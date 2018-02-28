@@ -1,0 +1,28 @@
+﻿{
+  "Name" : "Fox", 
+  "MaxHealth": 240.0,
+  "AttackDamage": 14.0,
+  "Speed": 4.5,
+  "XP": 2.0,
+  "AIType": "Neutral",
+  "Ridable": false,
+  "Effects": [],
+  "Drops": [],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/FoxIdle.dae",
+    "Scale": 1.5,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/FoxIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/FoxWalk.dae",
+      "Speed": 1.65
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/FoxAttack.dae",
+      "Speed": 1.25
+    }
+  } 
+}

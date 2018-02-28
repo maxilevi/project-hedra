@@ -1,0 +1,27 @@
+﻿{
+  "Name" : "Wasp", 
+  "MaxHealth": 120.0,
+  "AttackDamage": 13.0,
+  "Speed": 4.65,
+  "XP": 3.0,
+  "AIType": "Hostile",
+  "Ridable": true,
+  "Effects": [],
+  "Drops": [ ],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/FlyIdle.dae",
+    "Scale": 1.25,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/FlyIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/FlyWalk.dae",
+      "Speed": 1.5
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/FlyAttack.dae",
+      "Speed": 1.15
+    }
+  } 
+}

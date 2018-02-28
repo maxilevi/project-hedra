@@ -1,0 +1,29 @@
+﻿{
+  "Name" : "QuestCarriage", 
+  "MaxHealth": 100.0,
+  "AttackDamage": 13.0,
+  "Speed": 1.00,
+  "XP": 0.0,
+  "AIType": "Neutral",
+  "Ridable": false,
+  "Effects": [],
+  "Drops": [ ],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/CarriageIdle.dae",
+    "Scale": 5.0,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/CarriageIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/CarriageMove.dae",
+      "Speed": 1.0
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/CarriageIdle.dae",
+      "Speed": 1.0
+    }
+  } 
+
+}

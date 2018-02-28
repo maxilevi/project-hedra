@@ -1,0 +1,711 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{301A6B68-CF39-4E86-A50A-479B96A5A298}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Hedra</RootNamespace>
+    <AssemblyName>Hedra</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <RunCodeAnalysis>False</RunCodeAnalysis>
+    <TargetFrameworkProfile />
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>False</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>False</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="CSScriptLibrary">
+      <HintPath>..\packages\CS-Script.3.9.10.0\lib\net45\CSScriptLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="LibNoise">
+      <HintPath>..\packages\LibNoise.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CSharp">
+      <HintPath>..\packages\CS-Script.3.9.10.0\lib\net45\Mono.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTKWithOpenAL.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Engine\Debug\Log.cs" />
+    <Compile Include="Engine\EntitySystem\AIComponent.cs" />
+    <Compile Include="Engine\EntitySystem\Dagger.cs" />
+    <Compile Include="Engine\EntitySystem\DamageComponent.cs" />
+    <Compile Include="Engine\EntitySystem\Entity.cs" />
+    <Compile Include="Engine\EntitySystem\EntityComponent.cs" />
+    <Compile Include="Engine\EntitySystem\CowModel.cs" />
+    <Compile Include="Engine\EntitySystem\EntitySpawner.cs" />
+    <Compile Include="Engine\EntitySystem\Hands.cs" />
+    <Compile Include="Engine\EntitySystem\HealthBarComponent.cs" />
+    <Compile Include="Engine\EntitySystem\HealthHeartComponent.cs" />
+    <Compile Include="Engine\EntitySystem\ItemModel.cs" />
+    <Compile Include="Engine\EntitySystem\PhysicsComponent.cs" />
+    <Compile Include="Engine\EntitySystem\Rapier.cs" />
+    <Compile Include="Engine\EntitySystem\SheepModel.cs" />
+    <Compile Include="Engine\EntitySystem\Weapon.cs" />
+    <Compile Include="Engine\Events\Enviroment\Cloud.cs" />
+    <Compile Include="Engine\Events\Enviroment\Fog.cs" />
+    <Compile Include="Engine\Events\Enviroment\Light.cs" />
+    <Compile Include="Engine\Events\Enviroment\SkyManager.cs" />
+    <Compile Include="Engine\Events\Enviroment\SkydomeShader.cs" />
+    <Compile Include="Engine\Events\Enviroment\Skydome.cs" />
+    <Compile Include="Engine\Events\EventDispatcher.cs" />
+    <Compile Include="Engine\Events\EventListener.cs" />
+    <Compile Include="Engine\Events\IEventListener.cs" />
+    <Compile Include="Engine\Extensions.cs" />
+    <Compile Include="Engine\Mathf.cs" />
+    <Compile Include="Engine\Generation\BiomePool.cs" />
+    <Compile Include="Engine\Generation\BlockUtils.cs" />
+    <Compile Include="Engine\Generation\BlockVector.cs" />
+    <Compile Include="Engine\Generation\GenerationThread.cs" />
+    <Compile Include="Engine\Generation\Generators\BiomeGenerator.cs" />
+    <Compile Include="Engine\Generation\Generators\CrossBiomeGenerator.cs" />
+    <Compile Include="Engine\Generation\Generators\DefaultBiomeGenerator.cs" />
+    <Compile Include="Engine\Generation\Generators\FloatingIslandsGenerator.cs" />
+    <Compile Include="Engine\Generation\Generators\MountainsGenerator.cs" />
+    <Compile Include="Engine\Generation\Generators\VoronoiGenerator.cs" />
+    <Compile Include="Engine\Generation\Generators\WaterCliffsGenerator.cs" />
+    <Compile Include="Engine\Generation\MeshBuilderQueue.cs" />
+    <Compile Include="Engine\Generation\Noise.cs" />
+    <Compile Include="Engine\Generation\NoiseManager.cs" />
+    <Compile Include="Engine\Generation\Region.cs" />
+    <Compile Include="Engine\Generation\TreeGenerator.cs" />
+    <Compile Include="Engine\Generation\WorldManager.cs" />
+    <Compile Include="Engine\GraphicsOptions.cs" />
+    <Compile Include="Engine\Item\InventoryItem.cs" />
+    <Compile Include="Engine\Item\ItemInfo.cs" />
+    <Compile Include="Engine\Item\ItemPool.cs" />
+    <Compile Include="Engine\Item\MaterialInfo.cs" />
+    <Compile Include="Engine\Management\AssetManager.cs" />
+    <Compile Include="Engine\Management\CleanupManager.cs" />
+    <Compile Include="Engine\Management\CoroutineManager.cs" />
+    <Compile Include="Engine\Management\DrawManager.cs" />
+    <Compile Include="Engine\Management\FrustumCulling.cs" />
+    <Compile Include="Engine\Management\ICleanable.cs" />
+    <Compile Include="Engine\Management\ICullable.cs" />
+    <Compile Include="Engine\Management\IRenderable.cs" />
+    <Compile Include="Engine\Management\IUpdatable.cs" />
+    <Compile Include="Engine\Management\OcclusionCulling.cs" />
+    <Compile Include="Engine\Management\ShaderManager.cs" />
+    <Compile Include="Engine\Management\TaskManager.cs" />
+    <Compile Include="Engine\Management\ThreadManager.cs" />
+    <Compile Include="Engine\Management\UpdateManager.cs" />
+    <Compile Include="Engine\Management\ZipManager.cs" />
+    <Compile Include="Engine\Physics.cs" />
+    <Compile Include="Engine\Player\Camera.cs" />
+    <Compile Include="Engine\Player\Inventory.cs" />
+    <Compile Include="Engine\Player\Map.cs" />
+    <Compile Include="Engine\Player\NetworkPlayer.cs" />
+    <Compile Include="Engine\Player\Player.cs" />
+    <Compile Include="Engine\Player\LocalPlayer.cs" />
+    <Compile Include="Engine\Player\PlayerInput.cs" />
+    <Compile Include="Engine\Player\PlayerModel.cs" />
+    <Compile Include="Engine\Rendering\Animations\EntityMeshShader.cs" />
+    <Compile Include="Engine\Rendering\Billboard.cs" />
+    <Compile Include="Engine\Rendering\BillboardShader.cs" />
+    <Compile Include="Engine\Rendering\ChunkMeshBuffer.cs" />
+    <Compile Include="Engine\Rendering\CubeMap.cs" />
+    <Compile Include="Engine\Rendering\Effects\BlockShader.cs" />
+    <Compile Include="Engine\Rendering\Effects\BlockShaders.cs" />
+    <Compile Include="Engine\Rendering\Effects\BlurFBO.cs" />
+    <Compile Include="Engine\Rendering\Effects\BlurShader.cs" />
+    <Compile Include="Engine\Rendering\Effects\DefaultFBO.cs" />
+    <Compile Include="Engine\Rendering\Effects\EffectsRenderer.cs" />
+    <Compile Include="Engine\Rendering\Effects\Filters.cs" />
+    <Compile Include="Engine\Rendering\Effects\GBuffer.cs" />
+    <Compile Include="Engine\Rendering\Effects\GrassShader.cs" />
+    <Compile Include="Engine\Rendering\Effects\HealthShader.cs" />
+    <Compile Include="Engine\Rendering\Effects\IEffect.cs" />
+    <Compile Include="Engine\Rendering\Effects\CubeShader.cs" />
+    <Compile Include="Engine\Rendering\Effects\SSAO.cs" />
+    <Compile Include="Engine\Rendering\Effects\SSAOShader.cs" />
+    <Compile Include="Engine\Rendering\Effects\WaterShader.cs" />
+    <Compile Include="Engine\Rendering\EntityMesh.cs" />
+    <Compile Include="Engine\Rendering\EntityMeshBuffer.cs" />
+    <Compile Include="Engine\Rendering\FBO.cs" />
+    <Compile Include="Engine\Rendering\DataContainer.cs" />
+    <Compile Include="Engine\Rendering\IModel.cs" />
+    <Compile Include="Engine\Rendering\LineData.cs" />
+    <Compile Include="Engine\Rendering\MarchingCubes.cs" />
+    <Compile Include="Engine\Rendering\MarchingData.cs" />
+    <Compile Include="Engine\Rendering\MarchingTetrahedra.cs" />
+    <Compile Include="Engine\Rendering\MarchingTriangles.cs" />
+    <Compile Include="Engine\Rendering\MeshData.cs" />
+    <Compile Include="Engine\Rendering\MeshSimplifier.cs" />
+    <Compile Include="Engine\Rendering\Particles\GPUParticleSystem.cs" />
+    <Compile Include="Engine\Rendering\Particles\TrailRenderer.cs" />
+    <Compile Include="Engine\Rendering\Particles\TrailShader.cs" />
+    <Compile Include="Engine\Rendering\PointData.cs" />
+    <Compile Include="Engine\Rendering\SDFont\FontCharacter.cs" />
+    <Compile Include="Engine\Rendering\SDFont\FontMesh.cs" />
+    <Compile Include="Engine\Rendering\SDFont\FontReader.cs" />
+    <Compile Include="Engine\Rendering\SDFont\Line.cs" />
+    <Compile Include="Engine\Rendering\SDFont\Word.cs" />
+    <Compile Include="Engine\Rendering\Particles\Particle3D.cs" />
+    <Compile Include="Engine\Rendering\Particles\ParticleSystem.cs" />
+    <Compile Include="Engine\Rendering\Particles\ParticleCreator.cs" />
+    <Compile Include="Engine\Rendering\StaticBatch.cs" />
+    <Compile Include="Engine\Rendering\StaticMeshBuffer.cs" />
+    <Compile Include="Engine\Rendering\UBO.cs" />
+    <Compile Include="Engine\Rendering\UI\Button.cs" />
+    <Compile Include="Engine\Rendering\UI\GUIRenderer.cs" />
+    <Compile Include="Engine\Rendering\UI\GUIShader.cs" />
+    <Compile Include="Engine\Rendering\UI\GUIText.cs" />
+    <Compile Include="Engine\Rendering\UI\GUITexture.cs" />
+    <Compile Include="Engine\Rendering\UI\OptionChooser.cs" />
+    <Compile Include="Engine\Rendering\UI\Panel.cs" />
+    <Compile Include="Engine\Rendering\UI\ProgressBar.cs" />
+    <Compile Include="Engine\Rendering\UI\Texture.cs" />
+    <Compile Include="Engine\Rendering\UI\UIElement.cs" />
+    <Compile Include="Engine\Rendering\UI\UserInterface.cs" />
+    <Compile Include="Engine\Rendering\VAO.cs" />
+    <Compile Include="Engine\Rendering\VertexData.cs" />
+    <Compile Include="Engine\Rendering\WaterMeshBuffer.cs" />
+    <Compile Include="Engine\Scenes\GameScene.cs" />
+    <Compile Include="Engine\Scenes\IScene.cs" />
+    <Compile Include="Engine\Scenes\MapScene.cs" />
+    <Compile Include="Engine\Scenes\SceneManager.cs" />
+    <Compile Include="Engine\Sound\SoundBuffer.cs" />
+    <Compile Include="Engine\Sound\SoundEffect.cs" />
+    <Compile Include="Engine\Sound\SoundManager.cs" />
+    <Compile Include="Engine\Sound\SoundSource.cs" />
+    <Compile Include="Engine\Hedra.cs" />
+    <Compile Include="Engine\Program.cs" />
+    <Compile Include="Engine\Time.cs" />
+    <Compile Include="Engine\Generation\Block.cs" />
+    <Compile Include="Engine\Generation\Chunk.cs" />
+    <Compile Include="Engine\Generation\ChunkLoader.cs" />
+    <Compile Include="Engine\Generation\GenerationQueue.cs" />
+    <Compile Include="Engine\Rendering\BasicGeometry.cs" />
+    <Compile Include="Engine\Rendering\VBO.cs" />
+    <Compile Include="Engine\Rendering\CubeData.cs" />
+    <Compile Include="Engine\Rendering\Graphics2D.cs" />
+    <Compile Include="Engine\Rendering\ChunkMesh.cs" />
+    <Compile Include="Engine\Rendering\Shader.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Characters\OrcBody.vox">
+      <Link>Assets\Chr\OrcBody.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Characters\OrcFoot.vox">
+      <Link>Assets\Chr\OrcFoot.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Characters\OrcHand.vox">
+      <Link>Assets\Chr\OrcHand.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Characters\OrcHead.vox">
+      <Link>Assets\Chr\OrcHead.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\CowBody.vox">
+      <Link>Assets\Chr\CowBody.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\CowFoot.vox">
+      <Link>Assets\Chr\CowFoot.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\CowHead.vox">
+      <Link>Assets\Chr\CowHead.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\GenericFoot.vox">
+      <Link>Assets\Chr\GenericFoot.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\GenericHand.vox">
+      <Link>Assets\Chr\GenericHand.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Head1.vox">
+      <Link>Assets\Chr\Head1.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Head2.vox">
+      <Link>Assets\Chr\Head2.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Head3.vox">
+      <Link>Assets\Chr\Head3.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Items\Armor1.vox">
+      <Link>Assets\Items\Armor1.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Items\Dagger.vox">
+      <Link>Assets\Items\Dagger.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Items\HoledDagger.vox">
+      <Link>Assets\Items\HoledDagger.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Items\HoledRapier.vox">
+      <Link>Assets\Items\HoledRapier.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Items\Rapier.vox">
+      <Link>Assets\Items\Rapier.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Items\Staff.vox">
+      <Link>Assets\Items\Staff.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Items\ThickRapier.vox">
+      <Link>Assets\Items\ThickRapier.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Knight.vox">
+      <Link>Assets\Chr\Knight.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\RatBody.vox">
+      <Link>Assets\Chr\RatBody.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\RatFoot.vox">
+      <Link>Assets\Chr\RatFoot.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\RatHead.vox">
+      <Link>Assets\Chr\RatHead.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Torso1.vox">
+      <Link>Assets\Chr\Torso1.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MagicaVoxel-0.97.2\vox\Torso2.vox">
+      <Link>Assets\Chr\Torso2.vox</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\GenericFoot.ply">
+      <Link>Assets\Chr\GenericFoot.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\GenericHand.ply">
+      <Link>Assets\Chr\GenericHand.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\Heart.ply">
+      <Link>Assets\Env\Heart.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\Sheep.ply">
+      <Link>Assets\Chr\Sheep.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\SheepBody.ply">
+      <Link>Assets\Chr\SheepBody.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\SheepHead.ply">
+      <Link>Assets\Chr\SheepHead.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\SheepLeg.ply">
+      <Link>Assets\Chr\SheepLeg.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\Torso1.ply">
+      <Link>Assets\Chr\Torso1.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="app.config" />
+    <None Include="Assets\Bars.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ClearSans-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ClearSans-Light.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ClearSans-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ClearSans-Thin.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Cone.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Flower1.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Flower2.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Flower3.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Icosphere.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Rock1.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Rock2.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Rock3.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Rock4.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Rock5.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Rock6.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Rock7.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Env\Rock8.ply">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\InventoryGrid.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Items\0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Items\1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Items\2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Items\3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Items\4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\matchingNormalMap.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\normalMap.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\pal0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\PlayerItems.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Simplifica.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\SkillsBar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\UI.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Sans.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\DuDv.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Shaders\Billboard.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Billboard.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Bloom.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Bloom.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Blur.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\EntityMesh.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\EntityMesh.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\EntityMeshExplode.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\EntityMeshExplode.glslg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\EntityMeshExplode.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\FXAA.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\FXAA.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\GBuffer.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\GBuffer.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\HBlur.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\GUI.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\GUI.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\HealthBar.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\HeartModel.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Jitter.glslv" />
+    <None Include="Shaders\Fragment.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Block.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Block.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Map.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Map.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Particle.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Particle.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\DistanceField.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Silhouette.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Skydome.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Skydome.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\SSAO\SSAO.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\SSAO\SSAO.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\TrailRenderer.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\TrailRenderer.glslg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\TrailRenderer.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\VBlur.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Water.glslf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Water.glslv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\FootStep.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\GlassBreak.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\GrassStep.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\HoverButton.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\LeavesMove.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\OnOff.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Swoosh1.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Swoosh2.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Swoosh3.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Swoosh4.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Swoosh5.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Swoosh6.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\WaterFlow.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\WaterSplash.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets" />
+    <Folder Include="Assets\Items" />
+    <Folder Include="Assets\Chr" />
+    <Folder Include="Assets\Env" />
+    <Folder Include="Engine\Debug" />
+    <Folder Include="Engine\Events" />
+    <Folder Include="Engine\Generation\Generators" />
+    <Folder Include="Engine\Management" />
+    <Folder Include="Engine\Events\Enviroment" />
+    <Folder Include="Engine\Networking" />
+    <Folder Include="Engine\EntitySystem" />
+    <Folder Include="Engine\Item" />
+    <Folder Include="Engine\Rendering\Animations" />
+    <Folder Include="Engine\Sound" />
+    <Folder Include="Engine\Rendering\Effects" />
+    <Folder Include="Engine\Rendering\SDFont" />
+    <Folder Include="Engine\Rendering\UI" />
+    <Folder Include="Engine\Rendering\Particles" />
+    <Folder Include="Engine\Scenes" />
+    <Folder Include="Engine\Player" />
+    <Folder Include="Engine" />
+    <Folder Include="Engine\Generation" />
+    <Folder Include="Sounds" />
+    <Folder Include="Shaders" />
+    <Folder Include="Engine\Rendering" />
+    <Folder Include="Shaders\SSAO" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ProfilingSessions\Session20160207_055936.sdps" />
+    <Content Include="ProfilingSessions\Session20160207_233953.sdps" />
+    <Content Include="ProfilingSessions\Session20160207_234239.sdps" />
+    <Content Include="ProfilingSessions\Session20160207_234318.sdps" />
+    <Content Include="ProfilingSessions\Session20160207_235111.sdps" />
+    <Content Include="ProfilingSessions\Session20160207_235635.sdps" />
+    <Content Include="ProfilingSessions\Session20160208_002234.sdps" />
+    <Content Include="ProfilingSessions\Session20160208_003424.sdps" />
+    <Content Include="ProfilingSessions\Session20160208_004921.sdps" />
+    <Content Include="ProfilingSessions\Session20160208_035431.sdps" />
+    <Content Include="ProfilingSessions\Session20160208_044044.sdps" />
+    <Content Include="ProfilingSessions\Session20160208_051930.sdps" />
+    <Content Include="ProfilingSessions\Session20160208_054412.sdps" />
+    <Content Include="ProfilingSessions\Session20160208_172859.sdps" />
+    <Content Include="ProfilingSessions\Session20160210_015931.sdps" />
+    <Content Include="ProfilingSessions\Session20160210_233550.sdps" />
+    <Content Include="ProfilingSessions\Session20160210_233649.sdps" />
+    <Content Include="ProfilingSessions\Session20160211_174645.sdps" />
+    <Content Include="ProfilingSessions\Session20160211_223832.sdps" />
+    <Content Include="ProfilingSessions\Session20160211_223945.sdps" />
+    <Content Include="ProfilingSessions\Session20160213_040051.sdps" />
+    <Content Include="ProfilingSessions\Session20160213_040925.sdps" />
+    <Content Include="ProfilingSessions\Session20160213_054522.sdps" />
+    <Content Include="ProfilingSessions\Session20160213_185501.sdps" />
+    <Content Include="ProfilingSessions\Session20160213_185641.sdps" />
+    <Content Include="ProfilingSessions\Session20160213_185834.sdps" />
+    <Content Include="ProfilingSessions\Session20160213_192003.sdps" />
+    <Content Include="ProfilingSessions\Session20160213_192857.sdps" />
+    <Content Include="ProfilingSessions\Session20160213_195010.sdps" />
+    <Content Include="ProfilingSessions\Session20160213_195053.sdps" />
+    <Content Include="ProfilingSessions\Session20160214_043519.sdps">
+      <DependentUpon>Session20160213_195053.sdps</DependentUpon>
+    </Content>
+    <Content Include="ProfilingSessions\Session20160214_043606.sdps" />
+    <Content Include="ProfilingSessions\Session20160214_222845.sdps" />
+    <Content Include="ProfilingSessions\Session20160214_223156.sdps" />
+    <Content Include="ProfilingSessions\Session20160215_211520.sdps" />
+    <Content Include="ProfilingSessions\Session20160216_025608.sdps" />
+    <Content Include="ProfilingSessions\Session20160216_025748.sdps" />
+    <Content Include="ProfilingSessions\Session20160217_001608.sdps" />
+    <Content Include="ProfilingSessions\Session20160218_043247.sdps" />
+    <Content Include="ProfilingSessions\Session20160220_030252.sdps" />
+    <Content Include="ProfilingSessions\Session20160224_170311.sdps" />
+    <Content Include="ProfilingSessions\Session20160224_170413.sdps" />
+    <Content Include="ProfilingSessions\Session20160224_170604.sdps" />
+    <Content Include="ProfilingSessions\Session20160306_051158.sdps" />
+    <Content Include="ProfilingSessions\Session20160306_051438.sdps" />
+    <Content Include="ProfilingSessions\Session20160312_191328.sdps" />
+    <Content Include="ProfilingSessions\Session20160320_135652.sdps" />
+    <Content Include="ProfilingSessions\Session20160330_195332.sdps" />
+    <Content Include="ProfilingSessions\Session20160417_222423.sdps" />
+    <Content Include="ProfilingSessions\Session20160606_202643.sdps" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+xcopy /s /y "$(SolutionDir)packages\OpenTKWithOpenAL.1.1.1589.5942\NativeBinaries\x86\*.*" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

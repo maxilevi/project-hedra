@@ -1,0 +1,132 @@
+﻿/*
+ * Created by SharpDevelop.
+ * User: maxi
+ * Date: 13/10/2017
+ * Time: 05:46 p.m.
+ * 
+ * To change this template use Tools | Options | Coding | Edit Standard Headers.
+ */
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using Hedra.Engine.Management;
+using OpenTK.Graphics.OpenGL;
+
+namespace Hedra.Engine.Rendering
+{
+	/// <summary>
+	/// One huge VBO with reduced fragmentation
+	/// </summary>
+	public class GeometryPool<T> : IDisposable where T : struct
+	{
+		private readonly int PoolSize;
+		public List<MemoryEntry> ObjectMap = new List<MemoryEntry>();
+		public VBO<T> Buffer;
+		
+		public int AvailableMemory => TotalMemory - UsedMemory;
+
+	    public int UsedMemory => ObjectMap.Count == 0 ? 0 : ObjectMap[ObjectMap.Count-1].Offset + ObjectMap[ObjectMap.Count-1].Length;
+
+	    public int TotalMemory => PoolSize * TypeSizeInBytes;
+
+	    public int Count => UsedMemory / TypeSizeInBytes;
+
+	    public int TypeSizeInBytes { get; }
+		
+		
+		public GeometryPool(int SizeInBytes, int TypeSizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget = BufferTarget.ArrayBuffer, BufferUsageHint Hint = BufferUsageHint.StaticDraw){
+			
+			Buffer = new VBO<T>(new T[]{}, 0, PointerType, BufferTarget, Hint);
+
+			this.PoolSize = (int) SizeInBytes;
+			this.TypeSizeInBytes = TypeSizeInBytes;
+		    int sizeInBytes = PoolSize * TypeSizeInBytes;
+			
+			GL.BindBuffer(Buffer.BufferTarget, Buffer.ID);
+			GL.BufferData(Buffer.BufferTarget, sizeInBytes, IntPtr.Zero, Buffer.Hint);
+			
+		}
+
+	    public Bitmap Draw()
+	    {
+	        int size = 18000 * TypeSizeInBytes;
+	        var bmp = new Bitmap(TotalMemory / size, 4);
+
+            for (int i = 0; i < ObjectMap.Count; i++)
+	        {
+	            var entry = ObjectMap[i];
+	            var len = (entry.Offset + entry.Length) / size;
+	            var rng = new Random(i);
+	            var color = Color.FromArgb(255, rng.Next(0, 256), rng.Next(0, 256), rng.Next(0, 256));
+
+	            for (int x = entry.Offset / size; x < Mathf.Clamp(len, 0, bmp.Width); x++)
+	            {
+	                for (int y = 0; y < bmp.Height; y++)
+	                {
+	                    bmp.SetPixel(x, y, color);
+	                }
+	            }
+	        }
+	        return bmp;
+	    }
+
+        public void DrawAndSave()
+        {
+            var bmp = this.Draw();
+	        Directory.CreateDirectory(AssetManager.AppPath + "/Snapshots/");
+	        bmp.Save(AssetManager.AppPath + "Snapshots/"+typeof(T)+"___"+DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png", ImageFormat.Png);
+            bmp.Dispose();
+        }
+
+		public MemoryEntry Update(T[] Data, int SizeInBytes, MemoryEntry Entry){
+			
+			if(Entry.Length != SizeInBytes){
+				int Offset = 0;
+				//Find a gap were this data can be inserted
+				ObjectMap.Sort( MemoryEntry.Compare  );
+				for(int i = 0; i < ObjectMap.Count; i++){
+					
+					if(i == 0 && ObjectMap[i].Offset > SizeInBytes){
+						Offset = 0;
+						break;
+					}
+					
+					if(i == ObjectMap.Count-1){
+						Offset = ObjectMap[ObjectMap.Count-1].Offset + ObjectMap[ObjectMap.Count-1].Length;
+						break; 
+					}
+					
+					if(ObjectMap[i] != Entry && ObjectMap[i+1].Offset - (ObjectMap[i].Offset + ObjectMap[i].Length) >= SizeInBytes){
+						Offset = ObjectMap[i].Offset + ObjectMap[i].Length;
+						break;
+					}
+				}
+			    if (Offset + SizeInBytes > TotalMemory)
+			    {
+                    this.DrawAndSave();
+			        throw new OutOfMemoryException("GeometryPool<T> is out of memory");
+			    }
+			    Entry.Offset = Offset;
+				Entry.Length = SizeInBytes;
+				if(ObjectMap.Contains(Entry))
+					ObjectMap.Remove(Entry);
+				
+				ObjectMap.Add(Entry);
+			}
+			
+			GL.BindBuffer(Buffer.BufferTarget, Buffer.ID);
+			GL.BufferSubData(Buffer.BufferTarget, (IntPtr) (Entry.Offset), SizeInBytes, Data);
+			return Entry;
+		}
+		
+		public MemoryEntry Allocate(T[] Data, int SizeInBytes){
+			return Update(Data, SizeInBytes, new MemoryEntry());
+		}
+		
+		public void Dispose(){
+			Buffer.Dispose();
+		}
+	}
+}

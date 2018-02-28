@@ -1,0 +1,28 @@
+﻿{
+  "Name" : "Horse", 
+  "MaxHealth": 320.0,
+  "AttackDamage": 6.0,
+  "Speed": 5.0,
+  "XP": 3.0,
+  "AIType": "Neutral",
+  "Ridable": true,
+  "Effects": [],
+  "Drops": [],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/HorseIdle.dae",
+    "Scale": 2.15,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/HorseIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/HorseWalk.dae",
+      "Speed": 1.25
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/HorseAttack.dae",
+      "Speed": 1.25
+    }
+  } 
+}

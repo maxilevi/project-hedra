@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Villager",
+  "DisplayName": "Villager",
+  "ModelType": "Villager",
+  "Class": "Warrior",
+  "Behaviour" : "Friendly",   
+  "Immune": true,
+  "Speed": 1.85,
+  "AttackPower": 1.0, 
+  "AttackSpeed": 0.3,  
+  "Weapons": []
+}

@@ -1,0 +1,20 @@
+# This is a sample build configuration for Other.
+# Check our guides at https://confluence.atlassian.com/x/5Q4SMw for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: mono
+
+pipelines:
+  default:
+    - step:
+        script:
+          - echo "Attemping to build Project Hedra using Mono..."
+          - apt-get install git-all
+          - sudo apt-get install openssh-server
+          - mkdir -p ~/.ssh
+          - cat my_known_hosts &gt;&gt; ~/.ssh/known_hosts
+          - (umask 077; echo $MY_SSH_KEY | base64 --decode &gt; ~/.ssh/id_rsa)
+          - git clone ssh://git@bitbucket.org/Zaphyk/project-hedra-assets.git
+          - mv "project-hedra-assets/" "Assets/"
+          - xbuild Hedra/Hedra.csproj

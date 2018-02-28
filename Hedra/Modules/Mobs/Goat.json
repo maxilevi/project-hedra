@@ -1,0 +1,43 @@
+﻿{
+  "Name" : "Goat", 
+  "MaxHealth": 160.0,
+  "AttackDamage": 10.0,
+  "Speed": 4.5,
+  "XP": 1.0,
+  "AIType": "Neutral",
+  "Ridable": false,
+  "Effects": [
+    {
+      "Name": "Knock",
+      "Chance": 10.0,
+      "Damage": 2.0,
+      "Duration": 2.0
+    }
+  ],
+
+  "Drops": [
+    {
+      "Type": "Stackable",
+      "Material": "GoatHorn",
+      "Amount": 1,
+      "Chance": 10
+    }
+  ],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/GoatIdle.dae",
+    "Scale": 1.15,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/GoatIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/GoatWalk.dae",
+      "Speed": 1.65
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/GoatAttack.dae",
+      "Speed": 1.25
+    }
+  } 
+}

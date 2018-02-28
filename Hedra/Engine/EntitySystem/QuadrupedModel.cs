@@ -1,0 +1,218 @@
+﻿/*
+ * Created by SharpDevelop.
+ * User: maxi
+ * Date: 21/05/2016
+ * Time: 10:17 p.m.
+ * 
+ * To change this template use Tools | Options | Coding | Edit Standard Headers.
+ */
+
+using System;
+using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
+using OpenTK;
+using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Sound;
+
+namespace Hedra.Engine.EntitySystem
+{
+	/// <inheritdoc />
+	/// <summary>
+	/// Description of SheepModel.
+	/// </summary>
+	public class QuadrupedModel : Model, IMountable, IAudible, IDisposeAnimation
+    {
+		
+		private bool _isAttacking;
+		private float _targetAlpha = 1f;
+	    private float _targetGain = 1f;
+	    private readonly AreaSound _sound;
+
+		public Entity Parent;
+		public override Vector3 TargetRotation {get; set;}
+		public bool IsMountable {get; set;}
+		public Timer AttackCooldown = new Timer(1.5f);
+		
+		public AnimatedModel Model;
+		public Animation IdleAnimation;
+		public Animation WalkAnimation;
+		public Animation AttackAnimation;
+
+		public QuadrupedModel(Entity Parent, ModelTemplate Template)
+		{
+			this.Parent = Parent;
+		    var rng = new Random(Parent.MobSeed);
+
+			Model = AnimationModelLoader.LoadEntity(Template.Path);
+			IdleAnimation = AnimationLoader.LoadAnimation(Template.IdleAnimation.Path);
+			WalkAnimation = AnimationLoader.LoadAnimation(Template.WalkAnimation.Path);
+			AttackAnimation = AnimationLoader.LoadAnimation(Template.AttackAnimation.Path);
+
+		    IdleAnimation.Speed = Template.IdleAnimation.Speed;
+		    WalkAnimation.Speed = Template.WalkAnimation.Speed;
+		    AttackAnimation.Speed = Template.AttackAnimation.Speed;
+
+			this.Model.Scale = Vector3.One * (Template.Scale + Template.Scale * rng.NextFloat() * .3f - Template.Scale * rng.NextFloat() * .15f);
+			this.Parent.DefaultBox = AssetManager.LoadHitbox(Template.IdleAnimation.Path);
+		    this.Parent.DefaultBox *= this.Model.Scale; 
+			
+			AttackAnimation.Loop = false;
+			AttackAnimation.OnAnimationEnd += delegate { 
+				this._isAttacking = false;
+			};
+			
+			this.Model.Size = (this.Parent.DefaultBox.Max - this.Parent.DefaultBox.Min);
+			this.Idle();
+
+		    var soundType = (Parent.MobType == MobType.Horse) ? SoundType.HorseRun : SoundType.HumanRun;
+		    this._sound = new AreaSound(soundType, this.Position, 48f);
+
+		}
+		
+		public void Resize(Vector3 Scalar){
+			this.Model.Scale *= Scalar;
+			this.Parent.HitBox *= Scalar;
+		}
+
+		public override void Attack(Entity Damager, float Damage)
+		{	
+			if(Model.Animator.AnimationPlaying == AttackAnimation)
+				return;
+			
+			if(!AttackCooldown.Tick()){
+				this.Idle();
+				return;
+			}
+			
+			OnAnimationHandler AttackHandler = null;
+			AttackHandler = delegate {
+				float Exp = 0;
+				Damager.Damage(Damage, this.Parent, out Exp);
+				
+				this.AttackAnimation.OnAnimationMid -= AttackHandler;
+			};
+			this.AttackAnimation.OnAnimationMid += AttackHandler;
+			
+			Model.PlayAnimation(AttackAnimation);
+			this._isAttacking = true;
+		}
+		
+		public override void Update(){
+			if(Model.Animator.AnimationPlaying == null)
+				this.Idle();
+			
+			if(base.Disposed) this.Model.Dispose();
+
+		    if (Model != null)
+		    {
+		        if (Model.Rendered)
+		            Model.Update();
+		        Model.Position = this.Position + Vector3.UnitY * 0.0f;
+		        Model.Rotation = Mathf.Lerp(Model.Rotation, this.TargetRotation, (float) Time.unScaledDeltaTime * 8f);
+		        this.Rotation = Model.Rotation;
+
+		        Model.BaseTint = Mathf.Lerp(Model.BaseTint, this.BaseTint, (float) Time.unScaledDeltaTime * 6f);
+		        Model.Tint = Mathf.Lerp(Model.Tint, this.Tint, (float) Time.unScaledDeltaTime * 6f);
+		        Model.Alpha = Mathf.Lerp(Model.Alpha, this._targetAlpha, (float) Time.ScaledFrameTimeSeconds * 8f);
+		    }
+
+		    if (!this.Disposed)
+		    {
+		        _sound.Position = this.Position;
+		        _sound.Update(this.IsRunning);
+		    }
+		}
+
+        public void StopSound()
+        {
+            _sound.Stop();
+        }
+
+        public void DisposeAnimation()
+        {
+            Model.SwitchShader(AnimatedModel.DeathShader);
+            DisposeTime = 0;
+        }
+
+        public float DisposeTime
+        {
+            get { return Model.DisposeTime; }
+            set { Model.DisposeTime = value; }
+        }
+
+        public void Recompose()
+        {
+            Model.SwitchShader(AnimatedModel.DefaultShader);
+            DisposeTime = 0;
+        }
+
+        public override void Run(){
+			
+			if(this._isAttacking)
+				return;
+			
+			if(Model != null && Model.Animator.AnimationPlaying != WalkAnimation)
+				Model.PlayAnimation(WalkAnimation);
+		}
+		public override void Idle(){
+			if(this._isAttacking)
+				return;
+			
+			if(Model != null && Model.Animator.AnimationPlaying != IdleAnimation)
+				Model.PlayAnimation(IdleAnimation);
+		}
+		
+		public void Draw(){
+			this.Model.Draw();
+		}
+
+	    private bool IsRunning => this.Model.Animator.AnimationPlaying == this.WalkAnimation;
+	    private bool IsIdle => this.Model.Animator.AnimationPlaying == this.IdleAnimation;
+
+        public override float Alpha {
+			get { return this._targetAlpha; }
+			set {
+				this._targetAlpha = value;				
+			}
+		}
+		
+		public override bool Fog{
+			get{ return Model.Fog; }
+			set{ Model.Fog = value;}
+		}
+		
+		public override bool Pause {
+			get { return base.Pause; }
+			set { 
+				base.Pause = value;
+				Model.Animator.Stop = value;
+			}
+		}
+		
+		private bool _enabled = true;
+		public override bool Enabled{
+			get{ return _enabled; }
+			set{
+				Model.Enabled = value;
+				_enabled = value;
+			}
+		}
+
+        public override Vector3 Position { get; set; }
+
+        private Vector3 _rotation;
+		public override Vector3 Rotation{
+			get{
+				return _rotation;
+			}
+			set{
+				this._rotation = value;
+				
+				if( float.IsNaN(this._rotation.X) || float.IsNaN(this._rotation.Y) || float.IsNaN(this._rotation.Z))
+					this._rotation = Vector3.Zero;
+			}
+		}
+	}
+}

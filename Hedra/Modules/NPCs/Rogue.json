@@ -1,0 +1,22 @@
+﻿{
+  "Name": "Rogue",
+  "DisplayName": "Rogue",
+  "ModelType": "Rogue",
+  "Class": "Rogue",
+  "Behaviour" : "Hostile", 
+  "Immune": false,
+  "Speed": 1.85,
+  "AttackPower": 1.0, 
+  "AttackSpeed": 0.3,  
+  "Weapons": [
+    {
+      "Type": "Claw"
+    },
+    {
+      "Type": "DoubleBlades"
+    },
+    {
+      "Type": "Katar"
+    }
+  ]
+}

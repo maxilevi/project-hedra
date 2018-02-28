@@ -1,0 +1,43 @@
+﻿{
+  "Name" : "Spider", 
+  "MaxHealth": 180.0,
+  "AttackDamage": 20.0,
+  "Speed": 4.5,
+  "XP": 3.0,
+  "AIType": "Hostile",
+  "Ridable": false,
+  "Effects": [
+    {
+      "Name": "Poison",
+      "Chance": 15.0,
+      "Damage": 6.0,
+      "Duration": 5.0
+    }
+  ],
+
+  "Drops": [
+    {
+      "Type": "Stackable",
+      "Material": "SpiderEye",
+      "Amount": 1,
+      "Chance": 20
+    }
+  ],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/SpiderIdle.dae",
+    "Scale": 1.75,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/SpiderIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/SpiderWalk.dae",
+      "Speed": 1.0
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/ Assets/Chr/SpiderAttack.dae",
+      "Speed": 1.25
+    }
+  } 
+}

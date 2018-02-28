@@ -1,0 +1,81 @@
+﻿/*
+ * Author: Zaphyk
+ * Date: 16/02/2016
+ * Time: 07:54 p.m.
+ *
+ */
+using System;
+using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
+using OpenTK;
+
+namespace Hedra.Engine.Rendering.Particles
+{
+	public class Particle3D{
+
+		public static Vector4 FireColor = new Vector4(1f,.1f,0f,1f);
+		public static Vector4 AshColor = new Vector4(.2f,.2f,.2f,1f);
+		public static bool UseTimeScale {get; set;}
+		public Vector3 Position;
+		public Vector3 Rotation;
+		public Vector3 Scale;
+		public Vector3 Velocity;
+		public Vector4 Color;
+		public float GravityEffect;
+		public float Lifetime;
+		public bool IsVisible;
+		public bool SpreadOverLifetime = false;
+		private float MaxLifetime, OriginalAlpha;
+		private Vector3 OriginalScale;
+		private float HeightAtY = 0;
+		
+		public Particle3D(Vector3 Position, Vector3 Velocity, Vector3 Rotation, Vector4 Color, Vector3 Scale, float GravityEffect, float Lifetime, bool Collides = false){
+			this.Position = Position;
+			this.Rotation = Rotation;
+			this.Scale = Scale;
+			this.Color = Color;
+			this.Velocity = Velocity;
+			this.GravityEffect = GravityEffect;
+			this.Lifetime = Lifetime;
+			this.MaxLifetime = Lifetime;
+			this.IsVisible = true;
+			this.OriginalAlpha = Color.W;
+			this.OriginalScale = Scale;
+			this.Collides = Collides;
+			
+		}
+		
+		public bool Update(){
+			this.Color = new Vector4(Color.Xyz, OriginalAlpha * 1);//(Lifetime / MaxLifetime) );
+			this.Scale = OriginalScale * (Lifetime / MaxLifetime);
+				
+			if(Collides && HeightAtY+2 > Position.Y){
+				Velocity = Velocity * new Vector3(1,0,1);	
+			}
+			
+			Position += Velocity * ((UseTimeScale) ? (float) Time.deltaTime : (float) Time.unScaledDeltaTime);
+			Velocity.Y += (float) ( 60 * Physics.Gravity * GravityEffect * ((UseTimeScale) ? (float) Time.deltaTime : (float) Time.unScaledDeltaTime));
+			Lifetime -= ((UseTimeScale) ? (float) Time.deltaTime : (float) Time.unScaledDeltaTime);
+			if(Lifetime < 0)
+				return false;
+			else
+				return true;
+		}
+		
+		private bool m_Collides;
+		public bool Collides{
+			get{ return m_Collides; }
+			set{ m_Collides = value;
+				if(value)
+					HeightAtY = Physics.HeightAtPosition( new Vector3(Position.X, Position.Y / Engine.Generation.Chunk.BlockSize + 1, Position.Z) );
+			}
+		}
+		
+		public static int SizeInBytes{
+			get{
+				return 4*4*sizeof(float) + Vector4.SizeInBytes;
+			}
+		}
+		
+	}
+}

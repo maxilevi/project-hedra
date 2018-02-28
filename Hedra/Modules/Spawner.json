@@ -1,0 +1,54 @@
+﻿{
+  "Shore": [
+    {
+      "Type": "Turtle",
+      "Chance": 100.0
+    }
+  ],
+
+  "Plains": [
+    {
+      "Type": "Sheep",
+      "Chance": 33.0
+    },
+    {
+      "Type": "Horse",
+      "Chance": 33.0
+    },
+    {
+      "Type": "Boar",
+      "Chance": 20.0
+    },
+    {
+      "Type": "Wasp",
+      "Chance": 13.0  
+    }
+  ],
+
+  "Mountain": [
+    {
+      "Type": "Goat",
+      "Chance": 100.0
+    }
+  ],
+
+  "Forest": [
+    {
+      "Type": "Wolf",
+      "Chance": 30.0
+    },
+    {
+      "Type": "Fox",
+      "Chance": 30.0
+    },
+    {
+      "Type": "Bee",
+      "Chance": 20.0 
+    },
+    {
+      "Type": "Spider",
+      "Chance": 20.0
+    }
+  ]
+}
+

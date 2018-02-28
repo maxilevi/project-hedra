@@ -1,0 +1,13 @@
+﻿{
+  "Name": "TravellingMerchant",
+  "DisplayName": "Travelling Merchant",
+  "ModelType": "Merchant",
+  "Class": "Warrior",
+  "Behaviour" : "Friendly",  
+  "Health": 100,
+  "Immune": true,
+  "Speed": 1.85,
+  "AttackPower": 1.0, 
+  "AttackSpeed": 0.3, 
+  "Weapons": []
+}

@@ -1,0 +1,103 @@
+﻿/*
+ * Author: Zaphyk
+ * Date: 03/04/2016
+ * Time: 01:02 p.m.
+ *
+ */
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
+using System.Collections.Generic;
+using Hedra.Engine.Management;
+
+namespace Hedra.Engine.Rendering.Effects
+{
+	/// <summary>
+	/// ONLY WORKS WITH SSAO
+	/// </summary>
+	public class DeferedRenderer
+	{
+		public FBO FirstPass;
+		public FBO SecondPass;
+	    public FBO ThirdPass; 
+		public Shader FirstPassShader = new Shader("Shaders/SSAO.vert","Shaders/SSAO-Pass1.frag");
+		public Shader SecondPassShader = new Shader("Shaders/SSAO.vert","Shaders/SSAO-Pass2.frag");
+	    public Shader ThirdPassShader = new Shader("Shaders/SSAO.vert", "Shaders/SSAO-Pass3.frag");
+		public int SamplesUniform;
+		public int RandomTex;
+		public float[] Samples;
+		public int ColorSampler, PositionSampler, NormalSampler, RandomSampler, AOSampler, ProjectionUniform, Intensity;
+		public DeferedRenderer()
+		{
+			FramebufferAttachment[] Attachments = new FramebufferAttachment[3];
+			Attachments[0] = FramebufferAttachment.ColorAttachment0;
+			Attachments[1] = FramebufferAttachment.ColorAttachment1;
+			Attachments[2] = FramebufferAttachment.ColorAttachment2;
+
+            PixelInternalFormat[] Formats = new PixelInternalFormat[3];
+		    Formats[0] = PixelInternalFormat.Rgba8;
+		    Formats[1] = PixelInternalFormat.Rgba32f;
+		    Formats[2] = PixelInternalFormat.Rgba16f;
+
+            FirstPass = new FBO(new Size(Constants.WIDTH, Constants.HEIGHT), Attachments, Formats, false, false, 0, true);
+		    ThirdPass = new FBO(Constants.WIDTH / 2, Constants.HEIGHT / 2);
+		    SecondPass = new FBO(Constants.WIDTH, Constants.HEIGHT);
+
+            #region SETUP UNIFORMS & TEXTURES
+            SamplesUniform = GL.GetUniformLocation(FirstPassShader.ShaderID, "samples");
+			PositionSampler = GL.GetUniformLocation(FirstPassShader.ShaderID, "Position1");
+			NormalSampler = GL.GetUniformLocation(FirstPassShader.ShaderID, "Normal2");
+			RandomSampler = GL.GetUniformLocation(FirstPassShader.ShaderID, "Random3");
+			ProjectionUniform = GL.GetUniformLocation(FirstPassShader.ShaderID, "Projection");
+			ColorSampler = GL.GetUniformLocation(ThirdPassShader.ShaderID, "ColorInput");
+			AOSampler = GL.GetUniformLocation(ThirdPassShader.ShaderID, "SSAOInput");
+			Intensity = GL.GetUniformLocation(FirstPassShader.ShaderID, "Intensity");
+			
+			Random Gen = new Random();
+			Bitmap Bmp = new Bitmap(4,4);
+			for(int x = 0; x < 4; x++){
+				for(int y = 0; y < 4; y++){
+					Vector3 Value = new Vector3( Gen.NextFloat(), Gen.NextFloat(), 0.0f);
+					Color Col = Color.FromArgb(255, (byte)(Value.X * 255),(byte) (Value.Y * 255), (byte) (Value.Z * 255) );
+					Bmp.SetPixel(x,y, Col);
+				}
+			}
+			RandomTex = GL.GenTexture();
+			
+			GL.BindTexture(TextureTarget.Texture2D, RandomTex);
+	
+	        BitmapData bmp_data = Bmp.LockBits(new Rectangle(0,0,Bmp.Width, Bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+	
+	        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
+	            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
+	
+	        Bmp.UnlockBits(bmp_data);
+	        //Bmp.Dispose();
+
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Nearest);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
+			
+			Vector3[] VecSamples = new Vector3[16];
+			for(int i = 0; i < 16; i++){
+				VecSamples[i] = new Vector3( Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() );
+				VecSamples[i].Normalize();
+				VecSamples[i] *= Utils.Rng.NextFloat();
+				float Scale = i/16;
+				Scale = Mathf.Lerp(0.1f, 1.0f, Scale * Scale);
+				VecSamples[i] *= Scale;
+			}
+			List<float> fsamples = new List<float>();
+			for(int i = 0; i < VecSamples.Length; i++){
+				fsamples.Add(VecSamples[i].X);
+				fsamples.Add(VecSamples[i].Y);
+				fsamples.Add(VecSamples[i].Z);
+			}
+			Samples = fsamples.ToArray();
+			#endregion
+		}
+	}
+}

@@ -1,0 +1,25 @@
+﻿{
+  "Name": "Archer",
+  "DisplayName": "Archer",
+  "ModelType": "Archer",
+  "Class": "Archer",
+  "Behaviour" : "Hostile", 
+  "Immune": false,
+  "Speed": 1.85,
+  "AttackPower": 1.0, 
+  "AttackSpeed": 1.5,  
+  "Weapons": [
+    {
+      "Type": "Bow"
+    },
+    {
+      "Type": "Bow"
+    },
+    {
+      "Type": "Bow"
+    },
+    {
+      "Type": "Knife"
+    }
+  ]
+}

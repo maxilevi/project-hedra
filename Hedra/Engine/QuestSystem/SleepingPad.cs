@@ -1,0 +1,76 @@
+﻿using System;
+using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Enviroment;
+using Hedra.Engine.Management;
+using Hedra.Engine.Events;
+using Hedra.Engine.Player;
+using Hedra.Engine.Scenes;
+using OpenTK;
+using OpenTK.Input;
+
+namespace Hedra.Engine.QuestSystem
+{
+    public class SleepingPad : BaseStructure, IUpdatable, ITickable
+    {
+        public bool IsOccupied => Sleeper != null;
+        public Humanoid Sleeper { get; private set; }
+        public int BedRadius { get; set; } = 16;
+        public Vector3 TargetRotation { get; set; }
+
+        public SleepingPad(Vector3 Position)
+        {
+            this.Position = Position;
+            var player = LocalPlayer.Instance;
+            EventDispatcher.RegisterKeyDown(this, delegate(object sender, KeyboardKeyEventArgs Args)
+            {
+                if (Args.Key == Key.E && !IsOccupied)
+                {
+                    if (player.IsAttacking || player.IsCasting || player.IsDead || !player.CanInteract ||
+                        player.IsEating || (player.Position - this.Position).LengthSquared > BedRadius * BedRadius || !SkyManager.IsNight) return;
+
+                    this.SetSleeper(player);
+                }
+                if (Args.Key == Key.ShiftLeft && IsOccupied && Sleeper == player)
+                {
+                    this.SetSleeper(null);
+                }
+            });
+            UpdateManager.Add(this);      
+        }
+
+        public void Update()
+        {
+            var player = LocalPlayer.Instance;
+            player.MessageDispatcher.ShowMessageWhile("[E] TO SLEEP",
+                () => (player.Position - this.Position).LengthSquared < BedRadius * BedRadius && player.CanInteract && !IsOccupied && SkyManager.IsNight);
+
+            if(IsOccupied && !SkyManager.IsNight)
+                this.SetSleeper(null);
+        }
+
+        public void SetSleeper(Humanoid Human)
+        {
+            if (Sleeper != null)
+            {
+                Sleeper.IsSleeping = false;
+                Sleeper.CanInteract = true;
+                Sleeper.ShowIcon(null);
+            }
+            if (Human != null)
+            {
+                Human.ShowIcon(CacheItem.SleepingIcon);
+                Human.IsSleeping = true;
+                Human.IsRiding = false;
+                Human.CanInteract = false;
+                Human.Physics.TargetPosition = Position;
+                Human.Rotation = TargetRotation;
+            }
+            Sleeper = Human;
+        }
+
+        public override void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
+        }
+    }
+}

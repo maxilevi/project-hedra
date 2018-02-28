@@ -1,0 +1,38 @@
+﻿{
+  "Name" : "Turtle", 
+  "MaxHealth": 280.0,
+  "AttackDamage": 10.0,
+  "Speed": 2.0,
+  "XP": 1.0,
+  "AIType": "Neutral",
+  "Ridable": false,
+  "Effects": [],
+
+  "Drops": [
+    {
+      "Type": "Stackable",
+      "Material": "TurtleShell",
+      "Amount": 1,
+      "Chance": 33
+    }
+  ],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/TurtleIdle.dae",
+    "Scale": 2.25,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/TurtleIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/TurtleWalk.dae",
+      "Speed": 1.0
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/TurtleAttack.dae",
+      "Speed": 1.15
+    }
+  } 
+
+
+}

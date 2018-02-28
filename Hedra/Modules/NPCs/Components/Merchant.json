@@ -1,0 +1,9 @@
+﻿{
+  "Name": "Merchant",
+  "Components":  [
+    {
+      "Type": "Hedra.Engine.EntitySystem.MerchantComponent",
+      "Parameters": [false]
+    }
+  ] 
+}

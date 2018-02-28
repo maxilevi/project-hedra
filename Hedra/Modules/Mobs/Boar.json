@@ -1,0 +1,35 @@
+﻿{
+  "Name" : "Boar", 
+  "MaxHealth": 320.0,
+  "AttackDamage": 17.0,
+  "Speed": 4.65,
+  "XP": 2.0,
+  "AIType": "Hostile",
+  "Ridable": false,
+  "Effects": [],
+  "Drops": [
+    {
+      "Type": "Stackable",
+      "Material": "BoarTusk",
+      "Amount": 1,
+      "Chance": 20
+    }
+  ],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",
+    "Scale": 3.4,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/BoarWalk.dae",
+      "Speed": 1.25
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/BoarAttack.dae",
+      "Speed": 1.15
+    }
+  } 
+}

@@ -1,0 +1,36 @@
+﻿{
+  "Name" : "Rat", 
+  "MaxHealth": 60.0,
+  "AttackDamage": 4.0,
+  "Speed": 4.85,
+  "XP": 1.0,
+  "AIType": "Hostile",
+  "Ridable": false,
+  "Effects": [],
+
+  "Drops": [
+    {
+      "Type": "Stackable",
+      "Material": "RatTail",
+      "Amount": 1,
+      "Chance": 25
+    }
+  ],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/RatIdle.dae",
+    "Scale": 0.75,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/RatIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/RatWalk.dae",
+      "Speed": 1.4
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/RatAttack.dae",
+      "Speed": 1.15
+    }
+  } 
+}

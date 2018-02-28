@@ -1,0 +1,9 @@
+﻿{
+  "Name": "TravellingMerchant",
+  "Components":  [
+    {
+      "Type": "Hedra.Engine.EntitySystem.MerchantComponent",
+      "Parameters": [true]
+    }
+  ] 
+}

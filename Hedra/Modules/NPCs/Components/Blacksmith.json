@@ -1,0 +1,9 @@
+﻿{
+  "Name": "Blacksmith",
+  "Components":  [
+    {
+      "Type": "Hedra.Engine.QuestSystem.BlacksmithComponent",
+      "Parameters": []
+    }
+  ] 
+}

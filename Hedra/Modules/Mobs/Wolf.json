@@ -1,0 +1,36 @@
+﻿{
+  "Name" : "Wolf", 
+  "MaxHealth": 200.0,
+  "AttackDamage": 19.0,
+  "Speed": 3.5,
+  "XP": 4.0,
+  "AIType": "Hostile",
+  "Ridable": true,
+  "Effects": [
+    {
+      "Name": "Bleed",
+      "Chance": 10.0,
+      "Damage": 10.0,
+      "Duration": 8.0
+    }
+  ],
+
+  "Drops": [ ],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/WolfIdle.dae",
+    "Scale": 1.8,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/WolfIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/FoxWalk.dae",
+      "Speed": 1.65
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/FoxAttack.dae",
+      "Speed": 1.25
+    }
+  } 
+}

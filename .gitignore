@@ -1,0 +1,11 @@
+/AnimationBuilder/bin/Debug/Shaders
+/AnimationBuilder/bin/Debug/Assets
+/AnimationBuilder/bin/Debug
+bin
+obj
+.vs
+packages/
+/.idea
+packages
+/*.user
+/.vs
