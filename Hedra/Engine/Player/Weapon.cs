@@ -431,6 +431,7 @@ namespace Hedra.Engine.Player
                 if (Field.FieldType != typeof(EntityMesh[])) continue;
 
                 var MeshArray = Field.GetValue(this) as EntityMesh[];
+                if(MeshArray == this.Meshes) continue;
                 for (int j = 0; j < MeshArray.Length; j++)
                     MeshArray[j].Dispose();
             }

@@ -6,13 +6,10 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using OpenTK;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
-using System.Collections;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 
@@ -111,7 +108,7 @@ namespace Hedra.Engine.Player
 			this.Arrow[0].TransformationMatrix = ArrowMat4;
 			this.Arrow[0].Position = Model.Position;
 			this.Arrow[0].BeforeLocalRotation = Vector3.UnitZ * 0.5f;
-			this.Arrow[0].Enabled = base.InAttackStance || Model.Human.IsAttacking;	
+			this.Arrow[0].Enabled = (base.InAttackStance || Model.Human.IsAttacking) && this.Quiver.Enabled;	
 			
 		}
 		
