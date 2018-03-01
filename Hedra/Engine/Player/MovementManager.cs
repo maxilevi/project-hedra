@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player
 		private bool _inJumpCoroutine;
 		public float TargetSpeed = 1.75f;
 	    private const float NormalSpeed = 2.25f;
-	    private const float AttackingSpeed = 1.75f;
+	    private const float AttackingSpeed = 1.5f;
 
         public MovementManager(Humanoid RefPlayer){
 			Human = RefPlayer;
@@ -206,6 +206,7 @@ namespace Hedra.Engine.Player
 			    keysPresses += Program.GameWindow.Keyboard[Key.A] ? 1f : 0f;
 			    keysPresses = 1f / keysPresses;
 			    if (keysPresses < 1f) keysPresses *= 1.5f;
+			    float speed = Human.IsAttacking && Class.Archer == Human.ClassType ? AttackingSpeed : NormalSpeed;
 
                 if (Program.GameWindow.Keyboard[Key.W])
 				{
@@ -213,7 +214,7 @@ namespace Hedra.Engine.Player
                         (float) Math.Cos(Player.View.Yaw) * 5f * TargetSpeed * movementSpeed,
                         0,
                         (float) Math.Sin(Player.View.Yaw) * 5f * TargetSpeed * movementSpeed );
-				    this.ProcessMovement(Player, NormalSpeed * moveSpace * keysPresses);
+				    this.ProcessMovement(Player, speed * moveSpace * keysPresses);
 
                     Player.Model.TargetRotation = new Vector3(Player.Model.Rotation.X, DirectionY, Player.Model.Rotation.Z);
 					Player.Orientation = new Vector3( moveSpace.X, 0, moveSpace.Z).NormalizedFast();
@@ -225,7 +226,7 @@ namespace Hedra.Engine.Player
                         (float) -(Math.Cos(Player.View.Yaw) * 5f * TargetSpeed * movementSpeed),
                         0,
                         (float) -(Math.Sin(Player.View.Yaw) * 5f * TargetSpeed * movementSpeed) );
-		            this.ProcessMovement(Player, NormalSpeed * moveSpace * keysPresses);
+		            this.ProcessMovement(Player, speed * moveSpace * keysPresses);
                 }
 		            
 		        if (Program.GameWindow.Keyboard[Key.A])
@@ -234,7 +235,7 @@ namespace Hedra.Engine.Player
                         (float) -(Math.Cos(Player.View.Yaw + Math.PI / 2) * 5f * TargetSpeed * movementSpeed),
                         0,
                         (float) -(Math.Sin(Player.View.Yaw + Math.PI / 2) * 5f * TargetSpeed * movementSpeed) );
-		            this.ProcessMovement(Player, NormalSpeed * moveSpace * keysPresses);
+		            this.ProcessMovement(Player, speed * moveSpace * keysPresses);
                 }
 		       
 		        if (Program.GameWindow.Keyboard[Key.D])
@@ -243,7 +244,7 @@ namespace Hedra.Engine.Player
                         (float) Math.Cos(Player.View.Yaw + Math.PI / 2) * 5f * TargetSpeed * movementSpeed,
                         0,
                         (float) Math.Sin(Player.View.Yaw + Math.PI / 2) * 5f * TargetSpeed * movementSpeed);
-                    this.ProcessMovement(Player, NormalSpeed * moveSpace * keysPresses);
+                    this.ProcessMovement(Player, speed * moveSpace * keysPresses);
 		        }	 
 
                 #region Climb (Indev)
