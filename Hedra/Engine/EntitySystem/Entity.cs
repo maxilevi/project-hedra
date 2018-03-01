@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -15,7 +14,6 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 using OpenTK;
 
@@ -28,54 +26,32 @@ namespace Hedra.Engine.EntitySystem
 
     public class Entity : IUpdatable, IRenderable, IDisposable //, ICullable
     {
+        private DamageComponent _damageManager;
+        private int _drowningSoundTimer;
         private float _health;
         private int _isHumanoid = -1;
         private bool _knocked;
+        private string _name;
         private float _oxygen = 30;
+        private bool _playSpawningAnimation = true;
         private float _prevHeight;
         private float _previousFalltime;
         private bool _spawningWithAnimation;
-        private bool _playSpawningAnimation = true;
+        private TickSystem TickSystem;
 
-        public float AttackDamage = 1;
+        public float AttackDamage { get; set; } = 1;
         protected List<EntityComponent> Components = new List<EntityComponent>();
-
-        private DamageComponent _damageManager;
-
         public Box DefaultBox = new Box(new Vector3(0, 0, 0), new Vector3(2, 2, 2));
-        public bool Destroy = false;
-        public int Level = 1;
-
-        private string _name;
-        public float MaxOxygen = 30;
-        public int MobId = 0, MobSeed = 0;
-
-        public string Type { get; set; } = MobType.None.ToString();
-
-        public MobType MobType
-        {
-            get
-            {
-                MobType enumeration;
-                bool result = Enum.TryParse(Type, true, out enumeration);
-
-                return result ? enumeration : MobType.Unknown;
-            }
-
-            set
-            {
-                if(value != MobType.Unknown)
-                    Type = value.ToString();
-            }
-        }
-
-        public Vector3 Orientation = Vector3.UnitZ;
-        public PhysicsComponent Physics;
-        public bool Removable = true;
-        public float Speed = 2;
-
-        protected bool Splashed;
-
+        public bool Destroy { get; set; } = false;
+        public int Level { get; set; } = 1;
+        public float MaxOxygen { get; set; } = 30;
+        public int MobId { get; set; }
+        public int MobSeed { get; set; }
+        public Vector3 Orientation { get; set; } = Vector3.UnitZ;
+        public PhysicsComponent Physics { get; set; }
+        public bool Removable { get; set; } = true;
+        public float Speed { get; set; } = 2;
+        protected bool Splashed { get; set; }
         public Vector3 BlockPosition { get; set; }
 
         public virtual float Health
@@ -102,6 +78,8 @@ namespace Hedra.Engine.EntitySystem
                                      GameSettings.UpdateDistance * GameSettings.UpdateDistance;
 
         public bool IsActive { get; set; }
+
+        public bool IsBoss { get; set; }
         public bool IsDead { get; set; }
         public bool IsFlying { get; set; }
 
@@ -148,22 +126,29 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (value == _knocked) return;
                 _knocked = value;
-                this.ShowIcon(_knocked ? (CacheItem?) CacheItem.KnockedIcon : null);           
+                this.ShowIcon(_knocked ? (CacheItem?) CacheItem.KnockedIcon : null);
             }
-        }
-
-        public void ShowIcon(CacheItem? IconType)
-        {
-            var iconComponent = this.SearchComponent<HeadIconComponent>();
-            if (iconComponent == null)
-            {
-                iconComponent = new HeadIconComponent(this);
-                this.AddComponent(iconComponent);
-            }
-            iconComponent.ShowIcon(IconType);
         }
 
         public virtual float MaxHealth { get; set; }
+
+        public MobType MobType
+        {
+            get
+            {
+                MobType enumeration;
+                bool result = Enum.TryParse(Type, true, out enumeration);
+
+                return result ? enumeration : MobType.Unknown;
+            }
+
+            set
+            {
+                if (value != MobType.Unknown)
+                    Type = value.ToString();
+            }
+        }
+
         public Model Model { get; set; }
 
         public string Name
@@ -182,13 +167,13 @@ namespace Hedra.Engine.EntitySystem
             set
             {
                 _name = value;
-              
-               /*var bar = this.SearchComponent<HealthBarComponent>();
-                var bossBar = this.SearchComponent<BossHealthBarComponent>();
-                if (bar != null)
-                    bar.Name = value;
-                if (bossBar != null)
-                    bossBar.Name = value;*/
+
+                /*var bar = this.SearchComponent<HealthBarComponent>();
+                 var bossBar = this.SearchComponent<BossHealthBarComponent>();
+                 if (bar != null)
+                     bar.Name = value;
+                 if (bossBar != null)
+                     bossBar.Name = value;*/
             }
         }
 
@@ -210,21 +195,34 @@ namespace Hedra.Engine.EntitySystem
             set { Model.TargetRotation = value; }
         }
 
-        public bool IsBoss { get; set; }
-
 
         public RenderShape Shape { get; set; }
         public Vector3 Size { get; set; }
+
+        public string Type { get; set; } = MobType.None.ToString();
         public bool WasGrounded { get; private set; }
 
         public Entity()
         {
-            this.Physics = new PhysicsComponent(this);
-            this.MaxHealth = 100;
-            this.Health = this.MaxHealth;
+            TickSystem = new TickSystem();
+            Physics = new PhysicsComponent(this);
+            MaxHealth = 100;
+            Health = MaxHealth;
+        }
+
+        public void ShowIcon(CacheItem? IconType)
+        {
+            var iconComponent = this.SearchComponent<HeadIconComponent>();
+            if (iconComponent == null)
+            {
+                iconComponent = new HeadIconComponent(this);
+                this.AddComponent(iconComponent);
+            }
+            iconComponent.ShowIcon(IconType);
         }
 
         public event OnAttackEventHandler OnAttacking, BeforeAttacking;
+
         public void Damage(float Amount, Entity Damager, out float Exp, bool PlaySound = true)
         {
             for (var i = 0; i < Components.Count; i++)
@@ -247,53 +245,51 @@ namespace Hedra.Engine.EntitySystem
 
         public bool InAttackRange(Entity Target)
         {
-            return (Target.Position - Position).LengthFast < (this.DefaultBox.Max - this.DefaultBox.Min).LengthFast +
+            return (Target.Position - Position).LengthFast < (DefaultBox.Max - DefaultBox.Min).LengthFast +
                    (Target.DefaultBox.Max - Target.DefaultBox.Min).LengthFast &&
                    Target != this &&
                    Mathf.DotProduct(Orientation, (Target.Position - Position).Normalized()) > -0.2f;
-
         }
 
         public void AddComponent(EntityComponent Component)
         {
             Components.Add(Component);
+            var tickable = Component as ITickable;
+            if(tickable != null) TickSystem.Add(tickable);
         }
 
         public void RemoveComponent(EntityComponent Component)
         {
             Components.Remove(Component);
+            var tickable = Component as ITickable;
+            if (tickable != null) TickSystem.Remove(tickable);
         }
 
         public T SearchComponent<T>() where T : EntityComponent
         {
             for (var i = 0; i < Components.Count; i++)
-            {
                 if (typeof(T).IsAssignableFrom(Components[i].GetType()))
                     return (T) Components[i];
-            }
             return default(T);
         }
 
-        private int _drowningSoundTimer;
         public void UpdateEnviroment()
         {
             if (!IsUnderwater)
-            {
                 if (IsGrounded && !WasGrounded && _previousFalltime > 0.25f)
                     SoundManager.PlaySound(SoundType.HitGround, Position);
-            }
             if (this is LocalPlayer)
             {
-                int a = 0;
+                var a = 0;
             }
 
             float nearestWaterBlockY = float.MinValue;
-            Chunk underChunk = World.GetChunkAt(this.Position);
-            Vector3 blockSpace = World.ToBlockSpace(this.Position);
-            if(underChunk == null) return;
+            Chunk underChunk = World.GetChunkAt(Position);
+            Vector3 blockSpace = World.ToBlockSpace(Position);
+            if (underChunk == null) return;
             for (int y = underChunk.BoundsY - 1; y > -1; y--)
             {
-                var block = underChunk.GetBlockAt( (int) blockSpace.X, y, (int) blockSpace.Z);
+                Block block = underChunk.GetBlockAt((int) blockSpace.X, y, (int) blockSpace.Z);
                 if (block.Type == BlockType.Water)
                 {
                     nearestWaterBlockY = y * Chunk.BlockSize;
@@ -301,7 +297,7 @@ namespace Hedra.Engine.EntitySystem
                 }
             }
 
-            if (nearestWaterBlockY > this.Position.Y + this.DefaultBox.Max.Y - this.DefaultBox.Min.Y + Chunk.BlockSize)
+            if (nearestWaterBlockY > Position.Y + DefaultBox.Max.Y - DefaultBox.Min.Y + Chunk.BlockSize)
             {
                 if (!Splashed)
                 {
@@ -335,13 +331,14 @@ namespace Hedra.Engine.EntitySystem
                 }
                 IsUnderwater = true;
             }
-            else if( Math.Abs(nearestWaterBlockY - (this.Position.Y + this.DefaultBox.Max.Y - this.DefaultBox.Min.Y + Chunk.BlockSize)) > Chunk.BlockSize * .5f)
+            else if (Math.Abs(nearestWaterBlockY -
+                              (Position.Y + DefaultBox.Max.Y - DefaultBox.Min.Y + Chunk.BlockSize)) >
+                     Chunk.BlockSize * .5f)
             {
-                if(IsUnderwater)
+                if (IsUnderwater)
                     Physics.GravityDirection = -Vector3.UnitY;
                 Splashed = false;
                 IsUnderwater = false;
-                
             }
 
             if (IsUnderwater) Oxygen -= (float) Time.deltaTime * 2f;
@@ -364,6 +361,46 @@ namespace Hedra.Engine.EntitySystem
         {
             Knocked = true;
             TaskManager.Delay((int) (Time * 1000), delegate { Knocked = false; });
+        }
+
+        public void SpawnAnimation()
+        {
+            if (_playSpawningAnimation)
+            {
+                _playSpawningAnimation = false;
+                Model.Alpha = 0;
+                SoundManager.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
+            }
+            if (!IsDead && Model.Alpha < 0.1f && (Model.Position.Xz - BlockPosition.Xz).LengthSquared < 4 * 4)
+            {
+                var animable = Model as IDisposeAnimation;
+                if (animable != null)
+                {
+                    animable.DisposeAnimation();
+                    _spawningWithAnimation = true;
+                    animable.DisposeTime = 1;
+                    Model.Alpha = .1f;
+                }
+                else
+                {
+                    Model.Alpha = 1;
+                }
+            }
+            if (_spawningWithAnimation)
+            {
+                var animable = Model as IDisposeAnimation;
+                if (animable != null)
+                {
+                    if (animable.DisposeTime < 0)
+                    {
+                        _spawningWithAnimation = false;
+                        animable.Recompose();
+                        Model.Alpha = 1;
+                    }
+                    Model.Alpha += Time.FrameTimeSeconds * 0.5f * .25f;
+                    animable.DisposeTime -= Time.FrameTimeSeconds * 0.5f;
+                }
+            }
         }
 
         public void Dispose()
@@ -402,15 +439,14 @@ namespace Hedra.Engine.EntitySystem
         {
             if (IsDead) return;
 
-            this.SpawnAnimation();           
+            this.SpawnAnimation();
             PhysicsSystem.Physics.Manager.Add(this);
-            Model.Update();
+            this.Model.Update();
             this.UpdateEnviroment();
-            for (var i = 0; i < Components.Count; i++)
-            {
-                Components[i].Update();
-            }
-            Model.Rotation = Mathf.Lerp(Model.Rotation, Model.TargetRotation, (float) Time.deltaTime * 16f);
+            this.TickSystem.Tick();
+            for (var i = 0; i < this.Components.Count; i++)
+                this.Components[i].Update();
+            this.Model.Rotation = Mathf.Lerp(Model.Rotation, Model.TargetRotation, (float) Time.deltaTime * 16f);
             if (Knocked)
             {
                 var model = Model as HumanModel;
@@ -422,46 +458,6 @@ namespace Hedra.Engine.EntitySystem
                 else
                 {
                     Model.Idle();
-                }
-            }
-        }
-
-        public void SpawnAnimation()
-        {
-            if (_playSpawningAnimation)
-            {
-                _playSpawningAnimation = false;
-                this.Model.Alpha = 0;
-                SoundManager.PlaySound(SoundType.GlassBreakInverted, this.BlockPosition, false, 1f, .8f);
-            }
-            if (!this.IsDead && Model.Alpha < 0.1f && (Model.Position.Xz - BlockPosition.Xz).LengthSquared < 4 * 4)
-            {
-                var animable = Model as IDisposeAnimation;
-                if (animable != null)
-                {
-                    animable.DisposeAnimation();
-                    _spawningWithAnimation = true;
-                    animable.DisposeTime = 1;
-                    Model.Alpha = .1f;
-                }
-                else
-                {
-                    Model.Alpha = 1;
-                }
-            }
-            if (_spawningWithAnimation)
-            {
-                var animable = Model as IDisposeAnimation;
-                if (animable != null)
-                {
-                    if (animable.DisposeTime < 0)
-                    {
-                        _spawningWithAnimation = false;
-                        animable.Recompose();
-                        Model.Alpha = 1;
-                    }
-                    Model.Alpha += Time.FrameTimeSeconds * 0.5f * .25f;
-                    animable.DisposeTime -= Time.FrameTimeSeconds * 0.5f;
                 }
             }
         }

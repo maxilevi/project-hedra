@@ -4,22 +4,18 @@
  * Time: 04:50 a.m.
  *
  */
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Reflection;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.EntitySystem
 {
 	/// <summary>
 	/// Description of EntityComponent.
 	/// </summary>
-	public abstract class EntityComponent
+	public abstract class EntityComponent : IUpdatable
 	{	
-		protected bool Disposed = false;
+		protected bool Disposed;
 		protected Entity Parent;
-		public bool DrawsUI {get; set;}
-
+	    public bool DrawsUI;
 	    protected EntityComponent(Entity Entity){
 			this.Parent = Entity;
 		}

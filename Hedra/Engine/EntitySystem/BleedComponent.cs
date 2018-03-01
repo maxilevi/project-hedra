@@ -29,11 +29,11 @@ namespace Hedra.Engine.EntitySystem
 		private float _oldSpeed = 0;
 		
 		public BleedComponent(Entity Parent) : base(Parent) {
-            Parent.OnAttacking += new OnAttackEventHandler(this.Apply);
+            Parent.OnAttacking += this.Apply;
 		}
 		
 		public override void Update(){
-			_cooldown -= Engine.Time.FrameTimeSeconds;
+			_cooldown -= Time.FrameTimeSeconds;
 		}
 		
 		public void Apply(Entity Victim, float Amount){

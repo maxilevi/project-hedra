@@ -10,19 +10,19 @@ using System;
 using OpenTK;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Item;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.EntitySystem
 {
 	/// <summary>
 	/// Description of BerryBushComponent.
 	/// </summary>
-	public class BerryBushComponent : EntityComponent, IClaimable, IDisposable
-	{
+	public class BerryBushComponent : EntityComponent, IClaimable, IDisposable, ITickable
+    {
 		public Chunk UnderChunk;
-		private bool _interacted = false;
+		private bool _interacted;
 
 		public BerryBushComponent(Entity Parent) : base(Parent){}
 		

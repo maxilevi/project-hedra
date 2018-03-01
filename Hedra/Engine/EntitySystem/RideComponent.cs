@@ -8,6 +8,7 @@
  */
 using System.Drawing;
 using Hedra.Engine.Events;
+using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Input;
 using Hedra.Engine.Player;
@@ -17,8 +18,8 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of RideComponent.
 	/// </summary>
-	public class RideComponent : EntityComponent
-	{
+	public class RideComponent : EntityComponent, ITickable
+    {
 		public Humanoid Rider;
 		public bool HasRider;
 		public bool UnRidable = false;

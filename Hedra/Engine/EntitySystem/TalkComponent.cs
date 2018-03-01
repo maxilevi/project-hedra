@@ -10,6 +10,7 @@ using OpenTK;
 using System;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
@@ -19,7 +20,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of TalkComponent.
 	/// </summary>
-	public class TalkComponent : EntityComponent
+	public class TalkComponent : EntityComponent, ITickable
 	{
 		public static string[] Phrases = new string[]{"Have you tried selling your items"+
 													  Environment.NewLine+"in the market?"+Environment.NewLine
