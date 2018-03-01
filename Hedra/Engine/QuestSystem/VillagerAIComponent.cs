@@ -19,7 +19,7 @@ namespace Hedra.Engine.QuestSystem
     /// <summary>
     /// Description of WarriorAI.
     /// </summary>
-    public class VillagerAIComponent : EntityComponent
+    public class VillagerAIComponent : HumanoidAIComponent
     {
         private bool Move;
         private Vector3 TargetPoint;
@@ -62,16 +62,8 @@ namespace Hedra.Engine.QuestSystem
 	
 	            if ((Parent.Position - OriginalPosition).LengthSquared > 128 * 128)
 	                this.TargetPoint = OriginalPosition;
-	
-	           		Parent.Orientation = (TargetPoint - Parent.Position).Xz.NormalizedFast().ToVector3();
-	                Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
-	
-	            if( (TargetPoint.Xz - Parent.Position.Xz).LengthSquared > 3*3){
-	                Parent.Physics.Move( Parent.Orientation * Parent.Speed * 4 * 2);
-	                Parent.Model.Run();
-	            }else{
-	                Parent.Model.Idle();
-	            }
+	            
+                base.Move(TargetPoint);	
         	}
         }
     }

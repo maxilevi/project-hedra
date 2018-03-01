@@ -386,6 +386,8 @@
     <Compile Include="Engine\QuestSystem\BossGenerator.cs" />
     <Compile Include="Engine\QuestSystem\Cage.cs" />
     <Compile Include="Engine\QuestSystem\Campfire.cs" />
+    <Compile Include="Engine\QuestSystem\CombatAIComponent.cs" />
+    <Compile Include="Engine\QuestSystem\HumanoidAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\IStructure.cs" />
     <Compile Include="Engine\QuestSystem\SleepingPad.cs" />
     <Compile Include="Engine\QuestSystem\CarriageAIComponent.cs" />
