@@ -3,9 +3,9 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    class AttentionCache : CacheType
+    class AttentionIconCache : CacheType
     {
-        public AttentionCache()
+        public AttentionIconCache()
         {
             this.AddModel(AssetManager.PlyLoader("Assets/Env/ExclamationMark.ply", Vector3.One));
         }

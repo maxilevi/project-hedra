@@ -6,10 +6,14 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
+using System;
 using OpenTK;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.PhysicsSystem;
+using System.Reflection;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -20,29 +24,30 @@ namespace Hedra.Engine.CacheSystem
 	{
 		public static Dictionary< float, List<float> > CachedExtradata = new Dictionary< float, List<float> >();
 		public static Dictionary< Vector4, List<Vector4> > CachedColors = new Dictionary< Vector4, List<Vector4> >();
-        private static Dictionary<string, CacheType> _caches = new Dictionary<string, CacheType>();
+        private static readonly Dictionary<string, CacheType> _caches = new Dictionary<string, CacheType>();
 
-        public static void Load(){
-            _caches.Add(CacheItem.Grass.ToString().ToLowerInvariant(), new GrassCache());
-            _caches.Add(CacheItem.AppleTrees.ToString().ToLowerInvariant(), new AppleTreesCache());
-            _caches.Add(CacheItem.Bushes.ToString().ToLowerInvariant(), new BushCache());
-            _caches.Add(CacheItem.DeadTrees.ToString().ToLowerInvariant(), new DeadTreeCache());
-            _caches.Add(CacheItem.OakTrees.ToString().ToLowerInvariant(), new OakTreeCache());
-            _caches.Add(CacheItem.PineTrees.ToString().ToLowerInvariant(), new PineTreesCache());
-            _caches.Add(CacheItem.Rock.ToString().ToLowerInvariant(), new RockCache());
-            _caches.Add(CacheItem.TallTrees.ToString().ToLowerInvariant(), new TallTreesCache());
-            _caches.Add(CacheItem.Campfire.ToString().ToLowerInvariant(), new CampfireCache());
-            _caches.Add(CacheItem.CypressTree.ToString().ToLowerInvariant(), new CypressTreesCache());
-            _caches.Add(CacheItem.Ferns.ToString().ToLowerInvariant(), new FernCache());
-            _caches.Add(CacheItem.Wheat.ToString().ToLowerInvariant(), new WheatCache());
-            _caches.Add(CacheItem.Farms.ToString().ToLowerInvariant(), new FarmCache());
-            _caches.Add(CacheItem.Cloud.ToString().ToLowerInvariant(), new CloudCache());
-            _caches.Add(CacheItem.Berries.ToString().ToLowerInvariant(), new BerriesCache());
-            _caches.Add(CacheItem.KnockedIcon.ToString().ToLowerInvariant(), new KnockedIconCache());
-            _caches.Add(CacheItem.AttentionMark.ToString().ToLowerInvariant(), new AttentionCache());
-            _caches.Add(CacheItem.BerryBush.ToString().ToLowerInvariant(), new BerryBushCache());
-            _caches.Add(CacheItem.Mat.ToString().ToLowerInvariant(), new MatCache());
-            _caches.Add(CacheItem.SleepingIcon.ToString().ToLowerInvariant(), new SleepingIconCache());
+        public static void Load()
+        {
+            Type[] typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(CacheManager).Namespace).ToArray();
+            foreach (Type type in typeList)
+            {
+                if(!type.Name.EndsWith("Cache") || Attribute.GetCustomAttribute(type, typeof(CacheIgnore)) != null) continue;
+
+                var item = CacheItem.MaxEnums;
+                for (var i = 0; i < (int) CacheItem.MaxEnums; i++)
+                {
+                    var cache = (CacheItem) i;
+                    if (string.Equals(cache + "Cache", type.Name))
+                    {
+                        item = cache;
+                        break;
+                    }
+                }
+                //Log.WriteLine("Loading {0} into cache...", type);
+                if(item == CacheItem.MaxEnums) throw new ArgumentException("No valid cache type found for "+type);
+                _caches.Add(item.ToString().ToLowerInvariant(), (CacheType) Activator.CreateInstance(type));
+            }
+            Log.WriteLine("Finished building cache.");
         }
 
 	    public static VertexData GetModel(CacheItem Item)
@@ -84,53 +89,53 @@ namespace Hedra.Engine.CacheSystem
 	    {
 	        lock (CachedColors)
 	        {
-	            Vector4 CHash = MakeHash(Data.Colors);
-	            if (CachedColors.ContainsKey(CHash))
+	            Vector4 cHash = MakeHash(Data.Colors);
+	            if (CachedColors.ContainsKey(cHash))
 	            {
 	                goto COLOR_EXISTS;
 	            }
-	            CachedColors.Add(CHash, Data.Colors);
+	            CachedColors.Add(cHash, Data.Colors);
 
 	            COLOR_EXISTS:
-	            Data.ColorCache = CHash;
+	            Data.ColorCache = cHash;
 	            Data.Colors = new List<Vector4>();
 	        }
 
 	        lock (CachedExtradata)
 	        {
-	            float EHash = MakeHash(Data.ExtraData);
-	            if (CachedExtradata.ContainsKey(EHash))
+	            float eHash = MakeHash(Data.ExtraData);
+	            if (CachedExtradata.ContainsKey(eHash))
 	            {
 	                goto EXTRADATA_EXISTS;
 	            }
-	            CachedExtradata.Add(EHash, Data.ExtraData);
+	            CachedExtradata.Add(eHash, Data.ExtraData);
 
 	            EXTRADATA_EXISTS:
-	            Data.ExtraDataCache = EHash;
+	            Data.ExtraDataCache = eHash;
 	            Data.ExtraData = new List<float>();
 	        }
 	    }
 
 	    private static Vector4 MakeHash(List<Vector4> L)
 	    {
-	        Vector4 Hash = Vector4.Zero;
+	        Vector4 hash = Vector4.Zero;
 	        for (int i = 0; i < L.Count; i++)
 	        {
-	            Hash += L[i];
+	            hash += L[i];
 	        }
-	        Hash /= L.Count;
-	        return Hash;
+	        hash /= L.Count;
+	        return hash;
 	    }
 
 	    private static float MakeHash(List<float> L)
 	    {
-	        float Hash = 0;
+	        float hash = 0;
 	        for (int i = 0; i < L.Count; i++)
 	        {
-	            Hash += L[i];
+	            hash += L[i];
 	        }
-	        Hash /= L.Count;
-	        return Hash - 10;
+	        hash /= L.Count;
+	        return hash - 10;
 	    }
     }
 }

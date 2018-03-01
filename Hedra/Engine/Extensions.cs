@@ -41,18 +41,19 @@ namespace Hedra.Engine
 	        }
 	    }
 
-        public static IEnumerable<Type> GetLoadableTypes(this Assembly assembly)
-		{
-		    // TODO: Argument validation
+        public static IEnumerable<Type> GetLoadableTypes(this Assembly assembly, string Namespace = null)
+        {
+            IEnumerable<Type> types;
 		    try
 		    {
-		        return assembly.GetTypes();
+		        types = assembly.GetTypes();
 		    }
 		    catch (ReflectionTypeLoadException e)
 		    {
-		        return e.Types.Where(t => t != null);
+		        types = e.Types.Where(t => t != null);
 		    }
-		}
+            return Namespace != null ? types.Where(T => string.Equals(T.Namespace, Namespace, StringComparison.InvariantCulture)) : types;
+        }
 		
 		public static Vector3 ToEuler(this Quaternion Q){
 			Vector3 Axis;

@@ -3,9 +3,9 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    public class OakTreeCache : CacheType
+    public class OakTreesCache : CacheType
     {
-        public OakTreeCache()
+        public OakTreesCache()
         {
             this.AddModel(AssetManager.PlyLoader("Assets/Env/Oak0.ply", Vector3.One));
             this.AddModel(AssetManager.PlyLoader("Assets/Env/Oak1.ply", Vector3.One));

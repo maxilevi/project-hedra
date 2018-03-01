@@ -3,9 +3,9 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    public class BushCache : CacheType
+    public class BushesCache : CacheType
     {
-        public BushCache()
+        public BushesCache()
         {
             this.AddModel(AssetManager.PlyLoader("Assets/Env/Bush1.ply", Vector3.One));
             this.AddModel(AssetManager.PlyLoader("Assets/Env/Bush2.ply", Vector3.One));

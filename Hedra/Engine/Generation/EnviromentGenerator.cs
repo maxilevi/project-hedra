@@ -151,7 +151,7 @@ namespace Hedra.Engine.Generation
 				if(Type == PlantType.BUSH)
 					OriginalModel = CacheManager.GetModel(CacheItem.Bushes);
                 else if(Type == PlantType.FERN)
-					OriginalModel = CacheManager.GetModel(CacheItem.Ferns);
+					OriginalModel = CacheManager.GetModel(CacheItem.Fern);
                 else if(Type == PlantType.ROCK)
 					OriginalModel = CacheManager.GetModel(CacheItem.Rock);
 

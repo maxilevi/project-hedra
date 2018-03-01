@@ -405,7 +405,7 @@ namespace Hedra.Engine.QuestSystem
 
 			    //Vector3 terrainNormal = Physics.NormalAtPosition(position.X, position.Z);
 			    //var lookAt = new Matrix4(new Matrix3(Mathf.RotationAlign(Vector3.UnitY, terrainNormal)));
-				VertexData farmModel = CacheManager.GetModel(CacheItem.Farms).Clone();
+				VertexData farmModel = CacheManager.GetModel(CacheItem.Farm).Clone();
 				farmModel.Color(AssetManager.ColorCode1, Utils.VariateColor( FenceColor(new Random(World.Seed + 2412)), 15, rng) );
 				farmModel.Color(AssetManager.ColorCode2, Utils.VariateColor(underChunk.Biome.Colors.GrassColor , 15, rng) );
                 //farmModel.Transform(lookAt);
