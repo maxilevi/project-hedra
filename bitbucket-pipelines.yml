@@ -10,7 +10,6 @@ pipelines:
     - step:
         name: Setup build enviroment.
         script:
-          - apt-get install software-properties-common python-software-properties
           - add-apt-repository ppa:git-core/ppa
           - apt-get update
           - apt-get install git
