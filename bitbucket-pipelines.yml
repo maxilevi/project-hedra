@@ -8,13 +8,17 @@ image: mono
 pipelines:
   default:
     - step:
+        name: Setup build enviroment.
         script:
-          - echo "Attemping to build Project Hedra using Mono..."
-          - apt-get install git-all
-          - sudo apt-get install openssh-server
+          - apt-get install software-properties-common python-software-properties
+          - add-apt-repository ppa:git-core/ppa
+          - apt-get update
+          - apt-get install git
+          - apt-get install openssh-server
           - mkdir -p ~/.ssh
           - cat my_known_hosts &gt;&gt; ~/.ssh/known_hosts
           - (umask 077; echo $MY_SSH_KEY | base64 --decode &gt; ~/.ssh/id_rsa)
           - git clone ssh://git@bitbucket.org/Zaphyk/project-hedra-assets.git
+          - ls
           - mv "project-hedra-assets/" "Assets/"
           - xbuild Hedra/Hedra.csproj
