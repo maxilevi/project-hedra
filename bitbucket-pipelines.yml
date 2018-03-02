@@ -10,7 +10,6 @@ pipelines:
     - step:
         name: Setup build enviroment.
         script:
-          - add-apt-repository ppa:git-core/ppa
           - apt-get update
           - apt-get install git
           - apt-get install openssh-server
