@@ -11,8 +11,8 @@ pipelines:
         name: Setup build enviroment.
         script:
           - apt-get update
-          - apt-get install git
-          - apt-get install openssh-server
+          - apt-get install -y git
+          - apt-get install -y openssh-server
           - mkdir -p ~/.ssh
           - cat my_known_hosts &gt;&gt; ~/.ssh/known_hosts
           - (umask 077; echo $MY_SSH_KEY | base64 --decode &gt; ~/.ssh/id_rsa)
