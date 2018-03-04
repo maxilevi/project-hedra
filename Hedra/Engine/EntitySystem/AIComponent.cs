@@ -109,11 +109,7 @@ namespace Hedra.Engine.EntitySystem
                 float dist = (Target.Position.Xz - Parent.Position.Xz).LengthFast;
                 this.MoveToPoint(
                     Target.Position.Xz.ToVector3() -
-                    (Target.Position - Parent.Position).NormalizedFast() * .5f * dist, delegate
-                    {
-                        Parent.Orientation = (_point - Parent.Position).Xz.NormalizedFast().ToVector3();
-                        Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
-                    });
+                    (Target.Position - Parent.Position).NormalizedFast() * .5f * dist, delegate{});
             }
         }
 
@@ -181,10 +177,11 @@ namespace Hedra.Engine.EntitySystem
             _lastPos = Parent.Position;
             if ((_point.Xz - Parent.Position.Xz).LengthSquared < 6 * 6 || _point.Xz == Vector2.Zero)
             {
-
-                Parent.Orientation = (_point - Parent.Position).Xz.NormalizedFast().ToVector3();
-                Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
-                
+                if (AttackTarget == null)
+                {
+                    Parent.Orientation = (_point - Parent.Position).Xz.NormalizedFast().ToVector3();
+                    Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
+                }
 
                 Parent.Model.Idle();
                 if (_callback != null && !_callbacked)
