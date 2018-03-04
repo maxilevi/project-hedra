@@ -57,13 +57,13 @@ namespace Hedra.Engine.Player
 				for(int i = 1; i < this.Level; i++){
 					
 					if(ClassType == Class.Rogue)
-						maxHealth += 36 + ((this.RandomFactor-.75f)*8 - 1f) * 5 - 2.5f;
+						maxHealth += 38 + ((this.RandomFactor-.75f)*8 - 1f) * 5 - 2.5f;
 					
 					if(ClassType == Class.Archer)
 						maxHealth += 22 + ((this.RandomFactor-.75f)*8 - 1f) * 5 - 2.5f;
 
 				    if (ClassType == Class.Warrior)
-                        maxHealth += 38 + ((this.RandomFactor-.75f)*8 - 1f) * 5 - 2.5f;
+                        maxHealth += 46 + ((this.RandomFactor-.75f)*8 - 1f) * 5 - 2.5f;
 				}
 				return maxHealth + AddonHealth;
 			}

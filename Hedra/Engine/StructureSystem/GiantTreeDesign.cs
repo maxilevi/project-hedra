@@ -49,6 +49,7 @@ namespace Hedra.Engine.StructureSystem
 
             ThreadManager.ExecuteOnMainThread(delegate
             {
+                Log.WriteLine("Setting up GiantTree...");
                 MobType BossType;
                 Entity TreeBoss = BossGenerator.Generate(rng, out BossType);
 
@@ -63,6 +64,7 @@ namespace Hedra.Engine.StructureSystem
 
                 World.AddStructure(prize);
                 underChunk.AddStaticElement(model);
+                Log.WriteLine("End of setup");
             });
 
         }
@@ -85,7 +87,7 @@ namespace Hedra.Engine.StructureSystem
             BlockType type;
             float height = BiomeGenerator.GetHeight( TargetPosition.X, TargetPosition.Z, null, out type);
 
-            return Rng.Next(0, 600) == 1 && height > 0;
+            return Rng.Next(0, 85) == 1 && height > 0;
         }
     }
 }

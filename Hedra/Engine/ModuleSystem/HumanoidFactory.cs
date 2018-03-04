@@ -75,7 +75,7 @@ namespace Hedra.Engine.ModuleSystem
 
                 var drop = new DropComponent(human)
                 {
-                    DropChance = 5,
+                    DropChance = 20,
                     RandomDrop = false,
                     ItemDrop = Utils.Rng.Next(0, 2) == 1 ? human.Ring : human.MainWeapon
                 };

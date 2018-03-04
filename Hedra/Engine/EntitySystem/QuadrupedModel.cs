@@ -76,7 +76,7 @@ namespace Hedra.Engine.EntitySystem
 			this.Parent.HitBox *= Scalar;
 		}
 
-		public override void Attack(Entity Damager, float Damage)
+		public override void Attack(Entity Damagee, float Damage)
 		{	
 			if(Model.Animator.AnimationPlaying == AttackAnimation)
 				return;
@@ -89,7 +89,7 @@ namespace Hedra.Engine.EntitySystem
 			OnAnimationHandler AttackHandler = null;
 			AttackHandler = delegate {
 				float Exp = 0;
-				Damager.Damage(Damage, this.Parent, out Exp);
+				Damagee.Damage(Damage, this.Parent, out Exp);
 				
 				this.AttackAnimation.OnAnimationMid -= AttackHandler;
 			};

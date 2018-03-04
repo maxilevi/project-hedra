@@ -78,7 +78,7 @@ namespace Hedra.Engine.ModuleSystem
             {
                 var drop = new DropComponent(Mob)
                 {
-                    DropChance = 8,
+                    DropChance = 12.5f,
                     RandomDrop = true,
                 };
                 Mob.AddComponent(drop);
@@ -91,7 +91,7 @@ namespace Hedra.Engine.ModuleSystem
 
                 var drop = new DropComponent(Mob)
                 {
-                    DropChance = (int) (template.Chance / 100f),
+                    DropChance = template.Chance,
                     RandomDrop = false,
                     ItemDrop = new InventoryItem(type, new ItemInfo(material, template.Amount))
                 };

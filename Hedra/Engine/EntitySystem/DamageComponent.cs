@@ -79,6 +79,7 @@ namespace Hedra.Engine.EntitySystem
                 return;
             }
 
+            bool shouldMiss = Utils.Rng.Next(1, 11) == 1;
             var damager = Damager as Humanoid;
             if (damager?.MainWeapon?.Type == Item.ItemType.ThrowableDagger)
                 Amount *= 1f + (float) Math.Min(_consecutiveHits * .2, 1.2f);
@@ -90,28 +91,29 @@ namespace Hedra.Engine.EntitySystem
             _hasBeenAttacked = true;
 
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
-            Billboard DmgLabel;
             if (!Parent.IsStatic && PlaySound && Damager is LocalPlayer)
             {
-                Color Color = Color.White;
-                float DmgDiff = Amount / (Damager as LocalPlayer).BaseDamageEquation;
-                if (DmgDiff > 1.7f) Color = Color.Gold;
-                if (DmgDiff > 2.5f) Color = Color.Red;
-                if (!Immune)
-                    DmgLabel = new Billboard(1.8f, ((int) Amount).ToString(), Color,
+                Color color = Color.White;
+                float dmgDiff = Amount / (Damager as LocalPlayer).BaseDamageEquation;
+                if (dmgDiff > 1.7f) color = Color.Gold;
+                if (dmgDiff > 2.5f) color = Color.Red;
+                Billboard dmgLabel;
+                if (!Immune && !shouldMiss)
+                    dmgLabel = new Billboard(1.8f, ((int) Amount).ToString(), color,
                         FontCache.Get(AssetManager.Fonts.Families[0], 10 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 else
-                    DmgLabel = new Billboard(1.8f, "Missed", Color,
+                    dmgLabel = new Billboard(1.8f, "MISS", Color.White,
                         FontCache.Get(AssetManager.Fonts.Families[0], 10 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
-                DmgLabel.Vanish = true;
-                DmgLabel.Speed = 4;
-                DmgLabel.FollowFunc = () => Parent.Position;
-                DamageLabels.Add(DmgLabel);
+                dmgLabel.Vanish = true;
+                dmgLabel.Speed = 4;
+                dmgLabel.FollowFunc = () => Parent.Position;
+                DamageLabels.Add(dmgLabel);
             }
             Exp = 0;
             _tintTimer = 0.25f;
+            if(shouldMiss) return;
             if (Damager != null && Damager != Parent)
             {
                 Vector3 Direction = -(Damager.Position - Parent.Position).Normalized();

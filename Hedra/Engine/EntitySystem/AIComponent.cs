@@ -78,6 +78,8 @@ namespace Hedra.Engine.EntitySystem
         {
             if (Target == null)
                 return;
+
+            Physics.LookAt(Parent, Target);
             AttackTarget = Target;
             IsAttacking = true;
 
@@ -117,7 +119,7 @@ namespace Hedra.Engine.EntitySystem
 
         private void Friendly() { }
 
-    private void Hostile()
+        private void Hostile()
         {
             LocalPlayer player = SceneManager.Game.LPlayer;
             if (player == null) return;
@@ -179,8 +181,10 @@ namespace Hedra.Engine.EntitySystem
             _lastPos = Parent.Position;
             if ((_point.Xz - Parent.Position.Xz).LengthSquared < 6 * 6 || _point.Xz == Vector2.Zero)
             {
+
                 Parent.Orientation = (_point - Parent.Position).Xz.NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
+                
 
                 Parent.Model.Idle();
                 if (_callback != null && !_callbacked)

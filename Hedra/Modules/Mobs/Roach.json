@@ -1,0 +1,36 @@
+{
+  "Name" : "Roach", 
+  "MaxHealth": 180.0,
+  "AttackDamage": 20.0,
+  "Speed": 4.5,
+  "XP": 3.0,
+  "AIType": "Hostile",
+  "Ridable": false,
+  "Effects": [
+    {
+      "Name": "Poison",
+      "Chance": 15.0,
+      "Damage": 6.0,
+      "Duration": 5.0
+    }
+  ],
+
+  "Drops": [],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/RoachIdle.dae",
+    "Scale": 2.0,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/RoachIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/RoachWalk.dae",
+      "Speed": 1.0
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/RoachAttack.dae",
+      "Speed": 1.0
+    }
+  } 
+}

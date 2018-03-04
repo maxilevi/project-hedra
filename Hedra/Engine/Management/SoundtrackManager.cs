@@ -167,14 +167,12 @@ namespace Hedra.Engine.Management
 				short[] Data = CastBuffer(Buffer, ReceivedBytes);
 				//Default buffer
 				if(UsedBuffer == null || (FrontBuffer != null && UsedBuffer.ID == FrontBuffer.ID) ){
-					if(BackBuffer != null)
-						BackBuffer.Dispose();
-					BackBuffer = new SoundBuffer(SoundManager.GetSoundFormat(Reader.Channels, 16), Data, Reader.SampleRate);
+				    BackBuffer?.Dispose();
+				    BackBuffer = new SoundBuffer(SoundManager.GetSoundFormat(Reader.Channels, 16), Data, Reader.SampleRate);
 					UsedBuffer = BackBuffer;
 				} else if(UsedBuffer.ID == BackBuffer.ID){
-					if(FrontBuffer != null)
-						FrontBuffer.Dispose();
-					FrontBuffer = new SoundBuffer(SoundManager.GetSoundFormat(Reader.Channels, 16), Data, Reader.SampleRate);
+				    FrontBuffer?.Dispose();
+				    FrontBuffer = new SoundBuffer(SoundManager.GetSoundFormat(Reader.Channels, 16), Data, Reader.SampleRate);
 					UsedBuffer = FrontBuffer;
 				}
 				BuildBuffers = false;

@@ -102,14 +102,14 @@ namespace Hedra.Engine.QuestSystem
 
 	        var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile);
 	        behaviour.Name = Undead ? "Skeleton" : "Bandit";
-            var human = this.SpawnHumanoid(classType.ToString(), Position, behaviour);
+            var human = this.SpawnHumanoid("Gnoll"/*classType.ToString()*/, Position, behaviour);
 
 	        if (Undead)
 	        {
 	            human.Model = new HumanModel(human, HumanType.Skeleton);
 	            human.Model.SetWeapon(human.MainWeapon.Weapon);
 	        }
-	        human.Level = Math.Max(1, LocalPlayer.Instance.Level + Utils.Rng.Next(-1,2));
+	        human.Level = Math.Max(1, LocalPlayer.Instance.Level - 1);
 
             if(!human.MainWeapon.Weapon.IsMelee)
                 human.AddComponent( new ArcherAIComponent(human, Friendly) );

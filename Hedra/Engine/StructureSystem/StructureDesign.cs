@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
@@ -21,7 +20,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected abstract CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Random Rng);
 
-        public virtual void CheckFor(Vector2 ChunkOffset)
+        public virtual void CheckFor(Vector2 ChunkOffset, StructureDesign[] Designs)
         {
             for (int x = Math.Min(-2, -Radius / Chunk.ChunkWidth * 2); x < Math.Max(2, Radius / Chunk.ChunkWidth * 2); x++)
             {
@@ -37,7 +36,7 @@ namespace Hedra.Engine.StructureSystem
 
                     bool shouldBe = this.SetupRequirements(targetPosition, newOffset, rng) && (Math.Abs(targetPosition.X - 50000) > 2000 || Math.Abs(targetPosition.Y - 50000) > 2000);
 
-                    if (shouldBe && !this.InOtherStrucutureRange(targetPosition))
+                    if (shouldBe && this.ShouldBuild(targetPosition, Designs))
                     {
                         lock(World.StructureGenerator.Items)
                             World.StructureGenerator.Items.Add(Setup(targetPosition, newOffset, rng));
@@ -47,16 +46,19 @@ namespace Hedra.Engine.StructureSystem
             }
         }
 
-        private bool InOtherStrucutureRange(Vector3 NewPosition)
+        private bool ShouldBuild(Vector3 NewPosition, StructureDesign[] Designs)
         {
-            CollidableStructure[] items;
-            lock (World.StructureGenerator.Items)
-                items = World.StructureGenerator.Items.ToArray();
-
-
-            return items.Any(Item =>
-                (Item.Position.Xz - NewPosition.Xz).LengthSquared <
-                (Item.Design.Radius + Radius) * (Item.Design.Radius + Radius));
+            float wSeed = World.Seed * 0.0001f;
+            var height = (int) (World.StructureGenerator.SeedGenerator.GetValue(NewPosition.X * .05f + wSeed,
+                          NewPosition.Z * .05f + wSeed) * 100f);
+            var index = new Random(height).Next(0, Designs.Length);
+            bool isStructureRegion = index == Array.IndexOf(Designs, this);
+            if (isStructureRegion)
+            {
+                lock (World.StructureGenerator.Items)    
+                    return World.StructureGenerator.Items.All(Struct => Struct.Design.GetType() != this.GetType() || Struct.Design.GetType() == this.GetType() && (Struct.Position.Xz - NewPosition.Xz).LengthSquared > this.Radius * this.Radius);
+            }
+            return false;
 
         }
 

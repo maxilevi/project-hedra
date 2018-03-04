@@ -310,19 +310,19 @@ namespace Hedra.Engine.Player
 				if(Model.MountModel == null || Model.MountModel != null && Model.MountModel.Disposed) IsRiding = false;
 			}
 			DmgComponent.Immune = !CanInteract;
-			
 
-			for(int i = World.Entities.Count-1; i>-1; i--){
+            var entities = World.Entities;
+			for(int i = entities.Count-1; i>-1; i--){
 				LocalPlayer player = SceneManager.Game.LPlayer;
-				if( World.Entities[i] != player && World.Entities[i].InUpdateRange && !GameSettings.Paused && !SceneManager.Game.IsLoading 
+				if(entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused && !SceneManager.Game.IsLoading 
                         
-                    || Pet.MountEntity == World.Entities[i] || World.Entities[i].IsBoss){
+                    || Pet.MountEntity == entities[i] || entities[i].IsBoss){
 
-					World.Entities[i].Update();
+				    entities[i].Update();
 				}
-                else if (World.Entities[i] != player && World.Entities[i].InUpdateRange && GameSettings.Paused)
+                else if (entities[i] != player && entities[i].InUpdateRange && GameSettings.Paused)
 				{
-					(World.Entities[i].Model as IAudible)?.StopSound();
+					(entities[i].Model as IAudible)?.StopSound();
                 }
 			}
 			

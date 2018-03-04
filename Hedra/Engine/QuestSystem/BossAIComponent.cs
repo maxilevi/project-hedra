@@ -60,7 +60,7 @@ namespace Hedra.Engine.QuestSystem
 							return;
 						}else{
 							Parent.Model.Run();
-							Parent.Model.TargetRotation = Physics.LookAt(Parent, Player);
+							Physics.LookAt(Parent, Player);
 							return;
 						}
 					}
@@ -68,7 +68,7 @@ namespace Hedra.Engine.QuestSystem
 				}
 				Parent.Model.Run();
 				Parent.Physics.Move( (Player.Position - Parent.Position).NormalizedFast().Xz.ToVector3() * Parent.Speed * 4 * 2);
-				Parent.Model.TargetRotation = Physics.LookAt(Parent, Player);
+				Physics.LookAt(Parent, Player);
 			}else
 				Parent.Model.Idle();
 		}

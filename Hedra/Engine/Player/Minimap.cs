@@ -8,7 +8,6 @@
  */
 using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using Hedra.Engine.Generation;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -121,7 +120,7 @@ namespace Hedra.Engine.Player
 			MapCursor.Enable();
 			MiniMapRing.Enable();
 			MiniMapN.Enable();
-			MiniMapQ.Enable();
+			//MiniMapQ.Enable();
 			if(World.StructureGenerator.MerchantSpawned)
 				MiniMapM.Enable();
 			else

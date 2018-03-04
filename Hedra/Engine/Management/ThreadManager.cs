@@ -22,7 +22,7 @@ namespace Hedra.Engine.Management
 	     public static void ExecuteOnMainThread(Action func)
 	     {
 	     	lock(Functions){
-	     		Functions.Add( new KeyValuePair<Action, Action>(func, () => NullCallBack()) );
+	     		Functions.Add( new KeyValuePair<Action, Action>(func, NullCallBack) );
 	     	}
 	     }
 	     

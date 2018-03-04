@@ -17,15 +17,15 @@ namespace Hedra.Engine.PhysicsSystem
 		public static float Gravity = -9.81f;
 		public static PhysicsThreadManager Manager = new PhysicsThreadManager();
 		
-		public static Vector3 LookAt(Entity Parent, Entity Target){
-			Vector3 Dir = (Target.BlockPosition-Parent.BlockPosition).Normalized();
+		public static void LookAt(Entity Parent, Entity Target){
+			Vector3 Dir = (Target.Model.Position-Parent.Model.Position).Normalized();
 			Parent.Orientation = Dir.Xz.Normalized().ToVector3();
 			 
 			Matrix4 MV = Mathf.RotationAlign(Vector3.UnitZ, Parent.Orientation);
 			Vector3 Axis;
 			float Angle;
-			MV.ExtractRotation().ToAxisAngle(out Axis, out Angle);	
-			return new Vector3(Parent.Model.TargetRotation.X, Axis.Y * Angle * Mathf.Degree, Parent.Model.TargetRotation.Z);
+			MV.ExtractRotation().ToAxisAngle(out Axis, out Angle);
+			Parent.Rotation = new Vector3(Parent.Model.TargetRotation.X, Axis.Y * Angle * Mathf.Degree, Parent.Model.TargetRotation.Z);
 		}
 		
 		public static Vector3 DirectionToEuler( Vector3 Direction){
@@ -228,20 +228,21 @@ namespace Hedra.Engine.PhysicsSystem
 			return false;
 		}
 		
-		public static bool Collides(ICollidable Obj1, ICollidable Obj2){
+		public static bool Collides(ICollidable Obj1, ICollidable Obj2)
+		{
+		    var obj1Box = Obj1 as Box;
+		    var obj2Box = Obj2 as Box;
+
+            if (obj1Box != null && obj2Box != null)
+				return Physics.AABBvsAABB(obj1Box, obj2Box);
 			
-			if( Obj1 is Box && Obj2 is Box)
-				return Physics.AABBvsAABB(Obj1 as Box, Obj2 as Box);
-			
-			if( Obj1 is CollisionShape && Obj2 is CollisionShape)
+			if(obj1Box == null && obj2Box == null)
 				return GJKCollision.Collides(Obj1 as CollisionShape, Obj2 as CollisionShape);
 			
-			if(Obj1 is CollisionShape && Obj2 is Box)
-				return GJKCollision.Collides(Obj1 as CollisionShape, (Obj2 as Box).ToShape() );
+			if(obj1Box == null)
+				return GJKCollision.Collides(Obj1 as CollisionShape, obj2Box.ToShape() );
 
-		    if (Obj1 is Box && Obj2 is CollisionShape)
-		        return GJKCollision.Collides((Obj1 as Box).ToShape(), Obj2 as CollisionShape);
-            return false;
+		    return GJKCollision.Collides(obj1Box.ToShape(), Obj2 as CollisionShape);
 		}
 
 		public static bool AABBvsAABB(Box a, Box b) {

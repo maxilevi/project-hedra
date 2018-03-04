@@ -149,9 +149,14 @@ namespace Hedra.Engine.BiomeSystem
 
 	    }
 
-        public Region GetPredominantBiome(Chunk Chunk)
+	    public Region GetPredominantBiome(Chunk Chunk)
+	    {
+	        return this.GetPredominantBiome(new Vector2(Chunk.OffsetX + Chunk.ChunkWidth * .5f, Chunk.OffsetZ + Chunk.ChunkWidth * .5f));
+	    }
+
+        public Region GetPredominantBiome(Vector2 ChunkOffset)
         {
-            return this.GetRegion(new Vector3(Chunk.OffsetX + Chunk.ChunkWidth * .5f, 0, Chunk.OffsetZ + Chunk.ChunkWidth * .5f));
+            return this.GetRegion(new Vector3(ChunkOffset.X, 0, ChunkOffset.Y));
 		}
 
         public static float EncodeWater(float Height, float Density)

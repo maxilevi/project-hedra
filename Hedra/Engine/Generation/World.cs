@@ -56,13 +56,20 @@ namespace Hedra.Engine.Generation
 		public static bool Enabled {get; set;}
 	    public static bool IsGenerated { get; set; }
 
-	    private static List<Entity> _entities;
+	    private static readonly List<Entity> _entities;
+	    private static bool _isEntityCacheDirty = true;
+	    private static ReadOnlyCollection<Entity> _entityListCache;
 	    public static ReadOnlyCollection<Entity> Entities
 	    {
 	        get
 	        {
-	            lock (_entities)
-	                return _entities.AsReadOnly();
+	            if (_isEntityCacheDirty)
+	            {
+	                lock (_entities)
+	                    _entityListCache = _entities.AsReadOnly();
+	                _isEntityCacheDirty = false;
+	            }
+	            return _entityListCache;
 	        }
 	    }
 
@@ -297,12 +304,16 @@ namespace Hedra.Engine.Generation
 	    {
 	        lock(_entities)
                 _entities.Add(Entity);
+	        _isEntityCacheDirty = true;
+
 	    }
 
 	    public static void RemoveEntity(Entity Entity)
 	    {
 	        lock (_entities)
 	            _entities.Remove(Entity);
+	        _isEntityCacheDirty = true;
+
 	    }
 
 	    public static void RemoveEntity(int i)

@@ -1,0 +1,22 @@
+﻿{
+  "Name": "Gnoll",
+  "DisplayName": "Gnoll",
+  "ModelType": "Gnoll",
+  "Class": "Warrior",
+  "Behaviour" : "Hostile",  
+  "Immune": false,
+  "Speed": 1.85,
+  "AttackPower": 1.0, 
+  "AttackSpeed": 0.3,  
+  "Weapons": [
+    {
+      "Type": "Sword"
+    },
+    {
+      "Type": "Axe"
+    },
+    {
+      "Type": "Hammer"
+    }
+  ]
+}

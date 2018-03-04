@@ -51,13 +51,25 @@ namespace Hedra.Engine.PhysicsSystem
 			return Box1;
 		}
 		
-		public static bool operator ==(Box Box1, Box Box2){
-			return (Box1.Min == Box2.Min && Box2.Max == Box1.Max);
+		public static bool operator ==(Box Box1, Box Box2)
+		{
+		    bool b1Null = object.ReferenceEquals(Box1, null);
+            bool b2Null = object.ReferenceEquals(Box2, null);
+
+            if (b1Null && b2Null) return true;
+		    if (b1Null || b2Null) return false;
+			return Box1.Min == Box2.Min && Box2.Max == Box1.Max;
 		}
 		
-		public static bool operator !=(Box Box1, Box Box2){
-			return (Box1.Min != Box2.Min || Box2.Max != Box1.Max);
-		}
+		public static bool operator !=(Box Box1, Box Box2)
+		{
+		    bool b1Null = object.ReferenceEquals(Box1, null);
+		    bool b2Null = object.ReferenceEquals(Box2, null);
+
+		    if (b1Null && b2Null) return false;
+		    if (b1Null || b2Null) return true;
+		    return Box1.Min != Box2.Min || Box2.Max != Box1.Max;
+        }
 		
 		public Box Clone(){
 			return new Box(this.Min, this.Max);
@@ -148,7 +160,7 @@ namespace Hedra.Engine.PhysicsSystem
 			
 			Shape.Vertices[7] = this.Max - halfSize;
 
-		    Shape.SetCenter( (this.Min + this.Max) / 2);
+		    Shape.SetCenter( (this.Min + this.Max) * .5f);
             Shape.BroadphaseRadius = (this.Min - this.Max).LengthFast;
 
 		    _shape = Shape;

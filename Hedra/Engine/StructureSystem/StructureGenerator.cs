@@ -8,6 +8,7 @@
  */
 using OpenTK;
 using System.Collections.Generic;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
 
@@ -21,11 +22,13 @@ namespace Hedra.Engine.StructureSystem
 	    public readonly List<CollidableStructure> Items;
 		public Vector3 MerchantPosition { get; set; }
         public bool MerchantSpawned { get; set; }
+        public Voronoi SeedGenerator { get; }
 
 	    public StructureGenerator()
 	    {
 	        Items = new List<CollidableStructure>();
-	    }
+	        SeedGenerator = new Voronoi();
+        }
 
 	    public void CheckStructures(Vector2 ChunkOffset)
 	    {
@@ -36,7 +39,7 @@ namespace Hedra.Engine.StructureSystem
 	        for (var i = 0; i < designs.Length; i++)
 	        {
                 if(designs[i].MeetsRequirements(ChunkOffset))
-                    designs[i].CheckFor(ChunkOffset);
+                    designs[i].CheckFor(ChunkOffset, designs);
 	        }
 	    }
 

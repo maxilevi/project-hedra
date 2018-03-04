@@ -146,19 +146,20 @@ namespace Hedra.Engine.EntitySystem
 		public float CollisionSize => HitboxSize * Parent.Model.Scale.Average();
 
 	    public void Move(MoveCommand command){
-			Physics.Manager.Add(command);
+			Physics.Manager.AddCommand(command);
 		}
 
 	    public void Move(Vector3 v)
 	    {
-	        Physics.Manager.Add(new MoveCommand(this.Parent, v));
+	        Physics.Manager.AddCommand(new MoveCommand(this.Parent, v));
 	    }
 
         public void ProccessCommand(MoveCommand Command) {
+            if(Command.Delta == Vector3.Zero) return;
 			Vector3 v = Command.Delta;
             bool onlyY = Command.Delta.Xz == Vector2.Zero;
 			Vector3 delta = v * _deltaTime;
-			
+            var parentBox = this.Parent.HitBox;
 			float modifierX = (delta.X < 0) ? -1f : 1f;
 			float modifierZ = (delta.Z < 0) ? -1f : 1f;
 
@@ -200,11 +201,10 @@ namespace Hedra.Engine.EntitySystem
                         continue;
 
                     if (World.Entities[i].Physics.HasCollision &&
-                        Physics.Collides(World.Entities[i].HitBox, Parent.HitBox))
+                        Physics.Collides(World.Entities[i].HitBox, parentBox))
                     {
                         if (!PushAround) return;
                         
-
                         Vector3 increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3();
                         increment = increment.Xz.NormalizedFast().ToVector3();
                         var command = new MoveCommand(World.Entities[i], increment * 2f);
@@ -215,16 +215,14 @@ namespace Hedra.Engine.EntitySystem
                     }
                 }
             }
-            
-
-            
+  
 			lock(_collisions)
 			{
 			    Vector3 deltaOrientation = delta.NormalizedFast();
 
 				for(int i = _collisions.Count-1; i > -1; i--){
 
-				    Box box = Parent.HitBox.Cache;
+				    Box box = parentBox.Cache;
 
 				    if (!onlyY)
 				    {
@@ -274,13 +272,13 @@ namespace Hedra.Engine.EntitySystem
 				    {
 
 				        box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 2f 
-                            + (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .5f * Vector3.UnitY;
+                            + (parentBox.Max.Y - parentBox.Min.Y) * .5f * Vector3.UnitY;
 				        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 4f 
-                            + (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * 1.0f * Vector3.UnitY;
+                            + (parentBox.Max.Y - parentBox.Min.Y) * 1.0f * Vector3.UnitY;
 
 				        if (!Physics.Collides(box, _collisions[i]) && !blockPy)
 				        {
-				            Parent.BlockPosition += Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .05f;
+				            Parent.BlockPosition += Vector3.UnitY * (parentBox.Max.Y - parentBox.Min.Y) * .05f;
 				            if (deltaOrientation.X > 0)
 				                blockPx = false;
 
@@ -305,10 +303,6 @@ namespace Hedra.Engine.EntitySystem
 			}
 		    if (onlyY)
 		    {
-		        if (Parent is LocalPlayer)
-		        {
-		            int a = 0;
-		        }
 		        float lowestY = Physics.LowestHeight((int)Parent.BlockPosition.X, (int)Parent.BlockPosition.Z);
 		        if (Parent.BlockPosition.Y * Chunk.BlockSize < lowestY)
 		        {

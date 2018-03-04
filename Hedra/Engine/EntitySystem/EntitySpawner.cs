@@ -52,10 +52,8 @@ namespace Hedra.Engine.EntitySystem
 				
 				if(!Enabled) 
 					goto START;
-				Entity[] mobs = World.Entities.ToArray();
 
-
-			    if (mobs.Length >= MobCap || !(Utils.Rng.NextFloat() <= SpawnChance) ) continue;
+			    if (World.Entities.Count >= MobCap || !(Utils.Rng.NextFloat() <= SpawnChance) ) continue;
 			    Vector3 desiredPosition = new Vector3(Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.ChunkWidth - GameSettings.ChunkLoaderRadius * Chunk.ChunkWidth * .5f,
                     0,
                     Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.ChunkWidth - GameSettings.ChunkLoaderRadius * Chunk.ChunkWidth * .5f)
@@ -69,11 +67,11 @@ namespace Hedra.Engine.EntitySystem
 			        if((Player.Position.Xz - desiredPosition.Xz).LengthSquared < 24f*Chunk.BlockSize*24f*Chunk.BlockSize)
 			            goto START;
 
-			        for(int i = mobs.Length- 1; i > -1; i--)
+			        for(int i = World.Entities .Count- 1; i > -1; i--)
 			        {
-			            if (mobs[i] == Player || mobs[i].IsStatic) continue;
+			            if (World.Entities[i] == Player || World.Entities[i].IsStatic) continue;
 
-			            if((mobs[i].BlockPosition.Xz - desiredPosition.Xz).LengthSquared < 48f * Chunk.BlockSize * 48f * Chunk.BlockSize)
+			            if((World.Entities[i].BlockPosition.Xz - desiredPosition.Xz).LengthSquared < 48f * Chunk.BlockSize * 48f * Chunk.BlockSize)
 			                goto START;
 			        }
 						

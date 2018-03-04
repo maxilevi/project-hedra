@@ -198,6 +198,7 @@
     <Compile Include="Engine\EntitySystem\EntitySpawner.cs" />
     <Compile Include="Engine\Generation\HighlightedArea.cs" />
     <Compile Include="Engine\Generation\AreaHighlighter.cs" />
+    <Compile Include="Engine\PhysicsSystem\PhysicsLoadBalancer.cs" />
     <Compile Include="Engine\PhysicsSystem\PhysicsThread.cs" />
     <Compile Include="Engine\Player\Hands.cs" />
     <Compile Include="Engine\EntitySystem\HealthBarComponent.cs" />
@@ -708,6 +709,10 @@
       <Link>Assets\Chr\FoxWalk.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Animations\GnollIdle.dae">
+      <Link>Assets\Chr\GnollIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Animations\GoatAttack.dae">
       <Link>Assets\Chr\GoatAttack.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -750,6 +755,18 @@
     </None>
     <None Include="..\..\..\Assets\Animations\RatWalk.dae">
       <Link>Assets\Chr\RatWalk.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\RoachAttack.dae">
+      <Link>Assets\Chr\RoachAttack.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\RoachIdle.dae">
+      <Link>Assets\Chr\RoachIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\RoachWalk.dae">
+      <Link>Assets\Chr\RoachWalk.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Animations\RogueBlade-Stance.dae">
@@ -3750,6 +3767,9 @@
     <None Include="Modules\Mobs\Rat.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Mobs\Roach.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Mobs\Sheep.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3763,6 +3783,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Components\Blacksmith.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\NPCs\Components\Gnoll.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Components\Mandragora.json">
@@ -3783,6 +3806,9 @@
     <None Include="Modules\NPCs\Components\Warrior.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\NPCs\Gnoll.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\NPCs\Mandragora.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3793,6 +3819,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Models\BlacksmithModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\NPCs\Models\GnollModel.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Models\MandragoraModel.json">

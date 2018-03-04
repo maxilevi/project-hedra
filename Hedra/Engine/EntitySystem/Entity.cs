@@ -70,7 +70,7 @@ namespace Hedra.Engine.EntitySystem
 
         public Box HitBox
         {
-            get { return DefaultBox.Cache.Translate(Model.Position); }
+            get{return DefaultBox.Cache.Translate(Model.Position);}
             set { DefaultBox = value; }
         }
 
@@ -440,7 +440,7 @@ namespace Hedra.Engine.EntitySystem
             if (IsDead) return;
 
             this.SpawnAnimation();
-            PhysicsSystem.Physics.Manager.Add(this);
+            PhysicsSystem.Physics.Manager.AddCommand(this);
             this.Model.Update();
             this.UpdateEnviroment();
             this.TickSystem.Tick();

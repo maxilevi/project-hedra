@@ -265,26 +265,33 @@ namespace Hedra.Engine.Generation
 			//Model.Transform(new Vector3(Position.X, Height, Position.Z) );
 						
 			ThreadManager.ExecuteOnMainThread( delegate{
-				var BerryBush = new Entity();
-				BerryBush.Physics.HasCollision = false;
-				BerryBush.Physics.UsePhysics = false;
-				BerryBush.Physics.HitboxSize = 0;
-				//BerryBush.Physics.CanCollide = false;
-				BerryBush.Model = new StaticModel(BerryBush, Model);
-				BerryBush.Model.Position = new Vector3(Position.X, Height, Position.Z);
-				
-				DamageComponent Damage = new DamageComponent(BerryBush);
-				Damage.Immune = true;
-				BerryBush.AddComponent( Damage );
-				
-				BerryBushComponent Berries = new BerryBushComponent(BerryBush);
-				Berries.UnderChunk = UnderChunk;
-				BerryBush.AddComponent( Berries );
+			    var berryBush = new Entity
+			    {
+			        Physics =
+			        {
+			            HasCollision = false,
+			            UsePhysics = false,
+			            HitboxSize = 0,
+			            CanCollide = false
+			        },
+                    BlockPosition = new Vector3(Position.X, Height, Position.Z)
+                };
+			    berryBush.Model = new StaticModel(berryBush, Model)
+			    {
+			        Position = new Vector3(Position.X, Height, Position.Z)
+			    };
 
-			    World.AddEntity(BerryBush);
+			    var damage = new DamageComponent(berryBush) {Immune = true};
+			    berryBush.AddComponent( damage );
+
+			    var berries = new BerryBushComponent(berryBush)
+			    {
+			        UnderChunk = UnderChunk
+			    };
+			    berryBush.AddComponent( berries );
+
+			    World.AddEntity(berryBush);
 			});
-			//Model.Transform(new Vector3(Position.X, Height, Position.Z) );
-			//UnderChunk.AddStaticElement(Model);
 		}
 		
 		public Vector4 BerryColor(Random Rng){

@@ -45,10 +45,10 @@ namespace Hedra.Engine.EntitySystem
 		}
 				
 		private float AttackCooldown = 0;
-		public override void Attack(Entity Damager, float Damage){
+		public override void Attack(Entity Damagee, float Damage){
 			if(AttackCooldown < 0){
 				float Exp;
-				Damager.Damage(Damage, Damager, out Exp, true);
+				Damagee.Damage(Damage, Damagee, out Exp, true);
 				AttackCooldown = 3;
 			}
 			AttackCooldown -= Time.FrameTimeSeconds;

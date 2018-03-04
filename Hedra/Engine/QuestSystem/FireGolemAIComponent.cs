@@ -53,7 +53,7 @@ namespace Hedra.Engine.QuestSystem
 		private float FireballCooldown = 5f;
 		private void Fireball(){
 			this.Parent.Model.Attack(Player, 0f);
-			Parent.Model.TargetRotation = Physics.LookAt(Parent, Player);
+			Physics.LookAt(Parent, Player);
 			
 			float RandomScale = Mathf.Clamp(Utils.Rng.NextFloat() * 2f -1f, 1, 2);
 			var Fire = new ParticleProjectile(Vector3.One + new Vector3(RandomScale, RandomScale, RandomScale) * 0.35f,

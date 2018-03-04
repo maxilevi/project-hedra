@@ -215,10 +215,10 @@ namespace Hedra
 				
 				Chunk UChunk = World.GetChunkAt(Player.Position);
 				
-				int MobCount = 0;
+				int MobCount = World.Entities.Count;
 				for(var i = 0; i < World.Entities.Count; i++){
-					if(World.Entities[i] != null && !World.Entities[i].IsStatic)
-						MobCount++;
+					//if(World.Entities[i] != null && !World.Entities[i].IsStatic)
+					//	MobCount++;
 				}
 				_underChunk = World.GetChunkByOffset(Vec2);
 				_debugPanel.Enable();
