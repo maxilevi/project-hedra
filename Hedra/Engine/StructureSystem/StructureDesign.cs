@@ -33,15 +33,15 @@ namespace Hedra.Engine.StructureSystem
                     var targetPosition = new Vector3(newOffset.X + rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize,
                         0,
                         newOffset.Y + rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize);
-
                     bool shouldBe = this.SetupRequirements(targetPosition, newOffset, rng) && (Math.Abs(targetPosition.X - 50000) > 2000 || Math.Abs(targetPosition.Y - 50000) > 2000);
-
                     if (shouldBe && this.ShouldBuild(targetPosition, Designs))
                     {
-                        lock(World.StructureGenerator.Items)
-                            World.StructureGenerator.Items.Add(Setup(targetPosition, newOffset, rng));
+                        lock (World.StructureGenerator.Items)
+                        {
+                            var item = Setup(targetPosition, newOffset, rng);
+                            if(item != null) World.StructureGenerator.Items.Add(item);
+                        }
                     }
-
                 }
             }
         }
@@ -49,14 +49,21 @@ namespace Hedra.Engine.StructureSystem
         private bool ShouldBuild(Vector3 NewPosition, StructureDesign[] Designs)
         {
             float wSeed = World.Seed * 0.0001f;
-            var height = (int) (World.StructureGenerator.SeedGenerator.GetValue(NewPosition.X * .05f + wSeed,
-                          NewPosition.Z * .05f + wSeed) * 100f);
+            var height = (int) (World.StructureGenerator.SeedGenerator.GetValue(NewPosition.X * .01f + wSeed,
+                          NewPosition.Z * .01f + wSeed) * 100f);
             var index = new Random(height).Next(0, Designs.Length);
             bool isStructureRegion = index == Array.IndexOf(Designs, this);
             if (isStructureRegion)
             {
-                lock (World.StructureGenerator.Items)    
-                    return World.StructureGenerator.Items.All(Struct => Struct.Design.GetType() != this.GetType() || Struct.Design.GetType() == this.GetType() && (Struct.Position.Xz - NewPosition.Xz).LengthSquared > this.Radius * this.Radius);
+                lock (World.StructureGenerator.Items)
+                {
+                    for (var i = 0; i < World.StructureGenerator.Items.Count; i++)
+                    {
+                        if (World.StructureGenerator.Items[i].Design.GetType() == this.GetType() && NewPosition == World.StructureGenerator.Items[i].Position)
+                            return false;
+                    }
+                }
+                return true;
             }
             return false;
 

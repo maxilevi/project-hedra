@@ -25,15 +25,16 @@ namespace Hedra.Engine.EntitySystem
 	public class QuadrupedModel : Model, IMountable, IAudible, IDisposeAnimation
     {
 		
-		private bool _isAttacking;
+		public bool IsAttacking { get; private set; }
 		private float _targetAlpha = 1f;
 	    private float _targetGain = 1f;
-	    private readonly AreaSound _sound;
+        private float _attackCooldown;
+        private readonly AreaSound _sound;
 
 		public Entity Parent;
 		public override Vector3 TargetRotation {get; set;}
 		public bool IsMountable {get; set;}
-		public Timer AttackCooldown = new Timer(1.5f);
+		public const float AttackCooldown = 1.5f;
 		
 		public AnimatedModel Model;
 		public Animation IdleAnimation;
@@ -43,7 +44,8 @@ namespace Hedra.Engine.EntitySystem
 		public QuadrupedModel(Entity Parent, ModelTemplate Template)
 		{
 			this.Parent = Parent;
-		    var rng = new Random(Parent.MobSeed);
+		    _attackCooldown = AttackCooldown;
+            var rng = new Random(Parent.MobSeed);
 
 			Model = AnimationModelLoader.LoadEntity(Template.Path);
 			IdleAnimation = AnimationLoader.LoadAnimation(Template.IdleAnimation.Path);
@@ -60,7 +62,7 @@ namespace Hedra.Engine.EntitySystem
 			
 			AttackAnimation.Loop = false;
 			AttackAnimation.OnAnimationEnd += delegate { 
-				this._isAttacking = false;
+				this.IsAttacking = false;
 			};
 			
 			this.Model.Size = (this.Parent.DefaultBox.Max - this.Parent.DefaultBox.Min);
@@ -81,22 +83,23 @@ namespace Hedra.Engine.EntitySystem
 			if(Model.Animator.AnimationPlaying == AttackAnimation)
 				return;
 			
-			if(!AttackCooldown.Tick()){
+			if(_attackCooldown < 0){
 				this.Idle();
+			    _attackCooldown = AttackCooldown;
 				return;
 			}
 			
 			OnAnimationHandler AttackHandler = null;
 			AttackHandler = delegate {
-				float Exp = 0;
-				Damagee.Damage(Damage, this.Parent, out Exp);
+				float exp;
+				Damagee.Damage(Damage, this.Parent, out exp);
 				
 				this.AttackAnimation.OnAnimationMid -= AttackHandler;
 			};
 			this.AttackAnimation.OnAnimationMid += AttackHandler;
 			
 			Model.PlayAnimation(AttackAnimation);
-			this._isAttacking = true;
+			this.IsAttacking = true;
 		}
 		
 		public override void Update(){
@@ -123,6 +126,7 @@ namespace Hedra.Engine.EntitySystem
 		        _sound.Position = this.Position;
 		        _sound.Update(this.IsRunning);
 		    }
+		    _attackCooldown -= Time.FrameTimeSeconds;
 		}
 
         public void StopSound()
@@ -150,14 +154,14 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Run(){
 			
-			if(this._isAttacking)
+			if(this.IsAttacking)
 				return;
 			
 			if(Model != null && Model.Animator.AnimationPlaying != WalkAnimation)
 				Model.PlayAnimation(WalkAnimation);
 		}
 		public override void Idle(){
-			if(this._isAttacking)
+			if(this.IsAttacking)
 				return;
 			
 			if(Model != null && Model.Animator.AnimationPlaying != IdleAnimation)

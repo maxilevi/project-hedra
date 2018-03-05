@@ -145,6 +145,7 @@
     <Compile Include="Engine\CompatibilityManager.cs" />
     <Compile Include="Engine\GameLoader.cs" />
     <Compile Include="Engine\IO\ConfigurationFile.cs" />
+    <Compile Include="Engine\Management\ISearchable.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
     <Compile Include="Engine\Management\TickSystem.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationTemplate.cs" />
@@ -615,6 +616,7 @@
     <Compile Include="Engine\TreeSystem\TreeDesign.cs" />
     <Compile Include="Engine\UnitTesting\BaseTest.cs" />
     <Compile Include="Engine\UnitTesting\CodePolicies\ShaderCodePolicy.cs" />
+    <Compile Include="Engine\UnitTesting\GenerationTests\WorldTester.cs" />
     <Compile Include="Engine\UnitTesting\GraphicsTests\GraphicsWrapperTester.cs" />
     <Compile Include="Engine\UnitTesting\TestMethod.cs" />
     <Compile Include="Engine\UnitTesting\UnitTester.cs" />

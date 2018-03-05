@@ -30,6 +30,7 @@ namespace Hedra.Engine.EntitySystem
         private Vector3 _newPos;
         private Vector3 _point;
         private float _timeLeft;
+        private QuadrupedModel _model;
 
         public Action AILogic;
         public Entity AttackTarget;
@@ -38,10 +39,11 @@ namespace Hedra.Engine.EntitySystem
         public Timer FollowTimer = new Timer(16f);
         public Action OldLogic;
         public Vector3 TargetPosition;
-        public bool IsAttacking { get; private set; }
 
         public AIComponent(Entity Parent, AIType Type) : base(Parent)
         {
+            _model = Parent.Model as QuadrupedModel;
+            if(_model == null) throw new ArgumentException("AI Component only supports Quadruped models.");
             switch (Type)
             {
                 case AIType.Neutral:
@@ -68,7 +70,6 @@ namespace Hedra.Engine.EntitySystem
 
             if (!GameSettings.Paused && !Parent.IsDead && !Parent.Knocked && Enabled)
             {
-                IsAttacking = false;
                 AILogic();
             }
             this.UpdateMovement();
@@ -81,7 +82,6 @@ namespace Hedra.Engine.EntitySystem
 
             Physics.LookAt(Parent, Target);
             AttackTarget = Target;
-            IsAttacking = true;
 
             if (((Target.Position - Parent.Position).LengthSquared > 64 * 64 || Target.IsInvisible) &&
                 (!Force || Target.IsDead))
@@ -97,7 +97,6 @@ namespace Hedra.Engine.EntitySystem
                 TaskManager.Delay(8000, delegate { AILogic = OldLogic; });
                 return;
             }
-
             
             if (Parent.InAttackRange(Target) && !Target.IsDead && !Target.IsInvisible)
             {
@@ -187,12 +186,12 @@ namespace Hedra.Engine.EntitySystem
                 if (_callback != null && !_callbacked)
                     _callback();
             }
-            else
+            else if(!_model.IsAttacking)
             {
                 Parent.Orientation = (_point - Parent.Position).Xz.NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
 
-                Parent.Physics.Move(Parent.Orientation * 4 * Parent.Speed );
+                Parent.Physics.Move(Parent.Orientation * 5 * Parent.Speed );
 
                 Parent.Model.Run();
             }

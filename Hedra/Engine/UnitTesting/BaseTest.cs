@@ -70,7 +70,7 @@ namespace Hedra.Engine.UnitTesting
         /// </summary>
         /// <param name="Condition">The condition to assert.</param>
         /// <param name="Message">Message to display.</param>
-        public void AssertTrue(bool Condition, string Message)
+        public void AssertTrue(bool Condition, string Message = "Expected TRUE got FALSE")
         {
             if (!Condition)
             {
@@ -85,7 +85,7 @@ namespace Hedra.Engine.UnitTesting
         /// </summary>
         /// <param name="Condition">The condition to assert.</param>
         /// <param name="Message">Message to display.</param>
-        public void AssertFalse(bool Condition, string Message)
+        public void AssertFalse(bool Condition, string Message = "Expected FALSE got TRUE")
         {
            this.AssertTrue(!Condition, Message);
         }
@@ -96,7 +96,7 @@ namespace Hedra.Engine.UnitTesting
         /// <param name="Obj1">The first object to compare.</param>
         /// <param name="Obj2">The second object to compare.</param>
         /// <param name="Message">Message to display.</param>
-        public void AssertEqual(object Obj1, object Obj2, string Message)
+        public void AssertEqual(object Obj1, object Obj2, string Message = "Provided parameters are NOT EQUAL")
         {
             this.AssertTrue(Obj1.Equals(Obj2), Message);
         }

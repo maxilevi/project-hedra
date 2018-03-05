@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player
 		private bool _inJumpCoroutine;
 		public float TargetSpeed = 1.75f;
 	    private const float NormalSpeed = 2.25f;
-	    private const float AttackingSpeed = 1.5f;
+	    private const float AttackingSpeed = 1.25f;
 
         public MovementManager(Humanoid RefPlayer){
 			Human = RefPlayer;

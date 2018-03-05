@@ -37,7 +37,7 @@
     },
     "AttackAnimation": {
       "Path": "$DataFile$/Assets/Chr/GoatAttack.dae",
-      "Speed": 1.25
+      "Speed": 1.35
     }
   } 
 }

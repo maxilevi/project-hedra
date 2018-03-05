@@ -50,7 +50,7 @@ namespace Hedra.Engine.Networking
 						AIComponent AI = World.Entities[i].SearchComponent<AIComponent>();
 						if( AI != null ){
 							//Position.Add( AI.TargetPosition );
-							Animation.Add( (byte) ((AI.IsAttacking) ? 0x1 : 0x0) );
+							//Animation.Add( (byte) (AI.IsAttacking ? 0x1 : 0x0) );
 						}else{
 							Animation.Add( 0x0 );
 						}

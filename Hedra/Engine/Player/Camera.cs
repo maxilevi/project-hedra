@@ -104,7 +104,7 @@ namespace Hedra.Engine.Player
         public void Update()
         {
             _distance = Mathf.Lerp(_distance, TargetDistance+AddonDistance, Time.unScaledDeltaTime * 3f);
-            if (!GameSettings.Paused && !_player.IsDead)
+            if ( !GameSettings.Paused && !Scenes.SceneManager.Game.IsLoading && !_player.IsDead)
             {
                 XDelta = Cursor.Position.X - Constants.WIDTH / 2;
                 YDelta = Cursor.Position.Y - Constants.HEIGHT / 2;

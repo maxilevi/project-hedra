@@ -19,7 +19,7 @@
 
   "Model": {
     "Path": "$DataFile$/Assets/Chr/RatIdle.dae",
-    "Scale": 0.75,
+    "Scale": 1.0,
     "IdleAnimation": {
       "Path": "$DataFile$/Assets/Chr/RatIdle.dae",
       "Speed": 1.0

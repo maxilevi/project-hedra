@@ -205,8 +205,7 @@ namespace Hedra.Engine.Player
         public override void Attack(Entity Target, float Damage)
 		{
 			if(!Human.IsAttacking && !(Human is LocalPlayer)){
-				//Human.AttackEntity(Human.DamageEquation, Target);
-				LeftWeapon.Attack1(this);//Damage is the attack multiplier
+				LeftWeapon.Attack1(this);
 			}
 		}
 		

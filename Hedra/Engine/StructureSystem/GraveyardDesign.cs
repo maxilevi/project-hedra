@@ -202,7 +202,7 @@ namespace Hedra.Engine.StructureSystem
         {
             BlockType type;
             float height = BiomeGenerator.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
-            return Rng.Next(0, 75) == 1 && height > 0;
+            return Rng.Next(0, 150) == 1 && height > 0;
         }
     }
 }

@@ -57,6 +57,7 @@ namespace Hedra.Engine.Generation
 	    public static bool IsGenerated { get; set; }
 
 	    private static readonly List<Entity> _entities;
+	    private static HashSet<Entity> _entitiesSet;
 	    private static bool _isEntityCacheDirty = true;
 	    private static ReadOnlyCollection<Entity> _entityListCache;
 	    public static ReadOnlyCollection<Entity> Entities
@@ -92,6 +93,7 @@ namespace Hedra.Engine.Generation
 	    {
 	        _structures = new List< BaseStructure > ();
 	        _entities = new List<Entity>();
+            _entitiesSet = new HashSet<Entity>();
             Chunks = new List<Chunk>();
             SearcheableChunks = new Dictionary<Vector2, Chunk>();
             Projectiles = new List<ParticleProjectile>();
@@ -227,9 +229,7 @@ namespace Hedra.Engine.Generation
 
 			for(int i = Entities.Count-1; i > -1; i--){
 				if(Entities[i] is LocalPlayer) continue;
-				if(NetworkManager.Humans.Contains(Entities[i])) continue;
-					
-				Entities[i].Dispose();
+				RemoveEntity(Entities[i]);
 			}		
 
 			WorldRenderer.Clear();
@@ -272,12 +272,12 @@ namespace Hedra.Engine.Generation
 			}
 		}
 
-	    public static T[] InRadius<T>(Vector3 Position, float Radius) where T : Entity
+	    public static T[] InRadius<T>(Vector3 Position, float Radius) where T : ISearchable
 	    {
 	        var results = new List<T>();
 	        var searchOptions = new List<T>();
-            lock (Entities)
-                searchOptions.AddRange(Entities.OfType<T>());
+            searchOptions.AddRange(Entities.OfType<T>());
+            searchOptions.AddRange(Structures.OfType<T>());
 
 	        for (var i = 0; i < searchOptions.Count; i++)
 	        {
@@ -286,8 +286,8 @@ namespace Hedra.Engine.Generation
 	        }
 	        return results.ToArray();
 	    }
-		
-		public static void AddChunkToQueue(Chunk C, bool DoMesh){
+
+        public static void AddChunkToQueue(Chunk C, bool DoMesh){
 			//Queue.Add(C, DoMesh);
 			if(!DoMesh)
 				ChunkGenerationQueue.Queue.Add(C);
@@ -302,15 +302,26 @@ namespace Hedra.Engine.Generation
 
 	    public static void AddEntity(Entity Entity)
 	    {
-	        lock(_entities)
-                _entities.Add(Entity);
+	        lock (_entitiesSet)
+	        {
+	            if(_entitiesSet.Contains(Entity)) return;
+	            _entitiesSet.Add(Entity);
+	        }
+	        lock (_entities)
+	            _entities.Add(Entity);
+	        
 	        _isEntityCacheDirty = true;
 
 	    }
 
 	    public static void RemoveEntity(Entity Entity)
 	    {
-	        lock (_entities)
+	        lock (_entitiesSet)
+	        {
+	            if (!_entitiesSet.Contains(Entity)) return;
+	            _entitiesSet.Remove(Entity);
+	        }
+            lock (_entities)
 	            _entities.Remove(Entity);
 	        _isEntityCacheDirty = true;
 
@@ -318,7 +329,13 @@ namespace Hedra.Engine.Generation
 
 	    public static void RemoveEntity(int i)
 	    {
-	        lock (_entities)
+	        var entity = _entities[i];
+            lock (_entitiesSet)
+	        {
+	            if (!_entitiesSet.Contains(entity)) return;
+	            _entitiesSet.Remove(entity);
+	        }
+            lock (_entities)
 	            _entities.RemoveAt(i);
 	    }
 
@@ -406,6 +423,12 @@ namespace Hedra.Engine.Generation
 		}
 
         #region Space Helpers
+
+	    public static bool IsChunkOffset(Vector2 Offset)
+	    {
+	        return Offset.X % Chunk.ChunkWidth == 0 && Offset.Y % Chunk.ChunkWidth == 0;
+	    }
+
         public static Vector3 ToBlockSpace(Vector3 Vec3){
 		
 			int ChunkX = (int) Vec3.X / Chunk.ChunkWidth;

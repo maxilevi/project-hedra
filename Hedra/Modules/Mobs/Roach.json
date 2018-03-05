@@ -19,18 +19,18 @@
 
   "Model": {
     "Path": "$DataFile$/Assets/Chr/RoachIdle.dae",
-    "Scale": 2.0,
+    "Scale": 1.25,
     "IdleAnimation": {
       "Path": "$DataFile$/Assets/Chr/RoachIdle.dae",
       "Speed": 1.0
     },
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/RoachWalk.dae",
-      "Speed": 1.0
+      "Speed": 1.25
     },
     "AttackAnimation": {
       "Path": "$DataFile$/Assets/Chr/RoachAttack.dae",
-      "Speed": 1.0
+      "Speed": 1.25
     }
   } 
 }

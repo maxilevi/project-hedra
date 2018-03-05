@@ -45,7 +45,7 @@ namespace Hedra.Engine.EntitySystem
 			{
 			    var model = Parent.Model as IMountable;
 			    if(model != null && model.IsMountable && !Parent.IsUnderwater && !Parent.Knocked){					
-					player.MessageDispatcher.ShowMessage("[E] TO MOUNT", 2f, Color.White);
+					player.MessageDispatcher.ShowMessage("[E] TO MOUNT", .5f, Color.White);
 					Parent.Model.Tint = new Vector4(1.5f,1.5f,1.5f,1);
                     if(EventDispatcher.LastKeyDown == Key.E)
 					    this.Ride(player);					

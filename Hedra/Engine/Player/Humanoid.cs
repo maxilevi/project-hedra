@@ -197,11 +197,11 @@ namespace Hedra.Engine.Player
 	    }
 
 
-        public bool AttackEntity(float AttackDamage, Entity Mob, Action<Entity> Injection)
+        public bool AttackEntity(float AttackDamage, Entity Mob, Action<Entity> Callback)
 		{
 		    if (!this.InAttackRange(Mob)) return false;
 
-		    Injection?.Invoke(Mob);
+		    Callback?.Invoke(Mob);
 
 
 		    float Exp;

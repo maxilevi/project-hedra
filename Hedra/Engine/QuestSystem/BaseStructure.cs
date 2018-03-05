@@ -8,10 +8,6 @@
  */
 using System;
 using OpenTK;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Generation;
-using System.Collections.Generic;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.QuestSystem
@@ -20,8 +16,8 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of Structure.
 	/// </summary>
-	public class BaseStructure : IDisposable, IStructure
-	{
+	public class BaseStructure : IDisposable, IStructure, ISearchable
+    {
         public Vector3 Position { get; set; }
 		protected bool Disposed;
 		

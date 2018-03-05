@@ -79,7 +79,7 @@ namespace Hedra.Engine.EntitySystem
                 return;
             }
 
-            bool shouldMiss = Utils.Rng.Next(1, 11) == 1;
+            bool shouldMiss = Parent is LocalPlayer && Utils.Rng.Next(1, 18) == 1;
             var damager = Damager as Humanoid;
             if (damager?.MainWeapon?.Type == Item.ItemType.ThrowableDagger)
                 Amount *= 1f + (float) Math.Min(_consecutiveHits * .2, 1.2f);

@@ -24,7 +24,7 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public delegate void OnAttackEventHandler(Entity Victim, float Amount);
 
-    public class Entity : IUpdatable, IRenderable, IDisposable //, ICullable
+    public class Entity : IUpdatable, IRenderable, IDisposable, ISearchable//, ICullable
     {
         private DamageComponent _damageManager;
         private int _drowningSoundTimer;
@@ -33,7 +33,6 @@ namespace Hedra.Engine.EntitySystem
         private bool _knocked;
         private string _name;
         private float _oxygen = 30;
-        private bool _playSpawningAnimation = true;
         private float _prevHeight;
         private float _previousFalltime;
         private bool _spawningWithAnimation;
@@ -53,6 +52,7 @@ namespace Hedra.Engine.EntitySystem
         public float Speed { get; set; } = 2;
         protected bool Splashed { get; set; }
         public Vector3 BlockPosition { get; set; }
+        public bool PlaySpawningAnimation { get; set; } = true;
 
         public virtual float Health
         {
@@ -327,6 +327,7 @@ namespace Hedra.Engine.EntitySystem
                 }
                 else
                 {
+                    IsGrounded = false;
                     Physics.GravityDirection = Vector3.Zero;
                 }
                 IsUnderwater = true;
@@ -365,9 +366,9 @@ namespace Hedra.Engine.EntitySystem
 
         public void SpawnAnimation()
         {
-            if (_playSpawningAnimation)
+            if (PlaySpawningAnimation)
             {
-                _playSpawningAnimation = false;
+                PlaySpawningAnimation = false;
                 Model.Alpha = 0;
                 SoundManager.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
             }

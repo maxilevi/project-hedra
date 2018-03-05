@@ -54,11 +54,12 @@ namespace Hedra.Engine.QuestSystem
         protected void Roll()
         {
             var human = Parent as Humanoid;
+            if(human != null && human.WasAttacking) return;
             if (RollTimer.Tick() && human != null && (TargetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius)
                 human.Roll();
 
             Parent.Model.Run();
-            Parent.Physics.Move(Parent.Orientation * Parent.Speed * 4 * 2);
+            Parent.Physics.Move(Parent.Orientation * Parent.Speed * 5 * 2);
         }
 
         protected void LookTarget()

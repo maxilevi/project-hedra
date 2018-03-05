@@ -21,14 +21,14 @@ namespace Hedra.Engine.QuestSystem
 	/// </summary>
 	public class WarriorAIComponent : CombatAIComponent
     {
-        private readonly Timer _attackTimer;
+        private float _attackTimer;
         public override float SearchRadius { get; set; } = 64;
         public override float AttackRadius { get; set; } = 0;
         public override float ForgetRadius { get; set; } = 64;
 
         public WarriorAIComponent(Entity Parent, bool Friendly) : base(Parent, Friendly)
 		{
-			this._attackTimer = new Timer(0.75f);
+			this._attackTimer = 0f;
 		}
 		
 		public override void DoUpdate()
@@ -44,14 +44,18 @@ namespace Hedra.Engine.QuestSystem
 				}
 				
 				this.TargetPoint = ChasingTarget.Position;
-				if( Parent.InAttackRange(ChasingTarget) && !Parent.Knocked){
-					Parent.Model.Idle();
-					if(_attackTimer.Tick()){
+			    this._attackTimer -= Time.FrameTimeSeconds;
+			    var rangeDistance = (Parent.DefaultBox.Max - Parent.DefaultBox.Min).LengthFast +
+			                        (ChasingTarget.DefaultBox.Max - ChasingTarget.DefaultBox.Min).LengthFast;
+                if ((ChasingTarget.Position - Parent.Position).LengthFast < rangeDistance * .5f && !Parent.Knocked){
+					if(_attackTimer < 0)
+                    {
 						if(ChasingTarget is LocalPlayer)
 							Parent.Model.Attack(ChasingTarget, 0f);
 						else
 							Parent.Model.Attack(ChasingTarget, 4.5f);//Do more damage to mobs
-					}
+                        _attackTimer = 1.25f;
+                    }
 				}else
 				{
 				    base.Roll();

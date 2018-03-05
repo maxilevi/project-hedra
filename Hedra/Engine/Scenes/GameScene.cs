@@ -87,10 +87,10 @@ namespace Hedra.Engine.Scenes
 		public IEnumerator MenuCoroutine(){
 			while(!Constants.CHARACTER_CHOOSED){
                 
-				Vector3 Location = MenuBackground.NewLocation;
+				Vector3 location = MenuBackground.NewLocation;
                 
-				LPlayer.Physics.TargetPosition = Location;
-				LPlayer.Model.Position = Location;
+				LPlayer.Physics.TargetPosition = location;
+				LPlayer.Model.Position = location;
 				yield return null;
 			}
 		}
@@ -148,12 +148,7 @@ namespace Hedra.Engine.Scenes
 			Enviroment.SkyManager.DayTime = Data.Daytime;
 			Enviroment.SkyManager.LoadTime = true;
 			LPlayer.Inventory.SetItems(Data.Items);
-			/*BossObjective Quest = (LWorldManager.QuestGenerator.Quest as QuestSystem.BossObjective);
-			
-			if(Quest != null){
-				Quest.Boss.Health = Data.BossHealth;
-				if(Data.BossHealth <= 0) Quest.Boss.Dispose();
-			}*/
+
 			if(LPlayer.Health == 0){
 				LPlayer.BlockPosition = new Vector3(Constants.WORLD_OFFSET.X * .5f, 128, Constants.WORLD_OFFSET.Z * .5f);
 				LPlayer.Respawn();
@@ -231,8 +226,10 @@ namespace Hedra.Engine.Scenes
 		    _playerText.UiText.Opacity = 1;
 		    _playerText.Enable();
 		    _loadingScreen.Enable();
+		    UpdateManager.CursorShown = true;
 
-		    World.StructureGenerator.CheckStructures(LocalPlayer.Instance.BlockPosition.Xz);
+		    var chunkOffset = World.ToChunkSpace(LocalPlayer.Instance.BlockPosition);
+		    World.StructureGenerator.CheckStructures(chunkOffset);
             while (true){
 				time += Time.FrameTimeSeconds;
 				if(time >= .5f){
@@ -265,8 +262,9 @@ namespace Hedra.Engine.Scenes
 				    _playerText.UiText.Opacity = 0;
 					if(_isNewRun)
 						LPlayer.QuestLog.Show = true;
-					
-					LocalPlayer.Instance.MessageDispatcher.ShowTitleMessage(World.QuestManager.GenerateName(), 1.5f);
+
+				    LocalPlayer.Instance.PlaySpawningAnimation = true;
+                    LocalPlayer.Instance.MessageDispatcher.ShowTitleMessage(World.QuestManager.GenerateName(), 1.5f);
 					LPlayer.DmgComponent.Immune = false;
 					_isNewRun = false;
 					break;

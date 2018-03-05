@@ -6,6 +6,8 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
+using System;
 using OpenTK;
 using System.Collections.Generic;
 using Hedra.Engine.BiomeSystem;
@@ -32,6 +34,9 @@ namespace Hedra.Engine.StructureSystem
 
 	    public void CheckStructures(Vector2 ChunkOffset)
 	    {
+            if(!World.IsChunkOffset(ChunkOffset))
+                throw new ArgumentException("Provided paramater does not represent a valid offset");
+
 	        var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
 	        var designs = underChunk != null 
                 ? underChunk.Biome.Structures.Designs 

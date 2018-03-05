@@ -23,7 +23,7 @@ namespace Hedra.Engine.QuestSystem
 
             if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > 3 * 3)
             {
-                Parent.Physics.Move(Parent.Orientation * Parent.Speed * 4 * 2);
+                Parent.Physics.Move(Parent.Orientation * Parent.Speed * 5 * 2);
                 Parent.Model.Run();
             }
             else

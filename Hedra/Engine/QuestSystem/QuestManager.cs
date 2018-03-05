@@ -102,7 +102,8 @@ namespace Hedra.Engine.QuestSystem
 
 	        var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile);
 	        behaviour.Name = Undead ? "Skeleton" : "Bandit";
-            var human = this.SpawnHumanoid("Gnoll"/*classType.ToString()*/, Position, behaviour);
+	        var isGnoll = Utils.Rng.Next(0, 4) == 1;
+            var human = this.SpawnHumanoid(isGnoll ? "Gnoll" : classType.ToString(), Position, behaviour);
 
 	        if (Undead)
 	        {

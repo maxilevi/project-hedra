@@ -11,7 +11,7 @@
 
   "Model": {
     "Path": "$DataFile$/Assets/Chr/FoxIdle.dae",
-    "Scale": 1.5,
+    "Scale": 1.85,
     "IdleAnimation": {
       "Path": "$DataFile$/Assets/Chr/FoxIdle.dae",
       "Speed": 1.0

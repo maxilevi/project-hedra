@@ -311,8 +311,8 @@ namespace Hedra.Engine.Player
 			}
 			DmgComponent.Immune = !CanInteract;
 
-            var entities = World.Entities;
-			for(int i = entities.Count-1; i>-1; i--){
+            var entities = World.Entities.ToArray();
+			for(int i = entities.Length-1; i>-1; i--){
 				LocalPlayer player = SceneManager.Game.LPlayer;
 				if(entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused && !SceneManager.Game.IsLoading 
                         
@@ -545,7 +545,7 @@ namespace Hedra.Engine.Player
 			Health = MaxHealth;
 			Mana = MaxMana;
 		    Stamina = MaxStamina;
-			Model.Alpha = 1;
+		    this.PlaySpawningAnimation = true;
 		    this.IsRiding = false;
             var newOffset = new Vector3( (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize);
 		    var newPosition = newOffset + this.Model.Position;

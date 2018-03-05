@@ -24,7 +24,7 @@ namespace Hedra.Engine.BiomeSystem
         {
             this.Frequency = 1.0;
             this.Displacement = 1.0;
-            this.Seed = 0;
+            this.Seed = 1;
             this.DistanceEnabled = false;
         }
 

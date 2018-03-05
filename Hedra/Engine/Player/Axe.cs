@@ -55,7 +55,7 @@ namespace Hedra.Engine.Player
 		    for (int i = 0; i < SecondaryAnimations.Length; i++)
 		    {
 		        SecondaryAnimations[i].Loop = false;
-		        SecondaryAnimations[0].OnAnimationEnd += delegate
+                SecondaryAnimations[0].OnAnimationEnd += delegate
 		        {
 		            Model.Human.Attack(Model.Human.DamageEquation * 1.75f, delegate (Entity mob)
 		            {
