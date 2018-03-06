@@ -39,6 +39,7 @@ namespace Hedra.Engine.BiomeSystem
                 TreeDesign = new NormalBiomeTreeDesign(),
 	            SkyDesign = new NormalBiomeSkyDesign(),
 	            MobDesign = new NormalBiomeMobDesign(),
+                GenerationDesign = new NormalBiomeGenerationDesign(),
             };
 
 	        _voronoi = new Voronoi
@@ -56,33 +57,33 @@ namespace Hedra.Engine.BiomeSystem
 	    public Region GetRegion(Vector3 Offset)
 	    {
             lock (_regionCache) {
-	                var voronoiHeight = this.VoronoiFormula(Offset.Xz.ToVector3());
-	                int regionIndex = new Random((int) voronoiHeight).Next(0, MaxRegionsPerBiome);
-	                int biomeIndex = new Random((int) voronoiHeight + 421).Next(0, BiomeDesigns.Length);
-	                int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
+	            var voronoiHeight = this.VoronoiFormula(Offset.Xz.ToVector3());
+	            int regionIndex = new Random((int) voronoiHeight).Next(0, MaxRegionsPerBiome);
+	            int biomeIndex = new Random((int) voronoiHeight + 421).Next(0, BiomeDesigns.Length);
+	            int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
 
-	                if (_regionCache.ContainsKey(index))
-	                    return _regionCache[index];
-
-	                var regionColors =
-	                    new RegionColor(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].ColorDesign);
-	                var regionTrees = new RegionTree(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].TreeDesign);
-	                var regionStructures = new RegionStructure(World.Seed + regionIndex + biomeIndex,
-	                    BiomeDesigns[biomeIndex].StructureDesign);
-	                var regionSky = new RegionSky(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].SkyDesign);
-	                var regionMob = new RegionMob(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].MobDesign);
-	                var region = new Region
-	                {
-	                    Colors = regionColors,
-	                    Trees = regionTrees,
-	                    Structures = regionStructures,
-	                    Sky = regionSky,
-	                    Mob = regionMob,
-	                };
-
-	                _regionCache.Add(index, region);
-
+	            if (_regionCache.ContainsKey(index))
 	                return _regionCache[index];
+
+	            var regionColors = new RegionColor(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].ColorDesign);
+	            var regionTrees = new RegionTree(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].TreeDesign);
+	            var regionStructures = new RegionStructure(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].StructureDesign);
+	            var regionSky = new RegionSky(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].SkyDesign);
+	            var regionMob = new RegionMob(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].MobDesign);
+                var regionGeneration = new RegionGeneration(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].GenerationDesign);
+                var region = new Region
+	            {
+	                Colors = regionColors,
+	                Trees = regionTrees,
+	                Structures = regionStructures,
+	                Sky = regionSky,
+	                Mob = regionMob,
+                    Generation = regionGeneration,
+	            };
+
+	            _regionCache.Add(index, region);
+
+	            return _regionCache[index];
 	        }
 	    }
 

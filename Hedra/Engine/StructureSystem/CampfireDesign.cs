@@ -18,7 +18,7 @@ namespace Hedra.Engine.StructureSystem
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {
             var underChunk = World.GetChunkAt(Position);
-            var rng = new Random( (int)(Position.X / 11 * (Position.Z / 13)) );
+            var rng = new Random((int) (Position.X / 11 * (Position.Z / 13)));
             VertexData model = CacheManager.GetModel(CacheItem.Campfire).Clone();
 
             var rotation = rng.NextFloat() * 360.0f;
@@ -53,7 +53,7 @@ namespace Hedra.Engine.StructureSystem
                 shapes = CacheManager.GetShape(originalModel).DeepClone();
                 for (var i = 0; i < shapes.Count; i++)
                 {
-                    shapes[i].Transform( Matrix4.CreateScale(Vector3.One * .8f) );
+                    shapes[i].Transform(Matrix4.CreateScale(Vector3.One * .8f));
                     shapes[i].Transform(transMatrix);
                     shapes[i].Transform(padOffset);
                     underChunk.AddCollisionShape(shapes[i]);
@@ -74,22 +74,22 @@ namespace Hedra.Engine.StructureSystem
             }
         }
 
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Random Rng)
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
             BlockType type;
-            float height = BiomeGenerator.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
 
             var plateau = new Plateau(TargetPosition, 48, 16, height);
             World.QuestManager.AddPlateau(plateau);
             return new CollidableStructure(this, TargetPosition, plateau);
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Random Rng)
+        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
             BlockType type;
-            float height = BiomeGenerator.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
 
-            return Rng.Next(0, 15) == 1 && height > 0;
+            return Rng.Next(0, 12) == 1 && height > 0;
         }
 
 

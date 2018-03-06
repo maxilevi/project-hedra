@@ -91,9 +91,9 @@ namespace Hedra.Engine.Generation
                             {
                                 if (World.GetChunkByOffset( Offset + new Vector2(x, z) * new Vector2(Chunk.ChunkWidth, Chunk.ChunkWidth)) ==  null)
                                 {
-                                    Vector2 ChunkPos =
+                                    Vector2 chunkPos =
                                         Offset + new Vector2(x, z) * new Vector2(Chunk.ChunkWidth, Chunk.ChunkWidth);
-                                    Chunk chunk = new Chunk((int) ChunkPos.X, (int) ChunkPos.Y);
+                                    var chunk = new Chunk((int) chunkPos.X, (int) chunkPos.Y);
                                     World.AddChunk(chunk);
                                 }
                             }

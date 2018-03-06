@@ -52,8 +52,8 @@ namespace Hedra.Engine.BiomeSystem
 				    var depth = (int) (Chunk.ChunkWidth / Chunk.BlockSize);
 
 				    var noise3D = new float[0];//Chunk.ChunkHeight / noiseScale];
-
-				    Plateau[] plateauPositions;
+ 
+                    Plateau[] plateauPositions;
 
 				    lock (World.QuestManager.Plateaus)
 				        plateauPositions = World.QuestManager.Plateaus.ToArray();
@@ -63,7 +63,11 @@ namespace Hedra.Engine.BiomeSystem
 				    lock (World.StructureGenerator.Items)
 				        structs = World.StructureGenerator.Items.ToArray();
 
-				    for (var x = 0; x < width; x++)
+				    var biomeGen = Chunk.Biome.Generation;
+				    var hasRiver = biomeGen.HasRivers ? 1f : 0f;
+				    var hasPath = biomeGen.HasPaths ? 1f : 0f;
+
+                    for (var x = 0; x < width; x++)
 					{
 					    const float narrow = 0.42f;
 					    const float border = 0.02f;
@@ -76,7 +80,7 @@ namespace Hedra.Engine.BiomeSystem
 							
 							var position = new Vector2(x * Chunk.BlockSize + OffsetX, z* Chunk.BlockSize + OffsetZ);
 					        BlockType type;
-					        float height = GetHeight(position.X, position.Y, heightCache, out type);
+					        float height = Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out type);
                             float dist, final;
 
                             #region Structure stuff
@@ -124,11 +128,11 @@ namespace Hedra.Engine.BiomeSystem
 								townClamped = false;
 
 					        var pathClamped = false;
-					        float path = BiomeGenerator.PathFormula(Chunk.BlockSize * x + Chunk.OffsetX, Chunk.BlockSize * z + Chunk.OffsetZ);
+					        float path = hasPath * BiomeGenerator.PathFormula(Chunk.BlockSize * x + Chunk.OffsetX, Chunk.BlockSize * z + Chunk.OffsetZ);
 					        path = Mathf.Clamp(path * 100f, 0, pathDepth);
 
-					        float river = (float) Math.Max(0, 0.5 - Math.Abs(OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + Chunk.OffsetX) * 0.0011f, (Chunk.BlockSize * z + Chunk.OffsetZ) *  0.0011f) - 0.2) - narrow) * scale;
-					        float riverBorders = (float) Math.Max(0, 0.5 - Math.Abs(OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + Chunk.OffsetX) * 0.0011f, (Chunk.BlockSize * z + Chunk.OffsetZ) *  0.0011f) - 0.2) - narrow+border) * scale;
+					        float river = hasRiver * (float) Math.Max(0, 0.5 - Math.Abs(OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + Chunk.OffsetX) * 0.0011f, (Chunk.BlockSize * z + Chunk.OffsetZ) *  0.0011f) - 0.2) - narrow) * scale;
+					        float riverBorders = hasRiver * (float) Math.Max(0, 0.5 - Math.Abs(OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + Chunk.OffsetX) * 0.0011f, (Chunk.BlockSize * z + Chunk.OffsetZ) *  0.0011f) - 0.2) - narrow+border) * scale;
 						    river = Mathf.Clamp(river * riverMult, 0, riverDepth);
 					        float amplifiedRiverBorders = Mathf.Clamp(riverBorders * riverMult, 0, riverDepth);
 
@@ -158,7 +162,7 @@ namespace Hedra.Engine.BiomeSystem
 					        for (var i = 0; i < noise3D.Length; i++)
 					        {
 					            if (World.MenuSeed != World.Seed)
-					                noise3D[i] = BiomeGenerator.GetDensity(OffsetX + x * Chunk.BlockSize, i * noiseScale * Chunk.BlockSize,
+					                noise3D[i] = biomeGen.GetDensity(OffsetX + x * Chunk.BlockSize, i * noiseScale * Chunk.BlockSize,
 					                    OffsetZ + z * Chunk.BlockSize, heightCache);
 
 
@@ -210,7 +214,7 @@ namespace Hedra.Engine.BiomeSystem
 					        height -= river;
 							height -= path;
 
-					        bool makeDirt = SimplexNoise.Noise.Generate( (x*Chunk.BlockSize+OffsetX) * 0.0075f,
+					        bool makeDirt = biomeGen.HasDirt && SimplexNoise.Noise.Generate( (x*Chunk.BlockSize+OffsetX) * 0.0075f,
                                 (z*Chunk.BlockSize+OffsetZ) * 0.0075f) > .45f;
 
 					        var villagePath = false;
@@ -235,7 +239,7 @@ namespace Hedra.Engine.BiomeSystem
                                     noise3D[ (int) Math.Min(noise3D.Length-1, Math.Floor(y / (float) noiseScale) + 1) ],
 								    (y / (float) noiseScale) - (int) Math.Floor(y / (float)noiseScale));*/
 
-                                type = GetHeightSubtype(position.X, y, position.Y, height, type, heightCache);
+                                type = biomeGen.GetHeightSubtype(position.X, y, position.Y, height, type, heightCache);
 
 								if(noise != 0 && townClamped)
 									townClamped = false;

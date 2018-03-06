@@ -13,5 +13,6 @@ namespace Hedra.Engine.BiomeSystem
         public BiomeEnviromentDesign EnviromentDesign;
         public BiomeTreeDesign TreeDesign;
         public BiomeSkyDesign SkyDesign;
+        public BiomeGenerationDesign GenerationDesign;
     }
 }

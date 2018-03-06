@@ -79,7 +79,7 @@ namespace Hedra.Engine.StructureSystem
             CoroutineManager.StartCoroutine(VillageGenerator.GenerateStable, new object[] { Structure, Position, rng, true, stableTransMatrix });
         }
 
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Random Rng)
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
             Vector3 farmPosition = -Vector3.UnitY * 2.0f - Vector3.UnitZ * 140.0f;
             try
@@ -140,7 +140,7 @@ namespace Hedra.Engine.StructureSystem
             }
 
             BlockType type;
-            float height = BiomeGenerator.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
 
             var plateau = new Plateau(TargetPosition, this.Radius, 800, height);
             World.QuestManager.AddPlateau(plateau);
@@ -148,10 +148,10 @@ namespace Hedra.Engine.StructureSystem
             return new CollidableStructure(this, TargetPosition, plateau);        
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Random Rng)
+        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
             BlockType type;
-            float height = BiomeGenerator.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
 
             return BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0 && Rng.Next(0, 200) == 1 && height > 0;
         }

@@ -38,13 +38,14 @@ namespace Hedra.Engine.StructureSystem
                 throw new ArgumentException("Provided paramater does not represent a valid offset");
 
 	        var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
-	        var designs = underChunk != null 
-                ? underChunk.Biome.Structures.Designs 
-                : World.BiomePool.GetRegion(ChunkOffset.ToVector3()).Structures.Designs;
+	        var region = underChunk != null 
+                ? underChunk.Biome 
+                : World.BiomePool.GetRegion(ChunkOffset.ToVector3());
+	        var designs = region.Structures.Designs;
 	        for (var i = 0; i < designs.Length; i++)
 	        {
                 if(designs[i].MeetsRequirements(ChunkOffset))
-                    designs[i].CheckFor(ChunkOffset, designs);
+                    designs[i].CheckFor(ChunkOffset, region);
 	        }
 	    }
 

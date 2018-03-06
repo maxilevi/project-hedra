@@ -49,7 +49,6 @@ namespace Hedra.Engine.StructureSystem
 
             ThreadManager.ExecuteOnMainThread(delegate
             {
-                Log.WriteLine("Setting up GiantTree...");
                 MobType BossType;
                 Entity TreeBoss = BossGenerator.Generate(rng, out BossType);
 
@@ -64,15 +63,14 @@ namespace Hedra.Engine.StructureSystem
 
                 World.AddStructure(prize);
                 underChunk.AddStaticElement(model);
-                Log.WriteLine("End of setup");
             });
 
         }
 
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Random Rng)
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
             BlockType type;
-            float height = BiomeGenerator.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
 
             var plateau = new Plateau(TargetPosition, Radius, 800, height);
 
@@ -82,12 +80,12 @@ namespace Hedra.Engine.StructureSystem
             
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Random Rng)
+        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
             BlockType type;
-            float height = BiomeGenerator.GetHeight( TargetPosition.X, TargetPosition.Z, null, out type);
+            float height = Biome.Generation.GetHeight( TargetPosition.X, TargetPosition.Z, null, out type);
 
-            return Rng.Next(0, 225) == 1 && height > 0;
+            return Rng.Next(0, 200) == 1 && height > 0;
         }
     }
 }

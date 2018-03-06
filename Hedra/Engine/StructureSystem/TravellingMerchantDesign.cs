@@ -39,12 +39,12 @@ namespace Hedra.Engine.StructureSystem
             ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.TravellingMerchant, Position));
         }
 
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Random Rng)
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
             World.StructureGenerator.MerchantSpawned = true;
 
             BlockType type;
-            float height = BiomeGenerator.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
 
             World.StructureGenerator.MerchantPosition = TargetPosition;
 
@@ -53,13 +53,13 @@ namespace Hedra.Engine.StructureSystem
             return new CollidableStructure(this, TargetPosition, plateau);
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Random Rng)
+        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
             BlockType type;
-            float height = BiomeGenerator.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
 
             return !(Math.Abs(ChunkOffset.X - 50000) > 10000 || Math.Abs(ChunkOffset.Y - 50000) > 10000) &&
-                   Rng.Next(0, 100) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > 0;
+                   Rng.Next(0, 30) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > 0;
         }
 
         public override bool MeetsRequirements(Vector2 ChunkOffset)

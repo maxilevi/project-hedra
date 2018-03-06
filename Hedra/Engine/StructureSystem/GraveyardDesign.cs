@@ -12,6 +12,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
+using Region = Hedra.Engine.BiomeSystem.Region;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -186,11 +187,11 @@ namespace Hedra.Engine.StructureSystem
             }
         }
 
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Random Rng)
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
 
             BlockType type;
-            float height = BiomeGenerator.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type) + Chunk.BlockSize;
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type) + Chunk.BlockSize;
 
             var plateau = new Plateau(TargetPosition, Radius, 580, height);
             World.QuestManager.AddPlateau(plateau);
@@ -198,11 +199,11 @@ namespace Hedra.Engine.StructureSystem
             return new CollidableStructure(this, TargetPosition, plateau);
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Random Rng)
+        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
             BlockType type;
-            float height = BiomeGenerator.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
-            return Rng.Next(0, 150) == 1 && height > 0;
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            return Rng.Next(0, 125) == 1 && height > 0;
         }
     }
 }

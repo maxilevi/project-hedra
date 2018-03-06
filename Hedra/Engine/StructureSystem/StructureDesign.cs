@@ -18,9 +18,9 @@ namespace Hedra.Engine.StructureSystem
 
         public abstract void Build(Vector3 Position, CollidableStructure Structure);
 
-        protected abstract CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Random Rng);
+        protected abstract CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng);
 
-        public virtual void CheckFor(Vector2 ChunkOffset, StructureDesign[] Designs)
+        public virtual void CheckFor(Vector2 ChunkOffset, Region Biome)
         {
             for (int x = Math.Min(-2, -Radius / Chunk.ChunkWidth * 2); x < Math.Max(2, Radius / Chunk.ChunkWidth * 2); x++)
             {
@@ -33,12 +33,12 @@ namespace Hedra.Engine.StructureSystem
                     var targetPosition = new Vector3(newOffset.X + rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize,
                         0,
                         newOffset.Y + rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize);
-                    bool shouldBe = this.SetupRequirements(targetPosition, newOffset, rng) && (Math.Abs(targetPosition.X - 50000) > 2000 || Math.Abs(targetPosition.Y - 50000) > 2000);
-                    if (shouldBe && this.ShouldBuild(targetPosition, Designs))
+                    bool shouldBe = this.SetupRequirements(targetPosition, newOffset, Biome, rng) && (Math.Abs(targetPosition.X - 50000) > 2000 || Math.Abs(targetPosition.Y - 50000) > 2000);
+                    if (shouldBe && this.ShouldBuild(targetPosition, Biome.Structures.Designs))
                     {
                         lock (World.StructureGenerator.Items)
                         {
-                            var item = Setup(targetPosition, newOffset, rng);
+                            var item = Setup(targetPosition, newOffset, Biome, rng);
                             if(item != null) World.StructureGenerator.Items.Add(item);
                         }
                     }
@@ -96,7 +96,7 @@ namespace Hedra.Engine.StructureSystem
 
         }
 
-        protected abstract bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Random Rng);
+        protected abstract bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng);
 
         public virtual bool MeetsRequirements(Vector2 ChunkOffset)
         {

@@ -44,8 +44,13 @@ namespace Hedra.Engine.QuestSystem.Objectives
             _stablePosition = StablePosition;
             base.CenterHeight = 0;
 
+            var underChunk = World.GetChunkAt(StablePosition.Xz.ToVector3());
+            var region = underChunk != null
+                ? underChunk.Biome
+                : World.BiomePool.GetRegion(StablePosition.Xz.ToVector3());
+
             BlockType type;
-            if(BiomeGenerator.GetHeight(ObjectivePosition.X, ObjectivePosition.Z, null, out type) > 5)
+            if(region.Generation.GetHeight(ObjectivePosition.X, ObjectivePosition.Z, null, out type) > 5)
                 base.CenterRadius = 0;
         }
 
