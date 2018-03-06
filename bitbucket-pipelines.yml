@@ -8,14 +8,10 @@ image: mono
 pipelines:
   default:
     - step:
-        name: Setup build enviroment.
+        name: Build Project Hedra for Mono.
         script:
           - apt-get update
           - apt-get install -y git
-          # apt-get install -y openssh-server
-          #- ls ~/.ssh
           - git clone ssh://git@bitbucket.org/Zaphyk/project-hedra-assets.git
-          - ls
           - mv "project-hedra-assets/" "../../Assets/"
-          - ls "../../"
           - xbuild Hedra/Hedra.csproj
