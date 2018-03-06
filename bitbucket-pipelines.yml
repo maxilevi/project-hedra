@@ -13,9 +13,7 @@ pipelines:
           - apt-get update
           - apt-get install -y git
           - apt-get install -y openssh-server
-          - mkdir -p ~/.ssh
-          - cat my_known_hosts >> ~/.ssh/known_hosts
-          - base64 --decode hedra_assets >> ~/.ssh/id_rsa
+          - ls ~/.ssh
           - git clone ssh://git@bitbucket.org/Zaphyk/project-hedra-assets.git
           - ls
           - mv "project-hedra-assets/" "Assets/"
