@@ -4173,9 +4173,9 @@
     </Content>
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>call "C:/Utilities/ShaderCompiler.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" true
-call "C:/Utilities/ShaderCompiler.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" false
-call "C:/Utilities/ShaderCompiler.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" false</PostBuildEvent>
+    <PostBuildEvent>call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" true
+call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" false
+call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" false</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <ErrorReport>prompt</ErrorReport>
