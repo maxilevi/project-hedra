@@ -48,12 +48,13 @@ namespace Hedra.Engine.ModuleSystem
             mob.AddComponent(barComponent);
 
             int levelN = rng.Next(0, 10);
-            if (levelN <= 4) mob.Level = 1;
-            else if (levelN > 4 && levelN <= 7) mob.Level = 2;
-            else if (levelN > 7 && levelN <= 9) mob.Level = 3;
+            float mobDifficulty = 1f;
+            if (levelN <= 4) mobDifficulty = 1f;
+            else if (levelN > 4 && levelN <= 7) mobDifficulty = 1.5f;
+            else if (levelN > 7 && levelN <= 9) mobDifficulty = 2f;
 
-            barComponent.FontColor = mob.Level == 1 ? Color.White : mob.Level == 2 ? Color.Gold : Color.Red;
-            mob.Level = (int) (LocalPlayer.Instance.Level * .2f + mob.Level);
+            barComponent.FontColor = mobDifficulty == 1 ? Color.White : mobDifficulty == 2 ? Color.Red : Color.Gold;
+            mob.Level = (int) Math.Max(1, LocalPlayer.Instance.Level * .2f * mobDifficulty);
 
             _factories[Type.ToLowerInvariant()].Apply(mob);
 
@@ -65,7 +66,7 @@ namespace Hedra.Engine.ModuleSystem
 
             mob.AttackDamage *= Math.Max(mob.Level * .35f, 1);
 
-            dmg.XpToGive = Math.Max(1, (float) Math.Round(dmg.XpToGive * mob.Level * .75f));
+            dmg.XpToGive = Math.Max(1, (float) Math.Round(dmg.XpToGive * mob.Level));
             dmg.OnDamageEvent += delegate(DamageEventArgs Args)
             {
                 if (Args.Damager != null)
