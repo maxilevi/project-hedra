@@ -122,7 +122,7 @@ namespace Hedra.Engine.EntitySystem
         public bool Knocked
         {
             get { return _knocked; }
-            set
+            private set
             {
                 if (value == _knocked) return;
                 _knocked = value;
@@ -411,7 +411,7 @@ namespace Hedra.Engine.EntitySystem
             World.RemoveEntity(this);
 
             for (var i = 0; i < Components.Count; i++)
-                (Components[i] as IDisposable)?.Dispose();
+                Components[i].Dispose();
 
             var humanoid = this as Humanoid;
             if (humanoid != null)

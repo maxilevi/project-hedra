@@ -67,10 +67,13 @@ namespace Hedra.Engine.Generation
 	            if (_isEntityCacheDirty)
 	            {
 	                lock (_entities)
+	                {
 	                    _entityListCache = _entities.AsReadOnly();
+	                }	                
 	                _isEntityCacheDirty = false;
 	            }
-	            return _entityListCache;
+	            lock (_entityListCache)
+                    return _entityListCache;
 	        }
 	    }
 
