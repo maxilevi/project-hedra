@@ -9,9 +9,15 @@ pipelines:
   default:
     - step:
         name: Build Project Hedra for Mono.
+        deployment: production
         script:
           - apt-get update
           - apt-get install -y git
+          #- apt-get install -y zip
+          - zip -r myfiles.zip mydir
           - git clone ssh://git@bitbucket.org/Zaphyk/project-hedra-assets.git
           - mv "project-hedra-assets/" "../../Assets/"
           - xbuild Hedra/Hedra.csproj
+          - zip -r mono-build-${BITBUCKET_COMMIT}.zip Hedra/bin/Debug/
+          - curl -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"mono-build-${BITBUCKET_COMMIT}.zip"
+          - mono Hedra/bin/Debug/Hedra.exe
