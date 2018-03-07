@@ -83,9 +83,8 @@ namespace Hedra.Engine.EntitySystem
 			if(Model.Animator.AnimationPlaying == AttackAnimation)
 				return;
 			
-			if(_attackCooldown < 0){
+			if(_attackCooldown > 0){
 				this.Idle();
-			    _attackCooldown = AttackCooldown;
 				return;
 			}
 			
@@ -100,7 +99,8 @@ namespace Hedra.Engine.EntitySystem
 			
 			Model.PlayAnimation(AttackAnimation);
 			this.IsAttacking = true;
-		}
+		    _attackCooldown = AttackCooldown;
+        }
 		
 		public override void Update(){
 			if(Model.Animator.AnimationPlaying == null)
