@@ -13,8 +13,7 @@ pipelines:
         script:
           - apt-get update
           - apt-get install -y git
-          #- apt-get install -y zip
-          - zip -r myfiles.zip mydir
+          - apt-get install -y zip
           - git clone ssh://git@bitbucket.org/Zaphyk/project-hedra-assets.git
           - mv "project-hedra-assets/" "../../Assets/"
           - xbuild Hedra/Hedra.csproj
