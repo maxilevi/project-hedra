@@ -4178,7 +4178,8 @@
         call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" false
         call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" false
     </PostBuildEvent>
-    <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">./compress.sh</PostBuildEvent>
+    <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">echo compress</PostBuildEvent>
+    <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">compress.sh</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <ErrorReport>prompt</ErrorReport>
