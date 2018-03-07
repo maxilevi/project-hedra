@@ -4173,9 +4173,16 @@
     </Content>
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" true
-call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" false
-call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" false</PostBuildEvent>
+    <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
+        call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" true
+        call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" false
+        call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" false
+    </PostBuildEvent>
+    <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">
+        mono "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" true
+        mono "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" false
+        mono "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" false
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <ErrorReport>prompt</ErrorReport>
