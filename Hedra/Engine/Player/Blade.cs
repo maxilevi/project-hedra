@@ -42,12 +42,12 @@ namespace Hedra.Engine.Player
 
             for (int i = 0; i < PrimaryAnimations.Length; i++)
             {
-                PrimaryAnimations[i].Speed = 1.25f;
+                PrimaryAnimations[i].Speed = 2.0f;
                 PrimaryAnimations[i].Loop = false;
 
                 PrimaryAnimations[i].OnAnimationMid += delegate
                 {
-                    Model.Human.Attack(Model.Human.DamageEquation * .6f);
+                    Model.Human.Attack(Model.Human.DamageEquation * 0.85f);
                 };
             }
 
