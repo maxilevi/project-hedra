@@ -55,8 +55,13 @@ namespace Hedra.Engine.Management
 					LocalPlayer.Instance.XP += float.Parse(Parts[1]);
 					return true;
 				}
-				
-				if(Parts[0] == "speed"){
+			    if (Parts[0] == "lvl")
+			    {
+			        LocalPlayer.Instance.Level = int.Parse(Parts[1]);
+			        return true;
+			    }
+
+                if (Parts[0] == "speed"){
 					LocalPlayer.Instance.Speed += float.Parse(Parts[1]);
 					return true;
 				}
