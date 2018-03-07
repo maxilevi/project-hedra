@@ -430,12 +430,6 @@ namespace Hedra.Engine.Player
 		    }
 
 #if DEBUG
-			if(e.Key == Key.Number9){
-				for(int i = 0; i < Graphics2D.Textures.Count; i++){
-					OpenTK.Graphics.OpenGL.GL.DeleteTexture(Graphics2D.Textures[i]);
-				}
-					
-			}
 			if(e.Key == Key.F9 && player.CanInteract){
 				if(Recorder.Active)
 					Recorder.Active = false;
