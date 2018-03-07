@@ -4180,6 +4180,8 @@
     </PostBuildEvent>
     <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">
         mono "utilities/ShaderCompiler.exe" "$(TargetDir)Shaders/" "$(TargetDir)data1.db" true
+        mono "utilities/ShaderCompiler.exe" "$(TargetDir)Sounds/" "$(TargetDir)data2.db" false
+        mono "utilities/ShaderCompiler.exe" "$(TargetDir)Assets/" "$(TargetDir)data3.db" false
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
