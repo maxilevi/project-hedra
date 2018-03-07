@@ -11,11 +11,6 @@ pipelines:
         name: Build Project Hedra with Mono.
         deployment: production
         script:
-          - mono utilities/ShaderCompiler.exe test_folder2 test2.db true
-          - mono utilities/ShaderCompiler.exe test_folder3 test3.db false
-          - chmod +x compress.sh
-          - ./compress.sh
-          - ls
           - apt-get update
           - apt-get install -y git
           - apt-get install -y zip
