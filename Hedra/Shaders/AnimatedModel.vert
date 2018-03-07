@@ -128,7 +128,7 @@ void main(void){
 
 	vec4 final_color = vec4(finalRim,0.0) + (vec4(Diffuse,1.0) * vec4(in_color,1.0)) + Specular;
 
-	vec3 lightDiffuse = max(DiffuseModel(unitToLight, unitNormal, FLightColor), vec3(.0, .0, .0)) * .7;
+	vec3 lightDiffuse = DiffuseModel(unitToLight, unitNormal, FLightColor) * .7;
 
 	pass_lightDiffuse = vec4(lightDiffuse,1.0) * vec4(in_color,1.0);
 	pass_color = vec4(final_color.xyz, Alpha);

@@ -55,10 +55,10 @@ void main(void){
 		vec4 new_color = pass_color * Tint;
 
 		if(UseFog){
-			vec4 NewColor = mix(SkyColor, new_color * ShadowVisibility, pass_visibility);
+			vec4 NewColor = mix(SkyColor, new_color * ShadowVisibility + pass_lightDiffuse, pass_visibility);
 			out_colour = vec4(NewColor.xyz, new_color.w);
 		}else{
-			out_colour = vec4(new_color.xyz * ShadowVisibility, new_color.w);
+			out_colour = vec4(new_color.xyz * ShadowVisibility + pass_lightDiffuse.xyz, new_color.w);
 		}		
 		
 		mat3 mat = mat3(transpose(inverse(gl_ModelViewMatrix)));
