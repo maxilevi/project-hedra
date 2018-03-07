@@ -55,8 +55,7 @@ namespace Hedra.Engine.Player
 	    private bool _shouldUpdateTime;
 	    private int _emitted;
 	    private float _health;
-	    private bool _wasSleeping;
-	    
+	    private bool _wasSleeping;	    
 
 	    public LocalPlayer(){
 			this.UI = new UserInterface(this);
@@ -170,6 +169,18 @@ namespace Hedra.Engine.Player
         }
         #endregion
 
+	    private bool _canInteract;
+	    public override bool CanInteract
+	    {
+	        get { return _canInteract; }
+	        set
+	        {
+	            _canInteract = value;
+                if(DmgComponent != null)
+	                DmgComponent.Immune = !value;
+	        }
+	    }
+
         public override void Draw(){
 			if(Oxygen != MaxOxygen && !GameSettings.Paused && UI.GamePanel.Enabled)
 				UI.GamePanel.Oxygen = true;
@@ -185,9 +196,10 @@ namespace Hedra.Engine.Player
 			base.Draw();
 			Map.Draw();
 
-			for(int i = World.Entities.Count-1; i>-1; i--){
-				if( !(World.Entities[i] is LocalPlayer) && (World.Entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256*256 || Pet.MountEntity == World.Entities[i]){
-					World.Entities[i].Draw();
+            var entities = World.Entities.ToArray();
+            for (int i = entities.Length- 1; i>-1; i--){
+				if( !(entities[i] is LocalPlayer) && (entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256*256 || Pet.MountEntity == entities[i]){
+				    entities[i].Draw();
 				}
 			}   	
 		}
@@ -309,7 +321,6 @@ namespace Hedra.Engine.Player
 					_floating = false;
 				if(Model.MountModel == null || Model.MountModel != null && Model.MountModel.Disposed) IsRiding = false;
 			}
-			DmgComponent.Immune = !CanInteract;
 
             var entities = World.Entities.ToArray();
 			for(int i = entities.Length-1; i>-1; i--){

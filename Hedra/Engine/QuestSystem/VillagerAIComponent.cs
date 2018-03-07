@@ -21,21 +21,25 @@ namespace Hedra.Engine.QuestSystem
     /// </summary>
     public class VillagerAIComponent : HumanoidAIComponent
     {
-        private bool Move;
-        private Vector3 TargetPoint;
-        private Timer MovementTimer;
-        private Vector3 OriginalPosition;
+        private readonly bool _move;
+        private Vector3 _targetPoint;
+        private readonly Timer _movementTimer;
+        private readonly Vector3 _originalPosition;
+        public override bool ShouldSleep => true;
 
         public VillagerAIComponent(Entity Parent, bool Move) : base(Parent)
         {
-            this.Move = Move;
-            this.MovementTimer = new Timer(6.0f);//Alert every 6.0f seconds
-            this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.BlockPosition;
-            this.OriginalPosition = Parent.BlockPosition;
+            this._move = Move;
+            this._movementTimer = new Timer(6.0f);//Alert every 6.0f seconds
+            this._targetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.BlockPosition;
+            this._originalPosition = Parent.BlockPosition;
         }
 
         public override void Update()
         {
+            this.ManageSleeping();
+            if (IsSleeping) return;
+
         	if( (LocalPlayer.Instance.Position - this.Parent.Position).Xz.LengthSquared < 24*24){
         		Parent.Orientation = (LocalPlayer.Instance.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
 	            Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
@@ -55,15 +59,15 @@ namespace Hedra.Engine.QuestSystem
         		return;
         	}
         	
-        	if(Move){
-	            if( this.MovementTimer.Tick()){
-	                this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.BlockPosition;
+        	if(_move){
+	            if( this._movementTimer.Tick()){
+	                this._targetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.BlockPosition;
 	            }
 	
-	            if ((Parent.Position - OriginalPosition).LengthSquared > 128 * 128)
-	                this.TargetPoint = OriginalPosition;
+	            if ((Parent.Position - _originalPosition).LengthSquared > 128 * 128)
+	                this._targetPoint = _originalPosition;
 	            
-                base.Move(TargetPoint);	
+                base.Move(_targetPoint);	
         	}
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Enviroment;
 using Hedra.Engine.Management;
 using Hedra.Engine.Events;
@@ -35,6 +36,7 @@ namespace Hedra.Engine.QuestSystem
                     this.SetSleeper(null);
                 }
             });
+            
             UpdateManager.Add(this);      
         }
 
@@ -46,6 +48,8 @@ namespace Hedra.Engine.QuestSystem
 
             if(IsOccupied && !SkyManager.IsNight)
                 this.SetSleeper(null);
+            if(IsOccupied && Sleeper.IsDead)
+                this.SetSleeper(null);
         }
 
         public void SetSleeper(Humanoid Human)
@@ -55,6 +59,11 @@ namespace Hedra.Engine.QuestSystem
                 Sleeper.IsSleeping = false;
                 Sleeper.CanInteract = true;
                 Sleeper.ShowIcon(null);
+                var dmgComponent = Sleeper.SearchComponent<DamageComponent>();
+                if (dmgComponent != null)
+                {
+                    dmgComponent.OnDamageEvent -= this.OnDamageWakeUp;
+                }
             }
             if (Human != null)
             {
@@ -64,8 +73,20 @@ namespace Hedra.Engine.QuestSystem
                 Human.CanInteract = false;
                 Human.Physics.TargetPosition = Position;
                 Human.Rotation = TargetRotation;
+                var dmgComponent = Human.SearchComponent<DamageComponent>();
+                if (dmgComponent != null)
+                {
+                    dmgComponent.Immune = false;
+                    dmgComponent.OnDamageEvent += this.OnDamageWakeUp;
+                }
             }
             Sleeper = Human;
+        }
+
+        public void OnDamageWakeUp (DamageEventArgs Args)
+        {
+            if (Sleeper == Args.Victim)
+                this.SetSleeper(null);
         }
 
         public override void Dispose()

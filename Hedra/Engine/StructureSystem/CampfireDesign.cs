@@ -41,7 +41,7 @@ namespace Hedra.Engine.StructureSystem
             var fire = new Campfire(Position);
             World.AddStructure(fire);
 
-            if (rng.Next(0, 4) != 1)
+            if (rng.Next(0, 5) != 1)
             {
                 var padOffset = Vector3.TransformPosition(Vector3.UnitX * -12f, rotMat);
                 var originalModel = CacheManager.GetModel(CacheItem.Mat);
@@ -66,11 +66,6 @@ namespace Hedra.Engine.StructureSystem
                 };
                 World.AddStructure(pad);
                 UpdateManager.Add(pad);
-                /*if (rng.Next(1, 2) == 1)
-                    pad.SetSleeper(
-                        World.InRadius<Humanoid>(Position, 20f).FirstOrDefault()
-                    );
-                */
             }
         }
 

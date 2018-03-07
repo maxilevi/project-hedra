@@ -34,7 +34,7 @@ namespace Hedra.Engine.Player
 		public bool IsRiding { get; set; }
 		public bool IsClimbing { get; set; }
 		public bool WasAttacking { get; set; }
-		public bool CanInteract {get; set; }
+		public virtual bool CanInteract {get; set; }
         public bool IsSleeping { get; set; }
 		public bool IsSitting { get{ return Model.IsSitting; } set{ if(value) Model.Sit(); else Model.Idle(); } }
 		public new HumanModel Model { get{ return base.Model as HumanModel; } set{ base.Model = value;} }

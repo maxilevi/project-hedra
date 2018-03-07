@@ -22,6 +22,7 @@ namespace Hedra.Engine.QuestSystem
         public abstract float SearchRadius { get; set; }
         public abstract float AttackRadius { get; set; }
         public abstract float ForgetRadius { get; set; }
+        public override bool ShouldSleep => !Chasing;
 
         protected CombatAIComponent(Entity Entity, bool Friendly) : base(Entity)
         {
@@ -32,11 +33,34 @@ namespace Hedra.Engine.QuestSystem
             this.OriginalPosition = Parent.BlockPosition;
         }
 
+        public override bool ShouldWakeup
+        {
+            get
+            {
+                var humanoids = World.InRadius<Humanoid>(this.Parent.Position, 64f);
+                if (humanoids == null) return false;
+                for (var i = 0; i < humanoids.Length; i++)
+                {
+                    var combatAI = humanoids[i].SearchComponent<CombatAIComponent>();
+                    if (combatAI != null)
+                    {
+                        if (humanoids[i].IsAttacking)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
         public override void Update()
         {
             if (Parent.Knocked) return;
 
-            this.DoUpdate();
+            if(!this.IsSleeping)
+                this.DoUpdate();
+            this.ManageSleeping();
         }
 
         public abstract void DoUpdate();
