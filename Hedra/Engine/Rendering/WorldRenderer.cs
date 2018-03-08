@@ -29,7 +29,6 @@ namespace Hedra.Engine.Rendering
 	    public static WorldBuffer StaticBuffer;
 	    public static WorldBuffer WaterBuffer;
 	    private static float WaveMovement { get; set; }
-        public static float WaterTransparencyModifier {get; set;}
 		public static bool ShowWaterBackfaces {get; set;}
 	    public static Texture3D NoiseTexture;
 
@@ -179,7 +178,6 @@ namespace Hedra.Engine.Rendering
 			BlockShaders.WaterShader.AreaColorsUniform.LoadVectorArray(World.Highlighter.AreaColors);
 			
 			GL.Uniform1(BlockShaders.WaterShader.WaveMovementUniform, WaveMovement);
-			GL.Uniform1(BlockShaders.WaterShader.TransparencyLocation, WaterTransparencyModifier);
            	
            	
            	if(ShowWaterBackfaces) 

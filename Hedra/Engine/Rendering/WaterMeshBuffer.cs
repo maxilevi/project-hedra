@@ -28,7 +28,6 @@ namespace Hedra.Engine.Rendering
 			if(Shadows) return;
 			
 			GL.Uniform1(BlockShaders.WaterShader.WaveMovementUniform, WaveMovement);
-			GL.Uniform1(BlockShaders.WaterShader.TransparencyLocation, TransparencyModifier);
 			
 			WaveMovement += (float) Time.deltaTime * Mathf.Radian * 0.2f;
 			if(WaveMovement >= 5)

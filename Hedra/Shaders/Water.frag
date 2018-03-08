@@ -16,7 +16,6 @@ layout(location = 2)out vec4 OutNormal;
 
 uniform vec4 AreaColors[16];
 uniform vec4 AreaPositions[16];
-uniform float TransparencyModifier = 0.7;
 uniform sampler2D DepthMap;
 
 const float Strength = 0.01;
@@ -43,7 +42,6 @@ void main(){
 	vec4 NewColor = mix(SkyColor, InputColor, Visibility);
 	
 	OutColor = NewColor;
-	OutColor.a = 0.45 + TransparencyModifier;
 	OutColor.a *= clamp(WaterDepth / 12.0, 0.0, 1.0);
 	
 	

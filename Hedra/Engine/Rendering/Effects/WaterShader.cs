@@ -25,7 +25,6 @@ namespace Hedra.Engine.Rendering.Effects
 		public int DuDvMapUniform;
 		public uint DuDvMap;
 		public int BlockSizeLocation;
-		public int TransparencyLocation;
 		public int PlayerPositionUniform;
 		public UniformVector4Array AreaPositionsUniform, AreaColorsUniform;
 		
@@ -41,7 +40,6 @@ namespace Hedra.Engine.Rendering.Effects
 			ReflectionTextureUniform = GL.GetUniformLocation(ShaderID, "ReflectionSampler");
 			DuDvMapUniform = GL.GetUniformLocation(ShaderID, "DuDvMap");
 			BlockSizeLocation = GL.GetUniformLocation(ShaderID, "BlockSize");
-			TransparencyLocation = GL.GetUniformLocation(ShaderID, "TransparencyModifier");
 			AreaPositionsUniform = new UniformVector4Array(ShaderID, "AreaPositions", 16);
 			AreaColorsUniform = new UniformVector4Array(ShaderID, "AreaColors", 16);
 			
