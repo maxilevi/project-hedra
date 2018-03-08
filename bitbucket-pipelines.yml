@@ -17,5 +17,5 @@ pipelines:
           - git clone ssh://git@bitbucket.org/Zaphyk/project-hedra-assets.git
           - mv "project-hedra-assets/" "../../Assets/"
           - xbuild Hedra/Hedra.csproj
-          - zip mono-build-${BITBUCKET_COMMIT}.zip Hedra/bin/Debug/
+          - (cd Hedra/bin/Debug/ && zip -r mono-build-${BITBUCKET_COMMIT}.zip)
           - curl -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"mono-build-${BITBUCKET_COMMIT}.zip"
