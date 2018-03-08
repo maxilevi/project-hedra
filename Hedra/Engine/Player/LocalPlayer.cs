@@ -196,13 +196,24 @@ namespace Hedra.Engine.Player
 			base.Draw();
 			Map.Draw();
 
-            var entities = World.Entities.ToArray();
-            for (int i = entities.Length- 1; i>-1; i--){
-				if( !(entities[i] is LocalPlayer) && (entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256*256 || Pet.MountEntity == entities[i]){
-				    entities[i].Draw();
-				}
-			}   	
-		}
+            try
+            {
+                var entities = World.Entities.ToArray();
+                for (int i = entities.Length - 1; i > -1; i--)
+                {
+                    if (!(entities[i] is LocalPlayer) &&
+                        (entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256 * 256 ||
+                        Pet.MountEntity == entities[i])
+                    {
+                        entities[i].Draw();
+                    }
+                }
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Log.WriteLine("Syncronization exception while reading entities.");
+            }
+        }
 
         public new void Update(){
 			base.Update();
@@ -322,21 +333,31 @@ namespace Hedra.Engine.Player
 				if(Model.MountModel == null || Model.MountModel != null && Model.MountModel.Disposed) IsRiding = false;
 			}
 
-            var entities = World.Entities.ToArray();
-			for(int i = entities.Length-1; i>-1; i--){
-				LocalPlayer player = SceneManager.Game.LPlayer;
-				if(entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused && !SceneManager.Game.IsLoading 
-                        
-                    || Pet.MountEntity == entities[i] || entities[i].IsBoss){
+            try
+            {
+                var entities = World.Entities.ToArray();
+                for (int i = entities.Length - 1; i > -1; i--)
+                {
+                    LocalPlayer player = SceneManager.Game.LPlayer;
+                    if (entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused &&
+                        !SceneManager.Game.IsLoading
 
-				    entities[i].Update();
-				}
-                else if (entities[i] != player && entities[i].InUpdateRange && GameSettings.Paused)
-				{
-					(entities[i].Model as IAudible)?.StopSound();
+                        || Pet.MountEntity == entities[i] || entities[i].IsBoss)
+                    {
+
+                        entities[i].Update();
+                    }
+                    else if (entities[i] != player && entities[i].InUpdateRange && GameSettings.Paused)
+                    {
+                        (entities[i].Model as IAudible)?.StopSound();
+                    }
                 }
-			}
-			
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Log.WriteLine("Syncronization exception while reading entities.");
+            }
+
             if (!this.IsDead)
             {
                 this.Health += HealthRegen * Time.FrameTimeSeconds;
