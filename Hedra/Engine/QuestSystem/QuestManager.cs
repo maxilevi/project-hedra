@@ -77,21 +77,22 @@ namespace Hedra.Engine.QuestSystem
 	        return carriage;
 	    }
 
-	    public Humanoid SpawnHumanoid(HumanType Type, Vector3 Position)
+	    public Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition)
 	    {
-	        return SpawnHumanoid(Type.ToString(), Position, null);
+	        return SpawnHumanoid(Type.ToString(), DesiredPosition, null);
 	    }
 
-	    public Humanoid SpawnHumanoid(string Type, Vector3 Position)
+	    public Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition)
 	    {
 	        var human = HumanoidFactory.BuildHumanoid(Type, null);
-	        return human;
+	        human.Physics.TargetPosition = World.FindPlaceablePosition(human, DesiredPosition);
+            return human;
 	    }
 
-        public Humanoid SpawnHumanoid(string Type, Vector3 Position, HumanoidBehaviourTemplate behaviour)
+        public Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition, HumanoidBehaviourTemplate behaviour)
 	    {
 	        var human = HumanoidFactory.BuildHumanoid(Type, behaviour);
-	        human.Physics.TargetPosition = Position;
+	        human.Physics.TargetPosition = World.FindPlaceablePosition(human, DesiredPosition);
 	        return human;
 	    }
 

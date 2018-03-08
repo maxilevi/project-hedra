@@ -160,8 +160,8 @@ namespace Hedra.Engine.EntitySystem
             bool onlyY = Command.Delta.Xz == Vector2.Zero;
 			Vector3 delta = v * _deltaTime;
             var parentBox = this.Parent.HitBox;
-			float modifierX = (delta.X < 0) ? -1f : 1f;
-			float modifierZ = (delta.Z < 0) ? -1f : 1f;
+			float modifierX = delta.X < 0 ? -1f : 1f;
+			float modifierZ = delta.Z < 0 ? -1f : 1f;
 
             bool blockPx = false, blockNx = false, blockPy = false, blockNy = false, blockPz = false, blockNz = false;
 
@@ -248,7 +248,6 @@ namespace Hedra.Engine.EntitySystem
 				    }
 
 				    if (!Physics.Collides(box, _collisions[i])) continue;
-
 
 				    if (deltaOrientation.X > 0)
 				        blockPx = true;

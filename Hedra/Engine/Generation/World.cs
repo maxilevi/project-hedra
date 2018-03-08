@@ -625,17 +625,38 @@ namespace Hedra.Engine.Generation
 		{
             
 		    Entity mob = MobFactory.Build(Type, MobSeed);
-
+		    Vector3 placeablePosition = World.FindPlaceablePosition(mob, DesiredPosition); 
 		    mob.MobId = ++_previousId;
 		    mob.MobSeed = MobSeed;
 		    mob.Model.TargetRotation = new Vector3(0, new Random(MobSeed).NextFloat() * 360f, 0);
-		    mob.Physics.TargetPosition = DesiredPosition;
-		    mob.Model.Position = DesiredPosition;
+            mob.Physics.TargetPosition = placeablePosition;
+		    mob.Model.Position = placeablePosition;
 
             World.AddEntity(mob);
 
 			return mob;
 		}
+
+	    public static Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition)
+	    {
+	        Vector3 position = DesiredPosition;
+	        Chunk underChunk = World.GetChunkAt(position);
+	        var collidesOnSurface = true;
+	        Box box = Mob.DefaultBox.Cache.Translate(position.Xz.ToVector3()
+                + Vector3.UnitY * Physics.HeightAtPosition(position.X, position.Z));
+	        while (underChunk != null && collidesOnSurface)
+	        {
+	            collidesOnSurface = underChunk.CollisionShapes.Any(Shape => Physics.Collides(Shape, box));
+	            if (collidesOnSurface)
+	            {
+	                position = position + new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
+	                underChunk = World.GetChunkAt(position);
+	                box = Mob.DefaultBox.Cache.Translate(position.Xz.ToVector3() 
+                        + Vector3.UnitY * Physics.HeightAtPosition(position.X, position.Z));
+	            }
+
+	        }
+	        return position;
+	    }
 	}
-	
 }
