@@ -29,6 +29,11 @@ namespace Hedra.Engine.ModuleSystem
                 _factories.Clear();
         }
 
+        public bool ContainsFactory(string Type)
+        {
+            return _factories.ContainsKey(Type);
+        }
+
         public Entity Build(MobType Type, int Seed)
         {
             return this.Build(Type.ToString(), Seed);

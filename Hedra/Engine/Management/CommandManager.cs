@@ -161,7 +161,10 @@ namespace Hedra.Engine.Management
                         return true;
 			        }
 
-                    World.SpawnMob(Parts[1], Caster.Position + Caster.Orientation * 32, Utils.Rng);
+			        if (World.MobFactory.ContainsFactory(Parts[1]))
+			            World.SpawnMob(Parts[1], Caster.Position + Caster.Orientation * 32, Utils.Rng);
+			        else
+			            World.QuestManager.SpawnHumanoid(Parts[1], Caster.Position + Caster.Orientation * 32);
 					return true;
 				}
 				if(Parts[0] == "chest"){
