@@ -6,11 +6,11 @@
 image: mono
 
 pipelines:
-  default:
+  custom:
+    staging:
     - step:
         name: Build Project Hedra with Mono.
         deployment: production
-        trigger: manual
         script:
           - apt-get update
           - apt-get install -y git
