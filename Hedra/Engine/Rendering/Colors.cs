@@ -38,5 +38,21 @@ namespace Hedra.Engine.Rendering
             var inverse = 1 / 256f;
             return new Vector4(R * inverse, G * inverse, B * inverse, A * inverse);
         }
+
+        #region Custom Colors Lists
+        public static Vector4 BerryColor(Random Rng)
+        {
+            switch (Rng.Next(0, 6))
+            {
+                case 0: return Colors.FromHtml("#BF4B42");
+                case 1: return Colors.FromHtml("#FF6380");
+                case 2: return Colors.FromHtml("#AA3D98");
+                case 3: return Colors.FromHtml("#FF65F2");
+                case 4: return Colors.FromHtml("#379B95");
+                case 5: return Colors.FromHtml("#FFAD5A");
+                default: return Colors.FromHtml("#ff0000");
+            }
+        }
+        #endregion
     }
 }

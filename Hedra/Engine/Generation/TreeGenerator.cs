@@ -5,7 +5,6 @@
  *
  */
 using System;
-using System.Drawing;
 using Hedra.Engine.Rendering;
 using System.Collections.Generic;
 using Hedra.Engine.CacheSystem;

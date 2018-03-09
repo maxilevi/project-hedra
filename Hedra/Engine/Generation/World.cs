@@ -204,7 +204,6 @@ namespace Hedra.Engine.Generation
 			MeshQueue.SafeDiscard();
 			ChunkGenerationQueue.SafeDiscard();
 			GlobalColliders.Clear();
-			EnviromentGenerator.Clear();
 			SkyManager.SetTime(12000);
 			for(int i = 0; i < Items.Count; i++){
 				Items[i].Dispose();
@@ -485,11 +484,15 @@ namespace Hedra.Engine.Generation
 			if(BlockChunk != null){
 				return BlockChunk.GetBlockAt(X, (int) Vec3.Y, Z);
 			}
-			else
-				return new Block();			
+		    return new Block();			
 		}
-		
-		public static Block GetHighestBlockAt(int x, int z){
+
+	    public static Block GetHighestBlockAt(float x, float z)
+	    {
+	        return GetHighestBlockAt( (int) x, (int) z);
+	    }
+
+	    public static Block GetHighestBlockAt(int x, int z){
 			int ChunkX = (int) x / Chunk.ChunkWidth;
 			int ChunkZ = (int) z / Chunk.ChunkWidth;
 									
@@ -503,8 +506,7 @@ namespace Hedra.Engine.Generation
 			if(BlockChunk != null){
 				return BlockChunk.GetHighestBlockAt(X,Z);
 			}
-			else
-				return new Block();	
+			return new Block();	
 		}
 		public static int GetHighestY(int x, int z){
 			int ChunkX = (int) x / Chunk.ChunkWidth;

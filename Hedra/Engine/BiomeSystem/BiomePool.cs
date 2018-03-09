@@ -40,6 +40,7 @@ namespace Hedra.Engine.BiomeSystem
 	            SkyDesign = new NormalBiomeSkyDesign(),
 	            MobDesign = new NormalBiomeMobDesign(),
                 GenerationDesign = new NormalBiomeGenerationDesign(),
+                EnviromentDesign = new NormalBiomeEnviromentDesign()
             };
 
 	        _voronoi = new Voronoi
@@ -71,6 +72,7 @@ namespace Hedra.Engine.BiomeSystem
 	            var regionSky = new RegionSky(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].SkyDesign);
 	            var regionMob = new RegionMob(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].MobDesign);
                 var regionGeneration = new RegionGeneration(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].GenerationDesign);
+                var regionEnviroment = new RegionEnviroment(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].EnviromentDesign);
                 var region = new Region
 	            {
 	                Colors = regionColors,
@@ -79,7 +81,8 @@ namespace Hedra.Engine.BiomeSystem
 	                Sky = regionSky,
 	                Mob = regionMob,
                     Generation = regionGeneration,
-	            };
+                    Enviroment = regionEnviroment,
+                };
 
 	            _regionCache.Add(index, region);
 

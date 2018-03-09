@@ -596,7 +596,7 @@ namespace Hedra.Engine.QuestSystem
 					shelfModel.Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
 					shelfModel.Transform(Vector3.UnitZ * marketDist * Chunk.BlockSize);
 					shelfModel.Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
-					shelfModel.Color(AssetManager.ColorCode1, World.EnviromentGenerator.BerryColor(rng) );
+					shelfModel.Color(AssetManager.ColorCode1, Colors.BerryColor(rng) );
 					
 					for(int j = 0; j < shelfShapes.Count; j++){
 						shelfShapes[j].Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
@@ -621,7 +621,7 @@ namespace Hedra.Engine.QuestSystem
 							shelfModel.Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
 							shelfModel.Transform(Vector3.UnitZ * marketDist * Chunk.BlockSize);
 							shelfModel.Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
-							shelfModel.Color(AssetManager.ColorCode1, World.EnviromentGenerator.BerryColor(rng) );
+							shelfModel.Color(AssetManager.ColorCode1, Colors.BerryColor(rng) );
 							
 							for(int j = 0; j < shelfShapes.Count; j++){
 								shelfShapes[j].Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );

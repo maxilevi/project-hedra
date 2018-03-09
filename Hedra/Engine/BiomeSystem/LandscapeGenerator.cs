@@ -8,10 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Generation;
+using Hedra.Engine.PlantSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.QuestSystem.Objectives;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.TreeSystem;
+using Newtonsoft.Json.Converters;
 using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem
@@ -315,172 +317,116 @@ namespace Hedra.Engine.BiomeSystem
 				}
 			}
 		}
-		
-		
-		
-		public void PlaceClouds(){
-			float width = (int) (Chunk.ChunkWidth / Chunk.BlockSize);
-			for(var x = 0; x < width; x++)
-			for (var z = 0; z < width; z++)
-			    if(Utils.Rng.Next(0,15000) == 1) World.EnviromentGenerator.GeneratePlant(x,0,z, Chunk, PlantType.CLOUD);
-		}
 
 	    public override void PlaceStructures()
 	    {
-	        StructuresPlaced = true;
-	        this.PlaceClouds();
+	        this.StructuresPlaced = true;
 
-	        Plateau[] plateauPositions;
 	        CollidableStructure[] structs;
-
-	        lock (World.QuestManager.Plateaus)
-	            plateauPositions = World.QuestManager.Plateaus.ToArray();
-
 	        lock (World.StructureGenerator.Items)
 	            structs = World.StructureGenerator.Items.ToArray();
 
-            float width = (int) (Chunk.ChunkWidth / Chunk.BlockSize);
-	        for (var x = 0; x < width; x++)
+	        for (var x = 0; x < this.Chunk.BoundsX; x++)
 	        {
-	            for (var z = 0; z < width; z++)
+	            for (var z = 0; z < this.Chunk.BoundsZ; z++)
 	            {
 	                int y = Chunk.GetHighestY(x, z);
-	                var position = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1,
-	                    Chunk.OffsetZ + z * Chunk.BlockSize);
-
-                    bool hideEnv = (new Vector2(x * Chunk.BlockSize + Chunk.OffsetX, Chunk.BlockSize * z + Chunk.OffsetZ)
-	                                - World.QuestManager.ObjectivePosition.Xz).LengthSquared <
-	                               World.QuestManager.Quest.NoEnviromentRadius * World.QuestManager
-	                                   .Quest.NoEnviromentRadius;
+	                var position = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
 
 	                if (_blocks[x][y][z].Type == BlockType.Water && _blocks[x][y + 1][z].Type == BlockType.Air
 	                    && _blocks[x][y - 1][z].Type != BlockType.Water &&
 	                    _blocks[x][y - 1][z].Type != BlockType.Air) _blocks[x][y][z].Type = BlockType.Air;
 
-	                Block block = Chunk.GetBlockAt(x, y, z);
-	                bool noGrassZone = false, noTreesZone = false;
-	                var inMerchant = false;
+                    Block block = Chunk.GetBlockAt(x, y, z);
+	                Region region = World.BiomePool.GetRegion(position);
+                    bool noWeedZone, noTreesZone, inMerchant;
 
-	                foreach (CollidableStructure structPosition in structs)
+	                this.LoopStructures(x, z, structs, out noWeedZone, out noTreesZone, out inMerchant);
+	                this.DoEnviromentPlacements(position, noWeedZone, region);
+
+	                if (block.Type != BlockType.Grass) continue;
+	                if (World.Seed == World.MenuSeed)
 	                {
-	                    var possiblePosition = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, 0,
-	                        Chunk.OffsetZ + z * Chunk.BlockSize);
-
-	                    if (structPosition.Design is GiantTreeDesign)
-	                    {
-	                        float radius = structPosition.Mountain.Radius;
-	                        if ((structPosition.Mountain.Position.Xz - possiblePosition.Xz).LengthSquared <
-	                            radius * .3f * radius * .3f)
-	                        {
-	                            //noTreesZone = true;
-	                            noGrassZone = true;
-	                        }
-
-	                        if (!noTreesZone && (structPosition.Mountain.Position.Xz - possiblePosition.Xz).LengthSquared <
-	                            radius * 0.5f * radius * 0.5f)
-	                            noTreesZone = true;
-
-	                    }
-
-	                    if (structPosition.Design is TravellingMerchantDesign)
-	                    {
-	                        float radius = structPosition.Mountain.Radius;
-	                        if ((structPosition.Mountain.Position.Xz - possiblePosition.Xz).LengthSquared <
-	                            radius * .5f * radius * .5f)
-	                            inMerchant = true;
-	                    }
-	                    if (structPosition.Generated) continue;
-
-                        if ((possiblePosition.Xz - structPosition.Position.Xz).LengthSquared < 2 * 2)
-	                    {
-	                        World.StructureGenerator.Build(possiblePosition, structPosition);
-	                        structPosition.Generated = true;
-	                    }
-                    }
-
-
-	                if (block.Type != BlockType.Water && block.Type != BlockType.Seafloor && !hideEnv)
-	                {
-	                    int rng = RandomGen.Next(0, 20000);
-
-	                    if (World.MenuSeed != World.Seed)
-	                    {
-	                        rng = RandomGen.Next(0, 950);
-	                        if (rng == 1)
-	                            World.EnviromentGenerator.GeneratePlant(x, y, z, Chunk, PlantType.ROCK);
-	                    }
-	                    if (block.Type == BlockType.Grass && World.MenuSeed != World.Seed)
-	                    {
-	                        rng = RandomGen.Next(0, 450);
-	                        if (rng == 1)
-	                        {
-	                            rng = RandomGen.Next(0, 4);
-	                            World.EnviromentGenerator.GeneratePlant(x, y, z, Chunk,
-	                                rng != 1 ? PlantType.BUSH : PlantType.FERN);
-	                        }
-	                        rng = Utils.Rng.Next(0, 1000);
-
-	                        if (rng == 1) //If it's menu don't generate them
-	                            World.EnviromentGenerator.GenerateBerryBush(x, y, z, Chunk);
-	                    }
+	                    //Is menu, force a platform
+	                    if ((Scenes.MenuBackground.DefaultPosition.Xz - new Vector2(
+	                             Chunk.OffsetX + x * Chunk.BlockSize,
+	                             Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
+	                    if ((Scenes.MenuBackground.CreatorPosition.Xz - new Vector2(
+	                             Chunk.OffsetX + x * Chunk.BlockSize,
+	                             Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
+	                    if ((Scenes.MenuBackground.CampfirePosition.Xz - new Vector2(
+	                             Chunk.OffsetX + x * Chunk.BlockSize,
+	                             Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 48 * 48) continue;
 	                }
 
-	                if (block.Type == BlockType.Grass && !hideEnv)
-	                {
-	                    if (!noGrassZone && SimplexNoise.Noise.Generate((x * Chunk.BlockSize + OffsetX) * 0.025f,
-	                            (z * Chunk.BlockSize + OffsetZ) * 0.025f) > 0.55f)
+	                if(noTreesZone) continue;
 
-	                        World.EnviromentGenerator.GeneratePlant(x, y, z, Chunk,
-	                            RandomGen.Next(0, 7) != 1 ? PlantType.GRASS : PlantType.WHEAT);
-
-	                    if (this.NoTreeZone(x, z) || inMerchant)
-	                    {
-
-	                        var plateau = false;
-	                        int i;
-	                        Plateau plateauObj = null;
-
-	                        for (i = 0; i < plateauPositions.Length; i++)
-	                        {
-	                            plateauObj = plateauPositions[i];
-
-	                            if (!((plateauObj.Position.Xz -
-	                                   new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize))
-	                                  .LengthSquared
-	                                  < plateauObj.Radius * plateauObj.Radius * .5f)) continue;
-
-	                            plateau = true;
-	                            break;
-	                        }
-	                    }
-
-
-	                    if (World.Seed == World.MenuSeed)
-	                    {
-	                        //Is menu, force a platform
-	                        if ((Scenes.MenuBackground.DefaultPosition.Xz - new Vector2(
-	                                 Chunk.OffsetX + x * Chunk.BlockSize,
-	                                 Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
-	                        if ((Scenes.MenuBackground.CreatorPosition.Xz - new Vector2(
-	                                 Chunk.OffsetX + x * Chunk.BlockSize,
-	                                 Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
-	                        if ((Scenes.MenuBackground.CampfirePosition.Xz - new Vector2(
-	                                 Chunk.OffsetX + x * Chunk.BlockSize,
-	                                 Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 48 * 48) continue;
-	                    }
-
-                        if(noTreesZone) continue;
-
-	                    Region region = World.BiomePool.GetRegion(position);
-	                    float noise = (float) OpenSimplexNoise.Evaluate(position.X * 0.005f, position.Z * 0.005f);
-	                    World.TreeGenerator.GenerateTree(position, region, region.Trees.GetDesign( (int) (noise * 10000) ));
-	                }
+	                float noise = (float) OpenSimplexNoise.Evaluate(position.X * 0.005f, position.Z * 0.005f);
+	                World.TreeGenerator.GenerateTree(position, region, region.Trees.GetDesign( (int) (noise * 10000) ));
 	            }
 	        }
 	    }
 
+	    private void DoEnviromentPlacements(Vector3 Position, bool HideEnviroment, Region Biome)
+	    {
+	        var designs = Biome.Enviroment.Designs;
+	        for (var i = 0; i < designs.Length; i++)
+	        {
+	            if(designs[i].CanBeHidden && HideEnviroment) continue;
+	            if (designs[i].ShouldPlace(Position, this.Chunk))
+	            {
+	                var design = designs[i].GetDesign(Position, this.Chunk);
+                    World.EnviromentGenerator.GeneratePlant(Position, Biome, design);
+	            }
+	        }
+	    }
+
+	    private void LoopStructures(int X, int Z, CollidableStructure[] Structs,
+            out bool NoGrassZone, out bool NoTreesZone, out bool InMerchant)
+	    {
+	        NoGrassZone = false;
+	        NoTreesZone = false;
+	        InMerchant = false;
+
+	        foreach (CollidableStructure structPosition in Structs)
+	        {
+	            var possiblePosition = new Vector3(Chunk.OffsetX + X * Chunk.BlockSize, 0,
+	                Chunk.OffsetZ + Z * Chunk.BlockSize);
+
+	            if (structPosition.Design is GiantTreeDesign)
+	            {
+	                float radius = structPosition.Mountain.Radius;
+	                if ((structPosition.Mountain.Position.Xz - possiblePosition.Xz).LengthSquared <
+	                    radius * .3f * radius * .3f)
+	                {
+	                    NoGrassZone = true;
+	                }
+
+	                if (!NoTreesZone && (structPosition.Mountain.Position.Xz - possiblePosition.Xz).LengthSquared <
+	                    radius * 0.5f * radius * 0.5f)
+	                    NoTreesZone = true;
+
+	            }
+
+	            if (structPosition.Design is TravellingMerchantDesign)
+	            {
+	                float radius = structPosition.Mountain.Radius;
+	                if ((structPosition.Mountain.Position.Xz - possiblePosition.Xz).LengthSquared <
+	                    radius * .5f * radius * .5f)
+	                    InMerchant = true;
+	            }
+	            if (structPosition.Generated) continue;
+
+	            if ((possiblePosition.Xz - structPosition.Position.Xz).LengthSquared < 2 * 2)
+	            {
+	                World.StructureGenerator.Build(possiblePosition, structPosition);
+	                structPosition.Generated = true;
+	            }
+	        }
+        }
+
 	    public bool NoTreeZone(int X, int Z){
-			return Utils.Rng.Next(0, 4) == 1;//false;//SimplexNoise.Noise.Generate( (x*Chunk.BLOCK_SIZE+Chunk.OffsetX) * 0.005f, (z*Chunk.BLOCK_SIZE+Chunk.OffsetZ) * 0.005f) < -0.35f || SimplexNoise.Noise.Generate((x*Chunk.BLOCK_SIZE+Chunk.OffsetX) * .001f, (z*Chunk.BLOCK_SIZE+Chunk.OffsetZ+100) *  .001f) < 0;
+			return Utils.Rng.Next(0, 4) == 1;
 		}
 		
 		public void CheckForNearbyStructures(){

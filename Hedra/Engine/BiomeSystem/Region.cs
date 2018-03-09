@@ -13,6 +13,7 @@ namespace Hedra.Engine.BiomeSystem
         public RegionSky Sky;
         public RegionMob Mob;
         public RegionGeneration Generation;
+        public RegionEnviroment Enviroment;
 
         public static Region Interpolate(params Region[] Regions)
         {
@@ -24,6 +25,7 @@ namespace Hedra.Engine.BiomeSystem
                 Sky = RegionSky.Interpolate(Regions.Select(Reg => Reg.Sky).ToArray()),
                 Mob = RegionMob.Interpolate(Regions.Select(Reg => Reg.Mob).ToArray()),
                 Generation = RegionGeneration.Interpolate(Regions.Select(Reg => Reg.Generation).ToArray()),
+                Enviroment = RegionEnviroment.Interpolate(Regions.Select(Reg => Reg.Enviroment).ToArray()),
             };
 
             return reg;
