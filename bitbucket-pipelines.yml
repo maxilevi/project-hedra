@@ -15,7 +15,7 @@ pipelines:
           - apt-get update
           - apt-get install -y git
           - apt-get install -y zip
-          - git clone ssh://git@bitbucket.org/Zaphyk/project-hedra-assets.git
+          - git clone --depth=1 ssh://git@bitbucket.org/Zaphyk/project-hedra-assets.git
           - mv "project-hedra-assets/" "../../Assets/"
           - xbuild Hedra/Hedra.csproj
           - zip -r mono-build-${BITBUCKET_COMMIT}.zip Hedra/bin/Debug/
