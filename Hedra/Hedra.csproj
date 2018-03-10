@@ -661,6 +661,10 @@
       <Link>Assets\Chr\ArcherTripleShoot.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Animations\BearIdle.dae">
+      <Link>Assets\Chr\BearIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Animations\BeeAttack.dae">
       <Link>Assets\Chr\BeeAttack.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3766,6 +3770,9 @@
     <None Include="Modules\Items\Materials\SpiderEye.json" />
     <None Include="Modules\Items\Materials\TurtleShell.json" />
     <None Include="Modules\Items\Materials\WolfMount.json" />
+    <None Include="Modules\Mobs\Bear.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Mobs\Bee.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

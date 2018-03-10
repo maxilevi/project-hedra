@@ -1,0 +1,28 @@
+﻿{
+  "Name" : "Bear", 
+  "MaxHealth": 520.0,
+  "AttackDamage": 17.0,
+  "Speed": 4.65,
+  "XP": 5.0,
+  "AIType": "Neutral",
+  "Ridable": false,
+  "Effects": [],
+  "Drops": [],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/BearIdle.dae",
+    "Scale": 5.0,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/BoarWalk.dae",
+      "Speed": 1.25
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/BoarAttack.dae",
+      "Speed": 1.15
+    }
+  } 
+}
