@@ -9,45 +9,61 @@
   "Plains": [
     {
       "Type": "Sheep",
-      "Chance": 33.0
+      "Chance": 40.0,
+      "MinGroup" : 3,
+      "MaxGroup": 5
     },
     {
       "Type": "Horse",
-      "Chance": 33.0
+      "Chance": 30.0,
+      "MinGroup" : 2,
+      "MaxGroup": 3
     },
     {
       "Type": "Boar",
-      "Chance": 20.0
+      "Chance": 15.0
     },
     {
       "Type": "Wasp",
-      "Chance": 13.0  
+      "Chance": 15.0,
+      "MinGroup" : 1,
+      "MaxGroup": 2
     }
   ],
 
   "Mountain": [
     {
       "Type": "Goat",
-      "Chance": 100.0
+      "Chance": 100.0,
+      "MinGroup" : 1,
+      "MaxGroup": 3
     }
   ],
 
   "Forest": [
     {
+      "Type": "Bear",
+      "Chance": 12.5
+    },
+    {
       "Type": "Wolf",
-      "Chance": 30.0
+      "Chance": 22.5
     },
     {
       "Type": "Fox",
-      "Chance": 30.0
+      "Chance": 25.0,
+      "MinGroup" : 1,
+      "MaxGroup": 2
     },
     {
       "Type": "Bee",
-      "Chance": 20.0 
+      "Chance": 25.0,
+      "MinGroup" : 1, 
+      "MaxGroup": 3
     },
     {
       "Type": "Spider",
-      "Chance": 20.0
+      "Chance": 5.0
     }
   ]
 }

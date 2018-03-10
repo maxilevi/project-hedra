@@ -71,23 +71,31 @@ namespace Hedra.Engine.EntitySystem
 			        {
 			            if (World.Entities[i] == Player || World.Entities[i].IsStatic) continue;
 
-			            if((World.Entities[i].BlockPosition.Xz - desiredPosition.Xz).LengthSquared < 48f * Chunk.BlockSize * 48f * Chunk.BlockSize)
+			            if((World.Entities[i].BlockPosition.Xz - desiredPosition.Xz).LengthSquared < 64f * Chunk.BlockSize * 64f * Chunk.BlockSize)
 			                goto START;
 			        }
 						
-			        Vector3 newPosition = new Vector3(desiredPosition.X, Physics.HeightAtPosition(desiredPosition), desiredPosition.Z);
+			        var newPosition = new Vector3(desiredPosition.X, Physics.HeightAtPosition(desiredPosition), desiredPosition.Z);
 						
-			        string type = this.SelectMobType(newPosition);
-                    if(type == null) goto START;
+			        SpawnTemplate template = this.SelectMobTemplate(newPosition);
+                    if(template == null) goto START;
 
-                    World.SpawnMob(type, newPosition, Utils.Rng);
+			        int count = Utils.Rng.Next(template.MaxGroup, template.MaxGroup + 1);
+			        for (var i = 0; i < count; i++)
+			        {
+                        var offset = new Vector3(Utils.Rng.NextFloat() * 12f - 6f, 0, Utils.Rng.NextFloat() * 12f - 6f) * Chunk.BlockSize;
+			            var newNearPosition = new Vector3(newPosition.X + offset.X,
+                            Physics.HeightAtPosition(newPosition + offset),
+                            newPosition.Z + offset.Z);
+			            World.SpawnMob(template.Type, newNearPosition, Utils.Rng);
+			        }
 			    }
 			}
 		}
 		
-		public string SelectMobType(Vector3 NewPosition){
+		public SpawnTemplate SelectMobTemplate(Vector3 NewPosition){
 			bool mountain = NewPosition.Y > 60 * Chunk.BlockSize;
-		    bool shore = NewPosition.Y / Chunk.BlockSize > Chunk.BaseHeight && NewPosition.Y / Chunk.BlockSize < 8 + Chunk.BaseHeight;
+		    bool shore = NewPosition.Y / Chunk.BlockSize > Chunk.BaseHeight && NewPosition.Y / Chunk.BlockSize < 2 + Chunk.BaseHeight;
 		    bool forest = !shore && World.TreeGenerator.SpaceNoise(NewPosition.X, NewPosition.Z) > 0;
             bool plains = !forest && !shore && !mountain;
 
@@ -110,15 +118,17 @@ namespace Hedra.Engine.EntitySystem
             var rng = Utils.Rng;
 		    for (var i = 0; i < templates.Length; i++)
 		    {
-		        var incremental = 0f;
-		        foreach (SpawnTemplate template in templates[i])
+		        if (conditions[i])
 		        {
-		            float val = rng.NextFloat();
+		            SpawnTemplate type = null;
+		            while (type == null)
+		            {
+		                var template = templates[i][rng.Next(0, templates[i].Length)];
 
-		            if (conditions[i] && val > incremental && val < incremental + template.Chance)
-                        return template.Type;
-		            
-		            incremental += template.Chance;
+		                if (rng.NextFloat() < template.Chance)
+		                    type = template;
+		            }
+		            return type;
 		        }
 		    }
 		    return null;
