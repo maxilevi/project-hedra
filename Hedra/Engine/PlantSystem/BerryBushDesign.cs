@@ -15,6 +15,8 @@ namespace Hedra.Engine.PlantSystem
     public class BerryBushDesign : PlantDesign
     {
         public override VertexData Model => CacheManager.GetModel(CacheItem.BerryBush);
+        public override bool HasCustomPlacement => true;
+
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);
@@ -52,6 +54,7 @@ namespace Hedra.Engine.PlantSystem
             Vector4 newColor = Utils.VariateColor(underChunk.Biome.Colors.GrassColor, 15, Rng);
             Vector4 berriesColor = Utils.VariateColor(Colors.BerryColor(Rng), 15, Rng);
 
+            ///maybe this is causing problems
             Data.Color(AssetManager.ColorCode0, newColor);
             Data.Color(AssetManager.ColorCode1, berriesColor);
             Data.GraduateColor(Vector3.UnitY);
@@ -63,6 +66,8 @@ namespace Hedra.Engine.PlantSystem
         {
             var position = TransMatrix.ExtractTranslation();
             var underChunk = World.GetChunkAt(position);
+            TransMatrix = TransMatrix.ClearTranslation();
+            Data.Transform(TransMatrix);
 
             ThreadManager.ExecuteOnMainThread(delegate {
                 var berryBush = new Entity

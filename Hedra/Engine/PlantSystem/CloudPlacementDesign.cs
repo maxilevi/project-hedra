@@ -9,7 +9,7 @@ namespace Hedra.Engine.PlantSystem
 {
     public class CloudPlacementDesign : PlacementDesign
     {
-        private PlantDesign _cloudDesign;
+        private readonly PlantDesign _cloudDesign;
 
         public CloudPlacementDesign()
         {
