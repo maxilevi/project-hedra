@@ -209,7 +209,7 @@ namespace Hedra.Engine.Player
                     }
                 }
             }
-            catch (IndexOutOfRangeException e)
+            catch (ArgumentException e)
             {
                 Log.WriteLine("Syncronization exception while reading entities.");
             }
@@ -353,7 +353,7 @@ namespace Hedra.Engine.Player
                     }
                 }
             }
-            catch (IndexOutOfRangeException e)
+            catch (ArgumentException e)
             {
                 Log.WriteLine("Syncronization exception while reading entities.");
             }
