@@ -7,12 +7,12 @@ namespace Hedra.Engine.ModuleSystem
     public static class SpawnerLoader
     {
 
-        public static SpawnerSettings Load(string AppPath)
+        public static SpawnerSettings Load(string AppPath, string Type)
         {
-            string data = File.ReadAllText(AppPath + "/Modules/Spawner.json");
+            string data = File.ReadAllText(AppPath + $"/Modules/{Type}Spawner.json");
             bool result;
             SpawnerSettings settings = FromJSON( data, out result);
-            if(!result) throw new ArgumentException("Could not load Spawner.json"); 
+            if(!result) throw new ArgumentException($"Could not load {Type}Spawner.json"); 
 
             return settings;
         }

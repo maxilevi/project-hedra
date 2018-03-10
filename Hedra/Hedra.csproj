@@ -3770,6 +3770,9 @@
     <None Include="Modules\Items\Materials\SpiderEye.json" />
     <None Include="Modules\Items\Materials\TurtleShell.json" />
     <None Include="Modules\Items\Materials\WolfMount.json" />
+    <None Include="Modules\LavaBiomeSpawner.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Mobs\Bear.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3881,7 +3884,7 @@
     <None Include="Modules\NPCs\Warrior.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Spawner.json">
+    <None Include="Modules\NormalBiomeSpawner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Spider.json">
@@ -3894,6 +3897,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Wolf.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\UndeadBiomeSpawner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="OpenTK.dll.config" />

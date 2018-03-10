@@ -29,9 +29,8 @@ using Hedra.Engine.StructureSystem;
 
 namespace Hedra.Engine.Generation
 {
-	/// <summary>
-	/// Description of World.
-	/// </summary>
+	public delegate void ModulesReloadEvent(string AppPath);
+
 	public static class World
 	{
 		public const float OverallDifficulty = 1;
@@ -48,16 +47,16 @@ namespace Hedra.Engine.Generation
 		public static EnviromentGenerator EnviromentGenerator;
 		public static BiomePool BiomePool;
 	    public static MobFactory MobFactory;
-	    public static SpawnerSettings SpawnerSettings;
 		public static TreeGenerator TreeGenerator;
 		public static QuestManager QuestManager;
 		public static StructureGenerator StructureGenerator;
+	    public static event ModulesReloadEvent ModulesReload;
 		public static int Seed { get; set; }
 		public static bool Enabled {get; set;}
 	    public static bool IsGenerated { get; set; }
 
 	    private static readonly List<Entity> _entities;
-	    private static HashSet<Entity> _entitiesSet;
+	    private static readonly HashSet<Entity> _entitiesSet;
 	    private static bool _isEntityCacheDirty = true;
 	    private static ReadOnlyCollection<Entity> _entityListCache;
 	    public static ReadOnlyCollection<Entity> Entities
@@ -138,10 +137,9 @@ namespace Hedra.Engine.Generation
 
             var factories = MobLoader.LoadModules(AssetManager.AppPath);
 	        MobFactory?.AddFactory(factories);
-
-	        SpawnerSettings = SpawnerLoader.Load(AssetManager.AppPath);
 	        HumanoidLoader.LoadModules(AssetManager.AppPath);
-        }
+            World.ModulesReload?.Invoke(AssetManager.AppPath);
+	    }
 		
 		public static int MenuSeed => 2124321422;
 

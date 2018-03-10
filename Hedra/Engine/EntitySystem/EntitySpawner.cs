@@ -7,8 +7,6 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using System.Linq;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using OpenTK;
@@ -76,7 +74,7 @@ namespace Hedra.Engine.EntitySystem
 			        }
 						
 			        var newPosition = new Vector3(desiredPosition.X, Physics.HeightAtPosition(desiredPosition), desiredPosition.Z);
-						
+                    	
 			        SpawnTemplate template = this.SelectMobTemplate(newPosition);
                     if(template == null) goto START;
 
@@ -94,17 +92,19 @@ namespace Hedra.Engine.EntitySystem
 		}
 		
 		public SpawnTemplate SelectMobTemplate(Vector3 NewPosition){
-			bool mountain = NewPosition.Y > 60 * Chunk.BlockSize;
+		    var region = World.BiomePool.GetRegion(NewPosition);
+            bool mountain = NewPosition.Y > 60 * Chunk.BlockSize;
 		    bool shore = NewPosition.Y / Chunk.BlockSize > Chunk.BaseHeight && NewPosition.Y / Chunk.BlockSize < 2 + Chunk.BaseHeight;
 		    bool forest = !shore && World.TreeGenerator.SpaceNoise(NewPosition.X, NewPosition.Z) > 0;
             bool plains = !forest && !shore && !mountain;
 
+
 		    var templates = new[]
 		    {
-		        World.SpawnerSettings.Forest,
-                World.SpawnerSettings.Mountain,
-                World.SpawnerSettings.Plains,
-		        World.SpawnerSettings.Shore
+		        region.Mob.SpawnerSettings.Forest,
+		        region.Mob.SpawnerSettings.Mountain,
+		        region.Mob.SpawnerSettings.Plains,
+		        region.Mob.SpawnerSettings.Shore
 		    };
 
 		    var conditions = new[]
