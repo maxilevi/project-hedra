@@ -16,6 +16,7 @@ using System.Linq;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using Hedra.Engine.ComplexMath;
 using OpenTK;
 
 namespace Hedra.Engine
@@ -55,11 +56,9 @@ namespace Hedra.Engine
             return Namespace != null ? types.Where(T => string.Equals(T.Namespace, Namespace, StringComparison.InvariantCulture)) : types;
         }
 		
-		public static Vector3 ToEuler(this Quaternion Q){
-			Vector3 Axis;
-			float Angle;
-			Q.ToAxisAngle(out Axis, out Angle);
-			return Axis * Angle;
+		public static Vector3 ToEuler(this Quaternion Quaternion)
+		{
+		    return QuaternionMath.ToEuler(Quaternion);
 		}
 		
 		public static List<T> DeepClone<T>(this List<T> List){
@@ -125,39 +124,43 @@ namespace Hedra.Engine
 			result.Normalize();
 			return result;
 		}
-		
-		public static Matrix4 ToMatrix(this Quaternion Quat){
-			float x = Quat.X, y = Quat.Y, z = Quat.Z, w = Quat.W;
-			float xy = x * y;
-			float xz = x * z;
-			float xw = x * w;
-			float yz = y * z;
-			float yw = y * w;
-			float zw = z * w;
-			float xSquared = x * x;
-			float ySquared = y * y;
-			float zSquared = z * z;
+        ///<sumary>
+        /// Do NOT touch this function. It's not a real ToMatrix, it's an adhoc version.
+        /// For a real one look Matrix4.CreateFromQuaterion();
+        ///</sumary>
+        public static Matrix4 ToMatrix(this Quaternion Quat)
+		{
+		    float x = Quat.X, y = Quat.Y, z = Quat.Z, w = Quat.W;
+		    float xy = x * y;
+		    float xz = x * z;
+		    float xw = x * w;
+		    float yz = y * z;
+		    float yw = y * w;
+		    float zw = z * w;
+		    float xSquared = x * x;
+		    float ySquared = y * y;
+		    float zSquared = z * z;
 
-			Matrix4 Matrix = Matrix4.Identity;
-			Matrix.M11 = 1 - 2 * (ySquared + zSquared);
-			Matrix.M12 = 2 * (xy - zw);
-			Matrix.M13 = 2 * (xz + yw);
-			Matrix.M14 = 0;
-			Matrix.M21 = 2 * (xy + zw);
-			Matrix.M22 = 1 - 2 * (xSquared + zSquared);
-			Matrix.M23 = 2 * (yz - xw);
-			Matrix.M24 = 0;
-			Matrix.M31 = 2 * (xz - yw);
-			Matrix.M32 = 2 * (yz + xw);
-			Matrix.M33 = 1 - 2 * (xSquared + ySquared);
-			Matrix.M34 = 0;
-			Matrix.M41 = 0;
-			Matrix.M42 = 0;
-			Matrix.M43 = 0; 
-			Matrix.M44 = 1;
+		    Matrix4 Matrix = Matrix4.Identity;
+		    Matrix.M11 = 1 - 2 * (ySquared + zSquared);
+		    Matrix.M12 = 2 * (xy - zw);
+		    Matrix.M13 = 2 * (xz + yw);
+		    Matrix.M14 = 0;
+		    Matrix.M21 = 2 * (xy + zw);
+		    Matrix.M22 = 1 - 2 * (xSquared + zSquared);
+		    Matrix.M23 = 2 * (yz - xw);
+		    Matrix.M24 = 0;
+		    Matrix.M31 = 2 * (xz - yw);
+		    Matrix.M32 = 2 * (yz + xw);
+		    Matrix.M33 = 1 - 2 * (xSquared + ySquared);
+		    Matrix.M34 = 0;
+		    Matrix.M41 = 0;
+		    Matrix.M42 = 0;
+		    Matrix.M43 = 0;
+		    Matrix.M44 = 1;
 
-			return Matrix;
-		}
+		    return Matrix;
+        }
 		
 		public static List<XmlNode> Children(this XmlNode Node, string Name){
 			XmlNodeList List = Node.ChildNodes;
