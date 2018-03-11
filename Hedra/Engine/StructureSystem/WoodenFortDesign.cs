@@ -6,13 +6,14 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.QuestSystem;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
     public class WoodenFortDesign : StructureDesign
     {
-        public override int Radius { get; set; } = 512;
+        public override int Radius { get; set; } = 256;
 
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {
@@ -33,28 +34,33 @@ namespace Hedra.Engine.StructureSystem
             }
             chunk.AddStaticElement(fortModel);
             
-            /*ThreadManager.ExecuteOnMainThread(delegate
+            ThreadManager.ExecuteOnMainThread(delegate
             {
 
-                Chest Prize = new Chest(Vector3.TransformPosition(Vector3.UnitX * -200f, transMatrix), new Item.InventoryItem(Item.ItemType.Random));
-                Prize.Condition += () => (TreeBoss == null || TreeBoss.IsDead);
-
-                TreeBoss.Position = Prize.Position.Xz.ToVector3();
-                TreeBoss.SearchComponent<BossAIComponent>().Protect = () => Prize.Position;
+                var Prize = new Chest(Position, new Item.InventoryItem(Item.ItemType.Random));
+                //Prize.Condition += () => (TreeBoss == null || TreeBoss.IsDead);
 
                 World.AddStructure(Prize);
-            });*/
+            });
 
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
-            return new CollidableStructure(this, NewOffset.ToVector3(), null);
+            BlockType type;
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+
+            var plateau = new Plateau(TargetPosition, this.Radius, 640, height);
+
+            World.QuestManager.AddPlateau(plateau);
+            return new CollidableStructure(this, TargetPosition, plateau);
         }
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
-            return false;//350
+            BlockType type;
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            return false && Rng.Next(0, 50) == 1 && height > 0;
         }
     }
 }
