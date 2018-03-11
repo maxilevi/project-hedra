@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Engine.ComplexMath;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
@@ -29,10 +30,12 @@ namespace Hedra.Engine.EntitySystem
 		private float _targetAlpha = 1f;
 	    private float _targetGain = 1f;
         private float _attackCooldown;
+        private Quaternion _targetTerrainOrientation = Quaternion.Identity;
+        private Quaternion _terrainOrientation = Quaternion.Identity;
+        private Quaternion _quaternionModelRotation = Quaternion.Identity;
         private readonly AreaSound _sound;
 
 		public Entity Parent;
-		public override Vector3 TargetRotation {get; set;}
 		public bool IsMountable {get; set;}
 		public const float AttackCooldown = 1.5f;
 		
@@ -112,11 +115,15 @@ namespace Hedra.Engine.EntitySystem
 		    {
 		        if (Model.Rendered)
 		            Model.Update();
-		        Model.Position = this.Position + Vector3.UnitY * 0.0f;
-		        Model.Rotation = Mathf.Lerp(Model.Rotation, this.TargetRotation, (float) Time.unScaledDeltaTime * 8f);
-		        this.Rotation = Model.Rotation;
 
-		        Model.BaseTint = Mathf.Lerp(Model.BaseTint, this.BaseTint, (float) Time.unScaledDeltaTime * 6f);
+		        _targetTerrainOrientation = new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))).ExtractRotation();
+		        _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.unScaledDeltaTime * 8f);
+		        Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
+                Model.Position = this.Position + Vector3.UnitY * 0.0f;
+                _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation,  Time.unScaledDeltaTime * 8f);
+		        Model.Rotation = _quaternionModelRotation.ToEuler();
+                this.Rotation = Model.Rotation;
+                Model.BaseTint = Mathf.Lerp(Model.BaseTint, this.BaseTint, (float) Time.unScaledDeltaTime * 6f);
 		        Model.Tint = Mathf.Lerp(Model.Tint, this.Tint, (float) Time.unScaledDeltaTime * 6f);
 		        Model.Alpha = Mathf.Lerp(Model.Alpha, this._targetAlpha, (float) Time.ScaledFrameTimeSeconds * 8f);
 		    }
@@ -174,6 +181,18 @@ namespace Hedra.Engine.EntitySystem
 
 	    private bool IsRunning => this.Model.Animator.AnimationPlaying == this.WalkAnimation;
 	    private bool IsIdle => this.Model.Animator.AnimationPlaying == this.IdleAnimation;
+
+        private Quaternion _quaternionTargetRotation;
+        private Vector3 _eulerTargetRotation;
+        public override Vector3 TargetRotation
+        {
+            get { return _eulerTargetRotation; }
+            set
+            {
+                _eulerTargetRotation = value;
+                _quaternionTargetRotation = QuaternionMath.ToQuaternion(_eulerTargetRotation * Mathf.Radian);
+            }
+        }
 
         public override float Alpha {
 			get { return this._targetAlpha; }

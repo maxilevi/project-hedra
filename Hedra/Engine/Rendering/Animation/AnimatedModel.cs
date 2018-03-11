@@ -43,7 +43,6 @@ namespace Hedra.Engine.Rendering.Animation
 	    public Vector4 Tint {get; set;}
 		public Vector4 BaseTint {get; set;}
 		public Vector3 Scale {get; set;}
-
 		public Vector3 Size {get; set;}
 		public RenderShape Shape {get; set;}
 		public bool DontCull {get; set;}
@@ -246,7 +245,7 @@ namespace Hedra.Engine.Rendering.Animation
 		 *            - the array of joint transforms that is being filled.
 		 */
 		private void AddJointsToArray(Joint HeadJoint, Matrix4[] JointMatrices) {
-			JointMatrices[HeadJoint.Index] = HeadJoint.AnimatedTransform * ScaleMatrix * RotationMatrix * PositionMatrix;
+			JointMatrices[HeadJoint.Index] = HeadJoint.AnimatedTransform * ScaleMatrix * RotationMatrix * TransformationMatrix * PositionMatrix;
 			for(int i = 0; i < HeadJoint.Children.Count; i++){
 				this.AddJointsToArray(HeadJoint.Children[i], JointMatrices);
 			}
@@ -284,19 +283,24 @@ namespace Hedra.Engine.Rendering.Animation
 	        this.Shader = NewShader;
 	    }
 
+        /// <summary>
+        /// A transformation matrix used for additional scaling or rotation. Applied before the translation.
+        /// </summary>
+	    public Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
+
 	    private Vector3 _rotation;
 		public Vector3 Rotation {
 			get{ return _rotation; }
 			set{
-				Vector3 NewValue = value;
+				Vector3 newValue = value;
 				if(float.IsNaN(value.X))
-					NewValue = new Vector3(0, NewValue.Y, NewValue.Z);
+					newValue = new Vector3(0, newValue.Y, newValue.Z);
 				if(float.IsNaN(value.Y))
-					NewValue = new Vector3(NewValue.X, 0, NewValue.Z);
+					newValue = new Vector3(newValue.X, 0, newValue.Z);
 				if(float.IsNaN(value.Z))
-					NewValue = new Vector3(NewValue.X, NewValue.Y, 0);
+					newValue = new Vector3(newValue.X, newValue.Y, 0);
 				
-				_rotation = NewValue;
+				_rotation = newValue;
 			}
 		}
 		

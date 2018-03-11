@@ -18,24 +18,19 @@ namespace Hedra.Engine.PhysicsSystem
 		public static PhysicsThreadManager Manager = new PhysicsThreadManager();
 		
 		public static void LookAt(Entity Parent, Entity Target){
-			Vector3 Dir = (Target.Model.Position-Parent.Model.Position).Normalized();
-			Parent.Orientation = Dir.Xz.Normalized().ToVector3();
-			 
-			Matrix4 MV = Mathf.RotationAlign(Vector3.UnitZ, Parent.Orientation);
-			Vector3 Axis;
-			float Angle;
-			MV.ExtractRotation().ToAxisAngle(out Axis, out Angle);
-			Parent.Rotation = new Vector3(Parent.Model.TargetRotation.X, Axis.Y * Angle * Mathf.Degree, Parent.Model.TargetRotation.Z);
+		    Parent.Orientation = (Target.Model.Position-Parent.Model.Position).Xz.NormalizedFast().ToVector3();
+            Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
 		}
 		
 		public static Vector3 DirectionToEuler( Vector3 Direction){
-			Matrix4 MV = Mathf.RotationAlign(Vector3.UnitZ, Direction);
-			Vector3 Axis;
-			float Angle;
-			MV.ExtractRotation().ToAxisAngle(out Axis, out Angle);	
-            if(float.IsNaN(Angle)) return Vector3.Zero;
-
-			return Axis * Angle * Mathf.Degree * Vector3.UnitY;
+			Matrix4 mv = Mathf.RotationAlign(Vector3.UnitZ, Direction);
+			Vector3 axis;
+			float angle;
+			mv.ExtractRotation().ToAxisAngle(out axis, out angle);	
+            if(float.IsNaN(angle)) return Vector3.Zero;
+		    if (axis.Y < 0) return (180 + (180 - angle * Mathf.Degree)) * Vector3.UnitY; //Ad hoc :(
+		    if (Math.Abs(angle * Mathf.Degree - 180) < .5f) return 180 * Vector3.UnitY;
+            return axis * angle * Mathf.Degree;
 		}
 		
 		public static float HeightAtPosition(float X, float Z){
