@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
@@ -93,7 +94,7 @@ namespace Hedra.Engine.EntitySystem
             }
             if (FollowTimer.Tick())
             {
-                AILogic = () => this.Neutral();
+                AILogic = this.Neutral;
                 TaskManager.Delay(8000, delegate { AILogic = OldLogic; });
                 return;
             }
@@ -132,7 +133,7 @@ namespace Hedra.Engine.EntitySystem
         {
             if (_timeLeft <= 0)
             {
-                _newPos = new Vector3(_rng.Next(-100, 100), 0, _rng.Next(-100, 100)) + Parent.BlockPosition;
+                _newPos = new Vector3(_rng.Next(-12, 12), 0, _rng.Next(-12, 12)) * Chunk.BlockSize + Parent.BlockPosition;
                 _ended = false;
                 _timeLeft = 10f + (float) _rng.NextDouble() * 10f - 5f;
             }
@@ -192,7 +193,6 @@ namespace Hedra.Engine.EntitySystem
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
 
                 Parent.Physics.Move(Parent.Orientation * 5 * Parent.Speed );
-
                 Parent.Model.Run();
             }
         }

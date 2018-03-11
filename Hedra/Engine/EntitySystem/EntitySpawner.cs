@@ -81,7 +81,7 @@ namespace Hedra.Engine.EntitySystem
 			        int count = Utils.Rng.Next(template.MaxGroup, template.MaxGroup + 1);
 			        for (var i = 0; i < count; i++)
 			        {
-                        var offset = new Vector3(Utils.Rng.NextFloat() * 12f - 6f, 0, Utils.Rng.NextFloat() * 12f - 6f) * Chunk.BlockSize;
+                        var offset = new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f) * Chunk.BlockSize;
 			            var newNearPosition = new Vector3(newPosition.X + offset.X,
                             Physics.HeightAtPosition(newPosition + offset),
                             newPosition.Z + offset.Z);
