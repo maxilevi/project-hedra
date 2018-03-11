@@ -266,14 +266,14 @@ namespace Hedra
 
 #if SHOW_COLLISION
 			            if(Constants.DEBUG){
-			            
+			           
 				            LocalPlayer Player = SceneManager.Game.LPlayer;
 				            Chunk UnderChunk = World.GetChunkAt(Player.Position);
-
-                /* if(UnderChunk != null){
-                     for(int x = 0; x < Chunk.CHUNK_WIDTH / Chunk.BLOCK_SIZE; x++){
-                         for(int z = 0; z < Chunk.CHUNK_WIDTH / Chunk.BLOCK_SIZE; z++){
-                             Vector3 BasePosition = new Vector3(x*Chunk.BLOCK_SIZE+UnderChunk.OffsetX, Physics.HeightAtPosition(x*Chunk.BLOCK_SIZE+UnderChunk.OffsetX, z*Chunk.BLOCK_SIZE+UnderChunk.OffsetZ), z*Chunk.BLOCK_SIZE+UnderChunk.OffsetZ);
+                /*
+                 if(UnderChunk != null){
+                     for(int x = 0; x < Chunk.ChunkWidth / Chunk.BlockSize; x++){
+                         for(int z = 0; z < Chunk.ChunkWidth / Chunk.BlockSize; z++){
+                             Vector3 BasePosition = new Vector3(x*Chunk.BlockSize+UnderChunk.OffsetX, Physics.HeightAtPosition(x*Chunk.BlockSize + UnderChunk.OffsetX, z*Chunk.BlockSize + UnderChunk.OffsetZ), z*Chunk.BlockSize + UnderChunk.OffsetZ);
                              Vector3 Normal = Physics.NormalAtPosition(BasePosition);
 
                              GL.Begin(PrimitiveType.Lines);

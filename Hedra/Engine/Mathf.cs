@@ -341,13 +341,31 @@ namespace Hedra.Engine
         {
 			return (float) ( r.NextDouble() );
         }
-		
-		public static Vector3 NextUnitSphere(this Random r)
-        {
-			return new Vector3( r.NextFloat() * 2f -1, r.NextFloat() * 2f -1f , r.NextFloat() * 2f -1f ).NormalizedFast();
-        }
-		
-		/*
+
+        public static int LevenshteinDistance(string Str1, string Str2)
+	    {
+	        if (string.IsNullOrEmpty(Str1) || string.IsNullOrEmpty(Str2)) return 0;
+
+	        int lengthA = Str1.Length;
+	        int lengthB = Str2.Length;
+	        var distances = new int[lengthA + 1, lengthB + 1];
+	        for (var i = 0; i <= lengthA; distances[i, 0] = i++) {}
+	        for (var j = 0; j <= lengthB; distances[0, j] = j++) {}
+
+	        for (var i = 1; i <= lengthA; i++)
+	        for (var j = 1; j <= lengthB; j++)
+	        {
+	            int cost = Str2[j - 1] == Str1[i - 1] ? 0 : 1;
+	            distances[i, j] = Math.Min
+	            (
+	                Math.Min(distances[i - 1, j] + 1, distances[i, j - 1] + 1),
+	                distances[i - 1, j - 1] + cost
+	            );
+	        }
+	        return distances[lengthA, lengthB];
+	    }
+
+        /*
 		public static int Compress(this Vector3 To){
 			float Factor = 21.325f;
 			return Color.FromArgb(255, (byte)(To.X * Factor+128), (byte)(To.Y * Factor+128), (byte)(To.Z * Factor+128)).ToArgb();
@@ -358,8 +376,8 @@ namespace Hedra.Engine
 			Color C = Color.FromArgb(From);
 			return new Vector3( (C.R - 128) * Factor, (C.G - 128) * Factor, (C.B - 128) * Factor );
 		}*/
-        
-		public static Color Lerp(this Color Origin, Color Target, float T){
+
+        public static Color Lerp(this Color Origin, Color Target, float T){
 			return Color.FromArgb( (byte) Mathf.Lerp(Origin.A, Target.A, T),
 			                       (byte) Mathf.Lerp(Origin.R, Target.R, T),
 			                       (byte) Mathf.Lerp(Origin.G, Target.G, T),
