@@ -30,8 +30,10 @@ namespace Hedra.Engine.QuestSystem.Objectives
     /// </summary>
     public abstract class Objective
     {
-        public static Vector3 DefaultPosition = Constants.WORLD_OFFSET * .5f +
-                                                new Vector3(BiomePool.WorldWidth * .5f, 0, BiomePool.WorldHeight * .5f);
+        public static Vector3 DefaultPosition = new Vector3(
+            BiomePool.WorldWidth * .5f + GameSettings.SpawnPoint.X,
+            0,
+            BiomePool.WorldHeight * .5f + GameSettings.SpawnPoint.Y);
 
         public static Vector3[] ObjectivePositions;
 
@@ -109,7 +111,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
             for (var i = 0; i < ObjectivePositions.Length; i++)
             {
-                ObjectivePositions[i] += Constants.WORLD_OFFSET * .5f;
+                ObjectivePositions[i] += GameSettings.SpawnPoint.ToVector3();
             }
         }
 

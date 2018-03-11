@@ -65,7 +65,7 @@ namespace Hedra.Engine.Rendering.UI
 					Enviroment.SkyManager.SetTime(NetworkManager.WorldTime);
 				Scenes.SceneManager.Game.LPlayer.Spawner.Enabled = false;
 				Scenes.SceneManager.Game.LPlayer.UI.HideMenu();
-				Scenes.SceneManager.Game.LPlayer.BlockPosition = Constants.WORLD_OFFSET * new Vector3(.5f,0,.5f) + Vector3.UnitY * 128;
+				Scenes.SceneManager.Game.LPlayer.BlockPosition = GameSettings.SpawnPoint.ToVector3() + Vector3.UnitY * 128;
 				
 			};
 			

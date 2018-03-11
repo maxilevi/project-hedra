@@ -12,6 +12,7 @@ namespace Hedra
 	/// <summary>
 	/// Description of Constants.
 	/// </summary>
+	[Obsolete]
 	public static class Constants
 	{
 		public static int VIEW_DISTANCE = 1024;
@@ -28,7 +29,6 @@ namespace Hedra
 		public static bool CLAMP_CAMERA = true;
 		public static bool REDIRECT_NET = false;
 		public static bool REDIRECT_NEW_RUN = false;
-		public static Vector3 WORLD_OFFSET = new Vector3(100000,250,100000);
 		public static bool HIDE_CHUNKS = false;
 		public static bool HIDE_ENTITIES = false;
 		public static bool NO_CULL = false;

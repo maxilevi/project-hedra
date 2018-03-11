@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player
 		public string Name, QuestData = "";
 		public int Level = 1, WorldSeed;
 		public float RandomFactor = 1, Daytime = 12000, XP = 0, Mana = 0, Health = 100, Speed = 2, SpeedMultiplier = 1;
-		public Vector3 BlockPosition = Constants.WORLD_OFFSET * .5f, Rotation, TargetPosition = Vector3.Zero;
+		public Vector3 BlockPosition = GameSettings.SpawnPoint.ToVector3(), Rotation, TargetPosition = Vector3.Zero;
 		public Dictionary<Item.InventoryItem, int> Items = new Dictionary<Item.InventoryItem, int>();
 		public Vector4 Color0 = new Vector4(.2f,.2f,.2f,1), Color1 = new Vector4(.2f,.2f,.2f,1);
 		public byte[] SkillsData = new byte[]{};

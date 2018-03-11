@@ -24,10 +24,10 @@ namespace Hedra.Engine
     /// </summary>
     public static class GameSettings
     {
+        public static Vector2 SpawnPoint { get; } = new Vector2(50000, 50000);
         public static bool Paused { get; set; }
-        private static bool _fullscreen;
-        private static int _shadowQuality = 2;
-        private static float _fpsLimit;
+        public static int MaxLoadingRadius { get; set; } = 32;
+        public static int MinLoadingRadius { get; } = 8;
         public static float AmbientOcclusionIntensity = 1;
         public static bool BlurFilter = false;
         public static bool DarkEffect = false;
@@ -36,12 +36,13 @@ namespace Hedra.Engine
         public const float Fov = 85.0f;
         public static bool GlobalShadows = true;
         public static bool Hardcore = false;
-        public static bool LOD = true;
+        public static bool Lod = true;
         public static bool MaxResolution = false;
         public static bool UnderWaterEffect = false;
         public static float UpdateDistance = 420;
-        public static int MaxLoadingRadius { get; set; } = 32;
-        public static int MinLoadingRadius { get; } = 8;
+        private static bool _fullscreen;
+        private static int _shadowQuality = 2;
+        private static float _fpsLimit;
 
 
         [Setting]

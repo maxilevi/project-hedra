@@ -150,14 +150,11 @@ namespace Hedra.Engine.Scenes
 			LPlayer.Inventory.SetItems(Data.Items);
 
 			if(LPlayer.Health == 0){
-				LPlayer.BlockPosition = new Vector3(Constants.WORLD_OFFSET.X * .5f, 128, Constants.WORLD_OFFSET.Z * .5f);
+				//LPlayer.BlockPosition = new Vector3(GameSettings.SpawnPoint.X, 128, GameSettings.SpawnPoint.Y);
 				LPlayer.Respawn();
 				_savedHealth = LPlayer.Health;
 			}else{
 				_savedHealth = Data.Health;
-			}
-			if(LPlayer.BlockPosition.X < 500 || LPlayer.BlockPosition.Z < 500){
-				LPlayer.BlockPosition = new Vector3(Constants.WORLD_OFFSET.X * .5f, 128, Constants.WORLD_OFFSET.Z * .5f);
 			}
 			
 			_savedMana = Data.Mana;
@@ -179,7 +176,7 @@ namespace Hedra.Engine.Scenes
 		    Player.Pet.MountEntity?.Update();//Finish removing the mount
 
 		    Data.WorldSeed = World.RandomSeed;
-			Data.BlockPosition = Constants.WORLD_OFFSET * new Vector3(.5f,10,.5f);
+			Data.BlockPosition = GameSettings.SpawnPoint.ToVector3();
 			Data.BlockPosition = new Vector3(Data.BlockPosition.X, 128, Data.BlockPosition.Z);
 			LocalPlayer.Instance.IsGliding = false;
 			SceneManager.Game.MakeCurrent(Data);
