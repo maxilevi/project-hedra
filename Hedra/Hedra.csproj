@@ -107,13 +107,13 @@
     <Compile Include="Engine\BiomeSystem\BiomeSkyDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeStructureDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeTreeDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiomeColors.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiomeEnviromentDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiomeGenerationDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiomeMobDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiomeSkyDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiomeStructureDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiomeTreeDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeColors.cs" />
+    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeEnviromentDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeGenerationDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeMobDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeSkyDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeStructureDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeTreeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\Region.cs" />
     <Compile Include="Engine\BiomeSystem\RegionEnviroment.cs" />
     <Compile Include="Engine\BiomeSystem\RegionGeneration.cs" />
@@ -121,6 +121,9 @@
     <Compile Include="Engine\BiomeSystem\RegionSky.cs" />
     <Compile Include="Engine\BiomeSystem\RegionStructure.cs" />
     <Compile Include="Engine\BiomeSystem\RegionTree.cs" />
+    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeColorsDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeTreeDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeSkyDesign.cs" />
     <Compile Include="Engine\BiomeSystem\Voronoi.cs" />
     <Compile Include="Engine\CacheSystem\AppleTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\AttentionIconCache.cs" />
@@ -152,6 +155,7 @@
     <Compile Include="Engine\Management\ISearchable.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
     <Compile Include="Engine\Management\TickSystem.cs" />
+    <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\ColorTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\CustomFactory.cs" />
@@ -628,12 +632,14 @@
     <Compile Include="Engine\Rendering\Shader.cs" />
     <Compile Include="Engine\TreeSystem\AppleDesign.cs" />
     <Compile Include="Engine\TreeSystem\CypressDesign.cs" />
+    <Compile Include="Engine\TreeSystem\DeadTreeDesign.cs" />
     <Compile Include="Engine\TreeSystem\OakDesign.cs" />
     <Compile Include="Engine\TreeSystem\PineDesign.cs" />
     <Compile Include="Engine\TreeSystem\TallDesign.cs" />
     <Compile Include="Engine\TreeSystem\TreeDesign.cs" />
     <Compile Include="Engine\UnitTesting\BaseTest.cs" />
     <Compile Include="Engine\UnitTesting\CodePolicies\ShaderCodePolicy.cs" />
+    <Compile Include="Engine\UnitTesting\DataStructures\QuaternionExtensionsTester.cs" />
     <Compile Include="Engine\UnitTesting\GenerationTests\WorldTester.cs" />
     <Compile Include="Engine\UnitTesting\GraphicsTests\GraphicsWrapperTester.cs" />
     <Compile Include="Engine\UnitTesting\TestMethod.cs" />
@@ -2978,6 +2984,18 @@
       <Link>Assets\Env\DeadTree0.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\DeadTree1.ply">
+      <Link>Assets\Env\DeadTree1.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\DeadTree2.ply">
+      <Link>Assets\Env\DeadTree2.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\DeadTree3.ply">
+      <Link>Assets\Env\DeadTree3.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\DesertRock0.ply">
       <Link>Assets\Env\DesertRock0.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -4157,6 +4175,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Engine\BiomeSystem\LavaBiome\" />
     <Folder Include="Engine\Player\Inventory\" />
   </ItemGroup>
   <ItemGroup>

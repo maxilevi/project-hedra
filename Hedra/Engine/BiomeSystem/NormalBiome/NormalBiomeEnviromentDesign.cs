@@ -1,8 +1,6 @@
-﻿using Hedra.Engine.Generation;
-using Hedra.Engine.PlantSystem;
-using Hedra.Engine.TreeSystem;
+﻿using Hedra.Engine.PlantSystem;
 
-namespace Hedra.Engine.BiomeSystem
+namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
     public class NormalBiomeEnviromentDesign : BiomeEnviromentDesign
     {

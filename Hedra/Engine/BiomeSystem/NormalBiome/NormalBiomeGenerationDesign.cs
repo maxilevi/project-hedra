@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Hedra.Engine.Generation;
 using OpenTK;
 
-namespace Hedra.Engine.BiomeSystem
+namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
     public class NormalBiomeGenerationDesign :  BiomeGenerationDesign
     {

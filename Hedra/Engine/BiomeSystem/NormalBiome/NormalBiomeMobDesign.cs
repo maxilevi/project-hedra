@@ -1,9 +1,8 @@
-﻿using System;
-using Hedra.Engine.Generation;
+﻿using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 
-namespace Hedra.Engine.BiomeSystem
+namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
     public class NormalBiomeMobDesign : BiomeMobDesign
     {
@@ -13,7 +12,7 @@ namespace Hedra.Engine.BiomeSystem
         public NormalBiomeMobDesign()
         {
             this.WorldModulesReload(AssetManager.AppPath);
-            World.ModulesReload += WorldModulesReload;
+            World.ModulesReload += this.WorldModulesReload;
         }
 
         private void WorldModulesReload(string AppPath)

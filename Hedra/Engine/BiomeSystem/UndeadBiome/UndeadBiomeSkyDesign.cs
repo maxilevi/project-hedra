@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
-namespace Hedra.Engine.BiomeSystem
+namespace Hedra.Engine.BiomeSystem.UndeadBiome
 {
-    public class NormalBiomeSkyDesign : BiomeSkyDesign
+    public class UndeadBiomeSkyDesign : BiomeSkyDesign
     {
         public override Vector4 AfternoonTop(int Seed)
         {
@@ -43,32 +38,30 @@ namespace Hedra.Engine.BiomeSystem
 
         public override Vector4 MiddayTop(int Seed)
         {
-            return IsRaining(Seed) ? CloudyTop : ClearTop;
+            return ClearTop;
         }
 
         public override Vector4 MiddayBot(int Seed)
         {
-            return IsRaining(Seed) ? CloudyBot : ClearBot;
+            return ClearBot;
         }
 
-        private Vector4 CloudyTop { get; } = Colors.FromArgb(255, 51, 60, 57);
-        private Vector4 CloudyBot { get; } = Colors.FromArgb(255, 253, 251, 240);
-        private Vector4 ClearTop { get; } = Colors.DeepSkyBlue;
-        private Vector4 ClearBot { get; } = Colors.FromArgb(255, 253, 251, 187);
+        private Vector4 ClearTop { get; } = Colors.FromHtml("#2f8e62");
+        private Vector4 ClearBot { get; } = Colors.FromHtml("#2f5e62");
 
         public override bool IsRaining(int Seed)
         {
-             return new Random(Seed + 2343).Next(0, 4) == 1;
+            return false;
         }
 
         public override float MinLight(int Seed)
         {
-            return float.MinValue;
+            return 0.2f;
         }
 
         public override float MaxLight(int Seed)
         {
-            return float.MaxValue;
+            return 0.6f;
         }
     }
 }

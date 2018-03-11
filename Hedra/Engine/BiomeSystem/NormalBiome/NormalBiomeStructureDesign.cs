@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Hedra.Engine.StructureSystem;
+﻿using Hedra.Engine.StructureSystem;
 
-namespace Hedra.Engine.BiomeSystem
+namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
     public class NormalBiomeStructureDesign : BiomeStructureDesign
     {
