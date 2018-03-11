@@ -7,7 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
+using Hedra.Engine.BiomeSystem.NormalBiome;
+using Hedra.Engine.BiomeSystem.UndeadBiome;
 using Hedra.Engine.Generation;
 using OpenTK;
 
@@ -32,7 +33,17 @@ namespace Hedra.Engine.BiomeSystem
             _regionCache = new Dictionary<int, Region>();
 
             BiomeDesigns = new BiomeDesign[1];
-	        BiomeDesigns[0] = new BiomeDesign
+           /* BiomeDesigns[0] = new BiomeDesign
+            {
+                ColorDesign = new UndeadBiomeColorsDesign(),
+                StructureDesign = new NormalBiomeStructureDesign(),
+                TreeDesign = new UndeadBiomeTreeDesign(),
+                SkyDesign = new UndeadBiomeSkyDesign(),
+                MobDesign = new NormalBiomeMobDesign(),
+                GenerationDesign = new NormalBiomeGenerationDesign(),
+                EnviromentDesign = new NormalBiomeEnviromentDesign()
+            };*/
+            BiomeDesigns[0] = new BiomeDesign
 	        {
 	            ColorDesign = new NormalBiomeColors(),
 	            StructureDesign = new NormalBiomeStructureDesign(),
@@ -43,7 +54,7 @@ namespace Hedra.Engine.BiomeSystem
                 EnviromentDesign = new NormalBiomeEnviromentDesign()
             };
 
-	        _voronoi = new Voronoi
+            _voronoi = new Voronoi
 	        {
 	            //Seed = World.Seed
 	        };
@@ -62,6 +73,8 @@ namespace Hedra.Engine.BiomeSystem
 	            int regionIndex = new Random((int) voronoiHeight).Next(0, MaxRegionsPerBiome);
 	            int biomeIndex = new Random((int) voronoiHeight + 421).Next(0, BiomeDesigns.Length);
 	            int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
+
+                if ((Offset.Xz - GameSettings.SpawnPoint).LengthFast < 2500) biomeIndex = 0;
 
 	            if (_regionCache.ContainsKey(index))
 	                return _regionCache[index];
