@@ -60,7 +60,7 @@ namespace Hedra.Engine.UnitTesting
 
                     Engine.Log.Write(TestName + " ", ConsoleColor.Magenta);
                     Engine.Log.Write((Passed ? "PASSED" : "FAILED") + Environment.NewLine, Passed ? ConsoleColor.Green : ConsoleColor.Red);
-                    UnitTester.Log(this.Log + Environment.NewLine);
+                    UnitTester.Log( string.IsNullOrEmpty(this.Log) ? this.Log : this.Log + Environment.NewLine);
                 }
             }
         }
@@ -96,8 +96,12 @@ namespace Hedra.Engine.UnitTesting
         /// <param name="Obj1">The first object to compare.</param>
         /// <param name="Obj2">The second object to compare.</param>
         /// <param name="Message">Message to display.</param>
-        public void AssertEqual(object Obj1, object Obj2, string Message = "Provided parameters are NOT EQUAL")
+        public void AssertEqual(object Obj1, object Obj2, string Message = null)
         {
+            if (Message == null)
+            {
+                Message = $"EQUAL expectation fails at {Obj1.ToString()} == {Obj2.ToString()}";
+            }
             this.AssertTrue(Obj1.Equals(Obj2), Message);
         }
     }
