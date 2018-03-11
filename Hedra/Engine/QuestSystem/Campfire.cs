@@ -6,7 +6,9 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
- using  System.Linq;
+
+using System;
+using  System.Linq;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Generation;
@@ -56,16 +58,26 @@ namespace Hedra.Engine.QuestSystem
 		        _fireParticles.Emit();
 		    }
 
-            for (int i = World.Entities.Count-1; i > -1; i--){
-                if(World.Entities[i] == null) continue;
-				if( (World.Entities[i].Position - Position).LengthSquared < 4*4){
-					if(World.Entities[i].SearchComponent<BurningComponent>() == null){
-						World.Entities[i].AddComponent( new BurningComponent(World.Entities[i], 5f, 40f) );
-					}
-				}
-			}
-			
-			if( (this._light == null) && (this.Position - LocalPlayer.Instance.Position).LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
+		    try
+		    {
+		        for (int i = World.Entities.Count - 1; i > -1; i--)
+		        {
+		            if (World.Entities[i] == null) continue;
+		            if ((World.Entities[i].Position - Position).LengthSquared < 4 * 4)
+		            {
+		                if (World.Entities[i].SearchComponent<BurningComponent>() == null)
+		                {
+		                    World.Entities[i].AddComponent(new BurningComponent(World.Entities[i], 5f, 40f));
+		                }
+		            }
+		        }
+		    }
+		    catch (ArgumentOutOfRangeException)
+		    {
+		        Log.WriteLine("ArgumentException while looping though entities.");
+		    }
+
+		    if( (this._light == null) && (this.Position - LocalPlayer.Instance.Position).LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
 
                 this._light = ShaderManager.GetAvailableLight();
 
