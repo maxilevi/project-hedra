@@ -98,10 +98,12 @@ namespace Hedra.Engine.QuestSystem
 	        }
 	        var shape = AssetManager.LoadCollisionShapes("Assets/Env/Chest.ply", 1, this.Scale)[0];
 	        //This will search for "Assets/Env/Colliders/Chest_Collider0.ply"
+            shape.Transform(-Vector3.UnitX * 1.5f);
 	        shape.Transform(Matrix4.CreateRotationY(this.Rotation.Y * Mathf.Radian) *
 	                        Matrix4.CreateRotationX(this.Rotation.X * Mathf.Radian) *
 	                        Matrix4.CreateRotationZ(this.Rotation.Z * Mathf.Radian));
-	        shape.Transform(this.Position);
+
+            shape.Transform(this.Position);
 	        _shape = shape;
 	        UnderChunk.AddCollisionShape(shape);  
 	    }
@@ -127,6 +129,8 @@ namespace Hedra.Engine.QuestSystem
 			get{ return Model.Position;  }
 	        set
 	        {
+                if(value == this.Position) return;
+
 	            this.Model.Position = value;
 	            this.CreateColliders();
 	        }
