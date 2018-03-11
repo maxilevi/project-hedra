@@ -1,7 +1,3 @@
-# Voxel Shift Official Repository #
- Follow its development at [The official blog](http://zaphyk.blogspot.com)
+# Project Hedra Repository #
 
-# Last Update: Procedural Trees #
-![p.jpg](https://bitbucket.org/repo/yGarjX/images/154591884-p.jpg)
-
-![p.png](https://bitbucket.org/repo/yGarjX/images/2351953082-p.png)
+![](https://i.redditmedia.com/pI7uVQZYW6xksur5CuHvXLrQBhECqkTkXejzlc-tyog.png)
