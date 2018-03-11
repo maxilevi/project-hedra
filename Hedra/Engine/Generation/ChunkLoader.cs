@@ -152,9 +152,9 @@ namespace Hedra.Engine.Generation
                                 float CameraDist = (Chunks[i].Position.Xz - _player.View.CameraPosition.Xz)
                                     .LengthSquared;
 
-                                if (CameraDist > 288 * 288 && CameraDist < 576 * 576 && GameSettings.LOD)
+                                if (CameraDist > 288 * 288 && CameraDist < 576 * 576 && GameSettings.Lod)
                                     Chunks[i].Lod = 2;
-                                else if (CameraDist > 576 * 576 && GameSettings.LOD)
+                                else if (CameraDist > 576 * 576 && GameSettings.Lod)
                                     Chunks[i].Lod = 4;
                                 else
                                     Chunks[i].Lod = 1;

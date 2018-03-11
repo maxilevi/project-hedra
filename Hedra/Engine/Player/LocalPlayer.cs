@@ -75,7 +75,7 @@ namespace Hedra.Engine.Player
 			this.Trade = new TradeSystem(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
 
-            this.BlockPosition = new Vector3(Constants.WORLD_OFFSET * .5f);
+            this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
 			this.Physics.CanCollide = true;
 			this.AttackSpeed = 1.25f;
 	        this.AttackPower = 1.0f;
