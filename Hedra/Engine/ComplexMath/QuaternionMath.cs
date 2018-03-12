@@ -5,6 +5,11 @@ namespace Hedra.Engine.ComplexMath
 {
     public static class QuaternionMath
     {
+        /// <summary>
+        /// Transform a quaternion into an equivalent euler rotation.
+        /// </summary>
+        /// <param name="Quaternion">Quaternion to take the angles from.</param>
+        /// <returns></returns>
         public static Vector3 ToEuler(Quaternion Quaternion)
         {
             double sinr = +2.0 * (Quaternion.W * Quaternion.X + Quaternion.Y * Quaternion.Z);
