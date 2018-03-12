@@ -4,7 +4,7 @@
 in vec4 Color;
 in vec4 IColor;
 in vec4 InPos;
-in vec4 InNorm;
+smooth in vec4 InNorm;
 in float Visibility;
 in float Height;
 in vec4 BotColor;
@@ -41,7 +41,7 @@ uniform mat4 ShadowMVP;
 uniform vec3 LightPosition;
 uniform vec3 LightColor;
 uniform PointLight Lights[12];
-uniform float Snow = 0.0;
+const float Snow = 0.0;
 uniform sampler3D noiseTexture;
 const float Damper = 10.0;
 const float Reflectivity = 0.08;
@@ -188,9 +188,10 @@ void main(){
 	//ShadowVisibility += has_shadows * when_eq(ShadowCoords.z, 1.0) * 1.0;
 	ShadowVisibility = 1.0 - (shadow * 0.55);
 	
-	float cond_met = when_gt(InNorm.y, 0.2) * Snow;
-	InputColor += cond_met * when_lt(ShadowVisibility, 1.0) * vec4(0.8-InputColor.x, 0.8-InputColor.y, 0.8-InputColor.z, 0.0) * clamp(InNorm.y, 0.0, 1.0) * 0.85 * clamp(ShadowVisibility ,0.0, 1.0);
-	InputColor += cond_met * not(when_lt(ShadowVisibility, 1.0)) * vec4(0.8-InputColor.x, 0.8-InputColor.y, 0.8-InputColor.z, 0.0) * clamp(InNorm.y, 0.0, 1.0) * 0.85;
+	float cond_met = when_gt(InNorm.y, 0.4) * Snow;
+	float snow_val = 1.2;
+	InputColor += cond_met * when_lt(ShadowVisibility, 1.0) * vec4(snow_val-InputColor.x, snow_val-InputColor.y, snow_val-InputColor.z, 0.0) * clamp(InNorm.y, 0.0, 1.0) * 1.0 * clamp(ShadowVisibility ,0.0, 1.0);
+	InputColor += cond_met * not(when_lt(ShadowVisibility, 1.0)) * vec4(snow_val-InputColor.x, snow_val-InputColor.y, snow_val-InputColor.z, 0.0) * clamp(InNorm.y, 0.0, 1.0) * 1.0;
 
 	vec4 FinalColor = vec4(finalRim, 0.0) + (vec4(Diffuse,1.0) * InputColor) + Specular;
 	vec4 SkyColor = vec4( mix(BotColor, TopColor, (gl_FragCoord.y / Height) - .25) );
