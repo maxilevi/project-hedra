@@ -107,6 +107,20 @@
     <Compile Include="Engine\BiomeSystem\BiomeSkyDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeStructureDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeTreeDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeColors.cs" />
+    <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeEnviromentDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeGenerationDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeMobDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeSkyDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeStructureDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeTreeDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\LavaBiome\LavaBiomeColors.cs" />
+    <Compile Include="Engine\BiomeSystem\LavaBiome\LavaBiomeEnviromentDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\LavaBiome\LavaBiomeGenerationDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\LavaBiome\LavaBiomeMobDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\LavaBiome\LavaBiomeSkyDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\LavaBiome\LavaBiomeStructureDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\LavaBiome\LavaBiomeTreeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeColors.cs" />
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeEnviromentDesign.cs" />
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeGenerationDesign.cs" />
@@ -121,7 +135,18 @@
     <Compile Include="Engine\BiomeSystem\RegionSky.cs" />
     <Compile Include="Engine\BiomeSystem\RegionStructure.cs" />
     <Compile Include="Engine\BiomeSystem\RegionTree.cs" />
+    <Compile Include="Engine\BiomeSystem\SnowBiome\SnowBiomeColorsDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\SnowBiome\SnowBiomeEnviromentDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\SnowBiome\SnowBiomeGenerationDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\SnowBiome\SnowBiomeMobDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\SnowBiome\SnowBiomeSkyDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\SnowBiome\SnowBiomeStructureDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\SnowBiome\SnowBiomeTreeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeColorsDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeEnviromentDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeGenerationDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeMobDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeStructureDesign.cs" />
     <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeTreeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeSkyDesign.cs" />
     <Compile Include="Engine\BiomeSystem\Voronoi.cs" />
@@ -615,6 +640,7 @@
     <Compile Include="Engine\StructureSystem\GiantTreeDesign.cs" />
     <Compile Include="Engine\StructureSystem\GraveyardDesign.cs" />
     <Compile Include="Engine\StructureSystem\ObeliskDesign.cs" />
+    <Compile Include="Engine\StructureSystem\TempleDesign.cs" />
     <Compile Include="Engine\StructureSystem\TravellingMerchantDesign.cs" />
     <Compile Include="Engine\StructureSystem\StructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageDesign.cs" />
@@ -3140,6 +3166,10 @@
       <Link>Assets\Env\Village\House1.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\IncaTemple0.ply">
+      <Link>Assets\Env\IncaTemple0.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\Katar0.ply">
       <Link>Assets\Items\Katar0.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3917,6 +3947,9 @@
     <None Include="Modules\Mobs\Wolf.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\SnowBiomeSpawner.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\UndeadBiomeSpawner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -4175,7 +4208,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Engine\BiomeSystem\LavaBiome\" />
     <Folder Include="Engine\Player\Inventory\" />
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.BiomeSystem.NormalBiome;
+using Hedra.Engine.BiomeSystem.SnowBiome;
 using Hedra.Engine.BiomeSystem.UndeadBiome;
 using Hedra.Engine.Generation;
 using OpenTK;
@@ -33,16 +34,18 @@ namespace Hedra.Engine.BiomeSystem
             _regionCache = new Dictionary<int, Region>();
 
             BiomeDesigns = new BiomeDesign[1];
-           /* BiomeDesigns[0] = new BiomeDesign
+            /*
+             BiomeDesigns[1] = new BiomeDesign
             {
                 ColorDesign = new UndeadBiomeColorsDesign(),
-                StructureDesign = new NormalBiomeStructureDesign(),
+                StructureDesign = new UndeadBiomeStructureDesign(),
                 TreeDesign = new UndeadBiomeTreeDesign(),
                 SkyDesign = new UndeadBiomeSkyDesign(),
-                MobDesign = new NormalBiomeMobDesign(),
-                GenerationDesign = new NormalBiomeGenerationDesign(),
-                EnviromentDesign = new NormalBiomeEnviromentDesign()
+                MobDesign = new UndeadBiomeMobDesign(),
+                GenerationDesign = new UndeadBiomeGenerationDesign(),
+                EnviromentDesign = new UndeadBiomeEnviromentDesign()
             };*/
+
             BiomeDesigns[0] = new BiomeDesign
 	        {
 	            ColorDesign = new NormalBiomeColors(),
@@ -52,8 +55,17 @@ namespace Hedra.Engine.BiomeSystem
 	            MobDesign = new NormalBiomeMobDesign(),
                 GenerationDesign = new NormalBiomeGenerationDesign(),
                 EnviromentDesign = new NormalBiomeEnviromentDesign()
-            };
-
+            };/*
+            BiomeDesigns[1] = new BiomeDesign
+            {
+                ColorDesign = new SnowBiomeColorsDesign(),
+                StructureDesign = new SnowBiomeStructureDesign(),
+                TreeDesign = new SnowBiomeTreeDesign(),
+                SkyDesign = new SnowBiomeSkyDesign(),
+                MobDesign = new SnowBiomeMobDesign(),
+                GenerationDesign = new SnowBiomeGenerationDesign(),
+                EnviromentDesign = new SnowBiomeEnviromentDesign()
+            };*/
             _voronoi = new Voronoi
 	        {
 	            //Seed = World.Seed
@@ -71,12 +83,12 @@ namespace Hedra.Engine.BiomeSystem
             lock (_regionCache) {
 	            var voronoiHeight = this.VoronoiFormula(Offset.Xz.ToVector3());
 	            int regionIndex = new Random((int) voronoiHeight).Next(0, MaxRegionsPerBiome);
-	            int biomeIndex = new Random((int) voronoiHeight + 421).Next(0, BiomeDesigns.Length);
-	            int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
+                int biomeIndex = new Random((int) voronoiHeight + 421).Next(0, BiomeDesigns.Length);
+                if ((Offset.Xz - GameSettings.SpawnPoint).LengthFast < 5000) biomeIndex = 0;
 
-                if ((Offset.Xz - GameSettings.SpawnPoint).LengthFast < 2500) biomeIndex = 0;
+                int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
 
-	            if (_regionCache.ContainsKey(index))
+                if (_regionCache.ContainsKey(index))
 	                return _regionCache[index];
 
 	            var regionColors = new RegionColor(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].ColorDesign);
