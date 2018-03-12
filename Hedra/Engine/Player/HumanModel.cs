@@ -464,8 +464,14 @@ namespace Hedra.Engine.Player
 				}
 				_previousPosition = this.Human.BlockPosition;
 			}
-			
-			Model.BaseTint = Mathf.Lerp(Model.BaseTint, this.BaseTint, (float) Time.unScaledDeltaTime * 6f);
+		    if (MountModel != null)
+		    {
+		        //Adapt human to animal
+		        // this.Model.TransformationMatrix = Matrix4.CreateTranslation(Vector3.UnitY * MountModel.Height)
+		        //* MountModel.Model.TransformationMatrix
+		        //* Matrix4.CreateTranslation(Vector3.UnitY * -MountModel.Height);
+		    }
+            Model.BaseTint = Mathf.Lerp(Model.BaseTint, this.BaseTint, (float) Time.unScaledDeltaTime * 6f);
 			Model.Tint = Mathf.Lerp(Model.Tint, this.Tint, (float) Time.unScaledDeltaTime * 6f);
 			this.LeftWeapon.Mesh.Tint = Model.Tint;
 			this.LeftWeapon.Mesh.BaseTint = Model.BaseTint;

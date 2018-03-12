@@ -27,6 +27,7 @@ namespace Hedra.Engine.EntitySystem
     {
 		
 		public bool IsAttacking { get; private set; }
+        public bool AlignWithTerrain { get; set; } = true;
 		private float _targetAlpha = 1f;
 	    private float _targetGain = 1f;
         private float _attackCooldown;
@@ -116,7 +117,7 @@ namespace Hedra.Engine.EntitySystem
 		        if (Model.Rendered)
 		            Model.Update();
 
-		        _targetTerrainOrientation = new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))).ExtractRotation();
+		        _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))).ExtractRotation() : Quaternion.Identity;
 		        _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.unScaledDeltaTime * 8f);
 		        Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
                 Model.Position = this.Position + Vector3.UnitY * 0.0f;

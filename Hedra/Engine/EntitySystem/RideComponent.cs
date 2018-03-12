@@ -76,7 +76,8 @@ namespace Hedra.Engine.EntitySystem
 					}
 				}
 				Parent.Position = Rider.Position;
-				Rider.Model.MountModel = null;
+			    Rider.Model.MountModel.AlignWithTerrain = true;
+                Rider.Model.MountModel = null;
 				Rider = null;
 				HasRider = false;
 				if(AI != null) AI.DoLogic = true;
@@ -99,6 +100,7 @@ namespace Hedra.Engine.EntitySystem
 			HasRider = true;
 			Rider.IsRiding = true;
 			Rider.Model.MountModel = Parent.Model as QuadrupedModel;
+		    Rider.Model.MountModel.AlignWithTerrain = false;
 			Parent.Physics.UsePhysics = false;
 			Parent.Physics.HasCollision = false;
 			Parent.SearchComponent<DamageComponent>().Immune = true;
