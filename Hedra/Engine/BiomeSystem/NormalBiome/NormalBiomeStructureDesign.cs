@@ -13,6 +13,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             this.AddDesign(new TravellingMerchantDesign());
             this.AddDesign(new ObeliskDesign());
             this.AddDesign(new CampfireDesign());
+            this.AddDesign(new TempleDesign());
         }
     }
 }

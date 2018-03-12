@@ -56,12 +56,12 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
 
         public override float MinLight(int Seed)
         {
-            return 0.2f;
+            return 0.4f;
         }
 
         public override float MaxLight(int Seed)
         {
-            return 0.6f;
+            return 0.8f;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
                     throw new ArgumentException("Region color does not exist");
             }
 
-            return waterColor * new Vector4(1f, 1f, 1f, .7f);
+            return waterColor * new Vector4(.5f, .5f, .5f, .7f);
         }
 
         public override Vector4 StoneColor(int Seed)
@@ -79,7 +79,7 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
 
         public override Vector4 DirtColor(int Seed)
         {
-            return Colors.FromArgb(255, 134, 94, 60);
+            return Colors.FromHtml("#591d1c");
         }
 
         public override Vector4 SeafloorColor(int Seed)
@@ -148,16 +148,13 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
         public override Vector4[] WoodColors(int Seed)
         {
             var rngGen = new Random(Seed + 6432);
-            int rng = rngGen.Next(0, 3);
+            int rng = rngGen.Next(0, 2);
             switch (rng)
             {
                 case 0://
                     return new[] { Colors.FromHtml("#2D262A"), Colors.FromHtml("#3c2116"), Colors.FromHtml("#37322e"), Colors.FromHtml("#343633") };
                 case 1://
                     return new[] { Colors.FromHtml("#845839"), Colors.FromHtml("#4e442b"), Colors.FromHtml("#5c3c23"), Colors.FromHtml("#7d6445") };
-                case 2://
-                    return new[] { Colors.FromHtml("#b49694"), Colors.FromHtml("#c2c5ba"), Colors.FromHtml("#9f8170"), Colors.FromHtml("#dbefc6") };
-
                 default: throw new ArgumentException("Region color does not exist");
             }
         }
@@ -165,31 +162,15 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
         public override Vector4[] GrassColors(int Seed)
         {
             var rngGen = new Random(Seed + 52234);
-            int rng = rngGen.Next(0, 5);
+            int rng = rngGen.Next(0, 1);
 
             Vector4[] returnArray = null;
             switch (rng)
             {
                 case 0:
-                    returnArray = new[] { Colors.FromHtml("#689d0f"), Colors.FromHtml("#bac51f"), Colors.FromHtml("#598e0a"), Colors.FromHtml("#9ac45c") };
-                    break;
-                case 1:
-                    returnArray = new[] { Colors.FromHtml("#a49a16"), Colors.FromHtml("#838812"), Colors.FromHtml("#5c6f2a"), Colors.FromHtml("#9ebd42") };
-                    break;
-                case 2:
-                    returnArray = new[] { Colors.FromHtml("#77b870"), Colors.FromHtml("#2d562e"), Colors.FromHtml("#59954f"), Colors.FromHtml("#3e6834") };
-                    break;
-                case 3:
-                    returnArray = new[] { Colors.FromHtml("#6a7229"), Colors.FromHtml("#5b6310"), Colors.FromHtml("#276832"), Colors.FromHtml("#679731") };
-                    break;
-                case 4:
-                    returnArray = new[] { Colors.FromHtml("#3d4f16"), Colors.FromHtml("#2e5d08"), Colors.FromHtml("#68771c"), Colors.FromHtml("#659318") };
+                    returnArray = new[] { Colors.FromHtml("#1e1534"), Colors.FromHtml("#40353b"), Colors.FromHtml("#2a1d31"), Colors.FromHtml("#1e1b2c") };
                     break;
                 default: throw new ArgumentException("Region color does not exist");
-            }
-            for (var i = 0; i < returnArray.Length; i++)
-            {
-                returnArray[i] = returnArray[i] * .25f;
             }
             return returnArray;
         }
