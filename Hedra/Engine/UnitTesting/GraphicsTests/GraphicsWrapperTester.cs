@@ -10,7 +10,7 @@ namespace Hedra.Engine.UnitTesting.GraphicsTests
 {
     public class GraphicsWrapperTester : BaseTest
     {
-        [TestMethod]
+        //[TestMethod]
         public void TestMatrixStack()
         {
             GraphicsLayer.MatrixMode(MatrixMode.Modelview);
@@ -32,7 +32,7 @@ namespace Hedra.Engine.UnitTesting.GraphicsTests
                 "PushMatrix and PopMatrix returned an unexpected result." + Environment.NewLine + GraphicsLayer.MvMatrix());
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestMatrixTransformationFunctionsWork()
         {
             GraphicsLayer.MatrixMode(MatrixMode.Modelview);
