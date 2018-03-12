@@ -85,7 +85,7 @@ namespace Hedra.Engine.StructureSystem
             BlockType type;
             float height = Biome.Generation.GetHeight( TargetPosition.X, TargetPosition.Z, null, out type);
 
-            return Rng.Next(0, 200) == 1 && height > 0;
+            return Rng.Next(0, 85) == 1 && height > 0;
         }
     }
 }

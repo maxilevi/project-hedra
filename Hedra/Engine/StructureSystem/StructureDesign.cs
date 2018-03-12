@@ -33,7 +33,8 @@ namespace Hedra.Engine.StructureSystem
                     var targetPosition = new Vector3(newOffset.X + rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize,
                         0,
                         newOffset.Y + rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize);
-                    bool shouldBe = this.SetupRequirements(targetPosition, newOffset, Biome, rng) && (Math.Abs(targetPosition.X - 50000) > 2000 || Math.Abs(targetPosition.Y - 50000) > 2000);
+                    bool shouldBe = this.SetupRequirements(targetPosition, newOffset, Biome, rng)
+                        && (targetPosition.Xz - GameSettings.SpawnPoint).LengthSquared > 256*256;
                     if (shouldBe && this.ShouldBuild(targetPosition, Biome.Structures.Designs))
                     {
                         lock (World.StructureGenerator.Items)
