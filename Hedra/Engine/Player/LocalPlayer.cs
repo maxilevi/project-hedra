@@ -209,9 +209,12 @@ namespace Hedra.Engine.Player
                     }
                 }
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
-                Log.WriteLine("Syncronization exception while reading entities.");
+                if (e is ArgumentOutOfRangeException || e is NullReferenceException)
+                    Log.WriteLine("Syncronization exception while reading entities.");
+                else
+                    throw;
             }
         }
 

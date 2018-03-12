@@ -28,7 +28,14 @@ namespace Hedra.Engine.PhysicsSystem
 
         public void Add(MoveCommand Item)
         {
-            _toMove.Add(Item);
+            try
+            {
+                _toMove.Add(Item);
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Log.WriteLine("Detected a sync error.");
+            }
         }
 
         public void Wakeup()

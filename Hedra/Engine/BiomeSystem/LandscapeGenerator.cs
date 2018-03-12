@@ -114,6 +114,7 @@ namespace Hedra.Engine.BiomeSystem
 
 							foreach (Plateau t in plateauPositions)
 							{
+
 							    dist = ( t.Position.Xz - position).LengthSquared;
 							    final = Math.Max(1-Math.Min(dist / (t.Radius * t.Radius),1), 0);
 							    float addonHeight = t.Height * Math.Max(final, 0f);
