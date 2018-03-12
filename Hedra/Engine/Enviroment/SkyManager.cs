@@ -37,7 +37,7 @@ namespace Hedra.Engine.Enviroment
 	    private static Vector4 _nextTargetBiomeTopColor;
 	    private static Vector4 _targetBiomeBotColor;
 	    private static Vector4 _nextTargetBiomeBotColor;
-	    private static float _minLight;
+        private static float _minLight;
 	    private static float _maxLight;
         public static float DaytimeSpeed = 1f;
 	    public static float LastDayFactor, SkyModifier;
@@ -156,13 +156,11 @@ namespace Hedra.Engine.Enviroment
 			Skydome.BotColor = Mathf.Lerp(_targetBiomeBotColor, _nextTargetBiomeBotColor, SkyModifier/6000);
 
 			if( Math.Abs(dayFactor - LastDayFactor) > .005f || LoadTime){
-				Vector3 newLightColor;
-				if(IsRaining)
-					newLightColor = Vector3.One * Mathf.Clamp(dayFactor * .7f, _minLight, _maxLight);
-				else
-					newLightColor = Vector3.One * Mathf.Clamp(dayFactor * 1f, _minLight, _maxLight);
-				
-				newLightColor = new Vector3( Math.Max(0f, newLightColor.X), Math.Max(0f, newLightColor.Y), Math.Max(0f, newLightColor.Z) );
+				Vector3 newLightColor = IsRaining 
+                    ? Vector3.One * Mathf.Clamp(dayFactor * .7f, _minLight, _maxLight) 
+                    : Vector3.One * Mathf.Clamp(dayFactor * 1f, _minLight, _maxLight);
+
+			    newLightColor = new Vector3( Math.Max(0f, newLightColor.X), Math.Max(0f, newLightColor.Y), Math.Max(0f, newLightColor.Z) );
 				ShaderManager.LightColor = newLightColor;
 			    FogManager.UpdateFogSettings(FogManager.MinDistance, FogManager.MaxDistance);
                 LastDayFactor = dayFactor;
