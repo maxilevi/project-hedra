@@ -65,7 +65,7 @@ namespace Hedra
 			base.OnLoad(e);
 		    string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
 		    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
-            this.GameVersion = "α 0.25";
+            this.GameVersion = "α 0.26";
 		    this.Title += " "+GameVersion;
             Hedra.MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
