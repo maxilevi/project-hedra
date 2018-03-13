@@ -339,7 +339,7 @@ namespace Hedra.Engine
 		
 		public static float NextFloat(this Random r)
         {
-			return (float) ( r.NextDouble() );
+			return (float) r.NextDouble() ;
         }
 
         public static int LevenshteinDistance(string Str1, string Str2)

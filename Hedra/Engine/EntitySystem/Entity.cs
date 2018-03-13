@@ -36,7 +36,8 @@ namespace Hedra.Engine.EntitySystem
         private float _prevHeight;
         private float _previousFalltime;
         private bool _spawningWithAnimation;
-        private TickSystem TickSystem;
+        private float _knockedTime;
+        private readonly TickSystem _tickSystem;
 
         public float AttackDamage { get; set; } = 1;
         protected List<EntityComponent> Components = new List<EntityComponent>();
@@ -122,7 +123,7 @@ namespace Hedra.Engine.EntitySystem
         public bool Knocked
         {
             get { return _knocked; }
-            private set
+            set
             {
                 if (value == _knocked) return;
                 _knocked = value;
@@ -204,7 +205,7 @@ namespace Hedra.Engine.EntitySystem
 
         public Entity()
         {
-            TickSystem = new TickSystem();
+            _tickSystem = new TickSystem();
             Physics = new PhysicsComponent(this);
             MaxHealth = 100;
             Health = MaxHealth;
@@ -255,14 +256,14 @@ namespace Hedra.Engine.EntitySystem
         {
             Components.Add(Component);
             var tickable = Component as ITickable;
-            if(tickable != null) TickSystem.Add(tickable);
+            if(tickable != null) _tickSystem.Add(tickable);
         }
 
         public void RemoveComponent(EntityComponent Component)
         {
             Components.Remove(Component);
             var tickable = Component as ITickable;
-            if (tickable != null) TickSystem.Remove(tickable);
+            if (tickable != null) _tickSystem.Remove(tickable);
         }
 
         public T SearchComponent<T>() where T : EntityComponent
@@ -361,7 +362,7 @@ namespace Hedra.Engine.EntitySystem
         public void KnockForSeconds(float Time)
         {
             Knocked = true;
-            TaskManager.Delay((int) (Time * 1000), delegate { Knocked = false; });
+            _knockedTime = Time;
         }
 
         public void SpawnAnimation()
@@ -370,7 +371,8 @@ namespace Hedra.Engine.EntitySystem
             {
                 PlaySpawningAnimation = false;
                 Model.Alpha = 0;
-                SoundManager.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
+                if(Model.Enabled)
+                    SoundManager.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
             }
             if (!IsDead && Model.Alpha < 0.1f && (Model.Position.Xz - BlockPosition.Xz).LengthSquared < 4 * 4)
             {
@@ -438,18 +440,20 @@ namespace Hedra.Engine.EntitySystem
 
         public virtual void Update()
         {
+            this.Model.Update();
+
             if (IsDead) return;
 
             this.SpawnAnimation();
             PhysicsSystem.Physics.Manager.AddCommand(this);
-            this.Model.Update();
             this.UpdateEnviroment();
-            this.TickSystem.Tick();
+            this._tickSystem.Tick();
             for (var i = 0; i < this.Components.Count; i++)
                 this.Components[i].Update();
             this.Model.Rotation = Mathf.Lerp(Model.Rotation, Model.TargetRotation, (float) Time.deltaTime * 16f);
             if (Knocked)
             {
+                _knockedTime -= Time.ScaledFrameTimeSeconds;
                 var model = Model as HumanModel;
                 if (model != null)
                 {
@@ -460,6 +464,7 @@ namespace Hedra.Engine.EntitySystem
                 {
                     Model.Idle();
                 }
+                if (_knockedTime < 0) Knocked = false;
             }
         }
     }

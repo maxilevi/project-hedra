@@ -20,7 +20,6 @@ namespace Hedra.Engine.Rendering
 	public class WaterMeshBuffer : ChunkMeshBuffer
 	{
 		public static float WaveMovement = 0;
-		public static float TransparencyModifier = 0.0f;
 		public static bool ShowBackfaces = false;
 		public static bool Move = true;
 		
