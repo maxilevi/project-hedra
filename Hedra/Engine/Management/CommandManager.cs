@@ -82,7 +82,11 @@ namespace Hedra.Engine.Management
 					LocalPlayer.Instance.Model.Sit();
 					return true;
 				}
-				
+			    if (Parts[0] == "spawnAnimation")
+			    {
+			        LocalPlayer.Instance.PlaySpawningAnimation = true;
+			        return true;
+			    }
 				if(Parts[0] == "get"){
 					if(Parts[1] == "random"){
 						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Random) );
@@ -126,7 +130,11 @@ namespace Hedra.Engine.Management
 			    {
 			        LocalPlayer.Instance.AddComponent(new BurningComponent(LocalPlayer.Instance, null, 5f, 30f));
 			    }
-			    if (Parts[0] == "audiotest")
+			    if (Parts[0] == "knock")
+			    {
+			        LocalPlayer.Instance.KnockForSeconds(float.Parse(Parts[1]));
+			    }
+                if (Parts[0] == "audiotest")
 			    {
 			        for (int i = 0; i < 16; i++)
 			        {

@@ -14,7 +14,7 @@ namespace Hedra.Engine.Management
 	/// </summary>
 	public static class ThreadManager
 	{
-		private static List<KeyValuePair<Action, Action>> Functions = new List<KeyValuePair<Action, Action>>();
+		private static readonly List<KeyValuePair<Action, Action>> Functions = new List<KeyValuePair<Action, Action>>();
 		
 		/// <summary>
 		/// Executes the give method on the main thread after a frame has passed.
@@ -33,7 +33,7 @@ namespace Hedra.Engine.Management
 	     	}
 	     }
 	      
-	     public static void NullCallBack(){}
+	     private static void NullCallBack(){}
 	     
 	     public static void Update()
 	     {
