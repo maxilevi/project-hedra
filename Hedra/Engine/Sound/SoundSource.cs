@@ -32,8 +32,10 @@ namespace Hedra.Engine.Sound
 	        AL.SourceStop(ID);
         }
 
-        private void Play(SoundBuffer Buffer){
-            AL.Listener(ALListener3f.Position, ref SoundManager.ListenerPosition);
+        private void Play(SoundBuffer Buffer)
+        {
+            var position = SoundManager.ListenerPosition;
+            AL.Listener(ALListener3f.Position, ref position);
 
             AL.Source(ID, ALSourcei.Buffer, (int) Buffer.ID);
             AL.SourcePlay(ID);

@@ -11,6 +11,7 @@ using OpenTK.Audio.OpenAL;
 using OpenTK.Audio;
 using System.Collections.Generic;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using NVorbis.Ogg;
 using NVorbis;
 using OpenTK.Graphics.ES10;
@@ -25,7 +26,7 @@ namespace Hedra.Engine.Sound
 	{
 		public static AudioContext AudioContext;
 	    public static float Volume = 0.4f;
-        public static Vector3 ListenerPosition;
+        public static Vector3 ListenerPosition { get; private set; }
 
 	    private static bool _loaded = false;
         private static readonly SoundBuffer[] SoundBuffers = new SoundBuffer[(int)SoundType.MaxSounds];
@@ -77,9 +78,9 @@ namespace Hedra.Engine.Sound
 			
 			Data = SoundManager.LoadWave("Sounds/DarkSound.wav", out Channels, out Bits, out Rate);
 			SoundBuffers[(int) SoundType.DarkSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
-			
-			Data = SoundManager.LoadWave("Sounds/Slash.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.SlashSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+
+            ShortData = SoundManager.LoadOgg("Sounds/Slash.ogg", out Channels, out Bits, out Rate);
+			SoundBuffers[(int) SoundType.SlashSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 			
 			Data = SoundManager.LoadWave("Sounds/Footstep/footstep_01.wav", out Channels, out Bits, out Rate);
 			SoundBuffers[(int) SoundType.FootStep] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
@@ -123,11 +124,10 @@ namespace Hedra.Engine.Sound
             _loaded = true;
 		}
 
-        public static void Update(Vector3 PlayerPosition){
+        public static void Update(Vector3 Position){
 			if(!_loaded) return;
 
-            ListenerPosition = PlayerPosition;
-
+            ListenerPosition = Position;
             //ALError error = AL.GetError();
             //if (error != ALError.NoError)
             //    Log.WriteResult(false, error.ToString());
@@ -137,6 +137,7 @@ namespace Hedra.Engine.Sound
         {
 
             if(!_loaded) return;
+            ListenerPosition = LocalPlayer.Instance.Position;
 
             Gain *= Volume;
 		    Gain = Math.Max(Gain - Math.Max(Math.Min(1, (ListenerPosition - Location).LengthFast / 256), 0), 0);
@@ -166,9 +167,9 @@ namespace Hedra.Engine.Sound
             PlaySound(Sound, ListenerPosition, false, Pitch, Gain);
 		}
 		
-		public static void PlaySoundWithVariation(SoundType Sound, Vector3 Location){
+		public static void PlaySoundWithVariation(SoundType Sound, Vector3 Location, float BasePitch = 1f, float BaseGain = 1f){
             if (!_loaded) return;
-            PlaySound(Sound, Location, false, 1 + Utils.Rng.NextFloat() * .2f - .1f, 1 + Utils.Rng.NextFloat() * .2f - .1f);
+            PlaySound(Sound, Location, false, BasePitch + Utils.Rng.NextFloat() * .2f - .1f, BaseGain + Utils.Rng.NextFloat() * .2f - .1f);
 		}
 
 	    public static SoundBuffer GetBuffer(SoundType Type)
@@ -216,7 +217,7 @@ namespace Hedra.Engine.Sound
 			
 			using(VorbisReader Reader = new VorbisReader(stream, true)){
 			
-				if(length == -1) length = (int) ( Math.Round(Reader.TotalTime.TotalSeconds) * Reader.SampleRate * 2);
+				if(length == -1) length = (int) ( Math.Ceiling(Reader.TotalTime.TotalSeconds) * Reader.SampleRate * 2);
 				
 				short[] Data = new short[length];
 				float[] buffer = new float[length];
