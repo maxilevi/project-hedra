@@ -220,7 +220,6 @@ namespace Hedra.Engine.Player
 
         public new void Update(){
 			base.Update();
-			
 			if(this.IsUnderwater && this.IsRiding)
 				this.IsRiding = false;
 
@@ -452,7 +451,6 @@ namespace Hedra.Engine.Player
 
 			Movement.Update();
 			UI.Update();
-			SoundManager.Update(Position);
 			ManageSounds();
 			QuestLog.Update();
 			Pet.Update();
@@ -508,7 +506,8 @@ namespace Hedra.Engine.Player
 		
 		public override float Health{
 			get{ return _health; }
-			set{
+			set
+			{
 				_health = Mathf.Clamp(value,0,MaxHealth);
 				if(_health <= 0f){
 					IsDead = true;
@@ -520,8 +519,11 @@ namespace Hedra.Engine.Player
 						ThreadManager.ExecuteOnMainThread( delegate{ this.MessageDispatcher.ShowMessageWhile("[R] TO RESPAWN", Color.White,
                                 () => this.Health <= 0 && Constants.CHARACTER_CHOOSED); } );
 				}else{
-					IsDead = false;
-				    Model?.Recompose();
+				    if (IsDead)
+				    {
+				        IsDead = false;
+				        Model?.Recompose();
+				    }
 				}
 			}
 		}
@@ -583,10 +585,11 @@ namespace Hedra.Engine.Player
 		    this.PlaySpawningAnimation = true;
 		    this.IsRiding = false;
             var newOffset = new Vector3( (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize);
-		    var newPosition = newOffset + this.Model.Position;
+		    var newPosition = newOffset + this.BlockPosition;
 		    newPosition = new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z), newPosition.Z);
             this.Model.Position = newPosition;
 		    this.Physics.TargetPosition = newPosition;
+		    this.Knocked = false;
 		}
 		
 		public static bool CreatePlayer(string Name, HumanModel PreviewModel, Class ClassType){

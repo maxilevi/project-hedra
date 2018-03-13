@@ -182,7 +182,7 @@ namespace Hedra
 			ThreadManager.Update();
 			UpdateManager.Update();
 			Physics.Manager.Update();
-			SoundManager.Update(LocalPlayer.Instance.View.CameraPosition);
+			SoundManager.Update(LocalPlayer.Instance.Position);
 			SoundtrackManager.Update();
 			AutosaveManager.Update();
 
@@ -332,7 +332,7 @@ namespace Hedra
 				            Chunk UnderChunkF = World.GetChunkAt(Player.Position + new Vector3(0,0,Chunk.ChunkWidth));
 				            Chunk UnderChunkB = World.GetChunkAt(Player.Position - new Vector3(0,0,Chunk.ChunkWidth));
 
-				            Collisions.AddRange(World.GlobalColliders.ToArray());
+				            Collisions.AddRange(World.GlobalColliders);
                             if(Player.NearCollisions != null)
                                 Collisions.AddRange(Player.NearCollisions);
 				            if(UnderChunk != null)
