@@ -44,15 +44,26 @@ namespace Hedra.Engine.Rendering
 			ChunkData = new Dictionary<Vector2, ChunkRenderCommand>();
 		}
 		
-		public void Clear(){
+		public void Discard(){
 			Indices.ObjectMap.Clear();
 			Vertices.ObjectMap.Clear();
 			Normals.ObjectMap.Clear();
 			Colors.ObjectMap.Clear();
-			ChunkData.Clear();
+		    lock (ChunkData)
+                ChunkData.Clear();
 		}
-		
-		public void Remove(Vector2 Offset){
+
+	    public void ForceDiscard()
+	    {
+	        Indices.Discard();
+	        Vertices.Discard();
+            Normals.Discard();
+            Colors.Discard();
+            lock (ChunkData)
+	            ChunkData.Clear();  
+	    }
+
+        public void Remove(Vector2 Offset){
 			
 			lock(ChunkData){
 				if(ChunkData.ContainsKey(Offset)){

@@ -42,10 +42,9 @@ namespace Hedra.Engine.Rendering
 
 			this.PoolSize = (int) SizeInBytes;
 			this.TypeSizeInBytes = TypeSizeInBytes;
-		    int sizeInBytes = PoolSize * TypeSizeInBytes;
 			
 			GL.BindBuffer(Buffer.BufferTarget, Buffer.ID);
-			GL.BufferData(Buffer.BufferTarget, sizeInBytes, IntPtr.Zero, Buffer.Hint);
+			GL.BufferData(Buffer.BufferTarget, TotalMemory, IntPtr.Zero, Buffer.Hint);
 			
 		}
 
@@ -124,7 +123,14 @@ namespace Hedra.Engine.Rendering
 		public MemoryEntry Allocate(T[] Data, int SizeInBytes){
 			return Update(Data, SizeInBytes, new MemoryEntry());
 		}
-		
+
+	    public void Discard()
+	    {
+            this.ObjectMap.Clear();
+	        GL.BindBuffer(Buffer.BufferTarget, Buffer.ID);
+	        GL.BufferData(Buffer.BufferTarget, TotalMemory, IntPtr.Zero, Buffer.Hint);
+        }
+
 		public void Dispose(){
 			Buffer.Dispose();
 		}

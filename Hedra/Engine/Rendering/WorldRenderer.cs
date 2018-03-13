@@ -119,10 +119,16 @@ namespace Hedra.Engine.Rendering
 			}	
 		}
 
-		public static void Clear(){
-			StaticBuffer.Clear();
-			WaterBuffer.Clear();
+		public static void Discard(){
+			StaticBuffer.Discard();
+			WaterBuffer.Discard();
 		}
+
+	    public static void ForceDiscard()
+	    {
+	        StaticBuffer.ForceDiscard();
+	        WaterBuffer.ForceDiscard();
+        }
 		
 		#region Binds
 		
