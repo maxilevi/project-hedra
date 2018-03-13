@@ -71,7 +71,7 @@ namespace Hedra.Engine.Player
 				if(Collide){
 					bool IsColliding = false;
 					Collisions.Clear();
-					Collisions.AddRange(World.GlobalColliders.ToArray());
+					Collisions.AddRange(World.GlobalColliders);
 					
 					Chunk UnderChunk = World.GetChunkAt(Mesh.Position);
 					Chunk UnderChunkR = World.GetChunkAt(Mesh.Position + new Vector3(Chunk.ChunkWidth,0, 0));

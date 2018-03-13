@@ -65,7 +65,7 @@ namespace Hedra.Engine.Player
 			if(Collide){
 				bool IsColliding = false;
 				Collisions.Clear();
-				Collisions.AddRange(World.GlobalColliders.ToArray());
+				Collisions.AddRange(World.GlobalColliders);
 				
 				Chunk UnderChunk = World.GetChunkAt(Position);
 				Chunk UnderChunkR = World.GetChunkAt(Position + new Vector3(Chunk.ChunkWidth,0, 0));

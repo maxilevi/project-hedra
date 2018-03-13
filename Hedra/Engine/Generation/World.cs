@@ -23,6 +23,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Linq;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.StructureSystem;
@@ -37,7 +38,6 @@ namespace Hedra.Engine.Generation
 	    public static Dictionary<Vector2, Chunk> SearcheableChunks;
         public static List<Chunk> Chunks;
 	    public static List<ParticleProjectile> Projectiles;
-	    public static List<ICollidable> GlobalColliders;
 	    public static List<ItemModel> Items;
 	    public static AreaHighlighter Highlighter;
 	    public static ParticleSystem WorldParticles;
@@ -55,10 +55,9 @@ namespace Hedra.Engine.Generation
 		public static bool Enabled {get; set;}
 	    public static bool IsGenerated { get; set; }
 
-	    private static readonly List<Entity> _entities;
-	    private static readonly HashSet<Entity> _entitiesSet;
 	    private static bool _isEntityCacheDirty = true;
-	    private static ReadOnlyCollection<Entity> _entityListCache;
+        private static readonly HashSet<Entity> _entities;
+	    private static ReadOnlyCollection<Entity> _entityCache;
 	    public static ReadOnlyCollection<Entity> Entities
 	    {
 	        get
@@ -67,43 +66,72 @@ namespace Hedra.Engine.Generation
 	            {
 	                lock (_entities)
 	                {
-	                    _entityListCache = _entities.AsReadOnly();
+	                    _entityCache = _entities.ToArray().ToList().AsReadOnly();
 	                }	                
 	                _isEntityCacheDirty = false;
 	            }
-	            lock (_entityListCache)
-                    return _entityListCache;
+	            lock (_entityCache)
+                    return _entityCache;
 	        }
 	    }
 
-        private static readonly List<BaseStructure> _structures;
-	    public static ReadOnlyCollection<BaseStructure> Structures
+	    private static bool _isStructuresCacheDirty = true;
+	    private static readonly HashSet<BaseStructure> _structures;
+	    private static ReadOnlyCollection<BaseStructure> _structuresCache;
+        public static ReadOnlyCollection<BaseStructure> Structures
         {
 	        get
 	        {
-	            lock (_structures)
-                    return _structures.AsReadOnly();
-	        }
+	            if (_isStructuresCacheDirty)
+	            {
+	                lock (_structures)
+	                {
+	                    _structuresCache = _structures.ToArray().ToList().AsReadOnly();
+	                }
+	                _isStructuresCacheDirty = false;
+	            }
+	            lock (_structuresCache)
+	                return _structuresCache;
+            }
 	    }
 
-        private static readonly Dictionary<Vector2, Chunk> ToDraw;
+	    private static bool _isGlobalCollidersCacheDirty = true;
+	    private static readonly HashSet<ICollidable> _globalColliders;
+	    private static ReadOnlyCollection<ICollidable> _globalCollidersCache;
+        public static ReadOnlyCollection<ICollidable> GlobalColliders
+	    {
+	        get
+	        {
+	            if (_isGlobalCollidersCacheDirty)
+	            {
+	                lock (_globalColliders)
+	                {
+	                    _globalCollidersCache = _globalColliders.ToArray().ToList().AsReadOnly();
+	                }
+	                _isGlobalCollidersCacheDirty = false;
+	            }
+	            lock (_globalCollidersCache)
+	                return _globalCollidersCache;
+            }
+	    }
+
+        private static readonly Dictionary<Vector2, Chunk> _toDraw;
 	    private static Matrix4 _previousModelView;
 	    private static int _previousCount;
 	    private static int _previousId;
 
 	    static World()
 	    {
-	        _structures = new List< BaseStructure > ();
-	        _entities = new List<Entity>();
-            _entitiesSet = new HashSet<Entity>();
+	        _structures = new HashSet< BaseStructure > ();
+	        _entities = new HashSet<Entity>();
             Chunks = new List<Chunk>();
             SearcheableChunks = new Dictionary<Vector2, Chunk>();
             Projectiles = new List<ParticleProjectile>();
-            GlobalColliders = new List<ICollidable>();
+            _globalColliders = new HashSet<ICollidable>();
             Items = new List<ItemModel>();
             WorldParticles = new ParticleSystem(Vector3.Zero);
             ClosestChunkComparer = new ClosestChunk();
-            ToDraw = new Dictionary<Vector2, Chunk>();
+            _toDraw = new Dictionary<Vector2, Chunk>();
 	    }
 
         public static void Load(){
@@ -125,7 +153,7 @@ namespace Hedra.Engine.Generation
 
             ReloadModules();
 
-            VillageGenerator.Init();
+            VillageGenerator.Load();
             IsGenerated = true;
         }
 
@@ -141,9 +169,9 @@ namespace Hedra.Engine.Generation
             World.ModulesReload?.Invoke(AssetManager.AppPath);
 	    }
 		
-		public static int MenuSeed => 2124321422;
+		public static int MenuSeed => 2124321422;//23123123
 
-	    public static int RandomSeed{
+        public static int RandomSeed{
 			get{
 				int newSeed = MenuSeed;
 				while(newSeed == MenuSeed){
@@ -158,7 +186,7 @@ namespace Hedra.Engine.Generation
 			if(_previousModelView == FrustumObject.ModelViewMatrix && LocalPlayer.Instance.Loader.ActiveChunks == _previousCount) 
 				return;
 			
-			ToDraw.Clear();
+			_toDraw.Clear();
 			Chunk[] toDrawArray;
 
 			lock(Chunks) 
@@ -170,9 +198,9 @@ namespace Hedra.Engine.Generation
 					continue;
 				}
 				
-				if( toDrawArray[i].Initialized && FrustumObject.IsInsideFrustum(toDrawArray[i].Mesh) ){
-					ToDraw.Add(new Vector2(toDrawArray[i].OffsetX, toDrawArray[i].OffsetZ), toDrawArray[i]);
-				}
+				if( toDrawArray[i].Initialized && FrustumObject.IsInsideFrustum(toDrawArray[i].Mesh) )
+					_toDraw.Add(new Vector2(toDrawArray[i].OffsetX, toDrawArray[i].OffsetZ), toDrawArray[i]);
+				
 			}
 			
 			_previousModelView = FrustumObject.ModelViewMatrix;
@@ -186,7 +214,7 @@ namespace Hedra.Engine.Generation
 			if(Constants.LINES)
 				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 			
-			WorldRenderer.Render(ToDraw, Type);
+			WorldRenderer.Render(_toDraw, Type);
 			
 			if(Constants.LINES)
 				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
@@ -196,16 +224,20 @@ namespace Hedra.Engine.Generation
 			if(World.Seed == Seed)
 				return;
 
+		    _previousId = 0;
 		    World.Seed = Seed;
-		    BiomePool = new BiomePool();
-		    OpenSimplexNoise.Load(Seed == MenuSeed ? 23123123 : Seed);
+            BiomePool = new BiomePool();
+		    StructureGenerator = new StructureGenerator();
+		    QuestManager = new QuestManager();
+            OpenSimplexNoise.Load(Seed == MenuSeed ? 23123123 : Seed);//Not really the menu seed.
 			MeshQueue.SafeDiscard();
 			ChunkGenerationQueue.SafeDiscard();
-			GlobalColliders.Clear();
 			SkyManager.SetTime(12000);
+
 			for(int i = 0; i < Items.Count; i++){
 				Items[i].Dispose();
 			}
+
 			Items.Clear();
 		    Highlighter.Reset();
 
@@ -223,7 +255,12 @@ namespace Hedra.Engine.Generation
 				}
 			}
 
-			for(int i = Structures.Count-1; i > -1; i--){
+		    for (int i = GlobalColliders.Count - 1; i > -1; i--)
+		    {
+		        RemoveGlobalCollider(GlobalColliders[i]);
+		    }
+
+            for (int i = Structures.Count-1; i > -1; i--){
 				RemoveStructure(Structures[i]);
 			}
 
@@ -232,16 +269,10 @@ namespace Hedra.Engine.Generation
 				RemoveEntity(Entities[i]);
 			}		
 
-			WorldRenderer.Clear();
-			_previousId = 0;
-			//CacheManager.CachedColors.Clear();
-			//CacheManager.CachedExtradata.Clear();
-            StructureGenerator = new StructureGenerator();
-			QuestManager = new QuestManager();
+			WorldRenderer.ForceDiscard();
+		    CacheManager.Discard();
 
 		    World.AddEntity(SceneManager.Game.LPlayer);
-
-			WaterMeshBuffer.TransparencyModifier = new Random(Seed + 531).NextFloat() * .3f - .15f;
 
             if (Seed == MenuSeed)
 			{
@@ -295,62 +326,67 @@ namespace Hedra.Engine.Generation
 				MeshQueue.Add(C);
 		}
 		
-		public static Chunk GetChunkByOffset(OpenTK.Vector2 vec2){
+		public static Chunk GetChunkByOffset(Vector2 vec2){
 			
 			return GetChunkByOffset((int)vec2.X, (int)vec2.Y);
 		}
 
 	    public static void AddEntity(Entity Entity)
 	    {
-	        lock (_entitiesSet)
-	        {
-	            if(_entitiesSet.Contains(Entity)) return;
-	            _entitiesSet.Add(Entity);
-	        }
 	        lock (_entities)
-	            _entities.Add(Entity);
-	        
+	        {
+	            if (_entities.Contains(Entity)) return;
+                    _entities.Add(Entity);
+	        }
+
 	        _isEntityCacheDirty = true;
 
 	    }
 
 	    public static void RemoveEntity(Entity Entity)
 	    {
-	        lock (_entitiesSet)
+	        lock (_entities)
 	        {
-	            if (!_entitiesSet.Contains(Entity)) return;
-	            _entitiesSet.Remove(Entity);
-	        }
-            lock (_entities)
+	            if (!_entities.Contains(Entity)) return;
 	            _entities.Remove(Entity);
+	        }
 	        _isEntityCacheDirty = true;
 
-	    }
-
-	    public static void RemoveEntity(int i)
-	    {
-	        var entity = _entities[i];
-            lock (_entitiesSet)
-	        {
-	            if (!_entitiesSet.Contains(entity)) return;
-	            _entitiesSet.Remove(entity);
-	        }
-            lock (_entities)
-	            _entities.RemoveAt(i);
 	    }
 
         public static void AddStructure(BaseStructure Struct){
 			lock(_structures)
 				_structures.Add(Struct);
-		}
+            _isStructuresCacheDirty = true;
+        }
 		
 		public static void RemoveStructure(BaseStructure Struct){
 			Struct.Dispose();
 			lock(_structures)
 				_structures.Remove(Struct);
-		}
-		
-		public static void AddChunk(Chunk C){
+		    _isStructuresCacheDirty = true;
+        }
+
+	    public static void AddGlobalCollider(params ICollidable[] Collidable)
+	    {
+	        lock (_globalColliders)
+	        {
+	            for (var i = 0; i < Collidable.Length; i++)
+	            {
+	                _globalColliders.Add(Collidable[i]);
+	            }
+	        }
+	        _isGlobalCollidersCacheDirty = true;
+	    }
+
+	    public static void RemoveGlobalCollider(ICollidable Collidable)
+	    {
+	        lock (_globalColliders)
+	            _globalColliders.Remove(Collidable);
+	        _isGlobalCollidersCacheDirty = true;
+        }
+
+        public static void AddChunk(Chunk C){
 			
 			lock(Chunks){
 				Chunks.Add(C);
@@ -381,10 +417,11 @@ namespace Hedra.Engine.Generation
                     World.RemoveStructure(baseStructuresArray[i]);		
 			}
 			
+
 			for(int i = Entities.Count-1; i > -1; i--){
 				if(Entities[i] == null)
 				{
-					World.RemoveEntity(i);
+					World.RemoveEntity(Entities[i]);
 					continue;
 				}
 					

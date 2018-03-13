@@ -84,7 +84,7 @@ namespace Hedra.Engine.EntitySystem
 	            lock (_collisions)
 	            {
 	                _collisions.Clear();
-	                _collisions.AddRange(World.GlobalColliders.ToArray());
+	                _collisions.AddRange(World.GlobalColliders);
 	                try
 	                {
 	                    if (_underChunk != null && _underChunk.Initialized)

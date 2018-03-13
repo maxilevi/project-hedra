@@ -161,7 +161,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
             };
 
             UnderChunk.AddStaticElement(Model);
-            World.GlobalColliders.AddRange(Shapes.ToArray());
+            World.AddGlobalCollider(Shapes.ToArray());
             World.AddChunkToQueue(UnderChunk, true);
         }
 
@@ -172,7 +172,10 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 if (World.GetChunkAt(ObjectivePosition) != null)
                 {
                     World.GetChunkAt(ObjectivePosition).RemoveStaticElement(Model);
-                    for (int i = Shapes.Count - 1; i > -1; i--) World.GlobalColliders.Remove(Shapes[i]);
+                    for (int i = Shapes.Count - 1; i > -1; i--)
+                    {
+                        World.RemoveGlobalCollider(Shapes[i]);
+                    }
                 }
             _itemModel?.Dispose();
             _itemModel = null;

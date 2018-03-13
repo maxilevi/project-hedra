@@ -199,7 +199,7 @@ namespace Hedra.Engine.PhysicsSystem
 			Chunk UnderChunkB = World.GetChunkAt(Position - new Vector3(0,0,Chunk.ChunkWidth));
 			
 			List<ICollidable> Collisions = new List<ICollidable>();
-			Collisions.AddRange(World.GlobalColliders.ToArray());
+			Collisions.AddRange(World.GlobalColliders);
 			
 			try{
 				if(UnderChunk != null)
