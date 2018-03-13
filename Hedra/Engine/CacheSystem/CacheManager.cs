@@ -73,7 +73,6 @@ namespace Hedra.Engine.CacheSystem
 	        return null;
 	    }
 
-
         public static List<CollisionShape> GetShape(CacheItem Item, VertexData Model)
 		{
 		    return GetShape(Item.ToString(), Model);
@@ -83,7 +82,12 @@ namespace Hedra.Engine.CacheSystem
 	    {
 	        return _caches[Type].GetShapes(Data);
 	    }
-		
+
+        public static void Discard()
+	    {
+	        CacheManager.CachedColors.Clear();
+	        CacheManager.CachedExtradata.Clear();
+	    }
 
 	    public static void Check(InstanceData Data)
 	    {
