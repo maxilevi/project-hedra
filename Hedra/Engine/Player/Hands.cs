@@ -37,7 +37,7 @@ namespace Hedra.Engine.EntitySystem
 
 		    SecondaryAnimations = new Animation[0];
 
-            base.PlaySound = false;
+            base.ShouldPlaySound = false;
 		}
 		
 		public override void Attack2(HumanModel Model){}

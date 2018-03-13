@@ -45,7 +45,7 @@ namespace Hedra.Engine.Player
         protected int SecondaryAnimationsIndex;
         protected bool Orientate { get; set; } = true;
         protected SoundType SoundType { get; set; } = SoundType.SlashSound;
-        protected bool PlaySound { get; set; } = true;
+        protected bool ShouldPlaySound { get; set; } = true;
         public abstract bool IsMelee { get; protected set; }
 
         public bool InAttackStance
@@ -158,12 +158,17 @@ namespace Hedra.Engine.Player
             return Model != null && !(Model.Human.IsAttacking || Model.Human.Knocked || SecondaryAttack || PrimaryAttack);
         }
 
+        public void PlaySound()
+        {
+            SoundManager.PlaySoundWithVariation(SoundType, Model.Human.Position);
+        }
+
         protected void BaseAttack(HumanModel Model)
         {
             Init(Model);
             Model.Model.Animator.StopBlend();
 
-            if(PlaySound)
+            if(ShouldPlaySound && !IsMelee)
                 SoundManager.PlaySoundWithVariation(SoundType, Model.Human.Position);
 
             if (Orientate && Model.Human is LocalPlayer)

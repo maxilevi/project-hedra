@@ -22,7 +22,6 @@ namespace Hedra.Engine.Player
 		public override Vector3 SheathedPosition => new Vector3(1.8f,-1.0f,0.0f);
 	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
 	    public override bool IsMelee { get; protected set; } = false;
-
         private EntityMesh Quiver;
 		private EntityMesh[] Arrow = new EntityMesh[1];//hacky stuff! so it's not affected by global enablers
 		private VertexData ArrowData;
@@ -69,7 +68,7 @@ namespace Hedra.Engine.Player
 		        };
 		    }
 
-		    base.PlaySound = false;
+		    base.ShouldPlaySound = false;
         }
 		
 		public override void Update(HumanModel Model)

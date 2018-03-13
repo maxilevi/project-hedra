@@ -390,7 +390,7 @@ namespace Hedra.Engine.Player
 			
 			if(Model.Animator.AnimationPlaying == null)
 				this.Idle();
-			
+
 			if(Model != null){
 				Model.Update();
 				Vector3 PositionAddon = -Vector3.UnitY * 1.5f;

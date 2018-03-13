@@ -20,9 +20,7 @@ using Hedra.Engine.Rendering.UI;
 
 namespace Hedra.Engine.Player
 {
-	/// <summary>
-	/// Description of Humanoid.
-	/// </summary>
+
 	public class Humanoid : Entity
 	{
 		public bool IsAttacking {get; set;}
@@ -220,15 +218,19 @@ namespace Hedra.Engine.Player
 			
 			float highestDot = 0;
 			Entity dotEntity = null;
+	        var hittedSomething = false;
 			for(int i = World.Entities.Count-1; i > -1; i--)
 			{
 			    if (World.Entities[i].IsFriendly) continue;
 			    if (World.Entities[i] == this) continue;
 
-			    if(World.Entities[i] != null)
-			        this.AttackEntity(AttackDamage, World.Entities[i], Injection);
+			    if (World.Entities[i] != null)
+			    {
+			        if (this.AttackEntity(AttackDamage, World.Entities[i], Injection))
+			            hittedSomething = true;
+			    }
 			}
-
+            if(!hittedSomething) this.MainWeapon.Weapon.PlaySound();
 			Mana = Mathf.Clamp(Mana + 8, 0 , MaxMana);
 		}
 
