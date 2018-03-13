@@ -51,34 +51,42 @@ namespace Hedra.Engine.Generation
 					Discard = false;
 					continue;
 				}
-				
-				if(Queue.Count != 0){
-					
-					if(Scenes.SceneManager.Game.LPlayer != null){
-						ClosestChunkComparer.PlayerPos = Scenes.SceneManager.Game.LPlayer.Position;
-						
-						lock(Queue){
-							try{
-								Queue.Sort(ClosestChunkComparer);
-							}catch(Exception e){
-								Log.WriteLine("Error while sorting chunks. Retrying...");
-							}
-						}
-					}
-					if(Queue[0] == null){
-						Queue.RemoveAt(0);
-						continue;
-					}
 
-					for(int i = 0; i < Threads.Count; i++){
-						 if(!Threads[i].IsWorking && Queue.Count != 0){
-							Threads[i].Generate(Queue[0]);
-							Queue[0].IsGenerated = true;
-							Queue.RemoveAt(0);
-						}
-					}
-				}
+			    if (Queue.Count == 0) continue;
+			    if(Scenes.SceneManager.Game.LPlayer != null){
+			        ClosestChunkComparer.PlayerPos = Scenes.SceneManager.Game.LPlayer.Position;
+						
+			        lock(Queue){
+			            try{
+			                Queue.Sort(ClosestChunkComparer);
+			            }catch(Exception e){
+			                Log.WriteLine("Error while sorting chunks. Retrying...");
+			            }
+			        }
+			    }
+			    if(Queue[0] == null){
+			        Queue.RemoveAt(0);
+			        continue;
+			    }
+
+			    try
+			    {
+			        for (int i = 0; i < Threads.Count; i++)
+			        {
+			            if (!Threads[i].IsWorking && Queue.Count != 0)
+			            {
+			                Threads[i].Generate(Queue[0]);
+			                Queue[0].IsGenerated = true;
+			                Queue.RemoveAt(0);
+			            }
+			        }
+			    }
+			    catch (ArgumentOutOfRangeException e)
+			    {
+			        Log.WriteLine(e);
+			    }
 			}
 		}
+
 	}
 }

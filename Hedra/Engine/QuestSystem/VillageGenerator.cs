@@ -41,7 +41,7 @@ namespace Hedra.Engine.QuestSystem
 	    private static List<CollisionShape> Stable0Shapes_Clone;
 		private static VertexData Cementery0_Clone = AssetManager.PlyLoader("Assets/Env/Mausoleum.ply", Vector3.One* 2f);
 
-        public static void Init(){
+        public static void Load(){
 			HouseModels[0] = AssetManager.PlyLoader("Assets/Env/Village/House"+0+".ply", Vector3.One);
 			HouseModels[1] = AssetManager.PlyLoader("Assets/Env/Village/House"+1+".ply", Vector3.One);
 			
