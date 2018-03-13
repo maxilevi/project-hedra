@@ -56,9 +56,9 @@ namespace Hedra.Engine.Player
 			
 			InPanel.AddElement(this);
 			
-			DrawManager.UIRenderer.Add(this, false);
+			DrawManager.UIRenderer.Add(this, DrawOrder.After);
 			RText = new RenderableText("", Position, Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 12, FontStyle.Bold));
-			DrawManager.UIRenderer.Add(RText, true);
+			DrawManager.UIRenderer.Add(RText, DrawOrder.Before);
 			InPanel.AddElement(RText);
 			
 			UpdateManager.Add(this);
@@ -150,7 +150,7 @@ namespace Hedra.Engine.Player
 				_position = value;
 				RText.Dispose();
 				RText = new RenderableText("", Position, Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 12, FontStyle.Bold));
-				DrawManager.UIRenderer.Add(RText, false);
+				DrawManager.UIRenderer.Add(RText, DrawOrder.After);
 			}
 		}
 		

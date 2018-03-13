@@ -36,9 +36,9 @@ namespace Hedra.Engine.Rendering.UI
 		{
 			this._player = Player;
 			
-			RenderableTexture barBackgrounds = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/BarBackgrounds.png"), Vector2.Zero, Vector2.One), false );
-			_oxygenBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenBackground.png"), Vector2.Zero, Vector2.One), false );
-			_staminaBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaBackground.png"), Vector2.Zero, Vector2.One), false );
+			RenderableTexture barBackgrounds = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/BarBackgrounds.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
+			_oxygenBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
+			_staminaBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			
 			_healthBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/HealthBar.png"), new Vector2(-.675f, .7775f), new Vector2(0.12f, 0.022f), delegate{ return Player.Health; } , delegate{ return Player.MaxHealth; }, this);
 			_manaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/ManaBar.png"), new Vector2(-.7315f, .7265f), new Vector2(0.07f, 0.015f), delegate{ return Player.Mana; }, delegate{ return Player.MaxMana; }, this);
@@ -47,9 +47,9 @@ namespace Hedra.Engine.Rendering.UI
 			OxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f), delegate{ return Player.Oxygen; }, delegate{ return Player.MaxOxygen; }, this);
 			StaminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f), delegate{ return Player.Stamina; }, delegate{ return Player.MaxStamina; }, this);
 			
-			ClassLogo = new RenderableTexture(new Texture(0, Vector2.Zero, Vector2.One), false);
-			_oxygenIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenIcon.png"), Vector2.Zero, Vector2.One), false );
-			_staminaIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaIcon.png"), Vector2.Zero, Vector2.One), false );
+			ClassLogo = new RenderableTexture(new Texture(0, Vector2.Zero, Vector2.One), DrawOrder.After);
+			_oxygenIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenIcon.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
+			_staminaIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaIcon.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			
 			Cross = new Texture(Graphics2D.LoadFromAssets("Assets/Pointer.png"), new Vector2(0, 0f), new Vector2(0.018f, 0.026f) );
 			

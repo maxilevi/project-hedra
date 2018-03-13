@@ -29,13 +29,13 @@ namespace Hedra.Engine.Rendering.UI
 		public bool ShowCaret {get; set;}
 		
 		public TextField(Vector2 Position, Vector2 Scale, Panel InPanel, bool CurveBorders = true){
-			_textBar = new Bar(Position, Scale, () => 1, () => 1, Vector4.One, InPanel, false, CurveBorders);
+			_textBar = new Bar(Position, Scale, () => 1, () => 1, Vector4.One, InPanel, DrawOrder.After, CurveBorders);
 			_textBar.ShowBar = false;
 			this.Text = "";
 			_textBar.UpdateTextRatio = false;
 			ShowCaret = false;
 			_caret = new RenderableText("|", Position + Vector2.UnitY * .00275f, _textBar.Text.UiText.FontColor, _textBar.Text.UiText.TextFont);
-			DrawManager.UIRenderer.Add(_caret, false);
+			DrawManager.UIRenderer.Add(_caret, DrawOrder.After);
 			InPanel.AddElement(_caret);
 			CoroutineManager.StartCoroutine(this.CaretUpdate);
 		}

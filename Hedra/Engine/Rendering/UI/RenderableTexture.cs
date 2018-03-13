@@ -20,10 +20,10 @@ namespace Hedra.Engine.Rendering.UI
 	{
 		public Texture BaseTexture;
 		
-		public RenderableTexture(Texture BaseTexture, bool DrawOnFirstPass){
+		public RenderableTexture(Texture BaseTexture, DrawOrder Order){
 			this.BaseTexture = BaseTexture;		
 			DrawManager.UIRenderer.Remove(BaseTexture.TextureElement);
-			DrawManager.UIRenderer.Add(this, DrawOnFirstPass);
+			DrawManager.UIRenderer.Add(this, Order);
 		}
 		
 		public void Draw(){

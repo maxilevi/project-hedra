@@ -170,11 +170,11 @@ namespace Hedra.Engine.Player
 				this.SkillsPanel.Disable();
 				this.SkillsPanel.OnPanelStateChange += new OnPanelStateChangeEventHandler(OnWindowOpened);
 				
-				DrawManager.UIRenderer.Add(this, false);
+				DrawManager.UIRenderer.Add(this, DrawOrder.After);
 				for(int i = 0; i < Slots.Length; i++){
 					for(int j = 0; j < Slots[i].Length; j++){
-						DrawManager.UIRenderer.Add(Slots[i][j].Button as RenderableButton, false);
-						DrawManager.UIRenderer.Add(Slots[i][j].LevelText, false);
+						DrawManager.UIRenderer.Add(Slots[i][j].Button as RenderableButton, DrawOrder.After);
+						DrawManager.UIRenderer.Add(Slots[i][j].LevelText, DrawOrder.After);
 					}
 				}
 			}

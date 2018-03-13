@@ -477,6 +477,7 @@
     <Compile Include="Engine\Rendering\Cubemap.cs" />
     <Compile Include="Engine\Rendering\PoolSize.cs" />
     <Compile Include="Engine\Rendering\Texture3D.cs" />
+    <Compile Include="Engine\Rendering\UI\TextureCommand.cs" />
     <Compile Include="Engine\StructureSystem\StructureGenerator.cs" />
     <Compile Include="Engine\QuestSystem\TravellingMerchant.cs" />
     <Compile Include="Engine\QuestSystem\TurtleBossAIComponent.cs" />
@@ -668,6 +669,7 @@
     <Compile Include="Engine\UnitTesting\DataStructures\QuaternionExtensionsTester.cs" />
     <Compile Include="Engine\UnitTesting\GenerationTests\WorldTester.cs" />
     <Compile Include="Engine\UnitTesting\GraphicsTests\GraphicsWrapperTester.cs" />
+    <Compile Include="Engine\UnitTesting\Managers\ThreadManagerTester.cs" />
     <Compile Include="Engine\UnitTesting\TestMethod.cs" />
     <Compile Include="Engine\UnitTesting\UnitTester.cs" />
     <Compile Include="Utils.cs" />
@@ -4162,7 +4164,7 @@
     <None Include="Sounds\Roll.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Slash.wav">
+    <None Include="Sounds\Slash.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Song0.ogg">

@@ -55,7 +55,7 @@ namespace Hedra.Engine.Rendering.UI
 			this._inPanel = InPanel;
 			this._textureId = (int) TextureId;
 			
-			DrawManager.UIRenderer.Add(this, false);
+			DrawManager.UIRenderer.Add(this, DrawOrder.After);
 			//Text = new RenderableText(Value() + " / " + Max(), Position, System.Drawing.Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 11, FontStyle.Bold));
 
 			//DrawManager.UIRenderer.Add(Text, false);

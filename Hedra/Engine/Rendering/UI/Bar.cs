@@ -40,7 +40,7 @@ namespace Hedra.Engine.Rendering.UI
         private Func<float> _value;
         public Vector4 BackgroundColor = new Vector4(0.1529f, 0.1529f, 0.1529f, 1);
         public bool CurvedBorders;
-        public bool DrawBefore;
+        public DrawOrder Order;
         public bool ShowBar = true;
         public Vector2 TargetResolution = new Vector2(1024, 578);
         public RenderableText Text;
@@ -49,22 +49,22 @@ namespace Hedra.Engine.Rendering.UI
         public bool UpdateTextRatio = true;
 
         public Bar(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Panel InPanel,
-            bool DrawBefore = true, bool CurvedBorders = true)
+            DrawOrder Order = DrawOrder.Before, bool CurvedBorders = true)
         {
-            Initialize(Position, Scale, Value, Max, InPanel, null, DrawBefore, CurvedBorders);
+            Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
         }
 
         public Bar(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Vector4 Color, Panel InPanel,
-            bool DrawBefore = true, bool CurvedBorders = true)
+            DrawOrder Order = DrawOrder.Before, bool CurvedBorders = true)
         {
             UniformColor = Color;
-            Initialize(Position, Scale, Value, Max, InPanel, null, DrawBefore, CurvedBorders);
+            Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
         }
 
         public Bar(Vector2 Position, Vector2 Scale, string Text, Func<float> Value, Func<float> Max, Panel InPanel,
-            bool DrawBefore = true)
+            DrawOrder Order = DrawOrder.Before)
         {
-            Initialize(Position, Scale, Value, Max, InPanel, Text, DrawBefore);
+            Initialize(Position, Scale, Value, Max, InPanel, Text, Order);
         }
 
         public bool ShowText
@@ -159,17 +159,17 @@ namespace Hedra.Engine.Rendering.UI
         }
 
         private void Initialize(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Panel InPanel,
-            string OptionalText, bool DrawBefore = true, bool CurvedBorders = true)
+            string OptionalText, DrawOrder Order = DrawOrder.Before, bool CurvedBorders = true)
         {
             this.Position = Position;
             this.Scale = Scale;
-            this.DrawBefore = DrawBefore;
+            this.Order = Order;
             this.CurvedBorders = CurvedBorders;
             _value = Value;
             _max = Max;
             _inPanel = InPanel;
 
-            DrawManager.UIRenderer.Add(this, DrawBefore);
+            DrawManager.UIRenderer.Add(this, Order);
             if (OptionalText == null)
             {
                 Text = new RenderableText(Value() + " / " + Max(), Position, Color.White,
@@ -181,7 +181,7 @@ namespace Hedra.Engine.Rendering.UI
                     FontCache.Get(AssetManager.Fonts.Families[0], 11, FontStyle.Bold));
                 UpdateTextRatio = false;
             }
-            DrawManager.UIRenderer.Add(Text, this.DrawBefore);
+            DrawManager.UIRenderer.Add(Text, this.Order);
             InPanel.AddElement(Text);
         }
     }
