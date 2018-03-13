@@ -126,6 +126,7 @@ namespace Hedra.Engine.Scenes
 			LPlayer.Rotation = Data.Rotation;
 			LPlayer.RandomFactor = Data.RandomFactor;
 			LPlayer.Model.Dispose();
+	        LPlayer.Physics.VelocityCap = float.MaxValue;
 
 		    var colors = new[] {Data.Color0, Data.Color1};
 		    LPlayer.Model = new HumanModel(LPlayer)
