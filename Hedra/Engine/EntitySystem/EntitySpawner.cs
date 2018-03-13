@@ -80,7 +80,8 @@ namespace Hedra.Engine.EntitySystem
                     if(template == null) goto START;
 
 			        int count = Utils.Rng.Next(template.MaxGroup, template.MaxGroup + 1);
-			        for (var i = 0; i < count; i++)
+			        if (!Program.GameWindow.Exists) break;
+                    for (var i = 0; i < count; i++)
 			        {
                         var offset = new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f) * Chunk.BlockSize;
 			            var newNearPosition = new Vector3(newPosition.X + offset.X,
