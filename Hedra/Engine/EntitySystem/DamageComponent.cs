@@ -51,7 +51,7 @@ namespace Hedra.Engine.EntitySystem
             else
                 _targetTint = new Vector4(1, 1, 1, 1);
 
-            Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, (float) Time.deltaTime * 5f);
+            Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, (float) Time.deltaTime * 12f);
 
             _tintTimer -= Time.FrameTimeSeconds;
             _tintTimer = Math.Max(_tintTimer, 0);
@@ -116,13 +116,13 @@ namespace Hedra.Engine.EntitySystem
             if(shouldMiss) return;
             if (Damager != null && Damager != Parent)
             {
-                Vector3 Direction = -(Damager.Position - Parent.Position).Normalized();
+                Vector3 direction = -(Damager.Position - Parent.Position).Normalized();
                 for (int i = 0; i < 10; i++)
-                    Parent.Physics.Move(Direction * 1.5f);
+                    Parent.Physics.Move(direction * 1.5f);
             }
 
             if (PlaySound)
-                SoundManager.PlaySoundWithVariation(SoundType.HitSound, Parent.Position);
+                SoundManager.PlaySoundWithVariation(SoundType.HitSound, Parent.Position, 1f, 80f);
 
             if (Parent.Health == 0 && !Parent.IsDead)
             {
