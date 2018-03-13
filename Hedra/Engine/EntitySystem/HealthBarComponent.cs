@@ -49,14 +49,14 @@ namespace Hedra.Engine.EntitySystem
         {
             _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGUI(new Vector2(1024, 578), _originalScale), Name,
                 () => Parent.Health, () => Parent.MaxHealth,
-                HealthBarPanel, true);
+                HealthBarPanel);
 
             _name = Name;
             _originalTextScale = _healthBar.Text.UiText.UiText.Scale;
             _healthBar.UpdateTextRatio = false;
 
             DrawManager.UIRenderer.Remove(_healthBar);
-            DrawManager.UIRenderer.Add(this, false);
+            DrawManager.UIRenderer.Add(this, DrawOrder.After);
             DrawManager.UIRenderer.Remove(_healthBar.Text);
             DrawsUI = true;
         }
@@ -65,13 +65,13 @@ namespace Hedra.Engine.EntitySystem
         {
             _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGUI(new Vector2(1024, 578), _originalScale), Name,
                 () => Parent.Health, () => Parent.MaxHealth,
-                HealthBarPanel, true);
+                HealthBarPanel);
 
             _healthBar.UpdateTextRatio = false;
             _originalTextScale = _healthBar.Text.UiText.UiText.Scale;
 
             DrawManager.UIRenderer.Remove(_healthBar);
-            DrawManager.UIRenderer.Add(this, false);
+            DrawManager.UIRenderer.Add(this, DrawOrder.After);
             DrawManager.UIRenderer.Remove(_healthBar.Text);
             DrawsUI = true;
         }

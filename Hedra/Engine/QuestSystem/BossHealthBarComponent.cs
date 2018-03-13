@@ -59,7 +59,7 @@ namespace Hedra.Engine.QuestSystem
 
 
             DrawManager.UIRenderer.Remove(_healthBar.Text);
-            DrawManager.UIRenderer.Add(_healthBar.Text, false);
+            DrawManager.UIRenderer.Add(_healthBar.Text, DrawOrder.After);
             _barDefaultScale = _healthBar.Scale;
             _nameDefaultScale = _nameGui.Scale;
 
