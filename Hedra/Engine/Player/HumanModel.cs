@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using OpenTK;
 using Hedra.Engine.Rendering;
@@ -64,9 +65,7 @@ namespace Hedra.Engine.Player
 	    public bool IsRunning => this.WalkAnimation == this.Model.Animator.AnimationPlaying;
 	    public bool IsGliding => this.GlideAnimation == this.Model.Animator.AnimationPlaying;
 	    public bool IsSwimming => this.IdleSwimAnimation == this.Model.Animator.AnimationPlaying || this.SwimAnimation == this.Model.Animator.AnimationPlaying;
-
-		public Vector4 Color0;
-        public Vector4 Color1;
+        private string _modelPath;
         private EntityMesh _lampModel;
 	    private bool _hasLamp;
         private float _foodHealth;
@@ -76,24 +75,38 @@ namespace Hedra.Engine.Player
 
         public HumanModel(Humanoid Human, HumanoidModelTemplate Template)
 		{
-		    this.Init(Human, Template);
+		    this.Load(Human, Template);
 		}
 
         public HumanModel(Humanoid Human, HumanType Type)
         {
-            this.Init(Human, HumanoidLoader.ModelTemplater[Type]);
+            this.Load(Human, HumanoidLoader.ModelTemplater[Type]);
         }
 
         public HumanModel(Humanoid Human)
         {
-            this.Init(Human, HumanoidLoader.ModelTemplater[Human.ClassType]);
+            this.Load(Human, HumanoidLoader.ModelTemplater[Human.ClassType]);
         }
 
-        public void Init(Humanoid Human, HumanoidModelTemplate Template){
+        public void Paint(Vector4[] Colors)
+        {
+            if(Colors.Length > AssetManager.ColorCodes.Length)
+                throw new ArgumentOutOfRangeException("Provided amount of colors cannot be higher than the color codes.");
+
+            var colorMap = new Dictionary<Vector3, Vector3>();
+            for (var i = 0; i < Colors.Length; i++)
+            {
+                colorMap.Add(AssetManager.ColorCodes[i].Xyz, Colors[i].Xyz);
+            }
+            this.Model = AnimationModelLoader.Paint(this.Model, _modelPath, colorMap);
+        }
+
+        private void Load(Humanoid Human, HumanoidModelTemplate Template){
 			this.Human = Human;
 			this.Scale = Vector3.One * Template.Scale;
 			this.LeftWeapon = Weapon.Empty;
 			this.Tint = Vector4.One;
+            this._modelPath = Template.Path;
 			
 			Model = AnimationModelLoader.LoadEntity(Template.Path);
 

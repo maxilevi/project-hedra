@@ -190,10 +190,7 @@ namespace Hedra.Engine.Rendering.UI
 				_humans[i].Model.TargetRotation = _humans[i].Model.Rotation;
 				_humans[i].Model.Enabled = true;
 				_humans[i].Name = _data[i].Name;
-				_humans[i].Level = _data[i].Level;
-				
-				_humans[i].Model.Color0 = _data[i].Color1;
-				_humans[i].Model.Color1 = _data[i].Color0;
+				_humans[i].Level = _data[i].Level;				
 				_humans[i].Model.UpdateModel();
 				
 				foreach(InventoryItem item in _data[i].Items.Keys){

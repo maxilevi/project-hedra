@@ -28,7 +28,7 @@ namespace Hedra.Engine.EntitySystem
     {
         private DamageComponent _damageManager;
         private int _drowningSoundTimer;
-        private float _health;
+        private float _health = 100f;
         private int _isHumanoid = -1;
         private bool _knocked;
         private string _name;
@@ -131,7 +131,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public virtual float MaxHealth { get; set; }
+        public virtual float MaxHealth { get; set; } = 100f;
 
         public MobType MobType
         {
@@ -207,8 +207,6 @@ namespace Hedra.Engine.EntitySystem
         {
             _tickSystem = new TickSystem();
             Physics = new PhysicsComponent(this);
-            MaxHealth = 100;
-            Health = MaxHealth;
         }
 
         public void ShowIcon(CacheItem? IconType)

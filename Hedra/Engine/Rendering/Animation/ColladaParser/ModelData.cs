@@ -47,5 +47,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 			
 			return Data;
 		}
+
+	    public ModelData Clone()
+	    {
+	        return new ModelData(this.Vertices.ToArray(), this.Colors.ToArray(), this.Normals.ToArray(),
+                this.Indices.ToArray(), this.JointIds.ToArray(), this.VertexWeights.ToArray(), FurthestPoint);
+	    }
 	}
 }

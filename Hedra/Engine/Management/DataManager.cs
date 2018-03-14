@@ -105,8 +105,6 @@ namespace Hedra.Engine.Management
 		        Rotation = P.Rotation,
 		        BlockPosition = (Connected) ? Scenes.SceneManager.Game.CurrentData.BlockPosition : P.BlockPosition,
 		        AddonHealth = P.AddonHealth,
-		        Color0 = P.Model.Color1,
-		        Color1 = P.Model.Color0,
 		        SkillsData = P.SkillSystem.Save(),
 		        SkillIDs = P.Skills.Save(),
 		        TargetPosition = P.Physics.TargetPosition,

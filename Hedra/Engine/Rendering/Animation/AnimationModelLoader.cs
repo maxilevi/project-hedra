@@ -10,7 +10,11 @@ using System;
 using System.Text;
 using OpenTK;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using OpenTK.Graphics.OpenGL;
 
@@ -23,11 +27,6 @@ namespace Hedra.Engine.Rendering.Animation
 	{
 		private static readonly Dictionary<string, AnimatedModelData> ModelCache = new Dictionary<string, AnimatedModelData>();
 
-	    public static void EmptyCache()
-	    {
-	        lock (ModelCache)
-                ModelCache.Clear();
-	    }
 
         /**
 		 * Creates an AnimatedEntity from the data in an entity file. It loads up
@@ -38,23 +37,18 @@ namespace Hedra.Engine.Rendering.Animation
 		 *            - the file containing the data for the entity.
 		 * @return The animated entity (no animation applied though)
 		 */
-        public static AnimatedModel LoadEntity(string ModelFile) {
-            AnimatedModelData EntityData;
-
-            lock (ModelCache) {
-                if (ModelCache.ContainsKey(ModelFile)) {
-                    EntityData = ModelCache[ModelFile];
-                } else {
-                    string FileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
-                    EntityData = ColladaLoader.LoadColladaModel(FileContents, GeneralSettings.MaxWeights);
-                    ModelCache.Add(ModelFile, EntityData);
-                }
-            }
+        public static AnimatedModel LoadEntity(AnimatedModelData EntityData)
+        {         
 			JointsData SkeletonData = EntityData.Joints;
 			Joint HeadJoint = AnimationModelLoader.CreateJoints(SkeletonData.HeadJoint);
 			return new AnimatedModel(EntityData.Mesh, HeadJoint, SkeletonData.JointCount);
 		}
-	
+
+	    public static AnimatedModel LoadEntity(string ModelFile)
+	    {
+	        return AnimationModelLoader.LoadEntity(AnimationModelLoader.GetEntityData(ModelFile));
+        }
+
 		/**
 		 * Constructs the joint-hierarchy skeleton from the data extracted from the
 		 * collada file.
@@ -70,5 +64,63 @@ namespace Hedra.Engine.Rendering.Animation
 			}
 			return Joint;
 		}
-	}
+
+	    private static AnimatedModelData GetEntityData(string ModelFile)
+	    {
+	        AnimatedModelData entityData;
+	        lock (ModelCache)
+	        {
+	            if (ModelCache.ContainsKey(ModelFile))
+	            {
+	                entityData = ModelCache[ModelFile];
+	            }
+	            else
+	            {
+	                string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
+	                entityData = ColladaLoader.LoadColladaModel(fileContents, GeneralSettings.MaxWeights);
+	                ModelCache.Add(ModelFile, entityData);
+	            }
+	        }
+	        return entityData;
+	    }
+
+        /// <summary>
+        /// Returns a new AnimatedModel with the replaced colors.
+        /// </summary>
+        /// <param name="Model">Original AnimatedModel</param>
+        /// <param name="Path">File path of the original model</param>
+        /// <param name="ColorMap">A Dictionary composed of ColorToReplace->ColorToReplaceWith </param>
+        /// <returns>A new AnimatedModel with the colors replaced.</returns>
+	    public static AnimatedModel Paint(AnimatedModel Model, string Path, Dictionary<Vector3, Vector3> ColorMap)
+	    {
+	        AnimatedModelData modelData = AnimationModelLoader.GetEntityData(Path).Clone();
+	        for (var i = 0; i < modelData.Mesh.Colors.Length; i++)
+	        {
+	            if (ColorMap.ContainsKey(modelData.Mesh.Colors[i]))
+	            {
+	                modelData.Mesh.Colors[i] = ColorMap[modelData.Mesh.Colors[i]];
+	            }
+	        }
+	        var flags = BindingFlags.Public | BindingFlags.Instance;
+	        var modelValues = Model.GetType().GetFields(flags).Where(
+                Field => Field.GetType().IsValueType).ToDictionary(Field => Field.Name, Field => Field.GetValue(Model));
+            Model.Dispose();
+	        var newModel = AnimationModelLoader.LoadEntity(modelData);
+	        foreach (var field in Model.GetType().GetFields(flags))
+	        {
+	            if (modelValues.ContainsKey(field.Name))
+	                field.SetValue(newModel, modelValues[field.Name]);
+	        }
+	        return newModel;
+	    }
+
+	    /// <summary>
+	    /// Empties the model cache
+	    /// </summary>
+	    public static void EmptyCache()
+	    {
+	        lock (ModelCache)
+	            ModelCache.Clear();
+	    }
+    }
 }

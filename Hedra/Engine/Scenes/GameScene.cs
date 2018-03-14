@@ -129,11 +129,7 @@ namespace Hedra.Engine.Scenes
 	        LPlayer.Physics.VelocityCap = float.MaxValue;
 
 		    var colors = new[] {Data.Color0, Data.Color1};
-		    LPlayer.Model = new HumanModel(LPlayer)
-		    {
-		        Color0 = colors[0],
-		        Color1 = colors[1]
-		    };
+		    LPlayer.Model = new HumanModel(LPlayer);
 
 			if(! (LPlayer.Health > 0) )
 				LPlayer.Model.Enabled = false;
@@ -183,12 +179,7 @@ namespace Hedra.Engine.Scenes
 			SceneManager.Game.MakeCurrent(Data);
 			Enviroment.SkyManager.SetTime(12000);
 
-		    var colors = new [] {Player.Model.Color1, Player.Model.Color0};
-		    Player.Model = new HumanModel(Player)
-		    {
-		        Color0 = colors[0],
-		        Color1 = colors[1]
-		    };
+		    Player.Model = new HumanModel(Player);
 			
 			if(Player.Inventory.Items[Inventory.WeaponHolder] != null){
 				//Force to discard cache

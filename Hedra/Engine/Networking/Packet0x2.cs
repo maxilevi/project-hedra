@@ -28,8 +28,6 @@ namespace Hedra.Engine.Networking
 		
 		public static Packet0x2 FromHuman(Humanoid P){
 			Packet0x2 Packet = new Packet0x2();
-			Packet.HairColor = P.Model.Color1.ToColor().ToArgb();
-			Packet.EyeColor = P.Model.Color0.ToColor().ToArgb();
 			Packet.Name = P.Name;
 			
 			return Packet;

@@ -22,5 +22,10 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 			this.Joints = Joints;
 			this.Mesh = Mesh;
 		}
+
+	    public AnimatedModelData Clone()
+	    {
+	        return new AnimatedModelData(Mesh.Clone(), Joints);
+	    }
 	}
 }
