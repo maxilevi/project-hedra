@@ -743,6 +743,10 @@
       <Link>Assets\Chr\ChestOpen.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Animations\EntIdle.dae">
+      <Link>Assets\Chr\EntIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Animations\FlyAttack.dae">
       <Link>Assets\Chr\FlyAttack.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3865,6 +3869,9 @@
     <None Include="Modules\NPCs\Components\Blacksmith.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\NPCs\Components\Ent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\NPCs\Components\Gnoll.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3886,6 +3893,9 @@
     <None Include="Modules\NPCs\Components\Warrior.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\NPCs\Ent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\NPCs\Gnoll.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3899,6 +3909,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Models\BlacksmithModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\NPCs\Models\EntModel.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Models\GnollModel.json">

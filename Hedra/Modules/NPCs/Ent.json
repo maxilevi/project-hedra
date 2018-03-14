@@ -1,0 +1,24 @@
+﻿{
+  "Name": "Ent",
+  "Health": 2000.0,
+  "DisplayName": "Ent",
+  "ModelType": "Ent",
+  "Class": "None",
+  "Behaviour" : "Hostile",
+  "Immune": false,
+  "Speed": 1.5,
+  "XP": 7.0,
+  "AttackPower": 1.0, 
+  "AttackSpeed": 0.3,
+  "Weapons": [
+    {
+      "Type": "Sword"
+    },
+    {
+      "Type": "Axe"
+    },
+    {
+      "Type": "Hammer"
+    }
+  ]
+}

@@ -46,10 +46,7 @@ namespace Hedra.Engine.ModuleSystem
 
             mob.Type = _factories[Type.ToLowerInvariant()].Name;
 
-            var barComponent = new HealthBarComponent(mob)
-            {
-                DistanceFromBase = (Math.Abs(mob.DefaultBox.Min.Y) + Math.Abs(mob.DefaultBox.Max.Y)) * .75f
-            };
+            var barComponent = new HealthBarComponent(mob);
             mob.AddComponent(barComponent);
 
             int levelN = rng.Next(0, 10);
@@ -84,7 +81,6 @@ namespace Hedra.Engine.ModuleSystem
 
             mob.MaxHealth += mob.MaxHealth * mob.Level * .5f;
             mob.Health = mob.MaxHealth;
-            
 
             return mob;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.EntitySystem;
@@ -33,11 +34,23 @@ namespace Hedra.Engine.ModuleSystem
             var template = HumanoidLoader.HumanoidTemplater[HumanoidType];
             var behaviour = Behaviour ?? _behaviours[template.Behaviour];
 
+            int levelN = Utils.Rng.Next(0, 10);
+            var difficultyType = 1f;
+            if (levelN <= 4) difficultyType = 1f;
+            else if (levelN > 4 && levelN <= 7) difficultyType = 1.5f;
+            else if (levelN > 7 && levelN <= 9) difficultyType = 2f;
+
             var human = new Humanoid();
+            human.Level = (int) ((LocalPlayer.Instance.Level + (Utils.Rng.Next(0, 2) - 1) + 1) * difficultyType);
             human.ClassType = (Class) Enum.Parse(typeof(Class), template.Class);
-            human.Level = LocalPlayer.Instance.Level + (Utils.Rng.Next(0, 2) - 1) + 1;
-            human.AddonHealth = human.MaxHealth;
-            human.Level = 1;
+            if (human.ClassType == Class.None)
+            {
+                human.MaxHealth = template.MaxHealth * human.Level * .5f + template.MaxHealth;
+            }
+            else
+            {
+                human.AddonHealth = human.MaxHealth * .5f;
+            }
             human.MobType = MobType.Human;
             human.Speed = template.Speed;
             human.Model = new HumanModel(human, template.Model);
@@ -86,11 +99,11 @@ namespace Hedra.Engine.ModuleSystem
             barComponent.FontColor = behaviour.Color.ToColor();
             human.AddComponent(barComponent);
 
-            human.SearchComponent<HealthBarComponent>().DistanceFromBase =
-                (Math.Abs(human.DefaultBox.Min.Y) + Math.Abs(human.DefaultBox.Max.Y)) * .5f;
+            human.SearchComponent<HealthBarComponent>().DistanceFromBase = 
+                human.DefaultBox.Max.Y - human.DefaultBox.Min.Y + .5f;
 
             human.SearchComponent<DamageComponent>().Immune = template.Immune;
-
+            human.SearchComponent<DamageComponent>().XpToGive = Math.Max(2f, (float)Math.Round(template.XP * human.Level * .65f));
             World.AddEntity(human);
             return human;
         }

@@ -14,6 +14,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Item;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
@@ -46,25 +47,34 @@ namespace Hedra.Engine.Player
 		public float MaxStamina {get; set;}
 		public float RandomFactor {get; set;}
 		public float AddonHealth {get; set;}
-		public float DodgeCost {get; set;}
-		
+		public float DodgeCost {get; set;}		
 		#region Propierties ( MaxMana, MaxHealth, MaxXp)
+
+	    private float _maxHealth;
 		public override float MaxHealth{
 			get{
-				float maxHealth = 97 + RandomFactor * 20f;
-				for(int i = 1; i < this.Level; i++){
-					
-					if(ClassType == Class.Rogue)
-						maxHealth += 38 + ((this.RandomFactor-.75f)*8 - 1f) * 5 - 2.5f;
-					
-					if(ClassType == Class.Archer)
-						maxHealth += 22 + ((this.RandomFactor-.75f)*8 - 1f) * 5 - 2.5f;
+			    if (ClassType == Class.None) return _maxHealth + AddonHealth;
+			    
+			    float maxHealth = 97 + RandomFactor * 20f;
+			    for (int i = 1; i < this.Level; i++)
+			    {
 
-				    if (ClassType == Class.Warrior)
-                        maxHealth += 46 + ((this.RandomFactor-.75f)*8 - 1f) * 5 - 2.5f;
-				}
-				return maxHealth + AddonHealth;
+			        if (ClassType == Class.Rogue)
+			            maxHealth += 38 + ((this.RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+
+			        if (ClassType == Class.Archer)
+			            maxHealth += 22 + ((this.RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+
+			        if (ClassType == Class.Warrior)
+			            maxHealth += 46 + ((this.RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+			    }
+			    return maxHealth + AddonHealth;			    
 			}
+		    set
+		    {
+		        _maxHealth = value;
+                if (ClassType != Class.None) throw new ArgumentException("Cannot set the max health of a classed humanoid.");
+		    }
 		}
 		public float MaxXP{
 			get{

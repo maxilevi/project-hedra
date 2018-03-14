@@ -6,6 +6,7 @@
   "Behaviour" : "Hostile",  
   "Immune": false,
   "Speed": 1.85,
+  "XP": 4.0,
   "AttackPower": 1.0, 
   "AttackSpeed": 0.3,  
   "Weapons": [
