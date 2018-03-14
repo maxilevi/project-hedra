@@ -111,7 +111,6 @@ namespace Hedra.Engine.QuestSystem
 	            human.Model = new HumanModel(human, HumanType.Skeleton);
 	            human.Model.SetWeapon(human.MainWeapon.Weapon);
 	        }
-	        human.Level = Math.Max(1, LocalPlayer.Instance.Level - 1);
 
             if(!human.MainWeapon.Weapon.IsMelee)
                 human.AddComponent( new ArcherAIComponent(human, Friendly) );
@@ -138,10 +137,21 @@ namespace Hedra.Engine.QuestSystem
             var human = this.SpawnHumanoid(HumanType.Villager, Position);
 
 	        human.AddComponent(new VillagerAIComponent(human, Move));
-
-	        World.AddEntity(human);
 	        return human;
 	    }
+
+	    public Humanoid SpawnEnt(Vector3 Position)
+	    {
+	        var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile);
+	        var human = this.SpawnHumanoid("Ent", Position, behaviour);
+	        human.AddComponent(new WarriorAIComponent(human, false));
+
+	        var region = World.BiomePool.GetRegion(Position);
+	        var woodColor = region.Colors.WoodColor * 3.0f;
+            human.Model.Paint(new []{ woodColor, region.Colors.LeavesColor, woodColor * .5f });
+
+	        return human;
+        }
 	    
 	    public Chest SpawnChest(Vector3 Position, InventoryItem Item){
 	    	var chest = new Chest(Position, Item);

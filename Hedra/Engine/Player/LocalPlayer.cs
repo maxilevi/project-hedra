@@ -609,8 +609,6 @@ namespace Hedra.Engine.Player
 		    {
 		        Name = Name,
 		        RandomFactor = Utils.Rng.NextFloat() * .35f + .75f,
-		        Color1 = PreviewModel.Color0,
-		        Color0 = PreviewModel.Color1,
 		        WorldSeed = World.RandomSeed,
 		        ClassType = ClassType
 		    };
