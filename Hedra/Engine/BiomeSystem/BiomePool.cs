@@ -78,13 +78,13 @@ namespace Hedra.Engine.BiomeSystem
 	        return BiomeDesigns[new Random((int) voronoiHeight).Next(0, BiomeDesigns.Length)];
 	    }
 
-	    public Region GetRegion(Vector3 Offset)
+	    public Region GetRegion(Vector3 Position)
 	    {
             lock (_regionCache) {
-	            var voronoiHeight = this.VoronoiFormula(Offset.Xz.ToVector3());
+	            var voronoiHeight = this.VoronoiFormula(Position.Xz.ToVector3());
 	            int regionIndex = new Random((int) voronoiHeight).Next(0, MaxRegionsPerBiome);
                 int biomeIndex = new Random((int) voronoiHeight + 421).Next(0, BiomeDesigns.Length);
-                if ((Offset.Xz - GameSettings.SpawnPoint).LengthFast < 5000) biomeIndex = 0;
+                if ((Position.Xz - GameSettings.SpawnPoint).LengthFast < 5000) biomeIndex = 0;
 
                 int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
 
