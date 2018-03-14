@@ -32,14 +32,16 @@ namespace Hedra.Engine.Management
 		public const string DataFile1 = "data1.db";
 		public const string DataFile2 = "data2.db";
 		public const string DataFile3 = "data3.db";
-		public static Vector4 ColorCode0 = new Vector4(.0f,.0f,.0f,1f);
-		public static Vector4 ColorCode1 = new Vector4(.2f,.2f,.2f,1f);
-		public static Vector4 ColorCode2 = new Vector4(.4f,.4f,.4f,1f);
-		public static Vector4 ColorCode3 = new Vector4(.6f,.6f,.6f,1f);
+		public static Vector4 ColorCode0 { get; } = new Vector4(.0f,.0f,.0f,1f);
+		public static Vector4 ColorCode1 { get; } = new Vector4(.2f,.2f,.2f,1f);
+		public static Vector4 ColorCode2 { get; } = new Vector4(.4f,.4f,.4f,1f);
+		public static Vector4 ColorCode3 { get; } = new Vector4(.6f,.6f,.6f,1f);
+        public static Vector4[] ColorCodes { get; } = { ColorCode0, ColorCode1, ColorCode2, ColorCode3};
 		public static PrivateFontCollection Fonts = new PrivateFontCollection();
-		public static string AppPath, AppData;
-	    public static string TempFolder;
-	    private static bool _filesDecompressed;
+		public static string AppPath { get; private set; }
+	    public static string AppData { get; private set; }
+        public static string TemporalFolder { get; private set; }
+        private static bool _filesDecompressed;
 
 	    public static string ShaderCode { get; private set; }
 
@@ -57,18 +59,18 @@ namespace Hedra.Engine.Management
 			AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
 			AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+ "/";
 
-		    TempFolder = AppData + "/Temp/";
+		    TemporalFolder = AppData + "/Temp/";
 
-            if ( Directory.Exists(TempFolder) ) Directory.Delete(TempFolder, true);
+            if ( Directory.Exists(TemporalFolder) ) Directory.Delete(TemporalFolder, true);
 
-		    DirectoryInfo info = Directory.CreateDirectory(TempFolder);
+		    DirectoryInfo info = Directory.CreateDirectory(TemporalFolder);
 		    info.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
 
 		    //Decompress binary contents in there so there is not much ram usage
-		    File.WriteAllBytes(TempFolder + Path.GetFileNameWithoutExtension(DataFile3),
+		    File.WriteAllBytes(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile3),
                 ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + DataFile3))  );
 
-		    File.WriteAllBytes(TempFolder + Path.GetFileNameWithoutExtension(DataFile2),
+		    File.WriteAllBytes(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile2),
 		        ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + DataFile2))  );
 
 		    _filesDecompressed = true;
@@ -76,7 +78,7 @@ namespace Hedra.Engine.Management
 
 	    public static void Dispose()
 	    {
-	        if (Directory.Exists(TempFolder)) Directory.Delete(TempFolder, true);
+	        if (Directory.Exists(TemporalFolder)) Directory.Delete(TemporalFolder, true);
         }
 
 	    public static byte[] ReadPath(string Path)
@@ -96,7 +98,7 @@ namespace Hedra.Engine.Management
 		public static byte[] ReadBinary(string Name, string DataFile)
 		{
 		    AssetManager.SetupFiles();
-            using (FileStream Fs = File.OpenRead(TempFolder + Path.GetFileNameWithoutExtension(DataFile))){
+            using (FileStream Fs = File.OpenRead(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile))){
 				using (BinaryReader Reader = new BinaryReader(Fs))
 				{
 				    while (Reader.BaseStream.Position < Reader.BaseStream.Length)
