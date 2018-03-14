@@ -100,10 +100,6 @@ namespace Hedra.Engine.StructureSystem
             var enemies = new List<Entity>();
 
             //execute this last
-            ThreadManager.ExecuteOnMainThread(delegate
-            {
-                Cementery.Enemies = enemies.ToArray();
-            });
 
             var skeletonCount = 4;
             for (int i = 0; i < skeletonCount; i++)
@@ -147,6 +143,11 @@ namespace Hedra.Engine.StructureSystem
                     }
                     return Cementery.Restored;
                 };
+            });
+
+            ThreadManager.ExecuteOnMainThread(delegate
+            {
+                Cementery.Enemies = enemies.ToArray();
             });
         }
 

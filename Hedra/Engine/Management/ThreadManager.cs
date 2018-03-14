@@ -34,17 +34,18 @@ namespace Hedra.Engine.Management
 	     }
 	      
 	     private static void NullCallBack(){}
-	     
-	     public static void Update()
-	     {
-	     	lock(Functions){
-		         for(int i = Functions.Count-1; i > -1; i--)
-		         {
-		         	Functions[i].Key();
-		         	Functions[i].Value();
-		         	Functions.RemoveAt(i);
-		         }
-	     	 }
-	     }
+
+	    public static void Update()
+	    {
+	        lock (Functions)
+	        {
+	            for (var i = 0; i < Functions.Count; i++)
+	            {
+	                Functions[i].Key();
+	                Functions[i].Value();
+	            }
+	            Functions.Clear();
+	        }
+	    }
 	}
 }
