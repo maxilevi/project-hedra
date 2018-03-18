@@ -80,9 +80,14 @@ namespace Hedra.Engine.Rendering
 			return Graphics2D.LoadTexture(TextBitmap);
 		}
 
+	    public static Vector2 ToRelativeSize(this Vector2 Size)
+	    {
+	        return new Vector2(Size.X / Constants.WIDTH, Size.Y / Constants.HEIGHT);
+	    }
+
         #region NonGL
 
-	    public static Vector2 TextureSize(Bitmap bmp)
+        public static Vector2 TextureSize(Bitmap bmp)
 	    {
 	        return new Vector2((float)bmp.Width / (float)Constants.WIDTH, (float)bmp.Height / (float)Constants.HEIGHT);
 	    }

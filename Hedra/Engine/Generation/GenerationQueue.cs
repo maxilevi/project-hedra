@@ -64,11 +64,18 @@ namespace Hedra.Engine.Generation
 			            }
 			        }
 			    }
-			    if(Queue[0] == null){
-			        Queue.RemoveAt(0);
-			        continue;
+			    try
+			    {
+			        if (Queue[0] == null)
+			        {
+			            Queue.RemoveAt(0);
+			            continue;
+			        }
 			    }
-
+			    catch (Exception e)
+			    {
+			        Log.WriteLine(e);
+			    }
 			    try
 			    {
 			        for (int i = 0; i < Threads.Count; i++)

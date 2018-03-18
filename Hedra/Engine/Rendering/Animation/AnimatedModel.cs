@@ -104,7 +104,7 @@ namespace Hedra.Engine.Rendering.Animation
 		 * (VAO) and texture.
 		 */
 		public void Dispose() {
-            if (Data == null)
+            if (!BuffersCreated)
             {
                 ThreadManager.ExecuteOnMainThread(delegate
                 {
@@ -282,6 +282,20 @@ namespace Hedra.Engine.Rendering.Animation
 	    {
 	        this.Shader = NewShader;
 	    }
+
+	    public void ReplaceColors(Vector3[] ColorArray)
+	    {
+	        ThreadManager.ExecuteOnMainThread(delegate
+	        {
+                if (ColorArray.Length != this.Colors.Count)
+                    throw new ArgumentOutOfRangeException("The new colors array can't have more data than the previous one.");
+
+
+	            this.Colors.Update(ColorArray, ColorArray.Length * Vector3.SizeInBytes);
+	        });
+	    }
+
+	    private bool BuffersCreated => Data != null;
 
         /// <summary>
         /// A transformation matrix used for additional scaling or rotation. Applied before the translation.

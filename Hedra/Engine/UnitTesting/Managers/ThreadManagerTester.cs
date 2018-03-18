@@ -15,8 +15,8 @@ namespace Hedra.Engine.UnitTesting.Managers
             ThreadManager.ExecuteOnMainThread(() => resultList.Add(object1));
             ThreadManager.ExecuteOnMainThread(() => resultList.Add(object2));
             ThreadManager.Update();
-            this.AssertEqual(object2, resultList[0]);
-            this.AssertEqual(object1, resultList[1]);
+            this.AssertEqual(object1, resultList[0]);
+            this.AssertEqual(object2, resultList[1]);
         }
     }
 }

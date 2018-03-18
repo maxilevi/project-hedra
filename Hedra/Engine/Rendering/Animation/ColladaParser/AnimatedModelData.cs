@@ -15,17 +15,12 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// </summary>
 	public class AnimatedModelData
 	{
-		public JointsData Joints {get; private set;}
-		public ModelData Mesh {get; private set;}
+		public JointsData Joints { get; }
+		public ModelData Mesh { get; }
 		
 		public AnimatedModelData(ModelData Mesh, JointsData Joints){
 			this.Joints = Joints;
 			this.Mesh = Mesh;
 		}
-
-	    public AnimatedModelData Clone()
-	    {
-	        return new AnimatedModelData(Mesh.Clone(), Joints);
-	    }
 	}
 }

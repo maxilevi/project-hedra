@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Item;
+using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.ModuleSystem
 {
@@ -56,7 +56,7 @@ namespace Hedra.Engine.ModuleSystem
 
             var ai = (AIType) Enum.Parse(typeof(AIType), this.AIType);
             Mob.AddComponent(new AIComponent(Mob, ai));
-            Mob.SearchComponent<HealthBarComponent>().DistanceFromBase = Mob.DefaultBox.Max.Y - Mob.DefaultBox.Min.Y + 0.5f;
+            Mob.SearchComponent<HealthBarComponent>().DistanceFromBase = Mob.DefaultBox.Max.Y - Mob.DefaultBox.Min.Y + 0.1f;
 
             var dmg = new DamageComponent(Mob)
             {
@@ -75,24 +75,23 @@ namespace Hedra.Engine.ModuleSystem
 
             if (Drops.Length == 0)
             {
-                var drop = new DropComponent(Mob)
+                /*var drop = new DropComponent(Mob)
                 {
                     DropChance = 12.5f,
                     RandomDrop = true,
                 };
-                Mob.AddComponent(drop);
+                Mob.AddComponent(drop);*/
             }
 
             foreach (DropTemplate template in Drops)
             {
                 var type = (ItemType) Enum.Parse(typeof(ItemType), template.Type);
-                var material = (Material) Enum.Parse(typeof(Material), template.Material);
 
                 var drop = new DropComponent(Mob)
                 {
                     DropChance = template.Chance,
                     RandomDrop = false,
-                    ItemDrop = new InventoryItem(type, new ItemInfo(material, template.Amount))
+                    ItemDrop = ItemPool.Grab(type)
                 };
                 Mob.AddComponent(drop);
             }

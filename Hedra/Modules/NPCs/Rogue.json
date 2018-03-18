@@ -11,12 +11,15 @@
   "AttackSpeed": 0.3,  
   "Weapons": [
     {
+      "Tier": "Uncommon",
       "Type": "Claw"
     },
     {
+      "Tier": "Uncommon",
       "Type": "DoubleBlades"
     },
     {
+      "Tier": "Uncommon",
       "Type": "Katar"
     }
   ]

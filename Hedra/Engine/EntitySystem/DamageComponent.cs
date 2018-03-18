@@ -15,6 +15,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using System.Drawing;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
 
@@ -81,8 +82,8 @@ namespace Hedra.Engine.EntitySystem
 
             bool shouldMiss = Parent is LocalPlayer && Utils.Rng.Next(1, 18) == 1;
             var damager = Damager as Humanoid;
-            if (damager?.MainWeapon?.Type == Item.ItemType.ThrowableDagger)
-                Amount *= 1f + (float) Math.Min(_consecutiveHits * .2, 1.2f);
+            //if (damager?.MainWeapon?.Type == ItemType.ThrowableDagger)
+            //    Amount *= 1f + (float) Math.Min(_consecutiveHits * .2, 1.2f);
 
             _consecutiveHits++;
             _hitsTimer.Reset();

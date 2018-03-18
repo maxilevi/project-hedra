@@ -7,14 +7,7 @@
   "AIType": "Hostile",
   "Ridable": false,
   "Effects": [],
-  "Drops": [
-    {
-      "Type": "Stackable",
-      "Material": "BoarTusk",
-      "Amount": 1,
-      "Chance": 20
-    }
-  ],
+  "Drops": [],
 
   "Model": {
     "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",

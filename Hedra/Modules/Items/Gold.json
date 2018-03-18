@@ -1,0 +1,16 @@
+﻿{
+  "Name": "Gold",
+  "DisplayName": "Gold",
+  "Tier": "Common",
+  "Description": "Currency.",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Coin.ply"
+  }
+}

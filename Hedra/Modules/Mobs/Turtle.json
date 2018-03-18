@@ -8,14 +8,7 @@
   "Ridable": false,
   "Effects": [],
 
-  "Drops": [
-    {
-      "Type": "Stackable",
-      "Material": "TurtleShell",
-      "Amount": 1,
-      "Chance": 33
-    }
-  ],
+  "Drops": [],
 
   "Model": {
     "Path": "$DataFile$/Assets/Chr/TurtleIdle.dae",

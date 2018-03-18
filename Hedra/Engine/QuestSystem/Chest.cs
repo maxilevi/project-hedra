@@ -10,12 +10,12 @@ using System;
 using System.Drawing;
 using OpenTK;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Item;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 
@@ -29,14 +29,14 @@ namespace Hedra.Engine.QuestSystem
 		private AnimatedModel Model;
 		private Animation IdleAnimation;
 		private Animation OpenAnimation;
-		public InventoryItem Item;
-		private Chunk UnderChunk;
+	    private Chunk UnderChunk;
+	    private CollisionShape _shape;
+        public Item ItemSpecification { get; }
 		public Func<bool> Condition;
 		public event OnItemCollect OnPickup;
-	    private CollisionShape _shape;
 		
-		public Chest(Vector3 Position, InventoryItem Item){
-			this.Item = Item;
+		public Chest(Vector3 Position, Item ItemSpecification){
+			this.ItemSpecification = ItemSpecification;
 			this.Model = AnimationModelLoader.LoadEntity("Assets/Chr/ChestIdle.dae");
 			this.IdleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestIdle.dae");
 			this.OpenAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestOpen.dae");
@@ -45,7 +45,7 @@ namespace Hedra.Engine.QuestSystem
 			this.OpenAnimation.Loop = false;
 			this.OpenAnimation.Speed = 1.5f;
 			this.OpenAnimation.OnAnimationEnd += delegate { 
-				ItemModel WorldItem = World.DropItem(Item, this.Position);
+				WorldItem WorldItem = World.DropItem(ItemSpecification, this.Position);
 				WorldItem.Position = new Vector3(WorldItem.Position.X, WorldItem.Position.Y + .75f * this.Scale.Y, WorldItem.Position.Z);
 				WorldItem.OnPickup += delegate(LocalPlayer Player)
 				{

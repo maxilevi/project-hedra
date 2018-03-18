@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.QuestSystem;
@@ -37,10 +38,10 @@ namespace Hedra.Engine.StructureSystem
             ThreadManager.ExecuteOnMainThread(delegate
             {
 
-                var Prize = new Chest(Position, new Item.InventoryItem(Item.ItemType.Random));
+                //var Prize = new Chest(Position, new InventoryItem(ItemType.Random));
                 //Prize.Condition += () => (TreeBoss == null || TreeBoss.IsDead);
 
-                World.AddStructure(Prize);
+                //World.AddStructure(Prize);
             });
 
         }

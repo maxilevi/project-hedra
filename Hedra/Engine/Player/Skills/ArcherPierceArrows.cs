@@ -13,6 +13,7 @@ using Hedra.Engine.Rendering.UI;
 using System.Linq;
 using System.Collections.Generic;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 
 namespace Hedra.Engine.Player
 {

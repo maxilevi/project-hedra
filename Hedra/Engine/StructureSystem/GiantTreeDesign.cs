@@ -5,6 +5,7 @@ using System.Text;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.QuestSystem;
@@ -53,7 +54,8 @@ namespace Hedra.Engine.StructureSystem
                 Entity TreeBoss = BossGenerator.Generate(rng, out BossType);
 
 
-                var prize = new Chest(Vector3.TransformPosition(Vector3.UnitZ * +10f + Vector3.UnitX * -80f, transMatrix), new Item.InventoryItem(Item.ItemType.Random));
+                var prize = new Chest(Vector3.TransformPosition(Vector3.UnitZ * +10f + Vector3.UnitX * -80f, transMatrix),
+                    ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
                 prize.Condition += () => TreeBoss == null || TreeBoss.IsDead;
                 prize.Rotation = Vector3.UnitY * 90f;
 
@@ -85,7 +87,7 @@ namespace Hedra.Engine.StructureSystem
             BlockType type;
             float height = Biome.Generation.GetHeight( TargetPosition.X, TargetPosition.Z, null, out type);
 
-            return Rng.Next(0, 85) == 1 && height > 0;
+            return Rng.Next(0, 95) == 1 && height > 0;
         }
     }
 }

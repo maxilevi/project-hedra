@@ -41,20 +41,6 @@ namespace Hedra.Engine
 	            output.Write(buffer, 0, bytesRead);
 	        }
 	    }
-
-        public static IEnumerable<Type> GetLoadableTypes(this Assembly assembly, string Namespace = null)
-        {
-            IEnumerable<Type> types;
-		    try
-		    {
-		        types = assembly.GetTypes();
-		    }
-		    catch (ReflectionTypeLoadException e)
-		    {
-		        types = e.Types.Where(t => t != null);
-		    }
-            return Namespace != null ? types.Where(T => string.Equals(T.Namespace, Namespace, StringComparison.InvariantCulture)) : types;
-        }
 		
 		public static Vector3 ToEuler(this Quaternion Quaternion)
 		{
@@ -329,5 +315,15 @@ namespace Hedra.Engine
 		public static Vector4 ReadVector4(this BinaryReader BR){
 			return new Vector4(BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle());
 		}
-	}
+
+	    public static KeyValuePair<T, R>[] ToArray<T,R>(this Dictionary<T, R> Dictionary)
+	    {
+	        return Enumerable.ToArray(Dictionary);
+	    }
+
+	    public static Dictionary<T, R> FromArray<T, R>(this KeyValuePair<T, R>[] Pairs)
+	    {
+	        return Pairs.ToDictionary(Pair => Pair.Key, Pair => Pair.Value);
+	    }
+    }
 }

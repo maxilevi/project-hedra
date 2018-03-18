@@ -1,6 +1,6 @@
 ﻿{
   "Name": "Ent",
-  "Health": 2000.0,
+  "MaxHealth": 2000.0,
   "DisplayName": "Ent",
   "ModelType": "Ent",
   "Class": "None",
@@ -10,15 +10,5 @@
   "XP": 7.0,
   "AttackPower": 1.0, 
   "AttackSpeed": 0.3,
-  "Weapons": [
-    {
-      "Type": "Sword"
-    },
-    {
-      "Type": "Axe"
-    },
-    {
-      "Type": "Hammer"
-    }
-  ]
+  "Weapons": []
 }

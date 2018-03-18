@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Hedra.Engine.Generation;
+using Hedra.Engine.Management;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.ModuleSystem
@@ -54,8 +56,6 @@ namespace Hedra.Engine.ModuleSystem
             {
                 ComponentsTemplates.Add(humanTemplates[i].Name.ToLowerInvariant(), componentsTemplates[i]);
             }
-
-
         }
 
         private static T[] Load<T>(string CompletePath)

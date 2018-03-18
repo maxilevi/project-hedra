@@ -1,0 +1,25 @@
+﻿{
+  "Name": "CommonWoodBow",
+  "DisplayName": "Wood Bow",
+  "WeaponType": "Bow", 
+  "Tier": "Common",
+  "Description": "Wood bow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.0
+    },
+    {
+      "Name": "AttackPower",
+      "Value": 8.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Berry.ply"
+  }
+}

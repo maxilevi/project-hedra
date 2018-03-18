@@ -18,6 +18,7 @@ using OpenTK;
 using OpenTK.Input;
 using System.Reflection;
 using System.Linq;
+using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.Player
 {
@@ -87,9 +88,9 @@ namespace Hedra.Engine.Player
 		
 		private IEnumerator Update(){
 			while(Program.GameWindow.Exists){
-				if(Player.Inventory.Items[Inventory.FoodHolder] != null && Player.Inventory.Items[Inventory.FoodHolder].Info.Damage > 0 && Player.UI.GamePanel.Enabled){
+				if(Player.Inventory.Food != null && Player.Inventory.Food.GetAttribute<int>(CommonAttributes.Amount) > 0 && Player.UI.GamePanel.Enabled){
 					this._berryIcon.Enable();
-					this._berryCount.Text = Player.Inventory.Items[Inventory.FoodHolder].Info.Damage.ToString();
+					this._berryCount.Text = Player.Inventory.Food.GetAttribute<int>(CommonAttributes.Amount).ToString();
 					this._berryCount.Position = new Vector2(_berryIconPosition.X + 0.0375f, -.95f);
 				}else{
 					this._berryIcon.Disable();

@@ -14,7 +14,7 @@ using Hedra.Engine.Player;
 using OpenTK;
 using System.Collections.Generic;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Item;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Rendering.UI
@@ -24,7 +24,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// </summary>
 	public class ChrChooserUI : Panel
 	{
-		private PlayerData[] _data;
+		private PlayerInformation[] _information;
 		private readonly List<Humanoid> _humans;
 		private Humanoid _selectedHuman, _previousHuman;
 		private GUIText _level, _name;
@@ -55,7 +55,7 @@ namespace Hedra.Engine.Rendering.UI
 					}
 				}
 				
-				Scenes.SceneManager.Game.CurrentData = DataManager.PlayerFiles[index];
+				Scenes.SceneManager.Game.CurrentInformation = DataManager.PlayerFiles[index];
 				
 				if(Constants.REDIRECT_NET){
 					Scenes.SceneManager.Game.LPlayer.UI.ChrChooser.Disable();
@@ -63,7 +63,7 @@ namespace Hedra.Engine.Rendering.UI
 					return;
 				}
 				Constants.CHARACTER_CHOOSED = true;
-				Scenes.SceneManager.Game.MakeCurrent(Scenes.SceneManager.Game.CurrentData);
+				Scenes.SceneManager.Game.MakeCurrent(Scenes.SceneManager.Game.CurrentInformation);
 				if(Constants.REDIRECT_NEW_RUN){
 					Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.LPlayer);
 					return;
@@ -82,8 +82,8 @@ namespace Hedra.Engine.Rendering.UI
 						break;
 					}
 				}
-				System.IO.File.Delete(AssetManager.AppData+"Characters/"+_data[index].Name+".db");
-				System.IO.File.Delete(AssetManager.AppData+"Characters/"+_data[index].Name+".db.bak");
+				System.IO.File.Delete(AssetManager.AppData+"Characters/"+_information[index].Name+".db");
+				System.IO.File.Delete(AssetManager.AppData+"Characters/"+_information[index].Name+".db.bak");
 				_selectedHuman.Model.Enabled = false;
 				_selectedHuman.Position = Vector3.Zero;
 			    _selectedHuman.Dispose();
@@ -129,23 +129,23 @@ namespace Hedra.Engine.Rendering.UI
 		}
 		
 		public void ReloadFiles(){
-		    PlayerData[] newData = DataManager.PlayerFiles;
+		    PlayerInformation[] newInformation = DataManager.PlayerFiles;
 
 		    bool same = true;
-		    if (_data != null && _data.Length == newData.Length)
+		    if (_information != null && _information.Length == newInformation.Length)
 		    {
 
-		        for (int k = 0; k < _data.Length; k++)
+		        for (int k = 0; k < _information.Length; k++)
 		        {
-		            if (_data[k].Name + _data[k].ClassType + _data[k].BlockPosition + _data[k].Health + _data[k].Level
-		                != newData[k].Name + newData[k].ClassType + newData[k].BlockPosition + newData[k].Health + newData[k].Level)
+		            if (_information[k].Name + _information[k].ClassType + _information[k].BlockPosition + _information[k].Health + _information[k].Level
+		                != newInformation[k].Name + newInformation[k].ClassType + newInformation[k].BlockPosition + newInformation[k].Health + newInformation[k].Level)
 		            {
 		                same = false;
 		            }
 		        }
 		        if (same) return;
 		    }
-		    _data = newData;
+		    _information = newInformation;
 
 		    if (_humans != null)
 		    {
@@ -156,7 +156,7 @@ namespace Hedra.Engine.Rendering.UI
 		    }
             _humans.Clear();
 
-		    for (int i = 0; i < _data.Length; i++)
+		    for (int i = 0; i < _information.Length; i++)
 		    {
 		        Humanoid human = new Humanoid();
 		        human.Model = new HumanModel(human);
@@ -164,7 +164,6 @@ namespace Hedra.Engine.Rendering.UI
 		        human.Physics.UseTimescale = false;
 		        human.Removable = false;
 		        human.Model.Enabled = false;
-		        human.MainWeapon = new InventoryItem(ItemType.Sword, ItemInfo.Random(ItemType.Sword));
 		        human.Model.Idle();
 		        human.Physics.CanCollide = false;
 		        _humans.Add(human);
@@ -175,29 +174,30 @@ namespace Hedra.Engine.Rendering.UI
 		    _level.Text = "";
 		    _name.Text = "";
 				
-			for(int i = 0; i < _data.Length; i++){
+			for(int i = 0; i < _information.Length; i++){
 			    Vector3 offset = this.FireDirection(i, 8f);
 
 
                 if (_humans[i].Model != null)
 					_humans[i].Model.Dispose();
 				
-				_humans[i].ClassType = _data[i].ClassType;
+				_humans[i].ClassType = _information[i].ClassType;
 				_humans[i].Model = new HumanModel(_humans[i]);
 			    _humans[i].Model.Resize(1.25f * Vector3.One);
                 _humans[i].BlockPosition = Scenes.MenuBackground.FirePosition + offset;
 				_humans[i].Model.Rotation = Physics.DirectionToEuler(-offset.Normalized().Xz.ToVector3());
 				_humans[i].Model.TargetRotation = _humans[i].Model.Rotation;
 				_humans[i].Model.Enabled = true;
-				_humans[i].Name = _data[i].Name;
-				_humans[i].Level = _data[i].Level;				
+				_humans[i].Name = _information[i].Name;
+				_humans[i].Level = _information[i].Level;				
 				_humans[i].Model.UpdateModel();
 				
-				foreach(InventoryItem item in _data[i].Items.Keys){
-					if(_data[i].Items[item] == Inventory.WeaponHolder && item != null){
-						_humans[i].MainWeapon = item;
-						_humans[i].Model.SetWeapon(_humans[i].MainWeapon.Weapon);
-					}
+				foreach(var pair in _information[i].Items)
+				{
+				    var item = pair.Value;
+				    if (pair.Key != PlayerInventory.WeaponHolder || item == null) continue;
+				    _humans[i].MainWeapon = item;
+				    _humans[i].Model.SetWeapon(_humans[i].MainWeapon.Weapon);
 				}
 			}
 		}
@@ -232,7 +232,7 @@ namespace Hedra.Engine.Rendering.UI
 		private Vector3 FireDirection(int I, float Mult)
 		{
 		    if (_humans.Count == 1) I = 1;
-			return Vector3.TransformPosition(Vector3.UnitX * Mult, Matrix4.CreateRotationY( ( I * 180 / _data.Length - 180 / _data.Length) * Mathf.Radian ));
+			return Vector3.TransformPosition(Vector3.UnitX * Mult, Matrix4.CreateRotationY( ( I * 180 / _information.Length - 180 / _information.Length) * Mathf.Radian ));
 		}
 		
 		private IEnumerator UpdateWrapper(){
@@ -258,7 +258,7 @@ namespace Hedra.Engine.Rendering.UI
 				}else{
 
 					int k = i;
-					if(_humans[k].MainWeapon.Weapon.InAttackStance)
+					if(_humans[k].MainWeapon != null && _humans[k].MainWeapon.Weapon.InAttackStance)
 						_humans[k].Model.Model.BlendAnimation(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);
 					else
 						_humans[k].Model.Model.Animator.ExitBlend();                              
@@ -317,7 +317,8 @@ namespace Hedra.Engine.Rendering.UI
 						}
 					}
                     Vector3 target = FireDirection(i, 6);
-                    _selectedHuman.MainWeapon.Weapon.InAttackStance = true;
+                    if(_selectedHuman.MainWeapon != null)
+                        _selectedHuman.MainWeapon.Weapon.InAttackStance = true;
 					if( (_selectedHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz).LengthSquared > 4*4){
 						_selectedHuman.Physics.Move(-target.NormalizedFast() * 6f);
 						_selectedHuman.Model.Run();
@@ -338,7 +339,8 @@ namespace Hedra.Engine.Rendering.UI
 						}
 					}
 					Vector3 backTarget = FireDirection(i, 10);
-					_previousHuman.MainWeapon.Weapon.InAttackStance = false;
+				    if (_previousHuman.MainWeapon != null)
+                        _previousHuman.MainWeapon.Weapon.InAttackStance = false;
                     if ( (_previousHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz - backTarget.Xz).LengthSquared > 1*1){
 						_previousHuman.Physics.Move(backTarget.NormalizedFast() * 6f);
 						_previousHuman.Model.Run();

@@ -91,27 +91,17 @@ namespace Hedra.Engine.Rendering.Animation
         /// <param name="Path">File path of the original model</param>
         /// <param name="ColorMap">A Dictionary composed of ColorToReplace->ColorToReplaceWith </param>
         /// <returns>A new AnimatedModel with the colors replaced.</returns>
-	    public static AnimatedModel Paint(AnimatedModel Model, string Path, Dictionary<Vector3, Vector3> ColorMap)
+	    public static void Paint(AnimatedModel Model, string Path, Dictionary<Vector3, Vector3> ColorMap)
 	    {
-	        AnimatedModelData modelData = AnimationModelLoader.GetEntityData(Path).Clone();
-	        for (var i = 0; i < modelData.Mesh.Colors.Length; i++)
+	        Vector3[] colorData = AnimationModelLoader.GetEntityData(Path).Mesh.Colors.ToArray();
+	        for (var i = 0; i < colorData.Length; i++)
 	        {
-	            if (ColorMap.ContainsKey(modelData.Mesh.Colors[i]))
+	            if (ColorMap.ContainsKey(colorData[i]))
 	            {
-	                modelData.Mesh.Colors[i] = ColorMap[modelData.Mesh.Colors[i]];
+	                colorData[i] = ColorMap[colorData[i]];
 	            }
 	        }
-	        var flags = BindingFlags.Public | BindingFlags.Instance;
-	        var modelValues = Model.GetType().GetFields(flags).Where(
-                Field => Field.GetType().IsValueType).ToDictionary(Field => Field.Name, Field => Field.GetValue(Model));
-            Model.Dispose();
-	        var newModel = AnimationModelLoader.LoadEntity(modelData);
-	        foreach (var field in Model.GetType().GetFields(flags))
-	        {
-	            if (modelValues.ContainsKey(field.Name))
-	                field.SetValue(newModel, modelValues[field.Name]);
-	        }
-	        return newModel;
+            Model.ReplaceColors(colorData);
 	    }
 
 	    /// <summary>

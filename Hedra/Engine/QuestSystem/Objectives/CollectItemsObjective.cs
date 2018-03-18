@@ -11,7 +11,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using System.Collections;
-using Hedra.Engine.Item;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
@@ -125,8 +125,8 @@ namespace Hedra.Engine.QuestSystem.Objectives
 		public IEnumerator Update(){
 			while(!Disposed){
 				LocalPlayer player = Scenes.SceneManager.Game.LPlayer;
-				for(int i = 0; i < player.Inventory.Items.Length; i++){
-					if(player.Inventory.Items[i] != null && player.Inventory.Items[i].Type == Item.ItemType.Stackable){
+				/*for(int i = 0; i < player.Inventory.Items.Length; i++){
+					if(player.Inventory.Items[i] != null && player.Inventory.Items[i].Type == ItemType.Stackable){
 						
 						if(player.Inventory.Items[i].Info.MaterialType == Material.BoarTusk){
 							if(player.Inventory.Items[i].Info.Damage >= _boarTusksAmount) _tusksComplete = true;
@@ -144,7 +144,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 							if(player.Inventory.Items[i].Info.Damage >= _turtleShellAmount) _shellsComplete = true;
 						}
 					}
-				}
+				}*/
 				if(_tusksComplete && _shellsComplete && _eyesComplete && _tailComplete)
 					this.NextObjective();
 				yield return null;

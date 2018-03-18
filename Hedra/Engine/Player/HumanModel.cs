@@ -15,6 +15,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Sound;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.QuestSystem;
@@ -98,7 +99,7 @@ namespace Hedra.Engine.Player
             {
                 colorMap.Add(AssetManager.ColorCodes[i].Xyz, Colors[i].Xyz);
             }
-            this.Model = AnimationModelLoader.Paint(this.Model, _modelPath, colorMap);
+            AnimationModelLoader.Paint(this.Model, _modelPath, colorMap);
         }
 
         private void Load(Humanoid Human, HumanoidModelTemplate Template){
@@ -217,7 +218,7 @@ namespace Hedra.Engine.Player
 
         public override void Attack(Entity Target, float Damage)
 		{
-			if(!Human.IsAttacking && !(Human is LocalPlayer)){
+			if(!Human.Knocked && !Human.IsAttacking && !(Human is LocalPlayer)){
 				LeftWeapon.Attack1(this);
 			}
 		}
@@ -254,12 +255,7 @@ namespace Hedra.Engine.Player
 					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.KNIFE_LUNGE);
 				}
 				
-				if(Weapon is ThrowingKnife){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.THROW);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.THROW_SPECIAL);
-				}
-				
-				if(Weapon is Blade){
+				if(Weapon is DoubleBlades){
 					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.BLADE1);
 					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.BLADE2);
 				}

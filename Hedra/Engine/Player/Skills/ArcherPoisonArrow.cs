@@ -12,6 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering.Animation;
 using OpenTK;
 

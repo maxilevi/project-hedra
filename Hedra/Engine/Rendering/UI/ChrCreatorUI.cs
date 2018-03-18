@@ -12,8 +12,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using System.Drawing;
 using OpenTK;
-using Hedra.Engine.Item;
 using System.Collections;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.Rendering.UI
@@ -60,31 +60,27 @@ namespace Hedra.Engine.Rendering.UI
 			string[] classes = new string[]{"Warrior","Archer","Rogue"};//,"Mage","Necromancer"};
 			OptionChooser classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, "Class", defaultColor,
 			                                              defaultFont, classes, true);
-			
-			
-			var itemInfo = new ItemInfo(Material.Copper, 6);
-			itemInfo.ModelSeed = 2;
-			
-			_human.Model.SetWeapon(new InventoryItem(ItemType.Sword, itemInfo).Weapon);
+						
+			_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonBronzeSword).Weapon);
 			
 			OnButtonClickEventHandler setWeapon = delegate {
 				_classType = (Class) Enum.Parse(typeof(Class), classes[classChooser.Index]);
 				if(_classType == Class.Rogue){
 					_human.Model.Model.Dispose();
 					_human.Model.Model = AnimationModelLoader.LoadEntity("Assets/Chr/RogueIdle.dae");
-					_human.Model.SetWeapon(new InventoryItem(ItemType.DoubleBlades, itemInfo).Weapon);
+					_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonBronzeDoubleBlades).Weapon);
 					_human.Model.LeftWeapon.Mesh.Scale = Vector3.One * .75f;
 					
 				}else if(_classType == Class.Archer){
 					_human.Model.Model.Dispose();
 					_human.Model.Model = AnimationModelLoader.LoadEntity("Assets/Chr/ArcherIdle.dae");
-					_human.Model.SetWeapon(new InventoryItem(ItemType.Bow, itemInfo).Weapon);
+					_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonWoodBow).Weapon);
 					_human.Model.LeftWeapon.Mesh.Scale = Vector3.One * .75f;
 					
 				}else if(_classType == Class.Warrior){
 					_human.Model.Model.Dispose();
 					_human.Model.Model = AnimationModelLoader.LoadEntity("Assets/Chr/WarriorIdle.dae");
-					_human.Model.SetWeapon(new InventoryItem(ItemType.Sword, itemInfo).Weapon);
+					_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonBronzeSword).Weapon);
 					_human.Model.LeftWeapon.Mesh.Scale = Vector3.One * .75f;
 				}
 			};

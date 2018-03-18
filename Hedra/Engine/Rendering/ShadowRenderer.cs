@@ -45,7 +45,7 @@ namespace Hedra.Engine.Rendering
 	    public static void Bind()
 	    {
 	        ShadowDistance = 1400f / (float) GameSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
-            PrevFBO = GraphicsLayer.FboBound;
+            PrevFBO = GraphicsLayer.FBOBound;
 	        if (ShadowFBO == null)
 	            ShadowRenderer.SetQuality(GameSettings.ShadowQuality);
 	        ShadowFBO.Bind();
@@ -76,7 +76,7 @@ namespace Hedra.Engine.Rendering
             Shader.UnBind();
 			GL.CullFace(CullFaceMode.Back);
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, PrevFBO);
-			GraphicsLayer.FboBound = PrevFBO;
+			GraphicsLayer.FBOBound = PrevFBO;
 		}
 		
 		public static void SetQuality(int Quality){

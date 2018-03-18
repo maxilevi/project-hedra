@@ -1,0 +1,21 @@
+﻿{
+  "Name": "CommonCopperRing",
+  "DisplayName": "Copper Ring",
+  "WeaponType": "Ring", 
+  "Tier": "Common",
+  "Description": "Copper ring.",
+  "Attributes": [
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    },
+    {
+      "Name": "EffectType",
+      "Value": "None"
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Berry.ply"
+  }
+}

@@ -10,7 +10,6 @@ using System;
 using System.Drawing;
 using System.Runtime.Serialization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Item;
 using OpenTK;
 using Hedra.Engine.EntitySystem;
 

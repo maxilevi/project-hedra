@@ -8,14 +8,7 @@
   "Ridable": false,
   "Effects": [],
 
-  "Drops": [
-    {
-      "Type": "Stackable",
-      "Material": "RatTail",
-      "Amount": 1,
-      "Chance": 25
-    }
-  ],
+  "Drops": [],
 
   "Model": {
     "Path": "$DataFile$/Assets/Chr/RatIdle.dae",

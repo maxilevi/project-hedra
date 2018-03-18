@@ -177,10 +177,26 @@
     <Compile Include="Engine\CompatibilityManager.cs" />
     <Compile Include="Engine\GameLoader.cs" />
     <Compile Include="Engine\IO\ConfigurationFile.cs" />
+    <Compile Include="Engine\ItemSystem\AttributeArray.cs" />
+    <Compile Include="Engine\ItemSystem\AttributeTemplate.cs" />
+    <Compile Include="Engine\ItemSystem\CommonAttributes.cs" />
+    <Compile Include="Engine\ItemSystem\CommonItems.cs" />
+    <Compile Include="Engine\ItemSystem\Item.cs" />
+    <Compile Include="Engine\ItemSystem\ItemFactory.cs" />
+    <Compile Include="Engine\ItemSystem\ItemModelLoader.cs" />
+    <Compile Include="Engine\ItemSystem\ItemModelTemplate.cs" />
+    <Compile Include="Engine\ItemSystem\ItemPoolSettings.cs" />
+    <Compile Include="Engine\ItemSystem\ItemRarity.cs" />
+    <Compile Include="Engine\ItemSystem\ItemTemplate.cs" />
+    <Compile Include="Engine\ItemSystem\ItemTemplater.cs" />
+    <Compile Include="Engine\ItemSystem\ItemType.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\WeaponFactory.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponType.cs" />
     <Compile Include="Engine\Management\ISearchable.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
     <Compile Include="Engine\Management\TickSystem.cs" />
     <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
+    <Compile Include="Engine\Management\TrackItem.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\ColorTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\CustomFactory.cs" />
@@ -248,9 +264,9 @@
     <Compile Include="Engine\PlantSystem\RockDesign.cs" />
     <Compile Include="Engine\PlantSystem\RockPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\WheatDesign.cs" />
-    <Compile Include="Engine\Player\Hands.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\Hands.cs" />
     <Compile Include="Engine\EntitySystem\HealthBarComponent.cs" />
-    <Compile Include="Engine\EntitySystem\ItemModel.cs" />
+    <Compile Include="Engine\ItemSystem\WorldItem.cs" />
     <Compile Include="Engine\EntitySystem\PhysicsComponent.cs" />
     <Compile Include="Engine\EntitySystem\PoisonousComponent.cs" />
     <Compile Include="Engine\EntitySystem\QuadrupedModel.cs" />
@@ -280,7 +296,6 @@
     <Compile Include="Engine\Generation\QueueThread.cs" />
     <Compile Include="Engine\Generation\Simplex.cs" />
     <Compile Include="Engine\Generation\CollidableStructure.cs" />
-    <Compile Include="Engine\Item\ItemGenerator.cs" />
     <Compile Include="Engine\IO\Log.cs" />
     <Compile Include="Engine\Management\AnalyticsManager.cs" />
     <Compile Include="Engine\Management\AutosaveManager.cs" />
@@ -310,10 +325,7 @@
     <Compile Include="Engine\Generation\TreeGenerator.cs" />
     <Compile Include="Engine\Generation\World.cs" />
     <Compile Include="Engine\GameSettings.cs" />
-    <Compile Include="Engine\Item\InventoryItem.cs" />
-    <Compile Include="Engine\Item\ItemInfo.cs" />
-    <Compile Include="Engine\Item\ItemPool.cs" />
-    <Compile Include="Engine\Item\MaterialInfo.cs" />
+    <Compile Include="Engine\ItemSystem\ItemPool.cs" />
     <Compile Include="Engine\Management\AssetManager.cs" />
     <Compile Include="Engine\Management\DisposeManager.cs" />
     <Compile Include="Engine\Management\CoroutineManager.cs" />
@@ -333,11 +345,8 @@
     <Compile Include="Engine\Networking\Packet0x13.cs" />
     <Compile Include="Engine\Networking\Packet0x14.cs" />
     <Compile Include="Engine\Networking\Packet0x15.cs" />
-    <Compile Include="Engine\Networking\Packet0x16.cs" />
-    <Compile Include="Engine\Networking\Packet0x17.cs" />
     <Compile Include="Engine\Networking\Packet0x4.cs" />
     <Compile Include="Engine\Networking\NetworkManager.cs" />
-    <Compile Include="Engine\Networking\Packet0x5.cs" />
     <Compile Include="Engine\Networking\Packet0x6.cs" />
     <Compile Include="Engine\Networking\Packet0x8.cs" />
     <Compile Include="Engine\Networking\PacketBuilder.cs" />
@@ -352,35 +361,41 @@
     <Compile Include="Engine\PhysicsSystem\PhysicsThreadManager.cs" />
     <Compile Include="Engine\PhysicsSystem\Simplex.cs" />
     <Compile Include="Engine\PhysicsSystem\SimplexVertex.cs" />
-    <Compile Include="Engine\Player\Axe.cs" />
-    <Compile Include="Engine\Player\Blade.cs" />
-    <Compile Include="Engine\Player\Bow.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\Axe.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\DoubleBlades.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\Bow.cs" />
     <Compile Include="Engine\Player\Camera.cs" />
     <Compile Include="Engine\Player\Chat.cs" />
-    <Compile Include="Engine\Player\Claw.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\Claw.cs" />
     <Compile Include="Engine\Player\GliderModel.cs" />
-    <Compile Include="Engine\Player\Hammer.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\Hammer.cs" />
     <Compile Include="Engine\Player\Humanoid.cs" />
-    <Compile Include="Engine\Player\Inventory.cs" />
+    <Compile Include="Engine\Player\Inventory\InventoryArrayInterface.cs" />
+    <Compile Include="Engine\Player\Inventory\InventoryBackground.cs" />
+    <Compile Include="Engine\Player\Inventory\InventoryItemRenderer.cs" />
+    <Compile Include="Engine\Player\Inventory\InventoryStateManager.cs" />
+    <Compile Include="Engine\Player\Inventory\PlayerInventoryInterface.cs" />
+    <Compile Include="Engine\Player\Inventory\RestrictionsInterface.cs" />
+    <Compile Include="Engine\Player\PlayerInventory.cs" />
     <Compile Include="Engine\Player\HandLamp.cs" />
-    <Compile Include="Engine\Player\Katar.cs" />
-    <Compile Include="Engine\Player\Knife.cs" />
+    <Compile Include="Engine\Player\Inventory\InventoryArray.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\Katar.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\Knife.cs" />
     <Compile Include="Engine\Player\LocalPlayer.cs" />
     <Compile Include="Engine\Player\Map.cs" />
     <Compile Include="Engine\Player\Minimap.cs" />
     <Compile Include="Engine\Player\PetManager.cs" />
-    <Compile Include="Engine\Player\PlayerData.cs" />
+    <Compile Include="Engine\Player\PlayerInformation.cs" />
     <Compile Include="Engine\Player\MovementManager.cs" />
     <Compile Include="Engine\Player\HumanModel.cs" />
     <Compile Include="Engine\Player\ParticleProjectile.cs" />
     <Compile Include="Engine\Player\Projectile.cs" />
     <Compile Include="Engine\Player\QuestLog.cs" />
-    <Compile Include="Engine\Player\Rapier.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\Sword.cs" />
     <Compile Include="Engine\Player\SkillsBar.cs" />
     <Compile Include="Engine\Player\Skills\ArcherAgility.cs" />
     <Compile Include="Engine\Player\Skills\ArcherFlameArrow.cs" />
     <Compile Include="Engine\Player\Skills\ArcherIceArrow.cs" />
-    <Compile Include="Engine\Player\Skills\ArcherLearnCrossbow.cs" />
     <Compile Include="Engine\Player\Skills\ArcherLearnKnife.cs" />
     <Compile Include="Engine\Player\Skills\ArcherPierceArrows.cs" />
     <Compile Include="Engine\Player\Skills\ArcherPoisonArrow.cs" />
@@ -422,10 +437,10 @@
     <Compile Include="Engine\Player\Skills\WarriorTreeBlueprint.cs" />
     <Compile Include="Engine\Player\Skills\WaterTreeBlueprint.cs" />
     <Compile Include="Engine\Player\Skills\WarriorWeaponThrow.cs" />
-    <Compile Include="Engine\Player\ThrowingKnife.cs" />
+    <Compile Include="Engine\Management\StateManager.cs" />
     <Compile Include="Engine\Player\TradeSystem.cs" />
     <Compile Include="Engine\Player\VisualMessageDispatcher.cs" />
-    <Compile Include="Engine\Player\Weapon.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\Weapon.cs" />
     <Compile Include="Engine\Player\WeaponAttack.cs" />
     <Compile Include="Engine\QuestSystem\ArcherAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\BlacksmithComponent.cs" />
@@ -473,6 +488,7 @@
     <Compile Include="Engine\QuestSystem\Shrine.cs" />
     <Compile Include="Engine\QuestSystem\SpiderBossAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\BaseStructure.cs" />
+    <Compile Include="Engine\Reflection.cs" />
     <Compile Include="Engine\Rendering\Colors.cs" />
     <Compile Include="Engine\Rendering\Cubemap.cs" />
     <Compile Include="Engine\Rendering\PoolSize.cs" />
@@ -1035,22 +1051,6 @@
       <Link>Assets\Items\Arrow.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\..\Assets\Models\AxeHandle0.ply">
-      <Link>Assets\Items\AxeHandle0.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\AxeHandle1.ply">
-      <Link>Assets\Items\AxeHandle1.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\AxeHandle2.ply">
-      <Link>Assets\Items\AxeHandle2.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\AxeHandle3.ply">
-      <Link>Assets\Items\AxeHandle3.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\..\Assets\Models\Berries.ply">
       <Link>Assets\Env\Berries.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1071,104 +1071,8 @@
       <Link>Assets\Env\Blacksmith1.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\..\Assets\Models\Blade1.ply">
-      <Link>Assets\Items\Blade1.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade10.ply">
-      <Link>Assets\Items\Blade10.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade11.ply">
-      <Link>Assets\Items\Blade11.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade12.ply">
-      <Link>Assets\Items\Blade12.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade2.ply">
-      <Link>Assets\Items\Blade2.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade3.ply">
-      <Link>Assets\Items\Blade3.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade4.ply">
-      <Link>Assets\Items\Blade4.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade5.ply">
-      <Link>Assets\Items\Blade5.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade6.ply">
-      <Link>Assets\Items\Blade6.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade7.ply">
-      <Link>Assets\Items\Blade7.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade8.ply">
-      <Link>Assets\Items\Blade8.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Blade9.ply">
-      <Link>Assets\Items\Blade9.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\..\Assets\Models\BoarTusk.ply">
       <Link>Assets\Items\BoarTusk.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Bow0.ply">
-      <Link>Assets\Items\Bow0.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowHandle0.ply">
-      <Link>Assets\Items\BowHandle0.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowHandle1.ply">
-      <Link>Assets\Items\BowHandle1.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowHandle2.ply">
-      <Link>Assets\Items\BowHandle2.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowHandle3.ply">
-      <Link>Assets\Items\BowHandle3.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowHandle4.ply">
-      <Link>Assets\Items\BowHandle4.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowStructure0.ply">
-      <Link>Assets\Items\BowStructure0.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowStructure1.ply">
-      <Link>Assets\Items\BowStructure1.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowStructure2.ply">
-      <Link>Assets\Items\BowStructure2.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowStructure3.ply">
-      <Link>Assets\Items\BowStructure3.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowStructure4.ply">
-      <Link>Assets\Items\BowStructure4.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\BowStructure5.ply">
-      <Link>Assets\Items\BowStructure5.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\Bush1.ply">
@@ -1201,10 +1105,6 @@
     </None>
     <None Include="..\..\..\Assets\Models\Castle1.ply">
       <Link>Assets\Env\Castle1.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Claw0.ply">
-      <Link>Assets\Items\Claw0.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\Cloud0.ply">
@@ -2996,6 +2896,10 @@
       <Link>Assets\Env\Colliders\Windmill0_Collider5.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\CommonBronzeSword.ply">
+      <Link>Assets\Items\Swords\CommonBronzeSword.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\CreationPlatform.ply">
       <Link>Assets\Intro\CreationPlatform.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3116,52 +3020,12 @@
       <Link>Assets\Env\Grave5.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\..\Assets\Models\HammerHandle0.ply">
-      <Link>Assets\Items\HammerHandle0.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\HammerHandle1.ply">
-      <Link>Assets\Items\HammerHandle1.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\HammerHandle2.ply">
-      <Link>Assets\Items\HammerHandle2.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\..\Assets\Models\Handlamp.ply">
       <Link>Assets\Items\Handlamp.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\..\Assets\Models\Handle1.ply">
-      <Link>Assets\Items\Handle1.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Handle2.ply">
-      <Link>Assets\Items\Handle2.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Handle3.ply">
-      <Link>Assets\Items\Handle3.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Handle4.ply">
-      <Link>Assets\Items\Handle4.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\..\Assets\Models\Heart.ply">
       <Link>Assets\Env\Heart.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Holder1.ply">
-      <Link>Assets\Items\Holder1.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Holder2.ply">
-      <Link>Assets\Items\Holder2.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Holder3.ply">
-      <Link>Assets\Items\Holder3.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\House0.ply">
@@ -3174,10 +3038,6 @@
     </None>
     <None Include="..\..\..\Assets\Models\IncaTemple0.ply">
       <Link>Assets\Env\IncaTemple0.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Katar0.ply">
-      <Link>Assets\Items\Katar0.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\KnifeQuiver.ply">
@@ -3348,30 +3208,6 @@
       <Link>Assets\Items\RatTail.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\..\Assets\Models\Ring1.ply">
-      <Link>Assets\Items\Ring1.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Ring2.ply">
-      <Link>Assets\Items\Ring2.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Ring3.ply">
-      <Link>Assets\Items\Ring3.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Ring4.ply">
-      <Link>Assets\Items\Ring4.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Ring5.ply">
-      <Link>Assets\Items\Ring5.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\Ring6.ply">
-      <Link>Assets\Items\Ring6.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\..\Assets\Models\Roaster.ply">
       <Link>Assets\Env\Roaster.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3525,9 +3361,6 @@
     <None Include="Assets\IconRing.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\InventoryGrid.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\KatarAttack1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3544,9 +3377,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\new-logo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\PlayerItems.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Pointer.png">
@@ -3717,9 +3547,6 @@
     <None Include="Assets\UI\Help.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\Inventory.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\UI\ItemInfo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3804,26 +3631,39 @@
     <None Include="Assets\UI\XPBar.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Materials\Amber.json" />
-    <None Include="Modules\Items\Materials\Andesine.json" />
-    <None Include="Modules\Items\Materials\Arsenic.json" />
-    <None Include="Modules\Items\Materials\Berry.json" />
-    <None Include="Modules\Items\Materials\Beryl.json" />
-    <None Include="Modules\Items\Materials\BoarTusk.json" />
-    <None Include="Modules\Items\Materials\Calcite.json" />
-    <None Include="Modules\Items\Materials\Copper.json" />
-    <None Include="Modules\Items\Materials\Fluorite.json" />
-    <None Include="Modules\Items\Materials\GoatHorn.json" />
-    <None Include="Modules\Items\Materials\Gold.json" />
-    <None Include="Modules\Items\Materials\HorseMount.json" />
-    <None Include="Modules\Items\Materials\Iron.json" />
-    <None Include="Modules\Items\Materials\Mount.json" />
-    <None Include="Modules\Items\Materials\Quartz.json" />
-    <None Include="Modules\Items\Materials\RatTail.json" />
-    <None Include="Modules\Items\Materials\Sapphire.json" />
-    <None Include="Modules\Items\Materials\SpiderEye.json" />
-    <None Include="Modules\Items\Materials\TurtleShell.json" />
-    <None Include="Modules\Items\Materials\WolfMount.json" />
+    <None Include="Modules\Items\Berry.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\CommonBronzeAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\CommonBronzeClaw.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\CommonBronzeDoubleBlades.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\CommonBronzeHammer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\CommonBronzeKatar.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\CommonBronzeKnife.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\CommonBronzeSword.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\CommonWoodBow.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Gold.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\CommonCopperRing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\LavaBiomeSpawner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -4222,17 +4062,42 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Engine\Player\Inventory\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\noiseTex.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\splash-background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\splash-logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventoryBackground.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventorySlot.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventorySlotBoots.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventorySlotChest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventorySlotGlider.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventorySlotHelmet.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventorySlotPants.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventorySlotPet.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventorySlotRing.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventorySlotWeapon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\UI\SocialButton.png">
@@ -4291,4 +4156,5 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <WarningLevel>1</WarningLevel>
   </PropertyGroup>
+  <ProjectExtensions />
 </Project>

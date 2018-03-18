@@ -12,9 +12,9 @@ using OpenTK;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Sound;
-using Hedra.Engine.Item;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
@@ -40,17 +40,16 @@ namespace Hedra.Engine.Player
 		public MovementManager Movement;
 		public HandLamp HandLamp;
 		public DamageComponent DmgComponent;
-		public virtual InventoryItem MainWeapon { get; set; }
-		
+		public virtual Item MainWeapon { get; set; }
 		public Class ClassType = Class.Warrior;
 	    public float AttackPower { get; set; }
 		public float MaxStamina {get; set;}
-		public float RandomFactor {get; set;}
 		public float AddonHealth {get; set;}
-		public float DodgeCost {get; set;}		
-		#region Propierties ( MaxMana, MaxHealth, MaxXp)
+		public float DodgeCost {get; set;}	
+        public float RandomFactor { get; set; }
+        #region Propierties ( MaxMana, MaxHealth, MaxXp)
 
-	    private float _maxHealth;
+        private float _maxHealth;
 		public override float MaxHealth{
 			get{
 			    if (ClassType == Class.None) return _maxHealth + AddonHealth;
@@ -60,13 +59,13 @@ namespace Hedra.Engine.Player
 			    {
 
 			        if (ClassType == Class.Rogue)
-			            maxHealth += 38 + ((this.RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+			            maxHealth += 38 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
 
 			        if (ClassType == Class.Archer)
-			            maxHealth += 22 + ((this.RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+			            maxHealth += 22 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
 
 			        if (ClassType == Class.Warrior)
-			            maxHealth += 46 + ((this.RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+			            maxHealth += 46 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
 			    }
 			    return maxHealth + AddonHealth;			    
 			}
@@ -90,13 +89,13 @@ namespace Hedra.Engine.Player
 				for(int i = 1; i < this.Level; i++){
 					
 					if(ClassType == Class.Rogue)
-						maxMana += 37.5f + ((this.RandomFactor-.75f)*8 - 1f) * 10 - 5f;
+						maxMana += 37.5f + ((RandomFactor - .75f)*8 - 1f) * 10 - 5f;
 					
 					if(ClassType == Class.Archer)
-						maxMana += 42.5f + ((this.RandomFactor-.75f)*8 - 1f) * 10 - 5f;
+						maxMana += 42.5f + ((RandomFactor - .75f)*8 - 1f) * 10 - 5f;
 					
 					if(ClassType == Class.Warrior)
-						maxMana += 32.5f + ((this.RandomFactor-.75f)*8 - 1f) * 10 - 5f;
+						maxMana += 32.5f + ((RandomFactor - .75f)*8 - 1f) * 10 - 5f;
 				}
 				return maxMana;
 			}
@@ -130,19 +129,18 @@ namespace Hedra.Engine.Player
 			this.CanInteract = true;
 			this.HandLamp = new HandLamp(this);
 			this.Movement = new MovementManager(this);
-		    this.DmgComponent = new DamageComponent(this)
-		    {
-		        XpToGive = 4f
-		    };
-		    this.AddComponent(DmgComponent);
 			this.Physics.HitboxSize = 8;
 			this.DefaultBox.Max = new Vector3(4f,4,4f);
 			this.Physics.CanCollide = true;
 			this.DodgeCost = 25f;
-			this.RandomFactor = 1;
 			this.MaxStamina = 100f;
             this.AttackPower = 1f;
-
+            this.RandomFactor = Humanoid.NewRandomFactor();
+            this.DmgComponent = new DamageComponent(this)
+            {
+                XpToGive = 4f
+            };
+            this.AddComponent(DmgComponent);
         }
 
         #region Dodge
@@ -244,13 +242,21 @@ namespace Hedra.Engine.Player
 			Mana = Mathf.Clamp(Mana + 8, 0 , MaxMana);
 		}
 
+	    protected static float NewRandomFactor()
+	    {
+	        return Utils.Rng.NextFloat() * .5f + .75f;
+	    }
+
 	    public float DamageEquation{
 			get{
 				float dmgToDo = 5 * (8+Level*1.5f) * .2f;
 			    if (MainWeapon == null) return dmgToDo * (1 + this.Level * .25f) * this.AttackPower;
 
-			    dmgToDo = (MainWeapon.Info.Damage + ItemPool.MaterialInfo(MainWeapon.Info.MaterialType).AttackPower) * (this.Level*.75f) * .8f;
-			    dmgToDo *= .7f + Utils.Rng.NextFloat() * (.9f +MainWeapon.Info.CritMultiplier);//Add item crit chance
+			    dmgToDo = (MainWeapon.GetAttribute<float>(CommonAttributes.Damage) 
+                    + MainWeapon.GetAttribute<float>(CommonAttributes.AttackPower)) * (this.Level * .75f) * .8f;
+
+			    dmgToDo *= .7f + Utils.Rng.NextFloat();
+
 			    return dmgToDo * (1+this.Level*.2f) * this.AttackPower;
 			}
 		}
@@ -258,9 +264,12 @@ namespace Hedra.Engine.Player
 		public float BaseDamageEquation{
 			get{
 				float dmgToDo = 5 * (8+Level*1.5f) * .25f;
+
 				if(MainWeapon != null)
-					dmgToDo = (MainWeapon.Info.Damage+ItemPool.MaterialInfo(MainWeapon.Info.MaterialType).AttackPower) * (8+this.Level*.75f) * .15f;
-				return dmgToDo;
+					dmgToDo = (MainWeapon.GetAttribute<float>(CommonAttributes.Damage)
+                        + MainWeapon.GetAttribute<float>(CommonAttributes.AttackPower)) * (8+this.Level*.75f) * .15f;
+
+                return dmgToDo;
 			}
 		}
 		
@@ -269,7 +278,7 @@ namespace Hedra.Engine.Player
 			get{
 				float AS = _attackSpeed;
 				if(MainWeapon != null)
-					AS *= ItemPool.MaterialInfo(MainWeapon.Info.MaterialType).AttackSpeed / 100f;
+					AS *= MainWeapon.GetAttribute<float>(CommonAttributes.AttackSpeed);
 				return AS;
 			}
 			set{this._attackSpeed = value;}
@@ -305,25 +314,26 @@ namespace Hedra.Engine.Player
 		}
 		
 		private EntityComponent _lastEffect;
-		private InventoryItem _ring;
-		public virtual InventoryItem Ring { 
+		private Item _ring;
+		public virtual Item Ring { 
 			get{ return _ring; }
 			set{
 			    if (_ring == value) return;
 			    if(_ring != null){
-			        MaterialInfo mInfo = ItemPool.MaterialInfo(_ring.Info.MaterialType);
-						
+
 			        if(_lastEffect != null)
 			            this.Components.Remove(_lastEffect);
 						
-			        this.Speed -= mInfo.MovementSpeed;
-			    }
+			        this.Speed -= _ring.GetAttribute<float>("MovementSpeed");
+
+                }
 			    _ring = value;
 			    if (_ring == null) return;
-			    MaterialInfo materialInfo = ItemPool.MaterialInfo(_ring.Info.MaterialType);
-			    this.Speed += materialInfo.MovementSpeed;
-			    switch (materialInfo.Effect)
-			    {
+			    this.Speed += _ring.GetAttribute<float>("MovementSpeed");
+			    var type = (EffectType) Enum.Parse(typeof(EffectType), _ring.GetAttribute<string>("EffectType"));
+                switch (type)
+
+                {
 			        case EffectType.Fire:
 			            var fire = new FireComponent(this);
 			            _lastEffect = fire;

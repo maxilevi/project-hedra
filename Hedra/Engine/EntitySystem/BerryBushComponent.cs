@@ -11,7 +11,7 @@ using OpenTK;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
-using Hedra.Engine.Item;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.EntitySystem
@@ -42,7 +42,7 @@ namespace Hedra.Engine.EntitySystem
 			if( (Parent.Position - Player.Position).LengthSquared > 16*16 
 			   || Vector3.Dot( (Parent.Position - Player.Position).NormalizedFast(), Player.View.LookAtPoint.NormalizedFast()) < .6f )return;
 			
-			var berry = new InventoryItem(ItemType.Food, ItemInfo.Berry(1) );
+			var berry = ItemPool.Grab(ItemType.Berry);
 			Player.Inventory.AddItem(berry);
 			Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, Parent.Position);
 			Player.MessageDispatcher.ShowNotification("You got a berry from the bush", System.Drawing.Color.DarkRed, 3f, false);

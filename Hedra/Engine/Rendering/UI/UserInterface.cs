@@ -166,19 +166,6 @@ namespace Hedra.Engine.Rendering.UI
 		public void Draw(){
 			if(!GameSettings.Paused && Constants.DEBUG)
             	DrawCoordinateSystem();
-			
-			if(_player.Inventory.Show){
-				_player.Model.Model.Scale *= 16;
-				Vector3 oldRot = _player.Model.Model.Rotation;
-				GameSettings.GlobalShadows = false;
-				_player.Model.Model.Rotation = Vector3.Zero;		
-				
-				DrawPreview(_player.Model, PlayerFbo);
-
-				GameSettings.GlobalShadows = true;
-				_player.Model.Model.Rotation = oldRot;	
-				_player.Model.Model.Scale /= 16;
-			}
 		}
 		
 		public void Update(){
@@ -189,22 +176,11 @@ namespace Hedra.Engine.Rendering.UI
 					    _player.MessageDispatcher.ShowMessageWhile("[F4] HELP", delegate { return !LocalPlayer.Instance.UI.ShowHelp; });
 					}
 				}
-				
-				_player.Inventory.Level.Text = "LVL "+_player.Level+" "+System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(_player.ClassType.ToString());
-				_player.Inventory.Name.Text = (_player.Name.Length > 12) ? _player.Name.ToUpperInvariant().Substring(0, 12) : _player.Name.ToUpperInvariant();
+
 				this.GamePanel.Compass.Disable();
 				this.GamePanel.Compass.TextureElement.Angle = _player.Model.Model.Rotation.Y;
 				
-				if(this._player.Inventory.Show){
-					this._player.Inventory.Level.Enable();
-					this._player.Inventory.Name.Enable();
-				}else{
-					this._player.Inventory.Level.Disable();
-					this._player.Inventory.Name.Disable();
-				}
-				
 				if(this.ShowHelp && this.GamePanel.Enabled){
-					_player.Inventory.Show = false;
 					_player.SkillSystem.Show = false;
 					_player.QuestLog.Show = false;
 					GamePanel.Help.Enable();
@@ -232,7 +208,7 @@ namespace Hedra.Engine.Rendering.UI
             Model.Enabled = true;
             GL.Enable(EnableCap.DepthTest);
             int prevShader = GraphicsLayer.ShaderBound;
-            int prevFbo = GraphicsLayer.FboBound;
+            int prevFbo = GraphicsLayer.FBOBound;
             Fbo.Bind();
 
             GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
@@ -280,7 +256,7 @@ namespace Hedra.Engine.Rendering.UI
 
             GL.Disable(EnableCap.DepthTest);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, prevFbo);
-            GraphicsLayer.FboBound = prevFbo;
+            GraphicsLayer.FBOBound = prevFbo;
             Model.Enabled = prevEnabled;
             GL.UseProgram(prevShader);
             DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, DrawManager.FrustumObject.ModelViewMatrix);
@@ -295,7 +271,7 @@ namespace Hedra.Engine.Rendering.UI
 			Mesh.Enabled = true;
 			GL.Enable(EnableCap.DepthTest);
 			int prevShader = GraphicsLayer.ShaderBound;
-			int prevFbo = GraphicsLayer.FboBound;
+			int prevFbo = GraphicsLayer.FBOBound;
 			Fbo.Bind();
 				GL.ClearColor(Color.FromArgb(0,0,0,0));
 				GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
@@ -329,7 +305,7 @@ namespace Hedra.Engine.Rendering.UI
 				
 			GL.Disable(EnableCap.DepthTest);
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, prevFbo);
-			GraphicsLayer.FboBound = prevFbo;
+			GraphicsLayer.FBOBound = prevFbo;
 			Mesh.Enabled = prevEnabled;
 			GL.UseProgram(prevShader);
 			GraphicsLayer.ShaderBound = prevShader;
@@ -369,8 +345,7 @@ namespace Hedra.Engine.Rendering.UI
 			Menu.Enable();
 			OptionsMenu.Disable();
 			ChrChooser.Disable();
-			if(_player != null && _player.Inventory != null)
-			_player.Inventory.Show = false;
+			if(_player?.Inventory != null) _player.Inventory.Show = false;
 			_player.SkillSystem.Show = false;
 			GamePanel.Disable();
 			ChrCreator.Disable();
@@ -385,7 +360,6 @@ namespace Hedra.Engine.Rendering.UI
 			UpdateManager.CursorShown = true;
 			LocalPlayer.Instance.Chat.Show = false;
 			GameSettings.DarkEffect = false;
-			//GraphicsOptions.DarkEffect = true;
 			System.Windows.Forms.Cursor.Position = new System.Drawing.Point(Constants.WIDTH / 2, Constants.HEIGHT/2);
 			//CoroutineManager.StartCoroutine(MenuEnter);
 		}

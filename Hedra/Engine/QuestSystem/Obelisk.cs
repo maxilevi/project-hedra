@@ -13,7 +13,6 @@ using OpenTK;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Item;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.UI;
 

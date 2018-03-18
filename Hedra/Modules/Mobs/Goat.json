@@ -15,14 +15,7 @@
     }
   ],
 
-  "Drops": [
-    {
-      "Type": "Stackable",
-      "Material": "GoatHorn",
-      "Amount": 1,
-      "Chance": 10
-    }
-  ],
+  "Drops": [],
 
   "Model": {
     "Path": "$DataFile$/Assets/Chr/GoatIdle.dae",

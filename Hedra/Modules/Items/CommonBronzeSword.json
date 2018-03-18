@@ -1,0 +1,25 @@
+﻿{
+  "Name": "CommonBronzeSword",
+  "DisplayName": "Bronze Sword",
+  "WeaponType": "Sword", 
+  "Tier": "Common",
+  "Description": "Bronze sword.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.0
+    },
+    {
+      "Name": "AttackPower",
+      "Value": 8.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Swords/CommonBronzeSword.ply"
+  }
+}

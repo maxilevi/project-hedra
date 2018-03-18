@@ -62,7 +62,7 @@ namespace Hedra.Engine.Player
 		public void DrawMap(){			
 			GL.Enable(EnableCap.DepthTest);
 			int PrevShader = GraphicsLayer.ShaderBound;
-			int PrevFBO = GraphicsLayer.FboBound;
+			int PrevFBO = GraphicsLayer.FBOBound;
 			LerpPosition = Mathf.Lerp(Player.Model.Position, LerpPosition, (float) Time.deltaTime * 8f);
 			MapFBO.Bind();
 				GL.ClearColor(Color.FromArgb(0,0,0,0));
@@ -100,7 +100,7 @@ namespace Hedra.Engine.Player
 				
 			GL.Disable(EnableCap.DepthTest);
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, PrevFBO);
-			GraphicsLayer.FboBound = PrevFBO;
+			GraphicsLayer.FBOBound = PrevFBO;
 			GL.UseProgram(PrevShader);
 			GraphicsLayer.ShaderBound = PrevShader;
 			GL.Enable(EnableCap.Blend);

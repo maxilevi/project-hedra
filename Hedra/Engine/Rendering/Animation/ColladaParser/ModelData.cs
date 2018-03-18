@@ -18,13 +18,13 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// </summary>
 	public class ModelData
 	{
-		public Vector3[] JointIds {get; private set;}
-		public Vector3[] VertexWeights {get; private set;}
-		public float FurthestPoint {get; private set;}
-		public Vector3[] Vertices {get; private set;}
-		public Vector3[] Colors {get; private set;}
-		public Vector3[] Normals {get; private set;}
-		public uint[] Indices {get; private set;}
+		public Vector3[] JointIds {get;}
+		public Vector3[] VertexWeights {get;}
+		public float FurthestPoint {get;}
+		public Vector3[] Vertices {get;}
+		public Vector3[] Colors {get;}
+		public Vector3[] Normals {get;}
+		public uint[] Indices {get;}
 	
 		public ModelData(Vector3[] Vertices, Vector3[] Colors, Vector3[] Normals, uint[] Indices, Vector3[] JointIds, Vector3[] VertexWeights, float FurthestPoint) {
 			this.Vertices = Vertices;

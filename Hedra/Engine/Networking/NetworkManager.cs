@@ -20,7 +20,7 @@ using Hedra.Engine.Generation;
 using System.IO;
 using System.Collections;
 using System.Linq;
-using Hedra.Engine.Item;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.QuestSystem;
 
 
@@ -171,11 +171,6 @@ namespace Hedra.Engine.Networking
 							Packet0x4.SetValues(Peers[AnyIP].Human, Formatter.Deserialize(Ms) as Packet0x4 );
 							break;
 							
-						case 0x5:
-							Ms = new MemoryStream(ZipManager.UnZipBytes(Data));
-							Packet0x5.SetValues(Peers[AnyIP].Human, Formatter.Deserialize(Ms) as Packet0x5 );
-							break;
-							
 						case 0x6://World Packet
 							Ms = new MemoryStream(ZipManager.UnZipBytes(Data));
 							Packet0x6.SetValues(Peers[AnyIP].Human, Formatter.Deserialize(Ms) as Packet0x6 );
@@ -213,26 +208,6 @@ namespace Hedra.Engine.Networking
 						case 0x15:
 							Ms = new MemoryStream(ZipManager.UnZipBytes(Data));
 							Packet0x15.SetValues(LocalPlayer.Instance, Formatter.Deserialize(Ms) as Packet0x15);
-							break;
-						case 0x16:
-							Ms = new MemoryStream(ZipManager.UnZipBytes(Data));
-							Packet0x16 P0x16 = Formatter.Deserialize(Ms) as Packet0x16;
-							if(IsHost)
-								Packet0x16.Accept(LocalPlayer.Instance, P0x16);
-							else
-								Packet0x16.SetValues(LocalPlayer.Instance, P0x16);
-							
-							break;
-						case 0x17:
-							Ms = new MemoryStream(ZipManager.UnZipBytes(Data));
-							Packet0x17 P0x17 = Formatter.Deserialize(Ms) as Packet0x17;
-							if(IsHost){
-								PacketBuilder NewP0x17 = Packet0x17.Authorize(LocalPlayer.Instance, P0x17);
-								if(NewP0x17 != null)
-									Socket.Send(NewP0x17.Bytes, NewP0x17.Count, AnyIP);
-							}else{
-								Packet0x17.SetValues(LocalPlayer.Instance, P0x17);
-							}
 							break;
 						case 0x18:
 							string Type = Encoding.ASCII.GetString(ZipManager.UnZipBytes(Data));
@@ -280,11 +255,9 @@ namespace Hedra.Engine.Networking
 							EntityRate = 0;
 						}
 						if(IsHost && ItemRate >= 1000){
-							NetworkManager.SendPacket0x16(Formatter, Ms, Peer);
 							ItemRate = 0;
 						}
 						
-						NetworkManager.UpdatePacket0x5(Formatter, Ms, Peer);
 						NetworkManager.UpdatePacket0x4(Formatter, Ms, Peer);
 						NetworkManager.SendPacket0x8(Formatter, Ms, Peer);
 					}
@@ -381,9 +354,6 @@ namespace Hedra.Engine.Networking
 		public static void SendPacket0x17(int ItemId){
 			BinaryFormatter Formatter = new BinaryFormatter();
 			using( MemoryStream Ms = new MemoryStream() ){
-				Packet0x17 Packet = Packet0x17.From( (ushort) ItemId);
-				Formatter.Serialize(Ms, Packet);
-				
 				PacketBuilder P0x17 = new PacketBuilder();
 				P0x17.ID = 0x17;
 				P0x17.Data = ZipManager.ZipBytes( Ms.ToArray() );
@@ -416,41 +386,6 @@ namespace Hedra.Engine.Networking
 				
 				Socket.Send(Builder.Bytes, Builder.Count, IP);
 			}
-		}
-		
-		private static void UpdatePacket0x5(BinaryFormatter Formatter, MemoryStream Ms, IPEndPoint IP){
-			if(Packet0x5.PrevHealth != LocalPlayer.Instance.Health || Packet0x5.PrevMaxHealth != LocalPlayer.Instance.MaxHealth
-			  || Packet0x5.PrevLevel != LocalPlayer.Instance.Level || Packet0x5.PrevWeaponItem != LocalPlayer.Instance.MainWeapon){
-				
-				Packet0x5.PrevHealth = LocalPlayer.Instance.Health;
-				Packet0x5.PrevMaxHealth = LocalPlayer.Instance.MaxHealth;
-				Packet0x5.PrevLevel = LocalPlayer.Instance.Level;
-				Packet0x5.PrevWeaponItem = LocalPlayer.Instance.MainWeapon;
-				
-				Packet0x5 Packet = Packet0x5.FromHuman(LocalPlayer.Instance);
-				
-				Ms.Dispose();
-				Ms = new MemoryStream();
-				Formatter.Serialize(Ms, Packet);
-				PacketBuilder Builder = new PacketBuilder();
-				Builder.ID = 0x5;
-				Builder.Data = ZipManager.ZipBytes(Ms.ToArray());
-				
-				Socket.Send(Builder.Bytes, Builder.Count, IP);
-			}
-		}
-		
-		private static void SendPacket0x16(BinaryFormatter Formatter, MemoryStream Ms, IPEndPoint IP){
-			Packet0x16 Packet = Packet0x16.FromHuman(LocalPlayer.Instance);
-			
-			Ms.Dispose();
-			Ms = new MemoryStream();
-			Formatter.Serialize(Ms, Packet);
-			PacketBuilder Builder = new PacketBuilder();
-			Builder.ID = 0x16;
-			Builder.Data = ZipManager.ZipBytes(Ms.ToArray());
-			
-			Socket.Send(Builder.Bytes, Builder.Count, IP);
 		}
 		
 		private static void SendPacket0x10(BinaryFormatter Formatter, MemoryStream Ms, IPEndPoint IP){
@@ -517,46 +452,6 @@ namespace Hedra.Engine.Networking
 			Builder.Data = ZipManager.ZipBytes(Ms.ToArray());
 			
 			Socket.Send(Builder.Bytes, Builder.Count, IP);
-		}
-		
-		public static void DropItem (InventoryItem Item, OpenTK.Vector3 DesiredPosition){
-			
-			ushort TempId = 0;
-			CREATE_ID:
-				TempId = (ushort) Utils.Rng.Next(1, ushort.MaxValue);
-			for(int i = World.Items.Count-1; i > -1; i--){
-				if(World.Items[i].ItemId == TempId)
-					goto CREATE_ID;
-			}
-			Packet0x16 P0x16 = new Packet0x16();
-			BinaryFormatter Formatter = new BinaryFormatter();
-			P0x16.Ids = new ushort[]{ TempId };
-			P0x16.Positions = new OpenTK.Vector3[]{ DesiredPosition };
-			P0x16.Datas = new InventoryItem[] { Item };
-			
-			using(MemoryStream Ms = new MemoryStream()){
-				PacketBuilder Packet = new PacketBuilder();
-				Formatter.Serialize(Ms, P0x16);
-				
-				Packet.ID = 0x16;
-				Packet.Data = ZipManager.ZipBytes(Ms.ToArray());
-				
-				Socket.Send(Packet.Bytes, Packet.Count, ServerIP);
-			}
-
-			/*TaskManager.RunAfterSeconds(2000, 
-			                            delegate{
-			                            	bool ItemFound = false;
-			                            	for(int i = World.Items.Count-1; i > -1; i--){
-			                            		if(World.Items[i].ItemId == TempId){
-			                            			ItemFound = true;
-			                            			break;
-			                            		}
-			                            	}
-			                            	if(!ItemFound){
-			                            		NetworkManager.DropItem(Item, DesiredPosition);
-			                            	}
-			                            });*/
 		}
 		
 		public static void SendChatMessage(string Message){

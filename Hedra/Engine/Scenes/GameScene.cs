@@ -4,7 +4,7 @@
  * Time: 02:19 a.m.
  *
  */
-using Hedra.Engine.Item;
+
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -13,6 +13,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using System.Drawing;
 using System.Collections;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.QuestSystem.Objectives;
 
 namespace Hedra.Engine.Scenes
@@ -24,12 +25,11 @@ namespace Hedra.Engine.Scenes
 	{
 	    public int Id { get; set; } = 1;
 		public LocalPlayer LPlayer;
-		public PlayerData CurrentData;
+		public PlayerInformation CurrentInformation;
 		private Texture _loadingScreen;
 	    private GUIText _playerText;
 	    private float _rotationY;
 	    private bool _isNewRun;
-	    private float _savedHealth, _savedMana;
         public bool IsLoading;
 
 		public void LoadScene()
@@ -95,76 +95,53 @@ namespace Hedra.Engine.Scenes
 			}
 		}
 		
-	    public void MakeCurrent(PlayerData Data){
+	    public void MakeCurrent(PlayerInformation Information){
 			if(Constants.CHARACTER_CHOOSED){
 				LPlayer.Model.Dispose();
 			}
 		    LPlayer.UI.ChrChooser.StopModels();//So as to fix loose ends
 
             GameSettings.DarkEffect = false;
-			LPlayer.ClassType = Data.ClassType;
-			if(LPlayer.ClassType == Class.Warrior)
-				LPlayer.Inventory.EquipmentTypes[Inventory.WeaponEquipmentType] = new []{ ItemType.Sword };
-			
-			else if(LPlayer.ClassType == Class.Archer)
-				LPlayer.Inventory.EquipmentTypes[Inventory.WeaponEquipmentType] = new []{ ItemType.Bow };
-			
-			else if(LPlayer.ClassType == Class.Rogue)
-				LPlayer.Inventory.EquipmentTypes[Inventory.WeaponEquipmentType] = new []{ ItemType.DoubleBlades };	
-			
+			LPlayer.ClassType = Information.ClassType;		
 			LPlayer.Spawner.Enabled = true;
 			LPlayer.HandLamp.Enabled = false;
 	        LPlayer.Speed = LocalPlayer.DefaultSpeed;
 			LPlayer.Physics.BaseHeight = 0;
-			LPlayer.Name = Data.Name;
-			LPlayer.XP = Data.XP;
-			LPlayer.Mana = Data.Mana;
-			LPlayer.Health = Data.Health;
-			LPlayer.Level = Data.Level;
-			LPlayer.AddonHealth = Data.AddonHealth;
-			LPlayer.BlockPosition = Data.BlockPosition;
-			LPlayer.Rotation = Data.Rotation;
-			LPlayer.RandomFactor = Data.RandomFactor;
+			LPlayer.Name = Information.Name;
+			LPlayer.XP = Information.Xp;
+			LPlayer.Mana = Information.Mana;
+			LPlayer.Health = Information.Health;
+			LPlayer.Level = Information.Level;
+			LPlayer.AddonHealth = Information.AddonHealth;
+			LPlayer.BlockPosition = Information.BlockPosition;
+			LPlayer.Rotation = Information.Rotation;
 			LPlayer.Model.Dispose();
 	        LPlayer.Physics.VelocityCap = float.MaxValue;
-
-		    var colors = new[] {Data.Color0, Data.Color1};
 		    LPlayer.Model = new HumanModel(LPlayer);
-
+	        LPlayer.RandomFactor = Information.RandomFactor;
 			if(! (LPlayer.Health > 0) )
 				LPlayer.Model.Enabled = false;
 			LPlayer.Model.Enabled = true;
-			LPlayer.SkillSystem = new SkillTree(LPlayer).Load(Data);
-			LPlayer.Skills = LPlayer.Skills.Load( Data.SkillIDs );
+			LPlayer.SkillSystem = new SkillTree(LPlayer).Load(Information);
+			LPlayer.Skills = LPlayer.Skills.Load( Information.SkillIDs );
 			LPlayer.Chat.Clear();
 			LPlayer.View.CameraHeight = Camera.DefaultCameraHeight;
-			
-			Objective.Unserialize(Data.QuestData);
-			if(Data.WorldSeed != 0)
-			    World.Recreate(Data.WorldSeed);
-			Enviroment.SkyManager.DayTime = Data.Daytime;
+			if(Information.WorldSeed != 0)
+			    World.Recreate(Information.WorldSeed);
+			Enviroment.SkyManager.DayTime = Information.Daytime;
 			Enviroment.SkyManager.LoadTime = true;
-			LPlayer.Inventory.SetItems(Data.Items);
+	        LPlayer.Inventory.ClearInventory();
+			LPlayer.Inventory.SetItems(Information.Items);
 
-			if(LPlayer.Health == 0){
-				//LPlayer.BlockPosition = new Vector3(GameSettings.SpawnPoint.X, 128, GameSettings.SpawnPoint.Y);
-				LPlayer.Respawn();
-				_savedHealth = LPlayer.Health;
-			}else{
-				_savedHealth = Data.Health;
-			}
-			
-			_savedMana = Data.Mana;
-			CoroutineManager.StartCoroutine(SpawnCoroutine);
-		
-			
+			if(LPlayer.Health == 0) LPlayer.Respawn();
+			CoroutineManager.StartCoroutine(SpawnCoroutine);	
 		}
 
 		public void NewRun(LocalPlayer Player){
 			NewRun(DataManager.DataFromPlayer(Player));
 		}
 
-		public void NewRun(PlayerData Data){
+		public void NewRun(PlayerInformation Information){
 			
 			LocalPlayer Player = LocalPlayer.Instance;
 			Player.IsRiding = false;
@@ -172,19 +149,19 @@ namespace Hedra.Engine.Scenes
 				Player.FinishRoll();
 		    Player.Pet.MountEntity?.Update();//Finish removing the mount
 
-		    Data.WorldSeed = World.RandomSeed;
-			Data.BlockPosition = GameSettings.SpawnPoint.ToVector3();
-			Data.BlockPosition = new Vector3(Data.BlockPosition.X, 128, Data.BlockPosition.Z);
+		    Information.WorldSeed = World.RandomSeed;
+			Information.BlockPosition = GameSettings.SpawnPoint.ToVector3();
+			Information.BlockPosition = new Vector3(Information.BlockPosition.X, 128, Information.BlockPosition.Z);
 			LocalPlayer.Instance.IsGliding = false;
-			SceneManager.Game.MakeCurrent(Data);
+			SceneManager.Game.MakeCurrent(Information);
 			Enviroment.SkyManager.SetTime(12000);
 
 		    Player.Model = new HumanModel(Player);
 			
-			if(Player.Inventory.Items[Inventory.WeaponHolder] != null){
+			if(Player.Inventory.MainWeapon != null){
 				//Force to discard cache
-				Player.Inventory.Items[Inventory.WeaponHolder].Type = Player.Inventory.Items[Inventory.WeaponHolder].Type;
-				Player.Model.SetWeapon(Player.Inventory.Items[Inventory.WeaponHolder].Weapon);
+			    Player.Inventory.MainWeapon.FlushCache();
+				Player.Model.SetWeapon(Player.Inventory.MainWeapon.Weapon);
 				
 			}
 			Player.UI.HideMenu();
@@ -195,14 +172,7 @@ namespace Hedra.Engine.Scenes
 		}
 		
 		private IEnumerator SpawnCoroutine(){
-			if(_isNewRun){
-				LPlayer.DmgComponent.Immune = true;
-				LPlayer.Health = LPlayer.MaxHealth;
-				LPlayer.Mana = LPlayer.MaxMana;
-			}else{
-				LPlayer.Health = _savedHealth;
-				LPlayer.Mana = _savedMana;
-			}
+			if(_isNewRun) LPlayer.DmgComponent.Immune = true;
 
 		    SceneManager.Game.LPlayer.UI.HideMenu();
             LPlayer.UI.GamePanel.Disable();

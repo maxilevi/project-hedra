@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
@@ -113,14 +114,16 @@ namespace Hedra.Engine.StructureSystem
 
                     if (_k == 0)
                     {
-                        skeleton.MaxHealth *= 3f;
+                        //UsecustomNPC
+                        //skeleton.MaxHealth *= 3f;
                         skeleton.Health = skeleton.MaxHealth;
                         skeleton.Model.Resize(Vector3.One * 2.5f);
                         skeleton.SearchComponent<HealthBarComponent>().DistanceFromBase *= 3.5f;
                     }
                     else
                     {
-                        skeleton.MaxHealth *= 1.5f;
+                        //UsecustomNPC
+                        //skeleton.MaxHealth *= 1.5f;
                         skeleton.Health = skeleton.MaxHealth;
                         skeleton.Model.Resize(Vector3.One * 1.5f);
                         skeleton.SearchComponent<HealthBarComponent>().DistanceFromBase *= 2.5f;
@@ -134,7 +137,8 @@ namespace Hedra.Engine.StructureSystem
             Chest prize;
             ThreadManager.ExecuteOnMainThread(delegate
             {
-                prize = World.QuestManager.SpawnChest(Position + Vector3.UnitX * 40f, World.QuestManager.RandomPrize(Rng));
+                prize = World.QuestManager.SpawnChest(Position + Vector3.UnitX * 40f, 
+                    ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
                 prize.Condition = delegate
                 {
                     if (!Cementery.Restored)

@@ -19,7 +19,6 @@ namespace Hedra.Engine.Player
         public const float DefaultMinPitch = -2f;
 
         private Vector3 _cameraHeight = Vector3.UnitY * 12.0f;
-        private Vector3 _lerpPosition;
         private readonly LocalPlayer _player;
         private float _prevAlpha = -1f;
         private float _prevDistance;
@@ -218,7 +217,7 @@ namespace Hedra.Engine.Player
 
         public override void OnMouseWheel(object Sender, MouseWheelEventArgs E)
         {
-            if (GameSettings.Paused) return;
+            if (GameSettings.Paused || !Check) return;
 
             Vector3 pos = Objective - LookAtPoint * (TargetDistance - E.Delta) + CameraHeight;
             float y = Physics.HeightAtPosition(pos);

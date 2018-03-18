@@ -112,7 +112,7 @@ namespace Hedra.Engine.EntitySystem
 	}
 	
 	public enum MountAIType{
-		WOLF,
-		HORSE
+		Wolf,
+		Horse
 	}
 }

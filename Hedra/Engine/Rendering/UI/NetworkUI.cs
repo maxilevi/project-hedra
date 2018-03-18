@@ -58,7 +58,7 @@ namespace Hedra.Engine.Rendering.UI
 				}
 				Constants.CHARACTER_CHOOSED = true;
 				Constants.REDIRECT_NET = false;
-				Scenes.SceneManager.Game.MakeCurrent(Scenes.SceneManager.Game.CurrentData);
+				Scenes.SceneManager.Game.MakeCurrent(Scenes.SceneManager.Game.CurrentInformation);
 				if(NetworkManager.WorldSeed != -1)
 					World.Recreate(NetworkManager.WorldSeed);
 				if(NetworkManager.WorldTime != -1)
@@ -70,24 +70,24 @@ namespace Hedra.Engine.Rendering.UI
 			};
 			
 			Button host = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Host", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], fontSize));
-			host.Click += delegate {
+			/*host.Click += delegate {
 				if(NetworkManager.Host()){
 					
 					Constants.CHARACTER_CHOOSED = true;
 					Constants.REDIRECT_NET = false;
-					Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.CurrentData.Clone());
+					Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.CurrentInformation.Clone());
 					Scenes.SceneManager.Game.LPlayer.UI.HideMenu();
 				}else{
 					//Hacky stuff
 					if(NetworkManager.Host()){
 						Constants.CHARACTER_CHOOSED = true;
 						Constants.REDIRECT_NET = false;
-						Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.CurrentData.Clone());
+						Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.CurrentInformation.Clone());
 						Scenes.SceneManager.Game.LPlayer.UI.HideMenu();
 					}else
 					    LocalPlayer.Instance.MessageDispatcher.ShowNotification("Connection Refused",Color.FromArgb(255,229,10,10), 2.5f);
 				}
-			};
+			};*/
 
 			this._joinButtons.Add(_ipField);
 			this._joinButtons.Add(@join);

@@ -14,8 +14,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.QuestSystem;
-using Hedra.Engine.Item;
 using System.Collections;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
@@ -466,9 +466,6 @@ namespace Hedra.Engine.Player
 			if(e.Key == Key.Keypad0 && player.CanInteract){
 				player.Physics.TargetPosition += Vector3.UnitY * 25f;
 			}
-			if(e.Key == Key.B && player.CanInteract){
-				player.Inventory.AddItem(new InventoryItem( ItemType.Mount, new ItemInfo(Material.WolfMount, 0f) ));
-			}
             if (e.Key == Key.Insert && player.CanInteract){
 				player.SkillSystem.Reset();
 			}
@@ -480,9 +477,6 @@ namespace Hedra.Engine.Player
 			}
 			if(e.Key == Key.K && player.CanInteract){
 				World.GetChunkAt(player.Position).Landscape.DefineBlocks();
-			}
-			if(e.Key == Key.V && player.CanInteract){
-				player.Inventory.AddItem(new InventoryItem(ItemType.ThrowableDagger));
 			}
             if(e.Key == Key.F11)
                 UnitTester.Run(AssetManager.AppPath + "/unitTests.txt");

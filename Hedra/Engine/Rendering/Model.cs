@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;

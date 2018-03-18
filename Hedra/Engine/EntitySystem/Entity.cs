@@ -252,6 +252,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void AddComponent(EntityComponent Component)
         {
+            if(Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             Components.Add(Component);
             var tickable = Component as ITickable;
             if(tickable != null) _tickSystem.Add(tickable);
@@ -259,6 +260,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void RemoveComponent(EntityComponent Component)
         {
+            if (Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             Components.Remove(Component);
             var tickable = Component as ITickable;
             if (tickable != null) _tickSystem.Remove(tickable);

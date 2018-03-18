@@ -471,14 +471,14 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		private bool m_Show;
+		private bool _show;
 		public bool Show{
-			get{ return m_Show; }
+			get{ return _show; }
 			set{
-				if(Player.Inventory.Show || Scenes.SceneManager.Game.IsLoading || m_Show == value || Player.Trade.Show)
+				if(Player.Inventory.Show || Scenes.SceneManager.Game.IsLoading || _show == value || Player.Trade.Show)
 					return;
 				
-				m_Show = value;
+				_show = value;
 				Sound.SoundManager.PlaySoundInPlayersLocation(Sound.SoundType.OnOff, 1.0f, 0.6f);
 				if(value){
 					if(Player.UI.GamePanel.Enabled){
@@ -507,24 +507,24 @@ namespace Hedra.Engine.Player
 			//Formatter.Serialize(Ms, Slots);
 			return Ms.ToArray();
 		}
-		public SkillTree Load(PlayerData PData){
+		public SkillTree Load(PlayerInformation PInformation){
 			//Before 0.8
 			//this.Type = SkillTreeType.FIRETREE;
 			//this.SetTreeTemplate(this.Type);
 			//return this;
 			//After 0.8
-			byte[] Data = PData.SkillsData;
+			byte[] Data = PInformation.SkillsData;
 			
-			if(PData.ClassType == Class.Warrior)
+			if(PInformation.ClassType == Class.Warrior)
 				this.Type = SkillTreeType.WARRIORTREE;
 			
-			if(PData.ClassType == Class.Rogue)
+			if(PInformation.ClassType == Class.Rogue)
 				this.Type = SkillTreeType.ROGUETREE;
 			
-			if(PData.ClassType == Class.Mage)
+			if(PInformation.ClassType == Class.Mage)
 				this.Type = SkillTreeType.FIRETREE;
 			
-			if(PData.ClassType == Class.Archer)
+			if(PInformation.ClassType == Class.Archer)
 				this.Type = SkillTreeType.ARCHERTREE;
 			
 			

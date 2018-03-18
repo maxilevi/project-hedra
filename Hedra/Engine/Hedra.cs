@@ -4,7 +4,6 @@
 
 using Hedra.Engine.Enviroment;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Item;
 using Hedra.Engine.Management;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
@@ -28,6 +27,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Forms = System.Windows.Forms;
 
@@ -94,8 +94,6 @@ namespace Hedra
 		    AssetManager.Load();
 
             GameLoader.AllocateMemory();
-
-            ItemGenerator.Load();
 			NameGenerator.Load();		
 			CacheManager.Load();
 			Physics.Manager.Load();

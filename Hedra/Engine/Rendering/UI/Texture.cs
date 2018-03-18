@@ -21,8 +21,16 @@ namespace Hedra.Engine.Rendering.UI
 	{
 		public static uint Background = Graphics2D.LoadTexture(Graphics2D.ReColorMask(Color.FromArgb(255,69,69,69),new Bitmap(new MemoryStream(AssetManager.ReadBinary("Assets/Background.png", AssetManager.DataFile3)))));
 		public GUITexture TextureElement;
-		
-		public Texture(uint TextureId, Vector2 Position, Vector2 Scale){
+	    public bool Enabled { get; private set; }
+
+        public Texture(string AssetPath, Vector2 Position, Vector2 Scale)
+	    {
+	        this.TextureElement = new GUITexture(Graphics2D.LoadFromAssets(AssetPath),
+	            Graphics2D.SizeFromAssets(AssetPath) * Scale, Position) {IsEnabled = true};
+	        DrawManager.UIRenderer.Add(this.TextureElement);
+	    }
+
+        public Texture(uint TextureId, Vector2 Position, Vector2 Scale){
 			this.TextureElement = new GUITexture(TextureId, Scale, Position);
 			this.TextureElement.IsEnabled = true;
 			DrawManager.UIRenderer.Add(this.TextureElement);
@@ -41,28 +49,25 @@ namespace Hedra.Engine.Rendering.UI
 			DrawManager.UIRenderer.Add(this.TextureElement);
 		}
 		
-		private Vector2 _mScale;
 		public Vector2 Scale{
-			get { return _mScale; }
+			get { return TextureElement.Scale; }
 			set { 
-				this._mScale = value;
 				this.TextureElement.Scale = value;
 			}
 		}
 		
-		private Vector2 _mPosition;
 		public Vector2 Position{
-			get { return _mPosition; }
+			get { return TextureElement.Position; }
 			set {
-				_mPosition = value;
 				this.TextureElement.Position = value;
 			}
 		}
-		public bool Enabled {get; private set;}
+
 		public void Enable(){
 			TextureElement.IsEnabled = true;
 			Enabled = true;			
 		}
+
 		public void Disable(){
 			TextureElement.IsEnabled = false;	
 			Enabled = false;

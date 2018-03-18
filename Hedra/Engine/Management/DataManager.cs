@@ -12,8 +12,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Item;
 using System.Collections.Generic;
+using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.Management
 {
@@ -22,9 +22,9 @@ namespace Hedra.Engine.Management
 	/// </summary>
 	public static class DataManager
 	{
-		public const float SaveVersion = 0.9f;
+		public const float SaveVersion = 1.0f;
 		
-		public static void SavePlayer(PlayerData Player){
+		public static void SavePlayer(PlayerInformation Player){
 			string ChrFile = AssetManager.AppData+"/Characters/"+Player.Name;
 			
 			if(File.Exists(ChrFile+".db")){
@@ -50,17 +50,13 @@ namespace Hedra.Engine.Management
 					
 					Bw.Write(Player.Speed);
 					
-					Bw.Write(Player.RandomFactor);
 					Bw.Write(Player.AddonHealth);
 					Bw.Write(Player.Health);
 					
-					Bw.Write(Player.XP);			
+					Bw.Write(Player.Xp);			
 					Bw.Write(Player.Level);
 					
 					Bw.Write(Player.Mana);
-					
-					Bw.Write(Player.Color0);
-					Bw.Write(Player.Color1);
 					
 					Bw.Write(Player.WorldSeed);			
 					
@@ -72,263 +68,131 @@ namespace Hedra.Engine.Management
 					
 					Bw.Write(Player.TargetPosition);
 					
-					Bw.Write(Player.QuestData);
 					Bw.Write(Player.Daytime);
 					Bw.Write( (int) Player.ClassType);
-					
-					if(Player.Items != null){
-						foreach(KeyValuePair<InventoryItem,int> Pair in Player.Items){
-							byte[] ItemData = DataManager.RawSerialize(Pair.Key.Info);
-							
-							Bw.Write(Pair.Key.Name);
-							Bw.Write((int)Pair.Key.Type);
-							Bw.Write(Pair.Value);
-							Bw.Write(ItemData.Length);
-							Bw.Write(ItemData);
-						}
+                    Bw.Write(Player.RandomFactor);
+
+				    var items = Player.Items;
+                    if (items != null){
+						Bw.Write(items.Length);
+					    foreach (var pair in items)
+					    {
+					        Bw.Write(pair.Key);
+					        var itemBytes = pair.Value.ToArray();
+                            Bw.Write(itemBytes.Length);
+                            Bw.Write(itemBytes);
+					    }
 					}
 				}
 			}
 		}
 	
-		public static PlayerData DataFromPlayer(LocalPlayer P){
-			bool Connected = Networking.NetworkManager.IsConnected;
-		    var Data = new PlayerData
+		public static PlayerInformation DataFromPlayer(LocalPlayer Player){
+			bool connected = Networking.NetworkManager.IsConnected;
+		    var data = new PlayerInformation
 		    {
-		        Level = P.Level,
-		        Health = P.Health,
-		        Mana = P.MaxXP,
-		        XP = P.XP,
-		        RandomFactor = P.RandomFactor,
-		        WorldSeed = (Connected) ? Scenes.SceneManager.Game.CurrentData.WorldSeed : World.Seed,
-		        Name = P.Name,
-		        Rotation = P.Rotation,
-		        BlockPosition = (Connected) ? Scenes.SceneManager.Game.CurrentData.BlockPosition : P.BlockPosition,
-		        AddonHealth = P.AddonHealth,
-		        SkillsData = P.SkillSystem.Save(),
-		        SkillIDs = P.Skills.Save(),
-		        TargetPosition = P.Physics.TargetPosition,
-		        Daytime = (Connected) ? Scenes.SceneManager.Game.CurrentData.Daytime : Enviroment.SkyManager.DayTime,
-		        QuestData = (Connected) ? "" : World.QuestManager.Quest.Serialize(),
-		        ClassType = P.ClassType
+		        Level = Player.Level,
+		        Health = Player.Health,
+		        Mana = Player.MaxXP,
+		        Xp = Player.XP,
+		        WorldSeed = connected ? Scenes.SceneManager.Game.CurrentInformation.WorldSeed : World.Seed,
+		        Name = Player.Name,
+		        Rotation = Player.Rotation,
+		        BlockPosition = connected ? Scenes.SceneManager.Game.CurrentInformation.BlockPosition : Player.BlockPosition,
+		        AddonHealth = Player.AddonHealth,
+		        SkillsData = Player.SkillSystem.Save(),
+		        SkillIDs = Player.Skills.Save(),
+		        TargetPosition = Player.Physics.TargetPosition,
+		        Daytime = connected ? Scenes.SceneManager.Game.CurrentInformation.Daytime : Enviroment.SkyManager.DayTime,
+		        ClassType = Player.ClassType,
+		        RandomFactor = Player.RandomFactor,
+		        Items = Player.Inventory.ToArray()
 		    };
-		    var items = new Dictionary<InventoryItem, int>();
-			for(int i = 0; i < P.Inventory.Items.Length; i++){
-				if(P.Inventory.Items[i] != null && !items.ContainsKey(P.Inventory.Items[i]))
-					items.Add(P.Inventory.Items[i], i);
-			}
-			Data.Items = items;	
-			return Data;
+
+		    return data;
 		}
 		
-		public static PlayerData LoadPlayer(string FileName){
+		public static PlayerInformation LoadPlayer(string FileName){
 			
-			FileInfo ChrInfo = new FileInfo(FileName);
-			if(ChrInfo.Length == 0){
-				if(File.Exists(FileName+".bak")){
-					File.Delete(FileName);
-					File.Copy(FileName+".bak", FileName);
-					FileInfo FInfo = new FileInfo(FileName);
-					FInfo.Attributes = FileAttributes.Normal;
-				}
+			var chrInfo = new FileInfo(FileName);
+			if(chrInfo.Length == 0){
+			    if (!File.Exists(FileName + ".bak")) return DataManager.LoadPlayer(File.Open(FileName, FileMode.Open));
+			    File.Delete(FileName);
+			    File.Copy(FileName+".bak", FileName);
+			    var fInfo = new FileInfo(FileName)
+			    {
+			        Attributes = FileAttributes.Normal
+			    };
 			}
 			
 			return DataManager.LoadPlayer(File.Open(FileName, FileMode.Open));
 		}
 		
-		public static PlayerData LoadPlayer(Stream str){
-			PlayerData Data = new PlayerData();
-			Dictionary<InventoryItem, int> Items;
-			using(BinaryReader Br = new BinaryReader(str)){
-				float Version = Br.ReadSingle();
-				
-				Data.Name = Br.ReadString();
-				Data.BlockPosition = new Vector3(Br.ReadSingle(), Br.ReadSingle(), Br.ReadSingle());
-				Data.Rotation = new Vector3(Br.ReadSingle(), Br.ReadSingle(), Br.ReadSingle());
-				
-				Data.Speed = Br.ReadSingle();
-				if(Version < 0.82f){
-					Data.SpeedMultiplier = Br.ReadSingle();
-					Data.Speed /= Data.SpeedMultiplier;
-				}
-				if(Version >= 0.89f){
-					Data.RandomFactor = Br.ReadSingle();
-					Data.AddonHealth = Br.ReadSingle();
-				}
-				Data.Health = Br.ReadSingle();
-				
-				if(Version < 0.89f)
-					Br.ReadSingle();
-				
-				Data.XP = Br.ReadSingle();
-				
-				if(Version < 0.89f)
-					Br.ReadSingle();
-				
-				Data.Level = Br.ReadInt32();
-				
-				Data.Mana = Br.ReadSingle();
-				
-				if(Version < 0.89f)
-					Br.ReadSingle();
-				
-				if(Version < 0.89f){
-					//Read old files
-					Br.ReadString();
-					Br.ReadString();
-					Br.ReadString();
-					Br.ReadString();
-					Br.ReadString();
-					Br.ReadString();
-				}
-				Data.Color0 = Br.ReadVector4();
-				Data.Color1 = Br.ReadVector4();
-				
-				//Seed cannot be negative anymore
-				Data.WorldSeed = Math.Abs(Br.ReadInt32());
-				//Skip the heightmap
-				if(Version < .81f){
-					Br.ReadBytes(Br.ReadInt32());
-				}
-			    if (Version < .9f)
+		public static PlayerInformation LoadPlayer(Stream Str){
+			var information = new PlayerInformation();
+			Dictionary<int, Item> items;
+			using(var Br = new BinaryReader(Str)){
+				float version = Br.ReadSingle();
+			    if (version < 1.0f) return null;
+				information.Name = Br.ReadString();
+				information.BlockPosition = new Vector3(Br.ReadSingle(), Br.ReadSingle(), Br.ReadSingle());
+				information.Rotation = new Vector3(Br.ReadSingle(), Br.ReadSingle(), Br.ReadSingle());
+				information.Speed = Br.ReadSingle();
+                information.AddonHealth = Br.ReadSingle();
+				information.Health = Br.ReadSingle();
+				information.Xp = Br.ReadSingle();
+				information.Level = Br.ReadInt32();		
+				information.Mana = Br.ReadSingle();
+				information.WorldSeed = Br.ReadInt32();
+			    information.SkillsData = Br.ReadBytes(Br.ReadInt32());
+				information.SkillIDs = Br.ReadBytes(Br.ReadInt32());
+				information.TargetPosition = Br.ReadVector3();
+				information.Daytime = Br.ReadSingle();
+				information.ClassType = (Class) Br.ReadInt32();
+                information.RandomFactor = Br.ReadSingle();
+                items = new Dictionary<int, Item>();
+			    int itemCount = Br.ReadInt32();
+			    for (var i = 0; i < itemCount; i++)
 			    {
-                    //old health & mana regen
-			        Br.ReadSingle();
-			        Br.ReadSingle();
+			        var index = Br.ReadInt32();
+			        var item = Item.FromArray(Br.ReadBytes(Br.ReadInt32()));
+                    items.Add(index, item);
 			    }
-			    if(Version >= 0.72f){
-					Data.SkillsData = Br.ReadBytes(Br.ReadInt32());
-				}
-				if(Version >= 0.73f){
-					if(Version >= .88f){
-						Data.SkillIDs = Br.ReadBytes(Br.ReadInt32());
-					}else{
-						Data.SkillIDs = new byte[4];
-						Data.SkillIDs[0] = Br.ReadByte();
-						Data.SkillIDs[1] = Br.ReadByte();
-						Data.SkillIDs[2] = Br.ReadByte();
-						Data.SkillIDs[3] = Br.ReadByte();
-					}
-				}
-				if(Version >= 0.74f && Version < 0.83f){
-					Br.ReadSingle();
-				}
-				if(Version >= 0.79f){
-					Data.TargetPosition = Br.ReadVector3();
-				}
-				if(Version >= 0.75f && Version < 0.84f){
-					int Length = Br.ReadInt32();
-					Data.Entities = Br.ReadBytes(Length);
-				}
-				if(Version >= 0.85f)
-					Data.QuestData = Br.ReadString();
-				
-				if(Version >= 0.86f)
-					Data.Daytime = Br.ReadSingle();
-				
-				if(Version >= 0.87f)
-					Data.ClassType = (Class) Br.ReadInt32();
-				
-				Items = new Dictionary<InventoryItem, int>();
-				while (Br.BaseStream.Position < Br.BaseStream.Length){
-					
-					string Name = Br.ReadString();
-					ItemType Type = (ItemType) Br.ReadInt32();
-					if(Version < 0.8f)
-						Br.ReadInt32();
-					int Index = Br.ReadInt32();
-					byte[] ItemInfoData = Br.ReadBytes(Br.ReadInt32());
-					InventoryItem NewItem;
-					
-					if(Version < 0.78f){
-						OldItemInfo Info = RawDeserialize<OldItemInfo>(ItemInfoData,0);
-						ItemInfo NewInfo = new ItemInfo(Info.MaterialType, Info.Damage);
-						NewItem = new InventoryItem(Type, NewInfo);
-					}else{
-						ItemInfo Info = RawDeserialize<ItemInfo>(ItemInfoData,0);
-						NewItem = new InventoryItem(Type, Info);
-					}
-					
-					if((int)NewItem.Type >= (int) ItemType.MaxItems)
-						NewItem.Type = ItemType.Sword;
-					Items.Add(NewItem, Index);
-				}
-				if(Version < 0.8f){ 
-					Items.Clear();
-					Items.Add(new InventoryItem(ItemType.Sword, ItemInfo.Random(ItemType.Sword) ), Inventory.WeaponHolder);
-				}
-				//Compatibility
-				if(Class.None == Data.ClassType){
-					foreach(InventoryItem Item in Items.Keys){
-						if(Items[Item] == Inventory.WeaponHolder){
-							if(Item.Type == ItemType.ThrowableDagger)
-								Data.ClassType = Class.Rogue;
-							
-							else if(Item.Type == ItemType.Bow)
-								Data.ClassType = Class.Archer;
-							
-							else if(Item.Type == ItemType.Sword)
-								Data.ClassType = Class.Warrior;
-						}
-					}
-				}
 			}
 
-			Data.Items = Items;
-			str.Close();
-			str.Dispose();
-			return Data;
-		}
-		
-		
-		/// <summary>
-		/// converts byte[] to struct
-		/// </summary>
-		public static T RawDeserialize<T>(byte[] rawData, int position)
-	    {
-	        int rawsize = Marshal.SizeOf(typeof(T));
-	        if (rawsize > rawData.Length - position)
-	            throw new ArgumentException("Not enough data to fill struct. Array length from position: "+(rawData.Length-position) + ", Struct length: "+rawsize);
-	        IntPtr buffer = Marshal.AllocHGlobal(rawsize);
-	        Marshal.Copy(rawData, position, buffer, rawsize);
-	        T retobj = (T)Marshal.PtrToStructure(buffer, typeof(T));
-	        Marshal.FreeHGlobal(buffer);
-	        return retobj;
-	    }
-		
-		/// <summary>
-		/// converts a struct to byte[]
-		/// </summary>
-		public static byte[] RawSerialize(object anything)
-	    {
-	        int rawSize = Marshal.SizeOf(anything);
-	        IntPtr buffer = Marshal.AllocHGlobal(rawSize);
-	        Marshal.StructureToPtr(anything, buffer, false);
-	        byte[] rawDatas = new byte[rawSize];
-	        Marshal.Copy(buffer, rawDatas, 0, rawSize);
-	        Marshal.FreeHGlobal(buffer);
-	        return rawDatas;
-	    }
-		
-		public static PlayerData[] PlayerFiles{
-			get{
-				List<PlayerData> FilesList = new List<PlayerData>();
-				string[] Files = Directory.GetFiles(AssetManager.AppData+"Characters/");
+			information.Items = items.ToArray();
+			Str.Close();
+			Str.Dispose();
+			return information;
+		}		
 
-				for(int i = 0; i < Files.Length; i++){
-					if(Files[i].EndsWith(".bak")) 
+		public static PlayerInformation[] PlayerFiles{
+			get{
+				var filesList = new List<PlayerInformation>();
+				string[] files = Directory.GetFiles(AssetManager.AppData+"Characters/");
+
+				for(int i = 0; i < files.Length; i++){
+					if(files[i].EndsWith(".bak")) 
 						continue;
-					try{
-						FilesList.Add( LoadPlayer(Files[i]));
+					try
+					{
+					    var information = LoadPlayer(files[i]);
+					    if (information == null)
+					    {
+					        File.Delete(files[i]);
+                            if(File.Exists(files[i] + ".bak")) File.Delete(files[i] + ".bak");
+                            continue;
+					    }
+                        filesList.Add( information );
 					}catch(Exception e){
 						if(e is UnauthorizedAccessException){
-							Log.WriteLine("Unathoriazed access in file: "+Path.GetFileName(Files[i]));
+							Log.WriteLine("Unathoriazed access in file: "+Path.GetFileName(files[i]));
 							continue;
 						}
 						Log.WriteLine(e.ToString());
 					}
 				}
-				return FilesList.ToArray();
+				return filesList.ToArray();
 			}
 		}
 		

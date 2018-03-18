@@ -13,7 +13,7 @@ using System.Drawing;
 using System.Linq;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Item;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
@@ -31,7 +31,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
     /// </summary>
     public class RecoverItemObjective : Objective
     {
-        private ItemModel _itemModel;
+        private WorldItem _worldItem;
         private EntityMesh _previewMesh;
         private TempleType _type;
 
@@ -144,7 +144,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 mob.Physics.CanCollide = false;
                 enemies.Add(mob);
             }
-            InventoryItem item = World.QuestManager.RandomPrize(rng);
+            Item item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon));
             Chest prizeChest =
                 World.QuestManager.SpawnChest(
                     spawnPosition + Vector3.UnitY * 8f - Vector3.UnitX * .5f + Vector3.UnitZ * .5f, item);
@@ -177,8 +177,8 @@ namespace Hedra.Engine.QuestSystem.Objectives
                         World.RemoveGlobalCollider(Shapes[i]);
                     }
                 }
-            _itemModel?.Dispose();
-            _itemModel = null;
+            _worldItem?.Dispose();
+            _worldItem = null;
             _previewMesh?.Dispose();
             _previewMesh = null;
         }

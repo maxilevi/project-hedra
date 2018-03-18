@@ -40,8 +40,8 @@ namespace Hedra.Engine.Rendering.UI
 
         public void MakeText()
         {
-            Bitmap textBitmap = new Bitmap(1, 1);
-            SolidBrush brush = new SolidBrush(FontColor);
+            var textBitmap = new Bitmap(1, 1);
+            var brush = new SolidBrush(FontColor);
             using (Graphics graphics = Graphics.FromImage(textBitmap))
             {
                 Size = graphics.MeasureString(Text, TextFont);
@@ -71,7 +71,7 @@ namespace Hedra.Engine.Rendering.UI
                     }
                 }
 
-                Pen outlinePen = new Pen(System.Drawing.Color.FromArgb(255, 39, 39, 39), 2.00f);
+                var outlinePen = new Pen(System.Drawing.Color.FromArgb(255, 39, 39, 39), 2.00f);
 
                 using (GraphicsPath gp = new GraphicsPath())
                 {
@@ -87,7 +87,7 @@ namespace Hedra.Engine.Rendering.UI
                 sf.Dispose();
             }
 
-
+            var previousState = UiText?.IsEnabled ?? false;
             uint newId;
             newId = Graphics2D.LoadTexture(textBitmap);
             //else newId = Graphics2D.LoadTexture( Graphics2D.ReColorMask(FontColor, textBitmap) );
@@ -102,6 +102,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 UiText.Position -= UiText.Scale;
             }
+            UiText.IsEnabled = previousState;
             textBitmap.Dispose();
             brush.Dispose();
         }

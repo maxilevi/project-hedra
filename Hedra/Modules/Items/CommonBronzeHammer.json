@@ -1,0 +1,25 @@
+﻿{
+  "Name": "CommonBronzeHammer",
+  "DisplayName": "Bronze Hammer",
+  "WeaponType": "Hammer", 
+  "Tier": "Common",
+  "Description": "Bronze hammer.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.0
+    },
+    {
+      "Name": "AttackPower",
+      "Value": 8.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Berry.ply"
+  }
+}

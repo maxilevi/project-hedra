@@ -8,18 +8,22 @@
   "Speed": 1.85,
   "XP": 2.5,
   "AttackPower": 1.0, 
-  "AttackSpeed": 1.5,  
+  "AttackSpeed": 1.5,
   "Weapons": [
     {
+      "Tier": "Uncommon",
       "Type": "Bow"
     },
     {
+      "Tier": "Uncommon",
       "Type": "Bow"
     },
     {
+      "Tier": "Uncommon",
       "Type": "Bow"
     },
     {
+      "Tier": "Uncommon",
       "Type": "Knife"
     }
   ]

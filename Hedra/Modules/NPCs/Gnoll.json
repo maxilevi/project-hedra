@@ -11,12 +11,15 @@
   "AttackSpeed": 0.3,  
   "Weapons": [
     {
+      "Tier": "Uncommon", 
       "Type": "Sword"
     },
     {
+      "Tier": "Uncommon",
       "Type": "Axe"
     },
     {
+      "Tier": "Uncommon",
       "Type": "Hammer"
     }
   ]

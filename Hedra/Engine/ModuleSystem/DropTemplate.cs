@@ -7,10 +7,8 @@ namespace Hedra.Engine.ModuleSystem
 {
     public class DropTemplate
     {
+        public string Tier { get; set; }
         public string Type { get; set; }
-        public string Material { get; set; }
-        public int Amount { get; set; }
         public int Chance { get; set; }
-
     }
 }

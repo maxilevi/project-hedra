@@ -15,14 +15,7 @@
     }
   ],
 
-  "Drops": [
-    {
-      "Type": "Stackable",
-      "Material": "SpiderEye",
-      "Amount": 1,
-      "Chance": 20
-    }
-  ],
+  "Drops": [],
 
   "Model": {
     "Path": "$DataFile$/Assets/Chr/SpiderIdle.dae",

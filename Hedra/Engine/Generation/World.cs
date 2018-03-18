@@ -17,13 +17,13 @@ using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Item;
 using Hedra.Engine.Networking;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Linq;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.StructureSystem;
@@ -38,7 +38,7 @@ namespace Hedra.Engine.Generation
 	    public static Dictionary<Vector2, Chunk> SearcheableChunks;
         public static List<Chunk> Chunks;
 	    public static List<ParticleProjectile> Projectiles;
-	    public static List<ItemModel> Items;
+	    public static List<WorldItem> Items;
 	    public static AreaHighlighter Highlighter;
 	    public static ParticleSystem WorldParticles;
 		public static GenerationQueue ChunkGenerationQueue;
@@ -128,7 +128,7 @@ namespace Hedra.Engine.Generation
             SearcheableChunks = new Dictionary<Vector2, Chunk>();
             Projectiles = new List<ParticleProjectile>();
             _globalColliders = new HashSet<ICollidable>();
-            Items = new List<ItemModel>();
+            Items = new List<WorldItem>();
             WorldParticles = new ParticleSystem(Vector3.Zero);
             ClosestChunkComparer = new ClosestChunk();
             _toDraw = new Dictionary<Vector2, Chunk>();
@@ -164,8 +164,9 @@ namespace Hedra.Engine.Generation
 	        AnimationModelLoader.EmptyCache();
 
             var factories = MobLoader.LoadModules(AssetManager.AppPath);
-	        MobFactory?.AddFactory(factories);
-	        HumanoidLoader.LoadModules(AssetManager.AppPath);
+	        MobFactory?.AddFactory(factories);    
+            HumanoidLoader.LoadModules(AssetManager.AppPath);
+            ItemFactory.LoadModules(AssetManager.AppPath);
             World.ModulesReload?.Invoke(AssetManager.AppPath);
 	    }
 		
@@ -630,12 +631,12 @@ namespace Hedra.Engine.Generation
 	        Highlighter.HighlightArea(Position, Color, Radius, Seconds);
 	    }
 
-        public static ItemModel DropItem(InventoryItem Item, Vector3 Position){
-			var model = new ItemModel(Item, Position);
+        public static WorldItem DropItem(Item ItemSpec, Vector3 Position){
+			var model = new WorldItem(ItemSpec, Position);
 			Items.Add(model);
 			
 			model.OnPickup += delegate(LocalPlayer Player) {
-				Player.Inventory.AddItem(model.Item);
+				Player.Inventory.AddItem(model.ItemSpecification);
 				Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, model.Position, false, 1f, 1.2f);
 				model.Dispose();
 			};

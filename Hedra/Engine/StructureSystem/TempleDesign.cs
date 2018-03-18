@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.QuestSystem;
@@ -35,17 +36,17 @@ namespace Hedra.Engine.StructureSystem
 
             ThreadManager.ExecuteOnMainThread(delegate
             {
-                MobType BossType;
-                Entity TreeBoss = BossGenerator.Generate(rng, out BossType);
+                MobType bossType;
+                Entity treeBoss = BossGenerator.Generate(rng, out bossType);
 
-
-                var prize = new Chest(Vector3.TransformPosition(Vector3.UnitZ * +10f + Vector3.UnitX * -80f, transMatrix), new Item.InventoryItem(Item.ItemType.Random));
-                prize.Condition += () => TreeBoss == null || TreeBoss.IsDead;
+                var prize = new Chest(Vector3.TransformPosition(Vector3.UnitZ * +10f + Vector3.UnitX * -80f, transMatrix),
+                    ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
+                prize.Condition += () => treeBoss == null || treeBoss.IsDead;
                 prize.Rotation = Vector3.UnitY * 90f;
 
-                TreeBoss.Position = prize.Position.Xz.ToVector3() - Vector3.UnitZ * 30f;
-                TreeBoss.Model.Position = prize.Position.Xz.ToVector3();
-                TreeBoss.SearchComponent<BossAIComponent>().Protect = () => prize.Position;
+                treeBoss.Position = prize.Position.Xz.ToVector3() - Vector3.UnitZ * 30f;
+                treeBoss.Model.Position = prize.Position.Xz.ToVector3();
+                treeBoss.SearchComponent<BossAIComponent>().Protect = () => prize.Position;
 
                 World.AddStructure(prize);
                 underChunk.AddStaticElement(model);

@@ -11,7 +11,7 @@ using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Item;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Sound;
 
 namespace Hedra.Engine.Management
@@ -50,8 +50,18 @@ namespace Hedra.Engine.Management
 					if(Parts[1] == "obj") World.QuestManager.Quest.NextObjective();
 					return true;
 				}
-				
-				if(Parts[0] == "xp"){
+
+			    if (Parts[0] == "logItems")
+			    {
+			        for (var i = 0; i < LocalPlayer.Instance.Inventory.Length; i++)
+			        {
+                        if(LocalPlayer.Instance.Inventory[i] != null)
+			                Log.WriteLine($" {i} {LocalPlayer.Instance.Inventory[i]}");
+			        }
+			        return true;
+			    }
+
+                if (Parts[0] == "xp"){
 					LocalPlayer.Instance.XP += float.Parse(Parts[1]);
 					return true;
 				}
@@ -73,7 +83,7 @@ namespace Hedra.Engine.Management
                 {
                     if (Parts[1] == "coin")
                     {
-                        World.DropItem(new InventoryItem(ItemType.Coin), LocalPlayer.Instance.Position + LocalPlayer.Instance.Orientation * 16f);
+                        World.DropItem(ItemPool.Grab(ItemType.Gold), LocalPlayer.Instance.Position + LocalPlayer.Instance.Orientation * 16f);
                         return true;
                     }
                 }
@@ -88,10 +98,7 @@ namespace Hedra.Engine.Management
 			        return true;
 			    }
 				if(Parts[0] == "get"){
-					if(Parts[1] == "random"){
-						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Random) );
-					}
-					if(Parts[1] == "mount"){
+					/*if(Parts[1] == "mount"){
 						if(Parts[2] == "horse")
 							LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Mount, new ItemInfo(Material.HorseMount, 100)));
 						else if(Parts[2] == "wolf")
@@ -115,7 +122,7 @@ namespace Hedra.Engine.Management
 					else if(Parts[1] == "coin")
 						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Coin, ItemInfo.Gold(5)) );
 					else if (Parts[1] == "rapier")
-					    LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Sword, ItemInfo.Random(ItemType.Sword)));
+					    LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Sword, ItemInfo.Random(ItemType.Sword)));*/
                     return true;
 				}
 				if(Parts[0] == "time"){
@@ -180,12 +187,7 @@ namespace Hedra.Engine.Management
 					return true;
 				}
 				if(Parts[0] == "chest"){
-					for(int i = 0; i < (int) ItemType.MaxItems; i++){
-						if( ((ItemType) i ).ToString().ToLowerInvariant().Contains(Parts[1].ToLowerInvariant())){
-							World.QuestManager.SpawnChest(Caster.Position + Caster.Orientation * 32, new InventoryItem( (ItemType) i ) );
-							break;
-						}
-					}
+                    World.QuestManager.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
 					return true;
 				}
                 Log.WriteLine("Unknown command.");

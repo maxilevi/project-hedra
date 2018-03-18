@@ -9,7 +9,7 @@
 
 using System;
 using OpenTK;
-using Hedra.Engine.Item;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.EntitySystem
@@ -20,7 +20,7 @@ namespace Hedra.Engine.EntitySystem
 	public class DropComponent : EntityComponent, ITickable
     {
 		public bool RandomDrop = true;
-		public InventoryItem ItemDrop;
+		public Item ItemDrop;
 		public DropComponent(Entity Parent) : base(Parent){}
         private float _dropChance;
         public float DropChance
@@ -41,11 +41,12 @@ namespace Hedra.Engine.EntitySystem
 		{
 			if(this.Parent.IsDead && !_dropped){
 				_dropped = true;
-				if(Utils.Rng.NextFloat() * 100f < DropChance){
-					InventoryItem item = RandomDrop ? new InventoryItem( ItemType.Random ) : ItemDrop;
-					if(item != null){
+				if(Utils.Rng.NextFloat() * 100f < DropChance)
+				{
+					var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
+					if(item != null)
 						Generation.World.DropItem(item, Parent.Position + Vector3.UnitY * 2f + new Vector3(Utils.Rng.NextFloat() * 8f -4f, 0, Utils.Rng.NextFloat() * 8f -4f));
-					}
+					
 				}
 			}	
 		}

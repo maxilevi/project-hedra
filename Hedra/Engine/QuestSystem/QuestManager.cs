@@ -16,7 +16,7 @@ using System.Drawing;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Item;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.QuestSystem.Objectives;
 using Hedra.Engine.Scenes;
@@ -147,13 +147,18 @@ namespace Hedra.Engine.QuestSystem
 	        human.AddComponent(new WarriorAIComponent(human, false));
 
 	        var region = World.BiomePool.GetRegion(Position);
-	        var woodColor = region.Colors.WoodColor * 3.0f;
-            human.Model.Paint(new []{ woodColor, region.Colors.LeavesColor, woodColor * .5f });
+	        var woodColor = region.Colors.WoodColors[Utils.Rng.Next(0, region.Colors.WoodColors.Length)] * 2.0f;
+            human.Model.Paint(new []
+            {
+                woodColor,
+                region.Colors.LeavesColors[Utils.Rng.Next(0, region.Colors.LeavesColors.Length)],
+                woodColor * .65f
+            });
 
 	        return human;
         }
 	    
-	    public Chest SpawnChest(Vector3 Position, InventoryItem Item){
+	    public Chest SpawnChest(Vector3 Position, Item Item){
 	    	var chest = new Chest(Position, Item);
 	        World.AddStructure(chest);
 	    	return chest;
@@ -241,30 +246,6 @@ namespace Hedra.Engine.QuestSystem
             }
 			return quest;
 		}
-	    
-	    public InventoryItem RandomPrize(Random Rng){
-    		var rewardType = ItemType.Ring;
-			int n = Rng.Next(0, 17);
-			if(n < 4)
-				rewardType = ItemType.Bow;
-			else if (n < 8)
-				rewardType = ItemType.Sword;
-			else if (n < 12)
-				rewardType = ItemType.Katar;
-			else if ( n == 12 ){
-				rewardType = ItemType.Mount;
-			}else if ( n > 12 && n < 17){
-				rewardType = ItemType.Hammer;
-			}
-			
-			InventoryItem item;
-			if(rewardType == ItemType.Mount)
-				item = new InventoryItem( rewardType, (Rng.NextBool() ) ? new ItemInfo(Material.WolfMount, 1) : new ItemInfo(Material.HorseMount, 1) );
-			else
-				item = new InventoryItem( rewardType, ItemInfo.Random(rewardType, Rng) ); 
-    		return item;
-
-	    }
 		
 		public string GenerateName(){
 			var rng = new Random(World.Seed);

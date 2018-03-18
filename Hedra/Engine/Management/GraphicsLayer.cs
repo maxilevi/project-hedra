@@ -17,10 +17,50 @@ namespace Hedra.Engine.Management
 	/// </summary>
 	public static class GraphicsLayer
 	{
-		public static int FboBound;
-		public static int ShaderBound;
+		public static int FBOBound { get; set; }
+		public static int ShaderBound { get; set; }
+	    private static readonly StateManager FboManager;
+	    private static readonly StateManager ShaderManager;
 
-	    public static void MultiDrawElements(PrimitiveType Type, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
+        static GraphicsLayer()
+	    {
+	        FboManager = new StateManager();
+            FboManager.RegisterStateItem( () => FBOBound, O => FBOBound = (int) O);
+            ShaderManager = new StateManager();
+	        ShaderManager.RegisterStateItem(() => ShaderBound, O => ShaderBound = (int)O);
+        }
+
+	    public static void PushFBO()
+	    {
+	        FboManager.CaptureState();
+	    }
+
+	    public static void PushShader()
+	    {
+	        ShaderManager.CaptureState();
+	    }
+
+	    public static void PopFBO()
+	    {
+	        FboManager.ReleaseState();
+	    }
+
+	    public static void PopShader()
+	    {
+	        ShaderManager.ReleaseState();
+	    }
+
+	    public static void BindShader(int Id)
+	    {
+	        GL.UseProgram(Id);
+	    }
+
+	    public static void BindFramebuffer(FramebufferTarget Target, int Id)
+	    {
+	        GL.BindFramebuffer(Target, Id);
+	    }
+
+        public static void MultiDrawElements(PrimitiveType Type, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
 	    {
 	        CompatibilityManager.MultiDrawElementsMethod(Type, Counts, ElementsType, Offsets, Length);
         }

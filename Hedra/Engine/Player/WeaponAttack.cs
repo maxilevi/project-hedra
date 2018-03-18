@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using OpenTK;
 using Hedra.Engine.Rendering.UI;
@@ -95,14 +96,14 @@ namespace Hedra.Engine.Player
 				base.TexId = ThrowSpecialIcon;
 			
 			if (Type == AttackType.SWING){
-				if(Player.Inventory.MainWeapon.Type == Item.ItemType.Hammer)
+				if(Player.Inventory.MainWeapon.WeaponType == WeaponType.Hammer.ToString())
 					base.TexId = SwingHammerIcon;
 				else
 					base.TexId = SwingAxeIcon;
 			}
 			
 			if(Type == AttackType.SMASH){
-				if(Player.Inventory.MainWeapon.Type == Item.ItemType.Hammer)
+				if(Player.Inventory.MainWeapon.WeaponType == WeaponType.Hammer.ToString())
 					base.TexId = SmashHammerIcon;
 				else
 					base.TexId = SmashAxeIcon;

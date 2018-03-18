@@ -16,8 +16,8 @@ namespace Hedra.Engine.Rendering
 		public bool Enabled{get; set;}
 		public bool DontCull {get; set;}
 		public bool Rendered {get; set;}
-		
-		public RenderShape Shape{get; set;}
+        private bool _disposed;
+        public RenderShape Shape{get; set;}
 		public int SceneId {get; set; }
 		public ChunkMesh Mesh{get;}
 		private EntityMeshBuffer Buffer;
@@ -316,10 +316,8 @@ namespace Hedra.Engine.Rendering
 			
 			return FromVertexData(Data, Position);
 		}
-
-		private bool Disposed;
 		public void Dispose(){
-			Disposed = true;
+			_disposed = true;
 			Mesh.Dispose();
 			DrawManager.Remove(this);
 		}

@@ -19,7 +19,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI; 
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
-using Hedra.Engine.Item;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem;
 using OpenTK.Input;
@@ -33,7 +33,7 @@ namespace Hedra.Engine.Player
 		public Camera View;
 		public ChunkLoader Loader;
 		public UserInterface UI;
-		public Inventory Inventory;
+		public PlayerInventory Inventory;
 		public EntitySpawner Spawner;
 		public SkillsBar Skills;
 		public QuestLog QuestLog;
@@ -63,7 +63,7 @@ namespace Hedra.Engine.Player
 			this.Loader = new ChunkLoader(this);
 			this.Spawner = new EntitySpawner(this);
 			this.Model = new HumanModel(this);
-			this.Inventory = new Inventory(this);
+			this.Inventory = new PlayerInventory(this);
 			this.Skills = new SkillsBar(this);
 			this.Glider = new GliderModel();
 			this.SkillSystem = new SkillTree(this);
@@ -449,6 +449,7 @@ namespace Hedra.Engine.Player
 
             //this.Physics.PushAround = !IsAttacking; // If he is attacking dont push 'em	
 
+            Inventory.Update();
 			Movement.Update();
 			UI.Update();
 			ManageSounds();
@@ -461,9 +462,9 @@ namespace Hedra.Engine.Player
             View.Update();
         }
 		
-		public override InventoryItem MainWeapon => Inventory.MainWeapon;
+		public override Item MainWeapon => Inventory.MainWeapon;
 
-	    public override InventoryItem Ring => Inventory.Ring;
+	    public override Item Ring => Inventory.Ring;
 
 	    public void EatFood(){
 			if(this.IsDead || this.IsEating || this.Knocked || this.IsEating || this.IsAttacking || this.IsClimbing) return;
@@ -471,16 +472,16 @@ namespace Hedra.Engine.Player
 			this.IsAttacking = false;
 			this.Model.LeftWeapon.SlowDown = false;
 			
-			if(Inventory.Items[Inventory.FoodHolder] != null){
-				InventoryItem FoodItem = Inventory.Items[Inventory.FoodHolder];
-				float FoodHealth = Item.ItemPool.MaterialInfo(FoodItem.Info.MaterialType).AttackPower;
-				this.PlayEatAnimation(FoodHealth);
-				if(FoodItem.Info.Damage > 1){
-					FoodItem.Info = new Item.ItemInfo(FoodItem.Info.MaterialType, FoodItem.Info.Damage-1);
-				}else{
-					//It's 1
-					this.Inventory.SetItem(null, Inventory.FoodHolder);
-				}
+			if(Inventory.Food != null){
+				var foodHealth = Inventory.Food.GetAttribute<float>("Saturation");
+                var foodAmount = Inventory.Food.GetAttribute<int>(CommonAttributes.Amount);
+                this.PlayEatAnimation(foodHealth);
+
+				if(foodAmount > 1)
+				    Inventory.Food.SetAttribute(CommonAttributes.Amount, foodAmount-1);
+                else
+					this.Inventory.SetItem(PlayerInventory.FoodHolder, null);
+				
 			}
 			this.Inventory.UpdateInventory();
 		}
@@ -488,14 +489,14 @@ namespace Hedra.Engine.Player
 		private void PlayEatAnimation(float FoodHealth){
 			if(Model != null){
 				Model.Food = new StaticModel();
-				VertexData FoodData = Inventory.Items[Inventory.FoodHolder].MeshFile.Clone();
-				FoodData.Scale( Vector3.One * 1.5f );
-				Model.Food.Mesh = EntityMesh.FromVertexData( FoodData, Vector3.Zero);
+				var foodData = Inventory.Food.Model.Clone();
+				foodData.Scale( Vector3.One * 1.5f );
+
+				Model.Food.Mesh = EntityMesh.FromVertexData( foodData, Vector3.Zero);
 				Model.Food.Mesh.Enabled= true;
 			}
-			Model.Food.Init();
-			this.IsEating = true;
-			Model.Eat(FoodHealth);
+			Model?.Food.Init();
+			Model?.Eat(FoodHealth);
 			this.IsEating = true;
 		}
 		
@@ -593,7 +594,7 @@ namespace Hedra.Engine.Player
 		}
 		
 		public static bool CreatePlayer(string Name, HumanModel PreviewModel, Class ClassType){
-			if(Name == String.Empty){
+			if(Name == string.Empty){
 				Instance.MessageDispatcher.ShowNotification("Name cannot be empty", Color.DarkRed, 3f);
 				return false;
 			}
@@ -605,34 +606,38 @@ namespace Hedra.Engine.Player
 			    Instance.MessageDispatcher.ShowNotification("Name cannot be that long", Color.DarkRed, 3f);
 				return false;
 			}
-		    var Data = new PlayerData
+		    var data = new PlayerInformation
 		    {
 		        Name = Name,
-		        RandomFactor = Utils.Rng.NextFloat() * .35f + .75f,
+		        RandomFactor = LocalPlayer.NewRandomFactor(),
 		        WorldSeed = World.RandomSeed,
 		        ClassType = ClassType
 		    };
 
-		    Data.Items.Add( new InventoryItem(ItemType.Coin, Item.ItemInfo.Gold(5)), Inventory.CoinHolder );
-			var BerryInfo = new ItemInfo(Material.Berry, 5);
-			Data.Items.Add( new InventoryItem(ItemType.Food, BerryInfo), Inventory.FoodHolder);
-			var ItemInfo = new ItemInfo(Material.Copper, 6);
-			ItemInfo.ModelSeed = 2;
-			
-			
-			if(ClassType == Class.Warrior)
-				Data.Items.Add( new InventoryItem( ItemType.Sword, ItemInfo), Inventory.WeaponHolder);
-			
-			else if(ClassType == Class.Archer)
-				Data.Items.Add( new InventoryItem( ItemType.Bow, ItemInfo), Inventory.WeaponHolder);
-			
-			else if(ClassType == Class.Rogue)
-				Data.Items.Add( new InventoryItem( ItemType.DoubleBlades, ItemInfo), Inventory.WeaponHolder);
-			
-			else if(ClassType == Class.Mage || ClassType == Class.Necromancer)
-				Data.Items.Add( new InventoryItem( ItemType.ThrowableDagger, ItemInfo), Inventory.WeaponHolder);
-			
-			DataManager.SavePlayer(Data);
+		    var gold = ItemPool.Grab(ItemType.Gold);
+            gold.SetAttribute(CommonAttributes.Amount, 5);
+		    data.AddItem(PlayerInventory.GoldHolder, gold );
+
+		    var food = ItemPool.Grab(ItemType.Berry);
+            food.SetAttribute(CommonAttributes.Amount, 5);
+			data.AddItem( PlayerInventory.FoodHolder, food);
+
+		    Item item = null;
+			switch (ClassType)
+			{
+			    case Class.Warrior:
+			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, WeaponType.Sword));
+			        break;
+			    case Class.Archer:
+			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, WeaponType.Bow));
+                    break;
+			    case Class.Rogue:
+			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, WeaponType.DoubleBlades));
+                    break;
+			}
+			data.AddItem(PlayerInventory.WeaponHolder, item);
+
+			DataManager.SavePlayer(data);
 		    return true;
 		}
 	}
