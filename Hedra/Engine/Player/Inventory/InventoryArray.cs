@@ -4,8 +4,11 @@ using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.Player.Inventory
 {
+    public delegate void OnItemSetEventHandler(int Index, Item New);
+
     public class InventoryArray
     {
+        public event OnItemSetEventHandler OnItemSet;
         private readonly Item[] _items;
         private readonly string[][] _restrictions;
 
@@ -19,11 +22,18 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
+        public bool CanSetItem(int Index, Item Item)
+        {
+            return Item == null || _restrictions[Index] != null 
+                && (_restrictions[Index].Length == 0 || _restrictions[Index].Contains(Item.WeaponType));
+        }
+
         public void SetItem(int Index, Item Item)
         {
-            if(_restrictions[Index] == null || _restrictions[Index].Length != 0 && !_restrictions[Index].Contains(Item.WeaponType))
-                throw new ArgumentException($" Putting {Item.WeaponType} in {_restrictions[Index]} is not permitted.");
+            if(!this.CanSetItem(Index, Item))
+                throw new ArgumentException($" Putting {Item.WeaponType} in {_restrictions[Index].FirstOrDefault()} is not permitted.");
             _items[Index] = Item;
+            OnItemSet?.Invoke(Index, Item);
         }
 
         public Item GetItem(int Index)
@@ -34,6 +44,11 @@ namespace Hedra.Engine.Player.Inventory
         public string[] GetRestrictions(int Index)
         {
             return _restrictions[Index];
+        }
+
+        public bool HasRestrictions(int Index)
+        {
+            return _restrictions[Index] == null || _restrictions[Index].Length > 0;
         }
 
         public void AppendRestriction(int Index, params string[] Restrictions)

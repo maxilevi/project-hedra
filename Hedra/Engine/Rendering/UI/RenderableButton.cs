@@ -25,11 +25,27 @@ namespace Hedra.Engine.Rendering.UI
 
 		public int SceneId { get; set; }
 		public DrawPriority Priority { get; set; }
-		
-		public RenderableButton(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor, Font F) : base(Position, Scale, Text, Texture, FontColor, F){}	
-		public RenderableButton(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor) : base(Position, Scale, Text, Texture, FontColor){}	
-		public RenderableButton(Vector2 Position, Vector2 Scale, string Text, uint Texture) : base(Position, Scale, Text, Texture){}
-		public RenderableButton(Vector2 Position, Vector2 Scale, uint Texture) : base(Position, Scale, Texture){}
+
+	    public RenderableButton(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor, Font F) :
+	        base(Position, Scale, Text, Texture, FontColor, F)
+	    {
+	        DrawManager.UIRenderer.Remove(this.Texture);
+        }
+
+	    public RenderableButton(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor) : base(
+	        Position, Scale, Text, Texture, FontColor)
+	    {
+	        DrawManager.UIRenderer.Remove(this.Texture);
+        }
+	    public RenderableButton(Vector2 Position, Vector2 Scale, string Text, uint Texture) : base(Position, Scale, Text,
+	        Texture)
+	    {
+	        DrawManager.UIRenderer.Remove(this.Texture);
+        }
+	    public RenderableButton(Vector2 Position, Vector2 Scale, uint Texture) : base(Position, Scale, Texture)
+	    {
+	        DrawManager.UIRenderer.Remove(this.Texture);
+	    }
 		
 		public void Draw(){
 			if(this.Texture != null)			

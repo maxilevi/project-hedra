@@ -24,6 +24,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     /// </summary>
     public abstract class Weapon
     {
+        private static Weapon _empty;
         public EntityMesh Mesh;
         public Animation AttackStanceAnimation { get; set; }
         public virtual Vector3 SheathedPosition => new Vector3(-.6f, 0.5f, -0.8f);
@@ -466,6 +467,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             set { Mesh.Rotation = value; }
         }
 
-        public static Weapon Empty => new Hands();
+        public static Weapon Empty => _empty ?? (_empty = new Hands());
     }
 }

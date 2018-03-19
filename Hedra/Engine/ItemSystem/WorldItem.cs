@@ -20,13 +20,13 @@ namespace Hedra.Engine.ItemSystem
 
 	public class WorldItem : Model, IUpdatable
 	{
-		private static ushort ItemCounter = 0;
+		private static ushort _itemCounter = 0;
 		
 		public ushort ItemId {get; set;}
 		public EntityMesh Mesh;
 		public Item ItemSpecification;
 		public event OnItemCollect OnPickup;
-		private bool IsColliding;
+		private bool _isColliding;
 	
 		public WorldItem(Item ItemSpecification, Vector3 Position)
 		{
@@ -35,7 +35,7 @@ namespace Hedra.Engine.ItemSystem
 			this.Mesh = EntityMesh.FromVertexData(ItemSpecification.Model.Clone());
 		    this.Mesh.Scale = this.Scale;
 			this.Position = new Vector3(Position.X, Physics.HeightAtPosition(Position.X, Position.Z) + 1.5f, Position.Z);
-			this.ItemId = ++ItemCounter;
+			this.ItemId = ++_itemCounter;
 			UpdateManager.Add(this);
 		}
 		

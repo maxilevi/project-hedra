@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
@@ -47,10 +48,15 @@ namespace Hedra.Engine.Player.Inventory
 
         public uint Draw(int Id)
         {
-            if (_models[Id] == null) return 0;
+            return Draw(_models[Id], _array[Id + _offset]);
+        }
 
-            _models[Id].AnimationRotation = new Vector3(0, _itemRotation, _array[Id + _offset].WeaponType != null ? 45 : 0);
-            _itemRotation += 25 * (float)Time.deltaTime / _itemCount;
+        public uint Draw(EntityMesh Mesh, Item Item)
+        {
+            if (Mesh == null || Item == null) return GUIRenderer.TransparentTexture;
+
+            Mesh.AnimationRotation = new Vector3(0, _itemRotation, Item.WeaponType != null ? 45 : 0);
+            _itemRotation += 25 * (float)Time.deltaTime / Math.Max(1,_itemCount);
 
             GraphicsLayer.PushShader();
             GraphicsLayer.PushFBO();
@@ -60,7 +66,7 @@ namespace Hedra.Engine.Player.Inventory
             GraphicsLayer.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projectionMatrix);
 
-            var offset = _array[Id + _offset].WeaponType != null
+            var offset = Item.WeaponType != null
                 ? Vector3.UnitY * 0.4f - Vector3.UnitX * 0.4f
                 : Vector3.UnitY * 0.25f;
             var lookAt = Matrix4.LookAt(Vector3.UnitZ * 3.0f, offset, Vector3.UnitY);
@@ -70,7 +76,7 @@ namespace Hedra.Engine.Player.Inventory
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
-            _models[Id].Draw();
+            Mesh.Draw();
 
             /*GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, ItemsFBO.BufferID);
 			GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, MultisampleItemsFBO.BufferID);

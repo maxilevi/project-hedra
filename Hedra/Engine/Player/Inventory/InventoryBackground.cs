@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public InventoryBackground(Vector2 Position)
         {
-            _texture = new Texture("Assets/UI/InventoryBackground.png", Vector2.Zero, Vector2.One);
+            _texture = new Texture("Assets/UI/InventoryBackground.png", Vector2.Zero, Vector2.One * .55f);
             _name = new GUIText(string.Empty, Position + Vector2.UnitY * .075f,
                 Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 24, FontStyle.Bold));
             _level = new GUIText(string.Empty, Position + Vector2.UnitY * -.05f,

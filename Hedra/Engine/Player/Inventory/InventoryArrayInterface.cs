@@ -1,6 +1,10 @@
-﻿using Hedra.Engine.Rendering;
+﻿using System;
+using Hedra.Engine.Events;
+using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -9,7 +13,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly InventoryArray _array;
         private readonly InventoryItemRenderer _renderer;
         private readonly Texture[] _inventoryTextures;
-        private readonly Button[] _inventoryButtons;
+        private readonly RenderableButton[] _inventoryButtons;
         private readonly Panel _elementsPanel;
         private readonly int _length;
         private readonly int _offset;
@@ -25,7 +29,7 @@ namespace Hedra.Engine.Player.Inventory
             this._offset = Offset;
             this._renderer = new InventoryItemRenderer(_array, _offset, _length);
             this._inventoryTextures = new Texture[_length];
-            this._inventoryButtons = new Button[_length];
+            this._inventoryButtons = new RenderableButton[_length];
             this._elementsPanel = new Panel();
             var size = Graphics2D.SizeFromAssets("Assets/UI/InventorySlot.png");
             var offset = new Vector2(size.X, size.Y);
@@ -33,20 +37,22 @@ namespace Hedra.Engine.Player.Inventory
                 size.X * (_length - 1 - (_length - 1) / SlotsPerLine * SlotsPerLine),
                 size.Y * ((_length - 1) / SlotsPerLine)
             );
-
             for (var i = 0; i < _length; i++)
             {
+                var k = i;
                 var j = i / SlotsPerLine;
                 var scale = Vector2.One * .5f;
                 var position = Vector2.Zero + new Vector2((i - j * SlotsPerLine) * offset.X, j * offset.Y) -
                                wholeSize * .5f;
 
                 _inventoryTextures[i] = new Texture(CustomIcons != null ? CustomIcons[i] : "Assets/UI/InventorySlot.png", position, scale);
-                _inventoryButtons[i] = new Button(position, size * scale, GUIRenderer.TransparentTexture);
+                _inventoryButtons[i] = new RenderableButton(position, size * scale, GUIRenderer.TransparentTexture);
+                _inventoryButtons[i].Texture.IdPointer = () => _renderer.Draw(k);
+                _inventoryButtons[i].PlaySound = false;
                 _elementsPanel.AddElement(_inventoryTextures[i]);
                 _elementsPanel.AddElement(_inventoryButtons[i]);
-                var k = i;
-                _inventoryButtons[i].Texture.IdPointer = () => _array[k + _offset] != null ? _renderer.Draw(k) : GUIRenderer.TransparentTexture;
+
+                DrawManager.UIRenderer.Add(_inventoryButtons[i], DrawOrder.After);
             }
         }
 
@@ -54,6 +60,11 @@ namespace Hedra.Engine.Player.Inventory
         {
             _renderer.UpdateView();
         }
+
+        public int Offset => _offset;
+        public InventoryItemRenderer Renderer => _renderer;
+        public InventoryArray Array => _array;
+        public RenderableButton[] Buttons => _inventoryButtons;
 
         public bool Enabled
         {

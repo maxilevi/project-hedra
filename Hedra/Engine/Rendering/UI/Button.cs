@@ -149,12 +149,10 @@ namespace Hedra.Engine.Rendering.UI
                 if (this.Position.Y + this.Scale.Y > -coords.Y && this.Position.Y - this.Scale.Y < -coords.Y
                     && this.Position.X + this.Scale.X > coords.X && this.Position.X - this.Scale.X < coords.X)
                 {
-                    if (this.Hover != null)
-                        this.Hover.Invoke(Sender, E);
+                    Hover?.Invoke(Sender, E);
                     if (!this._hasEntered)
                     {
-                        if (this.HoverEnter != null)
-                            this.HoverEnter.Invoke(Sender, E);
+                        HoverEnter?.Invoke(Sender, E);
                         this._hasEntered = true;
                     }
                 }
@@ -162,8 +160,7 @@ namespace Hedra.Engine.Rendering.UI
                 {
                     if (this._hasEntered)
                     {
-                        if (this.HoverExit != null)
-                            this.HoverExit.Invoke(Sender, E);
+                        HoverExit?.Invoke(Sender, E);
                         this._hasEntered = false;
                     }
                 }

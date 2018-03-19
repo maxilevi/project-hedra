@@ -51,7 +51,7 @@ namespace Hedra.Engine.Rendering.UI
 				this.LeftArrow = new Button(Position - new Vector2(prevLeftArrow.Scale.X + CurrentValue.Scale.X,0), Scale, "\u25C0", 0, C, F);
 				this.RightArrow = new Button(CurrentValue.Position + new Vector2(CurrentValue.Scale.X + prevRightArrow.Scale.X, 0), Scale, "\u25B6", 0, C, F);
 			}
-			LeftArrow.Click += this.OnLeftArrowClick;
+			LeftArrow.Click += this.OnArrowClick;
 			RightArrow.Click +=  this.OnRightArrowClick;
 			
 			prevLeftArrow.Dispose();
@@ -64,7 +64,7 @@ namespace Hedra.Engine.Rendering.UI
 			Initialize(Position, Scale, Text, C, F, Options, Centered);
 		}
 		
-		public void OnLeftArrowClick(object Sender, EventArgs E){
+		public void OnArrowClick(object Sender, EventArgs E){
 			Index--;
 			this.Update();
 		}

@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering.UI
     public class GUIRenderer : IDisposable
     {
         public static GUIShader Shader = new GUIShader("Shaders/GUI.vert", "Shaders/GUI.frag");
-        public static uint TransparentTexture;
+        public static uint TransparentTexture { get; private set; }
         private readonly HashSet<TextureCommand> _renderableUi;
         private readonly HashSet<GUITexture> _textures;
         private static bool _inited;

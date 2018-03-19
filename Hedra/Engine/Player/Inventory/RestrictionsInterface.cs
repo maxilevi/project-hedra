@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player.Inventory
         {
             var restrictions = _array.GetRestrictions(Index);
             if (restrictions == null) return false;
-            return restrictions.Length == 0 || restrictions.Contains(Type);
+            return restrictions.Contains(Type);
         }
     }
 }

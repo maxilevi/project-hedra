@@ -265,15 +265,6 @@ namespace Hedra.Engine.Rendering
 				Buffer.Scale = value;
 			}
 		}
-		
-		private Vector3 BakedPosition{
-			get{
-				return Buffer.BakedPosition;
-			}
-			set{
-				Buffer.BakedPosition = value;
-			}
-		}
 
 		public static EntityMesh FromVertexData(VertexData Data){
 			EntityMesh EMesh = new EntityMesh(Vector3.Zero);

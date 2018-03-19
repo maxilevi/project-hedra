@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using OpenTK;
@@ -42,6 +43,7 @@ namespace Hedra.Engine.Player
         private readonly InventoryArrayInterface _itemsArrayInterface;
         private readonly InventoryArrayInterface _leftMainItemsArrayInterface;
         private readonly InventoryArrayInterface _rightMainItemsArrayInterface;
+        private readonly InventoryArrayInterfaceManager _interfaceManager;
         private readonly InventoryBackground _inventoryBackground;
         private readonly InventoryStateManager _stateManager;
         private readonly RestrictionsInterface _restrictions;
@@ -54,6 +56,7 @@ namespace Hedra.Engine.Player
             _mainItems = new InventoryArray(MainSpaces);
             _restrictions = new RestrictionsInterface(_mainItems);
             _stateManager = new InventoryStateManager(_player);
+            _inventoryBackground = new InventoryBackground(Vector2.UnitY * .55f + Vector2.UnitY * .1f);
             _itemsArrayInterface = new InventoryArrayInterface(_items, 0, _items.Length, 10)
             {
                 Position = Vector2.UnitY * -.65f
@@ -68,15 +71,18 @@ namespace Hedra.Engine.Player
             {
                 Position = Vector2.UnitY * .05f + Vector2.UnitX * +.25f + Vector2.UnitY * .05f
             };
-            _inventoryBackground = new InventoryBackground(Vector2.UnitY * .55f + Vector2.UnitY * .1f);
-            _inventoryBackground.Scale *= .55f;
+            _mainItems.OnItemSet += delegate(int Index, Item New)
+            {
+                if (Index+InventorySpaces == WeaponHolder)
+                    _player.Model.SetWeapon( New == null ? Weapon.Empty : New.Weapon);
+            };
+            _interfaceManager = new InventoryArrayInterfaceManager
+                (_itemsArrayInterface, _leftMainItemsArrayInterface, _rightMainItemsArrayInterface);
         }
 
         public void UpdateInventory()
         {
-            _itemsArrayInterface.UpdateView();
-            _leftMainItemsArrayInterface.UpdateView();
-            _rightMainItemsArrayInterface.UpdateView();
+            _interfaceManager.UpdateView();
         }
 
         public void ClearInventory()
@@ -103,7 +109,6 @@ namespace Hedra.Engine.Player
             var array = Index >= InventorySpaces ? _mainItems : _items;
             var index = ToMainItemsSpace(Index);
             array.SetItem(index, New);
-            if(Index == WeaponHolder) _player.Model.SetWeapon(New.Weapon);
         }
 
         public void SetItems(KeyValuePair<int, Item>[] Items)
@@ -174,7 +179,6 @@ namespace Hedra.Engine.Player
             return Index >= InventorySpaces ? Index - InventorySpaces : Index;
         }
 
-
         public bool HasAvailableSpace => _items.HasAvailableSpace;
         public Item this[int Index] => (Index >= InventorySpaces ? _mainItems : _items)[ToMainItemsSpace(Index)];
         public Item MainWeapon => this[WeaponHolder];
@@ -200,6 +204,7 @@ namespace Hedra.Engine.Player
                 _leftMainItemsArrayInterface.Enabled = _show;
                 _rightMainItemsArrayInterface.Enabled = _show;
                 _inventoryBackground.Enabled = _show;
+                _interfaceManager.Enabled = _show;
                 this.UpdateInventory();
                 this.SetInventoryState(_show);
             }

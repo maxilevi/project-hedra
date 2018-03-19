@@ -371,6 +371,7 @@
     <Compile Include="Engine\ItemSystem\WeaponSystem\Hammer.cs" />
     <Compile Include="Engine\Player\Humanoid.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryArrayInterface.cs" />
+    <Compile Include="Engine\Player\Inventory\InventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryBackground.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryItemRenderer.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryStateManager.cs" />

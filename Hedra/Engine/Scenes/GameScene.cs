@@ -100,9 +100,7 @@ namespace Hedra.Engine.Scenes
 				LPlayer.Model.Dispose();
 			}
 		    LPlayer.UI.ChrChooser.StopModels();//So as to fix loose ends
-
-            GameSettings.DarkEffect = false;
-			LPlayer.ClassType = Information.ClassType;		
+            LPlayer.ClassType = Information.ClassType;		
 			LPlayer.Spawner.Enabled = true;
 			LPlayer.HandLamp.Enabled = false;
 	        LPlayer.Speed = LocalPlayer.DefaultSpeed;
@@ -132,8 +130,17 @@ namespace Hedra.Engine.Scenes
 			Enviroment.SkyManager.LoadTime = true;
 	        LPlayer.Inventory.ClearInventory();
 			LPlayer.Inventory.SetItems(Information.Items);
+	        if (Information.ClassType == Class.Warrior)
+	            LPlayer.Inventory.AddWeaponRestriction(WeaponType.Sword);
 
-			if(LPlayer.Health == 0) LPlayer.Respawn();
+	        else if (Information.ClassType == Class.Archer)
+	            LPlayer.Inventory.AddWeaponRestriction(WeaponType.Bow);
+
+	        else if (Information.ClassType == Class.Rogue)
+	            LPlayer.Inventory.AddWeaponRestriction(WeaponType.DoubleBlades);
+            GameSettings.DarkEffect = false;
+
+            if (LPlayer.Health == 0) LPlayer.Respawn();
 			CoroutineManager.StartCoroutine(SpawnCoroutine);	
 		}
 
