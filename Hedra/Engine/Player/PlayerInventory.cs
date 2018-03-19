@@ -93,13 +93,21 @@ namespace Hedra.Engine.Player
 
         public bool AddItem(Item New)
         {
+            var hasAmount = New.HasAttribute(CommonAttributes.Amount);
+            if (hasAmount)
+            {
+                for (var i = 0; i < _items.Length; i++)
+                {
+                    if (_items[i].Name != New.Name) continue;
+                    _items[i].SetAttribute(CommonAttributes.Amount, 
+                        _items[i].GetAttribute<int>(CommonAttributes.Amount) + New.GetAttribute<int>(CommonAttributes.Amount));
+                }
+            }
             for (var i = 0; i < _items.Length; i++)
             {
-                if (_items[i] == null)
-                {
-                    this.SetItem(i, New);
-                    return true;
-                }
+                if (_items[i] != null) continue;
+                this.SetItem(i, New);
+                return true;
             }
             return false;
         }

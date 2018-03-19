@@ -212,7 +212,7 @@ namespace Hedra.Engine.Scenes
 				if(underChunk != null && underChunk.IsGenerated && underChunk.Landscape.StructuresPlaced && underChunk.BuildedWithStructures
 				  && underChunk.Mesh != null && !underChunk.Mesh.Occluded){
 					if(LPlayer.IsUnderwater){
-						LPlayer.Position += Vector3.One.Xz.ToVector3() * (float) Time.FrameTimeSeconds * 60f * 5f;
+						LPlayer.BlockPosition += Vector3.One.Xz.ToVector3() * (float) Time.FrameTimeSeconds * 60f * 5f;
 						yield return null;
 						continue;
 					}

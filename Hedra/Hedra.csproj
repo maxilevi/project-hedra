@@ -3205,6 +3205,10 @@
       <Link>Assets\Items\Rapier.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\RareSilverGnollDoubleAxe.ply">
+      <Link>Assets\Items\Axes\RareSilverGnollDoubleAxe.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\RatTail.ply">
       <Link>Assets\Items\RatTail.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3663,6 +3667,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\CommonCopperRing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\RareSilverGnollDoubleAxe.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\LavaBiomeSpawner.json">

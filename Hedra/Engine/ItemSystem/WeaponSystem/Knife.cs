@@ -28,9 +28,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		
 		public Knife(VertexData Contents) : base(Contents)
 		{
-			VertexData BaseMesh = Contents.Clone();
-			BaseMesh.Scale(Vector3.One * 1.8f);
-			base.Mesh = EntityMesh.FromVertexData(BaseMesh);
 			
 			VertexData SheathData = AssetManager.PlyLoader("Assets/Items/KnifeSheath.ply", Vector3.One);
 			SheathData.Transform( Matrix4.CreateRotationY(180f * Mathf.Radian) );

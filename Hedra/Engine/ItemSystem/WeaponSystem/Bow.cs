@@ -30,10 +30,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		public OnModifyArrowEvent BowModifiers;
 		
 		public Bow(VertexData Contents) : base(Contents){
-			VertexData BaseMesh = Contents.Clone();
-			BaseMesh.Scale(Vector3.One * 1.4f);
-			base.Mesh = EntityMesh.FromVertexData(BaseMesh);
-
 			Arrow[0] = EntityMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f, Vector3.UnitX * .35f, Vector3.Zero));
 			Quiver = EntityMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Quiver.ply", Vector3.One * new Vector3(2.2f, 2.8f, 2.2f) * 1.5f));
 			Quiver.TargetPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);

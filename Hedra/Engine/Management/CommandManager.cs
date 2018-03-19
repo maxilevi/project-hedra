@@ -98,11 +98,19 @@ namespace Hedra.Engine.Management
 			        return true;
 			    }
 				if(Parts[0] == "get"){
-				    if (Parts[1] == "sword")
+				    if (Parts[1] == "item")
 				    {
-				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, WeaponType.Sword)));
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(Parts[2]));
+                    }
+                    if (Parts[1] == "sword")
+				    {
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, WeaponType.Sword)));
 				    }
-					/*if(Parts[1] == "mount"){
+				    if (Parts[1] == "axe")
+				    {
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, WeaponType.Axe)));
+				    }
+                    /*if(Parts[1] == "mount"){
 						if(Parts[2] == "horse")
 							LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Mount, new ItemInfo(Material.HorseMount, 100)));
 						else if(Parts[2] == "wolf")

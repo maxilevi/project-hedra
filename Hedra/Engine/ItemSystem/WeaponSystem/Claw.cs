@@ -26,10 +26,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         public Claw(VertexData Contents) : base(Contents)
         {
             VertexData BaseMesh = Contents.Clone();
-            BaseMesh.Scale(Vector3.One * 1f);
-
+            BaseMesh.Scale(Vector3.One * 1.75f);
             this.SecondBlade = EntityMesh.FromVertexData(BaseMesh);
-            base.Mesh = EntityMesh.FromVertexData(BaseMesh);
 
             AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBlade-Stance.dae");
 

@@ -26,10 +26,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		public Katar(VertexData Contents) : base(Contents)
 		{
 			VertexData BaseMesh = Contents.Clone();
-			BaseMesh.Scale(Vector3.One * 1.25f);
-			
-			this.SecondBlade = EntityMesh.FromVertexData(BaseMesh);
-			base.Mesh = EntityMesh.FromVertexData(BaseMesh);
+		    BaseMesh.Scale(Vector3.One * 1.75f);
+            this.SecondBlade = EntityMesh.FromVertexData(BaseMesh);
 
 		    AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBlade-Stance.dae");
 

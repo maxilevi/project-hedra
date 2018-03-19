@@ -25,9 +25,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public Axe(VertexData Contents) : base(Contents)
 		{
-			VertexData BaseMesh = Contents.Clone();
-			BaseMesh.Scale(Vector3.One * 1.75f);
-			base.Mesh = EntityMesh.FromVertexData(BaseMesh);
 			AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSmash-Stance.dae");
 
 		    PrimaryAnimations = new Animation[2];

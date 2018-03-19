@@ -38,6 +38,16 @@ namespace Hedra.Engine.ItemSystem
             return item;
         }
 
+        public bool HasAttribute(CommonAttributes Attribute)
+        {
+            return this.HasAttribute(Attribute.ToString());
+        }
+
+        public bool HasAttribute(string Attribute)
+        {
+            return _attributes.Has(Attribute);
+        }
+
         public void SetAttribute(CommonAttributes Attribute, object Value)
         {
             this.SetAttribute(Attribute.ToString(), Value);

@@ -36,12 +36,8 @@ namespace Hedra.Engine.Player
 		    Player.Inventory.AddWeaponRestriction(WeaponType.Hammer);
         }
 		
-		public override string Description {
-			get {
-				return "Learn to use the hammer.";
-			}
-		}
-		
-		public override void KeyDown(){}
+		public override string Description => "Learn to use the hammer.";
+
+	    public override void KeyDown(){}
 	}
 }

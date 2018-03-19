@@ -19,7 +19,7 @@
     }
   ],
   "Model": {
-    "Scale": 1.0,
-    "Path": "$DataFile$/Items/Berry.ply"
+    "Scale": 1.5,
+    "Path": "$DataFile$/Items/CommonBronzeSword.ply"
   }
 }

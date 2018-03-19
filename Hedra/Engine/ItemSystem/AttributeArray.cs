@@ -14,6 +14,11 @@ namespace Hedra.Engine.ItemSystem
             _attributes = new Dictionary<string, object>();
         }
 
+        public bool Has(string Attribute)
+        {
+            return _attributes.ContainsKey(Attribute);
+        }
+
         public void Set(string Attribute, object Value)
         {
             if (!_attributes.ContainsKey(Attribute))

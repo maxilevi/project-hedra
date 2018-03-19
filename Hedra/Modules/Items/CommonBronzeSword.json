@@ -19,7 +19,7 @@
     }
   ],
   "Model": {
-    "Scale": 2.0,
+    "Scale": 1.75,
     "Path": "$DataFile$/Items/Swords/CommonBronzeSword.ply"
   }
 }
