@@ -43,7 +43,6 @@ namespace Hedra.Engine.Player.Inventory
             _panel.AddElement(_xp);
             _panel.AddElement(_gold);
             this.Position = Position;
-            this.Scale = Scale;
         }
 
         public void UpdateView(Humanoid Human)
@@ -53,7 +52,7 @@ namespace Hedra.Engine.Player.Inventory
             _health.Text = $"{(int) Human.Health} HP";
             _mana.Text = $"{(int)Human.Mana} MP";
             _xp.Text = $"{(int)Human.XP}/{(int)Human.MaxXP} XP";
-            _gold.Text = "256 G";
+            _gold.Text = $"{Human.Gold} G";
         }
 
         public bool Enabled
@@ -67,12 +66,6 @@ namespace Hedra.Engine.Player.Inventory
                 else
                     _panel.Disable();
             }
-        }
-
-        public Vector2 Scale
-        {
-            get { return _texture.Scale; }
-            set { _texture.Scale = value; }
         }
 
         public Vector2 Position

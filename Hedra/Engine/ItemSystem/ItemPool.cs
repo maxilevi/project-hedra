@@ -22,7 +22,7 @@ namespace Hedra.Engine.ItemSystem
 	        var templates = ItemFactory.Templater.Templates;
 	        templates = templates.Where(Template => 
             Settings.SameTier ? Template.Tier == Settings.Tier : (int)Template.Tier <= (int)Settings.Tier).ToArray();
-	        templates = templates.Where(Template => Template.WeaponType == Settings.WeaponType).ToArray();
+	        templates = templates.Where(Template => Template.EquipmentType == Settings.EquipmentType).ToArray();
 	        return Item.FromTemplate(templates[Settings.Rng.Next(0, templates.Length)]);
 	    }
 

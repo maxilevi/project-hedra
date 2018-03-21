@@ -96,14 +96,14 @@ namespace Hedra.Engine.Player
 				base.TexId = ThrowSpecialIcon;
 			
 			if (Type == AttackType.SWING){
-				if(Player.Inventory.MainWeapon.WeaponType == WeaponType.Hammer.ToString())
+				if(Player.Inventory.MainWeapon.EquipmentType == EquipmentType.Hammer.ToString())
 					base.TexId = SwingHammerIcon;
 				else
 					base.TexId = SwingAxeIcon;
 			}
 			
 			if(Type == AttackType.SMASH){
-				if(Player.Inventory.MainWeapon.WeaponType == WeaponType.Hammer.ToString())
+				if(Player.Inventory.MainWeapon.EquipmentType == EquipmentType.Hammer.ToString())
 					base.TexId = SmashHammerIcon;
 				else
 					base.TexId = SmashAxeIcon;

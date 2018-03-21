@@ -6,7 +6,8 @@
   "Attributes": [
     {
       "Name": "Amount",
-      "Value": 1
+      "Value": 1,
+      "Hidden": true
     },
     {
       "Name": "Saturation",

@@ -1,16 +1,12 @@
 ﻿{
   "Name": "CommonBronzeClaw",
   "DisplayName": "Bronze Claw",
-  "WeaponType": "Claw", 
+  "EquipmentType": "Claw", 
   "Tier": "Common",
   "Description": "Bronze claw.",
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 8.0
-    },
-    {
-      "Name": "AttackPower",
       "Value": 8.0
     },
     {

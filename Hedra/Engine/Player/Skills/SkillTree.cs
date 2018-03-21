@@ -437,7 +437,7 @@ namespace Hedra.Engine.Player
 						}
 					}
 					if(Slots[i][j].Locked)
-						Slots[i][j].LevelText.UiText.UiText.Opacity = 0;
+						Slots[i][j].LevelText.UIText.UIText.Opacity = 0;
 				}
 			}
 		}

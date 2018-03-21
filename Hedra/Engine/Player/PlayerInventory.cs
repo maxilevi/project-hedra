@@ -172,12 +172,12 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public bool HasWeaponRestriction(WeaponType Type)
+        public bool HasWeaponRestriction(EquipmentType Type)
         {
             return _restrictions.HasRestriction(ToMainItemsSpace(WeaponHolder), Type.ToString());
         }
 
-        public void AddWeaponRestriction(WeaponType Type)
+        public void AddWeaponRestriction(EquipmentType Type)
         {   
             _restrictions.AddRestriction(ToMainItemsSpace(WeaponHolder), Type.ToString());
         }

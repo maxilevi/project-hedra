@@ -1,7 +1,7 @@
 ﻿{
   "Name": "CommonCopperRing",
   "DisplayName": "Copper Ring",
-  "WeaponType": "Ring", 
+  "EquipmentType": "Ring", 
   "Tier": "Common",
   "Description": "Copper ring.",
   "Attributes": [

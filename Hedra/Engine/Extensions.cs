@@ -17,6 +17,7 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Hedra.Engine.ComplexMath;
+using Newtonsoft.Json.Converters;
 using OpenTK;
 
 namespace Hedra.Engine
@@ -26,6 +27,11 @@ namespace Hedra.Engine
 	/// </summary>
 	public static class Extensions
 	{
+
+	    public static Vector2 ScaleUI(this Vector2 Vector, Vector2 Resolution)
+	    {
+	        return Mathf.ScaleGUI(Resolution, Vector);
+	    }
 
         public static string ToPascalString(this string S)
 	    {

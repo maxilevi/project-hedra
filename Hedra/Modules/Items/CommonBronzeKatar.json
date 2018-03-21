@@ -1,16 +1,12 @@
 ﻿{
   "Name": "CommonBronzeKatar",
   "DisplayName": "Bronze Katar",
-  "WeaponType": "Katar", 
+  "EquipmentType": "Katar", 
   "Tier": "Common",
   "Description": "Bronze katar.",
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 8.0
-    },
-    {
-      "Name": "AttackPower",
       "Value": 8.0
     },
     {

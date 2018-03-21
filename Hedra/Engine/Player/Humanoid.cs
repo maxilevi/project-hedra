@@ -24,7 +24,17 @@ namespace Hedra.Engine.Player
 
 	public class Humanoid : Entity
 	{
-		public bool IsAttacking {get; set;}
+	    private EntityComponent _lastEffect;
+	    private Item _ring;
+        private float _mana;
+        private float _xp;
+	    private float _maxHealth;
+	    private float _attackSpeed = 1;
+	    private float _stamina = 100f;
+	    private float _oldSpeed;
+	    private bool _isGliding;
+
+        public bool IsAttacking {get; set;}
 		public bool IsEating { get; set; }
 		public bool IsCasting { get; set; }
 		public bool IsSwimming { get; set; }
@@ -47,9 +57,9 @@ namespace Hedra.Engine.Player
 		public float AddonHealth {get; set;}
 		public float DodgeCost {get; set;}	
         public float RandomFactor { get; set; }
-        #region Propierties ( MaxMana, MaxHealth, MaxXp)
+	    public virtual int Gold => 0;
 
-        private float _maxHealth;
+        #region Propierties ( MaxMana, MaxHealth, MaxXp)
 		public override float MaxHealth{
 			get{
 			    if (ClassType == Class.None) return _maxHealth + AddonHealth;
@@ -144,7 +154,6 @@ namespace Hedra.Engine.Player
         }
 
         #region Dodge
-	    private float _oldSpeed;
         public void Roll(){
 			var player = this as LocalPlayer;
 			if( IsUnderwater || IsGliding || IsRolling || IsCasting || IsRiding || !IsGrounded) return;
@@ -202,7 +211,6 @@ namespace Hedra.Engine.Player
 	        return this.AttackEntity(AttackDamage, Mob, null);
 	    }
 
-
         public bool AttackEntity(float AttackDamage, Entity Mob, Action<Entity> Callback)
 		{
 		    if (!this.InAttackRange(Mob)) return false;
@@ -252,8 +260,7 @@ namespace Hedra.Engine.Player
 				float dmgToDo = 5 * (8+Level*1.5f) * .2f;
 			    if (MainWeapon == null) return dmgToDo * (1 + this.Level * .25f) * this.AttackPower;
 
-			    dmgToDo = (MainWeapon.GetAttribute<float>(CommonAttributes.Damage) 
-                    + MainWeapon.GetAttribute<float>(CommonAttributes.AttackPower)) * (this.Level * .75f) * .8f;
+			    dmgToDo = (MainWeapon.GetAttribute<float>(CommonAttributes.Damage)+8) * (this.Level * .75f) * .8f;
 
 			    dmgToDo *= .7f + Utils.Rng.NextFloat();
 
@@ -266,15 +273,13 @@ namespace Hedra.Engine.Player
 				float dmgToDo = 5 * (8+Level*1.5f) * .25f;
 
 				if(MainWeapon != null)
-					dmgToDo = (MainWeapon.GetAttribute<float>(CommonAttributes.Damage)
-                        + MainWeapon.GetAttribute<float>(CommonAttributes.AttackPower)) * (8+this.Level*.75f) * .15f;
+					dmgToDo = (MainWeapon.GetAttribute<float>(CommonAttributes.Damage) + 8) * (8+this.Level*.75f) * .15f;
 
                 return dmgToDo;
 			}
 		}
-		
-		private float _attackSpeed = 1;
-		public float AttackSpeed{
+
+        public float AttackSpeed{
 			get{
 				float AS = _attackSpeed;
 				if(MainWeapon != null)
@@ -284,8 +289,7 @@ namespace Hedra.Engine.Player
 			set{this._attackSpeed = value;}
 		}
 		
-		private float _xp;
-		public float XP {
+        public float XP {
 			get{ return _xp; }
 			set{
 				_xp = value;
@@ -313,9 +317,7 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		private EntityComponent _lastEffect;
-		private Item _ring;
-		public virtual Item Ring { 
+        public virtual Item Ring { 
 			get{ return _ring; }
 			set{
 			    if (_ring == value) return;
@@ -347,20 +349,18 @@ namespace Hedra.Engine.Player
 			    }
 			}
 		}
-		
-		private float _stamina = 100f;
-		public float Stamina {
+	
+        public float Stamina {
 			get{ return _stamina; }
 			set{ _stamina = Mathf.Clamp(value,0,MaxStamina); }
 		}
 		
-		private float _mana;
+
 		public float Mana{
 			get{ return _mana; }
 			set{ _mana = Mathf.Clamp(value,0,MaxMana); }
 		}
 		
-		private bool _isGliding;
 		public bool IsGliding
 		{
 			get{ return _isGliding; }

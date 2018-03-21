@@ -35,7 +35,7 @@ namespace Hedra.Engine.Player
             _playerText = new GUIText("", new Vector2(0, 0), Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 14, FontStyle.Bold));
 
             _notificationText = new GUIText("", new Vector2(0.7f, -0.9f), Color.FromArgb(255, 39, 39, 39), FontCache.Get(UserInterface.Fonts.Families[0], 12));
-            _notificationText.UiText.Opacity = 0f;
+            _notificationText.UIText.Opacity = 0f;
 
             Player.UI.GamePanel.AddElement(_mainText);
             Player.UI.GamePanel.AddElement(_playerText);
@@ -114,28 +114,28 @@ namespace Hedra.Engine.Player
 
         private void ProcessTitleMessage(MessageItem Item, Action Callback)
         {
-            _mainText.FontColor = Item.Color;
+            _mainText.TextColor = Item.Color;
             _mainText.Text = Item.Content;
-            _mainText.UiText.Opacity = 0;
+            _mainText.UIText.Opacity = 0;
 
             if (Player.UI.GamePanel.Enabled)
             {
                 TaskManager.Asynchronous(delegate
                 {
-                    _mainText.UiText.Opacity = 0.0001f;
+                    _mainText.UIText.Opacity = 0.0001f;
                     float factor = MessageSpeed;
-                    while (_mainText.UiText.Opacity > 0)
+                    while (_mainText.UIText.Opacity > 0)
                     {
-                        if (_mainText.UiText.Opacity >= 1f)
+                        if (_mainText.UIText.Opacity >= 1f)
                         {
                             Thread.Sleep((int) (Item.Time * 1000));
                             factor = -factor;
                         }
-                        _mainText.UiText.Opacity += factor;
-                        _mainText.UiText.Opacity = Mathf.Clamp(_mainText.UiText.Opacity, 0, 1);
+                        _mainText.UIText.Opacity += factor;
+                        _mainText.UIText.Opacity = Mathf.Clamp(_mainText.UIText.Opacity, 0, 1);
                         Thread.Sleep((int) (((factor < 0) ? -factor : factor) * 1000));
                     }
-                    _mainText.UiText.Opacity = 0;
+                    _mainText.UIText.Opacity = 0;
                     Callback();
                 });
             }
@@ -166,28 +166,16 @@ namespace Hedra.Engine.Player
 
         private void ProcessNormalMessage(MessageItem Item, Action Callback)
         {
-            _playerText.FontColor = Item.Color;
+            _playerText.TextColor = Item.Color;
             _playerText.Text = Item.Content;
-            _playerText.UiText.Opacity = 0;
-
+            
             if (Player.UI.GamePanel.Enabled)
             {
                 TaskManager.Asynchronous(delegate
                 {
-                    _playerText.UiText.Opacity = 0.0001f;
-                    var factor = MessageSpeed;
-                    while (_playerText.UiText.Opacity > 0)
-                    {
-                        if (_playerText.UiText.Opacity >= 1f)
-                        {
-                            Thread.Sleep((int)(Item.Time * 1000));
-                            factor = -factor;
-                        }
-                        _playerText.UiText.Opacity += factor;
-                        _playerText.UiText.Opacity = Mathf.Clamp(_playerText.UiText.Opacity, 0, 1);
-                        Thread.Sleep((int)((factor < 0 ? -factor : factor) * 1000));
-                    }
-                    _playerText.UiText.Opacity = 0;
+                    _playerText.UIText.Opacity = 1;
+                    Thread.Sleep( (int) (Item.Time * 1000) );
+                    _playerText.UIText.Opacity = 0;
                     Callback();
                 });
             }
@@ -219,28 +207,17 @@ namespace Hedra.Engine.Player
 
         private void ProcessWhileMessage(MessageItem Item, Action Callback)
         {
-            _playerText.FontColor = Item.Color;
+            _playerText.TextColor = Item.Color;
             _playerText.Text = Item.Content;
-            _playerText.UiText.Opacity = 0;
 
             if (Player.UI.GamePanel.Enabled)
             {
                 TaskManager.Asynchronous(delegate
                 {
-                    _playerText.UiText.Opacity = 0.0001f;
-                    var factor = MessageSpeed;
-                    while (_playerText.UiText.Opacity > 0)
-                    {
-                        if (_playerText.UiText.Opacity >= 1f)
-                        {
-                            while (Item.Condition()) { }
-                            factor = -factor;
-                        }
-                        _playerText.UiText.Opacity += factor;
-                        _playerText.UiText.Opacity = Mathf.Clamp(_playerText.UiText.Opacity, 0, 1);
-                        Thread.Sleep((int)((factor < 0 ? -factor : factor) * 1000));
-                    }
-                    _playerText.UiText.Opacity = 0;
+                    _playerText.UIText.Opacity = 1;
+                    while (Item.Condition()) { Thread.Sleep(5); }
+                    Thread.Sleep((int)(Item.Time * 1000));           
+                    _playerText.UIText.Opacity = 0;
                     Callback();
                 });
             }
@@ -272,27 +249,27 @@ namespace Hedra.Engine.Player
 
         private void ProcessNotificationMessage(MessageItem Item, Action Callback)
         {
-            _notificationText.FontColor = Item.Color;
+            _notificationText.TextColor = Item.Color;
             _notificationText.Text = Item.Content;
             if (Item.PlaySound)
                 Sound.SoundManager.PlaySound(Sound.SoundType.OnOff, Player.Position, false, 1f, 1.05f);
 
             TaskManager.Asynchronous(delegate
             {
-                _notificationText.UiText.Opacity = 0.0001f;
+                _notificationText.UIText.Opacity = 0.0001f;
                 var factor = MessageSpeed;
-                while (_notificationText.UiText.Opacity > 0)
+                while (_notificationText.UIText.Opacity > 0)
                 {
-                    if (_notificationText.UiText.Opacity >= 1f)
+                    if (_notificationText.UIText.Opacity >= 1f)
                     {
                         Thread.Sleep((int)(Item.Time * 1000));
                         factor = -factor;
                     }
-                    _notificationText.UiText.Opacity += factor;
-                    _notificationText.UiText.Opacity = Mathf.Clamp(_notificationText.UiText.Opacity, 0, 1);
+                    _notificationText.UIText.Opacity += factor;
+                    _notificationText.UIText.Opacity = Mathf.Clamp(_notificationText.UIText.Opacity, 0, 1);
                     Thread.Sleep((int)((factor < 0 ? -factor : factor) * 400));
                 }
-                _notificationText.UiText.Opacity = 0;
+                _notificationText.UIText.Opacity = 0;
                 Callback();
             });         
         }

@@ -19,54 +19,54 @@ namespace Hedra.Engine.Rendering.UI
 	/// </summary>
 	public class RenderableText : IRenderable, IDisposable, UIElement
 	{
-		public GUIText UiText;
+		public GUIText UIText;
 
-		public RenderableText(string Text, Vector2 Position, Color FontColor, Font F){
-			this.UiText = new GUIText(Text, Position, FontColor, F);
-			DrawManager.UIRenderer.Remove(this.UiText.UiText);
+		public RenderableText(string Text, Vector2 Position, Color FontColor, Font FontType){
+			this.UIText = new GUIText(Text, Position, FontColor, FontType);
+			DrawManager.UIRenderer.Remove(this.UIText.UIText);
 		}
-		
-		public void Draw(){
-			DrawManager.UIRenderer.Draw(UiText.UiText);
+
+        public void Draw(){
+			DrawManager.UIRenderer.Draw(UIText.UIText);
 		}
 		
 		public string Text{
-			get{ return UiText.Text;}
+			get{ return UIText.Text;}
 			set{
-				UiText.Text = value;
-				DrawManager.UIRenderer.Remove(this.UiText.UiText);
+				UIText.Text = value;
+				DrawManager.UIRenderer.Remove(this.UIText.UIText);
 			}
 		}
 		
 		public Vector2 Scale{
-			get{ return UiText.Scale;}
+			get{ return UIText.Scale;}
 			set{
-				UiText.Scale = value;
+				UIText.Scale = value;
 			}
 		}
 		
 		public Vector2 Position{
-			get{ return UiText.Position;}
+			get{ return UIText.Position;}
 			set{
-				UiText.Position = value;
+				UIText.Position = value;
 			}
 		}
 		
-		public Vector4 Color{
-			get{ return UiText.Color; }
-			set{ UiText.Color = value;}
+		public Color Color{
+			get{ return UIText.TextColor; }
+			set{ UIText.TextColor = value;}
 		}
 		
 		public void Enable(){
-			UiText.Enable();
+			UIText.Enable();
 		}
 		
 		public void Disable(){
-			UiText.Disable();
+			UIText.Disable();
 		}
 		
 		public void Dispose(){
-			UiText.Dispose();
+			UIText.Dispose();
 			DrawManager.UIRenderer.Remove(this);
 		}
 	}

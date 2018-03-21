@@ -131,13 +131,13 @@ namespace Hedra.Engine.Scenes
 	        LPlayer.Inventory.ClearInventory();
 			LPlayer.Inventory.SetItems(Information.Items);
 	        if (Information.ClassType == Class.Warrior)
-	            LPlayer.Inventory.AddWeaponRestriction(WeaponType.Sword);
+	            LPlayer.Inventory.AddWeaponRestriction(EquipmentType.Sword);
 
 	        else if (Information.ClassType == Class.Archer)
-	            LPlayer.Inventory.AddWeaponRestriction(WeaponType.Bow);
+	            LPlayer.Inventory.AddWeaponRestriction(EquipmentType.Bow);
 
 	        else if (Information.ClassType == Class.Rogue)
-	            LPlayer.Inventory.AddWeaponRestriction(WeaponType.DoubleBlades);
+	            LPlayer.Inventory.AddWeaponRestriction(EquipmentType.DoubleBlades);
             GameSettings.DarkEffect = false;
 
             if (LPlayer.Health == 0) LPlayer.Respawn();
@@ -189,7 +189,7 @@ namespace Hedra.Engine.Scenes
 			var text = "LOADING";
 
 		    _loadingScreen.TextureElement.Opacity = 1;
-		    _playerText.UiText.Opacity = 1;
+		    _playerText.UIText.Opacity = 1;
 		    _playerText.Enable();
 		    _loadingScreen.Enable();
 		    UpdateManager.CursorShown = true;
@@ -225,7 +225,7 @@ namespace Hedra.Engine.Scenes
 					LPlayer.CanInteract = true;
 					IsLoading = false;
 					_loadingScreen.TextureElement.Opacity = 0;
-				    _playerText.UiText.Opacity = 0;
+				    _playerText.UIText.Opacity = 0;
 					if(_isNewRun)
 						LPlayer.QuestLog.Show = true;
 

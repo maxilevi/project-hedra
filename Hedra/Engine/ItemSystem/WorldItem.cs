@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System.Runtime.Remoting.Messaging;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -46,7 +47,7 @@ namespace Hedra.Engine.ItemSystem
                 LocalPlayer.Instance.View.LookAtPoint.NormalizedFast());
 
 			if( dot > .5f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 12f*12f){
-			    LocalPlayer.Instance.MessageDispatcher.ShowMessage("[E] TO PICK UP", .5f);
+			    LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile("[E] TO PICK UP", () => dot > .5f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 12f * 12f);
 				Mesh.Tint = new Vector4(1.5f,1.5f,1.5f,1);
 				if(LocalPlayer.Instance.Inventory.HasAvailableSpace && Events.EventDispatcher.LastKeyDown == OpenTK.Input.Key.E && !Disposed)
 				{

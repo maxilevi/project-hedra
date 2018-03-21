@@ -7,14 +7,14 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using OpenTK.Input;
-using System.Drawing;
 using Hedra.Engine.Player;
 using System.Collections.Generic;
+using System.Drawing;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player.Inventory;
+using OpenTK.Input;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -24,25 +24,25 @@ namespace Hedra.Engine.EntitySystem
 	public class MerchantComponent : EntityComponent
 	{
 		public int TradeRadius = 12;
-		public Dictionary<int, Item> Items;
+		public Dictionary<int, Item> Items { get; }
 
 		public MerchantComponent(Entity Parent, bool TravellingMerchant) : base(Parent){
 			var rng = new Random(World.Seed + 82823 + Utils.Rng.Next(-9999999, 9999999));
 
 		    var items = new []
 		    {
-		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, WeaponType.Axe)),
-		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, WeaponType.Sword)),
-		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, WeaponType.Hammer)),
-		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, WeaponType.Claw)),
-		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, WeaponType.Katar)),
-		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, WeaponType.DoubleBlades)),
-		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, WeaponType.Bow)),
-		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, WeaponType.Knife))
+		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Axe)),
+		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Sword)),
+		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Hammer)),
+		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Claw)),
+		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Katar)),
+		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.DoubleBlades)),
+		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Bow)),
+		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Knife))
 		    };
 		    Items = new Dictionary<int, Item>
 		    {
-                {TradeSystem.MaxItems - 1, ItemPool.Grab(ItemType.Berry)}
+                {TradeInventory.MerchantSpaces - 1, ItemPool.Grab(ItemType.Berry)}
 		    };
 		    for (var i = 0; i < 4; i++)
 		    {
@@ -57,22 +57,24 @@ namespace Hedra.Engine.EntitySystem
 		}
 		 
 		public override void Update(){
-			LocalPlayer Player = LocalPlayer.Instance;
+			var player = LocalPlayer.Instance;
 			
 			if( (LocalPlayer.Instance.Position - this.Parent.Position).Xz.LengthSquared < 24*24){
         		Parent.Orientation = (LocalPlayer.Instance.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
 	            Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
         	}
-			/*
-			if( Player.CanInteract && !Player.IsDead && !GameSettings.Paused && !Player.Trade.Show && !Player.Inventory.Show && !Player.SkillSystem.Show && (Player.Position - Parent.Position).LengthSquared < TradeRadius*TradeRadius){
-			    Player.MessageDispatcher.ShowMessageWhile("[E] TO TRADE", Color.White,
-				    () => (Player.Position - Parent.Position).LengthSquared < TradeRadius * TradeRadius && !Player.Trade.Show);
-				
-				if(Events.EventDispatcher.LastKeyDown == Key.E){
-					Player.Trade.Show = true;
-					Player.Trade.SetMerchantItems(this.Items);
-				}
-			}*/
+
+		    var canTrade = player.CanInteract && !player.IsDead && !GameSettings.Paused &&
+		                   !player.Inventory.Show && !player.SkillSystem.Show;
+		    Func<bool> inRadiusFunc = () => (player.Position - Parent.Position).LengthSquared < TradeRadius * TradeRadius &&
+		                       !player.Trade.IsTrading;
+
+            var inRadius = inRadiusFunc();
+
+		    if (!canTrade || !inRadius) return;
+
+		    player.MessageDispatcher.ShowMessageWhile("[E] TO TRADE", Color.White, inRadiusFunc);				
+		    if(Events.EventDispatcher.LastKeyDown == Key.E) player.Trade.Trade(this.Parent);
 		}
 	}
 }

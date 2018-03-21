@@ -11,10 +11,12 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryItemRenderer
     {
+        public const float ZOffsetFactor = 1.15f;
         private readonly InventoryArray _array;
         private readonly int _length;
         private readonly int _offset;
         private readonly EntityMesh[] _models;
+        private readonly float[] _modelsHeights;
         private float _itemRotation;
         private float _itemCount;
 
@@ -24,6 +26,7 @@ namespace Hedra.Engine.Player.Inventory
             this._length = Length;
             this._offset = Offset;
             this._models = new EntityMesh[_length];
+            this._modelsHeights = new float[_length];
         }
 
         public void UpdateView()
@@ -37,7 +40,9 @@ namespace Hedra.Engine.Player.Inventory
                 }
                 if (_array[i+ _offset] != null)
                 {
-                    _models[i] = EntityMesh.FromVertexData(_array[i + _offset].Model);
+                    var model = _array[i + _offset].Model;
+                    _modelsHeights[i] = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
+                    _models[i] = EntityMesh.FromVertexData(model);
                     _models[i].UseFog = false;
                     DrawManager.Remove(_models[i]);
                     itemCount++;
@@ -48,14 +53,15 @@ namespace Hedra.Engine.Player.Inventory
 
         public uint Draw(int Id)
         {
-            return Draw(_models[Id], _array[Id + _offset]);
+            return Draw(_models[Id], _array[Id + _offset], true, _modelsHeights[Id] * InventoryItemRenderer.ZOffsetFactor);
         }
 
-        public uint Draw(EntityMesh Mesh, Item Item)
+        public uint Draw(EntityMesh Mesh, Item Item, bool TiltIfWeapon = true, float ZOffset = 3.0f)
         {
+            ZOffset = Math.Max(ZOffset, 3.0f);
             if (Mesh == null || Item == null) return GUIRenderer.TransparentTexture;
 
-            Mesh.AnimationRotation = new Vector3(0, _itemRotation, Item.WeaponType != null ? 45 : 0);
+            Mesh.AnimationRotation = new Vector3(0, _itemRotation, TiltIfWeapon && Item.EquipmentType != null ? 45 : 0);
             _itemRotation += 25 * (float)Time.deltaTime / Math.Max(1,_itemCount);
 
             GraphicsLayer.PushShader();
@@ -66,10 +72,10 @@ namespace Hedra.Engine.Player.Inventory
             GraphicsLayer.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projectionMatrix);
 
-            var offset = Item.WeaponType != null
+            var offset = Item.EquipmentType != null
                 ? Vector3.UnitY * 0.4f - Vector3.UnitX * 0.4f
                 : Vector3.UnitY * 0.25f;
-            var lookAt = Matrix4.LookAt(Vector3.UnitZ * 3.0f, offset, Vector3.UnitY);
+            var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset, offset, Vector3.UnitY);
             GraphicsLayer.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookAt);
 

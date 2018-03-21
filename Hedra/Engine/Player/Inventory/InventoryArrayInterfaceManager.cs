@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
@@ -13,6 +14,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryArrayInterfaceManager
     {
+        private readonly InventoryInterfaceItemInfo _itemInfoInterface;
         private readonly InventoryArrayInterface[] _interfaces;
         private readonly Button _cancelButton;
         private EntityMesh _selectedMesh;
@@ -34,10 +36,14 @@ namespace Hedra.Engine.Player.Inventory
                     var k = j;
                     buttons[j].Click += (Sender, EventArgs) => this.Interact(buttons[k], EventArgs);
                     buttons[j].Click += (Sender, EventArgs) => this.Use(buttons[k], EventArgs);
-                    buttons[j].HoverEnter += this.HoverEnter;
-                    buttons[j].HoverExit += this.HoverExit;
+                    buttons[j].HoverEnter += (Sender, EventArgs) => this.HoverEnter(buttons[k], EventArgs);
+                    buttons[j].HoverExit += (Sender, EventArgs) => this.HoverExit(buttons[k], EventArgs);
                 }
             }
+            _itemInfoInterface = new InventoryInterfaceItemInfo(_interfaces.First().Renderer)
+            {
+                Position = Vector2.UnitX * .6f + Vector2.UnitY * .1f
+            };
             EventDispatcher.RegisterMouseMove(this, this.MouseMove);
             EventDispatcher.RegisterMouseDown(this, this.MouseClick);
         }
@@ -57,9 +63,9 @@ namespace Hedra.Engine.Player.Inventory
 
         private void MouseMove(object Sender, MouseMoveEventArgs EventArgs)
         {
+            var newCoords = Mathf.ToNormalizedDeviceCoordinates(EventArgs.Mouse.X, Constants.HEIGHT - EventArgs.Mouse.Y);
             if (_selectedButton != null)
             {
-                var newCoords = Mathf.ToNormalizedDeviceCoordinates(EventArgs.Mouse.X, Constants.HEIGHT - EventArgs.Mouse.Y);
                 _selectedButton.Position = newCoords;
             }
         }
@@ -85,13 +91,14 @@ namespace Hedra.Engine.Player.Inventory
                 _selectedMesh.UseFog = false;
                 _selectedButton.Texture.IdPointer = () => renderer.Draw(_selectedMesh, item);
                 _cancelButton.Clickable = false;
+                this.UpdateView();
                 TaskManager.Delay(10, () => _cancelButton.Clickable = true);
                 SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick);
             }
             else if (_selectedButton != null)
             {
-                var newIndex = IndexByButton(_selectedButton);
-                var newArray = ArrayByButton(_selectedButton);
+                var newIndex = this.IndexByButton(_selectedButton);
+                var newArray = this.ArrayByButton(_selectedButton);
                 if(!array.CanSetItem(itemIndex, _selectedItem)) return;
 
                 array[itemIndex] = _selectedItem;
@@ -144,7 +151,7 @@ namespace Hedra.Engine.Player.Inventory
                         var restrictions = newArray.GetRestrictions(j);
                         for (var k = 0; k < restrictions.Length; k++)
                         {
-                            if (restrictions[k] != Item.WeaponType) continue;
+                            if (restrictions[k] != Item.EquipmentType) continue;
                             newArray[j] = Item;
                             return;
                         }
@@ -163,10 +170,15 @@ namespace Hedra.Engine.Player.Inventory
 
         private InventoryArray ArrayByButton(Button Sender)
         {
+            return this.InterfaceByButton(Sender).Array;
+        }
+
+        private InventoryArrayInterface InterfaceByButton(Button Sender)
+        {
             for (var i = 0; i < _interfaces.Length; i++)
             {
                 var result = Array.IndexOf(_interfaces[i].Buttons, Sender);
-                if (result != -1) return _interfaces[i].Array;
+                if (result != -1) return _interfaces[i];
             }
             return null;
         }
@@ -183,22 +195,12 @@ namespace Hedra.Engine.Player.Inventory
 
         private int OffsetByButton(Button Sender)
         {
-            for (var i = 0; i < _interfaces.Length; i++)
-            {
-                var result = Array.IndexOf(_interfaces[i].Buttons, Sender);
-                if (result != -1) return _interfaces[i].Offset;
-            }
-            throw new ArgumentException($"Button not found in button list.");
+            return this.InterfaceByButton(Sender).Offset;
         }
 
         private InventoryItemRenderer RendererByButton(Button Sender)
         {
-            for (var i = 0; i < _interfaces.Length; i++)
-            {
-                var result = Array.IndexOf(_interfaces[i].Buttons, Sender);
-                if (result != -1) return _interfaces[i].Renderer;
-            }
-            return null;
+            return this.InterfaceByButton(Sender).Renderer;
         }
 
         private void Cancel()
@@ -226,12 +228,17 @@ namespace Hedra.Engine.Player.Inventory
 
         private void HoverEnter(object Sender, MouseEventArgs EventArgs)
         {
+            var button = (Button)Sender;
+            var itemIndex = this.IndexByButton(button);
+            var array = this.ArrayByButton(button);
+            var item = array[itemIndex];
 
+            _itemInfoInterface.Show(item);
         }
 
         private void HoverExit(object Sender, MouseEventArgs EventArgs)
         {
-
+            _itemInfoInterface.Hide();
         }
 
         public bool Enabled
@@ -240,7 +247,8 @@ namespace Hedra.Engine.Player.Inventory
             set
             {
                 _enabled = value;
-                if(_enabled)
+                _itemInfoInterface.Enabled = value;
+                if (_enabled)
                     _cancelButton.Enable();
                 else
                     _cancelButton.Disable();

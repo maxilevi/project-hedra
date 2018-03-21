@@ -95,14 +95,14 @@ namespace Hedra.Engine.Rendering.UI
 			};
 			#endregion
 			
-			_name = new GUIText("", new Vector2(0, .55f), Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 16, FontStyle.Bold));
-			_level = new GUIText("", new Vector2(0, .425f), Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 14));
+			_name = new GUIText("", new Vector2(0, .55f), Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 24, FontStyle.Bold));
+			_level = new GUIText("", new Vector2(0, .425f), Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 16));
 			
 			this._dataElements.Add(_name);
 			this._dataElements.Add(_level);
 			this._dataElements.Add(playBtn);
 			this._dataElements.Add(deleteButton);
-			for(int i = 0; i < _dataElements.Count; i++){
+			for(var i = 0; i < _dataElements.Count; i++){
 				this.AddElement(_dataElements[i]);
 			}
 			this.AddElement(playBtn);
@@ -222,7 +222,7 @@ namespace Hedra.Engine.Rendering.UI
 						_previousHuman = _selectedHuman;
 						_selectedHuman = _humans[i];
 						_name.Text = _selectedHuman.Name;
-						_level.Text = Utils.FirstCharToUpper(_selectedHuman.ClassType.ToString().ToLowerInvariant()) +" Level "+_selectedHuman.Level;
+						_level.Text = $"{Utils.FirstCharToUpper(_selectedHuman.ClassType.ToString().ToLowerInvariant())} Level {_selectedHuman.Level}";
 						break;
 					}
 				}

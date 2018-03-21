@@ -1,16 +1,12 @@
 ﻿{
   "Name": "CommonBronzeAxe",
   "DisplayName": "Bronze Axe",
-  "WeaponType": "Axe", 
+  "EquipmentType": "Axe", 
   "Tier": "Common",
   "Description": "Bronze axe.",
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 8.0
-    },
-    {
-      "Name": "AttackPower",
       "Value": 8.0
     },
     {

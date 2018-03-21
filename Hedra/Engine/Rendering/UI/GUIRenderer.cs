@@ -121,12 +121,19 @@ namespace Hedra.Engine.Rendering.UI
 
             SetDraw();
 
-            GUITexture[] texturesArray = _textures.ToArray();
-            foreach (GUITexture texture in texturesArray)
+            try
             {
-                if (texture == null || !texture.IsEnabled) continue;
-                DrawCount++;
-                this.BaseDraw(texture);
+                GUITexture[] texturesArray = _textures.ToArray();
+                foreach (GUITexture texture in texturesArray)
+                {
+                    if (texture == null || !texture.IsEnabled) continue;
+                    DrawCount++;
+                    this.BaseDraw(texture);
+                }
+            }
+            catch (ArgumentException e)
+            {
+                Log.WriteLine(e);
             }
             UnsetDrawing();
 

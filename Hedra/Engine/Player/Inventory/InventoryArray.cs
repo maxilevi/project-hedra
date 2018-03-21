@@ -25,13 +25,13 @@ namespace Hedra.Engine.Player.Inventory
         public bool CanSetItem(int Index, Item Item)
         {
             return Item == null || _restrictions[Index] != null 
-                && (_restrictions[Index].Length == 0 || _restrictions[Index].Contains(Item.WeaponType));
+                && (_restrictions[Index].Length == 0 || _restrictions[Index].Contains(Item.EquipmentType));
         }
 
         public void SetItem(int Index, Item Item)
         {
             if(!this.CanSetItem(Index, Item))
-                throw new ArgumentException($" Putting {Item.WeaponType} in {_restrictions[Index].FirstOrDefault()} is not permitted.");
+                throw new ArgumentException($" Putting {Item.EquipmentType} in {_restrictions[Index].FirstOrDefault()} is not permitted.");
             _items[Index] = Item;
             OnItemSet?.Invoke(Index, Item);
         }
@@ -64,7 +64,7 @@ namespace Hedra.Engine.Player.Inventory
             _restrictions[Index] = Restrictions;
         }
 
-        public void SetRestrictions(int Index, params WeaponType[] Restrictions)
+        public void SetRestrictions(int Index, params EquipmentType[] Restrictions)
         {
             this.SetRestrictions(Index, Restrictions.ToList().Select(Type => Type.ToString()).ToArray());
         }

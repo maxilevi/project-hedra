@@ -41,7 +41,7 @@ namespace Hedra.Engine.Rendering
 			this.Texture = new GUIText(Text, Vector2.Zero, TextColor, TextFont);
 			this.Texture.Enable();
 			this.OriginalScale = this.Texture.Scale;
-			DrawManager.UIRenderer.Remove( (this.Texture as GUIText).UiText);
+			DrawManager.UIRenderer.Remove( (this.Texture as GUIText).UIText);
 			
 			DrawManager.Add(this);
 		}
@@ -67,7 +67,7 @@ namespace Hedra.Engine.Rendering
 			
 			if(Vanish){
 				AddedPosition += Vector3.UnitY * Time.FrameTimeSeconds * Speed;
-				(this.Texture as GUIText).UiText.Opacity = 1-(Life / LifeTime);
+				(this.Texture as GUIText).UIText.Opacity = 1-(Life / LifeTime);
 			}
 			Life += Time.FrameTimeSeconds;
 			
@@ -87,7 +87,7 @@ namespace Hedra.Engine.Rendering
 			this.Texture.Scale = this.OriginalScale * Size;
 			
 			if(TextBillboard)
-				DrawManager.UIRenderer.Draw((this.Texture as GUIText).UiText);
+				DrawManager.UIRenderer.Draw((this.Texture as GUIText).UIText);
 			else
 				DrawManager.UIRenderer.Draw((this.Texture as Texture).TextureElement);
 		}

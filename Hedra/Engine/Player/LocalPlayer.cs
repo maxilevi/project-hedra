@@ -21,6 +21,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.StructureSystem;
 using OpenTK.Input;
 
@@ -42,7 +43,7 @@ namespace Hedra.Engine.Player
 		public Chat Chat;
 		public Minimap Minimap;
 		public Map Map;
-		public TradeSystem Trade;
+		public TradeInventory Trade;
 		public GliderModel Glider;
 	    public VisualMessageDispatcher MessageDispatcher;
         public ICollidable[] NearCollisions { get; private set; }
@@ -55,9 +56,13 @@ namespace Hedra.Engine.Player
 	    private bool _shouldUpdateTime;
 	    private int _emitted;
 	    private float _health;
-	    private bool _wasSleeping;	    
+	    private bool _wasSleeping;
+	    private bool _enabled;
+	    private float _oldCementeryTime;
+	    private float _oldSpeed;
+	    private float _oldTime;
 
-	    public LocalPlayer(){
+        public LocalPlayer(){
 			this.UI = new UserInterface(this);
 			this.View = new Camera(this);
 			this.Loader = new ChunkLoader(this);
@@ -72,7 +77,7 @@ namespace Hedra.Engine.Player
 			this.Chat = new Chat(this);
 			this.Minimap = new Minimap(this);
 			this.Map = new Map(this);
-			this.Trade = new TradeSystem(this);
+			this.Trade = new TradeInventory(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
 
             this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
@@ -461,9 +466,9 @@ namespace Hedra.Engine.Player
 			Trade.Update();
             View.Update();
         }
-		
-		public override Item MainWeapon => Inventory.MainWeapon;
 
+	    public override int Gold => Inventory.Gold.GetAttribute<int>(CommonAttributes.Amount);
+		public override Item MainWeapon => Inventory.MainWeapon;
 	    public override Item Ring => Inventory.Ring;
 
 	    public void EatFood(){
@@ -502,8 +507,7 @@ namespace Hedra.Engine.Player
 		
 		public void ManageSounds(){
 
-		}
-		
+		}	
 		
 		public override float Health{
 			get{ return _health; }
@@ -528,8 +532,7 @@ namespace Hedra.Engine.Player
 				}
 			}
 		}
-		
-		private bool _enabled;
+
 		public bool Enabled{
 			get{ return _enabled; }
 			set{
@@ -540,9 +543,6 @@ namespace Hedra.Engine.Player
 		
 		public static LocalPlayer Instance => SceneManager.Game.LPlayer;
 
-	    private float _oldCementeryTime;
-	    private float _oldSpeed;
-	    private float _oldTime;
         public void UnLoad(){
 			if(_inCementery){
 				_oldCementeryTime = SkyManager.DayTime;
@@ -626,13 +626,13 @@ namespace Hedra.Engine.Player
 			switch (ClassType)
 			{
 			    case Class.Warrior:
-			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, WeaponType.Sword));
+			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, EquipmentType.Sword));
 			        break;
 			    case Class.Archer:
-			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, WeaponType.Bow));
+			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, EquipmentType.Bow));
                     break;
 			    case Class.Rogue:
-			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, WeaponType.DoubleBlades));
+			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, EquipmentType.DoubleBlades));
                     break;
 			}
 			data.AddItem(PlayerInventory.WeaponHolder, item);

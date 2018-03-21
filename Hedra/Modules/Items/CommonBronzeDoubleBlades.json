@@ -1,16 +1,12 @@
 ﻿{
   "Name": "CommonBronzeDoubleBlades",
   "DisplayName": "Bronze Double Blades",
-  "WeaponType": "DoubleBlades", 
+  "EquipmentType": "DoubleBlades", 
   "Tier": "Common",
   "Description": "Bronze double blades.",
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 8.0
-    },
-    {
-      "Name": "AttackPower",
       "Value": 8.0
     },
     {

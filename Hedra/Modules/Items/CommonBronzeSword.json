@@ -1,16 +1,12 @@
 ﻿{
   "Name": "CommonBronzeSword",
   "DisplayName": "Bronze Sword",
-  "WeaponType": "Sword", 
+  "EquipmentType": "Sword", 
   "Tier": "Common",
   "Description": "Bronze sword.",
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 8.0
-    },
-    {
-      "Name": "AttackPower",
       "Value": 8.0
     },
     {

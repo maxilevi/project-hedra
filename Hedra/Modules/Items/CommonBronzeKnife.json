@@ -1,16 +1,12 @@
 ﻿{
   "Name": "CommonBronzeKnife",
   "DisplayName": "Bronze Knife",
-  "WeaponType": "Knife", 
+  "EquipmentType": "Knife", 
   "Tier": "Common",
   "Description": "Bronze knife.",
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 8.0
-    },
-    {
-      "Name": "AttackPower",
       "Value": 8.0
     },
     {

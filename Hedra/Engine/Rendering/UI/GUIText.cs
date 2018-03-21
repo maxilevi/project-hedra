@@ -8,8 +8,8 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.UI
@@ -19,150 +19,150 @@ namespace Hedra.Engine.Rendering.UI
     /// </summary>
     public class GUIText : UIElement, IDisposable
     {
-        public GUITexture UiText;
-        public SizeF Size { get; private set; }
-        public Color FontColor;
-        public Font TextFont;
-        private Vector2 _temporalPosition;
-        private Vector2 _temporalScale;
-        public AlignMode Align = AlignMode.Center;
         public static Vector2 DefaultSize = new Vector2(Constants.WIDTH, Constants.HEIGHT);
+        public GUITexture UIText { get; private set; }
+        public TextConfiguration Configuration { get; set; }
+        public SizeF Size { get; private set; }
+        public AlignMode Align = AlignMode.Center;
+        private Vector2 _temporalPosition;
+        private string _text;
 
-        public GUIText(string Text, Vector2 Position, Color FontColor, System.Drawing.Font TextFont)
+        public GUIText(string Text, Vector2 Position, Color TextColor, Font TextFont)
         {
             this._text = Text;
-            this.TextFont = TextFont;
-            this.FontColor = FontColor;
             this._temporalPosition = Position;
-            this._temporalScale = Scale;
+            this.Configuration = new TextConfiguration(TextColor, TextFont);
             this.MakeText();
         }
 
         public void MakeText()
         {
-            var textBitmap = new Bitmap(1, 1);
-            var brush = new SolidBrush(FontColor);
-            using (Graphics graphics = Graphics.FromImage(textBitmap))
+            this.CalculateTextSize(_text);
+            var textBitmap = new Bitmap((int)Math.Ceiling(Math.Max(Size.Width, 1)), (int)Math.Ceiling(Math.Max(Size.Height,1)));
+            using (var graphics = Graphics.FromImage(textBitmap))
             {
-                Size = graphics.MeasureString(Text, TextFont);
-                if (Size.Width != 0 && Size.Height != 0)
-                    textBitmap = new Bitmap(textBitmap, (int) Math.Ceiling(Size.Width),
-                        (int) Math.Ceiling(Size.Height));
-            }
-
-
-            using (Graphics graphics = Graphics.FromImage(textBitmap))
-            {
-                StringFormat sf = new StringFormat();
                 graphics.ScaleTransform(1.3f, 1.3f);
-                using (GraphicsPath gp = new GraphicsPath())
+                #region Draw Shadows
+                using (var gp = new GraphicsPath())
                 {
-                    using (Brush ShadowBrush = new SolidBrush(System.Drawing.Color.FromArgb(80, 0, 0, 0)))
+                    using (Brush shadowBrush = new SolidBrush(System.Drawing.Color.FromArgb(80, 0, 0, 0)))
                     {
                         graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+                        graphics.SmoothingMode = SmoothingMode.HighQuality;
                         graphics.Clear(System.Drawing.Color.FromArgb(0, 0, 0, 0));
                         gp.AddString(Text, TextFont.FontFamily, (int) TextFont.Style, TextFont.Size,
-                            new RectangleF(PointF.Empty, Size), sf);
-                        graphics.SmoothingMode = SmoothingMode.HighQuality;
-                        Matrix ShadowOffset = new Matrix();
-                        ShadowOffset.Translate(1, 1);
-                        gp.Transform(ShadowOffset);
-                        graphics.FillPath(ShadowBrush, gp);
+                            Point.Empty, StringFormat.GenericTypographic);
+                        var shadowOffset = new Matrix();
+                        shadowOffset.Translate(1, 1);
+                        gp.Transform(shadowOffset);
+
+                        graphics.FillPath(shadowBrush, gp);
                     }
                 }
+                #endregion
 
-                var outlinePen = new Pen(System.Drawing.Color.FromArgb(255, 39, 39, 39), 2.00f);
-
-                using (GraphicsPath gp = new GraphicsPath())
+                using(var brush = new SolidBrush(TextColor))
+                using (var gp = new GraphicsPath())
                 {
                     graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-                    gp.AddString(Text, TextFont.FontFamily, (int) TextFont.Style, TextFont.Size,
-                        new RectangleF(PointF.Empty, Size), sf);
                     graphics.SmoothingMode = SmoothingMode.HighQuality;
-
+                    gp.AddString(Text, TextFont.FontFamily, (int)TextFont.Style, TextFont.Size,
+                        Point.Empty, StringFormat.GenericTypographic);
                     graphics.FillPath(brush, gp);
                 }
-
-                outlinePen.Dispose();
-                sf.Dispose();
             }
+            
+            var previousState = UIText?.IsEnabled ?? false;
+            DrawManager.UIRenderer.Remove(UIText);
+            UIText?.Dispose();
 
-            var previousState = UiText?.IsEnabled ?? false;
-            uint newId;
-            newId = Graphics2D.LoadTexture(textBitmap);
-            //else newId = Graphics2D.LoadTexture( Graphics2D.ReColorMask(FontColor, textBitmap) );
-            GUITexture uiText2 = new GUITexture(newId,
+            UIText = new GUITexture(Graphics2D.LoadTexture(textBitmap),
                 new Vector2(Size.Width / DefaultSize.X, Size.Height / DefaultSize.Y), _temporalPosition);
-            uiText2.IsEnabled = true;
-            DrawManager.UIRenderer.Add(uiText2);
-            DrawManager.UIRenderer.Remove(UiText);
-            UiText?.Dispose();
-            UiText = uiText2;
+            DrawManager.UIRenderer.Add(UIText);
+
             if (Align == AlignMode.Left)
             {
-                UiText.Position -= UiText.Scale;
+                UIText.Position -= UIText.Scale;
             }
-            UiText.IsEnabled = previousState;
-            textBitmap.Dispose();
-            brush.Dispose();
+            UIText.IsEnabled = previousState;
+        }
+
+        private void CalculateTextSize(string FullText)
+        {
+            using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                Size = graphics.MeasureString(FullText, TextFont);
+            }
         }
 
         public void Update()
         {
-            MakeText();
+            this.MakeText();
         }
 
-        private string _text;
+        public Color TextColor
+        {
+            get { return Configuration.Color; }
+            set { Configuration.Color = value; }
+        }
+
+        public Font TextFont
+        {
+            get { return Configuration.Font; }
+            set { Configuration.Font = value; }
+        }
 
         public string Text
         {
             get { return _text; }
             set
             {
-                if (value != _text && TextFont != null && _text != null)
-                {
-                    _text = value;
-                    MakeText();
-                }
+                if (value == _text || Configuration == null || _text == null) return;
+                _text = value;
+                this.MakeText();
             }
         }
 
         public Vector4 Color
         {
-            get { return this.UiText.Color; }
-            set { this.UiText.Color = value; }
+            get { return this.UIText.Color; }
+            set { this.UIText.Color = value; }
         }
 
         public Vector2 Scale
         {
             get
             {
-                if (UiText != null)
-                    return UiText.Scale;
+                if (UIText != null)
+                    return UIText.Scale;
                 else
                     return new Vector2(1, 1);
             }
             set
             {
-                if (UiText != null)
-                    UiText.Scale = value;
+                if (UIText != null)
+                    UIText.Scale = value;
             }
         }
 
         public Vector2 Position
         {
-            get { return UiText.Position; }
-            set { UiText.Position = value; }
+            get { return UIText.Position; }
+            set
+            {
+                UIText.Position = value;
+                _temporalPosition = value;
+            }
         }
 
         public void Enable()
         {
-            UiText.IsEnabled = true;
+            UIText.IsEnabled = true;
         }
 
         public void Disable()
         {
-            UiText.IsEnabled = false;
+            UIText.IsEnabled = false;
         }
 
         ~GUIText()
@@ -172,7 +172,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Dispose()
         {
-            DrawManager.UIRenderer.Remove(UiText);
+            DrawManager.UIRenderer.Remove(UIText);
         }
     }
 

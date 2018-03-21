@@ -34,7 +34,7 @@ namespace Hedra.Engine.Rendering.UI
 			this.Text = "";
 			_textBar.UpdateTextRatio = false;
 			ShowCaret = false;
-			_caret = new RenderableText("|", Position + Vector2.UnitY * .00275f, _textBar.Text.UiText.FontColor, _textBar.Text.UiText.TextFont);
+			_caret = new RenderableText("|", Position + Vector2.UnitY * .00275f, _textBar.Text.UIText.TextColor, _textBar.Text.UIText.TextFont);
 			DrawManager.UIRenderer.Add(_caret, DrawOrder.After);
 			InPanel.AddElement(_caret);
 			CoroutineManager.StartCoroutine(this.CaretUpdate);
@@ -87,7 +87,7 @@ namespace Hedra.Engine.Rendering.UI
 
 			if(InFocus && this._enabled){
 				
-				float textSize = Graphics2D.LineSize(Text, _textBar.Text.UiText.TextFont).X/Constants.WIDTH;
+				float textSize = Graphics2D.LineSize(Text, _textBar.Text.UIText.TextFont).X/Constants.WIDTH;
 				if(textSize > _textBar.Scale.X)
 					return;
 				
@@ -116,11 +116,11 @@ namespace Hedra.Engine.Rendering.UI
 		}
 		
 		public void UpdateCaret(){
-			_textBar.Text.UiText.Position = new Vector2(_textBar.Position.X - _textBar.Scale.X * .25f + _textBar.Text.UiText.Scale.X, _textBar.Text.UiText.Position.Y);
+			_textBar.Text.UIText.Position = new Vector2(_textBar.Position.X - _textBar.Scale.X * .25f + _textBar.Text.UIText.Scale.X, _textBar.Text.UIText.Position.Y);
 			if(ShowCaret){
 				_caretIndex = (int) Mathf.Clamp(_caretIndex,0, Text.Length-1 );
 				string beforeCaret = Text.Substring(0, (int)Mathf.Clamp(_caretIndex+1, 0, Text.Length));
-				float sizeX = Graphics2D.LineSize(beforeCaret, _textBar.Text.UiText.TextFont).X*Constants.WIDTH/Constants.WIDTH * 2f;
+				float sizeX = Graphics2D.LineSize(beforeCaret, _textBar.Text.UIText.TextFont).X*Constants.WIDTH/Constants.WIDTH * 2f;
 				_caret.Position = new Vector2(_textBar.Position.X - _textBar.Scale.X + sizeX - 0.0025f, _caret.Position.Y);
 			}
 		}

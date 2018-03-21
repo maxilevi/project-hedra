@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player.Inventory
             this.RegisterStateItem(() => UpdateManager.CursorShown, O => UpdateManager.CursorShown = (bool)O);
             this.RegisterStateItem(() => Player.Movement.Check, O => Player.Movement.Check = (bool)O);
             this.RegisterStateItem(() => Player.View.Check, O => Player.View.Check = (bool) O);
-            this.RegisterStateItem(() => GameSettings.DarkEffect, O => GameSettings.DarkEffect = (bool)O);
+            this.RegisterStateItem(() => Player.View.PositionDelegate, O => Player.View.PositionDelegate = (Func<Vector3>)O);
         }
 
         public new void ReleaseState()
@@ -65,8 +65,7 @@ namespace Hedra.Engine.Player.Inventory
                     _state = false;
                 }
                 yield return null;
-            }
-            
+            }       
         }
     }
 }

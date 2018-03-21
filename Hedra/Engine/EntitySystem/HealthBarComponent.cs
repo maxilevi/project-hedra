@@ -52,7 +52,7 @@ namespace Hedra.Engine.EntitySystem
                 HealthBarPanel);
 
             _name = Name;
-            _originalTextScale = _healthBar.Text.UiText.UiText.Scale;
+            _originalTextScale = _healthBar.Text.UIText.UIText.Scale;
             _healthBar.UpdateTextRatio = false;
 
             DrawManager.UIRenderer.Remove(_healthBar);
@@ -68,7 +68,7 @@ namespace Hedra.Engine.EntitySystem
                 HealthBarPanel);
 
             _healthBar.UpdateTextRatio = false;
-            _originalTextScale = _healthBar.Text.UiText.UiText.Scale;
+            _originalTextScale = _healthBar.Text.UIText.UIText.Scale;
 
             DrawManager.UIRenderer.Remove(_healthBar);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
@@ -102,7 +102,7 @@ namespace Hedra.Engine.EntitySystem
         public override void Draw()
         {
             _barSize = Mathf.Lerp(_barSize, _targetBarSize, (float) Time.deltaTime * 16f);
-            _healthBar.Text.UiText.UiText.Scale = _originalTextScale * _barSize * _textEnabled;
+            _healthBar.Text.UIText.UIText.Scale = _originalTextScale * _barSize * _textEnabled;
 
             if (_barSize <= 0.5f || Parent.IsDead || GameSettings.Paused || Hide || !_show || SceneManager.Game.IsLoading)
             {
@@ -134,8 +134,8 @@ namespace Hedra.Engine.EntitySystem
 
             if (!_textUpdated)
             {
-                _healthBar.Text.UiText.FontColor = FontColor;
-                _healthBar.Text.UiText.Update();
+                _healthBar.Text.UIText.TextColor = FontColor;
+                _healthBar.Text.UIText.Update();
                 _textUpdated = true;
             }
             _healthBar.CurvedBorders = true;

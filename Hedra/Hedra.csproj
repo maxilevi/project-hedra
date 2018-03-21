@@ -191,7 +191,7 @@
     <Compile Include="Engine\ItemSystem\ItemTemplater.cs" />
     <Compile Include="Engine\ItemSystem\ItemType.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\WeaponFactory.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponType.cs" />
+    <Compile Include="Engine\ItemSystem\EquipmentType.cs" />
     <Compile Include="Engine\Management\ISearchable.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
     <Compile Include="Engine\Management\TickSystem.cs" />
@@ -373,9 +373,9 @@
     <Compile Include="Engine\Player\Inventory\InventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryBackground.cs" />
+    <Compile Include="Engine\Player\Inventory\InventoryInterfaceItemInfo.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryItemRenderer.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryStateManager.cs" />
-    <Compile Include="Engine\Player\Inventory\PlayerInventoryInterface.cs" />
     <Compile Include="Engine\Player\Inventory\RestrictionsInterface.cs" />
     <Compile Include="Engine\Player\PlayerInventory.cs" />
     <Compile Include="Engine\Player\HandLamp.cs" />
@@ -439,7 +439,7 @@
     <Compile Include="Engine\Player\Skills\WaterTreeBlueprint.cs" />
     <Compile Include="Engine\Player\Skills\WarriorWeaponThrow.cs" />
     <Compile Include="Engine\Management\StateManager.cs" />
-    <Compile Include="Engine\Player\TradeSystem.cs" />
+    <Compile Include="Engine\Player\Inventory\TradeInventory.cs" />
     <Compile Include="Engine\Player\VisualMessageDispatcher.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Weapon.cs" />
     <Compile Include="Engine\Player\WeaponAttack.cs" />
@@ -494,6 +494,7 @@
     <Compile Include="Engine\Rendering\Cubemap.cs" />
     <Compile Include="Engine\Rendering\PoolSize.cs" />
     <Compile Include="Engine\Rendering\Texture3D.cs" />
+    <Compile Include="Engine\Rendering\UI\TextConfiguration.cs" />
     <Compile Include="Engine\Rendering\UI\TextureCommand.cs" />
     <Compile Include="Engine\StructureSystem\StructureGenerator.cs" />
     <Compile Include="Engine\QuestSystem\TravellingMerchant.cs" />
@@ -4079,6 +4080,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\UI\InventoryBackground.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\InventoryItemInfo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\UI\InventorySlot.png">

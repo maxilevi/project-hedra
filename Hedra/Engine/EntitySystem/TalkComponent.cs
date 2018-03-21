@@ -67,7 +67,7 @@ namespace Hedra.Engine.EntitySystem
 			var textSize = new GUIText(phrase, Vector2.Zero, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10));
 
 		    var backBoard = new Billboard(8f, Bar.BarBlueprint, Vector3.Zero,
-		        textSize.UiText.Scale + new Vector2(textSize.UiText.Scale.Y * .25f, textSize.UiText.Scale.Y * .25f))
+		        textSize.UIText.Scale + new Vector2(textSize.UIText.Scale.Y * .25f, textSize.UIText.Scale.Y * .25f))
 		    {
 		        FollowFunc = () => Parent.Position + Vector3.UnitY * 10f
 		    };

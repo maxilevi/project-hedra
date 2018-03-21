@@ -70,19 +70,10 @@ namespace Hedra
             }
             frameRate++;
         }
-        
-        private static Random m_Rng = new Random();
-        public static Random Rng{
-        	get{
-        		//lock(m_Rng){
-        			return m_Rng;
-        		//}
-        	}
-        	set{
-        		m_Rng = value;
-        	}
-        }
-        public static System.Drawing.Color VariateColor(System.Drawing.Color c, int Range){
+
+	    public static Random Rng { get; set; } = new Random();
+
+	    public static System.Drawing.Color VariateColor(System.Drawing.Color c, int Range){
         	int R = (int)(Range * (Rng.NextDouble() * 2 -1)) + c.R;
         	int G = (int)(Range * (Rng.NextDouble() * 2 -1)) + c.G;
         	int B = (int)(Range * (Rng.NextDouble() * 2 -1)) + c.B;
@@ -199,7 +190,7 @@ namespace Hedra
 			return new Vector4(R, G, B, c.W);
         }
         
-        public static string AddSpacesToSentence(string text, bool preserveAcronyms)
+        public static string AddSpacesToSentence(this string text, bool preserveAcronyms = false)
 		{
 		    if (string.IsNullOrWhiteSpace(text))
 		       return string.Empty;

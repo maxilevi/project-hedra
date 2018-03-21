@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player
 		{
 			if(base.Level == 0) return;
 			if(base.Level > 1) Player.SkillSystem.SetPoints(this.GetType(), 1);
-		    Player.Inventory.AddWeaponRestriction(WeaponType.DoubleBlades);
+		    Player.Inventory.AddWeaponRestriction(EquipmentType.DoubleBlades);
         }
 		
 		public override string Description {

@@ -87,7 +87,7 @@ namespace Hedra.Engine.Rendering.UI
 			
 			classChooser.RightArrow.Click += setWeapon;
 			classChooser.LeftArrow.Click += setWeapon;
-			classChooser.CurrentValue.FontColor = defaultColor;
+			classChooser.CurrentValue.TextColor = defaultColor;
 			classChooser.CurrentValue.Update(); 
 			
 			#region UI

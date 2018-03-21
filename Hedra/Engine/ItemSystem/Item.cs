@@ -10,7 +10,7 @@ namespace Hedra.Engine.ItemSystem
         public string DisplayName { get; set; }
         public string Description { get; set; }
         public ItemTier Tier { get; set; }
-        public string WeaponType { get; set; }
+        public string EquipmentType { get; set; }
         public ItemModelTemplate ModelTemplate { get; set; }
         private AttributeArray _attributes;
         private Weapon _weaponCache;
@@ -30,7 +30,7 @@ namespace Hedra.Engine.ItemSystem
                 Name = Template.Name,
                 Tier = Template.Tier,
                 Description = Template.Description,
-                WeaponType = Template.WeaponType,
+                EquipmentType = Template.EquipmentType,
                 ModelTemplate = Template.Model,
                 Model = ItemModelLoader.Load(Template.Model)
             };

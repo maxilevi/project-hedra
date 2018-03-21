@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player
 				m_Locked = value;
 				if(m_Button != null){
 					Button.Texture.Opacity = (m_Enabled) ? 1 : 0;
-					m_LevelText.UiText.UiText.Opacity = ( ((m_Enabled) ? true : false) && m_Level > 0) ? 1 : 0;
+					m_LevelText.UIText.UIText.Opacity = ( ((m_Enabled) ? true : false) && m_Level > 0) ? 1 : 0;
 					if(Texture != null)
 						Texture.TextureElement.Opacity = (m_Enabled && !Locked && m_Level > 0) ? 1 : 0;
 				}
@@ -41,7 +41,7 @@ namespace Hedra.Engine.Player
 				if(m_Button != null){
 					m_Button.Texture.Grayscale = !(m_Level > 0);
 					m_LevelText.Text = m_Level.ToString();
-					m_LevelText.UiText.UiText.Opacity = (m_Level > 0) ? 1 : 0;
+					m_LevelText.UIText.UIText.Opacity = (m_Level > 0) ? 1 : 0;
 					if(Texture != null)
 						Texture.TextureElement.Opacity = (m_Enabled && !Locked && Level > 0) ? 1 : 0;
 				}
@@ -60,7 +60,7 @@ namespace Hedra.Engine.Player
 					LevelText.Enable();
 				else
 					LevelText.Disable();
-				m_LevelText.UiText.UiText.Opacity = (m_Enabled) ? 1 : 0;
+				m_LevelText.UIText.UIText.Opacity = (m_Enabled) ? 1 : 0;
 			}
 		}
 		
