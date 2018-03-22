@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.ItemSystem;
 
@@ -22,6 +23,19 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
+        public bool AddItem(Item Item)
+        {
+            for (var i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] != null) continue;
+                if (!this.CanSetItem(i, Item)) continue;
+
+                this.SetItem(i, Item);
+                return true;
+            }
+            return false;
+        }
+
         public bool CanSetItem(int Index, Item Item)
         {
             return Item == null || _restrictions[Index] != null 
@@ -34,6 +48,14 @@ namespace Hedra.Engine.Player.Inventory
                 throw new ArgumentException($" Putting {Item.EquipmentType} in {_restrictions[Index].FirstOrDefault()} is not permitted.");
             _items[Index] = Item;
             OnItemSet?.Invoke(Index, Item);
+        }
+
+        public void SetItems(KeyValuePair<int, Item>[] Items)
+        {
+            for (var i = 0; i < Items.Length; i++)
+            {
+                this.SetItem(Items[i].Key, Items[i].Value);
+            }
         }
 
         public Item GetItem(int Index)
@@ -76,6 +98,16 @@ namespace Hedra.Engine.Player.Inventory
                 _restrictions[i] = new string[0];
                 _items[i] = null;
             }
+        }
+
+        public KeyValuePair<int, Item>[] ToArray()
+        {
+            var list = new List<KeyValuePair<int, Item>>();
+            for (var i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] != null) list.Add(new KeyValuePair<int, Item>(i, _items[i]));
+            }
+            return list.ToArray();
         }
 
         public int Length => _items.Length;

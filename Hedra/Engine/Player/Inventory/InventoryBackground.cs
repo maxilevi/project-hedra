@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;

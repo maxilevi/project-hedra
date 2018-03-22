@@ -76,8 +76,12 @@ namespace Hedra.Engine.Player
                 if (Index+InventorySpaces == WeaponHolder)
                     _player.Model.SetWeapon( New == null ? Weapon.Empty : New.Weapon);
             };
-            _interfaceManager = new InventoryArrayInterfaceManager
-                (_itemsArrayInterface, _leftMainItemsArrayInterface, _rightMainItemsArrayInterface);
+            var itemInfoInterface = new InventoryInterfaceItemInfo(_itemsArrayInterface.Renderer)
+            {
+                Position = Vector2.UnitX * .6f + Vector2.UnitY * .1f
+            };
+            _interfaceManager = new InventoryArrayInterfaceManager(itemInfoInterface, _itemsArrayInterface,
+                _leftMainItemsArrayInterface, _rightMainItemsArrayInterface);
         }
 
         public void UpdateInventory()
@@ -98,15 +102,18 @@ namespace Hedra.Engine.Player
             {
                 for (var i = 0; i < _items.Length; i++)
                 {
-                    if (_items[i].Name != New.Name) continue;
+                    if (_items[i] == null || _items[i].Name != New.Name) continue;
                     _items[i].SetAttribute(CommonAttributes.Amount, 
                         _items[i].GetAttribute<int>(CommonAttributes.Amount) + New.GetAttribute<int>(CommonAttributes.Amount));
+                    _interfaceManager.UpdateView();
+                    return true;
                 }
             }
             for (var i = 0; i < _items.Length; i++)
             {
                 if (_items[i] != null) continue;
                 this.SetItem(i, New);
+                _interfaceManager.UpdateView();
                 return true;
             }
             return false;
@@ -127,17 +134,31 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public KeyValuePair<int, Item>[] ToArray()
+        public KeyValuePair<int, Item>[] MainItemsToArray()
         {
             var list = new List<KeyValuePair<int, Item>>();
             for (var i = 0; i < _items.Length; i++)
             {
-                if(_items[i] != null) list.Add(new KeyValuePair<int, Item>(i, _items[i]));
+                if (_items[i] != null) list.Add(new KeyValuePair<int, Item>(i, _items[i]));
             }
+            return list.ToArray();
+        }
+
+        public KeyValuePair<int, Item>[] EquipmentItemsToArray()
+        {
+            var list = new List<KeyValuePair<int, Item>>();
             for (var i = 0; i < _mainItems.Length; i++)
             {
                 if (_mainItems[i] != null) list.Add(new KeyValuePair<int, Item>(i + InventorySpaces, _mainItems[i]));
             }
+            return list.ToArray();
+        }
+
+        public KeyValuePair<int, Item>[] ToArray()
+        {
+            var list = new List<KeyValuePair<int, Item>>();
+            list.AddRange(this.MainItemsToArray());
+            list.AddRange(this.EquipmentItemsToArray());
             return list.ToArray();
         }
 

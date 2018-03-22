@@ -10,6 +10,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryInterfaceItemInfo
     {
+        protected Item CurrentItem;
         private readonly Texture _backgroundTexture;
         private readonly Texture _itemTexture;
         private readonly Panel _panel;
@@ -22,7 +23,6 @@ namespace Hedra.Engine.Player.Inventory
         private readonly Vector2 _nonWeaponItemAttributesPosition;
         private readonly Vector2 _nonWeaponItemTexturePosition;
         private EntityMesh _currentItemMesh;
-        private Item _currentItem;
         private bool _enabled;
 
         public InventoryInterfaceItemInfo(InventoryItemRenderer Renderer)
@@ -57,19 +57,19 @@ namespace Hedra.Engine.Player.Inventory
             _weaponItemTexturePosition = _itemTexture.Position;
         }
 
-        private void UpdateView()
+        protected virtual void UpdateView()
         {
-            var isEquipment = _currentItem.EquipmentType != null;
+            var isEquipment = CurrentItem.EquipmentType != null;
             if (isEquipment)
             {
-                var tierColor = this.TierToColor(_currentItem.Tier);
+                var tierColor = this.TierToColor(CurrentItem.Tier);
                 _itemText.Color = tierColor;
 
                 _itemAttributes.Color = tierColor;
                 _itemDescription.Color = tierColor;
                 _itemAttributes.Position = _weaponItemAttributesPosition + this.Position;
                 _itemTexture.Position = _weaponItemTexturePosition + this.Position;
-                _itemDescription.Text = Utils.FitString(_currentItem.Description, 25);
+                _itemDescription.Text = Utils.FitString(CurrentItem.Description, 25);
             }
             else
             {
@@ -81,8 +81,8 @@ namespace Hedra.Engine.Player.Inventory
                 _itemDescription.Text = string.Empty;
             }
 
-            _itemText.Text = _currentItem.DisplayName.ToUpperInvariant();
-            var attributes = _currentItem.GetAttributes();
+            _itemText.Text = CurrentItem.DisplayName.ToUpperInvariant();
+            var attributes = CurrentItem.GetAttributes();
             var strBuilder = new StringBuilder();
             for (var i = 0; i < attributes.Length; i++)
             {
@@ -93,9 +93,9 @@ namespace Hedra.Engine.Player.Inventory
                 }
             }
             _itemAttributes.Text = strBuilder.ToString();
-            var model = _currentItem.Model;
+            var model = CurrentItem.Model;
             float newOffset = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
-            _itemTexture.TextureElement.IdPointer = () => _renderer.Draw(_currentItemMesh, _currentItem,
+            _itemTexture.TextureElement.IdPointer = () => _renderer.Draw(_currentItemMesh, CurrentItem,
                 false, newOffset * InventoryItemRenderer.ZOffsetFactor);
         }
 
@@ -114,27 +114,28 @@ namespace Hedra.Engine.Player.Inventory
         public void Show(Item Item)
         {
             if(Item == null) return;
-            _currentItem = Item;
+            CurrentItem = Item;
             _currentItemMesh = EntityMesh.FromVertexData(Item.Model);
             _currentItemMesh.UseFog = false;
             this.UpdateView();
-            _panel.Enable();
+            this.Enabled = true;
         }
 
         public void Hide()
         {
-            if(_currentItem == null) return;
+            if(CurrentItem == null) return;
             _currentItemMesh.Dispose();
             _currentItemMesh = null;
-            _currentItem = null;
+            CurrentItem = null;
             _panel.Disable();
+            this.Enabled = false;
         }
 
-        public bool Showing => _currentItem != null;
+        public bool Showing => CurrentItem != null;
 
         public Vector2 Scale => _backgroundTexture.Scale;
 
-        public Vector2 Position
+        public virtual Vector2 Position
         {
             get { return _backgroundTexture.Position; }
             set
@@ -147,13 +148,13 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        public bool Enabled
+        public virtual bool Enabled
         {
             get { return _enabled; }
             set
             {
                 _enabled = value;
-                if (_enabled && _currentItem != null)
+                if (_enabled && CurrentItem != null)
                     _panel.Enable();
                 else
                     _panel.Disable();

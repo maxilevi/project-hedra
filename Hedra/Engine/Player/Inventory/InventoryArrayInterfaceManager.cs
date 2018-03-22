@@ -12,8 +12,11 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory
 {
+    public delegate void OnItemMoveEventHandler(InventoryArray PreviousArray, InventoryArray NewArray, int Index, Item Item);
+
     public class InventoryArrayInterfaceManager
     {
+        public OnItemMoveEventHandler OnItemMove;
         private readonly InventoryInterfaceItemInfo _itemInfoInterface;
         private readonly InventoryArrayInterface[] _interfaces;
         private readonly Button _cancelButton;
@@ -23,7 +26,7 @@ namespace Hedra.Engine.Player.Inventory
         private bool _enabled;
         private bool _willReset;
 
-        public InventoryArrayInterfaceManager(params InventoryArrayInterface[] Interfaces)
+        public InventoryArrayInterfaceManager(InventoryInterfaceItemInfo ItemInfoInterface, params InventoryArrayInterface[] Interfaces)
         {
             _interfaces = Interfaces;
             _cancelButton = new Button(Vector2.Zero, Vector2.One, GUIRenderer.TransparentTexture);
@@ -40,10 +43,7 @@ namespace Hedra.Engine.Player.Inventory
                     buttons[j].HoverExit += (Sender, EventArgs) => this.HoverExit(buttons[k], EventArgs);
                 }
             }
-            _itemInfoInterface = new InventoryInterfaceItemInfo(_interfaces.First().Renderer)
-            {
-                Position = Vector2.UnitX * .6f + Vector2.UnitY * .1f
-            };
+            _itemInfoInterface = ItemInfoInterface;
             EventDispatcher.RegisterMouseMove(this, this.MouseMove);
             EventDispatcher.RegisterMouseDown(this, this.MouseClick);
         }
@@ -105,11 +105,12 @@ namespace Hedra.Engine.Player.Inventory
                 newArray[newIndex] = item;
                 this.ResetSelected();
                 this.UpdateView();
+                OnItemMove?.Invoke(newArray, array, itemIndex, item);
                 SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick);
             }
         }
 
-        private void Use(object Sender, MouseButtonEventArgs EventArgs)
+        protected virtual void Use(object Sender, MouseButtonEventArgs EventArgs)
         {
             if (EventArgs.Button != MouseButton.Right) return;
             var button = (Button)Sender;
@@ -168,12 +169,12 @@ namespace Hedra.Engine.Player.Inventory
             this.ResetSelected();
         }
 
-        private InventoryArray ArrayByButton(Button Sender)
+        protected InventoryArray ArrayByButton(Button Sender)
         {
             return this.InterfaceByButton(Sender).Array;
         }
 
-        private InventoryArrayInterface InterfaceByButton(Button Sender)
+        protected InventoryArrayInterface InterfaceByButton(Button Sender)
         {
             for (var i = 0; i < _interfaces.Length; i++)
             {
@@ -183,7 +184,7 @@ namespace Hedra.Engine.Player.Inventory
             return null;
         }
 
-        private int IndexByButton(Button Sender)
+        protected int IndexByButton(Button Sender)
         {
             for (var i = 0; i < _interfaces.Length; i++)
             {
@@ -193,12 +194,12 @@ namespace Hedra.Engine.Player.Inventory
             return -1;
         }
 
-        private int OffsetByButton(Button Sender)
+        protected int OffsetByButton(Button Sender)
         {
             return this.InterfaceByButton(Sender).Offset;
         }
 
-        private InventoryItemRenderer RendererByButton(Button Sender)
+        protected InventoryItemRenderer RendererByButton(Button Sender)
         {
             return this.InterfaceByButton(Sender).Renderer;
         }
