@@ -1,0 +1,27 @@
+﻿{
+  "Name" : "Ooze", 
+  "MaxHealth": 320.0,
+  "AttackDamage": 14.0,
+  "Speed": 2.0,
+  "XP": 2.0,
+  "AIType": "Hostile",
+  "Ridable": false,
+  "Effects": [],
+  "Drops": [],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/OozeIdle.dae",
+    "Scale": 8.0,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/OozeIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/OozeWalk.dae",
+      "Speed": 1.0
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/OozeAttack.dae",
+      "Speed": 1.0
+    }
+  } 
+}

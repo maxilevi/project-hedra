@@ -377,6 +377,8 @@
     <Compile Include="Engine\Player\Inventory\InventoryItemRenderer.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryStateManager.cs" />
     <Compile Include="Engine\Player\Inventory\RestrictionsInterface.cs" />
+    <Compile Include="Engine\Player\Inventory\TradeInventoryInterfaceItemInfo.cs" />
+    <Compile Include="Engine\Player\Inventory\TradeInventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\PlayerInventory.cs" />
     <Compile Include="Engine\Player\HandLamp.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryArray.cs" />
@@ -819,6 +821,18 @@
     </None>
     <None Include="..\..\..\Assets\Animations\MerchantIdle.dae">
       <Link>Assets\Chr\MerchantIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\OozeAttack.dae">
+      <Link>Assets\Chr\OozeAttack.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\OozeIdle.dae">
+      <Link>Assets\Chr\OozeIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\OozeWalk.dae">
+      <Link>Assets\Chr\OozeWalk.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Animations\PlantlingIdle.dae">
@@ -3553,9 +3567,6 @@
     <None Include="Assets\UI\Help.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\ItemInfo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\UI\ManaBar.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3695,6 +3706,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Horse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Mobs\Ooze.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Rat.json">
