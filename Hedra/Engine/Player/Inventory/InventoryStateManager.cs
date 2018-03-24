@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player.Inventory
             this.RegisterStateItem(() => UpdateManager.CursorShown, O => UpdateManager.CursorShown = (bool)O);
             this.RegisterStateItem(() => Player.Movement.Check, O => Player.Movement.Check = (bool)O);
             this.RegisterStateItem(() => Player.View.Check, O => Player.View.Check = (bool) O);
-            this.RegisterStateItem(() => Player.View.PositionDelegate, O => Player.View.PositionDelegate = (Func<Vector3>)O);
+            this.RegisterStateItem(() => Player.View.PositionDelegate, O => Player.View.PositionDelegate = (Func<Vector3>)O, true);
         }
 
         public new void ReleaseState()
@@ -31,6 +31,11 @@ namespace Hedra.Engine.Player.Inventory
 
         private IEnumerator LerpState()
         {
+            foreach (var cacheItem in _cache)
+            {
+                if (cacheItem.Key.ReleaseFirst)
+                    cacheItem.Key.Setter.Invoke(cacheItem.Value);
+            }
             while (_state)
             {
                 bool finishedLerp = false;
@@ -59,7 +64,8 @@ namespace Hedra.Engine.Player.Inventory
                 {
                     foreach (var cacheItem in _cache)
                     {
-                        cacheItem.Key.Setter.Invoke(cacheItem.Value);
+                        if(!cacheItem.Key.ReleaseFirst)
+                            cacheItem.Key.Setter.Invoke(cacheItem.Value);
                     }
                     _cache.Clear();
                     _state = false;

@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
@@ -95,28 +94,19 @@ namespace Hedra.Engine.Player
             _mainItems.Empty();
         }
 
+        public Item Search(Func<Item, bool> Matches)
+        {
+            var firstResult = _items.Search(Matches);
+            if (firstResult != null) return firstResult;
+            var secondResult = _mainItems.Search(Matches);
+            return secondResult;
+        }
+
         public bool AddItem(Item New)
         {
-            var hasAmount = New.HasAttribute(CommonAttributes.Amount);
-            if (hasAmount)
-            {
-                for (var i = 0; i < _items.Length; i++)
-                {
-                    if (_items[i] == null || _items[i].Name != New.Name) continue;
-                    _items[i].SetAttribute(CommonAttributes.Amount, 
-                        _items[i].GetAttribute<int>(CommonAttributes.Amount) + New.GetAttribute<int>(CommonAttributes.Amount));
-                    _interfaceManager.UpdateView();
-                    return true;
-                }
-            }
-            for (var i = 0; i < _items.Length; i++)
-            {
-                if (_items[i] != null) continue;
-                this.SetItem(i, New);
-                _interfaceManager.UpdateView();
-                return true;
-            }
-            return false;
+            var result = _items.AddItem(New);
+            _interfaceManager.UpdateView();
+            return result;
         }
 
         public void SetItem(int Index, Item New)
@@ -134,7 +124,7 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public KeyValuePair<int, Item>[] MainItemsToArray()
+        public KeyValuePair<int, Item>[] ItemsToArray()
         {
             var list = new List<KeyValuePair<int, Item>>();
             for (var i = 0; i < _items.Length; i++)
@@ -157,7 +147,7 @@ namespace Hedra.Engine.Player
         public KeyValuePair<int, Item>[] ToArray()
         {
             var list = new List<KeyValuePair<int, Item>>();
-            list.AddRange(this.MainItemsToArray());
+            list.AddRange(this.ItemsToArray());
             list.AddRange(this.EquipmentItemsToArray());
             return list.ToArray();
         }
@@ -208,10 +198,14 @@ namespace Hedra.Engine.Player
             return Index >= InventorySpaces ? Index - InventorySpaces : Index;
         }
 
+        public Item Food
+        {
+            get { return this.Search(I => I.IsFood); }
+        }
+
         public bool HasAvailableSpace => _items.HasAvailableSpace;
         public Item this[int Index] => (Index >= InventorySpaces ? _mainItems : _items)[ToMainItemsSpace(Index)];
         public Item MainWeapon => this[WeaponHolder];
-        public Item Food => this[FoodHolder];
         public Item Ring => this[RingHolder];
         public Item Glider => this[GliderHolder];
         public Item Mount => this[PetHolder];
@@ -219,7 +213,6 @@ namespace Hedra.Engine.Player
         public Item Chest => this[ChestHolder];
         public Item Pants => this[PantsHolder];
         public Item Boots => this[BootsHolder];
-        public Item Gold => this[GoldHolder];
         public int Length => _items.Length + _mainItems.Length;
 
         public bool Show

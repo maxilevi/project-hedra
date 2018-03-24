@@ -53,7 +53,8 @@ namespace Hedra.Engine.Player.Inventory
             _health.Text = $"{(int) Human.Health} HP";
             _mana.Text = $"{(int)Human.Mana} MP";
             _xp.Text = $"{(int)Human.XP}/{(int)Human.MaxXP} XP";
-            _gold.Text = $"{Human.Gold} G";
+            var gold = Human.Gold == int.MaxValue ? "∞" : Human.Gold.ToString();
+            _gold.Text = $"{gold} G";
         }
 
         public bool Enabled

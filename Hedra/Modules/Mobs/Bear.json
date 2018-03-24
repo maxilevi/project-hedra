@@ -18,7 +18,7 @@
     },
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/BoarWalk.dae",
-      "Speed": 1.25
+      "Speed": 1.0
     },
     "AttackAnimation": {
       "Path": "$DataFile$/Assets/Chr/BoarAttack.dae",

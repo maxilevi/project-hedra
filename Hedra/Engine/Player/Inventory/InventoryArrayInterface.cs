@@ -51,7 +51,7 @@ namespace Hedra.Engine.Player.Inventory
 
                 _inventoryTextures[i] = new Texture(CustomIcons != null ? CustomIcons[i] : "Assets/UI/InventorySlot.png", position, scale);
                 _inventoryButtonsText[i] = new RenderableText(string.Empty, position + new Vector2(size.X, -size.Y) * .25f, Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 10, FontStyle.Bold));
-                _inventoryButtons[i] = new RenderableButton(position, size * scale, GUIRenderer.TransparentTexture);
+                _inventoryButtons[i] = new RenderableButton(position, size * scale * .8f, GUIRenderer.TransparentTexture);
                 _inventoryButtons[i].Texture.IdPointer = () => _renderer.Draw(k);
                 _inventoryButtons[i].PlaySound = false;
                 _elementsPanel.AddElement(_inventoryTextures[i]);
@@ -70,7 +70,10 @@ namespace Hedra.Engine.Player.Inventory
                 if (_array[i] == null || !_array[i].HasAttribute(CommonAttributes.Amount))
                     _inventoryButtonsText[i].Text = string.Empty;
                 else
-                    _inventoryButtonsText[i].Text = _array[i].GetAttribute<int>(CommonAttributes.Amount).ToString();
+                {
+                    var amount = _array[i].GetAttribute<int>(CommonAttributes.Amount);
+                    _inventoryButtonsText[i].Text = amount == int.MaxValue ? "∞" : amount.ToString();
+                }
             }
             _renderer.UpdateView();
         }

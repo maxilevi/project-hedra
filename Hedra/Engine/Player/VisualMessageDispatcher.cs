@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -12,11 +11,11 @@ using OpenTK;
 
 namespace Hedra.Engine.Player
 {
-    public class VisualMessageDispatcher
+    public class VisualMessageDispatcher : IMessageDispatcher
     {
-        public LocalPlayer Player;
-        public const float MessageSpeed = .1f;
-        public static Color DefaultColor = Color.White;
+        private readonly LocalPlayer _player;
+        private static readonly Color DefaultColor = Color.White;
+        private const float MessageSpeed = .1f;
         private readonly GUIText _mainText;
         private readonly GUIText _playerText;
         private bool _messageRunningWhile;
@@ -28,7 +27,7 @@ namespace Hedra.Engine.Player
 
         public VisualMessageDispatcher(LocalPlayer Player)
         {
-            this.Player = Player;
+            this._player = Player;
             _messageQueue = new List<MessageItem>();
 
             _mainText = new GUIText("", new Vector2(0, .7f), Color.FromArgb(255, 39, 39, 39), FontCache.Get(AssetManager.Fonts.Families[0], 32, FontStyle.Bold));
@@ -118,7 +117,7 @@ namespace Hedra.Engine.Player
             _mainText.Text = Item.Content;
             _mainText.UIText.Opacity = 0;
 
-            if (Player.UI.GamePanel.Enabled)
+            if (_player.UI.GamePanel.Enabled)
             {
                 TaskManager.Asynchronous(delegate
                 {
@@ -169,7 +168,7 @@ namespace Hedra.Engine.Player
             _playerText.TextColor = Item.Color;
             _playerText.Text = Item.Content;
             
-            if (Player.UI.GamePanel.Enabled)
+            if (_player.UI.GamePanel.Enabled)
             {
                 TaskManager.Asynchronous(delegate
                 {
@@ -210,7 +209,7 @@ namespace Hedra.Engine.Player
             _playerText.TextColor = Item.Color;
             _playerText.Text = Item.Content;
 
-            if (Player.UI.GamePanel.Enabled)
+            if (_player.UI.GamePanel.Enabled)
             {
                 TaskManager.Asynchronous(delegate
                 {
@@ -252,7 +251,7 @@ namespace Hedra.Engine.Player
             _notificationText.TextColor = Item.Color;
             _notificationText.Text = Item.Content;
             if (Item.PlaySound)
-                Sound.SoundManager.PlaySound(Sound.SoundType.OnOff, Player.Position, false, 1f, 1.05f);
+                Sound.SoundManager.PlaySound(Sound.SoundType.OnOff, _player.Position, false, 1f, 1.05f);
 
             TaskManager.Asynchronous(delegate
             {

@@ -11,7 +11,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryItemRenderer
     {
-        public const float ZOffsetFactor = 1.15f;
+        public const float ZOffsetFactor = 1.0f;
         private readonly InventoryArray _array;
         private readonly int _length;
         private readonly int _offset;

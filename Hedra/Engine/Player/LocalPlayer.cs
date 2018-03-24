@@ -45,7 +45,7 @@ namespace Hedra.Engine.Player
 		public Map Map;
 		public TradeInventory Trade;
 		public GliderModel Glider;
-	    public VisualMessageDispatcher MessageDispatcher;
+	    public override IMessageDispatcher MessageDispatcher { get; set; }
         public ICollidable[] NearCollisions { get; private set; }
 
         private bool _floating;
@@ -467,7 +467,21 @@ namespace Hedra.Engine.Player
             View.Update();
         }
 
-	    public override int Gold => Inventory.Gold.GetAttribute<int>(CommonAttributes.Amount);
+	    public override int Gold
+	    {
+	        get
+	        {
+	            return Inventory.Search(I => I.IsGold)?.GetAttribute<int>(CommonAttributes.Amount) ?? 0;
+	        }
+	        set
+	        {
+	            var currentGold = Inventory.Search(I => I.IsGold);
+	            if (currentGold != null)
+	                currentGold.SetAttribute(CommonAttributes.Amount, value);
+	            else
+	                Inventory.AddItem(ItemPool.Grab(ItemType.Gold));
+	        }
+	    }
 		public override Item MainWeapon => Inventory.MainWeapon;
 	    public override Item Ring => Inventory.Ring;
 

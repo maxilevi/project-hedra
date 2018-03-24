@@ -367,8 +367,9 @@ namespace Hedra.Engine.Player
 						player.Inventory.Show = false;
 					if(player.SkillSystem.Show)
 						player.SkillSystem.Show = false;
-					
-				}else{
+				    if (player.Trade.Show) player.Trade.Cancel();
+                }
+                else{
 					
 					if(!player.UI.Menu.Enabled)
 						player.UI.ShowMenu();

@@ -223,7 +223,8 @@ namespace Hedra.Engine.Player
 			}
 			else
 			{
-				if(!Player.CanInteract || Player.Knocked || Player.IsDead || Player.IsUnderwater || Player.IsSwimming || Player.IsGliding || Player.Inventory.Show || Player.SkillSystem.Show || GameSettings.Paused) return;
+				if(!Player.CanInteract || Player.Knocked || Player.IsDead || Player.IsUnderwater 
+                    || Player.IsSwimming || Player.IsGliding || Player.Inventory.Show || Player.SkillSystem.Show || GameSettings.Paused || Player.Trade.Show) return;
 				
 				if(e.Button == MouseButton.Left){
 					if(W1.MeetsRequirements(this, 0)){
@@ -291,7 +292,8 @@ namespace Hedra.Engine.Player
 		
 		public override void OnKeyDown(object sender, KeyboardKeyEventArgs e)
 		{
-			if(!Player.CanInteract || Player.Movement.IsJumping || Player.Knocked || Player.IsDead || Player.IsSwimming || Player.IsUnderwater || Player.IsGliding || Player.Inventory.Show || Player.SkillSystem.Show || GameSettings.Paused) return;
+			if(!Player.CanInteract || Player.Movement.IsJumping || Player.Knocked || Player.IsDead || Player.IsSwimming 
+                || Player.IsUnderwater || Player.IsGliding || Player.Inventory.Show || Player.SkillSystem.Show || Player.Trade.Show || GameSettings.Paused) return;
 			
 			string KeyText = e.Key.ToString().ToLowerInvariant();
 			

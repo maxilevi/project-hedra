@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Text;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
@@ -62,7 +63,7 @@ namespace Hedra.Engine.Player.Inventory
             var isEquipment = CurrentItem.EquipmentType != null;
             if (isEquipment)
             {
-                var tierColor = this.TierToColor(CurrentItem.Tier);
+                var tierColor = TierToColor(CurrentItem.Tier);
                 _itemText.Color = tierColor;
 
                 _itemAttributes.Color = tierColor;
@@ -88,7 +89,7 @@ namespace Hedra.Engine.Player.Inventory
             {
                 if (!attributes[i].Hidden)
                 {
-                    var line = $"{attributes[i].Name.AddSpacesToSentence()}   ➝   {attributes[i].Value.ToString()}";
+                    var line = $"{attributes[i].Name.AddSpacesToSentence()}   ➝   {EscapeValue(attributes[i].Value)}";
                     strBuilder.AppendLine(line);
                 }
             }
@@ -99,7 +100,14 @@ namespace Hedra.Engine.Player.Inventory
                 false, newOffset * InventoryItemRenderer.ZOffsetFactor);
         }
 
-        private Color TierToColor(ItemTier Tier)
+        protected static string EscapeValue(object Value)
+        {
+            if (!(Value is int) && !(Value is long)) return Value.ToString();
+
+            return (int) Convert.ChangeType(Value, typeof(int)) == int.MaxValue ? "∞" : Value.ToString();
+        }
+
+        private static Color TierToColor(ItemTier Tier)
         {
             return 
                 Tier == ItemTier.Common ? Color.LightSkyBlue :
@@ -113,7 +121,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public void Show(Item Item)
         {
-            if(Item == null) return;
+            if(Item == null || Item.IsGold) return;
             CurrentItem = Item;
             _currentItemMesh = EntityMesh.FromVertexData(Item.Model);
             _currentItemMesh.UseFog = false;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
@@ -8,18 +10,33 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class TradeInventoryArrayInterfaceManager : InventoryArrayInterfaceManager
     {
+        public event OnTransactionCompleteEventHandler OnTransactionComplete;
         private readonly TradeInventoryInterfaceItemInfo _itemInfoInterface;
-        private readonly InventoryArrayInterface _playerInterface;
-        private readonly InventoryArrayInterface _merchantInterface;
+        private readonly InventoryArrayInterface _buyerInterface;
+        private readonly InventoryArrayInterface _sellerInterface;
+        private TradeManager _manager;
+        private Humanoid _buyer;
+        private Humanoid _seller;
 
         public TradeInventoryArrayInterfaceManager(TradeInventoryInterfaceItemInfo ItemInfoInterface,
-            InventoryArrayInterface PlayerInterface, InventoryArrayInterface MerchantInterface) 
-            : base(ItemInfoInterface, PlayerInterface, MerchantInterface)
+            InventoryArrayInterface BuyerInterface, InventoryArrayInterface SellerInterface) 
+            : base(ItemInfoInterface, BuyerInterface, SellerInterface)
         {
             _itemInfoInterface = ItemInfoInterface;
-            _playerInterface = PlayerInterface;
-            _merchantInterface = MerchantInterface;
+            _buyerInterface = BuyerInterface;
+            _sellerInterface = SellerInterface;
         }
+
+        public void SetTraders(Humanoid Buyer, Humanoid Seller)
+        {
+            _buyer = Buyer;
+            _seller = Seller;
+            _manager = _buyer == null && Seller == null ?  null : new TradeManager(_buyerInterface, _sellerInterface);
+            if(_manager != null) _manager.OnTransactionComplete += (I, P) => OnTransactionComplete?.Invoke(I, P);
+            _itemInfoInterface.SetManager(_manager);
+        }
+
+        protected override void Interact(object Sender, MouseButtonEventArgs EventArgs) {}
 
         protected override void Use(object Sender, MouseButtonEventArgs EventArgs)
         {
@@ -28,67 +45,19 @@ namespace Hedra.Engine.Player.Inventory
             var itemIndex = this.IndexByButton(button);
             var arrayInterface = this.InterfaceByButton(button);
             var item = arrayInterface.Array[itemIndex];
-            arrayInterface.Array[itemIndex] = null;
+            if (item == null || item.IsGold) return;
 
-            if (arrayInterface == _playerInterface)
+            var price = _manager.ItemPrice(item);
+            if (arrayInterface != _buyerInterface)
             {
-                _merchantInterface.Array.AddItem(item);
-                this.ProcessSell(item);
+                _manager.ProcessTrade(_buyer, _seller, _buyerInterface, _sellerInterface, item, price);
             }
             else
             {
-                _playerInterface.Array.AddItem(item);
-                this.ProcessBuy(item);
+                _manager.ProcessTrade(_seller, _buyer, _sellerInterface, _buyerInterface, item, price);
             }
             this.UpdateView();
             SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick);
         }
-
-        private void ProcessBuy(Item Item)
-        {
-            var price = ItemPrice(Item) * 1.0f;
-            SoundManager.PlaySoundInPlayersLocation(SoundType.TransactionSound);
-        }
-
-        private void ProcessSell(Item Item)
-        {
-            var price = ItemPrice(Item) * .75f;
-            SoundManager.PlaySoundInPlayersLocation(SoundType.TransactionSound);
-        }
-
-        public static int ItemPrice(Item Item)
-        {
-            float price = 0;
-            var attributes = Item.GetAttributes();
-            for (var i = 0; i < attributes.Length; i++)
-            {
-                if (attributes[i].Name == CommonAttributes.Amount.ToString())
-                {
-                    price += Item.GetAttribute<int>(CommonAttributes.Amount);
-                    continue;
-                }
-                var typeList = new[] { typeof(float), typeof(double), typeof(long) };
-                object selectedType = null;
-                for (var j = 0; j < typeList.Length; j++)
-                {
-                    if (typeList[j].IsInstanceOfType(attributes[i].Value))
-                    {
-                        selectedType = typeList[j];
-                        break;
-                    }
-                }
-
-                if (selectedType != null)
-                {
-                    var value = Item.GetAttribute<float>(attributes[i].Name);
-                    price += Item.EquipmentType != null ? value : value * .025f;
-                }
-            }
-            price *= Item.EquipmentType != null ? 1.5f : 1.0f;
-            price *= (int) Item.Tier+1;
-
-            return (int)price;
-        }
-
     }
 }

@@ -23,17 +23,56 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        public bool AddItem(Item Item)
+        public Item Search(Func<Item, bool> Matches)
         {
             for (var i = 0; i < _items.Length; i++)
             {
-                if (_items[i] != null) continue;
-                if (!this.CanSetItem(i, Item)) continue;
+                if (_items[i] != null && Matches(_items[i])) return _items[i];
+            }
+            return null;
+        }
 
+        public bool RemoveItem(Item Item)
+        {
+            for (var i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] != Item) continue;
+
+                this.SetItem(i, null);
+                return true;
+            }
+            return false;
+        }
+
+        public bool AddItem(Item Item)
+        {
+            var hasAmount = Item.HasAttribute(CommonAttributes.Amount);
+            if (hasAmount)
+            {
+                for (var i = 0; i < _items.Length; i++)
+                {
+                    if (_items[i] == null || _items[i].Name != Item.Name) continue;
+                    var isFinite = _items[i].GetAttribute<int>(CommonAttributes.Amount) != int.MaxValue;
+                    if (isFinite)
+                    {
+                        _items[i].SetAttribute(CommonAttributes.Amount,
+                            _items[i].GetAttribute<int>(CommonAttributes.Amount) +Item.GetAttribute<int>(CommonAttributes.Amount));
+                    }
+                    return true;
+                }
+            }
+            for (var i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] != null) continue;
                 this.SetItem(i, Item);
                 return true;
             }
             return false;
+        }
+
+        public bool Contains(Item Item)
+        {
+            return _items.Contains(Item);
         }
 
         public bool CanSetItem(int Index, Item Item)

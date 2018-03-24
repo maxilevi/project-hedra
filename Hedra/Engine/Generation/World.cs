@@ -636,9 +636,11 @@ namespace Hedra.Engine.Generation
 			Items.Add(model);
 			
 			model.OnPickup += delegate(LocalPlayer Player) {
-				Player.Inventory.AddItem(model.ItemSpecification);
-				Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, model.Position, false, 1f, 1.2f);
-				model.Dispose();
+			    if (Player.Inventory.AddItem(model.ItemSpecification))
+			    {
+			        Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, model.Position, false, 1f, 1.2f);
+			        model.Dispose();
+			    }
 			};
 			return model;
 		}

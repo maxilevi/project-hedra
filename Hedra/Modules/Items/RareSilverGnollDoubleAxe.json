@@ -1,7 +1,7 @@
 ﻿{
   "Name": "RareSilverGnollDoubleAxe",
   "DisplayName": "Silver Double Axe",
-  "WeaponType": "Axe", 
+  "EquipmentType": "Axe", 
   "Tier": "Common",
   "Description": "A rare silver double axe. Commonly used by gnolls.",
   "Attributes": [
@@ -10,16 +10,12 @@
       "Value": 10.0
     },
     {
-      "Name": "AttackPower",
-      "Value": 12.0
-    },
-    {
       "Name": "AttackSpeed",
       "Value": 2.0
     }
   ],
   "Model": {
     "Scale": 2.0,
-    "Path": "$DataFile$/Items/RareSilverGnollDoubleAxe.ply"
+    "Path": "$DataFile$/Items/Axe/RareSilverGnollDoubleAxe.ply"
   }
 }

@@ -11,12 +11,13 @@ namespace Hedra.Engine.Player.Inventory
         private readonly Texture _backgroundTexture;
         private readonly GUIText _priceText;
         private readonly Panel _panel;
+        private TradeManager _manager;
 
         public TradeInventoryInterfaceItemInfo(InventoryItemRenderer Renderer) : base(Renderer)
         {
             _panel = new Panel();
             _backgroundTexture = new Texture("Assets/UI/InventoryBackground.png", Vector2.UnitY * -.35f, Vector2.One * .15f);
-            _priceText = new GUIText(string.Empty, _backgroundTexture.Position, Color.Gold, FontCache.Get(AssetManager.Fonts.Families[0], 12, FontStyle.Bold));
+            _priceText = new GUIText(string.Empty, _backgroundTexture.Position, Color.Gold, FontCache.Get(AssetManager.Fonts.Families[0], 10, FontStyle.Bold));
 
             _panel.AddElement(_backgroundTexture);
             _panel.AddElement(_priceText);
@@ -25,7 +26,20 @@ namespace Hedra.Engine.Player.Inventory
         protected override void UpdateView()
         {
             base.UpdateView();
-            _priceText.Text = $"{TradeInventoryArrayInterfaceManager.ItemPrice(CurrentItem)} G";
+            var priceString = _manager.ItemPrice(CurrentItem).ToString();
+            if (CurrentItem.HasAttribute(CommonAttributes.Amount)
+                && CurrentItem.GetAttribute<int>(CommonAttributes.Amount) == int.MaxValue)
+            {
+                var clone = Item.FromArray(CurrentItem.ToArray());
+                clone.SetAttribute(CommonAttributes.Amount, 1);
+                priceString = _manager.ItemPrice(clone).ToString();
+            }
+            _priceText.Text = $"{priceString} G";
+        }
+
+        public void SetManager(TradeManager Manager)
+        {
+            _manager = Manager;
         }
 
         public override Vector2 Position

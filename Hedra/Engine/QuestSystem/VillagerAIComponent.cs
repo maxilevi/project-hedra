@@ -46,7 +46,8 @@ namespace Hedra.Engine.QuestSystem
 	            
 	            bool TalkDialogOpen = this.Parent.SearchComponent<TalkComponent>().Talked;
 	            LocalPlayer Player = LocalPlayer.Instance;
-	            if( Player.CanInteract && !Player.IsDead && !GameSettings.Paused && !TalkDialogOpen && !Player.Inventory.Show && !Player.SkillSystem.Show){
+	            if( Player.CanInteract && !Player.IsDead && !GameSettings.Paused && !TalkDialogOpen && 
+                    !Player.Inventory.Show && !Player.SkillSystem.Show && !Player.Trade.Show){
 					Player.MessageDispatcher.ShowMessageWhile("[E] TO TALK", Color.White,
 					    () => (Player.Position - Parent.Position).Xz.LengthSquared < 24f * 24f &&
 					          !this.Parent.SearchComponent<TalkComponent>().Talked);

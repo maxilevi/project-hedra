@@ -367,6 +367,7 @@
     <Compile Include="Engine\Player\Camera.cs" />
     <Compile Include="Engine\Player\Chat.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Claw.cs" />
+    <Compile Include="Engine\Player\DummyMessageDispatcher.cs" />
     <Compile Include="Engine\Player\GliderModel.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Hammer.cs" />
     <Compile Include="Engine\Player\Humanoid.cs" />
@@ -379,6 +380,9 @@
     <Compile Include="Engine\Player\Inventory\RestrictionsInterface.cs" />
     <Compile Include="Engine\Player\Inventory\TradeInventoryInterfaceItemInfo.cs" />
     <Compile Include="Engine\Player\Inventory\TradeInventoryArrayInterfaceManager.cs" />
+    <Compile Include="Engine\Player\Inventory\TradeManager.cs" />
+    <Compile Include="Engine\Player\IPlayer.cs" />
+    <Compile Include="Engine\Player\IMessageDispatcher.cs" />
     <Compile Include="Engine\Player\PlayerInventory.cs" />
     <Compile Include="Engine\Player\HandLamp.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryArray.cs" />
@@ -905,6 +909,18 @@
     </None>
     <None Include="..\..\..\Assets\Animations\SkeletonIdle.dae">
       <Link>Assets\Chr\SkeletonIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\SnakeAttack.dae">
+      <Link>Assets\Chr\SnakeAttack.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\SnakeIdle.dae">
+      <Link>Assets\Chr\SnakeIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\SnakeWalk.dae">
+      <Link>Assets\Chr\SnakeWalk.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Animations\SpiderAttack.dae">
@@ -2916,6 +2932,10 @@
       <Link>Assets\Items\Swords\CommonBronzeSword.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\CommonIronMace.ply">
+      <Link>Assets\Items\Hammers\CommonIronMace.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\CreationPlatform.ply">
       <Link>Assets\Intro\CreationPlatform.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3172,18 +3192,6 @@
       <Link>Assets\Env\Village\Path2.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\..\Assets\Models\PigBody.ply">
-      <Link>Assets\Chr\PigBody.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\PigHead.ply">
-      <Link>Assets\Chr\PigHead.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\PigLeg.ply">
-      <Link>Assets\Chr\PigLeg.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\..\Assets\Models\Pine0.ply">
       <Link>Assets\Env\Pine0.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3198,10 +3206,6 @@
     </None>
     <None Include="..\..\..\Assets\Models\Pine3.ply">
       <Link>Assets\Env\Pine3.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\PineMob.ply">
-      <Link>Assets\Chr\PineMob.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\Pyramid1.ply">
@@ -3298,6 +3302,10 @@
     </None>
     <None Include="..\..\..\Assets\Models\TurtleShell.ply">
       <Link>Assets\Items\TurtleShell.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\UncommonIronWarhammer.ply">
+      <Link>Assets\Items\Hammers\UncommonIronWarhammer.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\Well0.ply">
@@ -3672,6 +3680,9 @@
     <None Include="Modules\Items\CommonBronzeSword.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Items\CommonIronMace.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\CommonWoodBow.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3682,6 +3693,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\RareSilverGnollDoubleAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\UncommonIronWarhammer.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\LavaBiomeSpawner.json">
@@ -3718,6 +3732,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Sheep.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Mobs\Snake.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Archer.json">

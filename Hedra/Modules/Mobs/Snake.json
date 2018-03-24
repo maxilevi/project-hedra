@@ -1,0 +1,34 @@
+﻿{
+  "Name" : "Snake", 
+  "MaxHealth": 180.0,
+  "AttackDamage": 16.0,
+  "Speed": 2.0,
+  "XP": 2.0,
+  "AIType": "Hostile",
+  "Ridable": false,
+  "Effects": [
+    {
+      "Name": "Poison",
+      "Chance": 45.0,
+      "Damage": 8.0,
+      "Duration": 5.0
+    }
+  ],
+  "Drops": [],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/SnakeIdle.dae",
+    "Scale": 3.0,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/SnakeIdle.dae",
+      "Speed": 1.0
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/SnakeWalk.dae",
+      "Speed": 1.0
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/SnakeAttack.dae",
+      "Speed": 1.0
+    }
+  } 
+}

@@ -31,11 +31,11 @@ namespace Hedra.Engine.Player.Inventory
 	    private readonly InventoryArrayInterface _playerItemsInterface;
 	    private readonly InventoryArrayInterface _merchantItemsInterface;
 	    private readonly InventoryStateManager _stateManager;
-	    private readonly InventoryArrayInterfaceManager _interfaceManager;
+	    private readonly TradeInventoryArrayInterfaceManager _interfaceManager;
 	    private readonly InventoryBackground _playerBackground;
 	    private readonly InventoryBackground _merchantBackground;
 	    private MerchantComponent _merchantComponent;
-	    private Entity _trader;
+	    private Humanoid _trader;
         private bool _show;
 
         public TradeInventory(LocalPlayer Player){
@@ -58,44 +58,43 @@ namespace Hedra.Engine.Player.Inventory
             _interfaceManager = new TradeInventoryArrayInterfaceManager(itemInfoInterface, _playerItemsInterface, _merchantItemsInterface);
             _playerBackground = new InventoryBackground(Vector2.UnitX * .5f + Vector2.UnitY * .55f);
             _merchantBackground = new InventoryBackground(Vector2.UnitX * -.5f + Vector2.UnitY * .55f);
-            EventDispatcher.RegisterKeyDown(this, delegate (object Sender, KeyboardKeyEventArgs Args)
-            {
-                if (Args.Key == Key.Escape)
-                    this.Cancel();
-            });
+            _interfaceManager.OnTransactionComplete += (Item, Price) => this.UpdateTraders();
         }
 
-	    public void Trade(Entity Trader)
+	    public void Trade(Humanoid Trader)
 	    {
 	        IsTrading = true;
 	        _trader = Trader;
 	        _merchantComponent = Trader.SearchComponent<MerchantComponent>();
 	        Show = true;
-	        _playerItems.SetItems(_player.Inventory.MainItemsToArray());
+	        _playerItems.SetItems(_player.Inventory.ItemsToArray());
 	        _merchantItems.SetItems(_merchantComponent.Items.ToArray());
+            this._interfaceManager.SetTraders(_player, _trader);
             this.UpdateView();
         }
 
 	    public void Cancel()
 	    {
-	        Show = false;
+	        this._interfaceManager.SetTraders(null, null);
+            Show = false;
             IsTrading = false;
-	        //_trader = null;
             _merchantComponent = null;
 	        _playerItems.Empty();
 	        _merchantItems.Empty();
 	        this.UpdateView();
 	    }
 
+
 	    public void UpdateView()
 	    {
-	        _playerItemsInterface.UpdateView();
-            _merchantItemsInterface.UpdateView();
+	        _interfaceManager.UpdateView();
 	    }
 
         public void UpdateInventory()
         {
-            _interfaceManager.UpdateView();
+            _playerItems.SetItems(_player.Inventory.ItemsToArray());
+            _merchantItems.SetItems(_merchantComponent.Items.ToArray());
+            this.UpdateView();
         }
 
         public void ClearInventory()
@@ -103,6 +102,22 @@ namespace Hedra.Engine.Player.Inventory
             _merchantItems.Empty();
             _playerItems.Empty();
         }
+
+	    public void UpdateTraders()
+	    {
+	        for (var i = 0; i < _playerItems.Length; i++)
+	        {
+	            _player.Inventory.SetItem(i, null);
+                _player.Inventory.SetItem(i, _playerItems[i]);
+	        }
+
+	        _merchantComponent.Items.Clear();
+	        for (var i = 0; i < _merchantItems.Length; i++)
+	        {
+	            _merchantComponent.Items.Add(i, _merchantItems[i]);
+            }
+	        this.UpdateView();
+	    }
 
         private void SetInventoryState(bool State)
         {
@@ -133,7 +148,7 @@ namespace Hedra.Engine.Player.Inventory
                 _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
                     (float)Time.deltaTime * 16f);
                 _playerBackground.UpdateView(_player);
-                _merchantBackground.UpdateView(_trader as Humanoid);
+                _merchantBackground.UpdateView(_trader);
             }
         }
 

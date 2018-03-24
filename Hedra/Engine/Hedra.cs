@@ -410,7 +410,10 @@ namespace Hedra
 		{
 			base.OnFocusedChanged(e);
 			if(!this.Focused){
-				if(!SceneManager.Game.InMenuWorld && !SceneManager.Game.IsLoading && !GameSettings.Paused && SceneManager.Game.LPlayer != null && !SceneManager.Game.LPlayer.Inventory.Show && !SceneManager.Game.LPlayer.SkillSystem.Show){
+				if(!SceneManager.Game.InMenuWorld && !SceneManager.Game.IsLoading && !GameSettings.Paused &&
+                    SceneManager.Game.LPlayer != null && !SceneManager.Game.LPlayer.Inventory.Show &&
+                    !SceneManager.Game.LPlayer.SkillSystem.Show && !SceneManager.Game.LPlayer.Trade.Show)
+                {
 					//GameSettings.Paused = true;
 					SceneManager.Game.LPlayer.UI.ShowMenu();
 				}

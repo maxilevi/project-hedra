@@ -112,7 +112,7 @@ namespace Hedra.Engine.Player
 		}
 		
 		public void Focus(){
-			if(Player.SkillSystem.Show || Player.Inventory.Show || !Player.UI.GamePanel.Enabled) return;
+			if(Player.SkillSystem.Show || Player.Inventory.Show || !Player.UI.GamePanel.Enabled || Player.Trade.Show) return;
 			Player.CanInteract = false;
 			Player.View.Check = false;
 			Player.View.LockMouse = false;

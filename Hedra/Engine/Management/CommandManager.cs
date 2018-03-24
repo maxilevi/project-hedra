@@ -110,6 +110,20 @@ namespace Hedra.Engine.Management
 				    {
 				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Axe)));
 				    }
+				    if (Parts[1] == "katar")
+				    {
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Katar)));
+				    }
+				    if (Parts[1] == "hammer")
+				    {
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Hammer)));
+				    }
+				    if (Parts[1] == "gold")
+				    {
+				        var item = ItemPool.Grab(ItemType.Gold);
+                        item.SetAttribute(CommonAttributes.Amount, int.Parse(Parts[2]));
+                        LocalPlayer.Instance.Inventory.AddItem(item);
+                    }
                     /*if(Parts[1] == "mount"){
 						if(Parts[2] == "horse")
 							LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Mount, new ItemInfo(Material.HorseMount, 100)));

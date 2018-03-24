@@ -43,7 +43,10 @@ namespace Hedra.Engine.EntitySystem
 			   || Vector3.Dot( (Parent.Position - Player.Position).NormalizedFast(), Player.View.LookAtPoint.NormalizedFast()) < .6f )return;
 			
 			var berry = ItemPool.Grab(ItemType.Berry);
-			Player.Inventory.AddItem(berry);
+		    if (!Player.Inventory.AddItem(berry))
+		    {
+		        World.DropItem(berry, this.Parent.Position);
+		    }
 			Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, Parent.Position);
 			Player.MessageDispatcher.ShowNotification("You got a berry from the bush", System.Drawing.Color.DarkRed, 3f, false);
 			_interacted = true;

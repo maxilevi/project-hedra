@@ -40,9 +40,11 @@ namespace Hedra.Engine.EntitySystem
 		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Bow)),
 		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Knife))
 		    };
-		    Items = new Dictionary<int, Item>
+		    var berry = ItemPool.Grab(ItemType.Berry);
+            berry.SetAttribute(CommonAttributes.Amount, int.MaxValue);
+            Items = new Dictionary<int, Item>
 		    {
-                {TradeInventory.MerchantSpaces - 1, ItemPool.Grab(ItemType.Berry)}
+                {TradeInventory.MerchantSpaces - 1, berry}
 		    };
 		    for (var i = 0; i < 4; i++)
 		    {
@@ -54,6 +56,7 @@ namespace Hedra.Engine.EntitySystem
 				//Items.Add(TradeSystem.MaxItems - 3, ItemPool.Grab("WolfMount"));
 				//Items.Add(TradeSystem.MaxItems - 4, ItemPool.Grab(ItemType.Glider));
 			}
+		    (Parent as Humanoid).Gold = int.MaxValue;
 		}
 		 
 		public override void Update(){
@@ -74,7 +77,7 @@ namespace Hedra.Engine.EntitySystem
 		    if (!canTrade || !inRadius) return;
 
 		    player.MessageDispatcher.ShowMessageWhile("[E] TO TRADE", Color.White, inRadiusFunc);				
-		    if(Events.EventDispatcher.LastKeyDown == Key.E) player.Trade.Trade(this.Parent);
+		    if(Events.EventDispatcher.LastKeyDown == Key.E) player.Trade.Trade(this.Parent as Humanoid);
 		}
 	}
 }

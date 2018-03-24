@@ -70,7 +70,7 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        private void Interact(object Sender, MouseButtonEventArgs EventArgs)
+        protected virtual void Interact(object Sender, MouseButtonEventArgs EventArgs)
         {
             if(EventArgs.Button != MouseButton.Left) return;
             var button = (Button)Sender;
@@ -81,18 +81,10 @@ namespace Hedra.Engine.Player.Inventory
             _willReset = false;
             if (item != null && _selectedButton == null)
             {
-                _selectedButton = button;
-                _selectedItem = item;
-                _cancelButton.Position = button.Position;
-                _cancelButton.Scale = button.Scale;
+                this.SetSelectedItem(button, item);
                 array[itemIndex] = null;
-                var renderer = this.RendererByButton(_selectedButton);
-                _selectedMesh = EntityMesh.FromVertexData(item.Model);
-                _selectedMesh.UseFog = false;
-                _selectedButton.Texture.IdPointer = () => renderer.Draw(_selectedMesh, item);
-                _cancelButton.Clickable = false;
+                this.SetCancelButton(button);
                 this.UpdateView();
-                TaskManager.Delay(10, () => _cancelButton.Clickable = true);
                 SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick);
             }
             else if (_selectedButton != null)
@@ -100,9 +92,8 @@ namespace Hedra.Engine.Player.Inventory
                 var newIndex = this.IndexByButton(_selectedButton);
                 var newArray = this.ArrayByButton(_selectedButton);
                 if(!array.CanSetItem(itemIndex, _selectedItem)) return;
-
                 array[itemIndex] = _selectedItem;
-                newArray[newIndex] = item;
+                newArray[newIndex] = item;                
                 this.ResetSelected();
                 this.UpdateView();
                 OnItemMove?.Invoke(newArray, array, itemIndex, item);
@@ -119,11 +110,30 @@ namespace Hedra.Engine.Player.Inventory
             var item = array[itemIndex];
             array[itemIndex] = null;
             if (array.HasRestrictions(itemIndex))
-                this.PlaceItemInFirstEmptyPosition(item);          
+                this.PlaceItemInFirstEmptyPosition(item);
             else
                 this.PlaceInRestrictionsOrFirstEmpty(item);
+            
             this.UpdateView();
             SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick);
+        }
+
+        private void SetSelectedItem(Button SelectedButton, Item SelectedItem)
+        {
+            _selectedButton = SelectedButton;
+            _selectedItem = SelectedItem;
+            var renderer = this.RendererByButton(_selectedButton);
+            _selectedMesh = EntityMesh.FromVertexData(SelectedItem.Model);
+            _selectedMesh.UseFog = false;
+            _selectedButton.Texture.IdPointer = () => renderer.Draw(_selectedMesh, SelectedItem);
+        }
+
+        private void SetCancelButton(Button SelectedButton)
+        {
+            _cancelButton.Position = SelectedButton.Position;
+            _cancelButton.Scale = SelectedButton.Scale;
+            _cancelButton.Clickable = false;
+            TaskManager.Delay(10, () => _cancelButton.Clickable = true);
         }
 
         private void PlaceItemInFirstEmptyPosition(Item Item)
@@ -131,12 +141,7 @@ namespace Hedra.Engine.Player.Inventory
             for (var i = 0; i < _interfaces.Length; i++)
             {
                 var newArray = _interfaces[i].Array;
-                for (var j = 0; j < newArray.Length; j++)
-                {
-                    if (newArray[j] != null || newArray.HasRestrictions(j)) continue;
-                    newArray[j] = Item;
-                    return;
-                }
+                if(newArray.AddItem(Item)) return;
             }
         }
 

@@ -13,7 +13,6 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Sound;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
@@ -33,7 +32,7 @@ namespace Hedra.Engine.Player
 	    private float _stamina = 100f;
 	    private float _oldSpeed;
 	    private bool _isGliding;
-
+        public virtual IMessageDispatcher MessageDispatcher { get; set; }
         public bool IsAttacking {get; set;}
 		public bool IsEating { get; set; }
 		public bool IsCasting { get; set; }
@@ -57,7 +56,7 @@ namespace Hedra.Engine.Player
 		public float AddonHealth {get; set;}
 		public float DodgeCost {get; set;}	
         public float RandomFactor { get; set; }
-	    public virtual int Gold => 0;
+	    public virtual int Gold { get; set; }
 
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
 		public override float MaxHealth{
@@ -137,19 +136,20 @@ namespace Hedra.Engine.Player
 
         public Humanoid() : base() {
 			this.CanInteract = true;
-			this.HandLamp = new HandLamp(this);
+            this.MessageDispatcher = new DummyMessageDispatcher();
+            this.HandLamp = new HandLamp(this);
 			this.Movement = new MovementManager(this);
-			this.Physics.HitboxSize = 8;
-			this.DefaultBox.Max = new Vector3(4f,4,4f);
-			this.Physics.CanCollide = true;
-			this.DodgeCost = 25f;
-			this.MaxStamina = 100f;
-            this.AttackPower = 1f;
-            this.RandomFactor = Humanoid.NewRandomFactor();
             this.DmgComponent = new DamageComponent(this)
             {
                 XpToGive = 4f
             };
+            this.RandomFactor = Humanoid.NewRandomFactor();
+            this.Physics.HitboxSize = 8;
+            this.DefaultBox.Max = new Vector3(4f, 4, 4f);
+            this.Physics.CanCollide = true;
+            this.DodgeCost = 25f;
+            this.MaxStamina = 100f;
+            this.AttackPower = 1f;
             this.AddComponent(DmgComponent);
         }
 

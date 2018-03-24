@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering;
 
@@ -6,13 +7,15 @@ namespace Hedra.Engine.ItemSystem
 {
     public class Item
     {
+        private static string GoldItemName = "Gold";
+        private static string[] FoodItemNames = {"Berry"};
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
         public ItemTier Tier { get; set; }
         public string EquipmentType { get; set; }
         public ItemModelTemplate ModelTemplate { get; set; }
-        private AttributeArray _attributes;
+        private readonly AttributeArray _attributes;
         private Weapon _weaponCache;
         private VertexData _model;
         private bool _weaponCacheDirty;
@@ -115,6 +118,9 @@ namespace Hedra.Engine.ItemSystem
         {
             return Encoding.ASCII.GetBytes(ItemTemplate.ToJson(ItemTemplate.FromItem(this)));
         }
+
+        public bool IsGold => Name == Item.GoldItemName;
+        public bool IsFood => FoodItemNames.Contains(Name);
 
         public VertexData Model
         {

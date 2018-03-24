@@ -15,10 +15,10 @@ namespace Hedra.Engine.Management
             _cache = new Dictionary<TrackItem, object>();
         }
 
-        public void RegisterStateItem(Func<object> Getter, Action<object> Setter)
+        public void RegisterStateItem(Func<object> Getter, Action<object> Setter, bool ReleaseFirst = false)
         {
             if (_state) throw new ArgumentException("A state cannot be registeres while the manager is active.");
-            _trackItems.Add(new TrackItem(Getter,Setter));
+            _trackItems.Add(new TrackItem(Getter,Setter, ReleaseFirst));
         }
 
         public void CaptureState()
