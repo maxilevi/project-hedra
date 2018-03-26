@@ -23,7 +23,7 @@ namespace Hedra.Engine
     /// </summary>
     public static class GameSettings
     {
-        public static Vector2 SpawnPoint { get; } = new Vector2(0, 0);
+        public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
         public static int DeviceWidth;
         public static int DeviceHeight;
         public static int Width;
