@@ -65,25 +65,27 @@ namespace Hedra.Engine.Rendering.UI
 			
 			OnButtonClickEventHandler setWeapon = delegate {
 				_classType = (Class) Enum.Parse(typeof(Class), classes[classChooser.Index]);
+			    var position = _human.Model.Position;
+			    var rotation = _human.Model.Rotation;
 				if(_classType == Class.Rogue){
-					_human.Model.Model.Dispose();
-					_human.Model.Model = AnimationModelLoader.LoadEntity("Assets/Chr/RogueIdle.dae");
+					_human.Model.Dispose();
+					_human.Model = new HumanModel(_human, HumanType.Rogue);
 					_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonBronzeDoubleBlades).Weapon);
-					_human.Model.LeftWeapon.Mesh.Scale = Vector3.One * .75f;
 					
 				}else if(_classType == Class.Archer){
-					_human.Model.Model.Dispose();
-					_human.Model.Model = AnimationModelLoader.LoadEntity("Assets/Chr/ArcherIdle.dae");
-					_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonWoodenBow).Weapon);
-					_human.Model.LeftWeapon.Mesh.Scale = Vector3.One * .75f;
+					_human.Model.Dispose();
+				    _human.Model = new HumanModel(_human, HumanType.Archer);
+                    _human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonWoodenBow).Weapon);
 					
 				}else if(_classType == Class.Warrior){
-					_human.Model.Model.Dispose();
-					_human.Model.Model = AnimationModelLoader.LoadEntity("Assets/Chr/WarriorIdle.dae");
-					_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonBronzeSword).Weapon);
-					_human.Model.LeftWeapon.Mesh.Scale = Vector3.One * .75f;
+					_human.Model.Dispose();
+				    _human.Model = new HumanModel(_human, HumanType.Warrior);
+                    _human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonBronzeSword).Weapon);
 				}
-			};
+			    _human.Model.Position = position;
+			    _human.Model.Rotation = rotation;
+                _human.Model.TargetRotation = rotation;
+            };
 			
 			classChooser.RightArrow.Click += setWeapon;
 			classChooser.LeftArrow.Click += setWeapon;
