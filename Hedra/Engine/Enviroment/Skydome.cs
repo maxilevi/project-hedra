@@ -47,7 +47,7 @@ namespace Hedra.Engine.Enviroment
 			
 			GL.Uniform4(SkydomeShader.TopColorUniformLocation, TopColor);
 			GL.Uniform4(SkydomeShader.BotColorUniformLocation, BotColor);
-			GL.Uniform1(SkydomeShader.HeightUniformLocation, (float) Constants.HEIGHT);
+			GL.Uniform1(SkydomeShader.HeightUniformLocation, (float) GameSettings.Height);
 
 		    DrawManager.UIRenderer.SetupQuad();
 		    DrawManager.UIRenderer.DrawQuad();

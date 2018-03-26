@@ -1,0 +1,21 @@
+{
+  "Name": "CommonIronLongsword",
+  "DisplayName": "Iron Longsword",
+  "EquipmentType": "Sword", 
+  "Tier": "Common",
+  "Description": "Iron longsword.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 9.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.8
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Swords/CommonIronLongsword.ply"
+  }
+}

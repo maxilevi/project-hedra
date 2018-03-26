@@ -12,7 +12,10 @@
         DoubleBlades,
         Helmet,
         Chestplate,
-        Leggings,
-        Boots
+        Pants,
+        Boots,
+        Pet,
+        Vehicle,
+        Ring
     }
 }

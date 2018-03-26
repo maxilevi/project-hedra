@@ -48,9 +48,9 @@ namespace Hedra.Engine.Rendering.UI
 		
 		public UserInterface (LocalPlayer Player){
 			this._player = Player;
-			PlayerFbo = new FBO(Constants.WIDTH, Constants.HEIGHT);
-			InventoryFbo = new FBO(Constants.WIDTH, Constants.HEIGHT);
-			QuestFbo = new FBO(Constants.WIDTH, Constants.HEIGHT);
+			PlayerFbo = new FBO(GameSettings.Width, GameSettings.Height);
+			InventoryFbo = new FBO(GameSettings.Width, GameSettings.Height);
+			QuestFbo = new FBO(GameSettings.Width, GameSettings.Height);
 
 			byte[] sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.DataFile3);          	
 			Fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
@@ -70,7 +70,7 @@ namespace Hedra.Engine.Rendering.UI
 			/*Alpha = new Texture(Graphics2D.LoadFromAssets("Assets/UI/alpha.png"),
 			                     new Vector2(-.25f, .4f), Graphics2D.SizeFromAssets("Assets/UI/alpha.png") * .6f);*/
 			
-			Texture blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / Constants.HEIGHT * 578), GradientType.LEFT_RIGHT);
+			Texture blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LEFT_RIGHT);
 			
 			
 			_newRun = new Button(new Vector2(.1f, bandPosition.Y),
@@ -360,7 +360,7 @@ namespace Hedra.Engine.Rendering.UI
 			UpdateManager.CursorShown = true;
 			LocalPlayer.Instance.Chat.Show = false;
 			GameSettings.DarkEffect = false;
-			System.Windows.Forms.Cursor.Position = new System.Drawing.Point(Constants.WIDTH / 2, Constants.HEIGHT/2);
+			System.Windows.Forms.Cursor.Position = new System.Drawing.Point(GameSettings.Width / 2, GameSettings.Height/2);
 			//CoroutineManager.StartCoroutine(MenuEnter);
 		}
 			
@@ -381,7 +381,7 @@ namespace Hedra.Engine.Rendering.UI
 			UpdateManager.CursorShown = false;
 			LocalPlayer.Instance.Chat.Show = true;
 			LocalPlayer.Instance.Chat.LoseFocus();
-			System.Windows.Forms.Cursor.Position = new System.Drawing.Point(Constants.WIDTH / 2, Constants.HEIGHT/2);
+			System.Windows.Forms.Cursor.Position = new System.Drawing.Point(GameSettings.Width / 2, GameSettings.Height/2);
 			//Menu.Move(new Vector2(2,0));
 		}
 		

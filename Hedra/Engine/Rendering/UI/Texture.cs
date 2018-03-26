@@ -42,7 +42,7 @@ namespace Hedra.Engine.Rendering.UI
 		}
 		
 		public Texture(Color GradientColor0, Color GradientColor1, Vector2 Position, Vector2 Scale, GradientType Type){
-			Bitmap bmp = new Bitmap( (int) (Scale.X * Constants.WIDTH+1), (int) (Scale.Y*Constants.HEIGHT+1));
+			Bitmap bmp = new Bitmap( (int) (Scale.X * GameSettings.Width+1), (int) (Scale.Y*GameSettings.Height+1));
 		    bmp = Graphics2D.CreateGradient( GradientColor0, GradientColor1, Type, bmp);
 			this.TextureElement = new GUITexture(Graphics2D.LoadTexture(bmp), Scale, Position);
 			this.TextureElement.IsEnabled = true;

@@ -153,7 +153,7 @@ namespace Hedra.Engine.StructureSystem
             BlockType type;
             float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
 
-            return BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0 && Rng.Next(0, 175) == 1 && height > 0;
+            return BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0 && Rng.Next(0, 125) == 1 && height > 0;
         }
     }
 }

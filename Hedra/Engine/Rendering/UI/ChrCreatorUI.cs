@@ -36,7 +36,7 @@ namespace Hedra.Engine.Rendering.UI
 			Color defaultColor = Color.White;//Color.FromArgb(255,39,39,39);
 			
 			Vector2 bandPosition = new Vector2(0f, .8f);
-			Texture blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / Constants.HEIGHT * 578), GradientType.LEFT_RIGHT);
+			Texture blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LEFT_RIGHT);
 
 		    var currentTab = new GUIText("New Character", new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 15, FontStyle.Bold));
 
@@ -74,7 +74,7 @@ namespace Hedra.Engine.Rendering.UI
 				}else if(_classType == Class.Archer){
 					_human.Model.Model.Dispose();
 					_human.Model.Model = AnimationModelLoader.LoadEntity("Assets/Chr/ArcherIdle.dae");
-					_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonWoodBow).Weapon);
+					_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonWoodenBow).Weapon);
 					_human.Model.LeftWeapon.Mesh.Scale = Vector3.One * .75f;
 					
 				}else if(_classType == Class.Warrior){

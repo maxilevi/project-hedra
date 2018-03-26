@@ -75,12 +75,13 @@ namespace Hedra.Engine.ModuleSystem
 
             if (Drops.Length == 0)
             {
-                /*var drop = new DropComponent(Mob)
+                var drop = new DropComponent(Mob)
                 {
-                    DropChance = 12.5f,
-                    RandomDrop = true,
+                    RandomDrop = false,
+                    DropChance = 25f,
+                    GoldDrop = true,
                 };
-                Mob.AddComponent(drop);*/
+                Mob.AddComponent(drop);
             }
 
             foreach (DropTemplate template in Drops)
@@ -89,6 +90,7 @@ namespace Hedra.Engine.ModuleSystem
 
                 var drop = new DropComponent(Mob)
                 {
+                    GoldDrop = true,
                     DropChance = template.Chance,
                     RandomDrop = false,
                     ItemDrop = ItemPool.Grab(type)

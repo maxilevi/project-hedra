@@ -29,11 +29,13 @@ namespace Hedra.Engine.EntitySystem
 		public LocalPlayer Player;
 		public bool Enabled;
         public Thread SpawnThread;
+	    private Random Rng;
 		
 		public EntitySpawner(LocalPlayer Player)
 		{
 			this.Player = Player;
-			SpawnThread = new Thread(Update);
+		    Rng = new Random();
+            SpawnThread = new Thread(Update);
             SpawnThread.Start();
 		}
 		
@@ -117,7 +119,6 @@ namespace Hedra.Engine.EntitySystem
 		        shore
 		    };
 
-            var rng = Utils.Rng;
 		    for (var i = 0; i < templates.Length; i++)
 		    {
 		        if (conditions[i])
@@ -125,9 +126,9 @@ namespace Hedra.Engine.EntitySystem
 		            SpawnTemplate type = null;
 		            while (type == null)
 		            {
-		                var template = templates[i][rng.Next(0, templates[i].Length)];
+		                var template = templates[i][Rng.Next(0, templates[i].Length)];
 
-		                if (rng.NextFloat() < template.Chance)
+		                if (Rng.NextFloat() < template.Chance)
 		                    type = template;
 		            }
 		            return type;

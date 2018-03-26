@@ -6,7 +6,6 @@
  */
 using System;
 using OpenTK;
-using Hedra.Engine.Rendering.Effects;
 using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering
@@ -29,12 +28,11 @@ namespace Hedra.Engine.Rendering
 			if(Constants.HIDE_ENTITIES || Indices == null || Data == null) return;
 			
 			Bind();
-
-			GL.Uniform4(Shader.TintUniform, Tint+BaseTint);
+		    GL.Disable(EnableCap.Blend);
+            GL.Uniform4(Shader.TintUniform, Tint+BaseTint);
 			
-			if(Alpha < 1)
+			if(Alpha < 0.9)
 				GL.Enable(EnableCap.Blend);
-			//GL.BlendEquation(BlendEquationMode.FuncAdd);
 			GL.Enable(EnableCap.DepthTest);
 			
 			Data.Bind();
@@ -173,7 +171,7 @@ namespace Hedra.Engine.Rendering
 			GL.Uniform3(Shader.AnimationRotationPointLocation, AnimationRotationPoint);
 			GL.Uniform4(Shader.TintUniform, Tint+BaseTint);
 			GL.Uniform1(Shader.OutlineUniform, (Outline) ? 1 : 0);
-			GL.Uniform2(Shader.ResolutionUniform, new Vector2(Constants.WIDTH, Constants.HEIGHT));
+			GL.Uniform2(Shader.ResolutionUniform, new Vector2(GameSettings.Width, GameSettings.Height));
 			GL.Uniform3(Shader.BakedPositionUniform, Vector3.Zero);
 			GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.LPlayer.Position);
 			

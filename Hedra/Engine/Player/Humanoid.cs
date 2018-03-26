@@ -260,11 +260,11 @@ namespace Hedra.Engine.Player
 				float dmgToDo = 5 * (8+Level*1.5f) * .2f;
 			    if (MainWeapon == null) return dmgToDo * (1 + this.Level * .25f) * this.AttackPower;
 
-			    dmgToDo = (MainWeapon.GetAttribute<float>(CommonAttributes.Damage)+8) * (this.Level * .75f) * .8f;
+			    dmgToDo = (MainWeapon.GetAttribute<float>(CommonAttributes.Damage)+8) * (1f+this.Level * .05f) * .8f;
 
 			    dmgToDo *= .7f + Utils.Rng.NextFloat();
 
-			    return dmgToDo * (1+this.Level*.2f) * this.AttackPower;
+			    return dmgToDo * (1+this.Level*.05f) * this.AttackPower;
 			}
 		}
 		

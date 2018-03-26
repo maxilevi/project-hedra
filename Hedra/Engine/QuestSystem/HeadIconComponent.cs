@@ -69,7 +69,7 @@ namespace Hedra.Engine.QuestSystem
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             _iconMesh?.Dispose();
         }

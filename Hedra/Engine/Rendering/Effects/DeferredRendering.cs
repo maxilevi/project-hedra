@@ -41,9 +41,9 @@ namespace Hedra.Engine.Rendering.Effects
 		    Formats[1] = PixelInternalFormat.Rgba32f;
 		    Formats[2] = PixelInternalFormat.Rgba16f;
 
-            FirstPass = new FBO(new Size(Constants.WIDTH, Constants.HEIGHT), Attachments, Formats, false, false, 0, true);
-		    ThirdPass = new FBO(Constants.WIDTH / 2, Constants.HEIGHT / 2);
-		    SecondPass = new FBO(Constants.WIDTH, Constants.HEIGHT);
+            FirstPass = new FBO(new Size(GameSettings.Width, GameSettings.Height), Attachments, Formats, false, false, 0, true);
+		    ThirdPass = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
+		    SecondPass = new FBO(GameSettings.Width, GameSettings.Height);
 
             #region SETUP UNIFORMS & TEXTURES
             SamplesUniform = GL.GetUniformLocation(FirstPassShader.ShaderID, "samples");

@@ -17,10 +17,6 @@ namespace Hedra
 	{
 		public static int VIEW_DISTANCE = 1024;
 		public static int UPDATE_DISTANCE = 256;
-		public static int WIDTH = 1024, DEVICE_WIDTH;
-		public static int HEIGHT = 578, DEVICE_HEIGHT;
-		public static float SCREEN_RATIO = (float) ( (float) WIDTH / (float) HEIGHT);
-		public static float DEFAULT_SCREEN_RATIO = 1.33f;
 		public static bool DEBUG = true;
 		public static bool LINES = false;
 		public static bool LOCK_FRUSTUM = false;

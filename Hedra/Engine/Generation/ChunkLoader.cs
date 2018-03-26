@@ -79,8 +79,6 @@ namespace Hedra.Engine.Generation
                         goto SLEEP;
 
                     Offset = World.ToChunkSpace(_player.BlockPosition);
-                    if (Offset == Vector2.Zero)
-                        goto SLEEP;
                     var newPos = _player.BlockPosition.Xz;
                     if ( (_lastPos - newPos).LengthSquared > 16*16 || GameSettings.ChunkLoaderRadius != _lastRadius ||
                         SceneManager.Game.IsLoading)

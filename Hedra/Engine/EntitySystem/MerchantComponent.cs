@@ -52,9 +52,9 @@ namespace Hedra.Engine.EntitySystem
 		    }
 
 		    if(TravellingMerchant){
-				//Items.Add(TradeSystem.MaxItems - 2, ItemPool.Grab("HorseMount"));
-				//Items.Add(TradeSystem.MaxItems - 3, ItemPool.Grab("WolfMount"));
-				//Items.Add(TradeSystem.MaxItems - 4, ItemPool.Grab(ItemType.Glider));
+				Items.Add(TradeInventory.MerchantSpaces - 2, ItemPool.Grab("HorseMount"));
+				//Items.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab("WolfMount"));
+				//Items.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab(ItemType.Glider));
 			}
 		    (Parent as Humanoid).Gold = int.MaxValue;
 		}

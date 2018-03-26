@@ -22,8 +22,8 @@ namespace Hedra.Engine.Rendering.Effects
 		private static GUIShader Bloom =  new GUIShader("Shaders/Bloom.vert", "Shaders/Bloom.frag");
 		private static BlurShader HBlurShader = new BlurShader("Shaders/HBlur.vert","Shaders/Blur.frag");
 		private static BlurShader VBlurShader = new BlurShader("Shaders/VBlur.vert","Shaders/Blur.frag");
-		public FBO HBloomFBO = new FBO(Constants.WIDTH / 4, Constants.HEIGHT / 4);
-		public FBO VBloomFBO = new FBO(Constants.WIDTH / 4, Constants.HEIGHT / 4);
+		public FBO HBloomFBO = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
+		public FBO VBloomFBO = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
 		public int TopColorUniform, BotColorUniform, HeightUniform;
 		
 		public BloomFilter() : base(){
@@ -43,7 +43,7 @@ namespace Hedra.Engine.Rendering.Effects
 			
 			GL.Uniform4(TopColorUniform, SkyManager.Skydome.TopColor);
 			GL.Uniform4(BotColorUniform, SkyManager.Skydome.BotColor);
-			GL.Uniform1(HeightUniform, Constants.HEIGHT);
+			GL.Uniform1(HeightUniform, GameSettings.Height);
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
 			DrawQuad(Src.TextureID[0]);

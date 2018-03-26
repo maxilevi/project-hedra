@@ -66,8 +66,8 @@ namespace Hedra.Engine.Rendering.UI
                 if (texture.Position.X == 1) anchorPositionX = true;
                 if (texture.Position.Y == 1) anchorPositionY = true;
 
-                //Textures[i].Position = new Vector2(Textures[i].Position.X * Constants.WIDTH / NewWidth, Textures[i].Position.Y * Constants.HEIGHT / NewHeight);
-                texture.Scale = new Vector2(texture.Scale.X * Constants.WIDTH / NewWidth, texture.Scale.Y * Constants.HEIGHT / NewHeight);
+                //Textures[i].Position = new Vector2(Textures[i].Position.X * GameSettings.Width / NewWidth, Textures[i].Position.Y * GameSettings.Height / NewHeight);
+                texture.Scale = new Vector2(texture.Scale.X * GameSettings.Width / NewWidth, texture.Scale.Y * GameSettings.Height / NewHeight);
 
                 //Textures[i].Position = new Vector2( (AnchorPositionX) ? 1 : Textures[i].Position.X, (AnchorPositionY) ? 1 : Textures[i].Position.Y);
                 //_textures[i].Scale = new Vector2( (anchorScaleX) ? 1 : _textures[i].Scale.X, (anchorScaleY) ? 1 : _textures[i].Scale.Y);
@@ -154,7 +154,7 @@ namespace Hedra.Engine.Rendering.UI
             this.SetupQuad();
 
             GL.Uniform2(Shader.ScaleUniform, scale);
-            GL.Uniform2(Shader.SizeUniform, new Vector2(1.0f / Constants.WIDTH, 1.0f / Constants.HEIGHT));
+            GL.Uniform2(Shader.SizeUniform, new Vector2(1.0f / GameSettings.Width, 1.0f / GameSettings.Height));
             GL.Uniform1(Shader.FxaaUniform, Texture.Fxaa ? 1.0f : 0.0f);
             GL.Uniform2(Shader.PositionUniform, Texture.Position);
             GL.Uniform4(Shader.ColorUniform, Texture.Color);

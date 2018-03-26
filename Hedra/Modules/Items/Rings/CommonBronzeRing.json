@@ -1,0 +1,29 @@
+﻿{
+  "Name": "CommonBronzeRing",
+  "DisplayName": "Bronze Ring",
+  "EquipmentType": "Ring", 
+  "Tier": "Common",
+  "Description": "Bronze ring.",
+  "Attributes": [
+    {
+      "Name": "MovementSpeed",
+      "Value": 0.0
+    },
+    {
+      "Name": "Health",
+      "Value": 0.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.0
+    },
+    {
+      "Name": "EffectType",
+      "Value": "None"
+    }
+  ],
+  "Model": {
+    "Scale": 4.0,
+    "Path": "$DataFile$/Items/Rings/CommonBronzeRing.ply"
+  }
+}

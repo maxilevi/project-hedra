@@ -84,12 +84,10 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected void SetToChest(EntityMesh Mesh)
         {
             this.SetToDefault(Mesh);
+            Mesh.TransformationMatrix = Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + Model.ChestPosition + Vector3.UnitY * 1f);
             Mesh.Position = Model.Position;
-            Mesh.TargetPosition = Model.ChestPosition - this.Mesh.Position + (this.SheathedPosition - Vector3.UnitZ * .5f) * this.Scale;
-            Mesh.AnimationPosition = Model.ChestPosition - this.Mesh.Position + (this.SheathedPosition - Vector3.UnitZ * .5f) * this.Scale;
-            Mesh.RotationPoint = -(Model.ChestPosition - this.Mesh.Position);
-            Mesh.Rotation = Model.Rotation;
             Mesh.LocalRotation = this.SheathedRotation;
+            Mesh.BeforeLocalRotation = (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 2.5f) * this.Scale;
         }
 
         protected void SetToMainHand(EntityMesh Mesh)

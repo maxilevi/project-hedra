@@ -1,0 +1,29 @@
+﻿{
+  "Name": "CommonWoodenRing",
+  "DisplayName": "Wooden Ring",
+  "EquipmentType": "Ring", 
+  "Tier": "Common",
+  "Description": "Wooden ring.",
+  "Attributes": [
+    {
+      "Name": "MovementSpeed",
+      "Value": 0.25
+    },
+    {
+      "Name": "Health",
+      "Value": 0.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.0
+    },
+    {
+      "Name": "EffectType",
+      "Value": "None"
+    }
+  ],
+  "Model": {
+    "Scale": 4.0,
+    "Path": "$DataFile$/Items/Rings/CommonWoodenRing.ply"
+  }
+}

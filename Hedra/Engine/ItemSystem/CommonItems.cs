@@ -8,7 +8,7 @@ namespace Hedra.Engine.ItemSystem
     public enum CommonItems
     {
         CommonBronzeSword,
-        CommonWoodBow,
+        CommonWoodenBow,
         CommonBronzeDoubleBlades,
     }
 }

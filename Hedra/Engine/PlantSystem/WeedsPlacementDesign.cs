@@ -25,7 +25,7 @@ namespace Hedra.Engine.PlantSystem
         public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)
         {
             return World.GetHighestBlockAt(Position.X, Position.Z).Type == BlockType.Grass &&
-                SimplexNoise.Noise.Generate(Position.X * 0.025f, Position.Z * 0.025f) > 0.55f;
+                OpenSimplexNoise.Evaluate(Position.X * 0.045f, Position.Z * 0.045f) > 0.35f;
         }
     }
 }

@@ -112,7 +112,7 @@ namespace Hedra.Engine.QuestSystem
 
         public override void Draw() { }
 
-        public void Dispose()
+        public override void Dispose()
         {
             this.Initialize();
             LocalPlayer player = SceneManager.Game.LPlayer;

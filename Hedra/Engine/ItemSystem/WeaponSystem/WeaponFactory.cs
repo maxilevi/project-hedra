@@ -20,6 +20,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             }
         }
 
+        public static bool Contains(Item Item)
+        {
+            return Item.EquipmentType != null && Weapons.ContainsKey(Item.EquipmentType);
+        }
+
         public static Weapon Get(Item Item)
         {
              return (Weapon) Activator.CreateInstance(Weapons[Item.EquipmentType], Item.Model);

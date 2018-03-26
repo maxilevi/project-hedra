@@ -100,22 +100,22 @@ namespace Hedra.Engine.Player
 	        float pHealth = 0, pMaxHealth = 0;
 
 	        this.BeforeAttacking += delegate (Entity Victim, float Amount) {
-	            if (Pet.MountEntity != null && Victim == Pet.MountEntity)
+	            if (Pet.Pet != null && Victim == Pet.Pet)
 	            {
-	                pMaxHealth = Pet.MountEntity.MaxHealth;
-	                pHealth = Pet.MountEntity.Health;
+	                pMaxHealth = Pet.Pet.MaxHealth;
+	                pHealth = Pet.Pet.Health;
 
-	                Pet.MountEntity.MaxHealth = Amount + 1;
-	                Pet.MountEntity.Health = Pet.MountEntity.MaxHealth;
+	                Pet.Pet.MaxHealth = Amount + 1;
+	                Pet.Pet.Health = Pet.Pet.MaxHealth;
 	            }
 	        };
 
 	        this.OnAttacking += delegate (Entity Victim, float Amount) {
-	            if (Pet.MountEntity != null && Victim == Pet.MountEntity)
+	            if (Pet.Pet != null && Victim == Pet.Pet)
 	            {
-	                Pet.MountEntity.MaxHealth = pMaxHealth;
-	                Pet.MountEntity.Health = pHealth;
-	                var Dmg = Pet.MountEntity.SearchComponent<DamageComponent>();
+	                Pet.Pet.MaxHealth = pMaxHealth;
+	                Pet.Pet.Health = pHealth;
+	                var Dmg = Pet.Pet.SearchComponent<DamageComponent>();
 	                for (int i = Dmg.DamageLabels.Count - 1; i > -1; i--)
 	                {
 	                    if (Dmg.DamageLabels[i].Texture is GUIText)
@@ -208,7 +208,7 @@ namespace Hedra.Engine.Player
                 {
                     if (!(entities[i] is LocalPlayer) &&
                         (entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256 * 256 ||
-                        Pet.MountEntity == entities[i])
+                        Pet.Pet == entities[i])
                     {
                         entities[i].Draw();
                     }
@@ -349,7 +349,7 @@ namespace Hedra.Engine.Player
                     if (entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused &&
                         !SceneManager.Game.IsLoading
 
-                        || Pet.MountEntity == entities[i] || entities[i].IsBoss)
+                        || Pet.Pet == entities[i] || entities[i].IsBoss)
                     {
 
                         entities[i].Update();
@@ -640,13 +640,13 @@ namespace Hedra.Engine.Player
 			switch (ClassType)
 			{
 			    case Class.Warrior:
-			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, EquipmentType.Sword));
+			        item = ItemPool.Grab(CommonItems.CommonBronzeSword);
 			        break;
 			    case Class.Archer:
-			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, EquipmentType.Bow));
+			        item = ItemPool.Grab(CommonItems.CommonWoodenBow);
                     break;
 			    case Class.Rogue:
-			        item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, EquipmentType.DoubleBlades));
+			        item = ItemPool.Grab(CommonItems.CommonBronzeDoubleBlades);
                     break;
 			}
 			data.AddItem(PlayerInventory.WeaponHolder, item);

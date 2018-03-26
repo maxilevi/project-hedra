@@ -20,12 +20,21 @@ namespace Hedra.Engine.Rendering.Animation
 	/// </summary>
 	public class AnimatedModelShader : Shader
 	{
-		public int ProjectionViewUniform, ViewUniform;
-		public UniformMatrix4Array Mat4Uniform;
-		public int ShadowTexUniform, UseShadowsUniform, ShadowMVPUniform, PlayerPositionUniform, UseFogUniform, AlphaUniform, TintUniform, DisposeTimeUniform, ShadowTransitionUniform;
-		public AnimatedModelShader(string s1, string s2) : base(s1,s2){}
-	    public AnimatedModelShader(string s1, string s2, string s3) : base(s1, s2, s3) { }
-	    public AnimatedModelShader(ShaderData dataV, ShaderData dataG, ShaderData dataF) : base(dataV, dataG, dataF) { }
+		public int ProjectionViewUniform;
+	    public int ViewUniform;
+	    public UniformMatrix4Array Mat4Uniform;
+		public int ShadowTexUniform;
+	    public int UseShadowsUniform;
+	    public int ShadowMvpUniform;
+	    public int PlayerPositionUniform;
+	    public int UseFogUniform;
+	    public int AlphaUniform;
+	    public int TintUniform;
+	    public int DisposeTimeUniform;
+	    public int ShadowTransitionUniform;
+	    public AnimatedModelShader(string S1, string S2) : base(S1,S2){}
+	    public AnimatedModelShader(string S1, string S2, string S3) : base(S1, S2, S3) { }
+	    public AnimatedModelShader(ShaderData DataV, ShaderData DataG, ShaderData DataF) : base(DataV, DataG, DataF) { }
 
         public override void GetUniformsLocations()
 		{
@@ -37,7 +46,7 @@ namespace Hedra.Engine.Rendering.Animation
 			this.AlphaUniform = GL.GetUniformLocation(ShaderID, "Alpha");
 			this.TintUniform = GL.GetUniformLocation(ShaderID, "Tint");
 			this.ShadowTexUniform = GL.GetUniformLocation(ShaderID, "ShadowTex");
-			this.ShadowMVPUniform = GL.GetUniformLocation(ShaderID, "ShadowMVP");
+			this.ShadowMvpUniform = GL.GetUniformLocation(ShaderID, "ShadowMVP");
 			this.UseShadowsUniform = GL.GetUniformLocation(ShaderID, "UseShadows");
 			this.UseFogUniform = GL.GetUniformLocation(ShaderID, "UseFog");
 		    this.DisposeTimeUniform = GL.GetUniformLocation(ShaderID, "disposeTime");

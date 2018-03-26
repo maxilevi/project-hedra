@@ -106,9 +106,9 @@ namespace Hedra.Engine.Rendering.UI
                 GL.BindTexture(TextureTarget.Texture2D, RectangleBlueprint);
 
             GL.Uniform2(Shader.ScaleUniform,
-                Mathf.DivideVector(TargetResolution * Scale, new Vector2(Constants.WIDTH, Constants.HEIGHT)) +
+                Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) +
                 Mathf.DivideVector(TargetResolution * new Vector2(0.015f, 0.015f),
-                    new Vector2(Constants.WIDTH, Constants.HEIGHT)));
+                    new Vector2(GameSettings.Width, GameSettings.Height)));
             GL.Uniform2(Shader.PositionUniform, Position);
             GL.Uniform4(Shader.ColorUniform, BackgroundColor);
 
@@ -117,7 +117,7 @@ namespace Hedra.Engine.Rendering.UI
 
             GL.Uniform2(Shader.ScaleUniform,
                 ShowBar
-                    ? Mathf.DivideVector(TargetResolution * Scale, new Vector2(Constants.WIDTH, Constants.HEIGHT)) *
+                    ? Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) *
                       new Vector2(_barSize, 1)
                     : new Vector2(0, 0));
             GL.Uniform2(Shader.PositionUniform, Position);

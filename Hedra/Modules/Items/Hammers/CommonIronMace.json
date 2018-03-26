@@ -1,0 +1,21 @@
+﻿{
+  "Name": "CommonIronMace",
+  "DisplayName": "Iron Mace",
+  "EquipmentType": "Hammer", 
+  "Tier": "Common",
+  "Description": "A common iron mace.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.8
+    }
+  ],
+  "Model": {
+    "Scale": 2.75,
+    "Path": "$DataFile$/Items/Hammers/CommonIronMace.ply"
+  }
+}

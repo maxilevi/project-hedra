@@ -1,13 +1,13 @@
 ﻿{
-  "Name": "CommonBronzeKnife",
-  "DisplayName": "Bronze Knife",
-  "EquipmentType": "Knife", 
+  "Name": "CommonBronzeDoubleBlades",
+  "DisplayName": "Bronze Blades",
+  "EquipmentType": "DoubleBlades", 
   "Tier": "Common",
-  "Description": "Bronze knife.",
+  "Description": "Bronze double blades.",
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 8.0
+      "Value": 7.5
     },
     {
       "Name": "AttackSpeed",
@@ -15,7 +15,7 @@
     }
   ],
   "Model": {
-    "Scale": 0.5,
+    "Scale": 1.5,
     "Path": "$DataFile$/Items/CommonBronzeSword.ply"
   }
 }

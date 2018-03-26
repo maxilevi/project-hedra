@@ -1,9 +1,9 @@
 ﻿{
-  "Name": "CommonBronzeDoubleBlades",
-  "DisplayName": "Bronze Double Blades",
-  "EquipmentType": "DoubleBlades", 
+  "Name": "CommonBronzeKnife",
+  "DisplayName": "Bronze Knife",
+  "EquipmentType": "Knife", 
   "Tier": "Common",
-  "Description": "Bronze double blades.",
+  "Description": "Bronze knife.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -15,7 +15,7 @@
     }
   ],
   "Model": {
-    "Scale": 1.5,
+    "Scale": 1.0,
     "Path": "$DataFile$/Items/CommonBronzeSword.ply"
   }
 }

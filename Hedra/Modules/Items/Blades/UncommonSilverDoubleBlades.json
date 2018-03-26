@@ -1,0 +1,21 @@
+{
+  "Name": "UncommonSilverDoubleBlades",
+  "DisplayName": "Silver Blades",
+  "EquipmentType": "DoubleBlades", 
+  "Tier": "Uncommon",
+  "Description": "Silver Blades.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.25
+    }
+  ],
+  "Model": {
+    "Scale": 1.25,
+    "Path": "$DataFile$/Items/Swords/UncommonSilverSword.ply"
+  }
+}

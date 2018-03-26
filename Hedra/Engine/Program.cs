@@ -35,25 +35,25 @@ namespace Hedra
 		            Log.WriteLine(Devices[i].Bounds.ToString());
 		        }
 
-		        Constants.DEVICE_WIDTH = Screen.PrimaryScreen.Bounds.Width;
-		        Constants.DEVICE_HEIGHT = Screen.PrimaryScreen.Bounds.Height;
+		        GameSettings.DeviceWidth = Screen.PrimaryScreen.Bounds.Width;
+		        GameSettings.DeviceHeight = Screen.PrimaryScreen.Bounds.Height;
 
 
-		        Log.WriteLine("Creating the window on the Primary Device at " + Constants.DEVICE_WIDTH + "x" +
-		                      Constants.DEVICE_HEIGHT);
+		        Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +
+		                      GameSettings.DeviceHeight);
 
-		        Constants.WIDTH = Constants.DEVICE_WIDTH;
-		        Constants.HEIGHT = Constants.DEVICE_HEIGHT;
-		        Constants.SCREEN_RATIO = Constants.WIDTH / (float) Constants.HEIGHT;
+		        GameSettings.Width = GameSettings.DeviceWidth;
+		        GameSettings.Height = GameSettings.DeviceHeight;
+		        GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;
 
-		        GameWindow = new Hedra(Constants.WIDTH, Constants.HEIGHT,
+		        GameWindow = new Hedra(GameSettings.Width, GameSettings.Height,
 		            GraphicsMode.Default, "Project Hedra");
 
 		        GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
 		        GameWindow.WindowState = WindowState.Maximized;
-		        Constants.WIDTH = GameWindow.ClientSize.Width;
-		        Constants.HEIGHT = GameWindow.ClientSize.Height;
-		        Constants.SCREEN_RATIO = Constants.WIDTH / (float) Constants.HEIGHT;
+		        GameSettings.Width = GameWindow.ClientSize.Width;
+		        GameSettings.Height = GameWindow.ClientSize.Height;
+		        GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;
 		        GameWindow.Run();
 #if !DEBUG
 		    }

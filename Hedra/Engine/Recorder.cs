@@ -32,8 +32,8 @@ namespace Hedra.Engine
 			
 			Directory.CreateDirectory(Output);
 				
-			int[] pixels = new int[Constants.WIDTH * Constants.HEIGHT];
-			GL.ReadPixels(0, 0, Constants.WIDTH, Constants.HEIGHT, PixelFormat.Rgba, PixelType.Byte, pixels);
+			int[] pixels = new int[GameSettings.Width * GameSettings.Height];
+			GL.ReadPixels(0, 0, GameSettings.Width, GameSettings.Height, PixelFormat.Rgba, PixelType.Byte, pixels);
 			 
 			TaskManager.Asynchronous( delegate{
 			// we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
@@ -46,8 +46,8 @@ namespace Hedra.Engine
 			    pixels[i] = (r << 16 | g << 8 | b) << 1;
 			}
 			 
-			Bitmap Bmp = new Bitmap(Constants.WIDTH, Constants.HEIGHT);
-			var data = Bmp.LockBits(new Rectangle(0, 0, Constants.WIDTH, Constants.HEIGHT), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+			Bitmap Bmp = new Bitmap(GameSettings.Width, GameSettings.Height);
+			var data = Bmp.LockBits(new Rectangle(0, 0, GameSettings.Width, GameSettings.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
 			Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
 			Bmp.UnlockBits(data);
 
@@ -60,8 +60,8 @@ namespace Hedra.Engine
 		}
 		
 		public static string SaveScreenshot(string Path){
-			int[] pixels = new int[Constants.WIDTH * Constants.HEIGHT];
-			GL.ReadPixels(0, 0, Constants.WIDTH, Constants.HEIGHT, PixelFormat.Rgba, PixelType.Byte, pixels);
+			int[] pixels = new int[GameSettings.Width * GameSettings.Height];
+			GL.ReadPixels(0, 0, GameSettings.Width, GameSettings.Height, PixelFormat.Rgba, PixelType.Byte, pixels);
 			 
 			// we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
 			for (int i = 0; i < pixels.Length; i++)
@@ -73,9 +73,9 @@ namespace Hedra.Engine
 			    pixels[i] = (r << 16 | g << 8 | b) << 1;
 			}
 
-            using (Bitmap Bmp = new Bitmap(Constants.WIDTH, Constants.HEIGHT))
+            using (Bitmap Bmp = new Bitmap(GameSettings.Width, GameSettings.Height))
             {
-                var data = Bmp.LockBits(new Rectangle(0, 0, Constants.WIDTH, Constants.HEIGHT), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                var data = Bmp.LockBits(new Rectangle(0, 0, GameSettings.Width, GameSettings.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
                 Bmp.UnlockBits(data);
 

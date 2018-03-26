@@ -33,7 +33,7 @@ namespace Hedra.Engine.Player
 			if(base.Level == 0)return;
 			if(base.Level > 1) Player.SkillSystem.SetPoints(this.GetType(), 1);
 
-            Player.Inventory.AddWeaponRestriction(EquipmentType.Axe);
+            Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Axe);
 		}
 		
 		public override string Description => "Learn to use the axe.";

@@ -71,7 +71,7 @@ namespace Hedra.Engine.Management
 	     }
 	  	
 		public static void CenterMouse(){
-			System.Windows.Forms.Cursor.Position = new System.Drawing.Point(Constants.WIDTH / 2, Constants.HEIGHT / 2);
+			System.Windows.Forms.Cursor.Position = new System.Drawing.Point(GameSettings.Width / 2, GameSettings.Height / 2);
 		}
 
 	    public static CursorState CursorState { get; set; }

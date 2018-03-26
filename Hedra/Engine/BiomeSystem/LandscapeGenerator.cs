@@ -8,12 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Generation;
-using Hedra.Engine.PlantSystem;
 using Hedra.Engine.QuestSystem;
-using Hedra.Engine.QuestSystem.Objectives;
 using Hedra.Engine.StructureSystem;
-using Hedra.Engine.TreeSystem;
-using Newtonsoft.Json.Converters;
 using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem
@@ -216,9 +212,11 @@ namespace Hedra.Engine.BiomeSystem
 
 					        height -= river;
 							height -= path;
+					        var dirtNoise = OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + OffsetX) * 0.0175f,
+					            (z * Chunk.BlockSize + OffsetZ) * 0.0175f) > .35f;
 
-					        bool makeDirt = biomeGen.HasDirt && SimplexNoise.Noise.Generate( (x*Chunk.BlockSize+OffsetX) * 0.0075f,
-                                (z*Chunk.BlockSize+OffsetZ) * 0.0075f) > .45f;
+
+					        bool makeDirt = biomeGen.HasDirt && dirtNoise;
 
 					        var villagePath = false;
 					        lock (World.QuestManager.VillagePositions)

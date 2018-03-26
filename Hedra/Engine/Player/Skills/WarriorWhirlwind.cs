@@ -85,7 +85,7 @@ namespace Hedra.Engine.Player
 					Player.Model.LeftWeapon.LockWeapon = false;
 					return;
 				}
-				RotationY += Engine.Time.ScaledFrameTimeSeconds * 800f;
+				RotationY += Engine.Time.ScaledFrameTimeSeconds * 2000f;
                 //if(RotationY > 720) 
 			    //	RotationY -= 360;
 
@@ -152,10 +152,6 @@ namespace Hedra.Engine.Player
             _trail.Update();
 		}
 		
-		public override string Description {
-			get {
-				return "A fierce spinning attack.";
-			}
-		}
+		public override string Description => "A fierce spinning attack.";
 	}
 }

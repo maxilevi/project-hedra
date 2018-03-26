@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player
         public const int InventorySpaces = 20;
         public const int BootsHolder = 20;
         public const int PantsHolder = 21;
-        public const int ChestHolder = 22;
+        public const int ChestplateHolder = 22;
         public const int HelmetHolder = 23;
         public const int PetHolder = 24;
         public const int GliderHolder = 25;
@@ -112,7 +112,7 @@ namespace Hedra.Engine.Player
         public void SetItem(int Index, Item New)
         {
             var array = Index >= InventorySpaces ? _mainItems : _items;
-            var index = ToMainItemsSpace(Index);
+            var index = ToCorrectItemSpace(Index);
             array.SetItem(index, New);
         }
 
@@ -183,17 +183,17 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public bool HasWeaponRestriction(EquipmentType Type)
+        public bool HasRestrictions(int Index, EquipmentType Type)
         {
-            return _restrictions.HasRestriction(ToMainItemsSpace(WeaponHolder), Type.ToString());
+            return _restrictions.HasRestriction(ToCorrectItemSpace(WeaponHolder), Type.ToString());
         }
 
-        public void AddWeaponRestriction(EquipmentType Type)
-        {   
-            _restrictions.AddRestriction(ToMainItemsSpace(WeaponHolder), Type.ToString());
+        public void AddRestriction(int Index, EquipmentType Type)
+        {
+            _restrictions.AddRestriction(ToCorrectItemSpace(Index), Type.ToString());
         }
 
-        private static int ToMainItemsSpace(int Index)
+        private static int ToCorrectItemSpace(int Index)
         {
             return Index >= InventorySpaces ? Index - InventorySpaces : Index;
         }
@@ -204,13 +204,13 @@ namespace Hedra.Engine.Player
         }
 
         public bool HasAvailableSpace => _items.HasAvailableSpace;
-        public Item this[int Index] => (Index >= InventorySpaces ? _mainItems : _items)[ToMainItemsSpace(Index)];
+        public Item this[int Index] => (Index >= InventorySpaces ? _mainItems : _items)[ToCorrectItemSpace(Index)];
         public Item MainWeapon => this[WeaponHolder];
         public Item Ring => this[RingHolder];
         public Item Glider => this[GliderHolder];
-        public Item Mount => this[PetHolder];
+        public Item Pet => this[PetHolder];
         public Item Helmet => this[HelmetHolder];
-        public Item Chest => this[ChestHolder];
+        public Item Chest => this[ChestplateHolder];
         public Item Pants => this[PantsHolder];
         public Item Boots => this[BootsHolder];
         public int Length => _items.Length + _mainItems.Length;

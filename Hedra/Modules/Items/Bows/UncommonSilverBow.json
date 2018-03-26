@@ -1,0 +1,21 @@
+﻿{
+  "Name": "UncommonSilverBow",
+  "DisplayName": "Silver Bow",
+  "EquipmentType": "Bow", 
+  "Tier": "Uncommon",
+  "Description": "Silver bow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Bows/UncommonSilverBow.ply"
+  }
+}

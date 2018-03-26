@@ -1,0 +1,21 @@
+{
+  "Name": "UncommonSilverKnife",
+  "DisplayName": "Silver Knife",
+  "EquipmentType": "Knife", 
+  "Tier": "Uncommon",
+  "Description": "Silver knife.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.25
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Swords/UncommonSilverSword.ply"
+  }
+}

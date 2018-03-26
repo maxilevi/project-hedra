@@ -160,7 +160,7 @@ namespace Hedra.Engine.Rendering.Animation
 			GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.LPlayer.Position);
 			
 			if(GameSettings.Shadows){
-				GL.UniformMatrix4(Shader.ShadowMVPUniform, false, ref ShadowRenderer.ShadowMVP);
+				GL.UniformMatrix4(Shader.ShadowMvpUniform, false, ref ShadowRenderer.ShadowMVP);
 				GL.ActiveTexture(TextureUnit.Texture0);
 				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFBO.TextureID[0]);
 				GL.Uniform1(Shader.ShadowTexUniform, 0);

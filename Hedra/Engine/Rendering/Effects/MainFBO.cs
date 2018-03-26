@@ -36,9 +36,9 @@ namespace Hedra.Engine.Rendering.Effects
 		public MainFBO(){
 			Identity = Mathf.CreateTransformationMatrix(new Vector2(1,-1), Vector2.Zero);
 			SSAO = new DeferedRenderer();
-			Default = new FBO(Constants.WIDTH, Constants.HEIGHT, false, 0, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgba32f);
-			FinalFBO = new FBO(Constants.WIDTH, Constants.HEIGHT);
-			AdditiveFBO = new FBO(Constants.WIDTH, Constants.HEIGHT);
+			Default = new FBO(GameSettings.Width, GameSettings.Height, false, 0, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgba32f);
+			FinalFBO = new FBO(GameSettings.Width, GameSettings.Height);
+			AdditiveFBO = new FBO(GameSettings.Width, GameSettings.Height);
 
             Bloom = new BloomFilter();
 			UnderWater = new UnderWaterFilter();
@@ -150,7 +150,7 @@ namespace Hedra.Engine.Rendering.Effects
 			if(GameSettings.UnderWaterEffect)
 			{
 			    var underChunk = World.GetChunkAt(LocalPlayer.Instance.View.Position);
-				UnderWaterFilter.Multiplier = underChunk.Biome?.Colors.WaterColor * 0.8f ?? Colors.DeepSkyBlue;
+				UnderWaterFilter.Multiplier = underChunk?.Biome?.Colors.WaterColor * 0.8f ?? Colors.DeepSkyBlue;
 				UnderWater.Pass(Default, FinalFBO);
 			}
 			#endregion
@@ -218,7 +218,7 @@ namespace Hedra.Engine.Rendering.Effects
 			
 			GL.Uniform2(Shader.ScaleUniform, new Vector2(1,1));
 			GL.Uniform2(Shader.PositionUniform, new Vector2(0,0));
-            GL.Uniform2(Shader.SizeUniform, new Vector2(1.0f/Constants.WIDTH, 1.0f/Constants.HEIGHT));
+            GL.Uniform2(Shader.SizeUniform, new Vector2(1.0f/GameSettings.Width, 1.0f/GameSettings.Height));
             GL.Uniform1(Shader.FxaaUniform, (FXAA) ? 1.0f : 0.0f);
 
 		    DrawManager.UIRenderer.DrawQuad();

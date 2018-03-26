@@ -65,7 +65,7 @@ namespace Hedra.Engine.Generation
 		    Vector3 normal = Physics.NormalAtPosition(Position + addon + Vector3.UnitY * height);
 
 		    if (Vector3.Dot(normal, Vector3.UnitY) <= .2f)
-                return;;
+                return;
 
             //Insert item at the start
             for (int i = _previousTrees.Length-1; i > 0; i--)
@@ -147,7 +147,7 @@ namespace Hedra.Engine.Generation
 
 	    public float SpaceNoise(float X, float Z)
 	    {
-	        return SimplexNoise.Noise.Generate(X * .001f, (Z + 100) * .001f) * 40f;
+	        return (float) OpenSimplexNoise.Evaluate(X * .004f, (Z + 100) * .004f) * 40f;
 	    }
     }
 	

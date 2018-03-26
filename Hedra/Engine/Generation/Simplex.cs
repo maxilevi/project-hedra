@@ -69,6 +69,7 @@ namespace Hedra.Engine.Generation
         private static Contribution2[] lookup2D;
         private static Contribution3[] lookup3D;
         private static Contribution4[] lookup4D;
+        private static Random rng;
         
         public static void Load(long seed){
 			
@@ -98,6 +99,7 @@ namespace Hedra.Engine.Generation
                 perm4D[i] = (byte)(perm[i] & 0xFC);
                 source[r] = source[i];
             }
+            rng = new Random( (int) seed);
         }
         
         static OpenSimplexNoise()

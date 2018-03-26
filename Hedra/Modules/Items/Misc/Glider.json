@@ -1,0 +1,11 @@
+﻿{
+  "Name": "Glider",
+  "DisplayName": "Glider",
+  "Tier": "Rare",
+  "Description": "A glider.",
+  "Attributes": [],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Glider.ply"
+  }
+}

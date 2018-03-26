@@ -9,6 +9,7 @@ using OpenTK;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
+using Hedra.Engine.Player;
 
 namespace Hedra.Engine.PhysicsSystem
 {
@@ -39,39 +40,40 @@ namespace Hedra.Engine.PhysicsSystem
 		
 		public static float HeightAtPosition(Vector3 BlockPosition){
 			
-			Chunk UnderChunk = World.GetChunkAt(BlockPosition);
-			
 			if(World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Noise3D){
 				return HeightAtBlock( new Vector3(BlockPosition.X, World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z), BlockPosition.Z) );
 			}
 			
-			float DensityX = World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z ).Density;
-			float DensityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
-			float DensityXZ = World.GetHighestBlockAt( (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
-			float Density = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Density;
+			var densityX = World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z ).Density;
+			var densityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
+			var densityXz = World.GetHighestBlockAt( (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
+			var density = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Density;
 			
-			float YX = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z);
-			float YZ = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z + (int) Chunk.BlockSize);
-			float YXZ = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z + (int) Chunk.BlockSize);
-			float YH = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z);
+			var yx = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z);
+			var yz = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z + (int) Chunk.BlockSize);
+			var yxz = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z + (int) Chunk.BlockSize);
+			var yh = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z);
+				
+			Vector3 blockSpace = World.ToBlockSpace(BlockPosition);
+			var coords = (new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize , Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize);
 			
-			
-			Vector3 BlockSpace = World.ToBlockSpace(BlockPosition);
-			Vector2 Coords = (new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize , Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize);
-			
-			Vector3 Bottom = new Vector3(BlockSpace.X, YH + Density, BlockSpace.Z);
-			Vector3 Right = new Vector3(BlockSpace.X+1, YX + DensityX, BlockSpace.Z);
-			Vector3 Top = new Vector3(BlockSpace.X+1, YXZ + DensityXZ, BlockSpace.Z+1);
-			Vector3 Front = new Vector3(BlockSpace.X, YZ + DensityZ, BlockSpace.Z+1);
-			
-			float Height = 0;
-			if(Coords.X < (1-Coords.Y))
-				Height = Mathf.BarryCentric(new Vector3(0,Bottom.Y,0), new Vector3(1,Right.Y,0), new Vector3(0,Front.Y,1), Coords);
-			else
-				Height = Mathf.BarryCentric(new Vector3(1,Right.Y,0), new Vector3(1,Top.Y,1), new Vector3(0,Front.Y,1), Coords);
-			
-			return Height * Chunk.BlockSize;
-		}
+			var bottom = new Vector3(blockSpace.X, yh + density, blockSpace.Z);
+			var right = new Vector3(blockSpace.X+1, yx + densityX, blockSpace.Z);
+			var top = new Vector3(blockSpace.X+1, yxz + densityXz, blockSpace.Z+1);
+			var front = new Vector3(blockSpace.X, yz + densityZ, blockSpace.Z+1);
+
+		    float height1 = coords.X < 1 - coords.Y
+		        ? Mathf.BarryCentric(new Vector3(0, bottom.Y, 0), new Vector3(1, right.Y, 0), new Vector3(0, front.Y, 1), coords)
+		        : Mathf.BarryCentric(new Vector3(1, right.Y, 0), new Vector3(1, top.Y, 1), new Vector3(0, front.Y, 1), coords);
+
+		    coords = new Vector2(coords.X < 0 ? -coords.X : coords.X, coords.Y < 0 ? -coords.Y : coords.Y);
+
+		    float height0 = coords.X < 1 - coords.Y
+		        ? Mathf.BarryCentric(new Vector3(0, bottom.Y, 0), new Vector3(1, right.Y, 0), new Vector3(0, front.Y, 1), coords)
+		        : Mathf.BarryCentric(new Vector3(1, right.Y, 0), new Vector3(1, top.Y, 1), new Vector3(0, front.Y, 1), coords);
+
+		    return (height0 + height1) * .5f * Chunk.BlockSize;
+        }
 		
 		public static float HeightAtBlock(Vector3 BlockPosition){
 			
@@ -83,32 +85,31 @@ namespace Hedra.Engine.PhysicsSystem
 			}*/
 
 
-		    float DensityX = World.GetNearestBlockAt((int)BlockPosition.X + (int)Chunk.BlockSize, (int)BlockPosition.Y, (int)BlockPosition.Z).Density;
-		    float DensityZ = World.GetNearestBlockAt((int)BlockPosition.X, (int)BlockPosition.Y, (int)BlockPosition.Z + (int)Chunk.BlockSize).Density;
-		    float DensityXZ = World.GetNearestBlockAt((int)BlockPosition.X + (int)Chunk.BlockSize, (int)BlockPosition.Y, (int)BlockPosition.Z + (int)Chunk.BlockSize).Density;
-		    float Density = World.GetNearestBlockAt((int)BlockPosition.X, (int)BlockPosition.Y, (int)BlockPosition.Z).Density;
+		    var densityX = World.GetNearestBlockAt((int)BlockPosition.X + (int)Chunk.BlockSize, (int)BlockPosition.Y, (int)BlockPosition.Z).Density;
+		    var densityZ = World.GetNearestBlockAt((int)BlockPosition.X, (int)BlockPosition.Y, (int)BlockPosition.Z + (int)Chunk.BlockSize).Density;
+		    var densityXz = World.GetNearestBlockAt((int)BlockPosition.X + (int)Chunk.BlockSize, (int)BlockPosition.Y, (int)BlockPosition.Z + (int)Chunk.BlockSize).Density;
+		    var density = World.GetNearestBlockAt((int)BlockPosition.X, (int)BlockPosition.Y, (int)BlockPosition.Z).Density;
 
-		    float YX = (int) BlockPosition.Y;
-            float YZ = (int)BlockPosition.Y;
-            float YXZ = (int)BlockPosition.Y;
-            float YH = (int)BlockPosition.Y;
+		    var yx = (int) BlockPosition.Y;
+            var yz = (int)BlockPosition.Y;
+            var yxz = (int)BlockPosition.Y;
+            var yh = (int)BlockPosition.Y;
 
+            var blockSpace = World.ToBlockSpace(BlockPosition);
+		    var coords = (new Vector2(BlockPosition.X % Chunk.BlockSize, BlockPosition.Z % Chunk.BlockSize) / Chunk.BlockSize);
 
-            Vector3 BlockSpace = World.ToBlockSpace(BlockPosition);
-		    Vector2 Coords = (new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize, Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize);
+		    var bottom = new Vector3(blockSpace.X, yh + density, blockSpace.Z);
+		    var right = new Vector3(blockSpace.X + 1, yx + densityX, blockSpace.Z);
+		    var top = new Vector3(blockSpace.X + 1, yxz + densityXz, blockSpace.Z + 1);
+		    var front = new Vector3(blockSpace.X, yz + densityZ, blockSpace.Z + 1);
 
-		    Vector3 Bottom = new Vector3(BlockSpace.X, YH + Density, BlockSpace.Z);
-		    Vector3 Right = new Vector3(BlockSpace.X + 1, YX + DensityX, BlockSpace.Z);
-		    Vector3 Top = new Vector3(BlockSpace.X + 1, YXZ + DensityXZ, BlockSpace.Z + 1);
-		    Vector3 Front = new Vector3(BlockSpace.X, YZ + DensityZ, BlockSpace.Z + 1);
+		    coords = new Vector2(coords.X < 0 ? -coords.X : coords.X, coords.Y < 0 ? -coords.Y : coords.Y);
 
-		    float Height = 0;
-		    if (Coords.X < (1 - Coords.Y))
-		        Height = Mathf.BarryCentric(new Vector3(0, Bottom.Y, 0), new Vector3(1, Right.Y, 0), new Vector3(0, Front.Y, 1), Coords);
-		    else
-		        Height = Mathf.BarryCentric(new Vector3(1, Right.Y, 0), new Vector3(1, Top.Y, 1), new Vector3(0, Front.Y, 1), Coords);
+            float height0 = coords.X < 1 - coords.Y
+                ? Mathf.BarryCentric(new Vector3(0, bottom.Y, 0), new Vector3(1, right.Y, 0), new Vector3(0, front.Y, 1), coords) 
+                : Mathf.BarryCentric(new Vector3(1, right.Y, 0), new Vector3(1, top.Y, 1), new Vector3(0, front.Y, 1), coords);
 
-		    return Height * Chunk.BlockSize;
+		    return height0 * Chunk.BlockSize + (BlockPosition.X < 0 || BlockPosition.Z < 0 ? .25f : 0);
         }
 
 	    public static float LowestHeight(float X, float Z)

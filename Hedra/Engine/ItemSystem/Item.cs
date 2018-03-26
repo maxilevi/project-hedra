@@ -50,12 +50,6 @@ namespace Hedra.Engine.ItemSystem
         {
             return _attributes.Has(Attribute);
         }
-
-        public void SetAttribute(CommonAttributes Attribute, object Value)
-        {
-            this.SetAttribute(Attribute.ToString(), Value);
-        }
-
         public T GetAttribute<T>(CommonAttributes Attribute)
         {
             return this.GetAttribute<T>(Attribute.ToString());
@@ -66,9 +60,24 @@ namespace Hedra.Engine.ItemSystem
             this.DeleteAttribute(Attribute.ToString());
         }
 
+        public void SetAttribute(CommonAttributes Attribute, object Value)
+        {
+            this.SetAttribute(Attribute, Value, false);
+        }
+
+        public void SetAttribute(CommonAttributes Attribute, object Value, bool Hidden)
+        {
+            this.SetAttribute(Attribute.ToString(), Value, Hidden);
+        }
+
         public void SetAttribute(string Attribute, object Value)
         {
-            _attributes.Set(Attribute, Value);
+            this.SetAttribute(Attribute, Value, false);
+        }
+
+        public void SetAttribute(string Attribute, object Value, bool Hidden)
+        {
+            _attributes.Set(Attribute, Value, Hidden);
         }
 
         public T GetAttribute<T>(string Attribute)
@@ -90,7 +99,7 @@ namespace Hedra.Engine.ItemSystem
         {
             foreach (var attribute in Templates)
             {
-                this.SetAttribute(attribute.Name, attribute.Value);
+                this.SetAttribute(attribute.Name, attribute.Value, attribute.Hidden);
             }
         }
 
@@ -121,6 +130,8 @@ namespace Hedra.Engine.ItemSystem
 
         public bool IsGold => Name == Item.GoldItemName;
         public bool IsFood => FoodItemNames.Contains(Name);
+        public bool IsWeapon => WeaponFactory.Contains(this);
+        public bool IsEquipment => IsWeapon; //Add ArmorFactory
 
         public VertexData Model
         {

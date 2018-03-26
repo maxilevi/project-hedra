@@ -127,7 +127,7 @@ namespace Hedra.Engine
 		}
 		
 		public static Vector2 ScaleGUI(Vector2 TargetResolution, Vector2 Size){
-			return Mathf.DivideVector(TargetResolution * Size, new Vector2(Constants.WIDTH, Constants.HEIGHT)/*new Vector2(Constants.DEVICE_WIDTH, Constants.DEVICE_HEIGHT)*/);
+			return Mathf.DivideVector(TargetResolution * Size, new Vector2(GameSettings.Width, GameSettings.Height)/*new Vector2(GameSettings.DeviceWidth, GameSettings.DeviceHeight)*/);
 		}
 		
 		public static IntPtr ByteArrayToIntPtr(byte[] bytes){
@@ -214,14 +214,14 @@ namespace Hedra.Engine
 		}
 		
 		public static Vector2 ToNormalizedDeviceCoordinates(float X, float Y) {
-			float x = (2.0f * X) / (Constants.WIDTH) - 1f;
-			float y = (2.0f * Y) / (Constants.HEIGHT) - 1f;
+			float x = (2.0f * X) / (GameSettings.Width) - 1f;
+			float y = (2.0f * Y) / (GameSettings.Height) - 1f;
 			return new Vector2(x, y);
 		}
 		
 		public static Vector2 FromNormalizedDeviceCoordinates(float X, float Y) {
-			float x = (X+1f) * Constants.WIDTH / 2.0f;
-			float y = (Y+1f) * Constants.HEIGHT / 2.0f;
+			float x = (X+1f) * GameSettings.Width / 2.0f;
+			float y = (Y+1f) * GameSettings.Height / 2.0f;
 			return new Vector2(x,y);
 		}
 		

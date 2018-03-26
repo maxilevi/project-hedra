@@ -51,7 +51,7 @@ namespace Hedra.Engine.Player.Inventory
             price *= Item.EquipmentType != null ? 1.5f : 1.0f;
             price *= (int)Item.Tier + 1;
 
-            return (int) (price *(_buyerInterface.Array.Contains(Item) ? 0.75f : 1.0f));
+            return (int) (price *(_buyerInterface.Array.Contains(Item) ? 0.75f : 1.15f));
         }
 
         public void ProcessTrade(Humanoid Buyer, Humanoid Seller,

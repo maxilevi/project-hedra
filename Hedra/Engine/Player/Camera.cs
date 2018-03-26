@@ -103,14 +103,15 @@ namespace Hedra.Engine.Player
         public void Update()
         {
             _distance = Mathf.Lerp(_distance, TargetDistance+AddonDistance, Time.unScaledDeltaTime * 3f);
+            this.ClampYaw();
             if ( !GameSettings.Paused && !Scenes.SceneManager.Game.IsLoading && !_player.IsDead)
             {
-                XDelta = Cursor.Position.X - Constants.WIDTH / 2;
-                YDelta = Cursor.Position.Y - Constants.HEIGHT / 2;
+                XDelta = Cursor.Position.X - GameSettings.Width / 2;
+                YDelta = Cursor.Position.Y - GameSettings.Height / 2;
 
                 if (LockMouse)
                     Cursor.Position =
-                        new Point(Constants.WIDTH / 2, Constants.HEIGHT / 2);
+                        new Point(GameSettings.Width / 2, GameSettings.Height / 2);
 
                 if (PlayerMode && Check)
                 {
@@ -187,6 +188,12 @@ namespace Hedra.Engine.Player
             }
             if (!Constants.LOCK_FRUSTUM)
                 DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, Matrix);
+        }
+
+        private void ClampYaw()
+        {
+            if (Yaw > 6.28f) Yaw -= 6.28f;
+            if (Yaw < -6.28f) Yaw += 6.28f;
         }
 
         public void InvertPitch()

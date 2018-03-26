@@ -18,9 +18,10 @@ namespace Hedra.Engine.EntitySystem
 	/// Description of DropComponent.
 	/// </summary>
 	public class DropComponent : EntityComponent, ITickable
-    {
-		public bool RandomDrop = true;
-		public Item ItemDrop;
+	{
+	    public bool RandomDrop { get; set; } = true;
+	    public bool GoldDrop { get; set; }
+        public Item ItemDrop { get; set; }
 		public DropComponent(Entity Parent) : base(Parent){}
         private float _dropChance;
         public float DropChance
@@ -39,16 +40,26 @@ namespace Hedra.Engine.EntitySystem
 		
 		public void Drop()
 		{
-			if(this.Parent.IsDead && !_dropped){
-				_dropped = true;
-				if(Utils.Rng.NextFloat() * 100f < DropChance)
-				{
-					var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
-					if(item != null)
-						Generation.World.DropItem(item, Parent.Position + Vector3.UnitY * 2f + new Vector3(Utils.Rng.NextFloat() * 8f -4f, 0, Utils.Rng.NextFloat() * 8f -4f));
-					
-				}
-			}	
+		    if (!this.Parent.IsDead || _dropped) return;
+		    _dropped = true;
+		    if (!(Utils.Rng.NextFloat() * 100f < DropChance)) return;
+
+		    var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
+		    if (GoldDrop)
+		    {
+		        var gold = ItemPool.Grab(ItemType.Gold);
+                gold.SetAttribute(CommonAttributes.Amount, Utils.Rng.Next(1, 4));
+                Generation.World.DropItem(gold,
+		            Parent.Position + Vector3.UnitY * 2f +
+		            new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f));
+		    }
+
+		    if (item != null)
+		    {
+		        Generation.World.DropItem(item,
+		            Parent.Position + Vector3.UnitY * 2f +
+		            new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f));
+		    }
 		}
 	}
 }

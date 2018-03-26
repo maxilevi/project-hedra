@@ -32,7 +32,7 @@ namespace Hedra.Engine.ItemSystem
         private static T[] Load<T>(string CompletePath)
         {
             var list = new List<T>();
-            string[] modules = Directory.GetFiles(CompletePath);
+            string[] modules = Directory.GetFiles(CompletePath, "*", SearchOption.AllDirectories);
             foreach (string module in modules)
             {
                 string ext = Path.GetExtension(module);

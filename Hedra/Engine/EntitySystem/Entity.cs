@@ -400,8 +400,8 @@ namespace Hedra.Engine.EntitySystem
                         animable.Recompose();
                         Model.Alpha = 1;
                     }
-                    Model.Alpha += Time.FrameTimeSeconds * 0.5f * .25f;
-                    animable.DisposeTime -= Time.FrameTimeSeconds * 0.5f;
+                    Model.Alpha += Time.FrameTimeSeconds * 2.0f * .25f;
+                    animable.DisposeTime -= Time.FrameTimeSeconds * 2.0f;
                 }
             }
         }

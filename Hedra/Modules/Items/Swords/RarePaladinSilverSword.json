@@ -1,0 +1,21 @@
+{
+  "Name": "RarePaladinSilverSword",
+  "DisplayName": "Paladin Silver Sword",
+  "EquipmentType": "Sword", 
+  "Tier": "Rare",
+  "Description": "Paladin silver sword.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 9.75
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.1
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Swords/RarePaladinSilverSword.ply"
+  }
+}

@@ -60,7 +60,7 @@ namespace Hedra.Engine.Player.Inventory
 
         protected virtual void UpdateView()
         {
-            var isEquipment = CurrentItem.EquipmentType != null;
+            var isEquipment = CurrentItem.IsEquipment;
             if (isEquipment)
             {
                 var tierColor = TierToColor(CurrentItem.Tier);
@@ -70,7 +70,7 @@ namespace Hedra.Engine.Player.Inventory
                 _itemDescription.Color = tierColor;
                 _itemAttributes.Position = _weaponItemAttributesPosition + this.Position;
                 _itemTexture.Position = _weaponItemTexturePosition + this.Position;
-                _itemDescription.Text = Utils.FitString(CurrentItem.Description, 25);
+                _itemDescription.Text = Utils.FitString(CurrentItem.Description, 18);
             }
             else
             {

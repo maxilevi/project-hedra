@@ -259,7 +259,7 @@ namespace Hedra.Engine.Player
 		{
 			if(_followingSkill != null)
 			{
-				_followingSkill.Position = Mathf.ToNormalizedDeviceCoordinates(e.X, Constants.HEIGHT-e.Y);
+				_followingSkill.Position = Mathf.ToNormalizedDeviceCoordinates(e.X, GameSettings.Height-e.Y);
 				_followingSkill.UseMask = false;
 				if(!Player.SkillSystem.Show)
 					_followingSkill.Position = _originalSkillPosition;

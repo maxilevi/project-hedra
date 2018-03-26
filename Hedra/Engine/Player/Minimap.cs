@@ -33,7 +33,7 @@ namespace Hedra.Engine.Player
 		
 		public Minimap(LocalPlayer Player){
 			this.Player = Player;
-			MapFBO = new FBO(Constants.WIDTH, Constants.HEIGHT);
+			MapFBO = new FBO(GameSettings.Width, GameSettings.Height);
 			
 			MiniMap = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMap.png"), new Vector2(.8f, .7f), new Vector2(0.13f, 0.23f) * new Vector2(1f, 1f));
 
@@ -160,7 +160,7 @@ namespace Hedra.Engine.Player
 						
 			GL.Uniform2(Shader.ScaleUniform, MiniMap.TextureElement.Scale);
 			GL.Uniform2(Shader.PositionUniform, MiniMap.TextureElement.Position);
-			GL.Uniform2(Shader.SizeUniform, MiniMap.TextureElement.Scale * new Vector2(Constants.WIDTH, Constants.HEIGHT) );
+			GL.Uniform2(Shader.SizeUniform, MiniMap.TextureElement.Scale * new Vector2(GameSettings.Width, GameSettings.Height) );
 			GL.Uniform4(Shader.ColorUniform, MiniMap.TextureElement.Color);
 			GL.Uniform1(Shader.FlippedUniform, (MiniMap.TextureElement.IdPointer == null && !MiniMap.TextureElement.Flipped) ? 0 : 1);
 			GL.Uniform1(Shader.OpacityUniform, MiniMap.TextureElement.Opacity);

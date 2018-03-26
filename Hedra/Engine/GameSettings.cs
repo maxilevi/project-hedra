@@ -6,7 +6,6 @@
  */
 
 using System;
-using System.IO;
 using System.Reflection;
 using System.Text;
 using Hedra.Engine.Management;
@@ -24,7 +23,13 @@ namespace Hedra.Engine
     /// </summary>
     public static class GameSettings
     {
-        public static Vector2 SpawnPoint { get; } = new Vector2(50000, 50000);
+        public static Vector2 SpawnPoint { get; } = new Vector2(0, 0);
+        public static int DeviceWidth;
+        public static int DeviceHeight;
+        public static int Width;
+        public static int Height;
+        public static float ScreenRatio;
+        public static float DefaultScreenHeight;
         public static bool Paused { get; set; }
         public static int MaxLoadingRadius { get; set; } = 32;
         public static int MinLoadingRadius { get; } = 8;
@@ -93,10 +98,10 @@ namespace Hedra.Engine
                 _fullscreen = value;
                 if (_fullscreen)
                 {
-                    Constants.WIDTH = Constants.DEVICE_WIDTH;
-                    Constants.HEIGHT = Constants.DEVICE_HEIGHT;
+                    GameSettings.Width = GameSettings.DeviceWidth;
+                    GameSettings.Height = GameSettings.DeviceHeight;
 
-                    //Program.GameWindow.Height = Constants.HEIGHT;
+                    //Program.GameWindow.Height = GameSettings.Height;
                     Program.GameWindow.WindowBorder = WindowBorder.Hidden;
                     Program.GameWindow.WindowState = WindowState.Fullscreen;
                 }
@@ -105,12 +110,12 @@ namespace Hedra.Engine
                     Program.GameWindow.WindowBorder = WindowBorder.Resizable;
                     Program.GameWindow.WindowState = WindowState.Maximized;
 
-                    Constants.WIDTH = Program.GameWindow.ClientSize.Width;
-                    Constants.HEIGHT = Program.GameWindow.ClientSize.Height;
+                    GameSettings.Width = Program.GameWindow.ClientSize.Width;
+                    GameSettings.Height = Program.GameWindow.ClientSize.Height;
                 }
                 MainFBO.DefaultBuffer.Resize();
                 UserInterface.PlayerFbo.Dispose();
-                UserInterface.PlayerFbo = new FBO(Constants.WIDTH / 2, Constants.HEIGHT / 2);
+                UserInterface.PlayerFbo = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
                 SceneManager.Game.LPlayer.UI = new UserInterface(SceneManager.Game.LPlayer);
             }
         }

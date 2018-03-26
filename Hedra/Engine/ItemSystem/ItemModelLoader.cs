@@ -19,14 +19,16 @@ namespace Hedra.Engine.ItemSystem
         public static VertexData Load(ItemModelTemplate ModelTemplate)
         {
             var path = ModelTemplate.Path;
-            if (ModelCache.ContainsKey(path)) return ModelCache[path].Clone();
+            if (!ModelCache.ContainsKey(path))
+            {
+                var model = AssetManager.PlyLoader(path, Vector3.One);
+                model = AdjustModel(model);
+                ModelCache.Add(path, model);
+            }
 
-            var model = AssetManager.PlyLoader(path, Vector3.One * ModelTemplate.Scale);
-            model = AdjustModel(model);
-
-            ModelCache.Add(path, model);
-
-            return ModelCache[path].Clone();
+            var returnModel = ModelCache[path].Clone();
+            returnModel.Transform( Matrix3.CreateScale(ModelTemplate.Scale));
+            return returnModel;
         }
 
         private static VertexData AdjustModel(VertexData Model)

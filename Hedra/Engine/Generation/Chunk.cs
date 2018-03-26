@@ -378,7 +378,7 @@ namespace Hedra.Engine.Generation
                         for (var l = 0; l < model.Colors.Count; l++)
                             model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
 
-                        if (Mesh.InstanceElements[i].ExtraDataCache != -1)
+                        if (CacheManager.CachedExtradata.ContainsKey(Mesh.InstanceElements[i].ExtraDataCache))
                             model.ExtraData = CacheManager.CachedExtradata[Mesh.InstanceElements[i].ExtraDataCache]
                                 .Clone();
                         else
@@ -792,7 +792,7 @@ namespace Hedra.Engine.Generation
             float colorCount = 0;
             int x = (int) position.X, y = (int) position.Y, z = (int) position.Z;
 
-            float noise = Noise.Generate((Cell.P[0].X + OffsetX) * .00075f, (Cell.P[0].Z + OffsetZ) * .00075f);
+            float noise = (float) OpenSimplexNoise.Evaluate((Cell.P[0].X + OffsetX) * .00075f, (Cell.P[0].Z + OffsetZ) * .00075f);
             RegionColor regionColor = RegionColor;
 
             for (int _x = -Lod * 1; _x < 1 * Lod + 1; _x += Lod)

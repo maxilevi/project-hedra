@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering.UI
 			Color fontColor = Color.White;
 			
 			Vector2 bandPosition = new Vector2(0f, .8f);
-			Texture blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / Constants.HEIGHT * 578), GradientType.LEFT_RIGHT);
+			Texture blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LEFT_RIGHT);
 			
 			Button hostTab = new Button(new Vector2(-0.1f, bandPosition.Y),
 			                    new Vector2(0.15f,0.075f), "Host", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], fontSize));

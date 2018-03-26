@@ -130,19 +130,34 @@ namespace Hedra.Engine.Scenes
 			Enviroment.SkyManager.LoadTime = true;
 	        LPlayer.Inventory.ClearInventory();
 			LPlayer.Inventory.SetItems(Information.Items);
-	        if (Information.ClassType == Class.Warrior)
-	            LPlayer.Inventory.AddWeaponRestriction(EquipmentType.Sword);
-
-	        else if (Information.ClassType == Class.Archer)
-	            LPlayer.Inventory.AddWeaponRestriction(EquipmentType.Bow);
-
-	        else if (Information.ClassType == Class.Rogue)
-	            LPlayer.Inventory.AddWeaponRestriction(EquipmentType.DoubleBlades);
+	        this.SetRestrictions(Information);
             GameSettings.DarkEffect = false;
 
             if (LPlayer.Health == 0) LPlayer.Respawn();
 			CoroutineManager.StartCoroutine(SpawnCoroutine);	
 		}
+
+	    private void SetRestrictions(PlayerInformation Information)
+	    {
+	        switch (Information.ClassType)
+	        {
+	            case Class.Warrior:
+	                LPlayer.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Sword);
+	                break;
+	            case Class.Archer:
+	                LPlayer.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Bow);
+	                break;
+	            case Class.Rogue:
+	                LPlayer.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.DoubleBlades);
+	                break;
+	        }
+            LPlayer.Inventory.AddRestriction(PlayerInventory.BootsHolder, EquipmentType.Boots);
+	        LPlayer.Inventory.AddRestriction(PlayerInventory.PantsHolder, EquipmentType.Pants);
+	        LPlayer.Inventory.AddRestriction(PlayerInventory.ChestplateHolder, EquipmentType.Chestplate);
+	        LPlayer.Inventory.AddRestriction(PlayerInventory.HelmetHolder, EquipmentType.Helmet);
+            LPlayer.Inventory.AddRestriction(PlayerInventory.GliderHolder, EquipmentType.Vehicle);
+	        LPlayer.Inventory.AddRestriction(PlayerInventory.PetHolder, EquipmentType.Pet);
+        }
 
 		public void NewRun(LocalPlayer Player){
 			NewRun(DataManager.DataFromPlayer(Player));
@@ -154,7 +169,7 @@ namespace Hedra.Engine.Scenes
 			Player.IsRiding = false;
 			if(Player.IsRolling)
 				Player.FinishRoll();
-		    Player.Pet.MountEntity?.Update();//Finish removing the mount
+		    Player.Pet.Pet?.Update();//Finish removing the mount
 
 		    Information.WorldSeed = World.RandomSeed;
 			Information.BlockPosition = GameSettings.SpawnPoint.ToVector3();

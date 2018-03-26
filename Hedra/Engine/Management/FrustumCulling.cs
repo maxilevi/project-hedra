@@ -149,7 +149,7 @@ namespace Hedra.Engine.Management
         
 		public void SetFrustum(Matrix4 View)
 		{
-		    Aspect = 1.45f / (float) Constants.HEIGHT * (float) Constants.DEVICE_HEIGHT;
+		    Aspect = 1.45f / (float) GameSettings.Height * (float) GameSettings.DeviceHeight;
         	GL.MatrixMode(MatrixMode.Projection);
 
 	       	ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, Aspect, ZNear, ZFar);
@@ -163,7 +163,7 @@ namespace Hedra.Engine.Management
 
 	    public void SetViewport()
 	    {
-	        GL.Viewport(0,0, Constants.WIDTH, Constants.HEIGHT);
+	        GL.Viewport(0,0, GameSettings.Width, GameSettings.Height);
         }
         
          public bool CubeInFrustum( float x , float y , float z , Vector3 size){

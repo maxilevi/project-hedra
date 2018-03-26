@@ -1,9 +1,9 @@
 ﻿{
   "Name" : "Ooze", 
-  "MaxHealth": 320.0,
+  "MaxHealth": 380.0,
   "AttackDamage": 14.0,
   "Speed": 2.0,
-  "XP": 2.0,
+  "XP": 3.5,
   "AIType": "Hostile",
   "Ridable": false,
   "Effects": [],
@@ -21,7 +21,7 @@
     },
     "AttackAnimation": {
       "Path": "$DataFile$/Assets/Chr/OozeAttack.dae",
-      "Speed": 1.2
+      "Speed": 1.4
     }
   } 
 }

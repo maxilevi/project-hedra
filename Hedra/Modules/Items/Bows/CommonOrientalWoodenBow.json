@@ -1,0 +1,21 @@
+{
+  "Name": "CommonOrientalWoodenBow",
+  "DisplayName": "Oriental Bow",
+  "EquipmentType": "Bow", 
+  "Tier": "Common",
+  "Description": "Oriental wooden bow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 7.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.5
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/CommonOrientalWoodenBow.ply"
+  }
+}

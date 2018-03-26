@@ -100,8 +100,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 					World.WorldParticles.Emit();
 				}
 				_previousPosition = Model.Human.BlockPosition;
-			}
-			
+			}	
 		}
 
 	    public override int ParsePrimaryIndex(int AnimationIndex)

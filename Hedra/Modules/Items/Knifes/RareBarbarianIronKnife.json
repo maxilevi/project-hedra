@@ -1,0 +1,21 @@
+{
+  "Name": "RareBarbarianIronKnife",
+  "DisplayName": "Barbarian Iron Knife",
+  "EquipmentType": "Knife", 
+  "Tier": "Rare",
+  "Description": "Barbarian iron knife.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 9.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.75
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Swords/RareBarbarianIronSword.ply"
+  }
+}

@@ -29,7 +29,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             PrimaryAnimations = new Animation[1];
             PrimaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorPunch.dae");
 		    PrimaryAnimations[0].Speed = 2.0f;
-		    for (int i = 0; i < PrimaryAnimations.Length; i++)
+		    PrimaryAnimations[0].OnAnimationMid += delegate
+		    {
+		        Model.Human.Attack(Model.Human.DamageEquation * 0.75f);
+		    };
+            for (int i = 0; i < PrimaryAnimations.Length; i++)
 		    {
 		        PrimaryAnimations[i].Loop = false;
 		    }

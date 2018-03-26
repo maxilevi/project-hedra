@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.Enviroment;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Effects;
 using Hedra.Engine.Rendering.UI;

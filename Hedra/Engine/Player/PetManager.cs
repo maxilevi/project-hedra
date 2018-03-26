@@ -11,7 +11,7 @@ using System;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Networking;
+using Hedra.Engine.Management;
 using OpenTK;
 
 namespace Hedra.Engine.Player
@@ -21,64 +21,59 @@ namespace Hedra.Engine.Player
     /// </summary>
     public class PetManager
     {
+        public Entity Pet { get; private set; }
         private readonly LocalPlayer _player;
-        private Item _previousMount;
-        private float DeadTimer = 48;
-        public Entity MountEntity;
+        private readonly Timer _deadTimer;
+        private Item _previousPetItem;
+        private bool _timerSet;
 
         public PetManager(LocalPlayer Player)
         {
             _player = Player;
+            _deadTimer = new Timer(8f);
         }
 
         public void Update()
         {
-            var mountItem = _player.Inventory.Mount;
-            if (MountEntity != null)
+            if (Pet != null) Pet.Model.Enabled = _player.Model.Enabled;
+
+            if (Pet != null && Pet.IsDead && !_timerSet)
             {
-                MountEntity.Model.Enabled = _player.Model.Enabled;
-                mountItem.SetAttribute("Health", MountEntity.MaxHealth);
+                _deadTimer.Reset();
+                _timerSet = true;
             }
 
-            if (MountEntity != null && (MountEntity != null && MountEntity.IsDead 
-                || _previousMount != mountItem 
-                || (MountEntity.BlockPosition.Xz - _player.BlockPosition.Xz).LengthSquared > 192 * 192) && !_player.IsRiding)
+            var petItem = _player.Inventory.Pet;
+            if (petItem != _previousPetItem || Pet != null && Pet.IsDead && _deadTimer.Tick())
             {
-                if (MountEntity != null && MountEntity.IsDead)
-                {
-                    DeadTimer -= Time.ScaledFrameTimeSeconds;
-                    if (DeadTimer > 0)
-                        return;
-                }
-                DeadTimer = 4; //60
-                if (MountEntity != null)
-                {
-                    if (MountEntity.IsDead)
-                        mountItem.SetAttribute("Health", MountEntity.MaxHealth);
-                    MountEntity.Dispose();
-                }
-                MountEntity = World.SpawnMob(mountItem.GetAttribute<string>("MobType"),
-                    _player.BlockPosition + Vector3.UnitX * 12f,mountItem.GetAttribute<int>("MountSeed"));
-
-                MountEntity.SearchComponent<DamageComponent>().Immune = true;
-                MountEntity.Health = MountEntity.MaxHealth;
-
-
-                MountEntity.Level = 1;
-                MountEntity.RemoveComponent(MountEntity.SearchComponent<HealthBarComponent>());
-                MountEntity.AddComponent(new HealthBarComponent(MountEntity, "Mount"));
-                MountEntity.SearchComponent<HealthBarComponent>().DistanceFromBase = 3;
-                MountEntity.AddComponent(new MountAIComponent(MountEntity, _player, mountItem.GetAttribute<MountAIType>("MountAIType")));
-                MountEntity.RemoveComponent(MountEntity.SearchComponent<AIComponent>());
-                MountEntity.Removable = false;
-                ((QuadrupedModel) MountEntity.Model).IsMountable = true;
-                _previousMount = mountItem;
+                this.SpawnPet(petItem);
+                _timerSet = false;
             }
-            else if (mountItem == null)
+        }
+
+        private void SpawnPet(Item PetItem)
+        {
+            Pet?.Dispose();
+            Pet = null;
+            _previousPetItem = PetItem;
+            if (PetItem != null)
             {
-                _previousMount = null;
-                MountEntity?.Dispose();
-                MountEntity = null;
+                Pet = World.SpawnMob(PetItem.GetAttribute<string>("MobType"),
+                    _player.BlockPosition + Vector3.UnitX * 12f, Utils.Rng);
+
+                Pet.SearchComponent<DamageComponent>().Immune = true;
+                Pet.Health = Pet.MaxHealth;
+
+                Pet.Level = 1;
+                Pet.RemoveComponent(Pet.SearchComponent<HealthBarComponent>());
+                Pet.AddComponent(new HealthBarComponent(Pet, "Mount"));
+                Pet.SearchComponent<HealthBarComponent>().DistanceFromBase = 3;
+                Pet.AddComponent(new MountAIComponent(Pet, _player,
+                    (MountAIType) Enum.Parse(typeof(MountAIType), PetItem.GetAttribute<string>("MountAIType")))
+                );
+                Pet.RemoveComponent(Pet.SearchComponent<AIComponent>());
+                Pet.Removable = false;
+                ((QuadrupedModel) Pet.Model).IsMountable = true;
             }
         }
     }

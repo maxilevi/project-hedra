@@ -21,7 +21,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		
 	public class Bow : Weapon
 	{	
-		public override Vector3 SheathedPosition => new Vector3(1.8f,-1.0f,0.0f);
+		public override Vector3 SheathedPosition => new Vector3(1.8f,-1.0f,0.65f);
 	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
 	    public override bool IsMelee { get; protected set; } = false;
         private EntityMesh Quiver;

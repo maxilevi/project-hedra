@@ -1,9 +1,9 @@
 ﻿{
-  "Name": "CommonBronzeClaw",
-  "DisplayName": "Bronze Claw",
-  "EquipmentType": "Claw", 
+  "Name": "CommonBronzeKatar",
+  "DisplayName": "Bronze Katar",
+  "EquipmentType": "Katar", 
   "Tier": "Common",
-  "Description": "Bronze claw.",
+  "Description": "Bronze katar.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -16,6 +16,6 @@
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Berry.ply"
+    "Path": "$DataFile$/Items/Katars/CommonBronzeKatar.ply"
   }
 }

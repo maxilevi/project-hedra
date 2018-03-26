@@ -1,0 +1,21 @@
+{
+  "Name": "UncommonBarbarianBronzeDoubleBlades",
+  "DisplayName": "Barbarian Bronze Blades",
+  "EquipmentType": "DoubleBlades", 
+  "Tier": "Uncommon",
+  "Description": "Barbarian bronze blades.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.75
+    }
+  ],
+  "Model": {
+    "Scale": 1.25,
+    "Path": "$DataFile$/Items/Swords/UncommonBarbarianBronzeSword.ply"
+  }
+}

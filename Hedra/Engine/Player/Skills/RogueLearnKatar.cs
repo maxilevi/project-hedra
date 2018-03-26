@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player
 		{
 			if(base.Level == 0) return;
 			if(base.Level > 1) Player.SkillSystem.SetPoints(this.GetType(), 1);
-		    Player.Inventory.AddWeaponRestriction(EquipmentType.Katar);
+		    Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Katar);
         }
 		
 		public override string Description {

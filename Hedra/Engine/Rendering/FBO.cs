@@ -282,7 +282,7 @@ namespace Hedra.Engine.Rendering
         {
             bool depth = this.DepthID != 0;
             this.Dispose();
-        	return new FBO(new Size(Constants.WIDTH, Constants.HEIGHT), Attachments, this.Formats, this.mipmaps, this.multisample, this.samples, depth);
+        	return new FBO(new Size(GameSettings.Width, GameSettings.Height), Attachments, this.Formats, this.mipmaps, this.multisample, this.samples, depth);
         }
         
 		

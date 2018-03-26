@@ -58,7 +58,7 @@ namespace Hedra.Engine.StructureSystem
             BlockType type;
             float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
 
-            return !(Math.Abs(ChunkOffset.X - 50000) > 10000 || Math.Abs(ChunkOffset.Y - 50000) > 10000) &&
+            return !(Math.Abs(ChunkOffset.X - GameSettings.SpawnPoint.X) > 10000 || Math.Abs(ChunkOffset.Y - GameSettings.SpawnPoint.Y) > 10000) &&
                    Rng.Next(0, 30) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > 0;
         }
 

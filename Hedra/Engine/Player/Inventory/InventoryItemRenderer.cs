@@ -11,7 +11,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryItemRenderer
     {
-        public const float ZOffsetFactor = 1.0f;
+        public const float ZOffsetFactor = 1.15f;
         private readonly InventoryArray _array;
         private readonly int _length;
         private readonly int _offset;
@@ -61,7 +61,7 @@ namespace Hedra.Engine.Player.Inventory
             ZOffset = Math.Max(ZOffset, 3.0f);
             if (Mesh == null || Item == null) return GUIRenderer.TransparentTexture;
 
-            Mesh.AnimationRotation = new Vector3(0, _itemRotation, TiltIfWeapon && Item.EquipmentType != null ? 45 : 0);
+            Mesh.AnimationRotation = new Vector3(0, _itemRotation, TiltIfWeapon && Item.IsWeapon ? 45 : 0);
             _itemRotation += 25 * (float)Time.deltaTime / Math.Max(1,_itemCount);
 
             GraphicsLayer.PushShader();
@@ -72,7 +72,7 @@ namespace Hedra.Engine.Player.Inventory
             GraphicsLayer.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projectionMatrix);
 
-            var offset = Item.EquipmentType != null
+            var offset = Item.IsWeapon
                 ? Vector3.UnitY * 0.4f - Vector3.UnitX * 0.4f
                 : Vector3.UnitY * 0.25f;
             var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset, offset, Vector3.UnitY);
@@ -86,7 +86,7 @@ namespace Hedra.Engine.Player.Inventory
 
             /*GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, ItemsFBO.BufferID);
 			GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, MultisampleItemsFBO.BufferID);
-			GL.BlitFramebuffer(0,Constants.HEIGHT,Constants.WIDTH,0, 0,Constants.HEIGHT,Constants.WIDTH,0
+			GL.BlitFramebuffer(0,GameSettings.Height,GameSettings.Width,0, 0,GameSettings.Height,GameSettings.Width,0
 			                   , ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
 			
 			GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);

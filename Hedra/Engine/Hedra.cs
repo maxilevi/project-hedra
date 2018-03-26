@@ -65,7 +65,7 @@ namespace Hedra
 			base.OnLoad(e);
 		    string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
 		    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
-            this.GameVersion = "α 0.26";
+            this.GameVersion = "α 0.27";
 		    this.Title += " "+GameVersion;
             Hedra.MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -118,7 +118,7 @@ namespace Hedra
 			_renderText = new GUIText("", new Vector2(.65f,-.5f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));			
 			_meshesText = new GUIText("", new Vector2(.65f,-.4f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
 			_cameraText = new GUIText("", new Vector2(.65f,-.3f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
-			//_geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / Constants.WIDTH, 16f / Constants.HEIGHT));
+			//_geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
             /*Texture WaterTexture = new Texture(WaterEffects.WaterFBO.TextureID[0], Vector2.Zero, Vector2.One);
 			WaterTexture.TextureElement.Flipped = true;
 			
@@ -226,7 +226,7 @@ namespace Hedra
 				_meshesText.Text = " Lights = "+ShaderManager.UsedLights +" / " +ShaderManager.MaxLights;
 				_meshQueueCount.Text = "Mesh Queue = "+ World.MeshQueue.Queue.Count + 
 					"Cache ="+CacheManager.CachedColors.Count + " | "+CacheManager.CachedExtradata.Count + " Time = "+(int)(SkyManager.DayTime/1000)+":"+((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)).ToString("00");
-				_generationQueueCount.Text =  "Generation Queue ="+ World.ChunkGenerationQueue.Queue.Count+" Mobs = "+MobCount +" Version = "+GameVersion;
+				_generationQueueCount.Text =  "Generation Queue ="+ World.ChunkGenerationQueue.Queue.Count+" Mobs = "+MobCount +" Yaw = "+Player.View.Yaw;
 				_renderText.Text = "Textures = "+Graphics2D.Textures.Count+" Seed= "+ World.Seed + " FPS= "+Utils.LastFrameRate + " MS="+Utils.FrameProccesingTime;
 				_cameraText.Text = "Pitch = "+Player.View.Pitch+" Physics Calls = "+ Physics.Manager.Count;
                 /*
@@ -377,22 +377,22 @@ namespace Hedra
 	        if (_forcingResize) return;
 
 	        _forcingResize = true;
-	        this.Width = Constants.WIDTH;
-	        this.Height = Constants.HEIGHT;
+	        this.Width = GameSettings.Width;
+	        this.Height = GameSettings.Height;
 	        _forcingResize = false;
 
 
 	        //DrawManager.UIRenderer.RescaleTextures(this.Width, this.Height);
-            //Constants.WIDTH = Width;
-            //Constants.HEIGHT = Height;
+            //GameSettings.Width = Width;
+            //GameSettings.Height = Height;
 
             //MainFBO.DefaultBuffer.Resize();
         }
 
         public void UpdateTextures(int Width, int Height){
 			//DrawManager.UIRenderer.RescaleTextures(Width, Height);
-			Constants.WIDTH = Width;
-			Constants.HEIGHT = Height;
+			GameSettings.Width = Width;
+			GameSettings.Height = Height;
 			
 			DrawManager.FrustumObject.SetFrustum(SceneManager.Game.LPlayer.View.Matrix);
 			DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, SceneManager.Game.LPlayer.View.Matrix);
@@ -402,7 +402,7 @@ namespace Hedra
 			
 			
 			UserInterface.PlayerFbo.Dispose();
-			UserInterface.PlayerFbo = new FBO(Constants.WIDTH / 2, Constants.HEIGHT / 2);
+			UserInterface.PlayerFbo = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
 			SceneManager.Game.LPlayer.UI = new UserInterface(SceneManager.Game.LPlayer);
 		}
 		

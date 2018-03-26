@@ -1,0 +1,21 @@
+{
+  "Name": "UncommonBarbarianBronzeKnife",
+  "DisplayName": "Barbarian Bronze Knife",
+  "EquipmentType": "Knife", 
+  "Tier": "Uncommon",
+  "Description": "Barbarian bronze knife.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.75
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Swords/UncommonBarbarianBronzeSword.ply"
+  }
+}

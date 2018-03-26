@@ -87,7 +87,7 @@ namespace Hedra.Engine.Rendering.UI
 
 			if(InFocus && this._enabled){
 				
-				float textSize = Graphics2D.LineSize(Text, _textBar.Text.UIText.TextFont).X/Constants.WIDTH;
+				float textSize = Graphics2D.LineSize(Text, _textBar.Text.UIText.TextFont).X/GameSettings.Width;
 				if(textSize > _textBar.Scale.X)
 					return;
 				
@@ -120,7 +120,7 @@ namespace Hedra.Engine.Rendering.UI
 			if(ShowCaret){
 				_caretIndex = (int) Mathf.Clamp(_caretIndex,0, Text.Length-1 );
 				string beforeCaret = Text.Substring(0, (int)Mathf.Clamp(_caretIndex+1, 0, Text.Length));
-				float sizeX = Graphics2D.LineSize(beforeCaret, _textBar.Text.UIText.TextFont).X*Constants.WIDTH/Constants.WIDTH * 2f;
+				float sizeX = Graphics2D.LineSize(beforeCaret, _textBar.Text.UIText.TextFont).X*GameSettings.Width/GameSettings.Width * 2f;
 				_caret.Position = new Vector2(_textBar.Position.X - _textBar.Scale.X + sizeX - 0.0025f, _caret.Position.Y);
 			}
 		}

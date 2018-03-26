@@ -40,7 +40,7 @@ namespace Hedra.Engine.Generation
 	    public static List<ParticleProjectile> Projectiles;
 	    public static List<WorldItem> Items;
 	    public static AreaHighlighter Highlighter;
-	    public static ParticleSystem WorldParticles;
+	    public static ParticleSystem WorldParticles { get; }
 		public static GenerationQueue ChunkGenerationQueue;
 		public static MeshBuilderQueue MeshQueue;
 	    public static ClosestChunk ClosestChunkComparer;
@@ -235,7 +235,7 @@ namespace Hedra.Engine.Generation
 			ChunkGenerationQueue.SafeDiscard();
 			SkyManager.SetTime(12000);
 
-			for(int i = 0; i < Items.Count; i++){
+			for(var i = Items.Count-1; i > -1; i--){
 				Items[i].Dispose();
 			}
 
@@ -258,16 +258,16 @@ namespace Hedra.Engine.Generation
 
 		    for (int i = GlobalColliders.Count - 1; i > -1; i--)
 		    {
-		        RemoveGlobalCollider(GlobalColliders[i]);
+		        World.RemoveGlobalCollider(GlobalColliders[i]);
 		    }
 
             for (int i = Structures.Count-1; i > -1; i--){
-				RemoveStructure(Structures[i]);
+                World.RemoveStructure(Structures[i]);
 			}
 
 			for(int i = Entities.Count-1; i > -1; i--){
 				if(Entities[i] is LocalPlayer) continue;
-				RemoveEntity(Entities[i]);
+                Entities[i].Dispose();
 			}		
 
 			WorldRenderer.ForceDiscard();
@@ -460,171 +460,109 @@ namespace Hedra.Engine.Generation
 			}
 		}
 
-        #region Space Helpers
-
 	    public static bool IsChunkOffset(Vector2 Offset)
 	    {
 	        return Offset.X % Chunk.ChunkWidth == 0 && Offset.Y % Chunk.ChunkWidth == 0;
 	    }
 
-        public static Vector3 ToBlockSpace(Vector3 Vec3){
-		
-			int ChunkX = (int) Vec3.X / Chunk.ChunkWidth;
-			int ChunkZ = (int) Vec3.Z / Chunk.ChunkWidth;
+	    public static Vector3 ToBlockSpace(float X, float Z)
+	    {
+	        return ToBlockSpace(new Vector3(X, 0, Z));
+	    }
+
+	    public static Vector2 ToChunkSpace(float X, float Z)
+	    {
+	        return ToChunkSpace(new Vector3(X, 0, Z));
+	    }
+
+        public static Vector3 ToBlockSpace(Vector3 Vec3)
+        {
+            var chunkSpace = World.ToChunkSpace(Vec3);
 			
-			ChunkX *= Chunk.ChunkWidth;
-			ChunkZ *= Chunk.ChunkWidth;
+			var x = (int) Math.Abs(Math.Floor( (Vec3.X - chunkSpace.X) / Chunk.BlockSize ));
+			var z = (int) Math.Abs(Math.Floor( (Vec3.Z - chunkSpace.Y) / Chunk.BlockSize ));
 			
-			var X = (int) Math.Floor( (Vec3.X - ChunkX) / Chunk.BlockSize );
-			var Z = (int) Math.Floor( (Vec3.Z - ChunkZ) / Chunk.BlockSize );
-			
-			return new Vector3(X, Math.Min(Vec3.Y / Chunk.BlockSize, Chunk.ChunkHeight-1) ,Z);
+			return new Vector3(x, Math.Min(Vec3.Y / Chunk.BlockSize, Chunk.ChunkHeight-1) ,z);
 		}
-		
-		public static Chunk GetChunkAt(Vector3 Vec3){
-			int ChunkX = (int) Vec3.X / Chunk.ChunkWidth;
-			int ChunkZ = (int) Vec3.Z / Chunk.ChunkWidth;
-			
-			ChunkX *= Chunk.ChunkWidth;
-			ChunkZ *= Chunk.ChunkWidth;
-			
-			return GetChunkByOffset(ChunkX, ChunkZ);
-		}
-		
 		public static Vector2 ToChunkSpace(Vector3 Vec3){
-			int ChunkX = (int) Vec3.X / Chunk.ChunkWidth;
-			int ChunkZ = (int) Vec3.Z / Chunk.ChunkWidth;
-
-			ChunkX *= Chunk.ChunkWidth;
-			ChunkZ *= Chunk.ChunkWidth;	
+			int chunkX = ((int)Vec3.X >> 7) << 7;
+			int chunkZ = ((int)Vec3.Z >> 7) << 7;
 			
-			return new Vector2(ChunkX, ChunkZ);
+			return new Vector2(chunkX, chunkZ);
 		}
 
-	    public static Block GetBlockAt(int X, int Y, int Z)
+	    public static Chunk GetChunkAt(Vector3 Vec3)
+	    {
+	        var chunkSpace = World.ToChunkSpace(Vec3);
+	        return GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+	    }
+
+        public static Block GetBlockAt(int X, int Y, int Z)
 	    {
 	        return GetBlockAt(new Vector3(X, Y, Z));
 	    }
 
-        public static Block GetBlockAt(Vector3 Vec3){
-			int ChunkX = (int) Vec3.X / Chunk.ChunkWidth;
-			int ChunkZ = (int) Vec3.Z / Chunk.ChunkWidth;
-									
-			ChunkX *= Chunk.ChunkWidth;
-			ChunkZ *= Chunk.ChunkWidth;
-
-			int X = (int) Math.Floor( (Vec3.X - ChunkX) / Chunk.BlockSize );
-			int Z = (int)  Math.Floor( (Vec3.Z - ChunkZ) / Chunk.BlockSize );	
+        public static Block GetBlockAt(Vector3 Vec3)
+        {
+            var chunkSpace = World.ToChunkSpace(Vec3);
+            var blockSpace = World.ToBlockSpace(Vec3);
 			
-			Chunk BlockChunk = GetChunkByOffset(ChunkX, ChunkZ);
-			if(BlockChunk != null){
-				return BlockChunk.GetBlockAt(X, (int) Vec3.Y, Z);
-			}
-		    return new Block();			
-		}
+			var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+			return blockChunk?.GetBlockAt((int)blockSpace.X, (int) Vec3.Y, (int) blockSpace.Z) ?? new Block();
+        }
 
-	    public static Block GetHighestBlockAt(float x, float z)
+	    public static Block GetHighestBlockAt(float X, float Z)
 	    {
-	        return GetHighestBlockAt( (int) x, (int) z);
+	        return GetHighestBlockAt( (int) X, (int) Z);
 	    }
 
-	    public static Block GetHighestBlockAt(int x, int z){
-			int ChunkX = (int) x / Chunk.ChunkWidth;
-			int ChunkZ = (int) z / Chunk.ChunkWidth;
-									
-			ChunkX *= Chunk.ChunkWidth;
-			ChunkZ *= Chunk.ChunkWidth;
+	    public static Block GetHighestBlockAt(int X, int Z){
+	        var chunkSpace = World.ToChunkSpace(X,Z);
+	        var blockSpace = World.ToBlockSpace(X,Z);
 
-			int X = (int) Math.Floor( (x - ChunkX) / Chunk.BlockSize );
-			int Z = (int) Math.Floor( (z - ChunkZ) / Chunk.BlockSize );	
-			
-			Chunk BlockChunk = GetChunkByOffset(ChunkX, ChunkZ);
-			if(BlockChunk != null){
-				return BlockChunk.GetHighestBlockAt(X,Z);
-			}
-			return new Block();	
-		}
-		public static int GetHighestY(int x, int z){
-			int ChunkX = (int) x / Chunk.ChunkWidth;
-			int ChunkZ = (int) z / Chunk.ChunkWidth;
-									
-			ChunkX *= Chunk.ChunkWidth;
-			ChunkZ *= Chunk.ChunkWidth;
+	        var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+	        return blockChunk?.GetHighestBlockAt((int)blockSpace.X, (int)blockSpace.Z) ?? new Block();
+        }
+		public static int GetHighestY(int X, int Z){
+		    var chunkSpace = World.ToChunkSpace(X, Z);
+		    var blockSpace = World.ToBlockSpace(X, Z);
 
-			int X = (int) Math.Floor( (x - ChunkX) / Chunk.BlockSize );
-			int Z = (int) Math.Floor( (z - ChunkZ) / Chunk.BlockSize );	
-			
-			Chunk BlockChunk = GetChunkByOffset(ChunkX, ChunkZ);
-			if(BlockChunk != null)
-				return BlockChunk.GetHighestY(X,Z);
-			else
-				return 0;	
-		}
+		    var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+		    return blockChunk?.GetHighestY((int)blockSpace.X, (int)blockSpace.Z) ?? 0;
+        }
 		
-		public static Block GetNearestBlockAt(int x, int y, int z){
-			int ChunkX = (int) x / Chunk.ChunkWidth;
-			int ChunkZ = (int) z / Chunk.ChunkWidth;
-									
-			ChunkX *= Chunk.ChunkWidth;
-			ChunkZ *= Chunk.ChunkWidth;
+		public static Block GetNearestBlockAt(int X, int Y, int Z){
+		    var chunkSpace = World.ToChunkSpace(X, Z);
+		    var blockSpace = World.ToBlockSpace(X, Z);
 
-			int X = (int) Math.Floor( (x - ChunkX) / Chunk.BlockSize );
-			int Z = (int) Math.Floor( (z - ChunkZ) / Chunk.BlockSize );	
-			
-			Chunk BlockChunk = GetChunkByOffset(ChunkX, ChunkZ);
-			if(BlockChunk != null){
-				return BlockChunk.GetNearestBlockAt(X, y, Z);
-			}
-			else
-				return new Block();	
-		}
+		    var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+		    return blockChunk?.GetNearestBlockAt((int)blockSpace.X, Y, (int)blockSpace.Z) ?? new Block();
+        }
 		
-		public static int GetNearestY(int x, int y, int z){
-			int ChunkX = (int) x / Chunk.ChunkWidth;
-			int ChunkZ = (int) z / Chunk.ChunkWidth;
-									
-			ChunkX *= Chunk.ChunkWidth;
-			ChunkZ *= Chunk.ChunkWidth;
+		public static int GetNearestY(int X, int y, int Z){
+		    var chunkSpace = World.ToChunkSpace(X, Z);
+		    var blockSpace = World.ToBlockSpace(X, Z);
 
-			int X = (int) Math.Floor( (x - ChunkX) / Chunk.BlockSize );
-			int Z = (int) Math.Floor( (z - ChunkZ) / Chunk.BlockSize );	
-			
-			Chunk BlockChunk = GetChunkByOffset(ChunkX, ChunkZ);
-			if(BlockChunk != null)
-				return BlockChunk.GetNearestY(X, y, Z);
-			else
-				return 0;	
-		}
+		    var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+		    return blockChunk?.GetNearestY((int)blockSpace.X, y, (int)blockSpace.Z) ?? 0;
+        }
 		
-		public static int GetLowestY(int x, int z){
-			int chunkX = (int) x / Chunk.ChunkWidth;
-			int chunkZ = (int) z / Chunk.ChunkWidth;
-									
-			chunkX *= Chunk.ChunkWidth;
-			chunkZ *= Chunk.ChunkWidth;
+		public static int GetLowestY(int X, int Z){
+		    var chunkSpace = World.ToChunkSpace(X, Z);
+		    var blockSpace = World.ToBlockSpace(X, Z);
 
-			var X = (int) Math.Floor( (x - chunkX) / Chunk.BlockSize );
-			var Z = (int) Math.Floor( (z - chunkZ) / Chunk.BlockSize );	
-			
-			Chunk blockChunk = GetChunkByOffset(chunkX, chunkZ);
-			return blockChunk?.GetLowestY(X,Z) ?? 0;	
-		}
+		    var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+		    return blockChunk?.GetLowestY((int)blockSpace.X, (int)blockSpace.Z) ?? 0;
+        }
 
-	    public static Block GetLowestBlock(int x, int z)
+	    public static Block GetLowestBlock(int X, int Z)
 	    {
-	        int chunkX = (int)x / Chunk.ChunkWidth;
-	        int chunkZ = (int)z / Chunk.ChunkWidth;
+	        var chunkSpace = World.ToChunkSpace(X, Z);
+	        var blockSpace = World.ToBlockSpace(X, Z);
 
-	        chunkX *= Chunk.ChunkWidth;
-	        chunkZ *= Chunk.ChunkWidth;
-
-	        var X = (int)Math.Floor((x - chunkX) / Chunk.BlockSize);
-	        var Z = (int)Math.Floor((z - chunkZ) / Chunk.BlockSize);
-
-	        Chunk blockChunk = GetChunkByOffset(chunkX, chunkZ);
-	        return blockChunk?.GetLowestBlockAt(X, Z) ?? new Block();
-	    }
-        #endregion
+	        var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+	        return blockChunk?.GetLowestBlockAt((int)blockSpace.X, (int)blockSpace.Z) ?? new Block();
+        }
 
         public static void HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
 	    {

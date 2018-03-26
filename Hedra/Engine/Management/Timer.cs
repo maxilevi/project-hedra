@@ -6,8 +6,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-
 namespace Hedra.Engine.Management
 {
 	/// <summary>
@@ -15,7 +13,7 @@ namespace Hedra.Engine.Management
 	/// </summary>
 	public class Timer
 	{
-		private float TimerCount = 0;
+		private float _timerCount;
 		public float AlertTime {get; set;}
 		
 		public Timer(float AlertTime){
@@ -23,17 +21,14 @@ namespace Hedra.Engine.Management
 		}
 		
 		public void Reset(){
-			TimerCount = 0;
+			_timerCount = 0;
 		}
 		
 		public bool Tick(){
-			TimerCount += Time.FrameTimeSeconds;
-			if(TimerCount >= AlertTime){
-				TimerCount = 0;
-				return true;
-			}else{
-				return false;
-			}
+			_timerCount += Time.FrameTimeSeconds;
+		    if (!(_timerCount >= AlertTime)) return false;
+		    _timerCount = 0;
+		    return true;
 		}
 	}
 }

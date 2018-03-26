@@ -40,10 +40,10 @@ namespace Hedra.Engine.Enviroment
 		{
 		    MinDistance = MinDist;
 		    MaxDistance = MaxDist;
-			FogData Data = new FogData(MinDist, MaxDist, Constants.HEIGHT, SkyManager.Skydome.BotColor, SkyManager.Skydome.TopColor);
-			FogValues = Data;
+			var data = new FogData(MinDist, MaxDist, GameSettings.Height, SkyManager.Skydome.BotColor, SkyManager.Skydome.TopColor);
+			FogValues = data;
 			GL.BindBuffer(BufferTarget.UniformBuffer, UboID);
-			GL.BufferSubData(BufferTarget.UniformBuffer, IntPtr.Zero, (IntPtr) (BlockShaders.StaticShader.FogSettingsSize), ref Data);
+			GL.BufferSubData(BufferTarget.UniformBuffer, IntPtr.Zero, (IntPtr) (BlockShaders.StaticShader.FogSettingsSize), ref data);
 			
 		}
 		

@@ -43,7 +43,9 @@
   "Forest": [
     {
       "Type": "Ooze",
-      "Chance": 12.5
+      "Chance": 10,
+      "MinGroup": 1,
+      "MaxGroup": 2
     },
     {
       "Type": "Bear",
@@ -54,14 +56,18 @@
       "Chance": 22.5
     },
     {
+      "Type": "Snake",
+      "Chance": 5
+    },
+    {
       "Type": "Fox",
-      "Chance": 25.0,
+      "Chance": 20.0,
       "MinGroup": 1,
       "MaxGroup": 2
     },
     {
       "Type": "Bee",
-      "Chance": 12.5,
+      "Chance": 15,
       "MinGroup": 1,
       "MaxGroup": 3
     },

@@ -20,6 +20,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly InventoryInterfaceItemInfo _itemInfoInterface;
         private readonly InventoryArrayInterface[] _interfaces;
         private readonly Button _cancelButton;
+        private float _selectedMeshHeight;
         private EntityMesh _selectedMesh;
         private Button _selectedButton;
         private Item _selectedItem;
@@ -63,7 +64,7 @@ namespace Hedra.Engine.Player.Inventory
 
         private void MouseMove(object Sender, MouseMoveEventArgs EventArgs)
         {
-            var newCoords = Mathf.ToNormalizedDeviceCoordinates(EventArgs.Mouse.X, Constants.HEIGHT - EventArgs.Mouse.Y);
+            var newCoords = Mathf.ToNormalizedDeviceCoordinates(EventArgs.Mouse.X, GameSettings.Height - EventArgs.Mouse.Y);
             if (_selectedButton != null)
             {
                 _selectedButton.Position = newCoords;
@@ -112,7 +113,7 @@ namespace Hedra.Engine.Player.Inventory
             if (array.HasRestrictions(itemIndex))
                 this.PlaceItemInFirstEmptyPosition(item);
             else
-                this.PlaceInRestrictionsOrFirstEmpty(item);
+                this.PlaceInRestrictionsOrFirstEmpty(itemIndex, array, item);
             
             this.UpdateView();
             SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick);
@@ -125,7 +126,8 @@ namespace Hedra.Engine.Player.Inventory
             var renderer = this.RendererByButton(_selectedButton);
             _selectedMesh = EntityMesh.FromVertexData(SelectedItem.Model);
             _selectedMesh.UseFog = false;
-            _selectedButton.Texture.IdPointer = () => renderer.Draw(_selectedMesh, SelectedItem);
+            _selectedMeshHeight = SelectedItem.Model.SupportPoint(Vector3.UnitY).Y - SelectedItem.Model.SupportPoint(-Vector3.UnitY).Y;
+            _selectedButton.Texture.IdPointer = () => renderer.Draw(_selectedMesh, SelectedItem, true, _selectedMeshHeight * InventoryItemRenderer.ZOffsetFactor);
         }
 
         private void SetCancelButton(Button SelectedButton)
@@ -145,19 +147,20 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        private void PlaceInRestrictionsOrFirstEmpty(Item Item)
+        private void PlaceInRestrictionsOrFirstEmpty(int ItemIndex, InventoryArray Array, Item Item)
         {
             for (var i = 0; i < _interfaces.Length; i++)
             {
                 var newArray = _interfaces[i].Array;
                 for (var j = 0; j < newArray.Length; j++)
                 {
-                    if (newArray[j] == null && newArray.HasRestrictions(j))
+                    if (newArray.HasRestrictions(j))
                     {
                         var restrictions = newArray.GetRestrictions(j);
                         for (var k = 0; k < restrictions.Length; k++)
                         {
                             if (restrictions[k] != Item.EquipmentType) continue;
+                            this.SwitchItems(ItemIndex, j, Array, newArray);
                             newArray[j] = Item;
                             return;
                         }
@@ -165,6 +168,13 @@ namespace Hedra.Engine.Player.Inventory
                 }
             }
             this.PlaceItemInFirstEmptyPosition(Item);
+        }
+
+        private void SwitchItems(int Index, int IndexToSwitch, InventoryArray Array, InventoryArray ArrayToSwitch)
+        {
+            var item = Array[Index];
+            Array[Index] = ArrayToSwitch[IndexToSwitch];
+            ArrayToSwitch[IndexToSwitch] = item;
         }
 
         private void DropItem(Item SelectedItem)

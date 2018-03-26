@@ -320,12 +320,11 @@ namespace Hedra.Engine.EntitySystem
 		            {
 
                         float heightAtPositon = Physics.HeightAtBlock(Parent.BlockPosition - Vector3.UnitY);
-
 		                Parent.BlockPosition = new Vector3(Parent.BlockPosition.X,
 		                    (heightAtPositon + Parent.Model.Height + BaseHeight) / Chunk.BlockSize,
-		                    Parent.BlockPosition.Z);
+		                    Parent.BlockPosition.Z);	                
 
-                        Parent.IsGrounded = true;
+		                Parent.IsGrounded = true;
 		                blockNy = true;
 		                Velocity = Vector3.Zero;
                     }
