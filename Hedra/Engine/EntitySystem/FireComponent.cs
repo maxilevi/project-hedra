@@ -25,40 +25,38 @@ namespace Hedra.Engine.EntitySystem
 		public int Chance { get; set; } = 20;//20%
 		public float TotalStrength { get; set; } = 30;
 		public float BaseTime { get; set; } = 5;
-		
-		private float _cooldown;
-		private bool _canFire = true;
-		
-		public FireComponent(Entity Parent) : base(Parent) {
-			Parent.OnAttacking += new OnAttackEventHandler(this.Apply);
+        private bool _canFire = true;
+        private float _cooldown;
+        private float _fireTime;
+        private float _time;
+        private float _pTime;
+        private Entity _victim;
+
+        public FireComponent(Entity Parent) : base(Parent) {
+			Parent.OnAttacking += this.Apply;
 		}
 		
 		public override void Update(){
-			_cooldown -= Engine.Time.FrameTimeSeconds;
+			_cooldown -= Time.FrameTimeSeconds;
 		}
 		
 		public void Apply(Entity Victim, float Amount){
 			if(_cooldown > 0 || !_canFire) return;
 			
 			bool shouldFire = Utils.Rng.NextFloat() <= Chance * 0.01 ? true : false;
-			if(shouldFire){
-				_fireTime =  BaseTime + Utils.Rng.NextFloat() * 4 -2f;
-				if(Victim.SearchComponent<BurningComponent>() == null){
-					Victim.AddComponent(new BurningComponent(Victim, Parent, _fireTime, TotalStrength));
-				}
-			}
+		    if (!shouldFire) return;
+		    _fireTime =  BaseTime + Utils.Rng.NextFloat() * 4 -2f;
+		    if(Victim.SearchComponent<BurningComponent>() == null){
+		        Victim.AddComponent(new BurningComponent(Victim, Parent, _fireTime, TotalStrength));
+		    }
 		}
 		
-		private float _fireTime = 0;
-		private float _time = 0;
-		private float _pTime = 0;
-		private Entity _victim;
 		public IEnumerator FireCoroutine(){
 			_victim.Model.BaseTint = Bar.Low * new Vector4(1,3,1,1) * .7f;
 			this._canFire = false;
 			while(_fireTime > _pTime && !_victim.IsDead && !Disposed){
 				
-				_time += Engine.Time.FrameTimeSeconds;
+				_time += Time.FrameTimeSeconds;
 				if(_time >= 1){
 					_pTime++;
 					_time = 0;

@@ -92,6 +92,8 @@ namespace Hedra.Engine.Player.Inventory
 
         public void UpdateInventory()
         {
+            _playerItems.Empty();
+            _merchantItems.Empty();
             _playerItems.SetItems(_player.Inventory.ItemsToArray());
             _merchantItems.SetItems(_merchantComponent.Items.ToArray());
             this.UpdateView();
@@ -116,7 +118,8 @@ namespace Hedra.Engine.Player.Inventory
 	        {
 	            _merchantComponent.Items.Add(i, _merchantItems[i]);
             }
-	        this.UpdateView();
+	        _merchantComponent.TransactionComplete();
+            this.UpdateInventory();
 	    }
 
         private void SetInventoryState(bool State)

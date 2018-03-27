@@ -387,8 +387,6 @@ namespace Hedra.Engine.EntitySystem
 			this._underChunkL = null;
 			this._underChunkF = null;
 			this._underChunkB = null;
-			
-			this.Disposed = true;
 		}
 	}
 }

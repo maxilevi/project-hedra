@@ -67,15 +67,18 @@ namespace Hedra.Engine.Rendering
 			Vertex += LocalRotationPoint;
 			Vertex = Vector3.TransformPosition(Vertex, m_LocalMat4);
 			Vertex -= LocalRotationPoint;
-			
-			Vertex += AnimationPosition;
+
+		    Vertex = Vector3.TransformPosition(Vertex, MatrixTrans);
+
+            Vertex += AnimationPosition;
 		
 			Vertex += Point;
 			Vertex = Vector3.TransformPosition(Vertex, m_mat4);
 			Vertex -= Point;
 			
 			Vertex += m_pos;
-			return Vertex;
+
+            return Vertex;
 		}
 		
 		private bool m_RotMatrixCached;
@@ -173,7 +176,7 @@ namespace Hedra.Engine.Rendering
 			GL.Uniform1(Shader.OutlineUniform, (Outline) ? 1 : 0);
 			GL.Uniform2(Shader.ResolutionUniform, new Vector2(GameSettings.Width, GameSettings.Height));
 			GL.Uniform3(Shader.BakedPositionUniform, Vector3.Zero);
-			GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.LPlayer.Position);
+			GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
 			
 			if(GameSettings.Shadows){
 				GL.UniformMatrix4(Shader.ShadowMVPUniform, false, ref ShadowRenderer.ShadowMVP);

@@ -234,7 +234,7 @@ namespace Hedra.Engine.Rendering
                 if (field.FieldType == typeof(EntityMesh))
                     meshList.Add(field.GetValue(this) as EntityMesh);
                 if (field.FieldType == typeof(Weapon))
-                    meshList.Add((field.GetValue(this) as Weapon)?.Mesh);
+                    meshList.Add((field.GetValue(this) as Weapon)?.MainMesh);
             }
 
             Meshes = meshList.ToArray();

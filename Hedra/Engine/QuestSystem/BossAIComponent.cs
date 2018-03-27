@@ -28,7 +28,7 @@ namespace Hedra.Engine.QuestSystem
 		public Func<Vector3> Protect;
 		
 		public BossAIComponent(Entity Parent) : base(Parent){
-			Player = Scenes.SceneManager.Game.LPlayer;
+			Player = Scenes.SceneManager.Game.Player;
 		}
 		
 		public virtual void LateUpdate(){}

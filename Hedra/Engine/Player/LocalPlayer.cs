@@ -345,7 +345,7 @@ namespace Hedra.Engine.Player
                 var entities = World.Entities.ToArray();
                 for (int i = entities.Length - 1; i > -1; i--)
                 {
-                    LocalPlayer player = SceneManager.Game.LPlayer;
+                    LocalPlayer player = SceneManager.Game.Player;
                     if (entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused &&
                         !SceneManager.Game.IsLoading
 
@@ -555,7 +555,7 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public static LocalPlayer Instance => SceneManager.Game.LPlayer;
+		public static LocalPlayer Instance => SceneManager.Game.Player;
 
         public void UnLoad(){
 			if(_inCementery){

@@ -50,7 +50,7 @@ namespace Hedra.Engine.Rendering.UI
 			_controlsText = new ControlsUi(fontColor);
 			
 			var bandPosition = new Vector2(0f, .8f);
-			var blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LEFT_RIGHT);
+			var blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
 
 		    var donateBtc = new Texture(Graphics2D.LoadFromAssets("Assets/UI/SocialMedia.png"), Vector2.Zero, Vector2.One);
 			donateBtc.Disable();
@@ -499,7 +499,7 @@ namespace Hedra.Engine.Rendering.UI
 			
 			OnEscapePressed += delegate { 
 				Disable();
-				Scenes.SceneManager.Game.LPlayer.UI.Menu.Enable();
+				Scenes.SceneManager.Game.Player.UI.Menu.Enable();
 			};
 			
 			OnPanelStateChange += delegate(object Sender, PanelState E) {

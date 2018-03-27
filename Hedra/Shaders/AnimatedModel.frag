@@ -62,7 +62,7 @@ void main(void){
 		}		
 		
 		mat3 mat = mat3(transpose(inverse(gl_ModelViewMatrix)));
-		out_position = vec4( (gl_ModelViewMatrix * vec4(pass_position, 1.0)).xyz, gl_FragCoord.z);
-		out_normal = vec4( mat * pass_normal, 1.0);
+		out_position = vec4( (gl_ModelViewMatrix * vec4(pass_position, 1.0)).xyz, gl_FragCoord.z) * Alpha;
+		out_normal = vec4( mat * pass_normal, 1.0) * Alpha;
 	
 }

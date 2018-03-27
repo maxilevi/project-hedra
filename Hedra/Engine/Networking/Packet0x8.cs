@@ -44,7 +44,7 @@ namespace Hedra.Engine.Networking
 			else if(Packet.Type == AnimationType.ROLL)
 				Human.Roll();
 			else if(Packet.Type == AnimationType.ATTACK1)
-				Human.Model.LeftWeapon.Attack1(Human.Model);
+				Human.Model.LeftWeapon.Attack1(Human);
 			Human.HandLamp.Enabled = Packet.LightOn;
 		}
 	}

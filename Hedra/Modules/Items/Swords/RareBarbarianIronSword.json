@@ -1,9 +1,9 @@
 {
   "Name": "RareBarbarianIronSword",
-  "DisplayName": "Barbarian Iron Sword",
+  "DisplayName": "Iron Machete",
   "EquipmentType": "Sword", 
   "Tier": "Rare",
-  "Description": "Barbarian iron sword.",
+  "Description": "Iron machete.",
   "Attributes": [
     {
       "Name": "Damage",

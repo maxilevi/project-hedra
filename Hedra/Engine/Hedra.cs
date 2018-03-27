@@ -205,11 +205,11 @@ namespace Hedra
 				_lastValue = newNumber;
 			
 			
-			LocalPlayer Player = SceneManager.Game.LPlayer;
-			DrawManager.FrustumObject.SetFrustum(SceneManager.Game.LPlayer.View.Matrix);
+			LocalPlayer Player = SceneManager.Game.Player;
+			DrawManager.FrustumObject.SetFrustum(SceneManager.Game.Player.View.Matrix);
 			Vector2 Vec2 = World.ToChunkSpace(Player.Position);
 			//Log.WriteLine( (System.GC.GetTotalMemory(false) / 1024 / 1024) + " MB");
-			if(Constants.DEBUG){
+			if(GameSettings.Debug){
 				
 				Chunk UChunk = World.GetChunkAt(Player.Position);
 				
@@ -263,9 +263,9 @@ namespace Hedra
             }
 
 #if SHOW_COLLISION
-			            if(Constants.DEBUG){
+			            if(GameSettings.Debug){
 			           
-				            LocalPlayer Player = SceneManager.Game.LPlayer;
+				            LocalPlayer Player = SceneManager.Game.Player;
 				            Chunk UnderChunk = World.GetChunkAt(Player.Position);
                 /*
                  if(UnderChunk != null){
@@ -394,8 +394,8 @@ namespace Hedra
 			GameSettings.Width = Width;
 			GameSettings.Height = Height;
 			
-			DrawManager.FrustumObject.SetFrustum(SceneManager.Game.LPlayer.View.Matrix);
-			DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, SceneManager.Game.LPlayer.View.Matrix);
+			DrawManager.FrustumObject.SetFrustum(SceneManager.Game.Player.View.Matrix);
+			DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, SceneManager.Game.Player.View.Matrix);
 			//Resize FBOs
 			MainFBO.DefaultBuffer.Resize();
 			//SceneManager.Game.LPlayer.Inventory.Resize();
@@ -403,7 +403,7 @@ namespace Hedra
 			
 			UserInterface.PlayerFbo.Dispose();
 			UserInterface.PlayerFbo = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
-			SceneManager.Game.LPlayer.UI = new UserInterface(SceneManager.Game.LPlayer);
+			SceneManager.Game.Player.UI = new UserInterface(SceneManager.Game.Player);
 		}
 		
 		protected override void OnFocusedChanged(EventArgs e)
@@ -411,11 +411,11 @@ namespace Hedra
 			base.OnFocusedChanged(e);
 			if(!this.Focused){
 				if(!SceneManager.Game.InMenuWorld && !SceneManager.Game.IsLoading && !GameSettings.Paused &&
-                    SceneManager.Game.LPlayer != null && !SceneManager.Game.LPlayer.Inventory.Show &&
-                    !SceneManager.Game.LPlayer.SkillSystem.Show && !SceneManager.Game.LPlayer.Trade.Show)
+                    SceneManager.Game.Player != null && !SceneManager.Game.Player.Inventory.Show &&
+                    !SceneManager.Game.Player.SkillSystem.Show && !SceneManager.Game.Player.Trade.Show)
                 {
 					//GameSettings.Paused = true;
-					SceneManager.Game.LPlayer.UI.ShowMenu();
+					SceneManager.Game.Player.UI.ShowMenu();
 				}
 			}
 		}

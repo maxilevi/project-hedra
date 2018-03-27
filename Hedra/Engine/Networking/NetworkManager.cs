@@ -231,7 +231,7 @@ namespace Hedra.Engine.Networking
 		public static void Send(){
 			BinaryFormatter Formatter = new BinaryFormatter();
 			MemoryStream Ms = new MemoryStream();
-			LocalPlayer Player = Scenes.SceneManager.Game.LPlayer;
+			LocalPlayer Player = Scenes.SceneManager.Game.Player;
 			int TimePassed = 0, EntityRate = 0, ItemRate = 0;
 			
 			while(IsConnected && Program.GameWindow.Exists){

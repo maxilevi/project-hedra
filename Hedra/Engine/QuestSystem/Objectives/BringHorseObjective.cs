@@ -67,7 +67,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
             {
                 if (_stoleHorse)
                 {
-                    SceneManager.Game.LPlayer.UI.DrawPreview(_previewMesh, UserInterface.QuestFbo);
+                    SceneManager.Game.Player.UI.DrawPreview(_previewMesh, UserInterface.QuestFbo);
                     return UserInterface.QuestFbo.TextureID[0];
                 }
                 if (!_runningAway)
@@ -76,7 +76,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                     if(model == null) return UserInterface.QuestFbo.TextureID[0];
                     model.Model.Scale *= 2f;
 
-                    SceneManager.Game.LPlayer.UI.DrawPreview(_horse.Model, UserInterface.QuestFbo);
+                    SceneManager.Game.Player.UI.DrawPreview(_horse.Model, UserInterface.QuestFbo);
 
                     model.Model.Scale /= 2f;
 
@@ -87,7 +87,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                     if (model == null) return UserInterface.QuestFbo.TextureID[0];
                     model.Model.Scale *= 2f;
 
-                    SceneManager.Game.LPlayer.UI.DrawPreview(_horseRider.Model, UserInterface.QuestFbo);
+                    SceneManager.Game.Player.UI.DrawPreview(_horseRider.Model, UserInterface.QuestFbo);
 
                     model.Model.Scale /= 2f;
                 }
@@ -96,7 +96,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         }
 
         public override bool ShouldDisplay =>
-            (SceneManager.Game.LPlayer.Position.Xz - ObjectivePosition.Xz).LengthSquared > 16 * 16;
+            (SceneManager.Game.Player.Position.Xz - ObjectivePosition.Xz).LengthSquared > 16 * 16;
 
         public override void SetOutObjectives()
         {
@@ -164,7 +164,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
                 if (_horse.IsDead)
                 {
-                    SceneManager.Game.LPlayer.CanInteract = false;
+                    SceneManager.Game.Player.CanInteract = false;
                     LocalPlayer.Instance.MessageDispatcher.ShowNotification("YOU KILLED THE HORSE", Color.DarkRed, 3f);
 
                     IsLost = true;

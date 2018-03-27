@@ -124,9 +124,7 @@ namespace Hedra.Engine.Player.Inventory
             _selectedButton = SelectedButton;
             _selectedItem = SelectedItem;
             var renderer = this.RendererByButton(_selectedButton);
-            _selectedMesh = EntityMesh.FromVertexData(SelectedItem.Model);
-            _selectedMesh.UseFog = false;
-            _selectedMeshHeight = SelectedItem.Model.SupportPoint(Vector3.UnitY).Y - SelectedItem.Model.SupportPoint(-Vector3.UnitY).Y;
+            _selectedMesh = renderer.BuildModel(_selectedItem, out _selectedMeshHeight);
             _selectedButton.Texture.IdPointer = () => renderer.Draw(_selectedMesh, SelectedItem, true, _selectedMeshHeight * InventoryItemRenderer.ZOffsetFactor);
         }
 
@@ -149,6 +147,7 @@ namespace Hedra.Engine.Player.Inventory
 
         private void PlaceInRestrictionsOrFirstEmpty(int ItemIndex, InventoryArray Array, Item Item)
         {
+            if(Item == null) return;
             for (var i = 0; i < _interfaces.Length; i++)
             {
                 var newArray = _interfaces[i].Array;

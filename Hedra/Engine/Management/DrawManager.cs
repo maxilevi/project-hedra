@@ -125,7 +125,7 @@ namespace Hedra.Engine.Management
 	    	MainBuffer.Clear();
 	    	
 	    	#if DEBUG
-	    	if(Constants.DEBUG){
+	    	if(GameSettings.Debug){
 		    	ErrorCode code = GL.GetError();
 		    	if(code != ErrorCode.NoError)
 		    		Log.WriteResult(false, "OpenGL error: "+code.ToString());

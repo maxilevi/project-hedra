@@ -124,7 +124,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 		
 		public IEnumerator Update(){
 			while(!Disposed){
-				LocalPlayer player = Scenes.SceneManager.Game.LPlayer;
+				LocalPlayer player = Scenes.SceneManager.Game.Player;
 				/*for(int i = 0; i < player.Inventory.Items.Length; i++){
 					if(player.Inventory.Items[i] != null && player.Inventory.Items[i].Type == ItemType.Stackable){
 						
@@ -173,7 +173,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 		
 		public override uint QuestLogIcon {
 			get {
-				Scenes.SceneManager.Game.LPlayer.UI.DrawPreview(_previewMesh, UserInterface.QuestFbo);
+				Scenes.SceneManager.Game.Player.UI.DrawPreview(_previewMesh, UserInterface.QuestFbo);
 				return UserInterface.QuestFbo.TextureID[0];
 			}
 		}

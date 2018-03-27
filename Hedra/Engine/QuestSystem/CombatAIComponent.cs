@@ -113,7 +113,7 @@ namespace Hedra.Engine.QuestSystem
                 }
                 else
                 {
-                    Humanoid player = Scenes.SceneManager.Game.LPlayer;
+                    Humanoid player = Scenes.SceneManager.Game.Player;
                     if ((player.Position.Xz - Parent.Position.Xz).LengthSquared < SearchRadius * SearchRadius)
                     {
                         this.Chasing = true;

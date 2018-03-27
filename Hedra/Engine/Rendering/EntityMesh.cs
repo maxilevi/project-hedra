@@ -12,26 +12,27 @@ namespace Hedra.Engine.Rendering
 {
 	public class EntityMesh : IRenderable, ICullable, IDisposable
 	{
-		public Vector3 Size{get; set;}
-		public bool Enabled{get; set;}
-		public bool DontCull {get; set;}
-		public bool Rendered {get; set;}
-        private bool _disposed;
-        public RenderShape Shape{get; set;}
-		public int SceneId {get; set; }
-		public ChunkMesh Mesh{get;}
-		private EntityMeshBuffer Buffer;
-		
-		public Vector3 TargetRotation, TargetPosition;
-		public float AnimationSpeed = 2;
+	    public Vector3 TargetRotation { get; set; }
+	    public Vector3 TargetPosition { get; set; }
+	    public float AnimationSpeed { get; set; } = 2;
+        public Vector3 Size { get; set;}
+		public bool Enabled { get; set;}
+		public bool DontCull { get; set;}
+		public bool Rendered { get; set;}
+        public RenderShape Shape { get; set;}
+		public int SceneId { get; set; }
+		public ChunkMesh Mesh { get; }
+
+		private readonly EntityMeshBuffer _buffer;
+	    private bool _disposed;
 		
 		public EntityMesh(Vector3 Position){
 			this.Enabled = true;
 			SceneId = Scenes.SceneManager.Game.Id;
-			var MeshBuffers = new ChunkMeshBuffer[1];
-			MeshBuffers[0] = new EntityMeshBuffer();
-			Mesh = new ChunkMesh(Position, MeshBuffers);
-			Buffer = Mesh.MeshBuffers[0] as EntityMeshBuffer;
+			var meshBuffers = new ChunkMeshBuffer[1];
+			meshBuffers[0] = new EntityMeshBuffer();
+			Mesh = new ChunkMesh(Position, meshBuffers);
+			_buffer = Mesh.MeshBuffers[0] as EntityMeshBuffer;
 			this.Position = Position;
 			this.Rotation = Vector3.Zero;
 			Mesh.Enabled = true;
@@ -50,77 +51,77 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public Vector3 TransformPoint(Vector3 Point){
-			return Buffer.TransformPoint(Point);// + Position;
+			return _buffer.TransformPoint(Point);// + Position;
 		}
 		
 		public bool Outline{
 			get{
-				return Buffer.Outline;
+				return _buffer.Outline;
 			}
 			set{
-				Buffer.Outline = value;
+				_buffer.Outline = value;
 			}
 		}
 		
 		
 		public Matrix4 TransformationMatrix{
 			get{
-				return Buffer.MatrixTrans;
+				return _buffer.MatrixTrans;
 			}
 			set{
-				Buffer.MatrixTrans = value;
+				_buffer.MatrixTrans = value;
 			}
 		}
 		
 		public Vector4 Tint{
 			get{
-				return Buffer.Tint;
+				return _buffer.Tint;
 			}
 			set{
-				Buffer.Tint = value;
+				_buffer.Tint = value;
 			}
 		}
 		
 		public Vector4 BaseTint{
 			get{
-				return Buffer.BaseTint;
+				return _buffer.BaseTint;
 			}
 			set{
-				Buffer.BaseTint = value;
+				_buffer.BaseTint = value;
 			}
 		}
 		
 		
 		public Vector3 Position{
 			get{
-				return Buffer.Position;
+				return _buffer.Position;
 			}
 			set{
-				Buffer.Position = value;
+				_buffer.Position = value;
 			}
 		}
 		
 		public Vector3 LocalPosition{
 			get{
-				return Buffer.LocalPosition;
+				return _buffer.LocalPosition;
 			}
 			set{
-				Buffer.LocalPosition = value;
+				_buffer.LocalPosition = value;
 			}
 		}
 		
 		public Vector3 RotationPoint{
 			get{
-				return Buffer.Point;
+				return _buffer.Point;
 			}
 			set{
-				Buffer.Point = value;
+				_buffer.Point = value;
 			}
 		}
 		
 		public Vector3 Rotation{
 			get{
-				return Buffer.Rotation;
+				return _buffer.Rotation;
 			}
 			set{
 				float valY = value.Y;
@@ -136,22 +137,22 @@ namespace Hedra.Engine.Rendering
 				if(float.IsInfinity(valZ) || float.IsNaN(valZ)) valZ = 0;
 
 				
-				Buffer.Rotation = new Vector3(valX, valY, valZ);
+				_buffer.Rotation = new Vector3(valX, valY, valZ);
 			}
 		}
 		
 		public Vector3 BeforeLocalRotation{
 			get{
-				return Buffer.BeforeLocalRotation;
+				return _buffer.BeforeLocalRotation;
 			}
 			set{
-				Buffer.BeforeLocalRotation = value;
+				_buffer.BeforeLocalRotation = value;
 			}
 		}
 		
 		public Vector3 LocalRotation{
 			get{
-				return Buffer.LocalRotation;
+				return _buffer.LocalRotation;
 			}
 			set{
 				float valY = value.Y;
@@ -167,27 +168,27 @@ namespace Hedra.Engine.Rendering
 				if(float.IsInfinity(valZ) || float.IsNaN(valZ)) valZ = 0;
 
 				
-				Buffer.LocalRotation = new Vector3(valX, valY, valZ);
+				_buffer.LocalRotation = new Vector3(valX, valY, valZ);
 			}
 		}
 		
 		public Vector4 OutlineColor{
-			get{ return Buffer.OutlineColor; }
-			set{ Buffer.OutlineColor = value; }
+			get{ return _buffer.OutlineColor; }
+			set{ _buffer.OutlineColor = value; }
 		}
 		
 		public Vector3 LocalRotationPoint{
 			get{
-				return Buffer.LocalRotationPoint;
+				return _buffer.LocalRotationPoint;
 			}
 			set{
-				Buffer.LocalRotationPoint = value;
+				_buffer.LocalRotationPoint = value;
 			}
 		}
 		
 		public Vector3 AnimationRotation{
 			get{
-				return Buffer.AnimationRotation;
+				return _buffer.AnimationRotation;
 			}
 			set{
 				float valY = value.Y;
@@ -203,22 +204,22 @@ namespace Hedra.Engine.Rendering
 				if(valZ > 40960 || valZ < -40960) valZ = 0;
 
 				
-				Buffer.AnimationRotation = new Vector3(valX, valY, valZ);
+				_buffer.AnimationRotation = new Vector3(valX, valY, valZ);
 			}
 		}
 		
 		public Vector3 AnimationRotationPoint{
 			get{
-				return Buffer.AnimationRotationPoint;
+				return _buffer.AnimationRotationPoint;
 			}
 			set{
-				Buffer.AnimationRotationPoint = value;
+				_buffer.AnimationRotationPoint = value;
 			}
 		}
 		
 		public Vector3 AnimationPosition{
 			get{
-				return Buffer.AnimationPosition;
+				return _buffer.AnimationPosition;
 			}
 			set{
 				float valY = value.Y;
@@ -234,35 +235,35 @@ namespace Hedra.Engine.Rendering
 				if(valZ > 4096 || valZ < -4096) valZ = 0;
 
 				
-				Buffer.AnimationPosition = new Vector3(valX, valY, valZ);
+				_buffer.AnimationPosition = new Vector3(valX, valY, valZ);
 			}
 		}
 		
 		public bool UseFog{
 			get{
-				return Buffer.UseFog;
+				return _buffer.UseFog;
 			}
 			set{
-				Buffer.UseFog = value;
+				_buffer.UseFog = value;
 			}
 		}
 		
 		public float Alpha{
 			get{
-				return Buffer.Alpha;
+				return _buffer.Alpha;
 			}
 			set{
-				Buffer.Alpha = value;
+				_buffer.Alpha = value;
 			}
 		}
 		
 		
 		public Vector3 Scale{
 			get{
-				return Buffer.Scale;
+				return _buffer.Scale;
 			}
 			set{
-				Buffer.Scale = value;
+				_buffer.Scale = value;
 			}
 		}
 

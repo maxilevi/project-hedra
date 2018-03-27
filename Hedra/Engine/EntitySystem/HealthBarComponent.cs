@@ -20,7 +20,6 @@ namespace Hedra.Engine.EntitySystem
         private readonly Vector2 _originalScale = new Vector2(0.075f, 0.025f) * .8f;
         private readonly Vector2 _originalTextScale;
         private float _barSize;
-
         private string _name;
         private bool _show;
         private float _targetBarSize = 1;
@@ -58,7 +57,6 @@ namespace Hedra.Engine.EntitySystem
             DrawManager.UIRenderer.Remove(_healthBar);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
             DrawManager.UIRenderer.Remove(_healthBar.Text);
-            DrawsUI = true;
         }
 
         public HealthBarComponent(Entity Parent) : base(Parent)
@@ -73,13 +71,12 @@ namespace Hedra.Engine.EntitySystem
             DrawManager.UIRenderer.Remove(_healthBar);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
             DrawManager.UIRenderer.Remove(_healthBar.Text);
-            DrawsUI = true;
         }
 
         public override void Update()
         {
             if ((Parent.BlockPosition.Xz.ToVector3() + Parent.Position.Y * Vector3.UnitY -
-                 SceneManager.Game.LPlayer.Position).LengthSquared < 45 * 45)
+                 SceneManager.Game.Player.Position).LengthSquared < 45 * 45)
             {
                 _healthBar.Enable();
                 _targetBarSize = 1;
@@ -111,7 +108,7 @@ namespace Hedra.Engine.EntitySystem
                 return;
             }
 
-            LocalPlayer player = SceneManager.Game.LPlayer;
+            LocalPlayer player = SceneManager.Game.Player;
             float product = Mathf.DotProduct(player.View.CrossDirection,
                 (Parent.Position - player.Position).NormalizedFast());
             if (product <= 0.5f)

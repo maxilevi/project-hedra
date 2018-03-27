@@ -52,109 +52,109 @@ namespace Hedra.Engine.Player
 		public void SetType(AttackType Type){
 			this.Type = Type;	
 			
-			if(Type == AttackType.KATAR1)
+			if(Type == AttackType.Katar1)
 				base.TexId = Katar1Icon;
 			
-			if (Type == AttackType.KATAR2)
+			if (Type == AttackType.Katar2)
 				base.TexId = Katar2Icon;
 			
-			if(Type == AttackType.BLADE1)
+			if(Type == AttackType.Blade1)
 				base.TexId = Blade1Icon;
 			
-			if (Type == AttackType.BLADE2)
+			if (Type == AttackType.Blade2)
 				base.TexId = Blade2Icon;
 			
-			if(Type == AttackType.CLAW1)
+			if(Type == AttackType.Claw1)
 				base.TexId = Claw1Icon;
 			
-			if (Type == AttackType.CLAW2)
+			if (Type == AttackType.Claw2)
 				base.TexId = Claw2Icon;
 			
 			
-			if(Type == AttackType.SLASH)
+			if(Type == AttackType.Slash)
 				base.TexId = SlashIcon;
 			
-			if (Type == AttackType.LUNGE)
+			if (Type == AttackType.Lunge)
 				base.TexId = LungeIcon;
 			
-			if(Type == AttackType.KNIFE_SLASH)
+			if(Type == AttackType.KnifeSlash)
 				base.TexId = SlashKnifeIcon;
 			
-			if (Type == AttackType.KNIFE_LUNGE)
+			if (Type == AttackType.KnifeLunge)
 				base.TexId = LungeKnifeIcon;
 			
-			if (Type == AttackType.SHOOT)
+			if (Type == AttackType.Shoot)
 				base.TexId = ShootIcon;
 			
-			if(Type == AttackType.TRIPLESHOT)
+			if(Type == AttackType.Tripleshot)
 				base.TexId = TripleShotIcon;
 			
-			if (Type == AttackType.THROW)
+			if (Type == AttackType.Throw)
 				base.TexId = ThrowIcon;
 			
-			if(Type == AttackType.THROW_SPECIAL)
+			if(Type == AttackType.ThrowSpecial)
 				base.TexId = ThrowSpecialIcon;
 			
-			if (Type == AttackType.SWING){
+			if (Type == AttackType.Swing){
 				if(Player.Inventory.MainWeapon.EquipmentType == EquipmentType.Hammer.ToString())
 					base.TexId = SwingHammerIcon;
 				else
 					base.TexId = SwingAxeIcon;
 			}
 			
-			if(Type == AttackType.SMASH){
+			if(Type == AttackType.Smash){
 				if(Player.Inventory.MainWeapon.EquipmentType == EquipmentType.Hammer.ToString())
 					base.TexId = SmashHammerIcon;
 				else
 					base.TexId = SmashAxeIcon;
 			}
 			
-			if(Type == AttackType.BLADE1)
+			if(Type == AttackType.Blade1)
 				base.MaxCooldown = 0.3f - Player.AttackSpeed / 50f;
 			
-			if(Type == AttackType.CLAW1)
+			if(Type == AttackType.Claw1)
 				base.MaxCooldown = 0.1f - Player.AttackSpeed / 50f;
 			
-			if(Type == AttackType.KATAR1)
+			if(Type == AttackType.Katar1)
 				base.MaxCooldown = 0.2f - Player.AttackSpeed / 50f;
 			
-			if(Type == AttackType.CLAW2)
+			if(Type == AttackType.Claw2)
 				base.MaxCooldown = 1.5f - Player.AttackSpeed / 50f;
 			
-			if(Type == AttackType.KATAR2)
+			if(Type == AttackType.Katar2)
 				base.MaxCooldown = 2.0f - Player.AttackSpeed / 50f;
 			
-			if(Type == AttackType.BLADE2)
+			if(Type == AttackType.Blade2)
 				base.MaxCooldown = 3.5f - Player.AttackSpeed / 50f;
 			
-			if(Type == AttackType.SLASH)
+			if(Type == AttackType.Slash)
 				base.MaxCooldown = 0.75f - Player.AttackSpeed / 50f;
 			
-			if(Type == AttackType.KNIFE_SLASH)
+			if(Type == AttackType.KnifeSlash)
 				base.MaxCooldown = 0.55f - Player.AttackSpeed / 50f;
 			
-			if(Type == AttackType.SHOOT)
+			if(Type == AttackType.Shoot)
 				base.MaxCooldown = 0.45f - Math.Max(.25f, Player.AttackSpeed / 50f);
 			
-			if(Type == AttackType.SWING)
+			if(Type == AttackType.Swing)
 				base.MaxCooldown = 0.75f - Player.AttackSpeed / 50f;
 			
-			if(Type == AttackType.SMASH)
+			if(Type == AttackType.Smash)
 				base.MaxCooldown = 5.25f - Math.Max(.75f, Player.AttackSpeed / 50f);
 			
-			if(Type == AttackType.TRIPLESHOT)
+			if(Type == AttackType.Tripleshot)
 				base.MaxCooldown = 4.0f- Player.AttackSpeed / 25;
 
-			if (Type == AttackType.KNIFE_LUNGE)
+			if (Type == AttackType.KnifeLunge)
 				base.MaxCooldown = 3.0f- Player.AttackSpeed / 25;
 			
-			if (Type == AttackType.LUNGE)
+			if (Type == AttackType.Lunge)
 				base.MaxCooldown = 5.0f- Player.AttackSpeed / 25;
 			
-			if(Type == AttackType.THROW)
+			if(Type == AttackType.Throw)
 				base.MaxCooldown = 0.45f - Math.Max(.25f, Player.AttackSpeed / 50f);
 			
-			if(Type == AttackType.THROW_SPECIAL)
+			if(Type == AttackType.ThrowSpecial)
 				base.MaxCooldown = 4.0f- Player.AttackSpeed / 25;
 		}
 		
@@ -164,7 +164,7 @@ namespace Hedra.Engine.Player
 			
 			 if(!base.MeetsRequirements(Bar, CastingAbilityCount) || Player.IsAttacking || Player.IsEating || !Player.CanInteract) return false;
 			
-			if(Type == AttackType.LUNGE)
+			if(Type == AttackType.Lunge)
 			{
 				return true;//No special requirements
 			}
@@ -183,13 +183,13 @@ namespace Hedra.Engine.Player
 		public override void KeyDown(){
 			
 			_isPressing = true;
-			if(Type == AttackType.SLASH || Type == AttackType.SHOOT || Type == AttackType.THROW || Type == AttackType.SWING || Type == AttackType.KNIFE_SLASH 
-			   || Type == AttackType.KATAR1 || Type == AttackType.CLAW1 || Type == AttackType.BLADE1){
-				Player.Model.LeftWeapon.Attack1(Player.Model);
+			if(Type == AttackType.Slash || Type == AttackType.Shoot || Type == AttackType.Throw || Type == AttackType.Swing || Type == AttackType.KnifeSlash 
+			   || Type == AttackType.Katar1 || Type == AttackType.Claw1 || Type == AttackType.Blade1){
+				Player.Model.LeftWeapon.Attack1(Player);
 			}
-			if (Type == AttackType.LUNGE || Type == AttackType.TRIPLESHOT || Type == AttackType.THROW_SPECIAL || Type == AttackType.SMASH || Type == AttackType.KNIFE_LUNGE
-			    || Type == AttackType.BLADE2 || Type == AttackType.CLAW2 || Type == AttackType.KATAR2){
-				Player.Model.LeftWeapon.Attack2(Player.Model);
+			if (Type == AttackType.Lunge || Type == AttackType.Tripleshot || Type == AttackType.ThrowSpecial || Type == AttackType.Smash || Type == AttackType.KnifeLunge
+			    || Type == AttackType.Blade2 || Type == AttackType.Claw2 || Type == AttackType.Katar2){
+				Player.Model.LeftWeapon.Attack2(Player);
 			}
 		}
 		
@@ -197,7 +197,7 @@ namespace Hedra.Engine.Player
 			if(DisableWeapon) return;
 			
 			if(_isPressing && Cooldown < 0){
-				Player.Model.LeftWeapon.Attack1(Player.Model);
+				Player.Model.LeftWeapon.Attack1(Player);
 				Player.Model.LeftWeapon.ContinousAttack = true;
 			}
 			else{
@@ -244,29 +244,25 @@ namespace Hedra.Engine.Player
 			GL.Enable(EnableCap.CullFace);
 		}
 		
-		public override string Description {
-			get {
-				return "";
-			}
-		}
-		
-		public enum AttackType{
-			SLASH,
-			LUNGE,
-			SHOOT,
-			TRIPLESHOT,
-			THROW,
-			THROW_SPECIAL,
-			SWING,
-			SMASH,
-			KNIFE_SLASH,
-			KNIFE_LUNGE,
-			BLADE1,
-			BLADE2,
-			CLAW1,
-			CLAW2,
-			KATAR1,
-			KATAR2
+		public override string Description => string.Empty;
+
+	    public enum AttackType{
+			Slash,
+			Lunge,
+			Shoot,
+			Tripleshot,
+			Throw,
+			ThrowSpecial,
+			Swing,
+			Smash,
+			KnifeSlash,
+			KnifeLunge,
+			Blade1,
+			Blade2,
+			Claw1,
+			Claw2,
+			Katar1,
+			Katar2
 		}
 	}
 }

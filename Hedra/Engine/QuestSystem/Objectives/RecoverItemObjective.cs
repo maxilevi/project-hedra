@@ -52,7 +52,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 _previewMesh.Scale *= .75f;
                 if (_type == TempleType.GreekTemple)
                     _previewMesh.Scale *= .33f;
-                SceneManager.Game.LPlayer.UI.DrawPreview(_previewMesh, UserInterface.QuestFbo);
+                SceneManager.Game.Player.UI.DrawPreview(_previewMesh, UserInterface.QuestFbo);
                 _previewMesh.Scale = oldScale;
                 return UserInterface.QuestFbo.TextureID[0];
             }

@@ -24,12 +24,13 @@ namespace Hedra.Engine
     public static class GameSettings
     {
         public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
-        public static int DeviceWidth;
-        public static int DeviceHeight;
-        public static int Width;
-        public static int Height;
-        public static float ScreenRatio;
-        public static float DefaultScreenHeight;
+        public static bool Debug { get; set; }
+        public static int DeviceWidth { get; set; }
+        public static int DeviceHeight { get; set; }
+        public static int Width { get; set; }
+        public static int Height { get; set; }
+        public static float ScreenRatio { get; set; }
+        public static float DefaultScreenHeight { get; set; }
         public static bool Paused { get; set; }
         public static int MaxLoadingRadius { get; set; } = 32;
         public static int MinLoadingRadius { get; } = 8;
@@ -116,7 +117,7 @@ namespace Hedra.Engine
                 MainFBO.DefaultBuffer.Resize();
                 UserInterface.PlayerFbo.Dispose();
                 UserInterface.PlayerFbo = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
-                SceneManager.Game.LPlayer.UI = new UserInterface(SceneManager.Game.LPlayer);
+                SceneManager.Game.Player.UI = new UserInterface(SceneManager.Game.Player);
             }
         }
 

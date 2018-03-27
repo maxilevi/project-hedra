@@ -33,7 +33,7 @@ namespace Hedra.Engine.QuestSystem
 		}
 		
 		public void Update(){
-			var player = Scenes.SceneManager.Game.LPlayer;
+			var player = Scenes.SceneManager.Game.Player;
 
 			if(( player.Position - base.Position).LengthSquared < ClaimDistance*ClaimDistance && !_used && !GameSettings.Paused 
 			   && Vector3.Dot( (base.Position - player.Position).NormalizedFast(), player.View.LookAtPoint.NormalizedFast()) > .6f)

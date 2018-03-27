@@ -77,7 +77,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         {
             get
             {
-                Vector3 diff = ObjectivePosition - SceneManager.Game.LPlayer.Position;
+                Vector3 diff = ObjectivePosition - SceneManager.Game.Player.Position;
                 string leftRight = diff.X < 0 ? " West" : " East";
                 string upDown = diff.Z < 0 ? "South" : "North";
 

@@ -120,6 +120,7 @@ namespace Hedra.Engine.ItemSystem
             savedTemplate.Model = defaultTemplate.Model;
             savedTemplate.Description = defaultTemplate.Description;
             savedTemplate.DisplayName = defaultTemplate.DisplayName;
+            savedTemplate.Tier = defaultTemplate.Tier;
             return FromTemplate(savedTemplate);
         }
 

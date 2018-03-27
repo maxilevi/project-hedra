@@ -9,7 +9,9 @@ namespace Hedra.Engine.ItemSystem
     {
         Amount,
         Damage,
-        AttackPower,
-        AttackSpeed
+        AttackSpeed,
+        MovementSpeed,
+        Health,
+        EffectType
     }
 }

@@ -90,13 +90,13 @@ namespace Hedra.Engine.StructureSystem
             underChunk.AddStaticElement(mausoleum);
 
             this.BuildLamps(Position);
-            this.BuildReward(Position, cementery, rng);
+            BuildReward(Position, cementery, rng);
 
             underChunk.Blocked = true;
             World.AddChunkToQueue(underChunk, true);
         }
 
-        private void BuildReward(Vector3 Position, Graveyard Cementery, Random Rng)
+        private static void BuildReward(Vector3 Position, Graveyard Cementery, Random Rng)
         {
             var enemies = new List<Entity>();
 

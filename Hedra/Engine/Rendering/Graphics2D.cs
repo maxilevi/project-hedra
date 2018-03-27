@@ -195,16 +195,16 @@ namespace Hedra.Engine.Rendering
 		              for (int x = 0; x < Bmp.Width; x++)
 		              {
 		              	  float LerpValue = 0;
-		              	  if(Type == GradientType.LEFT_RIGHT)
+		              	  if(Type == GradientType.LeftRight)
 		              	  	LerpValue = (float) ( (float) x / (float) Bmp.Width);
 		              	  
-		              	  if(Type == GradientType.TOP_BOT)
+		              	  if(Type == GradientType.TopBot)
 		              	  	LerpValue = (float) ( (float) y / (float) Bmp.Height);
 		              	  
-		              	  if(Type == GradientType.DIAGONAL)
+		              	  if(Type == GradientType.Diagonal)
 		              	  	LerpValue = Mathf.Clamp( (new Vector2(0,0) - new Vector2(x,y)).LengthFast / (Bmp.Width+Bmp.Height), 0, 1);
 		              	  
-		              	  if(Type == GradientType.CENTER)
+		              	  if(Type == GradientType.Center)
 		              	  	LerpValue = Mathf.Clamp( (new Vector2(Bmp.Width / 2, Bmp.Height / 2) - new Vector2(x,y)).LengthFast / (Bmp.Width+Bmp.Height), 0, 1);
 		              	  
 		              	  Color NewColor = Mathf.Lerp(Color1, Color2, LerpValue);
@@ -227,9 +227,9 @@ namespace Hedra.Engine.Rendering
 	}
 	
 	public enum GradientType{
-		DIAGONAL,
-		LEFT_RIGHT,
-		TOP_BOT,
-		CENTER
+		Diagonal,
+		LeftRight,
+		TopBot,
+		Center
 	}
 }

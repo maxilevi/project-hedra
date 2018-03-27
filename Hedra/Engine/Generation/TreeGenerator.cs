@@ -37,7 +37,11 @@ namespace Hedra.Engine.Generation
 
             if (World.MenuSeed == World.Seed)
             {
-			    spaceBetween = SimplexNoise.Noise.Generate(Position.X * .001f, (Position.Z + 100) * .001f) * 75f;
+                //This old noise doesnt support negative coordinates
+                //And I will leave it here because the menu looks good with it.
+			    spaceBetween = Position.X > 0 && Position.Z > 0 
+                    ? SimplexNoise.Noise.Generate(Position.X * .001f, (Position.Z + 100) * .001f) * 75f
+                    : int.MaxValue;
                 noiseValue = Math.Min(Math.Max(0, Math.Abs(spaceBetween / 75f) * valueFactor)+.3f, 1.0f);
             }
             else

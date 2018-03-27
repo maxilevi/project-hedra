@@ -157,7 +157,7 @@ namespace Hedra.Engine.Rendering.Animation
 
             Shader.Mat4Uniform.LoadMatrixArray(JointTransforms);
 			GL.UniformMatrix4(Shader.ProjectionViewUniform, false, ref ProjectionViewMat);
-			GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.LPlayer.Position);
+			GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
 			
 			if(GameSettings.Shadows){
 				GL.UniformMatrix4(Shader.ShadowMvpUniform, false, ref ShadowRenderer.ShadowMVP);
@@ -166,7 +166,7 @@ namespace Hedra.Engine.Rendering.Animation
 				GL.Uniform1(Shader.ShadowTexUniform, 0);
 			}
 			GL.Uniform1(Shader.UseShadowsUniform, GameSettings.Shadows ? 1.0f : 0.0f);
-			GL.Uniform1(Shader.UseFogUniform, (Fog) ? 1 : 0 );
+			GL.Uniform1(Shader.UseFogUniform, Fog ? 1 : 0 );
 			GL.Uniform1(Shader.AlphaUniform, Alpha);
 			GL.Uniform4(Shader.TintUniform, Tint+BaseTint);
 			

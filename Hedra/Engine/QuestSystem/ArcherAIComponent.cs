@@ -54,12 +54,12 @@ namespace Hedra.Engine.QuestSystem
 				        if (_secondAttackCooldown <= 0)
 				        {
 				            _secondAttackCooldown = 4.5f;
-				            human.Model.LeftWeapon.Attack2(human.Model);
+				            human.Model.LeftWeapon.Attack2(human);
 				        }
 				        else if (_firstAttackCooldown <= 0)
 				        {
 				            _firstAttackCooldown = 1.5f;
-				            human.Model.LeftWeapon.Attack1(human.Model); // It's a bow
+				            human.Model.LeftWeapon.Attack1(human); // It's a bow
 				        }
 				    }
 				}else

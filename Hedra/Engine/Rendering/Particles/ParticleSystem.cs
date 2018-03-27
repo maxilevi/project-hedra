@@ -127,7 +127,7 @@ namespace Hedra.Engine.Rendering.Particles
 				GL.Enable(EnableCap.DepthTest);
 				//GL.Disable(EnableCap.CullFace);
 				Shader.Bind();
-				GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.LPlayer.Position);//Really hacky
+				GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);//Really hacky
 				
 				GL.BindVertexArray(VAOID);
 

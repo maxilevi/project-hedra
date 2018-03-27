@@ -18,11 +18,10 @@ namespace Hedra.Engine.EntitySystem
     {
 		public int Chance { get; set; } = 20;
         public float TotalStrength { get; set; } = 30;
-		public float BaseTime { get; set; } = 5;
-		
+		public float BaseTime { get; set; } = 5;		
 		private float _cooldown;
 		private bool _canBleed = true;
-		private float _bleedTime = 0;
+		private float _bleedTime;
 		private float _time = 0;
 		private float _pTime = 0;
 		private Entity _victim;
@@ -40,12 +39,11 @@ namespace Hedra.Engine.EntitySystem
 			if(_cooldown > 0 || !_canBleed) return;
 			
 			bool shouldBleed = Utils.Rng.NextFloat() <= Chance * 0.01 ? true : false;
-			if(shouldBleed){
-				_bleedTime =  BaseTime + Utils.Rng.NextFloat() * 4 -2f;
-				if(Victim.SearchComponent<BleedingComponent>() == null){
-					Victim.AddComponent(new BleedingComponent(Victim, Parent, _bleedTime, TotalStrength));
-				}
-			}
+		    if (!shouldBleed) return;
+		    _bleedTime =  BaseTime + Utils.Rng.NextFloat() * 4 -2f;
+		    if(Victim.SearchComponent<BleedingComponent>() == null){
+		        Victim.AddComponent(new BleedingComponent(Victim, Parent, _bleedTime, TotalStrength));
+		    }
 		}
 	}
 }

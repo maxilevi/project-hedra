@@ -1,9 +1,9 @@
 {
   "Name": "UncommonBarbarianBronzeSword",
-  "DisplayName": "Barbarian Bronze Sword",
+  "DisplayName": "Bronze Machete",
   "EquipmentType": "Sword", 
   "Tier": "Uncommon",
-  "Description": "Barbarian bronze sword.",
+  "Description": "Bronze machete.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -92,7 +92,7 @@ namespace Hedra.Engine.Rendering
 			GL.Disable(EnableCap.Blend);
 			BlockShaders.StaticShader.Bind();
 			GL.Uniform3(BlockShaders.StaticShader.LightColorLocation, ShaderManager.LightColor);
-			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, Scenes.SceneManager.Game.LPlayer.Position);
+			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
 			if(Constants.CHARACTER_CHOOSED)
 				GL.Uniform1(BlockShaders.StaticShader.TimeUniform, Time.CurrentFrame );
 			else

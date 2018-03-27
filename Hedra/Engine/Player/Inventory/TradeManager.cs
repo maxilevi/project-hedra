@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player.Inventory
             {
                 if (attributes[i].Name == CommonAttributes.Amount.ToString())
                 {
-                    price += Item.GetAttribute<int>(CommonAttributes.Amount);
+                    price += 1;
                     continue;
                 }
                 var typeList = new[] { typeof(float), typeof(double), typeof(long) };
@@ -57,13 +57,6 @@ namespace Hedra.Engine.Player.Inventory
         public void ProcessTrade(Humanoid Buyer, Humanoid Seller,
     InventoryArrayInterface BuyerInterface, InventoryArrayInterface SellerInterface, Item Item, int Price)
         {
-            if (Item.HasAttribute(CommonAttributes.Amount))
-            {
-                var clone = Item.FromArray(Item.ToArray());
-                clone.SetAttribute(CommonAttributes.Amount, 1);
-                Price = this.ItemPrice(clone);
-            }
-
             if (Buyer.Gold >= Price || Buyer.Gold == int.MaxValue)
             {
                 if (Buyer.Gold != int.MaxValue) Buyer.Gold -= Price;

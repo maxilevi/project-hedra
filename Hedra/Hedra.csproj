@@ -181,6 +181,7 @@
     <Compile Include="Engine\ItemSystem\AttributeTemplate.cs" />
     <Compile Include="Engine\ItemSystem\CommonAttributes.cs" />
     <Compile Include="Engine\ItemSystem\CommonItems.cs" />
+    <Compile Include="Engine\ItemSystem\EffectDescriber.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\ItemSystem\ItemFactory.cs" />
     <Compile Include="Engine\ItemSystem\ItemModelLoader.cs" />

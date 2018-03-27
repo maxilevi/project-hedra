@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Text;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
@@ -24,6 +25,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly Vector2 _nonWeaponItemAttributesPosition;
         private readonly Vector2 _nonWeaponItemTexturePosition;
         private EntityMesh _currentItemMesh;
+        private float _currentItemMeshHeight;
         private bool _enabled;
 
         public InventoryInterfaceItemInfo(InventoryItemRenderer Renderer)
@@ -82,7 +84,7 @@ namespace Hedra.Engine.Player.Inventory
                 _itemDescription.Text = string.Empty;
             }
 
-            _itemText.Text = CurrentItem.DisplayName.ToUpperInvariant();
+            _itemText.Text = Utils.FitString(CurrentItem.DisplayName.ToUpperInvariant(), 15);
             var attributes = CurrentItem.GetAttributes();
             var strBuilder = new StringBuilder();
             for (var i = 0; i < attributes.Length; i++)
@@ -94,14 +96,13 @@ namespace Hedra.Engine.Player.Inventory
                 }
             }
             _itemAttributes.Text = strBuilder.ToString();
-            var model = CurrentItem.Model;
-            float newOffset = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
             _itemTexture.TextureElement.IdPointer = () => _renderer.Draw(_currentItemMesh, CurrentItem,
-                false, newOffset * InventoryItemRenderer.ZOffsetFactor);
+                false, _currentItemMeshHeight * InventoryItemRenderer.ZOffsetFactor);
         }
 
         protected static string EscapeValue(object Value)
         {
+            if (Value is double || Value is float) return ((float)Convert.ChangeType(Value, typeof(float))).ToString("0.0", CultureInfo.InvariantCulture);
             if (!(Value is int) && !(Value is long)) return Value.ToString();
 
             return (int) Convert.ChangeType(Value, typeof(int)) == int.MaxValue ? "∞" : Value.ToString();
@@ -123,8 +124,8 @@ namespace Hedra.Engine.Player.Inventory
         {
             if(Item == null || Item.IsGold) return;
             CurrentItem = Item;
-            _currentItemMesh = EntityMesh.FromVertexData(Item.Model);
-            _currentItemMesh.UseFog = false;
+            _currentItemMesh?.Dispose();
+            _currentItemMesh = _renderer.BuildModel(Item, out _currentItemMeshHeight);
             this.UpdateView();
             this.Enabled = true;
         }

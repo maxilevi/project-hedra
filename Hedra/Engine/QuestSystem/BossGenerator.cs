@@ -28,7 +28,7 @@ namespace Hedra.Engine.QuestSystem
 		
 		public static Entity Generate(Random Rng, out MobType Type){
 
-			LocalPlayer player = SceneManager.Game.LPlayer;
+			LocalPlayer player = SceneManager.Game.Player;
 
 		    var bossType = BossType.NORMAL;
 		    Entity boss = null;

@@ -370,12 +370,9 @@ namespace Hedra.Engine.EntitySystem
             if (PlaySpawningAnimation)
             {
                 PlaySpawningAnimation = false;
-                Model.Alpha = 0;
                 if(Model.Enabled)
                     SoundManager.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
-            }
-            if (!IsDead && Model.Alpha < 0.1f && (Model.Position.Xz - BlockPosition.Xz).LengthSquared < 4 * 4)
-            {
+
                 var animable = Model as IDisposeAnimation;
                 if (animable != null)
                 {
@@ -434,7 +431,7 @@ namespace Hedra.Engine.EntitySystem
 
             Physics.Draw();
             for (var i = 0; i < Components.Count; i++)
-                if (!Components[i].DrawsUI)
+                if (!Components[i].Renderable)
                     Components[i].Draw();
         }
 

@@ -95,7 +95,7 @@ namespace Hedra.Engine.Rendering
 			GL.Uniform1(Shader.TimeUniform, Time.CurrentFrame);
 			GL.Uniform3(Shader.HighestPointUniform, HighestPoint);
 			GL.Uniform3(Shader.LowestPointUniform, LowestPoint);
-			GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.LPlayer.Position);
+			GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
 			
 			GL.BindVertexArray(VAOId);
 			GL.EnableVertexAttribArray(0);

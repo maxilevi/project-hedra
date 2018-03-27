@@ -11,7 +11,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryItemRenderer
     {
-        public const float ZOffsetFactor = 1.15f;
+        public const float ZOffsetFactor = 1.25f;
         private readonly InventoryArray _array;
         private readonly int _length;
         private readonly int _offset;
@@ -40,15 +40,22 @@ namespace Hedra.Engine.Player.Inventory
                 }
                 if (_array[i+ _offset] != null)
                 {
-                    var model = _array[i + _offset].Model;
-                    _modelsHeights[i] = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
-                    _models[i] = EntityMesh.FromVertexData(model);
-                    _models[i].UseFog = false;
-                    DrawManager.Remove(_models[i]);
+                    _models[i] = this.BuildModel(_array[i + _offset], out _modelsHeights[i]);
                     itemCount++;
                 }
             }
             _itemCount = itemCount;
+        }
+
+        public EntityMesh BuildModel(Item Item, out float ModelHeight)
+        {
+            var model = Item.Model;
+            ModelHeight = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
+            var mesh = EntityMesh.FromVertexData(model);
+            mesh.BaseTint = EffectDescriber.EffectColorFromItem(Item);
+            mesh.UseFog = false;
+            DrawManager.Remove(mesh);
+            return mesh;
         }
 
         public uint Draw(int Id)

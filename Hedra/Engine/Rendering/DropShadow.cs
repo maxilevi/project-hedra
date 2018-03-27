@@ -44,6 +44,6 @@ namespace Hedra.Engine.Rendering
 			DrawManager.DropShadows.Add(this);
 		}
 		
-		public bool ShouldDraw => (Scenes.SceneManager.Game.LPlayer.Position - Position).Xz.LengthSquared < 128*128 && Enabled && !GameSettings.SSAO && GameSettings.ShadowQuality > 1;
+		public bool ShouldDraw => (Scenes.SceneManager.Game.Player.Position - Position).Xz.LengthSquared < 128*128 && Enabled && !GameSettings.SSAO && GameSettings.ShadowQuality > 1;
 	}
 }

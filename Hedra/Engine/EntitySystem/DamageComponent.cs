@@ -47,10 +47,7 @@ namespace Hedra.Engine.EntitySystem
             if (_hitsTimer.Tick())
                 _consecutiveHits = 0;
 
-            if (_tintTimer > 0)
-                _targetTint = new Vector4(2.0f, 0.1f, 0.1f, 1);
-            else
-                _targetTint = new Vector4(1, 1, 1, 1);
+            _targetTint = _tintTimer > 0 ? new Vector4(2.0f, 0.1f, 0.1f, 1) : new Vector4(1, 1, 1, 1);
 
             Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, (float) Time.deltaTime * 12f);
 
@@ -101,11 +98,11 @@ namespace Hedra.Engine.EntitySystem
                 Billboard dmgLabel;
                 if (!Immune && !shouldMiss)
                     dmgLabel = new Billboard(1.8f, ((int) Amount).ToString(), color,
-                        FontCache.Get(AssetManager.Fonts.Families[0], 10 + 32 * (Amount / Parent.MaxHealth),
+                        FontCache.Get(AssetManager.Fonts.Families[0], 12 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 else
                     dmgLabel = new Billboard(1.8f, "MISS", Color.White,
-                        FontCache.Get(AssetManager.Fonts.Families[0], 10 + 32 * (Amount / Parent.MaxHealth),
+                        FontCache.Get(AssetManager.Fonts.Families[0], 12 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 dmgLabel.Vanish = true;
                 dmgLabel.Speed = 4;

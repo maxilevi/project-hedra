@@ -177,10 +177,10 @@ namespace Hedra.Engine.QuestSystem
 			LocalPlayer.Instance.MessageDispatcher.ShowTitleMessage("QUEST COMPLETED", 3f, Color.Gold);
 			float Exp = ChainLength * 7;
 			this.QuestCompleted = true;
-			SceneManager.Game.LPlayer.CanInteract = false;
+			SceneManager.Game.Player.CanInteract = false;
 			TaskManager.Delay(2500, delegate{ 
 		        var label = new Billboard(4.0f, "+"+Exp+" XP", Color.Violet, FontCache.Get(AssetManager.Fonts.Families[0], 48, FontStyle.Bold),
-				SceneManager.Game.LPlayer.Position);
+				SceneManager.Game.Player.Position);
 				label.Size = .4f;
 				label.Vanish = true;
 			});

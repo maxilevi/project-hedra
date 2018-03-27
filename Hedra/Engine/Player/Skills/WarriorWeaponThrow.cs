@@ -100,18 +100,18 @@ namespace Hedra.Engine.Player
 				Matrix4 Mat4 = Player.Model.LeftHandMatrix.ClearTranslation() * 
 					Matrix4.CreateTranslation(-Player.Model.Position + (Player.Model.LeftHandPosition + Player.Model.RightHandPosition) * .5f);
 				
-				Player.Model.LeftWeapon.Mesh.TransformationMatrix = Mat4;
+				Player.Model.LeftWeapon.MainMesh.TransformationMatrix = Mat4;
 				Player.Movement.OrientatePlayer(Player);
-				Player.Model.LeftWeapon.Mesh.Position = Player.Model.Position;
-				Player.Model.LeftWeapon.Mesh.Rotation = Vector3.Zero;
-				Player.Model.LeftWeapon.Mesh.TargetRotation = new Vector3(180,0,0);
-				Player.Model.LeftWeapon.Mesh.RotationPoint = Vector3.Zero;
-				Player.Model.LeftWeapon.Mesh.LocalRotation = Vector3.Zero;
-				Player.Model.LeftWeapon.Mesh.LocalRotationPoint = Vector3.Zero;
-				Player.Model.LeftWeapon.Mesh.LocalPosition = Vector3.Zero;
-				Player.Model.LeftWeapon.Mesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
-				Player.Model.LeftWeapon.Mesh.TargetPosition = Vector3.Zero;
-				Player.Model.LeftWeapon.Mesh.AnimationPosition = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.Position = Player.Model.Position;
+				Player.Model.LeftWeapon.MainMesh.Rotation = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.TargetRotation = new Vector3(180,0,0);
+				Player.Model.LeftWeapon.MainMesh.RotationPoint = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.LocalRotation = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.LocalRotationPoint = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.LocalPosition = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
+				Player.Model.LeftWeapon.MainMesh.TargetPosition = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.AnimationPosition = Vector3.Zero;
 			}
 		}
 		

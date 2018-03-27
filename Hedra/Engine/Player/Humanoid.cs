@@ -23,7 +23,6 @@ namespace Hedra.Engine.Player
 
 	public class Humanoid : Entity
 	{
-	    private EntityComponent _lastEffect;
 	    private Item _ring;
         private float _mana;
         private float _xp;
@@ -32,6 +31,7 @@ namespace Hedra.Engine.Player
 	    private float _stamina = 100f;
 	    private float _oldSpeed;
 	    private bool _isGliding;
+	    private HumanoidComponentManager _componentManager;
         public virtual IMessageDispatcher MessageDispatcher { get; set; }
         public bool IsAttacking {get; set;}
 		public bool IsEating { get; set; }
@@ -139,6 +139,7 @@ namespace Hedra.Engine.Player
             this.MessageDispatcher = new DummyMessageDispatcher();
             this.HandLamp = new HandLamp(this);
 			this.Movement = new MovementManager(this);
+            this._componentManager = new HumanoidComponentManager(this);
             this.DmgComponent = new DamageComponent(this)
             {
                 XpToGive = 4f
@@ -255,6 +256,40 @@ namespace Hedra.Engine.Player
 	        return Utils.Rng.NextFloat() * .5f + .75f;
 	    }
 
+	    public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)
+	    {
+	        _componentManager.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed), Condition);
+	    }
+
+	    public void ApplyEffectWhile(EffectType NewType, Func<bool> Condition)
+	    {
+	        EntityComponent effect;
+	        switch (NewType)
+	        {
+	            case EffectType.Fire:
+	                effect = new FireComponent(this);
+                    break;
+	            case EffectType.Poison:
+	                effect = new PoisonousComponent(this);
+                    break;
+	            case EffectType.Bleed:
+	                effect = new BleedComponent(this);
+                    break;
+	            case EffectType.Freeze:
+	                effect = new FreezeComponent(this);
+                    break;
+	            case EffectType.Speed:
+	                effect = new SpeedComponent(this);
+                    break;
+	            case EffectType.Slow:
+	                effect = new SlowComponent(this);
+                    break;
+                default:
+	                throw new ArgumentOutOfRangeException(nameof(NewType), NewType, null);
+	        }
+	        _componentManager.AddComponentWhile(effect, Condition);
+	    }
+
 	    public float DamageEquation{
 			get{
 				float dmgToDo = 5 * (8+Level*1.5f) * .2f;
@@ -293,62 +328,45 @@ namespace Hedra.Engine.Player
 			get{ return _xp; }
 			set{
 				_xp = value;
-				if(_xp >= MaxXP){
-					_xp -= MaxXP;
-					Level++;
+			    if (!(_xp >= MaxXP)) return;
+			    _xp -= MaxXP;
+			    Level++;
 					
-					Health = MaxHealth;
-					Mana = MaxMana;
+			    Health = MaxHealth;
+			    Mana = MaxMana;
 
-				    var label = new Billboard(4.0f, "LEVEL UP!", Color.Violet,
-				        FontCache.Get(AssetManager.Fonts.Families[0], 48, FontStyle.Bold),
-				        this.Model.Position)
-				    {
-				        Size = .7f,
-				        Vanish = true,
-				        FollowFunc = () => this.Position
-				    };
+			    var label = new Billboard(4.0f, "LEVEL UP!", Color.Violet,
+			        FontCache.Get(AssetManager.Fonts.Families[0], 48, FontStyle.Bold),
+			        this.Model.Position)
+			    {
+			        Size = .7f,
+			        Vanish = true,
+			        FollowFunc = () => this.Position
+			    };
 
-				    SoundManager.PlaySound(SoundType.NotificationSound, Position, false, 1, .65f);
-					//make a loop
-					if(_xp >= MaxXP)
-						XP = _xp;
-				}
+			    SoundManager.PlaySound(SoundType.NotificationSound, Position, false, 1, .65f);
+			    //make a loop
+			    if(_xp >= MaxXP)
+			        XP = _xp;
 			}
 		}
 		
         public virtual Item Ring { 
 			get{ return _ring; }
 			set{
-			    if (_ring == value) return;
-			    if(_ring != null){
-
-			        if(_lastEffect != null)
-			            this.Components.Remove(_lastEffect);
-						
-			        this.Speed -= _ring.GetAttribute<float>("MovementSpeed");
-
-                }
+			    if (this.Ring == value)  return;             
 			    _ring = value;
-			    if (_ring == null) return;
-			    this.Speed += _ring.GetAttribute<float>("MovementSpeed");
-			    var type = (EffectType) Enum.Parse(typeof(EffectType), _ring.GetAttribute<string>("EffectType"));
-                switch (type)
 
-                {
-			        case EffectType.Fire:
-			            var fire = new FireComponent(this);
-			            _lastEffect = fire;
-			            this.AddComponent( fire );
-			            break;
-			        case EffectType.Poison:
-			            var poison = new PoisonousComponent(this);
-			            _lastEffect = poison;
-			            this.AddComponent( poison );
-			            break;
+			    if (this.Ring != null)
+			    {
+			        this.ApplyEffectWhile(
+                        (EffectType) Enum.Parse(typeof(EffectType), _ring.GetAttribute<string>("EffectType")), () => this.Ring == value);
+			        this.AddBonusSpeedWhile(this.Ring.GetAttribute<float>("MovementSpeed"), () => this.Ring == value);
+
 			    }
 			}
 		}
+
 	
         public float Stamina {
 			get{ return _stamina; }

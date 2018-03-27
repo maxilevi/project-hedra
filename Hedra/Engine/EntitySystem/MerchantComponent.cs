@@ -18,17 +18,22 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.EntitySystem
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Description of MerchantComponent.
 	/// </summary>
 	public class MerchantComponent : EntityComponent
 	{
-		public int TradeRadius = 12;
-		public Dictionary<int, Item> Items { get; }
+	    public new Humanoid Parent;
+	    public int TradeRadius { get; } = 12;
+        public Dictionary<int, Item> Items { get; private set; }
+	    private readonly Dictionary<int, Item> _originalItems;
 
-		public MerchantComponent(Entity Parent, bool TravellingMerchant) : base(Parent){
-			var rng = new Random(World.Seed + 82823 + Utils.Rng.Next(-9999999, 9999999));
+        public MerchantComponent(Entity Parent, bool TravellingMerchant) : base(Parent){
+            if( !(Parent is Humanoid) ) throw new ArgumentException("The merchant component can only be used with Humanoids.");
+            this.Parent = base.Parent as Humanoid;
 
+            var rng = new Random(World.Seed + 82823 + Utils.Rng.Next(-9999999, 9999999));
 		    var items = new []
 		    {
 		        ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Axe)),
@@ -42,23 +47,29 @@ namespace Hedra.Engine.EntitySystem
 		    };
 		    var berry = ItemPool.Grab(ItemType.Berry);
             berry.SetAttribute(CommonAttributes.Amount, int.MaxValue);
-            Items = new Dictionary<int, Item>
+            _originalItems = new Dictionary<int, Item>
 		    {
                 {TradeInventory.MerchantSpaces - 1, berry}
 		    };
 		    for (var i = 0; i < 4; i++)
 		    {
-		        Items.Add(i, items[rng.Next(0, items.Length)]);
+		        _originalItems.Add(i, items[rng.Next(0, items.Length)]);
 		    }
 
 		    if(TravellingMerchant){
-				Items.Add(TradeInventory.MerchantSpaces - 2, ItemPool.Grab("HorseMount"));
+		        _originalItems.Add(TradeInventory.MerchantSpaces - 2, ItemPool.Grab("HorseMount"));
 				//Items.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab("WolfMount"));
 				//Items.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab(ItemType.Glider));
 			}
-		    (Parent as Humanoid).Gold = int.MaxValue;
+            Items = new Dictionary<int, Item>(_originalItems);
+		    this.Parent.Gold = int.MaxValue;
 		}
-		 
+
+	    public void TransactionComplete()
+	    {
+	        Items = new Dictionary<int, Item>(_originalItems);
+	    }
+
 		public override void Update(){
 			var player = LocalPlayer.Instance;
 			

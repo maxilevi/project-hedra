@@ -40,8 +40,8 @@ namespace Hedra.Engine.Player
 			WhirlwindAnimation.OnAnimationEnd += delegate{
 				if(PassedTime > 4){
 					Player.Model.TargetRotation = Vector3.Zero;
-					Player.Model.LeftWeapon.Mesh.TargetRotation = Vector3.Zero;
-					Player.Model.LeftWeapon.Mesh.TargetRotation = Vector3.Zero;
+					Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
+					Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
 					Player.Model.Model.Rotation = Vector3.Zero;
 					Player.IsCasting = false;
 					Casting = false;
@@ -69,8 +69,8 @@ namespace Hedra.Engine.Player
 			Player.Model.Model.PlayAnimation(WhirlwindAnimation);
 			
 			Player.Model.TargetRotation = Vector3.Zero;
-			Player.Model.LeftWeapon.Mesh.TargetRotation = Vector3.Zero;
-			Player.Model.LeftWeapon.Mesh.TargetRotation = Vector3.Zero;
+			Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
+			Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
 			Player.Model.Model.Rotation = Vector3.Zero;
 		    _trail.Emit = true;
 		}
@@ -90,18 +90,18 @@ namespace Hedra.Engine.Player
 			    //	RotationY -= 360;
 
 			    Chunk underChunk = World.GetChunkAt(Player.Position);
-                Player.Model.LeftWeapon.Mesh.TransformationMatrix = Matrix4.Identity;
+                Player.Model.LeftWeapon.MainMesh.TransformationMatrix = Matrix4.Identity;
 				Player.Model.TargetRotation = new Vector3(0,RotationY,0);
-				Player.Model.LeftWeapon.Mesh.Position = Player.Model.Position;
-				Player.Model.LeftWeapon.Mesh.Rotation = Vector3.Zero;
-				Player.Model.LeftWeapon.Mesh.TargetRotation = new Vector3(RotationY,0,0);
-				Player.Model.LeftWeapon.Mesh.RotationPoint = Player.Model.Position - (Player.Model.LeftHandPosition + Player.Model.RightHandPosition) / 2;
-				Player.Model.LeftWeapon.Mesh.LocalRotation = new Vector3(90,0,90);
-				Player.Model.LeftWeapon.Mesh.LocalRotationPoint = Vector3.Zero;
-				Player.Model.LeftWeapon.Mesh.LocalPosition = (Player.Model.LeftHandPosition + Player.Model.RightHandPosition) / 2 - Player.Model.LeftWeapon.Mesh.Position;
-				Player.Model.LeftWeapon.Mesh.BeforeLocalRotation = Vector3.Zero;
-				Player.Model.LeftWeapon.Mesh.TargetPosition = Vector3.Zero;
-				Player.Model.LeftWeapon.Mesh.AnimationPosition = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.Position = Player.Model.Position;
+				Player.Model.LeftWeapon.MainMesh.Rotation = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.TargetRotation = new Vector3(RotationY,0,0);
+				Player.Model.LeftWeapon.MainMesh.RotationPoint = Player.Model.Position - (Player.Model.LeftHandPosition + Player.Model.RightHandPosition) / 2;
+				Player.Model.LeftWeapon.MainMesh.LocalRotation = new Vector3(90,0,90);
+				Player.Model.LeftWeapon.MainMesh.LocalRotationPoint = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.LocalPosition = (Player.Model.LeftHandPosition + Player.Model.RightHandPosition) / 2 - Player.Model.LeftWeapon.MainMesh.Position;
+				Player.Model.LeftWeapon.MainMesh.BeforeLocalRotation = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.TargetPosition = Vector3.Zero;
+				Player.Model.LeftWeapon.MainMesh.AnimationPosition = Vector3.Zero;
 				
 				Block B = World.GetHighestBlockAt( (int) Player.Position.X, (int) Player.Position.Z);
 				World.WorldParticles.VariateUniformly = true;

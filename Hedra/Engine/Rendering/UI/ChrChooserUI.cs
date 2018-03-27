@@ -34,14 +34,14 @@ namespace Hedra.Engine.Rendering.UI
 		{
 		    _humans = new List<Humanoid>();
             var bandPosition = new Vector2(0f, .8f);
-			var blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LEFT_RIGHT);
-			var blackBand2 = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), -bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LEFT_RIGHT);	
+			var blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
+			var blackBand2 = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), -bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);	
 			
             var currentTab = new GUIText("Choose a character", new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 15, FontStyle.Bold));
 
 			var newChr = new Button(new Vector2(0.8f,bandPosition.Y), new Vector2(0.15f,0.05f),
 			                           "New Character", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 13));
-			newChr.Click += delegate { this.Disable(); Scenes.SceneManager.Game.LPlayer.UI.ChrCreator.Enable(); };	
+			newChr.Click += delegate { this.Disable(); Scenes.SceneManager.Game.Player.UI.ChrCreator.Enable(); };	
 			
 			var playBtn = new Button(new Vector2(-.1f, -.8f), Vector2.One, "Load", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 14));
 			
@@ -58,14 +58,14 @@ namespace Hedra.Engine.Rendering.UI
 				Scenes.SceneManager.Game.CurrentInformation = DataManager.PlayerFiles[index];
 				
 				if(Constants.REDIRECT_NET){
-					Scenes.SceneManager.Game.LPlayer.UI.ChrChooser.Disable();
-					Scenes.SceneManager.Game.LPlayer.UI.ConnectPanel.Enable();
+					Scenes.SceneManager.Game.Player.UI.ChrChooser.Disable();
+					Scenes.SceneManager.Game.Player.UI.ConnectPanel.Enable();
 					return;
 				}
 				Constants.CHARACTER_CHOOSED = true;
 				Scenes.SceneManager.Game.MakeCurrent(Scenes.SceneManager.Game.CurrentInformation);
 				if(Constants.REDIRECT_NEW_RUN){
-					Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.LPlayer);
+					Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.Player);
 					return;
 				}
 			};
@@ -124,7 +124,7 @@ namespace Hedra.Engine.Rendering.UI
 			};
 			
 			OnEscapePressed += delegate { 
-				this.Disable(); Scenes.SceneManager.Game.LPlayer.UI.Menu.Enable();
+				this.Disable(); Scenes.SceneManager.Game.Player.UI.Menu.Enable();
 			};
 		}
 		
@@ -288,7 +288,7 @@ namespace Hedra.Engine.Rendering.UI
 				}
 				
 				Scenes.MenuBackground.Campfire = true;
-				Scenes.SceneManager.Game.LPlayer.View.CameraHeight = Vector3.UnitY * 4;
+				Scenes.SceneManager.Game.Player.View.CameraHeight = Vector3.UnitY * 4;
 				#region Hover
 				Vector2 coords = Mathf.ToNormalizedDeviceCoordinates(Events.EventDispatcher.Mouse.X, Events.EventDispatcher.Mouse.Y);
 				coords += new Vector2(1,1);

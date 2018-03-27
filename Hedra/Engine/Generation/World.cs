@@ -273,7 +273,7 @@ namespace Hedra.Engine.Generation
 			WorldRenderer.ForceDiscard();
 		    CacheManager.Discard();
 
-		    World.AddEntity(SceneManager.Game.LPlayer);
+		    World.AddEntity(SceneManager.Game.Player);
 
             if (Seed == MenuSeed)
 			{

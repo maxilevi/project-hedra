@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering.UI
 			Color fontColor = Color.White;
 			
 			Vector2 bandPosition = new Vector2(0f, .8f);
-			Texture blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LEFT_RIGHT);
+			Texture blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
 			
 			Button hostTab = new Button(new Vector2(-0.1f, bandPosition.Y),
 			                    new Vector2(0.15f,0.075f), "Host", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], fontSize));
@@ -63,9 +63,9 @@ namespace Hedra.Engine.Rendering.UI
 					World.Recreate(NetworkManager.WorldSeed);
 				if(NetworkManager.WorldTime != -1)
 					Enviroment.SkyManager.SetTime(NetworkManager.WorldTime);
-				Scenes.SceneManager.Game.LPlayer.Spawner.Enabled = false;
-				Scenes.SceneManager.Game.LPlayer.UI.HideMenu();
-				Scenes.SceneManager.Game.LPlayer.BlockPosition = GameSettings.SpawnPoint.ToVector3() + Vector3.UnitY * 128;
+				Scenes.SceneManager.Game.Player.Spawner.Enabled = false;
+				Scenes.SceneManager.Game.Player.UI.HideMenu();
+				Scenes.SceneManager.Game.Player.BlockPosition = GameSettings.SpawnPoint.ToVector3() + Vector3.UnitY * 128;
 				
 			};
 			
@@ -117,7 +117,7 @@ namespace Hedra.Engine.Rendering.UI
 			
 			this.OnEscapePressed += delegate {
 				this.Disable(); 
-				Scenes.SceneManager.Game.LPlayer.UI.Menu.Enable();
+				Scenes.SceneManager.Game.Player.UI.Menu.Enable();
 			};
 		}
 		

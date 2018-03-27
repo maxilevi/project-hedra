@@ -382,7 +382,7 @@ namespace Hedra.Engine.Player
 				//AnalyticsManager.BugReport();
 			}
 			if(e.Key == Key.F3){
-			    Constants.DEBUG = !Constants.DEBUG;
+			    GameSettings.Debug = !GameSettings.Debug;
 			}
 			if(e.Key == Key.F2){
                 AssetManager.CreateDirectory(AssetManager.AppData + "/Screenshots/");
@@ -406,12 +406,12 @@ namespace Hedra.Engine.Player
 			}
 			
 			
-			if(Constants.DEBUG && e.Key == Key.F5){
+			if(GameSettings.Debug && e.Key == Key.F5){
 				World.ReloadModules();
 
                 player.Chat.AddLine("Modules reloaded.");
 			}
-			if(Constants.DEBUG && e.Key == Key.F6){
+			if(GameSettings.Debug && e.Key == Key.F6){
 				World.MeshQueue.SafeDiscard();
 				World.ChunkGenerationQueue.SafeDiscard();
 				lock(World.Chunks){

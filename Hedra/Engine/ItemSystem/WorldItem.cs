@@ -51,7 +51,7 @@ namespace Hedra.Engine.ItemSystem
 				Mesh.Tint = new Vector4(1.5f,1.5f,1.5f,1);
 				if(LocalPlayer.Instance.Inventory.HasAvailableSpace && Events.EventDispatcher.LastKeyDown == OpenTK.Input.Key.E && !Disposed)
 				{
-				    OnPickup?.Invoke(Scenes.SceneManager.Game.LPlayer);
+				    OnPickup?.Invoke(Scenes.SceneManager.Game.Player);
 				}
 			}else{
 				Mesh.Tint = new Vector4(1,1,1,1);

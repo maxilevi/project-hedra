@@ -62,8 +62,8 @@ namespace Hedra.Engine.Player
 				this.Skills[i].Active = false;
 			}
 			
-			W1 = new WeaponAttack(WeaponAttack.AttackType.SLASH, Mathf.ScaleGUI(_targetResolution, new Vector2(.118f,-.9f)), Mathf.ScaleGUI(new Vector2(1000,1000), new Vector2(.055f,-.05f)), Player.UI.GamePanel, Player);
-			W2 = new WeaponAttack(WeaponAttack.AttackType.LUNGE, Mathf.ScaleGUI(_targetResolution, new Vector2(.2366f,-.9f)), Mathf.ScaleGUI(new Vector2(1000,1000), new Vector2(.055f,-.05f)), Player.UI.GamePanel, Player);
+			W1 = new WeaponAttack(WeaponAttack.AttackType.Slash, Mathf.ScaleGUI(_targetResolution, new Vector2(.118f,-.9f)), Mathf.ScaleGUI(new Vector2(1000,1000), new Vector2(.055f,-.05f)), Player.UI.GamePanel, Player);
+			W2 = new WeaponAttack(WeaponAttack.AttackType.Lunge, Mathf.ScaleGUI(_targetResolution, new Vector2(.2366f,-.9f)), Mathf.ScaleGUI(new Vector2(1000,1000), new Vector2(.055f,-.05f)), Player.UI.GamePanel, Player);
 			//.3575f
 			Vector2 BarScale = Mathf.ScaleGUI(new Vector2(800,600), new Vector2(0.45f, 0.0875f));
 			Texture SBar = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Skillsbar.png"), new Vector2(0f,-0.9125f), BarScale);

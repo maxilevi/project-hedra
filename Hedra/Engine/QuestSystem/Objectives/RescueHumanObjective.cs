@@ -65,7 +65,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 			
 			CoroutineManager.StartCoroutine(Update);
 			
-			string pName = Scenes.SceneManager.Game.LPlayer.Name;
+			string pName = Scenes.SceneManager.Game.Player.Name;
 			if(pName == "Aidan" || pName == "Tyrael"){
 				_oldManName = "Deckard Cain";
 			}else{
@@ -168,7 +168,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 			    if (!_oldMan.InUpdateRange)
 			        _oldMan.Update();
 
-			    LocalPlayer player = Scenes.SceneManager.Game.LPlayer;
+			    LocalPlayer player = Scenes.SceneManager.Game.Player;
 			    if (!AreEnemiesDead || !((player.Position - Position).LengthSquared < 16 * 16)) continue;
 
 			    LocalPlayer.Instance.MessageDispatcher.ShowMessage("PRESS [E] TO UNTIE", .25f);
@@ -234,7 +234,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 				model.Model.Scale *= 2f;
 				model.Model.Rotation = Vector3.Zero;
 
-				Scenes.SceneManager.Game.LPlayer.UI.DrawPreview(_oldMan.Model, UserInterface.QuestFbo);
+				Scenes.SceneManager.Game.Player.UI.DrawPreview(_oldMan.Model, UserInterface.QuestFbo);
 
 				model.Model.Scale /= 2f;
 				model.Model.Rotation = prevRot;

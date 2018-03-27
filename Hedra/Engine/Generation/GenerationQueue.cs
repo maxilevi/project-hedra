@@ -53,8 +53,8 @@ namespace Hedra.Engine.Generation
 				}
 
 			    if (Queue.Count == 0) continue;
-			    if(Scenes.SceneManager.Game.LPlayer != null){
-			        ClosestChunkComparer.PlayerPos = Scenes.SceneManager.Game.LPlayer.Position;
+			    if(Scenes.SceneManager.Game.Player != null){
+			        ClosestChunkComparer.PlayerPos = Scenes.SceneManager.Game.Player.Position;
 						
 			        lock(Queue){
 			            try{

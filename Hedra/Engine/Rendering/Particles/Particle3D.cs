@@ -11,11 +11,14 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering.Particles
 {
-	public class Particle3D{
-
-		public static Vector4 FireColor = new Vector4(1f,.1f,0f,1f);
-		public static Vector4 AshColor = new Vector4(.2f,.2f,.2f,1f);
-		public static bool UseTimeScale {get; set;}
+	public class Particle3D
+	{
+	    public static Vector4 FireColor { get; } = new Vector4(1f, .1f, 0f, 1f);
+		public static Vector4 AshColor { get; } = new Vector4(.2f,.2f,.2f,1f);
+	    public static Vector4 BloodColor { get; } = new Vector4(.8f, .0f, 0, 1f);
+	    public static Vector4 IceColor { get; } = new Vector4(0.2f, 0.514f, 0.714f, 1f) * new Vector4(1, 1, 2, 1) * .7f;
+	    public static Vector4 PoisonColor { get; } = new Vector4(0.282f, 0.725f, 0.373f, 1f) * new Vector4(1, 3, 1, 1);
+        public static bool UseTimeScale {get; set;}
 		public Vector3 Position;
 		public Vector3 Rotation;
 		public Vector3 Scale;

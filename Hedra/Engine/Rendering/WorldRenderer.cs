@@ -56,8 +56,8 @@ namespace Hedra.Engine.Rendering
             
 			if(ToDraw.Count == 0) return;
 			
-			Scenes.SceneManager.Game.LPlayer.View.RebuildMatrix();
-			DrawManager.FrustumObject.SetFrustum(Scenes.SceneManager.Game.LPlayer.View.Matrix);
+			Scenes.SceneManager.Game.Player.View.RebuildMatrix();
+			DrawManager.FrustumObject.SetFrustum(Scenes.SceneManager.Game.Player.View.Matrix);
 			
 			if(Type == ChunkBufferTypes.STATIC){
 				IntPtr[] Offsets, ShadowOffsets;
@@ -136,7 +136,7 @@ namespace Hedra.Engine.Rendering
 			GL.Disable(EnableCap.Blend);
 			BlockShaders.StaticShader.Bind();
 			GL.Uniform3(BlockShaders.StaticShader.LightColorLocation, ShaderManager.LightColor);
-			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, Scenes.SceneManager.Game.LPlayer.Position);
+			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
 			if(Constants.CHARACTER_CHOOSED)
 				GL.Uniform1(BlockShaders.StaticShader.TimeUniform, Time.CurrentFrame );
 			else
@@ -174,7 +174,7 @@ namespace Hedra.Engine.Rendering
            	GL.Enable(EnableCap.Texture2D);
            	
            	BlockShaders.WaterShader.Bind();
-           	GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, Scenes.SceneManager.Game.LPlayer.Position);
+           	GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
            	GL.Uniform3(BlockShaders.WaterShader.LightColorLocation, ShaderManager.LightColor);
            	
            	GL.ActiveTexture(TextureUnit.Texture0);

@@ -179,7 +179,7 @@ namespace Hedra.Engine.Player
 				var Player = Human as LocalPlayer;
 				(Player.Skills.W1 as WeaponAttack).DisableWeapon = value;
 				(Player.Skills.W2 as WeaponAttack).DisableWeapon = value;
-				LeftWeapon.Mesh.Enabled = !value;				
+				LeftWeapon.MainMesh.Enabled = !value;				
 			}
 		}
 		
@@ -201,13 +201,17 @@ namespace Hedra.Engine.Player
         public void DisposeAnimation()
         {
             Model.SwitchShader(AnimatedModel.DeathShader);
+            Alpha = 0;
             DisposeTime = 0;
         }
 
         public float DisposeTime
         {
             get { return Model.DisposeTime; }
-            set { Model.DisposeTime = value; }
+            set
+            {
+                Model.DisposeTime = value;
+            }
         }
 
         public void Recompose()
@@ -219,26 +223,27 @@ namespace Hedra.Engine.Player
         public override void Attack(Entity Target, float Damage)
 		{
 			if(!Human.Knocked && !Human.IsAttacking && !(Human is LocalPlayer)){
-				LeftWeapon.Attack1(this);
+				LeftWeapon.Attack1(this.Human);
 			}
 		}
 		
 		public void SetWeapon(Weapon Weapon){
-			Init();
+			this.Init();
 			if(Weapon == this.LeftWeapon)
 				return;
 			int Index = -1;
-			for(int i = 0; i < base.Meshes.Length; i++){
-				if(base.Meshes[i] == this.LeftWeapon.Mesh){
+			for(var i = 0; i < base.Meshes.Length; i++){
+				if(base.Meshes[i] == this.LeftWeapon.MainMesh){
 					Index = i;
 					break;
 				}
 			}
-			
+		    var previousWeapon = this.LeftWeapon;
 			this.LeftWeapon.Enabled = false;
 			this.LeftWeapon = Weapon;
+            previousWeapon.Dispose();
 			this.LeftWeapon.Enabled = true;
-			base.Meshes[Index] = this.LeftWeapon.Mesh;
+			base.Meshes[Index] = this.LeftWeapon.MainMesh;
 			
 			this.LeftWeapon.Scale = Model.Scale;
 			this.LeftWeapon.Alpha = Model.Alpha;
@@ -246,33 +251,33 @@ namespace Hedra.Engine.Player
 			if(Human is LocalPlayer){
 				LocalPlayer Player = Human as LocalPlayer;
 				if(Weapon is Bow){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.SHOOT);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.TRIPLESHOT);
+					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Shoot);
+					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Tripleshot);
 				}
 				
 				if(Weapon is Knife){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.KNIFE_SLASH);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.KNIFE_LUNGE);
+					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.KnifeSlash);
+					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.KnifeLunge);
 				}
 				
 				if(Weapon is DoubleBlades){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.BLADE1);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.BLADE2);
+					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Blade1);
+					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Blade2);
 				}
 				
 				if(Weapon is Katar){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.KATAR1);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.KATAR2);
+					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Katar1);
+					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Katar2);
 				}
 				
 				if(Weapon is Claw){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.CLAW1);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.CLAW2);
+					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Claw1);
+					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Claw2);
 				}
 				
 				if(Weapon is Axe || Weapon is Hammer){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.SWING);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.SMASH);
+					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Swing);
+					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Smash);
 				}
 			}
 		}
@@ -437,7 +442,7 @@ namespace Hedra.Engine.Player
 			}
 			
 			if(!LockWeapon)
-				this.LeftWeapon.Update(this);
+				this.LeftWeapon.Update(this.Human);
 			
 			if(this._hasLamp){
 				this._lampModel.Position = this.LeftHandPosition;
@@ -482,12 +487,11 @@ namespace Hedra.Engine.Player
 		    }
             Model.BaseTint = Mathf.Lerp(Model.BaseTint, this.BaseTint, (float) Time.unScaledDeltaTime * 6f);
 			Model.Tint = Mathf.Lerp(Model.Tint, this.Tint, (float) Time.unScaledDeltaTime * 6f);
-			this.LeftWeapon.Mesh.Tint = Model.Tint;
-			this.LeftWeapon.Mesh.BaseTint = Model.BaseTint;
+			this.LeftWeapon.Tint = Model.Tint;
+			this.LeftWeapon.BaseTint = Model.BaseTint;
 			
 			Model.Alpha = Mathf.Lerp(Model.Alpha, _targetAlpha, (float) Time.ScaledFrameTimeSeconds * 8f);
 			this.LeftWeapon.Alpha =  Mathf.Lerp(LeftWeapon.Alpha, _targetAlpha, (float) Time.ScaledFrameTimeSeconds * 8f);
-            //this._shadow.Enabled = Model.Alpha > 0.25f && this.Human.IsGrounded && this.Enabled;
 
 		    if (!this.Disposed)
 		    {
@@ -518,8 +522,7 @@ namespace Hedra.Engine.Player
 		public override float Alpha {
 			get { return _targetAlpha; }
 			set {
-				_targetAlpha = value;
-					
+				_targetAlpha = value;				
 			}
 		}
 
@@ -629,15 +632,14 @@ namespace Hedra.Engine.Player
 	    public override void Dispose()
 		{
 			Model.Dispose();
-			//DrawManager.DropShadows.Remove(this._shadow);
 			LeftWeapon.Dispose();
 			
-			/*BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-			foreach (FieldInfo Field in this.GetType().GetFields(Flags))
+			var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+			foreach (var field in this.GetType().GetFields(flags))
 			{
-				if(Field.GetType() == typeof(Animation))
-					(Field.GetValue(this) as Animation).Dispose();
-			}*/
+				if(field.GetType() == typeof(Animation))
+					(field.GetValue(this) as Animation)?.Dispose();
+			}
 			base.Dispose();
 		}
 	}
