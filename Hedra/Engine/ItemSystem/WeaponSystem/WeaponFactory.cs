@@ -27,7 +27,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public static Weapon Get(Item Item)
         {
-             return (Weapon) Activator.CreateInstance(Weapons[Item.EquipmentType], Item.Model);
+            var weapon = (Weapon) Activator.CreateInstance(Weapons[Item.EquipmentType], Item.Model);
+            weapon.Describer = EffectDescriber.FromItem(Item);
+            return weapon;
         }
     }
 }

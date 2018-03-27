@@ -37,12 +37,12 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		        PrimaryAnimations[i].Speed = 1.0f;
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
-		            Model.Human.Attack(Model.Human.DamageEquation);
+		            Owner.Attack(Owner.DamageEquation);
 		        };
 
 		        PrimaryAnimations[i].OnAnimationEnd += delegate
 		        {
-		            _trail.Emit = false;
+		            Trail.Emit = false;
 		        };
 		    }
 
@@ -53,7 +53,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		        SecondaryAnimations[i].Loop = false;
 		        SecondaryAnimations[0].OnAnimationEnd += delegate
 		        {
-		            Model.Human.Attack(Model.Human.DamageEquation * 1.25f, delegate(Entity mob)
+		            Owner.Attack(Owner.DamageEquation * 1.25f, delegate(Entity mob)
 		            {
 		                if (Utils.Rng.Next(1, 3) == 1)
 		                    mob.KnockForSeconds(1.5f + Utils.Rng.NextFloat() * 2f);
@@ -63,26 +63,27 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
 		        SecondaryAnimations[i].OnAnimationEnd += delegate
 		        {
-		            _trail.Emit = false;
+		            Trail.Emit = false;
 		        };
 		    }
 		}
 		
 		
-		public override void Attack1(HumanModel Model){
+		public override void Attack1(Humanoid Human){
 		    if (!base.MeetsRequirements()) return;
 
-			base.Attack1(Model);
+			base.Attack1(Human);
 
-		    TaskManager.Delay(250, () => _trail.Emit = true);
+		    TaskManager.Delay(250, () => Trail.Emit = true);
         }
 		
-		public override void Attack2(HumanModel Model){
+		public override void Attack2(Humanoid Human)
+        {
 		    if (!base.MeetsRequirements()) return;
 
-            base.Attack2(Model);
+            base.Attack2(Human);
 
-		    TaskManager.Delay(200, () => _trail.Emit = true);
+		    TaskManager.Delay(200, () => Trail.Emit = true);
 
         }
 	}

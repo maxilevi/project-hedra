@@ -23,7 +23,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
 	    public Hands() : base(null)
 		{
-			base.Mesh = new EntityMesh(Vector3.Zero);
 		    AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorPunch-Stance.dae");
 
             PrimaryAnimations = new Animation[1];
@@ -31,9 +30,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    PrimaryAnimations[0].Speed = 2.0f;
 		    PrimaryAnimations[0].OnAnimationMid += delegate
 		    {
-		        Model.Human.Attack(Model.Human.DamageEquation * 0.75f);
+		        Owner.Attack(Owner.DamageEquation * 0.75f);
 		    };
-            for (int i = 0; i < PrimaryAnimations.Length; i++)
+            for (var i = 0; i < PrimaryAnimations.Length; i++)
 		    {
 		        PrimaryAnimations[i].Loop = false;
 		    }
@@ -43,6 +42,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             base.ShouldPlaySound = false;
 		}
 		
-		public override void Attack2(HumanModel Model){}
+		public override void Attack2(Humanoid Human){}
 	}
 }

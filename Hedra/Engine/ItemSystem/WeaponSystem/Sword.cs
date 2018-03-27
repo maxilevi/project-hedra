@@ -42,12 +42,12 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		        PrimaryAnimations[i].Speed = 1.35f;
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
-		            Model.Human.Attack(Model.Human.DamageEquation * (FrontSlash ? 1.25f : 1.0f) );
+		            Owner.Attack(Owner.DamageEquation * (FrontSlash ? 1.25f : 1.0f) );
                 };
 
                 PrimaryAnimations[i].OnAnimationEnd += delegate
 		        {	            
-		            _trail.Emit = false;
+		            Trail.Emit = false;
                 };
 		    }
 
@@ -59,37 +59,37 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		        SecondaryAnimations[k].Loop = false;
 		        SecondaryAnimations[k].OnAnimationEnd += delegate
 		        {
-		            Model.Human.Attack(Model.Human.DamageEquation * 1.10f, delegate(Entity Mob)
+		            Owner.Attack(Owner.DamageEquation * 1.10f, delegate(Entity Mob)
 		            {
 
 		                if (Utils.Rng.Next(0, 3) == 1)
 		                    Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);
 
 		                if (Utils.Rng.Next(0, 3) == 1)
-		                    Mob.AddComponent(new BleedingComponent(Mob, this.Model.Human, 4f,
-		                        Model.Human.DamageEquation * 2f));
+		                    Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 4f,
+		                        Owner.DamageEquation * 2f));
 
 		            });
 		        };
 		    }
 		}
 		
-		public override void Update(HumanModel Model)
+		public override void Update(Humanoid Human)
 		{
-			base.Update(Model);
+			base.Update(Human);
                 
 			if(SecondaryAttack){
-				base.SetToMainHand(Mesh);
+				base.SetToMainHand(MainMesh);
 				
-				if(_previousPosition != Model.Human.BlockPosition && Model.Human.IsGrounded)
+				if(_previousPosition != Human.BlockPosition && Human.IsGrounded)
 				{
-				    Chunk underChunk = World.GetChunkAt(Model.Position);
+				    Chunk underChunk = World.GetChunkAt(Human.Position);
 				    World.WorldParticles.VariateUniformly = true;
-				    World.WorldParticles.Color = World.GetHighestBlockAt( (int) Model.Human.Position.X, (int) Model.Human.Position.Z).GetColor(underChunk.Biome.Colors);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
-				    World.WorldParticles.Position = Model.Human.Position - Vector3.UnitY;
+				    World.WorldParticles.Color = World.GetHighestBlockAt( (int) Human.Position.X, (int) Human.Position.Z).GetColor(underChunk.Biome.Colors);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
+				    World.WorldParticles.Position = Human.Position - Vector3.UnitY;
 				    World.WorldParticles.Scale = Vector3.One * .5f;
 				    World.WorldParticles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				    World.WorldParticles.Direction = (-Model.Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
+				    World.WorldParticles.Direction = (-Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
 				    World.WorldParticles.ParticleLifetime = 1;
 				    World.WorldParticles.GravityEffect = .1f;
 				    World.WorldParticles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
@@ -99,7 +99,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 					
 					World.WorldParticles.Emit();
 				}
-				_previousPosition = Model.Human.BlockPosition;
+				_previousPosition = Human.BlockPosition;
 			}	
 		}
 
@@ -108,7 +108,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	        return AnimationIndex == 5 ? 2 : AnimationIndex & 1;
 	    }
 		
-		public override void Attack1(HumanModel Model){
+		public override void Attack1(Humanoid Human){
 			if(!base.MeetsRequirements()) return;
 
 		    if (PrimaryAnimationsIndex == 5)
@@ -116,9 +116,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
 		    PrimaryAnimationsIndex++;
 
-            base.BasePrimaryAttack(Model);
+            base.BasePrimaryAttack(Human);
 
-		    TaskManager.Delay(200, () => _trail.Emit = true);
+		    TaskManager.Delay(200, () => Trail.Emit = true);
 		}
 	}
 }

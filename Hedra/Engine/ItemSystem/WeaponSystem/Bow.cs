@@ -47,10 +47,10 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		        PrimaryAnimations[i].Loop = false;
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
-		            var player = Model.Human as LocalPlayer;
-		            Vector3 direction = player?.View.CrossDirection ?? Model.Human.Orientation;
+		            var player = Owner as LocalPlayer;
+		            Vector3 direction = player?.View.CrossDirection ?? Owner.Orientation;
 
-                    this.ShootArrow(Model.Human, direction);
+                    this.ShootArrow(Owner, direction);
 		        };
 		    }
 
@@ -62,50 +62,50 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		        SecondaryAnimations[0].Loop = false;
 		        SecondaryAnimations[0].OnAnimationMid += delegate
 		        {
-		            this.ShootTripleArrow(Model.Human);
+		            this.ShootTripleArrow(Owner);
 		        };
 		    }
 
 		    base.ShouldPlaySound = false;
         }
 		
-		public override void Update(HumanModel Model)
+		public override void Update(Humanoid Human)
 		{
-			base.Update(Model);
+			base.Update(Human);
 
-            base.SetToDefault(Mesh);
+            base.SetToDefault(MainMesh);
 
 			if(Sheathed){
-                this.Mesh.TransformationMatrix = Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + Model.ChestPosition - Vector3.UnitY * .25f);
-                this.Mesh.Position = Model.Position;
-			    this.Mesh.LocalRotation = this.SheathedRotation;
-                this.Mesh.BeforeLocalRotation = this.SheathedPosition * this.Scale;
+                this.MainMesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
+                this.MainMesh.Position = Owner.Model.Position;
+			    this.MainMesh.LocalRotation = this.SheathedRotation;
+                this.MainMesh.BeforeLocalRotation = this.SheathedPosition * this.Scale;
             }
 
-            if (base.InAttackStance || Model.Human.IsAttacking || Model.Human.WasAttacking)
+            if (base.InAttackStance || Owner.IsAttacking || Owner.WasAttacking)
             {
-				Matrix4 Mat4 = Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + Model.LeftHandPosition);
+				Matrix4 Mat4 = Owner.Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftHandPosition);
 					
-				this.Mesh.TransformationMatrix = Mat4;
-				this.Mesh.Position = Model.Position;
-				this.Mesh.TargetRotation = new Vector3(90,25,180);
-				this.Mesh.BeforeLocalRotation = (Vector3.UnitZ * -0.7f - Vector3.UnitX * -.5f + Vector3.UnitY * .35f);				
+				this.MainMesh.TransformationMatrix = Mat4;
+				this.MainMesh.Position = Owner.Model.Position;
+				this.MainMesh.TargetRotation = new Vector3(90,25,180);
+				this.MainMesh.BeforeLocalRotation = (Vector3.UnitZ * -0.7f - Vector3.UnitX * -.5f + Vector3.UnitY * .35f);				
 			}
 			
             base.SetToDefault(this.Quiver);
 
-		    this.Quiver.TransformationMatrix = Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + Model.ChestPosition);
-		    this.Quiver.Position = Model.Position;
+		    this.Quiver.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+		    this.Quiver.Position = Owner.Model.Position;
 		    this.Quiver.BeforeLocalRotation = (-Vector3.UnitY * 1.5f - Vector3.UnitZ * 1.8f) * this.Scale;
 
             base.SetToDefault(this.Arrow[0]);
 
-            Matrix4 ArrowMat4 = Model.RightHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + Model.RightHandPosition);
+            Matrix4 ArrowMat4 = Owner.Model.RightHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightHandPosition);
 			
 			this.Arrow[0].TransformationMatrix = ArrowMat4;
-			this.Arrow[0].Position = Model.Position;
+			this.Arrow[0].Position = Owner.Model.Position;
 			this.Arrow[0].BeforeLocalRotation = Vector3.UnitZ * 0.5f;
-			this.Arrow[0].Enabled = (base.InAttackStance || Model.Human.IsAttacking) && this.Quiver.Enabled;	
+			this.Arrow[0].Enabled = (base.InAttackStance || Owner.IsAttacking) && this.Quiver.Enabled;	
 			
 		}
 		
@@ -115,8 +115,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		}
 		
 		public Projectile ShootArrow(Humanoid Human, Vector3 Direction, int KnockChance = -1){
-			this.Init(Human.Model);
-			var arrowProj = new Projectile(ArrowData.Clone(), Model.LeftHandPosition + Model.Human.Orientation * 2 +
+			var arrowProj = new Projectile(ArrowData.Clone(), Owner.Model.LeftHandPosition + Owner.Model.Human.Orientation * 2 +
 			                                      ( (Human is LocalPlayer ) ? Vector3.UnitY * 0f : Vector3.Zero), Direction, Human);
 			arrowProj.Rotation = new Vector3(arrowProj.Rotation.X, arrowProj.Rotation.Y, arrowProj.Rotation.Z + 45*(Direction.Y-.2f)*3);
 			arrowProj.Speed = 6.0f;

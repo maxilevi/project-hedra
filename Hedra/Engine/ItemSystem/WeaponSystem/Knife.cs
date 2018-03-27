@@ -47,17 +47,17 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
 
-		            Model.Human.Attack(Model.Human.DamageEquation * 0.7f, delegate(Entity Mob)
+		            Owner.Attack(Owner.DamageEquation * 0.7f, delegate(Entity Mob)
 		            {
 		                if (Utils.Rng.Next(0, 5) == 1)
-		                    Mob.AddComponent(new BleedingComponent(Mob, this.Model.Human, 3f,
-		                        Model.Human.DamageEquation * 2.0f));
+		                    Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 3f,
+		                        Owner.DamageEquation * 2.0f));
 		            });
 		        };
 
 		        PrimaryAnimations[i].OnAnimationEnd += delegate
 		        {
-		            _trail.Emit = false;
+		            Trail.Emit = false;
 		        };
             }
 
@@ -69,69 +69,69 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		        SecondaryAnimations[i].Loop = false;
 		        SecondaryAnimations[i].OnAnimationEnd += delegate
 		        {
-		            Model.Human.Attack(Model.Human.DamageEquation * 0.8f, delegate(Entity Mob)
+		            Owner.Attack(Owner.DamageEquation * 0.8f, delegate(Entity Mob)
 		            {
 		                if (Utils.Rng.Next(0, 3) == 1)
-		                    Mob.AddComponent(new BleedingComponent(Mob, this.Model.Human, 4f,
-		                        Model.Human.DamageEquation * 2.0f));
+		                    Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 4f,
+		                        Owner.DamageEquation * 2.0f));
 		            });
 		        };
 		    }
 		}
 		
-		public override void Update(HumanModel Model)
+		public override void Update(Humanoid Human)
 		{
-			base.Update(Model);
-		    base.SetToDefault(Mesh);
+			base.Update(Owner);
+		    base.SetToDefault(MainMesh);
 
             if (Sheathed){
 
-                Matrix4 Mat4 = Model.Model.MatrixFromJoint(Model.Chest).ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + Model.ChestPosition);
+                Matrix4 Mat4 = Owner.Model.Model.MatrixFromJoint(Owner.Model.Chest).ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
 			
-				this.Mesh.Position = Model.Position;
-				this.Mesh.BeforeLocalRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
-				this.Mesh.TransformationMatrix = Mat4;
-				this.Mesh.TargetRotation = new Vector3(180, 0, 0);
+				this.MainMesh.Position = Owner.Model.Position;
+				this.MainMesh.BeforeLocalRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
+				this.MainMesh.TransformationMatrix = Mat4;
+				this.MainMesh.TargetRotation = new Vector3(180, 0, 0);
 			}
 			
-			if(base.InAttackStance || Model.Human.WasAttacking){
+			if(base.InAttackStance || Owner.WasAttacking){
 
-                Matrix4 Mat4 = Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + Model.LeftHandPosition);
+                Matrix4 Mat4 = Owner.Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftHandPosition);
 				
-				this.Mesh.TransformationMatrix = Mat4;
-				this.Mesh.Position = Model.Position;
-				this.Mesh.TargetRotation = new Vector3(270,0,0);
-				this.Mesh.BeforeLocalRotation = Vector3.UnitY * -0.1f - Vector3.UnitZ * .2f;
+				this.MainMesh.TransformationMatrix = Mat4;
+				this.MainMesh.Position = Owner.Model.Position;
+				this.MainMesh.TargetRotation = new Vector3(270,0,0);
+				this.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.1f - Vector3.UnitZ * .2f;
 				
 			}
 			
 			if(PrimaryAttack){
 
-                Matrix4 Mat4 = Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + Model.LeftHandPosition);
+                Matrix4 Mat4 = Owner.Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftHandPosition);
 				
-				this.Mesh.TransformationMatrix = Mat4;
-				this.Mesh.Position = Model.Position;
-				this.Mesh.TargetRotation = new Vector3(180,0,0);
-				this.Mesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
+				this.MainMesh.TransformationMatrix = Mat4;
+				this.MainMesh.Position = Owner.Model.Position;
+				this.MainMesh.TargetRotation = new Vector3(180,0,0);
+				this.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
 			}
 			
 			if(SecondaryAttack){
 
-				Matrix4 Mat4 = Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + Model.LeftHandPosition);
+				Matrix4 Mat4 = Owner.Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftHandPosition);
 				
-				this.Mesh.TransformationMatrix = Mat4;
-				this.Mesh.Position = Model.Position;
-				this.Mesh.TargetRotation = new Vector3(180,0,0);
-				this.Mesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
+				this.MainMesh.TransformationMatrix = Mat4;
+				this.MainMesh.Position = Owner.Model.Position;
+				this.MainMesh.TargetRotation = new Vector3(180,0,0);
+				this.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
 				
-				if(PreviousPosition != Model.Human.BlockPosition && Model.Human.IsGrounded){
-				    Chunk underChunk = World.GetChunkAt(Model.Position);
+				if(PreviousPosition != Owner.Model.Human.BlockPosition && Owner.Model.Human.IsGrounded){
+				    Chunk underChunk = World.GetChunkAt(Owner.Model.Position);
                     World.WorldParticles.VariateUniformly = true;
-				    World.WorldParticles.Color = World.GetHighestBlockAt( (int) Model.Human.Position.X, (int) Model.Human.Position.Z).GetColor(underChunk.Biome.Colors);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
-				    World.WorldParticles.Position = Model.Human.Position - Vector3.UnitY;
+				    World.WorldParticles.Color = World.GetHighestBlockAt( (int) Owner.Model.Human.Position.X, (int) Owner.Model.Human.Position.Z).GetColor(underChunk.Biome.Colors);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
+				    World.WorldParticles.Position = Owner.Model.Human.Position - Vector3.UnitY;
 				    World.WorldParticles.Scale = Vector3.One * .5f;
 				    World.WorldParticles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				    World.WorldParticles.Direction = (-Model.Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
+				    World.WorldParticles.Direction = (-Owner.Model.Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
 				    World.WorldParticles.ParticleLifetime = 1;
 				    World.WorldParticles.GravityEffect = .1f;
 				    World.WorldParticles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
@@ -143,22 +143,22 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 					    World.WorldParticles.Emit();
 					}
 				}
-				PreviousPosition = Model.Human.BlockPosition;
+				PreviousPosition = Owner.BlockPosition;
 			}
 		    base.SetToDefault(KnifeSheath);
 
-            Matrix4 KnifeMat4 = Model.Model.MatrixFromJoint(Model.Chest).ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + Model.ChestPosition);
+            Matrix4 KnifeMat4 = Owner.Model.Model.MatrixFromJoint(Owner.Model.Chest).ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
 			
-			this.KnifeSheath.Position = Model.Position;
+			this.KnifeSheath.Position = Owner.Model.Position;
 			this.KnifeSheath.BeforeLocalRotation = -Vector3.UnitX * 1.75f - Vector3.UnitY * 3.0f;
 			this.KnifeSheath.TransformationMatrix = KnifeMat4;
 		}
 		
-		public override void Attack1(HumanModel Model){
+		public override void Attack1(Humanoid Human){
             if(!this.MeetsRequirements()) return;
 
-			base.Attack1(Model);
-		    TaskManager.Delay(250, () => _trail.Emit = true);
+			base.Attack1(Human);
+		    TaskManager.Delay(250, () => Trail.Emit = true);
         }
 	}
 }
