@@ -12,10 +12,10 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of EntityMeshShader.
 	/// </summary>
-	public class EntityMeshShader : Shader
+	public class ObjectMeshShader : Shader
 	{
-		public int TransMatrixUniformLocation, MatrixUniformLocation;
-		public int PointLocation;
+		public int TransMatrixUniformLocation;
+	    public int MatrixUniformLocation;
 		public int LocalRotationLocation;
 		public int LocalRotationPointLocation;
 		public int LocalPositionLocation;
@@ -23,21 +23,24 @@ namespace Hedra.Engine.Rendering
 		public int AnimationPositionLocation;
 		public int AnimationRotationLocation;
 		public int AnimationRotationPointLocation;
-		public int TransPos;
-		public int Time;
-		public int TintUniform;
-		public int UseFogUniform;
-		public int ScaleUniform;
-		public int OutlineUniform;
 		public int ResolutionUniform;
 		public int BakedPositionUniform;
 		public int PlayerPositionUniform;
-		public int AlphaUniform;
 	    public int ShadowDistanceUniform;
-		public int ShadowMVPUniform, ShadowTexUniform, UseShadowsUniform;
-		public int DitherUniform;
-		public EntityMeshShader(string s1, string s2) : base(s1, s2){}
-		public EntityMeshShader(string s1, string s2, string s3) : base(s1, s2, s3){}
+		public int ShadowMvpUniform;
+	    public int ShadowTexUniform;
+	    public int PointLocation;
+        public int TintUniform;
+	    public int ApplyFogUniform;
+	    public int ScaleUniform;
+        public int UseShadowsUniform;
+	    public int AlphaUniform;
+        public int DitherUniform;
+	    public int TransPos;
+	    public int Time;
+
+        public ObjectMeshShader(string S1, string S2) : base(S1, S2){}
+		public ObjectMeshShader(string S1, string S2, string S3) : base(S1, S2, S3){}
 		
 		public override void GetUniformsLocations(){
 			TransMatrixUniformLocation = GL.GetUniformLocation(ShaderID, "TransMatrix");
@@ -51,15 +54,14 @@ namespace Hedra.Engine.Rendering
 			AnimationRotationPointLocation = GL.GetUniformLocation(ShaderID, "AnimationRotationPoint");
 			TransPos = GL.GetUniformLocation(ShaderID, "TransPos");
 			TintUniform = GL.GetUniformLocation(ShaderID, "Tint");
-			UseFogUniform = GL.GetUniformLocation(ShaderID, "UseFog");
+			ApplyFogUniform = GL.GetUniformLocation(ShaderID, "UseFog");
 			ScaleUniform = GL.GetUniformLocation(ShaderID, "Scale");
-			OutlineUniform = GL.GetUniformLocation(ShaderID, "Outline");
 			ResolutionUniform = GL.GetUniformLocation(ShaderID, "res");
 			BakedPositionUniform = GL.GetUniformLocation(ShaderID, "BakedPosition");
 			PlayerPositionUniform = GL.GetUniformLocation(ShaderID, "PlayerPosition");
 			AlphaUniform = GL.GetUniformLocation(ShaderID, "Alpha");
 			ShadowTexUniform = GL.GetUniformLocation(ShaderID, "ShadowTex");
-			ShadowMVPUniform = GL.GetUniformLocation(ShaderID, "ShadowMVP");
+			ShadowMvpUniform = GL.GetUniformLocation(ShaderID, "ShadowMVP");
 			UseShadowsUniform = GL.GetUniformLocation(ShaderID, "UseShadows");
 			DitherUniform = GL.GetUniformLocation(ShaderID, "Dither");
 			MatrixUniformLocation = GL.GetUniformLocation(ShaderID, "Matrix");

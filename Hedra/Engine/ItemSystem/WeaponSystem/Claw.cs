@@ -21,13 +21,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     public class Claw : Weapon
     {
         public override bool IsMelee { get; protected set; } = true;
-        private EntityMesh SecondBlade;
+        private ObjectMesh SecondBlade;
 
         public Claw(VertexData Contents) : base(Contents)
         {
             VertexData BaseMesh = Contents.Clone();
             BaseMesh.Scale(Vector3.One * 1.75f);
-            this.SecondBlade = EntityMesh.FromVertexData(BaseMesh);
+            this.SecondBlade = ObjectMesh.FromVertexData(BaseMesh);
 
             AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBlade-Stance.dae");
 
@@ -71,7 +71,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public override void Update(Humanoid Human)
         {
-            base.Update(Owner);
+            base.Update(Human);
 
             base.SetToDefault(this.MainMesh);
             base.SetToDefault(this.SecondBlade);

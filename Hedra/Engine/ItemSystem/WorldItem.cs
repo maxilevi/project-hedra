@@ -21,10 +21,10 @@ namespace Hedra.Engine.ItemSystem
 
 	public class WorldItem : Model, IUpdatable
 	{
-		private static ushort _itemCounter = 0;
+		private static ushort _itemCounter;
 		
 		public ushort ItemId {get; set;}
-		public EntityMesh Mesh;
+		public ObjectMesh Mesh;
 		public Item ItemSpecification;
 		public event OnItemCollect OnPickup;
 		private bool _isColliding;
@@ -33,7 +33,8 @@ namespace Hedra.Engine.ItemSystem
 		{
 			this.Scale = new Vector3(2.25f, 2.25f, 2.25f);
 			this.ItemSpecification = ItemSpecification;
-			this.Mesh = EntityMesh.FromVertexData(ItemSpecification.Model.Clone());
+			this.Mesh = ObjectMesh.FromVertexData(ItemSpecification.Model.Clone());
+		    this.Mesh.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
 		    this.Mesh.Scale = this.Scale;
 			this.Position = new Vector3(Position.X, Physics.HeightAtPosition(Position.X, Position.Z) + 1.5f, Position.Z);
 			this.ItemId = ++_itemCounter;

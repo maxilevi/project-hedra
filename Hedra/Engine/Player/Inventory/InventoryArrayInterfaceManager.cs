@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly InventoryArrayInterface[] _interfaces;
         private readonly Button _cancelButton;
         private float _selectedMeshHeight;
-        private EntityMesh _selectedMesh;
+        private ObjectMesh _selectedMesh;
         private Button _selectedButton;
         private Item _selectedItem;
         private bool _enabled;

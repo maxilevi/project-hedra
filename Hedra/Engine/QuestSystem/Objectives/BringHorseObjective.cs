@@ -32,7 +32,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
     {
         private Entity _horse;
         private RideComponent _horseComponent;
-        private EntityMesh _previewMesh;
+        private ObjectMesh _previewMesh;
         private readonly Vector3 _stablePosition;
         private bool _stoleHorse;
         private Entity _horseRider;

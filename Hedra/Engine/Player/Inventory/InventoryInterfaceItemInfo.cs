@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly Vector2 _weaponItemTexturePosition;
         private readonly Vector2 _nonWeaponItemAttributesPosition;
         private readonly Vector2 _nonWeaponItemTexturePosition;
-        private EntityMesh _currentItemMesh;
+        private ObjectMesh _currentItemMesh;
         private float _currentItemMeshHeight;
         private bool _enabled;
 

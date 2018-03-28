@@ -4,13 +4,32 @@ namespace Hedra.Engine.EntitySystem
 {
     public class SpeedComponent : EntityComponent
     {
-        public SpeedComponent(Entity Entity) : base(Entity)
-        {
+        public int Chance { get; set; } = 15;
+        public float SpeedBonus { get; set; } = .5f;
+        private float _speedTime;
+
+        public SpeedComponent(Entity Parent) : base(Parent) {
+            Parent.OnAttacking += this.Apply;
         }
 
         public override void Update()
         {
-            throw new NotImplementedException();
+            _speedTime -= Time.FrameTimeSeconds;
+        }
+
+        public void Apply(Entity Victim, float Amount)
+        {
+            if (Utils.Rng.NextFloat() <= Chance * 0.01)
+            {
+                _speedTime = 4 + Utils.Rng.NextFloat() * 2 - 1f;
+                if(Parent.SearchComponent<SpeedBonusComponent>() == null)
+                    Parent.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Parent, SpeedBonus), () => _speedTime > 0);
+            }
+        }
+
+        public override void Dispose()
+        {
+            Parent.OnAttacking -= this.Apply;
         }
     }
 }

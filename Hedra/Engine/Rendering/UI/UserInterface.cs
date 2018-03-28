@@ -264,7 +264,7 @@ namespace Hedra.Engine.Rendering.UI
             GL.Enable(EnableCap.Blend);
         }
 		
-		public void DrawPreview(EntityMesh Mesh, FBO Fbo){
+		public void DrawPreview(ObjectMesh Mesh, FBO Fbo){
 			if(	Mesh == null)
 				return;
 			bool prevEnabled  = Mesh.Enabled;
@@ -277,12 +277,12 @@ namespace Hedra.Engine.Rendering.UI
 				GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 				
 				Vector3 oldRot = Mesh.Rotation;
-				bool usedFog = Mesh.UseFog;
+				bool usedFog = Mesh.ApplyFog;
 				Vector2 posScale = Mathf.ScaleGUI(new Vector2(1024,578), new Vector2(1,1));
 				
 				_oldRotation += 25 * (float) Time.unScaledDeltaTime * 0.33f;
 				Mesh.Rotation = new Vector3(Mesh.Rotation.X, _oldRotation, Mesh.Rotation.Z);
-				Mesh.UseFog = false;
+				Mesh.ApplyFog = false;
 				Vector3 oldPosition = Mesh.Position;
 				Mesh.Position = Vector3.Zero;
 				
@@ -296,7 +296,7 @@ namespace Hedra.Engine.Rendering.UI
 				
 				Mesh.Draw();
 				
-				Mesh.UseFog = usedFog;
+				Mesh.ApplyFog = usedFog;
 				Mesh.Rotation = oldRot;
 				Mesh.Position = oldPosition;
 				

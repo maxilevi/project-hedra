@@ -32,7 +32,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 	    private bool _shellsComplete;
 	    private bool _eyesComplete;
 	    private bool _tailComplete;
-	    private readonly EntityMesh _previewMesh;
+	    private readonly ObjectMesh _previewMesh;
 		
 		public CollectItemsObjective()
 		{
@@ -84,7 +84,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 				previewData += data;
 				count++;
 			}
-			_previewMesh = EntityMesh.FromVertexData(previewData);
+			_previewMesh = ObjectMesh.FromVertexData(previewData);
 		}
 		
 		public void AddOffset(VertexData Data, int Count, int TypeAmount, float Size){

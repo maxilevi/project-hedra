@@ -95,67 +95,16 @@ namespace Hedra.Engine.Player
 			if(Type == AttackType.ThrowSpecial)
 				base.TexId = ThrowSpecialIcon;
 			
-			if (Type == AttackType.Swing){
-				if(Player.Inventory.MainWeapon.EquipmentType == EquipmentType.Hammer.ToString())
-					base.TexId = SwingHammerIcon;
-				else
-					base.TexId = SwingAxeIcon;
+			if (Type == AttackType.Swing)
+			{
+			    base.TexId = Player.Inventory.MainWeapon.EquipmentType == EquipmentType.Hammer.ToString() ? SwingHammerIcon : SwingAxeIcon;
 			}
-			
-			if(Type == AttackType.Smash){
-				if(Player.Inventory.MainWeapon.EquipmentType == EquipmentType.Hammer.ToString())
-					base.TexId = SmashHammerIcon;
-				else
-					base.TexId = SmashAxeIcon;
-			}
-			
-			if(Type == AttackType.Blade1)
-				base.MaxCooldown = 0.3f - Player.AttackSpeed / 50f;
-			
-			if(Type == AttackType.Claw1)
-				base.MaxCooldown = 0.1f - Player.AttackSpeed / 50f;
-			
-			if(Type == AttackType.Katar1)
-				base.MaxCooldown = 0.2f - Player.AttackSpeed / 50f;
-			
-			if(Type == AttackType.Claw2)
-				base.MaxCooldown = 1.5f - Player.AttackSpeed / 50f;
-			
-			if(Type == AttackType.Katar2)
-				base.MaxCooldown = 2.0f - Player.AttackSpeed / 50f;
-			
-			if(Type == AttackType.Blade2)
-				base.MaxCooldown = 3.5f - Player.AttackSpeed / 50f;
-			
-			if(Type == AttackType.Slash)
-				base.MaxCooldown = 0.75f - Player.AttackSpeed / 50f;
-			
-			if(Type == AttackType.KnifeSlash)
-				base.MaxCooldown = 0.55f - Player.AttackSpeed / 50f;
-			
-			if(Type == AttackType.Shoot)
-				base.MaxCooldown = 0.45f - Math.Max(.25f, Player.AttackSpeed / 50f);
-			
-			if(Type == AttackType.Swing)
-				base.MaxCooldown = 0.75f - Player.AttackSpeed / 50f;
 			
 			if(Type == AttackType.Smash)
-				base.MaxCooldown = 5.25f - Math.Max(.75f, Player.AttackSpeed / 50f);
-			
-			if(Type == AttackType.Tripleshot)
-				base.MaxCooldown = 4.0f- Player.AttackSpeed / 25;
-
-			if (Type == AttackType.KnifeLunge)
-				base.MaxCooldown = 3.0f- Player.AttackSpeed / 25;
-			
-			if (Type == AttackType.Lunge)
-				base.MaxCooldown = 5.0f- Player.AttackSpeed / 25;
-			
-			if(Type == AttackType.Throw)
-				base.MaxCooldown = 0.45f - Math.Max(.25f, Player.AttackSpeed / 50f);
-			
-			if(Type == AttackType.ThrowSpecial)
-				base.MaxCooldown = 4.0f- Player.AttackSpeed / 25;
+			{
+			    base.TexId = Player.Inventory.MainWeapon.EquipmentType == EquipmentType.Hammer.ToString() ? SmashHammerIcon : SmashAxeIcon;
+			}
+		    base.MaxCooldown = 0.25f;
 		}
 		
 		public override bool MeetsRequirements(SkillsBar Bar, int CastingAbilityCount)

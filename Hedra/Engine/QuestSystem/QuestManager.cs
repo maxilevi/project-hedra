@@ -41,7 +41,7 @@ namespace Hedra.Engine.QuestSystem
 	    public Dictionary<Vector3, float> VillagePositions = new Dictionary<Vector3, float>();
 	    public List<Plateau> Plateaus = new List<Plateau>();
 	    public List<Objective> PassedObjectives = new List<Objective>();
-		public EntityMesh QuestIcon;
+		public ObjectMesh QuestIcon;
 		
 		public QuestManager(){
 			Quest = new DummyObjective();

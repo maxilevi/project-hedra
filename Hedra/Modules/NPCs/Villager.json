@@ -7,6 +7,6 @@
   "Immune": true,
   "Speed": 1.85,
   "AttackPower": 1.0, 
-  "AttackSpeed": 0.3,  
+  "AttackSpeed": 1.0,  
   "Weapons": []
 }

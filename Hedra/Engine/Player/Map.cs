@@ -35,8 +35,8 @@ namespace Hedra.Engine.Player
 		private bool _isUpdating;
 		private Timer _updateTimer = new Timer(16f);
         private readonly MapPiece _mainPiece;
-		private readonly EntityMesh _questIcon;
-	    private readonly EntityMesh _cursor;
+		private readonly ObjectMesh _questIcon;
+	    private readonly ObjectMesh _cursor;
 	    private float _size;
 	    private float _targetSize;
 	    private int _previousSeed;
@@ -52,9 +52,9 @@ namespace Hedra.Engine.Player
 		    Chunk emptyChunk;
 			this._player = Player;
 			
-			this._questIcon = EntityMesh.FromVertexData(AssetManager.PlyLoader("Assets/Env/QuestIcon.ply", Vector3.One * 20f));
+			this._questIcon = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/Env/QuestIcon.ply", Vector3.One * 20f));
 			DrawManager.Remove(this._questIcon);
-			this._cursor = EntityMesh.FromVertexData(AssetManager.PlyLoader("Assets/UI/MapCursor.ply", Vector3.One * 15f));
+			this._cursor = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/UI/MapCursor.ply", Vector3.One * 15f));
 			DrawManager.Remove(this._cursor);
 
             _mainPiece = new MapPiece
@@ -162,12 +162,12 @@ namespace Hedra.Engine.Player
 		    }
 
 		    this._questIcon.Mesh.MeshBuffers[0].Bind();
-			GL.Uniform3(EntityMeshBuffer.Shader.LightColorLocation, Vector3.One);
+			GL.Uniform3(ObjectMeshBuffer.Shader.LightColorLocation, Vector3.One);
 			
 			//this._questIcon.Draw();
 			this._cursor.Draw();
 
-			GL.Uniform3(EntityMeshBuffer.Shader.LightColorLocation, ShaderManager.LightColor);
+			GL.Uniform3(ObjectMeshBuffer.Shader.LightColorLocation, ShaderManager.LightColor);
 			this._questIcon.Mesh.MeshBuffers[0].UnBind();			
 		}
 		

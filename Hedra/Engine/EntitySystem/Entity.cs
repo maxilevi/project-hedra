@@ -39,6 +39,7 @@ namespace Hedra.Engine.EntitySystem
         private float _knockedTime;
         private readonly TickSystem _tickSystem;
 
+        public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1;
         protected List<EntityComponent> Components = new List<EntityComponent>();
         public Box DefaultBox = new Box(new Vector3(0, 0, 0), new Vector3(2, 2, 2));
@@ -206,6 +207,7 @@ namespace Hedra.Engine.EntitySystem
         public Entity()
         {
             _tickSystem = new TickSystem();
+            ComponentManager = new EntityComponentManager(this);
             Physics = new PhysicsComponent(this);
         }
 
@@ -262,6 +264,7 @@ namespace Hedra.Engine.EntitySystem
         {
             if (Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             Components.Remove(Component);
+            Component.Dispose();
             var tickable = Component as ITickable;
             if (tickable != null) _tickSystem.Remove(tickable);
         }

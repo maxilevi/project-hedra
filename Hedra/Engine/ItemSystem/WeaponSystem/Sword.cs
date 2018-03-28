@@ -117,7 +117,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    PrimaryAnimationsIndex++;
 
             base.BasePrimaryAttack(Human);
-
+		    Trail.Emit = false;
 		    TaskManager.Delay(200, () => Trail.Emit = true);
 		}
 	}

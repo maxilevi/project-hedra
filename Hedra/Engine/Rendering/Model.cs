@@ -40,14 +40,14 @@ namespace Hedra.Engine.Rendering
         public bool Disposed;
         public float Height = 0;
 
-        public EntityMesh[] Meshes;
+        public ObjectMesh[] Meshes;
 
         public virtual float Alpha
         {
             get { return _alpha; }
             set
             {
-                this.Init();
+                this.GatherMeshes();
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
                         Meshes[i].Alpha = value;
@@ -60,7 +60,7 @@ namespace Hedra.Engine.Rendering
             get { return _baseTint; }
             set
             {
-                this.Init();
+                this.GatherMeshes();
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
                         Meshes[i].BaseTint = value;
@@ -73,7 +73,7 @@ namespace Hedra.Engine.Rendering
             get { return _enabled; }
             set
             {
-                this.Init();
+                this.GatherMeshes();
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
                         Meshes[i].Enabled = value;
@@ -86,10 +86,10 @@ namespace Hedra.Engine.Rendering
             get { return _fog; }
             set
             {
-                this.Init();
+                this.GatherMeshes();
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
-                        Meshes[i].UseFog = value;
+                        Meshes[i].ApplyFog = value;
                 _fog = value;
             }
         }
@@ -99,7 +99,7 @@ namespace Hedra.Engine.Rendering
             get { return _localPosition; }
             set
             {
-                this.Init();
+                this.GatherMeshes();
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
                         Meshes[i].LocalPosition = value;
@@ -112,24 +112,11 @@ namespace Hedra.Engine.Rendering
             get { return _localRotation; }
             set
             {
-                this.Init();
+                this.GatherMeshes();
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
                         Meshes[i].LocalRotation = value;
                 _localRotation = value;
-            }
-        }
-
-        public bool Outline
-        {
-            get { return _outline; }
-            set
-            {
-                this.Init();
-                for (var i = 0; i < Meshes.Length; i++)
-                    if (Meshes[i] != null)
-                        Meshes[i].Outline = value;
-                _outline = value;
             }
         }
 
@@ -140,7 +127,7 @@ namespace Hedra.Engine.Rendering
             get { return _position; }
             set
             {
-                this.Init();
+                this.GatherMeshes();
 
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
@@ -159,7 +146,7 @@ namespace Hedra.Engine.Rendering
             {
                 value = Mathf.FixNaN(value);
 
-                this.Init();
+                this.GatherMeshes();
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
                         Meshes[i].Rotation = value;
@@ -172,7 +159,7 @@ namespace Hedra.Engine.Rendering
             get { return _rotationPoint; }
             set
             {
-                this.Init();
+                this.GatherMeshes();
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
                         Meshes[i].RotationPoint = value;
@@ -188,7 +175,7 @@ namespace Hedra.Engine.Rendering
             get { return _size; }
             set
             {
-                this.Init();
+                this.GatherMeshes();
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
                         Meshes[i].Size = value;
@@ -203,7 +190,7 @@ namespace Hedra.Engine.Rendering
             get { return _tint; }
             set
             {
-                this.Init();
+                this.GatherMeshes();
                 for (var i = 0; i < Meshes.Length; i++)
                     if (Meshes[i] != null)
                         Meshes[i].Tint = value;
@@ -222,17 +209,17 @@ namespace Hedra.Engine.Rendering
         {
         }
 
-        public void Init(bool Force = false)
+        public void GatherMeshes(bool Force = false)
         {
             const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             if (Meshes != null && !Force) return;
 
-            var meshList = new List<EntityMesh>();
+            var meshList = new List<ObjectMesh>();
 
             foreach (FieldInfo field in this.GetType().GetFields(flags))
             {
-                if (field.FieldType == typeof(EntityMesh))
-                    meshList.Add(field.GetValue(this) as EntityMesh);
+                if (field.FieldType == typeof(ObjectMesh))
+                    meshList.Add(field.GetValue(this) as ObjectMesh);
                 if (field.FieldType == typeof(Weapon))
                     meshList.Add((field.GetValue(this) as Weapon)?.MainMesh);
             }
@@ -242,7 +229,7 @@ namespace Hedra.Engine.Rendering
 
         public virtual void Death()
         {
-            this.Init();
+            this.GatherMeshes();
             this.RemoveModel();
         }
 
@@ -256,7 +243,7 @@ namespace Hedra.Engine.Rendering
 
         public virtual void Dispose()
         {
-            this.Init(true);
+            this.GatherMeshes(true);
             for (var i = 0; i < Meshes.Length; i++)
                 if (Meshes[i] != null)
                     Meshes[i].Dispose();

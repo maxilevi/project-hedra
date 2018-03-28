@@ -32,7 +32,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
     public class RecoverItemObjective : Objective
     {
         private WorldItem _worldItem;
-        private EntityMesh _previewMesh;
+        private ObjectMesh _previewMesh;
         private TempleType _type;
 
         public override string Description
@@ -110,7 +110,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
             VertexData previewData = AssetManager.PlyLoader(buildingFile, Vector3.One * .65f * scale, relativePosition,
                 Vector3.Zero, true);
             previewData.GraduateColor(Vector3.UnitY);
-            _previewMesh = EntityMesh.FromVertexData(previewData);
+            _previewMesh = ObjectMesh.FromVertexData(previewData);
         }
 
         public override void Setup(Chunk UnderChunk)

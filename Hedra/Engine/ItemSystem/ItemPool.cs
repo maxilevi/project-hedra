@@ -58,7 +58,7 @@ namespace Hedra.Engine.ItemSystem
 	        {
 	            Item.SetAttribute(CommonAttributes.Damage, Item.GetAttribute<float>(CommonAttributes.Damage) * (1.0f + (Settings.Rng.NextFloat() * .3f - .15f) ));
 	            Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed) * (1.0f + (Settings.Rng.NextFloat() * .3f - .15f)));
-	            if (Settings.Rng.Next(1, 2) == 1)
+	            if (Settings.Rng.Next(0, 10) == 1)
 	            {
 	                Item.SetAttribute(CommonAttributes.EffectType, EffectTypes[Settings.Rng.Next(0, EffectTypes.Length)].ToString());
 	            }

@@ -7,5 +7,6 @@
         float BaseTime { get; set; }
 
         void Apply(Entity Victim, float Amount);
+        void Dispose ();
     }
 }

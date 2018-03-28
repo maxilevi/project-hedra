@@ -24,7 +24,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	{
 	    public override bool IsMelee { get; protected set; } = true;
         private Vector3 PreviousPosition = Vector3.Zero;
-		private EntityMesh KnifeSheath;
+		private ObjectMesh KnifeSheath;
 		
 		public Knife(VertexData Contents) : base(Contents)
 		{
@@ -32,7 +32,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			VertexData SheathData = AssetManager.PlyLoader("Assets/Items/KnifeSheath.ply", Vector3.One);
 			SheathData.Transform( Matrix4.CreateRotationY(180f * Mathf.Radian) );
 			SheathData.Scale( new Vector3(3.75f, 1.8f, 2f));
-			KnifeSheath = EntityMesh.FromVertexData(SheathData);
+			KnifeSheath = ObjectMesh.FromVertexData(SheathData);
 			
 			AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherShootStance.dae");
 
@@ -81,7 +81,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		
 		public override void Update(Humanoid Human)
 		{
-			base.Update(Owner);
+			base.Update(Human);
 		    base.SetToDefault(MainMesh);
 
             if (Sheathed){

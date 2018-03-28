@@ -75,7 +75,12 @@ namespace Hedra.Engine.Management
 					LocalPlayer.Instance.Speed += float.Parse(Parts[1]);
 					return true;
 				}
-				if(Parts[0] == "dmg"){
+			    if (Parts[0] == "attackspeed")
+			    {
+			        LocalPlayer.Instance.AttackSpeed = float.Parse(Parts[1]);
+			        return true;
+			    }
+                if (Parts[0] == "dmg"){
 					LocalPlayer.Instance.AttackPower += float.Parse(Parts[1]);
 					return true;
 				}

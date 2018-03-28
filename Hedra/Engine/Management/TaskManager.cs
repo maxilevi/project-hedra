@@ -53,6 +53,15 @@ namespace Hedra.Engine.Management
 	        CoroutineManager.StartCoroutine(AfterAction, Condition, Action);
 	    }
 
+	    /// <summary>
+	    /// Executes a provided action concurrently.
+	    /// </summary>
+	    /// <param name="Action">Action to execute.</param>
+	    public static void While(Func<bool> Condition, Action Do)
+	    {
+	        CoroutineManager.StartCoroutine(WhileCondition, Condition, Do);
+	    }
+
         /// <summary>
         /// Executes a provided action concurrently.
         /// </summary>
@@ -83,6 +92,17 @@ namespace Hedra.Engine.Management
 	            yield return null;
 	        }
 	        action();
+	    }
+
+	    private static IEnumerator WhileCondition(params object[] Args)
+	    {
+	        var condition = (Func<bool>)Args[0];
+	        var action = (Action)Args[1];
+	        while (condition())
+	        {
+	            action();
+	            yield return null;
+	        }
 	    }
         #endregion
     }

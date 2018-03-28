@@ -18,13 +18,13 @@ namespace Hedra.Engine.EntitySystem
 	/// </summary>
 	public class StaticModel : Model
 	{
-		public EntityMesh Mesh;
+		public ObjectMesh Mesh;
 		public Entity Parent;
 		public override Vector3 TargetRotation {get; set;}
 		
 		public StaticModel(){}
 		public StaticModel(Entity Parent, VertexData BaseMesh) : base(){
-			this.Mesh = EntityMesh.FromVertexData(BaseMesh);
+			this.Mesh = ObjectMesh.FromVertexData(BaseMesh);
 			this.Parent = Parent;
 		}
 		public override void Update(){}

@@ -10,7 +10,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering
 {
-	public class EntityMesh : IRenderable, ICullable, IDisposable
+	public class ObjectMesh : IRenderable, ICullable, IDisposable
 	{
 	    public Vector3 TargetRotation { get; set; }
 	    public Vector3 TargetPosition { get; set; }
@@ -23,16 +23,19 @@ namespace Hedra.Engine.Rendering
 		public int SceneId { get; set; }
 		public ChunkMesh Mesh { get; }
 
-		private readonly EntityMeshBuffer _buffer;
+		private readonly ObjectMeshBuffer _buffer;
 	    private bool _disposed;
 		
-		public EntityMesh(Vector3 Position){
+		public ObjectMesh(Vector3 Position){
 			this.Enabled = true;
 			SceneId = Scenes.SceneManager.Game.Id;
-			var meshBuffers = new ChunkMeshBuffer[1];
-			meshBuffers[0] = new EntityMeshBuffer();
-			Mesh = new ChunkMesh(Position, meshBuffers);
-			_buffer = Mesh.MeshBuffers[0] as EntityMeshBuffer;
+
+		    var meshBuffers = new ChunkMeshBuffer[]
+		    {
+		        new ObjectMeshBuffer()
+		    };
+			this.Mesh = new ChunkMesh(Position, meshBuffers);
+			this._buffer = Mesh.MeshBuffers[0] as ObjectMeshBuffer;
 			this.Position = Position;
 			this.Rotation = Vector3.Zero;
 			Mesh.Enabled = true;
@@ -42,87 +45,50 @@ namespace Hedra.Engine.Rendering
 
 		
 		public void Draw(){
-			if(Enabled)
-				Mesh.Draw(0);
-			
-			
-			this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition, (float) Time.unScaledDeltaTime * 6 * AnimationSpeed);
-			this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation, (float) Time.unScaledDeltaTime * 6 * AnimationSpeed);
+			if(Enabled) Mesh.Draw(0);					
+			this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition,
+                Time.unScaledDeltaTime * 6 * AnimationSpeed);
+			this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation,
+                Time.unScaledDeltaTime * 6 * AnimationSpeed);
 		}
 		
 		public Vector3 TransformPoint(Vector3 Point){
-			return _buffer.TransformPoint(Point);// + Position;
+			return _buffer.TransformPoint(Point);
 		}
-		
-		public bool Outline{
-			get{
-				return _buffer.Outline;
-			}
-			set{
-				_buffer.Outline = value;
-			}
-		}
-		
-		
+
 		public Matrix4 TransformationMatrix{
-			get{
-				return _buffer.MatrixTrans;
-			}
-			set{
-				_buffer.MatrixTrans = value;
-			}
+			get{ return _buffer.TransformationMatrix; }
+			set{ _buffer.TransformationMatrix = value; }
 		}
 		
 		public Vector4 Tint{
-			get{
-				return _buffer.Tint;
-			}
-			set{
-				_buffer.Tint = value;
-			}
+			get{ return _buffer.Tint; }
+			set{ _buffer.Tint = value; }
 		}
 		
 		public Vector4 BaseTint{
-			get{
-				return _buffer.BaseTint;
-			}
-			set{
-				_buffer.BaseTint = value;
-			}
+			get{ return _buffer.BaseTint; }
+			set{ _buffer.BaseTint = value; }
 		}
 		
 		
 		public Vector3 Position{
-			get{
-				return _buffer.Position;
-			}
-			set{
-				_buffer.Position = value;
-			}
+			get{ return _buffer.Position; }
+			set{ _buffer.Position = value; }
 		}
 		
 		public Vector3 LocalPosition{
-			get{
-				return _buffer.LocalPosition;
-			}
-			set{
-				_buffer.LocalPosition = value;
-			}
+			get{ return _buffer.LocalPosition; }
+			set{ _buffer.LocalPosition = value; }
 		}
 		
 		public Vector3 RotationPoint{
-			get{
-				return _buffer.Point;
-			}
-			set{
-				_buffer.Point = value;
-			}
+			get{ return _buffer.Point; }
+			set{ _buffer.Point = value; }
 		}
 		
 		public Vector3 Rotation{
-			get{
-				return _buffer.Rotation;
-			}
+			get{ return _buffer.Rotation; }
 			set{
 				float valY = value.Y;
 				
@@ -135,8 +101,7 @@ namespace Hedra.Engine.Rendering
 				float valZ = value.Z;
 				
 				if(float.IsInfinity(valZ) || float.IsNaN(valZ)) valZ = 0;
-
-				
+		
 				_buffer.Rotation = new Vector3(valX, valY, valZ);
 			}
 		}
@@ -170,11 +135,6 @@ namespace Hedra.Engine.Rendering
 				
 				_buffer.LocalRotation = new Vector3(valX, valY, valZ);
 			}
-		}
-		
-		public Vector4 OutlineColor{
-			get{ return _buffer.OutlineColor; }
-			set{ _buffer.OutlineColor = value; }
 		}
 		
 		public Vector3 LocalRotationPoint{
@@ -239,12 +199,12 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 		
-		public bool UseFog{
+		public bool ApplyFog{
 			get{
-				return _buffer.UseFog;
+				return _buffer.ApplyFog;
 			}
 			set{
-				_buffer.UseFog = value;
+				_buffer.ApplyFog = value;
 			}
 		}
 		
@@ -267,51 +227,51 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 
-		public static EntityMesh FromVertexData(VertexData Data){
-			EntityMesh EMesh = new EntityMesh(Vector3.Zero);
-			ThreadManager.ExecuteOnMainThread( delegate{
-			                                  	
-			EMesh.Mesh.BuildFrom(EMesh.Mesh.MeshBuffers[0], Data, false);
-			EMesh.Mesh.IsGenerated = true;
-			EMesh.Mesh.IsBuilded = true;
-			EMesh.Mesh.Enabled = true;
-			                                  });
+		public static ObjectMesh FromVertexData(VertexData Data){
+			var mesh = new ObjectMesh(Vector3.Zero);
+			ThreadManager.ExecuteOnMainThread( delegate
+            {		                                  	
+			    mesh.Mesh.BuildFrom(mesh.Mesh.MeshBuffers[0], Data, false);
+			    mesh.Mesh.IsGenerated = true;
+			    mesh.Mesh.IsBuilded = true;
+			    mesh.Mesh.Enabled = true;
+			});
 			
-			return EMesh;
-			
-		}
-		
-		public static EntityMesh FromVertexData(VertexData Data, Vector3 Position){
-			EntityMesh EMesh = new EntityMesh(Position);
-			ThreadManager.ExecuteOnMainThread( delegate{
-			                                  	
-			EMesh.Mesh.BuildFrom(EMesh.Mesh.MeshBuffers[0], Data, false);
-			EMesh.Mesh.IsGenerated = true;
-			EMesh.Mesh.IsBuilded = true;
-			EMesh.Mesh.Enabled = true;
-			                                  });
-			
-			return EMesh;
+			return mesh;
 			
 		}
 		
-		public static EntityMesh FromVertexData(VertexData Data, Vector4 Color1, Vector4 Color2){
+		public static ObjectMesh FromVertexData(VertexData Data, Vector3 Position){
+			var mesh = new ObjectMesh(Position);
+			ThreadManager.ExecuteOnMainThread( delegate
+            {			                                  	
+			    mesh.Mesh.BuildFrom(mesh.Mesh.MeshBuffers[0], Data, false);
+			    mesh.Mesh.IsGenerated = true;
+			    mesh.Mesh.IsBuilded = true;
+			    mesh.Mesh.Enabled = true;                
+            });
+			
+			return mesh;
+			
+		}
+		
+		public static ObjectMesh FromVertexData(VertexData Data, Vector4 Color1, Vector4 Color2){
 			Data.Color(AssetManager.ColorCode1, Color1);
 			Data.Color(AssetManager.ColorCode2, Color2);
 			
 			return FromVertexData(Data, Vector3.Zero);
 		}
 		
-		public static EntityMesh FromVertexData(VertexData Data, Vector3 Position, Vector4 Color1, Vector4 Color2){
+		public static ObjectMesh FromVertexData(VertexData Data, Vector3 Position, Vector4 Color1, Vector4 Color2){
 			Data.Color(AssetManager.ColorCode1, Color1);
 			Data.Color(AssetManager.ColorCode2, Color2);
 			
 			return FromVertexData(Data, Position);
 		}
 		public void Dispose(){
-			_disposed = true;
 			Mesh.Dispose();
 			DrawManager.Remove(this);
-		}
+		    _disposed = true;
+        }
 	}
 }

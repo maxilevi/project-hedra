@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player
     public class HumanModel : Model, IAudible, IDisposeAnimation
     {
 		public const float DefaultScale = 0.75f;
-		public Humanoid Human;
+		public Humanoid Human { get; private set; }
 		public AnimatedModel Model;
 		private Animation WalkAnimation;
 		private Animation IdleAnimation;
@@ -67,7 +67,7 @@ namespace Hedra.Engine.Player
 	    public bool IsGliding => this.GlideAnimation == this.Model.Animator.AnimationPlaying;
 	    public bool IsSwimming => this.IdleSwimAnimation == this.Model.Animator.AnimationPlaying || this.SwimAnimation == this.Model.Animator.AnimationPlaying;
         private string _modelPath;
-        private EntityMesh _lampModel;
+        private ObjectMesh _lampModel;
 	    private bool _hasLamp;
         private float _foodHealth;
         private Vector3 _previousPosition;
@@ -150,7 +150,6 @@ namespace Hedra.Engine.Player
 
 			EatAnimation.OnAnimationEnd += delegate{ 
 				this.Food.Enabled = false;
-				Human.Health += this._foodHealth * .5f;
 				
 				Human.IsEating = false;
 				this.Model.Animator.ExitBlend();
@@ -191,11 +190,11 @@ namespace Hedra.Engine.Player
 			
 			if(this._lampModel == null){
 				VertexData LampData = AssetManager.PlyLoader("Assets/Items/Handlamp.ply", new Vector3(1.5f, 1.5f, 1.5f), Vector3.Zero, Vector3.Zero, true);
-	        	this._lampModel = EntityMesh.FromVertexData(LampData);
+	        	this._lampModel = ObjectMesh.FromVertexData(LampData);
 			}
 			this._lampModel.Enabled = Active;
 			
-			base.Init(true);
+			base.GatherMeshes(true);
 		}
 
         public void DisposeAnimation()
@@ -228,7 +227,7 @@ namespace Hedra.Engine.Player
 		}
 		
 		public void SetWeapon(Weapon Weapon){
-			this.Init();
+			this.GatherMeshes();
 			if(Weapon == this.LeftWeapon)
 				return;
 			int Index = -1;
@@ -348,9 +347,10 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public void Eat(float FoodHealth){
+		public void Eat(float FoodHealth)
+		{
+		    TaskManager.While( () => this.Human.IsEating, () => Human.Health += FoodHealth * Time.FrameTimeSeconds * .3f);
 			this._foodHealth = FoodHealth;
-			this.Human.Health += FoodHealth * .5f;
 			Model.Animator.StopBlend();
 			Model.Animator.BlendAnimation(EatAnimation);
 			this.Human.WasAttacking = false;
@@ -441,8 +441,7 @@ namespace Hedra.Engine.Player
 				}
 			}
 			
-			if(!LockWeapon)
-				this.LeftWeapon.Update(this.Human);
+			if(!LockWeapon) this.LeftWeapon.Update(this.Human);
 			
 			if(this._hasLamp){
 				this._lampModel.Position = this.LeftHandPosition;

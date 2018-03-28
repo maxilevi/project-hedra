@@ -16,34 +16,28 @@ namespace Hedra.Engine.EntitySystem
 	/// </summary>
 	public class BleedComponent : EntityComponent, IEffectComponent
     {
-		public int Chance { get; set; } = 20;
+		public int Chance { get; set; } = 10;
         public float TotalStrength { get; set; } = 30;
 		public float BaseTime { get; set; } = 5;		
-		private float _cooldown;
-		private bool _canBleed = true;
-		private float _bleedTime;
-		private float _time = 0;
-		private float _pTime = 0;
-		private Entity _victim;
-		private float _oldSpeed = 0;
 		
 		public BleedComponent(Entity Parent) : base(Parent) {
             Parent.OnAttacking += this.Apply;
 		}
-		
-		public override void Update(){
-			_cooldown -= Time.FrameTimeSeconds;
-		}
-		
-		public void Apply(Entity Victim, float Amount){
-			if(_cooldown > 0 || !_canBleed) return;
-			
-			bool shouldBleed = Utils.Rng.NextFloat() <= Chance * 0.01 ? true : false;
-		    if (!shouldBleed) return;
-		    _bleedTime =  BaseTime + Utils.Rng.NextFloat() * 4 -2f;
-		    if(Victim.SearchComponent<BleedingComponent>() == null){
-		        Victim.AddComponent(new BleedingComponent(Victim, Parent, _bleedTime, TotalStrength));
-		    }
-		}
-	}
+        		
+		public override void Update(){}
+
+        public void Apply(Entity Victim, float Amount)
+        {
+            if (Utils.Rng.NextFloat() <= Chance * 0.01)
+            {
+                if (Victim.SearchComponent<BleedingComponent>() == null)
+                    Victim.AddComponent(new BleedingComponent(Victim, Parent, BaseTime + Utils.Rng.NextFloat() * 4 - 2f, TotalStrength));
+            }
+        }
+
+        public override void Dispose()
+        {
+            Parent.OnAttacking -= this.Apply;
+        }
+    }
 }

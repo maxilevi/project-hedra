@@ -217,7 +217,7 @@ namespace Hedra.Engine.Rendering
 		public new void Dispose(){
 			//Already disposed
 			if(MeshBuffers == null) return;
-			if(MeshBuffers.Count > 0 && MeshBuffers[0] is EntityMeshBuffer)
+			if(MeshBuffers.Count > 0 && MeshBuffers[0] is ObjectMeshBuffer)
 				return;
 			
 			foreach(ChunkMeshBuffer Buffer in MeshBuffers){
@@ -226,10 +226,9 @@ namespace Hedra.Engine.Rendering
 			for(int i = 0; i < InstanceBatches.Count; i++){
 				InstanceBatches[i].Dispose();
 			}
-			
-			if(ModelData != null)
-				ModelData.Dispose();
-			InstanceElements.Clear();
+
+		    ModelData?.Dispose();
+		    InstanceElements.Clear();
 			Elements.Clear();
             lock(CollisionBoxes)
 			    CollisionBoxes.Clear();

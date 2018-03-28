@@ -47,7 +47,7 @@ namespace Hedra.Engine.Player
 		public GliderModel Glider;
 	    public override IMessageDispatcher MessageDispatcher { get; set; }
         public ICollidable[] NearCollisions { get; private set; }
-
+	    private float _acummulativeHealing;
         private bool _floating;
 	    private bool _inCementery;
 	    private float _cementeryTime;
@@ -82,7 +82,7 @@ namespace Hedra.Engine.Player
 
             this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
 			this.Physics.CanCollide = true;
-			this.AttackSpeed = 1.25f;
+			this.AttackSpeed = 0.75f;
 	        this.AttackPower = 1.0f;
 			this.Speed = DefaultSpeed;
 	        this.DefaultBox.Max = new Vector3(2.5f, 5, 2.5f);
@@ -367,7 +367,8 @@ namespace Hedra.Engine.Player
 
             if (!this.IsDead)
             {
-                this.Health += HealthRegen * Time.FrameTimeSeconds;
+                if(!this.DmgComponent.HasBeenAttacked)
+                    this.Health += HealthRegen * Time.FrameTimeSeconds;
                 this.Mana += ManaRegen * Time.FrameTimeSeconds;
                 this.Stamina += (float)Time.deltaTime * 4f;
             }
@@ -499,7 +500,7 @@ namespace Hedra.Engine.Player
 				if(foodAmount > 1)
 				    Inventory.Food.SetAttribute(CommonAttributes.Amount, foodAmount-1);
                 else
-					this.Inventory.SetItem(PlayerInventory.FoodHolder, null);
+					this.Inventory.SetItem(this.Inventory.IndexOf(Inventory.Food), null);
 				
 			}
 			this.Inventory.UpdateInventory();
@@ -511,13 +512,38 @@ namespace Hedra.Engine.Player
 				var foodData = Inventory.Food.Model.Clone();
 				foodData.Scale( Vector3.One * 1.5f );
 
-				Model.Food.Mesh = EntityMesh.FromVertexData( foodData, Vector3.Zero);
+				Model.Food.Mesh = ObjectMesh.FromVertexData( foodData, Vector3.Zero);
 				Model.Food.Mesh.Enabled= true;
 			}
-			Model?.Food.Init();
+			Model?.Food.GatherMeshes();
 			Model?.Eat(FoodHealth);
 			this.IsEating = true;
 		}
+
+	    private void ManageDeath()
+	    {
+	        if (_health <= 0f)
+	        {
+	            IsDead = true;
+	            CoroutineManager.StartCoroutine(this.DmgComponent.DisposeCoroutine);
+	            if (GameSettings.Hardcore)
+	                ThreadManager.ExecuteOnMainThread(delegate {
+	                    this.MessageDispatcher.ShowMessageWhile("[R] NEW RUN", Color.White,
+	                        () => this.Health <= 0);
+	                });
+	            else
+	                ThreadManager.ExecuteOnMainThread(delegate {
+	                    this.MessageDispatcher.ShowMessageWhile("[R] TO RESPAWN", Color.White,
+	                        () => this.Health <= 0 && Constants.CHARACTER_CHOOSED);
+	                });
+	        }
+	        else
+	        {
+	            if (!IsDead) return;
+	            IsDead = false;
+	            Model?.Recompose();
+	        }
+        }
 		
 		public void ManageSounds(){
 
@@ -527,23 +553,24 @@ namespace Hedra.Engine.Player
 			get{ return _health; }
 			set
 			{
-				_health = Mathf.Clamp(value,0,MaxHealth);
-				if(_health <= 0f){
-					IsDead = true;
-					CoroutineManager.StartCoroutine(this.DmgComponent.DisposeCoroutine);
-					if(GameSettings.Hardcore)
-						ThreadManager.ExecuteOnMainThread( delegate{ this.MessageDispatcher.ShowMessageWhile("[R] NEW RUN", Color.White,
-						        () => this.Health <= 0); } );
-					else
-						ThreadManager.ExecuteOnMainThread( delegate{ this.MessageDispatcher.ShowMessageWhile("[R] TO RESPAWN", Color.White,
-                                () => this.Health <= 0 && Constants.CHARACTER_CHOOSED); } );
-				}else{
-				    if (IsDead)
-				    {
-				        IsDead = false;
-				        Model?.Recompose();
-				    }
-				}
+			    value = Mathf.Clamp(value, 0, this.MaxHealth);
+                var diff = value - _health;
+			    _acummulativeHealing += diff > 0 ? diff : 0;
+			    if (_acummulativeHealing > MaxHealth * .05f)
+			    {
+			        if (Model.Enabled)
+			        {
+			            var newLabel = new Billboard(2.0f, $"+ {(int) _acummulativeHealing} HP", Color.GreenYellow,
+			                FontCache.Get(AssetManager.Fonts.Families[0],
+			                    18 + 12 * ((_acummulativeHealing - MaxHealth * .05f) / this.MaxHealth),
+			                    FontStyle.Bold), this.Model.HeadPosition);
+			            newLabel.Vanish = true;
+			            newLabel.Speed = 4;
+			        }
+			        _acummulativeHealing = 0;
+			    }
+			    _health = value;
+			    this.ManageDeath();
 			}
 		}
 

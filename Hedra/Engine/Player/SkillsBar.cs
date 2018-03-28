@@ -33,7 +33,7 @@ namespace Hedra.Engine.Player
 		public LocalPlayer Player;
 		public Vector2 SkillScale;
 		private static Vector2 _targetResolution = new Vector2(1024, 576);
-		private EntityMesh _berryMesh;
+		private ObjectMesh _berryMesh;
 		private Texture _berryIcon;
 		private GUIText _berryCount;
 		private Vector2 _berryIconPosition = Mathf.ScaleGUI(_targetResolution, new Vector2(.357f,-.9f));
@@ -42,7 +42,7 @@ namespace Hedra.Engine.Player
 	    private Vector2 _originalSkillPosition;
 
         public SkillsBar(LocalPlayer Player){
-			this._berryMesh = EntityMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Berry.ply", Vector3.One * 4f, Vector3.UnitY*2, Vector3.Zero));
+			this._berryMesh = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Berry.ply", Vector3.One * 4f, Vector3.UnitY*2, Vector3.Zero));
 			this.Player = Player;
 			this.SkillScale = Mathf.ScaleGUI(new Vector2(1000,1000), new Vector2(.055f,.0495f));
 			

@@ -37,7 +37,6 @@ namespace Hedra.Engine.Generation
 		public const float OverallDifficulty = 1;
 	    public static Dictionary<Vector2, Chunk> SearcheableChunks;
         public static List<Chunk> Chunks;
-	    public static List<ParticleProjectile> Projectiles;
 	    public static List<WorldItem> Items;
 	    public static AreaHighlighter Highlighter;
 	    public static ParticleSystem WorldParticles { get; }
@@ -115,6 +114,27 @@ namespace Hedra.Engine.Generation
             }
 	    }
 
+        //When enabling the mage, consider removing this.
+	    private static bool _isParticleProjectilesCacheDirty = true;
+        private static readonly HashSet<ParticleProjectile> _particleProjectiles;
+	    private static ReadOnlyCollection<ParticleProjectile> _particleProjectilesCache;
+	    public static ReadOnlyCollection<ParticleProjectile> ParticleProjectiles
+	    {
+	        get
+	        {
+	            if (_isGlobalCollidersCacheDirty)
+	            {
+	                lock (_particleProjectiles)
+	                {
+	                    _particleProjectilesCache = _particleProjectiles.ToArray().ToList().AsReadOnly();
+	                }
+	                _isParticleProjectilesCacheDirty = false;
+	            }
+	            lock (_particleProjectiles)
+	                return _particleProjectilesCache;
+	        }
+	    }
+
         private static readonly Dictionary<Vector2, Chunk> _toDraw;
 	    private static Matrix4 _previousModelView;
 	    private static int _previousCount;
@@ -122,11 +142,12 @@ namespace Hedra.Engine.Generation
 
 	    static World()
 	    {
-	        _structures = new HashSet< BaseStructure > ();
+	        _structures = new HashSet<BaseStructure>();
 	        _entities = new HashSet<Entity>();
+	        _particleProjectiles = new HashSet<ParticleProjectile>();
+
             Chunks = new List<Chunk>();
             SearcheableChunks = new Dictionary<Vector2, Chunk>();
-            Projectiles = new List<ParticleProjectile>();
             _globalColliders = new HashSet<ICollidable>();
             Items = new List<WorldItem>();
             WorldParticles = new ParticleSystem(Vector3.Zero);

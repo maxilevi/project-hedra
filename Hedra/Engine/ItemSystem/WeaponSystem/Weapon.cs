@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -24,8 +25,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     /// </summary>
     public abstract class Weapon
     {
-        public EntityMesh MainMesh { get; }
-        public EntityMesh[] Meshes { get; private set; }
+        public ObjectMesh MainMesh { get; }
+        public ObjectMesh[] Meshes { get; private set; }
         public VertexData MeshData { get; }
         public Animation AttackStanceAnimation { get; set; }
         public virtual Vector3 SheathedPosition => new Vector3(-.6f, 0.5f, -0.8f);
@@ -52,12 +53,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected SoundType SoundType { get; set; } = SoundType.SlashSound;
         protected bool ShouldPlaySound { get; set; } = true;
 
+        private float[] _animationSpeeds;
         private EffectDescriber _describer;
         private static Weapon _empty;
         private bool _onAttackStance;
         private Vector3 _scale = Vector3.One;
         private float _alpha = 1f;
-        private Vector4 _tint = Vector4.One;
+        private bool _effectApplied;
 
         protected Weapon(VertexData MeshData)
         {
@@ -65,16 +67,16 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             {
                 VertexData baseMesh = MeshData.Clone();
                 baseMesh.Scale(Vector3.One * 1.75f);
-                this.MainMesh = EntityMesh.FromVertexData(baseMesh);
+                this.MainMesh = ObjectMesh.FromVertexData(baseMesh);
             }
             else
             {
-                this.MainMesh = new EntityMesh(Vector3.Zero);
+                this.MainMesh = new ObjectMesh(Vector3.Zero);
             }
             this.MeshData = MeshData;
         }
 
-        protected void SetToDefault(EntityMesh Mesh)
+        protected void SetToDefault(ObjectMesh Mesh)
         {
             Mesh.Position = Vector3.Zero;
             Mesh.TargetPosition = Vector3.Zero;
@@ -89,7 +91,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             Mesh.TargetRotation = Vector3.Zero;
         }
 
-        protected void SetToChest(EntityMesh Mesh)
+        protected void SetToChest(ObjectMesh Mesh)
         {
             this.SetToDefault(Mesh);
             Mesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() *
@@ -101,7 +103,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 2.5f) * this.Scale;
         }
 
-        protected void SetToMainHand(EntityMesh Mesh)
+        protected void SetToMainHand(ObjectMesh Mesh)
         {
             Matrix4 Mat4 = Owner.Model.LeftHandMatrix.ClearTranslation() *
                            Matrix4.CreateTranslation(-Owner.Position + Owner.Model.LeftHandPosition);
@@ -143,7 +145,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected void BasePrimaryAttack(Humanoid Human)
         {
             this.BaseAttack(Human);
-            Human.Model.Model.BlendAnimation(PrimaryAnimations[this.ParsePrimaryIndex(PrimaryAnimationsIndex)]);
+            var animation = PrimaryAnimations[this.ParsePrimaryIndex(PrimaryAnimationsIndex)];
+            animation.Speed = _animationSpeeds[Array.IndexOf(Animations, animation)] * Human.AttackSpeed;
+            Human.Model.Model.BlendAnimation(animation);
         }
 
         public virtual void Attack2(Humanoid Human)
@@ -161,7 +165,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected void BaseSecondaryAttack(Humanoid Human)
         {
             this.BaseAttack(Human);
-            Human.Model.Model.BlendAnimation(SecondaryAnimations[this.ParseSecondaryIndex(SecondaryAnimationsIndex)]);
+            var animation = SecondaryAnimations[this.ParseSecondaryIndex(SecondaryAnimationsIndex)];
+            animation.Speed = _animationSpeeds[Array.IndexOf(Animations, animation)] * Human.AttackSpeed;
+            Human.Model.Model.BlendAnimation(animation);
         }
 
         protected bool MeetsRequirements()
@@ -260,17 +266,17 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 var player = this.Owner as LocalPlayer;
                 if (Orientate && player != null) this.Owner.Movement.OrientatePlayer(player);
             }
-            if (Describer != null)
+            this.MainMesh.BaseTint = this.BaseTint;
+            this.MainMesh.Tint = this.Tint;
+
+            if (Describer != null && Describer.Type != EffectType.None)
             {
-                this.MainMesh.BaseTint = Vector4.Zero;
-                this.MainMesh.Tint = Vector4.One;
                 this.MainMesh.BaseTint = Describer.EffectColor;
-                //Describer.EmitParticles(this.MainMesh.TransformPoint(Vector3.Zero));
-            }
-            else
-            {
-                this.MainMesh.BaseTint = this.BaseTint;
-                this.MainMesh.Tint = this.Tint;
+                if (!_effectApplied)
+                {
+                    this.Owner.ApplyEffectWhile(this.Describer.Type, () => Owner.Model.LeftWeapon == this);
+                    _effectApplied = true;
+                }
             }
         }
 
@@ -283,7 +289,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             set
             {
                 _describer = value;
-                this.Owner.ApplyEffectWhile(this.Describer.Type, () => Owner.Model.LeftWeapon == this);
+                _effectApplied = false;
             }
         }
 
@@ -375,17 +381,17 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         private void GatherMeshes()
         {
             var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-            var meshList = new List<EntityMesh>();
+            var meshList = new List<ObjectMesh>();
             var fields = this.GetType().GetFields(flags);
             var propierties = this.GetType().GetProperties(flags);
             foreach (var field in fields)
             {
-                if (field.FieldType == typeof(EntityMesh)) meshList.Add(field.GetValue(this) as EntityMesh);
+                if (field.FieldType == typeof(ObjectMesh)) meshList.Add(field.GetValue(this) as ObjectMesh);
                 if (field.FieldType == typeof(Weapon)) meshList.Add((field.GetValue(this) as Weapon)?.MainMesh);
             }
             foreach (var property in propierties)
             {
-                if (property.PropertyType == typeof(EntityMesh)) meshList.Add(property.GetValue(this, null) as EntityMesh);
+                if (property.PropertyType == typeof(ObjectMesh)) meshList.Add(property.GetValue(this, null) as ObjectMesh);
                 if (property.PropertyType == typeof(Weapon)) meshList.Add((property.GetValue(this, null) as Weapon)?.MainMesh);
             }
             Meshes = meshList.ToArray();
@@ -426,6 +432,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 }
             }
             Animations = animList.ToArray();
+            _animationSpeeds = new float[Animations.Length];
+            for (var i = 0; i < _animationSpeeds.Length; i++)
+            {
+                _animationSpeeds[i] = Animations[i].Speed;
+            }
         }
 
         public void StartWasAttackingCoroutine()
@@ -485,16 +496,16 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         public void Dispose()
         {
             this.GatherMembers(true);
-            foreach (EntityMesh mesh in Meshes) mesh.Dispose();
+            foreach (ObjectMesh mesh in Meshes) mesh.Dispose();
 
             var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             foreach (var field in this.GetType().GetFields(flags))
             {
-                if (field.FieldType != typeof(EntityMesh[])) continue;
+                if (field.FieldType != typeof(ObjectMesh[])) continue;
 
-                var meshArray = field.GetValue(this) as EntityMesh[];
+                var meshArray = field.GetValue(this) as ObjectMesh[];
                 if (meshArray == this.Meshes) continue;
-                foreach (EntityMesh meshItem in meshArray) meshItem.Dispose();
+                foreach (ObjectMesh meshItem in meshArray) meshItem.Dispose();
             }
             this.Disposed = true;
         }

@@ -15,7 +15,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly InventoryArray _array;
         private readonly int _length;
         private readonly int _offset;
-        private readonly EntityMesh[] _models;
+        private readonly ObjectMesh[] _models;
         private readonly float[] _modelsHeights;
         private float _itemRotation;
         private float _itemCount;
@@ -25,7 +25,7 @@ namespace Hedra.Engine.Player.Inventory
             this._array = Array;
             this._length = Length;
             this._offset = Offset;
-            this._models = new EntityMesh[_length];
+            this._models = new ObjectMesh[_length];
             this._modelsHeights = new float[_length];
         }
 
@@ -47,13 +47,13 @@ namespace Hedra.Engine.Player.Inventory
             _itemCount = itemCount;
         }
 
-        public EntityMesh BuildModel(Item Item, out float ModelHeight)
+        public ObjectMesh BuildModel(Item Item, out float ModelHeight)
         {
             var model = Item.Model;
             ModelHeight = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
-            var mesh = EntityMesh.FromVertexData(model);
+            var mesh = ObjectMesh.FromVertexData(model);
             mesh.BaseTint = EffectDescriber.EffectColorFromItem(Item);
-            mesh.UseFog = false;
+            mesh.ApplyFog = false;
             DrawManager.Remove(mesh);
             return mesh;
         }
@@ -63,7 +63,7 @@ namespace Hedra.Engine.Player.Inventory
             return Draw(_models[Id], _array[Id + _offset], true, _modelsHeights[Id] * InventoryItemRenderer.ZOffsetFactor);
         }
 
-        public uint Draw(EntityMesh Mesh, Item Item, bool TiltIfWeapon = true, float ZOffset = 3.0f)
+        public uint Draw(ObjectMesh Mesh, Item Item, bool TiltIfWeapon = true, float ZOffset = 3.0f)
         {
             ZOffset = Math.Max(ZOffset, 3.0f);
             if (Mesh == null || Item == null) return GUIRenderer.TransparentTexture;

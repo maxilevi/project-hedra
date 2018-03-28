@@ -31,7 +31,6 @@ namespace Hedra.Engine.Player
 	    private float _stamina = 100f;
 	    private float _oldSpeed;
 	    private bool _isGliding;
-	    private HumanoidComponentManager _componentManager;
         public virtual IMessageDispatcher MessageDispatcher { get; set; }
         public bool IsAttacking {get; set;}
 		public bool IsEating { get; set; }
@@ -139,7 +138,6 @@ namespace Hedra.Engine.Player
             this.MessageDispatcher = new DummyMessageDispatcher();
             this.HandLamp = new HandLamp(this);
 			this.Movement = new MovementManager(this);
-            this._componentManager = new HumanoidComponentManager(this);
             this.DmgComponent = new DamageComponent(this)
             {
                 XpToGive = 4f
@@ -247,7 +245,7 @@ namespace Hedra.Engine.Player
 			            hittedSomething = true;
 			    }
 			}
-            if(!hittedSomething) this.MainWeapon.Weapon.PlaySound();
+            if(!hittedSomething) MainWeapon?.Weapon.PlaySound();
 			Mana = Mathf.Clamp(Mana + 8, 0 , MaxMana);
 		}
 
@@ -258,7 +256,7 @@ namespace Hedra.Engine.Player
 
 	    public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)
 	    {
-	        _componentManager.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed), Condition);
+	        ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed), Condition);
 	    }
 
 	    public void ApplyEffectWhile(EffectType NewType, Func<bool> Condition)
@@ -287,7 +285,7 @@ namespace Hedra.Engine.Player
                 default:
 	                throw new ArgumentOutOfRangeException(nameof(NewType), NewType, null);
 	        }
-	        _componentManager.AddComponentWhile(effect, Condition);
+	        ComponentManager.AddComponentWhile(effect, Condition);
 	    }
 
 	    public float DamageEquation{
@@ -316,12 +314,14 @@ namespace Hedra.Engine.Player
 
         public float AttackSpeed{
 			get{
-				float AS = _attackSpeed;
-				if(MainWeapon != null)
-					AS *= MainWeapon.GetAttribute<float>(CommonAttributes.AttackSpeed);
-				return AS;
+				float attackSpeed = _attackSpeed;
+				if(MainWeapon != null) attackSpeed *= MainWeapon.GetAttribute<float>(CommonAttributes.AttackSpeed);
+				return attackSpeed;
 			}
-			set{this._attackSpeed = value;}
+            set
+            {
+                this._attackSpeed = value;
+            }
 		}
 		
         public float XP {
@@ -359,8 +359,9 @@ namespace Hedra.Engine.Player
 
 			    if (this.Ring != null)
 			    {
-			        this.ApplyEffectWhile(
-                        (EffectType) Enum.Parse(typeof(EffectType), _ring.GetAttribute<string>("EffectType")), () => this.Ring == value);
+			        var effectType = (EffectType) Enum.Parse(typeof(EffectType), _ring.GetAttribute<string>("EffectType"));
+                    if (effectType != EffectType.None) this.ApplyEffectWhile(effectType, () => this.Ring == value);
+
 			        this.AddBonusSpeedWhile(this.Ring.GetAttribute<float>("MovementSpeed"), () => this.Ring == value);
 
 			    }

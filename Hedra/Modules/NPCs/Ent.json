@@ -9,6 +9,6 @@
   "Speed": 1.5,
   "XP": 7.0,
   "AttackPower": 1.0, 
-  "AttackSpeed": 0.3,
+  "AttackSpeed": 1.0,
   "Weapons": []
 }

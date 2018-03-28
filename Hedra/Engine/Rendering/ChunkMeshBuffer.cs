@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering
 {
 	public class ChunkMeshBuffer
 	{
-		public VBO<Vector3> Vertices;
+	    public VBO<Vector3> Vertices;
 		public VBO<Vector4> Colors;
 		public VBO<ushort> UshortIndices;
 		public VBO<uint> Indices;
@@ -24,30 +24,19 @@ namespace Hedra.Engine.Rendering
 		public List<DataContainer> Blocks = new List<DataContainer>();
 		public bool ShortBuffer = false;
 		
-		//public BO Indices{
-		//	get{ return (ShortBuffer) ? UshortIndices : UintIndices; }
-		//}
-		
-		
 		public void Dispose(){
-			if(this is EntityMeshBuffer) return;
+			if(this is ObjectMeshBuffer) return;
 			
 			Blocks.Clear();
-			if(Vertices != null)
-				Vertices.Dispose();
-			if(Colors != null)
-				Colors.Dispose();
-			if(UshortIndices != null)
-				UshortIndices.Dispose();
-			if(Indices != null)
-				Indices.Dispose();
-			if(Data != null)
-				Data.Dispose();
+		    Vertices?.Dispose();
+		    Colors?.Dispose();
+		    UshortIndices?.Dispose();
+		    Indices?.Dispose();
+		    Data?.Dispose();
 		}
 		
 		public virtual void Clear(){
-			Blocks.Clear();
-			
+			Blocks.Clear();			
 		}
 		
 		public virtual void Draw(Vector3 Position, bool Shadows){
@@ -83,37 +72,36 @@ namespace Hedra.Engine.Rendering
 		public VertexData ToVertexData(){
 			lock(Blocks){
 				
-				VertexData Data = new VertexData();
-				List<Vector4> ColorsArray = new List<Vector4>();
-				List<Vector3> VerticesArray = new List<Vector3>();
-				List<Vector3> NormalsArray = new List<Vector3>();
-				List<uint> IndicesArray = new List<uint>();
+				var Data = new VertexData();
+				var colorsArray = new List<Vector4>();
+				var verticesArray = new List<Vector3>();
+				var normalsArray = new List<Vector3>();
+				var indicesArray = new List<uint>();
 				
-				Data.Indices = IndicesArray;
-				Data.Vertices = VerticesArray;
-				Data.Normals = NormalsArray;
-				Data.Colors = ColorsArray;
+				Data.Indices = indicesArray;
+				Data.Vertices = verticesArray;
+				Data.Normals = normalsArray;
+				Data.Colors = colorsArray;
 				
 				if(Blocks.Count <= 0)
 					return Data;
 				
-				bool Regular = !(this.Blocks[0] is MarchingData);
-				uint IndexB = 0;
-				for(int i = 0; i<this.Blocks.Count; i++){				
+				bool regular = !(this.Blocks[0] is MarchingData);
+				uint indexB = 0;
+				for(var i = 0; i<this.Blocks.Count; i++){				
 					
-					for(int j=0; j<this.Blocks[i].Indices.Count;j++){
-						if(!Regular)
-							this.Blocks[i].Indices[j] += IndexB;
+					for(var j=0; j<this.Blocks[i].Indices.Count;j++){
+						if(!regular)
+							this.Blocks[i].Indices[j] += indexB;
 						else
 							this.Blocks[i].Indices[j] += (uint) (i * this.Blocks[i].VerticesArrays.Length);
 					}
-					IndexB += (uint) this.Blocks[i].Indices.Count;
+					indexB += (uint) this.Blocks[i].Indices.Count;
 					
-					ColorsArray.AddRange(this.Blocks[i].Color);
-					VerticesArray.AddRange(this.Blocks[i].VerticesArrays);
-					IndicesArray.AddRange(this.Blocks[i].Indices.ToArray());
-					if(this.Blocks[i].HasNormals)
-						NormalsArray.AddRange(this.Blocks[i].Normals);
+					colorsArray.AddRange(this.Blocks[i].Color);
+					verticesArray.AddRange(this.Blocks[i].VerticesArrays);
+					indicesArray.AddRange(this.Blocks[i].Indices.ToArray());
+					if(this.Blocks[i].HasNormals) normalsArray.AddRange(this.Blocks[i].Normals);
 					
 				}
 				

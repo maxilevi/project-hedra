@@ -175,6 +175,9 @@
     <Compile Include="Engine\CacheSystem\TallTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\WheatCache.cs" />
     <Compile Include="Engine\CompatibilityManager.cs" />
+    <Compile Include="Engine\EntitySystem\SlowingComponent.cs" />
+    <Compile Include="Engine\EntitySystem\SpeedBonusComponent.cs" />
+    <Compile Include="Engine\EntitySystem\SpeedComponent.cs" />
     <Compile Include="Engine\GameLoader.cs" />
     <Compile Include="Engine\IO\ConfigurationFile.cs" />
     <Compile Include="Engine\ItemSystem\AttributeArray.cs" />
@@ -371,6 +374,7 @@
     <Compile Include="Engine\Player\GliderModel.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Hammer.cs" />
     <Compile Include="Engine\Player\Humanoid.cs" />
+    <Compile Include="Engine\EntitySystem\EntityComponentManager.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryBackground.cs" />
@@ -565,9 +569,9 @@
     <Compile Include="Engine\Rendering\Effects\StaticShader.cs" />
     <Compile Include="Engine\Rendering\Effects\UnderWaterFilter.cs" />
     <Compile Include="Engine\Rendering\Effects\WaterShader.cs" />
-    <Compile Include="Engine\Rendering\EntityMesh.cs" />
-    <Compile Include="Engine\Rendering\EntityMeshBuffer.cs" />
-    <Compile Include="Engine\Rendering\EntityMeshShader.cs" />
+    <Compile Include="Engine\Rendering\ObjectMesh.cs" />
+    <Compile Include="Engine\Rendering\ObjectMeshBuffer.cs" />
+    <Compile Include="Engine\Rendering\ObjectMeshShader.cs" />
     <Compile Include="Engine\Rendering\FBO.cs" />
     <Compile Include="Engine\Rendering\DataContainer.cs" />
     <Compile Include="Engine\Rendering\GIF.cs" />
@@ -4017,10 +4021,10 @@
     <None Include="Shaders\DropShadows.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\EntityMesh.frag">
+    <None Include="Shaders\ObjectMesh.frag">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\EntityMesh.vert">
+    <None Include="Shaders\ObjectMesh.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\FXAA.frag">

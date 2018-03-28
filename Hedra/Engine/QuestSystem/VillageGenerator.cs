@@ -76,7 +76,7 @@ namespace Hedra.Engine.QuestSystem
 			return NameGenerator.Generate(rng.Next(0,99999999));
 		}
 		
-		public static EntityMesh GenerateWindmillBlades(Vector3 Position, Matrix4 TransMatrix){
+		public static ObjectMesh GenerateWindmillBlades(Vector3 Position, Matrix4 TransMatrix){
 			var scale = 1f;
 			var rng = new Random(World.Seed + 7654531 + (int) (Position.X+Position.Z) );
 			Matrix4 rotationMatrix = Matrix4.CreateRotationY( rng.NextFloat() * Mathf.Radian * 360 );
@@ -88,12 +88,12 @@ namespace Hedra.Engine.QuestSystem
 		    data.Color(AssetManager.ColorCode3, woodColor);
 		    
 
-		    EntityMesh mesh = EntityMesh.FromVertexData(data);
+		    ObjectMesh mesh = ObjectMesh.FromVertexData(data);
 			mesh.Position = Position + TransMatrix.ExtractTranslation();
 			return mesh;
 		}
 		
-		public static EntityMesh GenerateStableIcon(Vector3 Scale, Vector3 Position){
+		public static ObjectMesh GenerateStableIcon(Vector3 Scale, Vector3 Position){
 			var rng = new Random(World.Seed + 312412 + (int) (Position.X+Position.Z) );
 		    VertexData model = Stable0_Clone.Clone();
             model.Scale( Scale );
@@ -112,23 +112,23 @@ namespace Hedra.Engine.QuestSystem
 			model.Color(AssetManager.ColorCode1, woodColor);
 			model.GraduateColor(Vector3.UnitY);
 			
-			return EntityMesh.FromVertexData(model);
+			return ObjectMesh.FromVertexData(model);
 		}
 
-	    public static EntityMesh GenerateCementeryIcon(Vector3 Scale, Vector3 Position)
+	    public static ObjectMesh GenerateCementeryIcon(Vector3 Scale, Vector3 Position)
 	    {
 	        VertexData model = Cementery0_Clone.Clone();
 	        model.Scale(Scale);
 
 	        model.GraduateColor(Vector3.UnitY);
-	        return EntityMesh.FromVertexData(model);
+	        return ObjectMesh.FromVertexData(model);
 	    }
 
-        public static EntityMesh GenerateVillageHouseIcon(Vector3 Scale){
+        public static ObjectMesh GenerateVillageHouseIcon(Vector3 Scale){
 			var rng = new Random(World.Seed + 1231);
 			VertexData houseModel = AssetManager.PlyLoader("Assets/Env/Village/House1.ply", Scale);
 
-			return EntityMesh.FromVertexData(houseModel);
+			return ObjectMesh.FromVertexData(houseModel);
 		}
 		
 		public static VertexData GenerateLogHouse(Vector3 Position, List<CollisionShape> Shapes, Chunk UnderChunk){

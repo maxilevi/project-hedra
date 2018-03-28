@@ -102,6 +102,14 @@ namespace Hedra.Engine.Player
             return secondResult;
         }
 
+        public int IndexOf(Item Item)
+        {
+            var firstResult = _items.IndexOf(Item);
+            if (firstResult != null) return firstResult;
+            var secondResult = _mainItems.IndexOf(Item);
+            return secondResult;
+        }
+
         public bool AddItem(Item New)
         {
             var result = _items.AddItem(New);

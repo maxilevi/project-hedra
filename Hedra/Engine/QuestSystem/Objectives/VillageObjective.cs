@@ -29,7 +29,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
     public class VillageObjective : Objective
     {
 
-        private readonly EntityMesh _iconMesh;
+        private readonly ObjectMesh _iconMesh;
         private readonly float _scale = 3.5f;
         private int _seed;
         private bool _welcomeMsgShown;

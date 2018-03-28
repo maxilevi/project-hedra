@@ -24,14 +24,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		public override Vector3 SheathedPosition => new Vector3(1.8f,-1.0f,0.65f);
 	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
 	    public override bool IsMelee { get; protected set; } = false;
-        private EntityMesh Quiver;
-		private EntityMesh[] Arrow = new EntityMesh[1];//hacky stuff! so it's not affected by global enablers
+        private ObjectMesh Quiver;
+		private ObjectMesh[] Arrow = new ObjectMesh[1];//hacky stuff! so it's not affected by global enablers
 		private VertexData ArrowData;
 		public OnModifyArrowEvent BowModifiers;
 		
 		public Bow(VertexData Contents) : base(Contents){
-			Arrow[0] = EntityMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f, Vector3.UnitX * .35f, Vector3.Zero));
-			Quiver = EntityMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Quiver.ply", Vector3.One * new Vector3(2.2f, 2.8f, 2.2f) * 1.5f));
+			Arrow[0] = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f, Vector3.UnitX * .35f, Vector3.Zero));
+			Quiver = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Quiver.ply", Vector3.One * new Vector3(2.2f, 2.8f, 2.2f) * 1.5f));
 			Quiver.TargetPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
 			Quiver.LocalRotationPoint = new Vector3(0, 0, Quiver.TargetPosition.Z);
 			Quiver.TargetRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);

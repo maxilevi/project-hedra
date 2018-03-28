@@ -35,7 +35,7 @@ namespace Hedra.Engine.Player
 		public Vector3 Direction;
 		public float Speed = 1;
 		public float Lifetime = 10f;
-		public EntityMesh Mesh;
+		public ObjectMesh Mesh;
 		private Entity Parent;
 		private bool Hitted = false;
 		private List<ICollidable> Collisions = new List<ICollidable>();
@@ -44,7 +44,7 @@ namespace Hedra.Engine.Player
 		
 		
 		public Projectile(VertexData MeshData, Vector3 Origin, Vector3 Direction, Entity Parent){
-			this.Mesh = EntityMesh.FromVertexData(MeshData);
+			this.Mesh = ObjectMesh.FromVertexData(MeshData);
 			this.Direction = Direction;
 			this.Mesh.Position = Origin;
 			this.Parent = Parent;
@@ -64,10 +64,9 @@ namespace Hedra.Engine.Player
 				if(RotateOnX)
 					Mesh.Rotation += Vector3.UnitX * (float) Time.deltaTime * 90f;
 
-				if(MoveEventHandler != null)
-					MoveEventHandler.Invoke(this);
-				
-				#region Collision
+			    MoveEventHandler?.Invoke(this);
+
+			    #region Collision
 				if(Collide){
 					bool IsColliding = false;
 					Collisions.Clear();

@@ -21,13 +21,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public class Katar : Weapon
 	{
 	    public override bool IsMelee { get; protected set; } = true;
-        private EntityMesh SecondBlade;
+        private ObjectMesh SecondBlade;
 		
 		public Katar(VertexData Contents) : base(Contents)
 		{
 			VertexData BaseMesh = Contents.Clone();
 		    BaseMesh.Scale(Vector3.One * 1.75f);
-            this.SecondBlade = EntityMesh.FromVertexData(BaseMesh);
+            this.SecondBlade = ObjectMesh.FromVertexData(BaseMesh);
 
 		    AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBlade-Stance.dae");
 

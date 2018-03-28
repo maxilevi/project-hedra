@@ -41,7 +41,7 @@ namespace Hedra.Engine.ItemSystem
                 case EffectType.Poison: return Particle3D.PoisonColor * .5f;
                 case EffectType.Slow: return -Particle3D.AshColor * 2f;
                 case EffectType.Speed: return Vector4.One*1f;
-                default: return Vector4.One;
+                default: return Vector4.Zero;
             }
         }
     }

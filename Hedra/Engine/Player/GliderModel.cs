@@ -16,10 +16,10 @@ namespace Hedra.Engine.Player
 
 	public class GliderModel : Model
 	{
-		public EntityMesh BaseMesh;
+		public ObjectMesh BaseMesh;
 		
 		public GliderModel(){
-			BaseMesh = EntityMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Glider.ply", Vector3.One, Vector3.Zero, Vector3.Zero));
+			BaseMesh = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Glider.ply", Vector3.One, Vector3.Zero, Vector3.Zero));
 		}
 		
 		public override void Idle(){}

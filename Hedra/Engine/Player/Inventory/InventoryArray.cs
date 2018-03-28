@@ -75,6 +75,11 @@ namespace Hedra.Engine.Player.Inventory
             return _items.Contains(Item);
         }
 
+        public int IndexOf(Item Item)
+        {
+            return Array.IndexOf(_items, Item);
+        }
+
         public bool CanSetItem(int Index, Item Item)
         {
             return Item == null || _restrictions[Index] != null 

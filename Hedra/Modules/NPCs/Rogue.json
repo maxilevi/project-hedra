@@ -8,7 +8,7 @@
   "Speed": 1.85,
   "XP": 2.5,
   "AttackPower": 1.0, 
-  "AttackSpeed": 0.3,  
+  "AttackSpeed": 1.0,  
   "Weapons": [
     {
       "Tier": "Uncommon",

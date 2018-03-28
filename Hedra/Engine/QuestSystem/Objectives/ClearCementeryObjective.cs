@@ -18,7 +18,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
     public class ClearCementeryObjective : Objective
     {
 
-        private EntityMesh _cementeryModel;
+        private ObjectMesh _cementeryModel;
         private bool _arrivedCementery;
         private int _enemiesRemaining;
         private Graveyard _graveyard;

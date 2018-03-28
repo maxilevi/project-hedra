@@ -20,7 +20,7 @@ namespace Hedra.Engine.QuestSystem
 {
     public class HeadIconComponent : EntityComponent
     {
-        private EntityMesh _iconMesh;
+        private ObjectMesh _iconMesh;
         private readonly Humanoid _humanoidParent;
         private bool ParentIsHumanoid => _humanoidParent != null;
         public bool RotateIcon { get; set; } = true;
@@ -37,7 +37,7 @@ namespace Hedra.Engine.QuestSystem
                 _iconMesh?.Dispose();
                 var model = CacheManager.GetModel(IconType.Value).Clone();
                 model.Scale(Parent.Model.Scale);
-                _iconMesh = EntityMesh.FromVertexData(model);
+                _iconMesh = ObjectMesh.FromVertexData(model);
             }
             else
             {

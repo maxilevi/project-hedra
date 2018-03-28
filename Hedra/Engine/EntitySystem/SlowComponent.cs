@@ -18,7 +18,7 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public class SlowComponent : EntityComponent, IEffectComponent
     {
-        public int Chance { get; set; } = 25;
+        public int Chance { get; set; } = 15;
         public float TotalStrength { get; set; } = 60;
         public float BaseTime { get; set; } = 5;
 
@@ -29,41 +29,21 @@ namespace Hedra.Engine.EntitySystem
 		{
             Parent.OnAttacking += this.Apply;
 		}
-		
-		public override void Update(){
-			_cooldown -= Time.FrameTimeSeconds;
-		}
-		
-		public void Apply(Entity Victim, float Amount){
-			if(_cooldown > 0 || !_canSlow) return;
-			
-			bool shouldSlow = Utils.Rng.NextFloat() <= Chance * 0.01;
-			if(shouldSlow){
-				_slowTime =  5 + Utils.Rng.NextFloat() * 4 -2f;
-				_pTime = 0;
-				_oldSpeed = Victim.Speed;
-				Victim.Speed *= (TotalStrength/100);
-				this._victim = Victim;
-				
-				CoroutineManager.StartCoroutine(SlowCoroutine);
-			}
-		}
-		
-		private float _slowTime = 0;
-		private float _pTime = 0;
-		private float _oldSpeed = 0;
-		private Entity _victim;
-		public IEnumerator SlowCoroutine(){
-			_victim.Model.BaseTint = new Vector4(2,2,1,1) * .7f;
-			this._canSlow = false;
-			while(_slowTime > _pTime && !_victim.IsDead){
-				_pTime += Time.FrameTimeSeconds;
-				yield return null;
-			}
-			_victim.Speed = _oldSpeed; 
-			_victim.Model.BaseTint = Vector4.Zero;
-			this._canSlow = true;
-			this._cooldown = 4;
-		}
-	}
+
+        public override void Update() { }
+
+        public void Apply(Entity Victim, float Amount)
+        {
+            if (Utils.Rng.NextFloat() <= Chance * 0.01)
+            {
+                if (Victim.SearchComponent<SlowingComponent>() == null)
+                    Victim.AddComponent(new SlowingComponent(Victim, Parent, BaseTime + Utils.Rng.NextFloat() * 4 - 2f, TotalStrength));
+            }
+        }
+
+        public override void Dispose()
+        {
+            Parent.OnAttacking -= this.Apply;
+        }
+    }
 }

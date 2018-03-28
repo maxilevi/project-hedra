@@ -287,7 +287,7 @@ namespace Hedra.Engine.EntitySystem
 		public class AttackAnimation{
 			public Entity Parent, Target;
 			public bool Attack1, Attack2, Damaged;
-			public EntityMesh LeftHand, RightHand, LeftFoot, RightFoot, Head, Body;
+			public ObjectMesh LeftHand, RightHand, LeftFoot, RightFoot, Head, Body;
 			public Vector3 PrevLegPoint;
 			public float Damage, CoolDown, HeadUp = 1.1f;
 		}
@@ -295,7 +295,7 @@ namespace Hedra.Engine.EntitySystem
 		public class SpiderAttackAnimation{
 			public Entity Parent, Target;
 			public bool Attack1, Attack2, Damaged;
-			public EntityMesh LeftHand, RightHand, LeftFoot, RightFoot, Head, Body, MiddleRight, MiddleLeft;
+			public ObjectMesh LeftHand, RightHand, LeftFoot, RightFoot, Head, Body, MiddleRight, MiddleLeft;
 			public float Damage, CoolDown;
 		}
 		
