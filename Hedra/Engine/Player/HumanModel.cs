@@ -169,19 +169,6 @@ namespace Hedra.Engine.Player
             this.Human.HitBox *= Scalar;
         }
 		
-		public bool DisableWeapon { 
-			get{
-				var player = Human as LocalPlayer;				
-				return (player.Skills.W1 as WeaponAttack).DisableWeapon && (player.Skills.W2 as WeaponAttack).DisableWeapon; 
-			}
-			set{
-				var Player = Human as LocalPlayer;
-				(Player.Skills.W1 as WeaponAttack).DisableWeapon = value;
-				(Player.Skills.W2 as WeaponAttack).DisableWeapon = value;
-				LeftWeapon.MainMesh.Enabled = !value;				
-			}
-		}
-		
 		public void UpdateModel(){}
 		
 		public void SetLamp(bool Active){
@@ -246,39 +233,9 @@ namespace Hedra.Engine.Player
 			
 			this.LeftWeapon.Scale = Model.Scale;
 			this.LeftWeapon.Alpha = Model.Alpha;
-			
-			if(Human is LocalPlayer){
-				LocalPlayer Player = Human as LocalPlayer;
-				if(Weapon is Bow){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Shoot);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Tripleshot);
-				}
-				
-				if(Weapon is Knife){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.KnifeSlash);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.KnifeLunge);
-				}
-				
-				if(Weapon is DoubleBlades){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Blade1);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Blade2);
-				}
-				
-				if(Weapon is Katar){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Katar1);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Katar2);
-				}
-				
-				if(Weapon is Claw){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Claw1);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Claw2);
-				}
-				
-				if(Weapon is Axe || Weapon is Hammer){
-					(Player.Skills.W1 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Swing);
-					(Player.Skills.W2 as WeaponAttack)?.SetType(WeaponAttack.AttackType.Smash);
-				}
-			}
+
+		    var player = Human as LocalPlayer;
+		    player?.AbilityBar.SetAttackType(this.LeftWeapon);
 		}
 		
 		public override void Run(){

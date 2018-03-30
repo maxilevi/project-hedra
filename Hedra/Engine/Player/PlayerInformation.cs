@@ -30,8 +30,8 @@ namespace Hedra.Engine.Player
         public Vector3 BlockPosition;
         public Vector3 Rotation;
         public Vector3 TargetPosition;
-        public byte[] SkillsData;
-        public byte[] SkillIDs;
+        public byte[] AbilityTreeArray;
+        public byte[] AbilityBarArray;
         public Class ClassType;
         public float AddonHealth;
         public float RandomFactor;
@@ -46,8 +46,8 @@ namespace Hedra.Engine.Player
             this.SpeedMultiplier = 1;
             this.BlockPosition = GameSettings.SpawnPoint.ToVector3();
             this._items = new Dictionary<int, Item>();
-            this.SkillsData = new byte[0];
-            this.SkillIDs = new byte[4];
+            this.AbilityTreeArray = new byte[0];
+            this.AbilityBarArray = new byte[4];
         }
 
         public void AddItem(int Index, Item ItemSpecification)

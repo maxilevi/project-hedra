@@ -55,17 +55,17 @@ namespace Hedra.Engine.Player
             _mainItems = new InventoryArray(MainSpaces);
             _restrictions = new RestrictionsInterface(_mainItems);
             _stateManager = new InventoryStateManager(_player);
-            _inventoryBackground = new InventoryBackground(Vector2.UnitY * .55f + Vector2.UnitY * .1f);
-            _itemsArrayInterface = new InventoryArrayInterface(_items, 0, _items.Length, 10)
+            _inventoryBackground = new InventoryBackground(Vector2.UnitY * .65f);
+            _itemsArrayInterface = new InventoryArrayInterface(_items, 0, _items.Length, 10, Vector2.One)
             {
                 Position = Vector2.UnitY * -.65f
             };
-            _leftMainItemsArrayInterface = new InventoryArrayInterface(_mainItems, 0, 4, 1, 
+            _leftMainItemsArrayInterface = new InventoryArrayInterface(_mainItems, 0, 4, 1, Vector2.One,
                 new [] { "Assets/UI/InventorySlotBoots.png", "Assets/UI/InventorySlotPants.png", "Assets/UI/InventorySlotChest.png", "Assets/UI/InventorySlotHelmet.png" })
             {
                 Position = Vector2.UnitY * .05f + Vector2.UnitX * -.25f + Vector2.UnitY * .05f
             };
-            _rightMainItemsArrayInterface = new InventoryArrayInterface(_mainItems, 4, 4, 1,
+            _rightMainItemsArrayInterface = new InventoryArrayInterface(_mainItems, 4, 4, 1, Vector2.One,
                 new[] { "Assets/UI/InventorySlotPet.png", "Assets/UI/InventorySlotGlider.png", "Assets/UI/InventorySlotRing.png", "Assets/UI/InventorySlotWeapon.png" })
             {
                 Position = Vector2.UnitY * .05f + Vector2.UnitX * +.25f + Vector2.UnitY * .05f
@@ -74,6 +74,8 @@ namespace Hedra.Engine.Player
             {
                 if (Index+InventorySpaces == WeaponHolder)
                     _player.Model.SetWeapon( New == null ? Weapon.Empty : New.Weapon);
+                if (Index + InventorySpaces == RingHolder)
+                    _player.Ring = New;
             };
             var itemInfoInterface = new InventoryInterfaceItemInfo(_itemsArrayInterface.Renderer)
             {
@@ -105,7 +107,7 @@ namespace Hedra.Engine.Player
         public int IndexOf(Item Item)
         {
             var firstResult = _items.IndexOf(Item);
-            if (firstResult != null) return firstResult;
+            if (firstResult != -1) return firstResult;
             var secondResult = _mainItems.IndexOf(Item);
             return secondResult;
         }

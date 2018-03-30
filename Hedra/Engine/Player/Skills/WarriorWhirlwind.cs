@@ -52,8 +52,9 @@ namespace Hedra.Engine.Player
 			};
 		}
 
-		public override bool MeetsRequirements(SkillsBar Bar, int CastingAbilityCount)
-		{	bool Met = !Player.Model.DisableWeapon;
+		public override bool MeetsRequirements(AbilityBarSystem.AbilityBar Bar, int CastingAbilityCount)
+		{
+            bool Met = !Player.AbilityBar.DisableAttack;
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && Met;
 		}
 		

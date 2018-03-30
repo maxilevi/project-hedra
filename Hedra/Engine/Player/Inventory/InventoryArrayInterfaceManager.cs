@@ -248,12 +248,12 @@ namespace Hedra.Engine.Player.Inventory
             var array = this.ArrayByButton(button);
             var item = array[itemIndex];
 
-            _itemInfoInterface.Show(item);
+            _itemInfoInterface?.Show(item);
         }
 
         private void HoverExit(object Sender, MouseEventArgs EventArgs)
         {
-            _itemInfoInterface.Hide();
+            _itemInfoInterface?.Hide();
         }
 
         public bool Enabled
@@ -262,7 +262,7 @@ namespace Hedra.Engine.Player.Inventory
             set
             {
                 _enabled = value;
-                _itemInfoInterface.Enabled = value;
+                if(_itemInfoInterface != null) _itemInfoInterface.Enabled = value;
                 if (_enabled)
                     _cancelButton.Enable();
                 else

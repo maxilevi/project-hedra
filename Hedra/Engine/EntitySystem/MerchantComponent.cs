@@ -29,9 +29,8 @@ namespace Hedra.Engine.EntitySystem
         public Dictionary<int, Item> Items { get; private set; }
 	    private readonly Dictionary<int, Item> _originalItems;
 
-        public MerchantComponent(Entity Parent, bool TravellingMerchant) : base(Parent){
-            if( !(Parent is Humanoid) ) throw new ArgumentException("The merchant component can only be used with Humanoids.");
-            this.Parent = base.Parent as Humanoid;
+        public MerchantComponent(Humanoid Parent, bool TravellingMerchant) : base(Parent){
+            this.Parent = Parent;
 
             var rng = new Random(World.Seed + 82823 + Utils.Rng.Next(-9999999, 9999999));
 		    var items = new []
@@ -79,7 +78,7 @@ namespace Hedra.Engine.EntitySystem
         	}
 
 		    var canTrade = player.CanInteract && !player.IsDead && !GameSettings.Paused &&
-		                   !player.Inventory.Show && !player.SkillSystem.Show;
+		                   !player.Inventory.Show && !player.AbilityTree.Show;
 		    Func<bool> inRadiusFunc = () => (player.Position - Parent.Position).LengthSquared < TradeRadius * TradeRadius &&
 		                       !player.Trade.IsTrading;
 

@@ -55,9 +55,14 @@ namespace Hedra.Engine.ItemSystem
 	    {
 	        var equipmentType = (EquipmentType) Enum.Parse(typeof(EquipmentType), Item.EquipmentType);
             if (WeaponEquipmentTypes.Contains(equipmentType))
-	        {
-	            Item.SetAttribute(CommonAttributes.Damage, Item.GetAttribute<float>(CommonAttributes.Damage) * (1.0f + (Settings.Rng.NextFloat() * .3f - .15f) ));
-	            Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed) * (1.0f + (Settings.Rng.NextFloat() * .3f - .15f)));
+            {
+                var originalTier = Item.Tier;
+                Item = RandomizeTier(Settings, Item);
+                var tierChanged = originalTier != Item.Tier;
+                Item.SetAttribute(CommonAttributes.Damage, Item.GetAttribute<float>(CommonAttributes.Damage)
+                    * (1.0f + (Settings.Rng.NextFloat() * (.3f + (tierChanged ? .1f * (int) Item.Tier : .0f) ) - .15f)));
+	            Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed)
+                    * (1.0f + (Settings.Rng.NextFloat() * (.3f + +(tierChanged ? .1f * (int)Item.Tier : .0f)) - .15f)));
 	            if (Settings.Rng.Next(0, 10) == 1)
 	            {
 	                Item.SetAttribute(CommonAttributes.EffectType, EffectTypes[Settings.Rng.Next(0, EffectTypes.Length)].ToString());
@@ -74,6 +79,33 @@ namespace Hedra.Engine.ItemSystem
 	            Item.SetAttribute(CommonAttributes.Health, Item.GetAttribute<float>(CommonAttributes.Health) * (1.0f + (Settings.Rng.NextFloat() * .3f - .15f)));
             }
             return Item;
+	    }
+
+	    private static Item RandomizeTier(ItemPoolSettings Settings, Item Item)
+	    {
+	        var newTier = Item.Tier;
+	        for (var i = (int)ItemTier.Misc - 1; i > -1; i--)
+	        {
+	            if (i < (int)Item.Tier) break;
+	            var shouldConvert = true;
+	            for (var k = 0; k < i; k++)
+	            {
+	                shouldConvert = Settings.Rng.NextBool();
+	                if (shouldConvert)
+	                {
+	                    int a = 0;
+	                }
+	                if(!shouldConvert) break;
+	            }
+	            if (shouldConvert)
+	            {
+	                newTier = (ItemTier)i;
+                    break;
+	            }
+	        }
+	        if (newTier < Item.Tier) throw new Exception("Fix this");
+	        Item.Tier = newTier;
+	        return Item;
 	    }
 
 	    public static Item Grab(string Name)

@@ -181,7 +181,7 @@ namespace Hedra.Engine.Rendering.UI
 				this.GamePanel.Compass.TextureElement.Angle = _player.Model.Model.Rotation.Y;
 				
 				if(this.ShowHelp && this.GamePanel.Enabled){
-					_player.SkillSystem.Show = false;
+					_player.AbilityTree.Show = false;
 					_player.QuestLog.Show = false;
 					GamePanel.Help.Enable();
 				}else{
@@ -346,7 +346,7 @@ namespace Hedra.Engine.Rendering.UI
 			OptionsMenu.Disable();
 			ChrChooser.Disable();
 			if(_player?.Inventory != null) _player.Inventory.Show = false;
-			_player.SkillSystem.Show = false;
+			_player.AbilityTree.Show = false;
 			GamePanel.Disable();
 			ChrCreator.Disable();
 			ConnectPanel.Disable();

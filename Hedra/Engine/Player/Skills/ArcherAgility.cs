@@ -38,7 +38,7 @@ namespace Hedra.Engine.Player
 		public override void Update()
 		{
 			if(base.Level > 10)
-				Player.SkillSystem.SetPoints(this.GetType(), 10);
+				Player.AbilityTree.SetPoints(this.GetType(), 10);
 			
 			Player.DodgeCost = 25 + StaminaFormula();
 		

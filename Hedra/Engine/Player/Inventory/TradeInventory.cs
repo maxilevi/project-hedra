@@ -43,11 +43,11 @@ namespace Hedra.Engine.Player.Inventory
             _merchantItems = new InventoryArray(MerchantSpaces);
             _playerItems = new InventoryArray(PlayerInventory.InventorySpaces);
             _stateManager = new InventoryStateManager(_player);
-            _playerItemsInterface = new InventoryArrayInterface(_playerItems, 0, _playerItems.Length, 5)
+            _playerItemsInterface = new InventoryArrayInterface(_playerItems, 0, _playerItems.Length, 5, Vector2.One)
             {
                 Position = Vector2.UnitX * .5f + Vector2.UnitY * -.1f
             };
-            _merchantItemsInterface = new InventoryArrayInterface(_merchantItems, 0, _merchantItems.Length, 5)
+            _merchantItemsInterface = new InventoryArrayInterface(_merchantItems, 0, _merchantItems.Length, 5, Vector2.One)
             {
                 Position = Vector2.UnitX * -.5f + Vector2.UnitY * -.1f
             };

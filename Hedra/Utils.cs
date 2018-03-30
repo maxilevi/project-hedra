@@ -220,7 +220,7 @@ namespace Hedra
         
         
         public static  bool NextBool(this Random r){
-			return (r.Next(0,2) == 1) ? true : false;
+			return r.Next(0,2) == 1;
 		}
         
         public static Type[] GetTypesInNamespace(Assembly assembly, string nameSpace)

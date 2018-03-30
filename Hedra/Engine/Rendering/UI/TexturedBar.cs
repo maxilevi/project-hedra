@@ -74,8 +74,9 @@ namespace Hedra.Engine.Rendering.UI
 			GL.Disable(EnableCap.CullFace);
 			GL.Disable(EnableCap.DepthTest);
 			GL.Enable(EnableCap.Blend);
-			
-			GL.BindTexture(TextureTarget.Texture2D, _textureId);
+
+		    GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, _textureId);
 			
 			GL.Uniform2(Shader.ScaleUniform, new Vector2(_barSize * Scale.X, Scale.Y) );//Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) + Mathf.DivideVector(TargetResolution * new Vector2(0.015f,0.015f), new Vector2(GameSettings.Width, GameSettings.Height)));
 			GL.Uniform2(Shader.PositionUniform, Position - new Vector2(Scale.X * (1-_barSize), 0f));

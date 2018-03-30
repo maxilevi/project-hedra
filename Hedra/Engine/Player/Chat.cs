@@ -57,12 +57,13 @@ namespace Hedra.Engine.Player
 		
 		public void PushText(){
 
-			if(CommandLine.Text.Length >= 1 && CommandLine.Text[0] == '/'){
-				if(!CommandManager.ProcessCommand(CommandLine.Text, Player))
-					this.AddLine("Unkown command.");
-				else
-					SoundManager.PlaySound(SoundType.NotificationSound, Player.Position, false, 1f, 1f);
-				LastInput = CommandLine.Text;
+			if(CommandLine.Text.Length >= 1 && CommandLine.Text[0] == '/')
+			{
+			    string response;
+                if (CommandManager.ProcessCommand(CommandLine.Text, Player, out response))
+					SoundManager.PlaySound(SoundType.NotificationSound, Player.Position);
+			    this.AddLine(response);
+                LastInput = CommandLine.Text;
 			}else{
 				if(CommandLine.Text != ""){
 					//It's normal text
@@ -112,7 +113,7 @@ namespace Hedra.Engine.Player
 		}
 		
 		public void Focus(){
-			if(Player.SkillSystem.Show || Player.Inventory.Show || !Player.UI.GamePanel.Enabled || Player.Trade.Show) return;
+			if(Player.AbilityTree.Show || Player.Inventory.Show || !Player.UI.GamePanel.Enabled || Player.Trade.Show) return;
 			Player.CanInteract = false;
 			Player.View.Check = false;
 			Player.View.LockMouse = false;

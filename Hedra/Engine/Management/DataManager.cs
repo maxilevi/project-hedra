@@ -60,11 +60,11 @@ namespace Hedra.Engine.Management
 					
 					Bw.Write(Player.WorldSeed);			
 					
-					Bw.Write(Player.SkillsData.Length);
-					Bw.Write(Player.SkillsData);
+					Bw.Write(Player.AbilityTreeArray.Length);
+					Bw.Write(Player.AbilityTreeArray);
 					
-					Bw.Write(Player.SkillIDs.Length);
-					Bw.Write(Player.SkillIDs);
+					Bw.Write(Player.AbilityBarArray.Length);
+					Bw.Write(Player.AbilityBarArray);
 					
 					Bw.Write(Player.TargetPosition);
 					
@@ -100,8 +100,8 @@ namespace Hedra.Engine.Management
 		        Rotation = Player.Rotation,
 		        BlockPosition = connected ? Scenes.SceneManager.Game.CurrentInformation.BlockPosition : Player.BlockPosition,
 		        AddonHealth = Player.AddonHealth,
-		        SkillsData = Player.SkillSystem.Save(),
-		        SkillIDs = Player.Skills.Save(),
+		        AbilityTreeArray = Player.AbilityTree.ToArray(),
+		        AbilityBarArray = Player.AbilityBar.ToArray(),
 		        TargetPosition = Player.Physics.TargetPosition,
 		        Daytime = connected ? Scenes.SceneManager.Game.CurrentInformation.Daytime : Enviroment.SkyManager.DayTime,
 		        ClassType = Player.ClassType,
@@ -144,8 +144,8 @@ namespace Hedra.Engine.Management
 				information.Level = Br.ReadInt32();		
 				information.Mana = Br.ReadSingle();
 				information.WorldSeed = Br.ReadInt32();
-			    information.SkillsData = Br.ReadBytes(Br.ReadInt32());
-				information.SkillIDs = Br.ReadBytes(Br.ReadInt32());
+			    information.AbilityTreeArray = Br.ReadBytes(Br.ReadInt32());
+				information.AbilityBarArray = Br.ReadBytes(Br.ReadInt32());
 				information.TargetPosition = Br.ReadVector3();
 				information.Daytime = Br.ReadSingle();
 				information.ClassType = (Class) Br.ReadInt32();

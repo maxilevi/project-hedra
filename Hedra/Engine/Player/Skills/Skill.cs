@@ -64,9 +64,9 @@ namespace Hedra.Engine.Player
 			UpdateManager.Add(this);
 		}
 		
-		public virtual bool MeetsRequirements(SkillsBar Bar, int CastingAbilityCount)
+		public virtual bool MeetsRequirements(AbilityBarSystem.AbilityBar Bar, int CastingAbilityCount)
 		{
-		    if (Cooldown < 0 && (Bar.Player.Mana - ManaCost) > 0 && CastingAbilityCount == 0
+		    if (Cooldown < 0 && (LocalPlayer.Instance.Mana - ManaCost) > 0 && CastingAbilityCount == 0
 		        && this.Level > 0 && Active && !Player.IsEating)
 		    {
 		        if (Player.IsRiding || !Player.IsRiding) return true;

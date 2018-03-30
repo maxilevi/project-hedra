@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Globalization;
 using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
@@ -22,9 +23,10 @@ namespace Hedra.Engine.Management
 	public static class CommandManager
 	{
 		
-		public static bool ProcessCommand(string Command, Entity Caster){
-			try{
-				//remove the /
+		public static bool ProcessCommand(string Command, Entity Caster, out string Result){
+			try
+			{
+			    Result = string.Empty;
 				Command = Command.Remove(0,1);
 				string[] Parts = Command.Split(' ');
 				if(Parts[0] == "tp"){
@@ -103,6 +105,11 @@ namespace Hedra.Engine.Management
 			        return true;
 			    }
 				if(Parts[0] == "get"){
+				    if (Parts[1] == "attackspeed")
+				    {
+				        Result = LocalPlayer.Instance.AttackSpeed.ToString(CultureInfo.InvariantCulture);
+				        return true;
+				    }
 				    if (Parts[1] == "item")
 				    {
 				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(Parts[2]));
@@ -149,31 +156,7 @@ namespace Hedra.Engine.Management
                         item.SetAttribute(CommonAttributes.Amount, int.Parse(Parts[2]));
                         LocalPlayer.Instance.Inventory.AddItem(item);
                     }
-                    /*if(Parts[1] == "mount"){
-						if(Parts[2] == "horse")
-							LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Mount, new ItemInfo(Material.HorseMount, 100)));
-						else if(Parts[2] == "wolf")
-							LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Mount, new ItemInfo(Material.WolfMount, 100)));
-					}else if(Parts[1] == "axe")
-						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Axe, ItemInfo.Random(ItemType.Axe)));
-					else if(Parts[1] == "hammer")
-						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Hammer, ItemInfo.Random(ItemType.Hammer)));
-					else if(Parts[1] == "food")
-						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Food, ItemInfo.Berry(1)));
-					else if(Parts[1] == "knife")
-						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Knife, ItemInfo.Random(ItemType.Knife)));
-					else if(Parts[1] == "katar")
-						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Katar, ItemInfo.Random(ItemType.Katar)));
-					else if(Parts[1] == "claw")
-						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Claw, ItemInfo.Random(ItemType.Claw)));
-					else if(Parts[1] == "blade")
-						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.DoubleBlades, ItemInfo.Random(ItemType.DoubleBlades)));
-					else if(Parts[1] == "glider")
-						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Glider, ItemInfo.Random(ItemType.Glider)));
-					else if(Parts[1] == "coin")
-						LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Coin, ItemInfo.Gold(5)) );
-					else if (Parts[1] == "rapier")
-					    LocalPlayer.Instance.Inventory.AddItem(new InventoryItem(ItemType.Sword, ItemInfo.Random(ItemType.Sword)));*/
+				    Result = $"Giving item {Parts[1].ToUpperInvariant()} to {Caster.Name}";
                     return true;
 				}
 				if(Parts[0] == "time"){
@@ -241,10 +224,12 @@ namespace Hedra.Engine.Management
                     World.QuestManager.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
 					return true;
 				}
+			    Result = "Unknown command.";
                 Log.WriteLine("Unknown command.");
 			}catch(Exception e){
 				Log.WriteLine(e.ToString());
-				return false;
+			    Result = "Unknown command.";
+                return false;
 			}
 			return false;
 		}

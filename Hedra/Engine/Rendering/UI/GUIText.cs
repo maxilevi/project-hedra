@@ -72,7 +72,7 @@ namespace Hedra.Engine.Rendering.UI
                 }
             }
             
-            var previousState = UIText?.IsEnabled ?? false;
+            var previousState = UIText?.Enabled ?? false;
             DrawManager.UIRenderer.Remove(UIText);
             UIText?.Dispose();
 
@@ -84,7 +84,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 UIText.Position -= UIText.Scale;
             }
-            UIText.IsEnabled = previousState;
+            UIText.Enabled = previousState;
         }
 
         private void CalculateTextSize(string FullText)
@@ -157,12 +157,12 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Enable()
         {
-            UIText.IsEnabled = true;
+            UIText.Enabled = true;
         }
 
         public void Disable()
         {
-            UIText.IsEnabled = false;
+            UIText.Enabled = false;
         }
 
         ~GUIText()

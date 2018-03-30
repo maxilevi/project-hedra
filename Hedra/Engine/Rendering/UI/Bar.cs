@@ -95,15 +95,12 @@ namespace Hedra.Engine.Rendering.UI
 
             if (UpdateTextRatio)
                 Text.Text = (int) _value() + " / " + (int) _max();
-            Shader.Bind();
-            GL.ActiveTexture(TextureUnit.Texture0);
+            Shader.Bind();          
             GL.Disable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
 
-            if (CurvedBorders)
-                GL.BindTexture(TextureTarget.Texture2D, BarBlueprint);
-            else
-                GL.BindTexture(TextureTarget.Texture2D, RectangleBlueprint);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, CurvedBorders ? BarBlueprint : RectangleBlueprint);
 
             GL.Uniform2(Shader.ScaleUniform,
                 Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) +

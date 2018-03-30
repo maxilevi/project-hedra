@@ -48,7 +48,7 @@ namespace Hedra.Engine.Player
 			};
 		}
 		
-		public override bool MeetsRequirements(SkillsBar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(AbilityBarSystem.AbilityBar Bar, int CastingAbilityCount)
 		{
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsMoving;
 		}
@@ -74,14 +74,14 @@ namespace Hedra.Engine.Player
 		}
 		
 		private IEnumerator ThrowWeapon(){
-			Player.Model.DisableWeapon = true;
+			Player.AbilityBar.DisableAttack = true;
 			float TimePassed = 0;
 			this.ShootWeapon(Player, Player.View.CrossDirection.NormalizedFast(), 4);
 			while(TimePassed < 5){
 				TimePassed += (float) Engine.Time.FrameTimeSeconds;
 				yield return null;
 			}
-			Player.Model.DisableWeapon = false;
+			Player.AbilityBar.DisableAttack = false;
 		}
 		
 		public override void KeyDown(){

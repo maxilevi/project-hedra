@@ -12,6 +12,9 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryArrayInterface
     {
+        public const string DefaultIcon = "Assets/UI/InventorySlot.png";
+        public static uint DefaultId { get; } = Graphics2D.LoadFromAssets(DefaultIcon);
+        public static Vector2 DefaultSize { get; } = Graphics2D.SizeFromAssets(DefaultIcon);
         private readonly InventoryArray _array;
         private readonly InventoryItemRenderer _renderer;
         private readonly Texture[] _inventoryTextures;
@@ -25,7 +28,8 @@ namespace Hedra.Engine.Player.Inventory
         private Vector2 _scale = Vector2.One;
         private bool _enabled;
 
-        public InventoryArrayInterface(InventoryArray Array, int Offset, int Length, int SlotsPerLine, string[] CustomIcons = null)
+        public InventoryArrayInterface(InventoryArray Array, int Offset, int Length, int SlotsPerLine,
+            Vector2 Spacing, string[] CustomIcons = null)
         {
             this._array = Array;
             this._length = Length;
@@ -35,7 +39,7 @@ namespace Hedra.Engine.Player.Inventory
             this._inventoryButtons = new RenderableButton[_length];
             this._inventoryButtonsText = new RenderableText[_length];
             this._elementsPanel = new Panel();
-            var size = Graphics2D.SizeFromAssets("Assets/UI/InventorySlot.png");
+            var size = InventoryArrayInterface.DefaultSize;
             var offset = new Vector2(size.X, size.Y);
             var wholeSize = new Vector2(
                 size.X * (_length - 1 - (_length - 1) / SlotsPerLine * SlotsPerLine),
@@ -46,10 +50,12 @@ namespace Hedra.Engine.Player.Inventory
                 var k = i;
                 var j = i / SlotsPerLine;
                 var scale = Vector2.One * .5f;
-                var position = Vector2.Zero + new Vector2((i - j * SlotsPerLine) * offset.X, j * offset.Y) -
+                var position = Vector2.Zero + new Vector2((i - j * SlotsPerLine) * offset.X, j * offset.Y) * Spacing -
                                wholeSize * .5f;
+                var customId = CustomIcons != null ? Graphics2D.LoadFromAssets(CustomIcons[i]) : GUIRenderer.TransparentTexture;
+                var customScale = CustomIcons != null ? Graphics2D.SizeFromAssets(CustomIcons[i]) : InventoryArrayInterface.DefaultSize;
 
-                _inventoryTextures[i] = new Texture(CustomIcons != null ? CustomIcons[i] : "Assets/UI/InventorySlot.png", position, scale);
+                _inventoryTextures[i] = new Texture(CustomIcons != null ? customId : DefaultId, position, customScale * scale);
                 _inventoryButtonsText[i] = new RenderableText(string.Empty, position + new Vector2(size.X, -size.Y) * .25f, Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 10, FontStyle.Bold));
                 _inventoryButtons[i] = new RenderableButton(position, size * scale * .8f, GUIRenderer.TransparentTexture);
                 _inventoryButtons[i].Texture.IdPointer = () => _renderer.Draw(k);
@@ -63,7 +69,7 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        public void UpdateView()
+        public virtual void UpdateView()
         {
             for (var i = 0; i < _length; i++)
             {
@@ -82,8 +88,10 @@ namespace Hedra.Engine.Player.Inventory
         public InventoryItemRenderer Renderer => _renderer;
         public InventoryArray Array => _array;
         public RenderableButton[] Buttons => _inventoryButtons;
+        public RenderableText[] ButtonsText => _inventoryButtonsText;
+        public Texture[] Textures => _inventoryTextures;
 
-        public bool Enabled
+        public virtual bool Enabled
         {
             get { return _enabled; }
             set
@@ -94,7 +102,7 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        public Vector2 Scale
+        public virtual Vector2 Scale
         {
             get { return _scale; }
             set
@@ -122,7 +130,7 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        public Vector2 IndividualScale
+        public virtual Vector2 IndividualScale
         {
             get { return _individualScale; }
             set
@@ -138,7 +146,7 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        public Vector2 Position
+        public virtual Vector2 Position
         {
             get { return _position; }
             set

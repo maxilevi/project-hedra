@@ -56,8 +56,14 @@ namespace Hedra.Engine.Rendering.UI
 			get{ return UIText.TextColor; }
 			set{ UIText.TextColor = value;}
 		}
-		
-		public void Enable(){
+
+	    public Font TextFont
+	    {
+	        get { return UIText.TextFont; }
+	        set { UIText.TextFont = value; }
+	    }
+
+        public void Enable(){
 			UIText.Enable();
 		}
 		

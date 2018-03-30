@@ -17,26 +17,30 @@ namespace Hedra.Engine.Rendering.UI
 	/// </summary>
 	public class GUITexture : IDisposable{
 		
-		public bool Flipped, Fxaa;
-		public uint TextureId;
-		public float Opacity = 1;
-		public uint BackGroundId = 0;
-		public Vector2 Position;
-		public Vector2 Scale;
-		public Vector4 Color = new Vector4(0,0,0,0);
-		public bool IsEnabled{get; set;}
-		public Vector4 Tint = new Vector4(1,1,1,1);
-		public bool Grayscale = false;
-		public float Angle;
-		
-		public GUITexture(uint Id, Vector2 Scale, Vector2 Pos){
+		public bool Flipped { get; set; }
+        public bool Fxaa { get; set; }
+        public uint TextureId { get; set; }
+        public float Opacity { get; set; }  = 1;
+		public uint BackGroundId { get; set; }
+        public Vector2 Position { get; set; }
+        public Vector2 Scale { get; set; }
+        public Vector4 Color { get; set; }
+		public bool Enabled {get; set;}
+		public Vector4 Tint { get; set; } = new Vector4(1,1,1,1);
+		public bool Grayscale { get; set; }
+		public float Angle { get; set; }
+	    public uint MaskId { get; set; }
+        public bool UseMask => MaskId != 0;
+        public Func<uint> IdPointer { get; set; }
+
+        public GUITexture(uint Id, Vector2 Scale, Vector2 Pos){
 			this.TextureId = Id;
 			this.Position = Pos;
 			this.Scale = Scale;
 			
 			DisposeManager.Add(this);
 		}
-		public Func<uint> IdPointer;
+
 		public uint Id => IdPointer?.Invoke() ?? TextureId;
 
 	    public Matrix3 RotationMatrix => Matrix3.CreateFromAxisAngle(Vector3.UnitZ, Angle * Mathf.Radian);
@@ -44,13 +48,14 @@ namespace Hedra.Engine.Rendering.UI
 	    public void Dispose()
 	    {
 	        Graphics2D.Textures.Remove(TextureId);
-			GL.DeleteTextures(1, ref TextureId);
-		}
+	        var id = TextureId;
+			GL.DeleteTextures(1, ref id);
+	        TextureId = id;
+	    }
 
 	    ~GUITexture()
 	    {
 	        ThreadManager.ExecuteOnMainThread( this.Dispose );
 	    }
-
     }
 }

@@ -9,12 +9,12 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryBackground
     {
-        private readonly GUIText _name;
-        private readonly GUIText _level;
-        private readonly GUIText _health;
-        private readonly GUIText _mana;
-        private readonly GUIText _xp;
-        private readonly GUIText _gold;
+        protected readonly GUIText Name;
+        protected readonly GUIText Level;
+        protected readonly GUIText TopLeftText;
+        protected readonly GUIText BottomLeftText;
+        protected readonly GUIText TopRightText;
+        protected readonly GUIText BottomRightText;
         private readonly Texture _texture;
         private readonly Panel _panel;
         private bool _enabled;
@@ -22,39 +22,39 @@ namespace Hedra.Engine.Player.Inventory
         public InventoryBackground(Vector2 Position)
         {
             _texture = new Texture("Assets/UI/InventoryBackground.png", Vector2.Zero, Vector2.One * .55f);
-            _name = new GUIText(string.Empty, Position + Vector2.UnitY * .075f,
+            Name = new GUIText(string.Empty, Position + Vector2.UnitY * .075f,
                 Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 24, FontStyle.Bold));
-            _level = new GUIText(string.Empty, Position + Vector2.UnitY * -.05f,
+            Level = new GUIText(string.Empty, Position + Vector2.UnitY * -.05f,
                 Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 16));
-            _health = new GUIText(string.Empty, Position + Vector2.UnitX * -.2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f,
+            TopLeftText = new GUIText(string.Empty, Position + Vector2.UnitX * -.2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f,
                 Color.Red, FontCache.Get(AssetManager.Fonts.Families[0], 14, FontStyle.Bold));
-            _mana = new GUIText(string.Empty, Position + Vector2.UnitX * -.2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f,
+            BottomLeftText = new GUIText(string.Empty, Position + Vector2.UnitX * -.2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f,
                 Color.DodgerBlue, FontCache.Get(UserInterface.Fonts.Families[0], 10));
-            _xp = new GUIText(string.Empty, Position + Vector2.UnitX * .2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f,
+            TopRightText = new GUIText(string.Empty, Position + Vector2.UnitX * .2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f,
                 Color.DarkViolet, FontCache.Get(AssetManager.Fonts.Families[0], 14, FontStyle.Bold));
-            _gold = new GUIText(string.Empty, Position + Vector2.UnitX * .2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f,
+            BottomRightText = new GUIText(string.Empty, Position + Vector2.UnitX * .2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f,
                 Color.Gold, FontCache.Get(UserInterface.Fonts.Families[0], 10));
 
             _panel = new Panel();
             _panel.AddElement(_texture);
-            _panel.AddElement(_name);
-            _panel.AddElement(_level);
-            _panel.AddElement(_health);
-            _panel.AddElement(_mana);
-            _panel.AddElement(_xp);
-            _panel.AddElement(_gold);
+            _panel.AddElement(Name);
+            _panel.AddElement(Level);
+            _panel.AddElement(TopLeftText);
+            _panel.AddElement(BottomLeftText);
+            _panel.AddElement(TopRightText);
+            _panel.AddElement(BottomRightText);
             this.Position = Position;
         }
 
-        public void UpdateView(Humanoid Human)
+        public virtual void UpdateView(Humanoid Human)
         {
-            _name.Text = Human.Name;
-            _level.Text = "LEVEL "+Human.Level;
-            _health.Text = $"{(int) Human.Health} HP";
-            _mana.Text = $"{(int)Human.Mana} MP";
-            _xp.Text = $"{(int)Human.XP}/{(int)Human.MaxXP} XP";
+            Name.Text = Human.Name;
+            Level.Text = "LEVEL "+Human.Level;
+            TopLeftText.Text = $"{(int) Human.Health} HP";
+            BottomLeftText.Text = $"{(int)Human.Mana} MP";
+            TopRightText.Text = $"{(int)Human.XP}/{(int)Human.MaxXP} XP";
             var gold = Human.Gold == int.MaxValue ? "∞" : Human.Gold.ToString();
-            _gold.Text = $"{gold} G";
+            BottomRightText.Text = $"{gold} G";
         }
 
         public bool Enabled

@@ -26,18 +26,18 @@ namespace Hedra.Engine.Rendering.UI
         public Texture(string AssetPath, Vector2 Position, Vector2 Scale)
 	    {
 	        this.TextureElement = new GUITexture(Graphics2D.LoadFromAssets(AssetPath),
-	            Graphics2D.SizeFromAssets(AssetPath) * Scale, Position) {IsEnabled = true};
+	            Graphics2D.SizeFromAssets(AssetPath) * Scale, Position) {Enabled = true};
 	        DrawManager.UIRenderer.Add(this.TextureElement);
 	    }
 
         public Texture(uint TextureId, Vector2 Position, Vector2 Scale){
 			this.TextureElement = new GUITexture(TextureId, Scale, Position);
-			this.TextureElement.IsEnabled = true;
+			this.TextureElement.Enabled = true;
 			DrawManager.UIRenderer.Add(this.TextureElement);
 		}
 		public Texture(Vector4 TextureColor, Vector2 Position, Vector2 Scale){
 			this.TextureElement = new GUITexture(Graphics2D.ColorTexture(TextureColor), Scale, Position);
-			this.TextureElement.IsEnabled = true;
+			this.TextureElement.Enabled = true;
 			DrawManager.UIRenderer.Add(this.TextureElement);
 		}
 		
@@ -45,7 +45,7 @@ namespace Hedra.Engine.Rendering.UI
 			Bitmap bmp = new Bitmap( (int) (Scale.X * GameSettings.Width+1), (int) (Scale.Y*GameSettings.Height+1));
 		    bmp = Graphics2D.CreateGradient( GradientColor0, GradientColor1, Type, bmp);
 			this.TextureElement = new GUITexture(Graphics2D.LoadTexture(bmp), Scale, Position);
-			this.TextureElement.IsEnabled = true;
+			this.TextureElement.Enabled = true;
 			DrawManager.UIRenderer.Add(this.TextureElement);
 		}
 		
@@ -64,12 +64,12 @@ namespace Hedra.Engine.Rendering.UI
 		}
 
 		public void Enable(){
-			TextureElement.IsEnabled = true;
+			TextureElement.Enabled = true;
 			Enabled = true;			
 		}
 
 		public void Disable(){
-			TextureElement.IsEnabled = false;	
+			TextureElement.Enabled = false;	
 			Enabled = false;
 		}
 		

@@ -23,6 +23,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.Player.AbilityBarSystem;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player
@@ -36,9 +37,9 @@ namespace Hedra.Engine.Player
 		public UserInterface UI;
 		public PlayerInventory Inventory;
 		public EntitySpawner Spawner;
-		public SkillsBar Skills;
+		public AbilityBarSystem.AbilityBar AbilityBar;
 		public QuestLog QuestLog;
-		public SkillTree SkillSystem;
+		public AbilityTreeSystem.AbilityTree AbilityTree;
 		public PetManager Pet;
 		public Chat Chat;
 		public Minimap Minimap;
@@ -69,9 +70,9 @@ namespace Hedra.Engine.Player
 			this.Spawner = new EntitySpawner(this);
 			this.Model = new HumanModel(this);
 			this.Inventory = new PlayerInventory(this);
-			this.Skills = new SkillsBar(this);
+			this.AbilityBar = new AbilityBarSystem.AbilityBar(this);
 			this.Glider = new GliderModel();
-			this.SkillSystem = new SkillTree(this);
+			this.AbilityTree = new AbilityTreeSystem.AbilityTree(this);
 			this.QuestLog = new QuestLog(this);
 			this.Pet = new PetManager(this);
 			this.Chat = new Chat(this);
@@ -456,6 +457,7 @@ namespace Hedra.Engine.Player
             //this.Physics.PushAround = !IsAttacking; // If he is attacking dont push 'em	
 
             Inventory.Update();
+            AbilityTree.Update();
 			Movement.Update();
 			UI.Update();
 			ManageSounds();
@@ -484,7 +486,6 @@ namespace Hedra.Engine.Player
 	        }
 	    }
 		public override Item MainWeapon => Inventory.MainWeapon;
-	    public override Item Ring => Inventory.Ring;
 
 	    public void EatFood(){
 			if(this.IsDead || this.IsEating || this.Knocked || this.IsEating || this.IsAttacking || this.IsClimbing) return;

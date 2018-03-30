@@ -18,7 +18,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// </summary>
 	public class RenderableTexture : IRenderable, UIElement
 	{
-		public Texture BaseTexture;
+		public Texture BaseTexture { get; set; }
 		
 		public RenderableTexture(Texture BaseTexture, DrawOrder Order){
 			this.BaseTexture = BaseTexture;		

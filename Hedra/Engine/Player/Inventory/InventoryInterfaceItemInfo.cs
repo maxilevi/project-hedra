@@ -13,12 +13,12 @@ namespace Hedra.Engine.Player.Inventory
     public class InventoryInterfaceItemInfo
     {
         protected Item CurrentItem;
-        private readonly Texture _backgroundTexture;
-        private readonly Texture _itemTexture;
+        protected readonly Texture BackgroundTexture;
+        protected readonly Texture ItemTexture;
+        protected readonly RenderableText ItemText;
+        protected readonly RenderableText ItemDescription;
         private readonly Panel _panel;
         private readonly InventoryItemRenderer _renderer;
-        private readonly RenderableText _itemText;
-        private readonly RenderableText _itemDescription;
         private readonly RenderableText _itemAttributes;
         private readonly Vector2 _weaponItemAttributesPosition;
         private readonly Vector2 _weaponItemTexturePosition;
@@ -32,59 +32,61 @@ namespace Hedra.Engine.Player.Inventory
         {
             this._renderer = Renderer;
             this._panel = new Panel();
-            this._backgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Vector2.One * .35f);
-            this._itemTexture = new Texture(0, _backgroundTexture.Position + _backgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitY * -.05f,
-                _backgroundTexture.Scale * .75f);
+            this.BackgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Vector2.One * .35f);
+            this.ItemTexture = new Texture(0, BackgroundTexture.Position + BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitY * -.05f,
+                BackgroundTexture.Scale * .75f);
 
-            this._itemText = new RenderableText(string.Empty, _backgroundTexture.Position + Vector2.UnitY * .225f, Color.White,
+            this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Vector2.UnitY * .225f, Color.White,
                 FontCache.Get(AssetManager.Fonts.Families[0], 13, FontStyle.Bold));
-            DrawManager.UIRenderer.Add(_itemText, DrawOrder.After);
+            DrawManager.UIRenderer.Add(ItemText, DrawOrder.After);
 
-            this._itemDescription = new RenderableText(string.Empty, _backgroundTexture.Position - Vector2.UnitY * .225f,
+            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position - Vector2.UnitY * .225f,
                 Color.Bisque, FontCache.Get(AssetManager.Fonts.Families[0], 10, FontStyle.Bold));
-            DrawManager.UIRenderer.Add(_itemDescription, DrawOrder.After);
+            DrawManager.UIRenderer.Add(ItemDescription, DrawOrder.After);
 
-            this._itemAttributes = new RenderableText(string.Empty, _backgroundTexture.Position - Vector2.UnitX * .025f + Vector2.UnitY * .05f,
+            this._itemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position - Vector2.UnitX * .025f + Vector2.UnitY * .05f,
                 Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 9, FontStyle.Bold));
             DrawManager.UIRenderer.Add(_itemAttributes, DrawOrder.After);
 
-            _panel.AddElement(_itemText);
+            _panel.AddElement(ItemText);
             _panel.AddElement(_itemAttributes);
-            _panel.AddElement(_itemDescription);
-            _panel.AddElement(_itemTexture);
-            _panel.AddElement(_backgroundTexture);
+            _panel.AddElement(ItemDescription);
+            _panel.AddElement(ItemTexture);
+            _panel.AddElement(BackgroundTexture);
 
             _nonWeaponItemAttributesPosition = Vector2.UnitY * -.175f;
             _nonWeaponItemTexturePosition = Vector2.UnitY * .0f;
             _weaponItemAttributesPosition = _itemAttributes.Position;
-            _weaponItemTexturePosition = _itemTexture.Position;
+            _weaponItemTexturePosition = ItemTexture.Position;
         }
 
         protected virtual void UpdateView()
         {
+            _currentItemMesh?.Dispose();
+            _currentItemMesh = _renderer.BuildModel(CurrentItem, out _currentItemMeshHeight);
             var isEquipment = CurrentItem.IsEquipment;
             if (isEquipment)
             {
                 var tierColor = TierToColor(CurrentItem.Tier);
-                _itemText.Color = tierColor;
+                ItemText.Color = tierColor;
 
                 _itemAttributes.Color = tierColor;
-                _itemDescription.Color = tierColor;
+                ItemDescription.Color = tierColor;
                 _itemAttributes.Position = _weaponItemAttributesPosition + this.Position;
-                _itemTexture.Position = _weaponItemTexturePosition + this.Position;
-                _itemDescription.Text = Utils.FitString(CurrentItem.Description, 18);
+                ItemTexture.Position = _weaponItemTexturePosition + this.Position;
+                ItemDescription.Text = Utils.FitString(CurrentItem.Description, 18);
             }
             else
             {
-                _itemText.Color = Color.White;
+                ItemText.Color = Color.White;
                 _itemAttributes.Color = Color.Bisque;
-                _itemDescription.Color = Color.White;
+                ItemDescription.Color = Color.White;
                 _itemAttributes.Position = _nonWeaponItemAttributesPosition + this.Position;
-                _itemTexture.Position = _nonWeaponItemTexturePosition + this.Position;
-                _itemDescription.Text = string.Empty;
+                ItemTexture.Position = _nonWeaponItemTexturePosition + this.Position;
+                ItemDescription.Text = string.Empty;
             }
 
-            _itemText.Text = Utils.FitString(CurrentItem.DisplayName.ToUpperInvariant(), 15);
+            ItemText.Text = Utils.FitString(CurrentItem.DisplayName.ToUpperInvariant(), 15);
             var attributes = CurrentItem.GetAttributes();
             var strBuilder = new StringBuilder();
             for (var i = 0; i < attributes.Length; i++)
@@ -96,7 +98,7 @@ namespace Hedra.Engine.Player.Inventory
                 }
             }
             _itemAttributes.Text = strBuilder.ToString();
-            _itemTexture.TextureElement.IdPointer = () => _renderer.Draw(_currentItemMesh, CurrentItem,
+            ItemTexture.TextureElement.IdPointer = () => _renderer.Draw(_currentItemMesh, CurrentItem,
                 false, _currentItemMeshHeight * InventoryItemRenderer.ZOffsetFactor);
         }
 
@@ -124,8 +126,6 @@ namespace Hedra.Engine.Player.Inventory
         {
             if(Item == null || Item.IsGold) return;
             CurrentItem = Item;
-            _currentItemMesh?.Dispose();
-            _currentItemMesh = _renderer.BuildModel(Item, out _currentItemMeshHeight);
             this.UpdateView();
             this.Enabled = true;
         }
@@ -133,7 +133,7 @@ namespace Hedra.Engine.Player.Inventory
         public void Hide()
         {
             if(CurrentItem == null) return;
-            _currentItemMesh.Dispose();
+            _currentItemMesh?.Dispose();
             _currentItemMesh = null;
             CurrentItem = null;
             _panel.Disable();
@@ -142,18 +142,18 @@ namespace Hedra.Engine.Player.Inventory
 
         public bool Showing => CurrentItem != null;
 
-        public Vector2 Scale => _backgroundTexture.Scale;
+        public Vector2 Scale => BackgroundTexture.Scale;
 
         public virtual Vector2 Position
         {
-            get { return _backgroundTexture.Position; }
+            get { return BackgroundTexture.Position; }
             set
             {
-                _itemTexture.Position = _itemTexture.Position - Position + value;
-                _itemText.Position = _itemText.Position - Position + value;
-                _itemDescription.Position = _itemDescription.Position - Position + value;
+                ItemTexture.Position = ItemTexture.Position - Position + value;
+                ItemText.Position = ItemText.Position - Position + value;
+                ItemDescription.Position = ItemDescription.Position - Position + value;
                 _itemAttributes.Position = _itemAttributes.Position - Position + value;
-                _backgroundTexture.Position = value;
+                BackgroundTexture.Position = value;
             }
         }
 

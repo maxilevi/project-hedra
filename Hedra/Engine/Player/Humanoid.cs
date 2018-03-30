@@ -27,7 +27,6 @@ namespace Hedra.Engine.Player
         private float _mana;
         private float _xp;
 	    private float _maxHealth;
-	    private float _attackSpeed = 1;
 	    private float _stamina = 100f;
 	    private float _oldSpeed;
 	    private bool _isGliding;
@@ -41,7 +40,8 @@ namespace Hedra.Engine.Player
 		public bool IsRiding { get; set; }
 		public bool IsClimbing { get; set; }
 		public bool WasAttacking { get; set; }
-		public virtual bool CanInteract {get; set; }
+	    public float BaseAttackSpeed { get; private set; } = 1;
+        public virtual bool CanInteract {get; set; }
         public bool IsSleeping { get; set; }
 		public bool IsSitting { get{ return Model.IsSitting; } set{ if(value) Model.Sit(); else Model.Idle(); } }
 		public new HumanModel Model { get{ return base.Model as HumanModel; } set{ base.Model = value;} }
@@ -259,7 +259,17 @@ namespace Hedra.Engine.Player
 	        ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed), Condition);
 	    }
 
-	    public void ApplyEffectWhile(EffectType NewType, Func<bool> Condition)
+	    public void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition)
+	    {
+	        ComponentManager.AddComponentWhile(new AttackSpeedBonusComponent(this, BonusAttackSpeed), Condition);
+	    }
+	    public void AddBonusHealthWhile(float BonusHealth, Func<bool> Condition)
+	    {
+	        ComponentManager.AddComponentWhile(new HealthBonusComponent(this, BonusHealth), Condition);
+	    }
+
+
+        public void ApplyEffectWhile(EffectType NewType, Func<bool> Condition)
 	    {
 	        EntityComponent effect;
 	        switch (NewType)
@@ -312,15 +322,15 @@ namespace Hedra.Engine.Player
 			}
 		}
 
-        public float AttackSpeed{
+	    public float AttackSpeed{
 			get{
-				float attackSpeed = _attackSpeed;
+				float attackSpeed = BaseAttackSpeed;
 				if(MainWeapon != null) attackSpeed *= MainWeapon.GetAttribute<float>(CommonAttributes.AttackSpeed);
 				return attackSpeed;
 			}
             set
             {
-                this._attackSpeed = value;
+                this.BaseAttackSpeed = value;
             }
 		}
 		
@@ -363,8 +373,9 @@ namespace Hedra.Engine.Player
                     if (effectType != EffectType.None) this.ApplyEffectWhile(effectType, () => this.Ring == value);
 
 			        this.AddBonusSpeedWhile(this.Ring.GetAttribute<float>("MovementSpeed"), () => this.Ring == value);
-
-			    }
+			        this.AddBonusAttackSpeedWhile( this.Ring.GetAttribute<float>("AttackSpeed"), () => this.Ring == value);
+			        this.AddBonusHealthWhile(this.MaxHealth * (this.Ring.GetAttribute<float>("Health")*0.1f), () => this.Ring == value);
+                }
 			}
 		}
 

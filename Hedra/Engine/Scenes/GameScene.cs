@@ -115,8 +115,8 @@ namespace Hedra.Engine.Scenes
 			if(! (Player.Health > 0) )
 				Player.Model.Enabled = false;
 			Player.Model.Enabled = true;
-			Player.SkillSystem = new SkillTree(Player).Load(Information);
-			Player.Skills = Player.Skills.Load( Information.SkillIDs );
+			Player.AbilityTree.FromInformation(Information);
+			Player.AbilityBar.FromInformation(Information);
 			Player.Chat.Clear();
 			Player.View.CameraHeight = Camera.DefaultCameraHeight;
 			if(Information.WorldSeed != 0)

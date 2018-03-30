@@ -107,7 +107,7 @@ namespace Hedra.Engine.Player
 		    base.MaxCooldown = 0.25f;
 		}
 		
-		public override bool MeetsRequirements(SkillsBar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(AbilityBarSystem.AbilityBar Bar, int CastingAbilityCount)
 		{
 			if(DisableWeapon) return false;
 			

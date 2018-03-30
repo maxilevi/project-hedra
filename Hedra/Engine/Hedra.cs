@@ -84,11 +84,11 @@ namespace Hedra
             GameLoader.CreateCharacterFolders(appData, appPath);
 
             _studioLogo = new GUITexture(Graphics2D.LoadFromAssets("Assets/splash-logo.png"), Graphics2D.SizeFromAssets("Assets/splash-logo.png"), Vector2.Zero);
-			_studioLogo.IsEnabled = true;
+			_studioLogo.Enabled = true;
 		    _studioLogo.Opacity = 0;
 
             _studioBackground = new GUITexture(Graphics2D.LoadFromAssets("Assets/splash-background.png"),  Vector2.One, Vector2.Zero);
-			_studioBackground.IsEnabled = true;
+			_studioBackground.Enabled = true;
 		    _studioBackground.Opacity = 0;
 
 		    AssetManager.Load();
@@ -412,7 +412,7 @@ namespace Hedra
 			if(!this.Focused){
 				if(!SceneManager.Game.InMenuWorld && !SceneManager.Game.IsLoading && !GameSettings.Paused &&
                     SceneManager.Game.Player != null && !SceneManager.Game.Player.Inventory.Show &&
-                    !SceneManager.Game.Player.SkillSystem.Show && !SceneManager.Game.Player.Trade.Show)
+                    !SceneManager.Game.Player.AbilityTree.Show && !SceneManager.Game.Player.Trade.Show)
                 {
 					//GameSettings.Paused = true;
 					SceneManager.Game.Player.UI.ShowMenu();

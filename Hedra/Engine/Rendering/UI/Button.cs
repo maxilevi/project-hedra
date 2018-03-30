@@ -225,7 +225,7 @@ namespace Hedra.Engine.Rendering.UI
             if (this.Text != null)
                 this.Text.Disable();
             if (this.Texture != null)
-                this.Texture.IsEnabled = false;
+                this.Texture.Enabled = false;
         }
 
         public void Enable()
@@ -234,7 +234,7 @@ namespace Hedra.Engine.Rendering.UI
             if (this.Text != null)
                 this.Text.Enable();
             if (this.Texture != null)
-                this.Texture.IsEnabled = true;
+                this.Texture.Enabled = true;
         }
 
         public Vector2 Position

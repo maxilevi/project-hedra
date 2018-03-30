@@ -11,16 +11,20 @@ namespace Hedra.Engine.Rendering.UI
     {
 		public int ScaleUniform { get; set; }
         public int PositionUniform { get; set; }
-        public int ColorUniform;
+        public int ColorUniform { get; set; }
         public int BackGroundUniform { get; set; }
         public int GUIUniform { get; set; }
         public int FlippedUniform { get; set; }
         public int SizeUniform { get; set; }
         public int FxaaUniform { get; set; }
-        public int OpacityUniform;
-        public int GrayscaleUniform, TintUniform, RotationUniform;
-		
-		public GUIShader(string S1, string S2) : base(S1, S2){}
+        public int OpacityUniform { get; set; }
+        public int MaskUniform { get; set; }
+        public int GrayscaleUniform { get; set; }
+        public int TintUniform { get; set; }
+        public int RotationUniform { get; set; }
+        public int UseMaskUniform { get; set; }
+
+        public GUIShader(string S1, string S2) : base(S1, S2){}
 		
 		public override void GetUniformsLocations(){
 			ScaleUniform = GL.GetUniformLocation(ShaderID, "Scale");
@@ -35,6 +39,8 @@ namespace Hedra.Engine.Rendering.UI
 			RotationUniform = GL.GetUniformLocation(ShaderID, "Rotation");
             SizeUniform = GL.GetUniformLocation(ShaderID, "Size");
             FxaaUniform = GL.GetUniformLocation(ShaderID, "FXAA");
-        }
+		    MaskUniform = GL.GetUniformLocation(ShaderID, "Mask");
+		    UseMaskUniform = GL.GetUniformLocation(ShaderID, "UseMask");
+		}
 	}
 }

@@ -80,7 +80,6 @@ namespace Hedra.Engine.EntitySystem
                                      GameSettings.UpdateDistance * GameSettings.UpdateDistance;
 
         public bool IsActive { get; set; }
-
         public bool IsBoss { get; set; }
         public bool IsDead { get; set; }
         public bool IsFlying { get; set; }

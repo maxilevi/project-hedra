@@ -1,4 +1,5 @@
 ﻿using Hedra.Engine.Generation;
+using Hedra.Engine.Player;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
@@ -15,10 +16,11 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Update()
         {
+            if(Parent is Humanoid && !(this.Parent as Humanoid).IsMoving) return;
             World.WorldParticles.Color = Vector4.One;
             World.WorldParticles.VariateUniformly = false;
             World.WorldParticles.Position =
-                Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .5f;
+                Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .25f;
             World.WorldParticles.Scale = Vector3.One * .25f;
             World.WorldParticles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
             World.WorldParticles.Direction = -Parent.Orientation * .05f;
@@ -30,7 +32,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Dispose()
         {
-            Parent.Speed -= _speedBonus;
+            this.Parent.Speed -= _speedBonus;
         }
     }
 }

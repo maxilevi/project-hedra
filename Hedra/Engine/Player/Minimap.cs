@@ -116,7 +116,7 @@ namespace Hedra.Engine.Player
 				return;
 			}
 			
-			if(!MiniMap.TextureElement.IsEnabled) return;
+			if(!MiniMap.TextureElement.Enabled) return;
 			MapCursor.Enable();
 			MiniMapRing.Enable();
 			MiniMapN.Enable();

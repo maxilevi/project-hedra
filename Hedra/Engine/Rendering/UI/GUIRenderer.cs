@@ -126,7 +126,7 @@ namespace Hedra.Engine.Rendering.UI
                 GUITexture[] texturesArray = _textures.ToArray();
                 foreach (GUITexture texture in texturesArray)
                 {
-                    if (texture == null || !texture.IsEnabled) continue;
+                    if (texture == null || !texture.Enabled) continue;
                     DrawCount++;
                     this.BaseDraw(texture);
                 }
@@ -142,13 +142,21 @@ namespace Hedra.Engine.Rendering.UI
 
         private void BaseDraw(GUITexture Texture)
         {
-            GL.ActiveTexture(TextureUnit.Texture1);
-            GL.BindTexture(TextureTarget.Texture2D, Texture.BackGroundId);
-            GL.Uniform1(Shader.BackGroundUniform, 1);
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, Texture.Id);
             GL.Uniform1(Shader.GUIUniform, 0);
+
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, Texture.BackGroundId);
+            GL.Uniform1(Shader.BackGroundUniform, 1);
+
+            if (Texture.UseMask)
+            {
+                GL.ActiveTexture(TextureUnit.Texture2);
+                GL.BindTexture(TextureTarget.Texture2D, Texture.MaskId);
+                GL.Uniform1(Shader.MaskUniform, 2);
+            }
 
             Vector2 scale = Texture.Scale;
             this.SetupQuad();
@@ -162,6 +170,7 @@ namespace Hedra.Engine.Rendering.UI
             GL.Uniform1(Shader.OpacityUniform, Texture.Opacity);
             GL.Uniform1(Shader.GrayscaleUniform, Texture.Grayscale ? 1 : 0);
             GL.Uniform4(Shader.TintUniform, Texture.Tint);
+            GL.Uniform1(Shader.UseMaskUniform, Texture.UseMask ? 1 : 0);
 
             Matrix3 rot = Texture.Angle == 0 ? Matrix3.Identity : Texture.RotationMatrix;
             GL.UniformMatrix3(Shader.RotationUniform, false, ref rot);
@@ -188,7 +197,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Draw(GUITexture Texture)
         {
-            if (!Texture.IsEnabled) return;
+            if (!Texture.Enabled) return;
             
             SetDraw();
             this.BaseDraw(Texture);

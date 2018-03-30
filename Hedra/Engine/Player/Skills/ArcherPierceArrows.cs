@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player
 			if(base.Level == 0)return;
 
 			if(base.Level > 1)
-				Player.SkillSystem.SetPoints(this.GetType(), 1);
+				Player.AbilityTree.SetPoints(this.GetType(), 1);
 			
 			if(PlayerBow != Player.Model.LeftWeapon){
 				if(WasSet){

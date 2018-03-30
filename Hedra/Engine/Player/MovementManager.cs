@@ -316,14 +316,14 @@ namespace Hedra.Engine.Player
 					Jump();
 			}
 			
-			if(e.Key == Key.I && !GameSettings.Paused && Human.CanInteract && !player.IsDead)
-				player.Inventory.Show = !player.Inventory.Show;
+			if(e.Key == Key.I && !GameSettings.Paused && Human.CanInteract && !player.IsDead && !player.Map.Show && !player.AbilityTree.Show)
+                player.Inventory.Show = !player.Inventory.Show;
 			
-			if(e.Key == Key.X && !GameSettings.Paused && !player.IsDead && Human.CanInteract)
-				player.SkillSystem.Show = !player.SkillSystem.Show;
+			if(e.Key == Key.X && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !player.Map.Show && !player.Inventory.Show)
+                player.AbilityTree.Show = !player.AbilityTree.Show;
 			
 			
-			if(e.Key == Key.M && !GameSettings.Paused && !player.IsDead && Human.CanInteract)
+			if(e.Key == Key.M && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !player.Inventory.Show && !player.AbilityTree.Show)
 				player.Map.Show = !player.Map.Show ;
 			
 			
@@ -349,7 +349,7 @@ namespace Hedra.Engine.Player
 				player.UI.OptionsMenu.DonateBtcButton.ForceClick();
 			}
 			
-			if(e.Key == Key.T && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !player.SkillSystem.Show){
+			if(e.Key == Key.T && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !player.AbilityTree.Show){
 				if(player.QuestLog.Show)
 					player.QuestLog.Show = false;
 				else
@@ -357,7 +357,7 @@ namespace Hedra.Engine.Player
 			}
 			
 			if(e.Key == Key.Escape && Constants.CHARACTER_CHOOSED){
-				if(player.QuestLog.Show || player.Inventory.Show || player.SkillSystem.Show || player.Chat.Focused || player.Trade.Show){
+				if(player.QuestLog.Show || player.Inventory.Show || player.AbilityTree.Show || player.Chat.Focused || player.Trade.Show){
 					
 					if(player.Chat.Focused)
 						player.Chat.LoseFocus();
@@ -365,8 +365,8 @@ namespace Hedra.Engine.Player
 						player.QuestLog.Show = false;
 					if(player.Inventory.Show)
 						player.Inventory.Show = false;
-					if(player.SkillSystem.Show)
-						player.SkillSystem.Show = false;
+					if(player.AbilityTree.Show)
+						player.AbilityTree.Show = false;
 				    if (player.Trade.Show) player.Trade.Cancel();
                 }
                 else{
@@ -466,7 +466,7 @@ namespace Hedra.Engine.Player
 				player.Physics.TargetPosition += Vector3.UnitY * 25f;
 			}
             if (e.Key == Key.Insert && player.CanInteract){
-				player.SkillSystem.Reset();
+				player.AbilityTree.Reset();
 			}
 			if(e.Key == Key.Keypad7 && player.CanInteract){
 				World.QuestManager.Recreate();
