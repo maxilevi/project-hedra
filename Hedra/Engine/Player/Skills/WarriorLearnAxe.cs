@@ -13,19 +13,19 @@ using Hedra.Engine.Rendering.UI;
 using System.Linq;
 using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Player.Skills;
 
 namespace Hedra.Engine.Player
 {
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class LearnAxe : Skill
+	public class LearnAxe : BaseSkill
 	{
 
 		public LearnAxe(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
 			base.Passive = true;
-			this.Player = Player;
 		}
 		
 		public override void Update()

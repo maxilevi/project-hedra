@@ -14,13 +14,14 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
 using OpenTK;
 using System.Collections.Generic;
+using Hedra.Engine.Player.Skills;
 
 namespace Hedra.Engine.Player
 {
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class AttackLeap : Skill
+	public class AttackLeap : BaseSkill
 	{
 		
 		public AttackLeap(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {

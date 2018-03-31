@@ -17,13 +17,14 @@ using System.Collections.Generic;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player.Skills;
 
 namespace Hedra.Engine.Player
 {
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class Whirlwind : Skill
+	public class Whirlwind : BaseSkill
 	{
 		private float RotationY = 0, PassedTime = 0;
 		private Animation WhirlwindAnimation;
@@ -52,9 +53,9 @@ namespace Hedra.Engine.Player
 			};
 		}
 
-		public override bool MeetsRequirements(AbilityBarSystem.AbilityBar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(AbilityBarSystem.Toolbar Bar, int CastingAbilityCount)
 		{
-            bool Met = !Player.AbilityBar.DisableAttack;
+            bool Met = !Player.Toolbar.DisableAttack;
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && Met;
 		}
 		

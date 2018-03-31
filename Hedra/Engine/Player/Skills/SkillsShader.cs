@@ -23,9 +23,6 @@ namespace Hedra.Engine.Player
 		public int BoolsUniform;
 		public int CooldownUniform;
 		public int MaskUniform;
-		public int ReflectionUniform;
-		public int TimeUniform;
-		public int ReflectionPowerUniform;
 		
 		public SkillsShader(string s1, string s2) : base (s1,s2){}
 		
@@ -35,11 +32,7 @@ namespace Hedra.Engine.Player
 			PositionUniform = GL.GetUniformLocation(ShaderID, "Position");
 			BoolsUniform = GL.GetUniformLocation(ShaderID, "Bools");
 			CooldownUniform = GL.GetUniformLocation(ShaderID, "Cooldown");
-			MaskUniform = GL.GetUniformLocation(ShaderID, "Mask");
-			ReflectionUniform = GL.GetUniformLocation(ShaderID, "Reflec");
-			TimeUniform = GL.GetUniformLocation(ShaderID, "Time");
-			ReflectionUniform = GL.GetUniformLocation(ShaderID, "ReflectionPower");
-			
+			MaskUniform = GL.GetUniformLocation(ShaderID, "Mask");	
 		}
 	}
 }

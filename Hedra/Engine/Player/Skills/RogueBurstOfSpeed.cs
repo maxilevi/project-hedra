@@ -12,6 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.Animation;
 using OpenTK;
 
@@ -20,7 +21,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class BurstOfSpeed : Skill
+	public class BurstOfSpeed : BaseSkill
 	{
 	
 		private float PreviousSpeed = 0;		

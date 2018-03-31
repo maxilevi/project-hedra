@@ -77,6 +77,7 @@ namespace Hedra.Engine.Rendering.UI
 			
 			this.OnPanelStateChange += delegate(object Sender, PanelState E) { 
 				LocalPlayer.Instance.Minimap.Show = E == PanelState.Enabled;
+			    LocalPlayer.Instance.Toolbar.Show = E == PanelState.Enabled;
 			};
 			
 		}

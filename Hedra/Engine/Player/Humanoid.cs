@@ -170,7 +170,7 @@ namespace Hedra.Engine.Player
             IsRolling = true;
             DmgComponent.Immune = true;
 			_oldSpeed = Speed;
-			Speed *= 2.00f;
+			Speed *= 1.5f;
 			Movement.OrientateWhileMoving = false;	
 			if(!IsMoving){
 				Movement.MoveCount = 2;

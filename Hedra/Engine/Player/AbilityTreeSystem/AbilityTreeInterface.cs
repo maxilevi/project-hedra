@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
@@ -10,6 +11,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     {
         private readonly LocalPlayer _player;
         private readonly Panel _panel;
+        private readonly GUIText _availablePointsText;
+        private readonly RenderableTexture _backgroundTexture;
         private readonly RenderableTexture[] _skillPointsBackgrounTextures;
 
         public AbilityTreeInterface(LocalPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing)
@@ -18,6 +21,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _player = Player;
             _panel = new Panel();
             _skillPointsBackgrounTextures = new RenderableTexture[this.Buttons.Length];
+            _backgroundTexture = new RenderableTexture(new Texture("Assets/UI/AbilityTreeBackground.png",
+                new Vector2(.04f, .15f), new Vector2(.6f, .55f) * 1f), DrawOrder.Before);
+            _availablePointsText = new GUIText(string.Empty, new Vector2(_backgroundTexture.Position.X, -.35f),
+                Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 12f, FontStyle.Bold));
             for (var i = 0; i < this.Buttons.Length; i++)
             {
                 this.Buttons[i].Scale *= 1.25f;
@@ -31,10 +38,13 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
                 _panel.AddElement(_skillPointsBackgrounTextures[i]);
             }
+            _panel.AddElement(_availablePointsText);
+            _panel.AddElement(_backgroundTexture);
         }
 
         public override void UpdateView()
         {
+            _availablePointsText.Text = $"AVAILABLE POINTS: {_player.AbilityTree.AvailablePoints}";
             for (var i = 0; i < this.Buttons.Length; i++)
             {
                 if (!this.Array[i + Offset].HasAttribute("Enabled")) continue;
@@ -80,20 +90,20 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         private bool SetGrayscale(int Index)
         {
-            var decomposedIndexY = Index % AbilityTreeSystem.AbilityTree.Layers;
-            var decomposedIndexX = AbilityTreeSystem.AbilityTree.AbilityCount / AbilityTreeSystem.AbilityTree.Layers - 1 - (Index - decomposedIndexY) / AbilityTreeSystem.AbilityTree.Layers;
+            var decomposedIndexY = Index % AbilityTree.Layers;
+            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Layers - 1 - (Index - decomposedIndexY) / AbilityTree.Layers;
             this.Buttons[Index].Texture.Grayscale = decomposedIndexX * 5 > _player.Level || !this.PreviousUnlocked(Index);
             return this.Buttons[Index].Texture.Grayscale;
         }
 
         private bool PreviousUnlocked(int Index)
         {
-            var decomposedIndexY = Index % AbilityTreeSystem.AbilityTree.Layers;
-            var decomposedIndexX = AbilityTreeSystem.AbilityTree.AbilityCount / AbilityTreeSystem.AbilityTree.Layers - 1 - (Index - decomposedIndexY) / AbilityTreeSystem.AbilityTree.Layers;
+            var decomposedIndexY = Index % AbilityTree.Layers;
+            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Layers - 1 - (Index - decomposedIndexY) / AbilityTree.Layers;
             if (decomposedIndexX == 0) return true;
-            else if (!this.Array[Index + AbilityTreeSystem.AbilityTree.Layers].GetAttribute<bool>("Enabled"))
-                return this.PreviousUnlocked(Index + AbilityTreeSystem.AbilityTree.Layers);
-            return this.Array[Index + AbilityTreeSystem.AbilityTree.Layers].GetAttribute<int>("Level") > 0;
+            else if (!this.Array[Index + AbilityTree.Layers].GetAttribute<bool>("Enabled"))
+                return this.PreviousUnlocked(Index + AbilityTree.Layers);
+            return this.Array[Index + AbilityTree.Layers].GetAttribute<int>("Level") > 0;
         }
 
         public override bool Enabled
@@ -112,14 +122,19 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             get { return base.Scale; }
             set
             {
+                _backgroundTexture.Scale = new Vector2(_backgroundTexture.Scale.X / base.IndividualScale.X,
+                                                  _backgroundTexture.Scale.Y / base.IndividualScale.Y) * value;
+                var backgroundPosition = _backgroundTexture.Position - Position;
+                _backgroundTexture.Position = new Vector2(backgroundPosition.X / base.Scale.X,
+                                                  backgroundPosition.Y / base.Scale.Y) * value + Position;
+
                 for (var i = 0; i < _skillPointsBackgrounTextures.Length; i++)
                 {
                     _skillPointsBackgrounTextures[i].Scale = new Vector2(_skillPointsBackgrounTextures[i].Scale.X / base.IndividualScale.X,
                                                         _skillPointsBackgrounTextures[i].Scale.Y / base.IndividualScale.Y) * value;
-
                     var relativePosition = _skillPointsBackgrounTextures[i].Position - Position;
                     _skillPointsBackgrounTextures[i].Position = new Vector2(relativePosition.X / base.Scale.X,
-                        relativePosition.Y / base.Scale.Y) * value + Position;
+                                                                    relativePosition.Y / base.Scale.Y) * value + Position;
                 }
                 base.Scale = value;
             }
@@ -135,6 +150,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     _skillPointsBackgrounTextures[i].Scale = new Vector2(_skillPointsBackgrounTextures[i].Scale.X / base.IndividualScale.X,
                                                                  _skillPointsBackgrounTextures[i].Scale.Y / base.IndividualScale.Y) * value;
                 }
+                _backgroundTexture.Scale = new Vector2(_backgroundTexture.Scale.X / base.IndividualScale.X,
+                                                  _backgroundTexture.Scale.Y / base.IndividualScale.Y) * value;
                 base.IndividualScale = value;
             }
         }
@@ -148,6 +165,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 {
                     _skillPointsBackgrounTextures[i].Position = _skillPointsBackgrounTextures[i].Position - base.Position + value;
                 }
+                _backgroundTexture.Position = _backgroundTexture.Position - base.Position + value;
+                _availablePointsText.Position = _availablePointsText.Position - base.Position + value;
                 base.Position = value;
             }
         }

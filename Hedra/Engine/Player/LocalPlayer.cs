@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player
 		public UserInterface UI;
 		public PlayerInventory Inventory;
 		public EntitySpawner Spawner;
-		public AbilityBarSystem.AbilityBar AbilityBar;
+		public Toolbar Toolbar;
 		public QuestLog QuestLog;
 		public AbilityTreeSystem.AbilityTree AbilityTree;
 		public PetManager Pet;
@@ -70,7 +70,7 @@ namespace Hedra.Engine.Player
 			this.Spawner = new EntitySpawner(this);
 			this.Model = new HumanModel(this);
 			this.Inventory = new PlayerInventory(this);
-			this.AbilityBar = new AbilityBarSystem.AbilityBar(this);
+			this.Toolbar = new AbilityBarSystem.Toolbar(this);
 			this.Glider = new GliderModel();
 			this.AbilityTree = new AbilityTreeSystem.AbilityTree(this);
 			this.QuestLog = new QuestLog(this);
@@ -271,7 +271,7 @@ namespace Hedra.Engine.Player
 				SkyManager.Enabled = false;
 				_targetCementeryTime = GraveyardDesign.GraveyardSkyTime;
 				_shouldUpdateTime = true;
-				SoundManager.PlaySoundInPlayersLocation(SoundType.DarkSound);
+				SoundManager.PlayUISound(SoundType.DarkSound);
 			}
 			else if (!_inCementery && wasInCementery){
 				_targetCementeryTime = _cementeryTime;

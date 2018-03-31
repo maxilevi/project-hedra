@@ -16,13 +16,14 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Player.Skills;
 
 namespace Hedra.Engine.Player
 {
 	/// <summary>
 	/// Description of FlowingMagma.
 	/// </summary>
-	public class FlowingMagma : Skill
+	public class FlowingMagma : BaseSkill
 	{
 		private float Damage = 17.5f;
 		private float DurationTime = 6f;

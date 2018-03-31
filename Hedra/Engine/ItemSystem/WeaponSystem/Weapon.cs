@@ -39,7 +39,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         public bool SlowDown { get; set; }
         public Vector4 BaseTint { get; set; }
         public Vector4 Tint { get; set; }
-
         protected Humanoid Owner { get; set; }
         protected TrailRenderer Trail { get; set; }
         protected Animation[] Animations { get; set; }

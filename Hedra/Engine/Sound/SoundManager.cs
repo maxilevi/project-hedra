@@ -162,7 +162,7 @@ namespace Hedra.Engine.Sound
 			
 		}
 		
-		public static void PlaySoundInPlayersLocation(SoundType Sound, float Pitch = 1, float Gain = 1){
+		public static void PlayUISound(SoundType Sound, float Pitch = 1, float Gain = 1){
             if (!_loaded) return;
             PlaySound(Sound, ListenerPosition, false, Pitch, Gain);
 		}

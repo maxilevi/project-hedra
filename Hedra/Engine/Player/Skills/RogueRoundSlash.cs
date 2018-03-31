@@ -17,13 +17,14 @@ using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 using System.Collections.Generic;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Player.Skills;
 
 namespace Hedra.Engine.Player
 {
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class RoundSlash : Skill
+	public class RoundSlash : BaseSkill
 	{
 		private Animation RoundSlashAnimation;
 		private float FrameCounter = 0, PassedTime = 0, Damage = 0;

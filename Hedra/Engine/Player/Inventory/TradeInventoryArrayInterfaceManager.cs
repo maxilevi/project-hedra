@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player.Inventory
                 _manager.ProcessTrade(_seller, _buyer, _sellerInterface, _buyerInterface, item, price);
             }
             this.UpdateView();
-            SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick);
+            SoundManager.PlayUISound(SoundType.ButtonClick);
         }
     }
 }

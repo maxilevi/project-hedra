@@ -15,19 +15,19 @@ namespace Hedra.Engine.Rendering.UI
     {
         public static GUIShader Shader = new GUIShader("Shaders/GUI.vert", "Shaders/GUI.frag");
         public static uint TransparentTexture { get; private set; }
-        private readonly HashSet<TextureCommand> _renderableUi;
+        private readonly HashSet<TextureCommand> _renderableUI;
         private readonly HashSet<GUITexture> _textures;
         private static bool _inited;
         private static VAO<Vector2> _vao;
         private static VBO<Vector2> _vbo;
 
         public int DrawCount { get; private set; }
-        public int RenderableCount => _renderableUi.Count;
+        public int RenderableCount => _renderableUI.Count;
         public int TextureCount => _textures.Count;
 
         public GUIRenderer()
         {
-            _renderableUi = new HashSet<TextureCommand>();
+            _renderableUI = new HashSet<TextureCommand>();
             _textures = new HashSet<GUITexture>();
             _vbo = new VBO<Vector2>(
                 new[]
@@ -43,6 +43,23 @@ namespace Hedra.Engine.Rendering.UI
             TransparentTexture = Graphics2D.LoadTexture(bmp);
 
             DisposeManager.Add(this);
+        }
+
+        public DrawOrder GetDrawOrder(IRenderable Renderable)
+        {
+            lock (_renderableUI)
+            {
+                return _renderableUI.First(T => T.Renderable == Renderable).Order;
+            }
+        }
+
+        public void SetDrawOrder(IRenderable Renderable, DrawOrder Order)
+        {
+            lock (_renderableUI)
+            {
+                var command = _renderableUI.First(T => T.Renderable == Renderable);
+                command.Order = Order;
+            }
         }
 
         public void SetupQuad()
@@ -82,17 +99,17 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Add(IRenderable Texture)
         {
-            lock (_renderableUi)
+            lock (_renderableUI)
             {
-                _renderableUi.Add(new TextureCommand(Texture, DrawOrder.Before));
+                _renderableUI.Add(new TextureCommand(Texture, DrawOrder.Before));
             }
         }
 
         public void Add(IRenderable Texture, DrawOrder Order)
         {
-            lock (_renderableUi)
+            lock (_renderableUI)
             {
-                _renderableUi.Add( new TextureCommand(Texture, Order));
+                _renderableUI.Add( new TextureCommand(Texture, Order));
             }
         }
 
@@ -104,9 +121,9 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Remove(IRenderable Texture)
         {
-            lock (_renderableUi)
+            lock (_renderableUI)
             {
-                _renderableUi.RemoveWhere(Command => Command.Renderable == Texture);
+                _renderableUI.RemoveWhere(Command => Command.Renderable == Texture);
             }
         }
 
@@ -114,8 +131,8 @@ namespace Hedra.Engine.Rendering.UI
         {
             DrawCount = 0;
             HashSet<TextureCommand> tempDic;
-            lock (_renderableUi)
-                tempDic = new HashSet<TextureCommand>(_renderableUi);
+            lock (_renderableUI)
+                tempDic = new HashSet<TextureCommand>(_renderableUI);
             
             foreach (TextureCommand command in tempDic) if (command.Order == DrawOrder.Before) command.Renderable.Draw();
 
@@ -126,7 +143,7 @@ namespace Hedra.Engine.Rendering.UI
                 GUITexture[] texturesArray = _textures.ToArray();
                 foreach (GUITexture texture in texturesArray)
                 {
-                    if (texture == null || !texture.Enabled) continue;
+                    if (texture == null || !texture.Enabled || texture.Scale == Vector2.Zero) continue;
                     DrawCount++;
                     this.BaseDraw(texture);
                 }
@@ -142,6 +159,7 @@ namespace Hedra.Engine.Rendering.UI
 
         private void BaseDraw(GUITexture Texture)
         {
+            if(Texture.Scale == Vector2.Zero || !Texture.Enabled) return;
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, Texture.Id);

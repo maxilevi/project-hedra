@@ -16,6 +16,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Particles;
 using System.Collections;
+using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.Player
@@ -23,7 +24,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of TripleFireball.
 	/// </summary>
-	public class TripleFireball : Skill
+	public class TripleFireball : BaseSkill
 	{
 		private bool LeftHand;
 		private float Damage = 6.5f;

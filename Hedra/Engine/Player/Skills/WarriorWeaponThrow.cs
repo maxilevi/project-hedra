@@ -12,6 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.Animation;
 using OpenTK;
 
@@ -20,7 +21,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class WeaponThrow : Skill
+	public class WeaponThrow : BaseSkill
 	{
 		private readonly Animation ThrowAnimation;
 		
@@ -48,7 +49,7 @@ namespace Hedra.Engine.Player
 			};
 		}
 		
-		public override bool MeetsRequirements(AbilityBarSystem.AbilityBar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(AbilityBarSystem.Toolbar Bar, int CastingAbilityCount)
 		{
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsMoving;
 		}
@@ -74,14 +75,14 @@ namespace Hedra.Engine.Player
 		}
 		
 		private IEnumerator ThrowWeapon(){
-			Player.AbilityBar.DisableAttack = true;
+			Player.Toolbar.DisableAttack = true;
 			float TimePassed = 0;
 			this.ShootWeapon(Player, Player.View.CrossDirection.NormalizedFast(), 4);
 			while(TimePassed < 5){
 				TimePassed += (float) Engine.Time.FrameTimeSeconds;
 				yield return null;
 			}
-			Player.AbilityBar.DisableAttack = false;
+			Player.Toolbar.DisableAttack = false;
 		}
 		
 		public override void KeyDown(){

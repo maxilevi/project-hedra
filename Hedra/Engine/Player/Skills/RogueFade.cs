@@ -12,6 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.Animation;
 using OpenTK;
 
@@ -20,7 +21,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class Fade : Skill
+	public class Fade : BaseSkill
 	{
 		
 		public Fade(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
@@ -36,7 +37,7 @@ namespace Hedra.Engine.Player
 		
 		private IEnumerator FadeTime(){
 			float PassedTime = 8f + Math.Min(base.Level * .75f, 10f), PTime = 0;
-			Sound.SoundManager.PlaySoundInPlayersLocation(Sound.SoundType.DarkSound, 1f, .25f);
+			Sound.SoundManager.PlayUISound(Sound.SoundType.DarkSound, 1f, .25f);
 			while(PTime < PassedTime){
 				
 				Player.Model.Alpha = .4f;

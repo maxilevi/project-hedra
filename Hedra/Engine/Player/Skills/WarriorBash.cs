@@ -13,6 +13,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Player.Skills;
 using OpenTK;
 using Hedra.Engine.Rendering.Animation;
 
@@ -21,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Bash.
 	/// </summary>
-	public class Bash : Skill
+	public class Bash : BaseSkill
 	{	
 		private float Damage = 20f;
 		private Animation BashAnimation;

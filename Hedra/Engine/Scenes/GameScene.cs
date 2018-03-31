@@ -116,7 +116,7 @@ namespace Hedra.Engine.Scenes
 				Player.Model.Enabled = false;
 			Player.Model.Enabled = true;
 			Player.AbilityTree.FromInformation(Information);
-			Player.AbilityBar.FromInformation(Information);
+			Player.Toolbar.FromInformation(Information);
 			Player.Chat.Clear();
 			Player.View.CameraHeight = Camera.DefaultCameraHeight;
 			if(Information.WorldSeed != 0)

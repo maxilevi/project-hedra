@@ -378,7 +378,7 @@ namespace Hedra.Engine.Player
 
                     });
 				}
-				Sound.SoundManager.PlaySoundInPlayersLocation(Sound.SoundType.OnOff, 1.0f, 0.6f);
+				Sound.SoundManager.PlayUISound(Sound.SoundType.OnOff, 1.0f, 0.6f);
 				_show = value;
 			}
 		}

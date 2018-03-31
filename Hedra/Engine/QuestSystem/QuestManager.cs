@@ -173,7 +173,7 @@ namespace Hedra.Engine.QuestSystem
 	    }
 	    
 	    public void EndRun(){
-	    	Sound.SoundManager.PlaySoundInPlayersLocation(Sound.SoundType.NotificationSound);
+	    	Sound.SoundManager.PlayUISound(Sound.SoundType.NotificationSound);
 			LocalPlayer.Instance.MessageDispatcher.ShowTitleMessage("QUEST COMPLETED", 3f, Color.Gold);
 			float Exp = ChainLength * 7;
 			this.QuestCompleted = true;

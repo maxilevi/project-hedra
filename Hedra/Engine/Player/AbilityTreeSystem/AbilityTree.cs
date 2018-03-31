@@ -31,7 +31,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly InventoryStateManager _stateManager;
         private readonly AbilityInventoryBackground _background;
         private AbilityTreeBlueprint _blueprint;
-        private Vector4 _activeColor;
         private bool _show;
 
         public AbilityTree(LocalPlayer Player)
@@ -43,12 +42,11 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _abilities[i] = new Item();
                 _abilities[i].Model = new VertexData();
                 _abilities[i].SetAttribute("Level", 0);
-                _abilities[i].SetAttribute("AbilityType", 0);
                 
             }
             _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Layers, new Vector2(1.5f, 1.5f))
             {
-                Position = Vector2.UnitX * -.65f - Vector2.UnitY * .35f
+                Position = Vector2.UnitX * -.65f + Vector2.UnitY * -.25f
             };
             _interface.IndividualScale = Vector2.One * 1.1f;
             var itemInfo = new AbilityTreeInterfaceItemInfo(_interface.Renderer)
@@ -98,12 +96,21 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public void SetPoints(Type AbilityType, int Count)
         {
-            _abilities.Search(I => I.GetAttribute<Type>("AbilityType") == AbilityType)?.SetAttribute("Level", Count);
+            var item = _abilities.Search(I => I.GetAttribute<Type>("AbilityType") == AbilityType);
+            if(item != null) this.SetPoints(_abilities.IndexOf(item), Count);
         }
 
         public void SetPoints(int Index, int Count)
         {
             _abilities[Index].SetAttribute("Level", Count);
+            for (var k = 0; k < _player.Toolbar.Skills.Length; k++)
+            {
+                if (_player.Toolbar.Skills[k].GetType() == _abilities[Index].GetAttribute<Type>("AbilityType"))
+                {
+                    _player.Toolbar.Skills[k].Level = Count;
+                }
+            }
+            this.UpdateView();
         }
 
         public void Reset()
@@ -129,11 +136,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         private void SetBlueprint(AbilityTreeBlueprint Blueprint)
         {
-            for (var i = 0; i < _player.AbilityBar.Skills.Length; i++)
-            {
-                _player.AbilityBar.Skills[i].Level = 0;
-            }
-
             for (var i = 0; i < Blueprint.Items.Length; i++)
             {
                 for (var j = 0; j < Blueprint.Items[i].Length; j++)
@@ -155,22 +157,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     button.Texture.Opacity = 0.75f;
                     button.Texture.TextureId = slot.Image;
                     button.Texture.MaskId = _interface.Textures[index].TextureElement.Id;
-
-                    var level = ability.GetAttribute<int>("Level");
-                    if (level == 0) continue;
-
-                    for (var k = 0; k < _player.AbilityBar.Skills.Length; k++)
-                    {
-                        if (_player.AbilityBar.Skills[k].GetType() == slot.AbilityType)
-                        {
-                            _player.AbilityBar.Skills[k].Level = level;
-                        }
-                    }
                 }
             }
-            _activeColor = Blueprint.ActiveColor;
         }
 
+        public int AvailablePoints => _manager.AvailablePoints;
+        public InventoryArray TreeItems => _abilities;
         public bool Show
         {
             get { return _show; }
@@ -181,6 +173,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _interface.Enabled = _show;              
                 _background.Enabled = _show;
                 _manager.Enabled = _show;
+                _player.Toolbar.BagEnabled = _show;
                 if(_show)
                     this.SetBlueprint(_blueprint);
                 this.UpdateView();

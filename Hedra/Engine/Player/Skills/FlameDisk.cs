@@ -15,6 +15,7 @@ using System.IO;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.Particles;
 
 namespace Hedra.Engine.Player
@@ -22,7 +23,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of FlameDisk.
 	/// </summary>
-	public class FlameDisk : Skill
+	public class FlameDisk : BaseSkill
 	{
 		private const float Duration = 8f;
 		private bool Emitting = false;

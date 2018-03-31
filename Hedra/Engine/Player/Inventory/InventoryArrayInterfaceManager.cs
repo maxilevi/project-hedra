@@ -86,7 +86,7 @@ namespace Hedra.Engine.Player.Inventory
                 array[itemIndex] = null;
                 this.SetCancelButton(button);
                 this.UpdateView();
-                SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick);
+                SoundManager.PlayUISound(SoundType.ButtonClick);
             }
             else if (_selectedButton != null)
             {
@@ -98,7 +98,7 @@ namespace Hedra.Engine.Player.Inventory
                 this.ResetSelected();
                 this.UpdateView();
                 OnItemMove?.Invoke(newArray, array, itemIndex, item);
-                SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick);
+                SoundManager.PlayUISound(SoundType.ButtonClick);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Hedra.Engine.Player.Inventory
                 this.PlaceInRestrictionsOrFirstEmpty(itemIndex, array, item);
             
             this.UpdateView();
-            SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick);
+            SoundManager.PlayUISound(SoundType.ButtonClick);
         }
 
         private void SetSelectedItem(Button SelectedButton, Item SelectedItem)
@@ -213,6 +213,11 @@ namespace Hedra.Engine.Player.Inventory
             return this.InterfaceByButton(Sender).Offset;
         }
 
+        protected Item ItemByButton(Button Sender)
+        {
+            return this.ArrayByButton(Sender)[this.IndexByButton(Sender)];
+        }
+
         protected InventoryItemRenderer RendererByButton(Button Sender)
         {
             return this.InterfaceByButton(Sender).Renderer;
@@ -262,6 +267,10 @@ namespace Hedra.Engine.Player.Inventory
             set
             {
                 _enabled = value;
+                for (var i = 0; i < _interfaces.Length; i++)
+                {
+                    _interfaces[i].Enabled = value;
+                }
                 if(_itemInfoInterface != null) _itemInfoInterface.Enabled = value;
                 if (_enabled)
                     _cancelButton.Enable();
@@ -271,7 +280,7 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        public void UpdateView()
+        public virtual void UpdateView()
         {
             for (var i = 0; i < _interfaces.Length; i++)
             {

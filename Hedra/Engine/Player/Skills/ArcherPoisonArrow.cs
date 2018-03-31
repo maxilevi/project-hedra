@@ -13,6 +13,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
+using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.Animation;
 using OpenTK;
 
@@ -21,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of ArcherPoisonArrow.
 	/// </summary>
-	public class PoisonArrow : Skill
+	public class PoisonArrow : BaseSkill
 	{
 		private Animation ShootAnimation;
 		private float BaseDamage = 35f, Damage;
@@ -63,7 +64,7 @@ namespace Hedra.Engine.Player
 			};
 		}
 		
-		public override bool MeetsRequirements(AbilityBarSystem.AbilityBar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(AbilityBarSystem.Toolbar Bar, int CastingAbilityCount)
 		{
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && Player.Model.LeftWeapon is Bow;
 		}

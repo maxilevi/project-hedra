@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using Hedra.Engine.Player.Skills;
 using OpenTK;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
@@ -16,7 +17,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class Resistance : Skill
+	public class Resistance : BaseSkill
 	{
 		private bool Set = false;
 		private float AddonHealth = 0;
@@ -26,7 +27,6 @@ namespace Hedra.Engine.Player
 		public Resistance(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
 			base.Passive = true;
-			this.Player = Player;
 		}
 		
 		public float HealthFormula(bool clamp = false){

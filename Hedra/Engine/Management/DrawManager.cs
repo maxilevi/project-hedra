@@ -31,10 +31,10 @@ namespace Hedra.Engine.Management
 		public static int CullableObjectsCount;
 		public static int CulledObjectsCount;
 		public static int DrawCalls;
-		private static bool _initialized;
-		public static int VertsCount; 
-		
-		public static void Add(IRenderable a)
+		public static int VertsCount;
+	    private static bool _initialized;
+
+        public static void Add(IRenderable a)
 	     {
 			
 			lock(DrawFunctions)

@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using Hedra.Engine.Player.Skills;
 using OpenTK;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
@@ -16,7 +17,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class Agility : Skill
+	public class Agility : BaseSkill
 	{
 		private float BonusStamina = 0;
 		private int PrevLevel = 0;
@@ -25,7 +26,6 @@ namespace Hedra.Engine.Player
 		public Agility(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Agility.png");
 			base.Passive = true;
-			this.Player = Player;
 		}
 		
 		public float StaminaFormula(bool clamp = false){

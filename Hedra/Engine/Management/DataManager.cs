@@ -22,7 +22,7 @@ namespace Hedra.Engine.Management
 	/// </summary>
 	public static class DataManager
 	{
-		public const float SaveVersion = 1.0f;
+		public const float SaveVersion = 1.1f;
 		
 		public static void SavePlayer(PlayerInformation Player){
 			string ChrFile = AssetManager.AppData+"/Characters/"+Player.Name;
@@ -48,8 +48,6 @@ namespace Hedra.Engine.Management
 					Bw.Write(Player.Rotation.Y);
 					Bw.Write(Player.Rotation.Z);
 					
-					Bw.Write(Player.Speed);
-					
 					Bw.Write(Player.AddonHealth);
 					Bw.Write(Player.Health);
 					
@@ -63,8 +61,8 @@ namespace Hedra.Engine.Management
 					Bw.Write(Player.AbilityTreeArray.Length);
 					Bw.Write(Player.AbilityTreeArray);
 					
-					Bw.Write(Player.AbilityBarArray.Length);
-					Bw.Write(Player.AbilityBarArray);
+					Bw.Write(Player.ToolbarArray.Length);
+					Bw.Write(Player.ToolbarArray);
 					
 					Bw.Write(Player.TargetPosition);
 					
@@ -101,7 +99,7 @@ namespace Hedra.Engine.Management
 		        BlockPosition = connected ? Scenes.SceneManager.Game.CurrentInformation.BlockPosition : Player.BlockPosition,
 		        AddonHealth = Player.AddonHealth,
 		        AbilityTreeArray = Player.AbilityTree.ToArray(),
-		        AbilityBarArray = Player.AbilityBar.ToArray(),
+		        ToolbarArray = Player.Toolbar.ToArray(),
 		        TargetPosition = Player.Physics.TargetPosition,
 		        Daytime = connected ? Scenes.SceneManager.Game.CurrentInformation.Daytime : Enviroment.SkyManager.DayTime,
 		        ClassType = Player.ClassType,
@@ -131,31 +129,31 @@ namespace Hedra.Engine.Management
 		public static PlayerInformation LoadPlayer(Stream Str){
 			var information = new PlayerInformation();
 			Dictionary<int, Item> items;
-			using(var Br = new BinaryReader(Str)){
-				float version = Br.ReadSingle();
+			using(var br = new BinaryReader(Str)){
+				float version = br.ReadSingle();
 			    if (version < 1.0f) return null;
-				information.Name = Br.ReadString();
-				information.BlockPosition = new Vector3(Br.ReadSingle(), Br.ReadSingle(), Br.ReadSingle());
-				information.Rotation = new Vector3(Br.ReadSingle(), Br.ReadSingle(), Br.ReadSingle());
-				information.Speed = Br.ReadSingle();
-                information.AddonHealth = Br.ReadSingle();
-				information.Health = Br.ReadSingle();
-				information.Xp = Br.ReadSingle();
-				information.Level = Br.ReadInt32();		
-				information.Mana = Br.ReadSingle();
-				information.WorldSeed = Br.ReadInt32();
-			    information.AbilityTreeArray = Br.ReadBytes(Br.ReadInt32());
-				information.AbilityBarArray = Br.ReadBytes(Br.ReadInt32());
-				information.TargetPosition = Br.ReadVector3();
-				information.Daytime = Br.ReadSingle();
-				information.ClassType = (Class) Br.ReadInt32();
-                information.RandomFactor = Br.ReadSingle();
+				information.Name = br.ReadString();
+				information.BlockPosition = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+				information.Rotation = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+				if(version < 1.1f) br.ReadSingle();
+                information.AddonHealth = br.ReadSingle();
+				information.Health = br.ReadSingle();
+				information.Xp = br.ReadSingle();
+				information.Level = br.ReadInt32();		
+				information.Mana = br.ReadSingle();
+				information.WorldSeed = br.ReadInt32();
+			    information.AbilityTreeArray = br.ReadBytes(br.ReadInt32());
+				information.ToolbarArray = br.ReadBytes(br.ReadInt32());
+				information.TargetPosition = br.ReadVector3();
+				information.Daytime = br.ReadSingle();
+				information.ClassType = (Class) br.ReadInt32();
+                information.RandomFactor = br.ReadSingle();
                 items = new Dictionary<int, Item>();
-			    int itemCount = Br.ReadInt32();
+			    int itemCount = br.ReadInt32();
 			    for (var i = 0; i < itemCount; i++)
 			    {
-			        var index = Br.ReadInt32();
-			        var item = Item.FromArray(Br.ReadBytes(Br.ReadInt32()));
+			        var index = br.ReadInt32();
+			        var item = Item.FromArray(br.ReadBytes(br.ReadInt32()));
                     items.Add(index, item);
 			    }
 			}

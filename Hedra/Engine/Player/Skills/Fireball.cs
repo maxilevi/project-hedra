@@ -14,6 +14,7 @@ using System.Drawing;
 using System.IO;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Rendering.Animation;
 
@@ -22,7 +23,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Fireball.
 	/// </summary>
-	public class Fireball : Skill
+	public class Fireball : BaseSkill
 	{
 		private bool LeftHand;
 		private float Damage = 12f;

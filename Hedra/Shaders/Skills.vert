@@ -5,8 +5,6 @@ layout(location = 0)in vec2 InVertex;
 out vec2 UVs;
 out float YCoord;
 
-uniform vec2 MaskScale;
-uniform vec2 MaskPosition;
 uniform vec2 Scale;
 uniform vec2 Position;
 

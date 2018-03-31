@@ -37,6 +37,12 @@ namespace Hedra.Engine.Rendering.UI
 		public void Disable(){
 			BaseTexture.Disable();
 		}
+
+	    public DrawOrder Order
+	    {
+	        get { return DrawManager.UIRenderer.GetDrawOrder(this); }
+	        set { DrawManager.UIRenderer.SetDrawOrder(this, value); }
+	    }
 		
 		public Vector2 Position{
 			get{ return this.BaseTexture.Position; }

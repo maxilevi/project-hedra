@@ -338,7 +338,7 @@ namespace Hedra.Engine.Player
 			}
 
 		    if (e.Key == Key.Escape && !player.UI.GamePanel.Enabled && !player.UI.Hide)
-                Sound.SoundManager.PlaySoundInPlayersLocation(Sound.SoundType.ButtonClick);
+                Sound.SoundManager.PlayUISound(Sound.SoundType.ButtonClick);
 
             if (e.Key == Key.Escape && player.Chat.Focused){
 				player.Chat.LoseFocus();

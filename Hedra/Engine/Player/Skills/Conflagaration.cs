@@ -15,6 +15,7 @@ using System.IO;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Rendering.Animation;
 
@@ -23,7 +24,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Conflagaration.
 	/// </summary>
-	public class Conflagaration : Skill
+	public class Conflagaration : BaseSkill
 	{
 		private float Damage = 22.5f;
 		private PointLight Light;

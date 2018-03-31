@@ -239,7 +239,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                     return;
                 }
 
-                SoundManager.PlaySoundInPlayersLocation(SoundType.NotificationSound);
+                SoundManager.PlayUISound(SoundType.NotificationSound);
                 LocalPlayer.Instance.MessageDispatcher.ShowNotification("OBJECTIVE COMPLETED", Color.White, 5f, false);
                 World.QuestManager.SetQuest(OutObjective);
 

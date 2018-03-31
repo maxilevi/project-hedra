@@ -135,7 +135,7 @@ namespace Hedra.Engine.Rendering.UI
                     && this.Position.X + this.Scale.X > coords.X && this.Position.X - this.Scale.X < coords.X)
                     if (this.Clickable)
                     {
-                        SoundManager.PlaySoundInPlayersLocation(SoundType.ButtonClick, 1, 1.5f);
+                        SoundManager.PlayUISound(SoundType.ButtonClick, 1, 1.5f);
                         this.Click.Invoke(Sender, E);
                     }
             }
@@ -180,11 +180,11 @@ namespace Hedra.Engine.Rendering.UI
                 if(Enlarge)
                     Text.Scale = PreviousScale  + PreviousScale / 16;*/
                 if (this.PlaySound)
-                    SoundManager.PlaySoundInPlayersLocation(SoundType.OnOff, 1f, .2f);
+                    SoundManager.PlayUISound(SoundType.OnOff, 1f, .2f);
             }
             if (this.Texture != null)
                 if (this.PlaySound)
-                    SoundManager.PlaySoundInPlayersLocation(SoundType.OnOff, 1f, .3f);
+                    SoundManager.PlayUISound(SoundType.OnOff, 1f, .3f);
         }
 
         public void OnHoverExit(object Sender, EventArgs E)

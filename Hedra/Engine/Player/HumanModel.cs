@@ -235,7 +235,7 @@ namespace Hedra.Engine.Player
 			this.LeftWeapon.Alpha = Model.Alpha;
 
 		    var player = Human as LocalPlayer;
-		    player?.AbilityBar.SetAttackType(this.LeftWeapon);
+		    player?.Toolbar.SetAttackType(this.LeftWeapon);
 		}
 		
 		public override void Run(){

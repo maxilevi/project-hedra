@@ -35,7 +35,9 @@ namespace Hedra.Engine.ItemSystem
         public T Get<T>(string Attribute)
         {
             if(!_attributes.ContainsKey(Attribute)) throw new KeyNotFoundException($"Provided attribute '{Attribute}' does not exist.");
-            return (T)Convert.ChangeType(_attributes[Attribute].Value, typeof(T));
+            return typeof(T).IsAssignableFrom(typeof(IConvertible)) || typeof(T).IsValueType
+                ? (T) Convert.ChangeType(_attributes[Attribute].Value, typeof(T)) 
+                : (T) _attributes[Attribute].Value;
         }
 
         public void Delete(string Attribute)

@@ -14,13 +14,14 @@ using System.Linq;
 using System.Collections.Generic;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
+using Hedra.Engine.Player.Skills;
 
 namespace Hedra.Engine.Player
 {
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class Puncture : Skill
+	public class Puncture : BaseSkill
 	{
 
 		private Bow PlayerBow = null;
@@ -29,7 +30,6 @@ namespace Hedra.Engine.Player
 		public Puncture(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
 			base.Passive = true;
-			this.Player = Player;
 		}
 		
 		public override void Update()

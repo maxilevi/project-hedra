@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
             if (this.AvailablePoints > 0 && !locked && previousUnlocked)
             {
-                item.SetAttribute("Level", item.GetAttribute<int>("Level")+1);
+                _player.AbilityTree.SetPoints(index, item.GetAttribute<int>("Level")+1);
             }
             else
             {
@@ -39,7 +39,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 else if(!previousUnlocked)
                     _player.MessageDispatcher.ShowNotification("YOU NEED TO UNLOCK THE PREVIOUS SKILL", Color.DarkRed, 3.0f);
                 else
-                    Sound.SoundManager.PlaySoundInPlayersLocation(Sound.SoundType.OnOff, 1.0f, 0.6f);              
+                    Sound.SoundManager.PlayUISound(Sound.SoundType.OnOff, 1.0f, 0.6f);              
             }
             this.UpdateView();
         }
@@ -79,8 +79,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             return null;
         }
 
-        private int AvailablePoints => _player.Level - UsedPoints;
-        private int UsedPoints
+        public int AvailablePoints => _player.Level - UsedPoints;
+        public int UsedPoints
         {
             get
             {
