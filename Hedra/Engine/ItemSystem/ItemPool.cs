@@ -44,28 +44,31 @@ namespace Hedra.Engine.ItemSystem
 
 	    public static Item Grab(ItemPoolSettings Settings)
 	    {
-	        var templates = ItemFactory.Templater.Templates;
+	        var rng = new Random(Settings.Seed);
+            var templates = ItemFactory.Templater.Templates;
 	        templates = templates.Where(Template => 
             Settings.SameTier ? Template.Tier == Settings.Tier : (int)Template.Tier <= (int)Settings.Tier).ToArray();
 	        if(Settings.EquipmentType != null) templates = templates.Where(Template => Template.EquipmentType == Settings.EquipmentType).ToArray();
-	        return ItemPool.Randomize(Settings, Item.FromTemplate(templates[Settings.Rng.Next(0, templates.Length)]));
+	        var item = Item.FromTemplate(templates[rng.Next(0, templates.Length)]);
+	        item.SetAttribute(CommonAttributes.Seed, Settings.Seed, true);
+            return ItemPool.Randomize(item, rng);
 	    }
 
-	    private static Item Randomize(ItemPoolSettings Settings, Item Item)
+	    public static Item Randomize(Item Item, Random Rng)
 	    {
 	        var equipmentType = (EquipmentType) Enum.Parse(typeof(EquipmentType), Item.EquipmentType);
             if (WeaponEquipmentTypes.Contains(equipmentType))
             {
                 var originalTier = Item.Tier;
-                Item = RandomizeTier(Settings, Item);
+                Item = RandomizeTier(Item, Rng);
                 var tierChanged = originalTier != Item.Tier;
                 Item.SetAttribute(CommonAttributes.Damage, Item.GetAttribute<float>(CommonAttributes.Damage)
-                    * (1.0f + (Settings.Rng.NextFloat() * (.3f + (tierChanged ? .1f * (int) Item.Tier : .0f) ) - .15f)));
+                    * (1.0f + (Rng.NextFloat() * (.3f + (tierChanged ? .1f * (int) Item.Tier : .0f) ) - .15f)));
 	            Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed)
-                    * (1.0f + (Settings.Rng.NextFloat() * (.3f + +(tierChanged ? .1f * (int)Item.Tier : .0f)) - .15f)));
-	            if (Settings.Rng.Next(0, 10) == 1)
+                    * (1.0f + (Rng.NextFloat() * (.3f + +(tierChanged ? .1f * (int)Item.Tier : .0f)) - .15f)));
+	            if (Rng.Next(0, 10) == 1)
 	            {
-	                Item.SetAttribute(CommonAttributes.EffectType, EffectTypes[Settings.Rng.Next(0, EffectTypes.Length)].ToString());
+	                Item.SetAttribute(CommonAttributes.EffectType, EffectTypes[Rng.Next(0, EffectTypes.Length)].ToString());
 	            }
             }
 	        if (ArmorEquipmentTypes.Contains(equipmentType))
@@ -74,14 +77,14 @@ namespace Hedra.Engine.ItemSystem
 	        }
 	        if (EquipmentType.Ring == equipmentType)
 	        {
-	            Item.SetAttribute(CommonAttributes.MovementSpeed, Item.GetAttribute<float>(CommonAttributes.MovementSpeed) * (1.0f + (Settings.Rng.NextFloat() * .3f - .15f)));
-	            Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed) * (1.0f + (Settings.Rng.NextFloat() * .3f - .15f)));
-	            Item.SetAttribute(CommonAttributes.Health, Item.GetAttribute<float>(CommonAttributes.Health) * (1.0f + (Settings.Rng.NextFloat() * .3f - .15f)));
+	            Item.SetAttribute(CommonAttributes.MovementSpeed, Item.GetAttribute<float>(CommonAttributes.MovementSpeed) * (1.0f + (Rng.NextFloat() * .3f - .15f)));
+	            Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed) * (1.0f + (Rng.NextFloat() * .3f - .15f)));
+	            Item.SetAttribute(CommonAttributes.Health, Item.GetAttribute<float>(CommonAttributes.Health) * (1.0f + (Rng.NextFloat() * .3f - .15f)));
             }
             return Item;
 	    }
 
-	    private static Item RandomizeTier(ItemPoolSettings Settings, Item Item)
+	    private static Item RandomizeTier(Item Item, Random Rng)
 	    {
 	        var newTier = Item.Tier;
 	        for (var i = (int)ItemTier.Misc - 1; i > -1; i--)
@@ -90,7 +93,7 @@ namespace Hedra.Engine.ItemSystem
 	            var shouldConvert = true;
 	            for (var k = 0; k < i; k++)
 	            {
-	                shouldConvert = Settings.Rng.NextBool();
+	                shouldConvert = Rng.NextBool();
 	                if (shouldConvert)
 	                {
 	                    int a = 0;

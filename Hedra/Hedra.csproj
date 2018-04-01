@@ -3271,8 +3271,16 @@
       <Link>Assets\Items\Swords\RareBarbarianIronSword.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\RareEqualizerAxe.ply">
+      <Link>Assets\Items\Axes\RareEqualizerAxe.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\RareGoldRing.ply">
       <Link>Assets\Items\Rings\RareGoldRing.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\RareHunterAxe.ply">
+      <Link>Assets\Items\Axes\RareHunterAxe.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\RarePaladinSilverSword.ply">
@@ -3359,12 +3367,24 @@
       <Link>Assets\Items\Swords\UncommonBarbarianBronzeSword.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\UncommonHalvingBladeAxe.ply">
+      <Link>Assets\Items\Axes\UncommonHalvingBladeAxe.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\UncommonHandGuillotineAxe.ply">
+      <Link>Assets\Items\Axes\UncommonHandGuillotineAxe.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\UncommonIronRing.ply">
       <Link>Assets\Items\Rings\UncommonIronRing.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\UncommonIronWarhammer.ply">
       <Link>Assets\Items\Hammers\UncommonIronWarhammer.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\UncommonSilverAxe.ply">
+      <Link>Assets\Items\Axes\UncommonSilverAxe.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\UncommonSilverBow.ply">

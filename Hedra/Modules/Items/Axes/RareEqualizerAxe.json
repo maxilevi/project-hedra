@@ -1,0 +1,21 @@
+﻿{
+  "Name": "RareEqualizerAxe",
+  "DisplayName": "Equalizer",
+  "EquipmentType": "Axe", 
+  "Tier": "Rare",
+  "Description": "Equalizer axe.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 9.75
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.85
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Axes/RareEqualizerAxe.ply"
+  }
+}

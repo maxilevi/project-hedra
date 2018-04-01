@@ -1,0 +1,21 @@
+﻿{
+  "Name": "UncommonHandGuillotineAxe",
+  "DisplayName": "Hand Guillotine",
+  "EquipmentType": "Axe", 
+  "Tier": "Uncommon",
+  "Description": "Hand guillotine axe.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 9.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.85
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Axes/UncommonHalvingBladeAxe.ply"
+  }
+}

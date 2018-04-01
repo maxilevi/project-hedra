@@ -91,7 +91,7 @@ namespace Hedra.Engine.Player.Inventory
             var strBuilder = new StringBuilder();
             for (var i = 0; i < attributes.Length; i++)
             {
-                if (!attributes[i].Hidden)
+                if (!attributes[i].Hidden || GameSettings.Debug)
                 {
                     var line = $"{attributes[i].Name.AddSpacesToSentence()}   ➝   {EscapeValue(attributes[i].Value)}";
                     strBuilder.AppendLine(line);

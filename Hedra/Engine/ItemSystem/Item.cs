@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering;
@@ -121,7 +122,14 @@ namespace Hedra.Engine.ItemSystem
             savedTemplate.Description = defaultTemplate.Description;
             savedTemplate.DisplayName = defaultTemplate.DisplayName;
             savedTemplate.Tier = defaultTemplate.Tier;
-            return FromTemplate(savedTemplate);
+            var item = FromTemplate(savedTemplate);
+            if (savedTemplate.EquipmentType == null) return item;
+            
+            var newItem = ItemPool.Grab(savedTemplate.Name);
+            if (!item.HasAttribute(CommonAttributes.Seed)) item.SetAttribute(CommonAttributes.Seed, Utils.Rng.Next(int.MinValue, int.MaxValue), true);
+
+            newItem.SetAttribute(CommonAttributes.Seed, item.GetAttribute<int>(CommonAttributes.Seed), true);
+            return ItemPool.Randomize(newItem, new Random(newItem.GetAttribute<int>(CommonAttributes.Seed)));           
         }
 
         public byte[] ToArray()

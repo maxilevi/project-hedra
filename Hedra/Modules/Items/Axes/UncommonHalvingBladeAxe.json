@@ -1,0 +1,21 @@
+﻿{
+  "Name": "UncommonHalvingBladeAxe",
+  "DisplayName": "Halving Blade",
+  "EquipmentType": "Axe", 
+  "Tier": "Uncommon",
+  "Description": "Halving blade axe.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 9.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Axes/UncommonHalvingBladeAxe.ply"
+  }
+}

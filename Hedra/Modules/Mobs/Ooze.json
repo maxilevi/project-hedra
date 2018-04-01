@@ -21,7 +21,7 @@
     },
     "AttackAnimation": {
       "Path": "$DataFile$/Assets/Chr/OozeAttack.dae",
-      "Speed": 1.75
+      "Speed": 1.5
     }
   } 
 }

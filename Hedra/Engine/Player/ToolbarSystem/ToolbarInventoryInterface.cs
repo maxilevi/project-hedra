@@ -46,7 +46,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public override void UpdateView()
         {
-            _foodItem = _player.Inventory.Food;
             if(_foodItem != null) _foodMesh = Renderer.BuildModel(_foodItem, out _foodHeight);
             for (var i = 0; i < _textBackgrounds.Length; i++)
             {
@@ -67,6 +66,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public void Update()
         {
+            _foodItem = _player.Inventory.Food;
             this.ButtonsText[this.ButtonsText.Length - 1].Text =
                 _player.Inventory.Food?.GetAttribute<int>(CommonAttributes.Amount).ToString() ?? string.Empty;
         }

@@ -1,0 +1,21 @@
+﻿{
+  "Name": "UncommonSilverAxe",
+  "DisplayName": "Silver Axe",
+  "EquipmentType": "Axe", 
+  "Tier": "Uncommon",
+  "Description": "Silver axe.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Axes/UncommonSilverAxe.ply"
+  }
+}

@@ -12,6 +12,7 @@ namespace Hedra.Engine.ItemSystem
         AttackSpeed,
         MovementSpeed,
         Health,
-        EffectType
+        EffectType,
+        Seed
     }
 }
