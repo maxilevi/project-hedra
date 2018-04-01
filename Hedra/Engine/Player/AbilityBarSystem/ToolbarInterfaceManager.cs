@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.UI;
@@ -27,6 +28,34 @@ namespace Hedra.Engine.Player.AbilityBarSystem
             _player = Player;
         }
 
+        public void Empty()
+        {
+            for (var i = 0; i < this._bagInterface.Buttons.Length; i++)
+            {
+                this._bagInterface.Array[i].SetAttribute("ImageId", 0);
+                this._bagInterface.Array[i].SetAttribute("AbilityType", null);
+            }
+            for (var i = 0; i < this._toolbarInferface.Buttons.Length; i++)
+            {
+                if (this._toolbarInferface.Array[i].HasAttribute("AbilityType"))
+                    this._toolbarInferface.Array[i].SetAttribute("AbilityType", null);
+            }
+            var filteredSkills = this.GetFilteredSkills();
+            for (var i = 0; i < filteredSkills.Length; i++)
+            {
+                var firstButton = this._bagInterface.Buttons.First(
+                    B => _bagInterface.Array[Array.IndexOf(_bagInterface.Buttons, B)]
+                             .GetAttribute<Type>("AbilityType") == null);
+                var index = Array.IndexOf(_bagInterface.Buttons, firstButton);
+                var texture = _toolbarInferface.Textures[index];
+                filteredSkills[i].Scale = texture.Scale;
+                filteredSkills[i].Position = firstButton.Position;
+
+                this._bagInterface.Array[index].SetAttribute("ImageId", filteredSkills[i].TexId);
+                this._bagInterface.Array[index].SetAttribute("AbilityType", filteredSkills[i].GetType());
+            }
+        }
+
         public override void UpdateView()
         {
             var usedTypes = new List<Type>();
@@ -46,10 +75,11 @@ namespace Hedra.Engine.Player.AbilityBarSystem
             var filteredSkills = this.GetFilteredSkills();
             for (var i = 0; i < filteredSkills.Length; i++)
             {
-                filteredSkills[i].Active = this.Enabled;
+                filteredSkills[i].Active = this.Enabled && _player.AbilityTree.Show;
                 var type = filteredSkills[i].GetType();
                 if (usedTypes.Contains(type))
                 {
+                    filteredSkills[i].Active = true;
                     var button = this._toolbarInferface.Buttons.First(
                         B => _toolbarInferface.Array[Array.IndexOf(_toolbarInferface.Buttons, B)]
                                  .GetAttribute<Type>("AbilityType") == type
@@ -61,9 +91,9 @@ namespace Hedra.Engine.Player.AbilityBarSystem
                 }
                 else
                 {
-                    var firstButton = this._bagInterface.Buttons.First(
-                        B => _bagInterface.Array[Array.IndexOf(_bagInterface.Buttons, B)].GetAttribute<Type>("AbilityType") == null);
-                    var index = Array.IndexOf(_bagInterface.Buttons, firstButton);
+                    var index = Array.IndexOf(_bagInterface.Buttons, this._bagInterface.Buttons.First(
+                        B => _bagInterface.Array[Array.IndexOf(_bagInterface.Buttons, B)].GetAttribute<Type>("AbilityType") == null));
+                    var firstButton = _bagInterface.Buttons[index];
                     var texture = _toolbarInferface.Textures[index];
                     filteredSkills[i].Scale = texture.Scale;
                     filteredSkills[i].Position = firstButton.Position;
@@ -75,15 +105,12 @@ namespace Hedra.Engine.Player.AbilityBarSystem
             base.UpdateView();
         }
 
-        public void Switch(Button Object)
-        {
-            this.Use(Object, null);
-        }
-
         protected override void Interact(object Sender, MouseButtonEventArgs EventArgs) {}
 
         protected override void Use(object Sender, MouseButtonEventArgs EventArgs)
         {
+            if(!_player.AbilityTree.Show) return;
+
             var button = (Button) Sender;
             if (_toolbarInferface.Buttons.Contains(button))
             {
@@ -109,14 +136,23 @@ namespace Hedra.Engine.Player.AbilityBarSystem
                 if (Interface.Array[i].HasAttribute("AbilityType") &&
                     Interface.Array[i].GetAttribute<Type>("AbilityType") == null)
                 {
-                    Interface.Array[i].SetAttribute("AbilityType", abilityType);
+                    this.Move(item, abilityType, Interface, i);
                     success = true;
                     break;
                 }
             }
-
-            if (success) item.SetAttribute("AbilityType", null);
             return success;
+        }
+
+        private void Set(Type AbilityType, InventoryArrayInterface Interface, int Index)
+        {
+            Interface.Array[Index].SetAttribute("AbilityType", AbilityType);
+        }
+
+        public void Move(Item From, Type AbilityType, InventoryArrayInterface Interface, int Index)
+        {
+            this.Set(AbilityType, Interface, Index);
+            From.SetAttribute("AbilityType", null);
         }
 
         public BaseSkill[] GetFilteredSkills()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
@@ -16,6 +17,9 @@ namespace Hedra.Engine.Player.AbilityBarSystem
         private readonly LocalPlayer _player;
         private readonly Panel _panel;
         private readonly RenderableTexture[] _textBackgrounds;
+        private ObjectMesh _foodMesh;
+        private Item _foodItem;
+        private float _foodHeight;
 
         public ToolbarInventoryInterface(LocalPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing, string[] CustomIcons = null) : base(Array, Offset, Length, SlotsPerLine, Spacing, CustomIcons)
         {
@@ -38,10 +42,14 @@ namespace Hedra.Engine.Player.AbilityBarSystem
                 DrawManager.UIRenderer.Add(this.ButtonsText[i], DrawOrder.After);
                 _panel.AddElement(_textBackgrounds[i]);
             }
+            this.Buttons[this.Buttons.Length - 1].Texture.IdPointer = () =>
+                Renderer.Draw(_foodMesh, _foodItem, true, _foodHeight * InventoryItemRenderer.ZOffsetFactor);
         }
 
         public override void UpdateView()
         {
+            _foodItem = _player.Inventory.Food;
+            if(_foodItem != null) _foodMesh = Renderer.BuildModel(_foodItem, out _foodHeight);
             for (var i = 0; i < _textBackgrounds.Length; i++)
             {
                 this.ButtonsText[i].Text = i < Toolbar.InteractableItems 
@@ -54,6 +62,10 @@ namespace Hedra.Engine.Player.AbilityBarSystem
                     _textBackgrounds[i].Disable();
                 }
             }
+        }
+
+        public void Update()
+        {
             this.ButtonsText[this.ButtonsText.Length - 1].Text =
                 _player.Inventory.Food?.GetAttribute<int>(CommonAttributes.Amount).ToString() ?? string.Empty;
         }

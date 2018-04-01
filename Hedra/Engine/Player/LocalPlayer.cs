@@ -70,7 +70,7 @@ namespace Hedra.Engine.Player
 			this.Spawner = new EntitySpawner(this);
 			this.Model = new HumanModel(this);
 			this.Inventory = new PlayerInventory(this);
-			this.Toolbar = new AbilityBarSystem.Toolbar(this);
+			this.Toolbar = new Toolbar(this);
 			this.Glider = new GliderModel();
 			this.AbilityTree = new AbilityTreeSystem.AbilityTree(this);
 			this.QuestLog = new QuestLog(this);
@@ -458,6 +458,7 @@ namespace Hedra.Engine.Player
 
             Inventory.Update();
             AbilityTree.Update();
+            Toolbar.Update();
 			Movement.Update();
 			UI.Update();
 			ManageSounds();

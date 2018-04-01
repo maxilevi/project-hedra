@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player.AbilityBarSystem
 		private readonly LocalPlayer _player;
 	    private readonly InventoryArray _barItems;
 	    private readonly InventoryArray _bagItems;
-	    private readonly ToolbarInventoryInterface _barItemsInterface;
+	    private readonly ToolbarInventoryInterface _toolbarItemsInterface;
 	    private readonly AbilityBagInventoryInterface _bagItemsInterface;
 	    private readonly ToolbarInterfaceManager _manager;
 	    private readonly ToolbarInputHandler _inputHandler;
@@ -44,7 +44,7 @@ namespace Hedra.Engine.Player.AbilityBarSystem
 			_player = Player;
             _barItems = new InventoryArray(BarItems);
             _bagItems = new InventoryArray(AbilityTree.AbilityCount-1);
-            _barItemsInterface = new ToolbarInventoryInterface(_player, _barItems, 0, _barItems.Length, BarItems, Vector2.One)
+            _toolbarItemsInterface = new ToolbarInventoryInterface(_player, _barItems, 0, _barItems.Length, BarItems, Vector2.One)
             {
                 Position = Vector2.UnitY * -.875f,
                 IndividualScale = Vector2.One * 1.0f
@@ -54,7 +54,7 @@ namespace Hedra.Engine.Player.AbilityBarSystem
                 Position = Vector2.UnitY * -.6f,
                 IndividualScale = Vector2.One * 0.85f
             };
-            _manager = new ToolbarInterfaceManager(_player, _barItemsInterface, _bagItemsInterface);
+            _manager = new ToolbarInterfaceManager(_player, _toolbarItemsInterface, _bagItemsInterface);
             _inputHandler = new ToolbarInputHandler(_player);
             this.LoadSkills();
         }
@@ -70,8 +70,8 @@ namespace Hedra.Engine.Player.AbilityBarSystem
 	            _skills[i].MaskId = InventoryArrayInterface.DefaultId;
                 _skills[i].Active = false;
 	        }
-            _w1 = new WeaponAttack(_barItemsInterface.Textures[4].Position, _barItemsInterface.Textures[4].Scale, _player.UI.GamePanel, _player);
-            _w2 = new WeaponAttack(_barItemsInterface.Textures[5].Position, _barItemsInterface.Textures[5].Scale, _player.UI.GamePanel, _player);
+            _w1 = new WeaponAttack(_toolbarItemsInterface.Textures[4].Position, _toolbarItemsInterface.Textures[4].Scale, _player.UI.GamePanel, _player);
+            _w2 = new WeaponAttack(_toolbarItemsInterface.Textures[5].Position, _toolbarItemsInterface.Textures[5].Scale, _player.UI.GamePanel, _player);
 
 	        _w1.MaskId = InventoryArrayInterface.DefaultId;
 	        _w2.MaskId = InventoryArrayInterface.DefaultId;
@@ -118,6 +118,11 @@ namespace Hedra.Engine.Player.AbilityBarSystem
                 && S.GetType() == _barItems[Index].GetAttribute<Type>("AbilityType"));
 	    }
 
+	    public void Update()
+	    {
+	        _toolbarItemsInterface.Update();
+	    }
+
 	    public void UpdateView()
 	    {
 	        _manager.UpdateView();
@@ -137,25 +142,27 @@ namespace Hedra.Engine.Player.AbilityBarSystem
 		    for (var i = 0; i < InteractableItems; i++)
 		    {
 		        var skill = this.SkillAt(i);
-                saveData += skill == null ? string.Empty : skill.GetType().Name + Toolbar.Marker;
+                saveData += skill == null ? string.Empty + Toolbar.Marker : skill.GetType().Name + Toolbar.Marker;
 		    }
 		    return Encoding.ASCII.GetBytes(saveData);
 		}
 		
 		public void FromInformation(PlayerInformation Information)
 		{
+            _manager.Empty();
             var saveData = Encoding.ASCII.GetString(Information.ToolbarArray);
 		    var splits = saveData.Split(Toolbar.Marker);
-            for (var i = 0; i < _skills.Length; i++)
+		    for (var k = 0; k < splits.Length; k++)
 		    {
-		        for (var k = 0; k < splits.Length; k++)
+		        for (var i = 0; i < _skills.Length; i++)
 		        {
 		            var type = _skills[i].GetType();
-                    if (type.Name == splits[k])
+		            if (type.Name == splits[k])
 		            {
-                        _manager.Switch( _bagItemsInterface.Buttons.First(
-                            B => _bagItemsInterface.Array[Array.IndexOf(_bagItemsInterface.Buttons, B)]
-                            .GetAttribute<Type>("AbilityType") == type) );
+		                var itemIndex = Array.IndexOf(_bagItemsInterface.Buttons, _bagItemsInterface.Buttons.First(B =>
+		                    _bagItemsInterface.Array[Array.IndexOf(_bagItemsInterface.Buttons, B)].GetAttribute<Type>("AbilityType") == type));
+
+                        _manager.Move(_bagItemsInterface.Array[itemIndex], type, _toolbarItemsInterface, k);
 		            }
 		        }
 		    }
@@ -169,6 +176,15 @@ namespace Hedra.Engine.Player.AbilityBarSystem
 	        set
 	        {
 	            _bagItemsInterface.Enabled = value;
+	            var filtered = _manager.GetFilteredSkills();
+	            var inToolbar = new[] {this.SkillAt(0), this.SkillAt(1), this.SkillAt(2), this.SkillAt(3)};
+	            for (var i = 0; i < _skills.Length; i++)
+	            {
+                    if (!inToolbar.Contains(_skills[i])){
+	                    _skills[i].Active = false;
+	                    if (filtered.Contains(_skills[i])) _skills[i].Active = value;
+	                }
+	            }
 	        }
 	    }
 
@@ -178,8 +194,7 @@ namespace Hedra.Engine.Player.AbilityBarSystem
 	        set
 	        {
 	            _show = value;
-	            _manager.Enabled = value;
-	            _bagItemsInterface.Enabled = _player.AbilityTree.Show;
+                _manager.Enabled = _show;
                 this.UpdateView();
 	        }
 	    }
