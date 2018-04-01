@@ -18,6 +18,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.Skills;
+using Hedra.Engine.Player.ToolbarSystem;
 
 namespace Hedra.Engine.Player
 {
@@ -53,7 +54,7 @@ namespace Hedra.Engine.Player
 			};
 		}
 
-		public override bool MeetsRequirements(AbilityBarSystem.Toolbar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
 		{
             bool Met = !Player.Toolbar.DisableAttack;
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && Met;

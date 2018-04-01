@@ -27,6 +27,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public const int Layers = 3;
         private const char SaveMarker = '!';
         private const char NumberMarker = '|';
+        private const string HeaderMarker = "<>";
         private readonly LocalPlayer _player;
         private readonly InventoryArray _abilities;
         private readonly AbilityTreeInterface _interface;
@@ -126,7 +127,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public byte[] ToArray()
         {
-            var saveData = string.Empty;
+            var saveData = HeaderMarker;
             for (var i = 0; i < _abilities.Length; i++)
             {
                 var skill = _abilities[i];
@@ -144,7 +145,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             if (Information.AbilityTreeArray.Length > 0)
             {
                 var saveData = Encoding.ASCII.GetString(Information.AbilityTreeArray);
-                var splits = saveData.Split(AbilityTree.SaveMarker);
+                if(!saveData.StartsWith(HeaderMarker)) return;
+
+                var splits = saveData.Substring(HeaderMarker.Length, saveData.Length - HeaderMarker.Length).Split(AbilityTree.SaveMarker);
                 for (var i = 0; i < splits.Length; i++)
                 {
                     var subSplits = splits[i].Split(AbilityTree.NumberMarker);

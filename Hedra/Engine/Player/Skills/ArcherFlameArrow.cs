@@ -15,6 +15,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Player.Skills;
+using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.Animation;
 using OpenTK;
 using Hedra.Engine.Rendering.Particles;
@@ -132,7 +133,7 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public override bool MeetsRequirements(AbilityBarSystem.Toolbar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
 		{
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && Player.Model.LeftWeapon is Bow;
 		}

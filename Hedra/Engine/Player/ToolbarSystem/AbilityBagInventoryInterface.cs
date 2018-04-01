@@ -1,15 +1,10 @@
-﻿using System;
-using System.Drawing;
-using System.Linq;
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Management;
+﻿using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
 
-namespace Hedra.Engine.Player.AbilityBarSystem
+namespace Hedra.Engine.Player.ToolbarSystem
 {
     public class AbilityBagInventoryInterface : InventoryArrayInterface
     {

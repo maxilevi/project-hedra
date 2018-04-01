@@ -18,7 +18,7 @@ using Hedra.Engine.Player.Skills;
 using OpenTK;
 using OpenTK.Input;
 
-namespace Hedra.Engine.Player.AbilityBarSystem
+namespace Hedra.Engine.Player.ToolbarSystem
 {
 	/// <summary>
 	/// Description of SkillsBar.
@@ -28,7 +28,8 @@ namespace Hedra.Engine.Player.AbilityBarSystem
         public const int InteractableItems = 4;
 	    public const int BarItems = 7;
 	    private const char Marker = '!';
-		private readonly LocalPlayer _player;
+	    private const string HeaderMarker = "<>";
+        private readonly LocalPlayer _player;
 	    private readonly InventoryArray _barItems;
 	    private readonly InventoryArray _bagItems;
 	    private readonly ToolbarInventoryInterface _toolbarItemsInterface;
@@ -138,7 +139,7 @@ namespace Hedra.Engine.Player.AbilityBarSystem
 		
 		public byte[] ToArray()
 		{
-		    var saveData = string.Empty;
+		    var saveData = HeaderMarker;
 		    for (var i = 0; i < InteractableItems; i++)
 		    {
 		        var skill = this.SkillAt(i);
@@ -151,7 +152,8 @@ namespace Hedra.Engine.Player.AbilityBarSystem
 		{
             _manager.Empty();
             var saveData = Encoding.ASCII.GetString(Information.ToolbarArray);
-		    var splits = saveData.Split(Toolbar.Marker);
+            if(!saveData.StartsWith(HeaderMarker)) return;
+		    var splits = saveData.Substring(HeaderMarker.Length, saveData.Length-HeaderMarker.Length).Split(Toolbar.Marker);
 		    for (var k = 0; k < splits.Length; k++)
 		    {
 		        for (var i = 0; i < _skills.Length; i++)

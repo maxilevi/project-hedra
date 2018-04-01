@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
-using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
 
-namespace Hedra.Engine.Player.AbilityBarSystem
+namespace Hedra.Engine.Player.ToolbarSystem
 {
     public class ToolbarInventoryInterface : InventoryArrayInterface
     {
@@ -42,8 +39,9 @@ namespace Hedra.Engine.Player.AbilityBarSystem
                 DrawManager.UIRenderer.Add(this.ButtonsText[i], DrawOrder.After);
                 _panel.AddElement(_textBackgrounds[i]);
             }
-            this.Buttons[this.Buttons.Length - 1].Texture.IdPointer = () =>
-                Renderer.Draw(_foodMesh, _foodItem, true, _foodHeight * InventoryItemRenderer.ZOffsetFactor);
+            this.Buttons[this.Buttons.Length - 1].Texture.IdPointer = () => _foodItem != null
+                ? Renderer.Draw(_foodMesh, _foodItem, true, _foodHeight * InventoryItemRenderer.ZOffsetFactor)
+                : GUIRenderer.TransparentTexture;
         }
 
         public override void UpdateView()
@@ -55,7 +53,10 @@ namespace Hedra.Engine.Player.AbilityBarSystem
                 this.ButtonsText[i].Text = i < Toolbar.InteractableItems 
                     ? (i + 1).ToString() : i == Toolbar.InteractableItems 
                     ? "M1" : i == Toolbar.InteractableItems+1 ? "M2" : string.Empty;
-                if(Enabled) _textBackgrounds[i].Enable();
+                if (Enabled)
+                {
+                    _textBackgrounds[i].Enable();
+                }
                 if (this.Array[i].HasAttribute("AbilityType") && this.Array[i].GetAttribute<Type>("AbilityType") == null)
                 {
                     this.ButtonsText[i].Text = string.Empty;

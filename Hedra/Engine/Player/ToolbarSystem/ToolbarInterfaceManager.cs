@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.ItemSystem;
@@ -7,10 +6,9 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
-using OpenTK;
 using OpenTK.Input;
 
-namespace Hedra.Engine.Player.AbilityBarSystem
+namespace Hedra.Engine.Player.ToolbarSystem
 {
     public class ToolbarInterfaceManager : InventoryArrayInterfaceManager
     {

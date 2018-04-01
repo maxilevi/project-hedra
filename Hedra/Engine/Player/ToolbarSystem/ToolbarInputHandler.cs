@@ -1,11 +1,9 @@
-﻿using System;
-using System.Drawing;
-using System.Linq;
+﻿using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Sound;
 using OpenTK.Input;
 
-namespace Hedra.Engine.Player.AbilityBarSystem
+namespace Hedra.Engine.Player.ToolbarSystem
 {
     public class ToolbarInputHandler
     {

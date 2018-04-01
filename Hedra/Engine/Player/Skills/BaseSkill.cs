@@ -10,6 +10,7 @@
 using System;
 using System.Drawing;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -62,7 +63,7 @@ namespace Hedra.Engine.Player.Skills
 			UpdateManager.Add(this);
 		}
 		
-		public virtual bool MeetsRequirements(AbilityBarSystem.Toolbar Bar, int CastingAbilityCount)
+		public virtual bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
 		{
 		    if (!(Cooldown < 0) || !((LocalPlayer.Instance.Mana - ManaCost) > 0) || CastingAbilityCount != 0 ||
 		        this.Level <= 0 || !Active || Player.IsEating) return false;

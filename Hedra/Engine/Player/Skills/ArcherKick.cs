@@ -14,6 +14,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player.Skills;
+using Hedra.Engine.Player.ToolbarSystem;
 using OpenTK;
 using Hedra.Engine.Rendering.Animation;
 
@@ -65,7 +66,7 @@ namespace Hedra.Engine.Player
 			};
 		}
 		
-		public override bool MeetsRequirements(AbilityBarSystem.Toolbar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
 		{
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsAttacking && !Player.IsCasting;
 		}

@@ -369,10 +369,10 @@
     <Compile Include="Engine\ItemSystem\WeaponSystem\Axe.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\DoubleBlades.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Bow.cs" />
-    <Compile Include="Engine\Player\AbilityBarSystem\AbilityBagInventoryInterface.cs" />
-    <Compile Include="Engine\Player\AbilityBarSystem\ToolbarInputHandler.cs" />
-    <Compile Include="Engine\Player\AbilityBarSystem\ToolbarInterfaceManager.cs" />
-    <Compile Include="Engine\Player\AbilityBarSystem\ToolbarInventoryInterface.cs" />
+    <Compile Include="Engine\Player\ToolbarSystem\AbilityBagInventoryInterface.cs" />
+    <Compile Include="Engine\Player\ToolbarSystem\ToolbarInputHandler.cs" />
+    <Compile Include="Engine\Player\ToolbarSystem\ToolbarInterfaceManager.cs" />
+    <Compile Include="Engine\Player\ToolbarSystem\ToolbarInventoryInterface.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityInventoryBackground.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeInterface.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeInterfaceManager.cs" />
@@ -414,7 +414,7 @@
     <Compile Include="Engine\Player\Projectile.cs" />
     <Compile Include="Engine\Player\QuestLog.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Sword.cs" />
-    <Compile Include="Engine\Player\AbilityBarSystem\Toolbar.cs" />
+    <Compile Include="Engine\Player\ToolbarSystem\Toolbar.cs" />
     <Compile Include="Engine\Player\Skills\ArcherAgility.cs" />
     <Compile Include="Engine\Player\Skills\ArcherFlameArrow.cs" />
     <Compile Include="Engine\Player\Skills\ArcherIceArrow.cs" />

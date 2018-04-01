@@ -23,7 +23,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.StructureSystem;
-using Hedra.Engine.Player.AbilityBarSystem;
+using Hedra.Engine.Player.ToolbarSystem;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player

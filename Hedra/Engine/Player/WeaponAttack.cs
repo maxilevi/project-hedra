@@ -12,6 +12,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Skills;
+using Hedra.Engine.Player.ToolbarSystem;
 using OpenTK;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Rendering;
@@ -60,7 +61,7 @@ namespace Hedra.Engine.Player
 		    base.TexId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) 0);
 		}
 		
-		public override bool MeetsRequirements(AbilityBarSystem.Toolbar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
 		{
 			if(DisableWeapon) return false;			
 			 return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsAttacking && !Player.IsEating && Player.CanInteract;
