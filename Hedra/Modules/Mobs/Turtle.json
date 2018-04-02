@@ -1,7 +1,7 @@
 ﻿{
   "Name" : "Turtle", 
-  "MaxHealth": 280.0,
-  "AttackDamage": 10.0,
+  "MaxHealth": 880.0,
+  "AttackDamage": 8.0,
   "Speed": 2.0,
   "XP": 1.0,
   "AIType": "Neutral",

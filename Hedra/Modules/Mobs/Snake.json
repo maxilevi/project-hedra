@@ -1,7 +1,7 @@
 ﻿{
   "Name" : "Snake", 
-  "MaxHealth": 180.0,
-  "AttackDamage": 16.0,
+  "MaxHealth": 280.0,
+  "AttackDamage": 28.0,
   "Speed": 2.0,
   "XP": 2.0,
   "AIType": "Hostile",

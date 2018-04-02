@@ -1,0 +1,21 @@
+﻿{
+  "Name": "UniquePendulumBladeAxe",
+  "DisplayName": "Pendulum Blade",
+  "EquipmentType": "Axe", 
+  "Tier": "Unique",
+  "Description": "Pendulum blade axe.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 13.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.1
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Axes/UniquePendulumBladeAxe.ply"
+  }
+}

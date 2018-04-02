@@ -170,7 +170,15 @@ namespace Hedra.Engine.Player.ToolbarSystem
 		    }
 		}
 
-        public bool DisableAttack { get; set; }
+	    public bool DisableAttack
+	    {
+            get { return _w1.DisableWeapon && _w2.DisableWeapon; }
+	        set
+	        {
+	            _w1.DisableWeapon = value;
+	            _w2.DisableWeapon = value;
+	        }
+	    }
 
 	    public bool BagEnabled
 	    {

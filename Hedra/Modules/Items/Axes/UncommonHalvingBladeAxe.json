@@ -7,15 +7,15 @@
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 9.0
+      "Value": 10.5
     },
     {
       "Name": "AttackSpeed",
-      "Value": 1.05
+      "Value": 1.15
     }
   ],
   "Model": {
-    "Scale": 2.0,
+    "Scale": 3.0,
     "Path": "$DataFile$/Items/Axes/UncommonHalvingBladeAxe.ply"
   }
 }

@@ -86,22 +86,21 @@ namespace Hedra.Engine.Management
 		}
 	
 		public static PlayerInformation DataFromPlayer(LocalPlayer Player){
-			bool connected = Networking.NetworkManager.IsConnected;
 		    var data = new PlayerInformation
 		    {
 		        Level = Player.Level,
 		        Health = Player.Health,
-		        Mana = Player.MaxXP,
+		        AddonHealth = Player.AddonHealth,
+                Mana = Player.MaxXP,
 		        Xp = Player.XP,
-		        WorldSeed = connected ? Scenes.SceneManager.Game.CurrentInformation.WorldSeed : World.Seed,
+		        WorldSeed = World.Seed,
 		        Name = Player.Name,
 		        Rotation = Player.Rotation,
-		        BlockPosition = connected ? Scenes.SceneManager.Game.CurrentInformation.BlockPosition : Player.BlockPosition,
-		        AddonHealth = Player.AddonHealth,
+		        BlockPosition = Player.BlockPosition,
 		        AbilityTreeArray = Player.AbilityTree.ToArray(),
 		        ToolbarArray = Player.Toolbar.ToArray(),
 		        TargetPosition = Player.Physics.TargetPosition,
-		        Daytime = connected ? Scenes.SceneManager.Game.CurrentInformation.Daytime : Enviroment.SkyManager.DayTime,
+		        Daytime = Enviroment.SkyManager.DayTime,
 		        ClassType = Player.ClassType,
 		        RandomFactor = Player.RandomFactor,
 		        Items = Player.Inventory.ToArray()

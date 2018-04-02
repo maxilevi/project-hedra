@@ -7,7 +7,7 @@
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 8.5
+      "Value": 9.0
     },
     {
       "Name": "AttackSpeed",
@@ -15,7 +15,7 @@
     }
   ],
   "Model": {
-    "Scale": 2.0,
+    "Scale": 3.0,
     "Path": "$DataFile$/Items/Axes/UncommonSilverAxe.ply"
   }
 }

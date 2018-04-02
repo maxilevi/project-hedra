@@ -24,7 +24,6 @@ namespace Hedra.Engine.Scenes
 	{
 	    public int Id { get; set; } = 1;
 		public LocalPlayer Player { get; set; }
-		public PlayerInformation CurrentInformation { get; set; }
 	    public bool IsLoading { get; private set; }
         private Texture _loadingScreen;
 	    private GUIText _playerText;

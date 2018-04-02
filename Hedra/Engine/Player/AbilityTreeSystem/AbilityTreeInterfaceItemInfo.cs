@@ -16,7 +16,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         protected override void UpdateView()
         {
             ItemDescription.Color = Color.White;
-            ItemDescription.Text = CurrentItem.Description;  
+            ItemDescription.Text = CurrentItem.Description;
+            ItemDescription.Position = this.Position - Vector2.UnitY * .15f;
             ItemText.Text = Utils.FitString(CurrentItem.DisplayName.ToUpperInvariant(), 15);
 
             ItemTexture.Position = Vector2.UnitY * .05f + this.Position;

@@ -70,6 +70,7 @@ namespace Hedra.Engine.Player.Inventory
                 var tierColor = TierToColor(CurrentItem.Tier);
                 ItemText.Color = tierColor;
 
+                ItemText.Text = Utils.FitString($"{CurrentItem.Tier} {CurrentItem.DisplayName}", 15);
                 _itemAttributes.Color = tierColor;
                 ItemDescription.Color = tierColor;
                 _itemAttributes.Position = _weaponItemAttributesPosition + this.Position;
@@ -79,6 +80,7 @@ namespace Hedra.Engine.Player.Inventory
             else
             {
                 ItemText.Color = Color.White;
+                ItemText.Text = Utils.FitString(CurrentItem.DisplayName, 15);
                 _itemAttributes.Color = Color.Bisque;
                 ItemDescription.Color = Color.White;
                 _itemAttributes.Position = _nonWeaponItemAttributesPosition + this.Position;
@@ -86,7 +88,6 @@ namespace Hedra.Engine.Player.Inventory
                 ItemDescription.Text = string.Empty;
             }
 
-            ItemText.Text = Utils.FitString(CurrentItem.DisplayName.ToUpperInvariant(), 15);
             var attributes = CurrentItem.GetAttributes();
             var strBuilder = new StringBuilder();
             for (var i = 0; i < attributes.Length; i++)
@@ -96,6 +97,10 @@ namespace Hedra.Engine.Player.Inventory
                     var line = $"{attributes[i].Name.AddSpacesToSentence()}   ➝   {EscapeValue(attributes[i].Value)}";
                     strBuilder.AppendLine(line);
                 }
+            }
+            if (GameSettings.Debug && CurrentItem.HasAttribute(CommonAttributes.Damage))
+            {
+                strBuilder.AppendLine($"Modifier   ➝   {LocalPlayer.Instance.WeaponModifier(CurrentItem)}");
             }
             _itemAttributes.Text = strBuilder.ToString();
             ItemTexture.TextureElement.IdPointer = () => _renderer.Draw(_currentItemMesh, CurrentItem,

@@ -1,7 +1,7 @@
 ﻿{
   "Name" : "Wasp", 
-  "MaxHealth": 120.0,
-  "AttackDamage": 13.0,
+  "MaxHealth": 150.0,
+  "AttackDamage": 18.0,
   "Speed": 4.65,
   "XP": 3.0,
   "AIType": "Hostile",

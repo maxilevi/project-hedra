@@ -1,6 +1,6 @@
 ﻿{
   "Name" : "Rat", 
-  "MaxHealth": 60.0,
+  "MaxHealth": 80.0,
   "AttackDamage": 4.0,
   "Speed": 4.85,
   "XP": 1.0,

@@ -86,7 +86,7 @@ namespace Hedra.Engine.Player.Inventory
             GraphicsLayer.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookAt);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             Mesh.Draw();

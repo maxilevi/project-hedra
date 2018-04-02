@@ -46,7 +46,8 @@ namespace Hedra.Engine.Player
 				Casting = false;
 				Player.IsAttacking = false;
 				Player.Model.LeftWeapon.LockWeapon = false;
-				CoroutineManager.StartCoroutine(ThrowWeapon);
+                Player.Model.LockWeapon = false;
+                CoroutineManager.StartCoroutine(ThrowWeapon);
 			};
 		}
 		
@@ -56,14 +57,16 @@ namespace Hedra.Engine.Player
 		}
 		
 		private void ShootWeapon(Humanoid Human, Vector3 Direction, int KnockChance = -1){
-			VertexData WeaponData = Player.Model.LeftWeapon.MeshData.Clone();
-			WeaponData.Scale(Vector3.One * 1.75f);
-			Projectile WeaponProj = new Projectile(WeaponData, Player.Model.LeftHandPosition + Player.Model.Human.Orientation * 2 +
-			                                      Vector3.UnitY * 2f, Direction, Human);
-			WeaponProj.RotateOnX = true;
-			WeaponProj.Speed = 6.0f;
-			WeaponProj.Lifetime = 5f;
-			WeaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) { 
+			var weaponData = Player.Model.LeftWeapon.MeshData.Clone();
+			weaponData.Scale(Vector3.One * 1.75f);
+		    var weaponProj = new Projectile(weaponData, Player.Model.LeftHandPosition + Player.Model.Human.Orientation * 2 +
+		                                                Vector3.UnitY * 2f, Direction, Human)
+		    {
+		        RotateOnX = true,
+		        Speed = 6.0f,
+		        Lifetime = 5f
+		    };
+		    weaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) { 
 				float Exp;
 				Hit.Damage(Human.DamageEquation * 3.2f, Human, out Exp, true);
 				Human.XP += Exp;
@@ -77,14 +80,18 @@ namespace Hedra.Engine.Player
 		
 		private IEnumerator ThrowWeapon(){
 			Player.Toolbar.DisableAttack = true;
-			float TimePassed = 0;
+			float timePassed = 0;
 			this.ShootWeapon(Player, Player.View.CrossDirection.NormalizedFast(), 4);
-			while(TimePassed < 5){
-				TimePassed += (float) Engine.Time.FrameTimeSeconds;
+			while(timePassed < 5){
+				timePassed += Time.FrameTimeSeconds;
 				yield return null;
 			}
 			Player.Toolbar.DisableAttack = false;
-		}
+		    for (var i = 0; i < Player.Model.LeftWeapon.Meshes.Length; i++)
+		    {
+		        Player.Model.LeftWeapon.Meshes[i].Enabled = true;
+		    }
+        }
 		
 		public override void KeyDown(){
 			base.MaxCooldown = 8.5f - base.Level * .5f;
@@ -93,8 +100,13 @@ namespace Hedra.Engine.Player
 			Player.IsAttacking = true;
 			Player.Model.LeftWeapon.InAttackStance = false;
 			Player.Model.LeftWeapon.LockWeapon = true;
-			Player.Model.Model.Animator.StopBlend();
+		    Player.Model.LockWeapon = false;
+            Player.Model.Model.Animator.StopBlend();
 			Player.Model.Model.PlayAnimation(ThrowAnimation);
+		    for (var i = 0; i < Player.Model.LeftWeapon.Meshes.Length; i++)
+		    {
+		        Player.Model.LeftWeapon.Meshes[i].Enabled = false;
+		    }
 		}
 		
 		public override void Update(){
@@ -102,7 +114,7 @@ namespace Hedra.Engine.Player
 				Matrix4 Mat4 = Player.Model.LeftHandMatrix.ClearTranslation() * 
 					Matrix4.CreateTranslation(-Player.Model.Position + (Player.Model.LeftHandPosition + Player.Model.RightHandPosition) * .5f);
 				
-				Player.Model.LeftWeapon.MainMesh.TransformationMatrix = Mat4;
+				Player.Model.LeftWeapon.MainMesh.TransformationMatrix = Matrix4.Identity;
 				Player.Movement.OrientatePlayer(Player);
 				Player.Model.LeftWeapon.MainMesh.Position = Player.Model.Position;
 				Player.Model.LeftWeapon.MainMesh.Rotation = Vector3.Zero;
@@ -117,10 +129,6 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public override string Description {
-			get {
-				return "Throw your current weapon at your foes.";
-			}
-		}
+		public override string Description => "Throw your current weapon at your foes.";
 	}
 }

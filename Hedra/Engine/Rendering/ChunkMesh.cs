@@ -197,7 +197,7 @@ namespace Hedra.Engine.Rendering
 
 			if(Constants.LINES)
 				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-			DrawMesh(MeshBuffers[(int) Type], Position, Shadows);
+			    DrawMesh(MeshBuffers[(int) Type], Position, Shadows);
 			if(Constants.LINES)
 				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 

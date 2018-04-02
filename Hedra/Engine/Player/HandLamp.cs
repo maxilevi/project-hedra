@@ -6,7 +6,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using OpenTK;
 using Hedra.Engine.Management;
 
@@ -17,37 +16,35 @@ namespace Hedra.Engine.Player
 	/// </summary>
 	public class HandLamp
 	{
-		public Humanoid Human;
-		public PointLight Light;
-		public float LightModifier = 0;
-		public Vector3 LightColor = new Vector3(1,.6f,.5f);
-		
-		public HandLamp(Humanoid Human){
+		public Humanoid Human { get; set; }
+        public PointLight Light { get; set; }
+        public float LightModifier { get; set; }
+        public Vector3 LightColor { get; set; } = new Vector3(1,.6f,.5f);
+	    private bool _enabled;
+
+        public HandLamp(Humanoid Human){
 			this.Human = Human;
 		}
 		
 		public void Update(){
-			if(Light != null && (Light.Position != Human.Position || Light.Color != LightColor * LightModifier) ){
-				Light.Position = Human.Position;
-				Light.Color = LightColor * LightModifier;
-				ShaderManager.UpdateLight(Light);
-			}
+		    if (Light == null || (Light.Position == Human.Position && Light.Color == LightColor * LightModifier)) return;
+		    Light.Position = Human.Position;
+		    Light.Color = LightColor * LightModifier;
+		    Light.Radius = PointLight.DefaultRadius * 4f;
+		    ShaderManager.UpdateLight(Light);
 		}
 		
-		private bool m_Enabled = false;
 		public bool Enabled{
-			get{ return m_Enabled;}
+			get{ return _enabled;}
 			set{
-				m_Enabled = value;
-				//Lazy init
+				_enabled = value;
 				if(value && Light == null) Light = ShaderManager.GetAvailableLight();
-				LightModifier =  (Enabled) ? 1 : 0;
+				LightModifier =  Enabled ? 1 : 0;
 				Human.Model.SetLamp(Enabled);
 			}
 		}
 		
 		public void Dispose(){
-			//Free the light!
 			this.Enabled = false;
 			if(Light != null)
 				Light.Locked = false;

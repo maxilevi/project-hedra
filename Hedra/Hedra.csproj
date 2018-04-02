@@ -3023,6 +3023,10 @@
       <Link>Assets\Items\Hammers\DivineDrainerHammer.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\DivineEqualizerAxe.ply">
+      <Link>Assets\Items\Axes\DivineEqualizerAxe.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\ExclamationMark.ply">
       <Link>Assets\Env\ExclamationMark.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3151,6 +3155,14 @@
       <Link>Assets\Items\Hammers\LegendaryGolemFistHammer.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\LegendaryReedemerAxe.ply">
+      <Link>Assets\Items\Axes\LegendaryReedemerAxe.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\LegendaryRoyalAxe.ply">
+      <Link>Assets\Items\Axes\LegendaryRoyalAxe.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\LogHouse0.ply">
       <Link>Assets\Env\LogHouse0.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3269,10 +3281,6 @@
     </None>
     <None Include="..\..\..\Assets\Models\RareBarbarianIronSword.ply">
       <Link>Assets\Items\Swords\RareBarbarianIronSword.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\Assets\Models\RareEqualizerAxe.ply">
-      <Link>Assets\Items\Axes\RareEqualizerAxe.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\RareGoldRing.ply">
@@ -3399,12 +3407,24 @@
       <Link>Assets\Items\Swords\UncommonSilverSword.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\UniqueMaceAxe.ply">
+      <Link>Assets\Items\Axes\UniqueMaceAxe.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\UniquePaladinHammer.ply">
       <Link>Assets\Items\Hammers\UniquePaladinHammer.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\UniquePendulumBladeAxe.ply">
+      <Link>Assets\Items\Axes\UniquePendulumBladeAxe.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\UniqueRingingHammer.ply">
       <Link>Assets\Items\Hammers\UniqueRingingHammer.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\UniqueWoodsmanAxe.ply">
+      <Link>Assets\Items\Axes\UniqueWoodsmanAxe.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\Well0.ply">
@@ -3753,6 +3773,36 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\UI\XPBar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Axes\DivineEqualizerAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Axes\LegendaryReedemerAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Axes\LegendaryRoyalAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Axes\RareHunterAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Axes\UncommonHalvingBladeAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Axes\UncommonHandGuillotineAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Axes\UncommonSilverAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Axes\UniqueMaceAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Axes\UniquePendulumBladeAxe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Axes\UniqueWoodsmanAxe.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Blades\CommonIronDoubleBlades.json">

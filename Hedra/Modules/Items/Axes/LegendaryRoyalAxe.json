@@ -1,0 +1,21 @@
+﻿{
+  "Name": "LegendaryRoyalAxe",
+  "DisplayName": "Royal Axe",
+  "EquipmentType": "Axe", 
+  "Tier": "Legendary",
+  "Description": "Royal axe.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 16.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.15
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Axes/LegendaryRoyalAxe.ply"
+  }
+}

@@ -73,7 +73,7 @@ namespace Hedra.Engine.Player.Inventory
 
         protected virtual void Interact(object Sender, MouseButtonEventArgs EventArgs)
         {
-            if(EventArgs.Button != MouseButton.Left) return;
+            if(EventArgs == null || EventArgs.Button != MouseButton.Left) return;
             var button = (Button)Sender;
             var itemIndex = this.IndexByButton(button);
             var array = this.ArrayByButton(button);
@@ -104,7 +104,7 @@ namespace Hedra.Engine.Player.Inventory
 
         protected virtual void Use(object Sender, MouseButtonEventArgs EventArgs)
         {
-            if (EventArgs.Button != MouseButton.Right) return;
+            if (EventArgs == null || EventArgs.Button != MouseButton.Right) return;
             var button = (Button)Sender;
             var itemIndex = this.IndexByButton(button);
             var array = this.ArrayByButton(button);

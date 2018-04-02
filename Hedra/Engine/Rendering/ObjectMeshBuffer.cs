@@ -43,7 +43,6 @@ namespace Hedra.Engine.Rendering
 
 		    this.Bind();
 		    GL.Disable(EnableCap.Blend);
-            GL.Uniform4(Shader.TintUniform, Tint+BaseTint);
 			
 			if(Alpha < 0.9) GL.Enable(EnableCap.Blend);
 			GL.Enable(EnableCap.DepthTest);

@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Text;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
@@ -183,7 +184,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     if (slot.Enabled)
                     {
                         ability.DisplayName = slot.AbilityType.Name.AddSpacesToSentence();
-                        ability.Description = string.Empty;
+                        var realSkill = _player.Toolbar.Skills.First(S => slot.AbilityType == S.GetType());
+                        ability.Description = $"{Utils.FitString(realSkill.Description, 25)}" +
+                                              (realSkill.ManaCost != 0 ? $"Mana cost : {realSkill.ManaCost}{Environment.NewLine}" : string.Empty) +
+                                              (realSkill.MaxCooldown != 0 ? $"Cooldown : {realSkill.MaxCooldown}" : string.Empty);
                     }
 
                     button.Texture.Opacity = 0.75f;

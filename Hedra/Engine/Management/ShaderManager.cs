@@ -64,9 +64,13 @@ namespace Hedra.Engine.Management
 		}
 		
 		public static PointLight GetAvailableLight(){
-			for(int i = 0; i < PointLights.Length; i++){
-				if(!PointLights[i].Locked){
-					PointLights[i].Locked = true;
+			for(var i = 0; i < PointLights.Length; i++){
+				if(!PointLights[i].Locked)
+				{
+				    PointLights[i].Radius = PointLight.DefaultRadius;
+				    PointLights[i].Color = Vector3.Zero;
+				    PointLights[i].Position = Vector3.Zero;
+                    PointLights[i].Locked = true;
 					return PointLights[i];
 				}
 			}

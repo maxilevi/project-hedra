@@ -34,7 +34,9 @@ namespace Hedra.Engine.EntitySystem
         public void AddComponentWhile(EntityComponent Component, Func<bool> Condition)
         {
             if(!(_parent is LocalPlayer)) return;
-            CoroutineManager.StartCoroutine(this.WhileCoroutine, Component, Condition);
+            var name = _parent.Name.Clone();
+            Func<bool> realCondition = () => Condition() && _parent.Name == name;
+            CoroutineManager.StartCoroutine(this.WhileCoroutine, Component, realCondition);
         }
 
         private IEnumerator WhileCoroutine(object[] Params)

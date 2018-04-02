@@ -58,7 +58,7 @@ namespace Hedra.Engine.Rendering.UI
 				}
 				Constants.CHARACTER_CHOOSED = true;
 				Constants.REDIRECT_NET = false;
-				Scenes.SceneManager.Game.MakeCurrent(Scenes.SceneManager.Game.CurrentInformation);
+				//Scenes.SceneManager.Game.MakeCurrent(Scenes.SceneManager.Game.CurrentInformation);
 				if(NetworkManager.WorldSeed != -1)
 					World.Recreate(NetworkManager.WorldSeed);
 				if(NetworkManager.WorldTime != -1)

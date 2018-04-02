@@ -11,11 +11,11 @@
     },
     {
       "Name": "AttackSpeed",
-      "Value": 0.8
+      "Value": 1.2
     }
   ],
   "Model": {
-    "Scale": 2.0,
+    "Scale": 3.0,
     "Path": "$DataFile$/Items/Axes/RareHunterAxe.ply"
   }
 }

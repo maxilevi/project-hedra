@@ -1,0 +1,21 @@
+﻿{
+  "Name": "UniqueWoodsmanAxe",
+  "DisplayName": "Woodsman Axe",
+  "EquipmentType": "Axe", 
+  "Tier": "Unique",
+  "Description": "Woodsman axe.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 15.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Axes/UniqueWoodsmanAxe.ply"
+  }
+}

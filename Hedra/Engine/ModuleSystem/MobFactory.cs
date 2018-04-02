@@ -50,13 +50,12 @@ namespace Hedra.Engine.ModuleSystem
             mob.AddComponent(barComponent);
 
             int levelN = rng.Next(0, 10);
-            float mobDifficulty = 1f;
-            if (levelN <= 4) mobDifficulty = 1f;
-            else if (levelN > 4 && levelN <= 7) mobDifficulty = 1.5f;
-            else if (levelN > 7 && levelN <= 9) mobDifficulty = 2f;
+            int mobDifficulty = 1;
+            if (levelN <= 4) mobDifficulty = 1;
+            else if (levelN > 4 && levelN <= 7) mobDifficulty = 2;
+            else if (levelN > 7 && levelN <= 9) mobDifficulty = 3;
 
-            barComponent.FontColor = mobDifficulty == 1 ? Color.White : mobDifficulty == 2 ? Color.Red : Color.Gold;
-            mob.Level = (int) Math.Max(1, LocalPlayer.Instance.Level * .4f * mobDifficulty);
+            barComponent.FontColor = mobDifficulty == 1 ? Color.White : mobDifficulty == 3 ? Color.Red : Color.Gold;
 
             _factories[Type.ToLowerInvariant()].Apply(mob);
 
@@ -66,9 +65,9 @@ namespace Hedra.Engine.ModuleSystem
             var dmg = mob.SearchComponent<DamageComponent>();
             if (dmg == null) throw new ArgumentException("No DamageComponent has been set");
 
-            mob.AttackDamage *= Math.Max(mob.Level * .35f, 1);
+            mob.AttackDamage *= mobDifficulty;
 
-            dmg.XpToGive = Math.Max(3f, (float) Math.Round(dmg.XpToGive * mob.Level * .65f));
+            dmg.XpToGive *= mobDifficulty;
             dmg.OnDamageEvent += delegate(DamageEventArgs Args)
             {
                 if (Args.Damager != null)
@@ -79,7 +78,7 @@ namespace Hedra.Engine.ModuleSystem
                 }
             };
 
-            mob.MaxHealth += mob.MaxHealth * mob.Level * .5f;
+            mob.MaxHealth *= mobDifficulty;
             mob.Health = mob.MaxHealth;
 
             return mob;

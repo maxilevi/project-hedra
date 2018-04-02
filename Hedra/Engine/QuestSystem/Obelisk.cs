@@ -47,25 +47,15 @@ namespace Hedra.Engine.QuestSystem
 			if(Type == ObeliskType.Xp){
 				float xpToGive =  4 * Player.Level;
 				Player.XP += xpToGive;
-				
-				TaskManager.Delay(500, delegate{
-				                             Player.MessageDispatcher.ShowMessage("YOU EARNED "+ xpToGive + " XP", 2, Bar.Violet.ToColor());
-				                            });
+				Player.MessageDispatcher.ShowMessage("YOU EARNED "+ xpToGive + " XP", 2, Bar.Violet.ToColor());
 			}else
 			if(Type == ObeliskType.Health){
 				Player.Health += 16 * Player.Level;
-				
-				
-				TaskManager.Delay(500, delegate{ 
-				                            	Player.MessageDispatcher.ShowMessage("YOUR HEALTH FEELS REFRESHED", 2, Bar.Low.ToColor());
-				                            });
+				Player.MessageDispatcher.ShowMessage("YOUR HEALTH FEELS REFRESHED", 2, Bar.Low.ToColor());
 			}else
 			if(Type == ObeliskType.Mana){
 				Player.Mana += 32 * Player.Level;
-				
-				TaskManager.Delay(500, delegate{
-                                                Player.MessageDispatcher.ShowMessage("YOUR MANA FEELS REFRESHED", 2, Bar.Blue.ToColor());
-				                            });
+				Player.MessageDispatcher.ShowMessage("YOUR MANA FEELS REFRESHED", 2, Bar.Blue.ToColor());
 			}else
 			if(Type == ObeliskType.Mobs){
 				

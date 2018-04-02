@@ -155,7 +155,7 @@ void main(){
 				   + DiffuseModel(vec3(1.0, 0.0, 0.0), unitNormal, FullLight) * .35 + DiffuseModel(vec3(-1.0, 0.0, 0.0), unitNormal, FullLight) * .35 
 				   + DiffuseModel(unitToLight, unitNormal, LightColor) * .7;
 	
-	PointDiffuse = max(dot(unitNormal, unitToLight), 0.4) * 0.75 * FLightColor;
+	PointDiffuse = vec3(0,0,0);//dot(unitNormal, unitToLight) * 0.75 * FLightColor;
 
 	mat3 mat = mat3(transpose(inverse(gl_ModelViewMatrix)));
 	Color = Ambient + vec4(finalRim, 0.0) + (vec4(Diffuse,1.0) * InColor) + Specular;

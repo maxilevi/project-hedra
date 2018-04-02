@@ -1,6 +1,6 @@
 ﻿{
   "Name" : "Horse", 
-  "MaxHealth": 320.0,
+  "MaxHealth": 420.0,
   "AttackDamage": 6.0,
   "Speed": 5.0,
   "XP": 3.0,

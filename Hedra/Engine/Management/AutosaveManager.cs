@@ -31,13 +31,13 @@ namespace Hedra.Engine.Management
 		public static void Save(){
 			LocalPlayer.Instance.UnLoad();
 			
-			//for(int i = 0; i < Scenes.SceneManager.Game.Player.AbilityBar.Abilities.Length; i++)
-			//	Scenes.SceneManager.Game.Player.AbilityBar.Abilities[i].UnloadBuffs();
+			for(var i = 0; i < Scenes.SceneManager.Game.Player.Toolbar.Skills.Length; i++)
+				Scenes.SceneManager.Game.Player.Toolbar.Skills[i].UnloadBuffs();
 			
 			DataManager.SavePlayer( DataManager.DataFromPlayer(Scenes.SceneManager.Game.Player) );
 			
-			//for(int i = 0; i < Scenes.SceneManager.Game.Player.AbilityBar.Abilities.Length; i++)
-			//	Scenes.SceneManager.Game.Player.AbilityBar.Abilities[i].LoadBuffs();
+			for(var i = 0; i < Scenes.SceneManager.Game.Player.Toolbar.Skills.Length; i++)
+				Scenes.SceneManager.Game.Player.Toolbar.Skills[i].LoadBuffs();
 			
 			LocalPlayer.Instance.Load();
 		}

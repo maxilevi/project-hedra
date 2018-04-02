@@ -25,7 +25,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             var decomposedIndexY = index % AbilityTreeSystem.AbilityTree.Layers;
             var decomposedIndexX = AbilityTreeSystem.AbilityTree.AbilityCount / AbilityTreeSystem.AbilityTree.Layers-1 - (index - decomposedIndexY) / AbilityTreeSystem.AbilityTree.Layers;
             var item = this.ItemFromButton(button);
-            var locked = decomposedIndexX * 5 >= _player.Level;
+            var locked = decomposedIndexX * 5 > _player.Level;
             var previousUnlocked = this.PreviousUnlocked(index);
 
             if (this.AvailablePoints > 0 && !locked && previousUnlocked)

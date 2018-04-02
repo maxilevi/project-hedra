@@ -55,7 +55,7 @@ namespace Hedra.Engine.Rendering.UI
 					}
 				}
 				
-				Scenes.SceneManager.Game.CurrentInformation = DataManager.PlayerFiles[index];
+				var information = DataManager.PlayerFiles[index];
 				
 				if(Constants.REDIRECT_NET){
 					Scenes.SceneManager.Game.Player.UI.ChrChooser.Disable();
@@ -63,7 +63,7 @@ namespace Hedra.Engine.Rendering.UI
 					return;
 				}
 				Constants.CHARACTER_CHOOSED = true;
-				Scenes.SceneManager.Game.MakeCurrent(Scenes.SceneManager.Game.CurrentInformation);
+				Scenes.SceneManager.Game.MakeCurrent(information);
 				if(Constants.REDIRECT_NEW_RUN){
 					Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.Player);
 					return;

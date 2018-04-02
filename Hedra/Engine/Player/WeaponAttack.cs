@@ -25,7 +25,8 @@ namespace Hedra.Engine.Player
 	/// </summary>
 	public class WeaponAttack : BaseSkill
 	{
-		private static readonly uint Sword1 = Graphics2D.LoadFromAssets("Slash.png");
+	    private static readonly uint Default = Graphics2D.LoadFromAssets("HolderSkill.png");
+        private static readonly uint Sword1 = Graphics2D.LoadFromAssets("Slash.png");
 		private static readonly uint Sword2 = Graphics2D.LoadFromAssets("Lunge.png");
 		private static readonly uint Knife1 = Graphics2D.LoadFromAssets("SlashKnife.png");
 		private static readonly uint Knife2 = Graphics2D.LoadFromAssets("LungeKnife.png");
@@ -50,7 +51,8 @@ namespace Hedra.Engine.Player
 			base.ManaCost = 0f;
 			base.Level = 1;
 		    base.MaxCooldown = 0.25f;
-        }
+		    base.TexId = Default;
+		}
 		
 		public void SetType(Weapon Weapon, AttackType Type)
 		{
@@ -58,7 +60,7 @@ namespace Hedra.Engine.Player
 		    var flags = BindingFlags.Static | BindingFlags.NonPublic;
 		    var fieldInfo1 = this.GetType().GetField($"{Weapon.GetType().Name}1", flags);
 		    var fieldInfo2 = this.GetType().GetField($"{Weapon.GetType().Name}2", flags);
-		    base.TexId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) 0);
+		    base.TexId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) Default);
 		}
 		
 		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)

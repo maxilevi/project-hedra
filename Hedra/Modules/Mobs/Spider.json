@@ -1,7 +1,7 @@
 ﻿{
   "Name" : "Spider", 
-  "MaxHealth": 180.0,
-  "AttackDamage": 20.0,
+  "MaxHealth": 280.0,
+  "AttackDamage": 25.0,
   "Speed": 4.5,
   "XP": 3.0,
   "AIType": "Hostile",

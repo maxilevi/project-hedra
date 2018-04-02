@@ -1,6 +1,6 @@
 ﻿{
   "Name" : "Wolf", 
-  "MaxHealth": 200.0,
+  "MaxHealth": 400.0,
   "AttackDamage": 19.0,
   "Speed": 3.5,
   "XP": 4.0,

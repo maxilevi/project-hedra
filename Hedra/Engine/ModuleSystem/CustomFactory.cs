@@ -73,24 +73,23 @@ namespace Hedra.Engine.ModuleSystem
                 Mob.AddComponent(effect);
             }
 
-            if (Drops.Length == 0)
+            var gold = ItemPool.Grab(ItemType.Gold);
+            gold.SetAttribute(CommonAttributes.Amount, Utils.Rng.Next(1 + (int) (XP / 2), 4 + (int) (XP / 2)) );
+            var drop = new DropComponent(Mob)
             {
-                var drop = new DropComponent(Mob)
-                {
-                    RandomDrop = false,
-                    DropChance = 25f,
-                    GoldDrop = true,
-                };
-                Mob.AddComponent(drop);
-            }
+                ItemDrop = gold,
+                RandomDrop = false,
+                DropChance = 25f
+            };
+            Mob.AddComponent(drop);
+            
 
             foreach (DropTemplate template in Drops)
             {
                 var type = (ItemType) Enum.Parse(typeof(ItemType), template.Type);
 
-                var drop = new DropComponent(Mob)
+                drop = new DropComponent(Mob)
                 {
-                    GoldDrop = true,
                     DropChance = template.Chance,
                     RandomDrop = false,
                     ItemDrop = ItemPool.Grab(type)

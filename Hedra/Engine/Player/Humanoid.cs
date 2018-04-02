@@ -298,29 +298,27 @@ namespace Hedra.Engine.Player
 	        ComponentManager.AddComponentWhile(effect, Condition);
 	    }
 
-	    public float DamageEquation{
-			get{
-				float dmgToDo = 5 * (8+Level*1.5f) * .2f;
-			    if (MainWeapon == null) return dmgToDo * (1 + this.Level * .25f) * this.AttackPower;
+	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat());
 
-			    dmgToDo = (MainWeapon.GetAttribute<float>(CommonAttributes.Damage)+8) * (1f+this.Level * .05f) * .8f;
+	    public float BaseDamageEquation{
+			get
+			{
+			    float dmgToDo = this.Level * 18.0f;
 
-			    dmgToDo *= .7f + Utils.Rng.NextFloat();
-
-			    return dmgToDo * (1+this.Level*.05f) * this.AttackPower;
-			}
-		}
-		
-		public float BaseDamageEquation{
-			get{
-				float dmgToDo = 5 * (8+Level*1.5f) * .25f;
-
-				if(MainWeapon != null)
-					dmgToDo = (MainWeapon.GetAttribute<float>(CommonAttributes.Damage) + 8) * (8+this.Level*.75f) * .15f;
+			    if (MainWeapon != null)
+			    {
+			        dmgToDo *= WeaponModifier(MainWeapon);
+			    }
 
                 return dmgToDo;
 			}
 		}
+
+	    public float WeaponModifier(Item Weapon)
+	    {
+	        var tierModifier = 1.0f + (int)Weapon.Tier / ((int)ItemTier.Divine + 1.0f);
+	        return  Weapon.GetAttribute<float>(CommonAttributes.Damage) * tierModifier / 15.0f;
+        }
 
 	    public float AttackSpeed{
 			get{

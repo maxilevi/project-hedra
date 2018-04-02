@@ -92,17 +92,17 @@ namespace Hedra.Engine.EntitySystem
             if (!Parent.IsStatic && PlaySound && Damager is LocalPlayer)
             {
                 Color color = Color.White;
-                float dmgDiff = Amount / (Damager as LocalPlayer).BaseDamageEquation;
-                if (dmgDiff > 1.7f) color = Color.Gold;
-                if (dmgDiff > 2.5f) color = Color.Red;
+                float dmgDiff = Amount / ((Damager as LocalPlayer).BaseDamageEquation);
+                if (dmgDiff > 1.85f) color = Color.Gold;
+                if (dmgDiff > 2.25f) color = Color.Red;
                 Billboard dmgLabel;
                 if (!Immune && !shouldMiss)
                     dmgLabel = new Billboard(1.8f, ((int) Amount).ToString(), color,
-                        FontCache.Get(AssetManager.Fonts.Families[0], 14 + 32 * (Amount / Parent.MaxHealth),
+                        FontCache.Get(AssetManager.Fonts.Families[0], 11 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 else
                     dmgLabel = new Billboard(1.8f, "MISS", Color.White,
-                        FontCache.Get(AssetManager.Fonts.Families[0], 14 + 32 * (Amount / Parent.MaxHealth),
+                        FontCache.Get(AssetManager.Fonts.Families[0], 11 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 dmgLabel.Vanish = true;
                 dmgLabel.Speed = 4;

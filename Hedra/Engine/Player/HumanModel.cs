@@ -105,8 +105,8 @@ namespace Hedra.Engine.Player
         private void Load(Humanoid Human, HumanoidModelTemplate Template){
 			this.Human = Human;
 			this.Scale = Vector3.One * Template.Scale;
-			this.LeftWeapon = Weapon.Empty;
 			this.Tint = Vector4.One;
+            this.LeftWeapon = Weapon.Empty;
             this._modelPath = Template.Path;
 			
 			Model = AnimationModelLoader.LoadEntity(Template.Path);
@@ -217,21 +217,22 @@ namespace Hedra.Engine.Player
 			this.GatherMeshes();
 			if(Weapon == this.LeftWeapon)
 				return;
-			int Index = -1;
+
+		    var previousWeapon = this.LeftWeapon;
+            int index = -1;
 			for(var i = 0; i < base.Meshes.Length; i++){
 				if(base.Meshes[i] == this.LeftWeapon.MainMesh){
-					Index = i;
+					index = i;
 					break;
 				}
 			}
-		    var previousWeapon = this.LeftWeapon;
-			this.LeftWeapon.Enabled = false;
 			this.LeftWeapon = Weapon;
-            previousWeapon.Dispose();
 			this.LeftWeapon.Enabled = true;
-			base.Meshes[Index] = this.LeftWeapon.MainMesh;
-			
-			this.LeftWeapon.Scale = Model.Scale;
+			base.Meshes[index] = this.LeftWeapon.MainMesh;
+
+		    previousWeapon.Dispose();
+
+            this.LeftWeapon.Scale = Model.Scale;
 			this.LeftWeapon.Alpha = Model.Alpha;
 
 		    var player = Human as LocalPlayer;

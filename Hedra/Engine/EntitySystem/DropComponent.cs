@@ -20,7 +20,6 @@ namespace Hedra.Engine.EntitySystem
 	public class DropComponent : EntityComponent, ITickable
 	{
 	    public bool RandomDrop { get; set; } = true;
-	    public bool GoldDrop { get; set; }
         public Item ItemDrop { get; set; }
 		public DropComponent(Entity Parent) : base(Parent){}
         private float _dropChance;
@@ -45,15 +44,6 @@ namespace Hedra.Engine.EntitySystem
 		    if (!(Utils.Rng.NextFloat() * 100f < DropChance)) return;
 
 		    var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
-		    if (GoldDrop)
-		    {
-		        var gold = ItemPool.Grab(ItemType.Gold);
-                gold.SetAttribute(CommonAttributes.Amount, Utils.Rng.Next(1, 4));
-                Generation.World.DropItem(gold,
-		            Parent.Position + Vector3.UnitY * 2f +
-		            new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f));
-		    }
-
 		    if (item != null)
 		    {
 		        Generation.World.DropItem(item,

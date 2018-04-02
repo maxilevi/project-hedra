@@ -1,0 +1,21 @@
+﻿{
+  "Name": "UniqueMaceAxe",
+  "DisplayName": "Mace Axe",
+  "EquipmentType": "Axe", 
+  "Tier": "Unique",
+  "Description": "Mace axe.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 14.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.95
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Axes/UniqueMaceAxe.ply"
+  }
+}

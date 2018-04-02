@@ -1,6 +1,6 @@
 ﻿{
   "Name" : "Fox", 
-  "MaxHealth": 240.0,
+  "MaxHealth": 440.0,
   "AttackDamage": 14.0,
   "Speed": 4.5,
   "XP": 2.0,
