@@ -1,4 +1,4 @@
-﻿/*
+﻿    /*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 02/07/2016
@@ -145,6 +145,7 @@ namespace Hedra.Engine.QuestSystem
 	        var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile);
 	        var human = this.SpawnHumanoid("Ent", Position, behaviour);
 	        human.AddComponent(new WarriorAIComponent(human, false));
+	        human.MainWeapon = null;
 
 	        var region = World.BiomePool.GetRegion(Position);
 	        var woodColor = region.Colors.WoodColors[Utils.Rng.Next(0, region.Colors.WoodColors.Length)] * 2.0f;

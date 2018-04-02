@@ -40,6 +40,7 @@ namespace Hedra.Engine.EntitySystem
         public Timer FollowTimer = new Timer(16f);
         public Action OldLogic;
         public Vector3 TargetPosition;
+        private AIType _type;
 
         public AIComponent(Entity Parent, AIType Type) : base(Parent)
         {
@@ -63,6 +64,7 @@ namespace Hedra.Engine.EntitySystem
                     AILogic = this.Neutral;
                     break;
             }
+            _type = Type;
         }
 
         public override void Update()
@@ -84,12 +86,11 @@ namespace Hedra.Engine.EntitySystem
             Physics.LookAt(Parent, Target);
             AttackTarget = Target;
 
-            if (((Target.Position - Parent.Position).LengthSquared > 64 * 64 || Target.IsInvisible) &&
-                (!Force || Target.IsDead))
+            if (((Target.Position - Parent.Position).LengthSquared > 64 * 64 || Target.IsInvisible) && !Force || Target.IsDead)
             {
                 if (Target.IsDead && Target is LocalPlayer)
                     Parent.Health = Parent.MaxHealth;
-                AILogic = OldLogic;
+                AILogic = _type == AIType.Neutral ? this.Neutral : _type == AIType.Hostile ? this.Hostile : OldLogic;
                 return;
             }
             if (FollowTimer.Tick())
@@ -122,7 +123,7 @@ namespace Hedra.Engine.EntitySystem
 
             this.Neutral();
 
-            if (!((Parent.Position - player.Position).LengthSquared < 24 * 24) || player.IsInvisible) return;
+            if (!((Parent.Position - player.Position).LengthSquared < 24 * 24) || player.IsInvisible || player.IsDead) return;
 
             AILogic = () => this.Attack(player);
             OldLogic = this.Hostile;

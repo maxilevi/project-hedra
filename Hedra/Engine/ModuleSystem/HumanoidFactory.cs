@@ -31,24 +31,16 @@ namespace Hedra.Engine.ModuleSystem
             var behaviour = Behaviour ?? _behaviours[template.Behaviour];
 
             int levelN = Utils.Rng.Next(0, 10);
-            var difficultyType = 1f;
-            if (levelN <= 4) difficultyType = 1f;
-            else if (levelN > 4 && levelN <= 7) difficultyType = 1.5f;
-            else if (levelN > 7 && levelN <= 9) difficultyType = 2f;
+            var difficultyType = 1;
+            if (levelN <= 4) difficultyType = 1;
+            else if (levelN > 4 && levelN <= 7) difficultyType = 2;
+            else if (levelN > 7 && levelN <= 9) difficultyType = 3;
 
             var human = new Humanoid
             {
-                Level = (int) ((LocalPlayer.Instance.Level + (Utils.Rng.Next(0, 2) - 1) + 1) * difficultyType),
+                Level = LocalPlayer.Instance.Level + (difficultyType-1),
                 ClassType = (Class) Enum.Parse(typeof(Class), template.Class)
             };
-            if (human.ClassType == Class.None)
-            {
-                human.MaxHealth = template.MaxHealth * human.Level * .5f + template.MaxHealth;
-            }
-            else
-            {
-                human.AddonHealth = human.MaxHealth * .5f;
-            }
             human.MobType = MobType.Human;
             human.Speed = template.Speed;
             human.Model = new HumanModel(human, template.Model);
@@ -94,7 +86,7 @@ namespace Hedra.Engine.ModuleSystem
                 human.DefaultBox.Max.Y - human.DefaultBox.Min.Y + .5f;
 
             human.SearchComponent<DamageComponent>().Immune = template.Immune;
-            human.SearchComponent<DamageComponent>().XpToGive = Math.Max(2f, (float)Math.Round(template.XP * human.Level * .65f));
+            human.SearchComponent<DamageComponent>().XpToGive = 1.5f * human.Level;
             World.AddEntity(human);
             return human;
         }

@@ -10,6 +10,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
+using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
@@ -131,8 +132,12 @@ namespace Hedra.Engine.EntitySystem
 	                float Exp;
 	                if (FallTime > 1.75f && HasFallDamage)
 	                {
-	                    Parent.Damage(FallTime * 45f, null, out Exp, true);
-	                    Parent.KnockForSeconds(3f);
+	                    var fallTime = FallTime;
+	                    ThreadManager.ExecuteOnMainThread(delegate
+	                    {
+	                        Parent.Damage(fallTime * 45f, null, out Exp, true);
+	                        Parent.KnockForSeconds(3f);
+	                    });
 	                }
 	                FallTime = 0;
 	            }

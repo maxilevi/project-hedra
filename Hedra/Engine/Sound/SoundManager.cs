@@ -140,7 +140,7 @@ namespace Hedra.Engine.Sound
             ListenerPosition = LocalPlayer.Instance.Position;
 
             Gain *= Volume;
-		    Gain = Math.Max(Gain - Math.Max(Math.Min(1, (ListenerPosition - Location).LengthFast / 256), 0), 0);
+		    Gain = Math.Max(Gain - (ListenerPosition - Location).LengthFast / 256f, 0);
             if(Gain <= 0 ) return;
 
             SoundType type = Sound;

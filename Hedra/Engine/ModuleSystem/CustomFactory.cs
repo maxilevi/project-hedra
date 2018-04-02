@@ -79,7 +79,7 @@ namespace Hedra.Engine.ModuleSystem
             {
                 ItemDrop = gold,
                 RandomDrop = false,
-                DropChance = 25f
+                DropChance = 50f
             };
             Mob.AddComponent(drop);
             

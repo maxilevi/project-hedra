@@ -88,21 +88,22 @@ namespace Hedra.Engine.EntitySystem
             _attackedTimer = 6;
             _hasBeenAttacked = true;
 
-            Parent.Health = Math.Max(Parent.Health - Amount, 0);
-            if (!Parent.IsStatic && PlaySound && Damager is LocalPlayer)
+            if (!Parent.IsStatic && PlaySound && (LocalPlayer.Instance.Position - Parent.Position).LengthSquared < 80*80)
             {
+                var baseDamage = Damager != null ? (Damager as Humanoid)?.BaseDamageEquation 
+                    ?? (Damager.SearchComponent<AIComponent>() != null ? Damager.AttackDamage * .3f : Amount * .3f) : Amount / 3f;
                 Color color = Color.White;
-                float dmgDiff = Amount / ((Damager as LocalPlayer).BaseDamageEquation);
+                float dmgDiff = Amount / baseDamage;
                 if (dmgDiff > 1.85f) color = Color.Gold;
                 if (dmgDiff > 2.25f) color = Color.Red;
                 Billboard dmgLabel;
                 if (!Immune && !shouldMiss)
                     dmgLabel = new Billboard(1.8f, ((int) Amount).ToString(), color,
-                        FontCache.Get(AssetManager.Fonts.Families[0], 11 + 32 * (Amount / Parent.MaxHealth),
+                        FontCache.Get(AssetManager.Fonts.Families[0], 12 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 else
                     dmgLabel = new Billboard(1.8f, "MISS", Color.White,
-                        FontCache.Get(AssetManager.Fonts.Families[0], 11 + 32 * (Amount / Parent.MaxHealth),
+                        FontCache.Get(AssetManager.Fonts.Families[0], 12 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 dmgLabel.Vanish = true;
                 dmgLabel.Speed = 4;
@@ -110,8 +111,9 @@ namespace Hedra.Engine.EntitySystem
                 DamageLabels.Add(dmgLabel);
             }
             Exp = 0;
+            if (shouldMiss) return;
             _tintTimer = 0.25f;
-            if(shouldMiss) return;
+            Parent.Health = Math.Max(Parent.Health - Amount, 0);
             if (Damager != null && Damager != Parent)
             {
                 Vector3 direction = -(Damager.Position - Parent.Position).Normalized();

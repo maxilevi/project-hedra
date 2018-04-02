@@ -26,7 +26,6 @@ namespace Hedra.Engine.Player
 	    private Item _ring;
         private float _mana;
         private float _xp;
-	    private float _maxHealth;
 	    private float _stamina = 100f;
 	    private float _oldSpeed;
 	    private bool _isGliding;
@@ -60,28 +59,28 @@ namespace Hedra.Engine.Player
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
 		public override float MaxHealth{
 			get{
-			    if (ClassType == Class.None) return _maxHealth + AddonHealth;
-			    
 			    float maxHealth = 97 + RandomFactor * 20f;
 			    for (int i = 1; i < this.Level; i++)
 			    {
 
-			        if (ClassType == Class.Rogue)
-			            maxHealth += 38 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
-
-			        if (ClassType == Class.Archer)
-			            maxHealth += 22 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
-
-			        if (ClassType == Class.Warrior)
-			            maxHealth += 46 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+			        switch (ClassType)
+			        {
+			            case Class.Rogue:
+			                maxHealth += 38 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+			                break;
+			            case Class.Archer:
+			                maxHealth += 22 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+			                break;
+			            case Class.Warrior:
+			                maxHealth += 46 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+			                break;
+                        default:
+                            maxHealth += 30 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+                            break;
+                    }
 			    }
 			    return maxHealth + AddonHealth;			    
 			}
-		    set
-		    {
-		        _maxHealth = value;
-                if (ClassType != Class.None) throw new ArgumentException("Cannot set the max health of a classed humanoid.");
-		    }
 		}
 		public float MaxXP{
 			get{
@@ -298,16 +297,16 @@ namespace Hedra.Engine.Player
 	        ComponentManager.AddComponentWhile(effect, Condition);
 	    }
 
-	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat());
+	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f);
 
 	    public float BaseDamageEquation{
 			get
 			{
-			    float dmgToDo = this.Level * 18.0f;
+			    float dmgToDo = this.Level * 16.0f + 4.0f;
 
 			    if (MainWeapon != null)
 			    {
-			        dmgToDo *= WeaponModifier(MainWeapon);
+			        dmgToDo *= this.WeaponModifier(MainWeapon);
 			    }
 
                 return dmgToDo;

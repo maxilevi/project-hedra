@@ -48,8 +48,9 @@ namespace Hedra.Engine.QuestSystem
 			    player.MessageDispatcher.ShowMessage("YOU EARNED "+(int)dmgComponent.XpToGive + " XP!", 3f, Rendering.UI.Bar.Violet.ToColor());
 			    healthBarComponent.Enabled = false;
 			};
+		    boss.AttackDamage *= Math.Min(LocalPlayer.Instance.Level * .75f, 1);
 
-			switch(bossType){
+            switch (bossType){
 				
 				case BossType.NORMAL:
 
@@ -58,23 +59,23 @@ namespace Hedra.Engine.QuestSystem
 					    case MobType.Boar:
 					        aiComponent = new BoarBossAIComponent(boss)
 					        {
-					            AttackDamage = 7
+					            AttackDamage = boss.AttackDamage
 					        };
 					        break;
 
 					    case MobType.Turtle:
 					        aiComponent = new TurtleBossAIComponent(boss)
 					        {
-					            AttackDamage = 7
-					        };
+					            AttackDamage = boss.AttackDamage
+                            };
 					        break;
 
 					    case MobType.Spider:
 					    case MobType.Bee:
 					        aiComponent = new SpiderBossAIComponent(boss)
 					        {
-					            AttackDamage = 7
-					        };
+					            AttackDamage = boss.AttackDamage
+                            };
 
 					        var poison = new PoisonousComponent(boss)
 					        {
@@ -87,8 +88,8 @@ namespace Hedra.Engine.QuestSystem
 					    default:
 					        aiComponent = new SpiderBossAIComponent(boss)
 					        {
-					            AttackDamage = 6
-					        };
+					            AttackDamage = boss.AttackDamage
+                            };
 					        break;
 					}
 					break;

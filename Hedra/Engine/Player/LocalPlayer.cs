@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using OpenTK;
 using Hedra.Engine.Sound;
@@ -557,8 +558,8 @@ namespace Hedra.Engine.Player
 			{
 			    value = Mathf.Clamp(value, 0, this.MaxHealth);
                 var diff = value - _health;
-			    _acummulativeHealing += diff > 0 ? diff : 0;
-			    if (_acummulativeHealing > MaxHealth * .05f)
+			    _acummulativeHealing += diff < 0 ? 0 : diff;
+                if (_acummulativeHealing > MaxHealth * .05f)
 			    {
 			        if (Model.Enabled)
 			        {
@@ -571,6 +572,7 @@ namespace Hedra.Engine.Player
 			        }
 			        _acummulativeHealing = 0;
 			    }
+			    if (_health <= 0 && value > 0) this.PlaySpawningAnimation = true;
 			    _health = value;
 			    this.ManageDeath();
 			}
