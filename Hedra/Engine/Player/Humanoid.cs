@@ -23,12 +23,6 @@ namespace Hedra.Engine.Player
 
 	public class Humanoid : Entity
 	{
-	    private Item _ring;
-        private float _mana;
-        private float _xp;
-	    private float _stamina = 100f;
-	    private float _oldSpeed;
-	    private bool _isGliding;
         public virtual IMessageDispatcher MessageDispatcher { get; set; }
         public bool IsAttacking {get; set;}
 		public bool IsEating { get; set; }
@@ -55,9 +49,34 @@ namespace Hedra.Engine.Player
 		public float DodgeCost {get; set;}	
         public float RandomFactor { get; set; }
 	    public virtual int Gold { get; set; }
+	    private Item _ring;
+	    private float _mana;
+	    private float _xp;
+	    private float _stamina = 100f;
+	    private bool _isGliding;
+	    private float _speedAddon;
 
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
-		public override float MaxHealth{
+
+        public float BaseSpeed
+	    {
+	        get
+	        {
+	            switch (ClassType)
+	            {
+                    case Class.Rogue:
+                        return 1.45f;
+                    case Class.Warrior:
+                        return 1.25f;
+                    case Class.Archer:
+                        return 1.35f;
+                    default:
+                        return 1.25f;
+	            }
+	        }
+	    }
+
+        public override float MaxHealth{
 			get{
 			    float maxHealth = 97 + RandomFactor * 20f;
 			    for (int i = 1; i < this.Level; i++)
@@ -148,6 +167,7 @@ namespace Hedra.Engine.Player
             this.DodgeCost = 25f;
             this.MaxStamina = 100f;
             this.AttackPower = 1f;
+            this.Speed = this.BaseSpeed;
             this.AddComponent(DmgComponent);
         }
 
@@ -168,9 +188,9 @@ namespace Hedra.Engine.Player
 			IsAttacking = false;
             IsRolling = true;
             DmgComponent.Immune = true;
-			_oldSpeed = Speed;
-			Speed *= 1.5f;
-			Movement.OrientateWhileMoving = false;	
+            this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.5f),
+                () => IsRolling);
+            Movement.OrientateWhileMoving = false;	
 			if(!IsMoving){
 				Movement.MoveCount = 2;
 				Movement.MoveFeet = true;
@@ -182,7 +202,6 @@ namespace Hedra.Engine.Player
 		
 		public void FinishRoll(){
 			IsRolling = false;
-			Speed = _oldSpeed;
 			DmgComponent.Immune = false;
 			Movement.OrientateWhileMoving = true;
 			Movement.MoveFeet = false;
@@ -253,11 +272,6 @@ namespace Hedra.Engine.Player
 	        return Utils.Rng.NextFloat() * .5f + .75f;
 	    }
 
-	    public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)
-	    {
-	        ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed), Condition);
-	    }
-
 	    public void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition)
 	    {
 	        ComponentManager.AddComponentWhile(new AttackSpeedBonusComponent(this, BonusAttackSpeed), Condition);
@@ -309,7 +323,7 @@ namespace Hedra.Engine.Player
 			        dmgToDo *= this.WeaponModifier(MainWeapon);
 			    }
 
-                return dmgToDo;
+                return dmgToDo * this.AttackPower;
 			}
 		}
 

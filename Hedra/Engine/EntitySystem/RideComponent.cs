@@ -26,10 +26,6 @@ namespace Hedra.Engine.EntitySystem
 		public float HeightAddon = 0;
 		private AIComponent AI;
 		private HealthBarComponent _healthBar;
-        /// <summary>
-        /// The speed of the rider before mounting
-        /// </summary>
-		public float RiderSpeed;
 		
 		public RideComponent(Entity Parent) : base(Parent) {
 			AI = Parent.SearchComponent<AIComponent>();
@@ -67,7 +63,6 @@ namespace Hedra.Engine.EntitySystem
 
 
 			if(HasRider && !Rider.IsRiding){
-				Rider.Speed = RiderSpeed;
 			    var ridePlayer = Rider as LocalPlayer;
 			    if(ridePlayer != null){
 			        ridePlayer.Model.LeftWeapon.MainMesh.DontCull = false;
@@ -95,8 +90,7 @@ namespace Hedra.Engine.EntitySystem
 			if(HasRider || UnRidable || Entity.IsRiding)return;
 			
 			Rider = Entity;
-			RiderSpeed = Rider.Speed;
-			Rider.Speed = Parent.Speed * .5f;
+			Rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Rider, -Rider.Speed + Parent.Speed * .5f), () => Rider.IsRiding);
 			HasRider = true;
 			Rider.IsRiding = true;
 			Rider.Model.MountModel = Parent.Model as QuadrupedModel;

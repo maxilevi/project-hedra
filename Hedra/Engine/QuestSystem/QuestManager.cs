@@ -105,7 +105,7 @@ namespace Hedra.Engine.QuestSystem
 	        behaviour.Name = Undead ? "Skeleton" : "Bandit";
 	        var isGnoll = Utils.Rng.Next(0, 4) == 1;
             var human = this.SpawnHumanoid(isGnoll ? "Gnoll" : classType.ToString(), Position, behaviour);
-
+	        if (isGnoll) human.AddonHealth = human.MaxHealth * .5f;
 	        if (Undead)
 	        {
 	            human.Model = new HumanModel(human, HumanType.Skeleton);

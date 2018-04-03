@@ -193,7 +193,8 @@ namespace Hedra.Engine.Management
 		    };
 		    EntityData.Mesh.Colors.ToList().ForEach( vector => Data.Colors.Add(new Vector4(vector.X, vector.Y, vector.Z, 1))  );
 
-            return new Box(Data.SupportPoint(-Vector3.One), Data.SupportPoint(Vector3.One));
+            return new Box(new Vector3(Data.SupportPoint(-Vector3.UnitX).X, Data.SupportPoint(-Vector3.UnitY).Y, Data.SupportPoint(-Vector3.UnitZ).Z),
+                new Vector3(Data.SupportPoint(Vector3.UnitX).X, Data.SupportPoint(Vector3.UnitY).Y, Data.SupportPoint(Vector3.UnitZ).Z));
 		}
 		
 		public static VertexData PlyLoader(string file, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true){

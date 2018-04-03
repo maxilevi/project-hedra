@@ -95,7 +95,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 				    World.WorldParticles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
 					
 					if(World.WorldParticles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
-						World.WorldParticles.Color = underChunk.Biome.Colors.GrassColor;
+						World.WorldParticles.Color = new Vector4(underChunk.Biome.Colors.GrassColor.Xyz,1);
 					
 					World.WorldParticles.Emit();
 				}

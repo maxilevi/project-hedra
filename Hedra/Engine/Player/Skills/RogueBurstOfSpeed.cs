@@ -22,9 +22,7 @@ namespace Hedra.Engine.Player
 	/// Description of WeaponThrow.
 	/// </summary>
 	public class BurstOfSpeed : BaseSkill
-	{
-	
-		private float PreviousSpeed = 0;		
+	{	
 		public BurstOfSpeed(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/BurstOfSpeed.png");
 			base.ManaCost = 80f;
@@ -33,21 +31,18 @@ namespace Hedra.Engine.Player
 		
 		public override void KeyDown(){
 			base.MaxCooldown = 14f;
-			PreviousSpeed = Player.Speed;
 			CoroutineManager.StartCoroutine(SpeedTime);
 		}
 		
 		private IEnumerator SpeedTime(){
-			float PassedTime = 4f + Math.Min(base.Level * .5f, 2f), PTime = 0;
-			while(PTime < PassedTime){
-				
-				Player.Speed = 1.25f + Math.Min(base.Level * .1f, 1);
-				
-				PTime += Engine.Time.ScaledFrameTimeSeconds;
+			float passedTime = 4f + Math.Min(base.Level * .5f, 2f);
+		    float pTime = 0;
+		    Player.AddBonusSpeedWhile(Math.Min(base.Level * .1f, 1), () => pTime < passedTime);
+
+            while (pTime < passedTime){							
+				pTime += Time.ScaledFrameTimeSeconds;
 				yield return null;
-			}
-			
-			Player.Speed = PreviousSpeed;
+			}			
 		}
 		
 		public override void Update(){}

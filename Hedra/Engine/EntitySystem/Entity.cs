@@ -51,10 +51,10 @@ namespace Hedra.Engine.EntitySystem
         public Vector3 Orientation { get; set; } = Vector3.UnitZ;
         public PhysicsComponent Physics { get; set; }
         public bool Removable { get; set; } = true;
-        public float Speed { get; set; } = 2;
         protected bool Splashed { get; set; }
         public Vector3 BlockPosition { get; set; }
         public bool PlaySpawningAnimation { get; set; } = true;
+        public float Speed { get; set; } = 2;
 
         public virtual float Health
         {
@@ -249,6 +249,17 @@ namespace Hedra.Engine.EntitySystem
                    (Target.DefaultBox.Max - Target.DefaultBox.Min).LengthFast &&
                    Target != this &&
                    Mathf.DotProduct(Orientation, (Target.Position - Position).Normalized()) > -0.2f;
+        }
+
+        public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)
+        {
+            this.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed), Condition);
+        }
+
+
+        public void AddComponentWhile(EntityComponent Component, Func<bool> Condition)
+        {
+            ComponentManager.AddComponentWhile(Component, Condition);
         }
 
         public void AddComponent(EntityComponent Component)

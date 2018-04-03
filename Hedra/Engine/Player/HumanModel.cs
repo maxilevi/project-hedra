@@ -133,7 +133,6 @@ namespace Hedra.Engine.Player
 			KnockedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorKnocked.dae");
             TiedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTied.dae");
             SleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
-            WalkAnimation.Speed = 1.35f;
 
             RollAnimation.Loop = false;
 			RollAnimation.OnAnimationEnd += delegate(Animation Sender) { 
@@ -350,7 +349,8 @@ namespace Hedra.Engine.Player
         public override void Update()
 		{
 
-		    if (this.Model.Animator.AnimationPlaying != this.RollAnimation && Human.IsRolling)
+		    WalkAnimation.Speed = Human.Speed;
+            if (this.Model.Animator.AnimationPlaying != this.RollAnimation && Human.IsRolling)
 		        Human.FinishRoll();
 
             if (_lastAnimationTime != this.Model.Animator.AnimationTime || Scenes.SceneManager.Game.InMenu){

@@ -97,7 +97,7 @@ namespace Hedra.Engine.Scenes
             Player.ClassType = Information.ClassType;		
 			Player.Spawner.Enabled = true;
 			Player.HandLamp.Enabled = false;
-	        Player.Speed = LocalPlayer.DefaultSpeed;
+	        Player.Speed = Player.BaseSpeed;
 			Player.Physics.BaseHeight = 0;
 			Player.Name = Information.Name;
 			Player.XP = Information.Xp;

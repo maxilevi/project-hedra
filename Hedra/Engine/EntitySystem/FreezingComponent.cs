@@ -20,20 +20,22 @@ namespace Hedra.Engine.EntitySystem
 	/// </summary>
 	public class FreezingComponent : EntityComponent
 	{
-		private float TotalTime, Time, TotalDamage, OldSpeed;
-		private int PTime;
-		private Entity Damager = null;
+	    private readonly float _totalTime;
+	    private float _time;
+	    private readonly float _totalDamage;
+		private int _pTime;
+		private readonly Entity _damager;
 		
 		public FreezingComponent(Entity Parent, Entity Damager, float TotalTime, float TotalDamage) : base(Parent){
-			this.TotalTime = TotalTime;
-			this.TotalDamage = TotalDamage;
-			this.Damager = Damager;
+			this._totalTime = TotalTime;
+			this._totalDamage = TotalDamage;
+			this._damager = Damager;
 			CoroutineManager.StartCoroutine(UpdateFreeze);
 		}
 		
 		public FreezingComponent(Entity Parent, float TotalTime, float TotalDamage) : base(Parent){
-			this.TotalTime = TotalTime;
-			this.TotalDamage = TotalDamage;
+			this._totalTime = TotalTime;
+			this._totalDamage = TotalDamage;
 			CoroutineManager.StartCoroutine(UpdateFreeze);
 		}
 		
@@ -41,25 +43,24 @@ namespace Hedra.Engine.EntitySystem
 		
 		public IEnumerator UpdateFreeze(){
 			Parent.Model.BaseTint = Bar.Blue * new Vector4(1,1,2,1) * .7f;
-			OldSpeed = Parent.Speed;
-			Parent.Speed = 0;
+            Parent.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Parent, -Parent.Speed),
+                () => _totalTime > _pTime && !Parent.IsDead && !Disposed);
 			Parent.Model.Pause = true;
-			while(TotalTime > PTime && !Parent.IsDead && !Disposed){
+			while(_totalTime > _pTime && !Parent.IsDead && !Disposed){
 				
-				Time += Engine.Time.ScaledFrameTimeSeconds;
-				if(Time >= 1){
-					PTime++;
-					Time = 0;
+				_time += Engine.Time.ScaledFrameTimeSeconds;
+				if(_time >= 1){
+					_pTime++;
+					_time = 0;
 					float Exp;
-					Parent.Damage( (float) (TotalDamage / TotalTime), Damager, out Exp, true);
-					if(Damager != null && Damager is Humanoid)
-						(Damager as Humanoid).XP += Exp;
+					Parent.Damage( (float) (_totalDamage / _totalTime), _damager, out Exp, true);
+					if(_damager != null && _damager is Humanoid)
+						(_damager as Humanoid).XP += Exp;
 				}
 				
 				yield return null;
 			}
 			Parent.Model.BaseTint = Vector4.Zero;
-			Parent.Speed = OldSpeed;
 			Parent.Model.Pause = false;
 			this.Dispose();
 			Parent.RemoveComponent(this);

@@ -32,7 +32,6 @@ namespace Hedra.Engine.Player
 	public class LocalPlayer : Humanoid, IUpdatable
 	{
 
-	    public const float DefaultSpeed = 1.25f;
 		public Camera View;
 		public ChunkLoader Loader;
 		public UserInterface UI;
@@ -61,7 +60,6 @@ namespace Hedra.Engine.Player
 	    private bool _wasSleeping;
 	    private bool _enabled;
 	    private float _oldCementeryTime;
-	    private float _oldSpeed;
 	    private float _oldTime;
 
         public LocalPlayer(){
@@ -86,7 +84,6 @@ namespace Hedra.Engine.Player
 			this.Physics.CanCollide = true;
 			this.AttackSpeed = 0.75f;
 	        this.AttackPower = 1.0f;
-			this.Speed = DefaultSpeed;
 	        this.DefaultBox.Max = new Vector3(2.5f, 5, 2.5f);
 
 	        this.SetupHandlers();
@@ -322,7 +319,7 @@ namespace Hedra.Engine.Player
 				World.WorldParticles.GravityEffect = .1f;
 				World.WorldParticles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
 				if(World.WorldParticles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
-					World.WorldParticles.Color = underChunk.Biome.Colors.GrassColor;
+					World.WorldParticles.Color = Vector4.Zero;
 				
 				if(_emitted >= 3){
 					World.WorldParticles.Emit();
@@ -593,11 +590,6 @@ namespace Hedra.Engine.Player
 				_oldCementeryTime = SkyManager.DayTime;
 				SkyManager.DayTime = _cementeryTime;
 			}
-		    if (Model.MountModel != null)
-		    {
-		        _oldSpeed = this.Speed;
-		        this.Speed = Model.MountModel.Parent.SearchComponent<RideComponent>().RiderSpeed;
-		    }
             _oldTime = float.MaxValue;
             if (SkyManager.StackLength > 0)
             {
@@ -610,11 +602,6 @@ namespace Hedra.Engine.Player
 			if(_inCementery){
 				SkyManager.DayTime = _oldCementeryTime;
 			}
-
-		    if (Model.MountModel != null)
-		    {
-		        this.Speed = _oldSpeed;
-		    }
 
 		    if (_oldTime != float.MaxValue)
 		    {

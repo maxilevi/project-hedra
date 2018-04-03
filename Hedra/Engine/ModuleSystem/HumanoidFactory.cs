@@ -38,11 +38,11 @@ namespace Hedra.Engine.ModuleSystem
 
             var human = new Humanoid
             {
-                Level = LocalPlayer.Instance.Level + (difficultyType-1),
-                ClassType = (Class) Enum.Parse(typeof(Class), template.Class)
+                Level = LocalPlayer.Instance.Level + (difficultyType - 1),
+                ClassType = (Class) Enum.Parse(typeof(Class), template.Class),
+                MobType = MobType.Human,
+                Speed = template.Speed
             };
-            human.MobType = MobType.Human;
-            human.Speed = template.Speed;
             human.Model = new HumanModel(human, template.Model);
             human.Physics.CanCollide = true;
             human.Physics.HasCollision = true;
@@ -83,7 +83,7 @@ namespace Hedra.Engine.ModuleSystem
             human.AddComponent(barComponent);
 
             human.SearchComponent<HealthBarComponent>().DistanceFromBase = 
-                human.DefaultBox.Max.Y - human.DefaultBox.Min.Y + .5f;
+                (human.DefaultBox.Max.Y - human.DefaultBox.Min.Y) * 1f + .5f;
 
             human.SearchComponent<DamageComponent>().Immune = template.Immune;
             human.SearchComponent<DamageComponent>().XpToGive = 1.5f * human.Level;
