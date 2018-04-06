@@ -280,7 +280,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         }
 
         public virtual Vector3 WeaponTip =>
-            Vector3.TransformPosition(-Vector3.UnitY * 1.5f + Vector3.UnitX * 3f, Owner.Model.LeftHandMatrix);
+            Vector3.TransformPosition((-Vector3.UnitY * 1.5f + Vector3.UnitX * 3f) * 2F, Owner.Model.LeftHandMatrix);
 
         public EffectDescriber Describer
         {

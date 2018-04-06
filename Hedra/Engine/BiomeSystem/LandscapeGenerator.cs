@@ -65,7 +65,7 @@ namespace Hedra.Engine.BiomeSystem
 				    var hasRiver = biomeGen.HasRivers ? 1f : 0f;
 				    var hasPath = biomeGen.HasPaths ? 1f : 0f;
 
-                    for (var x = 0; x < width; x++)
+				    for (var x = 0; x < width; x++)
 					{
 					    const float narrow = 0.42f;
 					    const float border = 0.02f;
@@ -108,22 +108,38 @@ namespace Hedra.Engine.BiomeSystem
 
 						    var inPlateau = false;
 
-							foreach (Plateau t in plateauPositions)
-							{
+					        Plateau biggestPlateau = null;
+					        foreach (Plateau plateau in plateauPositions)
+					        {
+					            var currentDist = 1 - Math.Min((plateau.Position.Xz - position).LengthSquared / (plateau.Radius * plateau.Radius), 1);
+                                if(currentDist <= 0) continue;
 
-							    dist = ( t.Position.Xz - position).LengthSquared;
-							    final = Math.Max(1-Math.Min(dist / (t.Radius * t.Radius),1), 0);
-							    float addonHeight = t.Height * Math.Max(final, 0f);
+					            if (plateau.Radius > (biggestPlateau?.Radius ?? 0))
+					            {
+					                biggestPlateau = plateau;
+					            }
+					        }
+					        
+					        foreach (Plateau plateau in plateauPositions)
+					        {
 
-                                height +=addonHeight;
-							    height = Mathf.Lerp(height-addonHeight, Math.Min( t.MaxHeight + SmallFrequency(position.X, position.Y), height), Math.Min(1.0f, final * 1.5f));		
+					            dist = (plateau.Position.Xz - position).LengthSquared;
+					            final = Math.Max(1 - Math.Min(dist / (plateau.Radius * plateau.Radius), 1), 0);
+					            float addonHeight = plateau.Height * Math.Max(final, 0f);
 
-								
-							    if(final > 0 && nearGiantTree != null && t ==  nearGiantTree.Mountain) giantTree = true;
+					            height += addonHeight;
+					            height = Mathf.Lerp(height - addonHeight,
+					                Math.Min((plateau.Radius < 64 ? biggestPlateau ?? plateau : plateau).MaxHeight + SmallFrequency(position.X, position.Y),
+					                    height),
+					                Math.Min(1.0f, final * 1.5f));
 
-							    if(final > 0) inPlateau = true;
-							}
-							if(townClamped && townHeight != height)
+
+					            if (final > 0 && nearGiantTree != null && plateau == nearGiantTree.Mountain) giantTree = true;
+
+					            if (final > 0) inPlateau = true;
+					        }
+					        
+					        if(townClamped && townHeight != height)
 								townClamped = false;
 
 					        var pathClamped = false;

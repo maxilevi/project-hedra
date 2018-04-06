@@ -168,6 +168,8 @@ namespace Hedra.Engine.QuestSystem
                 yield return null;
             }
 
+            float heightAtPosition = Physics.HeightAtPosition(position + transMatrix.ExtractTranslation());
+            position.Y = heightAtPosition;
             var scale = 1f;
 
             Matrix4 rotationMatrix = Matrix4.CreateRotationY(rng.NextFloat() * Mathf.Radian * 360);
@@ -223,8 +225,8 @@ namespace Hedra.Engine.QuestSystem
 
             float heightAtPosition = Physics.HeightAtPosition(stablePosition);
 
-            if (Math.Abs(heightAtPosition - stablePosition.Y) > 2)
-                yield break;
+            //if (Math.Abs(heightAtPosition - stablePosition.Y) > 2)
+            //    yield break;
 
             position = new Vector3(position.X, heightAtPosition, position.Z);
 
@@ -265,11 +267,8 @@ namespace Hedra.Engine.QuestSystem
 				underChunk = World.GetChunkAt(position);
 				yield return null;
 			}
-
             float heightAtPosition = Physics.HeightAtPosition(position);
-
-            if (Math.Abs(heightAtPosition - position.Y) > 2)
-                yield break;
+            blacksmithPosition.Y = heightAtPosition;
 
             int type = 1;
 
@@ -327,9 +326,9 @@ namespace Hedra.Engine.QuestSystem
 
 
             float heightAtPosition = Physics.HeightAtPosition(housePosition);
-
-		    if (Math.Abs(heightAtPosition - housePosition.Y) > 4)
-		        yield break;
+		    position.Y = heightAtPosition;
+		    //if (Math.Abs(heightAtPosition - housePosition.Y) > 4)
+		    //    yield break;
 
             TaskManager.Parallel( delegate{
                 //var post = new LampPost(transMatrix.ExtractTranslation() + position + Vector3.UnitY * 24f);
@@ -396,16 +395,12 @@ namespace Hedra.Engine.QuestSystem
 					underChunk = World.GetChunkAt(position);
 					yield return null;
 				}
-
-			    
 			    float heightAtPosition = Physics.HeightAtPosition(position);
+			    farmPosition.Y = heightAtPosition;
 
-                if( Math.Abs(heightAtPosition - farmPosition.Y) > 3 )
-                    continue;
-
-			    //Vector3 terrainNormal = Physics.NormalAtPosition(position.X, position.Z);
-			    //var lookAt = new Matrix4(new Matrix3(Mathf.RotationAlign(Vector3.UnitY, terrainNormal)));
-				VertexData farmModel = CacheManager.GetModel(CacheItem.Farm).Clone();
+                //Vector3 terrainNormal = Physics.NormalAtPosition(position.X, position.Z);
+                //var lookAt = new Matrix4(new Matrix3(Mathf.RotationAlign(Vector3.UnitY, terrainNormal)));
+                VertexData farmModel = CacheManager.GetModel(CacheItem.Farm).Clone();
 				farmModel.Color(AssetManager.ColorCode1, Utils.VariateColor( FenceColor(new Random(World.Seed + 2412)), 15, rng) );
 				farmModel.Color(AssetManager.ColorCode2, Utils.VariateColor(underChunk.Biome.Colors.GrassColor , 15, rng) );
                 //farmModel.Transform(lookAt);
@@ -482,6 +477,9 @@ namespace Hedra.Engine.QuestSystem
 	            underChunk = World.GetChunkAt(transMatrix.ExtractTranslation());
 	            yield return null;
 	        }
+	        var originalPosition = transMatrix.ExtractTranslation();
+	        float heightAtPosition = Physics.HeightAtPosition(transMatrix.ExtractTranslation());
+	        transMatrix.Row3 = new Vector4(originalPosition.X, heightAtPosition, originalPosition.Z, transMatrix.Row3.W);
 
             Vector3 position = transMatrix.ExtractTranslation();
 
@@ -494,12 +492,7 @@ namespace Hedra.Engine.QuestSystem
 	            };
 	        World.AddStructure(bigPost);
 
-            float heightAtPosition = Physics.HeightAtPosition(position);
-
-	        if (Math.Abs(heightAtPosition - position.Y) > 2)
-	            yield break;
-
-	        float wellScale = rng.NextFloat() * .25f + .85f;
+            float wellScale = rng.NextFloat() * .25f + .85f;
 	        VertexData model = AssetManager.PlyLoader("Assets/Env/Village/Well0.ply", Vector3.One);
 	        model.Transform(Matrix4.CreateScale(wellScale));
 	        model.Transform(Matrix4.CreateTranslation(Vector3.UnitY * .3f));
@@ -532,8 +525,7 @@ namespace Hedra.Engine.QuestSystem
 			float marketDist = 1.75f + rng.NextFloat() * .75f + 1.2f;
 			int marketCount = 6 + rng.Next(0, 4);
 			
-		    Vector3 centerPosition = transMatrix.ExtractTranslation();
-
+		    Vector3 centerPosition = transMatrix.ExtractTranslation();		    
 
             for (int i = 0; i < marketCount; i++)
 			{
@@ -547,15 +539,11 @@ namespace Hedra.Engine.QuestSystem
 					underChunk = World.GetChunkAt(transMatrix.ExtractTranslation() +  marketPos);
 					yield return null;
 				}
+			    var originalPosition = transMatrix.ExtractTranslation();
+			    float heightAtPosition = Physics.HeightAtPosition(transMatrix.ExtractTranslation());
+			    transMatrix.Row3 = new Vector4(originalPosition.X, heightAtPosition, originalPosition.Z, transMatrix.Row3.W);
 
-			    Vector3 position = transMatrix.ExtractTranslation() + marketPos;
-
-                float heightAtPosition = Physics.HeightAtPosition(position);
-
-                if (Math.Abs(heightAtPosition - position.Y) > 2)
-			        continue;
-
-                if(i == 0)
+                if (i == 0)
 			        ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.Merchant, centerPosition - Vector3.UnitZ * 40f));
                 else if (i == 1)
                     ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.Merchant, centerPosition + Vector3.UnitZ * 40f));

@@ -93,11 +93,7 @@ namespace Hedra.Engine.ItemSystem
 	            var shouldConvert = true;
 	            for (var k = 0; k < i; k++)
 	            {
-	                shouldConvert = Rng.NextBool();
-	                if (shouldConvert)
-	                {
-	                    int a = 0;
-	                }
+	                shouldConvert = Rng.NextBool() && Rng.NextBool();
 	                if(!shouldConvert) break;
 	            }
 	            if (shouldConvert)
