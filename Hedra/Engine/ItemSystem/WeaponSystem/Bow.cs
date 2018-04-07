@@ -35,7 +35,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			Quiver.TargetPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
 			Quiver.LocalRotationPoint = new Vector3(0, 0, Quiver.TargetPosition.Z);
 			Quiver.TargetRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);
-			ArrowData = AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f, Vector3.Zero, new Vector3(-90,0,90) * Mathf.Radian);
+			ArrowData = AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 2.0f, Vector3.Zero, new Vector3(-90,0,90) * Mathf.Radian);
 
             AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherShootStance.dae");
 

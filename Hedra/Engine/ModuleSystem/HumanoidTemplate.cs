@@ -1,4 +1,6 @@
 ﻿
+using Hedra.Engine.ClassSystem;
+
 namespace Hedra.Engine.ModuleSystem
 {
     public class HumanoidTemplate
@@ -8,7 +10,7 @@ namespace Hedra.Engine.ModuleSystem
         public float MaxHealth { get; set; }
         public string DisplayName { get; set; }
         public string Behaviour { get; set; }
-        public string Class { get; set; } = Player.Class.None.ToString();
+        public string Class { get; set; } = ClassDesign.None.ToString();
         public string ModelType { get; set; }
         public bool Immune { get; set; }
         public float Speed { get; set; }

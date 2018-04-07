@@ -15,6 +15,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.QuestSystem;
 using System.Collections;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
@@ -206,7 +207,7 @@ namespace Hedra.Engine.Player
 			    keysPresses += Program.GameWindow.Keyboard[Key.A] ? 1f : 0f;
 			    keysPresses = 1f / keysPresses;
 			    if (keysPresses < 1f) keysPresses *= 1.5f;
-			    float speed = Human.IsAttacking && Class.Archer == Human.ClassType ? AttackingSpeed : NormalSpeed;
+			    float speed = Human.IsAttacking && Human.Class is ArcherDesign ? AttackingSpeed : NormalSpeed;
 
                 if (Program.GameWindow.Keyboard[Key.W])
 				{

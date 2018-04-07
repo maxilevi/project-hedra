@@ -28,7 +28,6 @@ namespace Hedra.Engine.EntitySystem
         public PhysicsComponent(Entity Parent) : base(Parent){ UsePhysics = true; UseTimescale = true; }
 		public Vector3 GravityDirection = new Vector3(0,-1f,0);
 		public float VelocityCap = float.MaxValue;
-		public float HitboxSize = 12f;
 		public Vector3 Force = Vector3.Zero;
 		public Vector3 Velocity = Vector3.Zero;
 		public bool HasFallDamage = true;
@@ -145,10 +144,6 @@ namespace Hedra.Engine.EntitySystem
 
             Parent.Model.Position = Mathf.Lerp(Parent.Model.Position, this.TargetPosition, _deltaTime * 8f);
 	    }
-		
-		public override void Draw(){}
-		
-		public float CollisionSize => HitboxSize * Parent.Model.Scale.Average();
 
 	    public void Move(MoveCommand command){
 			Physics.Manager.AddCommand(command);

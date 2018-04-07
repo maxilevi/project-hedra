@@ -66,7 +66,7 @@ namespace Hedra.Engine.ItemSystem
                     * (1.0f + (Rng.NextFloat() * (.3f + (tierChanged ? .1f * (int) Item.Tier : .0f) ) - .1f)));
 	            Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed)
                     * (1.0f + (Rng.NextFloat() * (.3f + +(tierChanged ? .1f * (int)Item.Tier : .0f)) - .1f)));
-	            if (Rng.Next(0, 10) == 1)
+	            if ( Item.Tier > ItemTier.Common && Rng.Next(0, 10) == 1)
 	            {
 	                Item.SetAttribute(CommonAttributes.EffectType, EffectTypes[Rng.Next(0, EffectTypes.Length)].ToString());
 	            }

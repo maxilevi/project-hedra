@@ -200,7 +200,12 @@ namespace Hedra.Engine.Player
 
         public void AddRestriction(int Index, EquipmentType Type)
         {
-            _restrictions.AddRestriction(ToCorrectItemSpace(Index), Type.ToString());
+            this.AddRestriction(Index, Type.ToString());
+        }
+
+        public void AddRestriction(int Index, string Type)
+        {
+            _restrictions.AddRestriction(ToCorrectItemSpace(Index), Type);
         }
 
         private static int ToCorrectItemSpace(int Index)

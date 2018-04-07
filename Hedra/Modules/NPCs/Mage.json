@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Mage",
+  "DisplayName": "Mage",
+  "ModelType": "Mage",
+  "Class": "Mage",
+  "Behaviour" : "Hostile",  
+  "Immune": false,
+  "Speed": 1.85,
+  "XP": 2.5, 
+  "AttackPower": 1.0, 
+  "AttackSpeed": 1.0,  
+  "Weapons": []
+}

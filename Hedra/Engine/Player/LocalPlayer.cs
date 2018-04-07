@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using Hedra.Engine.ClassSystem;
 using OpenTK;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Scenes;
@@ -625,7 +626,7 @@ namespace Hedra.Engine.Player
 		    this.Knocked = false;
 		}
 		
-		public static bool CreatePlayer(string Name, HumanModel PreviewModel, Class ClassType){
+		public static bool CreatePlayer(string Name, HumanModel PreviewModel, ClassDesign ClassType){
 			if(Name == string.Empty){
 				Instance.MessageDispatcher.ShowNotification("Name cannot be empty", Color.DarkRed, 3f);
 				return false;
@@ -643,7 +644,7 @@ namespace Hedra.Engine.Player
 		        Name = Name,
 		        RandomFactor = LocalPlayer.NewRandomFactor(),
 		        WorldSeed = World.RandomSeed,
-		        ClassType = ClassType
+		        Class = ClassType
 		    };
 
 		    var gold = ItemPool.Grab(ItemType.Gold);
@@ -654,32 +655,10 @@ namespace Hedra.Engine.Player
             food.SetAttribute(CommonAttributes.Amount, 5);
 			data.AddItem( PlayerInventory.FoodHolder, food);
 
-		    Item item = null;
-			switch (ClassType)
-			{
-			    case Class.Warrior:
-			        item = ItemPool.Grab(CommonItems.CommonBronzeSword);
-			        break;
-			    case Class.Archer:
-			        item = ItemPool.Grab(CommonItems.CommonWoodenBow);
-                    break;
-			    case Class.Rogue:
-			        item = ItemPool.Grab(CommonItems.CommonBronzeDoubleBlades);
-                    break;
-			}
-			data.AddItem(PlayerInventory.WeaponHolder, item);
+			data.AddItem(PlayerInventory.WeaponHolder, ClassType.StartingItem);
 
 			DataManager.SavePlayer(data);
 		    return true;
 		}
-	}
-	
-	public enum Class{
-		None,
-		Archer,
-		Rogue,
-		Warrior,
-		Mage,
-		Necromancer
 	}
 }

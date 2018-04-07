@@ -13,6 +13,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Rendering;
 using OpenTK;
 using System.Drawing;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
@@ -98,11 +99,13 @@ namespace Hedra.Engine.QuestSystem
 
 	    public Humanoid SpawnBandit(Vector3 Position, bool Friendly, bool Undead)
 	    {
-            int classN = Utils.Rng.Next(0, 3);
-	        Class classType = classN == 0 ? Class.Archer : classN == 1 ? Class.Warrior : Class.Rogue;
+            int classN = Utils.Rng.Next(0, ClassDesign.AvailableClasses.Length);
+	        var classType = ClassDesign.FromType(ClassDesign.AvailableClasses[classN]);
 
-	        var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile);
-	        behaviour.Name = Undead ? "Skeleton" : "Bandit";
+	        var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile)
+	        {
+	            Name = Undead ? "Skeleton" : "Bandit"
+	        };
 	        var isGnoll = Utils.Rng.Next(0, 4) == 1;
             var human = this.SpawnHumanoid(isGnoll ? "Gnoll" : classType.ToString(), Position, behaviour);
 	        if (isGnoll) human.AddonHealth = human.MaxHealth * .5f;

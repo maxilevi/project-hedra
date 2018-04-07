@@ -22,11 +22,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Forms = System.Windows.Forms;
@@ -319,6 +321,15 @@ namespace Hedra
 			    GL.Vertex3(Player.Position + Player.Orientation * 4f);
 			    GL.End();
 
+                World.Entities.ToList().ForEach( delegate(Entity E) 
+                {
+                    if (E != null)
+                    {
+                        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+                        BasicGeometry.DrawBox(E.HitBox.Min, E.DefaultBox.Max - E.DefaultBox.Min);
+                        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                    }
+                });
 
                 //LocalPlayer Player = SceneManager.Game.LPlayer;
                 var Collisions = new List<ICollidable>();

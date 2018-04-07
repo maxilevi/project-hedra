@@ -142,17 +142,13 @@ namespace Hedra.Engine.Player
 			if(Exploded)
 				return;
 
-			for(int i = 0; i < World.Entities.Count; i++){
-				if( Parent == World.Entities[i])
-					continue;
+			for(var i = 0; i < World.Entities.Count; i++){	   
+			    if (Parent == World.Entities[i] || !((this.Position - World.Entities[i].Position).LengthFast < 12 +
+			        (World.Entities[i].DefaultBox.Max - World.Entities[i].DefaultBox.Min).LengthFast)) continue;
 
-				if((this.Position - World.Entities[i].Position).LengthSquared < World.Entities[i].Physics.HitboxSize * World.Entities[i].Model.Scale.Average()){
-					if(HitEventHandler != null){
-						HitEventHandler.Invoke(this, World.Entities[i]);
-					}
-					Exploded = true;
-					return;
-				}
+			    HitEventHandler?.Invoke(this, World.Entities[i]);
+			    Exploded = true;
+			    return;
 			}
 		}
 		

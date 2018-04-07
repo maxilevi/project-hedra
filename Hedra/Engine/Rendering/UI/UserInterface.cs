@@ -186,17 +186,8 @@ namespace Hedra.Engine.Rendering.UI
 					GamePanel.Help.Enable();
 				}else{
 					GamePanel.Help.Disable();
-				}
-				
-				if(_player.ClassType == Class.Warrior)
-					this.GamePanel.ClassLogo.BaseTexture.TextureElement.TextureId = GameUI.WarriorLogo;
-				
-				else if(_player.ClassType == Class.Archer)
-					this.GamePanel.ClassLogo.BaseTexture.TextureElement.TextureId = GameUI.ArcherLogo;
-				
-				else if(_player.ClassType == Class.Rogue)
-					this.GamePanel.ClassLogo.BaseTexture.TextureElement.TextureId = GameUI.RogueLogo;
-
+				}				
+				this.GamePanel.ClassLogo.BaseTexture.TextureElement.TextureId = _player.Class.Logo;
 			}
 		}
 

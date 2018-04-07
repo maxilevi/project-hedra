@@ -76,7 +76,6 @@ namespace Hedra.Engine.PlantSystem
                     {
                         HasCollision = false,
                         UsePhysics = false,
-                        HitboxSize = 0,
                         CanCollide = false
                     },
                     BlockPosition = position

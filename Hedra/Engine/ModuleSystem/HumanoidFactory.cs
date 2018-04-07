@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
@@ -39,7 +40,7 @@ namespace Hedra.Engine.ModuleSystem
             var human = new Humanoid
             {
                 Level = LocalPlayer.Instance.Level + (difficultyType - 1),
-                ClassType = (Class) Enum.Parse(typeof(Class), template.Class),
+                Class = ClassDesign.FromString(template.Class),
                 MobType = MobType.Human,
                 Speed = template.Speed
             };

@@ -42,7 +42,7 @@ namespace Hedra.Engine.EntitySystem
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1;
         protected List<EntityComponent> Components = new List<EntityComponent>();
-        public Box DefaultBox = new Box(new Vector3(0, 0, 0), new Vector3(2, 2, 2));
+        public Box DefaultBox { get; set; }
         public bool Destroy { get; set; } = false;
         public int Level { get; set; } = 1;
         public float MaxOxygen { get; set; } = 30;

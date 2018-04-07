@@ -52,7 +52,7 @@ namespace Hedra.Engine.ModuleSystem
 
             HumanoidComponentsTemplate[] componentsTemplates = Load<HumanoidComponentsTemplate>(AppPath + "/Modules/NPCs/Components");
 
-            for (var i = 0; i < humanTemplates.Length; i++)
+            for (var i = 0; i < componentsTemplates.Length; i++)
             {
                 ComponentsTemplates.Add(humanTemplates[i].Name.ToLowerInvariant(), componentsTemplates[i]);
             }

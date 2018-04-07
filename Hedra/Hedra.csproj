@@ -174,6 +174,13 @@
     <Compile Include="Engine\CacheSystem\SleepingIconCache.cs" />
     <Compile Include="Engine\CacheSystem\TallTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\WheatCache.cs" />
+    <Compile Include="Engine\ClassSystem\ArcherDesign.cs" />
+    <Compile Include="Engine\ClassSystem\ClassDesign.cs" />
+    <Compile Include="Engine\ClassSystem\HiddenClassAttribute.cs" />
+    <Compile Include="Engine\ClassSystem\MageDesign.cs" />
+    <Compile Include="Engine\ClassSystem\NoneDesign.cs" />
+    <Compile Include="Engine\ClassSystem\RogueDesign.cs" />
+    <Compile Include="Engine\ClassSystem\WarriorDesign.cs" />
     <Compile Include="Engine\CompatibilityManager.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\HealthBonusComponent.cs" />
@@ -377,7 +384,6 @@
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeInterface.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeInterfaceManager.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeInterfaceItemInfo.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\BlueprintBuilder.cs" />
     <Compile Include="Engine\Player\Camera.cs" />
     <Compile Include="Engine\Player\Chat.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Claw.cs" />
@@ -440,7 +446,7 @@
     <Compile Include="Engine\Player\Skills\Conflagaration.cs" />
     <Compile Include="Engine\Player\Skills\Fireball.cs" />
     <Compile Include="Engine\Player\Skills\FireRelease.cs" />
-    <Compile Include="Engine\Player\Skills\FireAbilityTreeBlueprint.cs" />
+    <Compile Include="Engine\Player\Skills\MageAbilityTreeBlueprint.cs" />
     <Compile Include="Engine\Player\Skills\FlameDisk.cs" />
     <Compile Include="Engine\Player\Skills\FlameJump.cs" />
     <Compile Include="Engine\Player\Skills\FlameStyle.cs" />
@@ -457,7 +463,6 @@
     <Compile Include="Engine\Player\Skills\TreeItem.cs" />
     <Compile Include="Engine\Player\Skills\TripleFireball.cs" />
     <Compile Include="Engine\Player\Skills\WarriorAbilityTreeBlueprint.cs" />
-    <Compile Include="Engine\Player\Skills\WaterAbilityTreeBlueprint.cs" />
     <Compile Include="Engine\Player\Skills\WarriorWeaponThrow.cs" />
     <Compile Include="Engine\Management\StateManager.cs" />
     <Compile Include="Engine\Player\Inventory\TradeInventory.cs" />
@@ -838,6 +843,10 @@
       <Link>Assets\Chr\HorseWalk.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Animations\MageIdle.dae">
+      <Link>Assets\Chr\MageIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Animations\MerchantIdle.dae">
       <Link>Assets\Chr\MerchantIdle.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -948,6 +957,10 @@
     </None>
     <None Include="..\..\..\Assets\Animations\SpiderWalk.dae">
       <Link>Assets\Chr\SpiderWalk.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\TravellingMerchantIdle.dae">
+      <Link>Assets\Chr\TravellingMerchantIdle.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Animations\TurtleAttack.dae">
@@ -3968,6 +3981,9 @@
     <None Include="Modules\NPCs\Components\Gnoll.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\NPCs\Components\Mage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\NPCs\Components\Mandragora.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3992,6 +4008,9 @@
     <None Include="Modules\NPCs\Gnoll.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\NPCs\Mage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\NPCs\Mandragora.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -4010,6 +4029,9 @@
     <None Include="Modules\NPCs\Models\GnollModel.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\NPCs\Models\MageModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\NPCs\Models\MandragoraModel.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -4020,6 +4042,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Models\SkeletonModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\NPCs\Models\TravellingMerchantModel.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Models\VillagerModel.json">

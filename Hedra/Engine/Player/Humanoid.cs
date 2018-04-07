@@ -13,6 +13,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Sound;
 using System.Drawing;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
@@ -42,7 +43,7 @@ namespace Hedra.Engine.Player
 		public HandLamp HandLamp;
 		public DamageComponent DmgComponent;
 		public virtual Item MainWeapon { get; set; }
-		public Class ClassType = Class.Warrior;
+		public ClassDesign Class { get; set; } = new WarriorDesign();
 	    public float AttackPower { get; set; }
 		public float MaxStamina {get; set;}
 		public float AddonHealth {get; set;}
@@ -58,45 +59,14 @@ namespace Hedra.Engine.Player
 
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
 
-        public float BaseSpeed
-	    {
-	        get
-	        {
-	            switch (ClassType)
-	            {
-                    case Class.Rogue:
-                        return 1.45f;
-                    case Class.Warrior:
-                        return 1.25f;
-                    case Class.Archer:
-                        return 1.35f;
-                    default:
-                        return 1.25f;
-	            }
-	        }
-	    }
+        public float BaseSpeed => Class.BaseSpeed;
 
-        public override float MaxHealth{
+	    public override float MaxHealth{
 			get{
 			    float maxHealth = 97 + RandomFactor * 20f;
-			    for (int i = 1; i < this.Level; i++)
+			    for (var i = 1; i < this.Level; i++)
 			    {
-
-			        switch (ClassType)
-			        {
-			            case Class.Rogue:
-			                maxHealth += 38 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
-			                break;
-			            case Class.Archer:
-			                maxHealth += 22 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
-			                break;
-			            case Class.Warrior:
-			                maxHealth += 46 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
-			                break;
-                        default:
-                            maxHealth += 30 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
-                            break;
-                    }
+			        maxHealth += Class.MaxHealthFormula(RandomFactor);
 			    }
 			    return maxHealth + AddonHealth;			    
 			}
@@ -112,17 +82,9 @@ namespace Hedra.Engine.Player
 		public float MaxMana{
 			get{
 				float maxMana = 103 + RandomFactor * 34f;
-				for(int i = 1; i < this.Level; i++){
-					
-					if(ClassType == Class.Rogue)
-						maxMana += 37.5f + ((RandomFactor - .75f)*8 - 1f) * 10 - 5f;
-					
-					if(ClassType == Class.Archer)
-						maxMana += 42.5f + ((RandomFactor - .75f)*8 - 1f) * 10 - 5f;
-					
-					if(ClassType == Class.Warrior)
-						maxMana += 32.5f + ((RandomFactor - .75f)*8 - 1f) * 10 - 5f;
-				}
+				for(var i = 1; i < this.Level; i++){
+                    maxMana += Class.MaxHealthFormula(RandomFactor);				    
+                }
 				return maxMana;
 			}
 		}
@@ -156,12 +118,8 @@ namespace Hedra.Engine.Player
             this.MessageDispatcher = new DummyMessageDispatcher();
             this.HandLamp = new HandLamp(this);
 			this.Movement = new MovementManager(this);
-            this.DmgComponent = new DamageComponent(this)
-            {
-                XpToGive = 4f
-            };
+            this.DmgComponent = new DamageComponent(this);
             this.RandomFactor = Humanoid.NewRandomFactor();
-            this.Physics.HitboxSize = 8;
             this.DefaultBox.Max = new Vector3(4f, 4, 4f);
             this.Physics.CanCollide = true;
             this.DodgeCost = 25f;
@@ -317,19 +275,15 @@ namespace Hedra.Engine.Player
 			get
 			{
 			    float dmgToDo = this.Level * 16.0f + 4.0f;
-
-			    if (MainWeapon != null)
-			    {
-			        dmgToDo *= this.WeaponModifier(MainWeapon);
-			    }
-
+                dmgToDo *= this.WeaponModifier(MainWeapon);
                 return dmgToDo * this.AttackPower;
 			}
 		}
 
 	    public float WeaponModifier(Item Weapon)
 	    {
-	        var tierModifier = 1.0f + (int)Weapon.Tier / ((int)ItemTier.Divine + 1.0f);
+	        if (Weapon == null) return 0.2f;
+            var tierModifier = 1.0f + (int)Weapon.Tier / ((int)ItemTier.Divine + 1.0f);
 	        return  Weapon.GetAttribute<float>(CommonAttributes.Damage) * tierModifier / 15.0f;
         }
 

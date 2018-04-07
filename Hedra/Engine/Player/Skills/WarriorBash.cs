@@ -34,7 +34,7 @@ namespace Hedra.Engine.Player
 			
 			this.BashAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorBash.dae");
 			this.BashAnimation.Loop = false;
-		    this.BashAnimation.OnAnimationStart += delegate (Animation Sender)
+		    this.BashAnimation.OnAnimationStart += delegate
 		    {
 		        Sound.SoundManager.PlaySound(Sound.SoundType.SlashSound, Player.Position);
 		    };

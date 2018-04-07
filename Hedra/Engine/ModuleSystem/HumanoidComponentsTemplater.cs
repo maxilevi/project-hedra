@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Player;
 
 namespace Hedra.Engine.ModuleSystem
@@ -17,6 +18,6 @@ namespace Hedra.Engine.ModuleSystem
 
         public HumanoidComponentsTemplate this[string Key] => _componentsTemplates[Key.ToLowerInvariant()];
         public HumanoidComponentsTemplate this[HumanType Key] => _componentsTemplates[Key.ToString().ToLowerInvariant()];
-        public HumanoidComponentsTemplate this[Class Key] => _componentsTemplates[Key.ToString().ToLowerInvariant()];
+        public HumanoidComponentsTemplate this[ClassDesign Key] => _componentsTemplates[Key.Name.ToString().ToLowerInvariant()];
     }
 }

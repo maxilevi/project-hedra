@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.Management
@@ -22,7 +23,7 @@ namespace Hedra.Engine.Management
 	/// </summary>
 	public static class DataManager
 	{
-		public const float SaveVersion = 1.1f;
+		public const float SaveVersion = 1.11f;
 		
 		public static void SavePlayer(PlayerInformation Player){
 			string ChrFile = AssetManager.AppData+"/Characters/"+Player.Name;
@@ -67,7 +68,7 @@ namespace Hedra.Engine.Management
 					Bw.Write(Player.TargetPosition);
 					
 					Bw.Write(Player.Daytime);
-					Bw.Write( (int) Player.ClassType);
+					Bw.Write(Player.Class.Name);
                     Bw.Write(Player.RandomFactor);
 
 				    var items = Player.Items;
@@ -101,7 +102,7 @@ namespace Hedra.Engine.Management
 		        ToolbarArray = Player.Toolbar.ToArray(),
 		        TargetPosition = Player.Physics.TargetPosition,
 		        Daytime = Enviroment.SkyManager.DayTime,
-		        ClassType = Player.ClassType,
+		        Class = Player.Class,
 		        RandomFactor = Player.RandomFactor,
 		        Items = Player.Inventory.ToArray()
 		    };
@@ -145,7 +146,7 @@ namespace Hedra.Engine.Management
 				information.ToolbarArray = br.ReadBytes(br.ReadInt32());
 				information.TargetPosition = br.ReadVector3();
 				information.Daytime = br.ReadSingle();
-				information.ClassType = (Class) br.ReadInt32();
+				information.Class = ClassDesign.FromString( version < 1.11f ? intToClassDesignString(br.ReadInt32()) : br.ReadString() );
                 information.RandomFactor = br.ReadSingle();
                 items = new Dictionary<int, Item>();
 			    int itemCount = br.ReadInt32();
@@ -161,7 +162,14 @@ namespace Hedra.Engine.Management
 			Str.Close();
 			Str.Dispose();
 			return information;
-		}		
+		}
+
+        [Obsolete]
+	    private static string intToClassDesignString(int OldClass)
+        {
+            var map = new []{"None", "Archer", "Rogue", "Warrior"};
+            return map[OldClass];
+        }
 
 		public static PlayerInformation[] PlayerFiles{
 			get{

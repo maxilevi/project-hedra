@@ -57,7 +57,7 @@ namespace Hedra.Engine.Scenes
 		
 		public bool InMenuWorld => World.Seed == World.MenuSeed;
 
-	    public bool InMenu => Player.UI.Menu.Enabled && !Player.UI.Hide && World.Seed != World.MenuSeed;
+	    public bool InMenu => Player != null && Player.UI.Menu.Enabled && !Player.UI.Hide && World.Seed != World.MenuSeed;
 
 	    public void LoadMenu(){
 			Constants.REDIRECT_NET = false;
@@ -94,7 +94,7 @@ namespace Hedra.Engine.Scenes
 				Player.Model.Dispose();
 			}
 		    Player.UI.ChrChooser.StopModels();//So as to fix loose ends
-            Player.ClassType = Information.ClassType;		
+            Player.Class = Information.Class;		
 			Player.Spawner.Enabled = true;
 			Player.HandLamp.Enabled = false;
 	        Player.Speed = Player.BaseSpeed;
@@ -133,18 +133,7 @@ namespace Hedra.Engine.Scenes
 
 	    private void SetRestrictions(PlayerInformation Information)
 	    {
-	        switch (Information.ClassType)
-	        {
-	            case Class.Warrior:
-	                Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Sword);
-	                break;
-	            case Class.Archer:
-	                Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Bow);
-	                break;
-	            case Class.Rogue:
-	                Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.DoubleBlades);
-	                break;
-	        }
+	        Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, Information.Class.StartingItem.EquipmentType);
             Player.Inventory.AddRestriction(PlayerInventory.BootsHolder, EquipmentType.Boots);
 	        Player.Inventory.AddRestriction(PlayerInventory.PantsHolder, EquipmentType.Pants);
 	        Player.Inventory.AddRestriction(PlayerInventory.ChestplateHolder, EquipmentType.Chestplate);

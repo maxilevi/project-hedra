@@ -26,10 +26,10 @@ namespace Hedra.Engine.Player
 	 * 
 	 * 3  -   -   -
 	 * */
-	public class FireAbilityTreeBlueprint : AbilityTreeBlueprint
+	public class MageAbilityTreeBlueprint : AbilityTreeBlueprint
 	{
 		
-		public FireAbilityTreeBlueprint() : base(){
+		public MageAbilityTreeBlueprint() : base(){
 			base.ActiveColor = new Vector4(1.000f, 0.420f, 0.204f, 1.000f);
 			
 			Items[0][0].AbilityType = typeof(Fireball);	

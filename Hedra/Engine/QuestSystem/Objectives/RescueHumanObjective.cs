@@ -45,7 +45,6 @@ namespace Hedra.Engine.QuestSystem.Objectives
 			_oldMan.Position = this.Position + Vector3.UnitY * 7f + Vector3.UnitZ * 3.0f;
 			_oldMan.Physics.UsePhysics = false;
 			_oldMan.AddonHealth = 100f;
-			_oldMan.Physics.HitboxSize = 1;
 			_oldMan.Health = _oldMan.MaxHealth / 3 + rng.NextFloat() * 48f - 24f;
 			_oldMan.MobType = MobType.Human;
 			_oldMan.Rotation = new Vector3(-90,0,0);

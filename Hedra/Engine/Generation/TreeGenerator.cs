@@ -27,7 +27,7 @@ namespace Hedra.Engine.Generation
 		    Chunk underChunk = World.GetChunkAt(Position);
             if(underChunk == null) return;
 
-			Random rng = underChunk.Landscape.RandomGen;
+			Random rng = new Random(World.Seed + 24121);
 			var addon = new Vector3(rng.NextFloat() * 32f - 16f, 0, rng.NextFloat() * 32f - 16f);
 		    Vector3 blockSpace = World.ToBlockSpace(Position);
 

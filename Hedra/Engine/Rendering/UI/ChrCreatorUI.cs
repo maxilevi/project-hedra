@@ -13,6 +13,7 @@ using Hedra.Engine.Player;
 using System.Drawing;
 using OpenTK;
 using System.Collections;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering.Animation;
 
@@ -23,16 +24,15 @@ namespace Hedra.Engine.Rendering.UI
 	/// </summary>
 	public class ChrCreatorUI : Panel
 	{
-		private const int WeaponCount = 3;
-		private Class _classType = Class.Warrior;
-		private Humanoid _human;
-		private static Vector2 _targetResolution = new Vector2(1024, 578);
-		private Timer _clickTimer = new Timer(.25f);
-		private Button _openFolder;
+		private readonly Humanoid _human;
+	    private readonly Timer _clickTimer;
+		private readonly Button _openFolder;
+	    private ClassDesign _classType;
 		
 		public ChrCreatorUI(LocalPlayer Player) 
 		{
-			Font defaultFont = FontCache.Get(UserInterface.Fonts.Families[0], 12);
+            _clickTimer = new Timer(.25f);
+            Font defaultFont = FontCache.Get(UserInterface.Fonts.Families[0], 12);
 			Color defaultColor = Color.White;//Color.FromArgb(255,39,39,39);
 			
 			Vector2 bandPosition = new Vector2(0f, .8f);
@@ -45,47 +45,36 @@ namespace Hedra.Engine.Rendering.UI
 			_openFolder.Click += delegate { System.Diagnostics.Process.Start(AssetManager.AppData + "/Characters/"); };
 			
 			_human = new Humanoid();
-			_human.ClassType = Class.Warrior;
 			_human.Model = new HumanModel(_human);
 			_human.Model.Rotation = Vector3.UnitY * -90;
 			_human.Model.TargetRotation = Vector3.UnitY * -90;
 			_human.Physics.UseTimescale = false;
-			_human.Removable = false;
-			_human.BlockPosition = Scenes.MenuBackground.PlatformPosition + new Vector3(+2,0,0);
+            _human.Removable = false;
+			_human.BlockPosition = Scenes.MenuBackground.PlatformPosition;
 			_human.Model.Fog = true;
 			_human.Model.Enabled = true;
 			
-			CoroutineManager.StartCoroutine(Update);
-			
-			string[] classes = new string[]{"Warrior","Archer","Rogue"};//,"Mage","Necromancer"};
-			OptionChooser classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, "Class", defaultColor,
+			CoroutineManager.StartCoroutine(this.Update);
+
+		    string[] classes = ClassDesign.ClassNames;
+			var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, "Class", defaultColor,
 			                                              defaultFont, classes, true);
 						
 			_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonBronzeSword).Weapon);
 			
 			OnButtonClickEventHandler setWeapon = delegate {
-				_classType = (Class) Enum.Parse(typeof(Class), classes[classChooser.Index]);
+				_classType = ClassDesign.FromString(classes[classChooser.Index]);
 			    var position = _human.Model.Position;
 			    var rotation = _human.Model.Rotation;
-				if(_classType == Class.Rogue){
-					_human.Model.Dispose();
-					_human.Model = new HumanModel(_human, HumanType.Rogue);
-					_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonBronzeDoubleBlades).Weapon);
-					
-				}else if(_classType == Class.Archer){
-					_human.Model.Dispose();
-				    _human.Model = new HumanModel(_human, HumanType.Archer);
-                    _human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonWoodenBow).Weapon);
-					
-				}else if(_classType == Class.Warrior){
-					_human.Model.Dispose();
-				    _human.Model = new HumanModel(_human, HumanType.Warrior);
-                    _human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonBronzeSword).Weapon);
-				}
+
+			    _human.Model.Dispose();
+				_human.Model = new HumanModel(_human, _classType.Human);
+				_human.Model.SetWeapon(_classType.StartingItem.Weapon);
 			    _human.Model.Position = position;
 			    _human.Model.Rotation = rotation;
                 _human.Model.TargetRotation = rotation;
             };
+		    setWeapon(null, null);
 			
 			classChooser.RightArrow.Click += setWeapon;
 			classChooser.LeftArrow.Click += setWeapon;
@@ -148,8 +137,6 @@ namespace Hedra.Engine.Rendering.UI
 					_human.Model.Rotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
 					_human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
 					_human.Model.Idle();
-					_human.BlockPosition = Scenes.MenuBackground.PlatformPosition;
-					_human.BlockPosition = new Vector3(_human.BlockPosition.X, _human.BlockPosition.Y / Engine.Generation.Chunk.BlockSize, _human.BlockPosition.Z);
 				}
 				yield return null;
 			}

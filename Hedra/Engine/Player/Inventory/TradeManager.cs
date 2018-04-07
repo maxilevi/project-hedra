@@ -23,34 +23,41 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (Item == null) return 0;
             float price = 0;
-            var attributes = Item.GetAttributes();
-            for (var i = 0; i < attributes.Length; i++)
+            var hasPriceAttribute = Item.HasAttribute(CommonAttributes.Price);
+            if (!hasPriceAttribute)
             {
-                if (attributes[i].Name == CommonAttributes.Amount.ToString())
+                var attributes = Item.GetAttributes();
+                for (var i = 0; i < attributes.Length; i++)
                 {
-                    price += 1;
-                    continue;
-                }
-                var typeList = new[] { typeof(float), typeof(double), typeof(long) };
-                object selectedType = null;
-                for (var j = 0; j < typeList.Length; j++)
-                {
-                    if (typeList[j].IsInstanceOfType(attributes[i].Value))
+                    if (attributes[i].Name == CommonAttributes.Amount.ToString())
                     {
-                        selectedType = typeList[j];
-                        break;
+                        price += 1;
+                        continue;
+                    }
+                    var typeList = new[] {typeof(float), typeof(double), typeof(long)};
+                    object selectedType = null;
+                    for (var j = 0; j < typeList.Length; j++)
+                    {
+                        if (typeList[j].IsInstanceOfType(attributes[i].Value))
+                        {
+                            selectedType = typeList[j];
+                            break;
+                        }
+                    }
+
+                    if (selectedType != null)
+                    {
+                        var value = Item.GetAttribute<float>(attributes[i].Name);
+                        price += Item.EquipmentType != null ? value : value * .025f;
                     }
                 }
-
-                if (selectedType != null)
-                {
-                    var value = Item.GetAttribute<float>(attributes[i].Name);
-                    price += Item.EquipmentType != null ? value : value * .025f;
-                }
+                price *= Item.EquipmentType != null ? 1.5f : 1.0f;
+                price *= (int) Item.Tier + 1;
             }
-            price *= Item.EquipmentType != null ? 1.5f : 1.0f;
-            price *= (int)Item.Tier + 1;
-
+            else
+            {
+                price = Item.GetAttribute<int>(CommonAttributes.Price);
+            }
             return (int) (price *(_buyerInterface.Array.Contains(Item) ? 0.75f : 1.15f));
         }
 

@@ -86,7 +86,7 @@ namespace Hedra.Engine.Player
 
         public HumanModel(Humanoid Human)
         {
-            this.Load(Human, HumanoidLoader.ModelTemplater[Human.ClassType]);
+            this.Load(Human, HumanoidLoader.ModelTemplater[Human.Class]);
         }
 
         public void Paint(Vector4[] Colors)
@@ -610,6 +610,7 @@ namespace Hedra.Engine.Player
         Blacksmith,
 		Mandragora,
         TravellingMerchant,
-        Villager
+        Villager,
+        Mage
 	}
 }

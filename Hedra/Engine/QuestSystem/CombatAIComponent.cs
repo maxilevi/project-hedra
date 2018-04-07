@@ -19,6 +19,7 @@ namespace Hedra.Engine.QuestSystem
         protected Vector3 OriginalPosition;
         protected Timer MovementTimer;
         protected Timer RollTimer;
+        public bool CanDodge { get; set; } = true;
         public abstract float SearchRadius { get; set; }
         public abstract float AttackRadius { get; set; }
         public abstract float ForgetRadius { get; set; }
@@ -79,7 +80,7 @@ namespace Hedra.Engine.QuestSystem
         {
             var human = Parent as Humanoid;
             if(human != null && human.WasAttacking) return;
-            if (RollTimer.Tick() && human != null && (TargetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius)
+            if (RollTimer.Tick() && human != null && (TargetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius && CanDodge)
                 human.Roll();
 
             Parent.Model.Run();

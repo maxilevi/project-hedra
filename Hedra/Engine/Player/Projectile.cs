@@ -120,15 +120,13 @@ namespace Hedra.Engine.Player
 				}
 				#endregion
 				
-				for(int i = 0; i < World.Entities.Count; i++){
-					if( Parent == World.Entities[i])
-						continue;
-	
-					if( (Mesh.Position - World.Entities[i].Position).LengthSquared < World.Entities[i].Physics.HitboxSize * World.Entities[i].Model.Scale.Average() + 8*8){
-					    HitEventHandler?.Invoke(this, World.Entities[i]);
-					    Hitted = true;
-						break;
-					}
+				for(var i = 0; i < World.Entities.Count; i++){
+				    if (Parent == World.Entities[i] || !((Mesh.Position - World.Entities[i].Position).LengthFast < 2 +
+				                                         (World.Entities[i].DefaultBox.Max - World.Entities[i].DefaultBox.Min).LengthFast)) continue;
+
+					HitEventHandler?.Invoke(this, World.Entities[i]);
+					Hitted = true;
+					break;			
 				}
 				
 				yield return null;

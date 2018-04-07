@@ -137,8 +137,8 @@ namespace Hedra.Engine.Rendering.UI
 
 		        for (int k = 0; k < _information.Length; k++)
 		        {
-		            if (_information[k].Name + _information[k].ClassType + _information[k].BlockPosition + _information[k].Health + _information[k].Level
-		                != newInformation[k].Name + newInformation[k].ClassType + newInformation[k].BlockPosition + newInformation[k].Health + newInformation[k].Level)
+		            if (_information[k].Name + _information[k].Class + _information[k].BlockPosition + _information[k].Health + _information[k].Level
+		                != newInformation[k].Name + newInformation[k].Class + newInformation[k].BlockPosition + newInformation[k].Health + newInformation[k].Level)
 		            {
 		                same = false;
 		            }
@@ -181,7 +181,7 @@ namespace Hedra.Engine.Rendering.UI
                 if (_humans[i].Model != null)
 					_humans[i].Model.Dispose();
 				
-				_humans[i].ClassType = _information[i].ClassType;
+				_humans[i].Class = _information[i].Class;
 				_humans[i].Model = new HumanModel(_humans[i]);
 			    _humans[i].Model.Resize(1.25f * Vector3.One);
                 _humans[i].BlockPosition = Scenes.MenuBackground.FirePosition + offset;
@@ -222,7 +222,7 @@ namespace Hedra.Engine.Rendering.UI
 						_previousHuman = _selectedHuman;
 						_selectedHuman = _humans[i];
 						_name.Text = _selectedHuman.Name;
-						_level.Text = $"{Utils.FirstCharToUpper(_selectedHuman.ClassType.ToString().ToLowerInvariant())} Level {_selectedHuman.Level}";
+						_level.Text = $"{Utils.FirstCharToUpper(_selectedHuman.Class.ToString().ToLowerInvariant())} Level {_selectedHuman.Level}";
 						break;
 					}
 				}

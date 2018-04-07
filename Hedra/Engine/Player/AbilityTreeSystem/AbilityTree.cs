@@ -141,7 +141,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public void FromInformation(PlayerInformation Information)
         {
-            this._blueprint = BlueprintBuilder.Build(Information.ClassType);
+            this._blueprint = Information.Class.AbilityTreeDesign;
             this.SetBlueprint(_blueprint);
             if (Information.AbilityTreeArray.Length > 0)
             {

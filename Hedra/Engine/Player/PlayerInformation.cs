@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System.Collections.Generic;
+using Hedra.Engine.ClassSystem;
 using OpenTK;
 using Hedra.Engine.ItemSystem;
 
@@ -30,7 +31,7 @@ namespace Hedra.Engine.Player
         public Vector3 TargetPosition;
         public byte[] AbilityTreeArray;
         public byte[] ToolbarArray;
-        public Class ClassType;
+        public ClassDesign Class;
         public float AddonHealth;
         public float RandomFactor;
         private Dictionary<int, Item> _items;

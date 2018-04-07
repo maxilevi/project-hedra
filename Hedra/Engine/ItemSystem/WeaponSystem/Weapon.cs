@@ -54,7 +54,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         private float[] _animationSpeeds;
         private EffectDescriber _describer;
-        private static Weapon _empty;
         private bool _onAttackStance;
         private Vector3 _scale = Vector3.One;
         private float _alpha = 1f;
@@ -369,7 +368,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                                 Owner != null && !Owner.WasAttacking &&
                                 !InAttackStance;
 
-        public static Weapon Empty => _empty ?? (_empty = new Hands());
+        public static Weapon Empty => new Hands();
 
         public void GatherMembers(bool Force = false)
         {

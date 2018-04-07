@@ -20,9 +20,6 @@ namespace Hedra.Engine.Rendering.UI
 	/// </summary>
 	public class GameUI : Panel
 	{
-		public static uint WarriorLogo = Graphics2D.LoadFromAssets("Assets/UI/WarriorLogo.png"),
-						   ArcherLogo = Graphics2D.LoadFromAssets("Assets/UI/ArcherLogo.png"),
-						   RogueLogo = Graphics2D.LoadFromAssets("Assets/UI/RogueLogo.png");
 		public Texture Cross, QuestLogMsg, SkillTreeMsg, Compass, MapMsg, Help;
 		public RenderableTexture ClassLogo;
 		private RenderableTexture _oxygenBackground, _staminaBackground, _staminaIcon, _oxygenIcon;

@@ -191,11 +191,11 @@ namespace Hedra.Engine.Management
 		        Vertices = EntityData.Mesh.Vertices.ToList(),
 		        Colors = new List<Vector4>()
 		    };
-		    EntityData.Mesh.Colors.ToList().ForEach( vector => Data.Colors.Add(new Vector4(vector.X, vector.Y, vector.Z, 1))  );
+		    EntityData.Mesh.Colors.ToList().ForEach( Vector => Data.Colors.Add(new Vector4(Vector.X, Vector.Y, Vector.Z, 1))  );
 
-            return new Box(new Vector3(Data.SupportPoint(-Vector3.UnitX).X, Data.SupportPoint(-Vector3.UnitY).Y, Data.SupportPoint(-Vector3.UnitZ).Z),
-                new Vector3(Data.SupportPoint(Vector3.UnitX).X, Data.SupportPoint(Vector3.UnitY).Y, Data.SupportPoint(Vector3.UnitZ).Z));
-		}
+		    return new Box(new Vector3(Data.SupportPoint(-Vector3.UnitX).X, Data.SupportPoint(-Vector3.UnitY).Y, Data.SupportPoint(-Vector3.UnitZ).Z),
+		        new Vector3(Data.SupportPoint(Vector3.UnitX).X, Data.SupportPoint(Vector3.UnitY).Y, Data.SupportPoint(Vector3.UnitZ).Z));
+        }
 		
 		public static VertexData PlyLoader(string file, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true){
 			byte[] dataArray = AssetManager.ReadBinary(file, DataFile3);

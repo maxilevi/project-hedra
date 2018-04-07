@@ -11,6 +11,11 @@
     {
       "Name": "Saturation",
       "Value": 60
+    },
+    {
+      "Name": "Price",
+      "Value": 4,
+      "Hidden": true
     }
   ],
   "Model": {
