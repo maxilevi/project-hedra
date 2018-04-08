@@ -1,0 +1,21 @@
+{
+  "Name": "UniquePaladinHammer",
+  "DisplayName": "Paladin Hammer",
+  "EquipmentType": "Hammer", 
+  "Tier": "Unique",
+  "Description": "Paladin hammer.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 15.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.15
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Hammers/UniquePaladinHammer.ply"
+  }
+}

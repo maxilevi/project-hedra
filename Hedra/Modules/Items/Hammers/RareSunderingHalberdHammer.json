@@ -1,0 +1,21 @@
+{
+  "Name": "RareSunderingHalberdHammer",
+  "DisplayName": "Sundering Halberd",
+  "EquipmentType": "Hammer", 
+  "Tier": "Rare",
+  "Description": "Sundering halberd.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 16.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.95
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Hammers/RareSunderingHalberdHammer.ply"
+  }
+}

@@ -3308,6 +3308,18 @@
       <Link>Assets\Items\Swords\RarePaladinSilverSword.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\RareStoneBreakerHammer.ply">
+      <Link>Assets\Items\Hammers\RareStoneBreakerHammer.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\RareSunderingHalberdHammer.ply">
+      <Link>Assets\Items\Hammers\RareSunderingHalberdHammer.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\RareSunderingHammer.ply">
+      <Link>Assets\Items\Hammers\RareSunderingHammer.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\RatTail.ply">
       <Link>Assets\Items\RatTail.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3420,6 +3432,10 @@
       <Link>Assets\Items\Swords\UncommonSilverSword.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\UncommonSmithyHammer.ply">
+      <Link>Assets\Items\Hammers\UncommonSmithyHammer.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\UniqueMaceAxe.ply">
       <Link>Assets\Items\Axes\UniqueMaceAxe.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3434,6 +3450,10 @@
     </None>
     <None Include="..\..\..\Assets\Models\UniqueRingingHammer.ply">
       <Link>Assets\Items\Hammers\UniqueRingingHammer.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\UniqueShellbreakerHammer.ply">
+      <Link>Assets\Items\Hammers\UniqueShellbreakerHammer.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\UniqueWoodsmanAxe.ply">
@@ -3834,6 +3854,33 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Bows\UncommonSilverBow.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Hammers\DivineDrainerHammer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Hammers\LegendaryGolemFistHammer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Hammers\RareStoneBreakerHammer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Hammers\RareSunderingHalberdHammer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Hammers\RareSunderingHammer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Hammers\UncommonSmithyHammer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Hammers\UniquePaladinHammer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Hammers\UniqueRingingHammer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Hammers\UniqueShellbreakerHammer.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Knifes\CommonIronKnife.json">

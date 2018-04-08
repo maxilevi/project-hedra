@@ -61,26 +61,25 @@ namespace Hedra.Engine.EntitySystem
 		    AttackAnimation.Speed = Template.AttackAnimation.Speed;
 
 			this.Model.Scale = Vector3.One * (Template.Scale + Template.Scale * rng.NextFloat() * .3f - Template.Scale * rng.NextFloat() * .15f);
-			this.Parent.DefaultBox = AssetManager.LoadHitbox(Template.IdleAnimation.Path);
-		    this.Parent.DefaultBox *= this.Model.Scale; 
+			this.Parent.SetHitbox(AssetManager.LoadHitbox(Template.IdleAnimation.Path) * this.Model.Scale);
 			
 			AttackAnimation.Loop = false;
 			AttackAnimation.OnAnimationEnd += delegate { 
 				this.IsAttacking = false;
 			};
 			
-			this.Model.Size = (this.Parent.DefaultBox.Max - this.Parent.DefaultBox.Min);
+			this.Model.Size = (this.Parent.BaseBox.Max - this.Parent.BaseBox.Min);
 			this.Idle();
 
-		    var soundType = (Parent.MobType == MobType.Horse) ? SoundType.HorseRun : SoundType.HumanRun;
+		    var soundType = Parent.MobType == MobType.Horse ? SoundType.HorseRun : SoundType.HumanRun;
 		    this._sound = new AreaSound(soundType, this.Position, 48f);
 
 		}
 		
 		public void Resize(Vector3 Scalar){
 			this.Model.Scale *= Scalar;
-			this.Parent.HitBox *= Scalar;
-		}
+		    this.Parent.MultiplyHitbox(Scalar);
+        }
 
 		public override void Attack(Entity Damagee, float Damage)
 		{	

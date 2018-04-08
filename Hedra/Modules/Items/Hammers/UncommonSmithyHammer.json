@@ -1,0 +1,21 @@
+{
+  "Name": "UncommonSmithyHammer",
+  "DisplayName": "Smithy Hammer",
+  "EquipmentType": "Hammer", 
+  "Tier": "Uncommon",
+  "Description": "Smithy hammer.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 12.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.15
+    }
+  ],
+  "Model": {
+    "Scale": 2.5,
+    "Path": "$DataFile$/Items/Hammers/UncommonSmithyHammer.ply"
+  }
+}

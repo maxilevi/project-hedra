@@ -240,9 +240,9 @@ namespace Hedra.Engine.EntitySystem
 				        }
 				        else
 				        {
-				            box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * (Parent.DefaultBox.Max.Y-1f) -
+				            box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * (Parent.BaseBox.Max.Y-1f) -
 				                      Vector3.UnitX * .5f - Vector3.UnitZ * .5f;
-				            box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * (Parent.DefaultBox.Max.Y) +
+				            box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * (Parent.BaseBox.Max.Y) +
 				                      Vector3.UnitX * .5f + Vector3.UnitZ * .5f;
                         }
 				    }

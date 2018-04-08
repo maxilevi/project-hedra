@@ -1,0 +1,21 @@
+{
+  "Name": "LegendaryGolemFistHammer",
+  "DisplayName": "Golem Fist",
+  "EquipmentType": "Hammer", 
+  "Tier": "Legendary",
+  "Description": "Golem fist hammer.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 18.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Hammers/LegendaryGolemFistHammer.ply"
+  }
+}

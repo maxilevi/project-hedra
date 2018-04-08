@@ -154,18 +154,18 @@ namespace Hedra.Engine.Player
 				this.Model.Animator.ExitBlend();
 			};
 
-            this.Human.DefaultBox = AssetManager.LoadHitbox(Template.Path) * this.Model.Scale;
+            this.Human.SetHitbox(AssetManager.LoadHitbox(Template.Path) * this.Model.Scale);
             this.Height = 1.65f;//this.Human.DefaultBox.Max.Y - this.Human.DefaultBox.Min.Y;
 
             this.Idle();
-            this.Model.Size = this.Human.DefaultBox.Max - this.Human.DefaultBox.Min; 
+            this.Model.Size = this.Human.BaseBox.Max - this.Human.BaseBox.Min; 
             this._modelSound = new AreaSound(SoundType.HumanRun, Vector3.Zero, 48f);
         }
 
         public void Resize(Vector3 Scalar)
         {
             this.Model.Scale *= Scalar;
-            this.Human.HitBox *= Scalar;
+            this.Human.MultiplyHitbox(Scalar);
         }
 		
 		public void UpdateModel(){}

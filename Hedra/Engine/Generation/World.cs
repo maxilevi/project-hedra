@@ -641,7 +641,7 @@ namespace Hedra.Engine.Generation
 	        Vector3 position = DesiredPosition;
 	        Chunk underChunk = World.GetChunkAt(position);
 	        var collidesOnSurface = true;
-	        Box box = Mob.DefaultBox.Cache.Translate(position.Xz.ToVector3()
+	        Box box = Mob.BaseBox.Cache.Translate(position.Xz.ToVector3()
                 + Vector3.UnitY * Physics.HeightAtPosition(position.X, position.Z));
 	        while (underChunk != null && collidesOnSurface)
 	        {
@@ -650,7 +650,7 @@ namespace Hedra.Engine.Generation
 	            {
 	                position = position + new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
 	                underChunk = World.GetChunkAt(position);
-	                box = Mob.DefaultBox.Cache.Translate(position.Xz.ToVector3() 
+	                box = Mob.BaseBox.Cache.Translate(position.Xz.ToVector3() 
                         + Vector3.UnitY * Physics.HeightAtPosition(position.X, position.Z));
 	            }
 

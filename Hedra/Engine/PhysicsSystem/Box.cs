@@ -16,36 +16,33 @@ namespace Hedra.Engine.PhysicsSystem
 	/// Description of Box.
 	/// </summary>
 	public class Box : ICollidable{
-		public Vector3 Min, Max;
-		
-		public Box(Vector3 Min, Vector3 Max){
+		public Vector3 Min { get; set; }
+	    public Vector3 Max { get; set; }
+
+	    public Box(Vector3 Min, Vector3 Max){
 			this.Min = Min;
 			this.Max = Max;
 		}
 		
 		public static Box operator +(Box Box1, Box Box2){
-			//Box1.Cached = false;
 			Box1.Min += Box2.Min;
 			Box1.Max += Box2.Max;
 			return Box1;
 		}
 		
 		public static Box operator -(Box Box1, Box Box2){
-			//Box1.Cached = false;
 			Box1.Min -= Box2.Min;
 			Box1.Max -= Box2.Max;
 			return Box1;
 		}
 		
 		public static Box operator *(Box Box1, Vector3 Scale){
-			//Box1.Cached = false;
 			Box1.Min *= Scale;
 			Box1.Max *= Scale;
 			return Box1;
 		}
 		
 		public static Box operator *(Box Box1, float Scale){
-			//Box1.Cached = false;
 			Box1.Min *= Scale;
 			Box1.Max *= Scale;
 			return Box1;
@@ -70,7 +67,24 @@ namespace Hedra.Engine.PhysicsSystem
 		    if (b1Null || b2Null) return true;
 		    return Box1.Min != Box2.Min || Box2.Max != Box1.Max;
         }
-		
+
+	    public Box Rotate(Vector3 Euler)
+	    {
+	        return this;
+	        if (Euler == Vector3.Zero) return this;
+	        if (float.IsInfinity(Euler.X) || float.IsNaN(Euler.X) ||
+	            float.IsInfinity(Euler.Y) || float.IsNaN(Euler.Y) ||
+	            float.IsInfinity(Euler.Z) || float.IsNaN(Euler.Z))
+	        {
+	            int a = 0;
+	        }
+	        var mat = Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(Euler * Mathf.Radian));
+                
+	        this.Min = Vector3.TransformPosition(this.Min, mat);
+	        this.Max = Vector3.TransformPosition(this.Max, mat);
+	        return this;
+	    }
+
 		public Box Clone(){
 			return new Box(this.Min, this.Max);
 		}

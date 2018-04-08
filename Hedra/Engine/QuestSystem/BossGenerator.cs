@@ -111,7 +111,7 @@ namespace Hedra.Engine.QuestSystem
 
                 quadModel.Resize(Vector3.One * scale);
 				
-				float size = (boss.DefaultBox.Max - boss.DefaultBox.Min).Length+4;
+				float size = (boss.BaseBox.Max - boss.BaseBox.Min).Length+4;
 		        aiComponent.Radius = size * size;
 		    }
 

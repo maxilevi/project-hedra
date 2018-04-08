@@ -127,8 +127,8 @@ namespace Hedra.Engine.Player
 				
 				for(int i = World.Entities.Count-1; i > 0; i--){
 					if( (World.Entities[i].Position  - Player.Position).LengthFast <
-					   (this.Player.DefaultBox.Max - this.Player.DefaultBox.Min).LengthFast +
-					   (World.Entities[i].DefaultBox.Max - World.Entities[i].DefaultBox.Min).LengthFast - 2 &&
+					   (this.Player.BaseBox.Max - this.Player.BaseBox.Min).LengthFast +
+					   (World.Entities[i].BaseBox.Max - World.Entities[i].BaseBox.Min).LengthFast - 2 &&
 					    World.Entities[i] != Player && !World.Entities[i].IsStatic){
 						
 						float Dmg = Player.DamageEquation * Engine.Time.ScaledFrameTimeSeconds * 2f * (1+base.Level * .1f);

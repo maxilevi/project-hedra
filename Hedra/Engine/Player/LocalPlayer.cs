@@ -85,7 +85,6 @@ namespace Hedra.Engine.Player
 			this.Physics.CanCollide = true;
 			this.AttackSpeed = 0.75f;
 	        this.AttackPower = 1.0f;
-	        this.DefaultBox.Max = new Vector3(2.5f, 5, 2.5f);
 
 	        this.SetupHandlers();
 

@@ -41,7 +41,9 @@ namespace Hedra.Engine.Management
 		public static string AppPath { get; private set; }
 	    public static string AppData { get; private set; }
         public static string TemporalFolder { get; private set; }
+
         private static bool _filesDecompressed;
+	    private static Dictionary<string, VertexData> _hitboxCache;
 
 	    public static string ShaderCode { get; private set; }
 
@@ -50,6 +52,7 @@ namespace Hedra.Engine.Management
 			Fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
 
             ShaderCode = ZipManager.UnZip(File.ReadAllBytes(AppPath + DataFile1));
+            _hitboxCache = new Dictionary<string, VertexData>();
         }
 		
 		private static void SetupFiles(){
@@ -182,23 +185,31 @@ namespace Hedra.Engine.Management
 			return AssetManager.PlyLoader(file, Scale, Vector3.Zero, Vector3.Zero);
 		}
 		
-		public static Box LoadHitbox(string ModelFile){
-			string FileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
-			AnimatedModelData EntityData = ColladaLoader.LoadColladaModel(FileContents, GeneralSettings.MaxWeights);
-
-		    var Data = new VertexData
+		public static Box LoadHitbox(string ModelFile)
+		{
+		    if (!_hitboxCache.ContainsKey(ModelFile))
 		    {
-		        Vertices = EntityData.Mesh.Vertices.ToList(),
-		        Colors = new List<Vector4>()
-		    };
-		    EntityData.Mesh.Colors.ToList().ForEach( Vector => Data.Colors.Add(new Vector4(Vector.X, Vector.Y, Vector.Z, 1))  );
-
-		    return new Box(new Vector3(Data.SupportPoint(-Vector3.UnitX).X, Data.SupportPoint(-Vector3.UnitY).Y, Data.SupportPoint(-Vector3.UnitZ).Z),
-		        new Vector3(Data.SupportPoint(Vector3.UnitX).X, Data.SupportPoint(Vector3.UnitY).Y, Data.SupportPoint(Vector3.UnitZ).Z));
-        }
+		        string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
+		        var entityData = ColladaLoader.LoadColladaModel(fileContents, GeneralSettings.MaxWeights);
+		        var vertexData = new VertexData
+		        {
+		            Vertices = entityData.Mesh.Vertices.ToList(),
+		            Colors = new List<Vector4>()
+		        };
+		        entityData.Mesh.Colors.ToList().ForEach(Vector => vertexData.Colors.Add(new Vector4(Vector.X, Vector.Y, Vector.Z, 1)));
+		        _hitboxCache.Add(ModelFile, vertexData);
+		    }
+		    var data = _hitboxCache[ModelFile];
+		    var minus = Math.Min(data.SupportPoint(-Vector3.UnitX).X, data.SupportPoint(-Vector3.UnitZ).Z);
+		    var plus = Math.Max(data.SupportPoint(Vector3.UnitX).X, data.SupportPoint(Vector3.UnitZ).Z);
+            return new Box(
+		        new Vector3(minus, data.SupportPoint(-Vector3.UnitY).Y,
+		            minus),
+		        new Vector3(plus, data.SupportPoint(Vector3.UnitY).Y, plus)) * .75f;
+		}
 		
-		public static VertexData PlyLoader(string file, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true){
-			byte[] dataArray = AssetManager.ReadBinary(file, DataFile3);
+		public static VertexData PlyLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true){
+			byte[] dataArray = AssetManager.ReadBinary(File, DataFile3);
 		    string fileContents = Encoding.ASCII.GetString(dataArray);
 
 		    int endHeader = fileContents.IndexOf("element vertex", StringComparison.Ordinal);

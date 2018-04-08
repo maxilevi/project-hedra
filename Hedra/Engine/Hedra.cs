@@ -326,7 +326,7 @@ namespace Hedra
                     if (E != null)
                     {
                         GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                        BasicGeometry.DrawBox(E.HitBox.Min, E.DefaultBox.Max - E.DefaultBox.Min);
+                        BasicGeometry.DrawBox(E.HitBox.Min, E.BaseBox.Max - E.BaseBox.Min);
                         GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
                     }
                 });

@@ -1,0 +1,21 @@
+{
+  "Name": "DivineDrainerHammer",
+  "DisplayName": "Drainer",
+  "EquipmentType": "Hammer", 
+  "Tier": "Divine",
+  "Description": "Drainer hammer.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 24.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Hammers/DivineDrainerHammer.ply"
+  }
+}

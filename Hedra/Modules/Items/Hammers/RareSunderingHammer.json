@@ -1,0 +1,21 @@
+{
+  "Name": "RareSunderingHammer",
+  "DisplayName": "Sundering Hammer",
+  "EquipmentType": "Hammer", 
+  "Tier": "Rare",
+  "Description": "Sundering hammer.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 15.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.1
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Hammers/RareSunderingHammer.ply"
+  }
+}

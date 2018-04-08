@@ -113,14 +113,13 @@ namespace Hedra.Engine.Player
 
 	    #endregion
 
-        public Humanoid() : base() {
+        public Humanoid() {
 			this.CanInteract = true;
             this.MessageDispatcher = new DummyMessageDispatcher();
             this.HandLamp = new HandLamp(this);
 			this.Movement = new MovementManager(this);
             this.DmgComponent = new DamageComponent(this);
             this.RandomFactor = Humanoid.NewRandomFactor();
-            this.DefaultBox.Max = new Vector3(4f, 4, 4f);
             this.Physics.CanCollide = true;
             this.DodgeCost = 25f;
             this.MaxStamina = 100f;

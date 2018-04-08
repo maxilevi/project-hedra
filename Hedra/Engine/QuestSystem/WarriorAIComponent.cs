@@ -45,8 +45,8 @@ namespace Hedra.Engine.QuestSystem
 				
 				this.TargetPoint = ChasingTarget.Position;
 			    this._attackTimer -= Time.FrameTimeSeconds;
-			    var rangeDistance = (Parent.DefaultBox.Max - Parent.DefaultBox.Min).LengthFast +
-			                        (ChasingTarget.DefaultBox.Max - ChasingTarget.DefaultBox.Min).LengthFast;
+			    var rangeDistance = (Parent.BaseBox.Max - Parent.BaseBox.Min).LengthFast +
+			                        (ChasingTarget.BaseBox.Max - ChasingTarget.BaseBox.Min).LengthFast;
                 if ((ChasingTarget.Position - Parent.Position).LengthFast < rangeDistance * .5f && !Parent.Knocked){
 					if(_attackTimer < 0)
                     {

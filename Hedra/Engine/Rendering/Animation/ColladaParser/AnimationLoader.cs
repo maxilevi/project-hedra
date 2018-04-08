@@ -79,7 +79,6 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 		
 		private void ProcessTransforms(String jointName, String[] rawData, KeyFrameData[] keyFrames, bool root){
 			float[] matrixData = new float[16];
-			int a = rawData.Length;
 			for(int i=0; i<keyFrames.Length; i++){
 				for(int j=0; j<16; j++){
 					matrixData[j] = float.Parse(rawData[i*16 + j], NumberStyles.Any, CultureInfo.InvariantCulture);

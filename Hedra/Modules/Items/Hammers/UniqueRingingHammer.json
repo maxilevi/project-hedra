@@ -1,0 +1,21 @@
+{
+  "Name": "UniqueRingingHammer",
+  "DisplayName": "Ringing Hammer",
+  "EquipmentType": "Hammer", 
+  "Tier": "Unique",
+  "Description": "Ringing hammer.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 16.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Hammers/UniqueRingingHammer.ply"
+  }
+}

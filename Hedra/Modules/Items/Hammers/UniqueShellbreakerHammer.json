@@ -1,0 +1,21 @@
+{
+  "Name": "UniqueShellbreakerHammer",
+  "DisplayName": "Shellbreaker Hammer",
+  "EquipmentType": "Hammer", 
+  "Tier": "Unique",
+  "Description": "Shellbreaker hammer.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 17.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.9
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Hammers/UniqueShellbreakerHammer.ply"
+  }
+}

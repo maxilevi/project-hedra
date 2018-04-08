@@ -84,7 +84,7 @@ namespace Hedra.Engine.ModuleSystem
             human.AddComponent(barComponent);
 
             human.SearchComponent<HealthBarComponent>().DistanceFromBase = 
-                (human.DefaultBox.Max.Y - human.DefaultBox.Min.Y) * 1f + .5f;
+                (human.BaseBox.Max.Y - human.BaseBox.Min.Y) * 1f + .5f;
 
             human.SearchComponent<DamageComponent>().Immune = template.Immune;
             human.SearchComponent<DamageComponent>().XpToGive = 1.5f * human.Level;

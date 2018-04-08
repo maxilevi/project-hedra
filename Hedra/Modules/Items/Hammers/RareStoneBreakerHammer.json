@@ -1,0 +1,21 @@
+{
+  "Name": "RareStoneBreakerHammer",
+  "DisplayName": "Stone Breaker",
+  "EquipmentType": "Hammer", 
+  "Tier": "Rare",
+  "Description": "Stone breaker hammer.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 17.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Hammers/RareStoneBreakerHammer.ply"
+  }
+}

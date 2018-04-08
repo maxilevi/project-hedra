@@ -56,7 +56,7 @@ namespace Hedra.Engine.ModuleSystem
 
             var ai = (AIType) Enum.Parse(typeof(AIType), this.AIType);
             Mob.AddComponent(new AIComponent(Mob, ai));
-            Mob.SearchComponent<HealthBarComponent>().DistanceFromBase = Mob.DefaultBox.Max.Y - Mob.DefaultBox.Min.Y + 0.1f;
+            Mob.SearchComponent<HealthBarComponent>().DistanceFromBase = Mob.BaseBox.Max.Y - Mob.BaseBox.Min.Y + 0.1f;
 
             var dmg = new DamageComponent(Mob)
             {
