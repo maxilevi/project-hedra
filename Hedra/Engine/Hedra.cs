@@ -17,19 +17,14 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Forms = System.Windows.Forms;
 
@@ -67,7 +62,7 @@ namespace Hedra
 			base.OnLoad(e);
 		    string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
 		    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
-            this.GameVersion = "α 0.27";
+            this.GameVersion = "α 0.28";
 		    this.Title += " "+GameVersion;
             Hedra.MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
