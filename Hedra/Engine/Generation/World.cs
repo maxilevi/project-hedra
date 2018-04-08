@@ -17,7 +17,6 @@ using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Networking;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Linq;
@@ -35,26 +34,65 @@ namespace Hedra.Engine.Generation
 	public static class World
 	{
 		public const float OverallDifficulty = 1;
-	    public static Dictionary<Vector2, Chunk> SearcheableChunks;
-        public static List<Chunk> Chunks;
-	    public static List<WorldItem> Items;
-	    public static AreaHighlighter Highlighter;
-	    public static ParticleSystem WorldParticles { get; }
-		public static GenerationQueue ChunkGenerationQueue;
-		public static MeshBuilderQueue MeshQueue;
-	    public static ClosestChunk ClosestChunkComparer;
-		public static EnviromentGenerator EnviromentGenerator;
-		public static BiomePool BiomePool;
-	    public static MobFactory MobFactory;
-		public static TreeGenerator TreeGenerator;
-		public static QuestManager QuestManager;
-		public static StructureGenerator StructureGenerator;
-	    public static event ModulesReloadEvent ModulesReload;
+	    public static Dictionary<Vector2, Chunk> SearcheableChunks { get; }
+        public static AreaHighlighter Highlighter { get; private set; }
+        public static ParticleSystem Particles { get; }
+		public static GenerationQueue ChunkGenerationQueue { get; private set; }
+		public static MeshBuilderQueue MeshQueue { get; private set; }
+        public static ClosestChunk ClosestChunkComparer { get; }
+        public static EnviromentGenerator EnviromentGenerator { get; private set; }
+        public static BiomePool BiomePool { get; private set; }
+        public static MobFactory MobFactory { get; private set; }
+        public static TreeGenerator TreeGenerator { get; private set; }
+        public static QuestManager QuestManager { get; private set; }
+        public static StructureGenerator StructureGenerator { get; private set; }
+        public static event ModulesReloadEvent ModulesReload;
 		public static int Seed { get; set; }
 		public static bool Enabled {get; set;}
 	    public static bool IsGenerated { get; set; }
 
-	    private static bool _isEntityCacheDirty = true;
+	    private static bool _isChunksCacheDirty = true;
+	    private static readonly HashSet<Chunk> _chunks;
+	    private static ReadOnlyCollection<Chunk> _chunksCache;
+	    public static ReadOnlyCollection<Chunk> Chunks
+	    {
+	        get
+	        {
+	            if (_isChunksCacheDirty)
+	            {
+	                lock (_chunks)
+	                {
+	                    _chunksCache = _chunks.ToArray().ToList().AsReadOnly();
+	                }
+	                _isChunksCacheDirty = false;
+	            }
+	            lock (_chunksCache)
+	                return _chunksCache;
+	        }
+	    }
+
+
+        private static bool _isItemsCacheDirty = true;
+	    private static readonly HashSet<WorldItem> _items;
+	    private static ReadOnlyCollection<WorldItem> _itemsCache;
+	    public static ReadOnlyCollection<WorldItem> Items
+	    {
+	        get
+	        {
+	            if (_isItemsCacheDirty)
+	            {
+	                lock (_items)
+	                {
+	                    _itemsCache = _items.ToArray().ToList().AsReadOnly();
+	                }
+	                _isItemsCacheDirty = false;
+	            }
+	            lock (_itemsCache)
+	                return _itemsCache;
+	        }
+	    }
+
+        private static bool _isEntityCacheDirty = true;
         private static readonly HashSet<Entity> _entities;
 	    private static ReadOnlyCollection<Entity> _entityCache;
 	    public static ReadOnlyCollection<Entity> Entities
@@ -145,12 +183,12 @@ namespace Hedra.Engine.Generation
 	        _structures = new HashSet<BaseStructure>();
 	        _entities = new HashSet<Entity>();
 	        _particleProjectiles = new HashSet<ParticleProjectile>();
+            _items = new HashSet<WorldItem>();
+            _chunks = new HashSet<Chunk>();
 
-            Chunks = new List<Chunk>();
             SearcheableChunks = new Dictionary<Vector2, Chunk>();
             _globalColliders = new HashSet<ICollidable>();
-            Items = new List<WorldItem>();
-            WorldParticles = new ParticleSystem(Vector3.Zero);
+            Particles = new ParticleSystem(Vector3.Zero);
             ClosestChunkComparer = new ClosestChunk();
             _toDraw = new Dictionary<Vector2, Chunk>();
 	    }
@@ -209,13 +247,9 @@ namespace Hedra.Engine.Generation
 				return;
 			
 			_toDraw.Clear();
-			Chunk[] toDrawArray;
-
-			lock(Chunks) 
-				toDrawArray = Chunks.ToArray();
-
-			for(int i = 0; i < toDrawArray.Length; i++){
-				if(toDrawArray[i].Disposed){
+			var toDrawArray = Chunks;
+			for(var i = 0; i < toDrawArray.Count; i++){
+				if(toDrawArray[i] == null || toDrawArray[i].Disposed){
 					RemoveChunk(toDrawArray[i]);
 					continue;
 				}
@@ -259,8 +293,6 @@ namespace Hedra.Engine.Generation
 			for(var i = Items.Count-1; i > -1; i--){
 				Items[i].Dispose();
 			}
-
-			Items.Clear();
 		    Highlighter.Reset();
 
             lock(TreeGenerator)
@@ -268,14 +300,15 @@ namespace Hedra.Engine.Generation
 
             lock (SearcheableChunks)
                 SearcheableChunks.Clear();
+		    for (int i = Items.Count - 1; i > -1; i--)
+		    {
+		        World.RemoveItem(Items[i]);
+		    }
 
-            lock (Chunks){
-				for(int i = Chunks.Count-1; i > -1; i--){
-					Chunk chunk = Chunks[i];
-					Chunks.RemoveAt(i);
-					chunk.Dispose();
-				}
-			}
+            for (int i = Chunks.Count - 1; i > -1; i--)
+		    {
+		        World.RemoveChunk(Chunks[i]);
+		    }
 
 		    for (int i = GlobalColliders.Count - 1; i > -1; i--)
 		    {
@@ -408,26 +441,49 @@ namespace Hedra.Engine.Generation
 	        _isGlobalCollidersCacheDirty = true;
         }
 
-        public static void AddChunk(Chunk C){
-			
-			lock(Chunks){
-				Chunks.Add(C);
+	    public static void AddItem(WorldItem Item)
+	    {
+	        lock (_items)
+	        {
+	            if (_items.Contains(Item)) return;
+	            _items.Add(Item);
+	        }
+	        _isItemsCacheDirty = true;
+        }
+
+	    public static void RemoveItem(WorldItem Item)
+	    {
+	        lock (_items)
+	        {
+	            if (!_items.Contains(Item)) return;
+	            _items.Remove(Item);
+	        }
+	        _isItemsCacheDirty = true;
+        }
+
+        public static void AddChunk(Chunk Chunk){
+            lock (_chunks)
+            {
+                _chunks.Add(Chunk);
+            }
+            lock(SearcheableChunks){
+				if(!SearcheableChunks.ContainsKey(new Vector2(Chunk.OffsetX, Chunk.OffsetZ)))
+					SearcheableChunks.Add(new Vector2(Chunk.OffsetX, Chunk.OffsetZ), Chunk);
 			}
-			lock(SearcheableChunks){
-				if(!SearcheableChunks.ContainsKey(new Vector2(C.OffsetX, C.OffsetZ)))
-					SearcheableChunks.Add(new Vector2(C.OffsetX, C.OffsetZ), C);
-			}
-		}
+            _isChunksCacheDirty = true;
+        }
 		
 		public static void RemoveChunk(Chunk Chunk){
 			if(Chunk == null) return;
-			
-			lock(Chunks)
-				Chunks.Remove(Chunk);
-			lock(SearcheableChunks)
-				SearcheableChunks.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
-			
-			WorldRenderer.StaticBuffer.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
+
+		    lock (_chunks)
+            { 
+                _chunks.Remove(Chunk);
+            }
+			lock(SearcheableChunks) SearcheableChunks.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
+
+		    _isChunksCacheDirty = true;
+            WorldRenderer.StaticBuffer.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
 			WorldRenderer.WaterBuffer.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
 
 			BaseStructure[] baseStructuresArray = Structures.ToArray();
@@ -459,12 +515,13 @@ namespace Hedra.Engine.Generation
 			}
 			
 			for(int i = Items.Count-1; i > -1; i--){
-				if(Items[i] == null){
-					Items.RemoveAt(i);
-					continue;
-				}
-				
-				if(Items[i].Position.X < Chunk.OffsetX + Chunk.ChunkWidth && Items[i].Position.X > Chunk.OffsetX &&
+			    if (Items[i] == null)
+			    {
+			        World.RemoveItem(Items[i]);
+			        continue;
+			    }
+
+			    if (Items[i].Position.X < Chunk.OffsetX + Chunk.ChunkWidth && Items[i].Position.X > Chunk.OffsetX &&
 				   Items[i].Position.Z < Chunk.OffsetZ + Chunk.ChunkWidth && Items[i].Position.Z > Chunk.OffsetZ){
 					Items[i].Dispose();
 				}
@@ -592,7 +649,7 @@ namespace Hedra.Engine.Generation
 
         public static WorldItem DropItem(Item ItemSpec, Vector3 Position){
 			var model = new WorldItem(ItemSpec, Position);
-			Items.Add(model);
+			World.AddItem(model);
 			
 			model.OnPickup += delegate(LocalPlayer Player) {
 			    if (Player.Inventory.AddItem(model.ItemSpecification))

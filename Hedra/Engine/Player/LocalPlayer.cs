@@ -293,7 +293,7 @@ namespace Hedra.Engine.Player
 		    {
 
 		        if ((nearCollidableStructure.Position.Xz - this.Position.Xz).LengthFast < nearCollidableStructure.Design.Radius && nearCollidableStructure.Design is VillageDesign)
-		            SoundtrackManager.PlayAmbient(SoundtrackManager.VillageIndex);
+		            SoundtrackManager.PlayTrack(SoundtrackManager.VillageIndex, true);
 
                 NearCollisions = nearCollidableStructure.Colliders;
 		    }	    
@@ -309,20 +309,20 @@ namespace Hedra.Engine.Player
 			//END CEMENTERY
 			
 			if( this.Model.Enabled && (_previousPosition - Model.Human.BlockPosition).LengthFast > 0.25f && Model.Human.IsGrounded && underChunk != null){
-				World.WorldParticles.VariateUniformly = true;
-				World.WorldParticles.Color = World.GetHighestBlockAt( (int) Model.Human.Position.X, (int) Model.Human.Position.Z).GetColor(underChunk.Biome.Colors);
-				World.WorldParticles.Position = Model.Human.Position - Vector3.UnitY;
-				World.WorldParticles.Scale = Vector3.One * .25f;
-				World.WorldParticles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				World.WorldParticles.Direction = (-Model.Human.Orientation + Vector3.UnitY * 1.5f) * .15f;
-				World.WorldParticles.ParticleLifetime = 1;
-				World.WorldParticles.GravityEffect = .1f;
-				World.WorldParticles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
-				if(World.WorldParticles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
-					World.WorldParticles.Color = Vector4.Zero;
+				World.Particles.VariateUniformly = true;
+				World.Particles.Color = World.GetHighestBlockAt( (int) Model.Human.Position.X, (int) Model.Human.Position.Z).GetColor(underChunk.Biome.Colors);
+				World.Particles.Position = Model.Human.Position - Vector3.UnitY;
+				World.Particles.Scale = Vector3.One * .25f;
+				World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+				World.Particles.Direction = (-Model.Human.Orientation + Vector3.UnitY * 1.5f) * .15f;
+				World.Particles.ParticleLifetime = 1;
+				World.Particles.GravityEffect = .1f;
+				World.Particles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
+				if(World.Particles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
+					World.Particles.Color = Vector4.Zero;
 				
 				if(_emitted >= 3){
-					World.WorldParticles.Emit();
+					World.Particles.Emit();
 					_emitted = 0;
 				}
 				_emitted++;
@@ -404,15 +404,15 @@ namespace Hedra.Engine.Player
 				this.Model.Model.Rotation = new Vector3(AngleX, -this.Model.FacingDirection, 0);
 				this.Model.Glide();
 				
-				World.WorldParticles.Color = Vector4.One;
-				World.WorldParticles.Position = this.Glider.Position - Vector3.UnitY * 10f;
-				World.WorldParticles.ParticleLifetime = 1f;
-				World.WorldParticles.GravityEffect = .0f;
-				World.WorldParticles.Direction = Vector3.Zero;
-				World.WorldParticles.Scale = new Vector3(.5f,.5f,.5f);
+				World.Particles.Color = Vector4.One;
+				World.Particles.Position = this.Glider.Position - Vector3.UnitY * 10f;
+				World.Particles.ParticleLifetime = 1f;
+				World.Particles.GravityEffect = .0f;
+				World.Particles.Direction = Vector3.Zero;
+				World.Particles.Scale = new Vector3(.5f,.5f,.5f);
 				_emitted++;
 				if(_emitted % 4 == 0)
-					World.WorldParticles.Emit();
+					World.Particles.Emit();
 
 			}else{
 				if(this.Glider.Enabled){//Player was Gliding

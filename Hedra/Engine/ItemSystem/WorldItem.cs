@@ -61,7 +61,7 @@ namespace Hedra.Engine.ItemSystem
 		
 		public new void Dispose(){
 			UpdateManager.Remove(this);
-			World.Items.Remove(this);
+			World.RemoveItem(this);
 			base.Dispose();
 		}
 		

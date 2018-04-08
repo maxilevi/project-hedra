@@ -205,17 +205,17 @@ namespace Hedra.Engine.QuestSystem.Objectives
 			while(!Disposed){
 				yield return null; // Wait 2 frames
 				yield return null;
-				World.WorldParticles.Color = Particle3D.FireColor;
-				World.WorldParticles.VariateUniformly = false;
-				World.WorldParticles.Position = this.Position + Vector3.UnitY * 2f;
-				World.WorldParticles.Scale = Vector3.One * .5f;
-				World.WorldParticles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				World.WorldParticles.Direction = Vector3.UnitY * .05f;
-				World.WorldParticles.ParticleLifetime = 2f;
-				World.WorldParticles.GravityEffect = 0.0f;
-				World.WorldParticles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
+				World.Particles.Color = Particle3D.FireColor;
+				World.Particles.VariateUniformly = false;
+				World.Particles.Position = this.Position + Vector3.UnitY * 2f;
+				World.Particles.Scale = Vector3.One * .5f;
+				World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+				World.Particles.Direction = Vector3.UnitY * .05f;
+				World.Particles.ParticleLifetime = 2f;
+				World.Particles.GravityEffect = 0.0f;
+				World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
 					
-				World.WorldParticles.Emit();
+				World.Particles.Emit();
 			}
 		}
 		public override void Dispose()

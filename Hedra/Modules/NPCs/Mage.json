@@ -5,7 +5,6 @@
   "Class": "Mage",
   "Behaviour" : "Hostile",  
   "Immune": false,
-  "Speed": 1.85,
   "XP": 2.5, 
   "AttackPower": 1.0, 
   "AttackSpeed": 1.0,  

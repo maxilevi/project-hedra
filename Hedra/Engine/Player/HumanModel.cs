@@ -419,18 +419,18 @@ namespace Hedra.Engine.Player
 			if(Human.IsRolling){
 				if(_previousPosition != this.Human.BlockPosition && this.Human.IsGrounded){
 					Block block = World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z);
-				    World.WorldParticles.VariateUniformly = true;
-				    World.WorldParticles.Color = Vector4.One;//World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z).GetColor(Region.Default);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
-				    World.WorldParticles.Position = this.Human.Position - Vector3.UnitY;
-				    World.WorldParticles.Scale = Vector3.One * .5f;
-				    World.WorldParticles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				    World.WorldParticles.Direction = (-this.Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
-				    World.WorldParticles.ParticleLifetime = 1;
-				    World.WorldParticles.GravityEffect = .1f;
-				    World.WorldParticles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
+				    World.Particles.VariateUniformly = true;
+				    World.Particles.Color = Vector4.One;//World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z).GetColor(Region.Default);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
+				    World.Particles.Position = this.Human.Position - Vector3.UnitY;
+				    World.Particles.Scale = Vector3.One * .5f;
+				    World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+				    World.Particles.Direction = (-this.Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
+				    World.Particles.ParticleLifetime = 1;
+				    World.Particles.GravityEffect = .1f;
+				    World.Particles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
 					
 					for(int i = 0; i < 1; i++){
-					    World.WorldParticles.Emit();
+					    World.Particles.Emit();
 					}
 				}
 				_previousPosition = this.Human.BlockPosition;

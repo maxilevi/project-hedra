@@ -64,17 +64,17 @@ namespace Hedra.Engine.Player
 		public override void Update(){
 			if(Player.IsCasting && Casting){
 				
-				World.WorldParticles.Color = new Vector4(1,1,1,1);
-				World.WorldParticles.ParticleLifetime = 1f;
-				World.WorldParticles.GravityEffect = .0f;
-				World.WorldParticles.Direction = Vector3.Zero;
-				World.WorldParticles.Scale = new Vector3(.15f,.15f,.15f);
-				World.WorldParticles.Position = Player.Model.Model.TransformFromJoint(Player.Model.Model.JointDefaultPosition(Player.Model.LeftHand)
+				World.Particles.Color = new Vector4(1,1,1,1);
+				World.Particles.ParticleLifetime = 1f;
+				World.Particles.GravityEffect = .0f;
+				World.Particles.Direction = Vector3.Zero;
+				World.Particles.Scale = new Vector3(.15f,.15f,.15f);
+				World.Particles.Position = Player.Model.Model.TransformFromJoint(Player.Model.Model.JointDefaultPosition(Player.Model.LeftHand)
 				                                                                             + Vector3.UnitZ *0f, Player.Model.LeftHand);
-				World.WorldParticles.PositionErrorMargin = Vector3.One * 0.75f;
+				World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
 				
 				for(int i = 0; i < 1; i++)
-					World.WorldParticles.Emit();
+					World.Particles.Emit();
 				
 				
 

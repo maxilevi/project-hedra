@@ -97,18 +97,18 @@ namespace Hedra.Engine.Player
 				
 				if(IsColliding){
                     //Sound.SoundManager.PlaySound(Sound.SoundType.ARROW_HIT, Mesh.Position, false, 1f, .8f);
-				    World.WorldParticles.Color = Particle3D.FireColor;
-				    World.WorldParticles.ParticleLifetime = 4;
-				    World.WorldParticles.GravityEffect = 0f;
-				    World.WorldParticles.Scale = Vector3.One * .5f;
-				    World.WorldParticles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				    World.WorldParticles.Position = Position;
-				    World.WorldParticles.PositionErrorMargin = new Vector3(1f,1f,1f);
-				    World.WorldParticles.ParticleLifetime = 0.5f;
+				    World.Particles.Color = Particle3D.FireColor;
+				    World.Particles.ParticleLifetime = 4;
+				    World.Particles.GravityEffect = 0f;
+				    World.Particles.Scale = Vector3.One * .5f;
+				    World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+				    World.Particles.Position = Position;
+				    World.Particles.PositionErrorMargin = new Vector3(1f,1f,1f);
+				    World.Particles.ParticleLifetime = 0.5f;
 					for(int i = 0; i < 50; i++){
 						Vector3 Dir = (Mathf.RandomVector3(Utils.Rng) - Vector3.One * 0.5f);
-						World.WorldParticles.Direction = Dir;
-						World.WorldParticles.Emit();
+						World.Particles.Direction = Dir;
+						World.Particles.Emit();
 					}
 					this.Dispose();
 					Exploded = true;

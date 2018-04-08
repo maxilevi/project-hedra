@@ -70,13 +70,11 @@ namespace Hedra.Engine.PhysicsSystem
 
 	    public Box Rotate(Vector3 Euler)
 	    {
-	        return this;
-	        if (Euler == Vector3.Zero) return this;
-	        if (float.IsInfinity(Euler.X) || float.IsNaN(Euler.X) ||
+	        if (Euler == Vector3.Zero || float.IsInfinity(Euler.X) || float.IsNaN(Euler.X) ||
 	            float.IsInfinity(Euler.Y) || float.IsNaN(Euler.Y) ||
 	            float.IsInfinity(Euler.Z) || float.IsNaN(Euler.Z))
 	        {
-	            int a = 0;
+	            return this;
 	        }
 	        var mat = Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(Euler * Mathf.Radian));
                 

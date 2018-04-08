@@ -9,10 +9,7 @@
 using System;
 using OpenTK;
 using Hedra.Engine.Player;
-using Hedra.Engine.Management;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Generation;
-using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.QuestSystem
 {

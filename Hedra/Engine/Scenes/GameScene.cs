@@ -52,7 +52,7 @@ namespace Hedra.Engine.Scenes
 
 		    _loadingScreen.Disable();
 
-			CoroutineManager.StartCoroutine(this.MenuCoroutine);
+			this.LoadMenu();
 		}
 		
 		public bool InMenuWorld => World.Seed == World.MenuSeed;
@@ -60,8 +60,6 @@ namespace Hedra.Engine.Scenes
 	    public bool InMenu => Player != null && Player.UI.Menu.Enabled && !Player.UI.Hide && World.Seed != World.MenuSeed;
 
 	    public void LoadMenu(){
-			Constants.REDIRECT_NET = false;
-			Constants.REDIRECT_NEW_RUN = false;
 	        World.Recreate(World.MenuSeed);
             LocalPlayer.Instance.UI.ShowMenu();
           	Constants.CHARACTER_CHOOSED = false;
@@ -75,7 +73,8 @@ namespace Hedra.Engine.Scenes
 	        LocalPlayer.Instance.IsGliding = false;
 	        LocalPlayer.Instance.Glider.Enabled = false;
 	        LocalPlayer.Instance.Knocked = false;
-          	CoroutineManager.StartCoroutine(MenuCoroutine);
+	        SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
+            CoroutineManager.StartCoroutine(MenuCoroutine);
 		}
 		
 		public IEnumerator MenuCoroutine(){
@@ -148,7 +147,6 @@ namespace Hedra.Engine.Scenes
 		}
 
 		public void NewRun(PlayerInformation Information){
-			
 			Player.IsRiding = false;
 			if(Player.IsRolling)
 				Player.FinishRoll();
@@ -177,7 +175,8 @@ namespace Hedra.Engine.Scenes
 		}
 		
 		private IEnumerator SpawnCoroutine(){
-			if(_isNewRun) Player.DmgComponent.Immune = true;
+		    SoundtrackManager.PlayTrack(SoundtrackManager.LoopableSongsStart);
+            if (_isNewRun) Player.DmgComponent.Immune = true;
 
 		    SceneManager.Game.Player.UI.HideMenu();
             Player.UI.GamePanel.Disable();

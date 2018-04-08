@@ -6,7 +6,6 @@
   "Class": "None",
   "Behaviour" : "Hostile",
   "Immune": false,
-  "Speed": 1.5,
   "XP": 7.0,
   "AttackPower": 1.0, 
   "AttackSpeed": 1.0,

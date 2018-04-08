@@ -55,18 +55,18 @@ namespace Hedra.Engine.EntitySystem
 				}
 				
 				//Fire particles
-				World.WorldParticles.Color = new Vector4(.8f,.0f,0,1f);
-				World.WorldParticles.VariateUniformly = false;
-				World.WorldParticles.Position = Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .5f;
-				World.WorldParticles.Scale = Vector3.One * .5f;
-				World.WorldParticles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				World.WorldParticles.Direction = Vector3.UnitY * .2f;
-				World.WorldParticles.ParticleLifetime = 0.75f;
-				World.WorldParticles.GravityEffect = 0.5f;
-				World.WorldParticles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
+				World.Particles.Color = new Vector4(.8f,.0f,0,1f);
+				World.Particles.VariateUniformly = false;
+				World.Particles.Position = Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .5f;
+				World.Particles.Scale = Vector3.One * .5f;
+				World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+				World.Particles.Direction = Vector3.UnitY * .2f;
+				World.Particles.ParticleLifetime = 0.75f;
+				World.Particles.GravityEffect = 0.5f;
+				World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
 				
 				for(int i = 0; i < 1; i++){
-					World.WorldParticles.Emit();
+					World.Particles.Emit();
 				}
 				yield return null;
 			}

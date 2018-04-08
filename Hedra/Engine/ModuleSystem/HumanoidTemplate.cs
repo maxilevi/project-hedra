@@ -13,7 +13,6 @@ namespace Hedra.Engine.ModuleSystem
         public string Class { get; set; } = ClassDesign.None.ToString();
         public string ModelType { get; set; }
         public bool Immune { get; set; }
-        public float Speed { get; set; }
         public float AttackPower { get; set; }
         public float AttackSpeed { get; set; }
         public HumanoidWeaponTemplate[] Weapons { get; set; }

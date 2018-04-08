@@ -41,8 +41,7 @@ namespace Hedra.Engine.ModuleSystem
             {
                 Level = LocalPlayer.Instance.Level + (difficultyType - 1),
                 Class = ClassDesign.FromString(template.Class),
-                MobType = MobType.Human,
-                Speed = template.Speed
+                MobType = MobType.Human
             };
             human.Model = new HumanModel(human, template.Model);
             human.Physics.CanCollide = true;

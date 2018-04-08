@@ -118,19 +118,19 @@ namespace Hedra.Engine.Scenes
 
                 yield return null;
 				yield return null;
-				World.WorldParticles.Color = new Vector4(1f,.5f,0,1f);
-				World.WorldParticles.VariateUniformly = false;
-				World.WorldParticles.Position = FirePosition + Vector3.UnitY * 1f;
-				World.WorldParticles.Scale = Vector3.One * .65f;
-				World.WorldParticles.ScaleErrorMargin = new Vector3(.05f,.05f,.05f);
-				World.WorldParticles.Direction = Vector3.UnitY * 0f;
-				World.WorldParticles.ParticleLifetime = 1.15f;
-				World.WorldParticles.GravityEffect = -0.01f;
-				World.WorldParticles.PositionErrorMargin = new Vector3(1.15f, 0.0f, 1.15f);
+				World.Particles.Color = new Vector4(1f,.5f,0,1f);
+				World.Particles.VariateUniformly = false;
+				World.Particles.Position = FirePosition + Vector3.UnitY * 1f;
+				World.Particles.Scale = Vector3.One * .65f;
+				World.Particles.ScaleErrorMargin = new Vector3(.05f,.05f,.05f);
+				World.Particles.Direction = Vector3.UnitY * 0f;
+				World.Particles.ParticleLifetime = 1.15f;
+				World.Particles.GravityEffect = -0.01f;
+				World.Particles.PositionErrorMargin = new Vector3(1.15f, 0.0f, 1.15f);
 				Particle3D.UseTimeScale = false;
 				
 				for(int i = 0; i < 1; i++)
-					World.WorldParticles.Emit();
+					World.Particles.Emit();
 				
 				ShaderManager.UpdateLight(_light);
             }

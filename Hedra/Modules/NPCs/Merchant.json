@@ -6,7 +6,6 @@
   "Behaviour" : "Friendly",  
   "Health": 100,
   "Immune": true,
-  "Speed": 1.85,
   "AttackPower": 1.0, 
   "AttackSpeed": 1.0, 
   "Weapons": []

@@ -5,7 +5,6 @@
   "Class": "Warrior",
   "Behaviour" : "Friendly",   
   "Immune": true,
-  "Speed": 1.85,
   "AttackPower": 1.0, 
   "AttackSpeed": 1.0,  
   "Weapons": []

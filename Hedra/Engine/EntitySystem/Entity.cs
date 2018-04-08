@@ -27,7 +27,6 @@ namespace Hedra.Engine.EntitySystem
     public class Entity : IUpdatable, IRenderable, IDisposable, ISearchable//, ICullable
     {
         private DamageComponent _damageManager;
-        private Box _baseBox = new Box(Vector3.Zero, Vector3.One);
         private int _drowningSoundTimer;
         private float _health = 100f;
         private int _isHumanoid = -1;
@@ -43,7 +42,7 @@ namespace Hedra.Engine.EntitySystem
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1;
         protected List<EntityComponent> Components = new List<EntityComponent>();
-        public Box BaseBox => _baseBox.Cache.Rotate(this.Model?.Rotation ?? Vector3.Zero);
+        public Box BaseBox { get; private set; } = new Box(Vector3.Zero, Vector3.One);
         public bool Destroy { get; set; } = false;
         public int Level { get; set; } = 1;
         public float MaxOxygen { get; set; } = 30;
@@ -209,12 +208,12 @@ namespace Hedra.Engine.EntitySystem
 
         public void SetHitbox(Box NewBox)
         {
-            this._baseBox = NewBox;
+            this.BaseBox = NewBox;
         }
 
         public void MultiplyHitbox(Vector3 Scale)
         {
-            this._baseBox = _baseBox * Scale;
+            this.BaseBox = BaseBox * Scale;
         }
 
         public void ShowIcon(CacheItem? IconType)
@@ -322,18 +321,18 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (!Splashed)
                 {
-                    World.WorldParticles.VariateUniformly = true;
-                    World.WorldParticles.Color = underChunk.Biome.Colors.WaterColor;
-                    World.WorldParticles.Position = Position;
-                    World.WorldParticles.Scale = Vector3.One * .5f;
-                    World.WorldParticles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
-                    World.WorldParticles.Direction = Vector3.UnitY;
-                    World.WorldParticles.ParticleLifetime = 1;
-                    World.WorldParticles.GravityEffect = .05f;
-                    World.WorldParticles.PositionErrorMargin = new Vector3(3f, 3f, 3f);
+                    World.Particles.VariateUniformly = true;
+                    World.Particles.Color = underChunk.Biome.Colors.WaterColor;
+                    World.Particles.Position = Position;
+                    World.Particles.Scale = Vector3.One * .5f;
+                    World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
+                    World.Particles.Direction = Vector3.UnitY;
+                    World.Particles.ParticleLifetime = 1;
+                    World.Particles.GravityEffect = .05f;
+                    World.Particles.PositionErrorMargin = new Vector3(3f, 3f, 3f);
 
                     SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position);
-                    for (var i = 0; i < 30; i++) World.WorldParticles.Emit();
+                    for (var i = 0; i < 30; i++) World.Particles.Emit();
                     Splashed = true;
                 }
                 if (IsHumanoid)

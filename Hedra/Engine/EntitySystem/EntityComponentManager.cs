@@ -33,7 +33,6 @@ namespace Hedra.Engine.EntitySystem
 
         public void AddComponentWhile(EntityComponent Component, Func<bool> Condition)
         {
-            if(!(_parent is LocalPlayer)) return;
             var name = _parent.Name.Clone();
             Func<bool> realCondition = () => Condition() && _parent.Name == name;
             CoroutineManager.StartCoroutine(this.WhileCoroutine, Component, realCondition);

@@ -101,15 +101,15 @@ namespace Hedra.Engine.Player
 					
 					if(IsColliding){
 						//Sound.SoundManager.PlaySound(Sound.SoundType.ARROW_HIT, Mesh.Position, false, 1f, .8f);
-						World.WorldParticles.Color = new Vector4(1,1,1,1);
-						World.WorldParticles.ParticleLifetime = 0.75f;
-						World.WorldParticles.GravityEffect = .0f; 
-						World.WorldParticles.Scale = new Vector3(.75f,.75f,.75f);
-						World.WorldParticles.Position = Mesh.Position;
-						World.WorldParticles.PositionErrorMargin = Vector3.One * 1.5f;
+						World.Particles.Color = new Vector4(1,1,1,1);
+						World.Particles.ParticleLifetime = 0.75f;
+						World.Particles.GravityEffect = .0f; 
+						World.Particles.Scale = new Vector3(.75f,.75f,.75f);
+						World.Particles.Position = Mesh.Position;
+						World.Particles.PositionErrorMargin = Vector3.One * 1.5f;
 						for(int i = 0; i < 10; i++){
-							World.WorldParticles.Direction = new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
-							World.WorldParticles.Emit();
+							World.Particles.Direction = new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
+							World.Particles.Emit();
 						}
 						if(this.LandEventHandler != null)
 							this.LandEventHandler.Invoke(this);

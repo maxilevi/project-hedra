@@ -46,18 +46,18 @@ namespace Hedra.Engine.Player
 					Arrow.MoveEventHandler += delegate(Projectile Sender) { 
 						Arrow.Mesh.Tint = Bar.Low * new Vector4(1,3,1,1) * .7f;
 						
-						World.WorldParticles.Color = Particle3D.FireColor;
-						World.WorldParticles.VariateUniformly = false;
-						World.WorldParticles.Position = Sender.Mesh.Position;
-						World.WorldParticles.Scale = Vector3.One * .5f;
-						World.WorldParticles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-						World.WorldParticles.Direction = Vector3.UnitY * .2f;
-						World.WorldParticles.ParticleLifetime = 0.75f;
-						World.WorldParticles.GravityEffect = 0.0f;
-						World.WorldParticles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
+						World.Particles.Color = Particle3D.FireColor;
+						World.Particles.VariateUniformly = false;
+						World.Particles.Position = Sender.Mesh.Position;
+						World.Particles.Scale = Vector3.One * .5f;
+						World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+						World.Particles.Direction = Vector3.UnitY * .2f;
+						World.Particles.ParticleLifetime = 0.75f;
+						World.Particles.GravityEffect = 0.0f;
+						World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
 						
 						for(int i = 0; i < 2; i++)
-							World.WorldParticles.Emit();
+							World.Particles.Emit();
 					};
 					Arrow.LandEventHandler += delegate(Projectile Sender) { 
 						CoroutineManager.StartCoroutine( this.CreateFlames, new object[]{ Arrow } );
@@ -108,18 +108,18 @@ namespace Hedra.Engine.Player
 			while(Time < 6){
 				Time += Engine.Time.ScaledFrameTimeSeconds;
 			
-				World.WorldParticles.Color = Particle3D.FireColor;
-				World.WorldParticles.VariateUniformly = false;
-				World.WorldParticles.Position = Position;
-				World.WorldParticles.Scale = Vector3.One * .5f;
-				World.WorldParticles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				World.WorldParticles.Direction = Vector3.UnitY * 1.5f;
-				World.WorldParticles.ParticleLifetime = 0.75f;
-				World.WorldParticles.GravityEffect = 0.5f;
-				World.WorldParticles.PositionErrorMargin = new Vector3(12f, 4f, 12f);
+				World.Particles.Color = Particle3D.FireColor;
+				World.Particles.VariateUniformly = false;
+				World.Particles.Position = Position;
+				World.Particles.Scale = Vector3.One * .5f;
+				World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+				World.Particles.Direction = Vector3.UnitY * 1.5f;
+				World.Particles.ParticleLifetime = 0.75f;
+				World.Particles.GravityEffect = 0.5f;
+				World.Particles.PositionErrorMargin = new Vector3(12f, 4f, 12f);
 				
 				for(int i = 0; i < 4; i++)
-					World.WorldParticles.Emit();
+					World.Particles.Emit();
 				
 				for(int i = World.Entities.Count-1; i > -1; i--){
 					if( (World.Entities[i].Position - Position).LengthSquared < 24f*24f && !World.Entities[i].IsStatic){

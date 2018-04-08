@@ -20,30 +20,30 @@ namespace Hedra.Engine.EntitySystem
             if(Parent is Humanoid && !(this.Parent as Humanoid).IsMoving) return;
             if (_speedBonus > 0)
             {
-                World.WorldParticles.Color = Vector4.One;
-                World.WorldParticles.VariateUniformly = true;
-                World.WorldParticles.Position =
+                World.Particles.Color = Vector4.One;
+                World.Particles.VariateUniformly = true;
+                World.Particles.Position =
                     Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .25f;
-                World.WorldParticles.Scale = Vector3.One * .25f;
-                World.WorldParticles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
-                World.WorldParticles.Direction = -Parent.Orientation * .05f;
-                World.WorldParticles.ParticleLifetime = 0.25f;
-                World.WorldParticles.GravityEffect = 0.0f;
-                World.WorldParticles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
-                World.WorldParticles.Emit();
+                World.Particles.Scale = Vector3.One * .25f;
+                World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
+                World.Particles.Direction = -Parent.Orientation * .05f;
+                World.Particles.ParticleLifetime = 0.25f;
+                World.Particles.GravityEffect = 0.0f;
+                World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
+                World.Particles.Emit();
             }
             else if(_speedBonus < 0)
             {
-                World.WorldParticles.Color = new Vector4(.2f,.2f,.2f,.6f);
-                World.WorldParticles.VariateUniformly = true;
-                World.WorldParticles.Position = Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .15f;
-                World.WorldParticles.Scale = Vector3.One * .25f;
-                World.WorldParticles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
-                World.WorldParticles.Direction = -Parent.Orientation * .05f;
-                World.WorldParticles.ParticleLifetime = 0.25f;
-                World.WorldParticles.GravityEffect = .0f;
-                World.WorldParticles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
-                World.WorldParticles.Emit();
+                World.Particles.Color = new Vector4(.2f,.2f,.2f,.6f);
+                World.Particles.VariateUniformly = true;
+                World.Particles.Position = Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .15f;
+                World.Particles.Scale = Vector3.One * .25f;
+                World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
+                World.Particles.Direction = -Parent.Orientation * .05f;
+                World.Particles.ParticleLifetime = 0.25f;
+                World.Particles.GravityEffect = .0f;
+                World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
+                World.Particles.Emit();
             }
         }
 

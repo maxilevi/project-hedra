@@ -83,7 +83,7 @@ namespace Hedra.Engine.Player
 			get{
 				float maxMana = 103 + RandomFactor * 34f;
 				for(var i = 1; i < this.Level; i++){
-                    maxMana += Class.MaxHealthFormula(RandomFactor);				    
+                    maxMana += Class.MaxManaFormula(RandomFactor);				    
                 }
 				return maxMana;
 			}

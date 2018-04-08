@@ -43,15 +43,48 @@ namespace Hedra.Engine.ItemSystem
 	    }
 
 	    public static Item Grab(ItemPoolSettings Settings)
-	    {
+	    {            
 	        var rng = new Random(Settings.Seed);
             var templates = ItemFactory.Templater.Templates;
-	        templates = templates.Where(Template => 
-            Settings.SameTier ? Template.Tier == Settings.Tier : (int)Template.Tier <= (int)Settings.Tier).ToArray();
-	        if(Settings.EquipmentType != null) templates = templates.Where(Template => Template.EquipmentType == Settings.EquipmentType).ToArray();
+	        var selectedTier = Settings.SameTier ? Settings.Tier : ItemPool.SelectTier(Settings.Tier, rng);
+	        
+	        var newTemplates = templates.Where(Template =>
+	            Template.Tier == selectedTier).ToArray();
+
+	        if (Settings.EquipmentType != null)
+	        {
+	            newTemplates = newTemplates.Where(Template => Template.EquipmentType == Settings.EquipmentType).ToArray();
+            }
+
+            if (newTemplates.Length == 0 && Settings.EquipmentType != null)
+	        {
+	            newTemplates = templates.Where(Template => Template.Tier <= selectedTier 
+                && Template.EquipmentType == Settings.EquipmentType).ToArray();
+	        }
+	        templates = newTemplates;
+	        
 	        var item = Item.FromTemplate(templates[rng.Next(0, templates.Length)]);
 	        item.SetAttribute(CommonAttributes.Seed, Settings.Seed, true);
             return ItemPool.Randomize(item, rng);
+	    }
+
+	    public static ItemTier SelectTier(ItemTier Tier, Random Rng)
+	    {
+	        if (Tier == 0) return Tier;
+
+	        var selectedTier = Tier;
+	        for (var i = (int)Tier-1; i > -1; i--)
+	        {
+	            var useThisTier = true;
+	            for (var k = 0; k < (int) Tier-i+1; k++)
+	            {
+	                useThisTier = useThisTier && Rng.NextBool();
+	            }
+	            if (!useThisTier) continue;
+	            selectedTier = (ItemTier) i;
+	            break;
+	        }
+	        return selectedTier;
 	    }
 
 	    public static Item Randomize(Item Item, Random Rng)

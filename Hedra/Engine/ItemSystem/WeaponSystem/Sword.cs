@@ -84,20 +84,20 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 				if(_previousPosition != Human.BlockPosition && Human.IsGrounded)
 				{
 				    Chunk underChunk = World.GetChunkAt(Human.Position);
-				    World.WorldParticles.VariateUniformly = true;
-				    World.WorldParticles.Color = World.GetHighestBlockAt( (int) Human.Position.X, (int) Human.Position.Z).GetColor(underChunk.Biome.Colors);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
-				    World.WorldParticles.Position = Human.Position - Vector3.UnitY;
-				    World.WorldParticles.Scale = Vector3.One * .5f;
-				    World.WorldParticles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				    World.WorldParticles.Direction = (-Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
-				    World.WorldParticles.ParticleLifetime = 1;
-				    World.WorldParticles.GravityEffect = .1f;
-				    World.WorldParticles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
+				    World.Particles.VariateUniformly = true;
+				    World.Particles.Color = World.GetHighestBlockAt( (int) Human.Position.X, (int) Human.Position.Z).GetColor(underChunk.Biome.Colors);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
+				    World.Particles.Position = Human.Position - Vector3.UnitY;
+				    World.Particles.Scale = Vector3.One * .5f;
+				    World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+				    World.Particles.Direction = (-Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
+				    World.Particles.ParticleLifetime = 1;
+				    World.Particles.GravityEffect = .1f;
+				    World.Particles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
 					
-					if(World.WorldParticles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
-						World.WorldParticles.Color = new Vector4(underChunk.Biome.Colors.GrassColor.Xyz,1);
+					if(World.Particles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
+						World.Particles.Color = new Vector4(underChunk.Biome.Colors.GrassColor.Xyz,1);
 					
-					World.WorldParticles.Emit();
+					World.Particles.Emit();
 				}
 				_previousPosition = Human.BlockPosition;
 			}	
