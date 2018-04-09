@@ -17,13 +17,12 @@ using Hedra.Engine.QuestSystem;
 
 namespace Hedra.Engine.EntitySystem
 {
-	/// <inheritdoc />
-	/// <summary>
-	/// Description of PhysicsComponent.
-	/// </summary>
-	public class  PhysicsComponent : EntityComponent{
-	
-		public bool UsePhysics{ get; set; }
+    public delegate bool OnHitGroundEvent(Entity Parent, float Falltime);
+
+    public class  PhysicsComponent : EntityComponent
+	{
+	    public event OnHitGroundEvent OnHitGround;
+		public bool UsePhysics { get; set; }
 	    public float FallTime { get; private set; }
         public PhysicsComponent(Entity Parent) : base(Parent){ UsePhysics = true; UseTimescale = true; }
 		public Vector3 GravityDirection = new Vector3(0,-1f,0);
@@ -126,10 +125,10 @@ namespace Hedra.Engine.EntitySystem
 	        }
 	        else
 	        {
-	            if (FallTime != 0)
+	            if (FallTime > 0)
 	            {
 	                float Exp;
-	                if (FallTime > 1.75f && HasFallDamage)
+	                if (FallTime > 1.75f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, FallTime) ?? true) )
 	                {
 	                    var fallTime = FallTime;
 	                    ThreadManager.ExecuteOnMainThread(delegate

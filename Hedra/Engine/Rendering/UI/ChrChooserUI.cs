@@ -41,7 +41,7 @@ namespace Hedra.Engine.Rendering.UI
 
 			var newChr = new Button(new Vector2(0.8f,bandPosition.Y), new Vector2(0.15f,0.05f),
 			                           "New Character", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 13));
-			newChr.Click += delegate { this.Disable(); Scenes.SceneManager.Game.Player.UI.ChrCreator.Enable(); };	
+			newChr.Click += delegate { this.Disable(); GameManager.Player.UI.ChrCreator.Enable(); };	
 			
 			var playBtn = new Button(new Vector2(-.1f, -.8f), Vector2.One, "Load", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 14));
 			
@@ -56,18 +56,7 @@ namespace Hedra.Engine.Rendering.UI
 				}
 				
 				var information = DataManager.PlayerFiles[index];
-				
-				if(Constants.REDIRECT_NET){
-					Scenes.SceneManager.Game.Player.UI.ChrChooser.Disable();
-					Scenes.SceneManager.Game.Player.UI.ConnectPanel.Enable();
-					return;
-				}
-				Constants.CHARACTER_CHOOSED = true;
-				Scenes.SceneManager.Game.MakeCurrent(information);
-				if(Constants.REDIRECT_NEW_RUN){
-					Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.Player);
-					return;
-				}
+				GameManager.MakeCurrent(information);
 			};
 			#endregion
 			
@@ -124,7 +113,7 @@ namespace Hedra.Engine.Rendering.UI
 			};
 			
 			OnEscapePressed += delegate { 
-				this.Disable(); Scenes.SceneManager.Game.Player.UI.Menu.Enable();
+				this.Disable(); GameManager.Player.UI.Menu.Enable();
 			};
 		}
 		
@@ -288,7 +277,7 @@ namespace Hedra.Engine.Rendering.UI
 				}
 				
 				Scenes.MenuBackground.Campfire = true;
-				Scenes.SceneManager.Game.Player.View.CameraHeight = Vector3.UnitY * 4;
+				GameManager.Player.View.CameraHeight = Vector3.UnitY * 4;
 				#region Hover
 				Vector2 coords = Mathf.ToNormalizedDeviceCoordinates(Events.EventDispatcher.Mouse.X, Events.EventDispatcher.Mouse.Y);
 				coords += new Vector2(1,1);
@@ -356,7 +345,7 @@ namespace Hedra.Engine.Rendering.UI
 				#endregion
 			}else{
 				Scenes.MenuBackground.Campfire = false;
-				//Scenes.SceneManager.Game.LPlayer.View.CameraHeight = OldHeight;
+				//Game.LPlayer.View.CameraHeight = OldHeight;
 			}
 			
 		}

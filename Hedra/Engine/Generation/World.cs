@@ -264,16 +264,14 @@ namespace Hedra.Engine.Generation
 		}
 		
 		public static void Draw(ChunkBufferTypes Type){
-			if(Constants.HIDE_CHUNKS || !Enabled)
+			if(!Enabled)
 				return;
 			
-			if(Constants.LINES)
-				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+			if(GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 			
 			WorldRenderer.Render(_toDraw, Type);
 			
-			if(Constants.LINES)
-				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+			if(GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 		}
 		
 		public static void Recreate(int Seed){
@@ -327,7 +325,7 @@ namespace Hedra.Engine.Generation
 			WorldRenderer.ForceDiscard();
 		    CacheManager.Discard();
 
-		    World.AddEntity(SceneManager.Game.Player);
+		    World.AddEntity(GameManager.Player);
 
             if (Seed == MenuSeed)
 			{

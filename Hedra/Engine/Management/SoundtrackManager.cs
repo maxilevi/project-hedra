@@ -99,7 +99,7 @@ namespace Hedra.Engine.Management
 		
 		public static void Update(){
 
-            if ( !_loaded || (GameSettings.Paused && !SceneManager.Game.InMenuWorld) || SceneManager.Game.IsLoading || TrackNames.Length == 0 || _trackIndex < 0) return;
+            if ( !_loaded || (GameSettings.Paused && !GameManager.InStartMenu) || GameManager.IsLoading || TrackNames.Length == 0 || _trackIndex < 0) return;
 			
 			Source.Position = SoundManager.ListenerPosition;
 			

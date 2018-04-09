@@ -245,7 +245,7 @@ namespace Hedra.Engine.Rendering.Animation
 		 * reset, causing the animation to loop.
 		 */
 		private void IncreaseAnimationTime() {
-			if(Scenes.SceneManager.Game.InMenu || (!this.CurrentAnimation.Loop && AnimationTime > CurrentAnimation.Length) || Stop) 
+			if(GameManager.InMenu || (!this.CurrentAnimation.Loop && AnimationTime > CurrentAnimation.Length) || Stop) 
 				return;
 			AnimationTime += Time.unScaledDeltaTime * this.CurrentAnimation.Speed;
 			
@@ -259,7 +259,7 @@ namespace Hedra.Engine.Rendering.Animation
 		}
 		
 		private void IncreaseTargetAnimationTime() {
-			if(Scenes.SceneManager.Game.InMenu || Stop) 
+			if(GameManager.InMenu || Stop) 
 				return;
 			TargetAnimationTime += Engine.Time.unScaledDeltaTime * 4f * this.TargetAnimation.Speed;
 		}

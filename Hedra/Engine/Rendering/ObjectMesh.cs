@@ -20,15 +20,11 @@ namespace Hedra.Engine.Rendering
 		public bool DontCull { get; set;}
 		public bool Rendered { get; set;}
         public RenderShape Shape { get; set;}
-		public int SceneId { get; set; }
 		public ChunkMesh Mesh { get; }
-
 		private readonly ObjectMeshBuffer _buffer;
-	    private bool _disposed;
 		
 		public ObjectMesh(Vector3 Position){
 			this.Enabled = true;
-			SceneId = Scenes.SceneManager.Game.Id;
 
 		    var meshBuffers = new ChunkMeshBuffer[]
 		    {
@@ -271,7 +267,6 @@ namespace Hedra.Engine.Rendering
 		public void Dispose(){
 			Mesh.Dispose();
 			DrawManager.Remove(this);
-		    _disposed = true;
         }
 	}
 }

@@ -24,6 +24,8 @@ namespace Hedra.Engine
     public static class GameSettings
     {
         public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
+        public static bool Wireframe { get; set; }
+        public static bool LockFrustum { get; set; }
         public static bool Debug { get; set; }
         public static int DeviceWidth { get; set; }
         public static int DeviceHeight { get; set; }
@@ -117,7 +119,7 @@ namespace Hedra.Engine
                 MainFBO.DefaultBuffer.Resize();
                 UserInterface.PlayerFbo.Dispose();
                 UserInterface.PlayerFbo = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
-                SceneManager.Game.Player.UI = new UserInterface(SceneManager.Game.Player);
+                GameManager.Player.UI = new UserInterface(GameManager.Player);
             }
         }
 

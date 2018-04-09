@@ -135,9 +135,7 @@ namespace Hedra.Engine.Generation
 
         public void Initialize()
         {
-            var meshBuffers = new ChunkMeshBuffer[0];
-
-            Mesh = new ChunkMesh(Position, meshBuffers, 1);
+            Mesh = new ChunkMesh(Position, new ChunkMeshBuffer[0]);
         }
 
         public void Generate()

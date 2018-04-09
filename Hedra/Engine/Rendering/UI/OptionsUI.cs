@@ -499,7 +499,7 @@ namespace Hedra.Engine.Rendering.UI
 			
 			OnEscapePressed += delegate { 
 				Disable();
-				Scenes.SceneManager.Game.Player.UI.Menu.Enable();
+				GameManager.Player.UI.Menu.Enable();
 			};
 			
 			OnPanelStateChange += delegate(object Sender, PanelState E) {

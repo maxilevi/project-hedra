@@ -46,13 +46,6 @@ namespace Hedra.Engine.Rendering
 			
 			this.MeshBuffers.AddRange(BuffersAttachments);
 		}
-		
-		public ChunkMesh(Vector3 Position, ChunkMeshBuffer[] BuffersAttachments, int SceneId) : base(){
-			this.Position = Position;
-			this.Size = new Vector3(Chunk.ChunkWidth, 768, Chunk.ChunkWidth);
-			
-			this.MeshBuffers.AddRange(BuffersAttachments);
-		}
 
 		#region BUILD METHODS
 		public void Build(){
@@ -195,11 +188,9 @@ namespace Hedra.Engine.Rendering
 		public void Draw(ChunkBufferTypes Type, Vector3 Position, bool Shadows){
 			if(MeshBuffers == null) return;
 
-			if(Constants.LINES)
-				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-			    DrawMesh(MeshBuffers[(int) Type], Position, Shadows);
-			if(Constants.LINES)
-				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+			if(GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+			DrawMesh(MeshBuffers[(int) Type], Position, Shadows);
+			if(GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
 		}
 		

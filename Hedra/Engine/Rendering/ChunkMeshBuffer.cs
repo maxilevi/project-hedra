@@ -62,7 +62,7 @@ namespace Hedra.Engine.Rendering
 		
 		public virtual void Bind(){
 			BlockShaders.StaticShader.Bind();
-			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
+			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
 		}
 		
 		public virtual void UnBind(){

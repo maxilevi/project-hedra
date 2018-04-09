@@ -353,7 +353,7 @@ namespace Hedra.Engine.Player
             if (this.Model.Animator.AnimationPlaying != this.RollAnimation && Human.IsRolling)
 		        Human.FinishRoll();
 
-            if (_lastAnimationTime != this.Model.Animator.AnimationTime || Scenes.SceneManager.Game.InMenu){
+            if (_lastAnimationTime != this.Model.Animator.AnimationTime || GameManager.InMenu){
 				_lastAnimationTime = this.Model.Animator.AnimationTime;
 			}else{
 				Model.Animator.AnimationPlaying.DispatchEvents(1f);

@@ -81,7 +81,7 @@ namespace Hedra.Engine.Generation
                     Offset = World.ToChunkSpace(_player.BlockPosition);
                     var newPos = _player.BlockPosition.Xz;
                     if ( (_lastPos - newPos).LengthSquared > 16*16 || GameSettings.ChunkLoaderRadius != _lastRadius ||
-                        SceneManager.Game.IsLoading)
+                        GameManager.IsLoading)
                     {
                         for (int x = (int)(-GameSettings.ChunkLoaderRadius * .5f); x < (int)(GameSettings.ChunkLoaderRadius * .5f); x++)
                         {

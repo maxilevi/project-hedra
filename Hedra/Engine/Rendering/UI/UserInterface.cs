@@ -7,27 +7,23 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Linq;
 using OpenTK.Input;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
-using System.Drawing.Imaging;
 using OpenTK;
 using System.Reflection;
 using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Scenes;
 using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.Rendering.UI
 {
 	public class UserInterface
 	{
-		private LocalPlayer _player;
+		private readonly LocalPlayer _player;
 		public static PrivateFontCollection Fonts = new PrivateFontCollection();
 		public const int Sans = 0;
 		public bool ShowHelp = false;
@@ -82,11 +78,12 @@ namespace Hedra.Engine.Rendering.UI
 			                             new Vector2(0.15f,0.075f), "Load World", 0, DefaultFontColor, FontCache.Get(Fonts.Families[Sans], 16));
 
 			chooseChr.Click += delegate {
-				if(Constants.CHARACTER_CHOOSED){
+				if(!GameManager.InStartMenu){
 					AutosaveManager.Save();
-					SceneManager.Game.LoadMenu();
+					GameManager.LoadMenu();
 				}
-				Constants.REDIRECT_NET = false; Constants.REDIRECT_NEW_RUN = false; Menu.Disable(); ChrChooser.Enable();
+				Menu.Disable();
+                ChrChooser.Enable();
 			};
 			
 			Button connectToServer = new Button(new Vector2(.535f, bandPosition.Y),
@@ -98,17 +95,6 @@ namespace Hedra.Engine.Rendering.UI
 			
 			connectToServer.Click += delegate{
 			    Player.MessageDispatcher.ShowNotification("Multiplayer is down.", Color.DarkRed, 3f, true);
-				return;
-				if(Constants.CHARACTER_CHOOSED){
-					Menu.Disable();
-					ConnectPanel.Enable();
-				}else{
-					Constants.REDIRECT_NET = true;
-					Constants.REDIRECT_NEW_RUN = false;
-					//Do what ChrChooser does
-					Menu.Disable();
-					ChrChooser.Enable();
-				}
 			};
 			
 			Button options = new Button(new Vector2(.75f, bandPosition.Y),
@@ -153,12 +139,11 @@ namespace Hedra.Engine.Rendering.UI
 		}
 		
 		public void NewRunOnClick(object Sender, EventArgs E){
-			if(!Constants.CHARACTER_CHOOSED){
-				Constants.REDIRECT_NEW_RUN = true;
+			if(GameManager.InStartMenu){
 				Menu.Disable();
 				ChrChooser.Enable();
 			}else{
-				SceneManager.Game.NewRun(_player);
+				GameManager.NewRun(_player);
 			}
 		}
 		
@@ -214,7 +199,7 @@ namespace Hedra.Engine.Rendering.UI
             if (Model is HumanModel)
                 (Model as HumanModel).Fog = false;
 
-            Matrix4 projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(((_player.Model == Model) ? 50 : 60) * Mathf.Radian, 1.5f, 1, Constants.VIEW_DISTANCE);
+            Matrix4 projectionMatrix = Matrix4.CreatePerspectiveFieldOfView((_player.Model == Model ? 50 : 60) * Mathf.Radian, 1.5f, 1, 1024);
             Matrix4 rotationMatrix = Matrix4.CreateRotationY(_oldRotation * Mathf.Radian);
             Matrix4 lookAt = Matrix4.LookAt(Vector3.TransformPosition(-Vector3.UnitZ * ((Model == _player.Model) ? 180f : 30f), rotationMatrix) + Model.Position,
                                             Vector3.TransformPosition(Vector3.UnitY * ((Model == _player.Model) ? 41f : 15f), rotationMatrix) + Model.Position, Vector3.UnitY);
@@ -277,7 +262,7 @@ namespace Hedra.Engine.Rendering.UI
 				Vector3 oldPosition = Mesh.Position;
 				Mesh.Position = Vector3.Zero;
 				
-				Matrix4 projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 1, Constants.VIEW_DISTANCE);
+				Matrix4 projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 1, 1024);
 				GL.MatrixMode(MatrixMode.Projection);
 				GL.LoadMatrix(ref projectionMatrix);
 				
@@ -331,7 +316,7 @@ namespace Hedra.Engine.Rendering.UI
 		}
 		
 		public void ShowMenu(){
-			if(SceneManager.Game.IsLoading || SceneManager.Game.InMenu) return;
+			if(GameManager.IsLoading || GameManager.InMenu) return;
 			
 			Menu.Enable();
 			OptionsMenu.Disable();

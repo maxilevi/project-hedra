@@ -28,7 +28,7 @@ namespace Hedra.Engine.EntitySystem
 		
 		public override void Update(){
 			
-			LocalPlayer Player = Scenes.SceneManager.Game.Player;
+			LocalPlayer Player = GameManager.Player;
 			Parent.Model.Tint = new Vector4(1f,1f,1f,1);
 			if( (Parent.Position - Player.Position).LengthSquared < 16*16 
 			   && Vector3.Dot( (Parent.Position - Player.Position).NormalizedFast(), Player.View.LookAtPoint.NormalizedFast()) > .6f ){

@@ -298,7 +298,7 @@ namespace Hedra.Engine.Player
 				player.EatFood();
 			}
 
-			if(e.Key == Key.G && Human.CanInteract && !Scenes.SceneManager.Game.InMenu && !Human.Knocked && !Scenes.SceneManager.Game.InMenuWorld)
+			if(e.Key == Key.G && Human.CanInteract && !GameManager.InMenu && !Human.Knocked && !GameManager.InStartMenu)
 			{
 			    if(player.Inventory.Glider == null && !GameSettings.Paused){
 					player.MessageDispatcher.ShowNotification("YOU NEED A GLIDER TO DO THAT", System.Drawing.Color.DarkRed, 3f, true);
@@ -357,7 +357,7 @@ namespace Hedra.Engine.Player
 					player.QuestLog.Show = true;
 			}
 			
-			if(e.Key == Key.Escape && Constants.CHARACTER_CHOOSED){
+			if(e.Key == Key.Escape && !GameManager.InStartMenu){
 				if(player.QuestLog.Show || player.Inventory.Show || player.AbilityTree.Show || player.Chat.Focused || player.Trade.Show){
 					
 					if(player.Chat.Focused)
@@ -436,20 +436,9 @@ namespace Hedra.Engine.Player
 				else
 					Recorder.Active = true;
 			}
-			if(e.Key == Key.Number6 && player.CanInteract)
-			{
-			    Constants.HIDE_ENTITIES = !Constants.HIDE_ENTITIES;
-			}
-			if(e.Key == Key.H && player.CanInteract)
-			{
-			    Constants.LOCK_FRUSTUM = !Constants.LOCK_FRUSTUM;
-			}
-			if(e.Key == Key.Number5 && player.CanInteract)
-			{
-			    Constants.HIDE_CHUNKS = !Constants.HIDE_CHUNKS;
-			}
-			
-			if(e.Key == Key.Number7 && player.CanInteract)
+		    if (e.Key == Key.H && player.CanInteract) GameSettings.LockFrustum = !GameSettings.LockFrustum;
+
+            if (e.Key == Key.Number7 && player.CanInteract)
 			{
 			    Enviroment.SkyManager.Skydome.Enabled = !Enviroment.SkyManager.Skydome.Enabled;
 			}
@@ -458,10 +447,8 @@ namespace Hedra.Engine.Player
 				World.AddChunkToQueue(World.GetChunkByOffset(World.ToChunkSpace(player.Position)), true);
 			}
 			
-			if(e.Key == Key.L && player.CanInteract)
-			{
-			    Constants.LINES = !Constants.LINES;
-			}
+			if(e.Key == Key.L && player.CanInteract) GameSettings.Wireframe = !GameSettings.Wireframe;
+			
 
 			if(e.Key == Key.Keypad0 && player.CanInteract){
 				player.Physics.TargetPosition += Vector3.UnitY * 25f;

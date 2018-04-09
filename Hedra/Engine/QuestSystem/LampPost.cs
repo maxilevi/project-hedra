@@ -29,7 +29,7 @@ namespace Hedra.Engine.QuestSystem
 		}
 		
 		public void Update(){
-			LocalPlayer Player = Scenes.SceneManager.Game.Player;
+			LocalPlayer Player = GameManager.Player;
 			bool InRadius = (Player.Position - this.Position).Xz.LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance;
 			if(Light == null && InRadius){
 				Light = ShaderManager.GetAvailableLight();

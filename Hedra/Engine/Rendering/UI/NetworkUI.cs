@@ -56,16 +56,14 @@ namespace Hedra.Engine.Rendering.UI
 					LocalPlayer.Instance.MessageDispatcher.ShowNotification("Connection Refused",Color.FromArgb(255,229,10,10), 2.5f);
 					return;
 				}
-				Constants.CHARACTER_CHOOSED = true;
-				Constants.REDIRECT_NET = false;
-				//Scenes.SceneManager.Game.MakeCurrent(Scenes.SceneManager.Game.CurrentInformation);
+				//Game.MakeCurrent(Game.CurrentInformation);
 				if(NetworkManager.WorldSeed != -1)
 					World.Recreate(NetworkManager.WorldSeed);
 				if(NetworkManager.WorldTime != -1)
 					Enviroment.SkyManager.SetTime(NetworkManager.WorldTime);
-				Scenes.SceneManager.Game.Player.Spawner.Enabled = false;
-				Scenes.SceneManager.Game.Player.UI.HideMenu();
-				Scenes.SceneManager.Game.Player.BlockPosition = GameSettings.SpawnPoint.ToVector3() + Vector3.UnitY * 128;
+				GameManager.Player.Spawner.Enabled = false;
+				GameManager.Player.UI.HideMenu();
+				GameManager.Player.BlockPosition = GameSettings.SpawnPoint.ToVector3() + Vector3.UnitY * 128;
 				
 			};
 			
@@ -73,17 +71,17 @@ namespace Hedra.Engine.Rendering.UI
 			/*host.Click += delegate {
 				if(NetworkManager.Host()){
 					
-					Constants.CHARACTER_CHOOSED = true;
+					GameManager.InStartMenu = true;
 					Constants.REDIRECT_NET = false;
-					Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.CurrentInformation.Clone());
-					Scenes.SceneManager.Game.LPlayer.UI.HideMenu();
+					Game.NewRun(Game.CurrentInformation.Clone());
+					Game.LPlayer.UI.HideMenu();
 				}else{
 					//Hacky stuff
 					if(NetworkManager.Host()){
-						Constants.CHARACTER_CHOOSED = true;
+						GameManager.InStartMenu = true;
 						Constants.REDIRECT_NET = false;
-						Scenes.SceneManager.Game.NewRun(Scenes.SceneManager.Game.CurrentInformation.Clone());
-						Scenes.SceneManager.Game.LPlayer.UI.HideMenu();
+						Game.NewRun(Game.CurrentInformation.Clone());
+						Game.LPlayer.UI.HideMenu();
 					}else
 					    LocalPlayer.Instance.MessageDispatcher.ShowNotification("Connection Refused",Color.FromArgb(255,229,10,10), 2.5f);
 				}
@@ -117,7 +115,7 @@ namespace Hedra.Engine.Rendering.UI
 			
 			this.OnEscapePressed += delegate {
 				this.Disable(); 
-				Scenes.SceneManager.Game.Player.UI.Menu.Enable();
+				GameManager.Player.UI.Menu.Enable();
 			};
 		}
 		

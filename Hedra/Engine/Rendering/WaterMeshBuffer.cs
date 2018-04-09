@@ -53,7 +53,7 @@ namespace Hedra.Engine.Rendering
            	GL.Enable(EnableCap.Texture2D);
            	
            	BlockShaders.WaterShader.Bind();
-           	GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
+           	GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, GameManager.Player.Position);
            	GL.Uniform3(BlockShaders.WaterShader.LightColorLocation, ShaderManager.LightColor);
 
             //Removed the smooth borders because it causes issues on the map rendering.

@@ -104,7 +104,7 @@ namespace Hedra.Engine.Player
         {
             _distance = Mathf.Lerp(_distance, TargetDistance+AddonDistance, Time.unScaledDeltaTime * 3f);
             this.ClampYaw();
-            if ( !GameSettings.Paused && !Scenes.SceneManager.Game.IsLoading && !_player.IsDead)
+            if ( !GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead)
             {
                 XDelta = Cursor.Position.X - GameSettings.Width / 2;
                 YDelta = Cursor.Position.Y - GameSettings.Height / 2;
@@ -186,7 +186,7 @@ namespace Hedra.Engine.Player
                     }
                 }
             }
-            if (!Constants.LOCK_FRUSTUM)
+            if (!GameSettings.LockFrustum)
                 DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, Matrix);
         }
 

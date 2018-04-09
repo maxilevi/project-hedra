@@ -65,14 +65,14 @@ namespace Hedra.Engine.QuestSystem
 
 		    }
 
-            if (!Restored &&  (this.Position - Scenes.SceneManager.Game.Player.Position).Xz.LengthSquared 
+            if (!Restored &&  (this.Position - GameManager.Player.Position).Xz.LengthSquared 
 			   < Radius * Radius)
             {
 			
 				if(_passedTime % 2 == 0){
 					_particles.Color = Particle3D.AshColor;
 					_particles.VariateUniformly = false;
-					_particles.Position = Scenes.SceneManager.Game.Player.Position + Vector3.UnitY * 1f;
+					_particles.Position = GameManager.Player.Position + Vector3.UnitY * 1f;
 					_particles.Scale = Vector3.One * .85f;
 					_particles.ScaleErrorMargin = new Vector3(.05f,.05f,.05f);
 					_particles.Direction = Vector3.UnitY * 0f;

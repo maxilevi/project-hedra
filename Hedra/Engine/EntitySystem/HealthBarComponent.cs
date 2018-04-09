@@ -76,7 +76,7 @@ namespace Hedra.Engine.EntitySystem
         public override void Update()
         {
             if ((Parent.BlockPosition.Xz.ToVector3() + Parent.Position.Y * Vector3.UnitY -
-                 SceneManager.Game.Player.Position).LengthSquared < 45 * 45)
+                 GameManager.Player.Position).LengthSquared < 45 * 45)
             {
                 _healthBar.Enable();
                 _targetBarSize = 1;
@@ -101,14 +101,14 @@ namespace Hedra.Engine.EntitySystem
             _barSize = Mathf.Lerp(_barSize, _targetBarSize, (float) Time.deltaTime * 16f);
             _healthBar.Text.UIText.UIText.Scale = _originalTextScale * _barSize * _textEnabled;
 
-            if (_barSize <= 0.5f || Parent.IsDead || GameSettings.Paused || Hide || !_show || SceneManager.Game.IsLoading)
+            if (_barSize <= 0.5f || Parent.IsDead || GameSettings.Paused || Hide || !_show || GameManager.IsLoading)
             {
                 _healthBar.Disable();
                 _textEnabled = 0;
                 return;
             }
 
-            LocalPlayer player = SceneManager.Game.Player;
+            LocalPlayer player = GameManager.Player;
             float product = Mathf.DotProduct(player.View.CrossDirection,
                 (Parent.Position - player.Position).NormalizedFast());
             if (product <= 0.5f)

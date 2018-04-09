@@ -19,7 +19,7 @@ namespace Hedra.Engine.Management
 		public static int TimePerSave = 30;
 		private static float PassedTime;
 		public static void Update(){
-			if(!GameSettings.Autosave || !Constants.CHARACTER_CHOOSED) return;
+			if(!GameSettings.Autosave || GameManager.InStartMenu) return;
 			
 			PassedTime += Time.FrameTimeSeconds;
 			if(PassedTime >= TimePerSave){
@@ -31,13 +31,13 @@ namespace Hedra.Engine.Management
 		public static void Save(){
 			LocalPlayer.Instance.UnLoad();
 			
-			for(var i = 0; i < Scenes.SceneManager.Game.Player.Toolbar.Skills.Length; i++)
-				Scenes.SceneManager.Game.Player.Toolbar.Skills[i].UnloadBuffs();
+			for(var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
+				GameManager.Player.Toolbar.Skills[i].UnloadBuffs();
 			
-			DataManager.SavePlayer( DataManager.DataFromPlayer(Scenes.SceneManager.Game.Player) );
+			DataManager.SavePlayer( DataManager.DataFromPlayer(GameManager.Player) );
 			
-			for(var i = 0; i < Scenes.SceneManager.Game.Player.Toolbar.Skills.Length; i++)
-				Scenes.SceneManager.Game.Player.Toolbar.Skills[i].LoadBuffs();
+			for(var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
+				GameManager.Player.Toolbar.Skills[i].LoadBuffs();
 			
 			LocalPlayer.Instance.Load();
 		}

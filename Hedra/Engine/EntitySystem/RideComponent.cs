@@ -35,7 +35,7 @@ namespace Hedra.Engine.EntitySystem
 		public override void Update(){
 			//Player
 			Parent.Model.Tint = new Vector4(1f,1f,1f,1);
-			LocalPlayer player = Scenes.SceneManager.Game.Player;
+			LocalPlayer player = GameManager.Player;
 			if( !HasRider && (player.BlockPosition - Parent.BlockPosition).LengthSquared < 12*12 && !player.IsRiding && !player.IsCasting
 			    && Vector3.Dot( (Parent.BlockPosition - player.BlockPosition).NormalizedFast(), player.View.LookAtPoint.NormalizedFast()) > .6f)
 			{

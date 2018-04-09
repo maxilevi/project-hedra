@@ -39,7 +39,7 @@ namespace Hedra.Engine.Rendering
 	    private Matrix4 _animationRotationMatrix = Matrix4.Identity;
 
         public override void Draw(Vector3 Position, bool Shadows){
-			if(Constants.HIDE_ENTITIES || Indices == null || Data == null) return;
+			if(Indices == null || Data == null) return;
 
 		    this.Bind();
 		    GL.Disable(EnableCap.Blend);
@@ -165,7 +165,7 @@ namespace Hedra.Engine.Rendering
 			GL.Uniform4(Shader.TintUniform, Tint+BaseTint);
 			GL.Uniform2(Shader.ResolutionUniform, new Vector2(GameSettings.Width, GameSettings.Height));
 			GL.Uniform3(Shader.BakedPositionUniform, Vector3.Zero);
-			GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
+			GL.Uniform3(Shader.PlayerPositionUniform, GameManager.Player.Position);
 			
 			if(GameSettings.Shadows){
 				GL.UniformMatrix4(Shader.ShadowMvpUniform, false, ref ShadowRenderer.ShadowMVP);

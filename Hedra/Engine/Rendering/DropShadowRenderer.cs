@@ -98,7 +98,7 @@ namespace Hedra.Engine.Rendering
 
                     GL.UniformMatrix3(Shader.RotationUniform, false, ref rotation);
 					GL.Uniform1(Shader.OpacityUniform, ShouldShadows[i].Opacity);
-					GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
+					GL.Uniform3(Shader.PlayerPositionUniform, GameManager.Player.Position);
 					GL.Uniform3(Shader.PositionUniform, ShouldShadows[i].Position);
 					GL.Uniform3(Shader.ScaleUniform, ShouldShadows[i].Scale);
 					

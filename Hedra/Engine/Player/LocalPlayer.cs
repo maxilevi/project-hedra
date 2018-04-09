@@ -344,9 +344,9 @@ namespace Hedra.Engine.Player
                 var entities = World.Entities.ToArray();
                 for (int i = entities.Length - 1; i > -1; i--)
                 {
-                    LocalPlayer player = SceneManager.Game.Player;
+                    LocalPlayer player = GameManager.Player;
                     if (entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused &&
-                        !SceneManager.Game.IsLoading
+                        !GameManager.IsLoading
 
                         || Pet.Pet == entities[i] || entities[i].IsBoss)
                     {
@@ -382,7 +382,7 @@ namespace Hedra.Engine.Player
 					View.Position = new Vector3(Model.Position.X, Model.Position.Y, Model.Position.Z);
 			}
 			
-			if(this.IsGliding && this.IsUnderwater || this.IsGliding && SceneManager.Game.InMenuWorld)
+			if(this.IsGliding && this.IsUnderwater)
 				this.IsGliding = false;
 			
 			
@@ -534,7 +534,7 @@ namespace Hedra.Engine.Player
 	            else
 	                ThreadManager.ExecuteOnMainThread(delegate {
 	                    this.MessageDispatcher.ShowMessageWhile("[R] TO RESPAWN", Color.White,
-	                        () => this.Health <= 0 && Constants.CHARACTER_CHOOSED);
+	                        () => this.Health <= 0 && !GameManager.InStartMenu);
 	                });
 	        }
 	        else
@@ -583,7 +583,7 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public static LocalPlayer Instance => SceneManager.Game.Player;
+		public static LocalPlayer Instance => GameManager.Player;
 
         public void UnLoad(){
 			if(_inCementery){

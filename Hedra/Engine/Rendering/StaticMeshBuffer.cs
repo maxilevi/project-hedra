@@ -77,11 +77,9 @@ namespace Hedra.Engine.Rendering
 			Blocks.Clear();
 			Vertices.Dispose();
 			Colors.Dispose();
-			if(Indices != null)
-				Indices.Dispose();
-			if(UshortIndices != null)
-				UshortIndices.Dispose();
-			Data.Dispose();
+		    Indices?.Dispose();
+		    UshortIndices?.Dispose();
+		    Data.Dispose();
 		}
 		
 		public override void Clear(){
@@ -92,12 +90,10 @@ namespace Hedra.Engine.Rendering
 			GL.Disable(EnableCap.Blend);
 			BlockShaders.StaticShader.Bind();
 			GL.Uniform3(BlockShaders.StaticShader.LightColorLocation, ShaderManager.LightColor);
-			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
-			if(Constants.CHARACTER_CHOOSED)
-				GL.Uniform1(BlockShaders.StaticShader.TimeUniform, Time.CurrentFrame );
-			else
-				GL.Uniform1(BlockShaders.StaticShader.TimeUniform, Time.UnPausedCurrentFrame );
-			GL.Uniform1(BlockShaders.StaticShader.FancyUniform, (GameSettings.Fancy) ? 1.0f : 0.0f);
+			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
+		    GL.Uniform1(BlockShaders.StaticShader.TimeUniform,
+		        !GameManager.InStartMenu ? Time.CurrentFrame : Time.UnPausedCurrentFrame);
+		    GL.Uniform1(BlockShaders.StaticShader.FancyUniform, (GameSettings.Fancy) ? 1.0f : 0.0f);
 			GL.Uniform1(BlockShaders.StaticShader.SnowUniform, SkyManager.Snowing ? 1.0f : 0.0f);
 
 			BlockShaders.StaticShader.AreaPositionsUniform.LoadVectorArray( World.Highlighter.AreaPositions);

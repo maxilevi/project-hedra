@@ -94,7 +94,7 @@ namespace Hedra.Engine.Rendering.UI
 				}
 				if(!LocalPlayer.CreatePlayer(nameField.Text, _human.Model, _classType)) return;		    
 			    base.Disable();
-			    Scenes.SceneManager.Game.Player.UI.ChrChooser.Enable();
+			    GameManager.Player.UI.ChrChooser.Enable();
 			    nameField.Text = "";    
 			};
 			
@@ -120,7 +120,7 @@ namespace Hedra.Engine.Rendering.UI
 			};
 			
 			OnEscapePressed += delegate {	
-				base.Disable(); Scenes.SceneManager.Game.Player.UI.ChrChooser.Enable();
+				base.Disable(); GameManager.Player.UI.ChrChooser.Enable();
 			};
 		}
 		

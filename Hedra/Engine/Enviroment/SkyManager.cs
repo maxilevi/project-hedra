@@ -169,8 +169,8 @@ namespace Hedra.Engine.Enviroment
 
 			#region RAIN
 
-			if(Snowing && IsRaining && !SceneManager.Game.InMenu && SceneManager.Game.Player != null){
-				Rain.Position = SceneManager.Game.Player.Position + Vector3.UnitY * 160;
+			if(Snowing && IsRaining && !GameManager.InMenu && GameManager.Player != null){
+				Rain.Position = GameManager.Player.Position + Vector3.UnitY * 160;
 				Rain.Color = new Vector4(.5f,.5f,.5f,1);
 				Rain.Grayscale = true;
 				Rain.VariateUniformly = false;
@@ -187,10 +187,10 @@ namespace Hedra.Engine.Enviroment
 				
 				Rain.Particles[Rain.Particles.Count-1].Collides = true;
 			}
-			if(IsRaining && Time.timeScale == 1 && SceneManager.Game.Player != null && underChunk != null)
+			if(IsRaining && Time.timeScale == 1 && GameManager.Player != null && underChunk != null)
             {
 				if(!Snowing){
-					Rain.Position = SceneManager.Game.Player.Position + Vector3.UnitY * 256;
+					Rain.Position = GameManager.Player.Position + Vector3.UnitY * 256;
 					Rain.Color = underChunk.Biome.Colors.WaterColor * .8f;
 					Rain.VariateUniformly = true;
 					Rain.Grayscale = false;

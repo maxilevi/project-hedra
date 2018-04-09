@@ -53,7 +53,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         {
             get
             {
-                SceneManager.Game.Player.UI.DrawPreview(_iconMesh, UserInterface.QuestFbo);
+                GameManager.Player.UI.DrawPreview(_iconMesh, UserInterface.QuestFbo);
                 return UserInterface.QuestFbo.TextureID[0];
             }
         }
@@ -109,12 +109,12 @@ namespace Hedra.Engine.QuestSystem.Objectives
                     this.NextObjective();
                     break;
                 }
-                if (Escortee == null && (SceneManager.Game.Player.Position - Position).LengthSquared < 64 * 64)
+                if (Escortee == null && (GameManager.Player.Position - Position).LengthSquared < 64 * 64)
                 {
                     this.NextObjective();
                     break;
                 }
-                if (!_welcomeMsgShown && (SceneManager.Game.Player.Position - Position).LengthSquared < 192 * 192)
+                if (!_welcomeMsgShown && (GameManager.Player.Position - Position).LengthSquared < 192 * 192)
                 {
                     LocalPlayer.Instance.MessageDispatcher.ShowTitleMessage(
                         "Welcome to " + VillageGenerator.GenerateVillageName(World.Seed), 4f);

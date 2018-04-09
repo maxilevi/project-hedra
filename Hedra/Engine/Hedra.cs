@@ -17,14 +17,17 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using Forms = System.Windows.Forms;
 
@@ -101,8 +104,8 @@ namespace Hedra
             GameSettings.VSync = true;
 			GameSettings.Load(appData + "settings.cfg");
 			Log.WriteLine("Settings loading was Successful");
-			
-			SceneManager.Load();
+
+		    GameManager.Load();
 			Log.WriteLine("Scene loading was Successful.");
 			Log.WriteLine("Supported GLSL version is : "+GL.GetString(StringName.ShadingLanguageVersion));
 
@@ -202,8 +205,8 @@ namespace Hedra
 				_lastValue = newNumber;
 			
 			
-			LocalPlayer Player = SceneManager.Game.Player;
-			DrawManager.FrustumObject.SetFrustum(SceneManager.Game.Player.View.Matrix);
+			LocalPlayer Player = GameManager.Player;
+			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.Matrix);
 			Vector2 Vec2 = World.ToChunkSpace(Player.Position);
 			//Log.WriteLine( (System.GC.GetTotalMemory(false) / 1024 / 1024) + " MB");
 			if(GameSettings.Debug){
@@ -262,7 +265,7 @@ namespace Hedra
 #if SHOW_COLLISION
 			            if(GameSettings.Debug){
 			           
-				            LocalPlayer Player = SceneManager.Game.Player;
+				            LocalPlayer Player = GameManager.Player;
 				            Chunk UnderChunk = World.GetChunkAt(Player.Position);
                 /*
                  if(UnderChunk != null){
@@ -326,7 +329,7 @@ namespace Hedra
                     }
                 });
 
-                //LocalPlayer Player = SceneManager.Game.LPlayer;
+                //LocalPlayer Player = Game.LPlayer;
                 var Collisions = new List<ICollidable>();
 			                var Collisions2 = new List<ICollidable>();
 				
@@ -400,28 +403,28 @@ namespace Hedra
 			GameSettings.Width = Width;
 			GameSettings.Height = Height;
 			
-			DrawManager.FrustumObject.SetFrustum(SceneManager.Game.Player.View.Matrix);
-			DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, SceneManager.Game.Player.View.Matrix);
+			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.Matrix);
+			DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, GameManager.Player.View.Matrix);
 			//Resize FBOs
 			MainFBO.DefaultBuffer.Resize();
-			//SceneManager.Game.LPlayer.Inventory.Resize();
+			//Game.LPlayer.Inventory.Resize();
 			
 			
 			UserInterface.PlayerFbo.Dispose();
 			UserInterface.PlayerFbo = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
-			SceneManager.Game.Player.UI = new UserInterface(SceneManager.Game.Player);
+			GameManager.Player.UI = new UserInterface(GameManager.Player);
 		}
 		
 		protected override void OnFocusedChanged(EventArgs e)
 		{
 			base.OnFocusedChanged(e);
 			if(!this.Focused){
-				if(!SceneManager.Game.InMenuWorld && !SceneManager.Game.IsLoading && !GameSettings.Paused &&
-                    SceneManager.Game.Player != null && !SceneManager.Game.Player.Inventory.Show &&
-                    !SceneManager.Game.Player.AbilityTree.Show && !SceneManager.Game.Player.Trade.Show)
+				if(!GameManager.InStartMenu && !GameManager.IsLoading && !GameSettings.Paused &&
+                    GameManager.Player != null && !GameManager.Player.Inventory.Show &&
+                    !GameManager.Player.AbilityTree.Show && !GameManager.Player.Trade.Show)
                 {
 					//GameSettings.Paused = true;
-					SceneManager.Game.Player.UI.ShowMenu();
+					GameManager.Player.UI.ShowMenu();
 				}
 			}
 		}
@@ -431,10 +434,8 @@ namespace Hedra
 		    AssetManager.Dispose();
 			GameSettings.Save(AssetManager.AppData + "settings.cfg");
 			
-			if(Constants.CHARACTER_CHOOSED)
-				AutosaveManager.Save();
-			if(NetworkManager.IsConnected)
-				NetworkManager.Exit();
+			if(!GameManager.InStartMenu) AutosaveManager.Save();
+			if(NetworkManager.IsConnected) NetworkManager.Exit();
 			DisposeManager.DisposeAll();
 			Graphics2D.Dispose();
 			base.OnUnload(e);

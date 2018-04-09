@@ -118,7 +118,7 @@ namespace Hedra.Engine.EntitySystem
 
         private void Hostile()
         {
-            LocalPlayer player = SceneManager.Game.Player;
+            LocalPlayer player = GameManager.Player;
             if (player == null) return;
 
             this.Neutral();

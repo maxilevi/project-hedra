@@ -56,7 +56,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 if (model == null) return UserInterface.QuestFbo.TextureID[0];
                 model.Model.Scale *= 2f;
 
-                SceneManager.Game.Player.UI.DrawPreview(_talkTarget.Model, UserInterface.QuestFbo);
+                GameManager.Player.UI.DrawPreview(_talkTarget.Model, UserInterface.QuestFbo);
 
                 model.Model.Scale /= 2f;
                 return UserInterface.QuestFbo.TextureID[0];
@@ -64,7 +64,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         }
 
         public override bool ShouldDisplay =>
-            (SceneManager.Game.Player.Position - IconPosition).LengthSquared > 96 * 96;
+            (GameManager.Player.Position - IconPosition).LengthSquared > 96 * 96;
 
 
         public TalkObjective(Entity TalkTarget)
@@ -106,18 +106,18 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 if(!_talkTarget.InUpdateRange)
                     _talkTarget.Update();
 
-                if (!_isFollowing && (SceneManager.Game.Player.Position - IconPosition).LengthSquared <
+                if (!_isFollowing && (GameManager.Player.Position - IconPosition).LengthSquared <
                     96 * 96)
                 {
-                    _talkTarget.AddComponent(new FollowAIComponent(_talkTarget, SceneManager.Game.Player));               
+                    _talkTarget.AddComponent(new FollowAIComponent(_talkTarget, GameManager.Player));               
                     _isFollowing = true;
                 }
 
                 _talkTarget.Model.Tint = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
-                if ((_talkTarget.Position - SceneManager.Game.Player.Position).LengthSquared < 10 * 10
-                    && Vector3.Dot((_talkTarget.Position - SceneManager.Game.Player.Position).NormalizedFast(),
-                        SceneManager.Game.Player.View.LookAtPoint.NormalizedFast()) > .6f)
+                if ((_talkTarget.Position - GameManager.Player.Position).LengthSquared < 10 * 10
+                    && Vector3.Dot((_talkTarget.Position - GameManager.Player.Position).NormalizedFast(),
+                        GameManager.Player.View.LookAtPoint.NormalizedFast()) > .6f)
                 {
 
                     _talkTarget.Model.Tint = new Vector4(1.5f, 1.5f, 1.5f, 1.0f);

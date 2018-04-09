@@ -45,7 +45,7 @@ namespace Hedra.Engine.QuestSystem
                 return;
             _initialized = true;
 
-            LocalPlayer player = SceneManager.Game.Player;
+            LocalPlayer player = GameManager.Player;
 
             if (player == null || _healthBar != null)
                 return;
@@ -72,7 +72,7 @@ namespace Hedra.Engine.QuestSystem
             this.Initialize();
             if (!Enabled) return;
 
-            LocalPlayer player = SceneManager.Game.Player;
+            LocalPlayer player = GameManager.Player;
 
             if (player == null) return;
 
@@ -115,7 +115,7 @@ namespace Hedra.Engine.QuestSystem
         public override void Dispose()
         {
             this.Initialize();
-            LocalPlayer player = SceneManager.Game.Player;
+            LocalPlayer player = GameManager.Player;
             player.UI.GamePanel.RemoveElement(_healthBar);
             player.UI.GamePanel.RemoveElement(_nameGui);
             _healthBar.Dispose();

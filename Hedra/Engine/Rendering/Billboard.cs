@@ -76,7 +76,7 @@ namespace Hedra.Engine.Rendering
 				return;
 			}
 			
-			LocalPlayer Player = Scenes.SceneManager.Game.Player;
+			LocalPlayer Player = GameManager.Player;
 			float Product = Mathf.DotProduct(Player.View.LookAtPoint.NormalizedFast(), (Position+AddedPosition - Player.Position).NormalizedFast());
 			if(Product <= -0.5f) return;
 			

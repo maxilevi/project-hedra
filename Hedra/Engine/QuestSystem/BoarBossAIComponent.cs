@@ -25,7 +25,7 @@ namespace Hedra.Engine.QuestSystem
 		}
 		
 		public override void LateUpdate(){
-			Player = Scenes.SceneManager.Game.Player;
+			Player = GameManager.Player;
 			if(Player == null) return;
 			
 

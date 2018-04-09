@@ -157,7 +157,7 @@ namespace Hedra.Engine.Rendering.Animation
 
             Shader.Mat4Uniform.LoadMatrixArray(JointTransforms);
 			GL.UniformMatrix4(Shader.ProjectionViewUniform, false, ref ProjectionViewMat);
-			GL.Uniform3(Shader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
+			GL.Uniform3(Shader.PlayerPositionUniform, GameManager.Player.Position);
 			
 			if(GameSettings.Shadows){
 				GL.UniformMatrix4(Shader.ShadowMvpUniform, false, ref ShadowRenderer.ShadowMVP);

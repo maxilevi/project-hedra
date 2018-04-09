@@ -45,7 +45,7 @@ namespace Hedra.Engine.Management
 	          Occluded = (Passed == 0);
 	        }
 			
-			if(State != OcclusionState.WAITING && !Constants.LOCK_FRUSTUM)
+			if(State != OcclusionState.WAITING && !GameSettings.LockFrustum)
 			{
 			    State = OcclusionState.WAITING;
 			    GL.BeginQuery(QueryTarget.AnySamplesPassed, OcclusionQuery);

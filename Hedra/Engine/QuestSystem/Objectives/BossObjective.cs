@@ -66,9 +66,9 @@ namespace Hedra.Engine.QuestSystem.Objectives
 		
 		public override bool ShouldDisplay{
 			get{
-				if(SceneManager.Game.Player == null) return false;
+				if(GameManager.Player == null) return false;
 				
-				return !(Boss != null && Boss.IsDead) || !(Boss != null && (SceneManager.Game.Player.Position - Boss.Position).LengthSquared < 24*24);
+				return !(Boss != null && Boss.IsDead) || !(Boss != null && (GameManager.Player.Position - Boss.Position).LengthSquared < 24*24);
 			}
 		}
 		
@@ -98,7 +98,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                     model.Model.Scale *= 2;
                     if(_bossType == MobType.Bee)
 				        model.Model.Position -= Vector3.UnitY * 8f;
-				    SceneManager.Game.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
+				    GameManager.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
 				    model.Model.Scale /= 2;
 				}else{
 				    var model = Boss.Model as QuadrupedModel;
@@ -107,7 +107,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 				    Vector3 prevRot = model.Model.Rotation;
 				    model.Model.Rotation = Vector3.Zero;
                     model.Model.Update();
-				    SceneManager.Game.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
+				    GameManager.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
 				    model.Model.Rotation = prevRot;
 				}
 				return UserInterface.QuestFbo.TextureID[0];

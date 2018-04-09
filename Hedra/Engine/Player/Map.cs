@@ -69,7 +69,7 @@ namespace Hedra.Engine.Player
 		    meshBuffers[(int) ChunkBufferTypes.STATIC] = new StaticMeshBuffer();
 		    meshBuffers[(int) ChunkBufferTypes.WATER] = new WaterMeshBuffer();
 
-            _mainPiece.Chunk.Mesh = new ChunkMesh(_mainPiece.Chunk.Position, meshBuffers, 1)
+            _mainPiece.Chunk.Mesh = new ChunkMesh(_mainPiece.Chunk.Position, meshBuffers)
 		    {
 		        Enabled = true,
 		        IsGenerated = true,
@@ -340,7 +340,7 @@ namespace Hedra.Engine.Player
         public bool Show{
 			get{ return _show; }
 			set{
-				if(Scenes.SceneManager.Game.IsLoading || !Enabled)
+				if(GameManager.IsLoading || !Enabled)
 					return;
 				
 				if(value)

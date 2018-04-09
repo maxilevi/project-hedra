@@ -77,7 +77,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         {
             get
             {
-                Vector3 diff = ObjectivePosition - SceneManager.Game.Player.Position;
+                Vector3 diff = ObjectivePosition - GameManager.Player.Position;
                 string leftRight = diff.X < 0 ? " West" : " East";
                 string upDown = diff.Z < 0 ? "South" : "North";
 
@@ -158,7 +158,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         public void RunCoroutine()
         {
             CenterMaxHeight += (int) (new Random(World.Seed + 234).NextFloat() * 15 - 7.5f);
-            if (Model != null && Constants.CHARACTER_CHOOSED)
+            if (Model != null && !GameManager.InStartMenu)
                 if (World.GetChunkAt(ObjectivePosition) != null && World.GetChunkAt(ObjectivePosition).Initialized)
                 {
                     World.GetChunkAt(ObjectivePosition).RemoveStaticElement(Model);

@@ -98,7 +98,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeColorsDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeEnviromentDesign.cs" />
@@ -665,12 +664,8 @@
     <Compile Include="Engine\Rendering\WaterMeshBuffer.cs" />
     <Compile Include="Engine\Rendering\WorldBuffer.cs" />
     <Compile Include="Engine\Rendering\WorldRenderer.cs" />
-    <Compile Include="Engine\Scenes\GameScene.cs" />
-    <Compile Include="Engine\Scenes\IScene.cs" />
-    <Compile Include="Engine\Scenes\MapScene.cs" />
+    <Compile Include="Engine\GameManager.cs" />
     <Compile Include="Engine\Scenes\MenuBackground.cs" />
-    <Compile Include="Engine\Scenes\MenuScene.cs" />
-    <Compile Include="Engine\Scenes\SceneManager.cs" />
     <Compile Include="Engine\SettingAttribute.cs" />
     <Compile Include="Engine\Sound\AreaSound.cs" />
     <Compile Include="Engine\Sound\IAudible.cs" />

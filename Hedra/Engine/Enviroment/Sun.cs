@@ -35,7 +35,7 @@ namespace Hedra.Engine.Enviroment
 		}
 		
 		public bool Enabled{
-			get{ return SkyManager.DayTime > 6000 && SkyManager.DayTime < 20000 && Math.Sin(Scenes.SceneManager.Game.Player.View.Yaw) > 0; }
+			get{ return SkyManager.DayTime > 6000 && SkyManager.DayTime < 20000 && Math.Sin(GameManager.Player.View.Yaw) > 0; }
 		}
 		
 		public void Draw(){

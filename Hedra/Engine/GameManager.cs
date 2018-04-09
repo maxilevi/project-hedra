@@ -5,31 +5,33 @@
  *
  */
 
-using Hedra.Engine.Player;
+using System.Collections;
+using System.Drawing;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
-using OpenTK;
+using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
-using System.Drawing;
-using System.Collections;
-using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Scenes;
+using OpenTK;
 
-namespace Hedra.Engine.Scenes
+namespace Hedra.Engine
 {
 	/// <summary>
 	/// The Scene containing the main game
 	/// </summary>
-	public class GameScene : IScene
+	public static class GameManager
 	{
-	    public int Id { get; set; } = 1;
-		public LocalPlayer Player { get; set; }
-	    public bool IsLoading { get; private set; }
-        private Texture _loadingScreen;
-	    private GUIText _playerText;
-	    private bool _isNewRun;
+		public static LocalPlayer Player { get; set; }
+	    public static bool IsLoading { get; private set; }
+        private static Texture LoadingScreen;
+	    private static GUIText PlayerText;
+	    private static bool _isNewRun;
 
-		public void LoadScene()
+        public static void Load()
 		{
 		    World.Load();
 			Log.WriteLine("World Created Successfully!");
@@ -45,27 +47,24 @@ namespace Hedra.Engine.Scenes
 
 			Player.Enabled = false;
 
-			_loadingScreen = new Texture(Color.FromArgb(255,29,29,29), Color.FromArgb(255,59,59,59),
+			LoadingScreen = new Texture(Color.FromArgb(255,29,29,29), Color.FromArgb(255,59,59,59),
                 Vector2.Zero, Vector2.One, GradientType.TopBot);
-		    _playerText = new GUIText("", new Vector2(0, 0), Color.White,
+		    PlayerText = new GUIText("", new Vector2(0, 0), Color.White,
                 FontCache.Get(UserInterface.Fonts.Families[0], 14, FontStyle.Bold));
 
-		    _loadingScreen.Disable();
+		    LoadingScreen.Disable();
 
-			this.LoadMenu();
+			GameManager.LoadMenu();
 		}
 		
-		public bool InMenuWorld => World.Seed == World.MenuSeed;
+		public static bool InStartMenu => World.Seed == World.MenuSeed;
+	    public static bool InMenu => Player != null && Player.UI.Menu.Enabled && !Player.UI.Hide && World.Seed != World.MenuSeed;
 
-	    public bool InMenu => Player != null && Player.UI.Menu.Enabled && !Player.UI.Hide && World.Seed != World.MenuSeed;
-
-	    public void LoadMenu(){
+	    public static void LoadMenu(){
 	        World.Recreate(World.MenuSeed);
             LocalPlayer.Instance.UI.ShowMenu();
-          	Constants.CHARACTER_CHOOSED = false;
-          	CoroutineManager.StartCoroutine(SceneManager.Game.MenuCoroutine);
+	        Enviroment.SkyManager.SetTime(12000);
           	LocalPlayer.Instance.Model.Enabled = false;
-          	Enviroment.SkyManager.SetTime(12000);
           	LocalPlayer.Instance.View.Pitch = 0f;
           	LocalPlayer.Instance.HandLamp.Enabled = false;
           	LocalPlayer.Instance.View.Yaw = 0f;
@@ -74,11 +73,11 @@ namespace Hedra.Engine.Scenes
 	        LocalPlayer.Instance.Glider.Enabled = false;
 	        LocalPlayer.Instance.Knocked = false;
 	        SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
-            CoroutineManager.StartCoroutine(MenuCoroutine);
-		}
+            CoroutineManager.StartCoroutine(GameManager.MenuCoroutine);
+        }
 		
-		public IEnumerator MenuCoroutine(){
-			while(!Constants.CHARACTER_CHOOSED){
+		private static IEnumerator MenuCoroutine(){
+			while(GameManager.InStartMenu){
                 
 				Vector3 location = MenuBackground.NewLocation;
                 
@@ -88,8 +87,8 @@ namespace Hedra.Engine.Scenes
 			}
 		}
 		
-	    public void MakeCurrent(PlayerInformation Information){
-			if(Constants.CHARACTER_CHOOSED){
+	    public static void MakeCurrent(PlayerInformation Information){
+			if(!GameManager.InStartMenu){
 				Player.Model.Dispose();
 			}
 		    Player.UI.ChrChooser.StopModels();//So as to fix loose ends
@@ -123,14 +122,14 @@ namespace Hedra.Engine.Scenes
 			Enviroment.SkyManager.LoadTime = true;
 	        Player.Inventory.ClearInventory();
 			Player.Inventory.SetItems(Information.Items);
-	        this.SetRestrictions(Information);
+	        GameManager.SetRestrictions(Information);
             GameSettings.DarkEffect = false;
 
             if (Player.Health == 0) Player.Respawn();
-			CoroutineManager.StartCoroutine(SpawnCoroutine);	
+			CoroutineManager.StartCoroutine(GameManager.SpawnCoroutine);	
 		}
 
-	    private void SetRestrictions(PlayerInformation Information)
+	    private static void SetRestrictions(PlayerInformation Information)
 	    {
 	        Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, Information.Class.StartingItem.EquipmentType);
             Player.Inventory.AddRestriction(PlayerInventory.BootsHolder, EquipmentType.Boots);
@@ -142,11 +141,11 @@ namespace Hedra.Engine.Scenes
 	        Player.Inventory.AddRestriction(PlayerInventory.RingHolder, EquipmentType.Ring);
         }
 
-		public void NewRun(LocalPlayer Player){
-			this.NewRun(DataManager.DataFromPlayer(Player));
+		public static void NewRun(LocalPlayer Player){
+			GameManager.NewRun(DataManager.DataFromPlayer(Player));
 		}
 
-		public void NewRun(PlayerInformation Information){
+		public static void NewRun(PlayerInformation Information){
 			Player.IsRiding = false;
 			if(Player.IsRolling)
 				Player.FinishRoll();
@@ -156,7 +155,7 @@ namespace Hedra.Engine.Scenes
 			Information.BlockPosition = GameSettings.SpawnPoint.ToVector3();
 			Information.BlockPosition = new Vector3(Information.BlockPosition.X, 128, Information.BlockPosition.Z);
 			LocalPlayer.Instance.IsGliding = false;
-			SceneManager.Game.MakeCurrent(Information);
+			GameManager.MakeCurrent(Information);
 			Enviroment.SkyManager.SetTime(12000);
 
 		    Player.Model = new HumanModel(Player);
@@ -174,21 +173,24 @@ namespace Hedra.Engine.Scenes
 			_isNewRun = true;
 		}
 		
-		private IEnumerator SpawnCoroutine(){
+		private static IEnumerator SpawnCoroutine(){
 		    SoundtrackManager.PlayTrack(SoundtrackManager.LoopableSongsStart);
-            if (_isNewRun) Player.DmgComponent.Immune = true;
+		    if (_isNewRun)
+		    {
+		        Player.Physics.TargetPosition = new Vector3(Player.Physics.TargetPosition.X, 0, Player.Physics.TargetPosition.Z);
+		    }
 
-		    SceneManager.Game.Player.UI.HideMenu();
+		    GameManager.Player.UI.HideMenu();
             Player.UI.GamePanel.Disable();
 			Player.Chat.Show = false;
 			var time = 0f;
 			IsLoading = true;
 			var text = "LOADING";
 
-		    _loadingScreen.TextureElement.Opacity = 1;
-		    _playerText.UIText.Opacity = 1;
-		    _playerText.Enable();
-		    _loadingScreen.Enable();
+		    LoadingScreen.TextureElement.Opacity = 1;
+		    PlayerText.UIText.Opacity = 1;
+		    PlayerText.Enable();
+		    LoadingScreen.Enable();
 		    UpdateManager.CursorShown = true;
 
 		    var chunkOffset = World.ToChunkSpace(LocalPlayer.Instance.BlockPosition);
@@ -202,18 +204,22 @@ namespace Hedra.Engine.Scenes
 				
 				if(text.Contains("....")) 
 					text = "LOADING";
-				
-				_playerText.Text = text;
-				Player.Physics.ResetFall();
+
+                PlayerText.Text = text;
 				Chunk underChunk = World.GetChunkAt(Player.BlockPosition);
 				if(underChunk != null && underChunk.IsGenerated && underChunk.Landscape.StructuresPlaced && underChunk.BuildedWithStructures
 				  && underChunk.Mesh != null && !underChunk.Mesh.Occluded){
-					if(Player.IsUnderwater){
+                    if (Player.IsUnderwater){
 						Player.BlockPosition += Vector3.One.Xz.ToVector3() * (float) Time.FrameTimeSeconds * 60f * 5f;
 						yield return null;
 						continue;
 					}
 					
+                    Player.Physics.TargetPosition = new Vector3(
+                        Player.Physics.TargetPosition.X,
+                        Physics.HeightAtPosition(Player.Physics.TargetPosition),
+                        Player.Physics.TargetPosition.Z
+                        );
 					Player.Model.LeftWeapon.MainMesh.TargetPosition = Vector3.Zero;
 					Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
 					Player.Model.LeftWeapon.MainMesh.LocalRotation = Vector3.Zero;
@@ -221,14 +227,13 @@ namespace Hedra.Engine.Scenes
 					Player.Model.Fog = true;
 					Player.CanInteract = true;
 					IsLoading = false;
-					_loadingScreen.TextureElement.Opacity = 0;
-				    _playerText.UIText.Opacity = 0;
+					LoadingScreen.TextureElement.Opacity = 0;
+				    PlayerText.UIText.Opacity = 0;
 					if(_isNewRun)
 						Player.QuestLog.Show = true;
 
 				    LocalPlayer.Instance.PlaySpawningAnimation = true;
                     LocalPlayer.Instance.MessageDispatcher.ShowTitleMessage(World.QuestManager.GenerateName(), 1.5f);
-					Player.DmgComponent.Immune = false;
 					_isNewRun = false;
 					break;
 				}
@@ -238,5 +243,5 @@ namespace Hedra.Engine.Scenes
 			Player.Chat.Show = true;
 			Player.Chat.LoseFocus();
 		}
-	}
+    }
 }

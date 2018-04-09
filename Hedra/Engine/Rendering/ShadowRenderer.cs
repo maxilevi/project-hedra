@@ -51,8 +51,8 @@ namespace Hedra.Engine.Rendering
 	        ShadowFBO.Bind();
 
 	        //ShaderManager.LightPosition = Vector3.TransformNormal(LightPosition.NormalizedFast(), Matrix4.CreateRotationY(SkyManager.SkyModifier * 360 * Mathf.RADIAN));
-	        Vector3 Position = Scenes.SceneManager.Game.Player.View.Position +
-	                           Scenes.SceneManager.Game.Player.View.LookAtPoint;
+	        Vector3 Position = GameManager.Player.View.Position +
+	                           GameManager.Player.View.LookAtPoint;
 	        Vector3 NormalizedLight =
 	            (new Vector3(LightPosition.X, LightPosition.Y, LightPosition.Z))
 	            .NormalizedFast(); //ShaderManager.LightPosition

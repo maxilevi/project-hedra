@@ -22,8 +22,6 @@ namespace Hedra.Engine.Rendering.UI
 	
 	public class RenderableButton : Button, IRenderable
 	{
-
-		public int SceneId { get; set; }
 		public DrawPriority Priority { get; set; }
 
 	    public RenderableButton(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor, Font F) :

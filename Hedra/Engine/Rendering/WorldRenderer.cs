@@ -56,8 +56,8 @@ namespace Hedra.Engine.Rendering
             
 			if(ToDraw.Count == 0) return;
 			
-			Scenes.SceneManager.Game.Player.View.RebuildMatrix();
-			DrawManager.FrustumObject.SetFrustum(Scenes.SceneManager.Game.Player.View.Matrix);
+			GameManager.Player.View.RebuildMatrix();
+			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.Matrix);
 			
 			if(Type == ChunkBufferTypes.STATIC){
 				IntPtr[] Offsets, ShadowOffsets;
@@ -136,12 +136,10 @@ namespace Hedra.Engine.Rendering
 			GL.Disable(EnableCap.Blend);
 			BlockShaders.StaticShader.Bind();
 			GL.Uniform3(BlockShaders.StaticShader.LightColorLocation, ShaderManager.LightColor);
-			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
-			if(Constants.CHARACTER_CHOOSED)
-				GL.Uniform1(BlockShaders.StaticShader.TimeUniform, Time.CurrentFrame );
-			else
-				GL.Uniform1(BlockShaders.StaticShader.TimeUniform, Time.UnPausedCurrentFrame );
-			GL.Uniform1(BlockShaders.StaticShader.FancyUniform, (GameSettings.Fancy) ? 1.0f : 0.0f);
+			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
+		    GL.Uniform1(BlockShaders.StaticShader.TimeUniform,
+		        !GameManager.InStartMenu ? Time.CurrentFrame : Time.UnPausedCurrentFrame);
+		    GL.Uniform1(BlockShaders.StaticShader.FancyUniform, (GameSettings.Fancy) ? 1.0f : 0.0f);
 			GL.Uniform1(BlockShaders.StaticShader.SnowUniform, (SkyManager.Snowing) ? 1.0f : 0.0f);
 			
 			GL.Uniform1(BlockShaders.StaticShader.UseShadowsUniform, (float) GameSettings.ShadowQuality);
@@ -174,7 +172,7 @@ namespace Hedra.Engine.Rendering
            	GL.Enable(EnableCap.Texture2D);
            	
            	BlockShaders.WaterShader.Bind();
-           	GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, Scenes.SceneManager.Game.Player.Position);
+           	GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, GameManager.Player.Position);
            	GL.Uniform3(BlockShaders.WaterShader.LightColorLocation, ShaderManager.LightColor);
            	
            	GL.ActiveTexture(TextureUnit.Texture0);
