@@ -302,7 +302,6 @@
     <Compile Include="Engine\Generation\DungeonMap.cs" />
     <Compile Include="Engine\Generation\HeightmapData.cs" />
     <Compile Include="Engine\Generation\EnviromentGenerator.cs" />
-    <Compile Include="Engine\Generation\IGenerable.cs" />
     <Compile Include="Engine\Generation\Perlin.cs" />
     <Compile Include="Engine\Generation\QueueThread.cs" />
     <Compile Include="Engine\Generation\Simplex.cs" />
@@ -375,6 +374,9 @@
     <Compile Include="Engine\ItemSystem\WeaponSystem\Axe.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\DoubleBlades.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Bow.cs" />
+    <Compile Include="Engine\Player\MapSystem\MapBuilder.cs" />
+    <Compile Include="Engine\Player\MapSystem\MapItem.cs" />
+    <Compile Include="Engine\Player\MapSystem\MapStateManager.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\AbilityBagInventoryInterface.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\ToolbarInputHandler.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\ToolbarInterfaceManager.cs" />
@@ -409,8 +411,8 @@
     <Compile Include="Engine\ItemSystem\WeaponSystem\Katar.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Knife.cs" />
     <Compile Include="Engine\Player\LocalPlayer.cs" />
-    <Compile Include="Engine\Player\Map.cs" />
-    <Compile Include="Engine\Player\Minimap.cs" />
+    <Compile Include="Engine\Player\MapSystem\Map.cs" />
+    <Compile Include="Engine\Player\MapSystem\Minimap.cs" />
     <Compile Include="Engine\Player\PetManager.cs" />
     <Compile Include="Engine\Player\PlayerInformation.cs" />
     <Compile Include="Engine\Player\MovementManager.cs" />

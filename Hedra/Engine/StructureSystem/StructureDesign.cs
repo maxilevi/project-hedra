@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
@@ -20,31 +18,47 @@ namespace Hedra.Engine.StructureSystem
 
         protected abstract CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng);
 
-        public virtual void CheckFor(Vector2 ChunkOffset, Region Biome)
+        public void CheckFor(Vector2 ChunkOffset, Region Biome)
         {
             for (int x = Math.Min(-2, -Radius / Chunk.ChunkWidth * 2); x < Math.Max(2, Radius / Chunk.ChunkWidth * 2); x++)
             {
                 for (int z = Math.Min(-2, -Radius / Chunk.ChunkWidth * 2); z < Math.Max(2, Radius / Chunk.ChunkWidth * 2); z++)
                 {
+                    var offset = new Vector2(ChunkOffset.X + x * Chunk.ChunkWidth,
+                        ChunkOffset.Y + z * Chunk.ChunkWidth);
+                    var rng = this.BuildRng(offset);
+                    var targetPosition = this.BuildTargetPosition(offset, rng);
 
-                    var newOffset = new Vector2(ChunkOffset.X + x * Chunk.ChunkWidth, ChunkOffset.Y + z * Chunk.ChunkWidth);
-                    Random rng = BiomeGenerator.GenerateRng(newOffset);
-
-                    var targetPosition = new Vector3(newOffset.X + rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize,
-                        0,
-                        newOffset.Y + rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize);
-                    bool shouldBe = this.SetupRequirements(targetPosition, newOffset, Biome, rng)
-                        && (targetPosition.Xz - GameSettings.SpawnPoint).LengthSquared > 256*256;
-                    if (shouldBe && this.ShouldBuild(targetPosition, Biome.Structures.Designs))
+                    if (this.ShouldSetup(offset, targetPosition, Biome, rng))
                     {
                         lock (World.StructureGenerator.Items)
                         {
-                            var item = Setup(targetPosition, newOffset, Biome, rng);
+                            var item = this.Setup(targetPosition, offset, Biome, rng);
                             if(item != null) World.StructureGenerator.Items.Add(item);
                         }
                     }
                 }
             }
+        }
+
+        public Random BuildRng(Vector2 Offset)
+        {
+            return BiomeGenerator.GenerateRng(Offset);
+        }
+
+        public Vector3 BuildTargetPosition(Vector2 ChunkOffset, Random Rng)
+        {
+            return new Vector3(ChunkOffset.X + Rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize,
+                0,
+                ChunkOffset.Y + Rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize);
+        }
+
+        public bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, Region Biome, Random Rng)
+        {
+            bool shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng)
+                            && (TargetPosition.Xz - GameSettings.SpawnPoint).LengthSquared > 256 * 256;
+
+            return shouldBe && this.ShouldBuild(TargetPosition, Biome.Structures.Designs);
         }
 
         private bool ShouldBuild(Vector3 NewPosition, StructureDesign[] Designs)
