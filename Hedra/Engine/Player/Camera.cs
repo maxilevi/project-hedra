@@ -192,8 +192,8 @@ namespace Hedra.Engine.Player
 
         private void ClampYaw()
         {
-            if (Yaw > 6.28f) Yaw -= 6.28f;
-            if (Yaw < -6.28f) Yaw += 6.28f;
+            if (Yaw > Math.PI * 2f) Yaw -= (float) Math.PI * 2f;
+            if (Yaw < -Math.PI * 2f) Yaw += (float) Math.PI * 2f;
         }
 
         public void InvertPitch()
