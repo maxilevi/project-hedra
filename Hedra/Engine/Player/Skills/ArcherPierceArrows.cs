@@ -60,12 +60,8 @@ namespace Hedra.Engine.Player
 			};
 		}
 		
-		public override string Description {
-			get {
-				return "Arrows have a high chance to cause bleeding.";
-			}
-		}
-		
-		public override void KeyDown(){}
+		public override string Description => "Arrows have a high chance to cause bleeding.";
+
+	    public override void KeyDown(){}
 	}
 }

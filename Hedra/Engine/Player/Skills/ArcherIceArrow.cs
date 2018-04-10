@@ -86,10 +86,6 @@ namespace Hedra.Engine.Player
 		public override void Update(){}
 		
 		
-		public override string Description {
-			get {
-				return "Shoot a poisonous arrow.";
-			}
-		}
+		public override string Description => "Shoot a freezing arrow.";
 	}
 }

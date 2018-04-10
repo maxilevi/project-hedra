@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -21,7 +18,6 @@ namespace Hedra.Engine.StructureSystem
 
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {
-            Log.WriteLine("Building village.");
             Matrix4 marketTransMatrix = Matrix4.CreateScale(5f) * Matrix4.CreateTranslation(MarketPosition);
             Matrix4 farmTransMatrix = Matrix4.CreateScale(8f) * Matrix4.CreateTranslation(FarmPosition);
             Matrix4 windmillTransMatrix = Matrix4.CreateScale(10f) * Matrix4.CreateTranslation(WindmillPosition);
@@ -145,7 +141,6 @@ namespace Hedra.Engine.StructureSystem
 
             var plateau = new Plateau(TargetPosition, this.Radius, 800, height);
             World.QuestManager.AddPlateau(plateau);
-            Log.WriteLine($"Creating village at {plateau.Position}");
             return new CollidableStructure(this, TargetPosition, plateau);        
         }
 
