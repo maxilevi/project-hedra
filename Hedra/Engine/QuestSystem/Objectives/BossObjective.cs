@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;

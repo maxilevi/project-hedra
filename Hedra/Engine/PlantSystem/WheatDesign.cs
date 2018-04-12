@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -19,8 +20,8 @@ namespace Hedra.Engine.PlantSystem
             var underChunk = World.GetChunkAt(Position);
             var blockPosition = World.ToBlockSpace(Position);
             var addon = new Vector3(Rng.NextFloat() * 8f, 0, Rng.NextFloat() * 8f);
-            if (blockPosition.X + addon.X / Chunk.BlockSize > Chunk.ChunkWidth / Chunk.BlockSize) addon.X = 0;
-            if (blockPosition.Z + addon.Z / Chunk.BlockSize > Chunk.ChunkWidth / Chunk.BlockSize) addon.Z = 0;
+            if (blockPosition.X + addon.X / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) addon.X = 0;
+            if (blockPosition.Z + addon.Z / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) addon.Z = 0;
 
             float height = Physics.HeightAtPosition(Position + addon);
             Block topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));

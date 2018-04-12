@@ -11,6 +11,7 @@ using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.BiomeSystem.SnowBiome;
 using Hedra.Engine.BiomeSystem.UndeadBiome;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem
@@ -180,7 +181,7 @@ namespace Hedra.Engine.BiomeSystem
 
 	    public Region GetPredominantBiome(Chunk Chunk)
 	    {
-	        return this.GetPredominantBiome(new Vector2(Chunk.OffsetX + Chunk.ChunkWidth * .5f, Chunk.OffsetZ + Chunk.ChunkWidth * .5f));
+	        return this.GetPredominantBiome(new Vector2(Chunk.OffsetX + Chunk.Width * .5f, Chunk.OffsetZ + Chunk.Width * .5f));
 	    }
 
         public Region GetPredominantBiome(Vector2 ChunkOffset)

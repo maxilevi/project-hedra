@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using OpenTK;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
@@ -28,14 +29,14 @@ namespace Hedra.Engine.BiomeSystem
 			this.RandomGen = BiomeGenerator.GenerateRng(new Vector2(RefChunk.OffsetX, RefChunk.OffsetZ));
 			this.OffsetX = RefChunk.OffsetX;
 			this.OffsetZ = RefChunk.OffsetZ;
-			this._blocks = RefChunk.Blocks;
+			this._blocks = RefChunk.Voxels;
 			this.Chunk = RefChunk;
 			this.Seed = World.Seed;
 		}
 		
 		public virtual void Regenerate(){
 			this.RandomGen = new Random(World.Seed + this.Chunk.OffsetX + this.Chunk.OffsetZ);
-			this.SetupBlocks();
+			this.BuildArray();
 			this.DefineBlocks();
 		}
 
@@ -43,18 +44,16 @@ namespace Hedra.Engine.BiomeSystem
 		
 		public abstract void DefineBlocks();
 		
-		public virtual void SetupBlocks(){
-			for(int x = 0; x < (int) (Chunk.ChunkWidth / Chunk.BlockSize); x++){
-				_blocks[x] = new Block[Chunk.ChunkHeight][];
-				for(int y = 0; y <  Chunk.ChunkHeight; y++){
-					_blocks[x][y] = new Block[(int) (Chunk.ChunkWidth / Chunk.BlockSize)];
+		public void BuildArray(){
+			for(var x = 0; x < (int) (Chunk.Width / Chunk.BlockSize); x++){
+				_blocks[x] = new Block[Chunk.Height][];
+				for(var y = 0; y <  Chunk.Height; y++){
+					_blocks[x][y] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
 				}
 			}
-			Chunk.BoundsX = _blocks.Length;
-			Chunk.BoundsY = _blocks[0].Length;
-			Chunk.BoundsZ = _blocks[0][0].Length;
 			BlocksSetted = true;
-		}
+		    this.Chunk.CalculateBounds();
+        }
 		
 		public static float PathFormula(float x, float z){
 			return (float) Math.Max(0, (0.5 - Math.Abs(OpenSimplexNoise.Evaluate(x * 0.0009f, z *  0.0009f) - 0.2)) - 0.425f) * 1f;

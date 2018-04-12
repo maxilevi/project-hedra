@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;

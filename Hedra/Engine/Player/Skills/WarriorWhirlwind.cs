@@ -15,6 +15,7 @@ using Hedra.Engine.EntitySystem;
 using OpenTK;
 using System.Collections.Generic;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.Skills;

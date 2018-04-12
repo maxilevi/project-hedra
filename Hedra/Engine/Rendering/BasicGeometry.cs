@@ -18,7 +18,7 @@ namespace Hedra.Engine.Rendering
 		private static VBO<uint> CubeIndices;
 		static BasicGeometry(){
 			Data = new CubeData();
-			Data = CubeData.CutCubeFace(Data, CutFaceMode.ADD, Face.ALL);
+			Data.AddFace(Face.ALL);
 			CubeVerts = new VBO<Vector3>(Data.VerticesArrays, Data.VerticesArrays.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
 			CubeIndices = new VBO<uint>(Data.Indices.ToArray(), Data.Indices.Count * sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
 		}

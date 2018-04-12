@@ -38,12 +38,17 @@ namespace Hedra.Engine.Rendering
         public int DitherUniform;
 	    public int TransPos;
 	    public int Time;
+	    public int UseNoiseTextureUniform;
+	    public int NoiseTextureUniform;
 
         public ObjectMeshShader(string S1, string S2) : base(S1, S2){}
 		public ObjectMeshShader(string S1, string S2, string S3) : base(S1, S2, S3){}
 		
-		public override void GetUniformsLocations(){
-			TransMatrixUniformLocation = GL.GetUniformLocation(ShaderID, "TransMatrix");
+		public override void GetUniformsLocations()
+		{
+		    UseNoiseTextureUniform = GL.GetUniformLocation(ShaderID, "useNoiseTexture");
+		    NoiseTextureUniform = GL.GetUniformLocation(ShaderID, "noiseTexture");
+            TransMatrixUniformLocation = GL.GetUniformLocation(ShaderID, "TransMatrix");
 			PointLocation = GL.GetUniformLocation(ShaderID, "Point");
 			LocalRotationLocation = GL.GetUniformLocation(ShaderID, "LocalRotation");
 			LocalRotationPointLocation = GL.GetUniformLocation(ShaderID, "LocalRotationPoint");

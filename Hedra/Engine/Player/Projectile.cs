@@ -16,6 +16,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Player
@@ -73,10 +74,10 @@ namespace Hedra.Engine.Player
 					Collisions.AddRange(World.GlobalColliders);
 					
 					Chunk UnderChunk = World.GetChunkAt(Mesh.Position);
-					Chunk UnderChunkR = World.GetChunkAt(Mesh.Position + new Vector3(Chunk.ChunkWidth,0, 0));
-					Chunk UnderChunkL = World.GetChunkAt(Mesh.Position - new Vector3(Chunk.ChunkWidth,0, 0));
-					Chunk UnderChunkF = World.GetChunkAt(Mesh.Position + new Vector3(0,0,Chunk.ChunkWidth));
-					Chunk UnderChunkB = World.GetChunkAt(Mesh.Position - new Vector3(0,0,Chunk.ChunkWidth));
+					Chunk UnderChunkR = World.GetChunkAt(Mesh.Position + new Vector3(Chunk.Width,0, 0));
+					Chunk UnderChunkL = World.GetChunkAt(Mesh.Position - new Vector3(Chunk.Width,0, 0));
+					Chunk UnderChunkF = World.GetChunkAt(Mesh.Position + new Vector3(0,0,Chunk.Width));
+					Chunk UnderChunkB = World.GetChunkAt(Mesh.Position - new Vector3(0,0,Chunk.Width));
 					
 					if(UnderChunk != null)
 						Collisions.AddRange(UnderChunk.CollisionShapes.ToArray());

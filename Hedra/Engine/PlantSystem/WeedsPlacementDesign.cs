@@ -1,5 +1,6 @@
 ﻿
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 
 namespace Hedra.Engine.PlantSystem

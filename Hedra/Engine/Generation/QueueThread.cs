@@ -8,6 +8,7 @@
  */
 using System;
 using System.Threading;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Generation

@@ -12,6 +12,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using OpenTK;
 using System.Threading;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 
@@ -55,9 +56,9 @@ namespace Hedra.Engine.EntitySystem
 					goto START;
 
 			    if (World.Entities.Count >= MobCap || !(Utils.Rng.NextFloat() <= SpawnChance) ) continue;
-			    Vector3 desiredPosition = new Vector3(Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.ChunkWidth - GameSettings.ChunkLoaderRadius * Chunk.ChunkWidth * .5f,
+			    Vector3 desiredPosition = new Vector3(Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width - GameSettings.ChunkLoaderRadius * Chunk.Width * .5f,
                     0,
-                    Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.ChunkWidth - GameSettings.ChunkLoaderRadius * Chunk.ChunkWidth * .5f)
+                    Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width - GameSettings.ChunkLoaderRadius * Chunk.Width * .5f)
                     + Player.Position.Xz.ToVector3();
 			    Block underBlock = World.GetHighestBlockAt( (int) desiredPosition.X, (int) desiredPosition.Z);
 			    if(underBlock.Type != BlockType.Air && underBlock.Type != BlockType.Water && underBlock.Type != BlockType.Seafloor){

@@ -11,6 +11,7 @@ using System;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.QuestSystem

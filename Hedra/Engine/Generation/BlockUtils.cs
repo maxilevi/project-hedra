@@ -5,6 +5,7 @@
  *
  */
 using System;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
 

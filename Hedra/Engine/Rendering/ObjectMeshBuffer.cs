@@ -5,6 +5,8 @@
  *
  */
 using System;
+using System.Windows.Forms.VisualStyles;
+using Hedra.Engine.Generation;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -18,7 +20,8 @@ namespace Hedra.Engine.Rendering
 		public static ObjectMeshShader Shader { get; } = new ObjectMeshShader("Shaders/ObjectMesh.vert", "Shaders/ObjectMesh.frag");
 		public bool ApplyFog { get; set; } = true;
 		public float Alpha { get; set; } = 1;
-		public Vector4 Tint { get; set; } = new Vector4(1,1,1,1);
+	    public bool UseNoiseTexture { get; set; }
+        public Vector4 Tint { get; set; } = new Vector4(1,1,1,1);
 		public Vector4 BaseTint { get; set; } = new Vector4(0,0,0,0);
 	    public Vector3 Position { get; set; } = Vector3.Zero;
 	    public Vector3 Scale { get; set; } = Vector3.One;
@@ -29,6 +32,7 @@ namespace Hedra.Engine.Rendering
 	    public Vector3 AnimationPosition { get; set; }
 	    public Vector3 AnimationRotationPoint { get; set; }
 
+	    private static readonly Texture3D NoiseTexture;
 	    private bool _rotMatrixCached;
         private Vector3 _rotation = Vector3.Zero;
 	    private Matrix4 _rotationMatrix;
@@ -37,6 +41,22 @@ namespace Hedra.Engine.Rendering
         private Matrix4 _localRotationMatrix = Matrix4.Identity;
         private Matrix4 _transformationMatrix = Matrix4.Identity;
 	    private Matrix4 _animationRotationMatrix = Matrix4.Identity;
+
+	    static ObjectMeshBuffer()
+	    {
+	        var noiseValues = new float[16, 16, 16];
+	        for (var x = 0; x < noiseValues.GetLength(0); x++)
+	        {
+	            for (var y = 0; y < noiseValues.GetLength(1); y++)
+	            {
+	                for (var z = 0; z < noiseValues.GetLength(2); z++)
+	                {
+	                    noiseValues[x, y, z] = (float)OpenSimplexNoise.Evaluate(x * 0.6f, y * 0.6f, z * 0.6f) * .5f + .5f;
+	                }
+	            }
+	        }
+	        NoiseTexture = new Texture3D(noiseValues);
+        }
 
         public override void Draw(Vector3 Position, bool Shadows){
 			if(Indices == null || Data == null) return;
@@ -147,7 +167,6 @@ namespace Hedra.Engine.Rendering
 			Shader.Bind();
 
 		    Matrix4 rotationMatrix = RotationMatrix;
-
             GL.Uniform1(Shader.AlphaUniform, Alpha);
 			GL.Uniform3(Shader.ScaleUniform, Scale);
 			GL.Uniform1(Shader.ApplyFogUniform, ApplyFog ? 1 : 0);
@@ -166,8 +185,13 @@ namespace Hedra.Engine.Rendering
 			GL.Uniform2(Shader.ResolutionUniform, new Vector2(GameSettings.Width, GameSettings.Height));
 			GL.Uniform3(Shader.BakedPositionUniform, Vector3.Zero);
 			GL.Uniform3(Shader.PlayerPositionUniform, GameManager.Player.Position);
-			
-			if(GameSettings.Shadows){
+
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
+            GL.Uniform1(Shader.NoiseTextureUniform, 1);           
+            GL.Uniform1(Shader.UseNoiseTextureUniform, UseNoiseTexture ? 1f : 0f);
+            
+            if (GameSettings.Shadows){
 				GL.UniformMatrix4(Shader.ShadowMvpUniform, false, ref ShadowRenderer.ShadowMVP);
 				GL.ActiveTexture(TextureUnit.Texture0);
 				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFBO.TextureID[0]);

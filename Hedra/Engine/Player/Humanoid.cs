@@ -14,6 +14,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Sound;
 using System.Drawing;
 using Hedra.Engine.ClassSystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;

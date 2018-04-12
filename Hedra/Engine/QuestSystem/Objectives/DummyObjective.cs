@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using Hedra.Engine.Generation.ChunkSystem;
 
 namespace Hedra.Engine.QuestSystem.Objectives
 {
@@ -21,7 +22,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 			get {return false;}
 		}
 		
-		public override void Setup(Engine.Generation.Chunk UnderChunk){}
+		public override void Setup(Chunk UnderChunk){}
 		
 		public override void Recreate(){}
 		

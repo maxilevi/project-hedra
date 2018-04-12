@@ -77,28 +77,20 @@ namespace Hedra.Engine.Rendering
 		public CubeData(Vector4[] Color, Vector3 Position, float Scale){
 			this.Position = Position;
 			this.Color = Color;
-			 this.Initialize();
+			this.Initialize();
 			this.Scale(Scale);
 			this.TransformVerts(Position);
 		}
 		
-		public static CubeData CutCubeFace(CubeData Data, CutFaceMode Mode, Face F){
-			if(Mode == CutFaceMode.ADD){
-				Data.AddFace(F);
-			}
-			
-			if(Mode == CutFaceMode.ONLY){
-				if(F == Face.ALL){
-					Data.Indices = new List<uint>();
-				}
-				
-			}
+		public static CubeData CutCubeFace(CubeData Data, Face Type){
+			Data.AddFace(Type);
 			return Data;
 		}
 		
-		private void AddFace(Face F){
-			Indices.AddRange(IndexArray[(int)F]);
-			FacesIndex.Add( (byte) F );
+		public void AddFace(Face Type)
+        {
+			Indices.AddRange(IndexArray[(int)Type]);
+			FacesIndex.Add( (byte)Type);
 		}
 		
 		public CubeData Clone(){
@@ -106,15 +98,14 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public Vector3[] ToVertexArray(){
-			List<Vector3> NewVerts = new List<Vector3>();
-			for(int i = 0; i < Indices.Count; i++){
-				NewVerts.Add(VerticesArrays[Indices[i]]);
+			var newVerts = new List<Vector3>();
+			for(var i = 0; i < Indices.Count; i++){
+				newVerts.Add(VerticesArrays[Indices[i]]);
 			}
-			return NewVerts.ToArray();
+			return newVerts.ToArray();
 		}
 		
-		public static Vector4[] CreateCubeColor(Color c){
-			Vector4 Color = new Vector4(c.R/255.0f, c.G/255.0f, c.B/255.0f, c.A/255.0f);
+		public static Vector4[] CreateCubeColor(Vector4 Color){
 			return new Vector4[] { 
 				Color, Color, Color, Color,
 				Color, Color, Color, Color,
@@ -135,10 +126,4 @@ public enum Face{
 	DOWN,
 	FRONT,
 	ALL
-}
-
-public enum CutFaceMode{
-	ONLY,
-	ADD,
-	EXCEPT
 }

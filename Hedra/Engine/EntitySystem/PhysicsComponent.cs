@@ -10,6 +10,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
@@ -75,10 +76,10 @@ namespace Hedra.Engine.EntitySystem
 	        {
 
 	            _underChunk = World.GetChunkAt(Parent.Position);
-	            _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.ChunkWidth, 0, 0));
-	            _underChunkL = World.GetChunkAt(Parent.Position - new Vector3(Chunk.ChunkWidth, 0, 0));
-	            _underChunkF = World.GetChunkAt(Parent.Position + new Vector3(0, 0, Chunk.ChunkWidth));
-	            _underChunkB = World.GetChunkAt(Parent.Position - new Vector3(0, 0, Chunk.ChunkWidth));
+	            _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.Width, 0, 0));
+	            _underChunkL = World.GetChunkAt(Parent.Position - new Vector3(Chunk.Width, 0, 0));
+	            _underChunkF = World.GetChunkAt(Parent.Position + new Vector3(0, 0, Chunk.Width));
+	            _underChunkB = World.GetChunkAt(Parent.Position - new Vector3(0, 0, Chunk.Width));
 
 	            lock (_collisions)
 	            {

@@ -10,6 +10,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
+using Hedra.Engine.Generation.ChunkSystem;
 
 namespace Hedra.Engine.Rendering
 {
@@ -27,8 +28,8 @@ namespace Hedra.Engine.Rendering
 			Triangle T1 = new Triangle(V0, new Vector3(Middle.X - Size*0.25f, Middle.Y, Middle.Z + Size*0.5f), new Vector3(Middle.X + Size*0.25f, Middle.Y, Middle.Z + Size*0.5f));
 			Data.AddTriangle(T1);
 			
-			for(int x = 0; x < Chunk.ChunkWidth; x++){
-				for(int z = 0; z < Chunk.ChunkWidth; z++){
+			for(int x = 0; x < Chunk.Width; x++){
+				for(int z = 0; z < Chunk.Width; z++){
 					T1.Transform(new Vector3(Size,0,Size));
 					Data.AddTriangle(T1);
 				}

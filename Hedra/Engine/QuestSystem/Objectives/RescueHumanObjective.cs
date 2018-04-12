@@ -15,6 +15,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Rendering.Particles;

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.StructureSystem;
 using OpenTK;
@@ -26,7 +27,7 @@ namespace Hedra.Engine.BiomeSystem
 
 			this.CheckForNearbyStructures();
 			
-			this.SetupBlocks();
+			this.BuildArray();
 			this.DefineBlocks();
 			try{
 				this.PlaceStructures();
@@ -36,7 +37,6 @@ namespace Hedra.Engine.BiomeSystem
 				return;
 			}
 			StructuresPlaced = true;
-			Chunk.CanDispose = true;
 		}
 		
 		public override void DefineBlocks(){
@@ -46,8 +46,8 @@ namespace Hedra.Engine.BiomeSystem
 					var heightCache = new Dictionary<Vector2, float[]>();
 
 					const int noiseScale = 4;
-				    var width = (int) (Chunk.ChunkWidth / Chunk.BlockSize);
-				    var depth = (int) (Chunk.ChunkWidth / Chunk.BlockSize);
+				    var width = (int) (Chunk.Width / Chunk.BlockSize);
+				    var depth = (int) (Chunk.Width / Chunk.BlockSize);
 
 				    var noise3D = new float[0];//Chunk.ChunkHeight / noiseScale];
  
@@ -248,7 +248,7 @@ namespace Hedra.Engine.BiomeSystem
 					        }
                             #endregion
 
-                            for (var y = 0; y < Chunk.ChunkHeight-1; y++)
+                            for (var y = 0; y < Chunk.Height-1; y++)
                             {
 
                                 float noise = 0;/*Mathf.Lerp(

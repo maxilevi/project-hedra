@@ -22,6 +22,7 @@ using OpenTK.Graphics.OpenGL;
 using System.Linq;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering.Animation;
@@ -305,7 +306,14 @@ namespace Hedra.Engine.Generation
 
             for (int i = Chunks.Count - 1; i > -1; i--)
 		    {
-		        World.RemoveChunk(Chunks[i]);
+		        try
+		        {
+		            World.RemoveChunk(Chunks[i]);
+		        }
+		        catch (IndexOutOfRangeException e)
+		        {
+		            Log.WriteLine(e);
+		        }
 		    }
 
 		    for (int i = GlobalColliders.Count - 1; i > -1; i--)
@@ -501,8 +509,8 @@ namespace Hedra.Engine.Generation
 					continue;
 				}
 					
-				if(Entities[i].BlockPosition.X < Chunk.OffsetX + Chunk.ChunkWidth && Entities[i].BlockPosition.X > Chunk.OffsetX &&
-					Entities[i].BlockPosition.Z < Chunk.OffsetZ + Chunk.ChunkWidth && Entities[i].BlockPosition.Z > Chunk.OffsetZ) {
+				if(Entities[i].BlockPosition.X < Chunk.OffsetX + Chunk.Width && Entities[i].BlockPosition.X > Chunk.OffsetX &&
+					Entities[i].BlockPosition.Z < Chunk.OffsetZ + Chunk.Width && Entities[i].BlockPosition.Z > Chunk.OffsetZ) {
 				    if (Entities[i].Removable && !Entities[i].IsBoss && Entities[i].MobType != MobType.Human &&
 				        !(Entities[i] is LocalPlayer))
 				    {
@@ -519,8 +527,8 @@ namespace Hedra.Engine.Generation
 			        continue;
 			    }
 
-			    if (Items[i].Position.X < Chunk.OffsetX + Chunk.ChunkWidth && Items[i].Position.X > Chunk.OffsetX &&
-				   Items[i].Position.Z < Chunk.OffsetZ + Chunk.ChunkWidth && Items[i].Position.Z > Chunk.OffsetZ){
+			    if (Items[i].Position.X < Chunk.OffsetX + Chunk.Width && Items[i].Position.X > Chunk.OffsetX &&
+				   Items[i].Position.Z < Chunk.OffsetZ + Chunk.Width && Items[i].Position.Z > Chunk.OffsetZ){
 					Items[i].Dispose();
 				}
 			}
@@ -538,7 +546,7 @@ namespace Hedra.Engine.Generation
 
 	    public static bool IsChunkOffset(Vector2 Offset)
 	    {
-	        return Offset.X % Chunk.ChunkWidth == 0 && Offset.Y % Chunk.ChunkWidth == 0;
+	        return Offset.X % Chunk.Width == 0 && Offset.Y % Chunk.Width == 0;
 	    }
 
 	    public static Vector3 ToBlockSpace(float X, float Z)
@@ -558,7 +566,7 @@ namespace Hedra.Engine.Generation
 			var x = (int) Math.Abs(Math.Floor( (Vec3.X - chunkSpace.X) / Chunk.BlockSize ));
 			var z = (int) Math.Abs(Math.Floor( (Vec3.Z - chunkSpace.Y) / Chunk.BlockSize ));
 			
-			return new Vector3(x, Math.Min(Vec3.Y / Chunk.BlockSize, Chunk.ChunkHeight-1) ,z);
+			return new Vector3(x, Math.Min(Vec3.Y / Chunk.BlockSize, Chunk.Height-1) ,z);
 		}
 		public static Vector2 ToChunkSpace(Vector3 Vec3){
 			int chunkX = ((int)Vec3.X >> 7) << 7;

@@ -10,6 +10,7 @@ using System;
 using OpenTK;
 using System.Collections.Generic;
 using System.Collections;
+using Hedra.Engine.Generation.ChunkSystem;
 
 namespace Hedra.Engine.Generation
 {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
@@ -20,12 +21,12 @@ namespace Hedra.Engine.StructureSystem
 
         public void CheckFor(Vector2 ChunkOffset, Region Biome)
         {
-            for (int x = Math.Min(-2, -Radius / Chunk.ChunkWidth * 2); x < Math.Max(2, Radius / Chunk.ChunkWidth * 2); x++)
+            for (int x = Math.Min(-2, -Radius / Chunk.Width * 2); x < Math.Max(2, Radius / Chunk.Width * 2); x++)
             {
-                for (int z = Math.Min(-2, -Radius / Chunk.ChunkWidth * 2); z < Math.Max(2, Radius / Chunk.ChunkWidth * 2); z++)
+                for (int z = Math.Min(-2, -Radius / Chunk.Width * 2); z < Math.Max(2, Radius / Chunk.Width * 2); z++)
                 {
-                    var offset = new Vector2(ChunkOffset.X + x * Chunk.ChunkWidth,
-                        ChunkOffset.Y + z * Chunk.ChunkWidth);
+                    var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
+                        ChunkOffset.Y + z * Chunk.Width);
                     var rng = this.BuildRng(offset);
                     var targetPosition = this.BuildTargetPosition(offset, rng);
 
@@ -48,9 +49,9 @@ namespace Hedra.Engine.StructureSystem
 
         public Vector3 BuildTargetPosition(Vector2 ChunkOffset, Random Rng)
         {
-            return new Vector3(ChunkOffset.X + Rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize,
+            return new Vector3(ChunkOffset.X + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize,
                 0,
-                ChunkOffset.Y + Rng.Next(0, (int)(Chunk.ChunkWidth / Chunk.BlockSize)) * Chunk.BlockSize);
+                ChunkOffset.Y + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize);
         }
 
         public bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, Region Biome, Random Rng)

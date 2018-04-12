@@ -1,4 +1,4 @@
-#version 330 core
+#version 330 compatibility
 
 in vec4 Color;
 in vec4 IColor;
@@ -11,7 +11,7 @@ in vec3 InNorm;
 in vec4 Coords;
 in vec3 LightDir;
 in vec3 PointDiffuse;
-
+in vec3 vertex_position;
 
 layout(location = 0) out vec4 FColor;
 layout(location = 1)out vec4 OutPosition;
@@ -25,13 +25,15 @@ uniform float Alpha;
 uniform sampler2D ShadowTex;
 uniform bool UseShadows;
 uniform bool Dither = false;
+uniform float useNoiseTexture;
+uniform sampler3D noiseTexture;
 
 float noise(vec3 p);
 
 void main(){
 
-	vec4 inputColor = Color;
-		
+	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, vertex_position.xyz).r;
+	vec4 inputColor = vec4(Color.xyz + tex * 0.2 * useNoiseTexture, Color.w);	
 	
 	if(Dither){
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));

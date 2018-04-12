@@ -5,6 +5,7 @@
  *
  */
 using System;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
@@ -70,7 +71,7 @@ namespace Hedra.Engine.Rendering.Particles
 			get{ return m_Collides; }
 			set{ m_Collides = value;
 				if(value)
-					HeightAtY = Physics.HeightAtPosition( new Vector3(Position.X, Position.Y / Engine.Generation.Chunk.BlockSize + 1, Position.Z) );
+					HeightAtY = Physics.HeightAtPosition( new Vector3(Position.X, Position.Y / Chunk.BlockSize + 1, Position.Z) );
 			}
 		}
 		

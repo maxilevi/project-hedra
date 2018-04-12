@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering

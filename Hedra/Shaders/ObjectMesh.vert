@@ -36,6 +36,7 @@ out vec3 InNorm;
 out vec4 Coords;
 out vec3 LightDir;
 out vec3 PointDiffuse;
+out vec3 vertex_position;
 
 layout(std140) uniform FogSettings {
 	vec4 U_BotColor;
@@ -160,6 +161,7 @@ void main(){
 	mat3 mat = mat3(transpose(inverse(gl_ModelViewMatrix)));
 	Color = Ambient + vec4(finalRim, 0.0) + (vec4(Diffuse,1.0) * InColor) + Specular;
 	InPos = (gl_ModelViewMatrix * Vertex).xyz;
+	vertex_position = Vertex.xyz;
 	InNorm = normalize(mat * unitNormal); 
 	
 	//Shadows Stuff

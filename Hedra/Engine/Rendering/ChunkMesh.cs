@@ -11,6 +11,7 @@ using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Effects;
 using Hedra.Engine;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -42,7 +43,7 @@ namespace Hedra.Engine.Rendering
 
 		public ChunkMesh(Vector3 Position, ChunkMeshBuffer[] BuffersAttachments) : base(){
 			this.Position = Position;
-			this.Size = new Vector3(Chunk.ChunkWidth,768,Chunk.ChunkWidth );
+			this.Size = new Vector3(Chunk.Width,768,Chunk.Width );
 			
 			this.MeshBuffers.AddRange(BuffersAttachments);
 		}

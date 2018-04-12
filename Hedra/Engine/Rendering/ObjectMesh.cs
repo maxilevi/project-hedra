@@ -47,8 +47,14 @@ namespace Hedra.Engine.Rendering
 			this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation,
                 Time.unScaledDeltaTime * 6 * AnimationSpeed);
 		}
-		
-		public Vector3 TransformPoint(Vector3 Point){
+
+	    public bool ApplyNoiseTexture
+	    {
+	        get { return _buffer.UseNoiseTexture; }
+	        set { _buffer.UseNoiseTexture = value; }
+	    }
+
+        public Vector3 TransformPoint(Vector3 Point){
 			return _buffer.TransformPoint(Point);
 		}
 

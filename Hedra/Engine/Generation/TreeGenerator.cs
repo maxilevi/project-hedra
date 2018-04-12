@@ -8,6 +8,7 @@ using System;
 using Hedra.Engine.Rendering;
 using System.Collections.Generic;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.TreeSystem;

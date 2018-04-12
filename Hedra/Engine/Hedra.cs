@@ -28,6 +28,7 @@ using System.Threading;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Forms = System.Windows.Forms;
 
@@ -334,10 +335,10 @@ namespace Hedra
 			                var Collisions2 = new List<ICollidable>();
 				
 				            //Chunk UnderChunk = World.GetChunkAt(Player.BlockPosition);
-				            Chunk UnderChunkR = World.GetChunkAt(Player.Position + new Vector3(Chunk.ChunkWidth,0, 0));
-				            Chunk UnderChunkL = World.GetChunkAt(Player.Position - new Vector3(Chunk.ChunkWidth, 0, 0));
-				            Chunk UnderChunkF = World.GetChunkAt(Player.Position + new Vector3(0,0,Chunk.ChunkWidth));
-				            Chunk UnderChunkB = World.GetChunkAt(Player.Position - new Vector3(0,0,Chunk.ChunkWidth));
+				            Chunk UnderChunkR = World.GetChunkAt(Player.Position + new Vector3(Chunk.Width,0, 0));
+				            Chunk UnderChunkL = World.GetChunkAt(Player.Position - new Vector3(Chunk.Width, 0, 0));
+				            Chunk UnderChunkF = World.GetChunkAt(Player.Position + new Vector3(0,0,Chunk.Width));
+				            Chunk UnderChunkB = World.GetChunkAt(Player.Position - new Vector3(0,0,Chunk.Width));
 
 				            Collisions.AddRange(World.GlobalColliders);
                             if(Player.NearCollisions != null)

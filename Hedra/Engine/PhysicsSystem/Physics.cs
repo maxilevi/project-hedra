@@ -9,6 +9,7 @@ using OpenTK;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Player;
 
 namespace Hedra.Engine.PhysicsSystem
@@ -194,10 +195,10 @@ namespace Hedra.Engine.PhysicsSystem
 		
 		public static bool IsColliding(Vector3 Position, Box Hitbox){
 			Chunk UnderChunk = World.GetChunkAt(Position);
-			Chunk UnderChunkR = World.GetChunkAt(Position + new Vector3(Chunk.ChunkWidth,0, 0));
-			Chunk UnderChunkL = World.GetChunkAt(Position - new Vector3(Chunk.ChunkWidth,0, 0));
-			Chunk UnderChunkF = World.GetChunkAt(Position + new Vector3(0,0,Chunk.ChunkWidth));
-			Chunk UnderChunkB = World.GetChunkAt(Position - new Vector3(0,0,Chunk.ChunkWidth));
+			Chunk UnderChunkR = World.GetChunkAt(Position + new Vector3(Chunk.Width,0, 0));
+			Chunk UnderChunkL = World.GetChunkAt(Position - new Vector3(Chunk.Width,0, 0));
+			Chunk UnderChunkF = World.GetChunkAt(Position + new Vector3(0,0,Chunk.Width));
+			Chunk UnderChunkB = World.GetChunkAt(Position - new Vector3(0,0,Chunk.Width));
 			
 			List<ICollidable> Collisions = new List<ICollidable>();
 			Collisions.AddRange(World.GlobalColliders);

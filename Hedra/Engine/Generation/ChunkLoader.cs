@@ -15,6 +15,7 @@ using Hedra.Engine.Scenes;
 using Hedra.Engine.Player;
 using Hedra.Engine.Management;
 using Hedra.Engine.Enviroment;
+using Hedra.Engine.Generation.ChunkSystem;
 
 
 namespace Hedra.Engine.Generation
@@ -43,8 +44,8 @@ namespace Hedra.Engine.Generation
 
         public void UpdateFog()
         {
-            _targetMax = (float) (Chunk.ChunkWidth / Chunk.BlockSize * (Math.Sqrt(ActiveChunks)-2) * 2.00f );
-            _targetMin = (float) (Chunk.ChunkWidth / Chunk.BlockSize * (Math.Sqrt(ActiveChunks)-3) * 2.00f );
+            _targetMax = (float) (Chunk.Width / Chunk.BlockSize * (Math.Sqrt(ActiveChunks)-2) * 2.00f );
+            _targetMin = (float) (Chunk.Width / Chunk.BlockSize * (Math.Sqrt(ActiveChunks)-3) * 2.00f );
         }
 
         private IEnumerator FogLerpCoroutine()
@@ -87,10 +88,10 @@ namespace Hedra.Engine.Generation
                         {
                             for (int z = (int)(-GameSettings.ChunkLoaderRadius * .5f) ; z < (int)(GameSettings.ChunkLoaderRadius * .5f) ; z++)
                             {
-                                if (World.GetChunkByOffset( Offset + new Vector2(x, z) * new Vector2(Chunk.ChunkWidth, Chunk.ChunkWidth)) ==  null)
+                                if (World.GetChunkByOffset( Offset + new Vector2(x, z) * new Vector2(Chunk.Width, Chunk.Width)) ==  null)
                                 {
                                     Vector2 chunkPos =
-                                        Offset + new Vector2(x, z) * new Vector2(Chunk.ChunkWidth, Chunk.ChunkWidth);
+                                        Offset + new Vector2(x, z) * new Vector2(Chunk.Width, Chunk.Width);
                                     var chunk = new Chunk((int) chunkPos.X, (int) chunkPos.Y);
                                     World.AddChunk(chunk);
                                 }
@@ -225,8 +226,8 @@ namespace Hedra.Engine.Generation
                             }
 
                             if ((Chunks[i].Position.Xz - _player.Position.Xz).LengthSquared >
-                                (GameSettings.ChunkLoaderRadius) * .5f * Chunk.ChunkWidth *
-                                (GameSettings.ChunkLoaderRadius) * .5f * Chunk.ChunkWidth)
+                                (GameSettings.ChunkLoaderRadius) * .5f * Chunk.Width *
+                                (GameSettings.ChunkLoaderRadius) * .5f * Chunk.Width)
                             {
                                 if (!Chunks[i].Blocked)
                                     World.RemoveChunk(Chunks[i]);

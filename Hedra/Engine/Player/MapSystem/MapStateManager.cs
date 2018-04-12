@@ -11,6 +11,7 @@ namespace Hedra.Engine.Player.MapSystem
             this.RegisterStateItem(() => Player.View.MaxPitch, O => Player.View.MaxPitch = (float)O);
             this.RegisterStateItem(() => Player.View.MaxDistance, O => Player.View.MaxDistance = (float)O);
             this.RegisterStateItem(() => Player.View.MinDistance, O => Player.View.MinDistance = (float)O);
+            this.RegisterStateItem(() => Player.View.Check, O => Player.View.Check = (float)O);
             this.RegisterStateItem(() => SkyManager.FogManager.MinDistance, O =>
             SkyManager.FogManager.UpdateFogSettings( (float) O, SkyManager.FogManager.MaxDistance));
             this.RegisterStateItem(() => SkyManager.FogManager.MaxDistance, O =>

@@ -187,6 +187,10 @@
     <Compile Include="Engine\EntitySystem\SpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedComponent.cs" />
     <Compile Include="Engine\GameLoader.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\ChunkStructuresMeshBuilder.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilder.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilderHelper.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\ChunkMeshBuildOutput.cs" />
     <Compile Include="Engine\IO\ConfigurationFile.cs" />
     <Compile Include="Engine\ItemSystem\AttributeArray.cs" />
     <Compile Include="Engine\ItemSystem\AttributeTemplate.cs" />
@@ -689,7 +693,7 @@
     <Compile Include="Engine\StructureSystem\WoodenFortDesign.cs" />
     <Compile Include="Engine\Time.cs" />
     <Compile Include="Engine\Generation\Block.cs" />
-    <Compile Include="Engine\Generation\Chunk.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\Chunk.cs" />
     <Compile Include="Engine\Generation\ChunkLoader.cs" />
     <Compile Include="Engine\Generation\GenerationQueue.cs" />
     <Compile Include="Engine\Rendering\BasicGeometry.cs" />

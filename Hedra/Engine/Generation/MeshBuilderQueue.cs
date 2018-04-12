@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Generation
