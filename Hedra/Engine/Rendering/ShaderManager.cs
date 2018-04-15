@@ -6,22 +6,22 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using Hedra.Engine.Rendering;
-using OpenTK.Graphics.OpenGL;
-using System.Collections.Generic;
-using OpenTK;
 
-namespace Hedra.Engine.Management
+using System;
+using System.Collections.Generic;
+using Hedra.Engine.Management;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
+
+namespace Hedra.Engine.Rendering
 {
 	public class PointLight
 	{
 	    public const float DefaultRadius = 20f;
-        public Vector3 Position;
-	    public Vector3 Color;
-	    public float Radius = DefaultRadius;
-	    public bool Locked;
-	    
+        public Vector3 Position { get; set; }
+        public Vector3 Color { get; set; }
+	    public float Radius { get; set; } = DefaultRadius;
+	    public bool Locked { get; set; }
 	}
 	
 	public static class ShaderManager
@@ -30,8 +30,11 @@ namespace Hedra.Engine.Management
 		public const int MaxLights = 12;
 		private static readonly List<Shader> Shaders = new List<Shader>();
 		private static readonly PointLight[] PointLights = new PointLight[MaxLights];
-		
-		static ShaderManager(){
+	    private static Vector3 _lightPosition = new Vector3(0, 1000, 0);
+	    private static Vector3 _lightColor = new Vector3(1, 1, 1);
+	    private static float _clipPlaneY;
+
+        static ShaderManager(){
 			for(int i = 0; i < PointLights.Length; i++){
 				PointLights[i] = new PointLight();
 			}
@@ -81,7 +84,7 @@ namespace Hedra.Engine.Management
             if(!Light.Locked)
                 Light.Radius = PointLight.DefaultRadius;
 
-            int PrevShader = GraphicsLayer.ShaderBound;
+            int prevShader = GraphicsLayer.ShaderBound;
 			for(int i = 0; i < Shaders.Count; i++){
 				int k = i;
 				int j = Array.IndexOf(PointLights, Light);
@@ -95,18 +98,17 @@ namespace Hedra.Engine.Management
 					                                   } );
 			}
 			ThreadManager.ExecuteOnMainThread ( delegate{ 
-			                                   	GL.UseProgram(PrevShader);
-												GraphicsLayer.ShaderBound = PrevShader;
+			                                   	GL.UseProgram(prevShader);
+												GraphicsLayer.ShaderBound = prevShader;
 			                                   } );
 
 		}
 		
-		private static Vector3 m_LightColor = new Vector3(1,1,1);
 		public static Vector3 LightColor{
-			get{ return m_LightColor; }
+			get{ return _lightColor; }
 			set{
-				m_LightColor = value;
-				int PrevShader = GraphicsLayer.ShaderBound;
+				_lightColor = value;
+				int prevShader = GraphicsLayer.ShaderBound;
 				for(int i = 0; i < Shaders.Count; i++){
 					int k = i;
 					if(Shaders[i].LightColorLocation != -1)
@@ -115,32 +117,33 @@ namespace Hedra.Engine.Management
 						                                   	GL.Uniform3(Shaders[k].LightColorLocation, value); 
 						                                   } );
 				}
-				GL.UseProgram(PrevShader);
-				GraphicsLayer.ShaderBound = PrevShader;
+				GL.UseProgram(prevShader);
+				GraphicsLayer.ShaderBound = prevShader;
 			}
 		}
-		private static Vector3 m_LightPosition = new Vector3(0,1000,0);
+
 		public static Vector3 LightPosition{
-			get{ return m_LightPosition; }
+			get{ return _lightPosition; }
 			set{
-				if(m_LightPosition == value) return;
+				if(_lightPosition == value) return;
 				
-				m_LightPosition = value;
-				int PrevShader = GraphicsLayer.ShaderBound;
+				_lightPosition = value;
+				int prevShader = GraphicsLayer.ShaderBound;
 				for(int i = 0; i < Shaders.Count; i++){
 					int k = i;
 					if(Shaders[i].LightPositionLocation != -1)
 						ThreadManager.ExecuteOnMainThread ( delegate{
 						                                   	GL.UseProgram(Shaders[k].ShaderID);
-						                                   	GL.Uniform3(Shaders[k].LightPositionLocation, m_LightPosition);
+						                                   	GL.Uniform3(Shaders[k].LightPositionLocation, _lightPosition);
 						                                   } );
 				}
 				ThreadManager.ExecuteOnMainThread ( delegate{ 
-				                                   	GL.UseProgram(PrevShader);
-													GraphicsLayer.ShaderBound = PrevShader;
+				                                   	GL.UseProgram(prevShader);
+													GraphicsLayer.ShaderBound = prevShader;
 				                                   } );
 			}
 		}
+
 		public static int UsedLights{
 			get{
 				int UsedLights = 0;
@@ -159,12 +162,11 @@ namespace Hedra.Engine.Management
 				}
 			}
 		}
-		
-		private static float m_ClipPlaneY = 0;
+
 		public static float ClipPlaneY{
-			get{ return m_ClipPlaneY; }
+			get{ return _clipPlaneY; }
 			set{
-				m_ClipPlaneY = value;
+				_clipPlaneY = value;
 				for(int i = 0; i < Shaders.Count; i++){
 					int k = 0;
 				//	ThreadManager.ExecuteOnMainThread ( () => GL.Uniform1(Shaders[k].ClipPlaneLocation, value) );

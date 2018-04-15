@@ -8,6 +8,7 @@
  */
 using OpenTK;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.Player
 {

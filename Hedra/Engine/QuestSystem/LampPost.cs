@@ -10,6 +10,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.QuestSystem
 {

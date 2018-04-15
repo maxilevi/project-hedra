@@ -6,11 +6,13 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
+using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hedra.Engine.Management
+namespace Hedra.Engine.Rendering
 {
 	/// <summary>
 	/// Description of OpenGLStateManager.

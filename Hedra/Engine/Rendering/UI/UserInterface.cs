@@ -336,7 +336,7 @@ namespace Hedra.Engine.Rendering.UI
 			UpdateManager.CursorShown = true;
 			LocalPlayer.Instance.Chat.Show = false;
 			GameSettings.DarkEffect = false;
-			System.Windows.Forms.Cursor.Position = new System.Drawing.Point(GameSettings.Width / 2, GameSettings.Height/2);
+			System.Windows.Forms.Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height/2);
 			//CoroutineManager.StartCoroutine(MenuEnter);
 		}
 			

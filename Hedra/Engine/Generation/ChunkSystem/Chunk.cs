@@ -8,6 +8,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -111,15 +112,24 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.CalculateBounds();
             this.PrepareForBuilding();
             var output = this.CreateTerrainMesh(Neighbours);
+
+            if (output == null) return;
             this.SetChunkStatus(output);
             output = this.AddStructuresMeshes(output);
+
+            if (output == null) return;
             this.UploadMesh(output, true);
             this.FinishUpload(output);
         }
 
         public ChunkMeshBuildOutput CreateTerrainMesh(Chunk[] Neighbours)
         {
-            return _terrainBuilder.CreateTerrainMesh(Neighbours);
+            return this.CreateTerrainMesh(Neighbours, this.Lod);
+        }
+
+        public ChunkMeshBuildOutput CreateTerrainMesh(Chunk[] Neighbours, int LevelOfDetail)
+        {
+            return _terrainBuilder.CreateTerrainMesh(Neighbours, LevelOfDetail);
         }
 
         public ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input)
@@ -291,7 +301,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 _terrainBuilder.Helper.CreateCell(ref _nearestVertexCell, x, y, z, rightChunk, frontChunk, rightFrontChunk, leftBackChunk,
                     rightBackChunk, leftFrontChunk, backChunk, leftChunk,
                     width, height, depth, true,
-                    Voxels[x][y][z].Type == BlockType.Water && Voxels[x][y + 1][z].Type == BlockType.Air, out success);
+                    Voxels[x][y][z].Type == BlockType.Water && Voxels[x][y + 1][z].Type == BlockType.Air, Lod, out success);
 
                 _nearestVertexData.Vertices.Clear();
                 _nearestVertexData.Colors.Clear();
@@ -475,18 +485,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        public List<ICollidable> CollisionShapes
-        {
-            get
-            {
-                if (Disposed || !Initialized) return new List<ICollidable>();
-
-                lock (Mesh.CollisionBoxes)
-                {
-                    return Mesh.CollisionBoxes;
-                }
-            }
-        }
         public bool Initialized => Mesh != null;
 
         public Chunk[] NeighbourChunks
@@ -538,12 +536,25 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public ChunkMesh StaticBuffer => Mesh;
 
-        public List<VertexData> StaticElements => Mesh.Elements;
+        public ReadOnlyCollection<VertexData> StaticElements => Mesh.Elements.AsReadOnly();
+
+        public ReadOnlyCollection<ICollidable> CollisionShapes
+        {
+            get
+            {
+                if (Disposed || !Initialized) return new List<ICollidable>().AsReadOnly();
+
+                lock (Mesh.CollisionBoxes)
+                {
+                    return Mesh.CollisionBoxes.AsReadOnly();
+                }
+            }
+        }
 
         public void Reset()
         {
             Landscape.StructuresPlaced = false;
-            StaticElements.Clear();
+            Mesh.Elements.Clear();
             Mesh.InstanceElements.Clear();
         }
 

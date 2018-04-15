@@ -5,6 +5,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Player;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.QuestSystem
 {
@@ -29,16 +30,26 @@ namespace Hedra.Engine.QuestSystem
 		
 		public void Update(){
 			PassedTime++;
-			
-			for(int i = World.Entities.Count-1; i > -1; i--){
-				if( (World.Entities[i].Position - Position).LengthSquared < 4*4){
-					if(World.Entities[i].SearchComponent<BurningComponent>() == null){
-						World.Entities[i].AddComponent( new BurningComponent(World.Entities[i], 5f, 40f) );
-					}
-				}
-			}
-			
-			if(Light == null && (Position - LocalPlayer.Instance.Position).LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
+
+		    try
+		    {
+		        for (int i = World.Entities.Count - 1; i > -1; i--)
+		        {
+		            if ((World.Entities[i].Position - Position).LengthSquared < 4 * 4)
+		            {
+		                if (World.Entities[i].SearchComponent<BurningComponent>() == null)
+		                {
+		                    World.Entities[i].AddComponent(new BurningComponent(World.Entities[i], 5f, 40f));
+		                }
+		            }
+		        }
+		    }
+		    catch (IndexOutOfRangeException e)
+		    {
+		        Log.WriteLine(e);
+		    }
+
+		    if(Light == null && (Position - LocalPlayer.Instance.Position).LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
 				Light = ShaderManager.GetAvailableLight();
 				if(Light != null){
 					Light.Color = new Vector3(1f, 0.6f, 0.6f);

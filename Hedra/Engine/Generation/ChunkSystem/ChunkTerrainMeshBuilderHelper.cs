@@ -18,7 +18,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _parent = Parent;
         }
 
-        private int Lod => _parent.Lod;
         private int OffsetX => _parent.OffsetX;
         private int OffsetZ => _parent.OffsetZ;
         private int BoundsX => _parent.BoundsX;
@@ -31,7 +30,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public Vector4 GetColor(GridCell Cell, BlockType Type, Chunk RightChunk, Chunk FrontChunk,
             Chunk RightFrontChunk, Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk,
-            Chunk LeftChunk, int Width, int Height, int Depth, List<Vector4> AddonColors, RegionColor RegionColor)
+            Chunk LeftChunk, int Width, int Height, int Depth, List<Vector4> AddonColors, RegionColor RegionColor, int Lod)
         {
             Vector3 position = Cell.P[0] / BlockSize;
             Vector4 color = Vector4.Zero;
@@ -76,11 +75,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void CreateCell(ref GridCell Cell, int X, int Y, int Z, Chunk RightChunk, Chunk FrontChunk,
             Chunk RightFrontChunk, Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk,
-            Chunk LeftChunk, int Width, int Height, int Depth, bool ExtraData, bool WaterCell, out bool Success)
+            Chunk LeftChunk, int Width, int Height, int Depth, bool ExtraData, bool WaterCell, int Lod, out bool Success)
         {
             Success = true;
 
-            this.BuildCell(ref Cell, X, Y, Z, WaterCell);
+            this.BuildCell(ref Cell, X, Y, Z, WaterCell, Lod);
 
             if (!WaterCell)
                 for (var i = 0; i < Cell.Type.Length; i++)
@@ -166,7 +165,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             else if (WaterCell)
             {
                 this.UpdateCell(ref Cell, X, Y, Z, RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk,
-                    RightBackChunk, LeftFrontChunk, BackChunk, LeftChunk, Width, Height, Depth, ExtraData, WaterCell);
+                    RightBackChunk, LeftFrontChunk, BackChunk, LeftChunk, Width, Height, Depth, ExtraData, WaterCell, Lod);
             }
 
             for (var i = 0; i < Cell.Type.Length; i++)
@@ -179,7 +178,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void UpdateCell(ref GridCell Cell, int X, int Y, int Z, Chunk RightChunk, Chunk FrontChunk,
             Chunk RightFrontChunk, Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk,
-            Chunk LeftChunk, int Width, int Height, int Depth, bool ExtraData, bool NormalCell)
+            Chunk LeftChunk, int Width, int Height, int Depth, bool ExtraData, bool NormalCell, int Lod)
         {
             int lod = Lod;
 
@@ -327,7 +326,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             #endregion
         }
 
-        private void BuildCell(ref GridCell Cell, int X, int Y, int Z, bool WaterCell)
+        private void BuildCell(ref GridCell Cell, int X, int Y, int Z, bool WaterCell, int Lod)
         {
             int lod = Lod;
             float blockSizeLod = BlockSize * lod;

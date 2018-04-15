@@ -110,19 +110,14 @@ namespace Hedra.Engine.Player
                 YDelta = Cursor.Position.Y - GameSettings.Height / 2;
 
                 if (LockMouse)
-                    Cursor.Position =
-                        new Point(GameSettings.Width / 2, GameSettings.Height / 2);
-
+                {
+                    Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height / 2);
+                }
                 if (PlayerMode && Check)
                 {
                     Yaw += XDelta * GameSettings.MouseSensibility * 0.0025f;
 
-                    float testPitch = 0;
-                    if (!GameSettings.InvertMouse)
-                        testPitch -= YDelta * GameSettings.MouseSensibility * 0.0025f;
-                    else
-                        testPitch += YDelta * GameSettings.MouseSensibility * 0.0025f;
-
+                    float testPitch = (!GameSettings.InvertMouse  ? -YDelta : YDelta) * GameSettings.MouseSensibility * 0.0025f;
                     Vector3 camPos =
                         Objective - new Vector3((float) Math.Cos(Yaw), Pitch + testPitch, (float) Math.Sin(Yaw)) *
                         new Vector3(TargetDistance, TargetDistance, TargetDistance) + CameraHeight;

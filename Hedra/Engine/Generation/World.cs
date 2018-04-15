@@ -310,7 +310,7 @@ namespace Hedra.Engine.Generation
 		        {
 		            World.RemoveChunk(Chunks[i]);
 		        }
-		        catch (IndexOutOfRangeException e)
+		        catch (ArgumentOutOfRangeException e)
 		        {
 		            Log.WriteLine(e);
 		        }
@@ -389,7 +389,7 @@ namespace Hedra.Engine.Generation
 		
 		public static Chunk GetChunkByOffset(Vector2 vec2){
 			
-			return GetChunkByOffset((int)vec2.X, (int)vec2.Y);
+			 return GetChunkByOffset((int)vec2.X, (int)vec2.Y);
 		}
 
 	    public static void AddEntity(Entity Entity)
@@ -575,9 +575,9 @@ namespace Hedra.Engine.Generation
 			return new Vector2(chunkX, chunkZ);
 		}
 
-	    public static Chunk GetChunkAt(Vector3 Vec3)
+        public static Chunk GetChunkAt(Vector3 Coordinates)
 	    {
-	        var chunkSpace = World.ToChunkSpace(Vec3);
+	        var chunkSpace = World.ToChunkSpace(Coordinates);
 	        return GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
 	    }
 

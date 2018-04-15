@@ -25,7 +25,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private int BuildedLod => _parent.BuildedLod;
         private bool Disposed => _parent.Disposed;
         private ChunkMesh Mesh => _parent.Mesh;
-        private List<VertexData> StaticElements => _parent.StaticElements;
+        private List<VertexData> StaticElements => _parent.StaticElements.ToList();
 
         public ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input)
         {

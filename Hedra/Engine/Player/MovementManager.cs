@@ -71,7 +71,9 @@ namespace Hedra.Engine.Player
 		}
 		
 		public void Jump(){		
-			if(_inJumpCoroutine || Human.Knocked || Human.IsCasting || Human.IsRiding || Human.IsRolling || Human.IsDead || !Human.IsGrounded || !Human.CanInteract || Math.Abs(Human.Physics.TargetPosition.Y - Human.Position.Y) > 1.0f)
+			if(_inJumpCoroutine || Human.Knocked || Human.IsCasting || Human.IsRiding ||
+                Human.IsRolling || Human.IsDead || !Human.IsGrounded || !Human.CanInteract ||
+                Math.Abs(Human.Physics.TargetPosition.Y - Human.Position.Y) > 1.0f || !this.Check)
 				return;
 
 		    Human.IsSitting = false;

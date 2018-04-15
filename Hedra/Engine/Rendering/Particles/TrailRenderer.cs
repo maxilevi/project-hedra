@@ -21,7 +21,7 @@ namespace Hedra.Engine.Rendering
     /// </summary>
     public class TrailRenderer : IRenderable
     {
-        private static TrailShader _shader = new TrailShader("Shaders/TrailRenderer.vert", "Shaders/TrailRenderer.frag");
+        private static readonly Shader Shader;
         private readonly Func<Vector3> _tip;
         private readonly List<TrailPoint> _tipPoints;
         private readonly VBO<Vector3> _points;
@@ -30,6 +30,11 @@ namespace Hedra.Engine.Rendering
         public float Thickness { get; set; } = 1f;
         public Vector4 Color { get; set; }
         private int _times;
+
+        static TrailRenderer()
+        {
+            Shader = new Shader("Shaders/TrailRenderer.vert", "Shaders/TrailRenderer.frag");
+        }
 
         public TrailRenderer(Func<Vector3> Tip, Vector4 Color)
         {
@@ -158,8 +163,8 @@ namespace Hedra.Engine.Rendering
             if(_tipPoints.Count > 4)
             GL.Disable(EnableCap.CullFace);
             GL.Enable(EnableCap.Blend);
-            //GL.Disable(EnableCap.DepthTest);
-            _shader.Bind();
+
+            Shader.Bind();
 
             _data.Bind();
 
@@ -168,14 +173,13 @@ namespace Hedra.Engine.Rendering
 
             GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _points.Count);
 
-            GL.DisableVertexAttribArray(0);
             GL.DisableVertexAttribArray(1);
+            GL.DisableVertexAttribArray(0);
 
             _data.UnBind();
 
-            _shader.UnBind();
+            Shader.UnBind();
 
-            GL.Enable(EnableCap.DepthTest);
             GL.Disable(EnableCap.Blend);
             GL.Enable(EnableCap.CullFace);
         }

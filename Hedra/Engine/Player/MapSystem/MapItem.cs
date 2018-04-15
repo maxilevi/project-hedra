@@ -20,6 +20,8 @@ namespace Hedra.Engine.Player.MapSystem
             _mesh.Draw();
         }
 
+        public ObjectMesh Mesh => _mesh;
+
         public bool Enabled
         {
             get { return _mesh.Enabled; }

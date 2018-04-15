@@ -1,22 +1,22 @@
 ﻿using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.MapSystem
 {
     public class MapBuilder
     {
-        public int[][] Build(Vector2 Size, Vector2 Offset, int StepSize)
+        public int SampleChunk(Vector2 Offset, int SampleLength = 1)
         {
-            var grid = new int[(int) Size.X][]; 
-            for (var x = 0; x < Size.X; x++)
+            for (var x = 0; x < Chunk.Width; x++)
             {
-                grid[x] = new int[ (int) Size.Y];
-                for (var z = 0; z < Size.Y; z++)
+                for (var z = 0; z < Chunk.Width; z++)
                 {
-                    grid[x][z] = this.Sample(new Vector3(Offset.X + x * StepSize, 0, Offset.Y + z * StepSize));
+                    var result = this.Sample(Offset.ToVector3() + new Vector3(x, 0, z));
+                    if (result > 0) return result;
                 }
             }
-            return grid;
+            return 0;
         }
 
         public int Sample(Vector3 Position)

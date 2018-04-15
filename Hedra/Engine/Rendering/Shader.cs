@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Management;
+using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
@@ -128,7 +129,8 @@ namespace Hedra.Engine.Rendering
 		
 		public void Bind(){
 			if(GraphicsLayer.ShaderBound == ShaderID) return;
-			
+		    if (ShaderID < 0) throw new GraphicsException($"{this.GetType().Name} is corrupt. {this.ShaderID}");
+		    
 			GL.UseProgram(ShaderID);
 			GraphicsLayer.ShaderBound = ShaderID;
 		}

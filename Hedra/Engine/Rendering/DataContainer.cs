@@ -49,12 +49,14 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public VertexData ToVertexData(){
-			VertexData Data = new VertexData();
-			Data.Normals = Normals.ToList();
-			Data.Vertices = VerticesArrays.ToList();
-			Data.Indices = Indices;
-			Data.Colors = Color.ToList();
-			return Data;
+		    var data = new VertexData
+		    {
+		        Normals = Normals.ToArray().ToList(),
+		        Vertices = VerticesArrays.ToArray().ToList(),
+		        Indices = Indices,
+		        Colors = Color.ToArray().ToList()
+		    };
+		    return data;
 		}
 	}
 }

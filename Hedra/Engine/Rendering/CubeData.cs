@@ -61,10 +61,10 @@ namespace Hedra.Engine.Rendering
 		
 		public CubeData(Vector4[] Color, Vector3 Position, List<uint> Ind, List<byte> Faces, Vector3[] Verts){
 			this.Initialize();
-			this.Color = Color.Clone() as Vector4[];
+			this.Color = Color?.Clone() as Vector4[];
 			this.Position = Position;
-			this.Indices = (Ind.ToArray().Clone() as uint[]).ToList();
-			this.FacesIndex = (Faces.ToArray().Clone() as byte[]).ToList();
+			this.Indices = (Ind?.ToArray().Clone() as uint[])?.ToList();
+			this.FacesIndex = (Faces?.ToArray().Clone() as byte[])?.ToList();
 			this.VerticesArrays = Verts.Clone() as Vector3[];
 		}
 		
@@ -104,6 +104,18 @@ namespace Hedra.Engine.Rendering
 			}
 			return newVerts.ToArray();
 		}
+
+	    public void RecalculateNormals()
+	    {
+	        for (var i = 0; i < Indices.Count; i+=3)
+	        {
+	            Normals[Indices[i]] = Mathf.CalculateNormal(
+	                VerticesArrays[Indices[i+0]],
+	                VerticesArrays[Indices[i+1]],
+	                VerticesArrays[Indices[i+2]]
+	            );
+	        }
+	    }
 		
 		public static Vector4[] CreateCubeColor(Vector4 Color){
 			return new Vector4[] { 

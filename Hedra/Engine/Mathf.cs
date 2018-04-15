@@ -282,18 +282,24 @@ namespace Hedra.Engine
 
             return normalData;
         }
-		
-		public static double Clamp(double val, double min, double max)  
-		{  
-		    return (val < min) ? min : (val > max) ? max : val;  
-		}
-		
-		public static float Clamp(float val, float min, float max)  
-		{  
-		    return (val < min) ? min : (val > max) ? max : val;  
-		}
-		public static Vector3 Clamp(Vector3 v, float min, float max){
-			return new Vector3(Clamp(v.X,min,max), Clamp(v.Y,min,max), Clamp(v.Z,min,max));
+
+	    public static double Clamp(double Val, double Min, double Max)
+	    {
+	        return Val < Min ? Min : Val > Max ? Max : Val;
+	    }
+
+        public static float Clamp(float Val, float Min, float Max)
+        {
+            return Val < Min ? Min : Val > Max ? Max : Val;
+        }
+
+	    public static Vector3 Clamp(Vector3 Value, Vector3 Min, Vector3 Max)
+	    {
+	        return new Vector3(Clamp(Value.X, Min.X, Max.X), Clamp(Value.Y, Min.Y, Max.Y), Clamp(Value.Z, Min.Z, Max.Z));
+	    }
+
+        public static Vector3 Clamp(Vector3 Value, float min, float max){
+			return new Vector3(Clamp(Value.X,min,max), Clamp(Value.Y,min,max), Clamp(Value.Z,min,max));
 		}
 		
 		public static Vector4 Clamp(Vector4 v, float min, float max){

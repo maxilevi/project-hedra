@@ -17,7 +17,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Helper = new ChunkTerrainMeshBuilderHelper(Parent);
         }
 
-        private int Lod => _parent.Lod;
         private int OffsetX => _parent.OffsetX;
         private int OffsetZ => _parent.OffsetZ;
         private int BoundsX => _parent.BoundsX;
@@ -26,7 +25,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static float BlockSize => Chunk.BlockSize;
         private Block[][][] Voxels => _parent.Voxels;
 
-        public ChunkMeshBuildOutput CreateTerrainMesh(Chunk[] Neighbours)
+        public ChunkMeshBuildOutput CreateTerrainMesh(Chunk[] Neighbours, int Lod)
         {
             try
             {
@@ -71,7 +70,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             Helper.CreateCell(ref cell, x, y, z, rightChunk, frontChunk, rightFrontChunk, leftBackChunk,
                                 rightBackChunk, leftFrontChunk, backChunk, leftChunk,
                                 BoundsX, BoundsY, BoundsZ, true,
-                                Voxels[x][y][z].Type == BlockType.Water && Voxels[x][y + 1][z].Type == BlockType.Air,
+                                Voxels[x][y][z].Type == BlockType.Water && Voxels[x][y + 1][z].Type == BlockType.Air, Lod,
                                 out success);
 
                             if (!(Voxels[x][y][z].Type == BlockType.Water && Voxels[x][y + 1][z].Type == BlockType.Air) && !MarchingCubes.Usable(0f, cell)) continue;
@@ -100,7 +99,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                                     Helper.CreateCell(ref cell, x, y, z, rightChunk, frontChunk, rightFrontChunk,
                                         leftBackChunk,
                                         rightBackChunk, leftFrontChunk, backChunk, leftChunk,
-                                        BoundsX, BoundsY, BoundsZ, true, false, out success);
+                                        BoundsX, BoundsY, BoundsZ, true, false, Lod, out success);
 
                                 if (!MarchingCubes.Usable(0f, cell)) continue;
 
@@ -109,7 +108,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                                 color = Helper.GetColor(cell, Voxels[x][y][z].Type, rightChunk, frontChunk,
                                     rightFrontChunk,
                                     leftBackChunk, rightBackChunk, leftFrontChunk, backChunk,
-                                    leftChunk, BoundsX, BoundsY, BoundsZ, addonColors, region);
+                                    leftChunk, BoundsX, BoundsY, BoundsZ, addonColors, region, Lod);
                                 MarchingCubes.Process(0f, cell, color, next, blockData);
                             }
                             else
@@ -122,7 +121,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                                 color = Helper.GetColor(cell, Voxels[x][y][z].Type, rightChunk, frontChunk,
                                     rightFrontChunk,
                                     leftBackChunk, rightBackChunk, leftFrontChunk, backChunk,
-                                    leftChunk, BoundsX, BoundsY, BoundsZ, addonColors, region);
+                                    leftChunk, BoundsX, BoundsY, BoundsZ, addonColors, region, Lod);
 
                                 MarchingCubes.Process(0f, cell, color, next, blockData);
                             }

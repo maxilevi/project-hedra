@@ -319,7 +319,9 @@
     <Compile Include="Engine\Management\DataManager.cs" />
     <Compile Include="Engine\Management\Occludable.cs" />
     <Compile Include="Engine\Management\OcclusionState.cs" />
-    <Compile Include="Engine\Management\GraphicsLayer.cs" />
+    <Compile Include="Engine\Player\MapSystem\MapBaseItem.cs" />
+    <Compile Include="Engine\Player\MapSystem\MapMeshBuilder.cs" />
+    <Compile Include="Engine\Rendering\GraphicsLayer.cs" />
     <Compile Include="Engine\Management\OSManager.cs" />
     <Compile Include="Engine\Management\Platform.cs" />
     <Compile Include="Engine\Management\SoundtrackManager.cs">
@@ -349,7 +351,7 @@
     <Compile Include="Engine\Management\IRenderable.cs" />
     <Compile Include="Engine\Management\IUpdatable.cs" />
     <Compile Include="Engine\Management\OcclusionCulling.cs" />
-    <Compile Include="Engine\Management\ShaderManager.cs" />
+    <Compile Include="Engine\Rendering\ShaderManager.cs" />
     <Compile Include="Engine\Management\TaskManager.cs" />
     <Compile Include="Engine\Management\ThreadManager.cs" />
     <Compile Include="Engine\Management\UpdateManager.cs" />
@@ -524,7 +526,9 @@
     <Compile Include="Engine\Rendering\Colors.cs" />
     <Compile Include="Engine\Rendering\Cubemap.cs" />
     <Compile Include="Engine\Rendering\PoolSize.cs" />
+    <Compile Include="Engine\Rendering\Shaders\ShaderBuilder.cs" />
     <Compile Include="Engine\Rendering\Texture3D.cs" />
+    <Compile Include="Engine\Player\MapSystem\MapInputHandler.cs" />
     <Compile Include="Engine\Rendering\UI\TextConfiguration.cs" />
     <Compile Include="Engine\Rendering\UI\TextureCommand.cs" />
     <Compile Include="Engine\StructureSystem\StructureGenerator.cs" />
@@ -618,7 +622,6 @@
     </Compile>
     <Compile Include="Engine\Rendering\Particles\ParticleShader.cs" />
     <Compile Include="Engine\Rendering\Particles\TrailRenderer.cs" />
-    <Compile Include="Engine\Rendering\Particles\TrailShader.cs" />
     <Compile Include="Engine\Rendering\PointData.cs" />
     <Compile Include="Engine\Rendering\Particles\Particle3D.cs" />
     <Compile Include="Engine\Rendering\Particles\ParticleSystem.cs" />
