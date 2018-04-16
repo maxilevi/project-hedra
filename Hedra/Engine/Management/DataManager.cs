@@ -101,7 +101,7 @@ namespace Hedra.Engine.Management
 		        AbilityTreeArray = Player.AbilityTree.ToArray(),
 		        ToolbarArray = Player.Toolbar.ToArray(),
 		        TargetPosition = Player.Physics.TargetPosition,
-		        Daytime = Enviroment.SkyManager.DayTime,
+		        Daytime = EnvironmentSystem.SkyManager.DayTime,
 		        Class = Player.Class,
 		        RandomFactor = Player.RandomFactor,
 		        Items = Player.Inventory.ToArray()

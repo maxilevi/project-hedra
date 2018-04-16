@@ -60,7 +60,7 @@ namespace Hedra.Engine.Rendering.UI
 				if(NetworkManager.WorldSeed != -1)
 					World.Recreate(NetworkManager.WorldSeed);
 				if(NetworkManager.WorldTime != -1)
-					Enviroment.SkyManager.SetTime(NetworkManager.WorldTime);
+					EnvironmentSystem.SkyManager.SetTime(NetworkManager.WorldTime);
 				GameManager.Player.Spawner.Enabled = false;
 				GameManager.Player.UI.HideMenu();
 				GameManager.Player.BlockPosition = GameSettings.SpawnPoint.ToVector3() + Vector3.UnitY * 128;

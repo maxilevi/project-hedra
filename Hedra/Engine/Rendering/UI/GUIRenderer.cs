@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering.UI
     /// </summary>
     public class GUIRenderer : IDisposable
     {
-        public static GUIShader Shader = new GUIShader("Shaders/GUI.vert", "Shaders/GUI.frag");
+        public static Shader Shader;
         public static uint TransparentTexture { get; private set; }
         private readonly HashSet<TextureCommand> _renderableUI;
         private readonly HashSet<GUITexture> _textures;
@@ -27,6 +27,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public GUIRenderer()
         {
+            Shader = Shader.Build("Shaders/GUI.vert", "Shaders/GUI.frag");
             _renderableUI = new HashSet<TextureCommand>();
             _textures = new HashSet<GUITexture>();
             _vbo = new VBO<Vector2>(
@@ -163,35 +164,32 @@ namespace Hedra.Engine.Rendering.UI
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, Texture.Id);
-            GL.Uniform1(Shader.GUIUniform, 0);
+            Shader["Texture"] = 0;
 
             GL.ActiveTexture(TextureUnit.Texture1);
             GL.BindTexture(TextureTarget.Texture2D, Texture.BackGroundId);
-            GL.Uniform1(Shader.BackGroundUniform, 1);
+            Shader["Background"] = 1;
 
             if (Texture.UseMask)
             {
                 GL.ActiveTexture(TextureUnit.Texture2);
                 GL.BindTexture(TextureTarget.Texture2D, Texture.MaskId);
-                GL.Uniform1(Shader.MaskUniform, 2);
+                Shader["Mask"] = 2;
             }
 
             Vector2 scale = Texture.Scale;
             this.SetupQuad();
 
-            GL.Uniform2(Shader.ScaleUniform, scale);
-            GL.Uniform2(Shader.SizeUniform, new Vector2(1.0f / GameSettings.Width, 1.0f / GameSettings.Height));
-            GL.Uniform1(Shader.FxaaUniform, Texture.Fxaa ? 1.0f : 0.0f);
-            GL.Uniform2(Shader.PositionUniform, Texture.Position);
-            GL.Uniform4(Shader.ColorUniform, Texture.Color);
-            GL.Uniform1(Shader.FlippedUniform, Texture.IdPointer == null && !Texture.Flipped ? 0 : 1);
-            GL.Uniform1(Shader.OpacityUniform, Texture.Opacity);
-            GL.Uniform1(Shader.GrayscaleUniform, Texture.Grayscale ? 1 : 0);
-            GL.Uniform4(Shader.TintUniform, Texture.Tint);
-            GL.Uniform1(Shader.UseMaskUniform, Texture.UseMask ? 1 : 0);
-
-            Matrix3 rot = Texture.Angle == 0 ? Matrix3.Identity : Texture.RotationMatrix;
-            GL.UniformMatrix3(Shader.RotationUniform, false, ref rot);
+            Shader["Scale"] = scale;
+            Shader["Position"] = Texture.Position;
+            Shader["Flipped"] = Texture.IdPointer == null && !Texture.Flipped ? 0 : 1;
+            Shader["Opacity"] = Texture.Opacity;
+            Shader["Grayscale"] = Texture.Grayscale ? 1 : 0;
+            Shader["Tint"] = Texture.Tint;
+            Shader["Rotation"] = Texture.Angle == 0 ? Matrix3.Identity : Texture.RotationMatrix;
+            Shader["Size"] = new Vector2(1.0f / GameSettings.Width, 1.0f / GameSettings.Height);
+            Shader["FXAA"] = Texture.Fxaa ? 1.0f : 0.0f;
+            Shader["UseMask"] = Texture.UseMask ? 1 : 0;
 
             this.DrawQuad();
         }

@@ -11,6 +11,7 @@ using System;
 using System.Drawing;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.ToolbarSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -22,7 +23,7 @@ namespace Hedra.Engine.Player.Skills
 	/// </summary>
 	public abstract class BaseSkill : UIElement, IRenderable, IDisposable, IUpdatable
 	{
-		public static SkillsShader Shader { get; }
+		public static Shader Shader { get; }
 		public static Vector3 GrayTint { get; }
 		public static Vector3 NormalTint { get; }
         public Vector3 Tint { get; set; }
@@ -44,7 +45,7 @@ namespace Hedra.Engine.Player.Skills
 
 	    static BaseSkill()
 	    {
-	        Shader = new SkillsShader("Shaders/Skills.vert", "Shaders/Skills.frag");
+	        Shader = Shader.Build("Shaders/Skills.vert", "Shaders/Skills.frag");
             GrayTint = new Vector3(0.299f, 0.587f, 0.114f);
             NormalTint = Vector3.One;
         }
@@ -92,18 +93,18 @@ namespace Hedra.Engine.Player.Skills
 			GL.Disable(EnableCap.CullFace);
 			
 			Shader.Bind();
-			GL.Uniform3(Shader.TintUniform, Tint);
-			GL.Uniform2(Shader.ScaleUniform, Scale * new Vector2(1,-1));
-			GL.Uniform2(Shader.PositionUniform, Position);
-			GL.Uniform2(Shader.BoolsUniform, new Vector2(Level == 0 ? 1 : 0, UseMask ? 1 : 0) );
-			GL.Uniform1(Shader.CooldownUniform, this.Cooldown / this.MaxCooldown);
+            Shader["Tint"] = Tint;
+			Shader["Scale"] = Scale * new Vector2(1,-1);
+			Shader["Position"] = Position;
+			Shader["Bools"] = new Vector2(Level == 0 ? 1 : 0, UseMask ? 1 : 0);
+			Shader["Cooldown"] = this.Cooldown / this.MaxCooldown;
 			
 			GL.ActiveTexture(TextureUnit.Texture0);
 			GL.BindTexture(TextureTarget.Texture2D, TexId);
 			
 			GL.ActiveTexture(TextureUnit.Texture1);
 			GL.BindTexture(TextureTarget.Texture2D, MaskId);
-			GL.Uniform1(Shader.MaskUniform, 1);
+		    Shader["Mask"] = 1;
 			
 			DrawManager.UIRenderer.SetupQuad();
 			DrawManager.UIRenderer.DrawQuad();

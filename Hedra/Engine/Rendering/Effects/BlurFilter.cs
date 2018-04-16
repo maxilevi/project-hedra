@@ -10,7 +10,7 @@ using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.Effects
@@ -21,27 +21,29 @@ namespace Hedra.Engine.Rendering.Effects
 	public class BlurFilter : Filter
 	{
 		
-		private static BlurShader HBlurShader = new BlurShader("Shaders/HBlur.vert","Shaders/Blur.frag");
-		private static BlurShader VBlurShader = new BlurShader("Shaders/VBlur.vert","Shaders/Blur.frag");
-		
-		public BlurFilter() : base(){}
-		
-		public override void Resize(){
-	
-		}
+		private static readonly Shader HBlurShader;
+		private static readonly Shader VBlurShader;
+
+	    static BlurFilter()
+	    {
+	        HBlurShader = Shader.Build("Shaders/HBlur.vert", "Shaders/Blur.frag");
+	        VBlurShader = Shader.Build("Shaders/VBlur.vert", "Shaders/Blur.frag");
+	    }
+
+		public override void Resize(){}
 		
 		public override void Pass(FBO Src, FBO Dst){
 			
 			Dst.Bind();
 			HBlurShader.Bind();
-			DrawQuad(Src.TextureID[0], 0);
+		    this.DrawQuad(Src.TextureID[0], 0);
 			HBlurShader.UnBind();
 			Dst.UnBind();
 
 			Src.Bind();
 			
 			VBlurShader.Bind();
-			DrawQuad(Dst.TextureID[0], 0);
+		    this.DrawQuad(Dst.TextureID[0], 0);
 			VBlurShader.UnBind();
 			
 			Src.UnBind();

@@ -1,5 +1,5 @@
-#version 120
-attribute vec2 position;
+#version 330 compatibility
+layout(location = 0)in vec2 position;
  
 varying vec2 v_texCoord;
 varying vec2 v_blurTexCoords[14];

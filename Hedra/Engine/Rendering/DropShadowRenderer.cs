@@ -22,89 +22,97 @@ namespace Hedra.Engine.Rendering
 	/// </summary>
 	public class DropShadowRenderer
 	{
-		public DropShadowShader Shader = new DropShadowShader("Shaders/DropShadows.vert", "Shaders/DropShadows.frag");
-		private List<DropShadow> Shadows = new List<DropShadow>();
-		private List<DropShadow> ShouldShadows = new List<DropShadow>();
-        private HashSet<Vector3> ShadowPositions = new HashSet<Vector3>();
+	    public static Shader Shader;
+	    private List<DropShadow> _shouldShadows;
+        private readonly List<DropShadow> _shadows;
+        private readonly HashSet<Vector3> _shadowPositions;
 		public int Count {get; private set;}
 
+	    static DropShadowRenderer()
+	    {
+	        Shader = Shader.Build("Shaders/DropShadows.vert", "Shaders/DropShadows.frag");
+        }
+
+	    public DropShadowRenderer()
+	    {
+	        _shouldShadows = new List<DropShadow>();
+	        _shadows = new List<DropShadow>();
+	        _shadowPositions = new HashSet<Vector3>();
+        }
 		
 		public void Add(DropShadow Shadow){
-			lock(Shadows)
-				Shadows.Add(Shadow);
+			lock(_shadows)
+				_shadows.Add(Shadow);
 
-		    lock (ShadowPositions)
-		        ShadowPositions.Add(Shadow.Position);
+		    lock (_shadowPositions)
+		        _shadowPositions.Add(Shadow.Position);
 
 		}
 
 	    public void Remove(DropShadow Shadow)
 	    {
-	        lock (Shadows)
-	            Shadows.Remove(Shadow);
+	        lock (_shadows)
+	            _shadows.Remove(Shadow);
 
             /*TODO: since shadows can be moved outside of the renderer's scope this might create a small memory leak for dynamic shadows because the position on the hashtable hasnt been updated.*/
-	        lock (ShadowPositions) {
-	            if (ShadowPositions.Contains(Shadow.Position))
-	                ShadowPositions.Remove(Shadow.Position);
+	        lock (_shadowPositions) {
+	            if (_shadowPositions.Contains(Shadow.Position))
+	                _shadowPositions.Remove(Shadow.Position);
 	        }
 	}
 		
 		public DropShadow Get(Vector3 ShadowPosition){
-			return Shadows.Find( Shadow => Shadow.Position == ShadowPosition);
+			return _shadows.Find( Shadow => Shadow.Position == ShadowPosition);
 		}
 		
 		public bool Exists(Vector3 ShadowPosition)
 		{
-		    lock (ShadowPositions)
-                return ShadowPositions.Contains(ShadowPosition);
+		    lock (_shadowPositions)
+                return _shadowPositions.Contains(ShadowPosition);
 		    
-		}
-		
+		}	
 
 		public void Draw(){
 			if(GameSettings.SSAO || GameSettings.ShadowQuality <= 1) return;
 			
-			lock(Shadows){
-				ShouldShadows.Clear();
-				for(int i = 0; i < Shadows.Count; i++){
-					if(Shadows[i].ShouldDraw && DrawManager.FrustumObject.PointInFrustum(Shadows[i].Position))
-						ShouldShadows.Add(Shadows[i]);
+			lock(_shadows){
+				_shouldShadows.Clear();
+				for(int i = 0; i < _shadows.Count; i++){
+					if(_shadows[i].ShouldDraw && DrawManager.FrustumObject.PointInFrustum(_shadows[i].Position))
+						_shouldShadows.Add(_shadows[i]);
 				}
 			}
-			Count = ShouldShadows.Count;
-			if(ShouldShadows.Count > 0){
+			Count = _shouldShadows.Count;
+			if(_shouldShadows.Count > 0){
 
-				ShouldShadows = ShouldShadows.OrderBy( Shadow => Shadow.Position.Y).ToList();
+				_shouldShadows = _shouldShadows.OrderBy( Shadow => Shadow.Position.Y).ToList();
 				Shader.Bind();
 				GL.Enable(EnableCap.Blend);
 				GL.Disable(EnableCap.DepthTest);
 
 			    DrawManager.UIRenderer.SetupQuad();
 
-                for (int i = 0; i < ShouldShadows.Count; i++)
+                for (int i = 0; i < _shouldShadows.Count; i++)
 			    {
 
-			        if (ShouldShadows[i].DeleteWhen != null && ShouldShadows[i].DeleteWhen())
+			        if (_shouldShadows[i].DeleteWhen != null && _shouldShadows[i].DeleteWhen())
 			        {
-			            this.Remove(ShouldShadows[i]);
+			            this.Remove(_shouldShadows[i]);
 			            continue;
 			        }
 
-			        if (ShouldShadows[i].DepthTest)
+			        if (_shouldShadows[i].DepthTest)
 			            GL.Enable(EnableCap.DepthTest);
 
-			        Matrix3 rotation = ShouldShadows[i].Rotation;
-
-                    GL.UniformMatrix3(Shader.RotationUniform, false, ref rotation);
-					GL.Uniform1(Shader.OpacityUniform, ShouldShadows[i].Opacity);
-					GL.Uniform3(Shader.PlayerPositionUniform, GameManager.Player.Position);
-					GL.Uniform3(Shader.PositionUniform, ShouldShadows[i].Position);
-					GL.Uniform3(Shader.ScaleUniform, ShouldShadows[i].Scale);
+                    Shader["Rotation"] = _shouldShadows[i].Rotation;
+					Shader["Opacity"] = _shouldShadows[i].Opacity;
+					Shader["PlayerPosition"] = GameManager.Player.Position;
+					Shader["Position"] = _shouldShadows[i].Position;
+					Shader["Scale"] = _shouldShadows[i].Scale;
 					
 					DrawManager.UIRenderer.DrawQuad();
 					
-					if(ShouldShadows[i].DepthTest)
+					if(_shouldShadows[i].DepthTest)
 						GL.Disable(EnableCap.DepthTest);
 				}
 				GL.Enable(EnableCap.DepthTest);

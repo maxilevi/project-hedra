@@ -25,8 +25,8 @@ namespace Hedra.Engine.Rendering
 		
 		public override void Draw(Vector3 Position, bool Shadows){
 			if(Shadows) return;
-			
-			GL.Uniform1(BlockShaders.WaterShader.WaveMovementUniform, WaveMovement);
+			throw new Exception("Obsolete");
+			//GL.Uniform1(WorldRenderer.WaterShader.WaveMovementUniform, WaveMovement);
 			
 			WaveMovement += (float) Time.deltaTime * Mathf.Radian * 0.2f;
 			if(WaveMovement >= 5)
@@ -38,7 +38,7 @@ namespace Hedra.Engine.Rendering
 			GL.EnableVertexAttribArray(2);
 
 			//GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-			GL.DrawArrays(PrimitiveType.Triangles, 0, Vertices.Count);//GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+			GL.DrawArrays(PrimitiveType.Triangles, 0, Vertices.Count);//////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 			
 			GL.DisableVertexAttribArray(0);
 			GL.DisableVertexAttribArray(1);
@@ -47,20 +47,21 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public override void Bind(){
-			GL.Enable(EnableCap.Blend);
+		    throw new Exception("Obsolete");
+            GL.Enable(EnableCap.Blend);
 			GL.BlendEquation(BlendEquationMode.FuncAdd);
            	GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
            	GL.Enable(EnableCap.Texture2D);
            	
-           	BlockShaders.WaterShader.Bind();
-           	GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, GameManager.Player.Position);
-           	GL.Uniform3(BlockShaders.WaterShader.LightColorLocation, ShaderManager.LightColor);
+           	//BlockShaders.WaterShader.Bind();
+           	//GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, GameManager.Player.Position);
+           	//GL.Uniform3(BlockShaders.WaterShader.LightColorLocation, ShaderManager.LightColor);
 
             //Removed the smooth borders because it causes issues on the map rendering.
 
 			
-			BlockShaders.WaterShader.AreaPositionsUniform.LoadVectorArray( World.Highlighter.AreaPositions );
-			BlockShaders.WaterShader.AreaColorsUniform.LoadVectorArray( World.Highlighter.AreaColors );
+			//BlockShaders.WaterShader.AreaPositionsUniform.LoadVectorArray( World.Highlighter.AreaPositions );
+			//BlockShaders.WaterShader.AreaColorsUniform.LoadVectorArray( World.Highlighter.AreaColors );
            	
            	
            	if(ShowBackfaces) 
@@ -68,9 +69,10 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public override void UnBind(){
-			GL.Disable(EnableCap.Blend);
+		    throw new Exception("Obsolete");
+            GL.Disable(EnableCap.Blend);
 			GL.Disable(EnableCap.Texture2D);
-			BlockShaders.WaterShader.UnBind();
+			//BlockShaders.WaterShader.UnBind();
 			GL.Enable(EnableCap.CullFace);
 		}
 	}

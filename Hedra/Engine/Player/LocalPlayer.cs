@@ -14,7 +14,7 @@ using OpenTK;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Management;

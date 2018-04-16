@@ -13,48 +13,54 @@ using System.Drawing;
 using Hedra.Engine.Rendering.UI;
 using System.Collections.Generic;
 
-namespace Hedra.Engine.Enviroment
+namespace Hedra.Engine.EnvironmentSystem
 {
 	/// <summary>
 	/// Description of Skydome.
 	/// </summary>
 	public sealed class Skydome
 	{
-		public bool Enabled = true;
-		public int Segments {get; private set;}
-		public SkydomeShader SkydomeShader = new SkydomeShader("Shaders/Skydome.vert","Shaders/Skydome.frag");
-		public VBO<Vector3> Vertices {get; private set;}
-		public VBO<Vector3> Normals {get; private set;}
-		public VBO<Vector2> UVs {get; private set;}
-		public VBO<ushort> Indices {get; private set;}
-		public Vector4 TopColor = new Vector4(Mathf.ToVector4(Color.CornflowerBlue));
-		public Vector4 BotColor = new Vector4(Mathf.ToVector4(Color.LightYellow));
+	    private static readonly Shader SkydomeShader;
 	    private int _previousShader;
+
+        public bool Enabled = true;
+		public int Segments { get; }
+		public VBO<Vector3> Vertices { get; private set; }
+		public VBO<Vector3> Normals { get; private set; }
+		public VBO<Vector2> UVs { get; private set; }
+		public VBO<ushort> Indices { get; private set; }
+		public Vector4 TopColor { get; set; }
+		public Vector4 BotColor { get; set; }
+
+	    static Skydome()
+	    {
+	        SkydomeShader = Shader.Build("Shaders/Skydome.vert", "Shaders/Skydome.frag");
+        }
 
         public Skydome(int Segments){
 			this.Segments = Segments;
 			this.Generate();
-		}
+            TopColor = Color.CornflowerBlue.ToVector4();
+            BotColor = Color.LightYellow.ToVector4();
+        }
 		
 		public void Draw(){
 			if(!Enabled) return;
 
-		    //GL.PolygonMode(MaterialFace.Front, PolygonMode.Line);
             GL.Disable(EnableCap.DepthTest);
 			GL.Disable(EnableCap.Blend);
 			_previousShader = GraphicsLayer.ShaderBound;
 			SkydomeShader.Bind();
-			
-			GL.Uniform4(SkydomeShader.TopColorUniformLocation, TopColor);
-			GL.Uniform4(SkydomeShader.BotColorUniformLocation, BotColor);
-			GL.Uniform1(SkydomeShader.HeightUniformLocation, (float) GameSettings.Height);
+
+		    SkydomeShader["TopColor"] = TopColor;
+			SkydomeShader["BotColor"] = BotColor;
+			SkydomeShader["Height"] = (float) GameSettings.Height;
 
 		    DrawManager.UIRenderer.SetupQuad();
 		    DrawManager.UIRenderer.DrawQuad();
 
             GL.UseProgram(_previousShader);
 			GraphicsLayer.ShaderBound = _previousShader;
-            GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
 			GL.Enable(EnableCap.DepthTest);
 			GL.Enable(EnableCap.CullFace);
 		}

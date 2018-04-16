@@ -5,7 +5,7 @@
  *
  */
 using System.Collections.Generic;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;

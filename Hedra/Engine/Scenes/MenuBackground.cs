@@ -14,7 +14,7 @@ using Hedra.Engine.Generation;
 using OpenTK;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Particles;

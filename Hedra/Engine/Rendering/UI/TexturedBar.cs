@@ -18,58 +18,38 @@ namespace Hedra.Engine.Rendering.UI
 	
 	public class TexturedBar : IRenderable, UIElement, IDisposable
 	{
-		public static BarShader Shader = new BarShader("Shaders/Bar.vert", "Shaders/Bar.frag");
+	    private static readonly Shader Shader;
 		public Vector2 Scale {get; set;}
-		
-		private Func<float> _value;
-		private Func<float> _max;
-		private bool _enabled;
+	    public bool ShowBar { get; set; } = true;
+        private readonly Func<float> _value;
+		private readonly Func<float> _max;
+	    private readonly int _textureId;
+        private bool _enabled;
 		public Vector4 Color;
-		//public RenderableText Text;
-		private Panel _inPanel;
 		private float _barSize;
-		//private bool m_ShowText = true;
-		private Vector2 _targetResolution = new Vector2(1024,578);
-		private int _textureId;
-		/*
-		public bool ShowText{
-			get{ return m_ShowText; }
-			set{
-				m_ShowText = value;
-				//if(value)
-				//	Text.Enable();
-				//else
-				//	Text.Disable();
-			}
-		}*/
-		public bool ShowBar = true;
-		
-		public TexturedBar(uint TextureId, Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Panel InPanel){
-			Initialize(TextureId, Position, Scale, Value, Max, InPanel);
-		}
-		
-		private void Initialize(uint TextureId, Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Panel InPanel){
-			this.Scale = Scale;
-			this._value = Value;
-			this._max = Max;
-			this._inPanel = InPanel;
-			this._textureId = (int) TextureId;
-			
-			DrawManager.UIRenderer.Add(this, DrawOrder.After);
-			//Text = new RenderableText(Value() + " / " + Max(), Position, System.Drawing.Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 11, FontStyle.Bold));
+	    private Vector2 _position;
 
-			//DrawManager.UIRenderer.Add(Text, false);
-			//InPanel.AddElement(Text);
-			
-			this.Position = Position;
-		}
+	    static TexturedBar()
+	    {
+	        Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
+        }
+
+		public TexturedBar(uint TextureId, Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Panel InPanel){
+		    this.Scale = Scale;
+		    this._value = Value;
+		    this._max = Max;
+		    this._textureId = (int)TextureId;
+
+		    DrawManager.UIRenderer.Add(this, DrawOrder.After);
+
+		    this.Position = Position;
+        }
 		
 		public void Draw(){
 			if(!_enabled)
 				return;
 			_barSize = Mathf.Clamp( Mathf.Lerp(_barSize, _value() / _max(), (float) Time.deltaTime * 8f), 0, 1);
-			
-			//Text.Text = (int) ((Value() / Max())*100f)+"%";
+
 			Shader.Bind();
 			GL.Disable(EnableCap.CullFace);
 			GL.Disable(EnableCap.DepthTest);
@@ -78,9 +58,9 @@ namespace Hedra.Engine.Rendering.UI
 		    GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
 			
-			GL.Uniform2(Shader.ScaleUniform, new Vector2(_barSize * Scale.X, Scale.Y) );//Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) + Mathf.DivideVector(TargetResolution * new Vector2(0.015f,0.015f), new Vector2(GameSettings.Width, GameSettings.Height)));
-			GL.Uniform2(Shader.PositionUniform, Position - new Vector2(Scale.X * (1-_barSize), 0f));
-			GL.Uniform4(Shader.ColorUniform, -Vector4.One);
+			Shader["Scale"] = new Vector2(_barSize * Scale.X, Scale.Y);
+			Shader["Position"] = Position - new Vector2(Scale.X * (1-_barSize), 0f);
+			Shader["Color"] = -Vector4.One;
 
 			DrawManager.UIRenderer.SetupQuad();
 			DrawManager.UIRenderer.DrawQuad();	
@@ -91,27 +71,22 @@ namespace Hedra.Engine.Rendering.UI
 			Shader.UnBind();
 		}
 		
-		private Vector2 _mPosition;
 		public Vector2 Position{
-			get{ return _mPosition;}
+			get{ return _position;}
 			set{
-				_mPosition = value;
-				//Text.Position = m_Position;
+				_position = value;
 			}
 		}
 		
 		public void Enable(){
 			this._enabled = true;
-			//Text.Enable();
 		}
 		
 		public void Disable(){
 			this._enabled = false;
-			//Text.Disable();
 		}
 		
 		public void Dispose(){
-			//this.Text.Dispose();
 			DrawManager.UIRenderer.Remove(this);
 		}
 	}

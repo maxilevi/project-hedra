@@ -32,8 +32,8 @@ namespace Hedra.Engine.Rendering.Effects
             GL.ActiveTexture(TextureUnit.Texture0);
 			GL.BindTexture(TextureTarget.Texture2D, TexID);
 			
-			GL.Uniform2(MainFBO.Shader.ScaleUniform, new Vector2(1,1));
-			GL.Uniform2(MainFBO.Shader.PositionUniform, new Vector2(0,0));
+			MainFBO.Shader["Scale"] = Vector2.One;
+			MainFBO.Shader["Position"] = Vector3.Zero;
 
 		    DrawManager.UIRenderer.DrawQuad();
 

@@ -7,15 +7,8 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using System.Drawing;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Player.MapSystem
 {

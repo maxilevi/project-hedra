@@ -24,7 +24,7 @@ namespace Hedra.Engine.Networking
 		public static Packet0x6 FromHuman(Humanoid Human){
 			Packet0x6 Packet = new Packet0x6();
 			Packet.Seed = World.Seed;
-			Packet.DayTime = Enviroment.SkyManager.DayTime;
+			Packet.DayTime = EnvironmentSystem.SkyManager.DayTime;
 			
 			return Packet;
 		}
@@ -33,7 +33,7 @@ namespace Hedra.Engine.Networking
 			NetworkManager.WorldSeed = Packet.Seed;
 			NetworkManager.WorldTime = Packet.DayTime;
 		    World.Recreate(Packet.Seed);
-			Enviroment.SkyManager.SetTime(Packet.DayTime);
+			EnvironmentSystem.SkyManager.SetTime(Packet.DayTime);
 		}
 	}
 }

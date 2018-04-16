@@ -38,7 +38,5 @@ void main(void){
 	if(Grayscale){
 		float Scale = (OutColor.r + OutColor.g + OutColor.b) / 3.0;
 		OutColor = vec4(Scale, Scale, Scale, OutColor.a) * Tint;
-	}
-	
-	
+	}	
 }	

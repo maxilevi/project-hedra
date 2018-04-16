@@ -289,14 +289,11 @@
     <Compile Include="Engine\EntitySystem\StaticModel.cs" />
     <Compile Include="Engine\EntitySystem\TalkComponent.cs" />
     <Compile Include="Engine\EntitySystem\TameComponent.cs" />
-    <Compile Include="Engine\Enviroment\FlareShader.cs" />
-    <Compile Include="Engine\Enviroment\Fog.cs" />
-    <Compile Include="Engine\Enviroment\Light.cs" />
-    <Compile Include="Engine\Enviroment\SkyManager.cs" />
-    <Compile Include="Engine\Enviroment\SkydomeShader.cs" />
-    <Compile Include="Engine\Enviroment\Skydome.cs" />
-    <Compile Include="Engine\Enviroment\Sun.cs" />
-    <Compile Include="Engine\Enviroment\SunShader.cs" />
+    <Compile Include="Engine\EnvironmentSystem\Fog.cs" />
+    <Compile Include="Engine\EnvironmentSystem\Light.cs" />
+    <Compile Include="Engine\EnvironmentSystem\SkyManager.cs" />
+    <Compile Include="Engine\EnvironmentSystem\Skydome.cs" />
+    <Compile Include="Engine\EnvironmentSystem\Sun.cs" />
     <Compile Include="Engine\Events\EventDispatcher.cs" />
     <Compile Include="Engine\Events\EventListener.cs" />
     <Compile Include="Engine\Events\IEventListener.cs" />
@@ -351,6 +348,7 @@
     <Compile Include="Engine\Management\IRenderable.cs" />
     <Compile Include="Engine\Management\IUpdatable.cs" />
     <Compile Include="Engine\Management\OcclusionCulling.cs" />
+    <Compile Include="Engine\Rendering\PointLight.cs" />
     <Compile Include="Engine\Rendering\ShaderManager.cs" />
     <Compile Include="Engine\Management\TaskManager.cs" />
     <Compile Include="Engine\Management\ThreadManager.cs" />
@@ -463,7 +461,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Engine\Player\Skills\BaseSkill.cs" />
-    <Compile Include="Engine\Player\Skills\SkillsShader.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTree.cs" />
     <Compile Include="Engine\Player\Skills\WarriorWhirlwind.cs" />
     <Compile Include="Engine\Player\Skills\AbilityTreeBlueprint.cs" />
@@ -526,7 +523,12 @@
     <Compile Include="Engine\Rendering\Colors.cs" />
     <Compile Include="Engine\Rendering\Cubemap.cs" />
     <Compile Include="Engine\Rendering\PoolSize.cs" />
+    <Compile Include="Engine\Rendering\Shaders\MappingType.cs" />
     <Compile Include="Engine\Rendering\Shaders\ShaderBuilder.cs" />
+    <Compile Include="Engine\Rendering\Shaders\ShaderData.cs" />
+    <Compile Include="Engine\Rendering\Shaders\ShaderParser.cs" />
+    <Compile Include="Engine\Rendering\Shaders\UniformArray.cs" />
+    <Compile Include="Engine\Rendering\Shaders\UniformMapping.cs" />
     <Compile Include="Engine\Rendering\Texture3D.cs" />
     <Compile Include="Engine\Player\MapSystem\MapInputHandler.cs" />
     <Compile Include="Engine\Rendering\UI\TextConfiguration.cs" />
@@ -563,11 +565,9 @@
     <Compile Include="Engine\Rendering\Animation\JointTransform.cs" />
     <Compile Include="Engine\Rendering\Animation\KeyFrame.cs" />
     <Compile Include="Engine\Rendering\Billboard.cs" />
-    <Compile Include="Engine\Rendering\BillboardShader.cs" />
     <Compile Include="Engine\Rendering\ChunkGeometry.cs" />
     <Compile Include="Engine\Rendering\ChunkMeshBuffer.cs" />
     <Compile Include="Engine\Rendering\ChunkRenderCommand.cs" />
-    <Compile Include="Engine\Rendering\Effects\FXAAShader.cs" />
     <Compile Include="Engine\Rendering\Effects\FXShader.cs" />
     <Compile Include="Engine\Rendering\IDisposeAnimation.cs" />
     <Compile Include="Engine\Rendering\MegaTexture.cs" />
@@ -575,28 +575,17 @@
     <Compile Include="Engine\Rendering\DrawElementsIndirectCommand.cs" />
     <Compile Include="Engine\Rendering\DropShadow.cs" />
     <Compile Include="Engine\Rendering\DropShadowRenderer.cs" />
-    <Compile Include="Engine\Rendering\DropShadowShader.cs" />
-    <Compile Include="Engine\Rendering\Effects\BlockShader.cs" />
-    <Compile Include="Engine\Rendering\Effects\BlockShaders.cs" />
     <Compile Include="Engine\Rendering\Effects\BloomFilter.cs" />
     <Compile Include="Engine\Rendering\Effects\BlurFilter.cs" />
-    <Compile Include="Engine\Rendering\Effects\BlurShader.cs" />
     <Compile Include="Engine\Rendering\Effects\MainFBO.cs" />
     <Compile Include="Engine\Rendering\Effects\DistortionFilter.cs" />
     <Compile Include="Engine\Rendering\Effects\Filters.cs" />
     <Compile Include="Engine\Rendering\Effects\DeferredRendering.cs" />
-    <Compile Include="Engine\Rendering\Effects\GrassShader.cs" />
-    <Compile Include="Engine\Rendering\Effects\HealthShader.cs" />
     <Compile Include="Engine\Rendering\Effects\IEffect.cs" />
-    <Compile Include="Engine\Rendering\Effects\CubeShader.cs" />
     <Compile Include="Engine\Rendering\Effects\Filter.cs" />
-    <Compile Include="Engine\Rendering\Effects\LinesShader.cs" />
-    <Compile Include="Engine\Rendering\Effects\StaticShader.cs" />
     <Compile Include="Engine\Rendering\Effects\UnderWaterFilter.cs" />
-    <Compile Include="Engine\Rendering\Effects\WaterShader.cs" />
     <Compile Include="Engine\Rendering\ObjectMesh.cs" />
     <Compile Include="Engine\Rendering\ObjectMeshBuffer.cs" />
-    <Compile Include="Engine\Rendering\ObjectMeshShader.cs" />
     <Compile Include="Engine\Rendering\FBO.cs" />
     <Compile Include="Engine\Rendering\DataContainer.cs" />
     <Compile Include="Engine\Rendering\GIF.cs" />
@@ -604,7 +593,6 @@
     <Compile Include="Engine\Rendering\GeometryPool.cs" />
     <Compile Include="Engine\Rendering\InstanceBatch.cs" />
     <Compile Include="Engine\Rendering\InstanceData.cs" />
-    <Compile Include="Engine\Rendering\InstanceShader.cs" />
     <Compile Include="Engine\Rendering\MarchingData.cs" />
     <Compile Include="Engine\Rendering\Model.cs" />
     <Compile Include="Engine\Rendering\LineData.cs" />
@@ -620,7 +608,6 @@
     <Compile Include="Engine\Rendering\NvidiaGPUFix64.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Engine\Rendering\Particles\ParticleShader.cs" />
     <Compile Include="Engine\Rendering\Particles\TrailRenderer.cs" />
     <Compile Include="Engine\Rendering\PointData.cs" />
     <Compile Include="Engine\Rendering\Particles\Particle3D.cs" />
@@ -628,29 +615,24 @@
     <Compile Include="Engine\Rendering\Particles\ParticleCreator.cs" />
     <Compile Include="Engine\Rendering\ShadowBox.cs" />
     <Compile Include="Engine\Rendering\ShadowRenderer.cs" />
-    <Compile Include="Engine\Rendering\ShadowShader.cs" />
     <Compile Include="Engine\Rendering\StaticMeshBuffer.cs" />
     <Compile Include="Engine\Rendering\SurfaceNets.cs" />
     <Compile Include="Engine\Rendering\SymetricMatrix.cs" />
     <Compile Include="Engine\Rendering\TextureArray.cs" />
     <Compile Include="Engine\Rendering\UBO.cs" />
     <Compile Include="Engine\Rendering\UI\Bar.cs" />
-    <Compile Include="Engine\Rendering\UI\BarShader.cs" />
     <Compile Include="Engine\Rendering\UI\Button.cs" />
     <Compile Include="Engine\Rendering\UI\ChrChooserUI.cs" />
     <Compile Include="Engine\Rendering\UI\ChrCreatorUI.cs" />
     <Compile Include="Engine\Rendering\UI\ColorPicker.cs" />
     <Compile Include="Engine\Rendering\UI\ControlsUI.cs" />
     <Compile Include="Engine\Rendering\UI\Cursor.cs" />
-    <Compile Include="Engine\Rendering\UI\CursorShader.cs" />
     <Compile Include="Engine\Rendering\UI\DisplayOnDrag.cs" />
     <Compile Include="Engine\Rendering\UI\FontCache.cs" />
     <Compile Include="Engine\Rendering\UI\GameUI.cs" />
     <Compile Include="Engine\Rendering\UI\GUIRenderer.cs" />
-    <Compile Include="Engine\Rendering\UI\GUIShader.cs" />
     <Compile Include="Engine\Rendering\UI\GUIText.cs" />
     <Compile Include="Engine\Rendering\UI\GUITexture.cs" />
-    <Compile Include="Engine\Rendering\UI\MinimapShader.cs" />
     <Compile Include="Engine\Rendering\UI\NetworkUI.cs" />
     <Compile Include="Engine\Rendering\UI\OptionChooser.cs" />
     <Compile Include="Engine\Rendering\UI\OptionsUI.cs" />
@@ -664,9 +646,6 @@
     <Compile Include="Engine\Rendering\UI\TexturedBar.cs" />
     <Compile Include="Engine\Rendering\UI\UIElement.cs" />
     <Compile Include="Engine\Rendering\UI\UserInterface.cs" />
-    <Compile Include="Engine\Rendering\UniformMatrix4Array.cs" />
-    <Compile Include="Engine\Rendering\UniformVector3Array.cs" />
-    <Compile Include="Engine\Rendering\UniformVector4Array.cs" />
     <Compile Include="Engine\Rendering\VAO.cs" />
     <Compile Include="Engine\Rendering\VertexData.cs" />
     <Compile Include="Engine\Rendering\VertexOcclusion.cs" />
@@ -4146,12 +4125,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\AnimatedModelDeath.geom">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Shaders\Billboard.frag">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Shaders\Billboard.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Bloom.frag">

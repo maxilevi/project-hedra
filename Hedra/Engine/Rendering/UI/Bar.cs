@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering.UI
         public static uint RectangleBlueprint = Graphics2D.ColorTexture(Colors.FromArgb(255, 29, 29, 29));
 
 
-        public static BarShader Shader = new BarShader("Shaders/Bar.vert", "Shaders/Bar.frag");
+        public static Shader Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
         private float _barSize;
         private bool _enabled;
         private Panel _inPanel;
@@ -51,20 +51,20 @@ namespace Hedra.Engine.Rendering.UI
         public Bar(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Panel InPanel,
             DrawOrder Order = DrawOrder.Before, bool CurvedBorders = true)
         {
-            Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
+            this.Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
         }
 
         public Bar(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Vector4 Color, Panel InPanel,
             DrawOrder Order = DrawOrder.Before, bool CurvedBorders = true)
         {
             UniformColor = Color;
-            Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
+            this.Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
         }
 
         public Bar(Vector2 Position, Vector2 Scale, string Text, Func<float> Value, Func<float> Max, Panel InPanel,
             DrawOrder Order = DrawOrder.Before)
         {
-            Initialize(Position, Scale, Value, Max, InPanel, Text, Order);
+            this.Initialize(Position, Scale, Value, Max, InPanel, Text, Order);
         }
 
         public bool ShowText
@@ -102,24 +102,22 @@ namespace Hedra.Engine.Rendering.UI
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, CurvedBorders ? BarBlueprint : RectangleBlueprint);
 
-            GL.Uniform2(Shader.ScaleUniform,
+            Shader["Scale"] =
                 Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) +
                 Mathf.DivideVector(TargetResolution * new Vector2(0.015f, 0.015f),
-                    new Vector2(GameSettings.Width, GameSettings.Height)));
-            GL.Uniform2(Shader.PositionUniform, Position);
-            GL.Uniform4(Shader.ColorUniform, BackgroundColor);
+                    new Vector2(GameSettings.Width, GameSettings.Height));
+            Shader["Position"] = Position;
+            Shader["Color"] = BackgroundColor;
 
             DrawManager.UIRenderer.SetupQuad();
             DrawManager.UIRenderer.DrawQuad();
 
-            GL.Uniform2(Shader.ScaleUniform,
-                ShowBar
+            Shader["Scale"] = ShowBar
                     ? Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) *
                       new Vector2(_barSize, 1)
-                    : new Vector2(0, 0));
-            GL.Uniform2(Shader.PositionUniform, Position);
-            GL.Uniform4(Shader.ColorUniform,
-                UniformColor != Vector4.Zero ? UniformColor : _barSize > 0.6f ? Full : _barSize < 2.5f ? Low : Middle);
+                    : new Vector2(0, 0);
+            Shader["Position"] = Position;
+            Shader["Color"] =  UniformColor != Vector4.Zero ? UniformColor : _barSize > 0.6f ? Full : _barSize < 2.5f ? Low : Middle;
 
             DrawManager.UIRenderer.DrawQuad();
 

@@ -10,7 +10,7 @@ using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 
 namespace Hedra.Engine.Rendering.Effects
 {
@@ -19,26 +19,33 @@ namespace Hedra.Engine.Rendering.Effects
 	/// </summary>
 	public class BloomFilter : Filter
 	{
-		private static GUIShader Bloom =  new GUIShader("Shaders/Bloom.vert", "Shaders/Bloom.frag");
-		private static BlurShader HBlurShader = new BlurShader("Shaders/HBlur.vert","Shaders/Blur.frag");
-		private static BlurShader VBlurShader = new BlurShader("Shaders/VBlur.vert","Shaders/Blur.frag");
-		public FBO HBloomFBO = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
-		public FBO VBloomFBO = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
+	    private static readonly Shader Bloom;
+	    private static readonly Shader HBlurShader;
+	    private static readonly Shader VBlurShader;
+		public FBO HBloomFbo = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
+		public FBO VBloomFbo = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
 		public int TopColorUniform, BotColorUniform, HeightUniform;
-		
+
+	    static BloomFilter()
+	    {
+	        Bloom = Shader.Build("Shaders/Bloom.vert", "Shaders/Bloom.frag");
+	        HBlurShader = Shader.Build("Shaders/HBlur.vert", "Shaders/Blur.frag");
+	        VBlurShader = Shader.Build("Shaders/VBlur.vert", "Shaders/Blur.frag");
+        }
+
 		public BloomFilter() : base(){
-			TopColorUniform = GL.GetUniformLocation(Bloom.ShaderID, "TopColor");
-			BotColorUniform = GL.GetUniformLocation(Bloom.ShaderID, "BotColor");
-			HeightUniform = GL.GetUniformLocation(Bloom.ShaderID, "Height");
+            TopColorUniform = GL.GetUniformLocation(Bloom.ShaderId, "TopColor");
+			BotColorUniform = GL.GetUniformLocation(Bloom.ShaderId, "BotColor");
+			HeightUniform = GL.GetUniformLocation(Bloom.ShaderId, "Height");
 		}
 		
 		public override void Resize(){
-			HBloomFBO = HBloomFBO.Resize();
-			VBloomFBO = VBloomFBO.Resize();
+			HBloomFbo = HBloomFbo.Resize();
+			VBloomFbo = VBloomFbo.Resize();
 		}
 		
 		public override void Pass(FBO Src, FBO Dst){
-			HBloomFBO.Bind();
+			HBloomFbo.Bind();
 			Bloom.Bind();
 			
 			GL.Uniform4(TopColorUniform, SkyManager.Skydome.TopColor);
@@ -46,35 +53,35 @@ namespace Hedra.Engine.Rendering.Effects
 			GL.Uniform1(HeightUniform, GameSettings.Height);
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
-			DrawQuad(Src.TextureID[0]);
+		    this.DrawQuad(Src.TextureID[0]);
 			
 			Bloom.UnBind();
-			HBloomFBO.UnBind();
+			HBloomFbo.UnBind();
 			
 			//hblur
-			VBloomFBO.Bind();
+			VBloomFbo.Bind();
 			HBlurShader.Bind();
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            DrawQuad(HBloomFBO.TextureID[0]);
+		    this.DrawQuad(HBloomFbo.TextureID[0]);
 			
 			HBlurShader.UnBind();
-			VBloomFBO.UnBind();
+			VBloomFbo.UnBind();
 			
 			//vblur
-			HBloomFBO.Bind();
+			HBloomFbo.Bind();
 			VBlurShader.Bind();
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            DrawQuad(VBloomFBO.TextureID[0]);
+            DrawQuad(VBloomFbo.TextureID[0]);
 			
 			VBlurShader.UnBind();
-			HBloomFBO.UnBind();
+			HBloomFbo.UnBind();
 			
 			Dst.Bind();
 			MainFBO.Shader.Bind();
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            DrawQuad(HBloomFBO.TextureID[0], 0);
+		    this.DrawQuad(HBloomFbo.TextureID[0], 0);
 			MainFBO.Shader.UnBind();
 			Dst.UnBind();
 		}

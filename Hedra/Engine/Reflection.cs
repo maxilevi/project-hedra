@@ -11,7 +11,7 @@ namespace Hedra.Engine
         {
             return
                 Assembly.GetTypes()
-                    .Where(t => String.Equals(t.Namespace, NameSpace, StringComparison.Ordinal))
+                    .Where(T => string.Equals(T.Namespace, NameSpace, StringComparison.Ordinal))
                     .ToArray();
         }
 
@@ -24,7 +24,7 @@ namespace Hedra.Engine
             }
             catch (ReflectionTypeLoadException e)
             {
-                types = e.Types.Where(t => t != null);
+                types = e.Types.Where(T => T != null);
             }
             return Namespace != null ? types.Where(T => string.Equals(T.Namespace, Namespace, StringComparison.InvariantCulture)) : types;
         }

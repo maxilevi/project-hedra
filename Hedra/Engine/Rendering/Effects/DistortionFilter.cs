@@ -18,13 +18,20 @@ namespace Hedra.Engine.Rendering.Effects
 	/// </summary>
 	public class DistortionFilter : Filter
 	{
-		public GUIShader WaterEffect = new GUIShader("Shaders/UnderWater.vert", "Shaders/Distortion.frag");
-		private int DuDvMapUniform, TimeUniform;
-		private uint DuDvMapId = Graphics2D.LoadFromAssets("Assets/DuDvMap.png");
-		
+	    private static readonly Shader WaterEffect;
+	    private static readonly uint DuDvMapId;
+        private int _duDvMapUniform;
+	    private int _timeUniform;
+
+	    static DistortionFilter()
+	    {
+	        WaterEffect = Shader.Build("Shaders/UnderWater.vert", "Shaders/Distortion.frag");
+	        DuDvMapId = Graphics2D.LoadFromAssets("Assets/DuDvMap.png");
+        }
+
 		public DistortionFilter() : base(){
-			DuDvMapUniform = GL.GetUniformLocation(WaterEffect.ShaderID, "DuDvMap");
-			TimeUniform = GL.GetUniformLocation(WaterEffect.ShaderID, "Time");
+			_duDvMapUniform = GL.GetUniformLocation(WaterEffect.ShaderId, "DuDvMap");
+			_timeUniform = GL.GetUniformLocation(WaterEffect.ShaderId, "Time");
 		}
 		
 		public override void Resize(){}

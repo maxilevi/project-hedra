@@ -14,7 +14,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Scenes;
 using Gen = Hedra.Engine.Generation;
 
-namespace Hedra.Engine.Enviroment
+namespace Hedra.Engine.EnvironmentSystem
 {
 	/// <summary>
 	/// Description of Sky.

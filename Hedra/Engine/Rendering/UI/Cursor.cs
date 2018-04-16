@@ -15,14 +15,17 @@ namespace Hedra.Engine.Rendering.UI
 	/// Description of Cursor.
 	/// </summary>
 	public class Cursor : IRenderable
-	{
-		
-		
-		public uint TextureId;
+	{	
+		public uint TextureId { get; set; }
 		public Vector2 Position {get; set;}
-		public Vector2 Scale;
-		private static CursorShader _shader = new CursorShader("Shaders/Cursor.vert", "Shaders/Cursor.frag");
-		
+		public Vector2 Scale { get; set; }
+	    private static Shader _shader;
+
+	    static Cursor()
+	    {
+	        _shader = Shader.Build("Shaders/Cursor.vert", "Shaders/Cursor.frag");
+        }
+
 		public Cursor(uint TextureId){
 			this.TextureId = TextureId;
 			Scale = Mathf.ScaleGUI(new Vector2(1024, 576), new Vector2(0.05f * 0.5f, 0.08f * 0.5f));

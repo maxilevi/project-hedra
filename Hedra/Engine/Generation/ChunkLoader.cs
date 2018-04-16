@@ -14,7 +14,7 @@ using OpenTK;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.Player;
 using Hedra.Engine.Management;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation.ChunkSystem;
 
 

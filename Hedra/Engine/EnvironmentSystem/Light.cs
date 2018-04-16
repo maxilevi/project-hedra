@@ -7,7 +7,7 @@
 using System;
 using OpenTK;
 
-namespace Hedra.Engine.Enviroment
+namespace Hedra.Engine.EnvironmentSystem
 {
 	/// <summary>
 	/// Description of Light.

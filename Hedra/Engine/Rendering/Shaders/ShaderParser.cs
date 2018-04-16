@@ -1,0 +1,98 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using OpenTK;
+
+namespace Hedra.Engine.Rendering.Shaders
+{
+    /// <summary>
+    /// Partial shader parser for detecting certain uniforms
+    /// </summary>
+    public class ShaderParser
+    {
+        public string Source { get; set; }
+
+        public ShaderParser(string Source)
+        {
+            this.Source = Source;
+        }
+
+        public string GetVersionString()
+        {
+            var firstMatch = Regex.Match(Source, @"\s*#\s*version\s+([0-9]+\s*[a-zA-Z]+)\s+");
+            return firstMatch.Value;
+        }
+
+        public int GetVersionNumber()
+        {
+            var firstMatch = Regex.Match(Source, @"\s*#\s*version\s+(\d+)\s+");
+            return int.Parse(firstMatch.Value);
+        }
+
+        public UniformArray[] ParseUniformArrays(int ShaderId)
+        {
+            var mappings = new List<UniformArray>();
+            var matches = Regex.Matches(Source, @"\buniform\s+([a-zA-Z0-9]+)\s+([a-zA-Z0-9]+)\s*\[\s*(\d+|[a-zA-Z_]+)\s*\]").Cast<Match>().ToArray();
+            for (var i = 0; i < matches.Length; i ++)
+            {
+                if ((matches[i].Groups.Count - 1) % 3 != 0) throw new ArgumentException($"Expected remainder 0 got {(matches[i].Groups.Count - 1) % 3}");
+                var type = this.ParseType(matches[i].Groups[1].Value);
+                var key = matches[i].Groups[2].Value;
+                var size = this.ParseArraySize(matches[i].Groups[3].Value);
+                mappings.Add(new UniformArray(type, ShaderId, key, size));
+            }
+            return mappings.ToArray();
+        }
+
+        private int ParseArraySize(string Value)
+        {
+            int newValue;
+            var tryInt = int.TryParse(Value, out newValue);
+            if (!tryInt)
+            {
+                newValue = int.Parse(this.GetValueFromConstant(Value));
+            }
+            return newValue;
+        }
+
+        private string GetValueFromConstant(string VariableName)
+        {
+           var match = Regex.Match(Source, @"const\s+[a-zA-Z0-9]+\s+"+VariableName+@"\s*=\s*([a-zA-Z0-9]+)\s*;");
+           return match.Groups[1].Value;
+        }
+
+        public Type ParseType(string Type)
+        {
+            switch (Type)
+            {
+                case "mat4":
+                    return typeof(Matrix4);
+                case "mat3":
+                    return typeof(Matrix3);
+                case "vec4":
+                    return typeof(Vector4);
+                case "vec3":
+                    return typeof(Vector3);
+                case "vec2":
+                    return typeof(Vector2);
+                case "float":
+                    return typeof(float);
+                case "bool":
+                    return typeof(bool);
+                case "int":
+                    return typeof(int);
+                default:
+                    var possibleType = this.InferType(Type);
+                    if (possibleType != null) return possibleType;
+                    throw new ArgumentException($"Type '{Type}' could not be mapped to a valid type");
+            }
+        }
+
+        private Type InferType(string ClassName)
+        {
+            return Assembly.GetExecutingAssembly().GetLoadableTypes().FirstOrDefault(T => T.Name == ClassName);
+        }
+    }
+}

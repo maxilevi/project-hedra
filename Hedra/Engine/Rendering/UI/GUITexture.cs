@@ -24,7 +24,6 @@ namespace Hedra.Engine.Rendering.UI
 		public uint BackGroundId { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Scale { get; set; }
-        public Vector4 Color { get; set; }
 		public bool Enabled {get; set;}
 		public Vector4 Tint { get; set; } = new Vector4(1,1,1,1);
 		public bool Grayscale { get; set; }

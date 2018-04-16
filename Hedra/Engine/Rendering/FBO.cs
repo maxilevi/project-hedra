@@ -226,8 +226,8 @@ namespace Hedra.Engine.Rendering
         public void Bind(bool clear = true)
         {
         	if(GraphicsLayer.FBOBound == BufferID) return;
-        	
-        	GraphicsLayer.FBOBound = (int) BufferID;
+
+            GraphicsLayer.FBOBound = (int) BufferID;
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, BufferID);
             if (Attachments.Length == 1)
             {

@@ -22,16 +22,27 @@ namespace Hedra.Engine.Rendering.Effects
 		public FBO FirstPass;
 		public FBO SecondPass;
 	    public FBO ThirdPass; 
-		public Shader FirstPassShader = new Shader("Shaders/SSAO.vert","Shaders/SSAO-Pass1.frag");
-		public Shader SecondPassShader = new Shader("Shaders/SSAO.vert","Shaders/SSAO-Pass2.frag");
-	    public Shader ThirdPassShader = new Shader("Shaders/SSAO.vert", "Shaders/SSAO-Pass3.frag");
+		public Shader FirstPassShader;
+		public Shader SecondPassShader;
+	    public Shader ThirdPassShader;
 		public int SamplesUniform;
 		public int RandomTex;
 		public float[] Samples;
-		public int ColorSampler, PositionSampler, NormalSampler, RandomSampler, AOSampler, ProjectionUniform, Intensity;
-		public DeferedRenderer()
+		public int ColorSampler;
+	    public int PositionSampler;
+	    public int NormalSampler;
+	    public int RandomSampler;
+	    public int AOSampler;
+	    public int ProjectionUniform;
+	    public int Intensity;
+
+	    public DeferedRenderer()
 		{
-			FramebufferAttachment[] Attachments = new FramebufferAttachment[3];
+		    FirstPassShader = Shader.Build("Shaders/SSAO.vert", "Shaders/SSAO-Pass1.frag");
+		    SecondPassShader = Shader.Build("Shaders/SSAO.vert", "Shaders/SSAO-Pass2.frag");
+		    ThirdPassShader = Shader.Build("Shaders/SSAO.vert", "Shaders/SSAO-Pass3.frag");
+
+            FramebufferAttachment[] Attachments = new FramebufferAttachment[3];
 			Attachments[0] = FramebufferAttachment.ColorAttachment0;
 			Attachments[1] = FramebufferAttachment.ColorAttachment1;
 			Attachments[2] = FramebufferAttachment.ColorAttachment2;
@@ -46,14 +57,14 @@ namespace Hedra.Engine.Rendering.Effects
 		    SecondPass = new FBO(GameSettings.Width, GameSettings.Height);
 
             #region SETUP UNIFORMS & TEXTURES
-            SamplesUniform = GL.GetUniformLocation(FirstPassShader.ShaderID, "samples");
-			PositionSampler = GL.GetUniformLocation(FirstPassShader.ShaderID, "Position1");
-			NormalSampler = GL.GetUniformLocation(FirstPassShader.ShaderID, "Normal2");
-			RandomSampler = GL.GetUniformLocation(FirstPassShader.ShaderID, "Random3");
-			ProjectionUniform = GL.GetUniformLocation(FirstPassShader.ShaderID, "Projection");
-			ColorSampler = GL.GetUniformLocation(ThirdPassShader.ShaderID, "ColorInput");
-			AOSampler = GL.GetUniformLocation(ThirdPassShader.ShaderID, "SSAOInput");
-			Intensity = GL.GetUniformLocation(FirstPassShader.ShaderID, "Intensity");
+            SamplesUniform = GL.GetUniformLocation(FirstPassShader.ShaderId, "samples");
+			PositionSampler = GL.GetUniformLocation(FirstPassShader.ShaderId, "Position1");
+			NormalSampler = GL.GetUniformLocation(FirstPassShader.ShaderId, "Normal2");
+			RandomSampler = GL.GetUniformLocation(FirstPassShader.ShaderId, "Random3");
+			ProjectionUniform = GL.GetUniformLocation(FirstPassShader.ShaderId, "Projection");
+			ColorSampler = GL.GetUniformLocation(ThirdPassShader.ShaderId, "ColorInput");
+			AOSampler = GL.GetUniformLocation(ThirdPassShader.ShaderId, "SSAOInput");
+			Intensity = GL.GetUniformLocation(FirstPassShader.ShaderId, "Intensity");
 			
 			Random Gen = new Random();
 			Bitmap Bmp = new Bitmap(4,4);

@@ -123,12 +123,6 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        public Vector4 Color
-        {
-            get { return this.UIText.Color; }
-            set { this.UIText.Color = value; }
-        }
-
         public Vector2 Scale
         {
             get

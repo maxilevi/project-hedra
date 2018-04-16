@@ -1,7 +1,7 @@
 ﻿using System;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Events;
 using Hedra.Engine.Player;

@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
@@ -197,7 +197,6 @@ namespace Hedra.Engine.Player.MapSystem
                     this.UpdateMap();
                     this._targetSize = 1.0f;
 				    this._player.Movement.Check = false;
-                    this._player.UI.GamePanel.Disable();
                     this._player.View.MaxDistance = 100f;
 				    this._player.View.MinDistance = 30f;
                     this._player.View.TargetDistance = 100f;
@@ -209,7 +208,6 @@ namespace Hedra.Engine.Player.MapSystem
 				}else
 				{
                     _stateManager.ReleaseState();
-				    this._player.UI.GamePanel.Enable();
                     this._targetSize = 0f;
 					this._targetHeight = 0f;
                     this._targetTime = SkyManager.PeekTime();

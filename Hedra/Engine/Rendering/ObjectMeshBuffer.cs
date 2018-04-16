@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering
 	/// </summary>
 	public class ObjectMeshBuffer : ChunkMeshBuffer
 	{
-		public static ObjectMeshShader Shader { get; } = new ObjectMeshShader("Shaders/ObjectMesh.vert", "Shaders/ObjectMesh.frag");
+		public static Shader Shader { get; }
 		public bool ApplyFog { get; set; } = true;
 		public float Alpha { get; set; } = 1;
 	    public bool UseNoiseTexture { get; set; }
@@ -44,6 +44,7 @@ namespace Hedra.Engine.Rendering
 
 	    static ObjectMeshBuffer()
 	    {
+	        Shader = Shader.Build("Shaders/ObjectMesh.vert", "Shaders/ObjectMesh.frag");
 	        var noiseValues = new float[16, 16, 16];
 	        for (var x = 0; x < noiseValues.GetLength(0); x++)
 	        {
@@ -166,39 +167,37 @@ namespace Hedra.Engine.Rendering
 		public override void Bind(){
 			Shader.Bind();
 
-		    Matrix4 rotationMatrix = RotationMatrix;
-            GL.Uniform1(Shader.AlphaUniform, Alpha);
-			GL.Uniform3(Shader.ScaleUniform, Scale);
-			GL.Uniform1(Shader.ApplyFogUniform, ApplyFog ? 1 : 0);
-			GL.Uniform3(Shader.TransPos, Position);
-			GL.UniformMatrix4(Shader.TransMatrixUniformLocation, false, ref rotationMatrix);
-			GL.UniformMatrix4(Shader.MatrixUniformLocation, false, ref _transformationMatrix);
-			GL.Uniform3(Shader.PointLocation, Point);
-			GL.UniformMatrix4(Shader.LocalRotationLocation, false, ref _localRotationMatrix);
-			GL.Uniform3(Shader.LocalRotationPointLocation, LocalRotationPoint);
-			GL.Uniform3(Shader.LocalPositionLocation, LocalPosition);
-			GL.Uniform3(Shader.BeforeLocalRotationLocation, BeforeLocalRotation);
-			GL.Uniform3(Shader.AnimationPositionLocation, AnimationPosition);
-			GL.UniformMatrix4(Shader.AnimationRotationLocation, false, ref _animationRotationMatrix);
-			GL.Uniform3(Shader.AnimationRotationPointLocation, AnimationRotationPoint);
-			GL.Uniform4(Shader.TintUniform, Tint+BaseTint);
-			GL.Uniform2(Shader.ResolutionUniform, new Vector2(GameSettings.Width, GameSettings.Height));
-			GL.Uniform3(Shader.BakedPositionUniform, Vector3.Zero);
-			GL.Uniform3(Shader.PlayerPositionUniform, GameManager.Player.Position);
+            Shader["Alpha"] = Alpha;
+			Shader["Scale"] = Scale;
+			Shader["UseFog"] = ApplyFog ? 1 : 0;
+			Shader["TransPos"] = Position;
+			Shader["TransMatrix"] = RotationMatrix;
+			Shader["Matrix"] = _transformationMatrix;
+			Shader["Point"] = Point;
+			Shader["LocalRotation"] = _localRotationMatrix;
+			Shader["LocalRotationPoint"] = LocalRotationPoint;
+			Shader["LocalPosition"] = LocalPosition;
+			Shader["BeforeLocalRotation"] = BeforeLocalRotation;
+			Shader["AnimationPosition"] = AnimationPosition;
+			Shader["AnimationRotation"] = _animationRotationMatrix;
+			Shader["AnimationRotationPoint"] = AnimationRotationPoint;
+			Shader["Tint"] = Tint + BaseTint;
+			Shader["BakedPosition"] = Vector3.Zero;
+			Shader["PlayerPosition"] = GameManager.Player.Position;
 
-            GL.ActiveTexture(TextureUnit.Texture1);
-            GL.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
-            GL.Uniform1(Shader.NoiseTextureUniform, 1);           
-            GL.Uniform1(Shader.UseNoiseTextureUniform, UseNoiseTexture ? 1f : 0f);
+		    GL.ActiveTexture(TextureUnit.Texture1);
+		    GL.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
+            Shader["noiseTexture"] = 1;           
+            Shader["useNoiseTexture"] = UseNoiseTexture ? 1f : 0f;
             
             if (GameSettings.Shadows){
-				GL.UniformMatrix4(Shader.ShadowMvpUniform, false, ref ShadowRenderer.ShadowMVP);
+				Shader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
 				GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFBO.TextureID[0]);
-				GL.Uniform1(Shader.ShadowTexUniform, 0);
-                GL.Uniform1(Shader.ShadowDistanceUniform, ShadowRenderer.ShadowDistance);
+				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
+				Shader["ShadowTex"] = 0;
+                Shader["ShadowDistance"] = ShadowRenderer.ShadowDistance;
 			}
-			GL.Uniform1(Shader.UseShadowsUniform, GameSettings.Shadows ? 1 : 0);
+			Shader["UseShadows"] = GameSettings.Shadows ? 1 : 0;
 		}
 		
 		public override void UnBind(){

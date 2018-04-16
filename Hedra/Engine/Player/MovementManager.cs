@@ -319,7 +319,7 @@ namespace Hedra.Engine.Player
 					Jump();
 			}
 			
-			if(e.Key == Key.I && !GameSettings.Paused && Human.CanInteract && !player.IsDead && !player.Map.Show && !player.AbilityTree.Show)
+			if(e.Key == Key.I && !GameSettings.Paused && Human.CanInteract && !player.IsDead && !player.Map.Show && !player.AbilityTree.Show && !player.Trade.Show)
                 player.Inventory.Show = !player.Inventory.Show;
 			
 			if(e.Key == Key.X && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !player.Map.Show && !player.Inventory.Show)
@@ -442,7 +442,7 @@ namespace Hedra.Engine.Player
 
             if (e.Key == Key.Number7 && player.CanInteract)
 			{
-			    Enviroment.SkyManager.Skydome.Enabled = !Enviroment.SkyManager.Skydome.Enabled;
+			    EnvironmentSystem.SkyManager.Skydome.Enabled = !EnvironmentSystem.SkyManager.Skydome.Enabled;
 			}
 			
 			if(e.Key == Key.J){

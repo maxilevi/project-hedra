@@ -2,7 +2,7 @@
     #define SHOW_COLLISION
 #endif
 
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Networking;
@@ -23,6 +23,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.Engine;
@@ -157,6 +158,17 @@ namespace Hedra
 #if DEBUG
             this._finishedLoading = true;
 #endif
+            GL.Enable(EnableCap.DebugOutput);
+            GL.DebugMessageCallback(
+                delegate(DebugSource Source, DebugType Type, int Id, DebugSeverity Severity, int Length, IntPtr Message,
+                    IntPtr Param)
+                {
+                    if(Type != DebugType.DebugTypeError) return;
+                    Log.WriteLine(Source);
+                    Log.WriteLine(Marshal.PtrToStringAnsi(Message));
+                    Log.WriteLine(Severity);
+                    Log.WriteLine(Marshal.PtrToStringAnsi(Param));
+                }, IntPtr.Zero);
 		}
 
 	    private float _passedTime;

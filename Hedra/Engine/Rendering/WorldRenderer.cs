@@ -13,7 +13,7 @@ using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering.Effects;
 
@@ -27,15 +27,19 @@ namespace Hedra.Engine.Rendering
 	    public const int NoShadowsFlag = -1;
 	    public const int NoHighlightFlag = -2;
 	    public const int NoShadowsAndNoHighlightFlag = -3;
-	    public static WorldBuffer StaticBuffer;
+	    public static Shader WaterShader { get; private set; }
+	    public static Shader StaticShader { get; private set; }
+        private static float WaveMovement { get; set; }
+        public static WorldBuffer StaticBuffer;
 	    public static WorldBuffer WaterBuffer;
-	    private static float WaveMovement { get; set; }
 		public static bool ShowWaterBackfaces {get; set;}
 	    public static Texture3D NoiseTexture;
 
 	    public static void AllocateMemory()
 	    {
-	        StaticBuffer = new WorldBuffer(PoolSize.Normal);
+	        WaterShader = Shader.Build("Shaders/Water.vert", "Shaders/Water.frag");
+	        StaticShader = Shader.Build("Shaders/Static.vert", "Shaders/Static.frag");
+            StaticBuffer = new WorldBuffer(PoolSize.Normal);
             WaterBuffer = new WorldBuffer(PoolSize.Tiny);
 
 	        var noiseValues = new float[16, 16, 16];
@@ -135,35 +139,32 @@ namespace Hedra.Engine.Rendering
 		
 		private static void StaticBind(){
 			GL.Disable(EnableCap.Blend);
-			BlockShaders.StaticShader.Bind();
-			GL.Uniform3(BlockShaders.StaticShader.LightColorLocation, ShaderManager.LightColor);
-			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
-		    GL.Uniform1(BlockShaders.StaticShader.TimeUniform,
-		        !GameManager.InStartMenu ? Time.CurrentFrame : Time.UnPausedCurrentFrame);
-		    GL.Uniform1(BlockShaders.StaticShader.FancyUniform, (GameSettings.Fancy) ? 1.0f : 0.0f);
-			GL.Uniform1(BlockShaders.StaticShader.SnowUniform, (SkyManager.Snowing) ? 1.0f : 0.0f);
-			
-			GL.Uniform1(BlockShaders.StaticShader.UseShadowsUniform, (float) GameSettings.ShadowQuality);
+			StaticShader.Bind();
 
-			BlockShaders.StaticShader.AreaPositionsUniform.LoadVectorArray(World.Highlighter.AreaPositions);
-			BlockShaders.StaticShader.AreaColorsUniform.LoadVectorArray(World.Highlighter.AreaColors);
+            StaticShader["PlayerPosition"] = GameManager.Player.Position;
+		    StaticShader["Time"] = !GameManager.InStartMenu ? Time.CurrentFrame : Time.UnPausedCurrentFrame;
+		    StaticShader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
+			StaticShader["Snow"] = SkyManager.Snowing ? 1.0f : 0.0f;		
+			StaticShader["UseShadows"] = (float) GameSettings.ShadowQuality;
+
+			StaticShader["AreaPositions"] = World.Highlighter.AreaPositions;
+			StaticShader["AreaColors"] = World.Highlighter.AreaColors;
 			
             GL.ActiveTexture(TextureUnit.Texture1);
             GL.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
-		    GL.Uniform1(BlockShaders.StaticShader.NoiseTexUniform, 1);
+		    StaticShader["noiseTexture"] = 1;
             
             if (GameSettings.Shadows){
-				GL.UniformMatrix4(BlockShaders.StaticShader.ShadowMVPUniform, false, ref ShadowRenderer.ShadowMVP);
+				StaticShader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
 				GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFBO.TextureID[0]);
-				GL.Uniform1(BlockShaders.StaticShader.ShadowTexUniform, 0);
-			    GL.Uniform1(BlockShaders.StaticShader.ShadowDistanceUniform, ShadowRenderer.ShadowDistance);
-			}
-			
+				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
+                StaticShader["ShadowTex"] = 0;
+                StaticShader["ShadowDistance"] = ShadowRenderer.ShadowDistance;
+			}		
 		}
 		
 		private static void StaticUnBind(){
-			BlockShaders.StaticShader.UnBind();
+			StaticShader.UnBind();
 		}
 		
 		private static void WaterBind(){
@@ -172,29 +173,26 @@ namespace Hedra.Engine.Rendering
            	GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
            	GL.Enable(EnableCap.Texture2D);
            	
-           	BlockShaders.WaterShader.Bind();
-           	GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, GameManager.Player.Position);
-           	GL.Uniform3(BlockShaders.WaterShader.LightColorLocation, ShaderManager.LightColor);
+           	WaterShader.Bind();
+            WaterShader["PlayerPosition"] = GameManager.Player.Position;
            	
            	GL.ActiveTexture(TextureUnit.Texture0);
-		    GL.BindTexture(TextureTarget.Texture2D, (GameSettings.SSAO) ? DrawManager.MainBuffer.SSAO.FirstPass.TextureID[1] : DrawManager.MainBuffer.Default.TextureID[0]);
+		    GL.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : DrawManager.MainBuffer.Default.TextureID[0]);
 			
-			BlockShaders.WaterShader.AreaPositionsUniform.LoadVectorArray(World.Highlighter.AreaPositions);
-			BlockShaders.WaterShader.AreaColorsUniform.LoadVectorArray(World.Highlighter.AreaColors);
-			
-			GL.Uniform1(BlockShaders.WaterShader.WaveMovementUniform, WaveMovement);
+			WaterShader["AreaPositions"] = World.Highlighter.AreaPositions;
+			WaterShader["AreaColors"] = World.Highlighter.AreaColors;		
+			WaterShader["WaveMovement"] = WaveMovement;
            	
            	
-           	if(ShowWaterBackfaces) 
-           		GL.Disable(EnableCap.CullFace);
+           	if(ShowWaterBackfaces) GL.Disable(EnableCap.CullFace);
 		}
 		
 		private static void WaterUnBind(){
 			GL.Disable(EnableCap.Blend);
 			GL.Disable(EnableCap.Texture2D);
-			BlockShaders.WaterShader.UnBind();
 			GL.Enable(EnableCap.CullFace);
-		}
+		    WaterShader.UnBind();
+        }
 		
 		#endregion
 		

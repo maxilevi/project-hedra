@@ -7,14 +7,9 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using Hedra.Engine.Rendering.Effects;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Management;
-using System.Linq;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 
 namespace Hedra.Engine.Rendering
@@ -38,10 +33,10 @@ namespace Hedra.Engine.Rendering
 	
 				if(ShortBuffer){
 					GL.BindBuffer(BufferTarget.ElementArrayBuffer, UshortIndices.ID);
-					GL.DrawElements(PrimitiveType.Triangles, UshortIndices.Count, DrawType, IntPtr.Zero);
+					////GL.DrawElements(PrimitiveType.Triangles, UshortIndices.Count, DrawType, IntPtr.Zero);
 				}else{
 					GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-					GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
+					////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
 				}
 				GL.DisableVertexAttribArray(0);
 				
@@ -50,8 +45,8 @@ namespace Hedra.Engine.Rendering
 				Data.UnBind();
 				return;
 			}
-			
-			GL.Uniform1(BlockShaders.StaticShader.UseShadowsUniform, (UseShadows) ? GameSettings.ShadowQuality : 0.0f );
+
+		    //StaticShader["UseShadows"] = UseShadows ? GameSettings.ShadowQuality : 0.0f;
 
 			Data.Bind();
 			GL.EnableVertexAttribArray(0);
@@ -60,10 +55,10 @@ namespace Hedra.Engine.Rendering
 
 			if(ShortBuffer){
 				GL.BindBuffer(BufferTarget.ElementArrayBuffer, UshortIndices.ID);
-				GL.DrawElements(PrimitiveType.Triangles, UshortIndices.Count, DrawType, IntPtr.Zero);
+				////GL.DrawElements(PrimitiveType.Triangles, UshortIndices.Count, DrawType, IntPtr.Zero);
 			}else{
 				GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-				GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
+				////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
 			}
 			
 			GL.DisableVertexAttribArray(0);
@@ -88,7 +83,7 @@ namespace Hedra.Engine.Rendering
 		
 		public override void Bind(){
 			GL.Disable(EnableCap.Blend);
-			BlockShaders.StaticShader.Bind();
+			/*BlockShaders.StaticShader.Bind();
 			GL.Uniform3(BlockShaders.StaticShader.LightColorLocation, ShaderManager.LightColor);
 			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
 		    GL.Uniform1(BlockShaders.StaticShader.TimeUniform,
@@ -100,16 +95,16 @@ namespace Hedra.Engine.Rendering
 			BlockShaders.StaticShader.AreaColorsUniform.LoadVectorArray( World.Highlighter.AreaColors);
 			
 			if(GameSettings.Shadows){
-				GL.UniformMatrix4(BlockShaders.StaticShader.ShadowMVPUniform, false, ref ShadowRenderer.ShadowMVP);
+				GL.UniformMatrix4(BlockShaders.StaticShader.ShadowMVPUniform, false, ref ShadowRenderer.ShadowMvp);
 				GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFBO.TextureID[0]);
+				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
 				GL.Uniform1(BlockShaders.StaticShader.ShadowTexUniform, 0);
-			}
+			}*/
 			
 		}
 		
 		public override void UnBind(){
-			BlockShaders.StaticShader.UnBind();
+			//BlockShaders.StaticShader.UnBind();
 		}
 	}
 }

@@ -11,34 +11,34 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.UI;
 
-namespace Hedra.Engine.Enviroment
+namespace Hedra.Engine.EnvironmentSystem
 {
 	/// <summary>
 	/// Description of Sun.
 	/// </summary>
 	public class Sun
 	{
-		public Vector3 Direction;
-		private SunShader Shader = new SunShader("Shaders/Sun.vert","Shaders/Sun.frag");
-		private uint TextureID;
-		private Vector3 NDC;
-		
+	    public Vector3 Direction { get; set; }
+        private static readonly Shader Shader;
+		private readonly uint _textureId;
+		private Vector3 _ndc;
+
+	    static Sun()
+	    {
+	        Shader = Shader.Build("Shaders/Sun.vert", "Shaders/Sun.frag");
+        }
+
 		public Sun(Vector3 Direction){
 			this.Direction = Direction;
-			TextureID = Graphics2D.LoadFromAssets("Assets/Sun.png");
+			_textureId = Graphics2D.LoadFromAssets("Assets/Sun.png");
 		}
 		
-		public Vector2 Coordinates{
-			get{ return NDC.Xy;}
-		}
-		
-		public bool Enabled{
-			get{ return SkyManager.DayTime > 6000 && SkyManager.DayTime < 20000 && Math.Sin(GameManager.Player.View.Yaw) > 0; }
-		}
-		
-		public void Draw(){
+		public Vector2 Coordinates => _ndc.Xy;
+
+	    public bool Enabled => SkyManager.DayTime > 6000 && SkyManager.DayTime < 20000 && Math.Sin(GameManager.Player.View.Yaw) > 0;
+
+	    public void Draw(){
 			GL.Enable(EnableCap.Blend);
 			GL.Disable(EnableCap.CullFace);
 			GL.Disable(EnableCap.DepthTest);
@@ -47,17 +47,17 @@ namespace Hedra.Engine.Enviroment
 			Matrix4 TransMatrix = Matrix4.CreateScale(new Vector3(0.073f, 0.13f, 1f) * 2 * 1.5f);//Magic numbers are the resolution used for development
 			Vector4 EyeSpace = Vector4.Transform(new Vector4(ShaderManager.LightPosition,1), DrawManager.FrustumObject.ModelViewMatrix);
 			Vector4 HomogeneusSpace = Vector4.Transform(EyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
-			NDC = HomogeneusSpace.Xyz / HomogeneusSpace.W;
+			_ndc = HomogeneusSpace.Xyz / HomogeneusSpace.W;
 
 			if(Enabled){
-				NDC.Z = 0;
-				NDC.Y += 0.5f;
-				GL.Uniform3(Shader.PositionUniform, NDC);
-				GL.UniformMatrix4(Shader.TransMatrixUniform, false, ref TransMatrix);
-				GL.Uniform3(Shader.DirectionUniform, Direction);
+				_ndc.Z = 0;
+				_ndc.Y += 0.5f;
+				Shader["Position"] = _ndc;
+				Shader["TransMatrix"] = TransMatrix;
+				Shader["Direction"] = Direction;
 				
 				GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, this.TextureID);
+				GL.BindTexture(TextureTarget.Texture2D, this._textureId);
 
 			    DrawManager.UIRenderer.SetupQuad();
 			    DrawManager.UIRenderer.DrawQuad();

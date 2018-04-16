@@ -22,9 +22,9 @@ namespace Hedra.Engine.Rendering.Animation
 	public class AnimatedModel : IDisposable, IRenderable, ICullable
 	{
         //Skin
-	    public static AnimatedModelShader DefaultShader = new AnimatedModelShader("Shaders/AnimatedModel.vert", "Shaders/AnimatedModel.frag");
-	    public static AnimatedModelShader DeathShader = AnimatedModelShader.GenerateDeathShader();
-        private AnimatedModelShader Shader = DefaultShader;
+	    public static Shader DefaultShader = Shader.Build("Shaders/AnimatedModel.vert", "Shaders/AnimatedModel.frag");
+	    public static Shader DeathShader = AnimatedModelShader.GenerateDeathShader();
+        private Shader Shader = DefaultShader;
         private VBO<Vector3> Vertices, Normals, JointIds, VertexWeights;
 		private VBO<Vector3> Colors;
 		private VBO<uint> Indices;
@@ -143,32 +143,33 @@ namespace Hedra.Engine.Rendering.Animation
 			if(!Enabled || Disposed || Data == null) return;
 			GL.Enable(EnableCap.DepthTest);
 		    GL.Disable(EnableCap.Blend);
-            if (Alpha < 0.95f)//Almost 1
-                GL.Enable(EnableCap.Blend);
+            if (Alpha < 0.95f) GL.Enable(EnableCap.Blend);
 
             Shader.Bind();
 
-		    if (Shader.ViewUniform != -1)
+		    if (Shader == DeathShader)
 		    {
-		        GL.UniformMatrix4(Shader.ViewUniform, false, ref ViewMatrix);
-		        GL.Uniform1(Shader.DisposeTimeUniform, DisposeTime);
-                GL.Enable(EnableCap.Blend);
+		        GL.Enable(EnableCap.Blend);
+                Shader["viewMatrix"] = ViewMatrix;
+		        Shader["disposeTime"] = DisposeTime;
             }
 
-            Shader.Mat4Uniform.LoadMatrixArray(JointTransforms);
-			GL.UniformMatrix4(Shader.ProjectionViewUniform, false, ref ProjectionViewMat);
-			GL.Uniform3(Shader.PlayerPositionUniform, GameManager.Player.Position);
-			
-			if(GameSettings.Shadows){
-				GL.UniformMatrix4(Shader.ShadowMvpUniform, false, ref ShadowRenderer.ShadowMVP);
+            Shader["jointTransforms"] = JointTransforms;
+			Shader["projectionViewMatrix"] = ProjectionViewMat;
+            if(Shader != DeathShader)
+                Shader["PlayerPosition"] = GameManager.Player.Position;
+		    
+		    if(GameSettings.Shadows){
 				GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFBO.TextureID[0]);
-				GL.Uniform1(Shader.ShadowTexUniform, 0);
-			}
-			GL.Uniform1(Shader.UseShadowsUniform, GameSettings.Shadows ? 1.0f : 0.0f);
-			GL.Uniform1(Shader.UseFogUniform, Fog ? 1 : 0 );
-			GL.Uniform1(Shader.AlphaUniform, Alpha);
-			GL.Uniform4(Shader.TintUniform, Tint+BaseTint);
+				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
+				Shader["ShadowTex"] = 0;
+		        if (Shader != DeathShader)
+                    Shader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
+            }
+			Shader["UseShadows"] = GameSettings.Shadows ? 1.0f : 0.0f;
+			Shader["UseFog"] = Fog ? 1 : 0;
+			Shader["Alpha"] = Alpha;
+			Shader["Tint"] = Tint + BaseTint;
 			
 			Data.Bind();
 			GL.EnableVertexAttribArray(0);
@@ -278,7 +279,7 @@ namespace Hedra.Engine.Rendering.Animation
 			return Average;
 		}
 
-	    public void SwitchShader(AnimatedModelShader NewShader)
+	    public void SwitchShader(Shader NewShader)
 	    {
 	        this.Shader = NewShader;
 	    }

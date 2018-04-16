@@ -7,33 +7,46 @@
 using System;
 using OpenTK;
 using System.Runtime.InteropServices;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Effects;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hedra.Engine.Enviroment
+namespace Hedra.Engine.EnvironmentSystem
 {
 	/// <summary>
 	/// Description of Fog.
 	/// </summary>
 	public sealed class Fog
 	{
-		public uint UboID;
+		public uint UboId { get; }
 		public FogData FogValues;
         public float MaxDistance { get; private set; }
 	    public float MinDistance { get; private set; }
+	    private readonly int _fogSettingsIndex;
+        private readonly int _fogSettingsSize;
 
-        public Fog(){
-			GL.GenBuffers(1, out UboID);
+        public Fog()
+        {
+            _fogSettingsIndex = GL.GetUniformBlockIndex(WorldRenderer.StaticShader.ShaderId, "FogSettings");
+            GL.GetActiveUniformBlock(
+                WorldRenderer.StaticShader.ShaderId,
+                _fogSettingsIndex, ActiveUniformBlockParameter.UniformBlockDataSize,
+                out _fogSettingsSize
+                );
+
+            uint id;
+			GL.GenBuffers(1, out id);
+            UboId = id;
 			
-			GL.BindBuffer(BufferTarget.UniformBuffer, UboID);
-			GL.BufferData(BufferTarget.UniformBuffer, (IntPtr) (BlockShaders.StaticShader.FogSettingsSize), IntPtr.Zero, BufferUsageHint.DynamicDraw);
-			
-			BindBlock(BlockShaders.StaticShader.FogSettingsIndex);
+			GL.BindBuffer(BufferTarget.UniformBuffer, UboId);
+            GL.BufferData(BufferTarget.UniformBuffer, (IntPtr)_fogSettingsSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+
+            this.BindBlock(_fogSettingsIndex);
 		}
 		
 		public void BindBlock(int Index){
-			GL.BindBuffer(BufferTarget.UniformBuffer, UboID);
-			GL.BindBufferBase(BufferRangeTarget.UniformBuffer, Index, (int) UboID);
+			GL.BindBuffer(BufferTarget.UniformBuffer, UboId);
+			GL.BindBufferBase(BufferRangeTarget.UniformBuffer, Index, (int) UboId);
 		}
 		
 		public void UpdateFogSettings(float MinDist, float MaxDist)
@@ -42,16 +55,16 @@ namespace Hedra.Engine.Enviroment
 		    MaxDistance = MaxDist;
 			var data = new FogData(MinDist, MaxDist, GameSettings.Height, SkyManager.Skydome.BotColor, SkyManager.Skydome.TopColor);
 			FogValues = data;
-			GL.BindBuffer(BufferTarget.UniformBuffer, UboID);
-			GL.BufferSubData(BufferTarget.UniformBuffer, IntPtr.Zero, (IntPtr) (BlockShaders.StaticShader.FogSettingsSize), ref data);
+			GL.BindBuffer(BufferTarget.UniformBuffer, UboId);
+			GL.BufferSubData(BufferTarget.UniformBuffer, IntPtr.Zero, (IntPtr)_fogSettingsSize, ref data);
 			
 		}
 		
 		public void Enable(){
-			BlockShaders.StaticShader.Bind();
+		    WorldRenderer.StaticShader.Bind();
 		}
 		public void Disable(){
-			BlockShaders.StaticShader.UnBind();
+		    WorldRenderer.StaticShader.UnBind();
 		}
 	}
 	

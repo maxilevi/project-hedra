@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using Hedra.Engine.Management;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;

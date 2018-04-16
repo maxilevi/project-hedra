@@ -6,11 +6,9 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using Hedra.Engine.Rendering.UI;
 
 namespace Hedra.Engine.Rendering.Effects
 {
@@ -19,13 +17,16 @@ namespace Hedra.Engine.Rendering.Effects
 	/// </summary>
 	public class UnderWaterFilter : Filter
 	{
-		public GUIShader WaterEffect = new GUIShader("Shaders/UnderWater.vert", "Shaders/UnderWater.frag");
-		public static Vector4 Multiplier = new Vector4(1f,1f,1f ,1);
-		private int MultiplierUniform, TimeUniform;
-		
-		public UnderWaterFilter() : base(){
-			MultiplierUniform = GL.GetUniformLocation(WaterEffect.ShaderID, "Multiplier");
-			TimeUniform = GL.GetUniformLocation(WaterEffect.ShaderID, "Time");
+	    private static readonly Shader WaterEffect;
+		public Vector4 Multiplier { get; set; }
+
+	    static UnderWaterFilter()
+	    {
+	        WaterEffect = Shader.Build("Shaders/UnderWater.vert", "Shaders/UnderWater.frag");
+        }
+
+	    public UnderWaterFilter() {
+            Multiplier = new Vector4(1f, 1f, 1f, 1);
 		}
 		
 		public override void Resize(){}
@@ -34,8 +35,8 @@ namespace Hedra.Engine.Rendering.Effects
 			Dst.Bind();
 			
 			WaterEffect.Bind();
-			GL.Uniform1(TimeUniform, WaterMeshBuffer.WaveMovement);
-			GL.Uniform4(MultiplierUniform, Multiplier);
+		    //WaterEffect["Time"] = WaterMeshBuffer.WaveMovement;
+		    WaterEffect["Multiplier"] = Multiplier;
 			this.DrawQuad(Src.TextureID[0]);
 			WaterEffect.UnBind();
 			

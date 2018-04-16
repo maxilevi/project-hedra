@@ -19,28 +19,28 @@ namespace Hedra.Engine.Rendering
 	//Kind of hacky, refactor later
 	public class Billboard : IRenderable, IDisposable
 	{
-		public Vector3 Position = Vector3.Zero;
-		public float LifeTime;
-		public bool Disposed;
-		public bool Vanish;
-		public float Size = 1;
-		public float Speed = 2;
-		public Func<Vector3> FollowFunc;
-		public UIElement Texture;
-		public bool Enabled {get; set;}
-		
-		
-		private bool TextBillboard = true;
-		private Vector2 OriginalScale;
-		
-		public Billboard(float LifeTime, string Text, Color TextColor, Font TextFont, Vector3 Position)
+		public Vector3 Position { get; set; }
+        public float LifeTime { get; set; }
+        public bool Disposed { get; set; }
+        public bool Vanish { get; set; }
+		public float Size { get; set; } = 1;
+		public float Speed { get; set; } = 2;
+		public Func<Vector3> FollowFunc { get; set; }
+        public UIElement Texture { get; set; }
+        public bool Enabled {get; set;}		
+		private readonly bool _textBillboard;
+		private readonly Vector2 _originalScale;
+	    private float _life;
+	    private Vector3 _addedPosition;
+
+        public Billboard(float LifeTime, string Text, Color TextColor, Font TextFont, Vector3 Position)
 		{
-			TextBillboard = true;
+			_textBillboard = true;
 			this.LifeTime = LifeTime;
 			this.Position = Position;
 			this.Texture = new GUIText(Text, Vector2.Zero, TextColor, TextFont);
 			this.Texture.Enable();
-			this.OriginalScale = this.Texture.Scale;
+			this._originalScale = this.Texture.Scale;
 			DrawManager.UIRenderer.Remove( (this.Texture as GUIText).UIText);
 			
 			DrawManager.Add(this);
@@ -48,48 +48,45 @@ namespace Hedra.Engine.Rendering
 		
 		public Billboard(float LifeTime, uint Icon, Vector3 Position, Vector2 Scale)
 		{
-			TextBillboard = false;
+			_textBillboard = false;
 			this.LifeTime = LifeTime;
 			this.Position = Position;
 			this.Texture = new Texture(Icon, Vector2.Zero, Scale);
 			this.Texture.Enable();
-			this.OriginalScale = Scale;
+			this._originalScale = Scale;
 			DrawManager.UIRenderer.Remove( (this.Texture as Texture).TextureElement);
 			
 			DrawManager.Add(this);
 		}
 		
-		private float Life = 0;
-		private Vector3 AddedPosition;
 		public void Draw(){
 			if(FollowFunc != null)
 				Position = FollowFunc();
 			
 			if(Vanish){
-				AddedPosition += Vector3.UnitY * Time.FrameTimeSeconds * Speed;
-				(this.Texture as GUIText).UIText.Opacity = 1-(Life / LifeTime);
+				_addedPosition += Vector3.UnitY * Time.FrameTimeSeconds * Speed;
+				((GUIText) this.Texture).UIText.Opacity = 1-(_life / LifeTime);
 			}
-			Life += Time.FrameTimeSeconds;
+			_life += Time.FrameTimeSeconds;
 			
-			if(LifeTime != 0 && Life >= LifeTime){
+			if(LifeTime != 0 && _life >= LifeTime){
 				this.Dispose();
 				return;
 			}
 			
-			LocalPlayer Player = GameManager.Player;
-			float Product = Mathf.DotProduct(Player.View.LookAtPoint.NormalizedFast(), (Position+AddedPosition - Player.Position).NormalizedFast());
-			if(Product <= -0.5f) return;
+			var player = GameManager.Player;
+			float product = Mathf.DotProduct(player.View.LookAtPoint.NormalizedFast(), (Position+_addedPosition - player.Position).NormalizedFast());
+			if(product <= -0.5f) return;
 			
-			Vector4 EyeSpace = Vector4.Transform(new Vector4(Position+AddedPosition,1), DrawManager.FrustumObject.ModelViewMatrix);
-			Vector4 HomogeneusSpace = Vector4.Transform(EyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
-			Vector3 NDC = HomogeneusSpace.Xyz / HomogeneusSpace.W;
-			this.Texture.Position = Mathf.Clamp(NDC.Xy, -.98f, .98f);
-			this.Texture.Scale = this.OriginalScale * Size;
-			
-			if(TextBillboard)
-				DrawManager.UIRenderer.Draw((this.Texture as GUIText).UIText);
-			else
-				DrawManager.UIRenderer.Draw((this.Texture as Texture).TextureElement);
+			Vector4 eyeSpace = Vector4.Transform(new Vector4(Position+_addedPosition,1), DrawManager.FrustumObject.ModelViewMatrix);
+			Vector4 homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
+			Vector3 ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
+			this.Texture.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f);
+			this.Texture.Scale = this._originalScale * Size;
+
+		    DrawManager.UIRenderer.Draw(_textBillboard
+		        ? ((GUIText) this.Texture).UIText
+		        : ((Texture) this.Texture).TextureElement);
 		}
 		
 		public void Dispose(){

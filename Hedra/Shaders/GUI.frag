@@ -1005,7 +1005,6 @@ in vec2 UV;
 uniform sampler2D Texture;
 uniform sampler2D Background;
 uniform sampler2D Mask;
-uniform vec4 Color;
 uniform int Flipped;
 uniform float Opacity;
 uniform bool Grayscale;

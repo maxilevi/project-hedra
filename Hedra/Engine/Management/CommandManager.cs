@@ -161,10 +161,10 @@ namespace Hedra.Engine.Management
 				}
 				if(Parts[0] == "time"){
 					if(Parts[1] == "speed"){
-						Enviroment.SkyManager.DaytimeSpeed = int.Parse(Parts[2]);
+						EnvironmentSystem.SkyManager.DaytimeSpeed = int.Parse(Parts[2]);
 						return true;
 					}
-					Enviroment.SkyManager.SetTime(int.Parse(Parts[1]));
+					EnvironmentSystem.SkyManager.SetTime(int.Parse(Parts[1]));
 					return true;
 				}
 			    if (Parts[0] == "burn")

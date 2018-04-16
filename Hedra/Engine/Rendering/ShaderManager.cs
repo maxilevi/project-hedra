@@ -14,28 +14,23 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering
-{
-	public class PointLight
-	{
-	    public const float DefaultRadius = 20f;
-        public Vector3 Position { get; set; }
-        public Vector3 Color { get; set; }
-	    public float Radius { get; set; } = DefaultRadius;
-	    public bool Locked { get; set; }
-	}
-	
+{	
 	public static class ShaderManager
 	{
 		public const int LightDistance = 256;
 		public const int MaxLights = 12;
-		private static readonly List<Shader> Shaders = new List<Shader>();
-		private static readonly PointLight[] PointLights = new PointLight[MaxLights];
-	    private static Vector3 _lightPosition = new Vector3(0, 1000, 0);
-	    private static Vector3 _lightColor = new Vector3(1, 1, 1);
+	    private static readonly List<Shader> Shaders;
+	    private static readonly PointLight[] PointLights;
+	    private static Vector3 _lightPosition;
+	    private static Vector3 _lightColor;
 	    private static float _clipPlaneY;
 
         static ShaderManager(){
-			for(int i = 0; i < PointLights.Length; i++){
+            Shaders = new List<Shader>();
+            PointLights = new PointLight[MaxLights];
+            _lightPosition = new Vector3(0, 1000, 0);
+            _lightColor = new Vector3(1, 1, 1);
+            for (int i = 0; i < PointLights.Length; i++){
 				PointLights[i] = new PointLight();
 			}
 		}
@@ -43,23 +38,23 @@ namespace Hedra.Engine.Rendering
 		public static void RegisterShader(Shader Entry){
 			Shaders.Add(Entry);
 			//Entry.ClipPlaneLocation = GL.GetUniformLocation(Entry.ShaderID, "ClipPlane");
-			Entry.LightColorLocation = GL.GetUniformLocation(Entry.ShaderID, "LightColor");
-			Entry.PointLightsColorUniform = new int[MaxLights];
+			Entry.LightColorLocation = GL.GetUniformLocation(Entry.ShaderId, "LightColor");
+		    Entry.LightPositionLocation = GL.GetUniformLocation(Entry.ShaderId, "LightPosition");
+            Entry.PointLightsColorUniform = new int[MaxLights];
 			Entry.PointLightsPositionUniform = new int[MaxLights];
 			Entry.PointLightsRadiusUniform = new int[MaxLights];
 			
 			for(int i = 0; i < Entry.PointLightsColorUniform.Length; i++){
-				Entry.PointLightsColorUniform[i] = GL.GetUniformLocation(Entry.ShaderID, "Lights["+i+"].Color");
+				Entry.PointLightsColorUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Color");
 			}
 			for(int i = 0; i < Entry.PointLightsPositionUniform.Length; i++){
-				Entry.PointLightsPositionUniform[i] = GL.GetUniformLocation(Entry.ShaderID, "Lights["+i+"].Position");
+				Entry.PointLightsPositionUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Position");
 			}
 			for(int i = 0; i < Entry.PointLightsRadiusUniform.Length; i++){
-				Entry.PointLightsRadiusUniform[i] = GL.GetUniformLocation(Entry.ShaderID, "Lights["+i+"].Radius");
+				Entry.PointLightsRadiusUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Radius");
 			}
 	
 			//Entry.PlayerPositionUniform = GL.GetUniformLocation(Entry.ShaderID, "PlayerPosition");
-			//Entry.LightPositionLocation = GL.GetUniformLocation(Entry.ShaderID, "LightPosition");
 			//GL.Uniform1(Entry.ClipPlaneLocation, m_ClipPlaneY);
 			//GL.Uniform3(Entry.LightColorLocation, m_LightColor);
 			//GL.Uniform3(Entry.LightPositionLocation, m_LightPosition);
@@ -91,7 +86,7 @@ namespace Hedra.Engine.Rendering
 				if(j == -1) continue;
 				if(Shaders[i].PointLightsColorUniform[ j ] != -1)
 					ThreadManager.ExecuteOnMainThread ( delegate{
-					                                   	GL.UseProgram(Shaders[k].ShaderID);
+					                                   	GL.UseProgram(Shaders[k].ShaderId);
 					                                   	GL.Uniform3(Shaders[k].PointLightsColorUniform[ j ], Light.Color);
 					                                    GL.Uniform3(Shaders[k].PointLightsPositionUniform[ j ], Light.Position);
 					                                    GL.Uniform1(Shaders[k].PointLightsRadiusUniform[ j ], Light.Radius);
@@ -113,7 +108,7 @@ namespace Hedra.Engine.Rendering
 					int k = i;
 					if(Shaders[i].LightColorLocation != -1)
 						ThreadManager.ExecuteOnMainThread ( delegate{ 
-						                                   	GL.UseProgram(Shaders[k].ShaderID);
+						                                   	GL.UseProgram(Shaders[k].ShaderId);
 						                                   	GL.Uniform3(Shaders[k].LightColorLocation, value); 
 						                                   } );
 				}
@@ -133,7 +128,7 @@ namespace Hedra.Engine.Rendering
 					int k = i;
 					if(Shaders[i].LightPositionLocation != -1)
 						ThreadManager.ExecuteOnMainThread ( delegate{
-						                                   	GL.UseProgram(Shaders[k].ShaderID);
+						                                   	GL.UseProgram(Shaders[k].ShaderId);
 						                                   	GL.Uniform3(Shaders[k].LightPositionLocation, _lightPosition);
 						                                   } );
 				}

@@ -8,7 +8,7 @@ using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Management;
-using Hedra.Engine.Enviroment;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Rendering.UI;
 using System.Drawing;
 using Hedra.Engine.Generation;
@@ -19,26 +19,30 @@ namespace Hedra.Engine.Rendering.Effects
 	/// <summary>
 	/// Do Nothing.
 	/// </summary>
-	public class MainFBO : IEffect
+	public class MainFBO
 	{
-		public bool Enabled{get; set;}
-		public FBO Default, ThirdPass;
-		public FBO FinalFBO;
-		public FBO AdditiveFBO;
+	    public static Shader Shader { get; }
+        public bool Enabled {get; set;}
+		public FBO Default;
+	    public FBO ThirdPass;
+	    public FBO FinalFbo;
+		public FBO AdditiveFbo;
 		public UnderWaterFilter UnderWater;
 		public DistortionFilter Distortion;
 		public BloomFilter Bloom;
-		public BlurFilter Blur;
-		
-		public DeferedRenderer SSAO;
-        public static GUIShader Shader = new GUIShader("Shaders/GUI.vert", "Shaders/GUI.frag");
-		private Matrix4 Identity;
+		public BlurFilter Blur;	
+		public DeferedRenderer Ssao;
+
+	    static MainFBO()
+	    {
+	        Shader = Shader.Build("Shaders/GUI.vert", "Shaders/GUI.frag");
+        }
+
 		public MainFBO(){
-			Identity = Mathf.CreateTransformationMatrix(new Vector2(1,-1), Vector2.Zero);
-			SSAO = new DeferedRenderer();
+            Ssao = new DeferedRenderer();
 			Default = new FBO(GameSettings.Width, GameSettings.Height, false, 0, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgba32f);
-			FinalFBO = new FBO(GameSettings.Width, GameSettings.Height);
-			AdditiveFBO = new FBO(GameSettings.Width, GameSettings.Height);
+			FinalFbo = new FBO(GameSettings.Width, GameSettings.Height);
+			AdditiveFbo = new FBO(GameSettings.Width, GameSettings.Height);
 
             Bloom = new BloomFilter();
 			UnderWater = new UnderWaterFilter();
@@ -50,23 +54,23 @@ namespace Hedra.Engine.Rendering.Effects
 			#region Normal
 			//Just paste the contents without any effect
 			if(!GameSettings.UnderWaterEffect && !GameSettings.SSAO){
-				FinalFBO.Bind();
+				FinalFbo.Bind();
                 Shader.Bind();
 				DrawQuad(Default.TextureID[0]);
                 Shader.UnBind();
-				FinalFBO.UnBind();
+				FinalFbo.UnBind();
 				
 				if(GameSettings.BlurFilter){
 					Default.Bind();
                     Shader.Bind();
-					DrawQuad(FinalFBO.TextureID[0]);
+					DrawQuad(FinalFbo.TextureID[0]);
                     Shader.UnBind();
 					Default.UnBind();
 					
 					//Clear it
-					FinalFBO.Bind();
+					FinalFbo.Bind();
 					GL.ClearColor(Color.Transparent);
-					FinalFBO.UnBind();
+					FinalFbo.UnBind();
 				}
 			}
 			#endregion
@@ -75,11 +79,11 @@ namespace Hedra.Engine.Rendering.Effects
 			if(GameSettings.SSAO)
 			{
 
-			    FBO DrawFBO = (GameSettings.UnderWaterEffect || GameSettings.BlurFilter || GameSettings.DarkEffect) ? Default : FinalFBO;
+			    FBO DrawFBO = (GameSettings.UnderWaterEffect || GameSettings.BlurFilter || GameSettings.DarkEffect) ? Default : FinalFbo;
 
-                SSAO.SecondPass.Bind();
+                Ssao.SecondPass.Bind();
 				
-				SSAO.FirstPassShader.Bind();
+				Ssao.FirstPassShader.Bind();
 			
 				GL.Enable(EnableCap.Texture2D);
 				GL.Enable(EnableCap.Blend);
@@ -87,51 +91,51 @@ namespace Hedra.Engine.Rendering.Effects
 			    DrawManager.UIRenderer.SetupQuad();
 
                 GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, SSAO.FirstPass.TextureID[1]);
+				GL.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[1]);
 				
 				GL.ActiveTexture(TextureUnit.Texture1);
-				GL.BindTexture(TextureTarget.Texture2D, SSAO.FirstPass.TextureID[2]);
+				GL.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[2]);
 				
 				GL.ActiveTexture(TextureUnit.Texture2);
-				GL.BindTexture(TextureTarget.Texture2D, SSAO.RandomTex);
+				GL.BindTexture(TextureTarget.Texture2D, Ssao.RandomTex);
 				
-				GL.Uniform1(SSAO.PositionSampler, 0);
-				GL.Uniform1(SSAO.NormalSampler, 1);
-				GL.Uniform1(SSAO.RandomSampler, 2);
-				GL.Uniform1(SSAO.Intensity, GameSettings.AmbientOcclusionIntensity);
+				GL.Uniform1(Ssao.PositionSampler, 0);
+				GL.Uniform1(Ssao.NormalSampler, 1);
+				GL.Uniform1(Ssao.RandomSampler, 2);
+				GL.Uniform1(Ssao.Intensity, GameSettings.AmbientOcclusionIntensity);
 				
-				GL.UniformMatrix4(SSAO.ProjectionUniform, false, ref DrawManager.FrustumObject.ProjectionMatrix);
+				GL.UniformMatrix4(Ssao.ProjectionUniform, false, ref DrawManager.FrustumObject.ProjectionMatrix);
 
 			    DrawManager.UIRenderer.DrawQuad();
 
-                SSAO.FirstPassShader.UnBind();
+                Ssao.FirstPassShader.UnBind();
 
-			    SSAO.ThirdPass.Bind();
-                SSAO.SecondPassShader.Bind();
+			    Ssao.ThirdPass.Bind();
+                Ssao.SecondPassShader.Bind();
 
 			    //Firstpass output
 			    GL.ActiveTexture(TextureUnit.Texture0);
-			    GL.BindTexture(TextureTarget.Texture2D, SSAO.SecondPass.TextureID[0]);
+			    GL.BindTexture(TextureTarget.Texture2D, Ssao.SecondPass.TextureID[0]);
 
 			    DrawManager.UIRenderer.DrawQuad();
 
-                SSAO.ThirdPass.UnBind();
+                Ssao.ThirdPass.UnBind();
 			    DrawFBO.Bind();
-                SSAO.ThirdPassShader.Bind();
+                Ssao.ThirdPassShader.Bind();
 
                 //Firstpass output
                 GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, SSAO.ThirdPass.TextureID[0]);
+				GL.BindTexture(TextureTarget.Texture2D, Ssao.ThirdPass.TextureID[0]);
 				//Color texture
 				GL.ActiveTexture(TextureUnit.Texture1);
-				GL.BindTexture(TextureTarget.Texture2D, SSAO.FirstPass.TextureID[0]);
+				GL.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[0]);
 				
-				GL.Uniform1( SSAO.AOSampler, 0);
-				GL.Uniform1( SSAO.ColorSampler, 1);
+				GL.Uniform1( Ssao.AOSampler, 0);
+				GL.Uniform1( Ssao.ColorSampler, 1);
 
 			    DrawManager.UIRenderer.DrawQuad();
 
-                SSAO.ThirdPassShader.UnBind();
+                Ssao.ThirdPassShader.UnBind();
 			    DrawFBO.UnBind();//Unbind is the same
 				
 				GL.Enable(EnableCap.CullFace);
@@ -142,7 +146,7 @@ namespace Hedra.Engine.Rendering.Effects
 			
 			#region Bloom
 			if(GameSettings.Bloom){
-				Bloom.Pass(FinalFBO, AdditiveFBO);
+				Bloom.Pass(FinalFbo, AdditiveFbo);
 			}
 			#endregion
 			
@@ -150,8 +154,8 @@ namespace Hedra.Engine.Rendering.Effects
 			if(GameSettings.UnderWaterEffect)
 			{
 			    var underChunk = World.GetChunkAt(LocalPlayer.Instance.View.Position);
-				UnderWaterFilter.Multiplier = underChunk?.Biome?.Colors.WaterColor * 0.8f ?? Colors.DeepSkyBlue;
-				UnderWater.Pass(Default, FinalFBO);
+			    UnderWater.Multiplier = underChunk?.Biome?.Colors.WaterColor * 0.8f ?? Colors.DeepSkyBlue;
+				UnderWater.Pass(Default, FinalFbo);
 			}
 			#endregion
 			
@@ -163,14 +167,14 @@ namespace Hedra.Engine.Rendering.Effects
 			
 			#region Dark
 			if(GameSettings.DarkEffect){
-				UnderWaterFilter.Multiplier = new Vector4(.5f,.5f,.5f,1);
-				UnderWater.Pass(Default, FinalFBO);
+				UnderWater.Multiplier = new Vector4(.5f,.5f,.5f,1);
+				UnderWater.Pass(Default, FinalFbo);
 			}
 			#endregion
 			
 			#region Blur
 			if(GameSettings.BlurFilter){
-				Blur.Pass(Default, FinalFBO);
+				Blur.Pass(Default, FinalFbo);
 			}
 			#endregion 
 			
@@ -178,15 +182,15 @@ namespace Hedra.Engine.Rendering.Effects
 			if( (GameSettings.UnderWaterEffect || GameSettings.DarkEffect || GameSettings.BlurFilter) && GameSettings.SSAO && !GameSettings.Bloom){
                 Default.Bind();
 				Shader.Bind();
-				DrawQuad(FinalFBO.TextureID[0], 0, true);
+				DrawQuad(FinalFbo.TextureID[0], 0, true);
                 Shader.UnBind();
                 Default.UnBind();
 				   
-				FinalFBO.Bind();
+				FinalFbo.Bind();
                 Shader.Bind();
 				DrawQuad(Default.TextureID[0], 0, false);
                 Shader.UnBind();
-				FinalFBO.UnBind();
+				FinalFbo.UnBind();
 
                 //Clear it
                 Default.Bind();
@@ -196,7 +200,7 @@ namespace Hedra.Engine.Rendering.Effects
             #endregion
 
 			Shader.Bind();
-			DrawQuad(FinalFBO.TextureID[0], (GameSettings.Bloom) ? AdditiveFBO.TextureID[0] : 0, false, GameSettings.FXAA);
+			DrawQuad(FinalFbo.TextureID[0], (GameSettings.Bloom) ? AdditiveFbo.TextureID[0] : 0, false, GameSettings.FXAA);
 			Shader.UnBind();
 		}
 		
@@ -205,23 +209,22 @@ namespace Hedra.Engine.Rendering.Effects
 			GL.Disable(EnableCap.DepthTest);
 			
 			DrawManager.UIRenderer.SetupQuad();
-			
-			GL.ActiveTexture(TextureUnit.Texture0);
-			GL.BindTexture(TextureTarget.Texture2D, TexID);
-			GL.Uniform1(Shader.GUIUniform, 0);
-			
-			GL.ActiveTexture(TextureUnit.Texture1);
-			GL.BindTexture(TextureTarget.Texture2D, Additive);
-			GL.Uniform1(Shader.BackGroundUniform, 1);
-			
-			GL.Uniform1(Shader.FlippedUniform, (Flipped) ? 1 : 0);
-			
-			GL.Uniform2(Shader.ScaleUniform, new Vector2(1,1));
-			GL.Uniform2(Shader.PositionUniform, new Vector2(0,0));
-            GL.Uniform2(Shader.SizeUniform, new Vector2(1.0f/GameSettings.Width, 1.0f/GameSettings.Height));
-            GL.Uniform1(Shader.FxaaUniform, (FXAA) ? 1.0f : 0.0f);
 
-		    DrawManager.UIRenderer.DrawQuad();
+            GL.ActiveTexture(TextureUnit.Texture0);
+			GL.BindTexture(TextureTarget.Texture2D, TexID);
+		    Shader["Texture"] = 0;
+
+            GL.ActiveTexture(TextureUnit.Texture1);
+			GL.BindTexture(TextureTarget.Texture2D, Additive);
+		    Shader["Background"] = 1;
+
+            Shader["Scale"] = Vector2.One;
+		    Shader["Position"] = Vector2.Zero;
+		    Shader["Flipped"] = Flipped ? 1 : 0;
+		    Shader["Size"] = new Vector2(1.0f / GameSettings.Width, 1.0f / GameSettings.Height);
+		    Shader["FXAA"] = FXAA ? 1.0f : 0.0f;
+
+            DrawManager.UIRenderer.DrawQuad();
 
             GL.Enable(EnableCap.DepthTest);
 			GL.Disable(EnableCap.Texture2D);
@@ -233,7 +236,7 @@ namespace Hedra.Engine.Rendering.Effects
 			if(!GameSettings.SSAO)
 				Default.Bind();
 			else
-				SSAO.FirstPass.Bind();
+				Ssao.FirstPass.Bind();
 			
 			
 		}
@@ -241,18 +244,18 @@ namespace Hedra.Engine.Rendering.Effects
 			if(!GameSettings.SSAO)
 				Default.UnBind();
 			else
-				SSAO.FirstPass.UnBind();//Unbind ids the same
+				Ssao.FirstPass.UnBind();//Unbind ids the same
 		}
 		
 		public static MainFBO DefaultBuffer => DrawManager.MainBuffer;
 
 	    public void Resize(){
 			Default = Default.Resize();
-			FinalFBO = FinalFBO.Resize();
-			AdditiveFBO = AdditiveFBO.Resize();
-			SSAO.FirstPass = SSAO.FirstPass.Resize();
-			SSAO.SecondPass = SSAO.SecondPass.Resize();
-	        SSAO.ThirdPass = SSAO.ThirdPass.Resize();
+			FinalFbo = FinalFbo.Resize();
+			AdditiveFbo = AdditiveFbo.Resize();
+			Ssao.FirstPass = Ssao.FirstPass.Resize();
+			Ssao.SecondPass = Ssao.SecondPass.Resize();
+	        Ssao.ThirdPass = Ssao.ThirdPass.Resize();
 			Bloom.Resize();
 			Distortion.Resize();
 			Blur.Resize();

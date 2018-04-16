@@ -41,7 +41,7 @@ uniform mat4 ShadowMVP;
 uniform vec3 LightPosition;
 uniform vec3 LightColor;
 uniform PointLight Lights[12];
-const float Snow = 0.0;
+uniform float Snow = 0.0;
 uniform sampler3D noiseTexture;
 const float Damper = 10.0;
 const float Reflectivity = 0.08;

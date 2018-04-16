@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Enviroment;
+﻿using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Player.MapSystem

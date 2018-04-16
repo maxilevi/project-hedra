@@ -64,7 +64,7 @@ namespace Hedra.Engine
 	    public static void LoadMenu(){
 	        World.Recreate(World.MenuSeed);
             LocalPlayer.Instance.UI.ShowMenu();
-	        Enviroment.SkyManager.SetTime(12000);
+	        EnvironmentSystem.SkyManager.SetTime(12000);
           	LocalPlayer.Instance.Model.Enabled = false;
           	LocalPlayer.Instance.View.Pitch = 0f;
           	LocalPlayer.Instance.HandLamp.Enabled = false;
@@ -119,8 +119,8 @@ namespace Hedra.Engine
 			Player.View.CameraHeight = Camera.DefaultCameraHeight;
 			if(Information.WorldSeed != 0)
 			    World.Recreate(Information.WorldSeed);
-			Enviroment.SkyManager.DayTime = Information.Daytime;
-			Enviroment.SkyManager.LoadTime = true;
+			EnvironmentSystem.SkyManager.DayTime = Information.Daytime;
+			EnvironmentSystem.SkyManager.LoadTime = true;
 	        Player.Inventory.ClearInventory();
 			Player.Inventory.SetItems(Information.Items);
 	        GameManager.SetRestrictions(Information);
@@ -157,7 +157,7 @@ namespace Hedra.Engine
 			Information.BlockPosition = new Vector3(Information.BlockPosition.X, 128, Information.BlockPosition.Z);
 			LocalPlayer.Instance.IsGliding = false;
 			GameManager.MakeCurrent(Information);
-			Enviroment.SkyManager.SetTime(12000);
+			EnvironmentSystem.SkyManager.SetTime(12000);
 
 		    Player.Model = new HumanModel(Player);
 			

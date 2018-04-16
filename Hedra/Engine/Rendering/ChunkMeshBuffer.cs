@@ -47,7 +47,7 @@ namespace Hedra.Engine.Rendering
 			GL.EnableVertexAttribArray(2);
 
 			GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-			GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+			////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 			
 			GL.DisableVertexAttribArray(0);
 			GL.DisableVertexAttribArray(1);
@@ -61,12 +61,12 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public virtual void Bind(){
-			BlockShaders.StaticShader.Bind();
-			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
+			WorldRenderer.StaticShader.Bind();
+			//GL.Uniform3(WorldRenderer.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
 		}
 		
 		public virtual void UnBind(){
-			BlockShaders.StaticShader.UnBind();
+		    WorldRenderer.StaticShader.UnBind();
 		}
 		
 		public VertexData ToVertexData(){

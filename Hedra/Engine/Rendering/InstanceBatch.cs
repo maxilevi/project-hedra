@@ -21,83 +21,83 @@ namespace Hedra.Engine.Rendering
 	public class InstanceBatch : IRenderable
 	{
 		public const int MaxInstances = 64;
-		private VertexData Original;
-		public int Count;
-		public List<Matrix4> TransMatrix = new List<Matrix4>();
-		public List<Vector4> Colors = new List<Vector4>();
+		private readonly VertexData _original;
+		public int Count { get; set; }
+		public List<Matrix4> TransMatrix { get; set; }
+		public List<Vector4> Colors { get; set; }
 		public bool AffectWind {get; set;}
-		public bool Builded {get; set;}
+		public bool Builded {get; set;}	
 		
-		
-		
-		private static InstanceShader Shader;
-		private VBO<uint> IndicesVBO;
-		private VBO<Vector3> VerticesVBO;
-		private VBO<Vector3> NormalsVBO;
-		private uint VAOId, BufferID;
-		private Vector3 HighestPoint;
-		private Vector3 LowestPoint;
-		private bool Initialized;
+		private static Shader _shader;
+		private VBO<uint> _indicesVbo;
+		private VBO<Vector3> _verticesVbo;
+		private VBO<Vector3> _normalsVbo;
+	    private Vector3 _highestPoint;
+		private Vector3 _lowestPoint;
+	    private uint _vaoId;
+	    private uint _bufferId;
+        private bool _initialized;
 		
 		public InstanceBatch(VertexData Original){
-			this.Original = Original;
+            TransMatrix = new List<Matrix4>();
+            Colors = new List<Vector4>();
+            this._original = Original;
 		}
-		//So it can be Thread-Safe
+
 		public void Initialize(){
-			if(Shader == null){
-				Shader = new InstanceShader("Shaders/Instance.vert","Shaders/Instance.frag");
-				
+			if(_shader == null){
+				_shader = Shader.Build("Shaders/Instance.vert","Shaders/Instance.frag");			
 			}
-			LowestPoint = Original.SupportPoint(-Vector3.UnitY);
-			HighestPoint = Original.SupportPoint(Vector3.UnitY);
-			IndicesVBO = new VBO<uint>(Original.Indices.ToArray(), Original.Indices.Count * sizeof(uint),
-			                           VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer, BufferUsageHint.StaticDraw);
+			_lowestPoint = _original.SupportPoint(-Vector3.UnitY);
+			_highestPoint = _original.SupportPoint(Vector3.UnitY);
+			_indicesVbo = new VBO<uint>(_original.Indices.ToArray(), _original.Indices.Count * sizeof(uint),
+			                           VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
 			
-			VerticesVBO = new VBO<Vector3>(Original.Vertices.ToArray(), Original.Vertices.Count * Vector3.SizeInBytes,
-			                               VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.StaticDraw);
+			_verticesVbo = new VBO<Vector3>(_original.Vertices.ToArray(), _original.Vertices.Count * Vector3.SizeInBytes,
+			                               VertexAttribPointerType.Float);
 			
-			NormalsVBO = new VBO<Vector3>(Original.Normals.ToArray(), Original.Normals.Count * Vector3.SizeInBytes,
-			                              VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.StaticDraw);
+			_normalsVbo = new VBO<Vector3>(_original.Normals.ToArray(), _original.Normals.Count * Vector3.SizeInBytes,
+			                              VertexAttribPointerType.Float);
 			
-			Original.Dispose();
+			_original.Dispose();
 			this.AffectWind = true;
 			this.CreateVAO();
-			this.Initialized = true;
+			this._initialized = true;
 		}
 		
 		public void Add(Vector3 Position, Vector3 Scale, Vector4 Color, Vector3 Rotation){
 			if(Count >= MaxInstances) return;
 			
 			this.Colors.Add(Color);
-			Matrix4 NewMat = Matrix4.CreateScale(Scale);
-			NewMat *= Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z);
-			NewMat *= Matrix4.CreateTranslation(Position);
-			this.TransMatrix.Add( NewMat );
+			var newMat = Matrix4.CreateScale(Scale);
+			newMat *= Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z);
+			newMat *= Matrix4.CreateTranslation(Position);
+			this.TransMatrix.Add( newMat );
 			this.Count++;
 			this.Builded = false;
 		}
 		
 		public void Build(){
-			if(!this.Initialized)
+			if(!this._initialized)
 				this.Initialize();
 			this.UpdateVBO();
 			this.Builded = true;
 		}
 			
 		public void Draw(){
-			if(!Builded || !Initialized) return;
+			if(!Builded || !_initialized) return;
 			
 			GL.Enable(EnableCap.Blend);
 			GL.Enable(EnableCap.DepthTest);
-			Shader.Bind();
+			_shader.Bind();
 			
-			GL.Uniform1(Shader.WindUniform, (AffectWind) ? 1 : 0);
-			GL.Uniform1(Shader.TimeUniform, Time.CurrentFrame);
-			GL.Uniform3(Shader.HighestPointUniform, HighestPoint);
-			GL.Uniform3(Shader.LowestPointUniform, LowestPoint);
-			GL.Uniform3(Shader.PlayerPositionUniform, GameManager.Player.Position);
-			
-			GL.BindVertexArray(VAOId);
+			_shader["HasWind"] = AffectWind ? 1 : 0;
+			_shader["Time"] = Time.CurrentFrame;
+			_shader["HighestPoint"] = _highestPoint;
+			_shader["LowestPoint"] = _lowestPoint;
+			_shader["PlayerPosition"] = GameManager.Player.Position;
+
+            GL.BindVertexArray(_vaoId);
 			GL.EnableVertexAttribArray(0);
 			GL.EnableVertexAttribArray(1);
 			GL.EnableVertexAttribArray(2);
@@ -106,8 +106,8 @@ namespace Hedra.Engine.Rendering
 			GL.EnableVertexAttribArray(5);
 			GL.EnableVertexAttribArray(6);
 			
-			GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndicesVBO.ID);
-			GL.DrawElementsInstanced(PrimitiveType.Triangles, IndicesVBO.Count, DrawElementsType.UnsignedInt, IntPtr.Zero, Count);
+			GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indicesVbo.ID);
+			GL.DrawElementsInstanced(PrimitiveType.Triangles, _indicesVbo.Count, DrawElementsType.UnsignedInt, IntPtr.Zero, Count);
 			
 			GL.DisableVertexAttribArray(0);
 			GL.DisableVertexAttribArray(1);
@@ -118,7 +118,7 @@ namespace Hedra.Engine.Rendering
 			GL.DisableVertexAttribArray(6);
 			GL.BindVertexArray(0);
 			
-			Shader.UnBind();
+			_shader.UnBind();
 			GL.Disable(EnableCap.Blend);
 		}
 		
@@ -133,7 +133,7 @@ namespace Hedra.Engine.Rendering
 				Vec4s[i * 5 + 3] = TransMatrix[i].Column2;
 				Vec4s[i * 5 + 4] = TransMatrix[i].Column3;
 			}
-			GL.BindBuffer(BufferTarget	.ArrayBuffer, BufferID);
+			GL.BindBuffer(BufferTarget	.ArrayBuffer, _bufferId);
 			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxInstances * SizeInBytes), IntPtr.Zero, BufferUsageHint.StaticDraw);
 			GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, (IntPtr) (SizeInBytes * Count), Vec4s);
 		
@@ -144,18 +144,18 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		private void CreateVAO(){
-			GL.GenVertexArrays(1, out VAOId);
-			GL.BindVertexArray(VAOId);
+			GL.GenVertexArrays(1, out _vaoId);
+			GL.BindVertexArray(_vaoId);
 			
-			GL.BindBuffer(VerticesVBO.BufferTarget, VerticesVBO.ID);
+			GL.BindBuffer(_verticesVbo.BufferTarget, _verticesVbo.ID);
 			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
 			
 			
-			GL.BindBuffer(NormalsVBO.BufferTarget, NormalsVBO.ID);
+			GL.BindBuffer(_normalsVbo.BufferTarget, _normalsVbo.ID);
 			GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
 			
-			GL.GenBuffers(1, out BufferID);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, BufferID);
+			GL.GenBuffers(1, out _bufferId);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, _bufferId);
 			
 			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxInstances * SizeInBytes), IntPtr.Zero, BufferUsageHint.StaticDraw);
 
@@ -177,8 +177,8 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public void Dispose(){
-			ThreadManager.ExecuteOnMainThread( () => GL.DeleteVertexArrays(1, ref VAOId) );
-			ThreadManager.ExecuteOnMainThread( () => GL.DeleteBuffers(1, ref BufferID) );
+			ThreadManager.ExecuteOnMainThread( () => GL.DeleteVertexArrays(1, ref _vaoId) );
+			ThreadManager.ExecuteOnMainThread( () => GL.DeleteBuffers(1, ref _bufferId) );
 		}
 	}
 }

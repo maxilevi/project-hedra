@@ -18,7 +18,7 @@ namespace Hedra.Engine.Rendering.Particles
 		public const int MaxParticleCount = 15000;
 		
 		public List<Particle3D> Particles = new List<Particle3D>();
-		public static ParticleShader Shader = new ParticleShader("Shaders/Particle.vert","Shaders/Particle.frag");
+		public static Shader Shader = Shader.Build("Shaders/Particle.vert","Shaders/Particle.frag");
 		public uint VAOID { get; private set; }
         public uint BufferID { get; private set; }
         public Vector3 Position { get; set; }
@@ -127,7 +127,7 @@ namespace Hedra.Engine.Rendering.Particles
 				GL.Enable(EnableCap.DepthTest);
 				//GL.Disable(EnableCap.CullFace);
 				Shader.Bind();
-				GL.Uniform3(Shader.PlayerPositionUniform, GameManager.Player.Position);//Really hacky
+				Shader["PlayerPosition"] = GameManager.Player.Position;
 				
 				GL.BindVertexArray(VAOID);
 

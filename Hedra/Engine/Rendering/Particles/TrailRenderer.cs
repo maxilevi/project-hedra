@@ -33,7 +33,7 @@ namespace Hedra.Engine.Rendering
 
         static TrailRenderer()
         {
-            Shader = new Shader("Shaders/TrailRenderer.vert", "Shaders/TrailRenderer.frag");
+            Shader = Shader.Build("Shaders/TrailRenderer.vert", "Shaders/TrailRenderer.frag");
         }
 
         public TrailRenderer(Func<Vector3> Tip, Vector4 Color)
