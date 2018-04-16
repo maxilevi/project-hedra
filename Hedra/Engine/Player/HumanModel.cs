@@ -367,7 +367,7 @@ namespace Hedra.Engine.Player
 				Model.Update();
 				Vector3 PositionAddon = -Vector3.UnitY * 1.5f;
 				if(this.MountModel != null)
-					PositionAddon += (MountModel.Parent.HitBox.Max.Y - MountModel.Parent.HitBox.Min.Y) * Vector3.UnitY * 0.5f;
+					PositionAddon += (MountModel.Parent.HitBox.Max.Y - MountModel.Parent.HitBox.Min.Y) * Vector3.UnitY * 0.65f;
 				
 				Model.Position = this.Position + PositionAddon;
 				Model.Rotation = Mathf.Lerp(Model.Rotation, this.TargetRotation, (float) Time.unScaledDeltaTime * 8f);

@@ -90,7 +90,7 @@ namespace Hedra.Engine.EntitySystem
 			if(HasRider || UnRidable || Entity.IsRiding)return;
 			
 			Rider = Entity;
-			Rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Rider, -Rider.Speed + Parent.Speed * .5f), () => Rider.IsRiding);
+			Rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Rider, -Rider.Speed + Parent.Speed * .5f), () => Rider != null && Rider.IsRiding);
 			HasRider = true;
 			Rider.IsRiding = true;
 			Rider.Model.MountModel = Parent.Model as QuadrupedModel;
