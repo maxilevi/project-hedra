@@ -15,7 +15,6 @@ using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Rendering.Effects;
 
 namespace Hedra.Engine.Rendering
 {
@@ -57,12 +56,15 @@ namespace Hedra.Engine.Rendering
 
         }
 
+	    public static void PrepareRendering()
+	    {
+	        GameManager.Player.View.RebuildMatrix();
+	        DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.Matrix);
+        }
+
 		public static void Render(Dictionary<Vector2, Chunk> ToDraw, ChunkBufferTypes Type){
             
 			if(ToDraw.Count == 0) return;
-			
-			GameManager.Player.View.RebuildMatrix();
-			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.Matrix);
 			
 			if(Type == ChunkBufferTypes.STATIC){
 				IntPtr[] Offsets, ShadowOffsets;
@@ -145,9 +147,12 @@ namespace Hedra.Engine.Rendering
 		    StaticShader["Time"] = !GameManager.InStartMenu ? Time.CurrentFrame : Time.UnPausedCurrentFrame;
 		    StaticShader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
 			StaticShader["Snow"] = SkyManager.Snowing ? 1.0f : 0.0f;		
-			StaticShader["UseShadows"] = (float) GameSettings.ShadowQuality;
+			StaticShader["UseShadows"] = (float) GameSettings.ShadowQuality * (GameSettings.Shadows ? 1f : 0f);
+		    StaticShader["BakedOffset"] = BakedOffset;
+		    StaticShader["Scale"] = Scale;
+		    StaticShader["Offset"] = Offset;
 
-			StaticShader["AreaPositions"] = World.Highlighter.AreaPositions;
+            StaticShader["AreaPositions"] = World.Highlighter.AreaPositions;
 			StaticShader["AreaColors"] = World.Highlighter.AreaColors;
 			
             GL.ActiveTexture(TextureUnit.Texture1);
@@ -178,8 +183,11 @@ namespace Hedra.Engine.Rendering
            	
            	GL.ActiveTexture(TextureUnit.Texture0);
 		    GL.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : DrawManager.MainBuffer.Default.TextureID[0]);
-			
-			WaterShader["AreaPositions"] = World.Highlighter.AreaPositions;
+
+		    WaterShader["BakedOffset"] = BakedOffset;
+		    WaterShader["Scale"] = Scale;
+		    WaterShader["Offset"] = Offset;
+            WaterShader["AreaPositions"] = World.Highlighter.AreaPositions;
 			WaterShader["AreaColors"] = World.Highlighter.AreaColors;		
 			WaterShader["WaveMovement"] = WaveMovement;
            	
@@ -195,6 +203,10 @@ namespace Hedra.Engine.Rendering
         }
 		
 		#endregion
-		
+
+	    public static bool EnableCulling { get; set; } = true;
+        public static Vector3 BakedOffset { get; set; }
+        public static Vector3 Scale { get; set; } = Vector3.One;
+        public static Vector3 Offset { get; set; }
 	}
 }

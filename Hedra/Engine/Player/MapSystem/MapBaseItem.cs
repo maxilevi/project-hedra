@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Hedra.Engine.Rendering;
+﻿using Hedra.Engine.Rendering;
+using OpenTK;
 
 namespace Hedra.Engine.Player.MapSystem
 {
@@ -10,9 +7,14 @@ namespace Hedra.Engine.Player.MapSystem
     {
         public ObjectMesh Mesh { get; set; }
 
+        public MapBaseItem() { }
         public MapBaseItem(ObjectMesh Mesh)
         {
             this.Mesh = Mesh;
         }
+
+        public Vector2 Coordinates { get; set; }
+        public bool HasChunk { get; set; }
+        public bool WasBuilt { get; set; }
     }
 }

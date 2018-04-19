@@ -32,6 +32,9 @@ uniform float Fancy = 1.0;
 uniform mat4 ShadowMVP;
 uniform float ShadowDistance;
 uniform float UseShadows = 3.0;
+uniform vec3 Scale;
+uniform vec3 Offset;
+uniform vec3 BakedOffset;
 
 const float ShadowTransition = 10.0;
 
@@ -82,7 +85,7 @@ void main(){
 	CastShadows = InColor.a;
 	Color = InColor;
 	vec3 unitToLight = normalize(LightPosition);
-	vec4 Vertex = vec4(InVertex, 1.0);
+	vec4 Vertex = vec4((InVertex + BakedOffset) * Scale + Offset, 1.0);
 	
 	float config_set = when_ge(InColor.a, 0.0) * Fancy; //If configuration is set
 	vec2 Unpacked = Unpack(InColor.a, int(2048.0));

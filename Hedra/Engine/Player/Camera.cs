@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
         private readonly LocalPlayer _player;
         private float _prevAlpha = -1f;
         private float _prevDistance;
-        private float _distance;
+        public float Distance { get; set; }
 
         public bool Check = true;
         public float TargetDistance = 10f;
@@ -102,7 +102,7 @@ namespace Hedra.Engine.Player
 
         public void Update()
         {
-            _distance = Mathf.Lerp(_distance, TargetDistance+AddonDistance, Time.unScaledDeltaTime * 3f);
+            Distance = Mathf.Lerp(Distance, TargetDistance+AddonDistance, Time.unScaledDeltaTime * 3f);
             this.ClampYaw();
             if ( !GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead)
             {
@@ -205,15 +205,15 @@ namespace Hedra.Engine.Player
         public void RebuildMatrix(Vector3 MatrixPosition)
         {
             LookAtPoint = new Vector3((float) Math.Cos(Yaw), Pitch, (float) Math.Sin(Yaw));
-            Matrix = Matrix4.LookAt(MatrixPosition - LookAtPoint * _distance + Vector3.UnitY * 4f,
-                MatrixPosition + LookAtPoint * _distance, Vector3.UnitY);
+            Matrix = Matrix4.LookAt(MatrixPosition - LookAtPoint * Distance + Vector3.UnitY * 4f,
+                MatrixPosition + LookAtPoint * Distance, Vector3.UnitY);
         }
 
         public void RebuildMatrix()
         {
             LookAtPoint = new Vector3((float) Math.Cos(Yaw), Pitch, (float) Math.Sin(Yaw));
-            Matrix = Matrix4.LookAt(Objective - LookAtPoint * _distance + CameraHeight,
-                Objective + LookAtPoint * _distance + CameraHeight, Vector3.UnitY);
+            Matrix = Matrix4.LookAt(Objective - LookAtPoint * Distance + CameraHeight,
+                Objective + LookAtPoint * Distance + CameraHeight, Vector3.UnitY);
         }
 
 

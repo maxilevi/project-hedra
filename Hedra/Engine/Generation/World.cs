@@ -174,7 +174,7 @@ namespace Hedra.Engine.Generation
 	        }
 	    }
 
-        private static readonly Dictionary<Vector2, Chunk> _toDraw;
+        public static Dictionary<Vector2, Chunk> DrawingChunks { get; }
 	    private static Matrix4 _previousModelView;
 	    private static int _previousCount;
 	    private static int _previousId;
@@ -191,7 +191,7 @@ namespace Hedra.Engine.Generation
             _globalColliders = new HashSet<ICollidable>();
             Particles = new ParticleSystem(Vector3.Zero);
             ClosestChunkComparer = new ClosestChunk();
-            _toDraw = new Dictionary<Vector2, Chunk>();
+            DrawingChunks = new Dictionary<Vector2, Chunk>();
 	    }
 
         public static void Load(){
@@ -241,13 +241,13 @@ namespace Hedra.Engine.Generation
 				return newSeed;
 			}
 		}
-		
-		public static void CullTest(FrustumCulling FrustumObject){
+
+	    public static void CullTest(FrustumCulling FrustumObject){
 			
 			if(_previousModelView == FrustumObject.ModelViewMatrix && LocalPlayer.Instance.Loader.ActiveChunks == _previousCount) 
 				return;
 			
-			_toDraw.Clear();
+			DrawingChunks.Clear();
 			var toDrawArray = Chunks;
 			for(var i = 0; i < toDrawArray.Count; i++){
 				if(toDrawArray[i] == null || toDrawArray[i].Disposed){
@@ -255,9 +255,8 @@ namespace Hedra.Engine.Generation
 					continue;
 				}
 				
-				if( toDrawArray[i].Initialized && FrustumObject.IsInsideFrustum(toDrawArray[i].Mesh) )
-					_toDraw.Add(new Vector2(toDrawArray[i].OffsetX, toDrawArray[i].OffsetZ), toDrawArray[i]);
-				
+				if( !WorldRenderer.EnableCulling || toDrawArray[i].Initialized && FrustumObject.IsInsideFrustum(toDrawArray[i].Mesh))
+					DrawingChunks.Add(new Vector2(toDrawArray[i].OffsetX, toDrawArray[i].OffsetZ), toDrawArray[i]);				
 			}
 			
 			_previousModelView = FrustumObject.ModelViewMatrix;
@@ -270,7 +269,8 @@ namespace Hedra.Engine.Generation
 			
 			if(GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 			
-			WorldRenderer.Render(_toDraw, Type);
+            WorldRenderer.PrepareRendering();
+			WorldRenderer.Render(DrawingChunks, Type);
 			
 			if(GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 		}

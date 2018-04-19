@@ -19,7 +19,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _parent = Parent;
         }
 
-        private int Lod => _parent.Lod;
         private int OffsetX => _parent.OffsetX;
         private int OffsetZ => _parent.OffsetZ;
         private int BuildedLod => _parent.BuildedLod;
@@ -27,7 +26,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private ChunkMesh Mesh => _parent.Mesh;
         private List<VertexData> StaticElements => _parent.StaticElements.ToList();
 
-        public ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input)
+        public ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input, int Lod)
         {
 
             for (var i = 0; i < StaticElements.Count; i++)

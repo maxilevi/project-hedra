@@ -38,7 +38,9 @@ uniform PointLight Lights[12];
 uniform vec3 PlayerPosition;
 uniform float WaveMovement;
 uniform float Transparency = 0.7;
-
+uniform vec3 Scale;
+uniform vec3 Offset;
+uniform vec3 BakedOffset;
 uniform vec3 LightPosition = vec3(-500.0, 1000.0, 0.0);
 uniform vec3 LightColor = vec3(1.0, 1.0, 1.0);
 
@@ -67,7 +69,7 @@ const float Reflectivity = 0.05;
 void main()
 {
 	Movement = WaveMovement;
-    vec4 v = vec4(InVertex, 1.0);
+    vec4 v = vec4((InVertex + BakedOffset) * Scale + Offset, 1.0);
     v.y = GetY(v.x,v.y,v.z) * InNormal.z * .6 + InVertex.y;
     
     vec2 Unpacked1 = Unpack(InNormal.x, int(4096.0));

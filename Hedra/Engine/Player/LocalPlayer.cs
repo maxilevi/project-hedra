@@ -465,7 +465,6 @@ namespace Hedra.Engine.Player
 			QuestLog.Update();
 			Pet.Update();
 			Chat.Update();
-			Minimap.Update();
 			Map.Update();
 			Trade.Update();
             View.Update();

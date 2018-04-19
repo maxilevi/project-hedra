@@ -134,7 +134,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input)
         {
-            return _structuresBuilder.AddStructuresMeshes(Input);
+            return this.AddStructuresMeshes(Input, this.Lod);
+        }
+
+        public ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input, int LevelOfDetail)
+        {
+            return _structuresBuilder.AddStructuresMeshes(Input, LevelOfDetail);
         }
 
         public void SetTerrainVertices(ChunkMeshBuildOutput Input)

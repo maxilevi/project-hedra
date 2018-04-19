@@ -10,7 +10,6 @@ uniform float Opacity;
 uniform bool Grayscale;
 uniform vec4 Tint;
 uniform int AntiAlias;
-uniform vec2 size;
 
 layout(location = 0) out vec4 OutColor;
 

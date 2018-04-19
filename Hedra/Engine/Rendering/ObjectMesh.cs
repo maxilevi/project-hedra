@@ -22,8 +22,13 @@ namespace Hedra.Engine.Rendering
         public RenderShape Shape { get; set;}
 		public ChunkMesh Mesh { get; }
 		private readonly ObjectMeshBuffer _buffer;
-		
-		public ObjectMesh(Vector3 Position){
+
+	    public ObjectMesh()
+	    {
+	       _buffer = new ObjectMeshBuffer();
+	    }
+
+	    public ObjectMesh(Vector3 Position){
 			this.Enabled = true;
 
 		    var meshBuffers = new ChunkMeshBuffer[]
@@ -229,18 +234,9 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 
-		public static ObjectMesh FromVertexData(VertexData Data){
-			var mesh = new ObjectMesh(Vector3.Zero);
-			ThreadManager.ExecuteOnMainThread( delegate
-            {		                                  	
-			    mesh.Mesh.BuildFrom(mesh.Mesh.MeshBuffers[0], Data, false);
-			    mesh.Mesh.IsGenerated = true;
-			    mesh.Mesh.IsBuilded = true;
-			    mesh.Mesh.Enabled = true;
-			});
-			
-			return mesh;
-			
+		public static ObjectMesh FromVertexData(VertexData Data)
+		{
+		    return FromVertexData(Data, Vector3.Zero);
 		}
 		
 		public static ObjectMesh FromVertexData(VertexData Data, Vector3 Position){
@@ -256,22 +252,9 @@ namespace Hedra.Engine.Rendering
 			return mesh;
 			
 		}
-		
-		public static ObjectMesh FromVertexData(VertexData Data, Vector4 Color1, Vector4 Color2){
-			Data.Color(AssetManager.ColorCode1, Color1);
-			Data.Color(AssetManager.ColorCode2, Color2);
-			
-			return FromVertexData(Data, Vector3.Zero);
-		}
-		
-		public static ObjectMesh FromVertexData(VertexData Data, Vector3 Position, Vector4 Color1, Vector4 Color2){
-			Data.Color(AssetManager.ColorCode1, Color1);
-			Data.Color(AssetManager.ColorCode2, Color2);
-			
-			return FromVertexData(Data, Position);
-		}
+
 		public void Dispose(){
-			Mesh.Dispose();
+			Mesh?.Dispose();
 			DrawManager.Remove(this);
         }
 	}

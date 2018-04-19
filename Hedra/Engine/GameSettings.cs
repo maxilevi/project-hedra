@@ -68,7 +68,7 @@ namespace Hedra.Engine
 
         [Setting] public static bool Autosave = true;
 
-        [Setting] public static int ChunkLoaderRadius = 20;
+        [Setting] public static int ChunkLoaderRadius { get; set; } = 20;
 
         [Setting] public static bool HideObjectives = false;
 

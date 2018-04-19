@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -24,10 +23,10 @@ namespace Hedra.Engine.Player.MapSystem
 	/// </summary>
 	public class Map
 	{
-        private const int ViewSize = 1000;
-	    private const int MapViewSize = 8;
-        private const int MapSize = 4;
-	    private const int ChunkSize = 128;
+        private const int ViewSize = 500;
+	    private const int MapViewSize = 6;
+        private const int MapSize = 8;
+	    private const int ChunkSize = 32;
         private readonly LocalPlayer _player;
 	    private readonly MapStateManager _stateManager;
 	    private readonly MapItem _cursor;
@@ -49,7 +48,7 @@ namespace Hedra.Engine.Player.MapSystem
             this._icons = new List<MapItem>();
             this._stateManager = new MapStateManager(Player);
             this._builder = new MapBuilder();
-            this._cursor = new MapItem(AssetManager.PlyLoader("Assets/UI/MapCursor.ply", Vector3.One * 15f));
+            this._cursor = new MapItem(AssetManager.PlyLoader("Assets/UI/MapCursor.ply", Vector3.One * 80f));
             this._baseItems = new List<MapBaseItem>();
             this._mapInputHandler = new MapInputHandler(Player);
             this._meshBuilder = new MapMeshBuilder(_player, MapSize, ChunkSize);
@@ -76,8 +75,19 @@ namespace Hedra.Engine.Player.MapSystem
 		    }
 		    for (var i = 0; i < _baseItems.Count; i++)
 		    {
-		        _baseItems[i].Mesh.Position = new Vector3(_player.Position.X, _height, _player.Position.Z)
-		                             - _mapInputHandler.Position;
+		        if (_baseItems[i].Mesh != null)
+		        {
+		            _baseItems[i].Mesh.Position = new Vector3(_player.Position.X, _height + 200f, _player.Position.Z)
+		                                          - _mapInputHandler.Position;
+		        }
+		    }
+		    _cursor.Position = new Vector3(_player.Position.X, _height + 225f, _player.Position.Z)
+		                        - _mapInputHandler.Position;
+		    if (_show)
+		    {
+		        WorldRenderer.Scale = Mathf.Lerp(Vector3.One, Vector3.One * (ChunkSize / (float)Chunk.Width), _size);
+                WorldRenderer.BakedOffset = -(GameManager.Player.Position + Vector3.UnitY * _height);
+                WorldRenderer.Offset = GameManager.Player.Position + Vector3.UnitY * (_height + 550f) - _mapInputHandler.Position + Vector3.UnitZ * 15f;
 		    }
 		}
 
@@ -100,10 +110,20 @@ namespace Hedra.Engine.Player.MapSystem
 	    {
 	        if (_size < 0.01f) return;
 
-	        for (var i = 0; i < _icons.Count; i++)
+	        for (var i = 0; i < _baseItems.Count; i++)
 	        {
-	            _icons[i].Draw();
+	            if (_baseItems[i].Mesh != null)
+	            {
+	                _baseItems[i].Mesh.Alpha = _size;
+	                _baseItems[i].Mesh.Draw();
+	            }
 	        }
+            for (var i = 0; i < _icons.Count; i++)
+	        {
+	            _icons[i].Mesh.Alpha = _size;
+                _icons[i].Draw();
+	        }
+	        _cursor.Mesh.Alpha = _size;
             _cursor.Draw();
 	    }
 
@@ -112,8 +132,8 @@ namespace Hedra.Engine.Player.MapSystem
             var relativePosition = RelativeViewerPosition;
             for (var i = 0; i < _baseItems.Count; i++)
 	        {
-	            if ( Math.Abs(_baseItems[i].Mesh.LocalRotationPoint.X - relativePosition.X) > MapViewSize 
-                    || Math.Abs(_baseItems[i].Mesh.LocalRotationPoint.Z - relativePosition.Y) > MapViewSize )
+	            if ( Math.Abs(_baseItems[i].Coordinates.X - relativePosition.X) > MapViewSize 
+                    || Math.Abs(_baseItems[i].Coordinates.Y - relativePosition.Y) > MapViewSize )
 	            {
 	                _baseItems[i].Mesh.Dispose();
                     _baseItems.RemoveAt(i);
@@ -133,37 +153,56 @@ namespace Hedra.Engine.Player.MapSystem
                     );
                 if (!this.ContainsCoordinates(coords))
                 {
-                    var newMesh = new ObjectMesh(Vector3.Zero)
-                    {
-                        LocalRotationPoint = coords.ToVector3()
-                    };
-                    _baseItems.Add(new MapBaseItem(newMesh));
-                    var item = _baseItems[_baseItems.Count - 1];
-                    TaskManager.Parallel(delegate
-                    {   
-                        item.Mesh?.Dispose();
-                        item.Mesh = _meshBuilder.BuildMesh(coords);
-                        item.Mesh.LocalRotationPoint = coords.ToVector3();
-                       /* for (var i = 0; i < MapSize; i++)
-                        {
-                            for (var j = 0; j < MapSize; j++)
-                            {
-                                var sample = _builder.SampleChunk(
-                                    new Vector2(coords.X, coords.Y) * Chunk.Width * MapSize,
-                                    8);
-                                if(sample > 0)
-                                {
-                                    var mapItem = new MapItem(CacheManager.GetModel(CacheItem.AttentionIcon).Clone());
-                                    mapItem.Mesh.Scale = Vector3.One * 16f;
-                                    mapItem.Position = new Vector3(coords.X, 0, coords.Y) * Chunk.Width * MapSize;
-                                    _icons.Add(mapItem);                                                                       
-                                }
-                            }
-                        }*/
-                    });
+                    this.GenerateMesh(coords);
                 }
             }
 	    }
+
+	    private void GenerateMesh(Vector2 Coords)
+	    {
+	        var baseItem = this.FindByCoordinates(Coords);
+	        if (baseItem == null)
+	        {
+	            var newMesh = new ObjectMesh();
+	            baseItem = new MapBaseItem(newMesh)
+	            {
+	                Coordinates = Coords
+                };
+	            _baseItems.Add(baseItem);
+            }
+            this.GenerateMesh(baseItem, Coords);
+	    }
+
+	    private void GenerateMesh(MapBaseItem BaseItem, Vector2 Coords)
+	    {
+            TaskManager.Parallel(delegate
+	        {
+	            var prevMesh = BaseItem.Mesh;
+	            var item = _meshBuilder.BuildItem(Coords);
+                BaseItem.Mesh = item.Mesh;
+	            BaseItem.HasChunk = item.HasChunk;
+	            BaseItem.Coordinates = Coords;
+	            BaseItem.WasBuilt = item.WasBuilt;
+                if(prevMesh?.Mesh != null)
+                    prevMesh?.Dispose();
+	            /* for (var i = 0; i < MapSize; i++)
+                 {
+                     for (var j = 0; j < MapSize; j++)
+                     {
+                         var sample = _builder.SampleChunk(
+                             new Vector2(coords.X, coords.Y) * Chunk.Width * MapSize,
+                             8);
+                         if(sample > 0)
+                         {
+                             var mapItem = new MapItem(CacheManager.GetModel(CacheItem.AttentionIcon).Clone());
+                             mapItem.Mesh.Scale = Vector3.One * 16f;
+                             mapItem.Position = new Vector3(coords.X, 0, coords.Y) * Chunk.Width * MapSize;
+                             _icons.Add(mapItem);                                                                       
+                         }
+                     }
+                 }*/
+	        });
+        }
 
         private Vector2 RelativeViewerPosition => new Vector2( 
             (int) (_mapInputHandler.Position.X / MapSize / ChunkSize),
@@ -174,12 +213,21 @@ namespace Hedra.Engine.Player.MapSystem
 	    {
 	        for (var i = 0; i < _baseItems.Count; i++)
 	        {
-	            if (_baseItems[i].Mesh.LocalRotationPoint.Xz == Coordinates) return true;
+	            if (_baseItems[i].Coordinates == Coordinates) return true;
 	        }
 	        return false;   
 	    }
 
-	    public bool Show{
+	    private MapBaseItem FindByCoordinates(Vector2 Coordinates)
+	    {
+	        for (var i = 0; i < _baseItems.Count; i++)
+	        {
+	            if (_baseItems[i].Coordinates == Coordinates) return _baseItems[i];
+	        }
+	        return null;
+	    }
+
+        public bool Show{
 			get{ return _show; }
 			set{
 				if(GameManager.IsLoading) return;
@@ -188,26 +236,28 @@ namespace Hedra.Engine.Player.MapSystem
 				if(value)
 				{
                     _stateManager.CaptureState();
-                    this.UpdateChunkBounds();
-				    for (var i = 0; i < _baseItems.Count; i++)
-				    {
-			            _baseItems[i].Mesh.Dispose();
-				        _baseItems.RemoveAt(i);			        
-				    }
-                    this.UpdateMap();
+				    /*this.UpdateChunkBounds();
+                    for (var i = 0; i < _baseItems.Count; i++)
+                    {
+                        this.GenerateMesh(_baseItems[i], _baseItems[i].Coordinates);	        
+                    }*/
+                    //this.UpdateMap();
+                    WorldRenderer.EnableCulling = false;                              
                     this._targetSize = 1.0f;
 				    this._player.Movement.Check = false;
                     this._player.View.MaxDistance = 100f;
 				    this._player.View.MinDistance = 30f;
                     this._player.View.TargetDistance = 100f;
-					this._player.View.MaxPitch = -0.2f;
-					this._player.View.MinPitch = -0.8f;
+					this._player.View.MaxPitch = 0.2f;
+					this._player.View.MinPitch = -2.0f;
 					this._targetHeight = 2500f;
-				    this._targetTime = 12000;            
+				    this._targetTime = 12000;
+				    this._player.Minimap.Show = false;
                     SkyManager.PushTime();                   
 				}else
 				{
                     _stateManager.ReleaseState();
+				    this._player.Minimap.Show = true;
                     this._targetSize = 0f;
 					this._targetHeight = 0f;
                     this._targetTime = SkyManager.PeekTime();

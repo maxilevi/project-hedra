@@ -34,16 +34,16 @@ namespace Hedra.Engine.Player.MapSystem
                         Program.GameWindow.Keyboard[Key.S];
 
             if (Program.GameWindow.Keyboard[Key.D])
-                _targetPosition += -Vector3.Cross(Vector3.UnitY, cameraOrientation) * (float)Time.deltaTime * 500f;
+                _targetPosition += -Vector3.Cross(Vector3.UnitY, cameraOrientation) * (float)Time.deltaTime * 250f;
 
             if (Program.GameWindow.Keyboard[Key.A])
-                _targetPosition += Vector3.Cross(Vector3.UnitY, cameraOrientation) * (float)Time.deltaTime * 500f;
+                _targetPosition += Vector3.Cross(Vector3.UnitY, cameraOrientation) * (float)Time.deltaTime * 250f;
 
             if (Program.GameWindow.Keyboard[Key.W])
-                _targetPosition += cameraOrientation * (float)Time.deltaTime * 500f;
+                _targetPosition += cameraOrientation * (float)Time.deltaTime * 250f;
 
             if (Program.GameWindow.Keyboard[Key.S])
-                _targetPosition += -cameraOrientation * (float)Time.deltaTime * 500f;
+                _targetPosition += -cameraOrientation * (float)Time.deltaTime * 250f;
             Position = Mathf.Lerp(Position, _targetPosition, Time.FrameTimeSeconds * 16f);
             if(moved) OnMove?.Invoke();
         }

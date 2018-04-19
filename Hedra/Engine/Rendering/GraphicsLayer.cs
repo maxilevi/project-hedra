@@ -116,6 +116,11 @@ namespace Hedra.Engine.Rendering
 	        GL.LoadIdentity();
 	    }
 
+	    public static void LoadMatrix(ref Matrix4 Matrix)
+	    {
+	        GL.LoadMatrix(ref Matrix);
+	    }
+
         public static void PushMatrix()
 	    {
 	        GL.PushMatrix();
