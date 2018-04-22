@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
@@ -17,6 +18,7 @@ namespace Hedra.Engine.StructureSystem
     public class GiantTreeDesign : StructureDesign
     {
         public override int Radius { get; set; } = 700;
+        public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
 
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {

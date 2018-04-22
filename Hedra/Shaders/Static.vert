@@ -35,6 +35,7 @@ uniform float UseShadows = 3.0;
 uniform vec3 Scale;
 uniform vec3 Offset;
 uniform vec3 BakedOffset;
+uniform mat4 TransformationMatrix;
 
 const float ShadowTransition = 10.0;
 
@@ -92,12 +93,11 @@ void main(){
 	float Addon = config_set * ( cos(Time + Unpacked.y * 8.0) +0.8) * .85 * 0.7 * Unpacked.x * 1.2;
 
 	float invert_uk = when_lt(Unpacked.y, 0.5);
-	Vertex.x += invert_uk * Addon;
-	Vertex.z -= invert_uk * Addon;
-	Vertex.x -= not(invert_uk) * Addon;
-	Vertex.z += not(invert_uk) * Addon;
+	Vertex.x += invert_uk * Addon * Scale.x;
+	Vertex.z -= invert_uk * Addon * Scale.z;
+	Vertex.x -= not(invert_uk) * Addon * Scale.x;
+	Vertex.z += not(invert_uk) * Addon * Scale.z;
 
-	gl_Position = gl_ModelViewProjectionMatrix * Vertex;
 	Height = U_Height;
 	BotColor = U_BotColor;
 	TopColor = U_TopColor;
@@ -105,6 +105,9 @@ void main(){
 	float DistanceToCamera = length(vec3(PlayerPosition - Vertex.xyz).xz);
 	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
 	
+	Vertex = TransformationMatrix * Vertex;
+	gl_Position = gl_ModelViewProjectionMatrix * Vertex;
+
 	float use_shadows = when_neq(UseShadows, 0.0) * when_neq(InColor.a, -1.0);
 
 	float ShadowDist = DistanceToCamera - (ShadowDistance - ShadowTransition);

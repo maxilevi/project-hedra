@@ -1,36 +1,25 @@
-﻿using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
+﻿using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.Generation;
+using Hedra.Engine.StructureSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.MapSystem
 {
     public class MapBuilder
     {
-        public int SampleChunk(Vector2 Offset, int SampleLength = 1)
-        {
-            for (var x = 0; x < Chunk.Width; x++)
-            {
-                for (var z = 0; z < Chunk.Width; z++)
-                {
-                    var result = this.Sample(Offset.ToVector3() + new Vector3(x, 0, z));
-                    if (result > 0) return result;
-                }
-            }
-            return 0;
-        }
+        private static readonly CollidableStructure[] EmptyItems = new CollidableStructure[0];
 
-        public int Sample(Vector3 Position)
+        public StructureDesign Sample(Vector3 Position, Region Biome)
         {
-            var biome = World.BiomePool.GetRegion(Position);
             var chunkOffset = World.ToChunkSpace(Position);
-            for (var i = 0; i < biome.Structures.Designs.Length; i++)
+            for (var i = 0; i < Biome.Structures.Designs.Length; i++)
             {
-                var design = biome.Structures.Designs[i];
+                var design = Biome.Structures.Designs[i];
                 var rng = design.BuildRng(chunkOffset);
-                if (design.ShouldSetup(chunkOffset, design.BuildTargetPosition(chunkOffset, rng), biome, rng))
-                    return i+1;
+                if (design.ShouldSetup(chunkOffset, design.BuildTargetPosition(chunkOffset, rng), EmptyItems, Biome, rng))
+                    return design;
             }
-            return 0;
+            return null;
         }
     }
 }

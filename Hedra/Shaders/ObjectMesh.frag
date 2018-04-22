@@ -24,7 +24,7 @@ uniform vec2 res;
 uniform float Alpha;
 uniform sampler2D ShadowTex;
 uniform bool UseShadows;
-uniform bool Dither = false;
+uniform bool Dither;
 uniform float useNoiseTexture;
 uniform sampler3D noiseTexture;
 

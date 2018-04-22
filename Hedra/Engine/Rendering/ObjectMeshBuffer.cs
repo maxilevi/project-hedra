@@ -21,6 +21,7 @@ namespace Hedra.Engine.Rendering
 		public bool ApplyFog { get; set; } = true;
 		public float Alpha { get; set; } = 1;
 	    public bool UseNoiseTexture { get; set; }
+	    public bool Dither { get; set; }
         public Vector4 Tint { get; set; } = new Vector4(1,1,1,1);
 		public Vector4 BaseTint { get; set; } = new Vector4(0,0,0,0);
 	    public Vector3 Position { get; set; } = Vector3.Zero;
@@ -169,6 +170,7 @@ namespace Hedra.Engine.Rendering
 
             Shader["Alpha"] = Alpha;
 			Shader["Scale"] = Scale;
+		    Shader["Dither"] = Dither ? 1 : 0;
 			Shader["UseFog"] = ApplyFog ? 1 : 0;
 			Shader["TransPos"] = Position;
 			Shader["TransMatrix"] = RotationMatrix;

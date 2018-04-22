@@ -14,6 +14,7 @@ namespace Hedra.Engine.StructureSystem
     public class CampfireDesign : StructureDesign
     {
         public override int Radius { get; set; } = 80;
+        public override VertexData Icon => null;
 
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {

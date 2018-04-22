@@ -29,8 +29,8 @@ namespace Hedra.Engine.Generation
         private readonly LocalPlayer _player;
         private float _targetMin = 1;
         private float _targetMax = 1;
-        private float _minFog;
-        private float _maxFog;
+        public float MinFog { get; private set; }
+        public float MaxFog { get; private set; }
 
         public ChunkLoader(LocalPlayer PlayerRef)
         {
@@ -52,11 +52,11 @@ namespace Hedra.Engine.Generation
         {
             while (Program.GameWindow.Exists)
             {
-                if (_maxFog != _targetMax || _minFog != _targetMin)
+                if (MaxFog != _targetMax || MinFog != _targetMin)
                 {
-                    _maxFog = Mathf.Lerp(_maxFog, _targetMax, (float) Time.unScaledDeltaTime * 8f);
-                    _minFog = Mathf.Lerp(_minFog, _targetMin, (float) Time.unScaledDeltaTime * 8f);
-                    SkyManager.FogManager.UpdateFogSettings(_minFog, _maxFog);
+                    MaxFog = Mathf.Lerp(MaxFog, _targetMax, (float) Time.unScaledDeltaTime * 8f);
+                    MinFog = Mathf.Lerp(MinFog, _targetMin, (float) Time.unScaledDeltaTime * 8f);
+                    SkyManager.FogManager.UpdateFogSettings(MinFog, MaxFog);
                 }
 
                 yield return null;
@@ -86,7 +86,7 @@ namespace Hedra.Engine.Generation
                     {
                         for (int x = (int)(-GameSettings.ChunkLoaderRadius * .5f); x < (int)(GameSettings.ChunkLoaderRadius * .5f); x++)
                         {
-                            for (int z = (int)(-GameSettings.ChunkLoaderRadius * .5f) ; z < (int)(GameSettings.ChunkLoaderRadius * .5f) ; z++)
+                            for (int z = (int)(-GameSettings.ChunkLoaderRadius * .5f); z < (int)(GameSettings.ChunkLoaderRadius * .5f); z++)
                             {
                                 if (World.GetChunkByOffset( Offset + new Vector2(x, z) * new Vector2(Chunk.Width, Chunk.Width)) ==  null)
                                 {

@@ -92,7 +92,9 @@ namespace Hedra.Engine.EntitySystem
 			}
 			
 			OnAnimationHandler AttackHandler = null;
-			AttackHandler = delegate {
+			AttackHandler = delegate
+			{
+			    if (!Parent.InAttackRange(Damagee)) return;
 				float exp;
 				Damagee.Damage(Damage, this.Parent, out exp);
 				

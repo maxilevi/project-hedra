@@ -47,8 +47,10 @@ namespace Hedra.Engine.ItemSystem
 			float dot = Vector3.Dot(-(LocalPlayer.Instance.Position - this.Position).NormalizedFast(),
                 LocalPlayer.Instance.View.LookAtPoint.NormalizedFast());
 
-			if( dot > .5f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 12f*12f){
-			    LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile("[E] TO PICK UP", () => !Disposed && dot > .5f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 12f * 12f);
+			if( dot > .65f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 12f*12f){
+			    LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile("[E] TO PICK UP", 
+                    () => !Disposed && Vector3.Dot(-(LocalPlayer.Instance.Position - this.Position).NormalizedFast(),
+			                                                                                        LocalPlayer.Instance.View.LookAtPoint.NormalizedFast()) > .65f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 12f * 12f);
 				Mesh.Tint = new Vector4(1.5f,1.5f,1.5f,1);
 				if(LocalPlayer.Instance.Inventory.HasAvailableSpace && Events.EventDispatcher.LastKeyDown == OpenTK.Input.Key.E && !Disposed)
 				{

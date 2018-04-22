@@ -135,6 +135,7 @@ namespace Hedra.Engine.Player
             SleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
 
             RollAnimation.Loop = false;
+            RollAnimation.Speed = .75f;
 			RollAnimation.OnAnimationEnd += delegate(Animation Sender) { 
 				Human.Physics.ResetFall();
 				Human.FinishRoll();

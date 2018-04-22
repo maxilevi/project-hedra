@@ -71,7 +71,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void Damage(float Amount, Entity Damager, out float Exp, bool PlaySound)
         {
-            if (Immune || Parent.IsDead)
+            if (Parent.IsDead)
             {
                 Exp = 0;
                 return;
@@ -102,7 +102,7 @@ namespace Hedra.Engine.EntitySystem
                         FontCache.Get(AssetManager.Fonts.Families[0], 12 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 else
-                    dmgLabel = new Billboard(1.8f, "MISS", Color.White,
+                    dmgLabel = new Billboard(1.8f, Immune ? "IMMUNE" : "MISS", Color.White,
                         FontCache.Get(AssetManager.Fonts.Families[0], 12 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 dmgLabel.Vanish = true;
@@ -111,7 +111,7 @@ namespace Hedra.Engine.EntitySystem
                 DamageLabels.Add(dmgLabel);
             }
             Exp = 0;
-            if (shouldMiss) return;
+            if (shouldMiss || Immune) return;
             _tintTimer = 0.25f;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
             if (Damager != null && Damager != Parent)

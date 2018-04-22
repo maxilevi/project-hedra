@@ -13,6 +13,8 @@ namespace Hedra.Engine.Player.MapSystem
             this.RegisterStateItem(() => Player.View.MaxPitch, O => Player.View.MaxPitch = (float)O);
             this.RegisterStateItem(() => Player.View.MaxDistance, O => Player.View.MaxDistance = (float)O);
             this.RegisterStateItem(() => Player.View.MinDistance, O => Player.View.MinDistance = (float)O);
+            this.RegisterStateItem(() => Player.View.WheelSpeed, O => Player.View.WheelSpeed = (float)O);
+            this.RegisterStateItem(() => Player.View.TargetDistance, O => Player.View.TargetDistance = (float)O);
             this.RegisterStateItem(() => Player.Movement.Check, O => Player.Movement.Check = (bool)O);
             this.RegisterStateItem(() => Player.View.Check, O => Player.View.Check = (bool)O);
             this.RegisterStateItem(() => Player.View.LockMouse, O => Player.View.LockMouse = (bool)O);
@@ -21,10 +23,9 @@ namespace Hedra.Engine.Player.MapSystem
             this.RegisterStateItem(() => WorldRenderer.BakedOffset, O => WorldRenderer.BakedOffset = (Vector3)O);
             this.RegisterStateItem(() => WorldRenderer.Scale, O => WorldRenderer.Scale = (Vector3)O);
             this.RegisterStateItem(() => WorldRenderer.EnableCulling, O => WorldRenderer.EnableCulling = (bool)O);
-            this.RegisterStateItem(() => SkyManager.FogManager.MinDistance, O =>
-            SkyManager.FogManager.UpdateFogSettings( (float) O, SkyManager.FogManager.MaxDistance));
-            this.RegisterStateItem(() => SkyManager.FogManager.MaxDistance, O =>
-            SkyManager.FogManager.UpdateFogSettings(SkyManager.FogManager.MinDistance, (float) O));
+            this.RegisterStateItem(() => WorldRenderer.Dither, O => WorldRenderer.Dither = (bool)O);
+            this.RegisterStateItem(() => WorldRenderer.TransformationMatrix, O => WorldRenderer.TransformationMatrix = (Matrix4)O);
+            this.RegisterStateItem(() => SkyManager.UpdateDayColors, O => SkyManager.UpdateDayColors = (bool)O);
         }
     }
 }

@@ -77,9 +77,14 @@ namespace Hedra.Engine.Rendering
 			get{ return _buffer.BaseTint; }
 			set{ _buffer.BaseTint = value; }
 		}
-		
-		
-		public Vector3 Position{
+
+	    public bool Dither
+	    {
+	        get { return _buffer.Dither; }
+	        set { _buffer.Dither = value; }
+	    }
+
+        public Vector3 Position{
 			get{ return _buffer.Position; }
 			set{ _buffer.Position = value; }
 		}

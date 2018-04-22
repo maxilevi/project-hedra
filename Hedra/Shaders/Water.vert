@@ -43,7 +43,7 @@ uniform vec3 Offset;
 uniform vec3 BakedOffset;
 uniform vec3 LightPosition = vec3(-500.0, 1000.0, 0.0);
 uniform vec3 LightColor = vec3(1.0, 1.0, 1.0);
-
+uniform mat4 TransformationMatrix;
 
 float GetY(float x, float y, float z);
 float GetOffset(float x, float y, float z, float val1, float val2);
@@ -70,7 +70,7 @@ void main()
 {
 	Movement = WaveMovement;
     vec4 v = vec4((InVertex + BakedOffset) * Scale + Offset, 1.0);
-    v.y = GetY(v.x,v.y,v.z) * InNormal.z * .6 + InVertex.y;
+    v.y = GetY(v.x,v.y,v.z) * InNormal.z * .6 * Scale.y + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
     
     vec2 Unpacked1 = Unpack(InNormal.x, int(4096.0));
     vec2 Unpacked2 = Unpack(InNormal.y, int(4096.0));
@@ -78,19 +78,17 @@ void main()
     vec3 V0 = vec3(Unpacked1.x, 0.0, Unpacked1.y);
     vec3 V1 = vec3(Unpacked2.x, 0.0, Unpacked2.y);
     
-    V0.x += InVertex.x;
-    V0.z += InVertex.z;
-    V1.x += InVertex.x;
-    V1.z += InVertex.z;
-    V0.y += InVertex.y;
-    V1.y += InVertex.y;
+    V0.x = (V0.x + InVertex.x + BakedOffset.x) * Scale.x;
+    V0.z = (V0.z + InVertex.z + BakedOffset.z) * Scale.z;
+    V1.x = (V1.x + InVertex.x + BakedOffset.x) * Scale.x;
+    V1.z = (V1.z + InVertex.z + BakedOffset.z) * Scale.z;
+    V0.y = (V0.y + InVertex.y + BakedOffset.y) * Scale.y;
+    V1.y = (V1.y + InVertex.y + BakedOffset.y) * Scale.y;
     
-    V0.y = GetY(V0.x, V0.y, V0.z) * 0.4 + InVertex.y;
-    V1.y = GetY(V1.x, V1.y, V1.z) * 0.4 + InVertex.y;
+    V0.y = GetY(V0.x, V0.y, V0.z) * 0.4 * Scale.y + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
+    V1.y = GetY(V1.x, V1.y, V1.z) * 0.4 * Scale.y + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
     
     vec3 Normal = normalize(Cross(v.xyz - V0, V1 - v.xyz));
- 	    
- 	gl_Position = gl_ModelViewProjectionMatrix * v;
  	
     Height = U_Height;
 	BotColor = U_BotColor;
@@ -135,6 +133,9 @@ void main()
 	Color = Ambient + vec4(finalRim, 0.0) + (vec4(Diffuse, 1.0) * InColor) + Specular;
  	Color.a = Transparency;
  	
+	v = TransformationMatrix * v;
+ 	gl_Position = gl_ModelViewProjectionMatrix * v;
+
 	InPos = v;
 	ClipSpace = gl_Position;
 	InNorm = vec4(Normal,1.0);

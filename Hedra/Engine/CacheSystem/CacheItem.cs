@@ -23,6 +23,9 @@ namespace Hedra.Engine.CacheSystem
         Mat,
         KnockedIcon,
         SleepingIcon,
+        BossIcon,
+        GraveyardIcon,
+        VillageIcon,
         MaxEnums
     }
 }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
+using Hedra.Engine.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -13,6 +15,7 @@ namespace Hedra.Engine.StructureSystem
     public class TravellingMerchantDesign : StructureDesign
     {
         public override int Radius { get; set; } = 512;
+        public override VertexData Icon => CacheManager.GetModel(CacheItem.Mat);
 
         public override void Build(Vector3 Position, CollidableStructure Structure) {
 

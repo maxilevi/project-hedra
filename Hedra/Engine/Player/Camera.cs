@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
         private float _prevAlpha = -1f;
         private float _prevDistance;
         public float Distance { get; set; }
-
+        public float WheelSpeed { get; set; } = 1;
         public bool Check = true;
         public float TargetDistance = 10f;
         public bool LockMouse = true;
@@ -75,11 +75,7 @@ namespace Hedra.Engine.Player
         {
             get
             {
-                var lookingDir = new Vector4(0f, 0f, -1.0f, 1.0f);
-                lookingDir = Vector4.Transform(lookingDir, DrawManager.FrustumObject.ProjectionMatrix.Inverted());
-                lookingDir = new Vector4(lookingDir.X, lookingDir.Y, -1f, 0f);
-                lookingDir = Vector4.Transform(lookingDir, DrawManager.FrustumObject.ModelViewMatrix.Inverted());
-                return lookingDir.Xyz.NormalizedFast();
+                throw new NotImplementedException();
             }
         }
 
@@ -221,11 +217,11 @@ namespace Hedra.Engine.Player
         {
             if (GameSettings.Paused || !Check) return;
 
-            Vector3 pos = Objective - LookAtPoint * (TargetDistance - E.Delta) + CameraHeight;
+            Vector3 pos = Objective - LookAtPoint * (TargetDistance - E.Delta * WheelSpeed) + CameraHeight;
             float y = Physics.HeightAtPosition(pos);
             if (pos.Y <= y + MinDistance) return;
 
-            TargetDistance -= E.Delta;
+            TargetDistance -= E.Delta * WheelSpeed;
             TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
             if (TargetDistance < 4.5f)
                 _player.Model.Alpha = Mathf.Clamp((TargetDistance - 1.5f) / 4.5f, 0, 1) + 0.0025f;

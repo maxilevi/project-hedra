@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.QuestSystem;
+using Hedra.Engine.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -15,6 +17,7 @@ namespace Hedra.Engine.StructureSystem
     public class WoodenFortDesign : StructureDesign
     {
         public override int Radius { get; set; } = 256;
+        public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
 
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {

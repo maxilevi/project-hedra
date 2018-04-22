@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
@@ -17,6 +18,7 @@ namespace Hedra.Engine.StructureSystem
     public class ObeliskDesign : StructureDesign
     {
         public override int Radius { get; set; } = 256;
+        public override VertexData Icon => null;
 
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {

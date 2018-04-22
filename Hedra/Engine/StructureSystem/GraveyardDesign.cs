@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -19,6 +20,7 @@ namespace Hedra.Engine.StructureSystem
     {
         public override int Radius { get; set; } = 384;
         public const int GraveyardSkyTime = 24000;
+        public override VertexData Icon => CacheManager.GetModel(CacheItem.GraveyardIcon);
 
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {

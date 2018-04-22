@@ -43,6 +43,7 @@ uniform vec3 LightColor;
 uniform PointLight Lights[12];
 uniform float Snow = 0.0;
 uniform sampler3D noiseTexture;
+uniform bool Dither;
 const float Damper = 10.0;
 const float Reflectivity = 0.08;
 
@@ -99,7 +100,10 @@ vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal, vec3 LColor){
 }
 
 void main(){
-
+	if(Dither){
+		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
+		if( d-floor(d) < 0.5) discard;
+	}
 	//Lighting
 	vec3 unitNormal = normalize(InNorm.xyz);
 	vec3 unitToLight = normalize(LightPosition);

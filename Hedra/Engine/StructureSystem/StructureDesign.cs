@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -14,6 +15,7 @@ namespace Hedra.Engine.StructureSystem
     {
         public bool SpawnInMenu { get; set; }
         public abstract int Radius { get; set; }
+        public abstract VertexData Icon { get; }
 
         public abstract void Build(Vector3 Position, CollidableStructure Structure);
 
@@ -29,8 +31,11 @@ namespace Hedra.Engine.StructureSystem
                         ChunkOffset.Y + z * Chunk.Width);
                     var rng = this.BuildRng(offset);
                     var targetPosition = this.BuildTargetPosition(offset, rng);
-
-                    if (this.ShouldSetup(offset, targetPosition, Biome, rng))
+                    CollidableStructure[] items;
+                    lock (World.StructureGenerator.Items)
+                        items = World.StructureGenerator.Items.ToArray();
+                    
+                    if (this.ShouldSetup(offset, targetPosition, items, Biome, rng))
                     {
                         lock (World.StructureGenerator.Items)
                         {
@@ -54,15 +59,15 @@ namespace Hedra.Engine.StructureSystem
                 ChunkOffset.Y + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize);
         }
 
-        public bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, Region Biome, Random Rng)
+        public bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, Random Rng)
         {
             bool shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng)
                             && (TargetPosition.Xz - GameSettings.SpawnPoint).LengthSquared > 256 * 256;
 
-            return shouldBe && this.ShouldBuild(TargetPosition, Biome.Structures.Designs);
+            return shouldBe && this.ShouldBuild(TargetPosition, Items, Biome.Structures.Designs);
         }
 
-        private bool ShouldBuild(Vector3 NewPosition, StructureDesign[] Designs)
+        private bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] Designs)
         {
             float wSeed = World.Seed * 0.0001f;
             var height = (int) (World.StructureGenerator.SeedGenerator.GetValue(NewPosition.X * .0085f + wSeed,
@@ -71,11 +76,11 @@ namespace Hedra.Engine.StructureSystem
             bool isStructureRegion = index == Array.IndexOf(Designs, this);
             if (isStructureRegion)
             {
-                lock (World.StructureGenerator.Items)
+                lock (Items)
                 {
-                    for (var i = 0; i < World.StructureGenerator.Items.Count; i++)
+                    for (var i = 0; i < Items.Length; i++)
                     {
-                        if (World.StructureGenerator.Items[i].Design.GetType() == this.GetType() && NewPosition == World.StructureGenerator.Items[i].Position)
+                        if (Items[i].Design.GetType() == this.GetType() && NewPosition == Items[i].Position)
                             return false;
                     }
                 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.QuestSystem;
+using Hedra.Engine.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -16,6 +18,7 @@ namespace Hedra.Engine.StructureSystem
         public static Vector3 WindmillPosition = -Vector3.UnitY * 2.0f - Vector3.UnitZ * 140.0f;
         public static Vector3 FarmPosition = -Vector3.UnitY * 2.0f - Vector3.UnitZ * 140.0f;
         public override int Radius { get; set; } = 900;
+        public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
 
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {

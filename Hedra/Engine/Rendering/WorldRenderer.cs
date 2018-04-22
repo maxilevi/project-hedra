@@ -151,7 +151,8 @@ namespace Hedra.Engine.Rendering
 		    StaticShader["BakedOffset"] = BakedOffset;
 		    StaticShader["Scale"] = Scale;
 		    StaticShader["Offset"] = Offset;
-
+		    StaticShader["Dither"] = Dither ? 1 : 0;
+            StaticShader["TransformationMatrix"] = TransformationMatrix;
             StaticShader["AreaPositions"] = World.Highlighter.AreaPositions;
 			StaticShader["AreaColors"] = World.Highlighter.AreaColors;
 			
@@ -182,11 +183,13 @@ namespace Hedra.Engine.Rendering
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
            	
            	GL.ActiveTexture(TextureUnit.Texture0);
-		    GL.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : DrawManager.MainBuffer.Default.TextureID[0]);
+		    GL.BindTexture(TextureTarget.Texture2D, GameSettings.Fancy ? GameSettings.SSAO ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : DrawManager.MainBuffer.Default.TextureID[0] : 0);
 
-		    WaterShader["BakedOffset"] = BakedOffset;
+		    WaterShader["Dither"] = Dither ? 1 : 0;
+		    WaterShader["TransformationMatrix"] = TransformationMatrix;
+            WaterShader["BakedOffset"] = BakedOffset;
 		    WaterShader["Scale"] = Scale;
-		    WaterShader["Offset"] = Offset;
+		    WaterShader["Offset"] = Offset + Vector3.UnitY;
             WaterShader["AreaPositions"] = World.Highlighter.AreaPositions;
 			WaterShader["AreaColors"] = World.Highlighter.AreaColors;		
 			WaterShader["WaveMovement"] = WaveMovement;
@@ -201,12 +204,14 @@ namespace Hedra.Engine.Rendering
 			GL.Enable(EnableCap.CullFace);
 		    WaterShader.UnBind();
         }
-		
-		#endregion
 
-	    public static bool EnableCulling { get; set; } = true;
+        #endregion
+
+	    public static bool Dither { get; set; } = false;
+        public static bool EnableCulling { get; set; } = true;
         public static Vector3 BakedOffset { get; set; }
         public static Vector3 Scale { get; set; } = Vector3.One;
         public static Vector3 Offset { get; set; }
+	    public static Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
 	}
 }

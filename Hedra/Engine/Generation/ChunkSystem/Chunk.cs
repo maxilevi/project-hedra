@@ -188,23 +188,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (BuildBuffers)
             {
-                if (Mesh == null) return;
-
-                try
-                {
-                    Mesh.OccluMin = new Vector3(Input.StaticData.SupportPoint(-Vector3.UnitX).X,
-                        Input.StaticData.SupportPoint(-Vector3.UnitY).Y,
-                        Input.StaticData.SupportPoint(-Vector3.UnitZ).Z);
-                    Mesh.OccluSize = new Vector3(Input.StaticData.SupportPoint(Vector3.UnitX).X,
-                                         Math.Max(0, Input.StaticData.SupportPoint(Vector3.UnitY).Y),
-                                         Input.StaticData.SupportPoint(Vector3.UnitZ).Z) - Mesh.OccluMin;
-
-                }
-                catch (ArgumentOutOfRangeException e)
-                {
-                    Log.WriteLine("Sync error.");
-                    return;
-                }
+                if (Mesh == null || Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
+                    Input.StaticData.ExtraData.Count != Input.StaticData.Vertices.Count ||
+                    Input.StaticData.ExtraData.Count != Input.StaticData.Colors.Count) return;
 
                 for (var i = 0; i < Input.StaticData.ExtraData.Count; i++)
                 {

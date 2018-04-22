@@ -180,6 +180,7 @@ namespace Hedra.Engine.Rendering.UI
 				_humans[i].Name = _information[i].Name;
 				_humans[i].Level = _information[i].Level;				
 				_humans[i].Model.UpdateModel();
+			    _humans[i].PlaySpawningAnimation = false;
 				
 				foreach(var pair in _information[i].Items)
 				{

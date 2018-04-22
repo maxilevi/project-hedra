@@ -8,17 +8,13 @@ using System;
 using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Rendering.Effects;
-using Hedra.Engine;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Scenes;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Rendering
 {
-	public class ChunkMesh : Occludable, ICullable, IDisposable
+	public class ChunkMesh : ICullable, IDisposable
 	{
 		public List<ChunkMeshBuffer> MeshBuffers = new List<ChunkMeshBuffer>();
 		public List<InstanceBatch> InstanceBatches = new List<InstanceBatch>();
@@ -60,11 +56,9 @@ namespace Hedra.Engine.Rendering
 		
 		public void BuildFrom(ChunkMeshBuffer MeshBuffer, VertexData Data, bool ExtraData){
 			try{
-			if(Data == null || Data.Colors == null)
+			if(Data?.Colors == null)
 				return;
-			OccluMin = new Vector3(Data.SupportPoint(-Vector3.UnitX).X, Data.SupportPoint(-Vector3.UnitY).Y, Data.SupportPoint(-Vector3.UnitZ).Z);
-			OccluSize = new Vector3(Data.SupportPoint(Vector3.UnitX).X, Math.Max(0, Data.SupportPoint(Vector3.UnitY).Y), Data.SupportPoint(Vector3.UnitZ).Z) - OccluMin;
-			
+
 			Vector4[] ColorBuffer;
 			if(ExtraData){
 				ColorBuffer = new Vector4[Data.Colors.Count];
@@ -196,7 +190,7 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public void DrawMesh(ChunkMeshBuffer MeshBuffer, Vector3 Position, bool Shadows){
-			if(!Occluded && IsBuilded && IsGenerated && Enabled && MeshBuffer.Data != null){
+			if(IsBuilded && IsGenerated && Enabled && MeshBuffer.Data != null){
 				MeshBuffer.Draw(Position, Shadows);
 			}
 		}
@@ -226,7 +220,6 @@ namespace Hedra.Engine.Rendering
 			    CollisionBoxes.Clear();
 			InstanceBatches.Clear();
 			MeshBuffers = null;
-			base.Dispose();
 		}
 		
 		public void Clear(){

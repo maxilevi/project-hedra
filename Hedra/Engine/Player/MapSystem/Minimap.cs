@@ -9,6 +9,7 @@
 
 using System;
 using Hedra.Engine.ComplexMath;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -31,9 +32,11 @@ namespace Hedra.Engine.Player.MapSystem
 	    private readonly RenderableTexture _mapCursor;
 	    private readonly RenderableTexture _miniMapRing;
 	    private readonly RenderableTexture _miniMapNorth;
-	    private readonly RenderableTexture _miniMapQ;
+	    private readonly RenderableTexture _miniMapMarker;
 	    private readonly FBO _mapFbo;
         private bool _show;
+	    private bool _hasMarker;
+        public Vector3 MarkedPosition { get; private set; }
 
         public Minimap(LocalPlayer Player){
             this._player = Player;
@@ -45,20 +48,32 @@ namespace Hedra.Engine.Player.MapSystem
             _mapCursor = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MapCursor.png"), new Vector2(.8f, .7f), new Vector2(0.008f, 0.019f) * 1.3f), DrawOrder.After);
             _miniMapRing = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapRing.png"), new Vector2(.8f, .7f), new Vector2(0.13f, 0.23f) * 1.0f), DrawOrder.After);
             _miniMapNorth = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapNorth.png"), new Vector2(.8f, .7f), new Vector2(0.13f, 0.23f) * 1.0f), DrawOrder.After);
-            _miniMapQ = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapQuest.png"), new Vector2(.8f, .7f), new Vector2(0.13f, 0.23f) * 1.0f), DrawOrder.After);
+            _miniMapMarker = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapQuest.png"), new Vector2(.8f, .7f), new Vector2(0.13f, 0.23f) * 1.0f), DrawOrder.After);
             _panel.AddElement(_mapCursor);
             _panel.AddElement(_miniMap);
             _panel.AddElement(_miniMapRing);
             _panel.AddElement(_miniMapNorth);
-            _panel.AddElement(_miniMapQ);
+            _panel.AddElement(_miniMapMarker);
             _panel.Disable();
         }
+
+	    public void Mark(Vector3 Position)
+	    {
+	        MarkedPosition = Position;
+	        _hasMarker = true;
+        }
+
+	    public void Unmark()
+	    {
+	        _hasMarker = false;
+	    }
 		
 		public void DrawMap(){
 		    GL.Enable(EnableCap.DepthTest);
 		    GraphicsLayer.PushFBO();
 		    GraphicsLayer.PushShader();
             _mapFbo.Bind();
+            GL.ClearColor(SkyManager.FogManager.FogValues.U_BotColor.ToColor());
 		    GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
 		    var oldDistance = _player.View.Distance;
@@ -79,14 +94,17 @@ namespace Hedra.Engine.Player.MapSystem
 		    GraphicsLayer.LoadMatrix(ref projMatrix);
 
 		    var oldShadows = GameSettings.GlobalShadows;
+		    var oldFancy = GameSettings.Fancy;
 		    GameSettings.GlobalShadows = false;
+		    GameSettings.Fancy = false;
             DrawManager.FrustumObject.CalculateFrustum(projMatrix, DrawManager.FrustumObject.ModelViewMatrix);
             World.CullTest(DrawManager.FrustumObject);
             WorldRenderer.Render(World.DrawingChunks, ChunkBufferTypes.STATIC);
 		    WorldRenderer.Render(World.DrawingChunks, ChunkBufferTypes.WATER);
+		    GameSettings.Fancy = oldFancy;
 		    GameSettings.GlobalShadows = oldShadows;
 
-		    _player.View.Pitch = oldPitch;
+            _player.View.Pitch = oldPitch;
 		    _player.View.Yaw = oldFacing;
 		    _player.View.Distance = oldDistance;
 
@@ -95,7 +113,8 @@ namespace Hedra.Engine.Player.MapSystem
 
 		    GL.Disable(EnableCap.DepthTest);
 		    GL.Enable(EnableCap.Blend);
-		    GraphicsLayer.PopFBO();
+		    GL.ClearColor(Vector4.Zero.ToColor());
+            GraphicsLayer.PopFBO();
 		    GraphicsLayer.PopShader();
 		    GraphicsLayer.BindFramebuffer(FramebufferTarget.Framebuffer, GraphicsLayer.FBOBound);
 		    GraphicsLayer.BindShader(GraphicsLayer.ShaderBound);
@@ -107,7 +126,7 @@ namespace Hedra.Engine.Player.MapSystem
                 _mapCursor.Disable();
                 _miniMapRing.Disable();
                 _miniMapNorth.Disable();
-                _miniMapQ.Disable();
+                _miniMapMarker.Disable();
                 return;
             }
 
@@ -117,12 +136,19 @@ namespace Hedra.Engine.Player.MapSystem
             _miniMapNorth.Enable();
             _miniMapNorth.BaseTexture.TextureElement.Angle = _player.Model.Model.Rotation.Y;
 
-            var inverted = false;
-            Vector3 toObjDirection = (_player.Model.Model.Position - World.QuestManager.Quest.IconPosition).NormalizedFast().Xz.ToVector3();
-            Vector3 rot = Physics.DirectionToEuler(toObjDirection);
-            _miniMapQ.BaseTexture.TextureElement.Angle = _player.Model.Model.Rotation.Y - rot.Y + 180;
+		    if (_hasMarker)
+		    {
+		        Vector3 toObjDirection = (_player.Model.Model.Position - MarkedPosition).NormalizedFast().Xz.ToVector3();
+		        Vector3 rot = Physics.DirectionToEuler(toObjDirection);
+		        _miniMapMarker.BaseTexture.TextureElement.Angle = _player.Model.Model.Rotation.Y - rot.Y + 180;
+		        _miniMapMarker.Enable();
+		    }
+		    else
+		    {
+		        _miniMapMarker.Disable();
+		    }
 
-            this.DrawMap();
+		    this.DrawMap();
 
             Shader.Bind();
             GL.Enable(EnableCap.Texture2D);

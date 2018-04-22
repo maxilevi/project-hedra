@@ -53,8 +53,9 @@ namespace Hedra.Engine.Rendering.UI
 			_human.BlockPosition = Scenes.MenuBackground.PlatformPosition;
 			_human.Model.Fog = true;
 			_human.Model.Enabled = true;
-			
-			CoroutineManager.StartCoroutine(this.Update);
+		    _human.PlaySpawningAnimation = false;
+
+            CoroutineManager.StartCoroutine(this.Update);
 
 		    string[] classes = ClassDesign.ClassNames;
 			var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, "Class", defaultColor,

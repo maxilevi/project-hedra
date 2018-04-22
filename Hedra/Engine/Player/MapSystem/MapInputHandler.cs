@@ -1,5 +1,4 @@
 ﻿using System;
-using Hedra.Engine.Events;
 using OpenTK;
 using OpenTK.Input;
 
@@ -14,14 +13,10 @@ namespace Hedra.Engine.Player.MapSystem
         public bool Enabled { get; set; }
         private readonly LocalPlayer _player;
         private Vector3 _targetPosition;
-        private bool _dragging;
 
         public MapInputHandler(LocalPlayer Player)
         {
             _player = Player;
-            EventDispatcher.RegisterMouseDown(this, (O,E) => _dragging = true);
-            EventDispatcher.RegisterMouseUp(this, (O,E) => _dragging = false);
-            EventDispatcher.RegisterKeyDown(this, (O, E) => this.KeyDown(E));
         }
 
         public void Update()
@@ -48,17 +43,15 @@ namespace Hedra.Engine.Player.MapSystem
             if(moved) OnMove?.Invoke();
         }
 
-        private void KeyDown(KeyboardKeyEventArgs EventArgs)
+        public void Reset()
         {
-            if (!Enabled) return;
-            
+            _targetPosition = Vector3.Zero;
+            Position = Vector3.Zero;
         }
 
         public void Dispose()
         {
-            EventDispatcher.UnregisterMouseDown(this);
-            EventDispatcher.UnregisterMouseUp(this);
-            EventDispatcher.UnregisterKeyDown(this);
+
         }
     }
 }

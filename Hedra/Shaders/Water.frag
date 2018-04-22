@@ -17,9 +17,15 @@ layout(location = 2)out vec4 OutNormal;
 uniform vec4 AreaColors[16];
 uniform vec4 AreaPositions[16];
 uniform sampler2D DepthMap;
+uniform bool Dither;
 
 const float Strength = 0.01;
 void main(){
+
+	if(Dither){
+		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
+		if( d-floor(d) < 0.5) discard;
+	}
 	vec4 InputColor = Color;
 	for(int i = 0; i < 16; i++){
 		if(AreaColors[i] != vec4(0.0, 0.0, 0.0, 0.0))

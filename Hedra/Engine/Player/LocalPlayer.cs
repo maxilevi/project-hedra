@@ -82,7 +82,6 @@ namespace Hedra.Engine.Player
 			this.Map = new Map(this);
 			this.Trade = new TradeInventory(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
-
             this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
 			this.Physics.CanCollide = true;
 			this.AttackSpeed = 0.75f;

@@ -708,7 +708,15 @@ namespace Hedra.Engine.Generation
                 + Vector3.UnitY * Physics.HeightAtPosition(position.X, position.Z));
 	        while (underChunk != null && collidesOnSurface)
 	        {
-	            collidesOnSurface = underChunk.CollisionShapes.Any(Shape => Physics.Collides(Shape, box));
+	            try
+	            {
+	                collidesOnSurface = underChunk.CollisionShapes.Any(Shape => Physics.Collides(Shape, box));
+	            }
+	            catch (InvalidOperationException e)
+	            {
+                    Log.WriteLine(e.Message);
+	                continue;
+	            }
 	            if (collidesOnSurface)
 	            {
 	                position = position + new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);

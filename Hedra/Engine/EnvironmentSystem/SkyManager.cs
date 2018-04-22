@@ -30,6 +30,7 @@ namespace Hedra.Engine.EnvironmentSystem
 		public static Fog FogManager = new Fog();
 		public static Skydome Skydome = new Skydome(12);
 		public static Sun Sun = new Sun( new Vector3(-500,1000,0).Normalized() );
+	    public static bool UpdateDayColors { get; set; } = true;
 	    private static Func<Vector4> _targetTopColor;
 	    private static Func<Vector4> _nextTargetTopColor;
 	    private static Func<Vector4> _targetBotColor;
@@ -153,10 +154,12 @@ namespace Hedra.Engine.EnvironmentSystem
 		    _nextTargetBiomeTopColor = Mathf.Lerp(_nextTargetBiomeTopColor, _nextTargetTopColor(), Time.FrameTimeSeconds * biomeInterpolateSpeed);
 		    _nextTargetBiomeBotColor = Mathf.Lerp(_nextTargetBiomeBotColor, _nextTargetBotColor(), Time.FrameTimeSeconds * biomeInterpolateSpeed);
 
-            Skydome.TopColor = Mathf.Lerp(_targetBiomeTopColor, _nextTargetBiomeTopColor, SkyModifier/6000);
-			Skydome.BotColor = Mathf.Lerp(_targetBiomeBotColor, _nextTargetBiomeBotColor, SkyModifier/6000);
-
-			if( Math.Abs(dayFactor - LastDayFactor) > .005f || LoadTime){
+		    if (UpdateDayColors)
+		    {
+		        Skydome.TopColor = Mathf.Lerp(_targetBiomeTopColor, _nextTargetBiomeTopColor, SkyModifier / 6000);
+		        Skydome.BotColor = Mathf.Lerp(_targetBiomeBotColor, _nextTargetBiomeBotColor, SkyModifier / 6000);
+		    }
+		    if( Math.Abs(dayFactor - LastDayFactor) > .005f || LoadTime){
 				Vector3 newLightColor = IsRaining 
                     ? Vector3.One * Mathf.Clamp(dayFactor * .7f, _minLight, _maxLight) 
                     : Vector3.One * Mathf.Clamp(dayFactor * 1f, _minLight, _maxLight);

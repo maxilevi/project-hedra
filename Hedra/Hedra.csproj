@@ -153,6 +153,7 @@
     <Compile Include="Engine\CacheSystem\AttentionIconCache.cs" />
     <Compile Include="Engine\CacheSystem\BerriesCache.cs" />
     <Compile Include="Engine\CacheSystem\BerryBushCache.cs" />
+    <Compile Include="Engine\CacheSystem\BossIconCache.cs" />
     <Compile Include="Engine\CacheSystem\BushesCache.cs" />
     <Compile Include="Engine\CacheSystem\CacheItem.cs" />
     <Compile Include="Engine\CacheSystem\CacheType.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="Engine\CacheSystem\FlowerCache.cs" />
     <Compile Include="Engine\CacheSystem\GrassCache.cs" />
     <Compile Include="Engine\CacheSystem\CacheIgnore.cs" />
+    <Compile Include="Engine\CacheSystem\GraveyardIconCache.cs" />
     <Compile Include="Engine\CacheSystem\MatCache.cs" />
     <Compile Include="Engine\CacheSystem\OakTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\PineTreesCache.cs" />
@@ -172,6 +174,7 @@
     <Compile Include="Engine\CacheSystem\KnockedIconCache.cs" />
     <Compile Include="Engine\CacheSystem\SleepingIconCache.cs" />
     <Compile Include="Engine\CacheSystem\TallTreesCache.cs" />
+    <Compile Include="Engine\CacheSystem\VillageIconCache.cs" />
     <Compile Include="Engine\CacheSystem\WheatCache.cs" />
     <Compile Include="Engine\ClassSystem\ArcherDesign.cs" />
     <Compile Include="Engine\ClassSystem\ClassDesign.cs" />
@@ -317,6 +320,7 @@
     <Compile Include="Engine\Management\Occludable.cs" />
     <Compile Include="Engine\Management\OcclusionState.cs" />
     <Compile Include="Engine\Player\MapSystem\MapBaseItem.cs" />
+    <Compile Include="Engine\Player\MapSystem\MapMarkerHandler.cs" />
     <Compile Include="Engine\Player\MapSystem\MapMeshBuilder.cs" />
     <Compile Include="Engine\Rendering\GraphicsLayer.cs" />
     <Compile Include="Engine\Management\OSManager.cs" />
@@ -3929,7 +3933,9 @@
     <None Include="Modules\Items\Bows\CommonWoodenBow.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Misc\Glider.json" />
+    <None Include="Modules\Items\Misc\Glider.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\Misc\Gold.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
