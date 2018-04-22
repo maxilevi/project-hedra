@@ -66,7 +66,7 @@ namespace Hedra.Engine.Rendering.UI
         public void SetupQuad()
         {
             _vao.Bind();
-            GL.EnableVertexAttribArray(0);
+            GraphicsLayer.EnableVertexAttribArray(0);
         }
 
         public void DrawQuad()
@@ -197,17 +197,17 @@ namespace Hedra.Engine.Rendering.UI
         private static void SetDraw()
         {
             Shader.Bind();
-            GL.Enable(EnableCap.Texture2D);
-            GL.Enable(EnableCap.Blend);
-            GL.Disable(EnableCap.DepthTest);
+            GraphicsLayer.Enable(EnableCap.Texture2D);
+            GraphicsLayer.Enable(EnableCap.Blend);
+            GraphicsLayer.Disable(EnableCap.DepthTest);
         }
 
         private static void UnsetDrawing()
         {
-            GL.Enable(EnableCap.DepthTest);
-            GL.Disable(EnableCap.Blend);
-            GL.Disable(EnableCap.Texture2D);
-            GL.Enable(EnableCap.CullFace);
+            GraphicsLayer.Enable(EnableCap.DepthTest);
+            GraphicsLayer.Disable(EnableCap.Blend);
+            GraphicsLayer.Disable(EnableCap.Texture2D);
+            GraphicsLayer.Enable(EnableCap.CullFace);
             Shader.UnBind();
         }
 

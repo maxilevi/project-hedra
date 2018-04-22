@@ -91,7 +91,7 @@ namespace Hedra.Engine.Management
 			        }
 			    }
 			}
-			GL.Enable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.DepthTest);
 			World.Draw(ChunkBufferTypes.WATER);
 		    for (int i = TrailRenderer.Count - 1; i > -1; i--)
 		    {

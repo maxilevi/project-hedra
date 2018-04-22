@@ -47,8 +47,8 @@ namespace Hedra.Engine.EnvironmentSystem
 		public void Draw(){
 			if(!Enabled) return;
 
-            GL.Disable(EnableCap.DepthTest);
-			GL.Disable(EnableCap.Blend);
+            GraphicsLayer.Disable(EnableCap.DepthTest);
+			GraphicsLayer.Disable(EnableCap.Blend);
 			_previousShader = GraphicsLayer.ShaderBound;
 			SkydomeShader.Bind();
 
@@ -61,8 +61,8 @@ namespace Hedra.Engine.EnvironmentSystem
 
             GL.UseProgram(_previousShader);
 			GraphicsLayer.ShaderBound = _previousShader;
-			GL.Enable(EnableCap.DepthTest);
-			GL.Enable(EnableCap.CullFace);
+			GraphicsLayer.Enable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.CullFace);
 		}
 		
 		public void Generate(){

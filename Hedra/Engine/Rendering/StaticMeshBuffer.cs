@@ -26,10 +26,10 @@ namespace Hedra.Engine.Rendering
 			if(Indices == null) return;
 			if(Shadows){
 				Data.Bind();
-				GL.EnableVertexAttribArray(0);
+				GraphicsLayer.EnableVertexAttribArray(0);
 				
 				//if(GraphicsOptions.Fancy)
-					GL.EnableVertexAttribArray(1);
+					GraphicsLayer.EnableVertexAttribArray(1);
 	
 				if(ShortBuffer){
 					GL.BindBuffer(BufferTarget.ElementArrayBuffer, UshortIndices.ID);
@@ -38,10 +38,10 @@ namespace Hedra.Engine.Rendering
 					GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
 					////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
 				}
-				GL.DisableVertexAttribArray(0);
+				GraphicsLayer.DisableVertexAttribArray(0);
 				
 				if(GameSettings.Fancy)
-					GL.DisableVertexAttribArray(1);
+					GraphicsLayer.DisableVertexAttribArray(1);
 				Data.UnBind();
 				return;
 			}
@@ -49,9 +49,9 @@ namespace Hedra.Engine.Rendering
 		    //StaticShader["UseShadows"] = UseShadows ? GameSettings.ShadowQuality : 0.0f;
 
 			Data.Bind();
-			GL.EnableVertexAttribArray(0);
-			GL.EnableVertexAttribArray(1);
-			GL.EnableVertexAttribArray(2);
+			GraphicsLayer.EnableVertexAttribArray(0);
+			GraphicsLayer.EnableVertexAttribArray(1);
+			GraphicsLayer.EnableVertexAttribArray(2);
 
 			if(ShortBuffer){
 				GL.BindBuffer(BufferTarget.ElementArrayBuffer, UshortIndices.ID);
@@ -61,9 +61,9 @@ namespace Hedra.Engine.Rendering
 				////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
 			}
 			
-			GL.DisableVertexAttribArray(0);
-			GL.DisableVertexAttribArray(1);
-			GL.DisableVertexAttribArray(2);
+			GraphicsLayer.DisableVertexAttribArray(0);
+			GraphicsLayer.DisableVertexAttribArray(1);
+			GraphicsLayer.DisableVertexAttribArray(2);
 			Data.UnBind();
 
 		}
@@ -82,7 +82,7 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public override void Bind(){
-			GL.Disable(EnableCap.Blend);
+			GraphicsLayer.Disable(EnableCap.Blend);
 			/*BlockShaders.StaticShader.Bind();
 			GL.Uniform3(BlockShaders.StaticShader.LightColorLocation, ShaderManager.LightColor);
 			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, GameManager.Player.Position);

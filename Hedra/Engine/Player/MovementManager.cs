@@ -113,8 +113,8 @@ namespace Hedra.Engine.Player
 	    public override void OnMouseButtonDown(object sender, MouseButtonEventArgs e){
 			if(!Check || GameSettings.Paused || Human.Knocked || Human.IsDead || !Human.CanInteract || Human.IsRiding || Human.IsEating)
 				return;	
-			if(e.Button == MouseButton.Middle && Human is LocalPlayer){
-				(Human as LocalPlayer).Roll();
+			if(e.Button == MouseButton.Middle){
+				(Human as LocalPlayer)?.Roll();
 			}
 		}
 		
@@ -302,6 +302,7 @@ namespace Hedra.Engine.Player
 
 			if(e.Key == Key.G && Human.CanInteract && !GameManager.InMenu && !Human.Knocked && !GameManager.InStartMenu)
 			{
+                return;//FIXME
 			    if(player.Inventory.Glider == null && !GameSettings.Paused){
 					player.MessageDispatcher.ShowNotification("YOU NEED A GLIDER TO DO THAT", System.Drawing.Color.DarkRed, 3f, true);
 					return; // Player doesnt have a glider item.

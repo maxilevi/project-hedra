@@ -182,7 +182,7 @@ namespace Hedra.Engine.Rendering.UI
                 return;
             bool prevEnabled = Model.Enabled;
             Model.Enabled = true;
-            GL.Enable(EnableCap.DepthTest);
+            GraphicsLayer.Enable(EnableCap.DepthTest);
             int prevShader = GraphicsLayer.ShaderBound;
             int prevFbo = GraphicsLayer.FBOBound;
             Fbo.Bind();
@@ -230,14 +230,14 @@ namespace Hedra.Engine.Rendering.UI
             if (Model is HumanModel)
                 (Model as HumanModel).Fog = usedFog;
 
-            GL.Disable(EnableCap.DepthTest);
+            GraphicsLayer.Disable(EnableCap.DepthTest);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, prevFbo);
             GraphicsLayer.FBOBound = prevFbo;
             Model.Enabled = prevEnabled;
             GL.UseProgram(prevShader);
             DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, DrawManager.FrustumObject.ModelViewMatrix);
 		     GraphicsLayer.ShaderBound = prevShader;
-            GL.Enable(EnableCap.Blend);
+            GraphicsLayer.Enable(EnableCap.Blend);
         }
 		
 		public void DrawPreview(ObjectMesh Mesh, FBO Fbo){
@@ -245,7 +245,7 @@ namespace Hedra.Engine.Rendering.UI
 				return;
 			bool prevEnabled  = Mesh.Enabled;
 			Mesh.Enabled = true;
-			GL.Enable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.DepthTest);
 			int prevShader = GraphicsLayer.ShaderBound;
 			int prevFbo = GraphicsLayer.FBOBound;
 			Fbo.Bind();
@@ -279,13 +279,13 @@ namespace Hedra.Engine.Rendering.UI
 				_player.View.RebuildMatrix();
 				DrawManager.FrustumObject.SetFrustum(_player.View.Matrix);
 				
-			GL.Disable(EnableCap.DepthTest);
+			GraphicsLayer.Disable(EnableCap.DepthTest);
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, prevFbo);
 			GraphicsLayer.FBOBound = prevFbo;
 			Mesh.Enabled = prevEnabled;
 			GL.UseProgram(prevShader);
 			GraphicsLayer.ShaderBound = prevShader;
-			GL.Enable(EnableCap.Blend);
+			GraphicsLayer.Enable(EnableCap.Blend);
 		}
 		
 		private void DrawCoordinateSystem(){

@@ -66,9 +66,25 @@ namespace Hedra.Engine.BiomeSystem
 		public virtual void PlaceStructures(){
 			this.StructuresPlaced = true;
 		}
-		
-		public static Random GenerateRng(Vector2 Offset){
-			return new Random(World.Seed + (int) (Offset.X / 11.0 *  (Offset.Y / 13.0)) );
+
+	    static int seed2(int _s)
+	    {
+	        var s = 192837463 ^ System.Math.Abs(_s);
+	        var a = 1664525;
+	        var c = 1013904223;
+	        var m = 4294967296;
+	        return (int)((s * a + c) % m);
+	    }
+
+	    static int GetSeedXY(int x, int y)
+	    {
+	        int sx = seed2(x * 1947);
+	        int sy = seed2(y * 2904);
+	        return seed2(sx ^ sy);
+	    }
+
+        public static Random GenerateRng(Vector2 Offset){
+			return new Random( seed2(seed2((int) Offset.X * 1947) ^ seed2((int) Offset.Y * 2904)) );
         }
 		
 		public void Dispose(){

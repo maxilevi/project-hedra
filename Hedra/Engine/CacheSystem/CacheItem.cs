@@ -26,6 +26,7 @@ namespace Hedra.Engine.CacheSystem
         BossIcon,
         GraveyardIcon,
         VillageIcon,
+        MerchantIcon,
         MaxEnums
     }
 }

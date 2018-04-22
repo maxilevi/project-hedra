@@ -57,8 +57,8 @@ namespace Hedra.Engine.Rendering.Effects
 		
 		public override void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false){
 
-			GL.Enable(EnableCap.Texture2D);
-			GL.Disable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.Texture2D);
+			GraphicsLayer.Disable(EnableCap.DepthTest);
 
 		    DrawManager.UIRenderer.SetupQuad();
 
@@ -67,9 +67,9 @@ namespace Hedra.Engine.Rendering.Effects
 
 		    DrawManager.UIRenderer.DrawQuad();
 
-            GL.Enable(EnableCap.DepthTest);
-			GL.Enable(EnableCap.CullFace);
-			GL.Disable(EnableCap.Texture2D);
+            GraphicsLayer.Enable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.CullFace);
+			GraphicsLayer.Disable(EnableCap.Texture2D);
 		}
 	}
 }

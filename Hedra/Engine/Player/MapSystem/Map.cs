@@ -41,7 +41,7 @@ namespace Hedra.Engine.Player.MapSystem
 	    private float _targetHeight;
 	    private float _targetTime = float.MaxValue;
 	    private int lastChunkAmount = -1;
-	    private Vector2 _markedChunkPosition;
+	    private Chunk _underChunk;
 
         public Map(LocalPlayer Player){
 			this._player = Player;
@@ -63,8 +63,9 @@ namespace Hedra.Engine.Player.MapSystem
 		    lock (_icons)
 		    {
 		        for (var i = 0; i < _icons.Count; i++)
-		        {
-		            _icons[i].Mesh.Position = new Vector3(mapPosition.X, _height + 10f, mapPosition.Z);
+                { 
+		            _icons[i].Mesh.Rotation = new Vector3(_icons[i].Mesh.Rotation.X, _icons[i].Mesh.Rotation.Y + (float) Time.deltaTime * 0f, _icons[i].Mesh.Rotation.Z);
+                    _icons[i].Mesh.Position = new Vector3(mapPosition.X, _height + 10f, mapPosition.Z);
 		        }
 		    }
 		    for (var i = 0; i < _baseItems.Count; i++)
@@ -95,7 +96,7 @@ namespace Hedra.Engine.Player.MapSystem
 	            }
 	        }
 	        if (!Show) return;
-	        this._player.View.PositionDelegate = () => _player.Model.Model.Position.Xz.ToVector3() + _height * Vector3.UnitY;
+	        this._player.View.PositionDelegate = () => _player.Model.Model.Position.Xz.ToVector3() + Math.Max(_height, _player.Model.Model.Position.Y) * Vector3.UnitY;
             SkyManager.Skydome.TopColor = Vector4.One;
 	        SkyManager.Skydome.BotColor = Color.CadetBlue.ToVector4();
 	        SkyManager.FogManager.UpdateFogSettings(140 * .95f, 140);
@@ -139,7 +140,7 @@ namespace Hedra.Engine.Player.MapSystem
 	                        var pos = playerPos + new Vector2(coords.X, coords.Y) * Chunk.Width * MapSize +
 	                                  new Vector2((i - MapSize / 2) * Chunk.Width, (j - MapSize / 2) * Chunk.Width);
 	                        var chunk = World.GetChunkAt(pos.ToVector3());
-	                        if (!MapBaseItem.UsableChunk(chunk))
+	                        if (!MapBaseItem.UsableChunk(chunk) || true)
 	                        {
 	                            var biome = World.BiomePool.GetRegion(pos.ToVector3());
 	                            var sample = _builder.Sample(pos.ToVector3(), biome);
@@ -148,8 +149,16 @@ namespace Hedra.Engine.Player.MapSystem
 	                                var realPos = new Vector2(coords.X, coords.Y) * ChunkSize * MapSize
 	                                              + new Vector2((i - MapSize / 2) * ChunkSize,
 	                                                  (j - MapSize / 2) * ChunkSize);
-	                                var mapItem = new MapItem(sample.Icon.Clone());
-                                    mapItem.Mesh.Rotation = new Vector3(0, Utils.Rng.Next(0, 8) * 45f, 0);
+	                                var icon = sample.Icon.Clone();
+                                    var baseData = new CubeData();
+	                                var scale = 3f;
+                                    baseData.AddFace(Face.ALL);
+                                    baseData.Scale(new Vector3(scale, 1f, scale));
+                                    baseData.TransformVerts(-Vector3.UnitY * 1f - new Vector3(scale, 0, scale) * .5f);
+	                                baseData.Color = CubeData.CreateCubeColor(Color.DarkSlateGray.ToVector4());
+                                    var mapItem = new MapItem(icon + baseData.ToVertexData());
+	                                mapItem.Mesh.ApplyNoiseTexture = true;
+                                    mapItem.Mesh.Rotation = new Vector3(0, Utils.Rng.Next(0, 4) * 90f, 0);
 	                                mapItem.Mesh.LocalPosition = realPos.ToVector3();
 	                                mapItem.Mesh.Scale = Vector3.One * 2f;
 	                                lock (_icons) _icons.Add(mapItem);
@@ -173,21 +182,15 @@ namespace Hedra.Engine.Player.MapSystem
 	        }
 	    }
 
-	    private void UpdateChunkBounds()
-	    {
-            for (var i = 0; i < _baseItems.Count; i++)
-	        {
-	            if ( Math.Abs(_baseItems[i].Coordinates.X) > MapViewSize 
-                    || Math.Abs(_baseItems[i].Coordinates.Y) > MapViewSize )
-	            {
-	                _baseItems[i].Mesh.Dispose();
-                    _baseItems.RemoveAt(i);
-	            }   
-	        }   
-	    }
-
 	    private void UpdateMap()
 	    {
+	        var newChunk = World.GetChunkAt(_player.Position);
+	        var forceUpdate = false;
+            if (newChunk != _underChunk)
+            {
+                _underChunk = newChunk;
+                forceUpdate = true;
+            }
             for (var x = 0; x < MapViewSize+1; x++)
             for (var z = 0; z < MapViewSize+1; z++)
             {
@@ -196,7 +199,7 @@ namespace Hedra.Engine.Player.MapSystem
                     z - MapViewSize / 2
                     );
                 var item = this.FindByCoordinates(coords);
-                if (item == null || this.NeedsUpdate(item, coords))
+                if (item == null || this.NeedsUpdate(item, coords) || forceUpdate)
                 {
                     this.GenerateMesh(coords);
                 }
@@ -224,7 +227,6 @@ namespace Hedra.Engine.Player.MapSystem
 	        var currentChunkAmount = _player.Loader.ActiveChunks;
 	        if (lastChunkAmount == currentChunkAmount) return;
 
-	        this.UpdateChunkBounds();
 	        this.UpdateMap();
 	        lastChunkAmount = currentChunkAmount;
 	    }
@@ -281,7 +283,7 @@ namespace Hedra.Engine.Player.MapSystem
 				    this.UpdateChunks();
 				    TaskManager.Parallel(this.UpdateIcons);
 				    SkyManager.UpdateDayColors = false;
-                    WorldRenderer.EnableCulling = false;                         
+                    WorldRenderer.EnableCulling = false;                  
                     this._targetSize = 1.0f;
                     this._player.View.MaxDistance = 100f;
 				    this._player.View.MinDistance = 0f;
@@ -298,7 +300,7 @@ namespace Hedra.Engine.Player.MapSystem
                     _stateManager.ReleaseState();
 				    this._player.Minimap.Show = true;
                     this._targetSize = 0f;
-					this._targetHeight = _player.Model.Model.Position.Y;
+					this._targetHeight = 0f;
                     this._targetTime = SkyManager.PeekTime();
                     TaskManager.Delay(() => Math.Abs(_height - _targetHeight) < 0.01f, delegate
 				    {

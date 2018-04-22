@@ -88,7 +88,7 @@ namespace Hedra.Engine.EntitySystem
             _attackedTimer = 6;
             _hasBeenAttacked = true;
 
-            if (!Parent.IsStatic && PlaySound && (LocalPlayer.Instance.Position - Parent.Position).LengthSquared < 80*80)
+            if (!Parent.IsStatic && PlaySound && (LocalPlayer.Instance.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
             {
                 var baseDamage = Damager != null ? (Damager as Humanoid)?.BaseDamageEquation 
                     ?? (Damager.SearchComponent<AIComponent>() != null ? Damager.AttackDamage * .3f : Amount * .3f) : Amount / 3f;

@@ -88,9 +88,9 @@ namespace Hedra.Engine.Player.Skills
 		    if (CooldownSecondsText.Position != _position) CooldownSecondsText.Position = _position;
 		    CooldownSecondsText.Text = Cooldown > 0 ? ((int)Cooldown + 1).ToString() : string.Empty;
 			Tint = Player.Mana - this.ManaCost < 0 ? new Vector3(.9f,.6f,.6f) : new Vector3(1,1,1);
-			GL.Enable(EnableCap.Blend);
-			GL.Disable(EnableCap.DepthTest);
-			GL.Disable(EnableCap.CullFace);
+			GraphicsLayer.Enable(EnableCap.Blend);
+			GraphicsLayer.Disable(EnableCap.DepthTest);
+			GraphicsLayer.Disable(EnableCap.CullFace);
 			
 			Shader.Bind();
             Shader["Tint"] = Tint;
@@ -111,9 +111,9 @@ namespace Hedra.Engine.Player.Skills
 			
 			Shader.UnBind();
 			
-			GL.Disable(EnableCap.Blend);
-			GL.Enable(EnableCap.DepthTest);
-			GL.Enable(EnableCap.CullFace);	
+			GraphicsLayer.Disable(EnableCap.Blend);
+			GraphicsLayer.Enable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.CullFace);	
 		}
 		
 		public abstract void KeyDown();

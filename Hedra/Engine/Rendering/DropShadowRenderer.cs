@@ -87,8 +87,8 @@ namespace Hedra.Engine.Rendering
 
 				_shouldShadows = _shouldShadows.OrderBy( Shadow => Shadow.Position.Y).ToList();
 				Shader.Bind();
-				GL.Enable(EnableCap.Blend);
-				GL.Disable(EnableCap.DepthTest);
+				GraphicsLayer.Enable(EnableCap.Blend);
+				GraphicsLayer.Disable(EnableCap.DepthTest);
 
 			    DrawManager.UIRenderer.SetupQuad();
 
@@ -102,7 +102,7 @@ namespace Hedra.Engine.Rendering
 			        }
 
 			        if (_shouldShadows[i].DepthTest)
-			            GL.Enable(EnableCap.DepthTest);
+			            GraphicsLayer.Enable(EnableCap.DepthTest);
 
                     Shader["Rotation"] = _shouldShadows[i].Rotation;
 					Shader["Opacity"] = _shouldShadows[i].Opacity;
@@ -113,10 +113,10 @@ namespace Hedra.Engine.Rendering
 					DrawManager.UIRenderer.DrawQuad();
 					
 					if(_shouldShadows[i].DepthTest)
-						GL.Disable(EnableCap.DepthTest);
+						GraphicsLayer.Disable(EnableCap.DepthTest);
 				}
-				GL.Enable(EnableCap.DepthTest);
-				GL.Disable(EnableCap.Blend);
+				GraphicsLayer.Enable(EnableCap.DepthTest);
+				GraphicsLayer.Disable(EnableCap.Blend);
 				Shader.UnBind();
 			}
 		}

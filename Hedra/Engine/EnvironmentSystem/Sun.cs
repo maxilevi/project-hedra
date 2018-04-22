@@ -39,9 +39,9 @@ namespace Hedra.Engine.EnvironmentSystem
 	    public bool Enabled => SkyManager.DayTime > 6000 && SkyManager.DayTime < 20000 && Math.Sin(GameManager.Player.View.Yaw) > 0;
 
 	    public void Draw(){
-			GL.Enable(EnableCap.Blend);
-			GL.Disable(EnableCap.CullFace);
-			GL.Disable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.Blend);
+			GraphicsLayer.Disable(EnableCap.CullFace);
+			GraphicsLayer.Disable(EnableCap.DepthTest);
 			Shader.Bind(); 
 			
 			Matrix4 TransMatrix = Matrix4.CreateScale(new Vector3(0.073f, 0.13f, 1f) * 2 * 1.5f);//Magic numbers are the resolution used for development
@@ -64,9 +64,9 @@ namespace Hedra.Engine.EnvironmentSystem
             }
 			
 			Shader.UnBind();
-			GL.Enable(EnableCap.CullFace);
-			GL.Disable(EnableCap.Blend);
-			GL.Enable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.CullFace);
+			GraphicsLayer.Disable(EnableCap.Blend);
+			GraphicsLayer.Enable(EnableCap.DepthTest);
 		}
 	}
 }

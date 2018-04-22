@@ -161,27 +161,27 @@ namespace Hedra.Engine.Rendering
         public void Draw()
         {
             if(_tipPoints.Count > 4)
-            GL.Disable(EnableCap.CullFace);
-            GL.Enable(EnableCap.Blend);
+            GraphicsLayer.Disable(EnableCap.CullFace);
+            GraphicsLayer.Enable(EnableCap.Blend);
 
             Shader.Bind();
 
             _data.Bind();
 
-            GL.EnableVertexAttribArray(0);
-            GL.EnableVertexAttribArray(1);
+            GraphicsLayer.EnableVertexAttribArray(0);
+            GraphicsLayer.EnableVertexAttribArray(1);
 
             GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _points.Count);
 
-            GL.DisableVertexAttribArray(1);
-            GL.DisableVertexAttribArray(0);
+            GraphicsLayer.DisableVertexAttribArray(1);
+            GraphicsLayer.DisableVertexAttribArray(0);
 
             _data.UnBind();
 
             Shader.UnBind();
 
-            GL.Disable(EnableCap.Blend);
-            GL.Enable(EnableCap.CullFace);
+            GraphicsLayer.Disable(EnableCap.Blend);
+            GraphicsLayer.Enable(EnableCap.CullFace);
         }
     }
 

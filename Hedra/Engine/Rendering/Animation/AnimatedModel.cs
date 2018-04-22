@@ -141,15 +141,15 @@ namespace Hedra.Engine.Rendering.Animation
 		
 		public void DrawModel(Matrix4 ProjectionViewMat, Matrix4 ViewMatrix){
 			if(!Enabled || Disposed || Data == null) return;
-			GL.Enable(EnableCap.DepthTest);
-		    GL.Disable(EnableCap.Blend);
-            if (Alpha < 0.95f) GL.Enable(EnableCap.Blend);
+			GraphicsLayer.Enable(EnableCap.DepthTest);
+		    GraphicsLayer.Disable(EnableCap.Blend);
+            if (Alpha < 0.95f) GraphicsLayer.Enable(EnableCap.Blend);
 
             Shader.Bind();
 
 		    if (Shader == DeathShader)
 		    {
-		        GL.Enable(EnableCap.Blend);
+		        GraphicsLayer.Enable(EnableCap.Blend);
                 Shader["viewMatrix"] = ViewMatrix;
 		        Shader["disposeTime"] = DisposeTime;
             }
@@ -172,25 +172,25 @@ namespace Hedra.Engine.Rendering.Animation
 			Shader["Tint"] = Tint + BaseTint;
 			
 			Data.Bind();
-			GL.EnableVertexAttribArray(0);
-			GL.EnableVertexAttribArray(1);
-			GL.EnableVertexAttribArray(2);
-			GL.EnableVertexAttribArray(3);
-			GL.EnableVertexAttribArray(4);
+			GraphicsLayer.EnableVertexAttribArray(0);
+			GraphicsLayer.EnableVertexAttribArray(1);
+			GraphicsLayer.EnableVertexAttribArray(2);
+			GraphicsLayer.EnableVertexAttribArray(3);
+			GraphicsLayer.EnableVertexAttribArray(4);
 
 			GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
 			GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 			
-			GL.DisableVertexAttribArray(0);
-			GL.DisableVertexAttribArray(1);
-			GL.DisableVertexAttribArray(2);
-			GL.DisableVertexAttribArray(3);
-			GL.DisableVertexAttribArray(4);
+			GraphicsLayer.DisableVertexAttribArray(0);
+			GraphicsLayer.DisableVertexAttribArray(1);
+			GraphicsLayer.DisableVertexAttribArray(2);
+			GraphicsLayer.DisableVertexAttribArray(3);
+			GraphicsLayer.DisableVertexAttribArray(4);
 			Data.UnBind();
 
 			Shader.UnBind();
 
-			GL.Disable(EnableCap.Blend);
+			GraphicsLayer.Disable(EnableCap.Blend);
 		}
 		
 		/**

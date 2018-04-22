@@ -42,16 +42,16 @@ namespace Hedra.Engine.Rendering
 		public virtual void Draw(Vector3 Position, bool Shadows){
 			
 			Data.Bind();
-			GL.EnableVertexAttribArray(0);
-			GL.EnableVertexAttribArray(1);
-			GL.EnableVertexAttribArray(2);
+			GraphicsLayer.EnableVertexAttribArray(0);
+			GraphicsLayer.EnableVertexAttribArray(1);
+			GraphicsLayer.EnableVertexAttribArray(2);
 
 			GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
 			////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 			
-			GL.DisableVertexAttribArray(0);
-			GL.DisableVertexAttribArray(1);
-			GL.DisableVertexAttribArray(2);
+			GraphicsLayer.DisableVertexAttribArray(0);
+			GraphicsLayer.DisableVertexAttribArray(1);
+			GraphicsLayer.DisableVertexAttribArray(2);
 			Data.UnBind();
 			
 		}

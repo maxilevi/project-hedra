@@ -137,7 +137,7 @@ namespace Hedra
 			
 			GL.BlendEquation(BlendEquationMode.FuncAdd);
 	        GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-	        GL.Enable(EnableCap.Texture2D);
+	        GraphicsLayer.Enable(EnableCap.Texture2D);
 	        
 	        string GLVersion = GL.GetString(StringName.Version);
             Log.WriteLine(GLVersion);
@@ -158,7 +158,7 @@ namespace Hedra
 #if DEBUG
             this._finishedLoading = true;
 #endif
-            GL.Enable(EnableCap.DebugOutput);
+            GraphicsLayer.Enable(EnableCap.DebugOutput);
             GL.DebugMessageCallback(
                 delegate(DebugSource Source, DebugType Type, int Id, DebugSeverity Severity, int Length, IntPtr Message,
                     IntPtr Param)

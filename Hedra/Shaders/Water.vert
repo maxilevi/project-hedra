@@ -37,7 +37,7 @@ uniform PointLight Lights[12];
 
 uniform vec3 PlayerPosition;
 uniform float WaveMovement;
-uniform float Transparency = 0.7;
+uniform float Transparency = .7;
 uniform vec3 Scale;
 uniform vec3 Offset;
 uniform vec3 BakedOffset;
@@ -45,8 +45,8 @@ uniform vec3 LightPosition = vec3(-500.0, 1000.0, 0.0);
 uniform vec3 LightColor = vec3(1.0, 1.0, 1.0);
 uniform mat4 TransformationMatrix;
 
-float GetY(float x, float y, float z);
-float GetOffset(float x, float y, float z, float val1, float val2);
+float GetY(float x, float z);
+float GetOffset(float x, float z, float val1, float val2);
 vec3 Cross(vec3 v1, vec3 v2);
 
 vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal, vec3 LColor){	
@@ -70,7 +70,7 @@ void main()
 {
 	Movement = WaveMovement;
     vec4 v = vec4((InVertex + BakedOffset) * Scale + Offset, 1.0);
-    v.y = GetY(v.x,v.y,v.z) * InNormal.z * .6 * Scale.y + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
+    v.y = GetY(v.x, v.z) * InNormal.z * .6 * Scale.y + (InVertex.y + BakedOffset.y) * Scale.y + Offset.y;
     
     vec2 Unpacked1 = Unpack(InNormal.x, int(4096.0));
     vec2 Unpacked2 = Unpack(InNormal.y, int(4096.0));
@@ -78,15 +78,15 @@ void main()
     vec3 V0 = vec3(Unpacked1.x, 0.0, Unpacked1.y);
     vec3 V1 = vec3(Unpacked2.x, 0.0, Unpacked2.y);
     
-    V0.x = (V0.x + InVertex.x + BakedOffset.x) * Scale.x;
-    V0.z = (V0.z + InVertex.z + BakedOffset.z) * Scale.z;
-    V1.x = (V1.x + InVertex.x + BakedOffset.x) * Scale.x;
-    V1.z = (V1.z + InVertex.z + BakedOffset.z) * Scale.z;
-    V0.y = (V0.y + InVertex.y + BakedOffset.y) * Scale.y;
-    V1.y = (V1.y + InVertex.y + BakedOffset.y) * Scale.y;
+    V0.x = (V0.x + InVertex.x + BakedOffset.x) * Scale.x + Offset.x;
+    V0.z = (V0.z + InVertex.z + BakedOffset.z) * Scale.z + Offset.z;
+    V1.x = (V1.x + InVertex.x + BakedOffset.x) * Scale.x + Offset.x;
+    V1.z = (V1.z + InVertex.z + BakedOffset.z) * Scale.z + Offset.z;
+    V0.y = (V0.y + InVertex.y + BakedOffset.y) * Scale.y + Offset.y;
+    V1.y = (V1.y + InVertex.y + BakedOffset.y) * Scale.y + Offset.y;
     
-    V0.y = GetY(V0.x, V0.y, V0.z) * 0.4 * Scale.y + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
-    V1.y = GetY(V1.x, V1.y, V1.z) * 0.4 * Scale.y + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
+    V0.y = GetY(V0.x, V0.z) * 0.4 * Scale.y + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
+    V1.y = GetY(V1.x, V1.z) * 0.4 * Scale.y + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
     
     vec3 Normal = normalize(Cross(v.xyz - V0, V1 - v.xyz));
  	
@@ -150,7 +150,7 @@ const float waveLength = 1.75;
 const float waveTime = 0.5;
 const float PI = 3.14159265;
 
-float GetOffset(float x, float y, float z, float val1, float val2){
+float GetOffset(float x, float z, float val1, float val2){
 
 	float rX = ((mod(x+z*x*val1, waveLength)/waveLength)+Movement*0.2) * 2.0 * PI;
 	float rZ = ( (mod( val2 * (z*x + x*z), waveLength) / waveLength) +Movement*0.2 * 2.0) * 2.0 * PI;
@@ -158,8 +158,8 @@ float GetOffset(float x, float y, float z, float val1, float val2){
 	return 1.4 * 0.5 * (sin(rX) + sin(rZ));
 }
 
-float GetY(float x, float y, float z){
-    return GetOffset(x,y,z, 0.1, 0.3) + 0.0;
+float GetY(float x, float z){
+    return GetOffset(x,z, 0.1, 0.3) + 0.0;
 }
 
 vec3 Cross(vec3 v1, vec3 v2){

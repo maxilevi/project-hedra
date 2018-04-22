@@ -2,10 +2,17 @@
   "Name": "Glider",
   "DisplayName": "Glider",
   "Tier": "Rare",
+  "EquipmentType": "Vehicle", 
   "Description": "A glider.",
-  "Attributes": [],
+  "Attributes": [
+    {
+      "Name": "Price",
+      "Value": 480,
+      "Hidden": true
+    }
+  ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Glider.ply"
+    "Path": "$DataFile$/Items/GliderIcon.ply"
   }
 }

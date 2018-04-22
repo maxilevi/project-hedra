@@ -15,7 +15,7 @@ namespace Hedra.Engine.StructureSystem
     public class TravellingMerchantDesign : StructureDesign
     {
         public override int Radius { get; set; } = 512;
-        public override VertexData Icon => CacheManager.GetModel(CacheItem.Mat);
+        public override VertexData Icon => CacheManager.GetModel(CacheItem.MerchantIcon);
 
         public override void Build(Vector3 Position, CollidableStructure Structure) {
 

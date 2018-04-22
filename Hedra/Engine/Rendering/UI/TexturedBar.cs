@@ -51,9 +51,9 @@ namespace Hedra.Engine.Rendering.UI
 			_barSize = Mathf.Clamp( Mathf.Lerp(_barSize, _value() / _max(), (float) Time.deltaTime * 8f), 0, 1);
 
 			Shader.Bind();
-			GL.Disable(EnableCap.CullFace);
-			GL.Disable(EnableCap.DepthTest);
-			GL.Enable(EnableCap.Blend);
+			GraphicsLayer.Disable(EnableCap.CullFace);
+			GraphicsLayer.Disable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.Blend);
 
 		    GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
@@ -65,9 +65,9 @@ namespace Hedra.Engine.Rendering.UI
 			DrawManager.UIRenderer.SetupQuad();
 			DrawManager.UIRenderer.DrawQuad();	
 			
-			GL.Disable(EnableCap.Blend);
-			GL.Enable(EnableCap.DepthTest);
-			GL.Enable(EnableCap.CullFace);
+			GraphicsLayer.Disable(EnableCap.Blend);
+			GraphicsLayer.Enable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.CullFace);
 			Shader.UnBind();
 		}
 		

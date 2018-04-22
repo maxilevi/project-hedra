@@ -168,6 +168,7 @@
     <Compile Include="Engine\CacheSystem\CacheIgnore.cs" />
     <Compile Include="Engine\CacheSystem\GraveyardIconCache.cs" />
     <Compile Include="Engine\CacheSystem\MatCache.cs" />
+    <Compile Include="Engine\CacheSystem\MerchantIconCache.cs" />
     <Compile Include="Engine\CacheSystem\OakTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\PineTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\RockCache.cs" />
@@ -3077,6 +3078,10 @@
     </None>
     <None Include="..\..\..\Assets\Models\Glider.ply">
       <Link>Assets\Items\Glider.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\GliderIcon.ply">
+      <Link>Assets\Items\GliderIcon.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\GoatHorn.ply">

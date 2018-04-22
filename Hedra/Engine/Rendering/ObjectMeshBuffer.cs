@@ -64,30 +64,30 @@ namespace Hedra.Engine.Rendering
 			if(Indices == null || Data == null) return;
 
 		    this.Bind();
-		    GL.Disable(EnableCap.Blend);
+		    GraphicsLayer.Disable(EnableCap.Blend);
 			
-			if(Alpha < 0.9) GL.Enable(EnableCap.Blend);
-			GL.Enable(EnableCap.DepthTest);
+			if(Alpha < 0.9) GraphicsLayer.Enable(EnableCap.Blend);
+			GraphicsLayer.Enable(EnableCap.DepthTest);
 			
 			Data.Bind();
-			GL.EnableVertexAttribArray(0);
-			GL.EnableVertexAttribArray(1);
-			GL.EnableVertexAttribArray(2);
+			GraphicsLayer.EnableVertexAttribArray(0);
+			GraphicsLayer.EnableVertexAttribArray(1);
+			GraphicsLayer.EnableVertexAttribArray(2);
 
 			GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
 			GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 			
-			GL.DisableVertexAttribArray(0);
-			GL.DisableVertexAttribArray(1);
-			GL.DisableVertexAttribArray(2);
+			GraphicsLayer.DisableVertexAttribArray(0);
+			GraphicsLayer.DisableVertexAttribArray(1);
+			GraphicsLayer.DisableVertexAttribArray(2);
 			Data.UnBind();
 			
-			GL.Disable(EnableCap.Blend);
+			GraphicsLayer.Disable(EnableCap.Blend);
 
 			UnBind();
 			
 			if(Alpha < 1)
-				GL.Disable(EnableCap.Blend);
+				GraphicsLayer.Disable(EnableCap.Blend);
 		}
 		
 		public Vector3 TransformPoint(Vector3 Vertex){
@@ -204,7 +204,7 @@ namespace Hedra.Engine.Rendering
 		
 		public override void UnBind(){
 			Shader.UnBind();
-			GL.Enable(EnableCap.CullFace);
+			GraphicsLayer.Enable(EnableCap.CullFace);
 		}
 	}
 }

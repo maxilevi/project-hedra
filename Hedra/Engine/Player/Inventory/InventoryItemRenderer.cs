@@ -87,8 +87,8 @@ namespace Hedra.Engine.Player.Inventory
             GL.LoadMatrix(ref lookAt);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.Blend);
+            GraphicsLayer.Enable(EnableCap.DepthTest);
+            GraphicsLayer.Enable(EnableCap.Blend);
             Mesh.Draw();
 
             /*GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, ItemsFBO.BufferID);
@@ -103,8 +103,8 @@ namespace Hedra.Engine.Player.Inventory
             GraphicsLayer.PopShader();
             GraphicsLayer.BindFramebuffer(FramebufferTarget.Framebuffer, GraphicsLayer.FBOBound);
             GraphicsLayer.BindShader(GraphicsLayer.ShaderBound);
-            GL.Disable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.Blend);
+            GraphicsLayer.Disable(EnableCap.DepthTest);
+            GraphicsLayer.Enable(EnableCap.Blend);
             return UserInterface.InventoryFbo.TextureID[0];
         }
     }

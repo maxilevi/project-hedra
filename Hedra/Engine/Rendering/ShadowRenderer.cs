@@ -72,7 +72,7 @@ namespace Hedra.Engine.Rendering
 			Shader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
 			Shader["MVP"] = ShadowMvp;
 			GL.CullFace(CullFaceMode.Front);
-            GL.Enable(EnableCap.CullFace);
+            GraphicsLayer.Enable(EnableCap.CullFace);
 		}
 		
 		public static void UnBind()

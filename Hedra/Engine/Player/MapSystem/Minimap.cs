@@ -69,7 +69,7 @@ namespace Hedra.Engine.Player.MapSystem
 	    }
 		
 		public void DrawMap(){
-		    GL.Enable(EnableCap.DepthTest);
+		    GraphicsLayer.Enable(EnableCap.DepthTest);
 		    GraphicsLayer.PushFBO();
 		    GraphicsLayer.PushShader();
             _mapFbo.Bind();
@@ -111,8 +111,8 @@ namespace Hedra.Engine.Player.MapSystem
 		    _player.View.RebuildMatrix();
 		    DrawManager.FrustumObject.SetFrustum(_player.View.Matrix);
 
-		    GL.Disable(EnableCap.DepthTest);
-		    GL.Enable(EnableCap.Blend);
+		    GraphicsLayer.Disable(EnableCap.DepthTest);
+		    GraphicsLayer.Enable(EnableCap.Blend);
 		    GL.ClearColor(Vector4.Zero.ToColor());
             GraphicsLayer.PopFBO();
 		    GraphicsLayer.PopShader();
@@ -151,9 +151,9 @@ namespace Hedra.Engine.Player.MapSystem
 		    this.DrawMap();
 
             Shader.Bind();
-            GL.Enable(EnableCap.Texture2D);
-            GL.Enable(EnableCap.Blend);
-            GL.Disable(EnableCap.DepthTest);
+            GraphicsLayer.Enable(EnableCap.Texture2D);
+            GraphicsLayer.Enable(EnableCap.Blend);
+            GraphicsLayer.Disable(EnableCap.DepthTest);
 
             DrawManager.UIRenderer.SetupQuad();
 
@@ -174,10 +174,10 @@ namespace Hedra.Engine.Player.MapSystem
 
             DrawManager.UIRenderer.DrawQuad();
 
-            GL.Enable(EnableCap.DepthTest);
-            GL.Disable(EnableCap.Blend);
-            GL.Disable(EnableCap.Texture2D);
-            GL.Enable(EnableCap.CullFace);
+            GraphicsLayer.Enable(EnableCap.DepthTest);
+            GraphicsLayer.Disable(EnableCap.Blend);
+            GraphicsLayer.Disable(EnableCap.Texture2D);
+            GraphicsLayer.Enable(EnableCap.CullFace);
             Shader.UnBind();
         }
 		

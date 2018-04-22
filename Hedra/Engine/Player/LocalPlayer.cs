@@ -7,12 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using Hedra.Engine.ClassSystem;
 using OpenTK;
 using Hedra.Engine.Sound;
-using Hedra.Engine.Scenes;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
@@ -64,6 +62,7 @@ namespace Hedra.Engine.Player
 	    private bool _enabled;
 	    private float _oldCementeryTime;
 	    private float _oldTime;
+	    private bool _wasPlayingAmbient;
 
         public LocalPlayer(){
 			this.UI = new UserInterface(this);
@@ -291,13 +290,22 @@ namespace Hedra.Engine.Player
 
             this.NearCollisions = null;
             if (nearCollidableStructure != null)
-		    {
+            {
 
-		        if ((nearCollidableStructure.Position.Xz - this.Position.Xz).LengthFast < nearCollidableStructure.Design.Radius && nearCollidableStructure.Design is VillageDesign)
-		            SoundtrackManager.PlayTrack(SoundtrackManager.VillageIndex, true);
+                if ((nearCollidableStructure.Position.Xz - this.Position.Xz).LengthFast <
+                    nearCollidableStructure.Design.Radius && nearCollidableStructure.Design is VillageDesign)
+                {
+                    SoundtrackManager.PlayTrack(SoundtrackManager.VillageIndex, true);
+                    _wasPlayingAmbient = true;
+                }
 
                 NearCollisions = nearCollidableStructure.Colliders;
-		    }	    
+            }
+            else if(_wasPlayingAmbient)
+            {
+                _wasPlayingAmbient = false;
+                SoundtrackManager.PlayTrack(SoundtrackManager.LoopableSongsStart);
+            }
 
 		    if(_shouldUpdateTime){
 				SkyManager.SetTime( Mathf.Lerp(SkyManager.DayTime, _targetCementeryTime, (float) Time.deltaTime * 2f) );

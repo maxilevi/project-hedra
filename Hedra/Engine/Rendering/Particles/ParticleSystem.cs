@@ -123,37 +123,37 @@ namespace Hedra.Engine.Rendering.Particles
 			if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
 			
 			if(Particles.Count > 0){
-				GL.Enable(EnableCap.Blend);
-				GL.Enable(EnableCap.DepthTest);
-				//GL.Disable(EnableCap.CullFace);
+				GraphicsLayer.Enable(EnableCap.Blend);
+				GraphicsLayer.Enable(EnableCap.DepthTest);
+				//GraphicsLayer.Disable(EnableCap.CullFace);
 				Shader.Bind();
 				Shader["PlayerPosition"] = GameManager.Player.Position;
 				
 				GL.BindVertexArray(VAOID);
 
-				GL.EnableVertexAttribArray(0);
-				GL.EnableVertexAttribArray(1);
-				GL.EnableVertexAttribArray(2);
-				GL.EnableVertexAttribArray(3);
-				GL.EnableVertexAttribArray(4);
-				GL.EnableVertexAttribArray(5);
-				GL.EnableVertexAttribArray(6);
+				GraphicsLayer.EnableVertexAttribArray(0);
+				GraphicsLayer.EnableVertexAttribArray(1);
+				GraphicsLayer.EnableVertexAttribArray(2);
+				GraphicsLayer.EnableVertexAttribArray(3);
+				GraphicsLayer.EnableVertexAttribArray(4);
+				GraphicsLayer.EnableVertexAttribArray(5);
+				GraphicsLayer.EnableVertexAttribArray(6);
 				
 				GL.BindBuffer(BufferTarget.ElementArrayBuffer, ParticleCreator.IndicesVBO.ID);
 				GL.DrawElementsInstanced(PrimitiveType.Triangles, ParticleCreator.IndicesVBO.Count, DrawElementsType.UnsignedShort, IntPtr.Zero, Particles.Count);
 				
-				GL.DisableVertexAttribArray(0);
-				GL.DisableVertexAttribArray(1);
-				GL.DisableVertexAttribArray(2);
-				GL.DisableVertexAttribArray(3);
-				GL.DisableVertexAttribArray(4);
-				GL.DisableVertexAttribArray(5);
-				GL.DisableVertexAttribArray(6);
+				GraphicsLayer.DisableVertexAttribArray(0);
+				GraphicsLayer.DisableVertexAttribArray(1);
+				GraphicsLayer.DisableVertexAttribArray(2);
+				GraphicsLayer.DisableVertexAttribArray(3);
+				GraphicsLayer.DisableVertexAttribArray(4);
+				GraphicsLayer.DisableVertexAttribArray(5);
+				GraphicsLayer.DisableVertexAttribArray(6);
 				GL.BindVertexArray(0);
 				
 				Shader.UnBind();
-				//GL.Enable(EnableCap.CullFace);
-				GL.Disable(EnableCap.Blend);
+				//GraphicsLayer.Enable(EnableCap.CullFace);
+				GraphicsLayer.Disable(EnableCap.Blend);
 			}
 		}
 		

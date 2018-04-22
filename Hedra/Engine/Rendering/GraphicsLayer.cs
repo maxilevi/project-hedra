@@ -32,7 +32,17 @@ namespace Hedra.Engine.Rendering
 	        ShaderManager.RegisterStateItem(() => ShaderBound, O => ShaderBound = (int)O);
         }
 
-	    public static void PushFBO()
+	    public static void Enable(EnableCap Cap)
+	    {
+	        GL.Enable(Cap);
+	    }
+
+	    public static void Disable(EnableCap Cap)
+	    {
+	        GL.Disable(Cap);
+	    }
+
+        public static void PushFBO()
 	    {
 	        FboManager.CaptureState();
 	    }

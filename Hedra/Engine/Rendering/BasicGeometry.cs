@@ -44,7 +44,7 @@ namespace Hedra.Engine.Rendering
 	    static int[] indices = new int[8]{0,1,2,3,4,5,6,7};	    
 	    
 		public static void DrawBox(Vector3 Min, Vector3 Size){
-	    	GL.Disable(EnableCap.CullFace);
+	    	GraphicsLayer.Disable(EnableCap.CullFace);
 	    	Color color = Color.Transparent;
 	    	float w = Size.X, h = Size.Y, d = Size.Z;
 			v[0,0] = v[1,0] = v[2,0] = v[3,0] = 0;
@@ -70,11 +70,11 @@ namespace Hedra.Engine.Rendering
     		}
 	       GL.End();
 	       GL.PopMatrix();
-	       GL.Enable(EnableCap.CullFace);
+	       GraphicsLayer.Enable(EnableCap.CullFace);
 	    }
 	    
 	    public static void DrawShape(CollisionShape Shape, Color DrawColor){
-	    	GL.Disable(EnableCap.CullFace);
+	    	GraphicsLayer.Disable(EnableCap.CullFace);
 	    	GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 			
 			GL.Begin(PrimitiveType.Triangles);
@@ -84,7 +84,7 @@ namespace Hedra.Engine.Rendering
 			}
 			GL.End();
 			
-			GL.Enable(EnableCap.CullFace);
+			GraphicsLayer.Enable(EnableCap.CullFace);
 			GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 	    }
 		
@@ -107,7 +107,7 @@ namespace Hedra.Engine.Rendering
 			GL.PushMatrix();
 			
 			GL.Rotate(270f, new OpenTK.Vector3(1,0,0));
-			GL.Enable(EnableCap.Texture2D);
+			GraphicsLayer.Enable(EnableCap.Texture2D);
 			GL.Begin(PrimitiveType.Quads);
 			GL.BindTexture(TextureTarget.Texture2D, TexID);
 
@@ -121,8 +121,8 @@ namespace Hedra.Engine.Rendering
 			GL.Vertex2( 10, 0);
 	
 			GL.End();
-			GL.Disable(EnableCap.Texture2D);
-			GL.Enable(EnableCap.CullFace);
+			GraphicsLayer.Disable(EnableCap.Texture2D);
+			GraphicsLayer.Enable(EnableCap.CullFace);
 			
 			GL.PopMatrix();
 		}

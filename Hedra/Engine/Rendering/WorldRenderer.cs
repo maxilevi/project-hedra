@@ -72,8 +72,8 @@ namespace Hedra.Engine.Rendering
 				int[] ShadowCounts = StaticBuffer.BuildCounts(ToDraw, out ShadowOffsets, true);
 				
 				StaticBuffer.Data.Bind();
-				GL.EnableVertexAttribArray(0);
-			    GL.EnableVertexAttribArray(1);
+				GraphicsLayer.EnableVertexAttribArray(0);
+			    GraphicsLayer.EnableVertexAttribArray(1);
 
 			    GL.BindBuffer(StaticBuffer.Indices.Buffer.BufferTarget, StaticBuffer.Indices.Buffer.ID);
 
@@ -86,13 +86,13 @@ namespace Hedra.Engine.Rendering
 				}
 				StaticBind();
 				
-				GL.EnableVertexAttribArray(2);
+				GraphicsLayer.EnableVertexAttribArray(2);
 
 			    GraphicsLayer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);
 			    
-			    GL.DisableVertexAttribArray(0);
-				GL.DisableVertexAttribArray(1);
-				GL.DisableVertexAttribArray(2);
+			    GraphicsLayer.DisableVertexAttribArray(0);
+				GraphicsLayer.DisableVertexAttribArray(1);
+				GraphicsLayer.DisableVertexAttribArray(2);
 				
 				StaticBuffer.Data.UnBind();
 				
@@ -110,16 +110,16 @@ namespace Hedra.Engine.Rendering
                 WaterBind();
 				WaterBuffer.Data.Bind();
 				
-				GL.EnableVertexAttribArray(0);
-				GL.EnableVertexAttribArray(1);
-				GL.EnableVertexAttribArray(2);
+				GraphicsLayer.EnableVertexAttribArray(0);
+				GraphicsLayer.EnableVertexAttribArray(1);
+				GraphicsLayer.EnableVertexAttribArray(2);
 				
 				GL.BindBuffer(WaterBuffer.Indices.Buffer.BufferTarget, WaterBuffer.Indices.Buffer.ID);
 			    GraphicsLayer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);
 				
-				GL.DisableVertexAttribArray(0);
-				GL.DisableVertexAttribArray(1);
-				GL.DisableVertexAttribArray(2);	
+				GraphicsLayer.DisableVertexAttribArray(0);
+				GraphicsLayer.DisableVertexAttribArray(1);
+				GraphicsLayer.DisableVertexAttribArray(2);	
 				
 				WaterBuffer.Data.UnBind();
 				WaterUnBind();
@@ -140,7 +140,7 @@ namespace Hedra.Engine.Rendering
 		#region Binds
 		
 		private static void StaticBind(){
-			GL.Disable(EnableCap.Blend);
+			GraphicsLayer.Disable(EnableCap.Blend);
 			StaticShader.Bind();
 
             StaticShader["PlayerPosition"] = GameManager.Player.Position;
@@ -174,10 +174,10 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		private static void WaterBind(){
-			GL.Enable(EnableCap.Blend);
+			GraphicsLayer.Enable(EnableCap.Blend);
 			GL.BlendEquation(BlendEquationMode.FuncAdd);
            	GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-           	GL.Enable(EnableCap.Texture2D);
+           	GraphicsLayer.Enable(EnableCap.Texture2D);
            	
            	WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
@@ -194,20 +194,19 @@ namespace Hedra.Engine.Rendering
 			WaterShader["AreaColors"] = World.Highlighter.AreaColors;		
 			WaterShader["WaveMovement"] = WaveMovement;
            	
-           	
-           	if(ShowWaterBackfaces) GL.Disable(EnableCap.CullFace);
+           	if(ShowWaterBackfaces) GraphicsLayer.Disable(EnableCap.CullFace);
 		}
 		
 		private static void WaterUnBind(){
-			GL.Disable(EnableCap.Blend);
-			GL.Disable(EnableCap.Texture2D);
-			GL.Enable(EnableCap.CullFace);
+			GraphicsLayer.Disable(EnableCap.Blend);
+			GraphicsLayer.Disable(EnableCap.Texture2D);
+			GraphicsLayer.Enable(EnableCap.CullFace);
 		    WaterShader.UnBind();
         }
 
         #endregion
 
-	    public static bool Dither { get; set; } = false;
+        public static bool Dither { get; set; } = false;
         public static bool EnableCulling { get; set; } = true;
         public static Vector3 BakedOffset { get; set; }
         public static Vector3 Scale { get; set; } = Vector3.One;

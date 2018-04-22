@@ -96,8 +96,8 @@ namespace Hedra.Engine.Rendering.UI
             if (UpdateTextRatio)
                 Text.Text = (int) _value() + " / " + (int) _max();
             Shader.Bind();          
-            GL.Disable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.Blend);
+            GraphicsLayer.Disable(EnableCap.DepthTest);
+            GraphicsLayer.Enable(EnableCap.Blend);
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, CurvedBorders ? BarBlueprint : RectangleBlueprint);
@@ -121,10 +121,10 @@ namespace Hedra.Engine.Rendering.UI
 
             DrawManager.UIRenderer.DrawQuad();
 
-            GL.Enable(EnableCap.CullFace);
-            GL.Disable(EnableCap.Blend);
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.CullFace);
+            GraphicsLayer.Enable(EnableCap.CullFace);
+            GraphicsLayer.Disable(EnableCap.Blend);
+            GraphicsLayer.Enable(EnableCap.DepthTest);
+            GraphicsLayer.Enable(EnableCap.CullFace);
             Shader.UnBind();
         }
 

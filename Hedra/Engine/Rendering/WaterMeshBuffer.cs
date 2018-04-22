@@ -33,25 +33,25 @@ namespace Hedra.Engine.Rendering
 				WaveMovement = 0;
 			
 			Data.Bind();
-			GL.EnableVertexAttribArray(0);
-			GL.EnableVertexAttribArray(1);
-			GL.EnableVertexAttribArray(2);
+			GraphicsLayer.EnableVertexAttribArray(0);
+			GraphicsLayer.EnableVertexAttribArray(1);
+			GraphicsLayer.EnableVertexAttribArray(2);
 
 			//GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
 			GL.DrawArrays(PrimitiveType.Triangles, 0, Vertices.Count);//////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 			
-			GL.DisableVertexAttribArray(0);
-			GL.DisableVertexAttribArray(1);
-			GL.DisableVertexAttribArray(2);
+			GraphicsLayer.DisableVertexAttribArray(0);
+			GraphicsLayer.DisableVertexAttribArray(1);
+			GraphicsLayer.DisableVertexAttribArray(2);
 			Data.UnBind();
 		}
 		
 		public override void Bind(){
 		    throw new Exception("Obsolete");
-            GL.Enable(EnableCap.Blend);
+            GraphicsLayer.Enable(EnableCap.Blend);
 			GL.BlendEquation(BlendEquationMode.FuncAdd);
            	GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-           	GL.Enable(EnableCap.Texture2D);
+           	GraphicsLayer.Enable(EnableCap.Texture2D);
            	
            	//BlockShaders.WaterShader.Bind();
            	//GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, GameManager.Player.Position);
@@ -65,15 +65,15 @@ namespace Hedra.Engine.Rendering
            	
            	
            	if(ShowBackfaces) 
-           		GL.Disable(EnableCap.CullFace);
+           		GraphicsLayer.Disable(EnableCap.CullFace);
 		}
 		
 		public override void UnBind(){
 		    throw new Exception("Obsolete");
-            GL.Disable(EnableCap.Blend);
-			GL.Disable(EnableCap.Texture2D);
+            GraphicsLayer.Disable(EnableCap.Blend);
+			GraphicsLayer.Disable(EnableCap.Texture2D);
 			//BlockShaders.WaterShader.UnBind();
-			GL.Enable(EnableCap.CullFace);
+			GraphicsLayer.Enable(EnableCap.CullFace);
 		}
 	}
 }

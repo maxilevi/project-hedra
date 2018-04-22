@@ -24,8 +24,8 @@ namespace Hedra.Engine.Rendering.Effects
 		public abstract void Pass(FBO Src, FBO Dst);
 		
 		public virtual void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false){
-			GL.Enable(EnableCap.Texture2D);
-			GL.Disable(EnableCap.DepthTest);
+			GraphicsLayer.Enable(EnableCap.Texture2D);
+			GraphicsLayer.Disable(EnableCap.DepthTest);
 
 		    DrawManager.UIRenderer.SetupQuad();
 
@@ -37,9 +37,9 @@ namespace Hedra.Engine.Rendering.Effects
 
 		    DrawManager.UIRenderer.DrawQuad();
 
-            GL.Enable(EnableCap.DepthTest);
-			GL.Disable(EnableCap.Texture2D);
-			GL.Enable(EnableCap.CullFace);
+            GraphicsLayer.Enable(EnableCap.DepthTest);
+			GraphicsLayer.Disable(EnableCap.Texture2D);
+			GraphicsLayer.Enable(EnableCap.CullFace);
 		}
 	}
 }

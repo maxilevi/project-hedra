@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering
         {
             uint texId;
             GL.GenTextures(1, out texId);
-            GL.Enable(EnableCap.TextureCubeMap);
+            GraphicsLayer.Enable(EnableCap.TextureCubeMap);
             TextureId = texId;
 
             GL.BindTexture(TextureTarget.TextureCubeMap, TextureId);
