@@ -52,7 +52,8 @@ namespace Hedra
 		private bool _finishedLoading;
 	    private float _splashOpacity = 1;
         private float _lastValue = float.MinValue;
-		public string GameVersion;
+	    private float _passedTime;
+        public string GameVersion;
 		public bool FirstLaunch;
 	    public static int MainThreadId;
 	    public float VRam = 0;
@@ -67,7 +68,7 @@ namespace Hedra
 			base.OnLoad(e);
 		    string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
 		    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
-            this.GameVersion = "α 0.28";
+            this.GameVersion = "α 0.29";
 		    this.Title += " "+GameVersion;
             Hedra.MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -171,7 +172,6 @@ namespace Hedra
                 }, IntPtr.Zero);
 		}
 
-	    private float _passedTime;
 	    protected override void OnUpdateFrame(FrameEventArgs e){
 			base.OnUpdateFrame(e);
 

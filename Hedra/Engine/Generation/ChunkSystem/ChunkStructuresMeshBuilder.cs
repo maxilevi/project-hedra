@@ -24,20 +24,28 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private int BuildedLod => _parent.BuildedLod;
         private bool Disposed => _parent.Disposed;
         private ChunkMesh Mesh => _parent.Mesh;
-        private List<VertexData> StaticElements => _parent.StaticElements.ToList();
 
         public ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input, int Lod)
         {
-
-            for (var i = 0; i < StaticElements.Count; i++)
+            List<VertexData> staticElements;
+            try
             {
-                if (StaticElements[i].ExtraData.Count != StaticElements[i].Vertices.Count)
+                staticElements = _parent.StaticElements.ToList();
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Log.WriteLine(e.Message);
+                return null;
+            }
+            for (var i = 0; i < staticElements.Count; i++)
+            {
+                if (staticElements[i].ExtraData.Count != staticElements[i].Vertices.Count)
                 {
-                    float extraDataCount = StaticElements[i].Vertices.Count - StaticElements[i].ExtraData.Count;
-                    for (var k = 0; k < extraDataCount; k++) StaticElements[i].ExtraData.Add(0);
+                    float extraDataCount = staticElements[i].Vertices.Count - staticElements[i].ExtraData.Count;
+                    for (var k = 0; k < extraDataCount; k++) staticElements[i].ExtraData.Add(0);
                 }
 
-                Input.StaticData += StaticElements[i];
+                Input.StaticData += staticElements[i];
             }
 
             for (var i = 0; i < Mesh.InstanceElements.Count; i++)
