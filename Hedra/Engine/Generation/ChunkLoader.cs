@@ -69,6 +69,7 @@ namespace Hedra.Engine.Generation
         private int _prevChunkCount;
         private float _lastRadius;
         private int _previousSeed;
+        private int _genCounter;
 
         private void LoadChunks()
         {
@@ -199,7 +200,8 @@ namespace Hedra.Engine.Generation
             {
                 while (Program.GameWindow.Exists)
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(250);
+                    _genCounter += 250; 
 
                     if (!World.IsGenerated || !Enabled)
                         continue;
@@ -209,8 +211,9 @@ namespace Hedra.Engine.Generation
                     var newPos = _player.BlockPosition.Xz;
 
                     if ( (newPos - _lastPos2).LengthSquared > 16*16 || GameSettings.ChunkLoaderRadius != _lastRadius ||
-                        (UnderChunk != null && !UnderChunk.IsGenerated) || World.Seed != _previousSeed)
+                        (UnderChunk != null && !UnderChunk.IsGenerated) || World.Seed != _previousSeed || _genCounter >= 1000)
                     {
+                        _genCounter = 0;
                         _previousSeed = World.Seed;
                         Chunk[] Chunks;
                         lock (World.Chunks)

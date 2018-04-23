@@ -42,6 +42,16 @@ namespace Hedra.Engine.Rendering
 	        GL.Disable(Cap);
 	    }
 
+	    public static void EnableVertexAttribArray(uint Index)
+	    {
+	        GL.EnableVertexAttribArray(Index);
+	    }
+
+	    public static void DisableVertexAttribArray(uint Index)
+	    {
+	        GL.DisableVertexAttribArray(Index);
+        }
+
         public static void PushFBO()
 	    {
 	        FboManager.CaptureState();

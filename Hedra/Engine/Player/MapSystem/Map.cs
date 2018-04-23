@@ -11,11 +11,16 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Sound;
 using OpenTK;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Player.MapSystem
 {
@@ -27,13 +32,17 @@ namespace Hedra.Engine.Player.MapSystem
 	    private const int MapViewSize = 8;
         private const int MapSize = 8;
 	    private const int ChunkSize = 4;
+	    private const float FogDistance = 140f;
         private readonly LocalPlayer _player;
 	    private readonly MapStateManager _stateManager;
 	    private readonly List<MapItem> _icons;
 	    private readonly MapBuilder _builder;
 	    private readonly MapMeshBuilder _meshBuilder;
         private readonly List<MapBaseItem> _baseItems;
-		private bool _show;
+	    private readonly ObjectMesh _cursor;
+	    private readonly ObjectMesh _marker;
+	    private readonly Panel _panel;
+        private bool _show;
 	    private float _size;
 	    private float _targetSize;
 	    private int _previousSeed;
@@ -45,11 +54,36 @@ namespace Hedra.Engine.Player.MapSystem
 
         public Map(LocalPlayer Player){
 			this._player = Player;
+            this._panel = new Panel();
             this._icons = new List<MapItem>();
             this._stateManager = new MapStateManager(Player);
             this._builder = new MapBuilder();
             this._baseItems = new List<MapBaseItem>();
             this._meshBuilder = new MapMeshBuilder(_player, MapSize, ChunkSize);
+            this._cursor = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/UI/MapCursor.ply", Vector3.One * 20f));
+            this._marker = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f));
+            _marker.ApplyFog = false;
+
+            var hint = new GUIText("CLICK TO MARK A WAYPOINT",
+                Vector2.UnitY * .8f, Color.White,
+                FontCache.Get(AssetManager.Fonts.Families[0], 16f, FontStyle.Bold));
+            var underline = new GUIText("＿＿＿＿＿＿＿＿",
+                Vector2.UnitY * .75f, Color.FromArgb(255, 30, 30, 30),
+                FontCache.Get(AssetManager.Fonts.Families[0], 16f, FontStyle.Bold));
+            _panel.AddElement(hint);
+            _panel.AddElement(underline);
+            EventDispatcher.RegisterMouseDown(this, delegate(object Sender, MouseButtonEventArgs Args)
+            {
+                if(!_show) return;
+                if (Args.Button == MouseButton.Left)
+                {
+                    _player.Minimap.Mark(_player.View.CrossDirection.Xz.ToVector3().NormalizedFast());
+                    _player.Orientation = _player.Minimap.MarkedDirection;
+                    _player.Model.TargetRotation = Physics.DirectionToEuler(_player.Minimap.MarkedDirection);
+                }
+                else if(Args.Button == MouseButton.Right) _player.Minimap.Unmark();
+                SoundManager.PlayUISound(SoundType.NotificationSound);
+            });
         }
 
 		public void Update(){
@@ -77,8 +111,12 @@ namespace Hedra.Engine.Player.MapSystem
 		    }
 		    if (_show)
 		    {
-                this._player.Minimap.Show = false;
-		        WorldRenderer.Scale = Mathf.Lerp(Vector3.One, Vector3.One * (ChunkSize / (float)Chunk.Width), _size) + Vector3.One * 0.002f;
+		        _marker.Enabled = _player.Minimap.HasMarker;
+		        _marker.Position = mapPosition + Vector3.UnitY * (_height + 25f) + _player.Minimap.MarkedDirection * FogDistance;
+                _cursor.Position = mapPosition + Vector3.UnitY * (_height + 45f);
+                _cursor.Rotation = _player.Model.Rotation;
+		        WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
+                    Vector3.One * (ChunkSize / (float)Chunk.Width), _size) + Vector3.One * 0.002f;
                 WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _height);
                 WorldRenderer.Offset = mapPosition + Vector3.UnitY * (_height+80f);
 		        this.UpdateChunks();
@@ -99,7 +137,7 @@ namespace Hedra.Engine.Player.MapSystem
 	        this._player.View.PositionDelegate = () => _player.Model.Model.Position.Xz.ToVector3() + Math.Max(_height, _player.Model.Model.Position.Y) * Vector3.UnitY;
             SkyManager.Skydome.TopColor = Vector4.One;
 	        SkyManager.Skydome.BotColor = Color.CadetBlue.ToVector4();
-	        SkyManager.FogManager.UpdateFogSettings(140 * .95f, 140);
+	        SkyManager.FogManager.UpdateFogSettings(FogDistance * .95f, FogDistance);
         }
 
 	    public void Draw()
@@ -140,7 +178,7 @@ namespace Hedra.Engine.Player.MapSystem
 	                        var pos = playerPos + new Vector2(coords.X, coords.Y) * Chunk.Width * MapSize +
 	                                  new Vector2((i - MapSize / 2) * Chunk.Width, (j - MapSize / 2) * Chunk.Width);
 	                        var chunk = World.GetChunkAt(pos.ToVector3());
-	                        if (!MapBaseItem.UsableChunk(chunk) || true)
+	                        if (!MapBaseItem.UsableChunk(chunk))
 	                        {
 	                            var biome = World.BiomePool.GetRegion(pos.ToVector3());
 	                            var sample = _builder.Sample(pos.ToVector3(), biome);
@@ -287,27 +325,30 @@ namespace Hedra.Engine.Player.MapSystem
                     this._targetSize = 1.0f;
                     this._player.View.MaxDistance = 100f;
 				    this._player.View.MinDistance = 0f;
-				    this._player.View.TargetDistance = 50f;
+				    this._player.View.TargetDistance = 100f;
                     this._player.View.MaxPitch = -0.2f;
 					this._player.View.MinPitch = -1.4f;
 				    this._player.View.WheelSpeed = 5f;
 					this._targetHeight = 2500f;
 				    this._targetTime = 12000;
-				    this._player.Minimap.Show = false;
+				    this._player.Toolbar.Listen = false;
+				    _panel.Enable();
                     SkyManager.PushTime();                   
 				}else
 				{
                     _stateManager.ReleaseState();
+                    _panel.Disable();
 				    this._player.Minimap.Show = true;
                     this._targetSize = 0f;
 					this._targetHeight = 0f;
                     this._targetTime = SkyManager.PeekTime();
                     TaskManager.Delay(() => Math.Abs(_height - _targetHeight) < 0.01f, delegate
 				    {
+
 				        this._player.View.PositionDelegate = Camera.DefaultDelegate;
 				        SkyManager.PopTime();
 				        _targetTime = float.MaxValue;
-                        _height = 0f;
+                        if(!_show) _height = 0f;
 
                     });
 				    SkyManager.FogManager.UpdateFogSettings(_player.Loader.MinFog, _player.Loader.MaxFog);

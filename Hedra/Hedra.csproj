@@ -3180,6 +3180,10 @@
       <Link>Assets\UI\MapCursor.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\MapMarker.ply">
+      <Link>Assets\UI\MapMarker.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\MarketStand0.ply">
       <Link>Assets\Env\Village\MarketStand0.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

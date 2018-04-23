@@ -35,8 +35,8 @@ namespace Hedra.Engine.Player.MapSystem
 	    private readonly RenderableTexture _miniMapMarker;
 	    private readonly FBO _mapFbo;
         private bool _show;
-	    private bool _hasMarker;
-        public Vector3 MarkedPosition { get; private set; }
+	    public bool HasMarker { get; private set; }
+	    public Vector3 MarkedDirection { get; private set; }
 
         public Minimap(LocalPlayer Player){
             this._player = Player;
@@ -57,15 +57,15 @@ namespace Hedra.Engine.Player.MapSystem
             _panel.Disable();
         }
 
-	    public void Mark(Vector3 Position)
+	    public void Mark(Vector3 Direction)
 	    {
-	        MarkedPosition = Position;
-	        _hasMarker = true;
+	        MarkedDirection = Direction;
+	        HasMarker = true;
         }
 
 	    public void Unmark()
 	    {
-	        _hasMarker = false;
+	        HasMarker = false;
 	    }
 		
 		public void DrawMap(){
@@ -134,13 +134,12 @@ namespace Hedra.Engine.Player.MapSystem
             _mapCursor.Enable();
             _miniMapRing.Enable();
             _miniMapNorth.Enable();
-            _miniMapNorth.BaseTexture.TextureElement.Angle = _player.Model.Model.Rotation.Y;
+            _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.Model.Rotation.Y;
 
-		    if (_hasMarker)
+		    if (HasMarker)
 		    {
-		        Vector3 toObjDirection = (_player.Model.Model.Position - MarkedPosition).NormalizedFast().Xz.ToVector3();
-		        Vector3 rot = Physics.DirectionToEuler(toObjDirection);
-		        _miniMapMarker.BaseTexture.TextureElement.Angle = _player.Model.Model.Rotation.Y - rot.Y + 180;
+		        Vector3 rot = Physics.DirectionToEuler(MarkedDirection);
+		        _miniMapMarker.BaseTexture.TextureElement.Angle = -_player.Model.Model.Rotation.Y + rot.Y;
 		        _miniMapMarker.Enable();
 		    }
 		    else
