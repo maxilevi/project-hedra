@@ -99,26 +99,26 @@ namespace Hedra.Engine.Player.MapSystem
 		        for (var i = 0; i < _icons.Count; i++)
                 { 
 		            _icons[i].Mesh.Rotation = new Vector3(_icons[i].Mesh.Rotation.X, _icons[i].Mesh.Rotation.Y + (float) Time.deltaTime * 0f, _icons[i].Mesh.Rotation.Z);
-                    _icons[i].Mesh.Position = new Vector3(mapPosition.X, _height + 10f, mapPosition.Z);
+                    _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight + 10f, mapPosition.Z);
 		        }
 		    }
 		    for (var i = 0; i < _baseItems.Count; i++)
 		    {
 		        if (_baseItems[i].Mesh != null)
 		        {
-		            _baseItems[i].Mesh.Position = new Vector3(mapPosition.X, _height - ChunkSize * 2f + 25f, mapPosition.Z);
+		            _baseItems[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight - ChunkSize * 2f + 25f, mapPosition.Z);
 		        }
 		    }
 		    if (_show)
 		    {
 		        _marker.Enabled = _player.Minimap.HasMarker;
-		        _marker.Position = mapPosition + Vector3.UnitY * (_height + 25f) + _player.Minimap.MarkedDirection * FogDistance;
-                _cursor.Position = mapPosition + Vector3.UnitY * (_height + 45f);
+		        _marker.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f) + _player.Minimap.MarkedDirection * FogDistance;
+                _cursor.Position = mapPosition + Vector3.UnitY * (_targetHeight + 45f);
                 _cursor.Rotation = _player.Model.Rotation;
 		        WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
-                    Vector3.One * (ChunkSize / (float)Chunk.Width), _size) + Vector3.One * 0.002f;
-                WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _height);
-                WorldRenderer.Offset = mapPosition + Vector3.UnitY * (_height+80f);
+                    Vector3.One * (ChunkSize / (float)Chunk.Width), 1f) + Vector3.One * 0.002f;
+                WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _targetHeight);
+                WorldRenderer.Offset = mapPosition + Vector3.UnitY * (_targetHeight + 80f);
 		        this.UpdateChunks();
             }
 		}
@@ -330,6 +330,7 @@ namespace Hedra.Engine.Player.MapSystem
 					this._player.View.MinPitch = -1.4f;
 				    this._player.View.WheelSpeed = 5f;
 					this._targetHeight = 2500f;
+				    this._height = _targetHeight;
 				    this._targetTime = 12000;
 				    this._player.Toolbar.Listen = false;
 				    _panel.Enable();
