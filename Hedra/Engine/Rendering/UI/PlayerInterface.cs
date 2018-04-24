@@ -65,7 +65,6 @@ namespace Hedra.Engine.Rendering.UI
             }
             else
             {
-
                 if (!GameManager.Player.UI.Menu.Enabled) GameManager.Player.UI.ShowMenu();
                 else GameManager.Player.UI.HideMenu();
             }

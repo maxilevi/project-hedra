@@ -328,7 +328,7 @@ namespace Hedra.Engine.Player
 			
 			if(e.Key == Key.Enter && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !pushedText)
 			{
-			    player.Chat.Show = true;
+			    player.Chat.Focus();
 			}
 
 		    if (e.Key == Key.Escape && !player.UI.GamePanel.Enabled && !player.UI.Hide)
@@ -336,7 +336,7 @@ namespace Hedra.Engine.Player
 
             if (e.Key == Key.Escape && player.Chat.Focused)
             {
-                player.Chat.Show = false;
+                player.Chat.LoseFocus();
             }
 			
 			//Kinda specific?
@@ -350,21 +350,16 @@ namespace Hedra.Engine.Player
                 AssetManager.CreateDirectory(AssetManager.AppData + "/Screenshots/");
 				player.MessageDispatcher.ShowNotification( "Saved screenshot as "+Recorder.SaveScreenshot(AssetManager.AppData + "/Screenshots/"), System.Drawing.Color.White, 3f, false );
 			}
-			if(e.Key == Key.F4) 
-				player.UI.ShowHelp = !player.UI.ShowHelp;
-			if(e.Key == Key.F1){
-				if(player.UI.Hide)
-					player.UI.Hide = false;
-				else
-					player.UI.Hide = true;
+			if(e.Key == Key.F4) player.UI.ShowHelp = !player.UI.ShowHelp;
+
+			if(e.Key == Key.F1)
+			{
+			    player.UI.Hide = !player.UI.Hide;
 			}
-			if(e.Key == Key.F && !GameSettings.Paused && player.CanInteract){
-				if(player.HandLamp.Enabled)
-					player.HandLamp.Enabled = false;
-				else
-					player.HandLamp.Enabled = true;
-				
-				SoundManager.PlaySound(SoundType.NotificationSound, player.Position, false, 1f, .5f);
+			if(e.Key == Key.F && !GameSettings.Paused && player.CanInteract)
+			{
+			    player.HandLamp.Enabled = !player.HandLamp.Enabled;
+			    SoundManager.PlaySound(SoundType.NotificationSound, player.Position, false, 1f, .5f);
 			}
 						
 			if(GameSettings.Debug && e.Key == Key.F5){

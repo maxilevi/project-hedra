@@ -341,7 +341,6 @@ namespace Hedra.Engine.Rendering.UI
 		}
 			
 		public void HideMenu(){
-			//GraphicsOptions.DarkEffect = false;
 			GameSettings.Paused = false;
 			if(Networking.NetworkManager.IsConnected){
 				_player.View.LockMouse = true;
@@ -357,8 +356,7 @@ namespace Hedra.Engine.Rendering.UI
 			UpdateManager.CursorShown = false;
 			LocalPlayer.Instance.Chat.Show = true;
 			LocalPlayer.Instance.Chat.LoseFocus();
-			System.Windows.Forms.Cursor.Position = new System.Drawing.Point(GameSettings.Width / 2, GameSettings.Height/2);
-			//Menu.Move(new Vector2(2,0));
+			System.Windows.Forms.Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height/2);
 		}
 		
 		private IEnumerator MenuEnter(){

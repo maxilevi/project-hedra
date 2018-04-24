@@ -175,7 +175,7 @@ namespace Hedra.Engine.Player.Inventory
             get { return _show; }
             set
             {
-                if (!value) this.SetActive(false);
+                if (!value) this.Cancel();
             }
         }
     }

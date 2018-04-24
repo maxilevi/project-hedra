@@ -51,7 +51,7 @@ namespace Hedra.Engine.Player
 		
 		public void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs)
 		{
-			if(Focused && e.Key == Key.Up && _lastInput != null){
+			if(Focused && EventArgs.Key == Key.Up && _lastInput != null){
 				this._commandLine.Text = _lastInput;
 			}
 		}
@@ -69,9 +69,9 @@ namespace Hedra.Engine.Player
 				if(_commandLine.Text != ""){
 					//It's normal text
 					_lastInput = _commandLine.Text;
-					string OutText = _player.Name+": "+WordFilter.Filter(_commandLine.Text);
-					this.AddLine(OutText);
-					Networking.NetworkManager.SendChatMessage(OutText);
+					string outText = _player.Name+": "+WordFilter.Filter(_commandLine.Text);
+					this.AddLine(outText);
+					Networking.NetworkManager.SendChatMessage(outText);
 				}
 			}
 			_commandLine.Text = "";
@@ -113,7 +113,7 @@ namespace Hedra.Engine.Player
 			_textBox.Text = "";
 		}
 		
-		private void Focus(){
+		public void Focus(){
 			_player.CanInteract = false;
 			_player.View.Check = false;
 			_player.View.LockMouse = false;
@@ -125,7 +125,7 @@ namespace Hedra.Engine.Player
 			_commandLine.Text = "";
 		}
 		
-		private void LoseFocus(){
+		public void LoseFocus(){
 		    if (Focused)
 		    {
 		        _player.CanInteract = true;
@@ -145,9 +145,16 @@ namespace Hedra.Engine.Player
 		    set
 		    {
 		        _show = value;
-		        if(value) this.Focus();
-                else this.LoseFocus();
-		    }
+		        if (_show && GameSettings.ShowChat)
+		        {
+		            _inPanel.Enable();
+		        }
+		        else
+		        {
+		            _inPanel.Disable();
+		            _textBox.Disable();
+		        }
+            }
 		}
 	}
 }
