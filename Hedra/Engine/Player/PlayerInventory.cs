@@ -13,7 +13,9 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Engine.Rendering.UI;
 using OpenTK;
+using OpenTK.Input;
 
 
 namespace Hedra.Engine.Player
@@ -21,7 +23,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     /// Description of Inventory.
     /// </summary>
-    public class PlayerInventory
+    public class PlayerInventory : PlayerInterface
     {
         public const int MainSpaces = 8;
         public const int InventorySpaces = 20;
@@ -230,7 +232,8 @@ namespace Hedra.Engine.Player
         public Item Boots => this[BootsHolder];
         public int Length => _items.Length + _mainItems.Length;
 
-        public bool Show
+        public override Key OpeningKey => Key.I;
+        public override bool Show
         {
             get { return _show; }
             set

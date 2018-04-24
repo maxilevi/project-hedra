@@ -27,8 +27,8 @@ namespace Hedra.Engine.Player.MapSystem
 	/// <summary>
 	/// Description of Map.
 	/// </summary>
-	public class Map
-	{
+	public class Map : PlayerInterface
+    {
 	    private const int MapViewSize = 8;
         private const int MapSize = 8;
 	    private const int ChunkSize = 4;
@@ -135,8 +135,6 @@ namespace Hedra.Engine.Player.MapSystem
 	        }
 	        if (!Show) return;
 	        this._player.View.PositionDelegate = () => _player.Model.Model.Position.Xz.ToVector3() + Math.Max(_height, _player.Model.Model.Position.Y) * Vector3.UnitY;
-            SkyManager.Skydome.TopColor = Vector4.One;
-	        SkyManager.Skydome.BotColor = Color.CadetBlue.ToVector4();
 	        SkyManager.FogManager.UpdateFogSettings(FogDistance * .95f, FogDistance);
         }
 
@@ -310,10 +308,12 @@ namespace Hedra.Engine.Player.MapSystem
 	        return null;
 	    }
 
-        public bool Show{
+        public override Key OpeningKey => Key.M;
+
+        public override bool Show{
 			get{ return _show; }
 			set{
-				if(GameManager.IsLoading) return;
+				if(GameManager.IsLoading || _player.Trade.Show) return;
 
                 if (value)
 				{
@@ -354,7 +354,7 @@ namespace Hedra.Engine.Player.MapSystem
                     });
 				    SkyManager.FogManager.UpdateFogSettings(_player.Loader.MinFog, _player.Loader.MaxFog);
                 }
-				Sound.SoundManager.PlayUISound(Sound.SoundType.OnOff, 1.0f, 0.6f);
+				SoundManager.PlayUISound(SoundType.OnOff, 1.0f, 0.6f);
 				_show = value;
 			}
 		}

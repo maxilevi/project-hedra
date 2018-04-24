@@ -166,6 +166,11 @@ namespace Hedra.Engine.Player.Inventory
                     }
                 }
             }
+            if (Item.IsEquipment)
+            {
+                GameManager.Player.MessageDispatcher.ShowNotification("YOU HAVEN'T LEARNED TO USE THAT EQUIPMENT",
+                    System.Drawing.Color.DarkRed, 2f, true);
+            }
             this.PlaceItemInFirstEmptyPosition(Item);
         }
 

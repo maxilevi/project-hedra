@@ -548,7 +548,7 @@ namespace Hedra.Engine.Player
             }
         }
 
-	    public override bool Fog{
+	    public override bool ApplyFog{
 			get{ return Model.Fog; }
 			set{ Model.Fog = value;}
 		}

@@ -30,7 +30,7 @@ namespace Hedra.Engine.Networking
 			var Human = new Humanoid();
 			Human.Model = new HumanModel(Human);
 			Human.Removable = false;
-			Human.Model.Fog = true;
+			Human.Model.ApplyFog = true;
 			
 			var Dmg = Human.SearchComponent<DamageComponent>();
 			if(NetworkManager.IsHost){

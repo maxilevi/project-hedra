@@ -167,7 +167,27 @@ namespace Hedra.Engine.Management
 					EnvironmentSystem.SkyManager.SetTime(int.Parse(Parts[1]));
 					return true;
 				}
-			    if (Parts[0] == "burn")
+			    if (Parts[0] == "poison")
+			    {
+			        LocalPlayer.Instance.AddComponent(new PoisonComponent(LocalPlayer.Instance, null, 5f, 30f));
+			    }
+			    if (Parts[0] == "freeze")
+			    {
+			        LocalPlayer.Instance.AddComponent(new FreezingComponent(LocalPlayer.Instance, null, 5f, 30f));
+			    }
+			    if (Parts[0] == "bleed")
+			    {
+			        LocalPlayer.Instance.AddComponent(new BleedingComponent(LocalPlayer.Instance, null, 5f, 30f));
+			    }
+			    if (Parts[0] == "slow")
+			    {
+			        LocalPlayer.Instance.AddComponent(new SlowingComponent(LocalPlayer.Instance, null, 5f, 30f));
+			    }
+			    if (Parts[0] == "fast")
+			    {
+			        LocalPlayer.Instance.AddComponent(new SpeedComponent(LocalPlayer.Instance));
+			    }
+                if (Parts[0] == "burn")
 			    {
 			        LocalPlayer.Instance.AddComponent(new BurningComponent(LocalPlayer.Instance, null, 5f, 30f));
 			    }

@@ -57,8 +57,8 @@ namespace Hedra.Engine.EntitySystem
 
 		    if(TravellingMerchant){
 		        _originalItems.Add(TradeInventory.MerchantSpaces - 2, ItemPool.Grab("HorseMount"));
-				//Items.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab("WolfMount"));
-				Items.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab(ItemType.Glider));
+                //_originalItems.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab("WolfMount"));
+                _originalItems.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab(ItemType.Glider));
 			}
             Items = new Dictionary<int, Item>(_originalItems);
 		    this.Parent.Gold = int.MaxValue;

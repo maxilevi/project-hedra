@@ -190,14 +190,14 @@ namespace Hedra.Engine.Rendering.UI
             GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
             Vector3 oldRot = Model.Rotation;
-            bool usedFog = (Model as QuadrupedModel)?.Fog ?? ((Model as HumanModel)?.Fog ?? false);
+            bool usedFog = (Model as QuadrupedModel)?.ApplyFog ?? ((Model as HumanModel)?.ApplyFog ?? false);
 
             _oldRotation += 25 * (float)Time.unScaledDeltaTime / DataManager.CharacterCount;
             if (Model is QuadrupedModel)
-                (Model as QuadrupedModel).Fog = false;
+                (Model as QuadrupedModel).ApplyFog = false;
 
             if (Model is HumanModel)
-                (Model as HumanModel).Fog = false;
+                (Model as HumanModel).ApplyFog = false;
 
             Matrix4 projectionMatrix = Matrix4.CreatePerspectiveFieldOfView((_player.Model == Model ? 50 : 60) * Mathf.Radian, 1.5f, 1, 1024);
             Matrix4 rotationMatrix = Matrix4.CreateRotationY(_oldRotation * Mathf.Radian);
@@ -225,10 +225,10 @@ namespace Hedra.Engine.Rendering.UI
             }
 
             if (Model is QuadrupedModel)
-                (Model as QuadrupedModel).Fog = usedFog;
+                (Model as QuadrupedModel).ApplyFog = usedFog;
 
             if (Model is HumanModel)
-                (Model as HumanModel).Fog = usedFog;
+                (Model as HumanModel).ApplyFog = usedFog;
 
             GraphicsLayer.Disable(EnableCap.DepthTest);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, prevFbo);

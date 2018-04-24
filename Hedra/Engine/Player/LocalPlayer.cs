@@ -293,7 +293,7 @@ namespace Hedra.Engine.Player
             {
 
                 if ((nearCollidableStructure.Position.Xz - this.Position.Xz).LengthFast <
-                    nearCollidableStructure.Design.Radius && nearCollidableStructure.Design is VillageDesign)
+                    nearCollidableStructure.Design.Radius * .75f && nearCollidableStructure.Design is VillageDesign)
                 {
                     SoundtrackManager.PlayTrack(SoundtrackManager.VillageIndex, true);
                     _wasPlayingAmbient = true;
@@ -486,10 +486,17 @@ namespace Hedra.Engine.Player
 	        set
 	        {
 	            var currentGold = Inventory.Search(I => I.IsGold);
-	            if (currentGold != null)
-	                currentGold.SetAttribute(CommonAttributes.Amount, value);
+	            if (currentGold == null)
+	            {
+	                var gold = ItemPool.Grab(ItemType.Gold);
+	                gold.SetAttribute(CommonAttributes.Amount, value);
+	                Inventory.AddItem(gold);
+	            }
 	            else
-	                Inventory.AddItem(ItemPool.Grab(ItemType.Gold));
+	            {
+	                currentGold.SetAttribute(CommonAttributes.Amount, value);
+	            }
+
 	        }
 	    }
 		public override Item MainWeapon => Inventory.MainWeapon;

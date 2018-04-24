@@ -81,7 +81,7 @@ namespace Hedra.Engine.Rendering
             }
         }
 
-        public virtual bool Fog
+        public virtual bool ApplyFog
         {
             get { return _fog; }
             set

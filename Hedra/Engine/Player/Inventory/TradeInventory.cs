@@ -9,10 +9,8 @@
 
 using System;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Events;
-using Hedra.Engine.Generation;
-using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering.UI;
 using OpenTK;
 using OpenTK.Input;
 
@@ -21,8 +19,8 @@ namespace Hedra.Engine.Player.Inventory
 	/// <summary>
 	/// Description of TradeSystem.
 	/// </summary>
-	public class TradeInventory
-	{
+	public class TradeInventory : PlayerInterface
+    {
 		public const int MerchantSpaces = 20;
         public bool IsTrading { get; private set; }
 		private readonly LocalPlayer _player;
@@ -66,7 +64,7 @@ namespace Hedra.Engine.Player.Inventory
 	        IsTrading = true;
 	        _trader = Trader;
 	        _merchantComponent = Trader.SearchComponent<MerchantComponent>();
-	        Show = true;
+	        this.SetActive(true);
 	        _playerItems.SetItems(_player.Inventory.ItemsToArray());
 	        _merchantItems.SetItems(_merchantComponent.Items.ToArray());
             this._interfaceManager.SetTraders(_player, _trader);
@@ -76,7 +74,7 @@ namespace Hedra.Engine.Player.Inventory
 	    public void Cancel()
 	    {
 	        this._interfaceManager.SetTraders(null, null);
-            Show = false;
+	        this.SetActive(false);
             IsTrading = false;
             _merchantComponent = null;
 	        _playerItems.Empty();
@@ -109,6 +107,8 @@ namespace Hedra.Engine.Player.Inventory
 	    {
 	        for (var i = 0; i < _playerItems.Length; i++)
 	        {
+                if(_player.Inventory[i]?.IsGold ?? false) continue;
+
 	            _player.Inventory.SetItem(i, null);
                 _player.Inventory.SetItem(i, _playerItems[i]);
 	        }
@@ -155,20 +155,27 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        public bool Show
+        private void SetActive(bool Value)
+        {
+            if (_show == Value || _stateManager.GetState() != _show) return;
+            _show = true;
+            _merchantItemsInterface.Enabled = _show;
+            _playerItemsInterface.Enabled = _show;
+            _interfaceManager.Enabled = _show;
+            _playerBackground.Enabled = _show;
+            _merchantBackground.Enabled = _show;
+            this.UpdateInventory();
+            this.SetInventoryState(_show);
+        }
+
+        public override Key OpeningKey => default(Key);
+
+        public override bool Show
         {
             get { return _show; }
-            private set
+            set
             {
-                if (_show == value || _stateManager.GetState() != _show) return;
-                _show = value;
-                _merchantItemsInterface.Enabled = _show;
-                _playerItemsInterface.Enabled = _show;
-                _interfaceManager.Enabled = _show;
-                _playerBackground.Enabled = _show;
-                _merchantBackground.Enabled = _show;
-                this.UpdateInventory();
-                this.SetInventoryState(_show);
+                if (!value) this.SetActive(false);
             }
         }
     }

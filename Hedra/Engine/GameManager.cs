@@ -225,7 +225,7 @@ namespace Hedra.Engine
 					Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
 					Player.Model.LeftWeapon.MainMesh.LocalRotation = Vector3.Zero;
 					Player.Model.LeftWeapon.MainMesh.LocalPosition = Vector3.Zero;
-					Player.Model.Fog = true;
+					Player.Model.ApplyFog = true;
 					Player.CanInteract = true;
 					IsLoading = false;
 					LoadingScreen.TextureElement.Opacity = 0;

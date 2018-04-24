@@ -15,14 +15,16 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.UI;
 using OpenTK;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     /// <summary>
     /// Description of SkillSystem.
     /// </summary>
-    public class AbilityTree
+    public class AbilityTree : PlayerInterface
     {
         public const int AbilityCount = 15;
         public const int Layers = 3;
@@ -199,7 +201,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public int AvailablePoints => _manager.AvailablePoints;
         public InventoryArray TreeItems => _abilities;
-        public bool Show
+
+        public override Key OpeningKey => Key.X;
+        public override bool Show
         {
             get { return _show; }
             set

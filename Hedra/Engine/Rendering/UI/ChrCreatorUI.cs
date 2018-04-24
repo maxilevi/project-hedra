@@ -45,14 +45,16 @@ namespace Hedra.Engine.Rendering.UI
 			_openFolder.Click += delegate { System.Diagnostics.Process.Start(AssetManager.AppData + "/Characters/"); };
 			
 			_human = new Humanoid();
-			_human.Model = new HumanModel(_human);
-			_human.Model.Rotation = Vector3.UnitY * -90;
-			_human.Model.TargetRotation = Vector3.UnitY * -90;
-			_human.Physics.UseTimescale = false;
+		    _human.Model = new HumanModel(_human)
+		    {
+		        Rotation = Vector3.UnitY * -90,
+		        TargetRotation = Vector3.UnitY * -90,
+		        ApplyFog = true,
+		        Enabled = true
+		    };
+		    _human.Physics.UseTimescale = false;
             _human.Removable = false;
 			_human.BlockPosition = Scenes.MenuBackground.PlatformPosition;
-			_human.Model.Fog = true;
-			_human.Model.Enabled = true;
 		    _human.PlaySpawningAnimation = false;
 
             CoroutineManager.StartCoroutine(this.Update);
@@ -60,9 +62,7 @@ namespace Hedra.Engine.Rendering.UI
 		    string[] classes = ClassDesign.ClassNames;
 			var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, "Class", defaultColor,
 			                                              defaultFont, classes, true);
-						
-			_human.Model.SetWeapon(ItemPool.Grab(CommonItems.CommonBronzeSword).Weapon);
-			
+		    classChooser.Index = Array.IndexOf(classes, _human.Class.Name);			
 			OnButtonClickEventHandler setWeapon = delegate {
 				_classType = ClassDesign.FromString(classes[classChooser.Index]);
 			    var position = _human.Model.Position;

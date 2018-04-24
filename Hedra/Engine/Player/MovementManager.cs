@@ -317,74 +317,32 @@ namespace Hedra.Engine.Player
 			
 			if (e.Key == Key.Space && !player.IsUnderwater)
 			{
-					Jump();
+				this.Jump();
 			}
-			
-			if(e.Key == Key.I && !GameSettings.Paused && Human.CanInteract && !player.IsDead && !player.Map.Show && !player.AbilityTree.Show && !player.Trade.Show)
-                player.Inventory.Show = !player.Inventory.Show;
-			
-			if(e.Key == Key.X && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !player.Map.Show && !player.Inventory.Show)
-                player.AbilityTree.Show = !player.AbilityTree.Show;
-			
-			
-			if(e.Key == Key.M && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !player.Inventory.Show && !player.AbilityTree.Show)
-				player.Map.Show = !player.Map.Show ;
-			
-			
-			bool PushedText = false;
+	
+			var pushedText = false;
 			if(e.Key == Key.Enter && player.Chat.Focused){
 				player.Chat.PushText();
-				PushedText = true;
+				pushedText = true;
 			}
 			
-			if(e.Key == Key.Enter && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !PushedText){
-				player.Chat.Focus();
+			if(e.Key == Key.Enter && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !pushedText)
+			{
+			    player.Chat.Show = true;
 			}
 
 		    if (e.Key == Key.Escape && !player.UI.GamePanel.Enabled && !player.UI.Hide)
-                Sound.SoundManager.PlayUISound(Sound.SoundType.ButtonClick);
+                SoundManager.PlayUISound(SoundType.ButtonClick);
 
-            if (e.Key == Key.Escape && player.Chat.Focused){
-				player.Chat.LoseFocus();
-			}
+            if (e.Key == Key.Escape && player.Chat.Focused)
+            {
+                player.Chat.Show = false;
+            }
 			
 			//Kinda specific?
 			if(e.Key == Key.Escape && player.UI.OptionsMenu.DonateBtcButton.Enabled){
 				player.UI.OptionsMenu.DonateBtcButton.ForceClick();
-			}
-			
-			if(e.Key == Key.T && !GameSettings.Paused && !player.IsDead && Human.CanInteract && !player.AbilityTree.Show){
-				if(player.QuestLog.Show)
-					player.QuestLog.Show = false;
-				else
-					player.QuestLog.Show = true;
-			}
-			
-			if(e.Key == Key.Escape && !GameManager.InStartMenu){
-				if(player.QuestLog.Show || player.Inventory.Show || player.AbilityTree.Show || player.Chat.Focused || player.Trade.Show){
-					
-					if(player.Chat.Focused)
-						player.Chat.LoseFocus();
-					if(player.QuestLog.Show)
-						player.QuestLog.Show = false;
-					if(player.Inventory.Show)
-						player.Inventory.Show = false;
-					if(player.AbilityTree.Show)
-						player.AbilityTree.Show = false;
-				    if (player.Trade.Show) player.Trade.Cancel();
-                }
-                else{
-					
-					if(!player.UI.Menu.Enabled)
-						player.UI.ShowMenu();
-					else
-						player.UI.HideMenu();
-				}
-					
-			}
-			if(e.Key == Key.F7){
-				//AnalyticsManager.BugReport();
-			}
+			}    
 			if(e.Key == Key.F3){
 			    GameSettings.Debug = !GameSettings.Debug;
 			}
@@ -406,10 +364,9 @@ namespace Hedra.Engine.Player
 				else
 					player.HandLamp.Enabled = true;
 				
-				Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, player.Position, false, 1f, .5f);
+				SoundManager.PlaySound(SoundType.NotificationSound, player.Position, false, 1f, .5f);
 			}
-			
-			
+						
 			if(GameSettings.Debug && e.Key == Key.F5){
 				World.ReloadModules();
 

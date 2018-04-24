@@ -55,7 +55,7 @@ namespace Hedra.Engine.EntitySystem
 		
 		public TalkComponent(Entity Parent, string Text) : base(Parent)
 		{
-		    _phrase = Utils.FitString(Text, 45);
+		    _phrase = Utils.FitString(Text, 25);
 		}
 
 	    public TalkComponent(Entity Parent) : this(Parent, null){}
@@ -77,13 +77,13 @@ namespace Hedra.Engine.EntitySystem
 		    var backBoard = new Billboard(8f, Bar.BarBlueprint, Vector3.Zero,
 		        textSize.UIText.Scale + new Vector2(textSize.UIText.Scale.Y * .25f, textSize.UIText.Scale.Y * .25f))
 		    {
-		        FollowFunc = () => Parent.Position + Vector3.UnitY * 10f
+		        FollowFunc = () => Parent.Position + Vector3.UnitY * 8f
 		    };
 
 
 		    _board = new Billboard(8f, phrase, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10), Vector3.Zero)
 		    {
-		        FollowFunc = () => Parent.Position + Vector3.UnitY * 10f
+		        FollowFunc = () => Parent.Position + Vector3.UnitY * 8f
 		    };
 
 		    textSize.Dispose();

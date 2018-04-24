@@ -22,64 +22,65 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Chat.
 	/// </summary>
-	public class Chat : EventListener
+	public class Chat
 	{
 		public bool Focused {get; set;}
-		private LocalPlayer Player;
-		private TextField CommandLine;
-		private GUIText TextBox;
-		private Vector2 TargetResolution = new Vector2(1024, 578);
-		private Vector2 TextBoxPosition = new Vector2(-0.95f, -.65f);
-		private Panel InPanel = new Panel();
-		private string LastInput;
-		
-		public Chat(LocalPlayer Player){
-			this.Player = Player;
-			Vector2 BarPosition = new Vector2(-0.95f, -0.75f);
-			this.CommandLine = new TextField(BarPosition + Vector2.UnitX * .225f, new Vector2(.225f,.02f), InPanel, false);
-			this.TextBox = new GUIText("", TextBoxPosition, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10));
-			InPanel.AddElement(this.TextBox);
-			InPanel.AddElement(this.CommandLine);
-			InPanel.Disable();
+		private readonly LocalPlayer _player;
+		private readonly TextField _commandLine;
+		private readonly GUIText _textBox;
+		private readonly Vector2 _textBoxPosition = new Vector2(-0.95f, -.65f);
+		private readonly Panel _inPanel = new Panel();
+		private string _lastInput;
+	    private bool _show;
+
+        public Chat(LocalPlayer Player){
+			this._player = Player;
+			Vector2 barPosition = new Vector2(-0.95f, -0.75f);
+			this._commandLine = new TextField(barPosition + Vector2.UnitX * .225f, new Vector2(.225f,.02f), _inPanel, false);
+			this._textBox = new GUIText("", _textBoxPosition, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10));
+			_inPanel.AddElement(this._textBox);
+			_inPanel.AddElement(this._commandLine);
+			_inPanel.Disable();
+            EventDispatcher.RegisterKeyDown(this, this.OnKeyDown);
 		}
 		
 		public void Update(){
-			if(!CommandLine.InFocus && Focused && Show)
-				CommandLine.InFocus = true;
+			if(!_commandLine.InFocus && Focused && Show)
+				_commandLine.InFocus = true;
 		}
 		
-		public override void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+		public void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs)
 		{
-			if(Focused && e.Key == Key.Up && LastInput != null){
-				this.CommandLine.Text = LastInput;
+			if(Focused && e.Key == Key.Up && _lastInput != null){
+				this._commandLine.Text = _lastInput;
 			}
 		}
 		
 		public void PushText(){
 
-			if(CommandLine.Text.Length >= 1 && CommandLine.Text[0] == '/')
+			if(_commandLine.Text.Length >= 1 && _commandLine.Text[0] == '/')
 			{
 			    string response;
-                if (CommandManager.ProcessCommand(CommandLine.Text, Player, out response))
-					SoundManager.PlaySound(SoundType.NotificationSound, Player.Position);
+                if (CommandManager.ProcessCommand(_commandLine.Text, _player, out response))
+					SoundManager.PlaySound(SoundType.NotificationSound, _player.Position);
 			    this.AddLine(response);
-                LastInput = CommandLine.Text;
+                _lastInput = _commandLine.Text;
 			}else{
-				if(CommandLine.Text != ""){
+				if(_commandLine.Text != ""){
 					//It's normal text
-					LastInput = CommandLine.Text;
-					string OutText = Player.Name+": "+WordFilter.Filter(CommandLine.Text);
+					_lastInput = _commandLine.Text;
+					string OutText = _player.Name+": "+WordFilter.Filter(_commandLine.Text);
 					this.AddLine(OutText);
 					Networking.NetworkManager.SendChatMessage(OutText);
 				}
 			}
-			CommandLine.Text = "";
+			_commandLine.Text = "";
 			this.LoseFocus();
 			
 		}
 		
 		public void AddLine(string NewLine){
-			string[] Lines = TextBox.Text.Split( Environment.NewLine.ToCharArray() );
+			string[] Lines = _textBox.Text.Split( Environment.NewLine.ToCharArray() );
 			int LineCount = 0;
 			for(int i = 0; i < Lines.Length; i++){
 				if(Lines[i] != "" && Lines[i] != Environment.NewLine)
@@ -95,66 +96,58 @@ namespace Hedra.Engine.Player
 						k++;
 					}
 				}
-				TextBox.Text = NewText.ToString() + NewLine;
+				_textBox.Text = NewText.ToString() + NewLine;
 			}else{
-				TextBox.Text = TextBox.Text + Environment.NewLine + NewLine; 
+				_textBox.Text = _textBox.Text + Environment.NewLine + NewLine; 
 			}
-			Lines = TextBox.Text.Split( Environment.NewLine.ToCharArray() );
+			Lines = _textBox.Text.Split( Environment.NewLine.ToCharArray() );
 			string LongestLine = "";
 			for(int i = 0; i < Lines.Length; i++){
 				if(Lines[i].Length > LongestLine.Length)
 					LongestLine = Lines[i];
 			}
-			TextBox.Position = TextBoxPosition + TextBox.Scale;
+			_textBox.Position = _textBoxPosition + _textBox.Scale;
 		}
 		
 		public void Clear(){
-			TextBox.Text = "";
+			_textBox.Text = "";
 		}
 		
-		public void Focus(){
-			if(Player.AbilityTree.Show || Player.Inventory.Show || !Player.UI.GamePanel.Enabled || Player.Trade.Show) return;
-			Player.CanInteract = false;
-			Player.View.Check = false;
-			Player.View.LockMouse = false;
-			Player.UI.GamePanel.Cross.Disable();
-			CommandLine.Enable();
-			CommandLine.InFocus = true;
+		private void Focus(){
+			_player.CanInteract = false;
+			_player.View.Check = false;
+			_player.View.LockMouse = false;
+			_player.UI.GamePanel.Cross.Disable();
+			_commandLine.Enable();
+			_commandLine.InFocus = true;
 			Focused = true;
 			UpdateManager.CursorShown = true;
-			CommandLine.Text = "";
+			_commandLine.Text = "";
 		}
 		
-		public void LoseFocus(){
+		private void LoseFocus(){
 		    if (Focused)
 		    {
-		        Player.CanInteract = true;
-		        Player.View.Check = true;
-		        Player.View.LockMouse = true;
+		        _player.CanInteract = true;
+		        _player.View.Check = true;
+		        _player.View.LockMouse = true;
 		    }
-		    Player.UI.GamePanel.Cross.Enable();
-			CommandLine.Disable();
-			CommandLine.InFocus = false;
+		    _player.UI.GamePanel.Cross.Enable();
+			_commandLine.Disable();
+			_commandLine.InFocus = false;
 			Focused = false;
 			UpdateManager.CursorShown = false;
 			UpdateManager.CenterMouse();
 		}
 		
-		private bool m_Show;
-		public bool Show{
-			get{ return m_Show; }
-			set{
-				#if !DEBUG
-				return;
-				#endif
-				m_Show = value;
-				if(m_Show && GameSettings.ShowChat){
-					InPanel.Enable();
-				}else{
-					InPanel.Disable();
-					TextBox.Disable();
-				}
-			}
+		public bool Show {
+			get{ return _show; }
+		    set
+		    {
+		        _show = value;
+		        if(value) this.Focus();
+                else this.LoseFocus();
+		    }
 		}
 	}
 }

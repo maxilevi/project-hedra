@@ -496,7 +496,6 @@ namespace Hedra.Engine.QuestSystem
             float wellScale = rng.NextFloat() * .25f + .85f;
 	        VertexData model = AssetManager.PlyLoader("Assets/Env/Village/Well0.ply", Vector3.One);
 	        model.Transform(Matrix4.CreateScale(wellScale));
-	        model.Transform(Matrix4.CreateTranslation(Vector3.UnitY * .3f));
 	        model.Transform(transMatrix);
 
 	        List<CollisionShape> wellShapes =

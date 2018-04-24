@@ -242,7 +242,6 @@
     <Compile Include="Engine\ModuleSystem\SpawnerSettings.cs" />
     <Compile Include="Engine\ModuleSystem\SpawnTemplate.cs" />
     <Compile Include="Engine\EntitySystem\AIComponent.cs" />
-    <Compile Include="Engine\EntitySystem\AnimationPool.cs" />
     <Compile Include="Engine\EntitySystem\BerryBushComponent.cs" />
     <Compile Include="Engine\EntitySystem\BleedComponent.cs" />
     <Compile Include="Engine\EntitySystem\BleedingComponent.cs" />
@@ -304,7 +303,6 @@
     <Compile Include="Engine\Extensions.cs" />
     <Compile Include="Engine\GeneralSettings.cs" />
     <Compile Include="Engine\Generation\ClosestChunk.cs" />
-    <Compile Include="Engine\Generation\DungeonMap.cs" />
     <Compile Include="Engine\Generation\HeightmapData.cs" />
     <Compile Include="Engine\Generation\EnviromentGenerator.cs" />
     <Compile Include="Engine\Generation\Perlin.cs" />
@@ -321,7 +319,6 @@
     <Compile Include="Engine\Management\Occludable.cs" />
     <Compile Include="Engine\Management\OcclusionState.cs" />
     <Compile Include="Engine\Player\MapSystem\MapBaseItem.cs" />
-    <Compile Include="Engine\Player\MapSystem\MapMarkerHandler.cs" />
     <Compile Include="Engine\Player\MapSystem\MapMeshBuilder.cs" />
     <Compile Include="Engine\Rendering\GraphicsLayer.cs" />
     <Compile Include="Engine\Management\OSManager.cs" />
@@ -535,7 +532,7 @@
     <Compile Include="Engine\Rendering\Shaders\UniformArray.cs" />
     <Compile Include="Engine\Rendering\Shaders\UniformMapping.cs" />
     <Compile Include="Engine\Rendering\Texture3D.cs" />
-    <Compile Include="Engine\Player\MapSystem\MapInputHandler.cs" />
+    <Compile Include="Engine\Rendering\UI\PlayerInterface.cs" />
     <Compile Include="Engine\Rendering\UI\TextConfiguration.cs" />
     <Compile Include="Engine\Rendering\UI\TextureCommand.cs" />
     <Compile Include="Engine\StructureSystem\StructureGenerator.cs" />

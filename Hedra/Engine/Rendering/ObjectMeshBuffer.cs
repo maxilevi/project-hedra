@@ -183,7 +183,9 @@ namespace Hedra.Engine.Rendering
 			Shader["AnimationPosition"] = AnimationPosition;
 			Shader["AnimationRotation"] = _animationRotationMatrix;
 			Shader["AnimationRotationPoint"] = AnimationRotationPoint;
-			Shader["Tint"] = Tint + BaseTint;
+			Shader["Tint"] = Tint;
+		    Shader["BaseTint"] = BaseTint;
+            Shader["UseBaseTint"] = (BaseTint - Vector4.Zero).LengthFast > .1f ? 1 : 0;
 			Shader["BakedPosition"] = Vector3.Zero;
 			Shader["PlayerPosition"] = GameManager.Player.Position;
 
