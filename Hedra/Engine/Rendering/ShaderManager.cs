@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -30,35 +31,38 @@ namespace Hedra.Engine.Rendering
             PointLights = new PointLight[MaxLights];
             _lightPosition = new Vector3(0, 1000, 0);
             _lightColor = new Vector3(1, 1, 1);
-            for (int i = 0; i < PointLights.Length; i++){
+            for (var i = 0; i < PointLights.Length; i++){
 				PointLights[i] = new PointLight();
 			}
 		}
+
+	    public static void ReloadShaders()
+	    {
+#if DEBUG
+	        AssetManager.GrabShaders();
+#endif
+            AssetManager.ReloadShaderSources();
+	        var currentShaders = Shaders.ToArray();
+	        currentShaders.ToList().ForEach( S => S.Reload() );
+	    }
 		
 		public static void RegisterShader(Shader Entry){
 			Shaders.Add(Entry);
-			//Entry.ClipPlaneLocation = GL.GetUniformLocation(Entry.ShaderID, "ClipPlane");
 			Entry.LightColorLocation = GL.GetUniformLocation(Entry.ShaderId, "LightColor");
 		    Entry.LightPositionLocation = GL.GetUniformLocation(Entry.ShaderId, "LightPosition");
             Entry.PointLightsColorUniform = new int[MaxLights];
 			Entry.PointLightsPositionUniform = new int[MaxLights];
 			Entry.PointLightsRadiusUniform = new int[MaxLights];
 			
-			for(int i = 0; i < Entry.PointLightsColorUniform.Length; i++){
+			for(var i = 0; i < Entry.PointLightsColorUniform.Length; i++){
 				Entry.PointLightsColorUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Color");
 			}
-			for(int i = 0; i < Entry.PointLightsPositionUniform.Length; i++){
+			for(var i = 0; i < Entry.PointLightsPositionUniform.Length; i++){
 				Entry.PointLightsPositionUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Position");
 			}
-			for(int i = 0; i < Entry.PointLightsRadiusUniform.Length; i++){
+			for(var i = 0; i < Entry.PointLightsRadiusUniform.Length; i++){
 				Entry.PointLightsRadiusUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Radius");
 			}
-	
-			//Entry.PlayerPositionUniform = GL.GetUniformLocation(Entry.ShaderID, "PlayerPosition");
-			//GL.Uniform1(Entry.ClipPlaneLocation, m_ClipPlaneY);
-			//GL.Uniform3(Entry.LightColorLocation, m_LightColor);
-			//GL.Uniform3(Entry.LightPositionLocation, m_LightPosition);
-			//GL.Uniform3(Entry.PlayerPositionUniform);
 		}
 		
 		public static PointLight GetAvailableLight(){
@@ -146,26 +150,6 @@ namespace Hedra.Engine.Rendering
 					if(PointLights[i].Locked) UsedLights++;
 				
 				return UsedLights;
-			}
-		}
-		
-		public static Vector3 PlayerPosition{
-			set{
-				for(int i = 0; i < Shaders.Count; i++){
-					//Shaders[i].Bind();
-					//GL.Uniform3(Shaders[i].PlayerPositionUniform, value);
-				}
-			}
-		}
-
-		public static float ClipPlaneY{
-			get{ return _clipPlaneY; }
-			set{
-				_clipPlaneY = value;
-				for(int i = 0; i < Shaders.Count; i++){
-					int k = 0;
-				//	ThreadManager.ExecuteOnMainThread ( () => GL.Uniform1(Shaders[k].ClipPlaneLocation, value) );
-				}
 			}
 		}
 	}

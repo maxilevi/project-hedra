@@ -1,6 +1,5 @@
-/AnimationBuilder/bin/Debug/Shaders
-/AnimationBuilder/bin/Debug/Assets
-/AnimationBuilder/bin/Debug
+AssetBuilder/bin/
+AssetBuilder/obj/
 bin
 obj
 .vs
@@ -9,3 +8,4 @@ packages/
 packages
 /*.user
 /.vs
+

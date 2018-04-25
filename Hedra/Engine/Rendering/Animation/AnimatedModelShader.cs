@@ -42,19 +42,22 @@ namespace Hedra.Engine.Rendering.Animation
             var dataV = new ShaderData
 	        {
 	            Name = "AnimatedModelDeath.vert",
-	            Source = sourceV
-	        };
+	            Source = sourceV,
+	            SourceFinder = () => sourceV
+            };
 
 	        var dataG = new ShaderData
 	        {
 	            Name = "AnimatedModelDeath.geom",
-	            Source = sourceG
+	            Source = sourceG,
+	            SourceFinder = () => sourceG
             };
 
 	        var dataF = new ShaderData
 	        {
 	            Name = "AnimatedModelDeath.frag",
-	            Source = sourceF
+	            Source = sourceF,
+                SourceFinder = () => sourceF
             };
 
             return Shader.Build(dataV, dataG, dataF);

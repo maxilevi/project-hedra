@@ -150,22 +150,26 @@ namespace Hedra.Engine.Rendering.Animation
 		    if (Shader == DeathShader)
 		    {
 		        GraphicsLayer.Enable(EnableCap.Blend);
-                Shader["viewMatrix"] = ViewMatrix;
-		        Shader["disposeTime"] = DisposeTime;
+		        DeathShader["viewMatrix"] = ViewMatrix;
+		        DeathShader["disposeTime"] = DisposeTime;
             }
 
             Shader["jointTransforms"] = JointTransforms;
 			Shader["projectionViewMatrix"] = ProjectionViewMat;
-            if(Shader != DeathShader)
-                Shader["PlayerPosition"] = GameManager.Player.Position;
-		    
+		    if (Shader != DeathShader)
+		    {
+		        DefaultShader["PlayerPosition"] = GameManager.Player.Position;
+		    }
+
 		    if(GameSettings.Shadows){
 				GL.ActiveTexture(TextureUnit.Texture0);
 				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
 				Shader["ShadowTex"] = 0;
 		        if (Shader != DeathShader)
-                    Shader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
-            }
+		        {
+		            DefaultShader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
+		        }
+		    }
 			Shader["UseShadows"] = GameSettings.Shadows ? 1.0f : 0.0f;
 			Shader["UseFog"] = Fog ? 1 : 0;
 			Shader["Alpha"] = Alpha;

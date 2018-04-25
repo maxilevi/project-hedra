@@ -360,11 +360,19 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Disposed || X < 0 || Z < 0) return 0;
             if (Landscape == null || !Landscape.BlocksSetted) return 0;
-            for (var y = 0; y < BoundsY; y++)
+            try
             {
-                var block = Voxels[X][y][Z];
-                if (block.Type == BlockType.Air || block.Type == BlockType.Water)
-                    return y - 1;
+                for (var y = 0; y < BoundsY; y++)
+                {
+                    var block = Voxels[X][y][Z];
+                    if (block.Type == BlockType.Air || block.Type == BlockType.Water)
+                        return y - 1;
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                Log.WriteLine(e.Message);
+                return 0;
             }
             return 0;
         }

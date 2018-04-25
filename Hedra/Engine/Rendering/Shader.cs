@@ -25,9 +25,9 @@ namespace Hedra.Engine.Rendering
 	{
 	    private readonly Dictionary<string, UniformMapping> _mappings;
 	    private readonly Dictionary<string, UniformArray> _arrayMappings;
-        private ShaderData _vertexShader;
-	    private ShaderData _fragmentShader;
-	    private ShaderData _geometryShader;
+        private readonly ShaderData _vertexShader;
+	    private readonly ShaderData _fragmentShader;
+	    private readonly ShaderData _geometryShader;
         protected int ShaderVid { get; private set; }
         protected int ShaderFid { get; private set; }
         protected int ShaderGid { get; private set; }
@@ -44,13 +44,15 @@ namespace Hedra.Engine.Rendering
 	        var vertexShader = new ShaderData
 	        {
 	            Name = FileSourceV.Remove(0, FileSourceV.LastIndexOf("/", StringComparison.Ordinal) + 1),
-	            Source = AssetManager.ReadShader(FileSourceV)
+	            Source = AssetManager.ReadShader(FileSourceV),
+                Path = FileSourceV
 	        };
 
 	        var fragmentShader = new ShaderData
 	        {
 	            Name = FileSourceF.Remove(0, FileSourceF.LastIndexOf("/", StringComparison.Ordinal) + 1),
-	            Source = AssetManager.ReadShader(FileSourceF)
+	            Source = AssetManager.ReadShader(FileSourceF),
+                Path = FileSourceF
 	        };
 	        return Shader.Build(vertexShader, null, fragmentShader);
 	    }
@@ -60,6 +62,7 @@ namespace Hedra.Engine.Rendering
 	        return new Shader(DataV, DataG, DataF);
 	    }
 
+
 	    private Shader(ShaderData DataV, ShaderData DataG, ShaderData DataF)
 	    {
 	        _vertexShader = DataV;
@@ -68,6 +71,30 @@ namespace Hedra.Engine.Rendering
             _mappings = new Dictionary<string, UniformMapping>();
 	        _arrayMappings = new Dictionary<string, UniformArray>();
 	        this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
+        }
+
+	    private void UpdateSource()
+	    {
+	        var sources = new[] { _vertexShader, _geometryShader, _fragmentShader };
+	        for (var i = 0; i < sources.Length; i++)
+	        {
+	            if (sources[i] == null) continue;
+	            var newSource = sources[i].SourceFinder();
+	            if (newSource != sources[i].Source)
+	            {
+	                Log.WriteLine($"Shader source '{sources[i].Name}' has been updated. ");
+	                sources[i].Source = sources[i].SourceFinder();
+                }
+	        }
+	    }
+
+	    public void Reload()
+	    {
+	        if (ShaderId == 0) throw new ArgumentException($"Cannot rebuild a non existent shader");
+	        this.UpdateSource();
+	        _mappings.Clear();
+	        _arrayMappings.Clear();
+            this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
         }
 
 	    private void AddArrayMappings(UniformArray[] Array)
@@ -93,6 +120,7 @@ namespace Hedra.Engine.Rendering
 
         private void CompileShaders(ShaderData DataV, ShaderData DataG, ShaderData DataF)
 	    {
+            if(ShaderId != 0) GL.DeleteProgram(ShaderId);
 	        int shadervid = -1;
 	        int shaderfid = -1;
 	        int shadergid = -1;

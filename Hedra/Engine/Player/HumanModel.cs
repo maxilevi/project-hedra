@@ -307,7 +307,9 @@ namespace Hedra.Engine.Player
 		
 		public void Eat(float FoodHealth)
 		{
-		    TaskManager.While( () => this.Human.IsEating, () => Human.Health += FoodHealth * Time.FrameTimeSeconds * .3f);
+		    TaskManager.While( 
+                () => this.Human.IsEating && !Human.IsDead,
+                () => Human.Health += FoodHealth * Time.FrameTimeSeconds * .3f);
 			this._foodHealth = FoodHealth;
 			Model.Animator.StopBlend();
 			Model.Animator.BlendAnimation(EatAnimation);

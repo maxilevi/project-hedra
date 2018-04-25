@@ -3221,6 +3221,10 @@
       <Link>Assets\Env\MerchantCart.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\MerchantIcon.ply">
+      <Link>Assets\UI\MerchantIcon.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\Mount.ply">
       <Link>Assets\Items\Mount.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -4478,6 +4482,11 @@
     <OutputPath>bin\Debug\</OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <WarningLevel>1</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" text
+call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" binary
+call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" binary</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions />
 </Project>

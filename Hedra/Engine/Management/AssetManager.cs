@@ -51,13 +51,49 @@ namespace Hedra.Engine.Management
 			byte[] sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.DataFile3);
 			Fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
 
-            ShaderCode = ZipManager.UnZip(File.ReadAllBytes(AppPath + DataFile1));
+            AssetManager.ReloadShaderSources();
             _hitboxCache = new Dictionary<string, VertexData>();
         }
-		
-		private static void SetupFiles(){
-            if(_filesDecompressed) return;
-		    
+
+	    public static void ReloadShaderSources()
+	    {
+	        ShaderCode = ZipManager.UnZip(File.ReadAllBytes(AppPath + DataFile1));
+        }
+
+#if DEBUG
+	    private static void CopyShaders()
+	    {
+	        var compatibleAppPath = AppPath.Replace("/", @"\");
+
+	        Log.Write($"[DEBUG] Copying shader files to executable...{Environment.NewLine}", ConsoleColor.Magenta);
+            var proc = System.Diagnostics.Process.Start("cmd.exe",
+                $"/C xcopy \"{compatibleAppPath}\\..\\..\\Shaders\" \"{compatibleAppPath}\\Shaders\\\"  /s /e /y");
+	        proc?.WaitForExit();
+	    }
+	    public static void GrabShaders()
+	    {
+            AssetManager.CopyShaders();
+	        Log.Write($"[DEBUG] Rebuilding shader bundles...{Environment.NewLine}", ConsoleColor.Magenta);
+            var pProcess = new System.Diagnostics.Process
+	        {
+	            StartInfo =
+	            {
+	                FileName = $@"{AppPath}/../../../utilities/AssetBuilder.exe",
+	                Arguments = $"\"{AppPath}/Shaders/\" \"{AppPath}/data1.db\" text",
+	                UseShellExecute = false,
+	                RedirectStandardOutput = true,
+	                WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+	                CreateNoWindow = true
+	            }
+	        };
+	        pProcess.Start();
+	        Log.Write($"{Environment.NewLine}[DEBUG]{pProcess.StandardOutput.ReadToEnd()}{Environment.NewLine}", ConsoleColor.Magenta);
+	        pProcess.WaitForExit();
+	        pProcess.Dispose();
+	    }
+#endif
+        private static void SetupFiles(){
+            if(_filesDecompressed) return;		    
 
 			AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
 			AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+ "/";
@@ -136,22 +172,21 @@ namespace Hedra.Engine.Management
 		}
 		
 		public static string ReadShader(string Name){
-			StringBuilder Builder  = new StringBuilder();
-			bool Save = false;
-			bool Next = false;
-			foreach(string Line in ShaderCode.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)){
-				Next = false;
-				if(Line.Contains(Name)){
-					Save = true;
-					Next = true;
+			var builder  = new StringBuilder();
+			var save = false;
+		    foreach(var line in ShaderCode.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)){
+				var next = false;
+				if(line.Contains(Name)){
+					save = true;
+					next = true;
 				}
-				if(Line.Contains("#End File#"))
-					Save = false;
-				if(Save && !Next)
-					Builder.Append(Line + System.Environment.NewLine);
+				if(line.Contains("<end>"))
+					save = false;
+				if(save && !next)
+					builder.Append(line + Environment.NewLine);
 			}
 
-            return Builder.ToString();
+            return builder.ToString();
 		}
 		
 		public static Icon LoadIcon(string path){

@@ -385,6 +385,10 @@ namespace Hedra.Engine.Player
 		    }
 
 #if DEBUG
+		    if (e.Key == Key.F10)
+		    {
+		        ShaderManager.ReloadShaders();
+		    }
 			if(e.Key == Key.F9 && player.CanInteract){
 				if(Recorder.Active)
 					Recorder.Active = false;

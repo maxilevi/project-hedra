@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hedra", "Hedra\Hedra.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{9FB2A67A-BD65-4F38-BD81-9D41AB95876F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShaderCompiler", "ShaderCompiler\ShaderCompiler.csproj", "{16941AD3-BD14-4C61-B93E-77A42908A989}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetBuilder", "AssetBuilder\AssetBuilder.csproj", "{808D426E-63DF-4145-8957-9452B182D0A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,14 +33,14 @@ Global
 		{9FB2A67A-BD65-4F38-BD81-9D41AB95876F}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{9FB2A67A-BD65-4F38-BD81-9D41AB95876F}.Release|x86.ActiveCfg = Release|Any CPU
 		{9FB2A67A-BD65-4F38-BD81-9D41AB95876F}.Release|x86.Build.0 = Release|Any CPU
-		{16941AD3-BD14-4C61-B93E-77A42908A989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16941AD3-BD14-4C61-B93E-77A42908A989}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16941AD3-BD14-4C61-B93E-77A42908A989}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{16941AD3-BD14-4C61-B93E-77A42908A989}.Debug|x86.Build.0 = Debug|Any CPU
-		{16941AD3-BD14-4C61-B93E-77A42908A989}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{16941AD3-BD14-4C61-B93E-77A42908A989}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{16941AD3-BD14-4C61-B93E-77A42908A989}.Release|x86.ActiveCfg = Release|Any CPU
-		{16941AD3-BD14-4C61-B93E-77A42908A989}.Release|x86.Build.0 = Release|Any CPU
+		{808D426E-63DF-4145-8957-9452B182D0A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{808D426E-63DF-4145-8957-9452B182D0A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{808D426E-63DF-4145-8957-9452B182D0A7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{808D426E-63DF-4145-8957-9452B182D0A7}.Debug|x86.Build.0 = Debug|Any CPU
+		{808D426E-63DF-4145-8957-9452B182D0A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{808D426E-63DF-4145-8957-9452B182D0A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{808D426E-63DF-4145-8957-9452B182D0A7}.Release|x86.ActiveCfg = Release|Any CPU
+		{808D426E-63DF-4145-8957-9452B182D0A7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
