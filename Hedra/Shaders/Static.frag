@@ -14,6 +14,7 @@ in vec3 LightDir;
 in float Depth;
 in float CastShadows;
 in float Config;
+in float DitherVisibility;
 
 layout(location = 0)out vec4 OutColor; 
 layout(location = 1)out vec4 OutPosition;
@@ -99,11 +100,24 @@ vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal, vec3 LColor){
 	return (Brightness * LColor );
 }
 
+precision lowp    float;
+
+float PHI = 1.61803398874989484820459 * 00000.1; // Golden Ratio   
+float PI  = 3.14159265358979323846264 * 00000.1; // PI
+float SQ2 = 1.41421356237309504880169 * 10000.0; // Square Root of Two
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
 void main(){
-	if(Dither){
-		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
-		if( d-floor(d) < 0.5) discard;
+
+	if (Dither) {
+		if( clamp(texture(noiseTexture, vec3(int(InPos.x), int(InPos.y), int(InPos.z)) ).r, 0.0, 1.0) > DitherVisibility * 1.25){
+			discard;
+		}
 	}
+
 	//Lighting
 	vec3 unitNormal = normalize(InNorm.xyz);
 	vec3 unitToLight = normalize(LightPosition);
@@ -200,16 +214,16 @@ void main(){
 	vec4 FinalColor = vec4(finalRim, 0.0) + (vec4(Diffuse,1.0) * InputColor) + Specular;
 	vec4 SkyColor = vec4( mix(BotColor, TopColor, (gl_FragCoord.y / Height) - .25) );
 	vec4 NewColor = mix(SkyColor, FinalColor * ShadowVisibility + (vec4(FDiffuse, 1.0) * InputColor), Visibility);
-	
-	mat3 NormalMat = mat3(transpose(inverse(gl_ModelViewMatrix)));
 
+	mat3 NormalMat = mat3(transpose(inverse(gl_ModelViewMatrix)));
+	
 	if(Visibility == 0.0){
-		OutColor = vec4(NewColor.xyz, 1.0);
+		OutColor = NewColor;
 		OutPosition = vec4( InPos.xyz, gl_FragCoord.z);
 		OutNormal = vec4(0.0, 0.0, 0.0, 1.0);
 	}else{
 		mat3 NormalMat = mat3(transpose(inverse(gl_ModelViewMatrix)));
-		OutColor = vec4(NewColor.xyz,1.0);
+		OutColor = NewColor;
 		OutPosition = vec4( (gl_ModelViewMatrix * vec4(InPos.xyz, 1.0)).xyz, gl_FragCoord.z);
 		OutNormal = vec4(NormalMat * InNorm.xyz, 1.0);
 	}

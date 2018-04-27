@@ -183,7 +183,7 @@ namespace Hedra.Engine.QuestSystem
 			this.QuestCompleted = true;
 			GameManager.Player.CanInteract = false;
 			TaskManager.Delay(2500, delegate{ 
-		        var label = new Billboard(4.0f, "+"+Exp+" XP", Color.Violet, FontCache.Get(AssetManager.Fonts.Families[0], 48, FontStyle.Bold),
+		        var label = new Billboard(4.0f, "+"+Exp+" XP", Color.Violet, FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
 				GameManager.Player.Position);
 				label.Size = .4f;
 				label.Vanish = true;

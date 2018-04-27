@@ -505,6 +505,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 if (meshArray == this.Meshes) continue;
                 foreach (ObjectMesh meshItem in meshArray) meshItem.Dispose();
             }
+            Trail?.Dispose();
             this.Disposed = true;
         }
     }

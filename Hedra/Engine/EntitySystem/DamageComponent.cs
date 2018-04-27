@@ -99,11 +99,11 @@ namespace Hedra.Engine.EntitySystem
                 Billboard dmgLabel;
                 if (!Immune && !shouldMiss)
                     dmgLabel = new Billboard(1.8f, ((int) Amount).ToString(), color,
-                        FontCache.Get(AssetManager.Fonts.Families[0], 12 + 32 * (Amount / Parent.MaxHealth),
+                        FontCache.Get(AssetManager.BoldFamily, 12 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 else
                     dmgLabel = new Billboard(1.8f, Immune ? "IMMUNE" : "MISS", Color.White,
-                        FontCache.Get(AssetManager.Fonts.Families[0], 12 + 32 * (Amount / Parent.MaxHealth),
+                        FontCache.Get(AssetManager.BoldFamily, 12 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
                 dmgLabel.Vanish = true;
                 dmgLabel.Speed = 4;
@@ -130,7 +130,7 @@ namespace Hedra.Engine.EntitySystem
                 {
                     Exp = (int) XpToGive;
                     var label = new Billboard(4.0f, "+" + Exp + " XP", Color.Violet,
-                        FontCache.Get(AssetManager.Fonts.Families[0], 48, FontStyle.Bold),
+                        FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
                         Parent.Model.Position)
                     {
                         Size = .4f,

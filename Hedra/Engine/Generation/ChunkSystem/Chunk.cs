@@ -250,14 +250,22 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Disposed) return new Block();
 
-            if (Landscape != null && Landscape.BlocksSetted)
+            try
             {
-                if (X >= 0 && Y >= 0 && Z >= 0 && X <= BoundsX - 1 && Y <= BoundsY - 1 && Z <= BoundsZ - 1)
-                    return Voxels[X][Y][Z];
+                if (Landscape != null && Landscape.BlocksSetted)
+                {
+                    if (X >= 0 && Y >= 0 && Z >= 0 && X <= BoundsX - 1 && Y <= BoundsY - 1 && Z <= BoundsZ - 1)
+                        return Voxels[X][Y][Z];
 
+                    return new Block();
+                }
                 return new Block();
             }
-            return new Block();
+            catch (NullReferenceException e)
+            {
+                Log.WriteLine(e);
+                return new Block();
+            }
         }
 
         public Vector3 NearestVertex(Vector3 BlockPosition)

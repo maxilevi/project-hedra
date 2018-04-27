@@ -41,6 +41,7 @@ namespace Hedra.Engine.Management
 		public static string AppPath { get; private set; }
 	    public static string AppData { get; private set; }
         public static string TemporalFolder { get; private set; }
+	    public static FontFamily BoldFamily => Fonts.Families[0];
 
         private static bool _filesDecompressed;
 	    private static Dictionary<string, VertexData> _hitboxCache;

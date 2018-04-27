@@ -485,6 +485,7 @@ namespace Hedra.Engine.Player
 	        }
 	        set
 	        {
+	            if (value < 0) return;
 	            var currentGold = Inventory.Search(I => I.IsGold);
 	            if (currentGold == null)
 	            {
@@ -496,7 +497,6 @@ namespace Hedra.Engine.Player
 	            {
 	                currentGold.SetAttribute(CommonAttributes.Amount, value);
 	            }
-
 	        }
 	    }
 		public override Item MainWeapon => Inventory.MainWeapon;
@@ -540,17 +540,11 @@ namespace Hedra.Engine.Player
 	        if (_health <= 0f)
 	        {
 	            IsDead = true;
-	            CoroutineManager.StartCoroutine(this.DmgComponent.DisposeCoroutine);
-	            if (GameSettings.Hardcore)
-	                ThreadManager.ExecuteOnMainThread(delegate {
-	                    this.MessageDispatcher.ShowMessageWhile("[R] NEW RUN", Color.White,
-	                        () => this.Health <= 0);
-	                });
-	            else
-	                ThreadManager.ExecuteOnMainThread(delegate {
-	                    this.MessageDispatcher.ShowMessageWhile("[R] TO RESPAWN", Color.White,
-	                        () => this.Health <= 0 && !GameManager.InStartMenu);
-	                });
+                CoroutineManager.StartCoroutine(this.DmgComponent.DisposeCoroutine);
+	            ThreadManager.ExecuteOnMainThread(delegate {
+	                this.MessageDispatcher.ShowMessageWhile("[R] TO RESPAWN", Color.White,
+	                    () => this.Health <= 0 && !GameManager.InStartMenu);
+	            });
 	        }
 	        else
 	        {
@@ -576,7 +570,7 @@ namespace Hedra.Engine.Player
 			        if (Model.Enabled)
 			        {
 			            var newLabel = new Billboard(2.0f, $"+ {(int) _acummulativeHealing} HP", Color.GreenYellow,
-			                FontCache.Get(AssetManager.Fonts.Families[0],
+			                FontCache.Get(AssetManager.BoldFamily,
 			                    18 + 12 * ((_acummulativeHealing - MaxHealth * .05f) / this.MaxHealth),
 			                    FontStyle.Bold), this.Model.HeadPosition);
 			            newLabel.Vanish = true;
@@ -638,6 +632,31 @@ namespace Hedra.Engine.Player
             this.Model.Position = newPosition;
 		    this.Physics.TargetPosition = newPosition;
 		    this.Knocked = false;
+
+		    var xpDiff = (int)(XP * .15f);
+		    var goldDiff = (int)(Gold * .1f);
+		    XP = Math.Max(XP - xpDiff, 0);
+		    Gold = (int)(Gold - goldDiff);
+		    if (xpDiff > 0)
+		    {
+		        var xp = new Billboard(6f, $"- {xpDiff} XP", Color.Purple,
+		            FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), this.Model.HeadPosition + Vector3.UnitY * 1f)
+		        {
+		            Vanish = true,
+		            Speed = 2,
+		            FollowFunc = () => this.Model.HeadPosition + Vector3.UnitY * 1f
+                };
+		    }
+		    if (goldDiff > 0)
+		    {
+		        var gold = new Billboard(6f, $"- {goldDiff} G", Color.Gold,
+		            FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), this.Model.HeadPosition + Vector3.UnitY * 3f)
+		        {
+		            Vanish = true,
+		            Speed = 2,
+		            FollowFunc = () => this.Model.HeadPosition + Vector3.UnitY * 2f
+		        };
+		    }
 		}
 		
 		public static bool CreatePlayer(string Name, HumanModel PreviewModel, ClassDesign ClassType){

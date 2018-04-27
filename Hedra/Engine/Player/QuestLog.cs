@@ -78,7 +78,7 @@ namespace Hedra.Engine.Player
 
             _questDescription = new GUIText("QUEST DESCRIPTION",
                 Mathf.ScaleGUI(_targetResolution, new Vector2(0.7f, -0.3f)),
-                Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 12, FontStyle.Bold));
+                Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
 
             _inPanel.AddElement(background);
             _inPanel.AddElement(_questDescription);

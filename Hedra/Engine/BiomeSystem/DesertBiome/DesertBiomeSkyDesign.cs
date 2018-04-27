@@ -38,12 +38,12 @@ namespace Hedra.Engine.BiomeSystem.DesertBiome
 
         public override Vector4 MiddayTop(int Seed)
         {
-            return this.IsRaining(Seed) ? CloudyTop : ClearTop;
+            return this.CanRain(Seed) ? CloudyTop : ClearTop;
         }
 
         public override Vector4 MiddayBot(int Seed)
         {
-            return this.IsRaining(Seed) ? CloudyBot : ClearBot;
+            return this.CanRain(Seed) ? CloudyBot : ClearBot;
         }
 
         private Vector4 CloudyTop { get; } = Colors.FromArgb(255, 51, 60, 57);
@@ -51,7 +51,7 @@ namespace Hedra.Engine.BiomeSystem.DesertBiome
         private Vector4 ClearTop { get; } = Colors.DeepSkyBlue;
         private Vector4 ClearBot { get; } = Colors.FromArgb(255, 253, 251, 187);
 
-        public override bool IsRaining(int Seed)
+        public override bool CanRain(int Seed)
         {
              return new Random(Seed + 2343).Next(0, 4) == 1;
         }

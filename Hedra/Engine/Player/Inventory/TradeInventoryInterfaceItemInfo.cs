@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Inventory
         {
             _panel = new Panel();
             _backgroundTexture = new Texture("Assets/UI/InventoryBackground.png", Vector2.UnitY * -.35f, Vector2.One * .15f);
-            _priceText = new GUIText(string.Empty, _backgroundTexture.Position, Color.Gold, FontCache.Get(AssetManager.Fonts.Families[0], 10, FontStyle.Bold));
+            _priceText = new GUIText(string.Empty, _backgroundTexture.Position, Color.Gold, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
 
             _panel.AddElement(_backgroundTexture);
             _panel.AddElement(_priceText);

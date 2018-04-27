@@ -45,7 +45,7 @@ namespace Hedra.Engine.Rendering.UI
 			var dist = .2f;
 			var vDist = .25f;
             _normalFont = FontCache.Get(UserInterface.Fonts.Families[0], fontSize-1);
-		    _boldFont = FontCache.Get(AssetManager.Fonts.Families[0], fontSize+1, FontStyle.Bold);
+		    _boldFont = FontCache.Get(AssetManager.BoldFamily, fontSize+1, FontStyle.Bold);
             Color fontColor = Color.White;
 			_controlsText = new ControlsUi(fontColor);
 			

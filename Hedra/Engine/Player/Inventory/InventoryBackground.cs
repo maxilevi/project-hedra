@@ -23,15 +23,15 @@ namespace Hedra.Engine.Player.Inventory
         {
             _texture = new Texture("Assets/UI/InventoryBackground.png", Vector2.Zero, Vector2.One * .55f);
             Name = new GUIText(string.Empty, Position + Vector2.UnitY * .075f,
-                Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 24, FontStyle.Bold));
+                Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
             Level = new GUIText(string.Empty, Position + Vector2.UnitY * -.05f,
                 Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 16));
             TopLeftText = new GUIText(string.Empty, Position + Vector2.UnitX * -.2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f,
-                Color.Red, FontCache.Get(AssetManager.Fonts.Families[0], 14, FontStyle.Bold));
+                Color.Red, FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold));
             BottomLeftText = new GUIText(string.Empty, Position + Vector2.UnitX * -.2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f,
                 Color.DodgerBlue, FontCache.Get(UserInterface.Fonts.Families[0], 10));
             TopRightText = new GUIText(string.Empty, Position + Vector2.UnitX * .2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f,
-                Color.DarkViolet, FontCache.Get(AssetManager.Fonts.Families[0], 14, FontStyle.Bold));
+                Color.DarkViolet, FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold));
             BottomRightText = new GUIText(string.Empty, Position + Vector2.UnitX * .2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f,
                 Color.Gold, FontCache.Get(UserInterface.Fonts.Families[0], 10));
 

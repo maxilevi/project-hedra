@@ -302,7 +302,6 @@ namespace Hedra.Engine.Player
 
 			if(e.Key == Key.G && Human.CanInteract && !GameManager.InMenu && !Human.Knocked && !GameManager.InStartMenu)
 			{
-                return;//FIXME
 			    if(player.Inventory.Glider == null && !GameSettings.Paused){
 					player.MessageDispatcher.ShowNotification("YOU NEED A GLIDER TO DO THAT", System.Drawing.Color.DarkRed, 3f, true);
 					return; // Player doesnt have a glider item.

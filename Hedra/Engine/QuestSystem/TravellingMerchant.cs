@@ -14,22 +14,20 @@ namespace Hedra.Engine.QuestSystem
 	/// </summary>
 	public class TravellingMerchant : BaseStructure, IUpdatable
 	{
-		private long PassedTime;
-		private static ParticleSystem FireParticles;
-		private PointLight Light;
+		private long _passedTime;
+		private readonly ParticleSystem _particles;
+		private PointLight _light;
 		
 		
-		public TravellingMerchant(Vector3 Position) : base() {
-			if(FireParticles == null)
-				FireParticles = new ParticleSystem(Vector3.Zero);
-			
+		public TravellingMerchant(Vector3 Position) {
+			_particles = new ParticleSystem(Vector3.Zero);		
 			base.Position = Position;
 
 			UpdateManager.Add(this);
 		}
 		
 		public void Update(){
-			PassedTime++;
+			_passedTime++;
 
 		    try
 		    {
@@ -49,45 +47,45 @@ namespace Hedra.Engine.QuestSystem
 		        Log.WriteLine(e);
 		    }
 
-		    if(Light == null && (Position - LocalPlayer.Instance.Position).LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
-				Light = ShaderManager.GetAvailableLight();
-				if(Light != null){
-					Light.Color = new Vector3(1f, 0.6f, 0.6f);
-					Light.Position = Position;
-					Light.Radius = 30f;
-					ShaderManager.UpdateLight(Light);
+		    if(_light == null && (Position - LocalPlayer.Instance.Position).LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
+				_light = ShaderManager.GetAvailableLight();
+				if(_light != null){
+					_light.Color = new Vector3(1f, 0.6f, 0.6f);
+					_light.Position = Position;
+					_light.Radius = 30f;
+					ShaderManager.UpdateLight(_light);
 				}
 			}
-			if(Light != null && (Light.Position - LocalPlayer.Instance.Position).LengthSquared > ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
-				Light.Position = Vector3.Zero;
-				Light.Locked = false;
-				Light.Radius = 20f;
-				ShaderManager.UpdateLight(Light);
-				Light = null;
+			if(_light != null && (_light.Position - LocalPlayer.Instance.Position).LengthSquared > ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
+				_light.Position = Vector3.Zero;
+				_light.Locked = false;
+				_light.Radius = 20f;
+				ShaderManager.UpdateLight(_light);
+				_light = null;
 			}
 			
-			if(PassedTime % 2 == 0){
-				FireParticles.Color = Particle3D.FireColor;
-				FireParticles.VariateUniformly = false;
-				FireParticles.Position = this.Position + Vector3.UnitY * 1f;
-				FireParticles.Scale = Vector3.One * .85f;
-				FireParticles.ScaleErrorMargin = new Vector3(.05f,.05f,.05f);
-				FireParticles.Direction = Vector3.UnitY * 0f;
-				FireParticles.ParticleLifetime = 1.65f;
-				FireParticles.GravityEffect = -0.01f;
-				FireParticles.PositionErrorMargin = new Vector3(1f, 0f, 1f);
+			if(_passedTime % 2 == 0){
+				_particles.Color = Particle3D.FireColor;
+				_particles.VariateUniformly = false;
+				_particles.Position = this.Position + Vector3.UnitY * 1f;
+				_particles.Scale = Vector3.One * .85f;
+				_particles.ScaleErrorMargin = new Vector3(.05f,.05f,.05f);
+				_particles.Direction = Vector3.UnitY * 0f;
+				_particles.ParticleLifetime = 1.65f;
+				_particles.GravityEffect = -0.01f;
+				_particles.PositionErrorMargin = new Vector3(1f, 0f, 1f);
 				
-				FireParticles.Emit();
+				_particles.Emit();
 			}
 		}
 		
 		public override void Dispose(){
 			base.Dispose();
-			if(Light != null){
-				Light.Color = Vector3.Zero;
-				Light.Position = Vector3.Zero;
-				ShaderManager.UpdateLight(Light);
-				Light.Locked = false;
+			if(_light != null){
+				_light.Color = Vector3.Zero;
+				_light.Position = Vector3.Zero;
+				ShaderManager.UpdateLight(_light);
+				_light.Locked = false;
 			}
 		}
 	}

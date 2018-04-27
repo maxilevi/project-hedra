@@ -21,16 +21,21 @@ namespace Hedra.Engine.EnvironmentSystem
 	/// </summary>
 	public static class SkyManager
 	{
-		public static float DayTime { get; set; } = 12000;
-		public static bool IsRaining = false;
-		public static ParticleSystem Rain = new ParticleSystem(Vector3.Zero);
-		public static bool LoadTime = false, Enabled = true;
-	    private static readonly Stack<float> TimeStack = new Stack<float>();
-		private static BiomeSystem.Region _currentRegion;
-		public static Fog FogManager = new Fog();
-		public static Skydome Skydome = new Skydome(12);
-		public static Sun Sun = new Sun( new Vector3(-500,1000,0).Normalized() );
-	    public static bool UpdateDayColors { get; set; } = true;
+	    public static Fog FogManager { get; }
+	    public static Skydome Skydome { get; }
+	    public static Sun Sun { get; }
+        public static WeatherManager Weather { get; }
+        public static float LastDayFactor { get; set; }
+	    public static float SkyModifier { get; set; }
+	    public static bool LoadTime { get; set; }
+	    public static float DaytimeSpeed { get; set; } = 1f;
+        public static float DayTime { get; set; } = 12000;
+	    public static bool Enabled { get; set; } = true;
+	    public static float TargetIntensity { get; set; } = 1;
+        public static bool UpdateDayColors { get; set; } = true;
+
+	    private static readonly Stack<float> TimeStack;
+        private static BiomeSystem.Region _currentRegion;
 	    private static Func<Vector4> _targetTopColor;
 	    private static Func<Vector4> _nextTargetTopColor;
 	    private static Func<Vector4> _targetBotColor;
@@ -41,9 +46,15 @@ namespace Hedra.Engine.EnvironmentSystem
 	    private static Vector4 _nextTargetBiomeBotColor;
         private static float _minLight;
 	    private static float _maxLight;
-        public static float DaytimeSpeed = 1f;
-	    public static float LastDayFactor, SkyModifier;
-	    public static float TargetIntensity = 1;
+
+	    static SkyManager()
+	    {
+	        TimeStack = new Stack<float>();
+            Skydome = new Skydome(12);
+	        FogManager = new Fog();
+            Sun = new Sun(new Vector3(-500, 1000, 0).Normalized());
+	        Weather = new WeatherManager();
+        }
 
 	    public static int StackLength => TimeStack.Count;
 
@@ -87,6 +98,7 @@ namespace Hedra.Engine.EnvironmentSystem
 		{
 		    var underChunk = Gen.World.GetChunkAt(LocalPlayer.Instance.BlockPosition);
             if(underChunk == null) return;
+		    Weather.Update(underChunk);
 		    _currentRegion = underChunk.Biome;
 
             float dayFactor;
@@ -160,7 +172,7 @@ namespace Hedra.Engine.EnvironmentSystem
 		        Skydome.BotColor = Mathf.Lerp(_targetBiomeBotColor, _nextTargetBiomeBotColor, SkyModifier / 6000);
 		    }
 		    if( Math.Abs(dayFactor - LastDayFactor) > .005f || LoadTime){
-				Vector3 newLightColor = IsRaining 
+				Vector3 newLightColor = Weather.IsRaining 
                     ? Vector3.One * Mathf.Clamp(dayFactor * .7f, _minLight, _maxLight) 
                     : Vector3.One * Mathf.Clamp(dayFactor * 1f, _minLight, _maxLight);
 
@@ -170,50 +182,6 @@ namespace Hedra.Engine.EnvironmentSystem
                 LastDayFactor = dayFactor;
 			}
 			LoadTime = false;
-
-			#region RAIN
-
-			if(Snowing && IsRaining && !GameManager.InMenu && GameManager.Player != null){
-				Rain.Position = GameManager.Player.Position + Vector3.UnitY * 160;
-				Rain.Color = new Vector4(.5f,.5f,.5f,1);
-				Rain.Grayscale = true;
-				Rain.VariateUniformly = false;
-				Rain.PositionErrorMargin = Vector3.One * new Vector3(320, 64, 320);
-				Rain.GravityEffect = 0.0075f;
-				Rain.ScaleErrorMargin = Vector3.One * .35f;
-				Rain.RandomRotation = true;
-				Rain.Scale = Vector3.One * 1.05f;
-				Rain.ParticleLifetime = 12.00f;
-				
-				for(int i = 0; i < 10; i++){
-					Rain.Emit();
-				}
-				
-				Rain.Particles[Rain.Particles.Count-1].Collides = true;
-			}
-			if(IsRaining && Time.timeScale == 1 && GameManager.Player != null && underChunk != null)
-            {
-				if(!Snowing){
-					Rain.Position = GameManager.Player.Position + Vector3.UnitY * 256;
-					Rain.Color = underChunk.Biome.Colors.WaterColor * .8f;
-					Rain.VariateUniformly = true;
-					Rain.Grayscale = false;
-					Rain.PositionErrorMargin = Vector3.One * new Vector3(256, 16, 256);
-					Rain.GravityEffect = 0.175f;
-					Rain.ScaleErrorMargin = Vector3.One * .25f;
-					Rain.RandomRotation = true;
-					Rain.Scale = Vector3.One * 1f;
-					Rain.ParticleLifetime = 8.0f;
-					
-					for(int i = 0; i < 20; i++){
-						Rain.Emit();
-					}
-					
-					Rain.Particles[Rain.Particles.Count-1].Collides = true;
-				}
-				}
-			#endregion
-
 		}
 		
 		public static void Draw(){

@@ -49,7 +49,7 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
         private Vector4 ClearTop { get; } = Colors.FromHtml("#2f8e62");
         private Vector4 ClearBot { get; } = Colors.FromHtml("#2f5e62");
 
-        public override bool IsRaining(int Seed)
+        public override bool CanRain(int Seed)
         {
             return false;
         }

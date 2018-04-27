@@ -50,6 +50,7 @@ namespace Hedra.Engine.Player.MapSystem
 	    private float _targetHeight;
 	    private float _targetTime = float.MaxValue;
 	    private int lastChunkAmount = -1;
+        private float _mapDitherRadius;
 	    private Chunk _underChunk;
 
         public Map(LocalPlayer Player){
@@ -66,10 +67,10 @@ namespace Hedra.Engine.Player.MapSystem
 
             var hint = new GUIText("CLICK TO MARK A WAYPOINT",
                 Vector2.UnitY * .8f, Color.White,
-                FontCache.Get(AssetManager.Fonts.Families[0], 16f, FontStyle.Bold));
+                FontCache.Get(AssetManager.BoldFamily, 16f, FontStyle.Bold));
             var underline = new GUIText("＿＿＿＿＿＿＿＿",
                 Vector2.UnitY * .75f, Color.FromArgb(255, 30, 30, 30),
-                FontCache.Get(AssetManager.Fonts.Families[0], 16f, FontStyle.Bold));
+                FontCache.Get(AssetManager.BoldFamily, 16f, FontStyle.Bold));
             _panel.AddElement(hint);
             _panel.AddElement(underline);
             EventDispatcher.RegisterMouseDown(this, delegate(object Sender, MouseButtonEventArgs Args)
@@ -115,11 +116,11 @@ namespace Hedra.Engine.Player.MapSystem
 		        _marker.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f) + _player.Minimap.MarkedDirection * FogDistance;
                 _cursor.Position = mapPosition + Vector3.UnitY * (_targetHeight + 45f);
                 _cursor.Rotation = _player.Model.Rotation;
-		        WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
+                WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
                     Vector3.One * (ChunkSize / (float)Chunk.Width), 1f) + Vector3.One * 0.002f;
                 WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _targetHeight);
                 WorldRenderer.Offset = mapPosition + Vector3.UnitY * (_targetHeight + 80f);
-		        this.UpdateChunks();
+                this.UpdateChunks();
             }
 		}
 
@@ -136,6 +137,8 @@ namespace Hedra.Engine.Player.MapSystem
 	        if (!Show) return;
 	        this._player.View.PositionDelegate = () => _player.Model.Model.Position.Xz.ToVector3() + Math.Max(_height, _player.Model.Model.Position.Y) * Vector3.UnitY;
 	        SkyManager.FogManager.UpdateFogSettings(FogDistance * .95f, FogDistance);
+	        SkyManager.Skydome.TopColor = Vector4.One;
+	        SkyManager.Skydome.BotColor = Color.CadetBlue.ToVector4();
         }
 
 	    public void Draw()

@@ -38,7 +38,7 @@ namespace Hedra.Engine.Rendering.UI
 			Vector2 bandPosition = new Vector2(0f, .8f);
 			Texture blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
 
-		    var currentTab = new GUIText("New Character", new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 15, FontStyle.Bold));
+		    var currentTab = new GUIText("New Character", new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold));
 
             _openFolder = new Button(new Vector2(0.8f,bandPosition.Y), new Vector2(0.15f,0.05f),
 			                           "Character Folder", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 13));
@@ -84,7 +84,7 @@ namespace Hedra.Engine.Rendering.UI
 			
 			#region UI
 			TextField nameField = new TextField(new Vector2(0,-.7f), new Vector2(.15f,.03f), this);
-			Button createChr = new Button(new Vector2(0f,-.8f), new Vector2(.15f,.05f), "Create", 0, defaultColor, FontCache.Get(AssetManager.Fonts.Families[0], 11, FontStyle.Bold));
+			Button createChr = new Button(new Vector2(0f,-.8f), new Vector2(.15f,.05f), "Create", 0, defaultColor, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
 			createChr.Click += delegate {
 				for(int i = 0; i < DataManager.PlayerFiles.Length; i++){
 					if(nameField.Text == DataManager.PlayerFiles[i].Name){

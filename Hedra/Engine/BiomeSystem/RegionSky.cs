@@ -7,7 +7,7 @@ namespace Hedra.Engine.BiomeSystem
 
         public RegionSky(int Seed, BiomeSkyDesign Design)
         {
-            IsRaining = Design.IsRaining(Seed);
+            CanRain = Design.CanRain(Seed);
             AfternoonTop = Design.AfternoonTop(Seed);
             AfternoonBot = Design.AfternoonBot(Seed);
             NightTop = Design.NightTop(Seed);
@@ -31,7 +31,7 @@ namespace Hedra.Engine.BiomeSystem
         public float MinLight { get; }
         public float MaxLight { get; }
 
-        public bool IsRaining { get; }
+        public bool CanRain { get; }
 
         public static RegionSky Interpolate(params RegionSky[] Regions)
         {

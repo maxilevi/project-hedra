@@ -79,7 +79,16 @@ namespace Hedra.Engine.Player
 					maxXp = (int) (maxXp * 1.15f);
 				return maxXp;
 			}
-		}				
+		}
+
+	    protected float MaxXpForLevel(int TargetLevel)
+	    {
+	        var maxXp = 38;
+	        for (var i = 1; i < TargetLevel; i++)
+	            maxXp = (int)(maxXp * 1.15f);
+	        return maxXp;
+        }
+        			
 		public float MaxMana{
 			get{
 				float maxMana = 103 + RandomFactor * 34f;
@@ -311,7 +320,7 @@ namespace Hedra.Engine.Player
 			    Mana = MaxMana;
 
 			    var label = new Billboard(4.0f, "LEVEL UP!", Color.Violet,
-			        FontCache.Get(AssetManager.Fonts.Families[0], 48, FontStyle.Bold),
+			        FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
 			        this.Model.Position)
 			    {
 			        Size = .7f,

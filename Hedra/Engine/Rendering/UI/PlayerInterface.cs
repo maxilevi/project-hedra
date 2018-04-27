@@ -44,7 +44,7 @@ namespace Hedra.Engine.Rendering.UI
                 if (_openedInterface == null)
                 {
                     Interfaces[i].Show = true;
-                    _openedInterface = Interfaces[i];
+                    if(Interfaces[i].Show) _openedInterface = Interfaces[i];
                 }
                 else if(_openedInterface == Interfaces[i])
                 {

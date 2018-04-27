@@ -24,12 +24,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _backgroundTexture = new RenderableTexture(new Texture("Assets/UI/AbilityTreeBackground.png",
                 new Vector2(.04f, .15f), new Vector2(.6f, .55f) * 1f), DrawOrder.Before);
             _availablePointsText = new GUIText(string.Empty, new Vector2(_backgroundTexture.Position.X, -.35f),
-                Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 12f, FontStyle.Bold));
+                Color.White, FontCache.Get(AssetManager.BoldFamily, 12f, FontStyle.Bold));
             for (var i = 0; i < this.Buttons.Length; i++)
             {
                 this.Buttons[i].Scale *= 1.25f;
                 this.Buttons[i].Texture.IdPointer = null;
-                this.ButtonsText[i].TextFont = FontCache.Get(AssetManager.Fonts.Families[0], 10f, FontStyle.Bold);
+                this.ButtonsText[i].TextFont = FontCache.Get(AssetManager.BoldFamily, 10f, FontStyle.Bold);
                 this.ButtonsText[i].Position = this.Buttons[i].Position +
                                                new Vector2(0, -InventoryArrayInterface.DefaultSize.Y) * .65f;
                 _skillPointsBackgrounTextures[i] = 

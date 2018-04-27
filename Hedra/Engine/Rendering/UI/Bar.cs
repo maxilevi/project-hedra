@@ -168,12 +168,12 @@ namespace Hedra.Engine.Rendering.UI
             if (OptionalText == null)
             {
                 Text = new RenderableText(Value() + " / " + Max(), Position, Color.White,
-                    FontCache.Get(AssetManager.Fonts.Families[0], 11, FontStyle.Bold));
+                    FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
             }
             else
             {
                 Text = new RenderableText(OptionalText, Position, Color.White,
-                    FontCache.Get(AssetManager.Fonts.Families[0], 11, FontStyle.Bold));
+                    FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
                 UpdateTextRatio = false;
             }
             DrawManager.UIRenderer.Add(Text, this.Order);

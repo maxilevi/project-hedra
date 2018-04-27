@@ -190,6 +190,7 @@
     <Compile Include="Engine\EntitySystem\SlowingComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedComponent.cs" />
+    <Compile Include="Engine\EnvironmentSystem\WeatherManager.cs" />
     <Compile Include="Engine\GameLoader.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkStructuresMeshBuilder.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilder.cs" />
@@ -4330,6 +4331,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\OnOff.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Rain.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Roll.ogg">

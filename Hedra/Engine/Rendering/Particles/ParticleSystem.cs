@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering.Particles
 	public class ParticleSystem : IRenderable, IUpdatable, IDisposable
 	{
 		public const int MaxParticleCount = 15000;
-		
+	    public int MaxParticles { get; set; } = MaxParticleCount; 
 		public List<Particle3D> Particles = new List<Particle3D>();
 		public static Shader Shader = Shader.Build("Shaders/Particle.vert","Shaders/Particle.frag");
 		public uint VAOID { get; private set; }
@@ -61,7 +61,7 @@ namespace Hedra.Engine.Rendering.Particles
 		public void Emit(){
 			if( (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
 			
-			if(Particles.Count == MaxParticleCount || !Enabled || (GameSettings.Paused && Particle3D.UseTimeScale)) return;
+			if(Particles.Count == MaxParticles || !Enabled || (GameSettings.Paused && Particle3D.UseTimeScale)) return;
 			
 			float LocalPositionX = PositionErrorMargin.X * Utils.Rng.NextFloat() * 2f - PositionErrorMargin.X;
 			float LocalPositionY = PositionErrorMargin.Y * Utils.Rng.NextFloat() * 2f - PositionErrorMargin.Y;
@@ -174,7 +174,7 @@ namespace Hedra.Engine.Rendering.Particles
 			GL.GenBuffers(1, out bufferid);
 		    BufferID = bufferid;
 			GL.BindBuffer(BufferTarget.ArrayBuffer, BufferID);
-			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxParticleCount * Particle3D.SizeInBytes), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxParticles * Particle3D.SizeInBytes), IntPtr.Zero, BufferUsageHint.DynamicDraw);
 
             //Columns of the TransMatrix
             GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, IntPtr.Zero);

@@ -8,7 +8,9 @@
  */
 
 using System;
+using System.Linq;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
@@ -22,6 +24,7 @@ namespace Hedra.Engine.Player.Inventory
 	public class TradeInventory : PlayerInterface
     {
 		public const int MerchantSpaces = 20;
+        public const int TradeRadius = 12;
         public bool IsTrading { get; private set; }
 		private readonly LocalPlayer _player;
 	    private readonly InventoryArray _merchantItems;
@@ -158,7 +161,7 @@ namespace Hedra.Engine.Player.Inventory
         private void SetActive(bool Value)
         {
             if (_show == Value || _stateManager.GetState() != _show) return;
-            _show = true;
+            _show = Value;
             _merchantItemsInterface.Enabled = _show;
             _playerItemsInterface.Enabled = _show;
             _interfaceManager.Enabled = _show;
@@ -168,14 +171,21 @@ namespace Hedra.Engine.Player.Inventory
             this.SetInventoryState(_show);
         }
 
-        public override Key OpeningKey => default(Key);
+        private void TradeWithNearestMerchant()
+        {
+            var merchant = World.InRadius<Humanoid>(_player.Position, TradeRadius).FirstOrDefault(H => H.SearchComponent<MerchantComponent>() != null);
+            this.Trade(merchant);
+        }
+
+        public override Key OpeningKey => Key.E;
 
         public override bool Show
         {
             get { return _show; }
             set
             {
-                if (!value) this.Cancel();
+                if (value) this.TradeWithNearestMerchant();
+                else this.Cancel();
             }
         }
     }

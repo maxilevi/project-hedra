@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering
     /// <summary>
     ///     Description of TrailRenderer.
     /// </summary>
-    public class TrailRenderer : IRenderable
+    public class TrailRenderer : IRenderable, IDisposable
     {
         private static readonly Shader Shader;
         private readonly Func<Vector3> _tip;
@@ -182,6 +182,13 @@ namespace Hedra.Engine.Rendering
 
             GraphicsLayer.Disable(EnableCap.Blend);
             GraphicsLayer.Enable(EnableCap.CullFace);
+        }
+
+        public void Dispose()
+        {
+            this._points.Dispose();
+            this._colors.Dispose();
+            this._data.Dispose();
         }
     }
 

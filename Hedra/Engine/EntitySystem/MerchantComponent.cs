@@ -25,7 +25,6 @@ namespace Hedra.Engine.EntitySystem
 	public class MerchantComponent : EntityComponent
 	{
 	    public new Humanoid Parent;
-	    public int TradeRadius { get; } = 12;
         public Dictionary<int, Item> Items { get; private set; }
 	    private readonly Dictionary<int, Item> _originalItems;
 
@@ -79,15 +78,14 @@ namespace Hedra.Engine.EntitySystem
 
 		    var canTrade = player.CanInteract && !player.IsDead && !GameSettings.Paused &&
 		                   !player.Inventory.Show && !player.AbilityTree.Show;
-		    Func<bool> inRadiusFunc = () => (player.Position - Parent.Position).LengthSquared < TradeRadius * TradeRadius &&
+		    Func<bool> inRadiusFunc = () => (player.Position - Parent.Position).LengthSquared < TradeInventory.TradeRadius * TradeInventory.TradeRadius &&
 		                       !player.Trade.IsTrading;
 
             var inRadius = inRadiusFunc();
 
 		    if (!canTrade || !inRadius) return;
 
-		    player.MessageDispatcher.ShowMessageWhile("[E] TO TRADE", Color.White, inRadiusFunc);				
-		    if(Events.EventDispatcher.LastKeyDown == Key.E) player.Trade.Trade(this.Parent as Humanoid);
+		    player.MessageDispatcher.ShowMessageWhile("[E] TO TRADE", Color.White, inRadiusFunc);
 		}
 	}
 }

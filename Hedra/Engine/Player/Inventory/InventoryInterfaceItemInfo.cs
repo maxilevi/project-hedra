@@ -37,15 +37,15 @@ namespace Hedra.Engine.Player.Inventory
                 BackgroundTexture.Scale * .75f);
 
             this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Vector2.UnitY * .225f, Color.White,
-                FontCache.Get(AssetManager.Fonts.Families[0], 13, FontStyle.Bold));
+                FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemText, DrawOrder.After);
 
             this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position - Vector2.UnitY * .225f,
-                Color.Bisque, FontCache.Get(AssetManager.Fonts.Families[0], 10, FontStyle.Bold));
+                Color.Bisque, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemDescription, DrawOrder.After);
 
             this._itemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position - Vector2.UnitX * .025f + Vector2.UnitY * .05f,
-                Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 9, FontStyle.Bold));
+                Color.White, FontCache.Get(AssetManager.BoldFamily, 9, FontStyle.Bold));
             DrawManager.UIRenderer.Add(_itemAttributes, DrawOrder.After);
 
             _panel.AddElement(ItemText);

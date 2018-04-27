@@ -56,7 +56,7 @@ namespace Hedra.Engine.Player.Inventory
                 var customScale = CustomIcons != null ? Graphics2D.SizeFromAssets(CustomIcons[i]) : InventoryArrayInterface.DefaultSize;
 
                 _inventoryTextures[i] = new Texture(CustomIcons != null ? customId : DefaultId, position, customScale * scale);
-                _inventoryButtonsText[i] = new RenderableText(string.Empty, position + new Vector2(size.X, -size.Y) * .25f, Color.White, FontCache.Get(AssetManager.Fonts.Families[0], 10, FontStyle.Bold));
+                _inventoryButtonsText[i] = new RenderableText(string.Empty, position + new Vector2(size.X, -size.Y) * .25f, Color.White, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
                 _inventoryButtons[i] = new RenderableButton(position, size * scale * .8f, GUIRenderer.TransparentTexture);
                 _inventoryButtons[i].Texture.IdPointer = () => _renderer.Draw(k);
                 _inventoryButtons[i].PlaySound = false;

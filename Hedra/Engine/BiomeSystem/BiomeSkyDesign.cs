@@ -18,7 +18,7 @@ namespace Hedra.Engine.BiomeSystem
         public abstract Vector4 SunriseTop(int Seed);
         public abstract Vector4 SunriseBot(int Seed);
 
-        public abstract bool IsRaining(int Seed);
+        public abstract bool CanRain(int Seed);
         public abstract float MaxLight(int Seed);
         public abstract float MinLight(int Seed);
     }

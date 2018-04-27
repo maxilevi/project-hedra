@@ -26,8 +26,11 @@ namespace Hedra.Engine.Management
 		public static string[] TrackNames;
 	    public const int VillageIndex = 0;
 	    public const int MainThemeIndex = 1;
-        public const int LoopableSongsStart = 2;
+	    public const int RainIndex = 2;
+        public const int LoopableSongsStart = 3;
 
+	    public static int TrackIndex => _trackIndex;
+	    public static bool RepeatTrack => _repeatItself;
         private static readonly float[] Buffer = new float[176400 * 2];
 	    private static readonly Timer Ticker = new Timer(6f);
         private static int _trackIndex = -1;
@@ -43,21 +46,22 @@ namespace Hedra.Engine.Management
 		private static bool _sleepTime;
 		private static float _targetVolume;
 	    private static bool _repeatItself;
-
+	    private static int _previousIndex;
 
         public static void Load(){
 			Source = new SoundSource(SoundManager.ListenerPosition);
 
-			TrackNames = new string[9];
+			TrackNames = new string[10];
             TrackNames[0] = "Sounds/VillageAmbient.ogg";
             TrackNames[1] = "Sounds/MainTheme.ogg";
-            TrackNames[2] = "Sounds/ForestAmbient.ogg";
-			TrackNames[3] = "Sounds/Song0.ogg";
-			TrackNames[4] = "Sounds/Song1.ogg";
-			TrackNames[5] = "Sounds/Song2.ogg";
-			TrackNames[6] = "Sounds/Song3.ogg";
-			TrackNames[7] = "Sounds/Song4.ogg";
-			TrackNames[8] = "Sounds/Song5.ogg";
+            TrackNames[2] = "Sounds/Rain.ogg";
+            TrackNames[3] = "Sounds/ForestAmbient.ogg";
+			TrackNames[4] = "Sounds/Song0.ogg";
+			TrackNames[5] = "Sounds/Song1.ogg";
+			TrackNames[6] = "Sounds/Song2.ogg";
+			TrackNames[7] = "Sounds/Song3.ogg";
+			TrackNames[8] = "Sounds/Song4.ogg";
+			TrackNames[9] = "Sounds/Song5.ogg";
 			
 			for(var i = 0; i < TrackNames.Length; i++){
 				if(TrackNames[i] == null)
@@ -71,22 +75,26 @@ namespace Hedra.Engine.Management
 		public static void PlayTrack(int Index, bool RepeatItself = false)
 		{
 		    _repeatItself = RepeatItself;
-            if(Index != _trackIndex) { 
-		        _trackIndex = Index;
+            if(Index != _trackIndex)
+            {
+                _previousIndex = _trackIndex;
+                _trackIndex = Index;
                 SoundtrackManager.StartCurrentSong();
             }
 		}
 
 	    private static void NextTrack()
 	    {
-	        if (_repeatItself) return;
-	        if (_trackIndex < TrackNames.Length - 1) _trackIndex++;
+	        _previousIndex = TrackIndex;
+            if (_repeatItself) return;
+            if (_trackIndex < TrackNames.Length - 1) _trackIndex++;
 	        else _trackIndex = LoopableSongsStart + 1;
 	    }
 
 	    private static void StartCurrentSong()
 	    {
-	        _sleepTime = false;
+            if(_previousIndex != TrackIndex)//Song is looping, no interpolation
+                _sleepTime = true;
 	        _usedBuffer = null;
 	        _buildBuffers = true;
 	        _receivedBytes = -1;
@@ -99,23 +107,25 @@ namespace Hedra.Engine.Management
 		
 		public static void Update(){
 
-            if ( !_loaded || (GameSettings.Paused && !GameManager.InStartMenu) || GameManager.IsLoading || TrackNames.Length == 0 || _trackIndex < 0) return;
+            if ( !_loaded || GameSettings.Paused && !GameManager.InStartMenu || GameManager.IsLoading || TrackNames.Length == 0 || _trackIndex < 0) return;
 			
 			Source.Position = SoundManager.ListenerPosition;
 			
-			if(!_sleepTime){
-				_targetVolume = Volume;		
-				if( Math.Abs(_targetVolume - FinalVolume) > 0.005f)
-					FinalVolume = Mathf.Lerp(FinalVolume, _targetVolume, (float) Time.unScaledDeltaTime);		
-			}else{
-				_targetVolume = 0f;
+			if(_sleepTime){
+				_targetVolume = 0;
 			}
+		    if (Math.Abs(_targetVolume - FinalVolume) < 0.005f && _sleepTime)
+		    {
+		        _targetVolume = Volume;
+		        _sleepTime = false;
+		    }
+            FinalVolume = Mathf.Lerp(FinalVolume, _targetVolume, (float)Time.unScaledDeltaTime);
 
             PLAY:
 
             if (FinalVolume < 0.005f) return;
 
-			if( _receivedBytes == 0 && Ticker.Tick())
+			if( _receivedBytes == 0 && (Ticker.Tick() || _repeatItself) )
 			{
                 SoundtrackManager.NextTrack();
 			    SoundtrackManager.StartCurrentSong();

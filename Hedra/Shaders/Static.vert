@@ -15,6 +15,7 @@ out vec4 Coords;
 out vec3 LightDir;
 out float CastShadows;
 out float Config;
+out float DitherVisibility;
 
 layout(std140) uniform FogSettings {
 	vec4 U_BotColor;
@@ -36,7 +37,7 @@ uniform vec3 Scale;
 uniform vec3 Offset;
 uniform vec3 BakedOffset;
 uniform mat4 TransformationMatrix;
-
+uniform float DitherRadius;
 const float ShadowTransition = 10.0;
 
 vec2 Unpack(float inp, int prec)
@@ -104,7 +105,8 @@ void main(){
 	
 	float DistanceToCamera = length(vec3(PlayerPosition - Vertex.xyz).xz);
 	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
-	
+	DitherVisibility = clamp( (DitherRadius - DistanceToCamera) / DitherRadius, 0.0, 1.0);
+
 	Vertex = TransformationMatrix * Vertex;
 	gl_Position = gl_ModelViewProjectionMatrix * Vertex;
 

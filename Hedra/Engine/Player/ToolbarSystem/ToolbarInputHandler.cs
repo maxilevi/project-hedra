@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public void HandleDown(object Sender, KeyboardKeyEventArgs EventArgs)
         {
-            if (!_player.CanInteract || _player.Movement.IsJumping || _player.Knocked || _player.IsDead || _player.IsSwimming || _player.IsAttacking
+            if (!_player.CanInteract || _player.Movement.IsJumping || _player.Knocked || _player.IsDead || _player.IsSwimming || _player.IsAttacking || _player.IsRiding
                 || _player.IsUnderwater || _player.IsGliding || _player.Inventory.Show || _player.AbilityTree.Show || _player.Trade.Show || GameSettings.Paused) return;
 
 

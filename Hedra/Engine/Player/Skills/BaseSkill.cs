@@ -80,7 +80,7 @@ namespace Hedra.Engine.Player.Skills
 		    if (CooldownSecondsText == null)
 		    {
 		        CooldownSecondsText = new RenderableText(string.Empty, _position, Color.White,
-		            FontCache.Get(AssetManager.Fonts.Families[0], 12, FontStyle.Bold));
+		            FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
 		        DrawManager.UIRenderer.Add(CooldownSecondsText, DrawOrder.After);
                 if(_panel.Enabled) CooldownSecondsText.Enable();
 		        _panel.AddElement(CooldownSecondsText);

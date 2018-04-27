@@ -332,7 +332,8 @@ namespace Hedra.Engine.EntitySystem
                     World.Particles.GravityEffect = .05f;
                     World.Particles.PositionErrorMargin = new Vector3(3f, 3f, 3f);
 
-                    SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position);
+                    if(!GameManager.InStartMenu)
+                        SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position);
                     for (var i = 0; i < 30; i++) World.Particles.Emit();
                     Splashed = true;
                 }

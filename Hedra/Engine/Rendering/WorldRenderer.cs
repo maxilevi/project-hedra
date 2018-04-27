@@ -152,6 +152,7 @@ namespace Hedra.Engine.Rendering
 		    StaticShader["Scale"] = Scale;
 		    StaticShader["Offset"] = Offset;
 		    StaticShader["Dither"] = Dither ? 1 : 0;
+		    StaticShader["DitherRadius"] = DitherRadius;
             StaticShader["TransformationMatrix"] = TransformationMatrix;
             StaticShader["AreaPositions"] = World.Highlighter.AreaPositions;
 			StaticShader["AreaColors"] = World.Highlighter.AreaColors;
@@ -206,6 +207,7 @@ namespace Hedra.Engine.Rendering
 
         #endregion
 
+	    public static float DitherRadius { get; set; } = 1f;
         public static bool Dither { get; set; } = false;
         public static bool EnableCulling { get; set; } = true;
         public static Vector3 BakedOffset { get; set; }

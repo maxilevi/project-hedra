@@ -150,6 +150,10 @@ namespace Hedra.Engine.Management
 				    {
 				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Ring)));
 				    }
+				    if (Parts[1] == "glider")
+				    {
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(ItemType.Glider));
+				    }
                     if (Parts[1] == "gold")
 				    {
 				        var item = ItemPool.Grab(ItemType.Gold);
