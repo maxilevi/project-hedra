@@ -193,7 +193,6 @@ namespace Hedra.Engine.EntitySystem
             set { Model.TargetRotation = value; }
         }
 
-
         public RenderShape Shape { get; set; }
         public Vector3 Size { get; set; }
 

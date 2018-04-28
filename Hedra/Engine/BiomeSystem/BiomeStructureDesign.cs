@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
@@ -16,5 +14,6 @@ namespace Hedra.Engine.BiomeSystem
         }
 
         public StructureDesign[] Designs => _designs.ToArray();
+        public abstract VillageScheme Scheme { get; }
     }
 }

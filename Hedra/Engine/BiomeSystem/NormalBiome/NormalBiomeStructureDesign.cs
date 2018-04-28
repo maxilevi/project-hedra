@@ -1,4 +1,5 @@
 ﻿using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
@@ -15,5 +16,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             this.AddDesign(new CampfireDesign());
             this.AddDesign(new TempleDesign());
         }
+
+        public override VillageScheme Scheme { get; } = new NormalVillageScheme();
     }
 }

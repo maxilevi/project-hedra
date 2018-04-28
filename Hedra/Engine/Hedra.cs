@@ -73,9 +73,10 @@ namespace Hedra
             Hedra.MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
-            CompatibilityManager.Load();
+		    AssetManager.Load();
+            CompatibilityManager.Load(appPath);
 
-		    Log.WriteLine("OS = " + Environment.OSVersion + Environment.NewLine +
+            Log.WriteLine("OS = " + Environment.OSVersion + Environment.NewLine +
 		                  "CPU = " + OSManager.CPUArchitecture + Environment.NewLine +
 		                  "Graphics Card = " + OSManager.GraphicsCard + Environment.NewLine);
 
@@ -94,8 +95,6 @@ namespace Hedra
 			_studioBackground.Enabled = true;
 		    _studioBackground.Opacity = 0;
 
-		    AssetManager.Load();
-
             GameLoader.AllocateMemory();
 			NameGenerator.Load();		
 			CacheManager.Load();
@@ -108,7 +107,7 @@ namespace Hedra
 			GameSettings.Load(appData + "settings.cfg");
 			Log.WriteLine("Settings loading was Successful");
 
-		    GameManager.Load();
+            GameManager.Load();
 			Log.WriteLine("Scene loading was Successful.");
 			Log.WriteLine("Supported GLSL version is : "+GL.GetString(StringName.ShadingLanguageVersion));
 

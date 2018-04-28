@@ -6,13 +6,8 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using System.Windows.Forms;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Shaders;
-using OpenTK.Graphics.OpenGL;
-using OpenTK;
 
 namespace Hedra.Engine.Rendering.Animation
 {
@@ -33,13 +28,15 @@ namespace Hedra.Engine.Rendering.Animation
 	        string sourceG = AssetManager.ReadShader("Shaders/AnimatedModelDeath.geom");
 	        string sourceF = AssetManager.ReadShader("Shaders/AnimatedModel.frag");
 
+	        if (CompatibilityManager.SupportsGeometryShaders)
+	        {
+	            sourceV = sourceV.Replace("pass_color", "pass_colors");
+	            sourceV = sourceV.Replace("pass_position", "pass_positions");
+	            sourceV = sourceV.Replace("pass_normal", "pass_normals");
+	            sourceF = sourceF.Replace("pass_visibility);", "1.0);");
+	        }
 
-	        sourceV = sourceV.Replace("pass_color", "pass_colors");
-	        sourceV = sourceV.Replace("pass_position", "pass_positions");
-	        sourceV = sourceV.Replace("pass_normal", "pass_normals");
-            sourceF = sourceF.Replace("pass_visibility);", "1.0);");
-
-            var dataV = new ShaderData
+	        var dataV = new ShaderData
 	        {
 	            Name = "AnimatedModelDeath.vert",
 	            Source = sourceV,
@@ -60,7 +57,7 @@ namespace Hedra.Engine.Rendering.Animation
                 SourceFinder = () => sourceF
             };
 
-            return Shader.Build(dataV, dataG, dataF);
+            return Shader.Build(dataV, CompatibilityManager.SupportsGeometryShaders ? dataG : null, dataF);
 	    }
 	}
 }

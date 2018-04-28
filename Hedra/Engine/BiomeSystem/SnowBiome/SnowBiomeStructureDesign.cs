@@ -1,4 +1,5 @@
 ﻿using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem.SnowBiome
 {
@@ -14,5 +15,7 @@ namespace Hedra.Engine.BiomeSystem.SnowBiome
             this.AddDesign(new ObeliskDesign());
             this.AddDesign(new CampfireDesign());
         }
+
+        public override VillageScheme Scheme { get; } = new NormalVillageScheme();
     }
 }

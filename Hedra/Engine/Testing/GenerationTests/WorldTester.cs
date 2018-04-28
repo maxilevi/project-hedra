@@ -2,7 +2,7 @@
 using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 
-namespace Hedra.Engine.UnitTesting.GenerationTests
+namespace Hedra.Engine.Testing.GenerationTests
 {
     public class WorldTester : BaseTest
     {

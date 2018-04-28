@@ -1,4 +1,5 @@
 ﻿using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem.LavaBiome
 {
@@ -14,5 +15,7 @@ namespace Hedra.Engine.BiomeSystem.LavaBiome
             this.AddDesign(new ObeliskDesign());
             this.AddDesign(new CampfireDesign());
         }
+
+        public override VillageScheme Scheme { get; } = new NormalVillageScheme();
     }
 }

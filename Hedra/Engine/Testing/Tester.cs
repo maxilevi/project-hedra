@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Text;
 using System.IO;
 
-namespace Hedra.Engine.UnitTesting
+namespace Hedra.Engine.Testing
 {
-    public static class UnitTester
+    public static class Tester
     {
         private static StringBuilder _buffer;
 
@@ -24,7 +24,7 @@ namespace Hedra.Engine.UnitTesting
                     test.Run();
                 }
             }
-            UnitTester.Dump(LogPath);
+            Tester.Dump(LogPath);
         }
 
         public static void Log(string Text)

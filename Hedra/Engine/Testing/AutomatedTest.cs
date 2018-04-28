@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Hedra.Engine.UnitTesting
+namespace Hedra.Engine.Testing
 {
-    public class TestMethod : Attribute {}
+    class AutomatedTest : Attribute {}
 }

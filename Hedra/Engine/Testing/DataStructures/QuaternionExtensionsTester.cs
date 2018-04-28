@@ -2,7 +2,7 @@
 using Hedra.Engine.ComplexMath;
 using OpenTK;
 
-namespace Hedra.Engine.UnitTesting.DataStructures
+namespace Hedra.Engine.Testing.DataStructures
 {
     public class QuaternionExtensionsTester : BaseTest
     {

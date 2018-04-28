@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Hedra.Engine.Management;
 
-namespace Hedra.Engine.UnitTesting.Managers
+namespace Hedra.Engine.Testing.Managers
 {
     public class ThreadManagerTester : BaseTest
     {

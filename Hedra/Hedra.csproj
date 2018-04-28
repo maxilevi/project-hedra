@@ -675,7 +675,11 @@
     <Compile Include="Engine\StructureSystem\TravellingMerchantDesign.cs" />
     <Compile Include="Engine\StructureSystem\StructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageDesign.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\NormalVillageScheme.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageScheme.cs" />
     <Compile Include="Engine\StructureSystem\WoodenFortDesign.cs" />
+    <Compile Include="Engine\Testing\AutomatedTest.cs" />
+    <Compile Include="Engine\Testing\AutomatedTests\MenuTest.cs" />
     <Compile Include="Engine\Time.cs" />
     <Compile Include="Engine\Generation\Block.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\Chunk.cs" />
@@ -694,14 +698,14 @@
     <Compile Include="Engine\TreeSystem\PineDesign.cs" />
     <Compile Include="Engine\TreeSystem\TallDesign.cs" />
     <Compile Include="Engine\TreeSystem\TreeDesign.cs" />
-    <Compile Include="Engine\UnitTesting\BaseTest.cs" />
-    <Compile Include="Engine\UnitTesting\CodePolicies\ShaderCodePolicy.cs" />
-    <Compile Include="Engine\UnitTesting\DataStructures\QuaternionExtensionsTester.cs" />
-    <Compile Include="Engine\UnitTesting\GenerationTests\WorldTester.cs" />
-    <Compile Include="Engine\UnitTesting\GraphicsTests\GraphicsWrapperTester.cs" />
-    <Compile Include="Engine\UnitTesting\Managers\ThreadManagerTester.cs" />
-    <Compile Include="Engine\UnitTesting\TestMethod.cs" />
-    <Compile Include="Engine\UnitTesting\UnitTester.cs" />
+    <Compile Include="Engine\Testing\BaseTest.cs" />
+    <Compile Include="Engine\Testing\CodePolicies\ShaderCodePolicy.cs" />
+    <Compile Include="Engine\Testing\DataStructures\QuaternionExtensionsTester.cs" />
+    <Compile Include="Engine\Testing\GenerationTests\WorldTester.cs" />
+    <Compile Include="Engine\Testing\GraphicsTests\GraphicsWrapperTester.cs" />
+    <Compile Include="Engine\Testing\Managers\ThreadManagerTester.cs" />
+    <Compile Include="Engine\Testing\TestMethod.cs" />
+    <Compile Include="Engine\Testing\Tester.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
@@ -10,9 +11,11 @@ namespace Hedra.Engine.BiomeSystem
         {
             _seed = Seed;
             Designs = StructureDesign.Designs;
+            Scheme = StructureDesign.Scheme;
         }
 
         public StructureDesign[] Designs { get; }
+        public VillageScheme Scheme { get; }
 
         public static RegionStructure Interpolate(params RegionStructure[] Regions)
         {

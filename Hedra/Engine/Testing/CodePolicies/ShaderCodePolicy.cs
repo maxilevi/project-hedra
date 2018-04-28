@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
 
-namespace Hedra.Engine.UnitTesting.CodePolicies
+namespace Hedra.Engine.Testing.CodePolicies
 {
     public class ShaderCodePolicy : BaseTest
     {

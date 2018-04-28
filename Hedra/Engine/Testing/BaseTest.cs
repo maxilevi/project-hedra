@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
+using Hedra.Engine.Management;
 
-namespace Hedra.Engine.UnitTesting
+namespace Hedra.Engine.Testing
 {
     public class BaseTest
     {
@@ -51,7 +53,7 @@ namespace Hedra.Engine.UnitTesting
             var methods = this.GetType().GetMethods();
             foreach (MethodInfo method in methods)
             {
-                if (method.IsDefined(typeof(TestMethod), true))
+                if (method.IsDefined(typeof(TestMethod), true) && false)
                 {
                     this.Reset();
                     TestName = this.GetType().Name + "." + method.Name;
@@ -60,9 +62,15 @@ namespace Hedra.Engine.UnitTesting
 
                     Engine.Log.Write(TestName + " ", ConsoleColor.Magenta);
                     Engine.Log.Write((Passed ? "PASSED" : "FAILED") + Environment.NewLine, Passed ? ConsoleColor.Green : ConsoleColor.Red);
-                    UnitTester.Log( string.IsNullOrEmpty(this.Log) ? this.Log : this.Log + Environment.NewLine);
+                    Tester.Log( string.IsNullOrEmpty(this.Log) ? this.Log : this.Log + Environment.NewLine);
                 }
             }
+
+            TaskManager.Parallel(delegate
+            {
+                var tests = methods.ToList().Where(M => M.IsDefined(typeof(AutomatedTest), true));
+                tests.ToList().ForEach( T => T.Invoke(this, null) );
+            });
         }
 
         /// <summary>
