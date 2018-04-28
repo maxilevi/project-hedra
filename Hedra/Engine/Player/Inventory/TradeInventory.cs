@@ -174,7 +174,7 @@ namespace Hedra.Engine.Player.Inventory
         private void TradeWithNearestMerchant()
         {
             var merchant = World.InRadius<Humanoid>(_player.Position, TradeRadius).FirstOrDefault(H => H.SearchComponent<MerchantComponent>() != null);
-            this.Trade(merchant);
+            if(merchant != null) this.Trade(merchant);
         }
 
         public override Key OpeningKey => Key.E;

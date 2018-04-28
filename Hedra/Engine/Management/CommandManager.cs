@@ -12,6 +12,7 @@ using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Sound;
 
@@ -62,7 +63,20 @@ namespace Hedra.Engine.Management
 			        }
 			        return true;
 			    }
-
+			    if (Parts[0] == "rain")
+			    {
+			        SkyManager.Weather.IsRaining = true;
+                    return true;
+			    }
+			    if (Parts[0] == "sunny")
+			    {
+			        SkyManager.Weather.IsRaining = false;
+			        return true;
+			    }
+                if (Parts[0] == "xp"){
+					LocalPlayer.Instance.XP += float.Parse(Parts[1]);
+					return true;
+				}
                 if (Parts[0] == "xp"){
 					LocalPlayer.Instance.XP += float.Parse(Parts[1]);
 					return true;

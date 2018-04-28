@@ -12,25 +12,20 @@ namespace Hedra.Engine.StructureSystem
 {
     public class VillageDesign : StructureDesign
     {
-        public static Vector3 StablePosition = -Vector3.UnitX * 160.0f - Vector3.UnitZ * 150.0f;
-        public static Vector3 BlacksmithPosition = -Vector3.UnitZ * 30 - Vector3.UnitX * 180f;
-        public static Vector3 MarketPosition = -Vector3.UnitY * 2.0f + Vector3.UnitZ * 140.0f;
-        public static Vector3 WindmillPosition = -Vector3.UnitY * 2.0f - Vector3.UnitZ * 140.0f;
-        public static Vector3 FarmPosition = -Vector3.UnitY * 2.0f - Vector3.UnitZ * 140.0f;
         public override int Radius { get; set; } = 900;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
 
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {
-            Matrix4 marketTransMatrix = Matrix4.CreateScale(5f) * Matrix4.CreateTranslation(MarketPosition);
-            Matrix4 farmTransMatrix = Matrix4.CreateScale(8f) * Matrix4.CreateTranslation(FarmPosition);
-            Matrix4 windmillTransMatrix = Matrix4.CreateScale(10f) * Matrix4.CreateTranslation(WindmillPosition);
-            Matrix4 stableTransMatrix = Matrix4.CreateScale(8f) * Matrix4.CreateTranslation(StablePosition);
-            Matrix4 blacksmithTransMatrix = Matrix4.CreateScale(5f) * Matrix4.CreateTranslation(BlacksmithPosition);
-
+            var region = World.BiomePool.GetRegion(Position);
+            var scheme = region.Structures.Scheme;
+            Matrix4 marketTransMatrix = Matrix4.CreateScale(5f) * Matrix4.CreateTranslation(scheme.MarketPosition);
+            Matrix4 farmTransMatrix = Matrix4.CreateScale(8f) * Matrix4.CreateTranslation(scheme.FarmPosition);
+            Matrix4 windmillTransMatrix = Matrix4.CreateScale(10f) * Matrix4.CreateTranslation(scheme.WindmillPosition);
+            Matrix4 stableTransMatrix = Matrix4.CreateScale(8f) * Matrix4.CreateTranslation(scheme.StablePosition);
+            Matrix4 blacksmithTransMatrix = Matrix4.CreateScale(5f) * Matrix4.CreateTranslation(scheme.BlacksmithPosition);
 
             var rng = new Random(World.Seed + 2341243);
-
 
             for (int j = 0; j < 3; j++)
             {
@@ -82,66 +77,20 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
-            Vector3 farmPosition = -Vector3.UnitY * 2.0f - Vector3.UnitZ * 140.0f;
+            BlockType type;
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            var region = World.BiomePool.GetRegion(TargetPosition);
+            var scheme = region.Structures.Scheme;
+
             try
             {
-
-                World.QuestManager.AddVillagePosition(
-                    TargetPosition + MarketPosition, 96);
-                World.QuestManager.AddVillagePosition(
-                    TargetPosition + farmPosition + Vector3.UnitX * 360f, 96);
-                World.QuestManager.AddVillagePosition(
-                    TargetPosition - Vector3.UnitX * 180.0f - Vector3.UnitZ * 140.0f, 64);
-                World.QuestManager.AddVillagePosition(TargetPosition + farmPosition, 96);
-                World.QuestManager.AddVillagePosition(
-                    TargetPosition + farmPosition + Vector3.UnitX * 220.0f + Vector3.UnitZ * 180, 96);
-                World.QuestManager.AddVillagePosition(
-                    TargetPosition + farmPosition + Vector3.UnitX * 220.0f + Vector3.UnitZ * 400, 96);
-                World.QuestManager.AddVillagePosition(
-                    TargetPosition + Vector3.UnitZ * -30 + Vector3.UnitX * -180, 64);
-
-                for (var i = 0; i < 2; i++)
-                {
-                    for (var j = 0; j < 3; j++)
-                    {
-                        World.QuestManager.AddVillagePosition(
-                            TargetPosition - Vector3.UnitX * 241.0f + Vector3.UnitZ * 60.0f
-                            + Vector3.UnitX * i * Chunk.BlockSize * 20f
-                            + Vector3.UnitZ * j * Chunk.BlockSize * 20f, 48);
-                    }
-                }
-
-                for (var i = 0; i < 2; i++)
-                {
-                    for (var j = 0; j < 3; j++)
-                    {
-                        World.QuestManager.AddVillagePosition(
-                            TargetPosition + Vector3.UnitX * 360.0f + Vector3.UnitZ * 60.0f
-                            + Vector3.UnitX * i * Chunk.BlockSize * 20f
-                            + Vector3.UnitZ * j * Chunk.BlockSize * 20f, 48);
-                    }
-                }
-
-                for (var i = 0; i < 2; i++)
-                {
-                    for (var j = 0; j < 2; j++)
-                    {
-                        World.QuestManager.AddVillagePosition(
-                            TargetPosition + Vector3.UnitX * 140.0f - Vector3.UnitZ * 175.0f
-                            + Vector3.UnitX * i * Chunk.BlockSize * 20f
-                            + Vector3.UnitZ * j * Chunk.BlockSize * 20f, 48);
-                    }
-                }
-            }
-            
+                scheme.PlaceGroundwork(TargetPosition, height);
+            }         
             catch (ArgumentException e)
             {
                 Log.WriteLine("Couldn't setup town here. " + e);
                 return null;
             }
-
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
 
             var plateau = new Plateau(TargetPosition, this.Radius, 800, height);
             World.QuestManager.AddPlateau(plateau);

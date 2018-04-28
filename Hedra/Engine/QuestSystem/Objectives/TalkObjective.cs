@@ -95,7 +95,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
             _talkTarget.AddComponent(new HeadIconComponent(_talkTarget));
             _talkTarget.SearchComponent<HeadIconComponent>().ShowIcon(CacheItem.AttentionIcon);
-            _stablePosition = this.ObjectivePosition + VillageDesign.StablePosition;
+            //_stablePosition = this.ObjectivePosition + VillageDesign.StablePosition;
 
             CoroutineManager.StartCoroutine(this.Update);
         }

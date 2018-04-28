@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Events;
@@ -24,21 +25,33 @@ namespace Hedra.Engine.Rendering.UI
 	{
 		private const float MoveSpeed = 2f;
 		public bool Animate = false;
-		private List<UIElement> _elements = new List<UIElement>();
 		public bool Enabled{get; private set;}
 		public Vector2 Position{get; private set;}
 		public event OnPanelStateChangeEventHandler OnPanelStateChange;
 		public event OnEscapePressedEventHandler OnEscapePressed;
+	    private bool _firstHover;
+	    private int _x;
+	    private int _y;
+	    private int _prevX;
+	    private int _prevY;
+	    private Button[][] _buttons;
+        private readonly List<UIElement> _elements;
+        public ReadOnlyCollection<UIElement> Elements => _elements.AsReadOnly();
 
-		public void Move(Vector2 Vec2){
-			for(int i = 0; i < _elements.Count;i++){
+	    public Panel()
+	    {
+	        _elements = new List<UIElement>();
+        }
+
+        public void Move(Vector2 Vec2){
+			for(var i = 0; i < _elements.Count;i++){
 				_elements[i].Position = _elements[i].Position + Vec2;
 			}
 			Position += Vec2;
 		}
 		
 		public void MoveTo(Vector2 Vec2){
-			for(int i = 0; i < _elements.Count;i++){
+			for(var i = 0; i < _elements.Count;i++){
 				Vector2 relativePos = _elements[i].Position - Position;
 				_elements[i].Position = Vec2 + relativePos;
 			}
@@ -47,11 +60,10 @@ namespace Hedra.Engine.Rendering.UI
 
 		public void Disable(){
 			Enabled = false;
-			for(int i = 0; i < _elements.Count;i++){
+			for(var i = 0; i < _elements.Count;i++){
 				_elements[i].Disable();
 			}
-			if(OnPanelStateChange != null)
-				OnPanelStateChange.Invoke(this, PanelState.Disabled);
+		    OnPanelStateChange?.Invoke(this, PanelState.Disabled);
 		}
 		
 		public void Enable(){
@@ -59,9 +71,7 @@ namespace Hedra.Engine.Rendering.UI
 			for(int i = 0; i < _elements.Count;i++){
 				_elements[i].Enable();
 			}
-			if(OnPanelStateChange != null)
-				OnPanelStateChange.Invoke(this, PanelState.Enabled);
-
+		    OnPanelStateChange?.Invoke(this, PanelState.Enabled);
 		}
 
 		public void AddElement(UIElement Element){
@@ -72,32 +82,28 @@ namespace Hedra.Engine.Rendering.UI
 		
 		public void RemoveElement(UIElement Element){
 			_elements.Remove(Element);
-			this.InitButtons();
+			this.InitializeButtons();
 		}
 		
-		private Button[][] _buttons;
-		private void InitButtons(){
-			
-			//Now detect all the colums
-			List<float> columns = new List<float>();
-			for(int i = 0; i < _elements.Count; i++){
+		private void InitializeButtons(){		
+			var columns = new List<float>();
+			for(var i = 0; i < _elements.Count; i++){
 				if( _elements[i] is Button && (_elements[i] as Button).Enabled && !columns.Contains(_elements[i].Position.X) ) columns.Add( _elements[i].Position.X );
 			}
 			columns.Sort();
 			
 			_buttons = new Button[columns.Count][];
-			for(int i = 0; i < _buttons.Length; i++){
+			for(var i = 0; i < _buttons.Length; i++){
 				
-				//First analyze the amount of rows
-				List<float> rows = new List<float>();
+				var rows = new List<float>();
 				for(int l = 0; l < _elements.Count; l++){
 					if( _elements[l] is Button && (_elements[l] as Button).Enabled && columns[i] == _elements[l].Position.X && !rows.Contains(_elements[l].Position.Y) ) rows.Add( _elements[l].Position.Y );
 				}
 				rows.Sort( new Comparison<float>( (F1, F2) => F2.CompareTo(F1) ));
 				
 				_buttons[i] = new Button[rows.Count];
-				for(int j = 0; j < _buttons[i].Length; j++){
-					for(int k = 0; k < _elements.Count; k++){
+				for(var j = 0; j < _buttons[i].Length; j++){
+					for(var k = 0; k < _elements.Count; k++){
 						if(_elements[k] is Button && (_elements[k] as Button).Enabled && columns[i] == _elements[k].Position.X && rows[j] == _elements[k].Position.Y)
 							_buttons[i][j] = _elements[k] as Button;
 					}
@@ -105,23 +111,20 @@ namespace Hedra.Engine.Rendering.UI
 			}
 		}
 		
-		private bool _mFirstHover = false;
-		private int _x = 0,_y = 0, _prevX, _prevY;//Indexes
 		public override void OnKeyDown(object Sender, KeyboardKeyEventArgs E)
 		{
 			if(!Enabled) return;
 			
 			if(E.Key == Key.Escape){
-				if(OnEscapePressed != null)
-					OnEscapePressed.Invoke(this, E);
-				return;
+			    OnEscapePressed?.Invoke(this, E);
+			    return;
 			}
 			
-			this.InitButtons();
+			this.InitializeButtons();
 			
 			if(_buttons == null || _buttons.Length == 0 || _buttons[0].Length == 0) return;
 			
-			if(E.Key == Key.Enter && _mFirstHover){
+			if(E.Key == Key.Enter && _firstHover){
 				if(_buttons[_x][_y].Enabled)
 					_buttons[_x][_y].OnHoverExit(Sender, E);
 				_buttons[_x][_y].ForceClick();
@@ -148,20 +151,19 @@ namespace Hedra.Engine.Rendering.UI
 			
 			if(_y< 0) _y = _buttons[_x].Length-1;
 			if(_y > _buttons[_x].Length-1) _y = 0;
-			
-			
-			if(_prevX != _x || _prevY != _y){
-				if(_mFirstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit(Sender, E);
-				_mFirstHover = true;
-				_prevX = _x;
-				_prevY = _y;
-				_buttons[_x][_y].OnHoverEnter(Sender, E);
-			}
+
+
+		    if (_prevX == _x && _prevY == _y) return;
+		    if(_firstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit(Sender, E);
+		    _firstHover = true;
+		    _prevX = _x;
+		    _prevY = _y;
+		    _buttons[_x][_y].OnHoverEnter(Sender, E);
 		}
 		
 		public override void OnMouseMove(object Sender, MouseMoveEventArgs E)
 		{
-			if(_mFirstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit(Sender, E);
+			if(_firstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit(Sender, E);
 		}
 		
 	}

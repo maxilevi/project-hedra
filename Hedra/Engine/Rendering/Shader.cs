@@ -187,7 +187,7 @@ namespace Hedra.Engine.Rendering
                         if(location == -1) throw new ArgumentException($"Uniform {Key} does not exist in shader");
 	                    _mappings.Add(Key, new UniformMapping(location, value));
 	                }
-                    if(this.ShaderId != GraphicsLayer.ShaderBound) throw new ArgumentException($"Uniforms need to be upload with the owner's shader bound.");
+                    if(this.ShaderId != GraphicsLayer.ShaderBound) throw new ArgumentException($"Uniforms need to be uploaded when the owner's shader is bound.");
 	                _mappings[Key].Value = value;
 	                Shader.LoadMapping(_mappings[Key]); 
 	            }

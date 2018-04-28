@@ -8,12 +8,12 @@ namespace Hedra.Engine.EnvironmentSystem
 {
     public class WeatherManager
     {
-        public bool IsRaining { get; private set; }
         private readonly ParticleSystem _rain;
         private readonly Random _rng;
         private readonly Timer _rainTimer;
         private int _previousTrackIndex;
         private bool _previousTrackState;
+        private bool _isRaining;
 
         public WeatherManager()
         {
@@ -27,14 +27,18 @@ namespace Hedra.Engine.EnvironmentSystem
 
         public void Update(Chunk UnderChunk)
         {
-            if(!UnderChunk.Biome.Sky.CanRain) return;
+            if (IsRaining)
+            {
+                this.ManageRain(UnderChunk);
+            }
+
+            if (!UnderChunk.Biome.Sky.CanRain) return;
 
             if (IsRaining)
             {
                 if (_rainTimer.Tick())
                 {
                     IsRaining = false;
-                    SoundtrackManager.PlayTrack(_previousTrackIndex, _previousTrackState);
                 }
             }
             if (!IsRaining)
@@ -42,15 +46,7 @@ namespace Hedra.Engine.EnvironmentSystem
                 if (_rng.Next(0, 6000) == 1)
                 {
                     IsRaining = true;
-                    _previousTrackIndex = SoundtrackManager.TrackIndex;
-                    _previousTrackState = SoundtrackManager.RepeatTrack;
-                    SoundtrackManager.PlayTrack(SoundtrackManager.RainIndex, true);
                 }
-            }
-
-            if (IsRaining)
-            {
-                this.ManageRain(UnderChunk);
             }
         }
 
@@ -75,6 +71,26 @@ namespace Hedra.Engine.EnvironmentSystem
             }
 
             _rain.Particles[_rain.Particles.Count - 1].Collides = true;
+        }
+
+        public bool IsRaining
+        {
+            get { return _isRaining; }
+            set
+            {
+                if (_isRaining == value) return;
+                _isRaining = value;
+                if (_isRaining)
+                {
+                    _previousTrackIndex = SoundtrackManager.TrackIndex;
+                    _previousTrackState = SoundtrackManager.RepeatTrack;
+                    SoundtrackManager.PlayTrack(SoundtrackManager.RainIndex, true);
+                }
+                else
+                {
+                    SoundtrackManager.PlayTrack(_previousTrackIndex, _previousTrackState);
+                }
+            }
         }
     }
 }

@@ -30,7 +30,6 @@ namespace Hedra.Engine.Rendering
             Shaders = new List<Shader>();
             PointLights = new PointLight[MaxLights];
             _lightPosition = new Vector3(0, 1000, 0);
-            _lightColor = new Vector3(1, 1, 1);
             for (var i = 0; i < PointLights.Length; i++){
 				PointLights[i] = new PointLight();
 			}

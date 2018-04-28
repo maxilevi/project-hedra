@@ -27,8 +27,9 @@ namespace Hedra.Engine.Rendering.UI
 		private PlayerInformation[] _information;
 		private readonly List<Humanoid> _humans;
 		private Humanoid _selectedHuman, _previousHuman;
-		private GUIText _level, _name;
-		private List<UIElement> _dataElements = new List<UIElement>();
+	    private readonly GUIText _level;
+	    private readonly GUIText _name;
+		private readonly List<UIElement> _dataElements = new List<UIElement>();
 		
 		public ChrChooserUI(LocalPlayer Player)
 		{

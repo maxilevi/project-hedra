@@ -15,6 +15,7 @@ namespace Hedra.Engine.Player.MapSystem
             this.RegisterStateItem(() => Player.View.MinDistance, O => Player.View.MinDistance = (float)O);
             this.RegisterStateItem(() => Player.View.WheelSpeed, O => Player.View.WheelSpeed = (float)O);
             this.RegisterStateItem(() => Player.View.TargetDistance, O => Player.View.TargetDistance = (float)O);
+            this.RegisterStateItem(() => Player.View.Distance, O => Player.View.Distance = (float)O);
             this.RegisterStateItem(() => Player.Movement.Check, O => Player.Movement.Check = (bool)O);
             this.RegisterStateItem(() => Player.View.Check, O => Player.View.Check = (bool)O);
             this.RegisterStateItem(() => Player.View.LockMouse, O => Player.View.LockMouse = (bool)O);

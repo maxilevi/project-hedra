@@ -7,11 +7,8 @@
 using System;
 using System.Collections.Generic;
 using OpenTK;
-using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Scenes;
 using Gen = Hedra.Engine.Generation;
 
 namespace Hedra.Engine.EnvironmentSystem
@@ -44,6 +41,7 @@ namespace Hedra.Engine.EnvironmentSystem
 	    private static Vector4 _nextTargetBiomeTopColor;
 	    private static Vector4 _targetBiomeBotColor;
 	    private static Vector4 _nextTargetBiomeBotColor;
+	    private static Vector3 _targetLightColor;
         private static float _minLight;
 	    private static float _maxLight;
 
@@ -172,16 +170,21 @@ namespace Hedra.Engine.EnvironmentSystem
 		        Skydome.BotColor = Mathf.Lerp(_targetBiomeBotColor, _nextTargetBiomeBotColor, SkyModifier / 6000);
 		    }
 		    if( Math.Abs(dayFactor - LastDayFactor) > .005f || LoadTime){
-				Vector3 newLightColor = Weather.IsRaining 
-                    ? Vector3.One * Mathf.Clamp(dayFactor * .7f, _minLight, _maxLight) 
-                    : Vector3.One * Mathf.Clamp(dayFactor * 1f, _minLight, _maxLight);
-
-			    newLightColor = new Vector3( Math.Max(0f, newLightColor.X), Math.Max(0f, newLightColor.Y), Math.Max(0f, newLightColor.Z) );
-				ShaderManager.LightColor = newLightColor;
-			    FogManager.UpdateFogSettings(FogManager.MinDistance, FogManager.MaxDistance);
+		        FogManager.UpdateFogSettings(FogManager.MinDistance, FogManager.MaxDistance);
                 LastDayFactor = dayFactor;
 			}
-			LoadTime = false;
+		    Vector3 newLightColor = Weather.IsRaining
+		        ? Vector3.One * Mathf.Clamp(dayFactor * .7f, _minLight, _maxLight)
+		        : Vector3.One * Mathf.Clamp(dayFactor * 1f, _minLight, _maxLight);
+
+		    _targetLightColor = new Vector3(Math.Max(0f, newLightColor.X), Math.Max(0f, newLightColor.Y), Math.Max(0f, newLightColor.Z));
+            var previousLightColor = ShaderManager.LightColor;
+		    var interpolatedLightColor = Mathf.Lerp(ShaderManager.LightColor, _targetLightColor, Time.unScaledDeltaTime * 12f);
+		    if ((previousLightColor - interpolatedLightColor).Length > 0.005f)
+		    {
+		        ShaderManager.LightColor = interpolatedLightColor;
+		    }
+            LoadTime = false;
 		}
 		
 		public static void Draw(){

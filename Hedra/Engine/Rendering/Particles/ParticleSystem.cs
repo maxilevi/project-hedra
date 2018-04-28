@@ -207,7 +207,7 @@ namespace Hedra.Engine.Rendering.Particles
 				}
 
 				GL.BindBuffer(BufferTarget.ArrayBuffer, BufferID);
-				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxParticleCount * Particle3D.SizeInBytes), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxParticles * Particle3D.SizeInBytes), IntPtr.Zero, BufferUsageHint.DynamicDraw);
 				GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, (IntPtr) (Particle3D.SizeInBytes * Particles.Count), Vec4s);
 			}
 		}
