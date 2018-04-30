@@ -69,14 +69,22 @@ namespace Hedra.Engine.EntitySystem
 			        if((Player.Position.Xz - desiredPosition.Xz).LengthSquared < 24f*Chunk.BlockSize*24f*Chunk.BlockSize)
 			            goto START;
 
-			        for(int i = World.Entities .Count- 1; i > -1; i--)
+			        try
 			        {
-			            if (World.Entities[i] == Player || World.Entities[i].IsStatic) continue;
+			            for (int i = World.Entities.Count - 1; i > -1; i--)
+			            {
+			                if (World.Entities[i] == Player || World.Entities[i].IsStatic) continue;
 
-			            if((World.Entities[i].BlockPosition.Xz - desiredPosition.Xz).LengthSquared < 64f * Chunk.BlockSize * 64f * Chunk.BlockSize)
-			                goto START;
+			                if ((World.Entities[i].BlockPosition.Xz - desiredPosition.Xz).LengthSquared <
+			                    64f * Chunk.BlockSize * 64f * Chunk.BlockSize)
+			                    goto START;
+			            }
 			        }
-						
+			        catch (IndexOutOfRangeException e)
+			        {
+			            Log.WriteLine(e.Message);
+                        goto START;
+			        }
 			        var newPosition = new Vector3(desiredPosition.X, Physics.HeightAtPosition(desiredPosition), desiredPosition.Z);
                     	
 			        SpawnTemplate template = this.SelectMobTemplate(newPosition);

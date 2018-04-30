@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Hedra.Engine.Events;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using OpenTK.Input;
@@ -17,7 +19,7 @@ namespace Hedra.Engine.Testing.AutomatedTests
         public void TestCharacterSelectionWorks()
         {
             this.GoToCreator();
-
+            
             var chooser = this.FindFirst<OptionChooser>(GameManager.Player.UI.ChrCreator.Elements);
             chooser.RightArrow.ForceClick();
             Thread.Sleep(100);
@@ -50,39 +52,49 @@ namespace Hedra.Engine.Testing.AutomatedTests
             this.GoToMenu();
         }
 
-        //[AutomatedTest]
+        [AutomatedTest]
         public void TestCanLoadWithNewCharacter()
         {
             Thread.Sleep(2000);
             this.GoToChooser();
-            var information = DataManager.PlayerFiles[
-                Array.IndexOf(DataManager.PlayerFiles, DataManager.PlayerFiles.First( F => F.Name == _characterName))
-            ];
-            GameManager.MakeCurrent(information);
+            ThreadManager.ExecuteOnMainThread(delegate
+            {
+                GameManager.MakeCurrent(DataManager.PlayerFiles.First(F => F.Name == _characterName));
+                CoroutineManager.StartCoroutine(TestCanPlayWithNewCharacter);
+            });
+        }
+
+        private IEnumerator TestCanPlayWithNewCharacter()
+        {
+            var passedTime = 0f;
+            var maxTime = 0f;
+            var wPress = this.SimulateKeyEvent(Key.W);
+            while (passedTime < maxTime)
+            {
+                //Program.GameWindow.
+                passedTime += (float)Time.deltaTime;
+                yield return null;
+            }
         }
 
         private void GoToChooser()
         {
-            GameManager.Player.UI.ChrChooser.Disable();
-            GameManager.Player.UI.ChrCreator.Enable();
+            this.GoToMenu();
+            this.Find<Button>(GameManager.Player.UI.Menu.Elements).First(B => B.Text.Text == "Load World").ForceClick();
             Thread.Sleep(500);
         }
 
         private void GoToCreator()
         {
-            GameManager.Player.UI.Menu.Disable();
-            GameManager.Player.UI.ChrChooser.Enable();
-            Thread.Sleep(500);
-            GameManager.Player.UI.ChrChooser.Disable();
-            GameManager.Player.UI.ChrCreator.Enable();
+            this.GoToMenu();
+            this.GoToChooser();
+            this.Find<Button>(GameManager.Player.UI.ChrChooser.Elements).First(B => B.Text.Text == "New Character").ForceClick();
             Thread.Sleep(500);
         }
 
         private void GoToMenu()
         {
             GameManager.Player.UI.ChrCreator.Disable();
-            GameManager.Player.UI.ChrChooser.Enable();
-            Thread.Sleep(500);
             GameManager.Player.UI.ChrChooser.Disable();
             GameManager.Player.UI.Menu.Enable();
             Thread.Sleep(500);

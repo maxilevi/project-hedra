@@ -21,8 +21,9 @@ namespace Hedra.Engine.Player
         private readonly Dictionary<Key, Action> _registeredKeys;
         private float _characterRotation;
         private float _yaw;
-        private Quaternion _tiltQuaternion;
         private float _targetYaw;
+        private Vector3 _angles;
+        private Vector3 _targetAngles;
 
         public PlayerMovement(LocalPlayer Player) : base(Player)
         {
@@ -94,23 +95,22 @@ namespace Hedra.Engine.Player
                 keysPresses += aPressed ? 1f : 0f;
                 keysPresses = 1f / (!wPressed && !sPressed && !aPressed && !dPressed ? 1f : keysPresses);
                 if (keysPresses < 1f) keysPresses *= 1.5f;
-                _yaw = Mathf.Lerp(_yaw, _targetYaw, (float)Time.deltaTime * 6f);
-                var rotationVector = Mathf.Clamp(new Vector3(1f-(float)Math.Cos(_yaw), 0, 1f-(float)Math.Sin(_yaw)), 0, 1f);
-                    _tiltQuaternion = Quaternion.Slerp(_tiltQuaternion,
-                    QuaternionMath.FromEuler(
-                            Mathf.Clamp(_player.View.TargetYaw - _yaw, -1f, 1f) * 45f * rotationVector * Mathf.Radian * (Program.GameWindow.Keyboard[Key.W] ? 1.0f : 1.0f)
-                    ),
-                    (float) Time.deltaTime * 16f);
-                Log.WriteLine(rotationVector);
+
+                _targetAngles.Z = 4f * (_player.View.StackedYaw - _yaw);
+                _targetAngles = Mathf.Clamp(_targetAngles, -7.5f, 7.5f);
+                _angles = Mathf.Lerp(_angles, _targetAngles * (Program.GameWindow.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.deltaTime * 8f);
+                _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.deltaTime * 2f);
+
                 if (Program.GameWindow.Keyboard[Key.W])
                 {
                     _targetYaw = _player.View.TargetYaw;
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Forward) * keysPresses);                   
                     this.Orientate();
                 }
-                _player.Model.Model.TransformationMatrix = Matrix4.CreateFromQuaternion(
-                    _tiltQuaternion
-                );
+                _player.Model.Model.TransformationMatrix = 
+                    Matrix4.CreateRotationY(-_player.Model.Model.Rotation.Y * Mathf.Radian) *
+                    Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian) *
+                    Matrix4.CreateRotationY(_player.Model.Model.Rotation.Y * Mathf.Radian);
                 if (Program.GameWindow.Keyboard[Key.S])
                 {
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Backward) * keysPresses);

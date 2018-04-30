@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Hedra.Engine.Management;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Testing
 {
@@ -111,6 +112,13 @@ namespace Hedra.Engine.Testing
                 Message = $"EQUAL expectation fails at {Obj1.ToString()} == {Obj2.ToString()}";
             }
             this.AssertTrue(Obj1.Equals(Obj2), Message);
+        }
+
+        protected KeyboardKeyEventArgs SimulateKeyEvent(Key Press)
+        {
+            var keyEvent = new KeyboardKeyEventArgs();
+            keyEvent.GetType().GetField("key", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(keyEvent, Press);
+            return keyEvent;
         }
     }
 }

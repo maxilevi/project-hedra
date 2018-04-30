@@ -110,7 +110,16 @@ namespace Hedra.Engine.Rendering.UI
 				}
 			}
 		}
-		
+
+	    public void ResetSelected()
+	    {
+	        _firstHover = false;
+	        _x = 0;
+	        _y = 0;
+	        _prevX = 0;
+	        _prevY = 0;
+	    }
+
 		public override void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs)
 		{
 			if(!Enabled) return;

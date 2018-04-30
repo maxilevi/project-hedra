@@ -22,13 +22,16 @@ namespace Hedra.Engine.Rendering
     public class TrailRenderer : IRenderable, IDisposable
     {
         private static readonly Shader Shader;
-        private readonly Func<Vector3> _tip;
+        public Func<Vector3> Tip { get; set; }
         private readonly List<TrailPoint> _tipPoints;
         private readonly VBO<Vector3> _points;
         private readonly VBO<Vector4> _colors;
         private readonly VAO<Vector3, Vector4> _data;
         public float Thickness { get; set; } = 1f;
+        public int UpdateRate { get; set; } = 8;
         public Vector4 Color { get; set; }
+        public float MaxLifetime { get; set; } = 1f;
+        public Vector3 Orientation { get; set; } = Vector3.UnitY;
         private int _times;
 
         static TrailRenderer()
@@ -38,7 +41,7 @@ namespace Hedra.Engine.Rendering
 
         public TrailRenderer(Func<Vector3> Tip, Vector4 Color)
         {
-            this._tip = Tip;
+            this.Tip = Tip;
             this._tipPoints = new List<TrailPoint>();
             this.Color = Color;
 
@@ -107,20 +110,20 @@ namespace Hedra.Engine.Rendering
                 var dir = b - a;
                 var ndir = dir.NormalizedFast();
 
-                var perp = ndir.Cross(Vector3.UnitY);
+                var perp = ndir.Cross(Orientation);
                 var c = b - perp * (Thickness / 2);
                 var d = b + perp * (Thickness / 2);
 
                 points.Add( new TrailPoint(d, smoothPoints[i-1].Lifetime, smoothPoints[i - 1].MaxLifetime, 0f));
                 points.Add( new TrailPoint(c, smoothPoints[i].Lifetime, smoothPoints[i].MaxLifetime, .3f));
                 
-                colors.Add(new Vector4(Color.Xyz, points[points.Count - 2].Alpha));
-                colors.Add(new Vector4(Color.Xyz, points[points.Count - 1].Alpha));
+                colors.Add(new Vector4(Color.Xyz, Color.W * points[points.Count - 2].Alpha));
+                colors.Add(new Vector4(Color.Xyz, Color.W * points[points.Count - 1].Alpha));
             }
             if (smoothPoints.Count >= 1)
             {
                 points.Add(smoothPoints[smoothPoints.Count - 1]);
-                colors.Add(new Vector4(Color.Xyz, points[points.Count-1].Alpha ));
+                colors.Add(new Vector4(Color.Xyz, Color.W * points[points.Count-1].Alpha ));
             }
 
             _points.Update(points.Select( p => p.Point).ToArray(), points.Count * Vector3.SizeInBytes);
@@ -128,10 +131,10 @@ namespace Hedra.Engine.Rendering
                 
             if (!Emit) return;
 
-            if(_times % 8 == 0)
+            if(_times % UpdateRate == 0)
             {
 
-                _tipPoints.Add( new TrailPoint(_tip(), 0.25f, 0.35f, .0f) );
+                _tipPoints.Add( new TrailPoint(Tip(), 0.35f * MaxLifetime * .75f, 0.35f * MaxLifetime, .0f) );
                 _times = 0;
             }
             _times++;
@@ -165,7 +168,7 @@ namespace Hedra.Engine.Rendering
             GraphicsLayer.Enable(EnableCap.Blend);
 
             Shader.Bind();
-
+                
             _data.Bind();
 
             GraphicsLayer.EnableVertexAttribArray(0);

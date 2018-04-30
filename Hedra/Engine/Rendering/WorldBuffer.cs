@@ -34,7 +34,7 @@ namespace Hedra.Engine.Rendering
 		public WorldBuffer(PoolSize Size)
 		{
 		    const int megabyte = 1048576;
-		    float realPoolSize = (int) Size / 100f * (.4f + 0.025f * (GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius));
+		    float realPoolSize = (int) Size / 100f * (.5f + 0.025f * (GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius));
 
 			Indices = new GeometryPool<uint>( (int) (megabyte * 9f * realPoolSize), sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer, BufferUsageHint.DynamicDraw);
 			Vertices = new GeometryPool<Vector3>( (int) (megabyte * 7f * realPoolSize), Vector3.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);

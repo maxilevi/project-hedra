@@ -153,11 +153,11 @@ namespace Hedra.Engine.Generation
                                     .LengthSquared;
 
                                 if (CameraDist > 288 * 288 && CameraDist < 576 * 576 && GameSettings.Lod)
-                                    Chunks[i].Lod = 2;
+                                    Chunks[i].Lod = _player.IsGliding ? 4 : 2;
                                 else if (CameraDist > 576 * 576 && GameSettings.Lod)
                                     Chunks[i].Lod = 4;
                                 else
-                                    Chunks[i].Lod = 1;
+                                    Chunks[i].Lod = _player.IsGliding ? 4 : 1;
 
                                 if (Chunks[i].Mesh != null)
                                     Chunks[i].Mesh.DontCull = false;

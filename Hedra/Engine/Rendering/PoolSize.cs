@@ -12,5 +12,6 @@ namespace Hedra.Engine.Rendering
         Small = 50,
         Normal = 75,
         Big = 100,
+        SuperBig = 200,
     }
 }

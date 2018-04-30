@@ -120,7 +120,7 @@ namespace Hedra
 			_renderText = new GUIText("", new Vector2(.65f,-.5f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));			
 			_meshesText = new GUIText("", new Vector2(.65f,-.4f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
 			_cameraText = new GUIText("", new Vector2(.65f,-.3f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
-			//_geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
+			_geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
             /*Texture WaterTexture = new Texture(WaterEffects.WaterFBO.TextureID[0], Vector2.Zero, Vector2.One);
 			WaterTexture.TextureElement.Flipped = true;
 			
@@ -132,7 +132,7 @@ namespace Hedra
 			_debugPanel.AddElement(_meshQueueCount);
 			_debugPanel.AddElement(_meshesText);
 			_debugPanel.AddElement(_cameraText);
-            //_debugPanel.AddElement(_geomPoolMemory);
+            _debugPanel.AddElement(_geomPoolMemory);
 			_debugPanel.Disable();
 			
 			GL.BlendEquation(BlendEquationMode.FuncAdd);
@@ -241,7 +241,7 @@ namespace Hedra
 				_generationQueueCount.Text =  "Generation Queue ="+ World.ChunkGenerationQueue.Queue.Count+" Mobs = "+MobCount +" Yaw = "+Player.View.TargetYaw;
 				_renderText.Text = "Textures = "+Graphics2D.Textures.Count+" Seed= "+ World.Seed + " FPS= "+Utils.LastFrameRate + " MS="+Utils.FrameProccesingTime;
 				_cameraText.Text = "Pitch = "+Player.View.TargetPitch+" Physics Calls = "+ Physics.Manager.Count;
-                /*
+                
 			    _passedTime += Time.FrameTimeSeconds;
 			    if (_passedTime > 5.0f)
 			    {
@@ -249,7 +249,7 @@ namespace Hedra
 			        Graphics2D.Textures.Remove(_geomPoolMemory.TextureElement.TextureId);
                     GL.DeleteTexture(_geomPoolMemory.TextureElement.TextureId);
 			        _geomPoolMemory.TextureElement.TextureId = Graphics2D.LoadTexture(WorldRenderer.StaticBuffer.Indices.Draw());
-			    }*/
+			    }
 			}
             else
 				_debugPanel.Disable();
