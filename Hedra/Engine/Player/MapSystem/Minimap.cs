@@ -83,11 +83,11 @@ namespace Hedra.Engine.Player.MapSystem
 		    _player.View.Yaw = -1.55f;
 		    _player.View.Distance = 100f;
 		    _player.View.Pitch = -10f;
-		    _player.View.RebuildMatrix();
+		    _player.View.BuildCameraMatrix();
 
 		    var rotationMatrix =
-		        Matrix4.CreateFromQuaternion(QuaternionMath.ToQuaternion(-_player.Model.Model.Rotation.Y * Vector3.UnitY * Mathf.Radian));
-		    DrawManager.FrustumObject.SetFrustum(_player.View.Matrix * rotationMatrix);
+		        Matrix4.CreateFromQuaternion(QuaternionMath.FromEuler(-_player.Model.Model.Rotation.Y * Vector3.UnitY * Mathf.Radian));
+		    DrawManager.FrustumObject.SetFrustum(_player.View.ModelViewMatrix * rotationMatrix);
 
             GraphicsLayer.MatrixMode(MatrixMode.Projection);
 		    var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
@@ -108,8 +108,8 @@ namespace Hedra.Engine.Player.MapSystem
 		    _player.View.Yaw = oldFacing;
 		    _player.View.Distance = oldDistance;
 
-		    _player.View.RebuildMatrix();
-		    DrawManager.FrustumObject.SetFrustum(_player.View.Matrix);
+		    _player.View.BuildCameraMatrix();
+		    DrawManager.FrustumObject.SetFrustum(_player.View.ModelViewMatrix);
 
 		    GraphicsLayer.Disable(EnableCap.DepthTest);
 		    GraphicsLayer.Enable(EnableCap.Blend);

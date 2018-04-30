@@ -1,9 +1,9 @@
 {
   "Name" : "Roach", 
-  "MaxHealth": 280.0,
-  "AttackDamage": 20.0,
+  "MaxHealth": 240.0,
+  "AttackDamage": 22.0,
   "Speed": 4.5,
-  "XP": 3.0,
+  "XP": 4.0,
   "AIType": "Hostile",
   "Ridable": false,
   "Effects": [

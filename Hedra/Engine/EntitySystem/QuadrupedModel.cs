@@ -192,7 +192,7 @@ namespace Hedra.Engine.EntitySystem
             set
             {
                 _eulerTargetRotation = value;
-                _quaternionTargetRotation = QuaternionMath.ToQuaternion(_eulerTargetRotation * Mathf.Radian);
+                _quaternionTargetRotation = QuaternionMath.FromEuler(_eulerTargetRotation * Mathf.Radian);
             }
         }
 

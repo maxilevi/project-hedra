@@ -97,7 +97,7 @@ namespace Hedra.Engine.Rendering
 
         public float Length => _maxZ - _minZ;
 
-        private Matrix4 CameraRotationMatrix => new Matrix4(new Matrix3(_view.Matrix));
+        private Matrix4 CameraRotationMatrix => new Matrix4(new Matrix3(_view.ModelViewMatrix));
 
 
         private Vector4[] CalculateFrustumVertices(Matrix4 Rotation, Vector3 ForwardVector, Vector3 CenterNear, Vector3 CenterFar)

@@ -52,7 +52,7 @@ namespace Hedra.Engine.Player
 		public override void KeyDown(){
 			Player.IsCasting = true;
 			Casting = true;
-			Player.Movement.Check = false;
+			Player.Movement.CaptureMovement = false;
 			Continue = true;
 			if(Light == null){
 				Light = ShaderManager.GetAvailableLight();
@@ -77,13 +77,13 @@ namespace Hedra.Engine.Player
 				
 				Player.Mana -= Engine.Time.FrameTimeSeconds * 40f;
 				
-				Player.Movement.OrientatePlayer(Player);
+				Player.Movement.Orientate();
 				SetupParticles();
 				
 				if(!Continue){
 					Player.IsCasting = false;
 					Casting = false;
-					Player.Movement.Check = true;
+					Player.Movement.CaptureMovement = true;
 				}
 				
 			}else if(!Casting && Light != null){

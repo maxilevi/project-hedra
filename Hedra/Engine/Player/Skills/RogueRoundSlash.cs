@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player
 			Player.IsAttacking = true;
 			Player.Model.Model.Animator.StopBlend();
 			Player.Model.Model.PlayAnimation(RoundSlashAnimation);
-			Player.Movement.OrientatePlayer(Player);
+			Player.Movement.Orientate();
 			Player.Model.LeftWeapon.InAttackStance = true;
 		}
 		

@@ -127,7 +127,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 this.SecondBlade.TargetRotation = PrimaryAttack ? new Vector3(180, 180, 45) : new Vector3(180, 180, 0f);
                 this.SecondBlade.BeforeLocalRotation = PrimaryAttack ? -Vector3.UnitY * .35f : Vector3.UnitY * -0.7f;
             }
-
+            base.ApplyEffects(SecondBlade);
         }
     }
 }

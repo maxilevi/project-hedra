@@ -328,9 +328,8 @@ namespace Hedra.Engine.QuestSystem
 
             float heightAtPosition = Physics.HeightAtPosition(housePosition);
 		    position.Y = heightAtPosition;
-		    //if (Math.Abs(heightAtPosition - housePosition.Y) > 4)
-		    //    yield break;
-
+		    if (Math.Abs(heightAtPosition - housePosition.Y) > 4)
+		        yield break;
             TaskManager.Parallel( delegate{
                 //var post = new LampPost(transMatrix.ExtractTranslation() + position + Vector3.UnitY * 24f);
                 //post.Radius = 384;
@@ -340,13 +339,10 @@ namespace Hedra.Engine.QuestSystem
 			
 				VertexData houseModel = HouseModels[houseType].Clone();
 				Matrix4 houseMatrix = Matrix4.Identity;
-				if(houseType == 0)
-					houseMatrix =  Matrix4.CreateScale( new Vector3(1.45f,1.45f,1.45f) );
-				else
-					houseMatrix =  Matrix4.CreateScale( new Vector3(1.5f,1.5f,1.5f) );
-					
-                
-				houseModel.Transform(houseMatrix);
+                houseMatrix = Matrix4.CreateScale(houseType == 0 ? new Vector3(1.45f,1.45f,1.45f) : new Vector3(1.5f,1.5f,1.5f));
+
+
+                houseModel.Transform(houseMatrix);
 				houseModel.Transform(transMatrix);
 				houseModel.Transform(position);
 				//houseModel.GraduateColor(Vector3.UnitY);
@@ -397,8 +393,9 @@ namespace Hedra.Engine.QuestSystem
 					yield return null;
 				}
 			    float heightAtPosition = Physics.HeightAtPosition(position);
-			    farmPosition.Y = heightAtPosition;
-
+			    if (Math.Abs(heightAtPosition - farmPosition.Y) > 3)
+			        continue;
+                farmPosition.Y = heightAtPosition;
                 //Vector3 terrainNormal = Physics.NormalAtPosition(position.X, position.Z);
                 //var lookAt = new Matrix4(new Matrix3(Mathf.RotationAlign(Vector3.UnitY, terrainNormal)));
                 VertexData farmModel = CacheManager.GetModel(CacheItem.Farm).Clone();

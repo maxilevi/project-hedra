@@ -80,7 +80,7 @@ namespace Hedra.Engine.Player
 			Player.Model.LeftWeapon.InAttackStance = true;
 			Player.Model.Model.Animator.StopBlend();
 			Player.Model.Model.PlayAnimation(ShootAnimation);
-			Player.Movement.OrientatePlayer( Player );
+			Player.Movement.Orientate();
 		}
 		
 		public override void Update(){}

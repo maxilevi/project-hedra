@@ -32,7 +32,7 @@ namespace Hedra.Engine.EntitySystem
 			LocalPlayer Player = GameManager.Player;
 			Parent.Model.Tint = new Vector4(1f,1f,1f,1);
 			if( (Parent.Position - Player.Position).LengthSquared < 16*16 
-			   && Vector3.Dot( (Parent.Position - Player.Position).NormalizedFast(), Player.View.LookAtPoint.NormalizedFast()) > .6f ){
+			   && Vector3.Dot( (Parent.Position - Player.Position).NormalizedFast(), Player.View.LookingDirection) > .6f ){
 			    Player.MessageDispatcher.ShowMessage("[E] COLLECT", .5f);
 				Parent.Model.Tint = new Vector4(1.5f,1.5f,1.5f,1);
 			}
@@ -41,7 +41,7 @@ namespace Hedra.Engine.EntitySystem
 		public void Interact(LocalPlayer Player){
 			if(_interacted) return;
 			if( (Parent.Position - Player.Position).LengthSquared > 16*16 
-			   || Vector3.Dot( (Parent.Position - Player.Position).NormalizedFast(), Player.View.LookAtPoint.NormalizedFast()) < .6f )return;
+			   || Vector3.Dot( (Parent.Position - Player.Position).NormalizedFast(), Player.View.LookingDirection) < .6f )return;
 			
 			var berry = ItemPool.Grab(ItemType.Berry);
 		    if (!Player.Inventory.AddItem(berry))

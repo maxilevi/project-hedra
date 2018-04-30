@@ -33,8 +33,30 @@ namespace Hedra.Engine
 		    u.f = u.f * (1.5f - xhalf * u.f * u.f);
 		    return u.f * z;
 		}
-		
-		public static Vector3 RotationInDirection(Vector3 D){
+
+	    public static Vector3 Sign(Vector3 Vector)
+	    {
+	        return new Vector3(Math.Sign(Vector.X), Math.Sign(Vector.Y), Math.Sign(Vector.Z));
+	    }
+
+        public static Vector3 Abs(Vector3 Vector)
+	    {
+	        return new Vector3(Math.Abs(Vector.X), Math.Abs(Vector.Y), Math.Abs(Vector.Z));
+	    }
+
+        public static float CosineInterpolate(float Y1, float Y2, float Mu)
+        {
+            float mu2 = (float) (1 - Math.Cos(Mu * Math.PI)) / 2;
+            return Y1 * (1 - mu2) + Y2 * mu2;
+        }
+
+	    public static Vector3 CosineInterpolate(Vector3 Y1, Vector3 Y2, float Mu)
+	    {
+	        float mu2 = (float) (1 - Math.Cos(Mu * Math.PI)) / 2;
+	        return Y1 * (1 - mu2) + Y2 * mu2;
+	    }
+
+        public static Vector3 RotationInDirection(Vector3 D){
 			Matrix4 MV = Mathf.RotationAlign(-Vector3.UnitY, D);
 			Vector3 Axis;
 			float Angle;
@@ -167,10 +189,6 @@ namespace Hedra.Engine
 			return Color.FromArgb((byte)Mathf.Clamp((int)(v.W * 255),0,255), (byte) Mathf.Clamp((int)(v.X * 255),0,255), (byte)Mathf.Clamp((int) (v.Y * 255),0,255), (byte)Mathf.Clamp((int) (v.Z * 255),0,255));
         }
 		
-		public static double InterpolateDouble(double d, double target){
-			return (d + target) / 2;
-		}
-		
 		public static Matrix4 CreateTransformationMatrix(Vector3 Scale, Vector3 Position){
 			Matrix4 TransMatrix = Matrix4.CreateTranslation(Position);
 			TransMatrix *= Matrix4.CreateScale(Scale);
@@ -196,17 +214,6 @@ namespace Hedra.Engine
 			result.Z = m.M31 * v.X + m.M32 * v.Y + m.M33 * v.Z + m.M34 * v.W;
 			result.W = m.M41 * v.X + m.M42 * v.Y + m.M43 * v.Z + m.M44 * v.W;
 			return result;
-		}
-		
-		public static Vector3[] CreateCircle(Vector3 Center, int Radius){
-			List<Vector3> InsideCircles = new List<Vector3>();
-			for(int x = 0; x < Radius * 4; x++){
-				for(int z = 0; z < Radius * 4; z++){
-					if( (Center - (Center + new Vector3(x-(Radius * 2), 0, z-(Radius * 2))) ).Length <= Radius)
-						InsideCircles.Add( Center + new Vector3( x-(Radius * 2), 0, z-(Radius * 2) ) );
-				}
-			}
-			return InsideCircles.ToArray();
 		}
 		
 		public static Vector2 ToNormalizedDeviceCoordinates(Vector2 Vec2) {
@@ -318,18 +325,6 @@ namespace Hedra.Engine
 			return (uint)( (Color.A << 24) | (Color.R << 16) | (Color.G << 8) | (Color.B << 0) );
 		}
 		
-		private static bool AllSame(IEnumerable<int> list)
-		{
-		    bool first = true;
-		    int comparand = 0;
-		    foreach (int i in list) {
-		       if (first) comparand = i;
-		       else if (i != comparand) return false;
-		       first = false;
-		    }
-		    return true;
-		}
-		
 		public static double NextGaussian(this Random r, double mu = 0, double sigma = 1)
         {
             var u1 = r.NextDouble();
@@ -400,11 +395,6 @@ namespace Hedra.Engine
 			Vector2 Direction = Point;
 			Direction.NormalizeFast();
 			return Direction;
-		}
-		
-        public static bool AllSame(params int[] list)
-		{
-        	return AllSame(list as IEnumerable<int>);
 		}
 		
 		[StructLayout(LayoutKind.Explicit)]

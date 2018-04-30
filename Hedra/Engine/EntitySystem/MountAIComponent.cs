@@ -89,7 +89,7 @@ namespace Hedra.Engine.EntitySystem
 			if(QuadModel.WalkAnimation == QuadModel.Model.Animator.AnimationPlaying && Target != null){
 				Parent.Orientation = (Target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
 				Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
-				Parent.Physics.Move( Parent.Speed * 8 * Parent.Orientation );
+				Parent.Physics.Move( Parent.Speed * 8 * Parent.Orientation * (float)Time.deltaTime);
 			}
 			
 			if( (Target == Owner || Target == null) ){

@@ -42,7 +42,7 @@ namespace Hedra.Engine.Player
 			base.MaxCooldown = 6f - 1f*base.Level;
 			base.ManaCost = 30f - 5f * base.Level;
 			
-			Player.Movement.JumpDist = 12f;
+			//Player.Movement.JumpingDistance = 12f;
 			Player.Movement.Jump();
 		}
 		
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player
 				
 				if(base.Cooldown <= base.MaxCooldown - Duration){
 					Emitting = false;
-					Player.Movement.JumpDist = 4f;
+					//Player.Movement.JumpingDistance = 4f;
 				}
 			}
 		}

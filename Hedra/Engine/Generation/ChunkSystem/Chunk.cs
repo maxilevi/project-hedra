@@ -418,11 +418,19 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (Disposed || X > BoundsX - 1 || Z > BoundsZ - 1 || X < 0 || Z < 0) return new Block();
             if (Landscape == null || !Landscape.BlocksSetted) return new Block();
 
-            for (int y = BoundsY - 1; y > -1; y--)
+            try
             {
-                Block B = Voxels[X][y][Z];
-                if (B.Type != BlockType.Air && B.Type != BlockType.Water)
-                    return Voxels[X][y][Z];
+                for (int y = BoundsY - 1; y > -1; y--)
+                {
+                    Block B = Voxels[X][y][Z];
+                    if (B.Type != BlockType.Air && B.Type != BlockType.Water)
+                        return Voxels[X][y][Z];
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                Log.WriteLine(e.Message);
+                return new Block();
             }
             return new Block();
         }

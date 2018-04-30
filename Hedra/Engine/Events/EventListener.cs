@@ -15,18 +15,18 @@ namespace Hedra.Engine.Events
 			EventDispatcher.Add(this);
 		}
 		
-		public virtual void OnMouseButtonUp(object sender, MouseButtonEventArgs e){}
+		public virtual void OnMouseButtonUp(object Sender, MouseButtonEventArgs e){}
 		
-		public virtual void OnMouseButtonDown(object sender, MouseButtonEventArgs e){}
+		public virtual void OnMouseButtonDown(object Sender, MouseButtonEventArgs e){}
 		
-		public virtual void OnMouseWheel(object sender, MouseWheelEventArgs e){}
+		public virtual void OnMouseWheel(object Sender, MouseWheelEventArgs e){}
 		
-		public virtual void OnMouseMove(object sender, MouseMoveEventArgs e){}
+		public virtual void OnMouseMove(object Sender, MouseMoveEventArgs e){}
 		
-		public virtual void OnKeyDown(object sender, KeyboardKeyEventArgs e){}
+		public virtual void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs){}
 
-		public virtual void OnKeyUp(object sender, KeyboardKeyEventArgs e){}
+		public virtual void OnKeyUp(object Sender, KeyboardKeyEventArgs e){}
 		
-		public virtual void OnKeyPress(object sender, KeyPressEventArgs e){}
+		public virtual void OnKeyPress(object Sender, KeyPressEventArgs e){}
 	}
 }

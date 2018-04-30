@@ -118,7 +118,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
                 if ((_talkTarget.Position - GameManager.Player.Position).LengthSquared < 10 * 10
                     && Vector3.Dot((_talkTarget.Position - GameManager.Player.Position).NormalizedFast(),
-                        GameManager.Player.View.LookAtPoint.NormalizedFast()) > .6f)
+                        GameManager.Player.View.LookingDirection) > .6f)
                 {
 
                     _talkTarget.Model.Tint = new Vector4(1.5f, 1.5f, 1.5f, 1.0f);

@@ -8,6 +8,7 @@ namespace Hedra.Engine.Sound
         public float Radius { get; set; }
         public SoundType Type { get; set; }
         public Vector3 Position { get; set; }
+        public float Pitch { get; set; }
         private float _targetGain;
         private SoundItem _sound;
         private SoundType _bufferType;
@@ -27,7 +28,7 @@ namespace Hedra.Engine.Sound
 
             if (this._sound != null && (!this._sound.Source.IsPlaying || Type != _bufferType) && Condition)
             {
-                this._sound.Source.Play(SoundManager.GetBuffer(Type), this.Position, 1f, 1f, true);
+                this._sound.Source.Play(SoundManager.GetBuffer(Type), this.Position, Pitch, 1f, true);
                 _bufferType = Type;
             }
 

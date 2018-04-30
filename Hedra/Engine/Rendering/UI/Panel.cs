@@ -111,12 +111,12 @@ namespace Hedra.Engine.Rendering.UI
 			}
 		}
 		
-		public override void OnKeyDown(object Sender, KeyboardKeyEventArgs E)
+		public override void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs)
 		{
 			if(!Enabled) return;
 			
-			if(E.Key == Key.Escape){
-			    OnEscapePressed?.Invoke(this, E);
+			if(EventArgs.Key == Key.Escape){
+			    OnEscapePressed?.Invoke(this, EventArgs);
 			    return;
 			}
 			
@@ -124,17 +124,17 @@ namespace Hedra.Engine.Rendering.UI
 			
 			if(_buttons == null || _buttons.Length == 0 || _buttons[0].Length == 0) return;
 			
-			if(E.Key == Key.Enter && _firstHover){
+			if(EventArgs.Key == Key.Enter && _firstHover){
 				if(_buttons[_x][_y].Enabled)
-					_buttons[_x][_y].OnHoverExit(Sender, E);
+					_buttons[_x][_y].OnHoverExit(Sender, EventArgs);
 				_buttons[_x][_y].ForceClick();
 				return;
 			}
 			
-			if(E.Key == Key.Right) _x++;
-			if(E.Key == Key.Left) _x--;
-			if(E.Key == Key.Up) _y--;
-			if(E.Key == Key.Down) _y++;
+			if(EventArgs.Key == Key.Right) _x++;
+			if(EventArgs.Key == Key.Left) _x--;
+			if(EventArgs.Key == Key.Up) _y--;
+			if(EventArgs.Key == Key.Down) _y++;
 			
 			if(_y == -1 && _buttons[_x].Length-1 == 0){
 				int newX = _x;
@@ -154,11 +154,11 @@ namespace Hedra.Engine.Rendering.UI
 
 
 		    if (_prevX == _x && _prevY == _y) return;
-		    if(_firstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit(Sender, E);
+		    if(_firstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit(Sender, EventArgs);
 		    _firstHover = true;
 		    _prevX = _x;
 		    _prevY = _y;
-		    _buttons[_x][_y].OnHoverEnter(Sender, E);
+		    _buttons[_x][_y].OnHoverEnter(Sender, EventArgs);
 		}
 		
 		public override void OnMouseMove(object Sender, MouseMoveEventArgs E)

@@ -245,7 +245,7 @@ namespace Hedra.Engine.EntitySystem
             if (Damager != null)
             {
                 Vector3 increment = (-(Damager.Position.Xz - Position.Xz)).ToVector3();
-                Physics.Move(increment * .2f);
+                Physics.Move(increment * .2f * (float)Time.deltaTime);
             }
         }
 
@@ -433,11 +433,7 @@ namespace Hedra.Engine.EntitySystem
                 Components[i].Dispose();
 
             var humanoid = this as Humanoid;
-            if (humanoid != null)
-            {
-                humanoid.HandLamp.Dispose();
-                humanoid.Movement.Dispose();
-            }
+            humanoid?.HandLamp.Dispose();
 
             (Model as IAudible)?.StopSound();
 

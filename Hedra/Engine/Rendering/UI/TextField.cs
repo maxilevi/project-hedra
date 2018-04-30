@@ -59,9 +59,9 @@ namespace Hedra.Engine.Rendering.UI
 			}
 		}
 		
-		public override void OnKeyDown(object Sender, KeyboardKeyEventArgs E){
+		public override void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs){
 			if(InFocus && this._enabled){
-				if(E.Key == Key.BackSpace || E.Key == Key.BackSlash || E.Key == Key.NonUSBackSlash){
+				if(EventArgs.Key == Key.BackSpace || EventArgs.Key == Key.BackSlash || EventArgs.Key == Key.NonUSBackSlash){
 					if(Text.Length > 0){
 						Text = Text.Substring(0, Text.Length-1);
 						_caretIndex--;

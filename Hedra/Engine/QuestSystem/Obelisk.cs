@@ -36,7 +36,7 @@ namespace Hedra.Engine.QuestSystem
 			var player = GameManager.Player;
 
 			if(( player.Position - base.Position).LengthSquared < ClaimDistance*ClaimDistance && !_used && !GameSettings.Paused 
-			   && Vector3.Dot( (base.Position - player.Position).NormalizedFast(), player.View.LookAtPoint.NormalizedFast()) > .6f)
+			   && Vector3.Dot( (base.Position - player.Position).NormalizedFast(), player.View.LookingDirection) > .6f)
 			    player.MessageDispatcher.ShowMessage("[E] INTERACT WITH THE SHRINE", .25f);
 		}
 		

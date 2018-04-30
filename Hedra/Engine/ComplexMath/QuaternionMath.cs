@@ -28,9 +28,21 @@ namespace Hedra.Engine.ComplexMath
         /// <summary>
         /// Transform an euler rotation (X,Y,Z) into a Quaternion.
         /// </summary>
+        /// <param name="Pitch">Provided pitch</param>
+        /// <param name="Yaw">Provided yaw</param>
+        /// <param name="Roll">Provided roll</param>
+        /// <returns>A quaternion representation of the euler angles</returns>
+        public static Quaternion FromEuler(float Pitch, float Yaw, float Roll)
+        {
+            return QuaternionMath.FromEuler(new Vector3(Pitch, Yaw, Roll));
+        }
+
+        /// <summary>
+        /// Transform an euler rotation (X,Y,Z) into a Quaternion.
+        /// </summary>
         /// <param name="Euler">Euler rotation. In radians.</param>
-        /// <returns></returns>
-        public static Quaternion ToQuaternion(Vector3 Euler)
+        /// <returns>A quaternion representation of the euler angles</returns>
+        public static Quaternion FromEuler(Vector3 Euler)
         {
             var cy = (float)Math.Cos(Euler.Y * 0.5);
             var sy = (float)Math.Sin(Euler.Y * 0.5);

@@ -115,7 +115,7 @@ namespace Hedra.Engine.Player
 					Matrix4.CreateTranslation(-Player.Model.Position + (Player.Model.LeftHandPosition + Player.Model.RightHandPosition) * .5f);
 				
 				Player.Model.LeftWeapon.MainMesh.TransformationMatrix = Matrix4.Identity;
-				Player.Movement.OrientatePlayer(Player);
+				Player.Movement.Orientate();
 				Player.Model.LeftWeapon.MainMesh.Position = Player.Model.Position;
 				Player.Model.LeftWeapon.MainMesh.Rotation = Vector3.Zero;
 				Player.Model.LeftWeapon.MainMesh.TargetRotation = new Vector3(180,0,0);

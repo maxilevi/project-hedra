@@ -24,7 +24,7 @@ namespace Hedra.Engine.QuestSystem
             if ((_target.Position - Parent.Position).Xz.ToVector3().LengthFast < GameSettings.UpdateDistance * .75f)
             {
                 Parent.Model.Run();
-                Parent.Physics.Move(-_targetDirection * _speed * 2.0f * 4.0f * 2.0f);
+                Parent.Physics.Move(-_targetDirection * _speed * 2.0f * 4.0f * 2.0f * (float)Time.deltaTime);
             }
             else
             {

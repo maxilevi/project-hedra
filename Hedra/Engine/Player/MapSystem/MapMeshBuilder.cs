@@ -54,7 +54,7 @@ namespace Hedra.Engine.Player.MapSystem
                     var useChunkMesh = MapBaseItem.UsableChunk(chunk);
                     if (!useChunkMesh)
                     {
-                        var blockColor = Utils.UniformVariateColor( (region.Colors.GrassColor + Color.DimGray.ToVector4()) * .5f, 25, rng);
+                        var blockColor = Utils.UniformVariateColor(region.Colors.GrassColor, 25, rng);
                         item.HasChunk[x * _mapSize + z] = false;
                         var cubeData = _cubeData.Clone();
                         BlockType type;

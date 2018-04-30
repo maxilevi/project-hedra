@@ -118,7 +118,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 Vector3 direction = -(Damager.Position - Parent.Position).Normalized();
                 for (int i = 0; i < 10; i++)
-                    Parent.Physics.Move(direction * 1.5f);
+                    Parent.Physics.Move(direction * 1.5f * (float)Time.deltaTime);
             }
 
             if (PlaySound)

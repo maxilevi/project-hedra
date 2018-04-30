@@ -51,6 +51,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected bool Orientate { get; set; } = true;
         protected SoundType SoundType { get; set; } = SoundType.SlashSound;
         protected bool ShouldPlaySound { get; set; } = true;
+        protected virtual float WeaponCooldown => .5f;
 
         private float[] _animationSpeeds;
         private EffectDescriber _describer;
@@ -58,6 +59,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         private Vector3 _scale = Vector3.One;
         private float _alpha = 1f;
         private bool _effectApplied;
+        private bool _onAttackCooldown;
 
         protected Weapon(VertexData MeshData)
         {
@@ -142,7 +144,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         protected void BasePrimaryAttack(Humanoid Human)
         {
-            this.BaseAttack(Human);
+            this.BaseAttack(Human);        
             var animation = PrimaryAnimations[this.ParsePrimaryIndex(PrimaryAnimationsIndex)];
             animation.Speed = _animationSpeeds[Array.IndexOf(Animations, animation)] * Human.AttackSpeed;
             Human.Model.Model.BlendAnimation(animation);
@@ -187,8 +189,21 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if (ShouldPlaySound && !IsMelee)
                 SoundManager.PlaySoundWithVariation(SoundType, Human.Position);
 
-            if (Orientate && Human is LocalPlayer)
-                Human.Movement.OrientatePlayer(Human as LocalPlayer);
+            if (Human.Model.IsIdling)
+            {
+                Human.Model.Run();
+                TaskManager.After(1,
+                    () => TaskManager.While(
+                        () => Human.Model.IsRunning && !Human.IsMoving,
+                        delegate
+                        {
+                            Human.Movement.Orientate();
+                            Human.Physics.Move(Human.Movement.MoveFormula(Human.Orientation) * .25f * (float) Time.deltaTime);
+                        }
+                    )
+                );
+            }
+            if (Orientate) Human.Movement.Orientate();
         }
 
         public virtual void Update(Humanoid Human)
@@ -210,14 +225,27 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 if (Animations[i] != Owner.Model.Model.Animator.AnimationPlaying &&
                     Animations[i] != Owner.Model.Model.Animator.BlendingAnimation) continue;
                 attacking = true;
+                Owner.IsAttacking = true;
                 break;
             }
-            if (!attacking && Owner.Model.Human.IsAttacking)
+            if (!attacking && Owner.Model.Human.IsAttacking && !_onAttackCooldown)
             {
+                _onAttackCooldown = true;
+                TaskManager.Delay( (int) (WeaponCooldown * 1000f), delegate
+                {
+                    if (_onAttackCooldown)
+                    {
+                        _onAttackCooldown = false;
+                        Owner.IsAttacking = false;
+                    }
+                });
+                TaskManager.While(() => _onAttackCooldown, delegate
+                {
+                    if (attacking) _onAttackCooldown = false;
+                });
                 Owner.Model.Human.WasAttacking = true;
                 CoroutineManager.StartCoroutine(this.WasAttackingCoroutine);
             }
-
 
             var primaryAttack = false;
             for (var i = 0; i < PrimaryAnimations.Length; i++)
@@ -241,10 +269,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             }
             SecondaryAttack = secondaryAttack;
 
-
-            Owner.IsAttacking = attacking;
-
-
             if (Sheathed)
                 this.SetToChest(MainMesh);
 
@@ -261,20 +285,28 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
             if (PrimaryAttack || SecondaryAttack)
             {
-                var player = this.Owner as LocalPlayer;
-                if (Orientate && player != null) this.Owner.Movement.OrientatePlayer(player);
+                if (Orientate) this.Owner.Movement.Orientate();
             }
-            this.MainMesh.BaseTint = this.BaseTint;
-            this.MainMesh.Tint = this.Tint;
+
+            this.ApplyEffects(MainMesh);
 
             if (Describer != null && Describer.Type != EffectType.None)
             {
-                this.MainMesh.BaseTint = Describer.EffectColor;
                 if (!_effectApplied)
                 {
                     this.Owner.ApplyEffectWhile(this.Describer.Type, () => Owner.Model.LeftWeapon == this);
                     _effectApplied = true;
                 }
+            }
+        }
+
+        protected void ApplyEffects(ObjectMesh Mesh)
+        {
+            Mesh.BaseTint = this.BaseTint;
+            Mesh.Tint = this.Tint;
+            if (Describer != null && Describer.Type != EffectType.None)
+            {
+                Mesh.BaseTint = Describer.EffectColor;
             }
         }
 
@@ -468,9 +500,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             else
                 WeaponCoroutineExists = true;
             float passedTime = 0;
-            while (passedTime < 4f)
+            while (passedTime < 5f)
             {
-                if (Owner != null && Owner.IsAttacking)
+                if (Owner != null && Owner.IsAttacking && !this._onAttackCooldown)
                 {
                     if (Owner.IsAttacking)
                         Owner.WasAttacking = false;

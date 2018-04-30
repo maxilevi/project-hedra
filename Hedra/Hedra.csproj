@@ -24,6 +24,7 @@
     <DebugType>Full</DebugType>
     <WarningLevel>4</WarningLevel>
     <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -36,7 +37,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -319,8 +319,10 @@
     <Compile Include="Engine\Management\DataManager.cs" />
     <Compile Include="Engine\Management\Occludable.cs" />
     <Compile Include="Engine\Management\OcclusionState.cs" />
+    <Compile Include="Engine\Player\HangGlider.cs" />
     <Compile Include="Engine\Player\MapSystem\MapBaseItem.cs" />
     <Compile Include="Engine\Player\MapSystem\MapMeshBuilder.cs" />
+    <Compile Include="Engine\Player\PlayerMovement.cs" />
     <Compile Include="Engine\Rendering\GraphicsLayer.cs" />
     <Compile Include="Engine\Management\OSManager.cs" />
     <Compile Include="Engine\Management\Platform.cs" />

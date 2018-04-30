@@ -76,8 +76,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             {
                 _stateManager.CaptureState();
                 _player.View.LockMouse = false;
-                _player.Movement.Check = false;
-                _player.View.Check = false;
+                _player.Movement.CaptureMovement = false;
+                _player.View.CaptureMovement = false;
                 UpdateManager.CursorShown = true;
             }
             else
@@ -90,10 +90,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             if (_show)
             {
-                _player.View.Pitch = Mathf.Lerp(_player.View.Pitch, 0f, (float)Time.deltaTime * 16f);
+                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float)Time.deltaTime * 16f);
                 _player.View.TargetDistance =
                     Mathf.Lerp(_player.View.TargetDistance, 10f, (float)Time.deltaTime * 16f);
-                _player.View.Yaw = Mathf.Lerp(_player.View.Yaw, (float)Math.Acos(-_player.Orientation.X),
+                _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw, (float)Math.Acos(-_player.Orientation.X),
                     (float)Time.deltaTime * 16f);
                 _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
                     (float)Time.deltaTime * 16f);

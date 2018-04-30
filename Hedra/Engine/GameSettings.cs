@@ -117,8 +117,6 @@ namespace Hedra.Engine
                     GameSettings.Height = Program.GameWindow.ClientSize.Height;
                 }
                 MainFBO.DefaultBuffer.Resize();
-                UserInterface.PlayerFbo.Dispose();
-                UserInterface.PlayerFbo = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
                 GameManager.Player.UI = new UserInterface(GameManager.Player);
             }
         }

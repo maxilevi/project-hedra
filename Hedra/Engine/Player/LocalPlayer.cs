@@ -46,8 +46,9 @@ namespace Hedra.Engine.Player
 		public Minimap Minimap;
 		public Map Map;
 		public TradeInventory Trade;
-		public GliderModel Glider;
+		public HangGlider Glider;
 	    public override IMessageDispatcher MessageDispatcher { get; set; }
+	    public override Vector3 FacingDirection => Vector3.UnitY * -(View.TargetYaw * Mathf.Degree - 90f);
         public ICollidable[] NearCollisions { get; private set; }
 	    private float _acummulativeHealing;
         private bool _floating;
@@ -56,13 +57,13 @@ namespace Hedra.Engine.Player
 	    private float _targetCementeryTime;
 	    private Vector3 _previousPosition;
 	    private bool _shouldUpdateTime;
-	    private int _emitted;
 	    private float _health;
 	    private bool _wasSleeping;
 	    private bool _enabled;
 	    private float _oldCementeryTime;
 	    private float _oldTime;
 	    private bool _wasPlayingAmbient;
+	    private bool _canInteract;
 
         public LocalPlayer(){
 			this.UI = new UserInterface(this);
@@ -72,7 +73,7 @@ namespace Hedra.Engine.Player
 			this.Model = new HumanModel(this);
 			this.Inventory = new PlayerInventory(this);
 			this.Toolbar = new Toolbar(this);
-			this.Glider = new GliderModel();
+			this.Glider = new HangGlider(this);
 			this.AbilityTree = new AbilityTreeSystem.AbilityTree(this);
 			this.QuestLog = new QuestLog(this);
 			this.Pet = new PetManager(this);
@@ -80,6 +81,7 @@ namespace Hedra.Engine.Player
 			this.Minimap = new Minimap(this);
 			this.Map = new Map(this);
 			this.Trade = new TradeInventory(this);
+            this.Movement = new PlayerMovement(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
             this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
 			this.Physics.CanCollide = true;
@@ -92,6 +94,11 @@ namespace Hedra.Engine.Player
 			DrawManager.Add(this);
 			UpdateManager.Add(this);
 		}
+
+	    protected virtual MovementManager CreateMovementManager()
+	    {
+	        return new PlayerMovement(this);
+	    }
 
         #region SetupHandlers
         public void SetupHandlers()
@@ -159,7 +166,7 @@ namespace Hedra.Engine.Player
 
 	                if (!((this.Position - claimable.Position).LengthSquared < claimable.ClaimDistance * claimable.ClaimDistance) ||
 	                    !(Vector3.Dot((claimable.Position - this.Position).NormalizedFast(),
-	                          this.View.LookAtPoint.NormalizedFast()) > .6f)) continue;
+	                          this.View.LookingDirection) > .6f)) continue;
 
 	                claimable.Claim(this);
 	            }
@@ -173,7 +180,6 @@ namespace Hedra.Engine.Player
         }
         #endregion
 
-	    private bool _canInteract;
 	    public override bool CanInteract
 	    {
 	        get { return _canInteract; }
@@ -223,8 +229,9 @@ namespace Hedra.Engine.Player
         }
 
         public new void Update(){
-			base.Update();
-			if(this.IsUnderwater && this.IsRiding)
+            base.Update();
+
+            if (this.IsUnderwater && this.IsRiding)
 				this.IsRiding = false;
 
             if (this.IsSleeping != _wasSleeping)
@@ -330,11 +337,8 @@ namespace Hedra.Engine.Player
 				if(World.Particles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
 					World.Particles.Color = Vector4.Zero;
 				
-				if(_emitted >= 3){
-					World.Particles.Emit();
-					_emitted = 0;
-				}
-				_emitted++;
+				if( (int) Time.CurrentFrame % 2 == 0) World.Particles.Emit();
+				
 			    _previousPosition = Model.Human.BlockPosition;
             }
 			
@@ -380,58 +384,16 @@ namespace Hedra.Engine.Player
                 this.Mana += ManaRegen * Time.FrameTimeSeconds;
                 this.Stamina += (float)Time.deltaTime * 4f;
             }
-            this.Rotation = new Vector3(0, this.Rotation.Y, 0);
+            this.Rotation = new Vector3(0, this.Rotation.Y, 0);			
 			
-			Model.FacingDirection = View.Yaw * Mathf.Degree - Mathf.Degree - 25;
-			
-			if(View.PlayerMode){
-				if(IsGrounded && !this.IsFlying)
-					View.Position = new Vector3(Model.Position.X, View.Position.Y + (Model.Position.Y - View.Position.Y) * (float) Time.deltaTime * 4f , Model.Position.Z);
-				else
-					View.Position = new Vector3(Model.Position.X, Model.Position.Y, Model.Position.Z);
-			}
-			
-			if(this.IsGliding && this.IsUnderwater)
-				this.IsGliding = false;
-			
-			
-			if(this.IsGliding && !IsGrounded){		
-					
-				this.Glider.Enabled = true;
-				this.Glider.Position = this.Position + Vector3.UnitY * 5f;
-				
-				float AngleX = -45 * Mathf.Clamp(View.Pitch, -.5f, .5f);
+			if(this.IsGliding && (this.IsUnderwater || IsGrounded)) this.IsGliding = false;
 
-				this.Glider.BaseMesh.Rotation = new Vector3(AngleX, Model.Model.Rotation.Y, 0);
-				this.Glider.RotationPoint = Vector3.UnitY * 5.5f;
-				
-				this.Physics.GravityDirection = -Vector3.UnitY * .3f;
-				this.Physics.VelocityCap = 4.5f;
-				this.Physics.Move( this.View.LookAtPoint.NormalizedFast() * 7.5f * 3.5f * 3f * new Vector3(1f,.35f, 1f));
-				this.Physics.ResetFall();
-				this.Model.TargetRotation = new Vector3(AngleX, -this.Model.FacingDirection, 0);
-				this.Model.Model.Rotation = new Vector3(AngleX, -this.Model.FacingDirection, 0);
-				this.Model.Glide();
-				
-				World.Particles.Color = Vector4.One;
-				World.Particles.Position = this.Glider.Position - Vector3.UnitY * 10f;
-				World.Particles.ParticleLifetime = 1f;
-				World.Particles.GravityEffect = .0f;
-				World.Particles.Direction = Vector3.Zero;
-				World.Particles.Scale = new Vector3(.5f,.5f,.5f);
-				_emitted++;
-				if(_emitted % 4 == 0)
-					World.Particles.Emit();
-
-			}else{
-				if(this.Glider.Enabled){//Player was Gliding
-					
-					this.Model.TargetRotation = new Vector3(0, Model.TargetRotation.Y, 0);
-					//this.Glider.BaseMesh.Rotation = new Vector3(0, Model.Model.Rotation.Y, 0);
-					this.Glider.Enabled = false;
-					this.Physics.GravityDirection = -Vector3.UnitY;
-					this.Physics.VelocityCap = float.MaxValue;
-				}
+            if (this.IsGliding && !IsGrounded)
+            {							
+				this.Glider.Update();
+			}else
+            {
+				if(this.Glider.Enabled)this.Glider.Disable();			
 			}
 			
 
@@ -454,19 +416,14 @@ namespace Hedra.Engine.Player
 			    WorldRenderer.ShowWaterBackfaces = true;
 			    WaterMeshBuffer.ShowBackfaces = true;
             }
-
-			
-			if(IsGrounded)
-				IsGliding = false;
-
             this.View.AddonDistance = this.IsMoving || this.IsSwimming || this.IsGliding ? 3.0f : 0.0f;
 
-            //this.Physics.PushAround = !IsAttacking; // If he is attacking dont push 'em	
-
+            //this.Physics.PushAround = !IsAttacking; // If he is attacking dont push 'em	            
             Inventory.Update();
             AbilityTree.Update();
             Toolbar.Update();
-			Movement.Update();
+            View.Update();
+            Movement.Update();
 			UI.Update();
 			ManageSounds();
 			QuestLog.Update();
@@ -474,7 +431,6 @@ namespace Hedra.Engine.Player
 			Chat.Update();
 			Map.Update();
 			Trade.Update();
-            View.Update();
         }
 
 	    public override int Gold

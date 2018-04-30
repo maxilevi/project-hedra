@@ -134,7 +134,7 @@ namespace Hedra.Engine.Rendering.Animation
 		
 		public void Draw(){
 	
-			Matrix4 ViewMat = LocalPlayer.Instance.View.Matrix;
+			Matrix4 ViewMat = LocalPlayer.Instance.View.ModelViewMatrix;
 			Matrix4 ProjectionViewMat = ViewMat * DrawManager.FrustumObject.ProjectionMatrix;
 			this.DrawModel(ProjectionViewMat, ViewMat);
 		}

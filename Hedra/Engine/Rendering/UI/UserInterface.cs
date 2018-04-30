@@ -36,17 +36,14 @@ namespace Hedra.Engine.Rendering.UI
 		private Texture _title;
 		private Button _newRun;
 		
-		public static FBO PlayerFbo;
-		public static FBO InventoryFbo;
-	    public static FBO QuestFbo;
-	    public static Font Regular;
+		public static FBO QuestFbo;
+	    public static FBO InventoryFbo;
+        public static Font Regular;
 		public static Color DefaultFontColor = Color.White;
 		
 		public UserInterface (LocalPlayer Player){
 			this._player = Player;
-			PlayerFbo = new FBO(GameSettings.Width, GameSettings.Height);
 			InventoryFbo = new FBO(GameSettings.Width, GameSettings.Height);
-			QuestFbo = new FBO(GameSettings.Width, GameSettings.Height);
 
 			byte[] sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.DataFile3);          	
 			Fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
@@ -146,11 +143,17 @@ namespace Hedra.Engine.Rendering.UI
 				GameManager.NewRun(_player);
 			}
 		}
-		
 
-		public void Draw(){
-			if(!GameSettings.Paused && GameSettings.Debug)
-            	DrawCoordinateSystem();
+        /// <summary>
+        /// FIXME: Remove me
+        /// </summary>
+        /// <param name="__mesh"></param>
+        /// <param name="__fbo"></param>
+	    public void DrawPreview(ObjectMesh __mesh, FBO __fbo){}
+	    public void DrawPreview(Model __model, FBO __fbo) { }
+
+        public void Draw(){
+
 		}
 		
 		public void Update(){
@@ -175,145 +178,6 @@ namespace Hedra.Engine.Rendering.UI
 				this.GamePanel.ClassLogo.BaseTexture.TextureElement.TextureId = _player.Class.Logo;
 			}
 		}
-
-		private float _oldRotation;
-		 public void DrawPreview(Model Model, FBO Fbo){
-            if (Model == null)
-                return;
-            bool prevEnabled = Model.Enabled;
-            Model.Enabled = true;
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-            int prevShader = GraphicsLayer.ShaderBound;
-            int prevFbo = GraphicsLayer.FBOBound;
-            Fbo.Bind();
-
-            GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
-
-            Vector3 oldRot = Model.Rotation;
-            bool usedFog = (Model as QuadrupedModel)?.ApplyFog ?? ((Model as HumanModel)?.ApplyFog ?? false);
-
-            _oldRotation += 25 * (float)Time.unScaledDeltaTime / DataManager.CharacterCount;
-            if (Model is QuadrupedModel)
-                (Model as QuadrupedModel).ApplyFog = false;
-
-            if (Model is HumanModel)
-                (Model as HumanModel).ApplyFog = false;
-
-            Matrix4 projectionMatrix = Matrix4.CreatePerspectiveFieldOfView((_player.Model == Model ? 50 : 60) * Mathf.Radian, 1.5f, 1, 1024);
-            Matrix4 rotationMatrix = Matrix4.CreateRotationY(_oldRotation * Mathf.Radian);
-            Matrix4 lookAt = Matrix4.LookAt(Vector3.TransformPosition(-Vector3.UnitZ * ((Model == _player.Model) ? 180f : 30f), rotationMatrix) + Model.Position,
-                                            Vector3.TransformPosition(Vector3.UnitY * ((Model == _player.Model) ? 41f : 15f), rotationMatrix) + Model.Position, Vector3.UnitY);
-
-
-            if (Model is QuadrupedModel)
-            {
-                (Model as QuadrupedModel).Model.DrawModel(lookAt * projectionMatrix, lookAt);
-            }
-            else if (Model is HumanModel)
-            {
-
-
-                (Model as HumanModel).Model.DrawModel(lookAt * projectionMatrix, lookAt);
-                /*if((Model as HumanModel).LeftWeapon.Meshes != null){
-                    for(int i = 0; i < (Model as HumanModel).LeftWeapon.Meshes.Length; i++){
-                        Vector3 Prevrot = (Model as HumanModel).LeftWeapon.Meshes[i].Rotation;
-                        //(Model as HumanModel).LeftWeapon.Meshes[i].Rotation = Vector3.UnitY * OldRotation;
-                        //(Model as HumanModel).LeftWeapon.Meshes[i].Draw();
-                        //Model as HumanModel).LeftWeapon.Meshes[i].Rotation = Prevrot;
-                    }
-                }*/
-            }
-
-            if (Model is QuadrupedModel)
-                (Model as QuadrupedModel).ApplyFog = usedFog;
-
-            if (Model is HumanModel)
-                (Model as HumanModel).ApplyFog = usedFog;
-
-            GraphicsLayer.Disable(EnableCap.DepthTest);
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, prevFbo);
-            GraphicsLayer.FBOBound = prevFbo;
-            Model.Enabled = prevEnabled;
-            GL.UseProgram(prevShader);
-            DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, DrawManager.FrustumObject.ModelViewMatrix);
-		     GraphicsLayer.ShaderBound = prevShader;
-            GraphicsLayer.Enable(EnableCap.Blend);
-        }
-		
-		public void DrawPreview(ObjectMesh Mesh, FBO Fbo){
-			if(	Mesh == null)
-				return;
-			bool prevEnabled  = Mesh.Enabled;
-			Mesh.Enabled = true;
-			GraphicsLayer.Enable(EnableCap.DepthTest);
-			int prevShader = GraphicsLayer.ShaderBound;
-			int prevFbo = GraphicsLayer.FBOBound;
-			Fbo.Bind();
-				GL.ClearColor(Color.FromArgb(0,0,0,0));
-				GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
-				
-				Vector3 oldRot = Mesh.Rotation;
-				bool usedFog = Mesh.ApplyFog;
-				Vector2 posScale = Mathf.ScaleGUI(new Vector2(1024,578), new Vector2(1,1));
-				
-				_oldRotation += 25 * (float) Time.unScaledDeltaTime * 0.33f;
-				Mesh.Rotation = new Vector3(Mesh.Rotation.X, _oldRotation, Mesh.Rotation.Z);
-				Mesh.ApplyFog = false;
-				Vector3 oldPosition = Mesh.Position;
-				Mesh.Position = Vector3.Zero;
-				
-				Matrix4 projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 1, 1024);
-				GL.MatrixMode(MatrixMode.Projection);
-				GL.LoadMatrix(ref projectionMatrix);
-				
-				Matrix4 lookAt = Matrix4.LookAt(Vector3.UnitZ * 10f, Vector3.UnitY * 4f, Vector3.UnitY);
-				GL.MatrixMode(MatrixMode.Modelview);
-				GL.LoadMatrix(ref lookAt);
-				
-				Mesh.Draw();
-				
-				Mesh.ApplyFog = usedFog;
-				Mesh.Rotation = oldRot;
-				Mesh.Position = oldPosition;
-				
-				_player.View.RebuildMatrix();
-				DrawManager.FrustumObject.SetFrustum(_player.View.Matrix);
-				
-			GraphicsLayer.Disable(EnableCap.DepthTest);
-			GL.BindFramebuffer(FramebufferTarget.Framebuffer, prevFbo);
-			GraphicsLayer.FBOBound = prevFbo;
-			Mesh.Enabled = prevEnabled;
-			GL.UseProgram(prevShader);
-			GraphicsLayer.ShaderBound = prevShader;
-			GraphicsLayer.Enable(EnableCap.Blend);
-		}
-		
-		private void DrawCoordinateSystem(){
-           /* GL.PushMatrix();
-            GL.Translate(Player.View.LookAtPoint + new Vector3(Player.Position.X, Player.Position.Y, Player.Position.Z));
-            
-            GL.Begin(PrimitiveType.Lines);
-            
-            GL.Color3(System.Drawing.Color.Red);
-            GL.Vertex3(0,0,0);
-            GL.Color3(System.Drawing.Color.Red);
-            GL.Vertex3(0.1f,0,0);
-            
-            GL.Color3(System.Drawing.Color.Yellow);
-            GL.Vertex3(0,0,0);
-            GL.Color3(System.Drawing.Color.Yellow);
-            GL.Vertex3(0,0.1f,0);
-            
-            GL.Color3(System.Drawing.Color.Blue);
-            GL.Vertex3(0,0,0);
-            GL.Color3(System.Drawing.Color.Blue);
-            GL.Vertex3(0,0,0.1f);
-            GL.Color3(System.Drawing.Color.Transparent);
-            
-            GL.End();
-            
-            GL.PopMatrix();*/
-		}
 		
 		public void ShowMenu(){
 			if(GameManager.IsLoading || GameManager.InMenu) return;
@@ -330,8 +194,8 @@ namespace Hedra.Engine.Rendering.UI
 				GameSettings.Paused = true;
 			}else{
 				_player.View.LockMouse = false;
-				_player.Movement.Check = false;
-				_player.View.Check = false;
+				_player.Movement.CaptureMovement = false;
+				_player.View.CaptureMovement = false;
 			}
 			UpdateManager.CursorShown = true;
 			LocalPlayer.Instance.Chat.Show = false;
@@ -344,8 +208,8 @@ namespace Hedra.Engine.Rendering.UI
 			GameSettings.Paused = false;
 			if(Networking.NetworkManager.IsConnected){
 				_player.View.LockMouse = true;
-				_player.Movement.Check = true;
-				_player.View.Check = true;
+				_player.Movement.CaptureMovement = true;
+				_player.View.CaptureMovement = true;
 			}
 			Menu.Disable();
 			OptionsMenu.Disable();

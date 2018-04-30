@@ -38,9 +38,11 @@ namespace Hedra.Engine.Player
 	    public float BaseAttackSpeed { get; private set; } = 1;
         public virtual bool CanInteract {get; set; }
         public bool IsSleeping { get; set; }
-		public bool IsSitting { get{ return Model.IsSitting; } set{ if(value) Model.Sit(); else Model.Idle(); } }
+	    public bool IsJumping => Movement.IsJumping;
+	    public virtual Vector3 FacingDirection => Vector3.UnitY * -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
+        public bool IsSitting { get{ return Model.IsSitting; } set{ if(value) Model.Sit(); else Model.Idle(); } }
 		public new HumanModel Model { get{ return base.Model as HumanModel; } set{ base.Model = value;} }
-		public MovementManager Movement;
+		public MovementManager Movement { get; protected set; }
 		public HandLamp HandLamp;
 		public DamageComponent DmgComponent;
 		public virtual Item MainWeapon { get; set; }
@@ -72,6 +74,7 @@ namespace Hedra.Engine.Player
 			    return maxHealth + AddonHealth;			    
 			}
 		}
+
 		public float MaxXP{
 			get{
 				var maxXp = 38;
@@ -81,7 +84,7 @@ namespace Hedra.Engine.Player
 			}
 		}
 
-	    protected float MaxXpForLevel(int TargetLevel)
+        protected float MaxXpForLevel(int TargetLevel)
 	    {
 	        var maxXp = 38;
 	        for (var i = 1; i < TargetLevel; i++)
@@ -127,7 +130,7 @@ namespace Hedra.Engine.Player
 			this.CanInteract = true;
             this.MessageDispatcher = new DummyMessageDispatcher();
             this.HandLamp = new HandLamp(this);
-			this.Movement = new MovementManager(this);
+			this.Movement = this.CreateMovementManager();
             this.DmgComponent = new DamageComponent(this);
             this.RandomFactor = Humanoid.NewRandomFactor();
             this.Physics.CanCollide = true;
@@ -137,6 +140,11 @@ namespace Hedra.Engine.Player
             this.Speed = this.BaseSpeed;
             this.AddComponent(DmgComponent);
         }
+
+	    protected virtual MovementManager CreateMovementManager()
+	    {
+	        return new MovementManager(this);
+	    }
 
         #region Dodge
         public void Roll(){
@@ -157,11 +165,7 @@ namespace Hedra.Engine.Player
             DmgComponent.Immune = true;
             this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.5f),
                 () => IsRolling);
-            Movement.OrientateWhileMoving = false;	
-			if(!IsMoving){
-				Movement.MoveCount = 2;
-				Movement.MoveFeet = true;
-			}
+            Movement.Move(this.Orientation * 2f, 1.5f, false);
             SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);
 			Model.Roll();
 			
@@ -170,8 +174,6 @@ namespace Hedra.Engine.Player
 		public void FinishRoll(){
 			IsRolling = false;
 			DmgComponent.Immune = false;
-			Movement.OrientateWhileMoving = true;
-			Movement.MoveFeet = false;
 		}
 		#endregion
 		
@@ -372,9 +374,6 @@ namespace Hedra.Engine.Player
 				if(value){
 					if(IsGrounded)
 						return;
-					this.Movement.UnlockAnimations = true;
-				}else{
-					this.Movement.UnlockAnimations = false;
 				}
 				_isGliding = value;
 			}

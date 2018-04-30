@@ -13,77 +13,39 @@ namespace Hedra.Engine.Player
     {
         public static Vector3 DefaultCameraHeight = Vector3.UnitY * 9.0f;
         public static Func<Vector3> DefaultDelegate;
-        public const float DefaultMaxDistance = 10f;
+        public const float DefaultMaxDistance = 12f;
         public const float DefaultMinDistance = 2.0f;
-        public const float DefaultMaxPitch = 2f;
+        public const float DefaultMaxPitch = 1.5f;
         public const float DefaultMinPitch = -2f;
+
+        public float TargetPitch { get; set; }
+        public float TargetYaw { get; set; }
+        public float MaxDistance { get; set; } = DefaultMaxDistance;
+        public float MinDistance { get; set; } = DefaultMinDistance;
+        public float MaxPitch { get; set; } = DefaultMaxPitch;
+        public float MinPitch { get; set; } = DefaultMinPitch;
+        public float AddonDistance { get; set; }
+        public float Distance { get; set; }
+        public float WheelSpeed { get; set; } = 1;
+        public bool CaptureMovement { get; set; } = true;
+        public float TargetDistance { get; set; } = 10f;
+        public bool LockMouse { get; set; } = true;
+        public Matrix4 ModelViewMatrix { get; private set; }
+        public Func<Vector3> PositionDelegate { get; set; }
+        public int XDelta { get; private set; }
+        public int YDelta { get; private set; }
+        public float Pitch { get; set; }
+        public float Yaw { get; set; }
+        public float StackedYaw { get; private set; }
 
         private Vector3 _cameraHeight = Vector3.UnitY * 12.0f;
         private readonly LocalPlayer _player;
-        private float _prevAlpha = -1f;
+        private float _previousAlpha = -1f;
         private float _prevDistance;
-        public float Distance { get; set; }
-        public float WheelSpeed { get; set; } = 1;
-        public bool Check = true;
-        public float TargetDistance = 10f;
-        public bool LockMouse = true;
-        public Vector3 LookAtPoint;
-        public Matrix4 Matrix;
-        public float MaxDistance = DefaultMaxDistance;
-        public float MinDistance = DefaultMinDistance;
-        public float MaxPitch = DefaultMaxPitch;
-        public float MinPitch = DefaultMinPitch;
-        public float Pitch;
-        public bool PlayerMode = true;
-        public Vector3 Position;
-        public Func<Vector3> PositionDelegate;
-        public bool ThirdPerson = true;
-        public int XDelta;
-        public float Yaw;
-        public int YDelta;
-
-        public float AddonDistance { get; set; }
-
-        public Vector3 CameraHeight
-        {
-            get
-            {
-                if (_player.IsSitting || _player.IsSleeping)
-                    return _cameraHeight - Vector3.UnitY * 2.0f;
-
-                return _cameraHeight;
-            }
-            set { _cameraHeight = value; }
-        }
-
-        public Vector3 CameraPosition =>
-            Objective - LookAtPoint * new Vector3(TargetDistance, TargetDistance, TargetDistance) + CameraHeight;
-
-        public Vector3 CrossDirection
-        {
-            get
-            {
-                var lookingDir = new Vector4(0f, 0f, -1.0f, 1.0f);
-                lookingDir = Vector4.Transform(lookingDir, DrawManager.FrustumObject.ProjectionMatrix.Inverted());
-                lookingDir = new Vector4(lookingDir.X, lookingDir.Y, -1f, 0f);
-                lookingDir = Vector4.Transform(lookingDir, DrawManager.FrustumObject.ModelViewMatrix.Inverted());
-                return lookingDir.Xyz.NormalizedFast();
-            }
-        }
-
-        public Vector3 CrossPosition
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public Vector3 Objective => PositionDelegate();
-
-        public Matrix4 ViewMatrix => Matrix4.LookAt(-LookAtPoint * TargetDistance + CameraHeight,
-            LookAtPoint * TargetDistance + CameraHeight,
-            Vector3.UnitY);
+        private Vector3 _interpolatedPosition;
+        private Vector3 _lastDelegateValue;
+        private Vector3 _interpolatedZoomOut;
+        private Vector3 _targetZoomOut;
 
         public Camera(LocalPlayer RefPlayer)
         {
@@ -98,34 +60,19 @@ namespace Hedra.Engine.Player
 
         public void Update()
         {
-            Distance = Mathf.Lerp(Distance, TargetDistance+AddonDistance, Time.unScaledDeltaTime * 3f);
+            this.Interpolate();
             this.ClampYaw();
+
             if ( !GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead)
             {
                 XDelta = Cursor.Position.X - GameSettings.Width / 2;
                 YDelta = Cursor.Position.Y - GameSettings.Height / 2;
-
-                if (LockMouse)
+                if (LockMouse) Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height / 2);
+                
+                if (CaptureMovement)
                 {
-                    Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height / 2);
+                    this.ManageRotations();
                 }
-                if (PlayerMode && Check)
-                {
-                    Yaw += XDelta * GameSettings.MouseSensibility * 0.0025f;
-
-                    float testPitch = (!GameSettings.InvertMouse  ? -YDelta : YDelta) * GameSettings.MouseSensibility * 0.0025f;
-                    Vector3 camPos =
-                        Objective - new Vector3((float) Math.Cos(Yaw), Pitch + testPitch, (float) Math.Sin(Yaw)) *
-                        new Vector3(TargetDistance, TargetDistance, TargetDistance) + CameraHeight;
-
-                    float heightAtCamPos = Physics.HeightAtPosition(camPos);
-                    if (camPos.Y > heightAtCamPos + MinDistance)
-                        Pitch += testPitch;
-
-                    Pitch = Mathf.Clamp(Pitch, MinPitch, MaxPitch);
-                }
-
-                LookAtPoint = new Vector3((float) Math.Cos(Yaw), Pitch, (float) Math.Sin(Yaw));
 
                 Vector3 pos = CameraPosition;
                 float y = Physics.HeightAtPosition(pos), addonDistance = 0;
@@ -138,86 +85,88 @@ namespace Hedra.Engine.Player
                 }
                 else
                 {
-                    Vector3 pos2 = Objective + CameraHeight - LookAtPoint * _prevDistance;
-                    float y2 = Physics.HeightAtPosition(pos2);
-
-                    if (_prevDistance != 0 && !(pos2.Y <= y2 + MinDistance) &&
-                        !Physics.IsColliding(pos2, new Box(-Vector3.One * 2f + pos2, Vector3.One * 2f + pos2)) &&
-                        TargetDistance < _prevDistance)
-                    {
-                        Vector3 pos3 = Objective + CameraHeight -
-                                       LookAtPoint * (TargetDistance + (_prevDistance - TargetDistance) * .5f);
-                        float y3 = Physics.HeightAtPosition(pos3);
-                        if (!(pos3.Y <= y3 + MinDistance) && !Physics.IsColliding(pos3,
-                                new Box(-Vector3.One * 2f + pos3, Vector3.One * 2f + pos3)))
-                        {
-                            Vector3 pos4 = Objective + CameraHeight -
-                                           LookAtPoint * (TargetDistance + (_prevDistance - TargetDistance) * .25f);
-                            float y4 = Physics.HeightAtPosition(pos4);
-                            if (!(pos4.Y <= y4 + MinDistance) && !Physics.IsColliding(pos4,
-                                    new Box(-Vector3.One * 2f + pos3, Vector3.One * 2f + pos4)))
-                                TargetDistance += Time.unScaledDeltaTime * 24f;
-                        }
-                    }
+                    this.ClampDistance();
                 }
 
-                TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
-                if (TargetDistance < 4.5f)
-                {
-                    if (_prevAlpha == -1)
-                        _prevAlpha = _player.Model.Alpha;
-                    _player.Model.Alpha = Mathf.Clamp((TargetDistance - 1.5f) / 4.5f, 0, 1) + 0.0025f;
-                }
-                else
-                {
-                    if (_prevAlpha != -1)
-                    {
-                        _player.Model.Alpha = _prevAlpha;
-                        _prevAlpha = -1;
-                    }
-                }
+                this.ManageAlpha();
             }
+            this.BuildCameraMatrix();
             if (!GameSettings.LockFrustum)
-                DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, Matrix);
+                DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, ModelViewMatrix);
+        }
+
+        private void ManageRotations()
+        {
+            TargetYaw += XDelta * GameSettings.MouseSensibility * 0.0025f;
+            StackedYaw += XDelta * GameSettings.MouseSensibility * 0.0025f;
+
+            float possiblePitch = (!GameSettings.InvertMouse ? -YDelta : YDelta) * GameSettings.MouseSensibility * 0.0025f;
+            Vector3 camPos =
+                _interpolatedPosition - new Vector3((float)Math.Cos(TargetYaw), TargetPitch + possiblePitch, (float)Math.Sin(TargetYaw)) *
+                new Vector3(TargetDistance, TargetDistance, TargetDistance) + CameraHeight;
+
+            float heightAtCamPos = Physics.HeightAtPosition(camPos);
+            if (camPos.Y > heightAtCamPos + MinDistance) TargetPitch += possiblePitch;
+
+            TargetPitch = Mathf.Clamp(TargetPitch, MinPitch, MaxPitch);
+        }
+
+        private void Interpolate()
+        {
+            _targetZoomOut = _player.IsMoving ? _player.Orientation * 3f : Vector3.Zero;
+            if (DefaultDelegate == PositionDelegate)
+            {
+                _targetZoomOut += _player.IsJumping ? Vector3.UnitY * _player.Movement.JumpingDistance * 2f : Vector3.Zero;
+            }
+            _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, (float) Time.deltaTime * 1f);
+            _interpolatedPosition = PositionDelegate() - _interpolatedZoomOut;
+            Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.FrameTimeSeconds * 12f);
+            Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.unScaledDeltaTime * 12f);
+            Distance = Mathf.Lerp(Distance, TargetDistance+AddonDistance, Time.unScaledDeltaTime * 3f);
         }
 
         private void ClampYaw()
         {
-            if (Yaw > Math.PI * 2f) Yaw -= (float) Math.PI * 2f;
-            if (Yaw < -Math.PI * 2f) Yaw += (float) Math.PI * 2f;
+            if (TargetYaw > Math.PI * 2f)
+            {
+                TargetYaw -= (float) Math.PI * 2f;
+                Yaw -= (float)Math.PI * 2f;
+            }
+            if (TargetYaw < -Math.PI * 2f)
+            {
+                TargetYaw += (float) Math.PI * 2f;
+                Yaw += (float)Math.PI * 2f;
+            }
         }
 
-        public void InvertPitch()
+        private void ManageAlpha()
         {
-            Pitch = -Pitch;
+            TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
+            if (TargetDistance < 4.5f)
+            {
+                if (_previousAlpha <= -0.995) _previousAlpha = _player.Model.Alpha;
+                _player.Model.Alpha = Mathf.Clamp((TargetDistance - 1.5f) / 4.5f, 0, 1) + 0.0025f;
+            }
+            else
+            {
+                if (Math.Abs(_previousAlpha - -1f) < 0.005f) return;
+                _player.Model.Alpha = _previousAlpha;
+                _previousAlpha = -1;
+            }
         }
 
-        public void InvertFacing()
+        public void BuildCameraMatrix()
         {
-            Yaw = -Yaw;
-        }
-
-        //This is for rendering the images
-        public void RebuildMatrix(Vector3 MatrixPosition)
-        {
-            LookAtPoint = new Vector3((float) Math.Cos(Yaw), Pitch, (float) Math.Sin(Yaw));
-            Matrix = Matrix4.LookAt(MatrixPosition - LookAtPoint * Distance + Vector3.UnitY * 4f,
-                MatrixPosition + LookAtPoint * Distance, Vector3.UnitY);
-        }
-
-        public void RebuildMatrix()
-        {
-            LookAtPoint = new Vector3((float) Math.Cos(Yaw), Pitch, (float) Math.Sin(Yaw));
-            Matrix = Matrix4.LookAt(Objective - LookAtPoint * Distance + CameraHeight,
-                Objective + LookAtPoint * Distance + CameraHeight, Vector3.UnitY);
+            ModelViewMatrix = Matrix4.LookAt(_interpolatedPosition - LookAtPoint * Distance + CameraHeight,
+                _interpolatedPosition + LookAtPoint * Distance + CameraHeight, Vector3.UnitY);
         }
 
 
         public override void OnMouseWheel(object Sender, MouseWheelEventArgs E)
         {
-            if (GameSettings.Paused || !Check) return;
+            if (GameSettings.Paused || !CaptureMovement) return;
 
-            Vector3 pos = Objective - LookAtPoint * (TargetDistance - E.Delta * WheelSpeed) + CameraHeight;
+            Vector3 pos = _interpolatedPosition - LookAtPoint * (TargetDistance - E.Delta * WheelSpeed) + CameraHeight;
             float y = Physics.HeightAtPosition(pos);
             if (pos.Y <= y + MinDistance) return;
 
@@ -230,5 +179,69 @@ namespace Hedra.Engine.Player
 
             _prevDistance = TargetDistance;
         }
+
+        private void ClampDistance()
+        {
+            if (_prevDistance <= 0.005f || !(TargetDistance < _prevDistance)) return;
+
+            for (var i = 2; i < 5; i++)
+            {
+                var position = this.CalculatePosition(i);
+                float y = Physics.HeightAtPosition(position);
+                var box = new Box(-Vector3.One * 2f + this.CalculatePosition(i-1), Vector3.One * 2f + position);
+                if (position.Y <= y + MinDistance || Physics.IsColliding(position, box))
+                    return;
+            }
+            TargetDistance += Time.unScaledDeltaTime * 24f;
+        }
+
+        private Vector3 CalculatePosition(float i)
+        {
+            return _interpolatedPosition + CameraHeight -
+                LookAtPoint * (TargetDistance + (_prevDistance - TargetDistance) * (1f / (i + 1)));
+        }
+
+        private Vector3 LookAtPoint => new Vector3(Forward.X, Pitch, Forward.Z);
+
+        public Vector3 LookingDirection => LookAtPoint.NormalizedFast();
+
+        public Vector3 Forward => new Vector3((float)Math.Cos(Yaw), 0, (float)Math.Sin(Yaw));
+
+        public Vector3 Backward => -Forward;
+
+        public Vector3 Right => new Vector3((float)Math.Cos(Yaw + Math.PI / 2), 0, (float)Math.Sin(Yaw + Math.PI / 2));
+
+        public Vector3 Left => -Right;
+
+        public Vector3 CameraHeight
+        {
+            get
+            {
+                if (_player.IsSitting || _player.IsSleeping) return _cameraHeight - Vector3.UnitY * 2.0f;
+                return _cameraHeight;
+            }
+            set { _cameraHeight = value; }
+        }
+
+        public Vector3 CameraPosition => _interpolatedPosition - LookAtPoint * new Vector3(TargetDistance, TargetDistance, TargetDistance) + CameraHeight;
+
+        public Vector3 CrossDirection
+        {
+            get
+            {
+                var lookingDir = new Vector4(0f, 0f, -1.0f, 1.0f);
+                lookingDir = Vector4.Transform(lookingDir, DrawManager.FrustumObject.ProjectionMatrix.Inverted());
+                lookingDir = new Vector4(lookingDir.X, lookingDir.Y, -1f, 0f);
+                lookingDir = Vector4.Transform(lookingDir, DrawManager.FrustumObject.ModelViewMatrix.Inverted());
+                return lookingDir.Xyz.NormalizedFast();
+            }
+        }
+        public Vector3 CrossPosition {
+            get { throw new NotImplementedException(); }
+        }
+
+        public Matrix4 ViewMatrix => Matrix4.LookAt(-LookAtPoint * TargetDistance + CameraHeight,
+            LookAtPoint * TargetDistance + CameraHeight,
+            Vector3.UnitY);
     }
 }

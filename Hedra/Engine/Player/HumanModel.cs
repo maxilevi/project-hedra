@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Hedra.Engine.ComplexMath;
 using OpenTK;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
@@ -17,10 +18,7 @@ using Hedra.Engine.Sound;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.ModuleSystem;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Scenes;
 
 namespace Hedra.Engine.Player
 {
@@ -44,7 +42,7 @@ namespace Hedra.Engine.Player
 		private Animation GlideAnimation;
 		private Animation KnockedAnimation;
         private Animation TiedAnimation;
-        private Animation SleepAnimation;   
+        private Animation SleepAnimation;
         public Joint LeftHand;
         public Joint RightHand;
         public Joint Chest;
@@ -52,8 +50,6 @@ namespace Hedra.Engine.Player
         public Joint RightFoot;
         public Joint Head;
         private AreaSound _modelSound;
-
-        public float FacingDirection;
 		public StaticModel Food;
 		public Weapon LeftWeapon { get; private set; }
 		public QuadrupedModel MountModel;
@@ -62,7 +58,8 @@ namespace Hedra.Engine.Player
 		public bool LockWeapon {get; set;}
 	    public override Vector4 Tint { get; set; }
 	    public override Vector4 BaseTint { get; set; }
-	    public bool IsSitting => this.SitAnimation == this.Model.Animator.AnimationPlaying;
+        public bool IsIdling => this.IdleAnimation == this.Model.Animator.AnimationPlaying;
+        public bool IsSitting => this.SitAnimation == this.Model.Animator.AnimationPlaying;
 	    public bool IsRunning => this.WalkAnimation == this.Model.Animator.AnimationPlaying;
 	    public bool IsGliding => this.GlideAnimation == this.Model.Animator.AnimationPlaying;
 	    public bool IsSwimming => this.IdleSwimAnimation == this.Model.Animator.AnimationPlaying || this.SwimAnimation == this.Model.Animator.AnimationPlaying;
@@ -71,6 +68,7 @@ namespace Hedra.Engine.Player
 	    private bool _hasLamp;
         private float _foodHealth;
         private Vector3 _previousPosition;
+        private Quaternion _rotationQuaternion;
         private float _lastAnimationTime = -1;
 
 
@@ -135,7 +133,7 @@ namespace Hedra.Engine.Player
             SleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
 
             RollAnimation.Loop = false;
-            RollAnimation.Speed = .75f;
+            RollAnimation.Speed = 0.75f;
 			RollAnimation.OnAnimationEnd += delegate(Animation Sender) { 
 				Human.Physics.ResetFall();
 				Human.FinishRoll();
@@ -242,14 +240,15 @@ namespace Hedra.Engine.Player
 		public override void Run(){
 		    Human.IsMoving = true;
 
-            if (Human.IsRolling || Human.IsRiding  || Human.IsUnderwater || Human.IsAttacking || Human.IsGliding)
+            if (Human.IsRolling || Human.IsRiding  || Human.IsUnderwater || Human.IsAttacking || Human.IsGliding || Human.IsJumping)
 				return;
-			
-			if(Model != null && Model.Animator.AnimationPlaying != WalkAnimation)
-				Model.PlayAnimation(WalkAnimation);
-        }
-		
-		public void Glide(){
+
+		    if (Model != null && Model.Animator.AnimationPlaying != WalkAnimation)
+		        Model.PlayAnimation(WalkAnimation);
+		    
+		}
+
+        public void Glide(){
 
 			if(Model != null && Model.Animator.AnimationPlaying != GlideAnimation)
 				Model.PlayAnimation(GlideAnimation);
@@ -353,6 +352,7 @@ namespace Hedra.Engine.Player
 		{
 
 		    WalkAnimation.Speed = Human.Speed;
+		    this._modelSound.Pitch = Human.Speed / 1.11f;
             if (this.Model.Animator.AnimationPlaying != this.RollAnimation && Human.IsRolling)
 		        Human.FinishRoll();
 
@@ -373,8 +373,10 @@ namespace Hedra.Engine.Player
 					PositionAddon += (MountModel.Parent.HitBox.Max.Y - MountModel.Parent.HitBox.Min.Y) * Vector3.UnitY * 0.65f;
 				
 				Model.Position = this.Position + PositionAddon;
-				Model.Rotation = Mathf.Lerp(Model.Rotation, this.TargetRotation, (float) Time.unScaledDeltaTime * 8f);
-				this.Rotation = Model.Rotation;
+			    this._rotationQuaternion = Quaternion.Slerp(this._rotationQuaternion, QuaternionMath.FromEuler(this.TargetRotation * Mathf.Radian), Time.unScaledDeltaTime * 6f);
+			    Model.Rotation = QuaternionMath.ToEuler(this._rotationQuaternion);
+
+                this.Rotation = Model.Rotation;
 				//this._shadow.Position = Model.Position;
 				if(MountModel != null)
 					this.MountModel.TargetRotation = this.TargetRotation;

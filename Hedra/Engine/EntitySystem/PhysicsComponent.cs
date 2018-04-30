@@ -116,7 +116,7 @@ namespace Hedra.Engine.EntitySystem
 	        Velocity += -Physics.Gravity * GravityDirection * _deltaTime * 6f;
 	        Velocity = Mathf.Clamp(Velocity, -VelocityCap, VelocityCap);
 
-            var command = new MoveCommand(Parent, Velocity);
+            var command = new MoveCommand(Parent, Velocity * (float) (UseTimescale ? Time.deltaTime : Time.unScaledDeltaTime));
 	        this.ProccessCommand(command);
 
 	        if (!Parent.IsGrounded)
@@ -142,23 +142,27 @@ namespace Hedra.Engine.EntitySystem
 	            }
 	        }
 
-            Parent.Model.Position = Mathf.Lerp(Parent.Model.Position, this.TargetPosition, _deltaTime * 8f);
+	        Parent.Model.Position = Mathf.Lerp(Parent.Model.Position, this.TargetPosition, _deltaTime * 8f);
+	    }
+
+	    public void ResetVelocity()
+	    {
+	        Velocity = Vector3.Zero;
 	    }
 
 	    public void Move(MoveCommand command){
 			Physics.Manager.AddCommand(command);
 		}
 
-	    public void Move(Vector3 v)
+	    public void Move(Vector3 Delta)
 	    {
-	        Physics.Manager.AddCommand(new MoveCommand(this.Parent, v));
+	        Physics.Manager.AddCommand(new MoveCommand(this.Parent, Delta));
 	    }
 
         public void ProccessCommand(MoveCommand Command) {
             if(Command.Delta == Vector3.Zero) return;
-			Vector3 v = Command.Delta;
             bool onlyY = Command.Delta.Xz == Vector2.Zero;
-			Vector3 delta = v * _deltaTime;
+			Vector3 delta = Command.Delta;
             var parentBox = this.Parent.HitBox;
 			float modifierX = delta.X < 0 ? -1f : 1f;
 			float modifierZ = delta.Z < 0 ? -1f : 1f;
@@ -207,7 +211,7 @@ namespace Hedra.Engine.EntitySystem
                         
                         Vector3 increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3();
                         increment = increment.Xz.NormalizedFast().ToVector3();
-                        var command = new MoveCommand(World.Entities[i], increment * 2f);
+                        var command = new MoveCommand(World.Entities[i], increment * 2f * (float)Time.deltaTime);
                         command.IsRecursive = true;
 
                         World.Entities[i].Physics.Move(command);

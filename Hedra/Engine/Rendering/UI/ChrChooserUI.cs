@@ -311,7 +311,7 @@ namespace Hedra.Engine.Rendering.UI
                     if(_selectedHuman.MainWeapon != null)
                         _selectedHuman.MainWeapon.Weapon.InAttackStance = true;
 					if( (_selectedHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz).LengthSquared > 4*4){
-						_selectedHuman.Physics.Move(-target.NormalizedFast() * 6f);
+						_selectedHuman.Physics.Move(-target.NormalizedFast() * 6f * (float)Time.unScaledDeltaTime);
 						_selectedHuman.Model.Run();
 					}else{
 						_selectedHuman.Model.Idle();
@@ -333,7 +333,7 @@ namespace Hedra.Engine.Rendering.UI
 				    if (_previousHuman.MainWeapon != null)
                         _previousHuman.MainWeapon.Weapon.InAttackStance = false;
                     if ( (_previousHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz - backTarget.Xz).LengthSquared > 1*1){
-						_previousHuman.Physics.Move(backTarget.NormalizedFast() * 6f);
+						_previousHuman.Physics.Move(backTarget.NormalizedFast() * 6f * (float)Time.unScaledDeltaTime);
 						_previousHuman.Model.Run();
                         _previousHuman.Model.Rotation = Physics.DirectionToEuler(backTarget.NormalizedFast().Xz.ToVector3());
                         _previousHuman.Model.TargetRotation = _previousHuman.Model.Rotation;

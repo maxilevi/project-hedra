@@ -40,7 +40,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             for (var i = 0; i < PrimaryAnimations.Length; i++)
 		    {
 		        PrimaryAnimations[i].Loop = false;
-		        PrimaryAnimations[i].Speed = 1.35f;
+		        PrimaryAnimations[i].Speed = 1.5f;
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
 		            Owner.Attack(Owner.DamageEquation * (FrontSlash ? 1.25f : 1.0f) );
@@ -55,10 +55,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    SecondaryAnimations = new Animation[1];
             SecondaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorLunge.dae");
 
-		    for (var k = 0; k < SecondaryAnimations.Length; k++)
+            for (var k = 0; k < SecondaryAnimations.Length; k++)
 		    {
 		        SecondaryAnimations[k].Loop = false;
-		        SecondaryAnimations[k].OnAnimationEnd += delegate
+		        SecondaryAnimations[k].Speed = 1.5f;
+                SecondaryAnimations[k].OnAnimationEnd += delegate
 		        {
 		            Owner.Attack(Owner.DamageEquation * 1.10f, delegate(Entity Mob)
 		            {

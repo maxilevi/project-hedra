@@ -91,7 +91,7 @@ namespace Hedra.Engine.Player.MapSystem
 			if(World.Seed == World.MenuSeed && this.Show) this.Show = false;
 
 		    this._size = Mathf.Lerp(_size, _targetSize, Time.unScaledDeltaTime * 4f);
-		    this._height = Mathf.Lerp(_height, _targetHeight, Time.unScaledDeltaTime * 4f);
+		    this._height = Mathf.Lerp(_height, _targetHeight, Time.unScaledDeltaTime * 2f);
             this.UpdateFogAndTime();
 
             var mapPosition = _player.Model.Model.Position.Xz.ToVector3();

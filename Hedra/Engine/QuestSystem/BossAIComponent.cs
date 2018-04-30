@@ -68,7 +68,7 @@ namespace Hedra.Engine.QuestSystem
 			            
 				}
 				Parent.Model.Run();
-				Parent.Physics.Move( (Player.Position - Parent.Position).NormalizedFast().Xz.ToVector3() * Parent.Speed * 4 * 2);
+				Parent.Physics.Move( (Player.Position - Parent.Position).NormalizedFast().Xz.ToVector3() * Parent.Speed * 4 * 2 * (float)Time.deltaTime);
 				Physics.LookAt(Parent, Player);
 			}else
 				Parent.Model.Idle();

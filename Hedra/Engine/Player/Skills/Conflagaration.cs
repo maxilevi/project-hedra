@@ -55,7 +55,7 @@ namespace Hedra.Engine.Player
 			Player.IsCasting = true;
 			Casting = true;
 			base.MaxCooldown = 8 - 1f * base.Level;
-			Player.Movement.Check = false;
+			Player.Movement.CaptureMovement = false;
 			
 			Light = ShaderManager.GetAvailableLight();
 			Light.Color = new Vector3(1,0.2f,0.2f);
@@ -72,7 +72,7 @@ namespace Hedra.Engine.Player
 			}
 			if(Casting && Player.IsCasting){
 				this.PushEntitiesAway();
-				Player.Movement.OrientatePlayer(Player);
+				Player.Movement.Orientate();
 			}
 			
 		}

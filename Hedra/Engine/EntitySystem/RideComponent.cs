@@ -37,7 +37,7 @@ namespace Hedra.Engine.EntitySystem
 			Parent.Model.Tint = new Vector4(1f,1f,1f,1);
 			LocalPlayer player = GameManager.Player;
 			if( !HasRider && (player.BlockPosition - Parent.BlockPosition).LengthSquared < 12*12 && !player.IsRiding && !player.IsCasting
-			    && Vector3.Dot( (Parent.BlockPosition - player.BlockPosition).NormalizedFast(), player.View.LookAtPoint.NormalizedFast()) > .6f)
+			    && Vector3.Dot( (Parent.BlockPosition - player.BlockPosition).NormalizedFast(), player.View.LookingDirection) > .6f)
 			{
 			    var model = Parent.Model as IMountable;
 			    if(model != null && model.IsMountable && !Parent.IsUnderwater && !Parent.Knocked){					

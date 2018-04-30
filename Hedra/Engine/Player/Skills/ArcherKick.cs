@@ -40,8 +40,6 @@ namespace Hedra.Engine.Player
 			this.KickAnimation.OnAnimationEnd += delegate { 
 				Player.IsCasting = false;
 				Casting = false;
-				Player.Movement.MoveFeet = false;
-				Player.Movement.MoveCount = 1.0f;
 				Player.WasAttacking = false;
 				Player.IsAttacking = false;
 				this.EmitParticles = false;
@@ -85,7 +83,7 @@ namespace Hedra.Engine.Player
 		
 		public override void Update(){
 			if(Player.IsCasting && Casting){
-				Player.Movement.OrientatePlayer(Player);
+				Player.Movement.Orientate();
 				
 				if(EmitParticles){
 					this.PushEntitiesAway();

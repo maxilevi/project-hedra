@@ -36,7 +36,7 @@ namespace Hedra.Engine.EnvironmentSystem
 		
 		public Vector2 Coordinates => _ndc.Xy;
 
-	    public bool Enabled => SkyManager.DayTime > 6000 && SkyManager.DayTime < 20000 && Math.Sin(GameManager.Player.View.Yaw) > 0;
+	    public bool Enabled => SkyManager.DayTime > 6000 && SkyManager.DayTime < 20000 && Math.Sin(GameManager.Player.View.TargetYaw) > 0;
 
 	    public void Draw(){
 			GraphicsLayer.Enable(EnableCap.Blend);

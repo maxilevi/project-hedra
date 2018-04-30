@@ -6,22 +6,22 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using System.Threading;
 using Hedra.Engine.EntitySystem;
-using System.Collections.Generic;
-using System.Linq;
-using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-	/// <summary>
-	/// Description of PhysicsThreadManager.
-	/// </summary>
-	public class PhysicsThreadManager
+    /// <summary>
+    /// Description of PhysicsThreadManager.
+    /// </summary>
+    public delegate void OnCommandProcessedEventHandler(MoveCommand Command);
+    public delegate void OnBatchProcessedEventHandler();
+
+    public class PhysicsThreadManager
 	{
 	    public const int ThreadCount = 2;
-	    private PhysicsLoadBalancer _loadBalancer;
+	    public OnCommandProcessedEventHandler OnCommandProcessedEvent;
+	    public OnBatchProcessedEventHandler OnBatchProcessedEvent;
+        private PhysicsLoadBalancer _loadBalancer;
 	    private PhysicsThread[] _threads;
 		private bool _sleep = true;
 		
@@ -30,6 +30,8 @@ namespace Hedra.Engine.PhysicsSystem
             for (var i = 0; i < ThreadCount; i++)
 		    {
 		        _threads[i] = new PhysicsThread();
+		        _threads[i].OnBatchProcessedEvent += () => OnBatchProcessedEvent?.Invoke();
+                _threads[i].OnCommandProcessedEvent += M => OnCommandProcessedEvent?.Invoke(M);
 		    }
 		    _loadBalancer = new PhysicsLoadBalancer(_threads);
         }

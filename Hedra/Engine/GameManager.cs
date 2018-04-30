@@ -63,16 +63,16 @@ namespace Hedra.Engine
 
 	    public static void LoadMenu(){
 	        World.Recreate(World.MenuSeed);
-            LocalPlayer.Instance.UI.ShowMenu();
 	        EnvironmentSystem.SkyManager.SetTime(12000);
-          	LocalPlayer.Instance.Model.Enabled = false;
-          	LocalPlayer.Instance.View.Pitch = 0f;
-          	LocalPlayer.Instance.HandLamp.Enabled = false;
-          	LocalPlayer.Instance.View.Yaw = 0f;
-          	LocalPlayer.Instance.View.TargetDistance = 10f;
-	        LocalPlayer.Instance.IsGliding = false;
-	        LocalPlayer.Instance.Glider.Enabled = false;
-	        LocalPlayer.Instance.Knocked = false;
+	        Player.UI.ShowMenu();
+            Player.Model.Enabled = false;
+	        Player.View.TargetPitch = 0f;
+	        Player.HandLamp.Enabled = false;
+	        Player.View.TargetYaw = 0f;
+	        Player.View.TargetDistance = 10f;
+	        Player.IsGliding = false;
+	        Player.Glider.Enabled = false;
+	        Player.Knocked = false;
 	        SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
             CoroutineManager.StartCoroutine(GameManager.MenuCoroutine);
         }

@@ -194,7 +194,7 @@ namespace Hedra.Engine.EntitySystem
                 Parent.Orientation = (_point - Parent.Position).Xz.NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
 
-                Parent.Physics.Move(Parent.Orientation * 5 * Parent.Speed );
+                Parent.Physics.Move(Parent.Orientation * 5 * Parent.Speed * (float) Time.deltaTime);
                 Parent.Model.Run();
             }
         }

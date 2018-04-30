@@ -6,7 +6,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
@@ -19,9 +18,10 @@ namespace Hedra.Engine.Player
 		public ObjectMesh BaseMesh;
 		
 		public GliderModel(){
-			BaseMesh = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Glider.ply", Vector3.One, Vector3.Zero, Vector3.Zero));
+			BaseMesh = ObjectMesh.FromVertexData(
+                AssetManager.PlyLoader("Assets/Items/Glider.ply", Vector3.One * 1.25f)
+                );
 		}
-		
 		public override void Idle(){}
 		public override void Run(){}
 	}

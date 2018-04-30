@@ -115,7 +115,7 @@ namespace Hedra.Engine.Player
 		
 		public void Focus(){
 			_player.CanInteract = false;
-			_player.View.Check = false;
+			_player.View.CaptureMovement = false;
 			_player.View.LockMouse = false;
 			_player.UI.GamePanel.Cross.Disable();
 			_commandLine.Enable();
@@ -129,7 +129,7 @@ namespace Hedra.Engine.Player
 		    if (Focused)
 		    {
 		        _player.CanInteract = true;
-		        _player.View.Check = true;
+		        _player.View.CaptureMovement = true;
 		        _player.View.LockMouse = true;
 		    }
 		    _player.UI.GamePanel.Cross.Enable();

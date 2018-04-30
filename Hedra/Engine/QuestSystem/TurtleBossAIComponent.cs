@@ -54,7 +54,7 @@ namespace Hedra.Engine.QuestSystem
 		public void Spin(){
 			IsSpinning = true;
 			
-			Parent.Physics.Move(SpinDirection.Xz.ToVector3() * 2f * 4f * 8);
+			Parent.Physics.Move(SpinDirection.Xz.ToVector3() * 2f * 4f * 8 * (float)Time.deltaTime);
 			SpinDelta += (SpinDirection.Xz.ToVector3() * 2f * 4f * 8 * (float) Time.deltaTime).LengthFast;
 			if(SpinDelta >= SpinTarget.Xz.LengthFast ){
 				this.IsSpinning = false;

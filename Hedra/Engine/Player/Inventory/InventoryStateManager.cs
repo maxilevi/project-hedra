@@ -12,14 +12,14 @@ namespace Hedra.Engine.Player.Inventory
     {
         public InventoryStateManager(LocalPlayer Player)
         {
-            this.RegisterStateItem(() => Player.View.Pitch, O => Player.View.Pitch = (float) O);
+            this.RegisterStateItem(() => Player.View.TargetPitch, O => Player.View.TargetPitch = (float) O);
             this.RegisterStateItem(() => Player.View.CameraHeight, O => Player.View.CameraHeight = (Vector3)O);
             this.RegisterStateItem(() => Player.View.TargetDistance, O => Player.View.TargetDistance = (float)O);
-            this.RegisterStateItem(() => Player.View.Yaw, O => Player.View.Yaw = (float)O);
+            this.RegisterStateItem(() => Player.View.TargetYaw, O => Player.View.TargetYaw = (float)O);
             this.RegisterStateItem(() => Player.View.LockMouse, O => Player.View.LockMouse = (bool)O);
             this.RegisterStateItem(() => UpdateManager.CursorShown, O => UpdateManager.CursorShown = (bool)O);
-            this.RegisterStateItem(() => Player.Movement.Check, O => Player.Movement.Check = (bool)O);
-            this.RegisterStateItem(() => Player.View.Check, O => Player.View.Check = (bool) O);
+            this.RegisterStateItem(() => Player.Movement.CaptureMovement, O => Player.Movement.CaptureMovement = (bool)O);
+            this.RegisterStateItem(() => Player.View.CaptureMovement, O => Player.View.CaptureMovement = (bool) O);
             this.RegisterStateItem(() => Player.View.PositionDelegate, O => Player.View.PositionDelegate = (Func<Vector3>)O, true);
         }
 

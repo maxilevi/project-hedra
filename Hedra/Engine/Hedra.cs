@@ -190,9 +190,9 @@ namespace Hedra
 			
 			CoroutineManager.Update();
 			ThreadManager.Update();
-			UpdateManager.Update();
-			Physics.Manager.Update();
-			SoundManager.Update(LocalPlayer.Instance.Position);
+            UpdateManager.Update();
+	        Physics.Manager.Update();
+            SoundManager.Update(LocalPlayer.Instance.Position);
 			SoundtrackManager.Update();
 			AutosaveManager.Update();
 
@@ -218,7 +218,7 @@ namespace Hedra
 			
 			
 			LocalPlayer Player = GameManager.Player;
-			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.Matrix);
+			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
 			Vector2 Vec2 = World.ToChunkSpace(Player.Position);
 			//Log.WriteLine( (System.GC.GetTotalMemory(false) / 1024 / 1024) + " MB");
 			if(GameSettings.Debug){
@@ -235,12 +235,12 @@ namespace Hedra
 				_positionText.Text = "X = "+(int)Player.BlockPosition.X+" Y = "+(int)(Player.BlockPosition.Y)+" Z = "+(int)Player.BlockPosition.Z;
 				if(_underChunk != null)
 					_chunkText.Text = "Chunks = "+ World.Chunks.Count+" ChunkX = "+_underChunk.OffsetX+" ChunkZ = "+_underChunk.OffsetZ;
-				_meshesText.Text = " Lights = "+ShaderManager.UsedLights +" / " +ShaderManager.MaxLights;
+				_meshesText.Text = " Lights = "+ShaderManager.UsedLights +" / " +ShaderManager.MaxLights + " Pitch = "+Player.View.Pitch;
 				_meshQueueCount.Text = "Mesh Queue = "+ World.MeshQueue.Queue.Count + 
 					"Cache ="+CacheManager.CachedColors.Count + " | "+CacheManager.CachedExtradata.Count + " Time = "+(int)(SkyManager.DayTime/1000)+":"+((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)).ToString("00");
-				_generationQueueCount.Text =  "Generation Queue ="+ World.ChunkGenerationQueue.Queue.Count+" Mobs = "+MobCount +" Yaw = "+Player.View.Yaw;
+				_generationQueueCount.Text =  "Generation Queue ="+ World.ChunkGenerationQueue.Queue.Count+" Mobs = "+MobCount +" Yaw = "+Player.View.TargetYaw;
 				_renderText.Text = "Textures = "+Graphics2D.Textures.Count+" Seed= "+ World.Seed + " FPS= "+Utils.LastFrameRate + " MS="+Utils.FrameProccesingTime;
-				_cameraText.Text = "Pitch = "+Player.View.Pitch+" Physics Calls = "+ Physics.Manager.Count;
+				_cameraText.Text = "Pitch = "+Player.View.TargetPitch+" Physics Calls = "+ Physics.Manager.Count;
                 /*
 			    _passedTime += Time.FrameTimeSeconds;
 			    if (_passedTime > 5.0f)
@@ -415,15 +415,12 @@ namespace Hedra
 			GameSettings.Width = Width;
 			GameSettings.Height = Height;
 			
-			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.Matrix);
-			DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, GameManager.Player.View.Matrix);
+			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
+			DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, GameManager.Player.View.ModelViewMatrix);
 			//Resize FBOs
 			MainFBO.DefaultBuffer.Resize();
 			//Game.LPlayer.Inventory.Resize();
 			
-			
-			UserInterface.PlayerFbo.Dispose();
-			UserInterface.PlayerFbo = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
 			GameManager.Player.UI = new UserInterface(GameManager.Player);
 		}
 		

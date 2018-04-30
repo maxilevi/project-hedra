@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Threading;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.QuestSystem;
 
 namespace Hedra.Engine.PhysicsSystem
 {
     public class PhysicsThread
     {
+        public OnBatchProcessedEventHandler OnBatchProcessedEvent;
+        public OnCommandProcessedEventHandler OnCommandProcessedEvent;
         private readonly Thread _thread;
         private readonly List<Entity> _toUpdate;
         private readonly List<MoveCommand> _toMove;
@@ -78,7 +79,7 @@ namespace Hedra.Engine.PhysicsSystem
                     {
                         if (_toMove[i].Parent != null)
                             _toMove[i].Parent.Physics.ProccessCommand(_toMove[i]);
-
+                        OnCommandProcessedEvent?.Invoke(_toMove[i]);
                         _toMove.RemoveAt(i);
                     }
                     catch (Exception e)
@@ -86,7 +87,7 @@ namespace Hedra.Engine.PhysicsSystem
                         Log.WriteLine(e.ToString());
                     }
                 }
-
+                OnBatchProcessedEvent?.Invoke();
                 _sleep = true;
             }
 

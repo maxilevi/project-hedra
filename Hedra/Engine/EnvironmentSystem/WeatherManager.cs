@@ -29,24 +29,21 @@ namespace Hedra.Engine.EnvironmentSystem
         {
             if (IsRaining)
             {
-                this.ManageRain(UnderChunk);
-            }
-
-            if (!UnderChunk.Biome.Sky.CanRain) return;
-
-            if (IsRaining)
-            {
-                if (_rainTimer.Tick())
+                if (_rainTimer.Tick() || !UnderChunk.Biome.Sky.CanRain)
                 {
                     IsRaining = false;
                 }
             }
-            if (!IsRaining)
+            if (!IsRaining && UnderChunk.Biome.Sky.CanRain)
             {
                 if (_rng.Next(0, 6000) == 1)
                 {
                     IsRaining = true;
                 }
+            }
+            if (IsRaining)
+            {
+                this.ManageRain(UnderChunk);
             }
         }
 

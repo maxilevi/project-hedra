@@ -58,8 +58,8 @@ namespace Hedra.Engine.Rendering
 
 	    public static void PrepareRendering()
 	    {
-	        GameManager.Player.View.RebuildMatrix();
-	        DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.Matrix);
+	        //GameManager.Player.View.BuildCameraMatrix();
+	        DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
         }
 
 		public static void Render(Dictionary<Vector2, Chunk> ToDraw, ChunkBufferTypes Type){
