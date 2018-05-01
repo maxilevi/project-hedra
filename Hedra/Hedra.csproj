@@ -214,6 +214,7 @@
     <Compile Include="Engine\ItemSystem\EquipmentType.cs" />
     <Compile Include="Engine\Management\ISearchable.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
+    <Compile Include="Engine\Management\KeyboardManager.cs" />
     <Compile Include="Engine\Management\TickSystem.cs" />
     <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
     <Compile Include="Engine\Management\TrackItem.cs" />
@@ -681,6 +682,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageScheme.cs" />
     <Compile Include="Engine\StructureSystem\WoodenFortDesign.cs" />
     <Compile Include="Engine\Testing\AutomatedTest.cs" />
+    <Compile Include="Engine\Testing\AutomatedTests\BaseAutomatedTest.cs" />
     <Compile Include="Engine\Testing\AutomatedTests\MenuTest.cs" />
     <Compile Include="Engine\Time.cs" />
     <Compile Include="Engine\Generation\Block.cs" />

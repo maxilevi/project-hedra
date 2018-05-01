@@ -24,10 +24,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public class Knife : Weapon
 	{
 	    public override bool IsMelee { get; protected set; } = true;
-        private Vector3 PreviousPosition = Vector3.Zero;
-		private ObjectMesh KnifeSheath;
-		
-		public Knife(VertexData Contents) : base(Contents)
+	    protected override float WeaponCooldown => .25f;
+		private readonly ObjectMesh KnifeSheath;
+	    private Vector3 _previousPosition;
+
+        public Knife(VertexData Contents) : base(Contents)
 		{
 			
 			VertexData SheathData = AssetManager.PlyLoader("Assets/Items/KnifeSheath.ply", Vector3.One);
@@ -44,7 +45,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    for (int i = 0; i < PrimaryAnimations.Length; i++)
 		    {
 		        PrimaryAnimations[i].Loop = false;
-		        PrimaryAnimations[i].Speed = 1.0f;
+		        PrimaryAnimations[i].Speed = 1.5f;
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
 
@@ -68,7 +69,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    for (int i = 0; i < SecondaryAnimations.Length; i++)
 		    {
 		        SecondaryAnimations[i].Loop = false;
-		        SecondaryAnimations[i].OnAnimationEnd += delegate
+		        PrimaryAnimations[i].Speed = 1.5f;
+                SecondaryAnimations[i].OnAnimationEnd += delegate
 		        {
 		            Owner.Attack(Owner.DamageEquation * 0.8f, delegate(Entity Mob)
 		            {
@@ -125,7 +127,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 				this.MainMesh.TargetRotation = new Vector3(180,0,0);
 				this.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
 				
-				if(PreviousPosition != Owner.Model.Human.BlockPosition && Owner.Model.Human.IsGrounded){
+				if(_previousPosition != Owner.Model.Human.BlockPosition && Owner.Model.Human.IsGrounded){
 				    Chunk underChunk = World.GetChunkAt(Owner.Model.Position);
                     World.Particles.VariateUniformly = true;
 				    World.Particles.Color = World.GetHighestBlockAt( (int) Owner.Model.Human.Position.X, (int) Owner.Model.Human.Position.Z).GetColor(underChunk.Biome.Colors);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
@@ -144,7 +146,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 					    World.Particles.Emit();
 					}
 				}
-				PreviousPosition = Owner.BlockPosition;
+				_previousPosition = Owner.BlockPosition;
 			}
 		    base.SetToDefault(KnifeSheath);
 

@@ -21,7 +21,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public class Katar : Weapon
 	{
 	    public override bool IsMelee { get; protected set; } = true;
-        private ObjectMesh SecondBlade;
+	    protected override float WeaponCooldown => .05f;
+        private readonly ObjectMesh SecondBlade;
 		
 		public Katar(VertexData Contents) : base(Contents)
 		{
@@ -51,7 +52,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
 		    for (int i = 0; i < SecondaryAnimations.Length; i++)
 		    {
-		        SecondaryAnimations[i].Speed = 1.5f;
+		        SecondaryAnimations[i].Speed = 2.0f;
 		        SecondaryAnimations[i].Loop = false;
 		        SecondaryAnimations[i].OnAnimationEnd += delegate
 		        {

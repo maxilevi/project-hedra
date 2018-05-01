@@ -6,12 +6,13 @@ using System.Threading;
 using Hedra.Engine.Events;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
+using OpenTK;
 using OpenTK.Input;
 using Panel = Hedra.Engine.Rendering.UI.Panel;
 
 namespace Hedra.Engine.Testing.AutomatedTests
 {
-    public class MenuTest : BaseTest
+    public class MenuTest : BaseAutomatedTest
     {
         private const string _characterName = "_test";
 
@@ -60,21 +61,22 @@ namespace Hedra.Engine.Testing.AutomatedTests
             ThreadManager.ExecuteOnMainThread(delegate
             {
                 GameManager.MakeCurrent(DataManager.PlayerFiles.First(F => F.Name == _characterName));
-                CoroutineManager.StartCoroutine(TestCanPlayWithNewCharacter);
+                CoroutineManager.StartCoroutine(this.TestCanPlayWithNewCharacter);
             });
         }
 
         private IEnumerator TestCanPlayWithNewCharacter()
         {
             var passedTime = 0f;
-            var maxTime = 0f;
+            var maxTime = 5f;
             var wPress = this.SimulateKeyEvent(Key.W);
             while (passedTime < maxTime)
             {
-                //Program.GameWindow.
+                EventDispatcher.OnKeyDown(this, wPress);
                 passedTime += (float)Time.deltaTime;
                 yield return null;
             }
+            EventDispatcher.OnMouseButtonDown(this, this.SimulateMouseButtonEvent(MouseButton.Left, Vector2.Zero));
         }
 
         private void GoToChooser()

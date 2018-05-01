@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player
 	public class MovementManager
 	{
 	    private const float NormalSpeed = 2.25f;
-	    private const float AttackingSpeed = 1.25f;
+	    private const float AttackingSpeed = 1.0f;
         private readonly List<MoveOrder> _order;
 		public bool CaptureMovement { get; set; } = true;
 	    public float JumpingDistance => Human.IsMoving ? 6f : 3f;
@@ -34,7 +34,7 @@ namespace Hedra.Engine.Player
 	    public Vector3 MoveFormula(Vector3 Direction)
 	    {
 	        float movementSpeed = (Human.IsUnderwater && !Human.IsGrounded ? 1.25f : 1.0f) * Human.Speed;
-	        float speed = Human.IsAttacking && Human.Class is ArcherDesign ? AttackingSpeed : NormalSpeed;
+	        float speed = Human.IsAttacking ? AttackingSpeed : NormalSpeed;
 	        return Direction * 5f * 1.75f * movementSpeed * (Human.IsJumping ? 1.75f : 1f) * speed;
 	    }
 

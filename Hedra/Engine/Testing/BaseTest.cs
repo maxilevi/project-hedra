@@ -113,12 +113,5 @@ namespace Hedra.Engine.Testing
             }
             this.AssertTrue(Obj1.Equals(Obj2), Message);
         }
-
-        protected KeyboardKeyEventArgs SimulateKeyEvent(Key Press)
-        {
-            var keyEvent = new KeyboardKeyEventArgs();
-            keyEvent.GetType().GetField("key", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(keyEvent, Press);
-            return keyEvent;
-        }
     }
 }

@@ -21,13 +21,15 @@ namespace Hedra.Engine.Events
 	    private static readonly Dictionary<object, EventHandler<MouseButtonEventArgs>> MouseButtonDownHandlers;
         private static readonly Dictionary<object, EventHandler<MouseMoveEventArgs>> MouseMoveHandlers;
 	    private static readonly Dictionary<object, EventHandler<MouseWheelEventArgs>> MouseWheelHandlers;
-        private static event EventHandler<KeyboardKeyEventArgs> _onKeyDown;
-	    private static event EventHandler<KeyboardKeyEventArgs> _onKeyUp;
-        private static event EventHandler<KeyPressEventArgs> _onKeyPressed;
-        private static event EventHandler<MouseMoveEventArgs> _onMouseMove;
-        private static event EventHandler<MouseButtonEventArgs> _onMouseButtonUp;
-	    private static event EventHandler<MouseButtonEventArgs> _onMouseButtonDown;
-	    private static event EventHandler<MouseWheelEventArgs> _onMouseWheel;
+
+        private static event EventHandler<KeyboardKeyEventArgs> OnKeyDownEvent;
+	    private static event EventHandler<KeyboardKeyEventArgs> OnKeyUpEvent;
+        private static event EventHandler<KeyPressEventArgs> OnKeyPressedEvent;
+        private static event EventHandler<MouseMoveEventArgs> OnMouseMoveEvent;
+        private static event EventHandler<MouseButtonEventArgs> OnMouseButtonUpEvent;
+	    private static event EventHandler<MouseButtonEventArgs> OnMouseButtonDownEvent;
+	    private static event EventHandler<MouseWheelEventArgs> OnMouseWheelEvent;
+
         public static Vector2 Mouse { get; set; } = Vector2.Zero;
         public static Key LastKeyDown { get; private set; }
 
@@ -53,12 +55,12 @@ namespace Hedra.Engine.Events
 	    public static void RegisterMouseMove(object Key, EventHandler<MouseMoveEventArgs> EventHandler)
 	    {
 	        MouseMoveHandlers.Add(Key, EventHandler);
-	        _onMouseMove += MouseMoveHandlers[Key];
+	        OnMouseMoveEvent += MouseMoveHandlers[Key];
 	    }
 
 	    public static void UnregisterMouseMove(object Key)
 	    {
-	        _onMouseMove -= MouseMoveHandlers[Key];
+	        OnMouseMoveEvent -= MouseMoveHandlers[Key];
 	        MouseMoveHandlers.Remove(Key);
 
 	    }
@@ -66,12 +68,12 @@ namespace Hedra.Engine.Events
 	    public static void RegisterMouseDown(object Key, EventHandler<MouseButtonEventArgs> EventHandler)
 	    {
 	        MouseButtonDownHandlers.Add(Key, EventHandler);
-	        _onMouseButtonDown += MouseButtonDownHandlers[Key];
+	        OnMouseButtonDownEvent += MouseButtonDownHandlers[Key];
 	    }
 
 	    public static void UnregisterMouseDown(object Key)
 	    {
-	        _onMouseButtonDown -= MouseButtonDownHandlers[Key];
+	        OnMouseButtonDownEvent -= MouseButtonDownHandlers[Key];
 	        MouseButtonDownHandlers.Remove(Key);
 
 	    }
@@ -79,12 +81,12 @@ namespace Hedra.Engine.Events
 	    public static void RegisterMouseUp(object Key, EventHandler<MouseButtonEventArgs> EventHandler)
 	    {
 	        MouseButtonUpHandlers.Add(Key, EventHandler);
-	        _onMouseButtonUp += MouseButtonUpHandlers[Key];
+	        OnMouseButtonUpEvent += MouseButtonUpHandlers[Key];
 	    }
 
 	    public static void UnregisterMouseUp(object Key)
 	    {
-	        _onMouseButtonUp -= MouseButtonUpHandlers[Key];
+	        OnMouseButtonUpEvent -= MouseButtonUpHandlers[Key];
 	        MouseButtonUpHandlers.Remove(Key);
 
 	    }
@@ -92,96 +94,96 @@ namespace Hedra.Engine.Events
         public static void RegisterKeyDown(object Key, EventHandler<KeyboardKeyEventArgs> EventHandler)
 	    {
 	        KeyDownHandlers.Add(Key, EventHandler);
-	        _onKeyDown += KeyDownHandlers[Key];
+	        OnKeyDownEvent += KeyDownHandlers[Key];
 	    }
 
 	    public static void UnregisterKeyDown(object Key)
 	    {
-	        _onKeyDown -= KeyDownHandlers[Key];
+	        OnKeyDownEvent -= KeyDownHandlers[Key];
 	        KeyDownHandlers.Remove(Key);
 	    }
 
 	    public static void RegisterKeyUp(object Key, EventHandler<KeyboardKeyEventArgs> EventHandler)
 	    {
 	        KeyUpHandlers.Add(Key, EventHandler);
-	        _onKeyUp += KeyUpHandlers[Key];
+	        OnKeyUpEvent += KeyUpHandlers[Key];
 	    }
 
 	    public static void UnregisterKeyUp(object Key)
 	    {
-	        _onKeyUp -= KeyUpHandlers[Key];
+	        OnKeyUpEvent -= KeyUpHandlers[Key];
 	        KeyUpHandlers.Remove(Key);
 	    }
 
 	    public static void RegisterKeyPress(object Key, EventHandler<KeyPressEventArgs> EventHandler)
 	    {
 	        KeyPressedHandlers.Add(Key, EventHandler);
-	        _onKeyPressed += KeyPressedHandlers[Key];
+	        OnKeyPressedEvent += KeyPressedHandlers[Key];
 	    }
 
 	    public static void UnregisterKeyPress(object Key)
 	    {
-	        _onKeyPressed -= KeyPressedHandlers[Key];
+	        OnKeyPressedEvent -= KeyPressedHandlers[Key];
 	        KeyPressedHandlers.Remove(Key);
 	    }
 
-        public static void Add(IEventListener e){
-			EventListeners.Add(e);
+        public static void Add(IEventListener E){
+			EventListeners.Add(E);
 	    }
 		
-		public static void Remove(IEventListener a){
-			EventListeners.Remove(a);
+		public static void Remove(IEventListener A){
+			EventListeners.Remove(A);
 		}
-		
-		private static void OnMouseButtonDown(object Sender, MouseButtonEventArgs e){
-		    _onMouseButtonDown?.Invoke(Sender, e);
+
+	    public static void OnMouseButtonDown(object Sender, MouseButtonEventArgs E){
+		    OnMouseButtonDownEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
-				EventListeners[i].OnMouseButtonDown(Sender, e);
+				EventListeners[i].OnMouseButtonDown(Sender, E);
 			}
         }
-		
-		private static void OnMouseButtonUp(object Sender, MouseButtonEventArgs e){
-		    _onMouseButtonUp?.Invoke(Sender, e);
+
+	    public static void OnMouseButtonUp(object Sender, MouseButtonEventArgs E){
+		    OnMouseButtonUpEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
-				EventListeners[i].OnMouseButtonUp(Sender, e);
+				EventListeners[i].OnMouseButtonUp(Sender, E);
 			}
         }
-		
-		private static void OnMouseWheel(object Sender, MouseWheelEventArgs e){
-		    _onMouseWheel?.Invoke(Sender, e);
+
+	    public static void OnMouseWheel(object Sender, MouseWheelEventArgs E){
+		    OnMouseWheelEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
-				EventListeners[i].OnMouseWheel(Sender, e);
+				EventListeners[i].OnMouseWheel(Sender, E);
 			}
         }
-		
-		private static void OnMouseMove(object Sender, MouseMoveEventArgs e){
-			Mouse = new Vector2(e.Mouse.X, e.Mouse.Y);
-		    _onMouseMove?.Invoke(Sender, e);
+
+	    public static void OnMouseMove(object Sender, MouseMoveEventArgs E){
+			Mouse = new Vector2(E.Mouse.X, E.Mouse.Y);
+		    OnMouseMoveEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
-				EventListeners[i].OnMouseMove(Sender, e);
+				EventListeners[i].OnMouseMove(Sender, E);
 			}
         }
-		
-		private static void OnKeyDown(object Sender, KeyboardKeyEventArgs e)
+
+	    public static void OnKeyDown(object Sender, KeyboardKeyEventArgs E)
 		{
-		    LastKeyDown = e.Key;
-		    _onKeyDown?.Invoke(Sender, e);
+		    LastKeyDown = E.Key;
+		    OnKeyDownEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
-				EventListeners[i].OnKeyDown(Sender, e);
+				EventListeners[i].OnKeyDown(Sender, E);
+			}
+		}
+
+	    public static void OnKeyUp(object Sender, KeyboardKeyEventArgs E){
+		    OnKeyUpEvent?.Invoke(Sender, E);
+            for (var i = 0;i<EventListeners.Count; i++){
+				EventListeners[i].OnKeyUp(Sender, E);
 			}
 		}
 		
-		private static void OnKeyUp(object Sender, KeyboardKeyEventArgs e){
-		    _onKeyUp?.Invoke(Sender, e);
-            for (var i = 0;i<EventListeners.Count; i++){
-				EventListeners[i].OnKeyUp(Sender, e);
-			}
-		}
-		
-		private static void OnKeyPress(object Sender, KeyPressEventArgs e){
-            _onKeyPressed?.Invoke(Sender, e);
+		public static void OnKeyPress(object Sender, KeyPressEventArgs E){
+            OnKeyPressedEvent?.Invoke(Sender, E);
 			for(var i = 0;i<EventListeners.Count; i++){
-				EventListeners[i].OnKeyPress(Sender, e);
+				EventListeners[i].OnKeyPress(Sender, E);
 			}
 		}
 	}

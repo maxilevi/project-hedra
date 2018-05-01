@@ -18,6 +18,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scenes;
 using OpenTK;
+using OpenTK.Input;
 
 namespace Hedra.Engine
 {
@@ -26,15 +27,17 @@ namespace Hedra.Engine
 	/// </summary>
 	public static class GameManager
 	{
+	    public static KeyboardManager Keyboard { get; private set; }
 		public static LocalPlayer Player { get; set; }
 	    public static bool IsLoading { get; private set; }
-        private static Texture LoadingScreen;
-	    private static GUIText PlayerText;
+        private static Texture _loadingScreen;
+	    private static GUIText _playerText;
 	    private static bool _isNewRun;
 
         public static void Load()
 		{
-		    World.Load();
+		    Keyboard = new KeyboardManager();
+            World.Load();
 			Log.WriteLine("World Created Successfully!");
 			Player = new LocalPlayer();
 			Log.WriteLine("Player Created Successfully!");
@@ -48,12 +51,12 @@ namespace Hedra.Engine
 
 			Player.Enabled = false;
 
-			LoadingScreen = new Texture(Color.FromArgb(255,29,29,29), Color.FromArgb(255,59,59,59),
+			_loadingScreen = new Texture(Color.FromArgb(255,29,29,29), Color.FromArgb(255,59,59,59),
                 Vector2.Zero, Vector2.One, GradientType.TopBot);
-		    PlayerText = new GUIText("", new Vector2(0, 0), Color.White,
+		    _playerText = new GUIText("", new Vector2(0, 0), Color.White,
                 FontCache.Get(UserInterface.Fonts.Families[0], 14, FontStyle.Bold));
 
-		    LoadingScreen.Disable();
+		    _loadingScreen.Disable();
 
 			GameManager.LoadMenu();
 		}
@@ -188,10 +191,10 @@ namespace Hedra.Engine
 			IsLoading = true;
 			var text = "LOADING";
 
-		    LoadingScreen.TextureElement.Opacity = 1;
-		    PlayerText.UIText.Opacity = 1;
-		    PlayerText.Enable();
-		    LoadingScreen.Enable();
+		    _loadingScreen.TextureElement.Opacity = 1;
+		    _playerText.UIText.Opacity = 1;
+		    _playerText.Enable();
+		    _loadingScreen.Enable();
 		    UpdateManager.CursorShown = true;
 
 		    var chunkOffset = World.ToChunkSpace(LocalPlayer.Instance.BlockPosition);
@@ -206,7 +209,7 @@ namespace Hedra.Engine
 				if(text.Contains("....")) 
 					text = "LOADING";
 
-                PlayerText.Text = text;
+                _playerText.Text = text;
 				Chunk underChunk = World.GetChunkAt(Player.BlockPosition);
 				if(underChunk != null && underChunk.IsGenerated && underChunk.Landscape.StructuresPlaced && underChunk.BuildedWithStructures
 				  && underChunk.Mesh != null){
@@ -228,8 +231,8 @@ namespace Hedra.Engine
 					Player.Model.ApplyFog = true;
 					Player.CanInteract = true;
 					IsLoading = false;
-					LoadingScreen.TextureElement.Opacity = 0;
-				    PlayerText.UIText.Opacity = 0;
+					_loadingScreen.TextureElement.Opacity = 0;
+				    _playerText.UIText.Opacity = 0;
 					if(_isNewRun)
 						Player.QuestLog.Show = true;
 

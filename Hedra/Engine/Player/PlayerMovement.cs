@@ -49,7 +49,7 @@ namespace Hedra.Engine.Player
                 return;
 
 
-            if ((Program.GameWindow.Keyboard[Key.W] || Program.GameWindow.Keyboard[Key.A] || Program.GameWindow.Keyboard[Key.S] || Program.GameWindow.Keyboard[Key.D]) && !_player.IsCasting)
+            if ((GameManager.Keyboard[Key.W] || GameManager.Keyboard[Key.A] || GameManager.Keyboard[Key.S] || GameManager.Keyboard[Key.D]) && !_player.IsCasting)
             {
                 _player.Model.Run();
                 Human.Model.Rotation = new Vector3(0, Human.Model.Rotation.Y, Human.Model.Rotation.Z);
@@ -65,20 +65,20 @@ namespace Hedra.Engine.Player
             if (!_player.IsGliding)
             {
                 _characterRotation = Human.FacingDirection.Y;
-                if (Program.GameWindow.Keyboard[Key.D]) _characterRotation += -90f;
-                if (Program.GameWindow.Keyboard[Key.A])_characterRotation += 90f;
-                if (Program.GameWindow.Keyboard[Key.S]) _characterRotation += 180f;
-                if (Program.GameWindow.Keyboard[Key.W]) _characterRotation += 0f;
-                if (Program.GameWindow.Keyboard[Key.W] && Program.GameWindow.Keyboard[Key.D]) _characterRotation += 45f;
-                if (Program.GameWindow.Keyboard[Key.W] && Program.GameWindow.Keyboard[Key.A]) _characterRotation += -45f;
-                if (Program.GameWindow.Keyboard[Key.S] && Program.GameWindow.Keyboard[Key.D]) _characterRotation += 135f;
-                if (Program.GameWindow.Keyboard[Key.S] && Program.GameWindow.Keyboard[Key.A]) _characterRotation += -135f;
+                if (GameManager.Keyboard[Key.D]) _characterRotation += -90f;
+                if (GameManager.Keyboard[Key.A])_characterRotation += 90f;
+                if (GameManager.Keyboard[Key.S]) _characterRotation += 180f;
+                if (GameManager.Keyboard[Key.W]) _characterRotation += 0f;
+                if (GameManager.Keyboard[Key.W] && GameManager.Keyboard[Key.D]) _characterRotation += 45f;
+                if (GameManager.Keyboard[Key.W] && GameManager.Keyboard[Key.A]) _characterRotation += -45f;
+                if (GameManager.Keyboard[Key.S] && GameManager.Keyboard[Key.D]) _characterRotation += 135f;
+                if (GameManager.Keyboard[Key.S] && GameManager.Keyboard[Key.A]) _characterRotation += -135f;
 
                 var keysPresses = 0f;
-                var wPressed = Program.GameWindow.Keyboard[Key.W];
-                var sPressed = Program.GameWindow.Keyboard[Key.S];
-                var dPressed = Program.GameWindow.Keyboard[Key.D];
-                var aPressed = Program.GameWindow.Keyboard[Key.A];
+                var wPressed = GameManager.Keyboard[Key.W];
+                var sPressed = GameManager.Keyboard[Key.S];
+                var dPressed = GameManager.Keyboard[Key.D];
+                var aPressed = GameManager.Keyboard[Key.A];
                 if (dPressed && aPressed)
                 {
                     dPressed = false;
@@ -98,10 +98,10 @@ namespace Hedra.Engine.Player
 
                 _targetAngles.Z = 4f * (_player.View.StackedYaw - _yaw);
                 _targetAngles = Mathf.Clamp(_targetAngles, -7.5f, 7.5f);
-                _angles = Mathf.Lerp(_angles, _targetAngles * (Program.GameWindow.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.deltaTime * 8f);
+                _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.deltaTime * 8f);
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.deltaTime * 2f);
 
-                if (Program.GameWindow.Keyboard[Key.W])
+                if (GameManager.Keyboard[Key.W])
                 {
                     _targetYaw = _player.View.TargetYaw;
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Forward) * keysPresses);                   
@@ -111,24 +111,24 @@ namespace Hedra.Engine.Player
                     Matrix4.CreateRotationY(-_player.Model.Model.Rotation.Y * Mathf.Radian) *
                     Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian) *
                     Matrix4.CreateRotationY(_player.Model.Model.Rotation.Y * Mathf.Radian);
-                if (Program.GameWindow.Keyboard[Key.S])
+                if (GameManager.Keyboard[Key.S])
                 {
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Backward) * keysPresses);
                 }
 
-                if (Program.GameWindow.Keyboard[Key.A])
+                if (GameManager.Keyboard[Key.A])
                 {
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Left) * keysPresses);
                 }
 
-                if (Program.GameWindow.Keyboard[Key.D])
+                if (GameManager.Keyboard[Key.D])
                 {
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Right) * keysPresses);
                 }
 
                 #region Climb (Indev)
                 /*
-		        if(Program.GameWindow.Keyboard[Key.ControlLeft]){
+		        if(GameManager.Keyboard[Key.ControlLeft]){
 		            if(Player.Stamina > 5){
 		            	Player.IsClimbing = true;
 						Player.Climb();
@@ -149,8 +149,8 @@ namespace Hedra.Engine.Player
 
 
             if (!_player.IsUnderwater) return;
-            if (Program.GameWindow.Keyboard[Key.Space]) this.MoveInWater(true);
-            if (Program.GameWindow.Keyboard[Key.ShiftLeft]) this.MoveInWater(false);
+            if (GameManager.Keyboard[Key.Space]) this.MoveInWater(true);
+            if (GameManager.Keyboard[Key.ShiftLeft]) this.MoveInWater(false);
         }
 
         private void ProcessMovement(Humanoid Player, Vector3 MoveSpace)

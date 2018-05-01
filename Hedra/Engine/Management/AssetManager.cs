@@ -191,7 +191,7 @@ namespace Hedra.Engine.Management
 		}
 		
 		public static Icon LoadIcon(string path){
-			using(MemoryStream ms = new MemoryStream(AssetManager.ReadBinary(path, DataFile3))){
+			using(var ms = new MemoryStream(AssetManager.ReadBinary(path, DataFile3))){
 				return new Icon(ms);
 			}
 		}

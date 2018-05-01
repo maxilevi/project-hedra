@@ -24,9 +24,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public class Sword : Weapon
 	{
 	    public override bool IsMelee { get; protected set; } = true;
+	    protected override float WeaponCooldown => .5f;
         private Vector3 _previousPosition;
 	    private bool FrontSlash => PrimaryAnimationsIndex == 2;
-
 
         public Sword(VertexData Contents) : base(Contents)
 		{

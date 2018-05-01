@@ -23,10 +23,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	{	
 		public override Vector3 SheathedPosition => new Vector3(1.8f,-1.0f,0.65f);
 	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
-	    public override bool IsMelee { get; protected set; } = false;
-        private ObjectMesh Quiver;
-		private ObjectMesh[] Arrow = new ObjectMesh[1];//hacky stuff! so it's not affected by global enablers
-		private VertexData ArrowData;
+	    protected override float WeaponCooldown => .15f;
+        public override bool IsMelee { get; protected set; } = false;
+        private readonly ObjectMesh Quiver;
+		private readonly ObjectMesh[] Arrow = new ObjectMesh[1];//hacky stuff! so it's not affected by global enablers
+		private readonly VertexData ArrowData;
 		public OnModifyArrowEvent BowModifiers;
 		
 		public Bow(VertexData Contents) : base(Contents){
@@ -45,6 +46,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    for (int i = 0; i < PrimaryAnimations.Length; i++)
 		    {
 		        PrimaryAnimations[i].Loop = false;
+		        PrimaryAnimations[i].Speed = 1.15f;
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
 		            var player = Owner as LocalPlayer;
@@ -59,8 +61,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
 		    for (int i = 0; i < SecondaryAnimations.Length; i++)
 		    {
-		        SecondaryAnimations[0].Loop = false;
-		        SecondaryAnimations[0].OnAnimationMid += delegate
+		        SecondaryAnimations[i].Loop = false;
+		        SecondaryAnimations[i].Speed = 1.15f;
+                SecondaryAnimations[i].OnAnimationMid += delegate
 		        {
 		            this.ShootTripleArrow(Owner);
 		        };

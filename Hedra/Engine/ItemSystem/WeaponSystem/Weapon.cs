@@ -51,7 +51,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected bool Orientate { get; set; } = true;
         protected SoundType SoundType { get; set; } = SoundType.SlashSound;
         protected bool ShouldPlaySound { get; set; } = true;
-        protected virtual float WeaponCooldown => .5f;
+        protected abstract float WeaponCooldown { get; }
 
         private float[] _animationSpeeds;
         private EffectDescriber _describer;

@@ -73,6 +73,7 @@ namespace Hedra.Engine.Player
             {
                 _accumulatedVelocity = Vector3.Zero;
             }
+            this._player.Model.Enabled = false;
             this.ManageParticles();
             this.HandleInput();
             _model.Enabled = true;
@@ -90,15 +91,15 @@ namespace Hedra.Engine.Player
                 * Matrix4.CreateTranslation(Vector3.UnitY * 4f);
             _player.Movement.Orientate();
             _player.Physics.GravityDirection = -Vector3.UnitY * 1f;
-            _player.Physics.VelocityCap = 200f * Math.Max(ClampedPitch, 0) + 20f * (1.0f-Math.Min(1f, (_accumulatedVelocity.Average()- _decaySpeed) / _decaySpeed)) + 20f;
+            _player.Physics.VelocityCap = 200f * Math.Max(ClampedPitch, 0) + 20f * (1.0f-Math.Min(1f, (_accumulatedVelocity.Average()- _decaySpeed) / _decaySpeed)) + 15f;
             var propulsion = Vector3.One * 20f;
             propulsion *= 1f + _angles.X / 45f;
-            propulsion *= _angles.X < 15f ? 1.3f : 4.0f;
+            propulsion *= _angles.X < 15f ? 1.4f : 4.0f;
             _accumulatedVelocity += propulsion * (float)Time.deltaTime;
             _accumulatedVelocity *= (float) Math.Pow(.8f, (float)Time.deltaTime);
             _upPush *= (float)Math.Pow(.25f, (float)Time.deltaTime);
             _player.View.MaxDistance = 10f;
-            _player.Physics.Move( (_player.View.LookingDirection * _accumulatedVelocity + Vector3.UnitY * _upPush) * (float)Time.deltaTime * .4f);
+            _player.Physics.Move( (_player.View.LookingDirection * _accumulatedVelocity + Vector3.UnitY * _upPush) * (float)Time.deltaTime * .55f);
             _player.Physics.ResetFall();
             _player.Model.Glide();
 
@@ -134,6 +135,7 @@ namespace Hedra.Engine.Player
 
         public void Disable()
         {
+            this._player.Model.Enabled = true;
             _player.View.MaxPitch = Camera.DefaultMaxPitch;
             _player.View.MinPitch = Camera.DefaultMinPitch;
             _player.View.MaxDistance = Camera.DefaultMaxDistance;

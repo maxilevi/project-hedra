@@ -20,14 +20,15 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public class Hands : Weapon
 	{
 	    public override bool IsMelee { get; protected set; } = true;
+	    protected override float WeaponCooldown => .5f;
 
-	    public Hands() : base(null)
+        public Hands() : base(null)
 		{
 		    AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorPunch-Stance.dae");
 
             PrimaryAnimations = new Animation[1];
             PrimaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorPunch.dae");
-		    PrimaryAnimations[0].Speed = 2.0f;
+		    PrimaryAnimations[0].Speed = 3.0f;
 		    PrimaryAnimations[0].OnAnimationMid += delegate
 		    {
 		        Owner.Attack(Owner.DamageEquation * 0.75f);
