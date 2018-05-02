@@ -19,6 +19,7 @@ namespace Hedra.Engine.Player
 	    private const float NormalSpeed = 2.25f;
 	    private const float AttackingSpeed = 1.0f;
         private readonly List<MoveOrder> _order;
+	    private float _speed;
 		public bool CaptureMovement { get; set; } = true;
 	    public float JumpingDistance => Human.IsMoving ? 6f : 3f;
 		public bool IsFloating { get; set; }
@@ -34,8 +35,7 @@ namespace Hedra.Engine.Player
 	    public Vector3 MoveFormula(Vector3 Direction)
 	    {
 	        float movementSpeed = (Human.IsUnderwater && !Human.IsGrounded ? 1.25f : 1.0f) * Human.Speed;
-	        float speed = Human.IsAttacking ? AttackingSpeed : NormalSpeed;
-	        return Direction * 5f * 1.75f * movementSpeed * (Human.IsJumping ? 1.75f : 1f) * speed;
+	        return Direction * 5f * 1.75f * movementSpeed * (Human.IsJumping ? 1.75f : 1f) * _speed;
 	    }
 
         public void MoveInWater(bool Up){
@@ -55,10 +55,10 @@ namespace Hedra.Engine.Player
 		    IsFloating = true;
 		}
 		
-		public void Jump(){		
+		public void Jump(){
 			if(IsJumping || Human.Knocked || Human.IsCasting || Human.IsRiding ||
                 Human.IsRolling || Human.IsDead || !Human.IsGrounded || !Human.CanInteract ||
-                Math.Abs(Human.Physics.TargetPosition.Y - Human.Position.Y) > 1.0f || !this.CaptureMovement)
+                Math.Abs(Human.Physics.TargetPosition.Y - Human.Position.Y) > 2.0f || !this.CaptureMovement)
 				return;
 
 		    Human.IsSitting = false;
@@ -73,7 +73,7 @@ namespace Hedra.Engine.Player
 		    Human.IsGrounded = false;
 		    var targetPush = 80f;
 		    var push = 0f;
-		    while (Human.Model.Position.Y < startingY + JumpingDistance)
+		    while (Human.Model.Position.Y < startingY + JumpingDistance && (push > 0.05f || targetPush > 0))
 			{
 			    bool shouldPlayJumpAnimation = Human.IsMoving;
                 push = Mathf.Lerp(push, targetPush, (float) Time.deltaTime * 8f);
@@ -118,7 +118,8 @@ namespace Hedra.Engine.Player
         }
 
 		public void Update(){
-			this.DoUpdate();
+		    _speed = Mathf.Lerp(_speed, Human.IsAttacking ? AttackingSpeed : NormalSpeed, (float) Time.deltaTime * 2f);
+            this.DoUpdate();
 		    this.ManageMoveOrders();
 		    this.ManageSwimming();
 		}

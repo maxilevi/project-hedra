@@ -27,6 +27,7 @@ namespace Hedra.Engine.CacheSystem
         GraveyardIcon,
         VillageIcon,
         MerchantIcon,
+        CampfireIcon,
         MaxEnums
     }
 }

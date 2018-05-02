@@ -24,14 +24,18 @@ namespace Hedra.Engine.EntitySystem
 	{
 	    public event OnHitGroundEvent OnHitGround;
 		public bool UsePhysics { get; set; }
-	    public float FallTime { get; private set; }
-        public PhysicsComponent(Entity Parent) : base(Parent){ UsePhysics = true; UseTimescale = true; }
+	    public float Falltime { get; private set; }
 		public Vector3 GravityDirection = new Vector3(0,-1f,0);
 		public float VelocityCap = float.MaxValue;
 		public Vector3 Force = Vector3.Zero;
 		public Vector3 Velocity = Vector3.Zero;
 		public bool HasFallDamage = true;
 		public bool UseTimescale {get; set;}
+
+	    public PhysicsComponent(Entity Parent) : base(Parent)
+	    {
+	        UsePhysics = true; UseTimescale = true;
+	    }
 
         /// <summary>
         /// If collides with structures
@@ -122,23 +126,23 @@ namespace Hedra.Engine.EntitySystem
 	        if (!Parent.IsGrounded)
 	        {
 	            if (!Parent.IsUnderwater)
-	                FallTime += (float)Time.deltaTime;
+	                Falltime += (float)Time.deltaTime;
 	        }
 	        else
 	        {
-	            if (FallTime > 0)
+	            if (Falltime > 0)
 	            {
 	                float Exp;
-	                if (FallTime > 1.75f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, FallTime) ?? true) )
+	                if (Falltime > 1.75f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true) )
 	                {
-	                    var fallTime = FallTime;
+	                    var fallTime = Falltime;
 	                    ThreadManager.ExecuteOnMainThread(delegate
 	                    {
 	                        Parent.Damage(fallTime * 45f, null, out Exp, true);
 	                        Parent.KnockForSeconds(3f);
 	                    });
 	                }
-	                FallTime = 0;
+	                Falltime = 0;
 	            }
 	        }
 
@@ -380,7 +384,7 @@ namespace Hedra.Engine.EntitySystem
         }
 		
 		public void ResetFall(){
-		    FallTime = 0.01f;
+		    Falltime = 0.01f;
 		}
 		
 		public override void Dispose(){

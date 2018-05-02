@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 using Hedra.Engine.QuestSystem;
@@ -25,12 +26,14 @@ namespace Hedra.Engine.Generation
         public bool Generated = false;
         private readonly List<ICollidable> _colliders;
         public StructureDesign Design { get; set; }
+        public AttributeArray Parameters { get; }
 
         public CollidableStructure(StructureDesign Design, Vector3 Position, Plateau Mountain)
         {
             this.Position = Position;
             this.Mountain = Mountain;
             this.Design = Design;
+            this.Parameters = new AttributeArray();
             this._colliders = new List<ICollidable>();
 
         }

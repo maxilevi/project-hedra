@@ -158,6 +158,7 @@
     <Compile Include="Engine\CacheSystem\CacheItem.cs" />
     <Compile Include="Engine\CacheSystem\CacheType.cs" />
     <Compile Include="Engine\CacheSystem\CampfireCache.cs" />
+    <Compile Include="Engine\CacheSystem\CampfireIconCache.cs" />
     <Compile Include="Engine\CacheSystem\CloudCache.cs" />
     <Compile Include="Engine\CacheSystem\CypressTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\DeadTreesCache.cs" />
@@ -324,6 +325,7 @@
     <Compile Include="Engine\Player\MapSystem\MapBaseItem.cs" />
     <Compile Include="Engine\Player\MapSystem\MapMeshBuilder.cs" />
     <Compile Include="Engine\Player\PlayerMovement.cs" />
+    <Compile Include="Engine\QuestSystem\BanditCamp.cs" />
     <Compile Include="Engine\Rendering\GraphicsLayer.cs" />
     <Compile Include="Engine\Management\OSManager.cs" />
     <Compile Include="Engine\Management\Platform.cs" />
@@ -539,6 +541,7 @@
     <Compile Include="Engine\Rendering\UI\PlayerInterface.cs" />
     <Compile Include="Engine\Rendering\UI\TextConfiguration.cs" />
     <Compile Include="Engine\Rendering\UI\TextureCommand.cs" />
+    <Compile Include="Engine\StructureSystem\BanditCampDesign.cs" />
     <Compile Include="Engine\StructureSystem\StructureGenerator.cs" />
     <Compile Include="Engine\QuestSystem\TravellingMerchant.cs" />
     <Compile Include="Engine\QuestSystem\TurtleBossAIComponent.cs" />
@@ -1151,6 +1154,10 @@
     </None>
     <None Include="..\..\..\Assets\Models\Campfire2.ply">
       <Link>Assets\Env\Campfire2.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\CampfireIcon.ply">
+      <Link>Assets\UI\CampfireIcon.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\Castle1.ply">

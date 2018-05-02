@@ -16,6 +16,7 @@ using System.Drawing;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
@@ -45,7 +46,6 @@ namespace Hedra.Engine.Player
 		public MovementManager Movement { get; protected set; }
 		public HandLamp HandLamp;
 		public DamageComponent DmgComponent;
-		public virtual Item MainWeapon { get; set; }
 		public ClassDesign Class { get; set; } = new WarriorDesign();
 	    public float AttackPower { get; set; }
 		public float MaxStamina {get; set;}
@@ -53,7 +53,8 @@ namespace Hedra.Engine.Player
 		public float DodgeCost {get; set;}	
         public float RandomFactor { get; set; }
 	    public virtual int Gold { get; set; }
-	    private Item _ring;
+	    private Item _mainWeapon;
+        private Item _ring;
 	    private float _mana;
 	    private float _xp;
 	    private float _stamina = 100f;
@@ -62,7 +63,18 @@ namespace Hedra.Engine.Player
 
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
 
-        public float BaseSpeed => Class.BaseSpeed;
+	    public virtual Item MainWeapon
+	    {
+	        get { return _mainWeapon; }
+	        set
+	        {
+                if(_mainWeapon == value) return;
+	            _mainWeapon = value;
+                Model.SetWeapon(_mainWeapon?.Weapon ?? Weapon.Empty);           
+	        }
+	    }
+
+	    public float BaseSpeed => Class.BaseSpeed;
 
 	    public override float MaxHealth{
 			get{
@@ -138,6 +150,7 @@ namespace Hedra.Engine.Player
             this.MaxStamina = 100f;
             this.AttackPower = 1f;
             this.Speed = this.BaseSpeed;
+            this.MobType = MobType.Human;
             this.AddComponent(DmgComponent);
         }
 

@@ -15,6 +15,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             this.AddDesign(new ObeliskDesign());
             this.AddDesign(new CampfireDesign());
             this.AddDesign(new TempleDesign());
+            this.AddDesign(new BanditCampDesign());
         }
 
         public override VillageScheme Scheme { get; } = new NormalVillageScheme();

@@ -19,7 +19,7 @@ namespace Hedra.Engine.Player
 		
 		public GliderModel(){
 			BaseMesh = ObjectMesh.FromVertexData(
-                AssetManager.PlyLoader("Assets/Items/Glider.ply", Vector3.One * 1.25f)
+                AssetManager.PlyLoader("Assets/Items/Glider.ply", Vector3.One * 1.5f)
                 );
 		}
 		public override void Idle(){}

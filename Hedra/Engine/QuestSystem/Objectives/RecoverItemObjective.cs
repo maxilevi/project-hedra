@@ -116,8 +116,6 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
         public override void Setup(Chunk UnderChunk)
         {
-            UnderChunk.Blocked = true;
-
             Vector3 spawnPosition = ObjectivePosition +
                                     Vector3.UnitY * Physics.HeightAtPosition(ObjectivePosition.X, ObjectivePosition.Z) -
                                     Vector3.UnitY * 125.5f;

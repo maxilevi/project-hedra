@@ -229,11 +229,10 @@ namespace Hedra.Engine.Generation
                             }
 
                             if ((Chunks[i].Position.Xz - _player.Position.Xz).LengthSquared >
-                                (GameSettings.ChunkLoaderRadius) * .5f * Chunk.Width *
-                                (GameSettings.ChunkLoaderRadius) * .5f * Chunk.Width)
+                                GameSettings.ChunkLoaderRadius * .5f * Chunk.Width *
+                                GameSettings.ChunkLoaderRadius * .5f * Chunk.Width)
                             {
-                                if (!Chunks[i].Blocked)
-                                    World.RemoveChunk(Chunks[i]);
+                                if (!Chunks[i].Blocked) World.RemoveChunk(Chunks[i]);
                                 continue;
                             }
                             if (!Chunks[i].Initialized) Chunks[i].Initialize();

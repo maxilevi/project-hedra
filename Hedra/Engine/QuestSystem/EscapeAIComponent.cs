@@ -1,7 +1,6 @@
 ﻿using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
-using OpenTK.Platform.Windows;
 
 namespace Hedra.Engine.QuestSystem
 {

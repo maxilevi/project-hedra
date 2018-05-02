@@ -86,7 +86,6 @@ namespace Hedra.Engine.QuestSystem.Objectives
 		public override void Setup(Chunk UnderChunk)
 		{
 			CoroutineManager.StartCoroutine(FireParticles);
-			UnderChunk.Blocked = true;
 			
 			var rng = new Random(World.Seed + 532214);
 			Position = new Vector3(ObjectivePosition.X, Physics.HeightAtPosition(ObjectivePosition), ObjectivePosition.Z);

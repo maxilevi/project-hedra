@@ -45,11 +45,11 @@ namespace Hedra.Engine.Rendering.UI
                 #region Draw Shadows
                 using (var gp = new GraphicsPath())
                 {
-                    using (Brush shadowBrush = new SolidBrush(System.Drawing.Color.FromArgb(80, 0, 0, 0)))
+                    using (Brush shadowBrush = new SolidBrush(Color.FromArgb(80, 0, 0, 0)))
                     {
                         graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
                         graphics.SmoothingMode = SmoothingMode.HighQuality;
-                        graphics.Clear(System.Drawing.Color.FromArgb(0, 0, 0, 0));
+                        graphics.Clear(Color.FromArgb(0, 0, 0, 0));
                         gp.AddString(Text, TextFont.FontFamily, (int) TextFont.Style, TextFont.Size,
                             Point.Empty, StringFormat.GenericTypographic);
                         var shadowOffset = new Matrix();

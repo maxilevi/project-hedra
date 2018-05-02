@@ -657,10 +657,12 @@ namespace Hedra.Engine.Generation
 			var model = new WorldItem(ItemSpec, Position);
 			World.AddItem(model);
 			
-			model.OnPickup += delegate(LocalPlayer Player) {
+			model.OnPickup += delegate(LocalPlayer Player)
+			{
 			    if (Player.Inventory.AddItem(model.ItemSpecification))
 			    {
-			        Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, model.Position, false, 1f, 1.2f);
+			        model.Enabled = false;
+                    Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, model.Position, false, 1f, 1.2f);
 			        model.Dispose();
 			    }
 			};

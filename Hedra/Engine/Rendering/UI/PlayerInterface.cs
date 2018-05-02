@@ -8,6 +8,7 @@ namespace Hedra.Engine.Rendering.UI
     {
         private static readonly List<PlayerInterface> Interfaces;
         private static PlayerInterface _openedInterface;
+        public static bool Showing => _openedInterface != null;
         public abstract Key OpeningKey { get; }
         public abstract bool Show { get; set; }
 

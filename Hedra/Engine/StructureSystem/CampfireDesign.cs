@@ -40,6 +40,9 @@ namespace Hedra.Engine.StructureSystem
             underChunk.AddStaticElement(model);
 
             var fire = new Campfire(Position);
+            ThreadManager.ExecuteOnMainThread(
+                () => World.QuestManager.SpawnBandit(new Vector3(Position.X, 125, Position.Z), false, false)
+            );
             World.AddStructure(fire);
 
             if (rng.Next(0, 5) != 1)

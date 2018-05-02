@@ -376,7 +376,7 @@ namespace Hedra.Engine.EntitySystem
             }
 
             WasGrounded = IsGrounded;
-            _previousFalltime = Physics.FallTime;
+            _previousFalltime = Physics.Falltime;
         }
 
         public void KnockForSeconds(float Time)

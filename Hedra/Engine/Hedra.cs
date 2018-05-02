@@ -158,6 +158,7 @@ namespace Hedra
 #if DEBUG
             this._finishedLoading = true;
 #endif
+#if DEBUG
             GraphicsLayer.Enable(EnableCap.DebugOutput);
             GL.DebugMessageCallback(
                 delegate(DebugSource Source, DebugType Type, int Id, DebugSeverity Severity, int Length, IntPtr Message,
@@ -169,7 +170,8 @@ namespace Hedra
                     Log.WriteLine(Severity);
                     Log.WriteLine(Marshal.PtrToStringAnsi(Param));
                 }, IntPtr.Zero);
-		}
+#endif
+        }
 
 	    protected override void OnUpdateFrame(FrameEventArgs e){
 			base.OnUpdateFrame(e);

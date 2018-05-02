@@ -71,27 +71,28 @@ namespace Hedra.Engine.Player
         {
             if (!_model.Enabled)
             {
-                _accumulatedVelocity = Vector3.Zero;
+                _accumulatedVelocity = Vector3.One * 10f;
+                _yaw = _player.View.StackedYaw;
             }
-            this._player.Model.Enabled = false;
             this.ManageParticles();
             this.HandleInput();
             _model.Enabled = true;
             _player.View.MaxPitch = 1.25f;
             _player.View.MinPitch = -1.25f;
 
-            _model.Position = _player.Position + Vector3.UnitY * 4f;
-            _model.BaseMesh.BeforeLocalRotation = Vector3.UnitY * 0f;
+            _model.Position = _player.Position + Vector3.UnitY * 8f;
+            _model.BaseMesh.BeforeLocalRotation = Vector3.UnitY * 2f;
             _model.BaseMesh.Rotation = new Vector3(_angles.X, _player.Model.Model.Rotation.Y, 0);
             _model.BaseMesh.LocalRotation = Vector3.UnitZ * _angles.Z;
             _player.Model.Model.TransformationMatrix = Matrix4.CreateRotationY(-_player.Model.Model.Rotation.Y * Mathf.Radian)
-                * Matrix4.CreateTranslation(Vector3.UnitY * -4f)
+                * Matrix4.CreateTranslation(Vector3.UnitY * -7.5f)
                 * Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian) * Matrix4.CreateRotationX(_angles.X * Mathf.Radian)
                 * Matrix4.CreateRotationY(_player.Model.Model.Rotation.Y * Mathf.Radian)
-                * Matrix4.CreateTranslation(Vector3.UnitY * 4f);
+                * Matrix4.CreateTranslation(Vector3.UnitY * 10f);
             _player.Movement.Orientate();
             _player.Physics.GravityDirection = -Vector3.UnitY * 1f;
-            _player.Physics.VelocityCap = 200f * Math.Max(ClampedPitch, 0) + 20f * (1.0f-Math.Min(1f, (_accumulatedVelocity.Average()- _decaySpeed) / _decaySpeed)) + 15f;
+            _player.Physics.VelocityCap = 160f * Math.Max(ClampedPitch, 0) + 10f * (1.0f-Math.Min(1f, (_accumulatedVelocity.Average()- _decaySpeed) / _decaySpeed)) + 15f 
+                + 100f * Math.Max(0, _angles.Z / 90f);
             var propulsion = Vector3.One * 20f;
             propulsion *= 1f + _angles.X / 45f;
             propulsion *= _angles.X < 15f ? 1.4f : 4.0f;
@@ -122,7 +123,7 @@ namespace Hedra.Engine.Player
         {
             if (_remainingParticles > 0)
             {
-                World.Particles.Position = _model.Position;
+                World.Particles.Position = _player.Model.Position;
                 World.Particles.Color = Vector4.One;
                 World.Particles.Direction = -Vector3.UnitY * 4f;
                 World.Particles.Scale = Vector3.One * .25f;
@@ -135,7 +136,6 @@ namespace Hedra.Engine.Player
 
         public void Disable()
         {
-            this._player.Model.Enabled = true;
             _player.View.MaxPitch = Camera.DefaultMaxPitch;
             _player.View.MinPitch = Camera.DefaultMinPitch;
             _player.View.MaxDistance = Camera.DefaultMaxDistance;

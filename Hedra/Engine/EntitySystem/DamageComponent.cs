@@ -101,10 +101,11 @@ namespace Hedra.Engine.EntitySystem
                     dmgLabel = new Billboard(1.8f, ((int) Amount).ToString(), color,
                         FontCache.Get(AssetManager.BoldFamily, 12 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
-                else
+                else              
                     dmgLabel = new Billboard(1.8f, Immune ? "IMMUNE" : "MISS", Color.White,
                         FontCache.Get(AssetManager.BoldFamily, 12 + 32 * (Amount / Parent.MaxHealth),
                             FontStyle.Bold), Parent.Model.Position);
+                
                 dmgLabel.Vanish = true;
                 dmgLabel.Speed = 4;
                 dmgLabel.FollowFunc = () => Parent.Position;

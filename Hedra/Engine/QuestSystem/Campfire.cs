@@ -25,8 +25,8 @@ namespace Hedra.Engine.QuestSystem
 	/// </summary>
 	public class Campfire : BaseStructure, IUpdatable
 	{
-		private long _passedTime;
-		private static ParticleSystem _fireParticles;
+	    private static ParticleSystem _fireParticles;
+        private long _passedTime;
 		private PointLight _light;
 	    private SoundItem _sound;
 		public Vector3 Position { get; set; }
@@ -37,7 +37,6 @@ namespace Hedra.Engine.QuestSystem
 		    _fireParticles.HasMultipleOutputs = true;
 
             this.Position = Position;
-			ThreadManager.ExecuteOnMainThread( () => World.QuestManager.SpawnBandit(new Vector3(Position.X, 125, Position.Z), false, false) );
             UpdateManager.Add(this);
 		}
 		

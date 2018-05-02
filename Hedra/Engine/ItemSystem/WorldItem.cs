@@ -7,13 +7,16 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System;
 using System.Runtime.Remoting.Messaging;
+using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using OpenTK;
+using OpenTK.Input;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -22,46 +25,61 @@ namespace Hedra.Engine.ItemSystem
 	public class WorldItem : Model, IUpdatable
 	{
 		private static ushort _itemCounter;
-		
+		public bool PickedUp { get; private set; }
 		public ushort ItemId {get; set;}
 		public ObjectMesh Mesh;
 		public Item ItemSpecification;
 		public event OnItemCollect OnPickup;
-		private bool _isColliding;
-	
-		public WorldItem(Item ItemSpecification, Vector3 Position)
+	    private readonly float _height;
+        private bool _isColliding;
+	    private bool _shouldPickup;
+	    private bool _canPickup;
+
+        public WorldItem(Item ItemSpecification, Vector3 Position)
 		{
-			this.Scale = new Vector3(2.25f, 2.25f, 2.25f);
+			this.Scale = new Vector3(1.5f, 1.5f, 1.5f);
 			this.ItemSpecification = ItemSpecification;
-			this.Mesh = ObjectMesh.FromVertexData(ItemSpecification.Model.Clone());
+		    var modelData = ItemSpecification.Model.Clone();
+		    this._height = (float) Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y);
+            this.Mesh = ObjectMesh.FromVertexData(modelData);
 		    this.Mesh.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
 		    this.Mesh.Scale = this.Scale;
-			this.Position = new Vector3(Position.X, Physics.HeightAtPosition(Position.X, Position.Z) + 1.5f, Position.Z);
+		    this.Position = Position;
 			this.ItemId = ++_itemCounter;
+		    this.OnPickup += Player => PickedUp = true;
+
+		    EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyboardKeyEventArgs EventArgs)
+		    {
+		        if (_canPickup && Key.E == EventArgs.Key) _shouldPickup = true;
+		    });
 			UpdateManager.Add(this);
 		}
 		
 		public override void Update(){
-			this.Mesh.TargetRotation += Vector3.UnitY * 35 * (float) Time.deltaTime;
+		    this.Position = new Vector3(Position.X, Physics.HeightAtPosition(Position.X, Position.Z) + _height, Position.Z);
+            this.Mesh.TargetRotation += Vector3.UnitY * 35f * (float) Time.deltaTime;
 			
-			float dot = Vector3.Dot(-(LocalPlayer.Instance.Position - this.Position).NormalizedFast(),
-                LocalPlayer.Instance.View.LookingDirection);
+			Func<float> dotFunc = () => Vector2.Dot((this.Position - GameManager.Player.Position).Xz.NormalizedFast(),
+                LocalPlayer.Instance.View.LookingDirection.Xz.NormalizedFast());
 
-			if( dot > .65f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 12f*12f){
+			if(dotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f*14f){
 			    LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile("[E] TO PICK UP", 
-                    () => !Disposed && Vector3.Dot(-(LocalPlayer.Instance.Position - this.Position).NormalizedFast(),
-			                                                                                        GameManager.Player.View.LookingDirection) > .65f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 12f * 12f);
-				Mesh.Tint = new Vector4(1.5f,1.5f,1.5f,1);
-				if(LocalPlayer.Instance.Inventory.HasAvailableSpace && Events.EventDispatcher.LastKeyDown == OpenTK.Input.Key.E && !Disposed)
+                    () => !Disposed && dotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f * 14f);
+			    _canPickup = true;
+
+				if(LocalPlayer.Instance.Inventory.HasAvailableSpace && _shouldPickup && !PickedUp && !Disposed)
 				{
 				    OnPickup?.Invoke(GameManager.Player);
 				}
-			}else{
-				Mesh.Tint = new Vector4(1,1,1,1);
+			}else
+			{
+			    _canPickup = false;
 			}
+		    Mesh.Tint = _canPickup ? Vector4.One * 1.5f : Vector4.One;
 		}
 		
 		public new void Dispose(){
+            EventDispatcher.UnregisterKeyDown(this);
 			UpdateManager.Remove(this);
 			World.RemoveItem(this);
 			base.Dispose();
