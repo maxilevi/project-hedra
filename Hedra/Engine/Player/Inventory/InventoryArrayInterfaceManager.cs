@@ -110,7 +110,7 @@ namespace Hedra.Engine.Player.Inventory
             var array = this.ArrayByButton(button);
             var item = array[itemIndex];
             array[itemIndex] = null;
-            if (array.HasRestrictions(itemIndex))
+            if (array.HasRestrictions(itemIndex) && item != null)
                 this.PlaceItemInFirstEmptyPosition(item);
             else
                 this.PlaceInRestrictionsOrFirstEmpty(itemIndex, array, item);

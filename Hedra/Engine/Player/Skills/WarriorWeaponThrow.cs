@@ -40,8 +40,7 @@ namespace Hedra.Engine.Player
                 Sound.SoundManager.PlaySound(Sound.SoundType.SlashSound, Player.Position);
             };
 			ThrowAnimation.OnAnimationEnd += delegate(Animation Sender) 
-            {
-				
+            {				
 				Player.IsCasting = false;
 				Casting = false;
 				Player.IsAttacking = false;
@@ -53,7 +52,7 @@ namespace Hedra.Engine.Player
 		
 		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
 		{
-			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsMoving;
+			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsMoving && Player.MainWeapon != null;
 		}
 		
 		private void ShootWeapon(Humanoid Human, Vector3 Direction, int KnockChance = -1){
