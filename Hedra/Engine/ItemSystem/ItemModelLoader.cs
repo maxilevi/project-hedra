@@ -33,7 +33,8 @@ namespace Hedra.Engine.ItemSystem
 
         private static VertexData AdjustModel(VertexData Model)
         {
-            //TODO
+            //var center = Model.Vertices.Aggregate( (V1,V2) => V1+V2) / Model.Vertices.Count;
+            //Model.Vertices = Model.Vertices.Select(V => V-center).ToList();
             return Model;
         }
     }

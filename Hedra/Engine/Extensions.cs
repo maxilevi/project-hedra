@@ -173,18 +173,38 @@ namespace Hedra.Engine
 			}
 			return k;
 		}
-		public static XmlNode ChildWithAttribute(this XmlNode Node, string Name, string Attribute, string Value){
-			for(int j = 0; j < Node.ChildNodes.Count; j++){
-				if(Node.ChildNodes[j].Name == Name){
-					for(int i = 0; i < Node.ChildNodes[j].Attributes.Count; i++){
-						if(Node.ChildNodes[j].Attributes[i].Value == Value && Node[Name].Attributes[i].Name == Attribute)
-							return Node.ChildNodes[j];
-					}
-				}
-			 }
+
+		public static XmlNode ChildWithPattern(this XmlNode Node, string Name, string Attribute, string Pattern){
+		    for (int j = 0; j < Node.ChildNodes.Count; j++)
+		    {
+		        if (Node.ChildNodes[j].Name == Name)
+		        {
+		            for (int i = 0; i < Node.ChildNodes[j].Attributes.Count; i++)
+		            {
+		                if (Node[Name].Attributes[i].Name == Attribute && Regex.IsMatch(Node.ChildNodes[j].Attributes[i].Value, Pattern))
+		                    return Node.ChildNodes[j];
+		            }
+		        }
+		    }
 			return null;
 		}
-		
+
+	    public static XmlNode ChildWithAttribute(this XmlNode Node, string Name, string Attribute, string Value)
+	    {
+	        for (int j = 0; j < Node.ChildNodes.Count; j++)
+	        {
+	            if (Node.ChildNodes[j].Name == Name)
+	            {
+	                for (int i = 0; i < Node.ChildNodes[j].Attributes.Count; i++)
+	                {
+	                    if (Node.ChildNodes[j].Attributes[i].Value == Value && Node[Name].Attributes[i].Name == Attribute)
+	                        return Node.ChildNodes[j];
+	                }
+	            }
+	        }
+	        return null;
+	    }
+
 		public static XmlAttribute GetAttribute(this XmlNode Node, string Attr){
 			for(int j = 0; j < Node.Attributes.Count; j++){
 				if(Node.Attributes[j].Name == Attr)

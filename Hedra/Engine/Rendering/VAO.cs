@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering
 {
 	public class VAO : IDisposable{
 		public uint ID;
-		private bool Disposed;
+		private bool _disposed;
 		
 		public void Bind(){
 			GL.BindVertexArray(ID);
@@ -27,8 +27,8 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public void Dispose(){
-			if(!Disposed){
-				Disposed = true;
+			if(!_disposed){
+				_disposed = true;
 				ThreadManager.ExecuteOnMainThread( delegate{ GL.DeleteVertexArrays(1, ref ID); });
 			}
 		}

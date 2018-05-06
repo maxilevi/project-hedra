@@ -21,7 +21,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// </summary>
 	public class Axe : Weapon
 	{
-	    protected override float WeaponCooldown => .5f;
+	    public override float PrimaryAttackCooldown => 1.75f;
+	    public override float SecondaryAttackCooldown => 4.0f;
         public override bool IsMelee { get; protected set; } = true;
 
         public Axe(VertexData Contents) : base(Contents)
@@ -35,7 +36,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    for (int i = 0; i < PrimaryAnimations.Length; i++)
 		    {
 		        PrimaryAnimations[i].Loop = false;
-		        PrimaryAnimations[i].Speed = 1.5f;
+		        PrimaryAnimations[i].Speed = 1.25f;
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
 		            Owner.Attack(Owner.DamageEquation);

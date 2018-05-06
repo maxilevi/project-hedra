@@ -192,7 +192,15 @@ namespace Hedra.Engine.Player
         public void ShowMessageWhile(string Message, Color TextColor, Func<bool> Condition)
         {
             if(!Condition()) return;
-            if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
+            try
+            {
+                if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
+            }
+            catch (InvalidOperationException e)
+            {
+                Log.WriteLine(e.Message);
+                return;
+            }
             var item = new MessageItem
             {
                 Type = MessageType.While,

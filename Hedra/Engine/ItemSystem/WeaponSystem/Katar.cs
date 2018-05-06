@@ -21,7 +21,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public class Katar : Weapon
 	{
 	    public override bool IsMelee { get; protected set; } = true;
-	    protected override float WeaponCooldown => .05f;
+	    public override float PrimaryAttackCooldown => .1f;
+	    public override float SecondaryAttackCooldown => 3.0f;
         private readonly ObjectMesh SecondBlade;
 		
 		public Katar(VertexData Contents) : base(Contents)

@@ -24,8 +24,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public class Knife : Weapon
 	{
 	    public override bool IsMelee { get; protected set; } = true;
-	    protected override float WeaponCooldown => .25f;
-		private readonly ObjectMesh KnifeSheath;
+	    public override float PrimaryAttackCooldown => .5f;
+	    public override float SecondaryAttackCooldown => 2.5f;
+        private readonly ObjectMesh KnifeSheath;
 	    private Vector3 _previousPosition;
 
         public Knife(VertexData Contents) : base(Contents)

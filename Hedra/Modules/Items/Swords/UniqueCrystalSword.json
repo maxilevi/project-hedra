@@ -1,0 +1,21 @@
+{
+  "Name": "UniqueCrystalSword",
+  "DisplayName": "Crystal Sword",
+  "EquipmentType": "Sword",
+  "Tier": "Unique",
+  "Description": "Crystal sword.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 15.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.15
+    }
+  ],
+  "Model": {
+    "Scale": 3.5,
+    "Path": "$DataFile$/Items/Swords/UniqueCrystalSword.ply"
+  }
+}

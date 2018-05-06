@@ -192,6 +192,7 @@ namespace Hedra.Engine.Rendering
             this._points.Dispose();
             this._colors.Dispose();
             this._data.Dispose();
+            DrawManager.TrailRenderer.Remove(this);
         }
     }
 

@@ -15,7 +15,7 @@
     }
   ],
   "Model": {
-    "Scale": 1.0,
+    "Scale": 1.75,
     "Path": "$DataFile$/Items/Claws/CommonBronzeClaw.ply"
   }
 }

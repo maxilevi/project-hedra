@@ -46,13 +46,14 @@ namespace Hedra.Engine.Player
 		public bool DisableWeapon {get; set;}
 	    private bool _isPressing;
         private AttackType _type;
-		
-		public WeaponAttack(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+	    private float _maxCooldown;
+
+        public WeaponAttack(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
 			base.ManaCost = 0f;
 			base.Level = 1;
-		    base.MaxCooldown = 0.25f;
+            _maxCooldown = 0.25f;
 		    base.TexId = Default;
-		}
+        }
 		
 		public void SetType(Weapon Weapon, AttackType Type)
 		{
@@ -61,6 +62,7 @@ namespace Hedra.Engine.Player
 		    var fieldInfo1 = this.GetType().GetField($"{Weapon.GetType().Name}1", flags);
 		    var fieldInfo2 = this.GetType().GetField($"{Weapon.GetType().Name}2", flags);
 		    base.TexId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) Default);
+		    _maxCooldown = Type == AttackType.Primary ? Weapon.PrimaryAttackCooldown : Weapon.SecondaryAttackCooldown;
 		}
 		
 		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
@@ -83,7 +85,7 @@ namespace Hedra.Engine.Player
 		
 		public override void Update(){
 			if(DisableWeapon) return;
-			
+		    this.MaxCooldown = _maxCooldown / Player.AttackSpeed;
 			if(_isPressing && Cooldown < 0){
 				Player.Model.LeftWeapon.Attack1(Player);
 				Player.Model.LeftWeapon.ContinousAttack = true;

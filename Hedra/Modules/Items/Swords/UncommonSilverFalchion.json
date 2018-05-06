@@ -1,0 +1,21 @@
+{
+  "Name": "UncommonSilverFalchion",
+  "DisplayName": "Silver Falchion",
+  "EquipmentType": "Sword",
+  "Tier": "Uncommon",
+  "Description": "Steel falchion.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 13.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 3.5,
+    "Path": "$DataFile$/Items/Swords/UncommonSilverFalchion.ply"
+  }
+}

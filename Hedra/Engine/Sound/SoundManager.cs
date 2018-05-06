@@ -121,6 +121,9 @@ namespace Hedra.Engine.Sound
             ShortData = SoundManager.LoadOgg("Sounds/HumanSleep.ogg", out Channels, out Bits, out Rate);
             SoundBuffers[(int)SoundType.HumanSleep] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
+            Data = SoundManager.LoadWave("Sounds/ItemCollect.wav", out Channels, out Bits, out Rate);
+            SoundBuffers[(int)SoundType.TalkSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+
             _loaded = true;
 		}
 
@@ -146,7 +149,7 @@ namespace Hedra.Engine.Sound
             SoundType type = Sound;
 			
 			SoundSource source = null;
-			for(int i = 0; i < SoundSources.Length; i++){
+			for(var i = 0; i < SoundSources.Length; i++){
 			    if (!SoundSources[i].IsPlaying)
 			    {
 			        source = SoundSources[i];
@@ -347,6 +350,7 @@ namespace Hedra.Engine.Sound
         GlassBreak,
 	    GlassBreakInverted,
         HumanSleep,
+        TalkSound,
 	    MaxSounds
     }
 }

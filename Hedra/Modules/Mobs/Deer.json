@@ -1,0 +1,28 @@
+{
+  "Name": "Deer",
+  "MaxHealth": 1400.0,
+  "AttackDamage": 16.0,
+  "Speed": 5.0,
+  "XP": 10.0,
+  "AIType": "Neutral",
+  "Ridable": false,
+  "Effects": [],
+  "Drops": [],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/DeerIdle.dae",
+    "Scale": 1.0,
+    "IdleAnimation": {
+      "Path": "$DataFile$/Assets/Chr/DeerIdle.dae",
+      "Speed": 1.4
+    },
+    "WalkAnimation": {
+      "Path": "$DataFile$/Assets/Chr/DeerWalk.dae",
+      "Speed": 1.6
+    },
+    "AttackAnimation": {
+      "Path": "$DataFile$/Assets/Chr/DeerAttack0.dae",
+      "Speed": 1.6
+    }
+  }
+}

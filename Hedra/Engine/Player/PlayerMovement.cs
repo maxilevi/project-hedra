@@ -24,6 +24,7 @@ namespace Hedra.Engine.Player
         private float _targetYaw;
         private Vector3 _angles;
         private Vector3 _targetAngles;
+        private float _glidingCooldown;
 
         public PlayerMovement(LocalPlayer Player) : base(Player)
         {
@@ -45,6 +46,7 @@ namespace Hedra.Engine.Player
 
         protected override void DoUpdate()
         {
+            _glidingCooldown -= Time.FrameTimeSeconds;
             if (!CaptureMovement || _player.Knocked || _player.IsDead || !Human.CanInteract || GameSettings.Paused)
                 return;
 
@@ -97,7 +99,7 @@ namespace Hedra.Engine.Player
                 if (keysPresses < 1f) keysPresses *= 1.5f;
 
                 _targetAngles.Z = 5f * (_player.View.StackedYaw - _yaw);
-                _targetAngles = Mathf.Clamp(_targetAngles, -10f, 10f);
+                _targetAngles = Mathf.Clamp(_targetAngles, -15f, 15f);
                 _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.deltaTime * 8f);
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.deltaTime * 2f);
 
@@ -182,13 +184,14 @@ namespace Hedra.Engine.Player
             this.RegisterKey(Key.G, delegate
             {
                 if (Human.CanInteract && !GameManager.InMenu && !Human.Knocked
-                    && !GameManager.InStartMenu)
+                    && !GameManager.InStartMenu && _glidingCooldown < 0)
                 {
                     if (_player.Inventory.Glider == null && !GameSettings.Paused)
                     {
                         _player.MessageDispatcher.ShowNotification("YOU NEED A GLIDER TO DO THAT", System.Drawing.Color.DarkRed, 3f, true);
                         return;
                     }
+                    _glidingCooldown = .25f; 
                     _player.IsGliding = !_player.IsGliding;
                 }
             });

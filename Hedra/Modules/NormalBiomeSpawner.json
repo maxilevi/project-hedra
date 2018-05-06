@@ -40,16 +40,20 @@
   "Mountain": [
     {
       "Type": "Goat",
-      "Chance": 100.0,
-      "MinGroup" : 1,
+      "Chance": 95.0,
+      "MinGroup": 1,
       "MaxGroup": 3
+    },
+    {
+      "Type": "Roach",
+      "Chance": 5.0
     }
   ],
 
   "Forest": [
     {
-      "Type": "Roach",
-      "Chance": 5.0   
+      "Type": "Deer",
+      "Chance": 10.0 
     },
     {
       "Type": "Bear",
@@ -57,7 +61,7 @@
     },
     {
       "Type": "Wolf",
-      "Chance": 22.5
+      "Chance": 20.0
     },
     {
       "Type": "Snake",
@@ -65,7 +69,7 @@
     },
     {
       "Type": "Fox",
-      "Chance": 20.0,
+      "Chance": 17.5,
       "MinGroup": 1,
       "MaxGroup": 2
     },

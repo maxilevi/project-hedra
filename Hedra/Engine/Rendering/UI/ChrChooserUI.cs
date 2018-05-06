@@ -190,6 +190,7 @@ namespace Hedra.Engine.Rendering.UI
 				    _humans[i].MainWeapon = item;
 				    _humans[i].Model.SetWeapon(_humans[i].MainWeapon.Weapon);
 				}
+			    _humans[i].Model.LeftWeapon.Scale = (1f / 1.25f) * Vector3.One;
 			}
 		}
 		

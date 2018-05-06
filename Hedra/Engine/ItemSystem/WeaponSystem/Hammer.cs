@@ -22,7 +22,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public class Hammer : Weapon
 	{
 	    public override bool IsMelee { get; protected set; } = true;
-	    protected override float WeaponCooldown => .15f;
+	    public override float PrimaryAttackCooldown => 2.0f;
+	    public override float SecondaryAttackCooldown => 4.0f;
 
         public Hammer(VertexData Contents) : base(Contents)
 		{	
@@ -35,7 +36,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    for (int i = 0; i < PrimaryAnimations.Length; i++)
 		    {
 		        PrimaryAnimations[i].Loop = false;
-		        PrimaryAnimations[i].Speed = 1.5f;
+		        PrimaryAnimations[i].Speed = 1.25f;
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
 		            Owner.Attack(Owner.DamageEquation);

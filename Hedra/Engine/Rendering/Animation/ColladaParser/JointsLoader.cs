@@ -48,6 +48,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 		private JointData ExtractMainJointData(XmlNode JointNode, bool IsRoot){
 			string nameId = JointNode.GetAttribute("id").Value;
 			int index = BoneOrder.IndexOf(nameId);
+            if(IsRoot && index == -1) throw new ArgumentException($"Root bone cannot have an index of -1");
 			string[] matrixData = JointNode["matrix"].InnerText.Split(' ');
 			Matrix4 matrix = Mat4FromString(matrixData);
 			matrix.Transpose();

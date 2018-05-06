@@ -249,12 +249,22 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InAttackRange(Entity Target)
+        public bool InAttackRange(Entity Target, out float Dot)
         {
+            Dot = Math.Max(Vector2.Dot(
+                (Target.Position - this.Position).Xz.NormalizedFast(),
+                this.Orientation.Xz.NormalizedFast()
+                ), 0);
+
             return (Target.Position - Position).LengthFast < (BaseBox.Max - BaseBox.Min).LengthFast +
                    (Target.BaseBox.Max - Target.BaseBox.Min).LengthFast &&
                    Target != this &&
-                   Mathf.DotProduct(Orientation, (Target.Position - Position).Normalized()) > -0.2f;
+                   Dot > 0.7f;
+        }
+
+        public bool InAttackRange(Entity Target)
+        {
+            return this.InAttackRange(Target, out _);
         }
 
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)

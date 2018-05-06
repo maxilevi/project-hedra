@@ -1,0 +1,21 @@
+{
+  "Name": "DivineDemonBlade",
+  "DisplayName": "Demon Blade",
+  "EquipmentType": "Sword",
+  "Tier": "Divine",
+  "Description": "Demon blade.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 28.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 3.5,
+    "Path": "$DataFile$/Items/Swords/DivineDemonBlade.ply"
+  }
+}

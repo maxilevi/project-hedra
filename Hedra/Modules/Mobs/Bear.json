@@ -1,6 +1,6 @@
 ﻿{
   "Name" : "Bear", 
-  "MaxHealth": 2020.0,
+  "MaxHealth": 2000.0,
   "AttackDamage": 22.0,
   "Speed": 4.65,
   "XP": 12.0,

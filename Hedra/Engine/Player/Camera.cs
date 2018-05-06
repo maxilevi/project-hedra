@@ -113,7 +113,7 @@ namespace Hedra.Engine.Player
 
         private void Interpolate()
         {
-            _targetZoomOut = _player.IsMoving ? _player.Orientation * 3f : Vector3.Zero;
+            _targetZoomOut = _player.IsMoving ? _player.Orientation * 3.5f : Vector3.Zero;
             if (DefaultDelegate == PositionDelegate)
             {
                 _targetZoomOut += _player.IsJumping ? Vector3.UnitY * _player.Movement.JumpingDistance * 2f : Vector3.Zero;
@@ -220,7 +220,7 @@ namespace Hedra.Engine.Player
                 if (_player.IsSitting || _player.IsSleeping) return _cameraHeight - Vector3.UnitY * 2.0f;
                 return _cameraHeight;
             }
-            set { _cameraHeight = value; }
+            set => _cameraHeight = value;
         }
 
         public Vector3 CameraPosition => _interpolatedPosition - LookAtPoint * new Vector3(TargetDistance, TargetDistance, TargetDistance) + CameraHeight;
@@ -236,9 +236,7 @@ namespace Hedra.Engine.Player
                 return lookingDir.Xyz.NormalizedFast();
             }
         }
-        public Vector3 CrossPosition {
-            get { throw new NotImplementedException(); }
-        }
+        public Vector3 CrossPosition => throw new NotImplementedException();
 
         public Matrix4 ViewMatrix => Matrix4.LookAt(-LookAtPoint * TargetDistance + CameraHeight,
             LookAtPoint * TargetDistance + CameraHeight,

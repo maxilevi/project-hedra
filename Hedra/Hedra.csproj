@@ -784,6 +784,22 @@
       <Link>Assets\Chr\ChestOpen.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Animations\DeerAttack0.dae">
+      <Link>Assets\Chr\DeerAttack0.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\DeerAttack1.dae">
+      <Link>Assets\Chr\DeerAttack1.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\DeerIdle.dae">
+      <Link>Assets\Chr\DeerIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Animations\DeerWalk.dae">
+      <Link>Assets\Chr\DeerWalk.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Animations\EntIdle.dae">
       <Link>Assets\Chr\EntIdle.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3033,6 +3049,10 @@
       <Link>Assets\Env\DesertRock0.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\DivineDemonBlade.ply">
+      <Link>Assets\Items\Swords\DivineDemonBlade.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\DivineDrainerHammer.ply">
       <Link>Assets\Items\Hammers\DivineDrainerHammer.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3169,6 +3189,10 @@
       <Link>Assets\Chr\Lantern.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\LegendaryBloodEdge.ply">
+      <Link>Assets\Items\Swords\LegendaryBloodEdge.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\LegendaryGolemFistHammer.ply">
       <Link>Assets\Items\Hammers\LegendaryGolemFistHammer.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3179,6 +3203,10 @@
     </None>
     <None Include="..\..\..\Assets\Models\LegendaryRoyalAxe.ply">
       <Link>Assets\Items\Axes\LegendaryRoyalAxe.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\LegendarySteelChopper.ply">
+      <Link>Assets\Items\Swords\LegendarySteelChopper.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\LogHouse0.ply">
@@ -3321,6 +3349,14 @@
       <Link>Assets\Items\Swords\RarePaladinSilverSword.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\RareSilverRapier.ply">
+      <Link>Assets\Items\Swords\RareSilverRapier.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\RareSteelCleaver.ply">
+      <Link>Assets\Items\Swords\RareSteelCleaver.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\RareStoneBreakerHammer.ply">
       <Link>Assets\Items\Hammers\RareStoneBreakerHammer.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3437,6 +3473,10 @@
       <Link>Assets\Items\Bows\UncommonSilverBow.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\Assets\Models\UncommonSilverFalchion.ply">
+      <Link>Assets\Items\Swords\UncommonSilverFalchion.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\Assets\Models\UncommonSilverRing.ply">
       <Link>Assets\Items\Rings\UncommonSilverRing.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3447,6 +3487,14 @@
     </None>
     <None Include="..\..\..\Assets\Models\UncommonSmithyHammer.ply">
       <Link>Assets\Items\Hammers\UncommonSmithyHammer.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\UniqueAncientEdge.ply">
+      <Link>Assets\Items\Swords\UniqueAncientEdge.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\Assets\Models\UniqueCrystalSword.ply">
+      <Link>Assets\Items\Swords\UniqueCrystalSword.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\..\Assets\Models\UniqueMaceAxe.ply">
@@ -3974,16 +4022,40 @@
     <None Include="Modules\Items\Hammers\UncommonIronWarhammer.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Items\Swords\DivineDemonBlade.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Swords\LegendaryBloodEdge.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Swords\LegendarySteelChopper.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\Swords\RareBarbarianIronSword.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Swords\RarePaladinSilverSword.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Items\Swords\RareSilverRapier.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Swords\RareSteelCleaver.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\Swords\UncommonBarbarianBronzeSword.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Items\Swords\UncommonSilverFalchion.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\Swords\UncommonSilverSword.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Swords\UniqueAncientEdge.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Swords\UniqueCrystalSword.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\LavaBiomeSpawner.json">
@@ -3999,6 +4071,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Carriage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Mobs\Deer.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Fox.json">

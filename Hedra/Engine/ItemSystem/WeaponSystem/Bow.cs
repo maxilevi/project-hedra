@@ -23,7 +23,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	{	
 		public override Vector3 SheathedPosition => new Vector3(1.8f,-1.0f,0.65f);
 	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
-	    protected override float WeaponCooldown => .15f;
+	    public override float PrimaryAttackCooldown => .25f;
+	    public override float SecondaryAttackCooldown => 3.5f;
         public override bool IsMelee { get; protected set; } = false;
         private readonly ObjectMesh Quiver;
 		private readonly ObjectMesh[] Arrow = new ObjectMesh[1];//hacky stuff! so it's not affected by global enablers

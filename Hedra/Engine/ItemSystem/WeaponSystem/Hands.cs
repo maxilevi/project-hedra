@@ -20,7 +20,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public class Hands : Weapon
 	{
 	    public override bool IsMelee { get; protected set; } = true;
-	    protected override float WeaponCooldown => .5f;
+	    public override float PrimaryAttackCooldown => .5f;
+	    public override float SecondaryAttackCooldown => .5f;
 
         public Hands() : base(null)
 		{

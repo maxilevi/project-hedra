@@ -130,39 +130,39 @@ namespace Hedra.Engine.Management
                     }
                     if (Parts[1] == "sword")
 				    {
-				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Sword)));
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int) ItemTier.Divine), EquipmentType.Sword)));
 				    }
 				    if (Parts[1] == "axe")
 				    {
-				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Axe)));
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Axe)));
 				    }
 				    if (Parts[1] == "katar")
 				    {
-				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Katar)));
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Katar)));
 				    }
 				    if (Parts[1] == "hammer")
 				    {
-				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Hammer)));
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Hammer)));
 				    }
 				    if (Parts[1] == "claw")
 				    {
-				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Claw)));
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Claw)));
 				    }
 				    if (Parts[1] == "blades")
 				    {
-				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.DoubleBlades)));
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.DoubleBlades)));
 				    }
 				    if (Parts[1] == "bow")
 				    {
-				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Bow)));
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Bow)));
 				    }
 				    if (Parts[1] == "knife")
 				    {
-				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Knife)));
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Knife)));
 				    }
 				    if (Parts[1] == "ring")
 				    {
-				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine, EquipmentType.Ring)));
+				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Ring)));
 				    }
 				    if (Parts[1] == "glider")
 				    {

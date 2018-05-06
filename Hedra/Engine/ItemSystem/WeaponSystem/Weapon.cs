@@ -51,15 +51,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected bool Orientate { get; set; } = true;
         protected SoundType SoundType { get; set; } = SoundType.SlashSound;
         protected bool ShouldPlaySound { get; set; } = true;
-        protected abstract float WeaponCooldown { get; }
+        public abstract float PrimaryAttackCooldown { get; }
+        public abstract float SecondaryAttackCooldown { get; }
 
-        private float[] _animationSpeeds;
         private EffectDescriber _describer;
         private bool _onAttackStance;
         private Vector3 _scale = Vector3.One;
         private float _alpha = 1f;
         private bool _effectApplied;
-        private bool _onAttackCooldown;
 
         protected Weapon(VertexData MeshData)
         {
@@ -100,7 +99,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             Mesh.Position = Owner.Position;
             Mesh.LocalRotation = this.SheathedRotation;
             Mesh.BeforeLocalRotation =
-                (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 2.5f) * this.Scale;
+                (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 2.5f - Vector3.UnitY * 0.5f) * this.Scale;
         }
 
         protected void SetToMainHand(ObjectMesh Mesh)
@@ -145,9 +144,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected void BasePrimaryAttack(Humanoid Human)
         {
             this.BaseAttack(Human);        
-            var animation = PrimaryAnimations[this.ParsePrimaryIndex(PrimaryAnimationsIndex)];
-            animation.Speed = _animationSpeeds[Array.IndexOf(Animations, animation)] * Human.AttackSpeed;
-            Human.Model.Model.BlendAnimation(animation);
+            Human.Model.Model.BlendAnimation(PrimaryAnimations[this.ParsePrimaryIndex(PrimaryAnimationsIndex)]);
         }
 
         public virtual void Attack2(Humanoid Human)
@@ -165,9 +162,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected void BaseSecondaryAttack(Humanoid Human)
         {
             this.BaseAttack(Human);
-            var animation = SecondaryAnimations[this.ParseSecondaryIndex(SecondaryAnimationsIndex)];
-            animation.Speed = _animationSpeeds[Array.IndexOf(Animations, animation)] * Human.AttackSpeed;
-            Human.Model.Model.BlendAnimation(animation);
+            Human.Model.Model.BlendAnimation(SecondaryAnimations[this.ParseSecondaryIndex(SecondaryAnimationsIndex)]);
         }
 
         protected bool MeetsRequirements()
@@ -189,7 +184,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if (ShouldPlaySound && !IsMelee)
                 SoundManager.PlaySoundWithVariation(SoundType, Human.Position);
 
-            if (Human.Model.IsIdling)
+            if (Human.Model.IsIdling && IsMelee)
             {
                 Human.Model.Run();
                 TaskManager.After(1,
@@ -225,26 +220,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 if (Animations[i] != Owner.Model.Model.Animator.AnimationPlaying &&
                     Animations[i] != Owner.Model.Model.Animator.BlendingAnimation) continue;
                 attacking = true;
-                Owner.IsAttacking = true;
                 break;
-            }
-            if (!attacking && Owner.Model.Human.IsAttacking && !_onAttackCooldown)
-            {
-                _onAttackCooldown = true;
-                TaskManager.Delay( (int) (WeaponCooldown * 1000f), delegate
-                {
-                    if (_onAttackCooldown)
-                    {
-                        _onAttackCooldown = false;
-                        Owner.IsAttacking = false;
-                    }
-                });
-                TaskManager.While(() => _onAttackCooldown, delegate
-                {
-                    if (attacking) _onAttackCooldown = false;
-                });
-                Owner.Model.Human.WasAttacking = true;
-                CoroutineManager.StartCoroutine(this.WasAttackingCoroutine);
             }
 
             var primaryAttack = false;
@@ -269,13 +245,19 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             }
             SecondaryAttack = secondaryAttack;
 
+            if (!attacking && Owner.Model.Human.IsAttacking)
+            {
+                Owner.Model.Human.WasAttacking = true;
+                CoroutineManager.StartCoroutine(this.WasAttackingCoroutine);
+            }
+
+            Owner.IsAttacking = attacking;
+
             if (Sheathed)
                 this.SetToChest(MainMesh);
 
-
             if (InAttackStance || Owner.WasAttacking)
                 this.SetToMainHand(MainMesh);
-
 
             if (PrimaryAttack)
                 this.SetToMainHand(MainMesh);
@@ -315,7 +297,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public EffectDescriber Describer
         {
-            get { return _describer; }
+            get => _describer;
             set
             {
                 _describer = value;
@@ -334,14 +316,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
                 return Owner.Model.Model.Animator.BlendingAnimation == AttackStanceAnimation;
             }
-            set { _onAttackStance = value; }
+            set => _onAttackStance = value;
         }
 
         private bool _enabled = true;
 
         public bool Enabled
         {
-            get { return _enabled; }
+            get => _enabled;
             set
             {
                 this.GatherMembers();
@@ -355,7 +337,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public Vector3 Scale
         {
-            get { return _scale; }
+            get => _scale;
             set
             {
                 if (_scale == value) return;
@@ -370,7 +352,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public float Alpha
         {
-            get { return _alpha; }
+            get => _alpha;
             set
             {
                 if (_alpha == value) return;
@@ -386,14 +368,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public Vector3 Position
         {
-            get { return MainMesh.Position; }
-            set { MainMesh.Position = value; }
+            get => MainMesh.Position;
+            set => MainMesh.Position = value;
         }
 
         public Vector3 Rotation
         {
-            get { return MainMesh.Rotation; }
-            set { MainMesh.Rotation = value; }
+            get => MainMesh.Rotation;
+            set => MainMesh.Rotation = value;
         }
 
         public bool Sheathed => !LockWeapon && !PrimaryAttack && !SecondaryAttack &&
@@ -462,11 +444,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 }
             }
             Animations = animList.ToArray();
-            _animationSpeeds = new float[Animations.Length];
-            for (var i = 0; i < _animationSpeeds.Length; i++)
-            {
-                _animationSpeeds[i] = Animations[i].Speed;
-            }
         }
 
         public void StartWasAttackingCoroutine()
@@ -502,7 +479,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             float passedTime = 0;
             while (passedTime < 5f)
             {
-                if (Owner != null && Owner.IsAttacking && !this._onAttackCooldown)
+                if (Owner != null && Owner.IsAttacking)
                 {
                     if (Owner.IsAttacking)
                         Owner.WasAttacking = false;

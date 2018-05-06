@@ -1,0 +1,21 @@
+{
+  "Name": "LegendaryBloodEdge",
+  "DisplayName": "Blood Edge",
+  "EquipmentType": "Sword",
+  "Tier": "Legendary",
+  "Description": "Blood edge.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 22.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.1
+    }
+  ],
+  "Model": {
+    "Scale": 3.5,
+    "Path": "$DataFile$/Items/Swords/LegendaryBloodEdge.ply"
+  }
+}

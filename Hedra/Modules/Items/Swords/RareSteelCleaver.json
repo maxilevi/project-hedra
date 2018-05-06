@@ -1,0 +1,21 @@
+{
+  "Name": "RareSteelCleaver",
+  "DisplayName": "Steel Cleaver",
+  "EquipmentType": "Sword",
+  "Tier": "Rare",
+  "Description": "Steel cleaver.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 19.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.95
+    }
+  ],
+  "Model": {
+    "Scale": 3.5,
+    "Path": "$DataFile$/Items/Swords/RareSteelCleaver.ply"
+  }
+}

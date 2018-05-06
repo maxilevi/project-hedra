@@ -21,7 +21,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     public class Claw : Weapon
     {
         public override bool IsMelee { get; protected set; } = true;
-        protected override float WeaponCooldown => .05f;
+        public override float PrimaryAttackCooldown => .05f;
+        public override float SecondaryAttackCooldown => 2.5f;
         private readonly ObjectMesh SecondBlade;
 
         public Claw(VertexData Contents) : base(Contents)

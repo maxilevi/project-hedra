@@ -19,6 +19,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 		public static AnimatedModelData LoadColladaModel(string ColladaFile, int MaxWeights) {
 			XmlDocument Document = new XmlDocument();
 			Document.LoadXml(ColladaFile);
+            ColladaLoader.AssertCorrectName(Document);
 			XmlNode Node = Document.ChildNodes[1];
 	
 			SkinLoader SkinLoader = new SkinLoader(Node["library_controllers"], MaxWeights);
@@ -36,13 +37,24 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 		public static AnimationData LoadColladaAnimation(string ColladaFile) {
 			XmlDocument Document = new XmlDocument();
 			Document.LoadXml(ColladaFile);
-			XmlNode Node = Document.ChildNodes[1];
-			
+            ColladaLoader.AssertCorrectName(Document);
+			XmlNode Node = Document.ChildNodes[1];			
 			XmlNode AnimNode = Node["library_animations"];
 			XmlNode jointsNode = Node["library_visual_scenes"];
 			AnimationLoader loader = new AnimationLoader(AnimNode, jointsNode);
 			AnimationData animData = loader.ExtractAnimation();
 			return animData;
 		}
+
+	    private static void AssertCorrectName(XmlDocument Document)
+	    {
+	        if (Document.ChildNodes[1]["library_visual_scenes"]["visual_scene"]
+	                .ChildWithAttribute("node", "id", "Armature") == null)
+	        {
+	            var currentName = Document.ChildNodes[1]["library_visual_scenes"]["visual_scene"]
+	                .ChildWithPattern("node", "id", "^[a-zA-Z0-9_]*Armature[a-zA-Z0-9_]*$");
+                throw new ArgumentException($"Collada file armature should be named 'Armature' not {currentName.Value}");
+	        }
+	    }
 	}
 }

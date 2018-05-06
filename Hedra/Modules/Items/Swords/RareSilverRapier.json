@@ -1,0 +1,21 @@
+{
+  "Name": "RareSilverRapier",
+  "DisplayName": "Silver Rapier",
+  "EquipmentType": "Sword",
+  "Tier": "Rare",
+  "Description": "Silver rapier.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 14.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.2
+    }
+  ],
+  "Model": {
+    "Scale": 3.5,
+    "Path": "$DataFile$/Items/Swords/RareSilverRapier.ply"
+  }
+}

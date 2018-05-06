@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using Hedra.Engine.Events;
 using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
@@ -33,7 +34,7 @@ namespace Hedra.Engine.EntitySystem
 			Environment.NewLine+"in the market?"+Environment.NewLine
 			+"They accept every kind of object.",
 			
-			"Rumor says cementeries hold great"+
+			"Rumor says graveyards hold great"+
 			Environment.NewLine+"rewards.",
 		
 			"I've heard there is a travelling merchant"+
@@ -64,7 +65,8 @@ namespace Hedra.Engine.EntitySystem
 		    _phrase = Utils.FitString(Text, 25);
 		    EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyboardKeyEventArgs EventArgs)
 		    {
-		        if (EventArgs.Key == Key.E) _shouldTalk = true;
+		        if (EventArgs.Key == Key.E && (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 24f * 24f)
+                    _shouldTalk = true;
 		    });
 		}
 
@@ -72,14 +74,20 @@ namespace Hedra.Engine.EntitySystem
 
 	    public override void Update()
 	    {
-	        var talkDialogOpen = this.Parent.SearchComponent<TalkComponent>().Talked;
-	        if (GameManager.Player.CanInteract && !GameManager.Player.IsDead && !GameSettings.Paused && !talkDialogOpen && !PlayerInterface.Showing)
+            if (GameManager.Player.CanInteract && !GameManager.Player.IsDead && !GameSettings.Paused && !Talked && !PlayerInterface.Showing)
 	        {
 	            GameManager.Player.MessageDispatcher.ShowMessageWhile("[E] TO TALK", Color.White,
-	                () => (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 24f * 24f && !this.Parent.SearchComponent<TalkComponent>().Talked);
+	                () => (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 24f * 24f && !Talked);
 
-	            if (_shouldTalk) this.Parent.SearchComponent<TalkComponent>().Talk();         
+	            if (_shouldTalk)
+	            {
+	                this.Talk();
+	            }         
 	        }
+	        if (Talked && (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 24f * 24f)
+	        {
+	            Physics.LookAt(this.Parent, GameManager.Player);
+            }
         }
 
 	    public void Talk()
@@ -88,7 +96,7 @@ namespace Hedra.Engine.EntitySystem
 	    }
 
 	    public void Talk(bool Silent){
-            if(!Silent) SoundManager.PlayUISound(SoundType.NotificationSound, 1f, .75f);
+            if(!Silent) SoundManager.PlayUISound(SoundType.TalkSound, 1f, .75f);
 			string phrase = _phrase ?? Phrases[Utils.Rng.Next(0, Phrases.Length)];
 			
 			var textSize = new GUIText(phrase, Vector2.Zero, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10));
@@ -98,7 +106,6 @@ namespace Hedra.Engine.EntitySystem
 		    {
 		        FollowFunc = () => Parent.Position + Vector3.UnitY * 8f
 		    };
-
 
 		    _board = new Billboard(Duration, phrase, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10), Vector3.Zero)
 		    {

@@ -58,13 +58,12 @@ namespace Hedra.Engine.ItemSystem
 		public override void Update(){
 		    this.Position = new Vector3(Position.X, Physics.HeightAtPosition(Position.X, Position.Z) + _height, Position.Z);
             this.Mesh.TargetRotation += Vector3.UnitY * 35f * (float) Time.deltaTime;
-			
-			Func<float> dotFunc = () => Vector2.Dot((this.Position - GameManager.Player.Position).Xz.NormalizedFast(),
-                LocalPlayer.Instance.View.LookingDirection.Xz.NormalizedFast());
 
-			if(dotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f*14f){
+		    float DotFunc() => Vector2.Dot((this.Position - GameManager.Player.Position).Xz.NormalizedFast(), LocalPlayer.Instance.View.LookingDirection.Xz.NormalizedFast());
+
+		    if(DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f*14f){
 			    LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile("[E] TO PICK UP", 
-                    () => !Disposed && dotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f * 14f);
+                    () => !Disposed && DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f * 14f);
 			    _canPickup = true;
 
 				if(LocalPlayer.Instance.Inventory.HasAvailableSpace && _shouldPickup && !PickedUp && !Disposed)

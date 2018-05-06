@@ -1,0 +1,21 @@
+{
+  "Name": "LegendarySteelChopper",
+  "DisplayName": "Steel Chopper",
+  "EquipmentType": "Sword",
+  "Tier": "Legendary",
+  "Description": "Steel chopper.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 32.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.90
+    }
+  ],
+  "Model": {
+    "Scale": 3.5,
+    "Path": "$DataFile$/Items/Swords/LegendarySteelChopper.ply"
+  }
+}
