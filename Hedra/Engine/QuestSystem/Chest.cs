@@ -19,6 +19,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using OpenTK.Input;
 
 namespace Hedra.Engine.QuestSystem
 {
@@ -35,8 +36,10 @@ namespace Hedra.Engine.QuestSystem
         public Item ItemSpecification { get; }
 		public Func<bool> Condition;
 		public event OnItemCollect OnPickup;
-		
-		public Chest(Vector3 Position, Item ItemSpecification){
+	    private bool _shouldOpen;
+	    private bool _canOpen;
+
+        public Chest(Vector3 Position, Item ItemSpecification){
 			this.ItemSpecification = ItemSpecification;
 			this.Model = AnimationModelLoader.LoadEntity("Assets/Chr/ChestIdle.dae");
 			this.IdleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestIdle.dae");
@@ -57,6 +60,10 @@ namespace Hedra.Engine.QuestSystem
 			this.Model.PlayAnimation(IdleAnimation);
 			this.Model.Scale = Vector3.One * 4.5f;
 			this.Model.Fog = true;
+            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyboardKeyEventArgs EventArgs)
+            {
+                _shouldOpen = EventArgs.Key == Key.E && _canOpen;
+            });
 			UpdateManager.Add(this);
 		}
 		
@@ -78,15 +85,19 @@ namespace Hedra.Engine.QuestSystem
 			this.Position = new Vector3(this.Position.X, Physics.HeightAtPosition(this.Position), this.Position.Z);
 			this.Model.Update();
 			
-			var player = LocalPlayer.Instance;	
+			var player = LocalPlayer.Instance;
 
-			if(( player.Position - this.Position).LengthSquared < 16*16 && IsClosed && !GameSettings.Paused){
-				player.MessageDispatcher.ShowMessage("[E] INTERACT WITH THE CHEST", .25f, Color.White);
-				Model.Tint = new Vector4(1.5f,1.5f,1.5f,1);
-				if(EventDispatcher.LastKeyDown == OpenTK.Input.Key.E){
-					this.Open();
-				}
-			}
+		    if ((player.Position - this.Position).LengthSquared < 16 * 16 && IsClosed && !GameSettings.Paused)
+		    {
+		        player.MessageDispatcher.ShowMessage("[E] INTERACT WITH THE CHEST", .25f, Color.White);
+		        Model.Tint = new Vector4(1.5f, 1.5f, 1.5f, 1);
+		        _canOpen = true;
+		        if (_shouldOpen) this.Open();
+		    }
+		    else
+		    {
+		        _canOpen = false;
+		    }
 		}
 
 	    private void CreateColliders()
@@ -127,7 +138,7 @@ namespace Hedra.Engine.QuestSystem
 		public bool IsClosed => Model.Animator.AnimationPlaying == IdleAnimation;
 
 	    public new Vector3 Position{
-			get{ return Model.Position;  }
+			get => Model.Position;
 	        set
 	        {
                 if(value == this.Position) return;

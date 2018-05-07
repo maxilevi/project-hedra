@@ -31,7 +31,6 @@ namespace Hedra.Engine.Events
 	    private static event EventHandler<MouseWheelEventArgs> OnMouseWheelEvent;
 
         public static Vector2 Mouse { get; set; } = Vector2.Zero;
-        public static Key LastKeyDown { get; private set; }
 
 	    static EventDispatcher()
 	    {
@@ -166,7 +165,6 @@ namespace Hedra.Engine.Events
 
 	    public static void OnKeyDown(object Sender, KeyboardKeyEventArgs E)
 		{
-		    LastKeyDown = E.Key;
 		    OnKeyDownEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
 				EventListeners[i].OnKeyDown(Sender, E);

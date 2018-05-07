@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
@@ -12,6 +13,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using OpenTK;
+using OpenTK.Input;
 
 namespace Hedra.Engine.QuestSystem
 {
@@ -25,6 +27,8 @@ namespace Hedra.Engine.QuestSystem
         public bool Rescued { get; private set; }
         public float Radius { get; set; }
         private readonly Campfire _campfire;
+        private bool _shouldRescue;
+        private bool _canRescue;
 
         public BanditCamp(Vector3 Position, float Radius)
         {
@@ -32,6 +36,10 @@ namespace Hedra.Engine.QuestSystem
             this.Radius = Radius;
             this.BuildRescuee(new Random((int)(Position.X / 11 * (Position.Z / 13))));
             this._campfire = new Campfire(Position);
+            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyboardKeyEventArgs EventArgs)
+            {
+                _shouldRescue = EventArgs.Key == Key.E && _canRescue;
+            });
             UpdateManager.Add(this);
         }
 
@@ -88,11 +96,16 @@ namespace Hedra.Engine.QuestSystem
             if (!_rescuee.InUpdateRange)
                 _rescuee.Update();
 
-            if (!Cleared || !((GameManager.Player.Position - Position).LengthSquared < 16 * 16)) return;
+            if (!Cleared || !((GameManager.Player.Position - Position).LengthSquared < 16 * 16))
+            {
+                _canRescue = false;
+                return;
+            }
 
             GameManager.Player.MessageDispatcher.ShowMessage("PRESS [E] TO UNTIE", .25f);
+            _canRescue = true;
 
-            if (Events.EventDispatcher.LastKeyDown != OpenTK.Input.Key.E) return;
+            if (!_shouldRescue) return;
 
             Rescued = true;
             TaskManager.After(1, delegate

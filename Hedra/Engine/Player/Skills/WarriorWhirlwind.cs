@@ -99,10 +99,10 @@ namespace Hedra.Engine.Player
 				Player.Model.LeftWeapon.MainMesh.Position = Player.Model.Position;
 				Player.Model.LeftWeapon.MainMesh.Rotation = Vector3.Zero;
 				Player.Model.LeftWeapon.MainMesh.TargetRotation = new Vector3(RotationY,0,0);
-				Player.Model.LeftWeapon.MainMesh.RotationPoint = Player.Model.Position - (Player.Model.LeftHandPosition + Player.Model.RightHandPosition) / 2;
+				Player.Model.LeftWeapon.MainMesh.RotationPoint = Player.Model.Position - (Player.Model.LeftWeaponPosition + Player.Model.RightWeaponPosition) / 2;
 				Player.Model.LeftWeapon.MainMesh.LocalRotation = new Vector3(90,0,90);
 				Player.Model.LeftWeapon.MainMesh.LocalRotationPoint = Vector3.Zero;
-				Player.Model.LeftWeapon.MainMesh.LocalPosition = (Player.Model.LeftHandPosition + Player.Model.RightHandPosition) / 2 - Player.Model.LeftWeapon.MainMesh.Position;
+				Player.Model.LeftWeapon.MainMesh.LocalPosition = (Player.Model.LeftWeaponPosition + Player.Model.RightWeaponPosition) / 2 - Player.Model.LeftWeapon.MainMesh.Position;
 				Player.Model.LeftWeapon.MainMesh.BeforeLocalRotation = Vector3.Zero;
 				Player.Model.LeftWeapon.MainMesh.TargetPosition = Vector3.Zero;
 				Player.Model.LeftWeapon.MainMesh.AnimationPosition = Vector3.Zero;

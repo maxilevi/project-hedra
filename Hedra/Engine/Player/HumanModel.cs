@@ -43,12 +43,12 @@ namespace Hedra.Engine.Player
 		private Animation KnockedAnimation;
         private Animation TiedAnimation;
         private Animation SleepAnimation;
-        public Joint LeftHand;
-        public Joint RightHand;
-        public Joint Chest;
-        public Joint LeftFoot;
-        public Joint RightFoot;
-        public Joint Head;
+        public Joint LeftWeaponJoint;
+        public Joint RightWeaponJoint;
+        public Joint ChestJoint;
+        public Joint LeftFootJoint;
+        public Joint RightFootJoint;
+        public Joint HeadJoint;
         private AreaSound _modelSound;
 		public StaticModel Food;
 		public Weapon LeftWeapon { get; private set; }
@@ -70,6 +70,7 @@ namespace Hedra.Engine.Player
         private Vector3 _previousPosition;
         private Quaternion _rotationQuaternion;
         private float _lastAnimationTime = -1;
+        		private float _targetAlpha = 1f;
 
 
         public HumanModel(Humanoid Human, HumanoidModelTemplate Template)
@@ -109,13 +110,13 @@ namespace Hedra.Engine.Player
 			
 			Model = AnimationModelLoader.LoadEntity(Template.Path);
 
-            this.Model.Scale = DefaultScale * new Vector3(1, 1.15f, 1) * Template.Scale;// * 1.15f;
-			this.LeftHand = Model.RootJoint.GetChild("Hand_L");
-			this.RightHand = Model.RootJoint.GetChild("Hand_R");
-			this.Chest = Model.RootJoint.GetChild("Chest");
-			this.LeftFoot = Model.RootJoint.GetChild("Foot_L");
-			this.RightFoot = Model.RootJoint.GetChild("Foot_R");
-            this.Head = Model.RootJoint.GetChild("Head");
+            this.Model.Scale = DefaultScale * new Vector3(1, 1.15f, 1) * Template.Scale;
+			this.LeftWeaponJoint = Model.RootJoint.GetChild("Hand_L");
+			this.RightWeaponJoint = Model.RootJoint.GetChild("Hand_R");
+			this.ChestJoint = Model.RootJoint.GetChild("Chest");
+			this.LeftFootJoint = Model.RootJoint.GetChild("Foot_L");
+			this.RightFootJoint = Model.RootJoint.GetChild("Foot_R");
+            this.HeadJoint = Model.RootJoint.GetChild("Head");
 			
 			WalkAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWalk.dae");
 			IdleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorIdle.dae");
@@ -386,7 +387,7 @@ namespace Hedra.Engine.Player
 				Human.IsEating = false;
 				this.Food.Enabled = false;
 			}else if(Human.IsEating){
-				Matrix4 Mat4 = this.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + ((this.LeftHandPosition + this.RightHandPosition) / 2f) );
+				Matrix4 Mat4 = this.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + ((this.LeftWeaponPosition + this.RightWeaponPosition) / 2f) );
 				
 				this.Food.Mesh.TransformationMatrix = Mat4;
 				this.Food.Mesh.Position = Model.Position;
@@ -407,7 +408,7 @@ namespace Hedra.Engine.Player
 			if(!LockWeapon) this.LeftWeapon.Update(this.Human);
 			
 			if(this._hasLamp){
-				this._lampModel.Position = this.LeftHandPosition;
+				this._lampModel.Position = this.LeftWeaponPosition;
 				this._lampModel.Rotation = this.Rotation;
 				this._lampModel.RotationPoint = Vector3.Zero;
 			}
@@ -479,20 +480,16 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		
-		private float _targetAlpha = 1f;
 		public override float Alpha {
-			get { return _targetAlpha; }
-			set {
-				_targetAlpha = value;				
-			}
+			get => _targetAlpha;
+		    set => _targetAlpha = value;
 		}
 
-        public Matrix4 ChestMatrix => Model.MatrixFromJoint(Chest);
+        public Matrix4 ChestMatrix => Model.MatrixFromJoint(ChestJoint);
 
-        public Matrix4 LeftHandMatrix => Model.MatrixFromJoint(LeftHand);
+        public Matrix4 LeftWeaponMatrix => Model.MatrixFromJoint(LeftWeaponJoint);
 
-	    public Matrix4 RightHandMatrix => Model.MatrixFromJoint(RightHand);
+	    public Matrix4 RightWeaponMatrix => Model.MatrixFromJoint(RightWeaponJoint);
 
         private Vector3 _defaultHeadPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         public Vector3 HeadPosition
@@ -500,17 +497,17 @@ namespace Hedra.Engine.Player
             get
             {
                 if (this._defaultHeadPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-                    this._defaultHeadPosition = Model.JointDefaultPosition(Head);
-                return Model.TransformFromJoint(this._defaultHeadPosition, Head);
+                    this._defaultHeadPosition = Model.JointDefaultPosition(HeadJoint);
+                return Model.TransformFromJoint(this._defaultHeadPosition, HeadJoint);
             }
         }
 
-        private Vector3 _defaultLeftHandPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-		public Vector3 LeftHandPosition{
+        private Vector3 _defaultLeftWeaponPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+		public Vector3 LeftWeaponPosition{
 			get{
-				if(this._defaultLeftHandPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-					this._defaultLeftHandPosition = Model.JointDefaultPosition(LeftHand);
-				return Model.TransformFromJoint(this._defaultLeftHandPosition, LeftHand);
+				if(this._defaultLeftWeaponPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
+					this._defaultLeftWeaponPosition = Model.JointDefaultPosition(LeftWeaponJoint);
+				return Model.TransformFromJoint(this._defaultLeftWeaponPosition, LeftWeaponJoint);
 			}
 		}
 		
@@ -518,8 +515,8 @@ namespace Hedra.Engine.Player
 		public Vector3 RightFootPosition{
 			get{
 				if(this._defaultRightFootPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-					this._defaultRightFootPosition = Model.JointDefaultPosition(RightFoot);
-				return Model.TransformFromJoint(this._defaultRightFootPosition, RightFoot);
+					this._defaultRightFootPosition = Model.JointDefaultPosition(RightFootJoint);
+				return Model.TransformFromJoint(this._defaultRightFootPosition, RightFootJoint);
 			}
 		}
 		
@@ -527,17 +524,17 @@ namespace Hedra.Engine.Player
 		public Vector3 LeftFootPosition{
 			get{
 				if(this._defaultLeftFootPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-					this._defaultLeftFootPosition = Model.JointDefaultPosition(LeftFoot);
-				return Model.TransformFromJoint(this._defaultLeftFootPosition, LeftFoot);
+					this._defaultLeftFootPosition = Model.JointDefaultPosition(LeftFootJoint);
+				return Model.TransformFromJoint(this._defaultLeftFootPosition, LeftFootJoint);
 			}
 		}
 		
-		private Vector3 _defaultRightHandPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-		public Vector3 RightHandPosition{
+		private Vector3 _defaultRightWeaponPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+		public Vector3 RightWeaponPosition{
 			get{
-				if(this._defaultRightHandPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-					this._defaultRightHandPosition = Model.JointDefaultPosition(RightHand);
-				return Model.TransformFromJoint(this._defaultRightHandPosition, RightHand);
+				if(this._defaultRightWeaponPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
+					this._defaultRightWeaponPosition = Model.JointDefaultPosition(RightWeaponJoint);
+				return Model.TransformFromJoint(this._defaultRightWeaponPosition, RightWeaponJoint);
 			}
 		}
 
@@ -547,19 +544,19 @@ namespace Hedra.Engine.Player
             get
             {
                 if (this._defaultChestPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-                    this._defaultChestPosition = Model.JointDefaultPosition(Chest);
-                return Model.TransformFromJoint(this._defaultChestPosition, Chest);
+                    this._defaultChestPosition = Model.JointDefaultPosition(ChestJoint);
+                return Model.TransformFromJoint(this._defaultChestPosition, ChestJoint);
             }
         }
 
 	    public override bool ApplyFog{
-			get{ return Model.Fog; }
-			set{ Model.Fog = value;}
-		}
+			get => Model.Fog;
+	        set => Model.Fog = value;
+	    }
 		
 		public override bool Pause {
-			get { return base.Pause; }
-			set { 
+			get => base.Pause;
+		    set { 
 				base.Pause = value;
 				Model.Animator.Stop = value;
 			}
@@ -567,8 +564,8 @@ namespace Hedra.Engine.Player
 		
 		private bool _enabled = true;
 		public override bool Enabled{
-			get{ return _enabled; }
-			set{
+			get => _enabled;
+		    set{
 				this.LeftWeapon.Enabled = value;
 				Model.Enabled = value;
 				_enabled = value;
@@ -577,11 +574,8 @@ namespace Hedra.Engine.Player
 		
 		private Vector3 _position;
 		public override Vector3 Position{
-			get{
-                return _position;
-                
-			}
-			set{
+			get => _position;
+		    set{
 				if(MountModel != null)
 					this.MountModel.Position = value - Vector3.UnitY * 1.5f;
 

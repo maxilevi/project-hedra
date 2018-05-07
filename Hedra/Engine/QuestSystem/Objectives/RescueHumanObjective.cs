@@ -172,7 +172,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
 			    LocalPlayer.Instance.MessageDispatcher.ShowMessage("PRESS [E] TO UNTIE", .25f);
 
-			    if (Events.EventDispatcher.LastKeyDown != OpenTK.Input.Key.E) continue;
+			    //if (Events.EventDispatcher.LastKeyDown != OpenTK.Input.Key.E) continue;
 
 			    _oldManSaved = true;
 			    _oldMan.Physics.UsePhysics = true;

@@ -1004,6 +1004,10 @@
       <Link>Assets\Chr\WarriorGlide.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Animations\WarriorHello.dae">
+      <Link>Assets\Chr\WarriorHello.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Animations\WarriorIdle.dae">
       <Link>Assets\Chr\WarriorIdle.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

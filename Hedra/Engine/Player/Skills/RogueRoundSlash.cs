@@ -69,8 +69,8 @@ namespace Hedra.Engine.Player
 				World.Particles.GravityEffect = .0f;
 				World.Particles.Direction = Vector3.Zero;
 				World.Particles.Scale = new Vector3(.15f,.15f,.15f);
-				World.Particles.Position = Player.Model.Model.TransformFromJoint(Player.Model.Model.JointDefaultPosition(Player.Model.LeftHand)
-				                                                                             + Vector3.UnitZ *0f, Player.Model.LeftHand);
+				World.Particles.Position = Player.Model.Model.TransformFromJoint(Player.Model.Model.JointDefaultPosition(Player.Model.LeftWeaponJoint)
+				                                                                             + Vector3.UnitZ *0f, Player.Model.LeftWeaponJoint);
 				World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
 				
 				for(int i = 0; i < 1; i++)

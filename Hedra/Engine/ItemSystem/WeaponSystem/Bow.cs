@@ -88,7 +88,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
             if (base.InAttackStance || Owner.IsAttacking || Owner.WasAttacking)
             {
-				Matrix4 Mat4 = Owner.Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftHandPosition);
+				Matrix4 Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
 					
 				this.MainMesh.TransformationMatrix = Mat4;
 				this.MainMesh.Position = Owner.Model.Position;
@@ -104,7 +104,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
             base.SetToDefault(this.Arrow[0]);
 
-            Matrix4 ArrowMat4 = Owner.Model.RightHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightHandPosition);
+            Matrix4 ArrowMat4 = Owner.Model.RightWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);
 			
 			this.Arrow[0].TransformationMatrix = ArrowMat4;
 			this.Arrow[0].Position = Owner.Model.Position;
@@ -119,7 +119,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		}
 		
 		public Projectile ShootArrow(Humanoid Human, Vector3 Direction, int KnockChance = -1){
-			var arrowProj = new Projectile(ArrowData.Clone(), Owner.Model.LeftHandPosition + Owner.Model.Human.Orientation * 2 +
+			var arrowProj = new Projectile(ArrowData.Clone(), Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
 			                                      ( (Human is LocalPlayer ) ? Vector3.UnitY * 0f : Vector3.Zero), Direction, Human);
 			arrowProj.Rotation = new Vector3(arrowProj.Rotation.X, arrowProj.Rotation.Y, arrowProj.Rotation.Z + 45*(Direction.Y-.2f)*3);
 			arrowProj.Speed = 6.0f;

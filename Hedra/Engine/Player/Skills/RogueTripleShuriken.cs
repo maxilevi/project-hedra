@@ -61,7 +61,7 @@ namespace Hedra.Engine.Player
 		private void ShootShuriken(Humanoid Human, Vector3 Direction, int KnockChance = -1){
 			VertexData WeaponData = ShurikenData.Clone();
 			WeaponData.Scale(Vector3.One * 1.75f);
-			Projectile WeaponProj = new Projectile(WeaponData, Player.Model.LeftHandPosition + Player.Model.Human.Orientation * .5f +
+			Projectile WeaponProj = new Projectile(WeaponData, Player.Model.LeftWeaponPosition + Player.Model.Human.Orientation * .5f +
 			                                      Vector3.UnitY * 2f, Direction, Human);
 			WeaponProj.RotateOnX = true;
 			WeaponProj.Speed = 6.0f;
@@ -97,8 +97,8 @@ namespace Hedra.Engine.Player
 				World.Particles.GravityEffect = .0f;
 				World.Particles.Direction = Vector3.Zero;
 				World.Particles.Scale = new Vector3(.25f,.25f,.25f);
-				World.Particles.Position = Player.Model.Model.TransformFromJoint(Player.Model.Model.JointDefaultPosition(Player.Model.LeftHand)
-				                                                                             + Vector3.UnitZ *0f, Player.Model.LeftHand);
+				World.Particles.Position = Player.Model.Model.TransformFromJoint(Player.Model.Model.JointDefaultPosition(Player.Model.LeftWeaponJoint)
+				                                                                             + Vector3.UnitZ *0f, Player.Model.LeftWeaponJoint);
 				World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
 				
 				for(int i = 0; i < 1; i++)

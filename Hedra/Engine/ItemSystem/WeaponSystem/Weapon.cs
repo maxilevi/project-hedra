@@ -104,8 +104,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         protected void SetToMainHand(ObjectMesh Mesh)
         {
-            Matrix4 Mat4 = Owner.Model.LeftHandMatrix.ClearTranslation() *
-                           Matrix4.CreateTranslation(-Owner.Position + Owner.Model.LeftHandPosition);
+            Matrix4 Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() *
+                           Matrix4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
 
             Mesh.TransformationMatrix = Mat4;
             Mesh.Position = Owner.Position;
@@ -293,7 +293,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         }
 
         public virtual Vector3 WeaponTip =>
-            Vector3.TransformPosition((-Vector3.UnitY * 1.5f + Vector3.UnitX * 3f) * 2F, Owner.Model.LeftHandMatrix);
+            Vector3.TransformPosition((-Vector3.UnitY * 1.5f + Vector3.UnitX * 3f) * 2F, Owner.Model.LeftWeaponMatrix);
 
         public EffectDescriber Describer
         {

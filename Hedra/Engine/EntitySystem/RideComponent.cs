@@ -26,45 +26,66 @@ namespace Hedra.Engine.EntitySystem
 		public float HeightAddon = 0;
 		private AIComponent AI;
 		private HealthBarComponent _healthBar;
-		
-		public RideComponent(Entity Parent) : base(Parent) {
+        private bool _shouldRide;
+        private bool _shouldUnride;
+        private bool _canRide;
+        private bool _canUnride;
+
+        public RideComponent(Entity Parent) : base(Parent) {
 			AI = Parent.SearchComponent<AIComponent>();
 			_healthBar = Parent.SearchComponent<HealthBarComponent>();
+            EventDispatcher.RegisterKeyDown(this, delegate(object Object, KeyboardKeyEventArgs EventArgs)
+            {
+                _shouldRide = EventArgs.Key == Key.E && _canRide;
+                _shouldUnride = EventArgs.Key == Key.ShiftLeft && _canUnride;
+            });
 		}
 		
 		public override void Update(){
-			//Player
 			Parent.Model.Tint = new Vector4(1f,1f,1f,1);
 			LocalPlayer player = GameManager.Player;
-			if( !HasRider && (player.BlockPosition - Parent.BlockPosition).LengthSquared < 12*12 && !player.IsRiding && !player.IsCasting
-			    && Vector3.Dot( (Parent.BlockPosition - player.BlockPosition).NormalizedFast(), player.View.LookingDirection) > .6f)
-			{
-			    var model = Parent.Model as IMountable;
-			    if(model != null && model.IsMountable && !Parent.IsUnderwater && !Parent.Knocked){					
-					player.MessageDispatcher.ShowMessage("[E] TO MOUNT", .5f, Color.White);
-					Parent.Model.Tint = new Vector4(1.5f,1.5f,1.5f,1);
-                    if(EventDispatcher.LastKeyDown == Key.E)
-					    this.Ride(player);					
-				}
-			}
+		    if (!HasRider && (player.BlockPosition - Parent.BlockPosition).LengthSquared < 12 * 12 && !player.IsRiding &&
+		        !player.IsCasting
+		        && Vector3.Dot((Parent.BlockPosition - player.BlockPosition).NormalizedFast(), player.View.LookingDirection) >
+		        .6f)
+		    {
+		        if (Parent.Model is IMountable model && model.IsMountable && !Parent.IsUnderwater && !Parent.Knocked)
+		        {
+		            player.MessageDispatcher.ShowMessage("[E] TO MOUNT", .5f, Color.White);
+		            Parent.Model.Tint = new Vector4(1.5f, 1.5f, 1.5f, 1);
+		            _canRide = true;
+                    if (_shouldRide) this.Ride(player);
+		        }
+		        else
+		        {
+		            _canRide = false;
+		        }
+		    }
+		    else
+		    {
+		        _canRide = false;
+		    }
 			if(AI == null) AI = Parent.SearchComponent<AIComponent>();
 			if(_healthBar == null) _healthBar = Parent.SearchComponent<HealthBarComponent>();
 
-			if(HasRider && Rider.IsRiding)
-			{
-				if(!Rider.IsMoving)
-					Parent.Model.Idle();
-				else
-					Parent.Model.Run();
-
-			}
-			if( HasRider && Rider is LocalPlayer && EventDispatcher.LastKeyDown == Key.ShiftLeft || HasRider && Rider.IsDead )
+		    if (HasRider && Rider.IsRiding)
+		    {
+		        if (!Rider.IsMoving)
+		            Parent.Model.Idle();
+		        else
+		            Parent.Model.Run();
+		        _canUnride = true;
+		    }
+		    else
+		    {
+		        _canUnride = false;
+		    }
+			if( HasRider && Rider is LocalPlayer && _shouldUnride || HasRider && Rider.IsDead )
 				Rider.IsRiding = false;
 
 
 			if(HasRider && !Rider.IsRiding){
-			    var ridePlayer = Rider as LocalPlayer;
-			    if(ridePlayer != null){
+			    if(Rider is LocalPlayer ridePlayer){
 			        ridePlayer.Model.LeftWeapon.MainMesh.DontCull = false;
 					for(int i = 0; i < ridePlayer.Model.LeftWeapon.Meshes.Length; i++){
 						ridePlayer.Model.LeftWeapon.Meshes[i].DontCull = false;
@@ -81,8 +102,7 @@ namespace Hedra.Engine.EntitySystem
 				
 				Parent.Physics.UsePhysics = true;
 				Parent.Physics.HasCollision = true;
-				Parent.SearchComponent<DamageComponent>().Immune = false;
-				
+				Parent.SearchComponent<DamageComponent>().Immune = false;				
 			}
 		}
 		
@@ -98,8 +118,7 @@ namespace Hedra.Engine.EntitySystem
 			Parent.Physics.UsePhysics = false;
 			Parent.Physics.HasCollision = false;
 			Parent.SearchComponent<DamageComponent>().Immune = true;
-		    var player = Entity as LocalPlayer;
-		    if(player != null){
+		    if(Entity is LocalPlayer player){
 		        player.Model.LeftWeapon.MainMesh.DontCull = true;
 				for(int i = 0; i < player.Model.LeftWeapon.Meshes.Length; i++){
 					player.Model.LeftWeapon.Meshes[i].DontCull = true;

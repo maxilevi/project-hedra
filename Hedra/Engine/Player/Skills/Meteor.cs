@@ -66,7 +66,7 @@ namespace Hedra.Engine.Player
 		public void CreateProjectile(){
 			float RandomScale = Mathf.Clamp(Utils.Rng.NextFloat() * 2f -1f, 1, 2);
 			ParticleProjectile Fire = new ParticleProjectile(Vector3.One + new Vector3(RandomScale, RandomScale, RandomScale) * 0.35f,
-			                            ((LeftHand) ? Player.Model.LeftHandPosition - Vector3.UnitX * .5f : Player.Model.RightHandPosition + Vector3.UnitX * .5f) + Player.Orientation * 2 + Vector3.UnitY * 2f,
+			                            ((LeftHand) ? Player.Model.LeftWeaponPosition - Vector3.UnitX * .5f : Player.Model.RightWeaponPosition + Vector3.UnitX * .5f) + Player.Orientation * 2 + Vector3.UnitY * 2f,
 			                            2, Player.View.CrossDirection * 4f, Player);
 			
 			ParticleSystem Particles = new ParticleSystem(Fire.Position);

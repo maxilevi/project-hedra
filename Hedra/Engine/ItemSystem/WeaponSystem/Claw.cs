@@ -80,7 +80,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
             if (Sheathed)
             {
-                Matrix4 Mat4 = Owner.Model.Model.MatrixFromJoint(Owner.Model.Chest).ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+                Matrix4 Mat4 = Owner.Model.Model.MatrixFromJoint(Owner.Model.ChestJoint).ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
 
                 this.MainMesh.Position = Owner.Model.Position;
                 this.MainMesh.BeforeLocalRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
@@ -97,14 +97,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if (base.InAttackStance || Owner.Model.Human.WasAttacking)
             {
 
-                Matrix4 Mat4L = Owner.Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftHandPosition);
+                Matrix4 Mat4L = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
 
                 this.MainMesh.TransformationMatrix = Mat4L;
                 this.MainMesh.Position = Owner.Model.Position;
                 this.MainMesh.TargetRotation = new Vector3(180, 0, 0);
                 this.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.35f;
 
-                Matrix4 Mat4R = Owner.Model.RightHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightHandPosition);
+                Matrix4 Mat4R = Owner.Model.RightWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);
 
                 this.SecondBlade.TransformationMatrix = Mat4R;
                 this.SecondBlade.Position = Owner.Model.Position;
@@ -115,14 +115,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if (PrimaryAttack || SecondaryAttack)
             {
 
-                Matrix4 Mat4L = Owner.Model.LeftHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftHandPosition);
+                Matrix4 Mat4L = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
 
                 this.MainMesh.TransformationMatrix = Mat4L;
                 this.MainMesh.Position = Owner.Model.Position;
                 this.MainMesh.TargetRotation = new Vector3(180, 0, 0f);
                 this.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
 
-                Matrix4 Mat4R = Owner.Model.RightHandMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightHandPosition);
+                Matrix4 Mat4R = Owner.Model.RightWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);
 
                 this.SecondBlade.TransformationMatrix = Mat4R;
                 this.SecondBlade.Position = Owner.Model.Position;

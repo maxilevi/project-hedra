@@ -59,7 +59,7 @@ namespace Hedra.Engine.Player
 		private void ShootWeapon(Humanoid Human, Vector3 Direction, int KnockChance = -1){
 			var weaponData = Player.Model.LeftWeapon.MeshData.Clone();
 			weaponData.Scale(Vector3.One * 1.75f);
-		    var weaponProj = new Projectile(weaponData, Player.Model.LeftHandPosition + Player.Model.Human.Orientation * 2 +
+		    var weaponProj = new Projectile(weaponData, Player.Model.LeftWeaponPosition + Player.Model.Human.Orientation * 2 +
 		                                                Vector3.UnitY * 2f, Direction, Human)
 		    {
 		        RotateOnX = true,
@@ -111,8 +111,8 @@ namespace Hedra.Engine.Player
 		
 		public override void Update(){
 			if(Player.IsCasting && Casting){
-				Matrix4 Mat4 = Player.Model.LeftHandMatrix.ClearTranslation() * 
-					Matrix4.CreateTranslation(-Player.Model.Position + (Player.Model.LeftHandPosition + Player.Model.RightHandPosition) * .5f);
+				Matrix4 Mat4 = Player.Model.LeftWeaponMatrix.ClearTranslation() * 
+					Matrix4.CreateTranslation(-Player.Model.Position + (Player.Model.LeftWeaponPosition + Player.Model.RightWeaponPosition) * .5f);
 				
 				Player.Model.LeftWeapon.MainMesh.TransformationMatrix = Matrix4.Identity;
 				Player.Movement.Orientate();

@@ -123,7 +123,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
                     _talkTarget.Model.Tint = new Vector4(1.5f, 1.5f, 1.5f, 1.0f);
                     LocalPlayer.Instance.MessageDispatcher.ShowMessage("PRESS [E] TO INTERACT", .5f);
-                    if (EventDispatcher.LastKeyDown == Key.E)
+                    //if (EventDispatcher.LastKeyDown == Key.E)
                         _talked = true;
 
                 }
