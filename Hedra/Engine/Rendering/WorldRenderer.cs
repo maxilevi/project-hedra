@@ -184,7 +184,7 @@ namespace Hedra.Engine.Rendering
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
            	
            	GL.ActiveTexture(TextureUnit.Texture0);
-		    GL.BindTexture(TextureTarget.Texture2D, GameSettings.Fancy ? GameSettings.SSAO ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : DrawManager.MainBuffer.Default.TextureID[0] : 0);
+		    GL.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Fancy ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : 0);
 
 		    WaterShader["Dither"] = Dither ? 1 : 0;
 		    WaterShader["TransformationMatrix"] = TransformationMatrix;
