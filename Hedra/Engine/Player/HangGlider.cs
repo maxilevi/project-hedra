@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using OpenTK;
 using OpenTK.Input;
@@ -74,41 +68,51 @@ namespace Hedra.Engine.Player
                 _accumulatedVelocity = Vector3.One * 10f;
                 _yaw = _player.View.StackedYaw;
             }
-            this.ManageParticles();
-            this.HandleInput();
-            _model.Enabled = true;
-            _player.View.MaxPitch = 1.25f;
-            _player.View.MinPitch = -1.25f;
+            if (this.Enabled)
+            {
+                this.ManageParticles();
+                this.HandleInput();
+                _model.Enabled = true;
+                _player.View.MaxPitch = 1.25f;
+                _player.View.MinPitch = -1.25f;
 
-            _model.Position = _player.Position + Vector3.UnitY * 8f;
-            _model.BaseMesh.BeforeLocalRotation = Vector3.UnitY * 2f;
-            _model.BaseMesh.Rotation = new Vector3(_angles.X, _player.Model.Model.Rotation.Y, 0);
-            _model.BaseMesh.LocalRotation = Vector3.UnitZ * _angles.Z;
-            _player.Model.Model.TransformationMatrix = Matrix4.CreateRotationY(-_player.Model.Model.Rotation.Y * Mathf.Radian)
-                * Matrix4.CreateTranslation(Vector3.UnitY * -7.5f)
-                * Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian) * Matrix4.CreateRotationX(_angles.X * Mathf.Radian)
-                * Matrix4.CreateRotationY(_player.Model.Model.Rotation.Y * Mathf.Radian)
-                * Matrix4.CreateTranslation(Vector3.UnitY * 10f);
-            _player.Movement.Orientate();
-            _player.Physics.GravityDirection = -Vector3.UnitY * 1f;
-            _player.Physics.VelocityCap = 160f * Math.Max(ClampedPitch, 0) + 10f * (1.0f-Math.Min(1f, (_accumulatedVelocity.Average()- _decaySpeed) / _decaySpeed)) + 15f 
-                + 100f * Math.Max(0, _angles.Z / 90f);
-            var propulsion = Vector3.One * 20f;
-            propulsion *= 1f + _angles.X / 45f;
-            propulsion *= _angles.X < 15f ? 1.4f : 4.0f;
-            _accumulatedVelocity += propulsion * (float)Time.deltaTime;
-            _accumulatedVelocity *= (float) Math.Pow(.8f, (float)Time.deltaTime);
-            _upPush *= (float)Math.Pow(.25f, (float)Time.deltaTime);
-            _player.View.MaxDistance = 10f;
-            _player.Physics.Move( (_player.View.LookingDirection * _accumulatedVelocity + Vector3.UnitY * _upPush) * (float)Time.deltaTime * .55f);
-            _player.Physics.ResetFall();
-            _player.Model.Glide();
+                _model.Position = _player.Position + Vector3.UnitY * 8f;
+                _model.BaseMesh.BeforeLocalRotation = Vector3.UnitY * 2f;
+                _model.BaseMesh.Rotation = new Vector3(_angles.X, _player.Model.Model.Rotation.Y, 0);
+                _model.BaseMesh.LocalRotation = Vector3.UnitZ * _angles.Z;
+                _player.Model.Model.TransformationMatrix =
+                    Matrix4.CreateRotationY(-_player.Model.Model.Rotation.Y * Mathf.Radian)
+                    * Matrix4.CreateTranslation(Vector3.UnitY * -7.5f)
+                    * Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian) *
+                    Matrix4.CreateRotationX(_angles.X * Mathf.Radian)
+                    * Matrix4.CreateRotationY(_player.Model.Model.Rotation.Y * Mathf.Radian)
+                    * Matrix4.CreateTranslation(Vector3.UnitY * 10f);
+                _player.Movement.Orientate();
+                _player.Physics.GravityDirection = -Vector3.UnitY * 1f;
+                _player.Physics.VelocityCap = 160f * Math.Max(ClampedPitch, 0) + 10f *
+                                              (1.0f - Math.Min(1f,
+                                                   (_accumulatedVelocity.Average() - _decaySpeed) / _decaySpeed)) + 15f
+                                              + 100f * Math.Max(0, _angles.Z / 90f);
+                var propulsion = Vector3.One * 20f;
+                propulsion *= 1f + _angles.X / 45f;
+                propulsion *= _angles.X < 15f ? 1.4f : 4.0f;
+                _accumulatedVelocity += propulsion * (float) Time.deltaTime;
+                _accumulatedVelocity *= (float) Math.Pow(.8f, (float) Time.deltaTime);
+                _upPush *= (float) Math.Pow(.25f, (float) Time.deltaTime);
+                _player.View.MaxDistance = 10f;
+                _player.Physics.Move((_player.View.LookingDirection * _accumulatedVelocity + Vector3.UnitY * _upPush) *
+                                     (float) Time.deltaTime * .55f);
+                _player.Physics.ResetFall();
+                _player.Model.Glide();
 
-            _leftTrail.Thickness = 1f * (Math.Abs(_angles.Z)-15f) / 90f * Math.Min(1f, _accumulatedVelocity.Average() / _decaySpeed);
-            _rightTrail.Thickness = 1f * (Math.Abs(_angles.Z)-15f) / 90f * Math.Min(1f, _accumulatedVelocity.Average() / _decaySpeed);
+                _leftTrail.Thickness = 1f * (Math.Abs(_angles.Z) - 15f) / 90f *
+                                       Math.Min(1f, _accumulatedVelocity.Average() / _decaySpeed);
+                _rightTrail.Thickness = 1f * (Math.Abs(_angles.Z) - 15f) / 90f *
+                                        Math.Min(1f, _accumulatedVelocity.Average() / _decaySpeed);
 
-            _leftTrail.Emit = _leftTrail.Thickness > 0.05f;
-            _rightTrail.Emit = _rightTrail.Thickness > 0.05f;
+                _leftTrail.Emit = _leftTrail.Thickness > 0.05f;
+                _rightTrail.Emit = _rightTrail.Thickness > 0.05f;
+            }
 
             _rightTrail.Update();
             _leftTrail.Update();

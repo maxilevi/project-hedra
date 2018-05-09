@@ -44,7 +44,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public override Vector2 Position
         {
-            get { return base.Position; }
+            get => base.Position;
             set
             {
                 _backgroundTexture.Position += value - this.Position;
@@ -55,7 +55,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public override bool Enabled
         {
-            get { return base.Enabled; }
+            get => base.Enabled;
             set
             {
                 base.Enabled = value;

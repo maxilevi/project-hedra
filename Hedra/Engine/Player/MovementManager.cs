@@ -43,7 +43,7 @@ namespace Hedra.Engine.Player
 
 		    Human.IsGrounded = false;
 		    Human.Physics.Velocity = Vector3.Zero;
-		    Human.Model.Rotation = new Vector3(0, Human.Model.Rotation.Y, Human.Model.Rotation.Z);
+		    Human.Model.Rotation = new Vector3(0, Human.Model.Rotation.Y, 0);
 		    if(Up) Human.Physics.TargetPosition += Vector3.UnitY * 12.5f * (float) Time.deltaTime;
 		    else Human.Physics.TargetPosition -= Vector3.UnitY * 12.5f * (float) Time.deltaTime;
 
@@ -145,16 +145,8 @@ namespace Hedra.Engine.Player
 	    {
 	        if (!Human.IsGrounded && !Human.IsDead && Human.CanInteract && !Human.IsRiding && Human.IsUnderwater && !GameSettings.Paused)
 	        {
-	            if (Human.IsMoving)
-	            {
-	                Human.Model.Swim();
-	                Human.Model.TargetRotation = new Vector3(90, Human.Model.TargetRotation.Y, Human.Model.TargetRotation.Z);
-	            }
-	            else
-	            {
-	                Human.Model.IdleSwim();
-	                Human.Model.TargetRotation = new Vector3(0, Human.Model.TargetRotation.Y, Human.Model.TargetRotation.Z);
-	            }
+	            if (Human.IsMoving) Human.Model.Swim();     
+	            else Human.Model.IdleSwim();  
 	        }
         }
 

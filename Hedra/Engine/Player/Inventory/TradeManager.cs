@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player.Inventory
         public int ItemPrice(Item Item)
         {
             if (Item == null) return 0;
-            float price = 0;
+            float price = 1;
             var hasPriceAttribute = Item.HasAttribute(CommonAttributes.Price);
             if (!hasPriceAttribute)
             {
@@ -32,6 +32,16 @@ namespace Hedra.Engine.Player.Inventory
                     if (attributes[i].Name == CommonAttributes.Amount.ToString())
                     {
                         price += 1;
+                        continue;
+                    }
+                    if (attributes[i].Display == AttributeDisplay.Percentage.ToString())
+                    {
+                        price += (float) attributes[i].Value * 100f;
+                        continue;
+                    }
+                    if (attributes[i].Display == AttributeDisplay.Flat.ToString())
+                    {
+                        price += (float) attributes[i].Value;
                         continue;
                     }
                     var typeList = new[] {typeof(float), typeof(double), typeof(long)};

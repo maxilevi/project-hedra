@@ -21,15 +21,15 @@ namespace Hedra.Engine.ItemSystem
 
         public void Set(string Attribute, object Value)
         {
-            this.Set(Attribute, Value, false);
+            this.Set(Attribute, Value, false, null);
         }
 
-        public void Set(string Attribute, object Value, bool Hidden)
+        public void Set(string Attribute, object Value, bool Hidden, string Display)
         {
             if (!_attributes.ContainsKey(Attribute))
-                _attributes.Add(Attribute, new AttributeObject(Value, Hidden));
+                _attributes.Add(Attribute, new AttributeObject(Value, Hidden, Display));
             else
-                _attributes[Attribute] = new AttributeObject(Value, Hidden);
+                _attributes[Attribute] = new AttributeObject(Value, Hidden, Display ?? _attributes[Attribute].Display);
         }
 
         public T Get<T>(string Attribute)
@@ -55,7 +55,8 @@ namespace Hedra.Engine.ItemSystem
                 {
                     Name = pair.Key,
                     Value = pair.Value.Value,
-                    Hidden = pair.Value.Hidden
+                    Hidden = pair.Value.Hidden,
+                    Display = pair.Value.Display
                 });
             }
             return list.ToArray();
@@ -71,11 +72,13 @@ namespace Hedra.Engine.ItemSystem
     {
         public object Value { get; set; }
         public bool Hidden { get; set; }
+        public string Display { get; set; }
 
-        public AttributeObject(object Value, bool Hidden)
+        public AttributeObject(object Value, bool Hidden, string Display)
         {
             this.Value = Value;
             this.Hidden = Hidden;
+            this.Display = Display;
         }
     }
 }

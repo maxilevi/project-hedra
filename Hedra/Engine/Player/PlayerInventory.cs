@@ -172,6 +172,7 @@ namespace Hedra.Engine.Player
                 _player.View.LockMouse = false;
                 _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
+                _player.Model.Idle();
                 UpdateManager.CursorShown = true;
             }
             else
@@ -235,7 +236,7 @@ namespace Hedra.Engine.Player
         public override Key OpeningKey => Key.I;
         public override bool Show
         {
-            get { return _show; }
+            get => _show;
             set
             {
                 if(_show == value || _stateManager.GetState() != _show) return;

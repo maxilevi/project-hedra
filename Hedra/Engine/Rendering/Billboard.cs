@@ -54,14 +54,15 @@ namespace Hedra.Engine.Rendering
 			this.Texture = new Texture(Icon, Vector2.Zero, Scale);
 			this.Texture.Enable();
 			this._originalScale = Scale;
-			DrawManager.UIRenderer.Remove( (this.Texture as Texture).TextureElement);
-			
+			DrawManager.UIRenderer.Remove( (this.Texture as Texture).TextureElement);			
 			DrawManager.Add(this);
 		}
 		
 		public void Draw(){
-			if(FollowFunc != null)
-				Position = FollowFunc();
+		    if (FollowFunc != null)
+		    {
+		        Position = Mathf.Lerp(Position, FollowFunc(), (float) Time.deltaTime * 8f);
+		    }
 			
 			if(Vanish){
 				_addedPosition += Vector3.UnitY * Time.FrameTimeSeconds * Speed;

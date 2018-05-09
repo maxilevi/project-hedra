@@ -306,33 +306,20 @@ namespace Hedra.Engine.EntitySystem
         public void UpdateEnviroment()
         {
             if (!IsUnderwater)
+            {
                 if (IsGrounded && !WasGrounded && _previousFalltime > 0.25f)
                     SoundManager.PlaySound(SoundType.HitGround, Position);
-            if (this is LocalPlayer)
-            {
-                var a = 0;
             }
-
-            float nearestWaterBlockY = float.MinValue;
-            Chunk underChunk = World.GetChunkAt(Position);
-            Vector3 blockSpace = World.ToBlockSpace(Position);
-            if (underChunk == null) return;
-            for (int y = underChunk.BoundsY - 1; y > -1; y--)
-            {
-                Block block = underChunk.GetBlockAt((int) blockSpace.X, y, (int) blockSpace.Z);
-                if (block.Type == BlockType.Water)
-                {
-                    nearestWaterBlockY = y * Chunk.BlockSize;
-                    break;
-                }
-            }
-
-            if (nearestWaterBlockY > Position.Y + BaseBox.Max.Y - BaseBox.Min.Y + Chunk.BlockSize)
+            var nearestWaterBlockY = this.WaterAtPosition(this.Position);
+            var underChunk = World.GetChunkAt(this.Position);
+            var touchingFloor = this.Position.Y < PhysicsSystem.Physics.HeightAtPosition(this.Position) && nearestWaterBlockY < this.Position.Y;
+            var size = this.BaseBox.Max.Y - this.BaseBox.Min.Y;
+            if (nearestWaterBlockY > Position.Y + size+1f && !touchingFloor)
             {
                 if (!Splashed)
                 {
                     World.Particles.VariateUniformly = true;
-                    World.Particles.Color = underChunk.Biome.Colors.WaterColor;
+                    World.Particles.Color = underChunk?.Biome.Colors.WaterColor ?? Colors.DeepSkyBlue;
                     World.Particles.Position = Position;
                     World.Particles.Scale = Vector3.One * .5f;
                     World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
@@ -363,12 +350,9 @@ namespace Hedra.Engine.EntitySystem
                 }
                 IsUnderwater = true;
             }
-            else if (Math.Abs(nearestWaterBlockY -
-                              (Position.Y + BaseBox.Max.Y - BaseBox.Min.Y + Chunk.BlockSize)) >
-                     Chunk.BlockSize * .5f)
+            else if (nearestWaterBlockY < Position.Y + size || touchingFloor)
             {
-                if (IsUnderwater)
-                    Physics.GravityDirection = -Vector3.UnitY;
+                if (IsUnderwater) Physics.GravityDirection = -Vector3.UnitY;
                 Splashed = false;
                 IsUnderwater = false;
             }
@@ -387,6 +371,24 @@ namespace Hedra.Engine.EntitySystem
 
             WasGrounded = IsGrounded;
             _previousFalltime = Physics.Falltime;
+        }
+
+        private float WaterAtPosition(Vector3 Position)
+        {
+            float nearestWaterBlockY = float.MinValue;
+            Chunk underChunk = World.GetChunkAt(Position);
+            Vector3 blockSpace = World.ToBlockSpace(Position);
+            if (underChunk == null) return float.MaxValue;
+            for (int y = underChunk.BoundsY - 1; y > -1; y--)
+            {
+                Block block = underChunk.GetBlockAt((int)blockSpace.X, y, (int)blockSpace.Z);
+                if (block.Type == BlockType.Water)
+                {
+                    nearestWaterBlockY = y * Chunk.BlockSize;
+                    break;
+                }
+            }
+            return nearestWaterBlockY;
         }
 
         public void KnockForSeconds(float Time)

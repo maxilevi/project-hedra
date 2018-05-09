@@ -41,6 +41,7 @@ namespace Hedra.Engine
             {
                 SupportsGeometryShaders = false;
             }
+            Log.WriteLine($"Geometry shaders are {(SupportsGeometryShaders ? "ENABLED" : "DISABLED")}");
         }
 
         private static void WriteSpecificationsList(string AppPath)

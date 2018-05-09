@@ -56,13 +56,14 @@ namespace Hedra.Engine.EnvironmentSystem
             _rain.VariateUniformly = true;
             _rain.Grayscale = false;
             _rain.PositionErrorMargin = Vector3.One * new Vector3(256f, 16, 256f);
-            _rain.GravityEffect = 0.2f;
+            _rain.GravityEffect = 0.0f;
             _rain.ScaleErrorMargin = Vector3.One * .25f;
             _rain.RandomRotation = true;
+            _rain.Direction = Vector3.UnitY * -4.5f;
             _rain.Scale = Vector3.One * 1f;
             _rain.ParticleLifetime = 6.0f;
 
-            for (var i = 0; i < 20; i++)
+            for (var i = 0; i < 10; i++)
             {
                 _rain.Emit();
             }
@@ -72,7 +73,7 @@ namespace Hedra.Engine.EnvironmentSystem
 
         public bool IsRaining
         {
-            get { return _isRaining; }
+            get => _isRaining;
             set
             {
                 if (_isRaining == value) return;

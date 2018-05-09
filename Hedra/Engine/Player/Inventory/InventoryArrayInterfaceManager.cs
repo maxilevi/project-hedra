@@ -92,7 +92,11 @@ namespace Hedra.Engine.Player.Inventory
             {
                 var newIndex = this.IndexByButton(_selectedButton);
                 var newArray = this.ArrayByButton(_selectedButton);
-                if(!array.CanSetItem(itemIndex, _selectedItem)) return;
+                if (!array.CanSetItem(itemIndex, _selectedItem))
+                {
+                    this.ShowCannotYieldEquipment(_selectedItem);
+                    return;
+                }
                 array[itemIndex] = _selectedItem;
                 newArray[newIndex] = item;                
                 this.ResetSelected();
@@ -166,12 +170,17 @@ namespace Hedra.Engine.Player.Inventory
                     }
                 }
             }
+            this.ShowCannotYieldEquipment(Item);
+            this.PlaceItemInFirstEmptyPosition(Item);
+        }
+
+        private void ShowCannotYieldEquipment(Item Item)
+        {
             if (Item.IsEquipment)
             {
-                GameManager.Player.MessageDispatcher.ShowNotification("YOU HAVEN'T LEARNED TO USE THAT EQUIPMENT",
+                GameManager.Player.MessageDispatcher.ShowNotification("YOU HAVEN'T LEARNED TO USE THAT TYPE OF EQUIPMENT",
                     System.Drawing.Color.DarkRed, 2f, true);
             }
-            this.PlaceItemInFirstEmptyPosition(Item);
         }
 
         private void SwitchItems(int Index, int IndexToSwitch, InventoryArray Array, InventoryArray ArrayToSwitch)

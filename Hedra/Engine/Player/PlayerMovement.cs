@@ -102,7 +102,6 @@ namespace Hedra.Engine.Player
                 _targetAngles = Mathf.Clamp(_targetAngles, -15f, 15f);
                 _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.deltaTime * 8f);
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.deltaTime * 2f);
-
                 if (GameManager.Keyboard[Key.W])
                 {
                     _targetYaw = _player.View.TargetYaw;
@@ -111,7 +110,7 @@ namespace Hedra.Engine.Player
                 }
                 _player.Model.Model.TransformationMatrix = 
                     Matrix4.CreateRotationY(-_player.Model.Model.Rotation.Y * Mathf.Radian) *
-                    Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian) *
+                    Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f)) *
                     Matrix4.CreateRotationY(_player.Model.Model.Rotation.Y * Mathf.Radian);
                 if (GameManager.Keyboard[Key.S])
                 {
@@ -162,7 +161,7 @@ namespace Hedra.Engine.Player
 
             if (!Player.WasAttacking && !Player.IsAttacking)
             {
-                Player.Model.TargetRotation = new Vector3(Player.Model.Rotation.X, _characterRotation, Player.Model.Rotation.Z);
+                Player.Model.TargetRotation = new Vector3(Player.Model.TargetRotation.X, _characterRotation, Player.Model.TargetRotation.Z);    
                 Player.Orientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
             }
             RollDirection = new Vector3(Player.Model.Rotation.X, _characterRotation, Player.Model.Rotation.Z);

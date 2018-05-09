@@ -199,6 +199,7 @@
     <Compile Include="Engine\Generation\ChunkSystem\ChunkMeshBuildOutput.cs" />
     <Compile Include="Engine\IO\ConfigurationFile.cs" />
     <Compile Include="Engine\ItemSystem\AttributeArray.cs" />
+    <Compile Include="Engine\ItemSystem\AttributeDisplay.cs" />
     <Compile Include="Engine\ItemSystem\AttributeTemplate.cs" />
     <Compile Include="Engine\ItemSystem\CommonAttributes.cs" />
     <Compile Include="Engine\ItemSystem\CommonItems.cs" />

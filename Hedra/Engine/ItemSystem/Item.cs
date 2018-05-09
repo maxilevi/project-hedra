@@ -71,6 +71,11 @@ namespace Hedra.Engine.ItemSystem
             this.SetAttribute(Attribute.ToString(), Value, Hidden);
         }
 
+        public void SetAttribute(CommonAttributes Attribute, object Value, bool Hidden, string Display)
+        {
+            this.SetAttribute(Attribute.ToString(), Value, Hidden, Display);
+        }
+
         public void SetAttribute(string Attribute, object Value)
         {
             this.SetAttribute(Attribute, Value, false);
@@ -78,7 +83,12 @@ namespace Hedra.Engine.ItemSystem
 
         public void SetAttribute(string Attribute, object Value, bool Hidden)
         {
-            _attributes.Set(Attribute, Value, Hidden);
+            this.SetAttribute(Attribute, Value, Hidden, null);
+        }
+
+        public void SetAttribute(string Attribute, object Value, bool Hidden, string Display)
+        {
+            _attributes.Set(Attribute, Value, Hidden, Display);
         }
 
         public T GetAttribute<T>(string Attribute)
@@ -100,7 +110,7 @@ namespace Hedra.Engine.ItemSystem
         {
             foreach (var attribute in Templates)
             {
-                this.SetAttribute(attribute.Name, attribute.Value, attribute.Hidden);
+                this.SetAttribute(attribute.Name, attribute.Value, attribute.Hidden, attribute.Display);
             }
         }
 

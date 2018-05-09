@@ -170,7 +170,7 @@ namespace Hedra.Engine.Rendering
 
 	    public object this[string Key]
 	    {
-	        get { return _arrayMappings.ContainsKey(Key) ? _arrayMappings[Key].Values : _mappings[Key].Value; }
+	        get => _arrayMappings.ContainsKey(Key) ? _arrayMappings[Key].Values : _mappings[Key].Value;
 	        set
 	        {
 	            if (_arrayMappings.ContainsKey(Key))
@@ -184,7 +184,9 @@ namespace Hedra.Engine.Rendering
 	                if (!_mappings.ContainsKey(Key))
 	                {
 	                    var location = GL.GetUniformLocation(ShaderId, Key);
+#if DEBUG
                         if(location == -1) throw new ArgumentException($"Uniform {Key} does not exist in shader");
+#endif
 	                    _mappings.Add(Key, new UniformMapping(location, value));
 	                }
                     if(this.ShaderId != GraphicsLayer.ShaderBound) throw new ArgumentException($"Uniforms need to be uploaded when the owner's shader is bound.");

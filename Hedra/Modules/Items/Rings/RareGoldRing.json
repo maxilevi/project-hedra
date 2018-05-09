@@ -7,15 +7,18 @@
   "Attributes": [
     {
       "Name": "MovementSpeed",
-      "Value": 0.25
+      "Value": 0.25,
+      "Display": "Flat"
     },
     {
       "Name": "Health",
-      "Value": 2.0
+      "Value": 0.025,
+      "Display": "Percentage"
     },
     {
       "Name": "AttackSpeed",
-      "Value": 1.05
+      "Value": 0.05,
+      "Display": "Percentage"
     },
     {
       "Name": "EffectType",

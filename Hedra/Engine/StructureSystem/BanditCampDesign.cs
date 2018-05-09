@@ -100,6 +100,7 @@ namespace Hedra.Engine.StructureSystem
             {
                 yield return null;
             }
+            underChunk.Blocked = true;
             parameters.Position = new Vector3(
                 parameters.Position.X,
                 Physics.HeightAtPosition(parameters.Position),
@@ -132,7 +133,6 @@ namespace Hedra.Engine.StructureSystem
 
             underChunk.AddCollisionShape(campfireShapes.ToArray());
             underChunk.AddStaticElement(campfire);
-            underChunk.Blocked = true;
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)

@@ -94,7 +94,7 @@ namespace Hedra.Engine.Player.Inventory
             {
                 if (!attributes[i].Hidden || GameSettings.Debug)
                 {
-                    var line = $"{attributes[i].Name.AddSpacesToSentence()}   ➝   {EscapeValue(attributes[i].Value)}";
+                    var line = $"{attributes[i].Name.AddSpacesToSentence()}   ➝   {Format(attributes[i].Display, attributes[i].Value)}";
                     strBuilder.AppendLine(line);
                 }
             }
@@ -107,12 +107,24 @@ namespace Hedra.Engine.Player.Inventory
                 false, _currentItemMeshHeight * InventoryItemRenderer.ZOffsetFactor);
         }
 
-        protected static string EscapeValue(object Value)
+        protected static object Format(string Display, object Value)
         {
-            if (Value is double || Value is float) return ((float)Convert.ChangeType(Value, typeof(float))).ToString("0.0", CultureInfo.InvariantCulture);
+            if (Value is double || Value is float)
+            {
+                var asNumber = (float) Convert.ChangeType(Value, typeof(float));
+                if (Display == null) return asNumber.ToString("0.00", CultureInfo.InvariantCulture);
+                switch ((AttributeDisplay) Enum.Parse(typeof(AttributeDisplay), Display))
+                {
+                    case AttributeDisplay.Percentage:
+                        return $"{(asNumber > 0 ? "+" : asNumber == 0 ? string.Empty : "-")}{ (int) (asNumber * 100f)}%";
+                    case AttributeDisplay.Flat:
+                        return asNumber.ToString("0.00", CultureInfo.InvariantCulture);
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
             if (!(Value is int) && !(Value is long)) return Value.ToString();
-
-            return (int) Convert.ChangeType(Value, typeof(int)) == int.MaxValue ? "∞" : Value.ToString();
+            return (int)Convert.ChangeType(Value, typeof(int)) == int.MaxValue ? "∞" : Value.ToString();
         }
 
         private static Color TierToColor(ItemTier Tier)

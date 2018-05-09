@@ -32,8 +32,9 @@ namespace Hedra.Engine.Rendering.Particles
 		private float MaxLifetime, OriginalAlpha;
 		private Vector3 OriginalScale;
 		private float HeightAtY = 0;
-		
-		public Particle3D(Vector3 Position, Vector3 Velocity, Vector3 Rotation, Vector4 Color, Vector3 Scale, float GravityEffect, float Lifetime, bool Collides = false){
+	    private bool _collides;
+
+        public Particle3D(Vector3 Position, Vector3 Velocity, Vector3 Rotation, Vector4 Color, Vector3 Scale, float GravityEffect, float Lifetime, bool Collides = false){
 			this.Position = Position;
 			this.Rotation = Rotation;
 			this.Scale = Scale;
@@ -53,33 +54,24 @@ namespace Hedra.Engine.Rendering.Particles
 			this.Color = new Vector4(Color.Xyz, OriginalAlpha * 1);//(Lifetime / MaxLifetime) );
 			this.Scale = OriginalScale * (Lifetime / MaxLifetime);
 				
-			if(Collides && HeightAtY+2 > Position.Y){
+			if(Collides && Position.Y < HeightAtY + 2){
 				Velocity = Velocity * new Vector3(1,0,1);	
 			}
 			
-			Position += Velocity * ((UseTimeScale) ? (float) Time.deltaTime : (float) Time.unScaledDeltaTime);
-			Velocity.Y += (float) ( 60 * Physics.Gravity * GravityEffect * ((UseTimeScale) ? (float) Time.deltaTime : (float) Time.unScaledDeltaTime));
-			Lifetime -= ((UseTimeScale) ? (float) Time.deltaTime : (float) Time.unScaledDeltaTime);
-			if(Lifetime < 0)
-				return false;
-			else
-				return true;
+			Position += Velocity * (UseTimeScale ? (float) Time.deltaTime : Time.unScaledDeltaTime);
+			Velocity.Y += 60 * Physics.Gravity * GravityEffect * (UseTimeScale ? (float) Time.deltaTime : Time.unScaledDeltaTime);
+			Lifetime -= UseTimeScale ? (float) Time.deltaTime : Time.unScaledDeltaTime;
+			return !(Lifetime < 0);
 		}
 		
-		private bool m_Collides;
 		public bool Collides{
-			get{ return m_Collides; }
-			set{ m_Collides = value;
+			get => _collides;
+		    set{ _collides = value;
 				if(value)
 					HeightAtY = Physics.HeightAtPosition( new Vector3(Position.X, Position.Y / Chunk.BlockSize + 1, Position.Z) );
 			}
 		}
 		
-		public static int SizeInBytes{
-			get{
-				return 4*4*sizeof(float) + Vector4.SizeInBytes;
-			}
-		}
-		
+		public static int SizeInBytes => 4*4*sizeof(float) + Vector4.SizeInBytes;
 	}
 }

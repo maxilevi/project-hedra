@@ -10,5 +10,6 @@ namespace Hedra.Engine.ItemSystem
         public string Name { get; set; }
         public object Value { get; set; }
         public bool Hidden { get; set; }
+        public string Display { get; set; }
     }
 }

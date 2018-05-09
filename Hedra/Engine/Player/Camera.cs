@@ -113,7 +113,7 @@ namespace Hedra.Engine.Player
 
         private void Interpolate()
         {
-            _targetZoomOut = _player.IsMoving ? _player.Orientation * 3.5f : Vector3.Zero;
+            _targetZoomOut = _player.IsMoving && !_player.IsUnderwater ? _player.Orientation * 3.0f : Vector3.Zero;
             if (DefaultDelegate == PositionDelegate)
             {
                 _targetZoomOut += _player.IsJumping ? Vector3.UnitY * _player.Movement.JumpingDistance * 2f : Vector3.Zero;

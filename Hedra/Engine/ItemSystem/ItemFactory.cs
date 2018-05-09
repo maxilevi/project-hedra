@@ -38,8 +38,7 @@ namespace Hedra.Engine.ItemSystem
                 string ext = Path.GetExtension(module);
                 if (ext != ".json") continue;
 
-                bool result;
-                var obj = FromJSON<T>(File.ReadAllText(module), out result);
+                var obj = FromJSON<T>(File.ReadAllText(module), out bool result);
 
                 if (!result) continue;
 

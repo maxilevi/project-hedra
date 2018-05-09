@@ -232,18 +232,25 @@ namespace Hedra.Engine.Player
 			float highestDot = 0;
 			Entity dotEntity = null;
 	        var hittedSomething = false;
-			for(int i = World.Entities.Count-1; i > -1; i--)
-			{
-			    if (World.Entities[i].IsFriendly) continue;
-			    if (World.Entities[i] == this) continue;
+	        try
+	        {
+	            for (int i = World.Entities.Count - 1; i > -1; i--)
+	            {
+	                if (World.Entities[i].IsFriendly) continue;
+	                if (World.Entities[i] == this) continue;
 
-			    if (World.Entities[i] != null)
-			    {
-			        if (this.AttackEntity(AttackDamage, World.Entities[i], Injection))
-			            hittedSomething = true;
-			    }
-			}
-            if(!hittedSomething) MainWeapon?.Weapon.PlaySound();
+	                if (World.Entities[i] != null)
+	                {
+	                    if (this.AttackEntity(AttackDamage, World.Entities[i], Injection))
+	                        hittedSomething = true;
+	                }
+	            }
+	        }
+	        catch (ArgumentOutOfRangeException e)
+	        {
+	            Log.WriteLine(e.Message);
+	        }
+	        if(!hittedSomething) MainWeapon?.Weapon.PlaySound();
 			Mana = Mathf.Clamp(Mana + 8, 0 , MaxMana);
 		}
 
@@ -315,15 +322,12 @@ namespace Hedra.Engine.Player
 				if(MainWeapon != null) attackSpeed *= MainWeapon.GetAttribute<float>(CommonAttributes.AttackSpeed);
 				return attackSpeed;
 			}
-            set
-            {
-                this.BaseAttackSpeed = value;
-            }
-		}
+            set => this.BaseAttackSpeed = value;
+	    }
 		
         public float XP {
-			get{ return _xp; }
-			set{
+			get => _xp;
+            set{
 				_xp = value;
 			    if (!(_xp >= MaxXP)) return;
 			    _xp -= MaxXP;
@@ -349,8 +353,8 @@ namespace Hedra.Engine.Player
 		}
 		
         public virtual Item Ring { 
-			get{ return _ring; }
-			set{
+			get => _ring;
+            set{
 			    if (this.Ring == value)  return;             
 			    _ring = value;
 
@@ -360,28 +364,28 @@ namespace Hedra.Engine.Player
                     if (effectType != EffectType.None) this.ApplyEffectWhile(effectType, () => this.Ring == value);
 
 			        this.AddBonusSpeedWhile(this.Ring.GetAttribute<float>("MovementSpeed"), () => this.Ring == value);
-			        this.AddBonusAttackSpeedWhile( this.Ring.GetAttribute<float>("AttackSpeed"), () => this.Ring == value);
-			        this.AddBonusHealthWhile(this.MaxHealth * (this.Ring.GetAttribute<float>("Health")*0.1f), () => this.Ring == value);
+			        this.AddBonusAttackSpeedWhile(this.AttackSpeed * this.Ring.GetAttribute<float>("AttackSpeed"), () => this.Ring == value);
+			        this.AddBonusHealthWhile(this.MaxHealth * this.Ring.GetAttribute<float>("Health"), () => this.Ring == value);
                 }
 			}
 		}
 
 	
         public float Stamina {
-			get{ return _stamina; }
-			set{ _stamina = Mathf.Clamp(value,0,MaxStamina); }
-		}
+			get => _stamina;
+            set => _stamina = Mathf.Clamp(value,0,MaxStamina);
+        }
 		
 
 		public float Mana{
-			get{ return _mana; }
-			set{ _mana = Mathf.Clamp(value,0,MaxMana); }
+			get => _mana;
+		    set => _mana = Mathf.Clamp(value,0,MaxMana);
 		}
 		
 		public bool IsGliding
 		{
-			get{ return _isGliding; }
-			set{ 
+			get => _isGliding;
+		    set{ 
 				if(value){
 					if(IsGrounded)
 						return;

@@ -388,10 +388,8 @@ namespace Hedra.Engine.Player
 			
 			if(this.IsGliding && (this.IsUnderwater || IsGrounded)) this.IsGliding = false;
 
-            if (this.IsGliding && !IsGrounded)
-            {							
-				this.Glider.Update();
-			}else
+            this.Glider.Update();
+            if(!(this.IsGliding && !IsGrounded))
             {
 				if(this.Glider.Enabled)this.Glider.Disable();			
 			}
@@ -515,8 +513,8 @@ namespace Hedra.Engine.Player
 		}	
 		
 		public override float Health{
-			get{ return _health; }
-			set
+			get => _health;
+		    set
 			{
 			    value = Mathf.Clamp(value, 0, this.MaxHealth);
                 var diff = value - _health;
@@ -541,8 +539,8 @@ namespace Hedra.Engine.Player
 		}
 
 		public bool Enabled{
-			get{ return _enabled; }
-			set{
+			get => _enabled;
+		    set{
 				_enabled = value;
 				Model.Enabled = false;
 			}
