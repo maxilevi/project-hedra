@@ -48,8 +48,7 @@ void main(){
 	vec4 NewColor = mix(SkyColor, InputColor, Visibility);
 	
 	OutColor = NewColor;
-	OutColor.a *= clamp(WaterDepth / 12.0, 0.0, 1.0);
-	
+	OutColor.a *= clamp(WaterDepth / 4.0, 0.0, 1.0);
 	
 	OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
 	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);
