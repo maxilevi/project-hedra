@@ -21,11 +21,11 @@
       "Path": "$DataFile$/Assets/Chr/TurtleWalk.dae",
       "Speed": 1.0
     },
-    "AttackAnimation": {
-      "Path": "$DataFile$/Assets/Chr/TurtleAttack.dae",
-      "Speed": 1.15
-    }
-  } 
-
-
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/TurtleAttack.dae",
+        "Speed": 1.15
+      }
+    ]
+  }
 }

@@ -19,9 +19,11 @@
       "Path": "$DataFile$/Assets/Chr/FlyWalk.dae",
       "Speed": 1.5
     },
-    "AttackAnimation": {
-      "Path": "$DataFile$/Assets/Chr/FlyAttack.dae",
-      "Speed": 1.15
-    }
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/FlyAttack.dae",
+        "Speed": 1.15
+      }
+    ]
   } 
 }

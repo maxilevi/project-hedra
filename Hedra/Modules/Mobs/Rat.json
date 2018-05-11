@@ -21,9 +21,11 @@
       "Path": "$DataFile$/Assets/Chr/RatWalk.dae",
       "Speed": 1.4
     },
-    "AttackAnimation": {
-      "Path": "$DataFile$/Assets/Chr/RatAttack.dae",
-      "Speed": 1.15
-    }
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/RatAttack.dae",
+        "Speed": 1.15
+      }
+    ]
   } 
 }

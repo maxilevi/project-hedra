@@ -19,9 +19,11 @@
       "Path": "$DataFile$/Assets/Chr/OozeWalk.dae",
       "Speed": 1.0
     },
-    "AttackAnimation": {
-      "Path": "$DataFile$/Assets/Chr/OozeAttack.dae",
-      "Speed": 1.5
-    }
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/OozeAttack.dae",
+        "Speed": 1.5
+      }
+    ]
   } 
 }

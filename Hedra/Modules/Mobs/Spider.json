@@ -28,9 +28,11 @@
       "Path": "$DataFile$/Assets/Chr/SpiderWalk.dae",
       "Speed": 1.0
     },
-    "AttackAnimation": {
-      "Path": "$DataFile$/ Assets/Chr/SpiderAttack.dae",
-      "Speed": 1.25
-    }
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/ Assets/Chr/SpiderAttack.dae",
+        "Speed": 1.25
+      }
+    ]
   } 
 }

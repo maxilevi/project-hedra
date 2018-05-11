@@ -20,10 +20,11 @@
       "Path": "$DataFile$/Assets/Chr/CarriageMove.dae",
       "Speed": 1.0
     },
-    "AttackAnimation": {
-      "Path": "$DataFile$/Assets/Chr/CarriageIdle.dae",
-      "Speed": 1.0
-    }
-  } 
-
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/CarriageIdle.dae",
+        "Speed": 1.0
+      }
+    ]
+  }
 }

@@ -14,15 +14,21 @@
     "Scale": 1.0,
     "IdleAnimation": {
       "Path": "$DataFile$/Assets/Chr/DeerIdle.dae",
-      "Speed": 1.4
+      "Speed": 0.8
     },
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/DeerWalk.dae",
       "Speed": 1.6
     },
-    "AttackAnimation": {
-      "Path": "$DataFile$/Assets/Chr/DeerAttack0.dae",
-      "Speed": 1.6
-    }
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/DeerAttack0.dae",
+        "Speed": 1.6
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/DeerAttack1.dae",
+        "Speed": 1.6
+      }
+    ]
   }
 }
