@@ -71,7 +71,7 @@ namespace Hedra.Engine.Management
 	    	
 	    	var drawedObjects = 0;
 	    	var drawedCullableObjects = 0;
-			for(int i = 0;i<draws.Length;i++)
+			for(var i = 0;i<draws.Length;i++)
 			{
 			    if (draws[i] == null) continue;
 
@@ -79,14 +79,12 @@ namespace Hedra.Engine.Management
 			        draws[i].Draw();
 		     			
 			        drawedObjects++;
-			        var cullable = draws[i] as ICullable;
-			        if(cullable != null){
+			        if(draws[i] is ICullable cullable){
 			            drawedCullableObjects++;
 			            cullable.Rendered = true;
 			        }
 			    }else{
-			        var cullable = draws[i] as ICullable;
-			        if(cullable != null){
+			        if(draws[i] is ICullable cullable){
 			            cullable.Rendered = false;
 			        }
 			    }

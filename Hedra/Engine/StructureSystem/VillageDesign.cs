@@ -6,6 +6,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.StructureSystem.VillageSystem;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -19,6 +20,7 @@ namespace Hedra.Engine.StructureSystem
         {
             var region = World.BiomePool.GetRegion(Position);
             var scheme = region.Structures.Scheme;
+            ISchemeGenerator generator = new VillageGenerator();
             Matrix4 marketTransMatrix = Matrix4.CreateScale(5f) * Matrix4.CreateTranslation(scheme.MarketPosition);
             Matrix4 farmTransMatrix = Matrix4.CreateScale(8f) * Matrix4.CreateTranslation(scheme.FarmPosition);
             Matrix4 windmillTransMatrix = Matrix4.CreateScale(10f) * Matrix4.CreateTranslation(scheme.WindmillPosition);
@@ -32,7 +34,7 @@ namespace Hedra.Engine.StructureSystem
                 Vector3 houseOffset = Vector3.UnitZ * 60.0f - Vector3.UnitX * 240.0f + Vector3.UnitX * 20f * Chunk.BlockSize;
                 Vector3 housePosition = Vector3.UnitZ * j * Chunk.BlockSize * 20f + houseOffset;
                 Matrix4 houseTransMatrix = Matrix4.CreateScale(4f) * Matrix4.CreateTranslation(housePosition);
-                CoroutineManager.StartCoroutine(VillageGenerator.BuildSingleHouse, new object[] { Position, houseTransMatrix, rng });
+                CoroutineManager.StartCoroutine(generator.BuildSingleHouse, new object[] { Position, houseTransMatrix, rng });
 
             }
 
@@ -44,7 +46,7 @@ namespace Hedra.Engine.StructureSystem
                     Vector3 houseOffset = Vector3.UnitZ * 60.0f + Vector3.UnitX * 360.0f;
                     Vector3 housePosition = houseOffset + Vector3.UnitZ * j * Chunk.BlockSize * 20f;
                     Matrix4 houseTransMatrix = Matrix4.CreateScale(4f) * Matrix4.CreateRotationY(180f * Mathf.Radian) * Matrix4.CreateTranslation(housePosition);
-                    CoroutineManager.StartCoroutine(VillageGenerator.BuildSingleHouse, new object[] { Position, houseTransMatrix, rng });
+                    CoroutineManager.StartCoroutine(generator.BuildSingleHouse, new object[] { Position, houseTransMatrix, rng });
 
                 }
             }
@@ -55,7 +57,7 @@ namespace Hedra.Engine.StructureSystem
                 Vector3 houseOffset = -Vector3.UnitZ * 180.0f + Vector3.UnitX * 140.0f;
                 Vector3 housePosition = Vector3.UnitY * .3f + houseOffset + Vector3.UnitZ * j * Chunk.BlockSize * 20f;
                 Matrix4 houseTransMatrix = Matrix4.CreateScale(4f) * Matrix4.CreateRotationY(180f * Mathf.Radian) * Matrix4.CreateTranslation(housePosition);
-                CoroutineManager.StartCoroutine(VillageGenerator.BuildSingleHouse, new object[] { Position, houseTransMatrix, rng });
+                CoroutineManager.StartCoroutine(generator.BuildSingleHouse, new object[] { Position, houseTransMatrix, rng });
 
             }
 
@@ -64,15 +66,15 @@ namespace Hedra.Engine.StructureSystem
             ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(Position + farmTransMatrix.ExtractTranslation() + Vector3.UnitX * 220.0f + Vector3.UnitZ * 180f, true));
             ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(Position + farmTransMatrix.ExtractTranslation() + Vector3.UnitX * 220.0f + Vector3.UnitZ * 400f, true));
 
-            CoroutineManager.StartCoroutine(VillageGenerator.BuildMarket, new object[] { Structure, rng, marketTransMatrix * Matrix4.CreateTranslation(Position + Vector3.UnitY * .75f) });
-            CoroutineManager.StartCoroutine(VillageGenerator.BuildCenter, new object[] { rng, null, marketTransMatrix * Matrix4.CreateTranslation(Position) });
-            CoroutineManager.StartCoroutine(VillageGenerator.BuildFarms, new object[] { Structure, rng, farmTransMatrix, Position });
-            CoroutineManager.StartCoroutine(VillageGenerator.BuildFarms, new object[] { Structure, rng, farmTransMatrix * Matrix4.CreateTranslation(Vector3.UnitX * 360.0f), Position });
-            CoroutineManager.StartCoroutine(VillageGenerator.BuildFarms, new object[] { Structure, rng, farmTransMatrix * Matrix4.CreateTranslation(Vector3.UnitX * 220.0f + Vector3.UnitZ * 180), Position });
-            CoroutineManager.StartCoroutine(VillageGenerator.BuildFarms, new object[] { Structure, rng, farmTransMatrix * Matrix4.CreateTranslation(Vector3.UnitX * 220.0f + Vector3.UnitZ * 400), Position });
-            CoroutineManager.StartCoroutine(VillageGenerator.BuildBlacksmith, new object[] { Structure, blacksmithTransMatrix, Position });
-            CoroutineManager.StartCoroutine(VillageGenerator.GenerateWindmill, new object[] { Position, rng, true, windmillTransMatrix });
-            CoroutineManager.StartCoroutine(VillageGenerator.GenerateStable, new object[] { Structure, Position, rng, true, stableTransMatrix });
+            CoroutineManager.StartCoroutine(generator.BuildMarket, new object[] { Structure, rng, marketTransMatrix * Matrix4.CreateTranslation(Position + Vector3.UnitY * .75f) });
+            CoroutineManager.StartCoroutine(generator.BuildCenter, new object[] { rng, null, marketTransMatrix * Matrix4.CreateTranslation(Position) });
+            CoroutineManager.StartCoroutine(generator.BuildFarms, new object[] { Structure, rng, farmTransMatrix, Position });
+            CoroutineManager.StartCoroutine(generator.BuildFarms, new object[] { Structure, rng, farmTransMatrix * Matrix4.CreateTranslation(Vector3.UnitX * 360.0f), Position });
+            CoroutineManager.StartCoroutine(generator.BuildFarms, new object[] { Structure, rng, farmTransMatrix * Matrix4.CreateTranslation(Vector3.UnitX * 220.0f + Vector3.UnitZ * 180), Position });
+            CoroutineManager.StartCoroutine(generator.BuildFarms, new object[] { Structure, rng, farmTransMatrix * Matrix4.CreateTranslation(Vector3.UnitX * 220.0f + Vector3.UnitZ * 400), Position });
+            CoroutineManager.StartCoroutine(generator.BuildBlacksmith, new object[] { Structure, blacksmithTransMatrix, Position });
+            CoroutineManager.StartCoroutine(generator.GenerateWindmill, new object[] { Position, rng, true, windmillTransMatrix });
+            CoroutineManager.StartCoroutine(generator.GenerateStable, new object[] { Structure, Position, rng, true, stableTransMatrix });
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)

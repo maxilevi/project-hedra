@@ -1,7 +1,5 @@
 ﻿using System.Drawing;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
 
@@ -15,13 +13,15 @@ namespace Hedra.Engine.Player.Inventory
         protected readonly GUIText BottomLeftText;
         protected readonly GUIText TopRightText;
         protected readonly GUIText BottomRightText;
+        private readonly Vector2 _targetResolution;
         private readonly Texture _texture;
         private readonly Panel _panel;
         private bool _enabled;
 
         public InventoryBackground(Vector2 Position)
         {
-            _texture = new Texture("Assets/UI/InventoryBackground.png", Vector2.Zero, Vector2.One * .55f);
+            _targetResolution = new Vector2(1366, 768);
+            _texture = new Texture("Assets/UI/InventoryBackground.png", Vector2.Zero, Mathf.ScaleGUI(_targetResolution, Vector2.One * .55f));
             Name = new GUIText(string.Empty, Position + Vector2.UnitY * .075f,
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
             Level = new GUIText(string.Empty, Position + Vector2.UnitY * -.05f,

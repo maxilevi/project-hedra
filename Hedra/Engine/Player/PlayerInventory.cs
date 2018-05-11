@@ -38,6 +38,7 @@ namespace Hedra.Engine.Player
         public const int FoodHolder = 19;
         public const int GoldHolder = 18;
 
+        private readonly Vector2 _targetResolution;
         private readonly LocalPlayer _player;
         private readonly InventoryArray _items;
         private readonly InventoryArray _mainItems;
@@ -52,6 +53,7 @@ namespace Hedra.Engine.Player
 
         public PlayerInventory(LocalPlayer Player)
         {
+            _targetResolution = new Vector2(1366, 768);
             _player = Player;
             _items = new InventoryArray(InventorySpaces);
             _mainItems = new InventoryArray(MainSpaces);

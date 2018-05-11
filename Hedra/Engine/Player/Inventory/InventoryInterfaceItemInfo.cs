@@ -17,6 +17,7 @@ namespace Hedra.Engine.Player.Inventory
         protected readonly Texture ItemTexture;
         protected readonly RenderableText ItemText;
         protected readonly RenderableText ItemDescription;
+        private readonly Vector2 _targetResolution = new Vector2(1366, 768);
         private readonly Panel _panel;
         private readonly InventoryItemRenderer _renderer;
         private readonly RenderableText _itemAttributes;
@@ -32,7 +33,7 @@ namespace Hedra.Engine.Player.Inventory
         {
             this._renderer = Renderer;
             this._panel = new Panel();
-            this.BackgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Vector2.One * .35f);
+            this.BackgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Mathf.ScaleGUI(_targetResolution, Vector2.One * .35f));
             this.ItemTexture = new Texture(0, BackgroundTexture.Position + BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitY * -.05f,
                 BackgroundTexture.Scale * .75f);
 

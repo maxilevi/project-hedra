@@ -120,7 +120,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		
 		public Projectile ShootArrow(Humanoid Human, Vector3 Direction, int KnockChance = -1){
 			var arrowProj = new Projectile(ArrowData.Clone(), Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
-			                                      ( (Human is LocalPlayer ) ? Vector3.UnitY * 0f : Vector3.Zero), Direction, Human);
+			                                      ( Human is LocalPlayer ? Vector3.UnitY * 0f : Vector3.Zero), Direction, Human);
 			arrowProj.Rotation = new Vector3(arrowProj.Rotation.X, arrowProj.Rotation.Y, arrowProj.Rotation.Z + 45*(Direction.Y-.2f)*3);
 			arrowProj.Speed = 6.0f;
 			arrowProj.Lifetime = 5f;

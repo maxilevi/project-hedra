@@ -160,7 +160,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                     _stoleHorse = true;
                     if (LocalPlayer.Instance.QuestLog.Show)
                         LocalPlayer.Instance.QuestLog.UpdateText();
-                    _previewMesh = VillageGenerator.GenerateStableIcon(Vector3.One * .35f, _stablePosition);
+                    //_previewMesh = VillageGenerator.GenerateStableIcon(Vector3.One * .35f, _stablePosition);
                 }
 
                 if (_horse.IsDead)

@@ -546,7 +546,7 @@
     <Compile Include="Engine\StructureSystem\StructureGenerator.cs" />
     <Compile Include="Engine\QuestSystem\TravellingMerchant.cs" />
     <Compile Include="Engine\QuestSystem\TurtleBossAIComponent.cs" />
-    <Compile Include="Engine\QuestSystem\VillageGenerator.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageGenerator.cs" />
     <Compile Include="Engine\QuestSystem\VillagerAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\WarriorAIComponent.cs" />
     <Compile Include="Engine\Recorder.cs" />
@@ -683,6 +683,7 @@
     <Compile Include="Engine\StructureSystem\StructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\NormalVillageScheme.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\ISchemeGenerator.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageScheme.cs" />
     <Compile Include="Engine\StructureSystem\WoodenFortDesign.cs" />
     <Compile Include="Engine\Testing\AutomatedTest.cs" />

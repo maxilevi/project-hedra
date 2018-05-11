@@ -20,7 +20,6 @@ layout(location = 2)out vec4 OutNormal;
 uniform vec4 Tint;
 uniform vec4 BaseTint;
 uniform bool UseFog;
-uniform bool Outline;
 uniform vec2 res;
 uniform float Alpha;
 uniform sampler2D ShadowTex;
@@ -29,6 +28,8 @@ uniform bool Dither;
 uniform float useNoiseTexture;
 uniform sampler3D noiseTexture;
 uniform bool UseBaseTint;
+uniform bool Outline;
+uniform vec4 OutlineColor;
 
 vec4 doTint(vec4 color, vec4 tint);
 vec3 doTint(vec3 color, vec3 tint);
@@ -78,6 +79,10 @@ void main(){
 		FColor = vec4(NewColor.xyz, Alpha);
 	}else{
 		FColor = vec4( doTint(inputColor.xyz * ShadowVisibility + PointDiffuse.xyz, BaseTint.rgb) * Tint.rgb, Alpha);
+	}
+
+	if (Outline){
+		FColor = OutlineColor;
 	}
 	
 	OutPosition = vec4(InPos, gl_FragCoord.z) * Alpha;

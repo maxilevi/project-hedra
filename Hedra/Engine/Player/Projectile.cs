@@ -91,7 +91,7 @@ namespace Hedra.Engine.Player
 					if(UnderChunkB != null)
 						Collisions.AddRange(UnderChunkB.CollisionShapes.ToArray());
 					
-					for(int i = 0; i < Collisions.Count; i++){
+					for(var i = 0; i < Collisions.Count; i++){
 						
 						if(Physics.Collides(Collisions[i], new Box(Mesh.Position - Vector3.One * 1.5f, Mesh.Position + Vector3.One * 1.5f) + new Box(Direction * 25 * Speed * (float) Time.deltaTime, Direction * 25 * Speed * (float) Time.deltaTime) )){
 							IsColliding = true;
@@ -113,10 +113,9 @@ namespace Hedra.Engine.Player
 							World.Particles.Direction = new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
 							World.Particles.Emit();
 						}
-						if(this.LandEventHandler != null)
-							this.LandEventHandler.Invoke(this);
-						
-						this.Dispose();
+					    LandEventHandler?.Invoke(this);
+
+					    this.Dispose();
 						yield break;
 					}
 				}
@@ -137,8 +136,8 @@ namespace Hedra.Engine.Player
 		}
 		
 		public Vector3 Rotation{
-			get{ return Mesh.Rotation; }
-			set{ Mesh.Rotation = value; }
+			get => Mesh.Rotation;
+		    set => Mesh.Rotation = value;
 		}
 		
 		public void Dispose(){

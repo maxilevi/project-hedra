@@ -31,6 +31,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private const char SaveMarker = '!';
         private const char NumberMarker = '|';
         private const string HeaderMarker = "<>";
+        private readonly Vector2 _targetResolution;
         private readonly LocalPlayer _player;
         private readonly InventoryArray _abilities;
         private readonly AbilityTreeInterface _interface;
@@ -43,22 +44,25 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public AbilityTree(LocalPlayer Player)
         {
             _player = Player;
+            _targetResolution = new Vector2(1366, 768);
             _abilities = new InventoryArray(AbilityCount);
             for (var i = 0; i < _abilities.Length; i++)
             {
-                _abilities[i] = new Item();
-                _abilities[i].Model = new VertexData();
+                _abilities[i] = new Item
+                {
+                    Model = new VertexData()
+                };
                 _abilities[i].SetAttribute("Level", 0);
                 
             }
             _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Layers, new Vector2(1.5f, 1.5f))
             {
-                Position = Vector2.UnitX * -.65f + Vector2.UnitY * -.25f
+                Position = Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * -.65f + Vector2.UnitY * -.25f),
+                IndividualScale = Vector2.One * 1.1f
             };
-            _interface.IndividualScale = Vector2.One * 1.1f;
             var itemInfo = new AbilityTreeInterfaceItemInfo(_interface.Renderer)
             {
-                Position = Vector2.UnitX * .6f + Vector2.UnitY * .1f
+                Position = Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * .6f + Vector2.UnitY * .1f)
             };
             _manager = new AbilityTreeInterfaceManager(_player, itemInfo, _interface);
             _stateManager = new InventoryStateManager(_player);

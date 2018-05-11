@@ -23,6 +23,7 @@ uniform mat4 ShadowMVP;
 uniform float ShadowDistance;
 uniform bool UseShadows;
 uniform mat4 Matrix;
+uniform bool Outline;
 const float ShadowTransition = 20.0;
 
 
@@ -77,7 +78,9 @@ void main(){
 	BotColor = U_BotColor;
 	TopColor = U_TopColor;
 
-	vec4 Vertex = vec4((InVertex + BakedPosition) * Scale - BakedPosition, 1.0);
+
+	float realScale = Scale + (Outline) ? 0.25 : 0.0;
+	vec4 Vertex = vec4((InVertex + BakedPosition) * realScale - BakedPosition, 1.0);
 	
 	Vertex += vec4(AnimationRotationPoint, 0.0);
 	Vertex = AnimationRotation * Vertex;

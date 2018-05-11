@@ -20,29 +20,29 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.QuestSystem;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.StructureSystem.VillageSystem
 {
 	/// <summary>
 	/// Description of VillageGenerator.
 	/// </summary>
-	public static class VillageGenerator
+	public class VillageGenerator : ISchemeGenerator
 	{
-		private static VertexData[] HouseModels = new VertexData[2];
-        private static VertexData[] BlacksmithModels = new VertexData[2];
-	    private static List<CollisionShape>[] BlacksmithShapes = new List<CollisionShape>[2];
-        private static List<CollisionShape>[] HouseShapes_Clones = new List<CollisionShape>[2];
-		private static Dictionary<int, List<CollisionShape>> ShelfShapes_Clones = new Dictionary<int, List<CollisionShape>>();
-		private static Dictionary<int, VertexData> ShelfModels_Clones = new Dictionary<int, VertexData>();
-		private static VertexData Market0_Clone = AssetManager.PlyLoader("Assets/Env/Village/MarketStand0.ply", Vector3.One);
-		private static VertexData Market1_Clone = AssetManager.PlyLoader("Assets/Env/Village/MarketStand1.ply", Vector3.One);
-		private static List<CollisionShape> MarketShapes_Clone = AssetManager.LoadCollisionShapes("Assets/Env/Village/MarketStand0.ply", 6, Vector3.One);
-		private static List<CollisionShape> ExtraShelf_Clone = AssetManager.LoadCollisionShapes("Assets/Env/Village/MarketStand1.ply", 1, Vector3.One);
-		private static VertexData Stable0_Clone = AssetManager.PlyLoader("Assets/Env/Village/Stable0.ply", Vector3.One);
-	    private static List<CollisionShape> Stable0Shapes_Clone;
-		private static VertexData Cementery0_Clone = AssetManager.PlyLoader("Assets/Env/Mausoleum.ply", Vector3.One* 2f);
+		private VertexData[] HouseModels = new VertexData[2];
+        private VertexData[] BlacksmithModels = new VertexData[2];
+	    private List<CollisionShape>[] BlacksmithShapes = new List<CollisionShape>[2];
+        private List<CollisionShape>[] HouseShapes_Clones = new List<CollisionShape>[2];
+		private Dictionary<int, List<CollisionShape>> ShelfShapes_Clones = new Dictionary<int, List<CollisionShape>>();
+		private Dictionary<int, VertexData> ShelfModels_Clones = new Dictionary<int, VertexData>();
+		private VertexData Market0_Clone = AssetManager.PlyLoader("Assets/Env/Village/MarketStand0.ply", Vector3.One);
+		private VertexData Market1_Clone = AssetManager.PlyLoader("Assets/Env/Village/MarketStand1.ply", Vector3.One);
+		private List<CollisionShape> MarketShapes_Clone = AssetManager.LoadCollisionShapes("Assets/Env/Village/MarketStand0.ply", 6, Vector3.One);
+		private List<CollisionShape> ExtraShelf_Clone = AssetManager.LoadCollisionShapes("Assets/Env/Village/MarketStand1.ply", 1, Vector3.One);
+		private VertexData Stable0_Clone = AssetManager.PlyLoader("Assets/Env/Village/Stable0.ply", Vector3.One);
+	    private List<CollisionShape> Stable0Shapes_Clone;
 
-        public static void Load(){
+        public VillageGenerator(){
 			HouseModels[0] = AssetManager.PlyLoader("Assets/Env/Village/House"+0+".ply", Vector3.One);
 			HouseModels[1] = AssetManager.PlyLoader("Assets/Env/Village/House"+1+".ply", Vector3.One);
 			
@@ -77,7 +77,7 @@ namespace Hedra.Engine.QuestSystem
 			return NameGenerator.Generate(rng.Next(0,99999999));
 		}
 		
-		public static ObjectMesh GenerateWindmillBlades(Vector3 Position, Matrix4 TransMatrix){
+		public ObjectMesh GenerateWindmillBlades(Vector3 Position, Matrix4 TransMatrix){
 			var scale = 1f;
 			var rng = new Random(World.Seed + 7654531 + (int) (Position.X+Position.Z) );
 			Matrix4 rotationMatrix = Matrix4.CreateRotationY( rng.NextFloat() * Mathf.Radian * 360 );
@@ -94,7 +94,7 @@ namespace Hedra.Engine.QuestSystem
 			return mesh;
 		}
 		
-		public static ObjectMesh GenerateStableIcon(Vector3 Scale, Vector3 Position){
+		public ObjectMesh GenerateStableIcon(Vector3 Scale, Vector3 Position){
 			var rng = new Random(World.Seed + 312412 + (int) (Position.X+Position.Z) );
 		    VertexData model = Stable0_Clone.Clone();
             model.Scale( Scale );
@@ -116,45 +116,9 @@ namespace Hedra.Engine.QuestSystem
 			return ObjectMesh.FromVertexData(model);
 		}
 
-	    public static ObjectMesh GenerateCementeryIcon(Vector3 Scale, Vector3 Position)
-	    {
-	        VertexData model = Cementery0_Clone.Clone();
-	        model.Scale(Scale);
-
-	        model.GraduateColor(Vector3.UnitY);
-	        return ObjectMesh.FromVertexData(model);
-	    }
-
-        public static ObjectMesh GenerateVillageHouseIcon(Vector3 Scale){
-			var rng = new Random(World.Seed + 1231);
-			VertexData houseModel = AssetManager.PlyLoader("Assets/Env/Village/House1.ply", Scale);
-
-			return ObjectMesh.FromVertexData(houseModel);
-		}
-		
-		public static VertexData GenerateLogHouse(Vector3 Position, List<CollisionShape> Shapes, Chunk UnderChunk){
-			var rng = new Random(World.Seed +412412);
-		    var model = new VertexData();
-
-		    var scale = 3.5f;
-			Matrix4 transMatrix = Matrix4.CreateScale(scale);
-			transMatrix *= Matrix4.CreateRotationY( 360 * Mathf.Radian * rng.NextFloat() );
-			transMatrix *= Matrix4.CreateTranslation( Position + -Vector3.UnitY * .4f );
-			
-			model += AssetManager.PlyLoader("Assets/Env/LogHouse0.ply", Vector3.One);
-			model.Transform(transMatrix);
-			
-			List<CollisionShape> newShapes = AssetManager.LoadCollisionShapes("Assets/Env/LogHouse0.ply", 9, Vector3.One);
-			for(int i = 0; i < newShapes.Count; i++){
-				newShapes[i].Transform(transMatrix);
-			}
-			Shapes.AddRange(newShapes.ToArray());
-			return model;
-		}
-
         #region Coroutines
 
-        public static IEnumerator GenerateWindmill(object[] Params)
+        public IEnumerator GenerateWindmill(object[] Params)
         {
             var position = (Vector3)Params[0];
             var rng = new Random(World.Seed + 7654531 + (int)(position.X + position.Z));//Params[1] as Random;
@@ -204,7 +168,7 @@ namespace Hedra.Engine.QuestSystem
             underChunk.AddCollisionShape(shapes.ToArray());
         }
 
-        public static IEnumerator GenerateStable(object[] Params)
+        public IEnumerator GenerateStable(object[] Params)
         {
             var town = (CollidableStructure) Params[0];
             var position = (Vector3)Params[1];
@@ -255,7 +219,7 @@ namespace Hedra.Engine.QuestSystem
             
         }
 
-        public static IEnumerator BuildBlacksmith(object[] Params)
+        public IEnumerator BuildBlacksmith(object[] Params)
         {
             var town = (CollidableStructure) Params[0];
 			var transMatrix = (Matrix4) Params[1];
@@ -309,7 +273,7 @@ namespace Hedra.Engine.QuestSystem
                 World.QuestManager.SpawnHumanoid(HumanType.Blacksmith, blacksmithGuyOffset + blacksmithPosition + transMatrix.ExtractTranslation());
         }
 		
-		public static IEnumerator BuildSingleHouse(object[] Params){
+		public IEnumerator BuildSingleHouse(object[] Params){
 			Vector3 position = (Vector3)Params[0];
 			var transMatrix = (Matrix4) Params[1];
 			var rng = Params[2] as Random;
@@ -361,7 +325,7 @@ namespace Hedra.Engine.QuestSystem
 			                          });
 		}
 		
-		public static IEnumerator BuildFarms(object[] Params)
+		public IEnumerator BuildFarms(object[] Params)
 		{
 		    var town = (CollidableStructure) Params[0];
 		    var rng = Params[1] as Random;
@@ -459,7 +423,7 @@ namespace Hedra.Engine.QuestSystem
 			}
 		}
 
-	    public static IEnumerator BuildCenter(object[] Params)
+	    public IEnumerator BuildCenter(object[] Params)
 	    {
 
 	        var rng = Params[0] as Random;
@@ -513,7 +477,7 @@ namespace Hedra.Engine.QuestSystem
 			World.AddChunkToQueue(underChunk, true);
 		}
 		
-		public static IEnumerator BuildMarket(object[] Params)
+		public IEnumerator BuildMarket(object[] Params)
 		{
 		    var town = Params[0] as CollidableStructure;
 			var rng = Params[1] as Random;
@@ -710,7 +674,7 @@ namespace Hedra.Engine.QuestSystem
 
 #endregion
 
-        private static VertexData BuildPath(Matrix4 TransMatrix, Vector3 Origin, Vector3 End){
+        private VertexData BuildPath(Matrix4 TransMatrix, Vector3 Origin, Vector3 End){
 			int pathCount = (int) ( (Origin - End).Length / (5.35f * Chunk.BlockSize) ) + 1;
 			Vector3 dir = (Origin - End).Normalized();
 			Vector3 euler = Physics.DirectionToEuler( dir.Xz.ToVector3() );

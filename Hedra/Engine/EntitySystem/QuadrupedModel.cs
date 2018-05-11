@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Linq;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering;
@@ -43,7 +44,7 @@ namespace Hedra.Engine.EntitySystem
 		public AnimatedModel Model;
 		public Animation IdleAnimation;
 		public Animation WalkAnimation;
-		public Animation AttackAnimation;
+		public Animation[] AttackAnimations;
 
 		public QuadrupedModel(Entity Parent, ModelTemplate Template)
 		{
@@ -54,19 +55,23 @@ namespace Hedra.Engine.EntitySystem
 			Model = AnimationModelLoader.LoadEntity(Template.Path);
 			IdleAnimation = AnimationLoader.LoadAnimation(Template.IdleAnimation.Path);
 			WalkAnimation = AnimationLoader.LoadAnimation(Template.WalkAnimation.Path);
-			AttackAnimation = AnimationLoader.LoadAnimation(Template.AttackAnimation.Path);
+			AttackAnimations = new Animation[Template.AttackAnimations.Length];
 
 		    IdleAnimation.Speed = Template.IdleAnimation.Speed;
 		    WalkAnimation.Speed = Template.WalkAnimation.Speed;
-		    AttackAnimation.Speed = Template.AttackAnimation.Speed;
 
 			this.Model.Scale = Vector3.One * (Template.Scale + Template.Scale * rng.NextFloat() * .3f - Template.Scale * rng.NextFloat() * .15f);
 			this.Parent.SetHitbox(AssetManager.LoadHitbox(Template.IdleAnimation.Path) * this.Model.Scale);
-			
-			AttackAnimation.Loop = false;
-			AttackAnimation.OnAnimationEnd += delegate { 
-				this.IsAttacking = false;
-			};
+
+		    for (var i = 0; i < AttackAnimations.Length; i++)
+		    {
+		        AttackAnimations[i] = AnimationLoader.LoadAnimation(Template.AttackAnimations[i].Path);
+		        AttackAnimations[i].Speed = Template.AttackAnimations[i].Speed;
+                AttackAnimations[i].Loop = false;
+		        AttackAnimations[i].OnAnimationEnd += delegate {
+		            this.IsAttacking = false;
+		        };
+            }
 			
 			this.Model.Size = (this.Parent.BaseBox.Max - this.Parent.BaseBox.Min);
 			this.Idle();
@@ -83,26 +88,28 @@ namespace Hedra.Engine.EntitySystem
 
 		public override void Attack(Entity Damagee, float Damage)
 		{	
-			if(Model.Animator.AnimationPlaying == AttackAnimation)
+			if(Array.IndexOf(AttackAnimations, Model.Animator.AnimationPlaying) != -1)
 				return;
 			
 			if(_attackCooldown > 0){
 				this.Idle();
 				return;
 			}
+
+		    var selectedAnimation = AttackAnimations[Utils.Rng.Next(0, AttackAnimations.Length)];
+
+		    void AttackHandler(Animation Sender)
+		    {
+		        if (!Parent.InAttackRange(Damagee)) return;
+		        float exp;
+		        Damagee.Damage(Damage, this.Parent, out exp);
+
+		        selectedAnimation.OnAnimationMid -= AttackHandler;
+		    }
+
+		    selectedAnimation.OnAnimationMid += (OnAnimationHandler) AttackHandler;
 			
-			OnAnimationHandler AttackHandler = null;
-			AttackHandler = delegate
-			{
-			    if (!Parent.InAttackRange(Damagee)) return;
-				float exp;
-				Damagee.Damage(Damage, this.Parent, out exp);
-				
-				this.AttackAnimation.OnAnimationMid -= AttackHandler;
-			};
-			this.AttackAnimation.OnAnimationMid += AttackHandler;
-			
-			Model.PlayAnimation(AttackAnimation);
+			Model.PlayAnimation(selectedAnimation);
 			this.IsAttacking = true;
 		    _attackCooldown = AttackCooldown;
         }

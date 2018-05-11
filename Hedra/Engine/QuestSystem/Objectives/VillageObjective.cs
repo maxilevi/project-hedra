@@ -19,6 +19,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scenes;
+using Hedra.Engine.StructureSystem.VillageSystem;
 using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Objectives
@@ -66,7 +67,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         {
             //base.CenterRadius = (int) (StructureGenerator.CityRadius * 1.0f);
             this.Escortee = Escortee;
-            _iconMesh = VillageGenerator.GenerateVillageHouseIcon(Vector3.One * .65f);
+            //_iconMesh = VillageGenerator.GenerateVillageHouseIcon(Vector3.One * .65f);
         }
 
         public override void Recreate()

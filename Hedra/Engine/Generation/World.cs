@@ -213,7 +213,6 @@ namespace Hedra.Engine.Generation
 
             ReloadModules();
 
-            VillageGenerator.Load();
             IsGenerated = true;
         }
 

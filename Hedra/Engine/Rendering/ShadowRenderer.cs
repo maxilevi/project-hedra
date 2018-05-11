@@ -38,8 +38,8 @@ namespace Hedra.Engine.Rendering
 
         public static float ShadowDistance
 	    {
-	        get { return _shadowDistance; }
-	        set
+	        get => _shadowDistance;
+            set
 	        {
 	            _shadowDistance = value;
 	            DepthProj = Matrix4.CreateOrthographicOffCenter(-_shadowDistance, _shadowDistance,

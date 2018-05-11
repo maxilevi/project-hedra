@@ -55,7 +55,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         {
             base.Recreate();
             base.NoTreesRadius = 12;
-            _cementeryModel = VillageGenerator.GenerateCementeryIcon(Vector3.One * .15f , -Vector3.UnitY * 1.5f);
+            //_cementeryModel = VillageGenerator.GenerateCementeryIcon(Vector3.One * .15f , -Vector3.UnitY * 1.5f);
         }
 
         public override void SetOutObjectives()
