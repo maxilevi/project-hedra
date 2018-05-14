@@ -68,7 +68,7 @@ namespace Hedra.Engine.Player.Inventory
             var isEquipment = CurrentItem.IsEquipment;
             if (isEquipment)
             {
-                var tierColor = TierToColor(CurrentItem.Tier);
+                var tierColor = ItemUtils.TierToColor(CurrentItem.Tier);
                 ItemText.Color = tierColor;
 
                 ItemText.Text = Utils.FitString($"{CurrentItem.Tier} {CurrentItem.DisplayName}", 15);
@@ -126,18 +126,6 @@ namespace Hedra.Engine.Player.Inventory
             }
             if (!(Value is int) && !(Value is long)) return Value.ToString();
             return (int)Convert.ChangeType(Value, typeof(int)) == int.MaxValue ? "∞" : Value.ToString();
-        }
-
-        private static Color TierToColor(ItemTier Tier)
-        {
-            return 
-                Tier == ItemTier.Common ? Color.LightSkyBlue :
-                Tier == ItemTier.Uncommon ? Color.LightGreen : 
-                Tier == ItemTier.Rare ? Color.Bisque :
-                Tier == ItemTier.Unique ? Color.MediumPurple :
-                Tier == ItemTier.Legendary ? Color.DarkSalmon :
-                Tier == ItemTier.Divine ? Color.MediumVioletRed : 
-                Color.Transparent;
         }
 
         public void Show(Item Item)

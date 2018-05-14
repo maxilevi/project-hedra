@@ -25,7 +25,7 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public delegate void OnAttackEventHandler(Entity Victim, float Amount);
 
-    public class Entity : IUpdatable, IRenderable, IDisposable, ISearchable//, ICullable
+    public class Entity : IUpdatable, IRenderable, IDisposable, ISearchable
     {
         private DamageComponent _damageManager;
         private int _drowningSoundTimer;
@@ -40,9 +40,13 @@ namespace Hedra.Engine.EntitySystem
         private float _knockedTime;
         private readonly TickSystem _tickSystem;
 
+        protected List<EntityComponent> Components = new List<EntityComponent>();
+                protected bool Splashed { get; set; }
+
+        public event OnAttackEventHandler OnAttacking;
+        public event OnAttackEventHandler BeforeAttacking;
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1;
-        protected List<EntityComponent> Components = new List<EntityComponent>();
         public Box BaseBox { get; private set; } = new Box(Vector3.Zero, Vector3.One);
         public bool Destroy { get; set; } = false;
         public int Level { get; set; } = 1;
@@ -52,14 +56,13 @@ namespace Hedra.Engine.EntitySystem
         public Vector3 Orientation { get; set; } = Vector3.UnitZ;
         public PhysicsComponent Physics { get; set; }
         public bool Removable { get; set; } = true;
-        protected bool Splashed { get; set; }
         public Vector3 BlockPosition { get; set; }
         public bool PlaySpawningAnimation { get; set; } = true;
         public float Speed { get; set; } = 2;
 
         public virtual float Health
         {
-            get { return _health; }
+            get => _health;
             set
             {
                 if (value < 0)
@@ -119,7 +122,7 @@ namespace Hedra.Engine.EntitySystem
 
         public bool Knocked
         {
-            get { return _knocked; }
+            get => _knocked;
             set
             {
                 if (value == _knocked) return;
@@ -134,9 +137,7 @@ namespace Hedra.Engine.EntitySystem
         {
             get
             {
-                MobType enumeration;
-                bool result = Enum.TryParse(Type, true, out enumeration);
-
+                bool result = Enum.TryParse(Type, true, out MobType enumeration);
                 return result ? enumeration : MobType.Unknown;
             }
 
@@ -177,20 +178,20 @@ namespace Hedra.Engine.EntitySystem
 
         public float Oxygen
         {
-            get { return _oxygen; }
-            set { _oxygen = Mathf.Clamp(value, 0, MaxOxygen); }
+            get => _oxygen;
+            set => _oxygen = Mathf.Clamp(value, 0, MaxOxygen);
         }
 
         public Vector3 Position
         {
-            get { return Model.Position; }
-            set { BlockPosition = value; }
+            get => Model.Position;
+            set => BlockPosition = value;
         }
 
         public Vector3 Rotation
         {
-            get { return Model.TargetRotation; }
-            set { Model.TargetRotation = value; }
+            get => Model.TargetRotation;
+            set => Model.TargetRotation = value;
         }
 
         public RenderShape Shape { get; set; }
@@ -226,8 +227,6 @@ namespace Hedra.Engine.EntitySystem
             }
             iconComponent.ShowIcon(IconType);
         }
-
-        public event OnAttackEventHandler OnAttacking, BeforeAttacking;
 
         public void Damage(float Amount, Entity Damager, out float Exp, bool PlaySound = true)
         {
@@ -282,8 +281,7 @@ namespace Hedra.Engine.EntitySystem
         {
             if(Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             Components.Add(Component);
-            var tickable = Component as ITickable;
-            if(tickable != null) _tickSystem.Add(tickable);
+            if(Component is ITickable tickable) _tickSystem.Add(tickable);
         }
 
         public void RemoveComponent(EntityComponent Component)
@@ -291,15 +289,14 @@ namespace Hedra.Engine.EntitySystem
             if (Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             Components.Remove(Component);
             Component.Dispose();
-            var tickable = Component as ITickable;
-            if (tickable != null) _tickSystem.Remove(tickable);
+            if (Component is ITickable tickable) _tickSystem.Remove(tickable);
         }
 
         public T SearchComponent<T>() where T : EntityComponent
         {
             for (var i = 0; i < Components.Count; i++)
-                if (typeof(T).IsAssignableFrom(Components[i].GetType()))
-                    return (T) Components[i];
+                if (Components[i] is T variable)
+                    return variable;
             return default(T);
         }
 
@@ -405,8 +402,7 @@ namespace Hedra.Engine.EntitySystem
                 if(Model.Enabled)
                     SoundManager.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
 
-                var animable = Model as IDisposeAnimation;
-                if (animable != null)
+                if (Model is IDisposeAnimation animable)
                 {
                     animable.DisposeAnimation();
                     _spawningWithAnimation = true;
@@ -420,8 +416,7 @@ namespace Hedra.Engine.EntitySystem
             }
             if (_spawningWithAnimation)
             {
-                var animable = Model as IDisposeAnimation;
-                if (animable != null)
+                if (Model is IDisposeAnimation animable)
                 {
                     if (animable.DisposeTime < 0)
                     {
@@ -435,7 +430,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (Model.Disposed) return;
 
@@ -443,9 +438,6 @@ namespace Hedra.Engine.EntitySystem
 
             for (var i = 0; i < Components.Count; i++)
                 Components[i].Dispose();
-
-            var humanoid = this as Humanoid;
-            humanoid?.HandLamp.Dispose();
 
             (Model as IAudible)?.StopSound();
 
@@ -479,8 +471,7 @@ namespace Hedra.Engine.EntitySystem
             if (Knocked)
             {
                 _knockedTime -= Time.ScaledFrameTimeSeconds;
-                var model = Model as HumanModel;
-                if (model != null)
+                if (Model is HumanModel model)
                 {
                     model.KnockOut();
                     model.Human.IsRiding = false;

@@ -15,7 +15,6 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using System.Drawing;
-using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
 
@@ -39,13 +38,9 @@ namespace Hedra.Engine.EntitySystem
 
         private float _tintTimer = 0;
         private Vector4 _targetTint;
-        private int _consecutiveHits = 0;
-        private readonly Timer _hitsTimer = new Timer(3);
 
         public override void Update()
         {
-            if (_hitsTimer.Tick())
-                _consecutiveHits = 0;
 
             _targetTint = _tintTimer > 0 ? new Vector4(2.0f, 0.1f, 0.1f, 1) : new Vector4(1, 1, 1, 1);
 
@@ -78,13 +73,6 @@ namespace Hedra.Engine.EntitySystem
             }
 
             bool shouldMiss = Parent is LocalPlayer && Utils.Rng.Next(1, 18) == 1;
-            var damager = Damager as Humanoid;
-            //if (damager?.MainWeapon?.Type == ItemType.ThrowableDagger)
-            //    Amount *= 1f + (float) Math.Min(_consecutiveHits * .2, 1.2f);
-
-            _consecutiveHits++;
-            _hitsTimer.Reset();
-
             _attackedTimer = 6;
             _hasBeenAttacked = true;
 
@@ -157,8 +145,7 @@ namespace Hedra.Engine.EntitySystem
         {
             float currentTime = 0;
 
-            var animable = (Parent.Model as IDisposeAnimation);
-            if (animable != null)
+            if (Parent.Model is IDisposeAnimation animable)
             {
                 SoundManager.PlaySound(SoundType.GlassBreak, Parent.Position);
                 animable.DisposeAnimation();

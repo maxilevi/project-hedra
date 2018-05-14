@@ -22,8 +22,8 @@ namespace Hedra.Engine.Rendering
 		public float Alpha { get; set; } = 1;
 	    public bool UseNoiseTexture { get; set; }
 	    public bool Dither { get; set; }
-	    public bool Outline { get; set; } = true;
-        public Vector4 OutlineColor { get; set; } = new Vector4(1,0,0,1);
+	    public bool Outline { get; set; }
+        public Vector4 OutlineColor { get; set; }
         public Vector4 Tint { get; set; } = new Vector4(1,1,1,1);
 		public Vector4 BaseTint { get; set; } = new Vector4(0,0,0,0);
 	    public Vector3 Position { get; set; } = Vector3.Zero;
@@ -76,35 +76,37 @@ namespace Hedra.Engine.Rendering
 			GraphicsLayer.EnableVertexAttribArray(1);
 			GraphicsLayer.EnableVertexAttribArray(2);
 
+            Shader["Outline"] = 0;
             if (Outline)
             {
-                GraphicsLayer.Enable(EnableCap.StencilTest);
+                /*GraphicsLayer.Enable(EnableCap.StencilTest);
                 GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
                 GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
-                GL.StencilMask(0xFF);
-                Shader["Outline"] = 0;
+                GL.StencilMask(0xFF);*/
             }
-            
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
             GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
             if (Outline)
             {
-
-                GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
-                GL.StencilMask(0x00);
+                GraphicsLayer.Enable(EnableCap.Blend);
+                /*GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
+                GL.StencilMask(0x00);*/
                 GraphicsLayer.Disable(EnableCap.DepthTest);
+                //GraphicsLayer.Disable(EnableCap.CullFace);
                 Shader["Outline"] = this.Outline ? 1 : 0;
                 Shader["OutlineColor"] = this.OutlineColor;
-
+                Shader["Time"] = Time.FrameTimeSeconds;
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
                 GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-                GL.StencilMask(0xFF);
+                //GL.StencilMask(0xFF);
                 GraphicsLayer.Enable(EnableCap.DepthTest);
-                GraphicsLayer.Disable(EnableCap.StencilTest);
+                //GraphicsLayer.Enable(EnableCap.CullFace);
+                //GraphicsLayer.Disable(EnableCap.StencilTest);
             }
 
+            GraphicsLayer.Disable(EnableCap.Blend);
             GraphicsLayer.DisableVertexAttribArray(0);
 			GraphicsLayer.DisableVertexAttribArray(1);
 			GraphicsLayer.DisableVertexAttribArray(2);

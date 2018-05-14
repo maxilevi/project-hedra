@@ -7,6 +7,7 @@ namespace Hedra.Engine.ClassSystem
 {
     public class WarriorDesign : ClassDesign
     {
+        public override bool CanAccumulateHits { get; } = false;
         public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/WarriorLogo.png");
         public override HumanType Human => HumanType.Warrior;
         public override float BaseSpeed => 1.25f;

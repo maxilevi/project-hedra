@@ -24,11 +24,12 @@ namespace Hedra.Engine.Rendering
 		public float Opacity {get; set;}
 		public Matrix3 Rotation {get; set;}
 	    public bool Moved { get; private set; }
+        public bool IsReplacementShadow { get; set; }
 
 	    private Vector3 _position;
 	    public Vector3 Position
 	    {
-	        get { return _position;  }
+	        get => _position;
 	        set
 	        {
 	            _position = value;
@@ -44,6 +45,6 @@ namespace Hedra.Engine.Rendering
 			DrawManager.DropShadows.Add(this);
 		}
 		
-		public bool ShouldDraw => (GameManager.Player.Position - Position).Xz.LengthSquared < 128*128 && Enabled && !GameSettings.SSAO && GameSettings.ShadowQuality > 1;
+		public bool ShouldDraw => (GameManager.Player.Position - Position).Xz.LengthSquared < 128*128 && Enabled;
 	}
 }

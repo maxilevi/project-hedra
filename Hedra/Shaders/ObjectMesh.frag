@@ -12,6 +12,7 @@ in vec4 Coords;
 in vec3 LightDir;
 in vec3 PointDiffuse;
 in vec3 vertex_position;
+in vec3 base_normal;
 
 layout(location = 0) out vec4 FColor;
 layout(location = 1)out vec4 OutPosition;
@@ -30,6 +31,7 @@ uniform sampler3D noiseTexture;
 uniform bool UseBaseTint;
 uniform bool Outline;
 uniform vec4 OutlineColor;
+uniform float Time;
 
 vec4 doTint(vec4 color, vec4 tint);
 vec3 doTint(vec3 color, vec3 tint);
@@ -37,8 +39,10 @@ vec3 doTint(vec3 color, vec3 tint);
 void main(){
 
 	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, vertex_position.xyz).r;
-	vec4 inputColor = vec4(Color.xyz + tex * 0.2 * useNoiseTexture, Color.w);	
-	
+	vec4 inputColor = vec4(Color.xyz + tex * 0.2 * useNoiseTexture, Color.w);
+	if(Outline){
+		inputColor += vec4(Color.xyz, -1.0) * .5f;
+	}
 	if(Dither){
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
 		if( d-floor(d) < 0.5) discard;
@@ -81,12 +85,16 @@ void main(){
 		FColor = vec4( doTint(inputColor.xyz * ShadowVisibility + PointDiffuse.xyz, BaseTint.rgb) * Tint.rgb, Alpha);
 	}
 
-	if (Outline){
-		FColor = OutlineColor;
+	if (Outline) {
+		vec3 unitToCamera = normalize( (inverse(gl_ModelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - vertex_position.xyz);
+		float outlineDot = max(0, 1.0-dot(base_normal, unitToCamera));
+		FColor = outlineDot * (cos(Time*10)-.0) * 8.0 * OutlineColor;
+		OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
+		OutNormal = vec4(0.0, 0.0, 0.0, 0.0);
+	} else {
+		OutPosition = vec4(InPos, gl_FragCoord.z) * Alpha;
+		OutNormal = vec4(InNorm,1.0) * Alpha;
 	}
-	
-	OutPosition = vec4(InPos, gl_FragCoord.z) * Alpha;
-	OutNormal = vec4(InNorm,1.0) * Alpha;
 }
 
 vec4 doTint(vec4 color, vec4 tint) {

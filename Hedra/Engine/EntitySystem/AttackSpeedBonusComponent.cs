@@ -11,7 +11,7 @@ namespace Hedra.Engine.EntitySystem
         {
             this.Parent = Parent;
             _attackSpeedBonus = AttackSpeed;
-            Parent.AttackSpeed += _attackSpeedBonus;
+            Parent.AttackSpeed = Parent.BaseAttackSpeed + _attackSpeedBonus;
         }
 
         public override void Update()
@@ -20,7 +20,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Dispose()
         {
-            Parent.AttackSpeed -= _attackSpeedBonus;
+            Parent.AttackSpeed = Parent.BaseAttackSpeed  - _attackSpeedBonus;
         }
     }
 }

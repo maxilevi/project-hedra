@@ -7,6 +7,7 @@ namespace Hedra.Engine.ClassSystem
 {
     public class RogueDesign : ClassDesign
     {
+        public override bool CanAccumulateHits { get; } = true;
         public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/RogueLogo.png");
         public override HumanType Human => HumanType.Rogue;
         public override float BaseSpeed => 1.40f;

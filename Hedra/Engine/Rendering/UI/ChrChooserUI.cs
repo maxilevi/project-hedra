@@ -197,28 +197,26 @@ namespace Hedra.Engine.Rendering.UI
 				
 		public override void OnMouseButtonDown(object Sender, OpenTK.Input.MouseButtonEventArgs E)
 		{
-			if(this.Enabled){
-				for(int i = 0; i <_humans.Count; i++){
-					if(_humans[i].Model.Tint == new Vector4(2,2,2,1) && _humans[i] != _selectedHuman && _humans[i].Model != null){
-						if(_previousHuman != null){
-							for(int k = 0; k <_humans.Count; k++){
-								if(_previousHuman == _humans[k]){
-									Vector3 fPos = Scenes.MenuBackground.FirePosition + FireDirection(k, 10);
-									_previousHuman.BlockPosition = new Vector3(fPos.X, _previousHuman.BlockPosition.Y, fPos.Z);
-									_previousHuman.Model.Rotation = new Vector3(0, Physics.DirectionToEuler(FireDirection(k, 10).NormalizedFast().Xz.ToVector3()).Y+180, 0);
-									_previousHuman.Model.TargetRotation = new Vector3(0, Physics.DirectionToEuler(FireDirection(k, 10).NormalizedFast().Xz.ToVector3()).Y+180, 0);
-									_previousHuman.Model.Idle();
-								}
-							}
-						}
-						_previousHuman = _selectedHuman;
-						_selectedHuman = _humans[i];
-						_name.Text = _selectedHuman.Name;
-						_level.Text = $"{Utils.FirstCharToUpper(_selectedHuman.Class.ToString().ToLowerInvariant())} Level {_selectedHuman.Level}";
-						break;
-					}
-				}
-			}
+		    if (!this.Enabled) return;
+		    for(var i = 0; i <_humans.Count; i++){
+		        if (_humans[i].Model.Tint != new Vector4(2, 2, 2, 1) || _humans[i] == _selectedHuman ||
+		            _humans[i].Model == null) continue;
+		        if(_previousHuman != null){
+		            for(var k = 0; k <_humans.Count; k++){
+		                if (_previousHuman != _humans[k]) continue;
+		                Vector3 fPos = Scenes.MenuBackground.FirePosition + this.FireDirection(k, 10);
+		                _previousHuman.BlockPosition = new Vector3(fPos.X, _previousHuman.BlockPosition.Y, fPos.Z);
+		                _previousHuman.Model.Rotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 10).NormalizedFast().Xz.ToVector3()).Y+180, 0);
+		                _previousHuman.Model.TargetRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 10).NormalizedFast().Xz.ToVector3()).Y+180, 0);
+		                _previousHuman.Model.Idle();
+		            }
+		        }
+		        _previousHuman = _selectedHuman;
+		        _selectedHuman = _humans[i];
+		        _name.Text = _selectedHuman.Name;
+		        _level.Text = $"{Utils.FirstCharToUpper(_selectedHuman.Class.ToString().ToLowerInvariant())} Level {_selectedHuman.Level}";
+		        break;
+		    }
 		}
 		
 		private Vector3 FireDirection(int I, float Mult)

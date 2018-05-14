@@ -17,8 +17,7 @@ namespace Hedra.Engine.ModuleSystem
                 string ext = Path.GetExtension(module);
                 if (ext != ".json") continue;
 
-                bool result;
-                IEnemyFactory factory = FromJSON( File.ReadAllText(module), out result);
+                IEnemyFactory factory = FromJSON( File.ReadAllText(module), out bool result);
 
                 if(!result) continue;
 

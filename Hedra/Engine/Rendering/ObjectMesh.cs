@@ -55,8 +55,8 @@ namespace Hedra.Engine.Rendering
 
 	    public bool ApplyNoiseTexture
 	    {
-	        get { return _buffer.UseNoiseTexture; }
-	        set { _buffer.UseNoiseTexture = value; }
+	        get => _buffer.UseNoiseTexture;
+	        set => _buffer.UseNoiseTexture = value;
 	    }
 
         public Vector3 TransformPoint(Vector3 Point){
@@ -64,44 +64,56 @@ namespace Hedra.Engine.Rendering
 		}
 
 		public Matrix4 TransformationMatrix{
-			get{ return _buffer.TransformationMatrix; }
-			set{ _buffer.TransformationMatrix = value; }
+			get => _buffer.TransformationMatrix;
+		    set => _buffer.TransformationMatrix = value;
 		}
 		
 		public Vector4 Tint{
-			get{ return _buffer.Tint; }
-			set{ _buffer.Tint = value; }
+			get => _buffer.Tint;
+		    set => _buffer.Tint = value;
 		}
 		
 		public Vector4 BaseTint{
-			get{ return _buffer.BaseTint; }
-			set{ _buffer.BaseTint = value; }
+			get => _buffer.BaseTint;
+		    set => _buffer.BaseTint = value;
 		}
 
-	    public bool Dither
+	    public Vector4 OutlineColor
+        {
+	        get => _buffer.OutlineColor;
+	        set => _buffer.OutlineColor = value;
+	    }
+
+	    public bool Outline
 	    {
-	        get { return _buffer.Dither; }
-	        set { _buffer.Dither = value; }
+	        get => _buffer.Outline;
+	        set => _buffer.Outline = value;
+	    }
+
+        public bool Dither
+	    {
+	        get => _buffer.Dither;
+	        set => _buffer.Dither = value;
 	    }
 
         public Vector3 Position{
-			get{ return _buffer.Position; }
-			set{ _buffer.Position = value; }
-		}
+			get => _buffer.Position;
+            set => _buffer.Position = value;
+        }
 		
 		public Vector3 LocalPosition{
-			get{ return _buffer.LocalPosition; }
-			set{ _buffer.LocalPosition = value; }
+			get => _buffer.LocalPosition;
+		    set => _buffer.LocalPosition = value;
 		}
 		
 		public Vector3 RotationPoint{
-			get{ return _buffer.Point; }
-			set{ _buffer.Point = value; }
+			get => _buffer.Point;
+		    set => _buffer.Point = value;
 		}
 		
 		public Vector3 Rotation{
-			get{ return _buffer.Rotation; }
-			set{
+			get => _buffer.Rotation;
+		    set{
 				float valY = value.Y;
 				
 				if(float.IsInfinity(valY) || float.IsNaN(valY)) valY = 0;
@@ -119,19 +131,13 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public Vector3 BeforeLocalRotation{
-			get{
-				return _buffer.BeforeLocalRotation;
-			}
-			set{
-				_buffer.BeforeLocalRotation = value;
-			}
+			get => _buffer.BeforeLocalRotation;
+		    set => _buffer.BeforeLocalRotation = value;
 		}
 		
 		public Vector3 LocalRotation{
-			get{
-				return _buffer.LocalRotation;
-			}
-			set{
+			get => _buffer.LocalRotation;
+		    set{
 				float valY = value.Y;
 				
 				if(float.IsInfinity(valY) || float.IsNaN(valY)) valY = 0;
@@ -150,19 +156,13 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public Vector3 LocalRotationPoint{
-			get{
-				return _buffer.LocalRotationPoint;
-			}
-			set{
-				_buffer.LocalRotationPoint = value;
-			}
+			get => _buffer.LocalRotationPoint;
+		    set => _buffer.LocalRotationPoint = value;
 		}
 		
 		public Vector3 AnimationRotation{
-			get{
-				return _buffer.AnimationRotation;
-			}
-			set{
+			get => _buffer.AnimationRotation;
+		    set{
 				float valY = value.Y;
 				
 				if(valY > 40960 || valY < -40960) valY = 0;
@@ -181,19 +181,13 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public Vector3 AnimationRotationPoint{
-			get{
-				return _buffer.AnimationRotationPoint;
-			}
-			set{
-				_buffer.AnimationRotationPoint = value;
-			}
+			get => _buffer.AnimationRotationPoint;
+		    set => _buffer.AnimationRotationPoint = value;
 		}
 		
 		public Vector3 AnimationPosition{
-			get{
-				return _buffer.AnimationPosition;
-			}
-			set{
+			get => _buffer.AnimationPosition;
+		    set{
 				float valY = value.Y;
 				
 				if(valY > 4096 || valY < -4096) valY = 0;
@@ -212,31 +206,19 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public bool ApplyFog{
-			get{
-				return _buffer.ApplyFog;
-			}
-			set{
-				_buffer.ApplyFog = value;
-			}
+			get => _buffer.ApplyFog;
+		    set => _buffer.ApplyFog = value;
 		}
 		
 		public float Alpha{
-			get{
-				return _buffer.Alpha;
-			}
-			set{
-				_buffer.Alpha = value;
-			}
+			get => _buffer.Alpha;
+		    set => _buffer.Alpha = value;
 		}
 		
 		
 		public Vector3 Scale{
-			get{
-				return _buffer.Scale;
-			}
-			set{
-				_buffer.Scale = value;
-			}
+			get => _buffer.Scale;
+		    set => _buffer.Scale = value;
 		}
 
 		public static ObjectMesh FromVertexData(VertexData Data)

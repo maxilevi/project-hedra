@@ -41,13 +41,12 @@ namespace Hedra.Engine.Rendering.UI
 
         public override int GetHashCode()
         {
-            return Family.GetHashCode() + (int) Size + (int) Style * 13;
+            return Family.GetHashCode() + (int) Size * 29 + (int) Style * 13;
         }
 
         public override bool Equals(object obj)
         {
-            FontEntry other = obj as FontEntry;
-            return other != null && other.GetHashCode() == this.GetHashCode();
+            return obj is FontEntry other && other.GetHashCode() == this.GetHashCode();
         }
     }
 }

@@ -73,8 +73,9 @@ namespace Hedra.Engine.Rendering
 	        this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
         }
 
-	    private void UpdateSource()
+	    private bool UpdateSource()
 	    {
+	        var updated = false;
 	        var sources = new[] { _vertexShader, _geometryShader, _fragmentShader };
 	        for (var i = 0; i < sources.Length; i++)
 	        {
@@ -84,18 +85,22 @@ namespace Hedra.Engine.Rendering
 	            {
 	                Log.WriteLine($"Shader source '{sources[i].Name}' has been updated. ");
 	                sources[i].Source = sources[i].SourceFinder();
-                }
+	                updated = true;
+	            }
 	        }
+	        return updated;
 	    }
 
 	    public void Reload()
 	    {
 	        if (ShaderId == 0) throw new ArgumentException($"Cannot rebuild a non existent shader");
-	        this.UpdateSource();
-	        _mappings.Clear();
-	        _arrayMappings.Clear();
-            this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
-        }
+	        if (this.UpdateSource())
+	        {
+	            _mappings.Clear();
+	            _arrayMappings.Clear();
+	            this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
+	        }
+	    }
 
 	    private void AddArrayMappings(UniformArray[] Array)
 	    {

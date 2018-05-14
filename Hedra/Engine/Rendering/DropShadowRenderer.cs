@@ -73,12 +73,12 @@ namespace Hedra.Engine.Rendering
 		}	
 
 		public void Draw(){
-			if(GameSettings.SSAO || GameSettings.ShadowQuality <= 1) return;
+			if(GameSettings.ShadowQuality <= 1) return;
 			
 			lock(_shadows){
 				_shouldShadows.Clear();
 				for(int i = 0; i < _shadows.Count; i++){
-					if(_shadows[i].ShouldDraw && DrawManager.FrustumObject.PointInFrustum(_shadows[i].Position))
+					if ((!GameSettings.SSAO || _shadows[i].IsReplacementShadow) && _shadows[i].ShouldDraw && DrawManager.FrustumObject.PointInFrustum(_shadows[i].Position))
 						_shouldShadows.Add(_shadows[i]);
 				}
 			}

@@ -190,8 +190,9 @@ namespace Hedra.Engine.Player
                         _player.MessageDispatcher.ShowNotification("YOU NEED A GLIDER TO DO THAT", System.Drawing.Color.DarkRed, 3f, true);
                         return;
                     }
-                    _glidingCooldown = .25f; 
+                    _glidingCooldown = .25f;
                     _player.IsGliding = !_player.IsGliding;
+                    _player.Glider.Enabled = _player.IsGliding;
                 }
             });
 

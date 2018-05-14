@@ -27,6 +27,7 @@ namespace Hedra.Engine.Player
 	public class Humanoid : Entity
 	{
         public virtual IMessageDispatcher MessageDispatcher { get; set; }
+	    public int ConsecutiveHits { get; private set; }
         public bool IsAttacking {get; set;}
 		public bool IsEating { get; set; }
 		public bool IsCasting { get; set; }
@@ -41,8 +42,8 @@ namespace Hedra.Engine.Player
         public bool IsSleeping { get; set; }
 	    public bool IsJumping => Movement.IsJumping;
 	    public virtual Vector3 FacingDirection => Vector3.UnitY * -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
-        public bool IsSitting { get{ return Model.IsSitting; } set{ if(value) Model.Sit(); else Model.Idle(); } }
-		public new HumanModel Model { get{ return base.Model as HumanModel; } set{ base.Model = value;} }
+        public bool IsSitting { get => Model.IsSitting; set{ if(value) Model.Sit(); else Model.Idle(); } }
+		public new HumanModel Model { get => base.Model as HumanModel; set => base.Model = value; }
 		public MovementManager Movement { get; protected set; }
 		public HandLamp HandLamp;
 		public DamageComponent DmgComponent;
@@ -60,12 +61,13 @@ namespace Hedra.Engine.Player
 	    private float _stamina = 100f;
 	    private bool _isGliding;
 	    private float _speedAddon;
+	    private readonly Timer _consecutiveHitsTimer;
 
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
 
 	    public virtual Item MainWeapon
 	    {
-	        get { return _mainWeapon; }
+	        get => _mainWeapon;
 	        set
 	        {
                 if(_mainWeapon == value) return;
@@ -87,22 +89,12 @@ namespace Hedra.Engine.Player
 			}
 		}
 
-		public float MaxXP{
-			get{
-				var maxXp = 38;
-				for(var i = 1; i < Level; i++)
-					maxXp = (int) (maxXp * 1.15f);
-				return maxXp;
-			}
-		}
+		public float MaxXP => this.MaxXpForLevel(this.Level);
 
-        protected float MaxXpForLevel(int TargetLevel)
+	    protected float MaxXpForLevel(int TargetLevel)
 	    {
-	        var maxXp = 38;
-	        for (var i = 1; i < TargetLevel; i++)
-	            maxXp = (int)(maxXp * 1.15f);
-	        return maxXp;
-        }
+	        return TargetLevel * 10f + 38;
+	    }
         			
 		public float MaxMana{
 			get{
@@ -139,7 +131,9 @@ namespace Hedra.Engine.Player
 	    #endregion
 
         public Humanoid() {
-			this.CanInteract = true;
+            this._consecutiveHitsTimer = new Timer(3f);
+
+            this.CanInteract = true;
             this.MessageDispatcher = new DummyMessageDispatcher();
             this.HandLamp = new HandLamp(this);
 			this.Movement = this.CreateMovementManager();
@@ -152,6 +146,15 @@ namespace Hedra.Engine.Player
             this.Speed = this.BaseSpeed;
             this.MobType = MobType.Human;
             this.AddComponent(DmgComponent);
+        }
+
+	    public override void Update()
+	    {
+	        base.Update();
+	        if (_consecutiveHitsTimer.Tick())
+	        {
+	            ConsecutiveHits = 0;
+	        }
         }
 
 	    protected virtual MovementManager CreateMovementManager()
@@ -250,7 +253,18 @@ namespace Hedra.Engine.Player
 	        {
 	            Log.WriteLine(e.Message);
 	        }
-	        if(!hittedSomething) MainWeapon?.Weapon.PlaySound();
+	        if (!hittedSomething)
+	        {
+	            MainWeapon?.Weapon.PlaySound();
+	            ConsecutiveHits = 0;
+	        }
+	        else if(Class.CanAccumulateHits)
+	        {
+                _consecutiveHitsTimer.Reset();
+	            ConsecutiveHits++;
+	            int consecutiveHitsValue = ConsecutiveHits;
+                this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier, () => ConsecutiveHits == consecutiveHitsValue);
+	        }
 			Mana = Mathf.Clamp(Mana + 8, 0 , MaxMana);
 		}
 
@@ -298,16 +312,11 @@ namespace Hedra.Engine.Player
 	        ComponentManager.AddComponentWhile(effect, Condition);
 	    }
 
-	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f);
+	    public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 40f, 0f, .5f);
 
-	    public float BaseDamageEquation{
-			get
-			{
-			    float dmgToDo = this.Level * 16.0f + 4.0f;
-                dmgToDo *= this.WeaponModifier(MainWeapon);
-                return dmgToDo * this.AttackPower;
-			}
-		}
+	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f) * ConsecutiveHitsModifier;
+
+	    public float BaseDamageEquation => (this.Level * 2.75f + 16f) * this.WeaponModifier(MainWeapon);
 
 	    public float WeaponModifier(Item Weapon)
 	    {
@@ -393,5 +402,11 @@ namespace Hedra.Engine.Player
 				_isGliding = value;
 			}
 		}
+
+	    public override void Dispose()
+	    {
+            base.Dispose();
+	        this.HandLamp.Dispose();
+        }
 	}
 }

@@ -38,6 +38,7 @@ out vec4 Coords;
 out vec3 LightDir;
 out vec3 PointDiffuse;
 out vec3 vertex_position;
+out vec3 base_normal;
 
 layout(std140) uniform FogSettings {
 	vec4 U_BotColor;
@@ -78,10 +79,8 @@ void main(){
 	BotColor = U_BotColor;
 	TopColor = U_TopColor;
 
+	vec4 Vertex = vec4((InVertex + BakedPosition) * Scale - BakedPosition, 1.0);
 
-	float realScale = Scale + (Outline) ? 0.25 : 0.0;
-	vec4 Vertex = vec4((InVertex + BakedPosition) * realScale - BakedPosition, 1.0);
-	
 	Vertex += vec4(AnimationRotationPoint, 0.0);
 	Vertex = AnimationRotation * Vertex;
 	Vertex -= vec4(AnimationRotationPoint, 0.0);
@@ -90,7 +89,7 @@ void main(){
 	Vertex += vec4(LocalRotationPoint, 0.0);
 	Vertex = LocalRotation * Vertex;
 	Vertex -= vec4(LocalRotationPoint,0.0);
-	
+
 	Vertex = Matrix * Vertex;
 	
 	Vertex += vec4(AnimationPosition, 0.0);
@@ -99,7 +98,7 @@ void main(){
 	Vertex = TransMatrix * Vertex;
 	Vertex += vec4(TransPos, 0.0);
 	Vertex -= vec4(Point, 0.0);
-	
+
 	Vertex += vec4(LocalPosition,0.0);
 	
 	gl_Position = gl_ModelViewProjectionMatrix * Vertex;
@@ -165,6 +164,7 @@ void main(){
 	Color = Ambient + vec4(finalRim, 0.0) + (vec4(Diffuse,1.0) * InColor) + Specular;
 	InPos = (gl_ModelViewMatrix * Vertex).xyz;
 	vertex_position = Vertex.xyz;
+	base_normal = SurfaceNormal;
 	InNorm = normalize(mat * unitNormal); 
 	
 	//Shadows Stuff

@@ -263,7 +263,7 @@ namespace Hedra
            
 			base.OnRenderFrame(e);
 
-			GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+			GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
 
 
 		    if (!this._finishedLoading)

@@ -153,8 +153,8 @@ namespace Hedra.Engine.Player
 
         public bool Enabled
         {
-            get { return _model.Enabled; }
-            set { _model.Enabled = value; }
+            get => _model.Enabled;
+            set => _model.Enabled = value;
         }
     }
 }

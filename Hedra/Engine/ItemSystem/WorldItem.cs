@@ -40,9 +40,10 @@ namespace Hedra.Engine.ItemSystem
 			this.Scale = new Vector3(1.5f, 1.5f, 1.5f);
 			this.ItemSpecification = ItemSpecification;
 		    var modelData = ItemSpecification.Model.Clone();
-		    this._height = (float) Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y);
+		    this._height = Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y) - 1f;
             this.Mesh = ObjectMesh.FromVertexData(modelData);
-		    this.Mesh.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
+		    this.Mesh.OutlineColor = ItemUtils.TierToColor(ItemSpecification.Tier).ToVector4();
+            this.Mesh.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
 		    this.Mesh.Scale = this.Scale;
 		    this.Position = Position;
 			this.ItemId = ++_itemCounter;
@@ -52,11 +53,21 @@ namespace Hedra.Engine.ItemSystem
 		    {
 		        if (_canPickup && Key.E == EventArgs.Key) _shouldPickup = true;
 		    });
+		    var shadow = new DropShadow
+		    {
+		        Position = Position - Vector3.UnitY * 1f,
+		        DepthTest = true,
+		        DeleteWhen = () => this.Disposed,
+                Rotation = new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(Position))),
+                IsReplacementShadow = true
+		    };
+            DrawManager.DropShadows.Add(shadow);
+
 			UpdateManager.Add(this);
 		}
 		
 		public override void Update(){
-		    this.Position = new Vector3(Position.X, Physics.HeightAtPosition(Position.X, Position.Z) + _height, Position.Z);
+		    this.Position = new Vector3(Position.X, Physics.HeightAtPosition(Position.X, Position.Z) + _height + (float) Math.Cos( Time.CurrentFrame), Position.Z);
             this.Mesh.TargetRotation += Vector3.UnitY * 35f * (float) Time.deltaTime;
 
 		    float DotFunc() => Vector2.Dot((this.Position - GameManager.Player.Position).Xz.NormalizedFast(), LocalPlayer.Instance.View.LookingDirection.Xz.NormalizedFast());
@@ -75,7 +86,8 @@ namespace Hedra.Engine.ItemSystem
 			    _canPickup = false;
 			}
 		    Mesh.Tint = _canPickup ? Vector4.One * 1.5f : Vector4.One;
-		}
+		    this.Mesh.Outline = true;//_canPickup;
+        }
 		
 		public new void Dispose(){
             EventDispatcher.UnregisterKeyDown(this);

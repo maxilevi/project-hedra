@@ -54,8 +54,7 @@ namespace Hedra.Engine.QuestSystem
 			if( (Player.Position - base.Parent.Position).LengthSquared < VisiblityRange ){
 				
 				if((Player.Position-Parent.Position).LengthSquared < Radius && !Player.IsDead){
-					QuadrupedModel Model = Parent.Model as QuadrupedModel;
-					if(Model != null){
+				    if(Parent.Model is QuadrupedModel Model){
 						if(Array.IndexOf(Model.AttackAnimations, Model.Model.Animator.AnimationPlaying) == -1){
 							Parent.Model.Attack(Player, AttackDamage);
 							return;

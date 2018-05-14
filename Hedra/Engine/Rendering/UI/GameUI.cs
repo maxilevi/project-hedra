@@ -20,25 +20,31 @@ namespace Hedra.Engine.Rendering.UI
 	/// </summary>
 	public class GameUI : Panel
 	{
-		public Texture Cross, QuestLogMsg, SkillTreeMsg, Compass, MapMsg, Help;
-		public RenderableTexture ClassLogo;
-		private RenderableTexture _oxygenBackground, _staminaBackground, _staminaIcon, _oxygenIcon;
-		private LocalPlayer _player;
-		public static Vector2 TargetResolution = new Vector2(1024,578);
-		private TexturedBar _healthBar, _manaBar;
-		public TexturedBar OxygenBar, StaminaBar;
-		//public GUIText 
+	    public static Vector2 TargetResolution = new Vector2(1024, 578);
+        public readonly Texture Cross;
+	    public readonly Texture QuestLogMsg;
+	    public readonly Texture SkillTreeMsg;
+	    public readonly Texture Compass;
+	    public readonly Texture MapMsg;
+	    public readonly Texture Help;
+	    public readonly RenderableTexture ClassLogo;
+	    private readonly RenderableTexture _oxygenBackground;
+	    private readonly RenderableTexture _staminaBackground;
+	    private readonly RenderableTexture _staminaIcon;
+	    private readonly RenderableTexture _oxygenIcon;
+	    public readonly TexturedBar OxygenBar;
+	    public readonly TexturedBar StaminaBar;
+	    public readonly GUIText ConsecutiveHits;
 		
 		public GameUI(LocalPlayer Player) : base()
 		{
-			this._player = Player;
-			
-			RenderableTexture barBackgrounds = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/BarBackgrounds.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
+		    ConsecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.75f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
+            RenderableTexture barBackgrounds = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/BarBackgrounds.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			_oxygenBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			_staminaBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			
-			_healthBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/HealthBar.png"), new Vector2(-.675f, .7775f), new Vector2(0.12f, 0.022f), delegate{ return Player.Health; } , delegate{ return Player.MaxHealth; }, this);
-			_manaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/ManaBar.png"), new Vector2(-.7315f, .7265f), new Vector2(0.07f, 0.015f), delegate{ return Player.Mana; }, delegate{ return Player.MaxMana; }, this);
+			var healthBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/HealthBar.png"), new Vector2(-.675f, .7775f), new Vector2(0.12f, 0.022f), delegate{ return Player.Health; } , delegate{ return Player.MaxHealth; }, this);
+			var manaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/ManaBar.png"), new Vector2(-.7315f, .7265f), new Vector2(0.07f, 0.015f), delegate{ return Player.Mana; }, delegate{ return Player.MaxMana; }, this);
 			TexturedBar xpBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/XPBar.png"), new Vector2(-.675f, .815f), new Vector2(0.12f, 0.0065f), delegate{ return Player.XP; }, delegate{ return Player.MaxXP; }, this);
 			
 			OxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f), delegate{ return Player.Oxygen; }, delegate{ return Player.MaxOxygen; }, this);
@@ -57,6 +63,7 @@ namespace Hedra.Engine.Rendering.UI
 			Compass = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
 			Help = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Help.png"), Vector2.Zero, Vector2.One);
 			
+            this.AddElement(ConsecutiveHits);
 			this.AddElement(Compass);
 			this.AddElement(barBackgrounds);
 			this.AddElement(xpBar);
@@ -67,8 +74,8 @@ namespace Hedra.Engine.Rendering.UI
 			this.AddElement(SkillTreeMsg);
 			this.AddElement(OxygenBar);
 			this.AddElement(StaminaBar);
-			this.AddElement(_healthBar);
-			this.AddElement(_manaBar);
+			this.AddElement(healthBar);
+			this.AddElement(manaBar);
 			this.AddElement(MapMsg);
 			this.AddElement(Help);
 			

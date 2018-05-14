@@ -8,6 +8,7 @@ namespace Hedra.Engine.ClassSystem
     [HiddenClass]
     public class MageDesign : ClassDesign
     {
+        public override bool CanAccumulateHits { get; } = true;
         public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/ArcherLogo.png");
         public override HumanType Human => HumanType.Mage;
         public override float BaseSpeed => 1.35f;

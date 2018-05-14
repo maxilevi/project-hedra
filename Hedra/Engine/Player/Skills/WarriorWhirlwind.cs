@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
 			base.ManaCost = 85;
 			base.MaxCooldown = 8.5f;
-            _trail = new TrailRenderer( () => LocalPlayer.Instance.MainWeapon.Weapon.WeaponTip, Vector4.One);
+            _trail = new TrailRenderer( () => LocalPlayer.Instance.Model.LeftWeapon.WeaponTip, Vector4.One);
 			
 			WhirlwindAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWhirlwind.dae");
 			WhirlwindAnimation.OnAnimationEnd += delegate{

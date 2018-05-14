@@ -262,9 +262,9 @@ namespace Hedra.Engine.Rendering
             if (true)
             {
                 if (Attachments.Length == 1 && Attachments[0] == FramebufferAttachment.DepthAttachment)
-                	GL.Clear(ClearBufferMask.DepthBufferBit);// | ClearBufferMask.StencilBufferBit);
+                	GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
                 else
-                	GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);// | ClearBufferMask.StencilBufferBit);
+                	GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
             }
         }
 

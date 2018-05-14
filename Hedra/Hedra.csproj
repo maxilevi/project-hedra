@@ -212,6 +212,7 @@
     <Compile Include="Engine\ItemSystem\ItemTemplate.cs" />
     <Compile Include="Engine\ItemSystem\ItemTemplater.cs" />
     <Compile Include="Engine\ItemSystem\ItemType.cs" />
+    <Compile Include="Engine\ItemSystem\ItemUtils.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\WeaponFactory.cs" />
     <Compile Include="Engine\ItemSystem\EquipmentType.cs" />
     <Compile Include="Engine\Management\ISearchable.cs" />
@@ -844,6 +845,18 @@
     </None>
     <None Include="..\project-hedra-assets\Animations\GoatWalk.dae">
       <Link>Assets\Chr\GoatWalk.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\GorillaAttack.dae">
+      <Link>Assets\Chr\GorillaAttack.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\GorillaIdle.dae">
+      <Link>Assets\Chr\GorillaIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\GorillaWalk.dae">
+      <Link>Assets\Chr\GorillaWalk.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Animations\HorseAttack.dae">
@@ -4533,6 +4546,9 @@
     <Content Include="Assets\UI\SocialMedia.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Modules\Mobs\Gorilla.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Sounds\Eat.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

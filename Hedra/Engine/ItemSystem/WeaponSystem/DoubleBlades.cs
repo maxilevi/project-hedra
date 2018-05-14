@@ -21,7 +21,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     public class DoubleBlades : Weapon
     {
         public override bool IsMelee { get; protected set; } = true;
-        public override float PrimaryAttackCooldown => .125f;
+        public override float PrimaryAttackCooldown => .25f;
         public override float SecondaryAttackCooldown => 2.5f;
         private readonly ObjectMesh SecondBlade;
 

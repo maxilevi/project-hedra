@@ -154,7 +154,7 @@ namespace Hedra.Engine.ItemSystem
 
         public VertexData Model
         {
-            get { return _model; }
+            get => _model;
             set
             {
                 _model = value;

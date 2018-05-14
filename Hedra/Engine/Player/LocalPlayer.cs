@@ -182,7 +182,7 @@ namespace Hedra.Engine.Player
 
 	    public override bool CanInteract
 	    {
-	        get { return _canInteract; }
+	        get => _canInteract;
 	        set
 	        {
 	            _canInteract = value;
@@ -192,17 +192,6 @@ namespace Hedra.Engine.Player
 	    }
 
         public override void Draw(){
-			if(Oxygen != MaxOxygen && !GameSettings.Paused && UI.GamePanel.Enabled)
-				UI.GamePanel.Oxygen = true;
-			else
-				UI.GamePanel.Oxygen = false;
-			
-			if(Stamina != MaxStamina && !GameSettings.Paused && UI.GamePanel.Enabled && !this.IsUnderwater)
-				UI.GamePanel.Stamina = true;
-			else
-				UI.GamePanel.Stamina = false;
-			
-			UI.Draw();
 			base.Draw();
 			Map.Draw();
 
@@ -228,7 +217,7 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public new void Update(){
+        public override void Update(){
             base.Update();
 
             if (this.IsUnderwater && this.IsRiding)
