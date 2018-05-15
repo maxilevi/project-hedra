@@ -23,7 +23,8 @@ namespace Hedra.Engine.Rendering
 	/// </summary>
 	public class Shader : IDisposable
 	{
-	    private readonly Dictionary<string, UniformMapping> _mappings;
+	    private readonly Dictionary<string, bool> _knownMappings;
+        private readonly Dictionary<string, UniformMapping> _mappings;
 	    private readonly Dictionary<string, UniformArray> _arrayMappings;
         private readonly ShaderData _vertexShader;
 	    private readonly ShaderData _fragmentShader;
@@ -70,7 +71,8 @@ namespace Hedra.Engine.Rendering
 	        _fragmentShader = DataF;
             _mappings = new Dictionary<string, UniformMapping>();
 	        _arrayMappings = new Dictionary<string, UniformArray>();
-	        this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
+	        _knownMappings = new Dictionary<string, bool>();
+            this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
         }
 
 	    private bool UpdateSource()
@@ -98,7 +100,8 @@ namespace Hedra.Engine.Rendering
 	        {
 	            _mappings.Clear();
 	            _arrayMappings.Clear();
-	            this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
+	            _knownMappings.Clear();
+                this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
 	        }
 	    }
 
@@ -172,6 +175,15 @@ namespace Hedra.Engine.Rendering
 
             ShaderManager.RegisterShader(this);
 		}
+
+	    public bool HasUniform(string Key)
+	    {
+	        if (!_knownMappings.ContainsKey(Key))
+	        {
+	            _knownMappings.Add(Key, GL.GetUniformLocation(ShaderId, Key) != -1);
+            }
+            return _knownMappings[Key];
+	    }
 
 	    public object this[string Key]
 	    {

@@ -88,7 +88,7 @@ void main(){
 	if (Outline) {
 		vec3 unitToCamera = normalize( (inverse(gl_ModelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - vertex_position.xyz);
 		float outlineDot = max(0, 1.0-dot(base_normal, unitToCamera));
-		FColor = outlineDot * (cos(Time*10)-.0) * 8.0 * OutlineColor;
+		FColor = outlineDot * (cos(Time*10)-.0) * 2.0 * OutlineColor;
 		OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
 		OutNormal = vec4(0.0, 0.0, 0.0, 0.0);
 	} else {

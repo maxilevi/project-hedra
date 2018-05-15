@@ -36,14 +36,14 @@ namespace Hedra.Engine.Rendering.Effects
 			
 			Dst.Bind();
 			HBlurShader.Bind();
-		    this.DrawQuad(Src.TextureID[0], 0);
+		    this.DrawQuad(HBlurShader, Src.TextureID[0], 0);
 			HBlurShader.UnBind();
 			Dst.UnBind();
 
 			Src.Bind();
 			
 			VBlurShader.Bind();
-		    this.DrawQuad(Dst.TextureID[0], 0);
+		    this.DrawQuad(VBlurShader, Dst.TextureID[0], 0);
 			VBlurShader.UnBind();
 			
 			Src.UnBind();
@@ -55,7 +55,7 @@ namespace Hedra.Engine.Rendering.Effects
 			Dst.UnBind();
 		}
 		
-		public override void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false){
+		public override void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false){
 
 			GraphicsLayer.Enable(EnableCap.Texture2D);
 			GraphicsLayer.Disable(EnableCap.DepthTest);

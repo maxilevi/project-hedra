@@ -23,7 +23,7 @@ namespace Hedra.Engine.Rendering.Effects
 		public abstract void Resize();
 		public abstract void Pass(FBO Src, FBO Dst);
 		
-		public virtual void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false){
+		public virtual void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false){
 			GraphicsLayer.Enable(EnableCap.Texture2D);
 			GraphicsLayer.Disable(EnableCap.DepthTest);
 
@@ -31,9 +31,9 @@ namespace Hedra.Engine.Rendering.Effects
 
             GL.ActiveTexture(TextureUnit.Texture0);
 			GL.BindTexture(TextureTarget.Texture2D, TexID);
-			
-			MainFBO.Shader["Scale"] = Vector2.One;
-			MainFBO.Shader["Position"] = Vector3.Zero;
+
+            if (DrawingShader.HasUniform("Scale")) DrawingShader["Scale"] = Vector2.One;
+		    if (DrawingShader.HasUniform("Position"))  DrawingShader["Position"] = Vector2.Zero;
 
 		    DrawManager.UIRenderer.DrawQuad();
 

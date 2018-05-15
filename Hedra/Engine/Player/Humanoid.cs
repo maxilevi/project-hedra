@@ -314,7 +314,7 @@ namespace Hedra.Engine.Player
 
 	    public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 40f, 0f, .5f);
 
-	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f) * ConsecutiveHitsModifier;
+	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f) * Math.Max(ConsecutiveHitsModifier, 1f);
 
 	    public float BaseDamageEquation => (this.Level * 2.75f + 16f) * this.WeaponModifier(MainWeapon);
 

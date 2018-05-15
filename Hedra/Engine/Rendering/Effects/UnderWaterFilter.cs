@@ -37,13 +37,13 @@ namespace Hedra.Engine.Rendering.Effects
 			WaterEffect.Bind();
 		    //WaterEffect["Time"] = WaterMeshBuffer.WaveMovement;
 		    WaterEffect["Multiplier"] = Multiplier;
-			this.DrawQuad(Src.TextureID[0]);
+			this.DrawQuad(WaterEffect, Src.TextureID[0]);
 			WaterEffect.UnBind();
 			
 			Dst.UnBind();
 		}
 		
-		public override void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false){
+		public override void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false){
 			GraphicsLayer.Enable(EnableCap.Texture2D);
 			GraphicsLayer.Disable(EnableCap.DepthTest);
 			

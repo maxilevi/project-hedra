@@ -247,7 +247,6 @@ namespace Hedra.Engine.Rendering.UI
                     GameSettings.Bloom = !GameSettings.Bloom;
                     bloom.Text.Text = "Bloom: " + (GameSettings.Bloom ? "ON" : "OFF");
                 };
-            bloom.Disable();
 
             Button quality = new Button(new Vector2(-dist, vDist*2),
 			                     new Vector2(0.15f,0.075f), "Quality: " + ( GameSettings.Fancy ? "FANCY" : "FAST"), 0, fontColor, _normalFont);
@@ -445,13 +444,11 @@ namespace Hedra.Engine.Rendering.UI
 			Button autosave = new Button(new Vector2(0f, .2f),
 			                     new Vector2(0.15f,0.075f), "Autosave: " + ( GameSettings.Autosave ? "ON" : "OFF"), 0, fontColor, _normalFont);
 			
-			autosave.Click += new OnButtonClickEventHandler(
-				delegate{
-					if(GameSettings.Autosave)
-						GameSettings.Autosave = false;
-					else
-						GameSettings.Autosave = true;
-					autosave.Text.Text = "Autosave: " + ( GameSettings.Autosave ? "ON" : "OFF");
+			autosave.Click += (
+				delegate
+				{
+				    GameSettings.Autosave = !GameSettings.Autosave;
+				    autosave.Text.Text = "Autosave: " + ( GameSettings.Autosave ? "ON" : "OFF");
 				});
 
             _graphicsButtons.Add(quality);
@@ -461,6 +458,7 @@ namespace Hedra.Engine.Rendering.UI
 			_graphicsButtons.Add(viewDistance);
             _graphicsButtons.Add(fxaa);
 		    _graphicsButtons.Add(frameLimiter);
+		    _graphicsButtons.Add(bloom);
             //_graphicsButtons.Add(Fullscreen);
             _inputButtons.Add(invertMouse);
 			_inputButtons.Add(mouseSensitivity);
