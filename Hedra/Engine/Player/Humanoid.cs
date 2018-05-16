@@ -151,7 +151,7 @@ namespace Hedra.Engine.Player
 	    public override void Update()
 	    {
 	        base.Update();
-	        if (_consecutiveHitsTimer.Tick())
+	        if (!GameSettings.Paused && _consecutiveHitsTimer.Tick())
 	        {
 	            ConsecutiveHits = 0;
 	        }
@@ -253,20 +253,25 @@ namespace Hedra.Engine.Player
 	        {
 	            Log.WriteLine(e.Message);
 	        }
-	        if (!hittedSomething)
+	        this.ProcessAttack(hittedSomething);
+		}
+
+	    public void ProcessAttack(bool HittedSomething)
+	    {
+	        if (!HittedSomething)
 	        {
 	            MainWeapon?.Weapon.PlaySound();
 	            ConsecutiveHits = 0;
 	        }
-	        else if(Class.CanAccumulateHits)
+            else if (Class.CanAccumulateHits)
 	        {
-                _consecutiveHitsTimer.Reset();
+	            _consecutiveHitsTimer.Reset();
 	            ConsecutiveHits++;
 	            int consecutiveHitsValue = ConsecutiveHits;
-                this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier, () => ConsecutiveHits == consecutiveHitsValue);
-	        }
-			Mana = Mathf.Clamp(Mana + 8, 0 , MaxMana);
-		}
+	            this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier, () => ConsecutiveHits == consecutiveHitsValue);
+	            Mana = Mathf.Clamp(Mana + 8, 0, MaxMana);
+            }
+        }
 
 	    protected static float NewRandomFactor()
 	    {
@@ -312,9 +317,9 @@ namespace Hedra.Engine.Player
 	        ComponentManager.AddComponentWhile(effect, Condition);
 	    }
 
-	    public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 40f, 0f, .5f);
+	    public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 75f, 0f, .75f);
 
-	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f) * Math.Max(ConsecutiveHitsModifier, 1f);
+	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f) * (1f + ConsecutiveHitsModifier);
 
 	    public float BaseDamageEquation => (this.Level * 2.75f + 16f) * this.WeaponModifier(MainWeapon);
 

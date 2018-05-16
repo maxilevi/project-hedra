@@ -19,8 +19,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 {
 	public delegate void OnModifyArrowEvent(Projectile Arrow);
 		
-	public class Bow : Weapon
-	{	
+	public class Bow : RangedWeapon
+    {	
 		public override Vector3 SheathedPosition => new Vector3(1.8f,-1.0f,0.65f);
 	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
 	    public override float PrimaryAttackCooldown => .25f;
@@ -124,16 +124,15 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			arrowProj.Rotation = new Vector3(arrowProj.Rotation.X, arrowProj.Rotation.Y, arrowProj.Rotation.Z + 45*(Direction.Y-.2f)*3);
 			arrowProj.Speed = 6.0f;
 			arrowProj.Lifetime = 5f;
-			arrowProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) { 
-				float Exp;
-				Hit.Damage(Human.DamageEquation * 0.75f, Human, out Exp, true);
-				Human.XP += Exp;
-				if(KnockChance != -1){
-					if(Utils.Rng.Next(0, KnockChance) == 0)
-						Hit.KnockForSeconds(3);
-				}
+			arrowProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
+			    Hit.Damage(Human.DamageEquation * 0.75f, Human, out float exp, true);
+				Human.XP += exp;
+			    if(KnockChance != -1 && Utils.Rng.Next(0, KnockChance) == 0)
+                    Hit.KnockForSeconds(3);
 			};
-			SoundManager.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
+		    arrowProj.LandEventHandler += S => Human.ProcessAttack(false);
+		    arrowProj.HitEventHandler += (S,V) => Human.ProcessAttack(true);
+            SoundManager.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
 			arrowProj = this.AddModifiers(arrowProj);
 			return arrowProj;
 		}

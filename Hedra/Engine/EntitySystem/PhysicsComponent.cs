@@ -132,13 +132,12 @@ namespace Hedra.Engine.EntitySystem
 	        {
 	            if (Falltime > 0)
 	            {
-	                float Exp;
 	                if (Falltime > 1.75f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true) )
 	                {
 	                    var fallTime = Falltime;
 	                    ThreadManager.ExecuteOnMainThread(delegate
 	                    {
-	                        Parent.Damage(fallTime * 45f, null, out Exp, true);
+	                        Parent.Damage(fallTime * 45f, null, out _, true);
 	                        Parent.KnockForSeconds(3f);
 	                    });
 	                }
@@ -301,11 +300,14 @@ namespace Hedra.Engine.EntitySystem
 				        }
 				    }
 
-                    var human = Parent as Humanoid;
-					if(human != null && human.IsGliding){
+				    if(Parent is Humanoid human && human.IsGliding){
 						human.IsGliding = false;
 						Parent.KnockForSeconds(3f);
-					}
+				        ThreadManager.ExecuteOnMainThread(delegate
+				        {
+				            Parent.Damage(Parent.MaxHealth * .15f, Parent, out float xp);
+				        });
+				    }
 				}
 			}
 		    if (onlyY)

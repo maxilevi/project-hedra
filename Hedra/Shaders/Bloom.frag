@@ -16,7 +16,7 @@ void main(){
 	if(bright <= LumThresh) discard;
 	
 	
-	Color = vec3(1.0, 1.0, 1.0, 1.0) * .75;
+	Color = vec4(1.0, 1.0, 1.0, 1.0) * .75;
 	
 }
 

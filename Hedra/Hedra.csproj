@@ -213,6 +213,8 @@
     <Compile Include="Engine\ItemSystem\ItemTemplater.cs" />
     <Compile Include="Engine\ItemSystem\ItemType.cs" />
     <Compile Include="Engine\ItemSystem\ItemUtils.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\MeleeWeapon.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\RangedWeapon.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\WeaponFactory.cs" />
     <Compile Include="Engine\ItemSystem\EquipmentType.cs" />
     <Compile Include="Engine\Management\ISearchable.cs" />

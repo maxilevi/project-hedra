@@ -18,8 +18,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// <summary>
 	/// Description of TwoHandedSword.
 	/// </summary>
-	public class Katar : Weapon
-	{
+	public class Katar : MeleeWeapon
+    {
 	    public override bool IsMelee { get; protected set; } = true;
 	    public override float PrimaryAttackCooldown => .2f;
 	    public override float SecondaryAttackCooldown => 3.0f;

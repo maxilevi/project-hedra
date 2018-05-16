@@ -17,8 +17,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// <summary>
 	/// Description of Hands.
 	/// </summary>
-	public class Hands : Weapon
-	{
+	public class Hands : MeleeWeapon
+    {
 	    public override bool IsMelee { get; protected set; } = true;
 	    public override float PrimaryAttackCooldown => .5f;
 	    public override float SecondaryAttackCooldown => .5f;

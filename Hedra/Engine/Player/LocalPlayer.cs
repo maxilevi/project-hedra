@@ -373,18 +373,30 @@ namespace Hedra.Engine.Player
                 this.Mana += ManaRegen * Time.FrameTimeSeconds;
                 this.Stamina += (float)Time.deltaTime * 4f;
             }
-            this.Rotation = new Vector3(0, this.Rotation.Y, 0);			
-			
-			if(this.IsGliding && (this.IsUnderwater || IsGrounded)) this.IsGliding = false;
+            this.Rotation = new Vector3(0, this.Rotation.Y, 0);
+
+            if (this.IsGliding)
+            {
+                if (this.IsGrounded)
+                {
+                    this.IsGliding = false;
+                    this.KnockForSeconds(3f);
+                    this.Damage(MaxHealth * .15f, this, out float xp);
+                }
+                else if(this.IsUnderwater)
+                {
+                    this.IsGliding = false;
+                }
+            }
 
             this.Glider.Update();
-            if(!(this.IsGliding && !IsGrounded))
+            if (!(this.IsGliding && !IsGrounded) && this.Glider.Enabled)
             {
-				if(this.Glider.Enabled)this.Glider.Disable();			
-			}
-			
+               this.Glider.Disable();
+            }
 
-			Block underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
+
+            Block underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
 			Block underBlock1 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
 			Block underBlock2 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
 			Block underBlock3 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (3 + IsoSurfaceCreator.WaterQuadOffset));

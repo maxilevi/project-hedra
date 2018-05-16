@@ -21,8 +21,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// <summary>
 	/// Description of TwoHandedSword.
 	/// </summary>
-	public class Knife : Weapon
-	{
+	public class Knife : MeleeWeapon
+    {
 	    public override bool IsMelee { get; protected set; } = true;
 	    public override float PrimaryAttackCooldown => .5f;
 	    public override float SecondaryAttackCooldown => 2.5f;
