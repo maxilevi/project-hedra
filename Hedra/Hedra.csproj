@@ -4601,14 +4601,18 @@
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-        call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" true
-        call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" false
-        call "$(SolutionDir)/utilities/ShaderCompiler.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" false
+          <PropertyGroup>
+    <PostBuildEvent>
+        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" text
+        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" binary
+        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" binary
+    </PostBuildEvent>
+  </PropertyGroup>
     </PostBuildEvent>
     <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">
-        mono "$(TargetDir)../../../utilities/ShaderCompiler.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" true
-        mono "$(TargetDir)../../../utilities/ShaderCompiler.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" false
-        mono "$(TargetDir)../../../utilities/ShaderCompiler.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" false
+        mono "$(TargetDir)../../../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" text
+        mono "$(TargetDir)../../../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" binary
+        mono "$(TargetDir)../../../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" binary
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
@@ -4623,11 +4627,6 @@
     <OutputPath>bin\Debug\</OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <WarningLevel>1</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" text
-call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" binary
-call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" binary</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions />
 </Project>
