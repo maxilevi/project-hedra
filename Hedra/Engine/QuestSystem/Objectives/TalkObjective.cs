@@ -57,7 +57,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 if (model == null) return UserInterface.QuestFbo.TextureID[0];
                 model.Model.Scale *= 2f;
 
-                GameManager.Player.UI.DrawPreview(_talkTarget.Model, UserInterface.QuestFbo);
+                //GameManager.Player.UI.DrawPreview(_talkTarget.Model, UserInterface.QuestFbo);
 
                 model.Model.Scale /= 2f;
                 return UserInterface.QuestFbo.TextureID[0];

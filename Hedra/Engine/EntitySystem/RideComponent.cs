@@ -24,7 +24,7 @@ namespace Hedra.Engine.EntitySystem
 		public bool HasRider;
 		public bool UnRidable = false;
 		public float HeightAddon = 0;
-		private AIComponent AI;
+		private AIComponent_deprecated AI;
 		private HealthBarComponent _healthBar;
         private bool _shouldRide;
         private bool _shouldUnride;
@@ -32,7 +32,7 @@ namespace Hedra.Engine.EntitySystem
         private bool _canUnride;
 
         public RideComponent(Entity Parent) : base(Parent) {
-			AI = Parent.SearchComponent<AIComponent>();
+			AI = Parent.SearchComponent<AIComponent_deprecated>();
 			_healthBar = Parent.SearchComponent<HealthBarComponent>();
             EventDispatcher.RegisterKeyDown(this, delegate(object Object, KeyboardKeyEventArgs EventArgs)
             {
@@ -65,7 +65,7 @@ namespace Hedra.Engine.EntitySystem
 		    {
 		        _canRide = false;
 		    }
-			if(AI == null) AI = Parent.SearchComponent<AIComponent>();
+			if(AI == null) AI = Parent.SearchComponent<AIComponent_deprecated>();
 			if(_healthBar == null) _healthBar = Parent.SearchComponent<HealthBarComponent>();
 
 		    if (HasRider && Rider.IsRiding)
@@ -125,7 +125,7 @@ namespace Hedra.Engine.EntitySystem
 				}
 			}
 
-		    if (AI == null) AI = Parent.SearchComponent<AIComponent>();
+		    if (AI == null) AI = Parent.SearchComponent<AIComponent_deprecated>();
 		    if (_healthBar == null) _healthBar = Parent.SearchComponent<HealthBarComponent>();
 
 

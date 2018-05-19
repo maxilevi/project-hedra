@@ -78,10 +78,13 @@ namespace Hedra.Engine.EntitySystem
 				Parent.Model.Run();
 			}else if (Target != null && (Target.Position - Parent.Position).LengthSquared < Distance*.75f * Distance*.75f * Chunk.BlockSize * Chunk.BlockSize){
 					
-				if(Target != null && Target != Owner){
+				if(Target != null && Target != Owner)
+                {
 					Parent.Model.Attack(Target, Parent.AttackDamage);
 					if(Target.IsDead) Target = null;
-				}else{
+				}
+                else
+                {
 					Parent.Model.Idle();
 				}
 			}

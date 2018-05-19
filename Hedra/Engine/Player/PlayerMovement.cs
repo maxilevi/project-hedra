@@ -99,7 +99,7 @@ namespace Hedra.Engine.Player
                 if (keysPresses < 1f) keysPresses *= 1.5f;
 
                 _targetAngles.Z = 5f * (_player.View.StackedYaw - _yaw);
-                _targetAngles = Mathf.Clamp(_targetAngles, -15f, 15f);
+                _targetAngles = Mathf.Clamp(_targetAngles, -10f, 10f);
                 _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.deltaTime * 8f);
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.deltaTime * 2f);
                 if (GameManager.Keyboard[Key.W])
@@ -192,7 +192,6 @@ namespace Hedra.Engine.Player
                     }
                     _glidingCooldown = .25f;
                     _player.IsGliding = !_player.IsGliding;
-                    _player.Glider.Enabled = _player.IsGliding;
                 }
             });
 

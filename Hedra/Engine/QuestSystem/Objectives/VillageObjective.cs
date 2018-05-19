@@ -55,7 +55,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         {
             get
             {
-                GameManager.Player.UI.DrawPreview(_iconMesh, UserInterface.QuestFbo);
+                //GameManager.Player.UI.DrawPreview(_iconMesh, UserInterface.QuestFbo);
                 return UserInterface.QuestFbo.TextureID[0];
             }
         }

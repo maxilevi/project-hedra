@@ -23,7 +23,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     /// <summary>
     /// Description of Weapon.
     /// </summary>
-    public abstract class Weapon
+    public abstract class Weapon : IModel
     {
         public ObjectMesh MainMesh { get; }
         public ObjectMesh[] Meshes { get; private set; }
@@ -58,6 +58,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         private bool _onAttackStance;
         private Vector3 _scale = Vector3.One;
         private float _alpha = 1f;
+        private bool _applyFog;
+        private bool _pause;
         private bool _effectApplied;
 
         protected Weapon(VertexData MeshData)
@@ -332,6 +334,36 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                     Meshes[i].Enabled = value;
                 }
                 _enabled = value;
+            }
+        }
+
+        public bool ApplyFog
+        {
+            get => _applyFog;
+            set
+            {
+                if (_applyFog == value) return;
+                _applyFog = value;
+                this.GatherMembers();
+                for (var i = 0; i < Meshes.Length; i++)
+                {
+                    Meshes[i].ApplyFog = _applyFog;
+                }
+            }
+        }
+
+        public bool Pause
+        {
+            get => _pause;
+            set
+            {
+                if (_pause == value) return;
+                _pause = value;
+                this.GatherMembers();
+                for (var i = 0; i < Meshes.Length; i++)
+                {
+                    Meshes[i].Pause = _pause;
+                }
             }
         }
 

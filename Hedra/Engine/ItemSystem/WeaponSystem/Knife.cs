@@ -23,7 +23,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// </summary>
 	public class Knife : MeleeWeapon
     {
-	    public override bool IsMelee { get; protected set; } = true;
 	    public override float PrimaryAttackCooldown => .5f;
 	    public override float SecondaryAttackCooldown => 2.5f;
         private readonly ObjectMesh KnifeSheath;

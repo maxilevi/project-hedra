@@ -253,14 +253,14 @@ namespace Hedra.Engine.Player
 	        {
 	            Log.WriteLine(e.Message);
 	        }
-	        this.ProcessAttack(hittedSomething);
+            if(!hittedSomething) MainWeapon?.Weapon.PlaySound();
+            this.ProcessAttack(hittedSomething);
 		}
 
 	    public void ProcessAttack(bool HittedSomething)
 	    {
 	        if (!HittedSomething)
 	        {
-	            MainWeapon?.Weapon.PlaySound();
 	            ConsecutiveHits = 0;
 	        }
             else if (Class.CanAccumulateHits)
@@ -321,7 +321,7 @@ namespace Hedra.Engine.Player
 
 	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f) * (1f + ConsecutiveHitsModifier);
 
-	    public float BaseDamageEquation => (this.Level * 2.75f + 16f) * this.WeaponModifier(MainWeapon);
+	    public float BaseDamageEquation => (this.Level * 2.75f + 16f) * this.WeaponModifier(MainWeapon) * this.AttackPower;
 
 	    public float WeaponModifier(Item Weapon)
 	    {

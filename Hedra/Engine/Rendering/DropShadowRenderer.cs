@@ -78,7 +78,7 @@ namespace Hedra.Engine.Rendering
 			lock(_shadows){
 				_shouldShadows.Clear();
 				for(int i = 0; i < _shadows.Count; i++){
-					if ((!GameSettings.SSAO || _shadows[i].IsReplacementShadow) && _shadows[i].ShouldDraw && DrawManager.FrustumObject.PointInFrustum(_shadows[i].Position))
+					if ((!GameSettings.SSAO || _shadows[i].IsCosmeticShadow) && _shadows[i].ShouldDraw && DrawManager.FrustumObject.PointInFrustum(_shadows[i].Position))
 						_shouldShadows.Add(_shadows[i]);
 				}
 			}

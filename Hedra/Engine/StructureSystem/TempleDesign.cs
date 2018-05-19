@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
@@ -39,8 +40,7 @@ namespace Hedra.Engine.StructureSystem
 
             ThreadManager.ExecuteOnMainThread(delegate
             {
-                MobType bossType;
-                Entity treeBoss = BossGenerator.Generate(rng, out bossType);
+                Entity treeBoss = BossGenerator.Generate(new [] {MobType.Gorilla, MobType.Troll}, rng);
 
                 var prize = new Chest(Vector3.TransformPosition(Vector3.UnitZ * +10f + Vector3.UnitX * -80f, transMatrix),
                     ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
@@ -49,7 +49,7 @@ namespace Hedra.Engine.StructureSystem
 
                 treeBoss.Position = prize.Position.Xz.ToVector3() - Vector3.UnitZ * 30f;
                 treeBoss.Model.Position = prize.Position.Xz.ToVector3();
-                treeBoss.SearchComponent<BossAIComponent>().Protect = () => prize.Position;
+                //treeBoss.SearchComponent<BossAIComponent>().Protect = () => prize.Position;
 
                 World.AddStructure(prize);
                 underChunk.AddStaticElement(model);

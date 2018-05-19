@@ -24,32 +24,32 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of SheepModel.
 	/// </summary>
-	public class QuadrupedModel : Model, IMountable, IAudible, IDisposeAnimation
-    {
-		
-		public bool IsAttacking { get; private set; }
+	public class QuadrupedModel : EntityModel, IMountable, IAudible, IDisposeAnimation
+    {	
+        public const float MaxAttackCooldown = 1.5f;
+        public bool IsAttacking { get; private set; }
+        public bool IsRunning => this.Model.Animator.AnimationPlaying == this.WalkAnimation;
+        public bool IsIdle => this.Model.Animator.AnimationPlaying == this.IdleAnimation;
         public bool AlignWithTerrain { get; set; } = true;
-		private float _targetAlpha = 1f;
+        public bool IsMountable { get; set; }
+        public new AnimatedModel Model { get; protected set; }
+        public Animation IdleAnimation { get; }
+        public Animation WalkAnimation { get; }
+        public Animation[] AttackAnimations { get; }
+
 	    private float _targetGain = 1f;
         private float _attackCooldown;
         private Quaternion _targetTerrainOrientation = Quaternion.Identity;
         private Quaternion _terrainOrientation = Quaternion.Identity;
         private Quaternion _quaternionModelRotation = Quaternion.Identity;
+        private Quaternion _quaternionTargetRotation;
+        private Vector3 _eulerTargetRotation;
+        private Vector3 _rotation;
         private readonly AreaSound _sound;
 
-		public Entity Parent;
-		public bool IsMountable {get; set;}
-		public const float AttackCooldown = 1.5f;
-		
-		public AnimatedModel Model;
-		public Animation IdleAnimation;
-		public Animation WalkAnimation;
-		public Animation[] AttackAnimations;
 
-		public QuadrupedModel(Entity Parent, ModelTemplate Template)
+		public QuadrupedModel(Entity Parent, ModelTemplate Template) : base(Parent)
 		{
-			this.Parent = Parent;
-		    _attackCooldown = AttackCooldown;
             var rng = new Random(Parent.MobSeed);
 
 			Model = AnimationModelLoader.LoadEntity(Template.Path);
@@ -73,7 +73,8 @@ namespace Hedra.Engine.EntitySystem
 		        };
             }
 			
-			this.Model.Size = (this.Parent.BaseBox.Max - this.Parent.BaseBox.Min);
+			this.Model.Size = this.Parent.BaseBox.Max - this.Parent.BaseBox.Min;
+		    this.Height = this.Model.Size.Y;
 			this.Idle();
 
 		    var soundType = Parent.MobType == MobType.Horse ? SoundType.HorseRun : SoundType.HumanRun;
@@ -101,9 +102,8 @@ namespace Hedra.Engine.EntitySystem
 		    void AttackHandler(Animation Sender)
 		    {
 		        if (!Parent.InAttackRange(Damagee)) return;
-		        float exp;
-		        Damagee.Damage(Damage, this.Parent, out exp);
 
+		        Damagee.Damage(Damage, this.Parent, out float exp);
 		        selectedAnimation.OnAnimationMid -= AttackHandler;
 		    }
 
@@ -111,33 +111,32 @@ namespace Hedra.Engine.EntitySystem
 			
 			Model.PlayAnimation(selectedAnimation);
 			this.IsAttacking = true;
-		    _attackCooldown = AttackCooldown;
+		    _attackCooldown = MaxAttackCooldown;
         }
 		
 		public override void Update(){
+            base.Update();
+
 			if(Model.Animator.AnimationPlaying == null)
 				this.Idle();
-			
-			if(base.Disposed) this.Model.Dispose();
 
 		    if (Model != null)
 		    {
 		        if (Model.Rendered)
+		        {
 		            Model.Update();
 
-		        _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))).ExtractRotation() : Quaternion.Identity;
-		        _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.unScaledDeltaTime * 8f);
-		        Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
-                Model.Position = this.Position + Vector3.UnitY * 0.0f;
-                _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation,  Time.unScaledDeltaTime * 8f);
-		        Model.Rotation = _quaternionModelRotation.ToEuler();
-                this.Rotation = Model.Rotation;
-                Model.BaseTint = Mathf.Lerp(Model.BaseTint, this.BaseTint, (float) Time.unScaledDeltaTime * 6f);
-		        Model.Tint = Mathf.Lerp(Model.Tint, this.Tint, (float) Time.unScaledDeltaTime * 6f);
-		        Model.Alpha = Mathf.Lerp(Model.Alpha, this._targetAlpha, (float) Time.ScaledFrameTimeSeconds * 8f);
+		            _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))) .ExtractRotation() : Quaternion.Identity;
+		            _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.unScaledDeltaTime * 8f);
+		            Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
+		            _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.unScaledDeltaTime * 8f);
+		            Model.Rotation = _quaternionModelRotation.ToEuler();
+		            Model.Position = this.Position + Vector3.UnitY * 0.0f;
+                    this.Rotation = Model.Rotation; 
+		        }
 		    }
 
-		    if (!this.Disposed)
+		    if (!base.Disposed)
 		    {
 		        _sound.Position = this.Position;
 		        _sound.Update(this.IsRunning);
@@ -158,8 +157,8 @@ namespace Hedra.Engine.EntitySystem
 
         public float DisposeTime
         {
-            get { return Model.DisposeTime; }
-            set { Model.DisposeTime = value; }
+            get => Model.DisposeTime;
+            set => Model.DisposeTime = value;
         }
 
         public void Recompose()
@@ -168,78 +167,43 @@ namespace Hedra.Engine.EntitySystem
             DisposeTime = 0;
         }
 
-        public override void Run(){
-			
-			if(this.IsAttacking)
-				return;
+        public override void Run()
+        {
+		
+			if(this.IsAttacking) return;
 			
 			if(Model != null && Model.Animator.AnimationPlaying != WalkAnimation)
 				Model.PlayAnimation(WalkAnimation);
 		}
-		public override void Idle(){
-			if(this.IsAttacking)
-				return;
+
+		public override void Idle()
+        {
+			if(this.IsAttacking) return;
 			
 			if(Model != null && Model.Animator.AnimationPlaying != IdleAnimation)
 				Model.PlayAnimation(IdleAnimation);
 		}
 		
-		public void Draw(){
+		public override void Draw()
+        {
 			this.Model.Draw();
 		}
 
-	    private bool IsRunning => this.Model.Animator.AnimationPlaying == this.WalkAnimation;
-	    private bool IsIdle => this.Model.Animator.AnimationPlaying == this.IdleAnimation;
+        public override Vector3 Position { get; set; }
 
-        private Quaternion _quaternionTargetRotation;
-        private Vector3 _eulerTargetRotation;
         public override Vector3 TargetRotation
         {
-            get { return _eulerTargetRotation; }
+            get => _eulerTargetRotation;
             set
             {
                 _eulerTargetRotation = value;
                 _quaternionTargetRotation = QuaternionMath.FromEuler(_eulerTargetRotation * Mathf.Radian);
             }
         }
-
-        public override float Alpha {
-			get { return this._targetAlpha; }
-			set {
-				this._targetAlpha = value;				
-			}
-		}
-		
-		public override bool ApplyFog{
-			get{ return Model.Fog; }
-			set{ Model.Fog = value;}
-		}
-		
-		public override bool Pause {
-			get { return base.Pause; }
-			set { 
-				base.Pause = value;
-				Model.Animator.Stop = value;
-			}
-		}
-		
-		private bool _enabled = true;
-		public override bool Enabled{
-			get{ return _enabled; }
-			set{
-				Model.Enabled = value;
-				_enabled = value;
-			}
-		}
-
-        public override Vector3 Position { get; set; }
-
-        private Vector3 _rotation;
-		public override Vector3 Rotation{
-			get{
-				return _rotation;
-			}
-			set{
+		public override Vector3 Rotation
+        {
+			get => _rotation;
+		    set{
 				this._rotation = value;
 				
 				if( float.IsNaN(this._rotation.X) || float.IsNaN(this._rotation.Y) || float.IsNaN(this._rotation.Z))

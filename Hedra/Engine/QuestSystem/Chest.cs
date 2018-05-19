@@ -49,9 +49,9 @@ namespace Hedra.Engine.QuestSystem
 			this.OpenAnimation.Loop = false;
 			this.OpenAnimation.Speed = 1.5f;
 			this.OpenAnimation.OnAnimationEnd += delegate { 
-				WorldItem WorldItem = World.DropItem(ItemSpecification, this.Position);
-				WorldItem.Position = new Vector3(WorldItem.Position.X, WorldItem.Position.Y + .75f * this.Scale.Y, WorldItem.Position.Z);
-				WorldItem.OnPickup += delegate(LocalPlayer Player)
+				var worldItem = World.DropItem(ItemSpecification, this.Position);
+				worldItem.Position = new Vector3(worldItem.Position.X, worldItem.Position.Y + .75f * this.Scale.Y, worldItem.Position.Z);
+				worldItem.OnPickup += delegate(LocalPlayer Player)
 				{
 				    OnPickup?.Invoke(Player);
 				};
@@ -59,7 +59,7 @@ namespace Hedra.Engine.QuestSystem
 			
 			this.Model.PlayAnimation(IdleAnimation);
 			this.Model.Scale = Vector3.One * 4.5f;
-			this.Model.Fog = true;
+			this.Model.ApplyFog = true;
             EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyboardKeyEventArgs EventArgs)
             {
                 _shouldOpen = EventArgs.Key == Key.E && _canOpen;

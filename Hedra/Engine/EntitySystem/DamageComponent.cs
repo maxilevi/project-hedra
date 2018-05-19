@@ -79,7 +79,7 @@ namespace Hedra.Engine.EntitySystem
             if (!Parent.IsStatic && PlaySound && (LocalPlayer.Instance.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
             {
                 var baseDamage = Damager != null ? (Damager as Humanoid)?.BaseDamageEquation 
-                    ?? (Damager.SearchComponent<AIComponent>() != null ? Damager.AttackDamage * .3f : Amount * .3f) : Amount / 3f;
+                    ?? (Damager.SearchComponent<AIComponent_deprecated>() != null ? Damager.AttackDamage * .3f : Amount * .3f) : Amount / 3f;
                 Color color = Color.White;
                 float dmgDiff = Amount / baseDamage;
                 if (dmgDiff > 1.85f) color = Color.Gold;
@@ -100,6 +100,12 @@ namespace Hedra.Engine.EntitySystem
                 DamageLabels.Add(dmgLabel);
             }
             Exp = 0;
+
+            if (PlaySound)
+            {
+                SoundManager.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SwooshSound, Parent.Position, 1f, 80f);
+            }
+
             if (shouldMiss || Immune) return;
             _tintTimer = 0.25f;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
@@ -109,9 +115,6 @@ namespace Hedra.Engine.EntitySystem
                 for (int i = 0; i < 10; i++)
                     Parent.Physics.Move(direction * 1.5f * (float)Time.deltaTime);
             }
-
-            if (PlaySound)
-                SoundManager.PlaySoundWithVariation(SoundType.HitSound, Parent.Position, 1f, 80f);
 
             if (Parent.Health == 0 && !Parent.IsDead)
             {

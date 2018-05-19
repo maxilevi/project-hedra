@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 
@@ -10,6 +11,7 @@ namespace Hedra.Engine.ModuleSystem
     {
 
         public static Dictionary<string, Type> EffectTable;
+        public static Dictionary<string, Type> AITable;
 
         public string Name { get; set; }
         public float MaxHealth { get; set; }
@@ -34,6 +36,12 @@ namespace Hedra.Engine.ModuleSystem
                 {"Knock", typeof(KnockComponent)}
             };
 
+            AITable = new Dictionary<string, Type>
+            {
+                {"Friendly", typeof(FriendlyAIComponent)},
+                {"Neutral", typeof(NeutralAIComponent)},
+                {"Hostile", typeof(HostileAIComponent)},
+            };
 
             foreach (KeyValuePair<string, Type> pair in EffectTable)
             {
@@ -52,8 +60,6 @@ namespace Hedra.Engine.ModuleSystem
             Mob.AttackDamage = this.DamageFormula(AttackDamage);
             Mob.Speed = Speed;
 
-            var ai = (AIType) Enum.Parse(typeof(AIType), this.AIType);
-            Mob.AddComponent(new AIComponent(Mob, ai));
             Mob.SearchComponent<HealthBarComponent>().DistanceFromBase = Mob.BaseBox.Max.Y - Mob.BaseBox.Min.Y + 0.1f;
 
             var dmg = new DamageComponent(Mob)
@@ -94,6 +100,7 @@ namespace Hedra.Engine.ModuleSystem
                 };
                 Mob.AddComponent(drop);
             }
+            Mob.AddComponent((EntityComponent)Activator.CreateInstance(AITable[this.AIType], Mob));
         }
     }
 }

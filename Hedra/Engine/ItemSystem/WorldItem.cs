@@ -8,7 +8,7 @@
  */
 
 using System;
-using System.Runtime.Remoting.Messaging;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -22,12 +22,12 @@ namespace Hedra.Engine.ItemSystem
 {
 	public delegate void OnItemCollect(LocalPlayer Player);
 
-	public class WorldItem : Model, IUpdatable
+	public class WorldItem : EntityModel, IUpdatable
 	{
-		private static ushort _itemCounter;
+	    public new ObjectMesh Model { get; protected set; }
+        private static ushort _itemCounter;
 		public bool PickedUp { get; private set; }
 		public ushort ItemId {get; set;}
-		public ObjectMesh Mesh;
 		public Item ItemSpecification;
 		public event OnItemCollect OnPickup;
 	    private readonly float _height;
@@ -35,18 +35,17 @@ namespace Hedra.Engine.ItemSystem
 	    private bool _shouldPickup;
 	    private bool _canPickup;
 
-        public WorldItem(Item ItemSpecification, Vector3 Position)
+        public WorldItem(Item ItemSpecification, Vector3 Position) : base(null)
 		{
-			this.Scale = new Vector3(1.5f, 1.5f, 1.5f);
-			this.ItemSpecification = ItemSpecification;
-		    var modelData = ItemSpecification.Model.Clone();
-		    this._height = Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y) - 1f;
-            this.Mesh = ObjectMesh.FromVertexData(modelData);
-		    this.Mesh.OutlineColor = ItemUtils.TierToColor(ItemSpecification.Tier).ToVector4();
-            this.Mesh.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
-		    this.Mesh.Scale = this.Scale;
+            var modelData = ItemSpecification.Model.Clone();
+		    this.ItemSpecification = ItemSpecification;
+		    this.ItemId = ++_itemCounter;
+            this.Model = ObjectMesh.FromVertexData(modelData);
+		    this.Model.OutlineColor = ItemUtils.TierToColor(ItemSpecification.Tier).ToVector4();
+            this.Model.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
+		    this.Scale = new Vector3(1.5f, 1.5f, 1.5f);
 		    this.Position = Position;
-			this.ItemId = ++_itemCounter;
+            this.Height = Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y);
 		    this.OnPickup += Player => PickedUp = true;
 
 		    EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyboardKeyEventArgs EventArgs)
@@ -55,20 +54,23 @@ namespace Hedra.Engine.ItemSystem
 		    });
 		    var shadow = new DropShadow
 		    {
-		        Position = Position - Vector3.UnitY * 1f,
+		        Position = Position - Vector3.UnitY * 1.5f,
 		        DepthTest = true,
 		        DeleteWhen = () => this.Disposed,
                 Rotation = new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(Position))),
-                IsReplacementShadow = true
+                IsCosmeticShadow = true,
+                Opacity = .5f
 		    };
             DrawManager.DropShadows.Add(shadow);
-
+            
 			UpdateManager.Add(this);
 		}
 		
-		public override void Update(){
-		    this.Position = new Vector3(Position.X, Physics.HeightAtPosition(Position.X, Position.Z) + _height + (float) Math.Cos( Time.CurrentFrame), Position.Z);
-            this.Mesh.TargetRotation += Vector3.UnitY * 35f * (float) Time.deltaTime;
+		public override void Update()
+		{
+		    var heightAtPosition = Physics.HeightAtPosition(Position.X, Position.Z);
+            this.Position = new Vector3(Position.X, Math.Max(heightAtPosition + _height, heightAtPosition + _height + (float) Math.Cos( Time.CurrentFrame)), Position.Z);
+            this.Model.TargetRotation += Vector3.UnitY * 35f * (float) Time.deltaTime;
 
 		    float DotFunc() => Vector2.Dot((this.Position - GameManager.Player.Position).Xz.NormalizedFast(), LocalPlayer.Instance.View.LookingDirection.Xz.NormalizedFast());
 
@@ -85,8 +87,17 @@ namespace Hedra.Engine.ItemSystem
 			{
 			    _canPickup = false;
 			}
-		    Mesh.Tint = _canPickup ? Vector4.One * 1.5f : Vector4.One;
-		    this.Mesh.Outline = true;//_canPickup;
+		    this.Model.Tint = _canPickup ? Vector4.One * 1.5f : Vector4.One;
+		    this.Model.Outline = true;
+
+		    if (!ItemSpecification.IsEquipment && (this.Position - GameManager.Player.Position).Xz.LengthSquared < 12 * 12 
+                && GameManager.Player.Inventory.Search(I => I.Name == ItemSpecification.Name) != null)
+		    {
+		        if (LocalPlayer.Instance.Inventory.HasAvailableSpace && !PickedUp && !Disposed)
+		        {
+		            OnPickup?.Invoke(GameManager.Player);
+                }
+            }
         }
 		
 		public new void Dispose(){
@@ -95,8 +106,5 @@ namespace Hedra.Engine.ItemSystem
 			World.RemoveItem(this);
 			base.Dispose();
 		}
-		
-		public override void Run(){}
-		public override void Idle(){}
 	}
 }

@@ -6,29 +6,28 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Generation;
 
 namespace Hedra.Engine.EntitySystem
 {
 	/// <summary>
 	/// Description of StaticModel.
 	/// </summary>
-	public class StaticModel : Model
+	public class StaticModel : EntityModel
 	{
-		public ObjectMesh Mesh;
-		public Entity Parent;
-		public override Vector3 TargetRotation {get; set;}
-		
-		public StaticModel(){}
-		public StaticModel(Entity Parent, VertexData BaseMesh) : base(){
-			this.Mesh = ObjectMesh.FromVertexData(BaseMesh);
-			this.Parent = Parent;
-		}
-		public override void Update(){}
-		public override void Run(){}
-		public override void Idle(){}
-	}
+	    public override bool IsStatic => true;
+        public new ObjectMesh Model { get; protected set; }
+
+	    public StaticModel(Entity Parent, VertexData BaseMesh) : base(Parent)
+	    {
+	        this.Model = ObjectMesh.FromVertexData(BaseMesh);
+        }
+
+        public StaticModel(VertexData BaseMesh) : this(null, BaseMesh) { }
+
+	    public override void Dispose()
+	    {
+	        Model.Dispose();
+	    }
+    }
 }

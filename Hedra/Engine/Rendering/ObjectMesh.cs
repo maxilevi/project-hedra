@@ -10,7 +10,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering
 {
-	public class ObjectMesh : IRenderable, ICullable, IDisposable
+	public class ObjectMesh : IRenderable, ICullable, IDisposable, IModel
 	{
 	    public Vector3 TargetRotation { get; set; }
 	    public Vector3 TargetPosition { get; set; }
@@ -110,8 +110,14 @@ namespace Hedra.Engine.Rendering
 			get => _buffer.Point;
 		    set => _buffer.Point = value;
 		}
-		
-		public Vector3 Rotation{
+
+	    public bool Pause
+	    {
+	        get => _buffer.Pause;
+	        set => _buffer.Pause = value;
+	    }
+
+        public Vector3 Rotation{
 			get => _buffer.Rotation;
 		    set{
 				float valY = value.Y;

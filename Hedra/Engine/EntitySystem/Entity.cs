@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
@@ -41,7 +42,7 @@ namespace Hedra.Engine.EntitySystem
         private readonly TickSystem _tickSystem;
 
         protected List<EntityComponent> Components = new List<EntityComponent>();
-                protected bool Splashed { get; set; }
+        protected bool Splashed { get; set; }
 
         public event OnAttackEventHandler OnAttacking;
         public event OnAttackEventHandler BeforeAttacking;
@@ -116,8 +117,7 @@ namespace Hedra.Engine.EntitySystem
         }
 
         public bool IsInvisible { get; set; }
-
-        public bool IsStatic => Model is StaticModel;
+        public bool IsStatic => Model.IsStatic;
         public bool IsUnderwater { get; set; }
 
         public bool Knocked
@@ -148,7 +148,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public Model Model { get; set; }
+        public EntityModel Model { get; set; }
 
         public string Name
         {

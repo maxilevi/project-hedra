@@ -98,6 +98,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\AISystem\AIState.cs" />
+    <Compile Include="Engine\AISystem\AIType.cs" />
+    <Compile Include="Engine\AISystem\AttackingBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviour.cs" />
+    <Compile Include="Engine\AISystem\FollowBehaviour.cs" />
+    <Compile Include="Engine\AISystem\FriendlyAIComponent.cs" />
+    <Compile Include="Engine\AISystem\HostileAIComponent.cs" />
+    <Compile Include="Engine\AISystem\IdleBehaviour.cs" />
+    <Compile Include="Engine\AISystem\NeutralAIComponent.cs" />
+    <Compile Include="Engine\AISystem\RetaliateBehaviour.cs" />
+    <Compile Include="Engine\AISystem\RoamBehaviour.cs" />
+    <Compile Include="Engine\AISystem\WalkBehaviour.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeColorsDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeEnviromentDesign.cs" />
@@ -186,7 +198,9 @@
     <Compile Include="Engine\ClassSystem\RogueDesign.cs" />
     <Compile Include="Engine\ClassSystem\WarriorDesign.cs" />
     <Compile Include="Engine\CompatibilityManager.cs" />
+    <Compile Include="Engine\AISystem\BaseAIComponent.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
+    <Compile Include="Engine\EntitySystem\EntityModel.cs" />
     <Compile Include="Engine\EntitySystem\HealthBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\SlowingComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedBonusComponent.cs" />
@@ -248,7 +262,7 @@
     <Compile Include="Engine\ModuleSystem\SpawnerLoader.cs" />
     <Compile Include="Engine\ModuleSystem\SpawnerSettings.cs" />
     <Compile Include="Engine\ModuleSystem\SpawnTemplate.cs" />
-    <Compile Include="Engine\EntitySystem\AIComponent.cs" />
+    <Compile Include="Engine\EntitySystem\AIComponent_deprecated.cs" />
     <Compile Include="Engine\EntitySystem\BerryBushComponent.cs" />
     <Compile Include="Engine\EntitySystem\BleedComponent.cs" />
     <Compile Include="Engine\EntitySystem\BleedingComponent.cs" />
@@ -261,7 +275,6 @@
     <Compile Include="Engine\EntitySystem\KnockComponent.cs" />
     <Compile Include="Engine\EntitySystem\MerchantComponent.cs" />
     <Compile Include="Engine\ModuleSystem\MobFactory.cs" />
-    <Compile Include="Engine\EntitySystem\MosquitosModel.cs" />
     <Compile Include="Engine\EntitySystem\MountAIComponent.cs" />
     <Compile Include="Engine\EntitySystem\PoisonComponent.cs" />
     <Compile Include="Engine\EntitySystem\RideComponent.cs" />
@@ -487,10 +500,8 @@
     <Compile Include="Engine\Player\WeaponAttack.cs" />
     <Compile Include="Engine\QuestSystem\ArcherAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\BlacksmithComponent.cs" />
-    <Compile Include="Engine\QuestSystem\BoarBossAIComponent.cs" />
-    <Compile Include="Engine\QuestSystem\BossAIComponent.cs" />
-    <Compile Include="Engine\QuestSystem\BossHealthBarComponent.cs" />
-    <Compile Include="Engine\QuestSystem\BossGenerator.cs" />
+    <Compile Include="Engine\EntitySystem\BossSystem\BossHealthBarComponent.cs" />
+    <Compile Include="Engine\EntitySystem\BossSystem\BossGenerator.cs" />
     <Compile Include="Engine\QuestSystem\Cage.cs" />
     <Compile Include="Engine\QuestSystem\Campfire.cs" />
     <Compile Include="Engine\QuestSystem\CombatAIComponent.cs" />
@@ -501,7 +512,6 @@
     <Compile Include="Engine\QuestSystem\Graveyard.cs" />
     <Compile Include="Engine\QuestSystem\Chest.cs" />
     <Compile Include="Engine\QuestSystem\ClaimableStructure.cs" />
-    <Compile Include="Engine\QuestSystem\FireGolemAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\IClaimable.cs" />
     <Compile Include="Engine\QuestSystem\LampPost.cs" />
     <Compile Include="Engine\QuestSystem\MageAIComponent.cs" />
@@ -529,7 +539,6 @@
     <Compile Include="Engine\QuestSystem\QuestManager.cs" />
     <Compile Include="Engine\QuestSystem\HeadIconComponent.cs" />
     <Compile Include="Engine\QuestSystem\Shrine.cs" />
-    <Compile Include="Engine\QuestSystem\SpiderBossAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\BaseStructure.cs" />
     <Compile Include="Engine\Reflection.cs" />
     <Compile Include="Engine\Rendering\Colors.cs" />
@@ -548,7 +557,6 @@
     <Compile Include="Engine\StructureSystem\BanditCampDesign.cs" />
     <Compile Include="Engine\StructureSystem\StructureGenerator.cs" />
     <Compile Include="Engine\QuestSystem\TravellingMerchant.cs" />
-    <Compile Include="Engine\QuestSystem\TurtleBossAIComponent.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageGenerator.cs" />
     <Compile Include="Engine\QuestSystem\VillagerAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\WarriorAIComponent.cs" />
@@ -607,7 +615,7 @@
     <Compile Include="Engine\Rendering\InstanceBatch.cs" />
     <Compile Include="Engine\Rendering\InstanceData.cs" />
     <Compile Include="Engine\Rendering\MarchingData.cs" />
-    <Compile Include="Engine\Rendering\Model.cs" />
+    <Compile Include="Engine\Rendering\IModel.cs" />
     <Compile Include="Engine\Rendering\LineData.cs" />
     <Compile Include="Engine\Rendering\MarchingCubes.cs" />
     <Compile Include="Engine\Rendering\IsoSurfaceCreator.cs" />
@@ -991,6 +999,18 @@
     </None>
     <None Include="..\project-hedra-assets\Animations\TravellingMerchantIdle.dae">
       <Link>Assets\Chr\TravellingMerchantIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\TrollAttack0.dae">
+      <Link>Assets\Chr\TrollAttack0.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\TrollIdle.dae">
+      <Link>Assets\Chr\TrollIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\TrollWalk.dae">
+      <Link>Assets\Chr\TrollWalk.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Animations\TurtleAttack.dae">
@@ -4119,6 +4139,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Snake.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Mobs\Troll.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Archer.json">

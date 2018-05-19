@@ -9,6 +9,7 @@
 using System;
 using System.Collections;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
@@ -36,8 +37,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 		public override void Recreate(){ 
             base.Recreate();
 
-			var rng = new Random(World.Seed + 412312);
-			int n = rng.Next(0, 1);
+			/*int n = rng.Next(0, 1);
 			if(n == 0){
 				base.NoTreesRadius = 16;
 				base.CenterHeight = 92;
@@ -45,10 +45,10 @@ namespace Hedra.Engine.QuestSystem.Objectives
 				base.CenterRadius = 384;
                 lock(World.QuestManager.Plateaus)
 				    World.QuestManager.AddPlateau(new Plateau(this.ObjectivePosition, base.CenterRadius+512, -240, 0));
-			}
+			}*/
 			
 			Boss?.Dispose();
-			Boss = BossGenerator.Generate(rng, out _bossType);
+			//Boss = BossGenerator.Generate(rng, out _bossType);
 			Boss.BlockPosition = World.QuestManager.ObjectivePosition;
 			Boss.Model.Position = Boss.BlockPosition;
 
@@ -99,7 +99,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                     model.Model.Scale *= 2;
                     if(_bossType == MobType.Bee)
 				        model.Model.Position -= Vector3.UnitY * 8f;
-				    GameManager.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
+				    //GameManager.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
 				    model.Model.Scale /= 2;
 				}else{
 				    var model = Boss.Model as QuadrupedModel;
@@ -108,7 +108,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 				    Vector3 prevRot = model.Model.Rotation;
 				    model.Model.Rotation = Vector3.Zero;
                     model.Model.Update();
-				    GameManager.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
+				    //GameManager.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
 				    model.Model.Rotation = prevRot;
 				}
 				return UserInterface.QuestFbo.TextureID[0];

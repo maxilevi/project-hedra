@@ -394,6 +394,10 @@ namespace Hedra.Engine.Player
             {
                this.Glider.Disable();
             }
+            if (this.IsGliding && !IsGrounded && !this.Glider.Enabled)
+            {
+                this.Glider.Enable();
+            }
 
 
             Block underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
@@ -477,15 +481,19 @@ namespace Hedra.Engine.Player
 		}
 		
 		private void PlayEatAnimation(float FoodHealth){
-			if(Model != null){
-				Model.Food = new StaticModel();
+			if(Model != null)
+            {
 				var foodData = Inventory.Food.Model.Clone();
 				foodData.Scale( Vector3.One * 1.5f );
 
-				Model.Food.Mesh = ObjectMesh.FromVertexData( foodData, Vector3.Zero);
-				Model.Food.Mesh.Enabled= true;
-			}
-			Model?.Food.GatherMeshes();
+                Model.Food = new StaticModel(foodData)
+                {
+                    Model =
+                    {
+                        Enabled = true
+                    }
+                };
+            }
 			Model?.Eat(FoodHealth);
 			this.IsEating = true;
 		}

@@ -174,7 +174,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 		
 		public override uint QuestLogIcon {
 			get {
-				GameManager.Player.UI.DrawPreview(_previewMesh, UserInterface.QuestFbo);
+				//GameManager.Player.UI.DrawPreview(_previewMesh, UserInterface.QuestFbo);
 				return UserInterface.QuestFbo.TextureID[0];
 			}
 		}

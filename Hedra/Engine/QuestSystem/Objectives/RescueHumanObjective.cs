@@ -178,7 +178,6 @@ namespace Hedra.Engine.QuestSystem.Objectives
 			    _oldMan.Physics.UsePhysics = true;
 			    _oldMan.Physics.HasCollision = true;
 			    _oldMan.Physics.CanCollide = true;
-			    _oldMan.Model.LocalPosition = Vector3.Zero;
 			    _oldMan.Rotation = Vector3.Zero;
 			    _oldMan.Position += Vector3.UnitX * 2.5f;
 			    _oldMan.SearchComponent<FollowAIComponent>().ToFollow = player;
@@ -233,7 +232,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 				model.Model.Scale *= 2f;
 				model.Model.Rotation = Vector3.Zero;
 
-				GameManager.Player.UI.DrawPreview(_oldMan.Model, UserInterface.QuestFbo);
+				//GameManager.Player.UI.DrawPreview(_oldMan.Model, UserInterface.QuestFbo);
 
 				model.Model.Scale /= 2f;
 				model.Model.Rotation = prevRot;

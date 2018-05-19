@@ -130,7 +130,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public void Show(Item Item)
         {
-            if(Item == null || Item.IsGold) return;
+            if(Item == null) return;
             CurrentItem = Item;
             this.UpdateView();
             this.Enabled = true;
@@ -152,7 +152,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public virtual Vector2 Position
         {
-            get { return BackgroundTexture.Position; }
+            get => BackgroundTexture.Position;
             set
             {
                 ItemTexture.Position = ItemTexture.Position - Position + value;
@@ -165,7 +165,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public virtual bool Enabled
         {
-            get { return _enabled; }
+            get => _enabled;
             set
             {
                 _enabled = value;

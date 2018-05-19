@@ -24,7 +24,7 @@ namespace Hedra.Engine.Rendering
 		public float Opacity {get; set;}
 		public Matrix3 Rotation {get; set;}
 	    public bool Moved { get; private set; }
-        public bool IsReplacementShadow { get; set; }
+        public bool IsCosmeticShadow { get; set; }
 
 	    private Vector3 _position;
 	    public Vector3 Position

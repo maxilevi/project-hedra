@@ -14,7 +14,7 @@ namespace Hedra.Engine.Management
 	public class Timer
 	{
 		private float _timerCount;
-		public float AlertTime {get; set;}
+		public float AlertTime { get; set; }
 		
 		public Timer(float AlertTime){
 			this.AlertTime = AlertTime;

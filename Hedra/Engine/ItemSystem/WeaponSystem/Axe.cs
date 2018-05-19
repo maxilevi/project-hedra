@@ -23,7 +23,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	{
 	    public override float PrimaryAttackCooldown => 1.75f;
 	    public override float SecondaryAttackCooldown => 4.0f;
-        public override bool IsMelee { get; protected set; } = true;
 
         public Axe(VertexData Contents) : base(Contents)
 		{

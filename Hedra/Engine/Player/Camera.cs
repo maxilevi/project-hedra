@@ -113,12 +113,12 @@ namespace Hedra.Engine.Player
 
         private void Interpolate()
         {
-            _targetZoomOut = _player.IsMoving && !_player.IsUnderwater ? _player.Orientation * 3.0f : Vector3.Zero;
+            _targetZoomOut = _player.IsMoving && !_player.IsUnderwater ? _player.Orientation * 2.0f : Vector3.Zero;
             if (DefaultDelegate == PositionDelegate)
             {
                 _targetZoomOut += _player.IsJumping ? Vector3.UnitY * _player.Movement.JumpingDistance * 2f : Vector3.Zero;
             }
-            _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, (float) Time.deltaTime * 1f);
+            _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, (float) Time.deltaTime * 2f);
             _interpolatedPosition = PositionDelegate() - _interpolatedZoomOut;
             Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.FrameTimeSeconds * 16f);
             Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.unScaledDeltaTime * 16f);

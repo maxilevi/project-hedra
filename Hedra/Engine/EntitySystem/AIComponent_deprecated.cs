@@ -8,12 +8,11 @@
  */
 
 using System;
-using Hedra.Engine.Generation;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.Scenes;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
@@ -21,7 +20,7 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     ///     Description of AIComponent.
     /// </summary>
-    public class AIComponent : EntityComponent
+    public class AIComponent_deprecated : EntityComponent
     {
         private readonly Random _rng = new Random();
         private Action _callback;
@@ -43,7 +42,7 @@ namespace Hedra.Engine.EntitySystem
         public Vector3 TargetPosition;
         private AIType _type;
 
-        public AIComponent(Entity Parent, AIType Type) : base(Parent)
+        public AIComponent_deprecated(Entity Parent, AIType Type) : base(Parent)
         {
             _model = Parent.Model as QuadrupedModel;
             if(_model == null) throw new ArgumentException("AI Component only supports Quadruped models.");
@@ -198,12 +197,5 @@ namespace Hedra.Engine.EntitySystem
                 Parent.Model.Run();
             }
         }
-    }
-
-    public enum AIType
-    {
-        Neutral,
-        Friendly,
-        Hostile
     }
 }

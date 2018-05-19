@@ -141,14 +141,6 @@ namespace Hedra.Engine.Rendering.UI
 				GameManager.NewRun(_player);
 			}
 		}
-
-        /// <summary>
-        /// FIXME: Remove me
-        /// </summary>
-        /// <param name="__mesh"></param>
-        /// <param name="__fbo"></param>
-	    public void DrawPreview(ObjectMesh __mesh, FBO __fbo){}
-	    public void DrawPreview(Model __model, FBO __fbo) { }
 		
 		public void Update(){
 		    if (_player == null) return;

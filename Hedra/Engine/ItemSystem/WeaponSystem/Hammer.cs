@@ -21,7 +21,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// </summary>
 	public class Hammer : MeleeWeapon
     {
-	    public override bool IsMelee { get; protected set; } = true;
 	    public override float PrimaryAttackCooldown => 2.0f;
 	    public override float SecondaryAttackCooldown => 4.0f;
 

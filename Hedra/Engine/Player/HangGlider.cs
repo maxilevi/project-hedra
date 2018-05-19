@@ -28,14 +28,14 @@ namespace Hedra.Engine.Player
         {
             _player = Player;
             _model = new GliderModel();
-            _leftTrail = new TrailRenderer(() => _model.BaseMesh.TransformPoint(Vector3.UnitZ * 4f - Vector3.UnitX * 3f - Vector3.UnitY * .25f),
+            _leftTrail = new TrailRenderer(() => _model.Model.TransformPoint(Vector3.UnitZ * 4f - Vector3.UnitX * 3f - Vector3.UnitY * .25f),
                 new Vector4(Vector3.One, .5f))
             {
                 UpdateRate = 1,
                 Orientation = Vector3.UnitZ,
                 MaxLifetime = .5f
             };
-            _rightTrail = new TrailRenderer(() => _model.BaseMesh.TransformPoint(Vector3.UnitZ * 4f + Vector3.UnitX * 3f - Vector3.UnitY * .25f),
+            _rightTrail = new TrailRenderer(() => _model.Model.TransformPoint(Vector3.UnitZ * 4f + Vector3.UnitX * 3f - Vector3.UnitY * .25f),
                 new Vector4(Vector3.One, .5f))
             {
                 UpdateRate = 1,
@@ -77,9 +77,9 @@ namespace Hedra.Engine.Player
                 _player.View.MinPitch = -1.25f;
 
                 _model.Position = _player.Position + Vector3.UnitY * 8f;
-                _model.BaseMesh.BeforeLocalRotation = Vector3.UnitY * 2f;
-                _model.BaseMesh.Rotation = new Vector3(_angles.X, _player.Model.Model.Rotation.Y, 0);
-                _model.BaseMesh.LocalRotation = Vector3.UnitZ * _angles.Z;
+                _model.Model.BeforeLocalRotation = Vector3.UnitY * 2f;
+                _model.Model.Rotation = new Vector3(_angles.X, _player.Model.Model.Rotation.Y, 0);
+                _model.Model.LocalRotation = Vector3.UnitZ * _angles.Z;
                 _player.Model.Model.TransformationMatrix =
                     Matrix4.CreateRotationY(-_player.Model.Model.Rotation.Y * Mathf.Radian)
                     * Matrix4.CreateTranslation(Vector3.UnitY * -7.5f)
@@ -151,10 +151,11 @@ namespace Hedra.Engine.Player
             _leftTrail.Emit = false;
         }
 
-        public bool Enabled
+        public void Enable()
         {
-            get => _model.Enabled;
-            set => _model.Enabled = value;
+            this._model.Enabled = true;
         }
+
+        public bool Enabled => _model.Enabled;
     }
 }

@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering.Animation
 	/// <summary>
 	/// Description of AnimatedModel.
 	/// </summary>
-	public class AnimatedModel : IDisposable, IRenderable, ICullable
+	public class AnimatedModel : IDisposable, IRenderable, ICullable, IModel
 	{
         //Skin
 	    public static Shader DefaultShader = Shader.Build("Shaders/AnimatedModel.vert", "Shaders/AnimatedModel.frag");
@@ -37,7 +37,7 @@ namespace Hedra.Engine.Rendering.Animation
 		public Animator Animator {get;}
 		public Vector3 Position {get; set;}
 		public bool Enabled {get; set;} 
-		public bool Fog {get; set;}
+		public bool ApplyFog {get; set;}
 		public float Alpha {get; set;}
 	    public float DisposeTime {get; set;}
 	    public Vector4 Tint {get; set;}
@@ -93,7 +93,7 @@ namespace Hedra.Engine.Rendering.Animation
 			this.Alpha = 1.0f;
 			this.Tint = Vector4.One;
 			this.Scale = Vector3.One * 1.0f;
-            this.Fog = true;
+            this.ApplyFog = true;
             this.Enabled = true;
 			DisposeManager.Add(this);
 			DrawManager.Add(this);
@@ -171,7 +171,7 @@ namespace Hedra.Engine.Rendering.Animation
 		        }
 		    }
 			Shader["UseShadows"] = GameSettings.Shadows ? 1.0f : 0.0f;
-			Shader["UseFog"] = Fog ? 1 : 0;
+			Shader["UseFog"] = ApplyFog ? 1 : 0;
 			Shader["Alpha"] = Alpha;
 			Shader["Tint"] = Tint + BaseTint;
 			
@@ -307,7 +307,13 @@ namespace Hedra.Engine.Rendering.Animation
         /// </summary>
 	    public Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
 
-	    private Vector3 _rotation;
+	    public bool Pause
+	    {
+	        get => Animator.Stop;
+	        set => Animator.Stop = value;
+	    }
+
+        private Vector3 _rotation;
 		public Vector3 Rotation {
 			get{ return _rotation; }
 			set{

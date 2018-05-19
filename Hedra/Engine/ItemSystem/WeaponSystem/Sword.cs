@@ -23,7 +23,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// </summary>
 	public class Sword : MeleeWeapon
     {
-	    public override bool IsMelee { get; protected set; } = true;
 	    public override float PrimaryAttackCooldown => 1.0f;
 	    public override float SecondaryAttackCooldown => 3.0f;
         private Vector3 _previousPosition;

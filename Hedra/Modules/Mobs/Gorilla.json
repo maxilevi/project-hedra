@@ -2,7 +2,7 @@
 	"Name" : "Gorilla", 
 	"MaxHealth": 1200.0,
 	"AttackDamage": 20.0,
-	"Speed": 3.5,
+	"Speed": 6.5,
 	"XP": 4.0,
 	"AIType": "Hostile",
 	"Ridable": false,
@@ -10,7 +10,7 @@
 	"Drops": [],
 	"Model": {
 		"Path": "$DataFile$/Assets/Chr/GorillaIdle.dae",
-		"Scale": 2.0,
+		"Scale": 2.5,
 		"IdleAnimation": {
 			"Path": "$DataFile$/Assets/Chr/GorillaIdle.dae",
 			"Speed": 0.25
@@ -22,7 +22,7 @@
 		"AttackAnimations": [
 			{
 				"Path": "$DataFile$/Assets/Chr/GorillaAttack.dae",
-				"Speed": 1.0
+				"Speed": 1.5
 			}
 		]
 	} 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 
@@ -60,7 +61,7 @@ namespace Hedra.Engine.ModuleSystem
 
             _factories[Type.ToLowerInvariant()].Apply(mob);
 
-            var ai = mob.SearchComponent<AIComponent>();
+            var ai = mob.SearchComponent<BaseAIComponent>();
             if (ai == null) throw new ArgumentException("No AIComponent has been set");
 
             var dmg = mob.SearchComponent<DamageComponent>();
@@ -70,16 +71,6 @@ namespace Hedra.Engine.ModuleSystem
             mob.AttackDamage = (GameManager.Player.Level * 1.05f + mob.AttackDamage) * mobDifficultyModifier;
             dmg.XpToGive = (GameManager.Player.Level * 1.05f + dmg.XpToGive) * mobDifficultyModifier; 
             mob.Health = mob.MaxHealth;
-
-            dmg.OnDamageEvent += delegate(DamageEventArgs Args)
-            {
-                if (Args.Damager != null)
-                {
-                    ai.OldLogic = ai.AILogic;
-                    ai.AILogic = () => ai.Attack(Args.Damager, true);
-                    ai.FollowTimer.Reset();
-                }
-            };
             return mob;
         }
     }

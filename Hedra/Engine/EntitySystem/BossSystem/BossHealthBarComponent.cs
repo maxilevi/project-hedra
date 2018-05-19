@@ -9,14 +9,12 @@
 
 using System;
 using System.Drawing;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Scenes;
 using OpenTK;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.EntitySystem.BossSystem
 {
     /// <inheritdoc />
     /// <summary>

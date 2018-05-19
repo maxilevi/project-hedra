@@ -23,6 +23,7 @@ namespace Hedra.Engine.Rendering
 	    public bool UseNoiseTexture { get; set; }
 	    public bool Dither { get; set; }
 	    public bool Outline { get; set; }
+        public bool Pause { get; set; }
         public Vector4 OutlineColor { get; set; }
         public Vector4 Tint { get; set; } = new Vector4(1,1,1,1);
 		public Vector4 BaseTint { get; set; } = new Vector4(0,0,0,0);

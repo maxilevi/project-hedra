@@ -163,6 +163,8 @@ namespace Hedra.Engine.EntitySystem
 		Horse,
 		Wolf,
 		Goat,
+        Gorilla,
+        Troll,
 		TotalCount,
 		None,
         Unknown

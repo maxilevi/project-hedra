@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     /// Description of PlayerModel.
     /// </summary>
-    public class HumanModel : Model, IAudible, IDisposeAnimation
+    public class HumanModel : EntityModel, IAudible, IDisposeAnimation
     {
 		public const float DefaultScale = 0.75f;
 		public Humanoid Human { get; private set; }
@@ -70,20 +70,20 @@ namespace Hedra.Engine.Player
         private Vector3 _previousPosition;
         private Quaternion _rotationQuaternion;
         private float _lastAnimationTime = -1;
-        		private float _targetAlpha = 1f;
+        private float _targetAlpha = 1f;
 
 
-        public HumanModel(Humanoid Human, HumanoidModelTemplate Template)
+        public HumanModel(Humanoid Human, HumanoidModelTemplate Template) : base(Human)
 		{
 		    this.Load(Human, Template);
 		}
 
-        public HumanModel(Humanoid Human, HumanType Type)
+        public HumanModel(Humanoid Human, HumanType Type) : base(Human)
         {
             this.Load(Human, HumanoidLoader.ModelTemplater[Type]);
         }
 
-        public HumanModel(Humanoid Human)
+        public HumanModel(Humanoid Human) : base(Human)
         {
             this.Load(Human, HumanoidLoader.ModelTemplater[Human.Class]);
         }
@@ -170,17 +170,16 @@ namespace Hedra.Engine.Player
 		
 		public void UpdateModel(){}
 		
-		public void SetLamp(bool Active){
+		public void SetLamp(bool Active)
+        {
 			if(this._hasLamp == Active) return;
 			this._hasLamp = Active;
 			
 			if(this._lampModel == null){
-				VertexData LampData = AssetManager.PlyLoader("Assets/Items/Handlamp.ply", new Vector3(1.5f, 1.5f, 1.5f), Vector3.Zero, Vector3.Zero, true);
-	        	this._lampModel = ObjectMesh.FromVertexData(LampData);
+				var lampData = AssetManager.PlyLoader("Assets/Items/Handlamp.ply", new Vector3(1.5f, 1.5f, 1.5f), Vector3.Zero, Vector3.Zero, true);
+	        	this._lampModel = ObjectMesh.FromVertexData(lampData);
 			}
 			this._lampModel.Enabled = Active;
-			
-			base.GatherMeshes(true);
 		}
 
         public void DisposeAnimation()
@@ -192,11 +191,8 @@ namespace Hedra.Engine.Player
 
         public float DisposeTime
         {
-            get { return Model.DisposeTime; }
-            set
-            {
-                Model.DisposeTime = value;
-            }
+            get => Model.DisposeTime;
+            set => Model.DisposeTime = value;
         }
 
         public void Recompose()
@@ -212,30 +208,22 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public void SetWeapon(Weapon Weapon){
-			this.GatherMeshes();
+		public void SetWeapon(Weapon Weapon)
+        {
 			if(Weapon == this.LeftWeapon)
 				return;
 
-		    var previousWeapon = this.LeftWeapon;
-            int index = -1;
-			for(var i = 0; i < base.Meshes.Length; i++){
-				if(base.Meshes[i] == this.LeftWeapon.MainMesh){
-					index = i;
-					break;
-				}
-			}
+		    this.LeftWeapon.Dispose();
+		    this.UnregisterModel(this.LeftWeapon);
+
 			this.LeftWeapon = Weapon;
-			this.LeftWeapon.Enabled = true;
-			base.Meshes[index] = this.LeftWeapon.MainMesh;
-
-		    previousWeapon.Dispose();
-
+			this.LeftWeapon.Enabled = this.Enabled;
             this.LeftWeapon.Scale = Model.Scale;
-			this.LeftWeapon.Alpha = Model.Alpha;
+            this.LeftWeapon.Alpha = Model.Alpha;
 
-		    var player = Human as LocalPlayer;
-		    player?.Toolbar.SetAttackType(this.LeftWeapon);
+            this.RegisterModel(this.LeftWeapon);
+
+		    (Human as LocalPlayer)?.Toolbar.SetAttackType(this.LeftWeapon);
 		}
 		
 		public override void Run(){
@@ -317,25 +305,29 @@ namespace Hedra.Engine.Player
 			this.Human.IsAttacking = false;
 		}
 		
-		public void Swim(){
+		public void Swim()
+        {
 			if( !(Human is LocalPlayer) || Human.IsRolling || Human.IsCasting) return;
 			if(Model != null && Model.Animator.AnimationPlaying != SwimAnimation)
 				Model.PlayAnimation(SwimAnimation);
 		}
 		
-		public void IdleSwim(){
+		public void IdleSwim()
+        {
 			if( !(Human is LocalPlayer) || Human.IsRolling || Human.IsCasting) return;
 			if(Model != null && Model.Animator.AnimationPlaying != IdleSwimAnimation)
 				Model.PlayAnimation(IdleSwimAnimation);
 		}
 		
-		public void Roll(){
+		public void Roll()
+        {
 			Model.Animator.PlayAnimation(RollAnimation);
 			this.Human.WasAttacking = false;
 			this.Human.IsAttacking = false;
 		}
 		
-		public void Tied(){
+		public void Tied()
+        {
 		    if (Model != null && Model.Animator.AnimationPlaying != TiedAnimation)
                 Model.PlayAnimation(TiedAnimation);
 		}
@@ -351,15 +343,19 @@ namespace Hedra.Engine.Player
 
         public override void Update()
 		{
+            base.Update();
 
 		    WalkAnimation.Speed = Human.Speed;
 		    this._modelSound.Pitch = Human.Speed / 1.11f;
             if (this.Model.Animator.AnimationPlaying != this.RollAnimation && Human.IsRolling)
 		        Human.FinishRoll();
 
-            if (_lastAnimationTime != this.Model.Animator.AnimationTime || GameManager.InMenu){
+            if (_lastAnimationTime != this.Model.Animator.AnimationTime || GameManager.InMenu)
+            {
 				_lastAnimationTime = this.Model.Animator.AnimationTime;
-			}else{
+			}
+            else
+            {
 				Model.Animator.AnimationPlaying.DispatchEvents(1f);
 				Model.Animator.StopBlend();
 			}
@@ -367,7 +363,8 @@ namespace Hedra.Engine.Player
 			if(Model.Animator.AnimationPlaying == null)
 				this.Idle();
 
-			if(Model != null){
+			if(Model != null)
+            {
 				Model.Update();
 				Vector3 PositionAddon = -Vector3.UnitY * 1.5f;
 				if(this.MountModel != null)
@@ -389,16 +386,16 @@ namespace Hedra.Engine.Player
 			}else if(Human.IsEating){
 				Matrix4 Mat4 = this.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + ((this.LeftWeaponPosition + this.RightWeaponPosition) / 2f) );
 				
-				this.Food.Mesh.TransformationMatrix = Mat4;
-				this.Food.Mesh.Position = Model.Position;
-				this.Food.Mesh.TargetPosition = Vector3.Zero;
-				this.Food.Mesh.AnimationPosition = Vector3.Zero;
-				this.Food.Mesh.TargetRotation = new Vector3(180,0,0);
-				this.Food.Mesh.RotationPoint = Vector3.Zero;
-				this.Food.Mesh.Rotation = Vector3.Zero;
-				this.Food.Mesh.LocalRotation = Vector3.Zero;
-				this.Food.Mesh.LocalPosition = Vector3.Zero;
-				this.Food.Mesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
+				this.Food.Model.TransformationMatrix = Mat4;
+				this.Food.Model.Position = Model.Position;
+				this.Food.Model.TargetPosition = Vector3.Zero;
+				this.Food.Model.AnimationPosition = Vector3.Zero;
+				this.Food.Model.TargetRotation = new Vector3(180,0,0);
+				this.Food.Model.RotationPoint = Vector3.Zero;
+				this.Food.Model.Rotation = Vector3.Zero;
+				this.Food.Model.LocalRotation = Vector3.Zero;
+				this.Food.Model.LocalPosition = Vector3.Zero;
+				this.Food.Model.BeforeLocalRotation = Vector3.UnitY * -0.7f;
 				
 				if(!this.Human.IsMoving && Model.Animator.AnimationPlaying == WalkAnimation){
 					this.Model.Animator.ExitBlend();
@@ -448,13 +445,6 @@ namespace Hedra.Engine.Player
 		        //* MountModel.Model.TransformationMatrix
 		        //* Matrix4.CreateTranslation(Vector3.UnitY * -MountModel.Height);
 		    }
-            Model.BaseTint = Mathf.Lerp(Model.BaseTint, this.BaseTint, (float) Time.unScaledDeltaTime * 6f);
-			Model.Tint = Mathf.Lerp(Model.Tint, this.Tint, (float) Time.unScaledDeltaTime * 6f);
-			this.LeftWeapon.Tint = Model.Tint;
-			this.LeftWeapon.BaseTint = Model.BaseTint;
-			
-			Model.Alpha = Mathf.Lerp(Model.Alpha, _targetAlpha, (float) Time.ScaledFrameTimeSeconds * 8f);
-			this.LeftWeapon.Alpha =  Mathf.Lerp(LeftWeapon.Alpha, _targetAlpha, (float) Time.ScaledFrameTimeSeconds * 8f);
 
 		    if (!this.Disposed)
 		    {
@@ -469,7 +459,8 @@ namespace Hedra.Engine.Player
 	        _modelSound.Stop();
 	    }
 
-        public void Draw(){
+        public override void Draw()
+        {
 			if(!Enabled)
 				return;
 			this.Model.Draw();
@@ -548,29 +539,6 @@ namespace Hedra.Engine.Player
                 return Model.TransformFromJoint(this._defaultChestPosition, ChestJoint);
             }
         }
-
-	    public override bool ApplyFog{
-			get => Model.Fog;
-	        set => Model.Fog = value;
-	    }
-		
-		public override bool Pause {
-			get => base.Pause;
-		    set { 
-				base.Pause = value;
-				Model.Animator.Stop = value;
-			}
-		}
-		
-		private bool _enabled = true;
-		public override bool Enabled{
-			get => _enabled;
-		    set{
-				this.LeftWeapon.Enabled = value;
-				Model.Enabled = value;
-				_enabled = value;
-			}
-		}
 		
 		private Vector3 _position;
 		public override Vector3 Position{
@@ -588,6 +556,7 @@ namespace Hedra.Engine.Player
 	    public override void Dispose()
 		{
 			Model.Dispose();
+            _lampModel?.Dispose();
 			LeftWeapon.Dispose();
 			
 			var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;

@@ -74,7 +74,6 @@ namespace Hedra.Engine
 	        Player.View.TargetYaw = 0f;
 	        Player.View.TargetDistance = 10f;
 	        Player.IsGliding = false;
-	        Player.Glider.Enabled = false;
 	        Player.Knocked = false;
 	        SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
             CoroutineManager.StartCoroutine(GameManager.MenuCoroutine);

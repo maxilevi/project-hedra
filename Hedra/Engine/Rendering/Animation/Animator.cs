@@ -52,7 +52,7 @@ namespace Hedra.Engine.Rendering.Animation
 				this.CurrentAnimation = Animation;
 			}else{
 				if(Animation == CurrentAnimation){
-					this.CurrentAnimation.DispatchEvents(1.0f);
+					//this.CurrentAnimation.DispatchEvents(1.0f);
 					this.AnimationTime = 0;
 					this.CurrentAnimation = this.TargetAnimation ?? Animation;
 				}
