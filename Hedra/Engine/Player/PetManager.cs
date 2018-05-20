@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
@@ -71,7 +72,7 @@ namespace Hedra.Engine.Player
                 Pet.AddComponent(new MountAIComponent(Pet, _player,
                     (MountAIType) Enum.Parse(typeof(MountAIType), PetItem.GetAttribute<string>("MountAIType")))
                 );
-                Pet.RemoveComponent(Pet.SearchComponent<AIComponent_deprecated>());
+                Pet.RemoveComponent(Pet.SearchComponent<BaseAIComponent>());
                 Pet.Removable = false;
                 ((QuadrupedModel) Pet.Model).IsMountable = true;
             }

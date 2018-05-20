@@ -26,11 +26,10 @@ namespace Hedra.Engine.Player
     /// <summary>
     /// Description of PlayerModel.
     /// </summary>
-    public class HumanModel : EntityModel, IAudible, IDisposeAnimation
+    public class HumanModel : UpdatableModel<AnimatedModel>, IAudible, IDisposeAnimation
     {
 		public const float DefaultScale = 0.75f;
 		public Humanoid Human { get; private set; }
-		public AnimatedModel Model;
 		private Animation WalkAnimation;
 		private Animation IdleAnimation;
 		private Animation RollAnimation;
@@ -54,19 +53,17 @@ namespace Hedra.Engine.Player
 		public Weapon LeftWeapon { get; private set; }
 		public QuadrupedModel MountModel;
 		
-		public override Vector3 TargetRotation {get; set;}
 		public bool LockWeapon {get; set;}
 	    public override Vector4 Tint { get; set; }
 	    public override Vector4 BaseTint { get; set; }
-        public bool IsIdling => this.IdleAnimation == this.Model.Animator.AnimationPlaying;
         public bool IsSitting => this.SitAnimation == this.Model.Animator.AnimationPlaying;
-	    public bool IsRunning => this.WalkAnimation == this.Model.Animator.AnimationPlaying;
+        public override bool IsIdling => this.IdleAnimation == this.Model.Animator.AnimationPlaying;
+        public override bool IsWalking => this.WalkAnimation == this.Model.Animator.AnimationPlaying;
 	    public bool IsGliding => this.GlideAnimation == this.Model.Animator.AnimationPlaying;
 	    public bool IsSwimming => this.IdleSwimAnimation == this.Model.Animator.AnimationPlaying || this.SwimAnimation == this.Model.Animator.AnimationPlaying;
         private string _modelPath;
         private ObjectMesh _lampModel;
 	    private bool _hasLamp;
-        private float _foodHealth;
         private Vector3 _previousPosition;
         private Quaternion _rotationQuaternion;
         private float _lastAnimationTime = -1;
@@ -201,7 +198,7 @@ namespace Hedra.Engine.Player
             DisposeTime = 0;
         }
 
-        public override void Attack(Entity Target, float Damage)
+        public override void Attack(Entity Target)
 		{
 			if(!Human.Knocked && !Human.IsAttacking && !(Human is LocalPlayer)){
 				LeftWeapon.Attack1(this.Human);
@@ -298,7 +295,6 @@ namespace Hedra.Engine.Player
 		    TaskManager.While( 
                 () => this.Human.IsEating && !Human.IsDead,
                 () => Human.Health += FoodHealth * Time.FrameTimeSeconds * .3f);
-			this._foodHealth = FoodHealth;
 			Model.Animator.StopBlend();
 			Model.Animator.BlendAnimation(EatAnimation);
 			this.Human.WasAttacking = false;
@@ -450,7 +446,7 @@ namespace Hedra.Engine.Player
 		    {
 		        _modelSound.Type = Human.IsSleeping ? SoundType.HumanSleep : SoundType.HumanRun;
 		        _modelSound.Position = this.Position;
-		        _modelSound.Update(this.IsRunning || Human.IsSleeping);
+		        _modelSound.Update(this.IsWalking || Human.IsSleeping);
 		    }
 		}
 

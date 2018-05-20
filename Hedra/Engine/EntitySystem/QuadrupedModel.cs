@@ -8,11 +8,11 @@
  */
 
 using System;
-using System.Linq;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
+using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 using Hedra.Engine.Rendering.Animation;
@@ -24,15 +24,12 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of SheepModel.
 	/// </summary>
-	public class QuadrupedModel : EntityModel, IMountable, IAudible, IDisposeAnimation
+	public class QuadrupedModel : UpdatableModel<AnimatedModel>, IMountable, IAudible, IDisposeAnimation
     {	
-        public const float MaxAttackCooldown = 1.5f;
-        public bool IsAttacking { get; private set; }
-        public bool IsRunning => this.Model.Animator.AnimationPlaying == this.WalkAnimation;
-        public bool IsIdle => this.Model.Animator.AnimationPlaying == this.IdleAnimation;
+        public override bool IsWalking => this.Model.Animator.AnimationPlaying == this.WalkAnimation;
+        public override bool IsIdling => this.Model.Animator.AnimationPlaying == this.IdleAnimation;
         public bool AlignWithTerrain { get; set; } = true;
         public bool IsMountable { get; set; }
-        public new AnimatedModel Model { get; protected set; }
         public Animation IdleAnimation { get; }
         public Animation WalkAnimation { get; }
         public Animation[] AttackAnimations { get; }
@@ -45,6 +42,7 @@ namespace Hedra.Engine.EntitySystem
         private Quaternion _quaternionTargetRotation;
         private Vector3 _eulerTargetRotation;
         private Vector3 _rotation;
+        private bool _hasMidAnimationEvent;
         private readonly AreaSound _sound;
 
 
@@ -68,26 +66,49 @@ namespace Hedra.Engine.EntitySystem
 		        AttackAnimations[i] = AnimationLoader.LoadAnimation(Template.AttackAnimations[i].Path);
 		        AttackAnimations[i].Speed = Template.AttackAnimations[i].Speed;
                 AttackAnimations[i].Loop = false;
+
+		        int k = i;
+                if (Template.AttackAnimations[i].OnAnimationStart != null)
+		        {
+		            AttackAnimations[i].OnAnimationStart += delegate
+		            {
+		                AnimationEventBuilder.Build(Parent, Template.AttackAnimations[k].OnAnimationStart).Build();
+		            };
+		        }
+		        if (Template.AttackAnimations[i].OnAnimationMid != null)
+		        {
+		            _hasMidAnimationEvent = true;
+                    AttackAnimations[i].OnAnimationMid += delegate
+		            {
+		                AnimationEventBuilder.Build(Parent, Template.AttackAnimations[k].OnAnimationMid).Build();
+		            };
+		        }
+		        if (Template.AttackAnimations[i].OnAnimationEnd != null)
+		        {
+		            AttackAnimations[i].OnAnimationEnd += delegate
+		            {
+		                AnimationEventBuilder.Build(Parent, Template.AttackAnimations[k].OnAnimationEnd).Build();
+		            };
+		        }
 		        AttackAnimations[i].OnAnimationEnd += delegate {
 		            this.IsAttacking = false;
-		        };
+		            this.Idle();
+                };
             }
-			
-			this.Model.Size = this.Parent.BaseBox.Max - this.Parent.BaseBox.Min;
-		    this.Height = this.Model.Size.Y;
+            this.Model.Size = this.Parent.BaseBox.Max - this.Parent.BaseBox.Min;
+		    this.Height = this.Model.Size.Y * 0f;
 			this.Idle();
 
 		    var soundType = Parent.MobType == MobType.Horse ? SoundType.HorseRun : SoundType.HumanRun;
 		    this._sound = new AreaSound(soundType, this.Position, 48f);
-
-		}
+        }
 		
 		public void Resize(Vector3 Scalar){
 			this.Model.Scale *= Scalar;
 		    this.Parent.MultiplyHitbox(Scalar);
         }
 
-		public override void Attack(Entity Damagee, float Damage)
+		public override void Attack(Entity Damagee)
 		{	
 			if(Array.IndexOf(AttackAnimations, Model.Animator.AnimationPlaying) != -1)
 				return;
@@ -99,19 +120,25 @@ namespace Hedra.Engine.EntitySystem
 
 		    var selectedAnimation = AttackAnimations[Utils.Rng.Next(0, AttackAnimations.Length)];
 
-		    void AttackHandler(Animation Sender)
+		    if (!_hasMidAnimationEvent)
 		    {
-		        if (!Parent.InAttackRange(Damagee)) return;
+		        void AttackHandler(Animation Sender)
+		        {
+		            selectedAnimation.OnAnimationMid -= AttackHandler;
+		            if (!Parent.InAttackRange(Damagee))
+		            {
+		                SoundManager.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
+		                return;
+		            }
 
-		        Damagee.Damage(Damage, this.Parent, out float exp);
-		        selectedAnimation.OnAnimationMid -= AttackHandler;
+		            Damagee.Damage(Parent.AttackDamage, this.Parent, out float exp);
+		        }
+		        selectedAnimation.OnAnimationMid += (OnAnimationHandler) AttackHandler;
 		    }
 
-		    selectedAnimation.OnAnimationMid += (OnAnimationHandler) AttackHandler;
-			
-			Model.PlayAnimation(selectedAnimation);
+		    Model.PlayAnimation(selectedAnimation);
 			this.IsAttacking = true;
-		    _attackCooldown = MaxAttackCooldown;
+		    _attackCooldown = Parent.AttackCooldown;
         }
 		
 		public override void Update(){
@@ -125,21 +152,22 @@ namespace Hedra.Engine.EntitySystem
 		        if (Model.Rendered)
 		        {
 		            Model.Update();
-
-		            _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))) .ExtractRotation() : Quaternion.Identity;
-		            _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.unScaledDeltaTime * 8f);
-		            Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
-		            _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.unScaledDeltaTime * 8f);
-		            Model.Rotation = _quaternionModelRotation.ToEuler();
-		            Model.Position = this.Position + Vector3.UnitY * 0.0f;
-                    this.Rotation = Model.Rotation; 
 		        }
+
+		        _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))) .ExtractRotation() : Quaternion.Identity;
+		        _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.unScaledDeltaTime * 8f);
+		        Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
+		        _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.unScaledDeltaTime * 8f);
+		        Model.Rotation = _quaternionModelRotation.ToEuler();
+		        Model.Position = this.Position;
+                this.Rotation = Model.Rotation; 
+		        
 		    }
 
 		    if (!base.Disposed)
 		    {
 		        _sound.Position = this.Position;
-		        _sound.Update(this.IsRunning);
+		        _sound.Update(this.IsWalking);
 		    }
 		    _attackCooldown -= Time.FrameTimeSeconds;
 		}

@@ -22,9 +22,8 @@ namespace Hedra.Engine.ItemSystem
 {
 	public delegate void OnItemCollect(LocalPlayer Player);
 
-	public class WorldItem : EntityModel, IUpdatable
+	public class WorldItem : UpdatableModel<ObjectMesh>, IUpdatable
 	{
-	    public new ObjectMesh Model { get; protected set; }
         private static ushort _itemCounter;
 		public bool PickedUp { get; private set; }
 		public ushort ItemId {get; set;}
@@ -45,7 +44,7 @@ namespace Hedra.Engine.ItemSystem
             this.Model.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
 		    this.Scale = new Vector3(1.5f, 1.5f, 1.5f);
 		    this.Position = Position;
-            this.Height = Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y);
+            this._height = Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y);
 		    this.OnPickup += Player => PickedUp = true;
 
 		    EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyboardKeyEventArgs EventArgs)

@@ -124,6 +124,9 @@ namespace Hedra.Engine.Sound
             Data = SoundManager.LoadWave("Sounds/ItemCollect.wav", out Channels, out Bits, out Rate);
             SoundBuffers[(int)SoundType.TalkSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
 
+            ShortData = SoundManager.LoadOgg("Sounds/GroundQuake.ogg", out Channels, out Bits, out Rate);
+            SoundBuffers[(int)SoundType.GroundQuake] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+
             _loaded = true;
 		}
 
@@ -142,8 +145,7 @@ namespace Hedra.Engine.Sound
             if(!_loaded) return;
             ListenerPosition = LocalPlayer.Instance.Position;
 
-            Gain *= Volume;
-		    Gain = Math.Max(Gain - (ListenerPosition - Location).LengthFast / 256f, 0);
+		    Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast / 256f) * Volume, 0);
             if(Gain <= 0 ) return;
 
             SoundType type = Sound;
@@ -351,6 +353,7 @@ namespace Hedra.Engine.Sound
 	    GlassBreakInverted,
         HumanSleep,
         TalkSound,
-	    MaxSounds
+	    GroundQuake,
+        MaxSounds
     }
 }

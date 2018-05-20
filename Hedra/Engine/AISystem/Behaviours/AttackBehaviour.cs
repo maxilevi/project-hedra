@@ -1,8 +1,7 @@
-﻿using System;
-using Hedra.Engine.EntitySystem;
+﻿using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 
-namespace Hedra.Engine.AISystem
+namespace Hedra.Engine.AISystem.Behaviours
 {
     public class AttackBehaviour : Behaviour
     {
@@ -13,7 +12,7 @@ namespace Hedra.Engine.AISystem
         public AttackBehaviour(Entity Parent) : base(Parent)
         {
             Follow = new FollowBehaviour(Parent);
-            _followTimer = new Timer(16f);
+            _followTimer = new Timer(16);
         }
 
         public void SetTarget(Entity Target)
@@ -25,20 +24,20 @@ namespace Hedra.Engine.AISystem
 
         public override void Update()
         {
-            if (_followTimer.Tick())
+            if (_followTimer.Tick() || this.Target != null && this.Target.IsDead)
             {
                 this.Target = null;
                 Follow.Target = this.Target;
             }
-            if (!Parent.Model.IsAttacking)
+            if (!Parent.Model.IsAttacking && !Parent.InAttackRange(Target))
             {
                 Follow.Update();
             }
 
-            if (Target != null && Parent.InAttackRange(Target))
+            if (Parent.InAttackRange(Target))
             {
                 _followTimer.Reset();
-                Parent.Model.Attack(Target, Parent.AttackDamage + Utils.Rng.NextFloat() * 3 * 2f - 3f);            
+                Parent.Model.Attack(Target);            
             }
         }
 

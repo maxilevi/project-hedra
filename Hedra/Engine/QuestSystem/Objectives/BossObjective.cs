@@ -93,23 +93,22 @@ namespace Hedra.Engine.QuestSystem.Objectives
 		public override uint QuestLogIcon {
 			get {
 				if(_bossType == MobType.Bee || _bossType == MobType.Rat){
-					var model = Boss.Model as QuadrupedModel;
+					/*var model = Boss.Model as QuadrupedModel;
 				    if (model == null) return UserInterface.QuestFbo.TextureID[0];
 
                     model.Model.Scale *= 2;
                     if(_bossType == MobType.Bee)
 				        model.Model.Position -= Vector3.UnitY * 8f;
 				    //GameManager.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
-				    model.Model.Scale /= 2;
+				    model.Model.Scale /= 2;*/
 				}else{
-				    var model = Boss.Model as QuadrupedModel;
-				    if (model == null) return UserInterface.QuestFbo.TextureID[0];
+				    /*if (!(Boss.Model is QuadrupedModel model)) return UserInterface.QuestFbo.TextureID[0];
 
 				    Vector3 prevRot = model.Model.Rotation;
 				    model.Model.Rotation = Vector3.Zero;
                     model.Model.Update();
 				    //GameManager.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
-				    model.Model.Rotation = prevRot;
+				    model.Model.Rotation = prevRot;*/
 				}
 				return UserInterface.QuestFbo.TextureID[0];
 			}

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Hedra.Engine.Management;
+using OpenTK;
 
 namespace Hedra.Engine.Player
 {
-    public interface IPlayer
+    public interface IPlayer : ISearchable
     {
-        //VisualMessageDispatcher MessageDispatcher { get; set; }
+        Vector3 Position { get; set; }
     }
 }

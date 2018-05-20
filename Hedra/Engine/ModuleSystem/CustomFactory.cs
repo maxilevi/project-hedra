@@ -16,6 +16,7 @@ namespace Hedra.Engine.ModuleSystem
         public string Name { get; set; }
         public float MaxHealth { get; set; }
         public float AttackDamage { get; set; }
+        public float AttackCooldown { get; set; } = 1.5f;
         public float Speed { get; set; }
         public float XP { get; set; }
         public string AIType { get; set; }
@@ -58,6 +59,7 @@ namespace Hedra.Engine.ModuleSystem
             Mob.Model = new QuadrupedModel(Mob, Model);
             Mob.MaxHealth = MaxHealth;
             Mob.AttackDamage = this.DamageFormula(AttackDamage);
+            Mob.AttackCooldown = AttackCooldown;
             Mob.Speed = Speed;
 
             Mob.SearchComponent<HealthBarComponent>().DistanceFromBase = Mob.BaseBox.Max.Y - Mob.BaseBox.Min.Y + 0.1f;

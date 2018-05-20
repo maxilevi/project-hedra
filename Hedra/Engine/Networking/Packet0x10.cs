@@ -10,6 +10,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.Player;
 using System.Collections.Generic;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -46,8 +47,8 @@ namespace Hedra.Engine.Networking
 						Ids.Add( (ushort) World.Entities[i].MobId);
 						MobTypes.Add( (byte) World.Entities[i].MobType);
 						Health.Add( World.Entities[i].Health);
-						
-						AIComponent_deprecated AI = World.Entities[i].SearchComponent<AIComponent_deprecated>();
+
+					    BaseAIComponent AI = World.Entities[i].SearchComponent<BaseAIComponent>();
 						if( AI != null ){
 							//Position.Add( AI.TargetPosition );
 							//Animation.Add( (byte) (AI.IsAttacking ? 0x1 : 0x0) );
@@ -86,15 +87,15 @@ namespace Hedra.Engine.Networking
 					if(MobFound){
 						//Update
 						Mob.Health = Packet.Health[i];
-						AIComponent_deprecated AI = Mob.SearchComponent<AIComponent_deprecated>();
+					    BaseAIComponent AI = Mob.SearchComponent<BaseAIComponent>();
 						
 						if(AI != null){
-							AI.TargetPosition = Packet.Position[i];
-							AI.MoveToPoint(AI.TargetPosition, delegate{} );
+							//AI.TargetPosition = Packet.Position[i];
+							//AI.MoveToPoint(AI.TargetPosition, delegate{} );
 							
 							if(Packet.Animation[i] == 0x1){
 								Mob.SearchComponent<DamageComponent>().Immune = true;
-								Mob.Model.Attack(Mob, 0f); // Attack itself to do the animation
+								//Mob.Model.Attack(Mob, 0f); // Attack itself to do the animation
 								Mob.SearchComponent<DamageComponent>().Immune = false;
 							}
 						}
@@ -106,7 +107,7 @@ namespace Hedra.Engine.Networking
 						
 						if( MobEnt.SearchComponent<DropComponent>() != null )
 							MobEnt.RemoveComponent( MobEnt.SearchComponent<DropComponent>() );
-						AIComponent_deprecated AI = MobEnt.SearchComponent<AIComponent_deprecated>();
+						BaseAIComponent AI = MobEnt.SearchComponent<BaseAIComponent>();
 						if(AI != null)
 							AI.Enabled = false;
 					}

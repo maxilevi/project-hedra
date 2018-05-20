@@ -1,12 +1,13 @@
-﻿using Hedra.Engine.EntitySystem;
+﻿using Hedra.Engine.AISystem.Behaviours;
+using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem
 {
     public class HostileAIComponent : BaseAIComponent
     {
-        public override AIType Type => AIType.Neutral;
         protected RoamBehaviour Roam { get; }
         protected RetaliateBehaviour Retaliate { get; }
+        protected HostileBehaviour Hostile { get; }
 
         public HostileAIComponent(Entity Parent) : base(Parent)
         {
@@ -15,6 +16,7 @@ namespace Hedra.Engine.AISystem
                 AlertTime = 12f
             };
             Retaliate = new RetaliateBehaviour(Parent);
+            Hostile = new HostileBehaviour(Parent);
         }
 
         public override void Update()
@@ -25,7 +27,11 @@ namespace Hedra.Engine.AISystem
             }
             else
             {
-                Roam.Update();
+                Hostile.Update();
+                if (!Hostile.Enabled)
+                {
+                    Roam.Update();
+                }
             }
         }
     }

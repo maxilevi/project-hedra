@@ -80,7 +80,7 @@ namespace Hedra.Engine.EntitySystem
 					
 				if(Target != null && Target != Owner)
                 {
-					Parent.Model.Attack(Target, Parent.AttackDamage);
+					Parent.Model.Attack(Target);
 					if(Target.IsDead) Target = null;
 				}
                 else
@@ -88,8 +88,8 @@ namespace Hedra.Engine.EntitySystem
 					Parent.Model.Idle();
 				}
 			}
-			QuadrupedModel QuadModel = (Parent.Model as QuadrupedModel);
-			if(QuadModel.WalkAnimation == QuadModel.Model.Animator.AnimationPlaying && Target != null){
+
+			if(Parent.Model.IsWalking && Target != null){
 				Parent.Orientation = (Target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
 				Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
 				Parent.Physics.Move( Parent.Speed * 8 * Parent.Orientation * (float)Time.deltaTime);

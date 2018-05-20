@@ -191,7 +191,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 Human.Model.Run();
                 TaskManager.After(1,
                     () => TaskManager.While(
-                        () => Human.Model.IsRunning && !Human.IsMoving,
+                        () => Human.Model.IsWalking && !Human.IsMoving,
                         delegate
                         {
                             Human.Movement.Orientate();

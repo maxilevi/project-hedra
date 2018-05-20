@@ -23,11 +23,16 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 		public static Entity Generate(MobType[] PossibleTypes, Random Rng)
 		{
 		    var type = PossibleTypes[Rng.Next(0, PossibleTypes.Length)];
+		    if (type == MobType.Troll)
+		    {
+		        type = MobType.Gorilla;
+		    }
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);
 
-            var dmgComponent = new DamageComponent(boss);
-		    var healthBarComponent = new BossHealthBarComponent(boss, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
+		    var dmgComponent = boss.SearchComponent<DamageComponent>();
+            var healthBarComponent = new BossHealthBarComponent(boss, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
 			
+            boss.RemoveComponent(boss.SearchComponent<HealthBarComponent>());
 			dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args) {
 			    if (!(Args.Victim.Health <= 0)) return;
 

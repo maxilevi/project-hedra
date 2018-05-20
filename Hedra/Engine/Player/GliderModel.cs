@@ -15,10 +15,8 @@ using Hedra.Engine.Rendering;
 namespace Hedra.Engine.Player
 {
 
-	public class GliderModel : EntityModel
+	public class GliderModel : UpdatableModel<ObjectMesh>
 	{
-		public new ObjectMesh Model { get; protected set; }
-		
 		public GliderModel() : base(null)
         {
             Model = ObjectMesh.FromVertexData(

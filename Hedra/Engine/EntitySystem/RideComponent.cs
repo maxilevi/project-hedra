@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System.Drawing;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Management;
 using OpenTK;
@@ -24,7 +25,7 @@ namespace Hedra.Engine.EntitySystem
 		public bool HasRider;
 		public bool UnRidable = false;
 		public float HeightAddon = 0;
-		private AIComponent_deprecated AI;
+		private BaseAIComponent AI;
 		private HealthBarComponent _healthBar;
         private bool _shouldRide;
         private bool _shouldUnride;
@@ -32,7 +33,7 @@ namespace Hedra.Engine.EntitySystem
         private bool _canUnride;
 
         public RideComponent(Entity Parent) : base(Parent) {
-			AI = Parent.SearchComponent<AIComponent_deprecated>();
+			AI = Parent.SearchComponent<BaseAIComponent>();
 			_healthBar = Parent.SearchComponent<HealthBarComponent>();
             EventDispatcher.RegisterKeyDown(this, delegate(object Object, KeyboardKeyEventArgs EventArgs)
             {
@@ -65,7 +66,7 @@ namespace Hedra.Engine.EntitySystem
 		    {
 		        _canRide = false;
 		    }
-			if(AI == null) AI = Parent.SearchComponent<AIComponent_deprecated>();
+			if(AI == null) AI = Parent.SearchComponent<BaseAIComponent>();
 			if(_healthBar == null) _healthBar = Parent.SearchComponent<HealthBarComponent>();
 
 		    if (HasRider && Rider.IsRiding)
@@ -96,7 +97,7 @@ namespace Hedra.Engine.EntitySystem
                 Rider.Model.MountModel = null;
 				Rider = null;
 				HasRider = false;
-				if(AI != null) AI.DoLogic = true;
+				if(AI != null) AI.Enabled = true;
 				if(_healthBar != null) _healthBar.Hide = false;
 				
 				
@@ -113,7 +114,7 @@ namespace Hedra.Engine.EntitySystem
 			Rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Rider, -Rider.Speed + Parent.Speed * .5f), () => Rider != null && Rider.IsRiding);
 			HasRider = true;
 			Rider.IsRiding = true;
-			Rider.Model.MountModel = Parent.Model as QuadrupedModel;
+			Rider.Model.MountModel = (QuadrupedModel) Parent.Model;
 		    Rider.Model.MountModel.AlignWithTerrain = false;
 			Parent.Physics.UsePhysics = false;
 			Parent.Physics.HasCollision = false;
@@ -125,11 +126,11 @@ namespace Hedra.Engine.EntitySystem
 				}
 			}
 
-		    if (AI == null) AI = Parent.SearchComponent<AIComponent_deprecated>();
+		    if (AI == null) AI = Parent.SearchComponent<BaseAIComponent>();
 		    if (_healthBar == null) _healthBar = Parent.SearchComponent<HealthBarComponent>();
 
 
-            if (AI != null) AI.DoLogic = false;
+            if (AI != null) AI.Enabled = false;
 			if(_healthBar != null && Rider is LocalPlayer) _healthBar.Hide = true;
 		}
 	}

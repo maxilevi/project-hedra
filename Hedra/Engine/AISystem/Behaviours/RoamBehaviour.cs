@@ -2,7 +2,7 @@
 using Hedra.Engine.Management;
 using OpenTK;
 
-namespace Hedra.Engine.AISystem
+namespace Hedra.Engine.AISystem.Behaviours
 {
     public class RoamBehaviour : Behaviour
     {

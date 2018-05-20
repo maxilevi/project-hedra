@@ -6,16 +6,17 @@ using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public abstract class EntityModel : IDisposable
+    public abstract class UpdatableModel<T> : BaseUpdatableModel, IDisposable where T : class, IModel
     {
         protected HashSet<IModel> AdditionalModels { get; }
-        public virtual bool IsStatic => false;
+        public override Vector3 TargetRotation { get; set; }
+        public override bool IsStatic => false;
+        public override bool Disposed { get; protected set; }
         public Entity Parent { get; set; }
-        public virtual Vector3 TargetRotation { get; set; }
-        public bool Disposed { get; protected set; }
+        private T _model;
         private List<IModel> _iterableModels;
 
-        protected EntityModel(Entity Parent)
+        protected UpdatableModel(Entity Parent)
         {
             this._iterableModels = new List<IModel>();
             this.AdditionalModels = new HashSet<IModel>();
@@ -34,91 +35,105 @@ namespace Hedra.Engine.EntitySystem
             _iterableModels = AdditionalModels.ToList();
         }
 
-        public virtual bool IsAttacking { get; protected set; }
-        public virtual float Height { get; protected set; }
-        public virtual float Alpha { get; set; } = 1;
+        public T Model
+        {
+            get => _model;
+            protected set
+            {
+                if (_model?.Equals(value) ?? value != null)
+                {
+                    this.UnregisterModel(_model);
+                    _model = value;
+                    this.RegisterModel(_model);
+                }
+            }
+        }
 
-        public abstract IModel Model { get; set; }
+        public override bool IsAttacking { get; protected set; }
+        public override bool IsIdling { get; protected set; }
+        public override bool IsWalking { get; protected set; }
+        public override float Height { get; protected set; }
+        public override float Alpha { get; set; } = 1;
 
-        public virtual bool Pause
+        public override bool Pause
         {
             get => Model.Pause;
             set => _iterableModels.ForEach(M => M.Pause = value);
         }
 
-        public virtual bool ApplyFog
+        public override bool ApplyFog
         {
             get => Model.ApplyFog;
             set => _iterableModels.ForEach(M => M.ApplyFog = value);
         }
 
-        public virtual bool Enabled
+        public override bool Enabled
         {
             get => Model.Enabled;
             set => _iterableModels.ForEach(M => M.Enabled = value);
         }
 
-        public virtual Vector4 BaseTint
+        public override Vector4 BaseTint
         {
             get => Model.BaseTint;
             set => _iterableModels.ForEach(M => M.BaseTint = value);
         }
 
-        public virtual Vector4 Tint
+        public override Vector4 Tint
         {
             get => Model.Tint;
             set => _iterableModels.ForEach(M => M.Tint = value);
         }
 
-        public virtual Vector3 Position
+        public override Vector3 Position
         {
             get => Model.Position;
             set => _iterableModels.ForEach(M => M.Position = value);
         }
 
-        public virtual Vector3 Rotation
+        public override Vector3 Rotation
         {
             get => Model.Rotation;
             set => _iterableModels.ForEach(M => M.Rotation = value);
         }
 
-        public virtual Vector3 Scale
+        public override Vector3 Scale
         {
             get => Model.Scale;
             set => _iterableModels.ForEach(M => M.Scale = value);
         }
 
-        public virtual void Update()
+        public override void Update()
         {
-            if (Model != null)
+            if (_iterableModels.Count > 0)
             {
-                Model.BaseTint = Mathf.Lerp(Model.BaseTint, this.BaseTint, Time.unScaledDeltaTime * 6f);
-                Model.Tint = Mathf.Lerp(Model.Tint, this.Tint, Time.unScaledDeltaTime * 6f);
-                Model.Alpha = Mathf.Lerp(Model.Alpha, this.Alpha, Time.ScaledFrameTimeSeconds * 8f);
+                _iterableModels.ForEach(M => M.BaseTint = Mathf.Lerp(M.BaseTint, this.BaseTint, Time.unScaledDeltaTime * 6f));
+                _iterableModels.ForEach(M => M.Tint = Mathf.Lerp(M.Tint, this.Tint, Time.unScaledDeltaTime * 6f));
+                _iterableModels.ForEach(M => M.Alpha = Mathf.Lerp(M.Alpha, this.Alpha, Time.ScaledFrameTimeSeconds * 8f));
             }
         }
 
-        public virtual void Idle()
+        public override void Idle()
         {
 
         }
 
-        public virtual void Run()
+        public override void Run()
         {
 
         }
 
-        public virtual void Attack(Entity Target, float Damage)
+        public override void Attack(Entity Target)
         {
 
         }
 
-        public virtual void Draw()
+        public override void Draw()
         {
             
         }
 
-        public virtual void Dispose()
+        public override void Dispose()
         {
             this.Model?.Dispose();
             this.Disposed = true;

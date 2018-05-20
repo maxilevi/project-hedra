@@ -98,18 +98,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine\AISystem\AIState.cs" />
-    <Compile Include="Engine\AISystem\AIType.cs" />
-    <Compile Include="Engine\AISystem\AttackingBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviour.cs" />
-    <Compile Include="Engine\AISystem\FollowBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\AttackBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\Behaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\FollowBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\HostileBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\IdleBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\RetaliateBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\RoamBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\WalkBehaviour.cs" />
     <Compile Include="Engine\AISystem\FriendlyAIComponent.cs" />
     <Compile Include="Engine\AISystem\HostileAIComponent.cs" />
-    <Compile Include="Engine\AISystem\IdleBehaviour.cs" />
     <Compile Include="Engine\AISystem\NeutralAIComponent.cs" />
-    <Compile Include="Engine\AISystem\RetaliateBehaviour.cs" />
-    <Compile Include="Engine\AISystem\RoamBehaviour.cs" />
-    <Compile Include="Engine\AISystem\WalkBehaviour.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeColorsDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeEnviromentDesign.cs" />
@@ -200,8 +199,10 @@
     <Compile Include="Engine\CompatibilityManager.cs" />
     <Compile Include="Engine\AISystem\BaseAIComponent.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
-    <Compile Include="Engine\EntitySystem\EntityModel.cs" />
+    <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
+    <Compile Include="Engine\EntitySystem\UpdatableModel.cs" />
     <Compile Include="Engine\EntitySystem\HealthBonusComponent.cs" />
+    <Compile Include="Engine\EntitySystem\IModelHandler.cs" />
     <Compile Include="Engine\EntitySystem\SlowingComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedComponent.cs" />
@@ -237,11 +238,14 @@
     <Compile Include="Engine\Management\TickSystem.cs" />
     <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
     <Compile Include="Engine\Management\TrackItem.cs" />
+    <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEventBuilder.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\ColorTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\CustomFactory.cs" />
     <Compile Include="Engine\ModuleSystem\DropTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\EffectTemplate.cs" />
+    <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEvent.cs" />
+    <Compile Include="Engine\ModuleSystem\AnimationEvents\Shockwave.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidBehaviourTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidComponentsItemTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidComponentsTemplate.cs" />
@@ -262,7 +266,6 @@
     <Compile Include="Engine\ModuleSystem\SpawnerLoader.cs" />
     <Compile Include="Engine\ModuleSystem\SpawnerSettings.cs" />
     <Compile Include="Engine\ModuleSystem\SpawnTemplate.cs" />
-    <Compile Include="Engine\EntitySystem\AIComponent_deprecated.cs" />
     <Compile Include="Engine\EntitySystem\BerryBushComponent.cs" />
     <Compile Include="Engine\EntitySystem\BleedComponent.cs" />
     <Compile Include="Engine\EntitySystem\BleedingComponent.cs" />
@@ -4437,6 +4440,9 @@
     <None Include="Sounds\GlassBreakInverted.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Sounds\GroundQuake.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Sounds\Hit.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -4601,13 +4607,9 @@
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-          <PropertyGroup>
-    <PostBuildEvent>
         call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" text
         call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" binary
         call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" binary
-    </PostBuildEvent>
-  </PropertyGroup>
     </PostBuildEvent>
     <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">
         mono "$(TargetDir)../../../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" text

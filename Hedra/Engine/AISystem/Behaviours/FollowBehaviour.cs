@@ -1,6 +1,6 @@
 ﻿using Hedra.Engine.EntitySystem;
 
-namespace Hedra.Engine.AISystem
+namespace Hedra.Engine.AISystem.Behaviours
 {
     public class FollowBehaviour : Behaviour
     {

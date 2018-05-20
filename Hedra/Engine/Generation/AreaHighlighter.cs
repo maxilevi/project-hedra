@@ -70,7 +70,7 @@ namespace Hedra.Engine.Generation
                 CoroutineManager.StartCoroutine(CycleHighlight, new object[] { _highlightedAreas[k], World.Seed });
                 return;
             }
-            CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position + Vector3.UnitY * fadeSpeed });
+            CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position + Vector3.UnitY * fadeSpeed, Seconds });
 
             TaskManager.Delay((int)(Seconds * 1000f), () => CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position - Vector3.UnitY * fadeSpeed }));
         }
@@ -79,12 +79,15 @@ namespace Hedra.Engine.Generation
         {
             var area = (HighlightedArea)Params[0];
             var targetPosition = (Vector3)Params[1];
-            bool clear = targetPosition.LengthSquared < area.Position.LengthSquared; //Check if its fading in or out
+            var time = Params.Length > 2 ? (float) Params[2] : float.MaxValue;
+            var passedTime = 0f;
+            bool clear = targetPosition.Y < area.Position.Y; //Check if its fading in or out
 
-            while ((area.Position - targetPosition).LengthFast > .8f)
+            while ((area.Position - targetPosition).LengthFast > .75f && passedTime < time)
             {
 
-                area.Position = Mathf.Lerp(area.Position, targetPosition, (float)Time.deltaTime * 2f);
+                area.Position = Mathf.Lerp(area.Position, targetPosition, (float)Time.deltaTime * 4f);
+                passedTime += (float) Time.deltaTime * 4f;
                 yield return null;
             }
 

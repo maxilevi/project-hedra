@@ -1,10 +1,10 @@
-﻿using Hedra.Engine.EntitySystem;
+﻿using Hedra.Engine.AISystem.Behaviours;
+using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem
 {
     public class NeutralAIComponent : BaseAIComponent
     {
-        public override AIType Type => AIType.Neutral;
         protected RoamBehaviour Roam { get; }
         protected RetaliateBehaviour Retaliate { get; }
 

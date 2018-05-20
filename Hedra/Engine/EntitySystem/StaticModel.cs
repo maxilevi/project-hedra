@@ -13,10 +13,9 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of StaticModel.
 	/// </summary>
-	public class StaticModel : EntityModel
+	public class StaticModel : UpdatableModel<ObjectMesh>
 	{
 	    public override bool IsStatic => true;
-        public new ObjectMesh Model { get; protected set; }
 
 	    public StaticModel(Entity Parent, VertexData BaseMesh) : base(Parent)
 	    {

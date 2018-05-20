@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Hedra.Engine.EntitySystem;
@@ -10,14 +11,14 @@ namespace Hedra.Engine.PhysicsSystem
         public OnBatchProcessedEventHandler OnBatchProcessedEvent;
         public OnCommandProcessedEventHandler OnCommandProcessedEvent;
         private readonly Thread _thread;
-        private readonly List<Entity> _toUpdate;
-        private readonly List<MoveCommand> _toMove;
+        private readonly ConcurrentBag<Entity> _toUpdate;
+        private readonly ConcurrentBag<MoveCommand> _toMove;
         private bool _sleep;
 
         public PhysicsThread()
         {
-            _toUpdate = new List<Entity>();
-            _toMove = new List<MoveCommand>();
+            _toUpdate = new ConcurrentBag<Entity>();
+            _toMove = new ConcurrentBag<MoveCommand>();
             _thread = new Thread(this.Process);
             _thread.Start();
         }
@@ -56,37 +57,41 @@ namespace Hedra.Engine.PhysicsSystem
                     continue;
                 }
 
-                for (int i = _toUpdate.Count - 1; i > -1; i--)
+                while (!_toUpdate.IsEmpty)
                 {
                     try
                     {
-                        if (_toUpdate[i] != null)
-                            _toUpdate[i].Physics.Update();
-
-                        _toUpdate.RemoveAt(i);
+                        var result = _toUpdate.TryTake(out Entity entity);
+                        if (result)
+                        {
+                            entity?.Physics.Update();
+                        }
                     }
                     catch (Exception e)
                     {
                         Log.WriteLine(e.ToString());
+                        break;
                     }
                 }
 
-
-
-                for (int i = _toMove.Count - 1; i > -1; i--)
+                while (!_toMove.IsEmpty)
                 {
                     try
                     {
-                        if (_toMove[i].Parent != null)
-                            _toMove[i].Parent.Physics.ProccessCommand(_toMove[i]);
-                        OnCommandProcessedEvent?.Invoke(_toMove[i]);
-                        _toMove.RemoveAt(i);
+                        var result = _toMove.TryTake(out MoveCommand command);
+                        if (result)
+                        {
+                            command.Parent?.Physics.ProccessCommand(command);
+                            OnCommandProcessedEvent?.Invoke(command);
+                        }
                     }
                     catch (Exception e)
                     {
                         Log.WriteLine(e.ToString());
+                        break;
                     }
                 }
+
                 OnBatchProcessedEvent?.Invoke();
                 _sleep = true;
             }

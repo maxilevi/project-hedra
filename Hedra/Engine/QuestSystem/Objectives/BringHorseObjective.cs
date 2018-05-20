@@ -73,14 +73,14 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 }
                 if (!_runningAway)
                 {
-                    var model = _horse.Model as QuadrupedModel;
+                   /* var model = _horse.Model as QuadrupedModel;
                     if(model == null) return UserInterface.QuestFbo.TextureID[0];
                     model.Model.Scale *= 2f;
 
                     //GameManager.Player.UI.DrawPreview(_horse.Model, UserInterface.QuestFbo);
 
                     model.Model.Scale /= 2f;
-
+                    */
                 }
                 else
                 {
@@ -118,7 +118,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
             _horse.BlockPosition = ObjectivePosition;
             _horse.Model.Position = ObjectivePosition;
             _horse.Physics.CanCollide = false;
-            (_horse.Model as QuadrupedModel).IsMountable = true;
+            //(_horse.Model as QuadrupedModel).IsMountable = true;
 
             World.RemoveEntity(_horse);
 

@@ -13,6 +13,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Rendering;
 using OpenTK;
 using System.Drawing;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
@@ -69,7 +70,7 @@ namespace Hedra.Engine.QuestSystem
 	        carriage.Health = carriage.MaxHealth;
 	        carriage.Physics.CanCollide = true;
 	        carriage.Physics.PushAround = false;
-	        carriage.RemoveComponent(carriage.SearchComponent<AIComponent_deprecated>());
+	        carriage.RemoveComponent(carriage.SearchComponent<BaseAIComponent>());
 	        carriage.SearchComponent<DamageComponent>().Immune = true;
 	        carriage.AddComponent(new CarriageAIComponent(carriage));
             carriage.RemoveComponent(carriage.SearchComponent<HealthBarComponent>());

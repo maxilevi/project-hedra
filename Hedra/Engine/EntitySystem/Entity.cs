@@ -48,6 +48,7 @@ namespace Hedra.Engine.EntitySystem
         public event OnAttackEventHandler BeforeAttacking;
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1;
+        public float AttackCooldown { get; set; }
         public Box BaseBox { get; private set; } = new Box(Vector3.Zero, Vector3.One);
         public bool Destroy { get; set; } = false;
         public int Level { get; set; } = 1;
@@ -148,7 +149,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public EntityModel Model { get; set; }
+        public BaseUpdatableModel Model { get; set; }
 
         public string Name
         {
@@ -250,6 +251,12 @@ namespace Hedra.Engine.EntitySystem
 
         public bool InAttackRange(Entity Target, out float Dot)
         {
+            if (Target == null)
+            {
+                Dot = 0;
+                return false;
+            }
+
             Dot = Math.Max(Vector2.Dot(
                 (Target.Position - this.Position).Xz.NormalizedFast(),
                 this.Orientation.Xz.NormalizedFast()
@@ -258,7 +265,7 @@ namespace Hedra.Engine.EntitySystem
             return (Target.Position - Position).LengthFast < (BaseBox.Max - BaseBox.Min).LengthFast +
                    (Target.BaseBox.Max - Target.BaseBox.Min).LengthFast &&
                    Target != this &&
-                   Dot > 0.7f;
+                   Dot > 0.85f;
         }
 
         public bool InAttackRange(Entity Target)

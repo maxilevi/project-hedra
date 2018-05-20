@@ -47,10 +47,7 @@ namespace Hedra.Engine.QuestSystem
                 if ((ChasingTarget.Position - Parent.Position).LengthFast < rangeDistance * .5f && !Parent.Knocked){
 					if(_attackTimer < 0)
                     {
-						if(ChasingTarget is LocalPlayer)
-							Parent.Model.Attack(ChasingTarget, 0f);
-						else
-							Parent.Model.Attack(ChasingTarget, 4.5f);//Do more damage to mobs
+						Parent.Model.Attack(ChasingTarget);
                         _attackTimer = 1.25f;
                     }
 				}else

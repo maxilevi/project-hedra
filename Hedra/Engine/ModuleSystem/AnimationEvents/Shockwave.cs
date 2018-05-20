@@ -1,0 +1,47 @@
+﻿using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation;
+using Hedra.Engine.Rendering.Particles;
+using Hedra.Engine.Sound;
+using OpenTK;
+
+namespace Hedra.Engine.ModuleSystem.AnimationEvents
+{
+    public class Shockwave : AnimationEvent
+    {
+        public Shockwave(Entity Parent) : base(Parent) {}
+
+        public override void Build()
+        {
+            var position = Parent.Position + Parent.Orientation * Parent.Model.Scale * 6f;
+            var underChunk = World.GetChunkAt(position);
+
+            World.Particles.VariateUniformly = true;
+            World.Particles.GravityEffect = .25f;
+            World.Particles.Scale = Vector3.One;
+            World.Particles.ScaleErrorMargin = new Vector3(.25f, .25f, .25f);
+            World.Particles.PositionErrorMargin = new Vector3(4f, .5f, 4f);
+            World.Particles.Shape = ParticleShape.SPHERE;
+            World.Particles.ParticleLifetime = 1.5f;
+
+            for (var i = 0; i < 125; i++)
+            {
+                World.Particles.Position = position + new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0, Utils.Rng.NextFloat() * 2f -1f) * 24f;
+                World.Particles.Direction = (Utils.Rng.NextFloat() * .5f + .5f) * Vector3.UnitY * 2f;
+                World.Particles.Color = World.BiomePool.GetRegion(position).Colors.DirtColor;
+                World.Particles.Emit();
+            }
+            World.HighlightArea(position, World.BiomePool.GetRegion(position).Colors.DirtColor * 1.5f, 48f, 1.5f);
+
+            var entities = World.Entities;
+            foreach (var entity in entities)
+            {
+                var damage = Parent.AttackDamage * (1-Mathf.Clamp((position - entity.Position).Xz.LengthFast / 24f, 0, 1));
+                if (damage > 0 && Parent != entity)
+                {
+                    entity.Damage(damage, Parent, out float xp);
+                }           
+            }
+            SoundManager.PlaySound(SoundType.GroundQuake, position, false, 1f, 5f);
+        }
+    }
+}

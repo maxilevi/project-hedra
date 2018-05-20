@@ -15,6 +15,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using System.Drawing;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
 
@@ -79,7 +80,7 @@ namespace Hedra.Engine.EntitySystem
             if (!Parent.IsStatic && PlaySound && (LocalPlayer.Instance.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
             {
                 var baseDamage = Damager != null ? (Damager as Humanoid)?.BaseDamageEquation 
-                    ?? (Damager.SearchComponent<AIComponent_deprecated>() != null ? Damager.AttackDamage * .3f : Amount * .3f) : Amount / 3f;
+                    ?? (Damager.SearchComponent<BaseAIComponent>() != null ? Damager.AttackDamage * .3f : Amount * .3f) : Amount / 3f;
                 Color color = Color.White;
                 float dmgDiff = Amount / baseDamage;
                 if (dmgDiff > 1.85f) color = Color.Gold;
@@ -103,7 +104,7 @@ namespace Hedra.Engine.EntitySystem
 
             if (PlaySound)
             {
-                SoundManager.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SwooshSound, Parent.Position, 1f, 80f);
+                SoundManager.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SlashSound, Parent.Position, 1f, 80f);
             }
 
             if (shouldMiss || Immune) return;
