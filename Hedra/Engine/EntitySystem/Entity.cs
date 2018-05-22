@@ -251,12 +251,6 @@ namespace Hedra.Engine.EntitySystem
 
         public bool InAttackRange(Entity Target, out float Dot)
         {
-            if (Target == null)
-            {
-                Dot = 0;
-                return false;
-            }
-
             Dot = Math.Max(Vector2.Dot(
                 (Target.Position - this.Position).Xz.NormalizedFast(),
                 this.Orientation.Xz.NormalizedFast()
@@ -316,7 +310,7 @@ namespace Hedra.Engine.EntitySystem
             }
             var nearestWaterBlockY = this.WaterAtPosition(this.Position);
             var underChunk = World.GetChunkAt(this.Position);
-            var touchingFloor = this.Position.Y < PhysicsSystem.Physics.HeightAtPosition(this.Position) && nearestWaterBlockY < this.Position.Y;
+            var touchingFloor = this.Position.Y < PhysicsSystem.Physics.HeightAtPosition(this.Position);
             var size = this.BaseBox.Max.Y - this.BaseBox.Min.Y;
             if (nearestWaterBlockY > Position.Y + size+1f && !touchingFloor)
             {

@@ -58,7 +58,8 @@ namespace Hedra.Engine.EntitySystem
 		    IdleAnimation.Speed = Template.IdleAnimation.Speed;
 		    WalkAnimation.Speed = Template.WalkAnimation.Speed;
 
-			this.Model.Scale = Vector3.One * (Template.Scale + Template.Scale * rng.NextFloat() * .3f - Template.Scale * rng.NextFloat() * .15f);
+		    this.AlignWithTerrain = Template.AlignWithTerrain;
+            this.Model.Scale = Vector3.One * (Template.Scale + Template.Scale * rng.NextFloat() * .3f - Template.Scale * rng.NextFloat() * .15f);
 			this.Parent.SetHitbox(AssetManager.LoadHitbox(Template.IdleAnimation.Path) * this.Model.Scale);
 
 		    for (var i = 0; i < AttackAnimations.Length; i++)

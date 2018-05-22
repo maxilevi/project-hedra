@@ -42,6 +42,7 @@ namespace Hedra.Engine.ModuleSystem
                 {"Friendly", typeof(FriendlyAIComponent)},
                 {"Neutral", typeof(NeutralAIComponent)},
                 {"Hostile", typeof(HostileAIComponent)},
+                {"Sheep", typeof(SheepAIComponent)},
             };
 
             foreach (KeyValuePair<string, Type> pair in EffectTable)

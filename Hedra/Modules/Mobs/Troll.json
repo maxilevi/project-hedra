@@ -10,6 +10,7 @@
 	"Effects": [],
 	"Drops": [],
 	"Model": {
+		"AlignWithTerrain" :  false,
 		"Path": "$DataFile$/Assets/Chr/TrollIdle.dae",
 		"Scale": 3.0,
 		"IdleAnimation": {

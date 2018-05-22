@@ -17,6 +17,8 @@ namespace Hedra.Engine.AISystem.Behaviours
 
         public void SetTarget(Entity Target)
         {
+            if(Target.IsDead) return;
+
             this.Target = Target;
             Follow.Target = this.Target;
             _followTimer.Reset();
@@ -24,23 +26,22 @@ namespace Hedra.Engine.AISystem.Behaviours
 
         public override void Update()
         {
-            if (_followTimer.Tick() || this.Target != null && this.Target.IsDead)
+            if (_followTimer.Tick() || !Follow.Enabled)
             {
                 this.Target = null;
                 Follow.Target = this.Target;
             }
-            if (!Parent.Model.IsAttacking && !Parent.InAttackRange(Target))
+            if (!Parent.Model.IsAttacking && Target != null && !Parent.InAttackRange(Target))
             {
                 Follow.Update();
             }
-
-            if (Parent.InAttackRange(Target))
+            if (Target != null && Parent.InAttackRange(Target))
             {
                 _followTimer.Reset();
                 Parent.Model.Attack(Target);            
             }
         }
 
-        public bool Enabled => Follow.Enabled;
+        public bool Enabled => this.Target != null;
     }
 }

@@ -100,7 +100,9 @@
   <ItemGroup>
     <Compile Include="Engine\AISystem\Behaviours\AttackBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\Behaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\FleeBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\FollowBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\HerdBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\HostileBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\IdleBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\RetaliateBehaviour.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="Engine\AISystem\FriendlyAIComponent.cs" />
     <Compile Include="Engine\AISystem\HostileAIComponent.cs" />
     <Compile Include="Engine\AISystem\NeutralAIComponent.cs" />
+    <Compile Include="Engine\AISystem\SheepAIComponent.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeColorsDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeEnviromentDesign.cs" />
@@ -4422,6 +4425,9 @@
     <None Include="Sounds\Bow.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Sounds\Soundtrack\CardinalCity.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Sounds\DarkSound.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -4482,22 +4488,22 @@
     <None Include="Sounds\Slash.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Song0.ogg">
+    <None Include="Sounds\Soundtrack\Song0.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Song1.ogg">
+    <None Include="Sounds\Soundtrack\Song1.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Song2.ogg">
+    <None Include="Sounds\Soundtrack\Song2.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Song3.ogg">
+    <None Include="Sounds\Soundtrack\Song3.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Song4.ogg">
+    <None Include="Sounds\Soundtrack\Song4.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Song5.ogg">
+    <None Include="Sounds\Soundtrack\Song5.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\VillageAmbient.ogg">
