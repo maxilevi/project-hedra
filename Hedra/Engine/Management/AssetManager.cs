@@ -175,20 +175,33 @@ namespace Hedra.Engine.Management
 		public static string ReadShader(string Name){
 			var builder  = new StringBuilder();
 			var save = false;
-		    foreach(var line in ShaderCode.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)){
+		    var regex = $"^<.*{AssetManager.BuildNameRegex(Name)}>$";
+            foreach (var line in ShaderCode.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)){
 				var next = false;
-				if(line.Contains(Name)){
+				if(Regex.IsMatch(line, regex))
+                {
 					save = true;
 					next = true;
 				}
-				if(line.Contains("<end>"))
-					save = false;
-				if(save && !next)
-					builder.Append(line + Environment.NewLine);
-			}
+		        if (line.Contains("<end>"))
+		        {
+		            save = false;
+		        }
+
+		        if (save && !next)
+		        {
+		            builder.Append(line + Environment.NewLine);
+		        }
+		    }
 
             return builder.ToString();
 		}
+
+	    private static string BuildNameRegex(string Name)
+	    {
+	        var slashRegex = "\\\\*\\/*";
+            return Name.Replace("/", slashRegex).Replace(".", "\\.");
+	    }
 		
 		public static Icon LoadIcon(string path){
 			using(var ms = new MemoryStream(AssetManager.ReadBinary(path, DataFile3))){
@@ -236,12 +249,17 @@ namespace Hedra.Engine.Management
 		        _hitboxCache.Add(ModelFile, vertexData);
 		    }
 		    var data = _hitboxCache[ModelFile];
-		    var minus = Math.Min(data.SupportPoint(-Vector3.UnitX).X, data.SupportPoint(-Vector3.UnitZ).Z);
-		    var plus = Math.Max(data.SupportPoint(Vector3.UnitX).X, data.SupportPoint(Vector3.UnitZ).Z);
+		    var offset = new Vector3(
+                (data.SupportPoint(Vector3.UnitX).X + data.SupportPoint(-Vector3.UnitX).X) * .5f,
+                0,
+                (data.SupportPoint(Vector3.UnitZ).Z + data.SupportPoint(-Vector3.UnitZ).Z) * .5f
+                );
+            var minus = Math.Min(data.SupportPoint(-Vector3.UnitX).X - offset.X, data.SupportPoint(-Vector3.UnitZ).Z - offset.Z);
+		    var plus = Math.Max(data.SupportPoint(Vector3.UnitX).X - offset.X, data.SupportPoint(Vector3.UnitZ).Z - offset.Z);
             return new Box(
-		        new Vector3(minus, data.SupportPoint(-Vector3.UnitY).Y,
-		            minus),
-		        new Vector3(plus, data.SupportPoint(Vector3.UnitY).Y, plus)) * .75f;
+		        new Vector3(minus, data.SupportPoint(-Vector3.UnitY).Y, minus),
+		        new Vector3(plus, data.SupportPoint(Vector3.UnitY).Y, plus)
+                );
 		}
 		
 		public static VertexData PlyLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true){

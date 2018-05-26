@@ -28,9 +28,11 @@ namespace Hedra.Engine.Rendering.Animation
         private VBO<Vector3> Vertices, Normals, JointIds, VertexWeights;
 		private VBO<Vector3> Colors;
 		private VBO<uint> Indices;
-		private Vector3[] WeightsArray, JointIdsArray, VerticesArray;
-		private bool Disposed = false;
+        private bool Disposed = false;
 	    public VAO<Vector3, Vector3, Vector3, Vector3, Vector3> Data { get; private set; }
+	    public Vector3[] WeightsArray { get; private set; }
+	    public Vector3[] JointIdsArray { get; private set; }
+	    public Vector3[] VerticesArray { get; private set; }
         //Skeleton
         public Joint RootJoint {get;}
 		public int JointCount {get;}
@@ -256,11 +258,13 @@ namespace Hedra.Engine.Rendering.Animation
 			}
 		}
 		
-		public Matrix4 MatrixFromJoint(Joint TargetJoint){
+		public Matrix4 MatrixFromJoint(Joint TargetJoint)
+        {
 			return JointTransforms[TargetJoint.Index];
 		}
 		
-		public Vector3 TransformFromJoint(Vector3 Position, Joint TargetJoint){
+		public Vector3 TransformFromJoint(Vector3 Position, Joint TargetJoint)
+        {
 			
 			Vector3 TotalLocalPos = Vector3.Zero;
 			Matrix4 JointTransform = JointTransforms[ TargetJoint.Index ];
@@ -270,10 +274,12 @@ namespace Hedra.Engine.Rendering.Animation
 			return TotalLocalPos;
 		}
 		
-		public Vector3 JointDefaultPosition(Joint TargetJoint){
+		public Vector3 JointDefaultPosition(Joint TargetJoint)
+        {
 			Vector3 Average = Vector3.Zero;
 			float Count = 0;
-			for(int i = 0; i < VerticesArray.Length; i++){
+			for(var i = 0; i < VerticesArray.Length; i++)
+            {
 				if(JointIdsArray[i].X == TargetJoint.Index || JointIdsArray[i].Y == TargetJoint.Index || JointIdsArray[i].Z == TargetJoint.Index){
 					Average += VerticesArray[i];
 					Count++;

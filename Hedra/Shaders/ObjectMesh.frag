@@ -1,4 +1,5 @@
 #version 330 compatibility
+!include<"Includes/GammaCorrection.shader">
 
 in vec4 Color;
 in vec4 IColor;
@@ -10,9 +11,9 @@ in vec3 InPos;
 in vec3 InNorm;
 in vec4 Coords;
 in vec3 LightDir;
-in vec3 PointDiffuse;
 in vec3 vertex_position;
 in vec3 base_normal;
+in vec4 point_diffuse;
 
 layout(location = 0) out vec4 FColor;
 layout(location = 1)out vec4 OutPosition;
@@ -39,7 +40,8 @@ vec3 doTint(vec3 color, vec3 tint);
 void main(){
 
 	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, vertex_position.xyz).r;
-	vec4 inputColor = vec4(Color.xyz + tex * 0.2 * useNoiseTexture, Color.w);
+	vec4 inputColor = vec4(linear_to_srbg(Color.xyz + tex * 0.2 * useNoiseTexture), Color.w);
+
 	if(Outline){
 		inputColor += vec4(Color.xyz, -1.0) * .5f;
 	}
@@ -76,13 +78,14 @@ void main(){
 	}
 
 	vec4 SkyColor = vec4( mix(BotColor, TopColor, (gl_FragCoord.y / Height) - .25) );
-	
+	vec3 pointLightColor = doTint(linear_to_srbg(point_diffuse.xyz), BaseTint.rgb) * Tint.rgb;
+
 	if(UseFog){
-		vec4 NewColor = mix(SkyColor, doTint(inputColor * ShadowVisibility + vec4(PointDiffuse.xyz, 0.0), vec4(BaseTint.rgb, 1.0)) * vec4(Tint.rgb, 1.0), Visibility);
+		vec4 NewColor = mix(SkyColor, doTint(inputColor * ShadowVisibility, vec4(BaseTint.rgb, 1.0)) * vec4(Tint.rgb, 1.0) + vec4(pointLightColor, 0.0), Visibility);
 		
 		FColor = vec4(NewColor.xyz, Alpha);
 	}else{
-		FColor = vec4( doTint(inputColor.xyz * ShadowVisibility + PointDiffuse.xyz, BaseTint.rgb) * Tint.rgb, Alpha);
+		FColor = vec4( doTint(inputColor.xyz * ShadowVisibility, BaseTint.rgb) * Tint.rgb + pointLightColor, Alpha);
 	}
 
 	if (Outline) {

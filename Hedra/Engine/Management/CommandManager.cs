@@ -46,7 +46,10 @@ namespace Hedra.Engine.Management
 					}
 					return true;
 				}
-				
+			    if (Parts[0] == "bloom")
+			    {
+			        GameSettings.Bloom = !GameSettings.Bloom;
+			    }
 				if(Parts[0] == "kill")
 				{
 				    if (Parts.Length == 1) LocalPlayer.Instance.Health = 0f;

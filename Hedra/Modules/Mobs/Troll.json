@@ -24,7 +24,7 @@
 		"AttackAnimations": [
 			{
 				"Path": "$DataFile$/Assets/Chr/TrollAttack0.dae",
-				"Speed": 1.75,
+				"Speed": 0.75,
 				"OnAnimationMid" : "Shockwave"
 			}
 		]

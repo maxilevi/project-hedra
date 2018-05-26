@@ -121,7 +121,6 @@ namespace Hedra.Engine.StructureSystem
                         //skeleton.MaxHealth *= 3f;
                         skeleton.Health = skeleton.MaxHealth;
                         skeleton.Model.Resize(Vector3.One * 2.5f);
-                        skeleton.SearchComponent<HealthBarComponent>().DistanceFromBase *= 3.5f;
                     }
                     else
                     {
@@ -129,7 +128,6 @@ namespace Hedra.Engine.StructureSystem
                         //skeleton.MaxHealth *= 1.5f;
                         skeleton.Health = skeleton.MaxHealth;
                         skeleton.Model.Resize(Vector3.One * 1.5f);
-                        skeleton.SearchComponent<HealthBarComponent>().DistanceFromBase *= 2.5f;
                     }
                     enemies.Add(skeleton);
 

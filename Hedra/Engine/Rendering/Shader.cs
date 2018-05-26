@@ -7,7 +7,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Management;
@@ -82,11 +81,11 @@ namespace Hedra.Engine.Rendering
 	        for (var i = 0; i < sources.Length; i++)
 	        {
 	            if (sources[i] == null) continue;
-	            var newSource = sources[i].SourceFinder();
+	            var newSource = ShaderParser.ProcessSource(sources[i].SourceFinder());
 	            if (newSource != sources[i].Source)
 	            {
 	                Log.WriteLine($"Shader source '{sources[i].Name}' has been updated. ");
-	                sources[i].Source = sources[i].SourceFinder();
+	                sources[i].Source = newSource;
 	                updated = true;
 	            }
 	        }
@@ -127,8 +126,12 @@ namespace Hedra.Engine.Rendering
 	    }
 
         private void CompileShaders(ShaderData DataV, ShaderData DataG, ShaderData DataF)
-	    {
-            if(ShaderId != 0) GL.DeleteProgram(ShaderId);
+        {
+            if (DataV != null) DataV.Source = ShaderParser.ProcessSource(DataV.Source);
+            if (DataG != null) DataG.Source = ShaderParser.ProcessSource(DataG.Source);
+            if (DataF != null) DataF.Source = ShaderParser.ProcessSource(DataF.Source);
+
+            if (ShaderId != 0) GL.DeleteProgram(ShaderId);
 	        int shadervid = -1;
 	        int shaderfid = -1;
 	        int shadergid = -1;

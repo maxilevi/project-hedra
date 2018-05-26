@@ -96,7 +96,7 @@ namespace Hedra.Engine.StructureSystem
             var parameters = (TentParameters) Params[0];
             var rng = (Random)Params[1];
             var underChunk = World.GetChunkAt(parameters.Position);
-            while (underChunk == null || !underChunk.Landscape.StructuresPlaced)
+            while (underChunk?.Landscape == null || !underChunk.Landscape.StructuresPlaced)
             {
                 yield return null;
             }

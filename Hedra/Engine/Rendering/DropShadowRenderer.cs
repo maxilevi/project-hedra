@@ -45,7 +45,7 @@ namespace Hedra.Engine.Rendering
 				_shadows.Add(Shadow);
 
 		    lock (_shadowPositions)
-		        _shadowPositions.Add(Shadow.Position);
+		        _shadowPositions.Add(Shadow.Position.Xz.ToVector3());
 
 		}
 
@@ -77,11 +77,13 @@ namespace Hedra.Engine.Rendering
 			
 			lock(_shadows){
 				_shouldShadows.Clear();
-				for(int i = 0; i < _shadows.Count; i++){
+				for(var i = 0; i < _shadows.Count; i++)
+                {
 					if ((!GameSettings.SSAO || _shadows[i].IsCosmeticShadow) && _shadows[i].ShouldDraw && DrawManager.FrustumObject.PointInFrustum(_shadows[i].Position))
 						_shouldShadows.Add(_shadows[i]);
 				}
-			}
+			    _shouldShadows = _shouldShadows.OrderBy(S => S.Position.Y).ToList();
+            }
 			Count = _shouldShadows.Count;
 			if(_shouldShadows.Count > 0){
 
@@ -91,7 +93,6 @@ namespace Hedra.Engine.Rendering
 				GraphicsLayer.Disable(EnableCap.DepthTest);
 
 			    DrawManager.UIRenderer.SetupQuad();
-
                 for (int i = 0; i < _shouldShadows.Count; i++)
 			    {
 

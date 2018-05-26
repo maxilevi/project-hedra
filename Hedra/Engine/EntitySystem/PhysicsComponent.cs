@@ -66,8 +66,8 @@ namespace Hedra.Engine.EntitySystem
 
 	    public Vector3 TargetPosition
 	    {
-            get { return Parent.BlockPosition * new Vector3(1,Chunk.BlockSize,1); }
-            set { Parent.BlockPosition = new Vector3(value.X, value.Y / Chunk.BlockSize, value.Z); }
+            get => Parent.BlockPosition * new Vector3(1,Chunk.BlockSize,1);
+	        set => Parent.BlockPosition = new Vector3(value.X, value.Y / Chunk.BlockSize, value.Z);
 	    }
 
 	    public override void Update(){
@@ -210,12 +210,15 @@ namespace Hedra.Engine.EntitySystem
                     if (World.Entities[i].Physics.HasCollision &&
                         Physics.Collides(World.Entities[i].HitBox, parentBox))
                     {
-                        if (!PushAround) return;
+                        if (!PushAround || World.Entities[i].HitBox.Size.LengthFast > Parent.HitBox.Size.LengthFast) return;
                         
                         Vector3 increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3();
                         increment = increment.Xz.NormalizedFast().ToVector3();
-                        var command = new MoveCommand(World.Entities[i], increment * 2f * (float)Time.deltaTime);
-                        command.IsRecursive = true;
+                        var command =
+                            new MoveCommand(World.Entities[i], increment * 12f * (float) Time.deltaTime)
+                            {
+                                IsRecursive = true
+                            };
 
                         World.Entities[i].Physics.Move(command);
                         return;
@@ -315,7 +318,7 @@ namespace Hedra.Engine.EntitySystem
 		        float lowestY = Physics.LowestHeight((int)Parent.BlockPosition.X, (int)Parent.BlockPosition.Z);
 		        if (Parent.BlockPosition.Y * Chunk.BlockSize < lowestY)
 		        {
-		            Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, (lowestY + Parent.Model.Height + BaseHeight) / Chunk.BlockSize, Parent.BlockPosition.Z);
+		            Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, (lowestY + BaseHeight) / Chunk.BlockSize, Parent.BlockPosition.Z);
 		        }
 
                 if (!blockNy && delta.Y < 0 || !blockNy && Parent.IsUnderwater)
@@ -331,7 +334,7 @@ namespace Hedra.Engine.EntitySystem
 
                         float heightAtPositon = Physics.HeightAtBlock(Parent.BlockPosition - Vector3.UnitY);
 		                Parent.BlockPosition = new Vector3(Parent.BlockPosition.X,
-		                    (heightAtPositon + Parent.Model.Height + BaseHeight) / Chunk.BlockSize,
+		                    (heightAtPositon + BaseHeight) / Chunk.BlockSize,
 		                    Parent.BlockPosition.Z);	                
 
 		                Parent.IsGrounded = true;

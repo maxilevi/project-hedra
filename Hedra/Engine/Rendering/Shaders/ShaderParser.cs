@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Hedra.Engine.Management;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Shaders
@@ -17,6 +19,19 @@ namespace Hedra.Engine.Rendering.Shaders
         public ShaderParser(string Source)
         {
             this.Source = Source;
+        }
+
+        public static string ProcessSource(string Source)
+        {
+            if (Source == null) return null;
+            var matches = Regex.Matches(Source, @"(!\s*include\s*<\s*""([a-zA-Z\/\.]+)""\s*>)").Cast<Match>().ToArray();
+            for (var i = 0; i < matches.Length; i++)
+            {
+                var statement = matches[i].Groups[1].Value;
+                var includeFile = matches[i].Groups[2].Value;
+                Source = Source.Replace(statement, AssetManager.ReadShader(includeFile));
+            }
+            return Source;
         }
 
         public string GetVersionString()
@@ -48,8 +63,7 @@ namespace Hedra.Engine.Rendering.Shaders
 
         private int ParseArraySize(string Value)
         {
-            int newValue;
-            var tryInt = int.TryParse(Value, out newValue);
+            var tryInt = int.TryParse(Value, out int newValue);
             if (!tryInt)
             {
                 newValue = int.Parse(this.GetValueFromConstant(Value));

@@ -103,8 +103,8 @@ namespace Hedra.Engine.Rendering
 				IntPtr[] Offsets;
 				int[] Counts = WaterBuffer.BuildCounts(ToDraw, out Offsets);
 
-			    WaveMovement += (float)Time.unScaledDeltaTime * Mathf.Radian * 64;
-			    if (WaveMovement >= 5)
+			    WaveMovement += Time.unScaledDeltaTime * Mathf.Radian * 32;
+			    if (WaveMovement >= 5f)
 			        WaveMovement = 0;
 
                 WaterBind();
@@ -146,7 +146,7 @@ namespace Hedra.Engine.Rendering
             StaticShader["PlayerPosition"] = GameManager.Player.Position;
 		    StaticShader["Time"] = !GameManager.InStartMenu ? Time.CurrentFrame : Time.UnPausedCurrentFrame;
 		    StaticShader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
-			StaticShader["Snow"] = SkyManager.Snowing ? 1.0f : 0.0f;		
+			//StaticShader["Snow"] = SkyManager.Snowing ? 1.0f : 0.0f;		
 			StaticShader["UseShadows"] = (float) GameSettings.ShadowQuality * (GameSettings.Shadows ? 1f : 0f);
 		    StaticShader["BakedOffset"] = BakedOffset;
 		    StaticShader["Scale"] = Scale;

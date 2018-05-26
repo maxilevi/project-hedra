@@ -65,7 +65,10 @@ namespace Hedra.Engine.Player
         private ObjectMesh _lampModel;
 	    private bool _hasLamp;
         private Vector3 _previousPosition;
-        private Quaternion _rotationQuaternion;
+        private Vector3 _rotation;
+        private Quaternion _rotationQuaternionX;
+        private Quaternion _rotationQuaternionY;
+        private Quaternion _rotationQuaternionZ;
         private float _lastAnimationTime = -1;
         private float _targetAlpha = 1f;
 
@@ -152,7 +155,6 @@ namespace Hedra.Engine.Player
 			};
 
             this.Human.SetHitbox(AssetManager.LoadHitbox(Template.Path) * this.Model.Scale);
-            this.Height = 1.65f;//this.Human.DefaultBox.Max.Y - this.Human.DefaultBox.Min.Y;
 
             this.Idle();
             this.Model.Size = this.Human.BaseBox.Max - this.Human.BaseBox.Min; 
@@ -362,13 +364,22 @@ namespace Hedra.Engine.Player
 			if(Model != null)
             {
 				Model.Update();
-				Vector3 PositionAddon = -Vector3.UnitY * 1.5f;
-				if(this.MountModel != null)
-					PositionAddon += (MountModel.Parent.HitBox.Max.Y - MountModel.Parent.HitBox.Min.Y) * Vector3.UnitY * 0.65f;
-				
-				Model.Position = this.Position + PositionAddon;
-			    this._rotationQuaternion = Quaternion.Slerp(this._rotationQuaternion, QuaternionMath.FromEuler(this.TargetRotation * Mathf.Radian), Time.unScaledDeltaTime * 6f);
-			    Model.Rotation = QuaternionMath.ToEuler(this._rotationQuaternion);
+				Vector3 positionAddon = Vector3.Zero;
+                if (this.MountModel != null)
+                {
+                    positionAddon += (MountModel.Parent.HitBox.Max.Y - MountModel.Parent.HitBox.Min.Y) * Vector3.UnitY *
+                                     0.65f;
+                }
+
+                Model.Position = this.Position + positionAddon;
+                this._rotationQuaternionX = Quaternion.Slerp(this._rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * this.TargetRotation * Mathf.Radian), Time.unScaledDeltaTime * 6f);
+                this._rotationQuaternionY = Quaternion.Slerp(this._rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * this.TargetRotation * Mathf.Radian), Time.unScaledDeltaTime * 6f);
+                this._rotationQuaternionZ = Quaternion.Slerp(this._rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * this.TargetRotation * Mathf.Radian), Time.unScaledDeltaTime * 6f);
+                Model.Rotation = new Vector3(
+                    QuaternionMath.ToEuler(this._rotationQuaternionX).X,
+                    QuaternionMath.ToEuler(this._rotationQuaternionY).Y,
+                    QuaternionMath.ToEuler(this._rotationQuaternionZ).Z
+                    );
 
                 this.Rotation = Model.Rotation;
 				//this._shadow.Position = Model.Position;

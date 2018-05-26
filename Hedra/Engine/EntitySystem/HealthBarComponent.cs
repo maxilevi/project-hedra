@@ -25,7 +25,6 @@ namespace Hedra.Engine.EntitySystem
         private float _targetBarSize = 1;
         private float _textEnabled;
         private bool _textUpdated;
-        public float DistanceFromBase = 0;
         public Color FontColor = Color.White;
 
 
@@ -33,10 +32,7 @@ namespace Hedra.Engine.EntitySystem
 
         public string Name
         {
-            get
-            {
-                return _name ?? Utils.AddSpacesToSentence(Parent.Type, true);
-            }
+            get => _name ?? Parent.Type.AddSpacesToSentence(true);
             set
             {
                 _name = value;
@@ -122,7 +118,7 @@ namespace Hedra.Engine.EntitySystem
             _textEnabled = 1;
 
             Vector4 eyeSpace =
-                Vector4.Transform(new Vector4(Parent.Position + Vector3.UnitY * (DistanceFromBase + 4), 1),
+                Vector4.Transform(new Vector4(Parent.Position + (Parent.Model.Height+1) * Vector3.UnitY, 1),
                     DrawManager.FrustumObject.ModelViewMatrix);
             Vector4 homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
             Vector3 ndc = homogeneusSpace.Xyz / homogeneusSpace.W;

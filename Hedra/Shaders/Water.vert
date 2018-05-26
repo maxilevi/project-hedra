@@ -1,4 +1,5 @@
 #version 330 compatibility
+!include<"Includes/Lighting.shader">
 
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -41,18 +42,11 @@ uniform float Transparency = .7;
 uniform vec3 Scale;
 uniform vec3 Offset;
 uniform vec3 BakedOffset;
-uniform vec3 LightPosition = vec3(-500.0, 1000.0, 0.0);
-uniform vec3 LightColor = vec3(1.0, 1.0, 1.0);
 uniform mat4 TransformationMatrix;
 
 float GetY(float x, float z);
 float GetOffset(float x, float z, float val1, float val2);
 vec3 Cross(vec3 v1, vec3 v2);
-
-vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal, vec3 LColor){	
-	float Brightness = max(dot(unitNormal, unitToLight) ,0.2);
-	return (Brightness * LColor );
-}
 
 vec2 Unpack(float inp, int prec)
 {
@@ -64,8 +58,6 @@ vec2 Unpack(float inp, int prec)
     return outp / (prec - 1.0);
 }
 
-const float Damper = 6.0;
-const float Reflectivity = 0.05;
 void main()
 {
 	Movement = WaveMovement;
@@ -114,23 +106,13 @@ void main()
 	}
 	FLightColor = clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 
-	//Specular
-	vec3 ReflectedDir = reflect(-unitToLight, unitNormal);
-	float SpecBrightness = max(dot(ReflectedDir, unitToCamera), 0.0);
-	float Damp = pow(SpecBrightness, Damper) * Reflectivity;
-	vec4 Specular = vec4(Damp * FLightColor, 1.0);
-	
-	//Rim Lighting
-	float rim = 1.0 - max(dot(unitToCamera, unitNormal), 0.0);
-	rim = smoothstep(0.6, 1.0, rim);
-	vec3 finalRim = InColor.rgb * 0.1 * rim;
+	Ambient = 0.75;
+	//Damper = 128;
+	//Reflectivity = 0.25;
 
-	//Diffuse Lighting
-	vec4 Ambient = InColor * 0.0;
-	vec3 Diffuse = DiffuseModel(vec3(0.0, 0.0, 1.0), unitNormal, FLightColor) * .45 + DiffuseModel(vec3(0.0, 0.0, -1.0), unitNormal, FLightColor) * .45
-				   + DiffuseModel(vec3(1.0, 0.0, 0.0), unitNormal, FLightColor) * .45 + DiffuseModel(vec3(1.0, 0.0, 0.0), unitNormal, FLightColor) * .45 + DiffuseModel(unitToLight, unitNormal, FLightColor) * 1.05;
-	
-	Color = Ambient + vec4(finalRim, 0.0) + (vec4(Diffuse, 1.0) * InColor) + Specular;
+	Color = ( diffuse(unitToLight, unitNormal, FLightColor) * 1.0 + vec4(0.5, 0.5, 0.5, 0.0) * .0) * InColor 
+	+ specular(unitToLight, unitNormal, unitToCamera, FLightColor);
+
  	Color.a = Transparency;
  	
 	v = TransformationMatrix * v;

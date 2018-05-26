@@ -134,7 +134,5 @@ namespace Hedra.Engine.PhysicsSystem
 			//Shape.SupportCache = this.SupportCache;
 			return Shape;
 		}
-
-	    public float HighestPoint => Support(Vector3.UnitY).Y;
 	}
 }

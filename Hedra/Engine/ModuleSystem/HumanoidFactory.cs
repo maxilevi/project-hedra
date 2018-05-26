@@ -76,13 +76,12 @@ namespace Hedra.Engine.ModuleSystem
                 human.AddComponent(drop);
             }
 
-            var barComponent = new HealthBarComponent(human, behaviour.Name ?? template.DisplayName ?? template.Name);
-            barComponent.FontColor = behaviour.Color.ToColor();
+            var barComponent =
+                new HealthBarComponent(human, behaviour.Name ?? template.DisplayName ?? template.Name)
+                {
+                    FontColor = behaviour.Color.ToColor()
+                };
             human.AddComponent(barComponent);
-
-            human.SearchComponent<HealthBarComponent>().DistanceFromBase = 
-                (human.BaseBox.Max.Y - human.BaseBox.Min.Y) * 1f + .5f;
-
             human.SearchComponent<DamageComponent>().Immune = template.Immune;
             human.SearchComponent<DamageComponent>().XpToGive = 1.5f * human.Level;
             World.AddEntity(human);

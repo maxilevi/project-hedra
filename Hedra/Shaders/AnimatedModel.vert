@@ -1,5 +1,8 @@
 #version 330 compatibility
 
+!include<"Includes/GammaCorrection.shader">
+!include<"Includes/Lighting.shader">
+
 const int MAX_JOINTS = 50;//max joints allowed in a skeleton
 const int MAX_WEIGHTS = 3;//max number of joints that can affect a vertex
 
@@ -38,7 +41,6 @@ uniform mat4 projectionViewMatrix;
 uniform mat4 ShadowMVP;
 uniform float Alpha;
 
-
 struct PointLight
 {
     vec3 Position;
@@ -46,24 +48,10 @@ struct PointLight
     float Radius;
 };
 
-uniform vec3 LightPosition = vec3(-500.0, 800.0, 0.0);
-uniform vec3 LightColor = vec3(1.0, 1.0, 1.0);
 uniform PointLight Lights[12];
 
-const vec3 RimColor = vec3(0.2, 0.2, 0.2);
-const float Damper = 32.0;
-const float Reflectivity = 0.25;
-
-vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal, vec3 LColor){	
-	float Brightness = max(dot(unitNormal, unitToLight), 0.125);
-	if(UseFog)
-		return (Brightness * LColor );
-	else
-		return (Brightness * vec3(1.0, 1.0, 1.0) );
-}
-
 void main(void){
-	
+	vec3 linear_color = srgb_to_linear(in_color);
 	pass_height = U_Height;
 	pass_botColor = U_BotColor;
 	pass_topColor = U_TopColor;
@@ -109,28 +97,16 @@ void main(void){
 	}
 	FLightColor = clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 
-	//Specular
-	vec3 ReflectedDir = reflect(-unitToLight, unitNormal);
-	float SpecBrightness = max(dot(ReflectedDir, unitToCamera), 0.0);
-	float Damp = pow(SpecBrightness, Damper) * Reflectivity;
-	vec4 Specular = vec4(Damp*FLightColor,1.0);
-	
-	//Rim Lighting
-	float rim = 1.0 - max(dot(unitToCamera, unitNormal), 0.0);
-	rim = smoothstep(0.6, 1.0, rim);
-	vec3 finalRim = in_color.rgb * 0.4 * rim * max(FLightColor, vec3(.4,.4,.4));
+	vec4 Specular = specular(unitToLight, unitNormal, unitToCamera, LightColor);
+	vec4 Rim = rim(linear_color, LightColor, unitToCamera, unitNormal);
 
 	//Diffuse Lighting
 	vec3 FullLightColor = clamp(LightColor + FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
-	vec3 Diffuse = DiffuseModel(vec3(0.0, 0.0, 1.0), unitNormal, FullLightColor) * .35 + DiffuseModel(vec3(0.0, 0.0, -1.0), unitNormal, FullLightColor) * .35
-				   + DiffuseModel(vec3(1.0, 0.0, 0.0), unitNormal, FullLightColor) * .35 + DiffuseModel(vec3(-1.0, 0.0, 0.0), unitNormal, FullLightColor) * .35 
-				   + DiffuseModel(unitToLight, unitNormal, LightColor) * .7;
+	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
+	vec4 final_color = Rim + Diffuse * vec4(linear_color,1.0) + Specular;
+	vec3 lightDiffuse = diffuse(unitToLight, unitNormal, FLightColor).rgb;
 
-	vec4 final_color = vec4(finalRim,0.0) + (vec4(Diffuse,1.0) * vec4(in_color,1.0)) + Specular;
-
-	vec3 lightDiffuse = DiffuseModel(unitToLight, unitNormal, FLightColor) * .7;
-
-	pass_lightDiffuse = vec4(lightDiffuse,1.0) * vec4(in_color,1.0);
+	pass_lightDiffuse = vec4(lightDiffuse, 0.0) * vec4(linear_color, 0.0);
 	pass_color = vec4(final_color.xyz, Alpha);
 	
 	//Shadows Stuff
@@ -140,7 +116,6 @@ void main(void){
 	ShadowDist = clamp(1.0 - ShadowDist, 0.0, 1.0);
 	pass_coords = ShadowMVP * vec4(totalLocalPos.xyz,1.0);
 
-	
 	gl_Position = projectionViewMatrix * totalLocalPos;
 
 }

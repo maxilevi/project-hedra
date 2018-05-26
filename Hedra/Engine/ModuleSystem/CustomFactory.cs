@@ -62,9 +62,6 @@ namespace Hedra.Engine.ModuleSystem
             Mob.AttackDamage = this.DamageFormula(AttackDamage);
             Mob.AttackCooldown = AttackCooldown;
             Mob.Speed = Speed;
-
-            Mob.SearchComponent<HealthBarComponent>().DistanceFromBase = Mob.BaseBox.Max.Y - Mob.BaseBox.Min.Y + 0.1f;
-
             var dmg = new DamageComponent(Mob)
             {
                 XpToGive = XP

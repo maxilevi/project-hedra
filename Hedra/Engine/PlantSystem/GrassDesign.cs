@@ -53,7 +53,7 @@ namespace Hedra.Engine.PlantSystem
         public override VertexData Paint(Vector3 Position, VertexData Data, Random Rng)
         {
             var region = World.BiomePool.GetRegion(Position);
-            var newColor = new Vector4((region.Colors.GrassColor * 1.25f).Xyz, 1);
+            var newColor = new Vector4((region.Colors.GrassColor * 1.0f).Xyz, 1);
 
             Data.ReColor(newColor);
             Vector3 highest = Model.SupportPoint(Vector3.UnitY);

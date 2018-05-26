@@ -11,12 +11,9 @@ float luma(vec3 color);
 
 void main(){
 	vec4 val = texture(Sampler, TexCoords);
-	float bright = luma(val.rgb) - 0.0;
+	float bright = luma(val.rgb) - 0.75;
 	
-	if(bright <= LumThresh) discard;
-	
-	
-	Color = vec4(1.0, 1.0, 1.0, 1.0) * .75;
+	Color = val * bright;
 	
 }
 

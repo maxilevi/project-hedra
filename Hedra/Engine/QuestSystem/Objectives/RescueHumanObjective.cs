@@ -73,7 +73,6 @@ namespace Hedra.Engine.QuestSystem.Objectives
 			}
 
 		    _oldMan.AddComponent(new HealthBarComponent(_oldMan, _oldManName));
-		    _oldMan.SearchComponent<HealthBarComponent>().DistanceFromBase = 3.5f;
 		    _oldMan.SearchComponent<DamageComponent>().Immune = true;
         }
 		

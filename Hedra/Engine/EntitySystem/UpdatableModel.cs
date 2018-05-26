@@ -52,8 +52,9 @@ namespace Hedra.Engine.EntitySystem
         public override bool IsAttacking { get; protected set; }
         public override bool IsIdling { get; protected set; }
         public override bool IsWalking { get; protected set; }
-        public override float Height { get; protected set; }
         public override float Alpha { get; set; } = 1;
+
+        public override float Height => Parent.BaseBox.Max.Y - Parent.BaseBox.Min.Y;
 
         public override bool Pause
         {

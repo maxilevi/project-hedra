@@ -1,6 +1,5 @@
 #version 330 compatibility
-
-const vec2 lightBias = vec2(0.7, 0.6);//just indicates the balance between diffuse and ambient lighting
+!include<"Includes/GammaCorrection.shader">
 
 in vec4 pass_color;
 in vec3 pass_normal;
@@ -22,8 +21,6 @@ uniform bool UseShadows = true;
 uniform sampler2D ShadowTex;
 uniform vec4 Tint = vec4(1.0, 1.0, 1.0, 1.0);
 uniform float Alpha;
-
-float noise(vec3 p);
 
 void main(void){
 
@@ -52,13 +49,14 @@ void main(void){
 		ShadowVisibility = 1.0;
 	
 	vec4 SkyColor = vec4( mix(pass_botColor, pass_topColor, (gl_FragCoord.y / pass_height) - .25) );
-	vec4 new_color = pass_color * Tint;
+	vec4 new_color = pass_color * Tint * ShadowVisibility + pass_lightDiffuse * Tint;
+	new_color = vec4(linear_to_srbg(new_color.xyz), new_color.w);
 
 	if(UseFog){
-		vec4 NewColor = mix(SkyColor, new_color * ShadowVisibility + pass_lightDiffuse, pass_visibility);
+		vec4 NewColor = mix(SkyColor, new_color, pass_visibility);
 		out_colour = vec4(NewColor.xyz, new_color.w);
 	}else{
-		out_colour = vec4(new_color.xyz * ShadowVisibility + pass_lightDiffuse.xyz, new_color.w);
+		out_colour = vec4(new_color.xyz, new_color.w);
 	}		
 		
 	mat3 mat = mat3(transpose(inverse(gl_ModelViewMatrix)));

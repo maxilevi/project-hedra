@@ -292,6 +292,10 @@
     <Compile Include="Engine\EntitySystem\EntitySpawner.cs" />
     <Compile Include="Engine\Generation\HighlightedArea.cs" />
     <Compile Include="Engine\Generation\AreaHighlighter.cs" />
+    <Compile Include="Engine\PhysicsSystem\AnimatedCollider.cs" />
+    <Compile Include="Engine\PhysicsSystem\BoneBox.cs" />
+    <Compile Include="Engine\PhysicsSystem\BoneData.cs" />
+    <Compile Include="Engine\PhysicsSystem\ConvexHull.cs" />
     <Compile Include="Engine\PhysicsSystem\PhysicsLoadBalancer.cs" />
     <Compile Include="Engine\PhysicsSystem\PhysicsThread.cs" />
     <Compile Include="Engine\PlantSystem\BerryBushDesign.cs" />
@@ -732,6 +736,15 @@
     <Compile Include="Engine\Testing\Managers\ThreadManagerTester.cs" />
     <Compile Include="Engine\Testing\TestMethod.cs" />
     <Compile Include="Engine\Testing\Tester.cs" />
+    <None Include="Shaders\Includes\Conditionals.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Includes\GammaCorrection.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Includes\Lighting.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -4306,6 +4319,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\DropShadows.vert">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Includes\Random.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\ObjectMesh.frag">

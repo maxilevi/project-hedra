@@ -97,7 +97,6 @@ namespace Hedra.Engine.EntitySystem
                 };
             }
             this.Model.Size = this.Parent.BaseBox.Max - this.Parent.BaseBox.Min;
-		    this.Height = this.Model.Size.Y * 0f;
 			this.Idle();
 
 		    var soundType = Parent.MobType == MobType.Horse ? SoundType.HorseRun : SoundType.HumanRun;

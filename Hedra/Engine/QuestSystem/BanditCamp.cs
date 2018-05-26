@@ -74,11 +74,9 @@ namespace Hedra.Engine.QuestSystem
             _rescuee.Rotation = Vector3.UnitX * 90f;
             _rescuee.MainWeapon = null;
 
-            var distanceFromBase = _rescuee.SearchComponent<HealthBarComponent>().DistanceFromBase;
             _rescuee.Name = Rng.Next(0, 10) == 1 ? "Deckard Cain" : NameGenerator.PickMaleName(Rng);
             _rescuee.RemoveComponent(_rescuee.SearchComponent<HealthBarComponent>());
             _rescuee.AddComponent(new HealthBarComponent(_rescuee, _rescuee.Name));
-            _rescuee.SearchComponent<HealthBarComponent>().DistanceFromBase = distanceFromBase;
             _rescuee.SearchComponent<DamageComponent>().Immune = true;
             World.AddEntity(_rescuee);
         }

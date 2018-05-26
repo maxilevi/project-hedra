@@ -68,7 +68,6 @@ namespace Hedra.Engine.Player
                 Pet.Level = 1;
                 Pet.RemoveComponent(Pet.SearchComponent<HealthBarComponent>());
                 Pet.AddComponent(new HealthBarComponent(Pet, "Mount"));
-                Pet.SearchComponent<HealthBarComponent>().DistanceFromBase = 3;
                 Pet.AddComponent(new MountAIComponent(Pet, _player,
                     (MountAIType) Enum.Parse(typeof(MountAIType), PetItem.GetAttribute<string>("MountAIType")))
                 );

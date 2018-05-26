@@ -179,7 +179,7 @@ namespace Hedra.Engine.Rendering.Effects
 			#endregion 
 			
 			#region UnderWater & SSAO Flip
-			if( (GameSettings.UnderWaterEffect || GameSettings.DarkEffect || GameSettings.BlurFilter) && GameSettings.SSAO && !GameSettings.Bloom){
+			if( (GameSettings.UnderWaterEffect || GameSettings.DarkEffect || GameSettings.BlurFilter) && GameSettings.SSAO){
                 Default.Bind();
 				Shader.Bind();
 				DrawQuad(FinalFbo.TextureID[0], 0, true);
@@ -200,7 +200,7 @@ namespace Hedra.Engine.Rendering.Effects
             #endregion
 
 			Shader.Bind();
-			DrawQuad(FinalFbo.TextureID[0], (GameSettings.Bloom) ? AdditiveFbo.TextureID[0] : 0, false, GameSettings.FXAA);
+			DrawQuad(FinalFbo.TextureID[0], GameSettings.Bloom ? AdditiveFbo.TextureID[0] : 0, false, GameSettings.FXAA);
 			Shader.UnBind();
 		}
 		

@@ -238,7 +238,7 @@ namespace Hedra.Engine.Rendering.UI
                     GameSettings.FXAA = !GameSettings.FXAA;
                     fxaa.Text.Text = "FXAA: " + (GameSettings.FXAA ? "ON" : "OFF");
                 };
-            /*
+            
             Button bloom = new Button(new Vector2(dist, -vDist),
                      new Vector2(0.15f, 0.075f), "Bloom: " + (GameSettings.Bloom ? "ON" : "OFF"), 0, fontColor, _normalFont);
 
@@ -247,7 +247,7 @@ namespace Hedra.Engine.Rendering.UI
                     GameSettings.Bloom = !GameSettings.Bloom;
                     bloom.Text.Text = "Bloom: " + (GameSettings.Bloom ? "ON" : "OFF");
                 };
-            */
+            
             Button quality = new Button(new Vector2(-dist, vDist*2),
 			                     new Vector2(0.15f,0.075f), "Quality: " + ( GameSettings.Fancy ? "FANCY" : "FAST"), 0, fontColor, _normalFont);
 			
@@ -458,7 +458,7 @@ namespace Hedra.Engine.Rendering.UI
 			_graphicsButtons.Add(viewDistance);
             _graphicsButtons.Add(fxaa);
 		    _graphicsButtons.Add(frameLimiter);
-		    //_graphicsButtons.Add(bloom);
+		    _graphicsButtons.Add(bloom);
             //_graphicsButtons.Add(Fullscreen);
             _inputButtons.Add(invertMouse);
 			_inputButtons.Add(mouseSensitivity);

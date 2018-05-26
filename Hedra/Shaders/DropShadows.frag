@@ -15,8 +15,10 @@ layout(location = 2)out vec4 OutNormal;
 void main(void)
 {
   float distance = clamp(sqrt(uv.x * uv.x + uv.y * uv.y), 0.0, 1.0);
-  
+
   vec4 color = vec4(0.0, 0.0, 0.0, min( max(1.0 - sqrt(distance + .5), 0.0) * 3.0, 0.4) -.4 * (1.0-Opacity) );
+  if(color.a < 0.05) discard;
+
   vec4 SkyColor = vec4( mix(BotColor, TopColor, (gl_FragCoord.y / Height) - .25) );
   fragment_color = mix(SkyColor, color, Visibility);
   

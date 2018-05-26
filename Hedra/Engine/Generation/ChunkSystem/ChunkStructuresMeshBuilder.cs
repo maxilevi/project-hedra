@@ -78,7 +78,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 {
                     Vector3 instancePosition = Mesh.InstanceElements[i].TransMatrix.ExtractTranslation();
                     var grassRng = new Random((int)(instancePosition.X * instancePosition.Z));
-                    instancePosition += Vector3.UnitY * grassRng.NextFloat() * .2f;
+                    instancePosition += Vector3.UnitY * (grassRng.NextFloat() * .2f - .2f);
                     if (!DrawManager.DropShadows.Exists(instancePosition))
                     {
                         var shadow = new DropShadow
@@ -90,7 +90,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         };
                         shadow.Scale *= 1.4f;
                         shadow.Position += Vector3.Transform(Vector3.UnitY, shadow.Rotation) *
-                                           grassRng.NextFloat() * .4f;
+                                           (grassRng.NextFloat() * .4f);
                         shadow.DeleteWhen = () => BuildedLod != 1 || Disposed;
                     }
                 }

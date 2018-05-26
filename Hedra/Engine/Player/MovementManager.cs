@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player
 	public class MovementManager
 	{
 	    private const float NormalSpeed = 2.25f;
-	    private const float AttackingSpeed = 1.0f;
+	    private const float AttackingSpeed = 0.75f;
         private readonly List<MoveOrder> _order;
 	    private float _speed;
 		public bool CaptureMovement { get; set; } = true;
@@ -38,7 +38,8 @@ namespace Hedra.Engine.Player
 	        return Direction * 5f * 1.75f * movementSpeed * (Human.IsJumping ? 1.75f : 1f) * _speed;
 	    }
 
-        public void MoveInWater(bool Up){
+        public void MoveInWater(bool Up)
+        {
 		    if(Human.IsRolling || Human.IsDead || !Human.CanInteract || !Human.IsUnderwater) return;
 
 		    Human.IsGrounded = false;
@@ -55,7 +56,8 @@ namespace Hedra.Engine.Player
 		    IsFloating = true;
 		}
 		
-		public void Jump(){
+		public void Jump()
+        {
 			if(IsJumping || Human.Knocked || Human.IsCasting || Human.IsRiding ||
                 Human.IsRolling || Human.IsDead || !Human.IsGrounded || !Human.CanInteract ||
                 Math.Abs(Human.Physics.TargetPosition.Y - Human.Position.Y) > 2.0f || !this.CaptureMovement)
@@ -66,7 +68,8 @@ namespace Hedra.Engine.Player
             CoroutineManager.StartCoroutine(this.JumpCoroutine);
         }
 
-		public IEnumerator JumpCoroutine(){
+		public IEnumerator JumpCoroutine()
+        {
 			IsJumping = true;
 			var startingY = Human.Physics.TargetPosition.Y;
 			Human.Physics.GravityDirection = Vector3.Zero;

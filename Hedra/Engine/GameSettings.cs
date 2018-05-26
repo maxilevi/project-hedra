@@ -64,7 +64,7 @@ namespace Hedra.Engine
             }
         }
 
-        [Setting] private static bool _bloom;
+        [Setting] public static bool Bloom { get; set; } = true;
 
         [Setting] public static bool Autosave = true;
 
@@ -85,12 +85,6 @@ namespace Hedra.Engine
         [Setting] public static bool SSAO = true;
 
         public static bool BakedAO => !SSAO;
-
-        public static bool Bloom
-        {
-            get { return _bloom; }
-            set { _bloom = value; }
-        }
 
         //[SettingAttribute]
         public static bool Fullscreen

@@ -119,7 +119,8 @@ namespace Hedra.Engine.PhysicsSystem
 			this.Max *= Size;
 			return this;
 		}
-		
+
+	    public Vector3 Size => Max - Min;
 		public Vector3 Average => (Min + Max) / 2;
 
 	    private CollisionShape _boxShape;
@@ -180,7 +181,5 @@ namespace Hedra.Engine.PhysicsSystem
 
 			return BoxShape;
 		}
-
-	    public float HighestPoint => Max.Y;
 	}
 }

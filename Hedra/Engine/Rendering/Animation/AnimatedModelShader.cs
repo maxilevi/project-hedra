@@ -8,6 +8,7 @@
  */
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Shaders;
+using Newtonsoft.Json.Serialization;
 
 namespace Hedra.Engine.Rendering.Animation
 {
@@ -22,39 +23,53 @@ namespace Hedra.Engine.Rendering.Animation
 	    /// <returns></returns>
 	    public static Shader GenerateDeathShader()
 	    {
-
-            //Maybe add some dynamic retrieving?
-	        string sourceV = AssetManager.ReadShader("Shaders/AnimatedModel.vert");
-	        string sourceG = AssetManager.ReadShader("Shaders/AnimatedModelDeath.geom");
-	        string sourceF = AssetManager.ReadShader("Shaders/AnimatedModel.frag");
-
-	        if (CompatibilityManager.SupportsGeometryShaders)
+	        string VertexSource()
 	        {
-	            sourceV = sourceV.Replace("pass_color", "pass_colors");
-	            sourceV = sourceV.Replace("pass_position", "pass_positions");
-	            sourceV = sourceV.Replace("pass_normal", "pass_normals");
-	            sourceF = sourceF.Replace("pass_visibility);", "1.0);");
+	            string sourceV = AssetManager.ReadShader("Shaders/AnimatedModel.vert");
+	            if (CompatibilityManager.SupportsGeometryShaders)
+	            {
+	                sourceV = sourceV.Replace("pass_color", "pass_colors");
+	                sourceV = sourceV.Replace("pass_position", "pass_positions");
+	                sourceV = sourceV.Replace("pass_normal", "pass_normals");
+	                sourceV = sourceV.Replace("pass_lightDiffuse", "pass_lightDiffuses");
+	            }
+	            return sourceV;
+	        }
+
+	        string GeometrySource()
+	        {
+	            return AssetManager.ReadShader("Shaders/AnimatedModelDeath.geom");
+	        }
+
+	        string FragmentSource()
+	        {
+	            string sourceF = AssetManager.ReadShader("Shaders/AnimatedModel.frag");
+	            if (CompatibilityManager.SupportsGeometryShaders)
+	            {
+	                sourceF = sourceF.Replace("pass_visibility);", "1.0);");
+	            }
+	            return sourceF;
 	        }
 
 	        var dataV = new ShaderData
 	        {
 	            Name = "AnimatedModelDeath.vert",
-	            Source = sourceV,
-	            SourceFinder = () => sourceV
+	            Source = VertexSource(),
+	            SourceFinder = VertexSource
             };
 
 	        var dataG = new ShaderData
 	        {
 	            Name = "AnimatedModelDeath.geom",
-	            Source = sourceG,
-	            SourceFinder = () => sourceG
+	            Source = GeometrySource(),
+	            SourceFinder = GeometrySource
             };
 
 	        var dataF = new ShaderData
 	        {
 	            Name = "AnimatedModelDeath.frag",
-	            Source = sourceF,
-                SourceFinder = () => sourceF
+	            Source = FragmentSource(),
+                SourceFinder = FragmentSource
             };
 
             return Shader.Build(dataV, CompatibilityManager.SupportsGeometryShaders ? dataG : null, dataF);

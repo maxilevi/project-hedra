@@ -15,6 +15,6 @@ namespace Hedra.Engine.PhysicsSystem
 	/// </summary>
 	public interface ICollidable
 	{
-	    float HighestPoint { get; }
+	    
 	}
 }
