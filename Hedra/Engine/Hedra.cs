@@ -98,7 +98,7 @@ namespace Hedra
             GameLoader.AllocateMemory();
 			NameGenerator.Load();		
 			CacheManager.Load();
-			Physics.Manager.Load();
+			Physics.Threading.Load();
 			Log.WriteLine("Assets loading was Successful.");
 
 		    GameLoader.LoadSoundEngine();
@@ -193,7 +193,7 @@ namespace Hedra
 			CoroutineManager.Update();
 			ThreadManager.Update();
             UpdateManager.Update();
-	        Physics.Manager.Update();
+	        Physics.Update();
             SoundManager.Update(LocalPlayer.Instance.Position);
 			SoundtrackManager.Update();
 			AutosaveManager.Update();
@@ -242,7 +242,7 @@ namespace Hedra
 					"Cache ="+CacheManager.CachedColors.Count + " | "+CacheManager.CachedExtradata.Count + " Time = "+(int)(SkyManager.DayTime/1000)+":"+((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)).ToString("00");
 				_generationQueueCount.Text =  "Generation Queue ="+ World.ChunkGenerationQueue.Queue.Count+" Mobs = "+MobCount +" Yaw = "+Player.View.TargetYaw;
 				_renderText.Text = "Textures = "+Graphics2D.Textures.Count+" Seed= "+ World.Seed + " FPS= "+Utils.LastFrameRate + " MS="+Utils.FrameProccesingTime;
-				_cameraText.Text = "Pitch = "+Player.View.TargetPitch+" Physics Calls = "+ Physics.Manager.Count;
+				_cameraText.Text = "Pitch = "+Player.View.TargetPitch+" Physics Calls = "+ Physics.Threading.Count;
                 
 			    _passedTime += Time.FrameTimeSeconds;
 			    if (_passedTime > 5.0f)
@@ -277,10 +277,10 @@ namespace Hedra
             }
 
 #if SHOW_COLLISION
-			            if(GameSettings.Debug){
+			   if(GameSettings.Debug){
 			           
-				            LocalPlayer Player = GameManager.Player;
-				            Chunk UnderChunk = World.GetChunkAt(Player.Position);
+				LocalPlayer Player = GameManager.Player;
+			    Chunk UnderChunk = World.GetChunkAt(Player.Position);
                 /*
                  if(UnderChunk != null){
                      for(int x = 0; x < Chunk.ChunkWidth / Chunk.BlockSize; x++){
@@ -332,7 +332,7 @@ namespace Hedra
 			    GL.Color3(Color.Yellow);
 			    GL.Vertex3(Player.Position + Player.Orientation * 4f);
 			    GL.End();
-
+                /*
                 World.Entities.ToList().ForEach( delegate(Entity E) 
                 {
                     if (E != null)
@@ -341,9 +341,27 @@ namespace Hedra
                         BasicGeometry.DrawBox(E.HitBox.Min, E.BaseBox.Max - E.BaseBox.Min);
                         GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
                     }
-                });
+                });*/
+			        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+			        //BasicGeometry.DrawBox(GameManager.Player.Model.BaseBroadphaseBox.Min, GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
+			        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
-                //LocalPlayer Player = Game.LPlayer;
+			       World.Entities.ToList().ForEach(delegate(Entity E)
+			       {
+			           if (E == null || !E.InUpdateRange) return;
+			           var colliders = E.Model.Colliders;
+			           for (var i = 0; i < colliders.Length; i++)
+			           {
+			               GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+			               //BasicGeometry.DrawShape(colliders[i], Color.GreenYellow);
+			               GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+			           }
+			            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+			            BasicGeometry.DrawShape(E.Model.BroadphaseCollider, Color.GreenYellow);
+			            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                   });
+
+			                //LocalPlayer Player = Game.LPlayer;
                 var Collisions = new List<ICollidable>();
 			                var Collisions2 = new List<ICollidable>();
 				
@@ -369,14 +387,13 @@ namespace Hedra
 				
 				            for(int i = 0; i < Collisions.Count; i++)
 				            {
-				                var shape = Collisions[i] as CollisionShape;
-                                if(shape == null) return;
+				                if(!(Collisions[i] is CollisionShape shape)) return;
                                 
-				                var pshape = Player.HitBox.ToShape();
+				                var pshape = Player.Model.BroadphaseCollider;
 
                                 float radiiSum = shape.BroadphaseRadius + pshape.BroadphaseRadius;
 
-				                BasicGeometry.DrawShape(shape, (pshape.Center - shape.Center).LengthSquared < radiiSum * radiiSum ? Color.White : Color.Red);
+				                BasicGeometry.DrawShape(shape, (pshape.BroadphaseCenter - shape.BroadphaseCenter).LengthSquared < radiiSum * radiiSum ? Color.White : Color.Red);
 				            }
 				
 				            for(int i = 0; i < Collisions2.Count; i++)

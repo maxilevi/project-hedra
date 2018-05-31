@@ -29,33 +29,38 @@ namespace Hedra.Engine.QuestSystem
 		}
 		
 		public override void DoUpdate()
-		{			
-			if( this.MovementTimer.Tick() && !Chasing)
-				this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.BlockPosition;		
-			else if(Chasing){
-				
-				if((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > ForgetRadius * ForgetRadius || ChasingTarget.IsDead || ChasingTarget.IsInvisible)
-				{
-				    base.Reset();
-					return;
-				}
-				
-				this.TargetPoint = ChasingTarget.Position;
-			    this._attackTimer -= Time.FrameTimeSeconds;
-			    var rangeDistance = (Parent.BaseBox.Max - Parent.BaseBox.Min).LengthFast +
-			                        (ChasingTarget.BaseBox.Max - ChasingTarget.BaseBox.Min).LengthFast;
-                if ((ChasingTarget.Position - Parent.Position).LengthFast < rangeDistance * .5f && !Parent.Knocked){
-					if(_attackTimer < 0)
-                    {
-						Parent.Model.Attack(ChasingTarget);
-                        _attackTimer = 1.25f;
-                    }
-				}else
-				{
-				    base.Roll();
-				}
-			}
-			
+		{
+		    if (this.MovementTimer.Tick() && !Chasing)
+		    {
+		        this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24 - 12f, 0, Utils.Rng.NextFloat() * 24 - 12f) +
+		                           Parent.BlockPosition;
+		    }
+		    else if (Chasing)
+		    {
+
+		        if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > ForgetRadius * ForgetRadius ||
+		            ChasingTarget.IsDead || ChasingTarget.IsInvisible)
+		        {
+		            base.Reset();
+		            return;
+		        }
+
+		        this.TargetPoint = ChasingTarget.Position;
+		        this._attackTimer -= Time.FrameTimeSeconds;
+		        if (Parent.InAttackRange(ChasingTarget) && !Parent.Knocked)
+		        {
+		            if (_attackTimer < 0)
+		            {
+		                Parent.Model.Attack(ChasingTarget);
+		                _attackTimer = 1.25f;
+		            }
+		        }
+		        else
+		        {
+		            base.Roll();
+		        }
+		    }
+
 		    base.LookTarget();
 		}
 	}

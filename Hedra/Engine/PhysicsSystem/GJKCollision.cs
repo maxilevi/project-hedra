@@ -45,7 +45,7 @@ namespace Hedra.Engine.PhysicsSystem
 		    if (Shape1.UseBroadphase || Shape2.UseBroadphase)
 		    {
 		        float radii = Shape1.BroadphaseRadius + Shape2.BroadphaseRadius;
-		        if ( (Shape1.Center - Shape2.Center).LengthSquared > radii * radii)
+		        if ( (Shape1.BroadphaseCenter - Shape2.BroadphaseCenter).LengthSquared > radii * radii)
 		            return false;
 		    }
 

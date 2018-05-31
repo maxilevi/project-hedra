@@ -92,11 +92,11 @@ namespace Hedra.Engine.Player
 			    if (shouldPlayJumpAnimation) Human.Model.Pause = true;
                 yield return null;
 			}
-            TaskManager.Delay(50, delegate
+            TaskManager.After(50, delegate
             {
                 IsJumping = false;
             });
-		    TaskManager.Delay(() => Human.IsGrounded || Human.IsUnderwater || Human.IsGliding, () => Human.Model.Pause = false);           
+		    TaskManager.When(() => Human.IsGrounded || Human.IsUnderwater || Human.IsGliding, () => Human.Model.Pause = false);           
 		    Human.Physics.GravityDirection = -Vector3.UnitY;
 		}
 

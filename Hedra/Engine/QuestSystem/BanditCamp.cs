@@ -106,7 +106,7 @@ namespace Hedra.Engine.QuestSystem
             if (!_shouldRescue) return;
 
             Rescued = true;
-            TaskManager.After(1, delegate
+            TaskManager.Delay(1, delegate
             {
                 var talkComponent = new TalkComponent(_rescuee,
                     "I am grateful to you for saving me. Take this item as a show of gratitude");
@@ -114,7 +114,7 @@ namespace Hedra.Engine.QuestSystem
                 {
                     var settings = new ItemPoolSettings(ItemTier.Rare, EquipmentType.Axe);
                     _rescuee.Movement.Orientate();
-                    TaskManager.Delay(1000, () =>
+                    TaskManager.After(1000, () =>
                         World.DropItem(ItemPool.Grab(settings), _rescuee.Position + Vector3.UnitX * 5f)
                     );
                     //TaskManager.Delay( (int) ((talkComponent.Duration+1) * 1000), () =>

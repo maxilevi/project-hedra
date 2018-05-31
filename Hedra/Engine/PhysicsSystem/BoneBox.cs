@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
@@ -12,6 +13,7 @@ namespace Hedra.Engine.PhysicsSystem
         {
             if(Corners.Length != 8) throw new ArgumentOutOfRangeException($"Bone box should have 8 vertices.");
             this.Corners = Corners;
+            this.JointId = JointId;
         }
 
         public void Transform(Matrix4 Transformation)
@@ -20,6 +22,16 @@ namespace Hedra.Engine.PhysicsSystem
             {
                 Corners[i] = Vector3.TransformPosition(Corners[i], Transformation);
             }
+        }
+
+        public CollisionShape ToShape()
+        {
+            return new CollisionShape(new List<Vector3>(Corners),
+                    new List<uint>(Indices)
+                )
+            {
+                UseBroadphase = true
+            };
         }
 
         public BoneBox Clone()
@@ -58,5 +70,14 @@ namespace Hedra.Engine.PhysicsSystem
                 new Vector3(maxX, maxY, maxZ),
             });
         }
+
+        public static readonly uint[] Indices = {
+            0, 1, 3, 3, 1, 2,
+            1, 5, 2, 2, 5, 6,
+            5, 4, 6, 6, 4, 7,
+            4, 0, 7, 7, 0, 3,
+            3, 2, 7, 7, 2, 6,
+            4, 5, 0, 0, 5, 1
+        };
     }
 }

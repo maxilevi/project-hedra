@@ -87,21 +87,21 @@ namespace Hedra.Engine.Rendering.UI
 		    {
 		        DonateBtcButton.Clickable = false;
                 Process.Start("https://twitter.com/Zaphyk");
-		        TaskManager.Delay(250, delegate { DonateBtcButton.Clickable = true; });
+		        TaskManager.After(250, delegate { DonateBtcButton.Clickable = true; });
             };
 
 		    redditClick.Click += delegate
 		    {
 		        DonateBtcButton.Clickable = false;
                 Process.Start("https://www.reddit.com/r/projecthedra");
-		        TaskManager.Delay(250, delegate { DonateBtcButton.Clickable = true; });
+		        TaskManager.After(250, delegate { DonateBtcButton.Clickable = true; });
             };
 
 		    discordClick.Click += delegate
 		    {
 		        DonateBtcButton.Clickable = false;
                 Process.Start("https://discord.gg/AEC4Uab");
-		        TaskManager.Delay(250, delegate { DonateBtcButton.Clickable = true; });
+		        TaskManager.After(250, delegate { DonateBtcButton.Clickable = true; });
             };
 
 			

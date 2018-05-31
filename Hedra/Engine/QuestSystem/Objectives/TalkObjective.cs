@@ -53,7 +53,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         {
             get
             {
-                var model = _talkTarget.Model as HumanModel;
+                var model = _talkTarget.Model as HumanoidModel;
                 if (model == null) return UserInterface.QuestFbo.TextureID[0];
                 model.Model.Scale *= 2f;
 

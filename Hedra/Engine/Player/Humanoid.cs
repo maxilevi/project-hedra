@@ -19,6 +19,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.UI;
 
 namespace Hedra.Engine.Player
@@ -43,7 +44,7 @@ namespace Hedra.Engine.Player
 	    public bool IsJumping => Movement.IsJumping;
 	    public virtual Vector3 FacingDirection => Vector3.UnitY * -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
         public bool IsSitting { get => Model.IsSitting; set{ if(value) Model.Sit(); else Model.Idle(); } }
-		public new HumanModel Model { get => base.Model as HumanModel; set => base.Model = value; }
+		public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
 		public MovementManager Movement { get; protected set; }
 		public HandLamp HandLamp;
 		public DamageComponent DmgComponent;
@@ -215,11 +216,11 @@ namespace Hedra.Engine.Player
 
         public bool AttackEntity(float AttackDamage, Entity Mob, Action<Entity> Callback)
         {
-            if (!this.InAttackRange(Mob, out float dot)) return false;
+            if (!this.InAttackRange(Mob)) return false;
 
 		    Callback?.Invoke(Mob);
-
-		    Mob.Damage(AttackDamage * dot, this, out float exp);
+    
+		    Mob.Damage(AttackDamage, this, out float exp);
 		    this.XP += exp;
 		    return true;
 		}

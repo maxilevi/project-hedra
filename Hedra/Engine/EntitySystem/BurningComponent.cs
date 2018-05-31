@@ -61,7 +61,7 @@ namespace Hedra.Engine.EntitySystem
 				//Fire particles
 				World.Particles.Color = Particle3D.FireColor;
 				World.Particles.VariateUniformly = false;
-				World.Particles.Position = Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .5f;
+				World.Particles.Position = Parent.Position + Vector3.UnitY * Parent.Model.Height * .5f;
 				World.Particles.Scale = Vector3.One * .5f;
 				World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
 				World.Particles.Direction = Vector3.UnitY * .2f;

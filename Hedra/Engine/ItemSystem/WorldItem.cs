@@ -67,10 +67,15 @@ namespace Hedra.Engine.ItemSystem
 		
 		public override void Update()
 		{
-		    var heightAtPosition = Physics.HeightAtPosition(Position.X, Position.Z);
-            this.Position = new Vector3(Position.X, Math.Max(heightAtPosition + _height, heightAtPosition + _height + (float) Math.Cos( Time.CurrentFrame)), Position.Z);
-            this.Model.TargetRotation += Vector3.UnitY * 35f * (float) Time.deltaTime;
+		    this.Model.Alpha = this.Alpha;
+            if(this.PickedUp) return;
 
+            var heightAtPosition = Physics.HeightAtPosition(Position.X, Position.Z);
+		    this.Position = new Vector3(Position.X,
+		        Math.Max(heightAtPosition + _height, heightAtPosition + _height + (float) Math.Cos(Time.CurrentFrame)),
+		        Position.Z);
+		    this.Model.TargetRotation += Vector3.UnitY * 35f * (float) Time.deltaTime;
+		    
 		    float DotFunc() => Vector2.Dot((this.Position - GameManager.Player.Position).Xz.NormalizedFast(), LocalPlayer.Instance.View.LookingDirection.Xz.NormalizedFast());
 
 		    if(DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f*14f){

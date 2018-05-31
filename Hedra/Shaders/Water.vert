@@ -94,7 +94,7 @@ void main()
 	vec3 unitToLight = normalize(LightPosition);
 	vec3 unitToCamera = normalize((inverse(gl_ModelViewMatrix) * vec4(0.0,0.0,0.0,1.0) ).xyz - v.xyz);
 
-	vec3 FLightColor = LightColor;
+	vec3 FullLightColor = LightColor;
 	for(int i = 0; i < 12; i++){
 		float dist = length(Lights[i].Position - v.xyz);
 		vec3 toLightPoint = normalize(Lights[i].Position);
@@ -102,16 +102,14 @@ void main()
 		att *= Lights[i].Radius;
 		att = min(att, 1.0);
 		
-		FLightColor += Lights[i].Color * att; 
+		FullLightColor += Lights[i].Color * att; 
 	}
-	FLightColor = clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
+	FullLightColor = clamp(FullLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 
 	Ambient = 0.75;
-	//Damper = 128;
-	//Reflectivity = 0.25;
 
-	Color = ( diffuse(unitToLight, unitNormal, FLightColor) * 1.0 + vec4(0.5, 0.5, 0.5, 0.0) * .0) * InColor 
-	+ specular(unitToLight, unitNormal, unitToCamera, FLightColor);
+	Color = ( diffuse(unitToLight, unitNormal, FullLightColor) * 0.8 + vec4(0.5, 0.5, 0.5, 0.0) * .0) * InColor 
+	+ specular(unitToLight, unitNormal, unitToCamera, FullLightColor);
 
  	Color.a = Transparency;
  	

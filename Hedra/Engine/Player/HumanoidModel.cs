@@ -18,6 +18,7 @@ using Hedra.Engine.Sound;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.Player
@@ -26,7 +27,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     /// Description of PlayerModel.
     /// </summary>
-    public class HumanModel : UpdatableModel<AnimatedModel>, IAudible, IDisposeAnimation
+    public sealed class HumanoidModel : UpdatableModel<AnimatedModel>, IAudible, IDisposeAnimation
     {
 		public const float DefaultScale = 0.75f;
 		public Humanoid Human { get; private set; }
@@ -52,8 +53,12 @@ namespace Hedra.Engine.Player
 		public StaticModel Food;
 		public Weapon LeftWeapon { get; private set; }
 		public QuadrupedModel MountModel;
-		
-		public bool LockWeapon {get; set;}
+        public AnimatedCollider Collider { get; private set; }
+
+        public override CollisionShape BroadphaseCollider => Collider.Broadphase;
+        public override CollisionShape[] Colliders => Collider.Shapes;
+        public override Vector3[] Vertices => Collider.Vertices;
+        public bool LockWeapon {get; set;}
 	    public override Vector4 Tint { get; set; }
 	    public override Vector4 BaseTint { get; set; }
         public bool IsSitting => this.SitAnimation == this.Model.Animator.AnimationPlaying;
@@ -73,17 +78,17 @@ namespace Hedra.Engine.Player
         private float _targetAlpha = 1f;
 
 
-        public HumanModel(Humanoid Human, HumanoidModelTemplate Template) : base(Human)
+        public HumanoidModel(Humanoid Human, HumanoidModelTemplate Template) : base(Human)
 		{
 		    this.Load(Human, Template);
 		}
 
-        public HumanModel(Humanoid Human, HumanType Type) : base(Human)
+        public HumanoidModel(Humanoid Human, HumanType Type) : base(Human)
         {
             this.Load(Human, HumanoidLoader.ModelTemplater[Type]);
         }
 
-        public HumanModel(Humanoid Human) : base(Human)
+        public HumanoidModel(Humanoid Human) : base(Human)
         {
             this.Load(Human, HumanoidLoader.ModelTemplater[Human.Class]);
         }
@@ -154,17 +159,18 @@ namespace Hedra.Engine.Player
 				this.Model.Animator.ExitBlend();
 			};
 
-            this.Human.SetHitbox(AssetManager.LoadHitbox(Template.Path) * this.Model.Scale);
+            this.Collider = new AnimatedCollider(Template.Path, this.Model);
+            this.BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * this.Model.Scale;
 
             this.Idle();
-            this.Model.Size = this.Human.BaseBox.Max - this.Human.BaseBox.Min; 
+            this.Model.Size = this.BaseBroadphaseBox.Max - this.BaseBroadphaseBox.Min; 
             this._modelSound = new AreaSound(SoundType.HumanRun, Vector3.Zero, 48f);
         }
 
         public void Resize(Vector3 Scalar)
         {
             this.Model.Scale *= Scalar;
-            this.Human.MultiplyHitbox(Scalar);
+            this.BaseBroadphaseBox *= Scalar;
         }
 		
 		public void UpdateModel(){}
@@ -200,7 +206,7 @@ namespace Hedra.Engine.Player
             DisposeTime = 0;
         }
 
-        public override void Attack(Entity Target)
+        public override void Attack(Entity Victim)
 		{
 			if(!Human.Knocked && !Human.IsAttacking && !(Human is LocalPlayer)){
 				LeftWeapon.Attack1(this.Human);
@@ -367,7 +373,7 @@ namespace Hedra.Engine.Player
 				Vector3 positionAddon = Vector3.Zero;
                 if (this.MountModel != null)
                 {
-                    positionAddon += (MountModel.Parent.HitBox.Max.Y - MountModel.Parent.HitBox.Min.Y) * Vector3.UnitY *
+                    positionAddon += Parent.Model.Height * Vector3.UnitY *
                                      0.65f;
                 }
 
@@ -562,7 +568,8 @@ namespace Hedra.Engine.Player
 
 	    public override void Dispose()
 		{
-			Model.Dispose();
+		    Collider.Dispose();
+            Model.Dispose();
             _lampModel?.Dispose();
 			LeftWeapon.Dispose();
 			

@@ -53,14 +53,13 @@ namespace Hedra.Engine.StructureSystem
                 shapes[i].Transform(transMatrix);
             }
 
-            var enemies = new List<Entity>();
             var tents = Structure.Parameters.Get<TentParameters[]>("TentParameters");
+            var enemies = new Entity[tents.Length];
 
             for (var i = 0; i < tents.Length; i++)
             {
-                enemies.Add(
-                    MakeTent(tents[i], rng)
-                );
+                int k = i;
+                BanditCampDesign.MakeTent(tents[i], rng, enemies, k);
             }
 
             Structure.AddCollisionShape(shapes.ToArray());
@@ -69,7 +68,7 @@ namespace Hedra.Engine.StructureSystem
 
             var camp = new BanditCamp(Position, this.Radius)
             {
-                Enemies = enemies.ToArray()
+                Enemies = enemies
             };
             World.AddStructure(camp);
         }
@@ -83,11 +82,9 @@ namespace Hedra.Engine.StructureSystem
             return false;
         }
 
-        private static Humanoid MakeTent(TentParameters Parameters, Random Rng)
+        private static void MakeTent(TentParameters Parameters, Random Rng, Entity[] Enemies, int K)
         {
-            CoroutineManager.StartCoroutine(TentCoroutine, Parameters, Rng);
-            return World.QuestManager.SpawnBandit(
-                Parameters.Position + new Vector3(Rng.NextFloat() * 16f - 8f, 0, Rng.NextFloat() * 16f - 8f), false, false);
+            CoroutineManager.StartCoroutine(TentCoroutine, Parameters, Rng, Enemies, K);
         }
 
         private static IEnumerator TentCoroutine(object[] Params)
@@ -95,6 +92,8 @@ namespace Hedra.Engine.StructureSystem
             var currentModelOffset = -Vector3.UnitX * 4f;
             var parameters = (TentParameters) Params[0];
             var rng = (Random)Params[1];
+            var enemies = (Entity[])Params[2];
+            var j = (int) Params[3];
             var underChunk = World.GetChunkAt(parameters.Position);
             while (underChunk?.Landscape == null || !underChunk.Landscape.StructuresPlaced)
             {
@@ -133,6 +132,8 @@ namespace Hedra.Engine.StructureSystem
 
             underChunk.AddCollisionShape(campfireShapes.ToArray());
             underChunk.AddStaticElement(campfire);
+            enemies[j] = World.QuestManager.SpawnBandit(
+                parameters.Position + new Vector3(rng.NextFloat() * 16f - 8f, 0, rng.NextFloat() * 16f - 8f), false, false);
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
@@ -200,8 +201,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
             return Rng.Next(0, 100) == 1 && height > 0;
         }
 

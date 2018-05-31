@@ -70,7 +70,7 @@ namespace Hedra.Engine.Player
 			this.View = new Camera(this);
 			this.Loader = new ChunkLoader(this);
 			this.Spawner = new EntitySpawner(this);
-			this.Model = new HumanModel(this);
+			this.Model = new HumanoidModel(this);
 			this.Inventory = new PlayerInventory(this);
 			this.Toolbar = new Toolbar(this);
 			this.Glider = new HangGlider(this);
@@ -587,6 +587,7 @@ namespace Hedra.Engine.Player
 			Health = MaxHealth;
 			Mana = MaxMana;
 		    Stamina = MaxStamina;
+		    GameManager.SpawningEffect = true;
 		    this.PlaySpawningAnimation = true;
 		    this.IsRiding = false;
             var newOffset = new Vector3( (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize);
@@ -622,7 +623,7 @@ namespace Hedra.Engine.Player
 		    }
 		}
 		
-		public static bool CreatePlayer(string Name, HumanModel PreviewModel, ClassDesign ClassType){
+		public static bool CreatePlayer(string Name, HumanoidModel PreviewModel, ClassDesign ClassType){
 			if(Name == string.Empty){
 				Instance.MessageDispatcher.ShowNotification("Name cannot be empty", Color.DarkRed, 3f);
 				return false;

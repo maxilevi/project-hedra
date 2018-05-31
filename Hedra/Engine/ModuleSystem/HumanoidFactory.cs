@@ -43,7 +43,7 @@ namespace Hedra.Engine.ModuleSystem
                 Class = ClassDesign.FromString(template.Class),
                 MobType = MobType.Human
             };
-            human.Model = new HumanModel(human, template.Model);
+            human.Model = new HumanoidModel(human, template.Model);
             human.Physics.CanCollide = true;
             human.Physics.HasCollision = true;
             human.Health = human.MaxHealth;

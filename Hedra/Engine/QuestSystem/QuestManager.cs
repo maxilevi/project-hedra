@@ -112,7 +112,7 @@ namespace Hedra.Engine.QuestSystem
 	        if (isGnoll) human.AddonHealth = human.MaxHealth * .5f;
 	        if (Undead)
 	        {
-	            human.Model = new HumanModel(human, HumanType.Skeleton);
+	            human.Model = new HumanoidModel(human, HumanType.Skeleton);
 	            human.Model.SetWeapon(human.MainWeapon.Weapon);
 	        }
 
@@ -183,7 +183,7 @@ namespace Hedra.Engine.QuestSystem
 			float Exp = ChainLength * 7;
 			this.QuestCompleted = true;
 			GameManager.Player.CanInteract = false;
-			TaskManager.Delay(2500, delegate{ 
+			TaskManager.After(2500, delegate{ 
 		        var label = new Billboard(4.0f, "+"+Exp+" XP", Color.Violet, FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
 				GameManager.Player.Position);
 				label.Size = .4f;

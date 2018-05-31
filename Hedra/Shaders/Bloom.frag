@@ -1,17 +1,15 @@
 #version 330 compatibility
 
 uniform sampler2D Sampler;
-uniform vec2 Resolution;
+uniform float Modifier;
 in vec2 TexCoords;
-const float LumThresh = 0.95;
- 
 layout(location = 0) out vec4 Color; 
 
 float luma(vec3 color);
 
 void main(){
 	vec4 val = texture(Sampler, TexCoords);
-	float bright = luma(val.rgb) - 0.75;
+	float bright = luma(val.rgb) - 0.65 / Modifier;
 	
 	Color = val * bright;
 	

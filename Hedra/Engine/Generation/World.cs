@@ -353,7 +353,7 @@ namespace Hedra.Engine.Generation
 						}
 						lock(shapes){
 							for(int j = shapes.Count-1; j > -1; j--){
-								if( shapes[j] is CollisionShape && ( ((CollisionShape) shapes[j]).Center.Xz - Position.Xz).LengthSquared <= Radius*Radius)
+								if( shapes[j] is CollisionShape && ( ((CollisionShape) shapes[j]).BroadphaseCenter.Xz - Position.Xz).LengthSquared <= Radius*Radius)
 									shapes.RemoveAt(j);
 							}
 						}
@@ -658,13 +658,28 @@ namespace Hedra.Engine.Generation
 			
 			model.OnPickup += delegate(LocalPlayer Player)
 			{
-			    if (Player.Inventory.AddItem(model.ItemSpecification))
-			    {
-			        model.Enabled = false;
-                    Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, model.Position, false, 1f, 1.2f);
-			        model.Dispose();
-			    }
-			};
+			    var startingPosition = model.Position;
+			    var startingScale = model.Scale;
+                TaskManager.While(() => !model.Disposed, delegate
+                {
+                    model.Model.Outline = false;
+                    model.Position = Mathf.Lerp(model.Position, Player.Position, (float) Time.deltaTime * 5f);
+                    var progress = (model.Position - startingPosition).LengthFast /
+                                    (Player.Position - startingPosition).LengthFast;
+                    model.Scale = startingScale * progress;
+                    //model.Alpha = ((model.Position- startingPosition).LengthFast / (Player.Position - startingPosition).LengthFast);
+                    if ((model.Position - Player.Position).LengthSquared < 4*4)
+                    {
+                        if (Player.Inventory.AddItem(model.ItemSpecification))
+                        {
+                            model.Enabled = false;
+                            Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, model.Position, false, 1f,
+                                1.2f);
+                            model.Dispose();
+                        }
+                    }
+                });
+            };
 			return model;
 		}
 		
@@ -705,7 +720,7 @@ namespace Hedra.Engine.Generation
 	        Vector3 position = DesiredPosition;
 	        Chunk underChunk = World.GetChunkAt(position);
 	        var collidesOnSurface = true;
-	        Box box = Mob.BaseBox.Cache.Translate(position.Xz.ToVector3()
+	        Box box = Mob.Model.BaseBroadphaseBox.Cache.Translate(position.Xz.ToVector3()
                 + Vector3.UnitY * Physics.HeightAtPosition(position.X, position.Z));
 	        while (underChunk != null && collidesOnSurface)
 	        {
@@ -722,7 +737,7 @@ namespace Hedra.Engine.Generation
 	            {
 	                position = position + new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
 	                underChunk = World.GetChunkAt(position);
-	                box = Mob.BaseBox.Cache.Translate(position.Xz.ToVector3() 
+	                box = Mob.Model.BaseBroadphaseBox.Cache.Translate(position.Xz.ToVector3() 
                         + Vector3.UnitY * Physics.HeightAtPosition(position.X, position.Z));
 	            }
 

@@ -8,7 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Drawing.Text;
+using System.Linq;
 using OpenTK;
 using Hedra.Engine.Rendering;
 
@@ -18,103 +18,50 @@ namespace Hedra.Engine.PhysicsSystem
     /// <summary>
     /// Description of CollisionShape.
     /// </summary>
-    public class CollisionShape : ICollidable, ICloneable
-	{
-		public List<Vector3> Vertices = new List<Vector3>();
-		public List<uint> Indices = new List<uint>();
-		public bool UseCache {get; set;}
-        public float BroadphaseRadius {get; set; }
-	    public Vector3 Center { get; private set; }
-	    public bool UseBroadphase { get; set; } = true;
+    public class CollisionShape : ICollidable
+    {
+		public Vector3[] Vertices { get; }
+	    public uint[] Indices { get; }
+        public float BroadphaseRadius { get; set; }
+        public Vector3 BroadphaseCenter { get; set; }
+        public bool UseBroadphase { get; set; } = true;
+        private CollisionShape _cache;
 
-	    private Vector3 _avgCache;
-	    private bool _avgCacheCalculated;
-	    private float _radiusCache;
-	    private bool _radiusCacheCalculated;
-	    private Vector3 _position;
-
-
-	    public CollisionShape(List<Vector3> Verts, List<uint> Indices)
+        public CollisionShape(Vector3[] Vertices, uint[] Indices)
 	    {
-	        if (Verts != null)
-                this.Vertices = Verts;
-            #if DEBUG
-            if(Indices != null)
-	            this.Indices = Indices;
+	        this.Vertices = Vertices ?? new Vector3[0];
+#if DEBUG
+            this.Indices = Indices ?? new uint[0];
 #endif
+        }
 
-	        this.CalculateCenter();
-            this.CalculateBroadphase();
-	    }
-
-        public CollisionShape(List<Vector3> Verts) : this(Verts, null){}
-		
-		public CollisionShape(VertexData Data) : this(Data.Vertices, Data.Indices){}
-
-	    public void SetCenter(Vector3 Center)
-	    {
-	        this.Center = Center;
-	    }
-
-	    private void CalculateBroadphase()
-	    {
-	        Vector3 middle = this.Center;
-
-	        float dist = 0;
-	        for (int i = 0; i < Vertices.Count; i++)
-	        {
-	            float length = (Vertices[i] - middle).LengthFast;
-
-	            if (length > dist)
-	                dist = length;
-	        }
-	        BroadphaseRadius = dist;
-	    }
-
-		public void Transform(Matrix4 TransMatrix){
-			for(var i = 0; i < Vertices.Count; i++){
+		public CollisionShape Transform(Matrix4 TransMatrix)
+        {
+			for(var i = 0; i < Vertices.Length; i++)
+            {
 				Vertices[i] = Vector3.TransformPosition(Vertices[i], TransMatrix);
 			}
-            this.CalculateCenter();
-            this.CalculateBroadphase();
+            this.RecalculateBroadphase();
+            return this;
         }
-		public void Transform(Vector3 Position){
-			for(var i = 0; i < Vertices.Count; i++){
+
+		public CollisionShape Transform(Vector3 Position)
+        {
+			for(var i = 0; i < Vertices.Length; i++)
+            {
 				Vertices[i] = Vector3.TransformPosition(Vertices[i], Matrix4.CreateTranslation(Position));
 			}
-		    this.CalculateCenter();
-            this.CalculateBroadphase();
+            this.RecalculateBroadphase();
+            return this;
         }
-		
-		
-		public void CalculateCenter(){
-			Vector3 avg = Vector3.Zero;
-			for(var i = 0; i < Vertices.Count; i++){
-				avg += Vertices[i];
-			}
-			avg /= Vertices.Count;
-		    Center = avg;
-		}
-		
-		public float Diameter{
-			get{
-				if(_radiusCacheCalculated) return _radiusCache;
-				
-				float radius = (this.Support(Vector3.One) - this.Support(-Vector3.One)).LengthFast;
 
-			    if (_radiusCacheCalculated) return radius;
-			    _radiusCache = radius;
-			    _radiusCacheCalculated = true;
-			    return radius;
-			}
-		}
-		
 		public Vector3 Support(Vector3 Direction){
 			
-		    float highest = float.MinValue;
-		    Vector3 support = Vector3.Zero;
+		    var highest = float.MinValue;
+		    var support = Vector3.Zero;
 
-		    for (var i = 0; i < Vertices.Count; ++i) {
+		    for (var i = 0; i < Vertices.Length; ++i)
+            {
 		        Vector3 v = Vertices[i];
 		        float dot = Vector3.Dot(Direction, v);
 
@@ -125,14 +72,58 @@ namespace Hedra.Engine.PhysicsSystem
 		
 		    return support;
 		}
-		
-		public object Clone(){
-			var Shape = new CollisionShape( new List<Vector3>(Vertices) );
-			#if DEBUG
-			Shape.Indices = new List<uint>(this.Indices);
-			#endif
-			//Shape.SupportCache = this.SupportCache;
-			return Shape;
+
+        public void RecalculateBroadphase()
+        {
+            float dist = 0;
+            var verticesSum = Vector3.Zero;
+            for (var i = 0; i < Vertices.Length; i++)
+            {
+                verticesSum += Vertices[i];
+            }
+            this.BroadphaseCenter = verticesSum / Vertices.Length;
+            for (var i = 0; i < Vertices.Length; i++)
+            {
+                float length = (Vertices[i] - this.BroadphaseCenter).LengthFast;
+
+                if (length > dist)
+                    dist = length;
+            }
+            this.BroadphaseRadius = dist;
+        }
+
+        public CollisionShape Clone()
+		{
+		    return new CollisionShape(Vertices.ToArray(), this.Indices.ToArray());
 		}
-	}
+
+        public CollisionShape(List<Vector3> Vertices, List<uint> Indices) : this(Vertices.ToArray(), Indices.ToArray())
+        {
+        }
+
+        public CollisionShape(List<Vector3> Vertices) : this(Vertices.ToArray(), null)
+        {
+        }
+
+        public CollisionShape(Vector3[] Vertices) : this(Vertices, null)
+	    {
+	    }
+
+	    public CollisionShape(VertexData Data) : this(Data.Vertices.ToArray(), Data.Indices.ToArray())
+	    {       
+	    }
+
+        public CollisionShape Cache
+        {
+            get
+            {
+                if(_cache == null) _cache = new CollisionShape(Vertices.ToArray(), Indices.ToArray());
+                for (var i = 0; i < _cache.Vertices.Length; i++)
+                {
+                    _cache.Vertices[i] = this.Vertices[i];
+                }
+                return _cache;
+            }
+        }
+    }
 }

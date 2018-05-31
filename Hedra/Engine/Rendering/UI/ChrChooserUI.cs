@@ -149,7 +149,7 @@ namespace Hedra.Engine.Rendering.UI
 		    for (int i = 0; i < _information.Length; i++)
 		    {
 		        Humanoid human = new Humanoid();
-		        human.Model = new HumanModel(human);
+		        human.Model = new HumanoidModel(human);
 		        human.Model.Resize(1.25f * Vector3.One);
 		        human.Physics.UseTimescale = false;
 		        human.Removable = false;
@@ -172,7 +172,7 @@ namespace Hedra.Engine.Rendering.UI
 					_humans[i].Model.Dispose();
 				
 				_humans[i].Class = _information[i].Class;
-				_humans[i].Model = new HumanModel(_humans[i]);
+				_humans[i].Model = new HumanoidModel(_humans[i]);
 			    _humans[i].Model.Resize(1.25f * Vector3.One);
                 _humans[i].BlockPosition = Scenes.MenuBackground.FirePosition + offset;
 				_humans[i].Model.Rotation = Physics.DirectionToEuler(-offset.Normalized().Xz.ToVector3());

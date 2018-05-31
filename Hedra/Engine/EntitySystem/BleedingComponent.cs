@@ -48,16 +48,15 @@ namespace Hedra.Engine.EntitySystem
 				if(_time >= 1){
 					_pTime++;
 					_time = 0;
-					float exp;
-					Parent.Damage( (float) (_totalDamage / _totalTime), _damager, out exp, true);
-					if(_damager != null && _damager is Humanoid)
-						(_damager as Humanoid).XP += exp;
+				    Parent.Damage( (float) (_totalDamage / _totalTime), _damager, out float exp, true);
+					if(_damager is Humanoid humanoid)
+						humanoid.XP += exp;
 				}
 				
 				//Fire particles
 				World.Particles.Color = new Vector4(.8f,.0f,0,1f);
 				World.Particles.VariateUniformly = false;
-				World.Particles.Position = Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .5f;
+				World.Particles.Position = Parent.Position + Vector3.UnitY * Parent.Model.Height * .5f;
 				World.Particles.Scale = Vector3.One * .5f;
 				World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
 				World.Particles.Direction = Vector3.UnitY * .2f;

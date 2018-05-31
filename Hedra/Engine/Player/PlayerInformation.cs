@@ -32,7 +32,6 @@ namespace Hedra.Engine.Player
         public byte[] AbilityTreeArray;
         public byte[] ToolbarArray;
         public ClassDesign Class;
-        public float AddonHealth;
         public float RandomFactor;
         private Dictionary<int, Item> _items;
 
@@ -54,8 +53,8 @@ namespace Hedra.Engine.Player
         }
 
         public KeyValuePair<int, Item>[] Items {
-            get { return _items.ToArray(); }
-            set { _items = value.FromArray(); }
+            get => _items.ToArray();
+            set => _items = value.FromArray();
         }
     }
 }

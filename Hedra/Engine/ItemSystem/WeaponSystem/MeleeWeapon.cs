@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.ItemSystem.WeaponSystem
@@ -9,6 +6,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     public abstract class MeleeWeapon : Weapon
     {
         public override bool IsMelee { get; protected set; } = true;
-        protected MeleeWeapon(VertexData MeshData) : base(MeshData) {}
+        public ObjectMeshCollider MainCollider { get; protected set; }
+
+        protected MeleeWeapon(VertexData MeshData) : base(MeshData)
+        {
+            //MainCollider = new ObjectMeshCollider(MeshData);
+        }
     }
 }

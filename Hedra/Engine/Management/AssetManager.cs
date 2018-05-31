@@ -215,14 +215,7 @@ namespace Hedra.Engine.Management
 			for(int i = 0; i < Count; i++){
 				VertexData Data = AssetManager.PlyLoader("Assets/Env/Colliders/"+Name+"_Collider"+i+".ply", Scale, Vector3.Zero, Vector3.Zero, false);
 
-			    var newShape = new CollisionShape(new List<Vector3>(Data.Vertices))
-			    {
-			        UseCache = true,
-#if DEBUG
-			        Indices = new List<uint>(Data.Indices)
-#endif
-			    };
-
+			    var newShape = new CollisionShape(Data.Vertices, Data.Indices);
 			    Shapes.Add(newShape);
                 Data.Dispose();
 			}

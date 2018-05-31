@@ -27,8 +27,23 @@ namespace Hedra.Engine
 	/// </summary>
 	public static class Extensions
 	{
+	    public static Vector3 SupportPoint(this Vector3[] Vertices, Vector3 Direction)
+	    {
+	        float highest = float.MinValue;
+	        Vector3 support = Vector3.Zero;
+	        for (var i = 0; i < Vertices.Length; i++)
+	        {
+	            float dot = Vector3.Dot(Direction, Vertices[i]);
+	            if (dot > highest)
+	            {
+	                highest = dot;
+	                support = Vertices[i];
+	            }
+	        }
+	        return support;
+	    }
 
-	    public static Vector2 ScaleUI(this Vector2 Vector, Vector2 Resolution)
+        public static Vector2 ScaleUI(this Vector2 Vector, Vector2 Resolution)
 	    {
 	        return Mathf.ScaleGUI(Resolution, Vector);
 	    }

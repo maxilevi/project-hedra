@@ -77,7 +77,7 @@ namespace Hedra.Engine.Player
                 _player.View.MinPitch = -1.25f;
 
                 _model.Position = _player.Position + Vector3.UnitY * 8f;
-                _model.Model.BeforeLocalRotation = Vector3.UnitY * 2f;
+                _model.Model.BeforeLocalRotation = Vector3.UnitY * 3.5f;
                 _model.Model.Rotation = new Vector3(_angles.X, _player.Model.Model.Rotation.Y, 0);
                 _model.Model.LocalRotation = Vector3.UnitZ * _angles.Z;
                 _player.Model.Model.TransformationMatrix =

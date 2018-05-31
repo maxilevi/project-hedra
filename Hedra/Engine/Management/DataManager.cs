@@ -23,7 +23,7 @@ namespace Hedra.Engine.Management
 	/// </summary>
 	public static class DataManager
 	{
-		public const float SaveVersion = 1.11f;
+		public const float SaveVersion = 1.12f;
 		
 		public static void SavePlayer(PlayerInformation Player){
 			string ChrFile = AssetManager.AppData+"/Characters/"+Player.Name;
@@ -49,7 +49,6 @@ namespace Hedra.Engine.Management
 					Bw.Write(Player.Rotation.Y);
 					Bw.Write(Player.Rotation.Z);
 					
-					Bw.Write(Player.AddonHealth);
 					Bw.Write(Player.Health);
 					
 					Bw.Write(Player.Xp);			
@@ -91,7 +90,6 @@ namespace Hedra.Engine.Management
 		    {
 		        Level = Player.Level,
 		        Health = Player.Health,
-		        AddonHealth = Player.AddonHealth,
                 Mana = Player.MaxXP,
 		        Xp = Player.XP,
 		        WorldSeed = World.Seed,
@@ -136,7 +134,7 @@ namespace Hedra.Engine.Management
 				information.BlockPosition = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
 				information.Rotation = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
 				if(version < 1.1f) br.ReadSingle();
-                information.AddonHealth = br.ReadSingle();
+                if(version < 1.12f) br.ReadSingle();
 				information.Health = br.ReadSingle();
 				information.Xp = br.ReadSingle();
 				information.Level = br.ReadInt32();		

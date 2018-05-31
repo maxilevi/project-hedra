@@ -64,7 +64,7 @@ void main(){
 		float dist = length(Lights[i].Position.xyz - InPos.xyz);
 		vec3 toLightPoint = normalize(Lights[i].Position.xyz);
 		float att = 1.0 / (1.0 + 0.5 * dist * dist);
-		att *= Lights[i].Radius;
+		att *= Lights[i].Radius * .65;
 		att = min(att, 1.0);
 		
 		FLightColor += Lights[i].Color * att; 

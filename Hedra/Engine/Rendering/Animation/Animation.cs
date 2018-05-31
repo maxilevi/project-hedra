@@ -19,11 +19,12 @@ namespace Hedra.Engine.Rendering.Animation
 		public event OnAnimationHandler OnAnimationEnd;
 		public event OnAnimationHandler OnAnimationMid;
 		public event OnAnimationHandler OnAnimationStart;
-		public float Length {get; private set;}//In seconds
-		public KeyFrame[] KeyFrames {get; private set;}
+		public float Length { get; }//In seconds
+		public KeyFrame[] KeyFrames { get; }
 		public bool Loop {get; set;}
-		private bool MidAnimation, StartAnimation;
-		public float Speed = 1;
+		private bool MidAnimation;
+	    private bool StartAnimation;
+	    public float Speed = 1;
 	
 		/**
 		 * @param lengthInSeconds
@@ -43,11 +44,13 @@ namespace Hedra.Engine.Rendering.Animation
 			{
 			    OnAnimationEnd?.Invoke(this);
 			}
-			if(Progress >= 0.5f && !MidAnimation){
+			if(Progress >= 0.5f && !MidAnimation)
+            {
 				MidAnimation = true;
 			    OnAnimationMid?.Invoke(this);
 			}
-			if(Progress <= 0.5f && !StartAnimation){
+			if(Progress <= 0.5f && !StartAnimation)
+            {
 				StartAnimation = true;
 			    OnAnimationStart?.Invoke(this);
 			}
@@ -59,7 +62,7 @@ namespace Hedra.Engine.Rendering.Animation
 		}
 		
 		public void Dispose(){
-			
-		}
+            
+        }
 	}
 }

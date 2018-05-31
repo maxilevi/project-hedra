@@ -28,15 +28,16 @@ namespace Hedra.Engine.PhysicsSystem
             if(Input.Length < 4) throw new ArgumentException($"A convex hull cannot be created from {Input.Length}");
             var points = new List<Vector3>(Input);
             var a = ConvexHull.SupportPoint(points, -Vector3.One);
-            var B = ConvexHull.SupportPoint(points, Vector3.One);
+            var b = ConvexHull.SupportPoint(points, Vector3.One);
             var hull = new List<Vector3>();
 
             hull.Add(a);
-            hull.Add(B);
+            hull.Add(b);
             points.Remove(a);
-            points.Remove(B);
+            points.Remove(b);
 
-            //var s1 = points.Where(Vector3.Cross())
+            var s1 = points.Where(P => Vector3.Cross(a - b, b - P).Y > 0);
+            var s2 = points.Where(P => Vector3.Cross(a - b, b - P).Y < 0);
    /*
                 Segment AB divides the remaining(n-2) points into 2 groups S1 and S2
             where S1 are points in S that are on the right side of the oriented line from a to B, 

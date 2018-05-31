@@ -63,7 +63,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 	    private void LoadSkills()
 	    {
 	        Type[] skillsTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(Assembly => Assembly.GetLoadableTypes())
-                .Where(Type => Type.IsSubclassOf(typeof(BaseSkill))).Where(Type => Type != typeof(WeaponAttack)).ToArray();
+                .Where(Type => Type.IsSubclassOf(typeof(BaseSkill))).Where(Type => Type != typeof(WeaponAttack)).Where(Type => !Type.IsAbstract).ToArray();
 	        _skills = new BaseSkill[skillsTypes.Length];
 	        for (var i = 0; i < Skills.Length; i++)
 	        {

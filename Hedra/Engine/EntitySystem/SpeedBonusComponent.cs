@@ -24,7 +24,7 @@ namespace Hedra.Engine.EntitySystem
                 World.Particles.Color = Vector4.One;
                 World.Particles.VariateUniformly = true;
                 World.Particles.Position =
-                    Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .25f;
+                    Parent.Position + Vector3.UnitY * Parent.Model.Height * .25f;
                 World.Particles.Scale = Vector3.One * .25f;
                 World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
                 World.Particles.Direction = -Parent.Orientation * .05f;
@@ -37,7 +37,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 World.Particles.Color = new Vector4(.2f,.2f,.2f,.6f);
                 World.Particles.VariateUniformly = true;
-                World.Particles.Position = Parent.Position + Vector3.UnitY * (Parent.HitBox.Max.Y - Parent.HitBox.Min.Y) * .15f;
+                World.Particles.Position = Parent.Position + Vector3.UnitY * Parent.Model.Height * .15f;
                 World.Particles.Scale = Vector3.One * .25f;
                 World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
                 World.Particles.Direction = -Parent.Orientation * .05f;

@@ -189,7 +189,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if (Human.Model.IsIdling && IsMelee)
             {
                 Human.Model.Run();
-                TaskManager.After(1,
+                TaskManager.Delay(1,
                     () => TaskManager.While(
                         () => Human.Model.IsWalking && !Human.IsMoving,
                         delegate

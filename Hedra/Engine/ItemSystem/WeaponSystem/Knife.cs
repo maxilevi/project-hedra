@@ -161,7 +161,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if(!this.MeetsRequirements()) return;
 
 			base.Attack1(Human);
-		    TaskManager.Delay(250, () => Trail.Emit = true);
+		    TaskManager.After(250, () => Trail.Emit = true);
         }
 	}
 }

@@ -6,13 +6,13 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using Hedra.Engine.Player.Skills;
-using OpenTK;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using OpenTK;
 
-namespace Hedra.Engine.Player
+namespace Hedra.Engine.Player.Skills
 {
 	/// <summary>
 	/// Description of Resistance.
@@ -44,7 +44,7 @@ namespace Hedra.Engine.Player
 				PrevSkillLevel = (int) this.Level;
 				PrevLevel = this.Player.Level;
 				Player.AddonHealth -= AddonHealth;
-				AddonHealth = HealthFormula() * PrevLevel;
+				AddonHealth = this.HealthFormula() * PrevLevel;
 				Player.AddonHealth += AddonHealth;
 				if(Player.Health > Player.MaxHealth) Player.Health = Player.MaxHealth;
 				Set = true;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -54,7 +55,13 @@ namespace Hedra.Engine.EntitySystem
         public override bool IsWalking { get; protected set; }
         public override float Alpha { get; set; } = 1;
 
-        public override float Height => Parent.BaseBox.Max.Y - Parent.BaseBox.Min.Y;
+        public override Vector3[] Vertices => BroadphaseBox.Vertices.ToArray();
+        public override CollisionShape[] Colliders => new []{ BroadphaseBox.ToShape() };
+        public override CollisionShape BroadphaseCollider => BroadphaseBox.ToShape();
+        public override Box BroadphaseBox => BaseBroadphaseBox.Cache.Translate(Model.Position);
+        public override Box BaseBroadphaseBox { get; protected set; } = new Box(Vector3.Zero, Vector3.One);
+
+        public override float Height => BaseBroadphaseBox.Max.Y - BaseBroadphaseBox.Min.Y;
 
         public override bool Pause
         {
@@ -124,7 +131,7 @@ namespace Hedra.Engine.EntitySystem
 
         }
 
-        public override void Attack(Entity Target)
+        public override void Attack(Entity Victim)
         {
 
         }

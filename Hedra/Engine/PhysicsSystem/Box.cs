@@ -15,7 +15,8 @@ namespace Hedra.Engine.PhysicsSystem
 	/// <summary>
 	/// Description of Box.
 	/// </summary>
-	public class Box : ICollidable{
+	public class Box : ICollidable
+    {
 		public Vector3 Min { get; set; }
 	    public Vector3 Max { get; set; }
 
@@ -68,27 +69,27 @@ namespace Hedra.Engine.PhysicsSystem
 		    return Box1.Min != Box2.Min || Box2.Max != Box1.Max;
         }
 
-	    public Box Rotate(Vector3 Euler)
-	    {
-	        if (Euler == Vector3.Zero || float.IsInfinity(Euler.X) || float.IsNaN(Euler.X) ||
-	            float.IsInfinity(Euler.Y) || float.IsNaN(Euler.Y) ||
-	            float.IsInfinity(Euler.Z) || float.IsNaN(Euler.Z))
-	        {
-	            return this;
-	        }
-	        var mat = Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(Euler * Mathf.Radian));
-                
-	        this.Min = Vector3.TransformPosition(this.Min, mat);
-	        this.Max = Vector3.TransformPosition(this.Max, mat);
-	        return this;
-	    }
+        public Vector3[] Vertices => new[]
+        {
+            new Vector3(Min.X, Min.Y, Min.Z),
+            new Vector3(Max.X, Min.Y, Min.Z),
+            new Vector3(Min.X, Min.Y, Max.Z),
+            new Vector3(Max.X, Min.Y, Max.Z),
 
-		public Box Clone(){
+            new Vector3(Min.X, Max.Y, Min.Z),
+            new Vector3(Max.X, Max.Y, Min.Z),
+            new Vector3(Min.X, Max.Y, Max.Z),
+            new Vector3(Max.X, Max.Y, Max.Z)
+        };
+
+        public Box Clone()
+{
 			return new Box(this.Min, this.Max);
 		}
 
 		private Box _cache;		
-		public Box Cache{
+		public Box Cache
+        {
 			get{
 			    var collidable = _cache as ICollidable;
 			    if( collidable == null)//Cheap trick so there is no stackoverflow
@@ -124,9 +125,12 @@ namespace Hedra.Engine.PhysicsSystem
 		public Vector3 Average => (Min + Max) / 2;
 
 	    private CollisionShape _boxShape;
-		public CollisionShape BoxShape{
-			get{
-				if(_boxShape == null){
+		public CollisionShape BoxShape
+        {
+			get
+            {
+				if(_boxShape == null)
+                {
 					
                     var vertices = new List<Vector3>();
 					Vector3 Min = Vector3.Zero, Max = Vector3.Zero;
@@ -173,7 +177,7 @@ namespace Hedra.Engine.PhysicsSystem
 			
 			Shape.Vertices[7] = this.Max - halfSize;
 
-		    Shape.SetCenter( (this.Min + this.Max) * .5f);
+		    Shape.BroadphaseCenter = (this.Min + this.Max) * .5f;
             Shape.BroadphaseRadius = (this.Min - this.Max).LengthFast;
 
 		    _shape = Shape;

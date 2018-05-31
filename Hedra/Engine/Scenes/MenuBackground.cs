@@ -93,7 +93,7 @@ namespace Hedra.Engine.Scenes
 			        _light = ShaderManager.GetAvailableLight();
 			        if (_light != null)
 			        {
-			            _light.Color = new Vector3(1f, 0.5f, 0.5f);
+			            _light.Color = new Vector3(1f, 0.35f, 0.35f);
 			            _light.Position = FirePosition;
 			        }
 			    }

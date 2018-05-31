@@ -12,7 +12,6 @@ using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
@@ -49,7 +48,6 @@ namespace Hedra.Engine.EntitySystem
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1;
         public float AttackCooldown { get; set; }
-        public Box BaseBox { get; private set; } = new Box(Vector3.Zero, Vector3.One);
         public bool Destroy { get; set; } = false;
         public int Level { get; set; } = 1;
         public float MaxOxygen { get; set; } = 30;
@@ -75,8 +73,6 @@ namespace Hedra.Engine.EntitySystem
                 _health = Math.Min(value, MaxHealth);
             }
         }
-
-        public Box HitBox => BaseBox.Cache.Translate(Model.Position);
 
         public bool InUpdateRange => (BlockPosition.Xz - LocalPlayer.Instance.Model.Model.Position.Xz).LengthSquared <
                                      GameSettings.UpdateDistance * GameSettings.UpdateDistance;
@@ -208,16 +204,6 @@ namespace Hedra.Engine.EntitySystem
             Physics = new PhysicsComponent(this);
         }
 
-        public void SetHitbox(Box NewBox)
-        {
-            this.BaseBox = NewBox;
-        }
-
-        public void MultiplyHitbox(Vector3 Scale)
-        {
-            this.BaseBox = BaseBox * Scale;
-        }
-
         public void ShowIcon(CacheItem? IconType)
         {
             var iconComponent = this.SearchComponent<HeadIconComponent>();
@@ -249,22 +235,28 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InAttackRange(Entity Target, out float Dot)
-        {
-            Dot = Math.Max(Vector2.Dot(
-                (Target.Position - this.Position).Xz.NormalizedFast(),
-                this.Orientation.Xz.NormalizedFast()
-                ), 0);
-
-            return (Target.Position - Position).LengthFast < (BaseBox.Max - BaseBox.Min).LengthFast +
-                   (Target.BaseBox.Max - Target.BaseBox.Min).LengthFast &&
-                   Target != this &&
-                   Dot > 0.85f;
-        }
-
         public bool InAttackRange(Entity Target)
         {
-            return this.InAttackRange(Target, out _);
+            var collider0 = this.Model.BroadphaseCollider;
+            var collider1 = Target.Model.BroadphaseCollider;
+            var radii = collider0.BroadphaseRadius + collider1.BroadphaseRadius;
+            if ((collider0.BroadphaseCenter - collider1.BroadphaseCenter).LengthSquared > radii * radii) return false;
+
+            var vertices0 = collider0.Vertices;
+            var vertices1 = collider1.Vertices;
+            float lowestDistance = float.MaxValue;
+            for (var i = 0; i < vertices0.Length; i++)
+            {
+                for (var k = 0; k < vertices1.Length; k++)
+                {
+                    var dist = (new Vector3(vertices0[i].X, this.Model.Position.Y, vertices0[i].Z) - new Vector3(vertices1[k].X, Target.Model.Position.Y, vertices1[k].Z)).LengthFast;
+                    if (dist < lowestDistance)
+                    {
+                        lowestDistance = dist;
+                    }
+                }
+            }
+            return lowestDistance < 5f;
         }
 
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)
@@ -311,8 +303,7 @@ namespace Hedra.Engine.EntitySystem
             var nearestWaterBlockY = this.WaterAtPosition(this.Position);
             var underChunk = World.GetChunkAt(this.Position);
             var touchingFloor = this.Position.Y < PhysicsSystem.Physics.HeightAtPosition(this.Position);
-            var size = this.BaseBox.Max.Y - this.BaseBox.Min.Y;
-            if (nearestWaterBlockY > Position.Y + size+1f && !touchingFloor)
+            if (nearestWaterBlockY > Position.Y + Model.Height + 1f && !touchingFloor)
             {
                 if (!Splashed)
                 {
@@ -348,7 +339,7 @@ namespace Hedra.Engine.EntitySystem
                 }
                 IsUnderwater = true;
             }
-            else if (nearestWaterBlockY < Position.Y + size || touchingFloor)
+            else if (nearestWaterBlockY < Position.Y + Model.Height || touchingFloor)
             {
                 if (IsUnderwater) Physics.GravityDirection = -Vector3.UnitY;
                 Splashed = false;
@@ -463,7 +454,7 @@ namespace Hedra.Engine.EntitySystem
             if (IsDead) return;
 
             this.SpawnAnimation();
-            PhysicsSystem.Physics.Manager.AddCommand(this);
+            PhysicsSystem.Physics.Threading.AddCommand(this);
             this.UpdateEnviroment();
             this._tickSystem.Tick();
             for (var i = 0; i < this.Components.Count; i++)
@@ -472,7 +463,7 @@ namespace Hedra.Engine.EntitySystem
             if (Knocked)
             {
                 _knockedTime -= Time.ScaledFrameTimeSeconds;
-                if (Model is HumanModel model)
+                if (Model is HumanoidModel model)
                 {
                     model.KnockOut();
                     model.Human.IsRiding = false;

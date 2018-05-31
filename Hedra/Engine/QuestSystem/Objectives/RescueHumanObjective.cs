@@ -39,7 +39,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
 			var rng = new Random(World.Seed + 4213);
 			_oldMan = new Humanoid();
-			_oldMan.Model = new HumanModel(_oldMan);
+			_oldMan.Model = new HumanoidModel(_oldMan);
 			//OldMan.Model.HairColor = new Vector4(.9f, .9f, .9f, 1f);
 			//OldMan.Model.EyeColor = HumanModel.EyesColors[new Random(World.Seed + 1234214).Next(0, HumanModel.EyesColors.Length)];
 			//OldMan.Model.UpdateModel();
@@ -225,7 +225,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
 	    public override uint QuestLogIcon {
 			get {
-				HumanModel model = _oldMan.Model;
+				HumanoidModel model = _oldMan.Model;
 				
 				Vector3 prevRot = model.Model.Rotation; 
 				model.Model.Scale *= 2f;

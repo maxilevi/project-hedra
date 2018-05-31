@@ -5,6 +5,7 @@
  *
  */
 
+using System;
 using System.Collections;
 using System.Drawing;
 using Hedra.Engine.EntitySystem;
@@ -33,6 +34,28 @@ namespace Hedra.Engine
         private static Texture _loadingScreen;
 	    private static GUIText _playerText;
 	    private static bool _isNewRun;
+
+	    private static bool _spawningEffect;
+	    public static bool SpawningEffect
+	    {
+	        get => _spawningEffect;
+	        set
+	        {
+	            if (!value || value == SpawningEffect) return;
+	            _spawningEffect = value;
+	            GameSettings.BloomModifier = 8.0f;
+                TaskManager.While( () => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
+                {
+                    GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, (float) Time.deltaTime);
+                });
+                TaskManager.When( () => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
+	            {
+	                GameSettings.BloomModifier = 1.0f;
+	                _spawningEffect = false;
+
+	            });
+	        }
+	    }
 
         public static void Load()
 		{
@@ -105,12 +128,11 @@ namespace Hedra.Engine
 			Player.Mana = Information.Mana;
 			Player.Health = Information.Health;
 			Player.Level = Information.Level;
-			Player.AddonHealth = Information.AddonHealth;
 			Player.BlockPosition = Information.BlockPosition;
 			Player.Rotation = Information.Rotation;
 			Player.Model.Dispose();
 	        Player.Physics.VelocityCap = float.MaxValue;
-		    Player.Model = new HumanModel(Player);
+		    Player.Model = new HumanoidModel(Player);
 	        Player.RandomFactor = Information.RandomFactor;
 			if(! (Player.Health > 0) )
 				Player.Model.Enabled = false;
@@ -161,7 +183,7 @@ namespace Hedra.Engine
 			GameManager.MakeCurrent(Information);
 			EnvironmentSystem.SkyManager.SetTime(12000);
 
-		    Player.Model = new HumanModel(Player);
+		    Player.Model = new HumanoidModel(Player);
 			
 			if(Player.Inventory.MainWeapon != null){
 				//Force to discard cache
@@ -229,6 +251,7 @@ namespace Hedra.Engine
 					Player.Model.LeftWeapon.MainMesh.LocalPosition = Vector3.Zero;
 					Player.Model.ApplyFog = true;
 					Player.CanInteract = true;
+				    GameManager.SpawningEffect = true;
 					IsLoading = false;
 					_loadingScreen.TextureElement.Opacity = 0;
 				    _playerText.UIText.Opacity = 0;

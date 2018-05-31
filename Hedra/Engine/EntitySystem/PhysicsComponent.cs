@@ -154,19 +154,19 @@ namespace Hedra.Engine.EntitySystem
 	    }
 
 	    public void Move(MoveCommand command){
-			Physics.Manager.AddCommand(command);
+			Physics.Threading.AddCommand(command);
 		}
 
 	    public void Move(Vector3 Delta)
 	    {
-	        Physics.Manager.AddCommand(new MoveCommand(this.Parent, Delta));
+	        Physics.Threading.AddCommand(new MoveCommand(this.Parent, Delta));
 	    }
 
         public void ProccessCommand(MoveCommand Command) {
             if(Command.Delta == Vector3.Zero) return;
             bool onlyY = Command.Delta.Xz == Vector2.Zero;
 			Vector3 delta = Command.Delta;
-            var parentBox = this.Parent.HitBox;
+            var parentBox = this.Parent.Model.BroadphaseBox;
 			float modifierX = delta.X < 0 ? -1f : 1f;
 			float modifierZ = delta.Z < 0 ? -1f : 1f;
 
@@ -207,10 +207,9 @@ namespace Hedra.Engine.EntitySystem
                     if (World.Entities[i] == Parent)
                         continue;
 
-                    if (World.Entities[i].Physics.HasCollision &&
-                        Physics.Collides(World.Entities[i].HitBox, parentBox))
+                    if (World.Entities[i].Physics.HasCollision && Physics.Collides(Parent.Model.BroadphaseBox, World.Entities[i].Model.BroadphaseBox)) // !Parent.InAttackRange(World.Entities[i])
                     {
-                        if (!PushAround || World.Entities[i].HitBox.Size.LengthFast > Parent.HitBox.Size.LengthFast) return;
+                        if (!PushAround || World.Entities[i].Model.BroadphaseCollider.BroadphaseRadius > Parent.Model.BroadphaseCollider.BroadphaseRadius) return;
                         
                         Vector3 increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3();
                         increment = increment.Xz.NormalizedFast().ToVector3();
@@ -250,9 +249,11 @@ namespace Hedra.Engine.EntitySystem
 				        }
 				        else
 				        {
-				            box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * (Parent.BaseBox.Max.Y-1f) -
+				            box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation 
+                                * (Parent.Model.BaseBroadphaseBox.Max.Y-1f) -
 				                      Vector3.UnitX * .5f - Vector3.UnitZ * .5f;
-				            box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * (Parent.BaseBox.Max.Y) +
+				            box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation 
+                                * (Parent.Model.BaseBroadphaseBox.Max.Y) +
 				                      Vector3.UnitX * .5f + Vector3.UnitZ * .5f;
                         }
 				    }

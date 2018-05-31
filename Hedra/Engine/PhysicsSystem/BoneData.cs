@@ -26,12 +26,12 @@ namespace Hedra.Engine.PhysicsSystem
             return support;
         }
 
-        public static BoneData[] FromArrays(Vector3[] JointIds, Vector3[] Vertices)
+        public static BoneData[] FromArrays(int RootId, Vector3[] JointIds, Vector3[] Vertices)
         {
             var ids = new Dictionary<int, HashSet<Vector3>>();
             for (var i = 0; i < JointIds.Length; i++)
             {
-                for (var k = 0; k < 3; k++)
+                for (var k = 0; k < 1; k++)
                 {
                     var id = (int)JointIds[i][k];
                     if (!ids.ContainsKey(id))

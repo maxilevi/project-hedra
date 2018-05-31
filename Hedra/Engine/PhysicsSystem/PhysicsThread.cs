@@ -10,13 +10,15 @@ namespace Hedra.Engine.PhysicsSystem
     {
         public OnBatchProcessedEventHandler OnBatchProcessedEvent;
         public OnCommandProcessedEventHandler OnCommandProcessedEvent;
+        public PhysicsThreadType Type { get; }
         private readonly Thread _thread;
         private readonly ConcurrentBag<Entity> _toUpdate;
         private readonly ConcurrentBag<MoveCommand> _toMove;
         private bool _sleep;
 
-        public PhysicsThread()
+        public PhysicsThread(PhysicsThreadType Type)
         {
+            this.Type = Type;
             _toUpdate = new ConcurrentBag<Entity>();
             _toMove = new ConcurrentBag<MoveCommand>();
             _thread = new Thread(this.Process);
@@ -47,6 +49,47 @@ namespace Hedra.Engine.PhysicsSystem
 
         public int Count => _toMove.Count;
 
+        public void ProcessCommands()
+        {
+            while (!_toMove.IsEmpty)
+            {
+                try
+                {
+                    var result = _toMove.TryTake(out MoveCommand command);
+                    if (result)
+                    {
+                        command.Parent?.Physics.ProccessCommand(command);
+                        OnCommandProcessedEvent?.Invoke(command);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.WriteLine(e.ToString());
+                    break;
+                }
+            }
+        }
+
+        public void ProcessUpdates()
+        {
+            while (!_toUpdate.IsEmpty)
+            {
+                try
+                {
+                    var result = _toUpdate.TryTake(out Entity entity);
+                    if (result)
+                    {
+                        entity?.Physics.Update();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.WriteLine(e.ToString());
+                    break;
+                }
+            }
+        }
+
         public void Process()
         {
             while (Program.GameWindow.Exists)
@@ -57,45 +100,25 @@ namespace Hedra.Engine.PhysicsSystem
                     continue;
                 }
 
-                while (!_toUpdate.IsEmpty)
+                switch (Type)
                 {
-                    try
-                    {
-                        var result = _toUpdate.TryTake(out Entity entity);
-                        if (result)
-                        {
-                            entity?.Physics.Update();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.WriteLine(e.ToString());
+                    case PhysicsThreadType.ProcessUpdate:
+                        this.ProcessUpdates();
                         break;
-                    }
-                }
-
-                while (!_toMove.IsEmpty)
-                {
-                    try
-                    {
-                        var result = _toMove.TryTake(out MoveCommand command);
-                        if (result)
-                        {
-                            command.Parent?.Physics.ProccessCommand(command);
-                            OnCommandProcessedEvent?.Invoke(command);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.WriteLine(e.ToString());
+                    case PhysicsThreadType.ProcessCommand:
+                        this.ProcessCommands();
                         break;
-                    }
                 }
 
                 OnBatchProcessedEvent?.Invoke();
                 _sleep = true;
             }
-
         }
+    }
+
+    public enum PhysicsThreadType
+    {
+        ProcessUpdate,
+        ProcessCommand
     }
 }

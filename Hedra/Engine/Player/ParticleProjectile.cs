@@ -146,7 +146,7 @@ namespace Hedra.Engine.Player
 
 			for(var i = 0; i < World.Entities.Count; i++){	   
 			    if (Parent == World.Entities[i] || !((this.Position - World.Entities[i].Position).LengthFast < 12 +
-			        (World.Entities[i].BaseBox.Max - World.Entities[i].BaseBox.Min).LengthFast)) continue;
+			        (World.Entities[i].Model.BaseBroadphaseBox.Max - World.Entities[i].Model.BaseBroadphaseBox.Min).LengthFast)) continue;
 
 			    HitEventHandler?.Invoke(this, World.Entities[i]);
 			    Exploded = true;

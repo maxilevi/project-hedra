@@ -76,7 +76,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
 			base.Attack1(Human);
 
-		    TaskManager.Delay(250, () => Trail.Emit = true);
+		    TaskManager.After(250, () => Trail.Emit = true);
         }
 		
 		public override void Attack2(Humanoid Human)
@@ -85,7 +85,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
             base.Attack2(Human);
 
-		    TaskManager.Delay(200, () => Trail.Emit = true);
+		    TaskManager.After(200, () => Trail.Emit = true);
 
         }
 	}

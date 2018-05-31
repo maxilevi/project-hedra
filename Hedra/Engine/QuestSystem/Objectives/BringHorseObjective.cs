@@ -84,7 +84,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 }
                 else
                 {
-                    var model = _horseRider.Model as HumanModel;
+                    var model = _horseRider.Model as HumanoidModel;
                     if (model == null) return UserInterface.QuestFbo.TextureID[0];
                     model.Model.Scale *= 2f;
 
@@ -177,7 +177,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                     _horseComponent.Rider.IsRiding = false;
                     _horseComponent.UnRidable = true;
                     LocalPlayer.Instance.Model.Idle();//the animation was mounting so set it back to idle
-                    TaskManager.Delay(1500, () => _horse.RemoveComponent(_horseComponent));
+                    TaskManager.After(1500, () => _horse.RemoveComponent(_horseComponent));
                     this.NextObjective();
                 }
 

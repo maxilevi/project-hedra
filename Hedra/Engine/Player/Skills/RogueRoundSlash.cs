@@ -80,15 +80,15 @@ namespace Hedra.Engine.Player
 
 				for(int i = World.Entities.Count-1; i > -1; i--){
 
-					if( (World.Entities[i].Position  - Player.Position).LengthFast <
-					   (this.Player.BaseBox.Max - this.Player.BaseBox.Min).LengthFast +
-					   (World.Entities[i].BaseBox.Max - World.Entities[i].BaseBox.Min).LengthFast - 2
-					   && World.Entities[i] != Player && !World.Entities[i].IsStatic){
-						float Dmg = Player.DamageEquation * Damage * Engine.Time.ScaledFrameTimeSeconds * 2f;
-						if(AffectedEntities.ContainsKey(World.Entities[i])){
-				 			AffectedEntities[World.Entities[i]] = AffectedEntities[World.Entities[i]] + Dmg;
-						}else{
-							AffectedEntities.Add(World.Entities[i], Dmg);
+					if(Player.InAttackRange(World.Entities[i]))
+                    {
+						float dmg = Player.DamageEquation * Damage * Engine.Time.ScaledFrameTimeSeconds * 4f;
+						if(AffectedEntities.ContainsKey(World.Entities[i]))
+                        {
+				 			AffectedEntities[World.Entities[i]] = AffectedEntities[World.Entities[i]] + dmg;
+						}else
+                        {
+							AffectedEntities.Add(World.Entities[i], dmg);
 						}
 					}
 				}

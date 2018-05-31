@@ -6,6 +6,8 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
+using System;
 using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.PhysicsSystem
@@ -26,10 +28,11 @@ namespace Hedra.Engine.PhysicsSystem
 		private bool _sleep = true;
 		
 		public void Load(){
+            if(ThreadCount % 2 != 0) throw new ArgumentOutOfRangeException($"Physics thread count is {ThreadCount} and it should be a multiple of 2");
             _threads = new PhysicsThread[ThreadCount];
             for (var i = 0; i < ThreadCount; i++)
 		    {
-		        _threads[i] = new PhysicsThread();
+		        _threads[i] = new PhysicsThread(i % 2 == 0 ? PhysicsThreadType.ProcessUpdate : PhysicsThreadType.ProcessCommand);
 		        _threads[i].OnBatchProcessedEvent += () => OnBatchProcessedEvent?.Invoke();
                 _threads[i].OnCommandProcessedEvent += M => OnCommandProcessedEvent?.Invoke(M);
 		    }

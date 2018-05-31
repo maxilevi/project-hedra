@@ -8,6 +8,7 @@
  */
 using System;
 using System.Globalization;
+using System.Reflection;
 using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
@@ -46,6 +47,27 @@ namespace Hedra.Engine.Management
 					}
 					return true;
 				}
+			    if (Parts[0] == "cfg")
+			    {
+			        var variable = Parts[1];
+			        var prop = typeof(GameSettings).GetProperty(variable, BindingFlags.Public | BindingFlags.Static);
+                    if (Parts.Length > 2)
+			        {
+			            prop.SetValue(null, Convert.ChangeType(Parts[2], prop.PropertyType), null);
+			        }
+			        Result = $"{variable} = {prop.GetValue(null, null).ToString()}";
+                    return true;
+                }
+			    if (Parts[0] == "spawningEffect")
+			    {
+			        GameManager.SpawningEffect = true;
+			        return true;
+			    }
+			    if (Parts[0] == "hide")
+			    {
+			        LocalPlayer.Instance.Model.Enabled = !LocalPlayer.Instance.Model.Enabled;
+
+			    }
 			    if (Parts[0] == "bloom")
 			    {
 			        GameSettings.Bloom = !GameSettings.Bloom;

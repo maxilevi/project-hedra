@@ -16,10 +16,12 @@ namespace Hedra.Engine.QuestSystem
 	/// </summary>
 	public class Plateau
 	{
-		public Vector3 Position;
-		public float Height = 64, Radius = 64, MaxHeight = 32;
-		
-		public Plateau(Vector3 Position, float Radius, float Height, float MaxHeight){
+		public Vector3 Position { get; set; }
+		public float Height { get; set; }
+	    public float Radius { get; set; }
+	    public float MaxHeight { get; set; }
+
+	    public Plateau(Vector3 Position, float Radius, float Height, float MaxHeight){
 			this.Position = Position;
 			this.Radius = Radius;
 			this.Height = Height;

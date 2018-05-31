@@ -108,7 +108,6 @@ namespace Hedra.Engine.Management
 		
 	    public static void Draw()
 	    {	
-	    	
 	     	VertsCount = 0;
      		if(MainBuffer.Enabled){
     			

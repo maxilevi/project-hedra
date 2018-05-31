@@ -39,7 +39,7 @@ namespace Hedra.Engine.Management
         /// </summary>
         /// <param name="Time">Time to wait. In milliseconds.</param>
         /// <param name="Action">Action to execute.</param>
-		public static void Delay(int Time, Action Action){
+		public static void After(int Time, Action Action){
 			CoroutineManager.StartCoroutine(AfterSeconds, Time, Action);
 		}
 
@@ -48,7 +48,7 @@ namespace Hedra.Engine.Management
         /// </summary>
         /// <param name="Condition">Condition to be met.</param>
         /// <param name="Action">Action to execute.</param>
-	    public static void Delay(Func<bool> Condition, Action Action)
+	    public static void When(Func<bool> Condition, Action Action)
 	    {
 	        CoroutineManager.StartCoroutine(AfterAction, Condition, Action);
 	    }
@@ -76,7 +76,7 @@ namespace Hedra.Engine.Management
         /// </summary>
         /// <param name="Frames">Frames to wait for.</param>
         /// <param name="Do">Action to execute</param>
-	    public static void After(int Frames, Action Do)
+	    public static void Delay(int Frames, Action Do)
 	    {
 	        CoroutineManager.StartCoroutine(AfterFrames, Frames, Do);
 	    }

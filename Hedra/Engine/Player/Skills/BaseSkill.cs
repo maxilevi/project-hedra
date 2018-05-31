@@ -32,10 +32,10 @@ namespace Hedra.Engine.Player.Skills
 		public float MaxCooldown { get; set; }
         public int Level { get; set; }
 	    public bool Active { get; set; } = true;
-        public bool Passive { get; set; }
+        public virtual bool Passive { get; set; }
         public abstract string Description { get; }
 	    public bool Casting { get; set; }
-	    public uint TexId { get; protected set; }
+	    public virtual uint TexId { get; protected set; }
 	    public uint MaskId { get; set; }
         protected bool UseMask => MaskId != 0;
 	    protected bool Enabled { get; set; } = true;

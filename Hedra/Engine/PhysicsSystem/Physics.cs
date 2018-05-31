@@ -17,8 +17,14 @@ namespace Hedra.Engine.PhysicsSystem
 	public static class Physics
 	{
 		public static float Gravity = -9.81f;
-		public static PhysicsThreadManager Manager = new PhysicsThreadManager();
-		
+		public static PhysicsThreadManager Threading = new PhysicsThreadManager();
+
+	    public static void Update()
+	    {
+	        Threading.Update();
+	        PhysicsScheduler.Update();
+	    }
+
 		public static void LookAt(Entity Parent, Entity Target){
 		    Parent.Orientation = (Target.Model.Position-Parent.Model.Position).Xz.NormalizedFast().ToVector3();
             Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
@@ -56,7 +62,7 @@ namespace Hedra.Engine.PhysicsSystem
 			var yh = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z);
 				
 			Vector3 blockSpace = World.ToBlockSpace(BlockPosition);
-			var coords = (new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize , Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize);
+			var coords = new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize , Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize;
 			
 			var bottom = new Vector3(blockSpace.X, yh + density, blockSpace.Z);
 			var right = new Vector3(blockSpace.X+1, yx + densityX, blockSpace.Z);
@@ -97,7 +103,7 @@ namespace Hedra.Engine.PhysicsSystem
             var yh = (int)BlockPosition.Y;
 
             var blockSpace = World.ToBlockSpace(BlockPosition);
-		    var coords = (new Vector2(BlockPosition.X % Chunk.BlockSize, BlockPosition.Z % Chunk.BlockSize) / Chunk.BlockSize);
+		    var coords = new Vector2(BlockPosition.X % Chunk.BlockSize, BlockPosition.Z % Chunk.BlockSize) / Chunk.BlockSize;
 
 		    var bottom = new Vector3(blockSpace.X, yh + density, blockSpace.Z);
 		    var right = new Vector3(blockSpace.X + 1, yx + densityX, blockSpace.Z);
@@ -142,7 +148,7 @@ namespace Hedra.Engine.PhysicsSystem
 
 
             Vector3 BlockSpace = World.ToBlockSpace(BlockPosition);
-            Vector2 Coords = (new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize, Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize);
+            Vector2 Coords = new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize, Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize;
 
             Vector3 Bottom = new Vector3(BlockSpace.X, YH + Density, BlockSpace.Z);
             Vector3 Right = new Vector3(BlockSpace.X + 1, YX + DensityX, BlockSpace.Z);
@@ -150,7 +156,7 @@ namespace Hedra.Engine.PhysicsSystem
             Vector3 Front = new Vector3(BlockSpace.X, YZ + DensityZ, BlockSpace.Z + 1);
 
             float Height = 0;
-            if (Coords.X < (1 - Coords.Y))
+            if (Coords.X < 1 - Coords.Y)
                 Height = Mathf.BarryCentric(new Vector3(0, Bottom.Y, 0), new Vector3(1, Right.Y, 0), new Vector3(0, Front.Y, 1), Coords);
             else
                 Height = Mathf.BarryCentric(new Vector3(1, Right.Y, 0), new Vector3(1, Top.Y, 1), new Vector3(0, Front.Y, 1), Coords);
@@ -165,10 +171,10 @@ namespace Hedra.Engine.PhysicsSystem
 		public static Vector3 NormalAtPosition(Vector3 BlockPosition){
 			Chunk UnderChunk = World.GetChunkAt(BlockPosition);
 			
-			float DensityX = (World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z )).Density;
-			float DensityZ = (World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize )).Density;
-			float DensityXZ = (World.GetHighestBlockAt( (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z + (int) Chunk.BlockSize )).Density;
-			float Density = (World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z)).Density;
+			float DensityX = World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z ).Density;
+			float DensityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
+			float DensityXZ = World.GetHighestBlockAt( (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
+			float Density = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Density;
 			
 			float YX = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z);
 			float YZ = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z + (int) Chunk.BlockSize);
@@ -177,7 +183,7 @@ namespace Hedra.Engine.PhysicsSystem
 			
 			
 			Vector3 BlockSpace = World.ToBlockSpace(BlockPosition);
-			Vector2 Coords = (new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize , Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize);
+			Vector2 Coords = new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize , Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize;
 			
 			Vector3 Bottom = new Vector3(BlockSpace.X, YH + Density, BlockSpace.Z);
 			Vector3 Right = new Vector3(BlockSpace.X+1, YX + DensityX, BlockSpace.Z);
@@ -185,7 +191,7 @@ namespace Hedra.Engine.PhysicsSystem
 			Vector3 Front = new Vector3(BlockSpace.X, YZ + DensityZ, BlockSpace.Z+1);
 			
 			Vector3 Normal = Vector3.Zero;
-			if(Coords.X < (1-Coords.Y))
+			if(Coords.X < 1-Coords.Y)
 				Normal = Mathf.CalculateNormal(Bottom, Right, Front);
 			else
 				Normal = Mathf.CalculateNormal(Right, Top, Front);
@@ -243,15 +249,15 @@ namespace Hedra.Engine.PhysicsSystem
 		}
 
 		public static bool AABBvsAABB(Box a, Box b) {
-			return (a.Min.X  <= b.Max.X && a.Max.X >= b.Min.X) &&
-			   (a.Min.Y  <= b.Max.Y && a.Max.Y >= b.Min.Y) &&
-	 		   (a.Min.Z  <= b.Max.Z && a.Max.Z  >= b.Min.Z);
+			return a.Min.X  <= b.Max.X && a.Max.X >= b.Min.X &&
+                a.Min.Y  <= b.Max.Y && a.Max.Y >= b.Min.Y &&
+                a.Min.Z  <= b.Max.Z && a.Max.Z  >= b.Min.Z;
 		}
 		
 		public static bool AABBvsPoint(Box a, Vector3 P) {
-		  return (P.X >= a.Min.X && P.X <= a.Max.X) &&
-		         (P.Y >= a.Min.Y && P.Y <= a.Max.Y) &&
-		         (P.Z >= a.Min.Y && P.Z <= a.Max.Z);
+		  return P.X >= a.Min.X && P.X <= a.Max.X &&
+                P.Y >= a.Min.Y && P.Y <= a.Max.Y &&
+                P.Z >= a.Min.Y && P.Z <= a.Max.Z;
 		}
 	}		
 }

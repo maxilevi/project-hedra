@@ -76,13 +76,27 @@ namespace Hedra.Engine.Rendering
 	    public static void DrawShape(CollisionShape Shape, Color DrawColor){
 	    	GraphicsLayer.Disable(EnableCap.CullFace);
 	    	GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-			
-			GL.Begin(PrimitiveType.Triangles);
-			for(int j = 0; j < Shape.Indices.Count; j++){
-				GL.Color3( DrawColor );
-				GL.Vertex3( Shape.Vertices[(int)Shape.Indices[j]] );
-			}
-			GL.End();
+
+	        GL.PointSize(6f);
+            if (Shape.Indices.Length > 0)
+	        {
+	            GL.Begin(PrimitiveType.Triangles);
+	            for (var j = 0; j < Shape.Indices.Length; j++)
+	            {
+	                GL.Color3(DrawColor);
+	                GL.Vertex3(Shape.Vertices[(int) Shape.Indices[j]]);
+	            }
+	        }
+	        else
+	        {
+	            GL.Begin(PrimitiveType.Points);
+	            for (var j = 0; j < Shape.Vertices.Length; j++)
+	            {
+	                GL.Color3(DrawColor);
+	                GL.Vertex3(Shape.Vertices[j]);
+	            }
+            }
+	        GL.End();
 			
 			GraphicsLayer.Enable(EnableCap.CullFace);
 			GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);

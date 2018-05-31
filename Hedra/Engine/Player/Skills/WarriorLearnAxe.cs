@@ -6,38 +6,28 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
+
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
-using System.Linq;
-using System.Collections.Generic;
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Player.Skills;
+using OpenTK;
 
-namespace Hedra.Engine.Player
+namespace Hedra.Engine.Player.Skills
 {
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class LearnAxe : BaseSkill
+	public class LearnAxe : LearningSkill
 	{
+	    public override uint TexId => Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
 
-		public LearnAxe(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
-			base.Passive = true;
-		}
+        public LearnAxe(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) { }
 		
-		public override void Update()
+		public override void Learn()
 		{
-			if(base.Level == 0)return;
-			if(base.Level > 1) Player.AbilityTree.SetPoints(this.GetType(), 1);
-
             Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Axe);
 		}
 		
 		public override string Description => "Learn to use the axe.";
-
-	    public override void KeyDown(){}
 	}
 }

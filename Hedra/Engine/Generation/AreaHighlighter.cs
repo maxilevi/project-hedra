@@ -72,7 +72,7 @@ namespace Hedra.Engine.Generation
             }
             CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position + Vector3.UnitY * fadeSpeed, Seconds });
 
-            TaskManager.Delay((int)(Seconds * 1000f), () => CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position - Vector3.UnitY * fadeSpeed }));
+            TaskManager.After((int)(Seconds * 1000f), () => CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position - Vector3.UnitY * fadeSpeed }));
         }
 
         private IEnumerator FadeHighlight(object[] Params)

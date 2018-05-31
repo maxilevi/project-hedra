@@ -2,37 +2,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Rendering.Animation;
+using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
     public class AnimatedCollider : IDisposable
     {
         public AnimatedModel Model { get; }
-        private readonly BoneData[] _bonesData;
-        private BoneBox[] _defaultBoneBoxes;
+        private readonly AnimatedColliderData _colliderData;
+        private readonly CollisionShape[] _shapes;
+        private CollisionShape _defaultBroadphaseShape;
 
-        public AnimatedCollider(AnimatedModel Model)
+        public AnimatedCollider(string Identifier, AnimatedModel Model)
         {
             this.Model = Model;
-            this._bonesData = BoneData.FromArrays(Model.JointIdsArray, Model.VerticesArray);
-            this.Build();
+            this._colliderData = AnimatedColliderBuilder.Build(Identifier, Model);
+            this._shapes = new CollisionShape[_colliderData.BonesData.Length];
         }
 
-        private void Build()
+        public CollisionShape Broadphase
         {
-            var boxes = new List<BoneBox>();
-            for (var i = 0; i < _bonesData.Length; i++)
+            get
             {
-                boxes.Add(BoneBox.From(_bonesData[i]));
+                if (_defaultBroadphaseShape == null)
+                    _defaultBroadphaseShape = new CollisionShape(new Vector3[_colliderData.DefaultBroadphase.Length]);
+                for (var i = 0; i < _defaultBroadphaseShape.Vertices.Length; i++)
+                {
+                    _defaultBroadphaseShape.Vertices[i] = Vector3.TransformPosition(_colliderData.DefaultBroadphase[i].Vertex,
+                        Model.JointTransforms[_colliderData.DefaultBroadphase[i].Id]);
+                }
+                _defaultBroadphaseShape.RecalculateBroadphase();
+                return _defaultBroadphaseShape;
             }
-            _defaultBoneBoxes = boxes.ToArray();
         }
 
         public BoneBox[] Colliders
         {
             get
             {
-                var boneBoxes = _defaultBoneBoxes.Select(B => B.Clone()).ToArray();
+                var boneBoxes = _colliderData.DefaultBoneBoxes.Select(B => B.Clone()).ToArray();
                 var transforms = Model.JointTransforms;
                 for (var i = 0; i < boneBoxes.Length; i++)
                 {
@@ -42,9 +50,36 @@ namespace Hedra.Engine.PhysicsSystem
             }
         }
 
+        public Vector3[] Vertices
+        {
+            get
+            {
+                var colliders = this.Colliders;
+                var vertexList = new List<Vector3>();
+                for (var i = 0; i < colliders.Length; i++)
+                {
+                    vertexList.AddRange(colliders[i].Corners);
+                }
+                return vertexList.ToArray();
+            }
+        }
+
+        public CollisionShape[] Shapes
+        {
+            get
+            {
+                var colliders = this.Colliders;
+                for (var i = 0; i < colliders.Length; i++)
+                {
+                    _shapes[i] = colliders[i].ToShape();
+                }
+                return _shapes;
+            }
+        }
+
         public void Dispose()
         {
-            
+
         }
     }
 }

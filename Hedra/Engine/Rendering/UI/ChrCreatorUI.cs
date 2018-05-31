@@ -45,7 +45,7 @@ namespace Hedra.Engine.Rendering.UI
 			_openFolder.Click += delegate { System.Diagnostics.Process.Start(AssetManager.AppData + "/Characters/"); };
 			
 			_human = new Humanoid();
-		    _human.Model = new HumanModel(_human)
+		    _human.Model = new HumanoidModel(_human)
 		    {
 		        Rotation = Vector3.UnitY * -90,
 		        TargetRotation = Vector3.UnitY * -90,
@@ -69,7 +69,7 @@ namespace Hedra.Engine.Rendering.UI
 			    var rotation = _human.Model.Rotation;
 
 			    _human.Model.Dispose();
-				_human.Model = new HumanModel(_human, _classType.Human);
+				_human.Model = new HumanoidModel(_human, _classType.Human);
 				_human.Model.SetWeapon(_classType.StartingItem.Weapon);
 			    _human.Model.Position = position;
 			    _human.Model.Rotation = rotation;

@@ -28,7 +28,7 @@ namespace Hedra.Engine.Networking
 		
 		public static Humanoid NewHuman(IPEndPoint IP){
 			var Human = new Humanoid();
-			Human.Model = new HumanModel(Human);
+			Human.Model = new HumanoidModel(Human);
 			Human.Removable = false;
 			Human.Model.ApplyFog = true;
 			

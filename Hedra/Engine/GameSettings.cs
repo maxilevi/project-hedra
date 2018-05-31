@@ -24,6 +24,7 @@ namespace Hedra.Engine
     public static class GameSettings
     {
         public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
+        public static float BloomModifier { get; set; } = 1f;
         public static bool Wireframe { get; set; }
         public static bool LockFrustum { get; set; }
         public static bool Debug { get; set; }
@@ -148,8 +149,8 @@ namespace Hedra.Engine
         [Setting]
         public static bool VSync
         {
-            get { return (int) Program.GameWindow.VSync == 2; }
-            set { Program.GameWindow.VSync = (VSyncMode) (value ? 2 : 0); }
+            get => (int) Program.GameWindow.VSync == 2;
+            set => Program.GameWindow.VSync = (VSyncMode) (value ? 2 : 0);
         }
 
         public static void Save(string File)

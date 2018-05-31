@@ -41,7 +41,7 @@ namespace Hedra.Engine.Rendering.Effects
 		public override void Pass(FBO Src, FBO Dst){
 			HBloomFbo.Bind();
 			Bloom.Bind();
-
+		    Bloom["Modifier"] = GameSettings.BloomModifier;
             GL.Clear(ClearBufferMask.ColorBufferBit);
 		    this.DrawQuad(Bloom, Src.TextureID[0]);
 			
