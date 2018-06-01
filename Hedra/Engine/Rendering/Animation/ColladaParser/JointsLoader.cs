@@ -20,13 +20,14 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// </summary>
 	public class JointsLoader
 	{
+		private const string ArmatureName = "Armature";
 		private XmlNode ArmatureData;
 		private List<string> BoneOrder;
 		private int JointCount = 0;
 		private static readonly Matrix4 Correction = Matrix4.CreateFromAxisAngle(Vector3.UnitX, -90f * Mathf.Radian);
 	
 		public JointsLoader(XmlNode VisualSceneNode, List<string> BoneOrder) {
-			this.ArmatureData = VisualSceneNode["visual_scene"].ChildWithAttribute("node", "id", "Armature");
+			this.ArmatureData = VisualSceneNode["visual_scene"].ChildWithAttribute("node", "id", ArmatureName);
 			this.BoneOrder = BoneOrder;
 		}
 		
@@ -46,7 +47,9 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 		}
 		
 		private JointData ExtractMainJointData(XmlNode JointNode, bool IsRoot){
-			string nameId = JointNode.GetAttribute("id").Value;
+			string nameId = JointNode.GetAttribute("id").Value.Replace($"{ArmatureName}_", string.Empty);
+			string jointName = JointNode.GetAttribute("name").Value;
+			if(nameId != jointName) throw new ArgumentException($"Joint ID '{nameId}' differs from Joint NAME '{jointName}'.");
 			int index = BoneOrder.IndexOf(nameId);
             if(IsRoot && index == -1) throw new ArgumentException($"Root bone cannot have an index of -1");
 			string[] matrixData = JointNode["matrix"].InnerText.Split(' ');
