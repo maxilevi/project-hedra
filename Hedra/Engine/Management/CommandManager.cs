@@ -47,6 +47,10 @@ namespace Hedra.Engine.Management
 					}
 					return true;
 				}
+			    if (Parts[0] == "track")
+			    {
+			        SoundtrackManager.PlayTrack(int.Parse(Parts[1]), false);
+			    }
 			    if (Parts[0] == "cfg")
 			    {
 			        var variable = Parts[1];

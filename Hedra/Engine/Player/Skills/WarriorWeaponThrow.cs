@@ -93,7 +93,7 @@ namespace Hedra.Engine.Player
         }
 		
 		public override void KeyDown(){
-			base.MaxCooldown = 8.5f - base.Level * .5f;
+			base.MaxCooldown = Math.Max(5, 8.5f - base.Level * .1f);
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;

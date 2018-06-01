@@ -84,7 +84,7 @@ namespace Hedra.Engine.QuestSystem
                 human.Roll();
 
             Parent.Model.Run();
-            Parent.Physics.Move(Parent.Orientation * Parent.Speed * 5 * 2 * (float)Time.deltaTime);
+            Parent.Physics.Move(human?.Movement.MoveFormula(Parent.Orientation) * (float) Time.deltaTime ?? Vector3.Zero);
         }
 
         protected void LookTarget()

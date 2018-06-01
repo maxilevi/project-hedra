@@ -88,8 +88,8 @@ namespace Hedra.Engine.Player
                 };
 			    Human.Physics.ProccessCommand( command );
 			    if (Math.Abs(prevTarget - Human.Physics.TargetPosition.Y) < .01f)
-                    targetPush = 0f;
-			    if (shouldPlayJumpAnimation) Human.Model.Pause = true;
+			        targetPush = 0f;
+                if (shouldPlayJumpAnimation) Human.Model.Pause = true;
                 yield return null;
 			}
             TaskManager.After(50, delegate

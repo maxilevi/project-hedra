@@ -426,7 +426,6 @@ namespace Hedra.Engine.Player
             AbilityTree.Update();
             Toolbar.Update();
             View.Update();
-            Movement.Update();
 			UI.Update();
 			ManageSounds();
 			QuestLog.Update();

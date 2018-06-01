@@ -8,8 +8,13 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.Inventory
 {
+    public delegate void OnStateChangeEventHandler(bool State);
+
     public class InventoryStateManager : StateManager
     {
+        private bool _isExiting;
+        public event OnStateChangeEventHandler OnStateChange;
+
         public InventoryStateManager(LocalPlayer Player)
         {
             this.RegisterStateItem(() => Player.View.TargetPitch, O => Player.View.TargetPitch = (float) O);
@@ -23,14 +28,22 @@ namespace Hedra.Engine.Player.Inventory
             this.RegisterStateItem(() => Player.View.PositionDelegate, O => Player.View.PositionDelegate = (Func<Vector3>)O, true);
         }
 
-        public new void ReleaseState()
+        public override void ReleaseState()
         {
             if (!_state) throw new InvalidOperationException("Cannot release an empty state.");
+            if (_isExiting) return;
             TaskManager.Concurrent(this.LerpState);
+        }
+
+        public override void CaptureState()
+        {
+            base.CaptureState();
+            OnStateChange?.Invoke(_state);
         }
 
         private IEnumerator LerpState()
         {
+            _isExiting = true;
             foreach (var cacheItem in _cache)
             {
                 if (cacheItem.Key.ReleaseFirst)
@@ -60,18 +73,17 @@ namespace Hedra.Engine.Player.Inventory
                         finishedLerp = ((Vector3)cacheItem.Key.Getter.Invoke() - prevValue).Length < 0.01f;
                     }
                 }
-                if (finishedLerp)
-                {
-                    foreach (var cacheItem in _cache)
-                    {
-                        if(!cacheItem.Key.ReleaseFirst)
-                            cacheItem.Key.Setter.Invoke(cacheItem.Value);
-                    }
-                    _cache.Clear();
-                    _state = false;
-                }
+                if (finishedLerp) break;
                 yield return null;
-            }       
+            }
+            foreach (var cacheItem in _cache)
+            {
+                cacheItem.Key.Setter.Invoke(cacheItem.Value);
+            }
+            _cache.Clear();
+            _state = false;
+            OnStateChange?.Invoke(_state);
+            _isExiting = false;
         }
     }
 }

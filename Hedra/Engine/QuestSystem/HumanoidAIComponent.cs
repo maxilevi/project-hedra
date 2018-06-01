@@ -90,10 +90,16 @@ namespace Hedra.Engine.QuestSystem
         /// <param name="TargetPoint">Target point to move</param>
         protected void Move(Vector3 TargetPoint)
         {
-
             if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > 3 * 3)
             {
-                Parent.Physics.Move(Parent.Orientation * Parent.Speed * 5 * 2f * (float)Time.deltaTime);
+                if (Parent is Humanoid human)
+                {
+                    human.Physics.Move(human.Movement.MoveFormula(Parent.Orientation) * (float)Time.deltaTime);
+                }
+                else
+                {
+                    Parent.Physics.Move(Parent.Orientation * Parent.Speed * 5 * (float) Time.deltaTime);
+                }
                 Parent.Model.Run();
             }
             else

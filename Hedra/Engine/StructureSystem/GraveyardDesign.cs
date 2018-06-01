@@ -108,29 +108,12 @@ namespace Hedra.Engine.StructureSystem
             var skeletonCount = 4;
             for (int i = 0; i < skeletonCount; i++)
             {
-                int _k = i;
                 ThreadManager.ExecuteOnMainThread(delegate
                 {
                     Humanoid skeleton = World.QuestManager.SpawnBandit(
                         Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) * Chunk.BlockSize,
                         false, true);
-
-                    if (_k == 0)
-                    {
-                        //UsecustomNPC
-                        //skeleton.MaxHealth *= 3f;
-                        skeleton.Health = skeleton.MaxHealth;
-                        skeleton.Model.Resize(Vector3.One * 2.5f);
-                    }
-                    else
-                    {
-                        //UsecustomNPC
-                        //skeleton.MaxHealth *= 1.5f;
-                        skeleton.Health = skeleton.MaxHealth;
-                        skeleton.Model.Resize(Vector3.One * 1.5f);
-                    }
                     enemies.Add(skeleton);
-
                 });
             }
 

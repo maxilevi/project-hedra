@@ -30,12 +30,14 @@ namespace Hedra.Engine.Rendering.UI
 	        DrawManager.UIRenderer.Add(this.TextureElement);
 	    }
 
-        public Texture(uint TextureId, Vector2 Position, Vector2 Scale){
+        public Texture(uint TextureId, Vector2 Position, Vector2 Scale)
+        {
 			this.TextureElement = new GUITexture(TextureId, Scale, Position);
 			this.TextureElement.Enabled = true;
 			DrawManager.UIRenderer.Add(this.TextureElement);
 		}
-		public Texture(Vector4 TextureColor, Vector2 Position, Vector2 Scale){
+		public Texture(Vector4 TextureColor, Vector2 Position, Vector2 Scale)
+        {
 			this.TextureElement = new GUITexture(Graphics2D.ColorTexture(TextureColor), Scale, Position);
 			this.TextureElement.Enabled = true;
 			DrawManager.UIRenderer.Add(this.TextureElement);

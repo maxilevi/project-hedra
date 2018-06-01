@@ -4,10 +4,13 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI
 {
+    public delegate void OnPlayerInterfaceStateChangeEventHandler(bool Show);
+
     public abstract class PlayerInterface
     {
         private static readonly List<PlayerInterface> Interfaces;
         private static PlayerInterface _openedInterface;
+        public event OnPlayerInterfaceStateChangeEventHandler OnPlayerInterfaceStateChange;
         public static bool Showing => _openedInterface != null;
         public abstract Key OpeningKey { get; }
         public abstract bool Show { get; set; }
@@ -21,6 +24,13 @@ namespace Hedra.Engine.Rendering.UI
         {
             Interfaces = new List<PlayerInterface>();
             EventDispatcher.RegisterKeyDown(typeof(EventDispatcher), OnKeyDown);
+        }
+
+        public bool HasExitAnimation => OnPlayerInterfaceStateChange?.GetInvocationList().Length > 0;
+
+        protected void Invoke(bool Parameter)
+        {
+            OnPlayerInterfaceStateChange?.Invoke(Parameter);
         }
 
         private static void OnKeyDown(object Sender, KeyboardKeyEventArgs Args)
@@ -47,10 +57,9 @@ namespace Hedra.Engine.Rendering.UI
                     Interfaces[i].Show = true;
                     if(Interfaces[i].Show) _openedInterface = Interfaces[i];
                 }
-                else if(_openedInterface == Interfaces[i])
+                else if(_openedInterface == Interfaces[i] && Interfaces[i].Show)
                 {
-                    Interfaces[i].Show = false;
-                    _openedInterface = null;
+                    Close(Interfaces[i]);
                 }
             }
         }
@@ -61,13 +70,35 @@ namespace Hedra.Engine.Rendering.UI
 
             if (_openedInterface != null)
             {
-                _openedInterface.Show = false;
-                _openedInterface = null;
+                Close(_openedInterface);
             }
             else
             {
                 if (!GameManager.Player.UI.Menu.Enabled) GameManager.Player.UI.ShowMenu();
                 else GameManager.Player.UI.HideMenu();
+            }
+        }
+
+        private static void Close(PlayerInterface Interface)
+        {
+            if (Interface.HasExitAnimation)
+            {
+                Interface.Show = false;
+
+                void DelayedAction(bool State)
+                {
+                    Interface.OnPlayerInterfaceStateChange -= DelayedAction;
+                    if (!State)
+                    {
+                        _openedInterface = null;
+                    }
+                }
+                Interface.OnPlayerInterfaceStateChange += DelayedAction;
+            }
+            else
+            {
+                Interface.Show = false;
+                _openedInterface = null;
             }
         }
     }

@@ -6,12 +6,10 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Drawing;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using Hedra.Engine.Events;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -43,18 +41,30 @@ namespace Hedra.Engine.Rendering.UI
 			_oxygenBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			_staminaBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			
-			var healthBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/HealthBar.png"), new Vector2(-.675f, .7775f), new Vector2(0.12f, 0.022f), delegate{ return Player.Health; } , delegate{ return Player.MaxHealth; }, this);
-			var manaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/ManaBar.png"), new Vector2(-.7315f, .7265f), new Vector2(0.07f, 0.015f), delegate{ return Player.Mana; }, delegate{ return Player.MaxMana; }, this);
-			TexturedBar xpBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/XPBar.png"), new Vector2(-.675f, .815f), new Vector2(0.12f, 0.0065f), delegate{ return Player.XP; }, delegate{ return Player.MaxXP; }, this);
-			
-			OxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f), delegate{ return Player.Oxygen; }, delegate{ return Player.MaxOxygen; }, this);
-			StaminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f), delegate{ return Player.Stamina; }, delegate{ return Player.MaxStamina; }, this);
+			var healthBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/HealthBar.png"), new Vector2(-.675f, .7775f), new Vector2(0.12f, 0.022f),
+			    () => Player.Health,
+			    () => Player.MaxHealth, this);
+
+			var manaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/ManaBar.png"), new Vector2(-.7315f, .7265f), new Vector2(0.07f, 0.015f),
+			    () => Player.Mana,
+			    () => Player.MaxMana, this);
+
+			TexturedBar xpBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/XPBar.png"), new Vector2(-.675f, .815f), new Vector2(0.12f, 0.0065f),
+			    () => Player.XP,
+			    () => Player.MaxXP, this);
+
+			OxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f),
+			    () => Player.Oxygen,
+			    () => Player.MaxOxygen, this);
+
+			StaminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f),
+			    () => Player.Stamina, () => Player.MaxStamina, this);
 			
 			ClassLogo = new RenderableTexture(new Texture(0, Vector2.Zero, Vector2.One), DrawOrder.After);
 			_oxygenIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenIcon.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			_staminaIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaIcon.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			
-			Cross = new Texture(Graphics2D.LoadFromAssets("Assets/Pointer.png"), new Vector2(0, 0f), new Vector2(0.018f, 0.026f) );
+			Cross = new Texture("Assets/Pointer.png", new Vector2(0, 0f), Vector2.One * .1f);
 			
 			SkillTreeMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/SkillTreeMsg.png"), Vector2.Zero, Vector2.One);
 			QuestLogMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/QuestLogMsg.png"), Vector2.Zero, Vector2.One);

@@ -60,6 +60,10 @@ namespace Hedra.Engine.Player.Inventory
             _playerBackground = new InventoryBackground(Vector2.UnitX * .5f + Vector2.UnitY * .55f);
             _merchantBackground = new InventoryBackground(Vector2.UnitX * -.5f + Vector2.UnitY * .55f);
             _interfaceManager.OnTransactionComplete += (Item, Price) => this.UpdateTraders();
+            _stateManager.OnStateChange += State =>
+            {
+                base.Invoke(State);
+            };
         }
 
 	    public void Trade(Humanoid Trader)

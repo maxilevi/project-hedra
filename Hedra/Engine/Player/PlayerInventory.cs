@@ -87,6 +87,10 @@ namespace Hedra.Engine.Player
             };
             _interfaceManager = new InventoryArrayInterfaceManager(itemInfoInterface, _itemsArrayInterface,
                 _leftMainItemsArrayInterface, _rightMainItemsArrayInterface);
+            _stateManager.OnStateChange += State =>
+            {
+                base.Invoke(State);
+            };
         }
 
         public void UpdateInventory()

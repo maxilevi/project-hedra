@@ -67,6 +67,11 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _manager = new AbilityTreeInterfaceManager(_player, itemInfo, _interface);
             _stateManager = new InventoryStateManager(_player);
             _background = new AbilityInventoryBackground(Vector2.UnitY * .65f);
+
+            _stateManager.OnStateChange += State =>
+            {
+                base.Invoke(State);
+            };
         }
 
         public void UpdateView()
@@ -209,7 +214,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public override Key OpeningKey => Key.X;
         public override bool Show
         {
-            get { return _show; }
+            get => _show;
             set
             {
                 if (_show == value || _stateManager.GetState() != _show) return;

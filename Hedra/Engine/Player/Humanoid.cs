@@ -152,6 +152,7 @@ namespace Hedra.Engine.Player
 	    public override void Update()
 	    {
 	        base.Update();
+            Movement.Update();
 	        if (!GameSettings.Paused && _consecutiveHitsTimer.Tick())
 	        {
 	            ConsecutiveHits = 0;

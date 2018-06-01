@@ -55,7 +55,7 @@ namespace Hedra.Engine.Player.Skills
 		{
 			this.Player = Player;
 		    this._panel = InPanel;
-            this._position = Position;
+            this.Position = Position;
 			this.Scale = Scale;
 			this.Tint = NormalTint;
 		    _panel.AddElement(this);
@@ -79,13 +79,13 @@ namespace Hedra.Engine.Player.Skills
 			Cooldown -= Time.FrameTimeSeconds;
 		    if (CooldownSecondsText == null)
 		    {
-		        CooldownSecondsText = new RenderableText(string.Empty, _position, Color.White,
+		        CooldownSecondsText = new RenderableText(string.Empty, Position, Color.White,
 		            FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
 		        DrawManager.UIRenderer.Add(CooldownSecondsText, DrawOrder.After);
                 if(_panel.Enabled) CooldownSecondsText.Enable();
 		        _panel.AddElement(CooldownSecondsText);
             }
-		    if (CooldownSecondsText.Position != _position) CooldownSecondsText.Position = _position;
+		    if (CooldownSecondsText.Position != Position) CooldownSecondsText.Position = Position;
 		    CooldownSecondsText.Text = Cooldown > 0 ? ((int)Cooldown + 1).ToString() : string.Empty;
 			Tint = Player.Mana - this.ManaCost < 0 ? new Vector3(.9f,.6f,.6f) : new Vector3(1,1,1);
 			GraphicsLayer.Enable(EnableCap.Blend);
@@ -124,19 +124,15 @@ namespace Hedra.Engine.Player.Skills
 
 	    public Vector2 Scale { get; set; }
 
-	    private Vector2 _position;
-		public Vector2 Position{
-			get{ return _position; }
-			set{
-			    _position = value;
-            }
-		}
-		
-		public void Enable(){
+	    public Vector2 Position { get; set; }
+
+	    public void Enable()
+        {
 			this.Enabled = true;
 		}
 		
-		public void Disable(){
+		public void Disable()
+        {
 		    this.Enabled = false;
 		}
 		

@@ -21,7 +21,7 @@ namespace Hedra.Engine.Management
             _trackItems.Add(new TrackItem(Getter,Setter, ReleaseFirst));
         }
 
-        public void CaptureState()
+        public virtual void CaptureState()
         {
             if(_state) throw new StackOverflowException("Cannot capture a state while there already is one in memory");
             _state = true;
@@ -32,7 +32,7 @@ namespace Hedra.Engine.Management
             }
         }
 
-        public void ReleaseState()
+        public virtual void ReleaseState()
         {
             if (!_state) throw new InvalidOperationException("Cannot release an empty state.");
             _state = false;

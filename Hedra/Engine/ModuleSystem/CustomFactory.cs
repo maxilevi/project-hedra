@@ -4,6 +4,7 @@ using System.Linq;
 using Hedra.Engine.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.ModuleSystem
 {
@@ -53,6 +54,11 @@ namespace Hedra.Engine.ModuleSystem
                     throw new ArgumentException("Unsupported effect type '" + pair.Value + "'");
                 }
             }
+        }
+
+        public void Load()
+        {
+            AssetManager.LoadHitbox(Model.IdleAnimation.Path);
         }
 
         public void Apply(Entity Mob)

@@ -31,11 +31,12 @@ namespace Hedra.Engine.AISystem.Behaviours
                 this.Target = null;
                 Follow.Target = this.Target;
             }
-            if (!Parent.Model.IsAttacking && Target != null && !Parent.InAttackRange(Target))
+            var inAttackRange = Target != null && Parent.InAttackRange(Target);
+            if (!Parent.Model.IsAttacking && Target != null && !inAttackRange)
             {
                 Follow.Update();
             }
-            if (Target != null && Parent.InAttackRange(Target))
+            if (inAttackRange)
             {
                 _followTimer.Reset();
                 Parent.Model.Attack(Target);            
