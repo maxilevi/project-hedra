@@ -29,7 +29,7 @@ namespace Hedra.Engine.Player
 		private bool EmitParticles = false;
 		private Animation KickAnimation;
 		
-		public Kick(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public Kick() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Kick.png");
 			base.ManaCost = 15f;
 			base.MaxCooldown = 3f;
@@ -69,7 +69,7 @@ namespace Hedra.Engine.Player
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsAttacking && !Player.IsCasting;
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = Math.Max(4f - base.Level * .25f, 1.5f);
 			Damage = 35f * base.Level * .6f + 5f;
 			Player.IsCasting = true;

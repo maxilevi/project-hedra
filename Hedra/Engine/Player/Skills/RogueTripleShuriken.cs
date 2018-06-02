@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player
 		private Animation ThrowAnimation;
 		private VertexData ShurikenData;
 		
-		public TripleShuriken(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public TripleShuriken() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/TripleShuriken.png");
 			base.ManaCost = 35f;
 			base.MaxCooldown = 8.5f;
@@ -42,9 +42,9 @@ namespace Hedra.Engine.Player
 				Matrix4 D10 = Matrix4.CreateRotationY(10 * Mathf.Radian);
 				Matrix4 DN10 = Matrix4.CreateRotationY(-10 * Mathf.Radian);
 				
-				this.ShootShuriken(Player, Direction, 12);
-				this.ShootShuriken(Player, Vector3.TransformVector(Direction, D10), 12);
-				this.ShootShuriken(Player, Vector3.TransformVector(Direction, DN10), 12);
+				Shuriken.ShootShuriken(Player, Direction, 30f * base.Level * .5f, 12);
+			    Shuriken.ShootShuriken(Player, Vector3.TransformVector(Direction, D10), 30f * base.Level * .5f, 12);
+			    Shuriken.ShootShuriken(Player, Vector3.TransformVector(Direction, DN10), 30f * base.Level * .5f, 12);
 			};
 			ThrowAnimation.OnAnimationEnd += delegate(Animation Sender) {
 				Player.IsCasting = false;
@@ -58,27 +58,7 @@ namespace Hedra.Engine.Player
 			return base.MeetsRequirements(Bar, CastingAbilityCount);
 		}
 		
-		private void ShootShuriken(Humanoid Human, Vector3 Direction, int KnockChance = -1){
-			VertexData WeaponData = ShurikenData.Clone();
-			WeaponData.Scale(Vector3.One * 1.75f);
-			Projectile WeaponProj = new Projectile(WeaponData, Player.Model.LeftWeaponPosition + Player.Model.Human.Orientation * .5f +
-			                                      Vector3.UnitY * 2f, Direction, Human);
-			WeaponProj.RotateOnX = true;
-			WeaponProj.Speed = 6.0f;
-			WeaponProj.Lifetime = 5f;
-			WeaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) { 
-				float Exp;
-				Hit.Damage(30f * base.Level * .5f, Human, out Exp, true);
-				Human.XP += Exp;
-				if(KnockChance != -1){
-					if(Utils.Rng.Next(0, KnockChance) == 0)
-						Hit.KnockForSeconds(3);
-				}
-			};
-			Sound.SoundManager.PlaySound(Sound.SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
-		}
-		
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = 8.5f - Math.Min(5f, base.Level * .5f);
 			Player.IsCasting = true;
 			Casting = true;

@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player
 		private Bow PlayerBow = null;
 		private bool WasSet = false;
 		
-		public Puncture(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public Puncture() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
 			base.Passive = true;
 		}
@@ -62,6 +62,6 @@ namespace Hedra.Engine.Player
 		
 		public override string Description => "Arrows have a high chance to cause bleeding.";
 
-	    public override void KeyDown(){}
+	    public override void Use(){}
 	}
 }

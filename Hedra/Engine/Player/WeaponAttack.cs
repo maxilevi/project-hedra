@@ -48,7 +48,7 @@ namespace Hedra.Engine.Player
         private AttackType _type;
 	    private float _maxCooldown;
 
-        public WeaponAttack(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+        public WeaponAttack() : base() {
 			base.ManaCost = 0f;
 			base.Level = 1;
             _maxCooldown = 0.25f;
@@ -76,7 +76,7 @@ namespace Hedra.Engine.Player
 			_isPressing = false;
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			
 			_isPressing = true;
             if (_type == AttackType.Primary) Player.Model.LeftWeapon.Attack1(Player);

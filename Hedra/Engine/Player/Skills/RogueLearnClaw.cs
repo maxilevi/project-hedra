@@ -20,28 +20,14 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class LearnClaw : BaseSkill
+	public class LearnClaw : LearningSkill
 	{
-
-		public LearnClaw(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Claw.png");
-			base.Passive = true;
-		}
-		
-		public override void Update()
+		public override uint TexId => Graphics2D.LoadFromAssets("Assets/Skills/Claw.png");
+		public override void Learn()
 		{
-			if(base.Level == 0) return;
-			if(base.Level > 1) Player.AbilityTree.SetPoints(this.GetType(), 1);
-
 		    Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Claw);
         }
 		
-		public override string Description {
-			get {
-				return "Learn to use the claws.";
-			}
-		}
-		
-		public override void KeyDown(){}
+		public override string Description => "Learn to use the claws.";
 	}
 }

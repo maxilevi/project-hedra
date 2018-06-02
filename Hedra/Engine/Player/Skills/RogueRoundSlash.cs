@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player
 		private float FrameCounter = 0, PassedTime = 0, Damage = 0;
 		private Dictionary<Entity, float> AffectedEntities = new Dictionary<Entity, float>();
 		
-		public RoundSlash(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public RoundSlash() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
 			base.ManaCost = 80f;
 			base.MaxCooldown = 8.5f;
@@ -49,7 +49,7 @@ namespace Hedra.Engine.Player
 			};
 		}
 
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = 9f - Math.Min(5f, base.Level * .5f);
 			this.Damage = 1.0f + Math.Min(1f, base.Level * 0.15f);
 			Player.IsCasting = true;

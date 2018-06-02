@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	public class LearnKnife : BaseSkill
 	{
 
-		public LearnKnife(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public LearnKnife() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/LearnKnife.png");
 			base.Passive = true;
 		}
@@ -37,6 +37,6 @@ namespace Hedra.Engine.Player
 		
 		public override string Description => "Learn to use the knife.";
 
-	    public override void KeyDown(){}
+	    public override void Use(){}
 	}
 }

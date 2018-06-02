@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player
 		private ParticleSystem Particles;
 		private Animation FireReleaseAnimation;
 		
-		public FireRelease(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public FireRelease() : base() {
 			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("FireRelease.png", AssetManager.DataFile3))) );
 			base.MaxCooldown = .5f;
 			base.ManaCost = 5f;
@@ -49,7 +49,7 @@ namespace Hedra.Engine.Player
 			this.Continue = false;
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			Player.IsCasting = true;
 			Casting = true;
 			Player.Movement.CaptureMovement = false;

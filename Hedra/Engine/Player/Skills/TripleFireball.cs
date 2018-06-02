@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player
 		private ParticleSystem Particles = new ParticleSystem(Vector3.Zero);
 		private Animation FireballAnimation;
 		
-		public TripleFireball(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public TripleFireball() : base() {
 			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("TripleFireball.png", AssetManager.DataFile3))) );
 			base.MaxCooldown = 2.5f;
 			base.ManaCost = 35f;
@@ -48,7 +48,7 @@ namespace Hedra.Engine.Player
 		}
 		
 		private int FireballCombo = 5;
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = 2.75f - base.Level * .15f;
 			Player.IsCasting = true;
 			Casting = true;

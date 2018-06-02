@@ -24,13 +24,14 @@ namespace Hedra.Engine.Player
 	public class Fade : BaseSkill
 	{
 		
-		public Fade(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public Fade() : base() 
+		{
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
 			base.ManaCost = 80f;
 			base.MaxCooldown = 16f;
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = 20f;
 			CoroutineManager.StartCoroutine(FadeTime);
 		}

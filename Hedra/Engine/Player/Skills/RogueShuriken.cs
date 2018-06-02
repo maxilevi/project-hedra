@@ -25,60 +25,57 @@ namespace Hedra.Engine.Player
 	/// </summary>
 	public class Shuriken : BaseSkill
 	{
-		private Animation ThrowAnimation;
-		private VertexData ShurikenData;
-		
-		public Shuriken(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		private readonly Animation _throwAnimation;
+		private static readonly VertexData ShurikenData = AssetManager.PlyLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
+
+        public Shuriken() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
 			base.ManaCost = 35f;
 			base.MaxCooldown = 8.5f;
-            ShurikenData = AssetManager.PlyLoader("Assets/Items/Shuriken.ply", new Vector3(1,2,1) );
 			
-			ThrowAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
-			ThrowAnimation.Loop = false;
-			ThrowAnimation.OnAnimationMid += delegate(Animation Sender) { 
-				this.ShootShuriken(Player, Player.View.CrossDirection.NormalizedFast(), 8);
+			_throwAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
+			_throwAnimation.Loop = false;
+			_throwAnimation.OnAnimationMid += delegate(Animation Sender) {
+			    Shuriken.ShootShuriken(Player, Player.View.CrossDirection.NormalizedFast(), 20f * base.Level, 8);
 			};
-			ThrowAnimation.OnAnimationEnd += delegate(Animation Sender) {
+			_throwAnimation.OnAnimationEnd += delegate(Animation Sender) {
 				Player.IsCasting = false;
 				Casting = false;
 				Player.IsAttacking = false;
 			};
 		}
-		
-		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
-		{
-			return base.MeetsRequirements(Bar, CastingAbilityCount);
-		}
-		
-		private void ShootShuriken(Humanoid Human, Vector3 Direction, int KnockChance = -1){
-			VertexData WeaponData = ShurikenData.Clone();
-			WeaponData.Scale(Vector3.One * 1.75f);
-			Projectile WeaponProj = new Projectile(WeaponData, Player.Model.LeftWeaponPosition + Player.Model.Human.Orientation * .5f +
-			                                      Vector3.UnitY * 2f, Direction, Human);
-			WeaponProj.RotateOnX = true;
-			WeaponProj.Speed = 6.0f;
-			WeaponProj.Lifetime = 5f;
-			WeaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) { 
-				float Exp;
-				Hit.Damage(30f * base.Level * .5f, Human, out Exp, true);
-				Human.XP += Exp;
-				if(KnockChance != -1){
-					if(Utils.Rng.Next(0, KnockChance) == 0)
-						Hit.KnockForSeconds(3);
-				}
-			};
+
+		public static void ShootShuriken(Humanoid Human, Vector3 Direction, float Damage, int KnockChance = -1){
+			VertexData weaponData = ShurikenData.Clone();
+			weaponData.Scale(Vector3.One * 1.75f);
+
+		    var startingLocation = Human.Model.LeftWeaponPosition + Human.Orientation * .5f +
+		                           Vector3.UnitY * 2f;
+
+		    var weaponProj = new Projectile(Human, startingLocation, weaponData)
+		    {
+		        RotateOnX = true,
+		        Propulsion = Direction * 2f,
+		        Lifetime = 5f
+		    };
+		    weaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
+		        Hit.Damage(Damage, Human, out float exp, true);
+				Human.XP += exp;
+		        if (KnockChance == -1) return;
+		        if(Utils.Rng.Next(0, KnockChance) == 0)
+		            Hit.KnockForSeconds(3);
+		    };
 			Sound.SoundManager.PlaySound(Sound.SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = 8.5f - Math.Min(5f, base.Level * .5f);
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;
 			Player.Model.LeftWeapon.InAttackStance = false;
 			Player.Model.Model.Animator.StopBlend();
-			Player.Model.Model.PlayAnimation(ThrowAnimation);
+			Player.Model.Model.PlayAnimation(_throwAnimation);
 			Player.Movement.Orientate();
 		}
 		

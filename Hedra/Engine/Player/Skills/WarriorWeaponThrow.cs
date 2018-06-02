@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player
 	{
 		private readonly Animation ThrowAnimation;
 		
-		public WeaponThrow(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public WeaponThrow() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Throw.png");
 			base.ManaCost = 35f;
 			base.MaxCooldown = 8.5f;
@@ -58,11 +58,13 @@ namespace Hedra.Engine.Player
 		private void ShootWeapon(Humanoid Human, Vector3 Direction, int KnockChance = -1){
 			var weaponData = Player.Model.LeftWeapon.MeshData.Clone();
 			weaponData.Scale(Vector3.One * 1.75f);
-		    var weaponProj = new Projectile(weaponData, Player.Model.LeftWeaponPosition + Player.Model.Human.Orientation * 2 +
-		                                                Vector3.UnitY * 2f, Direction, Human)
+		    var startingPosition = Player.Model.LeftWeaponPosition + Player.Model.Human.Orientation * 2 +
+		                           Vector3.UnitY * 2f;
+
+            var weaponProj = new Projectile(Human, startingPosition, weaponData)
 		    {
+                Propulsion = Direction * 2f,
 		        RotateOnX = true,
-		        Speed = 6.0f,
 		        Lifetime = 5f
 		    };
 		    weaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) { 
@@ -92,7 +94,7 @@ namespace Hedra.Engine.Player
 		    }
         }
 		
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = Math.Max(5, 8.5f - base.Level * .1f);
 			Player.IsCasting = true;
 			Casting = true;

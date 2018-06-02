@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player
 		private bool Emitting = false;
 		private ParticleSystem HandParticles;
 		
-		public FlameStyle(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public FlameStyle() : base() {
 			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("FlameStyle.png", AssetManager.DataFile3))) );
 			base.MaxCooldown = 16.5f;
 			base.ManaCost = 30f;
@@ -38,7 +38,7 @@ namespace Hedra.Engine.Player
 			HandParticles.ParticleLifetime = .5f;
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			Emitting = true;
 			base.MaxCooldown = 16.5f - 1.5f*base.Level;
 			base.ManaCost = 30f - 5f * base.Level;

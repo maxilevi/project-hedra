@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player
 	    private float _passedTime;
 	    private float _rotationY;
 
-        public Whirlwind(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+        public Whirlwind() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
 			base.ManaCost = 85;
 			base.MaxCooldown = 8.5f;
@@ -59,7 +59,7 @@ namespace Hedra.Engine.Player
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.Toolbar.DisableAttack;
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = 8.5f - base.Level * .5f;
 			Player.IsCasting = true;
 			Casting = true;

@@ -196,9 +196,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     {
                         ability.DisplayName = slot.AbilityType.Name.AddSpacesToSentence();
                         var realSkill = _player.Toolbar.Skills.First(S => slot.AbilityType == S.GetType());
-                        ability.Description = $"{Utils.FitString(realSkill.Description, 25)}" +
-                                              (realSkill.ManaCost != 0 ? $"Mana cost : {realSkill.ManaCost}{Environment.NewLine}" : string.Empty) +
-                                              (realSkill.MaxCooldown != 0 ? $"Cooldown : {realSkill.MaxCooldown}" : string.Empty);
+                        ability.SetAttribute("Skill", realSkill);
                     }
 
                     button.Texture.Opacity = 0.75f;

@@ -29,7 +29,7 @@ namespace Hedra.Engine.Player
 		private bool Emitting = false;
 		private ParticleSystem HandParticles;
 		
-		public FlameDisk(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public FlameDisk() : base() {
 			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("FlameDisk.png", AssetManager.DataFile3))) );
 			base.MaxCooldown = 16.5f;
 			base.ManaCost = 30f;
@@ -39,7 +39,7 @@ namespace Hedra.Engine.Player
 			HandParticles.ParticleLifetime = .5f;
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			Emitting = true;
 			Color = new Vector4(.25f,0,0,1);
 		}

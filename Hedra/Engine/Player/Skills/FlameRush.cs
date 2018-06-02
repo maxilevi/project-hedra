@@ -30,13 +30,13 @@ namespace Hedra.Engine.Player
 		private float Time;
 		private Vector3 PreviousPosition;
 		
-		public FlowingMagma(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public FlowingMagma() : base() {
 			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("Conflagaration.png", AssetManager.DataFile3))) );
 			base.MaxCooldown = 14f;
 			base.ManaCost = 75f;
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			Player.IsCasting = true;
 			Casting = true;
 			base.MaxCooldown = 16f - Math.Min(4, base.Level * .75f);

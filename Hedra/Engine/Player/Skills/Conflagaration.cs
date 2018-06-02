@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player
 		private Timer LightTimer = new Timer(.35f);
 		private Animation ConflagarationAnimation;
 		
-		public Conflagaration(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public Conflagaration() : base() {
 			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("Conflagaration.png", AssetManager.DataFile3))) );
 			base.MaxCooldown = 8f;
 			base.ManaCost = 35f;
@@ -51,7 +51,7 @@ namespace Hedra.Engine.Player
 			};*/
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			Player.IsCasting = true;
 			Casting = true;
 			base.MaxCooldown = 8 - 1f * base.Level;

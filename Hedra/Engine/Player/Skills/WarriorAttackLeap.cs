@@ -24,14 +24,14 @@ namespace Hedra.Engine.Player
 	public class AttackLeap : BaseSkill
 	{
 		
-		public AttackLeap(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public AttackLeap() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/AttackLeap.png");
 			base.ManaCost = 85;
 			base.MaxCooldown = 8.5f;
 		}
 
 		
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = 8.5f - base.Level * .5f;
 			Player.IsCasting = true;
 			Casting = true;

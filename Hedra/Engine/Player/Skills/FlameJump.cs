@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player
 		private bool Emitting = false;
 		private ParticleSystem HandParticles;
 		
-		public FlameJump(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public FlameJump() : base() {
 			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("FlameJump.png", AssetManager.DataFile3))) );
 			HandParticles = new ParticleSystem(Vector3.Zero);
 			HandParticles.Scale = new Vector3(.5f,.5f,.5f);
@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player
 			HandParticles.Enabled = true;
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			Emitting = true;
 			base.MaxCooldown = 6f - 1f*base.Level;
 			base.ManaCost = 30f - 5f * base.Level;

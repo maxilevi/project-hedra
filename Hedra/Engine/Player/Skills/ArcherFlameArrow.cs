@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player
 		private Animation ShootAnimation;
 		private float BaseDamage = 50f, Damage;
 		
-		public FlameArrow(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public FlameArrow() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/FlameArrow.png");
 			base.ManaCost = 85f;
 			base.MaxCooldown = 6.5f;
@@ -138,7 +138,7 @@ namespace Hedra.Engine.Player
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && Player.Model.LeftWeapon is Bow;
 		}
 		
-		public override void KeyDown()
+		public override void Use()
 		{
 			this.Damage = BaseDamage + 15f * base.Level;
 			base.MaxCooldown = Math.Max(10f - base.Level * .5f, 4f);

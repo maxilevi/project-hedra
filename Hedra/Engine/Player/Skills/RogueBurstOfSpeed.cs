@@ -23,13 +23,13 @@ namespace Hedra.Engine.Player
 	/// </summary>
 	public class BurstOfSpeed : BaseSkill
 	{	
-		public BurstOfSpeed(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public BurstOfSpeed() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/BurstOfSpeed.png");
 			base.ManaCost = 80f;
 			base.MaxCooldown = 14f;
 		}
 		
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = 14f;
 			CoroutineManager.StartCoroutine(SpeedTime);
 		}

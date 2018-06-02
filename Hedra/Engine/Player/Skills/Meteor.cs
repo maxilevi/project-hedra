@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player
 		private ParticleSystem HandParticles;
 		private Animation FireballAnimation;
 		
-		public Meteor(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public Meteor() : base() {
 			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("Meteor.png", AssetManager.DataFile3))) );
 			base.MaxCooldown = 8.5f;
 			base.ManaCost = 160f;
@@ -54,7 +54,7 @@ namespace Hedra.Engine.Player
 		}
 		
 		private int FireballCombo = 5;
-		public override void KeyDown(){
+		public override void Use(){
 			Player.IsCasting = true;
 			Casting = true;
 			LeftHand = !LeftHand;

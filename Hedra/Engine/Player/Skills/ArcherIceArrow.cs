@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player
 		private Animation ShootAnimation;
 		private float BaseDamage = 35f, Damage;
 		
-		public IceArrow(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public IceArrow() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
 			base.ManaCost = 35f;
             base.MaxCooldown = 6.5f;
@@ -70,7 +70,7 @@ namespace Hedra.Engine.Player
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && Player.Model.LeftWeapon is Bow;
 		}
 		
-		public override void KeyDown()
+		public override void Use()
 		{
 			this.Damage = BaseDamage + 7.5f * base.Level;
 			base.MaxCooldown = 6.5f - base.Level * .5f;

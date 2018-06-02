@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player
 		private float Damage = 20f;
 		private Animation BashAnimation;
 		
-		public Bash(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public Bash() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
 			base.ManaCost = 15f;
 			base.MaxCooldown = 3f;
@@ -62,7 +62,7 @@ namespace Hedra.Engine.Player
 		}
 		
 		
-		public override void KeyDown(){
+		public override void Use(){
 			base.MaxCooldown = Math.Max(4f - base.Level * .25f, 1.5f);
 			Damage = 20f * base.Level * .6f + 5f;
 			Player.IsCasting = true;

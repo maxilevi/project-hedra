@@ -67,12 +67,15 @@ namespace Hedra.Engine.Player.ToolbarSystem
 	        _skills = new BaseSkill[skillsTypes.Length];
 	        for (var i = 0; i < Skills.Length; i++)
 	        {
-	            _skills[i] = (BaseSkill) Activator.CreateInstance(skillsTypes[i], Vector2.Zero, InventoryArrayInterface.DefaultSize, _player.UI.GamePanel, _player);
+	            _skills[i] = (BaseSkill) Activator.CreateInstance(skillsTypes[i]);
+				_skills[i].Initialize(Vector2.Zero, InventoryArrayInterface.DefaultSize, _player.UI.GamePanel, _player);
 	            _skills[i].MaskId = InventoryArrayInterface.DefaultId;
                 _skills[i].Active = false;
 	        }
-            _w1 = new WeaponAttack(_toolbarItemsInterface.Textures[4].Position, _toolbarItemsInterface.Textures[4].Scale, _player.UI.GamePanel, _player);
-            _w2 = new WeaponAttack(_toolbarItemsInterface.Textures[5].Position, _toolbarItemsInterface.Textures[5].Scale, _player.UI.GamePanel, _player);
+            _w1 = new WeaponAttack();
+			_w1.Initialize(_toolbarItemsInterface.Textures[4].Position, _toolbarItemsInterface.Textures[4].Scale, _player.UI.GamePanel, _player);
+            _w2 = new WeaponAttack();
+			_w2.Initialize(_toolbarItemsInterface.Textures[5].Position, _toolbarItemsInterface.Textures[5].Scale, _player.UI.GamePanel, _player);
 
 	        _w1.MaskId = InventoryArrayInterface.DefaultId;
 	        _w2.MaskId = InventoryArrayInterface.DefaultId;
@@ -90,12 +93,12 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 case MouseButton.Left:
                     if (!_w1.MeetsRequirements(this, 0)) return;
                     _w1.Cooldown = _w1.MaxCooldown;
-                    _w1.KeyDown();
+                    _w1.Use();
                     break;
                 case MouseButton.Right:
                     if (!_w2.MeetsRequirements(this, 0)) return;
                     _w2.Cooldown = _w2.MaxCooldown;
-                    _w2.KeyDown();
+                    _w2.Use();
                     break;
             }
 	    }

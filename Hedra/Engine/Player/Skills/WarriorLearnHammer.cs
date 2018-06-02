@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	public class LearnHammer : BaseSkill
 	{
 
-		public LearnHammer(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public LearnHammer() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
 			base.Passive = true;
 		}
@@ -38,6 +38,6 @@ namespace Hedra.Engine.Player
 		
 		public override string Description => "Learn to use the hammer.";
 
-	    public override void KeyDown(){}
+	    public override void Use(){}
 	}
 }

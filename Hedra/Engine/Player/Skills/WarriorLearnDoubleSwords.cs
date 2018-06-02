@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	public class LearnDoubleSwords : BaseSkill
 	{
 
-		public LearnDoubleSwords(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
+		public LearnDoubleSwords() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/DoubleSwords.png");
 			base.Passive = true;
 		}
@@ -41,6 +41,6 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public override void KeyDown(){}
+		public override void Use(){}
 	}
 }

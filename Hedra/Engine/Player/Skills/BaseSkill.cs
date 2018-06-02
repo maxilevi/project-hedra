@@ -37,11 +37,12 @@ namespace Hedra.Engine.Player.Skills
 	    public bool Casting { get; set; }
 	    public virtual uint TexId { get; protected set; }
 	    public uint MaskId { get; set; }
+		public bool Initialized { get; private set;}
         protected bool UseMask => MaskId != 0;
 	    protected bool Enabled { get; set; } = true;
 		protected RenderableText CooldownSecondsText;
-	    protected readonly LocalPlayer Player;
-	    private readonly Panel _panel;
+	    protected LocalPlayer Player;
+	    private Panel _panel;
 
 	    static BaseSkill()
 	    {
@@ -50,18 +51,22 @@ namespace Hedra.Engine.Player.Skills
             NormalTint = Vector3.One;
         }
 
-
-        protected BaseSkill(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player)
+		protected BaseSkill()
 		{
-			this.Player = Player;
-		    this._panel = InPanel;
-            this.Position = Position;
+			this.Player = GameManager.Player;
+		}
+
+		public void Initialize(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player)
+		{
+			this._panel = InPanel;
+			this.Position = Position;
 			this.Scale = Scale;
 			this.Tint = NormalTint;
 		    _panel.AddElement(this);
 			
 			DrawManager.UIRenderer.Add(this, DrawOrder.After);			
 			UpdateManager.Add(this);
+			this.Initialized = true;
 		}
 		
 		public virtual bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
@@ -76,6 +81,8 @@ namespace Hedra.Engine.Player.Skills
 			if(!Enabled || !Active)
 				return;
 			
+			if(!Initialized) throw new ArgumentException("This skill hasn't been initialized yet.");
+
 			Cooldown -= Time.FrameTimeSeconds;
 		    if (CooldownSecondsText == null)
 		    {
@@ -116,10 +123,10 @@ namespace Hedra.Engine.Player.Skills
 			GraphicsLayer.Enable(EnableCap.CullFace);	
 		}
 		
-		public abstract void KeyDown();
+		public abstract void Use();
 		public virtual void KeyUp(){}
-		public virtual void UnloadBuffs(){}
-		public virtual void LoadBuffs(){}
+		public virtual void Unload(){}
+		public virtual void Load(){}
 		public virtual void Update(){}
 
 	    public Vector2 Scale { get; set; }

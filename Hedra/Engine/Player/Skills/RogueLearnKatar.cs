@@ -20,18 +20,11 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class LearnKatar : BaseSkill
+	public class LearnKatar : LearningSkill
 	{
-
-		public LearnKatar(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player) : base(Position, Scale, InPanel, Player) {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Katar.png");
-			base.Passive = true;
-		}
-		
-		public override void Update()
+		public override uint TexId => Graphics2D.LoadFromAssets("Assets/Skills/Katar.png");
+		public override void Learn()
 		{
-			if(base.Level == 0) return;
-			if(base.Level > 1) Player.AbilityTree.SetPoints(this.GetType(), 1);
 		    Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Katar);
         }
 		
@@ -41,6 +34,6 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public override void KeyDown(){}
+		public override void Use(){}
 	}
 }

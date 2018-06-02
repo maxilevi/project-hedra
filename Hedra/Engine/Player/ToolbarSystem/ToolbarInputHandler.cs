@@ -52,7 +52,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
                     ability.Cooldown = ability.MaxCooldown;
                     _player.Mana -= ability.ManaCost;
-                    ability.KeyDown();
+                    ability.Use();
                 }
                 else
                 {
