@@ -67,7 +67,10 @@ namespace Hedra.Engine.Player
 		
 		public override void Update(){ }
 		
-		public static void BuildFireball(float Damage, float Level, bool LeftHand, ParticleSystem Particles){
+		public static void BuildFireball(float Damage, float Level, bool LeftHand, ParticleSystem Particles)
+
+        {
+            /*
 			LocalPlayer Player = LocalPlayer.Instance;
 			float RandomScale = Mathf.Clamp(Utils.Rng.NextFloat() * 2f -1f, 1, 2);
 			ParticleProjectile Fire = new ParticleProjectile(Vector3.One + new Vector3(RandomScale, RandomScale, RandomScale) * 0.35f,
@@ -103,13 +106,9 @@ namespace Hedra.Engine.Player
 					Particles.Emit();
 				}
 				Sender.Dispose();
-			};
+			};*/
 		}
 		
-		public override string Description {
-			get {
-				return "Shoot a fireball.";
-			}
-		}
+		public override string Description => "Shoot a fireball.";
 	}
 }

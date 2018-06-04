@@ -33,6 +33,6 @@ namespace Hedra.Engine.QuestSystem.Objectives
 			base.Disposed = true;
 		}
 		
-		public override string Description => "";
+		public override string Description => string.Empty;
 	}
 }

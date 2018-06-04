@@ -83,7 +83,8 @@ namespace Hedra.Engine.Rendering
                 Light.Radius = PointLight.DefaultRadius;
 
             int prevShader = GraphicsLayer.ShaderBound;
-			for(int i = 0; i < Shaders.Count; i++){
+			for(int i = 0; i < Shaders.Count; i++)
+            {
 				int k = i;
 				int j = Array.IndexOf(PointLights, Light);
 				if(j == -1) continue;

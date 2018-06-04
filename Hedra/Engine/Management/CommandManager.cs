@@ -7,14 +7,17 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Reflection;
+using Hedra.Engine.CacheSystem;
 using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 
 namespace Hedra.Engine.Management
@@ -47,6 +50,20 @@ namespace Hedra.Engine.Management
 					}
 					return true;
 				}
+			    if (Parts[0] == "spit")
+			    {
+			        var proj = new ParticleProjectile(Caster, Caster.Position)
+			        {
+			            Propulsion = Caster.Orientation * 2f,
+                        Color = Color.LawnGreen.ToVector4() * .85f,
+                        UseLight = false
+			        };
+			        return true;
+			    }
+			    if (Parts[0] == "icon")
+			    {
+			        Caster.ShowIcon((CacheItem) Enum.Parse(typeof(CacheItem), Parts[1]));
+			    }
 			    if (Parts[0] == "track")
 			    {
 			        SoundtrackManager.PlayTrack(int.Parse(Parts[1]), false);

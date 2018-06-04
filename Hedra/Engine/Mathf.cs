@@ -172,7 +172,7 @@ namespace Hedra.Engine
 		
 		public static string TryParseToEnum(Type E, int N){
 			if(E != null){
-				return Enum.ToObject(E, N).ToString().Replace("_", "");
+				return Enum.ToObject(E, N).ToString().Replace("_", string.Empty);
 			}
 			return N.ToString();
 		}

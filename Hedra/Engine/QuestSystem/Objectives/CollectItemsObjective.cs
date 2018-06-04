@@ -161,13 +161,13 @@ namespace Hedra.Engine.QuestSystem.Objectives
 			get {
 				string desc = "Collect the following items: " + Environment.NewLine;
 				if(_turtleShellAmount != 0)
-					desc += "● "+_turtleShellAmount+" Turtle shell"+ ((_turtleShellAmount > 1) ? "s" : "") + Environment.NewLine;
+					desc += "● "+_turtleShellAmount+" Turtle shell"+ ((_turtleShellAmount > 1) ? "s" : string.Empty) + Environment.NewLine;
 				if(_spiderEyeAmount != 0)
-					desc += "● "+_spiderEyeAmount+" Spider eye"+ ((_spiderEyeAmount > 1) ? "s" : "") + Environment.NewLine;
+					desc += "● "+_spiderEyeAmount+" Spider eye"+ ((_spiderEyeAmount > 1) ? "s" : string.Empty) + Environment.NewLine;
 				if(_boarTusksAmount != 0)
-					desc += "● "+_boarTusksAmount+" Boar tusk"+ ((_boarTusksAmount > 1) ? "s" : "") + Environment.NewLine;
+					desc += "● "+_boarTusksAmount+" Boar tusk"+ ((_boarTusksAmount > 1) ? "s" : string.Empty) + Environment.NewLine;
 				if(_ratTailAmount != 0)
-					desc += "● "+_ratTailAmount+" Rat tail"+ ((_ratTailAmount > 1) ? "s" : "") + Environment.NewLine;
+					desc += "● "+_ratTailAmount+" Rat tail"+ ((_ratTailAmount > 1) ? "s" : string.Empty) + Environment.NewLine;
 				return desc;
 			}
 		}

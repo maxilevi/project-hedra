@@ -8,14 +8,16 @@
   "Ridable": true,
   "Effects": [],
   "Drops": [],
-
+  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/HorseIdle.dae",
     "Scale": 2.15,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/HorseIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/HorseIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/HorseWalk.dae",
       "Speed": 1.25

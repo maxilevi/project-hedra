@@ -77,7 +77,6 @@ namespace Hedra.Engine.EnvironmentSystem
 			SkyModifier = 6001;
 			
 			LoadTime = true;
-			Networking.NetworkManager.UpdateTime();
 		}
 		
 		public static bool IsNight => DayTime > 16000 || DayTime < 10000;
@@ -99,11 +98,12 @@ namespace Hedra.Engine.EnvironmentSystem
 		    Weather.Update(underChunk);
 		    _currentRegion = underChunk.Biome;
 
+		    var simplifiedTime = DayTime % 24000;
             float dayFactor;
-			 if(DayTime < 12000)
-				dayFactor = DayTime / 12000;
+			 if(simplifiedTime < 12000)
+				dayFactor = simplifiedTime / 12000;
 			else
-				dayFactor = 1-(DayTime-12000) / 12000;
+				dayFactor = 1-(simplifiedTime - 12000) / 12000;
 			if(Enabled){
 				if(DayTime >= 24000)//pura noche
 					DayTime = 0;
@@ -112,47 +112,47 @@ namespace Hedra.Engine.EnvironmentSystem
 				SkyModifier += Time.ScaledFrameTimeSeconds * 5f * DaytimeSpeed;
 			}
 
-			if(DayTime >= 12000 && DayTime < 18000 && (SkyModifier >= 6000 || LoadTime) ){
+			if(simplifiedTime >= 12000 && simplifiedTime < 18000 && (SkyModifier >= 6000 || LoadTime) ){
 				_targetTopColor = () => _currentRegion.Sky.MiddayTop;
 				_targetBotColor = () => _currentRegion.Sky.MiddayBot;
 			
 				_nextTargetTopColor = () => _currentRegion.Sky.AfternoonTop;
 				_nextTargetBotColor = () => _currentRegion.Sky.AfternoonBot;
 			    UpdateTargets();
-                SkyModifier = !LoadTime ? 0 : DayTime - 12000;
+                SkyModifier = !LoadTime ? 0 : simplifiedTime - 12000;
 			    TargetIntensity = 1;
 			}
 			
-			if(DayTime >= 18000 && DayTime < 24000 && (SkyModifier >= 6000 || LoadTime) ){
+			if(simplifiedTime >= 18000 && simplifiedTime < 24000 && (SkyModifier >= 6000 || LoadTime) ){
 				_targetTopColor = () => _currentRegion.Sky.AfternoonTop;
 				_targetBotColor = () => _currentRegion.Sky.AfternoonBot;
 			
 				_nextTargetTopColor = () => _currentRegion.Sky.NightTop;
 				_nextTargetBotColor = () => _currentRegion.Sky.NightBot;
 			    UpdateTargets();
-                SkyModifier = !LoadTime ? 0 : DayTime - 18000;
+                SkyModifier = !LoadTime ? 0 : simplifiedTime - 18000;
 			    TargetIntensity = 1f;
 			}
 			
-			if(DayTime >= 0 && DayTime < 6000 && (SkyModifier >= 6000 || LoadTime) ){
+			if(simplifiedTime >= 0 && simplifiedTime < 6000 && (SkyModifier >= 6000 || LoadTime) ){
 				_targetTopColor = () => _currentRegion.Sky.NightTop;
 				_targetBotColor = () => _currentRegion.Sky.NightBot;
 			
 				_nextTargetTopColor = () => _currentRegion.Sky.SunriseTop;
 				_nextTargetBotColor = () => _currentRegion.Sky.SunriseBot;
 			    UpdateTargets();
-                SkyModifier = !LoadTime ? 0 : DayTime;
+                SkyModifier = !LoadTime ? 0 : simplifiedTime;
 				TargetIntensity = .35f;
 			}
 			
-			if(DayTime >= 6000 && DayTime < 12000 && (SkyModifier >= 6000 || LoadTime) ){
+			if(simplifiedTime >= 6000 && simplifiedTime < 12000 && (SkyModifier >= 6000 || LoadTime) ){
 				_targetTopColor = () => _currentRegion.Sky.SunriseTop;
 				_targetBotColor = () => _currentRegion.Sky.SunriseBot;
 			
 				_nextTargetTopColor = () => _currentRegion.Sky.MiddayTop;
 				_nextTargetBotColor = () => _currentRegion.Sky.MiddayBot;
 			    UpdateTargets();
-                SkyModifier = !LoadTime ? 0 : DayTime - 6000;
+                SkyModifier = !LoadTime ? 0 : simplifiedTime - 6000;
 			    TargetIntensity = .5f;
 			}
 		    const float biomeInterpolateSpeed = .3f;

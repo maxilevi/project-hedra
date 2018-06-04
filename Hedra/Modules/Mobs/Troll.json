@@ -13,10 +13,12 @@
 		"AlignWithTerrain" :  false,
 		"Path": "$DataFile$/Assets/Chr/TrollIdle.dae",
 		"Scale": 3.0,
-		"IdleAnimation": {
-			"Path": "$DataFile$/Assets/Chr/TrollIdle.dae",
-			"Speed": 0.5
-		},
+		"IdleAnimations": [
+			{
+				"Path": "$DataFile$/Assets/Chr/TrollIdle.dae",
+				"Speed": 0.5
+			}
+		],
 		"WalkAnimation": {
 			"Path": "$DataFile$/Assets/Chr/TrollWalk.dae",
 			"Speed": 1.25

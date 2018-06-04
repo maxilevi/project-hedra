@@ -6,13 +6,10 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using OpenTK;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Rendering;
 using System.Drawing;
 using System.IO;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Skills;
@@ -116,7 +113,7 @@ namespace Hedra.Engine.Player
 			Particles.GravityEffect = 0f;
 			Particles.Scale = Vector3.One * .5f;
 			Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-			Particles.Shape = ParticleShape.CONE;
+			Particles.Shape = ParticleShape.Cone;
 			Particles.ConeAngle = -95f;
 			Particles.ParticleLifetime = 2.25f;
 		}

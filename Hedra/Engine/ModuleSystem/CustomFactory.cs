@@ -44,6 +44,8 @@ namespace Hedra.Engine.ModuleSystem
                 {"Neutral", typeof(NeutralAIComponent)},
                 {"Hostile", typeof(HostileAIComponent)},
                 {"Sheep", typeof(SheepAIComponent)},
+                {"GorillaWarrior", typeof(GorillaWarriorAIComponent)},
+                {"GiantBeetle", typeof(GiantBeetleAIComponent)},
             };
 
             foreach (KeyValuePair<string, Type> pair in EffectTable)
@@ -58,7 +60,7 @@ namespace Hedra.Engine.ModuleSystem
 
         public void Load()
         {
-            AssetManager.LoadHitbox(Model.IdleAnimation.Path);
+            AssetManager.LoadHitbox(Model.Path);
         }
 
         public void Apply(Entity Mob)
@@ -79,8 +81,11 @@ namespace Hedra.Engine.ModuleSystem
 
             foreach (EffectTemplate template in Effects)
             {
-                var effect = (EntityComponent) Activator.CreateInstance(EffectTable[template.Name], Mob);
-                Mob.AddComponent(effect);
+                var effect = (IEffectComponent) Activator.CreateInstance(EffectTable[template.Name], Mob);
+                effect.Chance = (int) template.Chance;
+                effect.Duration = template.Duration;
+                effect.Damage = this.DamageFormula(template.Damage);
+                Mob.AddComponent(effect as EntityComponent);
             }
 
             var gold = ItemPool.Grab(ItemType.Gold);

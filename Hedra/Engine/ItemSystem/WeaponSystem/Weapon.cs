@@ -69,12 +69,12 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 VertexData baseMesh = MeshData.Clone();
                 baseMesh.Scale(Vector3.One * 1.75f);
                 this.MainMesh = ObjectMesh.FromVertexData(baseMesh);
+                this.MeshData = baseMesh;
             }
             else
             {
                 this.MainMesh = new ObjectMesh(Vector3.Zero);
             }
-            this.MeshData = MeshData;
         }
 
         protected void SetToDefault(ObjectMesh Mesh)
@@ -532,7 +532,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             WeaponCoroutineExists = false;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             this.GatherMembers(true);
             foreach (ObjectMesh mesh in Meshes) mesh.Dispose();

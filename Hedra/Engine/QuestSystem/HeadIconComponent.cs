@@ -46,6 +46,12 @@ namespace Hedra.Engine.QuestSystem
             }
         }
 
+        public void ShowIconFor(CacheItem? IconType, float Seconds)
+        {
+            this.ShowIcon(IconType);
+            TaskManager.After((int) (Seconds * 1000), () => this.ShowIcon(null));
+        }
+
         public override void Update()
         {
             if (_iconMesh != null)

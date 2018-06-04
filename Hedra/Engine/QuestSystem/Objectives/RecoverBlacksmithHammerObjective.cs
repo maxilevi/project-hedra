@@ -13,7 +13,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 {
     public class RecoverBlacksmithHammerObjective : Objective
     {
-        public override string Description => "";
+        public override string Description => string.Empty;
         public override bool ShouldDisplay => true;
 
         public override uint QuestLogIcon

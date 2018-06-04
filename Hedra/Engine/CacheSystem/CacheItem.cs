@@ -28,6 +28,7 @@ namespace Hedra.Engine.CacheSystem
         VillageIcon,
         MerchantIcon,
         CampfireIcon,
+        FearIcon,
         MaxEnums
     }
 }

@@ -12,8 +12,8 @@ namespace Hedra.Engine.EntitySystem
     public class KnockComponent : EntityComponent, IEffectComponent
     {
         public int Chance { get; set; } = 20;
-        public float TotalStrength { get; set; } = 30;
-        public float BaseTime { get; set; } = 3;
+        public float Damage { get; set; } = 30;
+        public float Duration { get; set; } = 3;
 
         private float _cooldown;
 
@@ -34,8 +34,8 @@ namespace Hedra.Engine.EntitySystem
             bool shouldKnock = Utils.Rng.NextFloat() <= Chance * 0.01f;
 
             if (!shouldKnock) return;
-            if (!Victim.Knocked) Victim.KnockForSeconds(BaseTime);
-            _cooldown = BaseTime + 2;
+            if (!Victim.Knocked) Victim.KnockForSeconds(Duration);
+            _cooldown = Duration + 2;
         }
     }
 }

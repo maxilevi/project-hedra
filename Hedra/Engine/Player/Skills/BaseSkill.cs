@@ -41,7 +41,7 @@ namespace Hedra.Engine.Player.Skills
         protected bool UseMask => MaskId != 0;
 	    protected bool Enabled { get; set; } = true;
 		protected RenderableText CooldownSecondsText;
-	    protected LocalPlayer Player;
+	    protected LocalPlayer Player => GameManager.Player;
 	    private Panel _panel;
 
 	    static BaseSkill()
@@ -53,7 +53,7 @@ namespace Hedra.Engine.Player.Skills
 
 		protected BaseSkill()
 		{
-			this.Player = GameManager.Player;
+			
 		}
 
 		public void Initialize(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player)

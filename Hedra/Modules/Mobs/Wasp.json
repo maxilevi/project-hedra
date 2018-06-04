@@ -11,10 +11,12 @@
   "Model": {
     "Path": "$DataFile$/Assets/Chr/FlyIdle.dae",
     "Scale": 1.25,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/FlyIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/FlyIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/FlyWalk.dae",
       "Speed": 1.5

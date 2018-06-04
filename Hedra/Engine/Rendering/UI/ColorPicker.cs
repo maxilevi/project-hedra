@@ -35,7 +35,7 @@ namespace Hedra.Engine.Rendering.UI
 			Vector2 totalOffset = Vector2.Zero;
 			
 			for(int i = 0; i < Colors.Length; i++){
-				Button background = new Button(Position + Mathf.ScaleGUI(_targetResolution,xOffset+yOffset) * Scale, Mathf.ScaleGUI(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.5f *Scale, "", GUIRenderer.TransparentTexture);
+				Button background = new Button(Position + Mathf.ScaleGUI(_targetResolution,xOffset+yOffset) * Scale, Mathf.ScaleGUI(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.5f *Scale, string.Empty, GUIRenderer.TransparentTexture);
 				int k = i;
 				background.Click += delegate { if(ColorPickedEvent != null) ColorPickedEvent.Invoke(Colors[k]); };
 				Texture backgroundTex = new Texture(Graphics2D.LoadTexture(Graphics2D.Clone(Graphics2D.RoundedRectangle)),

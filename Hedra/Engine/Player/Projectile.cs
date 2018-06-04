@@ -8,13 +8,10 @@
  */
 using OpenTK;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -29,119 +26,146 @@ namespace Hedra.Engine.Player
 	public delegate void OnProjectileLandEvent(Projectile Sender);
 	public delegate void OnProjectileMoveEvent(Projectile Sender);
 	
-	public class Projectile : IDisposable
+	public class Projectile : IDisposable, IUpdatable
 	{
 		public event OnProjectileHitEvent HitEventHandler;
 		public event OnProjectileMoveEvent MoveEventHandler;
 		public event OnProjectileMoveEvent LandEventHandler;
-		public Vector3 Direction;
-		public float Speed = 1;
-		public float Lifetime = 10f;
-		public ObjectMesh Mesh;
-		private Entity Parent;
-		private bool Hitted = false;
-		private List<ICollidable> Collisions = new List<ICollidable>();
-		public bool Collide = true;
-		public bool RotateOnX = false;
+
+		public Vector3 Propulsion { get; set; }
+		public float Lifetime { get; set; } = 10f;
+		public ObjectMesh Mesh { get; set; }
+	    public bool Collide { get; set; } = true;
+        public bool Disposed { get; private set; }
+
+        private readonly Entity _parent;
+	    private readonly List<ICollidable> _collisions;
+	    private readonly Box _collisionBox;
+        private Vector3 _accumulatedVelocity;
+        private bool _collided;
+
+
+        public Projectile(Entity Parent, Vector3 Origin, VertexData MeshData)
+        {
+		    this._parent = Parent;
+            this._collisions = new List<ICollidable>();
+            this._collisionBox = Physics.BuildBroadphaseBox(MeshData);
+            this.Mesh = ObjectMesh.FromVertexData(MeshData);
+			this.Propulsion = Propulsion;
+            this.Mesh.Position = Origin;
+            UpdateManager.Add(this);
+        }
 		
-		
-		public Projectile(VertexData MeshData, Vector3 Origin, Vector3 Direction, Entity Parent){
-			this.Mesh = ObjectMesh.FromVertexData(MeshData);
-			this.Direction = Direction;
-			this.Mesh.Position = Origin;
-			this.Parent = Parent;
-			/*Matrix4 Mat4 = Matrix4.LookAt(Vector3.Zero, Direction, Vector3.UnitZ);
-			float Angle;
-			Vector3 Axis;
-			Mat4.ExtractRotation().ToAxisAngle(out Axis, out Angle);
-			this.Mesh.Rotation = new Vector3(Axis.X, Axis.Y, Axis.Z) * Angle;*/
-			this.Mesh.Rotation = Physics.DirectionToEuler(Direction.Xz.NormalizedFast().ToVector3());
-			CoroutineManager.StartCoroutine(Update);
-		}
-		
-		public IEnumerator Update(){
-			while(Lifetime > 0 && !Hitted){
-				Lifetime -= Time.ScaledFrameTimeSeconds;
-				Mesh.Position += Direction * 25 * Speed * (float) Time.deltaTime;
-				if(RotateOnX)
-					Mesh.Rotation += Vector3.UnitX * (float) Time.deltaTime * 90f;
+		public virtual void Update()
+        {
+            if(Disposed) return;
 
-			    MoveEventHandler?.Invoke(this);
+            if (_accumulatedVelocity == Vector3.Zero)
+            {
+                _accumulatedVelocity = Propulsion + Vector3.UnitY * .5f;
+            }
 
-			    #region Collision
-				if(Collide){
-					bool IsColliding = false;
-					Collisions.Clear();
-					Collisions.AddRange(World.GlobalColliders);
-					
-					Chunk UnderChunk = World.GetChunkAt(Mesh.Position);
-					Chunk UnderChunkR = World.GetChunkAt(Mesh.Position + new Vector3(Chunk.Width,0, 0));
-					Chunk UnderChunkL = World.GetChunkAt(Mesh.Position - new Vector3(Chunk.Width,0, 0));
-					Chunk UnderChunkF = World.GetChunkAt(Mesh.Position + new Vector3(0,0,Chunk.Width));
-					Chunk UnderChunkB = World.GetChunkAt(Mesh.Position - new Vector3(0,0,Chunk.Width));
-					
-					if(UnderChunk != null)
-						Collisions.AddRange(UnderChunk.CollisionShapes.ToArray());
-					if(UnderChunkL != null)
-						Collisions.AddRange(UnderChunkL.CollisionShapes.ToArray());
-					if(UnderChunkR != null)
-						Collisions.AddRange(UnderChunkR.CollisionShapes.ToArray());
-					if(UnderChunkF != null)
-						Collisions.AddRange(UnderChunkF.CollisionShapes.ToArray());
-					if(UnderChunkB != null)
-						Collisions.AddRange(UnderChunkB.CollisionShapes.ToArray());
-					
-					for(var i = 0; i < Collisions.Count; i++){
-						
-						if(Physics.Collides(Collisions[i], new Box(Mesh.Position - Vector3.One * 1.5f, Mesh.Position + Vector3.One * 1.5f) + new Box(Direction * 25 * Speed * (float) Time.deltaTime, Direction * 25 * Speed * (float) Time.deltaTime) )){
-							IsColliding = true;
-							break;
-						}
-					}
-					if(Mesh.Position.Y <= Physics.HeightAtPosition(Mesh.Position))
-						IsColliding = true;
-					
-					if(IsColliding){
-						//Sound.SoundManager.PlaySound(Sound.SoundType.ARROW_HIT, Mesh.Position, false, 1f, .8f);
-						World.Particles.Color = new Vector4(1,1,1,1);
-						World.Particles.ParticleLifetime = 0.75f;
-						World.Particles.GravityEffect = .0f; 
-						World.Particles.Scale = new Vector3(.75f,.75f,.75f);
-						World.Particles.Position = Mesh.Position;
-						World.Particles.PositionErrorMargin = Vector3.One * 1.5f;
-						for(int i = 0; i < 10; i++){
-							World.Particles.Direction = new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
-							World.Particles.Emit();
-						}
-					    LandEventHandler?.Invoke(this);
+            Lifetime -= Time.ScaledFrameTimeSeconds;
+            Propulsion *= (float)Math.Pow(.75f, (float)Time.deltaTime);
+            _accumulatedVelocity += (Propulsion - Vector3.UnitY) * (float) Time.deltaTime;
+            _accumulatedVelocity *= (float) Math.Pow(.8f, (float)Time.deltaTime);
+			Mesh.Position += _accumulatedVelocity * .5f;
+            Mesh.Rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
 
-					    this.Dispose();
-						yield break;
-					}
-				}
-				#endregion
-				
-				for(var i = 0; i < World.Entities.Count; i++){
-				    if (Parent == World.Entities[i] || !((Mesh.Position - World.Entities[i].Position).LengthFast < 2 +
-				                                         (World.Entities[i].Model.BaseBroadphaseBox.Max - World.Entities[i].Model.BaseBroadphaseBox.Min).LengthFast)) continue;
-
-					HitEventHandler?.Invoke(this, World.Entities[i]);
-					Hitted = true;
-					break;			
-				}
-				
-				yield return null;
+            if (Collide)
+			{
+			    this.ProcessCollision();
 			}
-			this.Dispose();
-		}
-		
-		public Vector3 Rotation{
+				
+			for(var i = 0; i < World.Entities.Count; i++)
+            {
+				if (_parent == World.Entities[i] || !Physics.Collides(_collisionBox.Cache.Translate(Mesh.Position), World.Entities[i].Model.BroadphaseBox)) continue;
+
+				HitEventHandler?.Invoke(this, World.Entities[i]);
+				_collided = true;
+                this.Dispose();
+                break;
+            }
+
+            if (Lifetime < 0)
+            {
+                this.Dispose();
+            }
+            MoveEventHandler?.Invoke(this);
+        }
+
+	    private void ProcessCollision()
+	    {
+            var isColliding = false;
+            _collisions.Clear();
+            _collisions.AddRange(World.GlobalColliders);
+
+            var underChunk = World.GetChunkAt(Mesh.Position);
+            var underChunkR = World.GetChunkAt(Mesh.Position + new Vector3(Chunk.Width, 0, 0));
+            var underChunkL = World.GetChunkAt(Mesh.Position - new Vector3(Chunk.Width, 0, 0));
+            var underChunkF = World.GetChunkAt(Mesh.Position + new Vector3(0, 0, Chunk.Width));
+            var underChunkB = World.GetChunkAt(Mesh.Position - new Vector3(0, 0, Chunk.Width));
+
+            if (underChunk != null)
+                _collisions.AddRange(underChunk.CollisionShapes.ToArray());
+            if (underChunkL != null)
+                _collisions.AddRange(underChunkL.CollisionShapes.ToArray());
+            if (underChunkR != null)
+                _collisions.AddRange(underChunkR.CollisionShapes.ToArray());
+            if (underChunkF != null)
+                _collisions.AddRange(underChunkF.CollisionShapes.ToArray());
+            if (underChunkB != null)
+                _collisions.AddRange(underChunkB.CollisionShapes.ToArray());
+
+            for (var i = 0; i < _collisions.Count; i++)
+            {
+
+                if (Physics.Collides(_collisions[i], _collisionBox.Cache.Translate(Mesh.Position)))
+                {
+                    isColliding = true;
+                    break;
+                }
+            }
+            if (Mesh.Position.Y <= Physics.HeightAtPosition(Mesh.Position))
+                isColliding = true;
+
+            if (isColliding)
+            {
+                //Sound.SoundManager.PlaySound(Sound.SoundType.ARROW_HIT, Mesh.Position, false, 1f, .8f);
+                World.Particles.Color = new Vector4(1, 1, 1, 1);
+                World.Particles.ParticleLifetime = 0.75f;
+                World.Particles.GravityEffect = .0f;
+                World.Particles.Scale = new Vector3(.75f, .75f, .75f);
+                World.Particles.Position = Mesh.Position;
+                World.Particles.PositionErrorMargin = Vector3.One * 1.5f;
+                for (int i = 0; i < 10; i++)
+                {
+                    World.Particles.Direction = new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
+                    World.Particles.Emit();
+                }
+                LandEventHandler?.Invoke(this);
+
+                this.Dispose();
+            }
+        }
+
+		public virtual Vector3 Rotation
+        {
 			get => Mesh.Rotation;
 		    set => Mesh.Rotation = value;
 		}
-		
-		public void Dispose(){
-			Mesh.Dispose();
-		}
+
+	    public virtual Vector3 Position
+	    {
+	        get => Mesh.Position;
+	        set => Mesh.Position = value;
+	    }
+
+        public virtual void Dispose()
+		{
+		    UpdateManager.Remove(this);
+            Mesh.Dispose();
+		    Disposed = true;
+        }
 	}
 }

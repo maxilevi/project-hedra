@@ -51,7 +51,7 @@ namespace Hedra.Engine.StructureSystem
 
             ThreadManager.ExecuteOnMainThread(delegate
             {
-                Entity treeBoss = BossGenerator.Generate(new [] { MobType.Gorilla, MobType.Troll }, rng);
+                Entity treeBoss = BossGenerator.Generate(new [] { MobType.Beetle, MobType.Gorilla }, rng);
 
                 var prize = new Chest(Vector3.TransformPosition(Vector3.UnitZ * +10f + Vector3.UnitX * -80f, transMatrix),
                     ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));

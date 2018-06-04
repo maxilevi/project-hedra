@@ -34,6 +34,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 		public JointsData ExtractBoneData(){
 			XmlNode headNode = ArmatureData["node"];
 			JointData headJoint = LoadJointData(headNode, true);
+            if(BoneOrder.Count > JointCount) throw new ArgumentOutOfRangeException($"Some vertex groups have no attached joint ({BoneOrder.Count}). Probably check that the exported model has no duplicated vertex groups.");
 			return new JointsData(JointCount, headJoint);
 		}
 		
@@ -47,17 +48,17 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 		}
 		
 		private JointData ExtractMainJointData(XmlNode JointNode, bool IsRoot){
-			string nameId = JointNode.GetAttribute("id").Value.Replace($"{ArmatureName}_", string.Empty);
-			string jointName = JointNode.GetAttribute("name").Value;
-			if(nameId != jointName) throw new ArgumentException($"Joint ID '{nameId}' differs from Joint NAME '{jointName}'.");
-			int index = BoneOrder.IndexOf(nameId);
+			string jointId = JointNode.GetAttribute("id").Value.Replace($"{ArmatureName}_", string.Empty);
+			string jointSid = JointNode.GetAttribute("sid").Value;
+			if(jointId != jointSid) throw new ArgumentException($"Joint ID '{jointId}' differs from Joint NAME '{jointSid}'.");
+			int index = BoneOrder.IndexOf(jointId);
             if(IsRoot && index == -1) throw new ArgumentException($"Root bone cannot have an index of -1");
 			string[] matrixData = JointNode["matrix"].InnerText.Split(' ');
 			Matrix4 matrix = Mat4FromString(matrixData);
 			matrix.Transpose();
 			if(IsRoot)matrix = matrix * Correction;
 			JointCount++;
-			return new JointData(index, nameId, matrix);
+			return new JointData(index, jointId, matrix);
 		}
 		
 		private Matrix4 Mat4FromString(String[] rawData){

@@ -102,13 +102,17 @@
     <Compile Include="Engine\AISystem\Behaviours\Behaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\FleeBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\FollowBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\GiantBeetleAttackBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\GorillaWarriorAttackBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\HerdBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\HostileBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\IdleBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\RetaliateBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\RoamBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\StareBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\WalkBehaviour.cs" />
     <Compile Include="Engine\AISystem\FriendlyAIComponent.cs" />
+    <Compile Include="Engine\AISystem\GiantBeetleAIComponent.cs" />
     <Compile Include="Engine\AISystem\HostileAIComponent.cs" />
     <Compile Include="Engine\AISystem\NeutralAIComponent.cs" />
     <Compile Include="Engine\AISystem\SheepAIComponent.cs" />
@@ -177,6 +181,7 @@
     <Compile Include="Engine\CacheSystem\CypressTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\DeadTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\FarmCache.cs" />
+    <Compile Include="Engine\CacheSystem\FearIconCache.cs" />
     <Compile Include="Engine\CacheSystem\FernCache.cs" />
     <Compile Include="Engine\CacheSystem\FlowerCache.cs" />
     <Compile Include="Engine\CacheSystem\GrassCache.cs" />
@@ -200,9 +205,10 @@
     <Compile Include="Engine\ClassSystem\RogueDesign.cs" />
     <Compile Include="Engine\ClassSystem\WarriorDesign.cs" />
     <Compile Include="Engine\CompatibilityManager.cs" />
-    <Compile Include="Engine\AISystem\BaseAIComponent.cs" />
+    <Compile Include="Engine\AISystem\BasicAIComponent.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
+    <Compile Include="Engine\AISystem\GorillaWarriorAIComponent.cs" />
     <Compile Include="Engine\EntitySystem\UpdatableModel.cs" />
     <Compile Include="Engine\EntitySystem\HealthBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\IModelHandler.cs" />
@@ -242,13 +248,14 @@
     <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
     <Compile Include="Engine\Management\TrackItem.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEventBuilder.cs" />
+    <Compile Include="Engine\ModuleSystem\AnimationEvents\Growl.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\ColorTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\CustomFactory.cs" />
     <Compile Include="Engine\ModuleSystem\DropTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\EffectTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEvent.cs" />
-    <Compile Include="Engine\ModuleSystem\AnimationEvents\Shockwave.cs" />
+    <Compile Include="Engine\ModuleSystem\AnimationEvents\Quake.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidBehaviourTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidComponentsItemTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidComponentsTemplate.cs" />
@@ -743,6 +750,45 @@
     <Compile Include="Engine\Testing\Managers\ThreadManagerTester.cs" />
     <Compile Include="Engine\Testing\TestMethod.cs" />
     <Compile Include="Engine\Testing\Tester.cs" />
+    <None Include="..\project-hedra-assets\Animations\BeetleAttack0.dae">
+      <Link>Assets\Chr\BeetleAttack0.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\BeetleAttack1.dae">
+      <Link>Assets\Chr\BeetleAttack1.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\BeetleIdle.dae">
+      <Link>Assets\Chr\BeetleIdle.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\BeetleWalk.dae">
+      <Link>Assets\Chr\BeetleWalk.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\GorillaAttack0.dae">
+      <Link>Assets\Chr\GorillaAttack0.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\GorillaAttack1.dae">
+      <Link>Assets\Chr\GorillaAttack1.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\SheepIdle0.dae">
+      <Link>Assets\Chr\SheepIdle0.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\SheepIdle1.dae">
+      <Link>Assets\Chr\SheepIdle1.dae</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\FearIcon.ply">
+      <Link>Assets\Env\FearIcon.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Mobs\Beetle.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Shaders\Includes\Conditionals.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -883,10 +929,6 @@
       <Link>Assets\Chr\GoatWalk.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Animations\GorillaAttack.dae">
-      <Link>Assets\Chr\GorillaAttack.dae</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Animations\GorillaIdle.dae">
       <Link>Assets\Chr\GorillaIdle.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -985,10 +1027,6 @@
     </None>
     <None Include="..\project-hedra-assets\Animations\SheepAttack.dae">
       <Link>Assets\Chr\SheepAttack.dae</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Animations\SheepIdle.dae">
-      <Link>Assets\Chr\SheepIdle.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Animations\SheepWalk.dae">
@@ -4446,6 +4484,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Bow.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\GorillaGrowl.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\CardinalCity.ogg">

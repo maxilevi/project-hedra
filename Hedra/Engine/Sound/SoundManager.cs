@@ -127,6 +127,12 @@ namespace Hedra.Engine.Sound
             ShortData = SoundManager.LoadOgg("Sounds/GroundQuake.ogg", out Channels, out Bits, out Rate);
             SoundBuffers[(int)SoundType.GroundQuake] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
+            Data = SoundManager.LoadWave("Sounds/Bow.wav", out Channels, out Bits, out Rate);
+            SoundBuffers[(int)SoundType.SpitSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+
+            ShortData = SoundManager.LoadOgg("Sounds/GorillaGrowl.ogg", out Channels, out Bits, out Rate);
+            SoundBuffers[(int)SoundType.GorillaGrowl] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+
             _loaded = true;
 		}
 
@@ -354,6 +360,8 @@ namespace Hedra.Engine.Sound
         HumanSleep,
         TalkSound,
 	    GroundQuake,
+        SpitSound,
+	    GorillaGrowl,
         MaxSounds
     }
 }

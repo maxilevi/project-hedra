@@ -14,16 +14,18 @@
       "Duration": 5.0
     }
   ],
-
+  
   "Drops": [ ],
-
+  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/BeeIdle.dae",
     "Scale": 0.75,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/BeeIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BeeIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/BeeWalk.dae",
       "Speed": 1.25

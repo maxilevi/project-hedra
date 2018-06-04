@@ -20,7 +20,7 @@ namespace Hedra.Engine.Rendering
 
         public static Vector4 FromHtml(string Hex)
         {
-            int argb = int.Parse(Hex.Replace("#", ""), NumberStyles.HexNumber);
+            int argb = int.Parse(Hex.Replace("#", string.Empty), NumberStyles.HexNumber);
 
             return Colors.FromArgb((byte)((argb & -16777216) >> 0x18),
             (byte)((argb & 0xff0000) >> 0x10),

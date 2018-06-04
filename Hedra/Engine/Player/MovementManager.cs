@@ -76,6 +76,7 @@ namespace Hedra.Engine.Player
 		    Human.IsGrounded = false;
 		    var targetPush = 80f;
 		    var push = 0f;
+            var stoppedJump = false;
 		    while (Human.Model.Position.Y < startingY + JumpingDistance && (push > 0.05f || targetPush > 0))
 			{
 			    bool shouldPlayJumpAnimation = Human.IsMoving;
@@ -88,16 +89,25 @@ namespace Hedra.Engine.Player
                 };
 			    Human.Physics.ProccessCommand( command );
 			    if (Math.Abs(prevTarget - Human.Physics.TargetPosition.Y) < .01f)
-			        targetPush = 0f;
-                if (shouldPlayJumpAnimation) Human.Model.Pause = true;
+			    {
+			        stoppedJump = true;
+                    IsJumping = false;
+			        Human.Model.Pause = false;
+                    break;
+			    }
+			    if (shouldPlayJumpAnimation) Human.Model.Pause = true;
                 yield return null;
 			}
-            TaskManager.After(50, delegate
+            if (!stoppedJump)
             {
-                IsJumping = false;
-            });
-		    TaskManager.When(() => Human.IsGrounded || Human.IsUnderwater || Human.IsGliding, () => Human.Model.Pause = false);           
-		    Human.Physics.GravityDirection = -Vector3.UnitY;
+                TaskManager.After(50, delegate
+                {
+                    IsJumping = false;
+                });
+                TaskManager.When(() => Human.IsGrounded || Human.IsUnderwater || Human.IsGliding,
+                    () => Human.Model.Pause = false);
+            }
+            Human.Physics.GravityDirection = -Vector3.UnitY;
 		}
 
 	    protected virtual void DoUpdate() { }

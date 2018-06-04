@@ -7,16 +7,18 @@
   "AIType": "Hostile",
   "Ridable": false,
   "Effects": [],
-
+  
   "Drops": [],
-
+  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/RatIdle.dae",
     "Scale": 1.0,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/RatIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/RatIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/RatWalk.dae",
       "Speed": 1.4

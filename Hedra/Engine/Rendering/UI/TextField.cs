@@ -31,7 +31,7 @@ namespace Hedra.Engine.Rendering.UI
 		public TextField(Vector2 Position, Vector2 Scale, Panel InPanel, bool CurveBorders = true){
 			_textBar = new Bar(Position, Scale, () => 1, () => 1, Vector4.One, InPanel, DrawOrder.After, CurveBorders);
 			_textBar.ShowBar = false;
-			this.Text = "";
+			this.Text = string.Empty;
 			_textBar.UpdateTextRatio = false;
 			ShowCaret = false;
 			_caret = new RenderableText("|", Position + Vector2.UnitY * .00275f, _textBar.Text.UIText.TextColor, _textBar.Text.UIText.TextFont);

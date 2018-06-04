@@ -7,16 +7,18 @@
   "AIType": "Neutral",
   "Ridable": false,
   "Effects": [],
-
+  
   "Drops": [],
-
+  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/TurtleIdle.dae",
     "Scale": 2.25,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/TurtleIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/TurtleIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/TurtleWalk.dae",
       "Speed": 1.0

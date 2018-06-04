@@ -30,7 +30,7 @@ namespace Hedra.Engine.Rendering.Particles
 		public Vector3 ScaleErrorMargin;
 		public Vector3 Scale { get; set; }
         public bool RandomRotation { get; set; } = true;
-		public ParticleShape Shape { get; set; } = ParticleShape.SQUARE;
+		public ParticleShape Shape { get; set; } = ParticleShape.Square;
 		public float ConeAngle;
 		public bool Grayscale;
 		public bool VariateUniformly;
@@ -87,11 +87,11 @@ namespace Hedra.Engine.Rendering.Particles
 				}
 			}
 			
-			if(Shape == ParticleShape.CONE){
+			if(Shape == ParticleShape.Cone){
 				Particles.Add(new Particle3D(Position, ParticleCreator.UnitWithinCone(Direction, ConeAngle)* 25, Mathf.RandomVector3(Utils.Rng) * 360,
                              NewColor,
                              Scale + ParticleScale, GravityEffect, ParticleLifetime));
-			}else if(Shape == ParticleShape.SPHERE){
+			}else if(Shape == ParticleShape.Sphere){
 				
 				if(ParticlePosition.X * ParticlePosition.X + ParticlePosition.Y * ParticlePosition.Y + ParticlePosition.Z * ParticlePosition.Z <=
 				   (PositionErrorMargin.X * PositionErrorMargin.X + PositionErrorMargin.Y * PositionErrorMargin.Y + PositionErrorMargin.Z * PositionErrorMargin.Z) / 4.0)
@@ -231,8 +231,8 @@ namespace Hedra.Engine.Rendering.Particles
 	}
 	
 	public enum ParticleShape{
-		SQUARE,
-		SPHERE,
-		CONE
+		Square,
+		Sphere,
+		Cone
 	}
 }

@@ -61,7 +61,7 @@ namespace Hedra.Engine.ModuleSystem
 
             _factories[Type.ToLowerInvariant()].Apply(mob);
 
-            var ai = mob.SearchComponent<BaseAIComponent>();
+            var ai = mob.SearchComponent<BasicAIComponent>();
             if (ai == null) throw new ArgumentException("No AIComponent has been set");
 
             var dmg = mob.SearchComponent<DamageComponent>();

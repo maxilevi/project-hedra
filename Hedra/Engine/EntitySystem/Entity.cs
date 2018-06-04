@@ -206,13 +206,21 @@ namespace Hedra.Engine.EntitySystem
 
         public void ShowIcon(CacheItem? IconType)
         {
+            this.ShowIcon(IconType, -1);
+        }
+
+        public void ShowIcon(CacheItem? IconType, float Seconds)
+        {
             var iconComponent = this.SearchComponent<HeadIconComponent>();
             if (iconComponent == null)
             {
                 iconComponent = new HeadIconComponent(this);
                 this.AddComponent(iconComponent);
             }
-            iconComponent.ShowIcon(IconType);
+            if(Seconds < 0)
+                iconComponent.ShowIcon(IconType);
+            else
+                iconComponent.ShowIconFor(IconType, Seconds);
         }
 
         public void Damage(float Amount, Entity Damager, out float Exp, bool PlaySound = true)
@@ -235,7 +243,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InAttackRange(Entity Target)
+        public bool InAttackRange(Entity Target, float LowestDistance = 15f)
         {
             var collider0 = this.Model.BroadphaseCollider;
             var collider1 = Target.Model.BroadphaseCollider;
@@ -256,7 +264,7 @@ namespace Hedra.Engine.EntitySystem
                     }
                 }
             }
-            return lowestDistance < 5f;
+            return lowestDistance < LowestDistance;
         }
 
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)
@@ -264,10 +272,19 @@ namespace Hedra.Engine.EntitySystem
             this.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed), Condition);
         }
 
+        public void AddBonusSpeedForSeconds(float BonusSpeed, float Seconds)
+        {
+            this.AddComponentForSeconds(new SpeedBonusComponent(this, BonusSpeed), Seconds);
+        }
 
         public void AddComponentWhile(EntityComponent Component, Func<bool> Condition)
         {
             ComponentManager.AddComponentWhile(Component, Condition);
+        }
+
+        public void AddComponentForSeconds(EntityComponent Component, float Seconds)
+        {
+            ComponentManager.AddComponentForSeconds(Component, Seconds);
         }
 
         public void AddComponent(EntityComponent Component)
@@ -383,6 +400,7 @@ namespace Hedra.Engine.EntitySystem
         public void KnockForSeconds(float Time)
         {
             Knocked = true;
+            Physics.Move(Vector3.UnitY * 7.5f);
             _knockedTime = Time;
         }
 

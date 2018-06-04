@@ -72,7 +72,15 @@ namespace Hedra.Engine.Rendering
 	       GL.PopMatrix();
 	       GraphicsLayer.Enable(EnableCap.CullFace);
 	    }
-	    
+
+	    public static void DrawShapes(CollisionShape[] Shapes, Color DrawColor)
+	    {
+	        for (var i = 0; i < Shapes.Length; i++)
+	        {
+	            BasicGeometry.DrawShape(Shapes[i], DrawColor);
+	        }
+	    }
+
 	    public static void DrawShape(CollisionShape Shape, Color DrawColor){
 	    	GraphicsLayer.Disable(EnableCap.CullFace);
 	    	GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);

@@ -19,6 +19,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// </summary>
 	public class AnimationLoader
 	{
+	    private const string ArmatureName = "Armature";
 		private static readonly Matrix4 Correction = Matrix4.CreateRotationX( -90f * Mathf.Radian);
 		private XmlNode AnimationData;
 		private XmlNode JointHierarchy;
@@ -74,7 +75,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 		private string GetJointName(XmlNode jointData){
 			XmlNode channelNode = jointData["channel"];
 			string data = channelNode.GetAttribute("target").Value;
-			return data.Split('/')[0];
+			return data.Split('/')[0].Replace($"{ArmatureName}_", string.Empty);
 		}
 		
 		private void ProcessTransforms(String jointName, String[] rawData, KeyFrameData[] keyFrames, bool root){
@@ -95,7 +96,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 		}
 		
 		private string FindRootJointName(){
-			XmlNode skeleton = JointHierarchy["visual_scene"].ChildWithAttribute("node", "id", "Armature");
+			XmlNode skeleton = JointHierarchy["visual_scene"].ChildWithAttribute("node", "id", ArmatureName);
 			return skeleton["node"].GetAttribute("id");
 		}
 	}

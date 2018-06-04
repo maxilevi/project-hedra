@@ -40,7 +40,7 @@ namespace Hedra.Engine.Networking
 		public static readonly IPEndPoint ConnectorIP;
 		public static IPEndPoint AnyIP, ServerIP = null;
 		public static bool IsHost = false, CanSend = false;
-		public static string JoinCode = "";
+		public static string JoinCode = string.Empty;
 		public static int WorldSeed = -1;
 		public static float WorldTime = -1;
 		private static Thread ListeningThread, SendingThread;
@@ -495,7 +495,7 @@ namespace Hedra.Engine.Networking
 			IsConnected = false;
 			ServerIP = null;
 			CanSend = false;
-			JoinCode = "";
+			JoinCode = string.Empty;
 			if(GotoMenu)
 				GameManager.LoadMenu();
 			

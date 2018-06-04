@@ -23,7 +23,7 @@ namespace Hedra.Engine.AISystem.Behaviours
                     var nearEntities = World.InRadius<Entity>(Parent.Position, CallRadius).Where(E => E.Type == Parent.Type).ToList();                      
                     nearEntities.ForEach(delegate(Entity E)
                     {
-                        var baseAIComponent = E.SearchComponent<BaseAIComponent>();
+                        var baseAIComponent = E.SearchComponent<BasicAIComponent>();
                         var herd = baseAIComponent.SearchBehaviour<HerdBehaviour>();
                         if (herd != null)
                         {

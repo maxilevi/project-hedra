@@ -21,7 +21,8 @@ namespace Hedra.Engine.QuestSystem
         public Vector3 Position { get; set; }
 		protected bool Disposed;
 		
-		public virtual void Dispose(){
+		public virtual void Dispose()
+		{
 			Disposed = true;
 		}
 	}

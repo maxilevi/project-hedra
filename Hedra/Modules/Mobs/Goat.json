@@ -14,16 +14,18 @@
       "Duration": 2.0
     }
   ],
-
+  
   "Drops": [],
-
+  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/GoatIdle.dae",
     "Scale": 2.25,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/GoatIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/GoatIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/GoatWalk.dae",
       "Speed": 1.65

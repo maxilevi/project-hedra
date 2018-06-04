@@ -76,7 +76,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
             base.Recreate();
 
             int structureIndex;
-            var buildingFile = "";
+            var buildingFile = string.Empty;
             var colliderCount = 0;
             var scale = 1f;
             Vector3 relativePosition = Vector3.Zero;

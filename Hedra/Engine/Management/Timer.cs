@@ -14,21 +14,30 @@ namespace Hedra.Engine.Management
 	public class Timer
 	{
 		private float _timerCount;
-		public float AlertTime { get; set; }
+	    public bool AutoReset { get; set; } = true;
+        public float AlertTime { get; set; }
 		
-		public Timer(float AlertTime){
+		public Timer(float AlertTime)
+        {
 			this.AlertTime = AlertTime;
 		}
 		
-		public void Reset(){
+		public void Reset()
+        {
 			_timerCount = 0;
 		}
 		
-		public bool Tick(){
+		public bool Tick()
+        {
 			_timerCount += Time.FrameTimeSeconds;
-		    if (!(_timerCount >= AlertTime)) return false;
-		    _timerCount = 0;
+
+		    if (!Ready) return false;
+		    if (AutoReset)_timerCount = 0;
+
 		    return true;
 		}
+
+	    public bool Ready => _timerCount >= AlertTime;
+
 	}
 }

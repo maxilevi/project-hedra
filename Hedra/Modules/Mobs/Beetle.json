@@ -1,0 +1,43 @@
+﻿{
+	"Name" : "Beetle", 
+	"MaxHealth": 1200.0,
+	"AttackDamage": 35.0,
+	"AttackCooldown": 3.0,
+	"Speed": 4.5,
+	"XP": 5.0,
+	"AIType": "GiantBeetle",
+	"Ridable": false,
+	"Effects": [
+		{
+			"Name": "Poison",
+			"Chance": 15.0,
+			"Damage": 8.0,
+			"Duration": 5.0
+		}
+	],
+	"Drops": [],
+	"Model": {
+		"Path": "$DataFile$/Assets/Chr/BeetleIdle.dae",
+		"Scale": 2.75,
+		"IdleAnimations": [
+			{
+				"Path": "$DataFile$/Assets/Chr/BeetleIdle.dae",
+				"Speed": 1.0
+			}
+		],
+		"WalkAnimation": {
+			"Path": "$DataFile$/Assets/Chr/BeetleWalk.dae",
+			"Speed": 1.0
+		},
+		"AttackAnimations": [
+			{
+				"Path": "$DataFile$/Assets/Chr/BeetleAttack0.dae",
+				"Speed": 1.5
+			},
+			{
+				"Path": "$DataFile$/Assets/Chr/BeetleAttack1.dae",
+				"Speed": 1.0
+			}
+		]
+	} 
+}

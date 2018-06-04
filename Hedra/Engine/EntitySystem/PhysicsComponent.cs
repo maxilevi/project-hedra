@@ -209,7 +209,7 @@ namespace Hedra.Engine.EntitySystem
 
                     if (World.Entities[i].Physics.HasCollision && Physics.Collides(Parent.Model.BroadphaseBox, World.Entities[i].Model.BroadphaseBox)) // !Parent.InAttackRange(World.Entities[i])
                     {
-                        if (!PushAround || World.Entities[i].Model.BroadphaseCollider.BroadphaseRadius > Parent.Model.BroadphaseCollider.BroadphaseRadius) return;
+                        if (!PushAround) return;// || World.Entities[i].Model.BroadphaseCollider.BroadphaseRadius > Parent.Model.BroadphaseCollider.BroadphaseRadius) return;
                         
                         Vector3 increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3();
                         increment = increment.Xz.NormalizedFast().ToVector3();

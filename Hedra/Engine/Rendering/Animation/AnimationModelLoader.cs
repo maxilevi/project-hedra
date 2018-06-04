@@ -11,12 +11,8 @@ using System.Text;
 using OpenTK;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using Hedra.Engine.Management;
-using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
-using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering.Animation
 {
@@ -46,7 +42,7 @@ namespace Hedra.Engine.Rendering.Animation
 
 	    public static AnimatedModel LoadEntity(string ModelFile)
 	    {
-	        return AnimationModelLoader.LoadEntity(AnimationModelLoader.GetEntityData(ModelFile));
+            return AnimationModelLoader.LoadEntity(AnimationModelLoader.GetEntityData(ModelFile));
         }
 
 		/**

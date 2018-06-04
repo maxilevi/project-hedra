@@ -83,7 +83,9 @@ namespace Hedra.Engine.Player
 			yield return null;
 		}
 		
-		public void CreateProjectile(Vector3 Direction){
+		public void CreateProjectile(Vector3 Direction)
+        {
+            /*
 			float RandomScale = Mathf.Clamp(Utils.Rng.NextFloat() * 2f -1f, 1, 2);
 			ParticleProjectile Fire = new ParticleProjectile(Vector3.One + new Vector3(RandomScale, RandomScale, RandomScale) * 0.35f,
 			                            ((LeftHand) ? Player.Model.LeftWeaponPosition - Vector3.UnitX * .5f : Player.Model.RightWeaponPosition + Vector3.UnitX * .5f) + Player.Orientation * 2 + Vector3.UnitY * 2f,
@@ -118,13 +120,9 @@ namespace Hedra.Engine.Player
 					Particles.Emit();
 				}
 				Sender.Dispose();
-			};
+			};*/
 		}
 		
-		public override string Description {
-			get {
-				return "Shoot 5 fireballs in different directions.";
-			}
-		}
+		public override string Description => "Shoot 5 fireballs in different directions.";
 	}
 }

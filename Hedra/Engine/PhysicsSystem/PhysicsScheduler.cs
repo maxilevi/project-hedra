@@ -49,6 +49,19 @@ namespace Hedra.Engine.PhysicsSystem
             });
         }
 
+        public static void TemporalListener(Func<bool> FinishWhen, Func<CollisionShape[]> Shapes0, Func<CollisionShape[]> Shapes1, Action Callback, Action FailureCallback)
+        {
+            var identifier = AddListener(Shapes0, Shapes1, Callback);
+            TaskManager.When(FinishWhen, delegate
+            {
+                if (ExistsListener(identifier))
+                {
+                    RemoveListener(identifier);
+                    FailureCallback();
+                }
+            });
+        }
+
         public static void Update()
         {
             Worker.Wakeup();

@@ -29,13 +29,9 @@ uniform bool UseShadows;
 uniform bool Dither;
 uniform float useNoiseTexture;
 uniform sampler3D noiseTexture;
-uniform bool UseBaseTint;
 uniform bool Outline;
 uniform vec4 OutlineColor;
 uniform float Time;
-
-vec4 doTint(vec4 color, vec4 tint);
-vec3 doTint(vec3 color, vec3 tint);
 
 void main(){
 
@@ -78,14 +74,14 @@ void main(){
 	}
 
 	vec4 SkyColor = vec4( mix(BotColor, TopColor, (gl_FragCoord.y / Height) - .25) );
-	vec3 pointLightColor = doTint(linear_to_srbg(point_diffuse.xyz), BaseTint.rgb) * Tint.rgb;
+	vec3 pointLightColor = linear_to_srbg(point_diffuse.xyz) * (Tint.rgb + BaseTint.rgb);
 
 	if(UseFog){
-		vec4 NewColor = mix(SkyColor, doTint(inputColor * ShadowVisibility, vec4(BaseTint.rgb, 1.0)) * vec4(Tint.rgb, 1.0) + vec4(pointLightColor, 0.0), Visibility);
+		vec4 NewColor = mix(SkyColor, inputColor * ShadowVisibility * vec4(Tint.rgb + BaseTint.rgb, 1.0) + vec4(pointLightColor, 0.0), Visibility);
 		
 		FColor = vec4(NewColor.xyz, Alpha);
 	}else{
-		FColor = vec4( doTint(inputColor.xyz * ShadowVisibility, BaseTint.rgb) * Tint.rgb + pointLightColor, Alpha);
+		FColor = vec4( inputColor.xyz * ShadowVisibility * (Tint.rgb + BaseTint.rgb) + pointLightColor, Alpha);
 	}
 
 	if (Outline) {
@@ -98,15 +94,4 @@ void main(){
 		OutPosition = vec4(InPos, gl_FragCoord.z) * Alpha;
 		OutNormal = vec4(InNorm,1.0) * Alpha;
 	}
-}
-
-vec4 doTint(vec4 color, vec4 tint) {
-	if(!UseBaseTint) return color;
-	float shade = color.x + color.y + color.z;
-	shade = shade * 0.33;
-	return vec4(shade * tint.xyz, 1.0); 
-}
-
-vec3 doTint(vec3 color, vec3 tint){
-	return doTint(vec4(color, 1.0), vec4(tint, 1.0)).xyz;
 }

@@ -14,16 +14,18 @@
       "Duration": 8.0
     }
   ],
-
+  
   "Drops": [ ],
-
+  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/WolfIdle.dae",
     "Scale": 2.0,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/WolfIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WolfIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/FoxWalk.dae",
       "Speed": 1.65

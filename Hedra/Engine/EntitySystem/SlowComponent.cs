@@ -19,8 +19,8 @@ namespace Hedra.Engine.EntitySystem
     public class SlowComponent : EntityComponent, IEffectComponent
     {
         public int Chance { get; set; } = 15;
-        public float TotalStrength { get; set; } = 60;
-        public float BaseTime { get; set; } = 5;
+        public float Damage { get; set; } = 60;
+        public float Duration { get; set; } = 5;
 
 	    private float _cooldown;
 		private bool _canSlow = true;
@@ -37,7 +37,7 @@ namespace Hedra.Engine.EntitySystem
             if (Utils.Rng.NextFloat() <= Chance * 0.01)
             {
                 if (Victim.SearchComponent<SlowingComponent>() == null)
-                    Victim.AddComponent(new SlowingComponent(Victim, Parent, BaseTime + Utils.Rng.NextFloat() * 4 - 2f, TotalStrength));
+                    Victim.AddComponent(new SlowingComponent(Victim, Parent, Duration + Utils.Rng.NextFloat() * 4 - 2f, Damage));
             }
         }
 

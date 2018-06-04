@@ -3,14 +3,17 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem
 {
-    public class SheepAIComponent : BaseAIComponent
+    public class SheepAIComponent : BasicAIComponent
     {
         protected RoamBehaviour Roam { get; }
         protected HerdBehaviour Herd { get; }
 
         public SheepAIComponent(Entity Parent) : base(Parent)
         {
-            Roam = new RoamBehaviour(Parent);
+            Roam = new RoamBehaviour(Parent)
+            {
+                AlertTime = 18f
+            };
             Herd = new HerdBehaviour(Parent);
         }
 

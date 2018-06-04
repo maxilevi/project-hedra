@@ -21,6 +21,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.UI;
+using System.Linq;
 
 namespace Hedra.Engine.Player
 {
@@ -195,7 +196,8 @@ namespace Hedra.Engine.Player
 		}
 		#endregion
 		
-		public void Climb(){
+		public void Climb()
+		{
 			Block frontBlock = World.GetBlockAt( this.BlockPosition + this.Orientation.Xz.ToVector3() * Chunk.BlockSize + Vector3.UnitY * 2f  );
 			if(frontBlock.Type != BlockType.Air){
 				Model.Run();
@@ -215,16 +217,16 @@ namespace Hedra.Engine.Player
 	        return this.AttackEntity(AttackDamage, Mob, null);
 	    }
 
-        public bool AttackEntity(float AttackDamage, Entity Mob, Action<Entity> Callback)
-        {
-            if (!this.InAttackRange(Mob)) return false;
+	    public bool AttackEntity(float AttackDamage, Entity Mob, Action<Entity> Callback)
+	    {
+	        if (!this.InAttackRange(Mob)) return false;
 
-		    Callback?.Invoke(Mob);
-    
-		    Mob.Damage(AttackDamage, this, out float exp);
-		    this.XP += exp;
-		    return true;
-		}
+	        Callback?.Invoke(Mob);
+
+	        Mob.Damage(AttackDamage, this, out float exp);
+	        this.XP += exp;
+	        return true;
+	    }
 
 	    public void Attack(float AttackDamage)
 	    {
@@ -232,10 +234,11 @@ namespace Hedra.Engine.Player
 	    }
 
 
-	    public void Attack(float AttackDamage, Action<Entity> Injection){
-			
-			float highestDot = 0;
-			Entity dotEntity = null;
+	    public void Attack(float AttackDamage, Action<Entity> Injection)
+	    {
+
+	        float highestDot = 0;
+	        Entity dotEntity = null;
 	        var hittedSomething = false;
 	        try
 	        {
@@ -255,19 +258,87 @@ namespace Hedra.Engine.Player
 	        {
 	            Log.WriteLine(e.Message);
 	        }
-            if(!hittedSomething) MainWeapon?.Weapon.PlaySound();
-            this.ProcessAttack(hittedSomething);
-		}
+	        if (!hittedSomething) MainWeapon?.Weapon.PlaySound();
+	        this.ProcessHit(hittedSomething);
+	    }
 
-	    public void ProcessAttack(bool HittedSomething)
+        /*public void Attack(float Damage)
+	    {
+	        this.Attack(Damage, null);
+	    }
+
+
+	    public void Attack(float Damage, Action<Entity> Callback)
+	    {
+
+	        var nearEntities = World.InRadius<Entity>(this.Position, 16);//this.Model.BroadphaseCollider.BroadphaseRadius);
+			var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
+
+	        if (possibleTargets.Length == 0)
+	        {
+	            MainWeapon?.Weapon.PlaySound();
+                return;
+	        }
+
+	        var anyWaitingList = possibleTargets.ToList();
+            var missedWaitingList = possibleTargets.ToList();
+	        var atLeastOneHit = false;
+	        void PartialCallback(Entity Entity)
+	        {
+	            anyWaitingList.Remove(Entity);
+	            if (anyWaitingList.Count == 0 && atLeastOneHit)
+	            {
+	                this.ProcessHit(true);
+	            }
+                missedWaitingList.Remove(Entity);
+	            if (missedWaitingList.Count == 0)
+	            {
+	                MainWeapon?.Weapon.PlaySound();
+	                this.ProcessHit(false);
+                }
+	        }
+
+            void HitCallback(Entity Entity)
+            {
+                ThreadManager.ExecuteOnMainThread(delegate
+                {
+                    Entity.Damage(Damage * (1 + Utils.Rng.NextFloat() * 0.2f - 0.1f), this, out float exp);
+                    this.XP += exp;
+                });
+                Callback?.Invoke(Entity);
+
+	            anyWaitingList.Remove(Entity);
+	            if (anyWaitingList.Count == 0)
+	            {
+	                this.ProcessHit(true);
+	            }
+	            atLeastOneHit = true;
+	        }
+
+	        var asMelee = (MeleeWeapon) this.Model.LeftWeapon;
+            for (var i = 0; i < possibleTargets.Length; i++)
+	        {
+	            var k = i;
+	            PhysicsScheduler.TemporalListener(
+	                () => !this.IsAttacking,
+	                () => asMelee.Shapes,
+	                () => possibleTargets[k].Model.Colliders,
+	                () => HitCallback(possibleTargets[k]),
+	                () => PartialCallback(possibleTargets[k])
+                );
+	        }
+	    }*/
+
+        public void ProcessHit(bool HittedSomething)
 	    {
 	        if (!HittedSomething)
 	        {
 	            ConsecutiveHits = 0;
 	        }
-            else if (Class.CanAccumulateHits)
+            else
 	        {
-	            _consecutiveHitsTimer.Reset();
+                if (!Class.CanAccumulateHits) return;
+                _consecutiveHitsTimer.Reset();
 	            ConsecutiveHits++;
 	            int consecutiveHitsValue = ConsecutiveHits;
 	            this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier, () => ConsecutiveHits == consecutiveHitsValue);

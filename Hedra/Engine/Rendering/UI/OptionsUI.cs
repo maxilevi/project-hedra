@@ -384,27 +384,27 @@ namespace Hedra.Engine.Rendering.UI
 			                                             volumeOptions, false);
 
 			for(int i = 0; i < volumeOptions.Length; i++){
-				if( (float) (Int32.Parse( volumeOptions[i].Replace("%","") ) / 100f) == SoundtrackManager.Volume){
+				if( (float) (Int32.Parse( volumeOptions[i].Replace("%",string.Empty) ) / 100f) == SoundtrackManager.Volume){
 					musicVolume.Index = i;
 					musicVolume.CurrentValue.Text = volumeOptions[i];
-					//SoundtrackManager.Volume = Int32.Parse( VolumeOptions[Volume.Index].Replace("%","") ) / 100f;				
+					//SoundtrackManager.Volume = Int32.Parse( VolumeOptions[Volume.Index].Replace("%",string.Empty) ) / 100f;				
 					break;
 				}
 			}
 			
 			musicVolume.LeftArrow.Click += delegate { 
-				SoundtrackManager.Volume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%","") ) / 100f;
+				SoundtrackManager.Volume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%",string.Empty) ) / 100f;
 			};
 			
 			musicVolume.RightArrow.Click += delegate { 
-				SoundtrackManager.Volume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%","") ) / 100f;
+				SoundtrackManager.Volume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%",string.Empty) ) / 100f;
 			};
 			
 			OptionChooser sfxVolume = new OptionChooser(new Vector2(0, .4f), new Vector2(0.15f, 0.075f), "Sound FX Volume: ",  fontColor, _normalFont,
 			                                             volumeOptions, false);
 
 			for(int i = 0; i < volumeOptions.Length; i++){
-				if( (float) (Int32.Parse( volumeOptions[i].Replace("%","") ) / 100f) == Sound.SoundManager.Volume){
+				if( (float) (Int32.Parse( volumeOptions[i].Replace("%",string.Empty) ) / 100f) == Sound.SoundManager.Volume){
 					sfxVolume.Index = i;
 					sfxVolume.CurrentValue.Text = volumeOptions[i];			
 					break;
@@ -412,11 +412,11 @@ namespace Hedra.Engine.Rendering.UI
 			}
 			
 			sfxVolume.LeftArrow.Click += delegate { 
-				Sound.SoundManager.Volume = Int32.Parse( volumeOptions[sfxVolume.Index].Replace("%","") ) / 100f;
+				Sound.SoundManager.Volume = Int32.Parse( volumeOptions[sfxVolume.Index].Replace("%",string.Empty) ) / 100f;
 			};
 			
 			sfxVolume.RightArrow.Click += delegate { 
-				Sound.SoundManager.Volume = Int32.Parse( volumeOptions[sfxVolume.Index].Replace("%","") ) / 100f;
+				Sound.SoundManager.Volume = Int32.Parse( volumeOptions[sfxVolume.Index].Replace("%",string.Empty) ) / 100f;
 			};
 			
 			//if(!GraphicsOptions.MaxResolution)

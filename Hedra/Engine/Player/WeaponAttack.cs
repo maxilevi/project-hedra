@@ -83,7 +83,8 @@ namespace Hedra.Engine.Player
 		    if (_type == AttackType.Secondary) Player.Model.LeftWeapon.Attack2(Player);	
 		}
 		
-		public override void Update(){
+		public override void Update()
+        {
 			if(DisableWeapon) return;
 		    this.MaxCooldown = _maxCooldown / Player.AttackSpeed;
 			if(_isPressing && Cooldown < 0){

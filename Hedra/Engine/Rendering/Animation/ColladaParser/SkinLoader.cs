@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 using System.Globalization;
+using System.Linq;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {

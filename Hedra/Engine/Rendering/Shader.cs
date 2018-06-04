@@ -121,7 +121,7 @@ namespace Hedra.Engine.Rendering
 	        string log = "No log available.";
 	        GL.GetShader(ID, ShaderParameter.CompileStatus, out result);
 	        GL.GetShaderInfoLog(ID, out log);
-	        if (log == "") log = GL.GetError().ToString();
+	        if (log == string.Empty) log = GL.GetError().ToString();
 	        if (result != 1) Log.WriteResult(result == 1, "Shader " + Name + " has compiled" + " | " + log + " | " + result);
 	    }
 

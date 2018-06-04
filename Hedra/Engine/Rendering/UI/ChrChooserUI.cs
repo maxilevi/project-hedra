@@ -85,8 +85,8 @@ namespace Hedra.Engine.Rendering.UI
 			};
 			#endregion
 			
-			_name = new GUIText("", new Vector2(0, .55f), Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
-			_level = new GUIText("", new Vector2(0, .425f), Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 16));
+			_name = new GUIText(string.Empty, new Vector2(0, .55f), Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
+			_level = new GUIText(string.Empty, new Vector2(0, .425f), Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 16));
 			
 			this._dataElements.Add(_name);
 			this._dataElements.Add(_level);
@@ -161,8 +161,8 @@ namespace Hedra.Engine.Rendering.UI
 		    
 		    _selectedHuman = null;
 		    _previousHuman = null;
-		    _level.Text = "";
-		    _name.Text = "";
+		    _level.Text = string.Empty;
+		    _name.Text = string.Empty;
 				
 			for(int i = 0; i < _information.Length; i++){
 			    Vector3 offset = this.FireDirection(i, 8f);

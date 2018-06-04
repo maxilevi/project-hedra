@@ -6,7 +6,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -29,6 +28,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			VertexData BaseMesh = Contents.Clone();
 		    BaseMesh.Scale(Vector3.One * 1.75f);
             this.SecondBlade = ObjectMesh.FromVertexData(BaseMesh);
+			this.RegisterWeapon(SecondBlade, BaseMesh);
 
 		    AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBlade-Stance.dae");
 

@@ -30,9 +30,11 @@ namespace Hedra.Engine.PhysicsSystem
         public CollisionShape(Vector3[] Vertices, uint[] Indices)
 	    {
 	        this.Vertices = Vertices ?? new Vector3[0];
-#if DEBUG
-            this.Indices = Indices ?? new uint[0];
+#if !DEBUG
+            Indices = null;
 #endif
+            this.Indices = Indices ?? new uint[0];
+
         }
 
 		public CollisionShape Transform(Matrix4 TransMatrix)

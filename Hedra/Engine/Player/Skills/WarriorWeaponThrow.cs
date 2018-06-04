@@ -57,14 +57,12 @@ namespace Hedra.Engine.Player
 		
 		private void ShootWeapon(Humanoid Human, Vector3 Direction, int KnockChance = -1){
 			var weaponData = Player.Model.LeftWeapon.MeshData.Clone();
-			weaponData.Scale(Vector3.One * 1.75f);
 		    var startingPosition = Player.Model.LeftWeaponPosition + Player.Model.Human.Orientation * 2 +
 		                           Vector3.UnitY * 2f;
 
             var weaponProj = new Projectile(Human, startingPosition, weaponData)
 		    {
                 Propulsion = Direction * 2f,
-		        RotateOnX = true,
 		        Lifetime = 5f
 		    };
 		    weaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) { 

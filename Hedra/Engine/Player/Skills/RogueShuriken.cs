@@ -54,7 +54,6 @@ namespace Hedra.Engine.Player
 
 		    var weaponProj = new Projectile(Human, startingLocation, weaponData)
 		    {
-		        RotateOnX = true,
 		        Propulsion = Direction * 2f,
 		        Lifetime = 5f
 		    };

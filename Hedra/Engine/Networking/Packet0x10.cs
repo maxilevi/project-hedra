@@ -48,7 +48,7 @@ namespace Hedra.Engine.Networking
 						MobTypes.Add( (byte) World.Entities[i].MobType);
 						Health.Add( World.Entities[i].Health);
 
-					    BaseAIComponent AI = World.Entities[i].SearchComponent<BaseAIComponent>();
+					    BasicAIComponent AI = World.Entities[i].SearchComponent<BasicAIComponent>();
 						if( AI != null ){
 							//Position.Add( AI.TargetPosition );
 							//Animation.Add( (byte) (AI.IsAttacking ? 0x1 : 0x0) );
@@ -87,7 +87,7 @@ namespace Hedra.Engine.Networking
 					if(MobFound){
 						//Update
 						Mob.Health = Packet.Health[i];
-					    BaseAIComponent AI = Mob.SearchComponent<BaseAIComponent>();
+					    BasicAIComponent AI = Mob.SearchComponent<BasicAIComponent>();
 						
 						if(AI != null){
 							//AI.TargetPosition = Packet.Position[i];
@@ -107,7 +107,7 @@ namespace Hedra.Engine.Networking
 						
 						if( MobEnt.SearchComponent<DropComponent>() != null )
 							MobEnt.RemoveComponent( MobEnt.SearchComponent<DropComponent>() );
-						BaseAIComponent AI = MobEnt.SearchComponent<BaseAIComponent>();
+						BasicAIComponent AI = MobEnt.SearchComponent<BasicAIComponent>();
 						if(AI != null)
 							AI.Enabled = false;
 					}

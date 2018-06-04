@@ -14,13 +14,13 @@ namespace Hedra.Engine.EntitySystem
     public class SlowingComponent : EntityComponent
     {
         private readonly float _totalTime;
-        private readonly float _totalDamage;
+        private readonly float _slowPercentage;
         private readonly Entity _damager;
         private float _pTime;
 
-        public SlowingComponent(Entity Parent, Entity Damager, float TotalTime, float TotalDamage) : base(Parent){
+        public SlowingComponent(Entity Parent, Entity Damager, float TotalTime, float SlowPercentage) : base(Parent){
             this._totalTime = TotalTime;
-            this._totalDamage = TotalDamage;
+            this._slowPercentage = SlowPercentage;
             this._damager = Damager;
             CoroutineManager.StartCoroutine(this.UpdateEffect);
         }
@@ -29,8 +29,8 @@ namespace Hedra.Engine.EntitySystem
 
         public IEnumerator UpdateEffect()
         {
-            Parent.Model.BaseTint = new Vector4(-.5f, -.5f, -.5f, 1);
-            Parent.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Parent, -Parent.Speed + Parent.Speed * _totalDamage / 100),
+            Parent.Model.BaseTint = new Vector4(-.75f, -.75f, -.75f, 1);
+            Parent.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Parent, -Parent.Speed + Parent.Speed * _slowPercentage / 100),
                 () => _totalTime > _pTime && !Parent.IsDead && !Disposed);
             while (_totalTime > _pTime && !Parent.IsDead && !Disposed)
             {

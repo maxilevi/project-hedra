@@ -70,7 +70,7 @@ namespace Hedra.Engine.QuestSystem
 	        carriage.Health = carriage.MaxHealth;
 	        carriage.Physics.CanCollide = true;
 	        carriage.Physics.PushAround = false;
-	        carriage.RemoveComponent(carriage.SearchComponent<BaseAIComponent>());
+	        carriage.RemoveComponent(carriage.SearchComponent<BasicAIComponent>());
 	        carriage.SearchComponent<DamageComponent>().Immune = true;
 	        carriage.AddComponent(new CarriageAIComponent(carriage));
             carriage.RemoveComponent(carriage.SearchComponent<HealthBarComponent>());

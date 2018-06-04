@@ -1,19 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Hedra.Engine.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem
 {
-    public abstract class BaseAIComponent : EntityComponent
+    public abstract class BasicAIComponent : EntityComponent
     {
         public bool Enabled { get; set; }
         private Behaviour[] _behaviours;
 
-        protected BaseAIComponent(Entity Parent) : base(Parent)
+        protected BasicAIComponent(Entity Parent) : base(Parent)
         {
 
+        }
+
+        public void AlterBehaviour<T>(T NewBehaviour) where T : Behaviour
+        {
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            foreach (FieldInfo field in this.GetType().GetFields(flags))
+            {
+                if (field.FieldType.IsSubclassOf(typeof(T)) || typeof(T) == field.FieldType)
+                {
+                    field.SetValue(this, NewBehaviour);
+                }
+                else if(field.FieldType.IsSubclassOf(typeof(Behaviour)) || typeof(Behaviour) == field.FieldType)
+                {
+                    (field.GetValue(this) as Behaviour).AlterBehaviour<T>(NewBehaviour);
+                }
+            }
         }
 
         public T SearchBehaviour<T>() where T : Behaviour

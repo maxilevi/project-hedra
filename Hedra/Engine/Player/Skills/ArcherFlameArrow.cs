@@ -93,7 +93,7 @@ namespace Hedra.Engine.Player
 			Particles.Scale = Vector3.One * .5f;
 			Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
 			Particles.PositionErrorMargin = new Vector3(2.00f,2.00f,2.00f);
-			Particles.Shape = ParticleShape.SPHERE;
+			Particles.Shape = ParticleShape.Sphere;
 			
 			Particles.ParticleLifetime = .75f;
 			for(int i = 0; i < 750; i++){

@@ -164,6 +164,7 @@ namespace Hedra.Engine.EntitySystem
 		Wolf,
 		Goat,
         Gorilla,
+        Beetle,
         Troll,
 		TotalCount,
 		None,

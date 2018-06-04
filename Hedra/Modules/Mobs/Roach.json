@@ -14,16 +14,18 @@
       "Duration": 5.0
     }
   ],
-
+  
   "Drops": [],
-
+  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/RoachIdle.dae",
     "Scale": 1.25,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/RoachIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/RoachIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/RoachWalk.dae",
       "Speed": 1.25

@@ -15,7 +15,7 @@ namespace Hedra.Engine.AISystem.Behaviours
         {
             this.Idle = new IdleBehaviour(Parent);
             this.Walk = new WalkBehaviour(Parent);
-            this._ticker = new Timer(8f);
+            this._ticker = new Timer(10f);
             this._currentBehaviour = Idle;
         }
 

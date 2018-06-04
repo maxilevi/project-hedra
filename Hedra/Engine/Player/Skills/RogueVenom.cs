@@ -39,8 +39,8 @@ namespace Hedra.Engine.Player
 				PreviousLevel = base.Level;
 				PoisonousComponent Poison = Player.SearchComponent<PoisonousComponent>();
 				Poison.Chance = (int) (100 * (Math.Min(.4f, base.Level * .05f) + .2f));
-				Poison.TotalStrength = base.Level * 7.5f + 20f;
-				Poison.BaseTime = 8f - Math.Min(4f, base.Level * .5f);
+				Poison.Damage = base.Level * 7.5f + 20f;
+				Poison.Duration = 8f - Math.Min(4f, base.Level * .5f);
 			}
 			
 		}

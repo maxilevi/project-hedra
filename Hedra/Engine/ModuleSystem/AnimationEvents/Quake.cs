@@ -6,21 +6,20 @@ using OpenTK;
 
 namespace Hedra.Engine.ModuleSystem.AnimationEvents
 {
-    public class Shockwave : AnimationEvent
+    public class Quake : AnimationEvent
     {
-        public Shockwave(Entity Parent) : base(Parent) {}
+        public Quake(Entity Parent) : base(Parent) {}
 
         public override void Build()
         {
             var position = Parent.Position + Parent.Orientation * Parent.Model.Scale * 6f;
-            var underChunk = World.GetChunkAt(position);
 
             World.Particles.VariateUniformly = true;
             World.Particles.GravityEffect = .25f;
             World.Particles.Scale = Vector3.One;
             World.Particles.ScaleErrorMargin = new Vector3(.25f, .25f, .25f);
             World.Particles.PositionErrorMargin = new Vector3(4f, .5f, 4f);
-            World.Particles.Shape = ParticleShape.SPHERE;
+            World.Particles.Shape = ParticleShape.Sphere;
             World.Particles.ParticleLifetime = 1.5f;
 
             for (var i = 0; i < 125; i++)
@@ -35,7 +34,7 @@ namespace Hedra.Engine.ModuleSystem.AnimationEvents
             var entities = World.Entities;
             foreach (var entity in entities)
             {
-                var damage = Parent.AttackDamage * (1-Mathf.Clamp((position - entity.Position).Xz.LengthFast / 24f, 0, 1));
+                var damage = Parent.AttackDamage * (1-Mathf.Clamp((position - entity.Position).Xz.LengthFast / 48f, 0, 1)) * 3.0F;
                 if (damage > 0 && Parent != entity)
                 {
                     entity.Damage(damage, Parent, out float xp);

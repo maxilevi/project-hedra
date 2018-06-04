@@ -38,6 +38,26 @@ namespace Hedra.Engine.EntitySystem
             CoroutineManager.StartCoroutine(this.WhileCoroutine, Component, realCondition);
         }
 
+        public void AddComponentForSeconds(EntityComponent Component, float Seconds)
+        {
+            CoroutineManager.StartCoroutine(this.ForCoroutine, Component, Seconds);
+        }
+
+        private IEnumerator ForCoroutine(object[] Params)
+        {
+            var component = (EntityComponent)Params[0];
+            var seconds = (float)Params[1];
+
+            this.AddComponent(component);
+            var k = 0f;
+            while (k < seconds)
+            {
+                k += Time.ScaledFrameTimeSeconds;
+                yield return null;
+            }
+            this.RemoveComponent(component);
+        }
+
         private IEnumerator WhileCoroutine(object[] Params)
         {
             var component = (EntityComponent) Params[0];

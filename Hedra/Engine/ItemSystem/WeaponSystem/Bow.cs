@@ -36,7 +36,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			Quiver.TargetPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
 			Quiver.LocalRotationPoint = new Vector3(0, 0, Quiver.TargetPosition.Z);
 			Quiver.TargetRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);
-			ArrowData = AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 2.0f, Vector3.Zero, new Vector3(-90,0,90) * Mathf.Radian);
+			ArrowData = AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 8f, Vector3.Zero, new Vector3(-90,0,90) * Mathf.Radian);
 
             AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherShootStance.dae");
 
@@ -117,20 +117,24 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    return ArrowProj;
 		}
 		
-		public Projectile ShootArrow(Humanoid Human, Vector3 Direction, int KnockChance = -1){
-			var arrowProj = new Projectile(ArrowData.Clone(), Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
-			                                      ( Human is LocalPlayer ? Vector3.UnitY * 0f : Vector3.Zero), Direction, Human);
-			arrowProj.Rotation = new Vector3(arrowProj.Rotation.X, arrowProj.Rotation.Y, arrowProj.Rotation.Z + 45*(Direction.Y-.2f)*3);
-			arrowProj.Speed = 6.0f;
-			arrowProj.Lifetime = 5f;
-			arrowProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
+		public Projectile ShootArrow(Humanoid Human, Vector3 Direction, int KnockChance = -1)
+		{
+		    var startingLocation = Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
+		                           (Human is LocalPlayer ? Vector3.UnitY * 0f : Vector3.Zero);
+
+		    var arrowProj = new Projectile(Human, startingLocation, ArrowData.Clone())
+		    {
+		        Lifetime = 5f,
+		        Propulsion = Direction * 2f
+		    };
+		    arrowProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
 			    Hit.Damage(Human.DamageEquation * 0.75f, Human, out float exp, true);
 				Human.XP += exp;
 			    if(KnockChance != -1 && Utils.Rng.Next(0, KnockChance) == 0)
                     Hit.KnockForSeconds(3);
 			};
-		    arrowProj.LandEventHandler += S => Human.ProcessAttack(false);
-		    arrowProj.HitEventHandler += (S,V) => Human.ProcessAttack(true);
+		    arrowProj.LandEventHandler += S => Human.ProcessHit(false);
+		    arrowProj.HitEventHandler += (S,V) => Human.ProcessHit(true);
             SoundManager.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
 			arrowProj = this.AddModifiers(arrowProj);
 			return arrowProj;

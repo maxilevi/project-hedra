@@ -32,12 +32,12 @@ namespace Hedra.Engine.Management
 			LocalPlayer.Instance.UnLoad();
 			
 			for(var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
-				GameManager.Player.Toolbar.Skills[i].UnloadBuffs();
+				GameManager.Player.Toolbar.Skills[i].Unload();
 			
 			DataManager.SavePlayer( DataManager.DataFromPlayer(GameManager.Player) );
 			
 			for(var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
-				GameManager.Player.Toolbar.Skills[i].LoadBuffs();
+				GameManager.Player.Toolbar.Skills[i].Load();
 			
 			LocalPlayer.Instance.Load();
 		}

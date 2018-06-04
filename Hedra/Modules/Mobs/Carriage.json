@@ -8,14 +8,16 @@
   "Ridable": false,
   "Effects": [],
   "Drops": [ ],
-
+  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/CarriageIdle.dae",
     "Scale": 5.0,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/CarriageIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/CarriageIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/CarriageMove.dae",
       "Speed": 1.0

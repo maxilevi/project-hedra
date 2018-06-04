@@ -1,33 +1,43 @@
 ﻿using System;
 using Hedra.Engine.Rendering;
+using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
     public class ObjectMeshCollider : IDisposable
     {
-        private readonly BoneBox _collider;
+        private readonly BoneBox _originalCollider;
+        private readonly BoneBox _modifiedCollider;
         public ObjectMesh Mesh { get; set; }
+
+        public ObjectMeshCollider(VertexData Contents) : this(null, Contents)
+        {
+        }
 
         public ObjectMeshCollider(ObjectMesh Mesh, VertexData Contents)
         {
             this.Mesh = Mesh;
-            _collider = BoneBox.From(new BoneData
+            if (Contents != null)
             {
-                Id = 0,
-                Vertices = Contents.Vertices.ToArray()
-            });
-        }
-
-        private BoneBox TransformCollider(BoneBox Box)
-        {
-            for (var i = 0; i < Box.Corners.Length; i++)
-            {
-                Box.Corners[i] = Mesh.TransformPoint(Box.Corners[i]);
+                _originalCollider = BoneBox.From(new BoneData
+                {
+                    Id = 0,
+                    Vertices = Contents.Vertices.ToArray()
+                });
+                _modifiedCollider = new BoneBox(0, new Vector3[_originalCollider.Corners.Length]);
             }
-            return Box;
         }
 
-        public BoneBox Collider => this.TransformCollider(_collider);
+        private BoneBox TransformCollider()
+        {
+            for (var i = 0; i < _modifiedCollider.Corners.Length; i++)
+            {
+                _modifiedCollider.Corners[i] = Mesh.TransformPoint(_originalCollider.Corners[i]);
+            }
+            return _modifiedCollider;
+        }
+
+        public BoneBox Collider => this.TransformCollider();
         public CollisionShape Shape => Collider.ToShape();
 
         public void Dispose()

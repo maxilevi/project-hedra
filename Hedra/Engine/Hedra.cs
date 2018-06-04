@@ -30,6 +30,7 @@ using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.PhysicsSystem;
 using Forms = System.Windows.Forms;
 
@@ -113,13 +114,13 @@ namespace Hedra
 
 			_debugPanel = new Panel();
 			
-			_positionText = new GUIText("", new Vector2(.65f,-.9f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
-			_meshQueueCount = new GUIText("", new Vector2(.65f,-.8f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));                      
-			_generationQueueCount = new GUIText("", new Vector2(.65f,-.7f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
-			_chunkText = new GUIText("", new Vector2(.65f,-.6f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
-			_renderText = new GUIText("", new Vector2(.65f,-.5f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));			
-			_meshesText = new GUIText("", new Vector2(.65f,-.4f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
-			_cameraText = new GUIText("", new Vector2(.65f,-.3f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
+			_positionText = new GUIText(string.Empty, new Vector2(.65f,-.9f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
+			_meshQueueCount = new GUIText(string.Empty, new Vector2(.65f,-.8f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));                      
+			_generationQueueCount = new GUIText(string.Empty, new Vector2(.65f,-.7f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
+			_chunkText = new GUIText(string.Empty, new Vector2(.65f,-.6f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
+			_renderText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));			
+			_meshesText = new GUIText(string.Empty, new Vector2(.65f,-.4f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
+			_cameraText = new GUIText(string.Empty, new Vector2(.65f,-.3f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
 			_geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
             /*Texture WaterTexture = new Texture(WaterEffects.WaterFBO.TextureID[0], Vector2.Zero, Vector2.One);
 			WaterTexture.TextureElement.Flipped = true;
@@ -346,6 +347,12 @@ namespace Hedra
 			        //BasicGeometry.DrawBox(GameManager.Player.Model.BaseBroadphaseBox.Min, GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
 			        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
+			       if (GameManager.Player.Model.LeftWeapon != null && GameManager.Player.Model.LeftWeapon is MeleeWeapon melee)
+			       {
+			           GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+			           BasicGeometry.DrawShapes(melee.Shapes, Color.White);
+			           GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+			       }
 			       World.Entities.ToList().ForEach(delegate(Entity E)
 			       {
 			           if (E == null || !E.InUpdateRange) return;
@@ -353,7 +360,7 @@ namespace Hedra
 			           for (var i = 0; i < colliders.Length; i++)
 			           {
 			               GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-			               //BasicGeometry.DrawShape(colliders[i], Color.GreenYellow);
+			               BasicGeometry.DrawShape(colliders[i], Color.GreenYellow);
 			               GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 			           }
 			            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);

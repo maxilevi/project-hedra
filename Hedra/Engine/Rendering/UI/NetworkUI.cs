@@ -47,7 +47,7 @@ namespace Hedra.Engine.Rendering.UI
 			
 			GUIText gameId = new GUIText("Game ID", new Vector2(0,-.25f), Color.White, FontCache.Get(UserInterface.Fonts.Families[0], fontSize));
 			_ipField = new TextField(new Vector2(0,-.4f), new Vector2(.20f,.05f), this);
-			_ipField.Text = "";
+			_ipField.Text = string.Empty;
 			
 			var join = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Join", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], fontSize));
 			join.Click += delegate {

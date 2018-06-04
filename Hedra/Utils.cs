@@ -25,7 +25,7 @@ namespace Hedra
 	    {
 	        if (input == null) return input;
 	        string[] parts = input.Split(Environment.NewLine.ToCharArray());
-	        parts = parts.Where(Str => Str != "").ToArray();
+	        parts = parts.Where(Str => Str != string.Empty).ToArray();
 
 	        var builder = new StringBuilder();
 	        for (var i = 0; i < parts.Length; i++)
@@ -47,7 +47,7 @@ namespace Hedra
 
 	    public static string FirstCharToUpper(string input)
 		{
-		    return input.First().ToString().ToUpper() + String.Join("", input.Skip(1));
+		    return input.First().ToString().ToUpper() + String.Join(string.Empty, input.Skip(1));
 		}
 		
 		public static string GetProjectPath(string p){

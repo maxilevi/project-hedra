@@ -23,8 +23,8 @@ namespace Hedra.Engine.EntitySystem
     public class PoisonousComponent : EntityComponent, IEffectComponent
     {
 		public int Chance { get; set; } = 10;
-		public float TotalStrength { get; set; } = 30;
-		public float BaseTime { get; set; } = 5;
+		public float Damage { get; set; } = 30;
+		public float Duration { get; set; } = 5;
 
 		public PoisonousComponent(Entity Parent) : base(Parent){
 			Parent.OnAttacking += this.Apply;
@@ -37,7 +37,7 @@ namespace Hedra.Engine.EntitySystem
             if (Utils.Rng.NextFloat() <= Chance * 0.01)
             {
                 if (Victim.SearchComponent<PoisonComponent>() == null)
-                    Victim.AddComponent(new PoisonComponent(Victim, Parent, BaseTime + Utils.Rng.NextFloat() * 4 - 2f, TotalStrength));
+                    Victim.AddComponent(new PoisonComponent(Victim, Parent, Duration + Utils.Rng.NextFloat() * 4 - 2f, Damage));
             }
         }
 

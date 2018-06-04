@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player
 			this._player = Player;
 			Vector2 barPosition = new Vector2(-0.95f, -0.75f);
 			this._commandLine = new TextField(barPosition + Vector2.UnitX * .225f, new Vector2(.225f,.02f), _inPanel, false);
-			this._textBox = new GUIText("", _textBoxPosition, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10));
+			this._textBox = new GUIText(string.Empty, _textBoxPosition, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10));
 			_inPanel.AddElement(this._textBox);
 			_inPanel.AddElement(this._commandLine);
 			_inPanel.Disable();
@@ -66,7 +66,7 @@ namespace Hedra.Engine.Player
 			    this.AddLine(response);
                 _lastInput = _commandLine.Text;
 			}else{
-				if(_commandLine.Text != ""){
+				if(_commandLine.Text != string.Empty){
 					//It's normal text
 					_lastInput = _commandLine.Text;
 					string outText = _player.Name+": "+WordFilter.Filter(_commandLine.Text);
@@ -74,7 +74,7 @@ namespace Hedra.Engine.Player
 					Networking.NetworkManager.SendChatMessage(outText);
 				}
 			}
-			_commandLine.Text = "";
+			_commandLine.Text = string.Empty;
 			this.LoseFocus();
 			
 		}
@@ -83,16 +83,16 @@ namespace Hedra.Engine.Player
 			string[] Lines = _textBox.Text.Split( Environment.NewLine.ToCharArray() );
 			int LineCount = 0;
 			for(int i = 0; i < Lines.Length; i++){
-				if(Lines[i] != "" && Lines[i] != Environment.NewLine)
+				if(Lines[i] != string.Empty && Lines[i] != Environment.NewLine)
 					LineCount++;
 			}
 			if(LineCount == 7){
 				StringBuilder NewText = new StringBuilder();
 				int k = 0;
 				for(int i = 0; i < Lines.Length; i++){
-					if(Lines[i] != "" && Lines[i] != Environment.NewLine){
+					if(Lines[i] != string.Empty && Lines[i] != Environment.NewLine){
 						if(k != 0)
-							NewText.AppendLine( Lines[i].Replace(Environment.NewLine, "") );
+							NewText.AppendLine( Lines[i].Replace(Environment.NewLine, string.Empty) );
 						k++;
 					}
 				}
@@ -101,7 +101,7 @@ namespace Hedra.Engine.Player
 				_textBox.Text = _textBox.Text + Environment.NewLine + NewLine; 
 			}
 			Lines = _textBox.Text.Split( Environment.NewLine.ToCharArray() );
-			string LongestLine = "";
+			string LongestLine = string.Empty;
 			for(int i = 0; i < Lines.Length; i++){
 				if(Lines[i].Length > LongestLine.Length)
 					LongestLine = Lines[i];
@@ -110,7 +110,7 @@ namespace Hedra.Engine.Player
 		}
 		
 		public void Clear(){
-			_textBox.Text = "";
+			_textBox.Text = string.Empty;
 		}
 		
 		public void Focus(){
@@ -122,7 +122,7 @@ namespace Hedra.Engine.Player
 			_commandLine.InFocus = true;
 			Focused = true;
 			UpdateManager.CursorShown = true;
-			_commandLine.Text = "";
+			_commandLine.Text = string.Empty;
 		}
 		
 		public void LoseFocus(){

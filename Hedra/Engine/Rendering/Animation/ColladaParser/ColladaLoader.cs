@@ -26,7 +26,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 			SkinningData SkinningData = SkinLoader.ExtractSkinData();
 	
 			JointsLoader JointsLoader = new JointsLoader(Node["library_visual_scenes"], SkinningData.JointOrder);
-			JointsData JointsData = JointsLoader.ExtractBoneData();
+            JointsData JointsData = JointsLoader.ExtractBoneData();
 	
 			GeometryLoader GeometryLoader = new GeometryLoader(Node["library_geometries"], SkinningData.VerticesSkinData);
 			ModelData ModelData = GeometryLoader.ExtractModelData();

@@ -71,7 +71,7 @@ namespace Hedra.Engine.Player
                 Pet.AddComponent(new MountAIComponent(Pet, _player,
                     (MountAIType) Enum.Parse(typeof(MountAIType), PetItem.GetAttribute<string>("MountAIType")))
                 );
-                Pet.RemoveComponent(Pet.SearchComponent<BaseAIComponent>());
+                Pet.RemoveComponent(Pet.SearchComponent<BasicAIComponent>());
                 Pet.Removable = false;
                 ((QuadrupedModel) Pet.Model).IsMountable = true;
             }

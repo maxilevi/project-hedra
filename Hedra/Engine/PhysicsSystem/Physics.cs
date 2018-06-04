@@ -11,6 +11,7 @@ using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.PhysicsSystem
 {
@@ -24,6 +25,21 @@ namespace Hedra.Engine.PhysicsSystem
 	        Threading.Update();
 	        PhysicsScheduler.Update();
 	    }
+
+	    public static Box BuildBroadphaseBox(VertexData Model)
+	    {
+	        var offset = new Vector3(
+	            (Model.SupportPoint(Vector3.UnitX).X + Model.SupportPoint(-Vector3.UnitX).X) * .5f,
+	            0,
+	            (Model.SupportPoint(Vector3.UnitZ).Z + Model.SupportPoint(-Vector3.UnitZ).Z) * .5f
+	        );
+	        var minus = Math.Min(Model.SupportPoint(-Vector3.UnitX).X - offset.X, Model.SupportPoint(-Vector3.UnitZ).Z - offset.Z);
+	        var plus = Math.Max(Model.SupportPoint(Vector3.UnitX).X - offset.X, Model.SupportPoint(Vector3.UnitZ).Z - offset.Z);
+	        return new Box(
+	            new Vector3(minus, Model.SupportPoint(-Vector3.UnitY).Y, minus),
+	            new Vector3(plus, Model.SupportPoint(Vector3.UnitY).Y, plus)
+	        );
+        }
 
 		public static void LookAt(Entity Parent, Entity Target){
 		    Parent.Orientation = (Target.Model.Position-Parent.Model.Position).Xz.NormalizedFast().ToVector3();

@@ -373,8 +373,7 @@ namespace Hedra.Engine.Player
 				Vector3 positionAddon = Vector3.Zero;
                 if (this.MountModel != null)
                 {
-                    positionAddon += Parent.Model.Height * Vector3.UnitY *
-                                     0.65f;
+                    positionAddon += this.MountModel.Height * Vector3.UnitY * .5f;
                 }
 
                 Model.Position = this.Position + positionAddon;
@@ -558,7 +557,7 @@ namespace Hedra.Engine.Player
 			get => _position;
 		    set{
 				if(MountModel != null)
-					this.MountModel.Position = value - Vector3.UnitY * 1.5f;
+					this.MountModel.Position = value;
 
                 _position = value;
 			}

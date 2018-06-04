@@ -153,27 +153,6 @@ namespace Hedra.Engine.Generation
             }
 	    }
 
-        //When enabling the mage, consider removing this.
-	    private static bool _isParticleProjectilesCacheDirty = true;
-        private static readonly HashSet<ParticleProjectile> _particleProjectiles;
-	    private static ReadOnlyCollection<ParticleProjectile> _particleProjectilesCache;
-	    public static ReadOnlyCollection<ParticleProjectile> ParticleProjectiles
-	    {
-	        get
-	        {
-	            if (_isGlobalCollidersCacheDirty)
-	            {
-	                lock (_particleProjectiles)
-	                {
-	                    _particleProjectilesCache = _particleProjectiles.ToArray().ToList().AsReadOnly();
-	                }
-	                _isParticleProjectilesCacheDirty = false;
-	            }
-	            lock (_particleProjectiles)
-	                return _particleProjectilesCache;
-	        }
-	    }
-
         public static Dictionary<Vector2, Chunk> DrawingChunks { get; }
 	    private static Matrix4 _previousModelView;
 	    private static int _previousCount;
@@ -183,7 +162,6 @@ namespace Hedra.Engine.Generation
 	    {
 	        _structures = new HashSet<BaseStructure>();
 	        _entities = new HashSet<Entity>();
-	        _particleProjectiles = new HashSet<ParticleProjectile>();
             _items = new HashSet<WorldItem>();
             _chunks = new HashSet<Chunk>();
 

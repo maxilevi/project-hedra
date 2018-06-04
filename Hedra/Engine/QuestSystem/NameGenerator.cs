@@ -54,7 +54,7 @@ namespace Hedra.Engine.QuestSystem
 		
 		public static string Generate(int Seed){
 			var rng = new Random(Seed);
-			int length = rng.Next(3, 11);
+			int length = rng.Next(3, 6);
 			int entry = rng.Next(0, Table.Keys.Count);
 
 		    var iterator = 0;

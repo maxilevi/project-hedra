@@ -55,7 +55,7 @@ namespace Hedra.Engine.ClassSystem
 
         public static string ToString(Type ClassDesign)
         {
-            return ClassDesign.Name.Replace("Design", "");
+            return ClassDesign.Name.Replace("Design", string.Empty);
         }
 
         public static ClassDesign None { get; } = new NoneDesign();

@@ -8,14 +8,16 @@
   "Ridable": false,
   "Effects": [],
   "Drops": [],
-
+  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/FoxIdle.dae",
     "Scale": 1.85,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/FoxIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/FoxIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/FoxWalk.dae",
       "Speed": 1.65

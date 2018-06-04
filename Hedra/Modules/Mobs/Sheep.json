@@ -9,20 +9,26 @@
   "Effects": [],
   "Drops": [],
   "Model": {
-    "Path": "$DataFile$/Assets/Chr/SheepIdle.dae",
-    "Scale": 1.75,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/SheepIdle.dae",
-      "Speed": 1.0
-    },
+    "Path": "$DataFile$/Assets/Chr/SheepIdle0.dae",
+    "Scale": 1.25,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/SheepIdle0.dae",
+        "Speed": 0.75
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/SheepIdle1.dae",
+        "Speed": 0.75
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/SheepWalk.dae",
-      "Speed": 1.0
+      "Speed": 1.5
     },
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/SheepAttack.dae",
-        "Speed": 1.0
+        "Speed": 2.0
       }
     ]
   } 

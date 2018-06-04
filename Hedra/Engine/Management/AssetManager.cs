@@ -126,7 +126,7 @@ namespace Hedra.Engine.Management
 	        bool external = !Path.Contains("$DataFile$");
 	        if (!external || Path.StartsWith("Assets/"))
 	        {
-	            Path = Path.Replace("$DataFile$", "");
+	            Path = Path.Replace("$DataFile$", string.Empty);
 	            if (Path.StartsWith("/"))
                     Path = Path.Substring(1, Path.Length-1);
 
@@ -242,17 +242,7 @@ namespace Hedra.Engine.Management
 		        _hitboxCache.Add(ModelFile, vertexData);
 		    }
 		    var data = _hitboxCache[ModelFile];
-		    var offset = new Vector3(
-                (data.SupportPoint(Vector3.UnitX).X + data.SupportPoint(-Vector3.UnitX).X) * .5f,
-                0,
-                (data.SupportPoint(Vector3.UnitZ).Z + data.SupportPoint(-Vector3.UnitZ).Z) * .5f
-                );
-            var minus = Math.Min(data.SupportPoint(-Vector3.UnitX).X - offset.X, data.SupportPoint(-Vector3.UnitZ).Z - offset.Z);
-		    var plus = Math.Max(data.SupportPoint(Vector3.UnitX).X - offset.X, data.SupportPoint(Vector3.UnitZ).Z - offset.Z);
-            return new Box(
-		        new Vector3(minus, data.SupportPoint(-Vector3.UnitY).Y, minus),
-		        new Vector3(plus, data.SupportPoint(Vector3.UnitY).Y, plus)
-                );
+		    return Physics.BuildBroadphaseBox(data);
 		}
 		
 		public static VertexData PlyLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true){

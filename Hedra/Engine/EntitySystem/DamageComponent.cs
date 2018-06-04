@@ -80,7 +80,7 @@ namespace Hedra.Engine.EntitySystem
             if (!Parent.IsStatic && PlaySound && (LocalPlayer.Instance.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
             {
                 var baseDamage = Damager != null ? (Damager as Humanoid)?.BaseDamageEquation 
-                    ?? (Damager.SearchComponent<BaseAIComponent>() != null ? Damager.AttackDamage * .3f : Amount * .3f) : Amount / 3f;
+                    ?? (Damager.SearchComponent<BasicAIComponent>() != null ? Damager.AttackDamage * .3f : Amount * .3f) : Amount / 3f;
                 Color color = Color.White;
                 float dmgDiff = Amount / baseDamage;
                 if (dmgDiff > 1.85f) color = Color.Gold;

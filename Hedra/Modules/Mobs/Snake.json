@@ -18,10 +18,12 @@
   "Model": {
     "Path": "$DataFile$/Assets/Chr/SnakeIdle.dae",
     "Scale": 3.0,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/SnakeIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/SnakeIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/SnakeWalk.dae",
       "Speed": 1.0

@@ -14,16 +14,18 @@
       "Duration": 5.0
     }
   ],
-
+  
   "Drops": [],
-
+  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/SpiderIdle.dae",
     "Scale": 1.75,
-    "IdleAnimation": {
-      "Path": "$DataFile$/Assets/Chr/SpiderIdle.dae",
-      "Speed": 1.0
-    },
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/SpiderIdle.dae",
+        "Speed": 1.0
+      }
+    ],
     "WalkAnimation": {
       "Path": "$DataFile$/Assets/Chr/SpiderWalk.dae",
       "Speed": 1.0

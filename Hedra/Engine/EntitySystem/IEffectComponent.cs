@@ -3,8 +3,8 @@
     public interface IEffectComponent
     {
         int Chance { get; set; }
-        float TotalStrength { get; set; }
-        float BaseTime { get; set; }
+        float Damage { get; set; }
+        float Duration { get; set; }
 
         void Apply(Entity Victim, float Amount);
         void Dispose ();
