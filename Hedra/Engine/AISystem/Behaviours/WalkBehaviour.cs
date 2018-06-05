@@ -38,7 +38,7 @@ namespace Hedra.Engine.AISystem.Behaviours
 
         public override void Update()
         {
-            if (!_arrived)
+            if (!_arrived && !Parent.Knocked)
             {
                 Parent.Model.Run();
                 Parent.Orientation = (Target - Parent.Position).Xz.NormalizedFast().ToVector3();

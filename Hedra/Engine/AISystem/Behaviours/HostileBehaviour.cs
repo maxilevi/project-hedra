@@ -7,7 +7,7 @@ namespace Hedra.Engine.AISystem.Behaviours
 {
     public class HostileBehaviour : Behaviour
     {
-        public float Radius { get; } = 96;
+        public float Radius { get; } = 64;
         protected AttackBehaviour Attack { get; }
 
         public HostileBehaviour(Entity Parent) : base(Parent)

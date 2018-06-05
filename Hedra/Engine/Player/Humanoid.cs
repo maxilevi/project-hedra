@@ -212,57 +212,7 @@ namespace Hedra.Engine.Player
 			this.Physics.UsePhysics = true;
 		}
 
-	    public bool AttackEntity(float AttackDamage, Entity Mob)
-	    {
-	        return this.AttackEntity(AttackDamage, Mob, null);
-	    }
-
-	    public bool AttackEntity(float AttackDamage, Entity Mob, Action<Entity> Callback)
-	    {
-	        if (!this.InAttackRange(Mob)) return false;
-
-	        Callback?.Invoke(Mob);
-
-	        Mob.Damage(AttackDamage, this, out float exp);
-	        this.XP += exp;
-	        return true;
-	    }
-
-	    public void Attack(float AttackDamage)
-	    {
-	        this.Attack(AttackDamage, null);
-	    }
-
-
-	    public void Attack(float AttackDamage, Action<Entity> Injection)
-	    {
-
-	        float highestDot = 0;
-	        Entity dotEntity = null;
-	        var hittedSomething = false;
-	        try
-	        {
-	            for (int i = World.Entities.Count - 1; i > -1; i--)
-	            {
-	                if (World.Entities[i].IsFriendly) continue;
-	                if (World.Entities[i] == this) continue;
-
-	                if (World.Entities[i] != null)
-	                {
-	                    if (this.AttackEntity(AttackDamage, World.Entities[i], Injection))
-	                        hittedSomething = true;
-	                }
-	            }
-	        }
-	        catch (ArgumentOutOfRangeException e)
-	        {
-	            Log.WriteLine(e.Message);
-	        }
-	        if (!hittedSomething) MainWeapon?.Weapon.PlaySound();
-	        this.ProcessHit(hittedSomething);
-	    }
-
-        /*public void Attack(float Damage)
+        public void Attack(float Damage)
 	    {
 	        this.Attack(Damage, null);
 	    }
@@ -273,61 +223,25 @@ namespace Hedra.Engine.Player
 
 	        var nearEntities = World.InRadius<Entity>(this.Position, 16);//this.Model.BroadphaseCollider.BroadphaseRadius);
 			var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
+			var atLeastOneHit = false;
+			foreach(var target in possibleTargets)
+			{
+				var dot = Vector3.Dot( (this.Position - target.Position).NormalizedFast(), this.Orientation);
+				if(dot > 0.90f && this.InAttackRange(target, 2.0f))
+				{
+					var damageToDeal = Damage * dot;
+					target.Damage(damageToDeal, this, out float exp);
+            		this.XP += exp;
+					atLeastOneHit = true;
+				}
+			}
 
-	        if (possibleTargets.Length == 0)
-	        {
-	            MainWeapon?.Weapon.PlaySound();
-                return;
-	        }
-
-	        var anyWaitingList = possibleTargets.ToList();
-            var missedWaitingList = possibleTargets.ToList();
-	        var atLeastOneHit = false;
-	        void PartialCallback(Entity Entity)
-	        {
-	            anyWaitingList.Remove(Entity);
-	            if (anyWaitingList.Count == 0 && atLeastOneHit)
-	            {
-	                this.ProcessHit(true);
-	            }
-                missedWaitingList.Remove(Entity);
-	            if (missedWaitingList.Count == 0)
-	            {
-	                MainWeapon?.Weapon.PlaySound();
-	                this.ProcessHit(false);
-                }
-	        }
-
-            void HitCallback(Entity Entity)
-            {
-                ThreadManager.ExecuteOnMainThread(delegate
-                {
-                    Entity.Damage(Damage * (1 + Utils.Rng.NextFloat() * 0.2f - 0.1f), this, out float exp);
-                    this.XP += exp;
-                });
-                Callback?.Invoke(Entity);
-
-	            anyWaitingList.Remove(Entity);
-	            if (anyWaitingList.Count == 0)
-	            {
-	                this.ProcessHit(true);
-	            }
-	            atLeastOneHit = true;
-	        }
-
-	        var asMelee = (MeleeWeapon) this.Model.LeftWeapon;
-            for (var i = 0; i < possibleTargets.Length; i++)
-	        {
-	            var k = i;
-	            PhysicsScheduler.TemporalListener(
-	                () => !this.IsAttacking,
-	                () => asMelee.Shapes,
-	                () => possibleTargets[k].Model.Colliders,
-	                () => HitCallback(possibleTargets[k]),
-	                () => PartialCallback(possibleTargets[k])
-                );
-	        }
-	    }*/
+			if(!atLeastOneHit)
+			{
+				MainWeapon?.Weapon.PlaySound();
+			}
+			this.ProcessHit(atLeastOneHit);
+	    }
 
         public void ProcessHit(bool HittedSomething)
 	    {

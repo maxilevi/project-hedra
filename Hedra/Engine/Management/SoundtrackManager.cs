@@ -75,7 +75,7 @@ namespace Hedra.Engine.Management
 		
 		public static void PlayTrack(int Index, bool RepeatItself = false)
 		{
-            if(_loaded) return;
+            if(!_loaded) return;
 		    _repeatItself = RepeatItself;
             if(Index != _trackIndex)
             {

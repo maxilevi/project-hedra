@@ -25,7 +25,8 @@ namespace Hedra.Engine.EntitySystem
 	    public event OnHitGroundEvent OnHitGround;
 		public bool UsePhysics { get; set; }
 	    public float Falltime { get; private set; }
-		public Vector3 GravityDirection = new Vector3(0,-1f,0);
+        public bool CanBePushed { get; set; }
+        public Vector3 GravityDirection = new Vector3(0,-1f,0);
 		public float VelocityCap = float.MaxValue;
 		public Vector3 Force = Vector3.Zero;
 		public Vector3 Velocity = Vector3.Zero;
@@ -207,9 +208,9 @@ namespace Hedra.Engine.EntitySystem
                     if (World.Entities[i] == Parent)
                         continue;
 
-                    if (World.Entities[i].Physics.HasCollision && Physics.Collides(Parent.Model.BroadphaseBox, World.Entities[i].Model.BroadphaseBox)) // !Parent.InAttackRange(World.Entities[i])
+                    if (World.Entities[i].Physics.HasCollision && Parent.InAttackRange(World.Entities[i]))
                     {
-                        if (!PushAround) return;// || World.Entities[i].Model.BroadphaseCollider.BroadphaseRadius > Parent.Model.BroadphaseCollider.BroadphaseRadius) return;
+                        if (!PushAround || !World.Entities[i].Physics.CanBePushed) return;
                         
                         Vector3 increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3();
                         increment = increment.Xz.NormalizedFast().ToVector3();

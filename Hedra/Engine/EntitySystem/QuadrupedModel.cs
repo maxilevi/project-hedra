@@ -123,7 +123,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void Attack(Entity Victim, Animation Animation, OnAnimationHandler Callback)
 		{	
-			if(Array.IndexOf(AttackAnimations, Model.Animator.AnimationPlaying) != -1)
+			if(Array.IndexOf(AttackAnimations, Model.Animator.AnimationPlaying) != -1 || Parent.Knocked)
 				return;
 			
 			if(_attackCooldown > 0)

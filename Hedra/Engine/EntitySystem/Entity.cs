@@ -243,8 +243,9 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InAttackRange(Entity Target, float LowestDistance = 15f)
+        public bool InAttackRange(Entity Target, float RadiusModifier = 1f)
         {
+            if (!PhysicsSystem.Physics.Collides(Target.Model.BroadphaseBox, this.Model.BroadphaseBox)) return false;
             var collider0 = this.Model.BroadphaseCollider;
             var collider1 = Target.Model.BroadphaseCollider;
             var radii = collider0.BroadphaseRadius + collider1.BroadphaseRadius;
@@ -264,7 +265,7 @@ namespace Hedra.Engine.EntitySystem
                     }
                 }
             }
-            return lowestDistance < LowestDistance;
+            return lowestDistance < 4f * RadiusModifier;
         }
 
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)

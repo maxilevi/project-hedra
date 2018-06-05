@@ -27,7 +27,7 @@
 			{
 				"Path": "$DataFile$/Assets/Chr/TrollAttack0.dae",
 				"Speed": 0.75,
-				"OnAnimationMid" : "Shockwave"
+				"OnAnimationMid" : "Quake"
 			}
 		]
 	} 

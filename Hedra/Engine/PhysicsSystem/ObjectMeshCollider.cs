@@ -26,6 +26,15 @@ namespace Hedra.Engine.PhysicsSystem
                 });
                 _modifiedCollider = new BoneBox(0, new Vector3[_originalCollider.Corners.Length]);
             }
+            else
+            {
+                _originalCollider = BoneBox.From(new BoneData
+                {
+                    Id = 0,
+                    Vertices = new Vector3[8]
+                });
+                _modifiedCollider = new BoneBox(0, new Vector3[8]);
+            }
         }
 
         private BoneBox TransformCollider()

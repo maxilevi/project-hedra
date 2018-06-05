@@ -162,6 +162,7 @@ namespace Hedra.Engine.Player
             }
             RollDirection = new Vector3(Player.Model.Rotation.X, _characterRotation, Player.Model.Rotation.Z);
             Player.IsMoving = MoveSpace.LengthSquared > 0;
+            Player.Physics.CanBePushed = !Player.IsMoving;
         }
 
         private void RegisterKey(Key Key, Action Action)

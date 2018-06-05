@@ -69,7 +69,7 @@ namespace Hedra
 			base.OnLoad(e);
 		    string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
 		    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
-            this.GameVersion = "α 0.31";
+            this.GameVersion = "α 0.32";
 		    this.Title += " "+GameVersion;
             Hedra.MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -333,16 +333,16 @@ namespace Hedra
 			    GL.Color3(Color.Yellow);
 			    GL.Vertex3(Player.Position + Player.Orientation * 4f);
 			    GL.End();
-                /*
+                
                 World.Entities.ToList().ForEach( delegate(Entity E) 
                 {
                     if (E != null)
                     {
                         GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                        BasicGeometry.DrawBox(E.HitBox.Min, E.BaseBox.Max - E.BaseBox.Min);
+                        BasicGeometry.DrawBox(E.Model.BroadphaseBox.Min, E.Model.BroadphaseBox.Max - E.Model.BroadphaseBox.Min);
                         GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
                     }
-                });*/
+                });
 			        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 			        //BasicGeometry.DrawBox(GameManager.Player.Model.BaseBroadphaseBox.Min, GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
 			        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);

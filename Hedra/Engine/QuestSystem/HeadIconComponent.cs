@@ -36,7 +36,7 @@ namespace Hedra.Engine.QuestSystem
             {
                 _iconMesh?.Dispose();
                 var model = CacheManager.GetModel(IconType.Value).Clone();
-                model.Scale(Parent.Model.Scale);
+                model.Scale(Parent.Model.BaseBroadphaseBox.Size.Average() * Vector3.One * .15f);
                 _iconMesh = ObjectMesh.FromVertexData(model);
             }
             else
