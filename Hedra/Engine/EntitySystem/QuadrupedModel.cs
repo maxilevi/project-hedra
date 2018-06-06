@@ -121,7 +121,7 @@ namespace Hedra.Engine.EntitySystem
 		    this.BaseBroadphaseBox *= Scalar;
         }
 
-        public void Attack(Entity Victim, Animation Animation, OnAnimationHandler Callback)
+        public void Attack(Entity Victim, Animation Animation, OnAnimationHandler Callback, float RangeModifier = 1.0f)
 		{	
 			if(Array.IndexOf(AttackAnimations, Model.Animator.AnimationPlaying) != -1 || Parent.Knocked)
 				return;
@@ -136,10 +136,10 @@ namespace Hedra.Engine.EntitySystem
 
 		    if (!_hasAnimationEvent || Callback != null)
 		    {
-		        void AttackHandler(Animation Sender)
+		        void EndAttackHandler(Animation Sender)
 		        {
-		            selectedAnimation.OnAnimationMid -= AttackHandler;
-		            if (!Parent.InAttackRange(Victim))
+		            selectedAnimation.OnAnimationEnd -= EndAttackHandler;
+		            if (!Parent.InAttackRange(Victim, RangeModifier))
 		            {
 		                SoundManager.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
 		                return;
@@ -147,7 +147,7 @@ namespace Hedra.Engine.EntitySystem
 
 		            Victim.Damage(Parent.AttackDamage, this.Parent, out float exp);
 		        }
-		        selectedAnimation.OnAnimationMid += Callback ?? AttackHandler;
+                selectedAnimation.OnAnimationEnd += Callback ?? EndAttackHandler;
             }
 		    Model.PlayAnimation(selectedAnimation);
 		    IsAttacking = true;
@@ -162,6 +162,11 @@ namespace Hedra.Engine.EntitySystem
         public override void Attack(Entity Victim)
         {
             this.Attack(Victim, AttackAnimations[Utils.Rng.Next(0, AttackAnimations.Length)], null);
+        }
+
+        public override void Attack(Entity Victim, float RangeModifier)
+        {
+            this.Attack(Victim, AttackAnimations[Utils.Rng.Next(0, AttackAnimations.Length)], null, RangeModifier);
         }
 
         public override void Update(){

@@ -38,9 +38,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 			this.MeshData = GeometryNode["geometry"]["mesh"];
 		}
 		
-		public ModelData ExtractModelData(){
-			this.ReadRawData();
-			this.AssembleVertices();
+		public ModelData ExtractModelData()
+		{
+		    var polyNode = this.MeshData["polylist"] ?? this.MeshData["triangles"];
+			this.ReadRawData(polyNode);
+			this.AssembleVertices(polyNode);
 			this.RemoveUnusedVertices();
 			this.InitArrays();
 			this.ConvertDataToArrays();
@@ -67,10 +69,10 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 			return new ModelData(Positions.ToArray(), ColorsList.ToArray(), NormalsList.ToArray(), Indices.ToArray(), JointIds.ToArray(), Weights.ToArray(), 1);
 		}
 	
-		private void ReadRawData() {
+		private void ReadRawData(XmlNode PolyNode) {
 			this.ReadPositions();
-			this.ReadNormals();
-			this.ReadColors();
+			this.ReadNormals(PolyNode);
+			this.ReadColors(PolyNode);
 		}
 	
 		private void ReadPositions() {
@@ -88,8 +90,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 			}
 		}
 	
-		private void ReadNormals() {
-			string normalsId = MeshData["polylist"].ChildWithAttribute("input", "semantic", "NORMAL").GetAttribute("source").Value.Substring(1);
+		private void ReadNormals(XmlNode PolyNode) {
+			string normalsId = PolyNode.ChildWithAttribute("input", "semantic", "NORMAL").GetAttribute("source").Value.Substring(1);
 			XmlNode normalsData = MeshData.ChildWithAttribute("source", "id", normalsId)["float_array"];
 			int count = int.Parse(normalsData.GetAttribute("count").Value);
 			string[] normData = normalsData.InnerText.Split(' ');
@@ -103,8 +105,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 			}
 		}
 	
-		private void ReadColors() {
-			string ColorsId = MeshData["polylist"].ChildWithAttribute("input", "semantic", "COLOR")
+		private void ReadColors(XmlNode PolyNode) {
+			string ColorsId = PolyNode.ChildWithAttribute("input", "semantic", "COLOR")
 					.GetAttribute("source").Value.Substring(1);
 			XmlNode ColorsNode = MeshData.ChildWithAttribute("source", "id", ColorsId)["float_array"];
 			int count = int.Parse(ColorsNode.GetAttribute("count").Value);
@@ -117,10 +119,10 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 			}
 		}
 		
-		private void AssembleVertices(){
-			XmlNode poly = MeshData["polylist"];
-			int typeCount = poly.ChildrenCount("input");
-			string[] indexData = poly["p"].InnerText.Split(' ');
+		private void AssembleVertices(XmlNode PolyNode)
+        {
+			int typeCount = PolyNode.ChildrenCount("input");
+			string[] indexData = PolyNode["p"].InnerText.Split(' ');
 			for(int i=0; i < indexData.Length / typeCount; i++){
 				int PositionIndex = int.Parse(indexData[i * typeCount]);
 				int NormalIndex = int.Parse(indexData[i * typeCount + 1]);

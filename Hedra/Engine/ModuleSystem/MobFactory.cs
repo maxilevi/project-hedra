@@ -32,7 +32,7 @@ namespace Hedra.Engine.ModuleSystem
 
         public bool ContainsFactory(string Type)
         {
-            return _factories.ContainsKey(Type);
+            return _factories.ContainsKey(Type.ToLowerInvariant());
         }
 
         public Entity Build(MobType Type, int Seed)

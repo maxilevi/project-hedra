@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -16,25 +17,13 @@ namespace Hedra.Engine.PhysicsSystem
 
         public ObjectMeshCollider(ObjectMesh Mesh, VertexData Contents)
         {
-            this.Mesh = Mesh;
-            if (Contents != null)
+            this.Mesh = Mesh;            
+            _originalCollider = BoneBox.From(new BoneData
             {
-                _originalCollider = BoneBox.From(new BoneData
-                {
-                    Id = 0,
-                    Vertices = Contents.Vertices.ToArray()
-                });
-                _modifiedCollider = new BoneBox(0, new Vector3[_originalCollider.Corners.Length]);
-            }
-            else
-            {
-                _originalCollider = BoneBox.From(new BoneData
-                {
-                    Id = 0,
-                    Vertices = new Vector3[8]
-                });
-                _modifiedCollider = new BoneBox(0, new Vector3[8]);
-            }
+                Id = 0,
+                Vertices = Contents?.Vertices.ToArray() ?? new Vector3[8] 
+            });
+            _modifiedCollider = new BoneBox(0, _originalCollider.Corners.ToArray());
         }
 
         private BoneBox TransformCollider()

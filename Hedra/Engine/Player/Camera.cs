@@ -173,9 +173,15 @@ namespace Hedra.Engine.Player
             TargetDistance -= E.Delta * WheelSpeed;
             TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
             if (TargetDistance < 4.5f)
-                _player.Model.Alpha = Mathf.Clamp((TargetDistance - 1.5f) / 4.5f, 0, 1) + 0.0025f;
+            {
+                var newAlpha = Mathf.Clamp((TargetDistance - 1.5f) / 4.5f, 0, 1);
+                _player.Model.Enabled = newAlpha != 0;
+                _player.Model.Alpha = newAlpha + 0.0025f;
+            }
             else
+            {
                 _player.Model.Alpha = 1;
+            }
 
             _prevDistance = TargetDistance;
         }

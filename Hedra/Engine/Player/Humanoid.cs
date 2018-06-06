@@ -220,14 +220,14 @@ namespace Hedra.Engine.Player
 
 	    public void Attack(float Damage, Action<Entity> Callback)
 	    {
-
-	        var nearEntities = World.InRadius<Entity>(this.Position, 16);//this.Model.BroadphaseCollider.BroadphaseRadius);
+	        var rangeModifier = this.Model.LeftWeapon is MeleeWeapon meleeWeapon ? meleeWeapon.MainWeaponSize.Y / 3.75f + .5f : 1.0f;
+            var nearEntities = World.InRadius<Entity>(this.Position, this.Model.BroadphaseCollider.BroadphaseRadius * rangeModifier);
 			var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
 			var atLeastOneHit = false;
-			foreach(var target in possibleTargets)
+            foreach (var target in possibleTargets)
 			{
-				var dot = Vector3.Dot( (this.Position - target.Position).NormalizedFast(), this.Orientation);
-				if(dot > 0.90f && this.InAttackRange(target, 2.0f))
+				var dot = Vector3.Dot( (target.Position - this.Position).NormalizedFast(), this.Orientation);
+				if(dot > 0.80f && this.InAttackRange(target, rangeModifier))
 				{
 					var damageToDeal = Damage * dot;
 					target.Damage(damageToDeal, this, out float exp);

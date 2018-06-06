@@ -62,14 +62,14 @@ namespace Hedra.Engine.Player
 
             if (_accumulatedVelocity == Vector3.Zero)
             {
-                _accumulatedVelocity = Propulsion + Vector3.UnitY * .5f;
+                _accumulatedVelocity = Propulsion + Vector3.UnitY * 15f;
             }
 
             Lifetime -= Time.ScaledFrameTimeSeconds;
             Propulsion *= (float)Math.Pow(.75f, (float)Time.deltaTime);
-            _accumulatedVelocity += (Propulsion - Vector3.UnitY) * (float) Time.deltaTime;
+            _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 30f) * (float) Time.deltaTime;
             _accumulatedVelocity *= (float) Math.Pow(.8f, (float)Time.deltaTime);
-			Mesh.Position += _accumulatedVelocity * .5f;
+			Mesh.Position += _accumulatedVelocity * 2f * (float)Time.deltaTime;
             Mesh.Rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
 
             if (Collide)

@@ -339,7 +339,7 @@ namespace Hedra
                     if (E != null)
                     {
                         GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                        BasicGeometry.DrawBox(E.Model.BroadphaseBox.Min, E.Model.BroadphaseBox.Max - E.Model.BroadphaseBox.Min);
+                        //BasicGeometry.DrawBox(E.Model.BroadphaseBox.Min, E.Model.BroadphaseBox.Max - E.Model.BroadphaseBox.Min);
                         GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
                     }
                 });
@@ -360,7 +360,7 @@ namespace Hedra
 			           for (var i = 0; i < colliders.Length; i++)
 			           {
 			               GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-			               BasicGeometry.DrawShape(colliders[i], Color.GreenYellow);
+			               //BasicGeometry.DrawShape(colliders[i], Color.GreenYellow);
 			               GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 			           }
 			            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);

@@ -25,7 +25,7 @@ namespace Hedra.Engine.EntitySystem
 	    public event OnHitGroundEvent OnHitGround;
 		public bool UsePhysics { get; set; }
 	    public float Falltime { get; private set; }
-        public bool CanBePushed { get; set; }
+	    public bool CanBePushed { get; set; } = true;
         public Vector3 GravityDirection = new Vector3(0,-1f,0);
 		public float VelocityCap = float.MaxValue;
 		public Vector3 Force = Vector3.Zero;
@@ -208,20 +208,31 @@ namespace Hedra.Engine.EntitySystem
                     if (World.Entities[i] == Parent)
                         continue;
 
-                    if (World.Entities[i].Physics.HasCollision && Parent.InAttackRange(World.Entities[i]))
+                    if (World.Entities[i].Physics.HasCollision)
                     {
-                        if (!PushAround || !World.Entities[i].Physics.CanBePushed) return;
-                        
-                        Vector3 increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3();
-                        increment = increment.Xz.NormalizedFast().ToVector3();
-                        var command =
-                            new MoveCommand(World.Entities[i], increment * 12f * (float) Time.deltaTime)
+                        if (Physics.Collides(World.Entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) &&
+                            Parent.InAttackRange(World.Entities[i]))
+                        {
+                            if (!PushAround || !World.Entities[i].Physics.CanBePushed) return;
+                            if (World.Entities[i].Model.BroadphaseBox.Size.LengthSquared >
+                                this.Parent.Model.BroadphaseBox.Size.LengthSquared)
                             {
-                                IsRecursive = true
-                            };
+                                if(Vector3.Dot(delta.NormalizedFast(), (World.Entities[i].Position - this.Parent.Position).NormalizedFast()) > .5f) return;
+                                else continue;
+                            }
+                            var increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3()
+                                .NormalizedFast();
 
-                        World.Entities[i].Physics.Move(command);
-                        return;
+                            for (var j = 0; j < 2; j++)
+                            {
+                                var command = new MoveCommand(World.Entities[i],
+                                    increment * 2f * (float) Time.deltaTime)
+                                {
+                                    IsRecursive = true
+                                };
+                                World.Entities[i].Physics.Move(command);
+                            }
+                        }
                     }
                 }
             }

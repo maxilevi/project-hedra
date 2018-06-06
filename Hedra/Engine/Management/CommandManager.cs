@@ -299,10 +299,18 @@ namespace Hedra.Engine.Management
 			        }
 
 			        if (World.MobFactory.ContainsFactory(Parts[1]))
-			            World.SpawnMob(Parts[1], Caster.Position + Caster.Orientation * 32, Utils.Rng);
+			        {
+			            var amount = Parts.Length > 2 ? int.Parse(Parts[2]) : 1;
+			            for (var i = 0; i < amount; i++)
+			            {
+			                World.SpawnMob(Parts[1], Caster.Position + Caster.Orientation * 32, Utils.Rng);
+			            }
+			        }
 			        else
+			        {
 			            World.QuestManager.SpawnHumanoid(Parts[1], Caster.Position + Caster.Orientation * 32);
-					return true;
+			        }
+			        return true;
 				}
 				if(Parts[0] == "chest"){
                     World.QuestManager.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );

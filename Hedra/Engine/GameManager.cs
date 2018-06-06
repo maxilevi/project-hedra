@@ -41,12 +41,12 @@ namespace Hedra.Engine
 	        get => _spawningEffect;
 	        set
 	        {
-	            if (!value || value == SpawningEffect) return;
+	            if (!value || value == SpawningEffect || GameSettings.Paused) return;
 	            _spawningEffect = value;
 	            GameSettings.BloomModifier = 8.0f;
                 TaskManager.While( () => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
                 {
-                    GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, (float) Time.deltaTime);
+                    GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, (float) Time.FrameTimeSeconds);
                 });
                 TaskManager.When( () => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
 	            {

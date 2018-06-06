@@ -1,5 +1,6 @@
 ﻿using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
@@ -31,20 +32,21 @@ namespace Hedra.Engine.AISystem.Behaviours
                 this.Target = null;
                 Follow.Target = this.Target;
             }
-            if (!Parent.Model.IsAttacking && Target != null && !Parent.InAttackRange(Target, 5f))
+            if (!Parent.Model.IsAttacking && Target != null && !Parent.InAttackRange(Target, 1.25f))
             {
                 Follow.Update();
             }
-            if (Target != null && Parent.InAttackRange(Target, 2.0f))
+            if (Target != null && Parent.InAttackRange(Target, 1.5f))
             {
                 FollowTimer.Reset();
-                this.Attack();
+                this.Attack(1.5f);
             }
         }
 
-        public virtual void Attack()
+        public virtual void Attack(float RangeModifier)
         {
-            Parent.Model.Attack(Target);
+            Physics.LookAt(this.Parent, Target);
+            Parent.Model.Attack(Target, RangeModifier);
         }
 
         public bool Enabled => this.Target != null;

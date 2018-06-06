@@ -71,7 +71,6 @@ namespace Hedra.Engine.QuestSystem
             _rescuee.Physics.UsePhysics = false;
             _rescuee.Physics.HasCollision = false;
             _rescuee.Physics.CanCollide = false;
-            _rescuee.Rotation = Vector3.UnitX * 90f;
             _rescuee.MainWeapon = null;
 
             _rescuee.Name = Rng.Next(0, 10) == 1 ? "Deckard Cain" : NameGenerator.PickMaleName(Rng);
@@ -81,13 +80,20 @@ namespace Hedra.Engine.QuestSystem
             World.AddEntity(_rescuee);
         }
 
+        private Matrix4 BuildRescueeMatrix()
+        {
+            return Matrix4.CreateRotationX(-90f * Mathf.Radian)
+                 * Matrix4.CreateTranslation(-_rescuee.Position) 
+                 * Matrix4.CreateTranslation( Vector3.UnitZ * 3f + Vector3.UnitY * 7f)
+                 * Matrix4.CreateTranslation(_rescuee.Position);
+        }
+
         private void ManageOldMan()
         {
             if (Rescued) return;
 
-            _rescuee.BlockPosition = this.Position.Xz.ToVector3() + Vector3.UnitY * 8.05f + Vector3.UnitZ * 3.0f
-                                    + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
-
+            _rescuee.Model.Model.TransformationMatrix = this.BuildRescueeMatrix();
+            _rescuee.BlockPosition = this.Position.Xz.ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
             _rescuee.Model.Position = _rescuee.BlockPosition;
             _rescuee.Model.Tied();
 

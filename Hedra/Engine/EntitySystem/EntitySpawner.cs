@@ -66,7 +66,7 @@ namespace Hedra.Engine.EntitySystem
 			        if(y <= 0) 
 			            goto START;
 						
-			        if((Player.Position.Xz - desiredPosition.Xz).LengthSquared < 24f*Chunk.BlockSize*24f*Chunk.BlockSize)
+			        if((Player.Position.Xz - desiredPosition.Xz).LengthSquared < 32f*Chunk.BlockSize*32f*Chunk.BlockSize)
 			            goto START;
 
 			        try
@@ -76,7 +76,7 @@ namespace Hedra.Engine.EntitySystem
 			                if (World.Entities[i] == Player || World.Entities[i].IsStatic) continue;
 
 			                if ((World.Entities[i].BlockPosition.Xz - desiredPosition.Xz).LengthSquared <
-			                    64f * Chunk.BlockSize * 64f * Chunk.BlockSize)
+			                    80f * Chunk.BlockSize * 80f * Chunk.BlockSize)
 			                    goto START;
 			            }
 			        }

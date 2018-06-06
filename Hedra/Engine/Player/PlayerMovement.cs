@@ -43,6 +43,7 @@ namespace Hedra.Engine.Player
         protected override void DoUpdate()
         {
             _glidingCooldown -= Time.FrameTimeSeconds;
+            _player.Physics.CanBePushed = !_player.IsMoving;
             if (!CaptureMovement || _player.Knocked || _player.IsDead || !Human.CanInteract || GameSettings.Paused)
                 return;
 
@@ -162,7 +163,6 @@ namespace Hedra.Engine.Player
             }
             RollDirection = new Vector3(Player.Model.Rotation.X, _characterRotation, Player.Model.Rotation.Z);
             Player.IsMoving = MoveSpace.LengthSquared > 0;
-            Player.Physics.CanBePushed = !Player.IsMoving;
         }
 
         private void RegisterKey(Key Key, Action Action)

@@ -39,12 +39,12 @@ namespace Hedra.Engine.AISystem.Behaviours
             if (inAttackRange)
             {
                 FollowTimer.Reset();
-                this.Attack();
+                this.Attack(1f);
             }
             GrowlTimer.Tick();
         }
 
-        public override void Attack()
+        public override void Attack(float RangeModfier)
         {
             var asQuadruped = (QuadrupedModel)Parent.Model;
             if (GrowlTimer.Ready)

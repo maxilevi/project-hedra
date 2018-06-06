@@ -6,14 +6,16 @@ namespace Hedra.Engine.PhysicsSystem
 {
     public class BoneBox
     {
-        public int JointId { get; private set; }
-        public Vector3[] Corners { get; private set; }
+        public int JointId { get; }
+        public Vector3[] Corners { get; }
+        public Vector3 Size { get; }
 
         public BoneBox(int JointId, Vector3[] Corners)
         {
             if(Corners.Length != 8) throw new ArgumentOutOfRangeException($"Bone box should have 8 vertices.");
             this.Corners = Corners;
             this.JointId = JointId;
+            this.Size = Corners[7] - Corners[0];
         }
 
         public void Transform(Matrix4 Transformation)

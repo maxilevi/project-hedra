@@ -53,7 +53,7 @@ namespace Hedra.Engine.Rendering.Effects
 			
 			#region Normal
 			//Just paste the contents without any effect
-			if(!GameSettings.UnderWaterEffect && !GameSettings.SSAO){
+			if(!GameSettings.SSAO){
 				FinalFbo.Bind();
                 Shader.Bind();
 				DrawQuad(Default.TextureID[0]);

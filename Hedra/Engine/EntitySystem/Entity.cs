@@ -245,12 +245,11 @@ namespace Hedra.Engine.EntitySystem
 
         public bool InAttackRange(Entity Target, float RadiusModifier = 1f)
         {
-            if (!PhysicsSystem.Physics.Collides(Target.Model.BroadphaseBox, this.Model.BroadphaseBox)) return false;
             var collider0 = this.Model.BroadphaseCollider;
             var collider1 = Target.Model.BroadphaseCollider;
-            var radii = collider0.BroadphaseRadius + collider1.BroadphaseRadius;
+            var radii = (collider0.BroadphaseRadius + collider1.BroadphaseRadius) * RadiusModifier;
             if ((collider0.BroadphaseCenter - collider1.BroadphaseCenter).LengthSquared > radii * radii) return false;
-
+            
             var vertices0 = collider0.Vertices;
             var vertices1 = collider1.Vertices;
             float lowestDistance = float.MaxValue;

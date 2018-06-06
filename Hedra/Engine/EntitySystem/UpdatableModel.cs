@@ -133,6 +133,11 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Attack(Entity Victim)
         {
+            this.Attack(Victim, 1);
+        }
+
+        public override void Attack(Entity Victim, float RangeModifier)
+        {
 
         }
 

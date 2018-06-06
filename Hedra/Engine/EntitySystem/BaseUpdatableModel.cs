@@ -30,6 +30,7 @@ namespace Hedra.Engine.EntitySystem
         public abstract void Idle();
         public abstract void Run();
         public abstract void Attack(Entity Victim);
+        public abstract void Attack(Entity Victim, float RangeModifier);
         public abstract void Draw();
         public abstract void Dispose();
     }

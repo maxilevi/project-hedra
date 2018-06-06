@@ -2,6 +2,8 @@
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using System.Collections.Generic;
+using System.Linq;
+using OpenTK;
 
 namespace Hedra.Engine.ItemSystem.WeaponSystem
 {
@@ -9,6 +11,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     {
         public int WeaponCount { get; private set; }
         public override bool IsMelee { get; protected set; } = true;
+        public Vector3 MainWeaponSize { get; private set; }
         private Dictionary<ObjectMesh, ObjectMeshCollider> _colliders { get; set; }
         private CollisionShape[] _shapesArray;
 
@@ -22,6 +25,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if (!this.WeaponRegistered(this.MainMesh))
             {
                 this.RegisterWeapon(this.MainMesh, this.MeshData);
+                var lastCollider = _colliders.Last().Value;
+                this.MainWeaponSize = lastCollider.Collider.Size;
             }
             base.Update(Human);
         }
