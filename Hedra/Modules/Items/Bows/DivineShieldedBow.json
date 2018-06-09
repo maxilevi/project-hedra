@@ -1,0 +1,22 @@
+
+{
+  "Name": "DivineShieldedBow",
+  "DisplayName": "Shielded Bow",
+  "EquipmentType": "Bow",
+  "Tier": "Divine",
+  "Description": "Shielded bow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 20.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.35
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Bows/DivineShieldedBow.ply"
+  }
+}

@@ -21,7 +21,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		
 	public class Bow : RangedWeapon
     {	
-		public override Vector3 SheathedPosition => new Vector3(1.8f,-1.0f,0.65f);
+		public override Vector3 SheathedPosition => new Vector3(1.5f,-0.0f,0.0f);
 	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
 	    public override float PrimaryAttackCooldown => .25f;
 	    public override float SecondaryAttackCooldown => 3.5f;
@@ -92,7 +92,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 				this.MainMesh.TransformationMatrix = Mat4;
 				this.MainMesh.Position = Owner.Model.Position;
 				this.MainMesh.TargetRotation = new Vector3(90,25,180);
-				this.MainMesh.BeforeLocalRotation = (Vector3.UnitZ * -0.7f - Vector3.UnitX * -.5f + Vector3.UnitY * .35f);				
+				this.MainMesh.BeforeLocalRotation = Vector3.Zero;				
 			}
 			
             base.SetToDefault(this.Quiver);

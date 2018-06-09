@@ -1,0 +1,22 @@
+
+{
+  "Name": "LegendaryEagleTipBow",
+  "DisplayName": "Eagle Tip Bow",
+  "EquipmentType": "Bow",
+  "Tier": "Legendary",
+  "Description": "Eagle tip bow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 16.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Bows/LegendaryEagleTipBow.ply"
+  }
+}

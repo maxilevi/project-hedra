@@ -1,0 +1,22 @@
+
+{
+  "Name": "UncommonSpikedGuardBow",
+  "DisplayName": "Spiked Guard Bow",
+  "EquipmentType": "Bow",
+  "Tier": "Uncommon",
+  "Description": "Spiked guard bow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 10.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Bows/UncommonSpikedGuardBow.ply"
+  }
+}

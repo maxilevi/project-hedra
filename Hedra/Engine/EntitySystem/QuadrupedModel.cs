@@ -121,24 +121,29 @@ namespace Hedra.Engine.EntitySystem
 		    this.BaseBroadphaseBox *= Scalar;
         }
 
+        public bool CanAttack()
+        {
+            if (Array.IndexOf(AttackAnimations, Model.Animator.AnimationPlaying) != -1 || Parent.Knocked)
+                return false;
+
+            if (_attackCooldown > 0)
+            {
+                this.Idle();
+                return false;
+            }
+            return true;
+        }
+
         public void Attack(Entity Victim, Animation Animation, OnAnimationHandler Callback, float RangeModifier = 1.0f)
 		{	
-			if(Array.IndexOf(AttackAnimations, Model.Animator.AnimationPlaying) != -1 || Parent.Knocked)
-				return;
-			
-			if(_attackCooldown > 0)
-            {
-				this.Idle();
-				return;
-			}
-
+            if(!this.CanAttack())return;
 		    var selectedAnimation = Animation;
 
 		    if (!_hasAnimationEvent || Callback != null)
 		    {
-		        void EndAttackHandler(Animation Sender)
+		        void AttackHandler(Animation Sender)
 		        {
-		            selectedAnimation.OnAnimationEnd -= EndAttackHandler;
+		            selectedAnimation.OnAnimationMid -= AttackHandler;
 		            if (!Parent.InAttackRange(Victim, RangeModifier))
 		            {
 		                SoundManager.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
@@ -147,7 +152,7 @@ namespace Hedra.Engine.EntitySystem
 
 		            Victim.Damage(Parent.AttackDamage, this.Parent, out float exp);
 		        }
-                selectedAnimation.OnAnimationEnd += Callback ?? EndAttackHandler;
+                selectedAnimation.OnAnimationMid += Callback ?? AttackHandler;
             }
 		    Model.PlayAnimation(selectedAnimation);
 		    IsAttacking = true;

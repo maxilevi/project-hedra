@@ -1,0 +1,26 @@
+
+{
+  "Name": "LegendaryPlatedGoreBow",
+  "DisplayName": "Plated Gore Bow",
+  "EquipmentType": "Bow",
+  "Tier": "Legendary",
+  "Description": "Plated gore bow. High chance of causing bleeding.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 28.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.8
+    },
+    {
+      "Name": "Effect",
+      "Value" : "Bleed"
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Bows/LegendaryPlatedGoreBow.ply"
+  }
+}

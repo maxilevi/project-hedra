@@ -642,13 +642,9 @@ namespace Hedra.Engine.Generation
                 {
                     model.Model.Outline = false;
                     model.Position = Mathf.Lerp(model.Position, Player.Position, (float) Time.deltaTime * 5f);
-                    var progress = (model.Position - startingPosition).LengthFast /
-                                    (Player.Position - startingPosition).LengthFast;
-                    model.Scale = startingScale * progress;
-                    //model.Alpha = ((model.Position- startingPosition).LengthFast / (Player.Position - startingPosition).LengthFast);
                     if ((model.Position - Player.Position).LengthSquared < 4*4)
                     {
-                        if (Player.Inventory.AddItem(model.ItemSpecification))
+                        if (c)
                         {
                             model.Enabled = false;
                             Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, model.Position, false, 1f,

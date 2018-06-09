@@ -1,0 +1,22 @@
+
+{
+  "Name": "RareBronzeShieldedBow",
+  "DisplayName": "Bronze Shielded Bow",
+  "EquipmentType": "Bow",
+  "Tier": "Rare",
+  "Description": "Bronze shielded bow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 13.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Bows/RareBronzeShieldedBow.ply"
+  }
+}

@@ -61,13 +61,14 @@ namespace Hedra.Engine.AISystem.Behaviours
 
         private void SpitAttack(Entity Victim, QuadrupedModel Model)
         {
+            if(!Model.CanAttack()) return;
             var spitAnimation = Model.AttackAnimations[SpitAnimationIndex];
             void AttackHandler(Animation Sender)
             {
                 Physics.LookAt(Parent, Victim);
                 spitAnimation.OnAnimationMid -= AttackHandler;
                 var direction = (Victim.Position - Parent.Position).NormalizedFast();
-                var spit = new ParticleProjectile(Parent, Parent.Position + Parent.Orientation * 2f + direction + Vector3.UnitY * 1.25f)
+                var spit = new ParticleProjectile(Parent, Parent.Position + Parent.Orientation * 2f + direction + Vector3.UnitY * 2.0f)
                 {
                     Propulsion = direction * 2f,
                     Color = Color.LawnGreen.ToVector4() * .5f,
@@ -81,12 +82,12 @@ namespace Hedra.Engine.AISystem.Behaviours
                 };
                 SoundManager.PlaySoundWithVariation(SoundType.SpitSound, Parent.Position);
             }
-            spitAnimation.OnAnimationMid += AttackHandler;
             Model.Attack(null, spitAnimation, AttackHandler);
         }
 
         private void BiteAttack(Entity Victim, QuadrupedModel Model)
         {
+            if (!Model.CanAttack()) return;
             var biteAnimation = Model.AttackAnimations[BiteAnimationIndex];
             void AttackHandler(Animation Sender)
             {

@@ -51,7 +51,7 @@ namespace Hedra.Engine.Management
         public static void Load(){
 			Source = new SoundSource(SoundManager.ListenerPosition);
 
-			TrackNames = new string[11];
+			TrackNames = new string[12];
             TrackNames[0] = "Sounds/VillageAmbient.ogg";
             TrackNames[1] = "Sounds/MainTheme.ogg";
             TrackNames[2] = "Sounds/Rain.ogg";
@@ -63,6 +63,7 @@ namespace Hedra.Engine.Management
 			TrackNames[8] = "Sounds/Song4.ogg";
 			TrackNames[9] = "Sounds/Song5.ogg";
             TrackNames[10] = "Sounds/CardinalCity.ogg";
+            TrackNames[11] = "Sounds/ThroughTheGrasslands.ogg";
 
             for (var i = 0; i < TrackNames.Length; i++){
 				if(TrackNames[i] == null)

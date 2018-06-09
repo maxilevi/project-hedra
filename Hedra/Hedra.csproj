@@ -782,8 +782,57 @@
       <Link>Assets\Chr\SheepIdle1.dae</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Bows\CommonRecurveBow.ply">
+      <Link>Assets\Items\Bows\CommonRecurveBow.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Bows\DivineShieldedBow.ply">
+      <Link>Assets\Items\Bows\DivineShieldedBow.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Bows\LegendaryEagleTipBow.ply">
+      <Link>Assets\Items\Bows\LegendaryEagleTipBow.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Bows\LegendaryPlatedGoreBow.ply">
+      <Link>Assets\Items\Bows\LegendaryPlatedGoreBow.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Bows\RareBronzeKnuckleShieldBow.ply">
+      <Link>Assets\Items\Bows\RareBronzeKnuckleShieldBow.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Bows\RareBronzeShieldedBow.ply">
+      <Link>Assets\Items\Bows\RareBronzeShieldedBow.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Bows\UncommonSpikedGuardBow.ply">
+      <Link>Assets\Items\Bows\UncommonSpikedGuardBow.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\FearIcon.ply">
       <Link>Assets\Env\FearIcon.ply</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Bows\CommonRecurveBow.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Bows\DivineShieldedBow.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Bows\LegendaryEagleTipBow.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Bows\LegendaryPlatedGoreBow.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Bows\RareBronzeKnuckleShieldBow.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Bows\RareBronzeShieldedBow.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Bows\UncommonSpikedGuardBow.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Beetle.json">
@@ -3107,11 +3156,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\CommonOrientalWoodenBow.ply">
-      <Link>Assets\Items\Bow\CommonOrientalWoodenBow.ply</Link>
+      <Link>Assets\Items\Bows\CommonOrientalWoodenBow.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\CommonWoodenBow.ply">
-      <Link>Assets\Items\Bow\CommonWoodenBow.ply</Link>
+      <Link>Assets\Items\Bows\CommonWoodenBow.ply</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\CommonWoodenRing.ply">
@@ -4568,6 +4617,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\Song5.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Soundtrack\ThroughTheGrasslands.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\VillageAmbient.ogg">
