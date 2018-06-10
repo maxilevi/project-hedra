@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Drawing;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
@@ -83,10 +84,18 @@ namespace Hedra.Engine.ItemSystem
                     () => !Disposed && DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f * 14f);
 			    _canPickup = true;
 
-				if(LocalPlayer.Instance.Inventory.HasAvailableSpace && _shouldPickup && !PickedUp && !Disposed)
-				{
-				    OnPickup?.Invoke(GameManager.Player);
-				}
+		        if (LocalPlayer.Instance.Inventory.HasAvailableSpace && _shouldPickup && !PickedUp && !Disposed)
+		        {
+		            OnPickup?.Invoke(GameManager.Player);
+		        }
+		        else
+		        {
+		            if (_shouldPickup)
+		            {
+		                _shouldPickup = false;
+                        GameManager.Player.MessageDispatcher.ShowNotification("YOUR INVENTORY IS FULL", Color.Red, 3f, true);
+		            }
+		        }
 			}else
 			{
 			    _canPickup = false;

@@ -168,6 +168,7 @@ namespace Hedra.Engine.Generation
             SearcheableChunks = new Dictionary<Vector2, Chunk>();
             _globalColliders = new HashSet<ICollidable>();
             Particles = new ParticleSystem(Vector3.Zero);
+	        Particles.HasMultipleOutputs = true;
             ClosestChunkComparer = new ClosestChunk();
             DrawingChunks = new Dictionary<Vector2, Chunk>();
 	    }
@@ -636,15 +637,13 @@ namespace Hedra.Engine.Generation
 			
 			model.OnPickup += delegate(LocalPlayer Player)
 			{
-			    var startingPosition = model.Position;
-			    var startingScale = model.Scale;
                 TaskManager.While(() => !model.Disposed, delegate
                 {
                     model.Model.Outline = false;
                     model.Position = Mathf.Lerp(model.Position, Player.Position, (float) Time.deltaTime * 5f);
                     if ((model.Position - Player.Position).LengthSquared < 4*4)
                     {
-                        if (c)
+                        if (Player.Inventory.AddItem(model.ItemSpecification))
                         {
                             model.Enabled = false;
                             Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, model.Position, false, 1f,

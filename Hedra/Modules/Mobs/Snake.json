@@ -31,7 +31,8 @@
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/SnakeAttack.dae",
-        "Speed": 1.0
+        "Speed": 1.0,
+        "AttackEvent": "End"
       }
     ]
   } 

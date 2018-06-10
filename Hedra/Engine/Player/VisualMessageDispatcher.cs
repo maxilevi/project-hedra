@@ -132,7 +132,7 @@ namespace Hedra.Engine.Player
                         }
                         _mainText.UIText.Opacity += factor;
                         _mainText.UIText.Opacity = Mathf.Clamp(_mainText.UIText.Opacity, 0, 1);
-                        Thread.Sleep((int) (((factor < 0) ? -factor : factor) * 1000));
+                        Thread.Sleep((int) ((factor < 0 ? -factor : factor) * 1000));
                     }
                     _mainText.UIText.Opacity = 0;
                     Callback();
@@ -265,7 +265,7 @@ namespace Hedra.Engine.Player
             TaskManager.Asynchronous(delegate
             {
                 _notificationText.UIText.Opacity = 0.0001f;
-                var factor = MessageSpeed;
+                var factor = MessageSpeed * 2f;
                 while (_notificationText.UIText.Opacity > 0)
                 {
                     if (_notificationText.UIText.Opacity >= 1f)

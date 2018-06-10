@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using OpenTK;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 
@@ -6,7 +7,7 @@ namespace Hedra.Engine.AISystem.Behaviours
 {
     public class HerdBehaviour : Behaviour
     {
-        public float CallRadius { get; set; } = 64f;
+        public float CallRadius { get; set; } = 80f;
         public FleeBehaviour Flee { get; set; }
         public AttackBehaviour Attack { get; set; }
 
@@ -29,7 +30,15 @@ namespace Hedra.Engine.AISystem.Behaviours
                         {
                             if (nearEntities.Count < 4)
                             {
-                                herd.SetFlee(Args.Damager, CallRadius);
+                                //Check if it is an arrow
+                                if ((Args.Damager.Position - Parent.Position).LengthSquared > CallRadius * CallRadius)
+                                {
+                                    herd.SetFlee(Parent.Position + (Args.Damager.Position - Parent.Position).NormalizedFast(), CallRadius);
+                                }
+                                else
+                                {
+                                    herd.SetFlee(Args.Damager, CallRadius);
+                                }
                             }
                             else
                             {
@@ -41,7 +50,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             }
         }
 
-        public void Update()
+        public override void Update()
         {
             if (Flee.Enabled)
             {
@@ -56,6 +65,11 @@ namespace Hedra.Engine.AISystem.Behaviours
         public void SetFlee(Entity Target, float Radius)
         {
             Flee.SetTarget(Target, Radius);
+        }
+
+        public void SetFlee(Vector3 Point, float Radius)
+        {
+            Flee.SetTarget(Point, Radius);
         }
 
         public void SetAttack(Entity Target)

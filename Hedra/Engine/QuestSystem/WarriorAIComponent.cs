@@ -10,6 +10,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.QuestSystem
 {
@@ -19,6 +20,7 @@ namespace Hedra.Engine.QuestSystem
 	public class WarriorAIComponent : CombatAIComponent
     {
         private float _attackTimer;
+        private Timer ForgetTimer { get; set; }
         public override float SearchRadius { get; set; } = 64;
         public override float AttackRadius { get; set; } = 0;
         public override float ForgetRadius { get; set; } = 64;
@@ -26,9 +28,17 @@ namespace Hedra.Engine.QuestSystem
         public WarriorAIComponent(Entity Parent, bool Friendly) : base(Parent, Friendly)
 		{
 			this._attackTimer = 0f;
-		}
-		
-		public override void DoUpdate()
+		    this.ForgetTimer = new Timer(8f);
+
+        }
+
+        protected override void SetTarget(Entity Target)
+        {
+            base.SetTarget(Target);
+            ForgetTimer.Reset();
+        }
+
+        public override void DoUpdate()
 		{
 		    if (this.MovementTimer.Tick() && !Chasing)
 		    {
@@ -38,7 +48,7 @@ namespace Hedra.Engine.QuestSystem
 		    else if (Chasing)
 		    {
 
-		        if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > ForgetRadius * ForgetRadius ||
+		        if (ForgetTimer.Tick() ||
 		            ChasingTarget.IsDead || ChasingTarget.IsInvisible)
 		        {
 		            base.Reset();
@@ -54,6 +64,7 @@ namespace Hedra.Engine.QuestSystem
 		                Parent.Model.Attack(ChasingTarget);
 		                _attackTimer = 1.25f;
 		            }
+                    this.ForgetTimer.Reset();
 		        }
 		        else
 		        {

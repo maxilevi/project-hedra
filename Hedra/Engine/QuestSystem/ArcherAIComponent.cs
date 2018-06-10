@@ -12,6 +12,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Management;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 
 namespace Hedra.Engine.QuestSystem
 {
@@ -48,18 +49,21 @@ namespace Hedra.Engine.QuestSystem
 				this.TargetPoint = ChasingTarget.Position;
 				if( (TargetPoint - Parent.Position).LengthSquared < AttackRadius * AttackRadius && !Parent.Knocked){
 					Parent.Model.Idle();
-					var human = Parent as Humanoid;
-				    if (human != null)
+				    if (Parent is Humanoid human)
 				    {
-				        if (_secondAttackCooldown <= 0)
+				        if (human.Model.LeftWeapon is Bow bow)
 				        {
-				            _secondAttackCooldown = 4.5f;
-				            human.Model.LeftWeapon.Attack2(human);
-				        }
-				        else if (_firstAttackCooldown <= 0)
-				        {
-				            _firstAttackCooldown = 1.5f;
-				            human.Model.LeftWeapon.Attack1(human); // It's a bow
+				            bow.ArrowDownForce = 1-(TargetPoint - Parent.Position).LengthFast / AttackRadius;
+                            if (_secondAttackCooldown <= 0)
+				            {
+				                _secondAttackCooldown = 4.5f;
+                                bow.Attack2(human);
+				            }
+				            else if (_firstAttackCooldown <= 0)
+				            {
+				                _firstAttackCooldown = 1.5f;
+				                bow.Attack1(human);
+				            }
 				        }
 				    }
 				}else

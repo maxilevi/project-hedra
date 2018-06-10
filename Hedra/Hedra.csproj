@@ -250,6 +250,7 @@
     <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEventBuilder.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\Growl.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationTemplate.cs" />
+    <Compile Include="Engine\ModuleSystem\AttackAnimationTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\ColorTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\CustomFactory.cs" />
     <Compile Include="Engine\ModuleSystem\DropTemplate.cs" />

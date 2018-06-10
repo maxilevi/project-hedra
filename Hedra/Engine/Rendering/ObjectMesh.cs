@@ -239,7 +239,8 @@ namespace Hedra.Engine.Rendering
 			    mesh.Mesh.BuildFrom(mesh.Mesh.MeshBuffers[0], Data, false);
 			    mesh.Mesh.IsGenerated = true;
 			    mesh.Mesh.IsBuilded = true;
-			    mesh.Mesh.Enabled = true;                
+			    mesh.Mesh.Enabled = true;   
+                mesh.Size = new Vector3(Data.SupportPoint(Vector3.UnitX).X, Data.SupportPoint(Vector3.UnitX).Y, Data.SupportPoint(Vector3.UnitX).Z) * 2f;
             });
 			
 			return mesh;

@@ -1,4 +1,5 @@
 ﻿using System;
+using OpenTK;
 using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem.Behaviours
@@ -6,7 +7,7 @@ namespace Hedra.Engine.AISystem.Behaviours
     public class FleeBehaviour : Behaviour
     {
         protected WalkBehaviour Walk { get; set; }
-        public Entity Target { get; protected set; }
+        public Func<Vector3> Target { get; protected set; }
         public float Radius { get; protected set; }
 
         public FleeBehaviour(Entity Parent) : base(Parent)
@@ -16,7 +17,13 @@ namespace Hedra.Engine.AISystem.Behaviours
 
         public void SetTarget(Entity Target, float Radius)
         {
-            this.Target = Target;
+            this.Target = () => Target.Position;
+            this.Radius = Radius;
+        }
+
+        public void SetTarget(Vector3 Point, float Radius)
+        {
+            this.Target = () => Point;
             this.Radius = Radius;
         }
 
@@ -24,9 +31,9 @@ namespace Hedra.Engine.AISystem.Behaviours
         {
             if (Target != null)
             {
-                var oppositeDirection = (Parent.Position - Target.Position).Xz.ToVector3().NormalizedFast();
+                var oppositeDirection = (Parent.Position - Target()).Xz.ToVector3().NormalizedFast();
                 Walk.SetTarget(Parent.Position + oppositeDirection * 4f);
-                if ((Parent.Position - Target.Position).LengthSquared > Radius * Radius)
+                if ((Parent.Position - Target()).LengthSquared > Radius * Radius)
                 {
                     this.Target = null;
                 }

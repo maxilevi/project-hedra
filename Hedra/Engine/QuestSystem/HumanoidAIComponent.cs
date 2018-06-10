@@ -14,12 +14,8 @@ namespace Hedra.Engine.QuestSystem
         public abstract bool ShouldSleep { get; }
         public virtual bool ShouldWakeup { get; }
 
-        protected HumanoidAIComponent(Entity Entity) : base(Entity) { }
-
-        protected void Orientate(Vector3 TargetPoint)
+        protected HumanoidAIComponent(Entity Entity) : base(Entity)
         {
-            Parent.Orientation = (TargetPoint - Parent.Position).Xz.NormalizedFast().ToVector3();
-            Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
             var dmgComponent = Parent.SearchComponent<DamageComponent>();
             if (dmgComponent != null)
             {
@@ -27,8 +23,13 @@ namespace Hedra.Engine.QuestSystem
             }
         }
 
-        //Called when the parent is attacked
-        private void OnDamageEvent(DamageEventArgs Args)
+        protected void Orientate(Vector3 TargetPoint)
+        {
+            Parent.Orientation = (TargetPoint - Parent.Position).Xz.NormalizedFast().ToVector3();
+            Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
+        }
+
+        protected virtual void OnDamageEvent(DamageEventArgs Args)
         {
             if (IsSleeping)
             {

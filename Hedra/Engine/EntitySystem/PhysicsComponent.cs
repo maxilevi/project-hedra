@@ -214,12 +214,12 @@ namespace Hedra.Engine.EntitySystem
                             Parent.InAttackRange(World.Entities[i]))
                         {
                             if (!PushAround || !World.Entities[i].Physics.CanBePushed) return;
-                            if (World.Entities[i].Model.BroadphaseBox.Size.LengthSquared >
+                            /*if (World.Entities[i].Model.BroadphaseBox.Size.LengthSquared >
                                 this.Parent.Model.BroadphaseBox.Size.LengthSquared)
                             {
                                 if(Vector3.Dot(delta.NormalizedFast(), (World.Entities[i].Position - this.Parent.Position).NormalizedFast()) > .5f) return;
                                 else continue;
-                            }
+                            }*/
                             var increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3()
                                 .NormalizedFast();
 

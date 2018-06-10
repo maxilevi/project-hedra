@@ -55,6 +55,13 @@ namespace Hedra.Engine.QuestSystem
             }
         }
 
+        protected override void OnDamageEvent(DamageEventArgs Args)
+        {
+            base.OnDamageEvent(Args);
+            if (Args.Damager == null) return;
+            this.SetTarget(Args.Damager);
+        }
+
         public override void Update()
         {
             if (Parent.Knocked) return;
@@ -106,8 +113,7 @@ namespace Hedra.Engine.QuestSystem
                                 || World.Entities[i].IsImmune || World.Entities[i].IsFriendly ||
                                 World.Entities[i].IsInvisible) continue;
 
-                            this.Chasing = true;
-                            this.ChasingTarget = World.Entities[i];
+                            this.SetTarget(World.Entities[i]);
                             break;
                         }
                     }
@@ -117,11 +123,16 @@ namespace Hedra.Engine.QuestSystem
                     Humanoid player = GameManager.Player;
                     if ((player.Position.Xz - Parent.Position.Xz).LengthSquared < SearchRadius * SearchRadius)
                     {
-                        this.Chasing = true;
-                        this.ChasingTarget = player;
+                        this.SetTarget(player);
                     }
                 }
             }
+        }
+
+        protected virtual void SetTarget(Entity Target)
+        {
+            this.Chasing = true;
+            this.ChasingTarget = Target;
         }
     }
 }

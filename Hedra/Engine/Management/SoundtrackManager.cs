@@ -11,6 +11,7 @@ using Hedra.Engine.Sound;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.Player;
 using System.IO;
+using System.Linq;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 using NVorbis;
@@ -55,7 +56,9 @@ namespace Hedra.Engine.Management
             TrackNames[0] = "Sounds/VillageAmbient.ogg";
             TrackNames[1] = "Sounds/MainTheme.ogg";
             TrackNames[2] = "Sounds/Rain.ogg";
+            // LoopableSongs
             TrackNames[3] = "Sounds/ForestAmbient.ogg";
+            // Forest should always be first
 			TrackNames[4] = "Sounds/Song0.ogg";
 			TrackNames[5] = "Sounds/Song1.ogg";
 			TrackNames[6] = "Sounds/Song2.ogg";
@@ -64,6 +67,7 @@ namespace Hedra.Engine.Management
 			TrackNames[9] = "Sounds/Song5.ogg";
             TrackNames[10] = "Sounds/CardinalCity.ogg";
             TrackNames[11] = "Sounds/ThroughTheGrasslands.ogg";
+            ShuffleSongs();
 
             for (var i = 0; i < TrackNames.Length; i++){
 				if(TrackNames[i] == null)
@@ -73,6 +77,18 @@ namespace Hedra.Engine.Management
 			Volume = .4f;
 			_loaded = true;
 		}
+
+	    private static void ShuffleSongs()
+	    {
+	        int n = TrackNames.Length;
+	        while (n > LoopableSongsStart+1)
+	        {
+	            int k = Utils.Rng.Next(LoopableSongsStart+1, n--);
+	            string temp = TrackNames[n];
+	            TrackNames[n] = TrackNames[k];
+	            TrackNames[k] = temp;
+	        }
+        }
 		
 		public static void PlayTrack(int Index, bool RepeatItself = false)
 		{
@@ -113,10 +129,15 @@ namespace Hedra.Engine.Management
             if ( !_loaded || GameSettings.Paused && !GameManager.InStartMenu || GameManager.IsLoading || TrackNames.Length == 0 || _trackIndex < 0) return;
 			
 			Source.Position = SoundManager.ListenerPosition;
-			
-			if(_sleepTime){
-				_targetVolume = 0;
-			}
+
+		    if (_sleepTime)
+		    {
+		        _targetVolume = 0;
+		    }
+		    else
+		    {
+		        _targetVolume = Volume;
+            }
 		    if (Math.Abs(_targetVolume - FinalVolume) < 0.005f && _sleepTime)
 		    {
 		        _targetVolume = Volume;

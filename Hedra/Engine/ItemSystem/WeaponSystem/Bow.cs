@@ -29,6 +29,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		private readonly ObjectMesh[] Arrow = new ObjectMesh[1];//hacky stuff! so it's not affected by global enablers
 		private readonly VertexData ArrowData;
 		public OnModifyArrowEvent BowModifiers;
+        public float ArrowDownForce { get; set; }
 		
 		public Bow(VertexData Contents) : base(Contents){
 			Arrow[0] = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f, Vector3.UnitX * .35f, Vector3.Zero));
@@ -120,13 +121,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		public Projectile ShootArrow(Humanoid Human, Vector3 Direction, int KnockChance = -1)
 		{
 		    var startingLocation = Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
-		                           (Human is LocalPlayer ? Vector3.UnitY * 0f : Vector3.Zero);
+		                           (Human is LocalPlayer ? Human.IsRiding ? Vector3.UnitY * 1f : Vector3.Zero : Vector3.Zero);
 
 		    var arrowProj = new Projectile(Human, startingLocation, ArrowData.Clone())
 		    {
 		        Lifetime = 5f,
-		        Propulsion = Direction * 2f
-		    };
+		        Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce
+            };
 		    arrowProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
 			    Hit.Damage(Human.DamageEquation * 0.75f, Human, out float exp, true);
 				Human.XP += exp;

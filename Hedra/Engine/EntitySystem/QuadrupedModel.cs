@@ -34,6 +34,7 @@ namespace Hedra.Engine.EntitySystem
         public Animation[] IdleAnimations { get; }
         public Animation WalkAnimation { get; }
         public Animation[] AttackAnimations { get; }
+		public AttackEvent[] AttackAnimationsEvents { get; }
         public AnimatedCollider Collider { get; }
 
         public override CollisionShape BroadphaseCollider => Collider.Broadphase;
@@ -59,7 +60,7 @@ namespace Hedra.Engine.EntitySystem
 			WalkAnimation = AnimationLoader.LoadAnimation(Template.WalkAnimation.Path);
 			IdleAnimations = new Animation[Template.IdleAnimations.Length];
 			AttackAnimations = new Animation[Template.AttackAnimations.Length];
-
+			AttackAnimationsEvents = new AttackEvent[Template.AttackAnimations.Length];
 		    WalkAnimation.Speed = Template.WalkAnimation.Speed;
 
 		    this.AlignWithTerrain = Template.AlignWithTerrain;
@@ -107,6 +108,7 @@ namespace Hedra.Engine.EntitySystem
 		            this.IsAttacking = false;
 		            this.Idle();
                 };
+				AttackAnimationsEvents[i] = (AttackEvent) Enum.Parse(typeof(AttackEvent), Template.AttackAnimations[i].AttackEvent);
             }
             this.Collider = new AnimatedCollider(Template.Path, Model);
             this.Model.Size = this.BaseBroadphaseBox.Max - this.BaseBroadphaseBox.Min;
@@ -125,13 +127,7 @@ namespace Hedra.Engine.EntitySystem
         {
             if (Array.IndexOf(AttackAnimations, Model.Animator.AnimationPlaying) != -1 || Parent.Knocked)
                 return false;
-
-            if (_attackCooldown > 0)
-            {
-                this.Idle();
-                return false;
-            }
-            return true;
+            return _attackCooldown < 0;
         }
 
         public void Attack(Entity Victim, Animation Animation, OnAnimationHandler Callback, float RangeModifier = 1.0f)
@@ -143,7 +139,7 @@ namespace Hedra.Engine.EntitySystem
 		    {
 		        void AttackHandler(Animation Sender)
 		        {
-		            selectedAnimation.OnAnimationMid -= AttackHandler;
+					this.SetAttackHandler(selectedAnimation, AttackHandler, false);
 		            if (!Parent.InAttackRange(Victim, RangeModifier))
 		            {
 		                SoundManager.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
@@ -152,7 +148,7 @@ namespace Hedra.Engine.EntitySystem
 
 		            Victim.Damage(Parent.AttackDamage, this.Parent, out float exp);
 		        }
-                selectedAnimation.OnAnimationMid += Callback ?? AttackHandler;
+				this.SetAttackHandler(selectedAnimation, Callback ?? AttackHandler, true);
             }
 		    Model.PlayAnimation(selectedAnimation);
 		    IsAttacking = true;
@@ -173,6 +169,29 @@ namespace Hedra.Engine.EntitySystem
         {
             this.Attack(Victim, AttackAnimations[Utils.Rng.Next(0, AttackAnimations.Length)], null, RangeModifier);
         }
+
+		private void SetAttackHandler(Animation AttackAnimation, OnAnimationHandler Handler, bool Add){
+			switch(AttackAnimationsEvents[Array.IndexOf(AttackAnimations, AttackAnimation)]){
+				case AttackEvent.Start:
+					if(Add)
+						AttackAnimation.OnAnimationStart += Handler;
+					else
+						AttackAnimation.OnAnimationStart -= Handler;
+					break;
+				case AttackEvent.Mid:
+					if(Add)
+						AttackAnimation.OnAnimationMid += Handler;
+					else
+						AttackAnimation.OnAnimationMid -= Handler;
+					break;
+				case AttackEvent.End:
+					if(Add)
+						AttackAnimation.OnAnimationEnd += Handler;
+					else
+						AttackAnimation.OnAnimationEnd -= Handler;
+					break;
+			}
+		}
 
         public override void Update(){
             base.Update();

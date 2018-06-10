@@ -49,7 +49,11 @@ namespace Hedra.Engine.Player.Inventory
 
         public ObjectMesh BuildModel(Item Item, out float ModelHeight)
         {
-            var model = Item.Model;
+            if (Item.EquipmentType == "Bow")
+            {
+                int a = 0;
+            }
+            var model = this.CenterModel(Item.Model.Clone());
             ModelHeight = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
             var mesh = ObjectMesh.FromVertexData(model);
             mesh.BaseTint = EffectDescriber.EffectColorFromItem(Item);
@@ -106,6 +110,22 @@ namespace Hedra.Engine.Player.Inventory
             GraphicsLayer.Disable(EnableCap.DepthTest);
             GraphicsLayer.Enable(EnableCap.Blend);
             return UserInterface.InventoryFbo.TextureID[0];
+        }
+
+        private VertexData CenterModel(VertexData Data)
+        {
+            var center = Vector3.Zero;
+            for (var i = 0; i < Data.Vertices.Count; i++)
+            {
+                center += Data.Vertices[i];
+            }
+            center = center / Data.Vertices.Count;
+
+            for (var i = 0; i < Data.Vertices.Count; i++)
+            {
+                Data.Vertices[i] -= center;
+            }
+            return Data;
         }
     }
 }
