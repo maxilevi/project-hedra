@@ -88,8 +88,7 @@
       <HintPath>..\references\NVorbis.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\references\OpenTK.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\OpenTK.3.0.0-git00044\lib\net20\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -839,6 +838,7 @@
     <None Include="Modules\Mobs\Beetle.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="OpenTK.dll.config" />
     <None Include="Shaders\Includes\Conditionals.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3694,9 +3694,6 @@
     </None>
     <None Include="app.config" />
     <None Include="app.manifest" />
-    <None Include="Assets\AnvilIcon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\Background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3704,9 +3701,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\BladesAttack2.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\BossIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\ClawAttack1.png">
@@ -3730,9 +3724,6 @@
     <None Include="Assets\Bar.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Cross.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\DoubleKnife.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3748,13 +3739,7 @@
     <None Include="Assets\HolderSkill.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\HouseIcon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\Icon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\IconRing.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\KatarAttack1.png">
@@ -3778,16 +3763,7 @@
     <None Include="Assets\Pointer.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\RingIcon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\Shoot.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\SkillsBarMask.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\SkillsReflection.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Skills\Agility.png">
@@ -3908,9 +3884,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\SwingHammerIcon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TalkIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Sans.ttf">
@@ -4381,7 +4354,6 @@
     <None Include="Modules\UndeadBiomeSpawner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="Shaders\AnimatedModel.frag">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -4649,6 +4621,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Assets\Skills\IronSkin.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\splash-background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

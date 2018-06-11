@@ -123,12 +123,13 @@ namespace Hedra.Engine.QuestSystem
                     TaskManager.After(1000, () =>
                         World.DropItem(ItemPool.Grab(settings), _rescuee.Position + Vector3.UnitX * 5f)
                     );
-                    //TaskManager.Delay( (int) ((talkComponent.Duration+1) * 1000), () =>
+                    //TaskManager.After( (int) ((talkComponent.Duration+1) * 1000), () =>
                     //    Talkee.AddComponent(new EscapeAIComponent(_rescuee, GameManager.Player))
                     //);
                 };
                 _rescuee.AddComponent(talkComponent);
             });
+            _rescuee.Model.Model.TransformationMatrix = Matrix4.Identity;
             _rescuee.Physics.UsePhysics = true;
             _rescuee.Physics.HasCollision = true;
             _rescuee.Physics.CanCollide = true;

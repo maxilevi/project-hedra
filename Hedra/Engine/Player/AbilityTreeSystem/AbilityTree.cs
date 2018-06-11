@@ -44,7 +44,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public AbilityTree(LocalPlayer Player)
         {
             _player = Player;
-            _targetResolution = new Vector2(1366, 768);
+            _targetResolution = new Vector2(1366, 705);
             _abilities = new InventoryArray(AbilityCount);
             for (var i = 0; i < _abilities.Length; i++)
             {

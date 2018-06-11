@@ -221,8 +221,8 @@ namespace Hedra.Engine.Player
 	    public void Attack(float Damage, Action<Entity> Callback)
 	    {
 	        var rangeModifier = this.Model.LeftWeapon is MeleeWeapon meleeWeapon ? meleeWeapon.MainWeaponSize.Y / 3.75f + .5f : 1.0f;
-            var nearEntities = World.InRadius<Entity>(this.Position, this.Model.BroadphaseCollider.BroadphaseRadius * rangeModifier);
-			var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
+            var nearEntities = World.InRadius<Entity>(this.Position, 16f * rangeModifier); // this.Model.BroadphaseCollider.BroadphaseRadius
+            var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
 			var atLeastOneHit = false;
             foreach (var target in possibleTargets)
 			{
@@ -231,7 +231,8 @@ namespace Hedra.Engine.Player
 				{
 					var damageToDeal = Damage * dot;
 					target.Damage(damageToDeal, this, out float exp);
-            		this.XP += exp;
+				    Callback?.Invoke(target);
+                    this.XP += exp;
 					atLeastOneHit = true;
 				}
 			}

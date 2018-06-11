@@ -177,7 +177,7 @@ namespace Hedra.Engine.Rendering
 		private static void WaterBind(){
 			GraphicsLayer.Enable(EnableCap.Blend);
 		    GL.BlendEquation(BlendEquationMode.FuncAdd);
-           	GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
            	GraphicsLayer.Enable(EnableCap.Texture2D);
            	
            	WaterShader.Bind();

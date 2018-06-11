@@ -53,7 +53,7 @@ namespace Hedra.Engine.Player
 
         public PlayerInventory(LocalPlayer Player)
         {
-            _targetResolution = new Vector2(1366, 768);
+            _targetResolution = new Vector2(1366, 705);
             _player = Player;
             _items = new InventoryArray(InventorySpaces);
             _mainItems = new InventoryArray(MainSpaces);

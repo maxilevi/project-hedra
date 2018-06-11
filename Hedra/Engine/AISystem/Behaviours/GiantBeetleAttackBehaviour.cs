@@ -35,6 +35,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             var inAttackRange = Target != null && (Parent.InAttackRange(Target) || SpitTimer.Ready && (Parent.Position - Target.Position).LengthSquared > 24*24);
             if (!Parent.Model.IsAttacking && Target != null && !inAttackRange)
             {
+                var a = Parent.InAttackRange(Target);
                 Follow.Update();
             }
             if (inAttackRange)

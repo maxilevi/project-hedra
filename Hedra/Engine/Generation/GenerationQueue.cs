@@ -23,12 +23,12 @@ namespace Hedra.Engine.Generation
 		public List<Chunk> Queue = new List<Chunk>();
 		public List<GenerationThread> Threads = new List<GenerationThread>();
 		public static int ThreadCount = 1;
-		public const int ThreadTime = 5;
+		public const int ThreadTime = 15;
 		public bool Stop {get; set;}
 		private ClosestChunk ClosestChunkComparer = new ClosestChunk();
 	
 		public GenerationQueue(){
-			Thread MainLoop = new Thread(ProccessQueueThread);
+			var MainLoop = new Thread(ProccessQueueThread);
 			MainLoop.Start();
 			for(int i = 0; i < ThreadCount; i++){
 				Threads.Add(new GenerationThread());
@@ -41,9 +41,9 @@ namespace Hedra.Engine.Generation
 		}
 		
 		private void ProccessQueueThread(){
-			while(true){
-			    
-				Thread.Sleep(5);
+			while(true)
+            {		    
+				Thread.Sleep(15);
 				if(!Program.GameWindow.Exists || Stop)
 					break;
 				

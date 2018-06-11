@@ -43,7 +43,7 @@ namespace Hedra.Engine.Player
         protected override void DoUpdate()
         {
             _glidingCooldown -= Time.FrameTimeSeconds;
-            _player.Physics.CanBePushed = !_player.IsMoving;
+            //_player.Physics.CanBePushed = !_player.IsMoving;
             if (!CaptureMovement || _player.Knocked || _player.IsDead || !Human.CanInteract || GameSettings.Paused)
                 return;
 

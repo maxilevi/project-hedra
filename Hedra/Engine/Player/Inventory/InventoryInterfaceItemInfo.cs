@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Inventory
         protected readonly Texture ItemTexture;
         protected readonly RenderableText ItemText;
         protected readonly RenderableText ItemDescription;
-        private readonly Vector2 _targetResolution = new Vector2(1366, 768);
+        private readonly Vector2 _targetResolution = new Vector2(1366, 705);
         private readonly Panel _panel;
         private readonly InventoryItemRenderer _renderer;
         private readonly RenderableText _itemAttributes;
@@ -33,19 +33,19 @@ namespace Hedra.Engine.Player.Inventory
         {
             this._renderer = Renderer;
             this._panel = new Panel();
-            this.BackgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Mathf.ScaleGUI(_targetResolution, Vector2.One * .35f));
-            this.ItemTexture = new Texture(0, BackgroundTexture.Position + BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitY * -.05f,
+            this.BackgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Vector2.One * .35f);
+            this.ItemTexture = new Texture(0, BackgroundTexture.Position + Mathf.ScaleGUI(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitY * -.05f),
                 BackgroundTexture.Scale * .75f);
 
-            this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Vector2.UnitY * .225f, Color.White,
+            this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .225f), Color.White,
                 FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemText, DrawOrder.After);
 
-            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position - Vector2.UnitY * .225f,
+            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position - Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .225f),
                 Color.Bisque, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemDescription, DrawOrder.After);
 
-            this._itemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position - Vector2.UnitX * .025f + Vector2.UnitY * .05f,
+            this._itemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position - Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * .025f + Vector2.UnitY * .05f),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 9, FontStyle.Bold));
             DrawManager.UIRenderer.Add(_itemAttributes, DrawOrder.After);
 
@@ -55,8 +55,8 @@ namespace Hedra.Engine.Player.Inventory
             _panel.AddElement(ItemTexture);
             _panel.AddElement(BackgroundTexture);
 
-            _nonWeaponItemAttributesPosition = Vector2.UnitY * -.175f;
-            _nonWeaponItemTexturePosition = Vector2.UnitY * .0f;
+            _nonWeaponItemAttributesPosition = Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * -.175f);
+            _nonWeaponItemTexturePosition = Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .0f);
             _weaponItemAttributesPosition = _itemAttributes.Position;
             _weaponItemTexturePosition = ItemTexture.Position;
         }

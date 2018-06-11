@@ -63,16 +63,16 @@ namespace Hedra.Engine.Player
 
         public void Update()
         {
-            if (!_model.Enabled)
+            if (!this.Enabled)
             {
                 _accumulatedVelocity = Vector3.One * 10f;
                 _yaw = _player.View.StackedYaw;
             }
+            this._model.Enabled = _player.Model.Enabled && this.Enabled;
             if (this.Enabled)
             {
                 this.ManageParticles();
                 this.HandleInput();
-                _model.Enabled = true;
                 _player.View.MaxPitch = 1.25f;
                 _player.View.MinPitch = -1.25f;
 
@@ -110,8 +110,8 @@ namespace Hedra.Engine.Player
                 _rightTrail.Thickness = 1f * (Math.Abs(_angles.Z) - 15f) / 90f *
                                         Math.Min(1f, _accumulatedVelocity.Average() / _decaySpeed);
 
-                _leftTrail.Emit = _leftTrail.Thickness > 0.05f;
-                _rightTrail.Emit = _rightTrail.Thickness > 0.05f;
+                _leftTrail.Emit = _leftTrail.Thickness > 0.05f && _model.Enabled;
+                _rightTrail.Emit = _rightTrail.Thickness > 0.05f && _model.Enabled;
             }
 
             _rightTrail.Update();
@@ -144,18 +144,18 @@ namespace Hedra.Engine.Player
             _player.View.MinPitch = Camera.DefaultMinPitch;
             _player.View.MaxDistance = Camera.DefaultMaxDistance;
             _player.Model.Model.TransformationMatrix = Matrix4.Identity;
-            _model.Enabled = false;
             _player.Model.Pause = false;
             _player.Physics.GravityDirection = -Vector3.UnitY;
             _player.Physics.VelocityCap = float.MaxValue;
             _leftTrail.Emit = false;
+            this.Enabled = false;
         }
 
         public void Enable()
         {
-            this._model.Enabled = true;
+            this.Enabled = true;
         }
 
-        public bool Enabled => _model.Enabled;
+        public bool Enabled { get; private set; }
     }
 }

@@ -134,28 +134,30 @@ namespace Hedra.Engine.Management
 	        }
 	        return Encoding.ASCII.GetBytes( File.ReadAllText(Path.Replace("$GameFolder$", AppPath)) );
 	    }
-		
+
 		public static byte[] ReadBinary(string Name, string DataFile)
 		{
 		    AssetManager.SetupFiles();
-            using (FileStream Fs = File.OpenRead(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile))){
-				using (BinaryReader Reader = new BinaryReader(Fs))
+            using (var fs = File.OpenRead(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile))){
+				using (var reader = new BinaryReader(fs))
 				{
-				    while (Reader.BaseStream.Position < Reader.BaseStream.Length)
+				    while (reader.BaseStream.Position < reader.BaseStream.Length)
        				{
-				    	string Header = Reader.ReadString();
-				    	int ChunkSize = Reader.ReadInt32();
+				    	string header = reader.ReadString();
+				    	int chunkSize = reader.ReadInt32();
 
-				    	byte[] Data = Reader.ReadBytes(ChunkSize);
-				    	if( Path.GetFileName(Header).Equals(Path.GetFileName(Name))) 
-				    		return Data;    	
-				    }			    
+				    	byte[] data = reader.ReadBytes(chunkSize);
+				        if (Path.GetFileName(header).Equals(Path.GetFileName(Name)))
+                            return data;
+				           
+				       }			    
 				}
 			}
-			return null;	
+            return null;	
 		}
 		
-		public static string[] GetFileNames(string DataFile){
+		public static string[] GetFileNames(string DataFile)
+        {
 			List<string> Files = new List<string>();
 			using (FileStream Fs = File.OpenRead(AppPath + DataFile)){
 				using (BinaryReader Reader = new BinaryReader(Fs))

@@ -34,7 +34,7 @@ namespace Hedra.Engine.PhysicsSystem
             Indices = null;
 #endif
             this.Indices = Indices ?? new uint[0];
-
+            this.RecalculateBroadphase();
         }
 
 		public CollisionShape Transform(Matrix4 TransMatrix)

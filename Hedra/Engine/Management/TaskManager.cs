@@ -14,7 +14,8 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Helper class to simplify running delayed, concurrent, parallel and asynchronous actions.
 	/// </summary>
-	public static class TaskManager{
+	public static class TaskManager
+    {
 
         /// <summary>
         /// Executes the provided action parallel to the main thread. 
@@ -99,7 +100,7 @@ namespace Hedra.Engine.Management
 			float passedTime = 0;
 			float milliseconds = Convert.ToSingle(Args[0]);
             var action = (Action)Args[1];
-            while (passedTime*1000 < milliseconds){
+            while (passedTime * 1000 < milliseconds){
 				passedTime += Time.FrameTimeSeconds;
 				yield return null;
 			}

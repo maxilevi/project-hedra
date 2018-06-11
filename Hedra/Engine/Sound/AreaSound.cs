@@ -8,7 +8,7 @@ namespace Hedra.Engine.Sound
         public float Radius { get; set; }
         public SoundType Type { get; set; }
         public Vector3 Position { get; set; }
-        public float Pitch { get; set; }
+        public float Pitch { get; set; } = 1f;
         private float _targetGain;
         private SoundItem _sound;
         private SoundType _bufferType;

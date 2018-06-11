@@ -9,6 +9,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     public class AbilityTreeInterfaceItemInfo : InventoryInterfaceItemInfo
     {
+        private readonly Vector2 _targetResolution = new Vector2(1366, 705);
         public AbilityTreeInterfaceItemInfo(InventoryItemRenderer Renderer) : base(Renderer)
         {
             ItemTexture.Scale *= .4f;
@@ -22,10 +23,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                               (realSkill.ManaCost != 0 ? $"Mana cost : {realSkill.ManaCost}{Environment.NewLine}" : string.Empty) +
                               (realSkill.MaxCooldown != 0 ? $"Cooldown : {realSkill.MaxCooldown}" : string.Empty);
             ItemDescription.Color = Color.White;
-            ItemDescription.Position = this.Position - Vector2.UnitY * .15f;
+            ItemDescription.Position = this.Position - Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .15f);
             ItemText.Text = Utils.FitString(CurrentItem.DisplayName.ToUpperInvariant(), 15);
 
-            ItemTexture.Position = Vector2.UnitY * .05f + this.Position;
+            ItemTexture.Position = this.Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .05f);
             ItemTexture.TextureElement.TextureId = CurrentItem.HasAttribute("ImageId") 
                 ? CurrentItem.GetAttribute<uint>("ImageId") 
                 : GUIRenderer.TransparentTexture;

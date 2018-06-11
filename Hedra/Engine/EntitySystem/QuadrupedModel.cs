@@ -15,6 +15,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using OpenTK;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
@@ -218,6 +219,10 @@ namespace Hedra.Engine.EntitySystem
 
 		    if (!base.Disposed)
 		    {
+		        if (LocalPlayer.Instance.Pet.Pet == Parent)
+		        {
+		            int a = 0;
+		        }
 		        _sound.Position = this.Position;
 		        _sound.Update(this.IsWalking);
 		    }

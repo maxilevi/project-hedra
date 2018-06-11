@@ -30,9 +30,6 @@ namespace Hedra.Engine.Rendering.UI
             Color.FromArgb(255, 39, 39, 39),
             new Bitmap(new MemoryStream(AssetManager.ReadBinary("Assets/Bar.png", AssetManager.DataFile3)))));
 
-        public static uint WhiteCross = Graphics2D.LoadTexture(Graphics2D.ReColorMask(Color.White,
-            new Bitmap(new MemoryStream(AssetManager.ReadBinary("Assets/Cross.png", AssetManager.DataFile3)))));
-
         private bool _hasEntered;
         private Vector2 _position;
         private Color _previousFontColor;

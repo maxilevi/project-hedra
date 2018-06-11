@@ -137,15 +137,16 @@ namespace Hedra
 			_debugPanel.Disable();
 			
 			GL.BlendEquation(BlendEquationMode.FuncAdd);
-	        GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-	        GraphicsLayer.Enable(EnableCap.Texture2D);
+		    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            GraphicsLayer.Enable(EnableCap.Texture2D);
 	        
 	        string GLVersion = GL.GetString(StringName.Version);
             Log.WriteLine(GLVersion);
 
             float ShadingOpenGLVersion = this.GetShadingVersion(GLVersion);
 
-			if( ShadingOpenGLVersion < 3.1f){//OpenGL Core
+			if( ShadingOpenGLVersion < 3.1f)
+			{
 				Forms.MessageBox.Show("Minimum OpenGL version is 3.1, yours is "+ShadingOpenGLVersion, "OpenGL Version not supported",
 				                      Forms.MessageBoxButtons.OK, Forms.MessageBoxIcon.Error);
 				this.Exit();
@@ -154,7 +155,7 @@ namespace Hedra
             //if (ShadingOpenGLVersion > 4.1f && FirstLaunch)
             //    GraphicsOptions.SSAO = true;
 #if !DEBUG
-            TaskManager.Delay(6000, () => _splashOpacity = 0);
+            TaskManager.After(6000, () => _splashOpacity = 0);
 #endif
 #if DEBUG
             this._finishedLoading = true;

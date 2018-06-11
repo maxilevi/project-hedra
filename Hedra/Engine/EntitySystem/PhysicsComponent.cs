@@ -211,22 +211,20 @@ namespace Hedra.Engine.EntitySystem
                     if (World.Entities[i].Physics.HasCollision)
                     {
                         if (Physics.Collides(World.Entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) &&
-                            Parent.InAttackRange(World.Entities[i]))
+                            Physics.Collides(World.Entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))//Parent.InAttackRange(World.Entities[i]))
                         {
                             if (!PushAround || !World.Entities[i].Physics.CanBePushed) return;
-                            /*if (World.Entities[i].Model.BroadphaseBox.Size.LengthSquared >
-                                this.Parent.Model.BroadphaseBox.Size.LengthSquared)
+                            if (World.Entities[i].Model.BroadphaseBox.Size.LengthSquared >
+                                this.Parent.Model.BroadphaseBox.Size.LengthSquared * 4f)
                             {
-                                if(Vector3.Dot(delta.NormalizedFast(), (World.Entities[i].Position - this.Parent.Position).NormalizedFast()) > .5f) return;
+                                if(Vector3.Dot(delta.NormalizedFast(), (World.Entities[i].Position - this.Parent.Position).NormalizedFast()) > .75f) return;
                                 else continue;
-                            }*/
-                            var increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3()
-                                .NormalizedFast();
-
-                            for (var j = 0; j < 2; j++)
+                            }
+                            var increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3().NormalizedFast();
+                            for (var j = 0; j < 6; j++)
                             {
                                 var command = new MoveCommand(World.Entities[i],
-                                    increment * 2f * (float) Time.deltaTime)
+                                    increment * 1f * (float) Time.deltaTime)
                                 {
                                     IsRecursive = true
                                 };

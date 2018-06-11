@@ -50,7 +50,7 @@ namespace Hedra.Engine.Rendering
 		    throw new Exception("Obsolete");
             GraphicsLayer.Enable(EnableCap.Blend);
 			GL.BlendEquation(BlendEquationMode.FuncAdd);
-           	GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+           //	GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
            	GraphicsLayer.Enable(EnableCap.Texture2D);
            	
            	//BlockShaders.WaterShader.Bind();

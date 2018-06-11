@@ -14,6 +14,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly GUIText _availablePointsText;
         private readonly RenderableTexture _backgroundTexture;
         private readonly RenderableTexture[] _skillPointsBackgrounTextures;
+        private readonly Vector2 _targetResolution = new Vector2(1366, 768);
 
         public AbilityTreeInterface(LocalPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing)
             : base(Array, Offset, Length, SlotsPerLine, Spacing, null)
@@ -22,7 +23,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _panel = new Panel();
             _skillPointsBackgrounTextures = new RenderableTexture[this.Buttons.Length];
             _backgroundTexture = new RenderableTexture(new Texture("Assets/UI/AbilityTreeBackground.png",
-                new Vector2(.04f, .15f), new Vector2(.6f, .55f) * 1f), DrawOrder.Before);
+                Mathf.ScaleGUI(_targetResolution, new Vector2(.04f, .15f)), new Vector2(.6f, .55f) * 1f), DrawOrder.Before);
             _availablePointsText = new GUIText(string.Empty, new Vector2(_backgroundTexture.Position.X, -.35f),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 12f, FontStyle.Bold));
             for (var i = 0; i < this.Buttons.Length; i++)
@@ -31,7 +32,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 this.Buttons[i].Texture.IdPointer = null;
                 this.ButtonsText[i].TextFont = FontCache.Get(AssetManager.BoldFamily, 10f, FontStyle.Bold);
                 this.ButtonsText[i].Position = this.Buttons[i].Position +
-                                               new Vector2(0, -InventoryArrayInterface.DefaultSize.Y) * .65f;
+                                               Mathf.ScaleGUI(_targetResolution, new Vector2(0, -InventoryArrayInterface.DefaultSize.Y) * .65f);
                 _skillPointsBackgrounTextures[i] = 
                     new RenderableTexture(new Texture("Assets/UI/InventoryBackground.png",
                     this.ButtonsText[i].Position, new Vector2(.05f, .075f)), DrawOrder.Before);

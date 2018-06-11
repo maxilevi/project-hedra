@@ -101,16 +101,20 @@ namespace Hedra.Engine.EntitySystem
 			
 			var textSize = new GUIText(phrase, Vector2.Zero, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10));
 
-		    var backBoard = new Billboard(Duration, Bar.BarBlueprint, Vector3.Zero,
+	        Vector3 FollowFunc()
+	        {
+	            return Parent.Position + Vector3.UnitY * 12f;
+	        }
+            var backBoard = new Billboard(Duration, Bar.BarBlueprint, FollowFunc(),
 		        textSize.UIText.Scale + new Vector2(textSize.UIText.Scale.Y * .25f, textSize.UIText.Scale.Y * .25f))
 		    {
-		        FollowFunc = () => Parent.Position + Vector3.UnitY * 8f
-		    };
+		        FollowFunc = FollowFunc
+            };
 
-		    _board = new Billboard(Duration, phrase, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10), Vector3.Zero)
+		    _board = new Billboard(Duration, phrase, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10), FollowFunc())
 		    {
-		        FollowFunc = () => Parent.Position + Vector3.UnitY * 8f
-		    };
+		        FollowFunc = FollowFunc
+            };
 	        OnTalk?.Invoke(this.Parent);
 
             textSize.Dispose();
