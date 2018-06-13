@@ -49,10 +49,6 @@ namespace Hedra.Engine.Player.Inventory
 
         public ObjectMesh BuildModel(Item Item, out float ModelHeight)
         {
-            if (Item.EquipmentType == "Bow")
-            {
-                int a = 0;
-            }
             var model = this.CenterModel(Item.Model.Clone());
             ModelHeight = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
             var mesh = ObjectMesh.FromVertexData(model);
@@ -92,7 +88,7 @@ namespace Hedra.Engine.Player.Inventory
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GraphicsLayer.Enable(EnableCap.DepthTest);
-            GraphicsLayer.Enable(EnableCap.Blend);
+            GraphicsLayer.Disable(EnableCap.Blend);
             Mesh.Draw();
 
             /*GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, ItemsFBO.BufferID);

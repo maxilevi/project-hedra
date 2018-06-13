@@ -35,7 +35,6 @@ namespace Hedra.Engine.AISystem.Behaviours
             var inAttackRange = Target != null && (Parent.InAttackRange(Target) || SpitTimer.Ready && (Parent.Position - Target.Position).LengthSquared > 24*24);
             if (!Parent.Model.IsAttacking && Target != null && !inAttackRange)
             {
-                var a = Parent.InAttackRange(Target);
                 Follow.Update();
             }
             if (inAttackRange)
@@ -71,7 +70,7 @@ namespace Hedra.Engine.AISystem.Behaviours
                 var direction = (Victim.Position - Parent.Position).NormalizedFast();
                 var spit = new ParticleProjectile(Parent, Parent.Position + Parent.Orientation * 2f + direction + Vector3.UnitY * 2.0f)
                 {
-                    Propulsion = direction * 2f,
+                    Propulsion = direction * 2f - Vector3.UnitY * (1 - (Victim.Position - Parent.Position).LengthFast / 80f),
                     Color = Color.LawnGreen.ToVector4() * .5f,
                     UseLight = false
                 };

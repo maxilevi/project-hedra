@@ -42,13 +42,14 @@ namespace Hedra.Engine.Management
 	    public static string AppData { get; private set; }
         public static string TemporalFolder { get; private set; }
 	    public static FontFamily BoldFamily => Fonts.Families[0];
-
+	    private static List<ResourceHandler> _registeredHandlers;
         private static bool _filesDecompressed;
 	    private static Dictionary<string, VertexData> _hitboxCache;
 
 	    public static string ShaderCode { get; private set; }
 
-        public static void Load(){
+        public static void Load()
+        {
 			byte[] sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.DataFile3);
 			Fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
 
@@ -80,7 +81,7 @@ namespace Hedra.Engine.Management
 	            StartInfo =
 	            {
 	                FileName = $@"{AppPath}/../../../utilities/AssetBuilder.exe",
-	                Arguments = $"\"{AppPath}/Shaders/\" \"{AppPath}/data1.db\" text",
+	                Arguments = $"\"{AppPath}/Shaders/\" \"{AppPath}/data1.db\" normal text",
 	                UseShellExecute = false,
 	                RedirectStandardOutput = true,
 	                WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
@@ -93,7 +94,7 @@ namespace Hedra.Engine.Management
 	        pProcess.Dispose();
 	    }
 #endif
-        private static void SetupFiles(){
+        private static void DecompileAssets(){
             if(_filesDecompressed) return;		    
 
 			AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
@@ -113,13 +114,9 @@ namespace Hedra.Engine.Management
 		    File.WriteAllBytes(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile2),
 		        ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + DataFile2))  );
 
-		    _filesDecompressed = true;
+            _registeredHandlers = new List<ResourceHandler>();
+            _filesDecompressed = true;
 		}
-
-	    public static void Dispose()
-	    {
-	        if (Directory.Exists(TemporalFolder)) Directory.Delete(TemporalFolder, true);
-        }
 
 	    public static byte[] ReadPath(string Path)
 	    {
@@ -137,44 +134,52 @@ namespace Hedra.Engine.Management
 
 		public static byte[] ReadBinary(string Name, string DataFile)
 		{
-		    AssetManager.SetupFiles();
-            using (var fs = File.OpenRead(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile))){
-				using (var reader = new BinaryReader(fs))
-				{
-				    while (reader.BaseStream.Position < reader.BaseStream.Length)
-       				{
-				    	string header = reader.ReadString();
-				    	int chunkSize = reader.ReadInt32();
+		    AssetManager.DecompileAssets();
+            ResourceHandler selectedHandler = null;
+		    for (var i = 0; i < _registeredHandlers.Count; i++)
+		    {
+		        if (!_registeredHandlers[i].Locked && _registeredHandlers[i].Id == DataFile)
+		        {
+		            selectedHandler = _registeredHandlers[i];
+		            selectedHandler.Locked = true;
+                    break;
+		        }
+		    }
+		    if (selectedHandler == null)
+		    {
+                selectedHandler = new ResourceHandler(File.OpenRead(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile)), DataFile);
+		        _registeredHandlers.Add(selectedHandler);
+                Log.WriteLine($"[IO] Registered resource handler... (Total = {_registeredHandlers.Count})");
+		    }
+		    try
+		    {
+		        return AssetManager.ReadBinaryFromStream(selectedHandler.Stream, Name);
+		    }
+		    finally
+		    {
+		        selectedHandler.Stream.Position = 0;
+		        selectedHandler.Locked = false;
+            }
+		}
 
-				    	byte[] data = reader.ReadBytes(chunkSize);
-				        if (Path.GetFileName(header).Equals(Path.GetFileName(Name)))
-                            return data;
-				           
-				       }			    
-				}
-			}
-            return null;	
-		}
+	    private static byte[] ReadBinaryFromStream(FileStream Stream, string Name)
+	    {
+	        var reader = new BinaryReader(Stream); // .Dispose closes the stream, something we dont want.
+	        while (reader.BaseStream.Position < reader.BaseStream.Length)
+	        {
+	            string header = reader.ReadString();
+	            int chunkSize = reader.ReadInt32();
+
+	            byte[] data = reader.ReadBytes(chunkSize);
+	            if (Path.GetFileName(header).Equals(Path.GetFileName(Name)))
+                    return data;
+	            
+	        }
+	        return null;
+        }
 		
-		public static string[] GetFileNames(string DataFile)
+		public static string ReadShader(string Name)
         {
-			List<string> Files = new List<string>();
-			using (FileStream Fs = File.OpenRead(AppPath + DataFile)){
-				using (BinaryReader Reader = new BinaryReader(Fs))
-				{
-				    while (Reader.BaseStream.Position < Reader.BaseStream.Length)
-       				{
-				    	string Header = Reader.ReadString();
-				    	int ChunkSize = Reader.ReadInt32();
-				    	byte[] Data = Reader.ReadBytes(ChunkSize);
-				    	Files.Add(Header);
-				    }				    
-				}
-			}
-			return Files.ToArray();
-		}
-		
-		public static string ReadShader(string Name){
 			var builder  = new StringBuilder();
 			var save = false;
 		    var regex = $"^<.*{AssetManager.BuildNameRegex(Name)}>$";
@@ -201,8 +206,8 @@ namespace Hedra.Engine.Management
 
 	    private static string BuildNameRegex(string Name)
 	    {
-	        var slashRegex = "\\\\*\\/*";
-            return Name.Replace("/", slashRegex).Replace(".", "\\.");
+	        const string slashRegex = "\\\\*\\/*";
+	        return Name.Replace("/", slashRegex).Replace(".", "\\.");
 	    }
 		
 		public static Icon LoadIcon(string path){
@@ -212,42 +217,43 @@ namespace Hedra.Engine.Management
 		}
 		
 		public static List<CollisionShape> LoadCollisionShapes(string filename, int Count, Vector3 Scale){
-			List<CollisionShape> Shapes = new List<CollisionShape>();
-			string Name = Path.GetFileNameWithoutExtension(filename);
-			for(int i = 0; i < Count; i++){
-				VertexData Data = AssetManager.PlyLoader("Assets/Env/Colliders/"+Name+"_Collider"+i+".ply", Scale, Vector3.Zero, Vector3.Zero, false);
+			var shapes = new List<CollisionShape>();
+			string name = Path.GetFileNameWithoutExtension(filename);
+			for(var i = 0; i < Count; i++){
+				var data = AssetManager.PlyLoader("Assets/Env/Colliders/"+name+"_Collider"+i+".ply", Scale, Vector3.Zero, Vector3.Zero, false);
 
-			    var newShape = new CollisionShape(Data.Vertices, Data.Indices);
-			    Shapes.Add(newShape);
-                Data.Dispose();
+			    var newShape = new CollisionShape(data.Vertices, data.Indices);
+			    shapes.Add(newShape);
+                data.Dispose();
 			}
 			
-			return Shapes;
+			return shapes;
 		}
-		
-		public static VertexData PlyLoader(string file, Vector3 Scale){
+
+	    public static Box LoadHitbox(string ModelFile)
+	    {
+	        if (!_hitboxCache.ContainsKey(ModelFile))
+	        {
+	            string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
+	            var entityData = ColladaLoader.LoadColladaModel(fileContents, GeneralSettings.MaxWeights);
+	            var vertexData = new VertexData
+	            {
+	                Vertices = entityData.Mesh.Vertices.ToList(),
+	                Colors = new List<Vector4>()
+	            };
+	            entityData.Mesh.Colors.ToList().ForEach(Vector => vertexData.Colors.Add(new Vector4(Vector.X, Vector.Y, Vector.Z, 1)));
+	            _hitboxCache.Add(ModelFile, vertexData);
+	        }
+	        var data = _hitboxCache[ModelFile];
+	        return Physics.BuildBroadphaseBox(data);
+	    }
+
+        public static VertexData PlyLoader(string file, Vector3 Scale){
 			return AssetManager.PlyLoader(file, Scale, Vector3.Zero, Vector3.Zero);
 		}
 		
-		public static Box LoadHitbox(string ModelFile)
-		{
-		    if (!_hitboxCache.ContainsKey(ModelFile))
-		    {
-		        string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
-		        var entityData = ColladaLoader.LoadColladaModel(fileContents, GeneralSettings.MaxWeights);
-		        var vertexData = new VertexData
-		        {
-		            Vertices = entityData.Mesh.Vertices.ToList(),
-		            Colors = new List<Vector4>()
-		        };
-		        entityData.Mesh.Colors.ToList().ForEach(Vector => vertexData.Colors.Add(new Vector4(Vector.X, Vector.Y, Vector.Z, 1)));
-		        _hitboxCache.Add(ModelFile, vertexData);
-		    }
-		    var data = _hitboxCache[ModelFile];
-		    return Physics.BuildBroadphaseBox(data);
-		}
-		
-		public static VertexData PlyLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true){
+		public static VertexData PlyLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
+        {
 			byte[] dataArray = AssetManager.ReadBinary(File, DataFile3);
 		    string fileContents = Encoding.ASCII.GetString(dataArray);
 
@@ -337,21 +343,27 @@ namespace Hedra.Engine.Management
 			Data.UseCache = true;
 			return Data;
 		}
-        
-		public static VAO<Vector3, Vector4, Vector3> PlyLoader(string file, out VBO<uint> IndicesVBO, Vector3 Scale, Vector3 Position, Vector3 Rotation){
-			VertexData Data = PlyLoader(file, Scale, Position, Rotation);
-			
-			VBO<Vector3> VBOVerts = new VBO<Vector3>(Data.Vertices.ToArray(), Data.Vertices.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
-			VBO<Vector4> VBOColors = new VBO<Vector4>(Data.Colors.ToArray(), Data.Colors.Count * Vector4.SizeInBytes, VertexAttribPointerType.Float);
-			VBO<Vector3> VBONorms = new VBO<Vector3>(Data.Normals.ToArray(), Data.Normals.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
-			IndicesVBO = new VBO<uint>(Data.Indices.ToArray(), Data.Indices.Count * sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
-			return new VAO<Vector3, Vector4, Vector3>(VBOVerts, VBOColors, VBONorms);
-		}
 
-        public static void CreateDirectory(string path)
+	    public static void Dispose()
+	    {
+	        foreach (var handler in _registeredHandlers)
+	        {
+	            handler.Stream.Dispose();
+	        }
+	        if (Directory.Exists(TemporalFolder)) Directory.Delete(TemporalFolder, true);
+	    }
+    }
+
+    internal class ResourceHandler
+    {
+        public FileStream Stream { get; }
+        public string Id { get; }
+        public bool Locked { get; set; }
+
+        public ResourceHandler(FileStream Stream, string Id)
         {
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
+            this.Stream = Stream;
+            this.Id = Id;
         }
     }
 }

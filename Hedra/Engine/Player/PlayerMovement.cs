@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -239,7 +240,7 @@ namespace Hedra.Engine.Player
             }
             if (EventArgs.Key == Key.F2)
             {
-                AssetManager.CreateDirectory(AssetManager.AppData + "/Screenshots/");
+                if (!Directory.Exists(AssetManager.AppData + "/Screenshots/")) Directory.CreateDirectory(AssetManager.AppData + "/Screenshots/");
                 _player.MessageDispatcher.ShowNotification("Saved screenshot as " + Recorder.SaveScreenshot(AssetManager.AppData + "/Screenshots/"), System.Drawing.Color.White, 3f, false);
             }
             if (EventArgs.Key == Key.F4) _player.UI.ShowHelp = !_player.UI.ShowHelp;

@@ -12,7 +12,6 @@ using OpenTK;
 using System.Linq;
 using Hedra.Engine.Rendering;
 using System.Collections.Generic;
-using Microsoft.VisualBasic.Logging;
 
 namespace Hedra.Engine.PhysicsSystem
 {

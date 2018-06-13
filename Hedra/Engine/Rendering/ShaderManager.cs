@@ -78,9 +78,13 @@ namespace Hedra.Engine.Rendering
 			return null;
 		}
 
-		public static void UpdateLight(PointLight Light){
-            if(!Light.Locked)
+		public static void UpdateLight(PointLight Light)
+        {
+            if (!Light.Locked)
+            {
                 Light.Radius = PointLight.DefaultRadius;
+                Light.Color = Vector3.Zero;
+            }
 
             int prevShader = GraphicsLayer.ShaderBound;
 			for(int i = 0; i < Shaders.Count; i++)
@@ -104,8 +108,8 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public static Vector3 LightColor{
-			get{ return _lightColor; }
-			set{
+			get => _lightColor;
+		    set{
 				_lightColor = value;
 				int prevShader = GraphicsLayer.ShaderBound;
 				for(int i = 0; i < Shaders.Count; i++){
@@ -121,9 +125,10 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 
-		public static Vector3 LightPosition{
-			get{ return _lightPosition; }
-			set{
+		public static Vector3 LightPosition
+        {
+			get => _lightPosition;
+		    set{
 				if(_lightPosition == value) return;
 				
 				_lightPosition = value;
@@ -143,7 +148,8 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 
-		public static int UsedLights{
+		public static int UsedLights
+        {
 			get{
 				int UsedLights = 0;
 				for(int i = 0; i < PointLights.Length; i++)

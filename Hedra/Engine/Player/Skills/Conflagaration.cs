@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player
 		private Animation ConflagarationAnimation;
 		
 		public Conflagaration() : base() {
-			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("Conflagaration.png", AssetManager.DataFile3))) );
+			base.TexId = Graphics2D.LoadFromAssets("Conflagaration.png");
 			base.MaxCooldown = 8f;
 			base.ManaCost = 35f;
 			

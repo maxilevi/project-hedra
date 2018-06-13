@@ -10,6 +10,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -203,32 +204,33 @@ namespace Hedra.Engine.EntitySystem
             
             if (this.HasCollision && !Command.IsRecursive)
             {
-                for (int i = World.Entities.Count - 1; i > -1; i--)
+                var entities = World.Entities;
+                for (int i = entities.Count - 1; i > -1; i--)
                 {
-                    if (World.Entities[i] == Parent)
+                    if (entities[i] == Parent)
                         continue;
 
-                    if (World.Entities[i].Physics.HasCollision)
+                    if (entities[i].Physics.HasCollision)
                     {
-                        if (Physics.Collides(World.Entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) &&
-                            Physics.Collides(World.Entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))//Parent.InAttackRange(World.Entities[i]))
+                        if (Physics.Collides(entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) 
+                            && Physics.Collides(entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))//Parent.InAttackRange(World.Entities[i]))
                         {
-                            if (!PushAround || !World.Entities[i].Physics.CanBePushed) return;
-                            if (World.Entities[i].Model.BroadphaseBox.Size.LengthSquared >
+                            if (!PushAround || !entities[i].Physics.CanBePushed) return;
+                            if (entities[i].Model.BroadphaseBox.Size.LengthSquared >
                                 this.Parent.Model.BroadphaseBox.Size.LengthSquared * 4f)
                             {
-                                if(Vector3.Dot(delta.NormalizedFast(), (World.Entities[i].Position - this.Parent.Position).NormalizedFast()) > .75f) return;
+                                if(Vector3.Dot(delta.NormalizedFast(), (entities[i].Position - this.Parent.Position).NormalizedFast()) > .75f) return;
                                 else continue;
                             }
-                            var increment = -(Parent.Position.Xz - World.Entities[i].Position.Xz).ToVector3().NormalizedFast();
+                            var increment = -(Parent.Position.Xz - entities[i].Position.Xz).ToVector3().NormalizedFast();
                             for (var j = 0; j < 6; j++)
                             {
-                                var command = new MoveCommand(World.Entities[i],
+                                var command = new MoveCommand(entities[i],
                                     increment * 1f * (float) Time.deltaTime)
                                 {
                                     IsRecursive = true
                                 };
-                                World.Entities[i].Physics.Move(command);
+                                entities[i].Physics.Move(command);
                             }
                         }
                     }

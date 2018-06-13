@@ -11,7 +11,7 @@ namespace Hedra.Engine.PhysicsSystem
 
     public class CollisionPoint
     {
-        public int Id { get; set; }
+        public Vector3 Id { get; set; }
         public Vector3 Vertex { get; set; }
     }
 }

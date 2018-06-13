@@ -345,7 +345,7 @@ namespace Hedra
                     }
                 });
 			        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-			        //BasicGeometry.DrawBox(GameManager.Player.Model.BaseBroadphaseBox.Min, GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
+			        BasicGeometry.DrawBox(GameManager.Player.Model.BaseBroadphaseBox.Min, GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
 			        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
 			       if (GameManager.Player.Model.LeftWeapon != null && GameManager.Player.Model.LeftWeapon is MeleeWeapon melee)

@@ -200,42 +200,17 @@ namespace Hedra.Engine.Management
 		}
 		
 		
-		public static int CharacterCount{
-			get{ 
-				string[] Files = Directory.GetFiles(AssetManager.AppData+"Characters/");
-				int Count = 0;
-				for(int i = 0; i < Files.Length; i++){
-					if(!Files[i].EndsWith(".bak")) Count++;
+		public static int CharacterCount
+        {
+			get
+            { 
+				string[] files = Directory.GetFiles(AssetManager.AppData+"Characters/");
+				var count = 0;
+				for(var i = 0; i < files.Length; i++){
+					if(!files[i].EndsWith(".bak")) count++;
 				}
-				return Count;
+				return count;
 			}
-		}
-		
-		
-		public static string[] GetModelFileNames(string Name){
-			List<string> ValidFiles = new List<string>();
-			string[] Files = AssetManager.GetFileNames(AssetManager.DataFile3);
-			for(int i = 0; i < Files.Length; i++){
-				if(Files[i].Contains("Assets/Chr")){
-					if(Files[i].Contains(".ply") && Files[i].Contains(Name)){
-						ValidFiles.Add(Path.GetFileNameWithoutExtension(Files[i]));
-					}
-				}
-			}
-			return ValidFiles.ToArray();
-		}
-		
-		public static string[] GetModelFiles(string Name){
-			List<string> ValidFiles = new List<string>();
-			string[] Files = AssetManager.GetFileNames(AssetManager.DataFile3);
-			for(int i = 0; i < Files.Length; i++){
-				if(Files[i].Contains("Assets/Chr")){
-					if(Files[i].Contains(".ply") && Files[i].Contains(Name)){
-						ValidFiles.Add(Files[i]);
-					}
-				}
-			}
-			return ValidFiles.ToArray();
 		}
 	}
 }

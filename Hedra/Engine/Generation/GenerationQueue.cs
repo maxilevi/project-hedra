@@ -7,11 +7,7 @@
 using System;
 using System.Threading;
 using System.Collections.Generic;
-using System.Collections;
 using Hedra.Engine.Generation.ChunkSystem;
-using OpenTK;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
 
 namespace Hedra.Engine.Generation
 {
@@ -43,7 +39,7 @@ namespace Hedra.Engine.Generation
 		private void ProccessQueueThread(){
 			while(true)
             {		    
-				Thread.Sleep(15);
+				Thread.Sleep(25);
 				if(!Program.GameWindow.Exists || Stop)
 					break;
 				
@@ -65,6 +61,7 @@ namespace Hedra.Engine.Generation
 			            }
 			        }
 			    }
+                
 			    try
 			    {
 			        if (Queue[0] == null)
@@ -93,8 +90,7 @@ namespace Hedra.Engine.Generation
 			    {
 			        Log.WriteLine(e);
 			    }
-			}
+            }
 		}
-
 	}
 }

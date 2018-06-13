@@ -10,7 +10,7 @@ namespace AssetBuilder
 {
     public abstract class Builder
     {
-        public abstract void Build(string[] Files, string Output);
+        public abstract void Build(Dictionary<string, object> Input, string Output);
 
         public byte[] Zip(string Str)
         {
