@@ -20,7 +20,8 @@ namespace Hedra.Engine.Rendering.Animation
 		public Animation AnimationPlaying { get { if(TargetAnimation != null) return this.TargetAnimation; else return this.CurrentAnimation;} }
 		public Animation BlendingAnimation => BlendAnimator?.AnimationPlaying;
 	    public float AnimationTime {get; private set;}
-		public bool AnimationBlending {get; set;}
+	    public float AnimationSpeed { get; set; } = 1f;
+        public bool AnimationBlending {get; set;}
 		public bool Stop {get; set;}
 		private Animation CurrentAnimation;
 		private Animation TargetAnimation;
@@ -65,7 +66,7 @@ namespace Hedra.Engine.Rendering.Animation
 		
 		public void BlendAnimation(Animation Animation){
 			if(Animation == null) return;
-			if(BlendAnimator != null && BlendAnimator.AnimationPlaying != null)
+			if(BlendAnimator?.AnimationPlaying != null)
 			{
 			    Animation.DispatchEvents(1.0f);
 			    return;
@@ -247,7 +248,7 @@ namespace Hedra.Engine.Rendering.Animation
 		private void IncreaseAnimationTime() {
 			if(GameManager.InMenu || (!this.CurrentAnimation.Loop && AnimationTime > CurrentAnimation.Length) || Stop) 
 				return;
-			AnimationTime += Time.unScaledDeltaTime * this.CurrentAnimation.Speed;
+			AnimationTime += Time.unScaledDeltaTime * this.CurrentAnimation.Speed * AnimationSpeed;
 			
 			this.CurrentAnimation.DispatchEvents(AnimationTime / CurrentAnimation.Length);
 			

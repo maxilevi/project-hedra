@@ -40,7 +40,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         public Vector4 BaseTint { get; set; }
         public Vector4 Tint { get; set; }
         protected Humanoid Owner { get; set; }
-        protected TrailRenderer Trail { get; set; }
         protected Animation[] Animations { get; set; }
         protected Animation[] SecondaryAnimations { get; set; }
         protected Animation[] PrimaryAnimations { get; set; }
@@ -58,6 +57,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         private bool _onAttackStance;
         private Vector3 _scale = Vector3.One;
         private float _alpha = 1f;
+        private float _animationSpeed = 1f;
         private bool _applyFog;
         private bool _pause;
         private bool _effectApplied;
@@ -207,14 +207,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         {
             this.GatherMembers();
             this.Owner = Human;
-
-            if (Trail == null)
-            {
-                this.Trail = new TrailRenderer(
-                    () => this.WeaponTip,
-                    Vector4.One);
-            }
-            this.Trail.Update();
 
             var attacking = false;
             for (var i = 0; i < Animations.Length; i++)
@@ -398,6 +390,22 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             }
         }
 
+        public float AnimationSpeed
+        {
+            get => _animationSpeed;
+            set
+            {
+                if (_animationSpeed == value) return;
+
+                this.GatherMembers();
+                _animationSpeed = value;
+                for (var i = 0; i < Meshes.Length; i++)
+                {
+                    Meshes[i].AnimationSpeed = _animationSpeed;
+                }
+            }
+        }
+
         public Vector3 Position
         {
             get => MainMesh.Position;
@@ -546,7 +554,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 if (meshArray == this.Meshes) continue;
                 foreach (ObjectMesh meshItem in meshArray) meshItem.Dispose();
             }
-            Trail?.Dispose();
             this.Disposed = true;
         }
     }

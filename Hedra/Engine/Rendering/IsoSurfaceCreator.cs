@@ -148,11 +148,7 @@ namespace Hedra.Engine.Rendering
 			
 			float[] Densities = new float[]{ (float) Math.Max(Cell.Density[0],0), (float) Math.Max(Cell.Density[1],0),
 				(float) Math.Max(Cell.Density[2],0), (float) Math.Max(Cell.Density[3],0)};
-			
-			if( Cell.P[0].Y <= BiomePool.SeaLevel){
-				Densities = new float[]{0,0,0,0}; 
-			}
-			
+
 			float Size = WaterQuadSize;
 			Vector3 V3 = new Vector3(BlockSize * LOD * Size - (Size-1) * (Cell.P[2].X / Chunk.BlockSize),-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[2].Y + Densities[2])*4, BlockSize * LOD * Size - (Size-1) * (Cell.P[2].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
 			Vector3 V1 = new Vector3(BlockSize * LOD * Size - (Size-1) * (Cell.P[1].X / Chunk.BlockSize),-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[1].Y + Densities[1])*4, - (Size-1) * (Cell.P[1].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);

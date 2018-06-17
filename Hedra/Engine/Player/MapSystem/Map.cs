@@ -115,7 +115,7 @@ namespace Hedra.Engine.Player.MapSystem
 		        _marker.Enabled = _player.Minimap.HasMarker;
 		        _marker.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f) + _player.Minimap.MarkedDirection * FogDistance;
                 _cursor.Position = mapPosition + Vector3.UnitY * (_targetHeight + 45f);
-                _cursor.Rotation = _player.Model.Rotation;
+                _cursor.Rotation = _player.Model.Model.Rotation;
                 WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
                     Vector3.One * (ChunkSize / (float)Chunk.Width), 1f) + Vector3.One * 0.002f;
                 WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _targetHeight);

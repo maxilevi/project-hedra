@@ -351,7 +351,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (Landscape == null || !Landscape.BlocksSetted) return 0;
                 for (y = BoundsY - 1; y > -1; y--)
                 {
-                    Block block = Voxels[X][y][Z];
+                    var block = Voxels[X][y][Z];
                     if (block.Type != BlockType.Air && block.Type != BlockType.Water)
                         return y;
                 }
@@ -393,7 +393,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (Landscape != null && Landscape.BlocksSetted)
                 for (int y = Y; y < BoundsY - 1; y++)
                 {
-                    Block block = Voxels[X][y][Z];
+                    var block = Voxels[X][y][Z];
                     if (block.Type != BlockType.Air && block.Type != BlockType.Water &&
                         Voxels[X][y + 1][Z].Type == BlockType.Air)
                         return y;
@@ -406,8 +406,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (Disposed) return new Block();
             if (Landscape == null || !Landscape.BlocksSetted) return new Block();
 
-            Block block = this.GetBlockAt(X, Y, Z);
-            if (block.Type == BlockType.Water && Y > BiomePool.SeaLevel)
+            var block = this.GetBlockAt(X, Y, Z);
+            if (block.Type == BlockType.Water)
                 return new Block();
 
             return block;
@@ -422,7 +422,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 for (int y = BoundsY - 1; y > -1; y--)
                 {
-                    Block B = Voxels[X][y][Z];
+                    var B = Voxels[X][y][Z];
                     if (B.Type != BlockType.Air && B.Type != BlockType.Water)
                         return Voxels[X][y][Z];
                 }
@@ -442,7 +442,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             for (var y = 0; y < Height; y++)
             {
-                Block block = Voxels[X][y][Z];
+                var block = Voxels[X][y][Z];
                 if (block.Type == BlockType.Air && block.Type == BlockType.Water)
                     return Voxels[X][y - 1][Z];
             }
@@ -451,7 +451,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public bool IsActiveBlock(int X, int Y, int Z)
         {
-            Block b = this.GetBlockAt(X, Y, Z);
+            var b = this.GetBlockAt(X, Y, Z);
             return b.Type != BlockType.Air && (b.Density > 0 || b.Density == -1) ? true : false;
         }
 

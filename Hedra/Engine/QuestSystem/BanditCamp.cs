@@ -36,7 +36,7 @@ namespace Hedra.Engine.QuestSystem
             this.Radius = Radius;
             this.BuildRescuee(new Random((int)(Position.X / 11 * (Position.Z / 13))));
             this._campfire = new Campfire(Position);
-            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyboardKeyEventArgs EventArgs)
+            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs EventArgs)
             {
                 _shouldRescue = EventArgs.Key == Key.E && _canRescue;
             });
@@ -66,7 +66,11 @@ namespace Hedra.Engine.QuestSystem
 
         private void BuildRescuee(Random Rng)
         {
-            _rescuee = World.QuestManager.SpawnHumanoid(HumanType.Warrior,
+            var randomTypes = new[]
+            {
+                HumanType.Warrior, HumanType.Archer, HumanType.Blacksmith, HumanType.Mage, HumanType.TravellingMerchant
+            };
+            _rescuee = World.QuestManager.SpawnHumanoid(randomTypes[Rng.Next(0, randomTypes.Length)],
                 this.Position + Vector3.UnitY * 7f + Vector3.UnitZ * 3.0f);
             _rescuee.Physics.UsePhysics = false;
             _rescuee.Physics.HasCollision = false;

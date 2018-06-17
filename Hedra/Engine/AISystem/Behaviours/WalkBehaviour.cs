@@ -49,6 +49,7 @@ namespace Hedra.Engine.AISystem.Behaviours
                 {
                     this.Cancel();
                 }
+                _lastPosition = Parent.Position;
             }
         }
     }

@@ -86,17 +86,17 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 {
                     var pos = new Vector3(Cell.P[i].X * _coefficient, Cell.P[i].Y * _coefficient,
                         Cell.P[i].Z * _coefficient); // LOD is 1
-                    Block block = this.GetNeighbourBlock((int)pos.X, (int)pos.Y, (int)pos.Z,
+                    var block = this.GetNeighbourBlock((int)pos.X, (int)pos.Y, (int)pos.Z,
                         RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk, RightBackChunk, LeftFrontChunk,
                         BackChunk, LeftChunk);
 
                     Cell.Type[i] = block.Type;
                     Cell.Density[i] = block.Density;
 
-                    if (block.Type == BlockType.Water && (int)pos.Y > BiomePool.SeaLevel)
+                    if (block.Type == BlockType.Water)
                         Cell.Density[i] = BiomePool.DecodeWater(block.Density);
                 }
-            if (WaterCell && Y > BiomePool.SeaLevel)
+            if (WaterCell)
             {
                 //Only rivers
                 var cz = new GridCell();
@@ -162,11 +162,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     }
                 }
             }
-            else if (WaterCell)
-            {
-                this.UpdateCell(ref Cell, X, Y, Z, RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk,
-                    RightBackChunk, LeftFrontChunk, BackChunk, LeftChunk, Width, Height, Depth, ExtraData, WaterCell, Lod);
-            }
 
             for (var i = 0; i < Cell.Type.Length; i++)
                 if (Cell.Type[i] == BlockType.Temporal && Y < this.Height - 2)
@@ -174,156 +169,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Success = false;
                     Cell.Type[i] = BlockType.Air;
                 }
-        }
-
-        private void UpdateCell(ref GridCell Cell, int X, int Y, int Z, Chunk RightChunk, Chunk FrontChunk,
-            Chunk RightFrontChunk, Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk,
-            Chunk LeftChunk, int Width, int Height, int Depth, bool ExtraData, bool NormalCell, int Lod)
-        {
-            int lod = Lod;
-
-            #region NormalCell
-
-            if (NormalCell)
-            {
-                if (ExtraData)
-                {
-                    if (X <= lod - 1)
-                    {
-                        if (LeftChunk != null && !LeftChunk.Disposed && LeftChunk.IsGenerated &&
-                            LeftChunk.Mesh.IsBuilded)
-                        {
-                            Cell.Type[4] = LeftChunk.GetBlockAt(Width - lod + X, Y, Z).Type;
-                            Cell.Density[4] = LeftChunk.GetBlockAt(Width - lod + X, Y, Z).Density;
-                        }
-                    }
-                    else
-                    {
-                        Cell.Type[4] = Blocks[X - lod][Y][Z].Type;
-                        Cell.Density[4] = Blocks[X - lod][Y][Z].Density;
-                    }
-
-                    //5
-
-                    if (Z <= lod - 1)
-                    {
-                        if (BackChunk != null && !BackChunk.Disposed && BackChunk.IsGenerated &&
-                            BackChunk.Mesh.IsBuilded)
-                        {
-                            Cell.Type[5] = BackChunk.GetBlockAt(X, Y, Depth - lod + Z).Type;
-                            Cell.Density[5] = BackChunk.GetBlockAt(X, Y, Depth - lod + Z).Density;
-                        }
-                    }
-                    else
-                    {
-                        Cell.Type[5] = Blocks[X][Y][Z - lod].Type;
-                        Cell.Density[5] = Blocks[X][Y][Z - lod].Density;
-                    }
-                }
-
-                //---Special Cases---
-                var bX = false;
-                var bZ = false;
-                //2
-                if (X >= Width - lod) bX = true;
-                if (Z >= Depth - lod) bZ = true;
-                if (bX && bZ && RightFrontChunk != null && !RightFrontChunk.Disposed && RightFrontChunk.IsGenerated &&
-                    RightFrontChunk.Mesh.IsBuilded)
-                {
-                    Cell.Density[2] = RightFrontChunk.GetBlockAt(0, Y, 0).Density;
-                    Cell.Type[2] = RightFrontChunk.GetBlockAt(0, Y, 0).Type;
-                }
-                if (bZ && !bX && FrontChunk != null && !FrontChunk.Disposed && FrontChunk.IsGenerated &&
-                    FrontChunk.Mesh.IsBuilded)
-                {
-                    Cell.Density[2] = FrontChunk.GetBlockAt(X + lod, Y, 0).Density;
-                    Cell.Type[2] = FrontChunk.GetBlockAt(X + lod, Y, 0).Type;
-                }
-                if (bX && !bZ && RightChunk != null && !RightChunk.Disposed && RightChunk.IsGenerated &&
-                    RightChunk.Mesh.IsBuilded)
-                {
-                    Cell.Density[2] = RightChunk.GetBlockAt(0, Y, Z + lod).Density;
-                    Cell.Type[2] = RightChunk.GetBlockAt(0, Y, Z + lod).Type;
-                }
-                if (!bX && !bZ)
-                {
-                    Cell.Density[2] = Blocks[X + lod][Y][Z + lod].Density;
-                    Cell.Type[2] = Blocks[X + lod][Y][Z + lod].Type;
-                }
-
-                if (ExtraData)
-                {
-                    //x-1z-1
-                    var nX = false;
-                    var nZ = false;
-                    //2
-                    if (X <= lod - 1) nX = true;
-                    if (Z <= lod - 1) nZ = true;
-
-                    if (nX && nZ && LeftBackChunk != null && !LeftBackChunk.Disposed && LeftBackChunk.IsGenerated &&
-                        LeftBackChunk.Mesh.IsBuilded)
-                    {
-                        Cell.Type[6] = LeftBackChunk.GetBlockAt(Width - lod + X, Y, Depth - lod + Z).Type;
-                        Cell.Density[6] = LeftBackChunk.GetBlockAt(Width - lod + X, Y, Depth - lod + Z).Density;
-                    }
-                    if (nZ && !nX && BackChunk != null && !BackChunk.Disposed && BackChunk.IsGenerated &&
-                        BackChunk.Mesh.IsBuilded)
-                    {
-                        Cell.Type[6] = BackChunk.GetBlockAt(X - lod, Y, Depth - lod + Z).Type;
-                        Cell.Density[6] = BackChunk.GetBlockAt(X - lod, Y, Depth - lod + Z).Density;
-                    }
-                    if (nX && !nZ && LeftChunk != null && !LeftChunk.Disposed && LeftChunk.IsGenerated &&
-                        LeftChunk.Mesh.IsBuilded)
-                    {
-                        Cell.Type[6] = LeftChunk.GetBlockAt(Width - lod + X, Y, Z - lod).Type;
-                        Cell.Density[6] = LeftChunk.GetBlockAt(Width - lod + X, Y, Z - lod).Density;
-                    }
-                    if (!nX && !nZ)
-                    {
-                        Cell.Type[6] = Blocks[X - lod][Y][Z - lod].Type;
-                        Cell.Density[6] = Blocks[X - lod][Y][Z - lod].Density;
-                    }
-
-                    //x-1 z+1
-
-                    if (nX && bZ && LeftFrontChunk != null && !LeftFrontChunk.Disposed && LeftFrontChunk.IsGenerated &&
-                        LeftFrontChunk.Mesh.IsBuilded)
-                        Cell.Type[0] = LeftFrontChunk.GetBlockAt(Width - lod + X, Y, 0).Type;
-                    if (!nX && bZ && FrontChunk != null && !FrontChunk.Disposed && FrontChunk.IsGenerated &&
-                        FrontChunk.Mesh.IsBuilded) Cell.Type[0] = FrontChunk.GetBlockAt(X - lod, Y, 0).Type;
-                    if (nX && !bZ && LeftChunk != null && !LeftChunk.Disposed && LeftChunk.IsGenerated &&
-                        LeftChunk.Mesh.IsBuilded) Cell.Type[0] = LeftChunk.GetBlockAt(Width - lod + X, Y, Z + lod).Type;
-                    if (!nX && !bZ) Cell.Type[0] = Blocks[X - lod][Y][Z + lod].Type;
-
-                    //x+1 z-1
-
-                    if (bX && nZ && RightBackChunk != null && !RightBackChunk.Disposed && RightBackChunk.IsGenerated &&
-                        RightBackChunk.Mesh.IsBuilded)
-                    {
-                        Cell.Type[7] = RightBackChunk.GetBlockAt(0, Y, Depth - lod + Z).Type;
-                        Cell.Density[7] = RightBackChunk.GetBlockAt(0, Y, Depth - lod + Z).Density;
-                    }
-                    if (!bX && nZ && BackChunk != null && !BackChunk.Disposed && BackChunk.IsGenerated &&
-                        BackChunk.Mesh.IsBuilded)
-                    {
-                        Cell.Type[7] = BackChunk.GetBlockAt(X + lod, Y, Depth - lod + Z).Type;
-                        Cell.Density[7] = BackChunk.GetBlockAt(X + lod, Y, Depth - lod + Z).Density;
-                    }
-                    if (bX && !nZ && RightChunk != null && !RightChunk.Disposed && RightChunk.IsGenerated &&
-                        RightChunk.Mesh.IsBuilded)
-                    {
-                        Cell.Type[7] = RightChunk.GetBlockAt(0, Y, Z - lod).Type;
-                        Cell.Density[7] = RightChunk.GetBlockAt(0, Y, Z - lod).Density;
-                    }
-                    if (!bX && !nZ)
-                    {
-                        Cell.Type[7] = Blocks[X + lod][Y][Z - lod].Type;
-                        Cell.Density[7] = Blocks[X + lod][Y][Z - lod].Density;
-                    }
-                }
-            }
-
-            #endregion
         }
 
         private void BuildCell(ref GridCell Cell, int X, int Y, int Z, bool WaterCell, int Lod)

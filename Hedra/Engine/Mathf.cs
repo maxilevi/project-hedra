@@ -122,16 +122,20 @@ namespace Hedra.Engine
 		    return (output.X * precision) + output.Y;
 		}
 		
-		public static Vector4 Lerp(Vector4 V1, Vector4 V2, float T){
+		public static Vector4 Lerp(Vector4 V1, Vector4 V2, float T)
+        {
 			return (1-T)*V1 + T*V2;
 		}
-		public static Vector3 Lerp(Vector3 V1, Vector3 V2, float T){
+		public static Vector3 Lerp(Vector3 V1, Vector3 V2, float T)
+        {
 			return (1-T)*V1 + T*V2;
 		}
-		public static Vector2 Lerp(Vector2 V1, Vector2 V2, float T){
+		public static Vector2 Lerp(Vector2 V1, Vector2 V2, float T)
+        {
 			return (1-T)*V1 + T*V2;
 		}
-		public static float Lerp(float F1, float F2, float T){
+		public static float Lerp(float F1, float F2, float T)
+        {
 			return (1-T)*F1 + T*F2;
 		}
 		

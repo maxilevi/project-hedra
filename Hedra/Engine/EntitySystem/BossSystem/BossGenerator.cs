@@ -28,12 +28,14 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 		        type = MobType.Gorilla;
 		    }
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);
-
+		    boss.MaxHealth *= (float) (Math.Log(GameManager.Player.Level) + 1);
+		    boss.Health = boss.MaxHealth;
 		    var dmgComponent = boss.SearchComponent<DamageComponent>();
             var healthBarComponent = new BossHealthBarComponent(boss, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
 			
             boss.RemoveComponent(boss.SearchComponent<HealthBarComponent>());
-			dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args) {
+		    dmgComponent.XpToGive += (int) (GameManager.Player.Level * .25f);
+            dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args) {
 			    if (!(Args.Victim.Health <= 0)) return;
 
 			    GameManager.Player.MessageDispatcher.ShowMessage("YOU EARNED "+(int)dmgComponent.XpToGive + " XP!", 3f, Rendering.UI.Bar.Violet.ToColor());

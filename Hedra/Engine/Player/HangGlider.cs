@@ -42,7 +42,7 @@ namespace Hedra.Engine.Player
                 Orientation = Vector3.UnitZ,
                 MaxLifetime = .5f
             };
-            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyboardKeyEventArgs EventArgs)
+            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs EventArgs)
             {
                 if (!this.Enabled || !this._player.CanInteract || EventArgs.Key != Key.Space || _player.Stamina < _player.MaxStamina * .25f) return;
                 this.Push(220f);

@@ -43,61 +43,39 @@ namespace Hedra.Engine.PhysicsSystem
                 vertexList.AddRange(Bones[i].Vertices);
             }
             var vertices = vertexList.ToArray();
-            var collisionPoints = new CollisionPoint[8];
-            var minX = GetSupportWithId(-Vector3.UnitX, vertices, Bones);
-            var minY = GetSupportWithId(-Vector3.UnitY, vertices, Bones);
-            var minZ = GetSupportWithId(-Vector3.UnitZ, vertices, Bones);
-            var maxX = GetSupportWithId(Vector3.UnitX, vertices, Bones);
-            var maxY = GetSupportWithId(Vector3.UnitY, vertices, Bones);
-            var maxZ = GetSupportWithId(Vector3.UnitZ, vertices, Bones);
-            collisionPoints[0] = BuildFromVectors(minX, minY, minZ, GetId(new Vector3(0, 0, 0), vertices, Bones));
-            collisionPoints[1] = BuildFromVectors(maxX, minY, minZ, GetId(new Vector3(1, 0, 0), vertices, Bones));
-            collisionPoints[2] = BuildFromVectors(minX, minY, maxZ, GetId(new Vector3(0, 0, 1), vertices, Bones));
-            collisionPoints[3] = BuildFromVectors(maxX, minY, maxZ, GetId(new Vector3(1, 0, 1), vertices, Bones));
-            
-            collisionPoints[4] = BuildFromVectors(minX, maxY, minZ, GetId(new Vector3(0, 1, 0), vertices, Bones));
-            collisionPoints[5] = BuildFromVectors(maxX, maxY, minZ, GetId(new Vector3(1, 1, 0), vertices, Bones));
-            collisionPoints[6] = BuildFromVectors(minX, maxY, maxZ, GetId(new Vector3(0, 1, 1), vertices, Bones));
-            collisionPoints[7] = BuildFromVectors(maxX, maxY, maxZ, GetId(new Vector3(1, 1, 1), vertices, Bones));
+            var collisionPoints = new CollisionPoint[12];
+            collisionPoints[0] = AddSupportWithId(-Vector3.UnitX, vertices, Bones);
+            collisionPoints[1] = AddSupportWithId(-Vector3.UnitY, vertices, Bones);
+            collisionPoints[2] = AddSupportWithId(-Vector3.UnitZ, vertices, Bones);
+            collisionPoints[3] = AddSupportWithId(Vector3.UnitX, vertices, Bones);
+            collisionPoints[4] = AddSupportWithId(Vector3.UnitY, vertices, Bones);
+            collisionPoints[5] = AddSupportWithId(Vector3.UnitZ, vertices, Bones);
+            collisionPoints[6] = AddSupportWithId(-Vector3.UnitX + -Vector3.UnitZ, vertices, Bones);
+            collisionPoints[7] = AddSupportWithId(-Vector3.UnitY + -Vector3.UnitZ, vertices, Bones);
+            collisionPoints[8] = AddSupportWithId(-Vector3.UnitZ + -Vector3.UnitY + -Vector3.UnitX, vertices, Bones);
+            collisionPoints[9] = AddSupportWithId(Vector3.UnitX + Vector3.UnitZ, vertices, Bones);
+            collisionPoints[10] = AddSupportWithId(Vector3.UnitY + Vector3.UnitZ, vertices, Bones);
+            collisionPoints[11] = AddSupportWithId(Vector3.UnitZ + Vector3.UnitY + Vector3.UnitX, vertices, Bones);
             return collisionPoints;
         }
 
-        private static CollisionPoint BuildFromVectors(Vector4 DirX, Vector4 DirY, Vector4 DirZ, int Id) 
+        private static CollisionPoint AddSupportWithId(Vector3 Direction, Vector3[] Vertices, BoneData[] Bones)
         {
+            var vertex = Vertices.SupportPoint(Direction);
+            var index = -1;
+            for (var i = 0; i < Bones.Length; i++)
+            {
+                if (Array.IndexOf(Bones[i].Vertices, vertex) != -1)
+                {
+                    index = Bones[i].Id;
+                    break;
+                }
+            }
             return new CollisionPoint
             {
-                Id = new Vector3(Id, Id, Id),
-                Vertex = new Vector3(DirX.X, DirY.Y, DirZ.Z)
+                Id = new Vector3(index, index, index),
+                Vertex = vertex
             };
-        }
-        private static Vector4 GetSupportWithId(Vector3 Direction, Vector3[] Vertices, BoneData[] Bones)
-        {
-            var vertex = Vertices.SupportPoint(Direction);
-            var index = -1;
-            for (var i = 0; i < Bones.Length; i++)
-            {
-                if (Array.IndexOf(Bones[i].Vertices, vertex) != -1)
-                {
-                    index = Bones[i].Id;
-                    break;
-                }
-            }
-            return new Vector4(vertex, index);
-        }
-
-        private static int GetId(Vector3 Direction, Vector3[] Vertices, BoneData[] Bones)
-        {
-            var vertex = Vertices.SupportPoint(Direction);
-            var index = -1;
-            for (var i = 0; i < Bones.Length; i++)
-            {
-                if (Array.IndexOf(Bones[i].Vertices, vertex) != -1)
-                {
-                    index = Bones[i].Id;
-                    break;
-                }
-            }
-            return index;
         }
     }
 }

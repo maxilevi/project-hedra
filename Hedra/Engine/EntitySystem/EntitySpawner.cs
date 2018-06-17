@@ -60,7 +60,7 @@ namespace Hedra.Engine.EntitySystem
                     0,
                     Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width - GameSettings.ChunkLoaderRadius * Chunk.Width * .5f)
                     + Player.Position.Xz.ToVector3();
-			    Block underBlock = World.GetHighestBlockAt( (int) desiredPosition.X, (int) desiredPosition.Z);
+			    var underBlock = World.GetHighestBlockAt( (int) desiredPosition.X, (int) desiredPosition.Z);
 			    if(underBlock.Type != BlockType.Air && underBlock.Type != BlockType.Water && underBlock.Type != BlockType.Seafloor){
 			        int y = World.GetHighestY( (int) desiredPosition.X, (int) desiredPosition.Z);
 			        if(y <= 0) 

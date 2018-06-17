@@ -11,6 +11,7 @@ namespace Hedra.Engine.Rendering
 {
     public static class Colors
     {
+        public static Vector4 DarkRed { get; } = new Vector4(.5f, 0, 0, 1);
         public static Vector4 Red { get; } = new Vector4(1,0,0,1);
         public static Vector4 Sienna { get; } = new Vector4(0.625f, 0.3203125f, 0.17578125f, 1);
         public static Vector4 Gray { get; } = new Vector4(.5f,.5f,.5f,1f);

@@ -11,6 +11,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -73,10 +74,12 @@ namespace Hedra.Engine.EntitySystem
 			}
 			
 			float Distance = (Target == Owner) ? 8 : 3;
-			if( Target != null && (Target.Position - Parent.Position).LengthSquared > Distance * Distance * Chunk.BlockSize * Chunk.BlockSize ){	
+			if( Target != null && (Target.Position - Parent.Position).LengthSquared > Distance * Distance * Chunk.BlockSize * Chunk.BlockSize )
+			{	
 				
 				Parent.Model.Run();
-			}else if (Target != null && (Target.Position - Parent.Position).LengthSquared < Distance*.75f * Distance*.75f * Chunk.BlockSize * Chunk.BlockSize){
+			}
+			else if (Target != null && (Target.Position - Parent.Position).LengthSquared < Distance * .75f * Distance*.75f * Chunk.BlockSize * Chunk.BlockSize){
 					
 				if(Target != null && Target != Owner)
                 {
@@ -88,13 +91,22 @@ namespace Hedra.Engine.EntitySystem
 					Parent.Model.Idle();
 				}
 			}
-
-			if(Parent.Model.IsWalking && Target != null){
-				Parent.Orientation = (Target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
+            /*var isInFrontOfOwner = Target == Owner && Vector3.Dot(Target.Orientation, (Target.Position - Parent.Position).NormalizedFast()) < 0.0;
+		    if (isInFrontOfOwner)
+		    {
+		        Parent.Model.Run();
+            }*/
+            if ( Parent.Model.IsWalking && Target != null)
+			{
+			    Parent.Orientation = (Target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
+                /*if (isInFrontOfOwner)
+			    {
+			        Parent.Orientation = (-Target.Orientation + -Target.Orientation.Xz.PerpendicularRight.ToVector3()) * .5f;
+			    }*/
 				Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
 				Parent.Physics.Move( Parent.Speed * 8 * Parent.Orientation * (float)Time.deltaTime);
 			}
-			
+
 			if( (Target == Owner || Target == null) ){
 				//bool FoundSomething = false;
 				/*for(int i = World.Entities.Count-1; i > -1; i--){

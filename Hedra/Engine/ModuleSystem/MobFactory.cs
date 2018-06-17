@@ -67,9 +67,9 @@ namespace Hedra.Engine.ModuleSystem
             var dmg = mob.SearchComponent<DamageComponent>();
             if (dmg == null) throw new ArgumentException("No DamageComponent has been set");
 
-            mob.MaxHealth = (GameManager.Player.Level * 1.5f + mob.MaxHealth) * mobDifficultyModifier;
-            mob.AttackDamage = (GameManager.Player.Level * 1.05f + mob.AttackDamage) * mobDifficultyModifier;
-            dmg.XpToGive = (GameManager.Player.Level * 1.05f + dmg.XpToGive) * mobDifficultyModifier; 
+            mob.MaxHealth = (GameManager.Player.Level * 1.75f + mob.MaxHealth) * mobDifficultyModifier;
+            mob.AttackDamage = mob.AttackDamage * mobDifficultyModifier + GameManager.Player.Level * 0.5f;
+            dmg.XpToGive = dmg.XpToGive * mobDifficultyModifier; 
             mob.Health = mob.MaxHealth;
             return mob;
         }

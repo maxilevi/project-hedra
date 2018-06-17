@@ -259,89 +259,82 @@ namespace Hedra.Engine.Management
 
 		    int endHeader = fileContents.IndexOf("element vertex", StringComparison.Ordinal);
             fileContents = fileContents.Substring(endHeader, fileContents.Length - endHeader);
-            MatchCollection verts = Regex.Matches(fileContents, @"-?[\d]+\.[\d]+|[\d]+\.[\d]+|[\d]+");
+            var numbers = Regex.Matches(fileContents, @"-?[\d]+\.[\d]+|[\d]+\.[\d]+|[\d]+");
 
-            var vertexData = new List<Vector3>();
+            const int vertexCountIndex = 0;
+            const int faceCountIndex = 1;
+            const int startDataIndex = 2;
+            var vertexCount = int.Parse(numbers[vertexCountIndex].Value);
+            var faceCount = int.Parse(numbers[faceCountIndex].Value);
+
+            var vertexData = new List<Vector3>(vertexCount);
 			var colors = new List<Vector4>();
 			var normals = new List<Vector3>();
-			var indices = new List<uint>();
-			var offset = 0;
+			var indices = new List<uint>(faceCount * 3);
+            var offset = 0;
 
-		    const int vertexCountIndex = 0;
-            const int faceCountIndex = 1;
-		    const int startDataIndex = 2;
+            var numberOffset = HasColors ? 9 : 6;
+			int accumulatedOffset = startDataIndex;
+            for(; vertexData.Count < vertexCount; accumulatedOffset += numberOffset)
+            {
+				vertexData.Add( 
+                    new Vector3(
+                        float.Parse(numbers[accumulatedOffset + 0].Value, CultureInfo.InvariantCulture),
+                        float.Parse(numbers[accumulatedOffset + 1].Value, CultureInfo.InvariantCulture),
+                        float.Parse(numbers[accumulatedOffset + 2].Value, CultureInfo.InvariantCulture) 
+                        )
+                );
+				normals.Add( 
+                    new Vector3(
+                        float.Parse(numbers[accumulatedOffset + 3].Value, CultureInfo.InvariantCulture),
+                        float.Parse(numbers[accumulatedOffset + 4].Value, CultureInfo.InvariantCulture),
+                        float.Parse(numbers[accumulatedOffset + 5].Value, CultureInfo.InvariantCulture)
+                        )
+                );
+				if (HasColors)
+				{
+				    colors.Add(
+                        new Vector4(
+                            float.Parse(numbers[accumulatedOffset + 6].Value) / 255f,
+                            float.Parse(numbers[accumulatedOffset + 7].Value) / 255f, 
+                            float.Parse(numbers[accumulatedOffset + 8].Value) / 255f,
+                            1.0f
+                            )
+                    );
+				}
+			}
+            for (; indices.Count / 3 < faceCount; accumulatedOffset += 4)
+            {
+                indices.Add(uint.Parse(numbers[accumulatedOffset + 1].Value));
+                indices.Add(uint.Parse(numbers[accumulatedOffset + 2].Value));
+                indices.Add(uint.Parse(numbers[accumulatedOffset + 3].Value));
+            }
 
-			if(HasColors){
-				int i = startDataIndex;
-				while(true){
-					vertexData.Add( new Vector3(float.Parse(verts[i].Value, CultureInfo.InvariantCulture), float.Parse(verts[i+1].Value, CultureInfo.InvariantCulture), float.Parse(verts[i+2].Value, CultureInfo.InvariantCulture) ));
-					normals.Add( new Vector3(float.Parse(verts[i+3].Value, CultureInfo.InvariantCulture), float.Parse(verts[i+4].Value, CultureInfo.InvariantCulture), float.Parse(verts[i+5].Value, CultureInfo.InvariantCulture) ));
-					                            
-					colors.Add( new Vector4(float.Parse(verts[i+6].Value) / 255f, float.Parse(verts[i+7].Value) / 255f, float.Parse(verts[i+8].Value) / 255f, 1));
-					if(vertexData.Count >= Int32.Parse(verts[vertexCountIndex].Value)){
-						i += 9;
-						break;
-					}
-					i += 9;
-				}
-
-				while(true){
-					indices.Add(uint.Parse(verts[i+1].Value));
-					indices.Add(uint.Parse(verts[i+2].Value));
-					indices.Add(uint.Parse(verts[i+3].Value));
-					
-					if(indices.Count / 3 >= uint.Parse(verts[faceCountIndex].Value)){
-						break;
-					}
-					
-					i+=4;
-				}
-			}else{
-				var i = startDataIndex;
-				while(true){
-					vertexData.Add( new Vector3(float.Parse(verts[i].Value, CultureInfo.InvariantCulture), float.Parse(verts[i+1].Value, CultureInfo.InvariantCulture), float.Parse(verts[i+2].Value, CultureInfo.InvariantCulture) ));
-					normals.Add( new Vector3(float.Parse(verts[i+3].Value, CultureInfo.InvariantCulture), float.Parse(verts[i+4].Value, CultureInfo.InvariantCulture), float.Parse(verts[i+5].Value, CultureInfo.InvariantCulture) ));
-					                            
-					if(vertexData.Count >= uint.Parse(verts[vertexCountIndex].Value)){
-						i += 6;
-						break;
-					}
-					i += 6;
-				}
-				while(true){
-					indices.Add(uint.Parse(verts[i+1].Value));
-					indices.Add(uint.Parse(verts[i+2].Value));
-					indices.Add(uint.Parse(verts[i+3].Value));
-					
-					if(indices.Count / 3 >= uint.Parse(verts[faceCountIndex].Value))
-						break;
-					
-					i+=4;
-				}
+			var scaleMat = Matrix4.CreateScale(Scale);
+			var positionMat = Matrix4.CreateTranslation(Position);
+			var rotationMat = Matrix4.CreateRotationY(Rotation.Y);
+			rotationMat *= Matrix4.CreateRotationX(Rotation.X);
+			rotationMat *= Matrix4.CreateRotationZ(Rotation.Z);
+			for(var j = 0; j < vertexData.Count; j++)
+            {
+				vertexData[j] = Vector3.TransformPosition(vertexData[j], scaleMat);
+				vertexData[j] = Vector3.TransformPosition(vertexData[j], rotationMat);
+				vertexData[j] = Vector3.TransformPosition(vertexData[j], positionMat);
 			}
 			
-			Matrix4 ScaleMat = Matrix4.CreateScale(Scale);
-			Matrix4 PositionMat = Matrix4.CreateTranslation(Position);
-			Matrix4 RotationMat = Matrix4.CreateRotationY(Rotation.Y);
-			RotationMat *= Matrix4.CreateRotationX(Rotation.X);
-			RotationMat *= Matrix4.CreateRotationZ(Rotation.Z);
-			for(int j = 0; j < vertexData.Count; j++){
-				vertexData[j] = Vector3.TransformPosition(vertexData[j], ScaleMat);
-				vertexData[j] = Vector3.TransformPosition(vertexData[j], RotationMat);
-				vertexData[j] = Vector3.TransformPosition(vertexData[j], PositionMat);
-			}
-			
-			for(int j = 0; j < normals.Count; j++){
-				normals[j] = Vector3.TransformNormal(normals[j], RotationMat);
+			for(var j = 0; j < normals.Count; j++)
+            {
+				normals[j] = Vector3.TransformNormal(normals[j], rotationMat);
 			}
 
-			VertexData Data = new VertexData();
-			Data.Vertices = vertexData;
-			Data.Indices = indices;
-			Data.Normals = normals;
-			Data.Colors = colors;
-			Data.UseCache = true;
-			return Data;
+            return new VertexData
+            {
+                Vertices = vertexData,
+                Indices = indices,
+                Normals = normals,
+                Colors = colors,
+                UseCache = true
+            };
 		}
 
 	    public static void Dispose()

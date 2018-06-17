@@ -15,7 +15,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             EventDispatcher.RegisterKeyUp(this, this.HandleUp);
             EventDispatcher.RegisterKeyDown(this, this.HandleDown);
         }
-        public void HandleUp(object Sender, KeyboardKeyEventArgs EventArgs)
+        public void HandleUp(object Sender, KeyEventArgs EventArgs)
         {
             if (!_player.CanInteract || _player.Knocked || _player.Movement.IsJumping || _player.IsDead || _player.IsSwimming ||
                 _player.IsUnderwater || _player.IsGliding || _player.Inventory.Show || _player.AbilityTree.Show || GameSettings.Paused) return;
@@ -29,7 +29,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _player.Toolbar.SkillAt(keyIndex)?.KeyUp();          
         }
 
-        public void HandleDown(object Sender, KeyboardKeyEventArgs EventArgs)
+        public void HandleDown(object Sender, KeyEventArgs EventArgs)
         {
             if (!_player.CanInteract || _player.Movement.IsJumping || _player.Knocked || _player.IsDead || _player.IsSwimming || _player.IsAttacking || _player.IsRiding
                 || _player.IsUnderwater || _player.IsGliding || _player.Inventory.Show || _player.AbilityTree.Show || _player.Trade.Show || GameSettings.Paused) return;

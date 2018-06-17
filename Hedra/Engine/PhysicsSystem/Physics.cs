@@ -71,7 +71,7 @@ namespace Hedra.Engine.PhysicsSystem
 			var densityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
 			var densityXz = World.GetHighestBlockAt( (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
 			var density = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Density;
-			
+
 			var yx = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z);
 			var yz = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z + (int) Chunk.BlockSize);
 			var yxz = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z + (int) Chunk.BlockSize);
@@ -113,7 +113,7 @@ namespace Hedra.Engine.PhysicsSystem
 		    var densityXz = World.GetNearestBlockAt((int)BlockPosition.X + (int)Chunk.BlockSize, (int)BlockPosition.Y, (int)BlockPosition.Z + (int)Chunk.BlockSize).Density;
 		    var density = World.GetNearestBlockAt((int)BlockPosition.X, (int)BlockPosition.Y, (int)BlockPosition.Z).Density;
 
-		    var yx = (int) BlockPosition.Y;
+            var yx = (int) BlockPosition.Y;
             var yz = (int)BlockPosition.Y;
             var yxz = (int)BlockPosition.Y;
             var yh = (int)BlockPosition.Y;

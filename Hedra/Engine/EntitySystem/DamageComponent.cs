@@ -28,24 +28,25 @@ namespace Hedra.Engine.EntitySystem
 
     public class DamageComponent : EntityComponent
     {
-        public float Armor = 1;
         public float XpToGive = 8;
         public bool Immune = false;
         public bool Delete = true;
         public List<Billboard> DamageLabels = new List<Billboard>();
         public event OnDamageEventHandler OnDamageEvent;
 
-        public DamageComponent(Entity Parent) : base(Parent){}
+        public DamageComponent(Entity Parent) : base(Parent) { }
 
-        private float _tintTimer = 0;
+        private float _tintTimer;
         private Vector4 _targetTint;
 
         public override void Update()
         {
-
             _targetTint = _tintTimer > 0 ? new Vector4(2.0f, 0.1f, 0.1f, 1) : new Vector4(1, 1, 1, 1);
 
-            Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, (float) Time.deltaTime * 12f);
+            if ((Parent.Model.Tint - _targetTint).LengthFast > 0.005f)
+            {
+                Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, (float) Time.deltaTime * 12f);
+            }
 
             _tintTimer -= Time.FrameTimeSeconds;
             _tintTimer = Math.Max(_tintTimer, 0);
@@ -67,6 +68,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void Damage(float Amount, Entity Damager, out float Exp, bool PlaySound)
         {
+            Amount /= this.Parent.AttackResistance;
             if (Parent.IsDead)
             {
                 Exp = 0;

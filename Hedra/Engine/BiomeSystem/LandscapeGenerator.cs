@@ -29,9 +29,12 @@ namespace Hedra.Engine.BiomeSystem
 			
 			this.BuildArray();
 			this.DefineBlocks();
-			try{
+			try
+            {
 				this.PlaceStructures();
-			}catch(Exception e){
+			}
+            catch (Exception e)
+            {
 				Log.WriteLine(e.ToString());
 				World.RemoveChunk(Chunk);
 				return;
@@ -152,8 +155,6 @@ namespace Hedra.Engine.BiomeSystem
 					        float amplifiedRiverBorders = Mathf.Clamp(riverBorders * riverMult, 0, riverDepth);
 
                             height = Math.Max(0, height + Chunk.BaseHeight );
-							river = Mathf.Clamp(Mathf.Lerp(0, river, height / BiomePool.SeaLevel - 2.0f), 0, river);
-							riverBorders = Mathf.Clamp(Mathf.Lerp(0, riverBorders, height / (BiomePool.SeaLevel-1) - 2.0f), 0, riverBorders);
 					        path = Mathf.Lerp(path, 0, river / riverDepth);
 
                             
@@ -289,30 +290,46 @@ namespace Hedra.Engine.BiomeSystem
 								    if( (World.Seed == World.MenuSeed || true) && makeDirt )
 								        _blocks[x][y][z].Type = BlockType.Dirt;
 
+                                if (y < height + river)
+                                {
+                                    if (_blocks[x][y][z].Type == BlockType.Air && river > 0)
+                                    {
+                                        _blocks[x][y][z].Type = BlockType.Water;
+                                        _blocks[x][y][z].Density = BiomePool.EncodeWater(height + river,
+                                            _blocks[x][y][z].Density);
+                                    }
+                                    else if (Mathf.Clamp(riverBorders * 100f, 0, riverDepth) > 2 &&
+                                             _blocks[x][y][z].Type != BlockType.Air)
+                                    {
+                                        _blocks[x][y][z].Type = BlockType.Seafloor;
+                                        for (var i = 0; i < y; i++) _blocks[x][i][z].Type = BlockType.Seafloor;
+                                    }
+                                }
 
-							    if(y < height+river)
-							        if(_blocks[x][y][z].Type == BlockType.Air && river > 0){
-										 
-							            _blocks[x][y][z].Type = BlockType.Water;
-							            _blocks[x][y][z].Density = BiomePool.EncodeWater((Half)(height + river), _blocks[x][y][z].Density); 
-									
-										
-							        } else if( Mathf.Clamp(riverBorders * 100f,0, riverDepth) > 2 && _blocks[x][y][z].Type != BlockType.Air){
-								
-							            _blocks[x][y][z].Type = BlockType.Seafloor;
-							            for(var i = 0; i < y; i++) _blocks[x][i][z].Type = BlockType.Seafloor;
-							        }
+                                if(y <= BiomePool.SeaLevel && _blocks[x][y][z].Type == BlockType.Air && y >= 1 && _blocks[x][y-1][z].Type != BlockType.Seafloor && _blocks[x][y-1][z].Type != BlockType.Air && _blocks[x][y-1][z].Type != BlockType.Water )
+                                {
+                                    if (y < BiomePool.SeaLevel)
+                                    { 
+                                        _blocks[x][y][z].Type = BlockType.Seafloor;
+                                        for (var i = 0; i < y; i++)
+                                        {
+                                            _blocks[x][i][z].Type = BlockType.Seafloor;
+                                        }
+                                    }
+                                }
 
+                                var isOcean = y > 0 && y <= BiomePool.SeaLevel &&
+                                              (_blocks[x][y - 1][z].Type == BlockType.Seafloor ||
+                                               _blocks[x][y - 1][z].Type == BlockType.Water) &&
+                                              _blocks[x][y][z].Type == BlockType.Air &&
+                                              _blocks[x][y + 1][z].Type == BlockType.Air;
+                                if (isOcean)
+                                {
+                                    _blocks[x][y][z].Type = BlockType.Water;
+                                    _blocks[x][y][z].Density = BiomePool.EncodeWater(BiomePool.SeaLevel, _blocks[x][y][z].Density);
+                                }
 
-							    if(y <= 16 && _blocks[x][y][z].Type == BlockType.Air && y >= 1 && _blocks[x][y-1][z].Type != BlockType.Seafloor && _blocks[x][y-1][z].Type != BlockType.Air && _blocks[x][y-1][z].Type != BlockType.Water ){
-									if(y < 16)
-										_blocks[x][y][z].Type = BlockType.Seafloor;
-									if(y < 16) for(var i = 0; i < y; i++) _blocks[x][i][z].Type = BlockType.Seafloor;
-							    }
-								
-								if( y > 0 && y <= 16 && (_blocks[x][y-1][z].Type == BlockType.Seafloor || _blocks[x][y-1][z].Type == BlockType.Water) && _blocks[x][y][z].Type == BlockType.Air && _blocks[x][y+1][z].Type == BlockType.Air ) _blocks[x][y][z].Type = BlockType.Water;
-
-							    if(villagePath || path == pathDepth || town){
+                                if(villagePath || path == pathDepth || town){
 									if( _blocks[x][y][z].Type != BlockType.Air && _blocks[x][y][z].Type != BlockType.Water && _blocks[x][y][z].Type != BlockType.Seafloor){
 										if(path > 0 || pathClamped || villagePath)
 											_blocks[x][y][z].Type = BlockType.Path;
@@ -352,11 +369,9 @@ namespace Hedra.Engine.BiomeSystem
 	                    && _blocks[x][y - 1][z].Type != BlockType.Water &&
 	                    _blocks[x][y - 1][z].Type != BlockType.Air) _blocks[x][y][z].Type = BlockType.Air;
 
-                    Block block = Chunk.GetBlockAt(x, y, z);
+	                var block = Chunk.GetBlockAt(x, y, z);
 	                Region region = World.BiomePool.GetRegion(position);
-                    bool noWeedZone, noTreesZone, inMerchant;
-
-	                this.LoopStructures(x, z, structs, out noWeedZone, out noTreesZone, out inMerchant);
+	                this.LoopStructures(x, z, structs, out bool noWeedZone, out bool noTreesZone, out bool inMerchant);
 	                this.DoEnviromentPlacements(position, noWeedZone, region);
 
 	                if (block.Type != BlockType.Grass) continue;

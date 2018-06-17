@@ -12,12 +12,4 @@ namespace Hedra.Engine.ModuleSystem
 
         void Apply(Entity Mob);
     }
-
-    internal static class EnemyFactoryExtensions
-    {
-        public static float DamageFormula(this IEnemyFactory Factory, float Base)
-        {
-            return Base * World.OverallDifficulty * Math.Max(1, LocalPlayer.Instance.Level * .2f);
-        }
-    }
 }

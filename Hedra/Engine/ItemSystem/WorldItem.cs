@@ -48,7 +48,7 @@ namespace Hedra.Engine.ItemSystem
             this._height = Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y);
 		    this.OnPickup += Player => PickedUp = true;
 
-		    EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyboardKeyEventArgs EventArgs)
+		    EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyEventArgs EventArgs)
 		    {
 		        if (_canPickup && Key.E == EventArgs.Key) _shouldPickup = true;
 		    });
@@ -106,7 +106,7 @@ namespace Hedra.Engine.ItemSystem
 		    if (!ItemSpecification.IsEquipment && (this.Position - GameManager.Player.Position).Xz.LengthSquared < 12 * 12 
                 && GameManager.Player.Inventory.Search(I => I.Name == ItemSpecification.Name) != null)
 		    {
-		        if (LocalPlayer.Instance.Inventory.HasAvailableSpace && !PickedUp && !Disposed)
+		        if (!PickedUp && !Disposed)
 		        {
 		            OnPickup?.Invoke(GameManager.Player);
                 }

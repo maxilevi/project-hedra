@@ -225,7 +225,7 @@ namespace Hedra
 			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
 			Vector2 Vec2 = World.ToChunkSpace(Player.Position);
 			//Log.WriteLine( (System.GC.GetTotalMemory(false) / 1024 / 1024) + " MB");
-			if(GameSettings.Debug){
+			if(GameSettings.DebugView){
 				
 				Chunk UChunk = World.GetChunkAt(Player.Position);
 				
@@ -279,7 +279,7 @@ namespace Hedra
             }
 
 #if SHOW_COLLISION
-			   if(GameSettings.Debug){
+			   if(GameSettings.DebugView){
 			           
 				LocalPlayer Player = GameManager.Player;
 			    Chunk UnderChunk = World.GetChunkAt(Player.Position);

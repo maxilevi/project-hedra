@@ -22,61 +22,51 @@ namespace Hedra.Engine.QuestSystem
 	/// Description of Obelisk.
 	/// </summary>
 	
-	public class Obelisk : ClaimableStructure, IUpdatable
+	public class Obelisk : InteractableStructure
 	{
-		public ObeliskType Type;
+	    public override string Message => "INTERACT WITH THE OBELISK";
+	    public override int InteractDistance => 32;
+        public ObeliskType Type;
 		private bool _used;
 		
-		public Obelisk()
-		{
-			UpdateManager.Add(this);
-		}
-		
-		public void Update(){
-			var player = GameManager.Player;
+		public override void Interact(LocalPlayer Interactee)
+        {
+			if(Interacted) return;
 
-			if(( player.Position - base.Position).LengthSquared < ClaimDistance*ClaimDistance && !_used && !GameSettings.Paused 
-			   && Vector3.Dot( (base.Position - player.Position).NormalizedFast(), player.View.LookingDirection) > .6f)
-			    player.MessageDispatcher.ShowMessage("[E] INTERACT WITH THE SHRINE", .25f);
-		}
-		
-		public override void Claim(LocalPlayer Player){
-			if(_used) return;
-			base.RaiseOnClaimed(Player);
-
-			if(Type == ObeliskType.Xp){
-				float xpToGive =  4 * Player.Level;
-				Player.XP += xpToGive;
-				Player.MessageDispatcher.ShowMessage("YOU EARNED "+ xpToGive + " XP", 2, Bar.Violet.ToColor());
-			}else
-			if(Type == ObeliskType.Health){
-				Player.Health += 16 * Player.Level;
-				Player.MessageDispatcher.ShowMessage("YOUR HEALTH FEELS REFRESHED", 2, Bar.Low.ToColor());
-			}else
-			if(Type == ObeliskType.Mana){
-				Player.Mana += 32 * Player.Level;
-				Player.MessageDispatcher.ShowMessage("YOUR MANA FEELS REFRESHED", 2, Bar.Blue.ToColor());
-			}else
-			if(Type == ObeliskType.Mobs){
-				
-				int count = Utils.Rng.Next(1, 4);
-				for(int i = 0; i < count; i++){
-					Vector3 desiredPosition = this.Position + new Vector3(Utils.Rng.NextFloat() * 40f * Chunk.BlockSize - 20f * Chunk.BlockSize, 0, Utils.Rng.NextFloat() * 40f * Chunk.BlockSize - 20f * Chunk.BlockSize);
-					desiredPosition = new Vector3(desiredPosition.X, Physics.HeightAtPosition(desiredPosition.X, desiredPosition.Z),desiredPosition.Z);
+            switch (Type)
+			{
+			    case ObeliskType.Xp:
+			        float xpToGive =  4 * Interactee.Level;
+			        Interactee.XP += xpToGive;
+			        Interactee.MessageDispatcher.ShowMessage($"YOU EARNED {xpToGive} XP", 2, Bar.Violet.ToColor());
+			        break;
+			    case ObeliskType.Health:
+			        Interactee.Health += 16 * Interactee.Level;
+			        Interactee.MessageDispatcher.ShowMessage("YOUR HEALTH FEELS REFRESHED", 2, Bar.Low.ToColor());
+			        break;
+			    case ObeliskType.Mana:
+			        Interactee.Mana += 32 * Interactee.Level;
+			        Interactee.MessageDispatcher.ShowMessage("YOUR MANA FEELS REFRESHED", 2, Bar.Blue.ToColor());
+			        break;
+			    case ObeliskType.Mobs:
+			        int count = Utils.Rng.Next(1, 4);
+			        for(var i = 0; i < count; i++)
+			        {
+			            Vector3 desiredPosition = this.Position + new Vector3(Utils.Rng.NextFloat() * 40f * Chunk.BlockSize - 20f * Chunk.BlockSize, 0, Utils.Rng.NextFloat() * 40f * Chunk.BlockSize - 20f * Chunk.BlockSize);
+			            desiredPosition = new Vector3(desiredPosition.X, Physics.HeightAtPosition(desiredPosition.X, desiredPosition.Z),desiredPosition.Z);
 					
-					World.SpawnMob(MobType.Spider, desiredPosition, Utils.Rng);
-				}
-				
-			}else{
-				return;
+			            World.SpawnMob(MobType.Spider, desiredPosition, Utils.Rng);
+			        }
+			        break;
+			    default:
+			        throw new ArgumentOutOfRangeException($"Obelisk type does not exist.");
 			}
-			_used = true;
 			
 			Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, this.Position, false, 1f, 0.6f);
-			
-		}
+        }
 		
-		public static Vector4 GetObeliskColor(ObeliskType Type){
+		public static Vector4 GetObeliskColor(ObeliskType Type)
+        {
 			switch(Type){
 				case ObeliskType.Health:
 					return Bar.Low * .3f;
@@ -94,7 +84,8 @@ namespace Hedra.Engine.QuestSystem
 			}
 		}
 		
-		public static Vector4 GetObeliskStoneColor(Random Rng){
+		public static Vector4 GetObeliskStoneColor(Random Rng)
+        {
 			int randomN = Rng.Next(0, 4);
 			switch(randomN){
 				case 0:
@@ -109,19 +100,17 @@ namespace Hedra.Engine.QuestSystem
 				default: return new Vector4(1,1,1,1);
 			}
 		}
-		
-		public override void Dispose(){
-			UpdateManager.Remove(this);
-		}
 	}
 	
-	public enum ShrineType{
+	public enum ShrineType
+    {
 		Obelisk,
 		Altar,
 		Monolith
 	}
 	
-	public enum ObeliskType{
+	public enum ObeliskType
+    {
 		Xp,
 		Health,
 		Mana,

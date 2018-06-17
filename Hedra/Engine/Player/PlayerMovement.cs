@@ -203,9 +203,23 @@ namespace Hedra.Engine.Player
             {
                 if (!_player.IsUnderwater) this.Jump();
             });
+
+            this.RegisterKey(Key.F, delegate
+            {
+                if (!GameSettings.Paused && _player.CanInteract)
+                {
+                    _player.HandLamp.Enabled = !_player.HandLamp.Enabled;
+                    SoundManager.PlaySound(SoundType.NotificationSound, _player.Position, false, 1f, .5f);
+                }
+            });
+
+            this.RegisterKey(Key.F3, delegate
+            {
+                GameSettings.DebugView = !GameSettings.DebugView && GameSettings.DebugMode;             
+            });
         }
 
-        public void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs)
+        public void OnKeyDown(object Sender, KeyEventArgs EventArgs)
         {
             if (_registeredKeys.ContainsKey(EventArgs.Key)) _registeredKeys[EventArgs.Key]();
 
@@ -234,10 +248,6 @@ namespace Hedra.Engine.Player
             {
                 _player.UI.OptionsMenu.DonateBtcButton.ForceClick();
             }
-            if (EventArgs.Key == Key.F3)
-            {
-                GameSettings.Debug = !GameSettings.Debug;
-            }
             if (EventArgs.Key == Key.F2)
             {
                 if (!Directory.Exists(AssetManager.AppData + "/Screenshots/")) Directory.CreateDirectory(AssetManager.AppData + "/Screenshots/");
@@ -249,19 +259,14 @@ namespace Hedra.Engine.Player
             {
                 _player.UI.Hide = !_player.UI.Hide;
             }
-            if (EventArgs.Key == Key.F && !GameSettings.Paused && _player.CanInteract)
-            {
-                _player.HandLamp.Enabled = !_player.HandLamp.Enabled;
-                SoundManager.PlaySound(SoundType.NotificationSound, _player.Position, false, 1f, .5f);
-            }
 
-            if (GameSettings.Debug && EventArgs.Key == Key.F5)
+            if (GameSettings.DebugView && EventArgs.Key == Key.F5)
             {
                 World.ReloadModules();
 
                 _player.Chat.AddLine("Modules reloaded.");
             }
-            if (GameSettings.Debug && EventArgs.Key == Key.F6)
+            if (GameSettings.DebugView && EventArgs.Key == Key.F6)
             {
                 World.MeshQueue.SafeDiscard();
                 World.ChunkGenerationQueue.SafeDiscard();
@@ -288,10 +293,7 @@ namespace Hedra.Engine.Player
             }
             if (EventArgs.Key == Key.F9 && _player.CanInteract)
             {
-                if (Recorder.Active)
-                    Recorder.Active = false;
-                else
-                    Recorder.Active = true;
+                Recorder.Active = !Recorder.Active;
             }
             if (EventArgs.Key == Key.H && _player.CanInteract) GameSettings.LockFrustum = !GameSettings.LockFrustum;
 

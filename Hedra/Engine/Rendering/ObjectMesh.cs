@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering
 	{
 	    public Vector3 TargetRotation { get; set; }
 	    public Vector3 TargetPosition { get; set; }
-	    public float AnimationSpeed { get; set; } = 2;
+	    public float AnimationSpeed { get; set; } = 1f;
         public Vector3 Size { get; set;}
 		public bool Enabled { get; set;}
 		public bool DontCull { get; set;}

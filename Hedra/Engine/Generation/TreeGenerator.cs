@@ -146,8 +146,8 @@ namespace Hedra.Engine.Generation
 		        TransMatrix = transMatrix
 		    };
 
-		    CacheManager.Check(data);		
-			underChunk.StaticBuffer.InstanceElements.Add(data);
+		    CacheManager.Check(data);
+			underChunk?.StaticBuffer?.InstanceElements?.Add(data);
 		}
 
 	    public float SpaceNoise(float X, float Z)

@@ -313,6 +313,12 @@ namespace Hedra.Engine.Rendering.Animation
         /// </summary>
 	    public Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
 
+	    public float AnimationSpeed
+	    {
+	        get => Animator.AnimationSpeed;
+	        set => Animator.AnimationSpeed = value;
+	    }
+
 	    public bool Pause
 	    {
 	        get => Animator.Stop;

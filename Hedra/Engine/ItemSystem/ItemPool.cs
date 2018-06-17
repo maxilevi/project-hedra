@@ -78,7 +78,7 @@ namespace Hedra.Engine.ItemSystem
 	            var useThisTier = true;
 	            for (var k = 0; k < (int) Tier-i+1; k++)
 	            {
-	                useThisTier = useThisTier && Rng.NextBool();
+	                useThisTier = useThisTier && Rng.Next(0, 3) == 1;
 	            }
 	            if (!useThisTier) continue;
 	            selectedTier = (ItemTier) i;

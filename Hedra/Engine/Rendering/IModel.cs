@@ -17,6 +17,7 @@ namespace Hedra.Engine.Rendering
         bool ApplyFog { get; set; }
         bool Pause { get; set; }
         float Alpha { get; set; }
+        float AnimationSpeed { get; set; }
 
         void Dispose();
     }

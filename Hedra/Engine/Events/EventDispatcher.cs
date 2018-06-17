@@ -14,16 +14,24 @@ namespace Hedra.Engine.Events
 	public static class EventDispatcher{
 
 		private static readonly List<IEventListener> EventListeners;
-	    private static readonly Dictionary<object, EventHandler<KeyboardKeyEventArgs>> KeyDownHandlers;
-	    private static readonly Dictionary<object, EventHandler<KeyboardKeyEventArgs>> KeyUpHandlers;
-	    private static readonly Dictionary<object, EventHandler<KeyPressEventArgs>> KeyPressedHandlers;
+	    private static readonly Dictionary<object, EventHandler<KeyEventArgs>> HighKeyDownHandlers;
+	    private static readonly Dictionary<object, EventHandler<KeyEventArgs>> NormalKeyDownHandlers;
+        private static readonly Dictionary<object, EventHandler<KeyEventArgs>> LowKeyDownHandlers;
+	    private static readonly Dictionary<object, EventHandler<KeyEventArgs>> HighKeyUpHandlers;
+	    private static readonly Dictionary<object, EventHandler<KeyEventArgs>> NormalKeyUpHandlers;
+	    private static readonly Dictionary<object, EventHandler<KeyEventArgs>> LowKeyUpHandlers;
+        private static readonly Dictionary<object, EventHandler<KeyPressEventArgs>> KeyPressedHandlers;
         private static readonly Dictionary<object, EventHandler<MouseButtonEventArgs>> MouseButtonUpHandlers;
 	    private static readonly Dictionary<object, EventHandler<MouseButtonEventArgs>> MouseButtonDownHandlers;
         private static readonly Dictionary<object, EventHandler<MouseMoveEventArgs>> MouseMoveHandlers;
 	    private static readonly Dictionary<object, EventHandler<MouseWheelEventArgs>> MouseWheelHandlers;
 
-        private static event EventHandler<KeyboardKeyEventArgs> OnKeyDownEvent;
-	    private static event EventHandler<KeyboardKeyEventArgs> OnKeyUpEvent;
+	    private static event EventHandler<KeyEventArgs> HighOnKeyDownEvent;
+	    private static event EventHandler<KeyEventArgs> NormalOnKeyDownEvent;
+        private static event EventHandler<KeyEventArgs> LowOnKeyDownEvent;
+	    private static event EventHandler<KeyEventArgs> HighOnKeyUpEvent;
+	    private static event EventHandler<KeyEventArgs> NormalOnKeyUpEvent;
+	    private static event EventHandler<KeyEventArgs> LowOnKeyUpEvent;
         private static event EventHandler<KeyPressEventArgs> OnKeyPressedEvent;
         private static event EventHandler<MouseMoveEventArgs> OnMouseMoveEvent;
         private static event EventHandler<MouseButtonEventArgs> OnMouseButtonUpEvent;
@@ -35,9 +43,13 @@ namespace Hedra.Engine.Events
 	    static EventDispatcher()
 	    {
 	        EventListeners = new List<IEventListener>();
-            KeyDownHandlers = new Dictionary<object, EventHandler<KeyboardKeyEventArgs>>();
-	        KeyUpHandlers = new Dictionary<object, EventHandler<KeyboardKeyEventArgs>>();
-	        KeyPressedHandlers = new Dictionary<object, EventHandler<KeyPressEventArgs>>();
+            HighKeyDownHandlers = new Dictionary<object, EventHandler<KeyEventArgs>>();
+	        NormalKeyDownHandlers = new Dictionary<object, EventHandler<KeyEventArgs>>();
+	        LowKeyDownHandlers = new Dictionary<object, EventHandler<KeyEventArgs>>();
+            HighKeyUpHandlers = new Dictionary<object, EventHandler<KeyEventArgs>>();
+	        NormalKeyUpHandlers = new Dictionary<object, EventHandler<KeyEventArgs>>();
+	        LowKeyUpHandlers = new Dictionary<object, EventHandler<KeyEventArgs>>();
+            KeyPressedHandlers = new Dictionary<object, EventHandler<KeyPressEventArgs>>();
             MouseMoveHandlers = new Dictionary<object, EventHandler<MouseMoveEventArgs>>();
             MouseWheelHandlers = new Dictionary<object, EventHandler<MouseWheelEventArgs>>();
 	        MouseButtonUpHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
@@ -90,29 +102,81 @@ namespace Hedra.Engine.Events
 
 	    }
 
-        public static void RegisterKeyDown(object Key, EventHandler<KeyboardKeyEventArgs> EventHandler)
-	    {
-	        KeyDownHandlers.Add(Key, EventHandler);
-	        OnKeyDownEvent += KeyDownHandlers[Key];
-	    }
+        public static void RegisterKeyDown(object Key, EventHandler<KeyEventArgs> EventHandler, EventPriority Priority = EventPriority.Low)
+        {
+            switch (Priority)
+            {
+                case EventPriority.Low:
+                    LowKeyDownHandlers.Add(Key, EventHandler);
+                    LowOnKeyDownEvent += LowKeyDownHandlers[Key];
+                    break;
+                case EventPriority.Normal:
+                    NormalKeyDownHandlers.Add(Key, EventHandler);
+                    NormalOnKeyDownEvent += NormalKeyDownHandlers[Key];
+                    break;
+                case EventPriority.High:
+                    HighKeyDownHandlers.Add(Key, EventHandler);
+                    HighOnKeyDownEvent += HighKeyDownHandlers[Key];
+                    break;
+            }
+        }
 
 	    public static void UnregisterKeyDown(object Key)
 	    {
-	        OnKeyDownEvent -= KeyDownHandlers[Key];
-	        KeyDownHandlers.Remove(Key);
-	    }
+	        if (LowKeyDownHandlers.ContainsKey(Key))
+	        {
+	            LowOnKeyDownEvent -= LowKeyDownHandlers[Key];
+	            LowKeyDownHandlers.Remove(Key);
+	        }
+	        else if (NormalKeyDownHandlers.ContainsKey(Key))
+	        {
+	            NormalOnKeyDownEvent -= NormalKeyDownHandlers[Key];
+	            NormalKeyDownHandlers.Remove(Key);
+	        }
+	        else if (HighKeyDownHandlers.ContainsKey(Key))
+	        {
+	            HighOnKeyDownEvent -= HighKeyDownHandlers[Key];
+	            HighKeyDownHandlers.Remove(Key);
+	        }
+        }
 
-	    public static void RegisterKeyUp(object Key, EventHandler<KeyboardKeyEventArgs> EventHandler)
+	    public static void RegisterKeyUp(object Key, EventHandler<KeyEventArgs> EventHandler, EventPriority Priority = EventPriority.Low)
 	    {
-	        KeyUpHandlers.Add(Key, EventHandler);
-	        OnKeyUpEvent += KeyUpHandlers[Key];
-	    }
+	        switch (Priority)
+	        {
+	            case EventPriority.Low:
+	                LowKeyUpHandlers.Add(Key, EventHandler);
+	                LowOnKeyUpEvent += LowKeyUpHandlers[Key];
+	                break;
+	            case EventPriority.Normal:
+	                NormalKeyUpHandlers.Add(Key, EventHandler);
+	                NormalOnKeyUpEvent += NormalKeyUpHandlers[Key];
+	                break;
+	            case EventPriority.High:
+	                HighKeyUpHandlers.Add(Key, EventHandler);
+	                HighOnKeyUpEvent += HighKeyUpHandlers[Key];
+	                break;
+	        }
+        }
 
 	    public static void UnregisterKeyUp(object Key)
 	    {
-	        OnKeyUpEvent -= KeyUpHandlers[Key];
-	        KeyUpHandlers.Remove(Key);
-	    }
+	        if (LowKeyUpHandlers.ContainsKey(Key))
+	        {
+	            LowOnKeyUpEvent -= LowKeyUpHandlers[Key];
+	            LowKeyUpHandlers.Remove(Key);
+	        }
+	        else if (NormalKeyUpHandlers.ContainsKey(Key))
+	        {
+	            NormalOnKeyUpEvent -= NormalKeyUpHandlers[Key];
+	            NormalKeyUpHandlers.Remove(Key);
+	        }
+	        else if (HighKeyUpHandlers.ContainsKey(Key))
+	        {
+	            HighOnKeyUpEvent -= HighKeyUpHandlers[Key];
+	            HighKeyUpHandlers.Remove(Key);
+	        }
+        }
 
 	    public static void RegisterKeyPress(object Key, EventHandler<KeyPressEventArgs> EventHandler)
 	    {
@@ -165,30 +229,66 @@ namespace Hedra.Engine.Events
 
 	    public static void OnKeyDown(object Sender, KeyboardKeyEventArgs E)
 		{
-		    OnKeyDownEvent?.Invoke(Sender, E);
-            for (var i = 0;i<EventListeners.Count; i++){
+		    var keyEvent = new KeyEventArgs(E);
+		    HighOnKeyDownEvent?.Invoke(Sender, keyEvent);
+		    NormalOnKeyDownEvent?.Invoke(Sender, keyEvent);
+		    LowOnKeyDownEvent?.Invoke(Sender, keyEvent);
+            for (var i = 0; i < EventListeners.Count; i++)
+            {
 				EventListeners[i].OnKeyDown(Sender, E);
 			}
 		}
 
-	    public static void OnKeyUp(object Sender, KeyboardKeyEventArgs E){
-		    OnKeyUpEvent?.Invoke(Sender, E);
-            for (var i = 0;i<EventListeners.Count; i++){
-				EventListeners[i].OnKeyUp(Sender, E);
-			}
-		}
+	    public static void OnKeyUp(object Sender, KeyboardKeyEventArgs E)
+	    {
+	        var keyEvent = new KeyEventArgs(E);
+            HighOnKeyUpEvent?.Invoke(Sender, keyEvent);
+            NormalOnKeyUpEvent?.Invoke(Sender, keyEvent);
+            LowOnKeyUpEvent?.Invoke(Sender, keyEvent);
+	        for (var i = 0; i < EventListeners.Count; i++)
+	        {
+	            EventListeners[i].OnKeyUp(Sender, E);
+	        }
+        }
 		
-		public static void OnKeyPress(object Sender, KeyPressEventArgs E){
+		public static void OnKeyPress(object Sender, KeyPressEventArgs E)
+        {
             OnKeyPressedEvent?.Invoke(Sender, E);
 			for(var i = 0;i<EventListeners.Count; i++){
 				EventListeners[i].OnKeyPress(Sender, E);
 			}
 		}
 	}
-}
 
-public enum EventPriority{
-	Low,
-	Normal,
-	High,
+    public class KeyEventArgs : EventArgs
+    {
+        public KeyboardKeyEventArgs Event { get; private set; }
+
+        public KeyEventArgs(KeyboardKeyEventArgs Event)
+        {
+            this.Event = Event;
+        }
+
+        public void Cancel()
+        {
+            this.Event = new KeyboardKeyEventArgs();
+        }
+
+        public Key Key => Event.Key;
+        public uint ScanCode => Event.ScanCode;
+        public bool Alt => Event.Alt;
+        public bool Control => Event.Control;
+        public bool Shift => Event.Shift;
+        public KeyModifiers Modifiers => Event.Modifiers;
+        public KeyboardState Keyboard => Event.Keyboard;
+        public bool IsRepeat => Event.IsRepeat;
+    }
+
+    public enum EventPriority
+    {
+        Low,
+        Normal,
+        High
+    }
+
 }

@@ -210,6 +210,7 @@
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
     <Compile Include="Engine\AISystem\GorillaWarriorAIComponent.cs" />
+    <Compile Include="Engine\EntitySystem\InteractableComponent.cs" />
     <Compile Include="Engine\EntitySystem\UpdatableModel.cs" />
     <Compile Include="Engine\EntitySystem\HealthBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\IModelHandler.cs" />
@@ -368,7 +369,9 @@
     <Compile Include="Engine\Player\MapSystem\MapMeshBuilder.cs" />
     <Compile Include="Engine\Player\PlayerMovement.cs" />
     <Compile Include="Engine\Player\Skills\LearningSkill.cs" />
+    <Compile Include="Engine\Player\Skills\WarriorIronSkin.cs" />
     <Compile Include="Engine\QuestSystem\BanditCamp.cs" />
+    <Compile Include="Engine\QuestSystem\Tombstone.cs" />
     <Compile Include="Engine\Rendering\GraphicsLayer.cs" />
     <Compile Include="Engine\Management\OSManager.cs" />
     <Compile Include="Engine\Management\Platform.cs" />
@@ -537,8 +540,7 @@
     <Compile Include="Engine\QuestSystem\CarriageAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\Graveyard.cs" />
     <Compile Include="Engine\QuestSystem\Chest.cs" />
-    <Compile Include="Engine\QuestSystem\ClaimableStructure.cs" />
-    <Compile Include="Engine\QuestSystem\IClaimable.cs" />
+    <Compile Include="Engine\QuestSystem\InteractableStructure.cs" />
     <Compile Include="Engine\QuestSystem\LampPost.cs" />
     <Compile Include="Engine\QuestSystem\MageAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\NameGenerator.cs" />
@@ -564,7 +566,6 @@
     <Compile Include="Engine\QuestSystem\Plateau.cs" />
     <Compile Include="Engine\QuestSystem\QuestManager.cs" />
     <Compile Include="Engine\QuestSystem\HeadIconComponent.cs" />
-    <Compile Include="Engine\QuestSystem\Shrine.cs" />
     <Compile Include="Engine\QuestSystem\BaseStructure.cs" />
     <Compile Include="Engine\Reflection.cs" />
     <Compile Include="Engine\Rendering\Colors.cs" />
@@ -4512,6 +4513,9 @@
     </None>
     <None Include="Sounds\GorillaGrowl.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Soundtrack\BreathOfDay.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\CardinalCity.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

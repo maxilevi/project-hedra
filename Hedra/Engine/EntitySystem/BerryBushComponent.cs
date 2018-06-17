@@ -14,51 +14,39 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Sound;
 
 namespace Hedra.Engine.EntitySystem
 {
 	/// <summary>
 	/// Description of BerryBushComponent.
 	/// </summary>
-	public class BerryBushComponent : EntityComponent, IClaimable, IDisposable, ITickable
+	public class BerryBushComponent : InteractableComponent, ITickable
     {
-		public Chunk UnderChunk;
-		private bool _interacted;
+		public BerryBushComponent(Entity Parent) : base(Parent) { }
 
-		public BerryBushComponent(Entity Parent) : base(Parent){}
+        public override float InteractionAngle => .75f;
+        public override string Message => "COLLECT";
+        public override int InteractDistance => 16;
 		
-		public override void Update(){
-			
-			LocalPlayer Player = GameManager.Player;
-			Parent.Model.Tint = new Vector4(1f,1f,1f,1);
-			if( (Parent.Position - Player.Position).LengthSquared < 16*16 
-			   && Vector3.Dot( (Parent.Position - Player.Position).NormalizedFast(), Player.View.LookingDirection) > .6f ){
-			    Player.MessageDispatcher.ShowMessage("[E] COLLECT", .5f);
-				Parent.Model.Tint = new Vector4(1.5f,1.5f,1.5f,1);
-			}
-		}
-		
-		public void Interact(LocalPlayer Player){
-			if(_interacted) return;
-			if( (Parent.Position - Player.Position).LengthSquared > 16*16 
-			   || Vector3.Dot( (Parent.Position - Player.Position).NormalizedFast(), Player.View.LookingDirection) < .6f )return;
-			
+		public override void Interact(LocalPlayer Interactee)
+        {
 			var berry = ItemPool.Grab(ItemType.Berry);
-		    if (!Player.Inventory.AddItem(berry))
+		    if (!Interactee.Inventory.AddItem(berry))
 		    {
 		        World.DropItem(berry, this.Parent.Position);
 		    }
-			Sound.SoundManager.PlaySound(Sound.SoundType.NotificationSound, Parent.Position);
-			Player.MessageDispatcher.ShowNotification("You got a berry from the bush", System.Drawing.Color.DarkRed, 3f, false);
-			_interacted = true;
 			
 			var damage = Parent.SearchComponent<DamageComponent>();
-			if(damage != null){
+			if(damage != null)
+            {
 				damage.Immune = false;
-				float Exp;
-				//Trigger it's dissapeareance.
-				damage.Damage(Parent.MaxHealth, Parent, out Exp, false);
+				damage.Damage(Parent.MaxHealth, Parent, out float xp, false);
 			}
-		}
-	}
+            SoundManager.PlaySound(SoundType.NotificationSound, Parent.Position);
+            Interactee.MessageDispatcher.ShowNotification("You got a berry from the bush", Colors.DarkRed.ToColor(), 3f, false);
+            base.Interact(Interactee);
+        }
+    }
 }

@@ -154,29 +154,6 @@ namespace Hedra.Engine.Player
 	                Networking.NetworkManager.RegisterAttack(Victim, Amount);
 
 	        };
-
-	        EventDispatcher.RegisterKeyDown(typeof(ClaimableStructure), delegate (object sender, KeyboardKeyEventArgs e)
-	        {
-	            if (e.Key != Key.E || GameSettings.Paused) return;
-
-	            for (var i = 0; i < World.Structures.Count; i++)
-	            {
-	                if (!(World.Structures[i] is ClaimableStructure)) continue;
-	                var claimable = (ClaimableStructure)World.Structures[i];
-
-	                if (!((this.Position - claimable.Position).LengthSquared < claimable.ClaimDistance * claimable.ClaimDistance) ||
-	                    !(Vector3.Dot((claimable.Position - this.Position).NormalizedFast(),
-	                          this.View.LookingDirection) > .6f)) continue;
-
-	                claimable.Claim(this);
-	            }
-
-	            for (var i = 0; i < World.Entities.Count; i++)
-	            {
-	                var claimableComponent = World.Entities[i].SearchComponent<BerryBushComponent>();
-	                claimableComponent?.Interact(this);
-	            }
-	        });
         }
         #endregion
 
@@ -400,10 +377,10 @@ namespace Hedra.Engine.Player
             }
 
 
-            Block underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
-			Block underBlock1 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
-			Block underBlock2 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
-			Block underBlock3 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (3 + IsoSurfaceCreator.WaterQuadOffset));
+            var underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
+			var underBlock1 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
+			var underBlock2 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
+			var underBlock3 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (3 + IsoSurfaceCreator.WaterQuadOffset));
 			int lowestY = World.GetLowestY( (int) View.CameraPosition.X, (int) View.CameraPosition.Z);
 			
 			//Log.WriteLine(UnderBlock0.Type);

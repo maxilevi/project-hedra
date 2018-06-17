@@ -83,7 +83,7 @@ namespace Hedra.Engine.ModuleSystem
                 };
             human.AddComponent(barComponent);
             human.SearchComponent<DamageComponent>().Immune = template.Immune;
-            human.SearchComponent<DamageComponent>().XpToGive = 1.5f * human.Level;
+            human.SearchComponent<DamageComponent>().XpToGive = 6f;
             World.AddEntity(human);
             return human;
         }

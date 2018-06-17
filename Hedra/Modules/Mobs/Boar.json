@@ -3,7 +3,7 @@
   "MaxHealth": 620.0,
   "AttackDamage": 17.0,
   "Speed": 4.65,
-  "XP": 2.0,
+  "XP": 3.0,
   "AIType": "Hostile",
   "Ridable": false,
   "Effects": [],

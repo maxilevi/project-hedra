@@ -46,8 +46,9 @@ namespace Hedra.Engine.EntitySystem
         public event OnAttackEventHandler OnAttacking;
         public event OnAttackEventHandler BeforeAttacking;
         public EntityComponentManager ComponentManager { get; }
-        public float AttackDamage { get; set; } = 1;
+        public float AttackDamage { get; set; } = 1.0f;
         public float AttackCooldown { get; set; }
+        public float AttackResistance { get; set; } = 1.0f;
         public bool Destroy { get; set; } = false;
         public int Level { get; set; } = 1;
         public float MaxOxygen { get; set; } = 30;
@@ -249,7 +250,6 @@ namespace Hedra.Engine.EntitySystem
             var collider1 = Target.Model.BroadphaseCollider;
             var radii = (collider0.BroadphaseRadius + collider1.BroadphaseRadius) * RadiusModifier;
             if ((collider0.BroadphaseCenter - collider1.BroadphaseCenter).LengthSquared > radii * radii) return false;
-            
             var vertices0 = collider0.Vertices;
             var vertices1 = collider1.Vertices;
             float lowestDistance = float.MaxValue;
@@ -387,7 +387,7 @@ namespace Hedra.Engine.EntitySystem
             if (underChunk == null) return float.MaxValue;
             for (int y = underChunk.BoundsY - 1; y > -1; y--)
             {
-                Block block = underChunk.GetBlockAt((int)blockSpace.X, y, (int)blockSpace.Z);
+                var block = underChunk.GetBlockAt((int)blockSpace.X, y, (int)blockSpace.Z);
                 if (block.Type == BlockType.Water)
                 {
                     nearestWaterBlockY = y * Chunk.BlockSize;

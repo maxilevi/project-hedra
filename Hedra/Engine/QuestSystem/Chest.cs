@@ -60,7 +60,7 @@ namespace Hedra.Engine.QuestSystem
 			this.Model.PlayAnimation(IdleAnimation);
 			this.Model.Scale = Vector3.One * 4.5f;
 			this.Model.ApplyFog = true;
-            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyboardKeyEventArgs EventArgs)
+            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs EventArgs)
             {
                 _shouldOpen = EventArgs.Key == Key.E && _canOpen;
             });

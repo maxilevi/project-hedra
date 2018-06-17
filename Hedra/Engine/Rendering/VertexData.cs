@@ -244,26 +244,6 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 		
-		private Vector4 Offset(Vector4 Color, float Green, float Offset){
-			switch( (int) (Green * 10)){
-				case 1:
-					return new Vector4(Color.X + Offset, Color.Y, Color.Z, Color.W);
-				case 2:
-					return new Vector4(Color.X + Offset, Color.Y + Offset, Color.Z, Color.W);
-				case 3:
-					return new Vector4(Color.X + Offset, Color.Y + Offset, Color.Z + Offset, Color.W);
-				case 4:
-					return new Vector4(Color.X + Offset, Color.Y + Offset, Color.Z + Offset, Color.W);
-				case 5:
-					return new Vector4(Color.X, Color.Y, Color.Z + Offset, Color.W);
-				case 6:
-					return new Vector4(Color.X, Color.Y + Offset, Color.Z, Color.W);
-				case 7:
-					return new Vector4(Color.X + Offset, Color.Y, Color.Z + Offset, Color.W);
-			}
-			return Color;
-		}
-		
 		public static VertexData operator +(VertexData V1, VertexData V2){
 			if(V1 == null || V1.Indices == null)
 				return V2.Clone();

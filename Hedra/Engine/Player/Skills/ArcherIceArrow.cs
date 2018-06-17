@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player
 		
 		public IceArrow() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
-			base.ManaCost = 35f;
+			base.ManaCost = 80f;
             base.MaxCooldown = 6.5f;
 			
 			ShootAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherTripleShoot.dae");
@@ -72,8 +72,8 @@ namespace Hedra.Engine.Player
 		
 		public override void Use()
 		{
-			this.Damage = BaseDamage + 7.5f * base.Level;
-			base.MaxCooldown = 6.5f - base.Level * .5f;
+			this.Damage = BaseDamage + 5f * base.Level;
+			base.MaxCooldown = Math.Max(3, 8.0f - base.Level * .5f);
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;

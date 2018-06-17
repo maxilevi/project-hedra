@@ -155,7 +155,6 @@ namespace Hedra.Engine.Management
                     items.Add(index, item);
 			    }
 			}
-
 			information.Items = items.ToArray();
 			Str.Close();
 			Str.Dispose();

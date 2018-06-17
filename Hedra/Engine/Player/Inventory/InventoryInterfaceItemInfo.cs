@@ -93,13 +93,13 @@ namespace Hedra.Engine.Player.Inventory
             var strBuilder = new StringBuilder();
             for (var i = 0; i < attributes.Length; i++)
             {
-                if (!attributes[i].Hidden || GameSettings.Debug)
+                if (!attributes[i].Hidden || GameSettings.DebugView)
                 {
                     var line = $"{attributes[i].Name.AddSpacesToSentence()}   ➝   {Format(attributes[i].Display, attributes[i].Value)}";
                     strBuilder.AppendLine(line);
                 }
             }
-            if (GameSettings.Debug && CurrentItem.HasAttribute(CommonAttributes.Damage))
+            if (GameSettings.DebugView && CurrentItem.HasAttribute(CommonAttributes.Damage))
             {
                 strBuilder.AppendLine($"Modifier   ➝   {LocalPlayer.Instance.WeaponModifier(CurrentItem)}");
             }
@@ -128,7 +128,7 @@ namespace Hedra.Engine.Player.Inventory
             return (int)Convert.ChangeType(Value, typeof(int)) == int.MaxValue ? "∞" : Value.ToString();
         }
 
-        public void Show(Item Item)
+        public virtual void Show(Item Item)
         {
             if(Item == null) return;
             CurrentItem = Item;
@@ -136,7 +136,7 @@ namespace Hedra.Engine.Player.Inventory
             this.Enabled = true;
         }
 
-        public void Hide()
+        public virtual void Hide()
         {
             if(CurrentItem == null) return;
             _currentItemMesh?.Dispose();

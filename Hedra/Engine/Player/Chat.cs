@@ -49,7 +49,7 @@ namespace Hedra.Engine.Player
 				_commandLine.InFocus = true;
 		}
 		
-		public void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs)
+		public void OnKeyDown(object Sender, KeyEventArgs EventArgs)
 		{
 			if(Focused && EventArgs.Key == Key.Up && _lastInput != null){
 				this._commandLine.Text = _lastInput;

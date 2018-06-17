@@ -37,6 +37,13 @@ namespace Hedra.Engine.Player.Inventory
             _priceText.Text = $"{priceString} G";
         }
 
+
+        public override void Show(Item Item)
+        {
+            if (Item == null || Item.IsGold) return;
+            base.Show(Item);
+        }
+
         public void SetManager(TradeManager Manager)
         {
             _manager = Manager;

@@ -8,11 +8,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     public static class WeaponFactory
     {
         private static readonly Dictionary<string, Type> Weapons;
+        private static readonly Dictionary<Item, Weapon> WeaponCache;
 
         static WeaponFactory()
         {
+            WeaponCache = new Dictionary<Item, Weapon>();
             Weapons = new Dictionary<string, Type>();
-            Type[] weaponTypes = Reflection.GetLoadableTypes(Assembly.GetExecutingAssembly(), typeof(WeaponFactory).Namespace).ToArray();
+            Type[] weaponTypes = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(WeaponFactory).Namespace).ToArray();
             foreach (var weaponType in weaponTypes)
             {
                 if(weaponType.IsSubclassOf(typeof(Weapon)))

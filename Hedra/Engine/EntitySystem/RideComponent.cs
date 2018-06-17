@@ -35,7 +35,7 @@ namespace Hedra.Engine.EntitySystem
         public RideComponent(Entity Parent) : base(Parent) {
 			AI = Parent.SearchComponent<BasicAIComponent>();
 			_healthBar = Parent.SearchComponent<HealthBarComponent>();
-            EventDispatcher.RegisterKeyDown(this, delegate(object Object, KeyboardKeyEventArgs EventArgs)
+            EventDispatcher.RegisterKeyDown(this, delegate(object Object, KeyEventArgs EventArgs)
             {
                 _shouldRide = EventArgs.Key == Key.E && _canRide;
                 _shouldUnride = EventArgs.Key == Key.ShiftLeft && _canUnride;
@@ -43,8 +43,7 @@ namespace Hedra.Engine.EntitySystem
 		}
 		
 		public override void Update(){
-			Parent.Model.Tint = new Vector4(1f,1f,1f,1);
-			LocalPlayer player = GameManager.Player;
+			var player = GameManager.Player;
 		    if (!HasRider && (player.BlockPosition - Parent.BlockPosition).LengthSquared < 12 * 12 && !player.IsRiding &&
 		        !player.IsCasting
 		        && Vector3.Dot((Parent.BlockPosition - player.BlockPosition).NormalizedFast(), player.View.LookingDirection) >
@@ -53,13 +52,13 @@ namespace Hedra.Engine.EntitySystem
 		        if (Parent.Model is IMountable model && model.IsMountable && !Parent.IsUnderwater && !Parent.Knocked)
 		        {
 		            player.MessageDispatcher.ShowMessage("[E] TO MOUNT", .5f, Color.White);
-		            Parent.Model.Tint = new Vector4(1.5f, 1.5f, 1.5f, 1);
+		            Parent.Model.Tint = new Vector4(2.0f, 2.0f, 2.0f, 1f);
 		            _canRide = true;
                     if (_shouldRide) this.Ride(player);
 		        }
 		        else
-		        {
-		            _canRide = false;
+		        {		            
+                    _canRide = false;
 		        }
 		    }
 		    else

@@ -60,6 +60,10 @@ namespace Hedra.Engine.Management
 			        };
 			        return true;
 			    }
+			    if (Parts[0] == "debug")
+			    {
+			        GameSettings.DebugMode = !GameSettings.DebugMode;          
+			    }
 			    if (Parts[0] == "icon")
 			    {
 			        Caster.ShowIcon((CacheItem) Enum.Parse(typeof(CacheItem), Parts[1]));

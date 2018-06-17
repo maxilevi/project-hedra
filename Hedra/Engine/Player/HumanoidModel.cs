@@ -433,7 +433,7 @@ namespace Hedra.Engine.Player
 
 			if(Human.IsRolling){
 				if(_previousPosition != this.Human.BlockPosition && this.Human.IsGrounded){
-					Block block = World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z);
+					var block = World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z);
 				    World.Particles.VariateUniformly = true;
 				    World.Particles.Color = Vector4.One;//World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z).GetColor(Region.Default);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
 				    World.Particles.Position = this.Human.Position - Vector3.UnitY;

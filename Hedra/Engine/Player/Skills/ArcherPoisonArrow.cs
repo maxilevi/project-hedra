@@ -30,8 +30,7 @@ namespace Hedra.Engine.Player
 		
 		public PoisonArrow() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/PoisonArrow.png");
-			base.ManaCost = 35f;
-			base.MaxCooldown = 6.5f;
+			base.ManaCost = 75;
 
             ShootAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherTripleShoot.dae");
 			ShootAnimation.Loop = false;
@@ -72,8 +71,8 @@ namespace Hedra.Engine.Player
 		
 		public override void Use()
 		{
-			this.Damage = BaseDamage + 7.5f * base.Level;
-			base.MaxCooldown = 6.5f - base.Level * .5f;
+			this.Damage = BaseDamage + 5.0f * base.Level;
+			base.MaxCooldown = Math.Max(7.5f - base.Level * .35f, 2f);
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;
@@ -86,10 +85,6 @@ namespace Hedra.Engine.Player
 		public override void Update(){}
 		
 		
-		public override string Description {
-			get {
-				return "Shoot a poisonous arrow.";
-			}
-		}
+		public override string Description => "Shoot a poisonous arrow.";
 	}
 }

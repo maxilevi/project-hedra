@@ -22,7 +22,7 @@ namespace Hedra.Engine.QuestSystem
         {
             this.Position = Position;
             var player = LocalPlayer.Instance;
-            EventDispatcher.RegisterKeyDown(this, delegate(object sender, KeyboardKeyEventArgs Args)
+            EventDispatcher.RegisterKeyDown(this, delegate(object sender, KeyEventArgs Args)
             {
                 if (Args.Key == Key.E && !IsOccupied)
                 {

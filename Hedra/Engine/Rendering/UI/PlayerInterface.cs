@@ -33,7 +33,7 @@ namespace Hedra.Engine.Rendering.UI
             OnPlayerInterfaceStateChange?.Invoke(Parameter);
         }
 
-        private static void OnKeyDown(object Sender, KeyboardKeyEventArgs Args)
+        private static void OnKeyDown(object Sender, KeyEventArgs Args)
         {
             switch (Args.Key)
             {
@@ -46,12 +46,12 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        private static void ManageOpened(KeyboardKeyEventArgs Args)
+        private static void ManageOpened(KeyEventArgs Args)
         {
             for (var i = 0; i < Interfaces.Count; i++)
             {
                 if (Interfaces[i].OpeningKey != Args.Key || GameSettings.Paused || GameManager.Player.IsDead ||
-                    !GameManager.Player.CanInteract) continue;
+                    !GameManager.Player.CanInteract || GameManager.IsLoading) continue;
                 if (_openedInterface == null)
                 {
                     Interfaces[i].Show = true;
@@ -64,7 +64,7 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        private static void OnEscapeDown(KeyboardKeyEventArgs Args)
+        private static void OnEscapeDown(KeyEventArgs Args)
         {
             if (Args.Key != Key.Escape || GameManager.InStartMenu) return;
 

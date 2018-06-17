@@ -159,6 +159,12 @@ namespace Hedra.Engine.EntitySystem
         public void Attack(Animation Animation)
         {
             this.Attack(null, Animation, null);
+
+        }
+
+        public void Attack(Animation Animation, float RangeModifier)
+        {
+            this.Attack(null, Animation, null, RangeModifier);
         }
 
         public override void Attack(Entity Victim)

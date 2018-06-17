@@ -282,11 +282,12 @@ namespace Hedra.Engine.Generation
 		        World.RemoveItem(Items[i]);
 		    }
 
-            for (int i = Chunks.Count - 1; i > -1; i--)
+		    var chunks = Chunks;
+            for (int i = chunks.Count - 1; i > -1; i--)
 		    {
 		        try
 		        {
-		            World.RemoveChunk(Chunks[i]);
+		            World.RemoveChunk(chunks[i]);
 		        }
 		        catch (ArgumentOutOfRangeException e)
 		        {

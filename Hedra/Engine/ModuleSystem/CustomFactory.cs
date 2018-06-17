@@ -63,11 +63,16 @@ namespace Hedra.Engine.ModuleSystem
             AssetManager.LoadHitbox(Model.Path);
         }
 
+        private float EffectDamageFormula(float Damage)
+        {
+            return Damage * GameManager.Player.Level * .25f;
+        }
+
         public void Apply(Entity Mob)
         {
             Mob.Model = new QuadrupedModel(Mob, Model);
             Mob.MaxHealth = MaxHealth;
-            Mob.AttackDamage = this.DamageFormula(AttackDamage);
+            Mob.AttackDamage = AttackDamage;
             Mob.AttackCooldown = AttackCooldown;
             Mob.Speed = Speed;
             var dmg = new DamageComponent(Mob)
@@ -84,7 +89,7 @@ namespace Hedra.Engine.ModuleSystem
                 var effect = (IEffectComponent) Activator.CreateInstance(EffectTable[template.Name], Mob);
                 effect.Chance = (int) template.Chance;
                 effect.Duration = template.Duration;
-                effect.Damage = this.DamageFormula(template.Damage);
+                effect.Damage = this.EffectDamageFormula(template.Damage);
                 Mob.AddComponent(effect as EntityComponent);
             }
 

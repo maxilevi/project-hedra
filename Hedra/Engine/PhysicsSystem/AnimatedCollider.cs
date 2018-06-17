@@ -25,16 +25,12 @@ namespace Hedra.Engine.PhysicsSystem
             get
             {
                 if (_defaultBroadphaseShape == null)
-                    _defaultBroadphaseShape = new CollisionShape(new Vector3[_colliderData.DefaultBroadphase.Length], BoneBox.Indices);
+                    _defaultBroadphaseShape = new CollisionShape(new Vector3[_colliderData.DefaultBroadphase.Length]);
                 for (var i = 0; i < _defaultBroadphaseShape.Vertices.Length; i++)
                 {
-                    _defaultBroadphaseShape.Vertices[i] = new Vector3( 
-                        Vector3.TransformPosition(_colliderData.DefaultBroadphase[i].Vertex,
-                        Model.JointTransforms[(int)_colliderData.DefaultBroadphase[i].Id.X]).X, 
-                        Vector3.TransformPosition(_colliderData.DefaultBroadphase[i].Vertex,
-                        Model.JointTransforms[(int)_colliderData.DefaultBroadphase[i].Id.Y]).Y,
-                        Vector3.TransformPosition(_colliderData.DefaultBroadphase[i].Vertex,
-                        Model.JointTransforms[(int)_colliderData.DefaultBroadphase[i].Id.Z]).Z
+                    _defaultBroadphaseShape.Vertices[i] = Vector3.TransformPosition(
+                        _colliderData.DefaultBroadphase[i].Vertex,
+                        Model.JointTransforms[(int)_colliderData.DefaultBroadphase[i].Id.X]
                     );
                 }
                 _defaultBroadphaseShape.RecalculateBroadphase();

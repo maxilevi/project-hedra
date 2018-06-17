@@ -222,7 +222,10 @@ namespace Hedra.Engine.Player
                 TaskManager.Asynchronous(delegate
                 {
                     _playerText.UIText.Opacity = 1;
-                    while (Item.Condition()) { Thread.Sleep(5); }
+                    while (Item.Condition())
+                    {
+                        Thread.Sleep(5);
+                    }
                     Thread.Sleep((int)(Item.Time * 1000));           
                     _playerText.UIText.Opacity = 0;
                     Callback();

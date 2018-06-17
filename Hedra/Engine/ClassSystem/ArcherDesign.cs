@@ -21,7 +21,7 @@ namespace Hedra.Engine.ClassSystem
 
         public override float MaxManaFormula(float RandomFactor)
         {
-            return 42.5f + ((RandomFactor - .75f) * 8 - 1f) * 10 - 5f;
+            return 12.5f + ((RandomFactor - .75f) * 8 - 1f) * 10 - 5f;
         }
     }
 }

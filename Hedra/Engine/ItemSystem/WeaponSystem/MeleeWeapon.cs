@@ -12,6 +12,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         public int WeaponCount { get; private set; }
         public override bool IsMelee { get; protected set; } = true;
         public Vector3 MainWeaponSize { get; private set; }
+        protected TrailRenderer Trail { get; set; }
         private Dictionary<ObjectMesh, ObjectMeshCollider> _colliders { get; set; }
         private CollisionShape[] _shapesArray;
 
@@ -28,6 +29,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 var lastCollider = _colliders.Last().Value;
                 this.MainWeaponSize = lastCollider.Collider.Size;
             }
+            if (Trail == null)
+            {
+                this.Trail = new TrailRenderer(
+                    () => this.WeaponTip,
+                    Vector4.One);
+            }
+            this.Trail.Emit &= this.Owner?.IsAttacking ?? false;
+            this.Trail.Update();
             base.Update(Human);
         }
 
@@ -60,6 +69,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         public override void Dispose()
         {
             _colliders.Clear();
+            Trail?.Dispose();
             base.Dispose();
         }
     }

@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player
 				Time -= Engine.Time.FrameTimeSeconds;
 				
 				if(Player.IsGrounded && PreviousPosition != Player.BlockPosition){
-					Block B = World.GetHighestBlockAt( (int) this.Player.Position.X, (int) this.Player.Position.Z);
+					var B = World.GetHighestBlockAt( (int) this.Player.Position.X, (int) this.Player.Position.Z);
 					World.Particles.VariateUniformly = true;
 					World.Particles.Color = Particle3D.FireColor;
 					World.Particles.Position = this.Player.Position - Vector3.UnitY;

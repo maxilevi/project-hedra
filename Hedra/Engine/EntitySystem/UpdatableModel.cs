@@ -50,6 +50,12 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
+        public override float AnimationSpeed
+        {
+            get => _model.AnimationSpeed;
+            set => _model.AnimationSpeed = value;
+        }
+
         public override bool IsAttacking { get; protected set; }
         public override bool IsIdling { get; protected set; }
         public override bool IsWalking { get; protected set; }

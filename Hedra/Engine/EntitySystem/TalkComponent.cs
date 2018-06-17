@@ -63,7 +63,7 @@ namespace Hedra.Engine.EntitySystem
 		public TalkComponent(Entity Parent, string Text) : base(Parent)
 		{
 		    _phrase = Utils.FitString(Text, 25);
-		    EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyboardKeyEventArgs EventArgs)
+		    EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyEventArgs EventArgs)
 		    {
 		        if (EventArgs.Key == Key.E && (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 24f * 24f)
                     _shouldTalk = true;

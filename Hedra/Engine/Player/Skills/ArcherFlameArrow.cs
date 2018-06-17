@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player
 		
 		public FlameArrow() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/FlameArrow.png");
-			base.ManaCost = 85f;
+			base.ManaCost = 120f;
 			base.MaxCooldown = 6.5f;
 
             ShootAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherTripleShoot.dae");
@@ -140,8 +140,8 @@ namespace Hedra.Engine.Player
 		
 		public override void Use()
 		{
-			this.Damage = BaseDamage + 15f * base.Level;
-			base.MaxCooldown = Math.Max(10f - base.Level * .5f, 4f);
+			this.Damage = BaseDamage + 10f * base.Level;
+			base.MaxCooldown = Math.Max(14f - base.Level * .5f, 8f);
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;

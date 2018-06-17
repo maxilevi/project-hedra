@@ -112,10 +112,8 @@ namespace Hedra.Engine.Player
 	    {
 	        get
 	        {
-	            var baseRegen = 2.75f;
-	            for (var i = 1; i < Level; i++)
-	                baseRegen = baseRegen * 1.15f;
-	            return baseRegen * (this.IsSleeping ? 6.0f : 1.0f);
+	            var baseRegen = this.MaxMana * .01f;
+                return baseRegen * (this.IsSleeping ? 6.0f : 1.0f);
             }
 	    }
 
@@ -123,9 +121,7 @@ namespace Hedra.Engine.Player
 	    {
 	        get
 	        {
-	            var baseRegen = .75f;
-	            for (var i = 1; i < Level; i++)
-	                baseRegen = baseRegen * 1.15f;
+	            var baseRegen = this.MaxHealth * .005f;
 	            return baseRegen * (this.IsSleeping ? 6.0f : 1.0f);
             }
 	    }
@@ -198,7 +194,7 @@ namespace Hedra.Engine.Player
 		
 		public void Climb()
 		{
-			Block frontBlock = World.GetBlockAt( this.BlockPosition + this.Orientation.Xz.ToVector3() * Chunk.BlockSize + Vector3.UnitY * 2f  );
+			var frontBlock = World.GetBlockAt( this.BlockPosition + this.Orientation.Xz.ToVector3() * Chunk.BlockSize + Vector3.UnitY * 2f  );
 			if(frontBlock.Type != BlockType.Air){
 				Model.Run();
 				this.Physics.UsePhysics = false;

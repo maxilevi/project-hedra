@@ -77,14 +77,20 @@ namespace Hedra.Engine.StructureSystem
                 grave.GraduateColor(Vector3.UnitY);
                 grave.Transform(gravePosition);
 
-                List<CollisionShape> shapes = AssetManager.LoadCollisionShapes("Assets/Env/Grave" + graveType + ".ply", 1, graveScale);
+                List<CollisionShape> shapes = AssetManager.LoadCollisionShapes($"Assets/Env/Grave{graveType}.ply", 1, graveScale);
                 for (int l = 0; l < shapes.Count; l++)
                 {
                     shapes[l].Transform(gravePosition);
                 }
 
-                CoroutineManager.StartCoroutine(BuildOnChunk, new object[] { gravePosition, grave, shapes });
-
+                CoroutineManager.StartCoroutine(this.BuildOnChunk, gravePosition, grave, shapes);
+                if (rng.Next(1, 2) == 1)
+                {
+                    World.AddStructure(new Tombstone
+                    {
+                        Position = gravePosition
+                    });
+                }
             }
             for (int i = 0; i < mausoleum.Colors.Count; i++)
                 mausoleum.Colors[i] *= new Vector4(.75f, .75f, .75f, 1);

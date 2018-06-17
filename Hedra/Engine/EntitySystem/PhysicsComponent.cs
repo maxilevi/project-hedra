@@ -174,7 +174,7 @@ namespace Hedra.Engine.EntitySystem
 
             bool blockPx = false, blockNx = false, blockPy = false, blockNy = false, blockPz = false, blockNz = false;
 
-            Block nextBlock =
+            var nextBlock =
                 World.GetBlockAt(new Vector3(1f * modifierX, 0, 1f * modifierZ) + delta +
                                     this.Parent.BlockPosition);
 
@@ -183,7 +183,7 @@ namespace Hedra.Engine.EntitySystem
                 if (nextBlock.Type != BlockType.Air && nextBlock.Type != BlockType.Water)
                 {
 
-                    Block nextBlockY = World.GetBlockAt(new Vector3(1f * modifierX, 2.75f, 1f * modifierZ) + delta +
+                    var nextBlockY = World.GetBlockAt(new Vector3(1f * modifierX, 2.75f, 1f * modifierZ) + delta +
                                                         this.Parent.BlockPosition);
                     if (nextBlockY.Type != BlockType.Air && nextBlockY.Type != BlockType.Water)
                     {
@@ -213,7 +213,7 @@ namespace Hedra.Engine.EntitySystem
                     if (entities[i].Physics.HasCollision)
                     {
                         if (Physics.Collides(entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) 
-                            && Physics.Collides(entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))//Parent.InAttackRange(World.Entities[i]))
+                            && Physics.Collides(entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))
                         {
                             if (!PushAround || !entities[i].Physics.CanBePushed) return;
                             if (entities[i].Model.BroadphaseBox.Size.LengthSquared >
@@ -336,8 +336,8 @@ namespace Hedra.Engine.EntitySystem
 
                 if (!blockNy && delta.Y < 0 || !blockNy && Parent.IsUnderwater)
 		        {
-		            Block underBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY);
-		            Block underUnderBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY * 2f);
+		            var underBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY);
+		            var underUnderBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY * 2f);
 		            if (Parent.IsUnderwater)
 		            {
 		                Parent.IsGrounded = false;

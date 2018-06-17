@@ -30,14 +30,17 @@ namespace Hedra.Engine.EntitySystem
         public IEnumerator UpdateEffect()
         {
             Parent.Model.BaseTint = new Vector4(-.75f, -.75f, -.75f, 1);
-            Parent.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Parent, -Parent.Speed + Parent.Speed * _slowPercentage / 100),
+            var newSpeed = Parent.Speed * _slowPercentage / 100f;
+            Parent.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Parent, newSpeed - Parent.Speed),
                 () => _totalTime > _pTime && !Parent.IsDead && !Disposed);
+            Parent.Model.AnimationSpeed = newSpeed;
             while (_totalTime > _pTime && !Parent.IsDead && !Disposed)
             {
 
                 _pTime += Time.ScaledFrameTimeSeconds;
                 yield return null;
             }
+            Parent.Model.AnimationSpeed = 1f;
             Parent.Model.BaseTint = Vector4.Zero;
             Parent.RemoveComponent(this);
         }

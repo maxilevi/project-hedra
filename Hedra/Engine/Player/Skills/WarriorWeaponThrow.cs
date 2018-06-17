@@ -65,9 +65,8 @@ namespace Hedra.Engine.Player
                 Propulsion = Direction * 2f,
 		        Lifetime = 5f
 		    };
-		    weaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) { 
-				float Exp;
-				Hit.Damage(Human.DamageEquation * 3.2f, Human, out Exp, true);
+		    weaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
+		        Hit.Damage(Human.DamageEquation * .5f, Human, out float Exp, true);
 				Human.XP += Exp;
 				if(KnockChance != -1){
 					if(Utils.Rng.Next(0, KnockChance) == 0)

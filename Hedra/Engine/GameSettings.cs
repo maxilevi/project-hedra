@@ -21,13 +21,15 @@ namespace Hedra.Engine
     /// <summary>
     ///     Description of GraphicsOptions.
     /// </summary>
-    public static class GameSettings
+    public static class 
+        GameSettings
     {
         public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
         public static float BloomModifier { get; set; } = 1f;
         public static bool Wireframe { get; set; }
         public static bool LockFrustum { get; set; }
-        public static bool Debug { get; set; }
+        public static bool DebugMode { get; set; }
+        public static bool DebugView { get; set; }
         public static int DeviceWidth { get; set; }
         public static int DeviceHeight { get; set; }
         public static int Width { get; set; }

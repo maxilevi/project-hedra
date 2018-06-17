@@ -31,15 +31,16 @@ namespace Hedra.Engine.AISystem.Behaviours
                 this.Target = null;
                 Follow.Target = this.Target;
             }
-            var inAttackRange = Target != null && (Parent.InAttackRange(Target) || GrowlTimer.Ready && (Parent.Position - Target.Position).LengthSquared > 16 * 16);
+            var inAttackRange = Target != null && (Parent.InAttackRange(Target, 1.5f) || GrowlTimer.Ready && (Parent.Position - Target.Position).LengthSquared > 16 * 16);
             if (!Parent.Model.IsAttacking && Target != null && !inAttackRange)
             {
                 Follow.Update();
             }
-            if (inAttackRange)
+            inAttackRange = Target != null && (Parent.InAttackRange(Target, 1.75f) || GrowlTimer.Ready && (Parent.Position - Target.Position).LengthSquared > 16 * 16);
+            if (!Parent.Model.IsAttacking && Target != null && inAttackRange)
             {
                 FollowTimer.Reset();
-                this.Attack(1f);
+                this.Attack(1.75f);
             }
             GrowlTimer.Tick();
         }
@@ -49,12 +50,12 @@ namespace Hedra.Engine.AISystem.Behaviours
             var asQuadruped = (QuadrupedModel)Parent.Model;
             if (GrowlTimer.Ready)
             {
-                asQuadruped.Attack(asQuadruped.AttackAnimations[GrowlAnimationIndex]);
+                asQuadruped.Attack(asQuadruped.AttackAnimations[GrowlAnimationIndex], RangeModfier);
                 GrowlTimer.Reset();
             }
             else
             {
-                asQuadruped.Attack(asQuadruped.AttackAnimations[QuakeAnimationIndex]);
+                asQuadruped.Attack(asQuadruped.AttackAnimations[QuakeAnimationIndex], RangeModfier);
             }
         }
     }

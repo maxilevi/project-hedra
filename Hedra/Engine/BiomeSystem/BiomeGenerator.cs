@@ -25,7 +25,8 @@ namespace Hedra.Engine.BiomeSystem
 		public bool BlocksSetted {get; set;}
 		public bool StructuresPlaced {get; set;}
 
-	    protected BiomeGenerator(Chunk RefChunk){
+	    protected BiomeGenerator(Chunk RefChunk)
+        {
 			this.RandomGen = BiomeGenerator.GenerateRng(new Vector2(RefChunk.OffsetX, RefChunk.OffsetZ));
 			this.OffsetX = RefChunk.OffsetX;
 			this.OffsetZ = RefChunk.OffsetZ;
@@ -34,7 +35,8 @@ namespace Hedra.Engine.BiomeSystem
 			this.Seed = World.Seed;
 		}
 		
-		public virtual void Regenerate(){
+		public virtual void Regenerate()
+        {
 			this.RandomGen = new Random(World.Seed + this.Chunk.OffsetX + this.Chunk.OffsetZ);
 			this.BuildArray();
 			this.DefineBlocks();
@@ -45,11 +47,13 @@ namespace Hedra.Engine.BiomeSystem
 		public abstract void DefineBlocks();
 		
 		public void BuildArray(){
-			for(var x = 0; x < (int) (Chunk.Width / Chunk.BlockSize); x++){
+			for(var x = 0; x < (int) (Chunk.Width / Chunk.BlockSize); x++)
+            {
 				_blocks[x] = new Block[Chunk.Height][];
-				for(var y = 0; y <  Chunk.Height; y++){
+				for(var y = 0; y <  Chunk.Height; y++)
+                {
 					_blocks[x][y] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
-				}
+                }
 			}
 			BlocksSetted = true;
 		    this.Chunk.CalculateBounds();

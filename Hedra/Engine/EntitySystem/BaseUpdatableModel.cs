@@ -15,6 +15,7 @@ namespace Hedra.Engine.EntitySystem
         public abstract bool IsIdling { get; protected set; }
         public abstract float Height { get; }
         public abstract float Alpha { get; set; }
+        public abstract float AnimationSpeed { get; set; }
         public abstract bool Pause { get; set; }
         public abstract bool ApplyFog { get; set; }
         public abstract bool Enabled { get; set; }
