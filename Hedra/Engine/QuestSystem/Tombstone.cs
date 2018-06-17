@@ -12,7 +12,6 @@ namespace Hedra.Engine.QuestSystem
 
 	    public override void Interact(LocalPlayer Interactee)
         {
-            base.Interact(Interactee);
             SoundManager.PlaySound(SoundType.NotificationSound, this.Position, false, 1f, 0.6f);            
         }
     }

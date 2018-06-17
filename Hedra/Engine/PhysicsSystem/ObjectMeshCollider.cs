@@ -28,7 +28,7 @@ namespace Hedra.Engine.PhysicsSystem
                         Id = 0,
                         Vertices = Contents.Vertices.ToArray()
                     }));
-                    Log.WriteLine($"[CACHE] Registered a new weapon cache.");
+                    Log.WriteLine($"[CACHE] Registered a new weapon cache. Total = {Cache.Keys.Count}");
                 }
                 _originalCollider = Cache[key];
             }

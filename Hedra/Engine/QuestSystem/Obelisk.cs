@@ -31,8 +31,6 @@ namespace Hedra.Engine.QuestSystem
 		
 		public override void Interact(LocalPlayer Interactee)
         {
-			if(Interacted) return;
-
             switch (Type)
 			{
 			    case ObeliskType.Xp:

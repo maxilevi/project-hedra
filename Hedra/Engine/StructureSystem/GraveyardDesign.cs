@@ -78,13 +78,13 @@ namespace Hedra.Engine.StructureSystem
                 grave.Transform(gravePosition);
 
                 List<CollisionShape> shapes = AssetManager.LoadCollisionShapes($"Assets/Env/Grave{graveType}.ply", 1, graveScale);
-                for (int l = 0; l < shapes.Count; l++)
+                for (var l = 0; l < shapes.Count; l++)
                 {
                     shapes[l].Transform(gravePosition);
                 }
 
                 CoroutineManager.StartCoroutine(this.BuildOnChunk, gravePosition, grave, shapes);
-                if (rng.Next(1, 2) == 1)
+                if (rng.Next(0, 5) == 1)
                 {
                     World.AddStructure(new Tombstone
                     {
@@ -92,7 +92,7 @@ namespace Hedra.Engine.StructureSystem
                     });
                 }
             }
-            for (int i = 0; i < mausoleum.Colors.Count; i++)
+            for (var i = 0; i < mausoleum.Colors.Count; i++)
                 mausoleum.Colors[i] *= new Vector4(.75f, .75f, .75f, 1);
 
             underChunk.AddCollisionShape(mausoleumShapes.ToArray());
@@ -108,8 +108,6 @@ namespace Hedra.Engine.StructureSystem
         private static void BuildReward(Vector3 Position, Graveyard Cementery, Random Rng)
         {
             var enemies = new List<Entity>();
-
-            //execute this last
 
             var skeletonCount = 4;
             for (int i = 0; i < skeletonCount; i++)

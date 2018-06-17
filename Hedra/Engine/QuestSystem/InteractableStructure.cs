@@ -65,7 +65,10 @@ namespace Hedra.Engine.QuestSystem
 	            if (_shouldInteract && !Interacted && !Disposed)
 	            {
 	                this.Interact(player);
-	            }
+	                Interacted = true;
+	                OnInteractEvent?.Invoke(player);
+	                this.Dispose();
+                }
 	            else
 	            {
 	                _shouldInteract = false;
@@ -73,12 +76,7 @@ namespace Hedra.Engine.QuestSystem
 	        }
         }
 
-	    public virtual void Interact(LocalPlayer Interactee)
-	    {
-	        Interacted = true;
-	        OnInteractEvent?.Invoke(Interactee);
-            this.Dispose();
-        }
+	    public abstract void Interact(LocalPlayer Interactee);
 
 	    public override void Dispose()
 	    {
