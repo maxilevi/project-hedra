@@ -89,7 +89,7 @@
       <HintPath>..\references\NVorbis.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.3.0.0-git00044\lib\net20\OpenTK.dll</HintPath>
+      <HintPath>..\references\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
