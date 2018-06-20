@@ -26,10 +26,12 @@
         "Speed": 1.0
       }
     ],
-    "WalkAnimation": {
-      "Path": "$DataFile$/Assets/Chr/BeeWalk.dae",
-      "Speed": 1.25
-    },
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BeeWalk.dae",
+        "Speed": 1.25
+      }
+    ],
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/BeeAttack.dae",

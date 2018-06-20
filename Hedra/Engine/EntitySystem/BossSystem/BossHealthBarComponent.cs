@@ -77,8 +77,14 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             if (_healthBar == null) return;
 
             if (_nameGui != null)
+            {
                 _nameGui.Scale = Mathf.Lerp(_nameGui.Scale, _nameDefaultScale * _targetSize,
                     (float) Time.deltaTime * 8f);
+                if(_targetSize > 0)
+                    _nameGui.Enable();
+                else
+                    _nameGui.Disable();
+            }
 
 
             _healthBar.Scale =

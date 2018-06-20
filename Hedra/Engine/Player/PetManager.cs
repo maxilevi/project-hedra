@@ -27,6 +27,9 @@ namespace Hedra.Engine.Player
         private readonly Timer _deadTimer;
         private Item _previousPetItem;
         private bool _timerSet;
+        private bool _petPreviousEnabled;
+        private float _petPreviousAlpha;
+        private bool _wasRiding;
 
         public PetManager(LocalPlayer Player)
         {
@@ -36,7 +39,25 @@ namespace Hedra.Engine.Player
 
         public void Update()
         {
-            if (Pet != null) Pet.Model.Enabled = _player.Model.Enabled;
+            if (Pet != null)
+            {
+                if (_player.IsRiding || !Pet.Model.Enabled)
+                {
+                    if (!_wasRiding && _player.IsRiding)
+                    {
+                        _petPreviousEnabled = Pet.Model.Enabled;
+                        _petPreviousAlpha = Pet.Model.Alpha;
+                    }
+                    Pet.Model.Alpha = _player.Model.Alpha;
+                    Pet.Model.Enabled = _player.Model.Enabled;
+                }
+                else
+                {
+                    Pet.Model.Alpha = _petPreviousAlpha;
+                    Pet.Model.Enabled = _petPreviousEnabled;
+                }
+                _wasRiding = _player.IsRiding;
+            }
 
             if (Pet != null && Pet.IsDead && !_timerSet)
             {

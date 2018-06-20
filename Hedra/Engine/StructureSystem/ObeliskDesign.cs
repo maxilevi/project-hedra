@@ -58,7 +58,6 @@ namespace Hedra.Engine.StructureSystem
             World.HighlightArea(obelisk.Position, new Vector4(.2f, .2f, .2f, .4f), 48, -1);
 
             World.AddStructure(obelisk);
-            World.AddChunkToQueue(underChunk, true);
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)

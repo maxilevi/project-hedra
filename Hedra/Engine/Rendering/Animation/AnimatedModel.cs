@@ -8,7 +8,7 @@
  */
 using System;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering.Animation
 	/// <summary>
 	/// Description of AnimatedModel.
 	/// </summary>
-	public class AnimatedModel : IDisposable, IRenderable, ICullable, IModel
+	public class AnimatedModel : IDisposable, IRenderable, ICullableModel
 	{
         //Skin
 	    public static Shader DefaultShader = Shader.Build("Shaders/AnimatedModel.vert", "Shaders/AnimatedModel.frag");
@@ -45,10 +45,9 @@ namespace Hedra.Engine.Rendering.Animation
 	    public Vector4 Tint {get; set;}
 		public Vector4 BaseTint {get; set;}
 		public Vector3 Scale {get; set;}
-		public Vector3 Size {get; set;}
-		public RenderShape Shape {get; set;}
-		public bool DontCull {get; set;}
-		public bool Rendered {get; set;}
+        //
+	    public Box CullingBox { get; set; }
+	    public bool DontCull { get; set; }
         /**
 		 * Creates a new entity capable of animation. The inverse bind transform for
 		 * all joints is calculated in this constructor. The bind transform is

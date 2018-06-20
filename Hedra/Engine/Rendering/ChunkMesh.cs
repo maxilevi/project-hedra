@@ -26,21 +26,19 @@ namespace Hedra.Engine.Rendering
 		//public bool OnlyShadows {get; set;}
 		public bool IsBuilded;
 		public bool IsGenerated;
-		public bool Rendered {get; set;}
-		public bool Enabled {get; set;}
-		public bool DontCull {get; set;}
-		public bool BuildedOnce {get; set;}
-		public bool Crashed {get; set;}
+		public bool Enabled { get; set; }
+		public bool DontCull { get; set; }
+		public bool BuildedOnce { get; set; }
+		public bool Crashed { get; set; }
 		
-		public Vector3 Position {get; set;}
-		public RenderShape Shape {get; set;}
-		public Vector3 Size {get; set;}
+        public Vector3 Position { get; set; }
+		public Box CullingBox { get; set; }
 		
 
-		public ChunkMesh(Vector3 Position, ChunkMeshBuffer[] BuffersAttachments) : base(){
+		public ChunkMesh(Vector3 Position, ChunkMeshBuffer[] BuffersAttachments)
+        {
 			this.Position = Position;
-			this.Size = new Vector3(Chunk.Width,768,Chunk.Width );
-			
+			this.CullingBox = new Box(Vector3.Zero, new Vector3(Chunk.Width, 768, Chunk.Width));			
 			this.MeshBuffers.AddRange(BuffersAttachments);
 		}
 

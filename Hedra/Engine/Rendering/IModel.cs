@@ -1,11 +1,10 @@
 ﻿using System;
+using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
-    /// <summary>
-    ///  Now works as a base class for the HumanModel & QuadrupedModel
-    /// </summary>
     public interface IModel
     {
         Vector4 Tint { get; set; }
@@ -20,5 +19,11 @@ namespace Hedra.Engine.Rendering
         float AnimationSpeed { get; set; }
 
         void Dispose();
+    }
+
+    public interface ICullableModel : IModel, ICullable
+    {
+        Vector3 Position { get; set; }
+        bool Enabled { get; set; }
     }
 }

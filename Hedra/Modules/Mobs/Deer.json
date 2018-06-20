@@ -18,10 +18,12 @@
         "Speed": 0.8
       }
     ],
-    "WalkAnimation": {
-      "Path": "$DataFile$/Assets/Chr/DeerWalk.dae",
-      "Speed": 1.6
-    },
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/DeerWalk.dae",
+        "Speed": 1.6
+      }
+    ],
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/DeerAttack0.dae",

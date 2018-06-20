@@ -78,7 +78,6 @@ namespace Hedra.Engine.Scenes
 			VertexData CenterModel = AssetManager.PlyLoader("Assets/Env/Campfire2.ply", Vector3.One * 3f);
 			CenterModel.Transform( FirePosition );
 			UnderChunk.AddStaticElement(CenterModel);
-			World.AddChunkToQueue(UnderChunk, true);
 			LocalPlayer.Instance.UI.ChrChooser.ReloadFiles();
 			CoroutineManager.StartCoroutine(MenuUpdate);
 		}

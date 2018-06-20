@@ -12,6 +12,7 @@ using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
@@ -191,9 +192,6 @@ namespace Hedra.Engine.EntitySystem
             get => Model.TargetRotation;
             set => Model.TargetRotation = value;
         }
-
-        public RenderShape Shape { get; set; }
-        public Vector3 Size { get; set; }
 
         public string Type { get; set; } = MobType.None.ToString();
         public bool WasGrounded { get; private set; }

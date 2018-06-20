@@ -164,6 +164,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void SetChunkStatus(ChunkMeshBuildOutput Input)
         {
+            if(!Initialized) throw new ArgumentException($"Chunk hasnt been initialized yet.");
             this.BuildedCompletely = !Input.Failed;
             this.Position = new Vector3(OffsetX, 0, OffsetZ);
             this.Mesh.IsGenerated = true;
@@ -198,8 +199,20 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                     Input.StaticData.Colors[i] = new Vector4(Input.StaticData.Colors[i].Xyz, edata);
                 }
-
-
+                var staticMin = new Vector3(
+                    Input.StaticData.SupportPoint(-Vector3.UnitX).X - OffsetX,
+                    Input.StaticData.SupportPoint(-Vector3.UnitY).Y,
+                    Input.StaticData.SupportPoint(-Vector3.UnitZ).Z - OffsetZ
+                );
+                var staticMax = new Vector3(
+                    Input.StaticData.SupportPoint(Vector3.UnitX).X - OffsetX,
+                    Input.StaticData.SupportPoint(Vector3.UnitY).Y,
+                    Input.StaticData.SupportPoint(Vector3.UnitZ).Z - OffsetZ
+                );
+                Mesh.CullingBox = new Box(
+                    new Vector3(staticMin.X, staticMin.Y, staticMin.Z),
+                    new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y), staticMax.Z)
+                );
                 ThreadManager.ExecuteOnMainThread(delegate
                 {
                     bool result = WorldRenderer.StaticBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.StaticData);
@@ -464,6 +477,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 for (var i = 0; i < Data.Length; i++)
                     Mesh.Elements.Add(Data[i]);
             }
+            this.NeedsRebuilding = true;
         }
 
         public void RemoveStaticElement(params VertexData[] Data)
@@ -475,6 +489,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 for (var i = 0; i < Data.Length; i++)
                     Mesh.Elements.Remove(Data[i]);
             }
+            this.NeedsRebuilding = true;
         }
 
 

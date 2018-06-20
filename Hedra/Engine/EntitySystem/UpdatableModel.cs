@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public abstract class UpdatableModel<T> : BaseUpdatableModel, IDisposable where T : class, IModel
+    public abstract class UpdatableModel<T> : BaseUpdatableModel, IDisposable where T : class, ICullableModel
     {
         protected HashSet<IModel> AdditionalModels { get; }
         public override Vector3 TargetRotation { get; set; }
@@ -16,6 +16,7 @@ namespace Hedra.Engine.EntitySystem
         public Entity Parent { get; set; }
         private T _model;
         private List<IModel> _iterableModels;
+        private Box _baseBroadphaseBox = new Box(Vector3.Zero, Vector3.One);
 
         protected UpdatableModel(Entity Parent)
         {
@@ -65,7 +66,16 @@ namespace Hedra.Engine.EntitySystem
         public override CollisionShape[] Colliders => new []{ BroadphaseBox.ToShape() };
         public override CollisionShape BroadphaseCollider => BroadphaseBox.ToShape();
         public override Box BroadphaseBox => BaseBroadphaseBox.Cache.Translate(Model.Position);
-        public override Box BaseBroadphaseBox { get; protected set; } = new Box(Vector3.Zero, Vector3.One);
+
+        public override Box BaseBroadphaseBox
+        {
+            get => _baseBroadphaseBox;
+            protected set
+            {
+                _baseBroadphaseBox = value;
+                _model.CullingBox = _baseBroadphaseBox;
+            }
+        }
 
         public override float Height => BaseBroadphaseBox.Max.Y - BaseBroadphaseBox.Min.Y;
 

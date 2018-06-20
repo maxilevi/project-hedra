@@ -7,20 +7,19 @@
 using System;
 using OpenTK;
 using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Rendering
 {
-	public class ObjectMesh : IRenderable, ICullable, IDisposable, IModel
+	public class ObjectMesh : IRenderable, IDisposable, ICullableModel
 	{
 	    public Vector3 TargetRotation { get; set; }
 	    public Vector3 TargetPosition { get; set; }
 	    public float AnimationSpeed { get; set; } = 1f;
-        public Vector3 Size { get; set;}
-		public bool Enabled { get; set;}
-		public bool DontCull { get; set;}
-		public bool Rendered { get; set;}
-        public RenderShape Shape { get; set;}
-		public ChunkMesh Mesh { get; }
+		public bool Enabled { get; set; }
+		public bool DontCull { get; set; }
+	    public Box CullingBox { get; set; }
+        public ChunkMesh Mesh { get; }
 		private readonly ObjectMeshBuffer _buffer;
 
 	    public ObjectMesh()
@@ -239,8 +238,8 @@ namespace Hedra.Engine.Rendering
 			    mesh.Mesh.BuildFrom(mesh.Mesh.MeshBuffers[0], Data, false);
 			    mesh.Mesh.IsGenerated = true;
 			    mesh.Mesh.IsBuilded = true;
-			    mesh.Mesh.Enabled = true;   
-                mesh.Size = new Vector3(Data.SupportPoint(Vector3.UnitX).X, Data.SupportPoint(Vector3.UnitX).Y, Data.SupportPoint(Vector3.UnitX).Z) * 2f;
+			    mesh.Mesh.Enabled = true;
+                TaskManager.Parallel( () => mesh.CullingBox = Physics.BuildBroadphaseBox(Data) );
             });
 			
 			return mesh;

@@ -1,5 +1,6 @@
 ﻿
 using System;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
@@ -75,6 +76,9 @@ namespace Hedra.Engine.Player.Inventory
             GraphicsLayer.PushFBO();
             UserInterface.InventoryFbo.Bind();
 
+            var currentDayColor = ShaderManager.LightColor;
+            ShaderManager.SetLightColorInTheSameThread(Vector3.One);
+
             var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 1, 1024f);
             GraphicsLayer.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projectionMatrix);
@@ -98,13 +102,13 @@ namespace Hedra.Engine.Player.Inventory
 			
 			GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
 			GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);*/
-
+            ShaderManager.SetLightColorInTheSameThread(currentDayColor);
             GraphicsLayer.PopFBO();
             GraphicsLayer.PopShader();
             GraphicsLayer.BindFramebuffer(FramebufferTarget.Framebuffer, GraphicsLayer.FBOBound);
             GraphicsLayer.BindShader(GraphicsLayer.ShaderBound);
             GraphicsLayer.Disable(EnableCap.DepthTest);
-            GraphicsLayer.Enable(EnableCap.Blend);
+            GraphicsLayer.Enable(EnableCap.Blend);        
             return UserInterface.InventoryFbo.TextureID[0];
         }
 

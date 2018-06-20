@@ -264,10 +264,10 @@ namespace Hedra.Engine.BiomeSystem
 								
 								_blocks[x][y][z].Type = BlockType.Air;
 								
-								_blocks[x][y][z].Density = 1-(y - height) + noise;
+								_blocks[x][y][z].Density = (Half) (1-(y - height) + noise);
 								
 								if(y < 2)
-									_blocks[x][y][z].Density = 0.95f + rng.NextFloat()*0.75f;
+									_blocks[x][y][z].Density = (Half)(0.95f + rng.NextFloat()*0.75f);
 								
 								if( _blocks[x][y][z].Density > 0){
 									
@@ -295,8 +295,7 @@ namespace Hedra.Engine.BiomeSystem
                                     if (_blocks[x][y][z].Type == BlockType.Air && river > 0)
                                     {
                                         _blocks[x][y][z].Type = BlockType.Water;
-                                        _blocks[x][y][z].Density = BiomePool.EncodeWater(height + river,
-                                            _blocks[x][y][z].Density);
+                                        _blocks[x][y][z].Density = (BiomePool.EncodeWater(height + river, _blocks[x][y][z].Density));
                                     }
                                     else if (Mathf.Clamp(riverBorders * 100f, 0, riverDepth) > 2 &&
                                              _blocks[x][y][z].Type != BlockType.Air)
@@ -326,7 +325,7 @@ namespace Hedra.Engine.BiomeSystem
                                 if (isOcean)
                                 {
                                     _blocks[x][y][z].Type = BlockType.Water;
-                                    _blocks[x][y][z].Density = BiomePool.EncodeWater(BiomePool.SeaLevel, _blocks[x][y][z].Density);
+                                    _blocks[x][y][z].Density = (BiomePool.EncodeWater(BiomePool.SeaLevel, _blocks[x][y][z].Density));
                                 }
 
                                 if(villagePath || path == pathDepth || town){

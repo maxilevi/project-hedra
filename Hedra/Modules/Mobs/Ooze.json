@@ -17,10 +17,12 @@
         "Speed": 1.0
       }
     ],
-    "WalkAnimation": {
-      "Path": "$DataFile$/Assets/Chr/OozeWalk.dae",
-      "Speed": 1.0
-    },
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/OozeWalk.dae",
+        "Speed": 1.0
+      }
+    ],
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/OozeAttack.dae",

@@ -75,7 +75,7 @@ namespace Hedra.Engine.Player
         private Quaternion _rotationQuaternionY;
         private Quaternion _rotationQuaternionZ;
         private float _lastAnimationTime = -1;
-        private float _targetAlpha = 1f;
+        private float _alpha = 1f;
 
 
         public HumanoidModel(Humanoid Human, HumanoidModelTemplate Template) : base(Human)
@@ -163,7 +163,6 @@ namespace Hedra.Engine.Player
             this.BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * this.Model.Scale;
 
             this.Idle();
-            this.Model.Size = this.BaseBroadphaseBox.Max - this.BaseBroadphaseBox.Min; 
             this._modelSound = new AreaSound(SoundType.HumanRun, Vector3.Zero, 48f);
         }
 
@@ -483,9 +482,14 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public override float Alpha {
-			get => _targetAlpha;
-		    set => _targetAlpha = value;
+		public override float Alpha
+        {
+			get => _alpha;
+		    set
+		    {
+		        _alpha = value;
+		        Model.Enabled = Alpha > 0.005f;
+		    }
 		}
 
         public Matrix4 ChestMatrix => Model.MatrixFromJoint(ChestJoint);

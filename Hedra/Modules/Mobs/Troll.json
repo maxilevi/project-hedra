@@ -19,10 +19,12 @@
 				"Speed": 0.5
 			}
 		],
-		"WalkAnimation": {
-			"Path": "$DataFile$/Assets/Chr/TrollWalk.dae",
-			"Speed": 1.25
-		},
+		"WalkAnimations": [
+			{
+				"Path": "$DataFile$/Assets/Chr/TrollWalk.dae",
+				"Speed": 1.25
+			}
+		],
 		"AttackAnimations": [
 			{
 				"Path": "$DataFile$/Assets/Chr/TrollAttack0.dae",

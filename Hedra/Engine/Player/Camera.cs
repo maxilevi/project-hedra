@@ -28,7 +28,6 @@ namespace Hedra.Engine.Player
         public float Distance { get; set; }
         public float WheelSpeed { get; set; } = 1;
         public bool CaptureMovement { get; set; } = true;
-        public float TargetDistance { get; set; } = 10f;
         public bool LockMouse { get; set; } = true;
         public Matrix4 ModelViewMatrix { get; private set; }
         public Func<Vector3> PositionDelegate { get; set; }
@@ -91,8 +90,7 @@ namespace Hedra.Engine.Player
                 this.ManageAlpha();
             }
             this.BuildCameraMatrix();
-            if (!GameSettings.LockFrustum)
-                DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, ModelViewMatrix);
+            DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, ModelViewMatrix);
         }
 
         private void ManageRotations()
@@ -172,16 +170,6 @@ namespace Hedra.Engine.Player
 
             TargetDistance -= E.Delta * WheelSpeed;
             TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
-            if (TargetDistance < 4.5f)
-            {
-                var newAlpha = Mathf.Clamp((TargetDistance - 1.5f) / 4.5f, 0, 1);
-                _player.Model.Enabled = newAlpha != 0;
-                _player.Model.Alpha = newAlpha + 0.0025f;
-            }
-            else
-            {
-                _player.Model.Alpha = 1;
-            }
 
             _prevDistance = TargetDistance;
         }
@@ -199,6 +187,26 @@ namespace Hedra.Engine.Player
                     return;
             }
             TargetDistance += Time.unScaledDeltaTime * 24f;
+        }
+
+        private float _targetDistance = 10f;
+
+        public float TargetDistance
+        {
+            get => _targetDistance;
+            set
+            {
+                _targetDistance = value;
+                if (TargetDistance < 4.5f)
+                {
+                    var newAlpha = Mathf.Clamp((TargetDistance - 1.5f) / 4.5f, 0, 1);
+                    _player.Model.Alpha = newAlpha + 0.0025f;
+                }
+                else
+                {
+                    _player.Model.Alpha = 1;
+                }
+            }
         }
 
         private Vector3 CalculatePosition(float i)

@@ -24,10 +24,12 @@
         "Speed": 1.0
       }
     ],
-    "WalkAnimation": {
-      "Path": "$DataFile$/Assets/Chr/SnakeWalk.dae",
-      "Speed": 1.0
-    },
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/SnakeWalk.dae",
+        "Speed": 1.0
+      }
+    ],
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/SnakeAttack.dae",

@@ -102,7 +102,6 @@ namespace Hedra.Engine.StructureSystem
             BuildReward(Position, cementery, rng);
 
             underChunk.Blocked = true;
-            World.AddChunkToQueue(underChunk, true);
         }
 
         private static void BuildReward(Vector3 Position, Graveyard Cementery, Random Rng)

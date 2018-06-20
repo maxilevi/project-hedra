@@ -65,7 +65,6 @@ namespace Hedra.Engine.StructureSystem
                 World.AddStructure(prize);
             });
             underChunk.AddStaticElement(model);
-            World.AddChunkToQueue(underChunk, true);
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)

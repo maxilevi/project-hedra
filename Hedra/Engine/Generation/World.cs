@@ -234,7 +234,7 @@ namespace Hedra.Engine.Generation
 				}
 				
 				if( !WorldRenderer.EnableCulling || toDrawArray[i].Initialized && FrustumObject.IsInsideFrustum(toDrawArray[i].Mesh))
-					DrawingChunks.Add(new Vector2(toDrawArray[i].OffsetX, toDrawArray[i].OffsetZ), toDrawArray[i]);				
+				DrawingChunks.Add(new Vector2(toDrawArray[i].OffsetX, toDrawArray[i].OffsetZ), toDrawArray[i]);				
 			}
 			
 			_previousModelView = FrustumObject.ModelViewMatrix;
@@ -358,12 +358,13 @@ namespace Hedra.Engine.Generation
 	        return results.ToArray();
 	    }
 
-        public static void AddChunkToQueue(Chunk C, bool DoMesh){
+        public static void AddChunkToQueue(Chunk Chunk, bool DoMesh)
+        {
 			//Queue.Add(C, DoMesh);
 			if(!DoMesh)
-				ChunkGenerationQueue.Queue.Add(C);
+				ChunkGenerationQueue.Queue.Add(Chunk);
 			else
-				MeshQueue.Add(C);
+				MeshQueue.Add(Chunk);
 		}
 		
 		public static Chunk GetChunkByOffset(Vector2 vec2){

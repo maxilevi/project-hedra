@@ -113,7 +113,6 @@ namespace Hedra.Engine.StructureSystem
                 underChunk.AddStaticElement(model);
 
             underChunk.Blocked = true;
-            World.AddChunkToQueue(underChunk, true);
 
         }
 

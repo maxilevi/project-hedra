@@ -358,7 +358,7 @@
     <Compile Include="Engine\IO\Log.cs" />
     <Compile Include="Engine\Management\AnalyticsManager.cs" />
     <Compile Include="Engine\Management\AutosaveManager.cs" />
-    <Compile Include="Engine\Management\ByteArrayPool.cs" />
+    <Compile Include="Engine\Management\Pool.cs" />
     <Compile Include="Engine\CacheSystem\CacheManager.cs" />
     <Compile Include="Engine\Management\CommandManager.cs" />
     <Compile Include="Engine\Management\DataManager.cs" />
@@ -4737,4 +4737,6 @@
     <WarningLevel>1</WarningLevel>
   </PropertyGroup>
   <ProjectExtensions />
+  <Target Name="AfterCompile">
+  </Target>
 </Project>

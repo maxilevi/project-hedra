@@ -19,10 +19,12 @@
         "Speed": 1.0
       }
     ],
-    "WalkAnimation": {
-      "Path": "$DataFile$/Assets/Chr/RatWalk.dae",
-      "Speed": 1.4
-    },
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/RatWalk.dae",
+        "Speed": 1.4
+      }
+    ],
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/RatAttack.dae",

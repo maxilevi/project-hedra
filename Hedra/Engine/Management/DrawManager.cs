@@ -71,23 +71,22 @@ namespace Hedra.Engine.Management
 	    	
 	    	var drawedObjects = 0;
 	    	var drawedCullableObjects = 0;
-			for(var i = 0;i<draws.Length;i++)
+			for(var i = 0; i < draws.Length; i++)
 			{
 			    if (draws[i] == null) continue;
 
-			    if(FrustumObject.IsInsideFrustum(draws[i])){
+			    if (draws[i] is ICullable cullable)
+			    {
+			        if (!FrustumObject.IsInsideFrustum(cullable)) continue;
 			        draws[i].Draw();
-		     			
 			        drawedObjects++;
-			        if(draws[i] is ICullable cullable){
-			            drawedCullableObjects++;
-			            cullable.Rendered = true;
-			        }
-			    }else{
-			        if(draws[i] is ICullable cullable){
-			            cullable.Rendered = false;
-			        }
+			        drawedCullableObjects++;
 			    }
+			    else
+			    {
+			        draws[i].Draw();
+			        drawedObjects++;
+                }
 			}
 			GraphicsLayer.Enable(EnableCap.DepthTest);
 			World.Draw(ChunkBufferTypes.WATER);

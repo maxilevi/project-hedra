@@ -129,50 +129,45 @@ namespace Hedra.Engine.Generation
                     }
 
                     _left += 0.25f;
-
                     if (_left >= .5f)
                     {
+                        var chunkUnderPlayer = World.GetChunkAt(_player.Position);
+                        if(chunkUnderPlayer?.Mesh != null) chunkUnderPlayer.Mesh.DontCull = true;
                         ActiveChunks = 0;
-                        //if(Offset != LastOffset || GraphicsOptions.ChunkLoaderRadius != LastRadius || Player.Position == Vector3.Zero){
                         for (int i = Chunks.Length - 1; i > -1; i--)
                         {
                             if (Chunks[i].Disposed)
                             {
                                 continue;
                             }
-
+                            if (Chunks[i]?.Mesh != null && chunkUnderPlayer != Chunks[i])
+                            {
+                                Chunks[i].Mesh.DontCull = false;
+                            }
                             if (Chunks[i].IsGenerated && Chunks[i].BuildedWithStructures)
                             {
                                 ActiveChunks++;
                             }
 
-
                             if (Chunks[i] != null && Chunks[i].IsGenerated)
                             {
-                                float CameraDist = (Chunks[i].Position.Xz - _player.View.CameraPosition.Xz)
-                                    .LengthSquared;
+                                var cameraDist = (Chunks[i].Position.Xz - _player.View.CameraPosition.Xz).LengthSquared;
 
-                                if (CameraDist > 288 * 288 && CameraDist < 576 * 576 && GameSettings.Lod)
+                                if (cameraDist > 288 * 288 && cameraDist < 576 * 576 && GameSettings.Lod)
                                     Chunks[i].Lod = 2;
-                                else if (CameraDist > 576 * 576 && GameSettings.Lod)
+                                else if (cameraDist > 576 * 576 && GameSettings.Lod)
                                     Chunks[i].Lod = 4;
                                 else
                                     Chunks[i].Lod = _player.IsGliding ? 2 : 1;
-
-                                if (Chunks[i].Mesh != null)
-                                    Chunks[i].Mesh.DontCull = false;
-                                
                             }
 
 
                             if (Chunks[i] != null && Chunks[i].Initialized && Chunks[i].IsGenerated &&
                                 Chunks[i].Landscape.StructuresPlaced && !World.MeshQueue.Contains(Chunks[i]) &&
-                                (!Chunks[i].BuildedCompletely || Chunks[i].Lod != Chunks[i].BuildedLod) ||
-                                (Chunks[i].Initialized &&
-                                 Chunks[i].Mesh.Crashed) /* || Chunks[i].HasAO != GraphicsOptions.BakedAO*/)
+                                (!Chunks[i].BuildedCompletely || Chunks[i].Lod != Chunks[i].BuildedLod || Chunks[i].NeedsRebuilding) 
+                                || Chunks[i] != null && Chunks[i].Initialized && Chunks[i].Mesh.Crashed)
                             {
-                                if (Chunks[i] != null &&
-                                    (Chunks[i].NeighboursExist))// || Chunks[i].NeverBuilded || Chunks[i].Mesh.Crashed))
+                                if (Chunks[i] != null && Chunks[i].NeighboursExist)
                                 {
                                     World.AddChunkToQueue(Chunks[i], true);
                                 }
@@ -180,11 +175,9 @@ namespace Hedra.Engine.Generation
                         }
                         _left = 0f;
                     }
-                    if (ActiveChunks != _prevChunkCount)
-                    {
-                        _prevChunkCount = ActiveChunks;
-                        this.UpdateFog();
-                    }
+                    if (ActiveChunks == _prevChunkCount) continue;
+                    _prevChunkCount = ActiveChunks;
+                    this.UpdateFog();
                 }
             }
             catch (Exception e)

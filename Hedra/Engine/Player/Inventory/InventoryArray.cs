@@ -140,7 +140,7 @@ namespace Hedra.Engine.Player.Inventory
             for (var i = 0; i < _restrictions.Length; i++)
             {
                 _restrictions[i] = new string[0];
-                _items[i] = null;
+                this.SetItem(i, null);
             }
         }
 

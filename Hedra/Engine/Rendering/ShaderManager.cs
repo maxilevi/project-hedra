@@ -107,23 +107,45 @@ namespace Hedra.Engine.Rendering
 
 		}
 		
-		public static Vector3 LightColor{
+		public static Vector3 LightColor
+        {
 			get => _lightColor;
-		    set{
+		    set
+            {
 				_lightColor = value;
 				int prevShader = GraphicsLayer.ShaderBound;
-				for(int i = 0; i < Shaders.Count; i++){
+				for(var i = 0; i < Shaders.Count; i++){
 					int k = i;
-					if(Shaders[i].LightColorLocation != -1)
-						ThreadManager.ExecuteOnMainThread ( delegate{ 
-						                                   	GL.UseProgram(Shaders[k].ShaderId);
-						                                   	GL.Uniform3(Shaders[k].LightColorLocation, value); 
-						                                   } );
+				    if (Shaders[i].LightColorLocation != -1)
+				    {
+				        ThreadManager.ExecuteOnMainThread(delegate
+				        {
+				            GL.UseProgram(Shaders[k].ShaderId);
+				            GL.Uniform3(Shaders[k].LightColorLocation, value);
+				        });
+				    }
 				}
 				GL.UseProgram(prevShader);
 				GraphicsLayer.ShaderBound = prevShader;
 			}
 		}
+
+	    public static void SetLightColorInTheSameThread(Vector3 Color)
+	    {
+	        _lightColor = Color;
+	        int prevShader = GraphicsLayer.ShaderBound;
+	        for (var i = 0; i < Shaders.Count; i++)
+	        {
+	            int k = i;
+	            if (Shaders[i].LightColorLocation != -1)
+	            {
+	                GL.UseProgram(Shaders[k].ShaderId);
+	                GL.Uniform3(Shaders[k].LightColorLocation, Color);	                
+	            }
+	        }
+	        GL.UseProgram(prevShader);
+	        GraphicsLayer.ShaderBound = prevShader;
+        }
 
 		public static Vector3 LightPosition
         {

@@ -90,8 +90,9 @@ namespace Hedra.Engine
 	    public static void LoadMenu(){
 	        World.Recreate(World.MenuSeed);
 	        EnvironmentSystem.SkyManager.SetTime(12000);
+            Player.Inventory.ClearInventory();
 	        Player.UI.ShowMenu();
-            Player.Model.Enabled = false;
+	        Player.Model.Alpha = 0f;
 	        Player.View.TargetPitch = 0f;
 	        Player.HandLamp.Enabled = false;
 	        Player.View.TargetYaw = 0f;
@@ -109,6 +110,7 @@ namespace Hedra.Engine
                 
 				Player.Physics.TargetPosition = location;
 				Player.Model.Position = location;
+			    Player.Model.Alpha = 0f;
 				yield return null;
 			}
 		}
@@ -136,7 +138,6 @@ namespace Hedra.Engine
 	        Player.RandomFactor = Information.RandomFactor;
 			if(! (Player.Health > 0) )
 				Player.Model.Enabled = false;
-			Player.Model.Enabled = true;
 			Player.AbilityTree.FromInformation(Information);
 			Player.Toolbar.FromInformation(Information);
 			Player.Chat.Clear();
@@ -194,7 +195,6 @@ namespace Hedra.Engine
 			Player.UI.HideMenu();
 			Player.UI.Hide = false;
 			Player.Enabled = true;				
-			Player.Model.Enabled = true;
 			_isNewRun = true;
 		}
 		

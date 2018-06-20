@@ -161,7 +161,6 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
             UnderChunk.AddStaticElement(Model);
             World.AddGlobalCollider(Shapes.ToArray());
-            World.AddChunkToQueue(UnderChunk, true);
         }
 
         public override void Dispose()

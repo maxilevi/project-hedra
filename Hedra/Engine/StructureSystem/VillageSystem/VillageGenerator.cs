@@ -215,65 +215,68 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             underChunk.AddStaticElement(model);
 
             underChunk.Blocked = true;
-            World.AddChunkToQueue(underChunk, true);
             
         }
 
-        public IEnumerator BuildBlacksmith(object[] Params)
-        {
-            var town = (CollidableStructure) Params[0];
-			var transMatrix = (Matrix4) Params[1];
-			var blacksmithPosition = (Vector3) Params[2];
+	    public IEnumerator BuildBlacksmith(object[] Params)
+	    {
+	        var town = (CollidableStructure) Params[0];
+	        var transMatrix = (Matrix4) Params[1];
+	        var blacksmithPosition = (Vector3) Params[2];
 
-            Vector3 position = transMatrix.ExtractTranslation() + blacksmithPosition;
-			Chunk underChunk = World.GetChunkAt(position);
-			int currentSeed = World.Seed;
-			while( (underChunk == null || !underChunk.BuildedWithStructures) && World.Seed == currentSeed){
-				underChunk = World.GetChunkAt(position);
-				yield return null;
-			}
-            float heightAtPosition = Physics.HeightAtPosition(position);
-            blacksmithPosition.Y = heightAtPosition;
+	        Vector3 position = transMatrix.ExtractTranslation() + blacksmithPosition;
+	        Chunk underChunk = World.GetChunkAt(position);
+	        int currentSeed = World.Seed;
+	        while ((underChunk == null || !underChunk.BuildedWithStructures) && World.Seed == currentSeed)
+	        {
+	            underChunk = World.GetChunkAt(position);
+	            yield return null;
+	        }
+	        float heightAtPosition = Physics.HeightAtPosition(position);
+	        blacksmithPosition.Y = heightAtPosition;
 
-            int type = 1;
+	        int type = 1;
 
-            if (type == 1)
-                transMatrix = transMatrix * Matrix4.CreateScale(.75f);
+	        if (type == 1)
+	            transMatrix = transMatrix * Matrix4.CreateScale(.75f);
 
-            Vector3 blacksmithGuyOffset = Vector3.Zero;
-            if (type == 1)
-                blacksmithGuyOffset = Vector3.UnitX * 10f + Vector3.UnitZ * 24;
+	        Vector3 blacksmithGuyOffset = Vector3.Zero;
+	        if (type == 1)
+	            blacksmithGuyOffset = Vector3.UnitX * 10f + Vector3.UnitZ * 24;
 
-            TaskManager.Parallel( delegate{
+	        TaskManager.Parallel(delegate
+	        {
 
-                var bigPost =
-                    new LampPost(blacksmithPosition + transMatrix.ExtractTranslation() + Vector3.UnitZ * 10f - Vector3.UnitX * 16f)
-                    {
-                        Radius = 32,
-                        LightColor = new Vector3(1f, .5f, 0f)
-                    };
-                World.AddStructure(bigPost);
+	            var bigPost =
+	                new LampPost(blacksmithPosition + transMatrix.ExtractTranslation() + Vector3.UnitZ * 10f -
+	                             Vector3.UnitX * 16f)
+	                {
+	                    Radius = 32,
+	                    LightColor = new Vector3(1f, .5f, 0f)
+	                };
+	            World.AddStructure(bigPost);
 
-                List<CollisionShape> blacksmithShapes = BlacksmithShapes[type].Clone();
-				VertexData blacksmith = BlacksmithModels[type].Clone();
-                blacksmith.Transform(transMatrix);
-				blacksmith.Transform(Matrix4.CreateTranslation(blacksmithPosition + Vector3.UnitY * -.5f));
-                blacksmith.GraduateColor(Vector3.UnitY);
-				underChunk.AddStaticElement(blacksmith);
-				
-				for(int i = 0; i < blacksmithShapes.Count; i++){
-					blacksmithShapes[i].Transform(transMatrix);
-					blacksmithShapes[i].Transform(Matrix4.CreateTranslation(blacksmithPosition));
-				}
-				town.AddCollisionShape(blacksmithShapes.ToArray());
-				underChunk.Blocked = true;
-				World.AddChunkToQueue(underChunk, true);
-			                          });
+	            List<CollisionShape> blacksmithShapes = BlacksmithShapes[type].Clone();
+	            VertexData blacksmith = BlacksmithModels[type].Clone();
+	            blacksmith.Transform(transMatrix);
+	            blacksmith.Transform(Matrix4.CreateTranslation(blacksmithPosition + Vector3.UnitY * -.5f));
+	            blacksmith.GraduateColor(Vector3.UnitY);
+	            underChunk.AddStaticElement(blacksmith);
 
-                World.QuestManager.SpawnHumanoid(HumanType.Blacksmith, blacksmithGuyOffset + blacksmithPosition + transMatrix.ExtractTranslation());
-        }
-		
-		public IEnumerator BuildSingleHouse(object[] Params){
+	            for (int i = 0; i < blacksmithShapes.Count; i++)
+	            {
+	                blacksmithShapes[i].Transform(transMatrix);
+	                blacksmithShapes[i].Transform(Matrix4.CreateTranslation(blacksmithPosition));
+	            }
+	            town.AddCollisionShape(blacksmithShapes.ToArray());
+	            underChunk.Blocked = true;
+
+	            World.QuestManager.SpawnHumanoid(HumanType.Blacksmith,
+	                blacksmithGuyOffset + blacksmithPosition + transMatrix.ExtractTranslation());
+	        });
+	    }
+
+	    public IEnumerator BuildSingleHouse(object[] Params){
 			Vector3 position = (Vector3)Params[0];
 			var transMatrix = (Matrix4) Params[1];
 			var rng = Params[2] as Random;
@@ -294,7 +297,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 		    position.Y = heightAtPosition;
 		    if (Math.Abs(heightAtPosition - housePosition.Y) > 4)
 		        yield break;
-            TaskManager.Parallel( delegate{
+            TaskManager.Parallel( delegate
+            {
                 //var post = new LampPost(transMatrix.ExtractTranslation() + position + Vector3.UnitY * 24f);
                 //post.Radius = 384;
                 //World.AddStructure(post);
@@ -321,8 +325,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 				underChunk.AddStaticElement(houseModel);
 				underChunk.AddCollisionShape(houseShapes.ToArray());
 				underChunk.Blocked = true;
-				World.AddChunkToQueue(underChunk, true);
-			                          });
+                
+            });
 		}
 		
 		public IEnumerator BuildFarms(object[] Params)
@@ -379,7 +383,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 				
 				underChunk.AddStaticElement(farmModel);
 				underChunk.Blocked = true;
-				World.AddChunkToQueue(underChunk, true);
 			}
 			k = 0; 
 			j = 0;
@@ -474,7 +477,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
 	        underChunk.AddStaticElement(model);
 			underChunk.Blocked = true;
-			World.AddChunkToQueue(underChunk, true);
 		}
 		
 		public IEnumerator BuildMarket(object[] Params)
@@ -514,7 +516,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(centerPosition + Vector3.UnitX * 40f, false));
 
                 int k = i;
-		    	TaskManager.Parallel( delegate{
+		    	TaskManager.Parallel( delegate
+                {
 			    	VertexData market0 = Market0_Clone.Clone();
 					bool extraShelf = rng.Next(0, 4) != 0;
 					if(extraShelf)
@@ -588,8 +591,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     //underChunk.AddCollisionShape(marketShapes.ToArray());
                     town.AddCollisionShape(marketShapes.ToArray());
 					underChunk.AddStaticElement(market0);
-					World.AddChunkToQueue(underChunk, true);
-		    	                          });
+                    
+                });
 			}
 		}
 

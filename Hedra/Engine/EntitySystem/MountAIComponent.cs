@@ -70,7 +70,7 @@ namespace Hedra.Engine.EntitySystem
 			}
 			
 			if( (Parent.Position - Owner.Position).LengthSquared > 128*128){
-				Parent.Position = Owner.BlockPosition + OpenTK.Vector3.UnitX * 12f;
+				Parent.Position = Owner.BlockPosition + Vector3.UnitX * 12f;
 			}
 			
 			float Distance = (Target == Owner) ? 8 : 3;

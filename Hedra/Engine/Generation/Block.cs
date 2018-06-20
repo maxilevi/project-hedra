@@ -17,7 +17,7 @@ namespace Hedra.Engine.Generation
 		[FieldOffset(1)] private bool _noise3D;
 	    [FieldOffset(2)] private float _density;
 
-        public Block(BlockType Type, float Density = 0)
+        public Block(BlockType Type, float Density = default(float))
         {
 			this._type = Type;
 			this._noise3D = false;

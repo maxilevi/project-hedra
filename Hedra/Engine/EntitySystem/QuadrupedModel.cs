@@ -28,12 +28,12 @@ namespace Hedra.Engine.EntitySystem
 	/// </summary>
 	public sealed class QuadrupedModel : UpdatableModel<AnimatedModel>, IMountable, IAudible, IDisposeAnimation
     {	
-        public override bool IsWalking => this.Model.Animator.AnimationPlaying == this.WalkAnimation;
+        public override bool IsWalking => Array.IndexOf(WalkAnimations, this.Model.Animator.AnimationPlaying) != -1;
         public override bool IsIdling => Array.IndexOf(IdleAnimations, this.Model.Animator.AnimationPlaying) != -1;
         public bool AlignWithTerrain { get; set; }
         public bool IsMountable { get; set; }
         public Animation[] IdleAnimations { get; }
-        public Animation WalkAnimation { get; }
+        public Animation[] WalkAnimations { get; }
         public Animation[] AttackAnimations { get; }
 		public AttackEvent[] AttackAnimationsEvents { get; }
         public AnimatedCollider Collider { get; }
@@ -58,11 +58,10 @@ namespace Hedra.Engine.EntitySystem
             var rng = new Random(Parent.MobSeed);
 
 			Model = AnimationModelLoader.LoadEntity(Template.Path);
-			WalkAnimation = AnimationLoader.LoadAnimation(Template.WalkAnimation.Path);
+		    WalkAnimations = new Animation[Template.WalkAnimations.Length];
 			IdleAnimations = new Animation[Template.IdleAnimations.Length];
 			AttackAnimations = new Animation[Template.AttackAnimations.Length];
 			AttackAnimationsEvents = new AttackEvent[Template.AttackAnimations.Length];
-		    WalkAnimation.Speed = Template.WalkAnimation.Speed;
 
 		    this.AlignWithTerrain = Template.AlignWithTerrain;
             this.Model.Scale = Vector3.One * (Template.Scale + Template.Scale * rng.NextFloat() * .3f - Template.Scale * rng.NextFloat() * .15f);
@@ -74,7 +73,13 @@ namespace Hedra.Engine.EntitySystem
 				IdleAnimations[i].Speed = Template.IdleAnimations[i].Speed;
 			}
 
-		    for (var i = 0; i < AttackAnimations.Length; i++)
+		    for (var i = 0; i < WalkAnimations.Length; i++)
+		    {
+		        WalkAnimations[i] = AnimationLoader.LoadAnimation(Template.WalkAnimations[i].Path);
+		        WalkAnimations[i].Speed = Template.WalkAnimations[i].Speed;
+		    }
+
+            for (var i = 0; i < AttackAnimations.Length; i++)
 		    {
 		        AttackAnimations[i] = AnimationLoader.LoadAnimation(Template.AttackAnimations[i].Path);
 		        AttackAnimations[i].Speed = Template.AttackAnimations[i].Speed;
@@ -112,7 +117,6 @@ namespace Hedra.Engine.EntitySystem
 				AttackAnimationsEvents[i] = (AttackEvent) Enum.Parse(typeof(AttackEvent), Template.AttackAnimations[i].AttackEvent);
             }
             this.Collider = new AnimatedCollider(Template.Path, Model);
-            this.Model.Size = this.BaseBroadphaseBox.Max - this.BaseBroadphaseBox.Min;
 			this.Idle();
 
 		    var soundType = Parent.MobType == MobType.Horse ? SoundType.HorseRun : SoundType.HumanRun;
@@ -208,11 +212,8 @@ namespace Hedra.Engine.EntitySystem
 
 		    if (Model != null)
 		    {
-		        if (Model.Rendered)
-		        {
-		            Model.Update();
-		        }
-
+                Model.Update();
+		        
 		        _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))) .ExtractRotation() : Quaternion.Identity;
 		        _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.unScaledDeltaTime * 8f);
 		        Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
@@ -263,8 +264,8 @@ namespace Hedra.Engine.EntitySystem
 		
 			if(this.IsAttacking) return;
 			
-			if(Model != null && Model.Animator.AnimationPlaying != WalkAnimation)
-				Model.PlayAnimation(WalkAnimation);
+			if(Model != null && this.IsWalking)
+				Model.PlayAnimation(WalkAnimations[Utils.Rng.Next(0, WalkAnimations.Length)]);
 		}
 
 		public override void Idle()
@@ -305,7 +306,7 @@ namespace Hedra.Engine.EntitySystem
         public override void Dispose()
         {
             this.IdleAnimations.ToList().ForEach(A => A.Dispose());
-            this.WalkAnimation.Dispose();
+            this.WalkAnimations.ToList().ForEach(A => A.Dispose());
             this.AttackAnimations.ToList().ForEach(A => A.Dispose());
             this.Collider.Dispose();
             this.Model.Dispose();
