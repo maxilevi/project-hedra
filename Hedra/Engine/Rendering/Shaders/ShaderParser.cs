@@ -98,6 +98,7 @@ namespace Hedra.Engine.Rendering.Shaders
                 case "int":
                     return typeof(int);
                 default:
+                    // FIXME: This doesnt work when obfuscated
                     var possibleType = this.InferType(Type);
                     if (possibleType != null) return possibleType;
                     throw new ArgumentException($"Type '{Type}' could not be mapped to a valid type");

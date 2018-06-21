@@ -6,3 +6,6 @@
 	path = hedra-tools
 	url = https://Zaphyk@bitbucket.org/Zaphyk/hedra-tools.git
 
+[submodule "hedra-obfuscator"]
+	path = hedra-obfuscator
+	url = git@bitbucket.org:Zaphyk/hedra-obfuscator.git

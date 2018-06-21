@@ -12,8 +12,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
-using OpenTK;
 using System.Reflection;
+using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 
@@ -242,11 +242,11 @@ namespace Hedra.Engine.Rendering.UI
 		public bool Hide{
 			get{ return _mEnabled; }
 			set{
-				BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+				var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 				int k = 0 ;
 				for(int i = 0; i < this.GetType().GetFields(flags).Length; i++)
 				{
-					FieldInfo field = this.GetType().GetFields(flags)[i];
+					var field = this.GetType().GetFields(flags)[i];
 					if(typeof(Panel).IsAssignableFrom(field.FieldType)){
 						if(value){
 							_wasEnabled.Add((field.GetValue(this) as Panel).Enabled);

@@ -1,7 +1,9 @@
-﻿using OpenTK;
+﻿using System.Reflection;
+using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
+    [Obfuscation(Exclude = false, Feature = "-rename")]
     public class PointLight
     {
         public const float DefaultRadius = 20f;

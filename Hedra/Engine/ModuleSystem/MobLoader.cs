@@ -7,7 +7,6 @@ namespace Hedra.Engine.ModuleSystem
 {
     public static class MobLoader
     {
-
         public static IEnemyFactory[] LoadModules(string AppPath)
         {
             var factories = new List<IEnemyFactory>();

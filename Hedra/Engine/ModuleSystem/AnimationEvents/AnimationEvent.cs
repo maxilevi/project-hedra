@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Reflection;
 using Hedra.Engine.EntitySystem;
 using OpenTK;
 
+[assembly: Obfuscation(Exclude = true)]
 namespace Hedra.Engine.ModuleSystem.AnimationEvents
 {
     public abstract class AnimationEvent : IDisposable

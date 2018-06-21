@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Hedra.Engine.Generation;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.ItemSystem

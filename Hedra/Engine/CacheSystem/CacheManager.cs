@@ -31,7 +31,7 @@ namespace Hedra.Engine.CacheSystem
             Type[] typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(CacheManager).Namespace).ToArray();
             foreach (Type type in typeList)
             {
-                if(!type.Name.EndsWith("Cache") || Attribute.GetCustomAttribute(type, typeof(CacheIgnore)) != null) continue;
+                if(!type.IsSubclassOf(typeof(CacheType)) || Attribute.GetCustomAttribute(type, typeof(CacheIgnore)) != null) continue;
 
                 var item = CacheItem.MaxEnums;
                 for (var i = 0; i < (int) CacheItem.MaxEnums; i++)

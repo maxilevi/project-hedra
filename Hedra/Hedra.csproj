@@ -213,7 +213,6 @@
     <Compile Include="Engine\EntitySystem\InteractableComponent.cs" />
     <Compile Include="Engine\EntitySystem\UpdatableModel.cs" />
     <Compile Include="Engine\EntitySystem\HealthBonusComponent.cs" />
-    <Compile Include="Engine\EntitySystem\IModelHandler.cs" />
     <Compile Include="Engine\EntitySystem\SlowingComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedComponent.cs" />
@@ -271,9 +270,6 @@
     <Compile Include="Engine\ModuleSystem\HumanoidTemplater.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidWeaponTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\IEnemyFactory.cs" />
-    <Compile Include="Engine\ModuleSystem\MaterialLoader.cs" />
-    <Compile Include="Engine\ModuleSystem\MaterialTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\MaterialTemplater.cs" />
     <Compile Include="Engine\ModuleSystem\MobLoader.cs" />
     <Compile Include="Engine\ModuleSystem\ModelTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\SpawnerLoader.cs" />
@@ -294,7 +290,6 @@
     <Compile Include="Engine\EntitySystem\MountAIComponent.cs" />
     <Compile Include="Engine\EntitySystem\PoisonComponent.cs" />
     <Compile Include="Engine\EntitySystem\RideComponent.cs" />
-    <Compile Include="Engine\EntitySystem\SaveAttribute.cs" />
     <Compile Include="Engine\EntitySystem\DamageComponent.cs" />
     <Compile Include="Engine\EntitySystem\DropComponent.cs" />
     <Compile Include="Engine\EntitySystem\Entity.cs" />
@@ -302,6 +297,7 @@
     <Compile Include="Engine\EntitySystem\EntitySpawner.cs" />
     <Compile Include="Engine\Generation\HighlightedArea.cs" />
     <Compile Include="Engine\Generation\AreaHighlighter.cs" />
+    <Compile Include="Engine\ObfuscatorSettings.cs" />
     <Compile Include="Engine\PhysicsSystem\AnimatedCollider.cs" />
     <Compile Include="Engine\PhysicsSystem\AnimatedColliderBuilder.cs" />
     <Compile Include="Engine\PhysicsSystem\AnimatedColliderData.cs" />
@@ -531,7 +527,6 @@
     <Compile Include="Engine\QuestSystem\BlacksmithComponent.cs" />
     <Compile Include="Engine\EntitySystem\BossSystem\BossHealthBarComponent.cs" />
     <Compile Include="Engine\EntitySystem\BossSystem\BossGenerator.cs" />
-    <Compile Include="Engine\QuestSystem\Cage.cs" />
     <Compile Include="Engine\QuestSystem\Campfire.cs" />
     <Compile Include="Engine\QuestSystem\CombatAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\HumanoidAIComponent.cs" />

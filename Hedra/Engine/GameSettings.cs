@@ -12,17 +12,13 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Effects;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Scenes;
 using Hedra.Engine.Sound;
 using OpenTK;
 
 namespace Hedra.Engine
 {
-    /// <summary>
-    ///     Description of GraphicsOptions.
-    /// </summary>
-    public static class 
-        GameSettings
+    [Obfuscation(Exclude = false, Feature = "-rename")]
+    public static class GameSettings
     {
         public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
         public static float BloomModifier { get; set; } = 1f;
