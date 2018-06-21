@@ -20,7 +20,6 @@
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <TargetFrameworkProfile />
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <SourceAnalysisOverrideSettingsFile>C:\Users\maxi\AppData\Roaming\ICSharpCode/SharpDevelop4\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
     <DebugType>Full</DebugType>
     <WarningLevel>4</WarningLevel>
     <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
@@ -4722,6 +4721,9 @@
     <ErrorReport>prompt</ErrorReport>
     <ConsolePause>False</ConsolePause>
     <OutputPath>bin\Release\</OutputPath>
+    <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">      
+        call "$(ProjectDir)/../hedra-obfuscator/Confuser.CLI.exe" "$(ProjectDir)/Hedra.crproj"
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>True</DebugSymbols>
