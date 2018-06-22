@@ -9,3 +9,6 @@
 [submodule "hedra-obfuscator"]
 	path = hedra-obfuscator
 	url = git@bitbucket.org:Zaphyk/hedra-obfuscator.git
+[submodule "api-facade"]
+	path = api-facade
+	url = https://github.com/Zaphyk/api-facade
