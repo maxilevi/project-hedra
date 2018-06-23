@@ -210,11 +210,6 @@ namespace Hedra.Engine.Player
 			//Dont cull the back chunk so that shadows can render
 			Vector2 chunkPos = World.ToChunkSpace(this.Position);
             Chunk underChunk = World.GetChunkAt(this.Position);
-            Chunk backChunk = World.GetChunkAt( chunkPos.ToVector3() - View.CrossDirection * Chunk.Width * 1f );
-			if(backChunk?.Mesh != null){
-				backChunk.Mesh.DontCull = true;
-				//BackChunk.Mesh.OnlyShadows = true;
-			}
 			
 			//START CEMENTERY
 			bool wasInCementery = _inCementery;

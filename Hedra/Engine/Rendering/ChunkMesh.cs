@@ -23,11 +23,9 @@ namespace Hedra.Engine.Rendering
 		public List<VertexData> Elements = new List<VertexData>();
 		public VertexData ModelData {get; set;}
 		
-		//public bool OnlyShadows {get; set;}
 		public bool IsBuilded;
 		public bool IsGenerated;
 		public bool Enabled { get; set; }
-		public bool DontCull { get; set; }
 		public bool BuildedOnce { get; set; }
 		public bool Crashed { get; set; }
 		

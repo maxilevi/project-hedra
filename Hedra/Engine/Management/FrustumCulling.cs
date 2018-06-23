@@ -6,8 +6,6 @@
  */
 using System;
 using OpenTK;
-using Hedra.Engine.Scenes;
-using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK.Graphics.OpenGL;
 
@@ -28,6 +26,7 @@ namespace Hedra.Engine.Management
         private readonly Vector4[] Planes = new Vector4[6];
 	    private readonly Vector3[] Points = new Vector3[8];
 	    private readonly CollisionShape FrustumShape = new CollisionShape(new Vector3[8]);
+	    private readonly Box _frustumBroadphase = new Box();
         private readonly Box _cacheBox = new Box();
         public Matrix4 ProjectionMatrix;
         public Matrix4 ModelViewMatrix = Matrix4.Identity;
@@ -36,7 +35,6 @@ namespace Hedra.Engine.Management
 		public bool IsInsideFrustum(ICullable CullableObject)
 		{
 			if (!CullableObject.Enabled) return false;
-			if (CullableObject.DontCull) return true;
             var box = CullableObject.CullingBox;
 		    if (box == null) return false;
 		    _cacheBox.Min = box.Min + CullableObject.Position;
@@ -138,6 +136,7 @@ namespace Hedra.Engine.Management
             // Normalize the ClippingPlane.FRONT side
             NormalizePlane(Frustum, (int) ClippingPlane.FRONT);
 
+            // FIXME: this is a really ugly hack, we should fix this.
             for (var i = 0; i < Planes.Length; i++)
             {
                 Planes[i] = new Vector4(Frustum[i, A], Frustum[i, B], Frustum[i, C], Frustum[i, D]);
@@ -153,9 +152,13 @@ namespace Hedra.Engine.Management
 
             for (var i = 0; i < Points.Length; i++)
             {
-                Points[i] = Vector3.TransformPosition(Points[i], (ModelViewMatrix).Inverted());
+                Points[i] = Vector3.TransformPosition(Points[i], (Modl).Inverted());
                 FrustumShape.Vertices[i] = Points[i];
             }
+            var center = Vector3.TransformPosition(Vector3.Zero, Modl.Inverted());
+            var size = 32;
+            _frustumBroadphase.Min = center - Vector3.One * size;
+            _frustumBroadphase.Max = center + Vector3.One * size;
         }
         
 		public void SetFrustum(Matrix4 View)
@@ -193,15 +196,22 @@ namespace Hedra.Engine.Management
 
 	    public bool BoxInFrustum(Box Box)
 	    {
-	        var insideFrustum = this.VerticesInFrustum(Box.Vertices);
-	        return insideFrustum;
-            if (insideFrustum) return true;
-            return this.BiggerThanFrustum(Box);
+	        return this.VerticesInFrustum(Box.Vertices) || this.FrustumCollidesWithBox(Box);
 	    }
 
-	    private bool BiggerThanFrustum(Box Box)
+	    private bool FrustumInBox(Box Box)
 	    {
-	        return GJKCollision.Collides(Box.ToShape(), FrustumShape);
+	        for (var i = 0; i < Points.Length; i++)
+	        {
+	            if (Physics.AABBvsPoint(Box, Points[i]))
+	                return true;
+	        }
+	        return false;
+	    }
+
+	    public bool FrustumCollidesWithBox(Box Box)
+	    {
+	        return Physics.Collides(Box, _frustumBroadphase);
 	    }
 
         public bool PointInFrustum(Vector3 Point)

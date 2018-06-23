@@ -131,18 +131,12 @@ namespace Hedra.Engine.Generation
                     _left += 0.25f;
                     if (_left >= .5f)
                     {
-                        var chunkUnderPlayer = World.GetChunkAt(_player.Position);
-                        if(chunkUnderPlayer?.Mesh != null) chunkUnderPlayer.Mesh.DontCull = true;
                         ActiveChunks = 0;
                         for (int i = Chunks.Length - 1; i > -1; i--)
                         {
                             if (Chunks[i].Disposed)
                             {
                                 continue;
-                            }
-                            if (Chunks[i]?.Mesh != null && chunkUnderPlayer != Chunks[i])
-                            {
-                                Chunks[i].Mesh.DontCull = false;
                             }
                             if (Chunks[i].IsGenerated && Chunks[i].BuildedWithStructures)
                             {

@@ -85,12 +85,6 @@ namespace Hedra.Engine.EntitySystem
 
 
 			if(HasRider && !Rider.IsRiding){
-			    if(Rider is LocalPlayer ridePlayer){
-			        ridePlayer.Model.LeftWeapon.MainMesh.DontCull = false;
-					for(int i = 0; i < ridePlayer.Model.LeftWeapon.Meshes.Length; i++){
-						ridePlayer.Model.LeftWeapon.Meshes[i].DontCull = false;
-					}
-				}
 				Parent.Position = Rider.Position;
 			    Rider.Model.MountModel.AlignWithTerrain = true;
                 Rider.Model.MountModel = null;
@@ -118,12 +112,6 @@ namespace Hedra.Engine.EntitySystem
 			Parent.Physics.UsePhysics = false;
 			Parent.Physics.HasCollision = false;
 			Parent.SearchComponent<DamageComponent>().Immune = true;
-		    if(Entity is LocalPlayer player){
-		        player.Model.LeftWeapon.MainMesh.DontCull = true;
-				for(int i = 0; i < player.Model.LeftWeapon.Meshes.Length; i++){
-					player.Model.LeftWeapon.Meshes[i].DontCull = true;
-				}
-			}
 
 		    if (AI == null) AI = Parent.SearchComponent<BasicAIComponent>();
 		    if (_healthBar == null) _healthBar = Parent.SearchComponent<HealthBarComponent>();

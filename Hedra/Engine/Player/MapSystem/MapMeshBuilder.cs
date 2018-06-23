@@ -79,7 +79,6 @@ namespace Hedra.Engine.Player.MapSystem
                 }
             }
             var baseMesh = ObjectMesh.FromVertexData(mapData);
-            baseMesh.DontCull = true;
             baseMesh.ApplyNoiseTexture = true;
             baseMesh.Dither = true;
             DrawManager.Remove(baseMesh);

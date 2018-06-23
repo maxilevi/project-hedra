@@ -26,6 +26,7 @@ namespace Hedra.Engine.PhysicsSystem
         private CollisionShape _shape;
         private CollisionShape _boxShape;
         private Vector3[] _verticesCache;
+        private Vector3[] _highResVerticesCache;
 
         #region Operators
         public Box() : this(Vector3.Zero, Vector3.One) { }
@@ -117,18 +118,38 @@ namespace Hedra.Engine.PhysicsSystem
                 return _verticesCache;
             }
         }
-/*
-		public Box Cache
+
+        public Vector3[] GetHighResolutionVertices(int Resolution)
         {
-			get
+            var defaultDelta = new Vector3(Max.X - Min.X, Max.Y - Min.Y, Max.Z - Min.Z);
+            if (_highResVerticesCache == null) _highResVerticesCache = new Vector3[Resolution * 8];
+
+            for (var i = 0; i < Resolution; i++)
             {
-			    if(_poolCache == null) _poolCache = new Pool<Box>();
-			    var cache = _poolCache.Grab();
-                cache.Min = this.Min;
-			    cache.Max = this.Max;				
-				return cache;
-			}
-		}*/
+                var delta = defaultDelta * ((i+1) / (float) Resolution);
+                _highResVerticesCache[i * 8 + 0] = new Vector3(Min.X, Min.Y, Min.Z);
+                _highResVerticesCache[i * 8 + 1] = new Vector3(Min.X + delta.X, Min.Y, Min.Z);
+                _highResVerticesCache[i * 8 + 2] = new Vector3(Min.X, Min.Y, Min.Z + delta.Z);
+                _highResVerticesCache[i * 8 + 3] = new Vector3(Min.X + delta.X, Min.Y, Min.Z + delta.Z);
+                _highResVerticesCache[i * 8 + 4] = new Vector3(Min.X, Min.Y + defaultDelta.Y, Min.Z);
+                _highResVerticesCache[i * 8 + 5] = new Vector3(Min.X + delta.X, Min.Y + defaultDelta.Y, Min.Z);
+                _highResVerticesCache[i * 8 + 6] = new Vector3(Min.X, Min.Y + defaultDelta.Y, Min.Z + delta.Z);
+                _highResVerticesCache[i * 8 + 7] = new Vector3(Min.X + delta.X, Min.Y + defaultDelta.Y, Min.Z + delta.Z);
+            }
+            return _highResVerticesCache;        
+        }
+        /*
+                public Box Cache
+                {
+                    get
+                    {
+                        if(_poolCache == null) _poolCache = new Pool<Box>();
+                        var cache = _poolCache.Grab();
+                        cache.Min = this.Min;
+                        cache.Max = this.Max;				
+                        return cache;
+                    }
+                }*/
 
         public Box Cache
         {

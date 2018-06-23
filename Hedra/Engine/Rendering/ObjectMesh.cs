@@ -17,7 +17,6 @@ namespace Hedra.Engine.Rendering
 	    public Vector3 TargetPosition { get; set; }
 	    public float AnimationSpeed { get; set; } = 1f;
 		public bool Enabled { get; set; }
-		public bool DontCull { get; set; }
 	    public Box CullingBox { get; set; }
         public ChunkMesh Mesh { get; }
 		private readonly ObjectMeshBuffer _buffer;

@@ -12,7 +12,6 @@ namespace Hedra.Engine.Management
 	public interface ICullable
 	{
 		bool Enabled { get; set; }
-	    bool DontCull { get; set; }
 	    Vector3 Position { get; set; }
         Box CullingBox { get; set; }
 	}

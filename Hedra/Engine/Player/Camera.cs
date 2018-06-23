@@ -120,7 +120,9 @@ namespace Hedra.Engine.Player
             _interpolatedPosition = PositionDelegate() - _interpolatedZoomOut;
             Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.FrameTimeSeconds * 16f);
             Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.unScaledDeltaTime * 16f);
-            Distance = Mathf.Lerp(Distance, TargetDistance+AddonDistance, Time.unScaledDeltaTime * 3f);
+            var cameraPosition = this.CalculatePosition(0);
+            var addonDistance = cameraPosition.Y > Physics.HeightAtPosition(cameraPosition) + 2 ? AddonDistance : 0;
+            Distance = Mathf.Lerp(Distance, TargetDistance + addonDistance, Time.unScaledDeltaTime * 3f);
         }
 
         private void ClampYaw()
@@ -180,7 +182,7 @@ namespace Hedra.Engine.Player
 
             for (var i = 2; i < 5; i++)
             {
-                var position = this.CalculatePosition(i);
+                var position = this.CalculatePosition(i) + Vector3.UnitY;
                 float y = Physics.HeightAtPosition(position);
                 var box = new Box(-Vector3.One * 2f + this.CalculatePosition(i-1), Vector3.One * 2f + position);
                 if (position.Y <= y + MinDistance || Physics.IsColliding(position, box))

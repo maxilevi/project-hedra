@@ -97,7 +97,7 @@ namespace Hedra.Engine.Player.MapSystem
 		    var oldFancy = GameSettings.Fancy;
 		    GameSettings.GlobalShadows = false;
 		    GameSettings.Fancy = false;
-            //DrawManager.FrustumObject.CalculateFrustum(projMatrix, DrawManager.FrustumObject.ModelViewMatrix);
+            DrawManager.FrustumObject.CalculateFrustum(projMatrix, DrawManager.FrustumObject.ModelViewMatrix);
             World.CullTest(DrawManager.FrustumObject);
             WorldRenderer.Render(World.DrawingChunks, ChunkBufferTypes.STATIC);
 		    WorldRenderer.Render(World.DrawingChunks, ChunkBufferTypes.WATER);
