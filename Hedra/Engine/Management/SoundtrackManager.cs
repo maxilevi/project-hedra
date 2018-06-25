@@ -49,7 +49,8 @@ namespace Hedra.Engine.Management
 	    private static bool _repeatItself;
 	    private static int _previousIndex;
 
-        public static void Load(){
+        public static void Load()
+        {
 			Source = new SoundSource(SoundManager.ListenerPosition);
 
 			TrackNames = new string[13];
@@ -113,6 +114,7 @@ namespace Hedra.Engine.Management
 
 	    private static void StartCurrentSong()
 	    {
+		    if(_loaded) return;
             if(_previousIndex != TrackIndex)//Song is looping, no interpolation
                 _sleepTime = true;
 	        _usedBuffer = null;

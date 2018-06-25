@@ -19,7 +19,7 @@ namespace Hedra.Engine.EnvironmentSystem
 	public static class SkyManager
 	{
 	    public static Fog FogManager { get; }
-	    public static Skydome Skydome { get; }
+	    public static Sky Sky { get; }
 	    public static Sun Sun { get; }
         public static WeatherManager Weather { get; }
         public static float LastDayFactor { get; set; }
@@ -48,7 +48,7 @@ namespace Hedra.Engine.EnvironmentSystem
 	    static SkyManager()
 	    {
 	        TimeStack = new Stack<float>();
-            Skydome = new Skydome();
+            Sky = new Sky();
 	        FogManager = new Fog();
             Sun = new Sun(new Vector3(-500, 1000, 0).Normalized());
 	        Weather = new WeatherManager();
@@ -167,8 +167,8 @@ namespace Hedra.Engine.EnvironmentSystem
 
 		    if (UpdateDayColors)
 		    {
-		        Skydome.TopColor = Mathf.Lerp(_targetBiomeTopColor, _nextTargetBiomeTopColor, SkyModifier / 6000);
-		        Skydome.BotColor = Mathf.Lerp(_targetBiomeBotColor, _nextTargetBiomeBotColor, SkyModifier / 6000);
+		        Sky.TopColor = Mathf.Lerp(_targetBiomeTopColor, _nextTargetBiomeTopColor, SkyModifier / 6000);
+		        Sky.BotColor = Mathf.Lerp(_targetBiomeBotColor, _nextTargetBiomeBotColor, SkyModifier / 6000);
 		    }
 		    if( Math.Abs(dayFactor - LastDayFactor) > .005f || LoadTime){
 		        FogManager.UpdateFogSettings(FogManager.MinDistance, FogManager.MaxDistance);
@@ -189,7 +189,7 @@ namespace Hedra.Engine.EnvironmentSystem
 		}
 		
 		public static void Draw(){
-			Skydome.Draw();
+			Sky.Draw();
 		}
 	}
 }

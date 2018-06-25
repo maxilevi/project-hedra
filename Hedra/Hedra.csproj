@@ -216,6 +216,7 @@
     <Compile Include="Engine\EntitySystem\SlowingComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedComponent.cs" />
+    <Compile Include="Engine\EnvironmentSystem\Skydome.cs" />
     <Compile Include="Engine\EnvironmentSystem\WeatherManager.cs" />
     <Compile Include="Engine\GameLoader.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkStructuresMeshBuilder.cs" />
@@ -337,7 +338,7 @@
     <Compile Include="Engine\EnvironmentSystem\Fog.cs" />
     <Compile Include="Engine\EnvironmentSystem\Light.cs" />
     <Compile Include="Engine\EnvironmentSystem\SkyManager.cs" />
-    <Compile Include="Engine\EnvironmentSystem\Skydome.cs" />
+    <Compile Include="Engine\EnvironmentSystem\Sky.cs" />
     <Compile Include="Engine\EnvironmentSystem\Sun.cs" />
     <Compile Include="Engine\Events\EventDispatcher.cs" />
     <Compile Include="Engine\Events\EventListener.cs" />
@@ -4406,11 +4407,11 @@
     <None Include="Shaders\MinimapGUI.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SkyStars.frag">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="Shaders\Skydome.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SkyStars.vert">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="Shaders\Skydome.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\SSAO-Pass1-MS.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

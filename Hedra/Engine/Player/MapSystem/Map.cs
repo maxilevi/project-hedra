@@ -137,8 +137,8 @@ namespace Hedra.Engine.Player.MapSystem
 	        if (!Show) return;
 	        this._player.View.PositionDelegate = () => _player.Model.Model.Position.Xz.ToVector3() + Math.Max(_height, _player.Model.Model.Position.Y) * Vector3.UnitY;
 	        SkyManager.FogManager.UpdateFogSettings(FogDistance * .95f, FogDistance);
-	        SkyManager.Skydome.TopColor = Vector4.One;
-	        SkyManager.Skydome.BotColor = Color.CadetBlue.ToVector4();
+	        SkyManager.Sky.TopColor = Vector4.One;
+	        SkyManager.Sky.BotColor = Color.CadetBlue.ToVector4();
         }
 
 	    public void Draw()

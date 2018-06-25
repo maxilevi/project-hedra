@@ -5,7 +5,7 @@ namespace Hedra.Engine.Rendering
 {
     internal static class Geometry
     {
-        public static GeometryData Skydome(int Segments)
+        public static GeometryData UVSphere(int Segments)
         {
             Vector3[] vertices = new Vector3[Segments * (Segments - 1) + 2];
             Vector2[] uvs = new Vector2[Segments * (Segments - 1) + 2];

@@ -46,10 +46,10 @@ void main() {
 
     float occlusion = 0.0;
     for(int i = 0; i < sample_count; ++i) {
-        vec3 sample = TBN * samples[i]; // From tangent to view-spaaaaaace
-        sample = fragPos + sample * radius;
+        vec3 sampl = TBN * samples[i]; // From tangent to view-spaaaaaace
+        sampl = fragPos + sampl * radius;
         
-        vec4 offset = vec4(sample, 1.0);
+        vec4 offset = vec4(sampl, 1.0);
         offset = Projection * offset; // from view to clip-spaaaaaace
         offset.xyz /= offset.w; // perspective divide
         offset.xyz = offset.xyz * 0.5 + 0.5; // transform to range 0.0 - 1.0
@@ -57,7 +57,7 @@ void main() {
         float sampleDepth = texelFetch(Position1, ivec2(offset.xy * Resolution), S).z; // Get depth value of kernel sample
         
         float rangeCheck = smoothstep(0.0, 1.0, radius / abs(fragPos.z - sampleDepth));
-        float final = (sampleDepth >= sample.z + bias ? 1.0 : 0.0) * rangeCheck;
+        float final = (sampleDepth >= sampl.z + bias ? 1.0 : 0.0) * rangeCheck;
         occlusion += final;
     }
     occlusion = (occlusion / sample_count);

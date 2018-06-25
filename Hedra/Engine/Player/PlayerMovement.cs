@@ -299,7 +299,7 @@ namespace Hedra.Engine.Player
 
             if (EventArgs.Key == Key.Number7 && _player.CanInteract)
             {
-                EnvironmentSystem.SkyManager.Skydome.Enabled = !EnvironmentSystem.SkyManager.Skydome.Enabled;
+                EnvironmentSystem.SkyManager.Sky.Enabled = !EnvironmentSystem.SkyManager.Sky.Enabled;
             }
 
             if (EventArgs.Key == Key.J)

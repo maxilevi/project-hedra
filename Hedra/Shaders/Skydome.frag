@@ -9,7 +9,7 @@ uniform sampler2D star_texture;
 
 void main()
 {
-	out_color = texture(star_texture, pass_uv * 3.0);
+	out_color = texture(star_texture, pass_uv);
     out_position = vec4(0.0, 0.0, 0.0, gl_FragCoord.z);
 	out_normal = vec4(0.0, 0.0, 0.0, 1.0);
 } 
