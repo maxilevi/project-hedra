@@ -17,20 +17,21 @@ namespace Hedra.Engine.BiomeSystem
 	/// </summary>
 	public abstract class BiomeGenerator : IDisposable
 	{
-		protected int OffsetX, OffsetZ;
-		protected Chunk Chunk;
-		protected int Seed;
-		protected Block[][][] _blocks;
-		public Random RandomGen;
-		public bool BlocksSetted {get; set;}
-		public bool StructuresPlaced {get; set;}
+		protected int OffsetX { get; }
+        protected int OffsetZ { get; }
+        protected Chunk Chunk { get; }
+		protected int Seed { get; }
+        protected Block[][][] Blocks { get; private set; }
+        public Random RandomGen { get; set; }
+		public bool BlocksSetted { get; set; }
+		public bool StructuresPlaced { get; set; }
 
 	    protected BiomeGenerator(Chunk RefChunk)
         {
 			this.RandomGen = BiomeGenerator.GenerateRng(new Vector2(RefChunk.OffsetX, RefChunk.OffsetZ));
 			this.OffsetX = RefChunk.OffsetX;
 			this.OffsetZ = RefChunk.OffsetZ;
-			this._blocks = RefChunk.Voxels;
+			this.Blocks = RefChunk.Voxels;
 			this.Chunk = RefChunk;
 			this.Seed = World.Seed;
 		}
@@ -49,10 +50,10 @@ namespace Hedra.Engine.BiomeSystem
 		public void BuildArray(){
 			for(var x = 0; x < (int) (Chunk.Width / Chunk.BlockSize); x++)
             {
-				_blocks[x] = new Block[Chunk.Height][];
+				Blocks[x] = new Block[Chunk.Height][];
 				for(var y = 0; y <  Chunk.Height; y++)
                 {
-					_blocks[x][y] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
+					Blocks[x][y] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
                 }
 			}
 			BlocksSetted = true;
@@ -94,8 +95,8 @@ namespace Hedra.Engine.BiomeSystem
 		public void Dispose(){
 			try{
 				if(BlocksSetted){
-					lock(_blocks)
-						_blocks = null;
+					lock(Blocks)
+						Blocks = null;
 				}
 			}catch(Exception e){
 				Log.WriteLine("Could not dispose the chunk properly.");

@@ -39,53 +39,56 @@ namespace Hedra.Engine.Management
 				var fInfo = new FileInfo(chrFile + ".db.bak");
 				fInfo.Attributes |= FileAttributes.Hidden;
 			}
-			
-			using (var fs = File.Create(AssetManager.AppData + "/Characters/" + Player.Name + ".db")){
-				using(var bw = new BinaryWriter(fs)){
-					bw.Write(SaveVersion);
-					bw.Write(Player.Name);
-					bw.Write(Player.BlockPosition.X);
-					bw.Write(Player.BlockPosition.Y+4);
-					bw.Write(Player.BlockPosition.Z);
-					
-					bw.Write(Player.Rotation.X);
-					bw.Write(Player.Rotation.Y);
-					bw.Write(Player.Rotation.Z);
-					
-					bw.Write(Player.Health);
-					
-					bw.Write(Player.Xp);			
-					bw.Write(Player.Level);
-					
-					bw.Write(Player.Mana);
-					
-					bw.Write(Player.WorldSeed);			
-					
-					bw.Write(Player.AbilityTreeArray.Length);
-					bw.Write(Player.AbilityTreeArray);
-					
-					bw.Write(Player.ToolbarArray.Length);
-					bw.Write(Player.ToolbarArray);
-					
-					bw.Write(Player.TargetPosition);
-					
-					bw.Write(Player.Daytime);
-					bw.Write(Player.Class.Name);
+            var actualHealth = LocalPlayer.Instance.MaxHealth;
+            using (var fs = File.Create(AssetManager.AppData + "/Characters/" + Player.Name + ".db"))
+            {
+                using (var bw = new BinaryWriter(fs))
+                {
+                    bw.Write(SaveVersion);
+                    bw.Write(Player.Name);
+                    bw.Write(Player.BlockPosition.X);
+                    bw.Write(Player.BlockPosition.Y + 4);
+                    bw.Write(Player.BlockPosition.Z);
+
+                    bw.Write(Player.Rotation.X);
+                    bw.Write(Player.Rotation.Y);
+                    bw.Write(Player.Rotation.Z);
+
+                    bw.Write(Player.Health);
+
+                    bw.Write(Player.Xp);
+                    bw.Write(Player.Level);
+
+                    bw.Write(Player.Mana);
+
+                    bw.Write(Player.WorldSeed);
+
+                    bw.Write(Player.AbilityTreeArray.Length);
+                    bw.Write(Player.AbilityTreeArray);
+
+                    bw.Write(Player.ToolbarArray.Length);
+                    bw.Write(Player.ToolbarArray);
+
+                    bw.Write(Player.TargetPosition);
+
+                    bw.Write(Player.Daytime);
+                    bw.Write(Player.Class.Name);
                     bw.Write(Player.RandomFactor);
 
-				    var items = Player.Items;
-                    if (items != null){
-						bw.Write(items.Length);
-					    foreach (var pair in items)
-					    {
-					        bw.Write(pair.Key);
-					        var itemBytes = pair.Value.ToArray();
+                    var items = Player.Items;
+                    if (items != null)
+                    {
+                        bw.Write(items.Length);
+                        foreach (var pair in items)
+                        {
+                            bw.Write(pair.Key);
+                            var itemBytes = pair.Value.ToArray();
                             bw.Write(itemBytes.Length);
                             bw.Write(itemBytes);
-					    }
-					}
-				}
-			}
+                        }
+                    }
+                }
+            }
 		}
 	
 		public static PlayerInformation DataFromPlayer(LocalPlayer Player)
@@ -113,22 +116,28 @@ namespace Hedra.Engine.Management
 		}
 		
 		public static PlayerInformation LoadPlayer(string FileName)
-        {	
-			var chrInfo = new FileInfo(FileName);
-			if(chrInfo.Length == 0)
+		{
+		    var info = new FileInfo(FileName);
+		    //FileName = info.Length == 0 ? $"{FileName}.bak" : FileName;
+            var data = DataManager.LoadPlayer(File.Open(FileName, FileMode.Open));
+			if(data.IsCorrupt)
             {
-			    if (!File.Exists(FileName + ".bak"))
+                Log.WriteLine($"[IO] Detected corrupt character file '{Path.GetFileName(FileName)}'.");
+			    if (!File.Exists($"{FileName}.bak"))
 			    {
-			        return DataManager.LoadPlayer(File.Open(FileName, FileMode.Open));
+			        Log.WriteLine($"[IO] Failed to load character '{Path.GetFileName(FileName)}'.");
+                    return null;
 			    }
-			    File.Delete(FileName);
-			    File.Copy(FileName+".bak", FileName);
+                Log.WriteLine("[IO] Character backup found! Retrying...");
+                File.Delete(FileName);
+			    File.Copy($"{FileName}.bak", FileName);
 			    var fInfo = new FileInfo(FileName)
 			    {
 			        Attributes = FileAttributes.Normal
 			    };
-			}		
-			return DataManager.LoadPlayer(File.Open(FileName, FileMode.Open));
+                return LoadPlayer($"{FileName}.bak");
+            }		
+			return data;
 		}
 		
 		public static PlayerInformation LoadPlayer(Stream Str)

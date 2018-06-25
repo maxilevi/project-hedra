@@ -48,7 +48,7 @@ namespace Hedra.Engine.EnvironmentSystem
 	    static SkyManager()
 	    {
 	        TimeStack = new Stack<float>();
-            Skydome = new Skydome(12);
+            Skydome = new Skydome();
 	        FogManager = new Fog();
             Sun = new Sun(new Vector3(-500, 1000, 0).Normalized());
 	        Weather = new WeatherManager();
@@ -72,7 +72,8 @@ namespace Hedra.Engine.EnvironmentSystem
 	        TimeStack.Pop();
         }
 		
-		public static void SetTime(float Time){
+		public static void SetTime(float Time)
+        {
 			DayTime = Time;
 			SkyModifier = 6001;
 			

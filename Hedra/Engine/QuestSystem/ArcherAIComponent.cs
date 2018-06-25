@@ -53,7 +53,7 @@ namespace Hedra.Engine.QuestSystem
 				    {
 				        if (human.Model.LeftWeapon is Bow bow)
 				        {
-				            bow.ArrowDownForce = 1-(TargetPoint - Parent.Position).LengthFast / AttackRadius;
+				            bow.ArrowDownForce = 1-(TargetPoint - Parent.Position).LengthFast / (AttackRadius+16);
                             if (_secondAttackCooldown <= 0)
 				            {
 				                _secondAttackCooldown = 4.5f;

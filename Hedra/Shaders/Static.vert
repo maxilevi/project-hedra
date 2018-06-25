@@ -12,9 +12,9 @@ out vec4 InPos;
 smooth out vec4 InNorm;
 out vec4 Color;
 out float Visibility;
-out float Height;
-out vec4 BotColor;
-out vec4 TopColor;
+out float pass_height;
+out vec4 pass_botColor;
+out vec4 pass_topColor;
 out vec4 Coords;
 out vec3 LightDir;
 out float CastShadows;
@@ -69,9 +69,9 @@ void main(){
 	Vertex.x -= not(invert_uk) * Addon * Scale.x;
 	Vertex.z += not(invert_uk) * Addon * Scale.z;
 
-	Height = U_Height;
-	BotColor = U_BotColor;
-	TopColor = U_TopColor;
+	pass_height = U_Height;
+	pass_botColor = U_BotColor;
+	pass_topColor = U_TopColor;
 	
 	float DistanceToCamera = length(vec3(PlayerPosition - Vertex.xyz).xz);
 	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);

@@ -1,12 +1,11 @@
 #version 330 compatibility
 
+!include<"Includes/Sky.shader">
+
 flat in vec4 Color;
 in vec4 InPos;
 in vec4 InNorm;
 in float Visibility;
-in float Height;
-in vec4 BotColor;
-in vec4 TopColor;
 in vec4 ClipSpace;
 in float Movement;
 
@@ -20,8 +19,12 @@ uniform sampler2D DepthMap;
 uniform bool Dither;
 
 const float Strength = 0.01;
-void main(){
-
+void main()
+{
+	if(Visibility < 0.005)
+	{
+		discard;
+	}
 	if(Dither){
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
 		if( d-floor(d) < 0.5) discard;
@@ -43,9 +46,7 @@ void main(){
 	Depth = gl_FragCoord.z;
 	float WaterDistance = 2.0 * Near * Far / (Far + Near - (2.0 * Depth - 1.0) * (Far - Near));
 	float WaterDepth = FloorDistance - WaterDistance;
-
-	vec4 SkyColor = vec4( mix(BotColor, TopColor, (gl_FragCoord.y / Height) - .25) );
-	vec4 NewColor = mix(SkyColor, InputColor, Visibility);
+	vec4 NewColor = mix(sky_color(), InputColor, Visibility);
 	
 	OutColor = NewColor;
 	OutColor.a *= clamp(WaterDepth / 4.0, 0.0, 1.0);

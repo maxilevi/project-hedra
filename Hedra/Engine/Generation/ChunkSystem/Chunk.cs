@@ -46,6 +46,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public int OffsetZ { get; }
         public Vector3 Position { get; private set; }
 
+        private Dictionary<Vector3, Half> _waterDensity;
         private readonly VertexData _nearestVertexData;
         private readonly Chunk[] _neighbours;
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
@@ -108,7 +109,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void BuildMesh(Chunk[] Neighbours)
         {
             if (Disposed || !IsGenerated || !Landscape.BlocksSetted) return;
-
             this.CalculateBounds();
             this.PrepareForBuilding();
             var output = this.CreateTerrainMesh(Neighbours);
@@ -353,6 +353,18 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 }
                 return nearest0 + 1 * Vector3.UnitY;
             }
+        }
+
+        public void AddWaterDensity(Vector3 WaterPosition, Half Density)
+        {
+            if(_waterDensity == null) _waterDensity = new Dictionary<Vector3, Half>();
+            if (!_waterDensity.ContainsKey(WaterPosition)) //throw new ArgumentException("Water key already exists.");
+                _waterDensity.Add(WaterPosition, Density);
+        }
+
+        public Half GetWaterDensity(Vector3 WaterPosition)
+        {
+            return _waterDensity?.ContainsKey(WaterPosition) ?? false ? _waterDensity[WaterPosition] : default(Half);
         }
 
         public int GetHighestY(int X, int Z)

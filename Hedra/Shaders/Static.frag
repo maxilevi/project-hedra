@@ -3,15 +3,13 @@
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Lighting.shader">
 !include<"Includes/Conditionals.shader">
+!include<"Includes/Sky.shader">
 
 in vec4 Color;
 in vec4 IColor;
 in vec4 InPos;
 smooth in vec4 InNorm;
 in float Visibility;
-in float Height;
-in vec4 BotColor;
-in vec4 TopColor;
 in vec4 Coords;
 in vec3 LightDir;
 in float Depth;
@@ -47,7 +45,12 @@ uniform float Snow = 0.0;
 uniform sampler3D noiseTexture;
 uniform bool Dither;
 
-void main(){
+void main()
+{
+	if(Visibility < 0.005)
+	{
+		discard;
+	}
 	if (Dither) {
 		if( clamp(texture(noiseTexture, vec3(int(InPos.x), int(InPos.y), int(InPos.z)) ).r, 0.0, 1.0) > DitherVisibility * 1.25){
 			discard;
@@ -138,8 +141,7 @@ void main(){
 	vec4 realColor = Rim + Diffuse * InputColor + Specular;
 	vec4 pointLightColor = pointRim + pointDiffuse * InputColor;
 
-	vec4 SkyColor = vec4( mix(BotColor, TopColor, (gl_FragCoord.y / Height) - .25) );
-	vec4 NewColor = mix(SkyColor, vec4( linear_to_srbg(realColor.xyz) * ShadowVisibility + linear_to_srbg(pointLightColor.xyz), realColor.w), Visibility);
+	vec4 NewColor = mix(sky_color(), vec4( linear_to_srbg(realColor.xyz) * ShadowVisibility + linear_to_srbg(pointLightColor.xyz), realColor.w), Visibility);
 
 	mat3 NormalMat = mat3(transpose(inverse(gl_ModelViewMatrix)));
 	

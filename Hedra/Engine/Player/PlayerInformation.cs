@@ -19,20 +19,20 @@ namespace Hedra.Engine.Player
     /// </summary>
     public class PlayerInformation
     {
-        public string Name;
-        public int Level;
-        public int WorldSeed;
-        public float Daytime;
-        public float Xp;
-        public float Mana;
-        public float Health;
-        public Vector3 BlockPosition;
-        public Vector3 Rotation;
-        public Vector3 TargetPosition;
-        public byte[] AbilityTreeArray;
-        public byte[] ToolbarArray;
-        public ClassDesign Class;
-        public float RandomFactor;
+        public string Name { get; set; }
+        public int Level { get; set; }
+        public int WorldSeed { get; set; }
+        public float Daytime { get; set; }
+        public float Xp { get; set; }
+        public float Mana { get; set; }
+        public float Health { get; set; }
+        public Vector3 BlockPosition { get; set; }
+        public Vector3 Rotation { get; set; }
+        public Vector3 TargetPosition { get; set; }
+        public byte[] AbilityTreeArray { get; set; }
+        public byte[] ToolbarArray { get; set; }
+        public ClassDesign Class { get; set; }
+        public float RandomFactor { get; set; }
         private Dictionary<int, Item> _items;
 
         public PlayerInformation()
@@ -56,5 +56,9 @@ namespace Hedra.Engine.Player
             get => _items.ToArray();
             set => _items = value.FromArray();
         }
+
+        public bool IsCorrupt => 
+            BlockPosition.IsInvalid() || Rotation.IsInvalid() || TargetPosition.IsInvalid() ||
+            Daytime.IsInvalid() || Xp.IsInvalid() || Mana.IsInvalid() || Health.IsInvalid();
     }
 }

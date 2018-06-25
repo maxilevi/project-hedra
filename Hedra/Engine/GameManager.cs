@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Drawing;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
@@ -89,7 +90,7 @@ namespace Hedra.Engine
 
 	    public static void LoadMenu(){
 	        World.Recreate(World.MenuSeed);
-	        EnvironmentSystem.SkyManager.SetTime(12000);
+	        SkyManager.SetTime(12000);
             Player.Inventory.ClearInventory();
 	        Player.UI.ShowMenu();
 	        Player.Model.Alpha = 0f;

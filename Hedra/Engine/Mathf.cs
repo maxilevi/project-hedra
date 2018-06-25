@@ -267,32 +267,6 @@ namespace Hedra.Engine
 		public static Vector2 DivideVector(Vector2 V1, Vector2 V2){
 			return new Vector2(V1.X / V2.X, V1.Y / V2.Y);
 		}
-		
-		public static Vector3[] CalculateNormals(Vector3[] vertexData, ushort[] elementData)
-        {
-            Vector3 b1, b2, normal;
-            Vector3[] normalData = new Vector3[vertexData.Length];
-
-            for (int i = 0; i < elementData.Length / 3; i++)
-            {
-                int cornerA = elementData[i * 3];
-                int cornerB = elementData[i * 3 + 1];
-                int cornerC = elementData[i * 3 + 2];
-
-                b1 = vertexData[cornerB] - vertexData[cornerA];
-                b2 = vertexData[cornerC] - vertexData[cornerA];
-
-                normal = Mathf.CrossProduct(b1, b2).Normalized();
-
-                normalData[cornerA] += normal;
-                normalData[cornerB] += normal;
-                normalData[cornerC] += normal;
-            }
-
-            for (int i = 0; i < normalData.Length; i++) normalData[i] = normalData[i].Normalized();
-
-            return normalData;
-        }
 
 	    public static double Clamp(double Val, double Min, double Max)
 	    {

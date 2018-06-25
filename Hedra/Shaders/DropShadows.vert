@@ -4,9 +4,9 @@ layout(location = 0)in vec2 InVertex;
 
 out vec2 uv;
 out float Visibility;
-out float Height;
-out vec4 BotColor;
-out vec4 TopColor;
+out float pass_height;
+out vec4 pass_botColor;
+out vec4 pass_topColor;
 
 uniform vec3 PlayerPosition;
 uniform vec3 Scale;
@@ -28,9 +28,9 @@ void main(void){
 	gl_Position = gl_ModelViewProjectionMatrix * Vertex;
 	uv = vec2((InVertex.y+1.0)/2.0 - .5, 1.0 - (InVertex.x+1.0)/2.0 - .5);
 	
-	BotColor = U_BotColor;
-	TopColor = U_TopColor;
-	Height = U_Height;
+	pass_height = U_Height;
+	pass_botColor = U_BotColor;
+	pass_topColor = U_TopColor;
 	
 	float DistanceToCamera = length(vec3(PlayerPosition - Vertex.xyz).xz);
 	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);

@@ -27,8 +27,8 @@ namespace Hedra.Engine.Player
         private readonly Timer _deadTimer;
         private Item _previousPetItem;
         private bool _timerSet;
-        private bool _petPreviousEnabled;
-        private float _petPreviousAlpha;
+        private bool _petPreviousEnabled = true;
+        private float _petPreviousAlpha = 1;
         private bool _wasRiding;
 
         public PetManager(LocalPlayer Player)

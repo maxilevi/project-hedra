@@ -22,7 +22,6 @@ namespace Hedra.Engine.BiomeSystem
 	public class LandscapeGenerator : BiomeGenerator
 	{
 		public LandscapeGenerator(Chunk Chunk) : base (Chunk){}
-
 		public override void Generate(){
 
 			this.CheckForNearbyStructures();
@@ -42,11 +41,14 @@ namespace Hedra.Engine.BiomeSystem
 			StructuresPlaced = true;
 		}
 		
-		public override void DefineBlocks(){
+		public override void DefineBlocks()
+        {
 			var rng = new Random(World.Seed + 1234123);
-			lock(_blocks){
-				try{
-					var heightCache = new Dictionary<Vector2, float[]>();
+			lock(Blocks)
+            {
+				try
+                {
+                    var heightCache = new Dictionary<Vector2, float[]>();
 
 					const int noiseScale = 4;
 				    var width = (int) (Chunk.Width / Chunk.BlockSize);
@@ -77,11 +79,11 @@ namespace Hedra.Engine.BiomeSystem
 					    const float riverMult = 165f;
 					    const float pathDepth = 2.25f;
 
-					    for(var z = 0; z < depth; z++){
+					    for(var z = 0; z < depth; z++)
+                        {
 							
 							var position = new Vector2(x * Chunk.BlockSize + OffsetX, z* Chunk.BlockSize + OffsetZ);
-					        BlockType type;
-					        float height = Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out type);
+					        float height = Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out BlockType type);
                             float dist, final;
 
                             #region Structure stuff
@@ -262,86 +264,88 @@ namespace Hedra.Engine.BiomeSystem
 								if(noise != 0 && townClamped)
 									townClamped = false;
 								
-								_blocks[x][y][z].Type = BlockType.Air;
+								Blocks[x][y][z].Type = BlockType.Air;
 								
-								_blocks[x][y][z].Density = (Half) (1-(y - height) + noise);
+								Blocks[x][y][z].Density = (Half) (1-(y - height) + noise);
 								
 								if(y < 2)
-									_blocks[x][y][z].Density = (Half)(0.95f + rng.NextFloat()*0.75f);
+									Blocks[x][y][z].Density = (Half)(0.95f + rng.NextFloat()*0.75f);
 								
-								if( _blocks[x][y][z].Density > 0){
+								if( Blocks[x][y][z].Density > 0){
 									
-									_blocks[x][y][z].Type = type;
+									Blocks[x][y][z].Type = type;
 
 								    if (height - y > 3.0f)
 								    {
-								        _blocks[x][y][z].Type = BlockType.Stone;
+								        Blocks[x][y][z].Type = BlockType.Stone;
 								    }
                                     
                                     if (y < 2)
-										_blocks[x][y][z].Type = BlockType.Seafloor;
+										Blocks[x][y][z].Type = BlockType.Seafloor;
 									
 									if(noise != 0)
-										_blocks[x][y][z].Noise3D = true;
+										Blocks[x][y][z].Noise3D = true;
 									
 								}
 								
-								if(_blocks[x][y][z].Type == BlockType.Grass)
+								if(Blocks[x][y][z].Type == BlockType.Grass)
 								    if( (World.Seed == World.MenuSeed || true) && makeDirt )
-								        _blocks[x][y][z].Type = BlockType.Dirt;
+								        Blocks[x][y][z].Type = BlockType.Dirt;
 
                                 if (y < height + river)
                                 {
-                                    if (_blocks[x][y][z].Type == BlockType.Air && river > 0)
+                                    if (Blocks[x][y][z].Type == BlockType.Air && river > 0)
                                     {
-                                        _blocks[x][y][z].Type = BlockType.Water;
-                                        _blocks[x][y][z].Density = (BiomePool.EncodeWater(height + river, _blocks[x][y][z].Density));
+                                        Blocks[x][y][z].Type = BlockType.Water;
+                                        Chunk.AddWaterDensity(new Vector3(x,y,z), (Half) (height + river));
                                     }
                                     else if (Mathf.Clamp(riverBorders * 100f, 0, riverDepth) > 2 &&
-                                             _blocks[x][y][z].Type != BlockType.Air)
+                                             Blocks[x][y][z].Type != BlockType.Air)
                                     {
-                                        _blocks[x][y][z].Type = BlockType.Seafloor;
-                                        for (var i = 0; i < y; i++) _blocks[x][i][z].Type = BlockType.Seafloor;
+                                        Blocks[x][y][z].Type = BlockType.Seafloor;
+                                        for (var i = 0; i < y; i++) Blocks[x][i][z].Type = BlockType.Seafloor;
                                     }
                                 }
 
-                                if(y <= BiomePool.SeaLevel && _blocks[x][y][z].Type == BlockType.Air && y >= 1 && _blocks[x][y-1][z].Type != BlockType.Seafloor && _blocks[x][y-1][z].Type != BlockType.Air && _blocks[x][y-1][z].Type != BlockType.Water )
+                                if(y <= BiomePool.SeaLevel && Blocks[x][y][z].Type == BlockType.Air && y >= 1 && Blocks[x][y-1][z].Type != BlockType.Seafloor && Blocks[x][y-1][z].Type != BlockType.Air && Blocks[x][y-1][z].Type != BlockType.Water )
                                 {
                                     if (y < BiomePool.SeaLevel)
                                     { 
-                                        _blocks[x][y][z].Type = BlockType.Seafloor;
+                                        Blocks[x][y][z].Type = BlockType.Seafloor;
                                         for (var i = 0; i < y; i++)
                                         {
-                                            _blocks[x][i][z].Type = BlockType.Seafloor;
+                                            Blocks[x][i][z].Type = BlockType.Seafloor;
                                         }
                                     }
                                 }
 
                                 var isOcean = y > 0 && y <= BiomePool.SeaLevel &&
-                                              (_blocks[x][y - 1][z].Type == BlockType.Seafloor ||
-                                               _blocks[x][y - 1][z].Type == BlockType.Water) &&
-                                              _blocks[x][y][z].Type == BlockType.Air &&
-                                              _blocks[x][y + 1][z].Type == BlockType.Air;
+                                              (Blocks[x][y - 1][z].Type == BlockType.Seafloor ||
+                                               Blocks[x][y - 1][z].Type == BlockType.Water) &&
+                                              Blocks[x][y][z].Type == BlockType.Air &&
+                                              Blocks[x][y + 1][z].Type == BlockType.Air;
                                 if (isOcean)
                                 {
-                                    _blocks[x][y][z].Type = BlockType.Water;
-                                    _blocks[x][y][z].Density = (BiomePool.EncodeWater(BiomePool.SeaLevel, _blocks[x][y][z].Density));
+                                    Blocks[x][y][z].Type = BlockType.Water;
+                                    Chunk.AddWaterDensity(new Vector3(x,y,z), (Half) BiomePool.SeaLevel);
                                 }
 
                                 if(villagePath || path == pathDepth || town){
-									if( _blocks[x][y][z].Type != BlockType.Air && _blocks[x][y][z].Type != BlockType.Water && _blocks[x][y][z].Type != BlockType.Seafloor){
+									if( Blocks[x][y][z].Type != BlockType.Air && Blocks[x][y][z].Type != BlockType.Water && Blocks[x][y][z].Type != BlockType.Seafloor){
 										if(path > 0 || pathClamped || villagePath)
-											_blocks[x][y][z].Type = BlockType.Path;
+											Blocks[x][y][z].Type = BlockType.Path;
 										if(town && townClamped)
-										    if(_blocks[x][y][z].Type == BlockType.Stone)
-										        _blocks[x][y][z].Type = BlockType.Grass;
+										    if(Blocks[x][y][z].Type == BlockType.Stone)
+										        Blocks[x][y][z].Type = BlockType.Grass;
 									}
 								}
 							}
 						}
 					}
 					
-				}catch(NullReferenceException e){
+				}
+                catch (NullReferenceException e)
+                {
 					Log.WriteLine(e.ToString());
 					
 					World.RemoveChunk(Chunk);
@@ -364,9 +368,9 @@ namespace Hedra.Engine.BiomeSystem
 	                int y = Chunk.GetHighestY(x, z);
 	                var position = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
 
-	                if (_blocks[x][y][z].Type == BlockType.Water && _blocks[x][y + 1][z].Type == BlockType.Air
-	                    && _blocks[x][y - 1][z].Type != BlockType.Water &&
-	                    _blocks[x][y - 1][z].Type != BlockType.Air) _blocks[x][y][z].Type = BlockType.Air;
+	                if (Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air
+	                    && Blocks[x][y - 1][z].Type != BlockType.Water &&
+	                    Blocks[x][y - 1][z].Type != BlockType.Air) Blocks[x][y][z].Type = BlockType.Air;
 
 	                var block = Chunk.GetBlockAt(x, y, z);
 	                Region region = World.BiomePool.GetRegion(position);

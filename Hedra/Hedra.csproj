@@ -210,6 +210,7 @@
     <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
     <Compile Include="Engine\AISystem\GorillaWarriorAIComponent.cs" />
     <Compile Include="Engine\EntitySystem\InteractableComponent.cs" />
+    <Compile Include="Engine\EntitySystem\TradeComponent.cs" />
     <Compile Include="Engine\EntitySystem\UpdatableModel.cs" />
     <Compile Include="Engine\EntitySystem\HealthBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\SlowingComponent.cs" />
@@ -367,6 +368,8 @@
     <Compile Include="Engine\Player\Skills\WarriorIronSkin.cs" />
     <Compile Include="Engine\QuestSystem\BanditCamp.cs" />
     <Compile Include="Engine\QuestSystem\Tombstone.cs" />
+    <Compile Include="Engine\Rendering\Geometry.cs" />
+    <Compile Include="Engine\Rendering\GeometryData.cs" />
     <Compile Include="Engine\Rendering\GraphicsLayer.cs" />
     <Compile Include="Engine\Management\OSManager.cs" />
     <Compile Include="Engine\Management\Platform.cs" />
@@ -4388,6 +4391,9 @@
     <None Include="Shaders\Includes\Random.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Shaders\Includes\Sky.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Shaders\ObjectMesh.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -4399,6 +4405,12 @@
     </None>
     <None Include="Shaders\MinimapGUI.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\SkyStars.frag">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\SkyStars.vert">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\SSAO-Pass1-MS.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4460,10 +4472,10 @@
     <None Include="Shaders\Skills.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Skydome.frag">
+    <None Include="Shaders\SkyGradient.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Skydome.vert">
+    <None Include="Shaders\SkyGradient.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\SSAO-Pass2.frag">
@@ -4619,10 +4631,18 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Modules\Items\Boots\" />
+    <Folder Include="Modules\Items\Chestplates\" />
+    <Folder Include="Modules\Items\Helmets\" />
+    <Folder Include="Modules\Items\Pants\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Skills\IronSkin.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sky\starry_night.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\splash-background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

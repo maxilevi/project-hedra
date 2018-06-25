@@ -162,7 +162,7 @@ namespace Hedra.Engine.Management
             }
 		}
 
-	    private static byte[] ReadBinaryFromStream(FileStream Stream, string Name)
+	    private static byte[] ReadBinaryFromStream(Stream Stream, string Name)
 	    {
 	        var reader = new BinaryReader(Stream); // .Dispose closes the stream, something we dont want.
 	        while (reader.BaseStream.Position < reader.BaseStream.Length)

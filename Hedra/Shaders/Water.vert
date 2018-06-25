@@ -13,9 +13,9 @@ out vec4 InPos;
 out vec4 InNorm;
 flat out vec4 Color;
 out float Visibility;
-out float Height;
-out vec4 BotColor;
-out vec4 TopColor;
+out float pass_height;
+out vec4 pass_botColor;
+out vec4 pass_topColor;
 out float Movement;
 out vec4 ClipSpace;
 
@@ -82,9 +82,9 @@ void main()
     
     vec3 Normal = normalize(Cross(v.xyz - V0, V1 - v.xyz));
  	
-    Height = U_Height;
-	BotColor = U_BotColor;
-	TopColor = U_TopColor;
+    pass_height = U_Height;
+	pass_botColor = U_BotColor;
+	pass_topColor = U_TopColor;
 	
 	float DistanceToCamera = length(vec3(PlayerPosition - v.xyz).xz);
 	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);

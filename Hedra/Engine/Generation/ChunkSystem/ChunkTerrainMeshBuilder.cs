@@ -27,8 +27,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public ChunkMeshBuildOutput CreateTerrainMesh(Chunk[] Neighbours, int Lod)
         {
-            try
-            {
+            //try
+            //{
                 var failed = false;
                 var next = false;
                 var hasNoise3D = false;
@@ -137,12 +137,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     _parent.SetTerrainVertices(output);
                     return output;
                 }
-            }
+            /*}
             catch (Exception e)
             {
                 Log.WriteLine(
                     "---- Probably a sync error while building the chunk mesh ---- " + Environment.NewLine + e);
-            }
+            }*/
             return null;
         }
 

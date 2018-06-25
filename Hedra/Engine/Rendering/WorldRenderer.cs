@@ -71,7 +71,7 @@ namespace Hedra.Engine.Rendering
 				int[] Counts = StaticBuffer.BuildCounts(ToDraw, out Offsets);
 				int[] ShadowCounts = StaticBuffer.BuildCounts(ToDraw, out ShadowOffsets, true);
 				
-				StaticBuffer.Data.Bind();
+				StaticBuffer.Data.Bind(false);
 				GraphicsLayer.EnableVertexAttribArray(0);
 			    GraphicsLayer.EnableVertexAttribArray(1);
 
@@ -85,17 +85,11 @@ namespace Hedra.Engine.Rendering
 
 				}
 				StaticBind();
-				
-				GraphicsLayer.EnableVertexAttribArray(2);
 
-			    GraphicsLayer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);
-			    
-			    GraphicsLayer.DisableVertexAttribArray(0);
-				GraphicsLayer.DisableVertexAttribArray(1);
-				GraphicsLayer.DisableVertexAttribArray(2);
-				
-				StaticBuffer.Data.UnBind();
-				
+				GraphicsLayer.EnableVertexAttribArray(2);
+			    GraphicsLayer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);		    
+
+				StaticBuffer.Data.Unbind();		
 				StaticUnBind();
 			}
 			else if(Type == ChunkBufferTypes.WATER){
@@ -121,7 +115,7 @@ namespace Hedra.Engine.Rendering
 				GraphicsLayer.DisableVertexAttribArray(1);
 				GraphicsLayer.DisableVertexAttribArray(2);	
 				
-				WaterBuffer.Data.UnBind();
+				WaterBuffer.Data.Unbind();
 				WaterUnBind();
 			}	
 		}

@@ -35,7 +35,7 @@ namespace Hedra.Engine.Player.Inventory
 	    private readonly TradeInventoryArrayInterfaceManager _interfaceManager;
 	    private readonly InventoryBackground _playerBackground;
 	    private readonly InventoryBackground _merchantBackground;
-	    private MerchantComponent _merchantComponent;
+	    private TradeComponent _tradeComponent;
 	    private Humanoid _trader;
         private bool _show;
 
@@ -70,10 +70,10 @@ namespace Hedra.Engine.Player.Inventory
 	    {
 	        IsTrading = true;
 	        _trader = Trader;
-	        _merchantComponent = Trader.SearchComponent<MerchantComponent>();
+	        _tradeComponent = Trader.SearchComponent<TradeComponent>();
 	        this.SetActive(true);
 	        _playerItems.SetItems(_player.Inventory.ItemsToArray());
-	        _merchantItems.SetItems(_merchantComponent.Items.ToArray());
+	        _merchantItems.SetItems(_tradeComponent.Items.ToArray());
             this._interfaceManager.SetTraders(_player, _trader);
             this.UpdateView();
         }
@@ -83,7 +83,7 @@ namespace Hedra.Engine.Player.Inventory
 	        this._interfaceManager.SetTraders(null, null);
 	        this.SetActive(false);
             IsTrading = false;
-            _merchantComponent = null;
+            _tradeComponent = null;
 	        _playerItems.Empty();
 	        _merchantItems.Empty();
 	        this.UpdateView();
@@ -100,7 +100,7 @@ namespace Hedra.Engine.Player.Inventory
             _playerItems.Empty();
             _merchantItems.Empty();
             _playerItems.SetItems(_player.Inventory.ItemsToArray());
-            _merchantItems.SetItems(_merchantComponent.Items.ToArray());
+            _merchantItems.SetItems(_tradeComponent.Items.ToArray());
             this.UpdateView();
         }
 
@@ -120,12 +120,12 @@ namespace Hedra.Engine.Player.Inventory
                 _player.Inventory.SetItem(i, _playerItems[i]);
 	        }
 
-	        _merchantComponent.Items.Clear();
+	        _tradeComponent.Items.Clear();
 	        for (var i = 0; i < _merchantItems.Length; i++)
 	        {
-	            _merchantComponent.Items.Add(i, _merchantItems[i]);
+	            _tradeComponent.Items.Add(i, _merchantItems[i]);
             }
-	        _merchantComponent.TransactionComplete();
+	        _tradeComponent.TransactionComplete();
             this.UpdateInventory();
 	    }
 
@@ -177,7 +177,7 @@ namespace Hedra.Engine.Player.Inventory
 
         private void TradeWithNearestMerchant()
         {
-            var merchant = World.InRadius<Humanoid>(_player.Position, TradeRadius).FirstOrDefault(H => H.SearchComponent<MerchantComponent>() != null);
+            var merchant = World.InRadius<Humanoid>(_player.Position, TradeRadius).FirstOrDefault(H => H.SearchComponent<TradeComponent>() != null);
             if(merchant != null) this.Trade(merchant);
         }
 

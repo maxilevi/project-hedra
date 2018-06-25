@@ -42,17 +42,11 @@ namespace Hedra.Engine.Rendering
 		public virtual void Draw(Vector3 Position, bool Shadows){
 			
 			Data.Bind();
-			GraphicsLayer.EnableVertexAttribArray(0);
-			GraphicsLayer.EnableVertexAttribArray(1);
-			GraphicsLayer.EnableVertexAttribArray(2);
 
 			GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-			////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-			
-			GraphicsLayer.DisableVertexAttribArray(0);
-			GraphicsLayer.DisableVertexAttribArray(1);
-			GraphicsLayer.DisableVertexAttribArray(2);
-			Data.UnBind();
+			//GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+
+			Data.Unbind();
 			
 		}
 		

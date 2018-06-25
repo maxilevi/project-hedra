@@ -177,21 +177,11 @@ namespace Hedra.Engine.Rendering.Animation
 			Shader["Tint"] = Tint + BaseTint;
 			
 			Data.Bind();
-			GraphicsLayer.EnableVertexAttribArray(0);
-			GraphicsLayer.EnableVertexAttribArray(1);
-			GraphicsLayer.EnableVertexAttribArray(2);
-			GraphicsLayer.EnableVertexAttribArray(3);
-			GraphicsLayer.EnableVertexAttribArray(4);
 
 			GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
 			GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 			
-			GraphicsLayer.DisableVertexAttribArray(0);
-			GraphicsLayer.DisableVertexAttribArray(1);
-			GraphicsLayer.DisableVertexAttribArray(2);
-			GraphicsLayer.DisableVertexAttribArray(3);
-			GraphicsLayer.DisableVertexAttribArray(4);
-			Data.UnBind();
+			Data.Unbind();
 
 			Shader.UnBind();
 

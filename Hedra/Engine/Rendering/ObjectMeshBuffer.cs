@@ -73,9 +73,6 @@ namespace Hedra.Engine.Rendering
 			GraphicsLayer.Enable(EnableCap.DepthTest);
 			
 			Data.Bind();
-			GraphicsLayer.EnableVertexAttribArray(0);
-			GraphicsLayer.EnableVertexAttribArray(1);
-			GraphicsLayer.EnableVertexAttribArray(2);
 
             Shader["Outline"] = 0;
             if (Outline)
@@ -108,10 +105,7 @@ namespace Hedra.Engine.Rendering
             }
 
             GraphicsLayer.Disable(EnableCap.Blend);
-            GraphicsLayer.DisableVertexAttribArray(0);
-			GraphicsLayer.DisableVertexAttribArray(1);
-			GraphicsLayer.DisableVertexAttribArray(2);
-			Data.UnBind();
+			Data.Unbind();
 			
 			GraphicsLayer.Disable(EnableCap.Blend);
 

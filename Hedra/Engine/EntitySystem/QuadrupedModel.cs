@@ -264,7 +264,7 @@ namespace Hedra.Engine.EntitySystem
 		
 			if(this.IsAttacking) return;
 			
-			if(Model != null && this.IsWalking)
+			if(Model != null && !this.IsWalking)
 				Model.PlayAnimation(WalkAnimations[Utils.Rng.Next(0, WalkAnimations.Length)]);
 		}
 

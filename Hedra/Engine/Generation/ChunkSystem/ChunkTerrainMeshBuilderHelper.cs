@@ -93,8 +93,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Cell.Type[i] = block.Type;
                     Cell.Density[i] = block.Density;
 
-                    if (block.Type == BlockType.Water)
-                        Cell.Density[i] = BiomePool.DecodeWater(block.Density);
+                    /*if (block.Type == BlockType.Water)
+                        Cell.Density[i] = BiomePool.DecodeWater(block.Density);*/
                 }
             if (WaterCell)
             {
@@ -140,23 +140,24 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     }
                     WATER_BREAK:
 
-                    var scaleFactor = 65530.0;
-                    double cp = 256.0 * 256.0;
+                    var neighbourChunk = this.GetNeighbourChunk((int) pos.X, Y, (int) pos.Z,
+                        RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk, RightBackChunk, LeftFrontChunk,
+                        BackChunk, LeftChunk);
+                    var x = (int)(pos.X % BoundsX);
+                    var z = (int)(pos.Z % BoundsZ);
 
-                    double dy = Math.Floor(waterBlock.Density / cp);
-                    var yk = (float)(dy / scaleFactor);
-                    yk *= 10.0f;
-
-
+                    var newHeight = neighbourChunk?.GetWaterDensity(new Vector3(x, Y, z)) ?? default(Half);
+                    for (int k = Y; k > -1 && Math.Abs(newHeight) < 0.005f; k--)
+                    {
+                        newHeight = neighbourChunk?.GetWaterDensity(new Vector3(x, k, z)) ?? default(Half);
+                    }
                     for (int k = Y; k > -1; k--)
                     {
-                        Block block = this.GetNeighbourBlock((int)pos.X, k, (int)pos.Z,
-                            RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk, RightBackChunk, LeftFrontChunk,
-                            BackChunk, LeftChunk);
+                        var block = neighbourChunk?.GetBlockAt(x, k, z) ?? new Block();
                         if (block.Type == BlockType.Seafloor)
                         {
                             Cell.Density[i] = 0;
-                            Cell.P[i] = new Vector3(Cell.P[i].X, yk, Cell.P[i].Z);
+                            Cell.P[i] = new Vector3(Cell.P[i].X, newHeight, Cell.P[i].Z);
                             break;
                         }
                     }
@@ -207,18 +208,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
             int Width, int Height, int Depth, Dictionary<Vector3, bool> Cache)
         {
             var isUsable = false;
-            var result = false;
-            Vector3 position;
-            Block y;
             for (int _x = -1; _x < 2 && !isUsable; _x++)
                 for (int _z = -1; _z < 2 && !isUsable; _z++)
                     for (int _i = -1; _i < 2 && !isUsable; _i++)
                     {
-                        position = new Vector3(X + _x, _i + Y, Z + _z);
+                        var position = new Vector3(X + _x, _i + Y, Z + _z);
 
+                        var result = false;
                         if (!Cache.ContainsKey(position))
                         {
-                            y = this.GetNeighbourBlock((int)position.X, (int)position.Y, (int)position.Z, RightChunk,
+                            Block y = this.GetNeighbourBlock((int)position.X, (int)position.Y, (int)position.Z, RightChunk,
                                 FrontChunk, RightFrontChunk,
                                 LeftBackChunk, RightBackChunk, LeftFrontChunk, BackChunk,
                                 LeftChunk);
@@ -231,17 +230,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         {
                             result = Cache[position];
                         }
-
-                        if (result)
-                        {
-                            isUsable = true;
-                            break;
-                        }
+                        if (!result) continue;
+                        isUsable = true;
+                        break;
                     }
             return isUsable;
         }
 
-        public Block GetNeighbourBlock(int X, int Y, int Z, Chunk RightChunk, Chunk FrontChunk, Chunk RightFrontChunk,
+        public Chunk GetNeighbourChunk(int X, int Y, int Z, Chunk RightChunk, Chunk FrontChunk, Chunk RightFrontChunk,
             Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk, Chunk LeftChunk)
         {
             bool bX = X >= BoundsX;
@@ -251,34 +247,41 @@ namespace Hedra.Engine.Generation.ChunkSystem
             bool nZ = Z <= -1;
 
             if (!bX && !bZ && !nX && !nZ)
-                return Blocks[X][Y][Z];
+                return _parent;
 
             if (bZ && !bX && FrontChunk != null && !FrontChunk.Disposed && FrontChunk.IsGenerated &&
                 FrontChunk.Landscape.StructuresPlaced)
-                return FrontChunk.GetBlockAt(X, Y, Z - BoundsZ);
+                return FrontChunk;
 
             if (bX && !bZ && RightChunk != null && !RightChunk.Disposed && RightChunk.IsGenerated &&
                 RightChunk.Landscape.StructuresPlaced)
-                return RightChunk.GetBlockAt(X - BoundsX, Y, Z);
+                return RightChunk;
 
             if (nZ && !nX && BackChunk != null && !BackChunk.Disposed && BackChunk.IsGenerated &&
                 BackChunk.Landscape.StructuresPlaced)
-                return BackChunk.GetBlockAt(X, Y, Z + BoundsZ);
+                return BackChunk;
 
             if (nX && !nZ && LeftChunk != null && !LeftChunk.Disposed && LeftChunk.IsGenerated &&
                 LeftChunk.Landscape.StructuresPlaced)
-                return LeftChunk.GetBlockAt(X + BoundsX, Y, Z);
+                return LeftChunk;
 
             if (nX && nZ && LeftBackChunk != null && !LeftBackChunk.Disposed && LeftBackChunk.IsGenerated &&
                 LeftBackChunk.Landscape.StructuresPlaced)
-                return LeftBackChunk.GetBlockAt(X + BoundsX, Y, Z + BoundsZ);
+                return LeftBackChunk;
 
             if (bX && bZ && RightFrontChunk != null && !RightFrontChunk.Disposed && RightFrontChunk.IsGenerated &&
                 RightFrontChunk.Landscape.StructuresPlaced)
-                return RightFrontChunk.GetBlockAt(X - BoundsX, Y, Z - BoundsZ);
+                return RightFrontChunk;
 
 
-            return new Block(BlockType.Temporal);
+            return null;
+        }
+
+        public Block GetNeighbourBlock(int X, int Y, int Z, Chunk RightChunk, Chunk FrontChunk, Chunk RightFrontChunk,
+            Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk, Chunk LeftChunk)
+        {
+            return this.GetNeighbourChunk(X,Y,Z, RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk, RightBackChunk, LeftFrontChunk,
+                BackChunk, LeftChunk)?.GetBlockAt(X % BoundsX, Y, Z % BoundsZ) ?? new Block(BlockType.Temporal);
         }
     }
 }

@@ -1,12 +1,10 @@
 #version 330 compatibility
 !include<"Includes/GammaCorrection.shader">
+!include<"Includes/Sky.shader">
 
 in vec4 Color;
 in vec4 IColor;
 in float Visibility;
-in float Height;
-in vec4 BotColor;
-in vec4 TopColor;
 in vec3 InPos;
 in vec3 InNorm;
 in vec4 Coords;
@@ -33,8 +31,12 @@ uniform bool Outline;
 uniform vec4 OutlineColor;
 uniform float Time;
 
-void main(){
-
+void main()
+{
+	if(Visibility < 0.005)
+	{
+		discard;
+	}
 	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, vertex_position.xyz).r;
 	vec4 inputColor = vec4(linear_to_srbg(Color.xyz + tex * 0.2 * useNoiseTexture), Color.w);
 
@@ -73,11 +75,10 @@ void main(){
 			ShadowVisibility = 1.0;
 	}
 
-	vec4 SkyColor = vec4( mix(BotColor, TopColor, (gl_FragCoord.y / Height) - .25) );
 	vec3 pointLightColor = linear_to_srbg(point_diffuse.xyz) * (Tint.rgb + BaseTint.rgb);
 
 	if(UseFog){
-		vec4 NewColor = mix(SkyColor, inputColor * ShadowVisibility * vec4(Tint.rgb + BaseTint.rgb, 1.0) + vec4(pointLightColor, 0.0), Visibility);
+		vec4 NewColor = mix(sky_color(), inputColor * ShadowVisibility * vec4(Tint.rgb + BaseTint.rgb, 1.0) + vec4(pointLightColor, 0.0), Visibility);
 		
 		FColor = vec4(NewColor.xyz, Alpha);
 	}else{

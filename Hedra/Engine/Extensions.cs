@@ -43,6 +43,16 @@ namespace Hedra.Engine
 	        return support;
 	    }
 
+	    public static bool IsInvalid(this Vector3 Vector)
+	    {
+	        return Vector.X.IsInvalid() || Vector.Y.IsInvalid() || Vector.Z.IsInvalid();
+	    }
+
+	    public static bool IsInvalid(this float Value)
+	    {
+	        return float.IsNaN(Value) || float.IsInfinity(Value) || Value > int.MaxValue || Value < int.MinValue;
+	    }
+
         public static Vector2 ScaleUI(this Vector2 Vector, Vector2 Resolution)
 	    {
 	        return Mathf.ScaleGUI(Resolution, Vector);

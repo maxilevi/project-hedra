@@ -127,12 +127,19 @@ namespace Hedra.Engine.Rendering
 			return Bmp1;
 		}
 		
-		public static Vector2 SizeFromAssets(string Path){
+		public static Vector2 SizeFromAssets(string Path)
+        {
 			return Graphics2D.TextureSize( new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))));
 		}
-		
-		public static uint LoadFromAssets(string Path){
-			return Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))));
+
+	    public static uint LoadFromAssets(string Path)
+	    {
+	        return Graphics2D.LoadFromAssets(Path, TextureMinFilter.Linear, TextureMagFilter.Linear, TextureWrapMode.ClampToBorder);
+	    }
+
+        public static uint LoadFromAssets(string Path, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
+        {
+			return Graphics2D.LoadTexture(new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))), Min, Mag, Wrap);
 		}
 		
 		public static Bitmap LoadBitmapFromAssets(string Path){

@@ -33,17 +33,11 @@ namespace Hedra.Engine.Rendering
 				WaveMovement = 0;
 			
 			Data.Bind();
-			GraphicsLayer.EnableVertexAttribArray(0);
-			GraphicsLayer.EnableVertexAttribArray(1);
-			GraphicsLayer.EnableVertexAttribArray(2);
 
 			//GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
 			GL.DrawArrays(PrimitiveType.Triangles, 0, Vertices.Count);//////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-			
-			GraphicsLayer.DisableVertexAttribArray(0);
-			GraphicsLayer.DisableVertexAttribArray(1);
-			GraphicsLayer.DisableVertexAttribArray(2);
-			Data.UnBind();
+
+			Data.Unbind();
 		}
 		
 		public override void Bind(){

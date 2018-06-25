@@ -10,14 +10,14 @@ using OpenTK;
 
 namespace Hedra.Engine.Generation
 {
-	[StructLayout(LayoutKind.Explicit, Size=6)]
+	[StructLayout(LayoutKind.Explicit, Size=4)]
 	public struct Block
 	{
 	    [FieldOffset(0)] private BlockType _type;
 		[FieldOffset(1)] private bool _noise3D;
-	    [FieldOffset(2)] private float _density;
+	    [FieldOffset(2)] private Half _density;
 
-        public Block(BlockType Type, float Density = default(float))
+        public Block(BlockType Type, Half Density = default(Half))
         {
 			this._type = Type;
 			this._noise3D = false;
@@ -36,7 +36,7 @@ namespace Hedra.Engine.Generation
 	        set => _noise3D = value;
 	    }
 
-	    public float Density
+	    public Half Density
 	    {
 	        get => _density;
 	        set => _density = value;

@@ -66,7 +66,6 @@ namespace Hedra.Engine.Rendering.UI
         public void SetupQuad()
         {
             _vao.Bind();
-            GraphicsLayer.EnableVertexAttribArray(0);
         }
 
         public void DrawQuad()

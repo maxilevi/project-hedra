@@ -9,9 +9,9 @@ layout(location = 6) in vec4 Col4;
  
 out vec4 Color; 
 out float Visibility;
-out float Height;
-out vec4 BotColor;
-out vec4 TopColor;
+out float pass_height;
+out vec4 pass_botColor;
+out vec4 pass_topColor;
 
 uniform vec3 PlayerPosition;
 layout(std140) uniform FogSettings {
@@ -46,9 +46,9 @@ vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal, vec3 LColor){
  	v =  v * TransMatrix;
 	gl_Position = gl_ModelViewProjectionMatrix * v;
 	
-	Height = U_Height;
-	BotColor = U_BotColor;
-	TopColor = U_TopColor;
+	pass_height = U_Height;
+	pass_botColor = U_BotColor;
+	pass_topColor = U_TopColor;
 	
 	float DistanceToCamera = length(vec3(PlayerPosition - v.xyz).xz);
 	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);

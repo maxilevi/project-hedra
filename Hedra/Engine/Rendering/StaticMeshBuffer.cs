@@ -42,16 +42,13 @@ namespace Hedra.Engine.Rendering
 				
 				if(GameSettings.Fancy)
 					GraphicsLayer.DisableVertexAttribArray(1);
-				Data.UnBind();
+				Data.Unbind();
 				return;
 			}
 
 		    //StaticShader["UseShadows"] = UseShadows ? GameSettings.ShadowQuality : 0.0f;
 
 			Data.Bind();
-			GraphicsLayer.EnableVertexAttribArray(0);
-			GraphicsLayer.EnableVertexAttribArray(1);
-			GraphicsLayer.EnableVertexAttribArray(2);
 
 			if(ShortBuffer){
 				GL.BindBuffer(BufferTarget.ElementArrayBuffer, UshortIndices.ID);
@@ -61,10 +58,7 @@ namespace Hedra.Engine.Rendering
 				////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
 			}
 			
-			GraphicsLayer.DisableVertexAttribArray(0);
-			GraphicsLayer.DisableVertexAttribArray(1);
-			GraphicsLayer.DisableVertexAttribArray(2);
-			Data.UnBind();
+			Data.Unbind();
 
 		}
 		

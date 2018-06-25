@@ -10,6 +10,7 @@ using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using System.Drawing;
+using Hedra.Engine.Rendering.UI;
 
 namespace Hedra.Engine.EnvironmentSystem
 {
@@ -18,28 +19,29 @@ namespace Hedra.Engine.EnvironmentSystem
 	/// </summary>
 	public sealed class Skydome
 	{
-	    private static readonly Shader SkydomeShader;
-	    private int _previousShader;
+	    private static readonly Shader SkyGradientShader;
+	    private static readonly Shader SkyStarsShader;
+	    private static readonly uint OverlayTexture;
+        private int _previousShader;
+	    private VBO<Vector3> _vertices;
+	    private VBO<Vector3> _normals;
+	    private VBO<Vector2> _uvs;
+	    private VBO<ushort> _indices;
+	    private VAO<Vector3, Vector2> _buffer;
+	    public bool Enabled { get; set; } = true;
+        public Vector4 TopColor { get; set; } = Color.CornflowerBlue.ToVector4();
+        public Vector4 BotColor { get; set; } = Color.LightYellow.ToVector4();
 
-        public bool Enabled = true;
-		public int Segments { get; }
-		public VBO<Vector3> Vertices { get; private set; }
-		public VBO<Vector3> Normals { get; private set; }
-		public VBO<Vector2> UVs { get; private set; }
-		public VBO<ushort> Indices { get; private set; }
-		public Vector4 TopColor { get; set; }
-		public Vector4 BotColor { get; set; }
-
-	    static Skydome()
-	    {
-	        SkydomeShader = Shader.Build("Shaders/Skydome.vert", "Shaders/Skydome.frag");
+        static Skydome()
+        {
+            OverlayTexture = Graphics2D.LoadFromAssets("Assets/Sky/starry_night.png", TextureMinFilter.Nearest, TextureMagFilter.Nearest, TextureWrapMode.Repeat);
+            SkyGradientShader = Shader.Build("Shaders/SkyGradient.vert", "Shaders/SkyGradient.frag");
+	        SkyStarsShader = Shader.Build("Shaders/SkyStars.vert", "Shaders/SkyStars.frag");
         }
 
-        public Skydome(int Segments){
-			this.Segments = Segments;
-			this.Generate();
-            TopColor = Color.CornflowerBlue.ToVector4();
-            BotColor = Color.LightYellow.ToVector4();
+        public Skydome()
+        {
+			this.Build();
         }
 		
 		public void Draw(){
@@ -48,89 +50,40 @@ namespace Hedra.Engine.EnvironmentSystem
             GraphicsLayer.Disable(EnableCap.DepthTest);
 			GraphicsLayer.Disable(EnableCap.Blend);
 			_previousShader = GraphicsLayer.ShaderBound;
-			SkydomeShader.Bind();
 
-		    SkydomeShader["TopColor"] = TopColor;
-			SkydomeShader["BotColor"] = BotColor;
-			SkydomeShader["Height"] = (float) GameSettings.Height;
-
+			SkyGradientShader.Bind();
+		    SkyGradientShader["topColor"] = TopColor;
+			SkyGradientShader["botColor"] = BotColor;
+			SkyGradientShader["height"] = (float) GameSettings.Height;
 		    DrawManager.UIRenderer.SetupQuad();
 		    DrawManager.UIRenderer.DrawQuad();
 
+		    GraphicsLayer.Enable(EnableCap.Blend);
+            SkyStarsShader.Bind();     
+            _buffer.Bind();
+		    SkyStarsShader["mvp"] = DrawManager.FrustumObject.ModelViewMatrix.ClearTranslation() * DrawManager.FrustumObject.ProjectionMatrix;
+		    SkyStarsShader["trans_matrix"] = Matrix4.CreateScale(5f);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, OverlayTexture);
+		    SkyStarsShader["star_texture"] = 0;
+		    GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indices.ID);
+            GL.DrawElements(PrimitiveType.Triangles, _indices.Count, DrawElementsType.UnsignedShort, IntPtr.Zero);
+            _buffer.Unbind();
+
             GL.UseProgram(_previousShader);
 			GraphicsLayer.ShaderBound = _previousShader;
-			GraphicsLayer.Enable(EnableCap.DepthTest);
+		    GraphicsLayer.Disable(EnableCap.Blend);
+            GraphicsLayer.Enable(EnableCap.DepthTest);
 			GraphicsLayer.Enable(EnableCap.CullFace);
 		}
 		
-		public void Generate(){
-			Vector3[] vertices = new Vector3[Segments * (Segments - 1) + 2];
-		    Vector2[] uvs = new Vector2[Segments * (Segments - 1) + 2];
-		    ushort[] Elements = new ushort[2 * Segments * (Segments - 1) * 3];
-		 
-		    double deltaLatitude = Math.PI / Segments;
-		    double deltaLongitude = Math.PI * 2.0 / Segments;
-		    int index = 0;
-		 
-		    // create the rings of the dome using polar coordinates
-		    for (int i = 1; i < Segments; i++)
-		    {
-		        double r0 = Math.Sin(i * deltaLatitude);
-		        double y0 = Math.Cos(i * deltaLatitude);
-		 
-		        for (int j = 0; j < Segments; j++)
-		        {
-		            double x0 = r0 * Math.Sin(j * deltaLongitude);
-		            double z0 = r0 * Math.Cos(j * deltaLongitude);
-		 
-		            vertices[index] = new Vector3( (float) x0, (float) y0, (float) z0);
-		            uvs[index++] = new Vector2(0, 1.0f - (float)y0);
-		        }
-		    }
-		 
-		    // create the top of the dome
-		    vertices[index] = new Vector3(0, 1, 0);
-		    uvs[index++] = new Vector2(0, 0);
-		 
-		    // create the bottom of the dome
-		    vertices[index] = new Vector3(0, -1, 0);
-		    uvs[index] = new Vector2(0, 2);
-		 
-		    // create the faces of the rings
-		    index = 0;
-		    for (int i = 0; i < Segments - 2; i++)
-		    {
-		        for (int j = 0; j < Segments; j++)
-		        {
-		        	Elements[index++] = (ushort) (Segments * i + j);
-		        	Elements[index++] = (ushort) (Segments * i + (j + 1) % Segments);
-		        	Elements[index++] = (ushort) (Segments * (i + 1) + (j + 1) % Segments);
-		        	Elements[index++] = (ushort) (Segments * i + j);
-		        	Elements[index++] = (ushort) (Segments * (i + 1) + (j + 1) % Segments);
-		            Elements[index++] = (ushort) (Segments * (i + 1) + j);
-		        }
-		    }
-		 
-		    // create the faces of the top of the dome
-		    for (int i = 0; i < Segments; i++)
-		    {
-		    	Elements[index++] = (ushort) (Segments * (Segments - 1));
-		    	Elements[index++] = (ushort) ((i + 1) % Segments);
-		        Elements[index++] = (ushort) i;
-		    }
-		 
-		    // create the faces of the bottom of the dome
-		    for (int i = 0; i < Segments; i++)
-		    {
-		    	Elements[index++] = (ushort) (Segments * (Segments - 1) + 1);
-		    	Elements[index++] = (ushort) (Segments * (Segments - 2) + i);
-		    	Elements[index++] = (ushort) (Segments * (Segments - 2) + (i + 1) % Segments);
-		    }
-		 
-		    Vector3[] normals = Mathf.CalculateNormals(vertices, Elements);
-		    
-		    this.Vertices = new VBO<Vector3>(vertices, vertices.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
-		    this.Indices = new VBO<ushort>(Elements, Elements.Length * sizeof(ushort), VertexAttribPointerType.UnsignedShort, BufferTarget.ElementArrayBuffer);
+		private void Build()
+		{
+		    var geometry = Geometry.Skydome(12);
+		    this._uvs = new VBO<Vector2>(geometry.UVs, geometry.UVs.Length * Vector2.SizeInBytes, VertexAttribPointerType.Float);
+            this._vertices = new VBO<Vector3>(geometry.Vertices, geometry.Vertices.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+		    this._indices = new VBO<ushort>(geometry.Indices, geometry.Indices.Length * sizeof(ushort), VertexAttribPointerType.UnsignedShort, BufferTarget.ElementArrayBuffer);
+		    this._buffer = new VAO<Vector3, Vector2>(_vertices, _uvs);
 		}
 	}
 }

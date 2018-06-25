@@ -29,9 +29,9 @@ const float ShadowTransition = 20.0;
 
 out vec4 Color;
 out float Visibility;
-out float Height;
-out vec4 BotColor;
-out vec4 TopColor;
+out float pass_height;
+out vec4 pass_botColor;
+out vec4 pass_topColor;
 out vec3 InPos;
 out vec3 InNorm;
 out vec4 Coords;
@@ -63,9 +63,9 @@ uniform bool UseFog = true;
 
 void main(){
 	vec4 linear_color = srgb_to_linear(InColor);
-	Height = U_Height;
-	BotColor = U_BotColor;
-	TopColor = U_TopColor;
+	pass_height = U_Height;
+	pass_botColor = U_BotColor;
+	pass_topColor = U_TopColor;
 
 	vec4 Vertex = vec4((InVertex + BakedPosition) * Scale - BakedPosition, 1.0);
 
