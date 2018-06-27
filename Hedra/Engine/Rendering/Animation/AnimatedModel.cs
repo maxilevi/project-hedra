@@ -96,7 +96,6 @@ namespace Hedra.Engine.Rendering.Animation
 			this.Scale = Vector3.One * 1.0f;
             this.ApplyFog = true;
             this.Enabled = true;
-			DisposeManager.Add(this);
 			DrawManager.Add(this);
 		}
 		
@@ -183,7 +182,7 @@ namespace Hedra.Engine.Rendering.Animation
 			
 			Data.Unbind();
 
-			Shader.UnBind();
+			Shader.Unbind();
 
 			GraphicsLayer.Disable(EnableCap.Blend);
 		}

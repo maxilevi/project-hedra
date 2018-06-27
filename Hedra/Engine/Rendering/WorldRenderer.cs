@@ -165,7 +165,7 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		private static void StaticUnBind(){
-			StaticShader.UnBind();
+			StaticShader.Unbind();
 		}
 		
 		private static void WaterBind(){
@@ -184,24 +184,25 @@ namespace Hedra.Engine.Rendering
 		    WaterShader["TransformationMatrix"] = TransformationMatrix;
             WaterShader["BakedOffset"] = BakedOffset;
 		    WaterShader["Scale"] = Scale;
-		    WaterShader["Offset"] = Offset + Vector3.UnitY;
+		    WaterShader["Offset"] = Offset;
             WaterShader["AreaPositions"] = World.Highlighter.AreaPositions;
 			WaterShader["AreaColors"] = World.Highlighter.AreaColors;		
 			WaterShader["WaveMovement"] = WaveMovement;
-           	
-           	if(ShowWaterBackfaces) GraphicsLayer.Disable(EnableCap.CullFace);
+		    WaterShader["Smoothness"] = WaterSmoothness;
+
+            if (ShowWaterBackfaces) GraphicsLayer.Disable(EnableCap.CullFace);
 		}
 		
 		private static void WaterUnBind(){
 			GraphicsLayer.Disable(EnableCap.Blend);
 			GraphicsLayer.Disable(EnableCap.Texture2D);
 			GraphicsLayer.Enable(EnableCap.CullFace);
-		    WaterShader.UnBind();
+		    WaterShader.Unbind();
         }
 
         #endregion
-
-	    public static float DitherRadius { get; set; } = 1f;
+	    public static float WaterSmoothness { get; set; } = 1f;
+        public static float DitherRadius { get; set; } = 1f;
         public static bool Dither { get; set; } = false;
         public static bool EnableCulling { get; set; } = true;
         public static Vector3 BakedOffset { get; set; }

@@ -77,7 +77,7 @@ namespace Hedra.Engine.Rendering
 		public static void UnBind()
 		{
 		    DrawManager.FrustumObject.SetViewport();
-            Shader.UnBind();
+            Shader.Unbind();
 			GL.CullFace(CullFaceMode.Back);
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, _prevFbo);
 			GraphicsLayer.FBOBound = _prevFbo;

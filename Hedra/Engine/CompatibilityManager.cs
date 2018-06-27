@@ -35,7 +35,7 @@ namespace Hedra.Engine
                 var shader = AnimatedModelShader.GenerateDeathShader();
                 shader.Bind();
                 shader["viewMatrix"] = Matrix4.Identity;
-                shader.UnBind();
+                shader.Unbind();
             }
             catch (ArgumentException e)
             {

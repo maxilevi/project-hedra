@@ -143,8 +143,6 @@ namespace Hedra.Engine.Rendering
 	        this.ShaderGid = shadergid;
 
             this.Combine();
-
-	        DisposeManager.Add(this);
         }
 		
 		private void Combine(){
@@ -220,7 +218,7 @@ namespace Hedra.Engine.Rendering
 	    {
 	        switch (Mapping.Type)
 	        {
-	            case MappingType.Integer:
+                case MappingType.Integer:
 	                GL.Uniform1(Mapping.Location, (int)Mapping.Value);
                     break;
 	            case MappingType.Double:
@@ -287,7 +285,7 @@ namespace Hedra.Engine.Rendering
 			GraphicsLayer.ShaderBound = ShaderId;
         }
 		
-		public void UnBind(){
+		public void Unbind(){
 			GL.UseProgram(0);
 			GraphicsLayer.ShaderBound = 0;
 		}

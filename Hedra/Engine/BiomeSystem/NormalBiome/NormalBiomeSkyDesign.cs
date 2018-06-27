@@ -8,12 +8,12 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
     {
         public override Vector4 AfternoonTop(int Seed)
         {
-            return Colors.FromHtml("#8f5543");
+            return Colors.FromHtml("#780471");
         }
 
         public override Vector4 AfternoonBot(int Seed)
         {
-            return Colors.FromHtml("#f78d59");
+            return Colors.FromHtml("#e34448");
         }
 
         public override Vector4 NightTop(int Seed)
@@ -28,12 +28,12 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         public override Vector4 SunriseTop(int Seed)
         {
-            return Colors.FromHtml("#b64360");
+            return Colors.FromHtml("#3651fa");
         }
 
         public override Vector4 SunriseBot(int Seed)
         {
-            return Colors.FromHtml("#fdc0ab");
+            return Colors.FromHtml("#ffa77a");
         }
 
         public override Vector4 MiddayTop(int Seed)

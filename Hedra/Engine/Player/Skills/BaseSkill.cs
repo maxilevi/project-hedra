@@ -116,7 +116,7 @@ namespace Hedra.Engine.Player.Skills
 			DrawManager.UIRenderer.SetupQuad();
 			DrawManager.UIRenderer.DrawQuad();
 			
-			Shader.UnBind();
+			Shader.Unbind();
 			
 			GraphicsLayer.Disable(EnableCap.Blend);
 			GraphicsLayer.Enable(EnableCap.DepthTest);

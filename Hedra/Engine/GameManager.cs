@@ -121,8 +121,9 @@ namespace Hedra.Engine
 				Player.Model.Dispose();
 			}
 		    Player.UI.ChrChooser.StopModels();//So as to fix loose ends
-            Player.Class = Information.Class;		
-			Player.Spawner.Enabled = true;
+            Player.Class = Information.Class;
+	        Player.Level = Information.Level;
+            Player.Spawner.Enabled = true;
 			Player.HandLamp.Enabled = false;
 	        Player.Speed = Player.BaseSpeed;
 			Player.Physics.BaseHeight = 0;
@@ -130,7 +131,6 @@ namespace Hedra.Engine
 			Player.XP = Information.Xp;
 			Player.Mana = Information.Mana;
 			Player.Health = Information.Health;
-			Player.Level = Information.Level;
 			Player.BlockPosition = Information.BlockPosition;
 			Player.Rotation = Information.Rotation;
 			Player.Model.Dispose();
@@ -145,8 +145,8 @@ namespace Hedra.Engine
 			Player.View.CameraHeight = Camera.DefaultCameraHeight;
 			if(Information.WorldSeed != 0)
 			    World.Recreate(Information.WorldSeed);
-			EnvironmentSystem.SkyManager.DayTime = Information.Daytime;
-			EnvironmentSystem.SkyManager.LoadTime = true;
+			SkyManager.DayTime = Information.Daytime;
+			SkyManager.LoadTime = true;
 	        Player.Inventory.ClearInventory();
 			Player.Inventory.SetItems(Information.Items);
 	        GameManager.SetRestrictions(Information);

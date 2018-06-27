@@ -17,6 +17,7 @@ uniform vec4 AreaColors[16];
 uniform vec4 AreaPositions[16];
 uniform sampler2D DepthMap;
 uniform bool Dither;
+uniform float Smoothness;
 
 const float Strength = 0.01;
 void main()
@@ -49,7 +50,7 @@ void main()
 	vec4 NewColor = mix(sky_color(), InputColor, Visibility);
 	
 	OutColor = NewColor;
-	OutColor.a *= clamp(WaterDepth / 4.0, 0.0, 1.0);
+	OutColor.a *= clamp(WaterDepth / (4.0 * Smoothness), 0.0, 1.0);
 	
 	OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
 	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);

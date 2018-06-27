@@ -39,7 +39,6 @@ namespace Hedra.Engine.Management
 				var fInfo = new FileInfo(chrFile + ".db.bak");
 				fInfo.Attributes |= FileAttributes.Hidden;
 			}
-            var actualHealth = LocalPlayer.Instance.MaxHealth;
             using (var fs = File.Create(AssetManager.AppData + "/Characters/" + Player.Name + ".db"))
             {
                 using (var bw = new BinaryWriter(fs))
@@ -118,7 +117,7 @@ namespace Hedra.Engine.Management
 		public static PlayerInformation LoadPlayer(string FileName)
 		{
 		    var info = new FileInfo(FileName);
-		    //FileName = info.Length == 0 ? $"{FileName}.bak" : FileName;
+		    FileName = info.Length == 0 ? $"{FileName}.bak" : FileName;
             var data = DataManager.LoadPlayer(File.Open(FileName, FileMode.Open));
 			if(data.IsCorrupt)
             {

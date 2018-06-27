@@ -151,7 +151,7 @@ namespace Hedra.Engine.Rendering.Particles
 				GraphicsLayer.DisableVertexAttribArray(6);
 				GL.BindVertexArray(0);
 				
-				Shader.UnBind();
+				Shader.Unbind();
 				//GraphicsLayer.Enable(EnableCap.CullFace);
 				GraphicsLayer.Disable(EnableCap.Blend);
 			}

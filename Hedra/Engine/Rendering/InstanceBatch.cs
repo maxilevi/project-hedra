@@ -118,7 +118,7 @@ namespace Hedra.Engine.Rendering
 			GraphicsLayer.DisableVertexAttribArray(6);
 			GL.BindVertexArray(0);
 			
-			_shader.UnBind();
+			_shader.Unbind();
 			GraphicsLayer.Disable(EnableCap.Blend);
 		}
 		

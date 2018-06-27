@@ -177,7 +177,7 @@ namespace Hedra.Engine.Player.MapSystem
             GraphicsLayer.Disable(EnableCap.Blend);
             GraphicsLayer.Disable(EnableCap.Texture2D);
             GraphicsLayer.Enable(EnableCap.CullFace);
-            Shader.UnBind();
+            Shader.Unbind();
         }
 		
 		public bool Show{

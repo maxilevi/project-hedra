@@ -472,7 +472,6 @@ namespace Hedra
 			
 			if(!GameManager.InStartMenu) AutosaveManager.Save();
 			if(NetworkManager.IsConnected) NetworkManager.Exit();
-			DisposeManager.DisposeAll();
 			Graphics2D.Dispose();
 			base.OnUnload(e);
 #if !DEBUG

@@ -142,14 +142,20 @@ void main()
 	vec4 pointLightColor = pointRim + pointDiffuse * InputColor;
 
 	vec4 NewColor = mix(sky_color(), vec4( linear_to_srbg(realColor.xyz) * ShadowVisibility + linear_to_srbg(pointLightColor.xyz), realColor.w), Visibility);
-
+	/*if(Visibility < 0.95)
+	{
+		NewColor.a = Visibility;
+	}*/
 	mat3 NormalMat = mat3(transpose(inverse(gl_ModelViewMatrix)));
 	
-	if(Visibility == 0.0){
+	if(Visibility == 0.0)
+	{
 		OutColor = NewColor;
 		OutPosition = vec4( InPos.xyz, gl_FragCoord.z);
 		OutNormal = vec4(0.0, 0.0, 0.0, 1.0);
-	}else{
+	}
+	else
+	{
 		mat3 NormalMat = mat3(transpose(inverse(gl_ModelViewMatrix)));
 		OutColor = NewColor;
 		OutPosition = vec4( (gl_ModelViewMatrix * vec4(InPos.xyz, 1.0)).xyz, gl_FragCoord.z);

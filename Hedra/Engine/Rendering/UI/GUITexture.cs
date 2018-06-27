@@ -31,13 +31,12 @@ namespace Hedra.Engine.Rendering.UI
 	    public uint MaskId { get; set; }
         public bool UseMask => MaskId != 0;
         public Func<uint> IdPointer { get; set; }
+	    private bool _disposed;
 
         public GUITexture(uint Id, Vector2 Scale, Vector2 Pos){
 			this.TextureId = Id;
 			this.Position = Pos;
 			this.Scale = Scale;
-			
-			DisposeManager.Add(this);
 		}
 
 		public uint Id => IdPointer?.Invoke() ?? TextureId;
@@ -46,15 +45,17 @@ namespace Hedra.Engine.Rendering.UI
 
 	    public void Dispose()
 	    {
+            if(_disposed) return;
 	        Graphics2D.Textures.Remove(TextureId);
 	        var id = TextureId;
 			GL.DeleteTextures(1, ref id);
 	        TextureId = id;
+	        _disposed = true;
 	    }
 
 	    ~GUITexture()
 	    {
-	        ThreadManager.ExecuteOnMainThread( this.Dispose );
-	    }
+            ThreadManager.ExecuteOnMainThread( this.Dispose );
+        }
     }
 }

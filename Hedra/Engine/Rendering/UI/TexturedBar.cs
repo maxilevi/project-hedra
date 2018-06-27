@@ -68,7 +68,7 @@ namespace Hedra.Engine.Rendering.UI
 			GraphicsLayer.Disable(EnableCap.Blend);
 			GraphicsLayer.Enable(EnableCap.DepthTest);
 			GraphicsLayer.Enable(EnableCap.CullFace);
-			Shader.UnBind();
+			Shader.Unbind();
 		}
 		
 		public Vector2 Position{

@@ -118,7 +118,7 @@ namespace Hedra.Engine.Rendering
 				}
 				GraphicsLayer.Enable(EnableCap.DepthTest);
 				GraphicsLayer.Disable(EnableCap.Blend);
-				Shader.UnBind();
+				Shader.Unbind();
 			}
 		}
 	}

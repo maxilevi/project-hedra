@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Linq;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
     internal static class Geometry
     {
+        public static GeometryData Cube()
+        {
+            return new GeometryData
+            {
+                Vertices = BoxVertices,
+            };
+        }
+
         public static GeometryData UVSphere(int Segments)
         {
             Vector3[] vertices = new Vector3[Segments * (Segments - 1) + 2];
@@ -104,5 +113,50 @@ namespace Hedra.Engine.Rendering
 
             return normalData;
         }
+
+        private static readonly Vector3[] BoxVertices = 
+        {
+            new Vector3(-1.0f,  1.0f, -1.0f),
+            new Vector3(-1.0f, -1.0f, -1.0f),
+            new Vector3(1.0f, -1.0f, -1.0f),
+            new Vector3(1.0f, -1.0f, -1.0f),
+            new Vector3(1.0f,  1.0f, -1.0f),
+            new Vector3(-1.0f,  1.0f, -1.0f),
+
+            new Vector3(-1.0f, -1.0f,  1.0f),
+            new Vector3(-1.0f, -1.0f, -1.0f),
+            new Vector3(-1.0f,  1.0f, -1.0f),
+            new Vector3(-1.0f,  1.0f, -1.0f),
+            new Vector3(-1.0f,  1.0f,  1.0f),
+            new Vector3(-1.0f, -1.0f,  1.0f),
+
+            new Vector3(1.0f, -1.0f, -1.0f),
+            new Vector3(1.0f, -1.0f,  1.0f),
+            new Vector3(1.0f,  1.0f,  1.0f),
+            new Vector3(1.0f,  1.0f,  1.0f),
+            new Vector3(1.0f,  1.0f, -1.0f),
+            new Vector3(1.0f, -1.0f, -1.0f),
+
+            new Vector3(-1.0f, -1.0f,  1.0f),
+            new Vector3(-1.0f,  1.0f,  1.0f),
+            new Vector3(1.0f,  1.0f,  1.0f),
+            new Vector3(1.0f,  1.0f,  1.0f),
+            new Vector3(1.0f, -1.0f,  1.0f),
+            new Vector3(-1.0f, -1.0f,  1.0f),
+
+            new Vector3(-1.0f,  1.0f, -1.0f),
+            new Vector3(1.0f,  1.0f, -1.0f),
+            new Vector3(1.0f,  1.0f,  1.0f),
+            new Vector3(1.0f,  1.0f,  1.0f),
+            new Vector3(-1.0f,  1.0f,  1.0f),
+            new Vector3(-1.0f,  1.0f, -1.0f),
+
+            new Vector3(-1.0f, -1.0f, -1.0f),
+            new Vector3(-1.0f, -1.0f,  1.0f),
+            new Vector3(1.0f, -1.0f, -1.0f),
+            new Vector3(1.0f, -1.0f, -1.0f),
+            new Vector3(-1.0f, -1.0f,  1.0f),
+            new Vector3(1.0f, -1.0f,  1.0f)
+        };
     }
 }

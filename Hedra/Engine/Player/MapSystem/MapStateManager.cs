@@ -28,6 +28,7 @@ namespace Hedra.Engine.Player.MapSystem
             this.RegisterStateItem(() => WorldRenderer.EnableCulling, O => WorldRenderer.EnableCulling = (bool)O);
             this.RegisterStateItem(() => WorldRenderer.Dither, O => WorldRenderer.Dither = (bool)O);
             this.RegisterStateItem(() => WorldRenderer.TransformationMatrix, O => WorldRenderer.TransformationMatrix = (Matrix4)O);
+            this.RegisterStateItem(() => WorldRenderer.WaterSmoothness, O => WorldRenderer.WaterSmoothness = (float)O);
             this.RegisterStateItem(() => SkyManager.UpdateDayColors, O => SkyManager.UpdateDayColors = (bool)O);
         }
     }

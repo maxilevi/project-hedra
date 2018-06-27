@@ -42,8 +42,6 @@ namespace Hedra.Engine.Rendering.UI
             var bmp = new Bitmap(1, 1);
             bmp.SetPixel(0, 0, Color.FromArgb(0, 0, 0, 0));
             TransparentTexture = Graphics2D.LoadTexture(bmp);
-
-            DisposeManager.Add(this);
         }
 
         public DrawOrder GetDrawOrder(IRenderable Renderable)
@@ -207,7 +205,7 @@ namespace Hedra.Engine.Rendering.UI
             GraphicsLayer.Disable(EnableCap.Blend);
             GraphicsLayer.Disable(EnableCap.Texture2D);
             GraphicsLayer.Enable(EnableCap.CullFace);
-            Shader.UnBind();
+            Shader.Unbind();
         }
 
         public void Draw(GUITexture Texture)

@@ -229,7 +229,7 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public override void UnBind(){
-			Shader.UnBind();
+			Shader.Unbind();
 			GraphicsLayer.Enable(EnableCap.CullFace);
 		}
 	}

@@ -173,7 +173,7 @@ namespace Hedra.Engine.Rendering
             GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _points.Count);
 
             _data.Unbind();
-            Shader.UnBind();
+            Shader.Unbind();
 
             GraphicsLayer.Disable(EnableCap.Blend);
             GraphicsLayer.Enable(EnableCap.CullFace);

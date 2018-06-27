@@ -84,7 +84,6 @@ namespace Hedra.Engine.Rendering
             this.mipmaps = Mipmaps;
             this.multisample = Multisample;
             this.samples = (multisample) ? Samples : 0;
-            DisposeManager.Add(this);
             
             // First create the framebuffer
             BufferID = (uint) GL.GenFramebuffer();
@@ -210,7 +209,6 @@ namespace Hedra.Engine.Rendering
         /// </summary>
         ~FBO()
         {
-        	ThreadManager.ExecuteOnMainThread( () => this.Dispose() );
             if (DepthID != 0 || BufferID != 0 || TextureID != null)
             {
                 System.Diagnostics.Debug.Fail("FBO was not disposed of properly.");

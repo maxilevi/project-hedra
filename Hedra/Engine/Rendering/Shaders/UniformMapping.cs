@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using System;
+using OpenTK;
 
 namespace Hedra.Engine.Rendering.Shaders
 {
@@ -26,7 +27,7 @@ namespace Hedra.Engine.Rendering.Shaders
                 : Value is Matrix2x4 ? MappingType.Matrix2X4
                 : Value is Matrix2x3 ? MappingType.Matrix2X3
                 : Value is Matrix2 ? MappingType.Matrix2
-                : Value is Vector4 ? MappingType.Vector4 
+                : Value is Vector4 ? MappingType.Vector4
                 : Value is Vector3 ? MappingType.Vector3
                 : Value is Vector2 ? MappingType.Vector2
                 : Value is float ? MappingType.Float

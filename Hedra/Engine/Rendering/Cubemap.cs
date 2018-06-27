@@ -1,7 +1,7 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
-using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
@@ -9,15 +9,14 @@ namespace Hedra.Engine.Rendering
     {
         public uint TextureId { get;}
 
-        public Cubemap (Bitmap[] TextureArray)
+        public Cubemap (IList<Bitmap> TextureArray, bool Dispose = true)
         {
-            uint texId;
-            GL.GenTextures(1, out texId);
+            GL.GenTextures(1, out uint texId);
             GraphicsLayer.Enable(EnableCap.TextureCubeMap);
             TextureId = texId;
 
             GL.BindTexture(TextureTarget.TextureCubeMap, TextureId);
-            for (int i = 0; i < TextureArray.Length; i++)
+            for (var i = 0; i < TextureArray.Count; i++)
             {
                 BitmapData data = TextureArray[i].LockBits(
                     new Rectangle(0, 0, TextureArray[i].Width, TextureArray[i].Height),
@@ -28,12 +27,24 @@ namespace Hedra.Engine.Rendering
                     data.Scan0);
                 
                 TextureArray[i].UnlockBits(data);
+                if(Dispose) TextureArray[i].Dispose();
             }
             GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Linear);
             GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int) TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int) TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int) TextureWrapMode.ClampToBorder);
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToBorder);
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int) TextureWrapMode.ClampToBorder);
+        }
+
+        public void Bind()
+        {
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.TextureCubeMap, TextureId);
+        }
+
+        public void Unbind()
+        {
+            GL.BindTexture(TextureTarget.TextureCubeMap, 0);
         }
     }
 }

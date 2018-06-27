@@ -60,7 +60,7 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public virtual void UnBind(){
-		    WorldRenderer.StaticShader.UnBind();
+		    WorldRenderer.StaticShader.Unbind();
 		}
 		
 		public VertexData ToVertexData(){

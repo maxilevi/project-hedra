@@ -216,7 +216,7 @@
     <Compile Include="Engine\EntitySystem\SlowingComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\SpeedComponent.cs" />
-    <Compile Include="Engine\EnvironmentSystem\Skydome.cs" />
+    <Compile Include="Engine\EnvironmentSystem\SkyOverlay.cs" />
     <Compile Include="Engine\EnvironmentSystem\WeatherManager.cs" />
     <Compile Include="Engine\GameLoader.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkStructuresMeshBuilder.cs" />
@@ -393,7 +393,6 @@
     <Compile Include="Engine\GameSettings.cs" />
     <Compile Include="Engine\ItemSystem\ItemPool.cs" />
     <Compile Include="Engine\Management\AssetManager.cs" />
-    <Compile Include="Engine\Management\DisposeManager.cs" />
     <Compile Include="Engine\Management\CoroutineManager.cs" />
     <Compile Include="Engine\Management\DrawManager.cs" />
     <Compile Include="Engine\Management\FrustumCulling.cs" />
@@ -3557,22 +3556,6 @@
       <Link>Assets\Env\SleepingIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\SnowmanBody.ply">
-      <Link>Assets\Chr\SnowmanBody.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\SnowmanHead.ply">
-      <Link>Assets\Chr\SnowmanHead.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\SnowmanLeftArm.ply">
-      <Link>Assets\Chr\SnowmanLeftArm.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\SnowmanRightArm.ply">
-      <Link>Assets\Chr\SnowmanRightArm.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\SpiderEyes.ply">
       <Link>Assets\Items\SpiderEyes.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4407,10 +4390,10 @@
     <None Include="Shaders\MinimapGUI.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Skydome.frag">
+    <None Include="Shaders\SkyOverlay.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Skydome.vert">
+    <None Include="Shaders\SkyOverlay.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\SSAO-Pass1-MS.frag">
@@ -4642,8 +4625,29 @@
     <Content Include="Assets\Skills\IronSkin.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sky\starry_night.png">
+    <Content Include="Assets\Sky\empty.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sky\stars_back.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sky\stars_bottom.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sky\stars_front.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sky\stars_left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sky\stars_right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sky\stars_top.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sky\sunandmoon_top.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\splash-background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

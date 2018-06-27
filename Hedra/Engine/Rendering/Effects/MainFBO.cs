@@ -57,14 +57,14 @@ namespace Hedra.Engine.Rendering.Effects
 				FinalFbo.Bind();
                 Shader.Bind();
 				DrawQuad(Default.TextureID[0]);
-                Shader.UnBind();
+                Shader.Unbind();
 				FinalFbo.UnBind();
 				
 				if(GameSettings.BlurFilter){
 					Default.Bind();
                     Shader.Bind();
 					DrawQuad(FinalFbo.TextureID[0]);
-                    Shader.UnBind();
+                    Shader.Unbind();
 					Default.UnBind();
 					
 					//Clear it
@@ -108,7 +108,7 @@ namespace Hedra.Engine.Rendering.Effects
 
 			    DrawManager.UIRenderer.DrawQuad();
 
-                Ssao.FirstPassShader.UnBind();
+                Ssao.FirstPassShader.Unbind();
 
 			    Ssao.ThirdPass.Bind();
                 Ssao.SecondPassShader.Bind();
@@ -135,7 +135,7 @@ namespace Hedra.Engine.Rendering.Effects
 
 			    DrawManager.UIRenderer.DrawQuad();
 
-                Ssao.ThirdPassShader.UnBind();
+                Ssao.ThirdPassShader.Unbind();
 			    DrawFBO.UnBind();//Unbind is the same
 				
 				GraphicsLayer.Enable(EnableCap.CullFace);
@@ -183,13 +183,13 @@ namespace Hedra.Engine.Rendering.Effects
                 Default.Bind();
 				Shader.Bind();
 				DrawQuad(FinalFbo.TextureID[0], 0, true);
-                Shader.UnBind();
+                Shader.Unbind();
                 Default.UnBind();
 				   
 				FinalFbo.Bind();
                 Shader.Bind();
 				DrawQuad(Default.TextureID[0], 0, false);
-                Shader.UnBind();
+                Shader.Unbind();
 				FinalFbo.UnBind();
 
                 //Clear it
@@ -201,7 +201,7 @@ namespace Hedra.Engine.Rendering.Effects
 
 			Shader.Bind();
 			DrawQuad(FinalFbo.TextureID[0], GameSettings.Bloom ? AdditiveFbo.TextureID[0] : 0, false, GameSettings.FXAA);
-			Shader.UnBind();
+			Shader.Unbind();
 		}
 		
 		public static void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false, bool FXAA = false){

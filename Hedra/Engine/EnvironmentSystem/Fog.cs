@@ -53,7 +53,7 @@ namespace Hedra.Engine.EnvironmentSystem
 		{
 		    MinDistance = MinDist;
 		    MaxDistance = MaxDist;
-			var data = new FogData(MinDist, MaxDist, GameSettings.Height, SkyManager.Sky.BotColor, SkyManager.Sky.TopColor);
+			var data = new FogData(MinDist, MaxDist, GameSettings.Height * (1 - GameManager.Player.View.Pitch * .25f), SkyManager.Sky.BotColor, SkyManager.Sky.TopColor);
 			FogValues = data;
 			GL.BindBuffer(BufferTarget.UniformBuffer, UboId);
 			GL.BufferSubData(BufferTarget.UniformBuffer, IntPtr.Zero, (IntPtr)_fogSettingsSize, ref data);
@@ -64,7 +64,7 @@ namespace Hedra.Engine.EnvironmentSystem
 		    WorldRenderer.StaticShader.Bind();
 		}
 		public void Disable(){
-		    WorldRenderer.StaticShader.UnBind();
+		    WorldRenderer.StaticShader.Unbind();
 		}
 	}
 	

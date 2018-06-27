@@ -38,7 +38,7 @@ namespace Hedra.Engine.Rendering.Effects
 		    //WaterEffect["Time"] = WaterMeshBuffer.WaveMovement;
 		    WaterEffect["Multiplier"] = Multiplier;
 			this.DrawQuad(WaterEffect, Src.TextureID[0]);
-			WaterEffect.UnBind();
+			WaterEffect.Unbind();
 			
 			Dst.UnBind();
 		}

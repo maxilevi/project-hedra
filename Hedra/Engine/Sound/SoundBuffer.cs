@@ -18,24 +18,20 @@ namespace Hedra.Engine.Sound
 	{
 		public uint ID;
 
-	    public SoundBuffer(ALFormat Format, byte[] Data, int SampleRate){
+	    public SoundBuffer(ALFormat Format, byte[] Data, int SampleRate)
+        {
 			AL.GenBuffers(1, out ID);
 			AL.BufferData( (int) ID, Format, Data, Data.Length, SampleRate);
-			DisposeManager.Add(this);
 		}
 		
-		public SoundBuffer(ALFormat Format, short[] Data, int SampleRate){
+		public SoundBuffer(ALFormat Format, short[] Data, int SampleRate)
+        {
 			AL.GenBuffers(1, out ID);
 			AL.BufferData( (int) ID, Format, Data, Data.Length * sizeof(short), SampleRate);
-			DisposeManager.Add(this);
 		}
 		
-		public SoundBuffer(){
-			DisposeManager.Add(this);
-		}
-		
-		public void Dispose(){
-			DisposeManager.Remove(this);
+		public void Dispose()
+        {
 			AL.DeleteBuffers(1, ref ID);
 		}
 	}

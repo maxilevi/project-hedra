@@ -60,6 +60,11 @@ namespace Hedra.Engine.Management
 			        };
 			        return true;
 			    }
+			    if (Parts[0] == "hurt")
+			    {
+			        GameManager.Player.SearchComponent<DamageComponent>().Immune = false;
+			        GameManager.Player.Damage(float.Parse(Parts[1]), null, out float exp);
+			    }
 			    if (Parts[0] == "debug")
 			    {
 			        GameSettings.DebugMode = !GameSettings.DebugMode;          
