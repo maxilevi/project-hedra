@@ -18,7 +18,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of InstanceBatch.
 	/// </summary>
-	public class InstanceBatch : IRenderable
+	internal class InstanceBatch : IRenderable
 	{
 		public const int MaxInstances = 64;
 		private readonly VertexData _original;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Hedra.Engine.Management
 {
-    public class StateManager
+    internal class StateManager
     {
         protected readonly HashSet<TrackItem> _trackItems;
         protected readonly Dictionary<TrackItem, object> _cache;

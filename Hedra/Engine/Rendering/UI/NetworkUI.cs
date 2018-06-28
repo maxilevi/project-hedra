@@ -17,7 +17,7 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.Rendering.UI
 {
-	public class NetworkUI : Panel
+	internal class NetworkUI : Panel
 	{
 		private TextField _ipField;
 		private List<UIElement> _joinButtons = new List<UIElement>();

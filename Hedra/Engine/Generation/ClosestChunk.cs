@@ -15,7 +15,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 namespace Hedra.Engine.Generation
 {
 	
-	public class ClosestChunk: IComparer<Chunk> {
+	internal class ClosestChunk: IComparer<Chunk> {
 		public Vector3 PlayerPos;
 		public ClosestChunk(){ 
 		}

@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.MapSystem
 {
-    public class MapItem : IDisposable
+    internal class MapItem : IDisposable
     {
         private readonly ObjectMesh _mesh;
 

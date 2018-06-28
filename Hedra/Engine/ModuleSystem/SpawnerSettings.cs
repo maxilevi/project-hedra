@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public class SpawnerSettings
+    internal class SpawnerSettings
     {        
         public SpawnTemplate[] Shore { get; set; }     
         public SpawnTemplate[] Plains { get; set; }

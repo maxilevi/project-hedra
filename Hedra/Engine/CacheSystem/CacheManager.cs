@@ -20,7 +20,7 @@ namespace Hedra.Engine.CacheSystem
 	/// <summary>
 	/// Description of CacheManager.
 	/// </summary>
-	public static class CacheManager
+	internal static class CacheManager
 	{
 		public static Dictionary< float, List<float> > CachedExtradata = new Dictionary< float, List<float> >();
 		public static Dictionary< Vector4, List<Vector4> > CachedColors = new Dictionary< Vector4, List<Vector4> >();

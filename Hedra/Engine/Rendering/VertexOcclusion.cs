@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of VertexOcclusion.
 	/// </summary>
-	public static class VertexOcclusion
+	internal static class VertexOcclusion
 	{
 		public static VertexData Bake(Vector3 Position, VertexData Data){
 	       	/*int Samples = 100;

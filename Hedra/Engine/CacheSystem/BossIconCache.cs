@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    public class BossIconCache : CacheType
+    internal class BossIconCache : CacheType
     {
         public BossIconCache()
         {

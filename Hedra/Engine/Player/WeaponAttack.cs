@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
     /// Description of WeaponAttack.
     /// </summary>
     [Obfuscation(Exclude = false, Feature = "-rename")]
-    public class WeaponAttack : BaseSkill
+    internal class WeaponAttack : BaseSkill
 	{
 	    private static readonly uint Default = Graphics2D.LoadFromAssets("HolderSkill.png");
         private static readonly uint Sword1 = Graphics2D.LoadFromAssets("Slash.png");

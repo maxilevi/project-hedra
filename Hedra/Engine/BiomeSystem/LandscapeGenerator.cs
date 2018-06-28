@@ -19,7 +19,7 @@ namespace Hedra.Engine.BiomeSystem
 	/// <summary>
 	/// Description of MountainGenerator.
 	/// </summary>
-	public class LandscapeGenerator : BiomeGenerator
+	internal class LandscapeGenerator : BiomeGenerator
 	{
 		public LandscapeGenerator(Chunk Chunk) : base (Chunk){}
 		public override void Generate(){

@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    public class RockPlacementDesign : PlacementDesign
+    internal class RockPlacementDesign : PlacementDesign
     {
         private readonly PlantDesign _rockDesign;
 

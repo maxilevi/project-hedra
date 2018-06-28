@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public class CampfireDesign : StructureDesign
+    internal class CampfireDesign : StructureDesign
     {
         public override int Radius { get; set; } = 80;
         public override VertexData Icon => null;

@@ -5,9 +5,9 @@ using Hedra.Engine.Sound;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    public delegate void OnTransactionCompleteEventHandler(Item Item, int Price);
+    internal delegate void OnTransactionCompleteEventHandler(Item Item, int Price);
 
-    public class TradeManager
+    internal class TradeManager
     {
         public event OnTransactionCompleteEventHandler OnTransactionComplete;
         private readonly InventoryArrayInterface _buyerInterface;

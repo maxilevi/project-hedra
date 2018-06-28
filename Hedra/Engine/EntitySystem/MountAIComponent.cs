@@ -18,7 +18,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of MountAIComponent.
 	/// </summary>
-	public class MountAIComponent : EntityComponent
+	internal class MountAIComponent : EntityComponent
 	{
 		private MountAIType Type;
 		private Entity Target = null;

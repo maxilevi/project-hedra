@@ -18,7 +18,7 @@ using OpenTK;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public class HeadIconComponent : EntityComponent
+    internal class HeadIconComponent : EntityComponent
     {
         private ObjectMesh _iconMesh;
         private readonly Humanoid _humanoidParent;

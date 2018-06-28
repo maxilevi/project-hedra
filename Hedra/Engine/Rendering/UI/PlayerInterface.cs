@@ -4,9 +4,9 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI
 {
-    public delegate void OnPlayerInterfaceStateChangeEventHandler(bool Show);
+    internal delegate void OnPlayerInterfaceStateChangeEventHandler(bool Show);
 
-    public abstract class PlayerInterface
+    internal abstract class PlayerInterface
     {
         private static readonly List<PlayerInterface> Interfaces;
         private static PlayerInterface _openedInterface;

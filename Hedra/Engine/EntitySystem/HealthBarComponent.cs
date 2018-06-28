@@ -13,7 +13,7 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     ///     Description of HealthComponent.
     /// </summary>
-    public class HealthBarComponent : EntityComponent, IRenderable, IDisposable
+    internal class HealthBarComponent : EntityComponent, IRenderable, IDisposable
     {
         private static readonly Panel HealthBarPanel = new Panel();
         private readonly Bar _healthBar;

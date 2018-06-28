@@ -5,7 +5,7 @@ using Hedra.Engine.Generation;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    public class HerdBehaviour : Behaviour
+    internal class HerdBehaviour : Behaviour
     {
         public float CallRadius { get; set; } = 80f;
         public FleeBehaviour Flee { get; set; }

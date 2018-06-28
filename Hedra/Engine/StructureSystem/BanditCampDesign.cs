@@ -16,7 +16,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public class BanditCampDesign : StructureDesign
+    internal class BanditCampDesign : StructureDesign
     {
         public override int Radius { get; set; } = 300;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.CampfireIcon);

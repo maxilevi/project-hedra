@@ -8,7 +8,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    public class NormalVillageScheme : VillageScheme
+    internal class NormalVillageScheme : VillageScheme
     {
         public override Vector3 StablePosition => -Vector3.UnitX * 160.0f - Vector3.UnitZ * 150.0f;
         public override Vector3 BlacksmithPosition => -Vector3.UnitZ * 30 - Vector3.UnitX * 180f;

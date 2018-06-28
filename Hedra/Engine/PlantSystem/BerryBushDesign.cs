@@ -13,7 +13,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    public class BerryBushDesign : PlantDesign
+    internal class BerryBushDesign : PlantDesign
     {
         public override VertexData Model => CacheManager.GetModel(CacheItem.BerryBush);
         public override bool HasCustomPlacement => true;

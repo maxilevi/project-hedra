@@ -12,7 +12,7 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     /// Description of FireComponent.
     /// </summary>
-    public class FireComponent : EntityComponent, IEffectComponent
+    internal class FireComponent : EntityComponent, IEffectComponent
     {
 		public int Chance { get; set; } = 10;
 		public float Damage { get; set; } = 30;

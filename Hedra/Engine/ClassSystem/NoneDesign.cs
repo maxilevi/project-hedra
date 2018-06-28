@@ -6,7 +6,7 @@ using Hedra.Engine.Player.Skills;
 namespace Hedra.Engine.ClassSystem
 {
     [HiddenClass]
-    public class NoneDesign : ClassDesign
+    internal class NoneDesign : ClassDesign
     {
         public override bool CanAccumulateHits { get; } = false;
         public override uint Logo => 0;

@@ -18,7 +18,7 @@ namespace Hedra.Engine.PhysicsSystem
 	/// <summary>
 	/// Description of GJKCollision.
 	/// </summary>
-	public static class GJKCollision
+	internal static class GJKCollision
 	{
 		private static Func<Simplex, bool>[] SimplexUpdateFuncs = new Func<Simplex, bool>[ (int) SimplexType.MaxCount ];
 	    private static Vector3 Direction;

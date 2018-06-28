@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public class SpeedBonusComponent : EntityComponent
+    internal class SpeedBonusComponent : EntityComponent
     {
         private readonly float _speedBonus;
 

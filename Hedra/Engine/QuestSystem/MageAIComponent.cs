@@ -13,7 +13,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of MageAIComponent.
 	/// </summary>
-	public class MageAIComponent
+	internal class MageAIComponent
 	{
 		/**/
 	}

@@ -28,7 +28,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
     /// <summary>
     ///     Description of SaveVillageObjective.
     /// </summary>
-    public class VillageObjective : Objective
+    internal class VillageObjective : Objective
     {
 
         private readonly ObjectMesh _iconMesh;

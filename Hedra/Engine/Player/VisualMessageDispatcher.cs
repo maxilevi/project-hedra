@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player
 {
-    public class VisualMessageDispatcher : IMessageDispatcher
+    internal class VisualMessageDispatcher : IMessageDispatcher
     {
         private readonly LocalPlayer _player;
         private static readonly Color DefaultColor = Color.White;

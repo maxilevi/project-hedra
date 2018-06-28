@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.Rendering.UI
 {
-    public class TextureCommand
+    internal class TextureCommand
     {
         public IRenderable Renderable { get; set; }
         public DrawOrder Order { get; set; }

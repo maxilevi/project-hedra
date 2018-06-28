@@ -20,7 +20,7 @@ using Hedra.Engine.Rendering;
 namespace Hedra.Engine.Rendering.UI
 {
 	
-	public class RenderableButton : Button, IRenderable
+	internal class RenderableButton : Button, IRenderable
 	{
 		public DrawPriority Priority { get; set; }
 

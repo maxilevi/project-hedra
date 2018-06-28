@@ -9,7 +9,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
-    public static class Colors
+    internal static class Colors
     {
         public static Vector4 DarkRed { get; } = new Vector4(.5f, 0, 0, 1);
         public static Vector4 Red { get; } = new Vector4(1,0,0,1);

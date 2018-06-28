@@ -12,7 +12,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of Campfire.
 	/// </summary>
-	public class TravellingMerchant : BaseStructure, IUpdatable
+	internal class TravellingMerchant : BaseStructure, IUpdatable
 	{
 		private long _passedTime;
 		private readonly ParticleSystem _particles;

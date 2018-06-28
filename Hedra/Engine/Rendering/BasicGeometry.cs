@@ -10,7 +10,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of BasicGeometry.
 	/// </summary>
-	public static class BasicGeometry
+	internal static class BasicGeometry
 	{
 		
 		private static CubeData Data;

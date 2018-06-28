@@ -18,7 +18,7 @@ using OpenTK;
 
 namespace Hedra
 {
-	public static class Utils
+	internal static class Utils
 	{
 
 	    public static string FitString(string input, int characterLimit)

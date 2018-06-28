@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public interface IStructure
+    internal interface IStructure
     {
     }
 }

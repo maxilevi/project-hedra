@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
-    public class ShadowBox
+    internal class ShadowBox
     {
         private const float Offset = 10;
         private const float ShadowDistance = 100;

@@ -22,7 +22,7 @@ namespace Hedra.Engine.Sound
 	/// <summary>
 	/// Description of SoundManager.
 	/// </summary>
-	public static class SoundManager
+	internal static class SoundManager
 	{
 		public static AudioContext AudioContext;
 	    public static float Volume = 0.4f;

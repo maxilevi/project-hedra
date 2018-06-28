@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of VertexSkinData.
 	/// </summary>
-	public class VertexSkinData
+	internal class VertexSkinData
 	{
 		public readonly List<int> JointIds = new List<int>();
 		public readonly List<float> Weights = new List<float>();

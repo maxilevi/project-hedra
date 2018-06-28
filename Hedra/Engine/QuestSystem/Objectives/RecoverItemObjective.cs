@@ -30,7 +30,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
     /// <summary>
     ///     Description of RecoverItemObjective.
     /// </summary>
-    public class RecoverItemObjective : Objective
+    internal class RecoverItemObjective : Objective
     {
         private WorldItem _worldItem;
         private ObjectMesh _previewMesh;

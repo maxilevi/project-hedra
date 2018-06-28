@@ -12,9 +12,9 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    public delegate void OnItemMoveEventHandler(InventoryArray PreviousArray, InventoryArray NewArray, int Index, Item Item);
+    internal delegate void OnItemMoveEventHandler(InventoryArray PreviousArray, InventoryArray NewArray, int Index, Item Item);
 
-    public class InventoryArrayInterfaceManager
+    internal class InventoryArrayInterfaceManager
     {
         public OnItemMoveEventHandler OnItemMove;
         private readonly InventoryInterfaceItemInfo _itemInfoInterface;

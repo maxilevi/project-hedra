@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
-    public class AbilityTreeInterfaceItemInfo : InventoryInterfaceItemInfo
+    internal class AbilityTreeInterfaceItemInfo : InventoryInterfaceItemInfo
     {
         private readonly Vector2 _targetResolution = new Vector2(1366, 705);
         public AbilityTreeInterfaceItemInfo(InventoryItemRenderer Renderer) : base(Renderer)

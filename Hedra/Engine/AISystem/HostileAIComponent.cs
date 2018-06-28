@@ -3,7 +3,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem
 {
-    public class HostileAIComponent : BasicAIComponent
+    internal class HostileAIComponent : BasicAIComponent
     {
         protected RoamBehaviour Roam { get; }
         protected RetaliateBehaviour Retaliate { get; }

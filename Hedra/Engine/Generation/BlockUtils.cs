@@ -14,7 +14,7 @@ namespace Hedra.Engine.Generation
 	/// <summary>
 	/// Description of BlockUtils.
 	/// </summary>
-	public static class BlockUtils
+	internal static class BlockUtils
 	{
 	    public static Vector4 GetColor(BlockType Type, BiomeSystem.RegionColor RegionColor)
 	    {

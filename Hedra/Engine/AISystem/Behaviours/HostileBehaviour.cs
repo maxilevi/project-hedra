@@ -5,7 +5,7 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    public class HostileBehaviour : Behaviour
+    internal class HostileBehaviour : Behaviour
     {
         public float Radius { get; } = 64;
         protected AttackBehaviour Attack { get; }

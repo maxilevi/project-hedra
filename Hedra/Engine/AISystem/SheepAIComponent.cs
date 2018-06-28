@@ -3,7 +3,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem
 {
-    public class SheepAIComponent : BasicAIComponent
+    internal class SheepAIComponent : BasicAIComponent
     {
         protected RoamBehaviour Roam { get; }
         protected HerdBehaviour Herd { get; }

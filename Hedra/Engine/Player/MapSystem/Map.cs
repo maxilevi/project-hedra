@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player.MapSystem
 	/// <summary>
 	/// Description of Map.
 	/// </summary>
-	public class Map : PlayerInterface
+	internal class Map : PlayerInterface
     {
 	    private const int MapViewSize = 8;
         private const int MapSize = 8;

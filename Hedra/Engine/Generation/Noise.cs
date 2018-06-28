@@ -34,7 +34,7 @@ namespace SimplexNoise
     /// Based loosely on SimplexNoise1234 by Stefan Gustavson <http://staffwww.itn.liu.se/~stegu/aqsis/aqsis-newnoise/>
     /// 
     /// </summary>
-    public class Noise
+    internal class Noise
     {
     	public static float Generate(float x, float y, int Octaves, float Frequency){
     		float FNoise = Generate(x / Frequency, y / Frequency);

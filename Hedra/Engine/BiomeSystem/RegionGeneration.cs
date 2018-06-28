@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    public class RegionGeneration
+    internal class RegionGeneration
     {
         private readonly BiomeGenerationDesign _design;
         private readonly int _seed;

@@ -19,7 +19,7 @@ namespace Hedra.Engine.Generation
     /// <summary>
     /// Description of Town.
     /// </summary>
-    public class CollidableStructure
+    internal class CollidableStructure
     {
         public Vector3 Position;
         public Plateau Mountain;

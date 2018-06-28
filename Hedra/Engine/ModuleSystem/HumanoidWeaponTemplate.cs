@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public class HumanoidWeaponTemplate
+    internal class HumanoidWeaponTemplate
     {
         public string Tier { get; set; }
         public string Type { get; set; }

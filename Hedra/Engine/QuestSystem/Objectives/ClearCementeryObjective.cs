@@ -16,7 +16,7 @@ using OpenTK.Platform.Windows;
 
 namespace Hedra.Engine.QuestSystem.Objectives
 {
-    public class ClearCementeryObjective : Objective
+    internal class ClearCementeryObjective : Objective
     {
 
         private ObjectMesh _cementeryModel;

@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class LearnDoubleSwords : BaseSkill
+	internal class LearnDoubleSwords : BaseSkill
 	{
 
 		public LearnDoubleSwords() : base() {

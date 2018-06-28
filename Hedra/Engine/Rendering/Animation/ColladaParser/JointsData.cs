@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of JointsData.
 	/// </summary>
-	public class JointsData
+	internal class JointsData
 	{
 		public readonly int JointCount;
 		public readonly JointData HeadJoint;

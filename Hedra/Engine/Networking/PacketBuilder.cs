@@ -14,7 +14,7 @@ namespace Hedra.Engine.Networking
 	/// <summary>
 	/// Description of PacketBuilder.
 	/// </summary>
-	public class PacketBuilder
+	internal class PacketBuilder
 	{
 		public byte ID = 0x0;
 		public byte[] Data;

@@ -6,7 +6,7 @@ using Hedra.Engine.PlantSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    public class RegionEnviroment
+    internal class RegionEnviroment
     {
         private readonly BiomeEnviromentDesign _design;
         private readonly int _seed;

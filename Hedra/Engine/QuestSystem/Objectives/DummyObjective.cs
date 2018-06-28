@@ -14,7 +14,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 	/// <summary>
 	/// Description of DummyObjective.
 	/// </summary>
-	public class DummyObjective : Objective
+	internal class DummyObjective : Objective
 	{
 		public DummyObjective(){}
 		

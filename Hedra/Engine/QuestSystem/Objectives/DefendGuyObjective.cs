@@ -13,7 +13,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 	/// <summary>
 	/// Description of DefendGuyObjective.
 	/// </summary>
-	public class DefendGuyObjective
+	internal class DefendGuyObjective
 	{
 		public DefendGuyObjective()
 		{

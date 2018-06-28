@@ -19,7 +19,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of ArcherAI.
 	/// </summary>
-	public class ArcherAIComponent : CombatAIComponent
+	internal class ArcherAIComponent : CombatAIComponent
     {
 		private float _secondAttackCooldown;
         private float _firstAttackCooldown;

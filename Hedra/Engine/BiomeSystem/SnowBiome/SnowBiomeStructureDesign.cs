@@ -3,7 +3,7 @@ using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem.SnowBiome
 {
-    public class SnowBiomeStructureDesign : BiomeStructureDesign
+    internal class SnowBiomeStructureDesign : BiomeStructureDesign
     {
         public SnowBiomeStructureDesign()
         {

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Hedra.Engine.Rendering.UI
 {
-    public class TextConfiguration
+    internal class TextConfiguration
     {
         public Color Color { get; set; }
         public Font Font { get; set; }

@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public abstract class StructureDesign
+    internal abstract class StructureDesign
     {
         public bool SpawnInMenu { get; set; }
         public abstract int Radius { get; set; }

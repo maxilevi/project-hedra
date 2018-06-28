@@ -8,7 +8,7 @@ namespace Hedra.Engine.Rendering
     /// <summary>
     /// Huge dynamic texture atlas
     /// </summary>
-    public class MegaTexture
+    internal class MegaTexture
     {
     }
 }

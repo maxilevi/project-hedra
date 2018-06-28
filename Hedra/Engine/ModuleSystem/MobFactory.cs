@@ -7,7 +7,7 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public class MobFactory
+    internal class MobFactory
     {
         private readonly Dictionary<string, IEnemyFactory> _factories;
 

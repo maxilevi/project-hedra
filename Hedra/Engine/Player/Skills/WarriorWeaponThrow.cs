@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class WeaponThrow : BaseSkill
+	internal class WeaponThrow : BaseSkill
 	{
 		private readonly Animation ThrowAnimation;
 		

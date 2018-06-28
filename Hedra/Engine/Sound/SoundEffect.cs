@@ -13,7 +13,7 @@ namespace Hedra.Engine.Sound
 	/// <summary>
 	/// Description of SoundEffect.
 	/// </summary>
-	public struct SoundEffect
+	internal struct SoundEffect
 	{
 		public SoundType Type;
 		public bool RandomPitch;

@@ -12,7 +12,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// A static class which manages invokes on the main thread
 	/// </summary>
-	public static class ThreadManager
+	internal static class ThreadManager
 	{
 		private static readonly List<KeyValuePair<Action, Action>> Functions = new List<KeyValuePair<Action, Action>>();
 		

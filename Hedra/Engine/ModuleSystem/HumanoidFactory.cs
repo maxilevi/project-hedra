@@ -11,7 +11,7 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public static class HumanoidFactory
+    internal static class HumanoidFactory
     {
         private static Dictionary<string, HumanoidBehaviourTemplate> _behaviours;
 

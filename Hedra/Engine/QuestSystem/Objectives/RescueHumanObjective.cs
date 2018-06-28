@@ -27,7 +27,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 	/// <summary>
 	/// Description of RescueHumanObjective.
 	/// </summary>
-	public class RescueHumanObjective : Objective
+	internal class RescueHumanObjective : Objective
 	{
 		private List<Humanoid> _enemies;
 		private bool _oldManSaved;

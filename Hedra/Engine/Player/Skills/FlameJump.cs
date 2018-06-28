@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of FlameJump.
 	/// </summary>
-	public class FlameJump : BaseSkill
+	internal class FlameJump : BaseSkill
 	{
 		private const float Duration = .75f;
 		private bool Emitting = false;

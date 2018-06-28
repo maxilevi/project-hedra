@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.MapSystem
 {
-    public class MapMeshBuilder
+    internal class MapMeshBuilder
     {
         private readonly LocalPlayer _player;
         private readonly int _mapSize;

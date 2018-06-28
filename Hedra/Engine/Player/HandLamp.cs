@@ -15,7 +15,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Lamp.
 	/// </summary>
-	public class HandLamp
+	internal class HandLamp
 	{
 		public Humanoid Human { get; set; }
         public PointLight Light { get; set; }

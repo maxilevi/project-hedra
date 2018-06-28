@@ -27,7 +27,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 	/// <summary>
 	/// Description of VillageGenerator.
 	/// </summary>
-	public class VillageGenerator : ISchemeGenerator
+	internal class VillageGenerator : ISchemeGenerator
 	{
 		private VertexData[] HouseModels = new VertexData[2];
         private VertexData[] BlacksmithModels = new VertexData[2];

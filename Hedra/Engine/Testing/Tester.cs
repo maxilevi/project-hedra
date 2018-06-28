@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Hedra.Engine.Testing
 {
-    public static class Tester
+    internal static class Tester
     {
         private static StringBuilder _buffer;
 

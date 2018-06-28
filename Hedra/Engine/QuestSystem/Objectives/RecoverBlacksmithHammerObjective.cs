@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Objectives
 {
-    public class RecoverBlacksmithHammerObjective : Objective
+    internal class RecoverBlacksmithHammerObjective : Objective
     {
         public override string Description => string.Empty;
         public override bool ShouldDisplay => true;

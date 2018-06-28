@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Management
 {
-    public interface ISearchable
+    internal interface ISearchable
     {
         Vector3 Position { get; set; }
     }

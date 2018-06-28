@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of MarchingData.
 	/// </summary>
-	public static class IsoSurfaceCreator
+	internal static class IsoSurfaceCreator
 	{
 		public const float WaterQuadSize = 1.0f;
 		public const float WaterQuadOffset = 1.5f;

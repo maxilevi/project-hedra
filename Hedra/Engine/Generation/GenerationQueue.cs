@@ -14,7 +14,7 @@ namespace Hedra.Engine.Generation
 /// <summary>
 /// Ported from the unity script i wrote
 /// </summary>
-	public class GenerationQueue
+	internal class GenerationQueue
 	{
 		public List<Chunk> Queue = new List<Chunk>();
 		public List<GenerationThread> Threads = new List<GenerationThread>();

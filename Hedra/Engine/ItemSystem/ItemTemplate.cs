@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Hedra.Engine.ItemSystem
 {
-    public class ItemTemplate
+    internal class ItemTemplate
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }

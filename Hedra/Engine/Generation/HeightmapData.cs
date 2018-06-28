@@ -15,7 +15,7 @@ namespace Hedra.Engine.Generation
 	/// <summary>
 	/// Description of HeightmapData.
 	/// </summary>
-	public class HeightmapData
+	internal class HeightmapData
 	{
 		public float[][] Heightmap;
 		public BlockType[][] HeightmapType;

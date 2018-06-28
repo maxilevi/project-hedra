@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of AnimatedModelData.
 	/// </summary>
-	public class AnimatedModelData
+	internal class AnimatedModelData
 	{
 		public JointsData Joints { get; }
 		public ModelData Mesh { get; }

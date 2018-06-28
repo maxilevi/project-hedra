@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of MeshSimplifier.
 	/// </summary>
-	public static class MeshSimplifier
+	internal static class MeshSimplifier
 	{
 		class Triangle{
 			public int[] v;

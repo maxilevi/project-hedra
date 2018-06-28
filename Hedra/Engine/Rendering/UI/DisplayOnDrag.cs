@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of OnDrag.
 	/// </summary>
-	public class DisplayOnDrag : EventListener
+	internal class DisplayOnDrag : EventListener
 	{
 		private bool _inFocus;
 		public Vector2 Scale, Position;

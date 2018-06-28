@@ -15,7 +15,7 @@ namespace Hedra.Engine.ItemSystem
 	/// <summary>
 	/// Description of ItemPool.
 	/// </summary>
-	public static class ItemPool
+	internal static class ItemPool
 	{
 	    private static readonly EquipmentType[] WeaponEquipmentTypes;
 	    private static readonly EquipmentType[] ArmorEquipmentTypes;

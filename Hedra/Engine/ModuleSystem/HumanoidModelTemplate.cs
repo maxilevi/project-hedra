@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public class HumanoidModelTemplate
+    internal class HumanoidModelTemplate
     {
         public string Name { get; set; }
         public string Path { get; set; }

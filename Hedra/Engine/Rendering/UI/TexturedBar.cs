@@ -16,7 +16,7 @@ using Hedra.Engine.Management;
 namespace Hedra.Engine.Rendering.UI
 {
 	
-	public class TexturedBar : IRenderable, UIElement, IDisposable
+	internal class TexturedBar : IRenderable, UIElement, IDisposable
 	{
 	    private static readonly Shader Shader;
 		public Vector2 Scale {get; set;}

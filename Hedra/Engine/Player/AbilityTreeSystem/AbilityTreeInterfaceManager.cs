@@ -6,7 +6,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
-    public class AbilityTreeInterfaceManager : InventoryArrayInterfaceManager
+    internal class AbilityTreeInterfaceManager : InventoryArrayInterfaceManager
     {
         private readonly Texture[] _lines;
         private readonly LocalPlayer _player;

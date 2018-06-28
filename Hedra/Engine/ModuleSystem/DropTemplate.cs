@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public class DropTemplate
+    internal class DropTemplate
     {
         public string Tier { get; set; }
         public string Type { get; set; }

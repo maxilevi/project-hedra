@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.MapSystem
 {
-    public class MapBaseItem
+    internal class MapBaseItem
     {
         public ObjectMesh Mesh { get; set; }
 

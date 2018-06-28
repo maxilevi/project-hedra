@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Testing.GenerationTests
 {
-    public class WorldTester : BaseTest
+    internal class WorldTester : BaseTest
     {
         [TestMethod]
         public void TestIsChunkOffset()

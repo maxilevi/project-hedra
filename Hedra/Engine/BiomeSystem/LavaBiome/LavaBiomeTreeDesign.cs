@@ -3,7 +3,7 @@ using Hedra.Engine.TreeSystem;
 
 namespace Hedra.Engine.BiomeSystem.LavaBiome
 {
-    public class LavaBiomeTreeDesign : BiomeTreeDesign
+    internal class LavaBiomeTreeDesign : BiomeTreeDesign
     {
         public LavaBiomeTreeDesign()
         {

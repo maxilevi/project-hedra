@@ -17,7 +17,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of WarriorAI.
 	/// </summary>
-	public class WarriorAIComponent : CombatAIComponent
+	internal class WarriorAIComponent : CombatAIComponent
     {
         private float _attackTimer;
         private Timer ForgetTimer { get; set; }

@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of OpenGLStateManager.
 	/// </summary>
-	public static class GraphicsLayer
+	internal static class GraphicsLayer
 	{
 		public static int FBOBound { get; set; }
 		public static int ShaderBound { get; set; }

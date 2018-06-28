@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.Generation
 {
-    public class HighlightedArea
+    internal class HighlightedArea
     {
         public Vector3 Position;
         public Vector4 Color;

@@ -18,10 +18,10 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>-
 	/// Description of Panel.
 	/// </summary>
-	public delegate void OnPanelStateChangeEventHandler(object Sender, PanelState E);
-	public delegate void OnEscapePressedEventHandler(object Sender, EventArgs E);
+	internal delegate void OnPanelStateChangeEventHandler(object Sender, PanelState E);
+	internal delegate void OnEscapePressedEventHandler(object Sender, EventArgs E);
 	
-	public class Panel : EventListener
+	internal class Panel : EventListener
 	{
 		private const float MoveSpeed = 2f;
 		public bool Animate = false;

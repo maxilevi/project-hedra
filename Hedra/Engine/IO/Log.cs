@@ -15,7 +15,7 @@ namespace Hedra.Engine
 	/// <summary>
 	/// Description of Log.
 	/// </summary>
-	public static class Log
+	internal static class Log
 	{
 		private static StreamWriter _writer;
 		private static readonly string AppPath;

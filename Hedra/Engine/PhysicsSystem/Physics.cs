@@ -15,7 +15,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-	public static class Physics
+	internal static class Physics
 	{
 		public static float Gravity = -9.81f;
 		public static PhysicsThreadManager Threading = new PhysicsThreadManager();

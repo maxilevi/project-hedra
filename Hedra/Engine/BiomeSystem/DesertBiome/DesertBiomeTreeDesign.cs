@@ -3,7 +3,7 @@ using Hedra.Engine.TreeSystem;
 
 namespace Hedra.Engine.BiomeSystem.DesertBiome
 {
-    public class DesertBiomeTreeDesign : BiomeTreeDesign
+    internal class DesertBiomeTreeDesign : BiomeTreeDesign
     {
         public DesertBiomeTreeDesign()
         {

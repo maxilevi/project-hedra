@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.ModuleSystem.AnimationEvents
 {
-    public class Growl : AnimationEvent
+    internal class Growl : AnimationEvent
     {
         public Growl(Entity Parent) : base(Parent) { }
 

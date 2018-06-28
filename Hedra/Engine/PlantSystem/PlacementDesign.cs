@@ -7,7 +7,7 @@ namespace Hedra.Engine.PlantSystem
     /// <summary>
     /// A design for a plant placement.
     /// </summary>
-    public abstract class PlacementDesign
+    internal abstract class PlacementDesign
     {
         /// <summary>
         /// If the placement can be hidden.

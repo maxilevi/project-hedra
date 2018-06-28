@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem.LavaBiome
 {
-    public class LavaBiomeGenerationDesign :  BiomeGenerationDesign
+    internal class LavaBiomeGenerationDesign :  BiomeGenerationDesign
     {
         public override bool HasRivers { get; set; } = true;
         public override bool HasPaths { get; set; } = true;

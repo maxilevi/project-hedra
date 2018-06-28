@@ -12,7 +12,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Constains all the data used for a Geometry Shader
 	/// </summary>
-	public class PointData : DataContainer
+	internal class PointData : DataContainer
 	{
 		public PointData(Vector3 Position, Vector4 Color)
 		{

@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.BiomeSystem.UndeadBiome
 {
-    public class UndeadBiomeEnviromentDesign : BiomeEnviromentDesign
+    internal class UndeadBiomeEnviromentDesign : BiomeEnviromentDesign
     {
         public UndeadBiomeEnviromentDesign()
         {

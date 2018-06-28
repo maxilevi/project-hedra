@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    public class BiomeDesign
+    internal class BiomeDesign
     {
         public BiomeColorsDesign ColorDesign;
         public BiomeStructureDesign StructureDesign;

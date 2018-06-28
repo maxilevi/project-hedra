@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Skills
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class Resistance : BaseSkill
+	internal class Resistance : BaseSkill
 	{
 	    private bool _set;
 		private float _addonHealth;

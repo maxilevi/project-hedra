@@ -24,7 +24,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 	/// <summary>
 	/// Description of BossObjective.
 	/// </summary>
-	public class BossObjective : Objective
+	internal class BossObjective : Objective
 	{
 		public Entity Boss;
 		private MobType _bossType;

@@ -12,7 +12,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of UIElement.
 	/// </summary>
-	public interface UIElement : IDisposable
+	internal interface UIElement : IDisposable
 	{
 		void Enable();
 		

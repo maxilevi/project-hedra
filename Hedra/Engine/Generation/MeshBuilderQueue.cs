@@ -17,7 +17,7 @@ namespace Hedra.Engine.Generation
 	/// <summary>
 	/// Description of MeshBuilderQueue.
 	/// </summary>
-	public class MeshBuilderQueue
+	internal class MeshBuilderQueue
 	{
 		public List<Chunk> Queue = new List<Chunk>();
 		public bool Stop {get; set;}

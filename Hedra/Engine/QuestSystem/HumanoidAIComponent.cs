@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public abstract class HumanoidAIComponent : EntityComponent
+    internal abstract class HumanoidAIComponent : EntityComponent
     {
         private SleepingPad _bed;
         protected bool IsSleeping { get; private set; }

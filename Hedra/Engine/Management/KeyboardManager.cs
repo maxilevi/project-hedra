@@ -4,7 +4,7 @@ using Hedra.Engine.Events;
 using OpenTK.Input;
 namespace Hedra.Engine.Management
 {
-    public class KeyboardManager
+    internal class KeyboardManager
     {
         private readonly Dictionary<Key, bool> _mappings;
 

@@ -16,7 +16,7 @@ namespace Hedra.Engine.Management
 	/// A static class which gathers all update functions
 	/// </summary>
 	/// TODO: impletem update distance
-	public static class UpdateManager
+	internal static class UpdateManager
 	{
 		private static readonly List<IUpdatable> UpdateFunctions;
 	    private static readonly TickSystem Ticker;

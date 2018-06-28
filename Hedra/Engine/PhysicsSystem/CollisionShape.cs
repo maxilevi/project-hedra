@@ -18,7 +18,7 @@ namespace Hedra.Engine.PhysicsSystem
     /// <summary>
     /// Description of CollisionShape.
     /// </summary>
-    public class CollisionShape : ICollidable
+    internal class CollisionShape : ICollidable
     {
 		public Vector3[] Vertices { get; }
 	    public uint[] Indices { get; }

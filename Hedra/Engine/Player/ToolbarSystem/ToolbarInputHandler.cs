@@ -5,7 +5,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {
-    public class ToolbarInputHandler
+    internal class ToolbarInputHandler
     {
         private readonly LocalPlayer _player;
 

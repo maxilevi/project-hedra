@@ -30,9 +30,9 @@ using Hedra.Engine.StructureSystem;
 
 namespace Hedra.Engine.Generation
 {
-	public delegate void ModulesReloadEvent(string AppPath);
+	internal delegate void ModulesReloadEvent(string AppPath);
 
-	public static class World
+	internal static class World
 	{
 		public const float OverallDifficulty = 1;
 	    public static Dictionary<Vector2, Chunk> SearcheableChunks { get; }

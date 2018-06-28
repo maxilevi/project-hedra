@@ -19,9 +19,9 @@ using Hedra.Engine.QuestSystem;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public delegate bool OnHitGroundEvent(Entity Parent, float Falltime);
+    internal delegate bool OnHitGroundEvent(Entity Parent, float Falltime);
 
-    public class  PhysicsComponent : EntityComponent
+    internal class  PhysicsComponent : EntityComponent
 	{
 	    public event OnHitGroundEvent OnHitGround;
 		public bool UsePhysics { get; set; }

@@ -20,7 +20,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of BurningComponent.
 	/// </summary>
-	public class BurningComponent : EntityComponent
+	internal class BurningComponent : EntityComponent
 	{
 		private readonly float _totalTime;
 	    private readonly float _totalDamage;

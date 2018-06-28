@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
-    public class NormalBiomeSkyDesign : BiomeSkyDesign
+    internal class NormalBiomeSkyDesign : BiomeSkyDesign
     {
         public override Vector4 AfternoonTop(int Seed)
         {

@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of MarchingCubes.
 	/// </summary>
-	public static class MarchingCubes
+	internal static class MarchingCubes
 	{
 		#region Tables
         static int[] EdgeTable = new int[256]{
@@ -514,7 +514,7 @@ namespace Hedra.Engine.Rendering
 	    
 	}
 	
-    public struct GridCell
+    internal struct GridCell
     {
         public Vector3[] P;
         public double[] Density;
@@ -541,7 +541,7 @@ namespace Hedra.Engine.Rendering
         	return Cell1;
         }
     }
-    public struct Triangle
+    internal struct Triangle
     {
         public Vector3[] P;
         

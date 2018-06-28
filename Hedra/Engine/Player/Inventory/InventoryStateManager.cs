@@ -8,9 +8,9 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    public delegate void OnStateChangeEventHandler(bool State);
+    internal delegate void OnStateChangeEventHandler(bool State);
 
-    public class InventoryStateManager : StateManager
+    internal class InventoryStateManager : StateManager
     {
         private bool _isExiting;
         public event OnStateChangeEventHandler OnStateChange;

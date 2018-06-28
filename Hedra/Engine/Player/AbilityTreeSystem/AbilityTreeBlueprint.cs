@@ -14,7 +14,7 @@ namespace Hedra.Engine.Player.Skills
 	/// <summary>
 	/// Description of TreeBlueprint.
 	/// </summary>
-	public abstract class AbilityTreeBlueprint
+	internal abstract class AbilityTreeBlueprint
 	{
 		public TreeItem[][] Items = new TreeItem[3][];
 		public Vector4 ActiveColor;

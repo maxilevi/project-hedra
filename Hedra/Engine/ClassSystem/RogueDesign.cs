@@ -5,7 +5,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.ClassSystem
 {
-    public class RogueDesign : ClassDesign
+    internal class RogueDesign : ClassDesign
     {
         public override bool CanAccumulateHits { get; } = true;
         public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/RogueLogo.png");

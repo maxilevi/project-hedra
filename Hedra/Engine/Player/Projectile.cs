@@ -22,11 +22,11 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Projectile.
 	/// </summary>
-	public delegate void OnProjectileHitEvent(Projectile Sender, Entity Hit);
-	public delegate void OnProjectileLandEvent(Projectile Sender);
-	public delegate void OnProjectileMoveEvent(Projectile Sender);
+	internal delegate void OnProjectileHitEvent(Projectile Sender, Entity Hit);
+	internal delegate void OnProjectileLandEvent(Projectile Sender);
+	internal delegate void OnProjectileMoveEvent(Projectile Sender);
 	
-	public class Projectile : IDisposable, IUpdatable
+	internal class Projectile : IDisposable, IUpdatable
 	{
 		public event OnProjectileHitEvent HitEventHandler;
 		public event OnProjectileMoveEvent MoveEventHandler;

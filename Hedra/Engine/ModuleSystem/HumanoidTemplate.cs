@@ -3,7 +3,7 @@ using Hedra.Engine.ClassSystem;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public class HumanoidTemplate
+    internal class HumanoidTemplate
     {
         public string Name { get; set; }
         public float XP { get; set; } = 1.0f;

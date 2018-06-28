@@ -11,7 +11,7 @@ using OpenTK;
 namespace Hedra.Engine.Generation
 {
 	[StructLayout(LayoutKind.Explicit, Size=4)]
-	public struct Block
+	internal struct Block
 	{
 	    [FieldOffset(0)] private BlockType _type;
 		[FieldOffset(1)] private bool _noise3D;

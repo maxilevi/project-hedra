@@ -10,7 +10,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Events
 {
-	public interface IEventListener
+	internal interface IEventListener
 	{
 		void OnMouseButtonUp(object sender, MouseButtonEventArgs e);
 		

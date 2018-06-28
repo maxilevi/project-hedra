@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of MarchingTetraHedra.
 	/// </summary>
-	public static class MarchingTetraHedra
+	internal static class MarchingTetraHedra
 	{
         
          public static MarchingData Process(double IsoLevel, GridCell Cell, Vector4 Color)

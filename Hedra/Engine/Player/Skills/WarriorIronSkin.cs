@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.Player.Skills
 {
-    public class WarriorIronSkin : BaseSkill
+    internal class WarriorIronSkin : BaseSkill
     {
         public override string Description => "Harden your s";
         public override void Use()

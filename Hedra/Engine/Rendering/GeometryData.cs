@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.Rendering
 {
-    public class GeometryData
+    internal class GeometryData
     {
         public Vector3[] Vertices { get; set; }
         public Vector3[] Normals { get; set; }

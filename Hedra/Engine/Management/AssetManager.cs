@@ -26,7 +26,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of AssetManager.
 	/// </summary>
-	public static class AssetManager
+	internal static class AssetManager
 	{
 		public static Color[] Palette = new Color[256];
 		public const string DataFile1 = "data1.db";

@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 	/// <summary>
 	/// Description of SkillsBar.
 	/// </summary>
-	public class Toolbar
+	internal class Toolbar
 	{
         public const int InteractableItems = 4;
 	    public const int BarItems = 7;

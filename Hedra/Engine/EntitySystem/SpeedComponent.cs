@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.EntitySystem
 {
-    public class SpeedComponent : EntityComponent
+    internal class SpeedComponent : EntityComponent
     {
         public int Chance { get; set; } = 15;
         public float SpeedBonus { get; set; } = .5f;

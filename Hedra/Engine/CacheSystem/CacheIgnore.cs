@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.CacheSystem
 {
-    public class CacheIgnore : Attribute
+    internal class CacheIgnore : Attribute
     {
     }
 }

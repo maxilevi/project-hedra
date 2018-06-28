@@ -6,7 +6,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public class CarriageAIComponent : EntityComponent
+    internal class CarriageAIComponent : EntityComponent
     {
         
         public CarriageAIComponent(Entity Entity) : base(Entity)

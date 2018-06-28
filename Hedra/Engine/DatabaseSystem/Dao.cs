@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Hedra.Engine.DatabaseSystem
 {
-    public class Dao
+    internal class Dao
     {
         /*public SQLiteConnection Connection { get; }
 

@@ -15,7 +15,7 @@ namespace Hedra.Engine.Sound
 	/// <summary>
 	/// Description of SoundSource.
 	/// </summary>
-	public class SoundSource
+	internal class SoundSource
 	{
 		public uint ID;
 		

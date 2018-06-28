@@ -9,7 +9,7 @@ using OpenTK.Input;
 using OpenTK;
 namespace Hedra.Engine.Events
 {
-	public class EventListener : IEventListener
+	internal class EventListener : IEventListener
 	{
 		public EventListener(){
 			EventDispatcher.Add(this);

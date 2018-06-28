@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    public class GiantBeetleAttackBehaviour : AttackBehaviour
+    internal class GiantBeetleAttackBehaviour : AttackBehaviour
     {
         protected const int SpitAnimationIndex = 1;
         protected const int BiteAnimationIndex = 0;

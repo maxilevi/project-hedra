@@ -7,7 +7,7 @@ using Hedra.Engine.Player.Inventory;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public abstract class TradeComponent : EntityComponent
+    internal abstract class TradeComponent : EntityComponent
     {
         public new Humanoid Parent;
         public Dictionary<int, Item> Items { get; private set; }

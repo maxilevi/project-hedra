@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering
 {
-    public class Texture3D : IDisposable
+    internal class Texture3D : IDisposable
     {
         public uint Id { get; }
 

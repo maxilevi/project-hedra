@@ -9,7 +9,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Management
 {
-	public interface ICullable
+	internal interface ICullable
 	{
 		bool Enabled { get; set; }
 	    Vector3 Position { get; set; }

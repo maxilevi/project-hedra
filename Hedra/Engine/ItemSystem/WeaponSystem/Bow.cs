@@ -17,9 +17,9 @@ using OpenTK;
 
 namespace Hedra.Engine.ItemSystem.WeaponSystem
 {
-	public delegate void OnModifyArrowEvent(Projectile Arrow);
+	internal delegate void OnModifyArrowEvent(Projectile Arrow);
 		
-	public class Bow : RangedWeapon
+	internal class Bow : RangedWeapon
     {	
 		public override Vector3 SheathedPosition => new Vector3(1.5f,-0.0f,0.0f);
 	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );

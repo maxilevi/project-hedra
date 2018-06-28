@@ -4,7 +4,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Testing.CodePolicies
 {
-    public class ShaderCodePolicy : BaseTest
+    internal class ShaderCodePolicy : BaseTest
     {
         private string _shaderCode;
 

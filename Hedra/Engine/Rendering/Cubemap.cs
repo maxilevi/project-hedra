@@ -5,7 +5,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering
 {
-    public class Cubemap
+    internal class Cubemap
     {
         public uint TextureId { get;}
 

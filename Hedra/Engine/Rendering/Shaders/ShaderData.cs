@@ -6,7 +6,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.Shaders
 {
-    public class ShaderData
+    internal class ShaderData
     {
         public string Source { get; set; }
         public string Path { get; set; }

@@ -6,7 +6,7 @@ using Hedra.Engine.Player.Inventory;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public class BlacksmithComponent :  TradeComponent
+    internal class BlacksmithComponent :  TradeComponent
     {
         public BlacksmithComponent(Humanoid Parent) : base(Parent)
         {

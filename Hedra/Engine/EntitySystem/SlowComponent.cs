@@ -16,7 +16,7 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     /// Description of FireComponent.
     /// </summary>
-    public class SlowComponent : EntityComponent, IEffectComponent
+    internal class SlowComponent : EntityComponent, IEffectComponent
     {
         public int Chance { get; set; } = 15;
         public float Damage { get; set; } = 60;

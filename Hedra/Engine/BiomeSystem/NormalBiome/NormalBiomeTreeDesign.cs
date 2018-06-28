@@ -3,7 +3,7 @@ using Hedra.Engine.TreeSystem;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
-    public class NormalBiomeTreeDesign : BiomeTreeDesign
+    internal class NormalBiomeTreeDesign : BiomeTreeDesign
     {
         public NormalBiomeTreeDesign()
         {

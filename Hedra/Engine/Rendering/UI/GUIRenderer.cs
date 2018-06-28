@@ -11,7 +11,7 @@ namespace Hedra.Engine.Rendering.UI
     /// <summary>
     ///     Description of GUIRenderer.
     /// </summary>
-    public class GUIRenderer : IDisposable
+    internal class GUIRenderer : IDisposable
     {
         public static Shader Shader;
         public static uint TransparentTexture { get; private set; }

@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of FireRelease.
 	/// </summary>
-	public class FireRelease : BaseSkill
+	internal class FireRelease : BaseSkill
 	{
 		
 		private float Damage = 50f;

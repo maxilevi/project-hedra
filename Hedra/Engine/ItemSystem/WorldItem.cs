@@ -21,9 +21,9 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.ItemSystem
 {
-	public delegate void OnItemCollect(LocalPlayer Player);
+	internal delegate void OnItemCollect(LocalPlayer Player);
 
-	public class WorldItem : UpdatableModel<ObjectMesh>, IUpdatable
+	internal class WorldItem : UpdatableModel<ObjectMesh>, IUpdatable
 	{
         private static ushort _itemCounter;
 		public bool PickedUp { get; private set; }

@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class Fade : BaseSkill
+	internal class Fade : BaseSkill
 	{
 		
 		public Fade() : base() 

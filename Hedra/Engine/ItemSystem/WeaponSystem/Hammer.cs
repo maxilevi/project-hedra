@@ -19,7 +19,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// <summary>
 	/// Description of TwoHandedSword.
 	/// </summary>
-	public class Hammer : MeleeWeapon
+	internal class Hammer : MeleeWeapon
     {
 	    public override float PrimaryAttackCooldown => 2.0f;
 	    public override float SecondaryAttackCooldown => 4.0f;

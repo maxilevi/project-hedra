@@ -26,7 +26,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of Chest.
 	/// </summary>
-	public class Chest : BaseStructure, IUpdatable
+	internal class Chest : BaseStructure, IUpdatable
 	{
 		private AnimatedModel Model;
 		private Animation IdleAnimation;

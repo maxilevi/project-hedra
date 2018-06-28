@@ -26,7 +26,7 @@ namespace Hedra.Engine.Scenes
 	/// <summary>
 	/// Description of MenuBackground.
 	/// </summary>
-	public static class MenuBackground
+	internal static class MenuBackground
 	{
 		
 		public static bool Campfire = false, Creator = false;

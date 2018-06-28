@@ -14,7 +14,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of EntityComponent.
 	/// </summary>
-	public abstract class EntityComponent : IUpdatable
+	internal abstract class EntityComponent : IUpdatable
 	{	
         public bool Renderable { get; }
 		protected bool Disposed { get; private set; }

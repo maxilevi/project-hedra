@@ -13,7 +13,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.Particles
 {
-	public class ParticleSystem : IRenderable, IUpdatable, IDisposable
+	internal class ParticleSystem : IRenderable, IUpdatable, IDisposable
 	{
 		public const int MaxParticleCount = 15000;
 	    public int MaxParticles { get; set; } = MaxParticleCount; 

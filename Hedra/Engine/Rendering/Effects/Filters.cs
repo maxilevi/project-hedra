@@ -11,7 +11,7 @@ using System.Drawing.Drawing2D;
 
 namespace Hedra.Engine.Rendering
 {
-	public static class Filters
+	internal static class Filters
 	{
 		/*public static bool FilterWhite(Bitmap b){
 			BitmapData bmData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);

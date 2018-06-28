@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.MapSystem
 {
-    public class MapBuilder
+    internal class MapBuilder
     {
         private static readonly CollidableStructure[] EmptyItems = new CollidableStructure[0];
 

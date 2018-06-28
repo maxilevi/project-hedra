@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class Agility : BaseSkill
+	internal class Agility : BaseSkill
 	{
 		private float BonusStamina = 0;
 		private int PrevLevel = 0;

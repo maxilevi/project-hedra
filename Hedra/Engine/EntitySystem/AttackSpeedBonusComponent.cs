@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.EntitySystem
 {
-    public class AttackSpeedBonusComponent : EntityComponent
+    internal class AttackSpeedBonusComponent : EntityComponent
     {
         public new Humanoid Parent;
         private readonly float _attackSpeedBonus;

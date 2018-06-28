@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of SkinningData.
 	/// </summary>
-	public class SkinningData
+	internal class SkinningData
 	{
 		public readonly List<string> JointOrder;
 		public readonly List<VertexSkinData> VerticesSkinData;

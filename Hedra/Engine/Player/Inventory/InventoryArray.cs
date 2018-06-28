@@ -5,9 +5,9 @@ using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    public delegate void OnItemSetEventHandler(int Index, Item New);
+    internal delegate void OnItemSetEventHandler(int Index, Item New);
 
-    public class InventoryArray
+    internal class InventoryArray
     {
         public event OnItemSetEventHandler OnItemSet;
         private readonly Item[] _items;

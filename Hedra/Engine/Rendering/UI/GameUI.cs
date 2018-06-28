@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of GameUI.
 	/// </summary>
-	public class GameUI : Panel
+	internal class GameUI : Panel
 	{
 	    public static Vector2 TargetResolution = new Vector2(1024, 578);
         public readonly Texture Cross;

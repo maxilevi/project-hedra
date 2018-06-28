@@ -5,7 +5,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.ClassSystem
 {
-    public class WarriorDesign : ClassDesign
+    internal class WarriorDesign : ClassDesign
     {
         public override bool CanAccumulateHits { get; } = false;
         public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/WarriorLogo.png");

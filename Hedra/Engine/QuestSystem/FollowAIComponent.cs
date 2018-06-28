@@ -17,7 +17,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of OldManAIComponent.
 	/// </summary>
-	public class FollowAIComponent : EntityComponent
+	internal class FollowAIComponent : EntityComponent
 	{
 		public Entity ToFollow = null;
 		public bool DoLogic = true;

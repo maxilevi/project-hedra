@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of ChunkGeometry.
 	/// </summary>
-	public static class ChunkGeometry
+	internal static class ChunkGeometry
 	{
 		private static Dictionary<int, byte[]> Geometry = new Dictionary<int, byte[]>();
 		

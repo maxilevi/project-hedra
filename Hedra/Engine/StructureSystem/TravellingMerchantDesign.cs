@@ -12,7 +12,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public class TravellingMerchantDesign : StructureDesign
+    internal class TravellingMerchantDesign : StructureDesign
     {
         public override int Radius { get; set; } = 512;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.MerchantIcon);

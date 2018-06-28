@@ -22,7 +22,7 @@ namespace Hedra.Engine.Rendering.UI
     /// <summary>
     /// Description of OptionsUI.
     /// </summary>
-    public class OptionsUI : Panel
+    internal class OptionsUI : Panel
 	{
 	    public Button DonateBtcButton = null;
         private List<UIElement> _graphicsButtons = new List<UIElement>();

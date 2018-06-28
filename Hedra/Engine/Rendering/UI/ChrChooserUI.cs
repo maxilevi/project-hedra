@@ -22,7 +22,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of ChrChooserUI.
 	/// </summary>
-	public class ChrChooserUI : Panel
+	internal class ChrChooserUI : Panel
 	{
 		private PlayerInformation[] _information;
 		private readonly List<Humanoid> _humans;

@@ -7,7 +7,7 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public class HumanoidComponentsTemplater
+    internal class HumanoidComponentsTemplater
     {
         private static Dictionary<string, HumanoidComponentsTemplate> _componentsTemplates;
 

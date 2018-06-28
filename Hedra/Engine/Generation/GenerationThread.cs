@@ -14,7 +14,7 @@ namespace Hedra.Engine.Generation
 	/// <summary>
 	/// Description of GenerationThread.
 	/// </summary>
-	public class GenerationThread
+	internal class GenerationThread
 	{
 		public Thread WorkingThread;
 		public bool IsWorking{ get; set;}

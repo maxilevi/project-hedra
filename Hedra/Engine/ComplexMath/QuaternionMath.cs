@@ -3,7 +3,7 @@ using System;
 
 namespace Hedra.Engine.ComplexMath
 {
-    public static class QuaternionMath
+    internal static class QuaternionMath
     {
         /// <summary>
         /// Transform a quaternion into an equivalent euler rotation.

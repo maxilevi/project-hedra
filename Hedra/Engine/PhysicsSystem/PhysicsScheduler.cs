@@ -4,7 +4,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    public static class PhysicsScheduler
+    internal static class PhysicsScheduler
     {
         private static uint _lastId;
         private static readonly Dictionary<uint, PhysicsListener> Listeners = new Dictionary<uint, PhysicsListener>();

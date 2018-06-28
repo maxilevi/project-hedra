@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.ItemSystem.WeaponSystem
 {
-    public abstract class MeleeWeapon : Weapon
+    internal abstract class MeleeWeapon : Weapon
     {
         public int WeaponCount { get; private set; }
         public override bool IsMelee { get; protected set; } = true;

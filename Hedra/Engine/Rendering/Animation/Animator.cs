@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace Hedra.Engine.Rendering.Animation
 {
 	
-	public class Animator
+	internal class Animator
 	{
 		public AnimatedModel Entity {get; private set;}
 		public Animation AnimationPlaying { get { if(TargetAnimation != null) return this.TargetAnimation; else return this.CurrentAnimation;} }

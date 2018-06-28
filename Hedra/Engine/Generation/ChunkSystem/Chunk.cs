@@ -18,7 +18,7 @@ using Region = Hedra.Engine.BiomeSystem.Region;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    public class Chunk : IDisposable
+    internal class Chunk : IDisposable
     {
         public static int BaseHeight { get; } = 24;
         public static float BlockSize { get; } = 4.0f;

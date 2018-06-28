@@ -5,19 +5,15 @@
  *
  */
 using System;
-using System.Collections.Generic;
-using OpenTK;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.Effects;
 
 namespace Hedra.Engine.Rendering
 {
 	/// <summary>
 	/// Description of FBO.
 	/// </summary>
-	public class FBO : IDisposable
+	internal class FBO : IDisposable
 	{
         /// <summary>
         /// The ID for the entire framebuffer object.

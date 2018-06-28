@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of ColladaLoader.
 	/// </summary>
-	public static class ColladaLoader
+	internal static class ColladaLoader
 	{
 		public static AnimatedModelData LoadColladaModel(string ColladaFile, int MaxWeights) {
 			XmlDocument Document = new XmlDocument();

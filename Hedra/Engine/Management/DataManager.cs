@@ -20,7 +20,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of SaveManager.
 	/// </summary>
-	public static class DataManager
+	internal static class DataManager
 	{
 		public const float SaveVersion = 1.12f;
 		

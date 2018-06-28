@@ -4,7 +4,7 @@ using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    public abstract class BiomeStructureDesign
+    internal abstract class BiomeStructureDesign
     {
         private List<StructureDesign> _designs { get; } = new List<StructureDesign>();
 

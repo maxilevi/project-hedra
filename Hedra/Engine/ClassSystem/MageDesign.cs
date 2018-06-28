@@ -6,7 +6,7 @@ using Hedra.Engine.Rendering;
 namespace Hedra.Engine.ClassSystem
 {
     [HiddenClass]
-    public class MageDesign : ClassDesign
+    internal class MageDesign : ClassDesign
     {
         public override bool CanAccumulateHits { get; } = true;
         public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/ArcherLogo.png");

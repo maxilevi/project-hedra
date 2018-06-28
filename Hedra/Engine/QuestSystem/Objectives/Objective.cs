@@ -29,7 +29,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
     /// <summary>
     ///     Description of Objective.
     /// </summary>
-    public abstract class Objective
+    internal abstract class Objective
     {
         public static Vector3 DefaultPosition = new Vector3(
             BiomePool.WorldWidth * .5f + GameSettings.SpawnPoint.X,

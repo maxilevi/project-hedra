@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    public class ChunkMeshBuildOutput
+    internal class ChunkMeshBuildOutput
     {
         public VertexData StaticData { get; set; }
         public VertexData WaterData { get; set; }

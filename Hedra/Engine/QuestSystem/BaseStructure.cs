@@ -16,7 +16,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of Structure.
 	/// </summary>
-	public class BaseStructure : IDisposable, IStructure, ISearchable
+	internal class BaseStructure : IDisposable, IStructure, ISearchable
     {
         public Vector3 Position { get; set; }
 		protected bool Disposed;

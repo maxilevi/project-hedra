@@ -19,7 +19,7 @@ namespace Hedra.Engine.QuestSystem
     /// <summary>
     /// Description of WarriorAI.
     /// </summary>
-    public class VillagerAIComponent : HumanoidAIComponent
+    internal class VillagerAIComponent : HumanoidAIComponent
     {
         private readonly bool _move;
         private Vector3 _targetPoint;

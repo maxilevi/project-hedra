@@ -3,7 +3,7 @@ using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem.LavaBiome
 {
-    public class LavaBiomeStructureDesign : BiomeStructureDesign
+    internal class LavaBiomeStructureDesign : BiomeStructureDesign
     {
         public LavaBiomeStructureDesign()
         {

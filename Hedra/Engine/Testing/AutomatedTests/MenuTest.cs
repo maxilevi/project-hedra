@@ -12,7 +12,7 @@ using Panel = Hedra.Engine.Rendering.UI.Panel;
 
 namespace Hedra.Engine.Testing.AutomatedTests
 {
-    public class MenuTest : BaseAutomatedTest
+    internal class MenuTest : BaseAutomatedTest
     {
         private const string _characterName = "_test";
 

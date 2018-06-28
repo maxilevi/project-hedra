@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    public class ObjectMeshCollider : IDisposable
+    internal class ObjectMeshCollider : IDisposable
     {
         private static readonly Dictionary<VertexData, BoneBox> Cache = new Dictionary<VertexData, BoneBox>();
         private readonly BoneBox _originalCollider;

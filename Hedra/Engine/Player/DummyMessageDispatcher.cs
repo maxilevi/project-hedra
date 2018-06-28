@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Hedra.Engine.Player
 {
-    public class DummyMessageDispatcher : IMessageDispatcher
+    internal class DummyMessageDispatcher : IMessageDispatcher
     {
         public void ShowTitleMessage(string Message, float Seconds)
         {

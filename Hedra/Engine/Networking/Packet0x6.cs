@@ -16,7 +16,7 @@ namespace Hedra.Engine.Networking
 	/// Description of Packet0x6.
 	/// </summary>
 	[Serializable]
-	public class Packet0x6
+	internal class Packet0x6
 	{
 		public int Seed;
 		public float DayTime = 12000;

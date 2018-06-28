@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of MemoryEntry.
 	/// </summary>
-	public class MemoryEntry
+	internal class MemoryEntry
 	{
 		public int Offset, Length;
 		

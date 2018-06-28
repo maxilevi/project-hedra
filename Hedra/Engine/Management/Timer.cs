@@ -11,7 +11,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of Timer.
 	/// </summary>
-	public class Timer
+	internal class Timer
 	{
 		private float _timerCount;
 	    public bool AutoReset { get; set; } = true;

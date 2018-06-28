@@ -3,7 +3,7 @@ using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    public class RegionStructure
+    internal class RegionStructure
     {
         private readonly int _seed;
      

@@ -4,7 +4,7 @@ using Hedra.Engine.ModuleSystem;
 
 namespace Hedra.Engine.BiomeSystem.LavaBiome
 {
-    public class LavaBiomeMobDesign : BiomeMobDesign
+    internal class LavaBiomeMobDesign : BiomeMobDesign
     {
         private SpawnerSettings _settings;
         public override SpawnerSettings Settings => _settings;

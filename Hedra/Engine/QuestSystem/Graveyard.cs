@@ -19,7 +19,7 @@ namespace Hedra.Engine.QuestSystem
     /// <summary>
     /// Description of Cementary.
     /// </summary>
-    public class Graveyard : BaseStructure, IUpdatable
+    internal class Graveyard : BaseStructure, IUpdatable
 	{
 		private readonly ParticleSystem _particles = new ParticleSystem();
 		private readonly int _passedTime = 0;

@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    public abstract class BiomeGenerationDesign
+    internal abstract class BiomeGenerationDesign
     {
         public abstract bool HasRivers { get; set; }
         public abstract bool HasPaths { get; set; }

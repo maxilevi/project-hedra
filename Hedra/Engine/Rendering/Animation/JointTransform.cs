@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering.Animation
 	/// <summary>
 	/// Description of JointTransform.
 	/// </summary>
-	public class JointTransform
+	internal class JointTransform
 	{
 		public Vector3 Position {get; private set;}
 		public Quaternion Rotation {get; private set;}

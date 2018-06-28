@@ -15,7 +15,7 @@ namespace Hedra.Engine.Networking
 	/// <summary>
 	/// Description of Packet0x14.
 	/// </summary>
-	public class Packet0x14
+	internal class Packet0x14
 	{
 		public float XP;
 		

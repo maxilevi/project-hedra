@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public static class MobLoader
+    internal static class MobLoader
     {
         public static IEnemyFactory[] LoadModules(string AppPath)
         {

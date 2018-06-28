@@ -18,7 +18,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of VertexData.
 	/// </summary>
-	public class VertexData : IDisposable
+	internal class VertexData : IDisposable
     {
 		public List<Vector3> Vertices = new List<Vector3>();
 		public List<Vector4> Colors = new List<Vector4>();

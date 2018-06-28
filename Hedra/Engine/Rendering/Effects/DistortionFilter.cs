@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering.Effects
 	/// <summary>
 	/// Description of UnderWaterFilter.
 	/// </summary>
-	public class DistortionFilter : Filter
+	internal class DistortionFilter : Filter
 	{
 	    private static readonly Shader WaterEffect;
 	    private static readonly uint DuDvMapId;

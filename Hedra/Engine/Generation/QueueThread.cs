@@ -16,7 +16,7 @@ namespace Hedra.Engine.Generation
 	/// <summary>
 	/// Description of QueueThread.
 	/// </summary>
-	public class QueueThread
+	internal class QueueThread
 	{
 		public Thread WorkingThread;
 		public bool IsWorking{ get; set;}

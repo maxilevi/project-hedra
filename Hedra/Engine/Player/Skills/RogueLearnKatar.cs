@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class LearnKatar : LearningSkill
+	internal class LearnKatar : LearningSkill
 	{
 		public override uint TexId => Graphics2D.LoadFromAssets("Assets/Skills/Katar.png");
 		public override void Learn()

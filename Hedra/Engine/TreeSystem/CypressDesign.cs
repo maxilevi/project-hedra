@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.TreeSystem
 {
-    public class CypressDesign : TreeDesign
+    internal class CypressDesign : TreeDesign
     {
         public override float Spacing => 75f;
         public override VertexData Model => CacheManager.GetModel(CacheItem.CypressTrees);

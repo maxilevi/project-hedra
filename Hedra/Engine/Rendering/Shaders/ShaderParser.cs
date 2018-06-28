@@ -12,7 +12,7 @@ namespace Hedra.Engine.Rendering.Shaders
     /// <summary>
     /// Partial shader parser for detecting certain uniforms
     /// </summary>
-    public class ShaderParser
+    internal class ShaderParser
     {
         public string Source { get; set; }
 

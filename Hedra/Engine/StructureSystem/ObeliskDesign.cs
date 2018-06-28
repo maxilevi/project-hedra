@@ -15,7 +15,7 @@ using ObeliskType = Hedra.Engine.QuestSystem.ObeliskType;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public class ObeliskDesign : StructureDesign
+    internal class ObeliskDesign : StructureDesign
     {
         public override int Radius { get; set; } = 256;
         public override VertexData Icon => null;

@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    public abstract class VillageScheme
+    internal abstract class VillageScheme
     {
         private readonly Dictionary<Vector3, float> _positions;
 

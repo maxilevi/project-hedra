@@ -23,7 +23,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of Campfire.
 	/// </summary>
-	public class Campfire : BaseStructure, IUpdatable
+	internal class Campfire : BaseStructure, IUpdatable
 	{
 	    private static ParticleSystem _fireParticles;
         private long _passedTime;

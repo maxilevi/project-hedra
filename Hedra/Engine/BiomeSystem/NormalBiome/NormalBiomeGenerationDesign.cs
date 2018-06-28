@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
-    public class NormalBiomeGenerationDesign :  BiomeGenerationDesign
+    internal class NormalBiomeGenerationDesign :  BiomeGenerationDesign
     {
         public override bool HasRivers { get; set; } = true;
         public override bool HasPaths { get; set; } = true;

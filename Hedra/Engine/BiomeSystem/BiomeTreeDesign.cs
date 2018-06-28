@@ -6,7 +6,7 @@ using Hedra.Engine.TreeSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    public abstract class BiomeTreeDesign
+    internal abstract class BiomeTreeDesign
     {
         public abstract TreeDesign[] AvailableTypes { get; }
     }

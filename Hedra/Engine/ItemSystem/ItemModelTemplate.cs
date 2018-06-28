@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.ItemSystem
 {
-    public class ItemModelTemplate
+    internal class ItemModelTemplate
     {
         public string Path { get; set; }
         public float Scale { get; set; }

@@ -18,7 +18,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of BurningComponent.
 	/// </summary>
-	public class FreezingComponent : EntityComponent
+	internal class FreezingComponent : EntityComponent
 	{
 	    private readonly float _totalTime;
 	    private float _time;

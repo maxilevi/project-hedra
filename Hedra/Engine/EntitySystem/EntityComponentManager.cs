@@ -6,7 +6,7 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public class EntityComponentManager
+    internal class EntityComponentManager
     {
         private readonly Entity _parent;
         private readonly HashSet<EntityComponent> _components;

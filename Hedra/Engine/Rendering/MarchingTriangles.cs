@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of MarchingTriangles.
 	/// </summary>
-	public static class MarchingTriangles
+	internal static class MarchingTriangles
 	{
 		public static VertexData Triangulate(Chunk Chunk){
 			VertexData Data = new VertexData();
@@ -37,7 +37,7 @@ namespace Hedra.Engine.Rendering
 			return Data;
 		}
 		
-		public struct Hexagon{
+		internal struct Hexagon{
 			public Triangle[] Triangles;
 			
 			public Hexagon(Vector3 Middle, Vector4 Color, int Size){
@@ -45,7 +45,7 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 		
-		public struct Triangle{
+		internal struct Triangle{
 			public Vertex V1, V2, V3;
 			
 			public Triangle(Vertex V1, Vertex V2, Vertex V3){
@@ -74,7 +74,7 @@ namespace Hedra.Engine.Rendering
 		}
 	}
 	
-	public struct Vertex{
+	internal struct Vertex{
 		public Vector3 Point;
 		public Vector4 Color;
 		public Vector3 Normal;

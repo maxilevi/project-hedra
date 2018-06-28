@@ -16,7 +16,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of Occludable.
 	/// </summary>
-	public abstract class Occludable
+	internal abstract class Occludable
 	{
 		public Vector3 OccluMin, OccluSize;
 		protected int OcclusionQuery;

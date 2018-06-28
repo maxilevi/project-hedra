@@ -17,7 +17,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public class BanditCamp : BaseStructure, IUpdatable
+    internal class BanditCamp : BaseStructure, IUpdatable
     {
         private readonly int _passedTime = 0;
         private bool _restoreSoundPlayed;

@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.BiomeSystem.LavaBiome
 {
-    public class LavaBiomeEnviromentDesign : BiomeEnviromentDesign
+    internal class LavaBiomeEnviromentDesign : BiomeEnviromentDesign
     {
         public LavaBiomeEnviromentDesign()
         {

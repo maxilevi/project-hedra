@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Hedra.Engine.Management
 {
-	public static class CoroutineManager
+	internal static class CoroutineManager
 	{
 		public static List<IEnumerator> Coroutines = new List<IEnumerator>();
 

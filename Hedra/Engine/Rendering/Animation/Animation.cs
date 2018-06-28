@@ -12,9 +12,9 @@ using System.Collections.Generic;
 
 namespace Hedra.Engine.Rendering.Animation
 {
-	public delegate void OnAnimationHandler(Animation Sender);
+	internal delegate void OnAnimationHandler(Animation Sender);
 	
-	public class Animation : IDisposable
+	internal class Animation : IDisposable
 	{
 		public event OnAnimationHandler OnAnimationEnd;
 		public event OnAnimationHandler OnAnimationMid;

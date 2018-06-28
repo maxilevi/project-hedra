@@ -14,7 +14,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of Plateau.
 	/// </summary>
-	public class Plateau
+	internal class Plateau
 	{
 		public Vector3 Position { get; set; }
 		public float Height { get; set; }

@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// An object which represents the rendering information of a cube
 	/// </summary>
-	public class CubeData : DataContainer
+	internal class CubeData : DataContainer
 	{	
 		public static uint[][] IndexArray = new uint[][]{
 			new uint[]{4, 5, 6,  6, 7, 4},

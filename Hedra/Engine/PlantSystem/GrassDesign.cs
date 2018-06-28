@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    public class GrassDesign : PlantDesign
+    internal class GrassDesign : PlantDesign
     {
         public override VertexData Model => CacheManager.GetModel(CacheItem.Grass);
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)

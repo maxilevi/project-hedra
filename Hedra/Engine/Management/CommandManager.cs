@@ -25,7 +25,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of CommandManager.
 	/// </summary>
-	public static class CommandManager
+	internal static class CommandManager
 	{
 		
 		public static bool ProcessCommand(string Command, Entity Caster, out string Result){

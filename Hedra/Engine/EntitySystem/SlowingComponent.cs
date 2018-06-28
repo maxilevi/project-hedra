@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public class SlowingComponent : EntityComponent
+    internal class SlowingComponent : EntityComponent
     {
         private readonly float _totalTime;
         private readonly float _slowPercentage;

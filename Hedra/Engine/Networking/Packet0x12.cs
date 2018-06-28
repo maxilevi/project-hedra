@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace Hedra.Engine.Networking
 {
 	[Serializable]
-	public class Packet0x12
+	internal class Packet0x12
 	{
 		public ushort[] Seeds;
 		public byte[] MobTypes;

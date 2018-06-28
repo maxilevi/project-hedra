@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.BiomeSystem
 {
-    public class RegionMob
+    internal class RegionMob
     {
         private readonly int _seed;
         private readonly BiomeMobDesign _design;

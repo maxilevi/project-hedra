@@ -26,7 +26,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of SheepModel.
 	/// </summary>
-	public sealed class QuadrupedModel : UpdatableModel<AnimatedModel>, IMountable, IAudible, IDisposeAnimation
+	internal sealed class QuadrupedModel : UpdatableModel<AnimatedModel>, IMountable, IAudible, IDisposeAnimation
     {	
         public override bool IsWalking => Array.IndexOf(WalkAnimations, this.Model.Animator.AnimationPlaying) != -1;
         public override bool IsIdling => Array.IndexOf(IdleAnimations, this.Model.Animator.AnimationPlaying) != -1;

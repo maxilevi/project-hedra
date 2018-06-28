@@ -20,7 +20,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 
 namespace Hedra.Engine.Generation
 {
-    public class ChunkLoader
+    internal class ChunkLoader
     {
         public Vector2 Offset { get; set; }
         public bool Enabled { get; set; }

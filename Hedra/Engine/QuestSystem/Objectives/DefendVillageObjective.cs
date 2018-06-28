@@ -13,7 +13,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 	/// <summary>
 	/// Description of DefendVillageObjective.
 	/// </summary>
-	public class DefendVillageObjective
+	internal class DefendVillageObjective
 	{
 		public DefendVillageObjective()
 		{

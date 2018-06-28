@@ -1,6 +1,6 @@
 namespace Hedra.Engine.ModuleSystem
 {
-    public class AttackAnimationTemplate : AnimationTemplate
+    internal class AttackAnimationTemplate : AnimationTemplate
     {
         public string AttackEvent { get; set; } = "Mid";
     }

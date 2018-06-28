@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.TreeSystem
 {
-    public abstract class TreeDesign
+    internal abstract class TreeDesign
     {
         public abstract float Spacing { get; }
 

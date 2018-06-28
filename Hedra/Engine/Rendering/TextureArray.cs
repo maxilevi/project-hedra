@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of TextureArray.
 	/// </summary>
-	public class TextureArray
+	internal class TextureArray
 	{
 		public int ID {get; private set;}
 		private int MipLevelCount = 1;

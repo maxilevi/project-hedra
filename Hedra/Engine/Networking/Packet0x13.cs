@@ -15,7 +15,7 @@ using Hedra.Engine.Generation;
 namespace Hedra.Engine.Networking
 {
 	[Serializable]
-	public class Packet0x13
+	internal class Packet0x13
 	{
 		public ushort MobId;
 		public float Damage;

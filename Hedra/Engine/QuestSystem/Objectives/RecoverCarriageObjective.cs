@@ -15,7 +15,7 @@ using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Objectives
 {
-    public class RecoverCarriageObjective : Objective
+    internal class RecoverCarriageObjective : Objective
     {
         private Entity _carriage;
         private Humanoid[] _enemies;

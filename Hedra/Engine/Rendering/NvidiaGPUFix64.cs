@@ -39,7 +39,7 @@ namespace Hedra.Engine.Rendering
     /// This static class is used to set or remove an Nvidia profile with Optimus
     /// setting such that the discrete GPU is used for the specified application.
     /// </summary>
-    public static class NvidiaGPUFix64
+    internal static class NvidiaGPUFix64
     {
         // Return values
         public const int RESULT_NO_CHANGE = 0;

@@ -21,7 +21,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of SoundtrackManager.
 	/// </summary>
-	public static class SoundtrackManager
+	internal static class SoundtrackManager
 	{
 		public static SoundSource Source;
 		public static string[] TrackNames;

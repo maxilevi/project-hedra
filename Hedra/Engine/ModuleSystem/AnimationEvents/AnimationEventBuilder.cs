@@ -6,7 +6,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.ModuleSystem.AnimationEvents
 {
-    public static class AnimationEventBuilder
+    internal static class AnimationEventBuilder
     {
         private static readonly Dictionary<string, Type> Events;
 

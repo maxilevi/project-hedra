@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.BiomeSystem.SnowBiome
 {
-    public class SnowBiomeEnviromentDesign : BiomeEnviromentDesign
+    internal class SnowBiomeEnviromentDesign : BiomeEnviromentDesign
     {
         public SnowBiomeEnviromentDesign()
         {

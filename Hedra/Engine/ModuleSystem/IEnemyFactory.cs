@@ -6,7 +6,7 @@ using Hedra.Engine.Scenes;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public interface IEnemyFactory
+    internal interface IEnemyFactory
     {
         string Name { get; set; }
 

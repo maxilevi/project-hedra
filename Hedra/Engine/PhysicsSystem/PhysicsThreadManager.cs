@@ -15,10 +15,10 @@ namespace Hedra.Engine.PhysicsSystem
     /// <summary>
     /// Description of PhysicsThreadManager.
     /// </summary>
-    public delegate void OnCommandProcessedEventHandler(MoveCommand Command);
-    public delegate void OnBatchProcessedEventHandler();
+    internal delegate void OnCommandProcessedEventHandler(MoveCommand Command);
+    internal delegate void OnBatchProcessedEventHandler();
 
-    public class PhysicsThreadManager
+    internal class PhysicsThreadManager
 	{
 	    public const int ThreadCount = 2;
 	    public OnCommandProcessedEventHandler OnCommandProcessedEvent;

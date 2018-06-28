@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of IDataContainer.
 	/// </summary>
-	public abstract class DataContainer
+	internal abstract class DataContainer
 	{
 		public Vector3[] VerticesArrays;
 		public List<uint> Indices = new List<uint>();

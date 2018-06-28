@@ -22,9 +22,9 @@ namespace Hedra.Engine.QuestSystem
 	/// Description of ClaimableStrucuture.
 	/// </summary>
 	
-	public delegate void OnInteraction(Entity Interactee);	
+	internal delegate void OnInteraction(Entity Interactee);	
 	
-	public abstract class InteractableStructure : BaseStructure, IUpdatable
+	internal abstract class InteractableStructure : BaseStructure, IUpdatable
 	{
 	    public virtual float InteractionAngle => .9f;
 	    public virtual Key Key => Key.E;

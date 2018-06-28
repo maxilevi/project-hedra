@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.Sound
 {
-    public class SoundItem
+    internal class SoundItem
     {
         public SoundItem(SoundSource Source)
         {

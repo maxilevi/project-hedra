@@ -16,7 +16,7 @@ namespace Hedra.Engine.Networking
 	/// Description of Packet0x4.
 	/// </summary>
 	[Serializable]
-	public class Packet0x4
+	internal class Packet0x4
 	{
 		public static Vector3 PrevPosition, PrevRotation;
 		public Vector3 Position, Rotation;

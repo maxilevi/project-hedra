@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering.Effects
 	/// <summary>
 	/// Description of IFilter.
 	/// </summary>
-	public abstract class Filter
+	internal abstract class Filter
 	{	
 
 		public abstract void Resize();

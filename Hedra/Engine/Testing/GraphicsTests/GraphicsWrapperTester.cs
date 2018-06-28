@@ -9,7 +9,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Testing.GraphicsTests
 {
-    public class GraphicsWrapperTester : BaseTest
+    internal class GraphicsWrapperTester : BaseTest
     {
         //[TestMethod]
         public void TestMatrixStack()

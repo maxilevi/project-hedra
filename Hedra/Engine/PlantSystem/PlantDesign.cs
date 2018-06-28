@@ -9,7 +9,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    public abstract class PlantDesign
+    internal abstract class PlantDesign
     {
         public abstract VertexData Model { get; }
 

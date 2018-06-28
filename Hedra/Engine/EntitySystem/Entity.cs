@@ -24,9 +24,9 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     ///     Description of Class1.
     /// </summary>
-    public delegate void OnAttackEventHandler(Entity Victim, float Amount);
+    internal delegate void OnAttackEventHandler(Entity Victim, float Amount);
 
-    public class Entity : IUpdatable, IRenderable, IDisposable, ISearchable
+    internal class Entity : IUpdatable, IRenderable, IDisposable, ISearchable
     {
         private DamageComponent _damageManager;
         private int _drowningSoundTimer;

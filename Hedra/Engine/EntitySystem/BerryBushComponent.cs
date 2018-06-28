@@ -22,7 +22,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of BerryBushComponent.
 	/// </summary>
-	public class BerryBushComponent : InteractableComponent, ITickable
+	internal class BerryBushComponent : InteractableComponent, ITickable
     {
 		public BerryBushComponent(Entity Parent) : base(Parent) { }
 

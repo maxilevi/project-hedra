@@ -11,7 +11,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public class SleepingPad : BaseStructure, IUpdatable, ITickable
+    internal class SleepingPad : BaseStructure, IUpdatable, ITickable
     {
         public bool IsOccupied => Sleeper != null;
         public Humanoid Sleeper { get; private set; }

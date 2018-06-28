@@ -13,7 +13,7 @@ namespace Hedra.Engine
 	/// <summary>
 	/// Description of GeneralSettings.
 	/// </summary>
-	public static class GeneralSettings
+	internal static class GeneralSettings
 	{
 		public static int MaxWeights = 3;
 	    public static int MaxJoints = 50;

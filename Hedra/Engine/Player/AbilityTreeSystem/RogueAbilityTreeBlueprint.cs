@@ -19,7 +19,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WaterTreeBlueprint.
 	/// </summary>
-	public class RogueAbilityTreeBlueprint : AbilityTreeBlueprint
+	internal class RogueAbilityTreeBlueprint : AbilityTreeBlueprint
 	{
 		
 		public RogueAbilityTreeBlueprint() : base(){

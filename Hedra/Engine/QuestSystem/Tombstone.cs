@@ -4,7 +4,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public class Tombstone : InteractableStructure
+    internal class Tombstone : InteractableStructure
     {
         public override Key Key => Key.F;
         public override string Message => "TO PAY RESPECTS";

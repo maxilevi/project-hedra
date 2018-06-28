@@ -28,7 +28,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
     /// <summary>
     ///     Creates
     /// </summary>
-    public class TalkObjective : Objective
+    internal class TalkObjective : Objective
     {
         private readonly bool _logHouse;
         private readonly Entity _talkTarget;

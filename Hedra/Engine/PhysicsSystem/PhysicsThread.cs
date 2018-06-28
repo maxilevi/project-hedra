@@ -6,7 +6,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    public class PhysicsThread
+    internal class PhysicsThread
     {
         public OnBatchProcessedEventHandler OnBatchProcessedEvent;
         public OnCommandProcessedEventHandler OnCommandProcessedEvent;

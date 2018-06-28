@@ -13,7 +13,7 @@ namespace Hedra.Engine
 	/// <summary>
 	/// Description of SettingAttribute.
 	/// </summary>
-	public class SettingAttribute : Attribute
+	internal class SettingAttribute : Attribute
 	{
 		
 	}

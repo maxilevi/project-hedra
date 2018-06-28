@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// IRenderable wrapper
 	/// </summary>
-	public class RenderableTexture : IRenderable, UIElement
+	internal class RenderableTexture : IRenderable, UIElement
 	{
 		public Texture BaseTexture { get; set; }
 		

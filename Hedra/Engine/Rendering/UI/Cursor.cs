@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of Cursor.
 	/// </summary>
-	public class Cursor : IRenderable
+	internal class Cursor : IRenderable
 	{	
 		public uint TextureId { get; set; }
 		public Vector2 Position {get; set;}

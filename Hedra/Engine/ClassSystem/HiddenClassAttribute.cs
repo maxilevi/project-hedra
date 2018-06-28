@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.ClassSystem
 {
-    public class HiddenClassAttribute : Attribute
+    internal class HiddenClassAttribute : Attribute
     {
     }
 }

@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public class HealthBonusComponent : EntityComponent
+    internal class HealthBonusComponent : EntityComponent
     {
         private readonly float _healthBonus;
         public new Humanoid Parent;

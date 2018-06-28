@@ -16,7 +16,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of NameGenerator.
 	/// </summary>
-	public static class NameGenerator
+	internal static class NameGenerator
 	{
 		public static string[] MaleNames = new string[]{"Keith", "Isaac", "Sylvester", "Alden", "Greg", "Levi", "Tyron", "Elliot"};
 		

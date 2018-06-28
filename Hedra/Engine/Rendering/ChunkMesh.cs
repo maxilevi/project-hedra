@@ -14,7 +14,7 @@ using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Rendering
 {
-	public class ChunkMesh : ICullable, IDisposable
+	internal class ChunkMesh : ICullable, IDisposable
 	{
 		public List<ChunkMeshBuffer> MeshBuffers = new List<ChunkMeshBuffer>();
 		public List<InstanceBatch> InstanceBatches = new List<InstanceBatch>();

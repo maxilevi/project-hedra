@@ -22,7 +22,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of Panel.
 	/// </summary>
-	public class ChrCreatorUI : Panel
+	internal class ChrCreatorUI : Panel
 	{
 		private readonly Humanoid _human;
 	    private readonly Timer _clickTimer;

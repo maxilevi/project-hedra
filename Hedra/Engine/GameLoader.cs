@@ -10,7 +10,7 @@ using Hedra.Engine.Sound;
 
 namespace Hedra.Engine
 {
-    public static class GameLoader
+    internal static class GameLoader
     {
 
         public static void AllocateMemory()

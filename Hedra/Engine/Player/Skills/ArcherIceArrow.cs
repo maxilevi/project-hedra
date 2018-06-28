@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of ArcherPoisonArrow.
 	/// </summary>
-	public class IceArrow : BaseSkill
+	internal class IceArrow : BaseSkill
 	{
 		private Animation ShootAnimation;
 		private float BaseDamage = 35f, Damage;

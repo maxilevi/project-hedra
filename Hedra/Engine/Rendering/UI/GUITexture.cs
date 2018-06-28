@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of GUITexture.
 	/// </summary>
-	public class GUITexture : IDisposable{
+	internal class GUITexture : IDisposable{
 		
 		public bool Flipped { get; set; }
         public bool Fxaa { get; set; }

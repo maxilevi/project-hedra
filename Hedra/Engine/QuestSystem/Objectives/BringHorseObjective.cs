@@ -29,7 +29,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
     /// <summary>
     ///     Can only be called from a village.
     /// </summary>
-    public class BringHorseObjective : Objective
+    internal class BringHorseObjective : Objective
     {
         private Entity _horse;
         private RideComponent _horseComponent;

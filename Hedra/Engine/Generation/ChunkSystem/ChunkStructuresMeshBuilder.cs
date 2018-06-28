@@ -10,7 +10,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    public class ChunkStructuresMeshBuilder
+    internal class ChunkStructuresMeshBuilder
     {
         private readonly Chunk _parent;
 

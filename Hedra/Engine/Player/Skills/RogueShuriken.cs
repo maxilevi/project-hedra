@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class Shuriken : BaseSkill
+	internal class Shuriken : BaseSkill
 	{
 		private readonly Animation _throwAnimation;
 		private static readonly VertexData ShurikenData = AssetManager.PlyLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));

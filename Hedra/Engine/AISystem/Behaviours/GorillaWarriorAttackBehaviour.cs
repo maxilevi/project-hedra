@@ -10,7 +10,7 @@ using OpenTK;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    public class GorillaWarriorAttackBehaviour : AttackBehaviour
+    internal class GorillaWarriorAttackBehaviour : AttackBehaviour
     {
         protected const int GrowlAnimationIndex = 1;
         protected const int QuakeAnimationIndex = 0;

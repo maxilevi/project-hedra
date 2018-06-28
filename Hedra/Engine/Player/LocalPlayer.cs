@@ -30,7 +30,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player
 {
-	public class LocalPlayer : Humanoid, IPlayer
+	internal class LocalPlayer : Humanoid, IPlayer
 	{
 
 		public Camera View;

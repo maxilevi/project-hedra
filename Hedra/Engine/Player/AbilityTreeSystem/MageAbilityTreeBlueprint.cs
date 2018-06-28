@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player
 	 * 
 	 * 3  -   -   -
 	 * */
-	public class MageAbilityTreeBlueprint : AbilityTreeBlueprint
+	internal class MageAbilityTreeBlueprint : AbilityTreeBlueprint
 	{
 		
 		public MageAbilityTreeBlueprint() : base(){

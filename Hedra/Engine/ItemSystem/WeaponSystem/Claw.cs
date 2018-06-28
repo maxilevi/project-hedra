@@ -17,7 +17,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     /// <summary>
     /// Description of TwoHandedSword.
     /// </summary>
-    public class Claw : MeleeWeapon
+    internal class Claw : MeleeWeapon
     {
         public override float PrimaryAttackCooldown => .15f;
         public override float SecondaryAttackCooldown => 2.5f;

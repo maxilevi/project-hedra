@@ -28,7 +28,7 @@ namespace Hedra.Engine.QuestSystem
 	/// <summary>
 	/// Description of QuestGenerator.
 	/// </summary>
-	public class QuestManager : IUpdatable
+	internal class QuestManager : IUpdatable
 	{
 		
 		private bool _addedToMenu;

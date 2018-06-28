@@ -20,9 +20,9 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public delegate void OnTalkEventHandler(Entity Talkee);
+    internal delegate void OnTalkEventHandler(Entity Talkee);
 
-	public class TalkComponent : EntityComponent, ITickable
+	internal class TalkComponent : EntityComponent, ITickable
 	{
         private static readonly uint TalkBackground = Graphics2D.LoadFromAssets("Assets/Bar.png");
 	    public float Duration { get; set; } = 8f;

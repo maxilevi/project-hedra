@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.Rendering.Shaders
 {
-    public class ShaderBuilder
+    internal class ShaderBuilder
     {
         
     }

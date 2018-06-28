@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering.Animation
 	/// <summary>
 	/// Description of KeyFrame.
 	/// </summary>
-	public class KeyFrame
+	internal class KeyFrame
 	{
 		public float TimeStamp {get; private set;}
 		public Dictionary<String, JointTransform> Pose {get; private set;}

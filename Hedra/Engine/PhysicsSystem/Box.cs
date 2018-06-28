@@ -16,7 +16,7 @@ namespace Hedra.Engine.PhysicsSystem
 	/// <summary>
 	/// Description of Box.
 	/// </summary>
-	public class Box : ICollidable
+	internal class Box : ICollidable
     {
 		public Vector3 Min { get; set; }
 	    public Vector3 Max { get; set; }

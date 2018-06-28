@@ -8,7 +8,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    public class CloudPlacementDesign : PlacementDesign
+    internal class CloudPlacementDesign : PlacementDesign
     {
         private readonly PlantDesign _cloudDesign;
 

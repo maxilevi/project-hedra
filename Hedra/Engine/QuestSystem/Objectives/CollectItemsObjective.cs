@@ -23,7 +23,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 	/// <summary>
 	/// Description of CollectItemsObjective.
 	/// </summary>
-	public class CollectItemsObjective : Objective
+	internal class CollectItemsObjective : Objective
 	{
 		private readonly int _boarTusksAmount;
 		private readonly int _turtleShellAmount;

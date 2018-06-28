@@ -14,7 +14,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public class TempleDesign : StructureDesign
+    internal class TempleDesign : StructureDesign
     {
         public override int Radius { get; set; } = 700;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);

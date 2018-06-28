@@ -19,9 +19,9 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of ColorPicker.
 	/// </summary>
-	public delegate void ColorPickedEventHandler(Vector4 Color);
+	internal delegate void ColorPickedEventHandler(Vector4 Color);
 	
-	public class ColorPicker : UIElement
+	internal class ColorPicker : UIElement
 	{
 		public event ColorPickedEventHandler ColorPickedEvent; 
 		public List<UIElement> Elements = new List<UIElement>();

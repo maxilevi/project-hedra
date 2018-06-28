@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class Whirlwind : BaseSkill
+	internal class Whirlwind : BaseSkill
 	{
 	    private readonly Animation _whirlwindAnimation;
 		private readonly Dictionary<Entity, float> _affectedEntities;

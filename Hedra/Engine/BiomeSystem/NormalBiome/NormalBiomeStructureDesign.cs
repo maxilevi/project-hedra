@@ -3,7 +3,7 @@ using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
-    public class NormalBiomeStructureDesign : BiomeStructureDesign
+    internal class NormalBiomeStructureDesign : BiomeStructureDesign
     {
         public NormalBiomeStructureDesign()
         {

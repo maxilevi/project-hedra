@@ -10,7 +10,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    public class InventoryInterfaceItemInfo
+    internal class InventoryInterfaceItemInfo
     {
         protected Item CurrentItem;
         protected readonly Texture BackgroundTexture;

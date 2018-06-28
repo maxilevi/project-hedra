@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Hedra.Engine.ItemSystem
 {
-    public class ItemTemplater
+    internal class ItemTemplater
     {
         private static Dictionary<string, ItemTemplate> _itemTemplates;
 

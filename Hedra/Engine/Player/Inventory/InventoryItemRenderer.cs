@@ -10,7 +10,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    public class InventoryItemRenderer
+    internal class InventoryItemRenderer
     {
         public const float ZOffsetFactor = 1.25f;
         private readonly InventoryArray _array;

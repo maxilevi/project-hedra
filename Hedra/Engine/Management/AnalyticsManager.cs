@@ -19,7 +19,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of AnalyticsManager.
 	/// </summary>
-	public static class AnalyticsManager
+	internal static class AnalyticsManager
 	{
 		private static string Server = "https://hedra-account-system.herokuapp.com/";
 		public static float AverageFPS = 0;

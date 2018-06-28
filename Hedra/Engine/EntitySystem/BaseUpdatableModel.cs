@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public abstract class BaseUpdatableModel
+    internal abstract class BaseUpdatableModel
     {
         public abstract Vector3[] Vertices { get; }
         public abstract CollisionShape[] Colliders { get; }

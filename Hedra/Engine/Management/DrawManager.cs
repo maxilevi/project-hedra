@@ -18,7 +18,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// A static class which acts as a layer between every Draw() method and the actual rendeirng 
 	/// </summary>
-	public static class DrawManager
+	internal static class DrawManager
 	{
 		private static readonly List<IRenderable> DrawFunctions = new List<IRenderable>();
 		public static List<IRenderable> ParticleRenderer = new List<IRenderable>();

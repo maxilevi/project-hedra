@@ -15,7 +15,7 @@ namespace Hedra.Engine.BiomeSystem
 	/// <summary>
 	/// Description of Region.
 	/// </summary>
-	public class RegionColor
+	internal class RegionColor
 	{
 	    public static Vector4 PathColor = Color.Sienna.ToVector4();
         public Vector4 WaterColor;

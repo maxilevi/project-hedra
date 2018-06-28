@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of JointTransformData.
 	/// </summary>
-	public class JointTransformData
+	internal class JointTransformData
 	{
 		public readonly string JointNameId;
 		public readonly Matrix4 JointLocalTransform;

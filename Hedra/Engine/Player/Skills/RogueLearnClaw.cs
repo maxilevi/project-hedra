@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class LearnClaw : LearningSkill
+	internal class LearnClaw : LearningSkill
 	{
 		public override uint TexId => Graphics2D.LoadFromAssets("Assets/Skills/Claw.png");
 		public override void Learn()

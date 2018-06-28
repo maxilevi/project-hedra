@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
-    public class NormalBiomeEnviromentDesign : BiomeEnviromentDesign
+    internal class NormalBiomeEnviromentDesign : BiomeEnviromentDesign
     {
         public NormalBiomeEnviromentDesign()
         {

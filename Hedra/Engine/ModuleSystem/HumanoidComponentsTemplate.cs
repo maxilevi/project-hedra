@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    public class HumanoidComponentsTemplate
+    internal class HumanoidComponentsTemplate
     {
         public string Name { get; set; }
         public HumanoidComponentsItemTemplate[] Components { get; set; }

@@ -21,7 +21,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of WorldBuffer.
 	/// </summary>
-	public class WorldBuffer
+	internal class WorldBuffer
 	{
 		public GeometryPool<uint> Indices;
 		public GeometryPool<Vector3> Vertices;

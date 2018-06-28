@@ -13,7 +13,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of WordFilter.
 	/// </summary>
-	public static class WordFilter
+	internal static class WordFilter
 	{
 		#region WORDFILTER
 		public static string[] WordList = new string[]{"4r5e", "5h1t", "5hit", "a55", "anal", "anus", "ar5e", "arrse",

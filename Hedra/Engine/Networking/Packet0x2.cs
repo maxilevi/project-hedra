@@ -19,7 +19,7 @@ namespace Hedra.Engine.Networking
 	/// Description of PlayerPacket.
 	/// </summary>
 	[Serializable]
-	public class Packet0x2
+	internal class Packet0x2
 	{
 		public string[] MeshFiles;
 		public int HairColor, EyeColor;

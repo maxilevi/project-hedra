@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Hedra.Engine.Rendering.UI
 {
-    public static class FontCache
+    internal static class FontCache
     {
         public static Dictionary<FontEntry, Font> CachedFonts = new Dictionary<FontEntry, Font>();
 
@@ -24,7 +24,7 @@ namespace Hedra.Engine.Rendering.UI
         }
     }
 
-    public class FontEntry
+    internal class FontEntry
     {
         public readonly FontFamily Family;
         public readonly float Size;

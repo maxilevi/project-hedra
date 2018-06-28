@@ -23,7 +23,7 @@ namespace Hedra.Engine.Generation
 	/// <summary>
 	/// Description of HerbGenerator.
 	/// </summary>
-	public class EnviromentGenerator
+	internal class EnviromentGenerator
 	{
 		
 		public void GeneratePlant(Vector3 Position, BiomeSystem.Region BiomeRegion, PlantDesign Design)

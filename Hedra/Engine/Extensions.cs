@@ -25,7 +25,7 @@ namespace Hedra.Engine
 	/// <summary>
 	/// Description of Extensions.
 	/// </summary>
-	public static class Extensions
+	internal static class Extensions
 	{
 	    public static Vector3 SupportPoint(this Vector3[] Vertices, Vector3 Direction)
 	    {
