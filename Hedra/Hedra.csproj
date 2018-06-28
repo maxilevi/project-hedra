@@ -339,7 +339,6 @@
     <Compile Include="Engine\EnvironmentSystem\Light.cs" />
     <Compile Include="Engine\EnvironmentSystem\SkyManager.cs" />
     <Compile Include="Engine\EnvironmentSystem\Sky.cs" />
-    <Compile Include="Engine\EnvironmentSystem\Sun.cs" />
     <Compile Include="Engine\Events\EventDispatcher.cs" />
     <Compile Include="Engine\Events\EventListener.cs" />
     <Compile Include="Engine\Events\IEventListener.cs" />
@@ -3859,9 +3858,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\SmashHammerIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Sun.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\SwingAxeIcon.png">

@@ -33,7 +33,7 @@ uniform float Time;
 
 void main()
 {
-	if(Visibility < 0.005)
+	if(UseFog && Visibility < 0.005)
 	{
 		discard;
 	}

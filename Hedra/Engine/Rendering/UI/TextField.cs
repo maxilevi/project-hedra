@@ -186,6 +186,11 @@ namespace Hedra.Engine.Rendering.UI
 			this._textBar.Enable();
 			_enabled = true;
 		}
-		
+
+	    public void Dispose()
+	    {
+	        _textBar?.Dispose();
+            _caret?.Dispose();
+	    }
 	}
 }

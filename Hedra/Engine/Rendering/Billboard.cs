@@ -25,6 +25,7 @@ namespace Hedra.Engine.Rendering
         public bool Vanish { get; set; }
 		public float Size { get; set; } = 1;
 		public float Speed { get; set; } = 2;
+	    public bool DisposeTextureId { get; set; } = true;
 		public Func<Vector3> FollowFunc { get; set; }
         public UIElement Texture { get; set; }
         public bool Enabled {get; set;}		
@@ -41,8 +42,7 @@ namespace Hedra.Engine.Rendering
 			this.Texture = new GUIText(Text, Vector2.Zero, TextColor, TextFont);
 			this.Texture.Enable();
 			this._originalScale = this.Texture.Scale;
-			DrawManager.UIRenderer.Remove( (this.Texture as GUIText).UIText);
-			
+			DrawManager.UIRenderer.Remove( ((GUIText) this.Texture).UIText);			
 			DrawManager.Add(this);
 		}
 		
@@ -54,7 +54,7 @@ namespace Hedra.Engine.Rendering
 			this.Texture = new Texture(Icon, Vector2.Zero, Scale);
 			this.Texture.Enable();
 			this._originalScale = Scale;
-			DrawManager.UIRenderer.Remove( (this.Texture as Texture).TextureElement);			
+			DrawManager.UIRenderer.Remove( ((Texture) this.Texture).TextureElement);			
 			DrawManager.Add(this);
 		}
 		
@@ -90,7 +90,16 @@ namespace Hedra.Engine.Rendering
 		        : ((Texture) this.Texture).TextureElement);
 		}
 		
-		public void Dispose(){
+		public void Dispose()
+        {
+            if (!DisposeTextureId)
+            {
+                var texAsTexture = Texture as Texture;
+                var texAsText = Texture as GUIText;
+                if (texAsTexture != null) texAsTexture.TextureElement.TextureId = 0;
+                if(texAsText != null) texAsText.UIText.TextureId = 0;
+            }
+            this.Texture?.Dispose();
 			DrawManager.Remove(this);
 			Disposed = true;
 		}

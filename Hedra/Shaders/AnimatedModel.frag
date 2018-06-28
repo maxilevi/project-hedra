@@ -23,7 +23,7 @@ uniform float Alpha;
 
 void main(void)
 {
-	if(pass_visibility < 0.005)
+	if(UseFog && pass_visibility < 0.005)
 	{
 		discard;
 	}

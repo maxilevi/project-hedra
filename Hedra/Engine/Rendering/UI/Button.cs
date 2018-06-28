@@ -26,10 +26,6 @@ namespace Hedra.Engine.Rendering.UI
 
     public class Button : EventListener, UIElement, IDisposable
     {
-        public static uint GreyBackground = Graphics2D.LoadTexture(Graphics2D.ReColorMask(
-            Color.FromArgb(255, 39, 39, 39),
-            new Bitmap(new MemoryStream(AssetManager.ReadBinary("Assets/Bar.png", AssetManager.DataFile3)))));
-
         private bool _hasEntered;
         private Vector2 _position;
         private Color _previousFontColor;

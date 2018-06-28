@@ -12,11 +12,13 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of UIElement.
 	/// </summary>
-	public interface UIElement
+	public interface UIElement : IDisposable
 	{
 		void Enable();
 		
 		void Disable();
+
+	    void Dispose();
 		
 		Vector2 Position {get; set;}
 		

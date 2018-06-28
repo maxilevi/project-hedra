@@ -24,8 +24,8 @@ namespace Hedra.Engine.Rendering.UI
         public static Vector4 Violet = new Vector4(0.941f, 0.008f, 0.608f, 1.000f);
         public static Vector4 Poison = new Vector4(0.282f, 0.725f, 0.373f, 1.000f);
 
-        public static uint BarBlueprint = Graphics2D.LoadFromAssets("Assets/Bar.png");
-        public static uint RectangleBlueprint = Graphics2D.ColorTexture(Colors.FromArgb(255, 29, 29, 29));
+        private static uint BarBlueprint = Graphics2D.LoadFromAssets("Assets/Bar.png");
+        private static uint RectangleBlueprint = Graphics2D.ColorTexture(Colors.FromArgb(255, 29, 29, 29));
 
 
         public static Shader Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");

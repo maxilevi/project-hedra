@@ -15,6 +15,7 @@ namespace Hedra.Engine.Rendering.UI
     {
         public static Shader Shader;
         public static uint TransparentTexture { get; private set; }
+        public static uint[] InmortalTextures { get; private set; }
         private readonly HashSet<TextureCommand> _renderableUI;
         private readonly HashSet<GUITexture> _textures;
         private static bool _inited;
@@ -42,6 +43,7 @@ namespace Hedra.Engine.Rendering.UI
             var bmp = new Bitmap(1, 1);
             bmp.SetPixel(0, 0, Color.FromArgb(0, 0, 0, 0));
             TransparentTexture = Graphics2D.LoadTexture(bmp);
+            InmortalTextures = new[] {TransparentTexture};
         }
 
         public DrawOrder GetDrawOrder(IRenderable Renderable)

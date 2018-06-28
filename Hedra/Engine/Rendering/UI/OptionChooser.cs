@@ -130,5 +130,14 @@ namespace Hedra.Engine.Rendering.UI
 				_mPosition = value;
 			}
 		}
+
+	    public void Dispose()
+	    {
+	        this.Text?.Dispose();
+            this.Font?.Dispose();
+            this.LeftArrow?.Dispose();
+	        this.RightArrow?.Dispose();
+	        this.CurrentValue?.Dispose();
+        }
 	}
 }

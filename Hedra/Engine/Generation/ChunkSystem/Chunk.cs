@@ -603,7 +603,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void ForceDispose()
         {
             Disposed = true;
-            _waterDensity.Clear();
+            _waterDensity?.Clear();
             if (Mesh != null)
             {
                 Mesh.Dispose();

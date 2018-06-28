@@ -9,7 +9,6 @@
 using OpenTK;
 using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using Hedra.Engine.Events;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -25,6 +24,7 @@ namespace Hedra.Engine.EntitySystem
 
 	public class TalkComponent : EntityComponent, ITickable
 	{
+        private static readonly uint TalkBackground = Graphics2D.LoadFromAssets("Assets/Bar.png");
 	    public float Duration { get; set; } = 8f;
         public event OnTalkEventHandler OnTalk;
 	    private bool _shouldTalk;
@@ -105,10 +105,11 @@ namespace Hedra.Engine.EntitySystem
 	        {
 	            return Parent.Position + Vector3.UnitY * 12f;
 	        }
-            var backBoard = new Billboard(Duration, Bar.BarBlueprint, FollowFunc(),
+            var backBoard = new Billboard(Duration, TalkBackground, FollowFunc(),
 		        textSize.UIText.Scale + new Vector2(textSize.UIText.Scale.Y * .25f, textSize.UIText.Scale.Y * .25f))
 		    {
-		        FollowFunc = FollowFunc
+		        FollowFunc = FollowFunc,
+		        DisposeTextureId = false
             };
 
 		    _board = new Billboard(Duration, phrase, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10), FollowFunc())

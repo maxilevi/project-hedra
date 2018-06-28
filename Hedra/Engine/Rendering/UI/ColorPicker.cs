@@ -106,7 +106,10 @@ namespace Hedra.Engine.Rendering.UI
 				_mPosition = value;
 			}
 		}
-		
-		
+
+	    public void Dispose()
+	    {
+	        Elements.ForEach(D => D.Dispose());
+        }	
 	}
 }

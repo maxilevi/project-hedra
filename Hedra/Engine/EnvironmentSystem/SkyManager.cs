@@ -170,7 +170,7 @@ namespace Hedra.Engine.EnvironmentSystem
 		        FogManager.UpdateFogSettings(FogManager.MinDistance, FogManager.MaxDistance);
                 LastDayFactor = dayFactor;
 			}
-		    var avgSkyColor = ((Sky.TopColor + Sky.BotColor).Xyz * .5f) * .75f  + Vector3.One * .25f;
+		    var avgSkyColor = (Sky.TopColor + Sky.BotColor).Xyz * .5f * .5f + Vector3.One * .5f;
             Vector3 newLightColor = Weather.IsRaining
 		        ? avgSkyColor * Mathf.Clamp(dayFactor * 0.7f, _minLight, _maxLight)
 		        : avgSkyColor * Mathf.Clamp(dayFactor * 1.0f, _minLight, _maxLight);

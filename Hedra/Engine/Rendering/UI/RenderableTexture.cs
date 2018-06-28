@@ -20,38 +20,48 @@ namespace Hedra.Engine.Rendering.UI
 	{
 		public Texture BaseTexture { get; set; }
 		
-		public RenderableTexture(Texture BaseTexture, DrawOrder Order){
+		public RenderableTexture(Texture BaseTexture, DrawOrder Order)
+        {
 			this.BaseTexture = BaseTexture;		
 			DrawManager.UIRenderer.Remove(BaseTexture.TextureElement);
 			DrawManager.UIRenderer.Add(this, Order);
 		}
 		
-		public void Draw(){
+		public void Draw()
+        {
 			DrawManager.UIRenderer.Draw(BaseTexture.TextureElement);
 		}
 		
-		public void Enable(){
+		public void Enable()
+        {
 			BaseTexture.Enable();
 		}
 		
-		public void Disable(){
+		public void Disable()
+        {
 			BaseTexture.Disable();
 		}
 
 	    public DrawOrder Order
 	    {
-	        get { return DrawManager.UIRenderer.GetDrawOrder(this); }
-	        set { DrawManager.UIRenderer.SetDrawOrder(this, value); }
+	        get => DrawManager.UIRenderer.GetDrawOrder(this);
+	        set => DrawManager.UIRenderer.SetDrawOrder(this, value);
 	    }
 		
 		public Vector2 Position{
-			get{ return this.BaseTexture.Position; }
-			set{ this.BaseTexture.Position = value;}
+			get => this.BaseTexture.Position;
+		    set => this.BaseTexture.Position = value;
 		}
 		
 		public Vector2 Scale{
-			get{ return this.BaseTexture.Scale; }
-			set{ this.BaseTexture.Scale = value;}
+			get => this.BaseTexture.Scale;
+		    set => this.BaseTexture.Scale = value;
 		}
+
+	    public void Dispose()
+	    {
+	        BaseTexture?.Dispose();
+
+        }
 	}
 }

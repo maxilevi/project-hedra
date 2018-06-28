@@ -33,7 +33,8 @@ namespace Hedra.Engine.Rendering.UI
         public Func<uint> IdPointer { get; set; }
 	    private bool _disposed;
 
-        public GUITexture(uint Id, Vector2 Scale, Vector2 Pos){
+        public GUITexture(uint Id, Vector2 Scale, Vector2 Pos)
+        {
 			this.TextureId = Id;
 			this.Position = Pos;
 			this.Scale = Scale;
@@ -46,11 +47,17 @@ namespace Hedra.Engine.Rendering.UI
 	    public void Dispose()
 	    {
             if(_disposed) return;
-	        Graphics2D.Textures.Remove(TextureId);
-	        var id = TextureId;
-			GL.DeleteTextures(1, ref id);
-	        TextureId = id;
+	        MaskId = this.DisposeId(MaskId);
+	        TextureId = this.DisposeId(TextureId);
 	        _disposed = true;
+	    }
+
+	    private uint DisposeId(uint DisposeId)
+	    {
+	        if (Array.IndexOf(GUIRenderer.InmortalTextures, DisposeId) != -1) return DisposeId;
+	        Graphics2D.Textures.Remove(DisposeId);
+	        GL.DeleteTextures(1, ref DisposeId);
+	        return DisposeId;
 	    }
 
 	    ~GUITexture()
