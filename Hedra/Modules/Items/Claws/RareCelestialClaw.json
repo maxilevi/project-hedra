@@ -1,0 +1,22 @@
+
+{
+  "Name": "RareCelestialClaw",
+  "DisplayName": "Celestial Claw",
+  "EquipmentType": "Claw",
+  "Tier": "Rare",
+  "Description": "Commonly used by knights.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 14.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.10
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Claw/RareCelestialClaw.ply"
+  }
+}

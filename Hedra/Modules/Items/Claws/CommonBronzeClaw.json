@@ -3,7 +3,7 @@
   "DisplayName": "Bronze Claw",
   "EquipmentType": "Claw", 
   "Tier": "Common",
-  "Description": "Bronze claw.",
+  "Description": "Useful for novices.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -15,7 +15,7 @@
     }
   ],
   "Model": {
-    "Scale": 1.75,
+    "Scale": 1.0,
     "Path": "$DataFile$/Items/Claws/CommonBronzeClaw.ply"
   }
 }

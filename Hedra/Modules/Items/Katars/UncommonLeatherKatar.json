@@ -1,0 +1,22 @@
+
+{
+  "Name": "UncommonLeatherKatar",
+  "DisplayName": "Leather Katar",
+  "EquipmentType": "Katar",
+  "Tier": "Uncommon",
+  "Description": "Stronger than what you would expect.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 9.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.95
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Katar/UncommonLeatherKatar.ply"
+  }
+}

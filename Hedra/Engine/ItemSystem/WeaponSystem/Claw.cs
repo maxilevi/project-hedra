@@ -100,7 +100,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
                 this.MainMesh.TransformationMatrix = Mat4L;
                 this.MainMesh.Position = Owner.Model.Position;
-                this.MainMesh.TargetRotation = new Vector3(180, 0, 0);
+                this.MainMesh.TargetRotation = new Vector3(180, 180, 0);
                 this.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.35f;
 
                 Matrix4 Mat4R = Owner.Model.RightWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);
@@ -118,7 +118,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
                 this.MainMesh.TransformationMatrix = Mat4L;
                 this.MainMesh.Position = Owner.Model.Position;
-                this.MainMesh.TargetRotation = new Vector3(180, 0, 0f);
+                this.MainMesh.TargetRotation = new Vector3(180, 180, 0f);
                 this.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
 
                 Matrix4 Mat4R = Owner.Model.RightWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);

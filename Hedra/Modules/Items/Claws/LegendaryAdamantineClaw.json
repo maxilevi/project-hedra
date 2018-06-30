@@ -1,0 +1,22 @@
+
+{
+  "Name": "LegendaryAdamantineClaw",
+  "DisplayName": "Adamantine Claw",
+  "EquipmentType": "Claw",
+  "Tier": "Legendary",
+  "Description": "Jack of all trades, master of none.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 15.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.20
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Claw/LegendaryAdamantineClaw.ply"
+  }
+}

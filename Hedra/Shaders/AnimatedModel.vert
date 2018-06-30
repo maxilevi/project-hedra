@@ -102,7 +102,7 @@ void main(void){
 
 	//Diffuse Lighting
 	vec3 FullLightColor = clamp(LightColor + FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
-	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
+	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor * 1.15);
 	vec4 final_color = Rim + Diffuse * vec4(linear_color,1.0) + Specular;
 	vec3 lightDiffuse = diffuse(unitToLight, unitNormal, FLightColor).rgb;
 

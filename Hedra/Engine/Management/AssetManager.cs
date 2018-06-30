@@ -164,6 +164,7 @@ namespace Hedra.Engine.Management
 
 	    private static byte[] ReadBinaryFromStream(Stream Stream, string Name)
 	    {
+	        if (!Stream.CanRead) return null;
 	        var reader = new BinaryReader(Stream); // .Dispose closes the stream, something we dont want.
 	        while (reader.BaseStream.Position < reader.BaseStream.Length)
 	        {
@@ -255,6 +256,7 @@ namespace Hedra.Engine.Management
 		public static VertexData PlyLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
         {
 			byte[] dataArray = AssetManager.ReadBinary(File, DataFile3);
+            if (dataArray == null) throw new ArgumentException($"Failed to found file '{File}' in the Assets folder.");
 		    string fileContents = Encoding.ASCII.GetString(dataArray);
 
 		    int endHeader = fileContents.IndexOf("element vertex", StringComparison.Ordinal);

@@ -1,0 +1,22 @@
+
+{
+  "Name": "RareEllipseKatar",
+  "DisplayName": "Ellipse Katar",
+  "EquipmentType": "Katar",
+  "Tier": "Rare",
+  "Description": "Great accuaracy, not so great range.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 12.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Katar/RareEllipseKatar.ply"
+  }
+}

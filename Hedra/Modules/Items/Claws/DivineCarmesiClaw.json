@@ -1,0 +1,22 @@
+
+{
+  "Name": "DivineCarmesiClaw",
+  "DisplayName": "Carmesi Claw",
+  "EquipmentType": "Claw",
+  "Tier": "Divine",
+  "Description": "An intense thirst for blood...",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 17.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.15
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Claw/DivineCarmesiClaw.ply"
+  }
+}

@@ -24,6 +24,8 @@
     <WarningLevel>4</WarningLevel>
     <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -38,8 +40,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
@@ -809,6 +809,62 @@
       <Link>Assets\Items\Bows\UncommonSpikedGuardBow.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Claws\CommonBronzeClaw.ply">
+      <Link>Assets\Items\Claws\CommonBronzeClaw.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Claws\CommonIronClaw.ply">
+      <Link>Assets\Items\Claws\CommonIronClaw.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Claws\DivineCarmesiClaw.ply">
+      <Link>Assets\Items\Claws\DivineCarmesiClaw.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Claws\LegendaryAdamantineClaw.ply">
+      <Link>Assets\Items\Claws\LegendaryAdamantineClaw.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Claws\RareCelestialClaw.ply">
+      <Link>Assets\Items\Claws\RareCelestialClaw.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Claws\UncommonBronzeClawFist.ply">
+      <Link>Assets\Items\Claws\UncommonBronzeClawFist.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Katars\CommonBronzeKatar.ply">
+      <Link>Assets\Items\Katars\CommonBronzeKatar.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Katars\DivineCrystalFist.ply">
+      <Link>Assets\Items\Katars\DivineCrystalFist.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Katars\LegendaryDemonicKatar.ply">
+      <Link>Assets\Items\Katars\LegendaryDemonicKatar.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Katars\LegendaryGoldenMaceFist.ply">
+      <Link>Assets\Items\Katars\LegendaryGoldenMaceFist.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Katars\RareCrimsonKatar.ply">
+      <Link>Assets\Items\Katars\RareCrimsonKatar.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Katars\RareEllipseKatar.ply">
+      <Link>Assets\Items\Katars\RareEllipseKatar.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Katars\UncommonIronKatar.ply">
+      <Link>Assets\Items\Katars\UncommonIronKatar.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Katars\UncommonLeatherKatar.ply">
+      <Link>Assets\Items\Katars\UncommonLeatherKatar.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\FearIcon.ply">
       <Link>Assets\Env\FearIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -832,6 +888,42 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Bows\UncommonSpikedGuardBow.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Claws\CommonIronClaw.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Claws\DivineCarmesiClaw.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Claws\LegendaryAdamantineClaw.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Claws\RareCelestialClaw.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Claws\UncommonBronzeClawFist.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Katars\DivineCrystalFist.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Katars\LegendaryDemonicKatar.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Katars\LegendaryGoldenMaceFist.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Katars\RareCrimsonKatar.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Katars\RareEllipseKatar.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Katars\UncommonIronKatar.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Katars\UncommonLeatherKatar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Beetle.json">
@@ -3127,16 +3219,8 @@
       <Link>Assets\Items\Axes\CommonBronzeAxe.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\CommonBronzeClaw.ply">
-      <Link>Assets\Items\Claws\CommonBronzeClaw.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\CommonBronzeHammer.ply">
       <Link>Assets\Items\Hammers\CommonBronzeHammer.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\CommonBronzeKatar.ply">
-      <Link>Assets\Items\Katars\CommonBronzeKatar.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\CommonBronzeRing.ply">

@@ -1,0 +1,22 @@
+
+{
+  "Name": "LegendaryDemonicKatar",
+  "DisplayName": "Demonic Katar",
+  "EquipmentType": "Katar",
+  "Tier": "Legendary",
+  "Description": "Demonic katar.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 15.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Katar/LegendaryDemonicKatar.ply"
+  }
+}

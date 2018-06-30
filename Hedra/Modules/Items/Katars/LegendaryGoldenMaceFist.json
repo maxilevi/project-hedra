@@ -1,0 +1,22 @@
+
+{
+  "Name": "LegendaryGoldenMaceFist",
+  "DisplayName": "Golden Mace Fist",
+  "EquipmentType": "Fist",
+  "Tier": "Legendary",
+  "Description": "Speed is meaningless when you only need one blow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 18.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.75
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Fist/LegendaryGoldenMaceFist.ply"
+  }
+}

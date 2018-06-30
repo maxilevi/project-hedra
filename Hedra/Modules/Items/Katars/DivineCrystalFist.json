@@ -1,0 +1,22 @@
+
+{
+  "Name": "DivineCrystalFist",
+  "DisplayName": "Crystal Fist",
+  "EquipmentType": "Fist",
+  "Tier": "Divine",
+  "Description": "Speed is meaningless when you only need one blow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 18.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.90
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Fist/DivineCrystalFist.ply"
+  }
+}

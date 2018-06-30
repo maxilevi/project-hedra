@@ -15,7 +15,7 @@
     }
   ],
   "Model": {
-    "Scale": 1.75,
+    "Scale": 1.0,
     "Path": "$DataFile$/Items/Katars/CommonBronzeKatar.ply"
   }
 }
