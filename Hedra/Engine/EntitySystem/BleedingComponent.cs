@@ -62,7 +62,7 @@ namespace Hedra.Engine.EntitySystem
 				World.Particles.Direction = Vector3.UnitY * .2f;
 				World.Particles.ParticleLifetime = 0.75f;
 				World.Particles.GravityEffect = 0.5f;
-				World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
+				World.Particles.PositionErrorMargin = Parent.Model.Dimensions.Size * .5f;
 				
 				for(int i = 0; i < 1; i++){
 					World.Particles.Emit();

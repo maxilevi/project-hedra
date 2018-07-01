@@ -161,7 +161,7 @@ namespace Hedra.Engine.Player
 
             this.Collider = new AnimatedCollider(Template.Path, this.Model);
             this.BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * this.Model.Scale;
-
+            this.Dimensions = AssetManager.LoadDimensions(Template.Path) * this.Model.Scale;
             this.Idle();
             this._modelSound = new AreaSound(SoundType.HumanRun, Vector3.Zero, 48f);
         }
@@ -497,6 +497,10 @@ namespace Hedra.Engine.Player
         public Matrix4 LeftWeaponMatrix => Model.MatrixFromJoint(LeftWeaponJoint);
 
 	    public Matrix4 RightWeaponMatrix => Model.MatrixFromJoint(RightWeaponJoint);
+
+		public Matrix4 LeftFootMatrix => Model.MatrixFromJoint(LeftFootJoint);
+
+		public Matrix4 RightFootMatrix => Model.MatrixFromJoint(RightFootJoint);
 
         private Vector3 _defaultHeadPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         public Vector3 HeadPosition

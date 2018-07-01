@@ -6,10 +6,9 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using OpenTK;
-using Hedra.Engine.Rendering.UI;
 using System.Collections;
+using System.Runtime.InteropServices;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
@@ -28,14 +27,16 @@ namespace Hedra.Engine.EntitySystem
 	    private float _time;
         private int _pTime;
 
-        public BurningComponent(Entity Parent, Entity Damager, float TotalTime, float TotalDamage) : base(Parent){
+        public BurningComponent(Entity Parent, Entity Damager, float TotalTime, float TotalDamage) : base(Parent)
+        {
 			this._totalTime = TotalTime;
 			this._totalDamage = TotalDamage;
 			this._damager = Damager;
 			CoroutineManager.StartCoroutine(UpdateBleed);
 		}
 		
-		public BurningComponent(Entity Parent, float TotalTime, float TotalDamage) : base(Parent){
+		public BurningComponent(Entity Parent, float TotalTime, float TotalDamage) : base(Parent)
+        {
 			this._totalTime = TotalTime;
 			this._totalDamage = TotalDamage;
 			CoroutineManager.StartCoroutine(UpdateBleed);
@@ -43,7 +44,8 @@ namespace Hedra.Engine.EntitySystem
 		
 		public override void Update(){}
 		
-		public IEnumerator UpdateBleed(){
+		public IEnumerator UpdateBleed()
+        {
 			Parent.Model.BaseTint = Particle3D.FireColor * 3f;
 			while(_totalTime > _pTime && !Parent.IsDead && !Disposed && !Parent.IsUnderwater){
 				
@@ -51,10 +53,8 @@ namespace Hedra.Engine.EntitySystem
 				if(_time >= 1){
 					_pTime++;
 					_time = 0;
-					float exp;
-					Parent.Damage(_totalDamage / _totalTime, _damager, out exp);
-				    var damager = _damager as Humanoid;
-				    if(damager != null)
+				    Parent.Damage(_totalDamage / _totalTime, _damager, out float exp);
+				    if(_damager is Humanoid damager)
 						damager.XP += exp;
 				}
 				
@@ -67,7 +67,7 @@ namespace Hedra.Engine.EntitySystem
 				World.Particles.Direction = Vector3.UnitY * .2f;
 				World.Particles.ParticleLifetime = 0.75f;
 				World.Particles.GravityEffect = 0.0f;
-				World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
+				World.Particles.PositionErrorMargin = Parent.Model.Dimensions.Size * .5f;
 				
 				for(int i = 0; i < 1; i++){
 					World.Particles.Emit();

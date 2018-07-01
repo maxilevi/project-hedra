@@ -147,11 +147,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     var z = (int)(pos.Z % BoundsZ);
 
                     var newHeight = neighbourChunk?.GetWaterDensity(new Vector3(x, Y, z)) ?? default(Half);
-                    for (int k = Y; k > -1 && Math.Abs(newHeight) < 0.005f; k--)
+                    for (int k = Math.Min(Y+8, Chunk.Height-1); k > -1 && Math.Abs(newHeight) < 0.005f; k--)
                     {
                         newHeight = neighbourChunk?.GetWaterDensity(new Vector3(x, k, z)) ?? default(Half);
                     }
-                    for (int k = Y; k > -1; k--)
+                    for (int k = Math.Min(Y + 8, Chunk.Height-1); k > -1; k--)
                     {
                         var block = neighbourChunk?.GetBlockAt(x, k, z) ?? new Block();
                         if (block.Type == BlockType.Seafloor)

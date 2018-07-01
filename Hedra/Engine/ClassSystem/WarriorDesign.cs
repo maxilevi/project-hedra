@@ -13,6 +13,8 @@ namespace Hedra.Engine.ClassSystem
         public override float BaseSpeed => 1.25f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new WarriorAbilityTreeBlueprint();
         public override Item StartingItem => ItemPool.Grab(CommonItems.CommonBronzeSword);
+        public override float AttackResistance => 2.0f;
+
         public override float MaxHealthFormula(float RandomFactor)
         {
             return 46 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;

@@ -132,7 +132,6 @@ namespace Hedra.Engine.Sound
 
             ShortData = SoundManager.LoadOgg("Sounds/GorillaGrowl.ogg", out Channels, out Bits, out Rate);
             SoundBuffers[(int)SoundType.GorillaGrowl] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
-
             _loaded = true;
 		}
 

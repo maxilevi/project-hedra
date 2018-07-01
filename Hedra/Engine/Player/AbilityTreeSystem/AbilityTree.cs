@@ -16,6 +16,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Sound;
 using OpenTK;
 using OpenTK.Input;
 
@@ -225,6 +226,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     this.SetBlueprint(_blueprint);
                 this.UpdateView();
                 this.SetInventoryState(_show);
+                SoundManager.PlayUISound(SoundType.OnOff, 1.0f, 0.6f);
             }
         }
     }

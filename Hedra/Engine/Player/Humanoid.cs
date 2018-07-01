@@ -55,6 +55,7 @@ namespace Hedra.Engine.Player
 		public float AddonHealth {get; set;}
 		public float DodgeCost {get; set;}	
         public float RandomFactor { get; set; }
+	    public override float AttackResistance => Class.AttackResistance;
 	    public virtual int Gold { get; set; }
 	    private Item _mainWeapon;
         private Item _ring;

@@ -41,7 +41,16 @@ namespace Hedra.Engine.PhysicsSystem
 	        );
         }
 
-		public static void LookAt(Entity Parent, Entity Target){
+	    public static Box BuildDimensionsBox(VertexData Model)
+	    {
+	        return new Box(
+	            new Vector3(Model.SupportPoint(-Vector3.UnitX).X, Model.SupportPoint(-Vector3.UnitY).Y, Model.SupportPoint(-Vector3.UnitZ).Z),
+	            new Vector3(Model.SupportPoint(Vector3.UnitX).X, Model.SupportPoint(Vector3.UnitY).Y, Model.SupportPoint(Vector3.UnitZ).Z)
+            );
+	    }
+
+
+        public static void LookAt(Entity Parent, Entity Target){
 		    Parent.Orientation = (Target.Model.Position-Parent.Model.Position).Xz.NormalizedFast().ToVector3();
             Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
 		}

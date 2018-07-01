@@ -54,21 +54,21 @@ namespace Hedra.Engine.Management
 			Source = new SoundSource(SoundManager.ListenerPosition);
 
 			TrackNames = new string[13];
-            TrackNames[0] = "Sounds/VillageAmbient.ogg";
-            TrackNames[1] = "Sounds/MainTheme.ogg";
-            TrackNames[2] = "Sounds/Rain.ogg";
+            TrackNames[0] = "Sounds/Soundtrack/VillageAmbient.ogg";
+            TrackNames[1] = "Sounds/Soundtrack/MainTheme.ogg";
+            TrackNames[2] = "Sounds/Soundtrack/Rain.ogg";
             // LoopableSongs
-            TrackNames[3] = "Sounds/ForestAmbient.ogg";
+            TrackNames[3] = "Sounds/Soundtrack/ForestAmbient.ogg";
             // Forest should always be first
-			TrackNames[4] = "Sounds/Song0.ogg";
-			TrackNames[5] = "Sounds/Song1.ogg";
-			TrackNames[6] = "Sounds/Song2.ogg";
-			TrackNames[7] = "Sounds/Song3.ogg";
-			TrackNames[8] = "Sounds/Song4.ogg";
-			TrackNames[9] = "Sounds/Song5.ogg";
-            TrackNames[10] = "Sounds/CardinalCity.ogg";
-            TrackNames[11] = "Sounds/ThroughTheGrasslands.ogg";
-            TrackNames[12] = "Sounds/BreathOfDay.ogg";
+			TrackNames[4] = "Sounds/Soundtrack/Song0.ogg";
+			TrackNames[5] = "Sounds/Soundtrack/Song1.ogg";
+			TrackNames[6] = "Sounds/Soundtrack/Song2.ogg";
+			TrackNames[7] = "Sounds/Soundtrack/Song3.ogg";
+			TrackNames[8] = "Sounds/Soundtrack/Song4.ogg";
+			TrackNames[9] = "Sounds/Soundtrack/Song5.ogg";
+            TrackNames[10] = "Sounds/Soundtrack/CardinalCity.ogg";
+            TrackNames[11] = "Sounds/Soundtrack/ThroughTheGrasslands.ogg";
+            TrackNames[12] = "Sounds/Soundtrack/BreathOfDay.ogg";
             ShuffleSongs();
 
             for (var i = 0; i < TrackNames.Length; i++){

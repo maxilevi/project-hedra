@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -46,7 +47,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public int OffsetZ { get; }
         public Vector3 Position { get; private set; }
 
-        private Dictionary<Vector3, Half> _waterDensity;
+        private Dictionary<CoordinateHash, Half> _waterDensity;
         private readonly VertexData _nearestVertexData;
         private readonly Chunk[] _neighbours;
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
@@ -357,16 +358,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void AddWaterDensity(Vector3 WaterPosition, Half Density)
         {
-            if(_waterDensity == null) _waterDensity = new Dictionary<Vector3, Half>();
-            if (!_waterDensity.ContainsKey(WaterPosition)) //throw new ArgumentException("Water key already exists.");
-                _waterDensity.Add(WaterPosition, Density);
+            if(_waterDensity == null) _waterDensity = new Dictionary<CoordinateHash, Half>();
+            var hash = new CoordinateHash(WaterPosition);
+            if (!_waterDensity.ContainsKey(hash)) _waterDensity.Add(hash, Density);
         }
 
         public Half GetWaterDensity(Vector3 WaterPosition)
         {
-            return _waterDensity?.ContainsKey(WaterPosition) ?? false ? _waterDensity[WaterPosition] : default(Half);
+            var hash = new CoordinateHash(WaterPosition);
+            return _waterDensity?.ContainsKey(hash) ?? false ? _waterDensity[hash] : default(Half);
         }
-
         public int GetHighestY(int X, int Z)
         {
             if (Disposed) return 0;

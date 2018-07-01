@@ -26,6 +26,7 @@ namespace Hedra.Engine.ClassSystem
         public abstract AbilityTreeBlueprint AbilityTreeDesign { get; }
         public abstract Item StartingItem { get; }
         public abstract bool CanAccumulateHits { get; }
+        public abstract float AttackResistance { get; }
 
         public abstract float MaxHealthFormula(float RandomFactor);
         public abstract float MaxManaFormula(float RandomFactor);

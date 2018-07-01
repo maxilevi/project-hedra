@@ -2,7 +2,7 @@
 {
   "Name": "UncommonBronzeClawFist",
   "DisplayName": "Bronze Claw Fist",
-  "EquipmentType": "Fist",
+  "EquipmentType": "Claw",
   "Tier": "Uncommon",
   "Description": "High precision.",
   "Attributes": [

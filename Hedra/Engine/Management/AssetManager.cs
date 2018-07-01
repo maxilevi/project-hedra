@@ -231,7 +231,7 @@ namespace Hedra.Engine.Management
 			return shapes;
 		}
 
-	    public static Box LoadHitbox(string ModelFile)
+	    private static VertexData LoadModelVertexData(string ModelFile)
 	    {
 	        if (!_hitboxCache.ContainsKey(ModelFile))
 	        {
@@ -245,9 +245,18 @@ namespace Hedra.Engine.Management
 	            entityData.Mesh.Colors.ToList().ForEach(Vector => vertexData.Colors.Add(new Vector4(Vector.X, Vector.Y, Vector.Z, 1)));
 	            _hitboxCache.Add(ModelFile, vertexData);
 	        }
-	        var data = _hitboxCache[ModelFile];
-	        return Physics.BuildBroadphaseBox(data);
+	        return _hitboxCache[ModelFile];
+        }
+
+	    public static Box LoadHitbox(string ModelFile)
+	    {        
+	        return Physics.BuildBroadphaseBox(AssetManager.LoadModelVertexData(ModelFile));
 	    }
+
+	    public static Box LoadDimensions(string ModelFile)
+	    {
+	        return Physics.BuildDimensionsBox(AssetManager.LoadModelVertexData(ModelFile));
+        }
 
         public static VertexData PlyLoader(string file, Vector3 Scale){
 			return AssetManager.PlyLoader(file, Scale, Vector3.Zero, Vector3.Zero);

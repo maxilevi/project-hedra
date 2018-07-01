@@ -14,6 +14,8 @@ namespace Hedra.Engine.ClassSystem
         public override float BaseSpeed => 1.25f;
         public override AbilityTreeBlueprint AbilityTreeDesign => null;
         public override Item StartingItem => null;
+        public override float AttackResistance => throw new ArgumentException();
+
         public override float MaxHealthFormula(float RandomFactor)
         {
             return 30 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;

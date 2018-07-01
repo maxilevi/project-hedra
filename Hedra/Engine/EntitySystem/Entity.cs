@@ -12,7 +12,6 @@ using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
@@ -49,7 +48,7 @@ namespace Hedra.Engine.EntitySystem
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1.0f;
         public float AttackCooldown { get; set; }
-        public float AttackResistance { get; set; } = 1.0f;
+        public virtual float AttackResistance { get; set; } = 1.0f;
         public bool Destroy { get; set; } = false;
         public int Level { get; set; } = 1;
         public float MaxOxygen { get; set; } = 30;

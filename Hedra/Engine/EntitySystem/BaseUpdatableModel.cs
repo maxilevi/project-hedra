@@ -10,6 +10,7 @@ namespace Hedra.Engine.EntitySystem
         public abstract CollisionShape BroadphaseCollider { get; }
         public abstract Box BroadphaseBox { get; }
         public abstract Box BaseBroadphaseBox { get; protected set; }
+        public abstract Box Dimensions { get; protected set; }
         public abstract bool IsAttacking { get; protected set; }
         public abstract bool IsWalking { get; protected set; }
         public abstract bool IsIdling { get; protected set; }

@@ -66,8 +66,9 @@ namespace Hedra.Engine.EntitySystem
 		    this.AlignWithTerrain = Template.AlignWithTerrain;
             this.Model.Scale = Vector3.One * (Template.Scale + Template.Scale * rng.NextFloat() * .3f - Template.Scale * rng.NextFloat() * .15f);
 			this.BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * this.Model.Scale;
+		    this.Dimensions = AssetManager.LoadDimensions(Template.Path) * this.Model.Scale;
 
-			for (var i = 0; i < IdleAnimations.Length; i++)
+            for (var i = 0; i < IdleAnimations.Length; i++)
 		    {
 				IdleAnimations[i] = AnimationLoader.LoadAnimation(Template.IdleAnimations[i].Path);
 				IdleAnimations[i].Speed = Template.IdleAnimations[i].Speed;
@@ -118,7 +119,6 @@ namespace Hedra.Engine.EntitySystem
             }
             this.Collider = new AnimatedCollider(Template.Path, Model);
 			this.Idle();
-
 		    var soundType = Parent.MobType == MobType.Horse ? SoundType.HorseRun : SoundType.HumanRun;
 		    this._sound = new AreaSound(soundType, this.Position, 48f);
         }

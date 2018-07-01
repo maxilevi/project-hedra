@@ -14,6 +14,7 @@ using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Sound;
 using OpenTK;
 using OpenTK.Input;
 
@@ -254,6 +255,7 @@ namespace Hedra.Engine.Player
                 _interfaceManager.Enabled = _show;
                 this.UpdateInventory();
                 this.SetInventoryState(_show);
+                SoundManager.PlayUISound(SoundType.OnOff, 1.0f, 0.6f);
             }
         }
     }

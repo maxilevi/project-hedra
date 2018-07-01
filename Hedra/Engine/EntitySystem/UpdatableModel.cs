@@ -66,6 +66,7 @@ namespace Hedra.Engine.EntitySystem
         public override CollisionShape[] Colliders => new []{ BroadphaseBox.ToShape() };
         public override CollisionShape BroadphaseCollider => BroadphaseBox.ToShape();
         public override Box BroadphaseBox => BaseBroadphaseBox.Cache.Translate(Model.Position);
+        public override Box Dimensions { get; protected set; }
 
         public override Box BaseBroadphaseBox
         {

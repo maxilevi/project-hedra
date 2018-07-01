@@ -223,7 +223,13 @@
     <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilder.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilderHelper.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkMeshBuildOutput.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\CoordinateHash.cs" />
     <Compile Include="Engine\IO\ConfigurationFile.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorPiece.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorFactory.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\Boots.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\Chest.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\DoubleArmorPiece.cs" />
     <Compile Include="Engine\ItemSystem\AttributeArray.cs" />
     <Compile Include="Engine\ItemSystem\AttributeDisplay.cs" />
     <Compile Include="Engine\ItemSystem\AttributeTemplate.cs" />
@@ -360,6 +366,8 @@
     <Compile Include="Engine\Management\DataManager.cs" />
     <Compile Include="Engine\Management\Occludable.cs" />
     <Compile Include="Engine\Management\OcclusionState.cs" />
+    <Compile Include="Engine\Player\Customization\CustomizationOptions.cs" />
+    <Compile Include="Engine\Player\Customization\ModelCustomization.cs" />
     <Compile Include="Engine\Player\HangGlider.cs" />
     <Compile Include="Engine\Player\MapSystem\MapBaseItem.cs" />
     <Compile Include="Engine\Player\MapSystem\MapMeshBuilder.cs" />
@@ -4599,7 +4607,7 @@
     <None Include="Sounds\Footstep\footstep_01.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\ForestAmbient.ogg">
+    <None Include="Sounds\Soundtrack\ForestAmbient.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\GlassBreak.ogg">
@@ -4632,7 +4640,7 @@
     <None Include="Sounds\LongSwoosh.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\MainTheme.ogg">
+    <None Include="Sounds\Soundtrack\MainTheme.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Money.wav">
@@ -4641,7 +4649,7 @@
     <None Include="Sounds\OnOff.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Rain.ogg">
+    <None Include="Sounds\Soundtrack\Rain.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Roll.ogg">
@@ -4671,7 +4679,7 @@
     <None Include="Sounds\Soundtrack\ThroughTheGrasslands.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\VillageAmbient.ogg">
+    <None Include="Sounds\Soundtrack\VillageAmbient.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\WaterSplash.wav">
@@ -4826,7 +4834,10 @@
     <ErrorReport>prompt</ErrorReport>
     <ConsolePause>False</ConsolePause>
     <OutputPath>bin\Release\</OutputPath>
-    <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">      
+    <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
+        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
+        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
+        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
         call "$(ProjectDir)/../hedra-obfuscator/Confuser.CLI.exe" "$(ProjectDir)/Hedra.crproj"
     </PostBuildEvent>
   </PropertyGroup>

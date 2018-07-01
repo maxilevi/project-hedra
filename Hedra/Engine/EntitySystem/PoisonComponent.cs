@@ -25,14 +25,16 @@ namespace Hedra.Engine.EntitySystem
 		private int PTime;
 		private Entity Damager = null;
 		
-		public PoisonComponent(Entity Parent, Entity Damager, float TotalTime, float TotalDamage) : base(Parent){
+		public PoisonComponent(Entity Parent, Entity Damager, float TotalTime, float TotalDamage) : base(Parent)
+        {
 			this.TotalTime = TotalTime;
 			this.TotalDamage = TotalDamage;
 			this.Damager = Damager;
 			CoroutineManager.StartCoroutine(UpdatePoison);
 		}
 		
-		public PoisonComponent(Entity Parent, float TotalTime, float TotalDamage) : base(Parent){
+		public PoisonComponent(Entity Parent, float TotalTime, float TotalDamage) : base(Parent)
+        {
 			this.TotalTime = TotalTime;
 			this.TotalDamage = TotalDamage;
 			CoroutineManager.StartCoroutine(UpdatePoison);
@@ -48,10 +50,9 @@ namespace Hedra.Engine.EntitySystem
 				if(Time >= 1){
 					PTime++;
 					Time = 0;
-					float Exp;
-					Parent.Damage(TotalDamage / TotalTime, Damager, out Exp, true);
-					if(Damager != null && Damager is Humanoid)
-						(Damager as Humanoid).XP += Exp;
+				    Parent.Damage(TotalDamage / TotalTime, Damager, out float Exp, true);
+					if(Damager is Humanoid humanoid)
+						humanoid.XP += Exp;
 				}
 				
 				yield return null;

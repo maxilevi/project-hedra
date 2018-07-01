@@ -6,17 +6,11 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using System.Reflection;
-using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Player.ToolbarSystem;
-using OpenTK;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Rendering;
-using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Player
 {
@@ -87,7 +81,7 @@ namespace Hedra.Engine.Player
 		public override void Update()
         {
 			if(DisableWeapon) return;
-		    this.MaxCooldown = _maxCooldown / Player.AttackSpeed;
+            this.MaxCooldown = _maxCooldown / Player.AttackSpeed;
 			if(_isPressing && Cooldown < 0){
 				Player.Model.LeftWeapon.Attack1(Player);
 				Player.Model.LeftWeapon.ContinousAttack = true;
