@@ -392,7 +392,8 @@ namespace Hedra.Engine.Player
             }
             this.View.AddonDistance = this.IsMoving || this.IsSwimming || this.IsGliding ? 3.0f : 0.0f;
 
-            //this.Physics.PushAround = !IsAttacking; // If he is attacking dont push 'em	            
+            //this.Physics.PushAround = !IsAttacking; // If he is attacking dont push 'em	
+			//Loader.Update();            
             Inventory.Update();
             AbilityTree.Update();
             Toolbar.Update();
@@ -474,7 +475,7 @@ namespace Hedra.Engine.Player
 	        {
 	            IsDead = true;
                 CoroutineManager.StartCoroutine(this.DmgComponent.DisposeCoroutine);
-	            ThreadManager.ExecuteOnMainThread(delegate {
+	            Executer.ExecuteOnMainThread(delegate {
 	                this.MessageDispatcher.ShowMessageWhile("[R] TO RESPAWN", Color.White,
 	                    () => this.Health <= 0 && !GameManager.InStartMenu);
 	            });
@@ -562,7 +563,7 @@ namespace Hedra.Engine.Player
 		    this.IsRiding = false;
             var newOffset = new Vector3( (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize);
 		    var newPosition = newOffset + this.BlockPosition;
-		    newPosition = new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z), newPosition.Z);
+		    newPosition = World.FindPlaceablePosition(this, new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z), newPosition.Z));
             this.Model.Position = newPosition;
 		    this.Physics.TargetPosition = newPosition;
 		    this.Knocked = false;

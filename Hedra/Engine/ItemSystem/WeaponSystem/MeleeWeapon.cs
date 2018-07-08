@@ -15,10 +15,15 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected TrailRenderer Trail { get; set; }
         private Dictionary<ObjectMesh, ObjectMeshCollider> _colliders { get; set; }
         private CollisionShape[] _shapesArray;
+        private readonly float _weaponHeight;
 
         protected MeleeWeapon(VertexData MeshData) : base(MeshData)
         {
             _colliders = new Dictionary<ObjectMesh, ObjectMeshCollider>();
+            if (MeshData != null)
+            {
+                _weaponHeight = MeshData.SupportPoint(Vector3.UnitY).Y - MeshData.SupportPoint(-Vector3.UnitY).Y;
+            }
         }
 
         public override void Update(Humanoid Human)
@@ -38,7 +43,24 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             this.Trail.Emit &= this.Owner?.IsAttacking ?? false;
             this.Trail.Update();
             base.Update(Human);
+
+            if (Sheathed)
+            {
+                this.SetToChest(MainMesh);
+                MainMesh.BeforeLocalRotation =
+                    (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 2.5f - Vector3.UnitY * (_weaponHeight * .5f - 1.25f)) * this.Scale;
+            }
+
+            if (PrimaryAttack)
+            {
+                base.SetToMainHand(MainMesh);
+                MainMesh.BeforeLocalRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15f * this.Scale.Y,
+                    Matrix4.CreateRotationX(-90 * Mathf.Radian) * Matrix4.CreateRotationZ(0 * Mathf.Radian));
+                MainMesh.TargetRotation = new Vector3(90, 0, 90);
+            }
         }
+
+        public override Vector3 WeaponTip => Vector3.Zero;//MainMesh.TransformPoint(Vector3.UnitY * _swordHeight);
 
         private bool WeaponRegistered(ObjectMesh Mesh) 
         {

@@ -51,7 +51,7 @@ namespace Hedra.Engine.Rendering.UI
 		}
 		
 		~RenderableButton(){
-			ThreadManager.ExecuteOnMainThread( ()=> base.Dispose() );
+			Executer.ExecuteOnMainThread( ()=> base.Dispose() );
 		}
 	}
 }

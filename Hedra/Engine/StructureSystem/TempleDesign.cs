@@ -38,7 +38,7 @@ namespace Hedra.Engine.StructureSystem
                 Structure.AddCollisionShape(shapes[i]);
             }*/
 
-            ThreadManager.ExecuteOnMainThread(delegate
+            Executer.ExecuteOnMainThread(delegate
             {
                 Entity treeBoss = BossGenerator.Generate(new [] {MobType.Gorilla, MobType.Troll}, rng);
 

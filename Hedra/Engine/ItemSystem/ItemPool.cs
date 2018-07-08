@@ -96,9 +96,9 @@ namespace Hedra.Engine.ItemSystem
                 Item = RandomizeTier(Item, Rng);
                 var tierChanged = originalTier != Item.Tier;
                 Item.SetAttribute(CommonAttributes.Damage, Item.GetAttribute<float>(CommonAttributes.Damage)
-                    * (1.0f + (Rng.NextFloat() * (.3f + (tierChanged ? .1f * (int) Item.Tier : .0f) ) - .1f)));
+                    * (1.0f + (Rng.NextFloat() * (.1f + (tierChanged ? .1f * (int) Item.Tier : .0f) ) - .075f)));
 	            Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed)
-                    * (1.0f + (Rng.NextFloat() * (.3f + +(tierChanged ? .1f * (int)Item.Tier : .0f)) - .1f)));
+                    * (1.0f + (Rng.NextFloat() * (.1f + (tierChanged ? .1f * (int)Item.Tier : .0f)) - .075f)));
 	            if ( Item.Tier > ItemTier.Common && Rng.Next(0, 10) == 1)
 	            {
 	                Item.SetAttribute(CommonAttributes.EffectType, EffectTypes[Rng.Next(0, EffectTypes.Length)].ToString());

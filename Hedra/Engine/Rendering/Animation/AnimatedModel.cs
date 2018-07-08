@@ -48,6 +48,8 @@ namespace Hedra.Engine.Rendering.Animation
         //
 	    public Box CullingBox { get; set; }
 	    public bool DontCull { get; set; }
+
+	    private readonly Matrix4[] _jointMatrices;
         /**
 		 * Creates a new entity capable of animation. The inverse bind transform for
 		 * all joints is calculated in this constructor. The bind transform is
@@ -76,7 +78,7 @@ namespace Hedra.Engine.Rendering.Animation
             this.JointIdsArray = Data.JointIds;
             this.VerticesArray = Data.Vertices;
 
-            ThreadManager.ExecuteOnMainThread(delegate
+            Executer.ExecuteOnMainThread(delegate
             {
                 this.Vertices = new VBO<Vector3>(Data.Vertices, Data.Vertices.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
                 this.Colors = new VBO<Vector3>(Data.Colors, Data.Colors.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
@@ -96,7 +98,8 @@ namespace Hedra.Engine.Rendering.Animation
 			this.Scale = Vector3.One * 1.0f;
             this.ApplyFog = true;
             this.Enabled = true;
-			DrawManager.Add(this);
+            this._jointMatrices = new Matrix4[JointCount];
+            DrawManager.Add(this);
 		}
 		
 		/**
@@ -106,7 +109,7 @@ namespace Hedra.Engine.Rendering.Animation
 		public void Dispose() {
             if (!BuffersCreated)
             {
-                ThreadManager.ExecuteOnMainThread(delegate
+                Executer.ExecuteOnMainThread(delegate
                 {
                     this.Disposed = true;
                     Data?.Dispose();
@@ -220,11 +223,12 @@ namespace Hedra.Engine.Rendering.Animation
 		 * @return The array of model-space transforms of the joints in the current
 		 *         animation pose.
 		 */
-		public Matrix4[] JointTransforms{
-			get{ 
-				Matrix4[] JointMatrices = new Matrix4[JointCount];
-				this.AddJointsToArray(RootJoint, JointMatrices);
-				return JointMatrices;
+		public Matrix4[] JointTransforms
+        {
+			get
+            { 
+				this.AddJointsToArray(RootJoint, _jointMatrices);
+				return _jointMatrices;
 			}
 		}
 	
@@ -284,7 +288,7 @@ namespace Hedra.Engine.Rendering.Animation
 
 	    public void ReplaceColors(Vector3[] ColorArray)
 	    {
-	        ThreadManager.ExecuteOnMainThread(delegate
+	        Executer.ExecuteOnMainThread(delegate
 	        {
                 if (ColorArray.Length != this.Colors.Count)
                     throw new ArgumentOutOfRangeException("The new colors array can't have more data than the previous one.");

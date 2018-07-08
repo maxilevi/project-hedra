@@ -90,19 +90,19 @@ namespace Hedra.Engine.QuestSystem.Objectives
 		
 		public void AddOffset(VertexData Data, int Count, int TypeAmount, float Size){
 			if(Count == 0 && (TypeAmount == 2 || TypeAmount == 3) )
-				Data.Transform( (-Vector3.UnitX * .5f + Vector3.UnitZ * .0f) * Size);
+				Data.Translate( (-Vector3.UnitX * .5f + Vector3.UnitZ * .0f) * Size);
 			
 			else if(Count == 1 && (TypeAmount == 2 || TypeAmount == 3) )
-				Data.Transform( (Vector3.UnitX * .5f + Vector3.UnitZ * .0f) * Size);
+				Data.Translate( (Vector3.UnitX * .5f + Vector3.UnitZ * .0f) * Size);
 			
 			else if (Count == 2 && TypeAmount == 3)
-				Data.Transform( (-Vector3.UnitZ * .25f + Vector3.UnitY * .0f) * Size);
+				Data.Translate( (-Vector3.UnitZ * .25f + Vector3.UnitY * .0f) * Size);
 			
 			else if (Count == 2 && TypeAmount == 4)
-				Data.Transform( (-Vector3.UnitZ * .25f - Vector3.UnitX * .5f + Vector3.UnitY * .0f) * Size);
+				Data.Translate( (-Vector3.UnitZ * .25f - Vector3.UnitX * .5f + Vector3.UnitY * .0f) * Size);
 			
 			else if (Count == 3 && TypeAmount == 4)
-				Data.Transform( (-Vector3.UnitZ * .25f + Vector3.UnitX * .5f + Vector3.UnitY * .0f) * Size);
+				Data.Translate( (-Vector3.UnitZ * .25f + Vector3.UnitX * .5f + Vector3.UnitY * .0f) * Size);
 		}
 		
 		public override bool ShouldDisplay => false;

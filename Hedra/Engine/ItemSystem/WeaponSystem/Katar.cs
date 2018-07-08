@@ -19,8 +19,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// </summary>
 	internal class Katar : MeleeWeapon
     {
-	    public override float PrimaryAttackCooldown => .2f;
-	    public override float SecondaryAttackCooldown => 3.0f;
         private readonly ObjectMesh SecondBlade;
 		
 		public Katar(VertexData Contents) : base(Contents)

@@ -37,7 +37,7 @@ namespace Hedra.Engine.Generation
             if(transMatrix == Matrix4.Identity) return;
 
             VertexData modelData = Design.Model;
-            VertexData modelDataClone = modelData.Clone();
+            VertexData modelDataClone = modelData.ShallowClone();
 
             Design.Paint(transMatrix.ExtractTranslation(), modelDataClone, rng);
             Design.AddShapes(underChunk, transMatrix);
@@ -52,7 +52,7 @@ namespace Hedra.Engine.Generation
                     TransMatrix = transMatrix
                 };
                 CacheManager.Check(data);
-                underChunk.StaticBuffer.AddInstance(data);
+                underChunk?.StaticBuffer?.AddInstance(data);
                 modelDataClone.Dispose();
             }
             else

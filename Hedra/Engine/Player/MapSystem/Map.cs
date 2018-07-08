@@ -296,7 +296,7 @@ namespace Hedra.Engine.Player.MapSystem
 	            BaseItem.HasChunk = item.HasChunk;
 	            BaseItem.Coordinates = Coords;
 	            BaseItem.WasBuilt = item.WasBuilt;
-	            ThreadManager.ExecuteOnMainThread(delegate
+	            Executer.ExecuteOnMainThread(delegate
 	            {
 	                if (prevMesh?.Mesh != null) prevMesh.Dispose();
 	            });

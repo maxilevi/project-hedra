@@ -232,7 +232,7 @@ namespace Hedra.Engine.Rendering
 		
 		public static ObjectMesh FromVertexData(VertexData Data, Vector3 Position){
 			var mesh = new ObjectMesh(Position);
-			ThreadManager.ExecuteOnMainThread( delegate
+			Executer.ExecuteOnMainThread( delegate
             {			                                  	
 			    mesh.Mesh.BuildFrom(mesh.Mesh.MeshBuffers[0], Data, false);
 			    mesh.Mesh.IsGenerated = true;

@@ -23,8 +23,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     {	
 		public override Vector3 SheathedPosition => new Vector3(1.5f,-0.0f,0.0f);
 	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
-	    public override float PrimaryAttackCooldown => .25f;
-	    public override float SecondaryAttackCooldown => 3.5f;
         private readonly ObjectMesh Quiver;
         private readonly ObjectMesh Arrow;
 		private readonly VertexData ArrowData;

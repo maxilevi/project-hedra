@@ -39,7 +39,7 @@ namespace Hedra.Engine.StructureSystem
             underChunk.Blocked = true;
 
             World.AddStructure(merchant);
-            ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.TravellingMerchant, Position));
+            Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.TravellingMerchant, Position));
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)

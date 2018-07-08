@@ -26,11 +26,13 @@ namespace Hedra.Engine.Rendering
 	    private static Vector3 _lightColor;
 	    private static float _clipPlaneY;
 
-        static ShaderManager(){
+        static ShaderManager()
+        {
             Shaders = new List<Shader>();
             PointLights = new PointLight[MaxLights];
             _lightPosition = new Vector3(0, 1000, 0);
-            for (var i = 0; i < PointLights.Length; i++){
+            for (var i = 0; i < PointLights.Length; i++)
+            {
 				PointLights[i] = new PointLight();
 			}
 		}
@@ -45,7 +47,8 @@ namespace Hedra.Engine.Rendering
 	        currentShaders.ToList().ForEach( S => S.Reload() );
 	    }
 		
-		public static void RegisterShader(Shader Entry){
+		public static void RegisterShader(Shader Entry)
+        {
 			Shaders.Add(Entry);
 			Entry.LightColorLocation = GL.GetUniformLocation(Entry.ShaderId, "LightColor");
 		    Entry.LightPositionLocation = GL.GetUniformLocation(Entry.ShaderId, "LightPosition");
@@ -53,27 +56,58 @@ namespace Hedra.Engine.Rendering
 			Entry.PointLightsPositionUniform = new int[MaxLights];
 			Entry.PointLightsRadiusUniform = new int[MaxLights];
 			
-			for(var i = 0; i < Entry.PointLightsColorUniform.Length; i++){
+			for(var i = 0; i < Entry.PointLightsColorUniform.Length; i++)
+            {
 				Entry.PointLightsColorUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Color");
 			}
-			for(var i = 0; i < Entry.PointLightsPositionUniform.Length; i++){
+			for(var i = 0; i < Entry.PointLightsPositionUniform.Length; i++)
+            {
 				Entry.PointLightsPositionUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Position");
 			}
-			for(var i = 0; i < Entry.PointLightsRadiusUniform.Length; i++){
+			for(var i = 0; i < Entry.PointLightsRadiusUniform.Length; i++)
+            {
 				Entry.PointLightsRadiusUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Radius");
 			}
 		}
-		
-		public static PointLight GetAvailableLight(){
+
+	    private static void Do(Func<Shader, bool> Condition, Action<Shader> Action, bool InSameThread = false)
+	    {
+	        var previousProgram = GraphicsLayer.ShaderBound;
+            GraphicsLayer.BindShader(previousProgram);
+	        for (var i = 0; i < Shaders.Count; i++)
+	        {
+	            int k = i;
+	            if (Condition(Shaders[k]))
+	            {
+	                void Do()
+	                {
+	                    Shaders[k].Bind();
+	                    Action(Shaders[k]);
+	                }
+
+	                if (InSameThread) Do();
+	                else Executer.ExecuteOnMainThread(Do);
+	            }
+	        }
+
+	        void Cleanup()
+	        {
+	            GraphicsLayer.ShaderBound = previousProgram;
+                GraphicsLayer.BindShader(GraphicsLayer.ShaderBound);
+	        }
+	        if (InSameThread) Cleanup();
+	        else Executer.ExecuteOnMainThread(Cleanup);
+	    }
+
+        public static PointLight GetAvailableLight()
+        {
 			for(var i = 0; i < PointLights.Length; i++){
-				if(!PointLights[i].Locked)
-				{
-				    PointLights[i].Radius = PointLight.DefaultRadius;
-				    PointLights[i].Color = Vector3.Zero;
-				    PointLights[i].Position = Vector3.Zero;
-                    PointLights[i].Locked = true;
-					return PointLights[i];
-				}
+			    if (PointLights[i].Locked) continue;
+			    PointLights[i].Radius = PointLight.DefaultRadius;
+			    PointLights[i].Color = Vector3.Zero;
+			    PointLights[i].Position = Vector3.Zero;
+			    PointLights[i].Locked = true;
+			    return PointLights[i];
 			}
 			return null;
 		}
@@ -85,26 +119,15 @@ namespace Hedra.Engine.Rendering
                 Light.Radius = PointLight.DefaultRadius;
                 Light.Color = Vector3.Zero;
             }
+            var lightIndex = Array.IndexOf(PointLights, Light);
+            if(lightIndex == -1) return;
 
-            int prevShader = GraphicsLayer.ShaderBound;
-			for(int i = 0; i < Shaders.Count; i++)
+            ShaderManager.Do(S => S.PointLightsColorUniform[lightIndex] != -1, delegate (Shader Shader)
             {
-				int k = i;
-				int j = Array.IndexOf(PointLights, Light);
-				if(j == -1) continue;
-				if(Shaders[i].PointLightsColorUniform[ j ] != -1)
-					ThreadManager.ExecuteOnMainThread ( delegate{
-					                                   	GL.UseProgram(Shaders[k].ShaderId);
-					                                   	GL.Uniform3(Shaders[k].PointLightsColorUniform[ j ], Light.Color);
-					                                    GL.Uniform3(Shaders[k].PointLightsPositionUniform[ j ], Light.Position);
-					                                    GL.Uniform1(Shaders[k].PointLightsRadiusUniform[ j ], Light.Radius);
-					                                   } );
-			}
-			ThreadManager.ExecuteOnMainThread ( delegate{ 
-			                                   	GL.UseProgram(prevShader);
-												GraphicsLayer.ShaderBound = prevShader;
-			                                   } );
-
+                GL.Uniform3(Shader.PointLightsColorUniform[lightIndex], Light.Color);
+                GL.Uniform3(Shader.PointLightsPositionUniform[lightIndex], Light.Position);
+                GL.Uniform1(Shader.PointLightsRadiusUniform[lightIndex], Light.Radius);
+            });
 		}
 		
 		public static Vector3 LightColor
@@ -113,71 +136,47 @@ namespace Hedra.Engine.Rendering
 		    set
             {
 				_lightColor = value;
-				int prevShader = GraphicsLayer.ShaderBound;
-				for(var i = 0; i < Shaders.Count; i++){
-					int k = i;
-				    if (Shaders[i].LightColorLocation != -1)
-				    {
-				        ThreadManager.ExecuteOnMainThread(delegate
-				        {
-				            GL.UseProgram(Shaders[k].ShaderId);
-				            GL.Uniform3(Shaders[k].LightColorLocation, value);
-				        });
-				    }
-				}
-				GL.UseProgram(prevShader);
-				GraphicsLayer.ShaderBound = prevShader;
-			}
+                ShaderManager.Do(S => S.LightColorLocation != -1, delegate (Shader Shader)
+                {
+                    Shader["LightColor"] = _lightColor;
+                });
+            }
 		}
 
 	    public static void SetLightColorInTheSameThread(Vector3 Color)
 	    {
 	        _lightColor = Color;
-	        int prevShader = GraphicsLayer.ShaderBound;
-	        for (var i = 0; i < Shaders.Count; i++)
+	        ShaderManager.Do(S => S.LightColorLocation != -1, delegate (Shader Shader)
 	        {
-	            int k = i;
-	            if (Shaders[i].LightColorLocation != -1)
-	            {
-	                GL.UseProgram(Shaders[k].ShaderId);
-	                GL.Uniform3(Shaders[k].LightColorLocation, Color);	                
-	            }
-	        }
-	        GL.UseProgram(prevShader);
-	        GraphicsLayer.ShaderBound = prevShader;
+	            Shader["LightColor"] = _lightColor;
+	        }, true);
         }
 
 		public static Vector3 LightPosition
         {
 			get => _lightPosition;
-		    set{
+		    set
+            {
 				if(_lightPosition == value) return;
 				
 				_lightPosition = value;
-				int prevShader = GraphicsLayer.ShaderBound;
-				for(int i = 0; i < Shaders.Count; i++){
-					int k = i;
-					if(Shaders[i].LightPositionLocation != -1)
-						ThreadManager.ExecuteOnMainThread ( delegate{
-						                                   	GL.UseProgram(Shaders[k].ShaderId);
-						                                   	GL.Uniform3(Shaders[k].LightPositionLocation, _lightPosition);
-						                                   } );
-				}
-				ThreadManager.ExecuteOnMainThread ( delegate{ 
-				                                   	GL.UseProgram(prevShader);
-													GraphicsLayer.ShaderBound = prevShader;
-				                                   } );
+                ShaderManager.Do(S => S.LightPositionLocation != -1, delegate(Shader Shader)
+                {
+                    Shader["LightPosition"] = _lightPosition;
+                });
 			}
 		}
 
 		public static int UsedLights
         {
-			get{
-				int UsedLights = 0;
-				for(int i = 0; i < PointLights.Length; i++)
-					if(PointLights[i].Locked) UsedLights++;
-				
-				return UsedLights;
+			get
+            {
+				var usedLights = 0;
+                for (var i = 0; i < PointLights.Length; i++)
+                {
+                    if (PointLights[i].Locked) usedLights++;
+                }
+                return usedLights;
 			}
 		}
 	}

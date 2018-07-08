@@ -139,7 +139,6 @@ namespace Hedra.Engine.Player
             SleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
 
             RollAnimation.Loop = false;
-            RollAnimation.Speed = 0.75f;
 			RollAnimation.OnAnimationEnd += delegate(Animation Sender) { 
 				Human.Physics.ResetFall();
 				Human.FinishRoll();
@@ -347,7 +346,6 @@ namespace Hedra.Engine.Player
         public override void Update()
 		{
             base.Update();
-
 		    WalkAnimation.Speed = Human.Speed;
 		    this._modelSound.Pitch = Human.Speed / 1.11f;
             if (this.Model.Animator.AnimationPlaying != this.RollAnimation && Human.IsRolling)
@@ -359,7 +357,7 @@ namespace Hedra.Engine.Player
 			}
             else
             {
-				Model.Animator.AnimationPlaying.DispatchEvents(1f);
+				Model.Animator.AnimationPlaying?.DispatchEvents(1f);
 				Model.Animator.StopBlend();
 			}
 			

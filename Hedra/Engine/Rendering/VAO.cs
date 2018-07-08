@@ -30,7 +30,7 @@ namespace Hedra.Engine.Rendering
         {
             if (_disposed) return;
             _disposed = true;
-            ThreadManager.ExecuteOnMainThread(delegate
+            Executer.ExecuteOnMainThread(delegate
             {
                 GL.DeleteVertexArrays(1, ref _id);
             });

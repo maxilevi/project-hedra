@@ -51,6 +51,12 @@ namespace Hedra.Engine
         private static int _shadowQuality = 2;
         private static float _fpsLimit;
 
+        static GameSettings()
+        {
+#if DEBUG
+            DebugMode = true;
+#endif
+        }
 
         [Setting]
         public static float FpsLimit {

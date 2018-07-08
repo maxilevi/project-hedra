@@ -49,7 +49,7 @@ namespace Hedra.Engine.PlantSystem
             for (int i = 0; i < Data.ExtraData.Count; i++)
                 Data.ExtraData[i] = 0.001f;
 
-            Data.ReColor(this.RockColor(Rng));
+            Data.Paint(this.RockColor(Rng));
             Data.GraduateColor(Vector3.UnitY);
 
             return Data; 

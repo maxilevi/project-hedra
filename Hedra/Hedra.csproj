@@ -205,6 +205,7 @@
     <Compile Include="Engine\ClassSystem\WarriorDesign.cs" />
     <Compile Include="Engine\CompatibilityManager.cs" />
     <Compile Include="Engine\AISystem\BasicAIComponent.cs" />
+    <Compile Include="Engine\ComplexMath\RandomDistribution.cs" />
     <Compile Include="Engine\DatabaseSystem\Dao.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
@@ -219,11 +220,19 @@
     <Compile Include="Engine\EnvironmentSystem\SkyOverlay.cs" />
     <Compile Include="Engine\EnvironmentSystem\WeatherManager.cs" />
     <Compile Include="Engine\GameLoader.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\AbstractBuilder.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\ChunkBuilder.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkStructuresMeshBuilder.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilder.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilderHelper.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkMeshBuildOutput.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\ChunkWatcher.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\CoordinateHash.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\LoadBalancer.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\SharedWorkerPool.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\Worker.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\WorkerPool.cs" />
+    <Compile Include="Engine\ICountable.cs" />
     <Compile Include="Engine\IO\ConfigurationFile.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorPiece.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorFactory.cs" />
@@ -249,6 +258,7 @@
     <Compile Include="Engine\ItemSystem\WeaponSystem\RangedWeapon.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\WeaponFactory.cs" />
     <Compile Include="Engine\ItemSystem\EquipmentType.cs" />
+    <Compile Include="Engine\Management\DistributedExecuter.cs" />
     <Compile Include="Engine\Management\ISearchable.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
     <Compile Include="Engine\Management\KeyboardManager.cs" />
@@ -350,11 +360,10 @@
     <Compile Include="Engine\Events\IEventListener.cs" />
     <Compile Include="Engine\Extensions.cs" />
     <Compile Include="Engine\GeneralSettings.cs" />
-    <Compile Include="Engine\Generation\ClosestChunk.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\ChunkComparer.cs" />
     <Compile Include="Engine\Generation\HeightmapData.cs" />
     <Compile Include="Engine\Generation\EnviromentGenerator.cs" />
     <Compile Include="Engine\Generation\Perlin.cs" />
-    <Compile Include="Engine\Generation\QueueThread.cs" />
     <Compile Include="Engine\Generation\Simplex.cs" />
     <Compile Include="Engine\Generation\CollidableStructure.cs" />
     <Compile Include="Engine\IO\Log.cs" />
@@ -389,10 +398,9 @@
     <Compile Include="Engine\Mathf.cs" />
     <Compile Include="Engine\BiomeSystem\BiomePool.cs" />
     <Compile Include="Engine\Generation\BlockUtils.cs" />
-    <Compile Include="Engine\Generation\GenerationThread.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeGenerator.cs" />
     <Compile Include="Engine\BiomeSystem\LandscapeGenerator.cs" />
-    <Compile Include="Engine\Generation\MeshBuilderQueue.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\MeshBuilder.cs" />
     <Compile Include="Engine\Generation\Noise.cs" />
     <Compile Include="Engine\BiomeSystem\RegionColor.cs" />
     <Compile Include="Engine\Generation\TreeGenerator.cs" />
@@ -410,7 +418,7 @@
     <Compile Include="Engine\Rendering\PointLight.cs" />
     <Compile Include="Engine\Rendering\ShaderManager.cs" />
     <Compile Include="Engine\Management\TaskManager.cs" />
-    <Compile Include="Engine\Management\ThreadManager.cs" />
+    <Compile Include="Engine\Management\Executer.cs" />
     <Compile Include="Engine\Management\UpdateManager.cs" />
     <Compile Include="Engine\Management\ZipManager.cs" />
     <Compile Include="Engine\Networking\Packet0x10.cs" />
@@ -651,7 +659,6 @@
     <Compile Include="Engine\Rendering\MarchingCubes.cs" />
     <Compile Include="Engine\Rendering\IsoSurfaceCreator.cs" />
     <Compile Include="Engine\Rendering\MarchingTetrahedra.cs" />
-    <Compile Include="Engine\Rendering\MarchingTriangles.cs" />
     <Compile Include="Engine\Rendering\MeshData.cs" />
     <Compile Include="Engine\Rendering\MeshSimplifier.cs" />
     <Compile Include="Engine\Rendering\NvidiaGPUFix32.cs">
@@ -734,8 +741,7 @@
     <Compile Include="Engine\Time.cs" />
     <Compile Include="Engine\Generation\Block.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\Chunk.cs" />
-    <Compile Include="Engine\Generation\ChunkLoader.cs" />
-    <Compile Include="Engine\Generation\GenerationQueue.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\ChunkLoader.cs" />
     <Compile Include="Engine\Rendering\BasicGeometry.cs" />
     <Compile Include="Engine\Rendering\VBO.cs" />
     <Compile Include="Engine\Rendering\CubeData.cs" />
@@ -948,6 +954,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="Utils.cs" />
+    <None Include="Sounds\Swoosh.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\WaterSplash.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\project-hedra-assets\Animations\ArcherIdle.dae">
@@ -1312,10 +1324,6 @@
     </None>
     <None Include="..\project-hedra-assets\Animations\WarriorSlash-Stance.dae">
       <Link>Assets\Chr\WarriorSlash-Stance.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Animations\WarriorSlash.dae">
-      <Link>Assets\Chr\WarriorSlash.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Animations\WarriorSleep.dae">
@@ -4586,10 +4594,37 @@
     <None Include="Shaders\Water.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Bow.wav">
+    <None Include="Sounds\Bow.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\DarkSound.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Eat.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\GorillaGrowl.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\HitGround.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\HoverButton.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\ItemCollect.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Jump.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Money.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\OnOff.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Run.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\BreathOfDay.ogg">
@@ -4598,13 +4633,7 @@
     <None Include="Sounds\Soundtrack\CardinalCity.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\DarkSound.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Sounds\Fireplace.ogg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Sounds\Footstep\footstep_01.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\ForestAmbient.ogg">
@@ -4625,28 +4654,13 @@
     <None Include="Sounds\Horse.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\HoverButton.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Sounds\HumanSleep.ogg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Sounds\ItemCollect.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Sounds\Jump.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\LongSwoosh.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\MainTheme.ogg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Sounds\Money.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Sounds\OnOff.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\Rain.ogg">
@@ -4680,9 +4694,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\VillageAmbient.ogg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Sounds\WaterSplash.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -4791,18 +4802,6 @@
     <None Include="Modules\Mobs\Gorilla.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Sounds\Eat.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sounds\HitGround.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sounds\Run.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sounds\Swoosh.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="x64\OpenAL32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

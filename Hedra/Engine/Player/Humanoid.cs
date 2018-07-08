@@ -179,7 +179,7 @@ namespace Hedra.Engine.Player
 			IsAttacking = false;
             IsRolling = true;
             DmgComponent.Immune = true;
-            this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.5f),
+            this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.1f),
                 () => IsRolling);
             Movement.Move(this.Orientation * 2f, 1.5f, false);
             SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);

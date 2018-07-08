@@ -21,11 +21,12 @@ namespace Hedra.Engine.Player.Skills
 	/// <summary>
 	/// Description of Skill.
 	/// </summary>
-	internal abstract class BaseSkill : UIElement, IRenderable, IDisposable, IUpdatable
+	internal abstract class BaseSkill : UIElement, IRenderable, IUpdatable
 	{
 		public static Shader Shader { get; }
 		public static Vector3 GrayTint { get; }
 		public static Vector3 NormalTint { get; }
+        protected virtual bool HasCooldown => true;
         public Vector3 Tint { get; set; }
         public float ManaCost { get; set; }
 		public float Cooldown { get; set; }
@@ -93,7 +94,7 @@ namespace Hedra.Engine.Player.Skills
 		        _panel.AddElement(CooldownSecondsText);
             }
 		    if (CooldownSecondsText.Position != Position) CooldownSecondsText.Position = Position;
-		    CooldownSecondsText.Text = Cooldown > 0 ? ((int)Cooldown + 1).ToString() : string.Empty;
+		    CooldownSecondsText.Text = Cooldown > 0 && HasCooldown ? ((int)Cooldown + 1).ToString() : string.Empty;
 			Tint = Player.Mana - this.ManaCost < 0 ? new Vector3(.9f,.6f,.6f) : new Vector3(1,1,1);
 			GraphicsLayer.Enable(EnableCap.Blend);
 			GraphicsLayer.Disable(EnableCap.DepthTest);

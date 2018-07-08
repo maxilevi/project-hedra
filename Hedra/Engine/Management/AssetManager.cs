@@ -149,7 +149,8 @@ namespace Hedra.Engine.Management
 		    {
                 selectedHandler = new ResourceHandler(File.OpenRead(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile)), DataFile);
 		        _registeredHandlers.Add(selectedHandler);
-                Log.WriteLine($"[IO] Registered resource handler... (Total = {_registeredHandlers.Count})");
+
+                Log.WriteLine($"Registered resource handler... (Total = {_registeredHandlers.Count})", LogType.IO);
 		    }
 		    try
 		    {

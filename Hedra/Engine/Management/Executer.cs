@@ -12,28 +12,28 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// A static class which manages invokes on the main thread
 	/// </summary>
-	internal static class ThreadManager
+	internal static class Executer
 	{
 		private static readonly List<KeyValuePair<Action, Action>> Functions = new List<KeyValuePair<Action, Action>>();
 		
 		/// <summary>
 		/// Executes the give method on the main thread after a frame has passed.
 		/// </summary>
-	     public static void ExecuteOnMainThread(Action func)
+	     public static void ExecuteOnMainThread(Action Func)
 	     {
-	     	lock(Functions){
-	     		Functions.Add( new KeyValuePair<Action, Action>(func, NullCallBack) );
+	     	lock(Functions)
+            {
+	     		Functions.Add( new KeyValuePair<Action, Action>(Func, delegate {}) );
 	     	}
 	     }
 	     
-	      public static void ExecuteOnMainThread(Action func, Action Callback)
+	      public static void ExecuteOnMainThread(Action Func, Action Callback)
 	     {
-	     	lock(Functions){
-	      		Functions.Add( new KeyValuePair<Action, Action>(func, Callback));
+	     	lock(Functions)
+            {
+	      		Functions.Add( new KeyValuePair<Action, Action>(Func, Callback));
 	     	}
 	     }
-	      
-	     private static void NullCallBack(){}
 
 	    public static void Update()
 	    {

@@ -268,8 +268,7 @@ namespace Hedra.Engine.Player
             }
             if (GameSettings.DebugView && EventArgs.Key == Key.F6)
             {
-                World.MeshQueue.SafeDiscard();
-                World.ChunkGenerationQueue.SafeDiscard();
+                World.Discard();
                 lock (World.Chunks)
                 {
                     for (int i = 0; i < World.Chunks.Count; i++)
@@ -325,10 +324,6 @@ namespace Hedra.Engine.Player
             if (EventArgs.Key == Key.Keypad2 && _player.CanInteract)
             {
                 _player.Health = _player.MaxHealth;
-            }
-            if (EventArgs.Key == Key.K && _player.CanInteract)
-            {
-                World.GetChunkAt(_player.Position).Landscape.DefineBlocks();
             }
             if (EventArgs.Key == Key.F11)
                 Tester.Run(AssetManager.AppPath + "/unitTests.txt");

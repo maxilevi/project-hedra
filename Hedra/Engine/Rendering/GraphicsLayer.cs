@@ -62,14 +62,16 @@ namespace Hedra.Engine.Rendering
 	        ShaderManager.CaptureState();
 	    }
 
-	    public static void PopFBO()
+	    public static int PopFBO()
 	    {
 	        FboManager.ReleaseState();
+	        return FBOBound;
 	    }
 
-	    public static void PopShader()
+	    public static int PopShader()
 	    {
 	        ShaderManager.ReleaseState();
+	        return ShaderBound;
 	    }
 
 	    public static void BindShader(int Id)

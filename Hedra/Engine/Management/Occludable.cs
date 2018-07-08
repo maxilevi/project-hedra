@@ -24,7 +24,7 @@ namespace Hedra.Engine.Management
 		protected OcclusionState State;
 		
 		public Occludable(){
-			ThreadManager.ExecuteOnMainThread( () => OcclusionQuery = GL.GenQuery() );
+			Executer.ExecuteOnMainThread( () => OcclusionQuery = GL.GenQuery() );
 		}
 		
 		public void DrawQuery(){
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Management
 		}
 		
 		public void Dispose(){
-			ThreadManager.ExecuteOnMainThread( () => GL.DeleteQuery( OcclusionQuery ) );
+			Executer.ExecuteOnMainThread( () => GL.DeleteQuery( OcclusionQuery ) );
 		}
 	}
 }

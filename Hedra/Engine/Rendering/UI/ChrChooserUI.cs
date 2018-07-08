@@ -118,7 +118,8 @@ namespace Hedra.Engine.Rendering.UI
 			};
 		}
 		
-		public void ReloadFiles(){
+		public void ReloadFiles()
+        {
 		    PlayerInformation[] newInformation = DataManager.PlayerFiles;
 
 		    bool same = true;

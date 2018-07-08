@@ -41,7 +41,7 @@ namespace Hedra.Engine.Rendering.Particles
 		public ParticleSystem(){
 			this.Position = Vector3.Zero;
 			ParticleCreator.Load();
-			ThreadManager.ExecuteOnMainThread( delegate{ this.CreateVAO();
+			Executer.ExecuteOnMainThread( delegate{ this.CreateVAO();
 			
 			DrawManager.ParticleRenderer.Add(this);
 			UpdateManager.Add(this);
@@ -51,7 +51,7 @@ namespace Hedra.Engine.Rendering.Particles
 		public ParticleSystem(Vector3 Position){
 			this.Position = Position;
 			ParticleCreator.Load();
-			ThreadManager.ExecuteOnMainThread( delegate{ this.CreateVAO();
+			Executer.ExecuteOnMainThread( delegate{ this.CreateVAO();
 			
 			DrawManager.ParticleRenderer.Add(this);
 			UpdateManager.Add(this);

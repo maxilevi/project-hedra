@@ -26,56 +26,51 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private int Width => Chunk.Width;
         private int Height => Chunk.Height;
         private static float BlockSize => Chunk.BlockSize;
-        private Block[][][] Blocks => _parent.Voxels;
 
-        public Vector4 GetColor(GridCell Cell, BlockType Type, Chunk RightChunk, Chunk FrontChunk,
-            Chunk RightFrontChunk, Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk,
-            Chunk LeftChunk, int Width, int Height, int Depth, List<Vector4> AddonColors, RegionColor RegionColor, int Lod)
+        public Vector4 GetColor(GridCell Cell, BlockType Type, int Width, int Height, int Depth,
+            List<Vector4> AddonColors, RegionColor RegionColor, int Lod)
         {
             Vector3 position = Cell.P[0] / BlockSize;
             Vector4 color = Vector4.Zero;
             float colorCount = 0;
-            int x = (int)position.X, y = (int)position.Y, z = (int)position.Z;
+            int x = (int) position.X, y = (int) position.Y, z = (int) position.Z;
 
-            float noise = (float)OpenSimplexNoise.Evaluate((Cell.P[0].X + OffsetX) * .00075f, (Cell.P[0].Z + OffsetZ) * .00075f);
+            float noise =
+                (float) OpenSimplexNoise.Evaluate((Cell.P[0].X + OffsetX) * .00075f, (Cell.P[0].Z + OffsetZ) * .00075f);
             RegionColor regionColor = RegionColor;
 
             for (int _x = -Lod * 1; _x < 1 * Lod + 1; _x += Lod)
-                for (int _z = -Lod * 1; _z < 1 * Lod + 1; _z += Lod)
-                    for (int _y = -1; _y < 1 + 1; _y++)
+            for (int _z = -Lod * 1; _z < 1 * Lod + 1; _z += Lod)
+            for (int _y = -1; _y < 1 + 1; _y++)
+            {
+                Block y0 = this.GetNeighbourBlock(x + _x, (int) Mathf.Clamp(y + _y, 0, this.Height - 1), z + _z);
+
+                if (y0.Type != BlockType.Water && y0.Type != BlockType.Air && y0.Type != BlockType.Temporal)
+                {
+                    Vector4 blockColor = Block.GetColor(y0.Type, regionColor);
+                    if (Block.GetColor(BlockType.Grass, regionColor) == blockColor)
                     {
-                        Block y0 = this.GetNeighbourBlock(x + _x, (int)Mathf.Clamp(y + _y, 0, this.Height - 1), z + _z,
-                            RightChunk, FrontChunk, RightFrontChunk,
-                            LeftBackChunk, RightBackChunk, LeftFrontChunk, BackChunk,
-                            LeftChunk);
+                        float clampNoise = (noise + 1) * .5f;
+                        float levelSize = 1.0f / regionColor.GrassColors.Length;
+                        var nextIndex = (int) Math.Ceiling(clampNoise / levelSize);
+                        if (nextIndex == regionColor.GrassColors.Length) nextIndex = 0;
 
-                        if (y0.Type != BlockType.Water && y0.Type != BlockType.Air && y0.Type != BlockType.Temporal)
-                        {
-                            Vector4 blockColor = Block.GetColor(y0.Type, regionColor);
-                            if (Block.GetColor(BlockType.Grass, regionColor) == blockColor)
-                            {
-                                float clampNoise = (noise + 1) * .5f;
-                                float levelSize = 1.0f / regionColor.GrassColors.Length;
-                                var nextIndex = (int)Math.Ceiling(clampNoise / levelSize);
-                                if (nextIndex == regionColor.GrassColors.Length) nextIndex = 0;
+                        Vector4 A = regionColor.GrassColors[(int) Math.Floor(clampNoise / levelSize)],
+                            B = regionColor.GrassColors[nextIndex];
 
-                                Vector4 A = regionColor.GrassColors[(int)Math.Floor(clampNoise / levelSize)],
-                                    B = regionColor.GrassColors[nextIndex];
+                        float delta = clampNoise / levelSize - (float) Math.Floor(clampNoise / levelSize);
 
-                                float delta = clampNoise / levelSize - (float)Math.Floor(clampNoise / levelSize);
-
-                                blockColor = Mathf.Lerp(A, B, delta);
-                            }
-                            color += new Vector4(blockColor.X, blockColor.Y, blockColor.Z, blockColor.W);
-                            colorCount++;
-                        }
+                        blockColor = Mathf.Lerp(A, B, delta);
                     }
+                    color += new Vector4(blockColor.X, blockColor.Y, blockColor.Z, blockColor.W);
+                    colorCount++;
+                }
+            }
             return new Vector4(color.Xyz / colorCount, 1.0f);
         }
 
-        public void CreateCell(ref GridCell Cell, int X, int Y, int Z, Chunk RightChunk, Chunk FrontChunk,
-            Chunk RightFrontChunk, Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk,
-            Chunk LeftChunk, int Width, int Height, int Depth, bool ExtraData, bool WaterCell, int Lod, out bool Success)
+        public void CreateCell(ref GridCell Cell, int X, int Y, int Z, int Width, int Height, int Depth, bool ExtraData,
+            bool WaterCell, int Lod, out bool Success)
         {
             Success = true;
 
@@ -86,9 +81,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 {
                     var pos = new Vector3(Cell.P[i].X * _coefficient, Cell.P[i].Y * _coefficient,
                         Cell.P[i].Z * _coefficient); // LOD is 1
-                    var block = this.GetNeighbourBlock((int)pos.X, (int)pos.Y, (int)pos.Z,
-                        RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk, RightBackChunk, LeftFrontChunk,
-                        BackChunk, LeftChunk);
+                    var block = this.GetNeighbourBlock((int) pos.X, (int) pos.Y, (int) pos.Z);
 
                     Cell.Type[i] = block.Type;
                     Cell.Density[i] = block.Density;
@@ -110,48 +103,40 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 {
                     var pos = new Vector3(cz.P[i].X * _coefficient, cz.P[i].Y * _coefficient,
                         cz.P[i].Z * _coefficient); // LOD is 1
-                    Block waterBlock = this.GetNeighbourBlock((int)pos.X, (int)pos.Y, (int)pos.Z,
-                        RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk, RightBackChunk, LeftFrontChunk,
-                        BackChunk, LeftChunk);
+                    Block waterBlock = this.GetNeighbourBlock((int) pos.X, (int) pos.Y, (int) pos.Z);
 
                     if (waterBlock.Type != BlockType.Water)
                     {
-                        for (int k = (int)pos.Y - 3; k < BoundsY; k++)
+                        for (int k = (int) pos.Y - 3; k < BoundsY; k++)
                         {
-                            waterBlock = this.GetNeighbourBlock((int)pos.X, k, (int)pos.Z,
-                                RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk, RightBackChunk, LeftFrontChunk,
-                                BackChunk, LeftChunk);
+                            waterBlock = this.GetNeighbourBlock((int) pos.X, k, (int) pos.Z);
 
 
                             if (waterBlock.Type == BlockType.Water) goto WATER_BREAK;
                         }
 
-                        for (int k = (int)pos.Y - 3; k < BoundsY; k++)
-                            for (int kx = -2; kx < 3; kx++)
-                                for (int kz = -2; kz < 3; kz++)
-                                {
-                                    waterBlock = this.GetNeighbourBlock((int)pos.X + kx, k, (int)pos.Z + kz,
-                                        RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk, RightBackChunk, LeftFrontChunk,
-                                        BackChunk, LeftChunk);
+                        for (int k = (int) pos.Y - 3; k < BoundsY; k++)
+                        for (int kx = -2; kx < 3; kx++)
+                        for (int kz = -2; kz < 3; kz++)
+                        {
+                            waterBlock = this.GetNeighbourBlock((int) pos.X + kx, k, (int) pos.Z + kz);
 
 
-                                    if (waterBlock.Type == BlockType.Water) goto WATER_BREAK;
-                                }
+                            if (waterBlock.Type == BlockType.Water) goto WATER_BREAK;
+                        }
                     }
                     WATER_BREAK:
 
-                    var neighbourChunk = this.GetNeighbourChunk((int) pos.X, Y, (int) pos.Z,
-                        RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk, RightBackChunk, LeftFrontChunk,
-                        BackChunk, LeftChunk);
-                    var x = (int)(pos.X % BoundsX);
-                    var z = (int)(pos.Z % BoundsZ);
+                    var neighbourChunk = this.GetNeighbourChunk((int) pos.X, Y, (int) pos.Z);
+                    var x = (int) (pos.X % BoundsX);
+                    var z = (int) (pos.Z % BoundsZ);
 
                     var newHeight = neighbourChunk?.GetWaterDensity(new Vector3(x, Y, z)) ?? default(Half);
-                    for (int k = Math.Min(Y+8, Chunk.Height-1); k > -1 && Math.Abs(newHeight) < 0.005f; k--)
+                    for (int k = Math.Min(Y + 8, Chunk.Height - 1); k > -1 && Math.Abs(newHeight) < 0.005f; k--)
                     {
                         newHeight = neighbourChunk?.GetWaterDensity(new Vector3(x, k, z)) ?? default(Half);
                     }
-                    for (int k = Math.Min(Y + 8, Chunk.Height-1); k > -1; k--)
+                    for (int k = Math.Min(Y + 8, Chunk.Height - 1); k > -1; k--)
                     {
                         var block = neighbourChunk?.GetBlockAt(x, k, z) ?? new Block();
                         if (block.Type == BlockType.Seafloor)
@@ -165,11 +150,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
 
             for (var i = 0; i < Cell.Type.Length; i++)
+            {
                 if (Cell.Type[i] == BlockType.Temporal && Y < this.Height - 2)
                 {
                     Success = false;
                     Cell.Type[i] = BlockType.Air;
                 }
+            }
         }
 
         private void BuildCell(ref GridCell Cell, int X, int Y, int Z, bool WaterCell, int Lod)
@@ -209,79 +196,49 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             var isUsable = false;
             for (int _x = -1; _x < 2 && !isUsable; _x++)
-                for (int _z = -1; _z < 2 && !isUsable; _z++)
-                    for (int _i = -1; _i < 2 && !isUsable; _i++)
-                    {
-                        var position = new Vector3(X + _x, _i + Y, Z + _z);
+            for (int _z = -1; _z < 2 && !isUsable; _z++)
+            for (int _i = -1; _i < 2 && !isUsable; _i++)
+            {
+                var position = new Vector3(X + _x, _i + Y, Z + _z);
 
-                        var result = false;
-                        if (!Cache.ContainsKey(position))
-                        {
-                            Block y = this.GetNeighbourBlock((int)position.X, (int)position.Y, (int)position.Z, RightChunk,
-                                FrontChunk, RightFrontChunk,
-                                LeftBackChunk, RightBackChunk, LeftFrontChunk, BackChunk,
-                                LeftChunk);
+                var result = false;
+                if (!Cache.ContainsKey(position))
+                {
+                    Block y = this.GetNeighbourBlock((int) position.X, (int) position.Y, (int) position.Z);
 
-                            result = y.Type != BlockType.Water && y.Type != BlockType.Air;
+                    result = y.Type != BlockType.Water && y.Type != BlockType.Air;
 
-                            Cache.Add(position, result);
-                        }
-                        else
-                        {
-                            result = Cache[position];
-                        }
-                        if (!result) continue;
-                        isUsable = true;
-                        break;
-                    }
+                    Cache.Add(position, result);
+                }
+                else
+                {
+                    result = Cache[position];
+                }
+                if (!result) continue;
+                isUsable = true;
+                break;
+            }
             return isUsable;
         }
 
-        public Chunk GetNeighbourChunk(int X, int Y, int Z, Chunk RightChunk, Chunk FrontChunk, Chunk RightFrontChunk,
-            Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk, Chunk LeftChunk)
+        public Chunk GetNeighbourChunk(int X, int Y, int Z)
         {
-            bool bX = X >= BoundsX;
-            bool bZ = Z >= BoundsZ;
-
-            bool nX = X <= -1;
-            bool nZ = Z <= -1;
-
-            if (!bX && !bZ && !nX && !nZ)
-                return _parent;
-
-            if (bZ && !bX && FrontChunk != null && !FrontChunk.Disposed && FrontChunk.IsGenerated &&
-                FrontChunk.Landscape.StructuresPlaced)
-                return FrontChunk;
-
-            if (bX && !bZ && RightChunk != null && !RightChunk.Disposed && RightChunk.IsGenerated &&
-                RightChunk.Landscape.StructuresPlaced)
-                return RightChunk;
-
-            if (nZ && !nX && BackChunk != null && !BackChunk.Disposed && BackChunk.IsGenerated &&
-                BackChunk.Landscape.StructuresPlaced)
-                return BackChunk;
-
-            if (nX && !nZ && LeftChunk != null && !LeftChunk.Disposed && LeftChunk.IsGenerated &&
-                LeftChunk.Landscape.StructuresPlaced)
-                return LeftChunk;
-
-            if (nX && nZ && LeftBackChunk != null && !LeftBackChunk.Disposed && LeftBackChunk.IsGenerated &&
-                LeftBackChunk.Landscape.StructuresPlaced)
-                return LeftBackChunk;
-
-            if (bX && bZ && RightFrontChunk != null && !RightFrontChunk.Disposed && RightFrontChunk.IsGenerated &&
-                RightFrontChunk.Landscape.StructuresPlaced)
-                return RightFrontChunk;
-
-
-            return null;
+            var coords =
+                World.ToChunkSpace(new Vector3(OffsetX + X * Chunk.BlockSize, 0, OffsetZ + Z * Chunk.BlockSize));
+            return World.SearcheableChunks.ContainsKey(coords) ? World.SearcheableChunks[coords] : null;
         }
 
-        public Block GetNeighbourBlock(int X, int Y, int Z, Chunk RightChunk, Chunk FrontChunk, Chunk RightFrontChunk,
-            Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk, Chunk LeftChunk)
+        public Block GetNeighbourBlock(int X, int Y, int Z)
         {
-            return this.GetNeighbourChunk(X,Y,Z, RightChunk, FrontChunk, RightFrontChunk, LeftBackChunk, RightBackChunk, LeftFrontChunk,
-                BackChunk, LeftChunk)?.GetBlockAt(X % BoundsX, Y, Z % BoundsZ) ?? new Block(BlockType.Temporal);
+            var normalizedX = (int) (X % BoundsX);
+            var normalizedZ = (int) (Z % BoundsZ);
+            var ch = this.GetNeighbourChunk(X, Y, Z);
+            if (ch?.Landscape?.BlocksSetted ?? false)
+                return ch
+                [BoundsX + normalizedX + (normalizedX >= 0 ? -BoundsX : 0)]
+                [Y]
+                [BoundsZ + normalizedZ + (normalizedZ >= 0 ? -BoundsZ : 0)];
+            return new Block(BlockType.Temporal);
         }
     }
 }

@@ -12,9 +12,9 @@ namespace Hedra.Engine.Testing.Managers
             var resultList = new List<object>();
             var object1 = new object();
             var object2 = new object();
-            ThreadManager.ExecuteOnMainThread(() => resultList.Add(object1));
-            ThreadManager.ExecuteOnMainThread(() => resultList.Add(object2));
-            ThreadManager.Update();
+            Executer.ExecuteOnMainThread(() => resultList.Add(object1));
+            Executer.ExecuteOnMainThread(() => resultList.Add(object2));
+            Executer.Update();
             this.AssertEqual(object1, resultList[0]);
             this.AssertEqual(object2, resultList[1]);
         }

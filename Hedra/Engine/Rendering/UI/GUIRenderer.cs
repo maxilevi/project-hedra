@@ -16,20 +16,23 @@ namespace Hedra.Engine.Rendering.UI
         public static Shader Shader;
         public static uint TransparentTexture { get; private set; }
         public static uint[] InmortalTextures { get; private set; }
-        private readonly HashSet<TextureCommand> _renderableUI;
+        private readonly HashSet<TextureCommand> _renderableUISet;
+        private readonly List<TextureCommand> _renderableUIList;
         private readonly HashSet<GUITexture> _textures;
         private static bool _inited;
         private static VAO<Vector2> _vao;
         private static VBO<Vector2> _vbo;
+        private readonly object _lock;
 
         public int DrawCount { get; private set; }
-        public int RenderableCount => _renderableUI.Count;
+        public int RenderableCount => _renderableUISet.Count;
         public int TextureCount => _textures.Count;
 
         public GUIRenderer()
         {
             Shader = Shader.Build("Shaders/GUI.vert", "Shaders/GUI.frag");
-            _renderableUI = new HashSet<TextureCommand>();
+            _renderableUISet = new HashSet<TextureCommand>();
+            _renderableUIList = new List<TextureCommand>();
             _textures = new HashSet<GUITexture>();
             _vbo = new VBO<Vector2>(
                 new[]
@@ -39,7 +42,7 @@ namespace Hedra.Engine.Rendering.UI
                 }, 6 * Vector2.SizeInBytes, VertexAttribPointerType.Float);
 
             _vao = new VAO<Vector2>(_vbo);
-
+            _lock = new object();
             var bmp = new Bitmap(1, 1);
             bmp.SetPixel(0, 0, Color.FromArgb(0, 0, 0, 0));
             TransparentTexture = Graphics2D.LoadTexture(bmp);
@@ -48,17 +51,17 @@ namespace Hedra.Engine.Rendering.UI
 
         public DrawOrder GetDrawOrder(IRenderable Renderable)
         {
-            lock (_renderableUI)
+            lock (_lock)
             {
-                return _renderableUI.First(T => T.Renderable == Renderable).Order;
+                return _renderableUIList.First(T => T.Renderable == Renderable).Order;
             }
         }
 
         public void SetDrawOrder(IRenderable Renderable, DrawOrder Order)
         {
-            lock (_renderableUI)
+            lock (_lock)
             {
-                var command = _renderableUI.First(T => T.Renderable == Renderable);
+                var command = _renderableUIList.First(T => T.Renderable == Renderable);
                 command.Order = Order;
             }
         }
@@ -93,68 +96,81 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Add(GUITexture Texture)
         {
-            if(!_textures.Contains(Texture))
-                _textures.Add(Texture);
+            lock(_lock)
+            {
+                if(!_textures.Contains(Texture))
+                    _textures.Add(Texture);
+            }
         }
 
         public void Add(IRenderable Texture)
         {
-            lock (_renderableUI)
+            lock (_lock)
             {
-                _renderableUI.Add(new TextureCommand(Texture, DrawOrder.Before));
+                var command = new TextureCommand(Texture, DrawOrder.Before);
+                _renderableUIList.Add(command);
+                _renderableUISet.Add(command);
             }
         }
 
         public void Add(IRenderable Texture, DrawOrder Order)
         {
-            lock (_renderableUI)
+            lock (_lock)
             {
-                _renderableUI.Add( new TextureCommand(Texture, Order));
+                var command = new TextureCommand(Texture, Order);
+                _renderableUIList.Add(command);
+                _renderableUISet.Add(command);
             }
         }
 
         public void Remove(GUITexture Texture)
         {
-            if (_textures.Contains(Texture))
-                _textures.Remove(Texture);
+            lock(_lock)
+            {
+                if (_textures.Contains(Texture))
+                    _textures.Remove(Texture);
+            }
         }
 
         public void Remove(IRenderable Texture)
         {
-            lock (_renderableUI)
+            lock (_lock)
             {
-                _renderableUI.RemoveWhere(Command => Command.Renderable == Texture);
+                _renderableUIList.Remove(_renderableUIList.First(Command => Command.Renderable == Texture));
+                _renderableUISet.RemoveWhere(Command => Command.Renderable == Texture);
             }
         }
 
         public void Draw()
         {
             DrawCount = 0;
-            HashSet<TextureCommand> tempDic;
-            lock (_renderableUI)
-                tempDic = new HashSet<TextureCommand>(_renderableUI);
-            
-            foreach (TextureCommand command in tempDic) if (command.Order == DrawOrder.Before) command.Renderable.Draw();
-
-            SetDraw();
-
-            try
+            lock (_lock)
             {
-                GUITexture[] texturesArray = _textures.ToArray();
-                foreach (GUITexture texture in texturesArray)
+                for(var i = 0; i < _renderableUIList.Count; i++)
+                {
+                    if (_renderableUIList[i].Order == DrawOrder.Before)
+                        _renderableUIList[i].Renderable.Draw();
+                }
+            }
+            SetDraw();
+            lock (_lock)
+            {
+                foreach (GUITexture texture in _textures)
                 {
                     if (texture == null || !texture.Enabled || texture.Scale == Vector2.Zero) continue;
                     DrawCount++;
                     this.BaseDraw(texture);
                 }
             }
-            catch (ArgumentException e)
-            {
-                Log.WriteLine(e);
-            }
             UnsetDrawing();
-
-            foreach (TextureCommand command in tempDic) if (command.Order == DrawOrder.After) command.Renderable.Draw();
+            lock (_lock)
+            {
+                for (var i = 0; i < _renderableUIList.Count; i++)
+                {
+                    if (_renderableUIList[i].Order == DrawOrder.After)
+                        _renderableUIList[i].Renderable.Draw();
+                }
+            }
         }
 
         private void BaseDraw(GUITexture Texture)
@@ -221,7 +237,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Dispose()
         {
-            GL.DeleteBuffers(1, ref _vbo.ID);
+            _vbo.Dispose();
         }
     }
 }

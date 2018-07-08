@@ -137,7 +137,7 @@ namespace Hedra.Engine.EntitySystem
 	                if (Falltime > 1.75f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true) )
 	                {
 	                    var fallTime = Falltime;
-	                    ThreadManager.ExecuteOnMainThread(delegate
+	                    Executer.ExecuteOnMainThread(delegate
 	                    {
 	                        Parent.Damage(fallTime * 45f, null, out _, true);
 	                        Parent.KnockForSeconds(3f);
@@ -319,7 +319,7 @@ namespace Hedra.Engine.EntitySystem
 				    if(Parent is Humanoid human && human.IsGliding){
 						human.IsGliding = false;
 						Parent.KnockForSeconds(3f);
-				        ThreadManager.ExecuteOnMainThread(delegate
+				        Executer.ExecuteOnMainThread(delegate
 				        {
 				            Parent.Damage(Parent.MaxHealth * .15f, Parent, out float xp);
 				        });

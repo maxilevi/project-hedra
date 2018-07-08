@@ -23,15 +23,12 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// </summary>
 	internal class Sword : MeleeWeapon
     {
-	    public override float PrimaryAttackCooldown => 1.0f;
-	    public override float SecondaryAttackCooldown => 3.0f;
         private Vector3 _previousPosition;
 	    private bool FrontSlash => PrimaryAnimationsIndex == 2;
 	    private readonly float _swordHeight;
 
         public Sword(VertexData Contents) : base(Contents)
         {
-            _swordHeight = Contents.SupportPoint(Vector3.UnitY).Y - Contents.SupportPoint(-Vector3.UnitY).Y;
             AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSlash-Stance.dae");
 
 		    PrimaryAnimations = new Animation[3];
@@ -42,14 +39,10 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             for (var i = 0; i < PrimaryAnimations.Length; i++)
 		    {
 		        PrimaryAnimations[i].Loop = false;
-		        PrimaryAnimations[i].Speed = 1.25f;
+		        PrimaryAnimations[i].Speed = 1.20f;
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
 		            Owner.Attack(Owner.DamageEquation * (FrontSlash ? 1.25f : 1.0f) );
-                };
-
-                PrimaryAnimations[i].OnAnimationEnd += delegate
-		        {	            
 		            Trail.Emit = false;
                 };
 		    }
@@ -60,7 +53,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             for (var k = 0; k < SecondaryAnimations.Length; k++)
 		    {
 		        SecondaryAnimations[k].Loop = false;
-		        SecondaryAnimations[k].Speed = 1.5f;
+		        SecondaryAnimations[k].Speed = 1.0f;
                 SecondaryAnimations[k].OnAnimationEnd += delegate
 		        {
 		            Owner.Attack(Owner.DamageEquation * 1.10f, delegate(Entity Mob)
@@ -81,13 +74,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		public override void Update(Humanoid Human)
 		{
 			base.Update(Human);
-
-		    if (Sheathed)
-		    {
-		        this.SetToChest(MainMesh);
-		        MainMesh.BeforeLocalRotation =
-		            (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 2.5f - Vector3.UnitY * (_swordHeight * .5f - 1.25f) ) * this.Scale;
-            }
 
 		    if (SecondaryAttack){
 				base.SetToMainHand(MainMesh);
@@ -114,7 +100,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			}	
 		}
 
-	    public override int ParsePrimaryIndex(int AnimationIndex)
+        public override int ParsePrimaryIndex(int AnimationIndex)
 	    {
 	        return AnimationIndex == 5 ? 2 : AnimationIndex & 1;
 	    }

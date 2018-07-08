@@ -8,7 +8,6 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
 using OpenTK.Input;
-using Panel = Hedra.Engine.Rendering.UI.Panel;
 
 namespace Hedra.Engine.Testing.AutomatedTests
 {
@@ -58,25 +57,38 @@ namespace Hedra.Engine.Testing.AutomatedTests
         {
             Thread.Sleep(2000);
             this.GoToChooser();
-            ThreadManager.ExecuteOnMainThread(delegate
+            Executer.ExecuteOnMainThread(delegate
             {
                 GameManager.MakeCurrent(DataManager.PlayerFiles.First(F => F.Name == _characterName));
-                CoroutineManager.StartCoroutine(this.TestCanPlayWithNewCharacter);
+                CoroutineManager.StartCoroutine(this.TestGameUIWorks);
             });
         }
 
-        private IEnumerator TestCanPlayWithNewCharacter()
+        private IEnumerator TestGameUIWorks()
+        {
+            EventDispatcher.OnKeyDown(this, this.SimulateKeyEvent(Key.I));
+            yield return this.WaitSeconds(1f);
+            EventDispatcher.OnKeyDown(this, this.SimulateKeyEvent(Key.I));
+            yield return this.WaitSeconds(1f);
+            EventDispatcher.OnKeyDown(this, this.SimulateKeyEvent(Key.X));
+            yield return this.WaitSeconds(1f);
+            EventDispatcher.OnKeyDown(this, this.SimulateKeyEvent(Key.X));
+            yield return this.WaitSeconds(1f);
+            EventDispatcher.OnKeyDown(this, this.SimulateKeyEvent(Key.M));
+            yield return this.WaitSeconds(2f);
+            EventDispatcher.OnMouseButtonDown(this, this.SimulateMouseButtonEvent(MouseButton.Left, Vector2.Zero));
+            yield return this.WaitSeconds(1f);
+            EventDispatcher.OnKeyDown(this, this.SimulateKeyEvent(Key.M));
+        }
+
+        private IEnumerator WaitSeconds(float Seconds)
         {
             var passedTime = 0f;
-            var maxTime = 5f;
-            var wPress = this.SimulateKeyEvent(Key.W);
-            while (passedTime < maxTime)
+            while (passedTime < Seconds)
             {
-                EventDispatcher.OnKeyDown(this, wPress);
                 passedTime += (float)Time.deltaTime;
                 yield return null;
             }
-            EventDispatcher.OnMouseButtonDown(this, this.SimulateMouseButtonEvent(MouseButton.Left, Vector2.Zero));
         }
 
         private void GoToChooser()

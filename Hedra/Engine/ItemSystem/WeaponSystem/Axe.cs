@@ -21,9 +21,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// </summary>
 	internal class Axe : MeleeWeapon
 	{
-	    public override float PrimaryAttackCooldown => 1.75f;
-	    public override float SecondaryAttackCooldown => 4.0f;
-
         public Axe(VertexData Contents) : base(Contents)
 		{
 			AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSmash-Stance.dae");

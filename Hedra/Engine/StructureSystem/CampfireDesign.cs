@@ -40,7 +40,7 @@ namespace Hedra.Engine.StructureSystem
             underChunk.AddStaticElement(model);
 
             var fire = new Campfire(Position);
-            ThreadManager.ExecuteOnMainThread(
+            Executer.ExecuteOnMainThread(
                 () => World.QuestManager.SpawnBandit(new Vector3(Position.X, 125, Position.Z), false, false)
             );
             World.AddStructure(fire);
@@ -52,7 +52,7 @@ namespace Hedra.Engine.StructureSystem
                 model = originalModel.Clone();
                 model.Scale(Vector3.One * .8f);
                 model.Transform(transMatrix);
-                model.Transform(padOffset);
+                model.Translate(padOffset);
 
                 shapes = CacheManager.GetShape(originalModel).DeepClone();
                 for (var i = 0; i < shapes.Count; i++)

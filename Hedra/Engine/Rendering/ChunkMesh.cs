@@ -27,7 +27,6 @@ namespace Hedra.Engine.Rendering
 		public bool IsGenerated;
 		public bool Enabled { get; set; }
 		public bool BuildedOnce { get; set; }
-		public bool Crashed { get; set; }
 		
         public Vector3 Position { get; set; }
 		public Box CullingBox { get; set; }
@@ -103,7 +102,9 @@ namespace Hedra.Engine.Rendering
 			IsBuilded = true;
 			Enabled = true;
 			BuildedOnce = true;
-			}catch(Exception e){
+			}
+            catch (Exception e)
+            {
 				Log.WriteLine(e.ToString());
 			}
 		}
@@ -163,10 +164,10 @@ namespace Hedra.Engine.Rendering
 				IsBuilded = true;
 				Enabled = true;
 				BuildedOnce = true;
-				this.Crashed = false;
-			}catch(Exception e){
+			}
+            catch (Exception e)
+            {
 			    Log.WriteLine(e.ToString());
-                this.Crashed = true;
 			}
 		}
 		#endregion

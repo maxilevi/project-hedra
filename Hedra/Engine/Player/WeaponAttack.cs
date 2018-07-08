@@ -38,26 +38,25 @@ namespace Hedra.Engine.Player
 		private static readonly uint Claw1 = Graphics2D.LoadFromAssets("ClawAttack1.png");
 		private static readonly uint Claw2 = Graphics2D.LoadFromAssets("ClawAttack2.png");
 
-		public bool DisableWeapon {get; set;}
+		public bool DisableWeapon { get; set; }
 	    private bool _isPressing;
         private AttackType _type;
-	    private float _maxCooldown;
 
-        public WeaponAttack() : base() {
+        public WeaponAttack()
+        {
 			base.ManaCost = 0f;
 			base.Level = 1;
-            _maxCooldown = 0.25f;
 		    base.TexId = Default;
+            this.MaxCooldown = .5f;
         }
 		
 		public void SetType(Weapon Weapon, AttackType Type)
 		{
-		    this._type = Type;
+            this._type = Type;
 		    var flags = BindingFlags.Static | BindingFlags.NonPublic;
 		    var fieldInfo1 = this.GetType().GetField($"{Weapon.GetType().Name}1", flags);
 		    var fieldInfo2 = this.GetType().GetField($"{Weapon.GetType().Name}2", flags);
 		    base.TexId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) Default);
-		    _maxCooldown = Type == AttackType.Primary ? Weapon.PrimaryAttackCooldown : Weapon.SecondaryAttackCooldown;
 		}
 		
 		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
@@ -71,7 +70,8 @@ namespace Hedra.Engine.Player
 			_isPressing = false;
 		}
 		
-		public override void Use(){
+		public override void Use()
+        {
 			
 			_isPressing = true;
             if (_type == AttackType.Primary) Player.Model.LeftWeapon.Attack1(Player);
@@ -81,17 +81,20 @@ namespace Hedra.Engine.Player
 		public override void Update()
         {
 			if(DisableWeapon) return;
-            this.MaxCooldown = _maxCooldown / Player.AttackSpeed;
-			if(_isPressing && Cooldown < 0){
+			if(_isPressing)
+            {
 				Player.Model.LeftWeapon.Attack1(Player);
 				Player.Model.LeftWeapon.ContinousAttack = true;
 			}
-			else{
+			else
+            {
 				Player.Model.LeftWeapon.ContinousAttack = false;
 			}
 		}
 		
 		public override string Description => string.Empty;
+	    protected override bool HasCooldown => false;
+
 	}
 
     public enum AttackType

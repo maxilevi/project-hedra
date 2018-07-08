@@ -9,7 +9,7 @@ namespace Hedra.Engine.CacheSystem
         public CloudCache()
         {
             var model = AssetManager.PlyLoader("Assets/Env/Cloud0.ply", Vector3.One);
-            model.ReColor(Vector4.One);
+            model.Paint(Vector4.One);
             model.FillExtraData(WorldRenderer.NoShadowsFlag);
 
             this.AddModel(model);

@@ -68,13 +68,13 @@ namespace Hedra.Engine.Player.MapSystem
                             Indices = cubeData.Indices,
                             Colors = cubeData.Color.ToArray().ToList(),
                         };
-                        dataPiece.Transform(Vector3.UnitY * -20f);
+                        dataPiece.Translate(Vector3.UnitY * -20f);
                     }
                     else
                     {
                         item.HasChunk[x * _mapSize + z] = true;
                     }
-                    dataPiece.Transform(Offset.ToVector3() * _chunkSize * _mapSize);
+                    dataPiece.Translate(Offset.ToVector3() * _chunkSize * _mapSize);
                     if (!useChunkMesh) mapData += dataPiece;
                 }
             }

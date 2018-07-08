@@ -38,9 +38,7 @@ namespace Hedra.Engine.Generation
 	    public static Dictionary<Vector2, Chunk> SearcheableChunks { get; }
         public static AreaHighlighter Highlighter { get; private set; }
         public static ParticleSystem Particles { get; }
-		public static GenerationQueue ChunkGenerationQueue { get; private set; }
-		public static MeshBuilderQueue MeshQueue { get; private set; }
-        public static ClosestChunk ClosestChunkComparer { get; }
+        public static ChunkComparer ChunkComparer { get; }
         public static EnviromentGenerator EnviromentGenerator { get; private set; }
         public static BiomePool BiomePool { get; private set; }
         public static MobFactory MobFactory { get; private set; }
@@ -51,8 +49,14 @@ namespace Hedra.Engine.Generation
 		public static int Seed { get; set; }
 		public static bool Enabled {get; set;}
 	    public static bool IsGenerated { get; set; }
+	    private static SharedWorkerPool _workerPool;
+	    private static MeshBuilder _meshBuilder;
+	    private static ChunkBuilder _chunkBuilder;
+        public static int MeshQueueCount => _meshBuilder.Count;
+	    public static int ChunkQueueCount => _chunkBuilder.Count;
 
-	    private static bool _isChunksCacheDirty = true;
+        #region Propierties
+        private static bool _isChunksCacheDirty = true;
 	    private static readonly HashSet<Chunk> _chunks;
 	    private static ReadOnlyCollection<Chunk> _chunksCache;
 	    public static ReadOnlyCollection<Chunk> Chunks
@@ -152,6 +156,7 @@ namespace Hedra.Engine.Generation
 	                return _globalCollidersCache;
             }
 	    }
+#endregion
 
         public static Dictionary<Vector2, Chunk> DrawingChunks { get; }
 	    private static Matrix4 _previousModelView;
@@ -160,16 +165,21 @@ namespace Hedra.Engine.Generation
 
 	    static World()
 	    {
-	        _structures = new HashSet<BaseStructure>();
+            _workerPool = new SharedWorkerPool();
+	        _meshBuilder = new MeshBuilder(_workerPool);
+	        _chunkBuilder = new ChunkBuilder(_workerPool);
+            _structures = new HashSet<BaseStructure>();
 	        _entities = new HashSet<Entity>();
             _items = new HashSet<WorldItem>();
             _chunks = new HashSet<Chunk>();
 
             SearcheableChunks = new Dictionary<Vector2, Chunk>();
             _globalColliders = new HashSet<ICollidable>();
-            Particles = new ParticleSystem(Vector3.Zero);
-	        Particles.HasMultipleOutputs = true;
-            ClosestChunkComparer = new ClosestChunk();
+	        Particles = new ParticleSystem
+	        {
+	            HasMultipleOutputs = true
+	        };
+	        ChunkComparer = new ChunkComparer();
             DrawingChunks = new Dictionary<Vector2, Chunk>();
 	    }
 
@@ -179,9 +189,7 @@ namespace Hedra.Engine.Generation
 			
 			Enabled = true;
 			Seed = MenuSeed;
-
-			MeshQueue = new MeshBuilderQueue();
-			ChunkGenerationQueue = new GenerationQueue();     
+    
 			BiomePool = new BiomePool();
 			TreeGenerator = new TreeGenerator();
 			QuestManager = new QuestManager();
@@ -252,8 +260,15 @@ namespace Hedra.Engine.Generation
 			
 			if(GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 		}
+
+	    public static void Update()
+	    {
+	        _meshBuilder.Update();
+            _chunkBuilder.Update();
+	    }
 		
-		public static void Recreate(int Seed){
+		public static void Recreate(int Seed)
+        {
 			if(World.Seed == Seed)
 				return;
 
@@ -263,8 +278,8 @@ namespace Hedra.Engine.Generation
 		    StructureGenerator = new StructureGenerator();
 		    QuestManager = new QuestManager();
             OpenSimplexNoise.Load(Seed == MenuSeed ? 23123123 : Seed);//Not really the menu seed.
-			MeshQueue.SafeDiscard();
-			ChunkGenerationQueue.SafeDiscard();
+		    _meshBuilder.Discard();
+			_chunkBuilder.Discard();
 			SkyManager.SetTime(12000);
 
 			for(var i = Items.Count-1; i > -1; i--){
@@ -319,7 +334,13 @@ namespace Hedra.Engine.Generation
 			    MenuBackground.Setup();
 			}
         }
-		
+
+	    public static void Discard()
+	    {
+	        _meshBuilder.Discard();
+            _chunkBuilder.Discard();
+	    }
+
 		public static void RemoveInstances(Vector3 Position, int Radius){
 			lock(Chunks){
 				for(int i = 0; i < Chunks.Count; i++){
@@ -360,12 +381,10 @@ namespace Hedra.Engine.Generation
 
         public static void AddChunkToQueue(Chunk Chunk, bool DoMesh)
         {
-			//Queue.Add(C, DoMesh);
-			if(!DoMesh)
-				ChunkGenerationQueue.Queue.Add(Chunk);
-			else
-				MeshQueue.Add(Chunk);
-		}
+            if(Chunk == null || Chunk.Disposed) return;
+            if (!DoMesh) _chunkBuilder.Add(Chunk);
+            else _meshBuilder.Add(Chunk);            
+        }
 		
 		public static Chunk GetChunkByOffset(Vector2 vec2){
 			
@@ -512,9 +531,9 @@ namespace Hedra.Engine.Generation
 					Items[i].Dispose();
 				}
 			}
-			ChunkGenerationQueue.Queue.Remove(Chunk);
-			MeshQueue.Queue.Remove(Chunk);
-			Chunk.Dispose();
+            _meshBuilder.Remove(Chunk);
+		    _chunkBuilder.Remove(Chunk);
+            Chunk.Dispose();
 		}
 
         public static Chunk GetChunkByOffset(int OffsetX, int OffsetZ){
@@ -541,12 +560,10 @@ namespace Hedra.Engine.Generation
 
         public static Vector3 ToBlockSpace(Vector3 Vec3)
         {
-            var chunkSpace = World.ToChunkSpace(Vec3);
-			
+			var chunkSpace = World.ToChunkSpace(Vec3);		
 			var x = (int) Math.Abs(Math.Floor( (Vec3.X - chunkSpace.X) / Chunk.BlockSize ));
-			var z = (int) Math.Abs(Math.Floor( (Vec3.Z - chunkSpace.Y) / Chunk.BlockSize ));
-			
-			return new Vector3(x, Math.Min(Vec3.Y / Chunk.BlockSize, Chunk.Height-1) ,z);
+			var z = (int) Math.Abs(Math.Floor( (Vec3.Z - chunkSpace.Y) / Chunk.BlockSize ));	
+			return new Vector3(x, Math.Min(Vec3.Y / Chunk.BlockSize, Chunk.Height-1),  z);
 		}
 		public static Vector2 ToChunkSpace(Vector3 Vec3){
 			int chunkX = ((int)Vec3.X >> 7) << 7;

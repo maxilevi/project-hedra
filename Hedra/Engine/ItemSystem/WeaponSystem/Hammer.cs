@@ -21,9 +21,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// </summary>
 	internal class Hammer : MeleeWeapon
     {
-	    public override float PrimaryAttackCooldown => 2.0f;
-	    public override float SecondaryAttackCooldown => 4.0f;
-
         public Hammer(VertexData Contents) : base(Contents)
 		{	
 			AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSmash-Stance.dae");

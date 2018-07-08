@@ -198,7 +198,7 @@ namespace Hedra.Engine.Rendering.UI
 
         ~Button()
         {
-            ThreadManager.ExecuteOnMainThread(() => this.Dispose());
+            Executer.ExecuteOnMainThread(() => this.Dispose());
         }
 
         public void Dispose()

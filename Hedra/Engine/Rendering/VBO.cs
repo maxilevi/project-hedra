@@ -102,7 +102,7 @@ namespace Hedra.Engine.Rendering
 		public void Dispose(){
         	if(!Disposed){
         		Disposed = true;
-				ThreadManager.ExecuteOnMainThread( () => GL.DeleteBuffers(1, ref ID) );
+				Executer.ExecuteOnMainThread( () => GL.DeleteBuffers(1, ref ID) );
         	}
 		}
 	}

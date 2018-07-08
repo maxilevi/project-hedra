@@ -38,7 +38,7 @@ namespace Hedra.Engine.StructureSystem
             }
             chunk.AddStaticElement(fortModel);
             
-            ThreadManager.ExecuteOnMainThread(delegate
+            Executer.ExecuteOnMainThread(delegate
             {
 
                 //var Prize = new Chest(Position, new InventoryItem(ItemType.Random));

@@ -50,9 +50,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected bool Orientate { get; set; } = true;
         protected SoundType SoundType { get; set; } = SoundType.SlashSound;
         protected bool ShouldPlaySound { get; set; } = true;
-        public abstract float PrimaryAttackCooldown { get; }
-        public abstract float SecondaryAttackCooldown { get; }
 
+        private float[] _animationSpeeds;
         private EffectDescriber _describer;
         private bool _onAttackStance;
         private Vector3 _scale = Vector3.One;
@@ -145,8 +144,10 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         protected void BasePrimaryAttack(Humanoid Human)
         {
-            this.BaseAttack(Human);        
-            Human.Model.Model.BlendAnimation(PrimaryAnimations[this.ParsePrimaryIndex(PrimaryAnimationsIndex)]);
+            this.BaseAttack(Human);
+            var animation = PrimaryAnimations[this.ParsePrimaryIndex(PrimaryAnimationsIndex)];
+            animation.Speed = _animationSpeeds[Array.IndexOf(Animations, animation)] * Owner.AttackSpeed;
+            Human.Model.Model.BlendAnimation(animation);
         }
 
         public virtual void Attack2(Humanoid Human)
@@ -164,7 +165,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected void BaseSecondaryAttack(Humanoid Human)
         {
             this.BaseAttack(Human);
-            Human.Model.Model.BlendAnimation(SecondaryAnimations[this.ParseSecondaryIndex(SecondaryAnimationsIndex)]);
+            var animation = SecondaryAnimations[this.ParseSecondaryIndex(SecondaryAnimationsIndex)];
+            animation.Speed = _animationSpeeds[Array.IndexOf(Animations, animation)] * Owner.AttackSpeed;
+            Human.Model.Model.BlendAnimation(animation);
         }
 
         protected bool MeetsRequirements()
@@ -195,7 +198,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                         delegate
                         {
                             Human.Movement.Orientate();
-                            Human.Physics.Move(Human.Movement.MoveFormula(Human.Orientation) * .25f * (float) Time.deltaTime);
+                            Human.Physics.Move(Human.Movement.MoveFormula(Human.Orientation) * .5f * (float) Time.deltaTime);
                         }
                     )
                 );
@@ -484,6 +487,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 }
             }
             Animations = animList.ToArray();
+            _animationSpeeds = new float[Animations.Length];
+            for (var i = 0; i < _animationSpeeds.Length; i++)
+            {
+                _animationSpeeds[i] = Animations[i].Speed;
+            }
         }
 
         public void StartWasAttackingCoroutine()

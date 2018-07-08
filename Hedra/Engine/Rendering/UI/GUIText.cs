@@ -161,7 +161,7 @@ namespace Hedra.Engine.Rendering.UI
 
         ~GUIText()
         {
-            ThreadManager.ExecuteOnMainThread(this.Dispose);
+            Executer.ExecuteOnMainThread(this.Dispose);
         }
 
         public void Dispose()

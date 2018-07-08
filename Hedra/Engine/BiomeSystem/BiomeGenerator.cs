@@ -21,7 +21,6 @@ namespace Hedra.Engine.BiomeSystem
         protected int OffsetZ { get; }
         protected Chunk Chunk { get; }
 		protected int Seed { get; }
-        protected Block[][][] Blocks { get; private set; }
         public Random RandomGen { get; set; }
 		public bool BlocksSetted { get; set; }
 		public bool StructuresPlaced { get; set; }
@@ -31,23 +30,16 @@ namespace Hedra.Engine.BiomeSystem
 			this.RandomGen = BiomeGenerator.GenerateRng(new Vector2(RefChunk.OffsetX, RefChunk.OffsetZ));
 			this.OffsetX = RefChunk.OffsetX;
 			this.OffsetZ = RefChunk.OffsetZ;
-			this.Blocks = RefChunk.Voxels;
 			this.Chunk = RefChunk;
 			this.Seed = World.Seed;
 		}
-		
-		public virtual void Regenerate()
-        {
-			this.RandomGen = new Random(World.Seed + this.Chunk.OffsetX + this.Chunk.OffsetZ);
-			this.BuildArray();
-			this.DefineBlocks();
-		}
 
-		public abstract void Generate();
+		public abstract void Generate(Block[][][] Blocks);
 		
-		public abstract void DefineBlocks();
+		public abstract void DefineBlocks(Block[][][] Blocks);
 		
-		public void BuildArray(){
+		public void BuildArray(Block[][][] Blocks)
+        {
 			for(var x = 0; x < (int) (Chunk.Width / Chunk.BlockSize); x++)
             {
 				Blocks[x] = new Block[Chunk.Height][];
@@ -56,7 +48,6 @@ namespace Hedra.Engine.BiomeSystem
 					Blocks[x][y] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
                 }
 			}
-			BlocksSetted = true;
 		    this.Chunk.CalculateBounds();
         }
 		
@@ -68,7 +59,8 @@ namespace Hedra.Engine.BiomeSystem
 			return (float) (OpenSimplexNoise.Evaluate(x * 0.2, z * 0.2) * -0.15f * OpenSimplexNoise.Evaluate(x * 0.035, z * 0.035) * 2.0f);
 		}
 		
-		public virtual void PlaceStructures(){
+		public virtual void PlaceStructures(Block[][][] Blocks)
+        {
 			this.StructuresPlaced = true;
 		}
 
@@ -92,15 +84,9 @@ namespace Hedra.Engine.BiomeSystem
 			return new Random( seed2(seed2((int) Offset.X * 1947) ^ seed2((int) Offset.Y * 2904)) );
         }
 		
-		public void Dispose(){
-			try{
-				if(BlocksSetted){
-					lock(Blocks)
-						Blocks = null;
-				}
-			}catch(Exception e){
-				Log.WriteLine("Could not dispose the chunk properly.");
-			}
+		public void Dispose()
+        {
+
 		}
 	}
 }

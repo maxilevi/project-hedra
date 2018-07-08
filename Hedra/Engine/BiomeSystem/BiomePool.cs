@@ -8,8 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.BiomeSystem.NormalBiome;
-using Hedra.Engine.BiomeSystem.SnowBiome;
-using Hedra.Engine.BiomeSystem.UndeadBiome;
+using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
@@ -29,11 +28,14 @@ namespace Hedra.Engine.BiomeSystem
         public BiomeDesign[] BiomeDesigns;
 	    private readonly Voronoi _voronoi;
         private readonly Dictionary<int, Region> _regionCache;
+	    private readonly RandomDistribution _regionDistribution;
+	    private readonly RandomDistribution _biomeDistribution;
 
         public BiomePool()
         {
             _regionCache = new Dictionary<int, Region>();
-
+            _regionDistribution = new RandomDistribution();
+            _biomeDistribution = new RandomDistribution();
             BiomeDesigns = new BiomeDesign[1];
             /*
              BiomeDesigns[1] = new BiomeDesign
@@ -81,10 +83,16 @@ namespace Hedra.Engine.BiomeSystem
 
 	    public Region GetRegion(Vector3 Position)
 	    {
-            lock (_regionCache) {
+            lock (_regionCache)
+            {
 	            var voronoiHeight = this.VoronoiFormula(Position.Xz.ToVector3());
-	            int regionIndex = new Random((int) voronoiHeight).Next(0, MaxRegionsPerBiome);
-                int biomeIndex = new Random((int) voronoiHeight + 421).Next(0, BiomeDesigns.Length);
+
+                this._regionDistribution.Seed = (int) voronoiHeight;
+                int regionIndex = _regionDistribution.Next(0, MaxRegionsPerBiome);
+
+                this._biomeDistribution.Seed = (int) voronoiHeight + 421;
+                int biomeIndex = _biomeDistribution.Next(0, BiomeDesigns.Length);
+
                 if ((Position.Xz - GameSettings.SpawnPoint).LengthFast < 5000) biomeIndex = 0;
 
                 int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;

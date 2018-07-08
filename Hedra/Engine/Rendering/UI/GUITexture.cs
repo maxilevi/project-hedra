@@ -62,7 +62,7 @@ namespace Hedra.Engine.Rendering.UI
 
 	    ~GUITexture()
 	    {
-            ThreadManager.ExecuteOnMainThread( this.Dispose );
+            Executer.ExecuteOnMainThread( this.Dispose );
         }
     }
 }

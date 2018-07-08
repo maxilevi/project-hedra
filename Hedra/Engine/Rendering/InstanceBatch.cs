@@ -177,8 +177,8 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public void Dispose(){
-			ThreadManager.ExecuteOnMainThread( () => GL.DeleteVertexArrays(1, ref _vaoId) );
-			ThreadManager.ExecuteOnMainThread( () => GL.DeleteBuffers(1, ref _bufferId) );
+			Executer.ExecuteOnMainThread( () => GL.DeleteVertexArrays(1, ref _vaoId) );
+			Executer.ExecuteOnMainThread( () => GL.DeleteBuffers(1, ref _bufferId) );
 		}
 	}
 }

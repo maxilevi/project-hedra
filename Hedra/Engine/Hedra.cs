@@ -69,7 +69,7 @@ namespace Hedra
 			base.OnLoad(e);
 		    string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
 		    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
-            this.GameVersion = "α 0.33";
+            this.GameVersion = "α 0.34";
 		    this.Title += " "+GameVersion;
             Hedra.MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -193,14 +193,16 @@ namespace Hedra
 			AnalyticsManager.PlayTime += Time.FrameTimeSeconds;
 			
 			CoroutineManager.Update();
-			ThreadManager.Update();
+			Executer.Update();
             UpdateManager.Update();
 	        Physics.Update();
+            World.Update();
             SoundManager.Update(LocalPlayer.Instance.Position);
 			SoundtrackManager.Update();
 			AutosaveManager.Update();
+	        DistributedExecuter.Update();
 
-	        if (!this._finishedLoading)
+            if (!this._finishedLoading)
 	        {
 	            _studioBackground.Opacity = Mathf.Lerp(_studioBackground.Opacity, _splashOpacity, Time.unScaledDeltaTime);
                 _studioLogo.Opacity = Mathf.Lerp(_studioLogo.Opacity, _splashOpacity, Time.unScaledDeltaTime);
@@ -240,9 +242,9 @@ namespace Hedra
 				if(_underChunk != null)
 					_chunkText.Text = "Chunks = "+ World.Chunks.Count+" ChunkX = "+_underChunk.OffsetX+" ChunkZ = "+_underChunk.OffsetZ;
 				_meshesText.Text = " Lights = "+ShaderManager.UsedLights +" / " +ShaderManager.MaxLights + " Pitch = "+Player.View.Pitch;
-				_meshQueueCount.Text = "Mesh Queue = "+ World.MeshQueue.Queue.Count + 
+				_meshQueueCount.Text = "Mesh Queue = "+ World.MeshQueueCount + 
 					"Cache ="+CacheManager.CachedColors.Count + " | "+CacheManager.CachedExtradata.Count + " Time = "+(int)(SkyManager.DayTime/1000)+":"+((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)).ToString("00");
-				_generationQueueCount.Text =  "Generation Queue ="+ World.ChunkGenerationQueue.Queue.Count+" Mobs = "+MobCount +" Yaw = "+Player.View.TargetYaw;
+				_generationQueueCount.Text =  "Generation Queue ="+ World.ChunkQueueCount+" Mobs = "+MobCount +" Yaw = "+Player.View.TargetYaw;
 				_renderText.Text = "Textures = "+Graphics2D.Textures.Count+" Seed= "+ World.Seed + " FPS= "+Utils.LastFrameRate + " MS="+Utils.FrameProccesingTime;
 				_cameraText.Text = $"CulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount} Pitch = {Player.View.TargetPitch} Physics Calls = {Physics.Threading.Count}";
                 

@@ -45,7 +45,7 @@ namespace Hedra.Engine.PlantSystem
             Data.ExtraData.AddRange(Data.GenerateWindValues());
 
             var underchunk = World.GetChunkAt(Position);
-            Data.ReColor(underchunk.Biome.Colors.GrassColor * .8f);
+            Data.Paint(underchunk.Biome.Colors.GrassColor * .8f);
             Data.GraduateColor(Vector3.UnitY);
 
             return Data;

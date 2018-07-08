@@ -70,7 +70,7 @@ namespace Hedra.Engine.PlantSystem
             TransMatrix = TransMatrix.ClearTranslation();
             Data.Transform(TransMatrix);
 
-            ThreadManager.ExecuteOnMainThread(delegate {
+            Executer.ExecuteOnMainThread(delegate {
                 var berryBush = new Entity
                 {
                     Physics =

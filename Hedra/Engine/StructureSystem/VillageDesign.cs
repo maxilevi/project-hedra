@@ -62,9 +62,9 @@ namespace Hedra.Engine.StructureSystem
             }
 
 
-            ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(Position + farmTransMatrix.ExtractTranslation() + Vector3.UnitX * 360.0f, true));
-            ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(Position + farmTransMatrix.ExtractTranslation() + Vector3.UnitX * 220.0f + Vector3.UnitZ * 180f, true));
-            ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(Position + farmTransMatrix.ExtractTranslation() + Vector3.UnitX * 220.0f + Vector3.UnitZ * 400f, true));
+            Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(Position + farmTransMatrix.ExtractTranslation() + Vector3.UnitX * 360.0f, true));
+            Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(Position + farmTransMatrix.ExtractTranslation() + Vector3.UnitX * 220.0f + Vector3.UnitZ * 180f, true));
+            Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(Position + farmTransMatrix.ExtractTranslation() + Vector3.UnitX * 220.0f + Vector3.UnitZ * 400f, true));
 
             CoroutineManager.StartCoroutine(generator.BuildMarket, new object[] { Structure, rng, marketTransMatrix * Matrix4.CreateTranslation(Position + Vector3.UnitY * .75f) });
             CoroutineManager.StartCoroutine(generator.BuildCenter, new object[] { rng, null, marketTransMatrix * Matrix4.CreateTranslation(Position) });

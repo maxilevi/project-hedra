@@ -120,8 +120,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                                     Vector3.UnitY * Physics.HeightAtPosition(ObjectivePosition.X, ObjectivePosition.Z) -
                                     Vector3.UnitY * 125.5f;
 
-            Model.Transform(spawnPosition);
-            Model.VariateColors(10f / 255f, Utils.Rng);
+            Model.Translate(spawnPosition);
 
             for (int i = Shapes.Count - 1; i >= 0; i--)
                 Shapes[i].Transform(spawnPosition);

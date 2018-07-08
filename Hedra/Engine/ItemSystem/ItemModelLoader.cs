@@ -25,7 +25,7 @@ namespace Hedra.Engine.ItemSystem
             }
 
             var returnModel = ModelCache[path].Clone();
-            returnModel.Transform( Matrix3.CreateScale(ModelTemplate.Scale));
+            returnModel.Transform( Matrix4.CreateScale(ModelTemplate.Scale));
             return returnModel;
         }
 

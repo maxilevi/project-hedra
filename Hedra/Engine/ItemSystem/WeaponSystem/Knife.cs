@@ -23,8 +23,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// </summary>
 	internal class Knife : MeleeWeapon
     {
-	    public override float PrimaryAttackCooldown => .5f;
-	    public override float SecondaryAttackCooldown => 2.5f;
         private readonly ObjectMesh KnifeSheath;
 	    private Vector3 _previousPosition;
 

@@ -71,7 +71,7 @@ namespace Hedra.Engine.Networking
 				}catch(Exception e){
 					return false;
 				}
-				ThreadManager.ExecuteOnMainThread( () => LocalPlayer.Instance.Chat.AddLine("Co-Op Game created using ID "+JoinCode) );
+				Executer.ExecuteOnMainThread( () => LocalPlayer.Instance.Chat.AddLine("Co-Op Game created using ID "+JoinCode) );
 
 				IsConnected = true;				
 				SendingThread = new Thread(Send);
@@ -151,14 +151,14 @@ namespace Hedra.Engine.Networking
 							PeerData NewPeer = new PeerData();
 							NewPeer.Human = PeerData.NewHuman(ServerIP);
 							Peers.Add(EndPoint, NewPeer);
-							ThreadManager.ExecuteOnMainThread( () =>  LocalPlayer.Instance.Chat.AddLine(NewPeer.Human.Name+" joined.") );
+							Executer.ExecuteOnMainThread( () =>  LocalPlayer.Instance.Chat.AddLine(NewPeer.Human.Name+" joined.") );
 							SendHostState();
 							break;
 
 						case 0x2:
 							MemoryStream NewMs = new MemoryStream(ZipManager.UnZipBytes(Data));
 							IPEndPoint UseIp = Utils.CreateIPEndPoint(AnyIP.ToString());
-							ThreadManager.ExecuteOnMainThread( delegate{ Packet0x2.SetValues(Peers[UseIp].Human, Formatter.Deserialize(NewMs) as Packet0x2 ); NewMs.Dispose();} );
+							Executer.ExecuteOnMainThread( delegate{ Packet0x2.SetValues(Peers[UseIp].Human, Formatter.Deserialize(NewMs) as Packet0x2 ); NewMs.Dispose();} );
 							Socket.Send(new byte[]{0x3}, 1, AnyIP);
 							break;
 						
@@ -187,7 +187,7 @@ namespace Hedra.Engine.Networking
 							break;
 						case 0x9:
 							Ms = new MemoryStream(ZipManager.UnZipBytes(Data));
-							ThreadManager.ExecuteOnMainThread( () => LocalPlayer.Instance.Chat.AddLine(Encoding.ASCII.GetString	(Ms.ToArray())) );
+							Executer.ExecuteOnMainThread( () => LocalPlayer.Instance.Chat.AddLine(Encoding.ASCII.GetString	(Ms.ToArray())) );
 							break;
 						case 0x10:
 							MemoryStream Ms0x10 = new MemoryStream(ZipManager.UnZipBytes(Data));
@@ -212,7 +212,7 @@ namespace Hedra.Engine.Networking
 						case 0x18:
 							string Type = Encoding.ASCII.GetString(ZipManager.UnZipBytes(Data));
 							if(World.QuestManager.Quest.GetType().ToString() == Type)
-								ThreadManager.ExecuteOnMainThread( () => World.QuestManager.Quest.NextObjective() );
+								Executer.ExecuteOnMainThread( () => World.QuestManager.Quest.NextObjective() );
 							break;
 						default:
 							break;
@@ -268,7 +268,7 @@ namespace Hedra.Engine.Networking
 						foreach(IPEndPoint Peer in Peers.Keys){
 							if(Peers[Peer].LastPing >= 15){
 								IPEndPoint PeerIP = Utils.CreateIPEndPoint(Peer.ToString());
-								ThreadManager.ExecuteOnMainThread( delegate{
+								Executer.ExecuteOnMainThread( delegate{
 								                                  	LocalPlayer.Instance.Chat.AddLine(Peers[Peer].Human.Name+" disconnected.");
 								                                  	Peers[PeerIP].Human.Dispose();
 								                                  	Peers.Remove(PeerIP);
@@ -286,7 +286,7 @@ namespace Hedra.Engine.Networking
 						}
 						for(int i = 0; i < DeadPeers.Count; i++){
 							if(DeadPeers[i] == ServerIP)
-								ThreadManager.ExecuteOnMainThread( () => NetworkManager.Disconnect(true) );
+								Executer.ExecuteOnMainThread( () => NetworkManager.Disconnect(true) );
 						}
 						DeadPeers.Clear();
 						

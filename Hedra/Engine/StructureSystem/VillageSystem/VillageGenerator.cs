@@ -141,7 +141,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             VertexData model = AssetManager.PlyLoader("Assets/Env/Village/Windmill0.ply", new Vector3(scale, scale, scale));
             //Model.Transform(RotationMatrix);
             model.Transform(transMatrix);
-            model.Transform(position);
+            model.Translate(position);
 
             //Changecolors
             Vector4 woodColor = Utils.UniformVariateColor(underChunk.Biome.Colors.WoodColor, 25, rng);
@@ -199,7 +199,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
             VertexData model = Stable0_Clone.Clone();
             model.Transform(transMatrix);
-            model.Transform(position);
+            model.Translate(position);
 
             //model.GraduateColor(Vector3.UnitY);
 
@@ -312,7 +312,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
                 houseModel.Transform(houseMatrix);
 				houseModel.Transform(transMatrix);
-				houseModel.Transform(position);
+				houseModel.Translate(position);
 				//houseModel.GraduateColor(Vector3.UnitY);
                 List<CollisionShape> houseShapes = HouseShapes_Clones[houseType].DeepClone();
 
@@ -371,9 +371,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 				farmModel.Color(AssetManager.ColorCode2, Utils.VariateColor(underChunk.Biome.Colors.GrassColor , 15, rng) );
                 //farmModel.Transform(lookAt);
 				farmModel.Transform(mat4);
-				farmModel.Transform(offset);
+				farmModel.Translate(offset);
 				farmModel.Transform(transMatrix);
-				farmModel.Transform(farmPosition);
+				farmModel.Translate(farmPosition);
 				model += farmModel;
 				j++;
 				if(j == 2){
@@ -507,13 +507,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 			    transMatrix.Row3 = new Vector4(originalPosition.X, heightAtPosition, originalPosition.Z, transMatrix.Row3.W);
 
                 if (i == 0)
-			        ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.Merchant, centerPosition - Vector3.UnitZ * 40f));
+			        Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.Merchant, centerPosition - Vector3.UnitZ * 40f));
                 else if (i == 1)
-                    ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.Merchant, centerPosition + Vector3.UnitZ * 40f));
+                    Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.Merchant, centerPosition + Vector3.UnitZ * 40f));
                 else if (i == 2)
-                    ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(centerPosition - Vector3.UnitX * 40f, false));
+                    Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(centerPosition - Vector3.UnitX * 40f, false));
                 else if (i == 3)
-                    ThreadManager.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(centerPosition + Vector3.UnitX * 40f, false));
+                    Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(centerPosition + Vector3.UnitX * 40f, false));
 
                 int k = i;
 		    	TaskManager.Parallel( delegate
@@ -523,7 +523,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 					if(extraShelf)
 						market0 += Market1_Clone.Clone();
 					market0.Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
-					market0.Transform(Vector3.UnitZ * marketDist * Chunk.BlockSize);
+					market0.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
 					market0.Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
 					market0.Color(AssetManager.ColorCode1, MarketColor(rng));
 					
@@ -546,7 +546,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 					VertexData shelfModel = ShelfModels_Clones[basketCount].Clone();
 					
 					shelfModel.Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
-					shelfModel.Transform(Vector3.UnitZ * marketDist * Chunk.BlockSize);
+					shelfModel.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
 					shelfModel.Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
 					shelfModel.Color(AssetManager.ColorCode1, Colors.BerryColor(rng) );
 					
@@ -571,7 +571,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 							shelfModel = ShelfModels_Clones[basketCount].Clone();
 							
 							shelfModel.Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
-							shelfModel.Transform(Vector3.UnitZ * marketDist * Chunk.BlockSize);
+							shelfModel.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
 							shelfModel.Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
 							shelfModel.Color(AssetManager.ColorCode1, Colors.BerryColor(rng) );
 							
@@ -690,7 +690,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 				paths.Add( pathToBlacksmith.Clone() );
 				//Paths[Paths.Count-1].Transform( DirectionMat );
 				paths[paths.Count-1].Transform(TransMatrix);
-				paths[paths.Count-1].Transform( dir * 5.35f * Chunk.BlockSize * i);
+				paths[paths.Count-1].Translate( dir * 5.35f * Chunk.BlockSize * i);
 				model += paths[paths.Count-1];
 			}
 			return model;

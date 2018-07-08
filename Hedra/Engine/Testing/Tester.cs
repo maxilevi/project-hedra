@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.IO;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Testing
 {
@@ -13,6 +14,11 @@ namespace Hedra.Engine.Testing
 
         public static void Run(string LogPath)
         {
+            var charactersPath = AssetManager.AppData + "/Characters/";
+            var charactersBackup = AssetManager.AppData + "/Characters_bk/";
+            Directory.Move(charactersPath, charactersBackup);
+            Directory.CreateDirectory(charactersPath);
+            GameManager.Player.UI.ChrChooser.ReloadFiles();
             _buffer = new StringBuilder();
 
             Assembly hedra = Assembly.GetExecutingAssembly();
@@ -25,6 +31,8 @@ namespace Hedra.Engine.Testing
                 }
             }
             Tester.Dump(LogPath);
+            Directory.Delete(charactersPath, true);
+            Directory.Move(charactersBackup, charactersPath);
         }
 
         public static void Log(string Text)

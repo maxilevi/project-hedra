@@ -49,23 +49,23 @@ namespace Hedra.Engine.Sound
             Log.WriteLine("Loading sounds...");
             int Channels, Bits, Rate;
             short[] ShortData;
-			byte[] Data = SoundManager.LoadWave("Sounds/HoverButton.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.ButtonClick] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+			ShortData = SoundManager.LoadOgg("Sounds/HoverButton.ogg", out Channels, out Bits, out Rate);
+			SoundBuffers[(int) SoundType.ButtonClick] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-			Data = SoundManager.LoadWave("Sounds/WaterSplash.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.WaterSplash] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+			ShortData = SoundManager.LoadOgg("Sounds/WaterSplash.ogg", out Channels, out Bits, out Rate);
+			SoundBuffers[(int) SoundType.WaterSplash] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 			
-			Data = SoundManager.LoadWave("Sounds/OnOff.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.OnOff] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+			ShortData = SoundManager.LoadOgg("Sounds/OnOff.ogg", out Channels, out Bits, out Rate);
+			SoundBuffers[(int) SoundType.OnOff] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 			
-			Data = SoundManager.LoadWave("Sounds/Swoosh.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.SwooshSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+			ShortData = SoundManager.LoadOgg("Sounds/Swoosh.ogg", out Channels, out Bits, out Rate);
+			SoundBuffers[(int) SoundType.SwooshSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
             ShortData = SoundManager.LoadOgg("Sounds/Hit.ogg", out Channels, out Bits, out Rate);
             SoundBuffers[(int) SoundType.HitSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 			
-			Data = SoundManager.LoadWave("Sounds/ItemCollect.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.NotificationSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+			ShortData = SoundManager.LoadOgg("Sounds/ItemCollect.ogg", out Channels, out Bits, out Rate);
+			SoundBuffers[(int) SoundType.NotificationSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 			
 			//Data = SoundManager.LoadWave("Sounds/ItemCollect.wav", out Channels, out Bits, out Rate);
 		    SoundBuffers[(int) SoundType.FoodEaten] = SoundBuffers[(int) SoundType.NotificationSound];//new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
@@ -73,26 +73,23 @@ namespace Hedra.Engine.Sound
             ShortData = SoundManager.LoadOgg("Sounds/Hit.ogg", out Channels, out Bits, out Rate);
             SoundBuffers[(int) SoundType.ArrowHit] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 			
-			Data = SoundManager.LoadWave("Sounds/Bow.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.BowSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+			ShortData = SoundManager.LoadOgg("Sounds/Bow.ogg", out Channels, out Bits, out Rate);
+			SoundBuffers[(int) SoundType.BowSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 			
-			Data = SoundManager.LoadWave("Sounds/DarkSound.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.DarkSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+			ShortData = SoundManager.LoadOgg("Sounds/DarkSound.ogg", out Channels, out Bits, out Rate);
+			SoundBuffers[(int) SoundType.DarkSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
             ShortData = SoundManager.LoadOgg("Sounds/Slash.ogg", out Channels, out Bits, out Rate);
 			SoundBuffers[(int) SoundType.SlashSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
-			
-			Data = SoundManager.LoadWave("Sounds/Footstep/footstep_01.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.FootStep] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
-			
-			Data = SoundManager.LoadWave("Sounds/Jump.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.Jump  ] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
-			
-			Data = SoundManager.LoadWave("Sounds/Money.wav", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.TransactionSound  ] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
 
-            Data = SoundManager.LoadWave("Sounds/Eat.wav", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.FoodEat] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+			ShortData = SoundManager.LoadOgg("Sounds/Jump.ogg", out Channels, out Bits, out Rate);
+			SoundBuffers[(int) SoundType.Jump  ] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+			
+			ShortData = SoundManager.LoadOgg("Sounds/Money.ogg", out Channels, out Bits, out Rate);
+			SoundBuffers[(int) SoundType.TransactionSound  ] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+
+            ShortData = SoundManager.LoadOgg("Sounds/Eat.ogg", out Channels, out Bits, out Rate);
+            SoundBuffers[(int)SoundType.FoodEat] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
 		    ShortData = SoundManager.LoadOgg("Sounds/Horse.ogg", out Channels, out Bits, out Rate);
 		    SoundBuffers[(int)SoundType.HorseRun] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
@@ -100,11 +97,11 @@ namespace Hedra.Engine.Sound
 		    ShortData = SoundManager.LoadOgg("Sounds/Fireplace.ogg", out Channels, out Bits, out Rate);
 		    SoundBuffers[(int)SoundType.Fireplace] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-		    Data = SoundManager.LoadWave("Sounds/Run.wav", out Channels, out Bits, out Rate);
-		    SoundBuffers[(int)SoundType.HumanRun] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+		    ShortData = SoundManager.LoadOgg("Sounds/Run.ogg", out Channels, out Bits, out Rate);
+		    SoundBuffers[(int)SoundType.HumanRun] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-		    Data = SoundManager.LoadWave("Sounds/HitGround.wav", out Channels, out Bits, out Rate);
-		    SoundBuffers[(int)SoundType.HitGround] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+		    ShortData = SoundManager.LoadOgg("Sounds/HitGround.ogg", out Channels, out Bits, out Rate);
+		    SoundBuffers[(int)SoundType.HitGround] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
 		    ShortData = SoundManager.LoadOgg("Sounds/Roll.ogg", out Channels, out Bits, out Rate);
 		    SoundBuffers[(int)SoundType.Dodge] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
@@ -121,14 +118,14 @@ namespace Hedra.Engine.Sound
             ShortData = SoundManager.LoadOgg("Sounds/HumanSleep.ogg", out Channels, out Bits, out Rate);
             SoundBuffers[(int)SoundType.HumanSleep] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            Data = SoundManager.LoadWave("Sounds/ItemCollect.wav", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.TalkSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+            ShortData = SoundManager.LoadOgg("Sounds/ItemCollect.ogg", out Channels, out Bits, out Rate);
+            SoundBuffers[(int)SoundType.TalkSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
             ShortData = SoundManager.LoadOgg("Sounds/GroundQuake.ogg", out Channels, out Bits, out Rate);
             SoundBuffers[(int)SoundType.GroundQuake] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            Data = SoundManager.LoadWave("Sounds/Bow.wav", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.SpitSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+            ShortData = SoundManager.LoadOgg("Sounds/Bow.ogg", out Channels, out Bits, out Rate);
+            SoundBuffers[(int)SoundType.SpitSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
             ShortData = SoundManager.LoadOgg("Sounds/GorillaGrowl.ogg", out Channels, out Bits, out Rate);
             SoundBuffers[(int)SoundType.GorillaGrowl] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
@@ -344,7 +341,6 @@ namespace Hedra.Engine.Sound
 		BowSound,
 		DarkSound,
 		SlashSound,
-		FootStep,
 		Jump,
 		TransactionSound,
         FoodEat,

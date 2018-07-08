@@ -55,7 +55,7 @@ namespace Hedra.Engine.PlantSystem
             var region = World.BiomePool.GetRegion(Position);
             var newColor = new Vector4((region.Colors.GrassColor * 1.0f).Xyz, 1);
 
-            Data.ReColor(newColor);
+            Data.Paint(newColor);
             Vector3 highest = Model.SupportPoint(Vector3.UnitY);
             Vector3 lowest = Model.SupportPoint(-Vector3.UnitY);
             float dot = Vector3.Dot(highest - lowest, Vector3.UnitY);

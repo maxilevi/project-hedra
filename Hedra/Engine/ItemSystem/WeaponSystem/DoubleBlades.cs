@@ -19,8 +19,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     /// </summary>
     internal class DoubleBlades : MeleeWeapon
     {
-        public override float PrimaryAttackCooldown => .25f;
-        public override float SecondaryAttackCooldown => 2.5f;
         private readonly ObjectMesh SecondBlade;
 
         public DoubleBlades(VertexData Contents) : base(Contents)

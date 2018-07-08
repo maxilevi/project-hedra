@@ -38,7 +38,7 @@ namespace Hedra.Engine.StructureSystem
             VertexData mausoleum = AssetManager.PlyLoader("Assets/Env/Mausoleum.ply", Vector3.One * 4f);
 
             mausoleum.Transform(rotationMatrix);
-            mausoleum.Transform(Position);
+            mausoleum.Translate(Position);
             mausoleum.GraduateColor(Vector3.UnitY);
 
             List<CollisionShape> mausoleumShapes = AssetManager.LoadCollisionShapes("Assets/Env/Mausoleum.ply", 2, Vector3.One * 4f);
@@ -75,7 +75,7 @@ namespace Hedra.Engine.StructureSystem
                 Vector3 graveScale = Vector3.One * (3.25f + rng.NextFloat() * .5f) * 1.5f;
                 VertexData grave = AssetManager.PlyLoader("Assets/Env/Grave" + graveType + ".ply", graveScale);
                 grave.GraduateColor(Vector3.UnitY);
-                grave.Transform(gravePosition);
+                grave.Translate(gravePosition);
 
                 List<CollisionShape> shapes = AssetManager.LoadCollisionShapes($"Assets/Env/Grave{graveType}.ply", 1, graveScale);
                 for (var l = 0; l < shapes.Count; l++)
@@ -111,7 +111,7 @@ namespace Hedra.Engine.StructureSystem
             var skeletonCount = 4;
             for (int i = 0; i < skeletonCount; i++)
             {
-                ThreadManager.ExecuteOnMainThread(delegate
+                Executer.ExecuteOnMainThread(delegate
                 {
                     Humanoid skeleton = World.QuestManager.SpawnBandit(
                         Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) * Chunk.BlockSize,
@@ -122,7 +122,7 @@ namespace Hedra.Engine.StructureSystem
 
             //Chest
             Chest prize;
-            ThreadManager.ExecuteOnMainThread(delegate
+            Executer.ExecuteOnMainThread(delegate
             {
                 prize = World.QuestManager.SpawnChest(Position + Vector3.UnitX * 40f, 
                     ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
@@ -136,7 +136,7 @@ namespace Hedra.Engine.StructureSystem
                 };
             });
 
-            ThreadManager.ExecuteOnMainThread(delegate
+            Executer.ExecuteOnMainThread(delegate
             {
                 Cementery.Enemies = enemies.ToArray();
             });
@@ -155,7 +155,7 @@ namespace Hedra.Engine.StructureSystem
 
                 Vector3 lightPosition = Position + addonPosition;
                 VertexData lampPost = AssetManager.PlyLoader("Assets/Env/Lamp0.ply", Vector3.One * 3.25f * 1.5f);
-                lampPost.Transform(lightPosition);
+                lampPost.Translate(lightPosition);
                 lampPost.GraduateColor(Vector3.UnitY);
                 lampPost.FillExtraData(WorldRenderer.NoHighlightFlag);
                 List<CollisionShape> shapes = AssetManager.LoadCollisionShapes("Assets/Env/Lamp0.ply", 1, Vector3.One * 3.25f * 1.5f);

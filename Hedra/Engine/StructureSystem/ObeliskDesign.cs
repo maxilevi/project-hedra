@@ -49,7 +49,7 @@ namespace Hedra.Engine.StructureSystem
             //data.Color(new Vector4(.4f, .4f, .4f, 1f), typeColor);
             data.Color(new Vector4(.6f, .6f, .6f, 1f), Obelisk.GetObeliskStoneColor(rng));
 
-            data.Transform(obelisk.Position);
+            data.Translate(obelisk.Position);
             data.ExtraData.Clear();
             data.FillExtraData(WorldRenderer.NoHighlightFlag);
 
