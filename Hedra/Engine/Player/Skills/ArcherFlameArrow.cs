@@ -106,7 +106,7 @@ namespace Hedra.Engine.Player
 			
 			float Time = 0;
 			while(Time < 6){
-				Time += Engine.Time.ScaledFrameTimeSeconds;
+				Time += Engine.Time.DeltaTime;
 			
 				World.Particles.Color = Particle3D.FireColor;
 				World.Particles.VariateUniformly = false;

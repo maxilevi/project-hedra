@@ -78,13 +78,14 @@ namespace Hedra.Engine.Player.Skills
 		    return Player.IsRiding || !Player.IsRiding;
 		}
 		
-		public virtual void Draw(){
+		public virtual void Draw()
+        {
 			if(!Enabled || !Active)
 				return;
 			
 			if(!Initialized) throw new ArgumentException("This skill hasn't been initialized yet.");
 
-			Cooldown -= Time.FrameTimeSeconds;
+			Cooldown -= Time.IndependantDeltaTime;
 		    if (CooldownSecondsText == null)
 		    {
 		        CooldownSecondsText = new RenderableText(string.Empty, Position, Color.White,
@@ -96,9 +97,9 @@ namespace Hedra.Engine.Player.Skills
 		    if (CooldownSecondsText.Position != Position) CooldownSecondsText.Position = Position;
 		    CooldownSecondsText.Text = Cooldown > 0 && HasCooldown ? ((int)Cooldown + 1).ToString() : string.Empty;
 			Tint = Player.Mana - this.ManaCost < 0 ? new Vector3(.9f,.6f,.6f) : new Vector3(1,1,1);
-			GraphicsLayer.Enable(EnableCap.Blend);
-			GraphicsLayer.Disable(EnableCap.DepthTest);
-			GraphicsLayer.Disable(EnableCap.CullFace);
+			Renderer.Enable(EnableCap.Blend);
+			Renderer.Disable(EnableCap.DepthTest);
+			Renderer.Disable(EnableCap.CullFace);
 			
 			Shader.Bind();
             Shader["Tint"] = Tint;
@@ -119,9 +120,9 @@ namespace Hedra.Engine.Player.Skills
 			
 			Shader.Unbind();
 			
-			GraphicsLayer.Disable(EnableCap.Blend);
-			GraphicsLayer.Enable(EnableCap.DepthTest);
-			GraphicsLayer.Enable(EnableCap.CullFace);	
+			Renderer.Disable(EnableCap.Blend);
+			Renderer.Enable(EnableCap.DepthTest);
+			Renderer.Enable(EnableCap.CullFace);	
 		}
 		
 		public abstract void Use();

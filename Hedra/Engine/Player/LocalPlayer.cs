@@ -256,7 +256,6 @@ namespace Hedra.Engine.Player
 
             CollidableStructure nearCollidableStructure = collidableStructures.FirstOrDefault();
 
-            this.NearCollisions = null;
             if (nearCollidableStructure != null)
             {
 
@@ -269,14 +268,18 @@ namespace Hedra.Engine.Player
 
                 NearCollisions = nearCollidableStructure.Colliders;
             }
-            else if(_wasPlayingAmbient)
+            else if (_wasPlayingAmbient)
             {
                 _wasPlayingAmbient = false;
                 SoundtrackManager.PlayTrack(SoundtrackManager.LoopableSongsStart);
             }
+            else
+            {
+                this.NearCollisions = null;
+            }
 
 		    if(_shouldUpdateTime){
-				SkyManager.SetTime( Mathf.Lerp(SkyManager.DayTime, _targetCementeryTime, (float) Time.deltaTime * 2f) );
+				SkyManager.SetTime( Mathf.Lerp(SkyManager.DayTime, _targetCementeryTime, (float) Time.DeltaTime * 2f) );
 				if( Math.Abs(SkyManager.DayTime - _targetCementeryTime) < 10 ){//Little difference
 					_shouldUpdateTime = false;
 					SkyManager.Enabled = true;
@@ -298,7 +301,7 @@ namespace Hedra.Engine.Player
 				if(World.Particles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
 					World.Particles.Color = Vector4.Zero;
 				
-				if( (int) Time.CurrentFrame % 2 == 0) World.Particles.Emit();
+				if( (int) Time.AccumulatedFrameTime % 2 == 0) World.Particles.Emit();
 				
 			    _previousPosition = Model.Human.BlockPosition;
             }
@@ -307,7 +310,7 @@ namespace Hedra.Engine.Player
 				if(this.Position.Y < -1f)
 					_floating = true;
 				if(_floating)
-					this.Physics.TargetPosition += Vector3.UnitY * 15 * (float) Time.deltaTime;
+					this.Physics.TargetPosition += Vector3.UnitY * 15 * (float) Time.DeltaTime;
 				if(this.Position.Y > 1f)
 					_floating = false;
 				if(Model.MountModel == null || Model.MountModel != null && Model.MountModel.Disposed) IsRiding = false;
@@ -341,9 +344,9 @@ namespace Hedra.Engine.Player
             if (!this.IsDead)
             {
                 if(!this.DmgComponent.HasBeenAttacked)
-                    this.Health += HealthRegen * Time.FrameTimeSeconds;
-                this.Mana += ManaRegen * Time.FrameTimeSeconds;
-                this.Stamina += (float)Time.deltaTime * 4f;
+                    this.Health += HealthRegen * Time.IndependantDeltaTime;
+                this.Mana += ManaRegen * Time.IndependantDeltaTime;
+                this.Stamina += (float)Time.DeltaTime * 4f;
             }
             this.Rotation = new Vector3(0, this.Rotation.Y, 0);
 

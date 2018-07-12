@@ -56,7 +56,7 @@ namespace Hedra.Engine.QuestSystem
 		        }
 
 		        this.TargetPoint = ChasingTarget.Position;
-		        this._attackTimer -= Time.FrameTimeSeconds;
+		        this._attackTimer -= Time.IndependantDeltaTime;
 		        if (Parent.InAttackRange(ChasingTarget) && !Parent.Knocked)
 		        {
 		            if (_attackTimer < 0)

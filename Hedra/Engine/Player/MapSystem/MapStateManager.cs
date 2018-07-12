@@ -30,6 +30,7 @@ namespace Hedra.Engine.Player.MapSystem
             this.RegisterStateItem(() => WorldRenderer.TransformationMatrix, O => WorldRenderer.TransformationMatrix = (Matrix4)O);
             this.RegisterStateItem(() => WorldRenderer.WaterSmoothness, O => WorldRenderer.WaterSmoothness = (float)O);
             this.RegisterStateItem(() => SkyManager.UpdateDayColors, O => SkyManager.UpdateDayColors = (bool)O);
+            this.RegisterStateItem(() => Player.Loader.ShouldUpdateFog, O => Player.Loader.ShouldUpdateFog = (bool)O);
         }
     }
 }

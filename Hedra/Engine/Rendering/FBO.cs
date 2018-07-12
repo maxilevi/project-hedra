@@ -5,6 +5,7 @@
  *
  */
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 
@@ -84,7 +85,7 @@ namespace Hedra.Engine.Rendering
             // First create the framebuffer
             BufferID = (uint) GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, BufferID);
-            GraphicsLayer.FBOBound = (int) BufferID;
+            Renderer.FBOBound = (int) BufferID;
 
             if (Attachments.Length == 1 && Attachments[0] == FramebufferAttachment.DepthAttachment)
             {
@@ -196,7 +197,7 @@ namespace Hedra.Engine.Rendering
             }
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            GraphicsLayer.FBOBound = 0;
+            Renderer.FBOBound = 0;
         }
         
 
@@ -219,9 +220,9 @@ namespace Hedra.Engine.Rendering
         /// <param name="clear">True to clear both the color and depth buffer bits of the FBO before enabling.</param>
         public void Bind(bool clear = true)
         {
-        	if(GraphicsLayer.FBOBound == BufferID) return;
+        	if(Renderer.FBOBound == BufferID) return;
 
-            GraphicsLayer.FBOBound = (int) BufferID;
+            Renderer.FBOBound = (int) BufferID;
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, BufferID);
             if (Attachments.Length == 1)
             {
@@ -269,7 +270,7 @@ namespace Hedra.Engine.Rendering
         {
             // unbind this framebuffer (does not guarantee the correct framebuffer is bound)
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            GraphicsLayer.FBOBound = 0;
+            Renderer.FBOBound = 0;
         }
 
         public FBO Resize()

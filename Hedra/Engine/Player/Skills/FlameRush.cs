@@ -54,7 +54,7 @@ namespace Hedra.Engine.Player
 		
 		public override void Update(){
 			if(Casting && Player.IsCasting){
-				Time -= Engine.Time.FrameTimeSeconds;
+				Time -= Engine.Time.IndependantDeltaTime;
 				
 				if(Player.IsGrounded && PreviousPosition != Player.BlockPosition){
 					var B = World.GetHighestBlockAt( (int) this.Player.Position.X, (int) this.Player.Position.Z);

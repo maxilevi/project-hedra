@@ -29,7 +29,7 @@ namespace Hedra.Engine.Management
 		
 		public bool Tick()
         {
-			_timerCount += Time.FrameTimeSeconds;
+			_timerCount += Time.IndependantDeltaTime;
 
 		    if (!Ready) return false;
 		    if (AutoReset)_timerCount = 0;

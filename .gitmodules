@@ -1,10 +1,10 @@
 [submodule "project-hedra-assets"]
 	path = project-hedra-assets
-	url = https://Zaphyk@bitbucket.org/Zaphyk/project-hedra-assets.git
+	url = git@bitbucket.org:Zaphyk/project-hedra-assets.git
 
 [submodule "hedra-tools"]
 	path = hedra-tools
-	url = https://Zaphyk@bitbucket.org/Zaphyk/hedra-tools.git
+	url = git@bitbucket.org:Zaphyk/hedra-tools.git
 
 [submodule "hedra-obfuscator"]
 	path = hedra-obfuscator

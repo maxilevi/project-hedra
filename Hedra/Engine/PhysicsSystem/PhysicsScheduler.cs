@@ -7,8 +7,14 @@ namespace Hedra.Engine.PhysicsSystem
     internal static class PhysicsScheduler
     {
         private static uint _lastId;
-        private static readonly Dictionary<uint, PhysicsListener> Listeners = new Dictionary<uint, PhysicsListener>();
-        private static readonly SchedulerWorker Worker = new SchedulerWorker(Listeners);
+        private static readonly Dictionary<uint, PhysicsListener> Listeners;
+        private static readonly SchedulerWorker Worker;
+
+        static PhysicsScheduler()
+        {
+            Worker = new SchedulerWorker(Listeners);
+            Listeners = new Dictionary<uint, PhysicsListener>();
+        }
 
         public static void RemoveListener(uint Identifier)
         {
@@ -31,6 +37,7 @@ namespace Hedra.Engine.PhysicsSystem
 
         public static uint AddListener(Func<CollisionShape[]> Shapes0, Func<CollisionShape[]> Shapes1, Action Callback)
         {
+            throw new ArgumentOutOfRangeException();
             var listener = new PhysicsListener(_lastId++, Shapes0, Shapes1, Callback);
             lock(Listeners) Listeners.Add(listener.Id, listener);
             return listener.Id;

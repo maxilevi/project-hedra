@@ -40,7 +40,7 @@ namespace Hedra.Engine.Player
 		    Player.AddBonusSpeedWhile(Math.Min(base.Level * .1f, 1), () => pTime < passedTime);
 
             while (pTime < passedTime){							
-				pTime += Time.ScaledFrameTimeSeconds;
+				pTime += Time.DeltaTime;
 				yield return null;
 			}			
 		}

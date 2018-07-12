@@ -32,6 +32,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player.Inventory;
 using Forms = System.Windows.Forms;
 
 namespace Hedra
@@ -138,7 +139,7 @@ namespace Hedra
 			
 			GL.BlendEquation(BlendEquationMode.FuncAdd);
 		    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            GraphicsLayer.Enable(EnableCap.Texture2D);
+            Renderer.Enable(EnableCap.Texture2D);
 	        
 	        string GLVersion = GL.GetString(StringName.Version);
             Log.WriteLine(GLVersion);
@@ -161,7 +162,7 @@ namespace Hedra
             this._finishedLoading = true;
 #endif
 #if DEBUG
-            GraphicsLayer.Enable(EnableCap.DebugOutput);
+            Renderer.Enable(EnableCap.DebugOutput);
             GL.DebugMessageCallback(
                 delegate(DebugSource Source, DebugType Type, int Id, DebugSeverity Severity, int Length, IntPtr Message,
                     IntPtr Param)
@@ -175,45 +176,43 @@ namespace Hedra
 #endif
         }
 
-	    protected override void OnUpdateFrame(FrameEventArgs e){
+	    protected override void OnUpdateFrame(FrameEventArgs e)
+        {
 			base.OnUpdateFrame(e);
 
-			Utils.CalculateFrameRate();
+            var frameTime = e.Time;
+            var dt = 1.0f / 60.0f;
+            while (frameTime > 0f)
+            {
+                var delta = Math.Min(frameTime, dt);
+                Time.Set(delta);
+                CoroutineManager.Update();
+                UpdateManager.Update();
+                Physics.Update();
+                World.Update();
+                SoundManager.Update(LocalPlayer.Instance.Position);
+                SoundtrackManager.Update();
+                AutosaveManager.Update();
+                Executer.Update();
+                DistributedExecuter.Update();
+                frameTime -= delta;
+            }
+            Time.Set(e.Time);
+            Time.IncrementFrame(e.Time);
 
-            Time.timeScale = GameSettings.Paused ? 0 : 1;
-			Time.deltaTime = e.Time * Time.timeScale;
-			Time.unScaledDeltaTime = (float) e.Time;
-			Time.FrameTimeSeconds = (float) e.Time;//Utils.FrameProccesingTime / 1000;
-			Time.ScaledFrameTimeSeconds =  Time.FrameTimeSeconds * (float) Time.timeScale;
-			Time.CurrentFrame += (float) Time.deltaTime;
-			Time.UnPausedCurrentFrame += Time.FrameTimeSeconds;
-			
-			AnalyticsManager.AverageFPS += Utils.LastFrameRate;
-			AnalyticsManager.AverageFPS *= .5f;
-			AnalyticsManager.PlayTime += Time.FrameTimeSeconds;
-			
-			CoroutineManager.Update();
-			Executer.Update();
-            UpdateManager.Update();
-	        Physics.Update();
-            World.Update();
-            SoundManager.Update(LocalPlayer.Instance.Position);
-			SoundtrackManager.Update();
-			AutosaveManager.Update();
-	        DistributedExecuter.Update();
-
+            AnalyticsManager.PlayTime += (float) e.Time;
             if (!this._finishedLoading)
 	        {
-	            _studioBackground.Opacity = Mathf.Lerp(_studioBackground.Opacity, _splashOpacity, Time.unScaledDeltaTime);
-                _studioLogo.Opacity = Mathf.Lerp(_studioLogo.Opacity, _splashOpacity, Time.unScaledDeltaTime);
+	            _studioBackground.Opacity = Mathf.Lerp(_studioBackground.Opacity, _splashOpacity, Time.IndependantDeltaTime);
+                _studioLogo.Opacity = Mathf.Lerp(_studioLogo.Opacity, _splashOpacity, Time.IndependantDeltaTime);
 
 	            if (_splashOpacity == 0 && Math.Abs(_studioLogo.Opacity - _splashOpacity) < 0.05f)
 	            {
 	                this._finishedLoading = true;
 	            }
 	        }
-	        //Utils.RNG is not thread safe so it might break itself
-            //Here is the autofix because thread-safety is for loosers
+	        // Utils.RNG is not thread safe so it might break itself
+            // Here is the autofix because thread-safety is for loosers
             float newNumber = Utils.Rng.NextFloat();
 			if(newNumber == 0 && _lastValue == 0){
 				Random Rng = Utils.Rng;
@@ -221,9 +220,9 @@ namespace Hedra
 				_lastValue = float.MinValue;
 			}else if(_lastValue != 0)
 				_lastValue = newNumber;
-			
-			
-			LocalPlayer Player = GameManager.Player;
+
+            Utils.CalculateFrameRate();
+            LocalPlayer Player = GameManager.Player;
 			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
 			Vector2 Vec2 = World.ToChunkSpace(Player.Position);
 			//Log.WriteLine( (System.GC.GetTotalMemory(false) / 1024 / 1024) + " MB");
@@ -248,7 +247,7 @@ namespace Hedra
 				_renderText.Text = "Textures = "+Graphics2D.Textures.Count+" Seed= "+ World.Seed + " FPS= "+Utils.LastFrameRate + " MS="+Utils.FrameProccesingTime;
 				_cameraText.Text = $"CulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount} Pitch = {Player.View.TargetPitch} Physics Calls = {Physics.Threading.Count}";
                 
-			    _passedTime += Time.FrameTimeSeconds;
+			    _passedTime += Time.IndependantDeltaTime;
 			    if (_passedTime > 5.0f)
 			    {
 			        _passedTime = 0;
@@ -281,7 +280,7 @@ namespace Hedra
             }
 
 #if SHOW_COLLISION
-			   if(GameSettings.DebugView){
+			   if(GameSettings.DebugView && false){
 			           
 				LocalPlayer Player = GameManager.Player;
 			    Chunk UnderChunk = World.GetChunkAt(Player.Position);
@@ -416,8 +415,7 @@ namespace Hedra
 			            }
 #endif
 
-            this.SwapBuffers();
-			
+            this.SwapBuffers();		
 		}
 
 	    private bool _forcingResize;
@@ -471,16 +469,12 @@ namespace Hedra
 		{
 		    AssetManager.Dispose();
 			GameSettings.Save(AssetManager.AppData + "settings.cfg");
-			
 			if(!GameManager.InStartMenu) AutosaveManager.Save();
-			if(NetworkManager.IsConnected) NetworkManager.Exit();
+
 			Graphics2D.Dispose();
+		    DrawManager.Dispose();
+            InventoryItemRenderer.Framebuffer.Dispose();
 			base.OnUnload(e);
-#if !DEBUG
-			//AnalyticsManager.SendData();
-#endif
-			//Environment.Exit(Environment.ExitCode);
-			//base.OnUnload(e);
 		}
 
 	    private float GetShadingVersion(string GLVersion)

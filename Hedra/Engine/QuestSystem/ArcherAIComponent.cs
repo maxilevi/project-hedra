@@ -31,8 +31,8 @@ namespace Hedra.Engine.QuestSystem
 		
 		public override void DoUpdate()
 		{		
-			_secondAttackCooldown -= Time.FrameTimeSeconds;
-			_firstAttackCooldown -= Time.FrameTimeSeconds;
+			_secondAttackCooldown -= Time.IndependantDeltaTime;
+			_firstAttackCooldown -= Time.IndependantDeltaTime;
 
 			if( this.MovementTimer.Tick() && !Chasing)
                 this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.BlockPosition;

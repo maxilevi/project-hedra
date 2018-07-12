@@ -17,6 +17,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     internal class ChunkLoader
     {
+        public bool ShouldUpdateFog { get; set; } = true;
         public bool Enabled { get; set; }
         public Vector2 Offset { get; private set; }
         public int ActiveChunks => (int) _activeChunks;
@@ -44,40 +45,40 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void UpdateFog()
         {
+            if (!ShouldUpdateFog) return;
             MaxFog = (float) Math.Max(1, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 2) * 2.00f);
             MinFog = (float) Math.Max(0, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 3) * 2.00f);
 
-            //if (Math.Abs(MaxFog - _targetMax) > 0.005f || Math.Abs(MinFog - _targetMin) > 0.005f)
+            if (Math.Abs(_activeChunks - _targetActivechunks) > .5f)
             {
-                if (Math.Abs(_targetMax - MaxFog) > .005f)
+                Executer.ExecuteOnMainThread(delegate
                 {
-                    Executer.ExecuteOnMainThread(delegate
-                    {
-                        SkyManager.FogManager.UpdateFogSettings(MinFog, MaxFog);
-                    });
-                }
-            }
+                    SkyManager.FogManager.UpdateFogSettings(MinFog, MaxFog);
+                });
+            }        
         }
 
         private void Update()
         {
             while (Program.GameWindow.Exists)
             {
+                Thread.Sleep(15);
                 if (!World.IsGenerated || !Enabled) continue;
 
                 Offset = World.ToChunkSpace(_player.BlockPosition);
-                var radius = (int) (GameSettings.ChunkLoaderRadius * .4f);
+                var radius = (int) (GameSettings.ChunkLoaderRadius * .5f);
                 for (var x = -radius; x < radius; x++)
                 {
                     for (var z = -radius; z < radius; z++)
                     {
-                        if (World.GetChunkByOffset(
-                                Offset + new Vector2(x, z) * new Vector2(Chunk.Width, Chunk.Width)) !=
-                            null) continue;
-                        Vector2 chunkPos = Offset + new Vector2(x, z) * new Vector2(Chunk.Width, Chunk.Width);
+                        var radiusOffset = new Vector2(x, z);
+                        if(radiusOffset.LengthSquared > radius * radius) continue;
+                        Vector2 chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
+                        if (World.GetChunkByOffset(chunkPos) != null) continue;
                         var chunk = new Chunk((int) chunkPos.X, (int) chunkPos.Y);
                         World.AddChunk(chunk);
                         _chunkWatchers.Add(new ChunkWatcher(chunk));
+                        Thread.Sleep(2);
                     }
                 }
 
@@ -88,8 +89,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     if (_chunkWatchers[i].IsHealthy) _targetActivechunks++;
                     if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
                 }
-                _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks,  Time.unScaledDeltaTime * 4f);
-                if (float.IsInfinity(_activeChunks)) _activeChunks = _targetActivechunks;
+                _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks,  Time.IndependantDeltaTime * 2f);
                 this.UpdateFog();
             }
         }

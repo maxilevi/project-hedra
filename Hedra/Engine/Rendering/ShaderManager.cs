@@ -72,8 +72,8 @@ namespace Hedra.Engine.Rendering
 
 	    private static void Do(Func<Shader, bool> Condition, Action<Shader> Action, bool InSameThread = false)
 	    {
-	        var previousProgram = GraphicsLayer.ShaderBound;
-            GraphicsLayer.BindShader(previousProgram);
+	        var previousProgram = Renderer.ShaderBound;
+            Renderer.BindShader(previousProgram);
 	        for (var i = 0; i < Shaders.Count; i++)
 	        {
 	            int k = i;
@@ -92,8 +92,8 @@ namespace Hedra.Engine.Rendering
 
 	        void Cleanup()
 	        {
-	            GraphicsLayer.ShaderBound = previousProgram;
-                GraphicsLayer.BindShader(GraphicsLayer.ShaderBound);
+	            Renderer.ShaderBound = previousProgram;
+                Renderer.BindShader(Renderer.ShaderBound);
 	        }
 	        if (InSameThread) Cleanup();
 	        else Executer.ExecuteOnMainThread(Cleanup);

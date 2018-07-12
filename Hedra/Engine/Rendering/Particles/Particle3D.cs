@@ -58,9 +58,9 @@ namespace Hedra.Engine.Rendering.Particles
 				Velocity = Velocity * new Vector3(1,0,1);	
 			}
 			
-			Position += Velocity * (UseTimeScale ? (float) Time.deltaTime : Time.unScaledDeltaTime);
-			Velocity.Y += 60 * Physics.Gravity * GravityEffect * (UseTimeScale ? (float) Time.deltaTime : Time.unScaledDeltaTime);
-			Lifetime -= UseTimeScale ? (float) Time.deltaTime : Time.unScaledDeltaTime;
+			Position += Velocity * (UseTimeScale ? (float) Time.DeltaTime : Time.IndependantDeltaTime);
+			Velocity.Y += 60 * Physics.Gravity * GravityEffect * (UseTimeScale ? (float) Time.DeltaTime : Time.IndependantDeltaTime);
+			Lifetime -= UseTimeScale ? (float) Time.DeltaTime : Time.IndependantDeltaTime;
 			return !(Lifetime < 0);
 		}
 		

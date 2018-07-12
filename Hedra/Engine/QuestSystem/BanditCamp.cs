@@ -78,6 +78,8 @@ namespace Hedra.Engine.QuestSystem
             _rescuee.MainWeapon = null;
 
             _rescuee.Name = Rng.Next(0, 10) == 1 ? "Deckard Cain" : NameGenerator.PickMaleName(Rng);
+            var trade = _rescuee.SearchComponent<TradeComponent>();
+            if(trade != null) _rescuee.RemoveComponent(trade);
             _rescuee.RemoveComponent(_rescuee.SearchComponent<HealthBarComponent>());
             _rescuee.AddComponent(new HealthBarComponent(_rescuee, _rescuee.Name));
             _rescuee.SearchComponent<DamageComponent>().Immune = true;

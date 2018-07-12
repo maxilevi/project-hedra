@@ -34,14 +34,15 @@ namespace Hedra.Engine.Rendering.UI
 		private Texture _title;
 		private Button _newRun;
 		
-		public static FBO QuestFbo;
-	    public static FBO InventoryFbo;
+        /* TODO: REMOVE WHEN REMOVING THE QUESTS */
+		public static FBO ___questFbo;
+
         public static Font Regular;
 		public static Color DefaultFontColor = Color.White;
 		
-		public UserInterface (LocalPlayer Player){
+		public UserInterface (LocalPlayer Player)
+        {
 			this._player = Player;
-			InventoryFbo = new FBO(GameSettings.Width, GameSettings.Height);
 
 			byte[] sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.DataFile3);          	
 			Fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);

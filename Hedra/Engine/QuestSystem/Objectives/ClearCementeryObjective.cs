@@ -47,7 +47,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
             get
             {
                 //GameManager.Player.UI.DrawPreview(_cementeryModel, UserInterface.QuestFbo);
-                return UserInterface.QuestFbo.TextureID [0];
+                return UserInterface.___questFbo.TextureID [0];
             }
         }
 

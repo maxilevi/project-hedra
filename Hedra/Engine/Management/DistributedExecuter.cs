@@ -5,6 +5,7 @@ namespace Hedra.Engine.Management
 {
     internal class DistributedExecuter
     {
+        public const int ExecutionsPerFrame = 1600;
         private static readonly Queue<Action> _jobs;
         private static readonly object _lock;
 
@@ -18,8 +19,11 @@ namespace Hedra.Engine.Management
         {
             lock (_lock)
             {
-                if(_jobs.Count == 0) return;
-                _jobs.Dequeue().Invoke();
+                for (var i = 0; i < ExecutionsPerFrame; i++)
+                {
+                    if (_jobs.Count == 0) return;
+                    _jobs.Dequeue().Invoke();
+                }
             }
         }
 

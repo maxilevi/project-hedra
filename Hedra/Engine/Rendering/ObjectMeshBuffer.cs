@@ -67,10 +67,10 @@ namespace Hedra.Engine.Rendering
 			if(Indices == null || Data == null) return;
 
 		    this.Bind();
-		    GraphicsLayer.Disable(EnableCap.Blend);
+		    Renderer.Disable(EnableCap.Blend);
 			
-			if(Alpha < 0.9) GraphicsLayer.Enable(EnableCap.Blend);
-			GraphicsLayer.Enable(EnableCap.DepthTest);
+			if(Alpha < 0.9) Renderer.Enable(EnableCap.Blend);
+			Renderer.Enable(EnableCap.DepthTest);
 			
 			Data.Bind();
 
@@ -88,31 +88,31 @@ namespace Hedra.Engine.Rendering
 
             if (Outline)
             {
-                GraphicsLayer.Enable(EnableCap.Blend);
+                Renderer.Enable(EnableCap.Blend);
                 /*GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
                 GL.StencilMask(0x00);*/
-                GraphicsLayer.Disable(EnableCap.DepthTest);
+                Renderer.Disable(EnableCap.DepthTest);
                 //GraphicsLayer.Disable(EnableCap.CullFace);
                 Shader["Outline"] = this.Outline ? 1 : 0;
                 Shader["OutlineColor"] = this.OutlineColor;
-                Shader["Time"] = Time.FrameTimeSeconds;
+                Shader["Time"] = Time.IndependantDeltaTime;
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
                 GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
                 //GL.StencilMask(0xFF);
-                GraphicsLayer.Enable(EnableCap.DepthTest);
+                Renderer.Enable(EnableCap.DepthTest);
                 //GraphicsLayer.Enable(EnableCap.CullFace);
                 //GraphicsLayer.Disable(EnableCap.StencilTest);
             }
 
-            GraphicsLayer.Disable(EnableCap.Blend);
+            Renderer.Disable(EnableCap.Blend);
 			Data.Unbind();
 			
-			GraphicsLayer.Disable(EnableCap.Blend);
+			Renderer.Disable(EnableCap.Blend);
 
 			UnBind();
 			
 			if(Alpha < 1)
-				GraphicsLayer.Disable(EnableCap.Blend);
+				Renderer.Disable(EnableCap.Blend);
 		}
 		
 		public Vector3 TransformPoint(Vector3 Vertex){
@@ -230,7 +230,7 @@ namespace Hedra.Engine.Rendering
 		
 		public override void UnBind(){
 			Shader.Unbind();
-			GraphicsLayer.Enable(EnableCap.CullFace);
+			Renderer.Enable(EnableCap.CullFace);
 		}
 	}
 }

@@ -40,7 +40,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
 
             var offset = World.ToChunkSpace(GameManager.Player.Position);
-            var radius = (GameSettings.ChunkLoaderRadius) * .5f * Chunk.Width * 2d;
+            var radius = GameSettings.ChunkLoaderRadius * .5f * Chunk.Width;
             if ((_object.Position.Xz - offset).LengthSquared > radius * radius)
             {
                 if (!_object.Blocked)
@@ -51,7 +51,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 }
             }
             if (!_object.Initialized) _object.Initialize();
-
             if (!_object.IsGenerated || !_object.Landscape.StructuresPlaced)
             {
                 World.AddChunkToQueue(_object, false);
@@ -70,7 +69,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             else if (cameraDist > 576 * 576 && GameSettings.Lod)
                 _object.Lod = 4;
             else
-                _object.Lod = GameManager.Player.IsGliding ? 1 : 1;
+                _object.Lod = 2;//GameManager.Player.IsGliding ? 1 : 1;
         }
 
         private static bool WasChunkBuilt(Chunk Chunk)

@@ -86,7 +86,7 @@ namespace Hedra.Engine.Management
 					TaskManager.Asynchronous( () => AnalyticsManager.SendData() );
 					PassedTime = 0;
 				}
-				PassedTime += Time.FrameTimeSeconds;
+				PassedTime += Time.IndependantDeltaTime;
 				yield return null;
 			}
 		}

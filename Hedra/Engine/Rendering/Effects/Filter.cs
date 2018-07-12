@@ -10,22 +10,22 @@ using System;
 using Hedra.Engine.Management;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
-using Hedra.Engine.Rendering.UI;
 
 namespace Hedra.Engine.Rendering.Effects
 {
 	/// <summary>
 	/// Description of IFilter.
 	/// </summary>
-	internal abstract class Filter
+	internal abstract class Filter : IDisposable
 	{	
 
 		public abstract void Resize();
-		public abstract void Pass(FBO Src, FBO Dst);
+	    public abstract void Dispose();
+        public abstract void Pass(FBO Src, FBO Dst);
 		
 		public virtual void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false){
-			GraphicsLayer.Enable(EnableCap.Texture2D);
-			GraphicsLayer.Disable(EnableCap.DepthTest);
+			Renderer.Enable(EnableCap.Texture2D);
+			Renderer.Disable(EnableCap.DepthTest);
 
 		    DrawManager.UIRenderer.SetupQuad();
 
@@ -37,9 +37,9 @@ namespace Hedra.Engine.Rendering.Effects
 
 		    DrawManager.UIRenderer.DrawQuad();
 
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-			GraphicsLayer.Disable(EnableCap.Texture2D);
-			GraphicsLayer.Enable(EnableCap.CullFace);
+            Renderer.Enable(EnableCap.DepthTest);
+			Renderer.Disable(EnableCap.Texture2D);
+			Renderer.Enable(EnableCap.CullFace);
 		}
 	}
 }

@@ -87,39 +87,39 @@ namespace Hedra.Engine.Rendering
 		public void Draw(){
 			if(!Builded || !_initialized) return;
 			
-			GraphicsLayer.Enable(EnableCap.Blend);
-			GraphicsLayer.Enable(EnableCap.DepthTest);
+			Renderer.Enable(EnableCap.Blend);
+			Renderer.Enable(EnableCap.DepthTest);
 			_shader.Bind();
 			
 			_shader["HasWind"] = AffectWind ? 1 : 0;
-			_shader["Time"] = Time.CurrentFrame;
+			_shader["Time"] = Time.AccumulatedFrameTime;
 			_shader["HighestPoint"] = _highestPoint;
 			_shader["LowestPoint"] = _lowestPoint;
 			_shader["PlayerPosition"] = GameManager.Player.Position;
 
             GL.BindVertexArray(_vaoId);
-			GraphicsLayer.EnableVertexAttribArray(0);
-			GraphicsLayer.EnableVertexAttribArray(1);
-			GraphicsLayer.EnableVertexAttribArray(2);
-			GraphicsLayer.EnableVertexAttribArray(3);
-			GraphicsLayer.EnableVertexAttribArray(4);
-			GraphicsLayer.EnableVertexAttribArray(5);
-			GraphicsLayer.EnableVertexAttribArray(6);
+			Renderer.EnableVertexAttribArray(0);
+			Renderer.EnableVertexAttribArray(1);
+			Renderer.EnableVertexAttribArray(2);
+			Renderer.EnableVertexAttribArray(3);
+			Renderer.EnableVertexAttribArray(4);
+			Renderer.EnableVertexAttribArray(5);
+			Renderer.EnableVertexAttribArray(6);
 			
 			GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indicesVbo.ID);
 			GL.DrawElementsInstanced(PrimitiveType.Triangles, _indicesVbo.Count, DrawElementsType.UnsignedInt, IntPtr.Zero, Count);
 			
-			GraphicsLayer.DisableVertexAttribArray(0);
-			GraphicsLayer.DisableVertexAttribArray(1);
-			GraphicsLayer.DisableVertexAttribArray(2);
-			GraphicsLayer.DisableVertexAttribArray(3);
-			GraphicsLayer.DisableVertexAttribArray(4);
-			GraphicsLayer.DisableVertexAttribArray(5);
-			GraphicsLayer.DisableVertexAttribArray(6);
+			Renderer.DisableVertexAttribArray(0);
+			Renderer.DisableVertexAttribArray(1);
+			Renderer.DisableVertexAttribArray(2);
+			Renderer.DisableVertexAttribArray(3);
+			Renderer.DisableVertexAttribArray(4);
+			Renderer.DisableVertexAttribArray(5);
+			Renderer.DisableVertexAttribArray(6);
 			GL.BindVertexArray(0);
 			
 			_shader.Unbind();
-			GraphicsLayer.Disable(EnableCap.Blend);
+			Renderer.Disable(EnableCap.Blend);
 		}
 		
 		private void UpdateVBO(){

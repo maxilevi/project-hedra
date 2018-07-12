@@ -22,8 +22,8 @@ namespace Hedra.Engine.EntitySystem
     /// Description of EntitySpawner.
     /// </summary>
     internal class EntitySpawner
-	{
-		public static int MobCap = int.MaxValue;
+    {
+        public static int MobCap = 0;//int.MaxValue;
 		public float SpawnChance = .8f;
 		public int MinSpawn = 1;
 		public int MaxSpawn = 3;
@@ -104,7 +104,8 @@ namespace Hedra.Engine.EntitySystem
 			}
 		}
 		
-		public SpawnTemplate SelectMobTemplate(Vector3 NewPosition){
+		public SpawnTemplate SelectMobTemplate(Vector3 NewPosition)
+        {
 		    var region = World.BiomePool.GetRegion(NewPosition);
             bool mountain = NewPosition.Y > 60 * Chunk.BlockSize;
 		    bool shore = NewPosition.Y / Chunk.BlockSize > Chunk.BaseHeight && NewPosition.Y / Chunk.BlockSize < 2 + Chunk.BaseHeight;

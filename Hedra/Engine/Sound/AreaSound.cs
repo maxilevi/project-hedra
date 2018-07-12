@@ -38,7 +38,7 @@ namespace Hedra.Engine.Sound
                 _targetGain *= Condition ? 1 : 0;
 
 
-                this._sound.Source.Volume = Mathf.Lerp(this._sound.Source.Volume, this._targetGain, (float)Time.unScaledDeltaTime * 8f);
+                this._sound.Source.Volume = Mathf.Lerp(this._sound.Source.Volume, this._targetGain, (float)Time.IndependantDeltaTime * 8f);
                 if (Math.Abs(this._sound.Source.Volume - this._targetGain) < 0.05f)
                     this._sound.Source.Volume = _targetGain;
 

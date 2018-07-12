@@ -20,7 +20,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
         {
             get
             {
-                return UserInterface.QuestFbo.TextureID[0];
+                return UserInterface.___questFbo.TextureID[0];
             }
         }
 

@@ -146,7 +146,7 @@ namespace Hedra.Engine.Management
 		        _targetVolume = Volume;
 		        _sleepTime = false;
 		    }
-            FinalVolume = Mathf.Lerp(FinalVolume, _targetVolume, (float)Time.unScaledDeltaTime);
+            FinalVolume = Mathf.Lerp(FinalVolume, _targetVolume, (float)Time.IndependantDeltaTime);
 
             PLAY:
 

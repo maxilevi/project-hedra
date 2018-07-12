@@ -36,7 +36,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
 		    for (int i = 0; i < PrimaryAnimations.Length; i++)
 		    {
-		        PrimaryAnimations[i].Speed = 2.5f;
+		        PrimaryAnimations[i].Speed = 1.25f;
                 PrimaryAnimations[i].Loop = false;
 
 		        PrimaryAnimations[i].OnAnimationMid += delegate

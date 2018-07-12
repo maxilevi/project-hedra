@@ -81,7 +81,7 @@ namespace Hedra.Engine.Player
 			float timePassed = 0;
 			this.ShootWeapon(Player, Player.View.CrossDirection.NormalizedFast(), 4);
 			while(timePassed < 5){
-				timePassed += Time.FrameTimeSeconds;
+				timePassed += Time.IndependantDeltaTime;
 				yield return null;
 			}
 			Player.Toolbar.DisableAttack = false;

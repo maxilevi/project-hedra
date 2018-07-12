@@ -45,14 +45,14 @@ namespace Hedra.Engine.EntitySystem
 		public override void Update()
 		{
             /*
-			WasAttackingTimer -= Time.ScaledFrameTimeSeconds;
+			WasAttackingTimer -= Time.DeltaTime;
 			if(PreviousHealth != Parent.Health){
 				WasAttackingTimer = 8f;
 				PreviousHealth = Parent.Health;
 			}
 			
 			if(WasAttackingTimer < 0f){
-				Parent.Health += 8f * Time.ScaledFrameTimeSeconds;
+				Parent.Health += 8f * Time.DeltaTime;
 			}*/
 		    //Parent.Health = Parent.MaxHealth;
 			
@@ -104,7 +104,7 @@ namespace Hedra.Engine.EntitySystem
 			        Parent.Orientation = (-Target.Orientation + -Target.Orientation.Xz.PerpendicularRight.ToVector3()) * .5f;
 			    }*/
 				Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
-				Parent.Physics.Move( Parent.Speed * 8 * Parent.Orientation * (float)Time.deltaTime);
+				Parent.Physics.DeltaTranslate( Parent.Speed * 8 * Parent.Orientation);
 			}
 
 			if( (Target == Owner || Target == null) ){

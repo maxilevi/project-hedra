@@ -54,7 +54,7 @@ namespace Hedra.Engine.Player
 					if( (World.Entities[i].Position - Player.Position).LengthSquared <= 100 && World.Entities[i] != Player){
 						
 						float Exp;
-						World.Entities[i].Damage(4 * (float) Time.deltaTime * Player.Level * 0.4f, Player, out Exp, false);
+						World.Entities[i].Damage(4 * (float) Time.DeltaTime * Player.Level * 0.4f, Player, out Exp, false);
 						Player.XP += Exp;
 					}
 				}

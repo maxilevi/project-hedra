@@ -45,8 +45,8 @@ namespace Hedra.Engine.Player
 		    Human.IsGrounded = false;
 		    Human.Physics.Velocity = Vector3.Zero;
 		    Human.Model.Rotation = new Vector3(0, Human.Model.Rotation.Y, 0);
-		    if(Up) Human.Physics.TargetPosition += Vector3.UnitY * 12.5f * (float) Time.deltaTime;
-		    else Human.Physics.TargetPosition -= Vector3.UnitY * 12.5f * (float) Time.deltaTime;
+		    if(Up) Human.Physics.TargetPosition += Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
+		    else Human.Physics.TargetPosition -= Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
 
 		    Human.Physics.TargetPosition = new Vector3(
 		        Human.Physics.TargetPosition.X,
@@ -74,17 +74,17 @@ namespace Hedra.Engine.Player
 			var startingY = Human.Physics.TargetPosition.Y;
 			Human.Physics.GravityDirection = Vector3.Zero;
 		    Human.IsGrounded = false;
-		    var targetPush = 80f;
+		    var targetPush = 60f;
 		    var push = 0f;
             var stoppedJump = false;
 		    while (Human.Model.Position.Y < startingY + JumpingDistance && (push > 0.05f || targetPush > 0))
 			{
 			    bool shouldPlayJumpAnimation = Human.IsMoving;
-                push = Mathf.Lerp(push, targetPush, (float) Time.deltaTime * 8f);
+                push = Mathf.Lerp(push, targetPush, Time.DeltaTime * 8f);
                 float prevTarget = Human.Physics.TargetPosition.Y;
 			    var command = new MoveCommand
 			    {
-			        Delta = Vector3.UnitY * push * (float) Time.deltaTime,
+			        Delta = Vector3.UnitY * push * Time.DeltaTime,
 			        Parent = Human
                 };
 			    Human.Physics.ProccessCommand( command );
@@ -131,7 +131,7 @@ namespace Hedra.Engine.Player
         }
 
 		public void Update(){
-		    _speed = Mathf.Lerp(_speed, Human.IsAttacking ? AttackingSpeed : NormalSpeed, (float) Time.deltaTime * 2f);
+		    _speed = Mathf.Lerp(_speed, Human.IsAttacking ? AttackingSpeed : NormalSpeed, (float) Time.DeltaTime * 2f);
             this.DoUpdate();
 		    this.ManageMoveOrders();
 		    this.ManageSwimming();
@@ -148,8 +148,8 @@ namespace Hedra.Engine.Player
 
 	    private bool ExecuteMoveOrder(MoveOrder Order)
 	    {
-            Human.Physics.Move(Order.Position / Order.Seconds * (float) Time.deltaTime);
-	        Order.Progress += (float) Time.deltaTime;
+            Human.Physics.DeltaTranslate(Order.Position / Order.Seconds);
+	        Order.Progress += (float) Time.DeltaTime;
             if(Order.Orientate) this.Orientate();
             return Order.Progress >= Order.Seconds;
 	    }

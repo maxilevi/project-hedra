@@ -39,6 +39,7 @@ namespace Hedra.Engine.EntitySystem
         private bool _spawningWithAnimation;
         private float _knockedTime;
         private readonly TickSystem _tickSystem;
+        public PhysicsComponent Physics { get; }
 
         protected List<EntityComponent> Components = new List<EntityComponent>();
         protected bool Splashed { get; set; }
@@ -54,8 +55,7 @@ namespace Hedra.Engine.EntitySystem
         public float MaxOxygen { get; set; } = 30;
         public int MobId { get; set; }
         public int MobSeed { get; set; }
-        public Vector3 Orientation { get; set; } = Vector3.UnitZ;
-        public PhysicsComponent Physics { get; set; }
+        public Vector3 Orientation { get; set; } = Vector3.UnitZ;       
         public bool Removable { get; set; } = true;
         public Vector3 BlockPosition { get; set; }
         public bool PlaySpawningAnimation { get; set; } = true;
@@ -237,7 +237,7 @@ namespace Hedra.Engine.EntitySystem
             if (Damager != null)
             {
                 Vector3 increment = (-(Damager.Position.Xz - Position.Xz)).ToVector3();
-                Physics.Move(increment * .2f * (float)Time.deltaTime);
+                Physics.DeltaTranslate(increment * .2f);
             }
         }
 
@@ -360,13 +360,13 @@ namespace Hedra.Engine.EntitySystem
                 IsUnderwater = false;
             }
 
-            if (IsUnderwater) Oxygen -= (float) Time.deltaTime * 2f;
-            else Oxygen += (float) Time.deltaTime * 4f;
+            if (IsUnderwater) Oxygen -= (float) Time.DeltaTime * 2f;
+            else Oxygen += (float) Time.DeltaTime * 4f;
 
-            if (Oxygen <= 0 && Time.deltaTime > 0)
+            if (Oxygen <= 0 && Time.DeltaTime > 0)
             {
                 float xp;
-                this.Damage((float) Time.deltaTime * 5f, null, out xp, _drowningSoundTimer == 128);
+                this.Damage((float) Time.DeltaTime * 5f, null, out xp, _drowningSoundTimer == 128);
                 if (_drowningSoundTimer == 128)
                     _drowningSoundTimer = 0;
                 _drowningSoundTimer++;
@@ -397,7 +397,7 @@ namespace Hedra.Engine.EntitySystem
         public void KnockForSeconds(float Time)
         {
             Knocked = true;
-            Physics.Move(Vector3.UnitY * 7.5f);
+            Physics.Translate(Vector3.UnitY * 7.5f);
             _knockedTime = Time;
         }
 
@@ -431,8 +431,8 @@ namespace Hedra.Engine.EntitySystem
                         animable.Recompose();
                         Model.Alpha = 1;
                     }
-                    Model.Alpha += Time.FrameTimeSeconds * 2.0f * .25f;
-                    animable.DisposeTime -= Time.FrameTimeSeconds * 2.0f;
+                    Model.Alpha += Time.IndependantDeltaTime * 2.0f * .25f;
+                    animable.DisposeTime -= Time.IndependantDeltaTime * 2.0f;
                 }
             }
         }
@@ -474,10 +474,10 @@ namespace Hedra.Engine.EntitySystem
             this._tickSystem.Tick();
             for (var i = 0; i < this.Components.Count; i++)
                 this.Components[i].Update();
-            this.Model.Rotation = Mathf.Lerp(Model.Rotation, Model.TargetRotation, (float) Time.deltaTime * 16f);
+            this.Model.Rotation = Mathf.Lerp(Model.Rotation, Model.TargetRotation, (float) Time.DeltaTime * 16f);
             if (Knocked)
             {
-                _knockedTime -= Time.ScaledFrameTimeSeconds;
+                _knockedTime -= Time.DeltaTime;
                 if (Model is HumanoidModel model)
                 {
                     model.KnockOut();

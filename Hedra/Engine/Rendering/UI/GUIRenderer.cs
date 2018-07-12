@@ -136,7 +136,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             lock (_lock)
             {
-                _renderableUIList.Remove(_renderableUIList.First(Command => Command.Renderable == Texture));
+                _renderableUIList.Remove(_renderableUIList.FirstOrDefault(Command => Command.Renderable == Texture));
                 _renderableUISet.RemoveWhere(Command => Command.Renderable == Texture);
             }
         }
@@ -212,17 +212,17 @@ namespace Hedra.Engine.Rendering.UI
         private static void SetDraw()
         {
             Shader.Bind();
-            GraphicsLayer.Enable(EnableCap.Texture2D);
-            GraphicsLayer.Enable(EnableCap.Blend);
-            GraphicsLayer.Disable(EnableCap.DepthTest);
+            Renderer.Enable(EnableCap.Texture2D);
+            Renderer.Enable(EnableCap.Blend);
+            Renderer.Disable(EnableCap.DepthTest);
         }
 
         private static void UnsetDrawing()
         {
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-            GraphicsLayer.Disable(EnableCap.Blend);
-            GraphicsLayer.Disable(EnableCap.Texture2D);
-            GraphicsLayer.Enable(EnableCap.CullFace);
+            Renderer.Enable(EnableCap.DepthTest);
+            Renderer.Disable(EnableCap.Blend);
+            Renderer.Disable(EnableCap.Texture2D);
+            Renderer.Enable(EnableCap.CullFace);
             Shader.Unbind();
         }
 

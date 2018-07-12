@@ -86,7 +86,7 @@ namespace Hedra.Engine.Testing.AutomatedTests
             var passedTime = 0f;
             while (passedTime < Seconds)
             {
-                passedTime += (float)Time.deltaTime;
+                passedTime += (float)Time.DeltaTime;
                 yield return null;
             }
         }

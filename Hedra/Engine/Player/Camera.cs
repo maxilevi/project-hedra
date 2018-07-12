@@ -80,7 +80,7 @@ namespace Hedra.Engine.Player
                 {
                     if (_prevDistance == 0)
                         _prevDistance = TargetDistance;
-                    TargetDistance += Time.unScaledDeltaTime * -24f;
+                    TargetDistance += Time.IndependantDeltaTime * -24f;
                 }
                 else
                 {
@@ -116,13 +116,13 @@ namespace Hedra.Engine.Player
             {
                 _targetZoomOut += _player.IsJumping ? Vector3.UnitY * _player.Movement.JumpingDistance * 2f : Vector3.Zero;
             }
-            _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, (float) Time.deltaTime * 2f);
+            _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, (float) Time.DeltaTime * 2f);
             _interpolatedPosition = PositionDelegate() - _interpolatedZoomOut;
-            Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.FrameTimeSeconds * 16f);
-            Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.unScaledDeltaTime * 16f);
+            Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.IndependantDeltaTime * 16f);
+            Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.IndependantDeltaTime * 16f);
             var cameraPosition = this.CalculatePosition(0);
             var addonDistance = cameraPosition.Y > Physics.HeightAtPosition(cameraPosition) + 2 ? AddonDistance : 0;
-            Distance = Mathf.Lerp(Distance, TargetDistance + addonDistance, Time.unScaledDeltaTime * 3f);
+            Distance = Mathf.Lerp(Distance, TargetDistance + addonDistance, Time.IndependantDeltaTime * 3f);
         }
 
         private void ClampYaw()
@@ -188,7 +188,7 @@ namespace Hedra.Engine.Player
                 if (position.Y <= y + MinDistance || Physics.IsColliding(position, box))
                     return;
             }
-            TargetDistance += Time.unScaledDeltaTime * 24f;
+            TargetDistance += Time.IndependantDeltaTime * 24f;
         }
 
         private float _targetDistance = 10f;

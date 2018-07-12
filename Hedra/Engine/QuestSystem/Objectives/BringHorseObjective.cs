@@ -69,7 +69,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 if (_stoleHorse)
                 {
                     //GameManager.Player.UI.DrawPreview(_previewMesh, UserInterface.QuestFbo);
-                    return UserInterface.QuestFbo.TextureID[0];
+                    return UserInterface.___questFbo.TextureID[0];
                 }
                 if (!_runningAway)
                 {
@@ -85,14 +85,14 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 else
                 {
                     var model = _horseRider.Model as HumanoidModel;
-                    if (model == null) return UserInterface.QuestFbo.TextureID[0];
+                    if (model == null) return UserInterface.___questFbo.TextureID[0];
                     model.Model.Scale *= 2f;
 
                     //GameManager.Player.UI.DrawPreview(_horseRider.Model, UserInterface.QuestFbo);
 
                     model.Model.Scale /= 2f;
                 }
-                return UserInterface.QuestFbo.TextureID[0];
+                return UserInterface.___questFbo.TextureID[0];
             }
         }
 

@@ -54,13 +54,13 @@ namespace Hedra.Engine.QuestSystem.Objectives
             get
             {
                 var model = _talkTarget.Model as HumanoidModel;
-                if (model == null) return UserInterface.QuestFbo.TextureID[0];
+                if (model == null) return UserInterface.___questFbo.TextureID[0];
                 model.Model.Scale *= 2f;
 
                 //GameManager.Player.UI.DrawPreview(_talkTarget.Model, UserInterface.QuestFbo);
 
                 model.Model.Scale /= 2f;
-                return UserInterface.QuestFbo.TextureID[0];
+                return UserInterface.___questFbo.TextureID[0];
             }
         }
 

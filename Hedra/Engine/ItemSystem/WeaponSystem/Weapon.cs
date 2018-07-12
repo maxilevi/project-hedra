@@ -198,7 +198,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                         delegate
                         {
                             Human.Movement.Orientate();
-                            Human.Physics.Move(Human.Movement.MoveFormula(Human.Orientation) * .5f * (float) Time.deltaTime);
+                            Human.Physics.DeltaTranslate(Human.Movement.MoveFormula(Human.Orientation) * .5f);
                         }
                     )
                 );
@@ -508,7 +508,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             float time = 0;
             while (time < 0.20f)
             {
-                time += Time.ScaledFrameTimeSeconds;
+                time += Time.DeltaTime;
 
                 yield return null;
             }
@@ -536,7 +536,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 }
 
                 Owner?.Model.Model.BlendAnimation(AttackStanceAnimation);
-                passedTime += Time.ScaledFrameTimeSeconds;
+                passedTime += Time.DeltaTime;
                 yield return null;
             }
             if (Owner != null && !Owner.IsAttacking)

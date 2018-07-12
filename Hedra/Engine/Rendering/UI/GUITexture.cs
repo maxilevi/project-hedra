@@ -5,6 +5,7 @@
  *
  */
 using System;
+using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
@@ -15,8 +16,8 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of GUITexture.
 	/// </summary>
-	internal class GUITexture : IDisposable{
-		
+	internal class GUITexture : IDisposable
+	{
 		public bool Flipped { get; set; }
         public bool Fxaa { get; set; }
         public uint TextureId { get; set; }
@@ -38,7 +39,7 @@ namespace Hedra.Engine.Rendering.UI
 			this.TextureId = Id;
 			this.Position = Pos;
 			this.Scale = Scale;
-		}
+        }
 
 		public uint Id => IdPointer?.Invoke() ?? TextureId;
 
@@ -62,7 +63,11 @@ namespace Hedra.Engine.Rendering.UI
 
 	    ~GUITexture()
 	    {
-            Executer.ExecuteOnMainThread( this.Dispose );
-        }
+	        if (!_disposed)
+	        {
+                Log.WriteLine($"Texture {Id} failed to dispose correctly.");
+	            Executer.ExecuteOnMainThread(this.Dispose);
+	        }
+	    }
     }
 }

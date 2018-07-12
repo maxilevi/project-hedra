@@ -46,7 +46,7 @@ namespace Hedra.Engine.EntitySystem
 			Parent.Model.BaseTint = Bar.Poison *new Vector4(1,3,1,1);
 			while(TotalTime > PTime && !Parent.IsDead && !Disposed){
 				
-				Time += Engine.Time.ScaledFrameTimeSeconds;
+				Time += Engine.Time.DeltaTime;
 				if(Time >= 1){
 					PTime++;
 					Time = 0;

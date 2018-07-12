@@ -37,7 +37,7 @@ namespace Hedra.Engine.QuestSystem
 				
 				Parent.Orientation = (ToFollow.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
 				Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
-				Parent.Physics.Move( Parent.Speed * 8 * Parent.Orientation * (float)Time.deltaTime);
+				Parent.Physics.DeltaTranslate( Parent.Speed * 8 * Parent.Orientation);
 				
 				Parent.Model.Run();
 			}else{

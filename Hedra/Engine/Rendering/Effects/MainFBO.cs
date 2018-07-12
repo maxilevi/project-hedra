@@ -38,7 +38,8 @@ namespace Hedra.Engine.Rendering.Effects
 	        Shader = Shader.Build("Shaders/GUI.vert", "Shaders/GUI.frag");
         }
 
-		public MainFBO(){
+		public MainFBO()
+        {
             Ssao = new DeferedRenderer();
 			Default = new FBO(GameSettings.Width, GameSettings.Height, false, 0, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgba32f);
 			FinalFbo = new FBO(GameSettings.Width, GameSettings.Height);
@@ -49,7 +50,9 @@ namespace Hedra.Engine.Rendering.Effects
 			Distortion = new DistortionFilter();
 			Blur = new BlurFilter();
 		}
-		public void Draw(){
+
+		public void Draw()
+        {
 			
 			#region Normal
 			//Just paste the contents without any effect
@@ -85,8 +88,8 @@ namespace Hedra.Engine.Rendering.Effects
 				
 				Ssao.FirstPassShader.Bind();
 			
-				GraphicsLayer.Enable(EnableCap.Texture2D);
-				GraphicsLayer.Enable(EnableCap.Blend);
+				Renderer.Enable(EnableCap.Texture2D);
+				Renderer.Enable(EnableCap.Blend);
 
 			    DrawManager.UIRenderer.SetupQuad();
 
@@ -138,9 +141,9 @@ namespace Hedra.Engine.Rendering.Effects
                 Ssao.ThirdPassShader.Unbind();
 			    DrawFBO.UnBind();//Unbind is the same
 				
-				GraphicsLayer.Enable(EnableCap.CullFace);
-				GraphicsLayer.Disable(EnableCap.Blend);
-				GraphicsLayer.Disable(EnableCap.Texture2D);
+				Renderer.Enable(EnableCap.CullFace);
+				Renderer.Disable(EnableCap.Blend);
+				Renderer.Disable(EnableCap.Texture2D);
 			}
 			#endregion
 			
@@ -205,8 +208,8 @@ namespace Hedra.Engine.Rendering.Effects
 		}
 		
 		public static void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false, bool FXAA = false){
-			GraphicsLayer.Enable(EnableCap.Texture2D);
-			GraphicsLayer.Disable(EnableCap.DepthTest);
+			Renderer.Enable(EnableCap.Texture2D);
+			Renderer.Disable(EnableCap.DepthTest);
 			
 			DrawManager.UIRenderer.SetupQuad();
 
@@ -226,8 +229,8 @@ namespace Hedra.Engine.Rendering.Effects
 
             DrawManager.UIRenderer.DrawQuad();
 
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-			GraphicsLayer.Disable(EnableCap.Texture2D);
+            Renderer.Enable(EnableCap.DepthTest);
+			Renderer.Disable(EnableCap.Texture2D);
 		}
 		
 		public void Clear(){}
@@ -249,7 +252,8 @@ namespace Hedra.Engine.Rendering.Effects
 		
 		public static MainFBO DefaultBuffer => DrawManager.MainBuffer;
 
-	    public void Resize(){
+	    public void Resize()
+        {
 			Default = Default.Resize();
 			FinalFbo = FinalFbo.Resize();
 			AdditiveFbo = AdditiveFbo.Resize();
@@ -261,5 +265,18 @@ namespace Hedra.Engine.Rendering.Effects
 			Blur.Resize();
 			UnderWater.Resize();
 		}
+
+	    public void Dispose()
+	    {
+	        Default.Dispose();
+	        AdditiveFbo.Dispose();
+            FinalFbo.Dispose();
+            Ssao.Dispose();
+	        Default.Dispose();
+	        Bloom.Dispose();
+	        Blur.Dispose();
+	        UnderWater.Dispose();
+	        Distortion.Dispose();
+        }
 	}
 }

@@ -199,9 +199,9 @@ namespace Hedra.Engine.Player
 			if(frontBlock.Type != BlockType.Air){
 				Model.Run();
 				this.Physics.UsePhysics = false;
-				this.BlockPosition += Vector3.UnitY * 8 *(float) Time.deltaTime;
-				this.Model.Position += Vector3.UnitY * 8 *(float) Time.deltaTime;
-				this.Stamina -= (float) Time.deltaTime * 25f;
+				this.BlockPosition += Vector3.UnitY * 8 *(float) Time.DeltaTime;
+				this.Model.Position += Vector3.UnitY * 8 *(float) Time.DeltaTime;
+				this.Stamina -= (float) Time.DeltaTime * 25f;
 			}
 		}
 		
@@ -249,11 +249,10 @@ namespace Hedra.Engine.Player
 	        }
             else
 	        {
-                if (!Class.CanAccumulateHits) return;
                 _consecutiveHitsTimer.Reset();
 	            ConsecutiveHits++;
 	            int consecutiveHitsValue = ConsecutiveHits;
-	            this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier, () => ConsecutiveHits == consecutiveHitsValue);
+	            this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier * .5f, () => ConsecutiveHits == consecutiveHitsValue);
 	            Mana = Mathf.Clamp(Mana + 8, 0, MaxMana);
             }
         }
@@ -302,9 +301,9 @@ namespace Hedra.Engine.Player
 	        ComponentManager.AddComponentWhile(effect, Condition);
 	    }
 
-	    public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 75f, 0f, .75f);
+	    public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 35f, 0f, 1.25f);
 
-	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f) * (1f + ConsecutiveHitsModifier);
+	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f) * (.5f + ConsecutiveHitsModifier);
 
 	    public float BaseDamageEquation => (this.Level * 2.75f + 16f) * this.WeaponModifier(MainWeapon) * this.AttackPower;
 

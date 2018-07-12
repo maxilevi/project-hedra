@@ -21,7 +21,7 @@ namespace Hedra.Engine.Management
 		public static void Update(){
 			if(!GameSettings.Autosave || GameManager.InStartMenu) return;
 			
-			PassedTime += Time.FrameTimeSeconds;
+			PassedTime += Time.IndependantDeltaTime;
 			if(PassedTime >= TimePerSave){
 				AutosaveManager.Save();
 				PassedTime = 0;

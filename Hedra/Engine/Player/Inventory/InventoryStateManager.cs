@@ -56,7 +56,7 @@ namespace Hedra.Engine.Player.Inventory
                         var prevValue = (float)cacheItem.Key.Getter.Invoke();
                         cacheItem.Key.Setter.Invoke(
                             Mathf.Lerp((float)cacheItem.Key.Getter.Invoke(), (float)cacheItem.Value,
-                                (float)Time.deltaTime * 16f)
+                                (float)Time.DeltaTime * 16f)
                         );
                         finishedLerp = Math.Abs((float)cacheItem.Key.Getter.Invoke() - prevValue) < 0.01f;
                     }
@@ -65,7 +65,7 @@ namespace Hedra.Engine.Player.Inventory
                         var prevValue = (Vector3)cacheItem.Key.Getter.Invoke();
                         cacheItem.Key.Setter.Invoke(
                             Mathf.Lerp((Vector3)cacheItem.Key.Getter.Invoke(), (Vector3)cacheItem.Value,
-                                (float)Time.deltaTime * 16f)
+                                (float)Time.DeltaTime * 16f)
                         );
                         finishedLerp = ((Vector3)cacheItem.Key.Getter.Invoke() - prevValue).Length < 0.01f;
                     }

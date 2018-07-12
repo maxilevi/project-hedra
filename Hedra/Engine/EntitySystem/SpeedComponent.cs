@@ -14,7 +14,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Update()
         {
-            _speedTime -= Time.FrameTimeSeconds;
+            _speedTime -= Time.IndependantDeltaTime;
         }
 
         public void Apply(Entity Victim, float Amount)

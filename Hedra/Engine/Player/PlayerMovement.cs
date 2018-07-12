@@ -43,7 +43,7 @@ namespace Hedra.Engine.Player
 
         protected override void DoUpdate()
         {
-            _glidingCooldown -= Time.FrameTimeSeconds;
+            _glidingCooldown -= Time.IndependantDeltaTime;
             //_player.Physics.CanBePushed = !_player.IsMoving;
             if (!CaptureMovement || _player.Knocked || _player.IsDead || !Human.CanInteract || GameSettings.Paused)
                 return;
@@ -98,8 +98,8 @@ namespace Hedra.Engine.Player
 
                 _targetAngles.Z = 5f * (_player.View.StackedYaw - _yaw);
                 _targetAngles = Mathf.Clamp(_targetAngles, -10f, 10f);
-                _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.deltaTime * 8f);
-                _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.deltaTime * 2f);
+                _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.DeltaTime * 8f);
+                _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
                 if (GameManager.Keyboard[Key.W])
                 {
                     _targetYaw = _player.View.TargetYaw;
@@ -155,7 +155,7 @@ namespace Hedra.Engine.Player
         private void ProcessMovement(Humanoid Player, Vector3 MoveSpace)
         {
             for (var i = 0; i < 5; i++)
-                Player.Physics.Move(MoveSpace * .2f * (float)Time.deltaTime);
+                Player.Physics.DeltaTranslate(MoveSpace * .2f);
 
             if (!Player.WasAttacking && !Player.IsAttacking)
             {

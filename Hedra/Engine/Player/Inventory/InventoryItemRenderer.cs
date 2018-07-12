@@ -1,6 +1,5 @@
 ﻿
 using System;
-using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
@@ -13,6 +12,7 @@ namespace Hedra.Engine.Player.Inventory
     internal class InventoryItemRenderer
     {
         public const float ZOffsetFactor = 1.25f;
+        public static readonly FBO Framebuffer;
         private readonly InventoryArray _array;
         private readonly int _length;
         private readonly int _offset;
@@ -20,6 +20,11 @@ namespace Hedra.Engine.Player.Inventory
         private readonly float[] _modelsHeights;
         private float _itemRotation;
         private float _itemCount;
+
+        static InventoryItemRenderer()
+        {
+            Framebuffer = new FBO(GameSettings.Width, GameSettings.Height);
+        }
 
         public InventoryItemRenderer(InventoryArray Array, int Offset, int Length)
         {
@@ -70,29 +75,29 @@ namespace Hedra.Engine.Player.Inventory
             if (Mesh == null || Item == null) return GUIRenderer.TransparentTexture;
 
             Mesh.AnimationRotation = new Vector3(0, _itemRotation, TiltIfWeapon && Item.IsWeapon ? 45 : 0);
-            _itemRotation += 25 * (float)Time.deltaTime / Math.Max(1,_itemCount);
+            _itemRotation += 25 * (float)Time.DeltaTime / Math.Max(1,_itemCount);
 
-            GraphicsLayer.PushShader();
-            GraphicsLayer.PushFBO();
-            UserInterface.InventoryFbo.Bind();
+            Renderer.PushShader();
+            Renderer.PushFBO();
+            Framebuffer.Bind();
 
             var currentDayColor = ShaderManager.LightColor;
             ShaderManager.SetLightColorInTheSameThread(Vector3.One);
 
             var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 1, 1024f);
-            GraphicsLayer.MatrixMode(MatrixMode.Projection);
+            Renderer.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projectionMatrix);
 
             var offset = Item.IsWeapon
                 ? Vector3.UnitY * 0.4f - Vector3.UnitX * 0.4f
                 : Vector3.UnitY * 0.25f;
             var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset, offset, Vector3.UnitY);
-            GraphicsLayer.MatrixMode(MatrixMode.Modelview);
+            Renderer.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookAt);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-            GraphicsLayer.Disable(EnableCap.Blend);
+            Renderer.Enable(EnableCap.DepthTest);
+            Renderer.Disable(EnableCap.Blend);
             Mesh.Draw();
 
             /*GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, ItemsFBO.BufferID);
@@ -103,13 +108,13 @@ namespace Hedra.Engine.Player.Inventory
 			GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
 			GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);*/
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
-            GraphicsLayer.PopFBO();
-            GraphicsLayer.PopShader();
-            GraphicsLayer.BindFramebuffer(FramebufferTarget.Framebuffer, GraphicsLayer.FBOBound);
-            GraphicsLayer.BindShader(GraphicsLayer.ShaderBound);
-            GraphicsLayer.Disable(EnableCap.DepthTest);
-            GraphicsLayer.Enable(EnableCap.Blend);        
-            return UserInterface.InventoryFbo.TextureID[0];
+            Renderer.PopFBO();
+            Renderer.PopShader();
+            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);
+            Renderer.BindShader(Renderer.ShaderBound);
+            Renderer.Disable(EnableCap.DepthTest);
+            Renderer.Enable(EnableCap.Blend);        
+            return Framebuffer.TextureID[0];
         }
 
         private VertexData CenterModel(VertexData Data)

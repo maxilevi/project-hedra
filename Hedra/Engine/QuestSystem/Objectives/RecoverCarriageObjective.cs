@@ -34,7 +34,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                 if (_carriage == null) return 0;
 
                 //LocalPlayer.Instance.UI.DrawPreview(_carriage.Model, UserInterface.QuestFbo);
-                return UserInterface.QuestFbo.TextureID[0];
+                return UserInterface.___questFbo.TextureID[0];
             }
         }
 

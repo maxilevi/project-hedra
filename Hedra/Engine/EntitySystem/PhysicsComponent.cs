@@ -76,7 +76,7 @@ namespace Hedra.Engine.EntitySystem
 			if(!UsePhysics)
 				return;
 
-			_deltaTime = (float) ( UseTimescale ? Time.deltaTime : Time.unScaledDeltaTime);
+			_deltaTime = this.Timestep;
 
 	        if (CanCollide)
 	        {
@@ -93,9 +93,12 @@ namespace Hedra.Engine.EntitySystem
 	                _collisions.AddRange(World.GlobalColliders);
 	                try
 	                {
+	                    if (Parent is LocalPlayer)
+	                    {
+	                        int a = 0;
+	                    }
 	                    if (_underChunk != null && _underChunk.Initialized)
 	                        _collisions.AddRange(_underChunk.CollisionShapes);
-
 
 	                    var player = LocalPlayer.Instance;
 
@@ -122,13 +125,13 @@ namespace Hedra.Engine.EntitySystem
 	        Velocity += -Physics.Gravity * GravityDirection * _deltaTime * 6f;
 	        Velocity = Mathf.Clamp(Velocity, -VelocityCap, VelocityCap);
 
-            var command = new MoveCommand(Parent, Velocity * (float) (UseTimescale ? Time.deltaTime : Time.unScaledDeltaTime));
+            var command = new MoveCommand(Parent, Velocity * _deltaTime);
 	        this.ProccessCommand(command);
 
 	        if (!Parent.IsGrounded)
 	        {
 	            if (!Parent.IsUnderwater)
-	                Falltime += (float)Time.deltaTime;
+	                Falltime += _deltaTime;
 	        }
 	        else
 	        {
@@ -136,12 +139,15 @@ namespace Hedra.Engine.EntitySystem
 	            {
 	                if (Falltime > 1.75f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true) )
 	                {
-	                    var fallTime = Falltime;
-	                    Executer.ExecuteOnMainThread(delegate
+	                    if (!Parent.SearchComponent<DamageComponent>()?.Immune ?? true)
 	                    {
-	                        Parent.Damage(fallTime * 45f, null, out _, true);
-	                        Parent.KnockForSeconds(3f);
-	                    });
+	                        var fallTime = Falltime;
+	                        Executer.ExecuteOnMainThread(delegate
+	                        {
+	                            Parent.Damage(fallTime * 45f, null, out _, true);
+	                            Parent.KnockForSeconds(3f);
+	                        });
+	                    }
 	                }
 	                Falltime = 0;
 	            }
@@ -155,16 +161,31 @@ namespace Hedra.Engine.EntitySystem
 	        Velocity = Vector3.Zero;
 	    }
 
-	    public void Move(MoveCommand command){
-			Physics.Threading.AddCommand(command);
+	    public void ExecuteTranslate(MoveCommand Command)
+        {
+			Physics.Threading.AddCommand(Command);
 		}
 
-	    public void Move(Vector3 Delta)
+	    public void Translate(Vector3 Delta)
 	    {
-	        Physics.Threading.AddCommand(new MoveCommand(this.Parent, Delta));
+	        this.ExecuteTranslate(new MoveCommand(this.Parent, Delta));
 	    }
 
-        public void ProccessCommand(MoveCommand Command) {
+        public void DeltaTranslate(Vector3 Delta)
+	    {
+	        this.ExecuteTranslate(new MoveCommand(this.Parent, Delta * Time.DeltaTime));
+	    }
+
+	    public void DeltaTranslate(MoveCommand Command)
+	    {
+	        Command.Delta *= this.Timestep;
+            this.ExecuteTranslate(Command);
+	    }
+
+	    public float Timestep => Time.IndependantDeltaTime * (UseTimescale ? Time.TimeScale : 1);
+
+        public void ProccessCommand(MoveCommand Command)
+        {
             if(Command.Delta == Vector3.Zero) return;
             bool onlyY = Command.Delta.Xz == Vector2.Zero;
 			Vector3 delta = Command.Delta;
@@ -226,11 +247,11 @@ namespace Hedra.Engine.EntitySystem
                             for (var j = 0; j < 6; j++)
                             {
                                 var command = new MoveCommand(entities[i],
-                                    increment * 1f * (float) Time.deltaTime)
+                                    increment * 1f)
                                 {
                                     IsRecursive = true
                                 };
-                                entities[i].Physics.Move(command);
+                                entities[i].Physics.DeltaTranslate(command);
                             }
                         }
                     }

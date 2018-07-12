@@ -22,7 +22,7 @@ namespace Hedra.Engine
 
         public static void Load(string AppPath)
         {
-            CompatibilityManager.WriteSpecificationsList(AppPath);
+            //CompatibilityManager.WriteSpecificationsList(AppPath);
             CompatibilityManager.DetectGeometryShaderSupport();
             CompatibilityManager.DefineMultiDrawElementsMethod();
         }
@@ -66,7 +66,7 @@ namespace Hedra.Engine
         {
             var videoCardString = GL.GetString(StringName.Renderer);
             var manufacturerString = GL.GetString(StringName.Vendor);
-            var useCompatibilityFunction = videoCardString.Contains("AMD Radeon HD") || manufacturerString.Contains("Intel");
+            var useCompatibilityFunction = true;//videoCardString.Contains("AMD Radeon HD") || manufacturerString.Contains("Intel");
             if(useCompatibilityFunction) Log.WriteLine("glMultiDrawElements issue detected. Enabling compatibility mode...");
 
             if (useCompatibilityFunction)

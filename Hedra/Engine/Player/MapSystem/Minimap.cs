@@ -11,6 +11,7 @@ using System;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -37,8 +38,11 @@ namespace Hedra.Engine.Player.MapSystem
         private bool _show;
 	    public bool HasMarker { get; private set; }
 	    public Vector3 MarkedDirection { get; private set; }
+	    private Vector3 _lastPosition;
+	    private int _previousActiveChunks;
 
-        public Minimap(LocalPlayer Player){
+        public Minimap(LocalPlayer Player)
+        {
             this._player = Player;
             this._panel = new Panel();
             _mapFbo = new FBO(GameSettings.Width, GameSettings.Height);
@@ -68,59 +72,64 @@ namespace Hedra.Engine.Player.MapSystem
 	        HasMarker = false;
 	    }
 		
-		public void DrawMap(){
-		    GraphicsLayer.Enable(EnableCap.DepthTest);
-		    GraphicsLayer.PushFBO();
-		    GraphicsLayer.PushShader();
-            _mapFbo.Bind();
-            GL.ClearColor(SkyManager.FogManager.FogValues.U_BotColor.ToColor());
-		    GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+		public void DrawMap()
+        {
+            if ((_lastPosition - _player.Position.Xz.ToVector3()).LengthSquared > 2 || _previousActiveChunks != _player.Loader.ActiveChunks)
+            {
+                Renderer.Enable(EnableCap.DepthTest);
+                Renderer.PushFBO();
+                Renderer.PushShader();
+                _mapFbo.Bind();
+                GL.ClearColor(SkyManager.FogManager.FogValues.U_BotColor.ToColor());
+                GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-		    var oldDistance = _player.View.Distance;
-		    var oldPitch = _player.View.Pitch;
-		    var oldFacing = _player.View.Yaw;
+                var oldDistance = _player.View.Distance;
+                var oldPitch = _player.View.Pitch;
+                var oldFacing = _player.View.Yaw;
 
-		    _player.View.Yaw = -1.55f;
-		    _player.View.Distance = 100f;
-		    _player.View.Pitch = -10f;
-		    _player.View.BuildCameraMatrix();
+                _player.View.Yaw = -1.55f;
+                _player.View.Distance = 100f;
+                _player.View.Pitch = -10f;
+                _player.View.BuildCameraMatrix();
 
-		    var rotationMatrix =
-		        Matrix4.CreateFromQuaternion(QuaternionMath.FromEuler(-_player.Model.Model.Rotation.Y * Vector3.UnitY * Mathf.Radian));
-		    DrawManager.FrustumObject.SetFrustum(_player.View.ModelViewMatrix * rotationMatrix);
+                DrawManager.FrustumObject.SetFrustum(_player.View.ModelViewMatrix);
 
-            GraphicsLayer.MatrixMode(MatrixMode.Projection);
-		    var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
-		    GraphicsLayer.LoadMatrix(ref projMatrix);
+                Renderer.MatrixMode(MatrixMode.Projection);
+                var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
+                Renderer.LoadMatrix(ref projMatrix);
 
-		    var oldShadows = GameSettings.GlobalShadows;
-		    var oldFancy = GameSettings.Fancy;
-		    GameSettings.GlobalShadows = false;
-		    GameSettings.Fancy = false;
-            DrawManager.FrustumObject.CalculateFrustum(projMatrix, DrawManager.FrustumObject.ModelViewMatrix);
-            World.CullTest(DrawManager.FrustumObject);
-            WorldRenderer.Render(World.DrawingChunks, ChunkBufferTypes.STATIC);
-		    WorldRenderer.Render(World.DrawingChunks, ChunkBufferTypes.WATER);
-		    GameSettings.Fancy = oldFancy;
-		    GameSettings.GlobalShadows = oldShadows;
+                var oldShadows = GameSettings.GlobalShadows;
+                var oldFancy = GameSettings.Fancy;
+                GameSettings.GlobalShadows = false;
+                GameSettings.Fancy = false;
+                DrawManager.FrustumObject.CalculateFrustum(projMatrix, DrawManager.FrustumObject.ModelViewMatrix);
+                World.CullTest(DrawManager.FrustumObject);
+                WorldRenderer.Render(World.DrawingChunks, ChunkBufferTypes.STATIC);
+                WorldRenderer.Render(World.DrawingChunks, ChunkBufferTypes.WATER);
+                GameSettings.Fancy = oldFancy;
+                GameSettings.GlobalShadows = oldShadows;
 
-            _player.View.Pitch = oldPitch;
-		    _player.View.Yaw = oldFacing;
-		    _player.View.Distance = oldDistance;
+                _player.View.Pitch = oldPitch;
+                _player.View.Yaw = oldFacing;
+                _player.View.Distance = oldDistance;
 
-		    _player.View.BuildCameraMatrix();
-		    DrawManager.FrustumObject.SetFrustum(_player.View.ModelViewMatrix);
+                _player.View.BuildCameraMatrix();
+                DrawManager.FrustumObject.SetFrustum(_player.View.ModelViewMatrix);
 
-		    GraphicsLayer.Disable(EnableCap.DepthTest);
-		    GraphicsLayer.Enable(EnableCap.Blend);
-		    GL.ClearColor(Vector4.Zero.ToColor());
-            GraphicsLayer.PopFBO();
-		    GraphicsLayer.PopShader();
-		    GraphicsLayer.BindFramebuffer(FramebufferTarget.Framebuffer, GraphicsLayer.FBOBound);
-		    GraphicsLayer.BindShader(GraphicsLayer.ShaderBound);
+                Renderer.Disable(EnableCap.DepthTest);
+                Renderer.Enable(EnableCap.Blend);
+                GL.ClearColor(Vector4.Zero.ToColor());
+                Renderer.PopFBO();
+                Renderer.PopShader();
+                Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);
+                Renderer.BindShader(Renderer.ShaderBound);
+                _lastPosition = _player.Position.Xz.ToVector3();
+                _previousActiveChunks = _player.Loader.ActiveChunks;
+            }
         }
 
-		public void Draw(){
+		public void Draw()
+        {
             if (!GameSettings.ShowMinimap)
             {
                 _mapCursor.Disable();
@@ -150,9 +159,9 @@ namespace Hedra.Engine.Player.MapSystem
 		    this.DrawMap();
 
             Shader.Bind();
-            GraphicsLayer.Enable(EnableCap.Texture2D);
-            GraphicsLayer.Enable(EnableCap.Blend);
-            GraphicsLayer.Disable(EnableCap.DepthTest);
+            Renderer.Enable(EnableCap.Texture2D);
+            Renderer.Enable(EnableCap.Blend);
+            Renderer.Disable(EnableCap.DepthTest);
 
             DrawManager.UIRenderer.SetupQuad();
 
@@ -170,23 +179,30 @@ namespace Hedra.Engine.Player.MapSystem
             Shader["Opacity"] = _miniMap.TextureElement.Opacity;
             Shader["Grayscale"] = _miniMap.TextureElement.Grayscale ? 1 : 0;
             Shader["Tint"] = _miniMap.TextureElement.Tint;
+            Shader["Rotation"] = Matrix3.CreateRotationZ(-_player.Model.Model.Rotation.Y * Mathf.Radian);
 
             DrawManager.UIRenderer.DrawQuad();
 
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-            GraphicsLayer.Disable(EnableCap.Blend);
-            GraphicsLayer.Disable(EnableCap.Texture2D);
-            GraphicsLayer.Enable(EnableCap.CullFace);
+            Renderer.Enable(EnableCap.DepthTest);
+            Renderer.Disable(EnableCap.Blend);
+            Renderer.Disable(EnableCap.Texture2D);
+            Renderer.Enable(EnableCap.CullFace);
             Shader.Unbind();
         }
 		
-		public bool Show{
-			get{ return _show; }
-			set{
+		public bool Show
+        {
+			get => _show;
+		    set{
 				_show = value;
 				if(_show) _panel.Enable();
 				else _panel.Disable();
 			}
 		}
+
+	    public void Dispose()
+	    {
+	        _mapFbo.Dispose();
+        }
 	}
 }

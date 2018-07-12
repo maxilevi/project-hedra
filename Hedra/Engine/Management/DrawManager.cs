@@ -43,23 +43,27 @@ namespace Hedra.Engine.Management
 			CullableObjectsCount = 0;
 			lock (DrawFunctions)
 			{
-			    for(int i = 0; i < DrawFunctions.Count; i++){
+			    for(int i = 0; i < DrawFunctions.Count; i++)
+                {
 			        if(DrawFunctions[i] is ICullable)
 			            CullableObjectsCount++;
 			    }
 			}
 	     }
 		
-		public static void Remove(IRenderable a){
+		public static void Remove(IRenderable a)
+        {
 			lock(DrawFunctions)
 				DrawFunctions.Remove(a);
 		}
 		
-		public static bool Contains(IRenderable a){
+		public static bool Contains(IRenderable a)
+        {
 			return DrawFunctions.Contains(a);
 		}
 		
-		public static void BulkDraw(){
+		public static void BulkDraw()
+        {
 			SkyManager.Draw();
 			World.CullTest(FrustumObject);
 			World.Draw(ChunkBufferTypes.STATIC);
@@ -88,7 +92,7 @@ namespace Hedra.Engine.Management
 			        drawedObjects++;
                 }
 			}
-			GraphicsLayer.Enable(EnableCap.DepthTest);
+			Renderer.Enable(EnableCap.DepthTest);
 			World.Draw(ChunkBufferTypes.WATER);
 		    for (int i = TrailRenderer.Count - 1; i > -1; i--)
 		    {
@@ -121,7 +125,8 @@ namespace Hedra.Engine.Management
 	    	MainBuffer.Clear();
 	    	
 	    	#if DEBUG
-	    	if(GameSettings.DebugView){
+	    	if(GameSettings.DebugView)
+            {
 		    	ErrorCode code = GL.GetError();
 		    	if(code != ErrorCode.NoError)
 		    		Log.WriteResult(false, "OpenGL error: "+code.ToString());
@@ -129,13 +134,21 @@ namespace Hedra.Engine.Management
 	    	#endif
 	    }
 	     
-	     public static void Load(){
+	     public static void Load()
+         {
 	         MainBuffer = new MainFBO
 	         {
 	             Enabled = true
 	         };
 	         _initialized = true;
 	     }
+
+	    public static void Dispose()
+	    {
+            MouseCursor?.Dispose();
+	        MainBuffer.Dispose();
+	        UIRenderer.Dispose();
+        }
 	}
 }
 

@@ -47,7 +47,7 @@ namespace Hedra.Engine
 	            GameSettings.BloomModifier = 8.0f;
                 TaskManager.While( () => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
                 {
-                    GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, (float) Time.FrameTimeSeconds);
+                    GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, (float) Time.IndependantDeltaTime);
                 });
                 TaskManager.When( () => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
 	            {
@@ -222,7 +222,7 @@ namespace Hedra.Engine
 		    var chunkOffset = World.ToChunkSpace(LocalPlayer.Instance.BlockPosition);
 		    World.StructureGenerator.CheckStructures(chunkOffset);
             while (true){
-				time += Time.FrameTimeSeconds;
+				time += Time.IndependantDeltaTime;
 				if(time >= .5f){
 					text += ".";
 					time = 0;
@@ -236,7 +236,7 @@ namespace Hedra.Engine
 				if(underChunk != null && underChunk.IsGenerated && underChunk.Landscape.StructuresPlaced && underChunk.BuildedWithStructures
 				  && underChunk.Mesh != null){
                     if (Player.IsUnderwater){
-						Player.BlockPosition += Vector3.One.Xz.ToVector3() * (float) Time.FrameTimeSeconds * 60f * 5f;
+						Player.BlockPosition += Vector3.One.Xz.ToVector3() * (float) Time.IndependantDeltaTime * 60f * 5f;
 						yield return null;
 						continue;
 					}

@@ -35,8 +35,8 @@ namespace Hedra.Engine.Rendering.Effects
 		}
 		
 		public override void Resize(){}
-		
-		public override void Pass(FBO Src, FBO Dst){
+
+	    public override void Pass(FBO Src, FBO Dst){
 			Dst.Bind();
 			
 			WaterEffect.Bind();
@@ -51,5 +51,10 @@ namespace Hedra.Engine.Rendering.Effects
 			
 			Dst.UnBind();
 		}
-	}
+
+	    public override void Dispose()
+	    {
+
+	    }
+    }
 }

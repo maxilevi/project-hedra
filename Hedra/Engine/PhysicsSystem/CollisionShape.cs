@@ -18,7 +18,7 @@ namespace Hedra.Engine.PhysicsSystem
     /// <summary>
     /// Description of CollisionShape.
     /// </summary>
-    internal class CollisionShape : ICollidable
+    internal class CollisionShape : ICollidable, ICloneable
     {
 		public Vector3[] Vertices { get; }
 	    public uint[] Indices { get; }
@@ -94,7 +94,7 @@ namespace Hedra.Engine.PhysicsSystem
             this.BroadphaseRadius = dist;
         }
 
-        public CollisionShape Clone()
+        public object Clone()
 		{
 		    return new CollisionShape(Vertices.ToArray(), this.Indices.ToArray());
 		}

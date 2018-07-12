@@ -86,8 +86,8 @@ namespace Hedra.Engine.Generation
             while ((area.Position - targetPosition).LengthFast > .75f && passedTime < time)
             {
 
-                area.Position = Mathf.Lerp(area.Position, targetPosition, (float)Time.deltaTime * 4f);
-                passedTime += (float) Time.deltaTime * 4f;
+                area.Position = Mathf.Lerp(area.Position, targetPosition, (float)Time.DeltaTime * 4f);
+                passedTime += (float) Time.DeltaTime * 4f;
                 yield return null;
             }
 

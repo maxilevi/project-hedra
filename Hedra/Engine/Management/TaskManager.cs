@@ -101,7 +101,7 @@ namespace Hedra.Engine.Management
 			float milliseconds = Convert.ToSingle(Args[0]);
             var action = (Action)Args[1];
             while (passedTime * 1000 < milliseconds){
-				passedTime += Time.FrameTimeSeconds;
+				passedTime += Time.IndependantDeltaTime;
 				yield return null;
 			}
 			action();

@@ -72,22 +72,22 @@ namespace Hedra.Engine.Rendering
 				int[] ShadowCounts = StaticBuffer.BuildCounts(ToDraw, out ShadowOffsets, true);
 				
 				StaticBuffer.Data.Bind(false);
-				GraphicsLayer.EnableVertexAttribArray(0);
-			    GraphicsLayer.EnableVertexAttribArray(1);
+				Renderer.EnableVertexAttribArray(0);
+			    Renderer.EnableVertexAttribArray(1);
 
 			    GL.BindBuffer(StaticBuffer.Indices.Buffer.BufferTarget, StaticBuffer.Indices.Buffer.ID);
 
                 if (GameSettings.Shadows){
 
 					ShadowRenderer.Bind();
-                    GraphicsLayer.MultiDrawElements(PrimitiveType.Triangles, ShadowCounts, DrawElementsType.UnsignedInt, ShadowOffsets, ShadowCounts.Length);
+                    Renderer.MultiDrawElements(PrimitiveType.Triangles, ShadowCounts, DrawElementsType.UnsignedInt, ShadowOffsets, ShadowCounts.Length);
 					ShadowRenderer.UnBind();
 
 				}
 				StaticBind();
 
-				GraphicsLayer.EnableVertexAttribArray(2);
-			    GraphicsLayer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);		    
+				Renderer.EnableVertexAttribArray(2);
+			    Renderer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);		    
 
 				StaticBuffer.Data.Unbind();		
 				StaticUnBind();
@@ -97,23 +97,23 @@ namespace Hedra.Engine.Rendering
 				IntPtr[] Offsets;
 				int[] Counts = WaterBuffer.BuildCounts(ToDraw, out Offsets);
 
-			    WaveMovement += Time.unScaledDeltaTime * Mathf.Radian * 32;
+			    WaveMovement += Time.IndependantDeltaTime * Mathf.Radian * 32;
 			    if (WaveMovement >= 5f)
 			        WaveMovement = 0;
 
                 WaterBind();
 				WaterBuffer.Data.Bind();
 				
-				GraphicsLayer.EnableVertexAttribArray(0);
-				GraphicsLayer.EnableVertexAttribArray(1);
-				GraphicsLayer.EnableVertexAttribArray(2);
+				Renderer.EnableVertexAttribArray(0);
+				Renderer.EnableVertexAttribArray(1);
+				Renderer.EnableVertexAttribArray(2);
 				
 				GL.BindBuffer(WaterBuffer.Indices.Buffer.BufferTarget, WaterBuffer.Indices.Buffer.ID);
-			    GraphicsLayer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);
+			    Renderer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);
 				
-				GraphicsLayer.DisableVertexAttribArray(0);
-				GraphicsLayer.DisableVertexAttribArray(1);
-				GraphicsLayer.DisableVertexAttribArray(2);	
+				Renderer.DisableVertexAttribArray(0);
+				Renderer.DisableVertexAttribArray(1);
+				Renderer.DisableVertexAttribArray(2);	
 				
 				WaterBuffer.Data.Unbind();
 				WaterUnBind();
@@ -134,11 +134,11 @@ namespace Hedra.Engine.Rendering
 		#region Binds
 		
 		private static void StaticBind(){
-			GraphicsLayer.Disable(EnableCap.Blend);
+			Renderer.Disable(EnableCap.Blend);
 			StaticShader.Bind();
 
             StaticShader["PlayerPosition"] = GameManager.Player.Position;
-		    StaticShader["Time"] = !GameManager.InStartMenu ? Time.CurrentFrame : Time.UnPausedCurrentFrame;
+		    StaticShader["Time"] = !GameManager.InStartMenu ? Time.AccumulatedFrameTime : Time.IndependentAccumulatedFrameTime;
 		    StaticShader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
 			//StaticShader["Snow"] = SkyManager.Snowing ? 1.0f : 0.0f;		
 			StaticShader["UseShadows"] = (float) GameSettings.ShadowQuality * (GameSettings.Shadows ? 1f : 0f);
@@ -169,10 +169,10 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		private static void WaterBind(){
-			GraphicsLayer.Enable(EnableCap.Blend);
+			Renderer.Enable(EnableCap.Blend);
 		    GL.BlendEquation(BlendEquationMode.FuncAdd);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-           	GraphicsLayer.Enable(EnableCap.Texture2D);
+           	Renderer.Enable(EnableCap.Texture2D);
            	
            	WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
@@ -190,13 +190,13 @@ namespace Hedra.Engine.Rendering
 			WaterShader["WaveMovement"] = WaveMovement;
 		    WaterShader["Smoothness"] = WaterSmoothness;
 
-            if (ShowWaterBackfaces) GraphicsLayer.Disable(EnableCap.CullFace);
+            if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
 		}
 		
 		private static void WaterUnBind(){
-			GraphicsLayer.Disable(EnableCap.Blend);
-			GraphicsLayer.Disable(EnableCap.Texture2D);
-			GraphicsLayer.Enable(EnableCap.CullFace);
+			Renderer.Disable(EnableCap.Blend);
+			Renderer.Disable(EnableCap.Texture2D);
+			Renderer.Enable(EnableCap.CullFace);
 		    WaterShader.Unbind();
         }
 

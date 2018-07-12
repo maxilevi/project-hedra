@@ -145,6 +145,7 @@
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeStructureDesign.cs" />
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeTreeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\Region.cs" />
+    <Compile Include="Engine\BiomeSystem\RegionCache.cs" />
     <Compile Include="Engine\BiomeSystem\RegionEnviroment.cs" />
     <Compile Include="Engine\BiomeSystem\RegionGeneration.cs" />
     <Compile Include="Engine\BiomeSystem\RegionMob.cs" />
@@ -385,9 +386,10 @@
     <Compile Include="Engine\Player\Skills\WarriorIronSkin.cs" />
     <Compile Include="Engine\QuestSystem\BanditCamp.cs" />
     <Compile Include="Engine\QuestSystem\Tombstone.cs" />
+    <Compile Include="Engine\Rendering\CapHandler.cs" />
     <Compile Include="Engine\Rendering\Geometry.cs" />
     <Compile Include="Engine\Rendering\GeometryData.cs" />
-    <Compile Include="Engine\Rendering\GraphicsLayer.cs" />
+    <Compile Include="Engine\Rendering\Renderer.cs" />
     <Compile Include="Engine\Management\OSManager.cs" />
     <Compile Include="Engine\Management\Platform.cs" />
     <Compile Include="Engine\Management\SoundtrackManager.cs">
@@ -589,10 +591,12 @@
     <Compile Include="Engine\Rendering\Shaders\ShaderParser.cs" />
     <Compile Include="Engine\Rendering\Shaders\UniformArray.cs" />
     <Compile Include="Engine\Rendering\Shaders\UniformMapping.cs" />
+    <Compile Include="Engine\Rendering\StateHandler.cs" />
     <Compile Include="Engine\Rendering\Texture3D.cs" />
     <Compile Include="Engine\Rendering\UI\PlayerInterface.cs" />
     <Compile Include="Engine\Rendering\UI\TextConfiguration.cs" />
     <Compile Include="Engine\Rendering\UI\TextureCommand.cs" />
+    <Compile Include="Engine\Rendering\VertexAttributeHandler.cs" />
     <Compile Include="Engine\StructureSystem\BanditCampDesign.cs" />
     <Compile Include="Engine\StructureSystem\StructureGenerator.cs" />
     <Compile Include="Engine\QuestSystem\TravellingMerchant.cs" />

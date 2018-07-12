@@ -20,16 +20,23 @@ float luma(vec3 color){
 void main(void){
 	vec2 TexCoords;
 	if(Flipped == int(1.0))
+	{
 		TexCoords = vec2( clamp(1.0-UV.x, 0.001, 0.999), clamp(1.0-UV.y, 0.001, 0.999) );
+	}
 	else
+	{
 		TexCoords = vec2( clamp(1.0-UV.x, 0.001, 0.999), clamp(UV.y, 0.001, 0.999) );
+	}
 	
 	vec4 Color;
 	vec4 texel = texture2D(Texture, TexCoords);
-	if(texel.r > .3 && texel.g < 0.7 && texel.b > .3){
+	if(texel.r > .3 && texel.g < 0.7 && texel.b > .3)
+	{
 		 Color = texture2D(Fill, TexCoords)  * vec4(1.0, 1.0, 1.0, Opacity);
 		 Color.a = texel.a;
-	}else{
+	}
+	else
+	{
 		 Color = texel * vec4(1.0, 1.0, 1.0, Opacity);
 	}
 	OutColor = Color;

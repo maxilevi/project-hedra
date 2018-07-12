@@ -7,7 +7,6 @@ namespace Hedra.Engine.ClassSystem
 {
     internal class ArcherDesign : ClassDesign
     {
-        public override bool CanAccumulateHits { get; } = true;
         public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/ArcherLogo.png");
         public override HumanType Human => HumanType.Archer;
         public override float BaseSpeed => 1.35f;

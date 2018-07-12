@@ -55,7 +55,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
                     _previewMesh.Scale *= .33f;
                 //GameManager.Player.UI.DrawPreview(_previewMesh, UserInterface.QuestFbo);
                 _previewMesh.Scale = oldScale;
-                return UserInterface.QuestFbo.TextureID[0];
+                return UserInterface.___questFbo.TextureID[0];
             }
         }
 

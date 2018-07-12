@@ -52,7 +52,7 @@ namespace Hedra.Engine.EntitySystem
             var k = 0f;
             while (k < seconds)
             {
-                k += Time.ScaledFrameTimeSeconds;
+                k += Time.DeltaTime;
                 yield return null;
             }
             this.RemoveComponent(component);

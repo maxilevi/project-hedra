@@ -91,7 +91,7 @@ namespace Hedra.Engine.QuestSystem
                 human.Roll();
 
             Parent.Model.Run();
-            Parent.Physics.Move(human?.Movement.MoveFormula(Parent.Orientation) * (float) Time.deltaTime ?? Vector3.Zero);
+            Parent.Physics.DeltaTranslate(human?.Movement.MoveFormula(Parent.Orientation) ?? Vector3.Zero);
         }
 
         protected void LookTarget()

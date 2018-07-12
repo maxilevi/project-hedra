@@ -30,8 +30,8 @@ namespace Hedra.Engine.Rendering.Effects
 		}
 		
 		public override void Resize(){}
-		
-		public override void Pass(FBO Src, FBO Dst){
+
+	    public override void Pass(FBO Src, FBO Dst){
 			Dst.Bind();
 			
 			WaterEffect.Bind();
@@ -44,8 +44,8 @@ namespace Hedra.Engine.Rendering.Effects
 		}
 		
 		public override void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false){
-			GraphicsLayer.Enable(EnableCap.Texture2D);
-			GraphicsLayer.Disable(EnableCap.DepthTest);
+			Renderer.Enable(EnableCap.Texture2D);
+			Renderer.Disable(EnableCap.DepthTest);
 			
 			DrawManager.UIRenderer.SetupQuad();
 			
@@ -54,9 +54,14 @@ namespace Hedra.Engine.Rendering.Effects
 
 		    DrawManager.UIRenderer.DrawQuad();
 
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-			GraphicsLayer.Disable(EnableCap.Texture2D);
-			GraphicsLayer.Enable(EnableCap.CullFace);
+            Renderer.Enable(EnableCap.DepthTest);
+			Renderer.Disable(EnableCap.Texture2D);
+			Renderer.Enable(EnableCap.CullFace);
 		}
-	}
+
+	    public override void Dispose()
+	    {
+
+	    }
+    }
 }

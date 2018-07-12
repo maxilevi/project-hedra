@@ -88,6 +88,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _player.View.LockMouse = false;
                 _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
+                _player.Model.Idle();
                 UpdateManager.CursorShown = true;
             }
             else
@@ -100,13 +101,13 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             if (_show)
             {
-                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float)Time.deltaTime * 16f);
+                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float)Time.DeltaTime * 16f);
                 _player.View.TargetDistance =
-                    Mathf.Lerp(_player.View.TargetDistance, 10f, (float)Time.deltaTime * 16f);
+                    Mathf.Lerp(_player.View.TargetDistance, 10f, (float)Time.DeltaTime * 16f);
                 _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw, (float)Math.Acos(-_player.Orientation.X),
-                    (float)Time.deltaTime * 16f);
+                    (float)Time.DeltaTime * 16f);
                 _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
-                    (float)Time.deltaTime * 16f);
+                    (float)Time.DeltaTime * 16f);
                 _background.UpdateView(_player);
             }
         }

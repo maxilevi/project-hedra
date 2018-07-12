@@ -24,7 +24,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private int BoundsZ => _parent.BoundsZ;
         private static float BlockSize => Chunk.BlockSize;
 
-        public ChunkMeshBuildOutput CreateTerrainMesh(Block[][][] Blocks, int Lod)
+        public ChunkMeshBuildOutput CreateTerrainMesh(Block[][][] Blocks, int Lod, RegionCache Cache)
         {
             var failed = false;
             var next = false;
@@ -67,7 +67,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             new Vector3(cell.P[0].X * BlockSize + OffsetX, 0,
                                 cell.P[0].Z * BlockSize + OffsetZ);
 
-                        RegionColor region = World.BiomePool.GetAverageRegionColor(regionPosition);
+                        RegionColor region = Cache.GetAverageRegionColor(regionPosition);
 
                         color = region.WaterColor;
                         IsoSurfaceCreator.CreateWaterQuad(BlockSize, cell, next,
@@ -88,7 +88,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         if (!MarchingCubes.Usable(0f, cell)) continue;
 
                         var regionPosition = new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
-                        RegionColor region = World.BiomePool.GetAverageRegionColor(regionPosition);
+                        RegionColor region = Cache.GetAverageRegionColor(regionPosition);
                         color = Helper.GetColor(cell, Blocks[x][y][z].Type, BoundsX, BoundsY, BoundsZ, addonColors,
                             region, Lod);
                         MarchingCubes.Process(0f, cell, color, next, blockData);
@@ -98,7 +98,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         var regionPosition =
                             new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
 
-                        RegionColor region = World.BiomePool.GetAverageRegionColor(regionPosition);
+                        RegionColor region = Cache.GetAverageRegionColor(regionPosition);
 
                         color = Helper.GetColor(cell, Blocks[x][y][z].Type, BoundsX, BoundsY, BoundsZ, addonColors,
                             region, Lod);

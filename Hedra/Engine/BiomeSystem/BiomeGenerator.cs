@@ -34,9 +34,9 @@ namespace Hedra.Engine.BiomeSystem
 			this.Seed = World.Seed;
 		}
 
-		public abstract void Generate(Block[][][] Blocks);
+		public abstract void Generate(Block[][][] Blocks, RegionCache Cache);
 		
-		public abstract void DefineBlocks(Block[][][] Blocks);
+		public abstract void DefineBlocks(Block[][][] Blocks, RegionCache Cache);
 		
 		public void BuildArray(Block[][][] Blocks)
         {
@@ -59,7 +59,7 @@ namespace Hedra.Engine.BiomeSystem
 			return (float) (OpenSimplexNoise.Evaluate(x * 0.2, z * 0.2) * -0.15f * OpenSimplexNoise.Evaluate(x * 0.035, z * 0.035) * 2.0f);
 		}
 		
-		public virtual void PlaceStructures(Block[][][] Blocks)
+		public virtual void PlaceStructures(Block[][][] Blocks, RegionCache Cache)
         {
 			this.StructuresPlaced = true;
 		}

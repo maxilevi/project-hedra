@@ -10,7 +10,6 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.PhysicsSystem
@@ -18,12 +17,16 @@ namespace Hedra.Engine.PhysicsSystem
 	internal static class Physics
 	{
 		public static float Gravity = -9.81f;
-		public static PhysicsThreadManager Threading = new PhysicsThreadManager();
+	    public static PhysicsThreadManager Threading;
 
-	    public static void Update()
+	    static Physics()
+	    {
+	        Threading = new PhysicsThreadManager();
+        }
+
+        public static void Update()
 	    {
 	        Threading.Update();
-	        PhysicsScheduler.Update();
 	    }
 
 	    public static Box BuildBroadphaseBox(VertexData Model)

@@ -159,13 +159,9 @@ namespace Hedra.Engine.Rendering.UI
             UIText.Enabled = false;
         }
 
-        ~GUIText()
-        {
-            Executer.ExecuteOnMainThread(this.Dispose);
-        }
-
         public void Dispose()
         {
+            UIText?.Dispose();
             DrawManager.UIRenderer.Remove(UIText);
         }
     }

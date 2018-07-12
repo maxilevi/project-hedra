@@ -27,7 +27,7 @@ namespace Hedra.Engine
         {
             _lock = new object();
             _logs = new Dictionary<LogType, StreamWriter>();
-            LogsPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Logs/";
+            /*LogsPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Logs/";
             Directory.CreateDirectory(LogsPath);
             for (var i = 0; i < (int) LogType.MaxEnums; i++)
             {
@@ -37,8 +37,12 @@ namespace Hedra.Engine
                 {
                     AutoFlush = true
                 });
-            }
-		}
+            }*/
+            _logs.Add(LogType.Normal, new StreamWriter(new FileStream($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt", FileMode.OpenOrCreate))
+            {
+                AutoFlush = true
+            });
+        }
 		
 		public static string Output
         {
@@ -50,12 +54,16 @@ namespace Hedra.Engine
                     _logs[_currentType].Close();
                     _logs[_currentType].Dispose();
 
-                    var path = $"{LogsPath}/{_currentType}.log";
+                    var path = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt";//$"{LogsPath}/{_currentType}.log";
                     string text = File.ReadAllText(path);
-                    _logs[_currentType] = new StreamWriter(new FileStream(path, FileMode.OpenOrCreate))
+                    /*_logs[_currentType] = new StreamWriter(new FileStream(path, FileMode.OpenOrCreate))
                     {
                         AutoFlush = true
-                    };
+                    };*/
+                    _logs.Add(LogType.Normal, new StreamWriter(new FileStream(path, FileMode.OpenOrCreate))
+                    {
+                        AutoFlush = true
+                    });
                     _logs[_currentType].BaseStream.Position = position;
                     return text;
                 }

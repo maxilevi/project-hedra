@@ -37,7 +37,7 @@ namespace Hedra.Engine.EntitySystem
             while (_totalTime > _pTime && !Parent.IsDead && !Disposed)
             {
 
-                _pTime += Time.ScaledFrameTimeSeconds;
+                _pTime += Time.DeltaTime;
                 yield return null;
             }
             Parent.Model.AnimationSpeed = 1f;

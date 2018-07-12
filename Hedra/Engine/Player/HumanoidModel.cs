@@ -300,7 +300,7 @@ namespace Hedra.Engine.Player
 		{
 		    TaskManager.While( 
                 () => this.Human.IsEating && !Human.IsDead,
-                () => Human.Health += FoodHealth * Time.FrameTimeSeconds * .3f);
+                () => Human.Health += FoodHealth * Time.IndependantDeltaTime * .3f);
 			Model.Animator.StopBlend();
 			Model.Animator.BlendAnimation(EatAnimation);
 			this.Human.WasAttacking = false;
@@ -374,9 +374,9 @@ namespace Hedra.Engine.Player
                 }
 
                 Model.Position = this.Position + positionAddon;
-                this._rotationQuaternionX = Quaternion.Slerp(this._rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * this.TargetRotation * Mathf.Radian), Time.unScaledDeltaTime * 6f);
-                this._rotationQuaternionY = Quaternion.Slerp(this._rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * this.TargetRotation * Mathf.Radian), Time.unScaledDeltaTime * 6f);
-                this._rotationQuaternionZ = Quaternion.Slerp(this._rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * this.TargetRotation * Mathf.Radian), Time.unScaledDeltaTime * 6f);
+                this._rotationQuaternionX = Quaternion.Slerp(this._rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * this.TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
+                this._rotationQuaternionY = Quaternion.Slerp(this._rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * this.TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
+                this._rotationQuaternionZ = Quaternion.Slerp(this._rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * this.TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
                 Model.Rotation = new Vector3(
                     QuaternionMath.ToEuler(this._rotationQuaternionX).X,
                     QuaternionMath.ToEuler(this._rotationQuaternionY).Y,

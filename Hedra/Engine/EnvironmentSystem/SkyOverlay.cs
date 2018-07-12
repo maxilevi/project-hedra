@@ -36,9 +36,9 @@ namespace Hedra.Engine.EnvironmentSystem
 
         public void Draw()
         {
-            GraphicsLayer.Disable(EnableCap.DepthTest);
-            GraphicsLayer.Disable(EnableCap.Blend);
-            GraphicsLayer.Enable(EnableCap.Blend);
+            Renderer.Disable(EnableCap.DepthTest);
+            Renderer.Disable(EnableCap.Blend);
+            Renderer.Enable(EnableCap.Blend);
             Shader.Bind();     
             _buffer.Bind();
             _map.Bind();
@@ -53,9 +53,9 @@ namespace Hedra.Engine.EnvironmentSystem
             _map.Unbind();
             _buffer.Unbind();
             Shader.Unbind(); 
-            GraphicsLayer.Disable(EnableCap.Blend);
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-            GraphicsLayer.Enable(EnableCap.CullFace);
+            Renderer.Disable(EnableCap.Blend);
+            Renderer.Enable(EnableCap.DepthTest);
+            Renderer.Enable(EnableCap.CullFace);
         }
 
         public void Dispose()

@@ -47,19 +47,25 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public Vector3 Position { get; private set; }
 
         private Block[][][] _blocks;
+        private static Block[][] _dummyBlocks;
         private Dictionary<CoordinateHash, Half> _waterDensity;
         private readonly VertexData _nearestVertexData;
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
         private readonly ChunkStructuresMeshBuilder _structuresBuilder;
         private readonly object _terrainVerticesLock;
         private readonly object _blocksLock;
+        private readonly RegionCache _regionCache;
         private bool _canDispose = true;
         private GridCell _nearestVertexCell;
         private Vector3[] _terrainVertices;
-        private static Block[][] _dummyBlocks;
 
-        public Chunk()
+        public Chunk(int OffsetX, int OffsetZ)
         {
+            this.OffsetX = OffsetX;
+            this.OffsetZ = OffsetZ;
+            this.Position = new Vector3(OffsetX, 0, OffsetZ);
+            if (World.GetChunkByOffset(this.OffsetX, this.OffsetZ) != null)
+                throw new ArgumentNullException($"A chunk with the coodinates ({OffsetX}, {OffsetZ}) already exists.");
             _blocks = new Block[(int)(Width / BlockSize)][][];
             _nearestVertexData = new VertexData();
             _terrainBuilder = new ChunkTerrainMeshBuilder(this);
@@ -67,18 +73,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _terrainVertices = new Vector3[0];
             _terrainVerticesLock = new object();
             _blocksLock = new object();
+            _regionCache = new RegionCache(Position, Position + new Vector3(Chunk.Width, 0, Chunk.Width));
             _dummyBlocks = new Block[Chunk.Height][];
             for(var i = 0; i < _dummyBlocks.Length; i++)
             {
                 _dummyBlocks[i] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
             }
-        }
-
-        public Chunk(int OffsetX, int OffsetZ) : this()
-        {
-            this.OffsetX = OffsetX;
-            this.OffsetZ = OffsetZ;
-            Position = new Vector3(OffsetX, 0, OffsetZ);
             Biome = World.BiomePool.GetPredominantBiome(this);
             Landscape = new LandscapeGenerator(this);
         }
@@ -90,11 +90,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Generate()
         {
+            if (Disposed) throw new ArgumentException($"Cannot build a disposed chunk.");
+            if (!Initialized) throw new ArgumentException($"Chunk hasnt been initialized yet.");
+            if (IsGenerated) throw new ArgumentException($"Cannot generate an already existing chunk");
             _canDispose = false;
             Mesh.Position = new Vector3(OffsetX, 0, OffsetZ);
             lock (_blocksLock)
             {
-                Landscape.Generate(_blocks);
+                Landscape.Generate(_blocks, _regionCache);
             }
             IsGenerated = true;
         }
@@ -102,35 +105,26 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void BuildMesh()
         {
             if (Disposed || !IsGenerated || !Landscape.BlocksSetted || !Landscape.StructuresPlaced) return;
+            var buildingLod = this.Lod;
             this.CalculateBounds();
             this.PrepareForBuilding();
-            var output = this.CreateTerrainMesh();
+            var output = this.CreateTerrainMesh(buildingLod);
 
             if (output == null) return;
             this.SetChunkStatus(output);
-            output = this.AddStructuresMeshes(output);
+            output = this.AddStructuresMeshes(output, buildingLod);
 
             if (output == null) return;
-            this.UploadMesh(output, true);
-            this.FinishUpload(output);
-        }
-
-        private ChunkMeshBuildOutput CreateTerrainMesh()
-        {
-            return this.CreateTerrainMesh(this.Lod);
+            this.UploadMesh(output);
+            this.FinishUpload(output, buildingLod);
         }
 
         private ChunkMeshBuildOutput CreateTerrainMesh(int LevelOfDetail)
         {
             lock (_blocks)
             {
-                return _terrainBuilder.CreateTerrainMesh(_blocks, LevelOfDetail);
+                return _terrainBuilder.CreateTerrainMesh(_blocks, LevelOfDetail, _regionCache);
             }
-        }
-
-        private ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input)
-        {
-            return this.AddStructuresMeshes(Input, this.Lod);
         }
 
         private ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input, int LevelOfDetail)
@@ -174,80 +168,68 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.Mesh.Clear();
         }
 
-        private void FinishUpload(ChunkMeshBuildOutput Input)
+        private void FinishUpload(ChunkMeshBuildOutput Input, int BuildedLod)
         {
-            this.BuildedLod = Lod;
+            this.BuildedLod = BuildedLod;
             this.BuildedWithStructures = true;
             this.NeedsRebuilding = false;
         }
 
-        private void UploadMesh(ChunkMeshBuildOutput Input, bool BuildBuffers)
+        private void UploadMesh(ChunkMeshBuildOutput Input)
         {
-            if (BuildBuffers)
+            if (Mesh == null || Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
+                Input.StaticData.ExtraData.Count != Input.StaticData.Vertices.Count ||
+                Input.StaticData.ExtraData.Count != Input.StaticData.Colors.Count) return;
+
+            for (var i = 0; i < Input.StaticData.ExtraData.Count; i++)
             {
-                if (Mesh == null || Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
-                    Input.StaticData.ExtraData.Count != Input.StaticData.Vertices.Count ||
-                    Input.StaticData.ExtraData.Count != Input.StaticData.Colors.Count) return;
+                float edata = Input.StaticData.ExtraData[i];
 
-                for (var i = 0; i < Input.StaticData.ExtraData.Count; i++)
+                Input.StaticData.Colors[i] = new Vector4(Input.StaticData.Colors[i].Xyz, edata);
+            }
+            var staticMin = new Vector3(
+                Input.StaticData.SupportPoint(-Vector3.UnitX).X - OffsetX,
+                Input.StaticData.SupportPoint(-Vector3.UnitY).Y,
+                Input.StaticData.SupportPoint(-Vector3.UnitZ).Z - OffsetZ
+            );
+            var staticMax = new Vector3(
+                Input.StaticData.SupportPoint(Vector3.UnitX).X - OffsetX,
+                Input.StaticData.SupportPoint(Vector3.UnitY).Y,
+                Input.StaticData.SupportPoint(Vector3.UnitZ).Z - OffsetZ
+            );
+            Mesh.CullingBox = new Box(
+                new Vector3(staticMin.X, staticMin.Y, staticMin.Z),
+                new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y), staticMax.Z)
+            );
+            DistributedExecuter.Execute(delegate
+            {
+                bool result = WorldRenderer.StaticBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.StaticData);
+
+                if (BuildedCompletely)
+                    BuildedCompletely = result;
+
+                if (Mesh != null)
                 {
-                    float edata = Input.StaticData.ExtraData[i];
-
-                    Input.StaticData.Colors[i] = new Vector4(Input.StaticData.Colors[i].Xyz, edata);
+                    Mesh.IsBuilded = true;
+                    Mesh.Enabled = true;
+                    Mesh.BuildedOnce = true;
                 }
-                var staticMin = new Vector3(
-                    Input.StaticData.SupportPoint(-Vector3.UnitX).X - OffsetX,
-                    Input.StaticData.SupportPoint(-Vector3.UnitY).Y,
-                    Input.StaticData.SupportPoint(-Vector3.UnitZ).Z - OffsetZ
-                );
-                var staticMax = new Vector3(
-                    Input.StaticData.SupportPoint(Vector3.UnitX).X - OffsetX,
-                    Input.StaticData.SupportPoint(Vector3.UnitY).Y,
-                    Input.StaticData.SupportPoint(Vector3.UnitZ).Z - OffsetZ
-                );
-                Mesh.CullingBox = new Box(
-                    new Vector3(staticMin.X, staticMin.Y, staticMin.Z),
-                    new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y), staticMax.Z)
-                );
-                Executer.ExecuteOnMainThread(delegate
+                Input.StaticData?.Dispose();
+
+                if (Input.WaterData.Vertices.Count == 0)
+                    _canDispose = true;
+            });
+            if (Input.WaterData.Vertices.Count > 0)
+                DistributedExecuter.Execute(delegate
                 {
-                    bool result = WorldRenderer.StaticBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.StaticData);
+                    bool result = WorldRenderer.WaterBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.WaterData);
 
                     if (BuildedCompletely)
                         BuildedCompletely = result;
+                    Input.WaterData?.Dispose();
 
-                    if (Mesh != null)
-                    {
-                        Mesh.IsBuilded = true;
-                        Mesh.Enabled = true;
-                        Mesh.BuildedOnce = true;
-                    }
-                    Input.StaticData?.Dispose();
-
-                    if (Input.WaterData.Vertices.Count == 0)
-                        _canDispose = true;
+                    _canDispose = true;
                 });
-                if (Input.WaterData.Vertices.Count > 0)
-                    Executer.ExecuteOnMainThread(delegate
-                    {
-                        bool result = WorldRenderer.WaterBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.WaterData);
-
-                        if (BuildedCompletely)
-                            BuildedCompletely = result;
-                        Input.WaterData?.Dispose();
-
-                        _canDispose = true;
-                    });
-            }
-            else
-            {
-
-                Executer.ExecuteOnMainThread(() =>
-                    Mesh.BuildFrom(Mesh.MeshBuffers[(int)ChunkBufferTypes.WATER], Input.WaterData, false));
-
-                Executer.ExecuteOnMainThread(() =>
-                    Mesh.BuildFrom(Mesh.MeshBuffers[(int)ChunkBufferTypes.STATIC], Input.StaticData, true));
-            }
         }
 
         public Block GetBlockAt(Vector3 V)
@@ -434,7 +416,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void AddStaticElement(params VertexData[] Data)
         {
-            if (Mesh == null) return;
+            if (Mesh == null) throw new ArgumentException($"Failed to add static element");
 
             lock (Mesh.Elements)
             {
@@ -446,7 +428,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void RemoveStaticElement(params VertexData[] Data)
         {
-            if (Mesh == null) return;
+            if (Mesh == null) throw new ArgumentException($"Failed to remove static element");
 
             lock (Mesh.Elements)
             {
@@ -459,8 +441,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void AddCollisionShape(params ICollidable[] Data)
         {
-            if (Mesh == null) return;
-
+            if (Mesh == null) throw new ArgumentException($"Failed to add collision shape");
+;
             lock (Mesh.CollisionBoxes)
             {
                 for (var i = 0; i < Data.Length; i++)
@@ -470,7 +452,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void RemoveCollisionShape(params ICollidable[] Data)
         {
-            if (Mesh == null) return;
+            if (Mesh == null) throw new ArgumentException($"Failed to remove collision shape");
 
             lock (Mesh.CollisionBoxes)
             {

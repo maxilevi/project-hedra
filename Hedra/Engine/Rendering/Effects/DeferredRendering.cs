@@ -109,5 +109,12 @@ namespace Hedra.Engine.Rendering.Effects
 			Samples = fsamples.ToArray();
 			#endregion
 		}
+
+	    public void Dispose()
+	    {
+	        FirstPass.Dispose();
+	        ThirdPass.Dispose();
+	        SecondPass.Dispose();
+        }
 	}
 }

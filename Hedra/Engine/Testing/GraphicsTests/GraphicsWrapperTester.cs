@@ -14,38 +14,38 @@ namespace Hedra.Engine.Testing.GraphicsTests
         //[TestMethod]
         public void TestMatrixStack()
         {
-            GraphicsLayer.MatrixMode(MatrixMode.Modelview);
+            Renderer.MatrixMode(MatrixMode.Modelview);
 
-            GraphicsLayer.LoadIdentity();
+            Renderer.LoadIdentity();
 
-            GraphicsLayer.Translate(Vector3.One);
+            Renderer.Translate(Vector3.One);
 
-            GraphicsLayer.LoadIdentity();
+            Renderer.LoadIdentity();
 
-            this.AssertEqual(GraphicsLayer.MvMatrix(), Matrix4.Identity, 
-                "LoadIdentity returned an unexpected result. " + Environment.NewLine + GraphicsLayer.MvMatrix());
+            this.AssertEqual(Renderer.MvMatrix(), Matrix4.Identity, 
+                "LoadIdentity returned an unexpected result. " + Environment.NewLine + Renderer.MvMatrix());
 
-            GraphicsLayer.PushMatrix();
-            GraphicsLayer.Translate(Vector3.One);
-            GraphicsLayer.PopMatrix();
+            Renderer.PushMatrix();
+            Renderer.Translate(Vector3.One);
+            Renderer.PopMatrix();
 
-            this.AssertEqual(GraphicsLayer.MvMatrix(), Matrix4.Identity, 
-                "PushMatrix and PopMatrix returned an unexpected result." + Environment.NewLine + GraphicsLayer.MvMatrix());
+            this.AssertEqual(Renderer.MvMatrix(), Matrix4.Identity, 
+                "PushMatrix and PopMatrix returned an unexpected result." + Environment.NewLine + Renderer.MvMatrix());
         }
 
         //[TestMethod]
         public void TestMatrixTransformationFunctionsWork()
         {
-            GraphicsLayer.MatrixMode(MatrixMode.Modelview);
+            Renderer.MatrixMode(MatrixMode.Modelview);
 
-            GraphicsLayer.LoadIdentity();
-            GraphicsLayer.Translate(Vector3.UnitY);
-            this.AssertEqual(GraphicsLayer.MvMatrix(), Matrix4.CreateTranslation(Vector3.UnitY), 
-                "Translate returned an unexpected result." + Environment.NewLine + GraphicsLayer.MvMatrix() + Environment.NewLine + Matrix4.CreateTranslation(Vector3.UnitY));
+            Renderer.LoadIdentity();
+            Renderer.Translate(Vector3.UnitY);
+            this.AssertEqual(Renderer.MvMatrix(), Matrix4.CreateTranslation(Vector3.UnitY), 
+                "Translate returned an unexpected result." + Environment.NewLine + Renderer.MvMatrix() + Environment.NewLine + Matrix4.CreateTranslation(Vector3.UnitY));
 
-            GraphicsLayer.LoadIdentity();
-            GraphicsLayer.Rotate(45f, Vector3.UnitY);
-            var resultRot = GraphicsLayer.MvMatrix();
+            Renderer.LoadIdentity();
+            Renderer.Rotate(45f, Vector3.UnitY);
+            var resultRot = Renderer.MvMatrix();
             var expectedRot = Matrix4.CreateRotationY(45f * Mathf.Radian);
             var areRotEqual = true;
             for (int i = 0; i < 4; i++)
@@ -58,12 +58,12 @@ namespace Hedra.Engine.Testing.GraphicsTests
             }
 
             this.AssertTrue(areRotEqual, 
-                "Rotate returned an unexpected result." + Environment.NewLine + GraphicsLayer.MvMatrix() + Environment.NewLine + Matrix4.CreateRotationY(45f * Mathf.Radian));
+                "Rotate returned an unexpected result." + Environment.NewLine + Renderer.MvMatrix() + Environment.NewLine + Matrix4.CreateRotationY(45f * Mathf.Radian));
 
-            GraphicsLayer.LoadIdentity();
-            GraphicsLayer.Scale(Vector3.UnitY);
-            this.AssertEqual(GraphicsLayer.MvMatrix(), Matrix4.CreateScale(Vector3.UnitY),
-                "Scale returned an unexpected result." + Environment.NewLine + GraphicsLayer.MvMatrix() + Environment.NewLine + Matrix4.CreateScale(Vector3.UnitY));
+            Renderer.LoadIdentity();
+            Renderer.Scale(Vector3.UnitY);
+            this.AssertEqual(Renderer.MvMatrix(), Matrix4.CreateScale(Vector3.UnitY),
+                "Scale returned an unexpected result." + Environment.NewLine + Renderer.MvMatrix() + Environment.NewLine + Matrix4.CreateScale(Vector3.UnitY));
 
         }
     }

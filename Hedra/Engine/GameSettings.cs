@@ -60,7 +60,7 @@ namespace Hedra.Engine
 
         [Setting]
         public static float FpsLimit {
-            get { return _fpsLimit; }
+            get => _fpsLimit;
             set
             {
                 _fpsLimit = value;

@@ -144,15 +144,15 @@ namespace Hedra.Engine.Rendering.Animation
 		
 		public void DrawModel(Matrix4 ProjectionViewMat, Matrix4 ViewMatrix){
 			if(!Enabled || Disposed || Data == null) return;
-			GraphicsLayer.Enable(EnableCap.DepthTest);
-		    GraphicsLayer.Disable(EnableCap.Blend);
-            if (Alpha < 0.95f) GraphicsLayer.Enable(EnableCap.Blend);
+			Renderer.Enable(EnableCap.DepthTest);
+		    Renderer.Disable(EnableCap.Blend);
+            if (Alpha < 0.95f) Renderer.Enable(EnableCap.Blend);
 
             Shader.Bind();
 
 		    if (Shader == DeathShader && CompatibilityManager.SupportsGeometryShaders)
 		    {
-		        GraphicsLayer.Enable(EnableCap.Blend);
+		        Renderer.Enable(EnableCap.Blend);
 		        DeathShader["viewMatrix"] = ViewMatrix;
 		        DeathShader["disposeTime"] = DisposeTime;
             }
@@ -187,7 +187,7 @@ namespace Hedra.Engine.Rendering.Animation
 
 			Shader.Unbind();
 
-			GraphicsLayer.Disable(EnableCap.Blend);
+			Renderer.Disable(EnableCap.Blend);
 		}
 		
 		/**

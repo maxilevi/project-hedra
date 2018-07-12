@@ -111,7 +111,7 @@ namespace Hedra.Engine.Rendering.Particles
 			
 			for(int i = 0; i < Particles.Count; i++){
 				if(this.RandomRotation)
-					Particles[i].Rotation += Mathf.RandomVector3(Utils.Rng) * 150 * (float) Time.deltaTime;
+					Particles[i].Rotation += Mathf.RandomVector3(Utils.Rng) * 150 * (float) Time.DeltaTime;
 				if(!Particles[i].Update()){
 					Particles.RemoveAt(i);
 				}
@@ -123,37 +123,37 @@ namespace Hedra.Engine.Rendering.Particles
 			if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
 			
 			if(Particles.Count > 0){
-				GraphicsLayer.Enable(EnableCap.Blend);
-				GraphicsLayer.Enable(EnableCap.DepthTest);
+				Renderer.Enable(EnableCap.Blend);
+				Renderer.Enable(EnableCap.DepthTest);
 				//GraphicsLayer.Disable(EnableCap.CullFace);
 				Shader.Bind();
 				Shader["PlayerPosition"] = GameManager.Player.Position;
 				
 				GL.BindVertexArray(VAOID);
 
-				GraphicsLayer.EnableVertexAttribArray(0);
-				GraphicsLayer.EnableVertexAttribArray(1);
-				GraphicsLayer.EnableVertexAttribArray(2);
-				GraphicsLayer.EnableVertexAttribArray(3);
-				GraphicsLayer.EnableVertexAttribArray(4);
-				GraphicsLayer.EnableVertexAttribArray(5);
-				GraphicsLayer.EnableVertexAttribArray(6);
+				Renderer.EnableVertexAttribArray(0);
+				Renderer.EnableVertexAttribArray(1);
+				Renderer.EnableVertexAttribArray(2);
+				Renderer.EnableVertexAttribArray(3);
+				Renderer.EnableVertexAttribArray(4);
+				Renderer.EnableVertexAttribArray(5);
+				Renderer.EnableVertexAttribArray(6);
 				
 				GL.BindBuffer(BufferTarget.ElementArrayBuffer, ParticleCreator.IndicesVBO.ID);
 				GL.DrawElementsInstanced(PrimitiveType.Triangles, ParticleCreator.IndicesVBO.Count, DrawElementsType.UnsignedShort, IntPtr.Zero, Particles.Count);
 				
-				GraphicsLayer.DisableVertexAttribArray(0);
-				GraphicsLayer.DisableVertexAttribArray(1);
-				GraphicsLayer.DisableVertexAttribArray(2);
-				GraphicsLayer.DisableVertexAttribArray(3);
-				GraphicsLayer.DisableVertexAttribArray(4);
-				GraphicsLayer.DisableVertexAttribArray(5);
-				GraphicsLayer.DisableVertexAttribArray(6);
+				Renderer.DisableVertexAttribArray(0);
+				Renderer.DisableVertexAttribArray(1);
+				Renderer.DisableVertexAttribArray(2);
+				Renderer.DisableVertexAttribArray(3);
+				Renderer.DisableVertexAttribArray(4);
+				Renderer.DisableVertexAttribArray(5);
+				Renderer.DisableVertexAttribArray(6);
 				GL.BindVertexArray(0);
 				
 				Shader.Unbind();
 				//GraphicsLayer.Enable(EnableCap.CullFace);
-				GraphicsLayer.Disable(EnableCap.Blend);
+				Renderer.Disable(EnableCap.Blend);
 			}
 		}
 		

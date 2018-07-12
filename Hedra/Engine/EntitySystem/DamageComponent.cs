@@ -45,15 +45,15 @@ namespace Hedra.Engine.EntitySystem
 
             if ((Parent.Model.Tint - _targetTint).LengthFast > 0.005f)
             {
-                Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, (float) Time.deltaTime * 12f);
+                Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, (float) Time.DeltaTime * 12f);
             }
 
-            _tintTimer -= Time.FrameTimeSeconds;
+            _tintTimer -= Time.IndependantDeltaTime;
             _tintTimer = Math.Max(_tintTimer, 0);
 
             if (HasBeenAttacked)
             {
-                _attackedTimer -= Time.FrameTimeSeconds;
+                _attackedTimer -= Time.IndependantDeltaTime;
                 if (_attackedTimer < 0)
                 {
                     _hasBeenAttacked = false;
@@ -115,8 +115,10 @@ namespace Hedra.Engine.EntitySystem
             if (Damager != null && Damager != Parent)
             {
                 Vector3 direction = -(Damager.Position - Parent.Position).Normalized();
-                for (int i = 0; i < 10; i++)
-                    Parent.Physics.Move(direction * 1.5f * (float)Time.deltaTime);
+                var factor = 0.5f;
+                var averageSize = (Parent.Model.BaseBroadphaseBox.Size.X + Parent.Model.BaseBroadphaseBox.Size.Z) * .5f;
+                if (Parent is LocalPlayer) factor = 0.0f;
+                Parent.Physics.Translate(direction * factor * averageSize);
             }
 
             if (Parent.Health == 0 && !Parent.IsDead)
@@ -158,7 +160,7 @@ namespace Hedra.Engine.EntitySystem
 
                 while (currentTime < 4)
                 {
-                    currentTime += Time.FrameTimeSeconds * 2.0f;
+                    currentTime += Time.IndependantDeltaTime * 2.0f;
                     animable.DisposeTime = currentTime;
                     yield return null;
                 }
@@ -167,7 +169,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 while (currentTime < 4)
                 {
-                    currentTime += Time.FrameTimeSeconds * 1f;
+                    currentTime += Time.IndependantDeltaTime * 1f;
                     Parent.Model.Alpha = 1.0f - currentTime / 4.0f;
                     yield return null;
                 }

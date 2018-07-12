@@ -12,7 +12,7 @@ namespace Hedra.Engine.Rendering
         public Cubemap (IList<Bitmap> TextureArray, bool Dispose = true)
         {
             GL.GenTextures(1, out uint texId);
-            GraphicsLayer.Enable(EnableCap.TextureCubeMap);
+            Renderer.Enable(EnableCap.TextureCubeMap);
             TextureId = texId;
 
             GL.BindTexture(TextureTarget.TextureCubeMap, TextureId);

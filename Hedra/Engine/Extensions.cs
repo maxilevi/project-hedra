@@ -78,18 +78,20 @@ namespace Hedra.Engine
 		    return QuaternionMath.ToEuler(Quaternion);
 		}
 		
-		public static List<T> DeepClone<T>(this List<T> List){
+		public static List<T> DeepClone<T>(this List<T> List)
+        {
 			
 			if(List.Count == 0) return new List<T>();	
 			
-			if(List[0] is ICloneable){
-				var NewList = new List<T>();
-				for(int i = 0; i < List.Count; i++){
-					NewList.Add( (T) (List[i] as ICloneable).Clone() );
+			if(List[0] is ICloneable)
+            {
+				var newList = new List<T>();
+				for(var i = 0; i < List.Count; i++){
+					newList.Add( (T) (List[i] as ICloneable)?.Clone() );
 				}
-				return NewList;
+				return newList;
 			}
-		    return new List<T>(List);
+		    throw new ArgumentException($"Cannot create a deep clone of Unclonable object");
 		}
 		
 		public static Quaternion FromMatrixExt(Matrix4 matrix) {

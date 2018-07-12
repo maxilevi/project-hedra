@@ -11,7 +11,7 @@
     },
     {
       "Name": "AttackSpeed",
-      "Value": 1.0
+      "Value": 0.9
     }
   ],
   "Model": {

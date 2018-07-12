@@ -26,13 +26,15 @@ namespace Hedra.Engine.Rendering.UI
 	        _shader = Shader.Build("Shaders/Cursor.vert", "Shaders/Cursor.frag");
         }
 
-		public Cursor(uint TextureId){
+		public Cursor(uint TextureId)
+        {
 			this.TextureId = TextureId;
 			Scale = Mathf.ScaleGUI(new Vector2(1024, 576), new Vector2(0.05f * 0.5f, 0.08f * 0.5f));
 			DrawManager.Add(this);
 		}
 		
-		public void Draw(){
+		public void Draw()
+        {
 			if(this.Position.X >= .98f || this.Position.Y >= .98f || this.Position.X <= -.98f || this.Position.Y <= -.98f){
 				Program.GameWindow.CursorVisible = true;
 				return;
@@ -41,5 +43,10 @@ namespace Hedra.Engine.Rendering.UI
 			if(!UpdateManager.CursorShown)
 				return;
 		}
+
+	    public void Dispose()
+	    {
+	        
+	    }
 	}
 }

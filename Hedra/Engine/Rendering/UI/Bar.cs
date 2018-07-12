@@ -91,13 +91,13 @@ namespace Hedra.Engine.Rendering.UI
             if (!_enabled)
                 return;
 
-            _barSize = Mathf.Clamp(Mathf.Lerp(_barSize, _value() / _max(), Time.unScaledDeltaTime * 8f), 0, 1);
+            _barSize = Mathf.Clamp(Mathf.Lerp(_barSize, _value() / _max(), Time.IndependantDeltaTime * 8f), 0, 1);
 
             if (UpdateTextRatio)
                 Text.Text = (int) _value() + " / " + (int) _max();
             Shader.Bind();          
-            GraphicsLayer.Disable(EnableCap.DepthTest);
-            GraphicsLayer.Enable(EnableCap.Blend);
+            Renderer.Disable(EnableCap.DepthTest);
+            Renderer.Enable(EnableCap.Blend);
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, CurvedBorders ? BarBlueprint : RectangleBlueprint);
@@ -121,10 +121,10 @@ namespace Hedra.Engine.Rendering.UI
 
             DrawManager.UIRenderer.DrawQuad();
 
-            GraphicsLayer.Enable(EnableCap.CullFace);
-            GraphicsLayer.Disable(EnableCap.Blend);
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-            GraphicsLayer.Enable(EnableCap.CullFace);
+            Renderer.Enable(EnableCap.CullFace);
+            Renderer.Disable(EnableCap.Blend);
+            Renderer.Enable(EnableCap.DepthTest);
+            Renderer.Enable(EnableCap.CullFace);
             Shader.Unbind();
         }
 

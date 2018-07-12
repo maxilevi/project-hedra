@@ -44,7 +44,7 @@ namespace Hedra.Engine.EntitySystem
 			Parent.Model.BaseTint = Bar.Low * new Vector4(3,1,1,1) * .7f;
 			while(_totalTime > _pTime && !Parent.IsDead && !Disposed){
 				
-				_time += Engine.Time.ScaledFrameTimeSeconds;
+				_time += Engine.Time.DeltaTime;
 				if(_time >= 1){
 					_pTime++;
 					_time = 0;

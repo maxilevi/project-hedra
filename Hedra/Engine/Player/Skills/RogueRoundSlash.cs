@@ -82,7 +82,7 @@ namespace Hedra.Engine.Player
 
 					if(Player.InAttackRange(World.Entities[i]))
                     {
-						float dmg = Player.DamageEquation * Damage * Engine.Time.ScaledFrameTimeSeconds * 4f;
+						float dmg = Player.DamageEquation * Damage * Engine.Time.DeltaTime * 4f;
 						if(AffectedEntities.ContainsKey(World.Entities[i]))
                         {
 				 			AffectedEntities[World.Entities[i]] = AffectedEntities[World.Entities[i]] + dmg;
@@ -102,15 +102,11 @@ namespace Hedra.Engine.Player
 					AffectedEntities.Clear();
 					FrameCounter = 0;
 				}
-				PassedTime += Engine.Time.ScaledFrameTimeSeconds;
-				FrameCounter += Engine.Time.ScaledFrameTimeSeconds;
+				PassedTime += Time.DeltaTime;
+				FrameCounter += Time.DeltaTime;
 			}
 		}
 		
-		public override string Description {
-			get {
-				return "Cast a special attack which damages surrounding enemies.";
-			}
-		}
+		public override string Description => "Cast a special attack which damages surrounding enemies.";
 	}
 }

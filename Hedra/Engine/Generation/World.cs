@@ -235,14 +235,21 @@ namespace Hedra.Engine.Generation
 			
 			DrawingChunks.Clear();
 			var toDrawArray = Chunks;
-			for(var i = 0; i < toDrawArray.Count; i++){
-				if(toDrawArray[i] == null || toDrawArray[i].Disposed){
-					RemoveChunk(toDrawArray[i]);
+			for(var i = 0; i < toDrawArray.Count; i++)
+			{
+			    var offset = new Vector2(toDrawArray[i].OffsetX, toDrawArray[i].OffsetZ);
+			    var chunk = toDrawArray[i];
+                if (chunk == null || chunk.Disposed)
+                {
+					RemoveChunk(chunk);
 					continue;
 				}
-				
-				if( !WorldRenderer.EnableCulling || toDrawArray[i].Initialized && FrustumObject.IsInsideFrustum(toDrawArray[i].Mesh))
-				DrawingChunks.Add(new Vector2(toDrawArray[i].OffsetX, toDrawArray[i].OffsetZ), toDrawArray[i]);				
+
+			    if (!WorldRenderer.EnableCulling || chunk.Initialized && FrustumObject.IsInsideFrustum(chunk.Mesh))
+			    {
+                    if(!DrawingChunks.ContainsKey(offset))
+			            DrawingChunks.Add(offset, chunk);
+			    }
 			}
 			
 			_previousModelView = FrustumObject.ModelViewMatrix;
@@ -466,15 +473,19 @@ namespace Hedra.Engine.Generation
 	        _isItemsCacheDirty = true;
         }
 
-        public static void AddChunk(Chunk Chunk){
-            lock (_chunks)
+        public static void AddChunk(Chunk Chunk)
+        {
+            lock (SearcheableChunks)
             {
-                _chunks.Add(Chunk);
+                if (!SearcheableChunks.ContainsKey(new Vector2(Chunk.OffsetX, Chunk.OffsetZ)))
+                {
+                    lock (_chunks)
+                    {
+                        _chunks.Add(Chunk);
+                    }
+                    SearcheableChunks.Add(new Vector2(Chunk.OffsetX, Chunk.OffsetZ), Chunk);
+                }
             }
-            lock(SearcheableChunks){
-				if(!SearcheableChunks.ContainsKey(new Vector2(Chunk.OffsetX, Chunk.OffsetZ)))
-					SearcheableChunks.Add(new Vector2(Chunk.OffsetX, Chunk.OffsetZ), Chunk);
-			}
             _isChunksCacheDirty = true;
         }
 		
@@ -482,10 +493,13 @@ namespace Hedra.Engine.Generation
 			if(Chunk == null) return;
 
 		    lock (_chunks)
-            { 
-                _chunks.Remove(Chunk);
-            }
-			lock(SearcheableChunks) SearcheableChunks.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
+		    {
+		        _chunks.Remove(Chunk);
+		    }
+		    lock (SearcheableChunks)
+		    {
+		        SearcheableChunks.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
+		    }
 
 		    _isChunksCacheDirty = true;
             WorldRenderer.StaticBuffer.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
@@ -539,7 +553,8 @@ namespace Hedra.Engine.Generation
         public static Chunk GetChunkByOffset(int OffsetX, int OffsetZ){
 			lock(SearcheableChunks)
 			{
-			    return SearcheableChunks.ContainsKey(new Vector2(OffsetX, OffsetZ)) ? SearcheableChunks[new Vector2(OffsetX, OffsetZ)] : null;
+			    var offset = new Vector2(OffsetX, OffsetZ);
+                return SearcheableChunks.ContainsKey(offset) ? SearcheableChunks[offset] : null;
 			}
 		}
 
@@ -659,7 +674,7 @@ namespace Hedra.Engine.Generation
                 TaskManager.While(() => !model.Disposed, delegate
                 {
                     model.Model.Outline = false;
-                    model.Position = Mathf.Lerp(model.Position, Player.Position, (float) Time.deltaTime * 5f);
+                    model.Position = Mathf.Lerp(model.Position, Player.Position, (float) Time.DeltaTime * 5f);
                     if ((model.Position - Player.Position).LengthSquared < 4*4)
                     {
                         if (Player.Inventory.AddItem(model.ItemSpecification))

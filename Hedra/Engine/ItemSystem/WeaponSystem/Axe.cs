@@ -32,7 +32,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    for (int i = 0; i < PrimaryAnimations.Length; i++)
 		    {
 		        PrimaryAnimations[i].Loop = false;
-		        PrimaryAnimations[i].Speed = 1.25f;
+		        PrimaryAnimations[i].Speed = 1.15f;
 		        PrimaryAnimations[i].OnAnimationMid += delegate
 		        {
 		            Owner.Attack(Owner.DamageEquation);
@@ -48,7 +48,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    for (int i = 0; i < SecondaryAnimations.Length; i++)
 		    {
 		        SecondaryAnimations[i].Loop = false;
-		        SecondaryAnimations[i].Speed = 1.5f;
+		        SecondaryAnimations[i].Speed = 1.0f;
                 SecondaryAnimations[i].OnAnimationEnd += delegate
 		        {
 		            Owner.Attack(Owner.DamageEquation * 1.75f, delegate (Entity mob)

@@ -103,7 +103,7 @@ namespace Hedra.Engine.Player
 						continue;
 					
 					Vector3 Direction = -(Player.Position - World.Entities[i].Position).Normalized();
-					World.Entities[i].BlockPosition += Direction * (float) Engine.Time.deltaTime * 36f;
+					World.Entities[i].BlockPosition += Direction * (float) Engine.Time.DeltaTime * 36f;
 				}
 			}
 		}

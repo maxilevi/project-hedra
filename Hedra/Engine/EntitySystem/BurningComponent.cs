@@ -49,7 +49,7 @@ namespace Hedra.Engine.EntitySystem
 			Parent.Model.BaseTint = Particle3D.FireColor * 3f;
 			while(_totalTime > _pTime && !Parent.IsDead && !Disposed && !Parent.IsUnderwater){
 				
-				_time += Time.ScaledFrameTimeSeconds;
+				_time += Time.DeltaTime;
 				if(_time >= 1){
 					_pTime++;
 					_time = 0;

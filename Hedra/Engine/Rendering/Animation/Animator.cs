@@ -156,7 +156,7 @@ namespace Hedra.Engine.Rendering.Animation
 					BlendAnimator.Update();
 				
 				if(!this.ShouldExitBlend){
-					BlendAnimationTime += Engine.Time.unScaledDeltaTime * 4f * this.BlendingAnimation.Speed;
+					BlendAnimationTime += Engine.Time.IndependantDeltaTime * 4f * this.BlendingAnimation.Speed;
 					BlendAnimationTime = Mathf.Clamp(BlendAnimationTime, 0,1);
 					
 					Dictionary<string, JointTransform> JointPose = LastPose;
@@ -177,7 +177,7 @@ namespace Hedra.Engine.Rendering.Animation
 						this.BlendAnimator.Stop = true;
 					}
 				}else{
-					BlendAnimationTime -= Engine.Time.unScaledDeltaTime * 4f * this.CurrentAnimation.Speed;
+					BlendAnimationTime -= Engine.Time.IndependantDeltaTime * 4f * this.CurrentAnimation.Speed;
 					BlendAnimationTime = Mathf.Clamp(BlendAnimationTime, 0,1);
 					
 					Dictionary<string, JointTransform> JointPose = this.CalculateCurrentJointAnimationPose();
@@ -248,7 +248,7 @@ namespace Hedra.Engine.Rendering.Animation
 		private void IncreaseAnimationTime() {
 			if(GameManager.InMenu || (!this.CurrentAnimation.Loop && AnimationTime > CurrentAnimation.Length) || Stop) 
 				return;
-			AnimationTime += Time.unScaledDeltaTime * this.CurrentAnimation.Speed * AnimationSpeed;
+			AnimationTime += Time.IndependantDeltaTime * this.CurrentAnimation.Speed * AnimationSpeed;
 			
 			this.CurrentAnimation.DispatchEvents(AnimationTime / CurrentAnimation.Length);
 			
@@ -262,7 +262,7 @@ namespace Hedra.Engine.Rendering.Animation
 		private void IncreaseTargetAnimationTime() {
 			if(GameManager.InMenu || Stop) 
 				return;
-			TargetAnimationTime += Engine.Time.unScaledDeltaTime * 4f * this.TargetAnimation.Speed;
+			TargetAnimationTime += Engine.Time.IndependantDeltaTime * 4f * this.TargetAnimation.Speed;
 		}
 	
 		/**

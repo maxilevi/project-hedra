@@ -72,7 +72,7 @@ namespace Hedra.Engine.Player
 					Continue = false;
 				}
 				
-				Player.Mana -= Engine.Time.FrameTimeSeconds * 40f;
+				Player.Mana -= Engine.Time.IndependantDeltaTime * 40f;
 				
 				Player.Movement.Orientate();
 				SetupParticles();
@@ -100,7 +100,7 @@ namespace Hedra.Engine.Player
 				float Dot = Mathf.DotProduct(ToEntity, Player.Orientation);
 				if(Dot >= .75f && (World.Entities[i].Position - Player.Position).LengthSquared < 320){
 					float Exp;
-					World.Entities[i].Damage(this.Damage * Dot * (float) Engine.Time.deltaTime * (base.Level * 0.6f), Player, out Exp, false);
+					World.Entities[i].Damage(this.Damage * Dot * (float) Engine.Time.DeltaTime * (base.Level * 0.6f), Player, out Exp, false);
 					Player.XP += Exp;
 				}
 			}

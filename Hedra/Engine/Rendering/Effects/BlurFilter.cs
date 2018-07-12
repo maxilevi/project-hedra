@@ -6,11 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.Effects
@@ -30,9 +26,7 @@ namespace Hedra.Engine.Rendering.Effects
 	        VBlurShader = Shader.Build("Shaders/VBlur.vert", "Shaders/Blur.frag");
 	    }
 
-		public override void Resize(){}
-		
-		public override void Pass(FBO Src, FBO Dst){
+	    public override void Pass(FBO Src, FBO Dst){
 			
 			Dst.Bind();
 			HBlurShader.Bind();
@@ -57,8 +51,8 @@ namespace Hedra.Engine.Rendering.Effects
 		
 		public override void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false){
 
-			GraphicsLayer.Enable(EnableCap.Texture2D);
-			GraphicsLayer.Disable(EnableCap.DepthTest);
+			Renderer.Enable(EnableCap.Texture2D);
+			Renderer.Disable(EnableCap.DepthTest);
 
 		    DrawManager.UIRenderer.SetupQuad();
 
@@ -67,9 +61,19 @@ namespace Hedra.Engine.Rendering.Effects
 
 		    DrawManager.UIRenderer.DrawQuad();
 
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-			GraphicsLayer.Enable(EnableCap.CullFace);
-			GraphicsLayer.Disable(EnableCap.Texture2D);
+            Renderer.Enable(EnableCap.DepthTest);
+			Renderer.Enable(EnableCap.CullFace);
+			Renderer.Disable(EnableCap.Texture2D);
 		}
-	}
+
+	    public override void Resize()
+	    {
+	        
+	    }
+
+	    public override void Dispose()
+	    {
+
+	    }
+    }
 }

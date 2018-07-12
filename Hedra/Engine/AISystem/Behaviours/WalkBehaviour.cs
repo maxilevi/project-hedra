@@ -43,7 +43,7 @@ namespace Hedra.Engine.AISystem.Behaviours
                 Parent.Model.Run();
                 Parent.Orientation = (Target - Parent.Position).Xz.NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
-                Parent.Physics.Move(Parent.Orientation * 5f * Parent.Speed * (float) Time.deltaTime);
+                Parent.Physics.DeltaTranslate(Parent.Orientation * 5f * Parent.Speed);
 
                 if ((Target - Parent.Position).Xz.LengthSquared < 4 * 4 || _lastPosition.Xz  == Parent.Position.Xz)
                 {

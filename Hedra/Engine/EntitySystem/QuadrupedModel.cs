@@ -215,9 +215,9 @@ namespace Hedra.Engine.EntitySystem
                 Model.Update();
 		        
 		        _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))) .ExtractRotation() : Quaternion.Identity;
-		        _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.unScaledDeltaTime * 8f);
+		        _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependantDeltaTime * 8f);
 		        Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
-		        _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.unScaledDeltaTime * 14f);
+		        _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependantDeltaTime * 14f);
 		        Model.Rotation = _quaternionModelRotation.ToEuler();
 		        Model.Position = this.Position;
                 this.Rotation = Model.Rotation; 
@@ -233,7 +233,7 @@ namespace Hedra.Engine.EntitySystem
 		        _sound.Position = this.Position;
 		        _sound.Update(this.IsWalking);
 		    }
-		    _attackCooldown -= Time.FrameTimeSeconds;
+		    _attackCooldown -= Time.IndependantDeltaTime;
 		}
 
         public void StopSound()

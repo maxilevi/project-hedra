@@ -61,14 +61,14 @@ namespace Hedra.Engine.Rendering
 		public void Draw(){
 		    if (FollowFunc != null)
 		    {
-		        Position = Mathf.Lerp(Position, FollowFunc(), (float) Time.deltaTime * 8f);
+		        Position = Mathf.Lerp(Position, FollowFunc(), (float) Time.DeltaTime * 8f);
 		    }
 			
 			if(Vanish){
-				_addedPosition += Vector3.UnitY * Time.FrameTimeSeconds * Speed;
+				_addedPosition += Vector3.UnitY * Time.IndependantDeltaTime * Speed;
 				((GUIText) this.Texture).UIText.Opacity = 1-(_life / LifeTime);
 			}
-			_life += Time.FrameTimeSeconds;
+			_life += Time.IndependantDeltaTime;
 			
 			if(LifeTime != 0 && _life >= LifeTime){
 				this.Dispose();

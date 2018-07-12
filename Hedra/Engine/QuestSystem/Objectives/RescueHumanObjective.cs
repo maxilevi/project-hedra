@@ -235,7 +235,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 
 				model.Model.Scale /= 2f;
 				model.Model.Rotation = prevRot;
-				return UserInterface.QuestFbo.TextureID[0];
+				return UserInterface.___questFbo.TextureID[0];
 			}
 		}
 	}

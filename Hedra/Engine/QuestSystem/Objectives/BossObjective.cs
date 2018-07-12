@@ -110,7 +110,7 @@ namespace Hedra.Engine.QuestSystem.Objectives
 				    //GameManager.Player.UI.DrawPreview(Boss.Model, UserInterface.QuestFbo);
 				    model.Model.Rotation = prevRot;*/
 				}
-				return UserInterface.QuestFbo.TextureID[0];
+				return UserInterface.___questFbo.TextureID[0];
 			}
 		}
 	}

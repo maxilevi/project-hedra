@@ -59,9 +59,9 @@ namespace Hedra.Engine.EnvironmentSystem
         {
 			if(!Enabled) return;
 
-            GraphicsLayer.Disable(EnableCap.DepthTest);
-			GraphicsLayer.Disable(EnableCap.Blend);
-			_previousShader = GraphicsLayer.ShaderBound;
+            Renderer.Disable(EnableCap.DepthTest);
+			Renderer.Disable(EnableCap.Blend);
+			_previousShader = Renderer.ShaderBound;
 
 			SkyGradientShader.Bind();
 		    SkyGradientShader["topColor"] = TopColor;
@@ -77,9 +77,9 @@ namespace Hedra.Engine.EnvironmentSystem
             _sunDome.Draw();
 
             GL.UseProgram(_previousShader);
-			GraphicsLayer.ShaderBound = _previousShader;
-            GraphicsLayer.Enable(EnableCap.DepthTest);
-			GraphicsLayer.Enable(EnableCap.CullFace);
+			Renderer.ShaderBound = _previousShader;
+            Renderer.Enable(EnableCap.DepthTest);
+			Renderer.Enable(EnableCap.CullFace);
 		}
 	}
 }

@@ -90,8 +90,8 @@ namespace Hedra.Engine.Player.MapSystem
 		public void Update(){
 			if(World.Seed == World.MenuSeed && this.Show) this.Show = false;
 
-		    this._size = Mathf.Lerp(_size, _targetSize, Time.unScaledDeltaTime * 4f);
-		    this._height = Mathf.Lerp(_height, _targetHeight, Time.unScaledDeltaTime * 2f);
+		    this._size = Mathf.Lerp(_size, _targetSize, Time.IndependantDeltaTime * 4f);
+		    this._height = Mathf.Lerp(_height, _targetHeight, Time.IndependantDeltaTime * 2f);
             this.UpdateFogAndTime();
 
             var mapPosition = _player.Model.Model.Position.Xz.ToVector3();
@@ -99,7 +99,7 @@ namespace Hedra.Engine.Player.MapSystem
 		    {
 		        for (var i = 0; i < _icons.Count; i++)
                 { 
-		            _icons[i].Mesh.Rotation = new Vector3(_icons[i].Mesh.Rotation.X, _icons[i].Mesh.Rotation.Y + (float) Time.deltaTime * 0f, _icons[i].Mesh.Rotation.Z);
+		            _icons[i].Mesh.Rotation = new Vector3(_icons[i].Mesh.Rotation.X, _icons[i].Mesh.Rotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.Rotation.Z);
                     _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight + 10f, mapPosition.Z);
 		        }
 		    }
@@ -129,7 +129,7 @@ namespace Hedra.Engine.Player.MapSystem
 	    {
 	        if (float.MaxValue != _targetTime)
 	        {
-	            SkyManager.SetTime(Mathf.Lerp(SkyManager.DayTime, _targetTime, (float)Time.deltaTime * 2f));
+	            SkyManager.SetTime(Mathf.Lerp(SkyManager.DayTime, _targetTime, (float)Time.DeltaTime * 2f));
 	            if (Math.Abs(SkyManager.DayTime - _targetTime) < 10)
 	            {
 	                if (SkyManager.DayTime > 24000) SkyManager.DayTime -= 24000;
@@ -327,6 +327,7 @@ namespace Hedra.Engine.Player.MapSystem
 				    SkyManager.UpdateDayColors = false;
                     WorldRenderer.EnableCulling = false;                  
                     this._targetSize = 1.0f;
+				    this._player.Loader.ShouldUpdateFog = false;
                     this._player.View.MaxDistance = 100f;
 				    this._player.View.MinDistance = 0f;
 				    this._player.View.TargetDistance = 100f;
@@ -356,7 +357,7 @@ namespace Hedra.Engine.Player.MapSystem
                         if(!_show) _height = 0f;
 
                     });
-				    SkyManager.FogManager.UpdateFogSettings(_player.Loader.MinFog, _player.Loader.MaxFog);
+				    _player.Loader.UpdateFog();
                 }
 				SoundManager.PlayUISound(SoundType.OnOff, 1.0f, 0.6f);
 				_show = value;

@@ -70,7 +70,7 @@ namespace Hedra.Engine.Rendering
         {
             for (int i = _tipPoints.Count - 1; i > -1; i--)
             {
-                _tipPoints[i] -= Time.ScaledFrameTimeSeconds;
+                _tipPoints[i] -= Time.DeltaTime;
 
                 if (_tipPoints[i].Lifetime < 0) _tipPoints.RemoveAt(i);
             }
@@ -164,8 +164,8 @@ namespace Hedra.Engine.Rendering
         public void Draw()
         {
             if(_tipPoints.Count > 4)
-            GraphicsLayer.Disable(EnableCap.CullFace);
-            GraphicsLayer.Enable(EnableCap.Blend);
+            Renderer.Disable(EnableCap.CullFace);
+            Renderer.Enable(EnableCap.Blend);
 
             Shader.Bind();        
             _data.Bind();
@@ -175,8 +175,8 @@ namespace Hedra.Engine.Rendering
             _data.Unbind();
             Shader.Unbind();
 
-            GraphicsLayer.Disable(EnableCap.Blend);
-            GraphicsLayer.Enable(EnableCap.CullFace);
+            Renderer.Disable(EnableCap.Blend);
+            Renderer.Enable(EnableCap.CullFace);
         }
 
         public void Dispose()

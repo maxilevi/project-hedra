@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -55,7 +56,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     if (chunk?.Disposed ?? false) return;
                     var result = _pool.Work(this, delegate
                     {
-                        this.Work(chunk);
+                        try
+                        {
+                            this.Work(chunk);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.WriteLine($"Failed to do job: {Environment.NewLine}{e}");
+                            _queue.Remove(chunk);
+                            _hashQueue.Remove(chunk);
+                        }
                         _hashQueue.Remove(chunk);
                     });
                     if (result)

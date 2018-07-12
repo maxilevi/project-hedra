@@ -14,10 +14,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         protected override void Work(Chunk Object)
         {
-            Log.RunWithType(LogType.WorldBuilding, delegate
-            {
-                Object.BuildMesh();
-            });
+            Object.BuildMesh();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Update()
         {
-            _cooldown -= Time.FrameTimeSeconds;
+            _cooldown -= Time.IndependantDeltaTime;
         }
 
         public void Apply(Entity Victim, float Amount)

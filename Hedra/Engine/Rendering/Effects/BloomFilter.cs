@@ -73,5 +73,11 @@ namespace Hedra.Engine.Rendering.Effects
 			MainFBO.Shader.Unbind();
 			Dst.UnBind();
 		}
+
+	    public override void Dispose()
+	    {
+	        HBloomFbo.Dispose();
+            VBloomFbo.Dispose();
+	    }
 	}
 }

@@ -57,8 +57,8 @@ namespace Hedra.Engine.Player
             _targetAngles.X = -45f * ClampedPitch + 45f * (1.0f - Math.Min(1f, (_accumulatedVelocity.Average() - _decaySpeed) / _decaySpeed));
             _targetAngles.Z = 45f * (_player.View.StackedYaw - _yaw) / (float) (Math.PI * .2f);
             _targetAngles = Mathf.Clamp(_targetAngles, -90, 90);
-            _angles = Mathf.Lerp(_angles, _targetAngles, (float) Time.deltaTime * 4f);
-            _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float) Time.deltaTime * 2f);
+            _angles = Mathf.Lerp(_angles, _targetAngles, (float) Time.DeltaTime * 4f);
+            _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float) Time.DeltaTime * 2f);
         }
 
         public void Update()
@@ -96,12 +96,11 @@ namespace Hedra.Engine.Player
                 var propulsion = Vector3.One * 20f;
                 propulsion *= 1f + _angles.X / 45f;
                 propulsion *= _angles.X < 15f ? 1.4f : 4.0f;
-                _accumulatedVelocity += propulsion * (float) Time.deltaTime;
-                _accumulatedVelocity *= (float) Math.Pow(.8f, (float) Time.deltaTime);
-                _upPush *= (float) Math.Pow(.25f, (float) Time.deltaTime);
+                _accumulatedVelocity += propulsion * (float) Time.DeltaTime;
+                _accumulatedVelocity *= (float) Math.Pow(.8f, (float) Time.DeltaTime);
+                _upPush *= (float) Math.Pow(.25f, (float) Time.DeltaTime);
                 _player.View.MaxDistance = 10f;
-                _player.Physics.Move((_player.View.LookingDirection * _accumulatedVelocity + Vector3.UnitY * _upPush) *
-                                     (float) Time.deltaTime * .55f);
+                _player.Physics.DeltaTranslate((_player.View.LookingDirection * _accumulatedVelocity + Vector3.UnitY * _upPush) * .55f);
                 _player.Physics.ResetFall();
                 _player.Model.Glide();
 

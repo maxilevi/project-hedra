@@ -51,7 +51,7 @@ namespace Hedra.Engine.Rendering
 	    public static void Bind()
 	    {
 	        ShadowDistance = 1400f / (float) GameSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
-            _prevFbo = GraphicsLayer.FBOBound;
+            _prevFbo = Renderer.FBOBound;
 	        if (ShadowFbo == null) ShadowRenderer.SetQuality(GameSettings.ShadowQuality);
 	        ShadowFbo.Bind();
 
@@ -67,11 +67,11 @@ namespace Hedra.Engine.Rendering
             ShadowMvp = newModel * Matrix4.LookAt( NormalizedLight + Position, Position, Vector3.UnitY) * DepthProj;
 
 			Shader.Bind();
-            Shader["Time"] = Time.CurrentFrame;
+            Shader["Time"] = Time.AccumulatedFrameTime;
 			Shader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
 			Shader["MVP"] = ShadowMvp;
 			GL.CullFace(CullFaceMode.Front);
-            GraphicsLayer.Enable(EnableCap.CullFace);
+            Renderer.Enable(EnableCap.CullFace);
 		}
 		
 		public static void UnBind()
@@ -80,10 +80,11 @@ namespace Hedra.Engine.Rendering
             Shader.Unbind();
 			GL.CullFace(CullFaceMode.Back);
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, _prevFbo);
-			GraphicsLayer.FBOBound = _prevFbo;
+			Renderer.FBOBound = _prevFbo;
 		}
 		
-		public static void SetQuality(int Quality){
+		public static void SetQuality(int Quality)
+        {
 
 		    ShadowFbo?.Dispose();
 
@@ -92,6 +93,11 @@ namespace Hedra.Engine.Rendering
 
 		    if (Quality == 3)
 		        ShadowFbo = new FBO(4096, 4096, false, 0, FramebufferAttachment.DepthAttachment, PixelInternalFormat.DepthComponent16, false, false);
+        }
+
+	    public static void Dispose()
+	    {
+	        ShadowFbo?.Dispose();
         }
 	}
 }

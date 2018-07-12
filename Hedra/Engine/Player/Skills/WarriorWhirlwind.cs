@@ -95,7 +95,7 @@ namespace Hedra.Engine.Player
 				}
 
 			    var underChunk = World.GetChunkAt(Player.Position);
-                _rotationY += Time.ScaledFrameTimeSeconds * 2000f;
+                _rotationY += Time.DeltaTime * 2000f;
                 Player.Model.Model.TransformationMatrix =
                     Matrix4.CreateRotationY(-Player.Model.Model.Rotation.Y * Mathf.Radian) *
                     Matrix4.CreateRotationY(_rotationY * Mathf.Radian) *
@@ -106,7 +106,7 @@ namespace Hedra.Engine.Player
                 {
 				    if (!Player.InAttackRange(World.Entities[i])) continue;
 
-				    float dmg = Player.DamageEquation * Time.ScaledFrameTimeSeconds * 2f * (1+base.Level * .1f);
+				    float dmg = Player.DamageEquation * Time.DeltaTime * 2f * (1+base.Level * .1f);
 
 				    if(_affectedEntities.ContainsKey(World.Entities[i]))
                     {
@@ -128,8 +128,8 @@ namespace Hedra.Engine.Player
 					_affectedEntities.Clear();
 					_frameCounter = 0;
 				}
-				_passedTime += Time.ScaledFrameTimeSeconds;
-				_frameCounter += Time.ScaledFrameTimeSeconds;
+				_passedTime += Time.DeltaTime;
+				_frameCounter += Time.DeltaTime;
 			}
             _trail.Update();
 		}

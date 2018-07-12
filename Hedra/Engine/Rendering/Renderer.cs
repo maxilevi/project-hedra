@@ -17,16 +17,20 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of OpenGLStateManager.
 	/// </summary>
-	internal static class GraphicsLayer
+	internal static class Renderer
 	{
 		public static int FBOBound { get; set; }
 		public static int ShaderBound { get; set; }
 	    private static readonly StateManager FboManager;
 	    private static readonly StateManager ShaderManager;
+	    private static readonly CapHandler CapHandler;
+	    private static readonly VertexAttributeHandler VertexAttributeHandler;
 
-        static GraphicsLayer()
+        static Renderer()
 	    {
-	        FboManager = new StateManager();
+	        CapHandler = new CapHandler();
+	        VertexAttributeHandler = new VertexAttributeHandler();
+            FboManager = new StateManager();
             FboManager.RegisterStateItem( () => FBOBound, O => FBOBound = (int) O);
             ShaderManager = new StateManager();
 	        ShaderManager.RegisterStateItem(() => ShaderBound, O => ShaderBound = (int)O);
@@ -34,22 +38,22 @@ namespace Hedra.Engine.Rendering
 
 	    public static void Enable(EnableCap Cap)
 	    {
-	        GL.Enable(Cap);
-	    }
+	        CapHandler.Enable(Cap);
+        }
 
 	    public static void Disable(EnableCap Cap)
 	    {
-	        GL.Disable(Cap);
-	    }
+	        CapHandler.Disable(Cap);
+        }
 
 	    public static void EnableVertexAttribArray(uint Index)
 	    {
-	        GL.EnableVertexAttribArray(Index);
-	    }
+	        VertexAttributeHandler.Enable(Index);
+        }
 
 	    public static void DisableVertexAttribArray(uint Index)
 	    {
-	        GL.DisableVertexAttribArray(Index);
+	        VertexAttributeHandler.Disable(Index);
         }
 
         public static void PushFBO()

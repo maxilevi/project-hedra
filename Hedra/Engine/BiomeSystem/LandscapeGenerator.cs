@@ -21,20 +21,23 @@ namespace Hedra.Engine.BiomeSystem
 	/// </summary>
 	internal class LandscapeGenerator : BiomeGenerator
 	{
-		public LandscapeGenerator(Chunk Chunk) : base (Chunk){}
-		public override void Generate(Block[][][] Blocks)
+	    public LandscapeGenerator(Chunk Chunk) : base(Chunk)
+	    {        
+	    }
+
+		public override void Generate(Block[][][] Blocks, RegionCache Cache)
         {
 
 			this.CheckForNearbyStructures();
 			
 			this.BuildArray(Blocks);
-		    this.DefineBlocks(Blocks);
+		    this.DefineBlocks(Blocks, Cache);
             this.BlocksSetted = true;
-			this.PlaceStructures(Blocks);
+			this.PlaceStructures(Blocks, Cache);
 			this.StructuresPlaced = true;
 		}
 
-	    public override void DefineBlocks(Block[][][] Blocks)
+	    public override void DefineBlocks(Block[][][] Blocks, RegionCache Cache)
 	    {
 	        var rng = new Random(World.Seed + 1234123);
 
@@ -366,7 +369,7 @@ namespace Hedra.Engine.BiomeSystem
 	        }
 	    }
 
-	    public override void PlaceStructures(Block[][][] Blocks)
+	    public override void PlaceStructures(Block[][][] Blocks, RegionCache Cache)
 	    {
 	        CollidableStructure[] structs;
 	        lock (World.StructureGenerator.Items)
@@ -384,7 +387,7 @@ namespace Hedra.Engine.BiomeSystem
 	                    Blocks[x][y - 1][z].Type != BlockType.Air) Blocks[x][y][z].Type = BlockType.Air;
 
 	                var block = Chunk.GetBlockAt(x, y, z);
-	                Region region = World.BiomePool.GetRegion(position);
+	                Region region = Cache.GetRegion(position);
 	                this.LoopStructures(x, z, structs, out bool noWeedZone, out bool noTreesZone, out bool inMerchant);
 	                this.DoEnviromentPlacements(position, noWeedZone, region);
 

@@ -57,16 +57,16 @@ namespace Hedra
 		private static int lastTick;
         public static int LastFrameRate;
         private static int frameRate;
-		public static double FrameProccesingTime;
+		public static double FrameProccesingTime = 1.0 / 60.0;
         public static void CalculateFrameRate()
         {
-            if (System.Environment.TickCount - lastTick >= 1000)
+            if (Environment.TickCount - lastTick >= 1000)
             {
                 LastFrameRate = frameRate;
                 if(LastFrameRate != 0)
                 	FrameProccesingTime = Math.Truncate(100 *(double) (1000.0 / LastFrameRate))/100;
                 frameRate = 0;
-                lastTick = System.Environment.TickCount;
+                lastTick = Environment.TickCount;
             }
             frameRate++;
         }

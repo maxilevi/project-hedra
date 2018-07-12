@@ -134,7 +134,7 @@ namespace Hedra.Engine.Rendering.UI
 					if(_clickTimer.Tick())
 						_openFolder.Clickable = true;
 					_human.Update();
-					_newRot += Time.unScaledDeltaTime * 30f;
+					_newRot += Time.IndependantDeltaTime * 30f;
 					_human.Model.Rotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
 					_human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
 					_human.Model.Idle();

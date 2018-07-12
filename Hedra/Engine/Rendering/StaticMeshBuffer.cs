@@ -26,10 +26,10 @@ namespace Hedra.Engine.Rendering
 			if(Indices == null) return;
 			if(Shadows){
 				Data.Bind();
-				GraphicsLayer.EnableVertexAttribArray(0);
+				Renderer.EnableVertexAttribArray(0);
 				
 				//if(GraphicsOptions.Fancy)
-					GraphicsLayer.EnableVertexAttribArray(1);
+					Renderer.EnableVertexAttribArray(1);
 	
 				if(ShortBuffer){
 					GL.BindBuffer(BufferTarget.ElementArrayBuffer, UshortIndices.ID);
@@ -38,10 +38,10 @@ namespace Hedra.Engine.Rendering
 					GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
 					////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
 				}
-				GraphicsLayer.DisableVertexAttribArray(0);
+				Renderer.DisableVertexAttribArray(0);
 				
 				if(GameSettings.Fancy)
-					GraphicsLayer.DisableVertexAttribArray(1);
+					Renderer.DisableVertexAttribArray(1);
 				Data.Unbind();
 				return;
 			}
@@ -76,7 +76,7 @@ namespace Hedra.Engine.Rendering
 		}
 		
 		public override void Bind(){
-			GraphicsLayer.Disable(EnableCap.Blend);
+			Renderer.Disable(EnableCap.Blend);
 			/*BlockShaders.StaticShader.Bind();
 			GL.Uniform3(BlockShaders.StaticShader.LightColorLocation, ShaderManager.LightColor);
 			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, GameManager.Player.Position);

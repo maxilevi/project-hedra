@@ -13,11 +13,34 @@ namespace Hedra.Engine
 	/// </summary>
 	internal static class Time
 	{
-		public static double deltaTime;
-		public static float unScaledDeltaTime;
-		public static double timeScale = 1;
-		public static float FrameTimeSeconds = 0;
-		public static float ScaledFrameTimeSeconds = 0;
-		public static float CurrentFrame = 0, UnPausedCurrentFrame;
+		public static float DeltaTime { get; private set; }
+		public static float IndependantDeltaTime { get; private set; }
+		public static float TimeScale { get; private set; } = 1;
+	    public static float AccumulatedFrameTime { get; private set; }
+	    public static float IndependentAccumulatedFrameTime { get; private set; }
+
+        public static void IncrementFrame(double Time)
+	    {
+	        IncrementFrame((float)Time);
+	    }
+
+        public static void IncrementFrame(float Time)
+	    {
+	        AccumulatedFrameTime += Time * TimeScale;
+	        IndependentAccumulatedFrameTime += Time;
+
+	    }
+
+	    public static void Set(double Time)
+	    {
+	        Set((float) Time);
+	    }
+
+	    public static void Set(float Time)
+	    {
+	        TimeScale = GameSettings.Paused ? 0 : 1;
+	        IndependantDeltaTime = Time;
+	        DeltaTime = IndependantDeltaTime * TimeScale;
+        }
 	}
 }

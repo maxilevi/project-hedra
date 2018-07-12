@@ -94,7 +94,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Draw()
         {
-            _barSize = Mathf.Lerp(_barSize, _targetBarSize, (float) Time.deltaTime * 16f);
+            _barSize = Mathf.Lerp(_barSize, _targetBarSize, (float) Time.DeltaTime * 16f);
             _healthBar.Text.UIText.UIText.Scale = _originalTextScale * _barSize * _textEnabled;
 
             if (_barSize <= 0.5f || Parent.IsDead || GameSettings.Paused || Hide || !_show || GameManager.IsLoading)

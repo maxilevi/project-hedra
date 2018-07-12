@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
 using System.Collections.Generic;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
@@ -183,8 +184,9 @@ namespace Hedra.Engine.Rendering.UI
 				_humans[i].Level = _information[i].Level;				
 				_humans[i].Model.UpdateModel();
 			    _humans[i].PlaySpawningAnimation = false;
-				
-				foreach(var pair in _information[i].Items)
+			    _humans[i].SearchComponent<DamageComponent>().Immune = true;
+
+                foreach (var pair in _information[i].Items)
 				{
 				    var item = pair.Value;
 				    if (pair.Key != PlayerInventory.WeaponHolder || item == null) continue;
@@ -255,8 +257,7 @@ namespace Hedra.Engine.Rendering.UI
 						_humans[k].Model.Model.Animator.ExitBlend();                              
 						
 					_humans[i].Model.Enabled = true;
-					_humans[i].Update();
-					
+                    _humans[i].Update();					
 				}
 			}
 
@@ -311,7 +312,7 @@ namespace Hedra.Engine.Rendering.UI
                     if(_selectedHuman.MainWeapon != null)
                         _selectedHuman.MainWeapon.Weapon.InAttackStance = true;
 					if( (_selectedHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz).LengthSquared > 4*4){
-						_selectedHuman.Physics.Move(-target.NormalizedFast() * 6f * (float)Time.unScaledDeltaTime);
+						_selectedHuman.Physics.Translate(-target.NormalizedFast() * 6f * Time.IndependantDeltaTime);
 						_selectedHuman.Model.Run();
 					}else{
 						_selectedHuman.Model.Idle();
@@ -333,7 +334,7 @@ namespace Hedra.Engine.Rendering.UI
 				    if (_previousHuman.MainWeapon != null)
                         _previousHuman.MainWeapon.Weapon.InAttackStance = false;
                     if ( (_previousHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz - backTarget.Xz).LengthSquared > 1*1){
-						_previousHuman.Physics.Move(backTarget.NormalizedFast() * 6f * (float)Time.unScaledDeltaTime);
+						_previousHuman.Physics.Translate(backTarget.NormalizedFast() * 6f * Time.IndependantDeltaTime);
 						_previousHuman.Model.Run();
                         _previousHuman.Model.Rotation = Physics.DirectionToEuler(backTarget.NormalizedFast().Xz.ToVector3());
                         _previousHuman.Model.TargetRotation = _previousHuman.Model.Rotation;

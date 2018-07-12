@@ -73,9 +73,9 @@ namespace Hedra.Engine.ItemSystem
 
             var heightAtPosition = Physics.HeightAtPosition(Position.X, Position.Z);
 		    this.Position = new Vector3(Position.X,
-		        Math.Max(heightAtPosition + _height, heightAtPosition + _height + (float) Math.Cos(Time.CurrentFrame)),
+		        Math.Max(heightAtPosition + _height, heightAtPosition + _height + (float) Math.Cos(Time.AccumulatedFrameTime)),
 		        Position.Z);
-		    this.Model.TargetRotation += Vector3.UnitY * 35f * (float) Time.deltaTime;
+		    this.Model.TargetRotation += Vector3.UnitY * 35f * (float) Time.DeltaTime;
 		    
 		    float DotFunc() => Vector2.Dot((this.Position - GameManager.Player.Position).Xz.NormalizedFast(), LocalPlayer.Instance.View.LookingDirection.Xz.NormalizedFast());
 

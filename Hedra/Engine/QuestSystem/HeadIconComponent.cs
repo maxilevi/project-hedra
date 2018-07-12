@@ -58,7 +58,7 @@ namespace Hedra.Engine.QuestSystem
             {
                 if (RotateIcon)
                 {
-                    _iconMesh.TargetRotation += Vector3.UnitY * (float) Time.deltaTime * 35f;
+                    _iconMesh.TargetRotation += Vector3.UnitY * (float) Time.DeltaTime * 35f;
                 }
                 Vector3 headOffset;
                 if (ParentIsHumanoid)

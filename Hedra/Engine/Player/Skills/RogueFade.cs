@@ -52,7 +52,7 @@ namespace Hedra.Engine.Player
 					yield break;
 				}
 				
-				PTime += Engine.Time.ScaledFrameTimeSeconds;
+				PTime += Engine.Time.DeltaTime;
 				yield return null;
 			}
 			

@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering
 			throw new Exception("Obsolete");
 			//GL.Uniform1(WorldRenderer.WaterShader.WaveMovementUniform, WaveMovement);
 			
-			WaveMovement += (float) Time.deltaTime * Mathf.Radian * 0.2f;
+			WaveMovement += (float) Time.DeltaTime * Mathf.Radian * 0.2f;
 			if(WaveMovement >= 5)
 				WaveMovement = 0;
 			
@@ -42,10 +42,10 @@ namespace Hedra.Engine.Rendering
 		
 		public override void Bind(){
 		    throw new Exception("Obsolete");
-            GraphicsLayer.Enable(EnableCap.Blend);
+            Renderer.Enable(EnableCap.Blend);
 			GL.BlendEquation(BlendEquationMode.FuncAdd);
            //	GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-           	GraphicsLayer.Enable(EnableCap.Texture2D);
+           	Renderer.Enable(EnableCap.Texture2D);
            	
            	//BlockShaders.WaterShader.Bind();
            	//GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, GameManager.Player.Position);
@@ -59,15 +59,15 @@ namespace Hedra.Engine.Rendering
            	
            	
            	if(ShowBackfaces) 
-           		GraphicsLayer.Disable(EnableCap.CullFace);
+           		Renderer.Disable(EnableCap.CullFace);
 		}
 		
 		public override void UnBind(){
 		    throw new Exception("Obsolete");
-            GraphicsLayer.Disable(EnableCap.Blend);
-			GraphicsLayer.Disable(EnableCap.Texture2D);
+            Renderer.Disable(EnableCap.Blend);
+			Renderer.Disable(EnableCap.Texture2D);
 			//BlockShaders.WaterShader.UnBind();
-			GraphicsLayer.Enable(EnableCap.CullFace);
+			Renderer.Enable(EnableCap.CullFace);
 		}
 	}
 }
