@@ -99,41 +99,47 @@ namespace Hedra.Engine.StructureSystem
             {
                 yield return null;
             }
-            underChunk.Blocked = true;
-            parameters.Position = new Vector3(
-                parameters.Position.X,
-                Physics.HeightAtPosition(parameters.Position),
-                parameters.Position.Z
-            );
-            parameters.Position = new Vector3(
-                parameters.WorldPosition.X,
-                Physics.HeightAtPosition(parameters.WorldPosition),
-                parameters.WorldPosition.Z
-            );
 
-            var campfireShapes = AssetManager.LoadCollisionShapes("Campfire0.ply", 7, Vector3.One);
-            campfireShapes.RemoveAt(0);
-
-            var positionMatrix = Matrix4.CreateTranslation(parameters.Position);
-
-            for (var k = 0; k < campfireShapes.Count; k++)
+            TaskManager.Parallel(delegate
             {
-                campfireShapes[k].Transform(Matrix4.CreateTranslation(currentModelOffset));
-                campfireShapes[k].Transform(parameters.TransformationMatrix);
-                campfireShapes[k].Transform(parameters.RotationMatrix);
-                campfireShapes[k].Transform(positionMatrix);
-            }
-            var campfire = AssetManager.PlyLoader("Assets/Env/Campfire1.ply", Vector3.One);
-            campfire.Transform(Matrix4.CreateTranslation(currentModelOffset));
-            campfire.Transform(parameters.TransformationMatrix);
-            campfire.Transform(parameters.RotationMatrix);
-            campfire.Transform(positionMatrix);
-            campfire.Color(AssetManager.ColorCode1, Utils.VariateColor(CampfireDesign.TentColor(rng), 15, rng));
+                underChunk.Blocked = true;
+                parameters.Position = new Vector3(
+                    parameters.Position.X,
+                    Physics.HeightAtPosition(parameters.Position),
+                    parameters.Position.Z
+                );
+                parameters.Position = new Vector3(
+                    parameters.WorldPosition.X,
+                    Physics.HeightAtPosition(parameters.WorldPosition),
+                    parameters.WorldPosition.Z
+                );
 
-            underChunk.AddCollisionShape(campfireShapes.ToArray());
-            underChunk.AddStaticElement(campfire);
-            enemies[j] = World.QuestManager.SpawnBandit(
-                parameters.Position + new Vector3(rng.NextFloat() * 16f - 8f, 0, rng.NextFloat() * 16f - 8f), false, false);
+                var campfireShapes = AssetManager.LoadCollisionShapes("Campfire0.ply", 7, Vector3.One);
+                campfireShapes.RemoveAt(0);
+
+                var positionMatrix = Matrix4.CreateTranslation(parameters.Position);
+
+                for (var k = 0; k < campfireShapes.Count; k++)
+                {
+                    campfireShapes[k].Transform(Matrix4.CreateTranslation(currentModelOffset));
+                    campfireShapes[k].Transform(parameters.TransformationMatrix);
+                    campfireShapes[k].Transform(parameters.RotationMatrix);
+                    campfireShapes[k].Transform(positionMatrix);
+                }
+
+                var campfire = AssetManager.PlyLoader("Assets/Env/Campfire1.ply", Vector3.One);
+                campfire.Transform(Matrix4.CreateTranslation(currentModelOffset));
+                campfire.Transform(parameters.TransformationMatrix);
+                campfire.Transform(parameters.RotationMatrix);
+                campfire.Transform(positionMatrix);
+                campfire.Color(AssetManager.ColorCode1, Utils.VariateColor(CampfireDesign.TentColor(rng), 15, rng));
+
+                underChunk.AddCollisionShape(campfireShapes.ToArray());
+                underChunk.AddStaticElement(campfire);
+                enemies[j] = World.QuestManager.SpawnBandit(
+                    parameters.Position + new Vector3(rng.NextFloat() * 16f - 8f, 0, rng.NextFloat() * 16f - 8f), false,
+                    false);
+            });
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)

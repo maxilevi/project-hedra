@@ -22,10 +22,11 @@ namespace Hedra.Engine.StructureSystem
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {
             var rng = new Random((int)(Position.X / 11 * (Position.Z / 13)));
-            var model = AssetManager.PlyLoader("Assets/Env/GiantTree0.ply", Vector3.One * 100f);
+            var originalModel = CacheManager.GetModel(CacheItem.GiantTree);
+            var model = originalModel.ShallowClone();
             var underChunk = World.GetChunkAt(Position);
 
-            Matrix4 transMatrix = Matrix4.Identity;
+            Matrix4 transMatrix = Matrix4.CreateScale(Vector3.One * 100f);
             transMatrix *= Matrix4.CreateRotationY(rng.NextFloat() * 360);
             transMatrix *= Matrix4.CreateTranslation(Position + Vector3.UnitY * 7f);
             model.Transform(transMatrix);
@@ -42,7 +43,7 @@ namespace Hedra.Engine.StructureSystem
             }
             model.GraduateColor(Vector3.UnitY);
 
-            List<CollisionShape> shapes = AssetManager.LoadCollisionShapes("GiantTree0.ply", 77, Vector3.One * 100f);
+            List<CollisionShape> shapes = CacheManager.GetShape(originalModel).DeepClone();
             for (int i = 0; i < shapes.Count; i++)
             {
                 shapes[i].Transform(transMatrix);

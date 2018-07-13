@@ -29,6 +29,11 @@ namespace Hedra.Engine.CacheSystem
         MerchantIcon,
         CampfireIcon,
         FearIcon,
+        GiantTree,
+        Grave,
+        Mausoleum,
+        Obelisk,
+        MerchantCart,
         MaxEnums
     }
 }

@@ -20,7 +20,8 @@ namespace Hedra.Engine.StructureSystem
         {
             var underChunk = World.GetChunkAt(Position);
             var rng = new Random((int) (Position.X / 11 * (Position.Z / 13)));
-            VertexData model = CacheManager.GetModel(CacheItem.Campfire).Clone();
+            var originalCampfire = CacheManager.GetModel(CacheItem.Campfire);
+            var model = originalCampfire.ShallowClone();
 
             var rotation = rng.NextFloat() * 360.0f;
             Matrix4 transMatrix = Matrix4.CreateScale(3 + rng.NextFloat() * 1.5f);
@@ -30,7 +31,7 @@ namespace Hedra.Engine.StructureSystem
             model.Transform(transMatrix);
             model.Color(AssetManager.ColorCode1, Utils.VariateColor(TentColor(rng), 15, rng));
 
-            List<CollisionShape> shapes = AssetManager.LoadCollisionShapes("Campfire0.ply", 7, Vector3.One);
+            var shapes = CacheManager.GetShape(originalCampfire).DeepClone();
             for (int i = 0; i < shapes.Count; i++)
             {
                 shapes[i].Transform(transMatrix);

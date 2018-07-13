@@ -188,55 +188,25 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        public bool IsBlockUsable(int X, int Y, int Z, Chunk RightChunk, Chunk FrontChunk, Chunk RightFrontChunk,
-            Chunk LeftBackChunk, Chunk RightBackChunk, Chunk LeftFrontChunk, Chunk BackChunk, Chunk LeftChunk,
-            int Width, int Height, int Depth, Dictionary<Vector3, bool> Cache)
-        {
-            var isUsable = false;
-            for (int _x = -1; _x < 2 && !isUsable; _x++)
-            for (int _z = -1; _z < 2 && !isUsable; _z++)
-            for (int _i = -1; _i < 2 && !isUsable; _i++)
-            {
-                var position = new Vector3(X + _x, _i + Y, Z + _z);
-
-                var result = false;
-                if (!Cache.ContainsKey(position))
-                {
-                    Block y = this.GetNeighbourBlock((int) position.X, (int) position.Y, (int) position.Z);
-
-                    result = y.Type != BlockType.Water && y.Type != BlockType.Air;
-
-                    Cache.Add(position, result);
-                }
-                else
-                {
-                    result = Cache[position];
-                }
-                if (!result) continue;
-                isUsable = true;
-                break;
-            }
-            return isUsable;
-        }
-
-        public Chunk GetNeighbourChunk(int X, int Y, int Z)
+        private Chunk GetNeighbourChunk(int X, int Y, int Z)
         {
             var coords =
                 World.ToChunkSpace(new Vector3(OffsetX + X * Chunk.BlockSize, 0, OffsetZ + Z * Chunk.BlockSize));
             return World.SearcheableChunks.ContainsKey(coords) ? World.SearcheableChunks[coords] : null;
         }
 
-        public Block GetNeighbourBlock(int X, int Y, int Z)
+        private Block GetNeighbourBlock(int X, int Y, int Z)
         {
-            var normalizedX = (int) (X % BoundsX);
-            var normalizedZ = (int) (Z % BoundsZ);
-            var ch = this.GetNeighbourChunk(X, Y, Z);
-            if (ch?.Landscape?.BlocksSetted ?? false)
-                return ch
-                [BoundsX + normalizedX + (normalizedX >= 0 ? -BoundsX : 0)]
-                [Y]
-                [BoundsZ + normalizedZ + (normalizedZ >= 0 ? -BoundsZ : 0)];
-            return new Block(BlockType.Temporal);
+            var chunk = this.GetNeighbourChunk(X, Y, Z);
+            if (chunk?.Landscape?.BlocksSetted ?? false) return new Block(BlockType.Temporal);
+            return chunk[Modulo(X, BoundsX)][Y][Modulo(X, BoundsX)];
+
+        }
+        
+        // Source: https://codereview.stackexchange.com/a/58309
+        private static int Modulo(int Index, int Bounds)
+        {
+            return (Index % Bounds + Bounds) % Bounds;
         }
     }
 }
