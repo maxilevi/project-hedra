@@ -5,8 +5,7 @@ bin
 obj
 .vs
 packages/
-/.idea
+.idea/
 packages
-/*.user
-/.vs
+*.user
 
