@@ -67,7 +67,7 @@ namespace Hedra.Engine.Player
 
             Lifetime -= Time.ScaledFrameTimeSeconds;
             Propulsion *= (float)Math.Pow(.75f, (float)Time.deltaTime);
-            _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 30f) * (float) Time.deltaTime;
+            _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f) * (float) Time.deltaTime;
             _accumulatedVelocity *= (float) Math.Pow(.8f, (float)Time.deltaTime);
 			Mesh.Position += _accumulatedVelocity * 2f * (float)Time.deltaTime;
             Mesh.Rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
