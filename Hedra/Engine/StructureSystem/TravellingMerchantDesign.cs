@@ -17,17 +17,18 @@ namespace Hedra.Engine.StructureSystem
         public override int Radius { get; set; } = 512;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.MerchantIcon);
 
-        public override void Build(Vector3 Position, CollidableStructure Structure) {
-
-            var model = AssetManager.PlyLoader("Assets/Env/MerchantCart.ply", Vector3.One * 4.5f);
+        public override void Build(Vector3 Position, CollidableStructure Structure)
+        {
+            var originalModel = CacheManager.GetModel(CacheItem.MerchantCart);
+            var model = originalModel.ShallowClone();
             var underChunk = World.GetChunkAt(Position);
 
-            Matrix4 transMatrix = Matrix4.CreateScale(1);
+            Matrix4 transMatrix = Matrix4.CreateScale(4.5f);
             transMatrix *= Matrix4.CreateTranslation(Position);
             model.Transform(transMatrix);
 
             var merchant = new TravellingMerchant(Position);
-            List<CollisionShape> shapes = AssetManager.LoadCollisionShapes("Assets/Env/MerchantCart.ply", 14, Vector3.One * 4.5f);
+            var shapes = CacheManager.GetShape(originalModel).DeepClone();
             for (int i = 0; i < shapes.Count; i++)
             {
                 shapes[i].Transform(transMatrix);
@@ -63,11 +64,6 @@ namespace Hedra.Engine.StructureSystem
 
             return !(Math.Abs(ChunkOffset.X - GameSettings.SpawnPoint.X) > 10000 || Math.Abs(ChunkOffset.Y - GameSettings.SpawnPoint.Y) > 10000) &&
                    Rng.Next(0, 40) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > 0 && !World.StructureGenerator.MerchantSpawned;
-        }
-
-        public override bool MeetsRequirements(Vector2 ChunkOffset)
-        {
-            return base.MeetsRequirements(ChunkOffset);
         }
     }
 }

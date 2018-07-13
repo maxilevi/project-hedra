@@ -29,21 +29,23 @@ namespace Hedra.Engine.StructureSystem
             var rng = new Random( (int) ( Position.X / 11 * (Position.Z / 13) ) );
 
             const int tombstoneCount = 25;
-            const int graveTypes = 6;
             var cementery = new Graveyard(Position, Radius);
 
             World.HighlightArea(Position, new Vector4(.2f, .2f, .2f, 1f) * .5f, Radius * 1.75f, -1);
 
-            Matrix4 rotationMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
-            VertexData mausoleum = AssetManager.PlyLoader("Assets/Env/Mausoleum.ply", Vector3.One * 4f);
+            var rotationMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
+            var originalMausoleum = CacheManager.GetModel(CacheItem.Mausoleum);
+            var mausoleum = originalMausoleum.ShallowClone();
 
+            mausoleum.Transform(Matrix4.CreateScale(4f));
             mausoleum.Transform(rotationMatrix);
             mausoleum.Translate(Position);
             mausoleum.GraduateColor(Vector3.UnitY);
 
-            List<CollisionShape> mausoleumShapes = AssetManager.LoadCollisionShapes("Assets/Env/Mausoleum.ply", 2, Vector3.One * 4f);
-            for (int i = 0; i < mausoleumShapes.Count; i++)
+            var mausoleumShapes = CacheManager.GetShape(originalMausoleum).DeepClone();
+            for (var i = 0; i < mausoleumShapes.Count; i++)
             {
+                mausoleumShapes[i].Transform(Matrix4.CreateScale(4f));
                 mausoleumShapes[i].Transform(rotationMatrix);
                 mausoleumShapes[i].Transform(Position);
             }
@@ -71,15 +73,17 @@ namespace Hedra.Engine.StructureSystem
                     + Vector3.UnitZ * -11 * k * Chunk.BlockSize;
                 gravePosition = new Vector3(gravePosition.X, Position.Y, gravePosition.Z);
 
-                int graveType = rng.Next(0, graveTypes);
                 Vector3 graveScale = Vector3.One * (3.25f + rng.NextFloat() * .5f) * 1.5f;
-                VertexData grave = AssetManager.PlyLoader("Assets/Env/Grave" + graveType + ".ply", graveScale);
+                var originalGrave = CacheManager.GetModel(CacheItem.Grave);
+                var grave = originalGrave.ShallowClone();
+                grave.Scale(graveScale);
                 grave.GraduateColor(Vector3.UnitY);
                 grave.Translate(gravePosition);
 
-                List<CollisionShape> shapes = AssetManager.LoadCollisionShapes($"Assets/Env/Grave{graveType}.ply", 1, graveScale);
+                var shapes = CacheManager.GetShape(originalGrave).DeepClone();
                 for (var l = 0; l < shapes.Count; l++)
                 {
+                    shapes[l].Transform(Matrix4.CreateScale(graveScale));
                     shapes[l].Transform(gravePosition);
                 }
 

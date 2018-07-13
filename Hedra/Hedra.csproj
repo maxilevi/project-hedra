@@ -183,12 +183,17 @@
     <Compile Include="Engine\CacheSystem\FearIconCache.cs" />
     <Compile Include="Engine\CacheSystem\FernCache.cs" />
     <Compile Include="Engine\CacheSystem\FlowerCache.cs" />
+    <Compile Include="Engine\CacheSystem\GiantTreeCache.cs" />
     <Compile Include="Engine\CacheSystem\GrassCache.cs" />
     <Compile Include="Engine\CacheSystem\CacheIgnore.cs" />
+    <Compile Include="Engine\CacheSystem\GraveCache.cs" />
     <Compile Include="Engine\CacheSystem\GraveyardIconCache.cs" />
     <Compile Include="Engine\CacheSystem\MatCache.cs" />
+    <Compile Include="Engine\CacheSystem\MausoleumCache.cs" />
+    <Compile Include="Engine\CacheSystem\MerchantCartCache.cs" />
     <Compile Include="Engine\CacheSystem\MerchantIconCache.cs" />
     <Compile Include="Engine\CacheSystem\OakTreesCache.cs" />
+    <Compile Include="Engine\CacheSystem\ObeliskCache.cs" />
     <Compile Include="Engine\CacheSystem\PineTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\RockCache.cs" />
     <Compile Include="Engine\CacheSystem\KnockedIconCache.cs" />

@@ -25,10 +25,12 @@ namespace Hedra.Engine.StructureSystem
             Chunk underChunk = World.GetChunkAt(Position);
             Vector3 scale = Vector3.One * 6;
             var rng = new Random( (int)(Position.X / 11 * (Position.Z / 13)) );
-            VertexData data = AssetManager.PlyLoader("Assets/Env/Obelisk.ply", scale);
+            var originalModel = CacheManager.GetModel(CacheItem.Obelisk);
+            var model = originalModel.ShallowClone();
+            model.Scale(scale);
             var obelisk = new Obelisk
             {
-                Position = Position,
+                Position = Position
             };
 
             var collisionBox = new Box(new Vector3(0, 0, 0), new Vector3(2.4f, 8, 2.4f) * scale);
@@ -45,15 +47,15 @@ namespace Hedra.Engine.StructureSystem
 
             Vector4 darkColor = Obelisk.GetObeliskStoneColor(rng);
 
-            data.Color(new Vector4(.2f, .2f, .2f, 1f), darkColor);
+            model.Color(new Vector4(.2f, .2f, .2f, 1f), darkColor);
             //data.Color(new Vector4(.4f, .4f, .4f, 1f), typeColor);
-            data.Color(new Vector4(.6f, .6f, .6f, 1f), Obelisk.GetObeliskStoneColor(rng));
+            model.Color(new Vector4(.6f, .6f, .6f, 1f), Obelisk.GetObeliskStoneColor(rng));
 
-            data.Translate(obelisk.Position);
-            data.ExtraData.Clear();
-            data.FillExtraData(WorldRenderer.NoHighlightFlag);
+            model.Translate(obelisk.Position);
+            model.ExtraData.Clear();
+            model.FillExtraData(WorldRenderer.NoHighlightFlag);
 
-            underChunk.AddStaticElement(data);
+            underChunk.AddStaticElement(model);
 
             World.HighlightArea(obelisk.Position, new Vector4(.2f, .2f, .2f, .4f), 48, -1);
 
