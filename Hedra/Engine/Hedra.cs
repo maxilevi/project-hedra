@@ -68,7 +68,8 @@ namespace Hedra
 
 		protected override void OnLoad(EventArgs e){
 			base.OnLoad(e);
-		    string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
+
+            string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
 		    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
             this.GameVersion = "α 0.34";
 		    this.Title += " "+GameVersion;

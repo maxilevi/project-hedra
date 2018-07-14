@@ -7,8 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -67,7 +65,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             _hashQueue.Remove(chunk);
                         }
                         _hashQueue.Remove(chunk);
-                    });
+                    }, SleepTime);
                     if (result)
                     {
                         _queue.Remove(chunk);
@@ -77,6 +75,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         }
 
         protected abstract void Work(Chunk Object);
+
+        protected abstract int SleepTime { get; }
 
         public void Add(Chunk Chunk)
         {

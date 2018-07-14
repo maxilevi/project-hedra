@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.QuestSystem;
@@ -21,19 +22,17 @@ namespace Hedra.Engine.BiomeSystem
 	/// </summary>
 	internal class LandscapeGenerator : BiomeGenerator
 	{
-	    public LandscapeGenerator(Chunk Chunk) : base(Chunk)
-	    {        
+        public LandscapeGenerator(Chunk Chunk) : base(Chunk)
+	    {
 	    }
 
 		public override void Generate(Block[][][] Blocks, RegionCache Cache)
         {
-
 			this.CheckForNearbyStructures();
-			
 			this.BuildArray(Blocks);
-		    this.DefineBlocks(Blocks, Cache);
+            this.DefineBlocks(Blocks, Cache);
             this.BlocksSetted = true;
-			this.PlaceStructures(Blocks, Cache);
+            this.PlaceStructures(Blocks, Cache);
 			this.StructuresPlaced = true;
 		}
 
@@ -122,8 +121,8 @@ namespace Hedra.Engine.BiomeSystem
 	                        biggestPlateau = plateau;
 	                    }
 	                }
-
-	                foreach (Plateau plateau in plateauPositions)
+	                var smallFrequency = SmallFrequency(position.X, position.Y);
+                    foreach (Plateau plateau in plateauPositions)
 	                {
 
 	                    dist = (plateau.Position.Xz - position).LengthSquared;
@@ -134,7 +133,7 @@ namespace Hedra.Engine.BiomeSystem
 	                    height = Mathf.Lerp(height - addonHeight,
 	                        Math.Min(
 	                            (plateau.Radius < 64 ? biggestPlateau ?? plateau : plateau).MaxHeight +
-	                            SmallFrequency(position.X, position.Y),
+	                            smallFrequency,
 	                            height),
 	                        Math.Min(1.0f, final * 1.5f));
 
@@ -374,19 +373,16 @@ namespace Hedra.Engine.BiomeSystem
 	        CollidableStructure[] structs;
 	        lock (World.StructureGenerator.Items)
 	            structs = World.StructureGenerator.Items.ToArray();
-
 	        for (var x = 0; x < this.Chunk.BoundsX; x++)
 	        {
 	            for (var z = 0; z < this.Chunk.BoundsZ; z++)
 	            {
 	                int y = Chunk.GetHighestY(x, z);
-	                var position = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
+                    var position = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
+	                var block = Blocks[x][y][z];
 
-	                if (Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air
-	                    && Blocks[x][y - 1][z].Type != BlockType.Water &&
-	                    Blocks[x][y - 1][z].Type != BlockType.Air) Blocks[x][y][z].Type = BlockType.Air;
-
-	                var block = Chunk.GetBlockAt(x, y, z);
+                    if(block.Type == BlockType.Seafloor) continue;
+	                
 	                Region region = Cache.GetRegion(position);
 	                this.LoopStructures(x, z, structs, out bool noWeedZone, out bool noTreesZone, out bool inMerchant);
 	                this.DoEnviromentPlacements(position, noWeedZone, region);
@@ -434,7 +430,6 @@ namespace Hedra.Engine.BiomeSystem
 	        NoGrassZone = false;
 	        NoTreesZone = false;
 	        InMerchant = false;
-
 	        foreach (CollidableStructure structPosition in Structs)
 	        {
 	            var possiblePosition = new Vector3(Chunk.OffsetX + X * Chunk.BlockSize, 0,
@@ -476,7 +471,8 @@ namespace Hedra.Engine.BiomeSystem
 			return Utils.Rng.Next(0, 4) == 1;
 		}
 		
-		public void CheckForNearbyStructures(){
+		public void CheckForNearbyStructures()
+        {
 			World.StructureGenerator.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
 		}
 	}

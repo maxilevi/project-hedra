@@ -25,10 +25,10 @@ namespace Hedra.Engine.BiomeSystem
 		public bool BlocksSetted { get; set; }
 		public bool StructuresPlaced { get; set; }
 
-	    protected BiomeGenerator(Chunk RefChunk)
+        protected BiomeGenerator(Chunk RefChunk)
         {
 			this.RandomGen = BiomeGenerator.GenerateRng(new Vector2(RefChunk.OffsetX, RefChunk.OffsetZ));
-			this.OffsetX = RefChunk.OffsetX;
+            this.OffsetX = RefChunk.OffsetX;
 			this.OffsetZ = RefChunk.OffsetZ;
 			this.Chunk = RefChunk;
 			this.Seed = World.Seed;

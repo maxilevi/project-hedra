@@ -22,7 +22,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             while (Program.GameWindow.Exists)
             {
-                Thread.Sleep(5);
+                //Thread.Sleep(SleepTime);
                 if (!IsWorking) continue;
                 try
                 {
@@ -43,6 +43,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _owner = Owner;
         }
 
+        public int SleepTime { get; set; } = 5;
         public bool IsWorking => _action != null;
         public object Owner => _owner;
     }

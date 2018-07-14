@@ -205,27 +205,29 @@ namespace Hedra.Engine.Rendering.UI
 
 		    var fpsLimitList = new List<string>();
             fpsLimitList.AddRange(Enumerable.Range(0, 12+1).Select(I => (I*5+30).ToString()));
+#if DEBUG
             fpsLimitList.Add("NONE");
-		    var frameLimiterValues = fpsLimitList.ToArray();
+#endif
+            var frameLimiterValues = fpsLimitList.ToArray();
 
 
             var frameLimiter = new OptionChooser(new Vector2(-dist, 0), new Vector2(0.15f, 0.075f), "FPS Limit: ",
 		        fontColor, _normalFont,
                 frameLimiterValues);
 
-		    if (GameSettings.FpsLimit <= 0.0f)
+		    if (GameSettings.FrameLimit <= 0.0f)
 		        frameLimiter.Index = fpsLimitList.Count - 1;
 		    else
 		        frameLimiter.Index = Enumerable.Range(0, fpsLimitList.Count-1)
-                    .FirstOrDefault(I => GameSettings.FpsLimit == int.Parse(fpsLimitList[I]));
+                    .FirstOrDefault(I => GameSettings.FrameLimit == int.Parse(fpsLimitList[I]));
 		    frameLimiter.CurrentValue.Text = fpsLimitList[frameLimiter.Index];
 
             OnButtonClickEventHandler updateLimiter = delegate
             {
                 if (frameLimiter.CurrentValue.Text == "NONE")
-                    GameSettings.FpsLimit = 0.0f;
+                    GameSettings.FrameLimit = 0.0f;
                 else
-                    GameSettings.FpsLimit = int.Parse(frameLimiter.CurrentValue.Text);
+                    GameSettings.FrameLimit = int.Parse(frameLimiter.CurrentValue.Text);
             };
 
 		    frameLimiter.LeftArrow.Click += updateLimiter;

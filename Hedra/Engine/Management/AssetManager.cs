@@ -45,8 +45,9 @@ namespace Hedra.Engine.Management
 	    private static List<ResourceHandler> _registeredHandlers;
         private static bool _filesDecompressed;
 	    private static Dictionary<string, VertexData> _hitboxCache;
+        private static readonly object HandlerLock = new object();
 
-	    public static string ShaderCode { get; private set; }
+        public static string ShaderCode { get; private set; }
 
         public static void Load()
         {
@@ -136,31 +137,42 @@ namespace Hedra.Engine.Management
 		{
 		    AssetManager.DecompileAssets();
             ResourceHandler selectedHandler = null;
-		    for (var i = 0; i < _registeredHandlers.Count; i++)
+		    lock (HandlerLock)
 		    {
-		        if (!_registeredHandlers[i].Locked && _registeredHandlers[i].Id == DataFile)
+		        for (var i = 0; i < _registeredHandlers.Count; i++)
 		        {
-		            selectedHandler = _registeredHandlers[i];
-		            selectedHandler.Locked = true;
-                    break;
+		            if (!_registeredHandlers[i].Locked && _registeredHandlers[i].Id == DataFile)
+		            {
+		                selectedHandler = _registeredHandlers[i];
+		                selectedHandler.Locked = true;
+		                break;
+		            }
 		        }
 		    }
 		    if (selectedHandler == null)
 		    {
-                selectedHandler = new ResourceHandler(File.OpenRead(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile)), DataFile);
-		        _registeredHandlers.Add(selectedHandler);
-
-                Log.WriteLine($"Registered resource handler... (Total = {_registeredHandlers.Count})", LogType.IO);
+		        lock (HandlerLock)
+		        {
+		            selectedHandler =new ResourceHandler(File.OpenRead(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile)), DataFile);
+		            _registeredHandlers.Add(selectedHandler);
+		        }
+		        Log.WriteLine($"Registered resource handler... (Total = {_registeredHandlers.Count})", LogType.IO);
 		    }
 		    try
 		    {
-		        return AssetManager.ReadBinaryFromStream(selectedHandler.Stream, Name);
+		        lock (HandlerLock)
+		        {
+		            return AssetManager.ReadBinaryFromStream(selectedHandler.Stream, Name);
+		        }
 		    }
 		    finally
 		    {
-		        selectedHandler.Stream.Position = 0;
-		        selectedHandler.Locked = false;
-            }
+		        lock (HandlerLock)
+                {
+		            selectedHandler.Stream.Position = 0;
+		            selectedHandler.Locked = false;
+		        }
+		    }
 		}
 
 	    private static byte[] ReadBinaryFromStream(Stream Stream, string Name)

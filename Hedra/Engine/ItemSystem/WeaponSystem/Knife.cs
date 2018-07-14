@@ -22,16 +22,20 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// Description of TwoHandedSword.
 	/// </summary>
 	internal class Knife : MeleeWeapon
-    {
+	{
+	    private static readonly VertexData SheathData;
         private readonly ObjectMesh KnifeSheath;
 	    private Vector3 _previousPosition;
 
+        static Knife()
+        {
+            SheathData = AssetManager.PlyLoader("Assets/Items/KnifeSheath.ply", Vector3.One);
+            SheathData.Transform(Matrix4.CreateRotationY(180f * Mathf.Radian));
+            SheathData.Scale(new Vector3(3.75f, 1.8f, 2f));
+        }
+
         public Knife(VertexData Contents) : base(Contents)
 		{
-			
-			VertexData SheathData = AssetManager.PlyLoader("Assets/Items/KnifeSheath.ply", Vector3.One);
-			SheathData.Transform( Matrix4.CreateRotationY(180f * Mathf.Radian) );
-			SheathData.Scale( new Vector3(3.75f, 1.8f, 2f));
 			KnifeSheath = ObjectMesh.FromVertexData(SheathData);
 			
 			AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherShootStance.dae");

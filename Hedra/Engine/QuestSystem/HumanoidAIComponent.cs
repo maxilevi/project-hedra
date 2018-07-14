@@ -108,5 +108,17 @@ namespace Hedra.Engine.QuestSystem
                 Parent.Model.Idle();
             }
         }
+
+        protected void Sit()
+        {
+            if (Parent is Humanoid human)
+            {
+                human.Model.Sit();
+            }
+            else
+            {
+                Parent.Model.Idle();
+            }
+        }
     }
 }

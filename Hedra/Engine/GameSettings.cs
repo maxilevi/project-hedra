@@ -49,7 +49,7 @@ namespace Hedra.Engine
         public static float UpdateDistance = 420;
         private static bool _fullscreen;
         private static int _shadowQuality = 2;
-        private static float _fpsLimit;
+        private static float _frameLimit = 60;
 
         static GameSettings()
         {
@@ -59,13 +59,13 @@ namespace Hedra.Engine
         }
 
         [Setting]
-        public static float FpsLimit {
-            get => _fpsLimit;
+        public static float FrameLimit {
+            get => _frameLimit;
             set
             {
-                _fpsLimit = value;
-                Program.GameWindow.TargetRenderFrequency = FpsLimit;
-                Program.GameWindow.TargetUpdateFrequency = FpsLimit;
+                _frameLimit = value;
+                Program.GameWindow.TargetRenderFrequency = FrameLimit;
+                Program.GameWindow.TargetUpdateFrequency = FrameLimit;
             }
         }
 

@@ -71,25 +71,22 @@ namespace Hedra.Engine.Generation.ChunkSystem
             bool WaterCell, int Lod, out bool Success)
         {
             Success = true;
-
             this.BuildCell(ref Cell, X, Y, Z, WaterCell, Lod);
 
             if (!WaterCell)
+            {
                 for (var i = 0; i < Cell.Type.Length; i++)
                 {
                     var pos = new Vector3(Cell.P[i].X * _coefficient, Cell.P[i].Y * _coefficient,
-                        Cell.P[i].Z * _coefficient); // LOD is 1
+                        Cell.P[i].Z * _coefficient);
                     var block = this.GetNeighbourBlock((int) pos.X, (int) pos.Y, (int) pos.Z);
 
                     Cell.Type[i] = block.Type;
                     Cell.Density[i] = block.Density;
-
-                    /*if (block.Type == BlockType.Water)
-                        Cell.Density[i] = BiomePool.DecodeWater(block.Density);*/
                 }
-            if (WaterCell)
+            }
+            else
             {
-                //Only rivers
                 var cz = new GridCell();
                 cz.P = new Vector3[4];
                 cz.P[0] = new Vector3(X * BlockSize, Y * BlockSize, Z * BlockSize);
@@ -163,16 +160,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
             float blockSizeLod = BlockSize * lod;
             if (WaterCell)
             {
-                Cell.P[0] = new Vector3(X, Y, Z); // * new Vector3(BLOCK_SIZE,1,BLOCK_SIZE);
-                Cell.P[1] = new Vector3(X + blockSizeLod, Y, Z); // * new Vector3(BLOCK_SIZE,1,BLOCK_SIZE); 
-                Cell.P[2] = new Vector3(X + blockSizeLod, Y,
-                    Z + blockSizeLod); // * new Vector3(BLOCK_SIZE,1,BLOCK_SIZE); 
-                Cell.P[3] = new Vector3(X, Y, Z + blockSizeLod); // * new Vector3(BLOCK_SIZE,1,BLOCK_SIZE); 
-                Cell.P[4] = new Vector3(X, Y + BlockSize, Z); // * new Vector3(BLOCK_SIZE,1,BLOCK_SIZE);
-                Cell.P[5] = new Vector3(X + blockSizeLod, Y + BlockSize, Z); // * new Vector3(BLOCK_SIZE,1,BLOCK_SIZE);
-                Cell.P[6] = new Vector3(X + blockSizeLod, Y + BlockSize,
-                    Z + blockSizeLod); // * new Vector3(BLOCK_SIZE,1,BLOCK_SIZE);
-                Cell.P[7] = new Vector3(X, Y + BlockSize, Z + blockSizeLod); // * new Vector3(BLOCK_SIZE,1,BLOCK_SIZE);
+                Cell.P[0] = new Vector3(X, Y, Z);
+                Cell.P[1] = new Vector3(X + blockSizeLod, Y, Z);
+                Cell.P[2] = new Vector3(X + blockSizeLod, Y, Z + blockSizeLod);
+                Cell.P[3] = new Vector3(X, Y, Z + blockSizeLod);  
+                Cell.P[4] = new Vector3(X, Y + BlockSize, Z); 
+                Cell.P[5] = new Vector3(X + blockSizeLod, Y + BlockSize, Z);
+                Cell.P[6] = new Vector3(X + blockSizeLod, Y + BlockSize, Z + blockSizeLod); 
+                Cell.P[7] = new Vector3(X, Y + BlockSize, Z + blockSizeLod);
             }
             else
             {
@@ -182,24 +177,23 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Cell.P[3] = new Vector3(Cell.P[0].X, Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
                 Cell.P[4] = new Vector3(Cell.P[0].X, BlockSize + Cell.P[0].Y, Cell.P[0].Z);
                 Cell.P[5] = new Vector3(blockSizeLod + Cell.P[0].X, BlockSize + Cell.P[0].Y, Cell.P[0].Z);
-                Cell.P[6] = new Vector3(blockSizeLod + Cell.P[0].X, BlockSize + Cell.P[0].Y,
-                    blockSizeLod + Cell.P[0].Z);
+                Cell.P[6] = new Vector3(blockSizeLod + Cell.P[0].X, BlockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
                 Cell.P[7] = new Vector3(Cell.P[0].X, BlockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
             }
         }
 
         private Chunk GetNeighbourChunk(int X, int Y, int Z)
         {
-            var coords =
-                World.ToChunkSpace(new Vector3(OffsetX + X * Chunk.BlockSize, 0, OffsetZ + Z * Chunk.BlockSize));
+            if (X >= 0 && X < BoundsX && Z >= 0 && Z < BoundsZ) return _parent;
+            var coords = World.ToChunkSpace(new Vector3(OffsetX + X * Chunk.BlockSize, 0, OffsetZ + Z * Chunk.BlockSize));
             return World.SearcheableChunks.ContainsKey(coords) ? World.SearcheableChunks[coords] : null;
         }
 
         private Block GetNeighbourBlock(int X, int Y, int Z)
         {
             var chunk = this.GetNeighbourChunk(X, Y, Z);
-            if (chunk?.Landscape?.BlocksSetted ?? false) return new Block(BlockType.Temporal);
-            return chunk[Modulo(X, BoundsX)][Y][Modulo(X, BoundsX)];
+            if (!chunk?.Landscape?.BlocksSetted ?? true) return new Block(BlockType.Temporal);
+            return chunk[Modulo(X, BoundsX)][Y][Modulo(Z, BoundsZ)];
 
         }
         

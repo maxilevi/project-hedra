@@ -245,10 +245,9 @@ namespace Hedra.Engine.Generation
 					continue;
 				}
 
-			    if (!WorldRenderer.EnableCulling || chunk.Initialized && FrustumObject.IsInsideFrustum(chunk.Mesh))
+                if (!WorldRenderer.EnableCulling || chunk.Initialized && FrustumObject.IsInsideFrustum(chunk.Mesh))
 			    {
-                    if(!DrawingChunks.ContainsKey(offset))
-			            DrawingChunks.Add(offset, chunk);
+                    DrawingChunks.Add(offset, chunk);
 			    }
 			}
 			

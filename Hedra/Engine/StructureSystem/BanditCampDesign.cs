@@ -6,10 +6,8 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
@@ -26,8 +24,11 @@ namespace Hedra.Engine.StructureSystem
             const float roasterScale = .75f;
             var underChunk = World.GetChunkAt(Position);
             var rng = new Random((int)(Position.X / 11 * (Position.Z / 13)));
-            var roasterModel = AssetManager.PlyLoader("Assets/Env/Roaster.ply", Vector3.One * roasterScale);
-            var centerModel = AssetManager.PlyLoader("Assets/Env/Campfire2.ply", Vector3.One);
+            var originalRoaster = CacheManager.GetModel(CacheItem.CampfireRoaster);
+            var roasterModel = originalRoaster.ShallowClone();
+            roasterModel.Transform(Matrix4.CreateScale(roasterScale));
+            var originalCenterModel = CacheManager.GetModel(CacheItem.CampfireLogs);
+            var centerModel = originalCenterModel.ShallowClone();
             var model = new VertexData();
 
             var scaleMatrix = Structure.Parameters.Get<Matrix4>("ScaleMatrix");
@@ -39,8 +40,8 @@ namespace Hedra.Engine.StructureSystem
             model += roasterModel;
             model += centerModel;
 
-            var fireShapes = AssetManager.LoadCollisionShapes("Campfire0.ply", 7, Vector3.One);
-            var roasterShapes = AssetManager.LoadCollisionShapes("Roaster0.ply", 5, Vector3.One);
+            var fireShapes = CacheManager.GetShape(originalCenterModel).DeepClone();
+            var roasterShapes = CacheManager.GetShape(originalRoaster).DeepClone();
             var shapes = new List<CollisionShape>
             {
                 fireShapes[0]
@@ -113,9 +114,9 @@ namespace Hedra.Engine.StructureSystem
                     Physics.HeightAtPosition(parameters.WorldPosition),
                     parameters.WorldPosition.Z
                 );
-
-                var campfireShapes = AssetManager.LoadCollisionShapes("Campfire0.ply", 7, Vector3.One);
-                campfireShapes.RemoveAt(0);
+                
+                var originalCampfire = CacheManager.GetModel(CacheItem.CampfireTent);
+                var campfireShapes = CacheManager.GetShape(originalCampfire).DeepClone();
 
                 var positionMatrix = Matrix4.CreateTranslation(parameters.Position);
 
@@ -127,7 +128,7 @@ namespace Hedra.Engine.StructureSystem
                     campfireShapes[k].Transform(positionMatrix);
                 }
 
-                var campfire = AssetManager.PlyLoader("Assets/Env/Campfire1.ply", Vector3.One);
+                var campfire = originalCampfire.ShallowClone();
                 campfire.Transform(Matrix4.CreateTranslation(currentModelOffset));
                 campfire.Transform(parameters.TransformationMatrix);
                 campfire.Transform(parameters.RotationMatrix);

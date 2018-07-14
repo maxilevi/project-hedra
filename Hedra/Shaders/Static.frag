@@ -84,7 +84,7 @@ void main()
 		}
 	}
 
-	vec3 FullLightColor = clamp(LightColor + FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
+	vec3 FullLightColor = max(clamp(LightColor + FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0)), vec3(.1, .1, .1));
 
 	float cond = when_lt(Color.a + 1.0, 0.1);
 	Ambient += cond * 0.25;
@@ -131,7 +131,7 @@ void main()
 		}    
 	}
 	shadow += not(use_disk) * has_shadows * ( shadow / 9.0 - shadow);
-	ShadowVisibility = 1.0 - (shadow * 0.55);
+	ShadowVisibility = 1.0 - (shadow * 0.50);
 	
 	float cond_met = when_gt(InNorm.y, 0.4) * Snow;
 	float snow_val = 1.2;

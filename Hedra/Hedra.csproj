@@ -177,6 +177,8 @@
     <Compile Include="Engine\CacheSystem\CacheType.cs" />
     <Compile Include="Engine\CacheSystem\CampfireCache.cs" />
     <Compile Include="Engine\CacheSystem\CampfireIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\CampfireLogsCache.cs" />
+    <Compile Include="Engine\CacheSystem\CampfireRoasterCache.cs" />
     <Compile Include="Engine\CacheSystem\CloudCache.cs" />
     <Compile Include="Engine\CacheSystem\CypressTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\DeadTreesCache.cs" />
@@ -200,6 +202,7 @@
     <Compile Include="Engine\CacheSystem\KnockedIconCache.cs" />
     <Compile Include="Engine\CacheSystem\SleepingIconCache.cs" />
     <Compile Include="Engine\CacheSystem\TallTreesCache.cs" />
+    <Compile Include="Engine\CacheSystem\CampfireTentCache.cs" />
     <Compile Include="Engine\CacheSystem\VillageIconCache.cs" />
     <Compile Include="Engine\CacheSystem\WheatCache.cs" />
     <Compile Include="Engine\ClassSystem\ArcherDesign.cs" />
@@ -233,7 +236,8 @@
     <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilderHelper.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkMeshBuildOutput.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkWatcher.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\CoordinateHash.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\CoordinateHash2D.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\CoordinateHash3D.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\LoadBalancer.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\SharedWorkerPool.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\Worker.cs" />
@@ -743,6 +747,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\NormalVillageScheme.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\ISchemeGenerator.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageScheme.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageTemplate.cs" />
     <Compile Include="Engine\StructureSystem\WoodenFortDesign.cs" />
     <Compile Include="Engine\Testing\AutomatedTest.cs" />
     <Compile Include="Engine\Testing\AutomatedTests\BaseAutomatedTest.cs" />

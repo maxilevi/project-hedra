@@ -36,13 +36,13 @@ namespace Hedra.Engine.EntitySystem
 		{
 			this.Player = Player;
 		    Rng = new Random();
-            SpawnThread = new Thread(Update);
-            SpawnThread.Start();
+            //SpawnThread = new Thread(Update);
+            //SpawnThread.Start();
 		}
 		
 		public void Update(){
 			
-			while(true){
+			while(Program.GameWindow.Exists){
                 START:
                 if(!Program.GameWindow.Exists) break;
                 Thread.Sleep(25);

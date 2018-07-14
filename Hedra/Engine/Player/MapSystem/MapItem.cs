@@ -24,26 +24,26 @@ namespace Hedra.Engine.Player.MapSystem
 
         public bool Enabled
         {
-            get { return _mesh.Enabled; }
-            set { _mesh.Enabled = value; }
+            get => _mesh.Enabled;
+            set => _mesh.Enabled = value;
         }
 
         public Vector3 Position
         {
-            get { return _mesh.Position; }
-            set { _mesh.Position = value; }
+            get => _mesh.Position;
+            set => _mesh.Position = value;
         }
 
         public Vector3 Scale
         {
-            get { return _mesh.Scale; }
-            set { _mesh.Scale = value; }
+            get => _mesh.Scale;
+            set => _mesh.Scale = value;
         }
 
         public Vector3 Rotation
         {
-            get { return _mesh.Rotation; }
-            set { _mesh.Rotation = value; }
+            get => _mesh.Rotation;
+            set => _mesh.Rotation = value;
         }
 
         public void Dispose()

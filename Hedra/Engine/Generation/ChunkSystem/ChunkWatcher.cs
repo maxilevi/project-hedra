@@ -63,13 +63,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (!_object.IsGenerated) return;
             var cameraDist = (_object.Position.Xz - GameManager.Player.View.CameraPosition.Xz).LengthSquared;
-
             if (cameraDist > 288 * 288 && cameraDist < 576 * 576 && GameSettings.Lod)
                 _object.Lod = 2;
             else if (cameraDist > 576 * 576 && GameSettings.Lod)
                 _object.Lod = 4;
             else
-                _object.Lod = 2;//GameManager.Player.IsGliding ? 1 : 1;
+                _object.Lod = GameManager.Player.IsGliding ? 2 : 1;
         }
 
         private static bool WasChunkBuilt(Chunk Chunk)

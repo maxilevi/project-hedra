@@ -107,8 +107,7 @@ void main()
 	FullLightColor = clamp(FullLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 
 	Ambient = 0.75;
-
-	Color = ( diffuse(unitToLight, unitNormal, FullLightColor) * 0.8 + vec4(0.5, 0.5, 0.5, 0.0) * .0) * InColor 
+	Color = ( diffuse(unitToLight, unitNormal, max(FullLightColor, vec3(.55, .55, .55))) * 0.8 + vec4(0.5, 0.5, 0.5, 0.0) * .0) * InColor 
 	+ specular(unitToLight, unitNormal, unitToCamera, FullLightColor);
 
  	Color.a = Transparency;

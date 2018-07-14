@@ -100,6 +100,7 @@ namespace Hedra.Engine.EnvironmentSystem
 		    _currentRegion = underChunk.Biome;
 
 		    var simplifiedTime = DayTime % 24000;
+		    var simplifiedFactor = 0f;
             float dayFactor;
 			 if(simplifiedTime < 12000)
 				dayFactor = simplifiedTime / 12000;
@@ -114,7 +115,7 @@ namespace Hedra.Engine.EnvironmentSystem
 			    DayTime += Time.DeltaTime * 5f * DaytimeSpeed;//20 mins
 			}
 
-			if(simplifiedTime >= 12000 && simplifiedTime < 18000 ){
+			if(simplifiedTime >= 10000 && simplifiedTime < 20000 ){
 				_targetTopColor = () => _currentRegion.Sky.MiddayTop;
 				_targetBotColor = () => _currentRegion.Sky.MiddayBot;
 			
@@ -122,9 +123,11 @@ namespace Hedra.Engine.EnvironmentSystem
 				_nextTargetBotColor = () => _currentRegion.Sky.AfternoonBot;
 			    UpdateTargets();
 			    TargetIntensity = 1f;
+			    simplifiedFactor = (simplifiedTime - 10000f) / 10000f;
+
 			}
 			
-			if(simplifiedTime >= 18000 && simplifiedTime < 24000 ){
+			if(simplifiedTime >= 20000 && simplifiedTime < 22000 ){
 				_targetTopColor = () => _currentRegion.Sky.AfternoonTop;
 				_targetBotColor = () => _currentRegion.Sky.AfternoonBot;
 			
@@ -132,9 +135,10 @@ namespace Hedra.Engine.EnvironmentSystem
 				_nextTargetBotColor = () => _currentRegion.Sky.NightBot;
 			    UpdateTargets();
 			    TargetIntensity = .5f;
-			}
+			    simplifiedFactor = (simplifiedTime - 20000f) / 4000f;
+            }
 			
-			if(simplifiedTime >= 0 && simplifiedTime < 6000 ){
+			if(simplifiedTime >= 22000 && simplifiedTime < 24000 || simplifiedTime >= 0 && simplifiedTime < 8000 ){
 				_targetTopColor = () => _currentRegion.Sky.NightTop;
 				_targetBotColor = () => _currentRegion.Sky.NightBot;
 			
@@ -142,9 +146,13 @@ namespace Hedra.Engine.EnvironmentSystem
 				_nextTargetBotColor = () => _currentRegion.Sky.SunriseBot;
 			    UpdateTargets();
 				TargetIntensity = 0f;
-			}
+                if (simplifiedTime >= 22000 && simplifiedTime < 24000)
+                    simplifiedFactor = (24000f - simplifiedTime) / 2000f;
+			    else
+                    simplifiedFactor = simplifiedTime / 8000f;
+            }
 			
-			if(simplifiedTime >= 6000 && simplifiedTime < 12000){
+			if(simplifiedTime >= 8000 && simplifiedTime < 10000){
 				_targetTopColor = () => _currentRegion.Sky.SunriseTop;
 				_targetBotColor = () => _currentRegion.Sky.SunriseBot;
 			
@@ -152,8 +160,9 @@ namespace Hedra.Engine.EnvironmentSystem
 				_nextTargetBotColor = () => _currentRegion.Sky.MiddayBot;
 			    UpdateTargets();
 			    TargetIntensity = .5f;
-			}
-		    _intensity = Mathf.Lerp(_intensity, TargetIntensity, Time.DeltaTime * 2f);
+			    simplifiedFactor = (simplifiedTime - 8000f) / 2000f;
+            }
+		    _intensity = Mathf.Lerp(_intensity, TargetIntensity, Time.IndependantDeltaTime * 2f);
 		    const float biomeInterpolateSpeed = .3f;
 		    _minLight = Mathf.Lerp(_minLight, _currentRegion.Sky.MinLight, biomeInterpolateSpeed);
 		    _maxLight = Mathf.Lerp(_maxLight, _currentRegion.Sky.MaxLight, biomeInterpolateSpeed);
@@ -165,10 +174,11 @@ namespace Hedra.Engine.EnvironmentSystem
 
 		    if (UpdateDayColors)
 		    {
-		        Sky.TopColor = Mathf.Lerp(_targetBiomeTopColor, _nextTargetBiomeTopColor, simplifiedTime % 6000 / 6000);
-		        Sky.BotColor = Mathf.Lerp(_targetBiomeBotColor, _nextTargetBiomeBotColor, simplifiedTime % 6000 / 6000);
+		        Sky.TopColor = Mathf.Lerp(_targetBiomeTopColor, _nextTargetBiomeTopColor, simplifiedFactor);
+		        Sky.BotColor = Mathf.Lerp(_targetBiomeBotColor, _nextTargetBiomeBotColor, simplifiedFactor);
 		    }
-		    if( Math.Abs(dayFactor - LastDayFactor) > .005f || LoadTime){
+		    if( Math.Abs(dayFactor - LastDayFactor) > .005f || LoadTime)
+            {
 		        FogManager.UpdateFogSettings(FogManager.MinDistance, FogManager.MaxDistance);
                 LastDayFactor = dayFactor;
 			}
@@ -176,7 +186,6 @@ namespace Hedra.Engine.EnvironmentSystem
             Vector3 newLightColor = Weather.IsRaining
 		        ? avgSkyColor * Mathf.Clamp(dayFactor * 0.7f, _minLight, _maxLight)
 		        : avgSkyColor * Mathf.Clamp(dayFactor * 1.0f, _minLight, _maxLight);
-
 
             _targetLightColor = new Vector3(Math.Max(0f, newLightColor.X), Math.Max(0f, newLightColor.Y), Math.Max(0f, newLightColor.Z));
             var previousLightColor = ShaderManager.LightColor;

@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Hedra.Engine.EnvironmentSystem;
@@ -30,67 +31,77 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private float _targetMax = 1;
         private float _activeChunks;
         private float _targetActivechunks;
+        private Vector2 _lastPosition;
 
         public ChunkLoader(LocalPlayer Player)
         {
             _player = Player;
             Enabled = true;
             _chunkWatchers = new List<ChunkWatcher>();
-            _mainThread = new Thread(this.Update)
+            CoroutineManager.StartCoroutine(this.Update);
+            CoroutineManager.StartCoroutine(this.FogCoroutine);
+        }
+
+        private IEnumerator FogCoroutine()
+        {
+            while (Program.GameWindow.Exists)
             {
-                IsBackground = true
-            };
-            _mainThread.Start();
+                _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks, Time.IndependantDeltaTime * .5f);
+                this.UpdateFog();
+                yield return null;
+            }
         }
 
         public void UpdateFog()
         {
-            if (!ShouldUpdateFog) return;
-            MaxFog = (float) Math.Max(1, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 2) * 2.00f);
-            MinFog = (float) Math.Max(0, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 3) * 2.00f);
+            MaxFog = (float)Math.Max(1, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 2) * 2.00f);
+            MinFog = (float)Math.Max(0, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 3) * 2.00f);
 
-            if (Math.Abs(_activeChunks - _targetActivechunks) > .5f)
+            if (Math.Abs(_activeChunks - _targetActivechunks) > .05f)
             {
                 Executer.ExecuteOnMainThread(delegate
                 {
                     SkyManager.FogManager.UpdateFogSettings(MinFog, MaxFog);
                 });
-            }        
+            }
         }
 
-        private void Update()
+        private IEnumerator Update()
         {
             while (Program.GameWindow.Exists)
             {
-                Thread.Sleep(15);
-                if (!World.IsGenerated || !Enabled) continue;
 
                 Offset = World.ToChunkSpace(_player.BlockPosition);
-                var radius = (int) (GameSettings.ChunkLoaderRadius * .5f);
-                for (var x = -radius; x < radius; x++)
+                if (World.IsGenerated && Enabled)
                 {
-                    for (var z = -radius; z < radius; z++)
+                    _lastPosition = Offset;
+                    var radius = (int) (GameSettings.ChunkLoaderRadius * .5f);
+                    var hadChanges = false;
+                    for (var x = -radius; x < radius; x++)
                     {
-                        var radiusOffset = new Vector2(x, z);
-                        if(radiusOffset.LengthSquared > radius * radius) continue;
-                        Vector2 chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
-                        if (World.GetChunkByOffset(chunkPos) != null) continue;
-                        var chunk = new Chunk((int) chunkPos.X, (int) chunkPos.Y);
-                        World.AddChunk(chunk);
-                        _chunkWatchers.Add(new ChunkWatcher(chunk));
-                        Thread.Sleep(2);
+                        for (var z = -radius; z < radius; z++)
+                        {
+                            yield return null;
+                            var radiusOffset = new Vector2(x, z);
+                            if (radiusOffset.LengthSquared > radius * radius) continue;
+                            Vector2 chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
+                            if (World.GetChunkByOffset(chunkPos) != null) continue;
+                            var chunk = new Chunk((int) chunkPos.X, (int) chunkPos.Y);
+                            World.AddChunk(chunk);
+                            _chunkWatchers.Add(new ChunkWatcher(chunk));
+                        }
                     }
                 }
-
-                _targetActivechunks = 0;
+                var newTarget = 0;
                 for (var i = _chunkWatchers.Count - 1; i > -1; i--)
                 {
                     _chunkWatchers[i].Update();
-                    if (_chunkWatchers[i].IsHealthy) _targetActivechunks++;
+                    if (_chunkWatchers[i].IsHealthy) newTarget++;
+                    if (_chunkWatchers[i].IsHealthy) yield return null;
                     if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
                 }
-                _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks,  Time.IndependantDeltaTime * 2f);
-                this.UpdateFog();
+                _targetActivechunks = newTarget;
+                yield return null;
             }
         }
     }

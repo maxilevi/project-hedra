@@ -31,14 +31,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return count;
         }
 
-        public bool Work(ICountable User, Action Do)
+        public bool Work(ICountable User, Action Do, int SleepTime)
         {
             if (!_balancer.Contains(User))
                 throw new ArgumentOutOfRangeException($"User hasn't been registed in the shared pool.");
             var maxWorkers = _balancer[User];
             var currentWorkers = this.GetCurrentWorkers(User);
             if (currentWorkers >= maxWorkers) return false;
-            return base.Work(Do, User);       
+            return base.Work(Do, User, SleepTime);       
         }
     }
 }

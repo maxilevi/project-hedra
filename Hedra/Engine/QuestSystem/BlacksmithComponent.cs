@@ -2,7 +2,6 @@
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.Player.Inventory;
 
 namespace Hedra.Engine.QuestSystem
 {

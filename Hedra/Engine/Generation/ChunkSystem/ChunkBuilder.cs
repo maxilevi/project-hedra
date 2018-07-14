@@ -10,5 +10,7 @@
         {
             Object?.Generate();
         }
+
+        protected override int SleepTime => 15;
     }
 }

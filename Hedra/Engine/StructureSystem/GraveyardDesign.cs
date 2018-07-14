@@ -113,37 +113,25 @@ namespace Hedra.Engine.StructureSystem
             var enemies = new List<Entity>();
 
             var skeletonCount = 4;
-            for (int i = 0; i < skeletonCount; i++)
+            for (var i = 0; i < skeletonCount; i++)
             {
-                Executer.ExecuteOnMainThread(delegate
-                {
-                    Humanoid skeleton = World.QuestManager.SpawnBandit(
+                var skeleton = World.QuestManager.SpawnBandit(
                         Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) * Chunk.BlockSize,
                         false, true);
                     enemies.Add(skeleton);
-                });
             }
+            Cementery.Enemies = enemies.ToArray();
 
-            //Chest
-            Chest prize;
-            Executer.ExecuteOnMainThread(delegate
-            {
-                prize = World.QuestManager.SpawnChest(Position + Vector3.UnitX * 40f, 
+            var prize = World.QuestManager.SpawnChest(Position + Vector3.UnitX * 40f, 
                     ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
-                prize.Condition = delegate
-                {
-                    if (!Cementery.Restored)
-                    {
-                        LocalPlayer.Instance.MessageDispatcher.ShowNotification("THERE ARE STILL ENEMIES AROUND.", Color.DarkRed, 2f);
-                    }
-                    return Cementery.Restored;
-                };
-            });
-
-            Executer.ExecuteOnMainThread(delegate
+            prize.Condition = delegate
             {
-                Cementery.Enemies = enemies.ToArray();
-            });
+                if (!Cementery.Restored)
+                {
+                    LocalPlayer.Instance.MessageDispatcher.ShowNotification("THERE ARE STILL ENEMIES AROUND.", Color.DarkRed, 2f);
+                }
+                return Cementery.Restored;
+            };
         }
 
         private void BuildLamps(Vector3 Position)

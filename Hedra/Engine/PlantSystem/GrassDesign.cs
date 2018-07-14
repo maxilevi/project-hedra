@@ -19,8 +19,8 @@ namespace Hedra.Engine.PlantSystem
             var underChunk = World.GetChunkAt(Position);
             var blockPosition = World.ToBlockSpace(Position);
             var addon = new Vector3(Rng.NextFloat() * 2f, 0, Rng.NextFloat() * 2f);
-            if (blockPosition.X + addon.X / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) addon.X = 0;
-            if (blockPosition.Z + addon.Z / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) addon.Z = 0;
+            if (blockPosition.X + addon.X / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) return Matrix4.Identity;
+            if (blockPosition.Z + addon.Z / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) return Matrix4.Identity;
 
             float height = Physics.HeightAtPosition(Position + addon);
             var topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));

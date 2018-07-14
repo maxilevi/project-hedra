@@ -130,7 +130,8 @@ namespace Hedra.Engine.QuestSystem
 	        return this.SpawnBandit(Position, Friendly, false);
 	    }
 
-        public Humanoid SpawnVillager(Vector3 Position, bool Move){
+        public Humanoid SpawnVillager(Vector3 Position, bool Move)
+        {
 	    	return this.SpawnVillager(Position, Move, null);
 	    }
 	    

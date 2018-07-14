@@ -16,5 +16,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             Object.BuildMesh();
         }
+
+        protected override int SleepTime => 5;
     }
 }

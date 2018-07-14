@@ -24,6 +24,7 @@ namespace Hedra.Engine.ItemSystem
 
             foreach (ItemTemplate template in itemTemplates)
             {
+                ItemModelLoader.Load(template.Model);
                 ItemTemplates.Add(template.Name.ToLowerInvariant(), template);
             }
         }

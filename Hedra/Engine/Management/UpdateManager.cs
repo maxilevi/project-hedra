@@ -30,6 +30,10 @@ namespace Hedra.Engine.Management
 
         public static void Add(IUpdatable Updatable)
 	     {
+	         if (UpdateFunctions.Contains(Updatable))
+	         {
+	             int a = 0;
+	         }
 	        var tickable = Updatable as ITickable;
 	         if (tickable != null)
 	         {

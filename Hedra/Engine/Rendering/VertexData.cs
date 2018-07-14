@@ -223,7 +223,7 @@ namespace Hedra.Engine.Rendering
                 Vertices = new List<Vector3>(this.Vertices),
                 Colors = new List<Vector4>(this.Colors),
                 Normals = new List<Vector3>(this.Normals),
-                ExtraData = new List<float>(ExtraData),
+                ExtraData = new List<float>(this.ExtraData),
                 Original = this
             };
         }

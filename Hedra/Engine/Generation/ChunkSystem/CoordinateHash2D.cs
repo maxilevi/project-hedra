@@ -5,29 +5,32 @@ using OpenTK;
 namespace Hedra.Engine.Generation.ChunkSystem
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct CoordinateHash : IEquatable<CoordinateHash>
+    public struct CoordinateHash2D : IEquatable<CoordinateHash2D>
     {
         private readonly byte X;
         private readonly byte Y;
-        private readonly byte Z;
 
-        public CoordinateHash(byte X, byte Y, byte Z)
+        public CoordinateHash2D(int X, int Y)
+        {
+            this.X = (byte) X;
+            this.Y = (byte) Y;
+        }
+
+        public CoordinateHash2D(byte X, byte Y)
         {
             this.X = X;
             this.Y = Y;
-            this.Z = Z;
         }
 
-        public CoordinateHash(Vector3 Coordinates)
+        public CoordinateHash2D(Vector2 Coordinates)
         {
             this.X = (byte)Coordinates.X;
             this.Y = (byte)Coordinates.Y;
-            this.Z = (byte)Coordinates.Z;
         }
 
-        public bool Equals(CoordinateHash Other)
+        public bool Equals(CoordinateHash2D Other)
         {
-            return X == Other.X && Y == Other.Y && Z == Other.Z;
+            return X == Other.X && Y == Other.Y;
         }
 
         public override int GetHashCode()
@@ -36,7 +39,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 int hashCode = X.GetHashCode();
                 hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
                 return hashCode;
             }
         }

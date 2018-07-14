@@ -25,6 +25,7 @@ namespace Hedra.Engine.QuestSystem
         private Vector3 _targetPoint;
         private readonly Timer _movementTimer;
         private readonly Vector3 _originalPosition;
+	    private bool _shouldSit;
         public override bool ShouldSleep => true;
 
         public VillagerAIComponent(Entity Parent, bool Move) : base(Parent)
@@ -32,7 +33,7 @@ namespace Hedra.Engine.QuestSystem
             this._move = Move;
             this._movementTimer = new Timer(6.0f);//Alert every 6.0f seconds
             this._targetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.BlockPosition;
-            this._originalPosition = Parent.BlockPosition;
+            this._originalPosition = Parent.Physics.TargetPosition;
         }
 
         public override void Update()
@@ -40,22 +41,27 @@ namespace Hedra.Engine.QuestSystem
             this.ManageSleeping();
             if (IsSleeping) return;
 
-        	if( (LocalPlayer.Instance.Position - this.Parent.Position).Xz.LengthSquared < 24*24){
+        	if( (LocalPlayer.Instance.Position - this.Parent.Position).Xz.LengthSquared < 24*24)
+	        {
         		Parent.Orientation = (LocalPlayer.Instance.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
 	            Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
 	            Parent.Model.Idle();
         		return;
-        	}
-        	
-        	if(_move){
-	            if( this._movementTimer.Tick()){
-	                this._targetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.BlockPosition;
+        	}       	
+        	if(_move)
+	        {
+	            if(_movementTimer.Tick())
+	            {
+		            _shouldSit = Utils.Rng.Next(0, 3) == 1;
+		            if(!_shouldSit)
+			            _targetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.Physics.TargetPosition;
 	            }
 	
-	            if ((Parent.Position - _originalPosition).LengthSquared > 128 * 128)
-	                this._targetPoint = _originalPosition;
-	            
-                base.Move(_targetPoint);	
+	            if ((Parent.Physics.TargetPosition - _originalPosition).LengthSquared > 128 * 128)
+	                _targetPoint = _originalPosition;
+
+		        if (_shouldSit) base.Sit();
+		        else base.Move(_targetPoint);	
         	}
         }
     }

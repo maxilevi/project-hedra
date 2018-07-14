@@ -19,23 +19,35 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 {
 	internal delegate void OnModifyArrowEvent(Projectile Arrow);
 		
-	internal class Bow : RangedWeapon
-    {	
+	internal sealed class Bow : RangedWeapon
+	{
+	    private static readonly VertexData ArrowVertexData;
+	    private static readonly VertexData _arrowDataVertexData;
+	    private static readonly VertexData QuiverVertexData;
 		public override Vector3 SheathedPosition => new Vector3(1.5f,-0.0f,0.0f);
 	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
-        private readonly ObjectMesh Quiver;
-        private readonly ObjectMesh Arrow;
-		private readonly VertexData ArrowData;
+        private readonly ObjectMesh _quiver;
+        private readonly ObjectMesh _arrow;
 		public OnModifyArrowEvent BowModifiers;
         public float ArrowDownForce { get; set; }
-		
-		public Bow(VertexData Contents) : base(Contents){
-			Arrow = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f, Vector3.UnitX * .35f, Vector3.Zero));
-			Quiver = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/Items/Quiver.ply", Vector3.One * new Vector3(2.2f, 2.8f, 2.2f) * 1.5f));
-			Quiver.TargetPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
-			Quiver.LocalRotationPoint = new Vector3(0, 0, Quiver.TargetPosition.Z);
-			Quiver.TargetRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);
-			ArrowData = AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 5f, Vector3.Zero, new Vector3(-90,0,90) * Mathf.Radian);
+
+        static Bow()
+        {
+            ArrowVertexData = AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f,
+                Vector3.UnitX * .35f, Vector3.Zero);
+            QuiverVertexData = AssetManager.PlyLoader("Assets/Items/Quiver.ply",
+                Vector3.One * new Vector3(2.2f, 2.8f, 2.2f) * 1.5f);
+            _arrowDataVertexData = AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 5f, Vector3.Zero,
+                new Vector3(-90, 0, 90) * Mathf.Radian);
+        }
+
+		public Bow(VertexData Contents) : base(Contents)
+        {
+			_arrow = ObjectMesh.FromVertexData(ArrowVertexData);
+			_quiver = ObjectMesh.FromVertexData(QuiverVertexData);
+			_quiver.TargetPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
+			_quiver.LocalRotationPoint = new Vector3(0, 0, _quiver.TargetPosition.Z);
+			_quiver.TargetRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);
 
             AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherShootStance.dae");
 
@@ -94,20 +106,20 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 				this.MainMesh.BeforeLocalRotation = Vector3.Zero;				
 			}
 			
-            base.SetToDefault(this.Quiver);
+            base.SetToDefault(this._quiver);
 
-		    this.Quiver.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
-		    this.Quiver.Position = Owner.Model.Position;
-		    this.Quiver.BeforeLocalRotation = (-Vector3.UnitY * 1.5f - Vector3.UnitZ * 1.8f) * this.Scale;
+		    this._quiver.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+		    this._quiver.Position = Owner.Model.Position;
+		    this._quiver.BeforeLocalRotation = (-Vector3.UnitY * 1.5f - Vector3.UnitZ * 1.8f) * this.Scale;
 
-            base.SetToDefault(this.Arrow);
+            base.SetToDefault(this._arrow);
 
             Matrix4 ArrowMat4 = Owner.Model.RightWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);
 			
-			this.Arrow.TransformationMatrix = ArrowMat4;
-			this.Arrow.Position = Owner.Model.Position;
-			this.Arrow.BeforeLocalRotation = Vector3.UnitZ * 0.5f;
-			this.Arrow.Enabled = (base.InAttackStance || Owner.IsAttacking) && this.Quiver.Enabled;	
+			this._arrow.TransformationMatrix = ArrowMat4;
+			this._arrow.Position = Owner.Model.Position;
+			this._arrow.BeforeLocalRotation = Vector3.UnitZ * 0.5f;
+			this._arrow.Enabled = (base.InAttackStance || Owner.IsAttacking) && this._quiver.Enabled;	
 			
 		}
 		
@@ -121,7 +133,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    var startingLocation = Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
 		                           (Human is LocalPlayer ? Human.IsRiding ? Vector3.UnitY * 1f : Vector3.Zero : Vector3.Zero);
 
-		    var arrowProj = new Projectile(Human, startingLocation, ArrowData.Clone())
+		    var arrowProj = new Projectile(Human, startingLocation, _arrowDataVertexData)
 		    {
 		        Lifetime = 5f,
 		        Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce

@@ -502,83 +502,89 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 					underChunk = World.GetChunkAt(transMatrix.ExtractTranslation() +  marketPos);
 					yield return null;
 				}
-			    var originalPosition = transMatrix.ExtractTranslation();
-			    float heightAtPosition = Physics.HeightAtPosition(transMatrix.ExtractTranslation());
-			    transMatrix.Row3 = new Vector4(originalPosition.X, heightAtPosition, originalPosition.Z, transMatrix.Row3.W);
+				int k = i;
+				TaskManager.Parallel(delegate
+				{
+					var originalPosition = transMatrix.ExtractTranslation();
+					float heightAtPosition = Physics.HeightAtPosition(transMatrix.ExtractTranslation());
+					transMatrix.Row3 = new Vector4(originalPosition.X, heightAtPosition, originalPosition.Z, transMatrix.Row3.W);
 
-                if (i == 0)
-			        Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.Merchant, centerPosition - Vector3.UnitZ * 40f));
-                else if (i == 1)
-                    Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.Merchant, centerPosition + Vector3.UnitZ * 40f));
-                else if (i == 2)
-                    Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(centerPosition - Vector3.UnitX * 40f, false));
-                else if (i == 3)
-                    Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnVillager(centerPosition + Vector3.UnitX * 40f, false));
+					if (k == 0)
+						World.QuestManager.SpawnHumanoid(HumanType.Merchant, centerPosition - Vector3.UnitZ * 40f);
+					else if (k == 1)
+						World.QuestManager.SpawnHumanoid(HumanType.Merchant, centerPosition + Vector3.UnitZ * 40f);
+					else if (k == 2)
+						World.QuestManager.SpawnVillager(centerPosition - Vector3.UnitX * 40f, false);
+					else if (k == 3)
+						World.QuestManager.SpawnVillager(centerPosition + Vector3.UnitX * 40f, false);
 
-                int k = i;
-		    	TaskManager.Parallel( delegate
-                {
-			    	VertexData market0 = Market0_Clone.Clone();
+
+					VertexData market0 = Market0_Clone.Clone();
 					bool extraShelf = rng.Next(0, 4) != 0;
-					if(extraShelf)
+					if (extraShelf)
 						market0 += Market1_Clone.Clone();
-					market0.Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
+					market0.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
 					market0.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
-					market0.Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
+					market0.Transform(Matrix4.CreateRotationY(360 / marketCount * k * Mathf.Radian));
 					market0.Color(AssetManager.ColorCode1, MarketColor(rng));
-					
+
 					List<CollisionShape> marketShapes = MarketShapes_Clone.DeepClone();
-					if(extraShelf) marketShapes.Add((CollisionShape) ExtraShelf_Clone[0].Clone());
-					
-					for(int j = 0; j < marketShapes.Count; j++){
-						marketShapes[j].Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
+					if (extraShelf) marketShapes.Add((CollisionShape) ExtraShelf_Clone[0].Clone());
+
+					for (int j = 0; j < marketShapes.Count; j++)
+					{
+						marketShapes[j].Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
 						marketShapes[j].Transform(Matrix4.CreateTranslation(Vector3.UnitZ * marketDist * Chunk.BlockSize));
-						marketShapes[j].Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
+						marketShapes[j].Transform(Matrix4.CreateRotationY(360 / marketCount * k * Mathf.Radian));
 						marketShapes[j].Transform(transMatrix);
 					}
-					
+
 					int basketCount = rng.Next(0, 6);
-					if(basketCount == 0) basketCount = 2;
-					else if(basketCount == 1 || basketCount == 2) basketCount = 3;
-					else if(basketCount == 3 || basketCount == 4 || basketCount == 5) basketCount = 4;
-					
+					if (basketCount == 0) basketCount = 2;
+					else if (basketCount == 1 || basketCount == 2) basketCount = 3;
+					else if (basketCount == 3 || basketCount == 4 || basketCount == 5) basketCount = 4;
+
 					List<CollisionShape> shelfShapes = ShelfShapes_Clones[basketCount].DeepClone();
 					VertexData shelfModel = ShelfModels_Clones[basketCount].Clone();
-					
-					shelfModel.Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
+
+					shelfModel.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
 					shelfModel.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
-					shelfModel.Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
-					shelfModel.Color(AssetManager.ColorCode1, Colors.BerryColor(rng) );
-					
-					for(int j = 0; j < shelfShapes.Count; j++){
-						shelfShapes[j].Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
+					shelfModel.Transform(Matrix4.CreateRotationY(360 / marketCount * k * Mathf.Radian));
+					shelfModel.Color(AssetManager.ColorCode1, Colors.BerryColor(rng));
+
+					for (int j = 0; j < shelfShapes.Count; j++)
+					{
+						shelfShapes[j].Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
 						shelfShapes[j].Transform(Matrix4.CreateTranslation(Vector3.UnitZ * marketDist * Chunk.BlockSize));
-						shelfShapes[j].Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
+						shelfShapes[j].Transform(Matrix4.CreateRotationY(360 / marketCount * k * Mathf.Radian));
 						shelfShapes[j].Transform(transMatrix);
 					}
-	
+
 					market0 += shelfModel;
 					marketShapes.AddRange(shelfShapes);
-					
-					if(extraShelf){
+
+					if (extraShelf)
+					{
 						basketCount = rng.Next(0, 6);
-						if(basketCount == 0) basketCount = -1;
-						else if(basketCount == 1 || basketCount == 2) basketCount = 5;
-						else if(basketCount == 3 || basketCount == 4 || basketCount == 5) basketCount = 6;
-						
-						if(basketCount != -1){
+						if (basketCount == 0) basketCount = -1;
+						else if (basketCount == 1 || basketCount == 2) basketCount = 5;
+						else if (basketCount == 3 || basketCount == 4 || basketCount == 5) basketCount = 6;
+
+						if (basketCount != -1)
+						{
 							shelfShapes = ShelfShapes_Clones[basketCount].DeepClone();
 							shelfModel = ShelfModels_Clones[basketCount].Clone();
-							
-							shelfModel.Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
+
+							shelfModel.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
 							shelfModel.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
-							shelfModel.Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
-							shelfModel.Color(AssetManager.ColorCode1, Colors.BerryColor(rng) );
-							
-							for(int j = 0; j < shelfShapes.Count; j++){
-								shelfShapes[j].Transform( Matrix4.CreateRotationY( 90 * Mathf.Radian ) );
+							shelfModel.Transform(Matrix4.CreateRotationY(360 / marketCount * k * Mathf.Radian));
+							shelfModel.Color(AssetManager.ColorCode1, Colors.BerryColor(rng));
+
+							for (int j = 0; j < shelfShapes.Count; j++)
+							{
+								shelfShapes[j].Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
 								shelfShapes[j].Transform(Matrix4.CreateTranslation(Vector3.UnitZ * marketDist * Chunk.BlockSize));
-								shelfShapes[j].Transform( Matrix4.CreateRotationY( 360 / marketCount * k * Mathf.Radian ) );
+								shelfShapes[j].Transform(Matrix4.CreateRotationY(360 / marketCount * k * Mathf.Radian));
 								shelfShapes[j].Transform(transMatrix);
 							}
 						}
@@ -587,12 +593,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 					}
 					market0.Transform(transMatrix);
 					underChunk.Blocked = true;
-					
-                    //underChunk.AddCollisionShape(marketShapes.ToArray());
-                    town.AddCollisionShape(marketShapes.ToArray());
+
+					//underChunk.AddCollisionShape(marketShapes.ToArray());
+					town.AddCollisionShape(marketShapes.ToArray());
 					underChunk.AddStaticElement(market0);
-                    
-                });
+
+				});
 			}
 		}
 

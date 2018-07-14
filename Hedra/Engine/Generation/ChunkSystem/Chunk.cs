@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Hedra.Engine.BiomeSystem;
@@ -48,7 +49,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private Block[][][] _blocks;
         private static Block[][] _dummyBlocks;
-        private Dictionary<CoordinateHash, Half> _waterDensity;
+        private Dictionary<CoordinateHash3D, Half> _waterDensity;
         private readonly VertexData _nearestVertexData;
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
         private readonly ChunkStructuresMeshBuilder _structuresBuilder;
@@ -192,6 +193,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Input.StaticData.SupportPoint(-Vector3.UnitY).Y,
                 Input.StaticData.SupportPoint(-Vector3.UnitZ).Z - OffsetZ
             );
+
             var staticMax = new Vector3(
                 Input.StaticData.SupportPoint(Vector3.UnitX).X - OffsetX,
                 Input.StaticData.SupportPoint(Vector3.UnitY).Y,
@@ -317,14 +319,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void AddWaterDensity(Vector3 WaterPosition, Half Density)
         {
-            if(_waterDensity == null) _waterDensity = new Dictionary<CoordinateHash, Half>();
-            var hash = new CoordinateHash(WaterPosition);
+            if(_waterDensity == null) _waterDensity = new Dictionary<CoordinateHash3D, Half>();
+            var hash = new CoordinateHash3D(WaterPosition);
             if (!_waterDensity.ContainsKey(hash)) _waterDensity.Add(hash, Density);
         }
 
         public Half GetWaterDensity(Vector3 WaterPosition)
         {
-            var hash = new CoordinateHash(WaterPosition);
+            var hash = new CoordinateHash3D(WaterPosition);
             return _waterDensity?.ContainsKey(hash) ?? false ? _waterDensity[hash] : default(Half);
         }
         public int GetHighestY(int X, int Z)

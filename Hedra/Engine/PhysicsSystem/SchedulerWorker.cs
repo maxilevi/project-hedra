@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Hedra.Engine.PhysicsSystem
@@ -11,6 +12,7 @@ namespace Hedra.Engine.PhysicsSystem
 
         public SchedulerWorker(Dictionary<uint, PhysicsListener> Listeners)
         {
+            throw new NotImplementedException();
             _processingThread = new Thread(this.Work);
             _listeners = Listeners;
             _processingThread.Start();

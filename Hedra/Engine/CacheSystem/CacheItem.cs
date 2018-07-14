@@ -34,6 +34,9 @@ namespace Hedra.Engine.CacheSystem
         Mausoleum,
         Obelisk,
         MerchantCart,
+        CampfireTent,
+        CampfireRoaster,
+        CampfireLogs,
         MaxEnums
     }
 }

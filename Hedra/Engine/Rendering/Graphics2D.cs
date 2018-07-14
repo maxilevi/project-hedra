@@ -22,19 +22,6 @@ namespace Hedra.Engine.Rendering
 		public static List<uint> Textures = new List<uint>();
 		public static Bitmap RoundedRectangle = new Bitmap(new MemoryStream(AssetManager.ReadBinary("Assets/Background.png",AssetManager.DataFile3)));
 
-        public static void UpdateTexture(uint ID, Bitmap bmp)
-		{
-	        GL.BindTexture(TextureTarget.Texture2D, ID);
-	        BitmapData bmp_data = bmp.LockBits(new Rectangle(0,0,bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-	
-	        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
-	            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
-	        
-	        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-	        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
-	        bmp.UnlockBits(bmp_data);
-		}
 		public static uint LoadTexture(Bitmap bmp, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
 		{
             uint id;
@@ -55,29 +42,11 @@ namespace Hedra.Engine.Rendering
 
             bmp.Dispose();
 	        Textures.Add(id);
-	        
-	        return id;
+            return id;
 	    }
 		
 		public static uint LoadTexture(Bitmap bmp){
 			return Graphics2D.LoadTexture(bmp, TextureMinFilter.Linear, TextureMagFilter.Linear, TextureWrapMode.ClampToBorder);
-		}
-		
-		public static uint CreateFromText(string Text, Color FontColor, Font F){
-			Bitmap TextBitmap = new Bitmap(1,1);
-			SolidBrush Brush = new SolidBrush(FontColor);
-			using (Graphics Graphics = Graphics.FromImage(TextBitmap))
-			{
-					SizeF Size = Graphics.MeasureString(Text, F);
-					TextBitmap = new Bitmap(TextBitmap, (int) Math.Ceiling(Size.Width), (int) Math.Ceiling(Size.Height));
-			}
-			using (Graphics Graphics = Graphics.FromImage(TextBitmap))
-			{
-				Graphics.Clear(System.Drawing.Color.Transparent);
-				Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-				Graphics.DrawString(Text, F, Brush, 0, 0);
-			}
-			return Graphics2D.LoadTexture(TextBitmap);
 		}
 
 	    public static Vector2 ToRelativeSize(this Vector2 Size)
