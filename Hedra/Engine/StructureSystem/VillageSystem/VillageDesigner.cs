@@ -5,14 +5,14 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     internal class VillageDesigner
     {
-        private static Dictionary<string, VillageDesign> _villageDesigns;
+        private static Dictionary<string, VillageRoot> _villageDesigns;
 
-        public VillageDesigner(Dictionary<string, VillageDesign> DesignDictionary)
+        public VillageDesigner(Dictionary<string, VillageRoot> DesignDictionary)
         {
             _villageDesigns = DesignDictionary;
         }
 
-        public VillageDesign[] Templates => _villageDesigns.Values.ToArray();
-        public VillageDesign this[string Key] => _villageDesigns[Key.ToLowerInvariant()];
+        public VillageRoot[] Templates => _villageDesigns.Values.ToArray();
+        public VillageRoot this[string Key] => _villageDesigns[Key.ToLowerInvariant()];
     }
 }

@@ -1,17 +1,17 @@
 ﻿namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class VillageDesign
+    internal class VillageRoot
     {
         public VillageCache Cache { get; private set; }
         public VillageTemplate Template { get; private set; }
         
-        private VillageDesign()
+        private VillageRoot()
         {
         }
 
-        public static VillageDesign FromTemplate(VillageTemplate Template)
+        public static VillageRoot FromTemplate(VillageTemplate Template)
         {
-            return new VillageDesign
+            return new VillageRoot
             {
                 Cache = VillageCache.FromTemplate(Template),
                 Template = Template

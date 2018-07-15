@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Hedra.Engine.Generation;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     internal class VillageLoader
     {
-        private static readonly Dictionary<string, VillageDesign> Designs;
+        private static readonly Dictionary<string, VillageRoot> Designs;
         public static VillageDesigner Designer;
 
         static VillageLoader()
         {
-            Designs = new Dictionary<string, VillageDesign>();
+            Designs = new Dictionary<string, VillageRoot>();
             Designer = new VillageDesigner(Designs);
-            World.ModulesReload += LoadModules;
         }
         
         public static void LoadModules(string AppPath)
@@ -24,7 +22,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             var templates = Load<VillageTemplate>(AppPath + "/Modules/Villages/");
             foreach (var template in templates)
             {
-                Designs.Add(template.Name, VillageDesign.FromTemplate(template));
+                Designs.Add(template.Name, VillageRoot.FromTemplate(template));
             }
         }
         

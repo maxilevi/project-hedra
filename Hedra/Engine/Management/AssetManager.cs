@@ -251,16 +251,14 @@ namespace Hedra.Engine.Management
 			while(true)
 			{
 				var path = $"Assets/Env/Colliders/{name}_Collider{iterator}.ply";
-				var data = ReadBinary(Filename, DataFile3);
-				if(data == null) break;
+				var data = ReadBinary(path, DataFile3);
+				if(data == null) return shapes;
 				var vertexInformation = AssetManager.PlyLoader(path, Scale, Vector3.Zero, Vector3.Zero, false);
 				var newShape = new CollisionShape(vertexInformation.Vertices, vertexInformation.Indices);
 				shapes.Add(newShape);
 				vertexInformation.Dispose();
 				iterator++;
 			}
-			
-			return shapes;
 		}
 
 	    private static VertexData LoadModelVertexData(string ModelFile)

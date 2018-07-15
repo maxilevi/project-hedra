@@ -15,6 +15,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private VillageCache()
         {
             _colliderCache = new Dictionary<string, List<CollisionShape>>();
+            _modelCache = new Dictionary<string, VertexData>();
         }
 
         public List<CollisionShape> GrabShapes(string Path)

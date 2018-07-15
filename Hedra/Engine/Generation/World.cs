@@ -27,6 +27,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.Generation
 {
@@ -213,6 +214,7 @@ namespace Hedra.Engine.Generation
 	        MobFactory?.AddFactory(factories);    
             HumanoidLoader.LoadModules(AssetManager.AppPath);
             ItemFactory.LoadModules(AssetManager.AppPath);
+	        VillageLoader.LoadModules(AssetManager.AppPath);
             World.ModulesReload?.Invoke(AssetManager.AppPath);
 	    }
 		

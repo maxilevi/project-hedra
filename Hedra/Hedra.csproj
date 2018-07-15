@@ -613,7 +613,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\DesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageBuilder.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageCache.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillageDesign.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageRoot.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageDesigner.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageGenerator.cs" />
     <Compile Include="Engine\QuestSystem\VillagerAIComponent.cs" />
@@ -4800,7 +4800,9 @@
     <None Include="Modules\Mobs\Gorilla.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Modules\Villages\Nordic.json" />
+    <Content Include="Modules\Villages\Nordic.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="x64\OpenAL32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
