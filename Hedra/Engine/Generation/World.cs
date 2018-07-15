@@ -255,7 +255,8 @@ namespace Hedra.Engine.Generation
 			_previousCount = LocalPlayer.Instance.Loader.ActiveChunks;
 		}
 		
-		public static void Draw(ChunkBufferTypes Type){
+		public static void Draw(ChunkBufferTypes Type)
+        {
 			if(!Enabled)
 				return;
 			

@@ -355,8 +355,7 @@ namespace Hedra.Engine.Player
                 if (this.IsGrounded)
                 {
                     this.IsGliding = false;
-                    this.KnockForSeconds(3f);
-                    this.Damage(MaxHealth * .15f, this, out float xp);
+                    this.AddBonusSpeedForSeconds(-this.Speed + this.Speed * .5f, 2f);
                 }
                 else if(this.IsUnderwater)
                 {
@@ -596,8 +595,23 @@ namespace Hedra.Engine.Player
 		        };
 		    }
 		}
+
+	    public void Reset()
+	    {
+	        Inventory.ClearInventory();
+	        ComponentManager.Clear();
+            //UI.ShowMenu();
+            Model.Alpha = 0f;
+	        View.TargetPitch = 0f;
+	        View.TargetYaw = 0f;
+	        View.TargetDistance = 10f;
+	        HandLamp.Enabled = false;
+            IsGliding = false;
+	        Knocked = false;	        
+	    }
 		
-		public static bool CreatePlayer(string Name, HumanoidModel PreviewModel, ClassDesign ClassType){
+		public static bool CreatePlayer(string Name, HumanoidModel PreviewModel, ClassDesign ClassType)
+        {
 			if(Name == string.Empty){
 				Instance.MessageDispatcher.ShowNotification("Name cannot be empty", Color.DarkRed, 3f);
 				return false;

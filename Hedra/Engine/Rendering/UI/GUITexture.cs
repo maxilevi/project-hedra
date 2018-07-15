@@ -33,12 +33,14 @@ namespace Hedra.Engine.Rendering.UI
         public bool UseMask => MaskId != 0;
         public Func<uint> IdPointer { get; set; }
 	    private bool _disposed;
+	    private StackTrace _trace;
 
         public GUITexture(uint Id, Vector2 Scale, Vector2 Pos)
         {
 			this.TextureId = Id;
 			this.Position = Pos;
 			this.Scale = Scale;
+            _trace = new StackTrace();
         }
 
 		public uint Id => IdPointer?.Invoke() ?? TextureId;
@@ -65,6 +67,7 @@ namespace Hedra.Engine.Rendering.UI
 	    {
 	        if (!_disposed)
 	        {
+                if(Program.GameWindow.IsExiting) return;
                 Log.WriteLine($"Texture {Id} failed to dispose correctly.");
 	            Executer.ExecuteOnMainThread(this.Dispose);
 	        }

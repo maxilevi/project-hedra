@@ -8,21 +8,25 @@ namespace Hedra.Engine.PhysicsSystem
     internal static class AnimatedColliderBuilder
     {
         private static readonly Dictionary<string, AnimatedColliderData> ColliderCache = new Dictionary<string, AnimatedColliderData>();
+        private static readonly object Lock = new object();
 
         public static AnimatedColliderData Build(string Identifier, AnimatedModel Model)
         {
-            if (!ColliderCache.ContainsKey(Identifier))
+            lock (Lock)
             {
-                var bones = BoneData.FromArrays(Model.RootJoint.Index, Model.JointIdsArray, Model.VerticesArray);
-                var colliderData = new AnimatedColliderData
+                if (!ColliderCache.ContainsKey(Identifier))
                 {
-                    BonesData = bones,
-                    DefaultBoneBoxes = BuildBoneBoxes(bones),
-                    DefaultBroadphase = BuildBroadphase(bones)
-                };
-                ColliderCache.Add(Identifier, colliderData);
+                    var bones = BoneData.FromArrays(Model.RootJoint.Index, Model.JointIdsArray, Model.VerticesArray);
+                    var colliderData = new AnimatedColliderData
+                    {
+                        BonesData = bones,
+                        DefaultBoneBoxes = BuildBoneBoxes(bones),
+                        DefaultBroadphase = BuildBroadphase(bones)
+                    };
+                    ColliderCache.Add(Identifier, colliderData);
+                }
+                return ColliderCache[Identifier];
             }
-            return ColliderCache[Identifier];
         }
 
         private static BoneBox[] BuildBoneBoxes(BoneData[] Bones)

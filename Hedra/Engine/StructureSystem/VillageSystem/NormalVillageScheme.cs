@@ -14,17 +14,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         public override Vector3 BlacksmithPosition => -Vector3.UnitZ * 30 - Vector3.UnitX * 180f;
         public override Vector3 MarketPosition => -Vector3.UnitY * 2.0f + Vector3.UnitZ * 140.0f;
         public override Vector3 WindmillPosition => -Vector3.UnitY * 2.0f - Vector3.UnitZ * 140.0f;
-        public override Vector3 FarmPosition => -Vector3.UnitY * 2.0f - Vector3.UnitZ * 140.0f;
+        public override Vector3 FarmPosition =>  -Vector3.UnitZ * 140.0f;
 
         public NormalVillageScheme()
         {
-            Vector3 farmPosition = -Vector3.UnitY * 2.0f - Vector3.UnitZ * 140.0f;
             this.AddGroundwork(MarketPosition, 96);
-            this.AddGroundwork(farmPosition + Vector3.UnitX * 360f, 96);
+            this.AddGroundwork(FarmPosition + Vector3.UnitX * 360f, 96);
             this.AddGroundwork(Vector3.UnitX * 180.0f - Vector3.UnitZ * 140.0f, 64);
-            this.AddGroundwork(farmPosition, 96);
-            this.AddGroundwork(farmPosition + Vector3.UnitX * 220.0f + Vector3.UnitZ * 180, 96);
-            this.AddGroundwork(farmPosition + Vector3.UnitX * 220.0f + Vector3.UnitZ * 400, 96);
+            this.AddGroundwork(FarmPosition, 96);
+            this.AddGroundwork(FarmPosition + Vector3.UnitX * 220.0f + Vector3.UnitZ * 180, 96);
+            this.AddGroundwork(FarmPosition + Vector3.UnitX * 220.0f + Vector3.UnitZ * 400, 96);
             this.AddGroundwork(Vector3.UnitZ * -30 + Vector3.UnitX * -180, 64);
 
             for (var i = 0; i < 2; i++)

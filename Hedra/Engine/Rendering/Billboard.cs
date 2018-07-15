@@ -39,12 +39,12 @@ namespace Hedra.Engine.Rendering
 			_textBillboard = true;
 			this.LifeTime = LifeTime;
 			this.Position = Position;
-			this.Texture = new GUIText(Text, Vector2.Zero, TextColor, TextFont);
+			this.Texture = new GUIText(string.Empty, Vector2.Zero, TextColor, TextFont);
 			this.Texture.Enable();
 			this._originalScale = this.Texture.Scale;
-			DrawManager.UIRenderer.Remove( ((GUIText) this.Texture).UIText);			
-			DrawManager.Add(this);
-		}
+            this.UpdateText(Text);
+		    DrawManager.UIRenderer.Add(this);
+        }
 		
 		public Billboard(float LifeTime, uint Icon, Vector3 Position, Vector2 Scale)
 		{
@@ -55,20 +55,29 @@ namespace Hedra.Engine.Rendering
 			this.Texture.Enable();
 			this._originalScale = Scale;
 			DrawManager.UIRenderer.Remove( ((Texture) this.Texture).TextureElement);			
-			DrawManager.Add(this);
+			DrawManager.UIRenderer.Add(this);
 		}
-		
-		public void Draw(){
+
+	    public void UpdateText(string Text)
+	    {
+	        var asGuiText = (GUIText) this.Texture;
+	        asGuiText.Text = Text;
+            DrawManager.UIRenderer.Remove(asGuiText.UIText);
+        }
+
+		public void Draw()
+        {
 		    if (FollowFunc != null)
 		    {
 		        Position = Mathf.Lerp(Position, FollowFunc(), (float) Time.DeltaTime * 8f);
 		    }
 			
-			if(Vanish){
-				_addedPosition += Vector3.UnitY * Time.IndependantDeltaTime * Speed;
+			if(Vanish)
+            {
+				_addedPosition += Vector3.UnitY * Time.DeltaTime * Speed;
 				((GUIText) this.Texture).UIText.Opacity = 1-(_life / LifeTime);
 			}
-			_life += Time.IndependantDeltaTime;
+			_life += Time.DeltaTime;
 			
 			if(LifeTime != 0 && _life >= LifeTime){
 				this.Dispose();
@@ -83,9 +92,12 @@ namespace Hedra.Engine.Rendering
 			Vector4 homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
 			Vector3 ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
 			this.Texture.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f);
-			this.Texture.Scale = this._originalScale * Size;
+            if (!_textBillboard)
+            {
+                this.Texture.Scale = this._originalScale * Size;
+            }
 
-		    DrawManager.UIRenderer.Draw(_textBillboard
+            DrawManager.UIRenderer.Draw(_textBillboard
 		        ? ((GUIText) this.Texture).UIText
 		        : ((Texture) this.Texture).TextureElement);
 		}

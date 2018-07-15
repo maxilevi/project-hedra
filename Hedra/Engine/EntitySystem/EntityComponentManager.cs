@@ -34,8 +34,22 @@ namespace Hedra.Engine.EntitySystem
         public void AddComponentWhile(EntityComponent Component, Func<bool> Condition)
         {
             var name = _parent.Name.Clone();
-            Func<bool> realCondition = () => Condition() && _parent.Name == name;
-            CoroutineManager.StartCoroutine(this.WhileCoroutine, Component, realCondition);
+            bool RealCondition() => Condition() && _parent.Name == name;
+            CoroutineManager.StartCoroutine(this.WhileCoroutine, Component, (Func<bool>) RealCondition);
+        }
+
+        private bool ContainsComponent(EntityComponent Component)
+        {
+            return _components.Contains(Component);
+        }
+
+        public void Clear()
+        {
+            var componentsCopy = new List<EntityComponent>(_components);
+            foreach (var component in componentsCopy)
+            {
+                this.RemoveComponent(component);
+            }
         }
 
         public void AddComponentForSeconds(EntityComponent Component, float Seconds)
@@ -55,6 +69,7 @@ namespace Hedra.Engine.EntitySystem
                 k += Time.DeltaTime;
                 yield return null;
             }
+            if (!this.ContainsComponent(component)) yield break;
             this.RemoveComponent(component);
         }
 
@@ -68,6 +83,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 yield return null;
             }
+            if(!this.ContainsComponent(component)) yield break;
             this.RemoveComponent(component);
         }
     }

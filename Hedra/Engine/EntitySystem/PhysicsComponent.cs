@@ -10,12 +10,10 @@ using System;
 using OpenTK;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -93,10 +91,6 @@ namespace Hedra.Engine.EntitySystem
 	                _collisions.AddRange(World.GlobalColliders);
 	                try
 	                {
-	                    if (Parent is LocalPlayer)
-	                    {
-	                        int a = 0;
-	                    }
 	                    if (_underChunk != null && _underChunk.Initialized)
 	                        _collisions.AddRange(_underChunk.CollisionShapes);
 

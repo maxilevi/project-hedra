@@ -38,7 +38,8 @@ namespace Hedra.Engine
                     AutoFlush = true
                 });
             }*/
-            _logs.Add(LogType.Normal, new StreamWriter(new FileStream($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt", FileMode.OpenOrCreate))
+            _logs.Add(LogType.Normal, new StreamWriter(new FileStream(
+                $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt", FileMode.OpenOrCreate))
             {
                 AutoFlush = true
             });
@@ -72,16 +73,16 @@ namespace Hedra.Engine
 		
 		public static void WriteToFile(object Text)
         {
-            //lock (_lock)
+            lock (_lock)
             {
-                _logs[_currentType].Write(Text.ToString());
+                _logs[LogType.Normal].Write(Text.ToString());
             }
         }
 
 		public static void Write(object Text)
 		{
-		    var newText = $"[{DateTime.Now:HH:mm:ss}] {Text}";
-            if(_currentType == LogType.Normal) Console.Write(newText);
+		    var newText = $"[{DateTime.Now:HH:mm:ss}] {(_currentType != LogType.Normal ? $"[{_currentType.ToString()}]" : string.Empty)} {Text}";
+            Console.Write(newText);
             WriteToFile(newText);
         }
 
@@ -127,7 +128,7 @@ namespace Hedra.Engine
 
 	    public static void Switch(LogType Type)
 	    {
-	        //lock (_lock)
+	        lock (_lock)
 	        {
 	            _currentType = Type;
 	        }
@@ -135,12 +136,12 @@ namespace Hedra.Engine
 
 	    public static void RunWithType(LogType Type, Action Job)
 	    {
-	        //lock (_lock)
+	        lock (_lock)
 	        {
-	            //var oldType = _currentType;
-	            //_currentType = Type;
+	            var oldType = _currentType;
+	            _currentType = Type;
 	            Job();
-	            //_currentType = oldType;
+	            _currentType = oldType;
 	        }
 	    }
 	}

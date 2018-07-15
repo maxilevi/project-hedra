@@ -1768,26 +1768,6 @@
       <Link>Assets\Env\Colliders\DesertRock0_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Farm0_Collider0.ply">
-      <Link>Assets\Env\Colliders\Farm0_Collider0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Farm0_Collider1.ply">
-      <Link>Assets\Env\Colliders\Farm0_Collider1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Farm0_Collider2.ply">
-      <Link>Assets\Env\Colliders\Farm0_Collider2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Farm0_Collider3.ply">
-      <Link>Assets\Env\Colliders\Farm0_Collider3.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Farm0_Collider4.ply">
-      <Link>Assets\Env\Colliders\Farm0_Collider4.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider0.ply">
       <Link>Assets\Env\Colliders\Fence0_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4079,12 +4059,6 @@
     <None Include="Assets\UI\SupportGame.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\Tooltip.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\UI\Trade.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\UI\WarriorLogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -4770,6 +4744,9 @@
     </Content>
     <Content Include="Assets\UI\AbilityTreeBackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\Dialog.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\UI\InventoryBackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

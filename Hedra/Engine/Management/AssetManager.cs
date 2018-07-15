@@ -14,10 +14,8 @@ using System.IO;
 using System.Collections.Generic;
 using OpenTK;
 using Hedra.Engine.Rendering;
-using OpenTK.Graphics.OpenGL;
 using System.Drawing.Text;
 using System.Reflection;
-using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.PhysicsSystem;
 
@@ -45,6 +43,7 @@ namespace Hedra.Engine.Management
 	    private static List<ResourceHandler> _registeredHandlers;
         private static bool _filesDecompressed;
 	    private static Dictionary<string, VertexData> _hitboxCache;
+	    private static readonly object _hitboxCacheLock = new object();
         private static readonly object HandlerLock = new object();
 
         public static string ShaderCode { get; private set; }
@@ -230,10 +229,11 @@ namespace Hedra.Engine.Management
 			}
 		}
 		
-		public static List<CollisionShape> LoadCollisionShapes(string filename, int Count, Vector3 Scale){
+		public static List<CollisionShape> LoadCollisionShapes(string Filename, int Count, Vector3 Scale){
 			var shapes = new List<CollisionShape>();
-			string name = Path.GetFileNameWithoutExtension(filename);
-			for(var i = 0; i < Count; i++){
+			string name = Path.GetFileNameWithoutExtension(Filename);
+			for(var i = 0; i < Count; i++)
+            {
 				var data = AssetManager.PlyLoader("Assets/Env/Colliders/"+name+"_Collider"+i+".ply", Scale, Vector3.Zero, Vector3.Zero, false);
 
 			    var newShape = new CollisionShape(data.Vertices, data.Indices);
@@ -246,20 +246,24 @@ namespace Hedra.Engine.Management
 
 	    private static VertexData LoadModelVertexData(string ModelFile)
 	    {
-	        if (!_hitboxCache.ContainsKey(ModelFile))
+	        lock (_hitboxCacheLock)
 	        {
-	            string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
-	            var entityData = ColladaLoader.LoadColladaModel(fileContents, GeneralSettings.MaxWeights);
-	            var vertexData = new VertexData
+	            if (!_hitboxCache.ContainsKey(ModelFile))
 	            {
-	                Vertices = entityData.Mesh.Vertices.ToList(),
-	                Colors = new List<Vector4>()
-	            };
-	            entityData.Mesh.Colors.ToList().ForEach(Vector => vertexData.Colors.Add(new Vector4(Vector.X, Vector.Y, Vector.Z, 1)));
-	            _hitboxCache.Add(ModelFile, vertexData);
+	                string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
+	                var entityData = ColladaLoader.LoadColladaModel(fileContents, GeneralSettings.MaxWeights);
+	                var vertexData = new VertexData
+	                {
+	                    Vertices = entityData.Mesh.Vertices.ToList(),
+	                    Colors = new List<Vector4>()
+	                };
+	                entityData.Mesh.Colors.ToList().ForEach(Vector =>
+	                    vertexData.Colors.Add(new Vector4(Vector.X, Vector.Y, Vector.Z, 1)));
+	                _hitboxCache.Add(ModelFile, vertexData);
+	            }
+	            return _hitboxCache[ModelFile];
 	        }
-	        return _hitboxCache[ModelFile];
-        }
+	    }
 
 	    public static Box LoadHitbox(string ModelFile)
 	    {        

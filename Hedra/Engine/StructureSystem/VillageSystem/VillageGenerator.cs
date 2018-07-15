@@ -384,46 +384,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 				underChunk.AddStaticElement(farmModel);
 				underChunk.Blocked = true;
 			}
-			k = 0; 
-			j = 0;
-			
-			for(int i = 0; i < farmCount; i++){
-				List<CollisionShape> farmShapes = AssetManager.LoadCollisionShapes("Assets/Env/Village/Farm0.ply",5, Vector3.One);
-				//FarmShapes.AddRange( AssetManager.LoadCollisionShapes("Assets/Env/Village/Fence0.ply",11, Vector3.One) );
-				Vector3 offset =  -Vector3.UnitX * (1f+modifier*.5f) * Chunk.BlockSize * 1f 
-				                    + Vector3.UnitZ * 4f * Chunk.BlockSize * 0.375f 
-				                    + Vector3.UnitX * (2f+modifier) * j * Chunk.BlockSize * 1f
-				                    - Vector3.UnitZ * k * 2f * Chunk.BlockSize * 1.5f;
-				
-				Chunk underChunk = World.GetChunkAt(transMatrix.ExtractTranslation() +  farmPosition + offset);
-				int currentSeed = World.Seed;
-		    	while( underChunk == null || !underChunk.BuildedWithStructures){
-				if(World.Seed != currentSeed)
-					yield break;
-					underChunk = World.GetChunkAt(transMatrix.ExtractTranslation() +  farmPosition + offset);
-					yield return null;
-				}
-
-			    float heightAtPosition = Physics.HeightAtPosition(transMatrix.ExtractTranslation() + farmPosition + offset);
-
-			    if (Math.Abs(heightAtPosition - farmPosition.Y) > 3)
-			        continue;
-
-                for (int l = 0; l < farmShapes.Count; l++){
-
-					farmShapes[l].Transform(mat4);
-					farmShapes[l].Transform(offset);
-					farmShapes[l].Transform(transMatrix);
-					farmShapes[l].Transform(farmPosition);
-                    farmShapes[l].UseBroadphase = true;
-                    town.AddCollisionShape(farmShapes[l]);
-                }
-				j++;
-				if(j == 2){
-					j = 0;
-					k++;
-				}
-			}
 		}
 
 	    public IEnumerator BuildCenter(object[] Params)

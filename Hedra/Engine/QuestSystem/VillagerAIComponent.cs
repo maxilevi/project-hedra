@@ -24,7 +24,6 @@ namespace Hedra.Engine.QuestSystem
         private readonly bool _move;
         private Vector3 _targetPoint;
         private readonly Timer _movementTimer;
-        private readonly Vector3 _originalPosition;
 	    private bool _shouldSit;
         public override bool ShouldSleep => true;
 
@@ -33,7 +32,6 @@ namespace Hedra.Engine.QuestSystem
             this._move = Move;
             this._movementTimer = new Timer(6.0f);//Alert every 6.0f seconds
             this._targetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.BlockPosition;
-            this._originalPosition = Parent.Physics.TargetPosition;
         }
 
         public override void Update()
@@ -56,9 +54,6 @@ namespace Hedra.Engine.QuestSystem
 		            if(!_shouldSit)
 			            _targetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.Physics.TargetPosition;
 	            }
-	
-	            if ((Parent.Physics.TargetPosition - _originalPosition).LengthSquared > 128 * 128)
-	                _targetPoint = _originalPosition;
 
 		        if (_shouldSit) base.Sit();
 		        else base.Move(_targetPoint);	

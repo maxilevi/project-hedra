@@ -22,7 +22,8 @@ namespace Hedra.Engine.Rendering.UI
 	/// </summary>
 	internal class TextField : EventListener, UIElement
 	{
-		private Bar _textBar;
+        private const int TextBuffer = 50;
+        private Bar _textBar;
 		private RenderableText _caret;
 		private int _caretIndex;
 		public bool UseNumbersOnly {get; set;}
@@ -87,7 +88,7 @@ namespace Hedra.Engine.Rendering.UI
 
 			if(InFocus && this._enabled){
 				
-				float textSize = Graphics2D.LineSize(Text, _textBar.Text.UIText.TextFont).X/GameSettings.Width;
+				float textSize = (Graphics2D.LineSize(Text, _textBar.Text.UIText.TextFont).X + TextBuffer) / GameSettings.Width;
 				if(textSize > _textBar.Scale.X)
 					return;
 				
@@ -116,7 +117,7 @@ namespace Hedra.Engine.Rendering.UI
 		}
 		
 		public void UpdateCaret(){
-			_textBar.Text.UIText.Position = new Vector2(_textBar.Position.X - _textBar.Scale.X * .25f + _textBar.Text.UIText.Scale.X, _textBar.Text.UIText.Position.Y);
+			_textBar.Text.UIText.Position = new Vector2(_textBar.Position.X, _textBar.Text.UIText.Position.Y);
 			if(ShowCaret){
 				_caretIndex = (int) Mathf.Clamp(_caretIndex,0, Text.Length-1 );
 				string beforeCaret = Text.Substring(0, (int)Mathf.Clamp(_caretIndex+1, 0, Text.Length));

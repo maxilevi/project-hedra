@@ -8,6 +8,8 @@
  */
 using OpenTK;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.Events;
 using Hedra.Engine.Management;
@@ -24,41 +26,23 @@ namespace Hedra.Engine.EntitySystem
 
 	internal class TalkComponent : EntityComponent, ITickable
 	{
-        private static readonly uint TalkBackground = Graphics2D.LoadFromAssets("Assets/Bar.png");
-	    public float Duration { get; set; } = 8f;
+        private static uint _talkBackground;
+	    private static Vector2 _talkBackgroundSize;
+        public float Duration { get; set; } = 8f;
         public event OnTalkEventHandler OnTalk;
-	    private bool _shouldTalk;
-
-        public static string[] Phrases = new string[]{
-            "Have you tried selling your items" +
-			Environment.NewLine+"in the market?"+Environment.NewLine
-			+"They accept every kind of object.",
-			
-			"Rumor says graveyards hold great"+
-			Environment.NewLine+"rewards.",
-		
-			"I've heard there is a travelling merchant"+
-			Environment.NewLine+"wandering around the world."+Environment.NewLine
-			+"He sells gliders & special items.",
-		
-			"You seem like an adventurer. Why don't you"+
-			Environment.NewLine+"try doing a quest?",
-		
-			"Farming is exhausting.",
-										
-			"Liked the game? Rate it on itch.io!",
-
-            "Am I the only one who hears the sound of glass breaking?",
-
-            "Are you an adventurer? I envy you. Farming gets tiring.",
-
-            "The life of a farmer may be a dull one, but it's what keeps the village going!",
-
-        };
-																							
+	    private bool _shouldTalk;																						
 		public bool Talked = false;
 		private Billboard _board;
 	    private readonly string _phrase;
+
+	    static TalkComponent()
+	    {
+	        Executer.ExecuteOnMainThread(delegate
+	        {
+	            _talkBackgroundSize = Graphics2D.SizeFromAssets("Assets/Skills/Dialog.png");
+                _talkBackground = Graphics2D.LoadFromAssets("Assets/Skills/Dialog.png");
+	        });
+	    }
 		
 		public TalkComponent(Entity Parent, string Text) : base(Parent)
 		{
@@ -70,7 +54,9 @@ namespace Hedra.Engine.EntitySystem
 		    });
 		}
 
-	    public TalkComponent(Entity Parent) : this(Parent, null){}
+	    public TalkComponent(Entity Parent) : this(Parent, null)
+	    {    
+	    }
 
 	    public override void Update()
 	    {
@@ -95,37 +81,75 @@ namespace Hedra.Engine.EntitySystem
             this.Talk(false);
 	    }
 
-	    public void Talk(bool Silent){
+	    public void Talk(bool Silent)
+        {
             if(!Silent) SoundManager.PlayUISound(SoundType.TalkSound, 1f, .75f);
 			string phrase = _phrase ?? Phrases[Utils.Rng.Next(0, Phrases.Length)];
+            phrase = Utils.FitString(phrase, 30);
 			
 			var textSize = new GUIText(phrase, Vector2.Zero, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10));
 
 	        Vector3 FollowFunc()
 	        {
-	            return Parent.Position + Vector3.UnitY * 12f;
+	            return Parent.Position + Vector3.UnitY * 14f;
 	        }
-            var backBoard = new Billboard(Duration, TalkBackground, FollowFunc(),
-		        textSize.UIText.Scale + new Vector2(textSize.UIText.Scale.Y * .25f, textSize.UIText.Scale.Y * .25f))
+            var backBoard = new Billboard(Duration, _talkBackground, FollowFunc(), _talkBackgroundSize)
 		    {
 		        FollowFunc = FollowFunc,
 		        DisposeTextureId = false
             };
 
-		    _board = new Billboard(Duration, phrase, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10), FollowFunc())
+		    _board = new Billboard(Duration, string.Empty, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10), FollowFunc())
 		    {
 		        FollowFunc = FollowFunc
             };
+            CoroutineManager.StartCoroutine(TalkCoroutine, _board, phrase, Duration);
 	        OnTalk?.Invoke(this.Parent);
 
             textSize.Dispose();
 			Talked = true;
 		}
 
+	    private static IEnumerator TalkCoroutine(object[] Args)
+	    {
+	        var billboard = (Billboard) Args[0];
+	        var text = (string) Args[1];
+	        var duration = (float) Args[2];
+	        var textElement = billboard.Texture as GUIText;
+	        var iterator = 0;
+	        var passedTime = 0f;
+            if(textElement == null) yield break;
+
+	        while (iterator < text.Length+1)
+	        {
+	            if (passedTime > .05f)
+	            {
+	                billboard.UpdateText(text.Substring(0, iterator));
+                    iterator++;
+	                passedTime = 0;
+	            }
+	            passedTime += Time.DeltaTime;
+	            yield return null;
+	        }
+        }
+
 	    public override void Dispose()
 	    {
 	        base.Dispose();
             EventDispatcher.UnregisterKeyDown(this);
 	    }
-	}
+
+	    public static string[] Phrases = {
+	        "Have you tried selling your items in the market? They accept every kind of object.",
+	        "Rumor says graveyards hold great rewards.",
+	        "I've heard there is a travelling merchant wandering around the world. He sells gliders & special items.",
+	        "You seem like an adventurer. Why don't you try doing a quest?",
+	        "Farming is exhausting.",
+	        "Liked the game? Rate it on itch.io!",
+	        "Am I the only one who hears the sound of glass breaking?",
+	        "Are you an adventurer? I envy you. Farming gets tiring.",
+	        "The life of a farmer may be a dull one, but it's what keeps the village going!",
+
+	    };
+    }
 }

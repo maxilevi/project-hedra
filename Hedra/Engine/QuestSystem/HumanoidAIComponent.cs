@@ -95,11 +95,11 @@ namespace Hedra.Engine.QuestSystem
             {
                 if (Parent is Humanoid human)
                 {
-                    human.Physics.DeltaTranslate(human.Movement.MoveFormula(Parent.Orientation));
+                    human.Physics.DeltaTranslate(human.Movement.MoveFormula(Parent.Orientation) * .75f);
                 }
                 else
                 {
-                    Parent.Physics.DeltaTranslate(Parent.Orientation * Parent.Speed * 5);
+                    Parent.Physics.DeltaTranslate(Parent.Orientation * Parent.Speed * 4);
                 }
                 Parent.Model.Run();
             }

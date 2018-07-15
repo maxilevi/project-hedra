@@ -66,7 +66,8 @@ namespace Hedra.Engine.Rendering
             
 			if(ToDraw.Count == 0) return;
 			
-			if(Type == ChunkBufferTypes.STATIC){
+			if(Type == ChunkBufferTypes.STATIC)
+            {
 				IntPtr[] Offsets, ShadowOffsets;
 				int[] Counts = StaticBuffer.BuildCounts(ToDraw, out Offsets);
 				int[] ShadowCounts = StaticBuffer.BuildCounts(ToDraw, out ShadowOffsets, true);

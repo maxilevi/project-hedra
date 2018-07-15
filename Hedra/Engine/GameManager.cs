@@ -75,10 +75,10 @@ namespace Hedra.Engine
 
 			Player.Enabled = false;
 
-			_loadingScreen = new Texture(Color.FromArgb(255,29,29,29), Color.FromArgb(255,59,59,59),
+			_loadingScreen = new Texture(Color.FromArgb(255, 40, 40, 40), Color.FromArgb(255, 70, 70, 70),
                 Vector2.Zero, Vector2.One, GradientType.TopBot);
 		    _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White,
-                FontCache.Get(UserInterface.Fonts.Families[0], 14, FontStyle.Bold));
+                FontCache.Get(UserInterface.Fonts.Families[0], 15, FontStyle.Bold));
 
 		    _loadingScreen.Disable();
 
@@ -86,29 +86,23 @@ namespace Hedra.Engine
 		}
 		
 		public static bool InStartMenu => World.Seed == World.MenuSeed;
+
 	    public static bool InMenu => Player != null && Player.UI.Menu.Enabled && !Player.UI.Hide && World.Seed != World.MenuSeed;
 
-	    public static void LoadMenu(){
+	    public static void LoadMenu()
+        {
 	        World.Recreate(World.MenuSeed);
 	        SkyManager.SetTime(12000);
-            Player.Inventory.ClearInventory();
-	        Player.UI.ShowMenu();
-	        Player.Model.Alpha = 0f;
-	        Player.View.TargetPitch = 0f;
-	        Player.HandLamp.Enabled = false;
-	        Player.View.TargetYaw = 0f;
-	        Player.View.TargetDistance = 10f;
-	        Player.IsGliding = false;
-	        Player.Knocked = false;
+            Player.Reset();
 	        SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
             CoroutineManager.StartCoroutine(GameManager.MenuCoroutine);
         }
 		
-		private static IEnumerator MenuCoroutine(){
-			while(GameManager.InStartMenu){
-                
-				Vector3 location = MenuBackground.NewLocation;
-                
+		private static IEnumerator MenuCoroutine()
+        {
+			while(GameManager.InStartMenu)
+            {               
+				Vector3 location = MenuBackground.NewLocation;            
 				Player.Physics.TargetPosition = location;
 				Player.Model.Position = location;
 			    Player.Model.Alpha = 0f;
@@ -116,7 +110,8 @@ namespace Hedra.Engine
 			}
 		}
 		
-	    public static void MakeCurrent(PlayerInformation Information){
+	    public static void MakeCurrent(PlayerInformation Information)
+        {
 			if(!GameManager.InStartMenu){
 				Player.Model.Dispose();
 			}
