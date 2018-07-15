@@ -609,6 +609,12 @@
     <Compile Include="Engine\StructureSystem\BanditCampDesign.cs" />
     <Compile Include="Engine\StructureSystem\StructureGenerator.cs" />
     <Compile Include="Engine\QuestSystem\TravellingMerchant.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\BuildingTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\DesignTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageBuilder.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageCache.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageDesign.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageDesigner.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageGenerator.cs" />
     <Compile Include="Engine\QuestSystem\VillagerAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\WarriorAIComponent.cs" />
@@ -746,6 +752,7 @@
     <Compile Include="Engine\StructureSystem\VillageDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\NormalVillageScheme.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\ISchemeGenerator.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageLoader.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageScheme.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageTemplate.cs" />
     <Compile Include="Engine\StructureSystem\WoodenFortDesign.cs" />
@@ -4793,6 +4800,7 @@
     <None Include="Modules\Mobs\Gorilla.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Modules\Villages\Nordic.json" />
     <Content Include="x64\OpenAL32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

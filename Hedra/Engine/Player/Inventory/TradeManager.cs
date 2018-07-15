@@ -68,6 +68,7 @@ namespace Hedra.Engine.Player.Inventory
             {
                 price = Item.GetAttribute<int>(CommonAttributes.Price);
             }
+            price *= 1 + ((float) Item.Tier / (float) (ItemTier.Misc - 1)) * .5f;
             return (int) (price *(_buyerInterface.Array.Contains(Item) ? 0.5f : 1.25f));
         }
 

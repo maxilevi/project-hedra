@@ -229,16 +229,35 @@ namespace Hedra.Engine.Management
 			}
 		}
 		
-		public static List<CollisionShape> LoadCollisionShapes(string Filename, int Count, Vector3 Scale){
+		public static List<CollisionShape> LoadCollisionShapes(string Filename, int Count, Vector3 Scale)
+		{
 			var shapes = new List<CollisionShape>();
-			string name = Path.GetFileNameWithoutExtension(Filename);
-			for(var i = 0; i < Count; i++)
-            {
+			var name = Path.GetFileNameWithoutExtension(Filename);
+			for(var i = 0; i < Count; i++){
 				var data = AssetManager.PlyLoader("Assets/Env/Colliders/"+name+"_Collider"+i+".ply", Scale, Vector3.Zero, Vector3.Zero, false);
-
 			    var newShape = new CollisionShape(data.Vertices, data.Indices);
 			    shapes.Add(newShape);
                 data.Dispose();
+			}
+			
+			return shapes;
+		}
+		
+		public static List<CollisionShape> LoadCollisionShapes(string Filename, Vector3 Scale)
+		{
+			var shapes = new List<CollisionShape>();
+			string name = Path.GetFileNameWithoutExtension(Filename);
+			var iterator = 0;
+			while(true)
+			{
+				var path = $"Assets/Env/Colliders/{name}_Collider{iterator}.ply";
+				var data = ReadBinary(Filename, DataFile3);
+				if(data == null) break;
+				var vertexInformation = AssetManager.PlyLoader(path, Scale, Vector3.Zero, Vector3.Zero, false);
+				var newShape = new CollisionShape(vertexInformation.Vertices, vertexInformation.Indices);
+				shapes.Add(newShape);
+				vertexInformation.Dispose();
+				iterator++;
 			}
 			
 			return shapes;
@@ -278,12 +297,17 @@ namespace Hedra.Engine.Management
         public static VertexData PlyLoader(string file, Vector3 Scale){
 			return AssetManager.PlyLoader(file, Scale, Vector3.Zero, Vector3.Zero);
 		}
-		
+
 		public static VertexData PlyLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
+		{
+			var data = AssetManager.ReadBinary(File, DataFile3);
+			if (data == null) throw new ArgumentException($"Failed to found file '{File}' in the Assets folder.");
+			return PlyLoader(data, Scale, Position, Rotation, HasColors);
+		}
+
+		public static VertexData PlyLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
         {
-			byte[] dataArray = AssetManager.ReadBinary(File, DataFile3);
-            if (dataArray == null) throw new ArgumentException($"Failed to found file '{File}' in the Assets folder.");
-		    string fileContents = Encoding.ASCII.GetString(dataArray);
+		    string fileContents = Encoding.ASCII.GetString(Data);
 
 		    int endHeader = fileContents.IndexOf("element vertex", StringComparison.Ordinal);
             fileContents = fileContents.Substring(endHeader, fileContents.Length - endHeader);
