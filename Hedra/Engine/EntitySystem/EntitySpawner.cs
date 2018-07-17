@@ -23,7 +23,7 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     internal class EntitySpawner
     {
-        public static int MobCap = 0;//int.MaxValue;
+        public static int MobCap = int.MaxValue;
 		public float SpawnChance = .8f;
 		public int MinSpawn = 1;
 		public int MaxSpawn = 3;
@@ -36,12 +36,12 @@ namespace Hedra.Engine.EntitySystem
 		{
 			this.Player = Player;
 		    Rng = new Random();
-            //SpawnThread = new Thread(Update);
-            //SpawnThread.Start();
+            SpawnThread = new Thread(Update);
+            SpawnThread.Start();
 		}
 		
-		public void Update(){
-			
+		public void Update()
+        {		
 			while(Program.GameWindow.Exists){
                 START:
                 if(!Program.GameWindow.Exists) break;
