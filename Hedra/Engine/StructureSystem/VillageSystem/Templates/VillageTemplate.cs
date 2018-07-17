@@ -8,7 +8,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         public BuildingTemplate House { get; set; }
         public BuildingTemplate Well { get; set; }
         public BuildingTemplate Stable { get; set; }
-        public BuildingTemplate Blacksmith { get; set; }
+        public BlacksmithTemplate Blacksmith { get; set; }
         public BuildingTemplate Farm { get; set; }
         public BuildingTemplate Windmill { get; set; }
 
