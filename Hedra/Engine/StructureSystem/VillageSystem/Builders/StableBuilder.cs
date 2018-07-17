@@ -1,6 +1,6 @@
-﻿namespace Hedra.Engine.StructureSystem.VillageSystem
+﻿namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    public class StableBuilder
+    internal class StableBuilder : Builder<BuildingParameters>
     {
         
     }

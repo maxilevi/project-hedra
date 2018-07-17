@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    public class MarketBuilder
+    internal class MarketBuilder
     {
         
     }

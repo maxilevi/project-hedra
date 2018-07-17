@@ -1,7 +1,6 @@
 ﻿namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
-    public class FarmTemplate
+    internal class FarmTemplate : BuildingTemplate<DesignTemplate>
     {
-        
     }
 }

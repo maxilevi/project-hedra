@@ -24,7 +24,7 @@ namespace Hedra.Engine.QuestSystem
 	    public Plateau(Vector3 Position, float Radius, float Height, float MaxHeight){
 			this.Position = Position;
 			this.Radius = Radius;
-			this.Height = Height;
+		    this.Height = Height;
 			this.MaxHeight = MaxHeight;
 		}
 	}

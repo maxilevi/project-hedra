@@ -20,7 +20,9 @@
     "Designs" : [
       {
         "Path" : "Assets/Env/Village/Blacksmith1.ply",
-        "Scale" : 5.0
+        "Scale" : 5.0,
+        "Oven" : [-16.0, 0.0, 10.0],
+        "Blacksmith" : [10.0, 0.0, 24.0]
       }
     ]
   },

@@ -1,7 +1,13 @@
-﻿namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
+﻿using System;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
+using OpenTK;
+
+namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    public interface IBuildingParameters
+    internal interface IBuildingParameters
     {
-        
+        DesignTemplate Design { get; set; }
+        Vector3 Position { get; set; }
+        Random Rng { get; set; }
     }
 }

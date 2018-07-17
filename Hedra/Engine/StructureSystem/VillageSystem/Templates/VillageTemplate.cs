@@ -1,17 +1,23 @@
-﻿using Newtonsoft.Json;
-
-namespace Hedra.Engine.StructureSystem.VillageSystem
+﻿namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
     internal class VillageTemplate
     {
         public string Name { get; set; }
-        public BuildingTemplate House { get; set; }
-        public BuildingTemplate Well { get; set; }
-        public BuildingTemplate Stable { get; set; }
+        public HouseTemplate House { get; set; }
+        public WellTemplate Well { get; set; }
+        public StableTemplate Stable { get; set; }
         public BlacksmithTemplate Blacksmith { get; set; }
-        public BuildingTemplate Farm { get; set; }
-        public BuildingTemplate Windmill { get; set; }
+        public FarmTemplate Farm { get; set; }
+        public WindmillTemplate Windmill { get; set; }
 
-        public BuildingTemplate[] Buildings => new []{ House, Well, Stable, Blacksmith, Farm, Windmill};
+        public DesignTemplate[][] Designs => new DesignTemplate[][]
+        {
+            House.Designs,
+            Well.Designs,
+            Stable.Designs,
+            Farm.Designs,
+            Windmill.Designs,
+            Blacksmith.Designs
+        };
     }
 }

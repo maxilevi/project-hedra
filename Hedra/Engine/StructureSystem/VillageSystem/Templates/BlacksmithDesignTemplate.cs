@@ -1,6 +1,6 @@
 ﻿using OpenTK;
 
-namespace Hedra.Engine.StructureSystem.VillageSystem
+namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
     internal class BlacksmithDesignTemplate : DesignTemplate
     {

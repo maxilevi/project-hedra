@@ -1,7 +1,6 @@
-﻿namespace Hedra.Engine.StructureSystem.VillageSystem
+﻿namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
-    public class HouseTemplate
+    internal class HouseTemplate : BuildingTemplate<DesignTemplate>
     {
-        
     }
 }

@@ -1,6 +1,4 @@
-﻿using OpenTK;
-
-namespace Hedra.Engine.StructureSystem.VillageSystem
+﻿namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
     internal class BuildingTemplate<T> where T : DesignTemplate
     {

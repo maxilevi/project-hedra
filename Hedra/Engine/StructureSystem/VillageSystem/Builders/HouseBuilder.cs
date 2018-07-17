@@ -1,12 +1,6 @@
-﻿using System;
-
-namespace Hedra.Engine.StructureSystem.VillageSystem
+﻿namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    internal class HouseBuilder : Builder
+    internal class HouseBuilder : Builder<BuildingParameters>
     {
-        public override void Place(BuildingParameters Parameters)
-        {
-            this.PlaceGroundwork(Parameters.Position, 48);
-        }
     }
 }

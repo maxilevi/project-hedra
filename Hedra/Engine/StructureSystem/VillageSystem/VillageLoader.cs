@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
