@@ -622,8 +622,13 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\StableBuilder.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\VillageBuilder.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\WellBuilder.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Placement.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\PlacementDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\PlacementDesigner.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\PlacementPoint.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\BlacksmithPlacer.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\FarmPlacer.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\Placer.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BlacksmithDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BlacksmithTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BuildingTemplate.cs" />
@@ -635,6 +640,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\WellTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\WindmillTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageCache.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageConfiguration.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillagePlacement.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageRing.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageRoot.cs" />

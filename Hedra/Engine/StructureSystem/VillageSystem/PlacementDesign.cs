@@ -1,12 +1,13 @@
-﻿namespace Hedra.Engine.StructureSystem.VillageSystem
+﻿using Hedra.Engine.StructureSystem.VillageSystem.Builders;
+
+namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    public class PlacementDesign
+    internal class PlacementDesign
     {
-        public int HouseCount { get; set; }
-        public int BlacksmithCount { get; set; }
-        public int StableCount { get; set; }
-        public int FarmCount { get; set; }
-        public int WellCount { get; set; }
-        public int MarketCount { get; set; } = 1;
+        public FarmParameters[] Farms { get; set; } = new FarmParameters[0];
+        public BuildingParameters[] Houses { get; set; } = new BuildingParameters[0];
+        public BlacksmithParameters[] Blacksmith { get; set; } = new BlacksmithParameters[0];
+        public BuildingParameters[] Stables { get; set; } = new BuildingParameters[0];
+        public BuildingParameters[] Markets { get; set; } = new BuildingParameters[0];
     }
 }

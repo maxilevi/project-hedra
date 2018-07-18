@@ -23,7 +23,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             var templates = Load<VillageTemplate>(AppPath + "/Modules/Villages/");
             foreach (var template in templates)
             {
-                Designs.Add(template.Name, VillageRoot.FromTemplate(template));
+                Designs.Add(template.Name.ToLowerInvariant(), VillageRoot.FromTemplate(template));
             }
         }
         
