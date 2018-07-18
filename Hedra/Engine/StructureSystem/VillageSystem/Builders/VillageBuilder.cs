@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections;
+using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.PlantSystem;
+using Hedra.Engine.Rendering;
+using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -73,21 +77,36 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var builders = new object[] { _houseBuilder, _farmBuilder, _blacksmithBuilder, _stableBuilder, _wellBuilder, _marketBuilder};
             for (var i = 0; i < builders.Length; i++)
             {
-                //place npcs
-                var build = builders[i].GetType().GetMethod("Build");
-                var output = (BuildingOutput) build.Invoke(builders[i], new object[] { parameters[i], _root } );
-                var paint = builders[i].GetType().GetMethod("Paint");
-                var finalOutput = (BuildingOutput) paint.Invoke(builders[i], new object[] { parameters[i], output } );
-                CoroutineManager.StartCoroutine(PlaceCoroutine, finalOutput);
+                for (var j = 0; j < parameters[i].Length; j++)
+                {
+                    //place npcs
+                    var build = builders[i].GetType().GetMethod("Build");
+                    var output = (BuildingOutput) build.Invoke(builders[i], new object[] {parameters[i][j], _root});
+                    var paint = builders[i].GetType().GetMethod("Paint");
+                    var finalOutput = (BuildingOutput) paint.Invoke(builders[i], new object[] {parameters[i][j], output});
+                    CoroutineManager.StartCoroutine(PlaceCoroutine, parameters[i][j].Position, finalOutput);
+                }
             }
         }
 
-        private IEnumerator PlaceCoroutine(object[] Args)
+        private IEnumerator PlaceCoroutine(object[] Arguments)
         {
-            while (true)
+            var position = (Vector3) Arguments[0];
+            var buildingOutput = (BuildingOutput) Arguments[1];
+            var model = buildingOutput.Model;
+            var shapes = buildingOutput.Shapes;
+            
+            var underChunk = World.GetChunkAt(position);
+            var currentSeed = World.Seed;
+            while(underChunk == null || !underChunk.BuildedWithStructures)
             {
-                
+                if(World.Seed != currentSeed) yield break;
+                underChunk = World.GetChunkAt(position);
+                yield return null;
             }
+            underChunk.Blocked = true;
+            underChunk.AddStaticElement(model);
+            underChunk.AddCollisionShape(shapes.ToArray());
         }
     }
 }

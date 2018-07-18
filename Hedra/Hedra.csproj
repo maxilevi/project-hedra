@@ -645,7 +645,6 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageRing.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageRoot.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageDesigner.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillageGenerator.cs" />
     <Compile Include="Engine\QuestSystem\VillagerAIComponent.cs" />
     <Compile Include="Engine\QuestSystem\WarriorAIComponent.cs" />
     <Compile Include="Engine\Recorder.cs" />
