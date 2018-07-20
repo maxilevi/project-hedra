@@ -73,8 +73,7 @@ namespace Hedra.Engine.BiomeSystem
 	            {
 
 	                var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
-	                float height =
-	                    Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out BlockType type);
+	                float height = Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out BlockType type);
 
 	                #region Structure stuff
 
@@ -105,21 +104,10 @@ namespace Hedra.Engine.BiomeSystem
 
 	                //var inPlateau = false;
 
-	               /* Plateau biggestPlateau = null;
-	                foreach (Plateau plateau in plateauPositions)
-	                {
-	                    var currentDist =
-	                        1 - Math.Min(
-	                            (plateau.Position.Xz - position).LengthSquared / (plateau.Radius * plateau.Radius), 1);
-	                    if (currentDist <= 0) continue;
-
-	                    if (plateau.Radius > (biggestPlateau?.Radius ?? 0))
-	                    {
-	                        biggestPlateau = plateau;
-	                    }
-	                }*/
+		            var biggestPlateau = this.GetBiggestPlateauForPosition(position, plateauPositions);	            
 	                var smallFrequency = SmallFrequency(position.X, position.Y);
-                    foreach (Plateau plateau in plateauPositions)
+		            
+                    /*foreach (Plateau plateau in plateauPositions)
 	                {
 
 	                    float dist = (plateau.Position.Xz - position).LengthSquared;
@@ -137,30 +125,21 @@ namespace Hedra.Engine.BiomeSystem
 
 	                    /*if (final > 0 && nearGiantTree != null && plateau == nearGiantTree.Mountain) giantTree = true;
 
-	                    if (final > 0) inPlateau = true;*/
-	                }
+	                    if (final > 0) inPlateau = true;
+	                }*/
 
 	                if (townClamped && townHeight != height)
 	                    townClamped = false;
 
 	                var pathClamped = false;
-	                float path = hasPath * BiomeGenerator.PathFormula(Chunk.BlockSize * x + Chunk.OffsetX,
-	                                 Chunk.BlockSize * z + Chunk.OffsetZ);
+	                float path = hasPath * PathFormula(Chunk.BlockSize * x + Chunk.OffsetX, Chunk.BlockSize * z + Chunk.OffsetZ);
 	                path = Mathf.Clamp(path * 100f, 0, pathDepth);
 
-	                float river = hasRiver * (float) Math.Max(0,
-	                                  0.5 - Math.Abs(OpenSimplexNoise.Evaluate(
-	                                                     (x * Chunk.BlockSize + Chunk.OffsetX) * 0.0011f,
-	                                                     (Chunk.BlockSize * z + Chunk.OffsetZ) * 0.0011f) -
-	                                                 0.2) - narrow) * scale;
-	                float riverBorders = hasRiver * (float) Math.Max(0,
-	                                         0.5 - Math.Abs(
-	                                             OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + Chunk.OffsetX) * 0.0011f,
-	                                                 (Chunk.BlockSize * z + Chunk.OffsetZ) * 0.0011f) - 0.2) - narrow +
-	                                         border) * scale;
-	                river = Mathf.Clamp(river * riverMult, 0, riverDepth);
+	                float river = hasRiver * River(x,z, narrow, scale);
+		            float riverBorders = hasRiver * River(x,z, narrow, scale, border);
 	                float amplifiedRiverBorders = Mathf.Clamp(riverBorders * riverMult, 0, riverDepth);
 
+		            river = Mathf.Clamp(river * riverMult, 0, riverDepth);
 	                height = Math.Max(0, height + Chunk.BaseHeight);
 	                path = Mathf.Lerp(path, 0, river / riverDepth);
 
@@ -339,35 +318,67 @@ namespace Hedra.Engine.BiomeSystem
 	                        Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) BiomePool.SeaLevel);
 	                    }
 
-	                    if (blockGroundworks.Length > 0 || path == pathDepth || town)
-	                    {
-	                        if (this.IsBlockChangeable(Blocks[x][y][z].Type))
-	                        {
-	                            if (path > 0 && !town || pathClamped && !town)
-	                            {
-	                                Blocks[x][y][z].Type = BlockType.Path;
-	                            }
-
-	                            if (blockGroundworks.Length > 0)
-	                            {
-	                                var groundwork = blockGroundworks[blockGroundworks.Length - 1];
-                                    Blocks[x][y][z].Type = groundwork.Type;
-	                                Blocks[x][y][z].Density += (Half) groundwork.Density;
-                                }
-
-	                            if (town && townClamped)
-	                            {
-	                                if (Blocks[x][y][z].Type == BlockType.Stone)
-	                                {
-	                                    Blocks[x][y][z].Type = BlockType.Grass;
-	                                }
-	                            }
-	                        }
-	                    }
+		                this.HandleGroundworks(Blocks, x, y, z, path, pathDepth, pathClamped, town, townClamped, blockGroundworks);
 	                }
 	            }
 	        }
 	    }
+
+		private void HandleGroundworks(Block[][][] Blocks, int X, int Y, int Z, float path, float pathDepth,
+			bool pathClamped, bool town, bool townClamped, IGroundwork[] BlockGroundworks)
+		{
+			if (BlockGroundworks.Length > 0 || path == pathDepth || town)
+			{
+				if (this.IsBlockChangeable(Blocks[X][Y][Z].Type))
+				{
+					if (path > 0 && !town || pathClamped && !town)
+					{
+						Blocks[X][Y][Z].Type = BlockType.Path;
+					}
+
+					if (BlockGroundworks.Length > 0)
+					{
+						var groundwork = BlockGroundworks[BlockGroundworks.Length - 1];
+						Blocks[X][Y][Z].Type = groundwork.Type;
+						Blocks[X][Y][Z].Density += groundwork.Density;
+					}
+
+					if (town && townClamped)
+					{
+						if (Blocks[X][Y][Z].Type == BlockType.Stone)
+						{
+							Blocks[X][Y][Z].Type = BlockType.Grass;
+						}
+					}
+				}
+			}
+		}
+		
+		private float River(int X, int Z, float Narrow, float Scale, float Border = 0)
+		{
+			return (float) Math.Max(0,
+				       0.5 - Math.Abs(
+					       OpenSimplexNoise.Evaluate((X * Chunk.BlockSize + Chunk.OffsetX) * 0.0011f,
+						       (Chunk.BlockSize * Z + Chunk.OffsetZ) * 0.0011f) - 0.2) - Narrow +
+				       Border) * Scale;
+		}
+		
+		private Plateau GetBiggestPlateauForPosition(Vector2 Position, Plateau[] Plateaux)
+		{
+			Plateau biggestPlateau = null;
+			foreach (Plateau plateau in Plateaux)
+			{
+				var currentDist = 1 - Math.Min((plateau.Position.Xz - Position).LengthSquared / (plateau.Radius * plateau.Radius), 1);
+				if (currentDist <= 0) continue;
+
+				if (plateau.Radius > (biggestPlateau?.Radius ?? 0))
+				{
+					biggestPlateau = plateau;
+				}
+			}
+
+			return biggestPlateau;
+		}
 
 	    private bool IsBlockChangeable(BlockType Type)
 	    {
