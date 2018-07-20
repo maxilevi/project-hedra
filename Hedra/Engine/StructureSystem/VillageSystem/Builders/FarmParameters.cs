@@ -23,5 +23,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 HasWindmill = HasWindmill
             };
         }
+
+        public float GetSize(VillageRoot Root)
+        {
+            return Root.Cache.GrabSize(Design.Path).Xz.LengthFast;
+        }
     }
 }

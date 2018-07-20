@@ -195,7 +195,7 @@ namespace Hedra.Engine.Player
 
             this.RegisterKey(Key.R, delegate
             {
-                if (!GameSettings.Paused && (_player.IsDead || World.QuestManager.Quest.IsLost || World.QuestManager.QuestCompleted))
+                if (!GameSettings.Paused && _player.IsDead)
                     _player.Respawn();
             });
 
@@ -316,10 +316,6 @@ namespace Hedra.Engine.Player
             if (EventArgs.Key == Key.Insert && _player.CanInteract)
             {
                 _player.AbilityTree.Reset();
-            }
-            if (EventArgs.Key == Key.Keypad7 && _player.CanInteract)
-            {
-                World.QuestManager.Recreate();
             }
             if (EventArgs.Key == Key.Keypad2 && _player.CanInteract)
             {

@@ -15,18 +15,18 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         public static bool Collide(VillageRing Ring, PlacementPoint Point)
         {
             return Point.Position.LengthSquared < Ring.Radius * Ring.Radius &&
-                   !Ring.InnerRing.Collides(Point);
+                   (Ring.InnerRing == null || !Ring.InnerRing.Collides(Point));
         }
 
         public static VillageRing Default => new VillageRing
         {
-            Radius = 756,
+            Radius = 800,
             InnerRing = new VillageRing
             {
-                Radius = 384,
+                Radius = 512,
                 InnerRing = new VillageRing
                 {
-                    Radius = 128
+                    Radius = 180
                 }
             }
         };

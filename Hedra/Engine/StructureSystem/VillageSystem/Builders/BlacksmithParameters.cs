@@ -15,5 +15,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             get => Design;
             set => Design = value as BlacksmithDesignTemplate;
         }
+
+        public float GetSize(VillageRoot Root)
+        {
+            return Root.Cache.GrabSize(Design.Path).Xz.LengthFast * .5f;
+        }
     }
 }

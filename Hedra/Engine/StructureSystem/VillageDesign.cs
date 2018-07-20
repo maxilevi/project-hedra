@@ -31,10 +31,11 @@ namespace Hedra.Engine.StructureSystem
             var region = World.BiomePool.GetRegion(TargetPosition);
             var builder = new VillageBuilder(VillageLoader.Designer[region.Structures.VillageType], Rng);
             var design = builder.DesignVillage();
+            design.Translate(TargetPosition);
             builder.PlaceGroundwork(design);
 
             var plateau = new Plateau(TargetPosition, this.Radius, 800, height);
-            World.QuestManager.AddPlateau(plateau);
+            //World.QuestManager.AddPlateau(plateau);
             var structure = new CollidableStructure(this, TargetPosition, plateau);
             structure.Parameters.Set("Builder", builder);
             structure.Parameters.Set("Design", design);

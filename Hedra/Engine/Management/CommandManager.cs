@@ -35,7 +35,6 @@ namespace Hedra.Engine.Management
 				Command = Command.Remove(0,1);
 				string[] Parts = Command.Split(' ');
 				if(Parts[0] == "tp"){
-					if(Parts[1] == "obj") Caster.BlockPosition = World.QuestManager.Quest.IconPosition - Vector3.One.Xz.ToVector3() * 80;
 					if(Parts[1] == "merchant"){
 						if(World.StructureGenerator.MerchantPosition != Vector3.Zero)
 							Caster.BlockPosition = World.StructureGenerator.MerchantPosition - Vector3.One.Xz.ToVector3() * 8;
@@ -105,7 +104,6 @@ namespace Hedra.Engine.Management
 				if(Parts[0] == "kill")
 				{
 				    if (Parts.Length == 1) LocalPlayer.Instance.Health = 0f;
-					if(Parts[1] == "obj") World.QuestManager.Quest.NextObjective();
 					return true;
 				}
 

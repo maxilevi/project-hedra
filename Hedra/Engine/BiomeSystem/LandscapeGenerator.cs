@@ -48,10 +48,8 @@ namespace Hedra.Engine.BiomeSystem
 
 	        var noise3D = new float[0]; //Chunk.ChunkHeight / noiseScale];
 
-	        Plateau[] plateauPositions;
-
-	        lock (World.QuestManager.Plateaus)
-	            plateauPositions = World.QuestManager.Plateaus.ToArray();
+	        var plateauPositions = World.QuestManager.Plateaus;
+	        var groundworks = World.QuestManager.Groundworks;
 
 	        CollidableStructure[] structs;
 
@@ -77,7 +75,6 @@ namespace Hedra.Engine.BiomeSystem
 	                var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
 	                float height =
 	                    Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out BlockType type);
-	                float dist, final;
 
 	                #region Structure stuff
 
@@ -106,9 +103,9 @@ namespace Hedra.Engine.BiomeSystem
 	                          item.Design is GiantTreeDesign
 	                    select item).FirstOrDefault();
 
-	                var inPlateau = false;
+	                //var inPlateau = false;
 
-	                Plateau biggestPlateau = null;
+	               /* Plateau biggestPlateau = null;
 	                foreach (Plateau plateau in plateauPositions)
 	                {
 	                    var currentDist =
@@ -120,13 +117,13 @@ namespace Hedra.Engine.BiomeSystem
 	                    {
 	                        biggestPlateau = plateau;
 	                    }
-	                }
+	                }*/
 	                var smallFrequency = SmallFrequency(position.X, position.Y);
                     foreach (Plateau plateau in plateauPositions)
 	                {
 
-	                    dist = (plateau.Position.Xz - position).LengthSquared;
-	                    final = Math.Max(1 - Math.Min(dist / (plateau.Radius * plateau.Radius), 1), 0);
+	                    float dist = (plateau.Position.Xz - position).LengthSquared;
+	                    float final = Math.Max(1 - Math.Min(dist / (plateau.Radius * plateau.Radius), 1), 0);
 	                    float addonHeight = plateau.Height * Math.Max(final, 0f);
 
 	                    height += addonHeight;
@@ -138,9 +135,9 @@ namespace Hedra.Engine.BiomeSystem
 	                        Math.Min(1.0f, final * 1.5f));
 
 
-	                    if (final > 0 && nearGiantTree != null && plateau == nearGiantTree.Mountain) giantTree = true;
+	                    /*if (final > 0 && nearGiantTree != null && plateau == nearGiantTree.Mountain) giantTree = true;
 
-	                    if (final > 0) inPlateau = true;
+	                    if (final > 0) inPlateau = true;*/
 	                }
 
 	                if (townClamped && townHeight != height)
@@ -167,7 +164,7 @@ namespace Hedra.Engine.BiomeSystem
 	                height = Math.Max(0, height + Chunk.BaseHeight);
 	                path = Mathf.Lerp(path, 0, river / riverDepth);
 
-
+                    /*
 	                foreach (Plateau plateau in plateauPositions)
 	                {
 	                    float plateauDist =
@@ -187,7 +184,7 @@ namespace Hedra.Engine.BiomeSystem
 	                        pathClamped = true;
 
 	                    path = Mathf.Clamp(Mathf.Lerp(0, path, 1 - Math.Min(1, plateauFinal * 3f)), 0, path);
-	                }
+	                }*/
 
 	                for (var i = 0; i < noise3D.Length; i++)
 	                {
@@ -196,7 +193,7 @@ namespace Hedra.Engine.BiomeSystem
 	                            i * noiseScale * Chunk.BlockSize,
 	                            OffsetZ + z * Chunk.BlockSize, heightCache);
 
-
+                        /*
 	                    if (inPlateau)
 	                    {
 	                        foreach (Plateau plateau in plateauPositions)
@@ -207,8 +204,8 @@ namespace Hedra.Engine.BiomeSystem
 	                            float plateauFinal = Math.Max(1 - plateauDist / plateau.Radius, 0);
 	                            noise3D[i] = Mathf.Lerp(0, noise3D[i], 1 - Math.Min(1, plateauFinal * 3f));
 	                        }
+	                    }*/
 
-	                    }
 	                    if (nearGiantTree == null)
 	                    {
 	                        river = Mathf.Clamp(Mathf.Lerp(0, river, 1 - Math.Abs(noise3D[i])), 0, river);
@@ -220,7 +217,7 @@ namespace Hedra.Engine.BiomeSystem
 
 	                float riverLerp = amplifiedRiverBorders / riverDepth;
 
-	                if ((riverLerp > 0 || path > 0) && !inPlateau)
+	                if ((riverLerp > 0 || path > 0) /*&& !inPlateau*/)
 	                {
 
 	                    if (heightCache.ContainsKey(new Vector2(x * Chunk.BlockSize + OffsetX,
@@ -254,18 +251,9 @@ namespace Hedra.Engine.BiomeSystem
 
 	                bool makeDirt = biomeGen.HasDirt && dirtNoise;
 
-	                var villagePath = false;
-	                lock (World.QuestManager.VillagePositions)
-	                {
-	                    foreach (var pair in World.QuestManager.VillagePositions)
-	                    {
-	                        var villageRadius = pair.Value;
-	                        if ((position - pair.Key.Xz).LengthSquared < villageRadius * villageRadius)
-	                        {
-	                            villagePath = true;
-	                        }
-	                    }
-	                }
+	                IGroundwork[] blockGroundworks = groundworks.ToList()
+	                    .Where(G => G.Affects(position)).ToArray();
+	                
 
 	                #endregion
 
@@ -351,21 +339,39 @@ namespace Hedra.Engine.BiomeSystem
 	                        Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) BiomePool.SeaLevel);
 	                    }
 
-	                    if (villagePath || path == pathDepth || town)
+	                    if (blockGroundworks.Length > 0 || path == pathDepth || town)
 	                    {
-	                        if (Blocks[x][y][z].Type != BlockType.Air && Blocks[x][y][z].Type != BlockType.Water &&
-	                            Blocks[x][y][z].Type != BlockType.Seafloor)
+	                        if (this.IsBlockChangeable(Blocks[x][y][z].Type))
 	                        {
-	                            if (path > 0 || pathClamped || villagePath)
+	                            if (path > 0 && !town || pathClamped && !town)
+	                            {
 	                                Blocks[x][y][z].Type = BlockType.Path;
+	                            }
+
+	                            if (blockGroundworks.Length > 0)
+	                            {
+	                                var groundwork = blockGroundworks[blockGroundworks.Length - 1];
+                                    Blocks[x][y][z].Type = groundwork.Type;
+	                                Blocks[x][y][z].Density += (Half) groundwork.Density;
+                                }
+
 	                            if (town && townClamped)
+	                            {
 	                                if (Blocks[x][y][z].Type == BlockType.Stone)
+	                                {
 	                                    Blocks[x][y][z].Type = BlockType.Grass;
+	                                }
+	                            }
 	                        }
 	                    }
 	                }
 	            }
 	        }
+	    }
+
+	    private bool IsBlockChangeable(BlockType Type)
+	    {
+	        return Type != BlockType.Air && Type != BlockType.Water && Type != BlockType.Seafloor;
 	    }
 
 	    public override void PlaceStructures(Block[][][] Blocks, RegionCache Cache)

@@ -18,7 +18,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private readonly StableBuilder _stableBuilder;
         private readonly WellBuilder _wellBuilder;
         private readonly MarketBuilder _marketBuilder;
-        private readonly PlacementDesigner _designer; 
+        private readonly PlacementDesigner _designer;
+        private readonly Random _rng;
 
         public VillageBuilder(VillageRoot Root, Random Rng)
         {
@@ -29,6 +30,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             _wellBuilder = new WellBuilder();
             _marketBuilder = new MarketBuilder();
             _root = Root;
+            _rng = Rng;
             _designer = new PlacementDesigner(_root, new VillageConfiguration(), Rng);
         }
 
@@ -54,12 +56,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             for (var i = 0; i < Design.Stables.Length; i++)
             {
                 _stableBuilder.Place(Design.Stables[i], _root.Cache);
-            }
-            
+            }      
             for (var i = 0; i < Design.Markets.Length; i++)
             {
                 _wellBuilder.Place(Design.Markets[i], _root.Cache);
-                //_marketBuilder.Place(Design.Markets[i], _root.Cache);
+                _marketBuilder.Place(Design.Markets[i], _root.Cache);
             }
         }
 
@@ -79,12 +80,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 for (var j = 0; j < parameters[i].Length; j++)
                 {
-                    //place npcs
                     var build = builders[i].GetType().GetMethod("Build");
-                    var output = (BuildingOutput) build.Invoke(builders[i], new object[] {parameters[i][j], _root});
+                    var output = (BuildingOutput) build.Invoke(builders[i], new object[] { parameters[i][j], _root.Cache, _rng, Design.Position });
+
                     var paint = builders[i].GetType().GetMethod("Paint");
-                    var finalOutput = (BuildingOutput) paint.Invoke(builders[i], new object[] {parameters[i][j], output});
+                    var finalOutput = (BuildingOutput) paint.Invoke(builders[i], new object[] { parameters[i][j], output });
                     CoroutineManager.StartCoroutine(PlaceCoroutine, parameters[i][j].Position, finalOutput);
+
+                    var polish = builders[i].GetType().GetMethod("Polish");
+                    polish.Invoke(builders[i], new object[] { parameters[i][j] });
                 }
             }
         }
@@ -104,6 +108,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 underChunk = World.GetChunkAt(position);
                 yield return null;
             }
+            var height = Physics.HeightAtPosition(position);
+            var transMatrix = Matrix4.CreateTranslation(Vector3.UnitY * height);
+            model.Transform(transMatrix);
+            shapes.ForEach(S => S.Transform(transMatrix));
             underChunk.Blocked = true;
             underChunk.AddStaticElement(model);
             underChunk.AddCollisionShape(shapes.ToArray());

@@ -211,8 +211,6 @@ namespace Hedra.Engine.Networking
 							break;
 						case 0x18:
 							string Type = Encoding.ASCII.GetString(ZipManager.UnZipBytes(Data));
-							if(World.QuestManager.Quest.GetType().ToString() == Type)
-								Executer.ExecuteOnMainThread( () => World.QuestManager.Quest.NextObjective() );
 							break;
 						default:
 							break;

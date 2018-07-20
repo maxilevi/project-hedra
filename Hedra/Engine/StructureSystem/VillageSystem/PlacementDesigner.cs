@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
-using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
@@ -18,7 +17,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private readonly BlacksmithPlacer _blacksmithPlacer;
         private readonly Placer<BuildingParameters> _housePlacer;
         private readonly Placer<BuildingParameters> _stablePlacer;
-        private readonly Placer<BuildingParameters> _marketPlacer;
+        private readonly MarketPlacer _marketPlacer;
 
         public PlacementDesigner(VillageRoot Root, VillageConfiguration Config, Random Rng)
         {
@@ -29,7 +28,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             this._blacksmithPlacer = new BlacksmithPlacer(Root.Template.Blacksmith.Designs, Rng);
             this._housePlacer = new Placer<BuildingParameters>(Root.Template.House.Designs, Rng);
             this._stablePlacer = new Placer<BuildingParameters>(Root.Template.Stable.Designs, Rng);
-            //this._marketPlacer = new Placer<BuildingParameters>(Root.Template.House.Designs, Rng);
+            this._marketPlacer = new MarketPlacer(Root.Template.Well.Designs, Rng);
         }
         
         public PlacementDesign CreateDesign()
@@ -41,10 +40,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             var configs = new[] { _config.InnerRing, _config.MiddleRing, _config.OuterRing };
             for (var i = 0; i < configs.Length; i++)
             {
+                design.Markets = design.Markets.Concat(this._marketPlacer.Place(sortedPoints[i], configs[i].MarketChances)).ToArray();
                 design.Stables = design.Stables.Concat(this._stablePlacer.Place(sortedPoints[i], configs[i].StableChances)).ToArray();
                 design.Blacksmith = design.Blacksmith.Concat(this._blacksmithPlacer.Place(sortedPoints[i], configs[i].BlacksmithChances)).ToArray();
                 design.Houses = design.Houses.Concat(this._housePlacer.Place(sortedPoints[i], configs[i].HouseChances)).ToArray();
-                design.Farms = design.Farms.Concat(this._farmPlacer.Place(sortedPoints[i], configs[i].FarmChances)).ToArray();
+                design.Farms = design.Farms.Concat(this._farmPlacer.Place(sortedPoints[i], configs[i].FarmChances)).ToArray();                
             }
             this.RemoveIntersecting(design);
             return design;
@@ -54,11 +54,14 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             var parameters = Design.Blacksmith.Concat<IBuildingParameters>(Design.Farms)
                 .Concat(Design.Houses).Concat(Design.Stables).Concat(Design.Markets).ToList();
+            parameters.Shuffle(_rng);
             var asPoints = parameters.Select(P => new PlacementPoint
             {
                 Position = P.Position,
-                Radius = _root.Cache.GrabSize(P.Design.Path).Xz.LengthFast
+                Radius = P.GetSize(_root),
+                CanBeRemoved = Array.IndexOf(Design.Markets, P) == -1
             }).ToList();
+
             var toRemove = new List<IBuildingParameters>();
             for (var i = asPoints.Count-1; i > -1; i--)
             {
@@ -70,21 +73,25 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     parameters.RemoveAt(i);
                 }
             }
-            Design.Blacksmith = RemoveIfExists(Design.Blacksmith, toRemove);
-            Design.Farms = RemoveIfExists(Design.Farms, toRemove);
-            Design.Houses = RemoveIfExists(Design.Houses, toRemove);
-            Design.Markets = RemoveIfExists(Design.Markets, toRemove);
-            Design.Stables = RemoveIfExists(Design.Stables, toRemove);
+            Design.Blacksmith = this.RemoveIfExists<BlacksmithParameters>(Design.Blacksmith, toRemove);
+            Design.Farms = this.RemoveIfExists<FarmParameters>(Design.Farms, toRemove);
+            Design.Houses = this.RemoveIfExists<BuildingParameters>(Design.Houses, toRemove);
+            Design.Markets = this.RemoveIfExists<BuildingParameters>(Design.Markets, toRemove);
+            Design.Stables = this.RemoveIfExists<BuildingParameters>(Design.Stables, toRemove);
         }
 
-        private T[] RemoveIfExists<T>(T[] Parameters, List<IBuildingParameters> Posibilities) where T : IBuildingParameters
+        private T[] RemoveIfExists<T>(object[] Parameters, List<IBuildingParameters> Posibilities)
         {
             var newList = Parameters.ToList();
             for (var i = 0; i < Posibilities.Count; i++)
             {
-                newList.Remove((T)Posibilities[i]);
+                var index = newList.IndexOf(Posibilities[i]);
+                if (index != -1)
+                {
+                    newList.RemoveAt(index);
+                }
             }
-            return newList.ToArray();
+            return newList.Cast<T>().ToArray();
         }
 
         private PlacementPoint[] SamplePoints(VillageRing Ring)
@@ -100,7 +107,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                          0,
                          _rng.Next((int) -Ring.Radius, (int) Ring.Radius)
                          ),
-                     Radius = 0,
+                     Radius = 0
                 };
             }
             return points;
@@ -116,13 +123,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 var innerRing = Ring.InnerRing.InnerRing;
                 var middleRing = Ring.InnerRing;
 
-                if(outerRingPoints.Contains(Points[i]))
+                if(Ring.Collides(Points[i]))
                     outerRingPoints.Add(Points[i]);
 
-                if(middleRingPoints.Contains(Points[i]))
+                if(middleRing.Collides(Points[i]))
                     middleRingPoints.Add(Points[i]);
 
-                if(innerRingPoints.Contains(Points[i]))
+                if(innerRing.Collides(Points[i]))
                     innerRingPoints.Add(Points[i]);    
             }
             return new[]
@@ -137,10 +144,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             for (var i = 0; i < Points.Count; i++)
             {
-                if (PlacementPoint.Collide(Point, Points[i]) && Point != Points[i])
-                    return false;
+                if (PlacementPoint.Collide(Point, Points[i]) && Point != Points[i] && Point.CanBeRemoved)
+                    return true;
             }
-            return true;
+            return false;
         }
     }
 }

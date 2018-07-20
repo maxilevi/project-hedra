@@ -9,15 +9,21 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     internal class VillageCache
     {
-
+        public static MarketCache Market { get; }
         private readonly Dictionary<string, List<CollisionShape>> _colliderCache;
         private readonly Dictionary<string, VertexData> _modelCache;
         private readonly Dictionary<string, Vector3> _sizeCache;
-        
+
+        static VillageCache()
+        {
+            Market = new MarketCache();
+        }
+
         private VillageCache()
         {
             _colliderCache = new Dictionary<string, List<CollisionShape>>();
             _modelCache = new Dictionary<string, VertexData>();
+            _sizeCache = new Dictionary<string, Vector3>();
         }
 
         public List<CollisionShape> GrabShapes(string Path)

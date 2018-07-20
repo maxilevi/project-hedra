@@ -8,11 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Rendering;
 using OpenTK;
-using System.Drawing;
 using Hedra.Engine.AISystem;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Player;
@@ -20,51 +16,61 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
-using Hedra.Engine.QuestSystem.Objectives;
-using Hedra.Engine.Scenes;
 
 namespace Hedra.Engine.QuestSystem
 {
 	/// <summary>
 	/// Description of QuestGenerator.
 	/// </summary>
-	internal class QuestManager : IUpdatable
+	internal class QuestManager
 	{
-		
-		private bool _addedToMenu;
-		private bool _goalSent = false;
-		public bool QuestCompleted {get; set;}
-		public int ChainLength {get; private set;}
-		public const int MaxChainLength = 9;
-		public Random Generator {get; private set;}
+	    private readonly List<IGroundwork> _groundwork;
+	    private readonly List<Plateau> _plateaus;
+        private readonly object _plateauLock = new object();
+	    private readonly object _groundworkLock = new object();
 
-		public Vector3 ObjectivePosition;
-		public Objective Quest;
-	    public Dictionary<Vector3, float> VillagePositions = new Dictionary<Vector3, float>();
-	    public List<Plateau> Plateaus = new List<Plateau>();
-	    public List<Objective> PassedObjectives = new List<Objective>();
-		public ObjectMesh QuestIcon;
-		
-		public QuestManager(){
-			Quest = new DummyObjective();
-			
-			UpdateManager.Add(this);
-		}
+	    public QuestManager()
+	    {
+	        _groundwork = new List<IGroundwork>();
+            _plateaus = new List<Plateau>();
+        }
 
 	    public void AddPlateau(Plateau Mount)
 	    {
-	        lock(Plateaus)
-                Plateaus.Add(Mount);
+	        lock (_plateauLock)
+	        {
+	            _plateaus.Add(Mount);
+	        }
 	    }
 
-	    public void AddVillagePosition(Vector3 Position, float Radius)
+	    public void AddGroundwork(IGroundwork Work)
 	    {
-	        lock(VillagePositions)
-	            VillagePositions.Add( Position, Radius);
+	        lock (_groundworkLock)
+	        {
+	            _groundwork.Add(Work);
+	        }
+	    }
 
-        }
+	    public Plateau[] Plateaus
+	    {
+	        get
+	        {
+	            lock (_plateauLock)
+	                return _plateaus.ToArray();
+	        }
+	    }
 
-	    public Entity SpawnCarriage(Vector3 Position)
+	    public IGroundwork[] Groundworks
+	    {
+	        get
+	        {
+	            lock (_groundworkLock)
+	                return _groundwork.ToArray();
+	        }
+	    }
+
+
+        public Entity SpawnCarriage(Vector3 Position)
 	    {
 	        Entity carriage = World.SpawnMob("QuestCarriage", Position, 1);
 	        carriage.Health = carriage.MaxHealth;
@@ -169,91 +175,9 @@ namespace Hedra.Engine.QuestSystem
 	        World.AddStructure(chest);
 	    	return chest;
 	    }
-	    
-	    public bool WasQuestTypeDone(Type QuestType){
-	    	for(int i = 0; i < PassedObjectives.Count; i++){
-	    		if( PassedObjectives[i].GetType() == QuestType)
-	    			return true;
-	    	}
-	    	return false;
-	    }
-	    
-	    public void EndRun(){
-	    	Sound.SoundManager.PlayUISound(Sound.SoundType.NotificationSound);
-			LocalPlayer.Instance.MessageDispatcher.ShowTitleMessage("QUEST COMPLETED", 3f, Color.Gold);
-			float Exp = ChainLength * 7;
-			this.QuestCompleted = true;
-			GameManager.Player.CanInteract = false;
-			TaskManager.After(2500, delegate{ 
-		        var label = new Billboard(4.0f, "+"+Exp+" XP", Color.Violet, FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
-				GameManager.Player.Position);
-				label.Size = .4f;
-				label.Vanish = true;
-			});
-			
-			
-	    }
-		
-	    public void Recreate(){
-			//Quest.Recreate();
-		}
-		
-		public void Update(){
 
-			if(Quest.IsLost || this.QuestCompleted)
-			{
-			    LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile(Networking.NetworkManager.IsConnected ? "[R] Disconnect" : "[R] New Run",
-			        () => Quest.IsLost || this.QuestCompleted);
-			}
-				
-		}
-		
-		public void SetQuest(Objective Quest){
-			//this.Quest = Quest;
-			//Quest.Recreate();
-		}
-		
-		public Objective GenerateQuest()
-		{
-		    return new DummyObjective();
-			//Build Quest Chain
-			this.QuestCompleted = false;
-			Objective quest = null;
-			Generator = new Random(World.Seed+232);
-			ChainLength = Generator.Next(4, MaxChainLength);
-			int n = Generator.Next(0,6);
-
-			switch(n){
-				case 0:
-					quest = new RecoverItemObjective(TempleType.RandomTemple);
-					break;
-				case 1:
-					quest = new BossObjective();
-					break;
-				case 2:
-					quest = new RescueHumanObjective();
-					break;
-				case 3:
-				    quest = new VillageObjective();
-					break;
-				case 4:
-				    quest = new CollectItemsObjective();
-					break;
-			    case 5:
-			        quest = new ClearCementeryObjective();
-			        break;
-              /*  case 6:
-                    quest = new RecoverBlacksmithHammerObjective();
-                    break;
-			    case 7:
-			        quest = new RecoverCarriageObjective();
-			        break;*/
-
-            }
-			return quest;
-		}
-		
-		public string GenerateName(){
+		public string GenerateName()
+        {
 			var rng = new Random(World.Seed);
 			var types = new string[]{"Islands","Lands","Mountains"};
 			return types[rng.Next(0,types.Length)]+" of "+NameGenerator.Generate(World.Seed);

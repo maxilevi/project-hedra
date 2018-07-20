@@ -7,10 +7,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
     {
         public Vector3 Position { get; set; }
         public float Radius { get; set; }
+        public bool CanBeRemoved { get; set; }
 
         public static bool Collide(PlacementPoint PointA, PlacementPoint PointB)
         {
-            return (PointA.Position - PointB.Position).LengthSquared < Math.Pow(PointA.Radius + PointB.Radius, 2);
+            return (PointA.Position - PointB.Position).LengthFast < PointA.Radius + PointB.Radius;
         }
     }
 }

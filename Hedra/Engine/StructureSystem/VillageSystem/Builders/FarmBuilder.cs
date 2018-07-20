@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Linq;
-using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     internal class FarmBuilder : Builder<FarmParameters>
     {
+        protected override bool LookAtCenter => false;
+
         public override void Place(FarmParameters Parameters, VillageCache Cache)
         {
             var size = Cache.GrabSize(Parameters.Design.Path);
             var offsets = this.BuildFarmOffsets(size);
-            this.PlaceGroundwork(Parameters.Position + offsets[0], size.Xz.LengthFast);
-            this.PlaceGroundwork(Parameters.Position + offsets[1], size.Xz.LengthFast);
-            this.PlaceGroundwork(Parameters.Position + offsets[2], size.Xz.LengthFast);
-            this.PlaceGroundwork(Parameters.Position + offsets[3], size.Xz.LengthFast);
+            this.PlaceGroundwork(Parameters.Position + offsets[0], size.Xz.LengthFast * .5f);
+            this.PlaceGroundwork(Parameters.Position + offsets[1], size.Xz.LengthFast * .5f);
+            this.PlaceGroundwork(Parameters.Position + offsets[2], size.Xz.LengthFast * .5f);
+            this.PlaceGroundwork(Parameters.Position + offsets[3], size.Xz.LengthFast * .5f);
             if (Parameters.HasWindmill)
             {
                 this.PlaceGroundwork(Parameters.Position, Cache.GrabSize(Parameters.WindmillDesign.Path).Xz.LengthFast);
@@ -32,15 +32,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return base.Paint(Parameters, Input);
         }
 
-        public override BuildingOutput Build(FarmParameters Parameters, VillageCache Cache)
+        public override BuildingOutput Build(FarmParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
             var size = Cache.GrabSize(Parameters.Design.Path);
             var offsets = this.BuildFarmOffsets(size);
-            var farm0 = base.Build(Parameters.AlterPosition(offsets[0]), Cache);
-            var farm1 = base.Build(Parameters.AlterPosition(offsets[1]), Cache);
-            var farm2 = base.Build(Parameters.AlterPosition(offsets[2]), Cache);
-            var farm3 = base.Build(Parameters.AlterPosition(offsets[3]), Cache);
-            var windmill = this.BuildWindmill(Parameters, Cache);
+            var farm0 = base.Build(Parameters.AlterPosition(offsets[0]), Cache, Rng, Center);
+            var farm1 = base.Build(Parameters.AlterPosition(offsets[1]), Cache, Rng, Center);
+            var farm2 = base.Build(Parameters.AlterPosition(offsets[2]), Cache, Rng, Center);
+            var farm3 = base.Build(Parameters.AlterPosition(offsets[3]), Cache, Rng, Center);
+            var windmill = Parameters.HasWindmill ? this.BuildWindmill(Parameters, Cache) : BuildingOutput.Empty;
             return new BuildingOutput
             {
                 Model = farm0.Model + farm1.Model + farm2.Model + farm3.Model + windmill.Model,
@@ -71,10 +71,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             return new Vector3[]
             {
-                Vector3.UnitX * Size.X * .25f + Vector3.UnitZ * Size.Z * .25f,
-                Vector3.UnitX * Size.X * -.25f + Vector3.UnitZ * Size.Z * .25f,
-                Vector3.UnitX * Size.X * .25f + Vector3.UnitZ * Size.Z * -.25f,
-                Vector3.UnitX * Size.X * -.25f + Vector3.UnitZ * Size.Z * -.25f
+                Vector3.UnitX * Size.X * .75f + Vector3.UnitZ * Size.Z * .75f,
+                Vector3.UnitX * Size.X * -.75f + Vector3.UnitZ * Size.Z * .75f,
+                Vector3.UnitX * Size.X * .75f + Vector3.UnitZ * Size.Z * -.75f,
+                Vector3.UnitX * Size.X * -.75f + Vector3.UnitZ * Size.Z * -.75f
             };
         }
         

@@ -21,7 +21,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             var parameters = new List<T>();
             for (var i = 0; i < Points.Length; i++)
             {
-                if (Rng.NextFloat() < Chances)
+                if (Rng.NextFloat() < Chances && this.SpecialRequirements(Points[i]))
                 {
                     parameters.Add(this.FromPoint(Points[i]));
                 }
@@ -37,6 +37,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
                 Position = Point.Position,
                 Rng = Rng
             };
+        }
+
+        protected virtual bool SpecialRequirements(PlacementPoint Point)
+        {
+            return true;
         }
         
         protected T SelectRandom<T>(T[] Templates)

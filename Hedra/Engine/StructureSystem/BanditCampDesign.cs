@@ -156,7 +156,7 @@ namespace Hedra.Engine.StructureSystem
 
             for (var i = 0; i < tents.Length; i++)
             {
-                World.QuestManager.AddVillagePosition(tents[i].WorldPosition, 16f);
+                World.QuestManager.AddGroundwork(new RoundedGroundwork(tents[i].WorldPosition, 16f));
             }
 
             var structure = new CollidableStructure(this, TargetPosition, plateau);
