@@ -8,7 +8,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
     internal abstract class CombatAIComponent : HumanoidAIComponent
     {

@@ -2,7 +2,7 @@
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
     /// <inheritdoc />
     internal class EscapeAIComponent : EntityComponent

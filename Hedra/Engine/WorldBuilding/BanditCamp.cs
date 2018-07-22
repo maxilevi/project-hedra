@@ -70,7 +70,7 @@ namespace Hedra.Engine.QuestSystem
             {
                 HumanType.Warrior, HumanType.Archer, HumanType.Blacksmith, HumanType.Mage, HumanType.TravellingMerchant
             };
-            _rescuee = World.QuestManager.SpawnHumanoid(randomTypes[Rng.Next(0, randomTypes.Length)],
+            _rescuee = World.WorldBuilding.SpawnHumanoid(randomTypes[Rng.Next(0, randomTypes.Length)],
                 this.Position + Vector3.UnitY * 7f + Vector3.UnitZ * 3.0f);
             _rescuee.Physics.UsePhysics = false;
             _rescuee.Physics.HasCollision = false;

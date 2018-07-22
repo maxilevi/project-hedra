@@ -8,7 +8,7 @@
  */
 using System;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <summary>
 	/// Description of MageAIComponent.

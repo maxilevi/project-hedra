@@ -2,7 +2,7 @@
 using Hedra.Engine.Sound;
 using OpenTK.Input;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
     internal class Tombstone : InteractableStructure
     {

@@ -14,7 +14,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
     /// <summary>
     /// Description of WarriorAI.

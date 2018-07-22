@@ -10,7 +10,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.Management;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <inheritdoc />
 	/// <summary>

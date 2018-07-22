@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Hedra.Engine.EntitySystem;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
     internal class CarriageAIComponent : EntityComponent
     {

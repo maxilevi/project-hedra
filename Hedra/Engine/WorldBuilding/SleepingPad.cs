@@ -9,7 +9,7 @@ using Hedra.Engine.Scenes;
 using OpenTK;
 using OpenTK.Input;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
     internal class SleepingPad : BaseStructure, IUpdatable, ITickable
     {

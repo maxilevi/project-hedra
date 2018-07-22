@@ -13,7 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
     /// <inheritdoc cref="BaseStructure" />
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using Hedra.Engine.Generation;
 using OpenTK;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
     internal interface IGroundwork
     {

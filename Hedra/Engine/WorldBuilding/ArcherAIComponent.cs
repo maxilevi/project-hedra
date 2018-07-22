@@ -14,7 +14,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <summary>
 	/// Description of ArcherAI.

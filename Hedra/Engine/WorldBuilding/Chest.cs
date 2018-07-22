@@ -21,7 +21,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK.Input;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <summary>
 	/// Description of Chest.

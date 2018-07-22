@@ -16,7 +16,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.UI;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <summary>
 	/// Description of Obelisk.

@@ -16,7 +16,7 @@ using Hedra.Engine.Player;
 using OpenTK;
 using OpenTK.Input;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <summary>
 	/// Description of ClaimableStrucuture.

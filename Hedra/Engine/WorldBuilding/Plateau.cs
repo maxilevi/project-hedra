@@ -9,7 +9,7 @@
 using System;
 using OpenTK;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <summary>
 	/// Description of Plateau.
@@ -21,11 +21,17 @@ namespace Hedra.Engine.QuestSystem
 	    public float Radius { get; set; }
 	    public float MaxHeight { get; set; }
 
-	    public Plateau(Vector3 Position, float Radius, float Height, float MaxHeight){
+	    public Plateau(Vector3 Position, float Radius, float Height, float MaxHeight)
+        {
 			this.Position = Position;
 			this.Radius = Radius;
 		    this.Height = Height;
 			this.MaxHeight = MaxHeight;
 		}
+
+	    public bool Collides(Plateau Mount)
+	    {
+	        return (this.Position - Mount.Position).LengthFast < Mount.Radius + this.Radius;
+	    }
 	}
 }

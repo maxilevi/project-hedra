@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <summary>
 	/// Description of NameGenerator.

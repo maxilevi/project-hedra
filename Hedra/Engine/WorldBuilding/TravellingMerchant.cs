@@ -7,7 +7,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Rendering;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <summary>
 	/// Description of Campfire.

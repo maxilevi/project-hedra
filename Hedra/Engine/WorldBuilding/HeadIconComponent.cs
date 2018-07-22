@@ -16,7 +16,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Scenes;
 using OpenTK;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
     internal class HeadIconComponent : EntityComponent
     {

@@ -3,7 +3,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
     internal class BlacksmithComponent :  TradeComponent
     {

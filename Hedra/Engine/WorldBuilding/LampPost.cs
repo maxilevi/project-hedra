@@ -12,7 +12,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <summary>
 	/// Manages a static light
