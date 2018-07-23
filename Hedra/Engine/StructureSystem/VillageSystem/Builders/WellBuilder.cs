@@ -1,14 +1,14 @@
 ﻿using Hedra.Engine.Generation;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     internal class WellBuilder : Builder<BuildingParameters>
     {
-        public override void Place(BuildingParameters Parameters, VillageCache Cache)
+        public override bool Place(BuildingParameters Parameters, VillageCache Cache)
         {
-            //this.PlaceGroundwork(Parameters.Position, 96);
+            return this.PlaceGroundwork(Parameters.Position, 32, BlockType.Path);
         }
 
         public override void Polish(BuildingParameters Parameters)

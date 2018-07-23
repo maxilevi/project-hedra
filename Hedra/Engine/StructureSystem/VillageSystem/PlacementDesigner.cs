@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
@@ -47,9 +49,20 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 design.Farms = design.Farms.Concat(this._farmPlacer.Place(sortedPoints[i], configs[i].FarmChances)).ToArray();                
             }
             this.RemoveIntersecting(design);
+            this.BuildPaths(design);
             return design;
         }
 
+        public void BuildPaths(PlacementDesign Design)
+        {
+            for (var i = 0; i < Design.Houses.Length; i++)
+            {
+                var dir = (Design.Markets[0].Position.Xz - Design.Houses[i].Position.Xz).NormalizedFast();
+                var path = new LineGroundwork(Design.Houses[i].Position.Xz - dir * 8, Design.Markets[0].Position.Xz - dir * 96, BlockType.Path);
+                World.WorldBuilding.AddGroundwork(path);
+            }
+        }
+        
         private void RemoveIntersecting(PlacementDesign Design)
         {
             var parameters = Design.Blacksmith.Concat<IBuildingParameters>(Design.Farms)

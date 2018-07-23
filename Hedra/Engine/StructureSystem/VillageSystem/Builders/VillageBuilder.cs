@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -41,27 +42,29 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public void PlaceGroundwork(PlacementDesign Design)
         {
-            for (var i = 0; i < Design.Houses.Length; i++)
+            Design.Markets = LoopStructures(Design.Markets, _marketBuilder, _wellBuilder);
+            Design.Houses = LoopStructures(Design.Houses, _houseBuilder);
+            Design.Blacksmith = LoopStructures(Design.Blacksmith, _blacksmithBuilder);
+            Design.Farms = LoopStructures(Design.Farms, _farmBuilder);
+            Design.Stables = LoopStructures(Design.Stables, _stableBuilder);
+            _designer.BuildPaths(Design);
+        }
+
+        private T[] LoopStructures<T>(T[] Parameters, params Builder<T>[] Builders) where T : IBuildingParameters
+        {
+            var list = Parameters.ToList();
+            for (var i = 0; i < Parameters.Length; i++)
             {
-                _houseBuilder.Place(Design.Houses[i], _root.Cache);
+                for(var j = 0; j < Builders.Length; j++)
+                {
+                    if (!Builders[j].Place(Parameters[i], _root.Cache))
+                    {
+                        list.Remove(Parameters[i]);
+                        break;
+                    }
+                }
             }
-            for (var i = 0; i < Design.Blacksmith.Length; i++)
-            {
-                _blacksmithBuilder.Place(Design.Blacksmith[i], _root.Cache);
-            }
-            for (var i = 0; i < Design.Farms.Length; i++)
-            {
-                _farmBuilder.Place(Design.Farms[i], _root.Cache);
-            }
-            for (var i = 0; i < Design.Stables.Length; i++)
-            {
-                _stableBuilder.Place(Design.Stables[i], _root.Cache);
-            }      
-            for (var i = 0; i < Design.Markets.Length; i++)
-            {
-                _wellBuilder.Place(Design.Markets[i], _root.Cache);
-                _marketBuilder.Place(Design.Markets[i], _root.Cache);
-            }
+            return list.ToArray();
         }
 
         public void Build(PlacementDesign Design)

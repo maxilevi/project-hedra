@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenTK;
 using Hedra.Engine.AISystem;
 using Hedra.Engine.ClassSystem;
@@ -17,29 +18,44 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Engine.WorldBuilding
 {
 	/// <summary>
 	/// Description of QuestGenerator.
 	/// </summary>
-	internal class QuestManager
+	internal class WorldBuilding
 	{
 	    private readonly List<IGroundwork> _groundwork;
 	    private readonly List<Plateau> _plateaus;
         private readonly object _plateauLock = new object();
 	    private readonly object _groundworkLock = new object();
 
-	    public QuestManager()
+	    public WorldBuilding()
 	    {
 	        _groundwork = new List<IGroundwork>();
             _plateaus = new List<Plateau>();
+        }
+
+	    public bool CanAddPlateau(Plateau Mount)
+	    {
+	        lock (_plateauLock)
+	        {
+	            for (var i = 0; i < _plateaus.Count; i++)
+	            {
+	                if (_plateaus[i].Collides(Mount) && Math.Abs(_plateaus[i].MaxHeight - Mount.MaxHeight) > 2.0f)
+	                {
+	                    return false;
+	                }
+	            }
+	            return true;
+	        }
         }
 
 	    public void AddPlateau(Plateau Mount)
 	    {
 	        lock (_plateauLock)
 	        {
-	            _plateaus.Add(Mount);
+                _plateaus.Add(Mount);
 	        }
 	    }
 
@@ -50,15 +66,17 @@ namespace Hedra.Engine.QuestSystem
 	            _groundwork.Add(Work);
 	        }
 	    }
-
-	    public Plateau[] Plateaus
-	    {
-	        get
-	        {
-	            lock (_plateauLock)
-	                return _plateaus.ToArray();
-	        }
-	    }
+		
+		public Plateau[] Plateaus
+		{
+			get
+			{
+				lock (_plateauLock)
+				{
+					return _plateaus.Select(P => P).ToArray();
+				}
+			}
+		}
 
 	    public IGroundwork[] Groundworks
 	    {

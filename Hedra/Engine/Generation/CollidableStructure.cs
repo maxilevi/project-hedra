@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 
 namespace Hedra.Engine.Generation

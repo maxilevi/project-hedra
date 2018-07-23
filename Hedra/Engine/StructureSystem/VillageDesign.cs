@@ -5,7 +5,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
@@ -27,15 +27,14 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
-            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
             var region = World.BiomePool.GetRegion(TargetPosition);
             var builder = new VillageBuilder(VillageLoader.Designer[region.Structures.VillageType], Rng);
             var design = builder.DesignVillage();
             design.Translate(TargetPosition);
             builder.PlaceGroundwork(design);
 
-            var plateau = new Plateau(TargetPosition, this.Radius, 800, height);
-            //World.QuestManager.AddPlateau(plateau);
+            var plateau = new Plateau(TargetPosition, 200);
+            World.WorldBuilding.AddPlateau(plateau);
             var structure = new CollidableStructure(this, TargetPosition, plateau);
             structure.Parameters.Set("Builder", builder);
             structure.Parameters.Set("Design", design);

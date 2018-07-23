@@ -1,4 +1,6 @@
-﻿using Hedra.Engine.Generation;
+﻿using System;
+using System.ComponentModel;
+using Hedra.Engine.Generation;
 using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
@@ -8,7 +10,8 @@ namespace Hedra.Engine.WorldBuilding
         public BlockType Type { get; set; } = BlockType.Path;
         public Vector3 Position { get; set; }
         public float Radius { get; set; }
-        public Half Density { get; set; } = (Half) 0f;
+        public float BonusHeight { get; set; }
+        public bool IsPath => false;
 
         public RoundedGroundwork(Vector3 Position, float Radius)
         {
@@ -24,6 +27,11 @@ namespace Hedra.Engine.WorldBuilding
         public bool Affects(Vector2 Sample)
         {
             return (Sample - this.Position.Xz).LengthSquared < this.Radius * this.Radius;
+        }
+        
+        public float Density(Vector2 Sample)
+        {
+            return 1 - Math.Min((Sample - this.Position.Xz).LengthSquared / (this.Radius * this.Radius), 1);
         }
     }
 }

@@ -255,7 +255,7 @@ namespace Hedra.Engine
 						Player.QuestLog.Show = true;
 
 				    LocalPlayer.Instance.PlaySpawningAnimation = true;
-                    LocalPlayer.Instance.MessageDispatcher.ShowTitleMessage(World.QuestManager.GenerateName(), 1.5f);
+                    LocalPlayer.Instance.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);
 					_isNewRun = false;
 					break;
 				}

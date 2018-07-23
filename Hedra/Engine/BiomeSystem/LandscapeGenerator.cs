@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using OpenTK;
 
@@ -48,8 +48,8 @@ namespace Hedra.Engine.BiomeSystem
 
 	        var noise3D = new float[0]; //Chunk.ChunkHeight / noiseScale];
 
-	        var plateauPositions = World.QuestManager.Plateaus;
-	        var groundworks = World.QuestManager.Groundworks;
+	        var plateaus = World.WorldBuilding.Plateaus;
+	        var groundworks = World.WorldBuilding.Groundworks;
 
 	        CollidableStructure[] structs;
 
@@ -102,31 +102,18 @@ namespace Hedra.Engine.BiomeSystem
 	                          item.Design is GiantTreeDesign
 	                    select item).FirstOrDefault();
 
-	                //var inPlateau = false;
-
-		            var biggestPlateau = this.GetBiggestPlateauForPosition(position, plateauPositions);	            
+	                var inPlateau = false;          
 	                var smallFrequency = SmallFrequency(position.X, position.Y);
+		            for (var i = 0; i < plateaus.Length; i++)
+		            {
+			            var previousHeight = height;
+			            height = plateaus[i].Apply(position, height, smallFrequency);       
+			            if ( Math.Abs(previousHeight - height) < 0.05f) inPlateau = true;
+	                    if (inPlateau && nearGiantTree != null && plateaus[i] == nearGiantTree.Mountain) giantTree = true;	                    
+	                }
 		            
-                    /*foreach (Plateau plateau in plateauPositions)
-	                {
-
-	                    float dist = (plateau.Position.Xz - position).LengthSquared;
-	                    float final = Math.Max(1 - Math.Min(dist / (plateau.Radius * plateau.Radius), 1), 0);
-	                    float addonHeight = plateau.Height * Math.Max(final, 0f);
-
-	                    height += addonHeight;
-	                    height = Mathf.Lerp(height - addonHeight,
-	                        Math.Min(
-	                            (plateau.Radius < 64 ? biggestPlateau ?? plateau : plateau).MaxHeight +
-	                            smallFrequency,
-	                            height),
-	                        Math.Min(1.0f, final * 1.5f));
-
-
-	                    /*if (final > 0 && nearGiantTree != null && plateau == nearGiantTree.Mountain) giantTree = true;
-
-	                    if (final > 0) inPlateau = true;
-	                }*/
+		            IGroundwork[] blockGroundworks = groundworks.ToList()
+			            .Where(G => G.Affects(position)).ToArray();
 
 	                if (townClamped && townHeight != height)
 	                    townClamped = false;
@@ -143,13 +130,13 @@ namespace Hedra.Engine.BiomeSystem
 	                height = Math.Max(0, height + Chunk.BaseHeight);
 	                path = Mathf.Lerp(path, 0, river / riverDepth);
 
-                    /*
-	                foreach (Plateau plateau in plateauPositions)
+                    
+		            for (var i = 0; i < plateaus.Length; i++)
 	                {
 	                    float plateauDist =
-	                    (plateau.Position.Xz -
+	                    (plateaus[i].Position.Xz -
 	                     new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize)).LengthFast;
-	                    float plateauFinal = Math.Max(1 - plateauDist / plateau.Radius, 0);
+	                    float plateauFinal = Math.Max(1 - plateauDist / plateaus[i].Radius, 0);
 
 	                    //Dont do this near trees
 	                    if (nearGiantTree == null)
@@ -159,11 +146,11 @@ namespace Hedra.Engine.BiomeSystem
 	                            riverBorders);
 	                    }
 
-	                    if (path > 0 && nearCollidableStructure != null && plateau == nearCollidableStructure.Mountain)
+	                    if (path > 0 && nearCollidableStructure != null && plateaus[i] == nearCollidableStructure.Mountain)
 	                        pathClamped = true;
 
 	                    path = Mathf.Clamp(Mathf.Lerp(0, path, 1 - Math.Min(1, plateauFinal * 3f)), 0, path);
-	                }*/
+	                }
 
 	                for (var i = 0; i < noise3D.Length; i++)
 	                {
@@ -195,43 +182,41 @@ namespace Hedra.Engine.BiomeSystem
 	                }
 
 	                float riverLerp = amplifiedRiverBorders / riverDepth;
-
-	                if ((riverLerp > 0 || path > 0) /*&& !inPlateau*/)
+		            var pathGroundwork = blockGroundworks.FirstOrDefault(P => P.IsPath);
+		            var groundworkDensity = pathGroundwork?.Density(position) ?? 0;
+	                if ((riverLerp > 0 || path > 0) && !inPlateau || groundworkDensity > 0)
 	                {
-
-	                    if (heightCache.ContainsKey(new Vector2(x * Chunk.BlockSize + OffsetX,
+                        if (heightCache.ContainsKey(new Vector2(x * Chunk.BlockSize + OffsetX,
 	                        z * Chunk.BlockSize + OffsetZ)))
 	                    {
+		                    var cache = heightCache[new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ)][0];
 	                        if (path > 0)
 	                        {
-	                            path = Mathf.Lerp(path, 0, Mathf.Clamp(heightCache[
-	                                                                       new Vector2(x * Chunk.BlockSize + OffsetX,
-	                                                                           z * Chunk.BlockSize + OffsetZ)][0] / 32.0f,
-	                                0,
-	                                1.0f));
+	                            path = Mathf.Lerp(path, 0, Mathf.Clamp(cache / 32.0f, 0, 1.0f));
 	                        }
 	                        if (riverLerp > 0)
 	                        {
-	                            float minus = Mathf.Lerp(0,
-	                                heightCache[
-	                                    new Vector2(x * Chunk.BlockSize + OffsetX,
-	                                        z * Chunk.BlockSize + OffsetZ)][0], riverLerp);
-	                            height -= minus;
+	                            height -= Mathf.Lerp(0, cache, riverLerp);
 	                        }
+		                    if (pathGroundwork != null)
+		                    {
+			                    height -= Mathf.Lerp(0, cache, groundworkDensity);
+		                    }
 	                    }
 	                }
-
-
+		            if (blockGroundworks.Length > 0)
+		            {
+			            height += blockGroundworks[blockGroundworks.Length - 1].BonusHeight;
+		            }
+		            if (pathGroundwork != null)
+		            {
+			            river = Mathf.Lerp(river, 0, groundworkDensity);
+		            }
 	                height -= river;
 	                height -= path;
-	                var dirtNoise = OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + OffsetX) * 0.0175f,
+		            var dirtNoise = OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + OffsetX) * 0.0175f,
 	                                    (z * Chunk.BlockSize + OffsetZ) * 0.0175f) > .35f;
-
-
 	                bool makeDirt = biomeGen.HasDirt && dirtNoise;
-
-	                IGroundwork[] blockGroundworks = groundworks.ToList()
-	                    .Where(G => G.Affects(position)).ToArray();
 	                
 
 	                #endregion
@@ -340,7 +325,6 @@ namespace Hedra.Engine.BiomeSystem
 					{
 						var groundwork = BlockGroundworks[BlockGroundworks.Length - 1];
 						Blocks[X][Y][Z].Type = groundwork.Type;
-						Blocks[X][Y][Z].Density += groundwork.Density;
 					}
 
 					if (town && townClamped)

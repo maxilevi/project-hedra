@@ -21,7 +21,7 @@ using System.IO;
 using System.Collections;
 using System.Linq;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 
 
 namespace Hedra.Engine.Networking

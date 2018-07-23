@@ -10,7 +10,7 @@
 using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem.BossSystem

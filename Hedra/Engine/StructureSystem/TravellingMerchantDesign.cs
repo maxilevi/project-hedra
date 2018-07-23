@@ -6,7 +6,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -40,20 +40,15 @@ namespace Hedra.Engine.StructureSystem
             underChunk.Blocked = true;
 
             World.AddStructure(merchant);
-            Executer.ExecuteOnMainThread(() => World.QuestManager.SpawnHumanoid(HumanType.TravellingMerchant, Position));
+            Executer.ExecuteOnMainThread(() => World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position));
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
             World.StructureGenerator.MerchantSpawned = true;
-
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
-
             World.StructureGenerator.MerchantPosition = TargetPosition;
-
-            var plateau = new Plateau(TargetPosition, 48, 4, height);
-            World.QuestManager.AddPlateau(plateau);
+            var plateau = new Plateau(TargetPosition, 48);
+            World.WorldBuilding.AddPlateau(plateau);
             return new CollidableStructure(this, TargetPosition, plateau);
         }
 

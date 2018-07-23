@@ -6,8 +6,9 @@ namespace Hedra.Engine.WorldBuilding
     internal interface IGroundwork
     {
         BlockType Type { get; set; }
-        Half Density { get; set; }
-
+        float BonusHeight { get; set; }
+        bool IsPath { get; }
         bool Affects(Vector2 Sample);
+        float Density(Vector2 Sample);
     }
 }

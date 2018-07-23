@@ -13,7 +13,6 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Scenes;
 using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding

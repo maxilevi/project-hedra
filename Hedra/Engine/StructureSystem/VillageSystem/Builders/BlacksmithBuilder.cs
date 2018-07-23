@@ -1,16 +1,16 @@
 ﻿using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
 	internal class BlacksmithBuilder : Builder<BlacksmithParameters>
 	{
-	    public override void Place(BlacksmithParameters Parameters, VillageCache Cache)
+	    public override bool Place(BlacksmithParameters Parameters, VillageCache Cache)
 	    {
-	        this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .75f, BlockType.StonePath);
+	        return this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .75f, BlockType.StonePath);
         }
 
 	    public override BuildingOutput Paint(BlacksmithParameters Parameters, BuildingOutput Input)
@@ -31,7 +31,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
 		public override void Polish(BlacksmithParameters Parameters)
 		{
-			World.QuestManager.SpawnHumanoid(HumanType.Blacksmith, Parameters.Position + Parameters.Design.Blacksmith * Parameters.Design.Scale);
+			World.WorldBuilding.SpawnHumanoid(HumanType.Blacksmith, Parameters.Position + Parameters.Design.Blacksmith * Parameters.Design.Scale);
 		}
 	}
 }

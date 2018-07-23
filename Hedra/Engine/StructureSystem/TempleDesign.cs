@@ -8,7 +8,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -59,12 +59,9 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            var plateau = new Plateau(TargetPosition, Radius);
 
-            var plateau = new Plateau(TargetPosition, Radius, 800, height);
-
-            World.QuestManager.AddPlateau(plateau);
+            World.WorldBuilding.AddPlateau(plateau);
 
             return new CollidableStructure(this, TargetPosition, plateau);
 

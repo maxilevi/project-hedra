@@ -12,10 +12,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     internal class MarketBuilder : Builder<BuildingParameters>
     {
-        public override void Place(BuildingParameters Parameters, VillageCache Cache)
+        public override bool Place(BuildingParameters Parameters, VillageCache Cache)
         {
-            this.PlaceGroundwork(Parameters.Position, 96, BlockType.StonePath);
-            this.PlaceGroundwork(Parameters.Position, 32, BlockType.Path);
+            return this.PlaceGroundwork(Parameters.Position, 96, BlockType.StonePath);
         }
 
         public override BuildingOutput Paint(BuildingParameters Parameters, BuildingOutput Input)
@@ -35,13 +34,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             for (var i = 0; i < marketCount; i++)
             {
                 if (i == 0)
-                    World.QuestManager.SpawnHumanoid(HumanType.Merchant, originalPosition - Vector3.UnitZ * 40f);
+                    World.WorldBuilding.SpawnHumanoid(HumanType.Merchant, originalPosition - Vector3.UnitZ * 40f);
                 else if (i == 1)
-                    World.QuestManager.SpawnHumanoid(HumanType.Merchant, originalPosition + Vector3.UnitZ * 40f);
+                    World.WorldBuilding.SpawnHumanoid(HumanType.Merchant, originalPosition + Vector3.UnitZ * 40f);
                 else if (i == 2)
-                    World.QuestManager.SpawnVillager(originalPosition - Vector3.UnitX * 40f, false);
+                    World.WorldBuilding.SpawnVillager(originalPosition - Vector3.UnitX * 40f, false);
                 else if (i == 3)
-                    World.QuestManager.SpawnVillager(originalPosition + Vector3.UnitX * 40f, false);
+                    World.WorldBuilding.SpawnVillager(originalPosition + Vector3.UnitX * 40f, false);
 
 
                 VertexData market0 = VillageCache.Market.Market0_Clone.Clone();
@@ -114,10 +113,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     }
                     market0 += shelfModel;
                     shapes.AddRange(shelfShapes);
-
-                    market += market0;
-                    marketShapes.AddRange(shapes.ToArray());
                 }
+                market += market0;
+                marketShapes.AddRange(shapes.ToArray());
             }
             market.Transform(transMatrix);
             return new BuildingOutput

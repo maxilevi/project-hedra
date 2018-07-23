@@ -1,7 +1,7 @@
 ﻿using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using OpenTK;
 
@@ -11,9 +11,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     {
         protected virtual bool LookAtCenter => true;
 
-        public virtual void Place(T Parameters, VillageCache Cache)
+        public virtual bool Place(T Parameters, VillageCache Cache)
         {
-            this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .75f);
+            return this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .75f);
         }
 
         public virtual BuildingOutput Paint(T Parameters, BuildingOutput Input)
@@ -57,12 +57,34 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return Cache.GrabSize(Parameters.Design.Path).Xz.LengthFast;
         }
 
-        protected void PlaceGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
+        protected GroundworkItem CreateGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
         {
-            float height = World.BiomePool.GetRegion(Position).Generation.GetHeight(Position.X, Position.Z, null, out _);
-            
-            World.QuestManager.AddPlateau(new Plateau(Position, Radius * 1.25f, 10000f, height));
-            World.QuestManager.AddGroundwork(new RoundedGroundwork(Position, Radius, Type));
+            return new GroundworkItem
+            {
+                Plateau = new Plateau(Position, Radius * 1.25f),
+                Groundwork = new RoundedGroundwork(Position, Radius, Type)
+            };
         }
+        
+        protected bool PlaceGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
+        {
+            return this.PushGroundwork(this.CreateGroundwork(Position, Radius, Type));
+        }
+        
+        protected bool PushGroundwork(GroundworkItem Item)
+        {
+            if (World.WorldBuilding.CanAddPlateau(Item.Plateau))
+            {
+                World.WorldBuilding.AddPlateau(Item.Plateau);
+                World.WorldBuilding.AddGroundwork(Item.Groundwork);
+                return true;
+            }
+            return false;
+        }
+    }
+    
+    internal class GroundworkItem {
+        public Plateau Plateau { get; set; }
+        public IGroundwork Groundwork { get; set; }
     }
 }

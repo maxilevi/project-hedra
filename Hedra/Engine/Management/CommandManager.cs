@@ -282,25 +282,25 @@ namespace Hedra.Engine.Management
 			    }
 			    if (Parts[0] == "spawn"){
 					if(Parts[1] == "bandit"){
-						World.QuestManager.SpawnBandit(Caster.Position + Caster.Orientation * 32, false);
+						World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, false);
 						return true;
 					}
 					if(Parts[1] == "plantling"){
-						World.QuestManager.SpawnHumanoid(HumanType.Mandragora, Caster.Position + Caster.Orientation * 32);
+						World.WorldBuilding.SpawnHumanoid(HumanType.Mandragora, Caster.Position + Caster.Orientation * 32);
 						return true;
 					}
 					if(Parts[1] == "merchant"){
-						World.QuestManager.SpawnHumanoid(HumanType.TravellingMerchant, Caster.Position + Caster.Orientation * 32);
+						World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Caster.Position + Caster.Orientation * 32);
 						return true;
 					}
 			        if (Parts[1] == "ent")
 			        {
-			            World.QuestManager.SpawnEnt(Caster.Position + Caster.Orientation * 32);
+			            World.WorldBuilding.SpawnEnt(Caster.Position + Caster.Orientation * 32);
 			            return true;
 			        }
                     if (Parts[1] == "carriage")
 			        {
-			            World.QuestManager.SpawnCarriage(Caster.Position + Caster.Orientation * 32);
+			            World.WorldBuilding.SpawnCarriage(Caster.Position + Caster.Orientation * 32);
 
                         return true;
 			        }
@@ -315,12 +315,12 @@ namespace Hedra.Engine.Management
 			        }
 			        else
 			        {
-			            World.QuestManager.SpawnHumanoid(Parts[1], Caster.Position + Caster.Orientation * 32);
+			            World.WorldBuilding.SpawnHumanoid(Parts[1], Caster.Position + Caster.Orientation * 32);
 			        }
 			        return true;
 				}
 				if(Parts[0] == "chest"){
-                    World.QuestManager.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
+                    World.WorldBuilding.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
 					return true;
 				}
 			    Result = "Unknown command.";

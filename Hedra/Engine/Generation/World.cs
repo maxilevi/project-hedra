@@ -14,7 +14,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Particles;
 using OpenTK;
@@ -44,7 +44,7 @@ namespace Hedra.Engine.Generation
         public static BiomePool BiomePool { get; private set; }
         public static MobFactory MobFactory { get; private set; }
         public static TreeGenerator TreeGenerator { get; private set; }
-        public static QuestManager QuestManager { get; private set; }
+        public static WorldBuilding.WorldBuilding WorldBuilding { get; private set; }
         public static StructureGenerator StructureGenerator { get; private set; }
         public static event ModulesReloadEvent ModulesReload;
 		public static int Seed { get; set; }
@@ -193,7 +193,7 @@ namespace Hedra.Engine.Generation
     
 			BiomePool = new BiomePool();
 			TreeGenerator = new TreeGenerator();
-			QuestManager = new QuestManager();
+			WorldBuilding = new WorldBuilding.WorldBuilding();
 			StructureGenerator = new StructureGenerator();
 			EnviromentGenerator = new EnviromentGenerator();
             MobFactory = new MobFactory();
@@ -285,7 +285,7 @@ namespace Hedra.Engine.Generation
 		    World.Seed = Seed;
             BiomePool = new BiomePool();
 		    StructureGenerator = new StructureGenerator();
-		    QuestManager = new QuestManager();
+		    WorldBuilding = new WorldBuilding.WorldBuilding();
             OpenSimplexNoise.Load(Seed == MenuSeed ? 23123123 : Seed);//Not really the menu seed.
 		    _meshBuilder.Discard();
 			_chunkBuilder.Discard();
