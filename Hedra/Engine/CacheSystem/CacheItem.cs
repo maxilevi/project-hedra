@@ -37,6 +37,7 @@ namespace Hedra.Engine.CacheSystem
         CampfireTent,
         CampfireRoaster,
         CampfireLogs,
+        Mushroom,
         MaxEnums
     }
 }
