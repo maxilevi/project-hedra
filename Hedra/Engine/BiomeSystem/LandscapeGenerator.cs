@@ -104,11 +104,16 @@ namespace Hedra.Engine.BiomeSystem
 
 	                var inPlateau = false;          
 	                var smallFrequency = SmallFrequency(position.X, position.Y);
+		            var plateauClampedDensity = 0f;
 		            for (var i = 0; i < plateaus.Length; i++)
 		            {
 			            var previousHeight = height;
-			            height = plateaus[i].Apply(position, height, smallFrequency);       
-			            if ( Math.Abs(previousHeight - height) < 0.05f) inPlateau = true;
+			            height = plateaus[i].Apply(position, height, smallFrequency);
+			            if (Math.Abs(previousHeight - height) > 0.05f)
+			            {
+				            //plateauClampedDensity = 1;
+				            inPlateau = true;
+			            }
 	                    if (inPlateau && nearGiantTree != null && plateaus[i] == nearGiantTree.Mountain) giantTree = true;	                    
 	                }
 		            
@@ -129,8 +134,7 @@ namespace Hedra.Engine.BiomeSystem
 		            river = Mathf.Clamp(river * riverMult, 0, riverDepth);
 	                height = Math.Max(0, height + Chunk.BaseHeight);
 	                path = Mathf.Lerp(path, 0, river / riverDepth);
-
-                    
+                 
 		            for (var i = 0; i < plateaus.Length; i++)
 	                {
 	                    float plateauDist =
@@ -184,7 +188,7 @@ namespace Hedra.Engine.BiomeSystem
 	                float riverLerp = amplifiedRiverBorders / riverDepth;
 		            var pathGroundwork = blockGroundworks.FirstOrDefault(P => P.IsPath);
 		            var groundworkDensity = pathGroundwork?.Density(position) ?? 0;
-	                if ((riverLerp > 0 || path > 0) && !inPlateau || groundworkDensity > 0)
+	                if ((riverLerp > 0 || path > 0) && !inPlateau)
 	                {
                         if (heightCache.ContainsKey(new Vector2(x * Chunk.BlockSize + OffsetX,
 	                        z * Chunk.BlockSize + OffsetZ)))
@@ -198,15 +202,12 @@ namespace Hedra.Engine.BiomeSystem
 	                        {
 	                            height -= Mathf.Lerp(0, cache, riverLerp);
 	                        }
-		                    if (pathGroundwork != null)
-		                    {
-			                    height -= Mathf.Lerp(0, cache, groundworkDensity);
-		                    }
 	                    }
 	                }
 		            if (blockGroundworks.Length > 0)
 		            {
-			            height += blockGroundworks[blockGroundworks.Length - 1].BonusHeight;
+			            var bonusHeight = blockGroundworks[blockGroundworks.Length - 1].BonusHeight * blockGroundworks[blockGroundworks.Length - 1].Density(position);
+			            height += Mathf.Lerp(bonusHeight, 0f, plateauClampedDensity);
 		            }
 		            if (pathGroundwork != null)
 		            {

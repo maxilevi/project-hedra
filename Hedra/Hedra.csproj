@@ -243,6 +243,9 @@
     <Compile Include="Engine\Generation\ChunkSystem\Worker.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\WorkerPool.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathEdge.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathGraph.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathVertex.cs" />
     <Compile Include="Engine\WorldBuilding\LineGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\RoundedGroundwork.cs" />
     <Compile Include="Engine\ICountable.cs" />

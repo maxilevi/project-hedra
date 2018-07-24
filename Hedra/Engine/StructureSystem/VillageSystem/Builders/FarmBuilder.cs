@@ -11,7 +11,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     {
         protected override bool LookAtCenter => false;
 
-        public override bool Place(FarmParameters Parameters, VillageCache Cache)
+        /*public override bool Place(FarmParameters Parameters, VillageCache Cache)
         {
             var size = Cache.GrabSize(Parameters.Design.Path);
             var offsets = this.BuildFarmOffsets(size);
@@ -24,7 +24,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 this.PlaceGroundwork(Parameters.Position, Cache.GrabSize(Parameters.WindmillDesign.Path).Xz.LengthFast);
             }
             return true;
-        }
+        }*/
 
         public override BuildingOutput Paint(FarmParameters Parameters, BuildingOutput Input)
         {
@@ -33,7 +33,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return base.Paint(Parameters, Input);
         }
 
-        public override BuildingOutput Build(FarmParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
+        /*public override BuildingOutput Build(FarmParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
             var size = Cache.GrabSize(Parameters.Design.Path);
             var offsets = this.BuildFarmOffsets(size);
@@ -47,7 +47,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Model = farm0.Model + farm1.Model + farm2.Model + farm3.Model + windmill.Model,
                 Shapes = farm0.Shapes.Concat(farm1.Shapes).Concat(farm2.Shapes).Concat(farm3.Shapes).Concat(windmill.Shapes).ToList()
             };
-        }
+        }*/
 
         private BuildingOutput BuildWindmill(FarmParameters Parameters, VillageCache Cache)
         {

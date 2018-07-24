@@ -10,7 +10,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 	{
 	    public override bool Place(BlacksmithParameters Parameters, VillageCache Cache)
 	    {
-	        return this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .75f, BlockType.StonePath);
+	        return this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .75f, BlockType.Path);
         }
 
 	    public override BuildingOutput Paint(BlacksmithParameters Parameters, BuildingOutput Input)

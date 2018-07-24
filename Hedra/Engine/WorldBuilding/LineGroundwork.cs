@@ -10,7 +10,7 @@ namespace Hedra.Engine.WorldBuilding
         public Vector2 Origin { get; set; }
         public Vector2 End { get; set; }
         public BlockType Type { get; set; }
-        public float BonusHeight { get; set; } = -.5f;
+        public float BonusHeight { get; set; } = -1.0f;
         public bool IsPath => true;
 
         public LineGroundwork(Vector2 Origin, Vector2 End, BlockType Type = BlockType.Path)
@@ -30,11 +30,10 @@ namespace Hedra.Engine.WorldBuilding
         
         public float Density(Vector2 Sample)
         {
-            var length = (End - Origin).LengthFast;
             var dir = (End - Origin).NormalizedFast();
             var point = (Sample - Origin).LengthFast;
             var den = 1 - Math.Min((point * dir + Origin - Sample).LengthFast / Width, 1);
-            return Math.Min(den * 1.25f, 1f);
+            return Math.Min(den * 2.5f, 1f);
         }
     }
 }

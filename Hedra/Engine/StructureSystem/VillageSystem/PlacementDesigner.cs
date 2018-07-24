@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
+using Hedra.Engine.StructureSystem.VillageSystem.Layout;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
@@ -55,10 +56,19 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         public void BuildPaths(PlacementDesign Design)
         {
-            for (var i = 0; i < Design.Houses.Length; i++)
+            var candidates = Design.Blacksmith.Concat<IBuildingParameters>(Design.Houses).Concat(Design.Farms).ToList();
+            var graph = new PathGraph();
+            candidates.ForEach(C => graph.AddVertex(new PathVertex
             {
-                var dir = (Design.Markets[0].Position.Xz - Design.Houses[i].Position.Xz).NormalizedFast();
-                var path = new LineGroundwork(Design.Houses[i].Position.Xz - dir * 8, Design.Markets[0].Position.Xz - dir * 96, BlockType.Path);
+                Point = C.Position
+            }));
+            for (var i = 0; i < candidates.Count; i++)
+            {
+                var from = candidates[i];
+                var to = candidates[_rng.Next(0, candidates.Count)];
+                if(to == from ) continue;
+                var dir = (to.Position.Xz - from.Position.Xz).NormalizedFast();
+                var path = new LineGroundwork(from.Position.Xz, to.Position.Xz, BlockType.StonePath);
                 World.WorldBuilding.AddGroundwork(path);
             }
         }
