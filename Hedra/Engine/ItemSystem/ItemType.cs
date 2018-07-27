@@ -9,6 +9,7 @@ namespace Hedra.Engine.ItemSystem
     {
         Berry,
         Gold,
-        Glider
+        Glider,
+        Mushroom
     }
 }

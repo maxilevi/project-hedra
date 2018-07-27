@@ -305,7 +305,7 @@
     <Compile Include="Engine\ModuleSystem\SpawnerLoader.cs" />
     <Compile Include="Engine\ModuleSystem\SpawnerSettings.cs" />
     <Compile Include="Engine\ModuleSystem\SpawnTemplate.cs" />
-    <Compile Include="Engine\EntitySystem\BerryBushComponent.cs" />
+    <Compile Include="Engine\EntitySystem\CollectibleComponent.cs" />
     <Compile Include="Engine\EntitySystem\BleedComponent.cs" />
     <Compile Include="Engine\EntitySystem\BleedingComponent.cs" />
     <Compile Include="Engine\EntitySystem\BurningComponent.cs" />
@@ -4807,6 +4807,7 @@
     <None Include="Modules\Mobs\Gorilla.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Modules\Items\Misc\Mushroom.json" />
     <Content Include="Modules\Villages\Nordic.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

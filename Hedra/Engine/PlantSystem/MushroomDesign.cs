@@ -3,6 +3,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -48,16 +49,11 @@ namespace Hedra.Engine.PlantSystem
 
         public override VertexData Paint(Vector3 Position, VertexData Data, Random Rng)
         {
-            Data = Data + CacheManager.GetModel(CacheItem.Berries).Clone();
+            Vector4 stemColor = Utils.VariateColor(Colors.MushroomStemColor(Rng), 15, Rng);
+            Vector4 headColor = Utils.VariateColor(Colors.MushroomHeadColor(Rng), 15, Rng);
 
-            var underChunk = World.GetChunkAt(Position);
-            Vector4 newColor = Utils.VariateColor(underChunk.Biome.Colors.GrassColor, 15, Rng);
-            Vector4 berriesColor = Utils.VariateColor(Colors.BerryColor(Rng), 15, Rng);
-
-            ///maybe this is causing problems
-            Data.Color(AssetManager.ColorCode0, newColor);
-            Data.Color(AssetManager.ColorCode1, berriesColor);
-            //Data.GraduateColor(Vector3.UnitY);
+            Data.Color(AssetManager.ColorCode0, stemColor);
+            Data.Color(AssetManager.ColorCode1, headColor);
 
             return Data;
         }
@@ -65,13 +61,12 @@ namespace Hedra.Engine.PlantSystem
         public override void CustomPlacement(VertexData Data, Matrix4 TransMatrix)
         {
             var position = TransMatrix.ExtractTranslation();
-            var underChunk = World.GetChunkAt(position);
             TransMatrix = TransMatrix.ClearTranslation();
             Data.Transform(TransMatrix);
 
             Executer.ExecuteOnMainThread(delegate
             {
-                var berryBush = new Entity
+                var mushroom = new Entity
                 {
                     Physics =
                     {
@@ -81,19 +76,20 @@ namespace Hedra.Engine.PlantSystem
                     },
                     BlockPosition = position
                 };
-                berryBush.Model = new StaticModel(berryBush, Data)
+                mushroom.Model = new StaticModel(mushroom, Data)
                 {
                     Position = position
                 };
 
-                var damage = new DamageComponent(berryBush)
+                var damage = new DamageComponent(mushroom)
                 {
                     Immune = true
                 };
-                berryBush.AddComponent(damage);
-                berryBush.AddComponent(new BerryBushComponent(berryBush));
-
-                World.AddEntity(berryBush);
+                mushroom.AddComponent(damage);
+                mushroom.AddComponent(
+                    new CollectibleComponent(mushroom, ItemPool.Grab(ItemType.Mushroom), "You pickep up a mushroom")
+                );
+                World.AddEntity(mushroom);
             });
         }
     }

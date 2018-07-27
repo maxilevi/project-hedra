@@ -1,7 +1,7 @@
 ﻿{
-  "Name": "Berry",
-  "DisplayName": "Berry",
-  "Tier": "Misc", 
+  "Name": "Mushroom",
+  "DisplayName": "Mushroom",
+  "Tier": "Misc",
   "Description": "Food.",
   "Attributes": [
     {
@@ -10,16 +10,16 @@
     },
     {
       "Name": "Saturation",
-      "Value": 60
+      "Value": 180
     },
     {
       "Name": "Price",
-      "Value": 4,
+      "Value": 18,
       "Hidden": true
     }
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Berry.ply"
+    "Path": "$DataFile$/Items/Mushroom.ply"
   }
 }

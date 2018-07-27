@@ -6,6 +6,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -91,7 +92,9 @@ namespace Hedra.Engine.PlantSystem
                     Immune = true
                 };
                 berryBush.AddComponent(damage);
-                berryBush.AddComponent(new BerryBushComponent(berryBush));
+                berryBush.AddComponent(
+                    new CollectibleComponent(berryBush, ItemPool.Grab(ItemType.Berry), "You got a berry from the bush")
+                );
 
                 World.AddEntity(berryBush);
             });

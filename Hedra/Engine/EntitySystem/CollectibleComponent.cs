@@ -22,30 +22,34 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of BerryBushComponent.
 	/// </summary>
-	internal class BerryBushComponent : InteractableComponent, ITickable
+	internal class CollectibleComponent : InteractableComponent, ITickable
     {
-		public BerryBushComponent(Entity Parent) : base(Parent) { }
-
-        public override float InteractionAngle => .75f;
-        public override string Message => "COLLECT";
-        public override int InteractDistance => 16;
+	    private string CollectMessage { get; set; }
+	    private Item Drop { get; }
+	    public override float InteractionAngle => .75f;
+	    public override string Message => "COLLECT";
+	    public override int InteractDistance => 16;
+	    
+	    public CollectibleComponent(Entity Parent, Item Drop, string CollectMessage) : base(Parent)
+	    {
+		    this.Drop = Drop;
+		    this.CollectMessage = CollectMessage;
+	    }
 		
 		public override void Interact(LocalPlayer Interactee)
         {
-			var berry = ItemPool.Grab(ItemType.Berry);
-		    if (!Interactee.Inventory.AddItem(berry))
+		    if (!Interactee.Inventory.AddItem(Drop))
 		    {
-		        World.DropItem(berry, this.Parent.Position);
-		    }
-			
+		        World.DropItem(Drop, this.Parent.Position);
+		    }			
 			var damage = Parent.SearchComponent<DamageComponent>();
 			if(damage != null)
             {
 				damage.Immune = false;
-				damage.Damage(Parent.MaxHealth, Parent, out float xp, false);
+				damage.Damage(Parent.MaxHealth, Parent, out _, false);
 			}
             SoundManager.PlaySound(SoundType.NotificationSound, Parent.Position);
-            Interactee.MessageDispatcher.ShowNotification("You got a berry from the bush", Colors.DarkRed.ToColor(), 3f, false);
+            Interactee.MessageDispatcher.ShowNotification(CollectMessage, Colors.DarkRed.ToColor(), 3f, false);
             base.Interact(Interactee);
         }
     }

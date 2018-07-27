@@ -51,7 +51,32 @@ namespace Hedra.Engine.Rendering
                 case 3: return Colors.FromHtml("#FF65F2");
                 case 4: return Colors.FromHtml("#379B95");
                 case 5: return Colors.FromHtml("#FFAD5A");
-                default: return Colors.FromHtml("#ff0000");
+                default: throw new ArgumentOutOfRangeException();
+            }
+        }
+        
+        public static Vector4 MushroomHeadColor(Random Rng)
+        {
+            switch (Rng.Next(0, 6))
+            {
+                case 0: return Colors.FromHtml("#fe785f");
+                case 1: return Colors.FromHtml("#FF6380");
+                case 2: return Colors.FromHtml("#AA3D98");
+                case 3: return Colors.FromHtml("#FF65F2");
+                case 4: return Colors.FromHtml("#379B95");
+                case 5: return Colors.FromHtml("#FFAD5A");
+                default: throw new ArgumentOutOfRangeException();
+            }
+        }
+        
+        public static Vector4 MushroomStemColor(Random Rng)
+        {
+            switch (Rng.Next(0, 3))
+            {
+                case 0: return Colors.FromHtml("#fe785f");
+                case 1: return Colors.FromHtml("#FF6380");
+                case 2: return Colors.FromHtml("#AA3D98");
+                default: throw new ArgumentOutOfRangeException();
             }
         }
         #endregion
