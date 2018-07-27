@@ -8,28 +8,39 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Layout
 {
     internal class PathGraph
     {
+        public Vector3 Position { get; set; }
         private readonly List<PathEdge> _edges;
         private readonly List<PathVertex> _vertices;
 
-        public PathGraph()
+        public PathGraph(Vector3 Position)
         {
+            this.Position = Position;
             _edges = new List<PathEdge>();
             _vertices = new List<PathVertex>();
         }
 
-        public void AddVertex(PathVertex Vertex)
+        public void AddVertex(params PathVertex[] Vertices)
         {
-            if(_vertices.Contains(Vertex))throw new ArgumentException($"Vertex already exists in the graph.");
-            if(_vertices.Any(V => V.Point == Vertex.Point))throw new ArgumentException($"Vertex with the same position already exists in the graph.");
-            _vertices.Add(Vertex);
+            for (var i = 0; i < Vertices.Length; i++)
+            {
+                if (_vertices.Contains(Vertices[i])) throw new ArgumentException($"Vertex already exists in the graph.");
+                if (_vertices.Any(V => V.Point == Vertices[i].Point))
+                    throw new ArgumentException($"Vertex with the same position already exists in the graph.");
+                _vertices.Add(Vertices[i]);
+            }
         }
         
-        public void AddEdge(PathEdge Edge)
+        public void AddEdge(params PathEdge[] Edges)
         {
-            if(!_vertices.Contains(Edge.Origin)) throw new ArgumentException($"Edge contains a vertex that doesnt exist in the graph.");
-            if(!_vertices.Contains(Edge.End)) throw new ArgumentException($"Edge contains a vertex that doesnt exist in the graph.");
-            if(_edges.Contains(Edge)) throw new ArgumentException($"Edge already exists in the graph.");
-            _edges.Add(Edge);
+            for (var i = 0; i < Edges.Length; i++)
+            {
+                if (!_vertices.Contains(Edges[i].Origin))
+                    throw new ArgumentException($"Edge contains a vertex that doesnt exist in the graph.");
+                if (!_vertices.Contains(Edges[i].End))
+                    throw new ArgumentException($"Edge contains a vertex that doesnt exist in the graph.");
+                if (_edges.Contains(Edges[i])) throw new ArgumentException($"Edge already exists in the graph.");
+                _edges.Add(Edges[i]);
+            }
         }
 
         public void Smooth(int Steps)
@@ -53,15 +64,23 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Layout
             var p0 = Edge.Origin;
             var p1 = Edge.End;
 
-            var q0 = new Vector3(0.75f * p0.X + 0.25f * p1.X, 0.75f * p0.Y + 0.25f * p1.Y, 0.75f * p0.Z + 0.25f * p1.Z);
-            var r0 = new Vector3(0.25f * p0.X + 0.75f * p1.X, 0.25f * p0.Y + 0.75f * p1.Y, 0.25f * p0.Z + 0.75f * p1.Z);
+            var q0 = new Vector3(
+                0.75f * (p0.X - Position.X) + 0.25f * (p1.X - Position.X),
+                0.75f * (p0.Y - Position.Y) + 0.25f * (p1.Y - Position.Y),
+                0.75f * (p0.Z - Position.Z) + 0.25f * (p1.Z - Position.Z)
+                );
+            var r0 = new Vector3(
+                0.25f * (p0.X - Position.X) + 0.75f * (p1.X - Position.X),
+                0.25f * (p0.Y - Position.Y) + 0.75f * (p1.Y - Position.Y),
+                0.25f * (p0.Z - Position.Z) + 0.75f * (p1.Z - Position.Z)
+                );
             var vertex0 = new PathVertex
             {
-                Point = q0
+                Point = q0 + Position
             };
             var vertex1 = new PathVertex
             {
-                Point = r0
+                Point = r0 + Position
             };
             this.AddVertex(vertex0);
             this.AddVertex(vertex1);

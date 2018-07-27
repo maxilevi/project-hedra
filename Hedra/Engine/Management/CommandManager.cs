@@ -68,6 +68,10 @@ namespace Hedra.Engine.Management
 			    {
 			        GameSettings.DebugMode = !GameSettings.DebugMode;          
 			    }
+			    if (Parts[0] == "mana")
+			    {
+			        GameManager.Player.Mana = GameManager.Player.MaxMana;
+			    }
 			    if (Parts[0] == "icon")
 			    {
 			        Caster.ShowIcon((CacheItem) Enum.Parse(typeof(CacheItem), Parts[1]));

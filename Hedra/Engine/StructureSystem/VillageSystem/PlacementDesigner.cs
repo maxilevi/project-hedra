@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Layout;
@@ -57,20 +56,40 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         public void BuildPaths(PlacementDesign Design)
         {
             var candidates = Design.Blacksmith.Concat<IBuildingParameters>(Design.Houses).Concat(Design.Farms).ToList();
-            var graph = new PathGraph();
-            candidates.ForEach(C => graph.AddVertex(new PathVertex
+            var graph = this.CreateGraph(Design, candidates);
+            var edges = graph.Edges;
+            for (var i = 0; i < edges.Length; i++)
+            {
+                var from = edges[i].Origin;
+                var to = edges[_rng.Next(0, edges.Length)].End;
+                var path = new LineGroundwork(from.Point.Xz, to.Point.Xz, BlockType.StonePath);
+                World.WorldBuilding.AddGroundwork(path);
+            }
+        }
+
+        private PathGraph CreateGraph(PlacementDesign Design, List<IBuildingParameters> Candidates)
+        {
+            var graph = new PathGraph(Design.Position);
+            var vertices = new Dictionary<IBuildingParameters, PathVertex>();
+            var edges = new List<PathEdge>();
+            Candidates.ForEach(C => vertices.Add(C, new PathVertex
             {
                 Point = C.Position
             }));
-            for (var i = 0; i < candidates.Count; i++)
+            for (var i = 0; i < Candidates.Count; i++)
             {
-                var from = candidates[i];
-                var to = candidates[_rng.Next(0, candidates.Count)];
+                var from = Candidates[i];
+                var to = Candidates[_rng.Next(0, Candidates.Count)];
                 if(to == from ) continue;
-                var dir = (to.Position.Xz - from.Position.Xz).NormalizedFast();
-                var path = new LineGroundwork(from.Position.Xz, to.Position.Xz, BlockType.StonePath);
-                World.WorldBuilding.AddGroundwork(path);
+                edges.Add(new PathEdge
+                {
+                    Origin = vertices[from],
+                    End = vertices[to]
+                });
             }
+            graph.AddVertex(vertices.Values.ToArray());
+            graph.AddEdge(edges.ToArray());
+            return graph;
         }
         
         private void RemoveIntersecting(PlacementDesign Design)

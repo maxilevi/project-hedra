@@ -66,13 +66,8 @@ namespace Hedra.Engine.Player
 			Player.IsAttacking = true;
 			_affectedEntities.Clear();
 			_passedTime = 0;
-			Player.Model.LeftWeapon.LockWeapon = true;
 			Player.Model.Model.Animator.StopBlend();
 			Player.Model.Model.PlayAnimation(_whirlwindAnimation);
-			Player.Model.TargetRotation = Vector3.Zero;
-			Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
-			Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
-			Player.Model.Model.Rotation = Vector3.Zero;
 		    _trail.Emit = true;
 		}
 
@@ -95,7 +90,7 @@ namespace Hedra.Engine.Player
 				}
 
 			    var underChunk = World.GetChunkAt(Player.Position);
-                _rotationY += Time.DeltaTime * 2000f;
+                _rotationY += Time.DeltaTime * 1500f;
                 Player.Model.Model.TransformationMatrix =
                     Matrix4.CreateRotationY(-Player.Model.Model.Rotation.Y * Mathf.Radian) *
                     Matrix4.CreateRotationY(_rotationY * Mathf.Radian) *

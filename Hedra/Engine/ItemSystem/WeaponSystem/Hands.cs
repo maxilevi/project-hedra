@@ -27,7 +27,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
             PrimaryAnimations = new Animation[1];
             PrimaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorPunch.dae");
-		    PrimaryAnimations[0].Speed = 3.0f;
+		    PrimaryAnimations[0].Speed = 1.0f;
 		    PrimaryAnimations[0].OnAnimationMid += delegate
 		    {
 		        Owner.Attack(Owner.DamageEquation * 0.75f);
