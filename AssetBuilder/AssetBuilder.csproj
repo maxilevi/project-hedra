@@ -48,10 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetBuild.cs" />
     <Compile Include="BinarySerializer.cs" />
     <Compile Include="Builder.cs" />
+    <Compile Include="BuildHistory.cs" />
     <Compile Include="DatabaseBuilder.cs" />
     <Compile Include="NormalBuilder.cs" />
+    <Compile Include="SerializationOutput.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="Dao.cs" />
     <Compile Include="Program.cs" />
