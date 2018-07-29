@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
@@ -22,7 +23,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             var templates = Load<VillageTemplate>(AppPath + "/Modules/Villages/");
             foreach (var template in templates)
             {
-                Designs.Add(template.Name, VillageRoot.FromTemplate(template));
+                Designs.Add(template.Name.ToLowerInvariant(), VillageRoot.FromTemplate(template));
             }
         }
         
@@ -36,7 +37,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 if (ext != ".json") continue;
 
                 var obj = FromJson<T>(File.ReadAllText(module), out var result);
-
                 if (!result) continue;
 
                 list.Add(obj);

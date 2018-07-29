@@ -13,7 +13,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using OpenTK;

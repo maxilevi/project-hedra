@@ -8,7 +8,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -137,7 +137,7 @@ namespace Hedra.Engine.StructureSystem
 
                 underChunk.AddCollisionShape(campfireShapes.ToArray());
                 underChunk.AddStaticElement(campfire);
-                enemies[j] = World.QuestManager.SpawnBandit(
+                enemies[j] = World.WorldBuilding.SpawnBandit(
                     parameters.Position + new Vector3(rng.NextFloat() * 16f - 8f, 0, rng.NextFloat() * 16f - 8f), false,
                     false);
             });
@@ -145,18 +145,15 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
-
-            var plateau = new Plateau(TargetPosition, Radius, 300f, height);
-            World.QuestManager.AddPlateau(plateau);
+            var plateau = new Plateau(TargetPosition, Radius);
+            World.WorldBuilding.AddPlateau(plateau);
 
             var scaleMatrix = Matrix4.CreateScale(3 + Rng.NextFloat() * 1.5f);
             var tents = this.SetupTents(TargetPosition, scaleMatrix, Rng);         
 
             for (var i = 0; i < tents.Length; i++)
             {
-                World.QuestManager.AddVillagePosition(tents[i].WorldPosition, 16f);
+                World.WorldBuilding.AddGroundwork(new RoundedGroundwork(tents[i].WorldPosition, 16f));
             }
 
             var structure = new CollidableStructure(this, TargetPosition, plateau);

@@ -7,7 +7,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Effects;
 using Hedra.Engine.Rendering.UI;
@@ -66,12 +66,13 @@ namespace Hedra
 		public Hedra(int Width, int Height, GraphicsMode Mode, string Title, GameWindowFlags Options, DisplayDevice Device)
 			: base( Width, Height, Mode, Title, Options, Device){}
 
-		protected override void OnLoad(EventArgs e){
+		protected override void OnLoad(EventArgs e)
+        {
 			base.OnLoad(e);
 
             string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
 		    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
-            this.GameVersion = "α 0.34";
+            this.GameVersion = "α 0.35";
 		    this.Title += " "+GameVersion;
             Hedra.MainThreadId = Thread.CurrentThread.ManagedThreadId;
 

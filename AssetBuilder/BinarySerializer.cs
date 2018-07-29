@@ -5,17 +5,41 @@ namespace AssetBuilder
 {
     public class BinarySerializer : Serializer
     {
-        public override Dictionary<string, object> Serialize(string[] Files)
+        public override SerializationOutput Serialize(string[] Files)
         {
             var sortedInput = new List<string>(Files);
             sortedInput.Sort(new FileSizeComparer());
-            var output = new Dictionary<string, object>();      
+            var output = new Dictionary<string, object>();
+            var builds = new List<AssetBuild>();
             for (var i = 0; i < sortedInput.Count; i++)
             {
-                var data = File.ReadAllBytes(sortedInput[i]);
+                var data = this.Process(sortedInput[i]);
                 output.Add(sortedInput[i], data);
+                builds.Add(new AssetBuild
+                {
+                    Path = sortedInput[i],
+                    Checksum = AssetBuild.CreateHash(sortedInput[i])
+                });
             }
-            return output;
+            return new SerializationOutput
+            {
+                Results = output,
+                History = new BuildHistory
+                {
+                    Builds = builds.ToArray()
+                }
+            };
+        }
+
+        private byte[] Process(string Filename)
+        {
+            switch (Path.GetExtension(Filename)?.ToLowerInvariant())
+            {
+                 case ".ply":
+                     return PLYProcessor.Process(Filename);
+                 default:
+                     return File.ReadAllBytes(Filename);
+            }
         }
     }
 

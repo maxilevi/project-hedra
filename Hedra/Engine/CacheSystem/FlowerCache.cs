@@ -8,7 +8,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public FlowerCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Tetrahedra.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Tetrahedra.ply", Vector3.One));
         }
     }
 }

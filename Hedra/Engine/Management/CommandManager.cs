@@ -35,7 +35,6 @@ namespace Hedra.Engine.Management
 				Command = Command.Remove(0,1);
 				string[] Parts = Command.Split(' ');
 				if(Parts[0] == "tp"){
-					if(Parts[1] == "obj") Caster.BlockPosition = World.QuestManager.Quest.IconPosition - Vector3.One.Xz.ToVector3() * 80;
 					if(Parts[1] == "merchant"){
 						if(World.StructureGenerator.MerchantPosition != Vector3.Zero)
 							Caster.BlockPosition = World.StructureGenerator.MerchantPosition - Vector3.One.Xz.ToVector3() * 8;
@@ -68,6 +67,10 @@ namespace Hedra.Engine.Management
 			    if (Parts[0] == "debug")
 			    {
 			        GameSettings.DebugMode = !GameSettings.DebugMode;          
+			    }
+			    if (Parts[0] == "mana")
+			    {
+			        GameManager.Player.Mana = GameManager.Player.MaxMana;
 			    }
 			    if (Parts[0] == "icon")
 			    {
@@ -105,7 +108,6 @@ namespace Hedra.Engine.Management
 				if(Parts[0] == "kill")
 				{
 				    if (Parts.Length == 1) LocalPlayer.Instance.Health = 0f;
-					if(Parts[1] == "obj") World.QuestManager.Quest.NextObjective();
 					return true;
 				}
 
@@ -284,25 +286,25 @@ namespace Hedra.Engine.Management
 			    }
 			    if (Parts[0] == "spawn"){
 					if(Parts[1] == "bandit"){
-						World.QuestManager.SpawnBandit(Caster.Position + Caster.Orientation * 32, false);
+						World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, false);
 						return true;
 					}
 					if(Parts[1] == "plantling"){
-						World.QuestManager.SpawnHumanoid(HumanType.Mandragora, Caster.Position + Caster.Orientation * 32);
+						World.WorldBuilding.SpawnHumanoid(HumanType.Mandragora, Caster.Position + Caster.Orientation * 32);
 						return true;
 					}
 					if(Parts[1] == "merchant"){
-						World.QuestManager.SpawnHumanoid(HumanType.TravellingMerchant, Caster.Position + Caster.Orientation * 32);
+						World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Caster.Position + Caster.Orientation * 32);
 						return true;
 					}
 			        if (Parts[1] == "ent")
 			        {
-			            World.QuestManager.SpawnEnt(Caster.Position + Caster.Orientation * 32);
+			            World.WorldBuilding.SpawnEnt(Caster.Position + Caster.Orientation * 32);
 			            return true;
 			        }
                     if (Parts[1] == "carriage")
 			        {
-			            World.QuestManager.SpawnCarriage(Caster.Position + Caster.Orientation * 32);
+			            World.WorldBuilding.SpawnCarriage(Caster.Position + Caster.Orientation * 32);
 
                         return true;
 			        }
@@ -317,12 +319,12 @@ namespace Hedra.Engine.Management
 			        }
 			        else
 			        {
-			            World.QuestManager.SpawnHumanoid(Parts[1], Caster.Position + Caster.Orientation * 32);
+			            World.WorldBuilding.SpawnHumanoid(Parts[1], Caster.Position + Caster.Orientation * 32);
 			        }
 			        return true;
 				}
 				if(Parts[0] == "chest"){
-                    World.QuestManager.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
+                    World.WorldBuilding.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
 					return true;
 				}
 			    Result = "Unknown command.";

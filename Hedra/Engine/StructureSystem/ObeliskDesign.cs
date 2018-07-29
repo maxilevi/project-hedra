@@ -8,10 +8,10 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using OpenTK;
-using ObeliskType = Hedra.Engine.QuestSystem.ObeliskType;
+using ObeliskType = Hedra.Engine.WorldBuilding.ObeliskType;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -64,11 +64,8 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
-
-            var plateau = new Plateau(TargetPosition, 32, 8, height);
-            World.QuestManager.AddPlateau(plateau);
+            var plateau = new Plateau(TargetPosition, 32);
+            World.WorldBuilding.AddPlateau(plateau);
             return new CollidableStructure(this, TargetPosition, plateau);
         }
 

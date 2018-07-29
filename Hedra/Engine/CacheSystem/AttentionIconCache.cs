@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public AttentionIconCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/ExclamationMark.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/ExclamationMark.ply", Vector3.One));
         }
     }
 }

@@ -27,7 +27,21 @@ namespace Hedra.Engine
 	/// </summary>
 	internal static class Extensions
 	{
-	    public static Vector3 SupportPoint(this Vector3[] Vertices, Vector3 Direction)
+
+	    public static void Shuffle<T>(this IList<T> List, Random Rng)
+	    {
+	        int n = List.Count;
+	        while (n > 1)
+	        {
+	            n--;
+	            int k = Rng.Next(n + 1);
+	            T value = List[k];
+	            List[k] = List[n];
+	            List[n] = value;
+	        }
+	    }
+
+        public static Vector3 SupportPoint(this Vector3[] Vertices, Vector3 Direction)
 	    {
 	        float highest = float.MinValue;
 	        Vector3 support = Vector3.Zero;

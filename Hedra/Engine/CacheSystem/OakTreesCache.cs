@@ -7,9 +7,9 @@ namespace Hedra.Engine.CacheSystem
     {
         public OakTreesCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Oak0.ply", Vector3.One));
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Oak1.ply", Vector3.One));
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Oak2.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Oak0.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Oak1.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Oak2.ply", Vector3.One));
 
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Oak0.ply", 10, Vector3.One));
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Oak1.ply", 2, Vector3.One));

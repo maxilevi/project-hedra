@@ -4,6 +4,6 @@ namespace AssetBuilder
 {
     public abstract class Serializer
     {
-        public abstract Dictionary<string, object> Serialize(string[] Files);
+        public abstract SerializationOutput Serialize(string[] Files);
     }
 }

@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public GraveyardIconCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Grave4.ply", Vector3.One * 2f));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Grave4.ply", Vector3.One * 2f));
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public MatCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Mat0.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Mat0.ply", Vector3.One));
 
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Mat0.ply", 2, Vector3.One));
         }

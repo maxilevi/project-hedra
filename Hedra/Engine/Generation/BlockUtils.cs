@@ -45,9 +45,11 @@ namespace Hedra.Engine.Generation
 	            case BlockType.Seafloor:
 	                return RegionColor.SeafloorColor;
 
-	            case BlockType.Sand:
-	                return RegionColor.SandColor;
-
+	            case BlockType.StonePath:
+	                return BiomeSystem.RegionColor.StonePathColor;
+				case BlockType.DarkStonePath:
+					return BiomeSystem.RegionColor.DarkStonePathColor;
+		           
 	            default:
 	                return Colors.Transparent;
 	                throw new ArgumentOutOfRangeException($"Unkown block type {Type}");
@@ -66,10 +68,10 @@ namespace Hedra.Engine.Generation
         Leaves,
         Rock,
         Path,
-        Cube,
         Temporal,
         Seafloor,
-        Sand,
+        StonePath,
+	    DarkStonePath,
         MaxNums
     }
 }

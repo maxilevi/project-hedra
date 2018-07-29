@@ -14,6 +14,6 @@ namespace Hedra.Engine.BiomeSystem
         }
 
         public StructureDesign[] Designs => _designs.ToArray();
-        public abstract VillageScheme Scheme { get; }
+        public abstract VillageType VillageType { get; }
     }
 }

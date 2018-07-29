@@ -5,7 +5,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -42,7 +42,7 @@ namespace Hedra.Engine.StructureSystem
 
             var fire = new Campfire(Position);
             Executer.ExecuteOnMainThread(
-                () => World.QuestManager.SpawnBandit(new Vector3(Position.X, 125, Position.Z), false, false)
+                () => World.WorldBuilding.SpawnBandit(new Vector3(Position.X, 125, Position.Z), false, false)
             );
             World.AddStructure(fire);
 
@@ -76,18 +76,14 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
-
-            var plateau = new Plateau(TargetPosition, 48, 16, height);
-            World.QuestManager.AddPlateau(plateau);
+            var plateau = new Plateau(TargetPosition, 48);
+            World.WorldBuilding.AddPlateau(plateau);
             return new CollidableStructure(this, TargetPosition, plateau);
         }
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
+            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
 
             return Rng.Next(0, 12) == 1 && height > 0;
         }

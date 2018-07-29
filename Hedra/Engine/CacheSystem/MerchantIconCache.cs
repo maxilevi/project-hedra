@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public MerchantIconCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/UI/MerchantIcon.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/UI/MerchantIcon.ply", Vector3.One));
         }
     }
 }

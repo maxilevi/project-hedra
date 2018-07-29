@@ -14,5 +14,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         public VillageRoot[] Templates => _villageDesigns.Values.ToArray();
         public VillageRoot this[string Key] => _villageDesigns[Key.ToLowerInvariant()];
+        public VillageRoot this[VillageType Key] => _villageDesigns[Key.ToString().ToLowerInvariant()];
     }
 }

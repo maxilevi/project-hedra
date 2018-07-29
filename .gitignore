@@ -8,4 +8,5 @@ packages/
 .idea/
 packages
 *.user
+*.hst
 

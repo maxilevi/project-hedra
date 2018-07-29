@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public FernCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Fern.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Fern.ply", Vector3.One));
         }
     }
 }

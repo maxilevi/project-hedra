@@ -19,12 +19,12 @@ namespace Hedra.Engine.Rendering.Animation
 		public event OnAnimationHandler OnAnimationEnd;
 		public event OnAnimationHandler OnAnimationMid;
 		public event OnAnimationHandler OnAnimationStart;
-		public float Length { get; }//In seconds
+		public float Speed { get; set; } = 1;
+		public float Length { get; }
 		public KeyFrame[] KeyFrames { get; }
 		public bool Loop {get; set;}
-		private bool MidAnimation;
-	    private bool StartAnimation;
-	    public float Speed = 1;
+		private bool _midAnimation;
+	    private bool _startAnimation;
 	
 		/**
 		 * @param lengthInSeconds
@@ -33,35 +33,39 @@ namespace Hedra.Engine.Rendering.Animation
 		 *            - all the keyframes for the animation, ordered by time of
 		 *            appearance in the animation.
 		 */
-		public Animation(float LengthInSeconds, KeyFrame[] Frames) {
+		public Animation(float LengthInSeconds, KeyFrame[] Frames)
+		{
 			this.KeyFrames = Frames;
 			this.Length = LengthInSeconds;
 			this.Loop = true;
 		}
 		
-		public void DispatchEvents(float Progress){
+		public void DispatchEvents(float Progress)
+		{
 			if(Progress >= 1)
 			{
 			    OnAnimationEnd?.Invoke(this);
 			}
-			if(Progress >= 0.5f && !MidAnimation)
+			if(Progress >= 0.5f && !_midAnimation)
             {
-				MidAnimation = true;
+				_midAnimation = true;
 			    OnAnimationMid?.Invoke(this);
 			}
-			if(Progress <= 0.5f && !StartAnimation)
+			if(Progress <= 0.5f && !_startAnimation)
             {
-				StartAnimation = true;
+				_startAnimation = true;
 			    OnAnimationStart?.Invoke(this);
 			}
 		}
 		
-		public void Reset(){
-			MidAnimation = false;
-			StartAnimation = false;
+		public void Reset()
+		{
+			_midAnimation = false;
+			_startAnimation = false;
 		}
 		
-		public void Dispose(){
+		public void Dispose()
+		{
             
         }
 	}

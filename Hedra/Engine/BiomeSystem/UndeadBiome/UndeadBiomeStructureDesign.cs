@@ -14,6 +14,6 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
             this.AddDesign(new CampfireDesign());
         }
 
-        public override VillageScheme Scheme { get; } = new NormalVillageScheme();
+        public override VillageType VillageType => VillageType.Ruins;
     }
 }

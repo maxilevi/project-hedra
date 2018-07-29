@@ -8,7 +8,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -23,7 +23,7 @@ namespace Hedra.Engine.StructureSystem
         {
             var chunk = World.GetChunkAt(Position);
             var rng = new Random(World.Seed + 64432 + chunk.OffsetX + chunk.OffsetZ + (int)Position.X + (int)Position.Y);
-            var fortModel = AssetManager.PlyLoader("Assets/Env/Fort1.ply", Vector3.One * 1.5f, Vector3.Zero, Vector3.Zero);
+            var fortModel = AssetManager.PLYLoader("Assets/Env/Fort1.ply", Vector3.One * 1.5f, Vector3.Zero, Vector3.Zero);
 
             var transMatrix = Matrix4.Identity;
             transMatrix *= Matrix4.CreateRotationY(rng.NextFloat() * 360);
@@ -51,12 +51,8 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
-
-            var plateau = new Plateau(TargetPosition, this.Radius, 640, height);
-
-            World.QuestManager.AddPlateau(plateau);
+            var plateau = new Plateau(TargetPosition, this.Radius);
+            World.WorldBuilding.AddPlateau(plateau);
             return new CollidableStructure(this, TargetPosition, plateau);
         }
 

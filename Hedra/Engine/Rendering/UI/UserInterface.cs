@@ -33,10 +33,6 @@ namespace Hedra.Engine.Rendering.UI
 		public NetworkUI ConnectPanel;
 		private Texture _title;
 		private Button _newRun;
-		
-        /* TODO: REMOVE WHEN REMOVING THE QUESTS */
-		public static FBO ___questFbo;
-
         public static Font Regular;
 		public static Color DefaultFontColor = Color.White;
 		

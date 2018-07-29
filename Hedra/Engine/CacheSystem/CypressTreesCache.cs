@@ -8,9 +8,9 @@ namespace Hedra.Engine.CacheSystem
     {
         public CypressTreesCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Cypress0.ply", Vector3.One));
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Cypress1.ply", Vector3.One));
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Cypress2.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Cypress0.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Cypress1.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Cypress2.ply", Vector3.One));
 
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Cypress0.ply", 2, Vector3.One));
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Cypress1.ply", 2, Vector3.One));

@@ -16,9 +16,9 @@ namespace Hedra.Engine.CacheSystem
              *  fix that before adding new models
              */
 
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Rock1.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Rock1.ply", Vector3.One));
 
-            VertexData shape = AssetManager.PlyLoader("Assets/Env/Colliders/Rock0_Collider0.ply",
+            VertexData shape = AssetManager.PLYLoader("Assets/Env/Colliders/Rock0_Collider0.ply",
                 Vector3.One, Vector3.Zero, Vector3.Zero, false);
             var list = new List<CollisionShape>
             {

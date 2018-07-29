@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public BerryBushCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/BerryBush.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/BerryBush.ply", Vector3.One));
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Hedra.Engine.Rendering.Particles
 		
 		public static void Load(){
 			if(VerticesVBO == null && IndicesVBO == null && NormalsVBO == null){
-				VertexData Data = AssetManager.PlyLoader("Assets/Env/Particle.ply", Vector3.One,Vector3.Zero, Vector3.Zero, true);
+				VertexData Data = AssetManager.PLYLoader("Assets/Env/Particle.ply", Vector3.One,Vector3.Zero, Vector3.Zero, true);
 				ushort[] NewIndices = new ushort[Data.Indices.Count];
 				for(int i = 0; i < NewIndices.Length; i++){
 					NewIndices[i] = (ushort) Data.Indices[i];

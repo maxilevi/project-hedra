@@ -1,0 +1,1 @@
+cp ../AssetBuilder/bin/Release/AssetBuilder.exe AssetBuilder.exe

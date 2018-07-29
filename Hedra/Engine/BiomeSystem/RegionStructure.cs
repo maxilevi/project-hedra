@@ -11,11 +11,11 @@ namespace Hedra.Engine.BiomeSystem
         {
             _seed = Seed;
             Designs = StructureDesign.Designs;
-            Scheme = StructureDesign.Scheme;
+            VillageType = StructureDesign.VillageType;
         }
 
         public StructureDesign[] Designs { get; }
-        public VillageScheme Scheme { get; }
+        public VillageType VillageType { get; }
 
         public static RegionStructure Interpolate(params RegionStructure[] Regions)
         {

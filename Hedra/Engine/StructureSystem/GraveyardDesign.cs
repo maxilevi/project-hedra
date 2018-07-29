@@ -9,7 +9,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using OpenTK;
 using Region = Hedra.Engine.BiomeSystem.Region;
@@ -115,14 +115,14 @@ namespace Hedra.Engine.StructureSystem
             var skeletonCount = 4;
             for (var i = 0; i < skeletonCount; i++)
             {
-                var skeleton = World.QuestManager.SpawnBandit(
+                var skeleton = World.WorldBuilding.SpawnBandit(
                         Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) * Chunk.BlockSize,
                         false, true);
                     enemies.Add(skeleton);
             }
             Cementery.Enemies = enemies.ToArray();
 
-            var prize = World.QuestManager.SpawnChest(Position + Vector3.UnitX * 40f, 
+            var prize = World.WorldBuilding.SpawnChest(Position + Vector3.UnitX * 40f, 
                     ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
             prize.Condition = delegate
             {
@@ -146,7 +146,7 @@ namespace Hedra.Engine.StructureSystem
                 if (i == 3) addonPosition = Vector3.UnitZ * 14 * Chunk.BlockSize - Vector3.UnitX * 14 * Chunk.BlockSize;
 
                 Vector3 lightPosition = Position + addonPosition;
-                VertexData lampPost = AssetManager.PlyLoader("Assets/Env/Lamp0.ply", Vector3.One * 3.25f * 1.5f);
+                VertexData lampPost = AssetManager.PLYLoader("Assets/Env/Lamp0.ply", Vector3.One * 3.25f * 1.5f);
                 lampPost.Translate(lightPosition);
                 lampPost.GraduateColor(Vector3.UnitY);
                 lampPost.FillExtraData(WorldRenderer.NoHighlightFlag);
@@ -170,12 +170,8 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
-
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type) + Chunk.BlockSize;
-
-            var plateau = new Plateau(TargetPosition, Radius, 580, height);
-            World.QuestManager.AddPlateau(plateau);
+            var plateau = new Plateau(TargetPosition, Radius);
+            World.WorldBuilding.AddPlateau(plateau);
 
             return new CollidableStructure(this, TargetPosition, plateau);
         }

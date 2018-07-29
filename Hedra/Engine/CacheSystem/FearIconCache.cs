@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public FearIconCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/FearIcon.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/FearIcon.ply", Vector3.One));
         }
     }
 }

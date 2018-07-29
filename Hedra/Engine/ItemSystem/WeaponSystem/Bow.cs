@@ -33,11 +33,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         static Bow()
         {
-            ArrowVertexData = AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f,
+            ArrowVertexData = AssetManager.PLYLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f,
                 Vector3.UnitX * .35f, Vector3.Zero);
-            QuiverVertexData = AssetManager.PlyLoader("Assets/Items/Quiver.ply",
+            QuiverVertexData = AssetManager.PLYLoader("Assets/Items/Quiver.ply",
                 Vector3.One * new Vector3(2.2f, 2.8f, 2.2f) * 1.5f);
-            _arrowDataVertexData = AssetManager.PlyLoader("Assets/Items/Arrow.ply", Vector3.One * 5f, Vector3.Zero,
+            _arrowDataVertexData = AssetManager.PLYLoader("Assets/Items/Arrow.ply", Vector3.One * 5f, Vector3.Zero,
                 new Vector3(-90, 0, 90) * Mathf.Radian);
         }
 

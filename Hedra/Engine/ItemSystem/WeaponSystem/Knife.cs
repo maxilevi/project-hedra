@@ -29,7 +29,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         static Knife()
         {
-            SheathData = AssetManager.PlyLoader("Assets/Items/KnifeSheath.ply", Vector3.One);
+            SheathData = AssetManager.PLYLoader("Assets/Items/KnifeSheath.ply", Vector3.One);
             SheathData.Transform(Matrix4.CreateRotationY(180f * Mathf.Radian));
             SheathData.Scale(new Vector3(3.75f, 1.8f, 2f));
         }

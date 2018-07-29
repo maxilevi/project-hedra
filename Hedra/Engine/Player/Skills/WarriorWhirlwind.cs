@@ -39,19 +39,6 @@ namespace Hedra.Engine.Player
             _trail = new TrailRenderer( () => LocalPlayer.Instance.Model.LeftWeapon.WeaponTip, Vector4.One);
 			
 			_whirlwindAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWhirlwind.dae");
-			_whirlwindAnimation.OnAnimationEnd += delegate
-            {
-                if (!(_passedTime > 4)) return;
-                Player.Model.TargetRotation = Vector3.Zero;
-                Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
-                Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
-                Player.Model.Model.Rotation = Vector3.Zero;
-                Player.IsCasting = false;
-                Casting = false;
-                Player.IsAttacking = false;
-                Player.Model.LeftWeapon.LockWeapon = false;
-                _trail.Emit = false;
-            };
 		}
 
 		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
@@ -59,20 +46,17 @@ namespace Hedra.Engine.Player
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.Toolbar.DisableAttack;
 		}
 		
-		public override void Use(){
+		public override void Use()
+        {
 			base.MaxCooldown = 8.5f - base.Level * .5f;
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;
 			_affectedEntities.Clear();
 			_passedTime = 0;
-			Player.Model.LeftWeapon.LockWeapon = true;
 			Player.Model.Model.Animator.StopBlend();
 			Player.Model.Model.PlayAnimation(_whirlwindAnimation);
-			Player.Model.TargetRotation = Vector3.Zero;
-			Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
-			Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
-			Player.Model.Model.Rotation = Vector3.Zero;
+			Player.Model.Model.BlendAnimation(_whirlwindAnimation);
 		    _trail.Emit = true;
 		}
 
@@ -82,20 +66,21 @@ namespace Hedra.Engine.Player
 	        Casting = false;
 	        Player.IsAttacking = false;
 	        Player.Model.LeftWeapon.LockWeapon = false;
-	        _trail.Emit = false;
+	        Player.Model.Model.Animator.StopBlend();
+            _trail.Emit = false;
         }
 		
 		public override void Update(){	
             
 			if(Player.IsCasting && Casting)
             {
-				if(Player.IsDead || Player.Knocked){
+				if(Player.IsDead || Player.Knocked || _passedTime > 4){
 					this.Disable();
 					return;
 				}
 
 			    var underChunk = World.GetChunkAt(Player.Position);
-                _rotationY += Time.DeltaTime * 2000f;
+                _rotationY += Time.DeltaTime * 1000f;
                 Player.Model.Model.TransformationMatrix =
                     Matrix4.CreateRotationY(-Player.Model.Model.Rotation.Y * Mathf.Radian) *
                     Matrix4.CreateRotationY(_rotationY * Mathf.Radian) *

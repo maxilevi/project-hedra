@@ -7,17 +7,11 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using System.Linq;
 using System.Drawing;
-using System.Text;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
-using Hedra.Engine.QuestSystem;
-using Hedra.Engine.QuestSystem.Objectives;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Scenes;
 using Hedra.Engine.Sound;
 using OpenTK;
 
@@ -29,7 +23,7 @@ namespace Hedra.Engine.Player
     internal class QuestLog
     {
         private readonly Texture _chainIcon;
-        private Objective _currentQuest;
+        private object _currentQuest;
         private readonly Panel _inPanel;
         private readonly LocalPlayer _player;
         private readonly GUIText _questDescription;
@@ -89,6 +83,7 @@ namespace Hedra.Engine.Player
 
         public void Update()
         {
+            /*
             if (Show && World.QuestManager.Quest != null)
                 _chainIcon.TextureElement.TextureId = World.QuestManager.Quest.QuestLogIcon;
 
@@ -96,7 +91,7 @@ namespace Hedra.Engine.Player
             {
                 _currentQuest = World.QuestManager.Quest;
                 this.UpdateText();
-            }
+            }*/
         }
 
         public void OnPanelStateChange(object Sender, PanelState State)
@@ -108,8 +103,8 @@ namespace Hedra.Engine.Player
         {
             const int characterLimit = 32;
 
-            string desc = Utils.FitString(World.QuestManager.Quest.Description, characterLimit);
-            _questDescription.Text = desc.Length == 0 ? World.QuestManager.Quest.Description : desc;
+            //string desc = Utils.FitString(World.QuestManager.Quest.Description, characterLimit);
+            //_questDescription.Text = desc.Length == 0 ? World.QuestManager.Quest.Description : desc;
         }
     }
 }

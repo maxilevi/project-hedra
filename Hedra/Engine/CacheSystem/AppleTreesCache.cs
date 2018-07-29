@@ -7,9 +7,9 @@ namespace Hedra.Engine.CacheSystem
     {
         public AppleTreesCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/AppleTree0.ply", Vector3.One));
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/AppleTree1.ply", Vector3.One));
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/AppleTree2.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/AppleTree0.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/AppleTree1.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/AppleTree2.ply", Vector3.One));
 
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/AppleTree0.ply", 2, Vector3.One));
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/AppleTree1.ply", 2, Vector3.One));

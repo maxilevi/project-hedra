@@ -183,10 +183,11 @@ namespace Hedra.Engine.Management
 	            string header = reader.ReadString();
 	            int chunkSize = reader.ReadInt32();
 
-	            byte[] data = reader.ReadBytes(chunkSize);
 	            if (Path.GetFileName(header).Equals(Path.GetFileName(Name)))
-                    return data;
-	            
+	            {
+	                return reader.ReadBytes(chunkSize);
+	            }
+	            reader.BaseStream.Seek(reader.BaseStream.Position + chunkSize, SeekOrigin.Begin);
 	        }
 	        return null;
         }
@@ -234,7 +235,7 @@ namespace Hedra.Engine.Management
 			var shapes = new List<CollisionShape>();
 			var name = Path.GetFileNameWithoutExtension(Filename);
 			for(var i = 0; i < Count; i++){
-				var data = AssetManager.PlyLoader("Assets/Env/Colliders/"+name+"_Collider"+i+".ply", Scale, Vector3.Zero, Vector3.Zero, false);
+				var data = AssetManager.PLYLoader("Assets/Env/Colliders/"+name+"_Collider"+i+".ply", Scale, Vector3.Zero, Vector3.Zero, false);
 			    var newShape = new CollisionShape(data.Vertices, data.Indices);
 			    shapes.Add(newShape);
                 data.Dispose();
@@ -253,7 +254,7 @@ namespace Hedra.Engine.Management
 				var path = $"Assets/Env/Colliders/{name}_Collider{iterator}.ply";
 				var data = ReadBinary(path, DataFile3);
 				if(data == null) return shapes;
-				var vertexInformation = AssetManager.PlyLoader(path, Scale, Vector3.Zero, Vector3.Zero, false);
+				var vertexInformation = AssetManager.PLYLoader(path, Scale, Vector3.Zero, Vector3.Zero, false);
 				var newShape = new CollisionShape(vertexInformation.Vertices, vertexInformation.Indices);
 				shapes.Add(newShape);
 				vertexInformation.Dispose();
@@ -292,32 +293,85 @@ namespace Hedra.Engine.Management
 	        return Physics.BuildDimensionsBox(AssetManager.LoadModelVertexData(ModelFile));
         }
 
-        public static VertexData PlyLoader(string file, Vector3 Scale){
-			return AssetManager.PlyLoader(file, Scale, Vector3.Zero, Vector3.Zero);
+        public static VertexData PLYLoader(string file, Vector3 Scale){
+			return AssetManager.PLYLoader(file, Scale, Vector3.Zero, Vector3.Zero);
 		}
 
-		public static VertexData PlyLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
+		public static VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
 		{
 			var data = AssetManager.ReadBinary(File, DataFile3);
 			if (data == null) throw new ArgumentException($"Failed to found file '{File}' in the Assets folder.");
-			return PlyLoader(data, Scale, Position, Rotation, HasColors);
+			return PLYLoader(data, Scale, Position, Rotation, HasColors);
 		}
 
-		public static VertexData PlyLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
+		public static VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
+		{
+			const string header = "PROCESSEDPLY";
+			var size = Encoding.ASCII.GetByteCount(header);
+			if (HasHeader(Data, header, size))
+			{
+				return PLYUnserialize(Data, size, Scale, Position, Rotation, HasColors);
+			}
+			return PLYParser(Data, Scale, Position, Rotation, HasColors);
+		}
+
+		public static VertexData PLYUnserialize(byte[] Data, int HeaderSize, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
+		{
+			using (var ms = new MemoryStream(Data))
+			{
+				var vertices = new List<Vector3>();
+				var normals = new List<Vector3>();
+				var colors = new List<Vector4>();
+				var indices = new List<uint>();
+				ms.Seek(HeaderSize+1, SeekOrigin.Begin);
+				using (var reader = new BinaryReader(ms))
+				{
+					var indicesLength = reader.ReadInt32();
+					for (var i = 0; i < indicesLength; i++)
+					{
+						indices.Add(reader.ReadUInt32());
+					}
+					var vertexLength = reader.ReadInt32();
+					for (var i = 0; i < vertexLength; i++)
+					{
+						vertices.Add(
+							new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle())
+						);
+					}
+					var normalLength = reader.ReadInt32();
+					for (var i = 0; i < normalLength; i++)
+					{
+						normals.Add(
+							new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle())
+							);
+					}
+					var colorLength = reader.ReadInt32();
+					for (var i = 0; i < colorLength; i++)
+					{
+						colors.Add(
+							new Vector4(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle())
+							);
+					}
+				}
+				return HandlePLYTransforms(vertices, normals, colors, indices, Scale, Position, Rotation);
+			}
+		}
+		
+		public static VertexData PLYParser(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
         {
 		    string fileContents = Encoding.ASCII.GetString(Data);
 
 		    int endHeader = fileContents.IndexOf("element vertex", StringComparison.Ordinal);
             fileContents = fileContents.Substring(endHeader, fileContents.Length - endHeader);
-            var numbers = Regex.Matches(fileContents, @"-?[\d]+\.[\d]+|[\d]+\.[\d]+|[\d]+");
+            var numbers = Regex.Matches(fileContents, @"-?[\d]+\.[\d]+|[\d]+\.[\d]+|[\d]+").Cast<Match>().Select(M => M.Value).ToArray();
 
             const int vertexCountIndex = 0;
             const int faceCountIndex = 1;
             const int startDataIndex = 2;
-            var vertexCount = int.Parse(numbers[vertexCountIndex].Value);
-            var faceCount = int.Parse(numbers[faceCountIndex].Value);
+            var vertexCount = int.Parse(numbers[vertexCountIndex]);
+            var faceCount = int.Parse(numbers[faceCountIndex]);
 
-            var vertexData = new List<Vector3>(vertexCount);
+            var vertices = new List<Vector3>(vertexCount);
 			var colors = new List<Vector4>();
 			var normals = new List<Vector3>();
 			var indices = new List<uint>(faceCount * 3);
@@ -325,29 +379,29 @@ namespace Hedra.Engine.Management
 
             var numberOffset = HasColors ? 9 : 6;
 			int accumulatedOffset = startDataIndex;
-            for(; vertexData.Count < vertexCount; accumulatedOffset += numberOffset)
+            for(; vertices.Count < vertexCount; accumulatedOffset += numberOffset)
             {
-				vertexData.Add( 
+				vertices.Add( 
                     new Vector3(
-                        float.Parse(numbers[accumulatedOffset + 0].Value, CultureInfo.InvariantCulture),
-                        float.Parse(numbers[accumulatedOffset + 1].Value, CultureInfo.InvariantCulture),
-                        float.Parse(numbers[accumulatedOffset + 2].Value, CultureInfo.InvariantCulture) 
+                        float.Parse(numbers[accumulatedOffset + 0], CultureInfo.InvariantCulture),
+                        float.Parse(numbers[accumulatedOffset + 1], CultureInfo.InvariantCulture),
+                        float.Parse(numbers[accumulatedOffset + 2], CultureInfo.InvariantCulture) 
                         )
                 );
 				normals.Add( 
                     new Vector3(
-                        float.Parse(numbers[accumulatedOffset + 3].Value, CultureInfo.InvariantCulture),
-                        float.Parse(numbers[accumulatedOffset + 4].Value, CultureInfo.InvariantCulture),
-                        float.Parse(numbers[accumulatedOffset + 5].Value, CultureInfo.InvariantCulture)
+                        float.Parse(numbers[accumulatedOffset + 3], CultureInfo.InvariantCulture),
+                        float.Parse(numbers[accumulatedOffset + 4], CultureInfo.InvariantCulture),
+                        float.Parse(numbers[accumulatedOffset + 5], CultureInfo.InvariantCulture)
                         )
                 );
 				if (HasColors)
 				{
 				    colors.Add(
                         new Vector4(
-                            float.Parse(numbers[accumulatedOffset + 6].Value) / 255f,
-                            float.Parse(numbers[accumulatedOffset + 7].Value) / 255f, 
-                            float.Parse(numbers[accumulatedOffset + 8].Value) / 255f,
+                            float.Parse(numbers[accumulatedOffset + 6]) / 255f,
+                            float.Parse(numbers[accumulatedOffset + 7]) / 255f, 
+                            float.Parse(numbers[accumulatedOffset + 8]) / 255f,
                             1.0f
                             )
                     );
@@ -355,38 +409,49 @@ namespace Hedra.Engine.Management
 			}
             for (; indices.Count / 3 < faceCount; accumulatedOffset += 4)
             {
-                indices.Add(uint.Parse(numbers[accumulatedOffset + 1].Value));
-                indices.Add(uint.Parse(numbers[accumulatedOffset + 2].Value));
-                indices.Add(uint.Parse(numbers[accumulatedOffset + 3].Value));
+                indices.Add(uint.Parse(numbers[accumulatedOffset + 1]));
+                indices.Add(uint.Parse(numbers[accumulatedOffset + 2]));
+                indices.Add(uint.Parse(numbers[accumulatedOffset + 3]));
             }
+	        return HandlePLYTransforms(vertices, normals, colors, indices, Scale, Position, Rotation);
+        }
 
+		private static VertexData HandlePLYTransforms(List<Vector3> Vertices, List<Vector3> Normals,
+			List<Vector4> Colors, List<uint> Indices, Vector3 Scale, Vector3 Position, Vector3 Rotation)
+		{
 			var scaleMat = Matrix4.CreateScale(Scale);
 			var positionMat = Matrix4.CreateTranslation(Position);
 			var rotationMat = Matrix4.CreateRotationY(Rotation.Y);
 			rotationMat *= Matrix4.CreateRotationX(Rotation.X);
 			rotationMat *= Matrix4.CreateRotationZ(Rotation.Z);
-			for(var j = 0; j < vertexData.Count; j++)
-            {
-				vertexData[j] = Vector3.TransformPosition(vertexData[j], scaleMat);
-				vertexData[j] = Vector3.TransformPosition(vertexData[j], rotationMat);
-				vertexData[j] = Vector3.TransformPosition(vertexData[j], positionMat);
+			for(var j = 0; j < Vertices.Count; j++)
+			{
+				Vertices[j] = Vector3.TransformPosition(Vertices[j], scaleMat);
+				Vertices[j] = Vector3.TransformPosition(Vertices[j], rotationMat);
+				Vertices[j] = Vector3.TransformPosition(Vertices[j], positionMat);
 			}
 			
-			for(var j = 0; j < normals.Count; j++)
-            {
-				normals[j] = Vector3.TransformNormal(normals[j], rotationMat);
+			for(var j = 0; j < Normals.Count; j++)
+			{
+				Normals[j] = Vector3.TransformNormal(Normals[j], rotationMat);
 			}
-
-            return new VertexData
-            {
-                Vertices = vertexData,
-                Indices = indices,
-                Normals = normals,
-                Colors = colors,
-                UseCache = true
-            };
+			
+			return new VertexData
+			{
+				Vertices = Vertices,
+				Indices = Indices,
+				Normals = Normals,
+				Colors = Colors,
+				UseCache = true
+			};
 		}
 
+		private static bool HasHeader(byte[] Data, string Header, int HeaderSize)
+		{
+		    var fileHeader = Encoding.ASCII.GetString(Data, 1, HeaderSize);
+            return fileHeader == Header;
+		}
+		
 	    public static void Dispose()
 	    {
 	        foreach (var handler in _registeredHandlers)

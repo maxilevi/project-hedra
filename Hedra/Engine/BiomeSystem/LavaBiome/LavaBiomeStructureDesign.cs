@@ -16,6 +16,6 @@ namespace Hedra.Engine.BiomeSystem.LavaBiome
             this.AddDesign(new CampfireDesign());
         }
 
-        public override VillageScheme Scheme { get; } = new NormalVillageScheme();
+        public override VillageType VillageType => VillageType.Volcanic;
     }
 }

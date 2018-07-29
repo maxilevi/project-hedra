@@ -7,9 +7,9 @@ namespace Hedra.Engine.CacheSystem
     {
         public BushesCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Bush1.ply", Vector3.One));
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Bush2.ply", Vector3.One));
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Bush3.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Bush1.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Bush2.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Bush3.ply", Vector3.One));
         }
     }
 }

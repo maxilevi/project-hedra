@@ -13,7 +13,7 @@ namespace Hedra.Engine.CacheSystem
              *  fix that before adding new models
              */
 
-            var model = AssetManager.PlyLoader("Assets/Env/Wheat.ply", Vector3.One);
+            var model = AssetManager.PLYLoader("Assets/Env/Wheat.ply", Vector3.One);
             model.ExtraData.AddRange(model.GenerateWindValues());
 
             this.AddModel(model);
