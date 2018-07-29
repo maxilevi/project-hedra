@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/TripleShuriken.png");
 			base.ManaCost = 35f;
 			base.MaxCooldown = 8.5f;
-            ShurikenData = AssetManager.PlyLoader("Assets/Items/Shuriken.ply", new Vector3(1,2,1) );
+            ShurikenData = AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1,2,1) );
 			
 			ThrowAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
 			ThrowAnimation.Loop = false;

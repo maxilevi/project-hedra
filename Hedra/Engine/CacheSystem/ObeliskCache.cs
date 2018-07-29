@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public ObeliskCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Obelisk.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Obelisk.ply", Vector3.One));
         }
     }
 }

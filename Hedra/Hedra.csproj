@@ -835,6 +835,10 @@
       <Link>Assets\Chr\SheepIdle1.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Animations\WarriorSmash.dae">
+      <Link>Assets\Chr\WarriorSmash.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Bows\CommonRecurveBow.ply">
       <Link>Assets\Items\Bows\CommonRecurveBow.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

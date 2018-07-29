@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms.VisualStyles;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
@@ -28,8 +29,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public virtual BuildingOutput Build(T Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            var rotY = Physics.DirectionToEuler((Center - Parameters.Position).NormalizedFast()).Y;
-            var rotationMatrix = LookAtCenter ? Matrix4.CreateRotationY(rotY * Mathf.Radian) : Matrix4.Identity;
+            var rotationMatrix = LookAtCenter ? Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian) : Matrix4.Identity;
             var transformationMatrix = rotationMatrix * Matrix4.CreateTranslation(Parameters.Position);
             var model = Cache.GrabModel(Parameters.Design.Path);
             model.Transform(transformationMatrix);
@@ -76,7 +76,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             if (World.WorldBuilding.CanAddPlateau(Item.Plateau))
             {
                 World.WorldBuilding.AddPlateau(Item.Plateau);
-                World.WorldBuilding.AddGroundwork(Item.Groundwork);
+                if (Item.Groundwork != null)
+                {
+                    World.WorldBuilding.AddGroundwork(Item.Groundwork);
+                }
                 return true;
             }
             return false;

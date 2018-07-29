@@ -9,6 +9,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public DesignTemplate Design { get; set; }
         public DesignTemplate WindmillDesign { get; set; }
         public Vector3 Position { get; set; }
+        public Vector3 Rotation { get; set; }
         public Random Rng { get; set; }
         public bool HasWindmill { get; set; }
 

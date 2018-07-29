@@ -37,7 +37,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 if (ext != ".json") continue;
 
                 var obj = FromJson<T>(File.ReadAllText(module), out var result);
-
                 if (!result) continue;
 
                 list.Add(obj);

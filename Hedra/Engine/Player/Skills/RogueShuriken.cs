@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player
 	internal class Shuriken : BaseSkill
 	{
 		private readonly Animation _throwAnimation;
-		private static readonly VertexData ShurikenData = AssetManager.PlyLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
+		private static readonly VertexData ShurikenData = AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
 
         public Shuriken() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");

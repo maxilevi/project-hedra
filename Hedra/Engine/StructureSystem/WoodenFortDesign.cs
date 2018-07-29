@@ -23,7 +23,7 @@ namespace Hedra.Engine.StructureSystem
         {
             var chunk = World.GetChunkAt(Position);
             var rng = new Random(World.Seed + 64432 + chunk.OffsetX + chunk.OffsetZ + (int)Position.X + (int)Position.Y);
-            var fortModel = AssetManager.PlyLoader("Assets/Env/Fort1.ply", Vector3.One * 1.5f, Vector3.Zero, Vector3.Zero);
+            var fortModel = AssetManager.PLYLoader("Assets/Env/Fort1.ply", Vector3.One * 1.5f, Vector3.Zero, Vector3.Zero);
 
             var transMatrix = Matrix4.Identity;
             transMatrix *= Matrix4.CreateRotationY(rng.NextFloat() * 360);

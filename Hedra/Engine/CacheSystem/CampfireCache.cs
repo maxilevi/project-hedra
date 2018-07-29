@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public CampfireCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Campfire0.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Campfire0.ply", Vector3.One));
             
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Campfire0.ply", 7, Vector3.One));
         }

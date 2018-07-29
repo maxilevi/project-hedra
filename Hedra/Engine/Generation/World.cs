@@ -211,11 +211,11 @@ namespace Hedra.Engine.Generation
 	        AnimationModelLoader.EmptyCache();
 
             var factories = MobLoader.LoadModules(AssetManager.AppPath);
-	        MobFactory?.AddFactory(factories);    
-            HumanoidLoader.LoadModules(AssetManager.AppPath);
-            ItemFactory.LoadModules(AssetManager.AppPath);
-	        VillageLoader.LoadModules(AssetManager.AppPath);
-            World.ModulesReload?.Invoke(AssetManager.AppPath);
+	        MobFactory?.AddFactory(factories);
+			ItemFactory.LoadModules(AssetManager.AppPath);
+			VillageLoader.LoadModules(AssetManager.AppPath);
+			HumanoidLoader.LoadModules(AssetManager.AppPath);
+			World.ModulesReload?.Invoke(AssetManager.AppPath);
 	    }
 		
 		public static int MenuSeed => 2124321422;//23123123

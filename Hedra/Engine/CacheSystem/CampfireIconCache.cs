@@ -9,7 +9,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public CampfireIconCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/UI/CampfireIcon.ply", Vector3.One * .75f));
+            this.AddModel(AssetManager.PLYLoader("Assets/UI/CampfireIcon.ply", Vector3.One * .75f));
         }
     }
 }

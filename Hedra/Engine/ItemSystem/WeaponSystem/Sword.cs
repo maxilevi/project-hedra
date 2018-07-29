@@ -14,7 +14,6 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
-using OpenTK;
 
 namespace Hedra.Engine.ItemSystem.WeaponSystem
 {
@@ -23,13 +22,12 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// </summary>
 	internal class Sword : MeleeWeapon
     {
-        private Vector3 _previousPosition;
 	    private bool FrontSlash => PrimaryAnimationsIndex == 2;
 	    private readonly float _swordHeight;
 
         public Sword(VertexData Contents) : base(Contents)
         {
-            AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSlash-Stance.dae");
+            AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSmash-Stance.dae");
 
 		    PrimaryAnimations = new Animation[3];
 		    PrimaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSlash-Left.dae");
@@ -53,7 +51,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             for (var k = 0; k < SecondaryAnimations.Length; k++)
 		    {
 		        SecondaryAnimations[k].Loop = false;
-		        SecondaryAnimations[k].Speed = 1.0f;
+		        SecondaryAnimations[k].Speed = 1.65f;
                 SecondaryAnimations[k].OnAnimationEnd += delegate
 		        {
 		            Owner.Attack(Owner.DamageEquation * 1.10f, delegate(Entity Mob)
@@ -71,35 +69,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    }
 		}
 		
-		public override void Update(Humanoid Human)
-		{
-			base.Update(Human);
-
-		    if (SecondaryAttack){
-				base.SetToMainHand(MainMesh);
-				
-				if(_previousPosition != Human.BlockPosition && Human.IsGrounded)
-				{
-				    Chunk underChunk = World.GetChunkAt(Human.Position);
-				    World.Particles.VariateUniformly = true;
-				    World.Particles.Color = World.GetHighestBlockAt( (int) Human.Position.X, (int) Human.Position.Z).GetColor(underChunk.Biome.Colors);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
-				    World.Particles.Position = Human.Position - Vector3.UnitY;
-				    World.Particles.Scale = Vector3.One * .5f;
-				    World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				    World.Particles.Direction = (-Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
-				    World.Particles.ParticleLifetime = 1;
-				    World.Particles.GravityEffect = .1f;
-				    World.Particles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
-					
-					if(World.Particles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
-						World.Particles.Color = new Vector4(underChunk.Biome.Colors.GrassColor.Xyz,1);
-					
-					World.Particles.Emit();
-				}
-				_previousPosition = Human.BlockPosition;
-			}	
-		}
-
         public override int ParsePrimaryIndex(int AnimationIndex)
 	    {
 	        return AnimationIndex == 5 ? 2 : AnimationIndex & 1;

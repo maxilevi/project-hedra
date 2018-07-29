@@ -75,7 +75,7 @@ namespace Hedra.Engine.Scenes
 			}
 			FirePosition = CampfirePosition.Xz.ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(CampfirePosition +  Vector3.UnitX * 4));
 			
-			VertexData CenterModel = AssetManager.PlyLoader("Assets/Env/Campfire2.ply", Vector3.One * 3f);
+			VertexData CenterModel = AssetManager.PLYLoader("Assets/Env/Campfire2.ply", Vector3.One * 3f);
 			CenterModel.Translate( FirePosition );
 			UnderChunk.AddStaticElement(CenterModel);
 			LocalPlayer.Instance.UI.ChrChooser.ReloadFiles();

@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public SleepingIconCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/SleepingIcon.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/SleepingIcon.ply", Vector3.One));
         }
     }
 }

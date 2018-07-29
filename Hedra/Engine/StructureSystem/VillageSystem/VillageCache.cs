@@ -50,7 +50,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 for (var j = 0; j < designs[i].Length; j++)
                 {
                     cache._colliderCache.Add(designs[i][j].Path, AssetManager.LoadCollisionShapes(designs[i][j].Path, Vector3.One * designs[i][j].Scale));
-                    cache._modelCache.Add(designs[i][j].Path, AssetManager.PlyLoader(designs[i][j].Path, Vector3.One * designs[i][j].Scale));
+                    cache._modelCache.Add(designs[i][j].Path, AssetManager.PLYLoader(designs[i][j].Path, Vector3.One * designs[i][j].Scale));
                     cache._sizeCache.Add(designs[i][j].Path, CalculateBounds(cache._modelCache[designs[i][j].Path]));
                 }
             }

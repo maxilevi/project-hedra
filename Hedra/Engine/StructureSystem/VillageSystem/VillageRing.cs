@@ -20,13 +20,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         public static VillageRing Default => new VillageRing
         {
-            Radius = 800,
+            Radius = 1024,
             InnerRing = new VillageRing
             {
-                Radius = 512,
+                Radius = 768,
                 InnerRing = new VillageRing
                 {
-                    Radius = 180
+                    Radius = 256
                 }
             }
         };

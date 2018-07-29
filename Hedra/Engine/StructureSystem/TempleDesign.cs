@@ -22,7 +22,7 @@ namespace Hedra.Engine.StructureSystem
         public override void Build(Vector3 Position, CollidableStructure Structure)
         {
             var rng = new Random((int)(Position.X / 11 * (Position.Z / 13)));
-            var model = AssetManager.PlyLoader("Assets/Env/IncaTemple0.ply", Vector3.One * 20f);
+            var model = AssetManager.PLYLoader("Assets/Env/IncaTemple0.ply", Vector3.One * 20f);
             var underChunk = World.GetChunkAt(Position);
 
             Matrix4 transMatrix = Matrix4.Identity;

@@ -68,7 +68,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             else if (cameraDist > 576 * 576 && GameSettings.Lod)
                 _object.Lod = 4;
             else
-                _object.Lod = GameManager.Player.IsGliding ? 1 : 1;
+                _object.Lod = GameManager.Player.IsGliding ? 2 : 1;
         }
 
         private static bool WasChunkBuilt(Chunk Chunk)

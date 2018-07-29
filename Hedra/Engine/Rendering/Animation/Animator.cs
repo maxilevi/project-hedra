@@ -84,30 +84,37 @@ namespace Hedra.Engine.Rendering.Animation
 		
 		#region Blending Axuliary Methods
 		
-		private string[] CalculateJointsToBlend(Animation Animation){
-			Dictionary<string, int> BlendedJointsCandidates = new Dictionary<string, int>();
-			for(int i = 0; i < Animation.KeyFrames.Length; i++){
-				foreach(KeyValuePair<string, JointTransform> Pair in Animation.KeyFrames[i].Pose) {
-					if(BlendedJointsCandidates.ContainsKey(Pair.Key)){
-						if(Animation.KeyFrames[i-1].Pose[Pair.Key].Position == Animation.KeyFrames[i].Pose[Pair.Key].Position 
-						   && Animation.KeyFrames[i-1].Pose[Pair.Key].Rotation == Animation.KeyFrames[i].Pose[Pair.Key].Rotation){
-							
-							BlendedJointsCandidates[Pair.Key] += 1; 
+		private string[] CalculateJointsToBlend(Animation Animation)
+		{
+			var blendedJointsCandidates = new Dictionary<string, int>();
+			for(var i = 0; i < Animation.KeyFrames.Length; i++)
+			{
+				foreach(var pair in Animation.KeyFrames[i].Pose)
+				{
+					if(blendedJointsCandidates.ContainsKey(pair.Key))
+					{
+						if(Animation.KeyFrames[i-1].Pose[pair.Key].Position == Animation.KeyFrames[i].Pose[pair.Key].Position 
+						   && Animation.KeyFrames[i-1].Pose[pair.Key].Rotation == Animation.KeyFrames[i].Pose[pair.Key].Rotation)
+						{						
+							blendedJointsCandidates[pair.Key] += 1; 
 						}
-					}else{
-						BlendedJointsCandidates.Add(Pair.Key, 1);
+					}
+					else
+					{
+						blendedJointsCandidates.Add(pair.Key, 1);
 					}
 				}
-			}
-			
-			List<string> BlendedJoints = new List<string>();
-			foreach(KeyValuePair<string, int> Pair in BlendedJointsCandidates) {
-				if(Pair.Value != Animation.KeyFrames.Length){
-					BlendedJoints.Add(Pair.Key);
+			}		
+			var blendedJoints = new List<string>();
+			foreach(var pair in blendedJointsCandidates)
+			{
+				if(pair.Value != Animation.KeyFrames.Length)
+				{
+					blendedJoints.Add(pair.Key);
 				}
 			}
 			
-			return BlendedJoints.ToArray();
+			return blendedJoints.ToArray();
 		}
 
 		#endregion

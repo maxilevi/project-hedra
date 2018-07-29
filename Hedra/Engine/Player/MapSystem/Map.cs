@@ -61,8 +61,8 @@ namespace Hedra.Engine.Player.MapSystem
             this._builder = new MapBuilder();
             this._baseItems = new List<MapBaseItem>();
             this._meshBuilder = new MapMeshBuilder(_player, MapSize, ChunkSize);
-            this._cursor = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/UI/MapCursor.ply", Vector3.One * 20f));
-            this._marker = ObjectMesh.FromVertexData(AssetManager.PlyLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f));
+            this._cursor = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapCursor.ply", Vector3.One * 20f));
+            this._marker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f));
             _marker.ApplyFog = false;
 
             var hint = new GUIText("CLICK TO MARK A WAYPOINT",

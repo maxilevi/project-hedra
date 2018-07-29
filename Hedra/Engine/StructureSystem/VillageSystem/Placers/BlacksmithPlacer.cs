@@ -12,7 +12,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             _blacksmithDesigns = Designs;
         }
 
-        protected override BlacksmithParameters FromPoint(PlacementPoint Point)
+        public override BlacksmithParameters FromPoint(PlacementPoint Point)
         {
             return new BlacksmithParameters
             {

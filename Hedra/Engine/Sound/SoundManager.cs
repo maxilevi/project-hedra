@@ -47,90 +47,119 @@ namespace Hedra.Engine.Sound
 				SoundItems[i] = new SoundItem(new SoundSource(Vector3.Zero));
 			}
             Log.WriteLine("Loading sounds...");
-            int Channels, Bits, Rate;
-            short[] ShortData;
-			ShortData = SoundManager.LoadOgg("Sounds/HoverButton.ogg", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.ButtonClick] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+            TaskManager.Parallel(delegate
+            {
+                int Channels, Bits, Rate;
+                short[] ShortData;
+                ShortData = SoundManager.LoadOgg("Sounds/HoverButton.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.ButtonClick] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-			ShortData = SoundManager.LoadOgg("Sounds/WaterSplash.ogg", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.WaterSplash] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
-			
-			ShortData = SoundManager.LoadOgg("Sounds/OnOff.ogg", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.OnOff] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
-			
-			ShortData = SoundManager.LoadOgg("Sounds/Swoosh.ogg", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.SwooshSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/WaterSplash.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.WaterSplash] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/Hit.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int) SoundType.HitSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
-			
-			ShortData = SoundManager.LoadOgg("Sounds/ItemCollect.ogg", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.NotificationSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
-			
-			//Data = SoundManager.LoadWave("Sounds/ItemCollect.wav", out Channels, out Bits, out Rate);
-		    SoundBuffers[(int) SoundType.FoodEaten] = SoundBuffers[(int) SoundType.NotificationSound];//new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/OnOff.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.OnOff] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/Hit.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int) SoundType.ArrowHit] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
-			
-			ShortData = SoundManager.LoadOgg("Sounds/Bow.ogg", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.BowSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
-			
-			ShortData = SoundManager.LoadOgg("Sounds/DarkSound.ogg", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.DarkSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Swoosh.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.SwooshSound] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/Slash.ogg", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.SlashSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Hit.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.HitSound] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-			ShortData = SoundManager.LoadOgg("Sounds/Jump.ogg", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.Jump  ] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
-			
-			ShortData = SoundManager.LoadOgg("Sounds/Money.ogg", out Channels, out Bits, out Rate);
-			SoundBuffers[(int) SoundType.TransactionSound  ] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/ItemCollect.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.NotificationSound] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/Eat.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.FoodEat] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                //Data = SoundManager.LoadWave("Sounds/ItemCollect.wav", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.FoodEaten] =
+                    SoundBuffers
+                        [(int) SoundType.NotificationSound]; //new SoundBuffer(GetSoundFormat(Channels, Bits), Data, Rate);
 
-		    ShortData = SoundManager.LoadOgg("Sounds/Horse.ogg", out Channels, out Bits, out Rate);
-		    SoundBuffers[(int)SoundType.HorseRun] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Hit.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.ArrowHit] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-		    ShortData = SoundManager.LoadOgg("Sounds/Fireplace.ogg", out Channels, out Bits, out Rate);
-		    SoundBuffers[(int)SoundType.Fireplace] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Bow.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.BowSound] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-		    ShortData = SoundManager.LoadOgg("Sounds/Run.ogg", out Channels, out Bits, out Rate);
-		    SoundBuffers[(int)SoundType.HumanRun] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/DarkSound.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.DarkSound] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-		    ShortData = SoundManager.LoadOgg("Sounds/HitGround.ogg", out Channels, out Bits, out Rate);
-		    SoundBuffers[(int)SoundType.HitGround] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Slash.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.SlashSound] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-		    ShortData = SoundManager.LoadOgg("Sounds/Roll.ogg", out Channels, out Bits, out Rate);
-		    SoundBuffers[(int)SoundType.Dodge] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Jump.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.Jump] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/LongSwoosh.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.LongSwoosh] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Money.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.TransactionSound] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/GlassBreak.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.GlassBreak] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Eat.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.FoodEat] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/GlassBreakInverted.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.GlassBreakInverted] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Horse.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.HorseRun] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/HumanSleep.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.HumanSleep] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Fireplace.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.Fireplace] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/ItemCollect.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.TalkSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Run.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.HumanRun] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/GroundQuake.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.GroundQuake] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/HitGround.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.HitGround] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/Bow.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.SpitSound] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                ShortData = SoundManager.LoadOgg("Sounds/Roll.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.Dodge] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
 
-            ShortData = SoundManager.LoadOgg("Sounds/GorillaGrowl.ogg", out Channels, out Bits, out Rate);
-            SoundBuffers[(int)SoundType.GorillaGrowl] = new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
-            _loaded = true;
-		}
+                ShortData = SoundManager.LoadOgg("Sounds/LongSwoosh.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.LongSwoosh] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+
+                ShortData = SoundManager.LoadOgg("Sounds/GlassBreak.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.GlassBreak] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+
+                ShortData = SoundManager.LoadOgg("Sounds/GlassBreakInverted.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.GlassBreakInverted] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+
+                ShortData = SoundManager.LoadOgg("Sounds/HumanSleep.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.HumanSleep] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+
+                ShortData = SoundManager.LoadOgg("Sounds/ItemCollect.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.TalkSound] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+
+                ShortData = SoundManager.LoadOgg("Sounds/GroundQuake.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.GroundQuake] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+
+                ShortData = SoundManager.LoadOgg("Sounds/Bow.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.SpitSound] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+
+                ShortData = SoundManager.LoadOgg("Sounds/GorillaGrowl.ogg", out Channels, out Bits, out Rate);
+                SoundBuffers[(int) SoundType.GorillaGrowl] =
+                    new SoundBuffer(GetSoundFormat(Channels, Bits), ShortData, Rate);
+                _loaded = true;
+                Log.WriteLine("Finished loading sounds.");
+            });
+        }
 
         public static void Update(Vector3 Position){
 			if(!_loaded) return;

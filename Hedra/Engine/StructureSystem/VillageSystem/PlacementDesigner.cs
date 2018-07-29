@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using Hedra.Engine.Generation;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Layout;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
@@ -55,14 +57,18 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         public void BuildPaths(PlacementDesign Design)
         {
-            var candidates = Design.Blacksmith.Concat<IBuildingParameters>(Design.Houses).Concat(Design.Farms).ToList();
+            var candidates = Design.Blacksmith.Concat<IBuildingParameters>(Design.Houses).Concat(Design.Farms).Concat(Design.Markets).ToList();
             var graph = this.CreateGraph(Design, candidates);
             var edges = graph.Edges;
             for (var i = 0; i < edges.Length; i++)
             {
                 var from = edges[i].Origin;
-                var to = edges[_rng.Next(0, edges.Length)].End;
-                var path = new LineGroundwork(from.Point.Xz, to.Point.Xz, BlockType.StonePath);
+                var to = edges[i].End;
+                var path = new LineGroundwork(from.Point.Xz, to.Point.Xz, BlockType.StonePath)
+                {
+                    BonusHeight = -1f,
+                    Width = 14
+                };
                 World.WorldBuilding.AddGroundwork(path);
             }
         }
@@ -76,22 +82,62 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             {
                 Point = C.Position
             }));
+            graph.AddVertex(vertices.Values.ToArray());
+            graph.AddAttribute("OriginWeight", V => (V.Point - Design.Position).LengthFast);
             for (var i = 0; i < Candidates.Count; i++)
             {
-                var from = Candidates[i];
-                var to = Candidates[_rng.Next(0, Candidates.Count)];
-                if(to == from ) continue;
+                var from = vertices[Candidates[i]];
+                if(from.Attributes.Get<float>("OriginWeight") <= 0f) continue;
+                var to = this.FindNearest(graph, from);
+                if(to == from || to == null) continue;
+                Candidates[i].Rotation = Vector3.UnitY *
+                                         Physics.DirectionToEuler((to.Point - from.Point).NormalizedFast());
                 edges.Add(new PathEdge
                 {
-                    Origin = vertices[from],
-                    End = vertices[to]
+                    Origin = from,
+                    End = to
                 });
             }
-            graph.AddVertex(vertices.Values.ToArray());
             graph.AddEdge(edges.ToArray());
+            for (var i = 0; i < Candidates.Count; i++)
+            {
+                //var degree = graph.Degree(vertices[Candidates[i]]);
+                //var newParam = this.ParameterFromDegree(degree, Candidates[i].Position);              
+            }
             return graph;
         }
+
+        private IBuildingParameters ParameterFromDegree(int Degree, Vector3 Position)
+        {
+            var point = new PlacementPoint
+            {
+                Position = Position,
+            };
+            
+            if(Degree == 1) return this._farmPlacer.FromPoint(point);
+            if(Degree == 2) return this._housePlacer.FromPoint(point);
+            if(Degree == 3) return this._blacksmithPlacer.FromPoint(point);
+            if(Degree > 3) return this._marketPlacer.FromPoint(point);
+            throw new ArgumentOutOfRangeException();
+        }
         
+        private PathVertex FindNearest(PathGraph Graph, PathVertex Vertex)
+        {
+            var vertices = Graph.Vertices;
+            PathVertex found = null;
+            var weight = float.MaxValue;
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                var newWeight = Vertex.Attributes.Get<float>("OriginWeight") * (Vertex.Point - vertices[i].Point).LengthFast;
+                if (Vertex != vertices[i] && newWeight < weight 
+                    && vertices[i].Attributes.Get<float>("OriginWeight") < Vertex.Attributes.Get<float>("OriginWeight"))
+                {
+                    weight = newWeight;
+                    found = vertices[i];
+                }
+            }
+            return found;
+        }
         private void RemoveIntersecting(PlacementDesign Design)
         {
             var parameters = Design.Blacksmith.Concat<IBuildingParameters>(Design.Farms)
@@ -138,7 +184,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         private PlacementPoint[] SamplePoints(VillageRing Ring)
         {
-            const int max = 256;
+            const int max = 512;
             var points = new PlacementPoint[max];
             for (var i = 0; i < points.Length; i++)
             {

@@ -114,7 +114,7 @@ namespace Hedra.Engine.Management
 
 	    private static void StartCurrentSong()
 	    {
-		    if(_loaded) return;
+		    if(!_loaded) return;
             if(_previousIndex != TrackIndex)//Song is looping, no interpolation
                 _sleepTime = true;
 	        _usedBuffer = null;

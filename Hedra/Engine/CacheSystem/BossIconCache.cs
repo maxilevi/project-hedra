@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public BossIconCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/QuestIcon.ply", Vector3.One * 6f, -Vector3.UnitY, Vector3.Zero));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/QuestIcon.ply", Vector3.One * 6f, -Vector3.UnitY, Vector3.Zero));
         }
     }
 }

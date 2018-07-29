@@ -15,7 +15,7 @@ namespace Hedra.Engine.StructureSystem
 {
     internal class VillageDesign : StructureDesign
     {
-        public override int Radius { get; set; } = 900;
+        public override int Radius { get; set; } = 1024;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
 
         public override void Build(Vector3 Position, CollidableStructure Structure)

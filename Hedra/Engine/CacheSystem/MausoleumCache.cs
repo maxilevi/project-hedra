@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public MausoleumCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Mausoleum.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Mausoleum.ply", Vector3.One));
             
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Mausoleum.ply", 2, Vector3.One));
         }

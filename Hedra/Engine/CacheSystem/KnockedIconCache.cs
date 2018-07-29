@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public KnockedIconCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/KnockedStars.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/KnockedStars.ply", Vector3.One));
         }
     }
 }

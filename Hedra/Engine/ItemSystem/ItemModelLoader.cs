@@ -19,7 +19,7 @@ namespace Hedra.Engine.ItemSystem
             var path = ModelTemplate.Path;
             if (!ModelCache.ContainsKey(path))
             {
-                var model = AssetManager.PlyLoader(path, Vector3.One);
+                var model = AssetManager.PLYLoader(path, Vector3.One);
                 model = AdjustModel(model);
                 ModelCache.Add(path, model);
             }

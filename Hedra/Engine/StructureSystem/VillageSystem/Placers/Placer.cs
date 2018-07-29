@@ -29,7 +29,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             return parameters.ToArray();
         }
 
-        protected virtual T FromPoint(PlacementPoint Point)
+        public virtual T FromPoint(PlacementPoint Point)
         {
             return new T
             {

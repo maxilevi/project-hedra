@@ -52,7 +52,6 @@ namespace Hedra.Engine.Rendering.Animation
                 }
                 else
                 {
-
                     string FileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ColladaFile));
                     AnimationData = ColladaLoader.LoadColladaAnimation(FileContents);
                     AnimationCache.Add(ColladaFile, AnimationData);

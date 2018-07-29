@@ -14,7 +14,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     {
         public override bool Place(BuildingParameters Parameters, VillageCache Cache)
         {
-            return this.PlaceGroundwork(Parameters.Position, 96, BlockType.StonePath);
+            var work = this.CreateGroundwork(Parameters.Position, 96, BlockType.StonePath);
+            work.Groundwork = null;
+            return this.PushGroundwork(work);
         }
 
         public override BuildingOutput Paint(BuildingParameters Parameters, BuildingOutput Input)

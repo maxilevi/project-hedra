@@ -146,7 +146,7 @@ namespace Hedra.Engine.StructureSystem
                 if (i == 3) addonPosition = Vector3.UnitZ * 14 * Chunk.BlockSize - Vector3.UnitX * 14 * Chunk.BlockSize;
 
                 Vector3 lightPosition = Position + addonPosition;
-                VertexData lampPost = AssetManager.PlyLoader("Assets/Env/Lamp0.ply", Vector3.One * 3.25f * 1.5f);
+                VertexData lampPost = AssetManager.PLYLoader("Assets/Env/Lamp0.ply", Vector3.One * 3.25f * 1.5f);
                 lampPost.Translate(lightPosition);
                 lampPost.GraduateColor(Vector3.UnitY);
                 lampPost.FillExtraData(WorldRenderer.NoHighlightFlag);

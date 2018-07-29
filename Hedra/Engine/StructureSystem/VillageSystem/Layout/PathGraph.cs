@@ -43,13 +43,38 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Layout
             }
         }
 
+        public int Degree(PathVertex Vertex)
+        {
+            var degree = 0;
+            for (var i = 0; i < _edges.Count; i++)
+            {
+                if (_edges[i].End == Vertex || _edges[i].Origin == Vertex)
+                    degree++;
+            }
+            return degree;
+        }
+
+        public void AddAttribute(string Name, Func<PathVertex, object> Func)
+        {
+            for (var i = 0; i < _vertices.Count; i++)
+            {
+                _vertices[i].Attributes.Set(Name, Func(_vertices[i]));
+            }
+        }
+
+        public PathVertex Find(Predicate<PathVertex> IsKey)
+        {
+            return _vertices.Find(IsKey);
+        }
+        
         public void Smooth(int Steps)
         {
             for (var k = 0; k < Steps; k++)
             {
-                for (var i = 0; i < _edges.Count; i++)
+                var originalEdges = this.Edges;
+                for (var i = 0; i < originalEdges.Length; i++)
                 {
-                    this.SmoothEdge(_edges[i]);
+                    this.SmoothEdge(originalEdges[i]);
                 }
             }
         }
@@ -101,5 +126,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Layout
         }
 
         public PathEdge[] Edges => _edges.ToArray();
+        public PathVertex[] Vertices => _vertices.ToArray();
     }
 }

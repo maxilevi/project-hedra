@@ -13,7 +13,7 @@ namespace AssetBuilder
             var builds = new List<AssetBuild>();
             for (var i = 0; i < sortedInput.Count; i++)
             {
-                var data = File.ReadAllBytes(sortedInput[i]);
+                var data = this.Process(sortedInput[i]);
                 output.Add(sortedInput[i], data);
                 builds.Add(new AssetBuild
                 {
@@ -29,6 +29,17 @@ namespace AssetBuilder
                     Builds = builds.ToArray()
                 }
             };
+        }
+
+        private byte[] Process(string Filename)
+        {
+            switch (Path.GetExtension(Filename)?.ToLowerInvariant())
+            {
+                 case ".ply":
+                     return PLYProcessor.Process(Filename);
+                 default:
+                     return File.ReadAllBytes(Filename);
+            }
         }
     }
 
