@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    internal class BuildingParameters : IBuildingParameters
+    public class BuildingParameters : IBuildingParameters
     {
         public DesignTemplate Design { get; set; }
         public Vector3 Position { get; set; }

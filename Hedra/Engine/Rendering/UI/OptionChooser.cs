@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering.UI
 {
-	internal class OptionChooser : UIElement
+	public class OptionChooser : UIElement
 	{
 		// \u25C0 Left
 		// \u25B6 Right		

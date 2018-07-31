@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    internal class EffectTemplate
+    public class EffectTemplate
     {
         public string Name { get; set; }
         public float Chance { get; set; } = -1;

@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     /// Object to transfer player information.
     /// </summary>
-    internal class PlayerInformation
+    public class PlayerInformation
     {
         public string Name { get; set; }
         public int Level { get; set; }

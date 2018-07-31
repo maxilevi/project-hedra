@@ -7,7 +7,7 @@ using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class RockCache : CacheType
+    public class RockCache : CacheType
     {
         public RockCache()
         {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.Sound
 {
-    internal interface IAudible
+    public interface IAudible
     {
         void StopSound();
     }

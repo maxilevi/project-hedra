@@ -10,7 +10,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    internal class InventoryArrayInterface
+    public class InventoryArrayInterface
     {
         public const string DefaultIcon = "Assets/UI/InventorySlot.png";
         public static uint DefaultId { get; } = Graphics2D.LoadFromAssets(DefaultIcon);

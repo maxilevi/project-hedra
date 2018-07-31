@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Bash.
 	/// </summary>
-	internal class Kick : BaseSkill
+	public class Kick : BaseSkill
 	{	
 		private float Damage = 35f;
 		private bool EmitParticles = false;

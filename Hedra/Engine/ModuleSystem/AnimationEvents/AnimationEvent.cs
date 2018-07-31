@@ -6,7 +6,7 @@ using OpenTK;
 [assembly: Obfuscation(Exclude = true)]
 namespace Hedra.Engine.ModuleSystem.AnimationEvents
 {
-    internal abstract class AnimationEvent : IDisposable
+    public abstract class AnimationEvent : IDisposable
     {
         public Entity Parent { get; set; }
         public bool Disposed { get; protected set; }

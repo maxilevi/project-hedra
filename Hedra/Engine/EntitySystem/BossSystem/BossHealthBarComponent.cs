@@ -20,7 +20,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
     /// <summary>
     ///     Description of BossHealthBarComponent.
     /// </summary>
-    internal class BossHealthBarComponent : EntityComponent, IDisposable
+    public class BossHealthBarComponent : EntityComponent, IDisposable
     {
         private Vector2 _barDefaultScale;
         private Bar _healthBar;

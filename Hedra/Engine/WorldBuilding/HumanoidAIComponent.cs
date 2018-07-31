@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    internal abstract class HumanoidAIComponent : EntityComponent
+    public abstract class HumanoidAIComponent : EntityComponent
     {
         private SleepingPad _bed;
         protected bool IsSleeping { get; private set; }

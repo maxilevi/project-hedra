@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class ObeliskCache : CacheType
+    public class ObeliskCache : CacheType
     {
         public ObeliskCache()
         {

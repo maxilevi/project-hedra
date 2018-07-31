@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class VillagePlacement
+    public class VillagePlacement
     {
         public VillageRoot Root { get; private set; }
         public VillageConfiguration Configuration { get; private set; }

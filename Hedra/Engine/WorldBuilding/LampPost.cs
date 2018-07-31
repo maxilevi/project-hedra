@@ -17,7 +17,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Manages a static light
 	/// </summary>
-	internal class LampPost : BaseStructure, IUpdatable
+	public class LampPost : BaseStructure, IUpdatable
 	{
 		public PointLight Light;
 		public Vector3 LightColor = new Vector3(1,1,1f);

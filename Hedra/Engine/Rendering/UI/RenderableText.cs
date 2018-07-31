@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Wrapper around GUIText.
 	/// </summary>
-	internal class RenderableText : IRenderable, IDisposable, UIElement
+	public class RenderableText : IRenderable, IDisposable, UIElement
 	{
 		public GUIText UIText;
 

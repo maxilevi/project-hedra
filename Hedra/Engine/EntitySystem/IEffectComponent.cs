@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.EntitySystem
 {
-    internal interface IEffectComponent
+    public interface IEffectComponent
     {
         int Chance { get; set; }
         float Damage { get; set; }

@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Management
 {
-	internal class FrustumCulling
+	public class FrustumCulling
 	{
 	    public static float Aspect = 1.45f;
         public const float ZNear = 2.0f;

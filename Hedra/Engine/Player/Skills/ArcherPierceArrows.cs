@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	internal class Puncture : BaseSkill
+	public class Puncture : BaseSkill
 	{
 
 		private Bow PlayerBow = null;

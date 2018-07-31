@@ -8,7 +8,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    internal class TradeInventoryArrayInterfaceManager : InventoryArrayInterfaceManager
+    public class TradeInventoryArrayInterfaceManager : InventoryArrayInterfaceManager
     {
         public event OnTransactionCompleteEventHandler OnTransactionComplete;
         private readonly TradeInventoryInterfaceItemInfo _itemInfoInterface;

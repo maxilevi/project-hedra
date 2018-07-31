@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.ItemSystem
 {
-    internal class ItemPoolSettings
+    public class ItemPoolSettings
     {
         public ItemTier Tier { get; set; }
         public bool SameTier { get; set; } = false;

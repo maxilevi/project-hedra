@@ -12,7 +12,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.Player.Skills
 {
-	internal class Agility : PassiveSkill
+	public class Agility : PassiveSkill
 	{
 		private float StaminaFormula(bool clamp = false)
 		{

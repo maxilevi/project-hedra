@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    internal class FarmParameters : IBuildingParameters
+    public class FarmParameters : IBuildingParameters
     {
         public DesignTemplate Design { get; set; }
         public DesignTemplate WindmillDesign { get; set; }

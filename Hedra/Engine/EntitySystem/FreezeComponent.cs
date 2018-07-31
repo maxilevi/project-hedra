@@ -18,7 +18,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of FireComponent.
 	/// </summary>
-	internal class FreezeComponent : EntityComponent, IEffectComponent
+	public class FreezeComponent : EntityComponent, IEffectComponent
 	{
 	    public int Chance { get; set; } = 10;
 	    public float Damage { get; set; } = 30;

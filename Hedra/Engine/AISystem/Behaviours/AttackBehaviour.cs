@@ -4,7 +4,7 @@ using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    internal class AttackBehaviour : Behaviour
+    public class AttackBehaviour : Behaviour
     {
         protected FollowBehaviour Follow { get; }
         protected readonly Timer FollowTimer;

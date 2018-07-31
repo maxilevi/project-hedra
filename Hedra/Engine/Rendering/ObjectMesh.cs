@@ -11,7 +11,7 @@ using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Rendering
 {
-	internal class ObjectMesh : IRenderable, IDisposable, ICullableModel
+	public class ObjectMesh : IRenderable, IDisposable, ICullableModel
 	{
 	    public Vector3 TargetRotation { get; set; }
 	    public Vector3 TargetPosition { get; set; }

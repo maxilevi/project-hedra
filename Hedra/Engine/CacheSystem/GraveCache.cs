@@ -3,7 +3,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class GraveCache : CacheType
+    public class GraveCache : CacheType
     {
         public GraveCache()
         {

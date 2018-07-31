@@ -5,7 +5,7 @@ using OpenTK;
 namespace Hedra.Engine.WorldBuilding
 {
     /// <inheritdoc />
-    internal class EscapeAIComponent : EntityComponent
+    public class EscapeAIComponent : EntityComponent
     {
         private readonly Entity _target;
         private readonly float _speed;

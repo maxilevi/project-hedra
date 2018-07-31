@@ -16,7 +16,7 @@ namespace Hedra.Engine
 	/// <summary>
 	/// Description of Log.
 	/// </summary>
-	internal static class Log
+	public static class Log
 	{
 	    private static LogType _currentType;
 	    private static Dictionary<LogType, StreamWriter> _logs;
@@ -146,7 +146,7 @@ namespace Hedra.Engine
 	    }
 	}
 
-    internal enum LogType
+    public enum LogType
     {
         Normal,
         IO,

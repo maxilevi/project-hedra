@@ -23,7 +23,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     /// <summary>
     /// Description of Weapon.
     /// </summary>
-    internal abstract class Weapon : IModel
+    public abstract class Weapon : IModel
     {
         public ObjectMesh MainMesh { get; }
         public ObjectMesh[] Meshes { get; private set; }

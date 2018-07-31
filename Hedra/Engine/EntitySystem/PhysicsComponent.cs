@@ -17,9 +17,9 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.EntitySystem
 {
-    internal delegate bool OnHitGroundEvent(Entity Parent, float Falltime);
+    public delegate bool OnHitGroundEvent(Entity Parent, float Falltime);
 
-    internal class  PhysicsComponent : EntityComponent
+    public class  PhysicsComponent : EntityComponent
 	{
 	    public event OnHitGroundEvent OnHitGround;
 		public bool UsePhysics { get; set; }

@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	internal class LearnHammer : BaseSkill
+	public class LearnHammer : BaseSkill
 	{
 
 		public LearnHammer() : base() {

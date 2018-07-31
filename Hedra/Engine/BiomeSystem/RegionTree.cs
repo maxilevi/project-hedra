@@ -6,7 +6,7 @@ using Hedra.Engine.TreeSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    internal class RegionTree
+    public class RegionTree
     {
         public TreeDesign PrimaryDesign { get; }
         private readonly BiomeTreeDesign _treeDesign;

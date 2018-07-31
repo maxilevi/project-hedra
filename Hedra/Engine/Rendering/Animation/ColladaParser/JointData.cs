@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of JointData.
 	/// </summary>
-	internal class JointData
+	public class JointData
 	{
 		public readonly int Index;
 		public readonly string NameId;

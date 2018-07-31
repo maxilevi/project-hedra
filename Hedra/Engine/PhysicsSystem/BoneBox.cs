@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    internal class BoneBox
+    public class BoneBox
     {
         public int JointId { get; }
         public Vector3[] Corners { get; }

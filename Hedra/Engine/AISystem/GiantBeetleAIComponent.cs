@@ -4,7 +4,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.AISystem
 {
-    internal class GiantBeetleAIComponent : BasicAIComponent
+    public class GiantBeetleAIComponent : BasicAIComponent
     {
         protected RetaliateBehaviour Retaliate { get; }
         protected HostileBehaviour Hostile { get; }

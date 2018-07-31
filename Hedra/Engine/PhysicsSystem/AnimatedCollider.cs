@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    internal class AnimatedCollider : IDisposable
+    public class AnimatedCollider : IDisposable
     {
         public AnimatedModel Model { get; }
         private readonly AnimatedColliderData _colliderData;

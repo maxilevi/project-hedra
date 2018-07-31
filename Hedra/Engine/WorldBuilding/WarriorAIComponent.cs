@@ -17,7 +17,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of WarriorAI.
 	/// </summary>
-	internal class WarriorAIComponent : CombatAIComponent
+	public class WarriorAIComponent : CombatAIComponent
     {
         private float _attackTimer;
         private Timer ForgetTimer { get; set; }

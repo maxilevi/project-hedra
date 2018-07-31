@@ -4,7 +4,7 @@ using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
 {
-    internal class FarmPlacer : Placer<FarmParameters>
+    public class FarmPlacer : Placer<FarmParameters>
     {
         private readonly DesignTemplate[] _windmillDesigns;
         

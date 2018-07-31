@@ -19,7 +19,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of ArcherAI.
 	/// </summary>
-	internal class ArcherAIComponent : CombatAIComponent
+	public class ArcherAIComponent : CombatAIComponent
     {
 		private float _secondAttackCooldown;
         private float _firstAttackCooldown;

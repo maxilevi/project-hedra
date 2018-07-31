@@ -25,7 +25,7 @@ namespace Hedra.Engine
 	/// <summary>
 	/// Description of Extensions.
 	/// </summary>
-	internal static class Extensions
+	public static class Extensions
 	{
 
 	    public static void Shuffle<T>(this IList<T> List, Random Rng)

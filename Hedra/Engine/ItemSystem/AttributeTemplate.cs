@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.ItemSystem
 {
-    internal class AttributeTemplate
+    public class AttributeTemplate
     {
         public string Name { get; set; }
         public object Value { get; set; }

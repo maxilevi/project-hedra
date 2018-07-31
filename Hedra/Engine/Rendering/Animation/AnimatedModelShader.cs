@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering.Animation
 	/// <summary>
 	/// Description of AnimatedModelShader.
 	/// </summary>
-	internal class AnimatedModelShader
+	public class AnimatedModelShader
 	{
 	    /// <summary>
 	    /// Kind of hacky but replaces some shader variables to generate a compatible shader

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.ItemSystem
 {
-    internal class AttributeArray
+    public class AttributeArray
     {
         private readonly Dictionary<string, AttributeObject> _attributes;
 
@@ -68,7 +68,7 @@ namespace Hedra.Engine.ItemSystem
         }
     }
 
-    internal class AttributeObject
+    public class AttributeObject
     {
         public object Value { get; set; }
         public bool Hidden { get; set; }

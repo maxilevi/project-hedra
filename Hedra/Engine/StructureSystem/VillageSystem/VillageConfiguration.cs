@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class VillageConfiguration
+    public class VillageConfiguration
     {
         public RingConfiguration InnerRing { get; set; } = new RingConfiguration
         {

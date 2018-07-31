@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of SymetricMatrix.
 	/// </summary>
-	internal class SymetricMatrix {
+	public class SymetricMatrix {
 		public float[] m = new float[10];
 	
 		public SymetricMatrix(float c=0){

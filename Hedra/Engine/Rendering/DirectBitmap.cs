@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering
 		/// <summary>
 		/// Description of DirectBitmap.
 		/// </summary>
-		internal class DirectBitmap : IDisposable
+		public class DirectBitmap : IDisposable
 	{
 	    public Bitmap Bitmap { get; private set; }
 	    public Int32[] Bits { get; private set; }

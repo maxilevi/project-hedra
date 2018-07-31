@@ -19,7 +19,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// <summary>
 	/// Description of TwoHandedSword.
 	/// </summary>
-	internal class Axe : MeleeWeapon
+	public class Axe : MeleeWeapon
 	{
         public Axe(VertexData Contents) : base(Contents)
 		{

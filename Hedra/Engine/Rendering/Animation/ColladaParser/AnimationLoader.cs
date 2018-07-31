@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of AnimationLoader.
 	/// </summary>
-	internal class AnimationLoader
+	public class AnimationLoader
 	{
 	    private const string ArmatureName = "Armature";
 		private static readonly Matrix4 Correction = Matrix4.CreateRotationX( -90f * Mathf.Radian);

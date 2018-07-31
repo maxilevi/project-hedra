@@ -8,7 +8,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player
 {
-    internal class HangGlider
+    public class HangGlider
     {
         private readonly LocalPlayer _player;
         private readonly GliderModel _model;

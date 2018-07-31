@@ -16,7 +16,7 @@ namespace Hedra.Engine.EnvironmentSystem
 	/// <summary>
 	/// Description of Fog.
 	/// </summary>
-	internal sealed class Fog
+	public sealed class Fog
 	{
 		public uint UboId { get; }
 		public FogData FogValues;
@@ -69,7 +69,7 @@ namespace Hedra.Engine.EnvironmentSystem
 	}
 	
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct FogData {
+	public struct FogData {
 	    public Vector4 U_BotColor;
 	    public Vector4 U_TopColor;
 	   	public float MinDist;

@@ -6,7 +6,7 @@ using Math = System.Math;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    internal class Voronoi
+    public class Voronoi
     {
         private const double Sqrt3 = 1.73205080756888;
 

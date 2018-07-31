@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering
     /// <summary>
     /// Description of VertexData.
     /// </summary>
-    internal sealed class VertexData : IDisposable
+    public sealed class VertexData : IDisposable
     {
         public List<Vector3> Vertices { get; set; }
         public List<Vector4> Colors { get; set; }

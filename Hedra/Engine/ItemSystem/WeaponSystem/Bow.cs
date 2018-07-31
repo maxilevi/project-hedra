@@ -17,9 +17,9 @@ using OpenTK;
 
 namespace Hedra.Engine.ItemSystem.WeaponSystem
 {
-	internal delegate void OnModifyArrowEvent(Projectile Arrow);
+	public delegate void OnModifyArrowEvent(Projectile Arrow);
 		
-	internal sealed class Bow : RangedWeapon
+	public sealed class Bow : RangedWeapon
 	{
 	    private static readonly VertexData ArrowVertexData;
 	    private static readonly VertexData _arrowDataVertexData;

@@ -16,7 +16,7 @@ using Hedra.Engine.EntitySystem;
 namespace Hedra.Engine.Player
 {
 
-	internal class ParticleProjectile : Projectile
+	public class ParticleProjectile : Projectile
 	{
 		public ParticleSystem Particles { get; }
 	    public bool UseLight { get; set; } = true;

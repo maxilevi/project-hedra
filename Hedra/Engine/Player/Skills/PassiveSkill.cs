@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.Player.Skills
 {
-    internal abstract class PassiveSkill : BaseSkill
+    public abstract class PassiveSkill : BaseSkill
     {
         public override bool Passive => true;
         protected abstract int MaxLevel { get; }

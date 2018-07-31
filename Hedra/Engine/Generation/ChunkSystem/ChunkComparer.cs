@@ -14,7 +14,7 @@ using OpenTK;
 namespace Hedra.Engine.Generation.ChunkSystem
 {
 	
-	internal class ChunkComparer: IComparer<Chunk>
+	public class ChunkComparer: IComparer<Chunk>
     {
 		public Vector3 Position { get; set; }
 

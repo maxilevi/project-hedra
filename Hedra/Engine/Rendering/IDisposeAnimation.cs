@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.Rendering
 {
-    internal interface IDisposeAnimation
+    public interface IDisposeAnimation
     {
         /// <summary>
         /// Prepares the model for using the death shader

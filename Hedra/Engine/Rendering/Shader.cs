@@ -20,7 +20,7 @@ namespace Hedra.Engine.Rendering
 	/// A class which combines vertex and fragment shaders and compiles them.
 	/// For how to write a glsl shader https://www.opengl.org/registry/doc/GLSLangSpec.Full.1.20.8.pdf
 	/// </summary>
-	internal class Shader : IDisposable
+	public class Shader : IDisposable
 	{
 	    private readonly Dictionary<string, bool> _knownMappings;
         private readonly Dictionary<string, UniformMapping> _mappings;

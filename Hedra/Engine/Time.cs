@@ -11,7 +11,7 @@ namespace Hedra.Engine
 	/// <summary>
 	/// Time manager.
 	/// </summary>
-	internal static class Time
+	public static class Time
 	{
 		public static float DeltaTime { get; private set; }
 		public static float IndependantDeltaTime { get; private set; }

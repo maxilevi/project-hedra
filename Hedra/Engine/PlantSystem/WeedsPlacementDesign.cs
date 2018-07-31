@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    internal class WeedsPlacementDesign : PlacementDesign
+    public class WeedsPlacementDesign : PlacementDesign
     {
         private readonly PlantDesign _grassDesign;
         private readonly PlantDesign _wheatDesign;

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Hedra.Engine.ItemSystem
 {
-    internal static class ItemFactory
+    public static class ItemFactory
     {
         private static readonly Dictionary<string, ItemTemplate> ItemTemplates;
         public static ItemTemplater Templater;

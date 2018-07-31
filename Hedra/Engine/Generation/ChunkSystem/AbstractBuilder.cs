@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    internal abstract class AbstractBuilder : ICountable, IDisposable
+    public abstract class AbstractBuilder : ICountable, IDisposable
     {
         public int Count => _queue.Count;
         private readonly SharedWorkerPool _pool;

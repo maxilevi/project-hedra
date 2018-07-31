@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    internal class WalkBehaviour : Behaviour
+    public class WalkBehaviour : Behaviour
     {
         public Vector3 Target { get; private set; }
         private bool _arrived;

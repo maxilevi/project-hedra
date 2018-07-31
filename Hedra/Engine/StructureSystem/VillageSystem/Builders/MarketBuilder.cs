@@ -10,7 +10,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    internal class MarketBuilder : Builder<BuildingParameters>
+    public class MarketBuilder : Builder<BuildingParameters>
     {
         public override bool Place(BuildingParameters Parameters, VillageCache Cache)
         {

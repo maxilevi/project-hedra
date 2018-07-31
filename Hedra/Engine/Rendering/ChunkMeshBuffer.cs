@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Hedra.Engine.Rendering
 {
-	internal class ChunkMeshBuffer
+	public class ChunkMeshBuffer
 	{
 	    public VBO<Vector3> Vertices;
 		public VBO<Vector4> Colors;

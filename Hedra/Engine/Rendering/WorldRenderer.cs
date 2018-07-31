@@ -21,7 +21,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of WorldRenderer.
 	/// </summary>
-	internal static class WorldRenderer
+	public static class WorldRenderer
 	{
 	    public const int NoShadowsFlag = -1;
 	    public const int NoHighlightFlag = -2;

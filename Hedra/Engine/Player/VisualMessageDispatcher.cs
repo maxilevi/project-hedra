@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player
 {
-    internal class VisualMessageDispatcher : IMessageDispatcher
+    public class VisualMessageDispatcher : IMessageDispatcher
     {
         private readonly LocalPlayer _player;
         private static readonly Color DefaultColor = Color.White;
@@ -286,7 +286,7 @@ namespace Hedra.Engine.Player
         }
     }
 
-    internal class MessageItem
+    public class MessageItem
     {
         public MessageType Type;
         public string Content;
@@ -296,7 +296,7 @@ namespace Hedra.Engine.Player
         public Func<bool> Condition;
     }
 
-    internal enum MessageType{
+    public enum MessageType{
         Title,
         Notification,
         Normal,

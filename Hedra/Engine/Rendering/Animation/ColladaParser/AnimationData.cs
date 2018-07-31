@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of AnimationData.
 	/// </summary>
-	internal class AnimationData
+	public class AnimationData
 	{
 		public readonly float LengthSeconds;
 		public readonly KeyFrameData[] KeyFrames;

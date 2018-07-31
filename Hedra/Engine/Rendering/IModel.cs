@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
-    internal interface IModel
+    public interface IModel
     {
         Vector4 Tint { get; set; }
         Vector4 BaseTint { get; set; }
@@ -21,7 +21,7 @@ namespace Hedra.Engine.Rendering
         void Dispose();
     }
 
-    internal interface ICullableModel : IModel, ICullable
+    public interface ICullableModel : IModel, ICullable
     {
         Vector3 Position { get; set; }
         bool Enabled { get; set; }

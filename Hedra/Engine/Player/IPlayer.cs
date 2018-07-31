@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player
 {
-    internal interface IPlayer : ISearchable
+    public interface IPlayer : ISearchable
     {
         Vector3 Position { get; set; }
     }

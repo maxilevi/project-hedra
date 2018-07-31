@@ -7,7 +7,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.ItemSystem
 {
-    internal class Item
+    public class Item
     {
         private static string GoldItemName = "Gold";
         private static string[] FoodItemNames = {"Berry"};

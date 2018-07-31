@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class VillageRoot
+    public class VillageRoot
     {
         public VillageCache Cache { get; private set; }
         public VillageTemplate Template { get; private set; }

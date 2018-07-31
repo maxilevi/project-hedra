@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine
 {
-    internal interface ICountable
+    public interface ICountable
     {
         int Count { get; }
     }

@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering.Particles
 {
-	internal sealed class ParticleCreator
+	public sealed class ParticleCreator
 	{	
 		
 		public static VBO<Vector3> VerticesVBO;

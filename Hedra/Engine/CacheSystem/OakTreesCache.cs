@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class OakTreesCache : CacheType
+    public class OakTreesCache : CacheType
     {
         public OakTreesCache()
         {

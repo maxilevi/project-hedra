@@ -12,7 +12,7 @@ using Hedra.Engine.Player;
 namespace Hedra.Engine.Networking
 {
 	[Serializable]
-	internal class Packet0x8
+	public class Packet0x8
 	{
 		public AnimationType Type;
 		public bool LightOn = false;

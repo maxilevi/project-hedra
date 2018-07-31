@@ -11,7 +11,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.EntitySystem
 {
-	internal interface IMountable
+	public interface IMountable
 	{
 		bool IsMountable{ get; }
 	}

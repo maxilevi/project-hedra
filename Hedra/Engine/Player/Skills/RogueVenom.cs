@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	internal class Venom : BaseSkill
+	public class Venom : BaseSkill
 	{
 		private int PreviousLevel = 0;
 		public Venom() : base() {

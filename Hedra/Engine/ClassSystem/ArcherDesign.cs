@@ -5,7 +5,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.ClassSystem
 {
-    internal class ArcherDesign : ClassDesign
+    public class ArcherDesign : ClassDesign
     {
         public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/ArcherLogo.png");
         public override HumanType Human => HumanType.Archer;

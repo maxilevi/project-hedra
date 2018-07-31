@@ -29,7 +29,7 @@ namespace Hedra.Engine.Networking
 	/// <summary>
 	/// Description of NetworkManager.
 	/// </summary>
-	internal static class NetworkManager
+	public static class NetworkManager
 	{
 		public const int DefaultPort = 23075, DefaultTimeout = 2000;
 		public const int PacketRate = 100;//In Milliseconds

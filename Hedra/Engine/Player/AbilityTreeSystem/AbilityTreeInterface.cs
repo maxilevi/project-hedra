@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
-    internal class AbilityTreeInterface : InventoryArrayInterface
+    public class AbilityTreeInterface : InventoryArrayInterface
     {
         private readonly LocalPlayer _player;
         private readonly Panel _panel;

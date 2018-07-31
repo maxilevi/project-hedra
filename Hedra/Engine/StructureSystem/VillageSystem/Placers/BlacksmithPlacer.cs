@@ -4,7 +4,7 @@ using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
 {
-    internal class BlacksmithPlacer : Placer<BlacksmithParameters>
+    public class BlacksmithPlacer : Placer<BlacksmithParameters>
     {
         private readonly BlacksmithDesignTemplate[] _blacksmithDesigns;
         public BlacksmithPlacer(BlacksmithDesignTemplate[] Designs, Random Rng) : base(Designs, Rng)

@@ -3,7 +3,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class GiantTreeCache : CacheType
+    public class GiantTreeCache : CacheType
     {
         public GiantTreeCache()
         {

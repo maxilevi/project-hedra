@@ -19,7 +19,7 @@ namespace Hedra.Engine.Generation
 	/// <summary>
 	/// Description of TreeGenerator.
 	/// </summary>
-	internal class TreeGenerator
+	public class TreeGenerator
 	{
 	    private readonly Vector3[] _previousTrees = new Vector3[8];
 

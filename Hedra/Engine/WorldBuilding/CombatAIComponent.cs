@@ -10,7 +10,7 @@ using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    internal abstract class CombatAIComponent : HumanoidAIComponent
+    public abstract class CombatAIComponent : HumanoidAIComponent
     {
         public bool Friendly { get; set; }
         protected Vector3 TargetPoint;

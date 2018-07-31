@@ -16,7 +16,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    internal class ChunkLoader
+    public class ChunkLoader
     {
         public bool ShouldUpdateFog { get; set; } = true;
         public bool Enabled { get; set; }

@@ -15,7 +15,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering.UI
 {
-    internal class Bar : IRenderable, UIElement, IDisposable
+    public class Bar : IRenderable, UIElement, IDisposable
     {
         public static Vector4 Low = new Vector4(0.878f, 0.196f, 0.235f, 1);
         public static Vector4 Middle = new Vector4(1, 0.839f, 0.149f, 1);

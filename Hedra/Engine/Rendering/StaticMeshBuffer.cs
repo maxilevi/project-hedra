@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of StaticMeshBuffer.
 	/// </summary>
-	 internal class StaticMeshBuffer : ChunkMeshBuffer, IDisposable
+	 public class StaticMeshBuffer : ChunkMeshBuffer, IDisposable
 	{
 		public bool UseShadows;
 		public DrawElementsType DrawType = DrawElementsType.UnsignedShort;

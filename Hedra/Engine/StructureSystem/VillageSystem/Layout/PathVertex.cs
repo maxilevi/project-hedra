@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Layout
 {
-    internal class PathVertex
+    public class PathVertex
     {
         public PathVertex()
         {

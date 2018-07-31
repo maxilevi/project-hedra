@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class PlacementPoint
+    public class PlacementPoint
     {
         public Vector3 Position { get; set; }
         public float Radius { get; set; }

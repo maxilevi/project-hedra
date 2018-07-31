@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering.Effects
 	/// <summary>
 	/// ONLY WORKS WITH SSAO
 	/// </summary>
-	internal class DeferedRenderer
+	public class DeferedRenderer
 	{
 		public FBO FirstPass;
 		public FBO SecondPass;

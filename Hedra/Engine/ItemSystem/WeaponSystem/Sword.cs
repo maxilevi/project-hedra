@@ -20,7 +20,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// <summary>
 	/// Description of TwoHandedSword.
 	/// </summary>
-	internal class Sword : MeleeWeapon
+	public class Sword : MeleeWeapon
     {
 	    private bool FrontSlash => PrimaryAnimationsIndex == 2;
 	    private readonly float _swordHeight;

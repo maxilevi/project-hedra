@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.Management
 {
-    internal class TickSystem
+    public class TickSystem
     {
         public int UpdatesPerSecond { get; set; } = 5;
         private readonly List<ITickable> _tickables;

@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    internal static class AnimatedColliderBuilder
+    public static class AnimatedColliderBuilder
     {
         private static readonly Dictionary<string, AnimatedColliderData> ColliderCache = new Dictionary<string, AnimatedColliderData>();
         private static readonly object Lock = new object();

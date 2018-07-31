@@ -16,7 +16,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering
 {	
-	internal static class ShaderManager
+	public static class ShaderManager
 	{
 		public const int LightDistance = 256;
 		public const int MaxLights = 12;

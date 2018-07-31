@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     /// Description of PlayerModel.
     /// </summary>
-    internal sealed class HumanoidModel : UpdatableModel<AnimatedModel>, IAudible, IDisposeAnimation
+    public sealed class HumanoidModel : UpdatableModel<AnimatedModel>, IAudible, IDisposeAnimation
     {
 		public const float DefaultScale = 0.75f;
 		public Humanoid Human { get; private set; }

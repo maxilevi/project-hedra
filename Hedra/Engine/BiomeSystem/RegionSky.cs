@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.BiomeSystem
 {
-    internal class RegionSky
+    public class RegionSky
     {
 
         public RegionSky(int Seed, BiomeSkyDesign Design)

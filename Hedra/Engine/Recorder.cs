@@ -19,7 +19,7 @@ namespace Hedra.Engine
 	/// <summary>
 	/// Description of Recorder.
 	/// </summary>
-	internal static class Recorder
+	public static class Recorder
 	{
 		public static bool Active;
 		public static string Output = "C:/Recordings/"+DateTime.Now.TimeOfDay.Minutes+"/";

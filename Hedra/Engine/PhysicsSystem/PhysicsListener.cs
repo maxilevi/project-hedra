@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    internal class PhysicsListener : IDisposable
+    public class PhysicsListener : IDisposable
     { 
         public uint Id { get; set; }
         public Func<CollisionShape[]> Shapes0 { get; set; }

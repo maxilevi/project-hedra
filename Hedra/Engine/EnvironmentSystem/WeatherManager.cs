@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.EnvironmentSystem
 {
-    internal class WeatherManager
+    public class WeatherManager
     {
         private readonly ParticleSystem _rain;
         private readonly Random _rng;

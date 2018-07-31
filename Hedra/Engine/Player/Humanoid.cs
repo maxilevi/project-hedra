@@ -26,7 +26,7 @@ using System.Linq;
 namespace Hedra.Engine.Player
 {
 
-	internal class Humanoid : Entity
+	public class Humanoid : Entity
 	{
         public virtual IMessageDispatcher MessageDispatcher { get; set; }
 	    public int ConsecutiveHits { get; private set; }

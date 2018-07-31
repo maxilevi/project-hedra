@@ -22,7 +22,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// Description of Obelisk.
 	/// </summary>
 	
-	internal class Obelisk : InteractableStructure
+	public class Obelisk : InteractableStructure
 	{
 	    public override string Message => "INTERACT WITH THE OBELISK";
 	    public override int InteractDistance => 32;

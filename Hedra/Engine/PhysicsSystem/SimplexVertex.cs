@@ -14,7 +14,7 @@ namespace Hedra.Engine.PhysicsSystem
 	/// <summary>
 	/// Description of SimplexVertex.
 	/// </summary>
-	internal class SimplexVertex
+	public class SimplexVertex
 	{
         public Vector3 SupportA;
         public Vector3 SupportB;

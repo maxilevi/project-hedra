@@ -4,7 +4,7 @@ using OpenTK;
 namespace Hedra.Engine.Rendering
 {
     [Obfuscation(Exclude = false, Feature = "-rename")]
-    internal class PointLight
+    public class PointLight
     {
         public const float DefaultRadius = 20f;
         public Vector3 Position { get; set; }

@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    internal class MushroomPlacementDesign : PlacementDesign
+    public class MushroomPlacementDesign : PlacementDesign
     {
         private readonly PlantDesign _mushroomDesign;
 

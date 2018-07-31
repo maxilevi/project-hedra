@@ -20,7 +20,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of TextField.
 	/// </summary>
-	internal class TextField : EventListener, UIElement
+	public class TextField : EventListener, UIElement
 	{
         private const int TextBuffer = 50;
         private Bar _textBar;

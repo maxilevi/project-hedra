@@ -18,7 +18,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of JointsLoader.
 	/// </summary>
-	internal class JointsLoader
+	public class JointsLoader
 	{
 		private const string ArmatureName = "Armature";
 		private XmlNode ArmatureData;

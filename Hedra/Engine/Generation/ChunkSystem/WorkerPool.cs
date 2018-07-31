@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    internal class WorkerPool
+    public class WorkerPool
     {
         public const int MaxWorkers = 2;
         protected readonly List<Worker> Workers;

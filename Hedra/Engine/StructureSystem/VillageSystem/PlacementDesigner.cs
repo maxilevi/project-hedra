@@ -12,7 +12,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal sealed class PlacementDesigner
+    public sealed class PlacementDesigner
     {
         private readonly VillageRoot _root;
         private readonly Random _rng;

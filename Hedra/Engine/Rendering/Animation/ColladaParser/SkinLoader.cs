@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of SkinLoader.
 	/// </summary>
-	internal class SkinLoader
+	public class SkinLoader
 	{
 		private readonly XmlNode SkinningData;
 		private readonly int MaxWeights;

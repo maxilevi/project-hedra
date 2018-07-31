@@ -9,7 +9,7 @@ using OpenTK;
 
 namespace Hedra.Engine.TreeSystem
 {
-    internal class PineDesign : TreeDesign
+    public class PineDesign : TreeDesign
     {
         public override float Spacing => 40f;
         public override VertexData Model => CacheManager.GetModel(CacheItem.PineTrees);

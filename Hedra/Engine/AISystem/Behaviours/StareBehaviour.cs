@@ -5,7 +5,7 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    internal class StareBehaviour : Behaviour
+    public class StareBehaviour : Behaviour
     {
         public StareBehaviour(Entity Parent) : base(Parent)
         {

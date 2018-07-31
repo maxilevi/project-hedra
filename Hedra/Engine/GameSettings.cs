@@ -18,7 +18,7 @@ using OpenTK;
 namespace Hedra.Engine
 {
     [Obfuscation(Exclude = false, Feature = "-rename")]
-    internal static class GameSettings
+    public static class GameSettings
     {
         public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
         public static float BloomModifier { get; set; } = 1f;

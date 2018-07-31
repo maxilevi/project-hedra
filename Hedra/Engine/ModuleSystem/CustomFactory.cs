@@ -8,7 +8,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    internal class CustomFactory : IEnemyFactory
+    public class CustomFactory : IEnemyFactory
     {
 
         public static Dictionary<string, Type> EffectTable;

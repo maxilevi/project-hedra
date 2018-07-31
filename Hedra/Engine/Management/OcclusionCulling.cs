@@ -12,7 +12,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of OcclusionCulling.
 	/// </summary>
-	internal static class OcclusionCulling
+	public static class OcclusionCulling
 	{
 		public static void StartQueries(Occludable[] Occludables){
 			GL.ColorMask(false, false, false, false);

@@ -10,7 +10,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering
 {
-	internal abstract class VAO : IDisposable
+	public abstract class VAO : IDisposable
 	{
 	    public uint ID => _id;
 		protected uint _id;
@@ -37,7 +37,7 @@ namespace Hedra.Engine.Rendering
         }
 	}
 	
-	internal class VAO<T1> : VAO where T1 : struct
+	public class VAO<T1> : VAO where T1 : struct
 	{
 		public VAO(VBO<T1> Buffer)
         {
@@ -63,7 +63,7 @@ namespace Hedra.Engine.Rendering
 	    }
     }
 	
-	internal class VAO<T1, T2> : VAO where T1 : struct where T2 : struct
+	public class VAO<T1, T2> : VAO where T1 : struct where T2 : struct
 	{
 		public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2)
         {
@@ -94,7 +94,7 @@ namespace Hedra.Engine.Rendering
         }
     }
 	
-	internal class VAO<T1, T2, T3> : VAO where T1 : struct where T2 : struct where T3 : struct
+	public class VAO<T1, T2, T3> : VAO where T1 : struct where T2 : struct where T3 : struct
 	{
 		public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3)
         {
@@ -130,7 +130,7 @@ namespace Hedra.Engine.Rendering
         }
     }
 	
-	internal class VAO<T1, T2, T3, T4> : VAO where T1 : struct where T2 : struct where T3 : struct  where T4 : struct
+	public class VAO<T1, T2, T3, T4> : VAO where T1 : struct where T2 : struct where T3 : struct  where T4 : struct
 	{
 		public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3, VBO<T4> Buffer4)
         {
@@ -171,7 +171,7 @@ namespace Hedra.Engine.Rendering
         }
     }
 	
-	internal class VAO<T1, T2, T3, T4, T5> : VAO where T1 : struct where T2 : struct where T3 : struct  where T4 : struct where T5 : struct
+	public class VAO<T1, T2, T3, T4, T5> : VAO where T1 : struct where T2 : struct where T3 : struct  where T4 : struct where T5 : struct
 	{
 		public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3, VBO<T4> Buffer4, VBO<T5> Buffer5)
         {

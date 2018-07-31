@@ -20,7 +20,7 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     /// Description of PoisonousComponent.
     /// </summary>
-    internal class PoisonousComponent : EntityComponent, IEffectComponent
+    public class PoisonousComponent : EntityComponent, IEffectComponent
     {
 		public int Chance { get; set; } = 10;
 		public float Damage { get; set; } = 30;

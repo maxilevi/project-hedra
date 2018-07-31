@@ -9,7 +9,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Testing.AutomatedTests
 {
-    internal class BaseAutomatedTest : BaseTest
+    public class BaseAutomatedTest : BaseTest
     {
         protected KeyboardKeyEventArgs SimulateKeyEvent(Key Press)
         {

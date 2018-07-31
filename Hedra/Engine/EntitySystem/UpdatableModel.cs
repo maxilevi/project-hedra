@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
-    internal abstract class UpdatableModel<T> : BaseUpdatableModel, IDisposable where T : class, ICullableModel
+    public abstract class UpdatableModel<T> : BaseUpdatableModel, IDisposable where T : class, ICullableModel
     {
         protected HashSet<IModel> AdditionalModels { get; }
         public override Vector3 TargetRotation { get; set; }

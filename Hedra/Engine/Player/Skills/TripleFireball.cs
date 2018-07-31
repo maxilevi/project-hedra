@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of TripleFireball.
 	/// </summary>
-	internal class TripleFireball : BaseSkill
+	public class TripleFireball : BaseSkill
 	{
 		private bool LeftHand;
 		private float Damage = 6.5f;

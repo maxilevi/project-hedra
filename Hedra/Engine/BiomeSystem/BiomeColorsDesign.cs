@@ -3,7 +3,7 @@
 
 namespace Hedra.Engine.BiomeSystem
 {
-    internal abstract class BiomeColorsDesign
+    public abstract class BiomeColorsDesign
     {
         public abstract Vector4 WaterColor(int Seed);
         public abstract Vector4 StoneColor(int Seed);

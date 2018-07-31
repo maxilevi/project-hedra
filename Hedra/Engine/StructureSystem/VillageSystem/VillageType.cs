@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal enum VillageType
+    public enum VillageType
     {
         Woodland,
         Nordic,

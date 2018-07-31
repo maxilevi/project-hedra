@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     ///     Description of PetManager.
     /// </summary>
-    internal class PetManager
+    public class PetManager
     {
         public Entity Pet { get; private set; }
         private readonly LocalPlayer _player;

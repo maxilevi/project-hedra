@@ -4,7 +4,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.AISystem
 {
-    internal class FriendlyAIComponent : BasicAIComponent
+    public class FriendlyAIComponent : BasicAIComponent
     {
         protected RoamBehaviour Roam { get; }
 

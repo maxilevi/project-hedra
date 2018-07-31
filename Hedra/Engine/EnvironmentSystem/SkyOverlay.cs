@@ -7,7 +7,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.EnvironmentSystem
 {
-    internal class SkyOverlay
+    public class SkyOverlay
     {
         private static readonly Bitmap DefaultBitmap;
         private static readonly Shader Shader;

@@ -6,7 +6,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.EntitySystem
 {
-    internal abstract class InteractableComponent : EntityComponent
+    public abstract class InteractableComponent : EntityComponent
     {
         public virtual float InteractionAngle => .9f;
         public virtual Key Key => Key.E;

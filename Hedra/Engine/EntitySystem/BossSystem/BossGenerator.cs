@@ -18,7 +18,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 	/// <summary>
 	/// Description of BossGenerator.
 	/// </summary>
-	internal static class BossGenerator
+	public static class BossGenerator
 	{
 		public static Entity Generate(MobType[] PossibleTypes, Random Rng)
 		{

@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player.MapSystem
 	/// <summary>
 	/// Description of Minimap.
 	/// </summary>
-	internal class Minimap : IRenderable
+	public class Minimap : IRenderable
 	{
 	    private static readonly Shader Shader = Shader.Build("Shaders/GUI.vert", "Shaders/MinimapGUI.frag");
         private readonly LocalPlayer _player;

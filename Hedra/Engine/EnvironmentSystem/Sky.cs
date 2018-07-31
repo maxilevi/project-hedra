@@ -17,7 +17,7 @@ namespace Hedra.Engine.EnvironmentSystem
 	/// <summary>
 	/// Description of Skydome.
 	/// </summary>
-	internal sealed class Sky
+	public sealed class Sky
 	{
 	    private static readonly Shader SkyGradientShader;
 	    public bool Enabled { get; set; } = true;

@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of ChunkRenderCommand.
 	/// </summary>
-	internal class ChunkRenderCommand
+	public class ChunkRenderCommand
 	{
 		public int DrawCount, VertexCount;
 		public int ByteOffset => Entries[0].Offset;

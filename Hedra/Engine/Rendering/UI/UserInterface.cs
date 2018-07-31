@@ -19,7 +19,7 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.Rendering.UI
 {
-	internal class UserInterface
+	public class UserInterface
 	{
 		private readonly LocalPlayer _player;
 		public static PrivateFontCollection Fonts = new PrivateFontCollection();

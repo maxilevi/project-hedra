@@ -15,7 +15,7 @@ namespace Hedra.Engine.BiomeSystem
 	/// <summary>
 	/// Description of BiomeGenerator.
 	/// </summary>
-	internal abstract class BiomeGenerator : IDisposable
+	public abstract class BiomeGenerator : IDisposable
 	{
 		protected int OffsetX { get; }
         protected int OffsetZ { get; }

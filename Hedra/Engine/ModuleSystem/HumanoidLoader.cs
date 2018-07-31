@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    internal static class HumanoidLoader
+    public static class HumanoidLoader
     {
         private static readonly Dictionary<string, HumanoidModelTemplate> ModelTemplates;
         private static readonly Dictionary<string, HumanoidTemplate> HumanoidTemplates;

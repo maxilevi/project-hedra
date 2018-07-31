@@ -3,7 +3,7 @@ using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem.UndeadBiome
 {
-    internal class UndeadBiomeStructureDesign : BiomeStructureDesign
+    public class UndeadBiomeStructureDesign : BiomeStructureDesign
     {
         public UndeadBiomeStructureDesign()
         {

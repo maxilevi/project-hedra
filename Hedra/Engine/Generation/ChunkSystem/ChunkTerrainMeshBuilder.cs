@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    internal class ChunkTerrainMeshBuilder
+    public class ChunkTerrainMeshBuilder
     {
         private readonly Chunk _parent;
         public ChunkTerrainMeshBuilderHelper Helper { get; }

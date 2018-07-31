@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    internal class FarmBuilder : Builder<FarmParameters>
+    public class FarmBuilder : Builder<FarmParameters>
     {
         protected override bool LookAtCenter => false;
 

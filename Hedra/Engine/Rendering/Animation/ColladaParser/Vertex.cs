@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of Vertex.
 	/// </summary>
-	internal class Vertex
+	public class Vertex
 	{
 		private const int NoIndex = -1;
 	

@@ -4,7 +4,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    internal class PhysicsLoadBalancer
+    public class PhysicsLoadBalancer
     {
         private readonly PhysicsThread[] _threads;
         private readonly PhysicsThread[] _loadCommandArray;

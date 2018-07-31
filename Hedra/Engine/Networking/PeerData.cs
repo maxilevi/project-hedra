@@ -19,7 +19,7 @@ namespace Hedra.Engine.Networking
 	/// <summary>
 	/// Description of PeerData.
 	/// </summary>
-	internal class PeerData
+	public class PeerData
 	{
 		public Humanoid Human;
 		public bool Packet0x2Sent = false;

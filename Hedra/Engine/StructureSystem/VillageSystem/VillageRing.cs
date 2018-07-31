@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class VillageRing
+    public class VillageRing
     {
         public float Radius { get; set; }
         public VillageRing InnerRing { get; set; }

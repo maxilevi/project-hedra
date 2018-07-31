@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    internal abstract class BiomeSkyDesign
+    public abstract class BiomeSkyDesign
     {
         public abstract Vector4 MiddayTop(int Seed);
         public abstract Vector4 MiddayBot(int Seed);

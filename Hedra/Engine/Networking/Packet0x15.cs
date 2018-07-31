@@ -16,7 +16,7 @@ namespace Hedra.Engine.Networking
 	/// Description of Packet0x15.
 	/// </summary>
 	[Serializable]
-	internal class Packet0x15
+	public class Packet0x15
 	{
 		public float Damage;
 		

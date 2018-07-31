@@ -20,7 +20,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of DropShadowRenderer.
 	/// </summary>
-	internal class DropShadowRenderer
+	public class DropShadowRenderer
 	{
 	    public static Shader Shader;
 	    private List<DropShadow> _shouldShadows;

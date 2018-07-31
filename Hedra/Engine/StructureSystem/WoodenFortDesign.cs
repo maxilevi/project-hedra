@@ -14,7 +14,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
-    internal class WoodenFortDesign : StructureDesign
+    public class WoodenFortDesign : StructureDesign
     {
         public override int Radius { get; set; } = 256;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);

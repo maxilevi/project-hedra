@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// One huge VBO with reduced fragmentation
 	/// </summary>
-	internal class GeometryPool<T> : IDisposable where T : struct
+	public class GeometryPool<T> : IDisposable where T : struct
 	{
 		private readonly int PoolSize;
 		public List<MemoryEntry> ObjectMap = new List<MemoryEntry>();

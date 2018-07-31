@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    internal class BlacksmithParameters : IBuildingParameters
+    public class BlacksmithParameters : IBuildingParameters
     {
         public BlacksmithDesignTemplate Design { get; set; }
         public Vector3 Position { get; set; }

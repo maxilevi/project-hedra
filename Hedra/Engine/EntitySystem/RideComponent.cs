@@ -19,7 +19,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of RideComponent.
 	/// </summary>
-	internal class RideComponent : EntityComponent, ITickable
+	public class RideComponent : EntityComponent, ITickable
     {
 		public Humanoid Rider;
 		public bool HasRider;

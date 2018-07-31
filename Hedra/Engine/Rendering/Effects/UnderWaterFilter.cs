@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering.Effects
 	/// <summary>
 	/// Description of UnderWaterFilter.
 	/// </summary>
-	internal class UnderWaterFilter : Filter
+	public class UnderWaterFilter : Filter
 	{
 	    private static readonly Shader WaterEffect;
 		public Vector4 Multiplier { get; set; }

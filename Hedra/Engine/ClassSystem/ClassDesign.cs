@@ -7,7 +7,7 @@ using Hedra.Engine.Player.Skills;
 
 namespace Hedra.Engine.ClassSystem
 {
-    internal abstract class ClassDesign
+    public abstract class ClassDesign
     {
         public static Type[] AvailableClasses { get; }
         public static string[] ClassNames { get; }
@@ -43,7 +43,7 @@ namespace Hedra.Engine.ClassSystem
             return ClassDesign.FromType(type);
         }
 
-        internal static ClassDesign FromType(Type Type)
+        public static ClassDesign FromType(Type Type)
         {
             return (ClassDesign)Activator.CreateInstance(Type);
         }
@@ -58,6 +58,6 @@ namespace Hedra.Engine.ClassSystem
             return ClassDesign.Name.Replace("Design", string.Empty);
         }
 
-        internal static ClassDesign None { get; } = new NoneDesign();
+        public static ClassDesign None { get; } = new NoneDesign();
     }
 }

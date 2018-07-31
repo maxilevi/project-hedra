@@ -19,7 +19,7 @@ namespace Hedra.Engine.WorldBuilding
     /// <summary>
     /// Description of WarriorAI.
     /// </summary>
-    internal class VillagerAIComponent : HumanoidAIComponent
+    public class VillagerAIComponent : HumanoidAIComponent
     {
         private readonly bool _move;
         private Vector3 _targetPoint;

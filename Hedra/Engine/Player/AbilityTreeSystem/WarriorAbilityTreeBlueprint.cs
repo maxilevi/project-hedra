@@ -19,7 +19,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WaterTreeBlueprint.
 	/// </summary>
-	internal class WarriorAbilityTreeBlueprint : AbilityTreeBlueprint
+	public class WarriorAbilityTreeBlueprint : AbilityTreeBlueprint
 	{
 		
 		public WarriorAbilityTreeBlueprint() : base(){

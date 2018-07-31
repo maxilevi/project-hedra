@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.ModuleSystem
 {
-    internal class AnimationTemplate
+    public class AnimationTemplate
     {
         public string Path { get; set; }
         public float Speed { get; set; }

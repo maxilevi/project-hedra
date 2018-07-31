@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering.Animation
 	/// <summary>
 	/// Description of AnimationModelLoader.
 	/// </summary>
-	internal static class AnimationModelLoader
+	public static class AnimationModelLoader
 	{
 		private static readonly Dictionary<string, AnimatedModelData> ModelCache = new Dictionary<string, AnimatedModelData>();
 

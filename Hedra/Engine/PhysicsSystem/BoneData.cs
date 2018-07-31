@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    internal class BoneData
+    public class BoneData
     {
         public int Id { get; set; }
         public Vector3[] Vertices { get; set; }

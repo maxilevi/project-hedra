@@ -11,7 +11,7 @@ using System;
 
 namespace Hedra.Engine.Generation{
 	
-	internal static class Perlin
+	public static class Perlin
 	{
 	    #region Noise functions
 	

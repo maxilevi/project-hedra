@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering.Shaders
 {
-    internal class UniformArray
+    public class UniformArray
     {
         protected UniformMapping[] Mappings { get; set; }
         public string Key { get; set; }

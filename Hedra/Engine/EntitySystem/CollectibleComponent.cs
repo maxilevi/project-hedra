@@ -22,7 +22,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of BerryBushComponent.
 	/// </summary>
-	internal class CollectibleComponent : InteractableComponent, ITickable
+	public class CollectibleComponent : InteractableComponent, ITickable
     {
 	    private string CollectMessage { get; set; }
 	    private Item Drop { get; }

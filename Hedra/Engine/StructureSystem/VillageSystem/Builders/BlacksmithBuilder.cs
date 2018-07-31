@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-	internal class BlacksmithBuilder : Builder<BlacksmithParameters>
+	public class BlacksmithBuilder : Builder<BlacksmithParameters>
 	{
 	    public override bool Place(BlacksmithParameters Parameters, VillageCache Cache)
 	    {

@@ -9,7 +9,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {
-    internal class ToolbarInventoryInterface : InventoryArrayInterface
+    public class ToolbarInventoryInterface : InventoryArrayInterface
     {
         private readonly LocalPlayer _player;
         private readonly Panel _panel;

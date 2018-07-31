@@ -13,7 +13,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of StaticModel.
 	/// </summary>
-	internal class StaticModel : UpdatableModel<ObjectMesh>
+	public class StaticModel : UpdatableModel<ObjectMesh>
 	{
 	    public override bool IsStatic => true;
 

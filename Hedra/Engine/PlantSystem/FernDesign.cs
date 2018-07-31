@@ -8,7 +8,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    internal class FernDesign : PlantDesign
+    public class FernDesign : PlantDesign
     {
         public override VertexData Model => CacheManager.GetModel(CacheItem.Fern);
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)

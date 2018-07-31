@@ -16,7 +16,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of Structure.
 	/// </summary>
-	internal class BaseStructure : IDisposable, IStructure, ISearchable
+	public class BaseStructure : IDisposable, IStructure, ISearchable
     {
         public Vector3 Position { get; set; }
 		protected bool Disposed;

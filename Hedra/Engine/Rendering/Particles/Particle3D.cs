@@ -12,7 +12,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering.Particles
 {
-	internal class Particle3D
+	public class Particle3D
 	{
 	    public static Vector4 FireColor { get; } = new Vector4(1f, .1f, 0f, 1f);
 		public static Vector4 AshColor { get; } = new Vector4(.2f,.2f,.2f,1f);

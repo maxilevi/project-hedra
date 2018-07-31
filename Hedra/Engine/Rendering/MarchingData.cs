@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of MarchingData.
 	/// </summary>
-	internal class MarchingData : DataContainer
+	public class MarchingData : DataContainer
 	{
 		public Vector4 TemplateColor;
 		public MarchingData(Vector4 Color) : base(){

@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    internal static class ConvexHull
+    public static class ConvexHull
     {
         public static Vector3 SupportPoint(List<Vector3> Input, Vector3 Direction)
         {

@@ -16,7 +16,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of Zip.
 	/// </summary>
-	internal static class ZipManager
+	public static class ZipManager
 	{
 				
 		public static void CopyTo(Stream src, Stream dest) {

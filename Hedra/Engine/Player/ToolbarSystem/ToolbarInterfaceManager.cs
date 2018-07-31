@@ -10,7 +10,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {
-    internal class ToolbarInterfaceManager : InventoryArrayInterfaceManager
+    public class ToolbarInterfaceManager : InventoryArrayInterfaceManager
     {
         private readonly ToolbarInventoryInterface _toolbarInferface;
         private readonly AbilityBagInventoryInterface _bagInterface;

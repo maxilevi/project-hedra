@@ -16,7 +16,7 @@ namespace Hedra.Engine.EnvironmentSystem
 	/// <summary>
 	/// Description of Sky.
 	/// </summary>
-	internal static class SkyManager
+	public static class SkyManager
 	{
 	    public static Fog FogManager { get; }
 	    public static Sky Sky { get; }

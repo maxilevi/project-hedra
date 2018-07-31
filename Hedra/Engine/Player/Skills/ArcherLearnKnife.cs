@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	internal class LearnKnife : BaseSkill
+	public class LearnKnife : BaseSkill
 	{
 
 		public LearnKnife() : base() {

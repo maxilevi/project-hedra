@@ -11,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    internal class MushroomDesign : PlantDesign
+    public class MushroomDesign : PlantDesign
     {
         public override VertexData Model => CacheManager.GetModel(CacheItem.Mushroom);
         public override bool HasCustomPlacement => true;

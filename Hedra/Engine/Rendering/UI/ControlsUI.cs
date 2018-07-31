@@ -18,7 +18,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of ControlUI.
 	/// </summary>
-	internal class ControlsUi
+	public class ControlsUi
 	{
 		public Vector2 TargetResolution = new Vector2(1366,768);
 		public List<UIElement> ControlsElements = new List<UIElement>();

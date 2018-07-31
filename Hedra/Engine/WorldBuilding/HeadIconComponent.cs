@@ -17,7 +17,7 @@ using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    internal class HeadIconComponent : EntityComponent
+    public class HeadIconComponent : EntityComponent
     {
         private ObjectMesh _iconMesh;
         private readonly Humanoid _humanoidParent;

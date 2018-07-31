@@ -3,7 +3,7 @@ using System;
 
 namespace Hedra.Engine.Management
 {
-    internal class DistributedExecuter
+    public class DistributedExecuter
     {
         public const int ExecutionsPerFrame = 1;
         private static readonly Queue<Action> _jobs;

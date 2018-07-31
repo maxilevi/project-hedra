@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class MatCache : CacheType
+    public class MatCache : CacheType
     {
         public MatCache()
         {

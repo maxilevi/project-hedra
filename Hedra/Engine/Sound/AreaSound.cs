@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Sound
 {
-    internal class AreaSound
+    public class AreaSound
     {
         public float Radius { get; set; }
         public SoundType Type { get; set; }

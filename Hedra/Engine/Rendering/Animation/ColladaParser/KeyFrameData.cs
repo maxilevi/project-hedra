@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of KeyFrameData.
 	/// </summary>
-	internal class KeyFrameData
+	public class KeyFrameData
 	{
 		public readonly float Time;
 		public readonly List<JointTransformData> JointTransforms = new List<JointTransformData>();

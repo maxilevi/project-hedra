@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class MarketCache
+    public class MarketCache
     {
         public readonly Dictionary<int, List<CollisionShape>> ShelfShapes_Clones;
         public readonly Dictionary<int, VertexData> ShelfModels_Clones;

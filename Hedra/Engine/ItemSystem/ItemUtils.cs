@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.ItemSystem
 {
-    internal static class ItemUtils
+    public static class ItemUtils
     {
         public static Color TierToColor(ItemTier Tier)
         {

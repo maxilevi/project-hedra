@@ -12,7 +12,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player
 {
-    internal class PlayerMovement : MovementManager
+    public class PlayerMovement : MovementManager
     {
         private readonly LocalPlayer _player;
         private readonly Dictionary<Key, Action> _registeredKeys;

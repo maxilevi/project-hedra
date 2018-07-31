@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.TreeSystem
 {
-    internal class DeadTreeDesign : TreeDesign
+    public class DeadTreeDesign : TreeDesign
     {
         public override float Spacing => 60f;
         public override VertexData Model => CacheManager.GetModel(CacheItem.DeadTrees);

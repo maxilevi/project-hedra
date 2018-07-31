@@ -14,7 +14,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Helper class to simplify running delayed, concurrent, parallel and asynchronous actions.
 	/// </summary>
-	internal static class TaskManager
+	public static class TaskManager
     {
 
         /// <summary>

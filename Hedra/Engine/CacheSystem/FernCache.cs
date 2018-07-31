@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class FernCache : CacheType
+    public class FernCache : CacheType
     {
         public FernCache()
         {

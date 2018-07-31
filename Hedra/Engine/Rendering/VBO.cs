@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// A Vertex Buffer Object.
 	/// </summary>
-	internal class VBO<T> : IDisposable where T : struct
+	public class VBO<T> : IDisposable where T : struct
 	{
 		private bool Disposed;
 		/// <summary>

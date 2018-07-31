@@ -5,7 +5,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem
 {
-    internal abstract class BasicAIComponent : EntityComponent
+    public abstract class BasicAIComponent : EntityComponent
     {
         public bool Enabled { get; set; }
         private Behaviour[] _behaviours;

@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.Skills
 {
-    internal abstract class LearningSkill : BaseSkill
+    public abstract class LearningSkill : BaseSkill
     {
         public override bool Passive => true;
         public override abstract uint TexId { get; }

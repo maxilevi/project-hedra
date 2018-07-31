@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.ModuleSystem
 {
-    internal class SpawnTemplate
+    public class SpawnTemplate
     {
         public string Type { get; set; }
         public float Chance { get; set; }

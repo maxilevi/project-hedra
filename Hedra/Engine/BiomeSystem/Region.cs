@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    internal class Region
+    public class Region
     {
         public RegionColor Colors;
         public RegionTree Trees;

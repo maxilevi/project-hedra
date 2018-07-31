@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player.Inventory
 	/// <summary>
 	/// Description of TradeSystem.
 	/// </summary>
-	internal class TradeInventory : PlayerInterface
+	public class TradeInventory : PlayerInterface
     {
 		public const int MerchantSpaces = 20;
         public const int TradeRadius = 12;

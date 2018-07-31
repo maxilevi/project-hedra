@@ -17,7 +17,7 @@ namespace Hedra.Engine
 	/// A math library which contains different functions
 	/// which are quicker but less accurate than the originals
 	/// </summary>
-	internal static class Mathf
+	public static class Mathf
 	{
 		public const float Radian = 0.0174533f;
 		public const float Degree = 57.2958f;

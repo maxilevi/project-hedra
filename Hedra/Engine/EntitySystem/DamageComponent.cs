@@ -24,9 +24,9 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     /// Description of DamageComponent.
     /// </summary>
-    internal delegate void OnDamageEventHandler(DamageEventArgs Args);
+    public delegate void OnDamageEventHandler(DamageEventArgs Args);
 
-    internal class DamageComponent : EntityComponent
+    public class DamageComponent : EntityComponent
     {
         public float XpToGive = 8;
         public bool Immune = false;
@@ -190,7 +190,7 @@ namespace Hedra.Engine.EntitySystem
         public bool HasBeenAttacked => _hasBeenAttacked;
     }
 
-    internal class DamageEventArgs : EventArgs
+    public class DamageEventArgs : EventArgs
     {
         public Entity Victim;
         public Entity Damager;

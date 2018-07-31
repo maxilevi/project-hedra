@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.ModuleSystem
 {
-    internal class ModelTemplate
+    public class ModelTemplate
     {
         public bool AlignWithTerrain { get; set; } = true;
         public string Path { get; set; }

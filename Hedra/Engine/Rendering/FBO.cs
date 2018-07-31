@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of FBO.
 	/// </summary>
-	internal class FBO : IDisposable
+	public class FBO : IDisposable
 	{
         /// <summary>
         /// The ID for the entire framebuffer object.
@@ -206,6 +206,7 @@ namespace Hedra.Engine.Rendering
         /// </summary>
         ~FBO()
         {
+	        if(Program.GameWindow.IsExiting) return;
             if (DepthID != 0 || BufferID != 0 || TextureID != null)
             {
                 System.Diagnostics.Debug.Fail("FBO was not disposed of properly.");

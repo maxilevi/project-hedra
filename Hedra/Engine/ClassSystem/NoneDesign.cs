@@ -6,7 +6,7 @@ using Hedra.Engine.Player.Skills;
 namespace Hedra.Engine.ClassSystem
 {
     [HiddenClass]
-    internal class NoneDesign : ClassDesign
+    public class NoneDesign : ClassDesign
     {
         public override uint Logo => 0;
         public override HumanType Human => throw new ArgumentException("Cannot retrieve HumanType from NoneClass");

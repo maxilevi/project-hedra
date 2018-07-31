@@ -9,7 +9,7 @@ using OpenTK;
 
 namespace Hedra.Engine.TreeSystem
 {
-    internal class AppleDesign : TreeDesign
+    public class AppleDesign : TreeDesign
     {
         public override float Spacing => 100f;
         public override VertexData Model => CacheManager.GetModel(CacheItem.AppleTrees);

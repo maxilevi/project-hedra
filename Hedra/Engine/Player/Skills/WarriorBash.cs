@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Bash.
 	/// </summary>
-	internal class Bash : BaseSkill
+	public class Bash : BaseSkill
 	{	
 		private float Damage = 20f;
 		private Animation BashAnimation;

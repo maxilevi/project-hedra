@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Meteor.
 	/// </summary>
-	internal class Meteor : BaseSkill
+	public class Meteor : BaseSkill
 	{
 		private bool LeftHand;
 		private float Damage = 27.5f;

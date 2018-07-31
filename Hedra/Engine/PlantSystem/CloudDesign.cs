@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    internal class CloudDesign : PlantDesign
+    public class CloudDesign : PlantDesign
     {
         public override VertexData Model => CacheManager.GetModel(CacheItem.Cloud);
 

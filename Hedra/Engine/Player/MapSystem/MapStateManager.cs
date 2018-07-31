@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.MapSystem
 {
-    internal class MapStateManager : StateManager
+    public class MapStateManager : StateManager
     {
         public MapStateManager(LocalPlayer Player)
         {

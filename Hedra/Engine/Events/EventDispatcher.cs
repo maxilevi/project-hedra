@@ -11,7 +11,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Events
 {
-	internal static class EventDispatcher{
+	public static class EventDispatcher{
 
 		private static readonly List<IEventListener> EventListeners;
 	    private static readonly Dictionary<object, EventHandler<KeyEventArgs>> HighKeyDownHandlers;
@@ -260,7 +260,7 @@ namespace Hedra.Engine.Events
 		}
 	}
 
-    internal class KeyEventArgs : EventArgs
+    public class KeyEventArgs : EventArgs
     {
         public KeyboardKeyEventArgs Event { get; private set; }
 

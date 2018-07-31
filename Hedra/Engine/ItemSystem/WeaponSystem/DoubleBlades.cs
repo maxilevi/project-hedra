@@ -17,7 +17,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     /// <summary>
     /// Description of TwoHandedSword.
     /// </summary>
-    internal class DoubleBlades : MeleeWeapon
+    public class DoubleBlades : MeleeWeapon
     {
         private readonly ObjectMesh SecondBlade;
 

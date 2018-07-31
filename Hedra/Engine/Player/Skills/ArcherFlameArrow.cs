@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player.Skills
 	/// <summary>
 	/// Description of ArcherPoisonArrow.
 	/// </summary>
-	internal class ArcherFlameArrow : SpecialAttackSkill
+	public class ArcherFlameArrow : SpecialAttackSkill
 	{
 		private const float EffectDuration = 6;
 		private const float EffectRange = 24;

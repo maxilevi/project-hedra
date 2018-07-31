@@ -8,7 +8,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    internal abstract class Builder<T> where T : IBuildingParameters
+    public abstract class Builder<T> where T : IBuildingParameters
     {
         protected virtual bool LookAtCenter => true;
 
@@ -86,7 +86,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         }
     }
     
-    internal class GroundworkItem {
+    public class GroundworkItem {
         public Plateau Plateau { get; set; }
         public IGroundwork Groundwork { get; set; }
     }

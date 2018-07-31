@@ -22,7 +22,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of MerchantComponent.
 	/// </summary>
-	internal class MerchantComponent : TradeComponent
+	public class MerchantComponent : TradeComponent
 	{
 	    private readonly bool _isTravellingMerchant;
 

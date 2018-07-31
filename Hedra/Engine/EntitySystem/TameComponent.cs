@@ -13,7 +13,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of TameComponent.
 	/// </summary>
-	internal class TameComponent : EntityComponent
+	public class TameComponent : EntityComponent
 	{
 		public TameComponent(Entity Parent) : base(Parent){
 		

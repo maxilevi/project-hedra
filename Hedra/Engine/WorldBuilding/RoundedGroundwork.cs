@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    internal class RoundedGroundwork : IGroundwork
+    public class RoundedGroundwork : IGroundwork
     {
         public BlockType Type { get; set; } = BlockType.Path;
         public Vector3 Position { get; set; }

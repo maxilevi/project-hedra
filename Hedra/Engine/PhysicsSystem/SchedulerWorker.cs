@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    internal class SchedulerWorker
+    public class SchedulerWorker
     {
         private readonly Dictionary<uint, PhysicsListener> _listeners;
         private readonly Thread _processingThread;

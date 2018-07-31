@@ -14,7 +14,7 @@ namespace Hedra.Engine.PhysicsSystem
 	/// <summary>
 	/// Description of Simplex.
 	/// </summary>
-	internal class Simplex {
+	public class Simplex {
 
 	    private static readonly List<Simplex> _cache = new List<Simplex>();
 

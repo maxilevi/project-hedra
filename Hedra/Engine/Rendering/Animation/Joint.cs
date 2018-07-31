@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering.Animation
 	/// <summary>
 	/// Description of Joint.
 	/// </summary>
-	internal class Joint
+	public class Joint
 	{
 		public readonly int Index;// ID
 		public readonly string Name;

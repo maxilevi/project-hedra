@@ -15,7 +15,7 @@ namespace Hedra.Engine.PhysicsSystem
 	/// <summary>
 	/// Description of MoveCommand.
 	/// </summary>
-	internal struct MoveCommand
+	public struct MoveCommand
 	{
 		public Vector3 Delta;
 		public Entity Parent;

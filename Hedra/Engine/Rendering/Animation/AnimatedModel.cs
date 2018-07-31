@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering.Animation
 	/// <summary>
 	/// Description of AnimatedModel.
 	/// </summary>
-	internal class AnimatedModel : IDisposable, IRenderable, ICullableModel
+	public class AnimatedModel : IDisposable, IRenderable, ICullableModel
 	{
         //Skin
 	    public static Shader DefaultShader = Shader.Build("Shaders/AnimatedModel.vert", "Shaders/AnimatedModel.frag");

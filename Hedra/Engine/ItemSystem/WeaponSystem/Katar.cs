@@ -17,7 +17,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// <summary>
 	/// Description of TwoHandedSword.
 	/// </summary>
-	internal class Katar : MeleeWeapon
+	public class Katar : MeleeWeapon
     {
         private readonly ObjectMesh SecondBlade;
 		

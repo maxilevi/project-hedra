@@ -17,7 +17,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of OldManAIComponent.
 	/// </summary>
-	internal class FollowAIComponent : EntityComponent
+	public class FollowAIComponent : EntityComponent
 	{
 		public Entity ToFollow = null;
 		public bool DoLogic = true;

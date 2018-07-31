@@ -4,7 +4,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    internal class FleeBehaviour : Behaviour
+    public class FleeBehaviour : Behaviour
     {
         protected WalkBehaviour Walk { get; set; }
         public Func<Vector3> Target { get; protected set; }

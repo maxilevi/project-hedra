@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.Management
 {
-    internal interface ITickable
+    public interface ITickable
     {
     }
 }

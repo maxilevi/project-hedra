@@ -6,7 +6,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Testing
 {
-    internal class BaseTest
+    public class BaseTest
     {
         /// <summary>
         /// Propierty indicating if a test is passed.

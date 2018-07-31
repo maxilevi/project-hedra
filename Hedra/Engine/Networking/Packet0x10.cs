@@ -21,7 +21,7 @@ namespace Hedra.Engine.Networking
 	/// Entities Packet
 	/// </summary>
 	[Serializable]
-	internal class Packet0x10
+	public class Packet0x10
 	{
 		public const int EntityRate = 16;
 		public ushort[] Ids, Seeds;

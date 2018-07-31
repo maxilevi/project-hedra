@@ -12,7 +12,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of MeshData.
 	/// </summary>
-	internal class MeshData : DataContainer
+	public class MeshData : DataContainer
 	{
 		public Vector4 TemplateColor;
 		public MeshData(Vector4 Color)

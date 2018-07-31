@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class MerchantCartCache : CacheType
+    public class MerchantCartCache : CacheType
     {
         public MerchantCartCache()
         {

@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     /// Description of Inventory.
     /// </summary>
-    internal class PlayerInventory : PlayerInterface
+    public class PlayerInventory : PlayerInterface
     {
         public const int MainSpaces = 8;
         public const int InventorySpaces = 20;

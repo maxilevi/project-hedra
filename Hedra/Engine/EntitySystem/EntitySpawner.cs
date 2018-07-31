@@ -21,7 +21,7 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     /// Description of EntitySpawner.
     /// </summary>
-    internal class EntitySpawner
+    public class EntitySpawner
     {
         public static int MobCap = int.MaxValue;
 		public float SpawnChance = .8f;

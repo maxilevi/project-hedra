@@ -19,7 +19,7 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of BurningComponent.
 	/// </summary>
-	internal class PoisonComponent : EntityComponent
+	public class PoisonComponent : EntityComponent
 	{
 		private float TotalTime, Time, TotalDamage;
 		private int PTime;

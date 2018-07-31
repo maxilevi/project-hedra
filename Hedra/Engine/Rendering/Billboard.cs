@@ -17,7 +17,7 @@ using Hedra.Engine.Player;
 namespace Hedra.Engine.Rendering
 {
 	//Kind of hacky, refactor later
-	internal class Billboard : IRenderable, IDisposable
+	public class Billboard : IRenderable, IDisposable
 	{
 		public Vector3 Position { get; set; }
         public float LifeTime { get; set; }

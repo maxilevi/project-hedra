@@ -14,7 +14,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of AutosaveManager.
 	/// </summary>
-	internal static class AutosaveManager
+	public static class AutosaveManager
 	{
 		public static int TimePerSave = 30;
 		private static float PassedTime;

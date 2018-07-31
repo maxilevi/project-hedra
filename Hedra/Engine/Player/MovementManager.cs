@@ -14,7 +14,7 @@ using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Player
 {
-	internal class MovementManager
+	public class MovementManager
 	{
 	    private const float NormalSpeed = 2.25f;
 	    private const float AttackingSpeed = 0.75f;
@@ -135,7 +135,7 @@ namespace Hedra.Engine.Player
 	        }
         }
 
-	    internal class MoveOrder
+	    public class MoveOrder
 	    {
 	        public Vector3 Position { get; set; }
             public float Seconds { get; set; }

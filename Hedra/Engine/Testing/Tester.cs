@@ -8,7 +8,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Testing
 {
-    internal static class Tester
+    public static class Tester
     {
         private static StringBuilder _buffer;
 

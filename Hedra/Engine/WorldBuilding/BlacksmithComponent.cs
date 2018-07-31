@@ -5,7 +5,7 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    internal class BlacksmithComponent :  TradeComponent
+    public class BlacksmithComponent :  TradeComponent
     {
         public BlacksmithComponent(Humanoid Parent) : base(Parent)
         {

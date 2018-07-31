@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of MeshData.
 	/// </summary>
-	internal class ModelData
+	public class ModelData
 	{
 		public Vector3[] JointIds {get;}
 		public Vector3[] VertexWeights {get;}

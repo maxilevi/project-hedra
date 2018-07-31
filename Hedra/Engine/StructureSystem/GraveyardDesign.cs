@@ -16,7 +16,7 @@ using Region = Hedra.Engine.BiomeSystem.Region;
 
 namespace Hedra.Engine.StructureSystem
 {
-    internal class GraveyardDesign : StructureDesign
+    public class GraveyardDesign : StructureDesign
     {
         public override int Radius { get; set; } = 384;
         public const int GraveyardSkyTime = 24000;

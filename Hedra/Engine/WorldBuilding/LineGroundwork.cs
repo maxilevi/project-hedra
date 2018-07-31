@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    internal class LineGroundwork : IGroundwork
+    public class LineGroundwork : IGroundwork
     {
         public float Width { get; set; } = 14f;
         public Vector2 Origin { get; set; }

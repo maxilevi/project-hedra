@@ -12,7 +12,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    internal class WheatDesign : PlantDesign
+    public class WheatDesign : PlantDesign
     {
         public override VertexData Model => CacheManager.GetModel(CacheItem.Wheat);
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)

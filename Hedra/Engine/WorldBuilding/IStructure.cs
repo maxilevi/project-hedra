@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    internal interface IStructure
+    public interface IStructure
     {
     }
 }

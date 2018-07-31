@@ -14,7 +14,7 @@ namespace Hedra.Engine.Sound
 	/// <summary>
 	/// Description of SoundBuffer.
 	/// </summary>
-	internal class SoundBuffer : IDisposable
+	public class SoundBuffer : IDisposable
 	{
 		public uint ID;
 

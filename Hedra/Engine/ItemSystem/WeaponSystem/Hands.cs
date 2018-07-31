@@ -17,7 +17,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// <summary>
 	/// Description of Hands.
 	/// </summary>
-	internal class Hands : MeleeWeapon
+	public class Hands : MeleeWeapon
     {
 	    public override bool IsMelee { get; protected set; } = true;
 

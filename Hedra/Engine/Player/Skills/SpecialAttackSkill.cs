@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.Player.Skills
 {
-    internal abstract class SpecialAttackSkill : BaseSkill
+    public abstract class SpecialAttackSkill : BaseSkill
     {
         public override void Use()
         {

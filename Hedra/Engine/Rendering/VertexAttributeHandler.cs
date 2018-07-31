@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.Rendering
 {
-    internal class VertexAttributeHandler : StateHandler<uint>
+    public class VertexAttributeHandler : StateHandler<uint>
     {
         protected override void DoEnable(uint Index)
         {

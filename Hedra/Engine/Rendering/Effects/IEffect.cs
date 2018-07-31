@@ -11,7 +11,7 @@ namespace Hedra.Engine.Rendering.Effects
 	/// <summary>
 	/// Description of IEffect.
 	/// </summary>
-	internal interface IEffect
+	public interface IEffect
 	{
 		bool Enabled{get; set;}
 		void Draw();

@@ -11,7 +11,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of ProgressBar.
 	/// </summary>
-	internal class ProgressBar// : UIElement
+	public class ProgressBar// : UIElement
 	{
 		public int Value = 50;
 		

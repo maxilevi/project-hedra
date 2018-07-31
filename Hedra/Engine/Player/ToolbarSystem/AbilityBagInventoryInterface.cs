@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {
-    internal class AbilityBagInventoryInterface : InventoryArrayInterface
+    public class AbilityBagInventoryInterface : InventoryArrayInterface
     {
         private readonly Panel _panel;
         private readonly LocalPlayer _player;

@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    internal class RoamBehaviour : Behaviour
+    public class RoamBehaviour : Behaviour
     {
         protected IdleBehaviour Idle { get; }
         protected WalkBehaviour Walk { get; }

@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Hedra.Engine.ItemSystem.WeaponSystem
 {
-    internal static class WeaponFactory
+    public static class WeaponFactory
     {
         private static readonly Dictionary<string, Type> Weapons;
 

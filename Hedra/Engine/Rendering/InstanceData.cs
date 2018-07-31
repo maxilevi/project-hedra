@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of InstanceData.
 	/// </summary>
-	internal class InstanceData
+	public class InstanceData
 	{
 		public VertexData MeshCache;
 		public List<Vector4> Colors;

@@ -3,7 +3,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Testing.Managers
 {
-    internal class ThreadManagerTester : BaseTest
+    public class ThreadManagerTester : BaseTest
     {
         [TestMethod]
         //Test threadmanager works in a first in last out fashion.

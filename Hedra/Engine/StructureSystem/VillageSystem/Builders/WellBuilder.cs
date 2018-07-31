@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    internal class WellBuilder : Builder<BuildingParameters>
+    public class WellBuilder : Builder<BuildingParameters>
     {
         public override bool Place(BuildingParameters Parameters, VillageCache Cache)
         {

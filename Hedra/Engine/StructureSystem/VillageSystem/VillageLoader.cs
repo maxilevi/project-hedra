@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class VillageLoader
+    public class VillageLoader
     {
         private static readonly Dictionary<string, VillageRoot> Designs;
         public static VillageDesigner Designer;

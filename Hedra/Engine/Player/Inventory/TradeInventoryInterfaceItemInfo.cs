@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    internal class TradeInventoryInterfaceItemInfo : InventoryInterfaceItemInfo
+    public class TradeInventoryInterfaceItemInfo : InventoryInterfaceItemInfo
     {
         private readonly Texture _backgroundTexture;
         private readonly GUIText _priceText;

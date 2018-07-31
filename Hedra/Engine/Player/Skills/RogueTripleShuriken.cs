@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	internal class TripleShuriken : BaseSkill
+	public class TripleShuriken : BaseSkill
 	{
 		private Animation ThrowAnimation;
 		private VertexData ShurikenData;

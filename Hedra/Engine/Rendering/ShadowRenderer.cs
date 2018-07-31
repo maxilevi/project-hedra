@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of ShadowRenderer.
 	/// </summary>
-	internal static class ShadowRenderer
+	public static class ShadowRenderer
 	{
 		public static Vector3 LightPosition { get; set; }
 		public static Shader Shader { get; set; }

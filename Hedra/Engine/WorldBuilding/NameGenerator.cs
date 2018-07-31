@@ -16,7 +16,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of NameGenerator.
 	/// </summary>
-	internal static class NameGenerator
+	public static class NameGenerator
 	{
 		public static string[] MaleNames = new string[]{"Keith", "Isaac", "Sylvester", "Alden", "Greg", "Levi", "Tyron", "Elliot"};
 		

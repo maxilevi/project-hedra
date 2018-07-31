@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of EntityMeshBuffer.
 	/// </summary>
-	internal class ObjectMeshBuffer : ChunkMeshBuffer
+	public class ObjectMeshBuffer : ChunkMeshBuffer
 	{
 		public static Shader Shader { get; }
 		public bool ApplyFog { get; set; } = true;

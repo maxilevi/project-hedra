@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
-    internal class VillageTemplate
+    public class VillageTemplate
     {
         public string Name { get; set; }
         public HouseTemplate House { get; set; }

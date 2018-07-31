@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Hedra.Engine
 {
-    internal static class Reflection
+    public static class Reflection
     {
         public static Type[] GetTypesInNamespace(Assembly Assembly, string NameSpace)
         {

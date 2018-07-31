@@ -10,7 +10,7 @@ using System;
 
 namespace Hedra.Engine.Rendering
 {
-	internal struct DrawElementsIndirectCommand{
+	public struct DrawElementsIndirectCommand{
 	    public uint  count;
 	    public uint  primCount;
 	    public uint  firstIndex;

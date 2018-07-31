@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class WheatCache : CacheType
+    public class WheatCache : CacheType
     {
         public WheatCache()
         {

@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering.Shaders
 {
-    internal class UniformMapping
+    public class UniformMapping
     {
         public int Location { get; }
         public object Value { get; set; }

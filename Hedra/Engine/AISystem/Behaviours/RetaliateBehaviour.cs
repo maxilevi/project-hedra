@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    internal class RetaliateBehaviour : Behaviour
+    public class RetaliateBehaviour : Behaviour
     {
         protected AttackBehaviour Attack { get; }
 

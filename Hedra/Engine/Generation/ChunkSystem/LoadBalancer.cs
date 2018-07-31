@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    internal class LoadBalancer
+    public class LoadBalancer
     {
         private readonly HashSet<ICountable> _users;
         private readonly Dictionary<ICountable, float> _loads;

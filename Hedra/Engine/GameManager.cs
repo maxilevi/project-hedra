@@ -27,7 +27,7 @@ namespace Hedra.Engine
 	/// <summary>
 	/// The Scene containing the main game
 	/// </summary>
-	internal static class GameManager
+	public static class GameManager
 	{
 	    public static KeyboardManager Keyboard { get; private set; }
 		public static LocalPlayer Player { get; set; }

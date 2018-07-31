@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    internal class FollowBehaviour : Behaviour
+    public class FollowBehaviour : Behaviour
     {
         public Entity Target { get; set; }
         protected WalkBehaviour Walk { get; }

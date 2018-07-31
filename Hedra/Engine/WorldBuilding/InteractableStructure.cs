@@ -22,9 +22,9 @@ namespace Hedra.Engine.WorldBuilding
 	/// Description of ClaimableStrucuture.
 	/// </summary>
 	
-	internal delegate void OnInteraction(Entity Interactee);	
+	public delegate void OnInteraction(Entity Interactee);	
 	
-	internal abstract class InteractableStructure : BaseStructure, IUpdatable
+	public abstract class InteractableStructure : BaseStructure, IUpdatable
 	{
 	    public virtual float InteractionAngle => .9f;
 	    public virtual Key Key => Key.E;

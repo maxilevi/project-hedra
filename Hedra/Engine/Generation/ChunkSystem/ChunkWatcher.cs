@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    internal class ChunkWatcher : IDisposable
+    public class ChunkWatcher : IDisposable
     {
         private Chunk _object;
         public bool Disposed { get; private set; }

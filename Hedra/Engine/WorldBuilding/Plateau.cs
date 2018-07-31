@@ -15,7 +15,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of Plateau.
 	/// </summary>
-	internal class Plateau
+	public class Plateau
 	{
 		public Vector3 Position { get; set; }
 	    public float Radius { get; set; }

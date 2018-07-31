@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering
     /// <summary>
     ///     Description of TrailRenderer.
     /// </summary>
-    internal class TrailRenderer : IRenderable, IDisposable
+    public class TrailRenderer : IRenderable, IDisposable
     {
         private static readonly Shader Shader;
         public Func<Vector3> Tip { get; set; }
@@ -188,7 +188,7 @@ namespace Hedra.Engine.Rendering
         }
     }
 
-    internal struct TrailPoint
+    public struct TrailPoint
     {
         public Vector3 Point;
         public float Lifetime;

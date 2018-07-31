@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    internal class IdleBehaviour : Behaviour
+    public class IdleBehaviour : Behaviour
     {
         protected StareBehaviour Stare { get; }
 

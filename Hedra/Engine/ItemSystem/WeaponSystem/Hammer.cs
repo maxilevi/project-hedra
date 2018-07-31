@@ -19,7 +19,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// <summary>
 	/// Description of TwoHandedSword.
 	/// </summary>
-	internal class Hammer : MeleeWeapon
+	public class Hammer : MeleeWeapon
     {
         public Hammer(VertexData Contents) : base(Contents)
 		{	

@@ -22,9 +22,9 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.EntitySystem
 {
-    internal delegate void OnTalkEventHandler(Entity Talkee);
+    public delegate void OnTalkEventHandler(Entity Talkee);
 
-	internal class TalkComponent : EntityComponent, ITickable
+	public class TalkComponent : EntityComponent, ITickable
 	{
         private static uint _talkBackground;
 	    private static Vector2 _talkBackgroundSize;

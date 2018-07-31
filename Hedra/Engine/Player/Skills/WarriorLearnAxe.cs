@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Skills
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	internal class LearnAxe : LearningSkill
+	public class LearnAxe : LearningSkill
 	{
 	    public override uint TexId => Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
 		public override void Learn()

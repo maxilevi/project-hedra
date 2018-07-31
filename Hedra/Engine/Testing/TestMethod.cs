@@ -5,5 +5,5 @@ using System.Text;
 
 namespace Hedra.Engine.Testing
 {
-    internal class TestMethod : Attribute {}
+    public class TestMethod : Attribute {}
 }

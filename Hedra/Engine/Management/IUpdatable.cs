@@ -12,7 +12,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of IUpdatable.
 	/// </summary>
-	internal interface IUpdatable
+	public interface IUpdatable
 	{
         
 

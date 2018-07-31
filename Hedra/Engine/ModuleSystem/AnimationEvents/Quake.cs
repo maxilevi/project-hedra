@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.ModuleSystem.AnimationEvents
 {
-    internal class Quake : AnimationEvent
+    public class Quake : AnimationEvent
     {
         public Quake(Entity Parent) : base(Parent) {}
 

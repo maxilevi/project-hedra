@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Layout
 {
-    internal class PathGraph
+    public class PathGraph
     {
         public Vector3 Position { get; set; }
         private readonly List<PathEdge> _edges;

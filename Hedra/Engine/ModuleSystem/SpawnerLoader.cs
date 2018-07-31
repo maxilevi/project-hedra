@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    internal static class SpawnerLoader
+    public static class SpawnerLoader
     {
 
         public static SpawnerSettings Load(string AppPath, string Type)

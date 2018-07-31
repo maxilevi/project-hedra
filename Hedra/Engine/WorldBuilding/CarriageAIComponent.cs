@@ -6,7 +6,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    internal class CarriageAIComponent : EntityComponent
+    public class CarriageAIComponent : EntityComponent
     {
         
         public CarriageAIComponent(Entity Entity) : base(Entity)

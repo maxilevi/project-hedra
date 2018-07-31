@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of FlowingMagma.
 	/// </summary>
-	internal class FlowingMagma : BaseSkill
+	public class FlowingMagma : BaseSkill
 	{
 		private float Damage = 17.5f;
 		private float DurationTime = 6f;

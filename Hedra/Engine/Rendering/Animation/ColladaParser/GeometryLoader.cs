@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 	/// <summary>
 	/// Description of GeometryLoader.
 	/// </summary>
-	internal class GeometryLoader
+	public class GeometryLoader
 	{
 		private readonly XmlNode MeshData;
 	

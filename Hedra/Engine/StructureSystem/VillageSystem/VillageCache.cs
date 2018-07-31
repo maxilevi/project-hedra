@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class VillageCache
+    public class VillageCache
     {
         public static MarketCache Market { get; }
         private readonly Dictionary<string, List<CollisionShape>> _colliderCache;

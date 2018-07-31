@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	internal class Whirlwind : BaseSkill
+	public class Whirlwind : BaseSkill
 	{
 	    private readonly Animation _whirlwindAnimation;
 	    private readonly TrailRenderer _trail;

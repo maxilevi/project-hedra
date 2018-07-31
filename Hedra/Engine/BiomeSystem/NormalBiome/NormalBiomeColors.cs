@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
-    internal class NormalBiomeColors : BiomeColorsDesign
+    public class NormalBiomeColors : BiomeColorsDesign
     {
         public override Vector4 WaterColor(int Seed)
         {

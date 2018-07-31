@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.Player.Customization
 {
-    internal class ModelCustomization
+    public class ModelCustomization
     {
         static ModelCustomization()
         {

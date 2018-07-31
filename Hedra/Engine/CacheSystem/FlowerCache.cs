@@ -4,7 +4,7 @@ using OpenTK;
 namespace Hedra.Engine.CacheSystem
 {
     [CacheIgnore]
-    internal class FlowerCache : CacheType
+    public class FlowerCache : CacheType
     {
         public FlowerCache()
         {

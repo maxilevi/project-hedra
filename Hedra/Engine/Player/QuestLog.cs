@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     ///     Description of QuestLog.
     /// </summary>
-    internal class QuestLog
+    public class QuestLog
     {
         private readonly Texture _chainIcon;
         private object _currentQuest;

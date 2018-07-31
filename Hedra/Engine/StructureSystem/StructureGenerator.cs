@@ -19,7 +19,7 @@ namespace Hedra.Engine.StructureSystem
 	/// <summary>
 	/// Description of StructureGenerator.
 	/// </summary>
-	internal class StructureGenerator
+	public class StructureGenerator
 	{
 	    public readonly List<CollidableStructure> Items;
 		public Vector3 MerchantPosition { get; set; }

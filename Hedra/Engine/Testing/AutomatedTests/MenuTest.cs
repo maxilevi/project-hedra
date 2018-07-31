@@ -11,7 +11,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Testing.AutomatedTests
 {
-    internal class MenuTest : BaseAutomatedTest
+    public class MenuTest : BaseAutomatedTest
     {
         private const string _characterName = "_test";
 

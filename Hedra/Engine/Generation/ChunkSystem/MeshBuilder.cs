@@ -6,7 +6,7 @@
  */
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    internal class MeshBuilder : AbstractBuilder
+    public class MeshBuilder : AbstractBuilder
     {
         public MeshBuilder(SharedWorkerPool Pool) : base(Pool)
         {

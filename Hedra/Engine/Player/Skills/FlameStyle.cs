@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of FlameStyle.
 	/// </summary>
-	internal class FlameStyle : BaseSkill
+	public class FlameStyle : BaseSkill
 	{
 		private const float Duration = 8f;
 		private bool Emitting = false;

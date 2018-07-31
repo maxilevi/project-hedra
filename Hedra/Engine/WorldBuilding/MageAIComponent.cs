@@ -13,7 +13,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of MageAIComponent.
 	/// </summary>
-	internal class MageAIComponent
+	public class MageAIComponent
 	{
 		/**/
 	}

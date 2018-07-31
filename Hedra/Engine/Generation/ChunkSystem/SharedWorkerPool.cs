@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    internal class SharedWorkerPool : WorkerPool
+    public class SharedWorkerPool : WorkerPool
     {
         private readonly LoadBalancer _balancer;
 

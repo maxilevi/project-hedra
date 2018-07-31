@@ -12,7 +12,7 @@ namespace Hedra.Engine.EnvironmentSystem
 	/// <summary>
 	/// Description of Light.
 	/// </summary>
-	internal class Light
+	public class Light
 	{
 		public Vector3 Position;
 		public Vector3 Color;

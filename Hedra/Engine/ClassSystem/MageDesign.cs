@@ -6,7 +6,7 @@ using Hedra.Engine.Rendering;
 namespace Hedra.Engine.ClassSystem
 {
     [HiddenClass]
-    internal class MageDesign : ClassDesign
+    public class MageDesign : ClassDesign
     {
         public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/ArcherLogo.png");
         public override HumanType Human => HumanType.Mage;

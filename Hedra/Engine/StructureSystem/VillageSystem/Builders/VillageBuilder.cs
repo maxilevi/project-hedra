@@ -10,7 +10,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    internal class VillageBuilder
+    public class VillageBuilder
     {
         private readonly VillageRoot _root;
         private readonly HouseBuilder _houseBuilder;

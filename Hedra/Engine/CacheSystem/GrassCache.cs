@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class GrassCache : CacheType
+    public class GrassCache : CacheType
     {
         public GrassCache()
         {

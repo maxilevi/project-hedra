@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of FlameDisk.
 	/// </summary>
-	internal class FlameDisk : BaseSkill
+	public class FlameDisk : BaseSkill
 	{
 		private const float Duration = 8f;
 		private bool Emitting = false;

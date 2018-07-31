@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class MushroomCache : CacheType
+    public class MushroomCache : CacheType
     {
         public MushroomCache()
         {

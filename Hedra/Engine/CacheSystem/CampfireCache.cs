@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class CampfireCache : CacheType
+    public class CampfireCache : CacheType
     {
         public CampfireCache()
         {

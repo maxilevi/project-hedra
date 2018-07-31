@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
-    internal static class Geometry
+    public static class Geometry
     {
         public static GeometryData Cube()
         {

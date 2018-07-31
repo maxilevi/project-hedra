@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    internal class GraveyardIconCache : CacheType
+    public class GraveyardIconCache : CacheType
     {
         public GraveyardIconCache()
         {

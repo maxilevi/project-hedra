@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of LineData.
 	/// </summary>
-	internal class LineData : DataContainer
+	public class LineData : DataContainer
 	{
 		public LineData(Vector3 Origin, Vector3 End, Vector4 Color, int LOD)
 		{

@@ -21,7 +21,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// <summary>
 	/// Description of TwoHandedSword.
 	/// </summary>
-	internal class Knife : MeleeWeapon
+	public class Knife : MeleeWeapon
 	{
 	    private static readonly VertexData SheathData;
         private readonly ObjectMesh KnifeSheath;

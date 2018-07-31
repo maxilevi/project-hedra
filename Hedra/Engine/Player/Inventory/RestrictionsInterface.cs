@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.Player.Inventory
 {
-    internal class RestrictionsInterface
+    public class RestrictionsInterface
     {
         private readonly InventoryArray _array;
 

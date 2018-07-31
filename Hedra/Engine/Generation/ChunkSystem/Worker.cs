@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    internal class Worker
+    public class Worker
     {
         private Thread _workerThread;
         private object _owner;

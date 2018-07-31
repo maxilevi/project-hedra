@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of UBO.
 	/// </summary>
-	internal class UBO<T> where T : struct
+	public class UBO<T> where T : struct
 	{
 		public int UboID;
 		public int Size;

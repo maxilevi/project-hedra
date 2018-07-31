@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Testing.DataStructures
 {
-    internal class QuaternionExtensionsTester : BaseTest
+    public class QuaternionExtensionsTester : BaseTest
     {
         [TestMethod]
         public void TestQuaternionToEuler()

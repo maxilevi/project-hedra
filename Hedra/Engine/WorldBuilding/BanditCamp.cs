@@ -17,7 +17,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    internal class BanditCamp : BaseStructure, IUpdatable
+    public class BanditCamp : BaseStructure, IUpdatable
     {
         private readonly int _passedTime = 0;
         private bool _restoreSoundPlayed;

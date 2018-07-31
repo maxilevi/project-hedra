@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of SurfaceNets.
 	/// </summary>
-	internal static class SurfaceNets
+	public static class SurfaceNets
 	{
 		private static int[] Buffer = new int[4096];
 		private static int[] CubeEdges = new int[24], EdgeTable = new int[256];

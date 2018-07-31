@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    internal class RegionCache
+    public class RegionCache
     {
         private readonly Region _predominantRegion;
         private readonly RegionColor _predominantInterpolatedRegionColor;

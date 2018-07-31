@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	internal class AttackLeap : BaseSkill
+	public class AttackLeap : BaseSkill
 	{
 		
 		public AttackLeap() : base() {

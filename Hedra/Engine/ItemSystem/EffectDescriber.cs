@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.ItemSystem
 {
-    internal class EffectDescriber
+    public class EffectDescriber
     {
         public EffectType Type { get; set; }
         public Vector4 EffectColor { get; set; }

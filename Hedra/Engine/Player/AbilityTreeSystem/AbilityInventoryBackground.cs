@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
-    internal class AbilityInventoryBackground : InventoryBackground
+    public class AbilityInventoryBackground : InventoryBackground
     {
         public AbilityInventoryBackground(Vector2 Position) : base(Position)
         {

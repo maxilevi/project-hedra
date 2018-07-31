@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering.UI
     /// <summary>
     /// Description of GUIText.
     /// </summary>
-    internal class GUIText : UIElement, IDisposable
+    public class GUIText : UIElement, IDisposable
     {
         public static Vector2 DefaultSize = new Vector2(GameSettings.Width, GameSettings.Height);
         public GUITexture UIText { get; private set; }

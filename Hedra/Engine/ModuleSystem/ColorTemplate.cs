@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.ModuleSystem
 {
-    internal class ColorTemplate
+    public class ColorTemplate
     {
         public float R { get; set; }
         public float G { get; set; }

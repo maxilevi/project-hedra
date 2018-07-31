@@ -1,6 +1,6 @@
 ﻿namespace Hedra.Engine.Rendering
 {
-    internal interface FXShader
+    public interface FXShader
     {
         int ScaleUniform { get; set; }
         int PositionUniform { get; set; }

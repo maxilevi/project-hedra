@@ -14,7 +14,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of ByteArray.
 	/// </summary>
-	internal class Pool<T> where T : new()
+	public class Pool<T> where T : new()
 	{
 	    private const int GCDelay = 1;
 	    private readonly List<PoolItem<T>> _items;
@@ -62,7 +62,7 @@ namespace Hedra.Engine.Management
 	    }
 	}
 
-    internal class PoolItem<T> where T : new()
+    public class PoolItem<T> where T : new()
     {
         public T Item { get; set; }
         public bool Locked { get; set; }

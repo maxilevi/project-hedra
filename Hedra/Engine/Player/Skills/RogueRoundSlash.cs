@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	internal class RoundSlash : BaseSkill
+	public class RoundSlash : BaseSkill
 	{
 		private Animation RoundSlashAnimation;
 		private float FrameCounter = 0, PassedTime = 0, Damage = 0;

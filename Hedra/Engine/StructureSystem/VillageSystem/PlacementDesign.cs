@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class PlacementDesign
+    public class PlacementDesign
     {
         public Vector3 Position { get; private set; }
         public FarmParameters[] Farms { get; set; } = new FarmParameters[0];

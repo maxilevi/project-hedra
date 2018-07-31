@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	internal class BurstOfSpeed : BaseSkill
+	public class BurstOfSpeed : BaseSkill
 	{	
 		public BurstOfSpeed() : base() {
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/BurstOfSpeed.png");

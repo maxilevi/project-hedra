@@ -5,7 +5,7 @@ using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
 {
-    internal class Placer<T> where T : IBuildingParameters, new()
+    public class Placer<T> where T : IBuildingParameters, new()
     {
         protected Random Rng { get; }
         protected DesignTemplate[] Designs { get; }

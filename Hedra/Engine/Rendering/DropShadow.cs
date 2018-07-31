@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of DropShadow.
 	/// </summary>
-	internal class DropShadow
+	public class DropShadow
 	{
 		public Vector3 Scale {get; set;}
 		public bool Enabled {get; set;}

@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of WaterMeshBuffer.
 	/// </summary>
-	internal class WaterMeshBuffer : ChunkMeshBuffer
+	public class WaterMeshBuffer : ChunkMeshBuffer
 	{
 		public static float WaveMovement = 0;
 		public static bool ShowBackfaces = false;

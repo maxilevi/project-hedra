@@ -7,7 +7,7 @@ using OpenTK.Audio;
 
 namespace Hedra.Engine.IO
 {
-    internal class ConfigurationFile
+    public class ConfigurationFile
     {
         private Dictionary<string, object> _values;
 

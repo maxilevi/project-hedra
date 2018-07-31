@@ -24,7 +24,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of AssetManager.
 	/// </summary>
-	internal static class AssetManager
+	public static class AssetManager
 	{
 		public static Color[] Palette = new Color[256];
 		public const string DataFile1 = "data1.db";
@@ -462,7 +462,7 @@ namespace Hedra.Engine.Management
 	    }
     }
 
-    internal class ResourceHandler
+    public class ResourceHandler
     {
         public FileStream Stream { get; }
         public string Id { get; }

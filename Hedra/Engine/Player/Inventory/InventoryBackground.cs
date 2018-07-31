@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    internal class InventoryBackground
+    public class InventoryBackground
     {
         protected readonly GUIText Name;
         protected readonly GUIText Level;

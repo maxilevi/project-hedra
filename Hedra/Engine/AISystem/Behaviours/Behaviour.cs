@@ -3,7 +3,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {
-    internal abstract class Behaviour
+    public abstract class Behaviour
     {
         protected Entity Parent { get; }
 

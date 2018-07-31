@@ -17,7 +17,7 @@ using System.Collections.Generic;
 
 namespace Hedra.Engine.Rendering
 {
-	internal static class Graphics2D
+	public static class Graphics2D
 	{
 		public static List<uint> Textures = new List<uint>();
 		public static Bitmap RoundedRectangle = new Bitmap(new MemoryStream(AssetManager.ReadBinary("Assets/Background.png",AssetManager.DataFile3)));

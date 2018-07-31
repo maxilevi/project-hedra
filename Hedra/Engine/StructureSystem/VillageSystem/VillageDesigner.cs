@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class VillageDesigner
+    public class VillageDesigner
     {
         private static Dictionary<string, VillageRoot> _villageDesigns;
 

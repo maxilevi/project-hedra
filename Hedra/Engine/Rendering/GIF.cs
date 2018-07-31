@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of GIF.
 	/// </summary>
-	internal class GIF
+	public class GIF
 	{
 		public float Speed {get; set;}
 		private uint[] Textures;
@@ -64,7 +64,7 @@ namespace Hedra.Engine.Rendering
 		}
 	}
 	
-	internal class FrameSorter : IComparer<string>
+	public class FrameSorter : IComparer<string>
 	{
 	    public int Compare(string a, string b)
 	    {

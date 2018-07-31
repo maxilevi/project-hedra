@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Conflagaration.
 	/// </summary>
-	internal class Conflagaration : BaseSkill
+	public class Conflagaration : BaseSkill
 	{
 		private float Damage = 22.5f;
 		private PointLight Light;

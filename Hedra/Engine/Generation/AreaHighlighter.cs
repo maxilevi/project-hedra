@@ -9,7 +9,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Generation
 {
-    internal class AreaHighlighter
+    public class AreaHighlighter
     {
         private readonly HighlightedArea[] _highlightedAreas;
 

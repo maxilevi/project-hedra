@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.Rendering
 {
-    internal abstract class StateHandler<T>
+    public abstract class StateHandler<T>
     {
         private readonly Dictionary<T, bool> _state;
 

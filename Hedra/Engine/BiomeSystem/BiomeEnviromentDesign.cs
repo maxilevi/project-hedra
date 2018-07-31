@@ -6,7 +6,7 @@ using Hedra.Engine.PlantSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    internal abstract class BiomeEnviromentDesign
+    public abstract class BiomeEnviromentDesign
     {
         public abstract PlacementDesign[] Designs { get; }
     }

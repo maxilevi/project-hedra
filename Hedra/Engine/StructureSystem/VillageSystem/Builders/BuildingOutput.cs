@@ -4,7 +4,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    internal class BuildingOutput
+    public class BuildingOutput
     {
         public VertexData Model { get; set; }
         public List<CollisionShape> Shapes { get; set; }

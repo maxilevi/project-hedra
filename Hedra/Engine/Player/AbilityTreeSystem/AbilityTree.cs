@@ -25,7 +25,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     /// <summary>
     /// Description of SkillSystem.
     /// </summary>
-    internal class AbilityTree : PlayerInterface
+    public class AbilityTree : PlayerInterface
     {
         public const int AbilityCount = 15;
         public const int Layers = 3;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hedra.Engine.Management
 {
-    internal class TrackItem
+    public class TrackItem
     {
         public Func<object> Getter { get; set; }
         public Action<object> Setter { get; set; }

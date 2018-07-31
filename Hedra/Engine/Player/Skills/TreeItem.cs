@@ -11,7 +11,7 @@ using System;
 
 namespace Hedra.Engine.Player.Skills
 {
-	internal class TreeItem
+	public class TreeItem
 	{
 		public Type AbilityType { get; set; }
 	    public bool Locked { get; set; }

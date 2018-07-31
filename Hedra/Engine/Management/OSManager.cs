@@ -10,7 +10,7 @@ namespace Hedra.Engine.Management
 	/// <summary>
 	/// Description of OSManager.
 	/// </summary>
-	internal static class OSManager
+	public static class OSManager
 	{
 	    public static void Load(string ExecName)
 	    {

@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering.Effects
 	/// <summary>
 	/// Description of BloomFilter.
 	/// </summary>
-	internal class BloomFilter : Filter
+	public class BloomFilter : Filter
 	{
 	    private static readonly Shader Bloom;
 	    private static readonly Shader HBlurShader;

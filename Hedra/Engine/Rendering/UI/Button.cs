@@ -16,15 +16,15 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI
 {
-    internal delegate void OnButtonClickEventHandler(object Sender, MouseButtonEventArgs E);
+    public delegate void OnButtonClickEventHandler(object Sender, MouseButtonEventArgs E);
 
-    internal delegate void OnButtonHoverEventHandler(object Sender, MouseEventArgs E);
+    public delegate void OnButtonHoverEventHandler(object Sender, MouseEventArgs E);
 
-    internal delegate void OnButtonHoverEnterEventHandler(object Sender, MouseEventArgs E);
+    public delegate void OnButtonHoverEnterEventHandler(object Sender, MouseEventArgs E);
 
-    internal delegate void OnButtonHoverExitEventHandler(object Sender, MouseEventArgs E);
+    public delegate void OnButtonHoverExitEventHandler(object Sender, MouseEventArgs E);
 
-    internal class Button : EventListener, UIElement, IDisposable
+    public class Button : EventListener, UIElement, IDisposable
     {
         private bool _hasEntered;
         private Vector2 _position;

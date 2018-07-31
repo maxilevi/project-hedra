@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Chat.
 	/// </summary>
-	internal class Chat
+	public class Chat
 	{
 		public bool Focused {get; set;}
 		private readonly LocalPlayer _player;

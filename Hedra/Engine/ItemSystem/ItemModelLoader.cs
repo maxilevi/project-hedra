@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.ItemSystem
 {
-    internal static class ItemModelLoader
+    public static class ItemModelLoader
     {
         private static readonly Dictionary<string, VertexData> ModelCache;
 

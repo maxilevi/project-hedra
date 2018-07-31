@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    internal interface IGroundwork
+    public interface IGroundwork
     {
         BlockType Type { get; set; }
         float BonusHeight { get; set; }

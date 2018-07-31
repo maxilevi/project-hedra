@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering.Effects
 	/// <summary>
 	/// Do Nothing.
 	/// </summary>
-	internal class MainFBO
+	public class MainFBO
 	{
 	    public static Shader Shader { get; }
         public bool Enabled {get; set;}

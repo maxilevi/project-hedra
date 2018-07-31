@@ -6,7 +6,7 @@ using Hedra.Engine.ModuleSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    internal abstract class BiomeMobDesign
+    public abstract class BiomeMobDesign
     {
         public abstract SpawnerSettings Settings { get; }
     }

@@ -13,7 +13,7 @@ namespace Hedra.Engine.PhysicsSystem
 	/// <summary>
 	/// Description of ICollidable.
 	/// </summary>
-	internal interface ICollidable
+	public interface ICollidable
 	{
 	    
 	}

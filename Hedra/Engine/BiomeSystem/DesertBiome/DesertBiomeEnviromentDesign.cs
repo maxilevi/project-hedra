@@ -2,7 +2,7 @@
 
 namespace Hedra.Engine.BiomeSystem.DesertBiome
 {
-    internal class DesertBiomeEnviromentDesign : BiomeEnviromentDesign
+    public class DesertBiomeEnviromentDesign : BiomeEnviromentDesign
     {
         public DesertBiomeEnviromentDesign()
         {

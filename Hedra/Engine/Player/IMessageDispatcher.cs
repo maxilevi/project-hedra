@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Hedra.Engine.Player
 {
-    internal interface IMessageDispatcher
+    public interface IMessageDispatcher
     {
         void ShowTitleMessage(string Message, float Seconds);
         void ShowTitleMessage(string Message, float Seconds, Color TextColor);
