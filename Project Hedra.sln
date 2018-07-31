@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetBuilder", "AssetBuilder\AssetBuilder.csproj", "{808D426E-63DF-4145-8957-9452B182D0A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HedraTests", "HedraTests\HedraTests.csproj", "{4DF696F0-B21C-4CDB-B8A6-F351E4AE7DD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,14 @@ Global
 		{808D426E-63DF-4145-8957-9452B182D0A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{808D426E-63DF-4145-8957-9452B182D0A7}.Release|x86.ActiveCfg = Release|Any CPU
 		{808D426E-63DF-4145-8957-9452B182D0A7}.Release|x86.Build.0 = Release|Any CPU
+		{4DF696F0-B21C-4CDB-B8A6-F351E4AE7DD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DF696F0-B21C-4CDB-B8A6-F351E4AE7DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DF696F0-B21C-4CDB-B8A6-F351E4AE7DD6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4DF696F0-B21C-4CDB-B8A6-F351E4AE7DD6}.Debug|x86.Build.0 = Debug|Any CPU
+		{4DF696F0-B21C-4CDB-B8A6-F351E4AE7DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DF696F0-B21C-4CDB-B8A6-F351E4AE7DD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DF696F0-B21C-4CDB-B8A6-F351E4AE7DD6}.Release|x86.ActiveCfg = Release|Any CPU
+		{4DF696F0-B21C-4CDB-B8A6-F351E4AE7DD6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -246,6 +246,7 @@
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
+    <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathEdge.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathGraph.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathVertex.cs" />
@@ -926,13 +927,21 @@
       <Link>Assets\Items\Katars\UncommonLeatherKatar.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Misc\Mushroom.ply">
+      <Link>Assets\Items\Misc\Mushroom.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\FearIcon.ply">
       <Link>Assets\Env\FearIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Mushroom0.ply">
       <Link>Assets\Env\Mushroom0.ply</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Mushroom1.ply">
+      <Link>Assets\Env\Mushroom1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Bows\CommonRecurveBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4830,7 +4839,9 @@
     <None Include="Modules\Mobs\Gorilla.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Modules\Items\Misc\Mushroom.json" />
+    <Content Include="Modules\Items\Misc\Mushroom.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Villages\Nordic.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
