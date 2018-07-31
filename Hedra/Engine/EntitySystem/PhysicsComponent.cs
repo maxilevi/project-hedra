@@ -353,13 +353,14 @@ namespace Hedra.Engine.EntitySystem
 		        {
 		            var underBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY);
 		            var underUnderBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY * 2f);
-		            if (Parent.IsUnderwater)
+		            var human = Parent as Humanoid;
+                    if (Parent.IsUnderwater || (human?.IsJumping ?? false))
 		            {
 		                Parent.IsGrounded = false;
                     }
-                    else if (underBlock.Type != BlockType.Air && underBlock.Type != BlockType.Water && underUnderBlock.Type != BlockType.Air && underUnderBlock.Type != BlockType.Water)
+                    else if (underBlock.Type != BlockType.Air && underBlock.Type != BlockType.Water 
+                        && underUnderBlock.Type != BlockType.Air && underUnderBlock.Type != BlockType.Water)
 		            {
-
                         float heightAtPositon = Physics.HeightAtBlock(Parent.BlockPosition - Vector3.UnitY);
 		                Parent.BlockPosition = new Vector3(Parent.BlockPosition.X,
 		                    (heightAtPositon + BaseHeight) / Chunk.BlockSize,

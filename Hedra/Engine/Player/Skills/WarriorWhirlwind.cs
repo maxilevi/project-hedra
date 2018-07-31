@@ -25,7 +25,6 @@ namespace Hedra.Engine.Player
 	internal class Whirlwind : BaseSkill
 	{
 	    private readonly Animation _whirlwindAnimation;
-		private readonly Dictionary<Entity, float> _affectedEntities;
 	    private readonly TrailRenderer _trail;
 	    private float _frameCounter;
 	    private float _passedTime;
@@ -35,7 +34,6 @@ namespace Hedra.Engine.Player
 			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
 			base.ManaCost = 85;
 			base.MaxCooldown = 8.5f;
-            _affectedEntities = new Dictionary<Entity, float>();
             _trail = new TrailRenderer( () => LocalPlayer.Instance.Model.LeftWeapon.WeaponTip, Vector4.One);
 			
 			_whirlwindAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWhirlwind.dae");
@@ -43,7 +41,7 @@ namespace Hedra.Engine.Player
 
 		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
 		{
-			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.Toolbar.DisableAttack;
+			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.Toolbar.DisableAttack && Player.HasWeapon;
 		}
 		
 		public override void Use()
@@ -52,7 +50,6 @@ namespace Hedra.Engine.Player
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;
-			_affectedEntities.Clear();
 			_passedTime = 0;
 			Player.Model.Model.Animator.StopBlend();
 			Player.Model.Model.PlayAnimation(_whirlwindAnimation);
@@ -70,8 +67,9 @@ namespace Hedra.Engine.Player
             _trail.Emit = false;
         }
 		
-		public override void Update(){	
-            
+		public override void Update()
+		{
+			this.Grayscale = !Player.HasWeapon;    
 			if(Player.IsCasting && Casting)
             {
 				if(Player.IsDead || Player.Knocked || _passedTime > 4){
@@ -87,30 +85,17 @@ namespace Hedra.Engine.Player
                     Matrix4.CreateRotationY(Player.Model.Model.Rotation.Y * Mathf.Radian);
                 this.ManageParticles(underChunk);
 				
-				for(var i = World.Entities.Count-1; i > 0; i--)
+				if(_frameCounter >= .25f)
                 {
-				    if (!Player.InAttackRange(World.Entities[i])) continue;
 
-				    float dmg = Player.DamageEquation * Time.DeltaTime * 2f * (1+base.Level * .1f);
+                    for (var i = World.Entities.Count - 1; i > 0; i--)
+                    {
+                        if (!Player.InAttackRange(World.Entities[i])) continue;
 
-				    if(_affectedEntities.ContainsKey(World.Entities[i]))
-                    {
-				        _affectedEntities[World.Entities[i]] = _affectedEntities[World.Entities[i]] + dmg;
-				    }
-                    else
-                    {
-				        _affectedEntities.Add(World.Entities[i], dmg);
-				    }
-				}
-				
-				if(_frameCounter >= .3f)
-                {
-					foreach(Entity key in _affectedEntities.Keys)
-                    {
-					    key.Damage(_affectedEntities[key], Player, out float exp, true);
-						Player.XP += exp;
-					}
-					_affectedEntities.Clear();
+                        float dmg = Player.DamageEquation * .2f * 2f * (1 + base.Level * .1f);
+                        World.Entities[i].Damage(dmg, Player, out float exp, true);
+                        Player.XP += exp;
+                    }
 					_frameCounter = 0;
 				}
 				_passedTime += Time.DeltaTime;

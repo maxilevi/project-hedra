@@ -43,6 +43,7 @@ namespace Hedra.Engine.Player
 		private Animation KnockedAnimation;
         private Animation TiedAnimation;
         private Animation SleepAnimation;
+	    private Animation JumpAnimation;
         public Joint LeftWeaponJoint;
         public Joint RightWeaponJoint;
         public Joint ChestJoint;
@@ -137,6 +138,10 @@ namespace Hedra.Engine.Player
 			KnockedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorKnocked.dae");
             TiedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTied.dae");
             SleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
+
+	        JumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWalk.dae");
+	        JumpAnimation.Speed = 0;
+	        //JumpAnimation.
 
             RollAnimation.Loop = false;
 			RollAnimation.OnAnimationEnd += delegate(Animation Sender) { 
@@ -240,21 +245,22 @@ namespace Hedra.Engine.Player
 		    
 		}
 
-        public void Glide(){
-
+        public void Glide()
+        {
 			if(Model != null && Model.Animator.AnimationPlaying != GlideAnimation)
 				Model.PlayAnimation(GlideAnimation);
 			
 		}
 		
-		public void KnockOut(){
-
+		public void KnockOut()
+		{
 			if(Model != null && Model.Animator.AnimationPlaying != KnockedAnimation)
 				Model.PlayAnimation(KnockedAnimation);
 			
 		}
 		
-		public override void Idle(){
+		public override void Idle()
+		{
 		    Human.IsMoving = false;
 
             if (Human.IsCasting || Human.IsRiding || Human.IsGliding || Human.IsClimbing || Human.IsAttacking || Human.IsEating || Human.IsRiding || Human.IsRolling || Human.IsUnderwater)
@@ -264,7 +270,8 @@ namespace Hedra.Engine.Player
 				Model.PlayAnimation(IdleAnimation);
         }		
 		
-		public void Climb(){
+		public void Climb()
+		{
 			if(Human.IsRolling || Human.IsUnderwater || Human.IsAttacking )
 				return;
 			
@@ -272,7 +279,8 @@ namespace Hedra.Engine.Player
 				Model.PlayAnimation(ClimbAnimation);
 		}
 		
-		public void Sit(){
+		public void Sit()
+		{
 			if(Human.IsRolling || Human.IsUnderwater || Human.IsAttacking)
 				return;
 			
@@ -295,6 +303,12 @@ namespace Hedra.Engine.Player
 					Model.PlayAnimation(IdleRideAnimation);
 			}
 		}
+
+	    public void Jump()
+	    {
+		    if(Model != null && Model.Animator.AnimationPlaying != JumpAnimation)
+			    Model.PlayAnimation(JumpAnimation);
+	    }
 		
 		public void Eat(float FoodHealth)
 		{

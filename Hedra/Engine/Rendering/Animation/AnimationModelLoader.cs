@@ -42,7 +42,9 @@ namespace Hedra.Engine.Rendering.Animation
 
 	    public static AnimatedModel LoadEntity(string ModelFile)
 	    {
-            return AnimationModelLoader.LoadEntity(AnimationModelLoader.GetEntityData(ModelFile));
+		    var animatedModel = AnimationModelLoader.LoadEntity(AnimationModelLoader.GetEntityData(ModelFile));
+		    animatedModel.CullingBox = AssetManager.LoadHitbox(ModelFile);
+            return animatedModel;
         }
 
 		/**

@@ -114,7 +114,7 @@ namespace Hedra.Engine.Player
             _targetZoomOut = _player.IsMoving && !_player.IsUnderwater ? _player.Orientation * 2.0f : Vector3.Zero;
             if (DefaultDelegate == PositionDelegate)
             {
-                _targetZoomOut += _player.IsJumping ? Vector3.UnitY * _player.Movement.JumpingDistance * 2f : Vector3.Zero;
+                _targetZoomOut += _player.IsJumping ? Vector3.UnitY * 2f : Vector3.Zero;
             }
             _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, (float) Time.DeltaTime * 2f);
             _interpolatedPosition = PositionDelegate() - _interpolatedZoomOut;

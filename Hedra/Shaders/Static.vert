@@ -8,8 +8,10 @@ layout(location = 0)in vec3 InVertex;
 layout(location = 1)in vec4 InColor;
 layout(location = 2)in vec3 InNormal;
 
+out vec4 raw_color;
 out vec4 InPos;
-smooth out vec4 InNorm;
+out vec4 InNorm;
+out vec3 pointlight_color;
 out vec4 Color;
 out float Visibility;
 out float pass_height;
@@ -18,7 +20,6 @@ out vec4 pass_topColor;
 out vec4 Coords;
 out vec3 LightDir;
 out float CastShadows;
-out float Config;
 out float DitherVisibility;
 
 layout(std140) uniform FogSettings {
@@ -40,7 +41,17 @@ uniform vec3 Offset;
 uniform vec3 BakedOffset;
 uniform mat4 TransformationMatrix;
 uniform float DitherRadius;
+uniform vec4 AreaColors[16];
+uniform vec4 AreaPositions[16];
 const float ShadowTransition = 10.0;
+
+struct PointLight
+{
+    vec3 Position;
+    vec3 Color;
+    float Radius;
+};
+uniform PointLight Lights[12];
 
 vec2 Unpack(float inp, int prec)
 {
@@ -53,9 +64,9 @@ vec2 Unpack(float inp, int prec)
 }
 
 void main(){
-	Config = InColor.a;
+    vec4 linear_color = srgb_to_linear(InColor); 
+	float Config = InColor.a;
 	CastShadows = InColor.a;
-	Color = vec4(srgb_to_linear(InColor.xyz), InColor.a);
 	vec3 unitToLight = normalize(LightPosition);
 	vec4 Vertex = vec4((InVertex + BakedOffset) * Scale + Offset, 1.0);
 	
@@ -90,4 +101,44 @@ void main(){
 	
 	InPos = Vertex;
 	InNorm = vec4(InNormal, 1.0);
+	
+    if(!(Config+2.0 < 0.1))
+    {
+        for(int i = 0; i < 16; i++)
+        {
+            if(AreaColors[i] != vec4(0.0, 0.0, 0.0, 0.0))
+            {
+                linear_color = mix(AreaColors[i], linear_color, clamp(length(AreaPositions[i].xyz - InPos.xyz) / AreaPositions[i].w , 0.0, 1.0) );
+            }
+        }
+    }
+		
+	//Lighting
+	vec3 unitNormal = normalize(InNorm.xyz);
+	vec3 unitToCamera = normalize((inverse(gl_ModelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - Vertex.xyz);
+
+	vec3 FLightColor = vec3(0.0, 0.0, 0.0);
+	float average_color = (LightColor.r + LightColor.g + LightColor.b) / 3.0; 
+	for(int i = 0; i < 12; i++){
+		float dist = length(Lights[i].Position.xyz - Vertex.xyz);
+		float att = 1.0 / (1.0 + dist * dist);
+		att *= Lights[i].Radius * .5;
+		att = min(att, 1.0);
+		
+		FLightColor += Lights[i].Color * att * .5 * (1.0 - average_color); 
+	}
+	FLightColor = clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
+	vec4 InputColor = vec4(linear_color.xyz, 1.0);
+
+	float cond = when_lt(Color.a + 1.0, 0.1);
+	Ambient += cond * 0.25;
+	vec4 Specular = specular(unitToLight, unitNormal, unitToCamera, LightColor);
+	vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
+	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
+	vec4 realColor = Rim + Diffuse * InputColor + Specular;
+    Color = vec4(realColor.xyz, realColor.a);	
+
+	pointlight_color = diffuse(unitToLight, unitNormal, FLightColor).rgb;		
+	raw_color = linear_color;
+	
 }

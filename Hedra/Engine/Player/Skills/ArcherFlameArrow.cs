@@ -6,35 +6,34 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using System.Collections;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
+using System.Linq;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem.WeaponSystem;
-using Hedra.Engine.Player.Skills;
+using Hedra.Engine.Management;
 using Hedra.Engine.Player.ToolbarSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
-using OpenTK;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Engine.Rendering.UI;
+using OpenTK;
 
-namespace Hedra.Engine.Player
+namespace Hedra.Engine.Player.Skills
 {
 	/// <summary>
 	/// Description of ArcherPoisonArrow.
 	/// </summary>
-	internal class FlameArrow : BaseSkill
+	internal class ArcherFlameArrow : SpecialAttackSkill
 	{
-		private Animation ShootAnimation;
-		private float BaseDamage = 50f, Damage;
+		private const float EffectDuration = 6;
+		private const float EffectRange = 24;
+		public override uint TexId => Graphics2D.LoadFromAssets("Assets/Skills/FlameArrow.png");
+		public override string Description => "Shoot a flaming arrow.";
 		
-		public FlameArrow() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/FlameArrow.png");
-			base.ManaCost = 120f;
-			base.MaxCooldown = 6.5f;
-
+		public ArcherFlameArrow() : base() {
             ShootAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherTripleShoot.dae");
 			ShootAnimation.Loop = false;
 			ShootAnimation.OnAnimationMid += delegate {
@@ -83,77 +82,46 @@ namespace Hedra.Engine.Player
 			};
 		}
 		
-		public IEnumerator CreateFlames(object[] Params){
-			Projectile ArrowProj = Params[0] as Projectile;
-			Vector3 Position = ArrowProj.Mesh.Position;
-			
-			ParticleSystem Particles = new ParticleSystem(Position);
-			Particles.Color = Particle3D.FireColor;
-			Particles.GravityEffect = 0f;
-			Particles.Scale = Vector3.One * .5f;
-			Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-			Particles.PositionErrorMargin = new Vector3(2.00f,2.00f,2.00f);
-			Particles.Shape = ParticleShape.Sphere;
-			
-			Particles.ParticleLifetime = .75f;
-			for(int i = 0; i < 750; i++){
-				Vector3 Dir = (Mathf.RandomVector3(Utils.Rng) * 2f - Vector3.One);
-				Particles.Direction = Dir * 1f;
-				Particles.Emit();
-			}
-			
-			World.HighlightArea(Position, Particle3D.FireColor, 24f, 6f);
-			
-			float Time = 0;
-			while(Time < 6){
-				Time += Engine.Time.DeltaTime;
-			
+		
+		public override void Use()
+		{
+
+		}
+		
+		private IEnumerator CreateFlames(object[] Params)
+		{
+			var arrowProj = (Projectile) Params[0];
+			var position = arrowProj.Mesh.Position;	
+			var time = 0f;
+			World.HighlightArea(position, Particle3D.FireColor, EffectRange, EffectDuration);
+			while(time < EffectDuration)
+			{
+				time += Time.DeltaTime;			
 				World.Particles.Color = Particle3D.FireColor;
 				World.Particles.VariateUniformly = false;
-				World.Particles.Position = Position;
+				World.Particles.Position = position;
 				World.Particles.Scale = Vector3.One * .5f;
 				World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
 				World.Particles.Direction = Vector3.UnitY * 1.5f;
 				World.Particles.ParticleLifetime = 0.75f;
 				World.Particles.GravityEffect = 0.5f;
 				World.Particles.PositionErrorMargin = new Vector3(12f, 4f, 12f);
-				
-				for(int i = 0; i < 4; i++)
+
+				for (var i = 0; i < 4; i++)
+				{
 					World.Particles.Emit();
-				
-				for(int i = World.Entities.Count-1; i > -1; i--){
-					if( (World.Entities[i].Position - Position).LengthSquared < 24f*24f && !World.Entities[i].IsStatic){
-						if(World.Entities[i].SearchComponent<BurningComponent>() == null){
-							World.Entities[i].AddComponent( new BurningComponent(World.Entities[i], Player, 6f, Damage * .4f) );
-						}
-					}
 				}
-				
+				World.Entities.ToList().ForEach(delegate(Entity entity)
+				{
+					if (!((entity.Position - position).LengthSquared < EffectRange * EffectRange) || entity.IsStatic) return;
+					
+					if(entity.SearchComponent<BurningComponent>() == null)
+					{
+						entity.AddComponent(new BurningComponent(entity, Player, EffectDuration, Damage * .4f));
+					}
+				});
 				yield return null;
 			}
 		}
-		
-		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
-		{
-			return base.MeetsRequirements(Bar, CastingAbilityCount) && Player.Model.LeftWeapon is Bow;
-		}
-		
-		public override void Use()
-		{
-			this.Damage = BaseDamage + 10f * base.Level;
-			base.MaxCooldown = Math.Max(14f - base.Level * .5f, 8f);
-			Player.IsCasting = true;
-			Casting = true;
-			Player.IsAttacking = true;
-			Player.Model.LeftWeapon.InAttackStance = true;
-			Player.Model.Model.Animator.StopBlend();
-			Player.Model.Model.PlayAnimation(ShootAnimation);
-			Player.Movement.Orientate();
-		}
-		
-		public override void Update(){}
-		
-		
-		public override string Description => "Shoot a flaming arrow.";
 	}
 }

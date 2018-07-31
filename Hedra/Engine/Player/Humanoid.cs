@@ -304,6 +304,8 @@ namespace Hedra.Engine.Player
 	        ComponentManager.AddComponentWhile(effect, Condition);
 	    }
 
+		public bool HasWeapon => MainWeapon != null;
+		
 	    public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 35f, 0f, 1.25f);
 
 	    public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f) * (.5f + ConsecutiveHitsModifier);

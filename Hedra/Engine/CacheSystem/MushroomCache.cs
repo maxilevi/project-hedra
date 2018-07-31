@@ -7,7 +7,8 @@ namespace Hedra.Engine.CacheSystem
     {
         public MushroomCache()
         {
-            this.AddModel(AssetManager.PlyLoader("Assets/Env/Mushroom0.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Mushroom0.ply", Vector3.One));
+            this.AddModel(AssetManager.PLYLoader("Assets/Env/Mushroom1.ply", Vector3.One));
         }
     }
 }

@@ -59,12 +59,12 @@ namespace Hedra.Engine.Rendering
         {
             switch (Rng.Next(0, 6))
             {
-                case 0: return Colors.FromHtml("#fe785f");
-                case 1: return Colors.FromHtml("#FF6380");
-                case 2: return Colors.FromHtml("#AA3D98");
-                case 3: return Colors.FromHtml("#FF65F2");
-                case 4: return Colors.FromHtml("#379B95");
-                case 5: return Colors.FromHtml("#FFAD5A");
+                case 0: return Colors.FromHtml("#f42e49");
+                case 1: return Colors.FromHtml("#77608e");
+                case 2: return Colors.FromHtml("#3474bc");
+                case 3: return Colors.FromHtml("#9a6c30");
+                case 4: return Colors.FromHtml("#df665e");
+                case 5: return Colors.FromHtml("#fcec61");
                 default: throw new ArgumentOutOfRangeException();
             }
         }
@@ -73,9 +73,9 @@ namespace Hedra.Engine.Rendering
         {
             switch (Rng.Next(0, 3))
             {
-                case 0: return Colors.FromHtml("#fe785f");
-                case 1: return Colors.FromHtml("#FF6380");
-                case 2: return Colors.FromHtml("#AA3D98");
+                case 0: return Colors.FromHtml("#dabdc2");
+                case 1: return Colors.FromHtml("#bca474");
+                case 2: return Colors.FromHtml("#ecce92");
                 default: throw new ArgumentOutOfRangeException();
             }
         }

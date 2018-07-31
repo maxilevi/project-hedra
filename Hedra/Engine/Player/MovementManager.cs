@@ -26,8 +26,9 @@ namespace Hedra.Engine.Player
         public Vector3 RollDirection { get; set; }
 	    public bool IsJumping { get; private set; }
         protected readonly Humanoid Human;
+		private Vector3 _jumpPropulsion;
 
-	    public MovementManager(Humanoid Human){
+        public MovementManager(Humanoid Human){
 	        this._order = new List<MoveOrder>();
 	        this.Human = Human;
         }
@@ -35,7 +36,7 @@ namespace Hedra.Engine.Player
 	    public Vector3 MoveFormula(Vector3 Direction)
 	    {
 	        float movementSpeed = (Human.IsUnderwater && !Human.IsGrounded ? 1.25f : 1.0f) * Human.Speed;
-	        return Direction * 5f * 1.75f * movementSpeed * (Human.IsJumping ? 1.75f : 1f) * _speed;
+	        return Direction * 5f * 1.75f * movementSpeed * _speed;
 	    }
 
         public void MoveInWater(bool Up)
@@ -65,50 +66,10 @@ namespace Hedra.Engine.Player
 
 		    Human.IsSitting = false;
 		    Human.IsGrounded = false;
-            CoroutineManager.StartCoroutine(this.JumpCoroutine);
-        }
-
-		public IEnumerator JumpCoroutine()
-        {
-			IsJumping = true;
-			var startingY = Human.Physics.TargetPosition.Y;
-			Human.Physics.GravityDirection = Vector3.Zero;
-		    Human.IsGrounded = false;
-		    var targetPush = 60f;
-		    var push = 0f;
-            var stoppedJump = false;
-		    while (Human.Model.Position.Y < startingY + JumpingDistance && (push > 0.05f || targetPush > 0))
-			{
-			    bool shouldPlayJumpAnimation = Human.IsMoving;
-                push = Mathf.Lerp(push, targetPush, Time.DeltaTime * 8f);
-                float prevTarget = Human.Physics.TargetPosition.Y;
-			    var command = new MoveCommand
-			    {
-			        Delta = Vector3.UnitY * push * Time.DeltaTime,
-			        Parent = Human
-                };
-			    Human.Physics.ProccessCommand( command );
-			    if (Math.Abs(prevTarget - Human.Physics.TargetPosition.Y) < .01f)
-			    {
-			        stoppedJump = true;
-                    IsJumping = false;
-			        Human.Model.Pause = false;
-                    break;
-			    }
-			    if (shouldPlayJumpAnimation) Human.Model.Pause = true;
-                yield return null;
-			}
-            if (!stoppedJump)
-            {
-                TaskManager.After(50, delegate
-                {
-                    IsJumping = false;
-                });
-                TaskManager.When(() => Human.IsGrounded || Human.IsUnderwater || Human.IsGliding,
-                    () => Human.Model.Pause = false);
-            }
+	        IsJumping = true;
             Human.Physics.GravityDirection = -Vector3.UnitY;
-		}
+	        _jumpPropulsion = Vector3.UnitY * 80f;
+        }
 
 	    protected virtual void DoUpdate() { }
 
@@ -135,6 +96,17 @@ namespace Hedra.Engine.Player
             this.DoUpdate();
 		    this.ManageMoveOrders();
 		    this.ManageSwimming();
+			this.HandleJumping();
+		}
+
+		private void HandleJumping()
+		{
+            if (!IsJumping) return;
+            Human.Physics.DeltaTranslate(_jumpPropulsion);
+			_jumpPropulsion *= (float) Math.Pow(.25f, Time.DeltaTime * 3f);
+			Human.Model.Jump();
+            if (_jumpPropulsion.LengthFast < 2f) IsJumping = false;
+            
 		}
 
 	    private void ManageMoveOrders()

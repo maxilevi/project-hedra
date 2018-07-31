@@ -72,7 +72,7 @@ namespace Hedra
 
             string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
 		    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
-            this.GameVersion = "α 0.35";
+            this.GameVersion = "α 0.36";
 		    this.Title += " "+GameVersion;
             Hedra.MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -183,10 +183,9 @@ namespace Hedra
 			base.OnUpdateFrame(e);
 
             var frameTime = e.Time;
-            var dt = 1.0f / 60.0f;
             while (frameTime > 0f)
             {
-                var delta = Math.Min(frameTime, dt);
+                var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta);
                 CoroutineManager.Update();
                 UpdateManager.Update();

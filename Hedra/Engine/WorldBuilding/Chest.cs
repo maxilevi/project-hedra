@@ -67,8 +67,10 @@ namespace Hedra.Engine.WorldBuilding
 			UpdateManager.Add(this);
 		}
 		
-		public void Update(){
-			if(UnderChunk == null){
+		public void Update()
+        {
+			if(UnderChunk == null)
+            {
 				UnderChunk = World.GetChunkAt(this.Position);
 				if(UnderChunk == null || !UnderChunk.Initialized){
 					this.Dispose();

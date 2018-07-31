@@ -49,7 +49,7 @@ namespace Hedra.Engine.Player
 			Items[2][0].Image = Graphics2D.LoadFromAssets("Skills/PoisonArrow.png");
 			Items[2][0].Enabled = true;
 			
-			Items[2][3].AbilityType = typeof(FlameArrow);	
+			Items[2][3].AbilityType = typeof(ArcherFlameArrow);	
 			Items[2][3].Image = Graphics2D.LoadFromAssets("Skills/FlameArrow.png");
 			Items[2][3].Enabled = true;
 			

@@ -38,6 +38,7 @@ namespace Hedra.Engine.Player.Skills
 	    public bool Casting { get; set; }
 	    public virtual uint TexId { get; protected set; }
 	    public uint MaskId { get; set; }
+		protected bool Grayscale { get; set; }
 		public bool Initialized { get; private set;}
         protected bool UseMask => MaskId != 0;
 	    protected bool Enabled { get; set; } = true;
@@ -105,7 +106,7 @@ namespace Hedra.Engine.Player.Skills
             Shader["Tint"] = Tint;
 			Shader["Scale"] = Scale * new Vector2(1,-1);
 			Shader["Position"] = Position;
-			Shader["Bools"] = new Vector2(Level == 0 ? 1 : 0, UseMask ? 1 : 0);
+			Shader["Bools"] = new Vector2(Level == 0 || Grayscale ? 1 : 0, UseMask ? 1 : 0);
 			Shader["Cooldown"] = this.Cooldown / this.MaxCooldown;
 			
 			GL.ActiveTexture(TextureUnit.Texture0);

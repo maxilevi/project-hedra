@@ -16,8 +16,10 @@ namespace Hedra.Engine.PhysicsSystem
 {
 	internal static class Physics
 	{
-		public static float Gravity = -9.81f;
-	    public static PhysicsThreadManager Threading;
+		public const float Gravity = -9.81f;
+	    public const float Timestep = 1.0f / 60.0f;
+
+        public static PhysicsThreadManager Threading;
 
 	    static Physics()
 	    {

@@ -22,7 +22,7 @@ namespace Hedra.Engine.PlantSystem
         {
             var type = World.GetHighestBlockAt(Position.X, Position.Z).Type;
             return  (type == BlockType.Dirt || type == BlockType.Stone) &&
-                   UnderChunk.Landscape.RandomGen.Next(0, 2000) == 1 && World.MenuSeed != World.Seed;
+                   UnderChunk.Landscape.RandomGen.Next(0, 200) == 1 && World.MenuSeed != World.Seed;
         }
     }
 }
