@@ -50,13 +50,8 @@ namespace Hedra.Engine.Generation
             _entities = new HashSet<Entity>();
             _items = new HashSet<WorldItem>();
             _chunks = new HashSet<Chunk>();
-
-            SearcheableChunks = new Dictionary<Vector2, Chunk>();
             _globalColliders = new HashSet<ICollidable>();
-            Particles = new ParticleSystem
-            {
-                HasMultipleOutputs = true
-            };
+            SearcheableChunks = new Dictionary<Vector2, Chunk>();
             DrawingChunks = new Dictionary<Vector2, Chunk>();
         }
 
@@ -64,7 +59,7 @@ namespace Hedra.Engine.Generation
 
         public Dictionary<Vector2, Chunk> SearcheableChunks { get; }
         public AreaHighlighter Highlighter { get; private set; }
-        public ParticleSystem Particles { get; }
+        public ParticleSystem Particles { get; private set; }
         public EnviromentGenerator EnviromentGenerator { get; private set; }
         public BiomePool BiomePool { get; private set; }
         public MobFactory MobFactory { get; private set; }
@@ -90,6 +85,10 @@ namespace Hedra.Engine.Generation
             EnviromentGenerator = new EnviromentGenerator();
             MobFactory = new MobFactory();
             Highlighter = new AreaHighlighter();
+            Particles = new ParticleSystem
+            {
+                HasMultipleOutputs = true
+            };
             ReloadModules();
             IsGenerated = true;
         }
@@ -563,23 +562,6 @@ namespace Hedra.Engine.Generation
                 });
             };
             return model;
-        }
-
-        public Entity SpawnMob(MobType Type, Vector3 DesiredPosition, Random SeedRng)
-        {
-            var mobSeed = SeedRng.Next(ushort.MinValue, ushort.MaxValue);
-            return SpawnMob(Type.ToString(), DesiredPosition, mobSeed);
-        }
-
-        public Entity SpawnMob(MobType Type, Vector3 DesiredPosition, int MobSeed)
-        {
-            return SpawnMob(Type.ToString(), DesiredPosition, MobSeed);
-        }
-
-        public Entity SpawnMob(string Type, Vector3 DesiredPosition, Random SeedRng)
-        {
-            var mobSeed = SeedRng.Next(ushort.MinValue, ushort.MaxValue);
-            return SpawnMob(Type, DesiredPosition, mobSeed);
         }
 
         public Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)

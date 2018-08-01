@@ -26,11 +26,11 @@ namespace Hedra.Engine.Player.Skills
 		public static Shader Shader { get; }
 		public static Vector3 GrayTint { get; }
 		public static Vector3 NormalTint { get; }
+	    public virtual float MaxCooldown { get; protected set; }
         protected virtual bool HasCooldown => true;
         public Vector3 Tint { get; set; }
-        public float ManaCost { get; set; }
+        public virtual float ManaCost { get; protected set; }
 		public float Cooldown { get; set; }
-		public float MaxCooldown { get; set; }
         public int Level { get; set; }
 	    public bool Active { get; set; } = true;
         public virtual bool Passive { get; set; }

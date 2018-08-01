@@ -19,7 +19,7 @@ namespace Hedra.Engine.WorldBuilding
 	public class BaseStructure : IDisposable, IStructure, ISearchable
     {
         public Vector3 Position { get; set; }
-		protected bool Disposed;
+		public bool Disposed { get; protected set; }
 		
 		public virtual void Dispose()
 		{

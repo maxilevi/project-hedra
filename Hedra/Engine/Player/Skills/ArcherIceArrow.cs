@@ -42,7 +42,7 @@ namespace Hedra.Engine.Player
 					
 					Projectile Arrow = PlayerBow.ShootArrow(Player, Player.View.CrossDirection);
 					Arrow.MoveEventHandler += delegate { 
-						Arrow.Mesh.Tint = Bar.Blue * new Vector4(1,1,3,1) * .7f;
+						Arrow.Mesh.Tint = Colors.LightBlue * new Vector4(1,1,3,1) * .7f;
 					};
 					Arrow.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
 						float Exp;

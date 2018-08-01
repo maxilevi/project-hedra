@@ -41,10 +41,12 @@ namespace Hedra.Engine.Rendering.Particles
 		public ParticleSystem(){
 			this.Position = Vector3.Zero;
 			ParticleCreator.Load();
-			Executer.ExecuteOnMainThread( delegate{ this.CreateVAO();
-			
-			DrawManager.ParticleRenderer.Add(this);
-			UpdateManager.Add(this);
+			Executer.ExecuteOnMainThread(delegate
+			{
+				this.CreateVAO();
+
+				DrawManager.ParticleRenderer.Add(this);
+				UpdateManager.Add(this);
 			});
 		}
 		

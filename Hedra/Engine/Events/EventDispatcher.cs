@@ -6,12 +6,14 @@
  */
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Events
 {
-	public static class EventDispatcher{
+	public static class EventDispatcher
+	{
 
 		private static readonly List<IEventListener> EventListeners;
 	    private static readonly Dictionary<object, EventHandler<KeyEventArgs>> HighKeyDownHandlers;
@@ -40,6 +42,36 @@ namespace Hedra.Engine.Events
 
         public static Vector2 Mouse { get; set; } = Vector2.Zero;
 
+		private static IEventProvider _provider;
+		public static IEventProvider Provider
+		{
+			get => _provider;
+			set
+			{
+				if (Provider != null)
+				{
+					Provider.MouseUp -= OnMouseButtonUp;
+					Provider.MouseDown -= OnMouseButtonDown;
+					Provider.MouseWheel -= OnMouseWheel;
+					Provider.MouseMove -= OnMouseMove;
+					Provider.KeyDown -= OnKeyDown;
+					Provider.KeyUp -= OnKeyUp;
+					Provider.KeyPress -= OnKeyPress;
+				}
+				_provider = value;
+				if (Provider != null)
+				{
+					Provider.MouseUp += OnMouseButtonUp;
+					Provider.MouseDown += OnMouseButtonDown;
+					Provider.MouseWheel += OnMouseWheel;
+					Provider.MouseMove += OnMouseMove;
+					Provider.KeyDown += OnKeyDown;
+					Provider.KeyUp += OnKeyUp;
+					Provider.KeyPress += OnKeyPress;
+				}
+			}
+		}
+
 	    static EventDispatcher()
 	    {
 	        EventListeners = new List<IEventListener>();
@@ -54,13 +86,7 @@ namespace Hedra.Engine.Events
             MouseWheelHandlers = new Dictionary<object, EventHandler<MouseWheelEventArgs>>();
 	        MouseButtonUpHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
 	        MouseButtonDownHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
-            Program.GameWindow.KeyDown += OnKeyDown;
-	        Program.GameWindow.MouseUp += OnMouseButtonUp;
-	        Program.GameWindow.MouseDown += OnMouseButtonDown;
-	        Program.GameWindow.MouseWheel += OnMouseWheel;
-	        Program.GameWindow.MouseMove += OnMouseMove;
-	        Program.GameWindow.KeyUp += OnKeyUp;
-	        Program.GameWindow.KeyPress += OnKeyPress;
+		    Provider = Program.GameWindow;
 	    }
 
 	    public static void RegisterMouseMove(object Key, EventHandler<MouseMoveEventArgs> EventHandler)

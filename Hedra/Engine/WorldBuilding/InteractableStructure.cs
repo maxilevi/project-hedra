@@ -22,7 +22,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// Description of ClaimableStrucuture.
 	/// </summary>
 	
-	public delegate void OnInteraction(Entity Interactee);	
+	public delegate void OnInteraction(IEntity Interactee);	
 	
 	public abstract class InteractableStructure : BaseStructure, IUpdatable
 	{
@@ -30,7 +30,7 @@ namespace Hedra.Engine.WorldBuilding
 	    public virtual Key Key => Key.E;
         public abstract string Message { get; }
         public abstract int InteractDistance { get; }
-	    protected bool Interacted { get; private set; }
+	    public bool Interacted { get; private set; }
         public event OnInteraction OnInteractEvent;
 	    private bool _canInteract;
 	    private bool _shouldInteract;
@@ -64,10 +64,7 @@ namespace Hedra.Engine.WorldBuilding
 
 	            if (_shouldInteract && !Interacted && !Disposed)
 	            {
-	                this.Interact(player);
-	                Interacted = true;
-	                OnInteractEvent?.Invoke(player);
-	                this.Dispose();
+					this.InvokeInteraction(player);
                 }
 	            else
 	            {
@@ -76,7 +73,15 @@ namespace Hedra.Engine.WorldBuilding
 	        }
         }
 
-	    public abstract void Interact(LocalPlayer Interactee);
+		public void InvokeInteraction(IPlayer Player)
+		{
+			Interacted = true;
+			this.Interact(Player);
+			OnInteractEvent?.Invoke(Player);
+			this.Dispose();
+		}
+
+	    public abstract void Interact(IPlayer Interactee);
 
 	    public override void Dispose()
 	    {

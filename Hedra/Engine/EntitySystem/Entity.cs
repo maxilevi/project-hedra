@@ -25,7 +25,7 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public delegate void OnAttackEventHandler(Entity Victim, float Amount);
 
-    public class Entity : IUpdatable, IRenderable, IDisposable, ISearchable
+    public class Entity : IUpdatable, IRenderable, IDisposable, ISearchable, IEntity
     {
         private DamageComponent _damageManager;
         private int _drowningSoundTimer;
@@ -193,6 +193,7 @@ namespace Hedra.Engine.EntitySystem
         }
 
         public string Type { get; set; } = MobType.None.ToString();
+        
         public bool WasGrounded { get; private set; }
 
         public Entity()

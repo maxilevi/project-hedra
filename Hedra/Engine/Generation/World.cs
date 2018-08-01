@@ -51,8 +51,7 @@ namespace Hedra.Engine.Generation
         public static int MenuSeed => Provider.MenuSeed;
         public static int RandomSeed => Provider.RandomSeed;
 
-        public static IWorldProvider Provider { get; set; }
-        
+        public static IWorldProvider Provider { get; set; }        
 
         public static void Load()
         {
@@ -248,17 +247,17 @@ namespace Hedra.Engine.Generation
 
         public static Entity SpawnMob(MobType Type, Vector3 DesiredPosition, Random SeedRng)
         {
-            return Provider.SpawnMob(Type, DesiredPosition, SeedRng);
-        }
-
-        public static Entity SpawnMob(MobType Type, Vector3 DesiredPosition, int MobSeed)
-        {
-            return Provider.SpawnMob(Type, DesiredPosition, MobSeed);
+            return SpawnMob(Type.ToString(), DesiredPosition, SeedRng);
         }
 
         public static Entity SpawnMob(string Type, Vector3 DesiredPosition, Random SeedRng)
         {
-            return Provider.SpawnMob(Type, DesiredPosition, SeedRng);
+            return SpawnMob(Type, DesiredPosition, SeedRng.Next(ushort.MinValue, ushort.MaxValue));
+        }
+        
+        public static Entity SpawnMob(MobType Type, Vector3 DesiredPosition, int MobSeed)
+        {
+            return SpawnMob(Type.ToString(), DesiredPosition, MobSeed);
         }
 
         public static Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)

@@ -10,6 +10,7 @@
 using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
@@ -38,7 +39,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args) {
 			    if (!(Args.Victim.Health <= 0)) return;
 
-			    GameManager.Player.MessageDispatcher.ShowMessage("YOU EARNED "+(int)dmgComponent.XpToGive + " XP!", 3f, Rendering.UI.Bar.Violet.ToColor());
+			    GameManager.Player.MessageDispatcher.ShowMessage("YOU EARNED "+(int)dmgComponent.XpToGive + " XP!", 3f, Colors.Violet.ToColor());
 			    healthBarComponent.Enabled = false;
 			};
 

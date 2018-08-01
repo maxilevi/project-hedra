@@ -6,12 +6,11 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 using OpenTK;
-using Hedra.Engine.Rendering.UI;
 using System.Collections;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -42,7 +41,7 @@ namespace Hedra.Engine.EntitySystem
 		public override void Update(){}
 		
 		public IEnumerator UpdateFreeze(){
-			Parent.Model.BaseTint = Bar.Blue * new Vector4(1,1,2,1) * .7f;
+			Parent.Model.BaseTint = Colors.LightBlue * new Vector4(1,1,2,1) * .7f;
             Parent.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Parent, -Parent.Speed),
                 () => _totalTime > _pTime && !Parent.IsDead && !Disposed);
 			Parent.Model.Pause = true;

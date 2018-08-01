@@ -29,6 +29,7 @@ using System.Threading;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Events;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.PhysicsSystem;
@@ -37,7 +38,7 @@ using Forms = System.Windows.Forms;
 
 namespace Hedra
 {
-    class Hedra : GameWindow
+    class Hedra : GameWindow, IEventProvider
 	{ 
 	
 		private GUITexture _studioLogo, _studioBackground;

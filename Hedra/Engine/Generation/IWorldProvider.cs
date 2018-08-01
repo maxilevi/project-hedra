@@ -131,12 +131,6 @@ namespace Hedra.Engine.Generation
 
         WorldItem DropItem(Item ItemSpec, Vector3 Position);
 
-        Entity SpawnMob(MobType Type, Vector3 DesiredPosition, Random SeedRng);
-
-        Entity SpawnMob(MobType Type, Vector3 DesiredPosition, int MobSeed);
-
-        Entity SpawnMob(string Type, Vector3 DesiredPosition, Random SeedRng);
-
         Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed);
 
         Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition);

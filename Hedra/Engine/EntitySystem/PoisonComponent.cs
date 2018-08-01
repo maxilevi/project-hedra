@@ -12,6 +12,7 @@ using Hedra.Engine.Rendering.UI;
 using System.Collections;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 
 namespace Hedra.Engine.EntitySystem
@@ -43,7 +44,7 @@ namespace Hedra.Engine.EntitySystem
 		public override void Update(){}
 		
 		public IEnumerator UpdatePoison(){
-			Parent.Model.BaseTint = Bar.Poison *new Vector4(1,3,1,1);
+			Parent.Model.BaseTint = Colors.PoisonGreen *new Vector4(1,3,1,1);
 			while(TotalTime > PTime && !Parent.IsDead && !Disposed){
 				
 				Time += Engine.Time.DeltaTime;

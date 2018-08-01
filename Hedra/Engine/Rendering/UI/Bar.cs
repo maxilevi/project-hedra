@@ -17,13 +17,6 @@ namespace Hedra.Engine.Rendering.UI
 {
     public class Bar : IRenderable, UIElement, IDisposable
     {
-        public static Vector4 Low = new Vector4(0.878f, 0.196f, 0.235f, 1);
-        public static Vector4 Middle = new Vector4(1, 0.839f, 0.149f, 1);
-        public static Vector4 Full = new Vector4(0.4f, 0.6627451f, 0.4f, 1);
-        public static Vector4 Blue = new Vector4(0.200f, 0.514f, 0.714f, 1.000f);
-        public static Vector4 Violet = new Vector4(0.941f, 0.008f, 0.608f, 1.000f);
-        public static Vector4 Poison = new Vector4(0.282f, 0.725f, 0.373f, 1.000f);
-
         private static uint BarBlueprint = Graphics2D.LoadFromAssets("Assets/Bar.png");
         private static uint RectangleBlueprint = Graphics2D.ColorTexture(Colors.FromArgb(255, 29, 29, 29));
 
@@ -117,7 +110,10 @@ namespace Hedra.Engine.Rendering.UI
                       new Vector2(_barSize, 1)
                     : new Vector2(0, 0);
             Shader["Position"] = Position;
-            Shader["Color"] =  UniformColor != Vector4.Zero ? UniformColor : _barSize > 0.6f ? Full : _barSize < 2.5f ? Low : Middle;
+            Shader["Color"] =  UniformColor != Vector4.Zero 
+                ? UniformColor : _barSize > 0.6f 
+                ? Colors.FullHealthGreen : _barSize < 2.5f 
+                ? Colors.LowHealthRed : throw new ArgumentOutOfRangeException("Health is out of range");
 
             DrawManager.UIRenderer.DrawQuad();
 

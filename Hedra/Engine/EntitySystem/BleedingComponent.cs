@@ -13,6 +13,7 @@ using System.Collections;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -41,7 +42,7 @@ namespace Hedra.Engine.EntitySystem
 		public override void Update(){}
 		
 		public IEnumerator UpdateBleed(){
-			Parent.Model.BaseTint = Bar.Low * new Vector4(3,1,1,1) * .7f;
+			Parent.Model.BaseTint = Colors.LowHealthRed * new Vector4(3,1,1,1) * .7f;
 			while(_totalTime > _pTime && !Parent.IsDead && !Disposed){
 				
 				_time += Engine.Time.DeltaTime;
