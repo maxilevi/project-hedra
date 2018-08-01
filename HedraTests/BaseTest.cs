@@ -3,13 +3,12 @@ using NUnit.Framework;
 
 namespace HedraTests
 {
-    [TestFixture]
     public class BaseTest
     {
         [SetUp]
         public virtual void Setup()
         {
-            World.Provider = new DummyProvider();
+            World.Provider = new SimpleWorldProviderMock();
             //EventDispatcher.Provider = new DummyProvider();
         }
 

@@ -16,8 +16,8 @@ namespace HedraTests.Handling
             Executer.ExecuteOnMainThread(() => resultList.Add(object1));
             Executer.ExecuteOnMainThread(() => resultList.Add(object2));
             Executer.Update();
-            Assert.Equals(object1, resultList[0]);
-            Assert.Equals(object2, resultList[1]);
+            Assert.AreSame(object1, resultList[0]);
+            Assert.AreSame(object2, resultList[1]);
         }
     }
 }

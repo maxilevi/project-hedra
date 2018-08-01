@@ -8,6 +8,13 @@ namespace HedraTests.Generation
     [TestFixture]
     public class WorldTest
     {
+        [SetUp]
+        public void Setup()
+        {
+            if(World.Provider == null)
+                World.Provider = new WorldProvider();
+        }
+        
         [Test]
         public void TestIsChunkOffset()
         {
@@ -15,14 +22,14 @@ namespace HedraTests.Generation
             Assert.True(World.IsChunkOffset(realChunkOffset));
 
             var fakeChunkOffset = new Vector2(Chunk.Width * 560 + 32, Chunk.Width * 421 + 13);
-            Assert.True(World.IsChunkOffset(fakeChunkOffset));
+            Assert.False(World.IsChunkOffset(fakeChunkOffset));
         }
 
         [Test]
         public void TestBlockSpace()
         {
             var originalVector = new Vector3(Chunk.Width * 560 + Chunk.Width / 2, 0, Chunk.Width * 421 + Chunk.Width / 2);
-            Assert.AreSame(
+            Assert.AreEqual(
                 World.ToBlockSpace(originalVector),
                 new Vector3(Chunk.Width / 2.0f / Chunk.BlockSize, 0, Chunk.Width / 2.0f / Chunk.BlockSize)
             );
@@ -32,7 +39,7 @@ namespace HedraTests.Generation
         public void TestChunkSpace()
         {
             var originalVector = new Vector3(Chunk.Width * 560 + Chunk.Width / 2, 0, Chunk.Width * 421 + Chunk.Width / 2);
-            Assert.AreSame(
+            Assert.AreEqual(
                 World.ToChunkSpace(originalVector),
                 new Vector2(Chunk.Width * 560, Chunk.Width * 421)
             );
