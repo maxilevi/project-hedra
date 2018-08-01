@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
 	{
 
 		public LearnDoubleSwords() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/DoubleSwords.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/DoubleSwords.png");
 			base.Passive = true;
 		}
 		

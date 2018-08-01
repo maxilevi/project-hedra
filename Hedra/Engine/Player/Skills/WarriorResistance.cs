@@ -58,6 +58,6 @@ namespace Hedra.Engine.Player.Skills
 		
 		public override string Description => $"Grants +{HealthFormula(true):0.0} HP.";
 		
-		public override uint TexId =>  Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+		public override uint TextureId =>  Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
 	}
 }

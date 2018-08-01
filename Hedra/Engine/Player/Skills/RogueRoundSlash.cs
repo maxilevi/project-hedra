@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player
 		private Dictionary<Entity, float> AffectedEntities = new Dictionary<Entity, float>();
 		
 		public RoundSlash() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
 			base.ManaCost = 80f;
 			base.MaxCooldown = 8.5f;
 			

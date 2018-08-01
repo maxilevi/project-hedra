@@ -29,7 +29,7 @@ namespace Hedra.Engine.Player
 		private float BaseDamage = 35f, Damage;
 		
 		public IceArrow() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
 			base.ManaCost = 80f;
             base.MaxCooldown = 6.5f;
 			

@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player.Skills
 		}
 		
 		protected override int MaxLevel => 10;
-		public override uint TexId => Graphics2D.LoadFromAssets("Assets/Skills/Agility.png");
+		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Agility.png");
 		public override string Description => $"Dodging costs {-StaminaFormula(true)} less stamina.";
 	}
 }

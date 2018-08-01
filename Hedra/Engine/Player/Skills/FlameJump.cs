@@ -29,7 +29,7 @@ namespace Hedra.Engine.Player
 		private ParticleSystem HandParticles;
 		
 		public FlameJump() : base() {
-			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("FlameJump.png", AssetManager.DataFile3))) );
+			base.TextureId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("FlameJump.png", AssetManager.DataFile3))) );
 			HandParticles = new ParticleSystem(Vector3.Zero);
 			HandParticles.Scale = new Vector3(.5f,.5f,.5f);
 			HandParticles.Color = Particle3D.FireColor;

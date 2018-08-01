@@ -1,10 +1,25 @@
-﻿namespace Hedra.Engine.Player.Skills
+﻿using System;
+using Hedra.Engine.ItemSystem.WeaponSystem;
+using Hedra.Engine.Player.ToolbarSystem;
+
+namespace Hedra.Engine.Player.Skills
 {
-    public abstract class SpecialAttackSkill : BaseSkill
+    public abstract class SpecialAttackSkill<T> : BaseSkill where T : Weapon
     {
+        protected override bool Grayscale => !Player.HasWeapon || !(Player.Model.LeftWeapon is T);
+        
         public override void Use()
         {
-            throw new System.NotImplementedException();
+            var weapon = (T) Player.Model.LeftWeapon;
+            this.BeforeUse(weapon);
+            weapon.Attack1(Player);
+        }
+
+        protected abstract void BeforeUse(T Weapon);
+        
+        public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
+        {
+            return base.MeetsRequirements(Bar, CastingAbilityCount) && !Grayscale;
         }
     }
 }

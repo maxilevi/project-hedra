@@ -1,33 +1,38 @@
-﻿namespace HedraTests.World
+﻿using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
+using NUnit.Framework;
+using OpenTK;
+
+namespace HedraTests.Generation
 {
+    [TestFixture]
     public class WorldTest
     {
-        [TestMethod]
+        [Test]
         public void TestIsChunkOffset()
         {
             var realChunkOffset = new Vector2(Chunk.Width * 560, Chunk.Width * 421);
-            this.AssertTrue(World.IsChunkOffset(realChunkOffset));
+            Assert.True(World.IsChunkOffset(realChunkOffset));
 
             var fakeChunkOffset = new Vector2(Chunk.Width * 560 + 32, Chunk.Width * 421 + 13);
-            this.AssertFalse(World.IsChunkOffset(fakeChunkOffset));
+            Assert.True(World.IsChunkOffset(fakeChunkOffset));
         }
 
-        [TestMethod]
+        [Test]
         public void TestBlockSpace()
         {
-
             var originalVector = new Vector3(Chunk.Width * 560 + Chunk.Width / 2, 0, Chunk.Width * 421 + Chunk.Width / 2);
-            this.AssertEqual(
+            Assert.AreSame(
                 World.ToBlockSpace(originalVector),
-                new Vector3(Chunk.Width / 2 / Chunk.BlockSize, 0, Chunk.Width / 2 / Chunk.BlockSize)
+                new Vector3(Chunk.Width / 2.0f / Chunk.BlockSize, 0, Chunk.Width / 2.0f / Chunk.BlockSize)
             );
         }
 
-        [TestMethod]
+        [Test]
         public void TestChunkSpace()
         {
             var originalVector = new Vector3(Chunk.Width * 560 + Chunk.Width / 2, 0, Chunk.Width * 421 + Chunk.Width / 2);
-            this.AssertEqual(
+            Assert.AreSame(
                 World.ToChunkSpace(originalVector),
                 new Vector2(Chunk.Width * 560, Chunk.Width * 421)
             );

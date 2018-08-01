@@ -97,7 +97,7 @@ namespace Hedra.Engine.Player
         public void Paint(Vector4[] Colors)
         {
             if(Colors.Length > AssetManager.ColorCodes.Length)
-                throw new ArgumentOutOfRangeException("Provided amount of colors cannot be higher than the color codes.");
+                throw new ArgumentOutOfRangeException($"Provided amount of colors cannot be higher than the color codes.");
 
             var colorMap = new Dictionary<Vector3, Vector3>();
             for (var i = 0; i < Colors.Length; i++)

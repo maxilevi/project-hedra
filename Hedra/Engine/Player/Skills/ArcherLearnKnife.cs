@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
 	{
 
 		public LearnKnife() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/LearnKnife.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/LearnKnife.png");
 			base.Passive = true;
 		}
 		

@@ -25,7 +25,7 @@ namespace Hedra.Engine.Player
 	{
 		
 		public AttackLeap() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/AttackLeap.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/AttackLeap.png");
 			base.ManaCost = 85;
 			base.MaxCooldown = 8.5f;
 		}

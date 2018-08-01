@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player
 		private readonly Animation ThrowAnimation;
 		
 		public WeaponThrow() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Throw.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Throw.png");
 			base.ManaCost = 35f;
 			base.MaxCooldown = 8.5f;
 

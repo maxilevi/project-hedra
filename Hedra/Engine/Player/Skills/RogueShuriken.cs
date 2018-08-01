@@ -29,7 +29,7 @@ namespace Hedra.Engine.Player
 		private static readonly VertexData ShurikenData = AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
 
         public Shuriken() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
 			base.ManaCost = 35f;
 			base.MaxCooldown = 8.5f;
 			

@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player
 		private bool WasSet = false;
 		
 		public Puncture() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
 			base.Passive = true;
 		}
 		

@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// </summary>
 	public class LearnKatar : LearningSkill
 	{
-		public override uint TexId => Graphics2D.LoadFromAssets("Assets/Skills/Katar.png");
+		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Katar.png");
 		public override void Learn()
 		{
 		    Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Katar);

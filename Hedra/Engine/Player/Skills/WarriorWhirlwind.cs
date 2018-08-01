@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player
 	    private float _rotationY;
 
         public Whirlwind() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
 			base.ManaCost = 85;
 			base.MaxCooldown = 8.5f;
             _trail = new TrailRenderer( () => LocalPlayer.Instance.Model.LeftWeapon.WeaponTip, Vector4.One);

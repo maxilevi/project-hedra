@@ -46,7 +46,7 @@ namespace Hedra.Engine.Player
         {
 			base.ManaCost = 0f;
 			base.Level = 1;
-		    base.TexId = Default;
+		    base.TextureId = Default;
             this.MaxCooldown = .5f;
         }
 		
@@ -56,7 +56,7 @@ namespace Hedra.Engine.Player
 		    var flags = BindingFlags.Static | BindingFlags.NonPublic;
 		    var fieldInfo1 = this.GetType().GetField($"{Weapon.GetType().Name}1", flags);
 		    var fieldInfo2 = this.GetType().GetField($"{Weapon.GetType().Name}2", flags);
-		    base.TexId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) Default);
+		    base.TextureId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) Default);
 		}
 		
 		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)

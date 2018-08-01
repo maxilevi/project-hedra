@@ -57,7 +57,6 @@ namespace Hedra.Engine.Generation
             {
                 HasMultipleOutputs = true
             };
-            new ChunkComparer();
             DrawingChunks = new Dictionary<Vector2, Chunk>();
         }
 
@@ -164,17 +163,17 @@ namespace Hedra.Engine.Generation
             _chunkBuilder.Update();
         }
 
-        public void Recreate(int Seed)
+        public void Recreate(int NewSeed)
         {
-            if (this.Seed == Seed)
+            if (this.Seed == NewSeed)
                 return;
 
             _previousId = 0;
-            this.Seed = Seed;
+            this.Seed = NewSeed;
             BiomePool = new BiomePool();
             StructureGenerator = new StructureGenerator();
             WorldBuilding = new WorldBuilding.WorldBuilding();
-            OpenSimplexNoise.Load(Seed == MenuSeed ? 23123123 : Seed); //Not really the menu seed.
+            OpenSimplexNoise.Load(NewSeed == MenuSeed ? 23123123 : NewSeed); //Not really the menu seed.
             _meshBuilder.Discard();
             _chunkBuilder.Discard();
             SkyManager.SetTime(12000);
@@ -223,7 +222,7 @@ namespace Hedra.Engine.Generation
 
             this.AddEntity(GameManager.Player);
 
-            if (Seed == MenuSeed)
+            if (NewSeed == MenuSeed)
                 MenuBackground.Setup();
         }
 

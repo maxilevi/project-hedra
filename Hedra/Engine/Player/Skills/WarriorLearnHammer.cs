@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
 	{
 
 		public LearnHammer() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
 			base.Passive = true;
 		}
 		

@@ -36,15 +36,16 @@ namespace Hedra.Engine.Player.Skills
         public virtual bool Passive { get; set; }
         public abstract string Description { get; }
 	    public bool Casting { get; set; }
-	    public virtual uint TexId { get; protected set; }
+	    public virtual uint TextureId { get; protected set; }
 	    public uint MaskId { get; set; }
-		protected bool Grayscale { get; set; }
+		protected virtual bool Grayscale { get; set; }
 		public bool Initialized { get; private set;}
         protected bool UseMask => MaskId != 0;
 	    protected bool Enabled { get; set; } = true;
 		protected RenderableText CooldownSecondsText;
 	    protected LocalPlayer Player => GameManager.Player;
 	    private Panel _panel;
+		private uint _textureId;
 
 	    static BaseSkill()
 	    {
@@ -64,6 +65,7 @@ namespace Hedra.Engine.Player.Skills
 			this.Position = Position;
 			this.Scale = Scale;
 			this.Tint = NormalTint;
+			this._textureId = TextureId;
 		    _panel.AddElement(this);
 			
 			DrawManager.UIRenderer.Add(this, DrawOrder.After);			
@@ -110,7 +112,7 @@ namespace Hedra.Engine.Player.Skills
 			Shader["Cooldown"] = this.Cooldown / this.MaxCooldown;
 			
 			GL.ActiveTexture(TextureUnit.Texture0);
-			GL.BindTexture(TextureTarget.Texture2D, TexId);
+			GL.BindTexture(TextureTarget.Texture2D, _textureId);
 			
 			GL.ActiveTexture(TextureUnit.Texture1);
 			GL.BindTexture(TextureTarget.Texture2D, MaskId);

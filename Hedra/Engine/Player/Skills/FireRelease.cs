@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player
 		private Animation FireReleaseAnimation;
 		
 		public FireRelease() : base() {
-			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("FireRelease.png", AssetManager.DataFile3))) );
+			base.TextureId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("FireRelease.png", AssetManager.DataFile3))) );
 			base.MaxCooldown = .5f;
 			base.ManaCost = 5f;
 			this.Particles = new ParticleSystem(Vector3.Zero);

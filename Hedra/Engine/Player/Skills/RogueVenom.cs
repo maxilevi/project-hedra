@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
 	{
 		private int PreviousLevel = 0;
 		public Venom() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
 			base.Passive = true;
 		}
 		

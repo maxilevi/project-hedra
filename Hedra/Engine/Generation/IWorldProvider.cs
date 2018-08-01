@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
@@ -11,46 +12,44 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
-using Hedra.Engine.Generation.ChunkSystem;
-using ChunkComparer = Hedra.Engine.Generation.ChunkSystem.ChunkComparer;
 
 namespace Hedra.Engine.Generation
 {
     public interface IWorldProvider
     {
-	    event ModulesReloadEvent ModulesReload;
-	    
-	    Dictionary<Vector2, Chunk> SearcheableChunks { get; }
-	    
+        event ModulesReloadEvent ModulesReload;
+
+        Dictionary<Vector2, Chunk> SearcheableChunks { get; }
+
         AreaHighlighter Highlighter { get; }
-	    
+
         ParticleSystem Particles { get; }
 
         EnviromentGenerator EnviromentGenerator { get; }
-	    
+
         BiomePool BiomePool { get; }
-	    
-        MobFactory MobFactory { get;  }
-	    
+
+        MobFactory MobFactory { get; }
+
         TreeGenerator TreeGenerator { get; }
-	    
+
         WorldBuilding.WorldBuilding WorldBuilding { get; }
-	    
+
         StructureGenerator StructureGenerator { get; }
-	    
-		int Seed { get; }
-	    
-	    bool IsGenerated { get; }
+
+        int Seed { get; }
+
+        bool IsGenerated { get; }
 
         int MeshQueueCount { get; }
-	    
-	    int ChunkQueueCount { get; }
 
-	    ReadOnlyCollection<Chunk> Chunks { get; }
+        int ChunkQueueCount { get; }
 
-	    ReadOnlyCollection<WorldItem> Items { get; }
-	    
-	    ReadOnlyCollection<Entity> Entities { get; }
+        ReadOnlyCollection<Chunk> Chunks { get; }
+
+        ReadOnlyCollection<WorldItem> Items { get; }
+
+        ReadOnlyCollection<Entity> Entities { get; }
 
         ReadOnlyCollection<BaseStructure> Structures { get; }
 
@@ -58,88 +57,88 @@ namespace Hedra.Engine.Generation
 
         Dictionary<Vector2, Chunk> DrawingChunks { get; }
 
-	    void Load();
+        void Load();
 
-	    void ReloadModules();
-		
-		int MenuSeed { get; }
+        void ReloadModules();
 
-	    int RandomSeed { get; }
+        int MenuSeed { get; }
 
-	    void CullTest(FrustumCulling FrustumObject);
+        int RandomSeed { get; }
 
-	    void Draw(ChunkBufferTypes Type);
+        void CullTest(FrustumCulling FrustumObject);
 
-	    void Update();
+        void Draw(ChunkBufferTypes Type);
 
-	    void Recreate(int Seed);
+        void Update();
 
-	    void Discard();
+        void Recreate(int NewSeed);
 
-	    void RemoveInstances(Vector3 Position, int Radius);
+        void Discard();
 
-	    T[] InRadius<T>(Vector3 Position, float Radius) where T : ISearchable;
+        void RemoveInstances(Vector3 Position, int Radius);
 
-	    void AddChunkToQueue(Chunk Chunk, bool DoMesh);
-	    
-	    Chunk GetChunkByOffset(Vector2 vec2);
+        T[] InRadius<T>(Vector3 Position, float Radius) where T : ISearchable;
 
-	    void AddEntity(Entity Entity);
+        void AddChunkToQueue(Chunk Chunk, bool DoMesh);
 
-	    void RemoveEntity(Entity Entity);
+        Chunk GetChunkByOffset(Vector2 Vec2);
 
-	    void AddStructure(BaseStructure Struct);
+        void AddEntity(Entity Entity);
 
-	    void RemoveStructure(BaseStructure Struct);
+        void RemoveEntity(Entity Entity);
 
-	    void AddGlobalCollider(params ICollidable[] Collidable);
+        void AddStructure(BaseStructure Struct);
 
-	    void RemoveGlobalCollider(ICollidable Collidable);
+        void RemoveStructure(BaseStructure Struct);
 
-	    void AddItem(WorldItem Item);
+        void AddGlobalCollider(params ICollidable[] Collidable);
 
-	    void RemoveItem(WorldItem Item);
+        void RemoveGlobalCollider(ICollidable Collidable);
 
-	    void AddChunk(Chunk Chunk);
+        void AddItem(WorldItem Item);
 
-	    void RemoveChunk(Chunk Chunk);
+        void RemoveItem(WorldItem Item);
 
-	    Chunk GetChunkByOffset(int OffsetX, int OffsetZ);
+        void AddChunk(Chunk Chunk);
 
-	    bool IsChunkOffset(Vector2 Offset);
+        void RemoveChunk(Chunk Chunk);
 
-	    Vector3 ToBlockSpace(Vector3 Vec3);
+        Chunk GetChunkByOffset(int OffsetX, int OffsetZ);
 
-	    Vector2 ToChunkSpace(Vector3 Vec3);
+        bool IsChunkOffset(Vector2 Offset);
 
-	    Chunk GetChunkAt(Vector3 Coordinates);
+        Vector3 ToBlockSpace(Vector3 Vec3);
 
-	    Block GetBlockAt(Vector3 Vec3);
+        Vector2 ToChunkSpace(Vector3 Vec3);
 
-	    Block GetHighestBlockAt(int X, int Z);
+        Chunk GetChunkAt(Vector3 Coordinates);
 
-	    int GetHighestY(int X, int Z);
+        Block GetBlockAt(Vector3 Vec3);
 
-	    Block GetNearestBlockAt(int X, int Y, int Z);
+        Block GetHighestBlockAt(int X, int Z);
 
-	    int GetNearestY(int X, int y, int Z);
+        int GetHighestY(int X, int Z);
 
-	    int GetLowestY(int X, int Z);
+        Block GetNearestBlockAt(int X, int Y, int Z);
 
-	    Block GetLowestBlock(int X, int Z);
+        int GetNearestY(int X, int Y, int Z);
 
-	    void HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds);
+        int GetLowestY(int X, int Z);
 
-	    WorldItem DropItem(Item ItemSpec, Vector3 Position);
+        Block GetLowestBlock(int X, int Z);
 
-	    Entity SpawnMob(MobType Type, Vector3 DesiredPosition, Random SeedRng);
+        void HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds);
 
-	    Entity SpawnMob(MobType Type, Vector3 DesiredPosition, int MobSeed);
+        WorldItem DropItem(Item ItemSpec, Vector3 Position);
 
-	    Entity SpawnMob(string Type, Vector3 DesiredPosition, Random SeedRng);
+        Entity SpawnMob(MobType Type, Vector3 DesiredPosition, Random SeedRng);
 
-	    Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed);
+        Entity SpawnMob(MobType Type, Vector3 DesiredPosition, int MobSeed);
 
-	    Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition);
+        Entity SpawnMob(string Type, Vector3 DesiredPosition, Random SeedRng);
+
+        Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed);
+
+        Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition);
     }
 }

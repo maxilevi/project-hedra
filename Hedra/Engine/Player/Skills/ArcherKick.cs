@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player
 		private Animation KickAnimation;
 		
 		public Kick() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Kick.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Kick.png");
 			base.ManaCost = 15f;
 			base.MaxCooldown = 3f;
 			

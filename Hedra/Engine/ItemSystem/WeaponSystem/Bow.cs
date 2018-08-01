@@ -54,7 +54,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             PrimaryAnimations = new Animation[1];
 		    PrimaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/ArcherShoot.dae");
 
-		    for (int i = 0; i < PrimaryAnimations.Length; i++)
+		    for (var i = 0; i < PrimaryAnimations.Length; i++)
 		    {
 		        PrimaryAnimations[i].Loop = false;
 		        PrimaryAnimations[i].Speed = 0.9f;
@@ -70,7 +70,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             SecondaryAnimations = new Animation[1];
 		    SecondaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/ArcherTripleShoot.dae");
 
-		    for (int i = 0; i < SecondaryAnimations.Length; i++)
+		    for (var i = 0; i < SecondaryAnimations.Length; i++)
 		    {
 		        SecondaryAnimations[i].Loop = false;
 		        SecondaryAnimations[i].Speed = 0.9f;
@@ -123,7 +123,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			
 		}
 		
-		public Projectile AddModifiers(Projectile ArrowProj){
+		public Projectile AddModifiers(Projectile ArrowProj)
+		{
 		    BowModifiers?.Invoke(ArrowProj);
 		    return ArrowProj;
 		}
@@ -146,8 +147,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			};
 		    arrowProj.LandEventHandler += S => Human.ProcessHit(false);
 		    arrowProj.HitEventHandler += (S,V) => Human.ProcessHit(true);
-            SoundManager.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
 			arrowProj = this.AddModifiers(arrowProj);
+			SoundManager.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
 			return arrowProj;
 		}
 		

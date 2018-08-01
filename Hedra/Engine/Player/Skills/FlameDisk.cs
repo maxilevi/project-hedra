@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player
 		private ParticleSystem HandParticles;
 		
 		public FlameDisk() : base() {
-			base.TexId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("FlameDisk.png", AssetManager.DataFile3))) );
+			base.TextureId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("FlameDisk.png", AssetManager.DataFile3))) );
 			base.MaxCooldown = 16.5f;
 			base.ManaCost = 30f;
 			HandParticles = new ParticleSystem(Vector3.Zero);

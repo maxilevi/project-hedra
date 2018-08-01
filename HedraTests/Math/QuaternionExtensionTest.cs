@@ -6,8 +6,9 @@ using OpenTK;
 namespace HedraTests.Math
 {
     [TestFixture]
-    public class QuaternionTest
+    public class QuaternionExtensionTest
     {
+        [Test]
         public void TestQuaternionToEuler()
         {
             var euler = new Vector3(56, 12, 42);

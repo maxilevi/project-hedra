@@ -29,7 +29,7 @@ namespace Hedra.Engine.Player
 		private float BaseDamage = 35f, Damage;
 		
 		public PoisonArrow() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/PoisonArrow.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/PoisonArrow.png");
 			base.ManaCost = 75;
 
             ShootAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherTripleShoot.dae");

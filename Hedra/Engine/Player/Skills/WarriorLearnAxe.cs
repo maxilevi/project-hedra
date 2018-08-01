@@ -19,7 +19,7 @@ namespace Hedra.Engine.Player.Skills
 	/// </summary>
 	public class LearnAxe : LearningSkill
 	{
-	    public override uint TexId => Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
+	    public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
 		public override void Learn()
 		{
             Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Axe);

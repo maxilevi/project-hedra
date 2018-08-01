@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player
 		private Animation BashAnimation;
 		
 		public Bash() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
 			base.ManaCost = 15f;
 			base.MaxCooldown = 3f;
 			

@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
 	public class BurstOfSpeed : BaseSkill
 	{	
 		public BurstOfSpeed() : base() {
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/BurstOfSpeed.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/BurstOfSpeed.png");
 			base.ManaCost = 80f;
 			base.MaxCooldown = 14f;
 		}

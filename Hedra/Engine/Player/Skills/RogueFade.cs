@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player
 		
 		public Fade() : base() 
 		{
-			base.TexId = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
 			base.ManaCost = 80f;
 			base.MaxCooldown = 16f;
 		}
