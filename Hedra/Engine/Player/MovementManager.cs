@@ -104,7 +104,6 @@ namespace Hedra.Engine.Player
             if (!IsJumping) return;
             Human.Physics.DeltaTranslate(_jumpPropulsion);
 			_jumpPropulsion *= (float) Math.Pow(.25f, Time.DeltaTime * 3f);
-			Human.Model.Jump();
             if (_jumpPropulsion.LengthFast < 2f) IsJumping = false;
             
 		}

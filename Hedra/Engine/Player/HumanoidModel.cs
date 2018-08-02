@@ -138,10 +138,7 @@ namespace Hedra.Engine.Player
 			KnockedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorKnocked.dae");
             TiedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTied.dae");
             SleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
-
-	        JumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWalk.dae");
-	        JumpAnimation.Speed = 0;
-	        //JumpAnimation.
+	        JumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
 
             RollAnimation.Loop = false;
 			RollAnimation.OnAnimationEnd += delegate(Animation Sender) { 
@@ -237,11 +234,12 @@ namespace Hedra.Engine.Player
 		public override void Run(){
 		    Human.IsMoving = true;
 
-            if (Human.IsRolling || Human.IsRiding  || Human.IsUnderwater || Human.IsAttacking || Human.IsGliding || Human.IsJumping)
+            if (Human.IsRolling || Human.IsRiding  || Human.IsUnderwater || Human.IsAttacking || Human.IsGliding)
 				return;
 
-		    if (Model != null && Model.Animator.AnimationPlaying != WalkAnimation)
-		        Model.PlayAnimation(WalkAnimation);
+		    var selected = Human.IsJumping ? JumpAnimation : WalkAnimation;
+            if (Model != null && Model.Animator.AnimationPlaying != selected)
+		        Model.PlayAnimation(selected);
 		    
 		}
 
