@@ -17,19 +17,21 @@ namespace Hedra.Engine.Sound
 	/// </summary>
 	public class SoundSource
 	{
-		public uint ID;
+		public readonly uint Id;		
+		private Vector3 _position;
+		private float _volume;
 		
 		public SoundSource(Vector3 Position){ 
 
-            AL.GenSources(1, out ID);
-			AL.Source(ID, ALSourcef.Gain, 1);
-			AL.Source(ID, ALSourcef.Pitch,  1);
-			AL.Source(ID, ALSource3f.Position, ref Position);
+            AL.GenSources(1, out Id);
+			AL.Source(Id, ALSourcef.Gain, 1);
+			AL.Source(Id, ALSourcef.Pitch,  1);
+			AL.Source(Id, ALSource3f.Position, ref Position);
         }
 
 	    public void Stop()
 	    {
-	        AL.SourceStop(ID);
+	        AL.SourceStop(Id);
         }
 
         private void Play(SoundBuffer Buffer)
@@ -37,17 +39,17 @@ namespace Hedra.Engine.Sound
             var position = SoundManager.ListenerPosition;
             AL.Listener(ALListener3f.Position, ref position);
 
-            AL.Source(ID, ALSourcei.Buffer, (int) Buffer.ID);
-            AL.SourcePlay(ID);
+            AL.Source(Id, ALSourcei.Buffer, (int) Buffer.ID);
+            AL.SourcePlay(Id);
 
         }
 		
 		public void Play(SoundBuffer Buffer, Vector3 Location, float Pitch, float Gain, bool Loop){
 
-            AL.Source(ID, ALSourcef.Pitch, Pitch);
-			AL.Source(ID, ALSourcef.Gain, Gain );
-			AL.Source(ID, ALSource3f.Position, ref Location);
-		    AL.Source(ID, ALSourceb.Looping, Loop);
+            AL.Source(Id, ALSourcef.Pitch, Pitch);
+			AL.Source(Id, ALSourcef.Gain, Gain );
+			AL.Source(Id, ALSource3f.Position, ref Location);
+		    AL.Source(Id, ALSourceb.Looping, Loop);
 
             this.Stop();
             this.Play(Buffer);
@@ -58,40 +60,33 @@ namespace Hedra.Engine.Sound
 	    {
 	        get
 	        {
-	            //if (System.Threading.Thread.CurrentThread.ManagedThreadId != Hedra.MainThreadId)
-	            //    throw new Exception("Playing ! Duude");
+		        AL.GetSource(Id, ALGetSourcei.SourceState, out var i);
+	            var state = (ALSourceState)i;
 
-                ALSourceState State;
-	            int i;
-	            AL.GetSource(ID, ALGetSourcei.SourceState, out i);
-	            State = (ALSourceState)i;
-
-	            return (State == ALSourceState.Playing);
+	            return (state == ALSourceState.Playing);
 	        }
 	    }
 
-        private Vector3 _position;
 		public Vector3 Position{
-			get{return this._position;}
+			get => this._position;
 			set{
                 if(value == this._position) return;
-				AL.Source(ID, ALSource3f.Position, ref value);
+				AL.Source(Id, ALSource3f.Position, ref value);
 
                 this._position = value;
 			}
 		}
 
-	    private float _volume;
 	    public float Volume
 	    {
-	        get { return this._volume; }
-	        set
+	        get => this._volume;
+		    set
 	        {
 	            if (System.Threading.Thread.CurrentThread.ManagedThreadId != Hedra.MainThreadId)
 	                throw new Exception("Duude");
 
 	            if (value == this._volume) return;
-                AL.Source(ID, ALSourcef.Gain, value);
+                AL.Source(Id, ALSourcef.Gain, value);
 
                 this._volume = value;
 	        }

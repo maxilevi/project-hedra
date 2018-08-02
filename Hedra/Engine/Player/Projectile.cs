@@ -69,9 +69,8 @@ namespace Hedra.Engine.Player
             Propulsion *= (float)Math.Pow(.75f, (float)Time.DeltaTime);
             _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f) * (float) Time.DeltaTime;
             _accumulatedVelocity *= (float) Math.Pow(.8f, (float)Time.DeltaTime);
-			Mesh.Position += _accumulatedVelocity * 2f * (float)Time.DeltaTime * .15f;
+			Mesh.Position += _accumulatedVelocity * 2f * (float)Time.DeltaTime;
             Mesh.Rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
-            Log.WriteLine(_accumulatedVelocity.NormalizedFast());
             if (Collide)
 			{
 			    this.ProcessCollision();

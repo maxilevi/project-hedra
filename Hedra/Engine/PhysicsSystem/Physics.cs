@@ -60,16 +60,14 @@ namespace Hedra.Engine.PhysicsSystem
             Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
 		}
 		
-		public static Vector3 DirectionToEuler( Vector3 Direction){
-			Matrix4 mv = Mathf.RotationAlign(Direction.Z < 0 ? -Vector3.UnitZ : Vector3.UnitZ, Direction.Z < 0 ? -Direction : Direction);
-		    mv.ExtractRotation().ToAxisAngle(out Vector3 axis, out float angle);	
-            //if(float.IsNaN(angle)) return Vector3.Zero;
-		    //if (axis.Y < 0) return (180 + (180 - angle * Mathf.Degree)) * Vector3.UnitY; //Ad hoc :(
-		    //if (Math.Abs(angle * Mathf.Degree - 180) < .5f) return 180 * Vector3.UnitY;
-            return axis * angle * Mathf.Degree;
-            /*var lookAt = Matrix4.LookAt(Vector3.Zero, -Direction, Vector3.UnitX);
-		    var axisAngle = lookAt.ExtractRotation().ToAxisAngle();
-            return axisAngle.Xyz * axisAngle.W * Mathf.Degree;*/
+		public static Vector3 DirectionToEuler( Vector3 Direction)
+        {
+            Matrix4 mv = Mathf.RotationAlign(Direction.Z < 0 ? -Vector3.UnitZ : Vector3.UnitZ, Direction);
+            var modifier = new Vector3(0, Direction.Z < 0 ? 180 : 0, 0);
+            var multiplier = new Vector3(Direction.Z < 0 ? -1f : 1, 1, 1);
+            mv.ExtractRotation().ToAxisAngle(out Vector3 axis, out float angle);
+            if(float.IsNaN(angle)) return Vector3.Zero;
+            return axis * angle * Mathf.Degree * multiplier + modifier;
         }
 
         public static float HeightAtPosition(float X, float Z){

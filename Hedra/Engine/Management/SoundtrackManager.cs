@@ -49,10 +49,14 @@ namespace Hedra.Engine.Management
 	    private static bool _repeatItself;
 	    private static int _previousIndex;
 
-        public static void Load()
-        {
-			Source = new SoundSource(SoundManager.ListenerPosition);
+		public static void Load()
+		{
+			Load(new SoundSource(SoundManager.ListenerPosition));
+		}
 
+		public static void Load(SoundSource Source)
+        {
+	        SoundtrackManager.Source = Source;
 			TrackNames = new string[13];
             TrackNames[0] = "Sounds/Soundtrack/VillageAmbient.ogg";
             TrackNames[1] = "Sounds/Soundtrack/MainTheme.ogg";
@@ -127,8 +131,8 @@ namespace Hedra.Engine.Management
 	        _reader = new VorbisReader(stream, true);
         }
 		
-		public static void Update(){
-
+		public static void Update()
+		{
             if ( !_loaded || GameSettings.Paused && !GameManager.InStartMenu || GameManager.IsLoading || TrackNames.Length == 0 || _trackIndex < 0) return;
 			
 			Source.Position = SoundManager.ListenerPosition;
@@ -160,8 +164,8 @@ namespace Hedra.Engine.Management
 			}
 			
 			if(_usedBuffer != null && !Source.IsPlaying && _receivedBytes != 0){
-			    AL.Source(Source.ID, ALSourcei.Buffer, (int) _usedBuffer.ID);
-			    AL.SourcePlay(Source.ID);
+			    AL.Source(Source.Id, ALSourcei.Buffer, (int) _usedBuffer.ID);
+			    AL.SourcePlay(Source.Id);
                 _buildBuffers = true;
 			}
 			
@@ -220,7 +224,7 @@ namespace Hedra.Engine.Management
 			get{ return _finalVolume; }
 			set{
 				if(_loaded)
-					AL.Source(Source.ID, ALSourcef.Gain, value);
+					AL.Source(Source.Id, ALSourcef.Gain, value);
 				_finalVolume = value;
 			}
 		}
