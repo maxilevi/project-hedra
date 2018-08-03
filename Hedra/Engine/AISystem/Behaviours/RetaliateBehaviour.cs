@@ -6,7 +6,7 @@ namespace Hedra.Engine.AISystem.Behaviours
     {
         protected AttackBehaviour Attack { get; }
 
-        public RetaliateBehaviour(Entity Parent) : base(Parent)
+        public RetaliateBehaviour(IEntity Parent) : base(Parent)
         {
             Attack = new AttackBehaviour(Parent);
             var damageComponent = Parent.SearchComponent<DamageComponent>();

@@ -69,7 +69,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	        return AnimationIndex == 5 ? 2 : AnimationIndex & 1;
 	    }
 		
-		public override void Attack1(Humanoid Human, AttackOptions Options)
+		public override void Attack1(IHumanoid Human, AttackOptions Options)
         {
 			if(!base.MeetsRequirements()) return;
 
@@ -83,7 +83,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    TaskManager.After(200, () => Trail.Emit = true);
 		}
 
-	    public override void Attack2(Humanoid Human, AttackOptions Options)
+	    public override void Attack2(IHumanoid Human, AttackOptions Options)
 	    {
 	        Options.IdleMovespeed *= Options.Charge * 2.5f + .25f;
 	        Options.RunMovespeed = Options.Charge;

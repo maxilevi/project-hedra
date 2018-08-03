@@ -1,10 +1,11 @@
 ﻿using Hedra.Engine.CacheSystem;
 using System;
+using Hedra.Engine.Management;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public interface IEntity
+    public interface IEntity : IUpdatable
     {
         PhysicsComponent Physics { get; }
         
@@ -88,9 +89,9 @@ namespace Hedra.Engine.EntitySystem
 
         void ShowIcon(CacheItem? IconType, float Seconds);
 
-        void Damage(float Amount, Entity Damager, out float Exp, bool PlaySound = true);
+        void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true);
 
-        bool InAttackRange(Entity Target, float RadiusModifier = 1f);
+        bool InAttackRange(IEntity Target, float RadiusModifier = 1f);
 
         void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition);
 
@@ -117,5 +118,9 @@ namespace Hedra.Engine.EntitySystem
         void Draw();
 
         void Update();
+
+        void InvokeBeforeAttack(IEntity Invoker, float Damage);
+
+        void InvokeAfterAttack(IEntity Invoker, float Damage);
     }
 }

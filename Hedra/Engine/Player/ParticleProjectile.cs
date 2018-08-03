@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
 
         private PointLight _light;
 		
-		public ParticleProjectile(Entity Parent, Vector3 Origin) : base(Parent, Origin, new VertexData())
+		public ParticleProjectile(IEntity Parent, Vector3 Origin) : base(Parent, Origin, new VertexData())
         {		
 			Particles = new ParticleSystem();		
 		}

@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
 	/// <summary>
 	/// Description of Projectile.
 	/// </summary>
-	public delegate void OnProjectileHitEvent(Projectile Sender, Entity Hit);
+	public delegate void OnProjectileHitEvent(Projectile Sender, IEntity Hit);
 	public delegate void OnProjectileLandEvent(Projectile Sender);
 	public delegate void OnProjectileMoveEvent(Projectile Sender);
 	
@@ -38,14 +38,14 @@ namespace Hedra.Engine.Player
 	    public bool Collide { get; set; } = true;
         public bool Disposed { get; private set; }
 
-        private readonly Entity _parent;
+        private readonly IEntity _parent;
 	    private readonly List<ICollidable> _collisions;
 	    private readonly Box _collisionBox;
         private Vector3 _accumulatedVelocity;
         private bool _collided;
 
 
-        public Projectile(Entity Parent, Vector3 Origin, VertexData MeshData)
+        public Projectile(IEntity Parent, Vector3 Origin, VertexData MeshData)
         {
 		    this._parent = Parent;
             this._collisions = new List<ICollidable>();

@@ -144,39 +144,29 @@ namespace Hedra
 		    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Renderer.Enable(EnableCap.Texture2D);
 	        
-	        string GLVersion = GL.GetString(StringName.Version);
-            Log.WriteLine(GLVersion);
-
-            float ShadingOpenGLVersion = this.GetShadingVersion(GLVersion);
+	        var GLVersion = GL.GetString(StringName.Version);
+            var ShadingOpenGLVersion = this.GetShadingVersion(GLVersion);
 
 			if( ShadingOpenGLVersion < 3.1f)
 			{
 				Forms.MessageBox.Show("Minimum OpenGL version is 3.1, yours is "+ShadingOpenGLVersion, "OpenGL Version not supported",
 				                      Forms.MessageBoxButtons.OK, Forms.MessageBoxIcon.Error);
-				this.Exit();
+				Exit();
 			}
-
-            //if (ShadingOpenGLVersion > 4.1f && FirstLaunch)
-            //    GraphicsOptions.SSAO = true;
 #if !DEBUG
             TaskManager.After(6000, () => _splashOpacity = 0);
 #endif
 #if DEBUG
             this._finishedLoading = true;
 #endif
+	        
 #if DEBUG
-            Renderer.Enable(EnableCap.DebugOutput);
-            GL.DebugMessageCallback(
-                delegate(DebugSource Source, DebugType Type, int Id, DebugSeverity Severity, int Length, IntPtr Message,
-                    IntPtr Param)
-                {
-                    if(Type != DebugType.DebugTypeError) return;
-                    Log.WriteLine(Source);
-                    Log.WriteLine(Marshal.PtrToStringAnsi(Message));
-                    Log.WriteLine(Severity);
-                    Log.WriteLine(Marshal.PtrToStringAnsi(Param));
-                }, IntPtr.Zero);
+	        if (OSManager.RunningPlatform == Platform.Windows)
+	        {
+		        GameLoader.EnableGLDebug();
+	        }
 #endif
+	        Log.WriteLine(GLVersion);
         }
 
 	    protected override void OnUpdateFrame(FrameEventArgs e)
@@ -224,7 +214,7 @@ namespace Hedra
 				_lastValue = newNumber;
 
             Utils.CalculateFrameRate();
-            LocalPlayer Player = GameManager.Player;
+            IPlayer Player = GameManager.Player;
 			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
 			Vector2 Vec2 = World.ToChunkSpace(Player.Position);
 			//Log.WriteLine( (System.GC.GetTotalMemory(false) / 1024 / 1024) + " MB");
@@ -284,7 +274,7 @@ namespace Hedra
 #if SHOW_COLLISION
 			   if(GameSettings.DebugView && false){
 			           
-				LocalPlayer Player = GameManager.Player;
+				var Player = GameManager.Player;
 			    Chunk UnderChunk = World.GetChunkAt(Player.Position);
                 /*
                  if(UnderChunk != null){
@@ -338,7 +328,7 @@ namespace Hedra
 			    GL.Vertex3(Player.Position + Player.Orientation * 4f);
 			    GL.End();
                 
-                World.Entities.ToList().ForEach( delegate(Entity E) 
+                World.Entities.ToList().ForEach( delegate(IEntity E) 
                 {
                     if (E != null)
                     {
@@ -357,7 +347,7 @@ namespace Hedra
 			           BasicGeometry.DrawShapes(melee.Shapes, Color.White);
 			           GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 			       }
-			       World.Entities.ToList().ForEach(delegate(Entity E)
+			       World.Entities.ToList().ForEach(delegate(IEntity E)
 			       {
 			           if (E == null || !E.InUpdateRange) return;
 			           var colliders = E.Model.Colliders;
@@ -372,7 +362,7 @@ namespace Hedra
 			            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
                    });
 
-			                //LocalPlayer Player = Game.LPlayer;
+			                //var Player = Game.LPlayer;
                 var Collisions = new List<ICollidable>();
 			                var Collisions2 = new List<ICollidable>();
 				
@@ -450,7 +440,7 @@ namespace Hedra
 			MainFBO.DefaultBuffer.Resize();
 			//Game.LPlayer.Inventory.Resize();
 			
-			GameManager.Player.UI = new UserInterface(GameManager.Player);
+			//GameManager.Player.UI = new UserInterface(GameManager.Player);
 		}
 		
 		protected override void OnFocusedChanged(EventArgs e)

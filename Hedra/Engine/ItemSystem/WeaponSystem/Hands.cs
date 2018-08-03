@@ -44,7 +44,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    throw new System.NotImplementedException();
 	    }
 
-	    public override void Attack2(Humanoid Human)
+	    public override void Attack2(IHumanoid Human)
 	    {
 	    }
 	}

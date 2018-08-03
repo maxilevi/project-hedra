@@ -36,6 +36,13 @@ namespace Hedra.Engine.Rendering
 	        ShaderManager.RegisterStateItem(() => ShaderBound, O => ShaderBound = (int)O);
         }
 
+		public static uint CreateTexture2D(bool Bind = true)
+		{
+			GL.CreateTextures(TextureTarget.Texture2D, 1, out uint id);
+			if (Bind) GL.BindTexture(TextureTarget.Texture2D, id);
+			return id;
+		}
+
 	    public static void Enable(EnableCap Cap)
 	    {
 	        CapHandler.Enable(Cap);

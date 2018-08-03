@@ -12,7 +12,7 @@ namespace Hedra.Engine.AISystem.Behaviours
         private Action _callback;
         private Vector3 _lastPosition;
 
-        public WalkBehaviour(Entity Parent) : base(Parent)
+        public WalkBehaviour(IEntity Parent) : base(Parent)
         {
         }
 

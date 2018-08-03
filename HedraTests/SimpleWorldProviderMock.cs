@@ -34,7 +34,7 @@ namespace HedraTests
         public virtual int ChunkQueueCount => 0;
         public virtual ReadOnlyCollection<Chunk> Chunks => null;
         public virtual ReadOnlyCollection<WorldItem> Items => null;
-        public virtual ReadOnlyCollection<Entity> Entities => null;
+        public virtual ReadOnlyCollection<IEntity> Entities => null;
         public virtual ReadOnlyCollection<BaseStructure> Structures => null;
         public virtual ReadOnlyCollection<ICollidable> GlobalColliders => null;
         public virtual Dictionary<Vector2, Chunk> DrawingChunks => null;
@@ -87,11 +87,11 @@ namespace HedraTests
             return default(Chunk);
         }
 
-        public virtual void AddEntity(Entity Entity)
+        public virtual void AddEntity(IEntity Entity)
         {
         }
 
-        public virtual void RemoveEntity(Entity Entity)
+        public virtual void RemoveEntity(IEntity Entity)
         {
         }
 

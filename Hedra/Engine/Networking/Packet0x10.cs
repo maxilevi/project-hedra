@@ -78,11 +78,11 @@ namespace Hedra.Engine.Networking
 					bool MobFound = false;
 					Entity Mob = null;
 					for(int j = World.Entities.Count-1; j > -1; j--){
-						if(World.Entities[j].MobId == Packet.Ids[i]){
+						/*if(World.Entities[j].MobId == Packet.Ids[i]){
 							MobFound = true;
 							Mob = World.Entities[j];
 							break;
-						}
+						}*/
 					}
 					if(MobFound){
 						//Update

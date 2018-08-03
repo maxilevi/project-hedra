@@ -15,7 +15,7 @@ namespace Hedra.Engine.WorldBuilding
         public bool Friendly { get; set; }
         protected Vector3 TargetPoint;
         protected bool Chasing;
-        protected Entity ChasingTarget;
+        protected IEntity ChasingTarget;
         protected Vector3 OriginalPosition;
         protected Timer MovementTimer;
         protected Timer RollTimer;
@@ -25,7 +25,7 @@ namespace Hedra.Engine.WorldBuilding
         public abstract float ForgetRadius { get; set; }
         public override bool ShouldSleep => !Chasing;
 
-        protected CombatAIComponent(Entity Entity, bool Friendly) : base(Entity)
+        protected CombatAIComponent(IEntity Entity, bool Friendly) : base(Entity)
         {
             this.Friendly = Friendly;
             this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24 - 12f, 0, Utils.Rng.NextFloat() * 24 - 12f) + Parent.BlockPosition;
@@ -120,7 +120,7 @@ namespace Hedra.Engine.WorldBuilding
                 }
                 else
                 {
-                    Humanoid player = GameManager.Player;
+                    var player = GameManager.Player;
                     if ((player.Position.Xz - Parent.Position.Xz).LengthSquared < SearchRadius * SearchRadius)
                     {
                         this.SetTarget(player);
@@ -129,7 +129,7 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        protected virtual void SetTarget(Entity Target)
+        protected virtual void SetTarget(IEntity Target)
         {
             this.Chasing = true;
             this.ChasingTarget = Target;

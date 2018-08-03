@@ -9,7 +9,7 @@ namespace Hedra.Engine.AISystem
         protected RetaliateBehaviour Retaliate { get; }
         protected HostileBehaviour Hostile { get; }
 
-        public GiantBeetleAIComponent(Entity Entity) : base(Entity)
+        public GiantBeetleAIComponent(IEntity Entity) : base(Entity)
         {
             Retaliate = new RetaliateBehaviour(Parent);
             Hostile = new HostileBehaviour(Parent);

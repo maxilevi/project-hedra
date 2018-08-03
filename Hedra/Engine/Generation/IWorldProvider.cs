@@ -49,7 +49,7 @@ namespace Hedra.Engine.Generation
 
         ReadOnlyCollection<WorldItem> Items { get; }
 
-        ReadOnlyCollection<Entity> Entities { get; }
+        ReadOnlyCollection<IEntity> Entities { get; }
 
         ReadOnlyCollection<BaseStructure> Structures { get; }
 
@@ -83,9 +83,9 @@ namespace Hedra.Engine.Generation
 
         Chunk GetChunkByOffset(Vector2 Vec2);
 
-        void AddEntity(Entity Entity);
+        void AddEntity(IEntity Entity);
 
-        void RemoveEntity(Entity Entity);
+        void RemoveEntity(IEntity Entity);
 
         void AddStructure(BaseStructure Struct);
 

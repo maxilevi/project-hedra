@@ -29,7 +29,7 @@ namespace Hedra.Engine.Rendering.UI
 		private readonly Button _openFolder;
 	    private ClassDesign _classType;
 		
-		public ChrCreatorUI(LocalPlayer Player) 
+		public ChrCreatorUI(IPlayer Player) 
 		{
             _clickTimer = new Timer(.25f);
             Font defaultFont = FontCache.Get(UserInterface.Fonts.Families[0], 12);

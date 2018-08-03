@@ -73,7 +73,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			});
 		}
 		
-		public override void Update(Humanoid Human)
+		public override void Update(IHumanoid Human)
 		{
 			base.Update(Human);
 		    base.SetToDefault(MainMesh);
@@ -148,7 +148,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			this._knifeSheath.TransformationMatrix = KnifeMat4;
 		}
 		
-		public override void Attack1(Humanoid Human){
+		public override void Attack1(IHumanoid Human){
             if(!this.MeetsRequirements()) return;
 
 			base.Attack1(Human);

@@ -15,10 +15,10 @@ namespace Hedra.Engine.EntitySystem
     {
         private readonly float _totalTime;
         private readonly float _slowPercentage;
-        private readonly Entity _damager;
+        private readonly IEntity _damager;
         private float _pTime;
 
-        public SlowingComponent(Entity Parent, Entity Damager, float TotalTime, float SlowPercentage) : base(Parent){
+        public SlowingComponent(IEntity Parent, IEntity Damager, float TotalTime, float SlowPercentage) : base(Parent){
             this._totalTime = TotalTime;
             this._slowPercentage = SlowPercentage;
             this._damager = Damager;
@@ -27,7 +27,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Update() { }
 
-        public IEnumerator UpdateEffect()
+        private IEnumerator UpdateEffect()
         {
             Parent.Model.BaseTint = new Vector4(-.75f, -.75f, -.75f, 1);
             var newSpeed = Parent.Speed * _slowPercentage / 100f;

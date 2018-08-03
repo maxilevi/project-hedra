@@ -13,12 +13,12 @@ namespace Hedra.Engine.EntitySystem
         public override Vector3 TargetRotation { get; set; }
         public override bool IsStatic => false;
         public override bool Disposed { get; protected set; }
-        public Entity Parent { get; set; }
+        public IEntity Parent { get; set; }
         private T _model;
         private List<IModel> _iterableModels;
         private Box _baseBroadphaseBox = new Box(Vector3.Zero, Vector3.One);
 
-        protected UpdatableModel(Entity Parent)
+        protected UpdatableModel(IEntity Parent)
         {
             this._iterableModels = new List<IModel>();
             this.AdditionalModels = new HashSet<IModel>();
@@ -148,12 +148,12 @@ namespace Hedra.Engine.EntitySystem
 
         }
 
-        public override void Attack(Entity Victim)
+        public override void Attack(IEntity Victim)
         {
             this.Attack(Victim, 1);
         }
 
-        public override void Attack(Entity Victim, float RangeModifier)
+        public override void Attack(IEntity Victim, float RangeModifier)
         {
 
         }

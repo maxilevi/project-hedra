@@ -38,7 +38,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         public bool SlowDown { get; set; }
         public Vector4 BaseTint { get; set; }
         public Vector4 Tint { get; set; }
-        protected Humanoid Owner { get; set; }
+        protected IHumanoid Owner { get; set; }
         protected Animation[] SecondaryAnimations { get; set; }
         protected Animation[] PrimaryAnimations { get; set; }
         protected bool SecondaryAttack { get; set; }
@@ -190,12 +190,12 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             return Index;
         }
         
-        public virtual void Attack1(Humanoid Human)
+        public virtual void Attack1(IHumanoid Human)
         {
             this.Attack1(Human, new AttackOptions());
         }
 
-        public virtual void Attack1(Humanoid Human, AttackOptions Options)
+        public virtual void Attack1(IHumanoid Human, AttackOptions Options)
         {
             if (!this.MeetsRequirements()) return;
 
@@ -207,7 +207,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             this.BasePrimaryAttack(Human, Options);
         }
 
-        protected void BasePrimaryAttack(Humanoid Human, AttackOptions Options)
+        protected void BasePrimaryAttack(IHumanoid Human, AttackOptions Options)
         {
             this.BaseAttack(Human, Options);
             var animation = PrimaryAnimations[this.ParsePrimaryIndex(PrimaryAnimationsIndex)];
@@ -215,12 +215,12 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             Human.Model.Model.BlendAnimation(animation);
         }
 
-        public virtual void Attack2(Humanoid Human)
+        public virtual void Attack2(IHumanoid Human)
         {
             this.Attack2(Human, new AttackOptions());
         }
         
-        public virtual void Attack2(Humanoid Human, AttackOptions Options)
+        public virtual void Attack2(IHumanoid Human, AttackOptions Options)
         {
             if (!this.MeetsRequirements()) return;
 
@@ -232,7 +232,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             this.BaseSecondaryAttack(Human, Options);
         }
 
-        protected void BaseSecondaryAttack(Humanoid Human, AttackOptions Options)
+        protected void BaseSecondaryAttack(IHumanoid Human, AttackOptions Options)
         {
             this.BaseAttack(Human, Options);
             var animation = SecondaryAnimations[this.ParseSecondaryIndex(SecondaryAnimationsIndex)];
@@ -251,7 +251,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             SoundManager.PlaySoundWithVariation(SoundType, Owner.Position);
         }
 
-        protected void BaseAttack(Humanoid Human, AttackOptions Options)
+        protected void BaseAttack(IHumanoid Human, AttackOptions Options)
         {
             this.Owner = Human;
             Human.Model.Model.Animator.StopBlend();
@@ -285,7 +285,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if (Orientate) Human.Movement.Orientate();
         }
 
-        public virtual void Update(Humanoid Human)
+        public virtual void Update(IHumanoid Human)
         {
             this.GatherMembers();
             this.Owner = Human;

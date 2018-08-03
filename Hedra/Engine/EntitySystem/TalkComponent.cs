@@ -22,7 +22,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public delegate void OnTalkEventHandler(Entity Talkee);
+    public delegate void OnTalkEventHandler(IEntity Talkee);
 
 	public class TalkComponent : EntityComponent, ITickable
 	{
@@ -44,7 +44,7 @@ namespace Hedra.Engine.EntitySystem
 	        });
 	    }
 		
-		public TalkComponent(Entity Parent, string Text) : base(Parent)
+		public TalkComponent(IEntity Parent, string Text) : base(Parent)
 		{
 		    _phrase = Utils.FitString(Text, 25);
 		    EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyEventArgs EventArgs)
@@ -54,7 +54,7 @@ namespace Hedra.Engine.EntitySystem
 		    });
 		}
 
-	    public TalkComponent(Entity Parent) : this(Parent, null)
+	    public TalkComponent(IEntity Parent) : this(Parent, null)
 	    {    
 	    }
 

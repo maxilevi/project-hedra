@@ -18,10 +18,10 @@ namespace Hedra.Engine.PhysicsSystem
 	public struct MoveCommand
 	{
 		public Vector3 Delta;
-		public Entity Parent;
+		public IEntity Parent;
 	    public bool IsRecursive;
 		
-		public MoveCommand(Entity Parent, Vector3 Delta){
+		public MoveCommand(IEntity Parent, Vector3 Delta){
 			this.Delta = Delta;
 			this.Parent = Parent;
 		    this.IsRecursive = false;

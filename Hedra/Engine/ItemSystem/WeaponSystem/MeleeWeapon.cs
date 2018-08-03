@@ -29,7 +29,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             }
         }
 
-        public override void Update(Humanoid Human)
+        public override void Update(IHumanoid Human)
         {
             if (!this.WeaponRegistered(this.MainMesh))
             {

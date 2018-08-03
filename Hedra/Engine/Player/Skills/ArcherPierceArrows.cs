@@ -53,7 +53,7 @@ namespace Hedra.Engine.Player
 		}
 		
 		public void PierceModifier(Projectile ArrowProj){
-			ArrowProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
+			ArrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
 				if(Utils.Rng.Next(0, 5) == 0){
 					Hit.AddComponent( new BleedingComponent(Hit, Player, 3f, 20f) );
 				}

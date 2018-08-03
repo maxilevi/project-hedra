@@ -23,9 +23,9 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     ///     Description of Class1.
     /// </summary>
-    public delegate void OnAttackEventHandler(Entity Victim, float Amount);
+    public delegate void OnAttackEventHandler(IEntity Victim, float Amount);
 
-    public class Entity : IUpdatable, IRenderable, IDisposable, ISearchable, IEntity
+    public class Entity : IRenderable, IDisposable, ISearchable, IEntity
     {
         private DamageComponent _damageManager;
         private int _drowningSoundTimer;
@@ -222,7 +222,7 @@ namespace Hedra.Engine.EntitySystem
                 iconComponent.ShowIconFor(IconType, Seconds);
         }
 
-        public void Damage(float Amount, Entity Damager, out float Exp, bool PlaySound = true)
+        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true)
         {
             for (var i = 0; i < Components.Count; i++)
                 if (Components[i] is DamageComponent)
@@ -231,9 +231,9 @@ namespace Hedra.Engine.EntitySystem
             if (_damageManager == null)
                 return;
 
-            Damager?.BeforeAttacking?.Invoke(this, Amount);
+            Damager?.InvokeBeforeAttack(this, Amount);
             _damageManager.Damage(Amount, Damager, out Exp, PlaySound);
-            Damager?.OnAttacking?.Invoke(this, Amount);
+            Damager?.InvokeAfterAttack(this, Amount);
 
             if (Damager != null)
             {
@@ -242,7 +242,17 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InAttackRange(Entity Target, float RadiusModifier = 1f)
+        public void InvokeBeforeAttack(IEntity Invoker, float Damage)
+        {
+            BeforeAttacking?.Invoke(Invoker, Damage);
+        }
+        
+        public void InvokeAfterAttack(IEntity Invoker, float Damage)
+        {
+            OnAttacking?.Invoke(Invoker, Damage);
+        }
+
+        public bool InAttackRange(IEntity Target, float RadiusModifier = 1f)
         {
             var collider0 = this.Model.BroadphaseCollider;
             var collider1 = Target.Model.BroadphaseCollider;

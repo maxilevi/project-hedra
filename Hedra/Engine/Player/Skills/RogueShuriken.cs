@@ -35,17 +35,17 @@ namespace Hedra.Engine.Player
 			
 			_throwAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
 			_throwAnimation.Loop = false;
-			_throwAnimation.OnAnimationMid += delegate(Animation Sender) {
+			_throwAnimation.OnAnimationMid += delegate{
 			    Shuriken.ShootShuriken(Player, Player.View.CrossDirection.NormalizedFast(), 20f * base.Level, 8);
 			};
-			_throwAnimation.OnAnimationEnd += delegate(Animation Sender) {
+			_throwAnimation.OnAnimationEnd += delegate{
 				Player.IsCasting = false;
 				Casting = false;
 				Player.IsAttacking = false;
 			};
 		}
 
-		public static void ShootShuriken(Humanoid Human, Vector3 Direction, float Damage, int KnockChance = -1){
+		public static void ShootShuriken(IHumanoid Human, Vector3 Direction, float Damage, int KnockChance = -1){
 			VertexData weaponData = ShurikenData.Clone();
 			weaponData.Scale(Vector3.One * 1.75f);
 
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player
 		        Propulsion = Direction * 2f,
 		        Lifetime = 5f
 		    };
-		    weaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
+		    weaponProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
 		        Hit.Damage(Damage, Human, out float exp, true);
 				Human.XP += exp;
 		        if (KnockChance == -1) return;

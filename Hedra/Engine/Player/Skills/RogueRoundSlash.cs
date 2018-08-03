@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player
 	{
 		private Animation RoundSlashAnimation;
 		private float FrameCounter = 0, PassedTime = 0, Damage = 0;
-		private Dictionary<Entity, float> AffectedEntities = new Dictionary<Entity, float>();
+		private Dictionary<IEntity, float> AffectedEntities = new Dictionary<IEntity, float>();
 		
 		public RoundSlash() : base() {
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
@@ -38,10 +38,10 @@ namespace Hedra.Engine.Player
 			RoundSlashAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeRoundAttack.dae");
 			RoundSlashAnimation.Loop = false;
 			RoundSlashAnimation.Speed = 1.75f;
-			RoundSlashAnimation.OnAnimationStart += delegate(Animation Sender) { 
+			RoundSlashAnimation.OnAnimationStart += delegate { 
 				Sound.SoundManager.PlaySound(Sound.SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
 			};
-			RoundSlashAnimation.OnAnimationEnd += delegate(Animation Sender) {
+			RoundSlashAnimation.OnAnimationEnd += delegate {
 				Player.IsCasting = false;
 				Casting = false;
 				Player.IsAttacking = false;
@@ -80,7 +80,7 @@ namespace Hedra.Engine.Player
 
 				for(int i = World.Entities.Count-1; i > -1; i--){
 
-					if(Player.InAttackRange(World.Entities[i]))
+					if(Player.InAttackRange(World.Entities[i]) && Player != World.Entities[i])
                     {
 						float dmg = Player.DamageEquation * Damage * Engine.Time.DeltaTime * 4f;
 						if(AffectedEntities.ContainsKey(World.Entities[i]))
@@ -94,7 +94,8 @@ namespace Hedra.Engine.Player
 				}
 				
 				if(FrameCounter >= .3f){
-					foreach(Entity Key in AffectedEntities.Keys){
+					foreach(Entity Key in AffectedEntities.Keys)
+					{
 						float Exp;
 						Key.Damage(AffectedEntities[Key], Player, out Exp, true);
 						Player.XP += Exp;

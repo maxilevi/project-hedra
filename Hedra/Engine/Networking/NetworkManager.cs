@@ -183,7 +183,6 @@ namespace Hedra.Engine.Networking
 							
 						case 0x8:
 							Ms = new MemoryStream(ZipManager.UnZipBytes(Data));
-							Packet0x8.SetValues(Peers[AnyIP].Human, Formatter.Deserialize(Ms) as Packet0x8 );
 							break;
 						case 0x9:
 							Ms = new MemoryStream(ZipManager.UnZipBytes(Data));
@@ -203,11 +202,11 @@ namespace Hedra.Engine.Networking
 							break;
 						case 0x14:
 							Ms = new MemoryStream(ZipManager.UnZipBytes(Data));
-							Packet0x14.SetValues(LocalPlayer.Instance, Formatter.Deserialize(Ms) as Packet0x14);
+							//Packet0x14.SetValues(LocalPlayer.Instance, Formatter.Deserialize(Ms) as Packet0x14);
 							break;
 						case 0x15:
 							Ms = new MemoryStream(ZipManager.UnZipBytes(Data));
-							Packet0x15.SetValues(LocalPlayer.Instance, Formatter.Deserialize(Ms) as Packet0x15);
+							//Packet0x15.SetValues(LocalPlayer.Instance, Formatter.Deserialize(Ms) as Packet0x15);
 							break;
 						case 0x18:
 							string Type = Encoding.ASCII.GetString(ZipManager.UnZipBytes(Data));
@@ -229,7 +228,7 @@ namespace Hedra.Engine.Networking
 		public static void Send(){
 			BinaryFormatter Formatter = new BinaryFormatter();
 			MemoryStream Ms = new MemoryStream();
-			LocalPlayer Player = GameManager.Player;
+			var Player = GameManager.Player;
 			int TimePassed = 0, EntityRate = 0, ItemRate = 0;
 			
 			while(IsConnected && Program.GameWindow.Exists){
@@ -312,7 +311,7 @@ namespace Hedra.Engine.Networking
 				return null;
 		}
 		
-		public static void RegisterAttack(Entity Victim, float Amount){
+		public static void RegisterAttack(IEntity Victim, float Amount){
 			Packet0x13 Packet = Packet0x13.FromEntity(Victim, Amount);
 			BinaryFormatter Formatter = new BinaryFormatter();
 			using( MemoryStream Ms = new MemoryStream() ){
@@ -373,7 +372,7 @@ namespace Hedra.Engine.Networking
 				Packet0x4.PrevPosition = LocalPlayer.Instance.Position;
 				Packet0x4.PrevRotation = LocalPlayer.Instance.Rotation;
 				
-				Packet0x4 Packet = Packet0x4.FromHuman(LocalPlayer.Instance);
+				/*Packet0x4 Packet = Packet0x4.FromHuman(LocalPlayer.Instance);
 				
 				Ms.Dispose();
 				Ms = new MemoryStream();
@@ -382,7 +381,7 @@ namespace Hedra.Engine.Networking
 				Builder.ID = 0x4;
 				Builder.Data = ZipManager.ZipBytes(Ms.ToArray());
 				
-				Socket.Send(Builder.Bytes, Builder.Count, IP);
+				Socket.Send(Builder.Bytes, Builder.Count, IP);*/
 			}
 		}
 		
@@ -400,7 +399,7 @@ namespace Hedra.Engine.Networking
 			}
 			
 			for(int i = 0; i < EstimatedPacketCount; i++){
-				Packet0x10 Packet = Packet0x10.FromHuman(LocalPlayer.Instance, i * Packet0x10.EntityRate);
+				/*Packet0x10 Packet = Packet0x10.FromHuman(LocalPlayer.Instance, i * Packet0x10.EntityRate);
 				
 				Ms.Dispose();
 				Ms = new MemoryStream();
@@ -409,47 +408,20 @@ namespace Hedra.Engine.Networking
 				Builder.ID = 0x10;
 				Builder.Data = ZipManager.ZipBytes(Ms.ToArray());
 				
-				Socket.Send(Builder.Bytes, Builder.Count, IP);
+				Socket.Send(Builder.Bytes, Builder.Count, IP);*/
 			}
 		}
 		
 		private static void SendPacket0x8(BinaryFormatter Formatter, MemoryStream Ms, IPEndPoint IP){
-			Packet0x8 Packet = Packet0x8.FromHuman(LocalPlayer.Instance);
-			
-			Ms.Dispose();
-			Ms = new MemoryStream();
-			Formatter.Serialize(Ms, Packet);
-			PacketBuilder Builder = new PacketBuilder();
-			Builder.ID = 0x8;
-			Builder.Data = ZipManager.ZipBytes(Ms.ToArray());
-			
-			Socket.Send(Builder.Bytes, Builder.Count, IP);
+
 		}
 		
 		private static void SendPacket0x6(BinaryFormatter Formatter, MemoryStream Ms, IPEndPoint IP){
-			Packet0x6 Packet = Packet0x6.FromHuman(LocalPlayer.Instance);
-			
-			Ms.Dispose();
-			Ms = new MemoryStream();
-			Formatter.Serialize(Ms, Packet);
-			PacketBuilder Builder = new PacketBuilder();
-			Builder.ID = 0x6;
-			Builder.Data = ZipManager.ZipBytes(Ms.ToArray());
-			
-			Socket.Send(Builder.Bytes, Builder.Count, IP);
+
 		}
 		
 		private static void SendPacket0x2(BinaryFormatter Formatter, MemoryStream Ms, IPEndPoint IP){
-			Packet0x2 Packet = Packet0x2.FromHuman(LocalPlayer.Instance);
-			
-			Ms.Dispose();
-			Ms = new MemoryStream();
-			Formatter.Serialize(Ms, Packet);
-			PacketBuilder Builder = new PacketBuilder();
-			Builder.ID = 0x2;
-			Builder.Data = ZipManager.ZipBytes(Ms.ToArray());
-			
-			Socket.Send(Builder.Bytes, Builder.Count, IP);
+
 		}
 		
 		public static void SendChatMessage(string Message){

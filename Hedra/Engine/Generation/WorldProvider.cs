@@ -47,7 +47,7 @@ namespace Hedra.Engine.Generation
             _meshBuilder = new MeshBuilder(_workerPool);
             _chunkBuilder = new ChunkBuilder(_workerPool);
             _structures = new HashSet<BaseStructure>();
-            _entities = new HashSet<Entity>();
+            _entities = new HashSet<IEntity>();
             _items = new HashSet<WorldItem>();
             _chunks = new HashSet<Chunk>();
             _globalColliders = new HashSet<ICollidable>();
@@ -284,7 +284,7 @@ namespace Hedra.Engine.Generation
             return GetChunkByOffset((int) vec2.X, (int) vec2.Y);
         }
 
-        public void AddEntity(Entity Entity)
+        public void AddEntity(IEntity Entity)
         {
             lock (_entities)
             {
@@ -295,7 +295,7 @@ namespace Hedra.Engine.Generation
             _isEntityCacheDirty = true;
         }
 
-        public void RemoveEntity(Entity Entity)
+        public void RemoveEntity(IEntity Entity)
         {
             lock (_entities)
             {
@@ -545,7 +545,7 @@ namespace Hedra.Engine.Generation
             var model = new WorldItem(ItemSpec, Position);
             this.AddItem(model);
 
-            model.OnPickup += delegate(LocalPlayer Player)
+            model.OnPickup += delegate(IPlayer Player)
             {
                 TaskManager.While(() => !model.Disposed, delegate
                 {
@@ -685,10 +685,10 @@ namespace Hedra.Engine.Generation
         }
 
         private bool _isEntityCacheDirty = true;
-        private readonly HashSet<Entity> _entities;
-        private ReadOnlyCollection<Entity> _entityCache;
+        private readonly HashSet<IEntity> _entities;
+        private ReadOnlyCollection<IEntity> _entityCache;
 
-        public ReadOnlyCollection<Entity> Entities
+        public ReadOnlyCollection<IEntity> Entities
         {
             get
             {

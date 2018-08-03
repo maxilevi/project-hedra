@@ -43,7 +43,7 @@ namespace Hedra.Engine.Player
 					Arrow.MoveEventHandler += delegate { 
 						Arrow.Mesh.Tint = Colors.PoisonGreen * new Vector4(1,3,1,1);
 					};
-					Arrow.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
+					Arrow.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
 						float Exp;
 						Hit.Damage(Player.DamageEquation * 0.5f, Player, out Exp, true);
 						Player.XP += Exp;

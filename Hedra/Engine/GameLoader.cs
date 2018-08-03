@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using Hedra.Engine.IO;
+using System.Runtime.InteropServices;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine
 {
@@ -35,6 +35,21 @@ namespace Hedra.Engine
             Log.WriteLine("Allocated " + waterMem + " MB of VRAM for water rendering.");
 
             DrawManager.Load();
+        }
+
+        public static void EnableGLDebug()
+        {
+            Renderer.Enable(EnableCap.DebugOutput);
+            GL.DebugMessageCallback(
+                delegate(DebugSource Source, DebugType Type, int Id, DebugSeverity Severity, int Length, IntPtr Message,
+                    IntPtr Param)
+                {
+                    if(Type != DebugType.DebugTypeError) return;
+                    Log.WriteLine(Source);
+                    Log.WriteLine(Marshal.PtrToStringAnsi(Message));
+                    Log.WriteLine(Severity);
+                    Log.WriteLine(Marshal.PtrToStringAnsi(Param));
+                }, IntPtr.Zero);
         }
 
         public static void LoadSoundEngine()

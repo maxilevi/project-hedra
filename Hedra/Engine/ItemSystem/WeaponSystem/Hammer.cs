@@ -54,7 +54,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    });
 	    }
 				
-		public override void Attack1(Humanoid Human){
+		public override void Attack1(IHumanoid Human){
 		    if (!base.MeetsRequirements()) return;
 
 			base.Attack1(Human);
@@ -62,7 +62,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    TaskManager.After(250, () => Trail.Emit = true);
         }
 		
-		public override void Attack2(Humanoid Human)
+		public override void Attack2(IHumanoid Human)
         {
 		    if (!base.MeetsRequirements()) return;
 

@@ -5,9 +5,9 @@ namespace Hedra.Engine.AISystem.Behaviours
 {
     public abstract class Behaviour
     {
-        protected Entity Parent { get; }
+        protected IEntity Parent { get; }
 
-        protected Behaviour(Entity Parent)
+        protected Behaviour(IEntity Parent)
         {
             this.Parent = Parent;
         }

@@ -9,7 +9,7 @@ namespace Hedra.Engine.EntitySystem
     {
         private readonly float _speedBonus;
 
-        public SpeedBonusComponent(Entity Parent, float Speed) : base(Parent)
+        public SpeedBonusComponent(IEntity Parent, float Speed) : base(Parent)
         {
             _speedBonus = Speed;
              Parent.Speed += _speedBonus;

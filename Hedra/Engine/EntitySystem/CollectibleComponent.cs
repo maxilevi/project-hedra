@@ -30,13 +30,13 @@ namespace Hedra.Engine.EntitySystem
 	    public override string Message => "COLLECT";
 	    public override int InteractDistance => 16;
 	    
-	    public CollectibleComponent(Entity Parent, Item Drop, string CollectMessage) : base(Parent)
+	    public CollectibleComponent(IEntity Parent, Item Drop, string CollectMessage) : base(Parent)
 	    {
 		    this.Drop = Drop;
 		    this.CollectMessage = CollectMessage;
 	    }
 		
-		public override void Interact(LocalPlayer Interactee)
+		public override void Interact(IPlayer Interactee)
         {
 		    if (!Interactee.Inventory.AddItem(Drop))
 		    {

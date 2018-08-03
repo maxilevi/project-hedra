@@ -21,7 +21,7 @@ namespace Hedra.Engine.EntitySystem
 	/// </summary>
 	public class RideComponent : EntityComponent, ITickable
     {
-		public Humanoid Rider;
+		public IHumanoid Rider;
 		public bool HasRider;
 		public bool UnRidable = false;
 		public float HeightAddon = 0;
@@ -100,7 +100,7 @@ namespace Hedra.Engine.EntitySystem
 			}
 		}
 		
-		public void Ride(Humanoid Entity){
+		public void Ride(IHumanoid Entity){
 			if(HasRider || UnRidable || Entity.IsRiding)return;
 			
 			Rider = Entity;

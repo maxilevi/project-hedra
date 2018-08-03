@@ -71,7 +71,7 @@ namespace Hedra.Engine.Player.Skills
 			{ 
 				CoroutineManager.StartCoroutine(CreateFlames, Arrow);
 			};
-			Arrow.HitEventHandler += delegate(Projectile Sender, Entity Hit)
+			Arrow.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
 			{				
 				Hit.AddComponent( new BurningComponent(Hit, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
 				CoroutineManager.StartCoroutine( this.CreateFlames, Arrow);
@@ -99,7 +99,7 @@ namespace Hedra.Engine.Player.Skills
 				World.Particles.PositionErrorMargin = new Vector3(12f, 4f, 12f);
 				World.Particles.Emit();
 				
-				World.Entities.ToList().ForEach(delegate(Entity Entity)
+				World.Entities.ToList().ForEach(delegate(IEntity Entity)
 				{
 					if (!((Entity.Position - position).LengthSquared < EffectRange * EffectRange) || Entity.IsStatic) return;
 					

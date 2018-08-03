@@ -104,7 +104,7 @@ namespace Hedra.Engine.EntitySystem
                 return;
             }
 
-            LocalPlayer player = GameManager.Player;
+            var player = GameManager.Player;
             float product = Mathf.DotProduct(player.View.CrossDirection,
                 (Parent.Position - player.Position).NormalizedFast());
             if (product <= 0.5f)

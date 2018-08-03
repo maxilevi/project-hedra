@@ -49,6 +49,7 @@
     <Compile Include="BaseTest.cs" />
     <Compile Include="HedraReflectionTest.cs" />
     <Compile Include="Math\PhysicsTest.cs" />
+    <Compile Include="Player\WeaponAttackTest.cs" />
     <Compile Include="SimpleWorldProviderMock.cs" />
     <Compile Include="SimpleMessageDispatcherMock.cs" />
     <Compile Include="PlayerMock.cs" />

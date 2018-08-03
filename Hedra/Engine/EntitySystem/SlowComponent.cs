@@ -18,6 +18,7 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public class SlowComponent : EntityComponent, IEffectComponent
     {
+        private readonly IEntity _parent;
         public int Chance { get; set; } = 15;
         public float Damage { get; set; } = 60;
         public float Duration { get; set; } = 5;
@@ -25,14 +26,15 @@ namespace Hedra.Engine.EntitySystem
 	    private float _cooldown;
 		private bool _canSlow = true;
 		
-		public SlowComponent(Entity Parent) : base(Parent)
+		public SlowComponent(IEntity Parent) : base(Parent)
 		{
-            Parent.OnAttacking += this.Apply;
+		    _parent = Parent;
+		    Parent.OnAttacking += this.Apply;
 		}
 
         public override void Update() { }
 
-        public void Apply(Entity Victim, float Amount)
+        public void Apply(IEntity Victim, float Amount)
         {
             if (Utils.Rng.NextFloat() <= Chance * 0.01)
             {

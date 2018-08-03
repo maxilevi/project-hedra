@@ -6,7 +6,7 @@
         float Damage { get; set; }
         float Duration { get; set; }
 
-        void Apply(Entity Victim, float Amount);
+        void Apply(IEntity Victim, float Amount);
         void Dispose ();
     }
 }

@@ -62,7 +62,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             });
         }
 
-        public override void Update(Humanoid Human)
+        public override void Update(IHumanoid Human)
         {
             base.Update(Human);
 

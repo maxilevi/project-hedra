@@ -35,18 +35,7 @@ namespace Hedra.Engine.Networking
 			}
 			return Packet;
 		}
-		
-		public static void SetValues(Humanoid Human, Packet0x8 Packet){
-			if(Packet.Type == AnimationType.IDLE)
-				Human.Model.Idle();
-			else if(Packet.Type == AnimationType.RUN)
-				Human.Model.Run();
-			else if(Packet.Type == AnimationType.ROLL)
-				Human.Roll();
-			else if(Packet.Type == AnimationType.ATTACK1)
-				Human.Model.LeftWeapon.Attack1(Human);
-			Human.HandLamp.Enabled = Packet.LightOn;
-		}
+	
 	}
 	
 	public enum AnimationType{

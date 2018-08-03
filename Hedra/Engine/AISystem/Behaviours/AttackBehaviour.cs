@@ -8,15 +8,15 @@ namespace Hedra.Engine.AISystem.Behaviours
     {
         protected FollowBehaviour Follow { get; }
         protected readonly Timer FollowTimer;
-        public Entity Target { get; protected set; }
+        public IEntity Target { get; protected set; }
 
-        public AttackBehaviour(Entity Parent) : base(Parent)
+        public AttackBehaviour(IEntity Parent) : base(Parent)
         {
             Follow = new FollowBehaviour(Parent);
             FollowTimer = new Timer(16);
         }
 
-        public void SetTarget(Entity Target)
+        public void SetTarget(IEntity Target)
         {
             if(Target.IsDead) return;
 

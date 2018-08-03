@@ -30,7 +30,7 @@ namespace Hedra.Engine
 	public static class GameManager
 	{
 	    public static KeyboardManager Keyboard { get; private set; }
-		public static LocalPlayer Player { get; set; }
+		public static IPlayer Player { get; set; }
 	    public static bool IsLoading { get; private set; }
         private static Texture _loadingScreen;
 	    private static GUIText _playerText;
@@ -163,14 +163,12 @@ namespace Hedra.Engine
 	        Player.Inventory.AddRestriction(PlayerInventory.RingHolder, EquipmentType.Ring);
         }
 
-		public static void NewRun(LocalPlayer Player){
+		public static void NewRun(IPlayer Player){
 			GameManager.NewRun(DataManager.DataFromPlayer(Player));
 		}
 
 		public static void NewRun(PlayerInformation Information){
 			Player.IsRiding = false;
-			if(Player.IsRolling)
-				Player.FinishRoll();
 		    Player.Pet.Pet?.Update();//Finish removing the mount
 
 		    Information.WorldSeed = World.RandomSeed;

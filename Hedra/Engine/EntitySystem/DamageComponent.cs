@@ -34,7 +34,7 @@ namespace Hedra.Engine.EntitySystem
         public List<Billboard> DamageLabels = new List<Billboard>();
         public event OnDamageEventHandler OnDamageEvent;
 
-        public DamageComponent(Entity Parent) : base(Parent) { }
+        public DamageComponent(IEntity Parent) : base(Parent) { }
 
         private float _tintTimer;
         private Vector4 _targetTint;
@@ -66,7 +66,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public void Damage(float Amount, Entity Damager, out float Exp, bool PlaySound)
+        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound)
         {
             Amount /= this.Parent.AttackResistance;
             if (Parent.IsDead)
@@ -192,12 +192,12 @@ namespace Hedra.Engine.EntitySystem
 
     public class DamageEventArgs : EventArgs
     {
-        public Entity Victim;
-        public Entity Damager;
+        public IEntity Victim;
+        public IEntity Damager;
         public float Amount;
         public float Experience;
 
-        public DamageEventArgs(Entity Victim, Entity Damager, float Amount, float Experience)
+        public DamageEventArgs(IEntity Victim, IEntity Damager, float Amount, float Experience)
         {
             this.Victim = Victim;
             this.Damager = Damager;

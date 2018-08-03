@@ -14,7 +14,7 @@ namespace Hedra.Engine.WorldBuilding
     public class SleepingPad : BaseStructure, IUpdatable, ITickable
     {
         public bool IsOccupied => Sleeper != null;
-        public Humanoid Sleeper { get; private set; }
+        public IHumanoid Sleeper { get; private set; }
         public int BedRadius { get; set; } = 16;
         public Vector3 TargetRotation { get; set; }
 
@@ -52,7 +52,7 @@ namespace Hedra.Engine.WorldBuilding
                 this.SetSleeper(null);
         }
 
-        public void SetSleeper(Humanoid Human)
+        public void SetSleeper(IHumanoid Human)
         {
             if (Sleeper != null)
             {

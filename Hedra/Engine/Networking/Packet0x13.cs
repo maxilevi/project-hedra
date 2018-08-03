@@ -21,7 +21,7 @@ namespace Hedra.Engine.Networking
 		public float Damage;
 		public byte EntityType;
 		
-		public static Packet0x13 FromEntity(Entity Mob, float Damage){
+		public static Packet0x13 FromEntity(IEntity Mob, float Damage){
 			Packet0x13 Packet = new Packet0x13();
 			Packet.MobId = (ushort) Mob.MobId;
 			Packet.Damage = Damage;

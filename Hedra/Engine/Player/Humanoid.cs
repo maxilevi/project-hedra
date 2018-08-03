@@ -26,7 +26,7 @@ using System.Linq;
 namespace Hedra.Engine.Player
 {
 
-	public class Humanoid : Entity
+	public class Humanoid : Entity, IHumanoid
 	{
         public virtual IMessageDispatcher MessageDispatcher { get; set; }
 	    public int ConsecutiveHits { get; private set; }
@@ -47,7 +47,7 @@ namespace Hedra.Engine.Player
         public bool IsSitting { get => Model.IsSitting; set{ if(value) Model.Sit(); else Model.Idle(); } }
 		public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
 		public MovementManager Movement { get; protected set; }
-		public HandLamp HandLamp;
+		public HandLamp HandLamp { get; }
 		public DamageComponent DmgComponent;
 		public ClassDesign Class { get; set; } = new WarriorDesign();
 	    public float AttackPower { get; set; }
@@ -184,13 +184,11 @@ namespace Hedra.Engine.Player
             Movement.Move(this.Orientation * 2f, 1.5f, false);
             SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);
 			Model.Roll();
-			
+			//IsRolling = false;
+	        //DmgComponent.Immune = false;
+	        //
 		}
-		
-		public void FinishRoll(){
-			IsRolling = false;
-			DmgComponent.Immune = false;
-		}
+
 		#endregion
 		
 		public void Climb()

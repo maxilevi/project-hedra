@@ -14,7 +14,7 @@ namespace Hedra.Engine.WorldBuilding
         public abstract bool ShouldSleep { get; }
         public virtual bool ShouldWakeup { get; }
 
-        protected HumanoidAIComponent(Entity Entity) : base(Entity)
+        protected HumanoidAIComponent(IEntity Entity) : base(Entity)
         {
             var dmgComponent = Parent.SearchComponent<DamageComponent>();
             if (dmgComponent != null)

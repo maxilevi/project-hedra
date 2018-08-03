@@ -24,16 +24,16 @@ namespace Hedra.Engine.EntitySystem
 	{
 		private float _totalTime, _time, _totalDamage;
 		private int _pTime;
-		private Entity _damager = null;
+		private IEntity _damager = null;
 		
-		public BleedingComponent(Entity Parent, Entity Damager, float TotalTime, float TotalDamage) : base(Parent){
+		public BleedingComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent){
 			this._totalTime = TotalTime;
 			this._totalDamage = TotalDamage;
 			this._damager = Damager;
 			CoroutineManager.StartCoroutine(UpdateBleed);
 		}
 		
-		public BleedingComponent(Entity Parent, float TotalTime, float TotalDamage) : base(Parent){
+		public BleedingComponent(IEntity Parent, float TotalTime, float TotalDamage) : base(Parent){
 			this._totalTime = TotalTime;
 			this._totalDamage = TotalDamage;
 			CoroutineManager.StartCoroutine(UpdateBleed);

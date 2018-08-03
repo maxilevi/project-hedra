@@ -33,20 +33,20 @@ namespace Hedra.Engine.Player
 	public class LocalPlayer : Humanoid, IPlayer
 	{
 
-		public Camera View;
-		public ChunkLoader Loader;
-		public UserInterface UI;
-		public PlayerInventory Inventory;
-		public EntitySpawner Spawner;
-		public Toolbar Toolbar;
-		public QuestLog QuestLog;
-		public AbilityTreeSystem.AbilityTree AbilityTree;
-		public PetManager Pet;
-		public Chat Chat;
-		public Minimap Minimap;
-		public Map Map;
-		public TradeInventory Trade;
-		public HangGlider Glider;
+		public Camera View { get; }
+		public ChunkLoader Loader { get; }
+		public UserInterface UI { get; set; }
+		public PlayerInventory Inventory { get; }
+		public EntitySpawner Spawner { get; }
+		public Toolbar Toolbar { get; }
+		public QuestLog QuestLog { get; }
+		public AbilityTreeSystem.AbilityTree AbilityTree { get; }
+		public PetManager Pet { get; }
+		public Chat Chat { get; }
+		public Minimap Minimap { get; }
+		public Map Map { get; }
+		public TradeInventory Trade { get; }
+		public HangGlider Glider { get; }
 	    public override IMessageDispatcher MessageDispatcher { get; set; }
 	    public override Vector3 FacingDirection => Vector3.UnitY * -(View.TargetYaw * Mathf.Degree - 90f);
         public ICollidable[] NearCollisions { get; private set; }
@@ -65,7 +65,8 @@ namespace Hedra.Engine.Player
 	    private bool _wasPlayingAmbient;
 	    private bool _canInteract;
 
-        public LocalPlayer(){
+        public LocalPlayer()
+        {
 			this.UI = new UserInterface(this);
 			this.View = new Camera(this);
 			this.Loader = new ChunkLoader(this);
@@ -105,7 +106,7 @@ namespace Hedra.Engine.Player
 	    {
 	        float pHealth = 0, pMaxHealth = 0;
 
-	        this.BeforeAttacking += delegate (Entity Victim, float Amount) {
+	        this.BeforeAttacking += delegate (IEntity Victim, float Amount) {
 	            if (Pet.Pet != null && Victim == Pet.Pet)
 	            {
 	                pMaxHealth = Pet.Pet.MaxHealth;
@@ -116,7 +117,7 @@ namespace Hedra.Engine.Player
 	            }
 	        };
 
-	        this.OnAttacking += delegate (Entity Victim, float Amount) {
+	        this.OnAttacking += delegate (IEntity Victim, float Amount) {
 	            if (Pet.Pet != null && Victim == Pet.Pet)
 	            {
 	                Pet.Pet.MaxHealth = pMaxHealth;
@@ -321,7 +322,7 @@ namespace Hedra.Engine.Player
                 var entities = World.Entities.ToArray();
                 for (int i = entities.Length - 1; i > -1; i--)
                 {
-                    LocalPlayer player = GameManager.Player;
+                    var player = GameManager.Player;
                     if (entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused &&
                         !GameManager.IsLoading
 
@@ -528,9 +529,9 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public static LocalPlayer Instance => GameManager.Player;
+		public static IPlayer Instance => GameManager.Player;
 
-        public void UnLoad(){
+        public void Unload(){
 			if(_inCementery){
 				_oldCementeryTime = SkyManager.DayTime;
 				SkyManager.DayTime = _cementeryTime;

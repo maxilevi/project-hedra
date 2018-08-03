@@ -101,7 +101,7 @@ namespace Hedra.Engine.Player.Inventory
             }
             if (GameSettings.DebugView && CurrentItem.HasAttribute(CommonAttributes.Damage))
             {
-                strBuilder.AppendLine($"Modifier   ➝   {LocalPlayer.Instance.WeaponModifier(CurrentItem)}");
+                strBuilder.AppendLine($"Modifier   ➝   {GameManager.Player.WeaponModifier(CurrentItem)}");
             }
             _itemAttributes.Text = strBuilder.ToString();
             ItemTexture.TextureElement.IdPointer = () => _renderer.Draw(_currentItemMesh, CurrentItem,

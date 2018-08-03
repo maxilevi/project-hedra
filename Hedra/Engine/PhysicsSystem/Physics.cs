@@ -55,7 +55,7 @@ namespace Hedra.Engine.PhysicsSystem
 	    }
 
 
-        public static void LookAt(Entity Parent, Entity Target){
+        public static void LookAt(IEntity Parent, IEntity Target){
 		    Parent.Orientation = (Target.Model.Position-Parent.Model.Position).Xz.NormalizedFast().ToVector3();
             Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
 		}

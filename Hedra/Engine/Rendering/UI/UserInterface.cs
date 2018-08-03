@@ -21,7 +21,7 @@ namespace Hedra.Engine.Rendering.UI
 {
 	public class UserInterface
 	{
-		private readonly LocalPlayer _player;
+		private readonly IPlayer _player;
 		public static PrivateFontCollection Fonts = new PrivateFontCollection();
 		public const int Sans = 0;
 		public bool ShowHelp = false;
@@ -36,7 +36,7 @@ namespace Hedra.Engine.Rendering.UI
         public static Font Regular;
 		public static Color DefaultFontColor = Color.White;
 		
-		public UserInterface (LocalPlayer Player)
+		public UserInterface (IPlayer Player)
         {
 			this._player = Player;
 
@@ -127,7 +127,6 @@ namespace Hedra.Engine.Rendering.UI
 					}
 				}
 			};
-
 		}
 		
 		public void NewRunOnClick(object Sender, EventArgs E)

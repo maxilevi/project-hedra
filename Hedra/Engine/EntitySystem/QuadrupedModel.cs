@@ -135,7 +135,7 @@ namespace Hedra.Engine.EntitySystem
             return _attackCooldown < 0;
         }
 
-        public void Attack(Entity Victim, Animation Animation, OnAnimationHandler Callback, float RangeModifier = 1.0f)
+        public void Attack(IEntity Victim, Animation Animation, OnAnimationHandler Callback, float RangeModifier = 1.0f)
 		{	
             if(!this.CanAttack())return;
 		    var selectedAnimation = Animation;
@@ -171,12 +171,12 @@ namespace Hedra.Engine.EntitySystem
             this.Attack(null, Animation, null, RangeModifier);
         }
 
-        public override void Attack(Entity Victim)
+        public override void Attack(IEntity Victim)
         {
             this.Attack(Victim, AttackAnimations[Utils.Rng.Next(0, AttackAnimations.Length)], null);
         }
 
-        public override void Attack(Entity Victim, float RangeModifier)
+        public override void Attack(IEntity Victim, float RangeModifier)
         {
             this.Attack(Victim, AttackAnimations[Utils.Rng.Next(0, AttackAnimations.Length)], null, RangeModifier);
         }

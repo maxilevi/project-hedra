@@ -62,7 +62,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             }
         }
 
-        public void SetFlee(Entity Target, float Radius)
+        public void SetFlee(IEntity Target, float Radius)
         {
             Flee.SetTarget(Target, Radius);
         }
@@ -72,7 +72,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             Flee.SetTarget(Point, Radius);
         }
 
-        public void SetAttack(Entity Target)
+        public void SetAttack(IEntity Target)
         {
             Attack.SetTarget(Target);
         }

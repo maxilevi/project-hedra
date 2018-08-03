@@ -25,14 +25,14 @@ namespace Hedra.Engine.WorldBuilding
         public override float AttackRadius { get; set; } = 0;
         public override float ForgetRadius { get; set; } = 64;
 
-        public WarriorAIComponent(Entity Parent, bool Friendly) : base(Parent, Friendly)
+        public WarriorAIComponent(IEntity Parent, bool Friendly) : base(Parent, Friendly)
 		{
 			this._attackTimer = 0f;
 		    this.ForgetTimer = new Timer(8f);
 
         }
 
-        protected override void SetTarget(Entity Target)
+        protected override void SetTarget(IEntity Target)
         {
             base.SetTarget(Target);
             ForgetTimer.Reset();

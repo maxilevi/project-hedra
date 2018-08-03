@@ -43,7 +43,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 return;
             _initialized = true;
 
-            LocalPlayer player = GameManager.Player;
+            var player = GameManager.Player;
 
             if (player == null || _healthBar != null)
                 return;
@@ -70,7 +70,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             this.Initialize();
             if (!Enabled) return;
 
-            LocalPlayer player = GameManager.Player;
+            var player = GameManager.Player;
 
             if (player == null) return;
 
@@ -119,7 +119,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         public override void Dispose()
         {
             this.Initialize();
-            LocalPlayer player = GameManager.Player;
+            var player = GameManager.Player;
             player.UI.GamePanel.RemoveElement(_healthBar);
             player.UI.GamePanel.RemoveElement(_nameGui);
             _healthBar.Dispose();

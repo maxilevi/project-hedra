@@ -32,7 +32,7 @@ namespace Hedra.Engine.Rendering.UI
 	    private readonly GUIText _name;
 		private readonly List<UIElement> _dataElements = new List<UIElement>();
 		
-		public ChrChooserUI(LocalPlayer Player)
+		public ChrChooserUI(IPlayer Player)
 		{
 		    _humans = new List<Humanoid>();
             var bandPosition = new Vector2(0f, .8f);

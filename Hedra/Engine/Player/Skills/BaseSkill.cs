@@ -44,7 +44,7 @@ namespace Hedra.Engine.Player.Skills
 	    protected bool Enabled { get; set; } = true;
 		protected virtual bool UseTextureIdCache { get; } = true;
 		protected RenderableText CooldownSecondsText;
-	    protected LocalPlayer Player => GameManager.Player;
+	    protected IPlayer Player => GameManager.Player;
 	    private Panel _panel;
 		private uint _textureId;
 
@@ -60,7 +60,7 @@ namespace Hedra.Engine.Player.Skills
 			
 		}
 
-		public void Initialize(Vector2 Position, Vector2 Scale, Panel InPanel, LocalPlayer Player)
+		public void Initialize(Vector2 Position, Vector2 Scale, Panel InPanel, IPlayer Player)
 		{
 			this._panel = InPanel;
 			this.Position = Position;

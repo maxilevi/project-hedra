@@ -18,13 +18,13 @@ namespace Hedra.Engine.EntitySystem
 		public float Damage { get; set; } = 30;
 		public float Duration { get; set; } = 5;
 
-        public FireComponent(Entity Parent) : base(Parent) {
+        public FireComponent(IEntity Parent) : base(Parent) {
 			Parent.OnAttacking += this.Apply;
 		}
 		
 		public override void Update(){}
 		
-		public void Apply(Entity Victim, float Amount){
+		public void Apply(IEntity Victim, float Amount){
 		    if (Utils.Rng.NextFloat() <= Chance * 0.01)
 		    {
 		        if (Victim.SearchComponent<BurningComponent>() == null)

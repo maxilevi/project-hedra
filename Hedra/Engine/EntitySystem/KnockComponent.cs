@@ -17,7 +17,7 @@ namespace Hedra.Engine.EntitySystem
 
         private float _cooldown;
 
-        public KnockComponent(Entity Parent) : base(Parent)
+        public KnockComponent(IEntity Parent) : base(Parent)
         {
             Parent.OnAttacking += this.Apply;
         }
@@ -27,7 +27,7 @@ namespace Hedra.Engine.EntitySystem
             _cooldown -= Time.IndependantDeltaTime;
         }
 
-        public void Apply(Entity Victim, float Amount)
+        public void Apply(IEntity Victim, float Amount)
         {
             if (_cooldown > 0) return;
 

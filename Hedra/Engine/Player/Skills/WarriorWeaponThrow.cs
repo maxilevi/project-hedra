@@ -55,7 +55,7 @@ namespace Hedra.Engine.Player
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsMoving && Player.MainWeapon != null;
 		}
 		
-		private void ShootWeapon(Humanoid Human, Vector3 Direction, int KnockChance = -1){
+		private void ShootWeapon(IHumanoid Human, Vector3 Direction, int KnockChance = -1){
 			var weaponData = Player.Model.LeftWeapon.MeshData.Clone();
 		    var startingPosition = Player.Model.LeftWeaponPosition + Player.Model.Human.Orientation * 2 +
 		                           Vector3.UnitY * 2f;
@@ -65,7 +65,7 @@ namespace Hedra.Engine.Player
                 Propulsion = Direction * 2f,
 		        Lifetime = 5f
 		    };
-		    weaponProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
+		    weaponProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
 		        Hit.Damage(Human.DamageEquation * .5f, Human, out float Exp, true);
 				Human.XP += Exp;
 				if(KnockChance != -1){

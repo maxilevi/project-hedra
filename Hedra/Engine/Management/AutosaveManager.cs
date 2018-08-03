@@ -6,9 +6,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using Hedra.Engine.Player;
-
 namespace Hedra.Engine.Management
 {
 	/// <summary>
@@ -29,7 +26,7 @@ namespace Hedra.Engine.Management
 		}
 		
 		public static void Save(){
-			LocalPlayer.Instance.UnLoad();
+			GameManager.Player.Unload();
 			
 			for(var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
 				GameManager.Player.Toolbar.Skills[i].Unload();
@@ -39,7 +36,7 @@ namespace Hedra.Engine.Management
 			for(var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
 				GameManager.Player.Toolbar.Skills[i].Load();
 			
-			LocalPlayer.Instance.Load();
+			GameManager.Player.Load();
 		}
 	}
 }

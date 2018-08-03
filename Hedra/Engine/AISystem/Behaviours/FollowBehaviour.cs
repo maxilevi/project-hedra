@@ -4,10 +4,10 @@ namespace Hedra.Engine.AISystem.Behaviours
 {
     public class FollowBehaviour : Behaviour
     {
-        public Entity Target { get; set; }
+        public IEntity Target { get; set; }
         protected WalkBehaviour Walk { get; }
 
-        public FollowBehaviour(Entity Parent) : base(Parent)
+        public FollowBehaviour(IEntity Parent) : base(Parent)
         {
             Walk = new WalkBehaviour(Parent);
         }

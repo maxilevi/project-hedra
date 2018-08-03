@@ -42,7 +42,7 @@ namespace Hedra.Engine.Generation
         public static int ChunkQueueCount => Provider.ChunkQueueCount;
         public static ReadOnlyCollection<Chunk> Chunks => Provider.Chunks;
         public static ReadOnlyCollection<WorldItem> Items => Provider.Items;
-        public static ReadOnlyCollection<Entity> Entities => Provider.Entities;
+        public static ReadOnlyCollection<IEntity> Entities => Provider.Entities;
         public static ReadOnlyCollection<BaseStructure> Structures => Provider.Structures;
         public static ReadOnlyCollection<ICollidable> GlobalColliders => Provider.GlobalColliders;
         public static Dictionary<Vector2, Chunk> DrawingChunks => Provider.DrawingChunks;
@@ -105,12 +105,12 @@ namespace Hedra.Engine.Generation
             return GetChunkByOffset((int) vec2.X, (int) vec2.Y);
         }
 
-        public static void AddEntity(Entity Entity)
+        public static void AddEntity(IEntity Entity)
         {
             Provider.AddEntity(Entity);
         }
 
-        public static void RemoveEntity(Entity Entity)
+        public static void RemoveEntity(IEntity Entity)
         {
             Provider.RemoveEntity(Entity);
         }

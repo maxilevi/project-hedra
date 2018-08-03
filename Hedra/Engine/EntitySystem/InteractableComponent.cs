@@ -16,7 +16,7 @@ namespace Hedra.Engine.EntitySystem
         private bool _canInteract;
         private bool _shouldInteract;
 
-        protected InteractableComponent(Entity Entity) : base(Entity)
+        protected InteractableComponent(IEntity Entity) : base(Entity)
         {
             EventDispatcher.RegisterKeyDown(this, delegate (object Sender, KeyEventArgs EventArgs)
             {
@@ -57,7 +57,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public virtual void Interact(LocalPlayer Interactee)
+        public virtual void Interact(IPlayer Interactee)
         {
             Interacted = true;
         }

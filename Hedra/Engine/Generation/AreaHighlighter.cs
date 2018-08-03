@@ -105,7 +105,7 @@ namespace Hedra.Engine.Generation
             var area = (HighlightedArea)Params[0];
             var areaClone = new HighlightedArea(area.Position, area.Color, area.Radius);
             var seed = (int) Params[1];
-            LocalPlayer player = LocalPlayer.Instance;
+            var player = GameManager.Player;
 
             while (World.Seed == seed && World.GetChunkAt(areaClone.Position) != null)
             {

@@ -8,7 +8,7 @@ namespace Hedra.Engine.EntitySystem
         public float SpeedBonus { get; set; } = .5f;
         private float _speedTime;
 
-        public SpeedComponent(Entity Parent) : base(Parent) {
+        public SpeedComponent(IEntity Parent) : base(Parent) {
             Parent.OnAttacking += this.Apply;
         }
 
@@ -17,7 +17,7 @@ namespace Hedra.Engine.EntitySystem
             _speedTime -= Time.IndependantDeltaTime;
         }
 
-        public void Apply(Entity Victim, float Amount)
+        public void Apply(IEntity Victim, float Amount)
         {
             if (Utils.Rng.NextFloat() <= Chance * 0.01)
             {

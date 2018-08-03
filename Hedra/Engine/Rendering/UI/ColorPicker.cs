@@ -23,6 +23,7 @@ namespace Hedra.Engine.Rendering.UI
 	
 	public class ColorPicker : UIElement
 	{
+		private static readonly Bitmap RoundedRectangle = new Bitmap(new MemoryStream(AssetManager.ReadBinary("Assets/Background.png",AssetManager.DataFile3)));
 		public event ColorPickedEventHandler ColorPickedEvent; 
 		public List<UIElement> Elements = new List<UIElement>();
 		private static Vector2 _targetResolution = new Vector2(1024, 600);
@@ -37,10 +38,10 @@ namespace Hedra.Engine.Rendering.UI
 				Button background = new Button(Position + Mathf.ScaleGUI(_targetResolution,xOffset+yOffset) * Scale, Mathf.ScaleGUI(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.5f *Scale, string.Empty, GUIRenderer.TransparentTexture);
 				int k = i;
 				background.Click += delegate { if(ColorPickedEvent != null) ColorPickedEvent.Invoke(Colors[k]); };
-				Texture backgroundTex = new Texture(Graphics2D.LoadTexture(Graphics2D.Clone(Graphics2D.RoundedRectangle)),
+				Texture backgroundTex = new Texture(Graphics2D.LoadTexture(Graphics2D.Clone(RoundedRectangle)),
 				                                    Position + Mathf.ScaleGUI(_targetResolution, xOffset+yOffset) * Scale, Mathf.ScaleGUI(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.5f * Scale);
 				
-				Texture colorTex = new Texture(Graphics2D.LoadTexture(Graphics2D.ReColorMask(Mathf.ToColor(Colors[i]),Graphics2D.Clone(Graphics2D.RoundedRectangle))),
+				Texture colorTex = new Texture(Graphics2D.LoadTexture(Graphics2D.ReColorMask(Mathf.ToColor(Colors[i]),Graphics2D.Clone(RoundedRectangle))),
 				                              Position +  Mathf.ScaleGUI(_targetResolution, xOffset+yOffset) * Scale, Mathf.ScaleGUI(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.4f * Scale);
 				xOffset += new Vector2(0.1f,0);
 				if(rowCount == 3){

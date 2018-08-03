@@ -10,12 +10,12 @@ namespace Hedra.Engine.AISystem.Behaviours
         public Func<Vector3> Target { get; protected set; }
         public float Radius { get; protected set; }
 
-        public FleeBehaviour(Entity Parent) : base(Parent)
+        public FleeBehaviour(IEntity Parent) : base(Parent)
         {
             Walk = new WalkBehaviour(Parent);
         }
 
-        public void SetTarget(Entity Target, float Radius)
+        public void SetTarget(IEntity Target, float Radius)
         {
             this.Target = () => Target.Position;
             this.Radius = Radius;

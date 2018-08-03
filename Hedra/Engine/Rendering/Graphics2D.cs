@@ -19,17 +19,12 @@ namespace Hedra.Engine.Rendering
 {
 	public static class Graphics2D
 	{
-		public static List<uint> Textures = new List<uint>();
-		public static Bitmap RoundedRectangle = new Bitmap(new MemoryStream(AssetManager.ReadBinary("Assets/Background.png",AssetManager.DataFile3)));
+		public static readonly List<uint> Textures = new List<uint>();
 
-		public static uint LoadTexture(Bitmap bmp, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
+		public static uint LoadTexture(Bitmap bmp, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
 		{
-            uint id;
-			GL.GenTextures(1, out id);
-	        GL.BindTexture(TextureTarget.Texture2D, id);
-	
-	        BitmapData bmp_data = bmp.LockBits(new Rectangle(0,0,bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-	
+			var id = Renderer.CreateTexture2D();
+	        var bmp_data = bmp.LockBits(new Rectangle(0,0,bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 	        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
 	            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
 	
@@ -44,12 +39,8 @@ namespace Hedra.Engine.Rendering
 	        Textures.Add(id);
             return id;
 	    }
-		
-		public static uint LoadTexture(Bitmap bmp){
-			return Graphics2D.LoadTexture(bmp, TextureMinFilter.Linear, TextureMagFilter.Linear, TextureWrapMode.ClampToBorder);
-		}
 
-	    public static Vector2 ToRelativeSize(this Vector2 Size)
+		public static Vector2 ToRelativeSize(this Vector2 Size)
 	    {
 	        return new Vector2(Size.X / GameSettings.Width, Size.Y / GameSettings.Height);
 	    }
@@ -58,7 +49,7 @@ namespace Hedra.Engine.Rendering
 
         public static Vector2 TextureSize(Bitmap bmp)
 	    {
-	        return new Vector2((float)bmp.Width / (float)GameSettings.Width, (float)bmp.Height / (float)GameSettings.Height);
+	        return new Vector2(bmp.Width / (float)GameSettings.Width, (float)bmp.Height / (float)GameSettings.Height);
 	    }
 
         public static Bitmap Clone(Bitmap Original)
@@ -197,7 +188,8 @@ namespace Hedra.Engine.Rendering
 		}
 #endregion
 
-        public static void Dispose(){
+        public static void Dispose()
+        {
 			GL.DeleteTextures(Textures.Count, Textures.ToArray());
 		}
 	}

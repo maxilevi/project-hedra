@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player
     public sealed class HumanoidModel : UpdatableModel<AnimatedModel>, IAudible, IDisposeAnimation
     {
 		public const float DefaultScale = 0.75f;
-		public Humanoid Human { get; private set; }
+		public IHumanoid Human { get; private set; }
 		private Animation WalkAnimation;
 		private Animation IdleAnimation;
 		private Animation RollAnimation;
@@ -79,17 +79,17 @@ namespace Hedra.Engine.Player
         private float _alpha = 1f;
 
 
-        public HumanoidModel(Humanoid Human, HumanoidModelTemplate Template) : base(Human)
+        public HumanoidModel(IHumanoid Human, HumanoidModelTemplate Template) : base(Human)
 		{
 		    this.Load(Human, Template);
 		}
 
-        public HumanoidModel(Humanoid Human, HumanType Type) : base(Human)
+        public HumanoidModel(IHumanoid Human, HumanType Type) : base(Human)
         {
             this.Load(Human, HumanoidLoader.ModelTemplater[Type]);
         }
 
-        public HumanoidModel(Humanoid Human) : base(Human)
+        public HumanoidModel(IHumanoid Human) : base(Human)
         {
             this.Load(Human, HumanoidLoader.ModelTemplater[Human.Class]);
         }
@@ -107,7 +107,7 @@ namespace Hedra.Engine.Player
             AnimationModelLoader.Paint(this.Model, _modelPath, colorMap);
         }
 
-        private void Load(Humanoid Human, HumanoidModelTemplate Template){
+        private void Load(IHumanoid Human, HumanoidModelTemplate Template){
 			this.Human = Human;
 			this.Scale = Vector3.One * Template.Scale;
 			this.Tint = Vector4.One;
@@ -143,7 +143,6 @@ namespace Hedra.Engine.Player
             RollAnimation.Loop = false;
 			RollAnimation.OnAnimationEnd += delegate(Animation Sender) { 
 				Human.Physics.ResetFall();
-				Human.FinishRoll();
 				this.Model.PlayAnimation(IdleAnimation);
 			};
 
@@ -206,7 +205,7 @@ namespace Hedra.Engine.Player
             DisposeTime = 0;
         }
 
-        public override void Attack(Entity Victim)
+        public override void Attack(IEntity Victim)
 		{
 			if(!Human.Knocked && !Human.IsAttacking && !(Human is LocalPlayer)){
 				LeftWeapon.Attack1(this.Human);
@@ -360,8 +359,6 @@ namespace Hedra.Engine.Player
             base.Update();
 		    WalkAnimation.Speed = Human.Speed;
 		    this._modelSound.Pitch = Human.Speed / 1.11f;
-            if (this.Model.Animator.AnimationPlaying != this.RollAnimation && Human.IsRolling)
-		        Human.FinishRoll();
 
             if (_lastAnimationTime != this.Model.Animator.AnimationTime || GameManager.InMenu)
             {

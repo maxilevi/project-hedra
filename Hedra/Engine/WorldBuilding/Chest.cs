@@ -51,7 +51,7 @@ namespace Hedra.Engine.WorldBuilding
 			this.OpenAnimation.OnAnimationEnd += delegate { 
 				var worldItem = World.DropItem(ItemSpecification, this.Position);
 				worldItem.Position = new Vector3(worldItem.Position.X, worldItem.Position.Y + .75f * this.Scale.Y, worldItem.Position.Z);
-				worldItem.OnPickup += delegate(LocalPlayer Player)
+				worldItem.OnPickup += delegate(IPlayer Player)
 				{
 				    OnPickup?.Invoke(Player);
 				};

@@ -78,7 +78,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			this.ShootTripleArrow(Owner);
 		}
 		
-		public override void Update(Humanoid Human)
+		public override void Update(IHumanoid Human)
 		{
 			base.Update(Human);
 
@@ -124,7 +124,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    return ArrowProj;
 		}
 		
-		public Projectile ShootArrow(Humanoid Human, Vector3 Direction, int KnockChance = -1)
+		public Projectile ShootArrow(IHumanoid Human, Vector3 Direction, int KnockChance = -1)
 		{
 		    var startingLocation = Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
 		                           (Human is LocalPlayer ? Human.IsRiding ? Vector3.UnitY * 1f : Vector3.Zero : Vector3.Zero);
@@ -134,7 +134,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		        Lifetime = 5f,
 		        Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce
             };
-		    arrowProj.HitEventHandler += delegate(Projectile Sender, Entity Hit) {
+		    arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
 			    Hit.Damage(Human.DamageEquation * 0.75f, Human, out float exp, true);
 				Human.XP += exp;
 			    if(KnockChance != -1 && Utils.Rng.Next(0, KnockChance) == 0)
@@ -147,7 +147,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			return arrowProj;
 		}
 		
-		public void ShootTripleArrow(Humanoid Human){
+		public void ShootTripleArrow(IHumanoid Human){
 		    var player = Human as LocalPlayer;
             Vector3 direction = player?.View.CrossDirection ?? Human.Orientation;
 

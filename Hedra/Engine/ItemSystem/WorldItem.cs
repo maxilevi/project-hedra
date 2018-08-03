@@ -21,14 +21,14 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.ItemSystem
 {
-	public delegate void OnItemCollect(LocalPlayer Player);
+	public delegate void OnItemCollect(IPlayer Player);
 
 	public class WorldItem : UpdatableModel<ObjectMesh>, IUpdatable
 	{
         private static ushort _itemCounter;
 		public bool PickedUp { get; private set; }
-		public ushort ItemId {get; set;}
-		public Item ItemSpecification;
+		public ushort ItemId { get; }
+		public Item ItemSpecification { get; }
 		public event OnItemCollect OnPickup;
 	    private readonly float _height;
         private bool _isColliding;

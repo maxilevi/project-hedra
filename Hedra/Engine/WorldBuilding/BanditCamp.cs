@@ -122,7 +122,7 @@ namespace Hedra.Engine.WorldBuilding
             {
                 var talkComponent = new TalkComponent(_rescuee,
                     "I am grateful to you for saving me. Take this item as a show of gratitude");
-                talkComponent.OnTalk += delegate(Entity Talkee)
+                talkComponent.OnTalk += delegate
                 {
                     var settings = new ItemPoolSettings(ItemTier.Rare, EquipmentType.Axe);
                     _rescuee.Movement.Orientate();

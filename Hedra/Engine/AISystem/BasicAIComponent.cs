@@ -10,7 +10,7 @@ namespace Hedra.Engine.AISystem
         public bool Enabled { get; set; }
         private Behaviour[] _behaviours;
 
-        protected BasicAIComponent(Entity Parent) : base(Parent)
+        protected BasicAIComponent(IEntity Parent) : base(Parent)
         {
 
         }

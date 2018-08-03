@@ -90,7 +90,7 @@ namespace Hedra.Engine.Management
             }
 		}
 	
-		public static PlayerInformation DataFromPlayer(LocalPlayer Player)
+		public static PlayerInformation DataFromPlayer(IPlayer Player)
         {
 		    var data = new PlayerInformation
 		    {

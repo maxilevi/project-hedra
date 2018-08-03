@@ -23,18 +23,12 @@ namespace Hedra.Engine.EntitySystem
 	    private float _time;
 	    private readonly float _totalDamage;
 		private int _pTime;
-		private readonly Entity _damager;
+		private readonly IEntity _damager;
 		
-		public FreezingComponent(Entity Parent, Entity Damager, float TotalTime, float TotalDamage) : base(Parent){
+		public FreezingComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent){
 			this._totalTime = TotalTime;
 			this._totalDamage = TotalDamage;
 			this._damager = Damager;
-			CoroutineManager.StartCoroutine(UpdateFreeze);
-		}
-		
-		public FreezingComponent(Entity Parent, float TotalTime, float TotalDamage) : base(Parent){
-			this._totalTime = TotalTime;
-			this._totalDamage = TotalDamage;
 			CoroutineManager.StartCoroutine(UpdateFreeze);
 		}
 		

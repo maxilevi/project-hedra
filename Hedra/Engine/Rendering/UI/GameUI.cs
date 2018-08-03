@@ -34,7 +34,7 @@ namespace Hedra.Engine.Rendering.UI
 	    public readonly TexturedBar StaminaBar;
 	    public readonly GUIText ConsecutiveHits;
 		
-		public GameUI(LocalPlayer Player) : base()
+		public GameUI(IPlayer Player) : base()
 		{
 		    ConsecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.75f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
             RenderableTexture barBackgrounds = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/BarBackgrounds.png"), Vector2.Zero, Vector2.One), DrawOrder.After);

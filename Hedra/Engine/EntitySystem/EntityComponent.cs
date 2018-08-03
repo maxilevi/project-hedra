@@ -18,9 +18,9 @@ namespace Hedra.Engine.EntitySystem
 	{	
         public bool Renderable { get; }
 		protected bool Disposed { get; private set; }
-		protected Entity Parent { get; set; }
+		protected IEntity Parent { get; set; }
 
-	    protected EntityComponent(Entity Entity)
+	    protected EntityComponent(IEntity Entity)
         {
 			this.Parent = Entity;
             this.Renderable = this.GetType().GetMethod("Draw")?.DeclaringType != base.GetType().BaseType;

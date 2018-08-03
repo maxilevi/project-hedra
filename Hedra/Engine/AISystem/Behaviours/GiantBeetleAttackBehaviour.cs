@@ -17,7 +17,7 @@ namespace Hedra.Engine.AISystem.Behaviours
         protected const int BiteAnimationIndex = 0;
         protected readonly Timer SpitTimer;
 
-        public GiantBeetleAttackBehaviour(Entity Parent) : base(Parent)
+        public GiantBeetleAttackBehaviour(IEntity Parent) : base(Parent)
         {
             SpitTimer = new Timer(5f)
             {
@@ -61,7 +61,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             }
         }
 
-        private void SpitAttack(Entity Victim, QuadrupedModel Model, float RangeModifier)
+        private void SpitAttack(IEntity Victim, QuadrupedModel Model, float RangeModifier)
         {
             if(!Model.CanAttack()) return;
             var spitAnimation = Model.AttackAnimations[SpitAnimationIndex];
@@ -76,7 +76,7 @@ namespace Hedra.Engine.AISystem.Behaviours
                     Color = Color.LawnGreen.ToVector4() * .5f,
                     UseLight = false
                 };
-                spit.HitEventHandler += delegate(Projectile Projectile, Entity Hit)
+                spit.HitEventHandler += delegate(Projectile Projectile, IEntity Hit)
                 {
                     Hit.KnockForSeconds(3);
                     Hit.Damage(Parent.AttackDamage, this.Parent, out float exp);
@@ -87,7 +87,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             Model.Attack(null, spitAnimation, AttackHandler, RangeModifier);
         }
 
-        private void BiteAttack(Entity Victim, QuadrupedModel Model, float RangeModifier)
+        private void BiteAttack(IEntity Victim, QuadrupedModel Model, float RangeModifier)
         {
             if (!Model.CanAttack()) return;
             var biteAnimation = Model.AttackAnimations[BiteAnimationIndex];

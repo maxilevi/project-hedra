@@ -23,11 +23,11 @@ namespace Hedra.Engine.EntitySystem
 	{
 		private readonly float _totalTime;
 	    private readonly float _totalDamage;
-		private readonly Entity _damager;
+		private readonly IEntity _damager;
 	    private float _time;
         private int _pTime;
 
-        public BurningComponent(Entity Parent, Entity Damager, float TotalTime, float TotalDamage) : base(Parent)
+        public BurningComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent)
         {
 			this._totalTime = TotalTime;
 			this._totalDamage = TotalDamage;
@@ -35,7 +35,7 @@ namespace Hedra.Engine.EntitySystem
 			CoroutineManager.StartCoroutine(UpdateBleed);
 		}
 		
-		public BurningComponent(Entity Parent, float TotalTime, float TotalDamage) : base(Parent)
+		public BurningComponent(IEntity Parent, float TotalTime, float TotalDamage) : base(Parent)
         {
 			this._totalTime = TotalTime;
 			this._totalDamage = TotalDamage;
