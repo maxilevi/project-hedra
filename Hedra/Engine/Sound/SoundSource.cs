@@ -21,8 +21,8 @@ namespace Hedra.Engine.Sound
 		private Vector3 _position;
 		private float _volume;
 		
-		public SoundSource(Vector3 Position){ 
-
+		public SoundSource(Vector3 Position)
+		{
             AL.GenSources(1, out Id);
 			AL.Source(Id, ALSourcef.Gain, 1);
 			AL.Source(Id, ALSourcef.Pitch,  1);

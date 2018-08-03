@@ -82,8 +82,24 @@ namespace Hedra.Engine.Management
 	        CoroutineManager.StartCoroutine(AfterFrames, Frames, Do);
 	    }
 
+        /// <summary>
+        /// Executes a provided action for a specific amount of seconds..
+        /// </summary>
+        /// <param name="Duration">Duration in seconds.</param>
+        /// <param name="Do">Action to execute</param>
+        public static void For(float Duration, Action Do)
+        {
+            var time = 0f;
+            While(() => time < Duration,
+            delegate
+            {
+                Do();
+                time += Time.DeltaTime;
+            });
+        }
+
         #region HelperCoroutines
-	    private static IEnumerator AfterFrames(params object[] Args)
+        private static IEnumerator AfterFrames(params object[] Args)
 	    {
 	        var framesToPass = (int) Args[0];
 	        var action = (Action) Args[1];

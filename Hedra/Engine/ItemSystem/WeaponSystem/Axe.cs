@@ -20,51 +20,39 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// Description of TwoHandedSword.
 	/// </summary>
 	public class Axe : MeleeWeapon
-	{
-        public Axe(VertexData Contents) : base(Contents)
+	{		
+		protected override string AttackStanceName => "Assets/Chr/WarriorSmash-Stance.dae";
+		protected override float PrimarySpeed => 1.15f;
+		protected override string[] PrimaryAnimationsNames => new []
 		{
-			AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSmash-Stance.dae");
-
-		    PrimaryAnimations = new Animation[2];
-		    PrimaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSlash-Right.dae");
-		    PrimaryAnimations[1] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSlash-Left.dae");
-
-		    for (int i = 0; i < PrimaryAnimations.Length; i++)
-		    {
-		        PrimaryAnimations[i].Loop = false;
-		        PrimaryAnimations[i].Speed = 1.15f;
-		        PrimaryAnimations[i].OnAnimationMid += delegate
-		        {
-		            Owner.Attack(Owner.DamageEquation);
-		        };
-
-		        PrimaryAnimations[i].OnAnimationEnd += delegate
-		        {
-		            Trail.Emit = false;
-		        };
-		    }
-            SecondaryAnimations = new Animation[1];
-		    SecondaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSlash-Front.dae");
-		    for (int i = 0; i < SecondaryAnimations.Length; i++)
-		    {
-		        SecondaryAnimations[i].Loop = false;
-		        SecondaryAnimations[i].Speed = 1.0f;
-                SecondaryAnimations[i].OnAnimationEnd += delegate
-		        {
-		            Owner.Attack(Owner.DamageEquation * 1.75f, delegate (Entity mob)
-		            {
-		                if (Utils.Rng.Next(0, 5) == 1)
-		                    mob.KnockForSeconds(0.75f + Utils.Rng.NextFloat() * 1f);
-		            });
-
-		        };
-
-		        SecondaryAnimations[i].OnAnimationEnd += delegate
-		        {
-		            Trail.Emit = false;
-		        };
-		    }
-        }
+			"Assets/Chr/WarriorSlash-Right.dae",
+			"Assets/Chr/WarriorSlash-Left.dae"
+		};
+		protected override float SecondarySpeed => 1.25f;
+		protected override string[] SecondaryAnimationsNames => new []
+		{
+			"Assets/Chr/WarriorSlash-Front.dae"
+		};
+		
+		public Axe(VertexData Contents) : base(Contents)
+		{
+		}
+		
+		protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
+		{
+			if(AttackEventType.Mid != Type) return;
+			Owner.Attack(Owner.DamageEquation);
+		}
+		
+		protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
+		{
+			if(Type != AttackEventType.End) return;
+			Owner.Attack(Owner.DamageEquation * 1.75f * Options.DamageModifier, delegate (Entity Mob)
+			{
+				if (Utils.Rng.Next(0, 5) == 1 && Options.Charge > .5f)
+					Mob.KnockForSeconds(0.75f + Utils.Rng.NextFloat() * 1f);
+			});
+		}
 
 	    public override void Attack1(Humanoid Human)
 	    {

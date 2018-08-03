@@ -181,11 +181,11 @@ namespace Hedra.Engine.Management
 				//Default buffer
 				if(_usedBuffer == null || (_frontBuffer != null && _usedBuffer.ID == _frontBuffer.ID) ){
 				    _backBuffer?.Dispose();
-				    _backBuffer = new SoundBuffer(SoundManager.GetSoundFormat(_reader.Channels, 16), data, _reader.SampleRate);
+				    _backBuffer = new SoundBuffer(data, SoundManager.GetSoundFormat(_reader.Channels, 16), _reader.SampleRate);
 					_usedBuffer = _backBuffer;
 				} else if(_usedBuffer.ID == _backBuffer.ID){
 				    _frontBuffer?.Dispose();
-				    _frontBuffer = new SoundBuffer(SoundManager.GetSoundFormat(_reader.Channels, 16), data, _reader.SampleRate);
+				    _frontBuffer = new SoundBuffer(data, SoundManager.GetSoundFormat(_reader.Channels, 16), _reader.SampleRate);
 					_usedBuffer = _frontBuffer;
 				}
 				_buildBuffers = false;

@@ -6,11 +6,15 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
+using System;
 using System.Reflection;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Sound;
+using OpenTK;
 
 namespace Hedra.Engine.Player
 {
@@ -20,6 +24,7 @@ namespace Hedra.Engine.Player
     [Obfuscation(Exclude = false, Feature = "-rename")]
     public class WeaponAttack : BaseSkill
 	{
+		private const float ChargeTime = 1;
 	    private static readonly uint Default = Graphics2D.LoadFromAssets("HolderSkill.png");
         private static readonly uint Sword1 = Graphics2D.LoadFromAssets("Slash.png");
 		private static readonly uint Sword2 = Graphics2D.LoadFromAssets("Lunge.png");
@@ -39,7 +44,9 @@ namespace Hedra.Engine.Player
 		private static readonly uint Claw2 = Graphics2D.LoadFromAssets("ClawAttack2.png");
 
 		public bool DisableWeapon { get; set; }
-	    private bool _isPressing;
+	    private bool _continousAttack;
+		private float _charge;
+		private bool _isCharging;
         private AttackType _type;
 
         public WeaponAttack()
@@ -67,34 +74,61 @@ namespace Hedra.Engine.Player
 		
 		public override void KeyUp()
 		{
-			_isPressing = false;
+		    if (_type == AttackType.Primary)
+		    {
+		        _continousAttack = false;
+		    }
+		    if (_type == AttackType.Secondary && _isCharging)
+			{
+				Player.Model.LeftWeapon.Attack2(Player, new AttackOptions
+				{
+				    Charge = _charge
+				});
+				IsCharging = false;
+			}
 		}
 		
 		public override void Use()
         {
-			
-			_isPressing = true;
-            if (_type == AttackType.Primary) Player.Model.LeftWeapon.Attack1(Player);
-		    if (_type == AttackType.Secondary) Player.Model.LeftWeapon.Attack2(Player);	
+            if (_type == AttackType.Primary)
+            {
+                _continousAttack = true;
+            }
+	        if (_type == AttackType.Secondary)
+	        {
+		        IsCharging = true;
+	            SoundManager.PlaySoundWhile(SoundType.PreparingAttack, () => IsCharging);
+            }
 		}
 		
 		public override void Update()
         {
 			if(DisableWeapon) return;
-			if(_isPressing)
-            {
-				Player.Model.LeftWeapon.Attack1(Player);
-				Player.Model.LeftWeapon.ContinousAttack = true;
+			if(_continousAttack)
+			{
+                Player.Model.LeftWeapon.Attack1(Player);
 			}
-			else
-            {
-				Player.Model.LeftWeapon.ContinousAttack = false;
+	        if (IsCharging)
+	        {
+                Player.Movement.Orientate();
+		        _charge = Math.Min(_charge + Time.DeltaTime, ChargeTime);
+	        }
+		}
+
+		public bool IsCharging
+		{
+			get => _isCharging;
+			set
+			{
+				_isCharging = value;
+				_charge = value ? _charge : 0;
+				Tint = value ? new Vector3(2, .75f, .75f) : NormalTint;
 			}
 		}
-		
-		public override string Description => string.Empty;
-	    protected override bool HasCooldown => false;
 
+		protected override bool UseTextureIdCache => false;
+	    protected override bool HasCooldown => false;
+		public override string Description => string.Empty;
 	}
 
     public enum AttackType

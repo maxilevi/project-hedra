@@ -101,8 +101,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             graph.AddEdge(edges.ToArray());
             for (var i = 0; i < Candidates.Count; i++)
             {
-                //var degree = graph.Degree(vertices[Candidates[i]]);
-                //var newParam = this.ParameterFromDegree(degree, Candidates[i].Position);              
+                var degree = graph.Degree(vertices[Candidates[i]]);
+                var newParam = this.ParameterFromDegree(degree, Candidates[i].Position);              
             }
             return graph;
         }

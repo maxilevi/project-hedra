@@ -20,52 +20,46 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     public class DoubleBlades : MeleeWeapon
     {
         private readonly ObjectMesh SecondBlade;
-
+        protected override string AttackStanceName => "Assets/Chr/RogueBlade-Stance.dae";
+        protected override float PrimarySpeed => 2.0f;
+        protected override string[] PrimaryAnimationsNames => new []
+        {
+            "Assets/Chr/RogueBladeLeftAttack.dae",
+            "Assets/Chr/RogueBladeRightAttack.dae"
+        };
+        protected override float SecondarySpeed => 1.5f;
+        protected override string[] SecondaryAnimationsNames => new []
+        {
+            "Assets/Chr/RogueBladeDoubleAttack.dae"
+        };
+        
         public DoubleBlades(VertexData Contents) : base(Contents)
         {
-            VertexData BaseMesh = Contents.Clone();
-            BaseMesh.Scale(Vector3.One * 1.75f);
-            this.SecondBlade = ObjectMesh.FromVertexData(BaseMesh);
-            this.RegisterWeapon(SecondBlade, BaseMesh);
-
-            AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBlade-Stance.dae");
-
-            PrimaryAnimations = new Animation[2];
-            PrimaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeLeftAttack.dae");
-            PrimaryAnimations[1] = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeRightAttack.dae");
-
-            for (int i = 0; i < PrimaryAnimations.Length; i++)
+            var baseMesh = Contents.Clone();
+            baseMesh.Scale(Vector3.One * 1.75f);
+            this.SecondBlade = ObjectMesh.FromVertexData(baseMesh);
+            this.RegisterWeapon(SecondBlade, baseMesh);
+        }
+        
+        protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
+        {
+            if(AttackEventType.Mid != Type) return;
+            Owner.Attack(Owner.DamageEquation * 0.85f);
+        }
+		
+        protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
+        {
+            if(Type != AttackEventType.End) return;
+            Owner.Attack(Owner.DamageEquation * 1.10f * Options.DamageModifier, delegate (Entity Mob)
             {
-                PrimaryAnimations[i].Speed = 2.0f;
-                PrimaryAnimations[i].Loop = false;
 
-                PrimaryAnimations[i].OnAnimationMid += delegate
-                {
-                    Owner.Attack(Owner.DamageEquation * 0.85f);
-                };
-            }
+                if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .75f)
+                    Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);
 
-            SecondaryAnimations = new Animation[1];
-            SecondaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeDoubleAttack.dae");
-
-            for (int i = 0; i < SecondaryAnimations.Length; i++)
-            {
-                SecondaryAnimations[i].Speed = 1.5f;
-                SecondaryAnimations[i].Loop = false;
-                SecondaryAnimations[i].OnAnimationEnd += delegate
-                {
-                    Owner.Attack(Owner.DamageEquation * 1.10f, delegate (Entity Mob)
-                    {
-
-                        if (Utils.Rng.Next(0, 3) == 1)
-                            Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);
-
-                        if (Utils.Rng.Next(0, 3) == 1)
-                            Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 4f,
-                                Owner.DamageEquation * 2f));
-                    });
-                };
-            }
+                if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .5f)
+                    Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 4f,
+                        Owner.DamageEquation * 2f));
+            });
         }
 
         public override void Update(Humanoid Human)

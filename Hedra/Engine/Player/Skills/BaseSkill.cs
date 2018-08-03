@@ -42,6 +42,7 @@ namespace Hedra.Engine.Player.Skills
 		public bool Initialized { get; private set;}
         protected bool UseMask => MaskId != 0;
 	    protected bool Enabled { get; set; } = true;
+		protected virtual bool UseTextureIdCache { get; } = true;
 		protected RenderableText CooldownSecondsText;
 	    protected LocalPlayer Player => GameManager.Player;
 	    private Panel _panel;
@@ -99,20 +100,19 @@ namespace Hedra.Engine.Player.Skills
             }
 		    if (CooldownSecondsText.Position != Position) CooldownSecondsText.Position = Position;
 		    CooldownSecondsText.Text = Cooldown > 0 && HasCooldown ? ((int)Cooldown + 1).ToString() : string.Empty;
-			Tint = Player.Mana - this.ManaCost < 0 ? new Vector3(.9f,.6f,.6f) : new Vector3(1,1,1);
 			Renderer.Enable(EnableCap.Blend);
 			Renderer.Disable(EnableCap.DepthTest);
 			Renderer.Disable(EnableCap.CullFace);
 			
 			Shader.Bind();
-            Shader["Tint"] = Tint;
+            Shader["Tint"] = Player.Mana - this.ManaCost < 0 && Tint == NormalTint ? new Vector3(.9f,.6f,.6f) : Tint;
 			Shader["Scale"] = Scale * new Vector2(1,-1);
 			Shader["Position"] = Position;
 			Shader["Bools"] = new Vector2(Level == 0 || Grayscale ? 1 : 0, UseMask ? 1 : 0);
 			Shader["Cooldown"] = this.Cooldown / this.MaxCooldown;
 			
 			GL.ActiveTexture(TextureUnit.Texture0);
-			GL.BindTexture(TextureTarget.Texture2D, _textureId);
+			GL.BindTexture(TextureTarget.Texture2D, UseTextureIdCache ? _textureId : TextureId);
 			
 			GL.ActiveTexture(TextureUnit.Texture1);
 			GL.BindTexture(TextureTarget.Texture2D, MaskId);

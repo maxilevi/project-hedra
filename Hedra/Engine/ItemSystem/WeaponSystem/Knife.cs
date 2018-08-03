@@ -24,8 +24,20 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public class Knife : MeleeWeapon
 	{
 	    private static readonly VertexData SheathData;
-        private readonly ObjectMesh KnifeSheath;
+        private readonly ObjectMesh _knifeSheath;
 	    private Vector3 _previousPosition;
+		protected override string AttackStanceName => "Assets/Chr/ArcherShootStance.dae";
+		protected override float PrimarySpeed => 1.25f;
+		protected override string[] PrimaryAnimationsNames => new []
+		{
+			"Assets/Chr/WarriorSlash-Left.dae",
+			"Assets/Chr/WarriorSlash-Right.dae"
+		};
+		protected override float SecondarySpeed => 1.5f;
+		protected override string[] SecondaryAnimationsNames => new[]
+		{
+			"Assets/Chr/WarriorLunge.dae"
+		};
 
         static Knife()
         {
@@ -36,52 +48,29 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public Knife(VertexData Contents) : base(Contents)
 		{
-			KnifeSheath = ObjectMesh.FromVertexData(SheathData);
-			
-			AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherShootStance.dae");
-
-		    PrimaryAnimations = new Animation[2];
-		    PrimaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSlash-Left.dae");
-		    PrimaryAnimations[1] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSlash-Right.dae");
-
-		    for (int i = 0; i < PrimaryAnimations.Length; i++)
-		    {
-		        PrimaryAnimations[i].Loop = false;
-		        PrimaryAnimations[i].Speed = 1.25f;
-		        PrimaryAnimations[i].OnAnimationMid += delegate
-		        {
-
-		            Owner.Attack(Owner.DamageEquation * 0.7f, delegate(Entity Mob)
-		            {
-		                if (Utils.Rng.Next(0, 5) == 1)
-		                    Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 3f,
-		                        Owner.DamageEquation * 2.0f));
-		            });
-		        };
-
-		        PrimaryAnimations[i].OnAnimationEnd += delegate
-		        {
-		            Trail.Emit = false;
-		        };
-            }
-
-		    SecondaryAnimations = new Animation[1];
-            SecondaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorLunge.dae");
-
-		    for (int i = 0; i < SecondaryAnimations.Length; i++)
-		    {
-		        SecondaryAnimations[i].Loop = false;
-		        PrimaryAnimations[i].Speed = 1.5f;
-                SecondaryAnimations[i].OnAnimationEnd += delegate
-		        {
-		            Owner.Attack(Owner.DamageEquation * 0.8f, delegate(Entity Mob)
-		            {
-		                if (Utils.Rng.Next(0, 3) == 1)
-		                    Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 4f,
-		                        Owner.DamageEquation * 2.0f));
-		            });
-		        };
-		    }
+			_knifeSheath = ObjectMesh.FromVertexData(SheathData);
+		}
+		
+		protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
+		{
+			if(AttackEventType.Mid != Type) return;
+			Owner.Attack(Owner.DamageEquation * 0.7f, delegate(Entity Mob)
+			{
+				if (Utils.Rng.Next(0, 5) == 1)
+					Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 3f,
+						Owner.DamageEquation * 2.0f));
+			});
+		}
+		
+		protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
+		{
+			if(Type != AttackEventType.End) return;
+			Owner.Attack(Owner.DamageEquation * 0.8f * Options.DamageModifier, delegate(Entity Mob)
+			{
+				if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .75f)
+					Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 4f,
+						Owner.DamageEquation * 2.0f));
+			});
 		}
 		
 		public override void Update(Humanoid Human)
@@ -150,13 +139,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 				}
 				_previousPosition = Owner.BlockPosition;
 			}
-		    base.SetToDefault(KnifeSheath);
+		    base.SetToDefault(_knifeSheath);
 
             Matrix4 KnifeMat4 = Owner.Model.Model.MatrixFromJoint(Owner.Model.ChestJoint).ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
 			
-			this.KnifeSheath.Position = Owner.Model.Position;
-			this.KnifeSheath.BeforeLocalRotation = -Vector3.UnitX * 1.75f - Vector3.UnitY * 3.0f;
-			this.KnifeSheath.TransformationMatrix = KnifeMat4;
+			this._knifeSheath.Position = Owner.Model.Position;
+			this._knifeSheath.BeforeLocalRotation = -Vector3.UnitX * 1.75f - Vector3.UnitY * 3.0f;
+			this._knifeSheath.TransformationMatrix = KnifeMat4;
 		}
 		
 		public override void Attack1(Humanoid Human){

@@ -130,7 +130,8 @@ namespace Hedra.Engine.Rendering.UI
 
 		}
 		
-		public void NewRunOnClick(object Sender, EventArgs E){
+		public void NewRunOnClick(object Sender, EventArgs E)
+		{
 			if(GameManager.InStartMenu){
 				Menu.Disable();
 				ChrChooser.Enable();
@@ -139,11 +140,14 @@ namespace Hedra.Engine.Rendering.UI
 			}
 		}
 		
-		public void Update(){
+		public void Update()
+		{
 		    if (_player == null) return;
 
-		    if(this.GamePanel.Enabled){
-		        if(Program.GameWindow.FirstLaunch){
+		    if(this.GamePanel.Enabled)
+		    {
+		        if(Program.GameWindow.FirstLaunch)
+		        {
 		            Program.GameWindow.FirstLaunch = false;
 		            _player.MessageDispatcher.ShowMessageWhile("[F4] HELP", () => !LocalPlayer.Instance.UI.ShowHelp);
 		        }

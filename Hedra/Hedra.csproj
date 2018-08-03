@@ -247,6 +247,7 @@
     <Compile Include="Engine\Generation\ChunkSystem\WorkerPool.cs" />
     <Compile Include="Engine\Generation\IWorldProvider.cs" />
     <Compile Include="Engine\Generation\WorldProvider.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\AttackOptions.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />

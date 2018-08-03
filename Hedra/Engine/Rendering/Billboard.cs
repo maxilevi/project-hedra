@@ -9,10 +9,8 @@
 using System;
 using System.Drawing;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Player;
 
 namespace Hedra.Engine.Rendering
 {

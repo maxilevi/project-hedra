@@ -18,13 +18,13 @@ namespace Hedra.Engine.Sound
 	{
 		public uint ID;
 
-	    public SoundBuffer(ALFormat Format, byte[] Data, int SampleRate)
+	    public SoundBuffer(byte[] Data, ALFormat Format, int SampleRate)
         {
 			AL.GenBuffers(1, out ID);
 			AL.BufferData( (int) ID, Format, Data, Data.Length, SampleRate);
 		}
 		
-		public SoundBuffer(ALFormat Format, short[] Data, int SampleRate)
+		public SoundBuffer(short[] Data, ALFormat Format, int SampleRate)
         {
 			AL.GenBuffers(1, out ID);
 			AL.BufferData( (int) ID, Format, Data, Data.Length * sizeof(short), SampleRate);

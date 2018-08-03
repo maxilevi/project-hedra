@@ -20,7 +20,19 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	public delegate void OnModifyArrowEvent(Projectile Arrow);
 		
 	public sealed class Bow : RangedWeapon
-	{
+	{			
+		protected override string AttackStanceName => "Assets/Chr/ArcherShootStance.dae";
+		protected override float PrimarySpeed => 0.9f;
+		protected override string[] PrimaryAnimationsNames => new []
+		{
+			"Assets/Chr/ArcherShoot.dae"
+		};
+		protected override float SecondarySpeed => 0.9f;
+		protected override string[] SecondaryAnimationsNames => new []
+		{
+			"Assets/Chr/ArcherTripleShoot.dae"
+		};
+		
 	    private static readonly VertexData ArrowVertexData;
 	    private static readonly VertexData _arrowDataVertexData;
 	    private static readonly VertexData QuiverVertexData;
@@ -30,6 +42,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         private readonly ObjectMesh _arrow;
 		public OnModifyArrowEvent BowModifiers;
         public float ArrowDownForce { get; set; }
+		
 
         static Bow()
         {
@@ -48,40 +61,22 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			_quiver.TargetPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
 			_quiver.LocalRotationPoint = new Vector3(0, 0, _quiver.TargetPosition.Z);
 			_quiver.TargetRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);
-
-            AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherShootStance.dae");
-
-            PrimaryAnimations = new Animation[1];
-		    PrimaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/ArcherShoot.dae");
-
-		    for (var i = 0; i < PrimaryAnimations.Length; i++)
-		    {
-		        PrimaryAnimations[i].Loop = false;
-		        PrimaryAnimations[i].Speed = 0.9f;
-		        PrimaryAnimations[i].OnAnimationMid += delegate
-		        {
-		            var player = Owner as LocalPlayer;
-		            Vector3 direction = player?.View.CrossDirection ?? Owner.Orientation;
-
-                    this.ShootArrow(Owner, direction);
-		        };
-		    }
-
-            SecondaryAnimations = new Animation[1];
-		    SecondaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/ArcherTripleShoot.dae");
-
-		    for (var i = 0; i < SecondaryAnimations.Length; i++)
-		    {
-		        SecondaryAnimations[i].Loop = false;
-		        SecondaryAnimations[i].Speed = 0.9f;
-                SecondaryAnimations[i].OnAnimationMid += delegate
-		        {
-		            this.ShootTripleArrow(Owner);
-		        };
-		    }
-
-		    base.ShouldPlaySound = false;
+	        base.ShouldPlaySound = false;		    
         }
+		
+		protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
+		{
+			if(Type != AttackEventType.Mid) return;
+			var player = Owner as LocalPlayer;
+			var direction = player?.View.CrossDirection ?? Owner.Orientation;
+			this.ShootArrow(Owner, direction);
+		}
+		
+		protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
+		{
+			if(Type != AttackEventType.Mid) return;
+			this.ShootTripleArrow(Owner);
+		}
 		
 		public override void Update(Humanoid Human)
 		{

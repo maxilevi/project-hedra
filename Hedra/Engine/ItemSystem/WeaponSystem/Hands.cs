@@ -18,30 +18,34 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	/// Description of Hands.
 	/// </summary>
 	public class Hands : MeleeWeapon
-    {
-	    public override bool IsMelee { get; protected set; } = true;
+	{
+		protected override bool ShouldPlaySound => false;
+	    protected override string AttackStanceName => "Assets/Chr/WarriorPunch-Stance.dae";
+	    protected override float PrimarySpeed => 1.0f;
+	    protected override string[] PrimaryAnimationsNames => new []
+	    {
+		    "Assets/Chr/WarriorPunch.dae"
+	    };
+	    protected override float SecondarySpeed => 0.9f;
+	    protected override string[] SecondaryAnimationsNames => new string[0];
 
         public Hands() : base(null)
 		{
-		    AttackStanceAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorPunch-Stance.dae");
-
-            PrimaryAnimations = new Animation[1];
-            PrimaryAnimations[0] = AnimationLoader.LoadAnimation("Assets/Chr/WarriorPunch.dae");
-		    PrimaryAnimations[0].Speed = 1.0f;
-		    PrimaryAnimations[0].OnAnimationMid += delegate
-		    {
-		        Owner.Attack(Owner.DamageEquation * 0.75f);
-		    };
-            for (var i = 0; i < PrimaryAnimations.Length; i++)
-		    {
-		        PrimaryAnimations[i].Loop = false;
-		    }
-
-		    SecondaryAnimations = new Animation[0];
-
-            base.ShouldPlaySound = false;
 		}
-		
-		public override void Attack2(Humanoid Human){}
+
+	    protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
+	    {
+		    if(Type != AttackEventType.Mid) return;
+		    Owner.Attack(Owner.DamageEquation * 0.75f);
+	    }
+
+	    protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
+	    {
+		    throw new System.NotImplementedException();
+	    }
+
+	    public override void Attack2(Humanoid Human)
+	    {
+	    }
 	}
 }
