@@ -250,6 +250,7 @@
     <Compile Include="Engine\ItemSystem\WeaponSystem\AttackOptions.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
+    <Compile Include="Engine\Player\ICamera.cs" />
     <Compile Include="Engine\Player\IHumanoid.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
     <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />

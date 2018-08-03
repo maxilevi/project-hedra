@@ -52,7 +52,7 @@ namespace Hedra.Engine.WorldBuilding
 	    {
 	        var player = GameManager.Player;
 
-	        bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Model.Model.Position).Xz.NormalizedFast(),
+	        bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
                 player.View.LookingDirection.Xz.NormalizedFast()) > .9f;	            
 	        
             bool IsInRadius() => (this.Position - player.Position).LengthSquared < InteractDistance * InteractDistance;

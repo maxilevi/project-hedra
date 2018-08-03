@@ -13,7 +13,7 @@ namespace Hedra.Engine.Player
     public interface IPlayer : ISearchable, IHumanoid
     {
         IMessageDispatcher MessageDispatcher { get; }
-        Camera View { get; }
+        ICamera View { get; }
         ChunkLoader Loader { get; }
         UserInterface UI { get; set; }
         PlayerInventory Inventory { get; }

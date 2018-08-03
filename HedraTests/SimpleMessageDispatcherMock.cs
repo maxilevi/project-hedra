@@ -21,6 +21,7 @@ namespace HedraTests
 
         public void ShowMessageWhile(string Message, Func<bool> Condition)
         {
+            if(!Condition()) return;
             LastMessage = Message;
         }
 
@@ -36,6 +37,7 @@ namespace HedraTests
 
         public void ShowMessageWhile(string Message, Color TextColor, Func<bool> Condition)
         {
+            if(!Condition()) return;
             LastMessage = Message;
         }
 
@@ -47,6 +49,11 @@ namespace HedraTests
         public void ShowTitleMessage(string Message, float Seconds, Color TextColor)
         {
             LastMessage = Message;
+        }
+
+        public void Reset()
+        {
+            LastMessage = null;
         }
     }
 }

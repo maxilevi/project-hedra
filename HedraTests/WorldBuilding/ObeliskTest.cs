@@ -1,7 +1,9 @@
-﻿using Hedra.Engine.Events;
+﻿using Hedra.Engine;
+using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
+using HedraTests.Player;
 using NUnit.Framework;
 using OpenTK;
 
@@ -21,18 +23,7 @@ namespace HedraTests.WorldBuilding
             _dummyPlayer = new PlayerMock();
             Assert.Null(_dummyPlayer.MessageMock.LastMessage);
         }
-        
-        [Test]
-        public void TestObeliskCanOnlyBeUsedOnce()
-        {
-            _obelisk.Type = ObeliskType.Xp;
-            
-            var startXp = _dummyPlayer.XP;
-            _obelisk.InvokeInteraction(_dummyPlayer);
-            Assert.True(_obelisk.Disposed);
-            Assert.True(_obelisk.Interacted);
-        }
-        
+
         [Test]
         public void TestObeliskXp()
         {

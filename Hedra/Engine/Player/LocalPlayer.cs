@@ -33,7 +33,7 @@ namespace Hedra.Engine.Player
 	public class LocalPlayer : Humanoid, IPlayer
 	{
 
-		public Camera View { get; }
+		public ICamera View { get; }
 		public ChunkLoader Loader { get; }
 		public UserInterface UI { get; set; }
 		public PlayerInventory Inventory { get; }

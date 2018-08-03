@@ -9,7 +9,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player
 {
-    public class Camera : EventListener
+    public class Camera : EventListener, ICamera
     {
         public static Vector3 DefaultCameraHeight = Vector3.UnitY * 9.0f;
         public static Func<Vector3> DefaultDelegate;
