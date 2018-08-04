@@ -4,6 +4,7 @@ using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
@@ -97,6 +98,7 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public Weapon LeftWeapon { get; }
         public MobType MobType { get; set; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public ICamera View { get; set; } = new SimpleCameraMock();
