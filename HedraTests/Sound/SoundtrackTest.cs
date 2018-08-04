@@ -15,7 +15,7 @@ namespace HedraTests.Sound
         {
             World.Provider = new SimpleWorldProviderMock();
             SoundtrackManager.Load(null);
-            Assert.Catch(typeof(FileNotFoundException), () => SoundtrackManager.PlayTrack(0));
+            SoundtrackManager.PlayTrack(0);
             Assert.Catch(typeof(NullReferenceException), SoundtrackManager.Update);
         }
     }
