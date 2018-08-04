@@ -254,6 +254,10 @@
     <Compile Include="Engine\Player\IHumanoid.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
     <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />
+    <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />
+    <Compile Include="Engine\Rendering\UI\SlingShotAnimation.cs" />
+    <Compile Include="Engine\Rendering\UI\TextureAnimation.cs" />
+    <Compile Include="Engine\Rendering\UI\ShiverAnimation.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathEdge.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathGraph.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathVertex.cs" />

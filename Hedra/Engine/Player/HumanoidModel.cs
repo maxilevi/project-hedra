@@ -44,12 +44,16 @@ namespace Hedra.Engine.Player
         private Animation TiedAnimation;
         private Animation SleepAnimation;
 	    private Animation JumpAnimation;
-        public Joint LeftWeaponJoint;
-        public Joint RightWeaponJoint;
-        public Joint ChestJoint;
-        public Joint LeftFootJoint;
-        public Joint RightFootJoint;
-        public Joint HeadJoint;
+	    public Joint LeftShoulderJoint { get; private set; }
+	    public Joint RightShoulderJoint { get; private set; }
+	    public Joint LeftElbowJoint { get; private set; }
+	    public Joint RightElbowJoint { get; private set; }
+        public Joint LeftWeaponJoint { get; private set; }
+        public Joint RightWeaponJoint { get; private set; }
+        public Joint ChestJoint { get; private set; }
+        public Joint LeftFootJoint { get; private set; }
+        public Joint RightFootJoint { get; private set; }
+        public Joint HeadJoint { get; private set; }
         private AreaSound _modelSound;
 		public StaticModel Food;
 		public Weapon LeftWeapon { get; private set; }
@@ -67,7 +71,8 @@ namespace Hedra.Engine.Player
         public override bool IsWalking => this.WalkAnimation == this.Model.Animator.AnimationPlaying;
 	    public bool IsGliding => this.GlideAnimation == this.Model.Animator.AnimationPlaying;
 	    public bool IsSwimming => this.IdleSwimAnimation == this.Model.Animator.AnimationPlaying || this.SwimAnimation == this.Model.Animator.AnimationPlaying;
-        private string _modelPath;
+	    public bool IsRolling => this.RollAnimation == this.Model.Animator.AnimationPlaying;
+	    private string _modelPath;
         private ObjectMesh _lampModel;
 	    private bool _hasLamp;
         private Vector3 _previousPosition;
@@ -107,7 +112,8 @@ namespace Hedra.Engine.Player
             AnimationModelLoader.Paint(this.Model, _modelPath, colorMap);
         }
 
-        private void Load(IHumanoid Human, HumanoidModelTemplate Template){
+        private void Load(IHumanoid Human, HumanoidModelTemplate Template)
+        {
 			this.Human = Human;
 			this.Scale = Vector3.One * Template.Scale;
 			this.Tint = Vector4.One;
@@ -123,6 +129,10 @@ namespace Hedra.Engine.Player
 			this.LeftFootJoint = Model.RootJoint.GetChild("Foot_L");
 			this.RightFootJoint = Model.RootJoint.GetChild("Foot_R");
             this.HeadJoint = Model.RootJoint.GetChild("Head");
+	        this.LeftElbowJoint = Model.RootJoint.GetChild("Arm_L");
+	        this.RightElbowJoint = Model.RootJoint.GetChild("Arm_R");
+	        this.LeftShoulderJoint = Model.RootJoint.GetChild("Shoulder_L");
+	        this.RightShoulderJoint = Model.RootJoint.GetChild("Shoulder_R");
 			
 			WalkAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWalk.dae");
 			IdleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorIdle.dae");
@@ -141,9 +151,9 @@ namespace Hedra.Engine.Player
 	        JumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
 
             RollAnimation.Loop = false;
-			RollAnimation.OnAnimationEnd += delegate(Animation Sender) { 
+			RollAnimation.OnAnimationEnd += delegate { 
 				Human.Physics.ResetFall();
-				this.Model.PlayAnimation(IdleAnimation);
+                this.Model.PlayAnimation(IdleAnimation);
 			};
 
 			EatAnimation.Loop = false;

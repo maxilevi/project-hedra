@@ -27,7 +27,6 @@ namespace Hedra.Engine.WorldBuilding
 	    public override string Message => "INTERACT WITH THE OBELISK";
 	    public override int InteractDistance => 32;
         public ObeliskType Type { get; set; }
-		private bool _used;
 		
 		public override void Interact(IPlayer Interactee)
         {

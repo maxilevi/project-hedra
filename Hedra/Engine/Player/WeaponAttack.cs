@@ -13,6 +13,7 @@ using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
 using OpenTK;
 
@@ -24,7 +25,8 @@ namespace Hedra.Engine.Player
     [Obfuscation(Exclude = false, Feature = "-rename")]
     public class WeaponAttack : BaseSkill
 	{
-		private const float ChargeTime = 1;
+		private const float BaseChargeTime = 2.0f;
+		private const float ExtraChargeTime = 2.5f;
 	    private static readonly uint Default = Graphics2D.LoadFromAssets("HolderSkill.png");
         private static readonly uint Sword1 = Graphics2D.LoadFromAssets("Slash.png");
 		private static readonly uint Sword2 = Graphics2D.LoadFromAssets("Lunge.png");
@@ -44,13 +46,16 @@ namespace Hedra.Engine.Player
 		private static readonly uint Claw2 = Graphics2D.LoadFromAssets("ClawAttack2.png");
 
 		public bool DisableWeapon { get; set; }
+		private ShiverAnimation _shiverAnimation;
 	    private bool _continousAttack;
 		private float _charge;
-		private bool _isCharging;
+	    private float _chargeTime;
+        private bool _isCharging;
         private AttackType _type;
 
         public WeaponAttack()
         {
+            _shiverAnimation = new ShiverAnimation();
 			base.ManaCost = 0f;
 			base.Level = 1;
 		    base.TextureId = Default;
@@ -79,11 +84,13 @@ namespace Hedra.Engine.Player
 		        _continousAttack = false;
 		    }
 		    if (_type == AttackType.Secondary && _isCharging)
-			{
-				Player.Model.LeftWeapon.Attack2(Player, new AttackOptions
+		    {
+		        var charge = _chargeTime / (BaseChargeTime + ExtraChargeTime);
+                Player.Model.LeftWeapon.Attack2(Player, new AttackOptions
 				{
-				    Charge = _charge
-				});
+				    Charge = charge,
+				    DamageModifier = AttackOptions.Default.DamageModifier * charge
+                });
 				IsCharging = false;
 			}
 		}
@@ -110,10 +117,16 @@ namespace Hedra.Engine.Player
 			}
 	        if (IsCharging)
 	        {
+		        Player.LeftWeapon.InAttackStance = true;
                 Player.Movement.Orientate();
-		        _charge = Math.Min(_charge + Time.DeltaTime, ChargeTime);
+	            _chargeTime = Math.Min(_chargeTime + Time.DeltaTime, BaseChargeTime + ExtraChargeTime);
+	            _charge = _chargeTime / (BaseChargeTime + ExtraChargeTime);
+                _shiverAnimation.Intensity = _charge;
+	            _shiverAnimation.Update();
+		        Player.LeftWeapon.ChargingIntensity = _charge;
 	        }
-		}
+            Tint = IsCharging ? new Vector3(1,0,0) * _charge + Vector3.One * .65f : NormalTint;
+        }
 
 		public bool IsCharging
 		{
@@ -121,8 +134,10 @@ namespace Hedra.Engine.Player
 			set
 			{
 				_isCharging = value;
-				_charge = value ? _charge : 0;
-				Tint = value ? new Vector3(2, .75f, .75f) : NormalTint;
+			    _chargeTime = value ? _chargeTime : 0;
+				Player.LeftWeapon.Charging = value; 
+				if(value) _shiverAnimation.Play(this);
+				else _shiverAnimation.Stop();
 			}
 		}
 

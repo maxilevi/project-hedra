@@ -136,7 +136,8 @@ namespace Hedra.Engine.Sound
 				Log.WriteLine($"Could not play sound {Sound}");
 				return;
 			}
-			TaskManager.While(Lambda, delegate
+		    source.Play(SoundBuffers[(int)Sound], ListenerPosition, Pitch, Gain, false);
+            TaskManager.While(Lambda, delegate
 			{
 				if (source.IsPlaying) return;
 				source.Play(SoundBuffers[(int) Sound], ListenerPosition, Pitch, Gain, false);

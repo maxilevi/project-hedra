@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace AssetBuilder
 {
@@ -40,10 +41,12 @@ namespace AssetBuilder
             var outputType = Args[2].ToLowerInvariant();
             var type = Args[3].ToLowerInvariant();
             Console.WriteLine($"Building with sources '{folder}' file '{file}' as '{type}' ");
-            var projectName = new DirectoryInfo(folder).Name;
+            var projectInfo = new DirectoryInfo(folder);
+            var projectName = projectInfo.Name;
+            var parentName = UniqueFrom(folder);
             Console.WriteLine($" folder is '{folder}' name is '{projectName}' ");
             var projectFiles = Directory.GetFiles(folder, "*", SearchOption.AllDirectories).OrderBy(P => P).ToArray();
-            var history = LoadHistory(projectName);
+            var history = LoadHistory(projectName, parentName);
             var needsRebuild = history == null || ShouldWeRebuild(history.Builds, projectFiles);
             if (needsRebuild || !File.Exists(file))
             {
@@ -51,7 +54,7 @@ namespace AssetBuilder
                 var output = Serializers[type].Serialize(projectFiles);
                 Builders[outputType].Build(output.Results, file);
                 output.History.Builds = output.History.Builds.OrderBy(B => B.Path).ToArray();
-                WriteHistory(projectName, output.History);
+                WriteHistory(projectName, parentName, output.History);
             }
             else
             {
@@ -59,15 +62,16 @@ namespace AssetBuilder
             }
         }
 
-        private static void WriteHistory(string Name, BuildHistory History)
+        private static void WriteHistory(string Name, string ParentName, BuildHistory History)
         {
-            var historyPath = $"{AppPath}/{Name}.hst";
+            var historyPath = $"{AppPath}/{ParentName}/{Name}.hst";
+            Directory.CreateDirectory($"{AppPath}/{ParentName}/");
             File.WriteAllText(historyPath, BuildHistory.To(History));
         }
 
-        private static BuildHistory LoadHistory(string Name)
+        private static BuildHistory LoadHistory(string Name, string ParentName)
         {
-            var historyPath = $"{AppPath}/{Name}.hst";
+            var historyPath = $"{AppPath}/{ParentName}/{Name}.hst";
             if (!File.Exists(historyPath)) return null;
             return BuildHistory.From(File.ReadAllLines(historyPath));
         }
@@ -96,6 +100,25 @@ namespace AssetBuilder
         private static bool ChecksumDiffers(string Path, string Checksum)
         {
             return AssetBuild.CreateHash(Path) != Checksum;
+        }
+
+        private static string UniqueFrom(string Path)
+        {
+            var alphabet = new []
+            {
+                "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"
+                
+            };
+            var rng = new Random( Path.GetHashCode() );
+            var builder = new StringBuilder();
+            for (var i = 0; i < 7; i++)
+            {
+                var code = alphabet[rng.Next(0, alphabet.Length)];
+                if (rng.Next(0, 2) == 0) code = code.ToUpperInvariant();
+                builder.Append(code);
+
+            }
+            return builder.ToString();
         }
     }
 }

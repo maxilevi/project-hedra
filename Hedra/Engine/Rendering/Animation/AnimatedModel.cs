@@ -243,9 +243,11 @@ namespace Hedra.Engine.Rendering.Animation
 		 * @param jointMatrices
 		 *            - the array of joint transforms that is being filled.
 		 */
-		private void AddJointsToArray(Joint HeadJoint, Matrix4[] JointMatrices) {
-			JointMatrices[HeadJoint.Index] = HeadJoint.AnimatedTransform * ScaleMatrix * RotationMatrix * TransformationMatrix * PositionMatrix;
-			for(int i = 0; i < HeadJoint.Children.Count; i++){
+		private void AddJointsToArray(Joint HeadJoint, Matrix4[] JointMatrices)
+		{
+			JointMatrices[HeadJoint.Index] = HeadJoint.AnimatedTransform * ScaleMatrix * RotationMatrix * HeadJoint.TransformationMatrix * TransformationMatrix * PositionMatrix;
+			for(int i = 0; i < HeadJoint.Children.Count; i++)
+			{
 				this.AddJointsToArray(HeadJoint.Children[i], JointMatrices);
 			}
 		}

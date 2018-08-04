@@ -34,6 +34,7 @@ namespace Hedra.Engine.Rendering.Animation
 		 *         associated vertices of the skin in the shaders.
 		 */
 		public Matrix4 AnimatedTransform {get; set;}
+		public Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
 		
 		/**
 		 * This returns the inverted model-space bind transform. The bind transform

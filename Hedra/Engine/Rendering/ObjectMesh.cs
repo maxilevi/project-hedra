@@ -57,7 +57,8 @@ namespace Hedra.Engine.Rendering
 	        set => _buffer.UseNoiseTexture = value;
 	    }
 
-        public Vector3 TransformPoint(Vector3 Point){
+        public Vector3 TransformPoint(Vector3 Point)
+        {
 			return _buffer.TransformPoint(Point);
 		}
 
@@ -94,17 +95,20 @@ namespace Hedra.Engine.Rendering
 	        set => _buffer.Dither = value;
 	    }
 
-        public Vector3 Position{
+        public Vector3 Position
+        {
 			get => _buffer.Position;
             set => _buffer.Position = value;
         }
 		
-		public Vector3 LocalPosition{
+		public Vector3 LocalPosition
+		{
 			get => _buffer.LocalPosition;
 		    set => _buffer.LocalPosition = value;
 		}
 		
-		public Vector3 RotationPoint{
+		public Vector3 RotationPoint
+		{
 			get => _buffer.Point;
 		    set => _buffer.Point = value;
 		}
@@ -134,9 +138,16 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 		
-		public Vector3 BeforeLocalRotation{
+		public Vector3 BeforeLocalRotation
+		{
 			get => _buffer.BeforeLocalRotation;
 		    set => _buffer.BeforeLocalRotation = value;
+		}
+		
+		public Vector3 AdditionalBeforeLocalRotation
+		{
+			get => _buffer.AdditionalBeforeLocalRotation;
+			set => _buffer.AdditionalBeforeLocalRotation = value;
 		}
 		
 		public Vector3 LocalRotation{

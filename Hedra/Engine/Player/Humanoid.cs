@@ -26,8 +26,11 @@ using System.Linq;
 namespace Hedra.Engine.Player
 {
 
+	public delegate void OnHitLandedEventHandler(IHumanoid Humanoid, int ConsecutiveHits);
+	
 	public class Humanoid : Entity, IHumanoid
 	{
+		public event OnHitLandedEventHandler OnHitLanded;
         public virtual IMessageDispatcher MessageDispatcher { get; set; }
 	    public int ConsecutiveHits { get; private set; }
         public bool IsAttacking {get; set;}
@@ -57,6 +60,7 @@ namespace Hedra.Engine.Player
         public float RandomFactor { get; set; }
 	    public override float AttackResistance => Class.AttackResistance;
 	    public virtual int Gold { get; set; }
+		public Weapon LeftWeapon => Model.LeftWeapon;
 	    private Item _mainWeapon;
         private Item _ring;
 	    private float _mana;
@@ -184,9 +188,11 @@ namespace Hedra.Engine.Player
             Movement.Move(this.Orientation * 2f, 1.5f, false);
             SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);
 			Model.Roll();
-			//IsRolling = false;
-	        //DmgComponent.Immune = false;
-	        //
+			TaskManager.When( () => !Model.IsRolling, () =>
+			{
+				IsRolling = false;
+				DmgComponent.Immune = false;
+			} );
 		}
 
 		#endregion
@@ -255,7 +261,8 @@ namespace Hedra.Engine.Player
 	            int consecutiveHitsValue = ConsecutiveHits;
 	            this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier * .5f, () => ConsecutiveHits == consecutiveHitsValue);
 	            Mana = Mathf.Clamp(Mana + 8, 0, MaxMana);
-            }
+		        OnHitLanded?.Invoke(this, ConsecutiveHits);
+	        }
         }
 
 	    protected static float NewRandomFactor()

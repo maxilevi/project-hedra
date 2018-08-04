@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player.Skills
 	/// <summary>
 	/// Description of Skill.
 	/// </summary>
-	public abstract class BaseSkill : UIElement, IRenderable, IUpdatable
+	public abstract class BaseSkill : UIElement, IRenderable, IUpdatable, ISimpleTexture
 	{
 		public static Shader Shader { get; }
 		public static Vector3 GrayTint { get; }

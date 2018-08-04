@@ -143,46 +143,7 @@ namespace Hedra.Engine.Rendering.UI
 		{
 		    if (_player == null) return;
 
-		    if(this.GamePanel.Enabled)
-		    {
-		        if(Program.GameWindow.FirstLaunch)
-		        {
-		            Program.GameWindow.FirstLaunch = false;
-		            _player.MessageDispatcher.ShowMessageWhile("[F4] HELP", () => !LocalPlayer.Instance.UI.ShowHelp);
-		        }
-		    }
-
-		    this.GamePanel.Compass.Disable();
-		    this.GamePanel.Compass.TextureElement.Angle = _player.Model.Model.Rotation.Y;
-
-		    if (this.ShowHelp && this.GamePanel.Enabled)
-		    {
-		        _player.AbilityTree.Show = false;
-		        _player.QuestLog.Show = false;
-		        GamePanel.Help.Enable();
-		    }
-		    else
-		    {
-		        GamePanel.Help.Disable();
-		    }
-		    if (Math.Abs(_player.Oxygen - _player.MaxOxygen) > 0.05f && !GameSettings.Paused && this.GamePanel.Enabled)
-		        this.GamePanel.Oxygen = true;
-		    else
-		        this.GamePanel.Oxygen = false;
-
-		    if (Math.Abs(_player.Stamina - _player.MaxStamina) > 0.05f && !GameSettings.Paused && this.GamePanel.Enabled && !_player.IsUnderwater)
-		        this.GamePanel.Stamina = true;
-		    else
-		        this.GamePanel.Stamina = false;
-
-            this.GamePanel.ClassLogo.BaseTexture.TextureElement.TextureId = _player.Class.Logo;
-		    this.GamePanel.ConsecutiveHits.TextColor = _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8
-		        ? Color.Gold : _player.ConsecutiveHits >= 8 ? Color.Red : Color.White;
-		    this.GamePanel.ConsecutiveHits.TextFont = FontCache.Get(this.GamePanel.ConsecutiveHits.TextFont.FontFamily,
-                _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8
-		        ? 15f : _player.ConsecutiveHits >= 8 ? 17f : 14f,
-		        this.GamePanel.ConsecutiveHits.TextFont.Style);
-            this.GamePanel.ConsecutiveHits.Text = _player.ConsecutiveHits > 0 ? $"{_player.ConsecutiveHits} HIT{(_player.ConsecutiveHits == 1 ? string.Empty : "S")}" : string.Empty;
+			this.GamePanel.Update(_player);
 		}
 		
 		public void ShowMenu(){

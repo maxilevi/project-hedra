@@ -36,8 +36,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	    private static readonly VertexData ArrowVertexData;
 	    private static readonly VertexData _arrowDataVertexData;
 	    private static readonly VertexData QuiverVertexData;
-		public override Vector3 SheathedPosition => new Vector3(1.5f,-0.0f,0.0f);
-	    public override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
+		protected override Vector3 SheathedPosition => new Vector3(1.5f,-0.0f,0.0f);
+	    protected override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
         private readonly ObjectMesh _quiver;
         private readonly ObjectMesh _arrow;
 		public OnModifyArrowEvent BowModifiers;

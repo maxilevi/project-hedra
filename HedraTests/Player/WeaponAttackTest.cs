@@ -1,5 +1,6 @@
 ﻿using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.UI;
+using Moq;
 using NUnit.Framework;
 using OpenTK;
 
@@ -12,7 +13,7 @@ namespace HedraTests.Player
         [SetUp]
         public void Setup()
         {
-            _attack = new WeaponAttack();
+            //_attack = new WeaponAttack();
             //_attack.Initialize(Vector2.Zero, Vector2.One, new Panel(), );
         }
         

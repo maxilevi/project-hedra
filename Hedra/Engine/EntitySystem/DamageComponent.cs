@@ -125,7 +125,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (!Parent.IsStatic && Damager is LocalPlayer)
                 {
-                    Exp = (int) XpToGive;
+                    Exp = (int) Math.Ceiling(XpToGive);
                     var label = new Billboard(4.0f, "+" + Exp + " XP", Color.Violet,
                         FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
                         Parent.Model.Position)

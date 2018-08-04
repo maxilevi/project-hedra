@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering.UI
 {
-    public class ShiverTextureAnimation : TextureAnimation<ISimpleTexture>
+    public class ShiverAnimation : TextureAnimation<ISimpleTexture>
     {
         protected override void Process(ISimpleTexture Texture, TextureState State)
         {

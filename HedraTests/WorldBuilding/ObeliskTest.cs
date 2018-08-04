@@ -38,7 +38,7 @@ namespace HedraTests.WorldBuilding
         [Test]
         public void TestObeliskHealth()
         {
-            _obelisk.Type = ObeliskType.Health;         
+            _obelisk.Type = ObeliskType.Health;
             var startHealth = _dummyPlayer.Health;
             _obelisk.InvokeInteraction(_dummyPlayer);
             Assert.NotNull(_dummyPlayer.MessageMock.LastMessage);

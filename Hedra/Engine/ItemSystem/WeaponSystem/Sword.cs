@@ -52,15 +52,10 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
 	    protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
 	    {
-		    if(Type == AttackEventType.Start) return;
-			Owner.Attack(Owner.DamageEquation * 1.10f * Options.DamageModifier, delegate(Entity Mob)
+            Owner.Attack(Owner.DamageEquation * 1.10f * Options.DamageModifier, delegate(Entity Mob)
 			{
-				if (Utils.Rng.Next(0, 3) == 1 && Options.DamageModifier > .75f)
+				if (Utils.Rng.Next(0, 5) == 1 && Options.DamageModifier > .5f)
 					Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);
-
-				if (Utils.Rng.Next(0, 3) == 1 && Options.DamageModifier > .5f)
-					Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 4f,
-						Owner.DamageEquation * 2f));
 			});	    
 	    }
 		
@@ -87,7 +82,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	    {
 	        Options.IdleMovespeed *= Options.Charge * 2.5f + .25f;
 	        Options.RunMovespeed = Options.Charge;
-		    Options.DamageModifier *= Options.Charge;
             base.Attack2(Human, Options);
 	    }
 	}

@@ -1,7 +1,10 @@
-﻿namespace Hedra.Engine.Rendering.UI
+﻿using OpenTK;
+
+namespace Hedra.Engine.Rendering.UI
 {
-    public class ITexture
+    public interface ISimpleTexture
     {
-        
+        Vector2 Position { get; set; }
+        Vector2 Scale { get; set; }
     }
 }

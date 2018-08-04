@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of GUITexture.
 	/// </summary>
-	public class GUITexture : IDisposable
+	public class GUITexture : IDisposable, ISimpleTexture
 	{
 		public bool Flipped { get; set; }
         public bool Fxaa { get; set; }
@@ -33,14 +33,12 @@ namespace Hedra.Engine.Rendering.UI
         public bool UseMask => MaskId != 0;
         public Func<uint> IdPointer { get; set; }
 	    private bool _disposed;
-	    private StackTrace _trace;
 
         public GUITexture(uint Id, Vector2 Scale, Vector2 Pos)
         {
 			this.TextureId = Id;
 			this.Position = Pos;
 			this.Scale = Scale;
-            _trace = new StackTrace();
         }
 
 		public uint Id => IdPointer?.Invoke() ?? TextureId;

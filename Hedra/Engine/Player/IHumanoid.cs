@@ -2,12 +2,14 @@
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player
 {
     public interface IHumanoid : IEntity
     {
+        event OnHitLandedEventHandler OnHitLanded;
         IMessageDispatcher MessageDispatcher { get; set; }
         int ConsecutiveHits { get; }
         bool IsAttacking {get; set;}
@@ -57,5 +59,6 @@ namespace Hedra.Engine.Player
         float ManaRegen { get; }
         float HealthRegen { get; }
         float WeaponModifier(Item Weapon);
+        Weapon LeftWeapon { get; }
     }
 }

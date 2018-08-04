@@ -18,6 +18,7 @@ namespace HedraTests.Player
 {
     public class PlayerMock : IPlayer
     {
+        public event OnHitLandedEventHandler OnHitLanded;
         public SimpleMessageDispatcherMock MessageMock => MessageDispatcher as SimpleMessageDispatcherMock;
         public SimpleCameraMock CameraMock => View as SimpleCameraMock;
         public PlayerMock()
@@ -59,7 +60,7 @@ namespace HedraTests.Player
         public float BaseSpeed { get; }
         public bool Destroy { get; set; }
         public float Stamina { get; set; }
-        public int Level { get; set; }
+        public int Level { get; set; } = 1;
         public float AttackPower { get; set; }
         public float MaxStamina { get; set; }
         public float AddonHealth { get; set; }

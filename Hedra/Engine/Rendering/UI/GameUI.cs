@@ -6,6 +6,8 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
+using System;
 using System.Drawing;
 using OpenTK;
 using Hedra.Engine.Management;
@@ -18,26 +20,35 @@ namespace Hedra.Engine.Rendering.UI
 	/// </summary>
 	public class GameUI : Panel
 	{
-	    public static Vector2 TargetResolution = new Vector2(1024, 578);
         public readonly Texture Cross;
 	    public readonly Texture QuestLogMsg;
-	    public readonly Texture SkillTreeMsg;
-	    public readonly Texture Compass;
-	    public readonly Texture MapMsg;
-	    public readonly Texture Help;
-	    public readonly RenderableTexture ClassLogo;
+		private readonly Texture _compass;
+		private readonly Texture _help;
+		private readonly RenderableTexture _classLogo;
 	    private readonly RenderableTexture _oxygenBackground;
 	    private readonly RenderableTexture _staminaBackground;
 	    private readonly RenderableTexture _staminaIcon;
 	    private readonly RenderableTexture _oxygenIcon;
-	    public readonly TexturedBar OxygenBar;
-	    public readonly TexturedBar StaminaBar;
-	    public readonly GUIText ConsecutiveHits;
+		private readonly TexturedBar _oxygenBar;
+		private readonly TexturedBar _staminaBar;
+		private readonly GUIText _consecutiveHits;
+		private readonly SlingShotAnimation _slingShot;
 		
-		public GameUI(IPlayer Player) : base()
+		public GameUI(IPlayer Player)
 		{
-		    ConsecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.75f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
-            RenderableTexture barBackgrounds = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/BarBackgrounds.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
+			_consecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.75f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
+			_slingShot = new SlingShotAnimation();
+		    _slingShot.Play(_consecutiveHits);
+            Player.OnHitLanded += delegate
+            {
+                if (_slingShot.Active) return;
+				TaskManager.When(() => _consecutiveHits.Scale.Y > 0, delegate
+				{
+				    _slingShot.Play(_consecutiveHits);
+				});
+			};
+			
+			var barBackgrounds = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/BarBackgrounds.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			_oxygenBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			_staminaBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			
@@ -49,76 +60,121 @@ namespace Hedra.Engine.Rendering.UI
 			    () => Player.Mana,
 			    () => Player.MaxMana, this);
 
-			TexturedBar xpBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/XPBar.png"), new Vector2(-.675f, .815f), new Vector2(0.12f, 0.0065f),
+			var xpBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/XPBar.png"), new Vector2(-.675f, .815f), new Vector2(0.12f, 0.0065f),
 			    () => Player.XP,
 			    () => Player.MaxXP, this);
 
-			OxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f),
+			_oxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f),
 			    () => Player.Oxygen,
 			    () => Player.MaxOxygen, this);
 
-			StaminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f),
+			_staminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f),
 			    () => Player.Stamina, () => Player.MaxStamina, this);
 			
-			ClassLogo = new RenderableTexture(new Texture(0, Vector2.Zero, Vector2.One), DrawOrder.After);
+			_classLogo = new RenderableTexture(new Texture(0, Vector2.Zero, Vector2.One), DrawOrder.After);
 			_oxygenIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenIcon.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			_staminaIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaIcon.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			
 			Cross = new Texture("Assets/Pointer.png", new Vector2(0, 0f), Vector2.One * .1f);
 			
-			SkillTreeMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/SkillTreeMsg.png"), Vector2.Zero, Vector2.One);
+			var skillTreeMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/SkillTreeMsg.png"), Vector2.Zero, Vector2.One);
 			QuestLogMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/QuestLogMsg.png"), Vector2.Zero, Vector2.One);
-			MapMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MapMsg.png"), Vector2.Zero, Vector2.One);
+			var mapMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MapMsg.png"), Vector2.Zero, Vector2.One);
 			
-			Compass = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
-			Help = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Help.png"), Vector2.Zero, Vector2.One);
+			_compass = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
+			_help = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Help.png"), Vector2.Zero, Vector2.One);
 			
-            this.AddElement(ConsecutiveHits);
-			this.AddElement(Compass);
-			this.AddElement(barBackgrounds);
-			this.AddElement(xpBar);
-			this.AddElement(ClassLogo);
-			this.AddElement(QuestLogMsg);
-			this.AddElement(SkillTreeMsg);
-			this.AddElement(Cross);
-			this.AddElement(SkillTreeMsg);
-			this.AddElement(OxygenBar);
-			this.AddElement(StaminaBar);
-			this.AddElement(healthBar);
-			this.AddElement(manaBar);
-			this.AddElement(MapMsg);
-			this.AddElement(Help);
+            AddElement(_consecutiveHits);
+			AddElement(_compass);
+			AddElement(barBackgrounds);
+			AddElement(xpBar);
+			AddElement(_classLogo);
+			AddElement(QuestLogMsg);
+			AddElement(skillTreeMsg);
+			AddElement(Cross);
+			AddElement(skillTreeMsg);
+			AddElement(_oxygenBar);
+			AddElement(_staminaBar);
+			AddElement(healthBar);
+			AddElement(manaBar);
+			AddElement(mapMsg);
+			AddElement(_help);
 			
-			this.OnPanelStateChange += delegate(object Sender, PanelState E) { 
+			this.OnPanelStateChange += delegate(object Sender, PanelState E)
+			{ 
 				LocalPlayer.Instance.Minimap.Show = E == PanelState.Enabled;
 			    LocalPlayer.Instance.Toolbar.Show = E == PanelState.Enabled;
-			};
-			
+			};	
 		}
+
+		public void Update(IPlayer Player)
+		{
+			
+			if(Enabled)
+			{
+				if(Program.GameWindow.FirstLaunch)
+				{
+					Program.GameWindow.FirstLaunch = false;
+					Player.MessageDispatcher.ShowMessageWhile("[F4] HELP", () => !LocalPlayer.Instance.UI.ShowHelp);
+				}
+			}
+
+			_compass.Disable();
+			_compass.TextureElement.Angle = Player.Model.Model.Rotation.Y;
+			
+			if (Player.UI.ShowHelp && Enabled)
+			{
+				Player.AbilityTree.Show = false;
+				Player.QuestLog.Show = false;
+				_help.Enable();
+			}
+			else
+			{
+				_help.Disable();
+			}
+
+			Oxygen = Math.Abs(Player.Oxygen - Player.MaxOxygen) > 0.05f && !GameSettings.Paused && Enabled;
+
+			Stamina = Math.Abs(Player.Stamina - Player.MaxStamina) > 0.05f && !GameSettings.Paused && Enabled &&
+			          !Player.IsUnderwater;
+
+			_classLogo.BaseTexture.TextureElement.TextureId = Player.Class.Logo;
+			_consecutiveHits.TextColor = Player.ConsecutiveHits >= 4 && Player.ConsecutiveHits < 8
+				? Color.Gold : Player.ConsecutiveHits >= 8 ? Color.Red : Color.White;
+			_consecutiveHits.TextFont = FontCache.Get(_consecutiveHits.TextFont.FontFamily,
+				Player.ConsecutiveHits >= 4 && Player.ConsecutiveHits < 8
+					? 15f : Player.ConsecutiveHits >= 8 ? 17f : 14f,
+				_consecutiveHits.TextFont.Style);
+			_consecutiveHits.Text = Player.ConsecutiveHits > 0 ? $"{Player.ConsecutiveHits} HIT{(Player.ConsecutiveHits == 1 ? string.Empty : "S")}" : string.Empty;
+
+		    _slingShot.Update();
+        }
 		
-		public bool Oxygen{
+		public bool Oxygen
+		{
 			set{
 				if(value){
-					OxygenBar.Enable();
+					_oxygenBar.Enable();
 					_oxygenBackground.Enable();
 					_oxygenIcon.Enable();
 				}else{
 					_oxygenBackground.Disable();
-					OxygenBar.Disable();
+					_oxygenBar.Disable();
 					_oxygenIcon.Disable();
 				}
 			}
 		}
 		
-		public bool Stamina{
+		public bool Stamina
+		{
 			set{
 				if(value){
-					StaminaBar.Enable();
+					_staminaBar.Enable();
 					_staminaBackground.Enable();
 					_staminaIcon.Enable();
 				}else{
 					_staminaBackground.Disable();
-					StaminaBar.Disable();
+					_staminaBar.Disable();
 					_staminaIcon.Disable();
 				}
 			}

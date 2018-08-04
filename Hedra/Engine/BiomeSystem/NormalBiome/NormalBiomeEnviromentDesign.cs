@@ -12,8 +12,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                 new RockPlacementDesign(), 
                 new CloudPlacementDesign(), 
                 new ShrubsPlacementDesign(),
-                new BerryBushPlacementDesign(),
-                new MushroomPlacementDesign(), 
+                new BerryBushPlacementDesign()
             };
         }
 
