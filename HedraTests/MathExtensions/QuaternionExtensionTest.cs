@@ -3,7 +3,7 @@ using Hedra.Engine.ComplexMath;
 using NUnit.Framework;
 using OpenTK;
 
-namespace HedraTests.Math
+namespace HedraTests.MathExtensions
 {
     [TestFixture]
     public class QuaternionExtensionTest

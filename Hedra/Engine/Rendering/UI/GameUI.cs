@@ -36,7 +36,7 @@ namespace Hedra.Engine.Rendering.UI
 		
 		public GameUI(IPlayer Player)
 		{
-			_consecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.75f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
+		    _consecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.75f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
 			_slingShot = new SlingShotAnimation();
 		    _slingShot.Play(_consecutiveHits);
             Player.OnHitLanded += delegate
@@ -47,7 +47,7 @@ namespace Hedra.Engine.Rendering.UI
 				    _slingShot.Play(_consecutiveHits);
 				});
 			};
-			
+				
 			var barBackgrounds = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/BarBackgrounds.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			_oxygenBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			_staminaBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
@@ -109,8 +109,7 @@ namespace Hedra.Engine.Rendering.UI
 
 		public void Update(IPlayer Player)
 		{
-			
-			if(Enabled)
+            if (Enabled)
 			{
 				if(Program.GameWindow.FirstLaunch)
 				{
@@ -146,8 +145,7 @@ namespace Hedra.Engine.Rendering.UI
 					? 15f : Player.ConsecutiveHits >= 8 ? 17f : 14f,
 				_consecutiveHits.TextFont.Style);
 			_consecutiveHits.Text = Player.ConsecutiveHits > 0 ? $"{Player.ConsecutiveHits} HIT{(Player.ConsecutiveHits == 1 ? string.Empty : "S")}" : string.Empty;
-
-		    _slingShot.Update();
+            _slingShot.Update();
         }
 		
 		public bool Oxygen

@@ -175,8 +175,8 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
 	    public bool DisableAttack
 	    {
-            get { return _w1.DisableWeapon && _w2.DisableWeapon; }
-	        set
+            get => _w1.DisableWeapon && _w2.DisableWeapon;
+		    set
 	        {
 	            _w1.DisableWeapon = value;
 	            _w2.DisableWeapon = value;
@@ -185,8 +185,8 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
 	    public bool BagEnabled
 	    {
-	        get { return _bagItemsInterface.Enabled; }
-	        set
+	        get => _bagItemsInterface.Enabled;
+		    set
 	        {
 	            _bagItemsInterface.Enabled = value;
 	            var filtered = _manager.GetFilteredSkills();
@@ -203,9 +203,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
 	    public bool Listen { get; set; } = true;
 
+		public float Charge => _w2.Charge;
+
         public bool Show
 	    {
-	        get { return _show; }
+	        get => _show;
 	        set
 	        {
 	            _show = value;

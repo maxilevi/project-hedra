@@ -15,6 +15,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using OpenTK;
 
 namespace Hedra.Engine.ItemSystem.WeaponSystem
 {
@@ -25,6 +26,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     {
 	    private bool FrontSlash => PrimaryAnimationsIndex == 2;
 	    private readonly float _swordHeight;
+        private readonly TrailRenderer _renderer;
 	    
 	    protected override string AttackStanceName => "Assets/Chr/WarriorSmash-Stance.dae";
 	    protected override float PrimarySpeed => 1.25f;
@@ -42,7 +44,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public Sword(VertexData Contents) : base(Contents)
         {
-		}
+            _renderer = new TrailRenderer(
+                () => this.Owner.Position + Owner.Orientation * 8f,
+                new Vector4(1, 1, 1, .5f))
+            {
+                MaxLifetime = 3,
+                Thickness = 1
+            };
+        }
 
 	    protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
 	    {
@@ -56,9 +65,17 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			{
 				if (Utils.Rng.Next(0, 5) == 1 && Options.DamageModifier > .5f)
 					Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);
-			});	    
+			});
+	        if (Type == AttackEventType.End) _renderer.Emit = false;
+
 	    }
-		
+
+        public override void Update(IHumanoid Human)
+        {
+            _renderer.Update();
+            base.Update(Human);
+        }
+
         public override int ParsePrimaryIndex(int AnimationIndex)
 	    {
 	        return AnimationIndex == 5 ? 2 : AnimationIndex & 1;
@@ -81,8 +98,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	    public override void Attack2(IHumanoid Human, AttackOptions Options)
 	    {
 	        Options.IdleMovespeed *= Options.Charge * 2.5f + .25f;
-	        Options.RunMovespeed = Options.Charge;
+	        Options.RunMovespeed = Options.Charge * 1.5f;
             base.Attack2(Human, Options);
+	        _renderer.Emit = true;
 	    }
 	}
 }

@@ -11,7 +11,6 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 using OpenTK;
 

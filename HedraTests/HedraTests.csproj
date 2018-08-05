@@ -64,17 +64,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
+    <Compile Include="CodePolicy\BaseCodePolicy.cs" />
     <Compile Include="CodePolicy\ShaderCodePolicy.cs" />
+    <Compile Include="CodePolicy\SolutionTest.cs" />
     <Compile Include="HedraReflectionTest.cs" />
-    <Compile Include="Math\PhysicsTest.cs" />
+    <Compile Include="MathExtensions\PhysicsTest.cs" />
+    <Compile Include="Player\EntitySpawnerTest.cs" />
     <Compile Include="Player\SimpleCameraMock.cs" />
     <Compile Include="Player\PlayerMock.cs" />
     <Compile Include="Player\WeaponAttackTest.cs" />
     <Compile Include="SimpleEventProvider.cs" />
+    <Compile Include="SimpleTexture2DProviderMock.cs" />
     <Compile Include="SimpleWorldProviderMock.cs" />
     <Compile Include="SimpleMessageDispatcherMock.cs" />
     <Compile Include="Handling\ExecuterTest.cs" />
-    <Compile Include="Math\QuaternionExtensionTest.cs" />
+    <Compile Include="MathExtensions\QuaternionExtensionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sound\SoundtrackTest.cs" />
     <Compile Include="WorldBuilding\InteractableStructureTest.cs" />

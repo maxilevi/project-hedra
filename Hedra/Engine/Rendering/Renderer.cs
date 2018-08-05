@@ -100,45 +100,6 @@ namespace Hedra.Engine.Rendering
 	        CompatibilityManager.MultiDrawElementsMethod(Type, Counts, ElementsType, Offsets, Length);
         }
 
-        public static int QueryAvailableMemory()
-	    {
-	        int mem;
-            GL.GetInteger( (GetPName) AtiMeminfo.VboFreeMemoryAti, out mem);
-            GL.GetError();
-
-	        if (mem == 0)
-	        {
-	            GL.GetInteger((GetPName) NvxGpuMemoryInfo.GpuMemoryInfoCurrentAvailableVidmemNvx, out mem);
-	            GL.GetError();
-            }
-
-	        return mem / 1024;
-	    }
-
-        /// <summary>
-        /// Returns the current MVP Matrix. SLOW METHOD
-        /// </summary>
-        /// <returns></returns>
-	    public static Matrix4 MvpMatrix()
-        {
-            Matrix4 mv;
-            Matrix4 p;
-            GL.GetFloat(GetPName.ProjectionMatrix, out p);
-            GL.GetFloat(GetPName.ModelviewMatrix, out mv);
-            return mv * p;
-        }
-
-	    /// <summary>
-	    /// Returns the current MV Matrix. SLOW METHOD
-	    /// </summary>
-	    /// <returns></returns>
-	    public static Matrix4 MvMatrix()
-	    {
-	        Matrix4 mv;
-	        GL.GetFloat(GetPName.ModelviewMatrix, out mv);
-	        return mv;
-	    }
-
 	    public static void MatrixMode(MatrixMode Mode)
 	    {
 	        GL.MatrixMode(Mode);

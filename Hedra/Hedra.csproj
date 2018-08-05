@@ -248,12 +248,17 @@
     <Compile Include="Engine\Generation\IWorldProvider.cs" />
     <Compile Include="Engine\Generation\WorldProvider.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\AttackOptions.cs" />
+    <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
+    <Compile Include="Engine\Management\IAssetProvider.cs" />
+    <Compile Include="Engine\Management\ResourceHandler.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\Player\ICamera.cs" />
     <Compile Include="Engine\Player\IHumanoid.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
     <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />
+    <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
+    <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
     <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />
     <Compile Include="Engine\Rendering\UI\SlingShotAnimation.cs" />
     <Compile Include="Engine\Rendering\UI\TextureAnimation.cs" />
@@ -814,7 +819,6 @@
     <Compile Include="Engine\Testing\CodePolicies\ShaderCodePolicy.cs" />
     <Compile Include="Engine\Testing\DataStructures\QuaternionExtensionsTester.cs" />
     <Compile Include="Engine\Testing\GenerationTests\WorldTester.cs" />
-    <Compile Include="Engine\Testing\GraphicsTests\GraphicsWrapperTester.cs" />
     <Compile Include="Engine\Testing\Managers\ThreadManagerTester.cs" />
     <Compile Include="Engine\Testing\TestMethod.cs" />
     <Compile Include="Engine\Testing\Tester.cs" />

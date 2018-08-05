@@ -19,26 +19,15 @@ namespace Hedra.Engine.Rendering
 {
 	public static class Graphics2D
 	{
+		public static ITexture2DProvider Provider { get; set; } = new Texture2DProvider();
 		public static readonly List<uint> Textures = new List<uint>();
 
-		public static uint LoadTexture(Bitmap bmp, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
+		public static uint LoadTexture(Bitmap Bmp, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
 		{
-			var id = Renderer.CreateTexture2D();
-	        var bmp_data = bmp.LockBits(new Rectangle(0,0,bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-	        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
-	            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
-	
-	        bmp.UnlockBits(bmp_data);
-	
-	        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)Min);
-	        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)Mag);
-		    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)Wrap);
-		    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)Wrap);
-
-            bmp.Dispose();
-	        Textures.Add(id);
-            return id;
-	    }
+			var id = Provider.LoadTexture(Bmp, Min, Mag, Wrap);
+			Textures.Add(id);
+			return id;
+		}
 
 		public static Vector2 ToRelativeSize(this Vector2 Size)
 	    {
@@ -101,7 +90,8 @@ namespace Hedra.Engine.Rendering
 			return new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3)));
 		}
 		
-		public static Vector2 LineSize(string Text, Font F){
+		public static Vector2 LineSize(string Text, Font F)
+		{
 			Bitmap Bmp = new Bitmap(1,1);
 			using (Graphics Graphics = Graphics.FromImage(Bmp))
 			{ 
@@ -114,12 +104,12 @@ namespace Hedra.Engine.Rendering
 		public static uint ColorTexture(Vector4 TextureColor)
 		{
 		    var textureColor = TextureColor.ToColor();
-			Bitmap Bmp = new Bitmap(2,2);
-			Bmp.SetPixel(0, 0, textureColor);
-		    Bmp.SetPixel(0, 1, textureColor);
-		    Bmp.SetPixel(1, 0, textureColor);
-		    Bmp.SetPixel(1, 1, textureColor);
-            return LoadTexture(Bmp, TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear, TextureWrapMode.Repeat);
+			var bmp = new Bitmap(2,2);
+			bmp.SetPixel(0, 0, textureColor);
+		    bmp.SetPixel(0, 1, textureColor);
+		    bmp.SetPixel(1, 0, textureColor);
+		    bmp.SetPixel(1, 1, textureColor);
+            return LoadTexture(bmp, TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear, TextureWrapMode.Repeat);
 		}
 		
 		public static Bitmap ReColorMask(Color NewColor, Bitmap Mask){

@@ -48,7 +48,7 @@ namespace Hedra.Engine.Player
 		public bool DisableWeapon { get; set; }
 		private ShiverAnimation _shiverAnimation;
 	    private bool _continousAttack;
-		private float _charge;
+		public float Charge { get; private set; }
 	    private float _chargeTime;
         private bool _isCharging;
         private AttackType _type;
@@ -120,12 +120,12 @@ namespace Hedra.Engine.Player
 		        Player.LeftWeapon.InAttackStance = true;
                 Player.Movement.Orientate();
 	            _chargeTime = Math.Min(_chargeTime + Time.DeltaTime, BaseChargeTime + ExtraChargeTime);
-	            _charge = _chargeTime / (BaseChargeTime + ExtraChargeTime);
-                _shiverAnimation.Intensity = _charge;
+	            Charge = _chargeTime / (BaseChargeTime + ExtraChargeTime);
+                _shiverAnimation.Intensity = Charge;
 	            _shiverAnimation.Update();
-		        Player.LeftWeapon.ChargingIntensity = _charge;
+		        Player.LeftWeapon.ChargingIntensity = Charge;
 	        }
-            Tint = IsCharging ? new Vector3(1,0,0) * _charge + Vector3.One * .65f : NormalTint;
+            Tint = IsCharging ? new Vector3(1,0,0) * Charge + Vector3.One * .65f : NormalTint;
         }
 
 		public bool IsCharging
@@ -135,6 +135,7 @@ namespace Hedra.Engine.Player
 			{
 				_isCharging = value;
 			    _chargeTime = value ? _chargeTime : 0;
+				Charge = value ? Charge : 0;
 				Player.LeftWeapon.Charging = value; 
 				if(value) _shiverAnimation.Play(this);
 				else _shiverAnimation.Stop();

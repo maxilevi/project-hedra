@@ -16,14 +16,14 @@ using Hedra.Engine.Management;
 namespace Hedra.Engine.Rendering.UI
 {
 	
-	public class TexturedBar : IRenderable, UIElement, IDisposable
+	public class TexturedBar : IRenderable, UIElement, IDisposable, ISimpleTexture
 	{
 	    private static readonly Shader Shader;
 		public Vector2 Scale {get; set;}
 	    public bool ShowBar { get; set; } = true;
         private readonly Func<float> _value;
 		private readonly Func<float> _max;
-	    private readonly int _textureId;
+	    public uint TextureId { get; set; }
         private bool _enabled;
 		public Vector4 Color;
 		private float _barSize;
@@ -38,14 +38,15 @@ namespace Hedra.Engine.Rendering.UI
 		    this.Scale = Scale;
 		    this._value = Value;
 		    this._max = Max;
-		    this._textureId = (int)TextureId;
+		    this.TextureId = TextureId;
 
 		    DrawManager.UIRenderer.Add(this, DrawOrder.After);
 
 		    this.Position = Position;
         }
 		
-		public void Draw(){
+		public void Draw()
+        {
 			if(!_enabled)
 				return;
 			_barSize = Mathf.Clamp( Mathf.Lerp(_barSize, _value() / _max(), (float) Time.DeltaTime * 8f), 0, 1);
@@ -56,10 +57,10 @@ namespace Hedra.Engine.Rendering.UI
 			Renderer.Enable(EnableCap.Blend);
 
 		    GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, _textureId);
+            GL.BindTexture(TextureTarget.Texture2D, TextureId);
 			
 			Shader["Scale"] = new Vector2(_barSize * Scale.X, Scale.Y);
-			Shader["Position"] = Position - new Vector2(Scale.X * (1-_barSize), 0f);
+			Shader["Position"] = Position - (!Centered ? new Vector2(Scale.X * (1f - _barSize), 0f) : Vector2.Zero);
 			Shader["Color"] = -Vector4.One;
 
 			DrawManager.UIRenderer.SetupQuad();
@@ -71,22 +72,28 @@ namespace Hedra.Engine.Rendering.UI
 			Shader.Unbind();
 		}
 		
-		public Vector2 Position{
+		public Vector2 Position
+        {
 			get{ return _position;}
 			set{
 				_position = value;
 			}
 		}
-		
-		public void Enable(){
+
+	    public bool Centered { get; set; }
+
+        public void Enable()
+        {
 			this._enabled = true;
 		}
 		
-		public void Disable(){
+		public void Disable()
+        {
 			this._enabled = false;
 		}
 		
-		public void Dispose(){
+		public void Dispose()
+        {
 			DrawManager.UIRenderer.Remove(this);
 		}
 	}

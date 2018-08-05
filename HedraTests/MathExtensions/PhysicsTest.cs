@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Hedra.Engine.PhysicsSystem;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using OpenTK;
 
-namespace HedraTests.Math
+namespace HedraTests.MathExtensions
 {
     [TestFixture]
     public class PhysicsTest

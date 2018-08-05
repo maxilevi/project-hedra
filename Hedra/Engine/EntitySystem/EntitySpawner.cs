@@ -24,25 +24,25 @@ namespace Hedra.Engine.EntitySystem
     public class EntitySpawner
     {
         public static int MobCap = int.MaxValue;
-		public float SpawnChance = .8f;
-		public int MinSpawn = 1;
-		public int MaxSpawn = 3;
-		public LocalPlayer Player;
-		public bool Enabled;
-        public Thread SpawnThread;
-	    private Random Rng;
+		public float SpawnChance { get; set; } = .8f;
+		public int MinSpawn { get; set; }= 1;
+		public int MaxSpawn { get; set; }= 3;
+	    private readonly LocalPlayer _player;
+	    private readonly Random _rng;
+	    public bool Enabled { get; set; }
 		
 		public EntitySpawner(LocalPlayer Player)
 		{
-			this.Player = Player;
-		    Rng = new Random();
-            SpawnThread = new Thread(Update);
-            SpawnThread.Start();
+			this._player = Player;
+		    _rng = new Random();
+            var spawnThread = new Thread(Update);
+            spawnThread.Start();
 		}
 		
 		public void Update()
         {		
-			while(Program.GameWindow.Exists){
+			while(Program.GameWindow.Exists)
+			{
                 START:
                 if(!Program.GameWindow.Exists) break;
                 Thread.Sleep(25);
@@ -59,21 +59,21 @@ namespace Hedra.Engine.EntitySystem
 			    Vector3 desiredPosition = new Vector3(Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width - GameSettings.ChunkLoaderRadius * Chunk.Width * .5f,
                     0,
                     Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width - GameSettings.ChunkLoaderRadius * Chunk.Width * .5f)
-                    + Player.Position.Xz.ToVector3();
+                    + _player.Position.Xz.ToVector3();
 			    var underBlock = World.GetHighestBlockAt( (int) desiredPosition.X, (int) desiredPosition.Z);
 			    if(underBlock.Type != BlockType.Air && underBlock.Type != BlockType.Water && underBlock.Type != BlockType.Seafloor){
 			        int y = World.GetHighestY( (int) desiredPosition.X, (int) desiredPosition.Z);
 			        if(y <= 0) 
 			            goto START;
 						
-			        if((Player.Position.Xz - desiredPosition.Xz).LengthSquared < 32f*Chunk.BlockSize*32f*Chunk.BlockSize)
+			        if((_player.Position.Xz - desiredPosition.Xz).LengthSquared < 32f*Chunk.BlockSize*32f*Chunk.BlockSize)
 			            goto START;
 
 			        try
 			        {
 			            for (int i = World.Entities.Count - 1; i > -1; i--)
 			            {
-			                if (World.Entities[i] == Player || World.Entities[i].IsStatic) continue;
+			                if (World.Entities[i] == _player || World.Entities[i].IsStatic) continue;
 
 			                if ((World.Entities[i].BlockPosition.Xz - desiredPosition.Xz).LengthSquared <
 			                    80f * Chunk.BlockSize * 80f * Chunk.BlockSize)
@@ -136,9 +136,9 @@ namespace Hedra.Engine.EntitySystem
 		            SpawnTemplate type = null;
 		            while (type == null)
 		            {
-		                var template = templates[i][Rng.Next(0, templates[i].Length)];
+		                var template = templates[i][_rng.Next(0, templates[i].Length)];
 
-		                if (Rng.NextFloat() < template.Chance)
+		                if (_rng.NextFloat() < template.Chance)
 		                    type = template;
 		            }
 		            return type;

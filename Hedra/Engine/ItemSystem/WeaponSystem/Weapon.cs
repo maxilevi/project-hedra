@@ -380,8 +380,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 Owner.Model.LeftElbowJoint.TransformationMatrix = Matrix4.CreateTranslation(offset * .1f);
                 
                 Owner.Model.RightShoulderJoint.TransformationMatrix = Owner.Model.LeftShoulderJoint.TransformationMatrix;
-                Owner.Model.RightElbowJoint.TransformationMatrix = Owner.Model.RightElbowJoint.TransformationMatrix;
-                Owner.Model.RightWeaponJoint.TransformationMatrix = Owner.Model.RightWeaponJoint.TransformationMatrix;
+                Owner.Model.RightElbowJoint.TransformationMatrix = Owner.Model.LeftElbowJoint.TransformationMatrix;
+                Owner.Model.RightWeaponJoint.TransformationMatrix = Owner.Model.LeftWeaponJoint.TransformationMatrix;
                 Mesh.BaseTint += new Vector4(1, 0, 0, 1) * intensity;
             }
             else

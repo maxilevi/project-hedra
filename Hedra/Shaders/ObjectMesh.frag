@@ -41,7 +41,7 @@ void main()
 	vec4 inputColor = vec4(linear_to_srbg(Color.xyz + tex * 0.2 * useNoiseTexture), Color.w);
 
 	if(Outline){
-		inputColor += vec4(Color.xyz, -1.0) * .5f;
+		inputColor += vec4(Color.xyz, -1.0) * .5;
 	}
 	if(Dither){
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
@@ -87,8 +87,8 @@ void main()
 
 	if (Outline) {
 		vec3 unitToCamera = normalize( (inverse(gl_ModelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - vertex_position.xyz);
-		float outlineDot = max(0, 1.0-dot(base_normal, unitToCamera));
-		FColor = outlineDot * (cos(Time*10)-.0) * 2.0 * OutlineColor * Alpha;
+		float outlineDot = max(0.0, 1.0 - dot(base_normal, unitToCamera));
+		FColor = outlineDot * ( cos(Time * 10.0)-.0) * 2.0 * OutlineColor * Alpha;
 		OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
 		OutNormal = vec4(0.0, 0.0, 0.0, 0.0);
 	} else {
