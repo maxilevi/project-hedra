@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-run id="2" testcasecount="0" result="Failed" label="Invalid" total="0" passed="0" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.8.0.0" clr-version="4.0.30319.42000" start-time="2018-08-05 02:47:32Z" end-time="2018-08-05 02:47:33Z" duration="0.910528">
+  <command-line><![CDATA["C:\Users\maxi\Documents\SharpDevelop Projects\Project Hedra\test\nunit3-console.exe" "C:\Users\maxi\Documents\SharpDevelop Projects\Project Hedra\HedraTests"]]></command-line>
+  <test-suite type="Unknown" id="0-1" name="HedraTests" fullname="C:\Users\maxi\Documents\SharpDevelop Projects\Project Hedra\HedraTests" testcasecount="0" runstate="NotRunnable" result="Failed" label="Invalid">
+    <properties>
+      <property name="_SKIPREASON" value="File not found: C:\Users\maxi\Documents\SharpDevelop Projects\Project Hedra\HedraTests" />
+    </properties>
+    <reason>
+      <message>File not found: C:\Users\maxi\Documents\SharpDevelop Projects\Project Hedra\HedraTests</message>
+    </reason>
+  </test-suite>
+</test-run>
