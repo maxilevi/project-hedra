@@ -74,21 +74,13 @@ namespace Hedra.Engine.EntitySystem
 			}
 			
 			float Distance = (Target == Owner) ? 8 : 3;
-			if( Target != null && (Target.Position - Parent.Position).LengthSquared > Distance * Distance * Chunk.BlockSize * Chunk.BlockSize )
-			{	
-				
-				Parent.Model.Run();
-			}
-			else if (Target != null && (Target.Position - Parent.Position).LengthSquared < Distance * .75f * Distance*.75f * Chunk.BlockSize * Chunk.BlockSize){
+			if (Target != null && (Target.Position - Parent.Position).LengthSquared 
+			         < Distance * .75f * Distance*.75f * Chunk.BlockSize * Chunk.BlockSize){
 					
 				if(Target != null && Target != Owner)
                 {
 					Parent.Model.Attack(Target);
 					if(Target.IsDead) Target = null;
-				}
-                else
-                {
-					Parent.Model.Idle();
 				}
 			}
             /*var isInFrontOfOwner = Target == Owner && Vector3.Dot(Target.Orientation, (Target.Position - Parent.Position).NormalizedFast()) < 0.0;

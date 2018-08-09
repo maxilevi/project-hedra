@@ -38,16 +38,16 @@ namespace Hedra.Engine.Player
 		public bool IsCasting { get; set; }
 		public bool IsSwimming { get; set; }
 		public bool IsRolling { get; set; }
-		public bool IsMoving { get; set; }
 		public bool IsRiding { get; set; }
+		public bool IsTied { get; set; }
 		public bool IsClimbing { get; set; }
 		public bool WasAttacking { get; set; }
+		public bool IsSitting { get; set; }
 	    public float BaseAttackSpeed { get; private set; } = 1;
         public virtual bool CanInteract {get; set; }
         public bool IsSleeping { get; set; }
 	    public bool IsJumping => Movement.IsJumping;
 	    public virtual Vector3 FacingDirection => Vector3.UnitY * -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
-        public bool IsSitting { get => Model.IsSitting; set{ if(value) Model.Sit(); else Model.Idle(); } }
 		public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
 		public MovementManager Movement { get; protected set; }
 		public HandLamp HandLamp { get; }
@@ -179,18 +179,17 @@ namespace Hedra.Engine.Player
 			    }
 			    Stamina -= DodgeCost;		
 			}
-			Model.Model.Animator.StopBlend();
 			IsAttacking = false;
             IsRolling = true;
             DmgComponent.Immune = true;
+	        WasAttacking = false;
+	        IsAttacking = false;
             this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.1f),
                 () => IsRolling);
             Movement.Move(this.Orientation * 2f, 1.5f, false);
             SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);
-			Model.Roll();
-			TaskManager.When( () => !Model.IsRolling, () =>
+			TaskManager.When( () => !IsRolling, () =>
 			{
-				IsRolling = false;
 				DmgComponent.Immune = false;
 			} );
 		}
@@ -200,8 +199,8 @@ namespace Hedra.Engine.Player
 		public void Climb()
 		{
 			var frontBlock = World.GetBlockAt( this.BlockPosition + this.Orientation.Xz.ToVector3() * Chunk.BlockSize + Vector3.UnitY * 2f  );
-			if(frontBlock.Type != BlockType.Air){
-				Model.Run();
+			if(frontBlock.Type != BlockType.Air)
+			{
 				this.Physics.UsePhysics = false;
 				this.BlockPosition += Vector3.UnitY * 8 *(float) Time.DeltaTime;
 				this.Model.Position += Vector3.UnitY * 8 *(float) Time.DeltaTime;

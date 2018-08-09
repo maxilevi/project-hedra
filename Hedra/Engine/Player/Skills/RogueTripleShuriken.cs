@@ -53,18 +53,12 @@ namespace Hedra.Engine.Player
 			};
 		}
 		
-		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
-		{
-			return base.MeetsRequirements(Bar, CastingAbilityCount);
-		}
-		
 		public override void Use(){
 			base.MaxCooldown = 8.5f - Math.Min(5f, base.Level * .5f);
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;
 			Player.Model.LeftWeapon.InAttackStance = false;
-			Player.Model.Model.Animator.StopBlend();
 			Player.Model.Model.PlayAnimation(ThrowAnimation);
 			Player.Movement.Orientate();
 		}

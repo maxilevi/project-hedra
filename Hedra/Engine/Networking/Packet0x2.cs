@@ -35,7 +35,6 @@ namespace Hedra.Engine.Networking
 		public static void SetValues(Humanoid Human, Packet0x2 Packet){
 			Human.RemoveComponent( Human.SearchComponent<HealthBarComponent>() );
 			Human.AddComponent( new HealthBarComponent(Human, Packet.Name) );
-			Human.Model.UpdateModel();
 		}
 	}
 }

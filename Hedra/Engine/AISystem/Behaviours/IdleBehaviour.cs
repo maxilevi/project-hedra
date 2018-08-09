@@ -14,7 +14,6 @@ namespace Hedra.Engine.AISystem.Behaviours
         public override void Update()
         {
             Stare.Update();
-            Parent.Model.Idle();
         }
     }
 }

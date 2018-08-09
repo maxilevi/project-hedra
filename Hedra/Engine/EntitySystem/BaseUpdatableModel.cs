@@ -13,6 +13,7 @@ namespace Hedra.Engine.EntitySystem
         public abstract Box Dimensions { get; protected set; }
         public abstract bool IsAttacking { get; protected set; }
         public abstract bool IsWalking { get; protected set; }
+        public abstract bool IsMoving { get; protected set; }
         public abstract bool IsIdling { get; protected set; }
         public abstract float Height { get; }
         public abstract float Alpha { get; set; }
@@ -29,8 +30,6 @@ namespace Hedra.Engine.EntitySystem
         public abstract Vector3 Scale { get; set; }
         public abstract Vector3 TargetRotation { get; set; }
         public abstract void Update();
-        public abstract void Idle();
-        public abstract void Run();
         public abstract void Attack(IEntity Victim);
         public abstract void Attack(IEntity Victim, float RangeModifier);
         public abstract void Draw();

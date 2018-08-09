@@ -49,7 +49,7 @@ namespace Hedra.Engine.EntitySystem
 		        && Vector3.Dot((Parent.BlockPosition - player.BlockPosition).NormalizedFast(), player.View.LookingDirection) >
 		        .6f)
 		    {
-		        if (Parent.Model is IMountable model && model.IsMountable && !Parent.IsUnderwater && !Parent.Knocked)
+		        if (Parent.Model is IMountable model && model.IsMountable && !Parent.IsUnderwater && !Parent.IsKnocked)
 		        {
 		            player.MessageDispatcher.ShowMessage("[E] TO MOUNT", .5f, Color.White);
 		            Parent.Model.Tint = new Vector4(2.0f, 2.0f, 2.0f, 1f);
@@ -70,10 +70,6 @@ namespace Hedra.Engine.EntitySystem
 
 		    if (HasRider && Rider.IsRiding)
 		    {
-		        if (!Rider.IsMoving)
-		            Parent.Model.Idle();
-		        else
-		            Parent.Model.Run();
 		        _canUnride = true;
 		    }
 		    else

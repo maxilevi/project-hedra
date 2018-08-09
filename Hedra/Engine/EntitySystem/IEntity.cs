@@ -67,7 +67,9 @@ namespace Hedra.Engine.EntitySystem
         
         bool IsUnderwater { get; set; }
         
-        bool Knocked { get; }
+        bool IsKnocked { get; }
+        
+        bool IsMoving { get; }
         
         float MaxHealth { get; }
         

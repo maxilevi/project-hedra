@@ -102,7 +102,6 @@ namespace Hedra.Engine.Player
                 _player.View.MaxDistance = 10f;
                 _player.Physics.DeltaTranslate((_player.View.LookingDirection * _accumulatedVelocity + Vector3.UnitY * _upPush) * .55f);
                 _player.Physics.ResetFall();
-                _player.Model.Glide();
 
                 _leftTrail.Thickness = 1f * (Math.Abs(_angles.Z) - 15f) / 90f *
                                        Math.Min(1f, _accumulatedVelocity.Average() / _decaySpeed);

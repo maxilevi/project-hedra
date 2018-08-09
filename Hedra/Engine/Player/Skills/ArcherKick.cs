@@ -77,7 +77,6 @@ namespace Hedra.Engine.Player
 			Player.IsAttacking = false;
 			Player.WasAttacking = false;
 			Player.Model.LeftWeapon.SlowDown = false;
-			Player.Model.Model.Animator.StopBlend();
 			Player.Model.Model.PlayAnimation(KickAnimation);
 		}
 		

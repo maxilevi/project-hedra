@@ -166,8 +166,15 @@ namespace Hedra.Engine.Management
                     }
                 }
 				
-				if(Parts[0] == "sit"){
-					LocalPlayer.Instance.Model.Sit();
+				if(Parts[0] == "sit")
+				{
+				    LocalPlayer.Instance.IsSitting = !LocalPlayer.Instance.IsSitting;
+					return true;
+				}
+				
+				if(Parts[0] == "tie")
+				{
+					LocalPlayer.Instance.IsTied = !LocalPlayer.Instance.IsTied;
 					return true;
 				}
 			    if (Parts[0] == "spawnAnimation")

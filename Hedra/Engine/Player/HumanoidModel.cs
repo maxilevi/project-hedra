@@ -29,21 +29,23 @@ namespace Hedra.Engine.Player
     /// </summary>
     public sealed class HumanoidModel : UpdatableModel<AnimatedModel>, IAudible, IDisposeAnimation
     {
-		public const float DefaultScale = 0.75f;
+	    private const float DefaultScale = 0.75f;
 		public IHumanoid Human { get; private set; }
-		private Animation WalkAnimation;
-		private Animation IdleAnimation;
-		private Animation RollAnimation;
-		private Animation EatAnimation;
-		private Animation SwimAnimation, IdleSwimAnimation;
-		private Animation RideAnimation, IdleRideAnimation;
-		private Animation ClimbAnimation;
-		private Animation SitAnimation;
-		private Animation GlideAnimation;
-		private Animation KnockedAnimation;
-        private Animation TiedAnimation;
-        private Animation SleepAnimation;
-	    private Animation JumpAnimation;
+		private Animation _walkAnimation;
+		private Animation _idleAnimation;
+		private Animation _rollAnimation;
+		private Animation _eatAnimation;
+		private Animation _swimAnimation;
+	    private Animation _idleSwimAnimation;
+	    private Animation _rideAnimation;
+	    private Animation _idleRideAnimation;
+	    private Animation _climbAnimation;
+		private Animation _sitAnimation;
+		private Animation _glideAnimation;
+		private Animation _knockedAnimation;
+        private Animation _tiedAnimation;
+        private Animation _sleepAnimation;
+	    private Animation _jumpAnimation;
 	    public Joint LeftShoulderJoint { get; private set; }
 	    public Joint RightShoulderJoint { get; private set; }
 	    public Joint LeftElbowJoint { get; private set; }
@@ -54,24 +56,19 @@ namespace Hedra.Engine.Player
         public Joint LeftFootJoint { get; private set; }
         public Joint RightFootJoint { get; private set; }
         public Joint HeadJoint { get; private set; }
+	    public Animation DefaultBlending { get; set; }
         private AreaSound _modelSound;
 		public StaticModel Food;
 		public Weapon LeftWeapon { get; private set; }
 		public QuadrupedModel MountModel;
-        public AnimatedCollider Collider { get; private set; }
+	    private AnimatedCollider _collider;
 
-        public override CollisionShape BroadphaseCollider => Collider.Broadphase;
-        public override CollisionShape[] Colliders => Collider.Shapes;
-        public override Vector3[] Vertices => Collider.Vertices;
-        public bool LockWeapon {get; set;}
+        public override CollisionShape BroadphaseCollider => _collider.Broadphase;
+        public override CollisionShape[] Colliders => _collider.Shapes;
+        public override Vector3[] Vertices => _collider.Vertices;
+        public bool LockWeapon { get; set; }
 	    public override Vector4 Tint { get; set; }
 	    public override Vector4 BaseTint { get; set; }
-        public bool IsSitting => this.SitAnimation == this.Model.Animator.AnimationPlaying;
-        public override bool IsIdling => this.IdleAnimation == this.Model.Animator.AnimationPlaying;
-        public override bool IsWalking => this.WalkAnimation == this.Model.Animator.AnimationPlaying;
-	    public bool IsGliding => this.GlideAnimation == this.Model.Animator.AnimationPlaying;
-	    public bool IsSwimming => this.IdleSwimAnimation == this.Model.Animator.AnimationPlaying || this.SwimAnimation == this.Model.Animator.AnimationPlaying;
-	    public bool IsRolling => this.RollAnimation == this.Model.Animator.AnimationPlaying;
 	    private string _modelPath;
         private ObjectMesh _lampModel;
 	    private bool _hasLamp;
@@ -86,17 +83,17 @@ namespace Hedra.Engine.Player
 
         public HumanoidModel(IHumanoid Human, HumanoidModelTemplate Template) : base(Human)
 		{
-		    this.Load(Human, Template);
+		    Load(Human, Template);
 		}
 
         public HumanoidModel(IHumanoid Human, HumanType Type) : base(Human)
         {
-            this.Load(Human, HumanoidLoader.ModelTemplater[Type]);
+            Load(Human, HumanoidLoader.ModelTemplater[Type]);
         }
 
         public HumanoidModel(IHumanoid Human) : base(Human)
         {
-            this.Load(Human, HumanoidLoader.ModelTemplater[Human.Class]);
+            Load(Human, HumanoidLoader.ModelTemplater[Human.Class]);
         }
 
         public void Paint(Vector4[] Colors)
@@ -109,91 +106,85 @@ namespace Hedra.Engine.Player
             {
                 colorMap.Add(AssetManager.ColorCodes[i].Xyz, Colors[i].Xyz);
             }
-            AnimationModelLoader.Paint(this.Model, _modelPath, colorMap);
+            AnimationModelLoader.Paint(Model, _modelPath, colorMap);
         }
 
-        private void Load(IHumanoid Human, HumanoidModelTemplate Template)
+        private void Load(IHumanoid Humanoid, HumanoidModelTemplate Template)
         {
-			this.Human = Human;
-			this.Scale = Vector3.One * Template.Scale;
-			this.Tint = Vector4.One;
-            this.LeftWeapon = Weapon.Empty;
-            this._modelPath = Template.Path;
+			Human = Humanoid;
+			Scale = Vector3.One * Template.Scale;
+			Tint = Vector4.One;
+            LeftWeapon = Weapon.Empty;
+            _modelPath = Template.Path;
 			
 			Model = AnimationModelLoader.LoadEntity(Template.Path);
 
-            this.Model.Scale = DefaultScale * new Vector3(1, 1.15f, 1) * Template.Scale;
-			this.LeftWeaponJoint = Model.RootJoint.GetChild("Hand_L");
-			this.RightWeaponJoint = Model.RootJoint.GetChild("Hand_R");
-			this.ChestJoint = Model.RootJoint.GetChild("Chest");
-			this.LeftFootJoint = Model.RootJoint.GetChild("Foot_L");
-			this.RightFootJoint = Model.RootJoint.GetChild("Foot_R");
-            this.HeadJoint = Model.RootJoint.GetChild("Head");
-	        this.LeftElbowJoint = Model.RootJoint.GetChild("Arm_L");
-	        this.RightElbowJoint = Model.RootJoint.GetChild("Arm_R");
-	        this.LeftShoulderJoint = Model.RootJoint.GetChild("Shoulder_L");
-	        this.RightShoulderJoint = Model.RootJoint.GetChild("Shoulder_R");
+            Model.Scale = DefaultScale * new Vector3(1, 1.15f, 1) * Template.Scale;
+			LeftWeaponJoint = Model.RootJoint.GetChild("Hand_L");
+			RightWeaponJoint = Model.RootJoint.GetChild("Hand_R");
+			ChestJoint = Model.RootJoint.GetChild("Chest");
+			LeftFootJoint = Model.RootJoint.GetChild("Foot_L");
+			RightFootJoint = Model.RootJoint.GetChild("Foot_R");
+            HeadJoint = Model.RootJoint.GetChild("Head");
+	        LeftElbowJoint = Model.RootJoint.GetChild("Arm_L");
+	        RightElbowJoint = Model.RootJoint.GetChild("Arm_R");
+	        LeftShoulderJoint = Model.RootJoint.GetChild("Shoulder_L");
+	        RightShoulderJoint = Model.RootJoint.GetChild("Shoulder_R");
 			
-			WalkAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWalk.dae");
-			IdleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorIdle.dae");
-			RollAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorRoll.dae");
-			EatAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorEat.dae");
-			SwimAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSwim.dae");
-			IdleSwimAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSwimIdle.dae");
-			ClimbAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorClimb.dae");
-			RideAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorMount.dae");
-			IdleRideAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorMountIdle.dae");
-			SitAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSit.dae");
-			GlideAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorGlide.dae");
-			KnockedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorKnocked.dae");
-            TiedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTied.dae");
-            SleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
-	        JumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
-
-            RollAnimation.Loop = false;
-			RollAnimation.OnAnimationEnd += delegate { 
-				Human.Physics.ResetFall();
-                this.Model.PlayAnimation(IdleAnimation);
+			_walkAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWalk.dae");
+			_idleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorIdle.dae");
+			_rollAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorRoll.dae");
+			_eatAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorEat.dae");
+			_swimAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSwim.dae");
+			_idleSwimAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSwimIdle.dae");
+			_climbAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorClimb.dae");
+			_rideAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorMount.dae");
+			_idleRideAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorMountIdle.dae");
+			_sitAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSit.dae");
+			_glideAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorGlide.dae");
+			_knockedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorKnocked.dae");
+            _tiedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTied.dae");
+            _sleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
+	        _jumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
+	        
+			_rollAnimation.OnAnimationEnd += delegate
+			{ 
+				Humanoid.Physics.ResetFall();
+			    Human.IsRolling = false;
 			};
 
-			EatAnimation.Loop = false;
-            EatAnimation.OnAnimationStart += delegate
+            _eatAnimation.OnAnimationStart += delegate
             {
-                SoundManager.PlaySound(SoundType.FoodEat, this.Position);
+                SoundManager.PlaySound(SoundType.FoodEat, Position);
             };
 
-			EatAnimation.OnAnimationEnd += delegate{ 
-				this.Food.Enabled = false;
-				
-				Human.IsEating = false;
-				this.Model.Animator.ExitBlend();
+			_eatAnimation.OnAnimationEnd += delegate{ 
+				Food.Enabled = false;			
+				Humanoid.IsEating = false;
 			};
 
-            this.Collider = new AnimatedCollider(Template.Path, this.Model);
-            this.BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * this.Model.Scale;
-            this.Dimensions = AssetManager.LoadDimensions(Template.Path) * this.Model.Scale;
-            this.Idle();
-            this._modelSound = new AreaSound(SoundType.HumanRun, Vector3.Zero, 48f);
+            _collider = new AnimatedCollider(Template.Path, Model);
+            BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * Model.Scale;
+            Dimensions = AssetManager.LoadDimensions(Template.Path) * Model.Scale;
+            _modelSound = new AreaSound(SoundType.HumanRun, Vector3.Zero, 48f);
         }
 
         public void Resize(Vector3 Scalar)
         {
-            this.Model.Scale *= Scalar;
-            this.BaseBroadphaseBox *= Scalar;
+            Model.Scale *= Scalar;
+            BaseBroadphaseBox *= Scalar;
         }
-		
-		public void UpdateModel(){}
-		
+
 		public void SetLamp(bool Active)
         {
-			if(this._hasLamp == Active) return;
-			this._hasLamp = Active;
+			if(_hasLamp == Active) return;
+			_hasLamp = Active;
 			
-			if(this._lampModel == null){
+			if(_lampModel == null){
 				var lampData = AssetManager.PLYLoader("Assets/Items/Handlamp.ply", new Vector3(1.5f, 1.5f, 1.5f), Vector3.Zero, Vector3.Zero, true);
-	        	this._lampModel = ObjectMesh.FromVertexData(lampData);
+	        	_lampModel = ObjectMesh.FromVertexData(lampData);
 			}
-			this._lampModel.Enabled = Active;
+			_lampModel.Enabled = Active;
 		}
 
         public void DisposeAnimation()
@@ -217,270 +208,206 @@ namespace Hedra.Engine.Player
 
         public override void Attack(IEntity Victim)
 		{
-			if(!Human.Knocked && !Human.IsAttacking && !(Human is LocalPlayer)){
-				LeftWeapon.Attack1(this.Human);
+			if(!Human.IsKnocked && !Human.IsAttacking && !(Human is LocalPlayer)){
+				LeftWeapon.Attack1(Human);
 			}
 		}
 		
 		public void SetWeapon(Weapon Weapon)
         {
-			if(Weapon == this.LeftWeapon)
+			if(Weapon == LeftWeapon)
 				return;
 
-		    this.LeftWeapon.Dispose();
-		    this.UnregisterModel(this.LeftWeapon);
+		    LeftWeapon.Dispose();
+		    UnregisterModel(LeftWeapon);
 
-			this.LeftWeapon = Weapon;
-			this.LeftWeapon.Enabled = this.Enabled;
-            this.LeftWeapon.Scale = Model.Scale;
-            this.LeftWeapon.Alpha = Model.Alpha;
+			LeftWeapon = Weapon;
+			LeftWeapon.Enabled = Enabled;
+            LeftWeapon.Scale = Model.Scale;
+            LeftWeapon.Alpha = Model.Alpha;
 
-            this.RegisterModel(this.LeftWeapon);
+            RegisterModel(LeftWeapon);
 
-		    (Human as LocalPlayer)?.Toolbar.SetAttackType(this.LeftWeapon);
-		}
-		
-		public override void Run(){
-		    Human.IsMoving = true;
-
-            if (Human.IsRolling || Human.IsRiding  || Human.IsUnderwater || Human.IsAttacking || Human.IsGliding)
-				return;
-
-		    var selected = Human.IsJumping ? JumpAnimation : WalkAnimation;
-            if (Model != null && Model.Animator.AnimationPlaying != selected)
-		        Model.PlayAnimation(selected);
-		    
+		    (Human as LocalPlayer)?.Toolbar.SetAttackType(LeftWeapon);
 		}
 
-        public void Glide()
-        {
-			if(Model != null && Model.Animator.AnimationPlaying != GlideAnimation)
-				Model.PlayAnimation(GlideAnimation);
-			
-		}
-		
-		public void KnockOut()
-		{
-			if(Model != null && Model.Animator.AnimationPlaying != KnockedAnimation)
-				Model.PlayAnimation(KnockedAnimation);
-			
-		}
-		
-		public override void Idle()
-		{
-		    Human.IsMoving = false;
-
-            if (Human.IsCasting || Human.IsRiding || Human.IsGliding || Human.IsClimbing || Human.IsAttacking || Human.IsEating || Human.IsRiding || Human.IsRolling || Human.IsUnderwater)
-				return;
-			
-			if(Model != null && Model.Animator.AnimationPlaying != IdleAnimation)
-				Model.PlayAnimation(IdleAnimation);
-        }		
-		
 		public void Climb()
 		{
-			if(Human.IsRolling || Human.IsUnderwater || Human.IsAttacking )
+			/*if(Human.IsRolling || Human.IsUnderwater || Human.IsAttacking )
 				return;
 			
 			if(Model != null && Model.Animator.AnimationPlaying != ClimbAnimation)
-				Model.PlayAnimation(ClimbAnimation);
+				Model.PlayAnimation(ClimbAnimation);*/
 		}
-		
-		public void Sit()
-		{
-			if(Human.IsRolling || Human.IsUnderwater || Human.IsAttacking)
-				return;
-			
-			if(Model != null && Model.Animator.AnimationPlaying != SitAnimation)
-				Model.PlayAnimation(SitAnimation);
-		}
-
-        public void Sleep()
-        {
-            if (Model != null && Model.Animator.AnimationPlaying != SleepAnimation)
-                Model.PlayAnimation(SleepAnimation);
-        }
-
-        public void Ride(){
-			if(Human.IsMoving){
-				if(Model != null && Model.Animator.AnimationPlaying != RideAnimation)
-					Model.PlayAnimation(RideAnimation);
-			}else{
-				if(Model != null && Model.Animator.AnimationPlaying != IdleRideAnimation)
-					Model.PlayAnimation(IdleRideAnimation);
-			}
-		}
-
-	    public void Jump()
-	    {
-		    if(Model != null && Model.Animator.AnimationPlaying != JumpAnimation)
-			    Model.PlayAnimation(JumpAnimation);
-	    }
 		
 		public void Eat(float FoodHealth)
 		{
 		    TaskManager.While( 
-                () => this.Human.IsEating && !Human.IsDead,
+                () => Human.IsEating && !Human.IsDead,
                 () => Human.Health += FoodHealth * Time.IndependantDeltaTime * .3f);
-			Model.Animator.StopBlend();
-			Model.Animator.BlendAnimation(EatAnimation);
-			this.Human.WasAttacking = false;
-			this.Human.IsAttacking = false;
-		}
-		
-		public void Swim()
-        {
-			if( !(Human is LocalPlayer) || Human.IsRolling || Human.IsCasting) return;
-			if(Model != null && Model.Animator.AnimationPlaying != SwimAnimation)
-				Model.PlayAnimation(SwimAnimation);
-		}
-		
-		public void IdleSwim()
-        {
-			if( !(Human is LocalPlayer) || Human.IsRolling || Human.IsCasting) return;
-			if(Model != null && Model.Animator.AnimationPlaying != IdleSwimAnimation)
-				Model.PlayAnimation(IdleSwimAnimation);
-		}
-		
-		public void Roll()
-        {
-			Model.Animator.PlayAnimation(RollAnimation);
-			this.Human.WasAttacking = false;
-			this.Human.IsAttacking = false;
-		}
-		
-		public void Tied()
-        {
-		    if (Model != null && Model.Animator.AnimationPlaying != TiedAnimation)
-                Model.PlayAnimation(TiedAnimation);
+			Model.BlendAnimation(_eatAnimation);
+			Human.WasAttacking = false;
+			Human.IsAttacking = false;
 		}
 
-        public void TiedSitting()
-        {
-            if (Model != null && Model.Animator.AnimationPlaying != SitAnimation)
-                Model.PlayAnimation(SitAnimation);
+	    private void HandleState()
+	    {
+            Animation currentAnimation = null;
+		    var blendingAnimation = DefaultBlending;
 
-            if (Model != null && Model.Animator.BlendingAnimation != TiedAnimation)
-                Model.BlendAnimation(TiedAnimation);
-        }
+	        if (Human.IsMoving)
+	        {
+	            currentAnimation = _walkAnimation;
+	            Human.IsSitting = false;
+	            if (Human.IsRiding)
+	            {
+	                currentAnimation = _rideAnimation;
+	            }
+	            if (Human.IsUnderwater)
+	            {
+	                currentAnimation = _swimAnimation;
+	            }
+	        }
+	        else
+	        {
+	            currentAnimation = _idleAnimation;
+                if (Human.IsRiding)
+	            {
+	                currentAnimation = _idleRideAnimation;
+	            }
+	            if (Human.IsUnderwater)
+	            {
+	                currentAnimation = _idleSwimAnimation;
+	            }
+	        }
+		    if(Human.IsTied)
+		    {
+			    currentAnimation = _tiedAnimation;
+		    }
+		    if (Human.IsSitting)
+	        {
+	            currentAnimation = _sitAnimation;
+            }
+	        if (Human.IsSleeping)
+	        {
+	            currentAnimation = _sleepAnimation;
+            }
+			if(Human.IsRolling)
+			{
+				currentAnimation = _rollAnimation;
+				HandleRollEffects();
+			}
+	        if (Human.IsJumping)
+	        {
+	            currentAnimation = _jumpAnimation;
+	        }
+		    if(Human.IsEating)
+		    {
+			    blendingAnimation = _eatAnimation;
+			    HandleEatingEffects();
+		    }
+		    if (Human.IsGliding)
+		    {
+			    currentAnimation = _glideAnimation;
+		    }
+		    if (Human.IsKnocked)
+		    {
+			    currentAnimation = _knockedAnimation;
+		    }
+		    if(currentAnimation != null && Model.AnimationPlaying != currentAnimation)
+			    Model.PlayAnimation(currentAnimation);
+	        if (blendingAnimation != null && Model.AnimationBlending != blendingAnimation)
+	        {
+                if(!(blendingAnimation == DefaultBlending && Model.AnimationBlending != null))
+                {
+                    Model.BlendAnimation(blendingAnimation);
+                }
+            }
+	    }
 
+	    private void HandleEatingEffects()
+	    {
+		    var mat4 = LeftWeaponMatrix.ClearTranslation() * 
+		    Matrix4.CreateTranslation(-Model.Position + ((LeftWeaponPosition + RightWeaponPosition) / 2f) );
+				
+		    Food.Model.TransformationMatrix = mat4;
+		    Food.Model.Position = Model.Position;
+		    Food.Model.TargetPosition = Vector3.Zero;
+		    Food.Model.AnimationPosition = Vector3.Zero;
+		    Food.Model.TargetRotation = new Vector3(180,0,0);
+		    Food.Model.RotationPoint = Vector3.Zero;
+		    Food.Model.Rotation = Vector3.Zero;
+		    Food.Model.LocalRotation = Vector3.Zero;
+		    Food.Model.LocalPosition = Vector3.Zero;
+		    Food.Model.BeforeLocalRotation = Vector3.UnitY * -0.7f;
+	    }
+	    
+	    private void HandleRollEffects()
+	    {
+		    if(_previousPosition != Human.BlockPosition && Human.IsGrounded){
+			    var block = World.GetHighestBlockAt( (int) Human.Position.X, (int) Human.Position.Z);
+			    World.Particles.VariateUniformly = true;
+			    World.Particles.Color = Vector4.One;//World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z).GetColor(Region.Default);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
+			    World.Particles.Position = Human.Position - Vector3.UnitY;
+			    World.Particles.Scale = Vector3.One * .5f;
+			    World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+			    World.Particles.Direction = (-Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
+			    World.Particles.ParticleLifetime = 1;
+			    World.Particles.GravityEffect = .1f;
+			    World.Particles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
+					
+			    for(int i = 0; i < 1; i++){
+				    World.Particles.Emit();
+			    }
+		    }
+		    _previousPosition = Human.BlockPosition;
+	    }
+	    
         public override void Update()
 		{
             base.Update();
-		    WalkAnimation.Speed = Human.Speed;
-		    this._modelSound.Pitch = Human.Speed / 1.11f;
-
-            if (_lastAnimationTime != this.Model.Animator.AnimationTime || GameManager.InMenu)
-            {
-				_lastAnimationTime = this.Model.Animator.AnimationTime;
-			}
-            else
-            {
-				Model.Animator.AnimationPlaying?.DispatchEvents(1f);
-				Model.Animator.StopBlend();
-			}
+            HandleState();
+			Model.Update();
+		    _walkAnimation.Speed = Human.Speed;
+		    _modelSound.Pitch = Human.Speed / 1.11f;
 			
-			if(Model.Animator.AnimationPlaying == null)
-				this.Idle();
-
-			if(Model != null)
-            {
-				Model.Update();
-				Vector3 positionAddon = Vector3.Zero;
-                if (this.MountModel != null)
-                {
-                    positionAddon += this.MountModel.Height * Vector3.UnitY * .5f;
-                }
-
-                Model.Position = this.Position + positionAddon;
-                this._rotationQuaternionX = Quaternion.Slerp(this._rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * this.TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
-                this._rotationQuaternionY = Quaternion.Slerp(this._rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * this.TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
-                this._rotationQuaternionZ = Quaternion.Slerp(this._rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * this.TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
-                Model.Rotation = new Vector3(
-                    QuaternionMath.ToEuler(this._rotationQuaternionX).X,
-                    QuaternionMath.ToEuler(this._rotationQuaternionY).Y,
-                    QuaternionMath.ToEuler(this._rotationQuaternionZ).Z
-                    );
-
-                this.Rotation = Model.Rotation;
-				//this._shadow.Position = Model.Position;
-				if(MountModel != null)
-					this.MountModel.TargetRotation = this.TargetRotation;
+			var positionAddon = Vector3.Zero;
+			if (MountModel != null)
+			{
+				positionAddon += MountModel.Height * Vector3.UnitY * .5f;
 			}
-		
-			if(Human.IsEating && this.Model.Animator.BlendingAnimation != EatAnimation){
-				Human.IsEating = false;
-				this.Food.Enabled = false;
-			}else if(Human.IsEating){
-				Matrix4 Mat4 = this.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Model.Position + ((this.LeftWeaponPosition + this.RightWeaponPosition) / 2f) );
-				
-				this.Food.Model.TransformationMatrix = Mat4;
-				this.Food.Model.Position = Model.Position;
-				this.Food.Model.TargetPosition = Vector3.Zero;
-				this.Food.Model.AnimationPosition = Vector3.Zero;
-				this.Food.Model.TargetRotation = new Vector3(180,0,0);
-				this.Food.Model.RotationPoint = Vector3.Zero;
-				this.Food.Model.Rotation = Vector3.Zero;
-				this.Food.Model.LocalRotation = Vector3.Zero;
-				this.Food.Model.LocalPosition = Vector3.Zero;
-				this.Food.Model.BeforeLocalRotation = Vector3.UnitY * -0.7f;
-				
-				if(!this.Human.IsMoving && Model.Animator.AnimationPlaying == WalkAnimation){
-					this.Model.Animator.ExitBlend();
-				}
-			}
+
+			Model.Position = Position + positionAddon;
+			_rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
+			_rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
+			_rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
+			Model.Rotation = new Vector3(
+				QuaternionMath.ToEuler(_rotationQuaternionX).X,
+				QuaternionMath.ToEuler(_rotationQuaternionY).Y,
+				QuaternionMath.ToEuler(_rotationQuaternionZ).Z
+				);
+
+			Rotation = Model.Rotation;
+			//this._shadow.Position = Model.Position;
+			if(MountModel != null)
+				MountModel.TargetRotation = TargetRotation;
+
+			if(!LockWeapon) LeftWeapon.Update(Human);
 			
-			if(!LockWeapon) this.LeftWeapon.Update(this.Human);
-			
-			if(this._hasLamp){
-				this._lampModel.Position = this.LeftWeaponPosition;
-				this._lampModel.Rotation = this.Rotation;
-				this._lampModel.RotationPoint = Vector3.Zero;
+			if(_hasLamp){
+				_lampModel.Position = LeftWeaponPosition;
+				_lampModel.Rotation = Rotation;
+				_lampModel.RotationPoint = Vector3.Zero;
 			}
 			Human.HandLamp.Update();
-			if(Human.IsRiding)
-				Ride();
-			
-			if(Human.IsSitting)
-				Sit();
 
-		    if (Human.IsSleeping)
-		        Sleep();
-
-			if(Human.IsRolling){
-				if(_previousPosition != this.Human.BlockPosition && this.Human.IsGrounded){
-					var block = World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z);
-				    World.Particles.VariateUniformly = true;
-				    World.Particles.Color = Vector4.One;//World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z).GetColor(Region.Default);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
-				    World.Particles.Position = this.Human.Position - Vector3.UnitY;
-				    World.Particles.Scale = Vector3.One * .5f;
-				    World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				    World.Particles.Direction = (-this.Human.Orientation + Vector3.UnitY * 2.75f) * .15f;
-				    World.Particles.ParticleLifetime = 1;
-				    World.Particles.GravityEffect = .1f;
-				    World.Particles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
-					
-					for(int i = 0; i < 1; i++){
-					    World.Particles.Emit();
-					}
-				}
-				_previousPosition = this.Human.BlockPosition;
-			}
-		    if (MountModel != null)
-		    {
-		        //Adapt human to animal
-		        // this.Model.TransformationMatrix = Matrix4.CreateTranslation(Vector3.UnitY * MountModel.Height)
-		        //* MountModel.Model.TransformationMatrix
-		        //* Matrix4.CreateTranslation(Vector3.UnitY * -MountModel.Height);
-		    }
-
-		    if (!this.Disposed)
+		    if (!Disposed)
 		    {
 		        _modelSound.Type = Human.IsSleeping ? SoundType.HumanSleep : SoundType.HumanRun;
-		        _modelSound.Position = this.Position;
-		        _modelSound.Update(this.IsWalking || Human.IsSleeping);
+		        _modelSound.Position = Position;
+		        _modelSound.Update(IsWalking || Human.IsSleeping);
 		    }
-		}
+        }
 
 	    public void StopSound()
 	    {
@@ -491,10 +418,10 @@ namespace Hedra.Engine.Player
         {
 			if(!Enabled)
 				return;
-			this.Model.Draw();
-			if(this.LeftWeapon.Meshes != null){
-				for(int i = 0; i < this.LeftWeapon.Meshes.Length; i++){
-					this.LeftWeapon.Meshes[i].Draw();
+			Model.Draw();
+			if(LeftWeapon.Meshes != null){
+				for(int i = 0; i < LeftWeapon.Meshes.Length; i++){
+					LeftWeapon.Meshes[i].Draw();
 				}
 			}
 		}
@@ -524,45 +451,45 @@ namespace Hedra.Engine.Player
         {
             get
             {
-                if (this._defaultHeadPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-                    this._defaultHeadPosition = Model.JointDefaultPosition(HeadJoint);
-                return Model.TransformFromJoint(this._defaultHeadPosition, HeadJoint);
+                if (_defaultHeadPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
+                    _defaultHeadPosition = Model.JointDefaultPosition(HeadJoint);
+                return Model.TransformFromJoint(_defaultHeadPosition, HeadJoint);
             }
         }
 
         private Vector3 _defaultLeftWeaponPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 		public Vector3 LeftWeaponPosition{
 			get{
-				if(this._defaultLeftWeaponPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-					this._defaultLeftWeaponPosition = Model.JointDefaultPosition(LeftWeaponJoint);
-				return Model.TransformFromJoint(this._defaultLeftWeaponPosition, LeftWeaponJoint);
+				if(_defaultLeftWeaponPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
+					_defaultLeftWeaponPosition = Model.JointDefaultPosition(LeftWeaponJoint);
+				return Model.TransformFromJoint(_defaultLeftWeaponPosition, LeftWeaponJoint);
 			}
 		}
 		
 		private Vector3 _defaultRightFootPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 		public Vector3 RightFootPosition{
 			get{
-				if(this._defaultRightFootPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-					this._defaultRightFootPosition = Model.JointDefaultPosition(RightFootJoint);
-				return Model.TransformFromJoint(this._defaultRightFootPosition, RightFootJoint);
+				if(_defaultRightFootPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
+					_defaultRightFootPosition = Model.JointDefaultPosition(RightFootJoint);
+				return Model.TransformFromJoint(_defaultRightFootPosition, RightFootJoint);
 			}
 		}
 		
 		private Vector3 _defaultLeftFootPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 		public Vector3 LeftFootPosition{
 			get{
-				if(this._defaultLeftFootPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-					this._defaultLeftFootPosition = Model.JointDefaultPosition(LeftFootJoint);
-				return Model.TransformFromJoint(this._defaultLeftFootPosition, LeftFootJoint);
+				if(_defaultLeftFootPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
+					_defaultLeftFootPosition = Model.JointDefaultPosition(LeftFootJoint);
+				return Model.TransformFromJoint(_defaultLeftFootPosition, LeftFootJoint);
 			}
 		}
 		
 		private Vector3 _defaultRightWeaponPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 		public Vector3 RightWeaponPosition{
 			get{
-				if(this._defaultRightWeaponPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-					this._defaultRightWeaponPosition = Model.JointDefaultPosition(RightWeaponJoint);
-				return Model.TransformFromJoint(this._defaultRightWeaponPosition, RightWeaponJoint);
+				if(_defaultRightWeaponPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
+					_defaultRightWeaponPosition = Model.JointDefaultPosition(RightWeaponJoint);
+				return Model.TransformFromJoint(_defaultRightWeaponPosition, RightWeaponJoint);
 			}
 		}
 
@@ -571,9 +498,9 @@ namespace Hedra.Engine.Player
         {
             get
             {
-                if (this._defaultChestPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
-                    this._defaultChestPosition = Model.JointDefaultPosition(ChestJoint);
-                return Model.TransformFromJoint(this._defaultChestPosition, ChestJoint);
+                if (_defaultChestPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
+                    _defaultChestPosition = Model.JointDefaultPosition(ChestJoint);
+                return Model.TransformFromJoint(_defaultChestPosition, ChestJoint);
             }
         }
 		
@@ -582,7 +509,7 @@ namespace Hedra.Engine.Player
 			get => _position;
 		    set{
 				if(MountModel != null)
-					this.MountModel.Position = value;
+					MountModel.Position = value;
 
                 _position = value;
 			}
@@ -592,13 +519,13 @@ namespace Hedra.Engine.Player
 
 	    public override void Dispose()
 		{
-		    Collider.Dispose();
+		    _collider.Dispose();
             Model.Dispose();
             _lampModel?.Dispose();
 			LeftWeapon.Dispose();
 			
 			var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-			foreach (var field in this.GetType().GetFields(flags))
+			foreach (var field in GetType().GetFields(flags))
 			{
 				if(field.GetType() == typeof(Animation))
 					(field.GetValue(this) as Animation)?.Dispose();

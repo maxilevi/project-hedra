@@ -34,7 +34,7 @@ namespace Hedra.Engine.EntitySystem
             bool shouldKnock = Utils.Rng.NextFloat() <= Chance * 0.01f;
 
             if (!shouldKnock) return;
-            if (!Victim.Knocked) Victim.KnockForSeconds(Duration);
+            if (!Victim.IsKnocked) Victim.KnockForSeconds(Duration);
             _cooldown = Duration + 2;
         }
     }

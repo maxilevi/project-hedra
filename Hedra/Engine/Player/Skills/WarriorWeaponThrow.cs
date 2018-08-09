@@ -99,7 +99,6 @@ namespace Hedra.Engine.Player
 			Player.Model.LeftWeapon.InAttackStance = false;
 			Player.Model.LeftWeapon.LockWeapon = true;
 		    Player.Model.LockWeapon = false;
-            Player.Model.Model.Animator.StopBlend();
 			Player.Model.Model.PlayAnimation(ThrowAnimation);
 		    for (var i = 0; i < Player.Model.LeftWeapon.Meshes.Length; i++)
 		    {

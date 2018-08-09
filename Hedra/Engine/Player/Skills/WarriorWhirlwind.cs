@@ -51,7 +51,6 @@ namespace Hedra.Engine.Player
 			Casting = true;
 			Player.IsAttacking = true;
 			_passedTime = 0;
-			Player.Model.Model.Animator.StopBlend();
 			Player.Model.Model.PlayAnimation(_whirlwindAnimation);
 			Player.Model.Model.BlendAnimation(_whirlwindAnimation);
 		    _trail.Emit = true;
@@ -63,7 +62,6 @@ namespace Hedra.Engine.Player
 	        Casting = false;
 	        Player.IsAttacking = false;
 	        Player.Model.LeftWeapon.LockWeapon = false;
-	        Player.Model.Model.Animator.StopBlend();
             _trail.Emit = false;
         }
 		
@@ -72,7 +70,7 @@ namespace Hedra.Engine.Player
 			this.Grayscale = !Player.HasWeapon;    
 			if(Player.IsCasting && Casting)
             {
-				if(Player.IsDead || Player.Knocked || _passedTime > 4){
+				if(Player.IsDead || Player.IsKnocked || _passedTime > 4){
 					this.Disable();
 					return;
 				}
@@ -80,9 +78,9 @@ namespace Hedra.Engine.Player
 			    var underChunk = World.GetChunkAt(Player.Position);
                 _rotationY += Time.DeltaTime * 1000f;
                 Player.Model.Model.TransformationMatrix =
-                    Matrix4.CreateRotationY(-Player.Model.Model.Rotation.Y * Mathf.Radian) *
+                    Matrix4.CreateRotationY(-Player.Model.Rotation.Y * Mathf.Radian) *
                     Matrix4.CreateRotationY(_rotationY * Mathf.Radian) *
-                    Matrix4.CreateRotationY(Player.Model.Model.Rotation.Y * Mathf.Radian);
+                    Matrix4.CreateRotationY(Player.Model.Rotation.Y * Mathf.Radian);
                 this.ManageParticles(underChunk);
 				
 				if(_frameCounter >= .25f)

@@ -137,7 +137,6 @@ namespace Hedra.Engine.Rendering.UI
 					_newRot += Time.IndependantDeltaTime * 30f;
 					_human.Model.Rotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
 					_human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
-					_human.Model.Idle();
 				}
 				yield return null;
 			}

@@ -47,8 +47,8 @@ namespace Hedra.Engine.WorldBuilding
 				}
 				
 				this.TargetPoint = ChasingTarget.Position;
-				if( (TargetPoint - Parent.Position).LengthSquared < AttackRadius * AttackRadius && !Parent.Knocked){
-					Parent.Model.Idle();
+				if( (TargetPoint - Parent.Position).LengthSquared < AttackRadius * AttackRadius && !Parent.IsKnocked)
+				{
 				    if (Parent is Humanoid human)
 				    {
 				        if (human.Model.LeftWeapon is Bow bow)

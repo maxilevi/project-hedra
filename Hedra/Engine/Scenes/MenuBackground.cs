@@ -86,7 +86,8 @@ namespace Hedra.Engine.Scenes
 	    private static SoundItem _sound;
 		private static IEnumerator MenuUpdate(){
 
-            while (World.Seed == World.MenuSeed){
+            while (World.Seed == World.MenuSeed)
+            {
 			    if (_light == null)
 			    {
 			        _light = ShaderManager.GetAvailableLight();
@@ -155,8 +156,10 @@ namespace Hedra.Engine.Scenes
 		
 		private static Vector3 Position;
 		private static float LerpTime = 12000;
-		public static Vector3 NewLocation{
-			get{
+		public static Vector3 NewLocation
+        {
+			get
+            {
 				float TargetTime = 0;
 				Vector3 TargetPosition = Vector3.Zero;
 				

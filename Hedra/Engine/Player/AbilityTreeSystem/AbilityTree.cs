@@ -88,7 +88,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _player.View.LockMouse = false;
                 _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
-                _player.Model.Idle();
                 UpdateManager.CursorShown = true;
             }
             else
