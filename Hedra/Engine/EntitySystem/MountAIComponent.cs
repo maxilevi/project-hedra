@@ -73,30 +73,23 @@ namespace Hedra.Engine.EntitySystem
 				Parent.Position = Owner.BlockPosition + Vector3.UnitX * 12f;
 			}
 			
-			float Distance = (Target == Owner) ? 8 : 3;
-			if (Target != null && (Target.Position - Parent.Position).LengthSquared 
-			         < Distance * .75f * Distance*.75f * Chunk.BlockSize * Chunk.BlockSize){
-					
-				if(Target != null && Target != Owner)
+			float distance = (Target == Owner) ? 8 : 3;
+		    var distSqr = distance * distance;
+
+            if (Target != null && ((Target.Position - Parent.Position).LengthSquared > distSqr * Chunk.BlockSize * Chunk.BlockSize && !Parent.IsMoving
+                || (Target.Position - Parent.Position).LengthSquared > distSqr * .75f * Chunk.BlockSize * Chunk.BlockSize && Parent.IsMoving))
+		    {
+		        Parent.Orientation = (Target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
+		        Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
+		        Parent.Physics.DeltaTranslate(Parent.Speed * 8 * Parent.Orientation);
+            }
+			if (Target != null && (Target.Position - Parent.Position).LengthSquared < distance * .75f * distance*.75f * Chunk.BlockSize * Chunk.BlockSize)
+            {
+                if (Target != null && Target != Owner)
                 {
 					Parent.Model.Attack(Target);
 					if(Target.IsDead) Target = null;
 				}
-			}
-            /*var isInFrontOfOwner = Target == Owner && Vector3.Dot(Target.Orientation, (Target.Position - Parent.Position).NormalizedFast()) < 0.0;
-		    if (isInFrontOfOwner)
-		    {
-		        Parent.Model.Run();
-            }*/
-            if ( Parent.Model.IsWalking && Target != null)
-			{
-			    Parent.Orientation = (Target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
-                /*if (isInFrontOfOwner)
-			    {
-			        Parent.Orientation = (-Target.Orientation + -Target.Orientation.Xz.PerpendicularRight.ToVector3()) * .5f;
-			    }*/
-				Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
-				Parent.Physics.DeltaTranslate( Parent.Speed * 8 * Parent.Orientation);
 			}
 
 			if( (Target == Owner || Target == null) ){

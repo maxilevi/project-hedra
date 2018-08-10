@@ -184,9 +184,10 @@ namespace Hedra.Engine.Player
             DmgComponent.Immune = true;
 	        WasAttacking = false;
 	        IsAttacking = false;
+            var wasWalking = this.IsMoving;
             this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.1f),
                 () => IsRolling);
-            Movement.Move(this.Orientation * 2f, 1.5f, false);
+            Movement.Move(this.Orientation * 2f, 1f, false);
             SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);
 			TaskManager.When( () => !IsRolling, () =>
 			{

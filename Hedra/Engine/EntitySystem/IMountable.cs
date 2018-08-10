@@ -14,5 +14,6 @@ namespace Hedra.Engine.EntitySystem
 	public interface IMountable
 	{
 		bool IsMountable{ get; }
+        bool HasRider { get; set; }
 	}
 }

@@ -83,8 +83,8 @@ namespace Hedra.Engine.EntitySystem
 			if(HasRider && !Rider.IsRiding){
 				Parent.Position = Rider.Position;
 			    Rider.Model.MountModel.AlignWithTerrain = true;
+			    Rider.Model.MountModel.HasRider = false;
                 Rider.Model.MountModel = null;
-				Rider = null;
 				HasRider = false;
 				if(AI != null) AI.Enabled = true;
 				if(_healthBar != null) _healthBar.Hide = false;
@@ -103,9 +103,10 @@ namespace Hedra.Engine.EntitySystem
 			Rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Rider, -Rider.Speed + Parent.Speed * .5f), () => Rider != null && Rider.IsRiding);
 			HasRider = true;
 			Rider.IsRiding = true;
-			Rider.Model.MountModel = (QuadrupedModel) Parent.Model;
+            Rider.Model.MountModel = (QuadrupedModel) Parent.Model;
 		    Rider.Model.MountModel.AlignWithTerrain = false;
-			Parent.Physics.UsePhysics = false;
+		    Rider.Model.MountModel.HasRider = true;
+            Parent.Physics.UsePhysics = false;
 			Parent.Physics.HasCollision = false;
 			Parent.SearchComponent<DamageComponent>().Immune = true;
 

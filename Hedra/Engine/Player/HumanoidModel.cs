@@ -269,6 +269,7 @@ namespace Hedra.Engine.Player
                 if (Human.IsRiding)
                 {
                     currentAnimation = _rideAnimation;
+                    MountModel?.Run();
                 }
                 if (Human.IsUnderwater)
                 {
@@ -281,6 +282,7 @@ namespace Hedra.Engine.Player
                 if (Human.IsRiding)
                 {
                     currentAnimation = _idleRideAnimation;
+                    MountModel?.Idle();
                 }
                 if (Human.IsUnderwater)
                 {
@@ -495,7 +497,8 @@ namespace Hedra.Engine.Player
 
 		public Vector3 LeftWeaponPosition
 		{
-			get{
+			get
+            {
 				if(_defaultLeftWeaponPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
 					_defaultLeftWeaponPosition = Model.JointDefaultPosition(LeftWeaponJoint);
 				return Model.TransformFromJoint(_defaultLeftWeaponPosition, LeftWeaponJoint);
@@ -504,7 +507,8 @@ namespace Hedra.Engine.Player
 		
 		public Vector3 RightFootPosition
 		{
-			get{
+			get
+            {
 				if(_defaultRightFootPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
 					_defaultRightFootPosition = Model.JointDefaultPosition(RightFootJoint);
 				return Model.TransformFromJoint(_defaultRightFootPosition, RightFootJoint);
@@ -513,7 +517,8 @@ namespace Hedra.Engine.Player
 		
 		public Vector3 LeftFootPosition
 		{
-			get{
+			get
+            {
 				if(_defaultLeftFootPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
 					_defaultLeftFootPosition = Model.JointDefaultPosition(LeftFootJoint);
 				return Model.TransformFromJoint(_defaultLeftFootPosition, LeftFootJoint);
@@ -522,7 +527,8 @@ namespace Hedra.Engine.Player
 		
 		public Vector3 RightWeaponPosition
 		{
-			get{
+			get
+            {
 				if(_defaultRightWeaponPosition == new Vector3(float.MaxValue, float.MaxValue, float.MaxValue))
 					_defaultRightWeaponPosition = Model.JointDefaultPosition(RightWeaponJoint);
 				return Model.TransformFromJoint(_defaultRightWeaponPosition, RightWeaponJoint);
@@ -543,7 +549,8 @@ namespace Hedra.Engine.Player
 		public override Vector3 Position
 		{
 			get => _position;
-		    set{
+		    set
+            {
 				if(MountModel != null)
 					MountModel.Position = value;
 

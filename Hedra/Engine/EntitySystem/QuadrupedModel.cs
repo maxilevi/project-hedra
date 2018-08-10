@@ -32,6 +32,7 @@ namespace Hedra.Engine.EntitySystem
         public override bool IsIdling => Array.IndexOf(IdleAnimations, this.Model.AnimationPlaying) != -1;
         public bool AlignWithTerrain { get; set; }
         public bool IsMountable { get; set; }
+        public bool HasRider { get; set; }
         public Animation[] IdleAnimations { get; }
         public Animation[] WalkAnimations { get; }
         public Animation[] AttackAnimations { get; }
@@ -203,13 +204,15 @@ namespace Hedra.Engine.EntitySystem
 					break;
 			}
 		}
-
+  
         public override void Update()
         {
+            if (!HasRider)
+            {
+                if (Parent.IsMoving) this.Run();
+                else this.Idle();
+            }
             base.Update();
-
-			if(Model.AnimationPlaying == null)
-				this.Idle();
 
 		    if (Model != null)
 		    {
