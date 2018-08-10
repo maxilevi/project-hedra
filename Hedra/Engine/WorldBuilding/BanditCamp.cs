@@ -99,7 +99,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             if (Rescued) return;
 
-            _rescuee.Model.Model.TransformationMatrix = this.BuildRescueeMatrix();
+            _rescuee.Model.TransformationMatrix = this.BuildRescueeMatrix();
             _rescuee.BlockPosition = this.Position.Xz.ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
             _rescuee.Model.Position = _rescuee.BlockPosition;
 
@@ -135,7 +135,7 @@ namespace Hedra.Engine.WorldBuilding
                 };
                 _rescuee.AddComponent(talkComponent);
             });
-            _rescuee.Model.Model.TransformationMatrix = Matrix4.Identity;
+            _rescuee.Model.TransformationMatrix = Matrix4.Identity;
             _rescuee.Physics.UsePhysics = true;
             _rescuee.Physics.HasCollision = true;
             _rescuee.Physics.CanCollide = true;

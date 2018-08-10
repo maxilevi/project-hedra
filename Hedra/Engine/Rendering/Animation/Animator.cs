@@ -100,7 +100,7 @@ namespace Hedra.Engine.Rendering.Animation
 		    var animationPose = _frameCounter % 2 != 0 || _lastPose == null
 		        ? _lastPose = CalculateCurrentAnimationPose()
 		        : _lastPose;
-			_pose = InterpolatePoses(_pose, animationPose, Time.IndependantDeltaTime * 8f);
+			_pose = InterpolatePoses(_pose, animationPose, Time.IndependantDeltaTime * 16f);
 			ApplyPoseToJoints(_pose, _entity.RootJoint, Matrix4.Identity);
 			if(_frameCounter % 2 == 0) IncreaseAnimationTime();
 		    _frameCounter++;
@@ -114,17 +114,21 @@ namespace Hedra.Engine.Rendering.Animation
 		 */
 		private void IncreaseAnimationTime() 
 		{
-			if(GameManager.InMenu || (!_currentAnimation.Loop && AnimationTime > _currentAnimation.Length) || Stop) 
-				return;
+			if(GameManager.InMenu || Stop) return;
 
-			AnimationTime += Time.IndependantDeltaTime * _currentAnimation.Speed * AnimationSpeed;
-            _currentAnimation.DispatchEvents(AnimationTime / _currentAnimation.Length);	
-			if (AnimationTime > _currentAnimation.Length){
-				_currentAnimation.Reset();
-				if(_currentAnimation.Loop) AnimationTime %= _currentAnimation.Length;	
-			}
+		    if (_currentAnimation != null)
+		    {
+		        AnimationTime += Time.IndependantDeltaTime * _currentAnimation.Speed * AnimationSpeed;
+		        _currentAnimation.DispatchEvents(AnimationTime / _currentAnimation.Length);
+		        if (AnimationTime > _currentAnimation.Length)
+		        {
+		            _currentAnimation.Reset();
+		            if (_currentAnimation.Loop) AnimationTime %= _currentAnimation.Length;
+		            else _currentAnimation = null;
+		        }
+		    }
 
-            if(_blendingAnimation == null) return;
+		    if(_blendingAnimation == null) return;
 		    BlendingAnimationTime += Time.IndependantDeltaTime * _blendingAnimation.Speed * AnimationSpeed;
 		    _blendingAnimation.DispatchEvents(BlendingAnimationTime / _blendingAnimation.Length);
 		    if (BlendingAnimationTime > _blendingAnimation.Length)
@@ -166,7 +170,7 @@ namespace Hedra.Engine.Rendering.Animation
 				var blendingPose = InterpolateJointPosesFromKeyframes(blendingFrames[0], blendingFrames[1], blendingProgression);
 				for (var i = 0; i < _blendJoints.Length; i++)
 				{
-					pose[_blendJoints[i]] = blendingPose[_blendJoints[i]];
+				    pose[_blendJoints[i]] = blendingPose[_blendJoints[i]];
 				}
 			}
 			return pose;

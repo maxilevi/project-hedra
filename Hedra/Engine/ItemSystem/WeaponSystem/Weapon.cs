@@ -215,7 +215,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             BaseAttack(Human, Options);
             var animation = _primaryAnimations[ParsePrimaryIndex(PrimaryAnimationsIndex)];
             animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed;
-            Human.Model.Model.BlendAnimation(animation);
+            Human.Model.Blend(animation);
         }
 
         public virtual void Attack2(IHumanoid Human)
@@ -240,7 +240,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             BaseAttack(Human, Options);
             var animation = _secondaryAnimations[ParseSecondaryIndex(SecondaryAnimationsIndex)];
             animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed;
-            Human.Model.Model.BlendAnimation(animation);
+            Human.Model.Blend(animation);
         }
 
         protected bool MeetsRequirements()
@@ -294,8 +294,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             var attacking = false;
             for (var i = 0; i < _animations.Length; i++)
             {
-                if (_animations[i] != Owner.Model.Model.AnimationPlaying &&
-                    _animations[i] != Owner.Model.Model.AnimationBlending) continue;
+                if (_animations[i] != Owner.Model.AnimationPlaying &&
+                    _animations[i] != Owner.Model.AnimationBlending) continue;
                 attacking = true;
                 break;
             }
@@ -303,8 +303,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             var primaryAttack = false;
             for (var i = 0; i < _primaryAnimations.Length; i++)
             {
-                if (_primaryAnimations[i] != Owner.Model.Model.AnimationPlaying &&
-                    _primaryAnimations[i] != Owner.Model.Model.AnimationBlending) continue;
+                if (_primaryAnimations[i] != Owner.Model.AnimationPlaying &&
+                    _primaryAnimations[i] != Owner.Model.AnimationBlending) continue;
                 primaryAttack = true;
                 break;
             }
@@ -313,8 +313,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             var secondaryAttack = false;
             for (int i = 0; i < _secondaryAnimations.Length; i++)
             {
-                if (_secondaryAnimations[i] == Owner.Model.Model.AnimationPlaying ||
-                    _secondaryAnimations[i] == Owner.Model.Model.AnimationBlending)
+                if (_secondaryAnimations[i] == Owner.Model.AnimationPlaying ||
+                    _secondaryAnimations[i] == Owner.Model.AnimationBlending)
                 {
                     secondaryAttack = true;
                     break;
@@ -415,7 +415,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 if (Owner == null)
                     return false;
 
-                return Owner.Model.Model.AnimationBlending == AttackStanceAnimation;
+                return Owner.Model.AnimationBlending == AttackStanceAnimation;
             }
             set
             {

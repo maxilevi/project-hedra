@@ -15,7 +15,7 @@ using Hedra.Engine.Rendering;
 namespace Hedra.Engine.Player
 {
 
-	public class GliderModel : UpdatableModel<ObjectMesh>
+	public class GliderModel : UpdatableObjectMeshModel
 	{
 		public GliderModel() : base(null)
         {

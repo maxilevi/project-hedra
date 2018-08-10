@@ -6,29 +6,22 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using System.Collections;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.PhysicsSystem;
-using OpenTK;
-using System.Collections.Generic;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Player.Skills;
 
-namespace Hedra.Engine.Player
+using System;
+using Hedra.Engine.Generation;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation;
+using OpenTK;
+
+namespace Hedra.Engine.Player.Skills
 {
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
 	public class RoundSlash : BaseSkill
 	{
-		private Animation RoundSlashAnimation;
-		private float FrameCounter = 0, PassedTime = 0, Damage = 0;
-		private Dictionary<IEntity, float> AffectedEntities = new Dictionary<IEntity, float>();
+		private readonly Animation RoundSlashAnimation;
+	    private float _frameCounter;
 		
 		public RoundSlash() : base() {
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
@@ -51,11 +44,10 @@ namespace Hedra.Engine.Player
 
 		public override void Use(){
 			base.MaxCooldown = 9f - Math.Min(5f, base.Level * .5f);
-			this.Damage = 1.0f + Math.Min(1f, base.Level * 0.15f);
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;
-			Player.Model.Model.PlayAnimation(RoundSlashAnimation);
+			Player.Model.PlayAnimation(RoundSlashAnimation);
 			Player.Movement.Orientate();
 			Player.Model.LeftWeapon.InAttackStance = true;
 		}
@@ -68,42 +60,24 @@ namespace Hedra.Engine.Player
 				World.Particles.GravityEffect = .0f;
 				World.Particles.Direction = Vector3.Zero;
 				World.Particles.Scale = new Vector3(.15f,.15f,.15f);
-				World.Particles.Position = Player.Model.Model.TransformFromJoint(Player.Model.Model.JointDefaultPosition(Player.Model.LeftWeaponJoint)
-				                                                                             + Vector3.UnitZ *0f, Player.Model.LeftWeaponJoint);
+				World.Particles.Position = Player.Model.LeftWeaponPosition;
 				World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
-				
-				for(int i = 0; i < 1; i++)
-					World.Particles.Emit();
-				
-				
+				World.Particles.Emit();
 
-				for(int i = World.Entities.Count-1; i > -1; i--){
+			    if (_frameCounter >= .25f)
+			    {
 
-					if(Player.InAttackRange(World.Entities[i]) && Player != World.Entities[i])
-                    {
-						float dmg = Player.DamageEquation * Damage * Engine.Time.DeltaTime * 4f;
-						if(AffectedEntities.ContainsKey(World.Entities[i]))
-                        {
-				 			AffectedEntities[World.Entities[i]] = AffectedEntities[World.Entities[i]] + dmg;
-						}else
-                        {
-							AffectedEntities.Add(World.Entities[i], dmg);
-						}
-					}
-				}
-				
-				if(FrameCounter >= .3f){
-					foreach(Entity Key in AffectedEntities.Keys)
-					{
-						float Exp;
-						Key.Damage(AffectedEntities[Key], Player, out Exp, true);
-						Player.XP += Exp;
-					}
-					AffectedEntities.Clear();
-					FrameCounter = 0;
-				}
-				PassedTime += Time.DeltaTime;
-				FrameCounter += Time.DeltaTime;
+			        for (var i = World.Entities.Count - 1; i > 0; i--)
+			        {
+			            if (!Player.InAttackRange(World.Entities[i])) continue;
+
+			            float dmg = Player.DamageEquation * .2f * 2f * (1 + base.Level * .1f);
+			            World.Entities[i].Damage(dmg, Player, out float exp, true);
+			            Player.XP += exp;
+			        }
+			        _frameCounter = 0;
+			    }
+				_frameCounter += Time.DeltaTime;
 			}
 		}
 		

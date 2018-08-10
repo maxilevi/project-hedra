@@ -94,7 +94,7 @@ namespace Hedra.Engine.Player.MapSystem
 		    this._height = Mathf.Lerp(_height, _targetHeight, Time.IndependantDeltaTime * 2f);
             this.UpdateFogAndTime();
 
-            var mapPosition = _player.Model.Model.Position.Xz.ToVector3();
+            var mapPosition = _player.Position.Xz.ToVector3();
 		    lock (_icons)
 		    {
 		        for (var i = 0; i < _icons.Count; i++)
@@ -115,7 +115,7 @@ namespace Hedra.Engine.Player.MapSystem
 		        _marker.Enabled = _player.Minimap.HasMarker;
 		        _marker.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f) + _player.Minimap.MarkedDirection * FogDistance;
                 _cursor.Position = mapPosition + Vector3.UnitY * (_targetHeight + 45f);
-                _cursor.Rotation = _player.Model.Model.Rotation;
+                _cursor.Rotation = _player.Model.Rotation;
                 WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
                     Vector3.One * (ChunkSize / (float)Chunk.Width), 1f) + Vector3.One * 0.002f;
                 WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _targetHeight);
@@ -136,7 +136,7 @@ namespace Hedra.Engine.Player.MapSystem
 	            }
 	        }
 	        if (!Show) return;
-	        this._player.View.PositionDelegate = () => _player.Model.Model.Position.Xz.ToVector3() + Math.Max(_height, _player.Model.Model.Position.Y) * Vector3.UnitY;
+	        this._player.View.PositionDelegate = () => _player.Model.Position.Xz.ToVector3() + Math.Max(_height, _player.Model.Position.Y) * Vector3.UnitY;
 	        SkyManager.FogManager.UpdateFogSettings(FogDistance * .95f, FogDistance);
 	        SkyManager.Sky.TopColor = Vector4.One;
 	        SkyManager.Sky.BotColor = Color.CadetBlue.ToVector4();

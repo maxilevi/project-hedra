@@ -60,7 +60,7 @@ namespace Hedra.Engine.Player
 			Light = ShaderManager.GetAvailableLight();
 			Light.Color = new Vector3(1,0.2f,0.2f);
 			LightTimer.Reset();
-			Player.Model.Model.PlayAnimation(ConflagarationAnimation);
+			Player.Model.PlayAnimation(ConflagarationAnimation);
 		}
 	
 		public override void Update(){

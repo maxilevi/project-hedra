@@ -119,7 +119,7 @@ namespace Hedra.Engine.Rendering.UI
 			}
 
 			_compass.Disable();
-			_compass.TextureElement.Angle = Player.Model.Model.Rotation.Y;
+			_compass.TextureElement.Angle = Player.Model.Rotation.Y;
 			
 			if (Player.UI.ShowHelp && Enabled)
 			{

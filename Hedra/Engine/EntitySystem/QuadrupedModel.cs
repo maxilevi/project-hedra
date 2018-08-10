@@ -204,7 +204,8 @@ namespace Hedra.Engine.EntitySystem
 			}
 		}
 
-        public override void Update(){
+        public override void Update()
+        {
             base.Update();
 
 			if(Model.AnimationPlaying == null)

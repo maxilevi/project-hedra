@@ -77,7 +77,7 @@ namespace Hedra.Engine.Player
 			Player.IsAttacking = false;
 			Player.WasAttacking = false;
 			Player.Model.LeftWeapon.SlowDown = false;
-			Player.Model.Model.PlayAnimation(KickAnimation);
+			Player.Model.PlayAnimation(KickAnimation);
 		}
 		
 		public override void Update(){
@@ -91,8 +91,9 @@ namespace Hedra.Engine.Player
 					World.Particles.GravityEffect = .0f;
 					World.Particles.Direction = Vector3.Zero;
 					World.Particles.Scale = new Vector3(.5f,.5f,.5f);
-					World.Particles.Position = Player.Model.Model.TransformFromJoint(Player.Model.Model.JointDefaultPosition(Player.Model.RightFootJoint)
-					                                                                             + Vector3.UnitZ *3f, Player.Model.RightFootJoint);
+					World.Particles.Position = 
+						Player.Model.TransformFromJoint(Player.Model.JointDefaultPosition(Player.Model.RightFootJoint)
+					                                                                             + Vector3.UnitZ * 3f, Player.Model.RightFootJoint);
 					World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
 					
 					for(int i = 0; i < 2; i++)
@@ -101,7 +102,8 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public void PushEntitiesAway(){
+		public void PushEntitiesAway()
+		{
 			for(int i = 0; i< World.Entities.Count; i++){
 				if( (Player.Position - World.Entities[i].Position).LengthSquared < 48*48){
 					if(Player == World.Entities[i])

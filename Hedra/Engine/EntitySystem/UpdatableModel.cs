@@ -42,10 +42,10 @@ namespace Hedra.Engine.EntitySystem
             _iterableModels = AdditionalModels.ToList();
         }
 
-        public T Model
+        protected T Model
         {
             get => _model;
-            protected set
+            set
             {
                 if (_model?.Equals(value) ?? value != null)
                 {

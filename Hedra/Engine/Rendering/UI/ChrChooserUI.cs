@@ -249,7 +249,7 @@ namespace Hedra.Engine.Rendering.UI
 
 					int k = i;
 					if(_humans[k].MainWeapon != null && _humans[k].MainWeapon.Weapon.InAttackStance)
-						_humans[k].Model.Model.BlendAnimation(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);                             
+						_humans[k].Model.Blend(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);                             
 						
 					_humans[i].Model.Enabled = true;
                     _humans[i].Update();					

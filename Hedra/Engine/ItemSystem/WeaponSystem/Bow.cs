@@ -68,13 +68,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			if(Type != AttackEventType.Mid) return;
 			var player = Owner as LocalPlayer;
 			var direction = player?.View.CrossDirection ?? Owner.Orientation;
-			this.ShootArrow(Owner, direction);
+			this.ShootArrow(Owner, direction, Options);
 		}
 		
 		protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
 		{
 			if(Type != AttackEventType.Mid) return;
-			this.ShootTripleArrow(Owner);
+			this.ShootTripleArrow(Owner, Options);
 		}
 		
 		public override void Update(IHumanoid Human)
@@ -122,8 +122,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    BowModifiers?.Invoke(ArrowProj);
 		    return ArrowProj;
 		}
-		
+
 		public Projectile ShootArrow(IHumanoid Human, Vector3 Direction, int KnockChance = -1)
+		{
+			return this.ShootArrow(Human, Direction, AttackOptions.Default, KnockChance);
+		}
+		
+		public Projectile ShootArrow(IHumanoid Human, Vector3 Direction, AttackOptions Options, int KnockChance = -1)
 		{
 		    var startingLocation = Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
 		                           (Human is LocalPlayer ? Human.IsRiding ? Vector3.UnitY * 1f : Vector3.Zero : Vector3.Zero);
@@ -134,7 +139,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		        Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce
             };
 		    arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
-			    Hit.Damage(Human.DamageEquation * 0.75f, Human, out float exp, true);
+			    Hit.Damage(Human.DamageEquation * 0.75f * Options.DamageModifier, Human, out float exp, true);
 				Human.XP += exp;
 			    if(KnockChance != -1 && Utils.Rng.Next(0, KnockChance) == 0)
                     Hit.KnockForSeconds(3);
@@ -146,13 +151,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			return arrowProj;
 		}
 		
-		public void ShootTripleArrow(IHumanoid Human){
+		public void ShootTripleArrow(IHumanoid Human, AttackOptions Options)
+		{
 		    var player = Human as LocalPlayer;
-            Vector3 direction = player?.View.CrossDirection ?? Human.Orientation;
-
-			this.ShootArrow(Human, (direction + Vector3.UnitX*.15f).NormalizedFast());
-			this.ShootArrow(Human, direction);
-			this.ShootArrow(Human, (direction - Vector3.UnitX*.15f).NormalizedFast());
+            var direction = player?.View.CrossDirection ?? Human.Orientation;
+			ShootArrow(Human, (direction + Vector3.UnitX * .15f).NormalizedFast(), Options);
+			ShootArrow(Human, direction, Options);
+			ShootArrow(Human, (direction - Vector3.UnitX * .15f).NormalizedFast(), Options);
 			SoundManager.PlaySound(SoundType.BowSound, Human.Position, false, 1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
 		}
 	}

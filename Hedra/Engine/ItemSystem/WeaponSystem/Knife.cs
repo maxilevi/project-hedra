@@ -80,7 +80,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
             if (Sheathed){
 
-                Matrix4 Mat4 = Owner.Model.Model.MatrixFromJoint(Owner.Model.ChestJoint).ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+                Matrix4 Mat4 = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
 			
 				this.MainMesh.Position = Owner.Model.Position;
 				this.MainMesh.BeforeLocalRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
@@ -141,11 +141,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			}
 		    base.SetToDefault(_knifeSheath);
 
-            Matrix4 KnifeMat4 = Owner.Model.Model.MatrixFromJoint(Owner.Model.ChestJoint).ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+            var knifeMat4 = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
 			
 			this._knifeSheath.Position = Owner.Model.Position;
 			this._knifeSheath.BeforeLocalRotation = -Vector3.UnitX * 1.75f - Vector3.UnitY * 3.0f;
-			this._knifeSheath.TransformationMatrix = KnifeMat4;
+			this._knifeSheath.TransformationMatrix = knifeMat4;
 		}
 		
 		public override void Attack1(IHumanoid Human){

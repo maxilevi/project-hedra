@@ -462,10 +462,7 @@ namespace Hedra.Engine.Player
 
                 Model.Food = new StaticModel(foodData)
                 {
-                    Model =
-                    {
-                        Enabled = true
-                    }
+                    Enabled = true
                 };
             }
 			Model?.Eat(FoodHealth);

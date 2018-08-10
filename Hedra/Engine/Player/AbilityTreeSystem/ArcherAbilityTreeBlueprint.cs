@@ -45,7 +45,7 @@ namespace Hedra.Engine.Player
 			Items[1][2].Image = Graphics2D.LoadFromAssets("Skills/PierceArrows.png");
 			Items[1][2].Enabled = true;
 			
-			Items[2][0].AbilityType = typeof(PoisonArrow);	
+			Items[2][0].AbilityType = typeof(ArcherPoisonArrow);	
 			Items[2][0].Image = Graphics2D.LoadFromAssets("Skills/PoisonArrow.png");
 			Items[2][0].Enabled = true;
 			
@@ -53,7 +53,7 @@ namespace Hedra.Engine.Player
 			Items[2][3].Image = Graphics2D.LoadFromAssets("Skills/FlameArrow.png");
 			Items[2][3].Enabled = true;
 			
-			Items[2][1].AbilityType = typeof(IceArrow);	
+			Items[2][1].AbilityType = typeof(ArcherIceArrow);	
 			Items[2][1].Image = Graphics2D.LoadFromAssets("Skills/IceArrow.png");
 			Items[2][1].Enabled = true;
 		}

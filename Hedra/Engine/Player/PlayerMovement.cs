@@ -99,10 +99,10 @@ namespace Hedra.Engine.Player
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Forward) * keysPresses);                   
                     this.Orientate();
                 }
-                _player.Model.Model.TransformationMatrix = 
-                    Matrix4.CreateRotationY(-_player.Model.Model.Rotation.Y * Mathf.Radian) *
+                _player.Model.TransformationMatrix = 
+                    Matrix4.CreateRotationY(-_player.Model.Rotation.Y * Mathf.Radian) *
                     Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f)) *
-                    Matrix4.CreateRotationY(_player.Model.Model.Rotation.Y * Mathf.Radian);
+                    Matrix4.CreateRotationY(_player.Model.Rotation.Y * Mathf.Radian);
                 if (GameManager.Keyboard[Key.S])
                 {
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Backward) * keysPresses);

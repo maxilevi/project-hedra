@@ -76,7 +76,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InUpdateRange => (BlockPosition.Xz - LocalPlayer.Instance.Model.Model.Position.Xz).LengthSquared <
+        public bool InUpdateRange => (BlockPosition.Xz - LocalPlayer.Instance.Model.Position.Xz).LengthSquared <
                                      GameSettings.UpdateDistance * GameSettings.UpdateDistance;
 
         public bool IsActive { get; set; }
@@ -486,7 +486,6 @@ namespace Hedra.Engine.EntitySystem
             this._tickSystem.Tick();
             for (var i = 0; i < this.Components.Count; i++)
                 this.Components[i].Update();
-            this.Model.Rotation = Mathf.Lerp(Model.Rotation, Model.TargetRotation, (float) Time.DeltaTime * 16f);
             if (IsKnocked)
             {
                 _knockedTime -= Time.DeltaTime;

@@ -69,7 +69,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    base.SetToDefault(this._secondBlade);
 
             if (Sheathed){
-                Matrix4 Mat4 = Owner.Model.Model.MatrixFromJoint(Owner.Model.ChestJoint).ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+                Matrix4 Mat4 = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
 			
 				this.MainMesh.Position = Owner.Model.Position;
 				this.MainMesh.BeforeLocalRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
