@@ -89,7 +89,7 @@ namespace HedraTests.Player
         public bool IsInvisible { get; set; }
         public bool IsStatic { get; }
         public bool IsUnderwater { get; set; }
-        public bool Knocked { get; }
+        public bool IsKnocked { get; }
         public float MaxHealth { get; }
         public float ManaRegen { get; }
         public float HealthRegen { get; }
@@ -121,6 +121,7 @@ namespace HedraTests.Player
         public bool IsCasting { get; set; }
         public bool IsSwimming { get; set; }
         public bool IsGliding { get; set; }
+        public bool IsTied { get; set; }
         public bool IsRolling { get; set; }
         public bool IsMoving { get; set; }
         public bool IsRiding { get; set; }
@@ -132,7 +133,7 @@ namespace HedraTests.Player
         public bool IsSleeping { get; set; }
         public bool IsJumping { get; }
         public Vector3 FacingDirection { get; }
-        public bool IsSitting { get; }
+        public bool IsSitting { get; set; }
         public bool HasWeapon { get; }
         public HandLamp HandLamp { get; }
         public HumanoidModel Model { get; set; }

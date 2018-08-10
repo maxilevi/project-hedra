@@ -137,7 +137,7 @@ namespace Hedra.Engine.WorldBuilding
 			this.Model.Dispose();
 		}
 		
-		public bool IsClosed => Model.Animator.AnimationPlaying == IdleAnimation;
+		public bool IsClosed => Model.AnimationPlaying == IdleAnimation;
 
 	    public new Vector3 Position{
 			get => Model.Position;

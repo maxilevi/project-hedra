@@ -58,7 +58,7 @@ namespace Hedra.Engine.Player
 			Player.IsCasting = true;
 			Casting = true;
 			LeftHand = !LeftHand;
-			Player.Model.Model.PlayAnimation(FireballAnimation);
+			Player.Model.PlayAnimation(FireballAnimation);
 		}
 		
 		public override void Update(){}

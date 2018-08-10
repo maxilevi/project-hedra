@@ -49,7 +49,7 @@ namespace Hedra.Engine.EntitySystem
 		        && Vector3.Dot((Parent.BlockPosition - player.BlockPosition).NormalizedFast(), player.View.LookingDirection) >
 		        .6f)
 		    {
-		        if (Parent.Model is IMountable model && model.IsMountable && !Parent.IsUnderwater && !Parent.Knocked)
+		        if (Parent.Model is IMountable model && model.IsMountable && !Parent.IsUnderwater && !Parent.IsKnocked)
 		        {
 		            player.MessageDispatcher.ShowMessage("[E] TO MOUNT", .5f, Color.White);
 		            Parent.Model.Tint = new Vector4(2.0f, 2.0f, 2.0f, 1f);
@@ -70,10 +70,6 @@ namespace Hedra.Engine.EntitySystem
 
 		    if (HasRider && Rider.IsRiding)
 		    {
-		        if (!Rider.IsMoving)
-		            Parent.Model.Idle();
-		        else
-		            Parent.Model.Run();
 		        _canUnride = true;
 		    }
 		    else
@@ -87,8 +83,8 @@ namespace Hedra.Engine.EntitySystem
 			if(HasRider && !Rider.IsRiding){
 				Parent.Position = Rider.Position;
 			    Rider.Model.MountModel.AlignWithTerrain = true;
+			    Rider.Model.MountModel.HasRider = false;
                 Rider.Model.MountModel = null;
-				Rider = null;
 				HasRider = false;
 				if(AI != null) AI.Enabled = true;
 				if(_healthBar != null) _healthBar.Hide = false;
@@ -107,9 +103,10 @@ namespace Hedra.Engine.EntitySystem
 			Rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Rider, -Rider.Speed + Parent.Speed * .5f), () => Rider != null && Rider.IsRiding);
 			HasRider = true;
 			Rider.IsRiding = true;
-			Rider.Model.MountModel = (QuadrupedModel) Parent.Model;
+            Rider.Model.MountModel = (QuadrupedModel) Parent.Model;
 		    Rider.Model.MountModel.AlignWithTerrain = false;
-			Parent.Physics.UsePhysics = false;
+		    Rider.Model.MountModel.HasRider = true;
+            Parent.Physics.UsePhysics = false;
 			Parent.Physics.HasCollision = false;
 			Parent.SearchComponent<DamageComponent>().Immune = true;
 

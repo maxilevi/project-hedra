@@ -78,14 +78,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             {
                 var baseMesh = MeshData.Clone();
                 baseMesh.Scale(Vector3.One * 1.75f);
-                this.MainMesh = ObjectMesh.FromVertexData(baseMesh);
+                MainMesh = ObjectMesh.FromVertexData(baseMesh);
                 this.MeshData = baseMesh;
             }
             else
             {
-                this.MainMesh = new ObjectMesh(Vector3.Zero);
+                MainMesh = new ObjectMesh(Vector3.Zero);
             }
-            this.CreateAnimations();
+            CreateAnimations();
         }
 
         private void CreateAnimations()
@@ -118,7 +118,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 _secondaryAnimations[i].OnAnimationEnd += 
                     Sender => OnSecondaryAttackEvent(AttackEventType.End, _currentAttackOption);
             }
-            this.RegisterAnimationSpeeds();
+            RegisterAnimationSpeeds();
         }
 
         private void RegisterAnimationSpeeds()
@@ -156,14 +156,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         protected void SetToChest(ObjectMesh Mesh)
         {
-            this.SetToDefault(Mesh);
+            SetToDefault(Mesh);
             Mesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() *
                                         Matrix4.CreateTranslation(
                                             -Owner.Position + Owner.Model.ChestPosition + Vector3.UnitY * 1f);
             Mesh.Position = Owner.Position;
-            Mesh.LocalRotation = this.SheathedRotation;
+            Mesh.LocalRotation = SheathedRotation;
             Mesh.BeforeLocalRotation =
-                (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 2.5f - Vector3.UnitY * 0.5f) * this.Scale;
+                (SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 2.5f - Vector3.UnitY * 0.5f) * Scale;
         }
 
         protected void SetToMainHand(ObjectMesh Mesh)
@@ -195,58 +195,58 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         
         public virtual void Attack1(IHumanoid Human)
         {
-            this.Attack1(Human, new AttackOptions());
+            Attack1(Human, new AttackOptions());
         }
 
         public virtual void Attack1(IHumanoid Human, AttackOptions Options)
         {
-            if (!this.MeetsRequirements()) return;
+            if (!MeetsRequirements()) return;
 
             PrimaryAnimationsIndex++;
 
             if (PrimaryAnimationsIndex == _primaryAnimations.Length)
                 PrimaryAnimationsIndex = 0;
 
-            this.BasePrimaryAttack(Human, Options);
+            BasePrimaryAttack(Human, Options);
         }
 
         protected void BasePrimaryAttack(IHumanoid Human, AttackOptions Options)
         {
-            this.BaseAttack(Human, Options);
-            var animation = _primaryAnimations[this.ParsePrimaryIndex(PrimaryAnimationsIndex)];
+            BaseAttack(Human, Options);
+            var animation = _primaryAnimations[ParsePrimaryIndex(PrimaryAnimationsIndex)];
             animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed;
-            Human.Model.Model.BlendAnimation(animation);
+            Human.Model.Blend(animation);
         }
 
         public virtual void Attack2(IHumanoid Human)
         {
-            this.Attack2(Human, new AttackOptions());
+            Attack2(Human, new AttackOptions());
         }
         
         public virtual void Attack2(IHumanoid Human, AttackOptions Options)
         {
-            if (!this.MeetsRequirements()) return;
+            if (!MeetsRequirements()) return;
 
             SecondaryAnimationsIndex++;
 
             if (SecondaryAnimationsIndex == _secondaryAnimations.Length)
                 SecondaryAnimationsIndex = 0;
 
-            this.BaseSecondaryAttack(Human, Options);
+            BaseSecondaryAttack(Human, Options);
         }
 
         protected void BaseSecondaryAttack(IHumanoid Human, AttackOptions Options)
         {
-            this.BaseAttack(Human, Options);
-            var animation = _secondaryAnimations[this.ParseSecondaryIndex(SecondaryAnimationsIndex)];
+            BaseAttack(Human, Options);
+            var animation = _secondaryAnimations[ParseSecondaryIndex(SecondaryAnimationsIndex)];
             animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed;
-            Human.Model.Model.BlendAnimation(animation);
+            Human.Model.Blend(animation);
         }
 
         protected bool MeetsRequirements()
         {
             return Owner != null &&
-                   !(Owner.IsAttacking || Owner.Knocked || SecondaryAttack || PrimaryAttack);
+                   !(Owner.IsAttacking || Owner.IsKnocked || SecondaryAttack || PrimaryAttack);
         }
 
         public void PlaySound()
@@ -256,16 +256,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         protected void BaseAttack(IHumanoid Human, AttackOptions Options)
         {
-            this.Owner = Human;
-            Human.Model.Model.Animator.StopBlend();
+            Owner = Human;
             
-            this._currentAttackOption = Options;
+            _currentAttackOption = Options;
             if (ShouldPlaySound && !IsMelee)
                 SoundManager.PlaySoundWithVariation(SoundType, Human.Position);
 
             if (Human.Model.IsIdling && IsMelee)
             {
-                Human.Model.Run();
                 TaskManager.Delay(1,
                     () => TaskManager.While(
                         () => Human.IsAttacking/*Human.Model.IsWalking && !Human.IsMoving*/,
@@ -290,14 +288,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public virtual void Update(IHumanoid Human)
         {
-            this.GatherMembers();
-            this.Owner = Human;
+            GatherMembers();
+            Owner = Human;
 
             var attacking = false;
             for (var i = 0; i < _animations.Length; i++)
             {
-                if (_animations[i] != Owner.Model.Model.Animator.AnimationPlaying &&
-                    _animations[i] != Owner.Model.Model.Animator.BlendingAnimation) continue;
+                if (_animations[i] != Owner.Model.AnimationPlaying &&
+                    _animations[i] != Owner.Model.AnimationBlending) continue;
                 attacking = true;
                 break;
             }
@@ -305,8 +303,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             var primaryAttack = false;
             for (var i = 0; i < _primaryAnimations.Length; i++)
             {
-                if (_primaryAnimations[i] != Owner.Model.Model.Animator.AnimationPlaying &&
-                    _primaryAnimations[i] != Owner.Model.Model.Animator.BlendingAnimation) continue;
+                if (_primaryAnimations[i] != Owner.Model.AnimationPlaying &&
+                    _primaryAnimations[i] != Owner.Model.AnimationBlending) continue;
                 primaryAttack = true;
                 break;
             }
@@ -315,8 +313,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             var secondaryAttack = false;
             for (int i = 0; i < _secondaryAnimations.Length; i++)
             {
-                if (_secondaryAnimations[i] == Owner.Model.Model.Animator.AnimationPlaying ||
-                    _secondaryAnimations[i] == Owner.Model.Model.Animator.BlendingAnimation)
+                if (_secondaryAnimations[i] == Owner.Model.AnimationPlaying ||
+                    _secondaryAnimations[i] == Owner.Model.AnimationBlending)
                 {
                     secondaryAttack = true;
                     break;
@@ -327,35 +325,35 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if (!attacking && Owner.Model.Human.IsAttacking)
             {
                 Owner.Model.Human.WasAttacking = true;
-                CoroutineManager.StartCoroutine(this.WasAttackingCoroutine);
+                CoroutineManager.StartCoroutine(WasAttackingCoroutine);
             }
 
             Owner.IsAttacking = attacking;
 
             if (Sheathed)
-                this.SetToChest(MainMesh);
+                SetToChest(MainMesh);
 
             if (InAttackStance || Owner.WasAttacking)
-                this.SetToMainHand(MainMesh);
+                SetToMainHand(MainMesh);
 
             if (PrimaryAttack)
-                this.SetToMainHand(MainMesh);
+                SetToMainHand(MainMesh);
 
             if (SecondaryAttack)
-                this.SetToMainHand(MainMesh);
+                SetToMainHand(MainMesh);
 
             if (PrimaryAttack || SecondaryAttack)
             {
-                if (Orientate) this.Owner.Movement.Orientate();
+                if (Orientate) Owner.Movement.Orientate();
             }
 
-            this.ApplyEffects(MainMesh);
+            ApplyEffects(MainMesh);
 
             if (Describer != null && Describer.Type != EffectType.None)
             {
                 if (!_effectApplied)
                 {
-                    this.Owner.ApplyEffectWhile(this.Describer.Type, () => Owner.Model.LeftWeapon == this);
+                    Owner.ApplyEffectWhile(Describer.Type, () => Owner.Model.LeftWeapon == this);
                     _effectApplied = true;
                 }
             }
@@ -363,8 +361,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         protected void ApplyEffects(ObjectMesh Mesh)
         {
-            Mesh.BaseTint = this.BaseTint;
-            Mesh.Tint = this.Tint;
+            Mesh.BaseTint = BaseTint;
+            Mesh.Tint = Tint;
             if (Describer != null && Describer.Type != EffectType.None)
             {
                 Mesh.BaseTint = Describer.EffectColor;
@@ -417,7 +415,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 if (Owner == null)
                     return false;
 
-                return Owner.Model.Model.Animator.BlendingAnimation == AttackStanceAnimation;
+                return Owner.Model.AnimationBlending == AttackStanceAnimation;
             }
             set
             {
@@ -425,7 +423,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 if (_onAttackStance == value) return;
                 if (value)
                 {
-                    CoroutineManager.StartCoroutine(this.WasAttackingCoroutine);
+                    CoroutineManager.StartCoroutine(WasAttackingCoroutine);
                 }
                 else
                 {
@@ -441,7 +439,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             get => _enabled;
             set
             {
-                this.GatherMembers();
+                GatherMembers();
                 for (var i = 0; i < Meshes.Length; i++)
                 {
                     Meshes[i].Enabled = value;
@@ -457,7 +455,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             {
                 if (_applyFog == value) return;
                 _applyFog = value;
-                this.GatherMembers();
+                GatherMembers();
                 for (var i = 0; i < Meshes.Length; i++)
                 {
                     Meshes[i].ApplyFog = _applyFog;
@@ -472,7 +470,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             {
                 if (_pause == value) return;
                 _pause = value;
-                this.GatherMembers();
+                GatherMembers();
                 for (var i = 0; i < Meshes.Length; i++)
                 {
                     Meshes[i].Pause = _pause;
@@ -487,7 +485,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             {
                 if (_scale == value) return;
                 _scale = value;
-                this.GatherMembers();
+                GatherMembers();
                 for (var i = 0; i < Meshes.Length; i++)
                 {
                     Meshes[i].Scale = _scale;
@@ -502,7 +500,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             {
                 if (_alpha == value) return;
 
-                this.GatherMembers();
+                GatherMembers();
                 _alpha = value;
                 for (var i = 0; i < Meshes.Length; i++)
                 {
@@ -518,7 +516,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             {
                 if (_animationSpeed == value) return;
 
-                this.GatherMembers();
+                GatherMembers();
                 _animationSpeed = value;
                 for (var i = 0; i < Meshes.Length; i++)
                 {
@@ -547,16 +545,16 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public void GatherMembers(bool Force = false)
         {
-            if (Meshes == null || Force) this.GatherMeshes();
-            if (_animations == null || Force) this.GatherAnimations();
+            if (Meshes == null || Force) GatherMeshes();
+            if (_animations == null || Force) GatherAnimations();
         }
 
         private void GatherMeshes()
         {
             var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             var meshList = new List<ObjectMesh>();
-            var fields = this.GetType().GetFields(flags);
-            var propierties = this.GetType().GetProperties(flags);
+            var fields = GetType().GetFields(flags);
+            var propierties = GetType().GetProperties(flags);
             foreach (var field in fields)
             {
                 if (field.FieldType == typeof(ObjectMesh)) meshList.Add(field.GetValue(this) as ObjectMesh);
@@ -574,7 +572,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         {
             var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             var animList = new List<Animation>();
-            foreach (var field in this.GetType().GetFields(flags))
+            foreach (var field in GetType().GetFields(flags))
             {
                 if (field.FieldType == typeof(Animation))
                 {
@@ -596,7 +594,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if (Owner != null)
             {
                 Owner.WasAttacking = true;
-                CoroutineManager.StartCoroutine(this.WasAttackingCoroutine);
+                CoroutineManager.StartCoroutine(WasAttackingCoroutine);
             }
         }
 
@@ -613,10 +611,10 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 Owner.WasAttacking = false;
         }
 
-        protected IEnumerator WasAttackingCoroutine()
+        private IEnumerator WasAttackingCoroutine()
         {
             _onAttackStance = true;
-            CoroutineManager.StartCoroutine(this.DisableWasAttacking);
+            CoroutineManager.StartCoroutine(DisableWasAttacking);
             if (WeaponCoroutineExists)
                 yield break;
             else
@@ -624,7 +622,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             _passedTimeInAttackStance = 0;
             while (_passedTimeInAttackStance < 5f && _onAttackStance)
             {
-                if (Owner != null && Owner.IsAttacking)
+                if (Owner.IsAttacking)
                 {
                     if (Owner.IsAttacking)
                         Owner.WasAttacking = false;
@@ -632,14 +630,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                     yield break;
                 }
 
-                Owner?.Model.Model.BlendAnimation(AttackStanceAnimation);
+                Owner.Model.DefaultBlending = AttackStanceAnimation;
                 _passedTimeInAttackStance += Time.DeltaTime;
                 yield return null;
             }
             if (Owner != null && !Owner.IsAttacking)
             {
-                if (Owner.Model.Model.Animator.BlendingAnimation == AttackStanceAnimation)
-                    Owner.Model.Model.Animator.ExitBlend();
+                Owner.Model.DefaultBlending = null;
             }
             _onAttackStance = false;
             WeaponCoroutineExists = false;
@@ -647,19 +644,19 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public virtual void Dispose()
         {
-            this.GatherMembers(true);
+            GatherMembers(true);
             foreach (ObjectMesh mesh in Meshes) mesh.Dispose();
 
             var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-            foreach (var field in this.GetType().GetFields(flags))
+            foreach (var field in GetType().GetFields(flags))
             {
                 if (field.FieldType != typeof(ObjectMesh[])) continue;
 
                 var meshArray = field.GetValue(this) as ObjectMesh[];
-                if (meshArray == this.Meshes) continue;
+                if (meshArray == Meshes) continue;
                 foreach (ObjectMesh meshItem in meshArray) meshItem.Dispose();
             }
-            this.Disposed = true;
+            Disposed = true;
         }
     }
 

@@ -56,7 +56,7 @@ namespace Hedra.Engine.Player
 			FireballCount++;
 			if(FireballCount > FireballCombo)
 				FireballCount = 0;
-			Player.Model.Model.PlayAnimation(FireballAnimation);
+			Player.Model.PlayAnimation(FireballAnimation);
 		}
 		
 		public override void Update(){ }

@@ -28,10 +28,11 @@ namespace Hedra.Engine.EntitySystem
 	/// </summary>
 	public sealed class QuadrupedModel : UpdatableModel<AnimatedModel>, IMountable, IAudible, IDisposeAnimation
     {	
-        public override bool IsWalking => Array.IndexOf(WalkAnimations, this.Model.Animator.AnimationPlaying) != -1;
-        public override bool IsIdling => Array.IndexOf(IdleAnimations, this.Model.Animator.AnimationPlaying) != -1;
+        public override bool IsWalking => Array.IndexOf(WalkAnimations, this.Model.AnimationPlaying) != -1;
+        public override bool IsIdling => Array.IndexOf(IdleAnimations, this.Model.AnimationPlaying) != -1;
         public bool AlignWithTerrain { get; set; }
         public bool IsMountable { get; set; }
+        public bool HasRider { get; set; }
         public Animation[] IdleAnimations { get; }
         public Animation[] WalkAnimations { get; }
         public Animation[] AttackAnimations { get; }
@@ -130,7 +131,7 @@ namespace Hedra.Engine.EntitySystem
 
         public bool CanAttack()
         {
-            if (Array.IndexOf(AttackAnimations, Model.Animator.AnimationPlaying) != -1 || Parent.Knocked)
+            if (Array.IndexOf(AttackAnimations, Model.AnimationPlaying) != -1 || Parent.IsKnocked)
                 return false;
             return _attackCooldown < 0;
         }
@@ -203,12 +204,15 @@ namespace Hedra.Engine.EntitySystem
 					break;
 			}
 		}
-
-        public override void Update(){
+  
+        public override void Update()
+        {
+            if (!HasRider)
+            {
+                if (Parent.IsMoving) this.Run();
+                else this.Idle();
+            }
             base.Update();
-
-			if(Model.Animator.AnimationPlaying == null)
-				this.Idle();
 
 		    if (Model != null)
 		    {
@@ -259,7 +263,7 @@ namespace Hedra.Engine.EntitySystem
             DisposeTime = 0;
         }
 
-        public override void Run()
+        public void Run()
         {
 		
 			if(this.IsAttacking) return;
@@ -268,7 +272,7 @@ namespace Hedra.Engine.EntitySystem
 				Model.PlayAnimation(WalkAnimations[Utils.Rng.Next(0, WalkAnimations.Length)]);
 		}
 
-		public override void Idle()
+		public void Idle()
         {
 			if(this.IsAttacking) return;
 			

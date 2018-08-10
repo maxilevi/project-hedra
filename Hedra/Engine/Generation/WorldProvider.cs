@@ -549,7 +549,7 @@ namespace Hedra.Engine.Generation
             {
                 TaskManager.While(() => !model.Disposed, delegate
                 {
-                    model.Model.Outline = false;
+                    model.Outline = false;
                     model.Position = Mathf.Lerp(model.Position, Player.Position, Time.DeltaTime * 5f);
                     if ((model.Position - Player.Position).LengthSquared < 4 * 4)
                         if (Player.Inventory.AddItem(model.ItemSpecification))

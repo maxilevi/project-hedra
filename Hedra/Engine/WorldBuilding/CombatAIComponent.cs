@@ -64,7 +64,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public override void Update()
         {
-            if (Parent.Knocked) return;
+            if (Parent.IsKnocked) return;
 
             if(!this.IsSleeping)
                 this.DoUpdate();
@@ -90,7 +90,6 @@ namespace Hedra.Engine.WorldBuilding
             if (RollTimer.Tick() && human != null && (TargetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius && CanDodge)
                 human.Roll();
 
-            Parent.Model.Run();
             Parent.Physics.DeltaTranslate(human?.Movement.MoveFormula(Parent.Orientation) ?? Vector3.Zero);
         }
 

@@ -53,7 +53,6 @@ namespace Hedra.Engine
 	            {
 	                GameSettings.BloomModifier = 1.0f;
 	                _spawningEffect = false;
-
 	            });
 	        }
 	    }

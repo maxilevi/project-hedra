@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player
 				Light.Position = Player.Position + Player.Orientation * 2f;
 				ShaderManager.UpdateLight(Light);
 			}
-			this.Player.Model.Model.PlayAnimation(FireReleaseAnimation);
+			this.Player.Model.PlayAnimation(FireReleaseAnimation);
 		}
 		
 		private bool Continue;

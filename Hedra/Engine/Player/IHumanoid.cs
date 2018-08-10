@@ -18,8 +18,8 @@ namespace Hedra.Engine.Player
         bool IsSwimming { get; set; }
         bool IsGliding { get; set; }
         bool IsRolling { get; set; }
-        bool IsMoving { get; set; }
         bool IsRiding { get; set; }
+        bool IsTied { get; set; }
         bool IsClimbing { get; set; }
         bool WasAttacking { get; set; }
         float AttackSpeed { get; set; }
@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player
         bool IsSleeping { get; set; }
         bool IsJumping { get; }
         Vector3 FacingDirection { get; }
-        bool IsSitting { get; }
+        bool IsSitting { get; set; }
         bool HasWeapon { get; }
         HandLamp HandLamp { get; }
         HumanoidModel Model { get; set; }

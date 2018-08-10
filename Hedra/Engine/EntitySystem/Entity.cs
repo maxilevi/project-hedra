@@ -60,6 +60,7 @@ namespace Hedra.Engine.EntitySystem
         public Vector3 BlockPosition { get; set; }
         public bool PlaySpawningAnimation { get; set; } = true;
         public float Speed { get; set; } = 2;
+        public bool IsMoving => Model.IsMoving;
 
         public virtual float Health
         {
@@ -75,7 +76,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InUpdateRange => (BlockPosition.Xz - LocalPlayer.Instance.Model.Model.Position.Xz).LengthSquared <
+        public bool InUpdateRange => (BlockPosition.Xz - LocalPlayer.Instance.Model.Position.Xz).LengthSquared <
                                      GameSettings.UpdateDistance * GameSettings.UpdateDistance;
 
         public bool IsActive { get; set; }
@@ -118,7 +119,7 @@ namespace Hedra.Engine.EntitySystem
         public bool IsStatic => Model.IsStatic;
         public bool IsUnderwater { get; set; }
 
-        public bool Knocked
+        public bool IsKnocked
         {
             get => _knocked;
             set
@@ -407,7 +408,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void KnockForSeconds(float Time)
         {
-            Knocked = true;
+            IsKnocked = true;
             Physics.Translate(Vector3.UnitY * 7.5f);
             _knockedTime = Time;
         }
@@ -485,20 +486,14 @@ namespace Hedra.Engine.EntitySystem
             this._tickSystem.Tick();
             for (var i = 0; i < this.Components.Count; i++)
                 this.Components[i].Update();
-            this.Model.Rotation = Mathf.Lerp(Model.Rotation, Model.TargetRotation, (float) Time.DeltaTime * 16f);
-            if (Knocked)
+            if (IsKnocked)
             {
                 _knockedTime -= Time.DeltaTime;
                 if (Model is HumanoidModel model)
                 {
-                    model.KnockOut();
                     model.Human.IsRiding = false;
                 }
-                else
-                {
-                    Model.Idle();
-                }
-                if (_knockedTime < 0) Knocked = false;
+                if (_knockedTime < 0) IsKnocked = false;
             }
         }
     }

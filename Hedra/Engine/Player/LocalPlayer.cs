@@ -435,7 +435,7 @@ namespace Hedra.Engine.Player
 		public override Item MainWeapon => Inventory.MainWeapon;
 
 	    public void EatFood(){
-			if(this.IsDead || this.IsEating || this.Knocked || this.IsEating || this.IsAttacking || this.IsClimbing) return;
+			if(this.IsDead || this.IsEating || this.IsKnocked || this.IsEating || this.IsAttacking || this.IsClimbing) return;
 			this.WasAttacking = false;
 			this.IsAttacking = false;
 			this.Model.LeftWeapon.SlowDown = false;
@@ -462,10 +462,7 @@ namespace Hedra.Engine.Player
 
                 Model.Food = new StaticModel(foodData)
                 {
-                    Model =
-                    {
-                        Enabled = true
-                    }
+                    Enabled = true
                 };
             }
 			Model?.Eat(FoodHealth);
@@ -556,8 +553,8 @@ namespace Hedra.Engine.Player
             }
         }
 		
-		public void Respawn(){
-			Model.Idle();
+		public void Respawn()
+		{
 			Health = MaxHealth;
 			Mana = MaxMana;
 		    Stamina = MaxStamina;
@@ -569,7 +566,7 @@ namespace Hedra.Engine.Player
 		    newPosition = World.FindPlaceablePosition(this, new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z), newPosition.Z));
             this.Model.Position = newPosition;
 		    this.Physics.TargetPosition = newPosition;
-		    this.Knocked = false;
+		    this.IsKnocked = false;
 
 		    var xpDiff = (int)(XP * .15f);
 		    var goldDiff = (int)(Gold * .1f);
@@ -608,7 +605,7 @@ namespace Hedra.Engine.Player
 	        View.TargetDistance = 10f;
 	        HandLamp.Enabled = false;
             IsGliding = false;
-	        Knocked = false;	        
+	        IsKnocked = false;	        
 	    }
 		
 		public static bool CreatePlayer(string Name, HumanoidModel PreviewModel, ClassDesign ClassType)

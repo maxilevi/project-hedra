@@ -59,7 +59,7 @@ namespace Hedra.Engine.Player
 		
 		public void Jump()
         {
-			if(IsJumping || Human.Knocked || Human.IsCasting || Human.IsRiding ||
+			if(IsJumping || Human.IsKnocked || Human.IsCasting || Human.IsRiding ||
                 Human.IsRolling || Human.IsDead || !Human.IsGrounded || !Human.CanInteract ||
                 Math.Abs(Human.Physics.TargetPosition.Y - Human.Position.Y) > 2.0f || !this.CaptureMovement)
 				return;
@@ -95,7 +95,6 @@ namespace Hedra.Engine.Player
 		    _speed = Mathf.Lerp(_speed, Human.IsAttacking ? AttackingSpeed : NormalSpeed, (float) Time.DeltaTime * 2f);
             this.DoUpdate();
 		    this.ManageMoveOrders();
-		    this.ManageSwimming();
 			this.HandleJumping();
 		}
 
@@ -124,15 +123,6 @@ namespace Hedra.Engine.Player
             if(Order.Orientate) this.Orientate();
             return Order.Progress >= Order.Seconds;
 	    }
-
-        private void ManageSwimming()
-	    {
-	        if (!Human.IsGrounded && !Human.IsDead && Human.CanInteract && !Human.IsRiding && Human.IsUnderwater && !GameSettings.Paused)
-	        {
-	            if (Human.IsMoving) Human.Model.Swim();     
-	            else Human.Model.IdleSwim();  
-	        }
-        }
 
 	    public class MoveOrder
 	    {

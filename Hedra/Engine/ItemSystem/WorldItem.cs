@@ -113,7 +113,14 @@ namespace Hedra.Engine.ItemSystem
             }
         }
 		
-		public new void Dispose(){
+		public bool Outline
+		{
+			get => Model.Outline;
+			set => Model.Outline = value;
+		}
+		
+		public new void Dispose()
+		{
             EventDispatcher.UnregisterKeyDown(this);
 			UpdateManager.Remove(this);
 			World.RemoveItem(this);

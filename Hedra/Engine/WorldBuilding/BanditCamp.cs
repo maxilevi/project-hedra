@@ -83,6 +83,7 @@ namespace Hedra.Engine.WorldBuilding
             _rescuee.RemoveComponent(_rescuee.SearchComponent<HealthBarComponent>());
             _rescuee.AddComponent(new HealthBarComponent(_rescuee, _rescuee.Name));
             _rescuee.SearchComponent<DamageComponent>().Immune = true;
+            _rescuee.IsTied = true;
             World.AddEntity(_rescuee);
         }
 
@@ -98,10 +99,9 @@ namespace Hedra.Engine.WorldBuilding
         {
             if (Rescued) return;
 
-            _rescuee.Model.Model.TransformationMatrix = this.BuildRescueeMatrix();
+            _rescuee.Model.TransformationMatrix = this.BuildRescueeMatrix();
             _rescuee.BlockPosition = this.Position.Xz.ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
             _rescuee.Model.Position = _rescuee.BlockPosition;
-            _rescuee.Model.Tied();
 
             if (!_rescuee.InUpdateRange)
                 _rescuee.Update();
@@ -135,13 +135,12 @@ namespace Hedra.Engine.WorldBuilding
                 };
                 _rescuee.AddComponent(talkComponent);
             });
-            _rescuee.Model.Model.TransformationMatrix = Matrix4.Identity;
+            _rescuee.Model.TransformationMatrix = Matrix4.Identity;
             _rescuee.Physics.UsePhysics = true;
             _rescuee.Physics.HasCollision = true;
             _rescuee.Physics.CanCollide = true;
             _rescuee.BlockPosition = new Vector3(this.Position.X + 8f, Physics.HeightAtPosition(this.Position) / Chunk.BlockSize, this.Position.Z);
             _rescuee.Rotation = Vector3.Zero;
-            _rescuee.Model.Idle();
         }
 
         public override void Dispose()

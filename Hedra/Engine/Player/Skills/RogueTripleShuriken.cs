@@ -53,19 +53,13 @@ namespace Hedra.Engine.Player
 			};
 		}
 		
-		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
-		{
-			return base.MeetsRequirements(Bar, CastingAbilityCount);
-		}
-		
 		public override void Use(){
 			base.MaxCooldown = 8.5f - Math.Min(5f, base.Level * .5f);
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;
 			Player.Model.LeftWeapon.InAttackStance = false;
-			Player.Model.Model.Animator.StopBlend();
-			Player.Model.Model.PlayAnimation(ThrowAnimation);
+			Player.Model.PlayAnimation(ThrowAnimation);
 			Player.Movement.Orientate();
 		}
 		
@@ -77,8 +71,7 @@ namespace Hedra.Engine.Player
 				World.Particles.GravityEffect = .0f;
 				World.Particles.Direction = Vector3.Zero;
 				World.Particles.Scale = new Vector3(.25f,.25f,.25f);
-				World.Particles.Position = Player.Model.Model.TransformFromJoint(Player.Model.Model.JointDefaultPosition(Player.Model.LeftWeaponJoint)
-				                                                                             + Vector3.UnitZ *0f, Player.Model.LeftWeaponJoint);
+				World.Particles.Position = Player.Model.LeftWeaponPosition;
 				World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
 				
 				for(int i = 0; i < 1; i++)

@@ -71,7 +71,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
             if (Sheathed)
             {
-                Matrix4 Mat4 = Human.Model.Model.MatrixFromJoint(Human.Model.ChestJoint).ClearTranslation() * Matrix4.CreateTranslation(-Owner.Position + Owner.Model.ChestPosition);
+                Matrix4 Mat4 = Human.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Position + Owner.Model.ChestPosition);
 
                 this.MainMesh.Position = Owner.Position;
                 this.MainMesh.BeforeLocalRotation = new Vector3(.4f, 0.75f, -1.2f);

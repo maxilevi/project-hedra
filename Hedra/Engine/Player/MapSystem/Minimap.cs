@@ -143,12 +143,12 @@ namespace Hedra.Engine.Player.MapSystem
             _mapCursor.Enable();
             _miniMapRing.Enable();
             _miniMapNorth.Enable();
-            _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.Model.Rotation.Y;
+            _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.Rotation.Y;
 
 		    if (HasMarker)
 		    {
 		        Vector3 rot = Physics.DirectionToEuler(MarkedDirection);
-		        _miniMapMarker.BaseTexture.TextureElement.Angle = -_player.Model.Model.Rotation.Y + rot.Y;
+		        _miniMapMarker.BaseTexture.TextureElement.Angle = -_player.Model.Rotation.Y + rot.Y;
 		        _miniMapMarker.Enable();
 		    }
 		    else
@@ -179,7 +179,7 @@ namespace Hedra.Engine.Player.MapSystem
             Shader["Opacity"] = _miniMap.TextureElement.Opacity;
             Shader["Grayscale"] = _miniMap.TextureElement.Grayscale ? 1 : 0;
             Shader["Tint"] = _miniMap.TextureElement.Tint;
-            Shader["Rotation"] = Matrix3.CreateRotationZ(-_player.Model.Model.Rotation.Y * Mathf.Radian);
+            Shader["Rotation"] = Matrix3.CreateRotationZ(-_player.Model.Rotation.Y * Mathf.Radian);
 
             DrawManager.UIRenderer.DrawQuad();
 

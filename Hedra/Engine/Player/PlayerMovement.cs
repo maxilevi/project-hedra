@@ -35,7 +35,7 @@ namespace Hedra.Engine.Player
 
         public void OnMouseButtonDown(object Sender, MouseButtonEventArgs EventArgs)
         {
-            if (!this.CaptureMovement || GameSettings.Paused || Human.Knocked || Human.IsDead
+            if (!this.CaptureMovement || GameSettings.Paused || Human.IsKnocked || Human.IsDead
                 || !Human.CanInteract || Human.IsRiding || Human.IsEating) return;
 
             if (EventArgs.Button == MouseButton.Middle) _player.Roll();
@@ -45,20 +45,13 @@ namespace Hedra.Engine.Player
         {
             _glidingCooldown -= Time.IndependantDeltaTime;
             //_player.Physics.CanBePushed = !_player.IsMoving;
-            if (!CaptureMovement || _player.Knocked || _player.IsDead || !Human.CanInteract || GameSettings.Paused)
+            if (!CaptureMovement || _player.IsKnocked || _player.IsDead || !Human.CanInteract || GameSettings.Paused)
                 return;
 
 
             if ((GameManager.Keyboard[Key.W] || GameManager.Keyboard[Key.A] || GameManager.Keyboard[Key.S] || GameManager.Keyboard[Key.D]) && !_player.IsCasting)
             {
-                _player.Model.Run();
                 Human.Model.Rotation = new Vector3(0, Human.Model.Rotation.Y, Human.Model.Rotation.Z);
-
-            }
-            else
-            {
-                if (!_player.IsSitting)
-                    _player.Model.Idle();
 
             }
 
@@ -106,10 +99,10 @@ namespace Hedra.Engine.Player
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Forward) * keysPresses);                   
                     this.Orientate();
                 }
-                _player.Model.Model.TransformationMatrix = 
-                    Matrix4.CreateRotationY(-_player.Model.Model.Rotation.Y * Mathf.Radian) *
+                _player.Model.TransformationMatrix = 
+                    Matrix4.CreateRotationY(-_player.Model.Rotation.Y * Mathf.Radian) *
                     Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f)) *
-                    Matrix4.CreateRotationY(_player.Model.Model.Rotation.Y * Mathf.Radian);
+                    Matrix4.CreateRotationY(_player.Model.Rotation.Y * Mathf.Radian);
                 if (GameManager.Keyboard[Key.S])
                 {
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Backward) * keysPresses);
@@ -163,7 +156,6 @@ namespace Hedra.Engine.Player
                 Player.Orientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
             }
             RollDirection = new Vector3(Player.Model.Rotation.X, _characterRotation, Player.Model.Rotation.Z);
-            Player.IsMoving = MoveSpace.LengthSquared > 0;
         }
 
         private void RegisterKey(Key Key, Action Action)
@@ -180,7 +172,7 @@ namespace Hedra.Engine.Player
 
             this.RegisterKey(Key.G, delegate
             {
-                if (Human.CanInteract && !GameManager.InMenu && !Human.Knocked
+                if (Human.CanInteract && !GameManager.InMenu && !Human.IsKnocked
                     && !GameManager.InStartMenu && _glidingCooldown < 0)
                 {
                     if (_player.Inventory.Glider == null && !GameSettings.Paused)

@@ -156,7 +156,6 @@ namespace Hedra.Engine.Rendering.UI
 		        human.Physics.UseTimescale = false;
 		        human.Removable = false;
 		        human.Model.Enabled = false;
-		        human.Model.Idle();
 		        human.Physics.CanCollide = false;
 		        _humans.Add(human);
 		    }
@@ -181,8 +180,7 @@ namespace Hedra.Engine.Rendering.UI
 				_humans[i].Model.TargetRotation = _humans[i].Model.Rotation;
 				_humans[i].Model.Enabled = true;
 				_humans[i].Name = _information[i].Name;
-				_humans[i].Level = _information[i].Level;				
-				_humans[i].Model.UpdateModel();
+				_humans[i].Level = _information[i].Level;
 			    _humans[i].PlaySpawningAnimation = false;
 			    _humans[i].SearchComponent<DamageComponent>().Immune = true;
 
@@ -211,7 +209,6 @@ namespace Hedra.Engine.Rendering.UI
 		                _previousHuman.BlockPosition = new Vector3(fPos.X, _previousHuman.BlockPosition.Y, fPos.Z);
 		                _previousHuman.Model.Rotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 10).NormalizedFast().Xz.ToVector3()).Y+180, 0);
 		                _previousHuman.Model.TargetRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 10).NormalizedFast().Xz.ToVector3()).Y+180, 0);
-		                _previousHuman.Model.Idle();
 		            }
 		        }
 		        _previousHuman = _selectedHuman;
@@ -241,8 +238,8 @@ namespace Hedra.Engine.Rendering.UI
                 _humans[i]?.Model?.StopSound();
         }
 
-		private void Update(){
-			
+		private void Update()
+        {		
 			//Force update!
 			for(int i = 0; i < _humans.Count; i++){
 				if(World.Seed != World.MenuSeed){
@@ -252,9 +249,7 @@ namespace Hedra.Engine.Rendering.UI
 
 					int k = i;
 					if(_humans[k].MainWeapon != null && _humans[k].MainWeapon.Weapon.InAttackStance)
-						_humans[k].Model.Model.BlendAnimation(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);
-					else
-						_humans[k].Model.Model.Animator.ExitBlend();                              
+						_humans[k].Model.Blend(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);                             
 						
 					_humans[i].Model.Enabled = true;
                     _humans[i].Update();					
@@ -311,11 +306,9 @@ namespace Hedra.Engine.Rendering.UI
                     Vector3 target = FireDirection(i, 6);
                     if(_selectedHuman.MainWeapon != null)
                         _selectedHuman.MainWeapon.Weapon.InAttackStance = true;
-					if( (_selectedHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz).LengthSquared > 4*4){
+					if( (_selectedHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz).LengthSquared > 4*4)
+					{
 						_selectedHuman.Physics.Translate(-target.NormalizedFast() * 6f * Time.IndependantDeltaTime);
-						_selectedHuman.Model.Run();
-					}else{
-						_selectedHuman.Model.Idle();
 					}
 					
 				}
@@ -335,14 +328,9 @@ namespace Hedra.Engine.Rendering.UI
                         _previousHuman.MainWeapon.Weapon.InAttackStance = false;
                     if ( (_previousHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz - backTarget.Xz).LengthSquared > 1*1){
 						_previousHuman.Physics.Translate(backTarget.NormalizedFast() * 6f * Time.IndependantDeltaTime);
-						_previousHuman.Model.Run();
                         _previousHuman.Model.Rotation = Physics.DirectionToEuler(backTarget.NormalizedFast().Xz.ToVector3());
                         _previousHuman.Model.TargetRotation = _previousHuman.Model.Rotation;
                     }
-                    else{
-						_previousHuman.Model.Idle();
-						
-					}
 					
 				}
 				#endregion

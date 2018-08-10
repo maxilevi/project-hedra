@@ -71,16 +71,16 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
             if (Sheathed)
             {
-                Matrix4 Mat4 = Owner.Model.Model.MatrixFromJoint(Owner.Model.ChestJoint).ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+                var mat4 = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
 
                 this.MainMesh.Position = Owner.Model.Position;
                 this.MainMesh.BeforeLocalRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
-                this.MainMesh.TransformationMatrix = Mat4;
+                this.MainMesh.TransformationMatrix = mat4;
                 this.MainMesh.TargetRotation = new Vector3(55 + 180, 0, 0);
 
                 this._secondBlade.Position = Owner.Model.Position;
                 this._secondBlade.BeforeLocalRotation = Vector3.UnitX * 1.0f - Vector3.UnitY * 2f;
-                this._secondBlade.TransformationMatrix = Mat4;
+                this._secondBlade.TransformationMatrix = mat4;
                 this._secondBlade.TargetRotation = new Vector3(-55 + 180, 180, 0);
 
             }

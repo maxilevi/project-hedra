@@ -33,15 +33,11 @@ namespace Hedra.Engine.WorldBuilding
 		        GameSettings.UpdateDistance * GameSettings.UpdateDistance * .5f * .5f)
 		        Parent.Position = ToFollow.Position;
 
-			if( (ToFollow.Position - Parent.Position).LengthSquared > 8*8 ){
-				
+			if( (ToFollow.Position - Parent.Position).LengthSquared > 8*8 )
+			{				
 				Parent.Orientation = (ToFollow.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
 				Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
 				Parent.Physics.DeltaTranslate( Parent.Speed * 8 * Parent.Orientation);
-				
-				Parent.Model.Run();
-			}else{
-				Parent.Model.Idle();
 			}
 		}
 	}

@@ -52,7 +52,7 @@ namespace Hedra.Engine.Player
 
             if (Camera.DefaultDelegate == null)
             {
-                Camera.DefaultDelegate = () => _player.Model.Model.Position;
+                Camera.DefaultDelegate = () => _player.Model.Position;
             }
             this.PositionDelegate = Camera.DefaultDelegate;
         }

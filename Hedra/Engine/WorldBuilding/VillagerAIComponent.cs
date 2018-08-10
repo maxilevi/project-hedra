@@ -43,7 +43,6 @@ namespace Hedra.Engine.WorldBuilding
 	        {
         		Parent.Orientation = (LocalPlayer.Instance.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
 	            Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
-	            Parent.Model.Idle();
         		return;
         	}       	
         	if(_move)

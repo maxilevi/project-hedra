@@ -38,9 +38,8 @@ namespace Hedra.Engine.AISystem.Behaviours
 
         public override void Update()
         {
-            if (!_arrived && !Parent.Knocked)
+            if (!_arrived && !Parent.IsKnocked)
             {
-                Parent.Model.Run();
                 Parent.Orientation = (Target - Parent.Position).Xz.NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
                 Parent.Physics.DeltaTranslate(Parent.Orientation * 5f * Parent.Speed);

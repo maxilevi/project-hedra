@@ -96,16 +96,12 @@ namespace Hedra.Engine.WorldBuilding
                 if (Parent is Humanoid human)
                 {
                     human.Physics.DeltaTranslate(human.Movement.MoveFormula(Parent.Orientation) * .75f);
+                    human.IsSitting = false;
                 }
                 else
                 {
                     Parent.Physics.DeltaTranslate(Parent.Orientation * Parent.Speed * 4);
                 }
-                Parent.Model.Run();
-            }
-            else
-            {
-                Parent.Model.Idle();
             }
         }
 
@@ -113,11 +109,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             if (Parent is Humanoid human)
             {
-                human.Model.Sit();
-            }
-            else
-            {
-                Parent.Model.Idle();
+                human.IsSitting = true;
             }
         }
     }

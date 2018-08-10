@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -17,10 +19,13 @@ namespace Hedra.Engine.EntitySystem
         private T _model;
         private List<IModel> _iterableModels;
         private Box _baseBroadphaseBox = new Box(Vector3.Zero, Vector3.One);
+        private Vector3 _lastPosition;
+        private Timer _movingTimer;
 
         protected UpdatableModel(IEntity Parent)
         {
             this._iterableModels = new List<IModel>();
+            this._movingTimer = new Timer(.05f);
             this.AdditionalModels = new HashSet<IModel>();
             this.Parent = Parent;
         }
@@ -37,10 +42,10 @@ namespace Hedra.Engine.EntitySystem
             _iterableModels = AdditionalModels.ToList();
         }
 
-        public T Model
+        protected T Model
         {
             get => _model;
-            protected set
+            set
             {
                 if (_model?.Equals(value) ?? value != null)
                 {
@@ -60,6 +65,7 @@ namespace Hedra.Engine.EntitySystem
         public override bool IsAttacking { get; protected set; }
         public override bool IsIdling { get; protected set; }
         public override bool IsWalking { get; protected set; }
+        public override bool IsMoving { get; protected set; }
         public override float Alpha { get; set; } = 1;
 
         public override Vector3[] Vertices => BroadphaseBox.Vertices.ToArray();
@@ -136,16 +142,11 @@ namespace Hedra.Engine.EntitySystem
                 _iterableModels.ForEach(M => M.Tint = Mathf.Lerp(M.Tint, this.Tint, Time.IndependantDeltaTime * 6f));
                 _iterableModels.ForEach(M => M.Alpha = Mathf.Lerp(M.Alpha, this.Alpha, Time.DeltaTime * 8f));
             }
-        }
-
-        public override void Idle()
-        {
-
-        }
-
-        public override void Run()
-        {
-
+            var isTranslating = (Parent.BlockPosition.Xz - _lastPosition.Xz).LengthFast > 0.001f;
+            if (isTranslating) _movingTimer.Reset();
+            if (IsMoving && _movingTimer.Tick()) IsMoving = false;
+            else if(isTranslating) IsMoving = true;
+            _lastPosition = Parent.BlockPosition;
         }
 
         public override void Attack(IEntity Victim)

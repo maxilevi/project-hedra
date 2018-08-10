@@ -48,7 +48,7 @@ namespace Hedra.Engine.StructureSystem
 
             if (rng.Next(0, 5) != 1)
             {
-                var padOffset = Vector3.TransformPosition(Vector3.UnitX * -12f, rotMat);
+                var padOffset = Vector3.TransformPosition(Vector3.UnitX * -12f, rotMat) + Vector3.UnitY * .25f;
                 var originalModel = CacheManager.GetModel(CacheItem.Mat);
                 model = originalModel.Clone();
                 model.Scale(Vector3.One * .8f);

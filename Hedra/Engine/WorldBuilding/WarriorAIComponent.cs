@@ -57,7 +57,7 @@ namespace Hedra.Engine.WorldBuilding
 
 		        this.TargetPoint = ChasingTarget.Position;
 		        this._attackTimer -= Time.IndependantDeltaTime;
-		        if (Parent.InAttackRange(ChasingTarget) && !Parent.Knocked)
+		        if (Parent.InAttackRange(ChasingTarget) && !Parent.IsKnocked)
 		        {
 		            if (_attackTimer < 0)
 		            {

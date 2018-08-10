@@ -28,14 +28,14 @@ namespace Hedra.Engine.Player
         {
             _player = Player;
             _model = new GliderModel();
-            _leftTrail = new TrailRenderer(() => _model.Model.TransformPoint(Vector3.UnitZ * 4f - Vector3.UnitX * 3f - Vector3.UnitY * .25f),
+            _leftTrail = new TrailRenderer(() => _model.TransformPoint(Vector3.UnitZ * 4f - Vector3.UnitX * 3f - Vector3.UnitY * .25f),
                 new Vector4(Vector3.One, .5f))
             {
                 UpdateRate = 1,
                 Orientation = Vector3.UnitZ,
                 MaxLifetime = .5f
             };
-            _rightTrail = new TrailRenderer(() => _model.Model.TransformPoint(Vector3.UnitZ * 4f + Vector3.UnitX * 3f - Vector3.UnitY * .25f),
+            _rightTrail = new TrailRenderer(() => _model.TransformPoint(Vector3.UnitZ * 4f + Vector3.UnitX * 3f - Vector3.UnitY * .25f),
                 new Vector4(Vector3.One, .5f))
             {
                 UpdateRate = 1,
@@ -77,15 +77,15 @@ namespace Hedra.Engine.Player
                 _player.View.MinPitch = -1.25f;
 
                 _model.Position = _player.Position + Vector3.UnitY * 8f;
-                _model.Model.BeforeLocalRotation = Vector3.UnitY * 3.5f;
-                _model.Model.Rotation = new Vector3(_angles.X, _player.Model.Model.Rotation.Y, 0);
-                _model.Model.LocalRotation = Vector3.UnitZ * _angles.Z;
-                _player.Model.Model.TransformationMatrix =
-                    Matrix4.CreateRotationY(-_player.Model.Model.Rotation.Y * Mathf.Radian)
+                _model.BeforeLocalRotation = Vector3.UnitY * 3.5f;
+                _model.Rotation = new Vector3(_angles.X, _player.Model.Rotation.Y, 0);
+                _model.LocalRotation = Vector3.UnitZ * _angles.Z;
+                _player.Model.TransformationMatrix =
+                    Matrix4.CreateRotationY(-_player.Model.Rotation.Y * Mathf.Radian)
                     * Matrix4.CreateTranslation(Vector3.UnitY * -7.5f)
                     * Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian) *
                     Matrix4.CreateRotationX(_angles.X * Mathf.Radian)
-                    * Matrix4.CreateRotationY(_player.Model.Model.Rotation.Y * Mathf.Radian)
+                    * Matrix4.CreateRotationY(_player.Model.Rotation.Y * Mathf.Radian)
                     * Matrix4.CreateTranslation(Vector3.UnitY * 10f);
                 _player.Movement.Orientate();
                 _player.Physics.GravityDirection = -Vector3.UnitY * 1f;
@@ -102,7 +102,6 @@ namespace Hedra.Engine.Player
                 _player.View.MaxDistance = 10f;
                 _player.Physics.DeltaTranslate((_player.View.LookingDirection * _accumulatedVelocity + Vector3.UnitY * _upPush) * .55f);
                 _player.Physics.ResetFall();
-                _player.Model.Glide();
 
                 _leftTrail.Thickness = 1f * (Math.Abs(_angles.Z) - 15f) / 90f *
                                        Math.Min(1f, _accumulatedVelocity.Average() / _decaySpeed);
@@ -142,7 +141,7 @@ namespace Hedra.Engine.Player
             _player.View.MaxPitch = Camera.DefaultMaxPitch;
             _player.View.MinPitch = Camera.DefaultMinPitch;
             _player.View.MaxDistance = Camera.DefaultMaxDistance;
-            _player.Model.Model.TransformationMatrix = Matrix4.Identity;
+            _player.Model.TransformationMatrix = Matrix4.Identity;
             _player.Model.Pause = false;
             _player.Physics.GravityDirection = -Vector3.UnitY;
             _player.Physics.VelocityCap = float.MaxValue;

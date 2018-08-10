@@ -6,86 +6,47 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using System.Collections;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
-using Hedra.Engine.Player.Skills;
-using Hedra.Engine.Player.ToolbarSystem;
-using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Rendering;
 using OpenTK;
 
-namespace Hedra.Engine.Player
+namespace Hedra.Engine.Player.Skills
 {
 	/// <summary>
 	/// Description of ArcherPoisonArrow.
 	/// </summary>
-	public class IceArrow : BaseSkill
+	public class ArcherIceArrow : SpecialAttackSkill<Bow>
 	{
-		private Animation ShootAnimation;
-		private float BaseDamage = 35f, Damage;
-		
-		public IceArrow() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
-			base.ManaCost = 80f;
-            base.MaxCooldown = 6.5f;
-			
-			ShootAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherTripleShoot.dae");
-			ShootAnimation.Loop = false;
-			ShootAnimation.OnAnimationMid += delegate {
-
-				if(Player.Model.LeftWeapon is Bow){
-					Bow PlayerBow = Player.Model.LeftWeapon as Bow;
-					
-					Projectile Arrow = PlayerBow.ShootArrow(Player, Player.View.CrossDirection);
-					Arrow.MoveEventHandler += delegate { 
-						Arrow.Mesh.Tint = Colors.LightBlue * new Vector4(1,1,3,1) * .7f;
-					};
-					Arrow.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
-						float Exp;
-						Hit.Damage(Player.DamageEquation * 0.5f, Player, out Exp, true);
-						Player.XP += Exp;
-						
-						Hit.AddComponent( new FreezingComponent(Hit, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
-						
-					};
-				}
-				
-			};
-			ShootAnimation.OnAnimationEnd += delegate(Animation Sender) {
-				
-				Player.IsCasting = false;
-				Casting = false;
-				Player.IsAttacking = false;
-				Player.Model.LeftWeapon.InAttackStance = false;
-				Player.Model.LeftWeapon.StartWasAttackingCoroutine();
-			};
-		}
-		
-		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
-		{
-			return base.MeetsRequirements(Bar, CastingAbilityCount) && Player.Model.LeftWeapon is Bow;
-		}
-		
-		public override void Use()
-		{
-			this.Damage = BaseDamage + 5f * base.Level;
-			base.MaxCooldown = Math.Max(3, 8.0f - base.Level * .5f);
-			Player.IsCasting = true;
-			Casting = true;
-			Player.IsAttacking = true;
-			Player.Model.LeftWeapon.InAttackStance = true;
-			Player.Model.Model.Animator.StopBlend();
-			Player.Model.Model.PlayAnimation(ShootAnimation);
-			Player.Movement.Orientate();
-		}
-		
-		public override void Update(){}
-		
-		
+		private const float BaseDamage = 60f;
+	    private const float BaseCooldown = 18f;
+	    private const float CooldownCap = 8f;
+		private const float BaseManaCost = 40f;
+		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
 		public override string Description => "Shoot a freezing arrow.";
+	    private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;
+	    public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
+		public override float ManaCost => BaseManaCost;
+
+        protected override void BeforeUse(Bow Weapon)
+		{
+			void HandlerLambda(Projectile A) => ModifierHandler(Weapon, A, HandlerLambda);
+			Weapon.BowModifiers += HandlerLambda;
+		}
+
+		private void ModifierHandler(Bow Weapon, Projectile Arrow, OnModifyArrowEvent Event)
+		{
+			Arrow.MoveEventHandler += Sender =>
+			{
+				Arrow.Mesh.Tint = Colors.Blue * new Vector4(1,1,3,1) * .7f;
+			};
+			Arrow.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
+			{				
+				Hit.AddComponent( new FreezingComponent(Hit, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
+			};
+			Weapon.BowModifiers -= Event;
+		}
 	}
 }

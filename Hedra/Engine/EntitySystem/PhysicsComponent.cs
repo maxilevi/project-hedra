@@ -158,7 +158,7 @@ namespace Hedra.Engine.EntitySystem
 	    public void ExecuteTranslate(MoveCommand Command)
         {
 			Physics.Threading.AddCommand(Command);
-		}
+        }
 
 	    public void Translate(Vector3 Delta)
 	    {
@@ -192,15 +192,18 @@ namespace Hedra.Engine.EntitySystem
             var nextBlock =
                 World.GetBlockAt(new Vector3(1f * modifierX, 0, 1f * modifierZ) + delta +
                                     this.Parent.BlockPosition);
-
+            
             if (!onlyY)
             {
-                if (nextBlock.Type != BlockType.Air && nextBlock.Type != BlockType.Water)
+                //if (nextBlock.Type != BlockType.Air && nextBlock.Type != BlockType.Water)
                 {
-
-                    var nextBlockY = World.GetBlockAt(new Vector3(1f * modifierX, 2.75f, 1f * modifierZ) + delta +
-                                                        this.Parent.BlockPosition);
-                    if (nextBlockY.Type != BlockType.Air && nextBlockY.Type != BlockType.Water)
+                    bool IsSolid(Block B) => B.Type != BlockType.Air && B.Type != BlockType.Water;
+                    var calcPosition = new Vector3(1f * modifierX, 2.5f, 1f * modifierZ) + delta +
+                                       this.Parent.BlockPosition;
+                    var nextBlockY = World.GetBlockAt(calcPosition);
+                    var terrainNormal = Physics.NormalAtPosition(calcPosition);
+                    if (IsSolid(nextBlockY) 
+                        || (Vector3.Dot(terrainNormal, Vector3.UnitY) < .35f && IsSolid(nextBlock)))
                     {
                         if (delta.X > 0)
                             blockPx = true;
@@ -382,13 +385,11 @@ namespace Hedra.Engine.EntitySystem
                     Parent.IsGrounded = true;
 		            Velocity = Vector3.Zero;
 		        }
-		    }
-		    
+		    }   
 
 			Vector3 prevPosition = Parent.BlockPosition;
 			Parent.BlockPosition += delta * new Vector3(1,1/Chunk.BlockSize,1);
-				
-			
+
 			if( (blockNz || _wasBlockNz) && (Parent.BlockPosition.Z - prevPosition.Z) < 0)
 				Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, Parent.BlockPosition.Y, prevPosition.Z);
 			
@@ -406,9 +407,7 @@ namespace Hedra.Engine.EntitySystem
 
             if ((blockPy || _wasBlockPy) && (Parent.BlockPosition.Y - prevPosition.Y) > 0)
                 Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, prevPosition.Y, Parent.BlockPosition.Z);
-                
-            
-
+	        
             _wasBlockNz = blockNz;
             _wasBlockNx = blockNx;
             _wasBlockNy = blockNy;
@@ -417,7 +416,8 @@ namespace Hedra.Engine.EntitySystem
             _wasBlockPy = blockPy;
         }
 		
-		public void ResetFall(){
+		public void ResetFall()
+		{
 		    Falltime = 0.01f;
 		}
 		
