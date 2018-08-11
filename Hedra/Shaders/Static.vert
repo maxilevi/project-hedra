@@ -130,8 +130,7 @@ void main(){
 	FLightColor = clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 	vec4 InputColor = vec4(linear_color.xyz, 1.0);
 
-	float cond = when_lt(Color.a + 1.0, 0.1);
-	Ambient += cond * 0.25;
+	Ambient += when_lt(Config + 1.0, 0.1) * 0.25;
 	vec4 Specular = specular(unitToLight, unitNormal, unitToCamera, LightColor);
 	vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
 	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
