@@ -35,7 +35,8 @@ namespace Hedra.Engine.Rendering.Animation
 		public void PlayAnimation(Animation Animation)
 		{
 			_currentAnimation = Animation;
-			AnimationTime = 0;
+		    _currentAnimation.Reset();
+            AnimationTime = 0;
 			if (_pose == null)
 			{
 				_pose = CalculateCurrentAnimationPose();
@@ -46,7 +47,8 @@ namespace Hedra.Engine.Rendering.Animation
 		{
 			_blendJoints = CalculateJointsToBlend(Animation);
 			_blendingAnimation = Animation;
-		    _blendingAnimationTime = 0;
+		    _blendingAnimation.Reset();
+            _blendingAnimationTime = 0;
 		}
 
 		public void Update()
