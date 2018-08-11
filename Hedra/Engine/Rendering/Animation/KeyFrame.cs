@@ -17,10 +17,11 @@ namespace Hedra.Engine.Rendering.Animation
 	/// </summary>
 	public class KeyFrame
 	{
-		public float TimeStamp {get; private set;}
-		public Dictionary<String, JointTransform> Pose {get; private set;}
+		public float TimeStamp { get; }
+		public Dictionary<string, JointTransform> Pose { get; }
 	
-		public KeyFrame(float TimeStamp, Dictionary<String, JointTransform> JointKeyFrames) {
+		public KeyFrame(float TimeStamp, Dictionary<string, JointTransform> JointKeyFrames)
+		{
 			this.TimeStamp = TimeStamp;
 			this.Pose = JointKeyFrames;
 		}

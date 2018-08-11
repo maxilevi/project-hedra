@@ -94,7 +94,7 @@ namespace Hedra.Engine.Player.MapSystem
 		    this._height = Mathf.Lerp(_height, _targetHeight, Time.IndependantDeltaTime * 2f);
             this.UpdateFogAndTime();
 
-            var mapPosition = _player.Position.Xz.ToVector3();
+            var mapPosition = _player.Model.ModelPosition.Xz.ToVector3();
 		    lock (_icons)
 		    {
 		        for (var i = 0; i < _icons.Count; i++)

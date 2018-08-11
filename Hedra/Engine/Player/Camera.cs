@@ -52,7 +52,7 @@ namespace Hedra.Engine.Player
 
             if (Camera.DefaultDelegate == null)
             {
-                Camera.DefaultDelegate = () => _player.Model.Position;
+                Camera.DefaultDelegate = () => _player.Model.ModelPosition;
             }
             this.PositionDelegate = Camera.DefaultDelegate;
         }
@@ -122,7 +122,7 @@ namespace Hedra.Engine.Player
             Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.IndependantDeltaTime * 16f);
             var cameraPosition = this.CalculatePosition(0);
             var addonDistance = cameraPosition.Y > Physics.HeightAtPosition(cameraPosition) + 2 ? AddonDistance : 0;
-            Distance = Mathf.Lerp(Distance, TargetDistance + addonDistance, Time.IndependantDeltaTime * 3f);
+            Distance = Mathf.Lerp(Distance, TargetDistance + addonDistance * Time.TimeScale, Time.IndependantDeltaTime * 3f);
         }
 
         private void ClampYaw()

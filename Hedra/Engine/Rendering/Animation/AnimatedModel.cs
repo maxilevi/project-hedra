@@ -82,7 +82,7 @@ namespace Hedra.Engine.Rendering.Animation
             });
             this.RootJoint = RootJoint;
             this.JointCount = JointCount;
-            _animator = new Animator(this);
+            _animator = new Animator(this.RootJoint);
             this.RootJoint.CalculateInverseBindTransform(Matrix4.Identity);
             Alpha = 1.0f;
             Tint = Vector4.One;

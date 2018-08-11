@@ -16,10 +16,10 @@ namespace Hedra.Engine.Rendering.Animation
 	public class Animator
 	{
 	    public float AnimationTime { get; private set; }
-	    public float AnimationSpeed { get; set; } = 2f;
-	    public float BlendingAnimationTime { get; private set; }
+	    public float AnimationSpeed { get; set; } = 1f;
         public bool Stop { get; set; }
-		private readonly AnimatedModel _entity;
+		private float _blendingAnimationTime;
+		private readonly Joint _rootJoint;
 		private Animation _currentAnimation;
 		private Animation _blendingAnimation;
 		private string[] _blendJoints;
@@ -27,9 +27,9 @@ namespace Hedra.Engine.Rendering.Animation
 	    private Dictionary<string, JointTransform> _lastPose;
 	    private int _frameCounter;
 
-        public Animator(AnimatedModel Entity)
+        public Animator(Joint RootJoint)
 		{
-			_entity = Entity;
+			_rootJoint = RootJoint;
 		}
 
 		public void PlayAnimation(Animation Animation)
@@ -46,72 +46,21 @@ namespace Hedra.Engine.Rendering.Animation
 		{
 			_blendJoints = CalculateJointsToBlend(Animation);
 			_blendingAnimation = Animation;
-		    BlendingAnimationTime = 0;
-		}
-		
-		#region Blending Axuliary Methods
-		
-		private string[] CalculateJointsToBlend(Animation Animation)
-		{
-			var blendedJointsCandidates = new Dictionary<string, int>();
-			for(var i = 0; i < Animation.KeyFrames.Length; i++)
-			{
-				foreach(var pair in Animation.KeyFrames[i].Pose)
-				{
-					if(blendedJointsCandidates.ContainsKey(pair.Key))
-					{
-						if(Animation.KeyFrames[i-1].Pose[pair.Key].Position == Animation.KeyFrames[i].Pose[pair.Key].Position 
-						   && Animation.KeyFrames[i-1].Pose[pair.Key].Rotation == Animation.KeyFrames[i].Pose[pair.Key].Rotation)
-						{						
-							blendedJointsCandidates[pair.Key] += 1; 
-						}
-					}
-					else
-					{
-						blendedJointsCandidates.Add(pair.Key, 1);
-					}
-				}
-			}		
-			var blendedJoints = new List<string>();
-			foreach(var pair in blendedJointsCandidates)
-			{
-				if(pair.Value != Animation.KeyFrames.Length)
-				{
-					blendedJoints.Add(pair.Key);
-				}
-			}
-			
-			return blendedJoints.ToArray();
+		    _blendingAnimationTime = 0;
 		}
 
-		#endregion
-		
-		/**
-		 * This method should be called each frame to update the animation currently
-		 * being played. This increases the animation time (and loops it back to
-		 * zero if necessary), finds the pose that the entity should be in at that
-		 * time of the animation, and then applies that pose to all the model's
-		 * joints by setting the joint transforms.
-		 */
 		public void Update()
 		{
 			if (_currentAnimation == null || Stop) return;
 
-		    var animationPose = _frameCounter % 2 != 0 || _lastPose == null
-		        ? _lastPose = CalculateCurrentAnimationPose()
-		        : _lastPose;
+			var animationPose = CalculateCurrentAnimationPose();
 			_pose = InterpolatePoses(_pose, animationPose, Time.IndependantDeltaTime * 16f);
-			ApplyPoseToJoints(_pose, _entity.RootJoint, Matrix4.Identity);
-			if(_frameCounter % 2 == 0) IncreaseAnimationTime();
+			ApplyPoseToJoints(_pose, _rootJoint, Matrix4.Identity);
+			IncreaseAnimationTime();
 		    _frameCounter++;
 
 		}
-	
-		/**
-		 * Increases the current animation time which allows the animation to
-		 * progress. If the current animation has reached the end then the timer is
-		 * reset, causing the animation to loop.
-		 */
+
 		private void IncreaseAnimationTime() 
 		{
 			if(GameManager.InMenu || Stop) return;
@@ -129,9 +78,9 @@ namespace Hedra.Engine.Rendering.Animation
 		    }
 
 		    if(_blendingAnimation == null) return;
-		    BlendingAnimationTime += Time.IndependantDeltaTime * _blendingAnimation.Speed * AnimationSpeed;
-		    _blendingAnimation.DispatchEvents(BlendingAnimationTime / _blendingAnimation.Length);
-		    if (BlendingAnimationTime > _blendingAnimation.Length)
+		    _blendingAnimationTime += Time.IndependantDeltaTime * _blendingAnimation.Speed * AnimationSpeed;
+		    _blendingAnimation.DispatchEvents(_blendingAnimationTime / _blendingAnimation.Length);
+		    if (_blendingAnimationTime > _blendingAnimation.Length)
 		    {
 		        _blendingAnimation.Reset();
 		        _blendingAnimation = null;
@@ -165,8 +114,8 @@ namespace Hedra.Engine.Rendering.Animation
 
 			if (_blendingAnimation != null)
 			{
-				var blendingFrames = GetPreviousAndNextFrames(_blendingAnimation, BlendingAnimationTime);
-				var blendingProgression = CalculateProgression(blendingFrames[0], blendingFrames[1], BlendingAnimationTime);
+				var blendingFrames = GetPreviousAndNextFrames(_blendingAnimation, _blendingAnimationTime);
+				var blendingProgression = CalculateProgression(blendingFrames[0], blendingFrames[1], _blendingAnimationTime);
 				var blendingPose = InterpolateJointPosesFromKeyframes(blendingFrames[0], blendingFrames[1], blendingProgression);
 				for (var i = 0; i < _blendJoints.Length; i++)
 				{
@@ -245,19 +194,8 @@ namespace Hedra.Engine.Rendering.Animation
 			}
 			return new [] { previousFrame, nextFrame };
 		}
-	
-		/**
-		 * Calculates how far between the previous and next keyframe the current
-		 * animation time is, and returns it as a value between 0 and 1.
-		 * 
-		 * @param previousFrame
-		 *            - the previous keyframe in the animation.
-		 * @param nextFrame
-		 *            - the next keyframe in the animation.
-		 * @return A number between 0 and 1 indicating how far between the two
-		 *         keyframes the current animation time is.
-		 */
-		private float CalculateProgression(KeyFrame PreviousFrame, KeyFrame NextFrame, float Time)
+
+		private static float CalculateProgression(KeyFrame PreviousFrame, KeyFrame NextFrame, float Time)
 		{
 			if(PreviousFrame == NextFrame) return 0.5f;
 			
@@ -266,8 +204,8 @@ namespace Hedra.Engine.Rendering.Animation
 			return currentTime / totalTime;
 		}
 		
-		private Dictionary<string, JointTransform> InterpolatePoses
-			(Dictionary<string, JointTransform> Pose, Dictionary<string, JointTransform> TargetPose, float Progression)
+		private static Dictionary<string, JointTransform> InterpolatePoses
+			(Dictionary<string, JointTransform> Pose, IDictionary<string, JointTransform> TargetPose, float Progression)
 		{
 		    var newPose = new Dictionary<string, JointTransform>();
             foreach (var pair in Pose) {
@@ -278,23 +216,7 @@ namespace Hedra.Engine.Rendering.Animation
 			return newPose;
 		}
 	
-		/**
-		 * Calculates all the local-space joint transforms for the desired current
-		 * pose by interpolating between the transforms at the previous and next
-		 * keyframes.
-		 * 
-		 * @param previousFrame
-		 *            - the previous keyframe in the animation.
-		 * @param nextFrame
-		 *            - the next keyframe in the animation.
-		 * @param progression
-		 *            - a number between 0 and 1 indicating how far between the
-		 *            previous and next keyframes the current animation time is.
-		 * @return The local-space transforms for all the joints for the desired
-		 *         current pose. They are returned in a map, indexed by the name of
-		 *         the joint to which they should be applied.
-		 */		
-		private Dictionary<string, JointTransform> InterpolateJointPosesFromKeyframes(KeyFrame PreviousFrame, KeyFrame NextFrame, float Progression)
+		private static Dictionary<string, JointTransform> InterpolateJointPosesFromKeyframes(KeyFrame PreviousFrame, KeyFrame NextFrame, float Progression)
 		{
 			var currentPose = new Dictionary<string, JointTransform>();
 			foreach(var pair in PreviousFrame.Pose) {
@@ -304,6 +226,39 @@ namespace Hedra.Engine.Rendering.Animation
 				currentPose.Add(pair.Key, currentTransform);
 			}
 			return currentPose;
+		}
+		
+		private static string[] CalculateJointsToBlend(Animation Animation)
+		{
+			var blendedJointsCandidates = new Dictionary<string, int>();
+			for(var i = 0; i < Animation.KeyFrames.Length; i++)
+			{
+				foreach(var pair in Animation.KeyFrames[i].Pose)
+				{
+					if(blendedJointsCandidates.ContainsKey(pair.Key))
+					{
+						if(Animation.KeyFrames[i-1].Pose[pair.Key].Position == Animation.KeyFrames[i].Pose[pair.Key].Position 
+						   && Animation.KeyFrames[i-1].Pose[pair.Key].Rotation == Animation.KeyFrames[i].Pose[pair.Key].Rotation)
+						{						
+							blendedJointsCandidates[pair.Key] += 1; 
+						}
+					}
+					else
+					{
+						blendedJointsCandidates.Add(pair.Key, 1);
+					}
+				}
+			}		
+			var blendedJoints = new List<string>();
+			foreach(var pair in blendedJointsCandidates)
+			{
+				if(pair.Value != Animation.KeyFrames.Length)
+				{
+					blendedJoints.Add(pair.Key);
+				}
+			}
+			
+			return blendedJoints.ToArray();
 		}
 		
 		public Animation AnimationPlaying => _currentAnimation;

@@ -16,10 +16,11 @@ namespace Hedra.Engine.Rendering.Animation
 	/// </summary>
 	public class JointTransform
 	{
-		public Vector3 Position {get; private set;}
-		public Quaternion Rotation {get; private set;}
+		public Vector3 Position { get; }
+		public Quaternion Rotation { get; }
 	
-		public JointTransform(Vector3 Position, Quaternion Rotation) {
+		public JointTransform(Vector3 Position, Quaternion Rotation)
+		{
 			this.Position = Position;
 			this.Rotation = Rotation;
 		}
@@ -35,11 +36,13 @@ namespace Hedra.Engine.Rendering.Animation
 		 *         transform as represented by the position and rotation in this
 		 *         instance, just in matrix form.
 		 */
-		public Matrix4 LocalTransform{
-			get{
-				Matrix4 Matrix = Matrix4.CreateTranslation(Position);
-				Matrix = Rotation.ToMatrix() * Matrix;
-				return Matrix;
+		public Matrix4 LocalTransform
+		{
+			get
+			{
+				var matrix = Matrix4.CreateTranslation(Position);
+				matrix = Rotation.ToMatrix() * matrix;
+				return matrix;
 			}
 		}
 	
@@ -64,9 +67,10 @@ namespace Hedra.Engine.Rendering.Animation
 		 *            transform somewhere in-between the two.
 		 * @return
 		 */
-		public static JointTransform Interpolate(JointTransform FrameA, JointTransform FrameB, float Progression) {
-			Vector3 pos = JointTransform.Interpolate(FrameA.Position, FrameB.Position, Progression);
-			Quaternion rot = Extensions.SlerpExt(FrameA.Rotation, FrameB.Rotation, Progression);
+		public static JointTransform Interpolate(JointTransform FrameA, JointTransform FrameB, float Progression)
+		{
+			var pos = JointTransform.Interpolate(FrameA.Position, FrameB.Position, Progression);
+			var rot = Extensions.SlerpExt(FrameA.Rotation, FrameB.Rotation, Progression);
 			return new JointTransform(pos, rot);
 		}
 		
@@ -84,9 +88,9 @@ namespace Hedra.Engine.Rendering.Animation
 		 * @return
 		 */
 		private static Vector3 Interpolate(Vector3 Start, Vector3 End, float Progression) {
-			float x = Start.X + (End.X - Start.X) * Progression;
-			float y = Start.Y + (End.Y - Start.Y) * Progression;
-			float z = Start.Z + (End.Z - Start.Z) * Progression;
+			var x = Start.X + (End.X - Start.X) * Progression;
+			var y = Start.Y + (End.Y - Start.Y) * Progression;
+			var z = Start.Z + (End.Z - Start.Z) * Progression;
 			return new Vector3(x, y, z);
 		}
 	}

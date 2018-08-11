@@ -73,6 +73,7 @@
     <Compile Include="Player\SimpleCameraMock.cs" />
     <Compile Include="Player\PlayerMock.cs" />
     <Compile Include="Player\WeaponAttackTest.cs" />
+    <Compile Include="Rendering\AnimatorTest.cs" />
     <Compile Include="SimpleEventProvider.cs" />
     <Compile Include="SimpleTexture2DProviderMock.cs" />
     <Compile Include="SimpleWorldProviderMock.cs" />

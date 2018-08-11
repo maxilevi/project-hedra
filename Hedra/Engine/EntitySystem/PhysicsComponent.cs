@@ -30,7 +30,8 @@ namespace Hedra.Engine.EntitySystem
 		public Vector3 Force = Vector3.Zero;
 		public Vector3 Velocity = Vector3.Zero;
 		public bool HasFallDamage = true;
-		public bool UseTimescale {get; set;}
+		public bool UseTimescale { get; set; }
+		public bool InFrontOfWall { get; private set; }
 
 	    public PhysicsComponent(Entity Parent) : base(Parent)
 	    {
@@ -188,36 +189,41 @@ namespace Hedra.Engine.EntitySystem
 			float modifierZ = delta.Z < 0 ? -1f : 1f;
 
             bool blockPx = false, blockNx = false, blockPy = false, blockNy = false, blockPz = false, blockNz = false;
-
-            var nextBlock =
-                World.GetBlockAt(new Vector3(1f * modifierX, 0, 1f * modifierZ) + delta +
-                                    this.Parent.BlockPosition);
-            
+      
             if (!onlyY)
             {
-                //if (nextBlock.Type != BlockType.Air && nextBlock.Type != BlockType.Water)
+                var nextBlock =
+                    World.GetBlockAt(new Vector3(1f * modifierX, 0, 1f * modifierZ) + delta +
+                                        this.Parent.BlockPosition);
+                bool IsSolid(Block B) => B.Type != BlockType.Air && B.Type != BlockType.Water;
+                var calcPosition = new Vector3(1f * modifierX, 2.5f, 1f * modifierZ) + delta +
+                                    this.Parent.BlockPosition;
+                var nextBlockY = World.GetBlockAt(calcPosition);
+                var terrainNormal = Physics.NormalAtPosition(calcPosition);
+                if (IsSolid(nextBlockY) || (Vector3.Dot(terrainNormal, Vector3.UnitY) < .35f && IsSolid(nextBlock)))
                 {
-                    bool IsSolid(Block B) => B.Type != BlockType.Air && B.Type != BlockType.Water;
-                    var calcPosition = new Vector3(1f * modifierX, 2.5f, 1f * modifierZ) + delta +
-                                       this.Parent.BlockPosition;
-                    var nextBlockY = World.GetBlockAt(calcPosition);
-                    var terrainNormal = Physics.NormalAtPosition(calcPosition);
-                    if (IsSolid(nextBlockY) 
-                        || (Vector3.Dot(terrainNormal, Vector3.UnitY) < .35f && IsSolid(nextBlock)))
+                    if (delta.X > 0)
+                        blockPx = true;
+
+                    if (delta.X < 0)
+                        blockNx = true;
+
+                    if (delta.Z < 0)
+                        blockNz = true;
+
+                    if (delta.Z > 0)
+                        blockPz = true;
+
+                    if (Parent is Humanoid human && human.IsClimbing)
                     {
-                        if (delta.X > 0)
-                            blockPx = true;
-
-                        if (delta.X < 0)
-                            blockNx = true;
-
-                        if (delta.Z < 0)
-                            blockNz = true;
-
-                        if (delta.Z > 0)
-                            blockPz = true;
-                    }
+                       delta += Vector3.UnitY * Time.DeltaTime * 60f;
+                    }           
+                    InFrontOfWall = true;
                 }
+                else
+                {
+	                InFrontOfWall = false;
+                }           
             }
             
             if (this.HasCollision && !Command.IsRecursive)

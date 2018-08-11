@@ -118,25 +118,27 @@ namespace Hedra.Engine.Player
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Right) * keysPresses);
                 }
 
-                #region Climb (Indev)
-                /*
-		        if(GameManager.Keyboard[Key.ControlLeft]){
-		            if(Player.Stamina > 5){
-		            	Player.IsClimbing = true;
-						Player.Climb();
-		            }else{
-		            	if(Player.IsClimbing){
-		            		Player.IsClimbing = false;
-		            		Player.EndClimb();
-		            	}
+		        if(GameManager.Keyboard[Key.ControlLeft] && _player.Physics.InFrontOfWall)
+		        {
+		            if(_player.Stamina > 5)
+		            {
+		                if (!_player.IsClimbing)
+		                {
+		                    _player.AddBonusSpeedWhile(-_player.Speed + _player.Speed * .15f, () => _player.IsClimbing);
+		                }
+		                _player.IsClimbing = true;
+                    }
+		            else
+		            {
+		            	if(_player.IsClimbing)
+			                _player.IsClimbing = false;
 		            }
-		        }else{
-		            if(Player.IsClimbing){
-		            	Player.IsClimbing = false;
-		            	Player.EndClimb();
-		            }
-		        }*/
-                #endregion
+		        }
+		        else
+		        {
+		            if(_player.IsClimbing)
+		                _player.IsClimbing = false;
+		        }
             }
 
 

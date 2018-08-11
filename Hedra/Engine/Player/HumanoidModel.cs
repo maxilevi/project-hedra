@@ -319,11 +319,14 @@ namespace Hedra.Engine.Player
             {
                 currentAnimation = _glideAnimation;
             }
+	        if (Human.IsClimbing)
+	        {
+		        currentAnimation = _climbAnimation;
+	        }
             if (Human.IsKnocked)
             {
                 currentAnimation = _knockedAnimation;
             }
-
             if (currentAnimation != null && Model.AnimationPlaying != currentAnimation 
                 && (Model.AnimationPlaying != _animationPlaying || _animationPlaying == null))
 		    {
@@ -470,6 +473,8 @@ namespace Hedra.Engine.Player
 		        Model.Enabled = Alpha > 0.005f;
 		    }
 		}
+
+        public Vector3 ModelPosition => Model.Position;
 
 	    public Animation AnimationPlaying => Model.AnimationPlaying;
 	    
