@@ -8,7 +8,8 @@ namespace Hedra.Engine.ClassSystem
     [HiddenClass]
     public class MageDesign : ClassDesign
     {
-        public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/ArcherLogo.png");
+        private static readonly uint LogoId = Graphics2D.LoadFromAssets("Assets/UI/ArcherLogo.png");
+        public override uint Logo { get; } = LogoId;
         public override HumanType Human => HumanType.Mage;
         public override float BaseSpeed => 1.35f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new MageAbilityTreeBlueprint();

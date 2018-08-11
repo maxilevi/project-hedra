@@ -7,7 +7,8 @@ namespace Hedra.Engine.ClassSystem
 {
     public class RogueDesign : ClassDesign
     {
-        public override uint Logo { get; } = Graphics2D.LoadFromAssets("Assets/UI/RogueLogo.png");
+        private static readonly uint LogoId = Graphics2D.LoadFromAssets("Assets/UI/RogueLogo.png");
+        public override uint Logo { get; } = LogoId;
         public override HumanType Human => HumanType.Rogue;
         public override float BaseSpeed => 1.40f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new RogueAbilityTreeBlueprint();
