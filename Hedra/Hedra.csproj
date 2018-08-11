@@ -4861,17 +4861,15 @@
     <Content Include="Modules\Villages\Nordic.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x64\OpenAL32.dll">
+    <Content Include="x64\openal32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x64\SQLite.Interop.dll" />
     <Content Include="x64\wrap_oal.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x86\OpenAL32.dll">
+    <Content Include="x86\openal32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x86\SQLite.Interop.dll" />
     <Content Include="x86\wrap_oal.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

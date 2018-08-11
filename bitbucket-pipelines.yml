@@ -8,7 +8,12 @@ pipelines:
         script:
           - apt-get update
           - apt-get install -y git
-          - (cd "project-hedra-assets/" && git submodule init && git submodule update)
+          - apt-get install -y nuget
+          - cd "project-hedra-assets/"
+          - git submodule init
+          - git submodule update
+          - cd ..
+          - nuget restore HedraTests/HedraTests.csproj -PackagesDirectory ../packages
           - xbuild HedraTests/HedraTests.csproj
           # - zip -r mono-build-${BITBUCKET_COMMIT}.zip Hedra/bin/Debug/
           # - curl -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"mono-build-${BITBUCKET_COMMIT}.zip"
