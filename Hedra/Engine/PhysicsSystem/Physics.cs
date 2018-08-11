@@ -60,7 +60,7 @@ namespace Hedra.Engine.PhysicsSystem
             Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
 		}
 		
-		public static Vector3 DirectionToEuler( Vector3 Direction)
+		public static Vector3 DirectionToEuler(Vector3 Direction)
         {
             Matrix4 mv = Mathf.RotationAlign(Direction.Z < 0 ? -Vector3.UnitZ : Vector3.UnitZ, Direction);
             var modifier = new Vector3(0, Direction.Z < 0 ? 180 : 0, 0);
@@ -70,6 +70,30 @@ namespace Hedra.Engine.PhysicsSystem
             return axis * angle * Mathf.Degree * multiplier + modifier;
         }
 
+		public static float WaterLevelAtPosition(Vector3 Position)
+		{
+			return Physics.WaterHeightAtPosition(Position) - Physics.HeightAtPosition(Position);
+		}
+		
+		public static float WaterHeightAtPosition(Vector3 Position)
+		{
+			var underChunk = World.GetChunkAt(Position);
+			var nearestWaterBlockY = float.MinValue;
+			var blockSpace = World.ToBlockSpace(Position);
+			if (underChunk == null) return float.MaxValue;
+			for (var y = underChunk.BoundsY - 1; y > -1; y--)
+			{
+				var block = underChunk.GetBlockAt((int)blockSpace.X, y, (int)blockSpace.Z);
+				if (block.Type == BlockType.Water)
+				{
+					nearestWaterBlockY = (y-1) * Chunk.BlockSize;
+					break;
+				}
+			}
+
+			return nearestWaterBlockY;
+		}
+		
         public static float HeightAtPosition(float X, float Z){
 			 return HeightAtPosition(new Vector3(X,0,Z));
 		}

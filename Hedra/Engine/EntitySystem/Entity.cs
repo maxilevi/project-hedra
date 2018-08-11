@@ -35,9 +35,9 @@ namespace Hedra.Engine.EntitySystem
         private string _name;
         private float _oxygen = 30;
         private float _prevHeight;
-        private float _previousFalltime;
         private bool _spawningWithAnimation;
         private float _knockedTime;
+        private bool _isUnderwater;
         private readonly TickSystem _tickSystem;
         public PhysicsComponent Physics { get; }
 
@@ -117,7 +117,6 @@ namespace Hedra.Engine.EntitySystem
 
         public bool IsInvisible { get; set; }
         public bool IsStatic => Model.IsStatic;
-        public bool IsUnderwater { get; set; }
 
         public bool IsKnocked
         {
@@ -195,8 +194,6 @@ namespace Hedra.Engine.EntitySystem
 
         public string Type { get; set; } = MobType.None.ToString();
         
-        public bool WasGrounded { get; private set; }
-
         public Entity()
         {
             _tickSystem = new TickSystem();
@@ -321,89 +318,76 @@ namespace Hedra.Engine.EntitySystem
 
         public void UpdateEnviroment()
         {
-            if (!IsUnderwater)
-            {
-                if (IsGrounded && !WasGrounded && _previousFalltime > 0.25f)
-                    SoundManager.PlaySound(SoundType.HitGround, Position);
-            }
-            var nearestWaterBlockY = this.WaterAtPosition(this.Position);
-            var underChunk = World.GetChunkAt(this.Position);
-            var touchingFloor = this.Position.Y < PhysicsSystem.Physics.HeightAtPosition(this.Position);
-            if (nearestWaterBlockY > Position.Y + Model.Height + 1f && !touchingFloor)
+            var underChunk = World.GetChunkAt(Position);
+            var waterHeight = PhysicsSystem.Physics.WaterHeightAtPosition(Position);
+            if (Position.Y + Model.Height < waterHeight && PhysicsSystem.Physics.WaterLevelAtPosition(Position) > Model.Height)
             {
                 if (!Splashed)
                 {
-                    World.Particles.VariateUniformly = true;
-                    World.Particles.Color = underChunk?.Biome.Colors.WaterColor ?? Colors.DeepSkyBlue;
-                    World.Particles.Position = Position;
-                    World.Particles.Scale = Vector3.One * .5f;
-                    World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
-                    World.Particles.Direction = Vector3.UnitY;
-                    World.Particles.ParticleLifetime = 1;
-                    World.Particles.GravityEffect = .05f;
-                    World.Particles.PositionErrorMargin = new Vector3(3f, 3f, 3f);
-
-                    if(!GameManager.InStartMenu)
-                        SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position);
-                    for (var i = 0; i < 30; i++) World.Particles.Emit();
+                    SplashEffect(underChunk);
                     Splashed = true;
                 }
-                if (IsHumanoid)
-                    Physics.ResetFall();
+                IsUnderwater = true;
+            }
+            else
+            {
+                IsUnderwater = false;
+                Splashed = false;
+            }
 
-                if (!IsHumanoid)
+            this.HandleOxygen(waterHeight);
+        }
+
+        public bool IsUnderwater
+        {
+            get => _isUnderwater;
+            private set
+            {
+                if (value == IsUnderwater) return;
+                if (value)
                 {
-                    Physics.GravityDirection = Vector3.UnitY * .4f;
-                    Physics.TargetPosition += Vector3.UnitY * .5f;
+                    Physics.GravityDirection = IsHumanoid ? Vector3.Zero : Vector3.UnitY * .0f;
                     IsGrounded = false;
                     Physics.ResetFall();
                 }
                 else
                 {
-                    IsGrounded = false;
-                    Physics.GravityDirection = Vector3.Zero;
+                    Physics.GravityDirection = -Vector3.UnitY;
                 }
-                IsUnderwater = true;
-            }
-            else if (nearestWaterBlockY < Position.Y + Model.Height || touchingFloor)
-            {
-                if (IsUnderwater) Physics.GravityDirection = -Vector3.UnitY;
-                Splashed = false;
-                IsUnderwater = false;
-            }
 
-            if (IsUnderwater) Oxygen -= (float) Time.DeltaTime * 2f;
-            else Oxygen += (float) Time.DeltaTime * 4f;
-
-            if (Oxygen <= 0 && Time.DeltaTime > 0)
-            {
-                float xp;
-                this.Damage((float) Time.DeltaTime * 5f, null, out xp, _drowningSoundTimer == 128);
-                if (_drowningSoundTimer == 128)
-                    _drowningSoundTimer = 0;
-                _drowningSoundTimer++;
+                _isUnderwater = value;
             }
-
-            WasGrounded = IsGrounded;
-            _previousFalltime = Physics.Falltime;
+            
         }
-
-        private float WaterAtPosition(Vector3 Position)
+        
+        private void HandleOxygen(float WaterHeight)
         {
-            float nearestWaterBlockY = float.MinValue;
-            Chunk underChunk = World.GetChunkAt(Position);
-            Vector3 blockSpace = World.ToBlockSpace(Position);
-            if (underChunk == null) return float.MaxValue;
-            for (int y = underChunk.BoundsY - 1; y > -1; y--)
-            {
-                var block = underChunk.GetBlockAt((int)blockSpace.X, y, (int)blockSpace.Z);
-                if (block.Type == BlockType.Water)
-                {
-                    nearestWaterBlockY = y * Chunk.BlockSize;
-                    break;
-                }
-            }
-            return nearestWaterBlockY;
+            // If the character is not moving and it's on the surface, then we shouldnt reduce the oxygen levels.
+            if (IsUnderwater && (this.Position.Y + Model.Height + 1 < WaterHeight || IsMoving)) Oxygen -= Time.DeltaTime * 2f;
+            else Oxygen += Time.DeltaTime * 4f;
+
+            if (!(Oxygen <= 0) || !(Time.DeltaTime > 0)) return;
+            Damage(Time.DeltaTime * 5f, null, out _, _drowningSoundTimer == 128);
+            if (_drowningSoundTimer == 128)
+                _drowningSoundTimer = 0;
+            _drowningSoundTimer++;
+        }
+        
+        private void SplashEffect(Chunk UnderChunk)
+        {
+            World.Particles.VariateUniformly = true;
+            World.Particles.Color = UnderChunk?.Biome.Colors.WaterColor ?? Colors.DeepSkyBlue;
+            World.Particles.Position = Position;
+            World.Particles.Scale = Vector3.One * .5f;
+            World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
+            World.Particles.Direction = Vector3.UnitY;
+            World.Particles.ParticleLifetime = 1;
+            World.Particles.GravityEffect = .05f;
+            World.Particles.PositionErrorMargin = new Vector3(3f, 3f, 3f);
+
+            if(!GameManager.InStartMenu)
+                SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position);
+            for (var i = 0; i < 30; i++) World.Particles.Emit();
         }
 
         public void KnockForSeconds(float Time)

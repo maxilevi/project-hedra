@@ -143,11 +143,12 @@ namespace Hedra.Engine.Player
 
 
             if (!_player.IsUnderwater) return;
+            this.ClampSwimming(_player);
             if (GameManager.Keyboard[Key.Space]) this.MoveInWater(true);
             if (GameManager.Keyboard[Key.ShiftLeft]) this.MoveInWater(false);
         }
 
-        private void ProcessMovement(Humanoid Player, Vector3 MoveSpace)
+        private void ProcessMovement(IHumanoid Player, Vector3 MoveSpace)
         {
             for (var i = 0; i < 5; i++)
                 Player.Physics.DeltaTranslate(MoveSpace * .2f);

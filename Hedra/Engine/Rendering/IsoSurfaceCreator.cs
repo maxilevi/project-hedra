@@ -146,24 +146,31 @@ namespace Hedra.Engine.Rendering
 		
 		public static void CreateWaterQuad(float BlockSize, GridCell Cell, bool Flipped, Vector3 Offset, int LOD, Vector4 TemplateColor, VertexData Data){
 			
-			float[] Densities = new float[]{ (float) Math.Max(Cell.Density[0],0), (float) Math.Max(Cell.Density[1],0),
-				(float) Math.Max(Cell.Density[2],0), (float) Math.Max(Cell.Density[3],0)};
+			var densities = new []
+            {
+                (float) Cell.Density[0],
+                (float) Cell.Density[1],
+				(float) Cell.Density[2],
+                (float) Cell.Density[3]
+            };
 
-			float Size = WaterQuadSize;
-			Vector3 V3 = new Vector3(BlockSize * LOD * Size - (Size-1) * (Cell.P[2].X / Chunk.BlockSize),-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[2].Y + Densities[2])*4, BlockSize * LOD * Size - (Size-1) * (Cell.P[2].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
-			Vector3 V1 = new Vector3(BlockSize * LOD * Size - (Size-1) * (Cell.P[1].X / Chunk.BlockSize),-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[1].Y + Densities[1])*4, - (Size-1) * (Cell.P[1].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
-			Vector3 V2 = new Vector3(- (Size-1) * (Cell.P[3].X / Chunk.BlockSize) ,-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[3].Y + Densities[3])*4, BlockSize * LOD * Size - (Size-1) * (Cell.P[3].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
-			Vector3 V0 = new Vector3(- (Size-1) * (Cell.P[0].X / Chunk.BlockSize), -Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[0].Y + Densities[0])*4, - (Size-1) * (Cell.P[0].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
-			int VertCount = Data.Vertices.Count;
+		    float Size = WaterQuadSize;
+			Vector3 V3 = new Vector3(BlockSize * LOD * Size - (Size-1) * (Cell.P[2].X / Chunk.BlockSize),-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[2].Y + densities[2])*4, BlockSize * LOD * Size - (Size-1) * (Cell.P[2].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
+			Vector3 V1 = new Vector3(BlockSize * LOD * Size - (Size-1) * (Cell.P[1].X / Chunk.BlockSize),-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[1].Y + densities[1])*4, - (Size-1) * (Cell.P[1].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
+			Vector3 V2 = new Vector3(-(Size-1) * (Cell.P[3].X / Chunk.BlockSize) ,-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[3].Y + densities[3])*4, BlockSize * LOD * Size - (Size-1) * (Cell.P[3].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
+			Vector3 V0 = new Vector3(-(Size-1) * (Cell.P[0].X / Chunk.BlockSize), -Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[0].Y + densities[0])*4, - (Size-1) * (Cell.P[0].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
+
+            int VertCount = Data.Vertices.Count;
 			
-			Data.Indices.AddRange( new uint[]{
-                      	(uint) Data.Vertices.Count+0,
-                      	(uint) Data.Vertices.Count+1,
-                      	(uint) Data.Vertices.Count+2,
-                      	(uint) Data.Vertices.Count+3,
-                      	(uint) Data.Vertices.Count+4,
-                      	(uint) Data.Vertices.Count+5
-                      } );
+			Data.Indices.AddRange( new []
+            {
+                (uint) Data.Vertices.Count+0,
+                (uint) Data.Vertices.Count+1,
+                (uint) Data.Vertices.Count+2,
+                (uint) Data.Vertices.Count+3,
+                (uint) Data.Vertices.Count+4,
+                (uint) Data.Vertices.Count+5
+            });
 			
 			if(Flipped){
 				
@@ -210,9 +217,9 @@ namespace Hedra.Engine.Rendering
 		private static Vector3 CodeNormal(Vector3 Original, Vector3 V1, Vector3 V2, bool ShouldMove){
 			Vector3 Coded1 = V1 - Original;
 			Vector3 Coded2 = V2 - Original;
-			
-			return new Vector3(Pack(Coded1.Xz, 4096), Pack(Coded2.Xz, 4096), (ShouldMove) ? 1 : 0);//The third value is if the vertex should move
-		}
+
+			return new Vector3(Pack(Coded1.Xz, 4096), Pack(Coded2.Xz, 4096), ShouldMove ? 1 : 0);
+        }
 		
 		private static float Pack(Vector2 input, int precision)
 		{

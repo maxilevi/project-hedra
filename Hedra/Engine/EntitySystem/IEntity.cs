@@ -65,7 +65,7 @@ namespace Hedra.Engine.EntitySystem
         
         bool IsStatic { get; }
         
-        bool IsUnderwater { get; set; }
+        bool IsUnderwater { get; }
         
         bool IsKnocked { get; }
         

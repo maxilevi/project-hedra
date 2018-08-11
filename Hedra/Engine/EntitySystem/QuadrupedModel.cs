@@ -207,7 +207,7 @@ namespace Hedra.Engine.EntitySystem
   
         public override void Update()
         {
-            if (!HasRider)
+            if (!HasRider && !IsAttacking)
             {
                 if (Parent.IsMoving) this.Run();
                 else this.Idle();
@@ -217,7 +217,7 @@ namespace Hedra.Engine.EntitySystem
 		    if (Model != null)
 		    {
                 Model.Update();
-		        
+                
 		        _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))) .ExtractRotation() : Quaternion.Identity;
 		        _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependantDeltaTime * 8f);
 		        Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);

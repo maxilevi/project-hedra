@@ -360,21 +360,26 @@ namespace Hedra.Engine.EntitySystem
 
                 if (!blockNy && delta.Y < 0 || !blockNy && Parent.IsUnderwater)
 		        {
-		            var underBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY);
+		            var currentBlock = World.GetBlockAt(Parent.BlockPosition);
+                    var underBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY);
 		            var underUnderBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY * 2f);
 		            var human = Parent as Humanoid;
                     if (Parent.IsUnderwater || (human?.IsJumping ?? false))
 		            {
 		                Parent.IsGrounded = false;
                     }
-                    else if (underBlock.Type != BlockType.Air && underBlock.Type != BlockType.Water 
-                        && underUnderBlock.Type != BlockType.Air && underUnderBlock.Type != BlockType.Water)
+                    else if (underUnderBlock.Type != BlockType.Air && underUnderBlock.Type != BlockType.Water 
+                        /*&& currentBlock.Type != BlockType.Air && currentBlock.Type != BlockType.Water*/)
 		            {
                         float heightAtPositon = Physics.HeightAtBlock(Parent.BlockPosition - Vector3.UnitY);
 		                Parent.BlockPosition = new Vector3(Parent.BlockPosition.X,
 		                    (heightAtPositon + BaseHeight) / Chunk.BlockSize,
-		                    Parent.BlockPosition.Z);	                
+		                    Parent.BlockPosition.Z);
 
+		                if (Parent is LocalPlayer)
+		                {
+		                    int a = 0;
+		                }
 		                Parent.IsGrounded = true;
 		                blockNy = true;
 		                Velocity = Vector3.Zero;
