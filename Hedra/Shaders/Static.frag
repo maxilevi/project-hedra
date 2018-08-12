@@ -39,7 +39,7 @@ float CalculateShadows();
 
 void main()
 {
-	if(Visibility < 0.005f)
+	if(Visibility < 0.005)
 	{
 		discard;
 	}
