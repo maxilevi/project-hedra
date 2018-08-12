@@ -130,6 +130,7 @@ namespace Hedra.Engine.Sound
 
 		public static void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, float Pitch = 1, float Gain = 1)
 		{
+			if (!_loaded) return;
 			var source = GrabSource();
 			if(source == null)
 			{

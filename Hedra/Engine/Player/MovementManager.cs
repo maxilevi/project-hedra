@@ -25,10 +25,11 @@ namespace Hedra.Engine.Player
 		public bool IsFloating { get; set; }
         public Vector3 RollDirection { get; set; }
 	    public bool IsJumping { get; private set; }
-        protected readonly Humanoid Human;
+        protected readonly IHumanoid Human;
 		private Vector3 _jumpPropulsion;
 
-        public MovementManager(Humanoid Human){
+        public MovementManager(IHumanoid Human)
+        {
 	        this._order = new List<MoveOrder>();
 	        this.Human = Human;
         }

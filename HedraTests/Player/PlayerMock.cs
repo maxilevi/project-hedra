@@ -6,6 +6,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
@@ -25,6 +26,14 @@ namespace HedraTests.Player
         public PlayerMock()
         {
             MessageDispatcher = new SimpleMessageDispatcherMock();
+            Movement = new SimpleMovementMock(this);
+            Model = new HumanoidModel(this, new HumanoidModelTemplate
+            {
+                Colors = new ColorTemplate[0],
+                Name = string.Empty,
+                Path = string.Empty,
+                Scale = 0
+            });
         }
 
         public PhysicsComponent Physics { get; }
@@ -98,7 +107,7 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
-        public Weapon LeftWeapon { get; }
+        public Weapon LeftWeapon { get; set; }
         public MobType MobType { get; set; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public ICamera View { get; set; } = new SimpleCameraMock();

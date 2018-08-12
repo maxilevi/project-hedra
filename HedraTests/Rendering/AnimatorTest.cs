@@ -41,14 +41,14 @@ namespace HedraTests.Rendering
             TestContext.WriteLine(_animation.Speed);
             TestContext.WriteLine(_rootJoint.AnimatedTransform);
             TestContext.WriteLine(_rootJoint.GetChild("Chest").AnimatedTransform);
-            Time.IncrementFrame(.25f);
+            Time.Set(.25f);
             _animator.Update();
-            Time.IncrementFrame(.5f);
+            Time.Set(.5f);
             TestContext.WriteLine(_animation.Speed);
             TestContext.WriteLine(_rootJoint.AnimatedTransform);
             TestContext.WriteLine(_rootJoint.GetChild("Chest").AnimatedTransform);
             _animator.Update();
-            Time.IncrementFrame(.25f);
+            Time.Set(.25f);
             TestContext.WriteLine(_animation.Speed);
             TestContext.WriteLine(_rootJoint.AnimatedTransform);
             TestContext.WriteLine(_rootJoint.GetChild("Chest").AnimatedTransform);*/

@@ -82,7 +82,7 @@ namespace Hedra.Engine.Rendering
 		}
 
 		public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
-        {
+		{
 			return Graphics2D.LoadTexture(new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))), Min, Mag, Wrap);
 		}
 		

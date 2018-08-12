@@ -44,7 +44,7 @@ namespace Hedra.Engine.Player
 				Player.IsCasting = false;
 				Casting = false;
 				Player.IsAttacking = false;
-				Player.Model.LeftWeapon.LockWeapon = false;
+				Player.LeftWeapon.LockWeapon = false;
                 Player.Model.LockWeapon = false;
                 CoroutineManager.StartCoroutine(ThrowWeapon);
 			};
@@ -56,7 +56,7 @@ namespace Hedra.Engine.Player
 		}
 		
 		private void ShootWeapon(IHumanoid Human, Vector3 Direction, int KnockChance = -1){
-			var weaponData = Player.Model.LeftWeapon.MeshData.Clone();
+			var weaponData = Player.LeftWeapon.MeshData.Clone();
 		    var startingPosition = Player.Model.LeftWeaponPosition + Player.Model.Human.Orientation * 2 +
 		                           Vector3.UnitY * 2f;
 
@@ -85,9 +85,9 @@ namespace Hedra.Engine.Player
 				yield return null;
 			}
 			Player.Toolbar.DisableAttack = false;
-		    for (var i = 0; i < Player.Model.LeftWeapon.Meshes.Length; i++)
+		    for (var i = 0; i < Player.LeftWeapon.Meshes.Length; i++)
 		    {
-		        Player.Model.LeftWeapon.Meshes[i].Enabled = true;
+		        Player.LeftWeapon.Meshes[i].Enabled = true;
 		    }
         }
 		
@@ -96,13 +96,13 @@ namespace Hedra.Engine.Player
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;
-			Player.Model.LeftWeapon.InAttackStance = false;
-			Player.Model.LeftWeapon.LockWeapon = true;
+			Player.LeftWeapon.InAttackStance = false;
+			Player.LeftWeapon.LockWeapon = true;
 		    Player.Model.LockWeapon = false;
 			Player.Model.PlayAnimation(ThrowAnimation);
-		    for (var i = 0; i < Player.Model.LeftWeapon.Meshes.Length; i++)
+		    for (var i = 0; i < Player.LeftWeapon.Meshes.Length; i++)
 		    {
-		        Player.Model.LeftWeapon.Meshes[i].Enabled = false;
+		        Player.LeftWeapon.Meshes[i].Enabled = false;
 		    }
 		}
 		
@@ -111,18 +111,18 @@ namespace Hedra.Engine.Player
 				Matrix4 Mat4 = Player.Model.LeftWeaponMatrix.ClearTranslation() * 
 					Matrix4.CreateTranslation(-Player.Model.Position + (Player.Model.LeftWeaponPosition + Player.Model.RightWeaponPosition) * .5f);
 				
-				Player.Model.LeftWeapon.MainMesh.TransformationMatrix = Matrix4.Identity;
+				Player.LeftWeapon.MainMesh.TransformationMatrix = Matrix4.Identity;
 				Player.Movement.Orientate();
-				Player.Model.LeftWeapon.MainMesh.Position = Player.Model.Position;
-				Player.Model.LeftWeapon.MainMesh.Rotation = Vector3.Zero;
-				Player.Model.LeftWeapon.MainMesh.TargetRotation = new Vector3(180,0,0);
-				Player.Model.LeftWeapon.MainMesh.RotationPoint = Vector3.Zero;
-				Player.Model.LeftWeapon.MainMesh.LocalRotation = Vector3.Zero;
-				Player.Model.LeftWeapon.MainMesh.LocalRotationPoint = Vector3.Zero;
-				Player.Model.LeftWeapon.MainMesh.LocalPosition = Vector3.Zero;
-				Player.Model.LeftWeapon.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
-				Player.Model.LeftWeapon.MainMesh.TargetPosition = Vector3.Zero;
-				Player.Model.LeftWeapon.MainMesh.AnimationPosition = Vector3.Zero;
+				Player.LeftWeapon.MainMesh.Position = Player.Model.Position;
+				Player.LeftWeapon.MainMesh.Rotation = Vector3.Zero;
+				Player.LeftWeapon.MainMesh.TargetRotation = new Vector3(180,0,0);
+				Player.LeftWeapon.MainMesh.RotationPoint = Vector3.Zero;
+				Player.LeftWeapon.MainMesh.LocalRotation = Vector3.Zero;
+				Player.LeftWeapon.MainMesh.LocalRotationPoint = Vector3.Zero;
+				Player.LeftWeapon.MainMesh.LocalPosition = Vector3.Zero;
+				Player.LeftWeapon.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
+				Player.LeftWeapon.MainMesh.TargetPosition = Vector3.Zero;
+				Player.LeftWeapon.MainMesh.AnimationPosition = Vector3.Zero;
 			}
 		}
 		

@@ -15,7 +15,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             Type[] weaponTypes = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(WeaponFactory).Namespace).ToArray();
             foreach (var weaponType in weaponTypes)
             {
-                if(weaponType.IsSubclassOf(typeof(Weapon)))
+                if(weaponType.IsSubclassOf(typeof(Weapon)) && !weaponType.IsAbstract)
                     Weapons.Add(weaponType.Name, weaponType);
             }
         }
@@ -30,6 +30,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             var weapon = (Weapon) Activator.CreateInstance(Weapons[Item.EquipmentType], Item.Model);
             weapon.Describer = EffectDescriber.FromItem(Item);
             return weapon;
+        }
+
+        public static Type[] GetTypes()
+        {
+            return Weapons.Values.ToArray();
         }
     }
 }

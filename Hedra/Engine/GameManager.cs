@@ -238,10 +238,10 @@ namespace Hedra.Engine
                         Physics.HeightAtPosition(Player.Physics.TargetPosition),
                         Player.Physics.TargetPosition.Z
                         );
-					Player.Model.LeftWeapon.MainMesh.TargetPosition = Vector3.Zero;
-					Player.Model.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
-					Player.Model.LeftWeapon.MainMesh.LocalRotation = Vector3.Zero;
-					Player.Model.LeftWeapon.MainMesh.LocalPosition = Vector3.Zero;
+					Player.LeftWeapon.MainMesh.TargetPosition = Vector3.Zero;
+					Player.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
+					Player.LeftWeapon.MainMesh.LocalRotation = Vector3.Zero;
+					Player.LeftWeapon.MainMesh.LocalPosition = Vector3.Zero;
 					Player.Model.ApplyFog = true;
 					Player.CanInteract = true;
 				    GameManager.SpawningEffect = true;

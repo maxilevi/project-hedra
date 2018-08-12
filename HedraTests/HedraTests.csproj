@@ -74,7 +74,12 @@
     <Compile Include="Player\PlayerMock.cs" />
     <Compile Include="Player\WeaponAttackTest.cs" />
     <Compile Include="Rendering\AnimatorTest.cs" />
+    <Compile Include="SimpleAnimationProvider.cs" />
+    <Compile Include="SimpleAssetProvider.cs" />
+    <Compile Include="SimpleColladaProvider.cs" />
     <Compile Include="SimpleEventProvider.cs" />
+    <Compile Include="SimpleGLProviderMock.cs" />
+    <Compile Include="SimpleMovementMock.cs" />
     <Compile Include="SimpleTexture2DProviderMock.cs" />
     <Compile Include="SimpleWorldProviderMock.cs" />
     <Compile Include="SimpleMessageDispatcherMock.cs" />

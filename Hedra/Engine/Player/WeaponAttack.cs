@@ -68,7 +68,7 @@ namespace Hedra.Engine.Player
 		    var flags = BindingFlags.Static | BindingFlags.NonPublic;
 		    var fieldInfo1 = this.GetType().GetField($"{Weapon.GetType().Name}1", flags);
 		    var fieldInfo2 = this.GetType().GetField($"{Weapon.GetType().Name}2", flags);
-		    base.TextureId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) Default);
+			base.TextureId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) Default);
 		}
 		
 		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
@@ -86,7 +86,7 @@ namespace Hedra.Engine.Player
 		    if (_type == AttackType.Secondary && _isCharging)
 		    {
 		        var charge = _chargeTime / (BaseChargeTime + ExtraChargeTime);
-                Player.Model.LeftWeapon.Attack2(Player, new AttackOptions
+                Player.LeftWeapon.Attack2(Player, new AttackOptions
 				{
 				    Charge = charge,
 				    DamageModifier = AttackOptions.Default.DamageModifier * charge
@@ -113,7 +113,7 @@ namespace Hedra.Engine.Player
 			if(DisableWeapon) return;
 			if(_continousAttack)
 			{
-                Player.Model.LeftWeapon.Attack1(Player);
+                Player.LeftWeapon.Attack1(Player);
 			}
 	        if (IsCharging)
 	        {

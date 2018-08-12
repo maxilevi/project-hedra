@@ -58,7 +58,7 @@ namespace Hedra.Engine.Player
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;
-			Player.Model.LeftWeapon.InAttackStance = false;
+			Player.LeftWeapon.InAttackStance = false;
 			Player.Model.PlayAnimation(ThrowAnimation);
 			Player.Movement.Orientate();
 		}

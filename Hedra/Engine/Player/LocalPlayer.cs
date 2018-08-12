@@ -438,7 +438,7 @@ namespace Hedra.Engine.Player
 			if(this.IsDead || this.IsEating || this.IsKnocked || this.IsEating || this.IsAttacking || this.IsClimbing) return;
 			this.WasAttacking = false;
 			this.IsAttacking = false;
-			this.Model.LeftWeapon.SlowDown = false;
+			this.LeftWeapon.SlowDown = false;
 			
 			if(Inventory.Food != null){
 				var foodHealth = Inventory.Food.GetAttribute<float>("Saturation");

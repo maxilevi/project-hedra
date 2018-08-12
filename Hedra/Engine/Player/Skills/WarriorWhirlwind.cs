@@ -34,7 +34,7 @@ namespace Hedra.Engine.Player
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
 			base.ManaCost = 85;
 			base.MaxCooldown = 8.5f;
-            _trail = new TrailRenderer( () => LocalPlayer.Instance.Model.LeftWeapon.WeaponTip, Vector4.One);
+            _trail = new TrailRenderer( () => LocalPlayer.Instance.LeftWeapon.WeaponTip, Vector4.One);
 			_whirlwindAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWhirlwind.dae");
             _whirlwindAnimation.Loop = false;
         }
@@ -61,7 +61,7 @@ namespace Hedra.Engine.Player
 	        Player.IsCasting = false;
 	        Casting = false;
 	        Player.IsAttacking = false;
-	        Player.Model.LeftWeapon.LockWeapon = false;
+	        Player.LeftWeapon.LockWeapon = false;
             _trail.Emit = false;
         }
 		

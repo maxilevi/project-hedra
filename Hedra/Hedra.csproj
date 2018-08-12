@@ -257,6 +257,10 @@
     <Compile Include="Engine\Player\IHumanoid.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
     <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />
+    <Compile Include="Engine\Rendering\Animation\AnimationLoader.cs" />
+    <Compile Include="Engine\Rendering\Animation\ColladaParser\ColladaProvider.cs" />
+    <Compile Include="Engine\Rendering\Animation\ColladaParser\IColladaProvider.cs" />
+    <Compile Include="Engine\Rendering\Animation\IAnimationProvider.cs" />
     <Compile Include="Engine\Rendering\GLProvider.cs" />
     <Compile Include="Engine\Rendering\IGLProvider.cs" />
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
@@ -667,7 +671,7 @@
     <Compile Include="Engine\Rendering\Animation\AnimatedModel.cs" />
     <Compile Include="Engine\Rendering\Animation\AnimatedModelShader.cs" />
     <Compile Include="Engine\Rendering\Animation\Animation.cs" />
-    <Compile Include="Engine\Rendering\Animation\AnimationLoader.cs" />
+    <Compile Include="Engine\Rendering\Animation\AnimationProvider.cs" />
     <Compile Include="Engine\Rendering\Animation\AnimationModelLoader.cs" />
     <Compile Include="Engine\Rendering\Animation\Animator.cs" />
     <Compile Include="Engine\Rendering\Animation\ColladaParser\AnimatedModelData.cs" />

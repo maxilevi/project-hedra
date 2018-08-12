@@ -28,7 +28,7 @@ namespace Hedra.Engine.Management
 		public static Vector4 ColorCode2 { get; }
 		public static Vector4 ColorCode3 { get; }
 		public static Vector4[] ColorCodes { get; }
-		public static IAssetProvider Provider { get; }
+		public static IAssetProvider Provider { get; set; }
 
 		static AssetManager()
 		{

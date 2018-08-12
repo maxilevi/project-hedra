@@ -166,6 +166,7 @@ namespace Hedra
 		        GameLoader.EnableGLDebug();
 	        }
 #endif
+	        
 	        Log.WriteLine(GLVersion);
         }
 

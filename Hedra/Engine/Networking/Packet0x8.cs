@@ -24,7 +24,7 @@ namespace Hedra.Engine.Networking
 				Packet.Type = AnimationType.ROLL;
 			}else{
 				if(Human.IsAttacking){
-					//if(Human.Model.LeftWeapon.a)
+					//if(Human.LeftWeapon.a)
 					Packet.Type = AnimationType.ATTACK1;
 				}else{
 					if(Human.IsMoving)

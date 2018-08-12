@@ -38,7 +38,7 @@ namespace Hedra.Engine.Player.Skills
 				Player.IsCasting = false;
 				Casting = false;
 				Player.IsAttacking = false;
-				Player.Model.LeftWeapon.InAttackStance = false;
+				Player.LeftWeapon.InAttackStance = false;
 			};
 		}
 
@@ -49,7 +49,7 @@ namespace Hedra.Engine.Player.Skills
 			Player.IsAttacking = true;
 			Player.Model.PlayAnimation(RoundSlashAnimation);
 			Player.Movement.Orientate();
-			Player.Model.LeftWeapon.InAttackStance = true;
+			Player.LeftWeapon.InAttackStance = true;
 		}
 		
 		public override void Update(){
