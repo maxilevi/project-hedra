@@ -117,7 +117,7 @@ namespace Hedra.Engine.Player
                 {
                     this.ProcessMovement(_player, this.MoveFormula(_player.View.Right) * keysPresses);
                 }
-                /*
+                
 		        if(GameManager.Keyboard[Key.ControlLeft] && _player.Physics.InFrontOfWall)
 		        {
 		            if(_player.Stamina > 5)
@@ -138,7 +138,7 @@ namespace Hedra.Engine.Player
 		        {
 		            if(_player.IsClimbing)
 		                _player.IsClimbing = false;
-		        }*/
+		        }
             }
 
 
