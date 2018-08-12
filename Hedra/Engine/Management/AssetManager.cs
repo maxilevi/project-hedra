@@ -51,7 +51,7 @@ namespace Hedra.Engine.Management
 			Provider.Load();
 		}
 
-		public static void ReloadShaderSources()
+        public static void ReloadShaderSources()
 		{
 			Provider.ReloadShaderSources();
 		}

@@ -55,7 +55,6 @@ namespace Hedra.Engine.Management
 	        ShaderCode = ZipManager.UnZip(File.ReadAllBytes(AppPath + ShaderResource));
         }
 
-#if DEBUG
 	    private void CopyShaders()
 	    {
 	        var compatibleAppPath = AppPath.Replace("/", @"\");
@@ -87,7 +86,7 @@ namespace Hedra.Engine.Management
 	        pProcess.WaitForExit();
 	        pProcess.Dispose();
 	    }
-#endif
+
         private void DecompileAssets()
         {
             if(_filesDecompressed) return;		    
