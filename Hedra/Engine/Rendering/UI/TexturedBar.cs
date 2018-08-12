@@ -56,8 +56,8 @@ namespace Hedra.Engine.Rendering.UI
 			Renderer.Disable(EnableCap.DepthTest);
 			Renderer.Enable(EnableCap.Blend);
 
-		    GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, TextureId);
+		    Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, TextureId);
 			
 			Shader["Scale"] = new Vector2(_barSize * Scale.X, Scale.Y);
 			Shader["Position"] = Position - (!Centered ? new Vector2(Scale.X * (1f - _barSize), 0f) : Vector2.Zero);

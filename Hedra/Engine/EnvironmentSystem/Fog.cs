@@ -27,26 +27,26 @@ namespace Hedra.Engine.EnvironmentSystem
 
         public Fog()
         {
-            _fogSettingsIndex = GL.GetUniformBlockIndex(WorldRenderer.StaticShader.ShaderId, "FogSettings");
-            GL.GetActiveUniformBlock(
+            _fogSettingsIndex = Renderer.GetUniformBlockIndex(WorldRenderer.StaticShader.ShaderId, "FogSettings");
+            Renderer.GetActiveUniformBlock(
                 WorldRenderer.StaticShader.ShaderId,
                 _fogSettingsIndex, ActiveUniformBlockParameter.UniformBlockDataSize,
                 out _fogSettingsSize
                 );
 
             uint id;
-			GL.GenBuffers(1, out id);
+			Renderer.GenBuffers(1, out id);
             UboId = id;
 			
-			GL.BindBuffer(BufferTarget.UniformBuffer, UboId);
-            GL.BufferData(BufferTarget.UniformBuffer, (IntPtr)_fogSettingsSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+			Renderer.BindBuffer(BufferTarget.UniformBuffer, UboId);
+            Renderer.BufferData(BufferTarget.UniformBuffer, (IntPtr)_fogSettingsSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
 
             this.BindBlock(_fogSettingsIndex);
 		}
 		
 		public void BindBlock(int Index){
-			GL.BindBuffer(BufferTarget.UniformBuffer, UboId);
-			GL.BindBufferBase(BufferRangeTarget.UniformBuffer, Index, (int) UboId);
+			Renderer.BindBuffer(BufferTarget.UniformBuffer, UboId);
+			Renderer.BindBufferBase(BufferRangeTarget.UniformBuffer, Index, (int) UboId);
 		}
 		
 		public void UpdateFogSettings(float MinDist, float MaxDist)
@@ -55,8 +55,8 @@ namespace Hedra.Engine.EnvironmentSystem
 		    MaxDistance = MaxDist;
 			var data = new FogData(MinDist, MaxDist, GameSettings.Height * (1 - GameManager.Player.View.Pitch * .25f), SkyManager.Sky.BotColor, SkyManager.Sky.TopColor);
 			FogValues = data;
-			GL.BindBuffer(BufferTarget.UniformBuffer, UboId);
-			GL.BufferSubData(BufferTarget.UniformBuffer, IntPtr.Zero, (IntPtr)_fogSettingsSize, ref data);
+			Renderer.BindBuffer(BufferTarget.UniformBuffer, UboId);
+			Renderer.BufferSubData(BufferTarget.UniformBuffer, IntPtr.Zero, (IntPtr)_fogSettingsSize, ref data);
 			
 		}
 		

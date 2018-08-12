@@ -70,7 +70,7 @@ namespace Hedra.Engine.Rendering
             Shader["Time"] = Time.AccumulatedFrameTime;
 			Shader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
 			Shader["MVP"] = ShadowMvp;
-			GL.CullFace(CullFaceMode.Front);
+			Renderer.CullFace(CullFaceMode.Front);
             Renderer.Enable(EnableCap.CullFace);
 		}
 		
@@ -78,8 +78,8 @@ namespace Hedra.Engine.Rendering
 		{
 		    DrawManager.FrustumObject.SetViewport();
             Shader.Unbind();
-			GL.CullFace(CullFaceMode.Back);
-			GL.BindFramebuffer(FramebufferTarget.Framebuffer, _prevFbo);
+			Renderer.CullFace(CullFaceMode.Back);
+			Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, _prevFbo);
 			Renderer.FBOBound = _prevFbo;
 		}
 		

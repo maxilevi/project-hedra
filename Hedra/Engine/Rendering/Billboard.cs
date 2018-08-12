@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering
         public UIElement Texture { get; set; }
         public bool Enabled {get; set;}		
 		private readonly bool _textBillboard;
-		private readonly Vector2 _originalScale;
+		private Vector2 _originalScale;
 	    private float _life;
 	    private Vector3 _addedPosition;
 
@@ -60,6 +60,7 @@ namespace Hedra.Engine.Rendering
 	    {
 	        var asGuiText = (GUIText) this.Texture;
 	        asGuiText.Text = Text;
+	        _originalScale = asGuiText.Scale;
             DrawManager.UIRenderer.Remove(asGuiText.UIText);
         }
 
@@ -77,7 +78,8 @@ namespace Hedra.Engine.Rendering
 			}
 			_life += Time.DeltaTime;
 			
-			if(LifeTime != 0 && _life >= LifeTime){
+			if(LifeTime != 0 && _life >= LifeTime)
+            {
 				this.Dispose();
 				return;
 			}
@@ -90,10 +92,8 @@ namespace Hedra.Engine.Rendering
 			Vector4 homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
 			Vector3 ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
 			this.Texture.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f);
-            if (!_textBillboard)
-            {
-                this.Texture.Scale = this._originalScale * Size;
-            }
+            var distanceScale = 1;//Mathf.Clamp(1 - ((player.Position - Position).LengthFast-24) / 128f, 0, 1);
+            this.Texture.Scale = this._originalScale * Size * distanceScale;
 
             DrawManager.UIRenderer.Draw(_textBillboard
 		        ? ((GUIText) this.Texture).UIText

@@ -24,7 +24,7 @@ namespace Hedra.Engine.Management
 		protected OcclusionState State;
 		
 		public Occludable(){
-			Executer.ExecuteOnMainThread( () => OcclusionQuery = GL.GenQuery() );
+			Executer.ExecuteOnMainThread( () => OcclusionQuery = Renderer.GenQuery() );
 		}
 		
 		public void DrawQuery(){
@@ -35,12 +35,12 @@ namespace Hedra.Engine.Management
 	        int Available = 0;
 	
 	        if(State == OcclusionState.WAITING)
-	        	GL.GetQueryObject(OcclusionQuery, GetQueryObjectParam.QueryResultAvailable, out Available);
+	        	Renderer.GetQueryObject(OcclusionQuery, GetQueryObjectParam.QueryResultAvailable, out Available);
 	
 	        if(Available != 0)
 	        {
 	          Passed = 0;
-	          GL.GetQueryObject(OcclusionQuery, GetQueryObjectParam.QueryResult, out Passed);
+	          Renderer.GetQueryObject(OcclusionQuery, GetQueryObjectParam.QueryResult, out Passed);
 	          State = (Passed != 0) ? OcclusionState.VISIBLE : OcclusionState.HIDDEN;
 	          Occluded = (Passed == 0);
 	        }
@@ -48,16 +48,16 @@ namespace Hedra.Engine.Management
 			if(State != OcclusionState.WAITING && !GameSettings.LockFrustum)
 			{
 			    State = OcclusionState.WAITING;
-			    GL.BeginQuery(QueryTarget.AnySamplesPassed, OcclusionQuery);
+			    Renderer.BeginQuery(QueryTarget.AnySamplesPassed, OcclusionQuery);
 			    
 			    BasicGeometry.DrawBox(OccluMin, OccluSize);
 				
-			    GL.EndQuery(QueryTarget.AnySamplesPassed);
+			    Renderer.EndQuery(QueryTarget.AnySamplesPassed);
 			}
 		}
 		
 		public void Dispose(){
-			Executer.ExecuteOnMainThread( () => GL.DeleteQuery( OcclusionQuery ) );
+			Executer.ExecuteOnMainThread( () => Renderer.DeleteQuery( OcclusionQuery ) );
 		}
 	}
 }

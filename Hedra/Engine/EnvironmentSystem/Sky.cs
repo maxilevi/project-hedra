@@ -76,7 +76,7 @@ namespace Hedra.Engine.EnvironmentSystem
 		    _sunDome.ColorMultiplier = Vector4.One * SkyManager.LastDayFactor * 2f;
             _sunDome.Draw();
 
-            GL.UseProgram(_previousShader);
+            Renderer.UseProgram(_previousShader);
 			Renderer.ShaderBound = _previousShader;
             Renderer.Enable(EnableCap.DepthTest);
 			Renderer.Enable(EnableCap.CullFace);

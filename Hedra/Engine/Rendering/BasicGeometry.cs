@@ -41,11 +41,11 @@ namespace Hedra.Engine.Rendering
 	            {0.0f, 0.0f, 1.0f},
 	            {0.0f, 0.0f, -1.0f}
 	    };
-	    static int[] indices = new int[8]{0,1,2,3,4,5,6,7};	    
-	    
-		public static void DrawBox(Vector3 Min, Vector3 Size){
+
+		public static void DrawBox(Vector3 Min, Vector3 Size)
+        {
 	    	Renderer.Disable(EnableCap.CullFace);
-	    	Color color = Color.Transparent;
+	    	Vector4 color = Colors.Transparent;
 	    	float w = Size.X, h = Size.Y, d = Size.Z;
 			v[0,0] = v[1,0] = v[2,0] = v[3,0] = 0;
 	        v[4,0] = v[5,0] = v[6,0] = v[7,0] = w;
@@ -54,26 +54,26 @@ namespace Hedra.Engine.Rendering
 	        v[0,2] = v[3,2] = v[4,2] = v[7,2] = 0;
 	        v[1,2] = v[2,2] = v[5,2] = v[6,2] = d;
 	        int i;
-	        GL.PushMatrix();
-	        //GL.Scale(Size);
-	        GL.Translate(Min);
-	        GL.Begin(PrimitiveType.Quads);
+	        Renderer.PushMatrix();
+	        //Renderer.Scale(Size);
+	        Renderer.Translate(Min);
+	        Renderer.Begin(PrimitiveType.Quads);
     		for (i = 5; i >= 0; i--) {
-	            GL.Color3(color);
-	            GL.Vertex3(ref v[faces[i, 0], 0]);
-	           	GL.Color3(color);
-	            GL.Vertex3(ref v[faces[i, 1], 0]);
-	            GL.Color3(color);
-	            GL.Vertex3(ref v[faces[i, 2], 0]);
-	            GL.Color3(color);
-	            GL.Vertex3(ref v[faces[i, 3], 0]);
+	            Renderer.Color3(color.Xyz);
+	            Renderer.Vertex3(ref v[faces[i, 0], 0]);
+	           	Renderer.Color3(color.Xyz);
+	            Renderer.Vertex3(ref v[faces[i, 1], 0]);
+	            Renderer.Color3(color.Xyz);
+	            Renderer.Vertex3(ref v[faces[i, 2], 0]);
+	            Renderer.Color3(color.Xyz);
+	            Renderer.Vertex3(ref v[faces[i, 3], 0]);
     		}
-	       GL.End();
-	       GL.PopMatrix();
+	       Renderer.End();
+	       Renderer.PopMatrix();
 	       Renderer.Enable(EnableCap.CullFace);
 	    }
 
-	    public static void DrawShapes(CollisionShape[] Shapes, Color DrawColor)
+	    public static void DrawShapes(CollisionShape[] Shapes, Vector4 DrawColor)
 	    {
 	        for (var i = 0; i < Shapes.Length; i++)
 	        {
@@ -81,89 +81,66 @@ namespace Hedra.Engine.Rendering
 	        }
 	    }
 
-	    public static void DrawShape(CollisionShape Shape, Color DrawColor){
+	    public static void DrawShape(CollisionShape Shape, Vector4 DrawColor){
 	    	Renderer.Disable(EnableCap.CullFace);
-	    	GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+	    	Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
-	        GL.PointSize(6f);
+	        Renderer.PointSize(6f);
             if (Shape.Indices.Length > 0)
 	        {
-	            GL.Begin(PrimitiveType.Triangles);
+	            Renderer.Begin(PrimitiveType.Triangles);
 	            for (var j = 0; j < Shape.Indices.Length; j++)
 	            {
-	                GL.Color3(DrawColor);
-	                GL.Vertex3(Shape.Vertices[(int) Shape.Indices[j]]);
+	                Renderer.Color3(DrawColor);
+	                Renderer.Vertex3(Shape.Vertices[(int) Shape.Indices[j]]);
 	            }
 	        }
 	        else
 	        {
-	            GL.Begin(PrimitiveType.Points);
+	            Renderer.Begin(PrimitiveType.Points);
 	            for (var j = 0; j < Shape.Vertices.Length; j++)
 	            {
-	                GL.Color3(DrawColor);
-	                GL.Vertex3(Shape.Vertices[j]);
+	                Renderer.Color3(DrawColor);
+	                Renderer.Vertex3(Shape.Vertices[j]);
 	            }
             }
-	        GL.End();
+	        Renderer.End();
 			
 			Renderer.Enable(EnableCap.CullFace);
-			GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+			Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 	    }
 		
-		public static void DrawPlane(int size, System.Drawing.Color color){
-			GL.PushMatrix();
-			GL.Rotate(270f, new OpenTK.Vector3(1,0,0));
-			GL.Begin(PrimitiveType.Quads);
-				GL.Color3(color);
-				GL.Vertex3( 1*size, 1*size, 0f);
-				GL.Color3(color);
-				GL.Vertex3(-1*size, 1*size, 0f);
-				GL.Color3(color);
-				GL.Vertex3(-1*size, -1f*size, 0f);
-				GL.Color3(color);
-				GL.Vertex3( 1*size, -1f*size, 0f);
-			GL.End();
-			GL.PopMatrix();
+		public static void DrawPlane(int size, Vector4 Color){
+			Renderer.PushMatrix();
+			Renderer.Rotate(270f, new OpenTK.Vector3(1,0,0));
+			Renderer.Begin(PrimitiveType.Quads);
+				Renderer.Color3(Color);
+				Renderer.Vertex3(new Vector3(1 * size, 1 * size, 0f));
+				Renderer.Color3(Color);
+				Renderer.Vertex3(new Vector3(-1 * size, 1 * size, 0f));
+				Renderer.Color3(Color);
+				Renderer.Vertex3(new Vector3(-1 * size, -1f * size, 0f));
+				Renderer.Color3(Color);
+				Renderer.Vertex3(new Vector3(1 * size, -1f * size, 0f));
+			Renderer.End();
+			Renderer.PopMatrix();
 		}
-	    public static void DrawPlaneWithTexture(int size, uint TexID){
-			GL.PushMatrix();
-			
-			GL.Rotate(270f, new OpenTK.Vector3(1,0,0));
-			Renderer.Enable(EnableCap.Texture2D);
-			GL.Begin(PrimitiveType.Quads);
-			GL.BindTexture(TextureTarget.Texture2D, TexID);
 
-			GL.TexCoord2(1,1);
-			GL.Vertex2( 10, 10);
-			GL.TexCoord2(0,1);
-			GL.Vertex2(0, 10);
-			GL.TexCoord2(0,0);
-			GL.Vertex2(0, 0);
-			GL.TexCoord2(1,0);
-			GL.Vertex2( 10, 0);
-	
-			GL.End();
-			Renderer.Disable(EnableCap.Texture2D);
-			Renderer.Enable(EnableCap.CullFace);
-			
-			GL.PopMatrix();
-		}
-	    
 	    public static void DrawPoint(Vector3 Point){
-	    	GL.Begin(PrimitiveType.Points);
+	    	Renderer.Begin(PrimitiveType.Points);
 	    	
-	    	GL.Vertex3(Point);
+	    	Renderer.Vertex3(Point);
 	    
-	    	GL.End();
+	    	Renderer.End();
 	    }
 	    
 	    public static void DrawLine(Vector3 Point1, Vector3 Point2){
-	    	GL.Begin(PrimitiveType.Lines);
+	    	Renderer.Begin(PrimitiveType.Lines);
 	    	
-	    	GL.Vertex3(Point1);
-	    	GL.Vertex3(Point2);
+	    	Renderer.Vertex3(Point1);
+	    	Renderer.Vertex3(Point2);
 	    	
-	    	GL.End();
+	    	Renderer.End();
 	    }
 	}
 }

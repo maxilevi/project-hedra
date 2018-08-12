@@ -114,7 +114,7 @@ namespace Hedra
 
             GameManager.Load();
 			Log.WriteLine("Scene loading was Successful.");
-			Log.WriteLine("Supported GLSL version is : "+GL.GetString(StringName.ShadingLanguageVersion));
+			Log.WriteLine("Supported GLSL version is : "+Renderer.GetString(StringName.ShadingLanguageVersion));
 
 			_debugPanel = new Panel();
 			
@@ -140,11 +140,11 @@ namespace Hedra
             _debugPanel.AddElement(_geomPoolMemory);
 			_debugPanel.Disable();
 			
-			GL.BlendEquation(BlendEquationMode.FuncAdd);
-		    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			Renderer.BlendEquation(BlendEquationMode.FuncAdd);
+		    Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Renderer.Enable(EnableCap.Texture2D);
 	        
-	        var GLVersion = GL.GetString(StringName.Version);
+	        var GLVersion = Renderer.GetString(StringName.Version);
             var ShadingOpenGLVersion = this.GetShadingVersion(GLVersion);
 
 			if( ShadingOpenGLVersion < 3.1f)
@@ -244,7 +244,7 @@ namespace Hedra
 			    {
 			        _passedTime = 0;
 			        Graphics2D.Textures.Remove(_geomPoolMemory.TextureElement.TextureId);
-                    GL.DeleteTexture(_geomPoolMemory.TextureElement.TextureId);
+                    Renderer.DeleteTexture(_geomPoolMemory.TextureElement.TextureId);
 			        _geomPoolMemory.TextureElement.TextureId = Graphics2D.LoadTexture(WorldRenderer.StaticBuffer.Indices.Draw());
 			    }
 			}
@@ -258,7 +258,7 @@ namespace Hedra
            
 			base.OnRenderFrame(e);
 
-			GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
+			Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
 
 
 		    if (!this._finishedLoading)
@@ -288,73 +288,73 @@ namespace Hedra
 		                            z * Chunk.BlockSize + UnderChunk.OffsetZ), z * Chunk.BlockSize + UnderChunk.OffsetZ);
 		                    Vector3 Normal = Physics.NormalAtPosition(BasePosition);
 
-		                    GL.Begin(PrimitiveType.Lines);
-		                    GL.Color3(Color.Yellow);
-		                    GL.Vertex3(BasePosition);
-		                    GL.Color3(Color.Yellow);
-		                    GL.Vertex3(BasePosition + Normal * 2);
-		                    GL.End();
+		                    Renderer.Begin(PrimitiveType.Lines);
+		                    Renderer.Color3(Colors.Yellow);
+		                    Renderer.Vertex3(BasePosition);
+		                    Renderer.Color3(Colors.Yellow);
+		                    Renderer.Vertex3(BasePosition + Normal * 2);
+		                    Renderer.End();
 		                }
 		            }
 		        }
 		        if (false)
 		        {
 
-		            GL.Begin(PrimitiveType.Lines);
-		            GL.Color3(Color.Blue);
-		            GL.Vertex3(Player.Position + Vector3.UnitZ * 2f);
-		            GL.Color3(Color.Blue);
-		            GL.Vertex3(Player.Position + Vector3.UnitZ * 4f);
-		            GL.End();
+		            Renderer.Begin(PrimitiveType.Lines);
+		            Renderer.Color3(Colors.Blue);
+		            Renderer.Vertex3(Player.Position + Vector3.UnitZ * 2f);
+		            Renderer.Color3(Colors.Blue);
+		            Renderer.Vertex3(Player.Position + Vector3.UnitZ * 4f);
+		            Renderer.End();
 
-		            GL.Begin(PrimitiveType.Lines);
-		            GL.Color3(Color.BlueViolet);
-		            GL.Vertex3(Player.Position - Vector3.UnitZ * 2f);
-		            GL.Color3(Color.BlueViolet);
-		            GL.Vertex3(Player.Position - Vector3.UnitZ * 4f);
-		            GL.End();
+		            Renderer.Begin(PrimitiveType.Lines);
+		            Renderer.Color3(Colors.BlueViolet);
+		            Renderer.Vertex3(Player.Position - Vector3.UnitZ * 2f);
+		            Renderer.Color3(Colors.BlueViolet);
+		            Renderer.Vertex3(Player.Position - Vector3.UnitZ * 4f);
+		            Renderer.End();
 
-		            GL.Begin(PrimitiveType.Lines);
-		            GL.Color3(Color.Red);
-		            GL.Vertex3(Player.Position + Vector3.UnitX * 2f);
-		            GL.Color3(Color.Red);
-		            GL.Vertex3(Player.Position + Vector3.UnitX * 4f);
-		            GL.End();
+		            Renderer.Begin(PrimitiveType.Lines);
+		            Renderer.Color3(Colors.Red);
+		            Renderer.Vertex3(Player.Position + Vector3.UnitX * 2f);
+		            Renderer.Color3(Colors.Red);
+		            Renderer.Vertex3(Player.Position + Vector3.UnitX * 4f);
+		            Renderer.End();
 
-		            GL.Begin(PrimitiveType.Lines);
-		            GL.Color3(Color.OrangeRed);
-		            GL.Vertex3(Player.Position - Vector3.UnitX * 2f);
-		            GL.Color3(Color.OrangeRed);
-		            GL.Vertex3(Player.Position - Vector3.UnitX * 4f);
-		            GL.End();
+		            Renderer.Begin(PrimitiveType.Lines);
+		            Renderer.Color3(Colors.OrangeRed);
+		            Renderer.Vertex3(Player.Position - Vector3.UnitX * 2f);
+		            Renderer.Color3(Colors.OrangeRed);
+		            Renderer.Vertex3(Player.Position - Vector3.UnitX * 4f);
+		            Renderer.End();
 
-		            GL.Begin(PrimitiveType.Lines);
-		            GL.Color3(Color.Yellow);
-		            GL.Vertex3(Player.Position + Player.Orientation * 2f);
-		            GL.Color3(Color.Yellow);
-		            GL.Vertex3(Player.Position + Player.Orientation * 4f);
-		            GL.End();
+		            Renderer.Begin(PrimitiveType.Lines);
+		            Renderer.Color3(Colors.Yellow);
+		            Renderer.Vertex3(Player.Position + Player.Orientation * 2f);
+		            Renderer.Color3(Colors.Yellow);
+		            Renderer.Vertex3(Player.Position + Player.Orientation * 4f);
+		            Renderer.End();
 
 		            World.Entities.ToList().ForEach(delegate(IEntity E)
 		            {
 		                if (E != null)
 		                {
-		                    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+		                    Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 		                    //BasicGeometry.DrawBox(E.Model.BroadphaseBox.Min, E.Model.BroadphaseBox.Max - E.Model.BroadphaseBox.Min);
-		                    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+		                    Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 		                }
 		            });
-		            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+		            Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 		            BasicGeometry.DrawBox(GameManager.Player.Model.BaseBroadphaseBox.Min,
 		                GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
-		            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+		            Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
 		            if (GameManager.Player.Model.LeftWeapon != null &&
 		                GameManager.Player.Model.LeftWeapon is MeleeWeapon melee)
 		            {
-		                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-		                BasicGeometry.DrawShapes(melee.Shapes, Color.White);
-		                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+		                Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+		                BasicGeometry.DrawShapes(melee.Shapes, Colors.White);
+		                Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 		            }
 		            World.Entities.ToList().ForEach(delegate(IEntity E)
 		            {
@@ -362,13 +362,13 @@ namespace Hedra
 		                var colliders = E.Model.Colliders;
 		                for (var i = 0; i < colliders.Length; i++)
 		                {
-		                    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+		                    Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 		                    //BasicGeometry.DrawShape(colliders[i], Color.GreenYellow);
-		                    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+		                    Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 		                }
-		                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-		                BasicGeometry.DrawShape(E.Model.BroadphaseCollider, Color.GreenYellow);
-		                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+		                Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+		                BasicGeometry.DrawShape(E.Model.BroadphaseCollider, Colors.GreenYellow);
+		                Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 		            });
 
 		            //var Player = Game.LPlayer;
@@ -405,8 +405,8 @@ namespace Hedra
 
 		                BasicGeometry.DrawShape(shape,
 		                    (pshape.BroadphaseCenter - shape.BroadphaseCenter).LengthSquared < radiiSum * radiiSum
-		                        ? Color.White
-		                        : Color.Red);
+		                        ? Colors.White
+		                        : Colors.Red);
 		            }
 
 		            for (int i = 0; i < Collisions2.Count; i++)

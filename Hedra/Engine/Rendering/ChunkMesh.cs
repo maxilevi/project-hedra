@@ -180,9 +180,9 @@ namespace Hedra.Engine.Rendering
 		public void Draw(ChunkBufferTypes Type, Vector3 Position, bool Shadows){
 			if(MeshBuffers == null) return;
 
-			if(GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+			if(GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 			DrawMesh(MeshBuffers[(int) Type], Position, Shadows);
-			if(GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+			if(GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
 		}
 		

@@ -92,8 +92,8 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.Blend);
 
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, CurvedBorders ? BarBlueprint : RectangleBlueprint);
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, CurvedBorders ? BarBlueprint : RectangleBlueprint);
 
             Shader["Scale"] =
                 Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) +

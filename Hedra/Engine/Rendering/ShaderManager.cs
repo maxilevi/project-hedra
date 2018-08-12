@@ -50,23 +50,23 @@ namespace Hedra.Engine.Rendering
 		public static void RegisterShader(Shader Entry)
         {
 			Shaders.Add(Entry);
-			Entry.LightColorLocation = GL.GetUniformLocation(Entry.ShaderId, "LightColor");
-		    Entry.LightPositionLocation = GL.GetUniformLocation(Entry.ShaderId, "LightPosition");
+			Entry.LightColorLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightColor");
+		    Entry.LightPositionLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightPosition");
             Entry.PointLightsColorUniform = new int[MaxLights];
 			Entry.PointLightsPositionUniform = new int[MaxLights];
 			Entry.PointLightsRadiusUniform = new int[MaxLights];
 			
 			for(var i = 0; i < Entry.PointLightsColorUniform.Length; i++)
             {
-				Entry.PointLightsColorUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Color");
+				Entry.PointLightsColorUniform[i] = Renderer.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Color");
 			}
 			for(var i = 0; i < Entry.PointLightsPositionUniform.Length; i++)
             {
-				Entry.PointLightsPositionUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Position");
+				Entry.PointLightsPositionUniform[i] = Renderer.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Position");
 			}
 			for(var i = 0; i < Entry.PointLightsRadiusUniform.Length; i++)
             {
-				Entry.PointLightsRadiusUniform[i] = GL.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Radius");
+				Entry.PointLightsRadiusUniform[i] = Renderer.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Radius");
 			}
 		}
 
@@ -124,9 +124,9 @@ namespace Hedra.Engine.Rendering
 
             ShaderManager.Do(S => S.PointLightsColorUniform[lightIndex] != -1, delegate (Shader Shader)
             {
-                GL.Uniform3(Shader.PointLightsColorUniform[lightIndex], Light.Color);
-                GL.Uniform3(Shader.PointLightsPositionUniform[lightIndex], Light.Position);
-                GL.Uniform1(Shader.PointLightsRadiusUniform[lightIndex], Light.Radius);
+                Renderer.Uniform3(Shader.PointLightsColorUniform[lightIndex], Light.Color);
+                Renderer.Uniform3(Shader.PointLightsPositionUniform[lightIndex], Light.Position);
+                Renderer.Uniform1(Shader.PointLightsRadiusUniform[lightIndex], Light.Radius);
             });
 		}
 		

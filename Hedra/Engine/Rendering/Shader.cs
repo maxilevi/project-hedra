@@ -18,7 +18,7 @@ namespace Hedra.Engine.Rendering
 
 	/// <summary>
 	/// A class which combines vertex and fragment shaders and compiles them.
-	/// For how to write a glsl shader https://www.opengl.org/registry/doc/GLSLangSpec.Full.1.20.8.pdf
+	/// For how to write a glsl shader https://www.openRenderer.org/registry/doc/GLSLangSpec.Full.1.20.8.pdf
 	/// </summary>
 	public class Shader : IDisposable
 	{
@@ -114,14 +114,12 @@ namespace Hedra.Engine.Rendering
 
 	    private static void Compile(out int ID, string Source, string Name, ShaderType Type)
 	    {
-	        ID = GL.CreateShader(Type);
-	        GL.ShaderSource(ID, Source);
-	        GL.CompileShader(ID);
-	        int result = -1;
-	        string log = "No log available.";
-	        GL.GetShader(ID, ShaderParameter.CompileStatus, out result);
-	        GL.GetShaderInfoLog(ID, out log);
-	        if (log == string.Empty) log = GL.GetError().ToString();
+	        ID = Renderer.CreateShader(Type);
+	        Renderer.ShaderSource(ID, Source);
+	        Renderer.CompileShader(ID);
+	        string log = Renderer.GetShaderInfoLog(ID);
+            Renderer.GetShader(ID, ShaderParameter.CompileStatus, out int result);       
+	        if (log == string.Empty) log = Renderer.GetError().ToString();
 	        if (result != 1) Log.WriteResult(result == 1, "Shader " + Name + " has compiled" + " | " + log + " | " + result);
 	    }
 
@@ -131,7 +129,7 @@ namespace Hedra.Engine.Rendering
             if (DataG != null) DataG.Source = ShaderParser.ProcessSource(DataG.Source);
             if (DataF != null) DataF.Source = ShaderParser.ProcessSource(DataF.Source);
 
-            if (ShaderId != 0) GL.DeleteProgram(ShaderId);
+            if (ShaderId != 0) Renderer.DeleteProgram(ShaderId);
 	        int shadervid = -1;
 	        int shaderfid = -1;
 	        int shadergid = -1;
@@ -146,21 +144,21 @@ namespace Hedra.Engine.Rendering
         }
 		
 		private void Combine(){
-			ShaderId = GL.CreateProgram();
+			ShaderId = Renderer.CreateProgram();
 
-            if (ShaderVid > 0) GL.AttachShader(ShaderId, ShaderVid);              
-            if (ShaderGid > 0) GL.AttachShader(ShaderId, ShaderGid);
-            if (ShaderFid > 0) GL.AttachShader(ShaderId, ShaderFid);
+            if (ShaderVid > 0) Renderer.AttachShader(ShaderId, ShaderVid);              
+            if (ShaderGid > 0) Renderer.AttachShader(ShaderId, ShaderGid);
+            if (ShaderFid > 0) Renderer.AttachShader(ShaderId, ShaderFid);
 
-            GL.LinkProgram(ShaderId);
+            Renderer.LinkProgram(ShaderId);
 		    
-            if (ShaderVid > 0) GL.DetachShader(ShaderId, ShaderVid);		               
-            if (ShaderGid > 0) GL.DetachShader(ShaderId, ShaderGid);		               
-            if (ShaderFid > 0) GL.DetachShader(ShaderId, ShaderFid);
+            if (ShaderVid > 0) Renderer.DetachShader(ShaderId, ShaderVid);		               
+            if (ShaderGid > 0) Renderer.DetachShader(ShaderId, ShaderGid);		               
+            if (ShaderFid > 0) Renderer.DetachShader(ShaderId, ShaderFid);
 		    
-            if (ShaderVid > 0) GL.DeleteShader(ShaderVid);	                
-            if (ShaderGid > 0) GL.DeleteShader(ShaderGid);		                
-            if (ShaderFid > 0) GL.DeleteShader(ShaderFid);
+            if (ShaderVid > 0) Renderer.DeleteShader(ShaderVid);	                
+            if (ShaderGid > 0) Renderer.DeleteShader(ShaderGid);		                
+            if (ShaderFid > 0) Renderer.DeleteShader(ShaderFid);
 
 		    var parser = new ShaderParser(_vertexShader.Source);
 		    this.AddArrayMappings(parser.ParseUniformArrays(ShaderId));
@@ -181,7 +179,7 @@ namespace Hedra.Engine.Rendering
 	    {
 	        if (!_knownMappings.ContainsKey(Key))
 	        {
-	            _knownMappings.Add(Key, GL.GetUniformLocation(ShaderId, Key) != -1);
+	            _knownMappings.Add(Key, Renderer.GetUniformLocation(ShaderId, Key) != -1);
             }
             return _knownMappings[Key];
 	    }
@@ -201,7 +199,7 @@ namespace Hedra.Engine.Rendering
                     if(value.GetType().IsArray) throw new ArgumentException($"Uniform mapping for array {Key} of type {value.GetType().Name} could not be found.");
 	                if (!_mappings.ContainsKey(Key))
 	                {
-	                    var location = GL.GetUniformLocation(ShaderId, Key);
+	                    var location = Renderer.GetUniformLocation(ShaderId, Key);
 #if DEBUG
                         if(location == -1) throw new ArgumentException($"Uniform {Key} does not exist in shader");
 #endif
@@ -219,79 +217,82 @@ namespace Hedra.Engine.Rendering
 	        switch (Mapping.Type)
 	        {
                 case MappingType.Integer:
-	                GL.Uniform1(Mapping.Location, (int)Mapping.Value);
+	                Renderer.Uniform1(Mapping.Location, (int)Mapping.Value);
                     break;
 	            case MappingType.Double:
-	                GL.Uniform1(Mapping.Location, (double)Mapping.Value);
+	                Renderer.Uniform1(Mapping.Location, (double)Mapping.Value);
 	                break;
 	            case MappingType.Float:
-	                GL.Uniform1(Mapping.Location, (float)Mapping.Value);
+	                Renderer.Uniform1(Mapping.Location, (float)Mapping.Value);
 	                break;
                 case MappingType.Vector2:
-	                GL.Uniform2(Mapping.Location, (Vector2)Mapping.Value);
+	                Renderer.Uniform2(Mapping.Location, (Vector2)Mapping.Value);
                     break;
 	            case MappingType.Vector3:
-	                GL.Uniform3(Mapping.Location, (Vector3)Mapping.Value);
+	                Renderer.Uniform3(Mapping.Location, (Vector3)Mapping.Value);
                     break;
 	            case MappingType.Vector4:
-	                GL.Uniform4(Mapping.Location, (Vector4)Mapping.Value);
+	                Renderer.Uniform4(Mapping.Location, (Vector4)Mapping.Value);
                     break;
 	            case MappingType.Matrix4:
 	                var matrix4 = (Matrix4) Mapping.Value;
-                    GL.UniformMatrix4(Mapping.Location, false, ref matrix4);
+                    Renderer.UniformMatrix4(Mapping.Location, false, ref matrix4);
 	                break;
 	            case MappingType.Matrix4X3:
 	                var matrix4X3 = (Matrix4x3)Mapping.Value;
-	                GL.UniformMatrix4x3(Mapping.Location, false, ref matrix4X3);
+	                Renderer.UniformMatrix4x3(Mapping.Location, false, ref matrix4X3);
                     break;
 	            case MappingType.Matrix4X2:
 	                var matrix4X2 = (Matrix4x2)Mapping.Value;
-	                GL.UniformMatrix4x2(Mapping.Location, false, ref matrix4X2);
+	                Renderer.UniformMatrix4x2(Mapping.Location, false, ref matrix4X2);
                     break;
 	            case MappingType.Matrix3X4:
 	                var matrix3X4 = (Matrix3x4)Mapping.Value;
-	                GL.UniformMatrix3x4(Mapping.Location, false, ref matrix3X4);
+	                Renderer.UniformMatrix3x4(Mapping.Location, false, ref matrix3X4);
                     break;
 	            case MappingType.Matrix3X2:
 	                var matrix3X2 = (Matrix3x2)Mapping.Value;
-	                GL.UniformMatrix3x2(Mapping.Location, false, ref matrix3X2);
+	                Renderer.UniformMatrix3x2(Mapping.Location, false, ref matrix3X2);
                     break;
 	            case MappingType.Matrix2X4:
 	                var matrix2X4 = (Matrix2x4)Mapping.Value;
-	                GL.UniformMatrix2x4(Mapping.Location, false, ref matrix2X4);
+	                Renderer.UniformMatrix2x4(Mapping.Location, false, ref matrix2X4);
                     break;
 	            case MappingType.Matrix3:
 	                var matrix3X3 = (Matrix3)Mapping.Value;
-	                GL.UniformMatrix3(Mapping.Location, false, ref matrix3X3);
+	                Renderer.UniformMatrix3(Mapping.Location, false, ref matrix3X3);
                     break;
 	            case MappingType.Matrix2X3:
 	                var matrix2X3 = (Matrix2x3)Mapping.Value;
-	                GL.UniformMatrix2x3(Mapping.Location, false, ref matrix2X3);
+	                Renderer.UniformMatrix2x3(Mapping.Location, false, ref matrix2X3);
                     break;
 	            case MappingType.Matrix2:
 	                var matrix2 = (Matrix2)Mapping.Value;
-	                GL.UniformMatrix2(Mapping.Location, false, ref matrix2);
+	                Renderer.UniformMatrix2(Mapping.Location, false, ref matrix2);
                     break;
 	            default:
 	                throw new ArgumentOutOfRangeException();
 	        }
 	    }
 
-		public void Bind(){
+		public void Bind()
+        {
 			if(Renderer.ShaderBound == ShaderId) return;
 		    if (ShaderId < 0) throw new GraphicsException($"{this.GetType().Name} is corrupt. {this.ShaderId}");
 
-            GL.UseProgram(ShaderId);
+            Renderer.UseProgram(ShaderId);
 			Renderer.ShaderBound = ShaderId;
         }
 		
-		public void Unbind(){
-			GL.UseProgram(0);
+		public void Unbind()
+        {
+			Renderer.UseProgram(0);
 			Renderer.ShaderBound = 0;
 		}
 		
-		public void Dispose(){
-			GL.DeleteProgram(ShaderId);
+		public void Dispose()
+        {
+			Renderer.DeleteProgram(ShaderId);
 		}
 	}
 }

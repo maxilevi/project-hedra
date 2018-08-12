@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering.Shaders
             this.Mappings = new UniformMapping[Size];
             for (var i = 0; i < Size; i++)
             {
-                var location = GL.GetUniformLocation(ShaderId, Key + "[" + i + "]");
+                var location = Renderer.GetUniformLocation(ShaderId, Key + "[" + i + "]");
                 this.Mappings[i] = new UniformMapping(location, Activator.CreateInstance(Type));
             }
         }

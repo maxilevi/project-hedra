@@ -56,14 +56,14 @@ namespace Hedra.Engine.Rendering.Effects
 		    SecondPass = new FBO(GameSettings.Width, GameSettings.Height);
 
             #region SETUP UNIFORMS & TEXTURES
-            SamplesUniform = GL.GetUniformLocation(FirstPassShader.ShaderId, "samples");
-			PositionSampler = GL.GetUniformLocation(FirstPassShader.ShaderId, "Position1");
-			NormalSampler = GL.GetUniformLocation(FirstPassShader.ShaderId, "Normal2");
-			RandomSampler = GL.GetUniformLocation(FirstPassShader.ShaderId, "Random3");
-			ProjectionUniform = GL.GetUniformLocation(FirstPassShader.ShaderId, "Projection");
-			ColorSampler = GL.GetUniformLocation(ThirdPassShader.ShaderId, "ColorInput");
-			AOSampler = GL.GetUniformLocation(ThirdPassShader.ShaderId, "SSAOInput");
-			Intensity = GL.GetUniformLocation(FirstPassShader.ShaderId, "Intensity");
+            SamplesUniform = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "samples");
+			PositionSampler = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "Position1");
+			NormalSampler = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "Normal2");
+			RandomSampler = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "Random3");
+			ProjectionUniform = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "Projection");
+			ColorSampler = Renderer.GetUniformLocation(ThirdPassShader.ShaderId, "ColorInput");
+			AOSampler = Renderer.GetUniformLocation(ThirdPassShader.ShaderId, "SSAOInput");
+			Intensity = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "Intensity");
 			
 			Random Gen = new Random();
 			Bitmap Bmp = new Bitmap(4,4);
@@ -74,22 +74,22 @@ namespace Hedra.Engine.Rendering.Effects
 					Bmp.SetPixel(x,y, Col);
 				}
 			}
-			RandomTex = GL.GenTexture();
+			RandomTex = Renderer.GenTexture();
 			
-			GL.BindTexture(TextureTarget.Texture2D, RandomTex);
+			Renderer.BindTexture(TextureTarget.Texture2D, RandomTex);
 	
 	        BitmapData bmp_data = Bmp.LockBits(new Rectangle(0,0,Bmp.Width, Bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 	
-	        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
+	        Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
 	            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
 	
 	        Bmp.UnlockBits(bmp_data);
 	        //Bmp.Dispose();
 
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Nearest);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
+			Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest);
+			Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Nearest);
+			Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
+			Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
 			
 			Vector3[] VecSamples = new Vector3[16];
 			for(int i = 0; i < 16; i++){

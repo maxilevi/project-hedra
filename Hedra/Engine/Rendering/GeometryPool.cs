@@ -43,8 +43,8 @@ namespace Hedra.Engine.Rendering
 			this.PoolSize = (int) SizeInBytes;
 			this.TypeSizeInBytes = TypeSizeInBytes;
 			
-			GL.BindBuffer(Buffer.BufferTarget, Buffer.ID);
-			GL.BufferData(Buffer.BufferTarget, TotalMemory, IntPtr.Zero, Buffer.Hint);
+			Renderer.BindBuffer(Buffer.BufferTarget, Buffer.ID);
+			Renderer.BufferData(Buffer.BufferTarget, (IntPtr) TotalMemory, IntPtr.Zero, Buffer.Hint);
 			
 		}
 
@@ -115,20 +115,21 @@ namespace Hedra.Engine.Rendering
 				ObjectMap.Add(Entry);
 			}
 			
-			GL.BindBuffer(Buffer.BufferTarget, Buffer.ID);
-			GL.BufferSubData(Buffer.BufferTarget, (IntPtr) (Entry.Offset), SizeInBytes, Data);
+			Renderer.BindBuffer(Buffer.BufferTarget, Buffer.ID);
+			Renderer.BufferSubData(Buffer.BufferTarget, (IntPtr) Entry.Offset, (IntPtr) SizeInBytes, Data);
 			return Entry;
 		}
 		
-		public MemoryEntry Allocate(T[] Data, int SizeInBytes){
+		public MemoryEntry Allocate(T[] Data, int SizeInBytes)
+		{
 			return Update(Data, SizeInBytes, new MemoryEntry());
 		}
 
 	    public void Discard()
 	    {
             this.ObjectMap.Clear();
-	        GL.BindBuffer(Buffer.BufferTarget, Buffer.ID);
-	        GL.BufferData(Buffer.BufferTarget, TotalMemory, IntPtr.Zero, Buffer.Hint);
+	        Renderer.BindBuffer(Buffer.BufferTarget, Buffer.ID);
+	        Renderer.BufferData(Buffer.BufferTarget, (IntPtr) TotalMemory, IntPtr.Zero, Buffer.Hint);
         }
 
 		public void Dispose(){

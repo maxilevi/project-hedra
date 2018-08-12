@@ -111,11 +111,11 @@ namespace Hedra.Engine.Player.Skills
 			Shader["Bools"] = new Vector2(Level == 0 || Grayscale ? 1 : 0, UseMask ? 1 : 0);
 			Shader["Cooldown"] = this.Cooldown / this.MaxCooldown;
 			
-			GL.ActiveTexture(TextureUnit.Texture0);
-			GL.BindTexture(TextureTarget.Texture2D, UseTextureIdCache ? _textureId : TextureId);
+			Renderer.ActiveTexture(TextureUnit.Texture0);
+			Renderer.BindTexture(TextureTarget.Texture2D, UseTextureIdCache ? _textureId : TextureId);
 			
-			GL.ActiveTexture(TextureUnit.Texture1);
-			GL.BindTexture(TextureTarget.Texture2D, MaskId);
+			Renderer.ActiveTexture(TextureUnit.Texture1);
+			Renderer.BindTexture(TextureTarget.Texture2D, MaskId);
 		    Shader["Mask"] = 1;
 			
 			DrawManager.UIRenderer.SetupQuad();

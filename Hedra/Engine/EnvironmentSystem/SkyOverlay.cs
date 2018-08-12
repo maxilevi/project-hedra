@@ -48,7 +48,7 @@ namespace Hedra.Engine.EnvironmentSystem
             Shader["trans_matrix"] = Matrix4.CreateScale(4) * TransformationMatrix;
             Shader["color_multiplier"] = ColorMultiplier;
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, _vertices.Count);
+            Renderer.DrawArrays(PrimitiveType.Triangles, 0, _vertices.Count);
 
             _map.Unbind();
             _buffer.Unbind();

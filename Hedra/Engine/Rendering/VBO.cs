@@ -65,9 +65,9 @@ namespace Hedra.Engine.Rendering
         /// <param name="Hint">The BufferUsageHint this VBO should use.</param>
         public VBO(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget = BufferTarget.ArrayBuffer, BufferUsageHint Hint = BufferUsageHint.StaticDraw){
         	
-			GL.GenBuffers(1, out ID);
-			GL.BindBuffer(BufferTarget, ID);
-			GL.BufferData(BufferTarget, (IntPtr)(SizeInBytes), Data, Hint);
+			Renderer.GenBuffers(1, out ID);
+			Renderer.BindBuffer(BufferTarget, ID);
+			Renderer.BufferData(BufferTarget, (IntPtr)(SizeInBytes), Data, Hint);
 			
 			this.Size = (Data is Vector4[]) ? 4 : (Data is Vector3[]) ?  3 : (Data is Vector2[]) ? 2 : 1;
 			this.BufferTarget = BufferTarget;
@@ -83,15 +83,15 @@ namespace Hedra.Engine.Rendering
         /// <param name="Data"></param>
         /// <param name="SizeInBytes"></param>
         public void Add(T[] Data, int SizeInBytes){
-        	GL.BindBuffer(BufferTarget, ID);
-        	GL.BufferSubData(BufferTarget, (IntPtr) (this.SizeInBytes), (IntPtr)(SizeInBytes), Data);
+        	Renderer.BindBuffer(BufferTarget, ID);
+        	Renderer.BufferSubData(BufferTarget, (IntPtr) (this.SizeInBytes), (IntPtr)(SizeInBytes), Data);
 			this.Count += Data.Length;
 			this.SizeInBytes += SizeInBytes;
         }
         
         public void Update(T[] Data, int SizeInBytes){
-        	GL.BindBuffer(BufferTarget, ID);
-			GL.BufferData(BufferTarget, (IntPtr)(SizeInBytes), Data, Hint);
+        	Renderer.BindBuffer(BufferTarget, ID);
+			Renderer.BufferData(BufferTarget, (IntPtr)(SizeInBytes), Data, Hint);
 			this.Count = Data.Length;
 			this.SizeInBytes = SizeInBytes;
         }
@@ -102,7 +102,7 @@ namespace Hedra.Engine.Rendering
 		public void Dispose(){
         	if(!Disposed){
         		Disposed = true;
-				Executer.ExecuteOnMainThread( () => GL.DeleteBuffers(1, ref ID) );
+				Executer.ExecuteOnMainThread( () => Renderer.DeleteBuffers(1, ref ID) );
         	}
 		}
 	}

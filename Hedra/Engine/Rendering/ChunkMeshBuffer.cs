@@ -43,8 +43,8 @@ namespace Hedra.Engine.Rendering
 			
 			Data.Bind();
 
-			GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-			//GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+			Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
+			//Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
 			Data.Unbind();
 			
@@ -56,7 +56,7 @@ namespace Hedra.Engine.Rendering
 		
 		public virtual void Bind(){
 			WorldRenderer.StaticShader.Bind();
-			//GL.Uniform3(WorldRenderer.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
+			//Renderer.Uniform3(WorldRenderer.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
 		}
 		
 		public virtual void UnBind(){

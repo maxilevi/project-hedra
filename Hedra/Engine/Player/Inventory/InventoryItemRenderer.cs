@@ -86,27 +86,27 @@ namespace Hedra.Engine.Player.Inventory
 
             var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 1, 1024f);
             Renderer.MatrixMode(MatrixMode.Projection);
-            GL.LoadMatrix(ref projectionMatrix);
+            Renderer.LoadMatrix(ref projectionMatrix);
 
             var offset = Item.IsWeapon
                 ? Vector3.UnitY * 0.4f - Vector3.UnitX * 0.4f
                 : Vector3.UnitY * 0.25f;
             var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset, offset, Vector3.UnitY);
             Renderer.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref lookAt);
+            Renderer.LoadMatrix(ref lookAt);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
             Mesh.Draw();
 
-            /*GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, ItemsFBO.BufferID);
-			GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, MultisampleItemsFBO.BufferID);
-			GL.BlitFramebuffer(0,GameSettings.Height,GameSettings.Width,0, 0,GameSettings.Height,GameSettings.Width,0
+            /*Renderer.BindFramebuffer(FramebufferTarget.DrawFramebuffer, ItemsFBO.BufferID);
+			Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, MultisampleItemsFBO.BufferID);
+			Renderer.BlitFramebuffer(0,GameSettings.Height,GameSettings.Width,0, 0,GameSettings.Height,GameSettings.Width,0
 			                   , ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
 			
-			GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
-			GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);*/
+			Renderer.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
+			Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);*/
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
             Renderer.PopFBO();
             Renderer.PopShader();

@@ -13,6 +13,7 @@ using System.IO;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine
 {
@@ -33,7 +34,7 @@ namespace Hedra.Engine
 			Directory.CreateDirectory(Output);
 				
 			int[] pixels = new int[GameSettings.Width * GameSettings.Height];
-			GL.ReadPixels(0, 0, GameSettings.Width, GameSettings.Height, PixelFormat.Rgba, PixelType.Byte, pixels);
+			Renderer.ReadPixels(0, 0, GameSettings.Width, GameSettings.Height, PixelFormat.Rgba, PixelType.Byte, pixels);
 			 
 			TaskManager.Asynchronous( delegate{
 			// we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
@@ -61,7 +62,7 @@ namespace Hedra.Engine
 		
 		public static string SaveScreenshot(string Path){
 			int[] pixels = new int[GameSettings.Width * GameSettings.Height];
-			GL.ReadPixels(0, 0, GameSettings.Width, GameSettings.Height, PixelFormat.Rgba, PixelType.Byte, pixels);
+			Renderer.ReadPixels(0, 0, GameSettings.Width, GameSettings.Height, PixelFormat.Rgba, PixelType.Byte, pixels);
 			 
 			// we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
 			for (int i = 0; i < pixels.Length; i++)

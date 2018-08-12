@@ -257,6 +257,8 @@
     <Compile Include="Engine\Player\IHumanoid.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
     <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />
+    <Compile Include="Engine\Rendering\GLProvider.cs" />
+    <Compile Include="Engine\Rendering\IGLProvider.cs" />
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
     <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />

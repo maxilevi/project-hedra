@@ -170,7 +170,7 @@ namespace Hedra.Engine.Rendering
             Shader.Bind();        
             _data.Bind();
 
-            GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _points.Count);
+            Renderer.DrawArrays(PrimitiveType.TriangleStrip, 0, _points.Count);
 
             _data.Unbind();
             Shader.Unbind();

@@ -15,27 +15,29 @@ namespace Hedra.Engine.Rendering
 	/// </summary>
 	public class UBO<T> where T : struct
 	{
-		public int UboID;
+		public uint UboID;
 		public int Size;
 		
 		public UBO(int Size, int Index)
 		{
-			GL.GenBuffers(1, out UboID);
+			Renderer.GenBuffers(1, out UboID);
 			
-			GL.BindBuffer(BufferTarget.UniformBuffer, UboID);
-			GL.BufferData(BufferTarget.UniformBuffer, (IntPtr) (Size), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+			Renderer.BindBuffer(BufferTarget.UniformBuffer, UboID);
+			Renderer.BufferData(BufferTarget.UniformBuffer, (IntPtr) Size, IntPtr.Zero, BufferUsageHint.DynamicDraw);
 			
 			BindBlock(Index);
 		}
 		
-		public void BindBlock(int Index){
-			GL.BindBuffer(BufferTarget.UniformBuffer, UboID);
-			GL.BindBufferBase(BufferRangeTarget.UniformBuffer, Index, (int) UboID);
+		public void BindBlock(int Index)
+        {
+			Renderer.BindBuffer(BufferTarget.UniformBuffer, UboID);
+			Renderer.BindBufferBase(BufferRangeTarget.UniformBuffer, Index, (int) UboID);
 		}
 		
-		public void Update(T Data){
-			GL.BindBuffer(BufferTarget.UniformBuffer, UboID);
-			GL.BufferSubData(BufferTarget.UniformBuffer, IntPtr.Zero, (IntPtr) (Size), ref Data);
+		public void Update(T Data)
+        {
+			Renderer.BindBuffer(BufferTarget.UniformBuffer, UboID);
+			Renderer.BufferSubData(BufferTarget.UniformBuffer, IntPtr.Zero, (IntPtr) Size, ref Data);
 		}
 	}
 }

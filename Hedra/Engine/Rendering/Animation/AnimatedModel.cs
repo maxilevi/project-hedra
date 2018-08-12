@@ -156,8 +156,8 @@ namespace Hedra.Engine.Rendering.Animation
 
             if (GameSettings.Shadows)
             {
-                GL.ActiveTexture(TextureUnit.Texture0);
-                GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
+                Renderer.ActiveTexture(TextureUnit.Texture0);
+                Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
                 _shader["ShadowTex"] = 0;
                 if (_shader != DeathShader || !CompatibilityManager.SupportsGeometryShaders)
                 {
@@ -172,8 +172,8 @@ namespace Hedra.Engine.Rendering.Animation
 
             Data.Bind();
 
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indices.ID);
-            GL.DrawElements(PrimitiveType.Triangles, _indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, _indices.ID);
+            Renderer.DrawElements(PrimitiveType.Triangles, _indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
             Data.Unbind();
 

@@ -48,15 +48,15 @@ namespace Hedra.Engine
         {
             var builder = new StringBuilder();
             builder.AppendLine($"OpenGL Specifications: {Environment.NewLine}");
-            Action<GetPName> write = E => builder.AppendLine($"{E.ToString()} = {GL.GetInteger(E)}");
+            Action<GetPName> write = E => builder.AppendLine($"{E.ToString()} = {Renderer.GetInteger(E)}");
 
             write(GetPName.MaxGeometryInputComponents);
             write(GetPName.MaxGeometryOutputVertices);
             write(GetPName.MaxGeometryOutputComponents);
             write(GetPName.MaxGeometryTotalOutputComponents);
 
-            builder.AppendLine($"Extensions = {GL.GetString(StringName.Extensions)}");
-            File.WriteAllText($"{AppPath}/opengl.txt", builder.ToString());
+            builder.AppendLine($"Extensions = {Renderer.GetString(StringName.Extensions)}");
+            File.WriteAllText($"{AppPath}/openRenderer.txt", builder.ToString());
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace Hedra.Engine
         /// </summary>
         private static void DefineMultiDrawElementsMethod()
         {
-            var videoCardString = GL.GetString(StringName.Renderer);
-            var manufacturerString = GL.GetString(StringName.Vendor);
+            var videoCardString = Renderer.GetString(StringName.Renderer);
+            var manufacturerString = Renderer.GetString(StringName.Vendor);
             var useCompatibilityFunction = true;//videoCardString.Contains("AMD Radeon HD") || manufacturerString.Contains("Intel");
             if(useCompatibilityFunction) Log.WriteLine("glMultiDrawElements issue detected. Enabling compatibility mode...");
 
@@ -76,7 +76,7 @@ namespace Hedra.Engine
                 {
                     for (int i = 0; i < Counts.Length; i++)
                     {
-                        GL.DrawElements(PrimitiveType.Triangles, Counts[i], DrawType, Offsets[i]);
+                        Renderer.DrawElements(PrimitiveType.Triangles, Counts[i], DrawType, Offsets[i]);
                     }
                 };
             }
@@ -85,7 +85,7 @@ namespace Hedra.Engine
                 MultiDrawElementsMethod =
                     delegate(PrimitiveType Type, int[] Counts, DrawElementsType DrawType, IntPtr[] Offsets, int Length)
                     {
-                        GL.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets,
+                        Renderer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets,
                             Counts.Length);
                     };
             }

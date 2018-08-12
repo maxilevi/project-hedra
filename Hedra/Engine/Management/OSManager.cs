@@ -35,9 +35,9 @@ namespace Hedra.Engine.Management
 	        }
 
 	        RamCount = 8;
-	        GraphicsCard = GL.GetString(StringName.Vendor) + Environment.NewLine
-             + GL.GetString(StringName.Renderer) + Environment.NewLine 
-             + GL.GetString(StringName.Version);
+	        GraphicsCard = Renderer.GetString(StringName.Vendor) + Environment.NewLine
+             + Renderer.GetString(StringName.Renderer) + Environment.NewLine 
+             + Renderer.GetString(StringName.Version);
 	        CPUArchitecture = Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER");
         }
 

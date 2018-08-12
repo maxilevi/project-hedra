@@ -79,27 +79,27 @@ namespace Hedra.Engine.Rendering
             if (Outline)
             {
                 /*GraphicsLayer.Enable(EnableCap.StencilTest);
-                GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
-                GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
-                GL.StencilMask(0xFF);*/
+                Renderer.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
+                Renderer.StencilFunc(StencilFunction.Always, 1, 0xFF);
+                Renderer.StencilMask(0xFF);*/
             }
 
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-            GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
+            Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
             if (Outline)
             {
                 Renderer.Enable(EnableCap.Blend);
-                /*GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
-                GL.StencilMask(0x00);*/
+                /*Renderer.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
+                Renderer.StencilMask(0x00);*/
                 Renderer.Disable(EnableCap.DepthTest);
                 //GraphicsLayer.Disable(EnableCap.CullFace);
                 Shader["Outline"] = this.Outline ? 1 : 0;
                 Shader["OutlineColor"] = this.OutlineColor;
                 Shader["Time"] = Time.IndependantDeltaTime;
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-                GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-                //GL.StencilMask(0xFF);
+                Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
+                Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+                //Renderer.StencilMask(0xFF);
                 Renderer.Enable(EnableCap.DepthTest);
                 //GraphicsLayer.Enable(EnableCap.CullFace);
                 //GraphicsLayer.Disable(EnableCap.StencilTest);
@@ -214,15 +214,15 @@ namespace Hedra.Engine.Rendering
 			Shader["BakedPosition"] = Vector3.Zero;
 			Shader["PlayerPosition"] = GameManager.Player.Position;
 
-		    GL.ActiveTexture(TextureUnit.Texture1);
-		    GL.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
+		    Renderer.ActiveTexture(TextureUnit.Texture1);
+		    Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
             Shader["noiseTexture"] = 1;           
             Shader["useNoiseTexture"] = UseNoiseTexture ? 1f : 0f;
             
             if (GameSettings.Shadows){
 				Shader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
-				GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
+				Renderer.ActiveTexture(TextureUnit.Texture0);
+				Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
 				Shader["ShadowTex"] = 0;
                 Shader["ShadowDistance"] = ShadowRenderer.ShadowDistance;
 			}

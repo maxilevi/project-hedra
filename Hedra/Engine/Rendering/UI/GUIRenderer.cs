@@ -73,7 +73,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void DrawQuad()
         {
-            GL.DrawArrays(PrimitiveType.Triangles, 0, _vbo.Count);
+            Renderer.DrawArrays(PrimitiveType.Triangles, 0, _vbo.Count);
         }
 
         public void RescaleTextures(float NewWidth, float NewHeight)
@@ -177,18 +177,18 @@ namespace Hedra.Engine.Rendering.UI
         {
             if(Texture.Scale == Vector2.Zero || !Texture.Enabled) return;
 
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, Texture.Id);
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, Texture.Id);
             Shader["Texture"] = 0;
 
-            GL.ActiveTexture(TextureUnit.Texture1);
-            GL.BindTexture(TextureTarget.Texture2D, Texture.BackGroundId);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, Texture.BackGroundId);
             Shader["Background"] = 1;
 
             if (Texture.UseMask)
             {
-                GL.ActiveTexture(TextureUnit.Texture2);
-                GL.BindTexture(TextureTarget.Texture2D, Texture.MaskId);
+                Renderer.ActiveTexture(TextureUnit.Texture2);
+                Renderer.BindTexture(TextureTarget.Texture2D, Texture.MaskId);
                 Shader["Mask"] = 2;
             }
 

@@ -26,7 +26,7 @@ namespace Hedra.Engine.Rendering
 		public override void Draw(Vector3 Position, bool Shadows){
 			if(Shadows) return;
 			throw new Exception("Obsolete");
-			//GL.Uniform1(WorldRenderer.WaterShader.WaveMovementUniform, WaveMovement);
+			//Renderer.Uniform1(WorldRenderer.WaterShader.WaveMovementUniform, WaveMovement);
 			
 			WaveMovement += (float) Time.DeltaTime * Mathf.Radian * 0.2f;
 			if(WaveMovement >= 5)
@@ -34,8 +34,8 @@ namespace Hedra.Engine.Rendering
 			
 			Data.Bind();
 
-			//GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-			GL.DrawArrays(PrimitiveType.Triangles, 0, Vertices.Count);//////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+			//Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
+			Renderer.DrawArrays(PrimitiveType.Triangles, 0, Vertices.Count);//////Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
 			Data.Unbind();
 		}
@@ -43,13 +43,13 @@ namespace Hedra.Engine.Rendering
 		public override void Bind(){
 		    throw new Exception("Obsolete");
             Renderer.Enable(EnableCap.Blend);
-			GL.BlendEquation(BlendEquationMode.FuncAdd);
-           //	GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+			Renderer.BlendEquation(BlendEquationMode.FuncAdd);
+           //	Renderer.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
            	Renderer.Enable(EnableCap.Texture2D);
            	
            	//BlockShaders.WaterShader.Bind();
-           	//GL.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, GameManager.Player.Position);
-           	//GL.Uniform3(BlockShaders.WaterShader.LightColorLocation, ShaderManager.LightColor);
+           	//Renderer.Uniform3(BlockShaders.WaterShader.PlayerPositionUniform, GameManager.Player.Position);
+           	//Renderer.Uniform3(BlockShaders.WaterShader.LightColorLocation, ShaderManager.LightColor);
 
             //Removed the smooth borders because it causes issues on the map rendering.
 

@@ -148,12 +148,12 @@ namespace Hedra.Engine.Generation
 
         public void Draw(ChunkBufferTypes Type)
         {
-            if (GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             WorldRenderer.PrepareRendering();
             WorldRenderer.Render(DrawingChunks, Type);
 
-            if (GameSettings.Wireframe) GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
         }
 
         public void Update()

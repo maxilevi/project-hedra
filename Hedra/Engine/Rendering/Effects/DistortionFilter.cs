@@ -30,8 +30,8 @@ namespace Hedra.Engine.Rendering.Effects
         }
 
 		public DistortionFilter() : base(){
-			_duDvMapUniform = GL.GetUniformLocation(WaterEffect.ShaderId, "DuDvMap");
-			_timeUniform = GL.GetUniformLocation(WaterEffect.ShaderId, "Time");
+			_duDvMapUniform = Renderer.GetUniformLocation(WaterEffect.ShaderId, "DuDvMap");
+			_timeUniform = Renderer.GetUniformLocation(WaterEffect.ShaderId, "Time");
 		}
 		
 		public override void Resize(){}
@@ -40,11 +40,11 @@ namespace Hedra.Engine.Rendering.Effects
 			Dst.Bind();
 			
 			WaterEffect.Bind();
-			//GL.Uniform1(TimeUniform, WaterMeshBuffer.WaveMovement);
+			//Renderer.Uniform1(TimeUniform, WaterMeshBuffer.WaveMovement);
 			
-			GL.ActiveTexture(TextureUnit.Texture1);
-			GL.BindTexture(TextureTarget.Texture2D, DuDvMapId);
-			//GL.Uniform1(DuDvMapUniform, 1);
+			Renderer.ActiveTexture(TextureUnit.Texture1);
+			Renderer.BindTexture(TextureTarget.Texture2D, DuDvMapId);
+			//Renderer.Uniform1(DuDvMapUniform, 1);
 			
 			DrawQuad(WaterEffect, Src.TextureID[0]);
 			WaterEffect.Unbind();

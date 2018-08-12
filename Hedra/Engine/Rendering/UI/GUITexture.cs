@@ -57,7 +57,7 @@ namespace Hedra.Engine.Rendering.UI
 	    {
 	        if (Array.IndexOf(GUIRenderer.InmortalTextures, DisposeId) != -1) return DisposeId;
 	        Graphics2D.Textures.Remove(DisposeId);
-	        GL.DeleteTextures(1, ref DisposeId);
+	        Renderer.DeleteTexture(DisposeId);
 	        return DisposeId;
 	    }
 

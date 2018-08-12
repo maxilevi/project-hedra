@@ -80,8 +80,8 @@ namespace Hedra.Engine.Player.MapSystem
                 Renderer.PushFBO();
                 Renderer.PushShader();
                 _mapFbo.Bind();
-                GL.ClearColor(SkyManager.FogManager.FogValues.U_BotColor.ToColor());
-                GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+                Renderer.ClearColor(SkyManager.FogManager.FogValues.U_BotColor);
+                Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
                 var oldDistance = _player.View.Distance;
                 var oldPitch = _player.View.Pitch;
@@ -118,7 +118,7 @@ namespace Hedra.Engine.Player.MapSystem
 
                 Renderer.Disable(EnableCap.DepthTest);
                 Renderer.Enable(EnableCap.Blend);
-                GL.ClearColor(Vector4.Zero.ToColor());
+                Renderer.ClearColor(Vector4.Zero);
                 Renderer.PopFBO();
                 Renderer.PopShader();
                 Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);
@@ -165,12 +165,12 @@ namespace Hedra.Engine.Player.MapSystem
 
             DrawManager.UIRenderer.SetupQuad();
 
-            GL.ActiveTexture(TextureUnit.Texture1);
-            GL.BindTexture(TextureTarget.Texture2D, _mapFbo.TextureID[0]);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, _mapFbo.TextureID[0]);
             Shader["Fill"] = 1;
 
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, _miniMap.TextureElement.TextureId);
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, _miniMap.TextureElement.TextureId);
             Shader["Texture"] = 0;
 
             Shader["Scale"] = _miniMap.TextureElement.Scale;

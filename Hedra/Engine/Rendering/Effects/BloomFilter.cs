@@ -42,7 +42,7 @@ namespace Hedra.Engine.Rendering.Effects
 			HBloomFbo.Bind();
 			Bloom.Bind();
 		    Bloom["Modifier"] = GameSettings.BloomModifier;
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            Renderer.Clear(ClearBufferMask.ColorBufferBit);
 		    this.DrawQuad(Bloom, Src.TextureID[0]);
 			
 			Bloom.Unbind();
@@ -51,7 +51,7 @@ namespace Hedra.Engine.Rendering.Effects
 			VBloomFbo.Bind();
 			HBlurShader.Bind();
 
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            Renderer.Clear(ClearBufferMask.ColorBufferBit);
 		    this.DrawQuad(HBlurShader, HBloomFbo.TextureID[0]);
 			
 			HBlurShader.Unbind();
@@ -60,7 +60,7 @@ namespace Hedra.Engine.Rendering.Effects
 			HBloomFbo.Bind();
 			VBlurShader.Bind();
 
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            Renderer.Clear(ClearBufferMask.ColorBufferBit);
             this.DrawQuad(VBlurShader, VBloomFbo.TextureID[0]);
 			
 			VBlurShader.Unbind();
@@ -68,7 +68,7 @@ namespace Hedra.Engine.Rendering.Effects
 			
 			Dst.Bind();
 			MainFBO.Shader.Bind();
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            Renderer.Clear(ClearBufferMask.ColorBufferBit);
 		    this.DrawQuad(MainFBO.Shader, HBloomFbo.TextureID[0], 0);
 			MainFBO.Shader.Unbind();
 			Dst.UnBind();

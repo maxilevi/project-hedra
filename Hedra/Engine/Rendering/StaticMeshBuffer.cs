@@ -32,11 +32,11 @@ namespace Hedra.Engine.Rendering
 					Renderer.EnableVertexAttribArray(1);
 	
 				if(ShortBuffer){
-					GL.BindBuffer(BufferTarget.ElementArrayBuffer, UshortIndices.ID);
-					////GL.DrawElements(PrimitiveType.Triangles, UshortIndices.Count, DrawType, IntPtr.Zero);
+					Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, UshortIndices.ID);
+					////Renderer.DrawElements(PrimitiveType.Triangles, UshortIndices.Count, DrawType, IntPtr.Zero);
 				}else{
-					GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-					////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
+					Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
+					////Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
 				}
 				Renderer.DisableVertexAttribArray(0);
 				
@@ -51,11 +51,11 @@ namespace Hedra.Engine.Rendering
 			Data.Bind();
 
 			if(ShortBuffer){
-				GL.BindBuffer(BufferTarget.ElementArrayBuffer, UshortIndices.ID);
-				////GL.DrawElements(PrimitiveType.Triangles, UshortIndices.Count, DrawType, IntPtr.Zero);
+				Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, UshortIndices.ID);
+				////Renderer.DrawElements(PrimitiveType.Triangles, UshortIndices.Count, DrawType, IntPtr.Zero);
 			}else{
-				GL.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
-				////GL.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
+				Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
+				////Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawType, IntPtr.Zero);
 			}
 			
 			Data.Unbind();
@@ -78,21 +78,21 @@ namespace Hedra.Engine.Rendering
 		public override void Bind(){
 			Renderer.Disable(EnableCap.Blend);
 			/*BlockShaders.StaticShader.Bind();
-			GL.Uniform3(BlockShaders.StaticShader.LightColorLocation, ShaderManager.LightColor);
-			GL.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
-		    GL.Uniform1(BlockShaders.StaticShader.TimeUniform,
+			Renderer.Uniform3(BlockShaders.StaticShader.LightColorLocation, ShaderManager.LightColor);
+			Renderer.Uniform3(BlockShaders.StaticShader.PlayerPositionUniform, GameManager.Player.Position);
+		    Renderer.Uniform1(BlockShaders.StaticShader.TimeUniform,
 		        !GameManager.InStartMenu ? Time.CurrentFrame : Time.UnPausedCurrentFrame);
-		    GL.Uniform1(BlockShaders.StaticShader.FancyUniform, (GameSettings.Fancy) ? 1.0f : 0.0f);
-			GL.Uniform1(BlockShaders.StaticShader.SnowUniform, SkyManager.Snowing ? 1.0f : 0.0f);
+		    Renderer.Uniform1(BlockShaders.StaticShader.FancyUniform, (GameSettings.Fancy) ? 1.0f : 0.0f);
+			Renderer.Uniform1(BlockShaders.StaticShader.SnowUniform, SkyManager.Snowing ? 1.0f : 0.0f);
 
 			BlockShaders.StaticShader.AreaPositionsUniform.LoadVectorArray( World.Highlighter.AreaPositions);
 			BlockShaders.StaticShader.AreaColorsUniform.LoadVectorArray( World.Highlighter.AreaColors);
 			
 			if(GameSettings.Shadows){
-				GL.UniformMatrix4(BlockShaders.StaticShader.ShadowMVPUniform, false, ref ShadowRenderer.ShadowMvp);
-				GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
-				GL.Uniform1(BlockShaders.StaticShader.ShadowTexUniform, 0);
+				Renderer.UniformMatrix4(BlockShaders.StaticShader.ShadowMVPUniform, false, ref ShadowRenderer.ShadowMvp);
+				Renderer.ActiveTexture(TextureUnit.Texture0);
+				Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
+				Renderer.Uniform1(BlockShaders.StaticShader.ShadowTexUniform, 0);
 			}*/
 			
 		}

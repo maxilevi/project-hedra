@@ -131,7 +131,7 @@ namespace Hedra.Engine.Rendering.Particles
 				Shader.Bind();
 				Shader["PlayerPosition"] = GameManager.Player.Position;
 				
-				GL.BindVertexArray(VAOID);
+				Renderer.BindVertexArray(VAOID);
 
 				Renderer.EnableVertexAttribArray(0);
 				Renderer.EnableVertexAttribArray(1);
@@ -141,8 +141,8 @@ namespace Hedra.Engine.Rendering.Particles
 				Renderer.EnableVertexAttribArray(5);
 				Renderer.EnableVertexAttribArray(6);
 				
-				GL.BindBuffer(BufferTarget.ElementArrayBuffer, ParticleCreator.IndicesVBO.ID);
-				GL.DrawElementsInstanced(PrimitiveType.Triangles, ParticleCreator.IndicesVBO.Count, DrawElementsType.UnsignedShort, IntPtr.Zero, Particles.Count);
+				Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, ParticleCreator.IndicesVBO.ID);
+				Renderer.DrawElementsInstanced(PrimitiveType.Triangles, ParticleCreator.IndicesVBO.Count, DrawElementsType.UnsignedShort, IntPtr.Zero, Particles.Count);
 				
 				Renderer.DisableVertexAttribArray(0);
 				Renderer.DisableVertexAttribArray(1);
@@ -151,7 +151,7 @@ namespace Hedra.Engine.Rendering.Particles
 				Renderer.DisableVertexAttribArray(4);
 				Renderer.DisableVertexAttribArray(5);
 				Renderer.DisableVertexAttribArray(6);
-				GL.BindVertexArray(0);
+				Renderer.BindVertexArray(0);
 				
 				Shader.Unbind();
 				//GraphicsLayer.Enable(EnableCap.CullFace);
@@ -162,37 +162,37 @@ namespace Hedra.Engine.Rendering.Particles
 		private void CreateVAO()
 		{
 		    uint vaoid;
-			GL.GenVertexArrays(1, out vaoid);
+			Renderer.GenVertexArrays(1, out vaoid);
 		    VAOID = vaoid;
-			GL.BindVertexArray(VAOID);
+			Renderer.BindVertexArray(VAOID);
 			
-			GL.BindBuffer(ParticleCreator.VerticesVBO.BufferTarget, ParticleCreator.VerticesVBO.ID);
-			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
+			Renderer.BindBuffer(ParticleCreator.VerticesVBO.BufferTarget, ParticleCreator.VerticesVBO.ID);
+			Renderer.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
 			
-			GL.BindBuffer(ParticleCreator.NormalsVBO.BufferTarget, ParticleCreator.NormalsVBO.ID);
-			GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
+			Renderer.BindBuffer(ParticleCreator.NormalsVBO.BufferTarget, ParticleCreator.NormalsVBO.ID);
+			Renderer.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
 
 		    uint bufferid;
-			GL.GenBuffers(1, out bufferid);
+			Renderer.GenBuffers(1, out bufferid);
 		    BufferID = bufferid;
-			GL.BindBuffer(BufferTarget.ArrayBuffer, BufferID);
-			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxParticles * Particle3D.SizeInBytes), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+			Renderer.BindBuffer(BufferTarget.ArrayBuffer, BufferID);
+			Renderer.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxParticles * Particle3D.SizeInBytes), IntPtr.Zero, BufferUsageHint.DynamicDraw);
 
             //Columns of the TransMatrix
-            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, IntPtr.Zero);
+            Renderer.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, IntPtr.Zero);
 			
-			GL.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes));
-			GL.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*2));
-			GL.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*3));
-			GL.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*4));
+			Renderer.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes));
+			Renderer.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*2));
+			Renderer.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*3));
+			Renderer.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*4));
 			
-			GL.VertexAttribDivisor(2,1);
-			GL.VertexAttribDivisor(3,1);
-			GL.VertexAttribDivisor(4,1);
-			GL.VertexAttribDivisor(5,1);
-			GL.VertexAttribDivisor(6,1);
+			Renderer.VertexAttribDivisor(2,1);
+			Renderer.VertexAttribDivisor(3,1);
+			Renderer.VertexAttribDivisor(4,1);
+			Renderer.VertexAttribDivisor(5,1);
+			Renderer.VertexAttribDivisor(6,1);
 				
-			GL.BindVertexArray(0);
+			Renderer.BindVertexArray(0);
 		}
 		
 		private void UpdateVBO(){
@@ -208,9 +208,9 @@ namespace Hedra.Engine.Rendering.Particles
 					Vec4s[i * 5 + 4] = TransMatrix.Column3;
 				}
 
-				GL.BindBuffer(BufferTarget.ArrayBuffer, BufferID);
-				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxParticles * Particle3D.SizeInBytes), IntPtr.Zero, BufferUsageHint.DynamicDraw);
-				GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, (IntPtr) (Particle3D.SizeInBytes * Particles.Count), Vec4s);
+				Renderer.BindBuffer(BufferTarget.ArrayBuffer, BufferID);
+				Renderer.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxParticles * Particle3D.SizeInBytes), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+				Renderer.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, (IntPtr) (Particle3D.SizeInBytes * Particles.Count), Vec4s);
 			}
 		}
 		
@@ -225,7 +225,7 @@ namespace Hedra.Engine.Rendering.Particles
 		}
 		
 		public void Dispose(){
-			//ThreadManager.ExecuteOnMainThread(() => GL.DeleteBuffers(1, ref BufferID));
+			//ThreadManager.ExecuteOnMainThread(() => Renderer.DeleteBuffers(1, ref BufferID));
 			
 			DrawManager.ParticleRenderer.Remove(this);
 			UpdateManager.Remove(this);

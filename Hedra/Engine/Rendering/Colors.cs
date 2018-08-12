@@ -23,7 +23,12 @@ namespace Hedra.Engine.Rendering
         public static Vector4 Gray { get; } = new Vector4(.5f,.5f,.5f,1f);
         public static Vector4 DeepSkyBlue { get; } = new Vector4(0, 0.74609375f, 1, 1);
         public static Vector4 Transparent { get; } = new Vector4(0,0,0,0);
-        public static Vector4 Blue { get; } = new Vector4(0,0,1,1);
+        public static Vector4 Blue { get; } = new Vector4(0, 0, 1, 1);
+        public static Vector4 Yellow { get; } = Color.Yellow.ToVector4();
+        public static Vector4 White { get; } = Color.White.ToVector4();
+        public static Vector4 BlueViolet { get; } = Color.BlueViolet.ToVector4();
+        public static Vector4 OrangeRed { get; } = Color.OrangeRed.ToVector4();
+        public static Vector4 GreenYellow { get; } = Color.GreenYellow.ToVector4();
 
         public static Vector4 FromHtml(string Hex)
         {

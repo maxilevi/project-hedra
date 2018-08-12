@@ -40,7 +40,7 @@ namespace Hedra.Engine
         public static void EnableGLDebug()
         {
             Renderer.Enable(EnableCap.DebugOutput);
-            GL.DebugMessageCallback(
+            Renderer.DebugMessageCallback(
                 delegate(DebugSource Source, DebugType Type, int Id, DebugSeverity Severity, int Length, IntPtr Message,
                     IntPtr Param)
                 {

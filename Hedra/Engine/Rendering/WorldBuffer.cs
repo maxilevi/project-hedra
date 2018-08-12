@@ -188,8 +188,8 @@ namespace Hedra.Engine.Rendering
 				Data[i] += NewCount;
 			}
 			
-			GL.BindBuffer(Indices.Buffer.BufferTarget, Indices.Buffer.ID);
-			GL.BufferSubData(Indices.Buffer.BufferTarget, (IntPtr) (Entry.Offset), SizeInBytes, Data);
+			Renderer.BindBuffer(Indices.Buffer.BufferTarget, Indices.Buffer.ID);
+			Renderer.BufferSubData(Indices.Buffer.BufferTarget, (IntPtr) Entry.Offset, (IntPtr) SizeInBytes, Data);
 			
 			return Entry;                                   
 		}

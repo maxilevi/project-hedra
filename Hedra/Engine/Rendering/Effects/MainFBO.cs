@@ -72,7 +72,7 @@ namespace Hedra.Engine.Rendering.Effects
 					
 					//Clear it
 					FinalFbo.Bind();
-					GL.ClearColor(Color.Transparent);
+					Renderer.ClearColor(Colors.Transparent);
 					FinalFbo.UnBind();
 				}
 			}
@@ -93,21 +93,21 @@ namespace Hedra.Engine.Rendering.Effects
 
 			    DrawManager.UIRenderer.SetupQuad();
 
-                GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[1]);
+                Renderer.ActiveTexture(TextureUnit.Texture0);
+				Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[1]);
 				
-				GL.ActiveTexture(TextureUnit.Texture1);
-				GL.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[2]);
+				Renderer.ActiveTexture(TextureUnit.Texture1);
+				Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[2]);
 				
-				GL.ActiveTexture(TextureUnit.Texture2);
-				GL.BindTexture(TextureTarget.Texture2D, Ssao.RandomTex);
+				Renderer.ActiveTexture(TextureUnit.Texture2);
+				Renderer.BindTexture(TextureTarget.Texture2D, (uint) Ssao.RandomTex);
 				
-				GL.Uniform1(Ssao.PositionSampler, 0);
-				GL.Uniform1(Ssao.NormalSampler, 1);
-				GL.Uniform1(Ssao.RandomSampler, 2);
-				GL.Uniform1(Ssao.Intensity, GameSettings.AmbientOcclusionIntensity);
+				Renderer.Uniform1(Ssao.PositionSampler, 0);
+				Renderer.Uniform1(Ssao.NormalSampler, 1);
+				Renderer.Uniform1(Ssao.RandomSampler, 2);
+				Renderer.Uniform1(Ssao.Intensity, GameSettings.AmbientOcclusionIntensity);
 				
-				GL.UniformMatrix4(Ssao.ProjectionUniform, false, ref DrawManager.FrustumObject.ProjectionMatrix);
+				Renderer.UniformMatrix4(Ssao.ProjectionUniform, false, ref DrawManager.FrustumObject.ProjectionMatrix);
 
 			    DrawManager.UIRenderer.DrawQuad();
 
@@ -117,8 +117,8 @@ namespace Hedra.Engine.Rendering.Effects
                 Ssao.SecondPassShader.Bind();
 
 			    //Firstpass output
-			    GL.ActiveTexture(TextureUnit.Texture0);
-			    GL.BindTexture(TextureTarget.Texture2D, Ssao.SecondPass.TextureID[0]);
+			    Renderer.ActiveTexture(TextureUnit.Texture0);
+			    Renderer.BindTexture(TextureTarget.Texture2D, Ssao.SecondPass.TextureID[0]);
 
 			    DrawManager.UIRenderer.DrawQuad();
 
@@ -127,14 +127,14 @@ namespace Hedra.Engine.Rendering.Effects
                 Ssao.ThirdPassShader.Bind();
 
                 //Firstpass output
-                GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, Ssao.ThirdPass.TextureID[0]);
+                Renderer.ActiveTexture(TextureUnit.Texture0);
+				Renderer.BindTexture(TextureTarget.Texture2D, Ssao.ThirdPass.TextureID[0]);
 				//Color texture
-				GL.ActiveTexture(TextureUnit.Texture1);
-				GL.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[0]);
+				Renderer.ActiveTexture(TextureUnit.Texture1);
+				Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[0]);
 				
-				GL.Uniform1( Ssao.AOSampler, 0);
-				GL.Uniform1( Ssao.ColorSampler, 1);
+				Renderer.Uniform1( Ssao.AOSampler, 0);
+				Renderer.Uniform1( Ssao.ColorSampler, 1);
 
 			    DrawManager.UIRenderer.DrawQuad();
 
@@ -194,10 +194,10 @@ namespace Hedra.Engine.Rendering.Effects
 				DrawQuad(Default.TextureID[0], 0, false);
                 Shader.Unbind();
 				FinalFbo.UnBind();
-
+                
                 //Clear it
                 Default.Bind();
-				GL.ClearColor(Color.Transparent);
+				Renderer.ClearColor(Colors.Transparent);
                 Default.UnBind();
 			}
             #endregion
@@ -213,12 +213,12 @@ namespace Hedra.Engine.Rendering.Effects
 			
 			DrawManager.UIRenderer.SetupQuad();
 
-            GL.ActiveTexture(TextureUnit.Texture0);
-			GL.BindTexture(TextureTarget.Texture2D, TexID);
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+			Renderer.BindTexture(TextureTarget.Texture2D, TexID);
 		    Shader["Texture"] = 0;
 
-            GL.ActiveTexture(TextureUnit.Texture1);
-			GL.BindTexture(TextureTarget.Texture2D, Additive);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+			Renderer.BindTexture(TextureTarget.Texture2D, Additive);
 		    Shader["Background"] = 1;
 
             Shader["Scale"] = Vector2.One;

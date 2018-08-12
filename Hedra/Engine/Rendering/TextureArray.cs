@@ -23,15 +23,15 @@ namespace Hedra.Engine.Rendering
 		private int LayerCount = 1;
 		
 		public TextureArray(int Length, SizedInternalFormat InternalFormat = SizedInternalFormat.Rgba16f){
-			ID = GL.GenTexture();
-			GL.BindTexture(TextureTarget.Texture2DArray, ID);
+			ID = Renderer.GenTexture();
+			Renderer.BindTexture(TextureTarget.Texture2DArray, ID);
 			
-			GL.TexStorage3D(TextureTarget3d.Texture2DArray, MipLevelCount, InternalFormat, Width, Height, LayerCount);
+			Renderer.TexStorage3D(TextureTarget3d.Texture2DArray, MipLevelCount, InternalFormat, Width, Height, LayerCount);
 			
-			GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Linear);
-	        GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Linear);
-	        GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureWrapS, (int) TextureWrapMode.ClampToEdge);
-	        GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToEdge);
+			Renderer.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Linear);
+	        Renderer.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Linear);
+	        Renderer.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureWrapS, (int) TextureWrapMode.ClampToEdge);
+	        Renderer.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToEdge);
 		}
 	}
 }

@@ -18,12 +18,12 @@ namespace Hedra.Engine.Rendering
 
 	    public virtual void Bind(bool EnableAttributes = true)
 	    {
-	        GL.BindVertexArray(ID);
+	        Renderer.BindVertexArray(ID);
         }
 		
 		public virtual void Unbind(bool DisableAttributes = true)
         {
-			GL.BindVertexArray(0);
+			Renderer.BindVertexArray(0);
 		}
 		
 		public void Dispose()
@@ -32,7 +32,7 @@ namespace Hedra.Engine.Rendering
             _disposed = true;
             Executer.ExecuteOnMainThread(delegate
             {
-                GL.DeleteVertexArrays(1, ref _id);
+                Renderer.DeleteVertexArrays(1, ref _id);
             });
         }
 	}
@@ -41,25 +41,25 @@ namespace Hedra.Engine.Rendering
 	{
 		public VAO(VBO<T1> Buffer)
         {
-			GL.GenVertexArrays(1, out _id);
-			GL.BindVertexArray(_id);
+			Renderer.GenVertexArrays(1, out _id);
+			Renderer.BindVertexArray(_id);
 			
-			GL.BindBuffer(Buffer.BufferTarget, Buffer.ID);
-			GL.VertexAttribPointer(0, Buffer.Size, Buffer.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer.BufferTarget, Buffer.ID);
+			Renderer.VertexAttribPointer(0, Buffer.Size, Buffer.PointerType, false, 0, 0);
 			
-			GL.BindVertexArray(0);
+			Renderer.BindVertexArray(0);
 		}
 
 	    public override void Bind(bool EnableAttributes = true)
 	    {
 	        base.Bind(EnableAttributes);
-            GL.EnableVertexAttribArray(0);
+            Renderer.EnableVertexAttribArray(0);
 	    }
 
 	    public override void Unbind(bool DisableAttributes = true)
 	    {
 	        base.Bind(DisableAttributes);
-	        GL.DisableVertexAttribArray(0);
+	        Renderer.DisableVertexAttribArray(0);
 	    }
     }
 	
@@ -67,30 +67,30 @@ namespace Hedra.Engine.Rendering
 	{
 		public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2)
         {
-			GL.GenVertexArrays(1, out _id);
-			GL.BindVertexArray(_id);
+			Renderer.GenVertexArrays(1, out _id);
+			Renderer.BindVertexArray(_id);
 			
-			GL.BindBuffer(Buffer1.BufferTarget, Buffer1.ID);
-			GL.VertexAttribPointer(0, Buffer1.Size, Buffer1.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer1.BufferTarget, Buffer1.ID);
+			Renderer.VertexAttribPointer(0, Buffer1.Size, Buffer1.PointerType, false, 0, 0);
 			
-			GL.BindBuffer(Buffer2.BufferTarget, Buffer2.ID);
-			GL.VertexAttribPointer(1, Buffer2.Size, Buffer2.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer2.BufferTarget, Buffer2.ID);
+			Renderer.VertexAttribPointer(1, Buffer2.Size, Buffer2.PointerType, false, 0, 0);
 			
-			GL.BindVertexArray(0);
+			Renderer.BindVertexArray(0);
 		}
 
 	    public override void Bind(bool EnableAttributes = true)
 	    {
 	        base.Bind(EnableAttributes);
-	        GL.EnableVertexAttribArray(0);
-	        GL.EnableVertexAttribArray(1);
+	        Renderer.EnableVertexAttribArray(0);
+	        Renderer.EnableVertexAttribArray(1);
         }
 
 	    public override void Unbind(bool DisableAttributes = true)
 	    {
 	        base.Bind(DisableAttributes);
-	        GL.DisableVertexAttribArray(0);
-	        GL.DisableVertexAttribArray(1);
+	        Renderer.DisableVertexAttribArray(0);
+	        Renderer.DisableVertexAttribArray(1);
         }
     }
 	
@@ -98,35 +98,35 @@ namespace Hedra.Engine.Rendering
 	{
 		public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3)
         {
-			GL.GenVertexArrays(1, out _id);
-			GL.BindVertexArray(_id);
+			Renderer.GenVertexArrays(1, out _id);
+			Renderer.BindVertexArray(_id);
 			
-			GL.BindBuffer(Buffer1.BufferTarget, Buffer1.ID);
-			GL.VertexAttribPointer(0, Buffer1.Size, Buffer1.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer1.BufferTarget, Buffer1.ID);
+			Renderer.VertexAttribPointer(0, Buffer1.Size, Buffer1.PointerType, false, 0, 0);
 			
-			GL.BindBuffer(Buffer1.BufferTarget, Buffer2.ID);
-			GL.VertexAttribPointer(1, Buffer2.Size, Buffer2.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer1.BufferTarget, Buffer2.ID);
+			Renderer.VertexAttribPointer(1, Buffer2.Size, Buffer2.PointerType, false, 0, 0);
 			
-			GL.BindBuffer(Buffer3.BufferTarget, Buffer3.ID);
-			GL.VertexAttribPointer(2, Buffer3.Size, Buffer3.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer3.BufferTarget, Buffer3.ID);
+			Renderer.VertexAttribPointer(2, Buffer3.Size, Buffer3.PointerType, false, 0, 0);
 			
-			GL.BindVertexArray(0);
+			Renderer.BindVertexArray(0);
 		}
 
 	    public override void Bind(bool EnableAttributes = true)
 	    {
 	        base.Bind(EnableAttributes);
-	        GL.EnableVertexAttribArray(0);
-	        GL.EnableVertexAttribArray(1);
-	        GL.EnableVertexAttribArray(2);
+	        Renderer.EnableVertexAttribArray(0);
+	        Renderer.EnableVertexAttribArray(1);
+	        Renderer.EnableVertexAttribArray(2);
         }
 
 	    public override void Unbind(bool DisableAttributes = true)
 	    {
 	        base.Bind(DisableAttributes);
-	        GL.DisableVertexAttribArray(0);
-	        GL.DisableVertexAttribArray(1);
-	        GL.DisableVertexAttribArray(2);
+	        Renderer.DisableVertexAttribArray(0);
+	        Renderer.DisableVertexAttribArray(1);
+	        Renderer.DisableVertexAttribArray(2);
         }
     }
 	
@@ -134,40 +134,40 @@ namespace Hedra.Engine.Rendering
 	{
 		public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3, VBO<T4> Buffer4)
         {
-			GL.GenVertexArrays(1, out _id);
-			GL.BindVertexArray(_id);
+			Renderer.GenVertexArrays(1, out _id);
+			Renderer.BindVertexArray(_id);
 			
-			GL.BindBuffer(Buffer1.BufferTarget, Buffer1.ID);
-			GL.VertexAttribPointer(0, Buffer1.Size, Buffer1.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer1.BufferTarget, Buffer1.ID);
+			Renderer.VertexAttribPointer(0, Buffer1.Size, Buffer1.PointerType, false, 0, 0);
 			
-			GL.BindBuffer(Buffer1.BufferTarget, Buffer2.ID);
-			GL.VertexAttribPointer(1, Buffer2.Size, Buffer2.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer1.BufferTarget, Buffer2.ID);
+			Renderer.VertexAttribPointer(1, Buffer2.Size, Buffer2.PointerType, false, 0, 0);
 			
-			GL.BindBuffer(Buffer3.BufferTarget, Buffer3.ID);
-			GL.VertexAttribPointer(2, Buffer3.Size, Buffer3.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer3.BufferTarget, Buffer3.ID);
+			Renderer.VertexAttribPointer(2, Buffer3.Size, Buffer3.PointerType, false, 0, 0);
 			
-			GL.BindBuffer(Buffer4.BufferTarget, Buffer4.ID);
-			GL.VertexAttribPointer(3, Buffer4.Size, Buffer4.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer4.BufferTarget, Buffer4.ID);
+			Renderer.VertexAttribPointer(3, Buffer4.Size, Buffer4.PointerType, false, 0, 0);
 			
-			GL.BindVertexArray(0);
+			Renderer.BindVertexArray(0);
 		}
 
 	    public override void Bind(bool EnableAttributes = true)
 	    {
 	        base.Bind(EnableAttributes);
-	        GL.EnableVertexAttribArray(0);
-	        GL.EnableVertexAttribArray(1);
-	        GL.EnableVertexAttribArray(2);
-	        GL.EnableVertexAttribArray(3);
+	        Renderer.EnableVertexAttribArray(0);
+	        Renderer.EnableVertexAttribArray(1);
+	        Renderer.EnableVertexAttribArray(2);
+	        Renderer.EnableVertexAttribArray(3);
         }
 
 	    public override void Unbind(bool DisableAttributes = true)
 	    {
 	        base.Bind(DisableAttributes);
-	        GL.DisableVertexAttribArray(0);
-	        GL.DisableVertexAttribArray(1);
-	        GL.DisableVertexAttribArray(2);
-	        GL.DisableVertexAttribArray(3);
+	        Renderer.DisableVertexAttribArray(0);
+	        Renderer.DisableVertexAttribArray(1);
+	        Renderer.DisableVertexAttribArray(2);
+	        Renderer.DisableVertexAttribArray(3);
         }
     }
 	
@@ -175,45 +175,45 @@ namespace Hedra.Engine.Rendering
 	{
 		public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3, VBO<T4> Buffer4, VBO<T5> Buffer5)
         {
-			GL.GenVertexArrays(1, out _id);
-			GL.BindVertexArray(_id);
+			Renderer.GenVertexArrays(1, out _id);
+			Renderer.BindVertexArray(_id);
 			
-			GL.BindBuffer(Buffer1.BufferTarget, Buffer1.ID);
-			GL.VertexAttribPointer(0, Buffer1.Size, Buffer1.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer1.BufferTarget, Buffer1.ID);
+			Renderer.VertexAttribPointer(0, Buffer1.Size, Buffer1.PointerType, false, 0, 0);
 			
-			GL.BindBuffer(Buffer1.BufferTarget, Buffer2.ID);
-			GL.VertexAttribPointer(1, Buffer2.Size, Buffer2.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer1.BufferTarget, Buffer2.ID);
+			Renderer.VertexAttribPointer(1, Buffer2.Size, Buffer2.PointerType, false, 0, 0);
 			
-			GL.BindBuffer(Buffer3.BufferTarget, Buffer3.ID);
-			GL.VertexAttribPointer(2, Buffer3.Size, Buffer3.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer3.BufferTarget, Buffer3.ID);
+			Renderer.VertexAttribPointer(2, Buffer3.Size, Buffer3.PointerType, false, 0, 0);
 			
-			GL.BindBuffer(Buffer4.BufferTarget, Buffer4.ID);
-			GL.VertexAttribPointer(3, Buffer4.Size, Buffer4.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer4.BufferTarget, Buffer4.ID);
+			Renderer.VertexAttribPointer(3, Buffer4.Size, Buffer4.PointerType, false, 0, 0);
 			
-			GL.BindBuffer(Buffer5.BufferTarget, Buffer5.ID);
-			GL.VertexAttribPointer(4, Buffer5.Size, Buffer5.PointerType, false, 0, 0);
+			Renderer.BindBuffer(Buffer5.BufferTarget, Buffer5.ID);
+			Renderer.VertexAttribPointer(4, Buffer5.Size, Buffer5.PointerType, false, 0, 0);
 			
-			GL.BindVertexArray(0);
+			Renderer.BindVertexArray(0);
 		}
 
 	    public override void Bind(bool EnableAttributes = true)
 	    {
 	        base.Bind(EnableAttributes);
-	        GL.EnableVertexAttribArray(0);
-	        GL.EnableVertexAttribArray(1);
-	        GL.EnableVertexAttribArray(2);
-	        GL.EnableVertexAttribArray(3);
-	        GL.EnableVertexAttribArray(4);
+	        Renderer.EnableVertexAttribArray(0);
+	        Renderer.EnableVertexAttribArray(1);
+	        Renderer.EnableVertexAttribArray(2);
+	        Renderer.EnableVertexAttribArray(3);
+	        Renderer.EnableVertexAttribArray(4);
         }
 
 	    public override void Unbind(bool DisableAttributes = true)
 	    {
 	        base.Bind(DisableAttributes);
-	        GL.DisableVertexAttribArray(0);
-	        GL.DisableVertexAttribArray(1);
-	        GL.DisableVertexAttribArray(2);
-	        GL.DisableVertexAttribArray(3);
-	        GL.DisableVertexAttribArray(4);
+	        Renderer.DisableVertexAttribArray(0);
+	        Renderer.DisableVertexAttribArray(1);
+	        Renderer.DisableVertexAttribArray(2);
+	        Renderer.DisableVertexAttribArray(3);
+	        Renderer.DisableVertexAttribArray(4);
         }
     }
 }

@@ -76,7 +76,7 @@ namespace Hedra.Engine.Rendering
 				Renderer.EnableVertexAttribArray(0);
 			    Renderer.EnableVertexAttribArray(1);
 
-			    GL.BindBuffer(StaticBuffer.Indices.Buffer.BufferTarget, StaticBuffer.Indices.Buffer.ID);
+			    Renderer.BindBuffer(StaticBuffer.Indices.Buffer.BufferTarget, StaticBuffer.Indices.Buffer.ID);
 
                 if (GameSettings.Shadows){
 
@@ -109,7 +109,7 @@ namespace Hedra.Engine.Rendering
 				Renderer.EnableVertexAttribArray(1);
 				Renderer.EnableVertexAttribArray(2);
 				
-				GL.BindBuffer(WaterBuffer.Indices.Buffer.BufferTarget, WaterBuffer.Indices.Buffer.ID);
+				Renderer.BindBuffer(WaterBuffer.Indices.Buffer.BufferTarget, WaterBuffer.Indices.Buffer.ID);
 			    Renderer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);
 				
 				Renderer.DisableVertexAttribArray(0);
@@ -152,14 +152,14 @@ namespace Hedra.Engine.Rendering
             StaticShader["AreaPositions"] = World.Highlighter.AreaPositions;
 			StaticShader["AreaColors"] = World.Highlighter.AreaColors;
 			
-            GL.ActiveTexture(TextureUnit.Texture1);
-            GL.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
 		    StaticShader["noiseTexture"] = 1;
             
             if (GameSettings.Shadows){
 				StaticShader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
-				GL.ActiveTexture(TextureUnit.Texture0);
-				GL.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
+				Renderer.ActiveTexture(TextureUnit.Texture0);
+				Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
                 StaticShader["ShadowTex"] = 0;
                 StaticShader["ShadowDistance"] = ShadowRenderer.ShadowDistance;
 			}		
@@ -171,15 +171,15 @@ namespace Hedra.Engine.Rendering
 		
 		private static void WaterBind(){
 			Renderer.Enable(EnableCap.Blend);
-		    GL.BlendEquation(BlendEquationMode.FuncAdd);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+		    Renderer.BlendEquation(BlendEquationMode.FuncAdd);
+            Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
            	Renderer.Enable(EnableCap.Texture2D);
            	
            	WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
            	
-           	GL.ActiveTexture(TextureUnit.Texture0);
-		    GL.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Fancy ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : 0);
+           	Renderer.ActiveTexture(TextureUnit.Texture0);
+		    Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Fancy ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : 0);
 
 		    WaterShader["Dither"] = Dither ? 1 : 0;
 		    WaterShader["TransformationMatrix"] = TransformationMatrix;

@@ -12,6 +12,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using Hedra.Engine.Rendering;
 using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Management
@@ -52,9 +53,9 @@ namespace Hedra.Engine.Management
 
 	    private static  string CalculateUserHash()
 	    {
-	        var identifiers = Environment.OSVersion + GL.GetString(StringName.Vendor)
-	                          + GL.GetString(StringName.Renderer) 
-                              + GL.GetString(StringName.Version) 
+	        var identifiers = Environment.OSVersion + Renderer.GetString(StringName.Vendor)
+	                          + Renderer.GetString(StringName.Renderer) 
+                              + Renderer.GetString(StringName.Version) 
                               + OSManager.CPUArchitecture 
                               + Environment.OSVersion 
                               + Environment.UserName;

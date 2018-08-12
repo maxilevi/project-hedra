@@ -175,7 +175,7 @@ namespace Hedra.Engine.Rendering
 
         public static void Dispose()
         {
-			GL.DeleteTextures(Textures.Count, Textures.ToArray());
+			Renderer.DeleteTextures(Textures.Count, Textures.ToArray());
 		}
 	}
 	

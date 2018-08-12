@@ -6,12 +6,12 @@ namespace Hedra.Engine.Rendering
     {
         protected override void DoEnable(EnableCap Index)
         {
-            GL.Enable(Index);
+            Renderer.Provider.Enable(Index);
         }
 
         protected override void DoDisable(EnableCap Index)
         {
-            GL.Disable(Index);
+            Renderer.Provider.Disable(Index);
         }
     }
 }

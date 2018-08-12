@@ -56,8 +56,8 @@ namespace Hedra.Engine.Rendering.Effects
 
 		    DrawManager.UIRenderer.SetupQuad();
 
-            GL.ActiveTexture(TextureUnit.Texture0);
-			GL.BindTexture(TextureTarget.Texture2D, TexID);
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+			Renderer.BindTexture(TextureTarget.Texture2D, TexID);
 
 		    DrawManager.UIRenderer.DrawQuad();
 

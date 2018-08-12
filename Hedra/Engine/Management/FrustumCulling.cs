@@ -7,6 +7,7 @@
 using System;
 using OpenTK;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
 using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Management
@@ -164,20 +165,20 @@ namespace Hedra.Engine.Management
 		public void SetFrustum(Matrix4 View)
 		{
 		    Aspect = 1.45f / (float) GameSettings.Height * (float) GameSettings.DeviceHeight;
-        	GL.MatrixMode(MatrixMode.Projection);
+        	Renderer.MatrixMode(MatrixMode.Projection);
 
 	       	ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, Aspect, ZNear, ZFar);
-	        GL.LoadMatrix(ref ProjectionMatrix);
+	        Renderer.LoadMatrix(ref ProjectionMatrix);
 	            
-	        GL.MatrixMode(MatrixMode.Modelview);
+	        Renderer.MatrixMode(MatrixMode.Modelview);
 	        ModelViewMatrix = View;
-			GL.LoadMatrix(ref ModelViewMatrix);
+			Renderer.LoadMatrix(ref ModelViewMatrix);
 			
 		}
 
 	    public void SetViewport()
 	    {
-	        GL.Viewport(0,0, GameSettings.Width, GameSettings.Height);
+	        Renderer.Viewport(0,0, GameSettings.Width, GameSettings.Height);
         }
 
         public bool VerticesInFrustum(Vector3[] Vertices)

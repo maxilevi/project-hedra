@@ -5,6 +5,7 @@
  *
  */
 using System;
+using Hedra.Engine.Rendering;
 using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Management
@@ -15,13 +16,13 @@ namespace Hedra.Engine.Management
 	public static class OcclusionCulling
 	{
 		public static void StartQueries(Occludable[] Occludables){
-			GL.ColorMask(false, false, false, false);
-			GL.DepthMask(false);
+			Renderer.ColorMask(false, false, false, false);
+			Renderer.DepthMask(false);
 			for(int i = 0; i < Occludables.Length; i++){
 				Occludables[i].DrawQuery();
 			}
-			GL.ColorMask(true, true, true, true);
-			GL.DepthMask(true);
+			Renderer.ColorMask(true, true, true, true);
+			Renderer.DepthMask(true);
 		}
 	}
 }

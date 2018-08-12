@@ -97,7 +97,7 @@ namespace Hedra.Engine.Rendering
 			_shader["LowestPoint"] = _lowestPoint;
 			_shader["PlayerPosition"] = GameManager.Player.Position;
 
-            GL.BindVertexArray(_vaoId);
+            Renderer.BindVertexArray(_vaoId);
 			Renderer.EnableVertexAttribArray(0);
 			Renderer.EnableVertexAttribArray(1);
 			Renderer.EnableVertexAttribArray(2);
@@ -106,8 +106,8 @@ namespace Hedra.Engine.Rendering
 			Renderer.EnableVertexAttribArray(5);
 			Renderer.EnableVertexAttribArray(6);
 			
-			GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indicesVbo.ID);
-			GL.DrawElementsInstanced(PrimitiveType.Triangles, _indicesVbo.Count, DrawElementsType.UnsignedInt, IntPtr.Zero, Count);
+			Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, _indicesVbo.ID);
+			Renderer.DrawElementsInstanced(PrimitiveType.Triangles, _indicesVbo.Count, DrawElementsType.UnsignedInt, IntPtr.Zero, Count);
 			
 			Renderer.DisableVertexAttribArray(0);
 			Renderer.DisableVertexAttribArray(1);
@@ -116,7 +116,7 @@ namespace Hedra.Engine.Rendering
 			Renderer.DisableVertexAttribArray(4);
 			Renderer.DisableVertexAttribArray(5);
 			Renderer.DisableVertexAttribArray(6);
-			GL.BindVertexArray(0);
+			Renderer.BindVertexArray(0);
 			
 			_shader.Unbind();
 			Renderer.Disable(EnableCap.Blend);
@@ -133,52 +133,50 @@ namespace Hedra.Engine.Rendering
 				Vec4s[i * 5 + 3] = TransMatrix[i].Column2;
 				Vec4s[i * 5 + 4] = TransMatrix[i].Column3;
 			}
-			GL.BindBuffer(BufferTarget	.ArrayBuffer, _bufferId);
-			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxInstances * SizeInBytes), IntPtr.Zero, BufferUsageHint.StaticDraw);
-			GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, (IntPtr) (SizeInBytes * Count), Vec4s);
+			Renderer.BindBuffer(BufferTarget	.ArrayBuffer, _bufferId);
+			Renderer.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxInstances * SizeInBytes), IntPtr.Zero, BufferUsageHint.StaticDraw);
+			Renderer.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, (IntPtr) (SizeInBytes * Count), Vec4s);
 		
 		}
 		
-		public int SizeInBytes{
-			get{ return sizeof(float) * 16 + Vector4.SizeInBytes; }
-		}
-		
+		public int SizeInBytes => sizeof(float) * 16 + Vector4.SizeInBytes;
+
 		private void CreateVAO(){
-			GL.GenVertexArrays(1, out _vaoId);
-			GL.BindVertexArray(_vaoId);
+			Renderer.GenVertexArrays(1, out _vaoId);
+			Renderer.BindVertexArray(_vaoId);
 			
-			GL.BindBuffer(_verticesVbo.BufferTarget, _verticesVbo.ID);
-			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
+			Renderer.BindBuffer(_verticesVbo.BufferTarget, _verticesVbo.ID);
+			Renderer.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
 			
 			
-			GL.BindBuffer(_normalsVbo.BufferTarget, _normalsVbo.ID);
-			GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
+			Renderer.BindBuffer(_normalsVbo.BufferTarget, _normalsVbo.ID);
+			Renderer.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
 			
-			GL.GenBuffers(1, out _bufferId);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _bufferId);
+			Renderer.GenBuffers(1, out _bufferId);
+			Renderer.BindBuffer(BufferTarget.ArrayBuffer, _bufferId);
 			
-			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxInstances * SizeInBytes), IntPtr.Zero, BufferUsageHint.StaticDraw);
+			Renderer.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(MaxInstances * SizeInBytes), IntPtr.Zero, BufferUsageHint.StaticDraw);
 
 			//Columns of the TransMatrix
-			GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, IntPtr.Zero);
+			Renderer.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, IntPtr.Zero);
 			
-			GL.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes));
-			GL.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*2));
-			GL.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*3));
-			GL.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*4));
+			Renderer.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes));
+			Renderer.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*2));
+			Renderer.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*3));
+			Renderer.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes*5, (IntPtr) (Vector4.SizeInBytes*4));
 			
-			GL.VertexAttribDivisor(2,1);
-			GL.VertexAttribDivisor(3,1);
-			GL.VertexAttribDivisor(4,1);
-			GL.VertexAttribDivisor(5,1);
-			GL.VertexAttribDivisor(6,1);
+			Renderer.VertexAttribDivisor(2,1);
+			Renderer.VertexAttribDivisor(3,1);
+			Renderer.VertexAttribDivisor(4,1);
+			Renderer.VertexAttribDivisor(5,1);
+			Renderer.VertexAttribDivisor(6,1);
 				
-			GL.BindVertexArray(0);
+			Renderer.BindVertexArray(0);
 		}
 		
 		public void Dispose(){
-			Executer.ExecuteOnMainThread( () => GL.DeleteVertexArrays(1, ref _vaoId) );
-			Executer.ExecuteOnMainThread( () => GL.DeleteBuffers(1, ref _bufferId) );
+			Executer.ExecuteOnMainThread( () => Renderer.DeleteVertexArrays(1, ref _vaoId) );
+			Executer.ExecuteOnMainThread( () => Renderer.DeleteBuffers(1, ref _bufferId) );
 		}
 	}
 }

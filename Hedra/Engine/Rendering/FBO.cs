@@ -83,42 +83,42 @@ namespace Hedra.Engine.Rendering
             this.samples = (multisample) ? Samples : 0;
             
             // First create the framebuffer
-            BufferID = (uint) GL.GenFramebuffer();
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, BufferID);
+            BufferID = (uint) Renderer.GenFramebuffer();
+            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, BufferID);
             Renderer.FBOBound = (int) BufferID;
 
             if (Attachments.Length == 1 && Attachments[0] == FramebufferAttachment.DepthAttachment)
             {
                 // if this is a depth attachment only
-                TextureID = new uint[] { (uint) GL.GenTexture() };
+                TextureID = new uint[] { (uint) Renderer.GenTexture() };
                 if(Multisample)
-                   	GL.BindTexture(TextureTarget.Texture2DMultisample, TextureID[0]);
+                   	Renderer.BindTexture(TextureTarget.Texture2DMultisample, TextureID[0]);
                 else
-                	GL.BindTexture(TextureTarget.Texture2D, TextureID[0]);
+                	Renderer.BindTexture(TextureTarget.Texture2D, TextureID[0]);
 				
                 if(Multisample)
-                	GL.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, Formats[0], Size.Width, Size.Height, true);
+                	Renderer.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, Formats[0], Size.Width, Size.Height, true);
                 else
-                	GL.TexImage2D(TextureTarget.Texture2D, 0, Formats[0], Size.Width, Size.Height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Nearest);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.ClampToEdge);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToEdge);
-                float[] BorderColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-				GL.GetTexParameter(TextureTarget.Texture2D, GetTextureParameter.TextureBorderColor, BorderColor);
+                	Renderer.TexImage2D(TextureTarget.Texture2D, 0, Formats[0], Size.Width, Size.Height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+                Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Nearest);
+                Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest);
+                Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.ClampToEdge);
+                Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToEdge);
+                //float[] BorderColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+				//Renderer.GetTexParameter(TextureTarget.Texture2D, GetTextureParameter.TextureBorderColor, BorderColor);
 
                 if(Multisample)
-                    GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2DMultisample, TextureID[0], 0);
+                    Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2DMultisample, TextureID[0], 0);
                 else
-                    GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureID[0], 0);
-                GL.DrawBuffer(DrawBufferMode.None);
-                GL.ReadBuffer(ReadBufferMode.None);
+                    Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureID[0], 0);
+                Renderer.DrawBuffer(DrawBufferMode.None);
+                Renderer.ReadBuffer(ReadBufferMode.None);
             }
             else
             {
                 // Create n texture buffers (known by the number of attachments)
                 TextureID = new uint[Attachments.Length];
-                GL.GenTextures(Attachments.Length, TextureID);
+                Renderer.GenTextures(Attachments.Length, TextureID);
 
                 // Bind the n texture buffers to the framebuffer
                 for (int i = 0; i < Attachments.Length; i++)
@@ -129,74 +129,74 @@ namespace Hedra.Engine.Rendering
                             : PixelType.UnsignedByte;
 
                     if (Multisample)
-                   		GL.BindTexture(TextureTarget.Texture2DMultisample, TextureID[i]);
+                   		Renderer.BindTexture(TextureTarget.Texture2DMultisample, TextureID[i]);
                 	else
-                		GL.BindTexture(TextureTarget.Texture2D, TextureID[i]);
+                		Renderer.BindTexture(TextureTarget.Texture2D, TextureID[i]);
                 	
                     if(Multisample)
-                		GL.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, Formats[i], Size.Width, Size.Height, true);
+                		Renderer.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, Formats[i], Size.Width, Size.Height, true);
                 	else
                 		if(Attachments[i] == FramebufferAttachment.DepthAttachment)
-                			GL.TexImage2D(TextureTarget.Texture2D, 0, Formats[i], Size.Width, Size.Height, 0, PixelFormat.DepthComponent, PixelType.UnsignedByte, IntPtr.Zero);
+                			Renderer.TexImage2D(TextureTarget.Texture2D, 0, Formats[i], Size.Width, Size.Height, 0, PixelFormat.DepthComponent, PixelType.UnsignedByte, IntPtr.Zero);
                 		else
-                			GL.TexImage2D(TextureTarget.Texture2D, 0, Formats[i], Size.Width, Size.Height, 0, PixelFormat.Rgba, pixelType, IntPtr.Zero);
+                			Renderer.TexImage2D(TextureTarget.Texture2D, 0, Formats[i], Size.Width, Size.Height, 0, PixelFormat.Rgba, pixelType, IntPtr.Zero);
                     
                 	if (Mipmaps)
                     {
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Linear);
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Linear);
-                        GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+                        Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Linear);
+                        Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Linear);
+                        Renderer.GenerateMipmap(GenerateMipmapTarget.Texture2D);
                     }
                     else
                     {
-                    	GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) filterType);
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) filterType);
+                    	Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) filterType);
+                        Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) filterType);
                     }
                     if(Multisample)
-                    	GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, Attachments[i], TextureTarget.Texture2DMultisample, TextureID[i], 0);
+                    	Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, Attachments[i], TextureTarget.Texture2DMultisample, TextureID[i], 0);
                 	else
-                    	GL.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[i], TextureID[i], 0);
+                    	Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[i], TextureID[i], 0);
                 }
 
                 // Create and attach a 24-bit depth buffer to the framebuffer
                 if (Depth) {
-                    DepthID = (uint) GL.GenTexture();
+                    DepthID = (uint) Renderer.GenTexture();
                     if(Multisample)
-                   	    GL.BindTexture(TextureTarget.Texture2DMultisample, DepthID);
+                   	    Renderer.BindTexture(TextureTarget.Texture2DMultisample, DepthID);
                     else
-                	    GL.BindTexture(TextureTarget.Texture2D, DepthID);
+                	    Renderer.BindTexture(TextureTarget.Texture2D, DepthID);
 
                     if(Multisample)
-                	    GL.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, PixelInternalFormat.DepthStencil, Size.Width, Size.Height, true);
+                	    Renderer.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, PixelInternalFormat.DepthStencil, Size.Width, Size.Height, true);
                     else
-               		    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Depth24Stencil8, Size.Width, Size.Height, 0, PixelFormat.DepthStencil, PixelType.UnsignedInt248, IntPtr.Zero);
+               		    Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Depth24Stencil8, Size.Width, Size.Height, 0, PixelFormat.DepthStencil, PixelType.UnsignedInt248, IntPtr.Zero);
                 
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Nearest);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.ClampToEdge);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToEdge);
+                    Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Nearest);
+                    Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest);
+                    Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.ClampToEdge);
+                    Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToEdge);
 
                     if(Multisample)
-                	    GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2DMultisample, DepthID, 0);
+                	    Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2DMultisample, DepthID, 0);
                     else
-                	    GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, DepthID, 0);
+                	    Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, DepthID, 0);
                 
                     if(Multisample)
-                	    GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, TextureTarget.Texture2DMultisample, DepthID, 0);
+                	    Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, TextureTarget.Texture2DMultisample, DepthID, 0);
                     else
-                	    GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, DepthID, 0);
+                	    Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, DepthID, 0);
                 }
             }
-            GL.Viewport(0, 0, Size.Width, Size.Height);
+            Renderer.Viewport(0, 0, Size.Width, Size.Height);
 
             // Build the framebuffer and check for errors
-            FramebufferErrorCode status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            FramebufferErrorCode status = Renderer.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
             if (status != FramebufferErrorCode.FramebufferComplete)
             {
-                Log.WriteLine("Frame buffer did not compile correctly.  Returned {0}, GLError: {1}", status.ToString(), GL.GetError().ToString());
+                Log.WriteLine("Frame buffer did not compile correctly.  Returned {0}, GLError: {1}", status.ToString(), Renderer.GetError().ToString());
             }
 
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             Renderer.FBOBound = 0;
         }
         
@@ -224,15 +224,15 @@ namespace Hedra.Engine.Rendering
         	if(Renderer.FBOBound == BufferID) return;
 
             Renderer.FBOBound = (int) BufferID;
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, BufferID);
+            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, BufferID);
             if (Attachments.Length == 1)
             {
             	if(!multisample){
-                	GL.BindTexture(TextureTarget.Texture2D, TextureID[0]);
-               		GL.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[0], TextureID[0], 0);
+                	Renderer.BindTexture(TextureTarget.Texture2D, TextureID[0]);
+               		Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[0], TextureID[0], 0);
             	}else{
-            		GL.BindTexture(TextureTarget.Texture2DMultisample, TextureID[0]);
-               		GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, Attachments[0], TextureTarget.Texture2DMultisample, TextureID[0], 0);
+            		Renderer.BindTexture(TextureTarget.Texture2DMultisample, TextureID[0]);
+               		Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, Attachments[0], TextureTarget.Texture2DMultisample, TextureID[0], 0);
             	}
             }
             else
@@ -241,26 +241,26 @@ namespace Hedra.Engine.Rendering
 
                 for (int i = 0; i < Attachments.Length; i++)
                 {
-                    //GL.BindTexture(TextureTarget.Texture2D, TextureID[i]);
-                    //GL.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[i], TextureID[i], 0);
+                    //Renderer.BindTexture(TextureTarget.Texture2D, TextureID[i]);
+                    //Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[i], TextureID[i], 0);
                     buffers[i] = (DrawBuffersEnum)Attachments[i];
                 }
 
-                //GL.BindTexture(TextureTarget.Texture2D, DepthID);
-                //GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, DepthID, 0);
+                //Renderer.BindTexture(TextureTarget.Texture2D, DepthID);
+                //Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, DepthID, 0);
 
-                if (Attachments.Length > 1) GL.DrawBuffers(Attachments.Length, buffers);
+                if (Attachments.Length > 1) Renderer.DrawBuffers(Attachments.Length, buffers);
             }
 			
-            GL.Viewport(0, 0, Size.Width, Size.Height);
+            Renderer.Viewport(0, 0, Size.Width, Size.Height);
 
             // configurably clear the buffer and color bits
             if (true)
             {
                 if (Attachments.Length == 1 && Attachments[0] == FramebufferAttachment.DepthAttachment)
-                	GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
+                	Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
                 else
-                	GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
+                	Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
             }
         }
 
@@ -270,7 +270,7 @@ namespace Hedra.Engine.Rendering
         public void UnBind()
         {
             // unbind this framebuffer (does not guarantee the correct framebuffer is bound)
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             Renderer.FBOBound = 0;
         }
 
@@ -286,19 +286,19 @@ namespace Hedra.Engine.Rendering
         {
             if (TextureID != null)
             {
-                GL.DeleteTextures(TextureID.Length, TextureID);
+                Renderer.DeleteTextures(TextureID.Length, TextureID);
                 TextureID = null;
             }
 
             if(BufferID != 0)
             {
-                GL.DeleteFramebuffers(1, new uint[] {BufferID});
+                Renderer.DeleteFramebuffers(1, new uint[] {BufferID});
                 BufferID = 0;
             }
 
             if(DepthID != 0)
             {
-                GL.DeleteFramebuffers(1, new uint[] { DepthID });
+                Renderer.DeleteFramebuffers(1, new uint[] { DepthID });
                 DepthID = 0;
             }
         }
