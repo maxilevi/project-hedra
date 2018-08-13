@@ -70,17 +70,12 @@ vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal, vec3 LColor){
 		FLightColor += Lights[i].Color * att; 
 	}
 	FLightColor = clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
-
-	//Specular
-	vec3 ReflectedDir = reflect(-unitToLight, unitNormal);
-	float SpecBrightness = max(dot(ReflectedDir, unitToCamera), 0.0);
-	float Damp = pow(SpecBrightness, Damper) * Reflectivity;
-	vec4 Specular = vec4(Damp*FLightColor,0.0);
 	
-	vec3 Diffuse = DiffuseModel(vec3(0.0, 0.0, 1.0), unitNormal, FLightColor) * 0.85 + DiffuseModel(vec3(0.0, 0.0, -1.0), unitNormal, FLightColor) * .85
-				   + DiffuseModel(vec3(1.0, 0.0, 0.0), unitNormal, FLightColor) * 0.85 + DiffuseModel(vec3(-1.0, 0.0, 0.0), unitNormal, FLightColor) * .85
-				   + DiffuseModel(vec3(0.0, -1.0, 0.0), unitNormal, FLightColor) * 1.1 + DiffuseModel(vec3(0.0, 1.0, 0.0), unitNormal, FLightColor) * .85;
+	vec3 Diffuse = DiffuseModel(unitToLight, unitNormal, FLightColor) + DiffuseModel(vec3(0.0, 0.0, 1.0), unitNormal, FLightColor) * .5
+					+ DiffuseModel(vec3(0.0, 0.0, -1.0), unitNormal, FLightColor) * .5
+				   + DiffuseModel(vec3(1.0, 0.0, 0.0), unitNormal, FLightColor) * .5 + DiffuseModel(vec3(-1.0, 0.0, 0.0), unitNormal, FLightColor) * .5
+				   + DiffuseModel(vec3(0.0, -1.0, 0.0), unitNormal, FLightColor) * .5 + DiffuseModel(vec3(0.0, 1.0, 0.0), unitNormal, FLightColor) * .5;
 	
-	Color = (vec4(Diffuse, 1.0) * v_Color) + Specular;
+	Color = (vec4(Diffuse, 1.0) * v_Color);
  }
 

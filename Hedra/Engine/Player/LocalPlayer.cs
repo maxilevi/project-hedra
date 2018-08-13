@@ -172,7 +172,6 @@ namespace Hedra.Engine.Player
         public override void Draw(){
 			base.Draw();
 			Map.Draw();
-
             try
             {
                 var entities = World.Entities.ToArray();
@@ -518,11 +517,12 @@ namespace Hedra.Engine.Player
 			}
 		}
 
-		public bool Enabled{
+		public bool Enabled
+        {
 			get => _enabled;
 		    set{
 				_enabled = value;
-				Model.Enabled = false;
+				Model.Enabled = value;
 			}
 		}
 		

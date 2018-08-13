@@ -132,8 +132,9 @@ namespace Hedra.Engine.Scenes
 				
 				for(int i = 0; i < 1; i++)
 					World.Particles.Emit();
-				
-				ShaderManager.UpdateLight(_light);
+
+                if (_light != null)
+                    ShaderManager.UpdateLight(_light);
             }
 
 		    if (_light != null)

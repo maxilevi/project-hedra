@@ -63,11 +63,11 @@ namespace Hedra.Engine.Rendering.Animation
 
 		private void IncreaseAnimationTime() 
 		{
-			if(Stop) return;
+			if (Stop || GameSettings.Paused && !GameManager.InStartMenu) return;
 
 		    if (_currentAnimation != null)
 		    {
-		        AnimationTime += Time.DeltaTime * _currentAnimation.Speed * AnimationSpeed;
+		        AnimationTime += Time.IndependantDeltaTime * _currentAnimation.Speed * AnimationSpeed;
 		        _currentAnimation.DispatchEvents(AnimationTime / _currentAnimation.Length);
 		        if (AnimationTime > _currentAnimation.Length)
 		        {
@@ -78,7 +78,7 @@ namespace Hedra.Engine.Rendering.Animation
 		    }
 
 		    if(_blendingAnimation == null) return;
-		    _blendingAnimationTime += Time.DeltaTime * _blendingAnimation.Speed * AnimationSpeed;
+		    _blendingAnimationTime += Time.IndependantDeltaTime * _blendingAnimation.Speed * AnimationSpeed;
 		    _blendingAnimation.DispatchEvents(_blendingAnimationTime / _blendingAnimation.Length);
 		    if (_blendingAnimationTime > _blendingAnimation.Length)
 		    {

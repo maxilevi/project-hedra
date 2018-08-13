@@ -38,7 +38,7 @@ namespace Hedra.Engine
 
 	    public static void Set(float Time)
 	    {
-	        TimeScale = GameSettings.Paused && GameManager.InStartMenu ? 0 : 1;
+	        TimeScale = GameSettings.Paused ? 0 : 1;
 	        IndependantDeltaTime = Time;
 	        DeltaTime = IndependantDeltaTime * TimeScale;
         }

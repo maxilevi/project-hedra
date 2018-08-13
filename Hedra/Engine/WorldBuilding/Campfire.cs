@@ -67,7 +67,9 @@ namespace Hedra.Engine.WorldBuilding
 		            {
 		                if (World.Entities[i].SearchComponent<BurningComponent>() == null)
 		                {
-		                    World.Entities[i].AddComponent(new BurningComponent(World.Entities[i], 5f, 40f));
+		                    var isImmune = World.Entities[i].SearchComponent<DamageComponent>().Immune;
+                            if (isImmune) continue;
+                            World.Entities[i].AddComponent(new BurningComponent(World.Entities[i], 5f, 40f));
 		                }
 		            }
 		        }

@@ -357,7 +357,7 @@ namespace Hedra.Engine.Player.MapSystem
                         if(!_show) _height = 0f;
 
                     });
-				    _player.Loader.UpdateFog();
+				    _player.Loader.UpdateFog(Force: true);
                 }
 				SoundManager.PlayUISound(SoundType.OnOff, 1.0f, 0.6f);
 				_show = value;

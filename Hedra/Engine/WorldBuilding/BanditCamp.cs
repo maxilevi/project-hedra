@@ -91,7 +91,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             return Matrix4.CreateRotationX(-90f * Mathf.Radian)
                  * Matrix4.CreateTranslation(-_rescuee.Position) 
-                 * Matrix4.CreateTranslation( Vector3.UnitZ * 3f + Vector3.UnitY * 7f)
+                 * Matrix4.CreateTranslation( Vector3.UnitZ * 3f + Vector3.UnitY * 6f)
                  * Matrix4.CreateTranslation(_rescuee.Position);
         }
 
@@ -117,6 +117,7 @@ namespace Hedra.Engine.WorldBuilding
 
             if (!_shouldRescue) return;
 
+            _rescuee.IsTied = false;
             Rescued = true;
             TaskManager.Delay(1, delegate
             {

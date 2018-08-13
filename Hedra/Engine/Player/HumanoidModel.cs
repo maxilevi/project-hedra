@@ -86,6 +86,7 @@ namespace Hedra.Engine.Player
 	    private Vector3 _defaultLeftFootPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 	    private Vector3 _defaultRightWeaponPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 	    private Vector3 _defaultChestPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        private bool _isDisposeAnimationPlaying;
 
 
         public HumanoidModel(IHumanoid Human, HumanoidModelTemplate Template) : base(Human)
@@ -196,6 +197,7 @@ namespace Hedra.Engine.Player
 
         public void DisposeAnimation()
         {
+            _isDisposeAnimationPlaying = true;
             Model.SwitchShader(AnimatedModel.DeathShader);
             Alpha = 0;
             DisposeTime = 0;
@@ -209,6 +211,7 @@ namespace Hedra.Engine.Player
 
         public void Recompose()
         {
+            _isDisposeAnimationPlaying = false;
             Model.SwitchShader(AnimatedModel.DefaultShader);
             DisposeTime = 0;
         }
@@ -236,15 +239,6 @@ namespace Hedra.Engine.Player
             RegisterModel(LeftWeapon);
 
 		    (Human as LocalPlayer)?.Toolbar.SetAttackType(LeftWeapon);
-		}
-
-		public void Climb()
-		{
-			/*if(Human.IsRolling || Human.IsUnderwater || Human.IsAttacking )
-				return;
-			
-			if(Model != null && Model.Animator.AnimationPlaying != ClimbAnimation)
-				Model.PlayAnimation(ClimbAnimation);*/
 		}
 		
 		public void Eat(float FoodHealth)
@@ -470,7 +464,7 @@ namespace Hedra.Engine.Player
 		    set
 		    {
 		        _alpha = value;
-		        Model.Enabled = Alpha > 0.005f;
+		        Model.Enabled = Alpha > 0.005f || _isDisposeAnimationPlaying;
 		    }
 		}
 
