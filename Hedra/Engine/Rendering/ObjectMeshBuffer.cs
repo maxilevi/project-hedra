@@ -33,7 +33,6 @@ namespace Hedra.Engine.Rendering
 	    public Vector3 LocalRotationPoint { get; set; }
 	    public Vector3 LocalPosition { get; set; }
 	    public Vector3 BeforeLocalRotation { get; set; }
-		public Vector3 AdditionalBeforeLocalRotation { get; set; }
 	    public Vector3 AnimationPosition { get; set; }
 	    public Vector3 AnimationRotationPoint { get; set; }
 
@@ -205,7 +204,7 @@ namespace Hedra.Engine.Rendering
 			Shader["LocalRotation"] = _localRotationMatrix;
 			Shader["LocalRotationPoint"] = LocalRotationPoint;
 			Shader["LocalPosition"] = LocalPosition;
-			Shader["BeforeLocalRotation"] = BeforeLocalRotation + AdditionalBeforeLocalRotation;
+			Shader["BeforeLocalRotation"] = BeforeLocalRotation;
 			Shader["AnimationPosition"] = AnimationPosition;
 			Shader["AnimationRotation"] = _animationRotationMatrix;
 			Shader["AnimationRotationPoint"] = AnimationRotationPoint;

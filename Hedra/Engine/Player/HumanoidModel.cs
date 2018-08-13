@@ -16,6 +16,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Sound;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
@@ -59,7 +60,7 @@ namespace Hedra.Engine.Player
 	    public Animation DefaultBlending { get; set; }
 	    private Animation _animationPlaying;
         private AreaSound _modelSound;
-		public StaticModel Food;
+		private StaticModel _food;
 		public Weapon LeftWeapon { get; private set; }
 		public QuadrupedModel MountModel;
 	    private AnimatedCollider _collider;
@@ -167,7 +168,7 @@ namespace Hedra.Engine.Player
             };
 
 			_eatAnimation.OnAnimationEnd += delegate{ 
-				Food.Enabled = false;			
+				_food.Enabled = false;			
 				Humanoid.IsEating = false;
 			};
 
@@ -175,6 +176,10 @@ namespace Hedra.Engine.Player
             BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * Model.Scale;
             Dimensions = AssetManager.LoadDimensions(Template.Path) * Model.Scale;
             _modelSound = new AreaSound(SoundType.HumanRun, Vector3.Zero, 48f);
+	        _food = new StaticModel(VertexData.Empty)
+	        {
+		        Scale = Vector3.One * 1.5f
+	        };
         }
 
         public void Resize(Vector3 Scalar)
@@ -240,6 +245,11 @@ namespace Hedra.Engine.Player
 
 		    (Human as LocalPlayer)?.Toolbar.SetAttackType(LeftWeapon);
 		}
+
+	    public void SetFood(Item Food)
+	    {
+		    _food.SetModel(Food.Model);
+	    }
 		
 		public void Eat(float FoodHealth)
 		{
@@ -351,16 +361,16 @@ namespace Hedra.Engine.Player
 		    var mat4 = LeftWeaponMatrix.ClearTranslation() * 
 		    Matrix4.CreateTranslation(-Model.Position + ((LeftWeaponPosition + RightWeaponPosition) / 2f) );
 				
-		    Food.TransformationMatrix = mat4;
-		    Food.Position = Model.Position;
-		    Food.TargetPosition = Vector3.Zero;
-		    Food.AnimationPosition = Vector3.Zero;
-		    Food.TargetRotation = new Vector3(180,0,0);
-		    Food.RotationPoint = Vector3.Zero;
-		    Food.Rotation = Vector3.Zero;
-		    Food.LocalRotation = Vector3.Zero;
-		    Food.LocalPosition = Vector3.Zero;
-		    Food.BeforeLocalRotation = Vector3.UnitY * -0.7f;
+		    _food.TransformationMatrix = mat4;
+		    _food.Position = Model.Position;
+		    _food.TargetPosition = Vector3.Zero;
+		    _food.AnimationPosition = Vector3.Zero;
+		    _food.TargetRotation = new Vector3(180, 0, 0);
+		    _food.RotationPoint = Vector3.Zero;
+		    _food.Rotation = Vector3.Zero;
+		    _food.LocalRotation = Vector3.Zero;
+		    _food.LocalPosition = Vector3.Zero;
+		    _food.BeforeLocalRotation = Vector3.Zero;
 	    }
 	    
 	    private void HandleRollEffects()

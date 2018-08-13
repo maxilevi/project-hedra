@@ -453,17 +453,9 @@ namespace Hedra.Engine.Player
 			this.Inventory.UpdateInventory();
 		}
 		
-		private void PlayEatAnimation(float FoodHealth){
-			if(Model != null)
-            {
-				var foodData = Inventory.Food.Model.Clone();
-				foodData.Scale( Vector3.One * 1.5f );
-
-                Model.Food = new StaticModel(foodData)
-                {
-                    Enabled = true
-                };
-            }
+		private void PlayEatAnimation(float FoodHealth)
+		{
+			Model.SetFood(Inventory.Food);
 			Model?.Eat(FoodHealth);
 			this.IsEating = true;
 		}

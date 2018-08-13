@@ -39,6 +39,12 @@ namespace Hedra.Engine.Rendering
             set => Model.TargetPosition = value;
         }
 
+        public override Vector3 TargetRotation
+        {
+            get => Model.TargetRotation;
+            set => Model.TargetRotation = value;
+        }
+
         public Vector3 RotationPoint
         {
             get => Model.RotationPoint;

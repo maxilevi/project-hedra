@@ -43,8 +43,9 @@ namespace Hedra.Engine.Rendering
 		}
 
 		
-		public void Draw(){
-			if(Enabled) Mesh.Draw(0);					
+		public void Draw()
+        {
+			if(Enabled) Mesh.Draw(0);
 			this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition,
                 Time.IndependantDeltaTime * 6 * AnimationSpeed);
 			this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation,
@@ -142,12 +143,6 @@ namespace Hedra.Engine.Rendering
 		{
 			get => _buffer.BeforeLocalRotation;
 		    set => _buffer.BeforeLocalRotation = value;
-		}
-		
-		public Vector3 AdditionalBeforeLocalRotation
-		{
-			get => _buffer.AdditionalBeforeLocalRotation;
-			set => _buffer.AdditionalBeforeLocalRotation = value;
 		}
 		
 		public Vector3 LocalRotation{
