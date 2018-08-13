@@ -6,7 +6,6 @@ pipelines:
         name: Run tests.
         deployment: production
         script:
-          - apt-get update
           - apt-get install -y nuget
           - nuget restore HedraTests/HedraTests.csproj -PackagesDirectory packages
           - chmod 777 prepare_testing.sh
