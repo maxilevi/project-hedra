@@ -729,12 +729,9 @@
     <Compile Include="Engine\Rendering\MarchingTetrahedra.cs" />
     <Compile Include="Engine\Rendering\MeshData.cs" />
     <Compile Include="Engine\Rendering\MeshSimplifier.cs" />
-    <Compile Include="Engine\Rendering\NvidiaGPUFix32.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Engine\Rendering\NvidiaGPUFix64.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
+    <Compile Include="Engine\Rendering\NvidiaGPUFix32.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Engine\Rendering\NvidiaGPUFix64.cs" />
     <Compile Include="Engine\Rendering\Particles\TrailRenderer.cs" />
     <Compile Include="Engine\Rendering\PointData.cs" />
     <Compile Include="Engine\Rendering\Particles\Particle3D.cs" />
@@ -1032,7 +1029,6 @@
     <None Include="Shaders\Includes\Lighting.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Include="Utils.cs" />
     <None Include="Sounds\Swoosh.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
