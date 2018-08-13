@@ -31,7 +31,49 @@ namespace HedraTests.Player
             _attack.Initialize(Vector2.Zero, Vector2.One, new Panel(), _player);
             GameManager.Player = _player;
         }
+
+        [Test]
+        public void TestPrimaryAttackIsContinous()
+        {
+            var executedAttackTimes = 0;
+            var weaponMock = new Mock<Weapon>(new VertexData());
+            weaponMock.Setup(W => W.Attack1(It.IsAny<IHumanoid>()))
+                .Callback( () => executedAttackTimes++);
+            _player.LeftWeapon = weaponMock.Object;
+            _attack.SetType(_player.LeftWeapon, AttackType.Primary);
+            _attack.Use();
+            Assert.AreEqual(0, executedAttackTimes);
+            
+            _attack.Update();
+            _attack.Update();
+            _attack.Update();
+            _attack.Update();
+            _attack.Update();
+            
+            _attack.KeyUp();
+            Assert.AreEqual(5, executedAttackTimes);
+        }
         
+        [Test]
+        public void TestPrimaryAttackDeactivates()
+        {
+            var executedAttackTimes = 0;
+            var weaponMock = new Mock<Weapon>(new VertexData());
+            weaponMock.Setup(W => W.Attack1(It.IsAny<IHumanoid>()))
+                .Callback( () => executedAttackTimes++);
+            _player.LeftWeapon = weaponMock.Object;
+            _attack.SetType(_player.LeftWeapon, AttackType.Primary);
+            _attack.Use();
+            Assert.AreEqual(0, executedAttackTimes);          
+            _attack.Update();     
+            _attack.KeyUp();
+            
+            _attack.Update(); 
+            _attack.Update(); 
+            _attack.Update();
+            Assert.AreEqual(1, executedAttackTimes);
+        }
+
         [Test]
         public void TestAttackCanBeCharged()
         {

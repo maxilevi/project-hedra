@@ -25,7 +25,6 @@ namespace Hedra.Engine.Rendering.Animation
 		private string[] _blendJoints;
 		private Dictionary<string, JointTransform> _pose;
 	    private Dictionary<string, JointTransform> _lastPose;
-	    private int _frameCounter;
 
         public Animator(Joint RootJoint)
 		{
@@ -59,17 +58,16 @@ namespace Hedra.Engine.Rendering.Animation
 			_pose = InterpolatePoses(_pose, animationPose, Time.IndependantDeltaTime * 16f);
 			ApplyPoseToJoints(_pose, _rootJoint, Matrix4.Identity);
 			IncreaseAnimationTime();
-		    _frameCounter++;
 
 		}
 
 		private void IncreaseAnimationTime() 
 		{
-			if(GameManager.InMenu || Stop) return;
+			if(Stop) return;
 
 		    if (_currentAnimation != null)
 		    {
-		        AnimationTime += Time.IndependantDeltaTime * _currentAnimation.Speed * AnimationSpeed;
+		        AnimationTime += Time.DeltaTime * _currentAnimation.Speed * AnimationSpeed;
 		        _currentAnimation.DispatchEvents(AnimationTime / _currentAnimation.Length);
 		        if (AnimationTime > _currentAnimation.Length)
 		        {
@@ -80,7 +78,7 @@ namespace Hedra.Engine.Rendering.Animation
 		    }
 
 		    if(_blendingAnimation == null) return;
-		    _blendingAnimationTime += Time.IndependantDeltaTime * _blendingAnimation.Speed * AnimationSpeed;
+		    _blendingAnimationTime += Time.DeltaTime * _blendingAnimation.Speed * AnimationSpeed;
 		    _blendingAnimation.DispatchEvents(_blendingAnimationTime / _blendingAnimation.Length);
 		    if (_blendingAnimationTime > _blendingAnimation.Length)
 		    {

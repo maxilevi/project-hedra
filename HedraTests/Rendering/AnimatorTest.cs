@@ -35,23 +35,77 @@ namespace HedraTests.Rendering
         }
         
         [Test]
-        public void TestPlayAnimationFromStartToEnd()
+        public void TestAnimationEventsAreDispatched()
         {
-            /*_animator.PlayAnimation(_animation);
-            TestContext.WriteLine(_animation.Speed);
-            TestContext.WriteLine(_rootJoint.AnimatedTransform);
-            TestContext.WriteLine(_rootJoint.GetChild("Chest").AnimatedTransform);
+            var start = false;
+            var mid = false;
+            var end = false;
+            _animation.Loop = false;
+            _animation.OnAnimationStart += Sender => start = true;
+            _animation.OnAnimationMid += Sender => mid = true;
+            _animation.OnAnimationEnd += Sender => end = true;
+            _animator.PlayAnimation(_animation);
+            Assert.NotNull(_animator.AnimationPlaying);
+            for (var i = 0; i < 10; i ++)
+            {
+                Time.Set(.1f);
+                _animator.Update();
+            }
+            Assert.Null(_animator.AnimationPlaying);
+            Assert.True(start);
+            Assert.True(mid);
+            Assert.True(end);
+        }
+        
+        [Test]
+        public void TestAnimationLoops()
+        {
+            _animator.PlayAnimation(_animation);
+            Assert.AreEqual(0, _animator.AnimationTime);
+            
             Time.Set(.25f);
             _animator.Update();
+            Assert.AreEqual(.25f, _animator.AnimationTime);
+            
             Time.Set(.5f);
-            TestContext.WriteLine(_animation.Speed);
-            TestContext.WriteLine(_rootJoint.AnimatedTransform);
-            TestContext.WriteLine(_rootJoint.GetChild("Chest").AnimatedTransform);
             _animator.Update();
+            Assert.AreEqual(.75f, _animator.AnimationTime);
+            
             Time.Set(.25f);
-            TestContext.WriteLine(_animation.Speed);
-            TestContext.WriteLine(_rootJoint.AnimatedTransform);
-            TestContext.WriteLine(_rootJoint.GetChild("Chest").AnimatedTransform);*/
+            _animator.Update();
+            Assert.AreEqual(1.0f, _animator.AnimationTime);
+            
+            Time.Set(.5f);
+            _animator.Update();
+            Assert.AreEqual(.5f, _animator.AnimationTime);
+        }
+        
+        [Test]
+        public void TestAnimationIsResettedWhenPlaying()
+        {
+            var timesDispatched = 0;
+            _animation.Loop = false;
+            _animation.OnAnimationEnd += Sender => timesDispatched++; 
+            _animation.DispatchEvents(1);
+            
+            Time.Set(1);
+            _animator.PlayAnimation(_animation);
+            _animator.Update();
+            _animator.Update();
+            Assert.AreEqual(2, timesDispatched);
+        }
+        
+        [Test]
+        public void TestAnimationTransformationsAreDoneCorrectly()
+        {
+            _animator.PlayAnimation(_animation);
+            Time.Set(.5f);
+            _animator.Update();
+            _animator.Update();
+            Assert.AreEqual(Matrix4.CreateTranslation(Vector3.UnitY * 16),
+                _rootJoint.AnimatedTransform);
+            Assert.AreEqual(Matrix4.CreateTranslation(Vector3.UnitY * 16 + Vector3.UnitX * 16),
+                _rootJoint.GetChild("Chest").AnimatedTransform);
         }
     }
 }

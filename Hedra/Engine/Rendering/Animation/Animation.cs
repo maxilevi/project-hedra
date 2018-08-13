@@ -25,6 +25,7 @@ namespace Hedra.Engine.Rendering.Animation
 		public bool Loop {get; set;}
 		private bool _midAnimation;
 	    private bool _startAnimation;
+		private bool _endAnimation;
 	
 		/**
 		 * @param lengthInSeconds
@@ -42,8 +43,9 @@ namespace Hedra.Engine.Rendering.Animation
 		
 		public void DispatchEvents(float Progress)
 		{
-			if(Progress >= 1)
+			if(Progress >= 1 && !_endAnimation)
 			{
+				_endAnimation = true;
 			    OnAnimationEnd?.Invoke(this);
 			}
 			if(Progress >= 0.5f && !_midAnimation)
@@ -51,7 +53,7 @@ namespace Hedra.Engine.Rendering.Animation
 				_midAnimation = true;
 			    OnAnimationMid?.Invoke(this);
 			}
-			if(Progress <= 0.5f && !_startAnimation)
+			if(Progress > 0f && !_startAnimation)
             {
 				_startAnimation = true;
 			    OnAnimationStart?.Invoke(this);
@@ -62,6 +64,7 @@ namespace Hedra.Engine.Rendering.Animation
 		{
 			_midAnimation = false;
 			_startAnimation = false;
+			_endAnimation = false;
 		}
 		
 		public void Dispose()
