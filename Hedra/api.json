@@ -1,9 +1,0 @@
-{
-	"ProjectFile" : "Hedra.csproj",
-	"TargetNamespace" : "Hedra.API",
-	"Folders" : [
-		{
-			"Path": "/Engine/EntitySystem/",
-		}
-	]
-}
