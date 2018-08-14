@@ -437,27 +437,19 @@ namespace Hedra.Engine.Player
 			if(this.IsDead || this.IsEating || this.IsKnocked || this.IsEating || this.IsAttacking || this.IsClimbing) return;
 			this.WasAttacking = false;
 			this.IsAttacking = false;
-			this.LeftWeapon.SlowDown = false;
-			
+		    
 			if(Inventory.Food != null){
 				var foodHealth = Inventory.Food.GetAttribute<float>("Saturation");
                 var foodAmount = Inventory.Food.GetAttribute<int>(CommonAttributes.Amount);
-                this.PlayEatAnimation(foodHealth);
+				Model.SetFood(Inventory.Food);
+				Model.Eat(foodHealth);
 
 				if(foodAmount > 1)
 				    Inventory.Food.SetAttribute(CommonAttributes.Amount, foodAmount-1);
                 else
 					this.Inventory.SetItem(this.Inventory.IndexOf(Inventory.Food), null);
-				
 			}
 			this.Inventory.UpdateInventory();
-		}
-		
-		private void PlayEatAnimation(float FoodHealth)
-		{
-			Model.SetFood(Inventory.Food);
-			Model?.Eat(FoodHealth);
-			this.IsEating = true;
 		}
 
 	    private void ManageDeath()

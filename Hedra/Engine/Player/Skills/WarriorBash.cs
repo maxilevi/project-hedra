@@ -69,7 +69,6 @@ namespace Hedra.Engine.Player
 			Casting = true;
 			Player.IsAttacking = false;
 			Player.WasAttacking = false;
-			Player.LeftWeapon.SlowDown = false;
 			Player.Model.PlayAnimation(BashAnimation);
 		}
 		
@@ -79,10 +78,6 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-		public override string Description {
-			get {
-				return "A powerful smashing blow.";
-			}
-		}
+		public override string Description => "A powerful smashing blow.";
 	}
 }

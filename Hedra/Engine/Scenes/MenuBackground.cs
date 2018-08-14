@@ -75,7 +75,7 @@ namespace Hedra.Engine.Scenes
 			}
 			FirePosition = CampfirePosition.Xz.ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(CampfirePosition +  Vector3.UnitX * 4));
 			
-			VertexData CenterModel = AssetManager.PLYLoader("Assets/Env/Campfire2.ply", Vector3.One * 3f);
+			VertexData CenterModel = AssetManager.PLYLoader("Assets/Env/Campfire2.ply", Vector3.One * 2.4f);
 			CenterModel.Translate( FirePosition );
 			UnderChunk.AddStaticElement(CenterModel);
 			LocalPlayer.Instance.UI.ChrChooser.ReloadFiles();
@@ -127,7 +127,7 @@ namespace Hedra.Engine.Scenes
 				World.Particles.Direction = Vector3.UnitY * 0f;
 				World.Particles.ParticleLifetime = 1.15f;
 				World.Particles.GravityEffect = -0.01f;
-				World.Particles.PositionErrorMargin = new Vector3(1.15f, 0.0f, 1.15f);
+				World.Particles.PositionErrorMargin = new Vector3(0.75f, 0.0f, 0.75f);
 				Particle3D.UseTimeScale = false;
 				
 				for(int i = 0; i < 1; i++)

@@ -117,16 +117,17 @@ namespace Hedra.Engine.EntitySystem
 	            }
 	        }
 
-	        Velocity += -Physics.Gravity * GravityDirection * _deltaTime * 6f;
+	        var modifier = 40f * (1f / (float) Utils.FrameProccesingTime);
+            Velocity += -Physics.Gravity * GravityDirection * _deltaTime * modifier;
 	        Velocity = Mathf.Clamp(Velocity, -VelocityCap, VelocityCap);
-
+            
             var command = new MoveCommand(Parent, Velocity * _deltaTime);
 	        this.ProccessCommand(command);
 
 	        if (!Parent.IsGrounded)
 	        {
 	            if (!Parent.IsUnderwater)
-	                Falltime += _deltaTime;
+	                Falltime += _deltaTime * 10f / (float)Utils.FrameProccesingTime;
 	        }
 	        else
 	        {

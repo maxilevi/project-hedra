@@ -35,7 +35,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         public bool LockWeapon { get; set; } = false;
         private bool WeaponCoroutineExists;
         public bool Disposed { get; private set; }
-        public bool SlowDown { get; set; }
         public Vector4 BaseTint { get; set; }
         public Vector4 Tint { get; set; }
         protected IHumanoid Owner { get; set; }

@@ -148,11 +148,10 @@ namespace Hedra.Engine.Rendering.UI
 		    }
             _humans.Clear();
 
-		    for (int i = 0; i < _information.Length; i++)
+		    for (var i = 0; i < _information.Length; i++)
 		    {
-		        Humanoid human = new Humanoid();
+		        var human = new Humanoid();
 		        human.Model = new HumanoidModel(human);
-		        human.Model.Resize(1.25f * Vector3.One);
 		        human.Physics.UseTimescale = false;
 		        human.Removable = false;
 		        human.Model.Enabled = false;
@@ -166,7 +165,7 @@ namespace Hedra.Engine.Rendering.UI
 		    _name.Text = string.Empty;
 				
 			for(int i = 0; i < _information.Length; i++){
-			    Vector3 offset = this.FireDirection(i, 8f);
+			    Vector3 offset = this.FireDirection(i, 6.4f);
 
 
                 if (_humans[i].Model != null)
@@ -174,7 +173,6 @@ namespace Hedra.Engine.Rendering.UI
 				
 				_humans[i].Class = _information[i].Class;
 				_humans[i].Model = new HumanoidModel(_humans[i]);
-			    _humans[i].Model.Resize(1.25f * Vector3.One);
                 _humans[i].BlockPosition = Scenes.MenuBackground.FirePosition + offset;
 				_humans[i].Model.Rotation = Physics.DirectionToEuler(-offset.Normalized().Xz.ToVector3());
 				_humans[i].Model.TargetRotation = _humans[i].Model.Rotation;
@@ -191,7 +189,6 @@ namespace Hedra.Engine.Rendering.UI
 				    _humans[i].MainWeapon = item;
 				    _humans[i].Model.SetWeapon(_humans[i].MainWeapon.Weapon);
 				}
-			    _humans[i].LeftWeapon.Scale = (1f / 1.25f) * Vector3.One;
 			}
 		}
 		
@@ -205,10 +202,10 @@ namespace Hedra.Engine.Rendering.UI
 		        if(_previousHuman != null){
 		            for(var k = 0; k <_humans.Count; k++){
 		                if (_previousHuman != _humans[k]) continue;
-		                Vector3 fPos = Scenes.MenuBackground.FirePosition + this.FireDirection(k, 10);
+		                Vector3 fPos = Scenes.MenuBackground.FirePosition + this.FireDirection(k, 8);
 		                _previousHuman.BlockPosition = new Vector3(fPos.X, _previousHuman.BlockPosition.Y, fPos.Z);
-		                _previousHuman.Model.Rotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 10).NormalizedFast().Xz.ToVector3()).Y+180, 0);
-		                _previousHuman.Model.TargetRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 10).NormalizedFast().Xz.ToVector3()).Y+180, 0);
+		                _previousHuman.Model.Rotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz.ToVector3()).Y+180, 0);
+		                _previousHuman.Model.TargetRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz.ToVector3()).Y+180, 0);
 		            }
 		        }
 		        _previousHuman = _selectedHuman;
@@ -258,7 +255,7 @@ namespace Hedra.Engine.Rendering.UI
 
 		    for (int j = 0; j < _humans.Count; j++)
 		    {
-		        Vector3 target = FireDirection(j, 6);
+		        Vector3 target = FireDirection(j, 4.8f);
 		        _humans[j].Model.Rotation = Physics.DirectionToEuler(target.NormalizedFast().Xz.ToVector3()) + Vector3.UnitY * 180f;
 		        _humans[j].Model.TargetRotation = _humans[j].Model.Rotation;
 		    }
@@ -303,7 +300,7 @@ namespace Hedra.Engine.Rendering.UI
 							break;
 						}
 					}
-                    Vector3 target = FireDirection(i, 6);
+                    Vector3 target = FireDirection(i, 4.8f);
                     if(_selectedHuman.MainWeapon != null)
                         _selectedHuman.MainWeapon.Weapon.InAttackStance = true;
 					if( (_selectedHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz).LengthSquared > 4*4)

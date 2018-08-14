@@ -182,12 +182,6 @@ namespace Hedra.Engine.Player
 	        };
         }
 
-        public void Resize(Vector3 Scalar)
-        {
-            Model.Scale *= Scalar;
-            BaseBroadphaseBox *= Scalar;
-        }
-
 		public void SetLamp(bool Active)
         {
 			if(_hasLamp == Active) return;
@@ -253,6 +247,7 @@ namespace Hedra.Engine.Player
 		
 		public void Eat(float FoodHealth)
 		{
+			Human.IsEating = true;
 		    TaskManager.While( 
                 () => Human.IsEating && !Human.IsDead,
                 () => Human.Health += FoodHealth * Time.IndependantDeltaTime * .3f);

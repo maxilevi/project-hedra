@@ -16,6 +16,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private readonly RenderableTexture[] _textBackgrounds;
         private ObjectMesh _foodMesh;
         private Item _foodItem;
+        private Item _builtFoodItem;
         private float _foodHeight;
 
         public ToolbarInventoryInterface(LocalPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing, string[] CustomIcons = null) : base(Array, Offset, Length, SlotsPerLine, Spacing, CustomIcons)
@@ -46,7 +47,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public override void UpdateView()
         {
-            if(_foodItem != null) _foodMesh = Renderer.BuildModel(_foodItem, out _foodHeight);
             for (var i = 0; i < _textBackgrounds.Length; i++)
             {
                 this.ButtonsText[i].Text = i < Toolbar.InteractableItems 
@@ -67,13 +67,18 @@ namespace Hedra.Engine.Player.ToolbarSystem
         public void Update()
         {
             _foodItem = _player.Inventory.Food;
+            if (_foodItem != _builtFoodItem && _foodItem != null)
+            {
+                _foodMesh = Renderer.BuildModel(_foodItem, out _foodHeight);
+                _builtFoodItem = _foodItem;
+            }
             this.ButtonsText[this.ButtonsText.Length - 1].Text =
                 _player.Inventory.Food?.GetAttribute<int>(CommonAttributes.Amount).ToString() ?? string.Empty;
         }
 
         public override bool Enabled
         {
-            get { return base.Enabled; }
+            get => base.Enabled;
             set
             {
                 base.Enabled = value;
@@ -84,7 +89,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public virtual Vector2 Scale
         {
-            get { return base.Scale; }
+            get => base.Scale;
             set
             {
                 for (var i = 0; i < _textBackgrounds.Length; i++)
@@ -102,7 +107,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public virtual Vector2 IndividualScale
         {
-            get { return base.IndividualScale; }
+            get => base.IndividualScale;
             set
             {
                 for (var i = 0; i < _textBackgrounds.Length; i++)
@@ -116,7 +121,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public virtual Vector2 Position
         {
-            get { return base.Position; }
+            get => base.Position;
             set
             {
                 for (var i = 0; i < _textBackgrounds.Length; i++)

@@ -203,8 +203,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
 	    public bool Listen { get; set; } = true;
 
-		public float Charge => _w2.Charge;
-
         public bool Show
 	    {
 	        get => _show;
