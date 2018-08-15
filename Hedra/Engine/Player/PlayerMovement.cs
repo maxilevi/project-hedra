@@ -150,8 +150,7 @@ namespace Hedra.Engine.Player
 
         private void ProcessMovement(IHumanoid Player, Vector3 MoveSpace)
         {
-            for (var i = 0; i < 5; i++)
-                Player.Physics.DeltaTranslate(MoveSpace * .2f);
+            Player.Physics.DeltaTranslate(MoveSpace);
 
             if (!Player.WasAttacking && !Player.IsAttacking)
             {

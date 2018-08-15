@@ -214,7 +214,6 @@ namespace Hedra
 
             Utils.CalculateFrameRate();
             IPlayer Player = GameManager.Player;
-			DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
 			Vector2 Vec2 = World.ToChunkSpace(Player.Position);
 			//Log.WriteLine( (System.GC.GetTotalMemory(false) / 1024 / 1024) + " MB");
 			if(GameSettings.DebugView){

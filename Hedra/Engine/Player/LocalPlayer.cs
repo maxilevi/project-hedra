@@ -399,7 +399,6 @@ namespace Hedra.Engine.Player
             Inventory.Update();
             AbilityTree.Update();
             Toolbar.Update();
-            View.Update();
 			UI.Update();
 			ManageSounds();
 			QuestLog.Update();
@@ -407,6 +406,7 @@ namespace Hedra.Engine.Player
 			Chat.Update();
 			Map.Update();
 			Trade.Update();
+            View.Update();
         }
 
 	    public override int Gold

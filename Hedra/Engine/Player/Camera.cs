@@ -91,6 +91,7 @@ namespace Hedra.Engine.Player
             }
             this.BuildCameraMatrix();
             DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, ModelViewMatrix);
+            DrawManager.FrustumObject.SetFrustum(ModelViewMatrix);
         }
 
         private void ManageRotations()
@@ -116,8 +117,8 @@ namespace Hedra.Engine.Player
             {
                 _targetZoomOut += _player.IsJumping ? Vector3.UnitY * 2f : Vector3.Zero;
             }
-            _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, (float) Time.DeltaTime * 2f);
-            _interpolatedPosition = PositionDelegate() - _interpolatedZoomOut;
+            _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, Time.DeltaTime * 2f);
+            _interpolatedPosition = Mathf.Lerp(_interpolatedPosition, PositionDelegate() - _interpolatedZoomOut, Time.IndependantDeltaTime * 16f);
             Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.IndependantDeltaTime * 16f);
             Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.IndependantDeltaTime * 16f);
             var cameraPosition = this.CalculatePosition(0);
@@ -160,7 +161,6 @@ namespace Hedra.Engine.Player
             ModelViewMatrix = Matrix4.LookAt(_interpolatedPosition - LookAtPoint * Distance + CameraHeight,
                 _interpolatedPosition + LookAtPoint * Distance + CameraHeight, Vector3.UnitY);
         }
-
 
         public override void OnMouseWheel(object Sender, MouseWheelEventArgs E)
         {

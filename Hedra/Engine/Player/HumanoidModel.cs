@@ -393,7 +393,6 @@ namespace Hedra.Engine.Player
 		{
             base.Update();
             HandleState();
-			Model.Update();
 		    _walkAnimation.Speed = Human.Speed;
 		    _modelSound.Pitch = Human.Speed / 1.11f;
 			
@@ -403,7 +402,7 @@ namespace Hedra.Engine.Player
 				positionAddon += MountModel.Height * Vector3.UnitY * .5f;
 			}
 
-			Model.Position = Position + positionAddon;
+			Model.Position = Mathf.Lerp(Model.Position, Position + positionAddon, Time.IndependantDeltaTime * 16f);
 			_rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
 			_rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
 			_rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
@@ -433,6 +432,7 @@ namespace Hedra.Engine.Player
 		        _modelSound.Position = Position;
 		        _modelSound.Update(IsWalking || Human.IsSleeping);
 		    }
+		    Model.Update();
         }
 
 	    public void StopSound()

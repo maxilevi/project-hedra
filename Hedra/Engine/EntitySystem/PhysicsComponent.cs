@@ -148,7 +148,6 @@ namespace Hedra.Engine.EntitySystem
 	                Falltime = 0;
 	            }
 	        }
-
 	        Parent.Model.Position = Mathf.Lerp(Parent.Model.Position, this.TargetPosition, _deltaTime * 8f);
 	    }
 
@@ -193,6 +192,7 @@ namespace Hedra.Engine.EntitySystem
       
             if (!onlyY)
             {
+
                 var nextBlock =
                     World.GetBlockAt(new Vector3(1f * modifierX, 0, 1f * modifierZ) + delta +
                                         this.Parent.BlockPosition);
@@ -377,10 +377,6 @@ namespace Hedra.Engine.EntitySystem
 		                    (heightAtPositon + BaseHeight) / Chunk.BlockSize,
 		                    Parent.BlockPosition.Z);
 
-		                if (Parent is LocalPlayer)
-		                {
-		                    int a = 0;
-		                }
 		                Parent.IsGrounded = true;
 		                blockNy = true;
 		                Velocity = Vector3.Zero;
