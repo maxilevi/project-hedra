@@ -25,6 +25,8 @@ namespace Hedra.Engine
 
 		static Log()
         {
+	        var log = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt";
+	        if(File.Exists(log)) File.Delete(log);
             _lock = new object();
             _logs = new Dictionary<LogType, StreamWriter>();
             /*LogsPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Logs/";
@@ -38,8 +40,7 @@ namespace Hedra.Engine
                     AutoFlush = true
                 });
             }*/
-            _logs.Add(LogType.Normal, new StreamWriter(new FileStream(
-                $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt", FileMode.OpenOrCreate))
+            _logs.Add(LogType.Normal, new StreamWriter(new FileStream(log, FileMode.OpenOrCreate))
             {
                 AutoFlush = true
             });

@@ -9,12 +9,9 @@ using System.IO;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 using OpenTK.Audio;
-using System.Collections.Generic;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using NVorbis.Ogg;
 using NVorbis;
-using OpenTK.Graphics.ES10;
 
 
 namespace Hedra.Engine.Sound
@@ -35,7 +32,6 @@ namespace Hedra.Engine.Sound
 
         public static void Load()
         {
-       
 			AudioContext = new AudioContext();
             Log.WriteLine("Generating a pool of sound sources...");
             for (int i = 0; i < SoundSources.Length; i++)

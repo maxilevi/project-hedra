@@ -29,13 +29,8 @@ namespace Hedra.Engine.Management
         }
 
         public static void Add(IUpdatable Updatable)
-	     {
-	         if (UpdateFunctions.Contains(Updatable))
-	         {
-	             int a = 0;
-	         }
-	        var tickable = Updatable as ITickable;
-	         if (tickable != null)
+	    {
+		    if (Updatable is ITickable tickable)
 	         {
 	            Ticker.Add(tickable);
                 return;
@@ -44,8 +39,7 @@ namespace Hedra.Engine.Management
         }
 		
 		public static void Remove(IUpdatable Updatable){
-		    var tickable = Updatable as ITickable;
-		    if (tickable != null)
+			if (Updatable is ITickable tickable)
 		    {
 		        Ticker.Remove(tickable);
                 return;
@@ -59,8 +53,7 @@ namespace Hedra.Engine.Management
 	
 	     
 		public static void Update()
-	     {
-			
+	    {
 	     	for(int i = UpdateFunctions.Count-1;i>-1;i--)
 	        {
 	     		if(UpdateFunctions[i] == null){
@@ -74,7 +67,8 @@ namespace Hedra.Engine.Management
 	     	SkyManager.Update();
 	     }
 	  	
-		public static void CenterMouse(){
+		public static void CenterMouse()
+		{
 			System.Windows.Forms.Cursor.Position = new System.Drawing.Point(GameSettings.Width / 2, GameSettings.Height / 2);
 		}
 

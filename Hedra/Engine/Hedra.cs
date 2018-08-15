@@ -61,8 +61,6 @@ namespace Hedra
 	    public static int MainThreadId;
 	    public float VRam = 0;
 		
-		public Hedra(int Width, int Height) : base( Width, Height){}
-		public Hedra(int Width, int Height, GraphicsMode Mode) : base( Width, Height, Mode){}
 		public Hedra(int Width, int Height, GraphicsMode Mode, string Title) : base( Width, Height, Mode, Title){}
 		public Hedra(int Width, int Height, GraphicsMode Mode, string Title, GameWindowFlags Options, DisplayDevice Device)
 			: base( Width, Height, Mode, Title, Options, Device){}

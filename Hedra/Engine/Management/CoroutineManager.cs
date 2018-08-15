@@ -7,40 +7,44 @@ namespace Hedra.Engine.Management
 {
 	public static class CoroutineManager
 	{
-		public static List<IEnumerator> Coroutines = new List<IEnumerator>();
+		private static readonly List<IEnumerator> Coroutines;
+		private static readonly object Lock;
 
-        public static void StartCoroutine(Func<IEnumerator> func)
+		static CoroutineManager()
+		{
+			Coroutines = new List<IEnumerator>();
+			Lock = new object();
+		}
+
+        public static void StartCoroutine(Func<IEnumerator> Func)
+        {
+			lock(Coroutines)
+				Coroutines.Add(Func());
+	    }
+	     
+	     public static void StartCoroutine(Func<object, IEnumerator> Func, object Param)
 	     {
-	     	lock(Coroutines){
-	     		Coroutines.Add(func());
-            }
+			lock(Coroutines)
+				Coroutines.Add(Func(Param));
 	     }
 	     
-	     public static void StartCoroutine(Func<object, IEnumerator> func, object param)
+	     public static void StartCoroutine(Func<object[], IEnumerator> Func, params object[] Param)
 	     {
-	     	lock(Coroutines){
-	     		Coroutines.Add(func(param));
-	     	}
+			lock(Coroutines)
+				Coroutines.Add(Func(Param));
 	     }
 	     
-	     public static void StartCoroutine(Func<object[], IEnumerator> func, params object[] param)
-	     {
-	     	lock(Coroutines){
-	     		Coroutines.Add(func(param));
-	     	}
-	     }
-	     
-	     public static void Update()
-	     {
-	     	lock(Coroutines){
-		         for(int i = Coroutines.Count-1; i > -1; i--)
-		         {
-                    
-                    bool Passed = Coroutines[i].MoveNext();
-		         	if(!Passed)
-		         		Coroutines.RemoveAt(i);
-		         }
-	     	}
-	     }
+	    public static void Update()
+	    {
+	     	lock(Coroutines)
+		     {
+				for(var i = Coroutines.Count-1; i > -1; i--)
+				{
+					var passed = Coroutines[i].MoveNext();
+					if(!passed)
+						Coroutines.RemoveAt(i);
+				}
+			}
+	    }
 	}
 }

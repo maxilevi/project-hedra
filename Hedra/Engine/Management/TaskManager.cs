@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections;
+using System.Diagnostics;
 
 namespace Hedra.Engine.Management
 {
@@ -24,15 +25,40 @@ namespace Hedra.Engine.Management
         /// <param name="Action">Action to execute</param>
         public static void Parallel(Action Action)
 		{
-		    ThreadPool.QueueUserWorkItem(delegate { Action(); });
+			var trace = new StackTrace();
+		    ThreadPool.QueueUserWorkItem(delegate
+			{
+				try
+				{
+					Action();
+				}
+				catch (Exception e)
+				{
+					Log.WriteLine($"Failed to do job:{Environment.NewLine}{e}." +
+					              $"{Environment.NewLine}Trace:{Environment.NewLine}{trace}");
+				}
+			});
 		}
 
         /// <summary>
         /// Executes the provided action asynchronously.
         /// </summary>
         /// <param name="Action">Action to execute.</param>
-        public static void Asynchronous(Action Action){
-			Task.Factory.StartNew(Action);
+        public static void Asynchronous(Action Action)
+        {
+	        var trace = new StackTrace();
+			Task.Factory.StartNew(delegate
+			{
+				try
+				{
+					Action();
+				}
+				catch (Exception e)
+				{
+					Log.WriteLine($"Failed to do job:{Environment.NewLine}{e}." +
+					              $"{Environment.NewLine}Trace: {trace}");
+				}
+			});
 		}
 		
         /// <summary>
@@ -40,7 +66,8 @@ namespace Hedra.Engine.Management
         /// </summary>
         /// <param name="Time">Time to wait. In milliseconds.</param>
         /// <param name="Action">Action to execute.</param>
-		public static void After(int Time, Action Action){
+		public static void After(int Time, Action Action)
+        {
 			CoroutineManager.StartCoroutine(AfterSeconds, Time, Action);
 		}
 
