@@ -13,27 +13,20 @@ using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Scenes;
-using OpenTK;
-using OpenTK.Input;
 
 namespace Hedra.Engine
 {
 
 	public static class GameManager
 	{
-		public static IGameProvider Provider { get; set; }
+		public static IGameProvider Provider { get; set; } = new GameProvider();
 
         public static void Load()
-		{
-		    Provider = new GameProvider();
-		}
+        {
+            Provider.Load();
+        }
 
 	    public static void LoadMenu()
 	    {
@@ -43,7 +36,7 @@ namespace Hedra.Engine
 	    public static void MakeCurrent(PlayerInformation Information)
         {
 			Provider.MakeCurrent(Information);
-		}
+        }
 
 		public static void NewRun(IPlayer User)
 		{
@@ -62,7 +55,11 @@ namespace Hedra.Engine
 		
 		public static bool SpawningEffect
 		{
-			set => Provider.SpawningEffect = value;
+		    set
+		    {
+                if(Provider == null) return;
+		        Provider.SpawningEffect = value;
+		    }
 		}
 
 		public static IPlayer Player

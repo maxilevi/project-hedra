@@ -18,16 +18,16 @@ namespace Hedra.Engine.Game
     public class GameProvider : IGameProvider
     {
         public bool Exists => Program.GameWindow.Exists;
-        public KeyboardManager Keyboard { get; }
+        public KeyboardManager Keyboard { get; private set; }
 		public IPlayer Player { get; set; }
 	    public bool IsLoading { get; private set; }
 		
-        private readonly Texture _loadingScreen;
-	    private readonly GUIText _playerText;
+        private Texture _loadingScreen;
+	    private GUIText _playerText;
 	    private bool _isNewRun;
 	    private bool _spawningEffect;
 
-        public GameProvider()
+        public void Load()
 		{
 		    Keyboard = new KeyboardManager();
             World.Load();
@@ -55,9 +55,9 @@ namespace Hedra.Engine.Game
         {
 	        World.Recreate(World.MenuSeed);
 	        SkyManager.SetTime(12000);
-            Player.Reset();
 	        SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
             CoroutineManager.StartCoroutine(MenuCoroutine);
+            Player.Reset();
         }
 		
 		private IEnumerator MenuCoroutine()

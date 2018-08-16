@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
 using System.Collections.Generic;
+using System.Dynamic;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
@@ -64,27 +65,7 @@ namespace Hedra.Engine.Rendering.UI
 			
 			var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, "Delete", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 14));
 			
-			#region DeleteButton
-			deleteButton.Click += delegate {
-				int index = 0;
-				for(int i = 0; i < _humans.Count; i++){
-					if(_humans[i] == _selectedHuman){
-						index = i;
-						break;
-					}
-				}
-				System.IO.File.Delete(AssetManager.AppData+"Characters/"+_information[index].Name+".db");
-				System.IO.File.Delete(AssetManager.AppData+"Characters/"+_information[index].Name+".db.bak");
-				_selectedHuman.Model.Enabled = false;
-				_selectedHuman.Position = Vector3.Zero;
-			    _selectedHuman.Dispose();
-                _humans.Remove(_selectedHuman);
-			    _name.Text = String.Empty;
-			    _level.Text = String.Empty;
-			    _selectedHuman = null;
-
-			};
-			#endregion
+			deleteButton.Click += (O, S) => DeleteSelected();
 			
 			_name = new GUIText(string.Empty, new Vector2(0, .55f), Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
 			_level = new GUIText(string.Empty, new Vector2(0, .425f), Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 16));
@@ -118,16 +99,23 @@ namespace Hedra.Engine.Rendering.UI
 				this.Disable(); GameManager.Player.UI.Menu.Enable();
 			};
 		}
+
+		private void DeleteSelected()
+		{
+			var index = _humans.IndexOf(_selectedHuman);
+			DataManager.DeleteCharacter(_information[index]);
+			this.ReloadFiles();
+		}
 		
 		public void ReloadFiles()
         {
-		    PlayerInformation[] newInformation = DataManager.PlayerFiles;
+		    var newInformation = DataManager.PlayerFiles;
 
-		    bool same = true;
+		    var same = true;
 		    if (_information != null && _information.Length == newInformation.Length)
 		    {
 
-		        for (int k = 0; k < _information.Length; k++)
+		        for (var k = 0; k < _information.Length; k++)
 		        {
 		            if (_information[k].Name + _information[k].Class + _information[k].BlockPosition + _information[k].Health + _information[k].Level
 		                != newInformation[k].Name + newInformation[k].Class + newInformation[k].BlockPosition + newInformation[k].Health + newInformation[k].Level)
@@ -181,7 +169,12 @@ namespace Hedra.Engine.Rendering.UI
 				_humans[i].Level = _information[i].Level;
 			    _humans[i].PlaySpawningAnimation = false;
 			    _humans[i].SearchComponent<DamageComponent>().Immune = true;
-
+			    _humans[i].Physics.TargetPosition = new Vector3(
+			        _humans[i].BlockPosition.X,
+			        Physics.HeightAtPosition(_humans[i].BlockPosition),
+			        _humans[i].BlockPosition.Z
+			    );
+			    _humans[i].Model.Position = _humans[i].Physics.TargetPosition;
                 foreach (var pair in _information[i].Items)
 				{
 				    var item = pair.Value;
@@ -248,7 +241,7 @@ namespace Hedra.Engine.Rendering.UI
 					if(_humans[k].MainWeapon != null && _humans[k].MainWeapon.Weapon.InAttackStance)
 						_humans[k].Model.Blend(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);                             
 						
-					_humans[i].Model.Enabled = true;
+					_humans[i].Model.Enabled = (_humans[i].Model.ModelPosition.Xz - _humans[i].BlockPosition.Xz).LengthFast < 8;
                     _humans[i].Update();					
 				}
 			}

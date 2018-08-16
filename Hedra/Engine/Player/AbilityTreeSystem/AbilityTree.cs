@@ -158,9 +158,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             if (Information.AbilityTreeArray.Length > 0)
             {
                 var saveData = Encoding.ASCII.GetString(Information.AbilityTreeArray);
-                if(!saveData.StartsWith(HeaderMarker)) return;
+                if (!saveData.StartsWith(HeaderMarker)) return;
 
-                var splits = saveData.Substring(HeaderMarker.Length, saveData.Length - HeaderMarker.Length).Split(AbilityTree.SaveMarker);
+                var splits = saveData.Substring(HeaderMarker.Length, saveData.Length - HeaderMarker.Length)
+                    .Split(AbilityTree.SaveMarker);
                 for (var i = 0; i < splits.Length; i++)
                 {
                     var subSplits = splits[i].Split(AbilityTree.NumberMarker);
@@ -175,6 +176,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                         }
                     }
                 }
+            }
+            else
+            {
+                this.Reset();
             }
             this.UpdateView();
         }

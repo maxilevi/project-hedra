@@ -30,6 +30,11 @@ namespace HedraTests
             throw new System.NotImplementedException();
         }
 
+        public void Load()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void NewRun(PlayerInformation Information)
         {
             throw new System.NotImplementedException();

@@ -22,7 +22,7 @@ namespace Hedra.Engine.Management
 	/// </summary>
 	public static class DataManager
 	{
-		public const float SaveVersion = 1.12f;
+		private const float SaveVersion = 1.12f;
 		
 		public static void SavePlayer(PlayerInformation Player)
         {
@@ -184,6 +184,12 @@ namespace Hedra.Engine.Management
             var map = new []{"None", "Archer", "Rogue", "Warrior"};
             return map[OldClass];
         }
+
+		public static void DeleteCharacter(PlayerInformation Information)
+		{
+			File.Delete($"{AssetManager.AppData}/Characters/{Information.Name}.db");
+			File.Delete($"{AssetManager.AppData}/Characters/{Information.Name}.db.bak");
+		}
 
 		public static PlayerInformation[] PlayerFiles
         {

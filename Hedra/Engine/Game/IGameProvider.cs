@@ -14,6 +14,7 @@ namespace Hedra.Engine.Game
         bool SpawningEffect { get; set; }
         void MakeCurrent(PlayerInformation Information);
         void LoadMenu();
+        void Load();
         void NewRun(PlayerInformation Information);
     }
 }
