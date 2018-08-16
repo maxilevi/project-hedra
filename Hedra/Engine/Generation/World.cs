@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -268,6 +269,11 @@ namespace Hedra.Engine.Generation
         public static Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition)
         {
             return Provider.FindPlaceablePosition(Mob, DesiredPosition);
+        }
+
+        public static void ForeachEntity(Action<IEntity> Lambda)
+        {
+            Entities.ToList().ForEach(Lambda);
         }
     }
 }

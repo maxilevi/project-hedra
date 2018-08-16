@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Hedra.Engine;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -28,6 +29,7 @@ namespace HedraTests
             Renderer.Provider = new SimpleGLProviderMock();
             AnimationLoader.Provider = new SimpleAnimationProvider();
             ColladaLoader.Provider = new SimpleColladaProvider();
+            GameManager.Provider = new SimpleGameProviderMock();
         }
 
         [TearDown]

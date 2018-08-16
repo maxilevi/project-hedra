@@ -232,6 +232,8 @@
     <Compile Include="Engine\EnvironmentSystem\WeatherManager.cs" />
     <Compile Include="Engine\Events\IEventProvider.cs" />
     <Compile Include="Engine\GameLoader.cs" />
+    <Compile Include="Engine\Game\GameProvider.cs" />
+    <Compile Include="Engine\Game\IGameProvider.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\AbstractBuilder.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkBuilder.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkStructuresMeshBuilder.cs" />

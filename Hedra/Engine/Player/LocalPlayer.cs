@@ -582,6 +582,7 @@ namespace Hedra.Engine.Player
 	    {
 	        Inventory.ClearInventory();
 	        ComponentManager.Clear();
+		    Chat.Clear();
             //UI.ShowMenu();
             Model.Alpha = 0f;
 	        View.TargetPitch = 0f;
@@ -589,7 +590,10 @@ namespace Hedra.Engine.Player
 	        View.TargetDistance = 10f;
 	        HandLamp.Enabled = false;
             IsGliding = false;
-	        IsKnocked = false;	        
+	        IsKnocked = false;	
+		    Spawner.Enabled = true;
+		    HandLamp.Enabled = false;
+		    if (Health <= 0) Respawn();
 	    }
 		
 		public static bool CreatePlayer(string Name, HumanoidModel PreviewModel, ClassDesign ClassType)

@@ -24,8 +24,9 @@ namespace HedraTests.Player
         private PlayerMock _player;
         
         [SetUp]
-        public void Setup()
+        public override void Setup()
         {
+            base.Setup();
             _player = new PlayerMock();
             _attack = new WeaponAttack();
             _attack.Initialize(Vector2.Zero, Vector2.One, new Panel(), _player);
