@@ -67,6 +67,7 @@
     <Compile Include="CodePolicy\BaseCodePolicy.cs" />
     <Compile Include="CodePolicy\ShaderCodePolicy.cs" />
     <Compile Include="CodePolicy\SolutionTest.cs" />
+    <Compile Include="EntitySystem\DamageComponentTest.cs" />
     <Compile Include="HedraReflectionTest.cs" />
     <Compile Include="MathExtensions\PhysicsTest.cs" />
     <Compile Include="Player\EntitySpawnerTest.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Player\PlayerMock.cs" />
     <Compile Include="Player\WeaponAttackTest.cs" />
     <Compile Include="Rendering\AnimatorTest.cs" />
+    <Compile Include="Rendering\BillboardTest.cs" />
     <Compile Include="SimpleAnimationProvider.cs" />
     <Compile Include="SimpleAssetProvider.cs" />
     <Compile Include="SimpleColladaProvider.cs" />

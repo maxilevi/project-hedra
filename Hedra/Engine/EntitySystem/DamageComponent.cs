@@ -68,7 +68,11 @@ namespace Hedra.Engine.EntitySystem
 
         public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound)
         {
-            Amount /= this.Parent.AttackResistance;
+            if (this.Parent.AttackResistance > 0)
+            {
+                Amount /= this.Parent.AttackResistance;
+            }
+
             if (Parent.IsDead)
             {
                 Exp = 0;
@@ -79,7 +83,7 @@ namespace Hedra.Engine.EntitySystem
             _attackedTimer = 6;
             _hasBeenAttacked = true;
 
-            if (!Parent.IsStatic && PlaySound && (LocalPlayer.Instance.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
+            if (!Parent.IsStatic && PlaySound && (GameManager.Player.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
             {
                 var baseDamage = Damager != null ? (Damager as Humanoid)?.BaseDamageEquation 
                     ?? (Damager.SearchComponent<BasicAIComponent>() != null ? Damager.AttackDamage * .3f : Amount * .3f) : Amount / 3f;
@@ -123,9 +127,9 @@ namespace Hedra.Engine.EntitySystem
 
             if (Parent.Health == 0 && !Parent.IsDead)
             {
-                if (!Parent.IsStatic && Damager is LocalPlayer)
+                Exp = (int) Math.Ceiling(XpToGive);
+                if (!Parent.IsStatic && Damager is IPlayer)
                 {
-                    Exp = (int) Math.Ceiling(XpToGive);
                     var label = new Billboard(4.0f, "+" + Exp + " XP", Color.Violet,
                         FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
                         Parent.Model.Position)

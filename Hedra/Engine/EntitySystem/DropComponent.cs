@@ -21,12 +21,12 @@ namespace Hedra.Engine.EntitySystem
 	{
 	    public bool RandomDrop { get; set; } = true;
         public Item ItemDrop { get; set; }
-		public DropComponent(Entity Parent) : base(Parent){}
+		public DropComponent(IEntity Parent) : base(Parent){}
         private float _dropChance;
         public float DropChance
         {
-            get { return _dropChance; }
-            set
+            get => _dropChance;
+	        set
             {
                 _dropChance = value;
                 if(_dropChance > 100 || _dropChance < 0)

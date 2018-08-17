@@ -11,8 +11,7 @@ namespace HedraTests.Generation
         [SetUp]
         public void Setup()
         {
-            if(World.Provider == null)
-                World.Provider = new WorldProvider();
+            World.Provider = new WorldProvider();
         }
         
         [Test]

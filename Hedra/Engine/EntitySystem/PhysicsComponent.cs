@@ -21,7 +21,8 @@ namespace Hedra.Engine.EntitySystem
 
     public class  PhysicsComponent : EntityComponent
 	{
-	    public event OnHitGroundEvent OnHitGround;
+		private readonly Entity _parent;
+		public event OnHitGroundEvent OnHitGround;
 		public bool UsePhysics { get; set; }
 	    public float Falltime { get; private set; }
 	    public bool CanBePushed { get; set; } = true;
@@ -35,7 +36,9 @@ namespace Hedra.Engine.EntitySystem
 
 	    public PhysicsComponent(Entity Parent) : base(Parent)
 	    {
-	        UsePhysics = true; UseTimescale = true;
+		    _parent = Parent;
+		    UsePhysics = true;
+		    UseTimescale = true;
 	    }
 
         /// <summary>
