@@ -87,7 +87,7 @@ namespace Hedra.Engine.EntitySystem
 			string phrase = _phrase ?? Phrases[Utils.Rng.Next(0, Phrases.Length)];
             phrase = Utils.FitString(phrase, 30);
 			
-			var textSize = new GUIText(phrase, Vector2.Zero, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10));
+			var textSize = new GUIText(phrase, Vector2.Zero, Color.White, FontCache.Get(AssetManager.NormalFamily, 10));
 
 	        Vector3 FollowFunc()
 	        {
@@ -99,7 +99,7 @@ namespace Hedra.Engine.EntitySystem
 		        DisposeTextureId = false
             };
 
-		    _board = new Billboard(Duration, string.Empty, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 10), FollowFunc())
+		    _board = new Billboard(Duration, string.Empty, Color.White, FontCache.Get(AssetManager.NormalFamily, 10), FollowFunc())
 		    {
 		        FollowFunc = FollowFunc
             };

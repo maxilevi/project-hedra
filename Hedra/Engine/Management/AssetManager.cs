@@ -41,6 +41,7 @@ namespace Hedra.Engine.Management
 		}
 
 		public static FontFamily BoldFamily => Provider.BoldFamily;
+		public static FontFamily NormalFamily => Provider.NormalFamily;
 		public static string AppPath => Provider.AppPath;
 		public static string AppData => Provider.AppData;
 		public static string TemporalFolder => Provider.TemporalFolder;

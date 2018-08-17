@@ -32,7 +32,7 @@ namespace Hedra.Engine.Rendering.UI
 		public ChrCreatorUI(IPlayer Player) 
 		{
             _clickTimer = new Timer(.25f);
-            Font defaultFont = FontCache.Get(UserInterface.Fonts.Families[0], 12);
+            Font defaultFont = FontCache.Get(AssetManager.NormalFamily, 12);
 			Color defaultColor = Color.White;//Color.FromArgb(255,39,39,39);
 			
 			Vector2 bandPosition = new Vector2(0f, .8f);
@@ -41,7 +41,7 @@ namespace Hedra.Engine.Rendering.UI
 		    var currentTab = new GUIText("New Character", new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold));
 
             _openFolder = new Button(new Vector2(0.8f,bandPosition.Y), new Vector2(0.15f,0.05f),
-			                           "Character Folder", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 13));
+			                           "Character Folder", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, 13));
 			_openFolder.Click += delegate { System.Diagnostics.Process.Start(AssetManager.AppData + "/Characters/"); };
 			
 			_human = new Humanoid();

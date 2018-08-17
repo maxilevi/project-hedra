@@ -43,10 +43,10 @@ namespace Hedra.Engine.Rendering.UI
             var currentTab = new GUIText("Choose a character", new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold));
 
 			var newChr = new Button(new Vector2(0.8f,bandPosition.Y), new Vector2(0.15f,0.05f),
-			                           "New Character", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 13));
+			                           "New Character", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, 13));
 			newChr.Click += delegate { this.Disable(); GameManager.Player.UI.ChrCreator.Enable(); };	
 			
-			var playBtn = new Button(new Vector2(-.1f, -.8f), Vector2.One, "Load", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 14));
+			var playBtn = new Button(new Vector2(-.1f, -.8f), Vector2.One, "Load", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, 14));
 			
 			#region PlayBtn
 			playBtn.Click += delegate {
@@ -63,12 +63,12 @@ namespace Hedra.Engine.Rendering.UI
 			};
 			#endregion
 			
-			var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, "Delete", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 14));
+			var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, "Delete", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, 14));
 			
 			deleteButton.Click += (O, S) => DeleteSelected();
 			
 			_name = new GUIText(string.Empty, new Vector2(0, .55f), Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
-			_level = new GUIText(string.Empty, new Vector2(0, .425f), Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 16));
+			_level = new GUIText(string.Empty, new Vector2(0, .425f), Color.White, FontCache.Get(AssetManager.NormalFamily, 16));
 			
 			this._dataElements.Add(_name);
 			this._dataElements.Add(_level);

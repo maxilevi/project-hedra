@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -12,7 +13,8 @@ namespace HedraTests
         public string ShaderResource { get; }
         public string SoundResource { get; }
         public string AssetsResource { get; }
-        public FontFamily BoldFamily { get; }
+        public FontFamily BoldFamily => new FontFamily(GenericFontFamilies.SansSerif);
+        public FontFamily NormalFamily => new FontFamily(GenericFontFamilies.SansSerif);
         public string AppPath { get; }
         public string AppData { get; }
         public string TemporalFolder { get; }

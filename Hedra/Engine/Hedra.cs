@@ -115,13 +115,13 @@ namespace Hedra
 
 			_debugPanel = new Panel();
 			
-			_positionText = new GUIText(string.Empty, new Vector2(.65f,-.9f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
-			_meshQueueCount = new GUIText(string.Empty, new Vector2(.65f,-.8f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));                      
-			_generationQueueCount = new GUIText(string.Empty, new Vector2(.65f,-.7f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
-			_chunkText = new GUIText(string.Empty, new Vector2(.65f,-.6f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
-			_renderText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));			
-			_meshesText = new GUIText(string.Empty, new Vector2(.65f,-.4f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
-			_cameraText = new GUIText(string.Empty, new Vector2(.65f,-.3f), Color.Black, FontCache.Get(UserInterface.Fonts.Families[0],12));
+			_positionText = new GUIText(string.Empty, new Vector2(.65f,-.9f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+			_meshQueueCount = new GUIText(string.Empty, new Vector2(.65f,-.8f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));                      
+			_generationQueueCount = new GUIText(string.Empty, new Vector2(.65f,-.7f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+			_chunkText = new GUIText(string.Empty, new Vector2(.65f,-.6f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+			_renderText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));			
+			_meshesText = new GUIText(string.Empty, new Vector2(.65f,-.4f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+			_cameraText = new GUIText(string.Empty, new Vector2(.65f,-.3f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
 			_geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
             /*Texture WaterTexture = new Texture(WaterEffects.WaterFBO.TextureID[0], Vector2.Zero, Vector2.One);
 			WaterTexture.TextureElement.Flipped = true;

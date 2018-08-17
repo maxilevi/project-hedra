@@ -29,6 +29,7 @@ namespace Hedra.Engine.Management
 	    public string AppData { get; private set; }
 	    public string TemporalFolder { get; private set; }
 	    public FontFamily BoldFamily => _fonts.Families[0];
+	    public FontFamily NormalFamily => _fonts.Families[1];
 	    public string ShaderResource => "data1.db";
 	    public string SoundResource => "data2.db";
 	    public string AssetsResource => "data3.db";
@@ -40,9 +41,12 @@ namespace Hedra.Engine.Management
 
         public void Load()
         {
-			byte[] sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.DataFile3);
+			var sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.DataFile3);
 			_fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
 
+			var sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.DataFile3);          	
+			_fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
+	        
             AssetManager.ReloadShaderSources();
 	        lock (_hitboxCacheLock)
 	        {

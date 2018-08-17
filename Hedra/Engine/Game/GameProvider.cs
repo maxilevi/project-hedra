@@ -46,7 +46,7 @@ namespace Hedra.Engine.Game
 			_loadingScreen = new Texture(Color.FromArgb(255, 40, 40, 40), Color.FromArgb(255, 70, 70, 70),
                 Vector2.Zero, Vector2.One, GradientType.TopBot);
 		    _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White,
-                FontCache.Get(UserInterface.Fonts.Families[0], 15, FontStyle.Bold));
+                FontCache.Get(AssetManager.NormalFamily, 15, FontStyle.Bold));
 		    _loadingScreen.Disable();
 			LoadMenu();
 		}

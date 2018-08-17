@@ -12,6 +12,7 @@ namespace Hedra.Engine.Management
         string SoundResource { get; }
         string AssetsResource { get; }
         FontFamily BoldFamily { get; }
+        FontFamily NormalFamily { get; }
         string AppPath { get; }
         string AppData { get; }
         string TemporalFolder { get; }

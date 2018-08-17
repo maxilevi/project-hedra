@@ -39,19 +39,24 @@ namespace HedraTests.EntitySystem
             Assert.AreEqual(0, xp);
         }
         
+        [Test]
         public void TestHasBeenAttacked()
         {
-            
+            Assert.False(_damageComponent.HasBeenAttacked);
+            _damageComponent.Damage(10, null, out var xp, false);
+            Assert.True(_damageComponent.HasBeenAttacked);
         }
         
+        [Test]
         public void TestDamageBillboardIsCreated()
         {
-            
+            _damageComponent.Damage(10, null, out var xp, true);
+            Assert.AreEqual(1, _damageComponent.DamageLabels.Count);
         }
         
         public void TestDamageBillboardHasTheCorrectColors()
         {
-            
+
         }
         
         public void TestEntityIsPushedWhenDamaged()
