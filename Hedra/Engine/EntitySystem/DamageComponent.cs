@@ -31,10 +31,13 @@ namespace Hedra.Engine.EntitySystem
         public float XpToGive = 8;
         public bool Immune = false;
         public bool Delete = true;
-        public List<Billboard> DamageLabels = new List<Billboard>();
+        public readonly List<Billboard> DamageLabels;
         public event OnDamageEventHandler OnDamageEvent;
 
-        public DamageComponent(IEntity Parent) : base(Parent) { }
+        public DamageComponent(IEntity Parent) : base(Parent)
+        {
+            DamageLabels = new List<Billboard>();
+        }
 
         private float _tintTimer;
         private Vector4 _targetTint;
@@ -91,19 +94,17 @@ namespace Hedra.Engine.EntitySystem
                 float dmgDiff = Amount / baseDamage;
                 if (dmgDiff > 1.85f) color = Color.Gold;
                 if (dmgDiff > 2.25f) color = Color.Red;
-                Billboard dmgLabel;
-                if (!Immune && !shouldMiss)
-                    dmgLabel = new Billboard(1.8f, ((int) Amount).ToString(), color,
-                        FontCache.Get(AssetManager.BoldFamily, 12 + 32 * (Amount / Parent.MaxHealth),
-                            FontStyle.Bold), Parent.Model.Position);
-                else              
-                    dmgLabel = new Billboard(1.8f, Immune ? "IMMUNE" : "MISS", Color.White,
-                        FontCache.Get(AssetManager.BoldFamily, 12 + 32 * (Amount / Parent.MaxHealth),
-                            FontStyle.Bold), Parent.Model.Position);
-                
-                dmgLabel.Vanish = true;
-                dmgLabel.Speed = 4;
-                dmgLabel.FollowFunc = () => Parent.Position;
+                if (!Immune && !shouldMiss) color = Color.White;
+                var font = FontCache.Get(AssetManager.BoldFamily, 12 + 32 * (Amount / Parent.MaxHealth), FontStyle.Bold);
+                var dmgString = ((int) Amount).ToString();
+                var missString = Immune ? "IMMUNE" : "MISS";
+                var dmgLabel = new Billboard(1.8f, !Immune && !shouldMiss ? dmgString : missString, color,
+                    font, Parent.Position)
+                {
+                    Vanish = true,
+                    Speed = 4,
+                    FollowFunc = () => Parent.Position
+                };
                 DamageLabels.Add(dmgLabel);
             }
             Exp = 0;

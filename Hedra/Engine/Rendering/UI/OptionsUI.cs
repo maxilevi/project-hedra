@@ -44,7 +44,7 @@ namespace Hedra.Engine.Rendering.UI
 			var fontSize = 14;
 			var dist = .2f;
 			var vDist = .25f;
-            _normalFont = FontCache.Get(UserInterface.Fonts.Families[0], fontSize-1);
+            _normalFont = FontCache.Get(AssetManager.NormalFamily, fontSize-1);
 		    _boldFont = FontCache.Get(AssetManager.BoldFamily, fontSize+1, FontStyle.Bold);
             Color fontColor = Color.White;
 			_controlsText = new ControlsUi(fontColor);
@@ -351,7 +351,7 @@ namespace Hedra.Engine.Rendering.UI
 				});
 			
 			/*Button Fullscreen = new Button(new Vector2(dist, -vDist),
-			                     new Vector2(0.15f,0.075f), "Fullscreen: " + ( GraphicsOptions.Fullscreen ? "ON" : "OFF"), 0, fontColor, new Font(UserInterface.Fonts.Families[0], fontSize));
+			                     new Vector2(0.15f,0.075f), "Fullscreen: " + ( GraphicsOptions.Fullscreen ? "ON" : "OFF"), 0, fontColor, new Font(AssetManager.NormalFamily, fontSize));
 						
 			Fullscreen.Click += delegate{
 					GraphicsOptions.Fullscreen = !GraphicsOptions.Fullscreen;
@@ -366,7 +366,7 @@ namespace Hedra.Engine.Rendering.UI
 				Resolutions.Add( AvailableResolutions[i].Width + "x" + AvailableResolutions[i].Height);
 			}
 			
-			OptionChooser Resolution = new OptionChooser(new Vector2(Dist, -VDist*3), new Vector2(0.15f, 0.075f), "Resolution: ",  FontColor, FontCache.Get(UserInterface.Fonts.Families[0], FontSize),
+			OptionChooser Resolution = new OptionChooser(new Vector2(Dist, -VDist*3), new Vector2(0.15f, 0.075f), "Resolution: ",  FontColor, FontCache.Get(AssetManager.NormalFamily, FontSize),
 			                                             Resolutions.ToArray(), false);
 			
 			

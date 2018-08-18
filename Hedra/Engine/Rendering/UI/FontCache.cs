@@ -9,7 +9,7 @@ namespace Hedra.Engine.Rendering.UI
 {
     public static class FontCache
     {
-        public static Dictionary<FontEntry, Font> CachedFonts = new Dictionary<FontEntry, Font>();
+        private static readonly Dictionary<FontEntry, Font> CachedFonts = new Dictionary<FontEntry, Font>();
 
         public static Font Get(FontFamily Family, float Size, FontStyle Style = FontStyle.Regular)
         {

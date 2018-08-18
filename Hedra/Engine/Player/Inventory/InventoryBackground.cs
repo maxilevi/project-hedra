@@ -25,15 +25,15 @@ namespace Hedra.Engine.Player.Inventory
             Name = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .075f),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
             Level = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * -.05f),
-                Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 16));
+                Color.White, FontCache.Get(AssetManager.NormalFamily, 16));
             TopLeftText = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * -.2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f),
                 Color.Red, FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold));
             BottomLeftText = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * -.2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f),
-                Color.DodgerBlue, FontCache.Get(UserInterface.Fonts.Families[0], 10));
+                Color.DodgerBlue, FontCache.Get(AssetManager.NormalFamily, 10));
             TopRightText = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * .2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f),
                 Color.DarkViolet, FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold));
             BottomRightText = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * .2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f),
-                Color.Gold, FontCache.Get(UserInterface.Fonts.Families[0], 10));
+                Color.Gold, FontCache.Get(AssetManager.NormalFamily, 10));
 
             _panel = new Panel();
             _panel.AddElement(_texture);

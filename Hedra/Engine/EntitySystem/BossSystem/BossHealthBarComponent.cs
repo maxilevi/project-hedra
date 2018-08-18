@@ -53,7 +53,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 player.UI.GamePanel);
 
             _nameGui = new GUIText(Name, new Vector2(0f, .85f), Color.White,
-                FontCache.Get(UserInterface.Fonts.Families[0], 14));
+                FontCache.Get(AssetManager.NormalFamily, 14));
 
 
             DrawManager.UIRenderer.Remove(_healthBar.Text);

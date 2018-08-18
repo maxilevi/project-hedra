@@ -22,8 +22,6 @@ namespace Hedra.Engine.Rendering.UI
 	public class UserInterface
 	{
 		private readonly IPlayer _player;
-		public static PrivateFontCollection Fonts = new PrivateFontCollection();
-		public const int Sans = 0;
 		public bool ShowHelp = false;
 		public Panel Menu;
 		public OptionsUI OptionsMenu;
@@ -39,9 +37,6 @@ namespace Hedra.Engine.Rendering.UI
 		public UserInterface (IPlayer Player)
         {
 			this._player = Player;
-
-			byte[] sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.DataFile3);          	
-			Fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
 			
 			Menu = new Panel();
 			OptionsMenu = new OptionsUI();
@@ -62,12 +57,12 @@ namespace Hedra.Engine.Rendering.UI
 			
 			
 			_newRun = new Button(new Vector2(.1f, bandPosition.Y),
-			                    new Vector2(0.15f,0.075f), "New World", 0, DefaultFontColor, FontCache.Get(Fonts.Families[Sans], 16));
+			                    new Vector2(0.15f,0.075f), "New World", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
 			
 			_newRun.Click += new OnButtonClickEventHandler(NewRunOnClick);
 			
 			Button chooseChr = new Button(new Vector2(.3f, bandPosition.Y),
-			                             new Vector2(0.15f,0.075f), "Load World", 0, DefaultFontColor, FontCache.Get(Fonts.Families[Sans], 16));
+			                             new Vector2(0.15f,0.075f), "Load World", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
 
 			chooseChr.Click += delegate {
 				if(!GameManager.InStartMenu){
@@ -79,10 +74,10 @@ namespace Hedra.Engine.Rendering.UI
 			};
 			
 			Button connectToServer = new Button(new Vector2(.535f, bandPosition.Y),
-			                             new Vector2(0.15f,0.075f), "Multiplayer", 0, DefaultFontColor, FontCache.Get(Fonts.Families[Sans], 16));
+			                             new Vector2(0.15f,0.075f), "Multiplayer", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
 			
 			Button disconnect = new Button(new Vector2(.535f, bandPosition.Y),
-			                             new Vector2(0.15f,0.075f), "Disconnect", 0, DefaultFontColor, FontCache.Get(Fonts.Families[Sans], 16));
+			                             new Vector2(0.15f,0.075f), "Disconnect", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
 			disconnect.Click += delegate{ Networking.NetworkManager.Disconnect(true); };
 			
 			connectToServer.Click += delegate{
@@ -90,17 +85,17 @@ namespace Hedra.Engine.Rendering.UI
 			};
 			
 			Button options = new Button(new Vector2(.75f, bandPosition.Y),
-			                            new Vector2(0.15f,0.075f), "Options", 0, DefaultFontColor, FontCache.Get(Fonts.Families[Sans], 16));
+			                            new Vector2(0.15f,0.075f), "Options", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
 			
 			options.Click += delegate(object Sender, MouseButtonEventArgs E) { Menu.Disable(); OptionsMenu.Enable();};
 			
 			Button quit = new Button(new Vector2(.9f, bandPosition.Y),
-			                         new Vector2(0.15f,0.075f), "Exit", 0, DefaultFontColor, FontCache.Get(Fonts.Families[Sans], 16));
+			                         new Vector2(0.15f,0.075f), "Exit", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
 			
 			quit.Click += delegate { Program.GameWindow.Exit(); };
 			
 			if( Program.GameWindow.GameVersion != "Unknown" ){
-				GUIText versionText = new GUIText(Program.GameWindow.GameVersion, Vector2.Zero, Color.Black, FontCache.Get(Fonts.Families[Sans], 8));
+				GUIText versionText = new GUIText(Program.GameWindow.GameVersion, Vector2.Zero, Color.Black, FontCache.Get(AssetManager.NormalFamily, 8));
 				versionText.Position = new Vector2(-1,1) + new Vector2(versionText.Scale.X, -versionText.Scale.Y);
 				Menu.AddElement(versionText);
 			}

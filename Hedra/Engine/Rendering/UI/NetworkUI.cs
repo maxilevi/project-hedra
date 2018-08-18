@@ -31,7 +31,7 @@ namespace Hedra.Engine.Rendering.UI
 			Texture blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
 			
 			Button hostTab = new Button(new Vector2(-0.1f, bandPosition.Y),
-			                    new Vector2(0.15f,0.075f), "Host", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], fontSize));
+			                    new Vector2(0.15f,0.075f), "Host", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, fontSize));
 			
 			hostTab.Click += delegate { 
 				this.SetHostButtonState(true);
@@ -39,17 +39,17 @@ namespace Hedra.Engine.Rendering.UI
 			};
 			
 			Button joinTab = new Button(new Vector2(0.1f, bandPosition.Y),
-			                    new Vector2(0.15f,0.075f), "Join", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], fontSize));
+			                    new Vector2(0.15f,0.075f), "Join", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, fontSize));
 			joinTab.Click += delegate { 
 				this.SetHostButtonState(false);
 				this.SetJoinButtonState(true);
 			};
 			
-			GUIText gameId = new GUIText("Game ID", new Vector2(0,-.25f), Color.White, FontCache.Get(UserInterface.Fonts.Families[0], fontSize));
+			GUIText gameId = new GUIText("Game ID", new Vector2(0,-.25f), Color.White, FontCache.Get(AssetManager.NormalFamily, fontSize));
 			_ipField = new TextField(new Vector2(0,-.4f), new Vector2(.20f,.05f), this);
 			_ipField.Text = string.Empty;
 			
-			var join = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Join", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], fontSize));
+			var join = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Join", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, fontSize));
 			join.Click += delegate {
 				
 				if(!NetworkManager.Join(_ipField.Text)){
@@ -67,7 +67,7 @@ namespace Hedra.Engine.Rendering.UI
 				
 			};
 			
-			Button host = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Host", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], fontSize));
+			Button host = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Host", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, fontSize));
 			/*host.Click += delegate {
 				if(NetworkManager.Host()){
 					
