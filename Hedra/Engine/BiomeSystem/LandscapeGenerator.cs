@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using OpenTK;
@@ -22,6 +23,13 @@ namespace Hedra.Engine.BiomeSystem
 	/// </summary>
 	public class LandscapeGenerator : BiomeGenerator
 	{
+		private const float narrow = 0.42f;
+		private const float border = 0.02f;
+		private const float scale = 1f;
+		private const float riverDepth = 8;
+		private const float riverMult = 165f;
+		private const float pathDepth = 2.25f;
+		
         public LandscapeGenerator(Chunk Chunk) : base(Chunk)
 	    {
 	    }
@@ -59,15 +67,9 @@ namespace Hedra.Engine.BiomeSystem
 	        var biomeGen = Chunk.Biome.Generation;
 	        var hasRiver = biomeGen.HasRivers ? 1f : 0f;
 	        var hasPath = biomeGen.HasPaths ? 1f : 0f;
-
+		    
 	        for (var x = 0; x < width; x++)
 	        {
-	            const float narrow = 0.42f;
-	            const float border = 0.02f;
-	            const float scale = 1f;
-	            const float riverDepth = 8;
-	            const float riverMult = 165f;
-	            const float pathDepth = 2.25f;
 
 	            for (var z = 0; z < depth; z++)
 	            {
@@ -75,152 +77,10 @@ namespace Hedra.Engine.BiomeSystem
 	                var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
 	                float height = Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out BlockType type);
 
-	                #region Structure stuff
-
-	                var town = false;
-	                var townClamped = false;
-	                CollidableStructure nearCollidableStructure = null;
-	                float townHeight = 0;
-
-	                foreach (CollidableStructure item in structs)
-	                {
-	                    if (!(item.Design is VillageDesign)) continue;
-
-	                    float villageRadius = item.Mountain.Radius;
-	                    if (!((position - item.Position.Xz).LengthSquared < villageRadius * villageRadius)) continue;
-
-	                    town = true;
-	                    nearCollidableStructure = item;
-	                    break;
-	                }
-
-	                var giantTree = false;
-
-	                CollidableStructure nearGiantTree = (from item in structs
-	                    let radius = item.Mountain?.Radius ?? float.MaxValue
-	                    where (position - item.Position.Xz).LengthSquared < radius * radius &&
-	                          item.Design is GiantTreeDesign
-	                    select item).FirstOrDefault();
-
-	                var inPlateau = false;          
-	                var smallFrequency = SmallFrequency(position.X, position.Y);
-		            for (var i = 0; i < plateaus.Length; i++)
-		            {
-			            var previousHeight = height;
-			            height = plateaus[i].Apply(position, height, smallFrequency);
-			            if (Math.Abs(previousHeight - height) > 0.05f)
-			            {
-				            inPlateau = true;
-			            }
-	                    if (inPlateau && nearGiantTree != null && plateaus[i] == nearGiantTree.Mountain) giantTree = true;	                    
-	                }
-		            
-		            IGroundwork[] blockGroundworks = groundworks.ToList()
-			            .Where(G => G.Affects(position)).ToArray();
-
-	                if (townClamped && townHeight != height)
-	                    townClamped = false;
-
-	                var pathClamped = false;
-	                float path = hasPath * PathFormula(Chunk.BlockSize * x + Chunk.OffsetX, Chunk.BlockSize * z + Chunk.OffsetZ);
-	                path = Mathf.Clamp(path * 100f, 0, pathDepth);
-
-	                float river = hasRiver * River(x,z, narrow, scale);
-		            float riverBorders = hasRiver * River(x,z, narrow, scale, border);
-	                float amplifiedRiverBorders = Mathf.Clamp(riverBorders * riverMult, 0, riverDepth);
-
-		            river = Mathf.Clamp(river * riverMult, 0, riverDepth);
-	                height = Math.Max(0, height + Chunk.BaseHeight);
-	                path = Mathf.Lerp(path, 0, river / riverDepth);
-
-		            var blockGroundworksModifier = 1.0f;
-		            for (var i = 0; i < plateaus.Length; i++)
-	                {
-	                    float plateauDist =
-	                    (plateaus[i].Position.Xz -
-	                     new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize)).LengthFast;
-	                    float plateauFinal = Math.Max(1 - plateauDist / plateaus[i].Radius, 0);
-
-	                    //Dont do this near trees
-	                    if (nearGiantTree == null)
-	                    {
-	                        river = Mathf.Clamp(Mathf.Lerp(0, river, 1 - Math.Min(1, plateauFinal * 3f)), 0, river);
-	                        riverBorders = Mathf.Clamp(Mathf.Lerp(0, riverBorders, 1 - Math.Min(1, plateauFinal * 3f)), 0,
-	                            riverBorders);
-	                    }
-
-	                    if (path > 0 && nearCollidableStructure != null && plateaus[i] == nearCollidableStructure.Mountain)
-	                        pathClamped = true;
-
-		                blockGroundworksModifier = Mathf.Clamp(Mathf.Lerp(0, blockGroundworksModifier, 1 - Math.Min(1, plateauFinal * 3f)), 0, blockGroundworksModifier);
-	                    path = Mathf.Clamp(Mathf.Lerp(0, path, 1 - Math.Min(1, plateauFinal * 3f)), 0, path);
-	                }
-
-	                for (var i = 0; i < noise3D.Length; i++)
-	                {
-	                    if (World.MenuSeed != World.Seed)
-	                        noise3D[i] = biomeGen.GetDensity(OffsetX + x * Chunk.BlockSize,
-	                            i * noiseScale * Chunk.BlockSize,
-	                            OffsetZ + z * Chunk.BlockSize, heightCache);
-
-                        /*
-	                    if (inPlateau)
-	                    {
-	                        foreach (Plateau plateau in plateauPositions)
-	                        {
-	                            float plateauDist =
-	                            (plateau.Position.Xz -
-	                             new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize)).LengthFast;
-	                            float plateauFinal = Math.Max(1 - plateauDist / plateau.Radius, 0);
-	                            noise3D[i] = Mathf.Lerp(0, noise3D[i], 1 - Math.Min(1, plateauFinal * 3f));
-	                        }
-	                    }*/
-
-	                    if (nearGiantTree == null)
-	                    {
-	                        river = Mathf.Clamp(Mathf.Lerp(0, river, 1 - Math.Abs(noise3D[i])), 0, river);
-	                        riverBorders = Mathf.Clamp(Mathf.Lerp(0, riverBorders, 1 - Math.Abs(noise3D[i])), 0,
-	                            riverBorders);
-	                    }
-	                    path = Mathf.Lerp(path, 0, noise3D[i]);
-	                }
-
-	                float riverLerp = amplifiedRiverBorders / riverDepth;
-		            var pathGroundwork = blockGroundworks.FirstOrDefault(P => P.IsPath);
-		            var groundworkDensity = pathGroundwork?.Density(position) ?? 0;
-	                if ((riverLerp > 0 || path > 0) && !inPlateau)
-	                {
-                        if (heightCache.ContainsKey(new Vector2(x * Chunk.BlockSize + OffsetX,
-	                        z * Chunk.BlockSize + OffsetZ)))
-	                    {
-		                    var cache = heightCache[new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ)][0];
-	                        if (path > 0)
-	                        {
-	                            path = Mathf.Lerp(path, 0, Mathf.Clamp(cache / 32.0f, 0, 1.0f));
-	                        }
-	                        if (riverLerp > 0)
-	                        {
-	                            height -= Mathf.Lerp(0, cache, riverLerp);
-	                        }
-	                    }
-	                }
-		            if (blockGroundworks.Length > 0)
-		            {
-			            var bonusHeight = blockGroundworks[blockGroundworks.Length - 1].BonusHeight * blockGroundworks[blockGroundworks.Length - 1].Density(position);
-			            height += bonusHeight * blockGroundworksModifier;
-		            }
-		            if (pathGroundwork != null)
-		            {
-			            river = Mathf.Lerp(river, 0, groundworkDensity);
-		            }
-	                height -= river;
-	                height -= path;
-		            var dirtNoise = OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + OffsetX) * 0.0175f,
-	                                    (z * Chunk.BlockSize + OffsetZ) * 0.0175f) > .35f;
-	                bool makeDirt = biomeGen.HasDirt && dirtNoise;
-	                
-
-	                #endregion
+		            this.HandleStructures(x, z, position, groundworks, plateaus, structs, heightCache, noise3D, biomeGen,
+			            hasPath, hasRiver, noiseScale, ref height, out var town, out var townClamped, out var makeDirt,
+			            out var pathClamped, out var river, out var path, out var riverBorders, out var blockGroundworksModifier,
+			            out var blockGroundworks);
 
 	                for (var y = 0; y < Chunk.Height - 1; y++)
 	                {
@@ -304,12 +164,164 @@ namespace Hedra.Engine.BiomeSystem
 	                        Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) BiomePool.SeaLevel);
 	                    }
 
-		                this.HandleGroundworks(Blocks, x, y, z, path, pathDepth, pathClamped, town, townClamped, blockGroundworks, blockGroundworksModifier);
+		                this.HandleGroundworks(Blocks, x, y, z, path, pathDepth, pathClamped, town, townClamped,
+			                blockGroundworks, blockGroundworksModifier);
 	                }
 	            }
 	        }
 	    }
 
+		private void HandleStructures(int x, int z, Vector2 position, IGroundwork[] groundworks, Plateau[] plateaus,
+			CollidableStructure[] structs, Dictionary<Vector2, float[]> heightCache, float[] noise3D, RegionGeneration biomeGen,
+			float hasPath, float hasRiver, float noiseScale, ref float height, out bool town, out bool townClamped,
+			out bool makeDirt, out bool pathClamped, out float river, out float path, out float riverBorders,
+			out float blockGroundworksModifier, out IGroundwork[] blockGroundworks)
+		{
+			town = false;
+			townClamped = false;
+			CollidableStructure nearCollidableStructure = null;
+			float townHeight = 0;
+
+			for(var i = 0; i < structs.Length; i++)
+			{
+				var item = structs[i];
+				if (!(item.Design is VillageDesign)) continue;
+
+				float villageRadius = item.Mountain.Radius;
+				if (!((position - item.Position.Xz).LengthSquared < villageRadius * villageRadius)) continue;
+
+				town = true;
+				nearCollidableStructure = item;
+				break;
+			}
+
+			var giantTree = false;
+
+			var nearGiantTree = (from item in structs
+				let radius = item.Mountain?.Radius ?? float.MaxValue
+				where (position - item.Position.Xz).LengthSquared < radius * radius &&
+					  item.Design is GiantTreeDesign
+				select item).FirstOrDefault();
+
+			var inPlateau = false;          
+			var smallFrequency = SmallFrequency(position.X, position.Y);
+			for (var i = 0; i < plateaus.Length; i++)
+			{
+				var previousHeight = height;
+				height = plateaus[i].Apply(position, height, smallFrequency);
+				if (Math.Abs(previousHeight - height) > 0.05f)
+				{
+					inPlateau = true;
+				}
+				if (inPlateau && nearGiantTree != null && plateaus[i] == nearGiantTree.Mountain) giantTree = true;	                    
+			}
+			
+			blockGroundworks = groundworks.ToList()
+				.Where(G => G.Affects(position)).ToArray();
+
+			if (townClamped && townHeight != height)
+				townClamped = false;
+
+			pathClamped = false;
+			path = hasPath * PathFormula(Chunk.BlockSize * x + Chunk.OffsetX, Chunk.BlockSize * z + Chunk.OffsetZ);
+			path = Mathf.Clamp(path * 100f, 0, pathDepth);
+
+			river = hasRiver * River(x,z, narrow, scale);
+			riverBorders = hasRiver * River(x,z, narrow, scale, border);
+			float amplifiedRiverBorders = Mathf.Clamp(riverBorders * riverMult, 0, riverDepth);
+
+			river = Mathf.Clamp(river * riverMult, 0, riverDepth);
+			height = Math.Max(0, height + Chunk.BaseHeight);
+			path = Mathf.Lerp(path, 0, river / riverDepth);
+
+			blockGroundworksModifier = 1.0f;
+			for (var i = 0; i < plateaus.Length; i++)
+			{
+				float plateauDist =
+				(plateaus[i].Position.Xz -
+				 new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize)).LengthFast;
+				float plateauFinal = Math.Max(1 - plateauDist / plateaus[i].Radius, 0);
+
+				//Dont do this near trees
+				if (nearGiantTree == null)
+				{
+					river = Mathf.Clamp(Mathf.Lerp(0, river, 1 - Math.Min(1, plateauFinal * 3f)), 0, river);
+					riverBorders = Mathf.Clamp(Mathf.Lerp(0, riverBorders, 1 - Math.Min(1, plateauFinal * 3f)), 0,
+						riverBorders);
+				}
+
+				if (path > 0 && nearCollidableStructure != null && plateaus[i] == nearCollidableStructure.Mountain)
+					pathClamped = true;
+
+				blockGroundworksModifier = Mathf.Clamp(Mathf.Lerp(0, blockGroundworksModifier, 1 - Math.Min(1, plateauFinal * 3f)), 0, blockGroundworksModifier);
+				path = Mathf.Clamp(Mathf.Lerp(0, path, 1 - Math.Min(1, plateauFinal * 3f)), 0, path);
+			}
+
+			for (var i = 0; i < noise3D.Length; i++)
+			{
+				if (World.MenuSeed != World.Seed)
+					noise3D[i] = biomeGen.GetDensity(OffsetX + x * Chunk.BlockSize,
+						i * noiseScale * Chunk.BlockSize,
+						OffsetZ + z * Chunk.BlockSize, heightCache);
+
+				/*
+				if (inPlateau)
+				{
+					foreach (Plateau plateau in plateauPositions)
+					{
+						float plateauDist =
+						(plateau.Position.Xz -
+						 new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize)).LengthFast;
+						float plateauFinal = Math.Max(1 - plateauDist / plateau.Radius, 0);
+						noise3D[i] = Mathf.Lerp(0, noise3D[i], 1 - Math.Min(1, plateauFinal * 3f));
+					}
+				}*/
+
+				if (nearGiantTree == null)
+				{
+					river = Mathf.Clamp(Mathf.Lerp(0, river, 1 - Math.Abs(noise3D[i])), 0, river);
+					riverBorders = Mathf.Clamp(Mathf.Lerp(0, riverBorders, 1 - Math.Abs(noise3D[i])), 0,
+						riverBorders);
+				}
+				path = Mathf.Lerp(path, 0, noise3D[i]);
+			}
+
+			float riverLerp = amplifiedRiverBorders / riverDepth;
+			var pathGroundwork = blockGroundworks.FirstOrDefault(P => P.IsPath);
+			var groundworkDensity = pathGroundwork?.Density(position) ?? 0;
+			if ((riverLerp > 0 || path > 0) && !inPlateau)
+			{
+				if (heightCache.ContainsKey(new Vector2(x * Chunk.BlockSize + OffsetX,
+					z * Chunk.BlockSize + OffsetZ)))
+				{
+					var cache = heightCache[new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ)][0];
+					if (path > 0)
+					{
+						path = Mathf.Lerp(path, 0, Mathf.Clamp(cache / 32.0f, 0, 1.0f));
+					}
+					if (riverLerp > 0)
+					{
+						height -= Mathf.Lerp(0, cache, riverLerp);
+					}
+				}
+			}
+			if (blockGroundworks.Length > 0)
+			{
+				var bonusHeight = blockGroundworks[blockGroundworks.Length - 1].BonusHeight * blockGroundworks[blockGroundworks.Length - 1].Density(position);
+				height += bonusHeight * blockGroundworksModifier;
+			}
+			if (pathGroundwork != null)
+			{
+				river = Mathf.Lerp(river, 0, groundworkDensity);
+			}
+			height -= river;
+			height -= path;
+			var dirtNoise = OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + OffsetX) * 0.0175f,
+								(z * Chunk.BlockSize + OffsetZ) * 0.0175f) > .35f;
+			makeDirt = biomeGen.HasDirt && dirtNoise;
+	                
+		}
+		
 		private void HandleGroundworks(Block[][][] Blocks, int X, int Y, int Z, float path, float pathDepth,
 			bool pathClamped, bool town, bool townClamped, IGroundwork[] BlockGroundworks, float GroundworksModifier)
 		{

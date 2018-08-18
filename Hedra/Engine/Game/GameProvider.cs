@@ -44,10 +44,12 @@ namespace Hedra.Engine.Game
 
 			Player.Enabled = false;
 			_loadingScreen = new Texture(Color.FromArgb(255, 40, 40, 40), Color.FromArgb(255, 70, 70, 70),
-                Vector2.Zero, Vector2.One, GradientType.TopBot);
+                Vector2.Zero, Vector2.One, GradientType.Center);
 		    _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White,
                 FontCache.Get(UserInterface.Fonts.Families[0], 15, FontStyle.Bold));
-		    _loadingScreen.Disable();
+			_loadingScreen.TextureElement.Opacity = 0;
+			_playerText.UIText.Opacity = 0;
+			CoroutineManager.StartCoroutine(LoadingScreenCoroutine);
 			LoadMenu();
 		}
 
@@ -75,6 +77,7 @@ namespace Hedra.Engine.Game
 	    public void MakeCurrent(PlayerInformation Information)
         {
 			Player.Reset();
+	        Player.Loader.Reset();
 		    Player.UI.ChrChooser.StopModels();//So as to fix loose ends
             Player.Class = Information.Class;
 	        Player.Level = Information.Level;
@@ -127,7 +130,7 @@ namespace Hedra.Engine.Game
 			Information.BlockPosition = new Vector3(Information.BlockPosition.X, 128, Information.BlockPosition.Z);
 			LocalPlayer.Instance.IsGliding = false;
 			GameManager.MakeCurrent(Information);
-			EnvironmentSystem.SkyManager.SetTime(12000);
+			SkyManager.SetTime(12000);
 
 		    Player.Model = new HumanoidModel(Player);
 			
@@ -143,86 +146,76 @@ namespace Hedra.Engine.Game
 			_isNewRun = true;
 		}
 
+	    private IEnumerator LoadingScreenCoroutine()
+	    {
+		    var time = 0f;
+		    var text = "LOADING";
+		    while (this.Exists)
+		    {
+			    yield return null;
+			    if (IsLoading)
+			    {
+				    time += Time.IndependantDeltaTime;
+				    if (time >= .5f)
+				    {
+					    text += ".";
+					    time = 0;
+					    if (text.Contains("...."))
+						    text = "LOADING";
+				    }
+				    _playerText.Text = text;
+				    _loadingScreen.TextureElement.Opacity = 1;
+				    _playerText.UIText.Opacity = 1;
+                    _playerText.Enable();
+                    _loadingScreen.Enable();
+			    }
+			    else
+			    {
+				    _loadingScreen.TextureElement.Opacity = 0;
+				    _playerText.UIText.Opacity = 0;
+			    }
+		    }
+	    }
+	    
 	    private IEnumerator SpawnCoroutine()
 	    {
 		    SoundtrackManager.PlayTrack(SoundtrackManager.LoopableSongsStart);
-		    if (_isNewRun)
-		    {
-			    Player.Physics.TargetPosition =
-				    new Vector3(Player.Physics.TargetPosition.X, 0, Player.Physics.TargetPosition.Z);
-		    }
-
 		    GameManager.Player.UI.HideMenu();
 		    Player.UI.GamePanel.Disable();
 		    Player.Chat.Show = false;
-		    var time = 0f;
 		    IsLoading = true;
-		    var text = "LOADING";
-
-		    _loadingScreen.TextureElement.Opacity = 1;
-		    _playerText.UIText.Opacity = 1;
-		    _playerText.Enable();
-		    _loadingScreen.Enable();
-		    UpdateManager.CursorShown = true;
 
 		    var chunkOffset = World.ToChunkSpace(LocalPlayer.Instance.BlockPosition);
 		    World.StructureGenerator.CheckStructures(chunkOffset);
-		    while (true)
+		    while (this.InsideFog() || Player.IsUnderwater)
 		    {
-			    time += Time.IndependantDeltaTime;
-			    if (time >= .5f)
+			    if (Player.IsUnderwater)
 			    {
-				    text += ".";
-				    time = 0;
+				    Player.BlockPosition += Vector3.One.Xz.ToVector3() * (float) Time.IndependantDeltaTime * 60f * 5f;
 			    }
-
-			    if (text.Contains("...."))
-				    text = "LOADING";
-
-			    _playerText.Text = text;
-			    var underChunk = World.GetChunkAt(Player.BlockPosition);
-			    if (underChunk != null && underChunk.IsGenerated && underChunk.Landscape.StructuresPlaced &&
-			        underChunk.BuildedWithStructures
-			        && underChunk.Mesh != null)
-			    {
-				    if (Player.IsUnderwater)
-				    {
-					    Player.BlockPosition +=
-						    Vector3.One.Xz.ToVector3() * (float) Time.IndependantDeltaTime * 60f * 5f;
-					    yield return null;
-					    continue;
-				    }
-
-				    Player.Physics.TargetPosition = new Vector3(
-					    Player.Physics.TargetPosition.X,
-					    Physics.HeightAtPosition(Player.Physics.TargetPosition),
-					    Player.Physics.TargetPosition.Z
-				    );
-				    Player.LeftWeapon.MainMesh.TargetPosition = Vector3.Zero;
-				    Player.LeftWeapon.MainMesh.TargetRotation = Vector3.Zero;
-				    Player.LeftWeapon.MainMesh.LocalRotation = Vector3.Zero;
-				    Player.LeftWeapon.MainMesh.LocalPosition = Vector3.Zero;
-				    Player.Model.ApplyFog = true;
-				    Player.CanInteract = true;
-				    GameManager.SpawningEffect = true;
-				    IsLoading = false;
-				    _loadingScreen.TextureElement.Opacity = 0;
-				    _playerText.UIText.Opacity = 0;
-				    if (_isNewRun)
-					    Player.QuestLog.Show = true;
-
-				    LocalPlayer.Instance.PlaySpawningAnimation = true;
-				    LocalPlayer.Instance.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);
-				    _isNewRun = false;
-				    break;
-			    }
-
+			    Player.Physics.TargetPosition = new Vector3(
+				    Player.Physics.TargetPosition.X,
+				    Physics.HeightAtPosition(Player.Physics.TargetPosition),
+				    Player.Physics.TargetPosition.Z
+			    );
 			    yield return null;
 		    }
 
 		    Player.UI.GamePanel.Enable();
 		    Player.Chat.Show = true;
 		    Player.Chat.LoseFocus();
+		    IsLoading = false;
+		    GameManager.SpawningEffect = true;
+		    Player.Model.ApplyFog = true;
+		    Player.CanInteract = true;
+		    Player.QuestLog.Show = true;
+		    GameManager.Player.PlaySpawningAnimation = true;
+		    GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);
+	    }
+
+	    private bool InsideFog()
+	    {
+		    return Player.Loader.ActiveChunks < 60;
 	    }
 
 	    public bool InStartMenu => World.Seed == World.MenuSeed;

@@ -26,14 +26,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public float MaxFog { get; private set; }
         private readonly List<ChunkWatcher> _chunkWatchers;
         private readonly Thread _mainThread;
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
         private float _targetMin = 1;
         private float _targetMax = 1;
         private float _activeChunks;
         private float _targetActivechunks;
-        private Vector2 _lastPosition;
+        private bool _reset;
 
-        public ChunkLoader(LocalPlayer Player)
+        public ChunkLoader(IPlayer Player)
         {
             _player = Player;
             Enabled = true;
@@ -74,7 +74,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Offset = World.ToChunkSpace(_player.BlockPosition);
                 if (World.IsGenerated && Enabled)
                 {
-                    _lastPosition = Offset;
                     var radius = (int) (GameSettings.ChunkLoaderRadius * .5f);
                     var hadChanges = false;
                     for (var x = -radius; x < radius; x++)
@@ -101,8 +100,26 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
                 }
                 _targetActivechunks = newTarget;
+                if (_reset) this.HandleReset();
                 yield return null;
             }
+        }
+
+        public void HandleReset()
+        {
+            for (var i = _chunkWatchers.Count - 1; i > -1; i--)
+            {
+                _chunkWatchers[i].Kill();
+                _chunkWatchers.RemoveAt(i);
+            }
+            _targetActivechunks = 0;
+            _activeChunks = 0;
+            _reset = false;
+        }
+
+        public void Reset()
+        {
+            _reset = true;
         }
     }
 }

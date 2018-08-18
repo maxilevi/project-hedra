@@ -48,20 +48,10 @@ namespace Hedra.Engine.Rendering.UI
 			
 			var playBtn = new Button(new Vector2(-.1f, -.8f), Vector2.One, "Load", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 14));
 			
-			#region PlayBtn
-			playBtn.Click += delegate {
-				int index = 0;
-				for(int i = 0; i < _humans.Count; i++){
-					if(_humans[i] == _selectedHuman){
-						index = i;
-						break;
-					}
-				}
-				
-				var information = DataManager.PlayerFiles[index];
-				GameManager.MakeCurrent(information);
+			playBtn.Click += delegate 
+			{
+				GameManager.MakeCurrent(DataManager.PlayerFiles[_humans.IndexOf(_selectedHuman)]);
 			};
-			#endregion
 			
 			var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, "Delete", 0, Color.White, FontCache.Get(UserInterface.Fonts.Families[0], 14));
 			

@@ -171,7 +171,8 @@ namespace Hedra.Engine.Rendering.UI
 			//CoroutineManager.StartCoroutine(MenuEnter);
 		}
 			
-		public void HideMenu(){
+		public void HideMenu()
+		{
 			GameSettings.Paused = false;
 			if(Networking.NetworkManager.IsConnected){
 				_player.View.LockMouse = true;

@@ -321,7 +321,7 @@ namespace HedraTests
         {
         }
 
-        public virtual void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, int[] Offsets, int Count)
+        public virtual void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
         {
         }
 

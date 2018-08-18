@@ -34,8 +34,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if(_object.Disposed)
             {
-                World.RemoveChunk(_object);
-                this.Dispose();
+                this.Kill();
                 return false;
             }
 
@@ -45,8 +44,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 if (!_object.Blocked)
                 {
-                    World.RemoveChunk(_object);
-                    this.Dispose();
+                    this.Kill();
                     return false;
                 }
             }
@@ -79,6 +77,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static bool ShouldWeRebuildChunk(Chunk Chunk)
         {
             return (!Chunk.BuildedCompletely || Chunk.Lod != Chunk.BuildedLod || Chunk.NeedsRebuilding) && Chunk.NeighboursExist;
+        }
+
+        public void Kill()
+        {
+            World.RemoveChunk(_object);
+            this.Dispose();
         }
 
         public void Dispose()

@@ -80,7 +80,7 @@ namespace Hedra.Engine.Rendering
         void LinkProgram(uint Program);
         void LoadMatrix(ref Matrix4 Matrix4);
         void MatrixMode(MatrixMode Mode);
-        void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, int[] Offsets, int Count);
+        void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count);
         void PointSize(float Size);
         void PolygonMode(MaterialFace Face, PolygonMode Mode);
         void PopMatrix();

@@ -467,11 +467,6 @@ namespace Hedra.Engine.Rendering
             Provider.MatrixMode(Mode);
         }
 
-        public static void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, int[] Offsets, int Count)
-        {
-            Provider.MultiDrawElements(Primitive, Counts, Type, Offsets, Count);
-        }
-
         public static void PointSize(float Size)
         {
             Provider.PointSize(Size);

@@ -372,7 +372,7 @@ namespace Hedra.Engine.Rendering
             GL.MatrixMode(Mode);
         }
 
-        public void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, int[] Offsets, int Count)
+        public void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
         {
             GL.MultiDrawElements(Primitive, Counts, Type, Offsets, Count);
         }
