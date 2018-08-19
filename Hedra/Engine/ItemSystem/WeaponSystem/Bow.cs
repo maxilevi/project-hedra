@@ -7,6 +7,10 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
@@ -66,7 +70,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
 		{
 			if(Type != AttackEventType.Mid) return;
-			var player = Owner as LocalPlayer;
+			var player = Owner as IPlayer;
 			var direction = player?.View.CrossDirection ?? Owner.Orientation;
 			this.ShootArrow(Owner, direction, Options);
 		}
@@ -74,8 +78,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
 		{
 			if(Type != AttackEventType.Mid) return;
-			this.ShootTripleArrow(Owner, Options);
-		}
+		    CoroutineManager.StartCoroutine(TripleArrowCoroutine, Options);
+        }
 		
 		public override void Update(IHumanoid Human)
 		{
@@ -127,13 +131,17 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		{
 			return this.ShootArrow(Human, Direction, AttackOptions.Default, KnockChance);
 		}
-		
-		public Projectile ShootArrow(IHumanoid Human, Vector3 Direction, AttackOptions Options, int KnockChance = -1)
-		{
-		    var startingLocation = Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
-		                           (Human is LocalPlayer ? Human.IsRiding ? Vector3.UnitY * 1f : Vector3.Zero : Vector3.Zero);
 
-		    var arrowProj = new Projectile(Human, startingLocation, _arrowDataVertexData)
+		public Projectile ShootArrow(IHumanoid Human, Vector3 Direction, AttackOptions Options,
+			int KnockChance = -1)
+		{
+			return this.ShootArrow(Human, this.ArrowOrigin, Direction, Options, KnockChance);
+		}
+		
+		public Projectile ShootArrow(IHumanoid Human, Vector3 Origin, Vector3 Direction, AttackOptions Options, int KnockChance = -1)
+		{
+
+		    var arrowProj = new Projectile(Human, Origin, _arrowDataVertexData)
 		    {
 		        Lifetime = 5f,
 		        Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce
@@ -150,15 +158,33 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 			SoundManager.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
 			return arrowProj;
 		}
-		
-		public void ShootTripleArrow(IHumanoid Human, AttackOptions Options)
-		{
-		    var player = Human as LocalPlayer;
-            var direction = player?.View.CrossDirection ?? Human.Orientation;
-			ShootArrow(Human, (direction + Vector3.UnitX * .15f).NormalizedFast(), Options);
-			ShootArrow(Human, direction, Options);
-			ShootArrow(Human, (direction - Vector3.UnitX * .15f).NormalizedFast(), Options);
-			SoundManager.PlaySound(SoundType.BowSound, Human.Position, false, 1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
-		}
+
+		private Vector3 ArrowOrigin => Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
+		                               (Owner is IPlayer
+			                               ? Owner.IsRiding ? Vector3.UnitY * 1f : Vector3.Zero
+			                               : Vector3.Zero);
+
+	    private IEnumerator TripleArrowCoroutine(object[] Params)
+	    {
+	        var options = (AttackOptions) Params[0];
+	        var player = Owner as IPlayer;
+	        var direction = player?.View.CrossDirection ?? Owner.Orientation;
+		    var origin = ArrowOrigin;
+	        this.ShootArrow(Owner, ArrowOrigin, direction, options);
+	        var time = 0f;
+	        while (time < .20f)
+	        {
+	            time += Time.DeltaTime;
+	            yield return null;
+	        }
+            this.ShootArrow(Owner, ArrowOrigin, direction, options);
+	        time = 0f;
+	        while (time < .20f)
+	        {
+	            time += Time.DeltaTime;
+	            yield return null;
+	        }
+            this.ShootArrow(Owner, ArrowOrigin, direction, options);
+        }
 	}
 }

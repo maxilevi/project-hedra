@@ -118,7 +118,7 @@ namespace Hedra.Engine.Player
                 _targetZoomOut += _player.IsJumping ? Vector3.UnitY * 2f : Vector3.Zero;
             }
             _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, Time.DeltaTime * 2f);
-            _interpolatedPosition = Mathf.Lerp(_interpolatedPosition, PositionDelegate() - _interpolatedZoomOut, Time.IndependantDeltaTime * 16f);
+            _interpolatedPosition = PositionDelegate() - _interpolatedZoomOut;
             Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.IndependantDeltaTime * 16f);
             Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.IndependantDeltaTime * 16f);
             var cameraPosition = this.CalculatePosition(0);

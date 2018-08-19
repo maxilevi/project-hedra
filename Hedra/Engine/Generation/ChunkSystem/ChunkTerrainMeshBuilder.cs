@@ -90,9 +90,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             if (!MarchingCubes.Usable(0f, cell)) continue;
 
                             var regionPosition = new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
-                            RegionColor region = Cache.GetAverageRegionColor(regionPosition);
-                            color = Helper.GetColor(cell, Blocks[x][y][z].Type, BoundsX, BoundsY, BoundsZ, addonColors,
-                                region, Lod);
+                            var region = Cache.GetAverageRegionColor(regionPosition);
+                            color = Helper.GetColor(cell, region, Lod);
                             MarchingCubes.Process(0f, cell, color, next, blockData);
                         }
                         else
@@ -102,8 +101,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                             RegionColor region = Cache.GetAverageRegionColor(regionPosition);
 
-                            color = Helper.GetColor(cell, Blocks[x][y][z].Type, BoundsX, BoundsY, BoundsZ, addonColors,
-                                region, Lod);
+                            color = Helper.GetColor(cell, region, Lod);
 
                             MarchingCubes.Process(0f, cell, color, next, blockData);
                         }

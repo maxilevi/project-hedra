@@ -29,10 +29,10 @@ namespace Hedra.Engine.Rendering.UI
 
         public GUIText(string Text, Vector2 Position, Color TextColor, Font TextFont)
         {
-            this._text = Text;
-            this._temporalPosition = Position;
-            this.Configuration = new TextConfiguration(TextColor, TextFont);
-            this.MakeText();
+            _text = Text;
+            _temporalPosition = Position;
+            Configuration = new TextConfiguration(TextColor, TextFont);
+            MakeText();
         }
 
         public void MakeText()

@@ -94,7 +94,7 @@ namespace Hedra.Engine.EntitySystem
                 float dmgDiff = Amount / baseDamage;
                 if (dmgDiff > 1.85f) color = Color.Gold;
                 if (dmgDiff > 2.25f) color = Color.Red;
-                if (!Immune && !shouldMiss) color = Color.White;
+                if (Immune || shouldMiss) color = Color.White;
                 var font = FontCache.Get(AssetManager.BoldFamily, 12 + 32 * (Amount / Parent.MaxHealth), FontStyle.Bold);
                 var dmgString = ((int) Amount).ToString();
                 var missString = Immune ? "IMMUNE" : "MISS";

@@ -270,12 +270,12 @@ namespace Hedra.Engine
 
 	    public static double Clamp(double Val, double Min, double Max)
 	    {
-	        return Val < Min ? Min : Val > Max ? Max : Val;
+		    return Math.Max(Math.Min(Val, Max), Min);
 	    }
 
         public static float Clamp(float Val, float Min, float Max)
         {
-            return Val < Min ? Min : Val > Max ? Max : Val;
+            return Math.Max(Math.Min(Val, Max), Min);
         }
 
 	    public static Vector3 Clamp(Vector3 Value, Vector3 Min, Vector3 Max)

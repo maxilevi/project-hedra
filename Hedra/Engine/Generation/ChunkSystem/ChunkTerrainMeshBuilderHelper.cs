@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
@@ -9,39 +9,44 @@ namespace Hedra.Engine.Generation.ChunkSystem
     public class ChunkTerrainMeshBuilderHelper
     {
         private readonly Chunk _parent;
-        private readonly float _coefficient = 1 / BlockSize;
+        private readonly float _coefficient;    
+        private readonly int _offsetX;
+        private readonly int _offsetZ;
+        private readonly int _boundsX;
+        private readonly int _boundsY;
+        private readonly int _boundsZ;
+        private readonly int _height;
+        private readonly float _blockSize;
 
         public ChunkTerrainMeshBuilderHelper(Chunk Parent)
         {
             _parent = Parent;
+            _offsetX = _parent.OffsetX;
+            _offsetZ = _parent.OffsetZ;
+            _blockSize = Chunk.BlockSize;
+            _boundsX = (int) (Chunk.Width / _blockSize);
+            _boundsY = Chunk.Height;
+            _boundsZ = (int) (Chunk.Width / _blockSize);
+            _height = Chunk.Height;
+            _coefficient =  1 / _blockSize;
         }
 
-        private int OffsetX => _parent.OffsetX;
-        private int OffsetZ => _parent.OffsetZ;
-        private int BoundsX => _parent.BoundsX;
-        private int BoundsY => _parent.BoundsY;
-        private int BoundsZ => _parent.BoundsZ;
-        private int Width => Chunk.Width;
-        private int Height => Chunk.Height;
-        private static float BlockSize => Chunk.BlockSize;
-
-        public Vector4 GetColor(GridCell Cell, BlockType Type, int Width, int Height, int Depth,
-            List<Vector4> AddonColors, RegionColor RegionColor, int Lod)
+        public Vector4 GetColor(GridCell Cell, RegionColor RegionColor, int Lod)
         {
-            Vector3 position = Cell.P[0] / BlockSize;
+            Vector3 position = Cell.P[0] / _blockSize;
             Vector4 color = Vector4.Zero;
             float colorCount = 0;
             int x = (int) position.X, y = (int) position.Y, z = (int) position.Z;
 
             float noise =
-                (float) OpenSimplexNoise.Evaluate((Cell.P[0].X + OffsetX) * .00075f, (Cell.P[0].Z + OffsetZ) * .00075f);
+                (float) OpenSimplexNoise.Evaluate((Cell.P[0].X + _offsetX) * .00075f, (Cell.P[0].Z + _offsetZ) * .00075f);
             RegionColor regionColor = RegionColor;
 
-            for (int _x = -Lod * 1; _x < 1 * Lod + 1; _x += Lod)
-            for (int _z = -Lod * 1; _z < 1 * Lod + 1; _z += Lod)
-            for (int _y = -1; _y < 1 + 1; _y++)
+            for (var _x = -Lod * 1; _x < 1 * Lod + 1; _x += Lod)
+            for (var _z = -Lod * 1; _z < 1 * Lod + 1; _z += Lod)
+            for (var _y = -1; _y < 1 + 1; _y++)
             {
-                Block y0 = this.GetNeighbourBlock(x + _x, (int) Mathf.Clamp(y + _y, 0, this.Height - 1), z + _z);
+                Block y0 = this.GetNeighbourBlock(x + _x, (int) Mathf.Clamp(y + _y, 0, this._height - 1), z + _z);
 
                 if (y0.Type != BlockType.Water && y0.Type != BlockType.Air && y0.Type != BlockType.Temporal)
                 {
@@ -89,10 +94,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 var cz = new GridCell();
                 cz.P = new Vector3[4];
-                cz.P[0] = new Vector3(X * BlockSize, Y * BlockSize, Z * BlockSize);
-                cz.P[1] = new Vector3(BlockSize * Lod + cz.P[0].X, cz.P[0].Y, cz.P[0].Z);
-                cz.P[2] = new Vector3(BlockSize * Lod + cz.P[0].X, cz.P[0].Y, BlockSize * Lod + cz.P[0].Z);
-                cz.P[3] = new Vector3(cz.P[0].X, cz.P[0].Y, BlockSize * Lod + cz.P[0].Z);
+                cz.P[0] = new Vector3(X * _blockSize, Y * _blockSize, Z * _blockSize);
+                cz.P[1] = new Vector3(_blockSize * Lod + cz.P[0].X, cz.P[0].Y, cz.P[0].Z);
+                cz.P[2] = new Vector3(_blockSize * Lod + cz.P[0].X, cz.P[0].Y, _blockSize * Lod + cz.P[0].Z);
+                cz.P[3] = new Vector3(cz.P[0].X, cz.P[0].Y, _blockSize * Lod + cz.P[0].Z);
 
                 for (var i = 0; i < 4; i++)
                 {
@@ -102,7 +107,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                     if (waterBlock.Type != BlockType.Water)
                     {
-                        for (int k = (int) pos.Y - 3; k < BoundsY; k++)
+                        for (int k = (int) pos.Y - 3; k < _boundsY; k++)
                         {
                             waterBlock = this.GetNeighbourBlock((int) pos.X, k, (int) pos.Z);
 
@@ -110,7 +115,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             if (waterBlock.Type == BlockType.Water) goto WATER_BREAK;
                         }
 
-                        for (int k = (int) pos.Y - 3; k < BoundsY; k++)
+                        for (int k = (int) pos.Y - 3; k < _boundsY; k++)
                         for (int kx = -2; kx < 3; kx++)
                         for (int kz = -2; kz < 3; kz++)
                         {
@@ -123,8 +128,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     WATER_BREAK:
 
                     var neighbourChunk = this.GetNeighbourChunk((int) pos.X, Y, (int) pos.Z);
-                    var x = (int) (pos.X % BoundsX);
-                    var z = (int) (pos.Z % BoundsZ);
+                    var x = (int) (pos.X % _boundsX);
+                    var z = (int) (pos.Z % _boundsZ);
 
                     var newHeight = neighbourChunk?.GetWaterDensity(new Vector3(x, Y, z)) ?? default(Half);
                     for (int k = Math.Min(Y + 8, Chunk.Height - 1); k > -1 && Math.Abs(newHeight) < 0.005f; k--)
@@ -146,7 +151,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             for (var i = 0; i < Cell.Type.Length; i++)
             {
-                if (Cell.Type[i] == BlockType.Temporal && Y < this.Height - 2)
+                if (Cell.Type[i] == BlockType.Temporal && Y < this._height - 2)
                 {
                     Success = false;
                     Cell.Type[i] = BlockType.Air;
@@ -157,44 +162,43 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void BuildCell(ref GridCell Cell, int X, int Y, int Z, bool WaterCell, int Lod)
         {
             int lod = Lod;
-            float blockSizeLod = BlockSize * lod;
+            float blockSizeLod = _blockSize * lod;
             if (WaterCell)
             {
                 Cell.P[0] = new Vector3(X, Y, Z);
                 Cell.P[1] = new Vector3(X + blockSizeLod, Y, Z);
                 Cell.P[2] = new Vector3(X + blockSizeLod, Y, Z + blockSizeLod);
                 Cell.P[3] = new Vector3(X, Y, Z + blockSizeLod);  
-                Cell.P[4] = new Vector3(X, Y + BlockSize, Z); 
-                Cell.P[5] = new Vector3(X + blockSizeLod, Y + BlockSize, Z);
-                Cell.P[6] = new Vector3(X + blockSizeLod, Y + BlockSize, Z + blockSizeLod); 
-                Cell.P[7] = new Vector3(X, Y + BlockSize, Z + blockSizeLod);
+                Cell.P[4] = new Vector3(X, Y + _blockSize, Z); 
+                Cell.P[5] = new Vector3(X + blockSizeLod, Y + _blockSize, Z);
+                Cell.P[6] = new Vector3(X + blockSizeLod, Y + _blockSize, Z + blockSizeLod); 
+                Cell.P[7] = new Vector3(X, Y + _blockSize, Z + blockSizeLod);
             }
             else
             {
-                Cell.P[0] = new Vector3(X * BlockSize, Y * BlockSize, Z * BlockSize);
+                Cell.P[0] = new Vector3(X * _blockSize, Y * _blockSize, Z * _blockSize);
                 Cell.P[1] = new Vector3(blockSizeLod + Cell.P[0].X, Cell.P[0].Y, Cell.P[0].Z);
                 Cell.P[2] = new Vector3(blockSizeLod + Cell.P[0].X, Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
                 Cell.P[3] = new Vector3(Cell.P[0].X, Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
-                Cell.P[4] = new Vector3(Cell.P[0].X, BlockSize + Cell.P[0].Y, Cell.P[0].Z);
-                Cell.P[5] = new Vector3(blockSizeLod + Cell.P[0].X, BlockSize + Cell.P[0].Y, Cell.P[0].Z);
-                Cell.P[6] = new Vector3(blockSizeLod + Cell.P[0].X, BlockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
-                Cell.P[7] = new Vector3(Cell.P[0].X, BlockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
+                Cell.P[4] = new Vector3(Cell.P[0].X, _blockSize + Cell.P[0].Y, Cell.P[0].Z);
+                Cell.P[5] = new Vector3(blockSizeLod + Cell.P[0].X, _blockSize + Cell.P[0].Y, Cell.P[0].Z);
+                Cell.P[6] = new Vector3(blockSizeLod + Cell.P[0].X, _blockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
+                Cell.P[7] = new Vector3(Cell.P[0].X, _blockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
             }
         }
 
         private Chunk GetNeighbourChunk(int X, int Y, int Z)
         {
-            if (X >= 0 && X < BoundsX && Z >= 0 && Z < BoundsZ) return _parent;
-            var coords = World.ToChunkSpace(new Vector3(OffsetX + X * Chunk.BlockSize, 0, OffsetZ + Z * Chunk.BlockSize));
+            if (X >= 0 && X < _boundsX && Z >= 0 && Z < _boundsZ) return _parent;
+            var coords = World.ToChunkSpace(new Vector3(_offsetX + X * _blockSize, 0, _offsetZ + Z * _blockSize));
             return World.SearcheableChunks.ContainsKey(coords) ? World.SearcheableChunks[coords] : null;
         }
 
         private Block GetNeighbourBlock(int X, int Y, int Z)
         {
             var chunk = this.GetNeighbourChunk(X, Y, Z);
-            if (!chunk?.Landscape?.BlocksSetted ?? true) return new Block(BlockType.Temporal);
-            return chunk[Modulo(X, BoundsX)][Y][Modulo(Z, BoundsZ)];
-
+            if (!chunk?.Landscape.BlocksSetted ?? true) return new Block(BlockType.Temporal);
+            return chunk[Modulo(X, _boundsX)][Y][Modulo(Z, _boundsZ)];
         }
         
         // Source: https://codereview.stackexchange.com/a/58309

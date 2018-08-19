@@ -402,7 +402,7 @@ namespace Hedra.Engine.Player
 				positionAddon += MountModel.Height * Vector3.UnitY * .5f;
 			}
 
-			Model.Position = Mathf.Lerp(Model.Position, Position + positionAddon, Time.IndependantDeltaTime * 16f);
+			Model.Position = Mathf.Lerp(Model.Position, Position + positionAddon, Time.IndependantDeltaTime * 32f);
 			_rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
 			_rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
 			_rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);

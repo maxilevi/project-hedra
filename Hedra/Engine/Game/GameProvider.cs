@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -43,9 +43,10 @@ namespace Hedra.Engine.Game
 			Log.WriteLine("Setted up GUI");
 
 			Player.Enabled = false;
-			_loadingScreen = new Texture(Color.FromArgb(255, 40, 40, 40), Color.FromArgb(255, 70, 70, 70),
-                Vector2.Zero, Vector2.One, GradientType.Center);
-		    _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.Get(AssetManager.NormalFamily, 15, FontStyle.Bold));
+			_loadingScreen = new Texture(Color.FromArgb(255, 30, 30, 30), Color.FromArgb(255, 60, 60, 60),
+                Vector2.Zero, Vector2.One, GradientType.Diagonal);
+		    _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, 
+			    FontCache.Get(AssetManager.NormalFamily, 15, FontStyle.Bold));
 			_loadingScreen.TextureElement.Opacity = 0;
 			_playerText.UIText.Opacity = 0;
 			CoroutineManager.StartCoroutine(LoadingScreenCoroutine);
@@ -149,7 +150,7 @@ namespace Hedra.Engine.Game
 	    {
 		    var time = 0f;
 		    var text = "LOADING";
-		    while (this.Exists)
+		    while (Exists)
 		    {
 			    yield return null;
 			    if (IsLoading)
@@ -186,12 +187,8 @@ namespace Hedra.Engine.Game
 
 		    var chunkOffset = World.ToChunkSpace(LocalPlayer.Instance.BlockPosition);
 		    World.StructureGenerator.CheckStructures(chunkOffset);
-		    while (this.InsideFog() || Player.IsUnderwater)
+		    while (!IsLoaded(chunkOffset))
 		    {
-			    if (Player.IsUnderwater)
-			    {
-				    Player.BlockPosition += Vector3.One.Xz.ToVector3() * (float) Time.IndependantDeltaTime * 60f * 5f;
-			    }
 			    Player.Physics.TargetPosition = new Vector3(
 				    Player.Physics.TargetPosition.X,
 				    Physics.HeightAtPosition(Player.Physics.TargetPosition),
@@ -212,9 +209,19 @@ namespace Hedra.Engine.Game
 		    GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);
 	    }
 
-	    private bool InsideFog()
+	    private static bool IsLoaded(Vector2 Offset)
 	    {
-		    return Player.Loader.ActiveChunks < 60;
+		    for (var x = -1; x < 2; x++)
+		    {
+			    for (var z = -1; z < 2; z++)
+			    {
+				    var chunk = World.GetChunkByOffset((int) Offset.X + x * Chunk.Width, (int) Offset.Y + z * Chunk.Width);
+				    if (!chunk?.BuildedWithStructures ?? true)
+					    return false;
+			    } 
+		    }
+
+		    return true;
 	    }
 
 	    public bool InStartMenu => World.Seed == World.MenuSeed;
@@ -231,7 +238,7 @@ namespace Hedra.Engine.Game
 			    GameSettings.BloomModifier = 8.0f;
 			    TaskManager.While( () => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
 			    {
-				    GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, (float) Time.IndependantDeltaTime);
+				    GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependantDeltaTime);
 			    });
 			    TaskManager.When( () => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
 			    {

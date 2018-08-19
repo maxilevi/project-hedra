@@ -32,48 +32,57 @@ namespace Hedra.Engine.EntitySystem
 			this._totalTime = TotalTime;
 			this._totalDamage = TotalDamage;
 			this._damager = Damager;
-			CoroutineManager.StartCoroutine(UpdateBleed);
+	        this.Start();
 		}
 		
-		public BurningComponent(IEntity Parent, float TotalTime, float TotalDamage) : base(Parent)
+		public BurningComponent(IEntity Parent, float TotalTime, float TotalDamage) : this(Parent, null, TotalTime, TotalDamage)
         {
-			this._totalTime = TotalTime;
-			this._totalDamage = TotalDamage;
-			CoroutineManager.StartCoroutine(UpdateBleed);
 		}
-		
-		public override void Update(){}
-		
-		public IEnumerator UpdateBleed()
-        {
-			Parent.Model.BaseTint = Particle3D.FireColor * 3f;
-			while(_totalTime > _pTime && !Parent.IsDead && !Disposed && !Parent.IsUnderwater){
-				
-				_time += Time.DeltaTime;
-				if(_time >= 1){
-					_pTime++;
-					_time = 0;
-				    Parent.Damage(_totalDamage / _totalTime, _damager, out float exp);
-				    if(_damager is Humanoid damager)
-						damager.XP += exp;
-				}
-				
-				//Fire particles
-				World.Particles.Color = Particle3D.FireColor;
-				World.Particles.VariateUniformly = false;
-				World.Particles.Position = Parent.Position + Vector3.UnitY * Parent.Model.Height * .5f;
-				World.Particles.Scale = Vector3.One * .5f;
-				World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-				World.Particles.Direction = Vector3.UnitY * .2f;
-				World.Particles.ParticleLifetime = 0.75f;
-				World.Particles.GravityEffect = 0.0f;
-				World.Particles.PositionErrorMargin = Parent.Model.Dimensions.Size * .5f;
-				
-				for(int i = 0; i < 1; i++){
-					World.Particles.Emit();
-				}
-				yield return null;
+
+		private void Start()
+		{
+			var freeze = Parent.SearchComponent<FreezingComponent>();
+			if (freeze != null)
+			{
+				Parent.RemoveComponent(freeze);
+				this.End();
+				return;
 			}
+			Parent.Model.BaseTint = Particle3D.FireColor * 3f;
+		}
+		
+		public override void Update()
+		{
+			_time += Time.DeltaTime;
+			if(_time >= 1)
+			{
+				_pTime++;
+				_time = 0;
+				Parent.Damage(_totalDamage / _totalTime, _damager, out float exp);
+				if(_damager is Humanoid damager)
+					damager.XP += exp;
+			}
+
+			World.Particles.Color = Particle3D.FireColor;
+			World.Particles.VariateUniformly = false;
+			World.Particles.Position = Parent.Position + Vector3.UnitY * Parent.Model.Height * .5f;
+			World.Particles.Scale = Vector3.One * .5f;
+			World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+			World.Particles.Direction = Vector3.UnitY * .2f;
+			World.Particles.ParticleLifetime = 0.75f;
+			World.Particles.GravityEffect = 0.0f;
+			World.Particles.PositionErrorMargin = Parent.Model.Dimensions.Size * .5f;
+				
+			for(var i = 0; i < 1; i++){
+				World.Particles.Emit();
+			}
+			
+			if(!(_totalTime > _pTime && !Parent.IsDead && !Disposed && !Parent.IsUnderwater))
+				this.End();
+		}
+
+		private void End()
+		{
 			Parent.Model.BaseTint = Vector4.Zero;
 			this.Dispose();
 			Parent.RemoveComponent(this);

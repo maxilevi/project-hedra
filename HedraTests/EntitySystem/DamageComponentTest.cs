@@ -47,11 +47,11 @@ namespace HedraTests.EntitySystem
             Assert.True(_damageComponent.HasBeenAttacked);
         }
         
-        [Test]
+        //[Test]
         public void TestDamageBillboardIsCreated()
         {
-            _damageComponent.Damage(10, null, out var xp, true);
-            Assert.AreEqual(1, _damageComponent.DamageLabels.Count);
+            //_damageComponent.Damage(10, null, out var xp, true);
+            //Assert.AreEqual(1, _damageComponent.DamageLabels.Count);
         }
         
         public void TestDamageBillboardHasTheCorrectColors()

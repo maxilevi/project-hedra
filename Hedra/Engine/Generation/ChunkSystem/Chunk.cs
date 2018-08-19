@@ -510,14 +510,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        public Block[][] this[int Index]
-        {
-            get
-            {
-                if (!Landscape.StructuresPlaced || !Landscape.BlocksSetted) return _dummyBlocks;
-                return _blocks[Index];
-            }
-        }
+        public Block[][] this[int Index] => !Landscape.StructuresPlaced || !Landscape.BlocksSetted 
+            ? _dummyBlocks 
+            : _blocks[Index];
 
         public void Reset()
         {

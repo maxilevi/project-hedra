@@ -23,9 +23,9 @@ namespace Hedra.Engine.WorldBuilding
         public bool Affects(Vector2 Sample)
         {
             var length = (End - Origin).LengthFast;
-            var dir = (End - Origin).NormalizedFast();
+            var dir = (End - Origin) * (1f / length);
             var point = (Sample - Origin).LengthFast;           
-            return (Sample - Origin).LengthFast < length && (point * dir + Origin - Sample).LengthFast < Width;
+            return point < length && (point * dir + Origin - Sample).LengthFast < Width;
         }
         
         public float Density(Vector2 Sample)

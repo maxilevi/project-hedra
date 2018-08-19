@@ -31,7 +31,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private float _targetMax = 1;
         private float _activeChunks;
         private float _targetActivechunks;
-        private bool _reset;
 
         public ChunkLoader(IPlayer Player)
         {
@@ -100,26 +99,18 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
                 }
                 _targetActivechunks = newTarget;
-                if (_reset) this.HandleReset();
                 yield return null;
             }
         }
 
-        public void HandleReset()
+        public void Reset()
         {
             for (var i = _chunkWatchers.Count - 1; i > -1; i--)
             {
                 _chunkWatchers[i].Kill();
-                _chunkWatchers.RemoveAt(i);
             }
             _targetActivechunks = 0;
             _activeChunks = 0;
-            _reset = false;
-        }
-
-        public void Reset()
-        {
-            _reset = true;
         }
     }
 }

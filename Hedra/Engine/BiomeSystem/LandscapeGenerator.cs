@@ -193,31 +193,11 @@ namespace Hedra.Engine.BiomeSystem
 				town = true;
 				nearCollidableStructure = item;
 				break;
-			}
-
-			var giantTree = false;
-
-			var nearGiantTree = (from item in structs
-				let radius = item.Mountain?.Radius ?? float.MaxValue
-				where (position - item.Position.Xz).LengthSquared < radius * radius &&
-					  item.Design is GiantTreeDesign
-				select item).FirstOrDefault();
-
-			var inPlateau = false;          
+			}     
 			var smallFrequency = SmallFrequency(position.X, position.Y);
-			for (var i = 0; i < plateaus.Length; i++)
-			{
-				var previousHeight = height;
-				height = plateaus[i].Apply(position, height, smallFrequency);
-				if (Math.Abs(previousHeight - height) > 0.05f)
-				{
-					inPlateau = true;
-				}
-				if (inPlateau && nearGiantTree != null && plateaus[i] == nearGiantTree.Mountain) giantTree = true;	                    
-			}
+			var nearGiantTree = FindNearestGiantTree(position, structs);
 			
-			blockGroundworks = groundworks.ToList()
-				.Where(G => G.Affects(position)).ToArray();
+			blockGroundworks = groundworks.ToList().Where(G => G.Affects(position)).ToArray();
 
 			if (townClamped && townHeight != height)
 				townClamped = false;
@@ -231,32 +211,14 @@ namespace Hedra.Engine.BiomeSystem
 			float amplifiedRiverBorders = Mathf.Clamp(riverBorders * riverMult, 0, riverDepth);
 
 			river = Mathf.Clamp(river * riverMult, 0, riverDepth);
-			height = Math.Max(0, height + Chunk.BaseHeight);
 			path = Mathf.Lerp(path, 0, river / riverDepth);
 
 			blockGroundworksModifier = 1.0f;
-			for (var i = 0; i < plateaus.Length; i++)
-			{
-				float plateauDist =
-				(plateaus[i].Position.Xz -
-				 new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize)).LengthFast;
-				float plateauFinal = Math.Max(1 - plateauDist / plateaus[i].Radius, 0);
+			this.HandlePlateaus(x, z, smallFrequency, ref height, plateaus, nearGiantTree, nearCollidableStructure,
+				ref river, ref riverBorders, ref path, ref blockGroundworksModifier, ref pathClamped, out var inPlateau);
 
-				//Dont do this near trees
-				if (nearGiantTree == null)
-				{
-					river = Mathf.Clamp(Mathf.Lerp(0, river, 1 - Math.Min(1, plateauFinal * 3f)), 0, river);
-					riverBorders = Mathf.Clamp(Mathf.Lerp(0, riverBorders, 1 - Math.Min(1, plateauFinal * 3f)), 0,
-						riverBorders);
-				}
-
-				if (path > 0 && nearCollidableStructure != null && plateaus[i] == nearCollidableStructure.Mountain)
-					pathClamped = true;
-
-				blockGroundworksModifier = Mathf.Clamp(Mathf.Lerp(0, blockGroundworksModifier, 1 - Math.Min(1, plateauFinal * 3f)), 0, blockGroundworksModifier);
-				path = Mathf.Clamp(Mathf.Lerp(0, path, 1 - Math.Min(1, plateauFinal * 3f)), 0, path);
-			}
-
+			height = Math.Max(0, height + Chunk.BaseHeight);
+			
 			for (var i = 0; i < noise3D.Length; i++)
 			{
 				if (World.MenuSeed != World.Seed)
@@ -320,6 +282,54 @@ namespace Hedra.Engine.BiomeSystem
 								(z * Chunk.BlockSize + OffsetZ) * 0.0175f) > .35f;
 			makeDirt = biomeGen.HasDirt && dirtNoise;
 	                
+		}
+
+		private void HandlePlateaus(int x, int z, float smallFrequency, ref float height, Plateau[] plateaus, CollidableStructure nearGiantTree,
+			CollidableStructure nearCollidableStructure, ref float river, ref float riverBorders, ref float path,
+			ref float blockGroundworksModifier, ref bool pathClamped, out bool inPlateau)
+		{
+			inPlateau = false;
+			for (var i = 0; i < plateaus.Length; i++)
+			{
+				var point = new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize);
+				var radius = plateaus[i].Radius;
+				var dist = (plateaus[i].Position.Xz - point).LengthSquared;
+				var final = Math.Max(1 - Math.Min(dist / (radius * radius), 1), 0);
+				var addonHeight = plateaus[i].MaxHeight * Math.Max(final, 0f);
+
+				height += addonHeight;
+				height = Mathf.Lerp(height - addonHeight,
+					Math.Min(plateaus[i].MaxHeight + smallFrequency, height),
+					Math.Min(1.0f, final * 1.5f));
+				
+				if (nearGiantTree == null)
+				{
+					river = Mathf.Clamp(Mathf.Lerp(0, river, 1 - Math.Min(1, final * 3f)), 0, river);
+					riverBorders = Mathf.Clamp(Mathf.Lerp(0, riverBorders, 1 - Math.Min(1, final * 3f)), 0,
+						riverBorders);
+				}
+
+				if (path > 0 && nearCollidableStructure != null && plateaus[i] == nearCollidableStructure.Mountain)
+					pathClamped = true;
+
+				blockGroundworksModifier = Mathf.Clamp(Mathf.Lerp(0, blockGroundworksModifier, 1 - Math.Min(1, final * 3f)),
+					0, blockGroundworksModifier);
+				path = Mathf.Clamp(Mathf.Lerp(0, path, 1 - Math.Min(1, final * 3f)), 0, path);
+				
+				if (final < 0.005f)
+				{
+					inPlateau = true;
+				}
+			}
+		}
+
+		private static CollidableStructure FindNearestGiantTree(Vector2 position, CollidableStructure[] structs)
+		{
+			return (from item in structs
+				let radius = item.Mountain?.Radius ?? float.MaxValue
+				where (position - item.Position.Xz).LengthSquared < radius * radius &&
+				      item.Design is GiantTreeDesign
+				select item).FirstOrDefault();
 		}
 		
 		private void HandleGroundworks(Block[][][] Blocks, int X, int Y, int Z, float path, float pathDepth,

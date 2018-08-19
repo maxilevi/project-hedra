@@ -34,7 +34,7 @@ namespace Hedra.Engine.Player
 
 		public Vector3 Propulsion { get; set; }
 		public float Lifetime { get; set; } = 10f;
-		public ObjectMesh Mesh { get; set; }
+		public ObjectMesh Mesh { get; }
 	    public bool Collide { get; set; } = true;
         public bool Disposed { get; private set; }
 
@@ -47,12 +47,12 @@ namespace Hedra.Engine.Player
 
         public Projectile(IEntity Parent, Vector3 Origin, VertexData MeshData)
         {
-		    this._parent = Parent;
-            this._collisions = new List<ICollidable>();
-            this._collisionBox = Physics.BuildBroadphaseBox(MeshData);
-            this.Mesh = ObjectMesh.FromVertexData(MeshData);
-			this.Propulsion = Propulsion;
-            this.Mesh.Position = Origin;
+		    _parent = Parent;
+            _collisions = new List<ICollidable>();
+            _collisionBox = Physics.BuildBroadphaseBox(MeshData);
+            Mesh = ObjectMesh.FromVertexData(MeshData);
+			Propulsion = Propulsion;
+            Mesh.Position = Origin;
             UpdateManager.Add(this);
         }
 		
@@ -62,18 +62,18 @@ namespace Hedra.Engine.Player
 
             if (_accumulatedVelocity == Vector3.Zero)
             {
-                _accumulatedVelocity = Propulsion + Vector3.UnitY * 15f;
+                _accumulatedVelocity = Propulsion + Vector3.UnitY * 10f;
             }
 
             Lifetime -= Time.DeltaTime;
-            Propulsion *= (float)Math.Pow(.75f, (float)Time.DeltaTime);
+            Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime);
             _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f) * (float) Time.DeltaTime;
             _accumulatedVelocity *= (float) Math.Pow(.8f, (float)Time.DeltaTime);
 			Mesh.Position += _accumulatedVelocity * 2f * (float)Time.DeltaTime;
             Mesh.Rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
             if (Collide)
 			{
-			    this.ProcessCollision();
+			    ProcessCollision();
 			}
 				
 			for(var i = 0; i < World.Entities.Count; i++)

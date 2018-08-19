@@ -17,8 +17,9 @@ namespace Hedra.Engine.Management
 {
     public class CompressedAssetProvider : IAssetProvider
     {
-	    private readonly PrivateFontCollection _fonts;
-	    private List<ResourceHandler> _registeredHandlers;
+	    private readonly PrivateFontCollection _boldFonts;
+        private readonly PrivateFontCollection _normalFonts;
+        private List<ResourceHandler> _registeredHandlers;
         private bool _filesDecompressed;
 	    private Dictionary<string, VertexData> _hitboxCache;
 	    private readonly object _hitboxCacheLock = new object();
@@ -28,24 +29,25 @@ namespace Hedra.Engine.Management
 	    public string AppPath { get; private set; }
 	    public string AppData { get; private set; }
 	    public string TemporalFolder { get; private set; }
-	    public FontFamily BoldFamily => _fonts.Families[0];
-	    public FontFamily NormalFamily => _fonts.Families[1];
+	    public FontFamily BoldFamily => _boldFonts.Families[0];
+	    public FontFamily NormalFamily => _normalFonts.Families[0];
 	    public string ShaderResource => "data1.db";
 	    public string SoundResource => "data2.db";
 	    public string AssetsResource => "data3.db";
 	    
 	    public CompressedAssetProvider()
 	    {
-		    _fonts = new PrivateFontCollection();
-	    }
+	        _boldFonts = new PrivateFontCollection();
+	        _normalFonts = new PrivateFontCollection();
+        }
 
         public void Load()
         {
 			var sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.DataFile3);
-			_fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
+			_boldFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
 
 			var sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.DataFile3);          	
-			_fonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
+			_normalFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
 	        
             AssetManager.ReloadShaderSources();
 	        lock (_hitboxCacheLock)
