@@ -37,13 +37,6 @@ namespace Hedra.Engine.Rendering
 	        ShaderManager.RegisterStateItem(() => ShaderBound, O => ShaderBound = (int)O);
         }
 
-		public static uint CreateTexture2D(bool Bind = true)
-		{
-			GL.CreateTextures(TextureTarget.Texture2D, 1, out uint id);
-			if (Bind) GL.BindTexture(TextureTarget.Texture2D, id);
-			return id;
-		}
-
 	    public static void Enable(EnableCap Cap)
 	    {
 	        CapHandler.Enable(Cap);
@@ -88,12 +81,12 @@ namespace Hedra.Engine.Rendering
 
 	    public static void BindShader(int Id)
 	    {
-	        GL.UseProgram(Id);
+	        Provider.UseProgram((uint)Id);
 	    }
 
 	    public static void BindFramebuffer(FramebufferTarget Target, int Id)
 	    {
-	        GL.BindFramebuffer(Target, Id);
+	        Provider.BindFramebuffer(Target, (uint)Id);
 	    }
 
         public static void MultiDrawElements(PrimitiveType Type, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
@@ -235,11 +228,6 @@ namespace Hedra.Engine.Rendering
         public static int CreateShader(ShaderType Type)
         {
             return Provider.CreateShader(Type);
-        }
-
-        public static void CreateTextures(TextureTarget Target, int N , out uint Id)
-        {
-            Provider.CreateTextures(Target, N , out Id);
         }
 
         public static void CullFace(CullFaceMode Mode)
@@ -548,11 +536,6 @@ namespace Hedra.Engine.Rendering
         public static void TexParameter(TextureTarget Target, TextureParameterName Name, int Value)
         {
             Provider.TexParameter(Target, Name, Value);
-        }
-
-        public static void TexStorage3D(TextureTarget3d Target, int Levels, SizedInternalFormat Internalformat, int Width, int Height, int Depth)
-        {
-            Provider.TexStorage3D(Target, Levels, Internalformat, Width, Height, Depth);
         }
 
         public static void Translate(Vector3 Location)

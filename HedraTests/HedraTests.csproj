@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
     <Compile Include="CodePolicy\BaseCodePolicy.cs" />
+    <Compile Include="CodePolicy\GLCodePolicy.cs" />
     <Compile Include="CodePolicy\ShaderCodePolicy.cs" />
     <Compile Include="CodePolicy\SolutionTest.cs" />
     <Compile Include="EntitySystem\DamageComponentTest.cs" />

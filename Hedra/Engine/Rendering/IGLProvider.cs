@@ -32,7 +32,6 @@ namespace Hedra.Engine.Rendering
         void CompileShader(uint Program);
         int CreateProgram();
         int CreateShader(ShaderType Type);
-        void CreateTextures(TextureTarget Target, int N , out uint Id);
         void CullFace(CullFaceMode Mode);
         void DebugMessageCallback(DebugProc Proc, IntPtr Ptr);
         void DeleteBuffers(int N, ref uint Id);
@@ -100,7 +99,6 @@ namespace Hedra.Engine.Rendering
         void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
             int V4, PixelFormat Format, PixelType Type, T[,,] Data) where T : struct;
         void TexParameter(TextureTarget Target, TextureParameterName Name, int Value);
-        void TexStorage3D(TextureTarget3d Target, int Levels, SizedInternalFormat Internalformat, int Width, int Height, int Depth);
         void Translate(Vector3 Location);
         void Uniform1(int Location, int Uniform);
         void Uniform1(int Location, float Uniform);

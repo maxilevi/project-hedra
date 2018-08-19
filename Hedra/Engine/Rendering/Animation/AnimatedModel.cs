@@ -143,15 +143,15 @@ namespace Hedra.Engine.Rendering.Animation
             if (_shader == DeathShader && CompatibilityManager.SupportsGeometryShaders)
             {
                 Renderer.Enable(EnableCap.Blend);
-                DeathShader["viewMatrix"] = ViewMatrix;
-                DeathShader["disposeTime"] = DisposeTime;
+                _shader["viewMatrix"] = ViewMatrix;
+                _shader["disposeTime"] = DisposeTime;
             }
 
             _shader["jointTransforms"] = JointTransforms;
             _shader["projectionViewMatrix"] = ProjectionViewMat;
             if (_shader != DeathShader || !CompatibilityManager.SupportsGeometryShaders)
             {
-                DefaultShader["PlayerPosition"] = GameManager.Player.Position;
+                _shader["PlayerPosition"] = GameManager.Player.Position;
             }
 
             if (GameSettings.Shadows)
@@ -161,7 +161,7 @@ namespace Hedra.Engine.Rendering.Animation
                 _shader["ShadowTex"] = 0;
                 if (_shader != DeathShader || !CompatibilityManager.SupportsGeometryShaders)
                 {
-                    DefaultShader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
+                    _shader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
                 }
             }
 

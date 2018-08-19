@@ -60,9 +60,8 @@ namespace Hedra
 	    public static int MainThreadId;
 	    public float VRam = 0;
 		
-		public Hedra(int Width, int Height, GraphicsMode Mode, string Title) : base( Width, Height, Mode, Title){}
-		public Hedra(int Width, int Height, GraphicsMode Mode, string Title, GameWindowFlags Options, DisplayDevice Device)
-			: base( Width, Height, Mode, Title, Options, Device){}
+		public Hedra(int Width, int Height, GraphicsMode Mode, string Title, DisplayDevice Device, int Minor, int Major) 
+			: base( Width, Height, Mode, Title, GameWindowFlags.Default, Device, Major, Minor, GraphicsContextFlags.ForwardCompatible){}
 
 		protected override void OnLoad(EventArgs e)
         {
@@ -72,7 +71,7 @@ namespace Hedra
 		    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
             this.GameVersion = "α 0.37";
 		    this.Title += " "+GameVersion;
-            Hedra.MainThreadId = Thread.CurrentThread.ManagedThreadId;
+            MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
 		    AssetManager.Load();
@@ -89,15 +88,21 @@ namespace Hedra
             
             GameLoader.CreateCharacterFolders(appData, appPath);
 
-            _studioLogo = new GUITexture(Graphics2D.LoadFromAssets("Assets/splash-logo.png"), Graphics2D.SizeFromAssets("Assets/splash-logo.png"), Vector2.Zero);
-			_studioLogo.Enabled = true;
-		    _studioLogo.Opacity = 0;
+	        _studioLogo = new GUITexture(Graphics2D.LoadFromAssets("Assets/splash-logo.png"),
+		        Graphics2D.SizeFromAssets("Assets/splash-logo.png"), Vector2.Zero)
+	        {
+		        Enabled = true,
+		        Opacity = 0
+	        };
 
-            _studioBackground = new GUITexture(Graphics2D.LoadFromAssets("Assets/splash-background.png"),  Vector2.One, Vector2.Zero);
-			_studioBackground.Enabled = true;
-		    _studioBackground.Opacity = 0;
+	        _studioBackground = new GUITexture(Graphics2D.LoadFromAssets("Assets/splash-background.png"), Vector2.One,
+		        Vector2.Zero)
+	        {
+		        Enabled = true,
+		        Opacity = 0
+	        };
 
-            GameLoader.AllocateMemory();
+	        GameLoader.AllocateMemory();
 			NameGenerator.Load();		
 			CacheManager.Load();
 			Physics.Threading.Load();

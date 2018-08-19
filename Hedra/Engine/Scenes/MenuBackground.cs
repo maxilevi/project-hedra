@@ -155,7 +155,7 @@ namespace Hedra.Engine.Scenes
 		    Particle3D.UseTimeScale = true;
 		}
 		
-		private static Vector3 Position;
+		private static Vector3 Position = DefaultPosition;
 		private static float LerpTime = 12000;
 		public static Vector3 NewLocation
         {
@@ -175,8 +175,8 @@ namespace Hedra.Engine.Scenes
 					TargetPosition = CreatorPosition;
 					TargetTime = 12000;
 				}
-				LerpTime = Mathf.Lerp(LerpTime, TargetTime, Time.IndependantDeltaTime * 2f);
-				Position = Mathf.Lerp(Position, TargetPosition, Time.IndependantDeltaTime * 2f);
+				LerpTime = Mathf.Lerp(LerpTime, TargetTime, Time.IndependantDeltaTime * 3f);
+				Position = Mathf.Lerp(Position, TargetPosition, Time.IndependantDeltaTime * 3f);
                 SkyManager.SetTime(LerpTime);
                 return new Vector3(Position.X, Physics.HeightAtPosition(Position.X, Position.Z)+Position.Y, Position.Z);
 			}	

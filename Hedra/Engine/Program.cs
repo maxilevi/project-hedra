@@ -44,8 +44,7 @@ namespace Hedra
 		    GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;
 
 		    GameWindow = new Hedra(GameSettings.Width, GameSettings.Height,
-		        GraphicsMode.Default, "Project Hedra");
-
+		        GraphicsMode.Default, "Project Hedra", device, 3, 3);
 		    GameWindow.WindowState = WindowState.Maximized;
 		    if (OSManager.RunningPlatform == Platform.Windows)
 		    {

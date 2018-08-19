@@ -41,9 +41,9 @@ namespace Hedra.Engine.Rendering.UI
             var previousState = UIText?.Enabled ?? false;
             DrawManager.UIRenderer.Remove(UIText);
             UIText?.Dispose();
-
+            var size = new Vector2(textBitmap.Width, textBitmap.Height);
             UIText = new GUITexture(Graphics2D.LoadTexture(textBitmap),
-                new Vector2(textBitmap.Width / DefaultSize.X, textBitmap.Height / DefaultSize.Y), _temporalPosition);
+                new Vector2(size.X / DefaultSize.X, size.Y / DefaultSize.Y), _temporalPosition);
             DrawManager.UIRenderer.Add(UIText);
             
             if (_align == AlignMode.Left)

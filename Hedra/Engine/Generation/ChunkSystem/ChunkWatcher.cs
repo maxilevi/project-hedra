@@ -16,7 +16,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void Update()
         {
             if(GameManager.Player == null) return;
-            IsHealthy = (_object?.IsGenerated ?? false) && _object.BuildedWithStructures && !Disposed;
+            IsHealthy = (_object?.BuildedWithStructures ?? false) && !Disposed;
             if (_object?.Disposed ?? true) this.Dispose();
             if (_object == null || Disposed) return;
 

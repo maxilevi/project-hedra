@@ -746,7 +746,6 @@
     <Compile Include="Engine\Rendering\StaticMeshBuffer.cs" />
     <Compile Include="Engine\Rendering\SurfaceNets.cs" />
     <Compile Include="Engine\Rendering\SymetricMatrix.cs" />
-    <Compile Include="Engine\Rendering\TextureArray.cs" />
     <Compile Include="Engine\Rendering\UBO.cs" />
     <Compile Include="Engine\Rendering\UI\Bar.cs" />
     <Compile Include="Engine\Rendering\UI\Button.cs" />

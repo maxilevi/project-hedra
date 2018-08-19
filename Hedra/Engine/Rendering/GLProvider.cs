@@ -132,11 +132,6 @@ namespace Hedra.Engine.Rendering
             return GL.CreateShader(Type);
         }
 
-        public void CreateTextures(TextureTarget Target, int N , out uint Id)
-        {
-            GL.CreateTextures(Target, N , out Id);
-        }
-
         public void CullFace(CullFaceMode Mode)
         {
             GL.CullFace(Mode);
@@ -458,11 +453,6 @@ namespace Hedra.Engine.Rendering
         public void TexParameter(TextureTarget Target, TextureParameterName Name, int Value)
         {
             GL.TexParameter(Target, Name, Value);
-        }
-
-        public void TexStorage3D(TextureTarget3d Target, int Levels, SizedInternalFormat Internalformat, int Width, int Height, int Depth)
-        {
-            GL.TexStorage3D(Target, Levels, Internalformat, Width, Height, Depth);
         }
 
         public void Translate(Vector3 Location)

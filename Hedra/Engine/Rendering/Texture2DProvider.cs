@@ -8,7 +8,8 @@ namespace Hedra.Engine.Rendering
     {
         public uint LoadTexture(Bitmap Bmp, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
         {
-            var id = Renderer.CreateTexture2D();
+            var id = (uint) Renderer.GenTexture();
+            Renderer.BindTexture(TextureTarget.Texture2D, id);
             var bmpData = Bmp.LockBits(new Rectangle(0,0,Bmp.Width, Bmp.Height), ImageLockMode.ReadOnly, 
                 System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpData.Width, bmpData.Height, 0,
