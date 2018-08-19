@@ -268,7 +268,9 @@
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
     <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />
+    <Compile Include="Engine\Rendering\UI\ITextProvider.cs" />
     <Compile Include="Engine\Rendering\UI\SlingShotAnimation.cs" />
+    <Compile Include="Engine\Rendering\UI\TextProvider.cs" />
     <Compile Include="Engine\Rendering\UI\TextureAnimation.cs" />
     <Compile Include="Engine\Rendering\UI\ShiverAnimation.cs" />
     <Compile Include="Engine\Rendering\UpdatableObjectMeshModel.cs" />

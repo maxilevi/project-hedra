@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Rendering.UI;
 using HedraTests.Player;
 using Moq;
 using NUnit.Framework;
@@ -14,15 +15,18 @@ namespace HedraTests.EntitySystem
         private IEntity _entity;
         private bool _isStatic;
         private PhysicsComponent _physics;
+        private float _maxHealth;
 
         [SetUp]
         public override void Setup()
         {
             base.Setup();
             _physics = new PhysicsComponent(null);
+            _maxHealth = 100;
             var entityMock = new Mock<IEntity>();
             entityMock.Setup(E => E.Physics).Returns( () => _physics);
             entityMock.SetupProperty(E => E.Health);
+            entityMock.Setup(E => E.MaxHealth).Returns(_maxHealth);
             entityMock.SetupProperty(E => E.IsDead);
             entityMock.Setup(E => E.IsStatic).Returns( () => _isStatic);
             _entity = entityMock.Object;
@@ -47,11 +51,11 @@ namespace HedraTests.EntitySystem
             Assert.True(_damageComponent.HasBeenAttacked);
         }
         
-        //[Test]
+        [Test]
         public void TestDamageBillboardIsCreated()
-        {
-            //_damageComponent.Damage(10, null, out var xp, true);
-            //Assert.AreEqual(1, _damageComponent.DamageLabels.Count);
+        {          
+            _damageComponent.Damage(10, null, out var xp, true);
+            Assert.AreEqual(1, _damageComponent.DamageLabels.Count);
         }
         
         public void TestDamageBillboardHasTheCorrectColors()

@@ -167,7 +167,7 @@ namespace Hedra.Engine.Rendering.UI
                 this._previousFontColor = this.Text.TextColor;
                 this.Text.TextColor = new Vector4(0.937f, 0.624f, 0.047f, 1.000f).ToColor();
                 var prevPosition = this.Text.Position;
-                this.Text.Update();
+                this.Text.UpdateText();
                 this.Text.Position = prevPosition;
                 /*PreviousScale = Text.Scale;
                 if(Enlarge)
@@ -186,7 +186,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 this.Text.TextColor = this._previousFontColor;
                 var prevPosition = this.Text.Position;
-                this.Text.Update();
+                this.Text.UpdateText();
                 this.Text.Position = prevPosition;
                 //	Text.Scale = PreviousScale;
             }

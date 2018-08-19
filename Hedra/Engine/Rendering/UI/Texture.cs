@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Description of Texture.
 	/// </summary>
-	public class Texture : UIElement, IDisposable
+	public class Texture : UIElement
 	{
 		private static uint Background = Graphics2D.LoadTexture(Graphics2D.ReColorMask(Color.FromArgb(255,69,69,69),new Bitmap(new MemoryStream(AssetManager.ReadBinary("Assets/Background.png", AssetManager.DataFile3)))));
 		public GUITexture TextureElement;

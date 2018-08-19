@@ -80,7 +80,7 @@ namespace Hedra.Engine.Rendering.UI
 			classChooser.RightArrow.Click += setWeapon;
 			classChooser.LeftArrow.Click += setWeapon;
 			classChooser.CurrentValue.TextColor = defaultColor;
-			classChooser.CurrentValue.Update(); 
+			classChooser.CurrentValue.UpdateText(); 
 			
 			#region UI
 			TextField nameField = new TextField(new Vector2(0,-.7f), new Vector2(.15f,.03f), this);

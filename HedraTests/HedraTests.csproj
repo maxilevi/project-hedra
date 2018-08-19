@@ -77,6 +77,7 @@
     <Compile Include="Player\WeaponAttackTest.cs" />
     <Compile Include="Rendering\AnimatorTest.cs" />
     <Compile Include="Rendering\BillboardTest.cs" />
+    <Compile Include="Rendering\SimpleTextProviderMock.cs" />
     <Compile Include="SimpleAnimationProvider.cs" />
     <Compile Include="SimpleAssetProvider.cs" />
     <Compile Include="SimpleColladaProvider.cs" />

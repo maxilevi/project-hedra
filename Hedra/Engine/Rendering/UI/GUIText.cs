@@ -17,13 +17,13 @@ namespace Hedra.Engine.Rendering.UI
     /// <summary>
     /// Description of GUIText.
     /// </summary>
-    public class GUIText : UIElement, IDisposable, ISimpleTexture
+    public class GUIText : UIElement, ISimpleTexture
     {
-        public static Vector2 DefaultSize = new Vector2(GameSettings.Width, GameSettings.Height);
+        public static ITextProvider Provider { get; set; } = new TextProvider();
         public GUITexture UIText { get; private set; }
-        public TextConfiguration Configuration { get; set; }
-        public SizeF Size { get; private set; }
-        public AlignMode Align = AlignMode.Center;
+        private AlignMode _align = AlignMode.Center;
+        private static readonly Vector2 DefaultSize = new Vector2(GameSettings.Width, GameSettings.Height);
+        private readonly TextConfiguration _configuration;
         private Vector2 _temporalPosition;
         private string _text;
 
@@ -31,107 +31,54 @@ namespace Hedra.Engine.Rendering.UI
         {
             _text = Text;
             _temporalPosition = Position;
-            Configuration = new TextConfiguration(TextColor, TextFont);
-            MakeText();
+            _configuration = new TextConfiguration(TextColor, TextFont);
+            this.UpdateText();
         }
 
-        public void MakeText()
+        public void UpdateText()
         {
-            this.CalculateTextSize(_text);
-            var textBitmap = new Bitmap((int)Math.Ceiling(Math.Max(Size.Width, 1)), (int)Math.Ceiling(Math.Max(Size.Height,1)));
-            using (var graphics = Graphics.FromImage(textBitmap))
-            {
-                graphics.ScaleTransform(1.3f, 1.3f);
-                #region Draw Shadows
-                using (var gp = new GraphicsPath())
-                {
-                    using (Brush shadowBrush = new SolidBrush(Color.FromArgb(80, 0, 0, 0)))
-                    {
-                        graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-                        graphics.SmoothingMode = SmoothingMode.HighQuality;
-                        graphics.Clear(Color.FromArgb(0, 0, 0, 0));
-                        gp.AddString(Text, TextFont.FontFamily, (int) TextFont.Style, TextFont.Size,
-                            Point.Empty, StringFormat.GenericTypographic);
-                        var shadowOffset = new Matrix();
-                        shadowOffset.Translate(1, 1);
-                        gp.Transform(shadowOffset);
-
-                        graphics.FillPath(shadowBrush, gp);
-                    }
-                }
-                #endregion
-
-                using(var brush = new SolidBrush(TextColor))
-                using (var gp = new GraphicsPath())
-                {
-                    graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-                    graphics.SmoothingMode = SmoothingMode.HighQuality;
-                    gp.AddString(Text, TextFont.FontFamily, (int)TextFont.Style, TextFont.Size,
-                        Point.Empty, StringFormat.GenericTypographic);
-                    graphics.FillPath(brush, gp);
-                }
-            }
-            
+            var textBitmap = Provider.BuildText(Text, TextFont, TextColor);
             var previousState = UIText?.Enabled ?? false;
             DrawManager.UIRenderer.Remove(UIText);
             UIText?.Dispose();
 
             UIText = new GUITexture(Graphics2D.LoadTexture(textBitmap),
-                new Vector2(Size.Width / DefaultSize.X, Size.Height / DefaultSize.Y), _temporalPosition);
+                new Vector2(textBitmap.Width / DefaultSize.X, textBitmap.Height / DefaultSize.Y), _temporalPosition);
             DrawManager.UIRenderer.Add(UIText);
-
-            if (Align == AlignMode.Left)
+            
+            if (_align == AlignMode.Left)
             {
                 UIText.Position -= UIText.Scale;
             }
             UIText.Enabled = previousState;
         }
 
-        private void CalculateTextSize(string FullText)
-        {
-            using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
-            {
-                Size = graphics.MeasureString(FullText, TextFont);
-            }
-        }
-
-        public void Update()
-        {
-            this.MakeText();
-        }
-
         public Color TextColor
         {
-            get { return Configuration.Color; }
-            set { Configuration.Color = value; }
+            get => _configuration.Color;
+            set => _configuration.Color = value;
         }
 
         public Font TextFont
         {
-            get { return Configuration.Font; }
-            set { Configuration.Font = value; }
+            get => _configuration.Font;
+            set => _configuration.Font = value;
         }
 
         public string Text
         {
-            get { return _text; }
+            get => _text;
             set
             {
-                if (value == _text || Configuration == null || _text == null) return;
+                if (value == _text || _configuration == null || _text == null) return;
                 _text = value;
-                this.MakeText();
+                this.UpdateText();
             }
         }
 
         public Vector2 Scale
         {
-            get
-            {
-                if (UIText != null)
-                    return UIText.Scale;
-                else
-                    return Vector2.Zero;
-            }
+            get => UIText?.Scale ?? Vector2.Zero;
             set
             {
                 if (UIText != null)

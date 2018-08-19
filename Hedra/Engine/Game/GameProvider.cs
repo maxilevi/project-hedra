@@ -211,6 +211,11 @@ namespace Hedra.Engine.Game
 
 	    private static bool IsLoaded(Vector2 Offset)
 	    {
+	        var earlyExit = false;
+#if DEBUG
+	        earlyExit = true;
+#endif
+            if (earlyExit) return true;
 		    for (var x = -1; x < 2; x++)
 		    {
 			    for (var z = -1; z < 2; z++)

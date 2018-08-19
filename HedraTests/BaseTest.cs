@@ -8,6 +8,8 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Engine.Rendering.UI;
+using HedraTests.Rendering;
 using Moq;
 using NUnit.Framework;
 using AnimationLoader = Hedra.Engine.Rendering.Animation.AnimationLoader;
@@ -30,6 +32,7 @@ namespace HedraTests
             AnimationLoader.Provider = new SimpleAnimationProvider();
             ColladaLoader.Provider = new SimpleColladaProvider();
             GameManager.Provider = new SimpleGameProviderMock();
+            GUIText.Provider = new SimpleTextProviderMock();
         }
 
         [TearDown]

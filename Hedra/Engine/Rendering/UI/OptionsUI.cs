@@ -531,11 +531,11 @@ namespace Hedra.Engine.Rendering.UI
 
 	    private void UpdateFonts()
 	    {
-	        _graphics.Text.Update();
-	        _input.Text.Update();
-            _audio.Text.Update();
-            _display.Text.Update();
-            _controls.Text.Update();
+	        _graphics.Text.UpdateText();
+	        _input.Text.UpdateText();
+            _audio.Text.UpdateText();
+            _display.Text.UpdateText();
+            _controls.Text.UpdateText();
         }
 
 	    private void SetGraphicsButtonState(bool Enabled)
