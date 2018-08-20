@@ -253,6 +253,7 @@
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
     <Compile Include="Engine\Management\IAssetProvider.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
+    <Compile Include="Engine\PhysicsSystem\IPhysicsThreadManager.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\Player\ICamera.cs" />

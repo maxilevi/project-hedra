@@ -175,8 +175,8 @@ namespace Hedra.Engine.Scenes
 					TargetPosition = CreatorPosition;
 					TargetTime = 12000;
 				}
-				LerpTime = Mathf.Lerp(LerpTime, TargetTime, Time.IndependantDeltaTime * 3f);
-				Position = Mathf.Lerp(Position, TargetPosition, Time.IndependantDeltaTime * 3f);
+				LerpTime = Mathf.Lerp(LerpTime, TargetTime, Time.IndependantDeltaTime * 2f);
+				Position = Mathf.Lerp(Position, TargetPosition, Time.IndependantDeltaTime * 2f);
                 SkyManager.SetTime(LerpTime);
                 return new Vector3(Position.X, Physics.HeightAtPosition(Position.X, Position.Z)+Position.Y, Position.Z);
 			}	

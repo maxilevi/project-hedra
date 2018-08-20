@@ -48,7 +48,7 @@ namespace Hedra.Engine.EntitySystem
 
             if ((Parent.Model.Tint - _targetTint).LengthFast > 0.005f)
             {
-                Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, (float) Time.DeltaTime * 12f);
+                Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, Time.DeltaTime * 12f);
             }
 
             _tintTimer -= Time.IndependantDeltaTime;
@@ -126,7 +126,7 @@ namespace Hedra.Engine.EntitySystem
                 Parent.Physics.Translate(direction * factor * averageSize);
             }
 
-            if (Parent.Health == 0 && !Parent.IsDead)
+            if (Parent.Health <= 0 && !Parent.IsDead)
             {
                 Exp = (int) Math.Ceiling(XpToGive);
                 if (!Parent.IsStatic && Damager is IPlayer)

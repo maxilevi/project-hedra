@@ -19,7 +19,7 @@ namespace Hedra.Engine.PhysicsSystem
 		public const float Gravity = -9.81f;
 	    public const float Timestep = 1.0f / 60.0f;
 
-        public static PhysicsThreadManager Threading;
+        public static IPhysicsThreadManager Threading { get; set; }
 
 	    static Physics()
 	    {

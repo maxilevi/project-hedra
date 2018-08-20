@@ -25,7 +25,7 @@ namespace Hedra.Engine.EntitySystem
         private float _dropChance;
         public float DropChance
         {
-            get => _dropChance;
+	        private get => _dropChance;
 	        set
             {
                 _dropChance = value;
@@ -33,14 +33,14 @@ namespace Hedra.Engine.EntitySystem
                     throw new ArgumentException("Drop chance cannot be less than 0 or more than 100.");
             }
         }
-        private bool _dropped = false;
+        public bool Dropped { get; private set; }
 		
 		public override void Update(){}
 		
 		public void Drop()
 		{
-		    if (!this.Parent.IsDead || _dropped) return;
-		    _dropped = true;
+		    if (!this.Parent.IsDead || Dropped) return;
+			Dropped = true;
 		    if (!(Utils.Rng.NextFloat() * 100f < DropChance)) return;
 
 		    var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;

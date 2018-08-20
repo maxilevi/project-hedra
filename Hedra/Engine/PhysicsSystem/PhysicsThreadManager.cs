@@ -18,11 +18,11 @@ namespace Hedra.Engine.PhysicsSystem
     public delegate void OnCommandProcessedEventHandler(MoveCommand Command);
     public delegate void OnBatchProcessedEventHandler();
 
-    public class PhysicsThreadManager
-	{
-	    public const int ThreadCount = 2;
-	    public OnCommandProcessedEventHandler OnCommandProcessedEvent;
-	    public OnBatchProcessedEventHandler OnBatchProcessedEvent;
+    public class PhysicsThreadManager : IPhysicsThreadManager
+    {
+		private const int ThreadCount = 2;
+	    public event OnCommandProcessedEventHandler OnCommandProcessedEvent;
+	    public event OnBatchProcessedEventHandler OnBatchProcessedEvent;
         private PhysicsLoadBalancer _loadBalancer;
 	    private PhysicsThread[] _threads;
 		private bool _sleep = true;
