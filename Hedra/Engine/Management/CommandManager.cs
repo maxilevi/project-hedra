@@ -287,8 +287,6 @@ namespace Hedra.Engine.Management
 			    }
 			    if (Parts[0] == "audioareas")
 			    {
-			        for (int i = 0; i < SoundManager.SoundItems.Length; i++)
-			            Log.WriteLine(SoundManager.SoundItems[i].Locked);
 			        return true;
 			    }
 			    if (Parts[0] == "spawn"){
