@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Drawing;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -184,6 +185,7 @@ namespace Hedra.Engine.Game
 		    Player.UI.GamePanel.Disable();
 		    Player.Chat.Show = false;
 		    IsLoading = true;
+		    Player.SearchComponent<DamageComponent>().Immune = true;
 
 		    var chunkOffset = World.ToChunkSpace(LocalPlayer.Instance.BlockPosition);
 		    World.StructureGenerator.CheckStructures(chunkOffset);
@@ -197,6 +199,7 @@ namespace Hedra.Engine.Game
 			    yield return null;
 		    }
 
+		    Player.SearchComponent<DamageComponent>().Immune = false;
 		    Player.UI.GamePanel.Enable();
 		    Player.Chat.Show = true;
 		    Player.Chat.LoseFocus();
@@ -211,14 +214,15 @@ namespace Hedra.Engine.Game
 
 	    private static bool IsLoaded(Vector2 Offset)
 	    {
-	        var earlyExit = false;
-#if DEBUG
-	        earlyExit = true;
-#endif
-            if (earlyExit) return true;
-		    for (var x = -1; x < 2; x++)
+		    var minRange = -1;
+		    var maxRange = 2;
+		    #if DEBUG
+		    minRange = 0;
+		    maxRange = 1;
+		    #endif
+		    for (var x = minRange; x < maxRange; x++)
 		    {
-			    for (var z = -1; z < 2; z++)
+			    for (var z = minRange; z < maxRange; z++)
 			    {
 				    var chunk = World.GetChunkByOffset((int) Offset.X + x * Chunk.Width, (int) Offset.Y + z * Chunk.Width);
 				    if (!chunk?.BuildedWithStructures ?? true)
