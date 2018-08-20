@@ -190,7 +190,6 @@ namespace Hedra.Engine.EntitySystem
             var parentBox = this.Parent.Model.BroadphaseBox;
 			float modifierX = delta.X < 0 ? -1f : 1f;
 			float modifierZ = delta.Z < 0 ? -1f : 1f;
-
             bool blockPx = false, blockNx = false, blockPy = false, blockNy = false, blockPz = false, blockNz = false;
       
             if (!onlyY)
@@ -320,7 +319,7 @@ namespace Hedra.Engine.EntitySystem
 
 				    if (!onlyY)
 				    {
-
+                        /*
 				        box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 2f 
                             + (parentBox.Max.Y - parentBox.Min.Y) * .5f * Vector3.UnitY;
 				        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 4f 
@@ -341,7 +340,7 @@ namespace Hedra.Engine.EntitySystem
 				            if (deltaOrientation.Z > 0)
 				                blockPz = false;
 
-				        }
+				        }*/
 				    }
 
 				    if(Parent is Humanoid human && human.IsGliding){
@@ -364,8 +363,6 @@ namespace Hedra.Engine.EntitySystem
 
                 if (!blockNy && delta.Y < 0 || !blockNy && Parent.IsUnderwater)
 		        {
-		            var currentBlock = World.GetBlockAt(Parent.BlockPosition);
-                    var underBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY);
 		            var underUnderBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY * 2f);
 		            var human = Parent as Humanoid;
                     if (Parent.IsUnderwater || (human?.IsJumping ?? false))

@@ -354,7 +354,7 @@ namespace Hedra.Engine.Player
 	    private void HandleEatingEffects()
 	    {
 		    var mat4 = LeftWeaponMatrix.ClearTranslation() * 
-		    Matrix4.CreateTranslation(-Model.Position + ((LeftWeaponPosition + RightWeaponPosition) / 2f) );
+		    Matrix4.CreateTranslation(-Model.Position + (LeftWeaponPosition + RightWeaponPosition) / 2f );
 				
 		    _food.TransformationMatrix = mat4;
 		    _food.Position = Model.Position;
@@ -366,12 +366,12 @@ namespace Hedra.Engine.Player
 		    _food.LocalRotation = Vector3.Zero;
 		    _food.LocalPosition = Vector3.Zero;
 		    _food.BeforeLocalRotation = Vector3.Zero;
+	        _food.Enabled = true;
 	    }
 	    
 	    private void HandleRollEffects()
 	    {
 		    if(_previousPosition != Human.BlockPosition && Human.IsGrounded){
-			    var block = World.GetHighestBlockAt( (int) Human.Position.X, (int) Human.Position.Z);
 			    World.Particles.VariateUniformly = true;
 			    World.Particles.Color = Vector4.One;//World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z).GetColor(Region.Default);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
 			    World.Particles.Position = Human.Position - Vector3.UnitY;

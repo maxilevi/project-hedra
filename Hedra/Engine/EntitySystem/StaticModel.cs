@@ -27,21 +27,27 @@ namespace Hedra.Engine.EntitySystem
 
 		public void SetModel(VertexData Mesh)
 		{
-			this.Model = ObjectMesh.FromVertexData(Mesh);
-			this.Model.Position = this.Position;
-			this.Model.Rotation = this.Rotation;
-			this.Model.RotationPoint = this.RotationPoint;
-			this.Model.LocalRotation = this.LocalRotation;
-			this.Model.LocalPosition = this.LocalPosition;
-			this.Model.BeforeLocalRotation = this.BeforeLocalRotation;
-			this.Model.TransformationMatrix = this.TransformationMatrix;
-			this.Model.TargetRotation = this.TargetRotation;
-			this.Model.TargetPosition = this.TargetPosition;
-			this.Model.Scale = this.Scale;
-			this.Model.Alpha = this.Alpha;
-			this.Model.ApplyFog = this.ApplyFog;
-			this.Model.Outline = this.Outline;
-			this.Model.Pause = this.Pause;
+			var model = ObjectMesh.FromVertexData(Mesh);
+		    if (Model != null)
+		    {
+		        model.Position = this.Position;
+		        model.Rotation = this.Rotation;
+		        model.RotationPoint = this.RotationPoint;
+		        model.LocalRotation = this.LocalRotation;
+		        model.LocalPosition = this.LocalPosition;
+		        model.BeforeLocalRotation = this.BeforeLocalRotation;
+		        model.TransformationMatrix = this.TransformationMatrix;
+		        model.TargetRotation = this.TargetRotation;
+		        model.TargetPosition = this.TargetPosition;
+		        model.Scale = this.Scale;
+		        model.Alpha = this.Alpha;
+		        model.ApplyFog = this.ApplyFog;
+		        model.Outline = this.Outline;
+		        model.Pause = this.Pause;
+		        model.Enabled = this.Enabled;
+		        Model.Dispose();
+		    }
+		    this.Model = model;
 		}
 		
         public override void Dispose()

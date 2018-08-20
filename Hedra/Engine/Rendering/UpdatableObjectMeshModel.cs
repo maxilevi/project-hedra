@@ -69,6 +69,12 @@ namespace Hedra.Engine.Rendering
             set => Model.BeforeLocalRotation = value;
         }
 
+        public Vector3 Position
+        {
+            get => Model.Position;
+            set => Model.Position = value;
+        }
+
         public Vector3 TransformPoint(Vector3 Point)
         {
             return Model.TransformPoint(Point);

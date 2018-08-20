@@ -47,7 +47,7 @@ namespace Hedra.Engine.EntitySystem
             get => _model;
             set
             {
-                if (_model?.Equals(value) ?? value != null)
+                if (value != null)
                 {
                     this.UnregisterModel(_model);
                     _model = value;

@@ -142,7 +142,7 @@ namespace Hedra.Engine.EntitySystem
 				        80f * Chunk.BlockSize * 80f * Chunk.BlockSize) return true;
 			    }
 		    }
-		    catch (IndexOutOfRangeException e)
+		    catch (ArgumentOutOfRangeException e)
 		    {
 			    Log.WriteLine(e.Message);
 			    return true;
