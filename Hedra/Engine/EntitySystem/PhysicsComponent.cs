@@ -190,6 +190,7 @@ namespace Hedra.Engine.EntitySystem
             var parentBox = this.Parent.Model.BroadphaseBox;
 			float modifierX = delta.X < 0 ? -1f : 1f;
 			float modifierZ = delta.Z < 0 ? -1f : 1f;
+            if(!(Parent is LocalPlayer)) return;
             bool blockPx = false, blockNx = false, blockPy = false, blockNy = false, blockPz = false, blockNz = false;
       
             if (!onlyY)
@@ -317,17 +318,16 @@ namespace Hedra.Engine.EntitySystem
 				    if (deltaOrientation.Y < 0)
 				        blockNy = true;
 
-				    if (!onlyY)
+                    /*if (!onlyY)
 				    {
-                        /*
-				        box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 2f 
-                            + (parentBox.Max.Y - parentBox.Min.Y) * .5f * Vector3.UnitY;
-				        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 4f 
-                            + (parentBox.Max.Y - parentBox.Min.Y) * 1.0f * Vector3.UnitY;
+                        
+				        box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 1f;
+				        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 2f 
+                            + (parentBox.Max.Y - parentBox.Min.Y) * 0.05f * Vector3.UnitY;
 
 				        if (!Physics.Collides(box, _collisions[i]) && !blockPy)
 				        {
-				            Parent.BlockPosition += Vector3.UnitY * (parentBox.Max.Y - parentBox.Min.Y) * .05f;
+				            Parent.BlockPosition += Vector3.UnitY * Parent.Model.Height * .05f;
 				            if (deltaOrientation.X > 0)
 				                blockPx = false;
 
@@ -340,10 +340,19 @@ namespace Hedra.Engine.EntitySystem
 				            if (deltaOrientation.Z > 0)
 				                blockPz = false;
 
-				        }*/
-				    }
+				        }
+				    }*/
 
-				    if(Parent is Humanoid human && human.IsGliding){
+				    if (!onlyY)
+				    {
+				        box = parentBox.Cache;
+				        if (Physics.Collides(box, _collisions[i]) && _collisions[i].Height < Parent.Model.Height * .5)
+				        {
+				            Parent.BlockPosition += Vector3.UnitY * Parent.Model.Height * .05f;
+                        }
+                    }
+
+                    if (Parent is Humanoid human && human.IsGliding){
 						human.IsGliding = false;
 						Parent.KnockForSeconds(3f);
 				        Executer.ExecuteOnMainThread(delegate

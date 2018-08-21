@@ -166,6 +166,8 @@ namespace Hedra.Engine.PhysicsSystem
         }
 
         public Vector3 Size => Max - Min;
+	    
+	    public float Height => Size.Y;
 
 		public Vector3 Average => (Min + Max) / 2;
 
