@@ -72,9 +72,10 @@ namespace Hedra.Engine.Player
 		}
 		
 		public void Jump()
-        {
-			if(IsJumping || Human.IsKnocked || Human.IsCasting || Human.IsRiding ||
-                Human.IsRolling || Human.IsDead || !Human.IsGrounded || !Human.CanInteract ||
+		{
+		    var canJump = Human.IsGrounded || Human.Position.Y - Human.Model.Height * .5f < Physics.HeightAtPosition(Human.Position);
+            if (IsJumping || Human.IsKnocked || Human.IsCasting || Human.IsRiding ||
+                Human.IsRolling || Human.IsDead || !canJump || !Human.CanInteract ||
                 Math.Abs(Human.Physics.TargetPosition.Y - Human.Position.Y) > 2.0f || !this.CaptureMovement)
 				return;
 
@@ -117,7 +118,7 @@ namespace Hedra.Engine.Player
             if (!IsJumping) return;
             Human.Physics.DeltaTranslate(_jumpPropulsion);
 			_jumpPropulsion *= (float) Math.Pow(.25f, Time.DeltaTime * 3f);
-		    if ((Physics.HeightAtPosition(Human.Position) > Human.Position.Y || Human.IsGrounded) && _jumpPropulsion.LengthFast < 40)
+		    if ((Physics.HeightAtPosition(Human.Position) > Human.Position.Y || Human.IsGrounded) && _jumpPropulsion.LengthFast < 40 || Human.IsUnderwater)
 		        IsJumping = false;
 
 		}

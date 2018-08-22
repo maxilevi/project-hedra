@@ -123,14 +123,14 @@ namespace Hedra.Engine.EntitySystem
 	        var modifier = 40f * (1f / (float) Utils.FrameProccesingTime);
             Velocity += -Physics.Gravity * GravityDirection * _deltaTime * modifier;
 	        Velocity = Mathf.Clamp(Velocity, -VelocityCap, VelocityCap);
-            
+
             var command = new MoveCommand(Parent, Velocity * _deltaTime);
 	        this.ProccessCommand(command);
 
 	        if (!Parent.IsGrounded)
 	        {
-	            if (!Parent.IsUnderwater)
-	                Falltime += _deltaTime * 10f / (float)Utils.FrameProccesingTime;
+	            //if (!Parent.IsUnderwater)
+	            //    Falltime += _deltaTime * 10f / (float)Utils.FrameProccesingTime;
 	        }
 	        else
 	        {
@@ -264,16 +264,30 @@ namespace Hedra.Engine.EntitySystem
                     }
                 }
             }
-  
+            var overFloor = false;
 			lock(_collisions)
 			{
 			    Vector3 deltaOrientation = delta.NormalizedFast();
 
-				for(int i = _collisions.Count-1; i > -1; i--){
-
+				for(int i = _collisions.Count-1; i > -1; i--)
+                {
 				    Box box = parentBox.Cache;
+                    if (onlyY)
+                    {
+                        /*box = parentBox.Cache;
+                        box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) - Vector3.UnitY * .25f;
+                        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + Vector3.UnitY * .25f;
+                        if (_collisions[i].Height < Parent.Model.Height * .5)
+                        {
+                            if (Physics.Collides(box, _collisions[i]))
+                            {
+                                //Parent.BlockPosition += Vector3.UnitY * Parent.Model.Height * .05f;
+                                //Parent.IsGrounded = false;
+                            }
+                        }*/
+                    }
 
-				    if (!onlyY)
+                    if (!onlyY)
 				    {
 				        box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 1f;
 				        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 2f + Vector3.UnitY;
@@ -293,7 +307,7 @@ namespace Hedra.Engine.EntitySystem
                                 * (Parent.Model.BaseBroadphaseBox.Max.Y-1f) -
 				                      Vector3.UnitX * .5f - Vector3.UnitZ * .5f;
 				            box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation 
-                                * (Parent.Model.BaseBroadphaseBox.Max.Y) +
+                                * Parent.Model.BaseBroadphaseBox.Max.Y +
 				                      Vector3.UnitX * .5f + Vector3.UnitZ * .5f;
                         }
 				    }
@@ -318,9 +332,8 @@ namespace Hedra.Engine.EntitySystem
 				    if (deltaOrientation.Y < 0)
 				        blockNy = true;
 
-                    /*if (!onlyY)
+                    if (!onlyY)
 				    {
-                        
 				        box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 1f;
 				        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 2f 
                             + (parentBox.Max.Y - parentBox.Min.Y) * 0.05f * Vector3.UnitY;
@@ -341,16 +354,7 @@ namespace Hedra.Engine.EntitySystem
 				                blockPz = false;
 
 				        }
-				    }*/
-
-				    if (!onlyY)
-				    {
-				        box = parentBox.Cache;
-				        if (Physics.Collides(box, _collisions[i]) && _collisions[i].Height < Parent.Model.Height * .5)
-				        {
-				            Parent.BlockPosition += Vector3.UnitY * Parent.Model.Height * .05f;
-                        }
-                    }
+				    }
 
                     if (Parent is Humanoid human && human.IsGliding){
 						human.IsGliding = false;
@@ -364,13 +368,20 @@ namespace Hedra.Engine.EntitySystem
 			}
 		    if (onlyY)
 		    {
-		        float lowestY = Physics.LowestHeight((int)Parent.BlockPosition.X, (int)Parent.BlockPosition.Z);
-		        if (Parent.BlockPosition.Y * Chunk.BlockSize < lowestY)
+		        float heightAtPosition = Physics.HeightAtPosition((int)Parent.BlockPosition.X, (int)Parent.BlockPosition.Z);
+		        if (Parent.BlockPosition.Y * Chunk.BlockSize < heightAtPosition)
 		        {
-		            Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, (lowestY + BaseHeight) / Chunk.BlockSize, Parent.BlockPosition.Z);
+		            Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, heightAtPosition / Chunk.BlockSize,
+		                Parent.BlockPosition.Z);
+		            Parent.IsGrounded = true;
+		            Velocity = Vector3.Zero;
+		        }
+		        else
+		        {
+		            Parent.IsGrounded = false;
 		        }
 
-                if (!blockNy && delta.Y < 0 || !blockNy && Parent.IsUnderwater)
+                if ((!blockNy && delta.Y < 0 || !blockNy && Parent.IsUnderwater))
 		        {
 		            var underUnderBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY * 2f);
 		            var human = Parent as Humanoid;
@@ -378,23 +389,18 @@ namespace Hedra.Engine.EntitySystem
 		            {
 		                Parent.IsGrounded = false;
                     }
-                    else if (underUnderBlock.Type != BlockType.Air && underUnderBlock.Type != BlockType.Water 
-                        /*&& currentBlock.Type != BlockType.Air && currentBlock.Type != BlockType.Water*/)
+                    /*else if (underUnderBlock.Type != BlockType.Air && underUnderBlock.Type != BlockType.Water 
+                        /*&& currentBlock.Type != BlockType.Air && currentBlock.Type != BlockType.Water)
 		            {
                         float heightAtPositon = Physics.HeightAtBlock(Parent.BlockPosition - Vector3.UnitY);
-		                Parent.BlockPosition = new Vector3(Parent.BlockPosition.X,
+		                /*Parent.BlockPosition = new Vector3(Parent.BlockPosition.X,
 		                    (heightAtPositon + BaseHeight) / Chunk.BlockSize,
 		                    Parent.BlockPosition.Z);
-
+                        
 		                Parent.IsGrounded = true;
 		                blockNy = true;
 		                Velocity = Vector3.Zero;
-                    }
-		            else
-		            {
-		                
-                        Parent.IsGrounded = false;
-		            }
+                    }*/
 
 		        }
 		        else if(blockNy)
