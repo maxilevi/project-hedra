@@ -67,7 +67,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return list.ToArray();
         }
 
-        public void Build(PlacementDesign Design)
+        public void Build(PlacementDesign Design, CollidableStructure Structure)
         {
             var parameters = new IBuildingParameters[][]
             {
@@ -78,6 +78,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Design.Markets,
                 Design.Markets
             };
+            var radius = 0f;
             var builders = new object[] { _houseBuilder, _farmBuilder, _blacksmithBuilder, _stableBuilder, _wellBuilder, _marketBuilder};
             for (var i = 0; i < builders.Length; i++)
             {
@@ -88,18 +89,24 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
                     var paint = builders[i].GetType().GetMethod("Paint");
                     var finalOutput = (BuildingOutput) paint.Invoke(builders[i], new object[] { parameters[i][j], output });
-                    CoroutineManager.StartCoroutine(PlaceCoroutine, parameters[i][j].Position, finalOutput);
+                    CoroutineManager.StartCoroutine(PlaceCoroutine, parameters[i][j].Position, finalOutput, Structure);
 
                     var polish = builders[i].GetType().GetMethod("Polish");
                     polish.Invoke(builders[i], new object[] { parameters[i][j] });
+                    var possibleRadius = (Structure.Position.Xz - parameters[i][j].Position.Xz).LengthFast +
+                                         parameters[i][j].GetSize(_root);
+                    if (possibleRadius > radius)
+                        radius = possibleRadius;
                 }
             }
+            Structure.Radius = radius;
         }
 
         private IEnumerator PlaceCoroutine(object[] Arguments)
         {
             var position = (Vector3) Arguments[0];
             var buildingOutput = (BuildingOutput) Arguments[1];
+            var structure = (CollidableStructure) Arguments[2];
             var model = buildingOutput.Model;
             var shapes = buildingOutput.Shapes;
             
@@ -117,7 +124,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             shapes.ForEach(S => S.Transform(transMatrix));
             underChunk.Blocked = true;
             underChunk.AddStaticElement(model);
-            underChunk.AddCollisionShape(shapes.ToArray());
+            structure.AddCollisionShape(shapes.ToArray());
         }
     }
 }

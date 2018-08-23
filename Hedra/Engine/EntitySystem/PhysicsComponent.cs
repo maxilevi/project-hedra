@@ -190,7 +190,7 @@ namespace Hedra.Engine.EntitySystem
             var parentBox = this.Parent.Model.BroadphaseBox;
 			float modifierX = delta.X < 0 ? -1f : 1f;
 			float modifierZ = delta.Z < 0 ? -1f : 1f;
-            if(!(Parent is LocalPlayer)) return;
+            //if(!(Parent is LocalPlayer)) return;
             bool blockPx = false, blockNx = false, blockPy = false, blockNy = false, blockPz = false, blockNz = false;
       
             if (!onlyY)

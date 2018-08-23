@@ -299,6 +299,49 @@ namespace Hedra
 		                }
 		            }
 		        }
+			    var Collisions = new List<ICollidable>();
+				var Collisions2 = new List<ICollidable>();
+
+				//Chunk UnderChunk = World.GetChunkAt(Player.BlockPosition);
+				Chunk UnderChunkR = World.GetChunkAt(Player.Position + new Vector3(Chunk.Width, 0, 0));
+				Chunk UnderChunkL = World.GetChunkAt(Player.Position - new Vector3(Chunk.Width, 0, 0));
+				Chunk UnderChunkF = World.GetChunkAt(Player.Position + new Vector3(0, 0, Chunk.Width));
+				Chunk UnderChunkB = World.GetChunkAt(Player.Position - new Vector3(0, 0, Chunk.Width));
+
+				Collisions.AddRange(World.GlobalColliders);
+				if (Player.NearCollisions != null)
+					Collisions.AddRange(Player.NearCollisions);
+				if (UnderChunk != null)
+					Collisions.AddRange(UnderChunk.CollisionShapes);
+				if (UnderChunkL != null)
+					Collisions2.AddRange(UnderChunkL.CollisionShapes);
+				if (UnderChunkR != null)
+					Collisions2.AddRange(UnderChunkR.CollisionShapes);
+				if (UnderChunkF != null)
+					Collisions2.AddRange(UnderChunkF.CollisionShapes);
+				if (UnderChunkB != null)
+					Collisions2.AddRange(UnderChunkB.CollisionShapes);
+
+				for (int i = 0; i < Collisions.Count; i++)
+				{
+					if (!(Collisions[i] is CollisionShape shape)) return;
+
+					var pshape = Player.Model.BroadphaseCollider;
+
+					float radiiSum = shape.BroadphaseRadius + pshape.BroadphaseRadius;
+
+					BasicGeometry.DrawShape(shape,
+						(pshape.BroadphaseCenter - shape.BroadphaseCenter).LengthSquared < radiiSum * radiiSum
+							? Colors.White
+							: Colors.Red);
+				}
+
+				for (int i = 0; i < Collisions2.Count; i++)
+				{
+					if( Collisions2[i] is CollisionShape shape){
+						BasicGeometry.DrawShape(shape, Colors.Yellow);
+					}
+				}
 		        if (false)
 		        {
 
@@ -374,7 +417,7 @@ namespace Hedra
 		            });
 
 		            //var Player = Game.LPlayer;
-		            var Collisions = new List<ICollidable>();
+		            /*var Collisions = new List<ICollidable>();
 		            var Collisions2 = new List<ICollidable>();
 
 		            //Chunk UnderChunk = World.GetChunkAt(Player.BlockPosition);
@@ -416,8 +459,8 @@ namespace Hedra
 		                /*var shape = Collisions2[i] as CollisionShape;
                         if( shape != null){
                             BasicGeometry.DrawShape(shape, Color.Yellow);
-                        }*/
-		            }
+                        }
+		            }*/
 		        }
 		    }
 #endif

@@ -22,10 +22,11 @@ namespace Hedra.Engine.Generation
     public class CollidableStructure
     {
         public Vector3 Position;
-        public Plateau Mountain;
+        public Plateau Mountain { get; }
+        public float Radius { get; set; }
         public bool Generated = false;
         private readonly List<ICollidable> _colliders;
-        public StructureDesign Design { get; set; }
+        public StructureDesign Design { get; }
         public AttributeArray Parameters { get; }
 
         public CollidableStructure(StructureDesign Design, Vector3 Position, Plateau Mountain)
@@ -33,6 +34,7 @@ namespace Hedra.Engine.Generation
             this.Position = Position;
             this.Mountain = Mountain;
             this.Design = Design;
+            this.Radius = Design.Radius;
             this.Parameters = new AttributeArray();
             this._colliders = new List<ICollidable>();
 

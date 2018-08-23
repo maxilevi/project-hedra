@@ -22,20 +22,20 @@ namespace Hedra.Engine.StructureSystem
         {
             var builder = Structure.Parameters.Get<VillageBuilder>("Builder");
             var design = Structure.Parameters.Get<PlacementDesign>("Design");
-            builder.Build(design);
+            builder.Build(design, Structure);
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
         {
+            var plateau = new Plateau(TargetPosition, 200);
+            var structure = new CollidableStructure(this, TargetPosition, plateau);
             var region = World.BiomePool.GetRegion(TargetPosition);
             var builder = new VillageBuilder(VillageLoader.Designer[region.Structures.VillageType], Rng);
             var design = builder.DesignVillage();
             design.Translate(TargetPosition);
             builder.PlaceGroundwork(design);
 
-            var plateau = new Plateau(TargetPosition, 200);
             World.WorldBuilding.AddPlateau(plateau);
-            var structure = new CollidableStructure(this, TargetPosition, plateau);
             structure.Parameters.Set("Builder", builder);
             structure.Parameters.Set("Design", design);
             return structure;        

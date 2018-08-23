@@ -250,17 +250,17 @@ namespace Hedra.Engine.Player
             lock (World.StructureGenerator.Items)
             {
                 collidableStructures = (from item in World.StructureGenerator.Items
-                    where (item.Position.Xz - this.Position.Xz).LengthSquared < item.Design.Radius * item.Design.Radius
+                    where (item.Position.Xz - Position.Xz).LengthSquared < item.Radius * item.Radius
                               select item).ToList();
             }
 
-            CollidableStructure nearCollidableStructure = collidableStructures.FirstOrDefault();
+            var nearCollidableStructure = collidableStructures.FirstOrDefault();
 
             if (nearCollidableStructure != null)
             {
 
                 if ((nearCollidableStructure.Position.Xz - this.Position.Xz).LengthFast <
-                    nearCollidableStructure.Design.Radius * .75f && nearCollidableStructure.Design is VillageDesign)
+                    nearCollidableStructure.Radius && nearCollidableStructure.Design is VillageDesign)
                 {
                     SoundtrackManager.PlayTrack(SoundtrackManager.VillageIndex, true);
                     _wasPlayingAmbient = true;
@@ -280,7 +280,8 @@ namespace Hedra.Engine.Player
 
 		    if(_shouldUpdateTime){
 				SkyManager.SetTime( Mathf.Lerp(SkyManager.DayTime, _targetCementeryTime, (float) Time.DeltaTime * 2f) );
-				if( Math.Abs(SkyManager.DayTime - _targetCementeryTime) < 10 ){//Little difference
+				if( Math.Abs(SkyManager.DayTime - _targetCementeryTime) < 10 )
+				{
 					_shouldUpdateTime = false;
 					SkyManager.Enabled = true;
 					if( SkyManager.DayTime > 24000) SkyManager.DayTime -= 24000;
@@ -310,7 +311,7 @@ namespace Hedra.Engine.Player
 				if(this.Position.Y < -1f)
 					_floating = true;
 				if(_floating)
-					this.Physics.TargetPosition += Vector3.UnitY * 15 * (float) Time.DeltaTime;
+					this.Physics.TargetPosition += Vector3.UnitY * 15 * Time.DeltaTime;
 				if(this.Position.Y > 1f)
 					_floating = false;
 				if(Model.MountModel == null || Model.MountModel != null && Model.MountModel.Disposed) IsRiding = false;
