@@ -8,7 +8,7 @@ namespace Hedra.Engine.Rendering
     {
         public uint LoadTexture(Bitmap Bmp, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
         {
-            var id = (uint) Renderer.GenTexture();
+            var id = Renderer.GenTexture();
             Renderer.BindTexture(TextureTarget.Texture2D, id);
             var bmpData = Bmp.LockBits(new Rectangle(0,0,Bmp.Width, Bmp.Height), ImageLockMode.ReadOnly, 
                 System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -23,6 +23,9 @@ namespace Hedra.Engine.Rendering
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)Wrap);
 
             Bmp.Dispose();
+            var error = Renderer.GetError();
+            if (error != ErrorCode.NoError)
+                Log.WriteLine("GL Error: Loading Texture: " + error);
             return id;
         }
     }

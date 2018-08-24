@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player
 		private Animation FireballAnimation;
 		
 		public Meteor() : base() {
-			base.TextureId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("Meteor.png", AssetManager.DataFile3))) );
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Meteor.png");
 			base.MaxCooldown = 8.5f;
 			base.ManaCost = 160f;
 			this.HandParticles = new ParticleSystem(Vector3.Zero);

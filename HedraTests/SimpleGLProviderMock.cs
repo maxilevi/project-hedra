@@ -241,7 +241,7 @@ namespace HedraTests
             return 0;
         }
 
-        public virtual int GenTexture()
+        public virtual uint GenTexture()
         {
             return 0;
         }

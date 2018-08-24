@@ -151,6 +151,7 @@ namespace Hedra.Engine
     {
         Normal,
         IO,
+	    GL,
         WorldBuilding,
         MaxEnums
     }

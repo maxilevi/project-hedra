@@ -25,7 +25,7 @@ namespace Hedra.Engine.Rendering.Effects
 		public Shader SecondPassShader;
 	    public Shader ThirdPassShader;
 		public int SamplesUniform;
-		public int RandomTex;
+		public uint RandomTex;
 		public float[] Samples;
 		public int ColorSampler;
 	    public int PositionSampler;

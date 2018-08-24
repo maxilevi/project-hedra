@@ -370,14 +370,9 @@ namespace Hedra.Engine.Rendering
             return Provider.GenQuery();
         }
 
-        public static int GenTexture()
+        public static uint GenTexture()
         {
             return Provider.GenTexture();
-        }
-
-        public static void GenTextures(int Count, uint[] Textures)
-        {
-            Provider.GenTextures(Count, Textures);
         }
 
         public static void GenVertexArrays(int N, out uint V1)

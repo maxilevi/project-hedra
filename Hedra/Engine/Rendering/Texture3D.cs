@@ -9,7 +9,7 @@ namespace Hedra.Engine.Rendering
 
         public Texture3D(float[,,] Data)
         {
-            Id = (uint) Renderer.GenTexture();
+            Id = Renderer.GenTexture();
 
             Renderer.BindTexture(TextureTarget.Texture3D, Id);
             Renderer.TexImage3D(TextureTarget.Texture3D, 0, PixelInternalFormat.One, Data.GetLength(0), Data.GetLength(1), Data.GetLength(2), 0,

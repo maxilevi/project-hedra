@@ -118,9 +118,12 @@ namespace Hedra.Engine.Rendering
             {
                 // Create n texture buffers (known by the number of attachments)
                 TextureID = new uint[Attachments.Length];
-                Renderer.GenTextures(Attachments.Length, TextureID);
+	            for (var i = 0; i < Attachments.Length; i++)
+	            {
+		            TextureID[i] = Renderer.GenTexture();
+	            }
 
-                // Bind the n texture buffers to the framebuffer
+	            // Bind the n texture buffers to the framebuffer
                 for (int i = 0; i < Attachments.Length; i++)
                 {
                     PixelType pixelType =

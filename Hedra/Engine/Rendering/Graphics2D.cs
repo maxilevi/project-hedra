@@ -45,45 +45,16 @@ namespace Hedra.Engine.Rendering
 	    {
 	        return Original.Clone(new RectangleF(0, 0, Original.Width, Original.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 	    }
-
-        public static Bitmap AddBitmap(Bitmap Bmp1, Bitmap Bmp2){
-			BitmapData Data1 = Bmp1.LockBits(new Rectangle(0,0,Bmp1.Width,Bmp1.Height), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-			BitmapData Data2 = Bmp2.LockBits(new Rectangle(0,0,Bmp2.Width,Bmp2.Height), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-			  unsafe
-		      {
-		          byte* DataPtr1 = (byte*)Data1.Scan0;
-		          byte* DataPtr2 = (byte*)Data2.Scan0;
-		          int Stride1 = Data1.Stride;
-		          int Stride2 = Data2.Stride;
-		          
-		          for (int y = 0; y < Bmp1.Height; y++)
-		          {
-		              for (int x = 0; x < Bmp1.Width; x++) 
-		              {
-		              	
-		              	if(DataPtr2[(x * 4) + y * Stride2 + 3] > 0){
-			              	  DataPtr1[(x * 4) + y * Stride1] =  DataPtr2[(x * 4) + y * Stride2]; // Red
-			                  DataPtr1[(x * 4) + y * Stride1 + 1] = DataPtr2[(x * 4) + y * Stride2 + 1]; // Blue
-			                  DataPtr1[(x * 4) + y * Stride1 + 2] = DataPtr2[(x * 4) + y * Stride2 + 2]; // Green
-			                 // DataPtr[(x * 4) + y * Stride + 3] = DataPtr[(x * 4) + y * Stride+3]; // Red
-		              	}
-		
-		              }
-		          }
-		      }
-			Bmp1.UnlockBits(Data1);
-			Bmp2.UnlockBits(Data2);
-			return Bmp1;
-		}
 		
 		public static Vector2 SizeFromAssets(string Path)
         {
-			return Graphics2D.TextureSize( new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))));
+			return TextureSize( new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))));
 		}
 
 		public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
 		{
-			return Graphics2D.LoadTexture(new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))), Min, Mag, Wrap);
+			Log.WriteLine($"Loading Texture: {Path}", LogType.GL);
+			return LoadTexture(new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))), Min, Mag, Wrap);
 		}
 		
 		public static Bitmap LoadBitmapFromAssets(string Path){

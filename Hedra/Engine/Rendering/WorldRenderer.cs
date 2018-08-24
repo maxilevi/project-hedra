@@ -53,7 +53,6 @@ namespace Hedra.Engine.Rendering
                 }
             }
 	        NoiseTexture = new Texture3D(noiseValues);
-
         }
 
 	    public static void PrepareRendering()

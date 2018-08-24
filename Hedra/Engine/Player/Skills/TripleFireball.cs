@@ -33,7 +33,7 @@ namespace Hedra.Engine.Player
 		private Animation FireballAnimation;
 		
 		public TripleFireball() : base() {
-			base.TextureId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("TripleFireball.png", AssetManager.DataFile3))) );
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/TripleFireball.png");
 			base.MaxCooldown = 2.5f;
 			base.ManaCost = 35f;
 			

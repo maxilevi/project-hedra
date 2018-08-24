@@ -62,8 +62,7 @@ namespace Hedra.Engine.Rendering
         void GenBuffers(int N, out uint V1);
         int GenFramebuffer();
         int GenQuery();
-        int GenTexture();
-        void GenTextures(int Count, uint[] Textures);
+        uint GenTexture();
         void GenVertexArrays(int N, out uint V1);
         void GenerateMipmap(GenerateMipmapTarget Target);
         void GetActiveUniformBlock(uint V0, uint V1, ActiveUniformBlockParameter Parameter, out int V3);

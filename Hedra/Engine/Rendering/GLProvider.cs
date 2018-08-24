@@ -282,14 +282,10 @@ namespace Hedra.Engine.Rendering
             return GL.GenQuery();
         }
 
-        public int GenTexture()
+        public uint GenTexture()
         {
-            return GL.GenTexture();
-        }
-
-        public void GenTextures(int Count, uint[] Textures)
-        {
-            GL.GenTextures(Count, Textures);
+            GL.GenTextures(1, out uint id);
+            return id;
         }
 
         public void GenVertexArrays(int N, out uint V1)

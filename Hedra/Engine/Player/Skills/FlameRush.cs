@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player
 		private Vector3 PreviousPosition;
 		
 		public FlowingMagma() : base() {
-			base.TextureId = Graphics2D.LoadTexture( new Bitmap( new MemoryStream(AssetManager.ReadBinary("Conflagaration.png", AssetManager.DataFile3))) );
+			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Conflagaration.png");
 			base.MaxCooldown = 14f;
 			base.ManaCost = 75f;
 		}

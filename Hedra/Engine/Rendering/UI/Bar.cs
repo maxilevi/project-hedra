@@ -15,11 +15,10 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering.UI
 {
-    public class Bar : IRenderable, UIElement, IDisposable
+    public class Bar : IRenderable, UIElement
     {
-        private static uint BarBlueprint = Graphics2D.LoadFromAssets("Assets/Bar.png");
-        private static uint RectangleBlueprint = Graphics2D.ColorTexture(Colors.FromArgb(255, 29, 29, 29));
-
+        private static uint BarBlueprint = 1;//Graphics2D.LoadFromAssets("Assets/Bar.png");
+        private static uint RectangleBlueprint = 1;//Graphics2D.ColorTexture(Colors.FromArgb(255, 29, 29, 29));
 
         public static Shader Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
         private float _barSize;
