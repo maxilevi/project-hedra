@@ -42,11 +42,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var radius = GameSettings.ChunkLoaderRadius * .5f * Chunk.Width;
             if ((_object.Position.Xz - offset).LengthSquared > radius * radius)
             {
-                if (!_object.Blocked)
-                {
-                    this.Kill();
-                    return false;
-                }
+                this.Kill();
+                return false;         
             }
             if (!_object.Initialized) _object.Initialize();
             if (!_object.IsGenerated || !_object.Landscape.StructuresPlaced)

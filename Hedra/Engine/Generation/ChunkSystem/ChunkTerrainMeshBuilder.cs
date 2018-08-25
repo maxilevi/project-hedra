@@ -108,7 +108,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     }
                 }
             }
-            for (var k = 0; k < blockData.Vertices.Count; k++) blockData.ExtraData.Add(0);
+            for (var k = 0; k < blockData.Vertices.Count; k++) blockData.Extradata.Add(0);
             blockData = MeshSimplifier.Simplify(blockData, Lod);
             waterData = MeshSimplifier.Simplify(waterData, Lod);
             blockData.Translate(new Vector3(OffsetX, 0, OffsetZ));

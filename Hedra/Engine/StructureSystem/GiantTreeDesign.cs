@@ -35,11 +35,11 @@ namespace Hedra.Engine.StructureSystem
             model.Color(AssetManager.ColorCode1, underChunk.Biome.Colors.LeavesColor);
             model.Color(AssetManager.ColorCode2, underChunk.Biome.Colors.LeavesColor  * .8f);
 
-            model.ExtraData.AddRange(model.GenerateWindValues());
+            model.Extradata.AddRange(model.GenerateWindValues());
             float treeRng = Utils.Rng.NextFloat();
-            for (int i = 0; i < model.ExtraData.Count; i++)
+            for (int i = 0; i < model.Extradata.Count; i++)
             {
-                model.ExtraData[i] = Mathf.Pack(new Vector2(model.ExtraData[i] * 2.5f, treeRng), 2048);
+                model.Extradata[i] = Mathf.Pack(new Vector2(model.Extradata[i] * 2.5f, treeRng), 2048);
             }
             model.GraduateColor(Vector3.UnitY);
 
@@ -47,7 +47,6 @@ namespace Hedra.Engine.StructureSystem
             for (int i = 0; i < shapes.Count; i++)
             {
                 shapes[i].Transform(transMatrix);
-                Structure.AddCollisionShape(shapes[i]);
             }
 
             Executer.ExecuteOnMainThread(delegate
@@ -65,7 +64,8 @@ namespace Hedra.Engine.StructureSystem
 
                 World.AddStructure(prize);
             });
-            underChunk.AddStaticElement(model);
+            Structure.AddCollisionShape(shapes.ToArray());
+            Structure.AddStaticElement(model);
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)

@@ -39,7 +39,6 @@ namespace Hedra.Engine.StructureSystem
 
             Vector3 Base = new Vector3(collisionBox.Max.X - collisionBox.Min.X, collisionBox.Max.Y - collisionBox.Min.Y, collisionBox.Max.Z - collisionBox.Min.Z) * .5f;
             collisionBox -= new Box(Base, Base);
-            underChunk.AddCollisionShape(collisionBox);
             obelisk.Type = (ObeliskType) Utils.Rng.Next(0, (int)ObeliskType.MaxItems);
 
             //data.VariateColors(0.05f, rng);
@@ -52,10 +51,11 @@ namespace Hedra.Engine.StructureSystem
             model.Color(new Vector4(.6f, .6f, .6f, 1f), Obelisk.GetObeliskStoneColor(rng));
 
             model.Translate(obelisk.Position);
-            model.ExtraData.Clear();
+            model.Extradata.Clear();
             model.FillExtraData(WorldRenderer.NoHighlightFlag);
 
-            underChunk.AddStaticElement(model);
+            Structure.AddCollisionShape(collisionBox);
+            Structure.AddStaticElement(model);
 
             World.HighlightArea(obelisk.Position, new Vector4(.2f, .2f, .2f, .4f), 48, -1);
 

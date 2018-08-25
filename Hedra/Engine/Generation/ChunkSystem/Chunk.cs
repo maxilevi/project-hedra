@@ -28,7 +28,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public static int Height { get; } = 160;
         public static int Width { get; } = 128;
         public Region Biome { get; }
-        public bool Blocked { get; set; }
         public int BoundsX { get; private set; }
         public int BoundsY { get; private set; }
         public int BoundsZ { get; private set; }
@@ -179,12 +178,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void UploadMesh(ChunkMeshBuildOutput Input)
         {
             if (Mesh == null || Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
-                Input.StaticData.ExtraData.Count != Input.StaticData.Vertices.Count ||
-                Input.StaticData.ExtraData.Count != Input.StaticData.Colors.Count) return;
+                Input.StaticData.Extradata.Count != Input.StaticData.Vertices.Count ||
+                Input.StaticData.Extradata.Count != Input.StaticData.Colors.Count) return;
 
-            for (var i = 0; i < Input.StaticData.ExtraData.Count; i++)
+            for (var i = 0; i < Input.StaticData.Extradata.Count; i++)
             {
-                float edata = Input.StaticData.ExtraData[i];
+                float edata = Input.StaticData.Extradata[i];
 
                 Input.StaticData.Colors[i] = new Vector4(Input.StaticData.Colors[i].Xyz, edata);
             }

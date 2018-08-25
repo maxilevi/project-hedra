@@ -61,7 +61,7 @@ namespace Hedra
 	    public float VRam = 0;
 		
 		public Hedra(int Width, int Height, GraphicsMode Mode, string Title, DisplayDevice Device, int Minor, int Major) 
-			: base( Width, Height, Mode, Title, GameWindowFlags.Default, Device, Major, Minor, GraphicsContextFlags.ForwardCompatible){}
+			: base( Width, Height, Mode, Title, GameWindowFlags.Default, Device/*, Major, Minor, GraphicsContextFlags.ForwardCompatible*/){}
 
 		protected override void OnLoad(EventArgs e)
         {
@@ -146,12 +146,12 @@ namespace Hedra
 		    Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Renderer.Enable(EnableCap.Texture2D);
 	        
-	        var GLVersion = Renderer.GetString(StringName.Version);
-            var ShadingOpenGLVersion = this.GetShadingVersion(GLVersion);
+	        var glVersion = Renderer.GetString(StringName.Version);
+            var shadingOpenGlVersion = this.GetShadingVersion(glVersion);
 
-			if( ShadingOpenGLVersion < 3.1f)
+			if( shadingOpenGlVersion < 3.1f)
 			{
-				Forms.MessageBox.Show("Minimum OpenGL version is 3.1, yours is "+ShadingOpenGLVersion, "OpenGL Version not supported",
+				Forms.MessageBox.Show("Minimum OpenGL version is 3.1, yours is "+shadingOpenGlVersion, "OpenGL Version not supported",
 				                      Forms.MessageBoxButtons.OK, Forms.MessageBoxIcon.Error);
 				Exit();
 			}
@@ -169,7 +169,7 @@ namespace Hedra
 	        }
 #endif
 	        
-	        Log.WriteLine(GLVersion);
+	        Log.WriteLine(glVersion);
         }
 
 	    protected override void OnUpdateFrame(FrameEventArgs e)

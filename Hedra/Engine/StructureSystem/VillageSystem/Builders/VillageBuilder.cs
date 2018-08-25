@@ -93,13 +93,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
                     var polish = builders[i].GetType().GetMethod("Polish");
                     polish.Invoke(builders[i], new object[] { parameters[i][j] });
-                    var possibleRadius = (Structure.Position.Xz - parameters[i][j].Position.Xz).LengthFast +
-                                         parameters[i][j].GetSize(_root);
-                    if (possibleRadius > radius)
-                        radius = possibleRadius;
                 }
             }
-            Structure.Radius = radius;
         }
 
         private IEnumerator PlaceCoroutine(object[] Arguments)
@@ -122,8 +117,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var transMatrix = Matrix4.CreateTranslation(Vector3.UnitY * height);
             model.Transform(transMatrix);
             shapes.ForEach(S => S.Transform(transMatrix));
-            underChunk.Blocked = true;
-            underChunk.AddStaticElement(model);
+            structure.AddStaticElement(model);
             structure.AddCollisionShape(shapes.ToArray());
         }
     }

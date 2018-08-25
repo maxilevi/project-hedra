@@ -59,10 +59,7 @@ namespace Hedra.Engine.BiomeSystem
 	        var plateaus = World.WorldBuilding.Plateaus;
 	        var groundworks = World.WorldBuilding.Groundworks;
 
-	        CollidableStructure[] structs;
-
-	        lock (World.StructureGenerator.Items)
-	            structs = World.StructureGenerator.Items.ToArray();
+	        var structs = World.StructureGenerator.Structures;
 
 	        var biomeGen = Chunk.Biome.Generation;
 	        var hasRiver = biomeGen.HasRivers ? 1f : 0f;
@@ -394,9 +391,7 @@ namespace Hedra.Engine.BiomeSystem
 
 	    public override void PlaceStructures(Block[][][] Blocks, RegionCache Cache)
 	    {
-	        CollidableStructure[] structs;
-	        lock (World.StructureGenerator.Items)
-	            structs = World.StructureGenerator.Items.ToArray();
+		    var structs = World.StructureGenerator.Structures;
 	        for (var x = 0; x < this.Chunk.BoundsX; x++)
 	        {
 	            for (var z = 0; z < this.Chunk.BoundsZ; z++)

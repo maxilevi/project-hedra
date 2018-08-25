@@ -94,6 +94,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sound\SimpleSoundProviderMock.cs" />
     <Compile Include="Sound\SoundtrackTest.cs" />
+    <Compile Include="Structure\StructureTest.cs" />
     <Compile Include="WorldBuilding\InteractableStructureTest.cs" />
     <Compile Include="WorldBuilding\ObeliskTest.cs" />
     <Compile Include="Generation\WorldTest.cs" />

@@ -54,7 +54,7 @@ namespace Hedra.Engine.StructureSystem
 
 
             int k = 0, j = 0;
-            for (int i = 0; i < tombstoneCount * 2; i++)
+            for (var i = 0; i < tombstoneCount * 2; i++)
             {
 
                 if (i % 2 == 0) continue;
@@ -87,7 +87,8 @@ namespace Hedra.Engine.StructureSystem
                     shapes[l].Transform(gravePosition);
                 }
 
-                CoroutineManager.StartCoroutine(this.BuildOnChunk, gravePosition, grave, shapes);
+                Structure.AddCollisionShape(shapes.ToArray());
+                Structure.AddStaticElement(grave);
                 if (rng.Next(0, 5) == 1)
                 {
                     World.AddStructure(new Tombstone
@@ -99,13 +100,11 @@ namespace Hedra.Engine.StructureSystem
             for (var i = 0; i < mausoleum.Colors.Count; i++)
                 mausoleum.Colors[i] *= new Vector4(.75f, .75f, .75f, 1);
 
-            underChunk.AddCollisionShape(mausoleumShapes.ToArray());
-            underChunk.AddStaticElement(mausoleum);
+            Structure.AddCollisionShape(mausoleumShapes.ToArray());
+            Structure.AddStaticElement(mausoleum);
 
-            this.BuildLamps(Position);
+            this.BuildLamps(Position, Structure);
             BuildReward(Position, cementery, rng);
-
-            underChunk.Blocked = true;
         }
 
         private static void BuildReward(Vector3 Position, Graveyard Cementery, Random Rng)
@@ -134,7 +133,7 @@ namespace Hedra.Engine.StructureSystem
             };
         }
 
-        private void BuildLamps(Vector3 Position)
+        private void BuildLamps(Vector3 Position, CollidableStructure Structure)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -155,8 +154,8 @@ namespace Hedra.Engine.StructureSystem
                 {
                     shapes[l].Transform(lightPosition);
                 }
-
-                CoroutineManager.StartCoroutine(BuildOnChunk, new object[] { lightPosition, lampPost, shapes });
+                Structure.AddCollisionShape(shapes.ToArray());
+                Structure.AddStaticElement(lampPost);
 
                 var Lamp = new LampPost(lightPosition + Vector3.UnitY * 7)
                 {

@@ -58,7 +58,7 @@ namespace Hedra.Engine.Rendering
 			if(ExtraData){
 				ColorBuffer = new Vector4[Data.Colors.Count];
 				for(int i = 0; i < ColorBuffer.Length; i++){
-					ColorBuffer[i] = new Vector4(Data.Colors[i].Xyz, Data.ExtraData[i]);
+					ColorBuffer[i] = new Vector4(Data.Colors[i].Xyz, Data.Extradata[i]);
 				}
 			}else{
 				ColorBuffer = Data.Colors.ToArray();

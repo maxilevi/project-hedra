@@ -48,7 +48,7 @@ namespace Hedra.Engine.Generation
                 {
                     MeshCache = modelData,
                     Colors = modelDataClone.Colors.Clone(),
-                    ExtraData = modelDataClone.ExtraData.Clone(),
+                    ExtraData = modelDataClone.Extradata.Clone(),
                     TransMatrix = transMatrix
                 };
                 CacheManager.Check(data);

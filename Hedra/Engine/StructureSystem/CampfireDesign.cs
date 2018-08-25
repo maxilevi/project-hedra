@@ -35,11 +35,11 @@ namespace Hedra.Engine.StructureSystem
             for (int i = 0; i < shapes.Count; i++)
             {
                 shapes[i].Transform(transMatrix);
-                underChunk.AddCollisionShape(shapes[i]);
             }
 
-            underChunk.AddStaticElement(model);
-
+            Structure.AddStaticElement(model);
+            Structure.AddCollisionShape(shapes.ToArray());
+            
             var fire = new Campfire(Position);
             Executer.ExecuteOnMainThread(
                 () => World.WorldBuilding.SpawnBandit(new Vector3(Position.X, 125, Position.Z), false, false)
@@ -61,10 +61,10 @@ namespace Hedra.Engine.StructureSystem
                     shapes[i].Transform(Matrix4.CreateScale(Vector3.One * .8f));
                     shapes[i].Transform(transMatrix);
                     shapes[i].Transform(padOffset);
-                    underChunk.AddCollisionShape(shapes[i]);
+                    Structure.AddCollisionShape(shapes[i]);
                 }
 
-                underChunk.AddStaticElement(model);
+                Structure.AddStaticElement(model);
                 var pad = new SleepingPad(Position + padOffset)
                 {
                     TargetRotation = rotation * Vector3.UnitY

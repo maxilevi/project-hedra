@@ -31,17 +31,12 @@ namespace Hedra.Engine.StructureSystem
                         ChunkOffset.Y + z * Chunk.Width);
                     var rng = this.BuildRng(offset);
                     var targetPosition = this.BuildTargetPosition(offset, rng);
-                    CollidableStructure[] items;
-                    lock (World.StructureGenerator.Items)
-                        items = World.StructureGenerator.Items.ToArray();
+                    var items = World.StructureGenerator.Structures;
                     
                     if (this.ShouldSetup(offset, targetPosition, items, Biome, rng))
                     {
-                        lock (World.StructureGenerator.Items)
-                        {
-                            var item = this.Setup(targetPosition, offset, Biome, rng);
-                            if(item != null) World.StructureGenerator.Items.Add(item);
-                        }
+                        var item = this.Setup(targetPosition, offset, Biome, rng);
+                        if(item != null) World.StructureGenerator.AddStructure(item);                
                     }
                 }
             }
@@ -87,32 +82,6 @@ namespace Hedra.Engine.StructureSystem
                 return true;
             }
             return false;
-
-        }
-
-        protected IEnumerator BuildOnChunk(object[] Params)
-        {
-            var position = (Vector3)Params[0];
-            var model = Params[1] as VertexData;
-            var boxes = Params[2] as List<CollisionShape>;
-
-            Chunk underChunk = World.GetChunkAt(position);
-            int currentSeed = World.Seed;
-            while ((underChunk == null || !underChunk.BuildedWithStructures || !underChunk.Initialized) && World.Seed == currentSeed)
-            {
-                underChunk = World.GetChunkAt(position);
-                yield return null;
-            }
-
-            if (underChunk == null) yield break;
-
-            if (boxes != null)
-                underChunk.AddCollisionShape(boxes.ToArray());
-
-            if (model != null)
-                underChunk.AddStaticElement(model);
-
-            underChunk.Blocked = true;
 
         }
 

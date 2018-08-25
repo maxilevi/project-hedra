@@ -32,7 +32,6 @@ namespace Hedra.Engine.Player
 {
 	public class LocalPlayer : Humanoid, IPlayer
 	{
-
 		public ICamera View { get; }
 		public ChunkLoader Loader { get; }
 		public UserInterface UI { get; set; }
@@ -49,7 +48,8 @@ namespace Hedra.Engine.Player
 		public HangGlider Glider { get; }
 	    public override IMessageDispatcher MessageDispatcher { get; set; }
 	    public override Vector3 FacingDirection => Vector3.UnitY * -(View.TargetYaw * Mathf.Degree - 90f);
-        public ICollidable[] NearCollisions { get; private set; }
+		public ICollidable[] NearCollisions => StructureAware.NearCollisions;
+		private IStructureAware StructureAware { get; }
 	    private float _acummulativeHealing;
         private bool _floating;
 	    private bool _inCementery;
@@ -62,7 +62,6 @@ namespace Hedra.Engine.Player
 	    private bool _enabled;
 	    private float _oldCementeryTime;
 	    private float _oldTime;
-	    private bool _wasPlayingAmbient;
 	    private bool _canInteract;
 
         public LocalPlayer()
@@ -84,6 +83,7 @@ namespace Hedra.Engine.Player
 			this.Trade = new TradeInventory(this);
             this.Movement = new PlayerMovement(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
+	        this.StructureAware = new StructureAware(this);
             this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
 			this.Physics.CanCollide = true;
 			this.AttackSpeed = 0.75f;
@@ -169,7 +169,8 @@ namespace Hedra.Engine.Player
 	        }
 	    }
 
-        public override void Draw(){
+        public override void Draw()
+        {
 			base.Draw();
 			Map.Draw();
             try
@@ -194,7 +195,8 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public override void Update(){
+        public override void Update()
+        {
             base.Update();
 
             if (this.IsUnderwater && this.IsRiding)
@@ -245,38 +247,6 @@ namespace Hedra.Engine.Player
 				_shouldUpdateTime = true;
 				SkyManager.Enabled = false;
 			}
-
-            List<CollidableStructure> collidableStructures = null;
-            lock (World.StructureGenerator.Items)
-            {
-                collidableStructures = (from item in World.StructureGenerator.Items
-                    where (item.Position.Xz - Position.Xz).LengthSquared < item.Radius * item.Radius
-                              select item).ToList();
-            }
-
-            var nearCollidableStructure = collidableStructures.FirstOrDefault();
-
-            if (nearCollidableStructure != null)
-            {
-
-                if ((nearCollidableStructure.Position.Xz - this.Position.Xz).LengthFast <
-                    nearCollidableStructure.Radius && nearCollidableStructure.Design is VillageDesign)
-                {
-                    SoundtrackManager.PlayTrack(SoundtrackManager.VillageIndex, true);
-                    _wasPlayingAmbient = true;
-                }
-
-                NearCollisions = nearCollidableStructure.Colliders;
-            }
-            else if (_wasPlayingAmbient)
-            {
-                _wasPlayingAmbient = false;
-                SoundtrackManager.PlayTrack(SoundtrackManager.LoopableSongsStart);
-            }
-            else
-            {
-                this.NearCollisions = null;
-            }
 
 		    if(_shouldUpdateTime){
 				SkyManager.SetTime( Mathf.Lerp(SkyManager.DayTime, _targetCementeryTime, (float) Time.DeltaTime * 2f) );
@@ -395,8 +365,7 @@ namespace Hedra.Engine.Player
             }
             this.View.AddonDistance = this.IsMoving || this.IsSwimming || this.IsGliding ? 3.0f : 0.0f;
 
-            //this.Physics.PushAround = !IsAttacking; // If he is attacking dont push 'em	
-			//Loader.Update();            
+	        StructureAware.Update();           
             Inventory.Update();
             AbilityTree.Update();
             Toolbar.Update();

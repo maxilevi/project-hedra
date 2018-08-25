@@ -32,12 +32,11 @@ namespace Hedra.Engine.StructureSystem
             for (int i = 0; i < shapes.Count; i++)
             {
                 shapes[i].Transform(transMatrix);
-                underChunk.AddCollisionShape(shapes[i]);
             }
             merchant.Position = Position + Vector3.UnitX * -12f;
 
-            underChunk.AddStaticElement(model);
-            underChunk.Blocked = true;
+            Structure.AddStaticElement(model);
+            Structure.AddCollisionShape(shapes.ToArray());
 
             World.AddStructure(merchant);
             Executer.ExecuteOnMainThread(() => World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position));

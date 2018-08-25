@@ -334,7 +334,7 @@ namespace Hedra.Engine.EntitySystem
 
                     if (!onlyY)
 				    {
-				        box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 1f;
+				        /*box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 1f;
 				        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 2f 
                             + (parentBox.Max.Y - parentBox.Min.Y) * 0.05f * Vector3.UnitY;
 
@@ -353,7 +353,7 @@ namespace Hedra.Engine.EntitySystem
 				            if (deltaOrientation.Z > 0)
 				                blockPz = false;
 
-				        }
+				        }*/
 				    }
 
                     if (Parent is Humanoid human && human.IsGliding){

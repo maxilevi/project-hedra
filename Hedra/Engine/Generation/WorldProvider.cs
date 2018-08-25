@@ -170,7 +170,6 @@ namespace Hedra.Engine.Generation
             _previousId = 0;
             this.Seed = NewSeed;
             BiomePool = new BiomePool();
-            StructureGenerator = new StructureGenerator();
             WorldBuilding = new WorldBuilding.WorldBuilding();
             OpenSimplexNoise.Load(NewSeed == MenuSeed ? 23123123 : NewSeed); //Not really the menu seed.
             _meshBuilder.Discard();
@@ -216,6 +215,7 @@ namespace Hedra.Engine.Generation
                 Entities[i].Dispose();
             }
 
+            StructureGenerator.Discard();
             WorldRenderer.ForceDiscard();
             CacheManager.Discard();
 

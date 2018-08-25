@@ -107,7 +107,7 @@ namespace Hedra.Engine.Generation
 			transMatrix *= Matrix4.CreateTranslation( new Vector3(Position.X, height, Position.Z) + addon );
 
 			float windRng = Utils.Rng.NextFloat(); 
-			model.ExtraData.AddRange( model.GenerateWindValues(AssetManager.ColorCode1, windRng) );
+			model.Extradata.AddRange( model.GenerateWindValues(AssetManager.ColorCode1, windRng) );
 		    model.AddExtraData(AssetManager.ColorCode2, model.GenerateWindValues(AssetManager.ColorCode2, windRng));
 
             var shadow = new DropShadow
@@ -140,7 +140,7 @@ namespace Hedra.Engine.Generation
 
 		    var data = new InstanceData
 		    {
-		        ExtraData = model.ExtraData,
+		        ExtraData = model.Extradata,
 		        MeshCache = originalModel,
 		        Colors = model.Colors,
 		        TransMatrix = transMatrix

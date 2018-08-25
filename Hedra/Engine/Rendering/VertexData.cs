@@ -16,13 +16,13 @@ namespace Hedra.Engine.Rendering
     /// <summary>
     /// Description of VertexData.
     /// </summary>
-    public sealed class VertexData : IDisposable
+    public sealed class VertexData : IDisposable, IVertexData
     {
         public List<Vector3> Vertices { get; set; }
         public List<Vector4> Colors { get; set; }
         public List<Vector3> Normals { get; set; }
         public List<uint> Indices { get; set; }
-        public List<float> ExtraData { get; set; }
+        public List<float> Extradata { get; set; }
         public VertexData Original { get; private set; }
         public bool UseCache { get; set; }
         public static VertexData Empty { get; }
@@ -39,7 +39,7 @@ namespace Hedra.Engine.Rendering
             Colors = new List<Vector4>();
             Normals = new List<Vector3>();
             Indices = new List<uint>();
-            ExtraData = new List<float>();
+            Extradata = new List<float>();
             _points = new Dictionary<Vector3, int>();
         }
 
@@ -122,10 +122,10 @@ namespace Hedra.Engine.Rendering
 
 	    public void FillExtraData(float Value)
 	    {
-	        ExtraData.Clear();
+	        Extradata.Clear();
 	        for (var i = 0; i < Vertices.Count; i++)
 	        {
-	            ExtraData.Add(Value);
+	            Extradata.Add(Value);
 	        }
 	    }
 
@@ -134,7 +134,7 @@ namespace Hedra.Engine.Rendering
 			for(var i = 0; i < Vertices.Count; i++)
             {
                 if (Colors[i] != Color) continue;
-                ExtraData[i] = Values[i];
+                Extradata[i] = Values[i];
                 k++;
             }
 		}
@@ -210,7 +210,7 @@ namespace Hedra.Engine.Rendering
                 Vertices = new List<Vector3>(this.Vertices),
                 Colors = new List<Vector4>(this.Colors),
                 Normals = new List<Vector3>(this.Normals),
-                ExtraData = new List<float>(ExtraData),
+                Extradata = new List<float>(Extradata),
                 Original = this
             };
 		}
@@ -223,7 +223,7 @@ namespace Hedra.Engine.Rendering
                 Vertices = new List<Vector3>(this.Vertices),
                 Colors = new List<Vector4>(this.Colors),
                 Normals = new List<Vector3>(this.Normals),
-                ExtraData = new List<float>(this.ExtraData),
+                Extradata = new List<float>(this.Extradata),
                 Original = this
             };
         }
@@ -251,7 +251,7 @@ namespace Hedra.Engine.Rendering
 			V1.Colors.AddRange(v3.Colors);
 			V1.Normals.AddRange(v3.Normals);
 			V1.Indices.AddRange(v3.Indices);
-			V1.ExtraData.AddRange(v3.ExtraData);
+			V1.Extradata.AddRange(v3.Extradata);
 			
 			v3.Dispose();
 			return V1;
@@ -261,17 +261,17 @@ namespace Hedra.Engine.Rendering
 		                          + Vertices.Count * Vector3.SizeInBytes 
 		                          + Normals.Count * Vector3.SizeInBytes 
 		                          + Colors.Count * Vector4.SizeInBytes 
-		                          + ExtraData.Count * sizeof(float);
+		                          + Extradata.Count * sizeof(float);
         public bool IsClone => Original != null;
 
         public void Clear()
         {
-            ExtraData.Clear();
+            Extradata.Clear();
             Indices.Clear();
             Normals.Clear();
             Vertices.Clear();
             Indices.Clear();
-            ExtraData.Clear();
+            Extradata.Clear();
         }
 
         public void Dispose()

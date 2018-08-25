@@ -30,13 +30,13 @@ namespace Hedra.Engine.StructureSystem
             transMatrix *= Matrix4.CreateTranslation(Position);
             fortModel.Transform(transMatrix);
 
-            List<CollisionShape> shapes = AssetManager.LoadCollisionShapes("Assets/Env/Fort1.ply", 91, Vector3.One * 1.5f);
-            for (int i = 0; i < shapes.Count; i++)
+            var shapes = AssetManager.LoadCollisionShapes("Assets/Env/Fort1.ply", 91, Vector3.One * 1.5f);
+            for (var i = 0; i < shapes.Count; i++)
             {
                 shapes[i].Transform(transMatrix);
-                Structure.AddCollisionShape(shapes[i]);
             }
-            chunk.AddStaticElement(fortModel);
+            Structure.AddStaticElement(fortModel);
+            Structure.AddCollisionShape(shapes.ToArray());
             
             Executer.ExecuteOnMainThread(delegate
             {

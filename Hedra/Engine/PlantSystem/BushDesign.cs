@@ -42,7 +42,7 @@ namespace Hedra.Engine.PlantSystem
 
         public override VertexData Paint(Vector3 Position, VertexData Data, Random Rng)
         {
-            Data.ExtraData.AddRange(Data.GenerateWindValues());
+            Data.Extradata.AddRange(Data.GenerateWindValues());
 
             var underchunk = World.GetChunkAt(Position);
             Data.Paint(underchunk.Biome.Colors.GrassColor * .8f);

@@ -256,7 +256,9 @@
     <Compile Include="Engine\PhysicsSystem\IPhysicsThreadManager.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
+    <Compile Include="Engine\Player\StructureAware.cs" />
     <Compile Include="Engine\Player\ICamera.cs" />
+    <Compile Include="Engine\Player\IStructureAware.cs" />
     <Compile Include="Engine\Player\IHumanoid.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
     <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />
@@ -264,9 +266,11 @@
     <Compile Include="Engine\Rendering\Animation\ColladaParser\ColladaProvider.cs" />
     <Compile Include="Engine\Rendering\Animation\ColladaParser\IColladaProvider.cs" />
     <Compile Include="Engine\Rendering\Animation\IAnimationProvider.cs" />
+    <Compile Include="Engine\Rendering\CachedVertexData.cs" />
     <Compile Include="Engine\Rendering\GLProvider.cs" />
     <Compile Include="Engine\Rendering\IGLProvider.cs" />
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
+    <Compile Include="Engine\Rendering\IVertexData.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
     <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />
     <Compile Include="Engine\Rendering\UI\ITextProvider.cs" />
@@ -277,6 +281,7 @@
     <Compile Include="Engine\Rendering\UpdatableObjectMeshModel.cs" />
     <Compile Include="Engine\Sound\ISoundProvider.cs" />
     <Compile Include="Engine\Sound\SoundProvider.cs" />
+    <Compile Include="Engine\StructureSystem\StructureWatcher.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathEdge.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathGraph.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathVertex.cs" />

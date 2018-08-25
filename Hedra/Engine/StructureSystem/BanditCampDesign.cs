@@ -60,12 +60,11 @@ namespace Hedra.Engine.StructureSystem
             for (var i = 0; i < tents.Length; i++)
             {
                 int k = i;
-                BanditCampDesign.MakeTent(tents[i], rng, enemies, k);
+                BanditCampDesign.MakeTent(tents[i], rng, enemies, k, Structure);
             }
 
             Structure.AddCollisionShape(shapes.ToArray());
-            underChunk.AddStaticElement(model);
-            underChunk.Blocked = true;
+            Structure.AddStaticElement(model);
 
             var camp = new BanditCamp(Position, this.Radius)
             {
@@ -83,9 +82,9 @@ namespace Hedra.Engine.StructureSystem
             return false;
         }
 
-        private static void MakeTent(TentParameters Parameters, Random Rng, Entity[] Enemies, int K)
+        private static void MakeTent(TentParameters Parameters, Random Rng, Entity[] Enemies, int K, CollidableStructure Structure)
         {
-            CoroutineManager.StartCoroutine(TentCoroutine, Parameters, Rng, Enemies, K);
+            CoroutineManager.StartCoroutine(TentCoroutine, Parameters, Rng, Enemies, K, Structure);
         }
 
         private static IEnumerator TentCoroutine(object[] Params)
@@ -95,6 +94,7 @@ namespace Hedra.Engine.StructureSystem
             var rng = (Random)Params[1];
             var enemies = (Entity[])Params[2];
             var j = (int) Params[3];
+            var structure = (CollidableStructure) Params[4];
             var underChunk = World.GetChunkAt(parameters.Position);
             while (underChunk?.Landscape == null || !underChunk.Landscape.StructuresPlaced)
             {
@@ -103,7 +103,6 @@ namespace Hedra.Engine.StructureSystem
 
             TaskManager.Parallel(delegate
             {
-                underChunk.Blocked = true;
                 parameters.Position = new Vector3(
                     parameters.Position.X,
                     Physics.HeightAtPosition(parameters.Position),
@@ -135,8 +134,8 @@ namespace Hedra.Engine.StructureSystem
                 campfire.Transform(positionMatrix);
                 campfire.Color(AssetManager.ColorCode1, Utils.VariateColor(CampfireDesign.TentColor(rng), 15, rng));
 
-                underChunk.AddCollisionShape(campfireShapes.ToArray());
-                underChunk.AddStaticElement(campfire);
+                structure.AddCollisionShape(campfireShapes.ToArray());
+                structure.AddStaticElement(campfire);
                 enemies[j] = World.WorldBuilding.SpawnBandit(
                     parameters.Position + new Vector3(rng.NextFloat() * 16f - 8f, 0, rng.NextFloat() * 16f - 8f), false,
                     false);

@@ -13,8 +13,8 @@ namespace Hedra.Engine.TreeSystem
         public override VertexData Paint(VertexData Data, Vector4 WoodColor, Vector4 LeafColor)
         {
             Data.Color(AssetManager.ColorCode0, WoodColor);
-            Data.ExtraData = new List<float>();
-            Data.ExtraData.AddRange(Data.GenerateWindValues());
+            Data.Extradata = new List<float>();
+            Data.Extradata.AddRange(Data.GenerateWindValues());
 
             return Data;
         }

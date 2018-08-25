@@ -38,10 +38,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
             for (var i = 0; i < staticElements.Count; i++)
             {
-                if (staticElements[i].ExtraData.Count != staticElements[i].Vertices.Count)
+                if (staticElements[i].Extradata.Count != staticElements[i].Vertices.Count)
                 {
-                    float extraDataCount = staticElements[i].Vertices.Count - staticElements[i].ExtraData.Count;
-                    for (var k = 0; k < extraDataCount; k++) staticElements[i].ExtraData.Add(0);
+                    float extraDataCount = staticElements[i].Vertices.Count - staticElements[i].Extradata.Count;
+                    for (var k = 0; k < extraDataCount; k++) staticElements[i].Extradata.Add(0);
                 }
 
                 Input.StaticData += staticElements[i];
@@ -67,10 +67,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
 
                 if (CacheManager.CachedExtradata.ContainsKey(Mesh.InstanceElements[i].ExtraDataCache))
-                    model.ExtraData = CacheManager.CachedExtradata[Mesh.InstanceElements[i].ExtraDataCache]
+                    model.Extradata = CacheManager.CachedExtradata[Mesh.InstanceElements[i].ExtraDataCache]
                         .Clone();
                 else
-                    model.ExtraData = Mesh.InstanceElements[i].ExtraData;
+                    model.Extradata = Mesh.InstanceElements[i].ExtraData;
 
                 if (Mesh.InstanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Grass) ||
                     Mesh.InstanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Wheat))
@@ -97,13 +97,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 model.Transform(Mesh.InstanceElements[i].TransMatrix);
                 //Pack some randomness to the wind values
                 float rng = Utils.Rng.NextFloat();
-                for (var k = 0; k < model.ExtraData.Count; k++)
+                for (var k = 0; k < model.Extradata.Count; k++)
                 {
-                    if (model.ExtraData[k] != 0 && model.ExtraData[k] != -10f)
-                        model.ExtraData[k] = Mathf.Pack(new Vector2(model.ExtraData[k], rng), 2048);
+                    if (model.Extradata[k] != 0 && model.Extradata[k] != -10f)
+                        model.Extradata[k] = Mathf.Pack(new Vector2(model.Extradata[k], rng), 2048);
 
-                    if (model.ExtraData[k] == -10f)
-                        model.ExtraData[k] = -1f;
+                    if (model.Extradata[k] == -10f)
+                        model.Extradata[k] = -1f;
                 }
 
                 //StaticBuffer.VData += Model;
@@ -114,7 +114,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Input.StaticData.Colors.AddRange(model.Colors);
                 Input.StaticData.Normals.AddRange(model.Normals);
                 Input.StaticData.Indices.AddRange(model.Indices);
-                Input.StaticData.ExtraData.AddRange(model.ExtraData);
+                Input.StaticData.Extradata.AddRange(model.Extradata);
 
                 model.Dispose();
             }

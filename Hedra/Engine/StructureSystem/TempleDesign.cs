@@ -52,7 +52,7 @@ namespace Hedra.Engine.StructureSystem
                 //treeBoss.SearchComponent<BossAIComponent>().Protect = () => prize.Position;
 
                 World.AddStructure(prize);
-                underChunk.AddStaticElement(model);
+               // underChunk.AddStaticElement(model);
             });
 
         }
