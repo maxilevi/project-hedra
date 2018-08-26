@@ -18,6 +18,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class ChunkLoader
     {
+        public event OnChunkEvent OnChunkReady;
         public bool ShouldUpdateFog { get; set; } = true;
         public bool Enabled { get; set; }
         public Vector2 Offset { get; private set; }
@@ -34,11 +35,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public ChunkLoader(IPlayer Player)
         {
-            _player = Player;
             Enabled = true;
+            _player = Player;
             _chunkWatchers = new List<ChunkWatcher>();
             CoroutineManager.StartCoroutine(this.Update);
             CoroutineManager.StartCoroutine(this.FogCoroutine);
+            OnChunkReady += World.MarkChunkReady;
         }
 
         private IEnumerator FogCoroutine()
@@ -86,7 +88,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             if (World.GetChunkByOffset(chunkPos) != null) continue;
                             var chunk = new Chunk((int) chunkPos.X, (int) chunkPos.Y);
                             World.AddChunk(chunk);
-                            _chunkWatchers.Add(new ChunkWatcher(chunk));
+                            var watcher = new ChunkWatcher(chunk);
+                            watcher.OnChunkReady += (O) => OnChunkReady?.Invoke(O);
+                            _chunkWatchers.Add(watcher);
                         }
                     }
                 }

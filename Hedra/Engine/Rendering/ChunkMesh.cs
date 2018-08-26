@@ -219,22 +219,11 @@ namespace Hedra.Engine.Rendering
 			MeshBuffers = null;
 		}
 		
-		public void Clear(){
-			foreach(ChunkMeshBuffer Buffer in MeshBuffers){
+		public void Clear()
+		{
+			foreach(ChunkMeshBuffer Buffer in MeshBuffers)
+			{
 				Buffer.Clear();
-			}
-		}
-		
-		public void AddBlock(DataContainer Data, ChunkMeshBuffer Buffer){
-			Buffer.Blocks.Add(Data);
-		}
-		
-		public void AddBlock(DataContainer Data, ChunkBufferTypes Type){
-			MeshBuffers[ (int) Type].Blocks.Add(Data);
-		}
-		public void AddBlocks(DataContainer[] Data, ChunkBufferTypes Type){
-			for(int i = 0; i < Data.Length; i++){
-				MeshBuffers[ (int) Type].Blocks.Add(Data[i]);
 			}
 		}
 	}

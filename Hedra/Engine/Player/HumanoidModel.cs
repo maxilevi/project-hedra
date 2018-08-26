@@ -403,6 +403,10 @@ namespace Hedra.Engine.Player
 			}
 
 			Model.Position = Mathf.Lerp(Model.Position, Position + positionAddon, Time.IndependantDeltaTime * 32f);
+			if (MountModel != null)
+			{
+				MountModel.Position =  Mathf.Lerp(MountModel.Position, Position, Time.IndependantDeltaTime * 32f);
+			}
 			_rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
 			_rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
 			_rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
@@ -548,19 +552,8 @@ namespace Hedra.Engine.Player
                 return Model.TransformFromJoint(_defaultChestPosition, ChestJoint);
             }
         }
-		
-		private Vector3 _position;
-		public override Vector3 Position
-		{
-			get => _position;
-		    set
-            {
-				if(MountModel != null)
-					MountModel.Position = value;
 
-                _position = value;
-			}
-		}
+	    public override Vector3 Position { get; set; }
 
 	    public Matrix4 TransformationMatrix
 	    {

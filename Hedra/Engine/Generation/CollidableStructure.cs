@@ -51,6 +51,15 @@ namespace Hedra.Engine.Generation
                     return _colliders.ToArray();
             }
         }
+        
+        public CachedVertexData[] Models
+        {
+            get
+            {
+                lock(_lock)
+                    return _models.ToArray();
+            }
+        }
 
         public void AddCollisionShape(params ICollidable[] IColliders)
 	    {

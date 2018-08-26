@@ -420,11 +420,6 @@ namespace Hedra.Engine.Rendering
             return Provider.GetString(Name);
         }
 
-        public static void GetTexParameter(TextureTarget Target, GetTextureParameter Parameter, out int V0)
-        {
-            Provider.GetTexParameter(Target, Parameter, out V0);
-        }
-
         public static int GetUniformBlockIndex(int V0, string Name)
         {
             return Provider.GetUniformBlockIndex((uint)V0, Name);

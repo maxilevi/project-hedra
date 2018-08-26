@@ -72,7 +72,6 @@ namespace Hedra.Engine.Rendering
         void GetShader(uint Program, ShaderParameter Parameter, out int Value);
         string GetShaderInfoLog(int Id);
         string GetString(StringName Name);
-        void GetTexParameter(TextureTarget Target, GetTextureParameter Parameter, out int V0);
         int GetUniformBlockIndex(uint V0, string Name);
         int GetUniformLocation(uint Program, string Name);
         void LinkProgram(uint Program);

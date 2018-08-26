@@ -96,7 +96,7 @@ namespace Hedra.Engine.Rendering
                 Normals = Data.Normals,
                 Indices = Data.Indices,
                 Extradata = Data.Extradata
-            };
+            }.Clone();
         }
     }
 }

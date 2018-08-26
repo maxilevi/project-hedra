@@ -246,10 +246,6 @@ namespace HedraTests
             return 0;
         }
 
-        public virtual void GenTextures(int Count, uint[] Textures)
-        {
-        }
-
         public virtual void GenVertexArrays(int N, out uint V1)
         {
             V1 = 0;

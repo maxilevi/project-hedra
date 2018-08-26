@@ -38,8 +38,8 @@ using Forms = System.Windows.Forms;
 namespace Hedra
 {
     class Hedra : GameWindow, IEventProvider
-	{ 
-	
+    {
+	    public bool Loaded => _finishedLoading;
 		private GUITexture _studioLogo, _studioBackground;
 		private Panel _debugPanel;
 		private GUIText _positionText;
@@ -117,31 +117,28 @@ namespace Hedra
             GameManager.Load();
 			Log.WriteLine("Scene loading was Successful.");
 			Log.WriteLine("Supported GLSL version is : "+Renderer.GetString(StringName.ShadingLanguageVersion));
+		
+	        _debugPanel = new Panel();
+			
+	        _positionText = new GUIText(string.Empty, new Vector2(.65f,-.9f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+	        _meshQueueCount = new GUIText(string.Empty, new Vector2(.65f,-.8f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));                      
+	        _generationQueueCount = new GUIText(string.Empty, new Vector2(.65f,-.7f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+	        _chunkText = new GUIText(string.Empty, new Vector2(.65f,-.6f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+	        _renderText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));			
+	        _meshesText = new GUIText(string.Empty, new Vector2(.65f,-.4f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+	        _cameraText = new GUIText(string.Empty, new Vector2(.65f,-.3f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+	        _geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
 
-			_debugPanel = new Panel();
-			
-			_positionText = new GUIText(string.Empty, new Vector2(.65f,-.9f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
-			_meshQueueCount = new GUIText(string.Empty, new Vector2(.65f,-.8f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));                      
-			_generationQueueCount = new GUIText(string.Empty, new Vector2(.65f,-.7f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
-			_chunkText = new GUIText(string.Empty, new Vector2(.65f,-.6f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
-			_renderText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));			
-			_meshesText = new GUIText(string.Empty, new Vector2(.65f,-.4f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
-			_cameraText = new GUIText(string.Empty, new Vector2(.65f,-.3f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
-			_geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
-            /*Texture WaterTexture = new Texture(WaterEffects.WaterFBO.TextureID[0], Vector2.Zero, Vector2.One);
-			WaterTexture.TextureElement.Flipped = true;
-			
-			DebugPanel.AddElement(WaterTexture);*/
-			_debugPanel.AddElement(_positionText);
-			_debugPanel.AddElement(_chunkText);
-			_debugPanel.AddElement(_renderText);
-			_debugPanel.AddElement(_generationQueueCount);
-			_debugPanel.AddElement(_meshQueueCount);
-			_debugPanel.AddElement(_meshesText);
-			_debugPanel.AddElement(_cameraText);
-            _debugPanel.AddElement(_geomPoolMemory);
-			_debugPanel.Disable();
-			
+	        _debugPanel.AddElement(_positionText);
+	        _debugPanel.AddElement(_chunkText);
+	        _debugPanel.AddElement(_renderText);
+	        _debugPanel.AddElement(_generationQueueCount);
+	        _debugPanel.AddElement(_meshQueueCount);
+	        _debugPanel.AddElement(_meshesText);
+	        _debugPanel.AddElement(_cameraText);
+	        _debugPanel.AddElement(_geomPoolMemory);
+	        _debugPanel.Disable();
+	        
 			Renderer.BlendEquation(BlendEquationMode.FuncAdd);
 		    Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Renderer.Enable(EnableCap.Texture2D);
@@ -171,6 +168,7 @@ namespace Hedra
 	        
 	        Log.WriteLine(glVersion);
         }
+
 
 	    protected override void OnUpdateFrame(FrameEventArgs e)
         {

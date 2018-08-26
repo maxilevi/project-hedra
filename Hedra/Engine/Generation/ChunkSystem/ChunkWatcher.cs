@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Dynamic;
+using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
+    public delegate void OnChunkEvent(Chunk Object);
+        
     public class ChunkWatcher : IDisposable
     {
         private Chunk _object;
+        private bool _wasBuilded;
+        public event OnChunkEvent OnChunkReady;
         public bool Disposed { get; private set; }
         public bool IsHealthy { get; private set; }
 
@@ -28,6 +34,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 World.AddChunkToQueue(_object, true);
             }
+            if (_object.BuildedWithStructures && !_wasBuilded)
+            {
+                _wasBuilded = true;
+                OnChunkReady?.Invoke(_object);
+            }
         }
 
         private bool ManageState()
@@ -43,7 +54,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if ((_object.Position.Xz - offset).LengthSquared > radius * radius)
             {
                 this.Kill();
-                return false;         
+                return false;
             }
             if (!_object.Initialized) _object.Initialize();
             if (!_object.IsGenerated || !_object.Landscape.StructuresPlaced)

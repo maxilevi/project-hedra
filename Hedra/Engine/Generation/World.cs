@@ -28,7 +28,8 @@ namespace Hedra.Engine.Generation
     public static class World
     {
         public static event ModulesReloadEvent ModulesReload;
-        
+        public static event OnChunkEvent OnChunkReady;
+        public static event OnChunkEvent OnChunkDisposed;
         public static Dictionary<Vector2, Chunk> SearcheableChunks => Provider.SearcheableChunks;
         public static AreaHighlighter Highlighter => Provider.Highlighter;
         public static ParticleSystem Particles => Provider.Particles;
@@ -154,6 +155,7 @@ namespace Hedra.Engine.Generation
         public static void RemoveChunk(Chunk Chunk)
         {
             Provider.RemoveChunk(Chunk);
+            OnChunkDisposed?.Invoke(Chunk);
         }
 
         public static Chunk GetChunkByOffset(int OffsetX, int OffsetZ)
@@ -271,9 +273,9 @@ namespace Hedra.Engine.Generation
             return Provider.FindPlaceablePosition(Mob, DesiredPosition);
         }
 
-        public static void ForeachEntity(Action<IEntity> Lambda)
+        public static void MarkChunkReady(Chunk Object)
         {
-            Entities.ToList().ForEach(Lambda);
+            OnChunkReady?.Invoke(Object);
         }
     }
 }

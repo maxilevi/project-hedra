@@ -284,8 +284,7 @@ namespace Hedra.Engine.Rendering
 
         public uint GenTexture()
         {
-            GL.GenTextures(1, out uint id);
-            return id;
+            return (uint) GL.GenTexture();
         }
 
         public void GenVertexArrays(int N, out uint V1)
@@ -331,11 +330,6 @@ namespace Hedra.Engine.Rendering
         public string GetString(StringName Name)
         {
             return GL.GetString(Name);
-        }
-
-        public void GetTexParameter(TextureTarget Target, GetTextureParameter Parameter, out int V0)
-        {
-            GL.GetTexParameter(Target, Parameter, out V0);
         }
 
         public int GetUniformBlockIndex(uint V0, string Name)
