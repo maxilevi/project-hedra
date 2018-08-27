@@ -11,11 +11,17 @@ namespace Hedra
 {
 	static class Program
 	{
+		public static bool IsDebug { get; private set; }
+		public static bool IsRelease => !IsDebug;
 		public static Hedra GameWindow;
 		
 		[STAThread]
 		static void Main(string[] Args)
         {
+	        #if DEBUG
+	        IsDebug = true;
+	        #endif
+	        
             var devices = new List<DisplayDevice>();
 		    for (var index = 0; index < 6; ++index)
 		    {

@@ -83,7 +83,8 @@ namespace Hedra.Engine
 		public static void Write(object Text)
 		{
 		    var newText = $"[{DateTime.Now:HH:mm:ss}] {(_currentType != LogType.Normal ? $"[{_currentType.ToString()}]" : string.Empty)} {Text}";
-            Console.Write(newText);
+            if(_currentType != LogType.GL || Program.IsDebug)
+			Console.Write(newText);
             WriteToFile(newText);
         }
 
@@ -100,12 +101,15 @@ namespace Hedra.Engine
 
 	    public static void WriteLine(string Text, LogType Type)
 	    {
-            RunWithType(Type, () => WriteLine(Text));
+		    var oldType = _currentType;
+		    _currentType = Type;
+		    WriteLine(Text);
+		    _currentType = oldType;
 	    }
 
 	    public static void WriteLine(string Format, params object[] Args)
         {
-			for(int i = 0; i < Args.Length; i++)
+			for(var i = 0; i < Args.Length; i++)
             {
 				Format = Format.Replace("{"+i+"}", Args[i].ToString());
 			}
@@ -132,17 +136,6 @@ namespace Hedra.Engine
 	        lock (_lock)
 	        {
 	            _currentType = Type;
-	        }
-	    }
-
-	    public static void RunWithType(LogType Type, Action Job)
-	    {
-	        lock (_lock)
-	        {
-	            var oldType = _currentType;
-	            _currentType = Type;
-	            Job();
-	            _currentType = oldType;
 	        }
 	    }
 	}
