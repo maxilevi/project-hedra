@@ -16,6 +16,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
@@ -72,7 +73,7 @@ namespace Hedra.Engine.Generation
             Provider.CullTest(FrustumObject);
         }
 
-        public static void Draw(ChunkBufferTypes Type)
+        public static void Draw(WorldRenderType Type)
         {
             Provider.Draw(Type);
         }

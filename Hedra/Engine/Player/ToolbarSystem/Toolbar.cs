@@ -23,13 +23,13 @@ namespace Hedra.Engine.Player.ToolbarSystem
 	/// <summary>
 	/// Description of SkillsBar.
 	/// </summary>
-	public class Toolbar
+	public class Toolbar : IToolbar
 	{
         public const int InteractableItems = 4;
 	    public const int BarItems = 7;
 	    private const char Marker = '!';
 	    private const string HeaderMarker = "<>";
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
 	    private readonly InventoryArray _barItems;
 	    private readonly InventoryArray _bagItems;
 	    private readonly ToolbarInventoryInterface _toolbarItemsInterface;
@@ -41,7 +41,8 @@ namespace Hedra.Engine.Player.ToolbarSystem
 	    private WeaponAttack _w2;
         private bool _show;
 
-        public Toolbar(LocalPlayer Player){
+        public Toolbar(IPlayer Player)
+        {
 			_player = Player;
             _barItems = new InventoryArray(BarItems);
             _bagItems = new InventoryArray(AbilityTree.AbilityCount-1);

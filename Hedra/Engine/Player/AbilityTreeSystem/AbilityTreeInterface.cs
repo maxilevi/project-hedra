@@ -9,14 +9,14 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     public class AbilityTreeInterface : InventoryArrayInterface
     {
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
         private readonly Panel _panel;
         private readonly GUIText _availablePointsText;
         private readonly RenderableTexture _backgroundTexture;
         private readonly RenderableTexture[] _skillPointsBackgrounTextures;
         private readonly Vector2 _targetResolution = new Vector2(1366, 768);
 
-        public AbilityTreeInterface(LocalPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing)
+        public AbilityTreeInterface(IPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing)
             : base(Array, Offset, Length, SlotsPerLine, Spacing, null)
         {
             _player = Player;

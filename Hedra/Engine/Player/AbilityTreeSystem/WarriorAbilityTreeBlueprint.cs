@@ -53,7 +53,7 @@ namespace Hedra.Engine.Player
 			//Slots[1][3].Image = Graphics2D.LoadFromAssets("Assets/Skills/DoubleSwords.png");
 			//Slots[1][3].Enabled = true;
 			
-			Items[2][1].AbilityType = typeof(Resistance);	
+			Items[2][1].AbilityType = typeof(WarriorResistance);	
 			Items[2][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
 			Items[2][1].Enabled = true;
 		}

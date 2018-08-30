@@ -115,9 +115,9 @@ namespace HedraTests.Player
         public UserInterface UI { get; set; }
         public PlayerInventory Inventory { get; }
         public EntitySpawner Spawner { get; }
-        public Toolbar Toolbar { get; }
+        public IToolbar Toolbar { get; set; }
         public QuestLog QuestLog { get; }
-        public AbilityTree AbilityTree { get; }
+        public IAbilityTree AbilityTree { get; set; }
         public PetManager Pet { get; }
         public Chat Chat { get; }
         public Minimap Minimap { get; }

@@ -12,7 +12,7 @@ namespace Hedra.Engine.Player.Inventory
         private bool _isExiting;
         public event OnStateChangeEventHandler OnStateChange;
 
-        public InventoryStateManager(LocalPlayer Player)
+        public InventoryStateManager(IPlayer Player)
         {
             this.RegisterStateItem(() => Player.View.TargetPitch, O => Player.View.TargetPitch = (float) O);
             this.RegisterStateItem(() => Player.View.CameraHeight, O => Player.View.CameraHeight = (Vector3)O);

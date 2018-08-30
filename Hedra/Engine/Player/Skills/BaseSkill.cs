@@ -74,7 +74,7 @@ namespace Hedra.Engine.Player.Skills
 			this.Initialized = true;
 		}
 		
-		public virtual bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
+		public virtual bool MeetsRequirements(IToolbar Bar, int CastingAbilityCount)
 		{
 		    if (!(Cooldown < 0) || !((LocalPlayer.Instance.Mana - ManaCost) > 0) || CastingAbilityCount != 0 ||
 		        this.Level <= 0 || !Active || Player.IsEating) return false;

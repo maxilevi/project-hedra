@@ -2,6 +2,7 @@
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.ToolbarSystem;
@@ -18,9 +19,9 @@ namespace Hedra.Engine.Player
         UserInterface UI { get; set; }
         PlayerInventory Inventory { get; }
         EntitySpawner Spawner { get; }
-        Toolbar Toolbar { get; }
+        IToolbar Toolbar { get; }
         QuestLog QuestLog { get; }
-        AbilityTreeSystem.AbilityTree AbilityTree { get; }
+        IAbilityTree AbilityTree { get; }
         PetManager Pet { get; }
         Chat Chat { get; }
         Minimap Minimap { get; }

@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Skills
 
         protected abstract void BeforeUse(T Weapon);
         
-        public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
+        public override bool MeetsRequirements(IToolbar Bar, int CastingAbilityCount)
         {
             return base.MeetsRequirements(Bar, CastingAbilityCount) && !Grayscale;
         }

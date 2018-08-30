@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using Hedra.Engine;
-using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
@@ -15,22 +10,19 @@ using Moq;
 using NUnit.Framework;
 using OpenTK;
 
-namespace HedraTests.Player
+namespace HedraTests.Player.Skills
 {
     [TestFixture]
-    public class WeaponAttackTest : BaseTest
+    public class WeaponAttackTest : SkillTest
     {
         private WeaponAttack _attack;
-        private PlayerMock _player;
         
         [SetUp]
         public override void Setup()
         {
             base.Setup();
-            _player = new PlayerMock();
             _attack = new WeaponAttack();
-            _attack.Initialize(Vector2.Zero, Vector2.One, new Panel(), _player);
-            GameManager.Player = _player;
+            _attack.Initialize(Vector2.Zero, Vector2.One, new Panel(), Player);
         }
 
         [Test]
@@ -40,8 +32,8 @@ namespace HedraTests.Player
             var weaponMock = new Mock<Weapon>(new VertexData());
             weaponMock.Setup(W => W.Attack1(It.IsAny<IHumanoid>()))
                 .Callback( () => executedAttackTimes++);
-            _player.LeftWeapon = weaponMock.Object;
-            _attack.SetType(_player.LeftWeapon, AttackType.Primary);
+            Player.LeftWeapon = weaponMock.Object;
+            _attack.SetType(Player.LeftWeapon, AttackType.Primary);
             _attack.Use();
             Assert.AreEqual(0, executedAttackTimes);
             
@@ -62,8 +54,8 @@ namespace HedraTests.Player
             var weaponMock = new Mock<Weapon>(new VertexData());
             weaponMock.Setup(W => W.Attack1(It.IsAny<IHumanoid>()))
                 .Callback( () => executedAttackTimes++);
-            _player.LeftWeapon = weaponMock.Object;
-            _attack.SetType(_player.LeftWeapon, AttackType.Primary);
+            Player.LeftWeapon = weaponMock.Object;
+            _attack.SetType(Player.LeftWeapon, AttackType.Primary);
             _attack.Use();
             Assert.AreEqual(0, executedAttackTimes);          
             _attack.Update();     
@@ -82,8 +74,8 @@ namespace HedraTests.Player
             var weaponMock = new Mock<Weapon>(new VertexData());
             weaponMock.Setup(W => W.Attack2(It.IsAny<IHumanoid>(), It.IsAny<AttackOptions>()))
                 .Callback( () => wasAttackExecuted = true);
-            _player.LeftWeapon = weaponMock.Object;
-            _attack.SetType(_player.LeftWeapon, AttackType.Secondary);
+            Player.LeftWeapon = weaponMock.Object;
+            _attack.SetType(Player.LeftWeapon, AttackType.Secondary);
             
             Assert.IsFalse(_attack.IsCharging);
             _attack.Use();

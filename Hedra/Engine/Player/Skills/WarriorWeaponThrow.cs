@@ -50,7 +50,7 @@ namespace Hedra.Engine.Player
 			};
 		}
 		
-		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(IToolbar Bar, int CastingAbilityCount)
 		{
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsMoving && Player.MainWeapon != null;
 		}

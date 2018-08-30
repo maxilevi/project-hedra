@@ -14,10 +14,10 @@ namespace Hedra.Engine.Player.ToolbarSystem
     {
         private readonly ToolbarInventoryInterface _toolbarInferface;
         private readonly AbilityBagInventoryInterface _bagInterface;
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
         private bool _hasInitialized;
 
-        public ToolbarInterfaceManager(LocalPlayer Player,
+        public ToolbarInterfaceManager(IPlayer Player,
             ToolbarInventoryInterface ToolbarInferface, AbilityBagInventoryInterface BagInterface)
             : base(null, ToolbarInferface, BagInterface)
         {

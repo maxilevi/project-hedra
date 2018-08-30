@@ -257,12 +257,14 @@
     <Compile Include="Engine\PhysicsSystem\IPhysicsThreadManager.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
+    <Compile Include="Engine\Player\AbilityTreeSystem\IAbilityTree.cs" />
     <Compile Include="Engine\Player\StructureAware.cs" />
     <Compile Include="Engine\Player\ICamera.cs" />
     <Compile Include="Engine\Player\IStructureAware.cs" />
     <Compile Include="Engine\Player\IHumanoid.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
     <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />
+    <Compile Include="Engine\Player\ToolbarSystem\IToolbar.cs" />
     <Compile Include="Engine\Rendering\Animation\AnimationLoader.cs" />
     <Compile Include="Engine\Rendering\Animation\ColladaParser\ColladaProvider.cs" />
     <Compile Include="Engine\Rendering\Animation\ColladaParser\IColladaProvider.cs" />
@@ -707,7 +709,7 @@
     <Compile Include="Engine\Rendering\Animation\KeyFrame.cs" />
     <Compile Include="Engine\Rendering\Billboard.cs" />
     <Compile Include="Engine\Rendering\ChunkGeometry.cs" />
-    <Compile Include="Engine\Rendering\ChunkMeshBuffer.cs" />
+    <Compile Include="Engine\Rendering\MeshBuffer.cs" />
     <Compile Include="Engine\Rendering\ChunkRenderCommand.cs" />
     <Compile Include="Engine\Rendering\Effects\FXShader.cs" />
     <Compile Include="Engine\Rendering\IDisposeAnimation.cs" />
@@ -752,7 +754,6 @@
     <Compile Include="Engine\Rendering\Particles\ParticleCreator.cs" />
     <Compile Include="Engine\Rendering\ShadowBox.cs" />
     <Compile Include="Engine\Rendering\ShadowRenderer.cs" />
-    <Compile Include="Engine\Rendering\StaticMeshBuffer.cs" />
     <Compile Include="Engine\Rendering\SurfaceNets.cs" />
     <Compile Include="Engine\Rendering\SymetricMatrix.cs" />
     <Compile Include="Engine\Rendering\UBO.cs" />
@@ -785,7 +786,6 @@
     <Compile Include="Engine\Rendering\VAO.cs" />
     <Compile Include="Engine\Rendering\VertexData.cs" />
     <Compile Include="Engine\Rendering\VertexOcclusion.cs" />
-    <Compile Include="Engine\Rendering\WaterMeshBuffer.cs" />
     <Compile Include="Engine\Rendering\WorldBuffer.cs" />
     <Compile Include="Engine\Rendering\WorldRenderer.cs" />
     <Compile Include="Engine\GameManager.cs" />

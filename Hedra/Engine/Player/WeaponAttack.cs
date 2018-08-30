@@ -71,7 +71,7 @@ namespace Hedra.Engine.Player
 			base.TextureId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) Default);
 		}
 		
-		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(IToolbar Bar, int CastingAbilityCount)
 		{
 			if(DisableWeapon) return false;			
 			 return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsAttacking && !Player.IsEating && Player.CanInteract;

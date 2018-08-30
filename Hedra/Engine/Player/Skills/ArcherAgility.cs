@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player.Skills
 			return -1f * Level;
 		}
 
-		protected override void Change()
+		protected override void OnChange()
 		{
 			Player.DodgeCost = 25 + StaminaFormula();
 		}

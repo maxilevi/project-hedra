@@ -85,7 +85,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Initialize()
         {
-            Mesh = new ChunkMesh(Position, new ChunkMeshBuffer[0]);
+            Mesh = new ChunkMesh(Position, null);
         }
 
         public void Generate()
@@ -165,7 +165,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             this._canDispose = false;
             this.BuildedCompletely = false;
-            this.Mesh.Clear();
         }
 
         private void FinishUpload(ChunkMeshBuildOutput Input, int BuildedLod)

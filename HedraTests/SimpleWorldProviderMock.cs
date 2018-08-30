@@ -9,6 +9,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
@@ -53,7 +54,7 @@ namespace HedraTests
         {
         }
 
-        public virtual void Draw(ChunkBufferTypes Type)
+        public virtual void Draw(WorldRenderType Type)
         {
         }
 

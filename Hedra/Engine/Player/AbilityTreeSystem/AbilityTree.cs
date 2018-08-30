@@ -25,7 +25,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     /// <summary>
     /// Description of SkillSystem.
     /// </summary>
-    public class AbilityTree : PlayerInterface
+    public class AbilityTree : PlayerInterface, IAbilityTree
     {
         public const int AbilityCount = 15;
         public const int Layers = 3;
@@ -33,7 +33,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private const char NumberMarker = '|';
         private const string HeaderMarker = "<>";
         private readonly Vector2 _targetResolution;
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
         private readonly InventoryArray _abilities;
         private readonly AbilityTreeInterface _interface;
         private readonly AbilityTreeInterfaceManager _manager;
@@ -42,7 +42,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private AbilityTreeBlueprint _blueprint;
         private bool _show;
 
-        public AbilityTree(LocalPlayer Player)
+        public AbilityTree(IPlayer Player)
         {
             _player = Player;
             _targetResolution = new Vector2(1366, 705);

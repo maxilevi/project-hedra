@@ -153,7 +153,7 @@ namespace Hedra.Engine.Generation
             _previousCount = GameManager.Player.Loader.ActiveChunks;
         }
 
-        public void Draw(ChunkBufferTypes Type)
+        public void Draw(WorldRenderType Type)
         {
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 

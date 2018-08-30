@@ -66,7 +66,7 @@ namespace Hedra.Engine.Management
         {
 			SkyManager.Draw();
 			World.CullTest(FrustumObject);
-			World.Draw(ChunkBufferTypes.STATIC);
+			World.Draw(WorldRenderType.Static);
 			DropShadows.Draw();
 			
 	    	IRenderable[] draws;
@@ -93,7 +93,7 @@ namespace Hedra.Engine.Management
                 }
 			}
 			Renderer.Enable(EnableCap.DepthTest);
-			World.Draw(ChunkBufferTypes.WATER);
+			World.Draw(WorldRenderType.Water);
 		    for (int i = TrailRenderer.Count - 1; i > -1; i--)
 		    {
 		        TrailRenderer[i].Draw();

@@ -14,7 +14,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             BottomRightText.TextColor = Color.LightBlue;
         }
 
-        public override void UpdateView(Humanoid Human)
+        public override void UpdateView(IHumanoid Human)
         {
             base.UpdateView(Human);
             TopLeftText.Text = $"{Human.HealthRegen:0.00} HP/s";

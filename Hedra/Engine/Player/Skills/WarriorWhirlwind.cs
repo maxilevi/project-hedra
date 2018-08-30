@@ -39,7 +39,7 @@ namespace Hedra.Engine.Player
             _whirlwindAnimation.Loop = false;
         }
 
-		public override bool MeetsRequirements(Toolbar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements(IToolbar Bar, int CastingAbilityCount)
 		{
 			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.Toolbar.DisableAttack && Player.HasWeapon;
 		}

@@ -8,6 +8,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
@@ -67,7 +68,7 @@ namespace Hedra.Engine.Generation
 
         void CullTest(FrustumCulling FrustumObject);
 
-        void Draw(ChunkBufferTypes Type);
+        void Draw(WorldRenderType Type);
 
         void Update();
 

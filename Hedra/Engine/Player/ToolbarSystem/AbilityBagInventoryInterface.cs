@@ -9,9 +9,9 @@ namespace Hedra.Engine.Player.ToolbarSystem
     public class AbilityBagInventoryInterface : InventoryArrayInterface
     {
         private readonly Panel _panel;
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
 
-        public AbilityBagInventoryInterface(LocalPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing, string[] CustomIcons = null) : base(Array, Offset, Length, SlotsPerLine, Spacing, CustomIcons)
+        public AbilityBagInventoryInterface(IPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing, string[] CustomIcons = null) : base(Array, Offset, Length, SlotsPerLine, Spacing, CustomIcons)
         {
             _panel = new Panel();
             _player = Player;

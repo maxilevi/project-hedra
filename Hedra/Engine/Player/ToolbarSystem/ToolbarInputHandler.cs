@@ -7,9 +7,9 @@ namespace Hedra.Engine.Player.ToolbarSystem
 {
     public class ToolbarInputHandler
     {
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
 
-        public ToolbarInputHandler(LocalPlayer Player)
+        public ToolbarInputHandler(IPlayer Player)
         {
             _player = Player;
             EventDispatcher.RegisterKeyUp(this, this.HandleUp);

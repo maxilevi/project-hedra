@@ -12,10 +12,10 @@ namespace Hedra.Engine.Player.Skills
             if(Level > MaxLevel)
                 Player.AbilityTree.SetPoints(GetType(), MaxLevel);
             
-            Change();
+            OnChange();
         }
 
-        protected abstract void Change();
+        protected abstract void OnChange();
         
         public override void Use()
         {

@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Skills
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class Resistance : PassiveSkill
+	public class WarriorResistance : PassiveSkill
 	{
 	    private bool _set;
 		private float _addonHealth;
@@ -29,11 +29,12 @@ namespace Hedra.Engine.Player.Skills
 		    return Clamp ? 12 * Math.Max(Level, 1) : 12 * Level;
 		}
 		
-		protected override void Change()
+		protected override void OnChange()
 		{
-			if(_previousLevel != Player.Level || _previousSkillLevel != Level) _set = false;
+			if (_previousLevel != Player.Level || _previousSkillLevel != Level) _set = false;
 			
-			if(!_set){
+			if (!_set)
+			{
 				_previousSkillLevel = Level;
 				_previousLevel = Player.Level;
 				Player.AddonHealth -= _addonHealth;

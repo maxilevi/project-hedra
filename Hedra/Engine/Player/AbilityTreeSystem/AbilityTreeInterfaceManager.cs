@@ -9,10 +9,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     public class AbilityTreeInterfaceManager : InventoryArrayInterfaceManager
     {
         private readonly Texture[] _lines;
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
         private readonly InventoryArrayInterface _interface;
         private readonly InventoryInterfaceItemInfo _itemInfo;
-        public AbilityTreeInterfaceManager(LocalPlayer Player, InventoryInterfaceItemInfo ItemInfoInterface, InventoryArrayInterface Interface)
+        public AbilityTreeInterfaceManager(IPlayer Player, InventoryInterfaceItemInfo ItemInfoInterface, InventoryArrayInterface Interface)
             : base(ItemInfoInterface, Interface)
         {
             _player = Player;

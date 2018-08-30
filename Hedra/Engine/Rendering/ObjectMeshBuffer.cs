@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of EntityMeshBuffer.
 	/// </summary>
-	public class ObjectMeshBuffer : ChunkMeshBuffer
+	public class ObjectMeshBuffer : MeshBuffer
 	{
 		public static Shader Shader { get; }
 		public bool ApplyFog { get; set; } = true;
@@ -63,7 +63,8 @@ namespace Hedra.Engine.Rendering
 	        NoiseTexture = new Texture3D(noiseValues);
         }
 
-        public override void Draw(Vector3 Position, bool Shadows){
+        public override void Draw()
+        {
 			if(Indices == null || Data == null) return;
 
 		    this.Bind();
@@ -190,7 +191,8 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 		
-		public override void Bind(){
+		public void Bind()
+		{
 			Shader.Bind();
 
             Shader["Alpha"] = Alpha;
@@ -228,7 +230,8 @@ namespace Hedra.Engine.Rendering
 			Shader["UseShadows"] = GameSettings.Shadows ? 1 : 0;
 		}
 		
-		public override void UnBind(){
+		public void UnBind()
+		{
 			Shader.Unbind();
 			Renderer.Enable(EnableCap.CullFace);
 		}

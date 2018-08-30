@@ -11,7 +11,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 {
     public class ToolbarInventoryInterface : InventoryArrayInterface
     {
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
         private readonly Panel _panel;
         private readonly RenderableTexture[] _textBackgrounds;
         private ObjectMesh _foodMesh;
@@ -19,7 +19,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private Item _builtFoodItem;
         private float _foodHeight;
 
-        public ToolbarInventoryInterface(LocalPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing, string[] CustomIcons = null) : base(Array, Offset, Length, SlotsPerLine, Spacing, CustomIcons)
+        public ToolbarInventoryInterface(IPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing, string[] CustomIcons = null) : base(Array, Offset, Length, SlotsPerLine, Spacing, CustomIcons)
         {
             _player = Player;
             _panel = new Panel();

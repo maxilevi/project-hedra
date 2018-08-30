@@ -22,6 +22,7 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.StructureSystem;
@@ -37,9 +38,9 @@ namespace Hedra.Engine.Player
 		public UserInterface UI { get; set; }
 		public PlayerInventory Inventory { get; }
 		public EntitySpawner Spawner { get; }
-		public Toolbar Toolbar { get; }
+		public IToolbar Toolbar { get; }
 		public QuestLog QuestLog { get; }
-		public AbilityTreeSystem.AbilityTree AbilityTree { get; }
+		public IAbilityTree AbilityTree { get; }
 		public PetManager Pet { get; }
 		public Chat Chat { get; }
 		public Minimap Minimap { get; }
@@ -355,13 +356,11 @@ namespace Hedra.Engine.Player
 				GameSettings.DistortEffect = false;
 				GameSettings.UnderWaterEffect = false;
 				WorldRenderer.ShowWaterBackfaces = false;
-			    WaterMeshBuffer.ShowBackfaces = false;
             }
 			if( underBlock0.Type == BlockType.Water || (View.CameraPosition.Y / Chunk.BlockSize <= lowestY + 2 && (underBlock1.Type == BlockType.Water || underBlock2.Type == BlockType.Water || underBlock3.Type == BlockType.Water))){
 				GameSettings.UnderWaterEffect = true;
 				GameSettings.DistortEffect = true;
 			    WorldRenderer.ShowWaterBackfaces = true;
-			    WaterMeshBuffer.ShowBackfaces = true;
             }
             this.View.AddonDistance = this.IsMoving || this.IsSwimming || this.IsGliding ? 3.0f : 0.0f;
 

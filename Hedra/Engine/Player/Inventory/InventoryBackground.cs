@@ -46,7 +46,7 @@ namespace Hedra.Engine.Player.Inventory
             this.Position = Position;
         }
 
-        public virtual void UpdateView(Humanoid Human)
+        public virtual void UpdateView(IHumanoid Human)
         {
             Name.Text = Human.Name;
             Level.Text = "LEVEL "+Human.Level;

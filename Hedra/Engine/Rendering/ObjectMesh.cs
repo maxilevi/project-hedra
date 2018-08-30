@@ -26,15 +26,11 @@ namespace Hedra.Engine.Rendering
 	       _buffer = new ObjectMeshBuffer();
 	    }
 
-	    public ObjectMesh(Vector3 Position){
+	    public ObjectMesh(Vector3 Position)
+	    {
 			this.Enabled = true;
-
-		    var meshBuffers = new ChunkMeshBuffer[]
-		    {
-		        new ObjectMeshBuffer()
-		    };
-			this.Mesh = new ChunkMesh(Position, meshBuffers);
-			this._buffer = Mesh.MeshBuffers[0] as ObjectMeshBuffer;
+		    this._buffer = new ObjectMeshBuffer();
+			this.Mesh = new ChunkMesh(Position, _buffer);
 			this.Position = Position;
 			this.Rotation = Vector3.Zero;
 			Mesh.Enabled = true;
@@ -45,7 +41,7 @@ namespace Hedra.Engine.Rendering
 		
 		public void Draw()
         {
-			if(Enabled) Mesh.Draw(0);
+			if(Enabled) Mesh.Draw();
 			this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition,
                 Time.IndependantDeltaTime * 6 * AnimationSpeed);
 			this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation,
@@ -236,11 +232,12 @@ namespace Hedra.Engine.Rendering
 		    return FromVertexData(Data, Vector3.Zero);
 		}
 		
-		public static ObjectMesh FromVertexData(VertexData Data, Vector3 Position){
+		public static ObjectMesh FromVertexData(VertexData Data, Vector3 Position)
+		{
 			var mesh = new ObjectMesh(Position);
 			Executer.ExecuteOnMainThread( delegate
             {			                                  	
-			    mesh.Mesh.BuildFrom(mesh.Mesh.MeshBuffers[0], Data, false);
+			    mesh.Mesh.BuildFrom(Data, false);
 			    mesh.Mesh.IsGenerated = true;
 			    mesh.Mesh.IsBuilded = true;
 			    mesh.Mesh.Enabled = true;
@@ -251,9 +248,9 @@ namespace Hedra.Engine.Rendering
 			
 		}
 
-		public void Dispose(){
-			Mesh?.Dispose();
-            _buffer?.Dispose();
+		public void Dispose()
+		{
+			_buffer?.Dispose();
 			DrawManager.Remove(this);
         }
 	}

@@ -61,11 +61,11 @@ namespace Hedra.Engine.Rendering
 	        DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
         }
 
-		public static void Render(Dictionary<Vector2, Chunk> ToDraw, ChunkBufferTypes Type){
+		public static void Render(Dictionary<Vector2, Chunk> ToDraw, WorldRenderType Type){
             
 			if(ToDraw.Count == 0) return;
 			
-			if(Type == ChunkBufferTypes.STATIC)
+			if(Type == WorldRenderType.Static)
             {
 				IntPtr[] Offsets, ShadowOffsets;
 				int[] Counts = StaticBuffer.BuildCounts(ToDraw, out Offsets);
@@ -92,7 +92,8 @@ namespace Hedra.Engine.Rendering
 				StaticBuffer.Data.Unbind();		
 				StaticUnBind();
 			}
-			else if(Type == ChunkBufferTypes.WATER){
+			else if(Type == WorldRenderType.Water)
+			{
 			
 				IntPtr[] Offsets;
 				int[] Counts = WaterBuffer.BuildCounts(ToDraw, out Offsets);
@@ -209,5 +210,11 @@ namespace Hedra.Engine.Rendering
         public static Vector3 Scale { get; set; } = Vector3.One;
         public static Vector3 Offset { get; set; }
 	    public static Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
+	}
+
+	public enum WorldRenderType
+	{
+		Static,
+		Water
 	}
 }
