@@ -471,24 +471,13 @@ namespace Hedra.Engine.BiomeSystem
 
 	            if (structPosition.Design is TravellingMerchantDesign)
 	            {
-	                float radius = structPosition.Mountain.Radius;
+	                var radius = structPosition.Mountain.Radius;
 	                if ((structPosition.Mountain.Position.Xz - possiblePosition.Xz).LengthSquared <
 	                    radius * .5f * radius * .5f)
 	                    InMerchant = true;
 	            }
-	            if (structPosition.Generated) continue;
-
-	            if ((possiblePosition.Xz - structPosition.Position.Xz).LengthSquared < 2 * 2)
-	            {
-	                World.StructureGenerator.Build(possiblePosition, structPosition);
-	                structPosition.Generated = true;
-	            }
 	        }
         }
-
-	    public bool NoTreeZone(int X, int Z){
-			return Utils.Rng.Next(0, 4) == 1;
-		}
 		
 		public void CheckForNearbyStructures()
         {

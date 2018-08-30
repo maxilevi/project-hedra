@@ -109,14 +109,6 @@ namespace Hedra.Engine.Rendering.UI
 
 		public void Update(IPlayer Player)
 		{
-            if (Enabled)
-			{
-				if(Program.GameWindow.FirstLaunch)
-				{
-					Program.GameWindow.FirstLaunch = false;
-					Player.MessageDispatcher.ShowMessageWhile("[F4] HELP", () => !LocalPlayer.Instance.UI.ShowHelp);
-				}
-			}
 
 			_compass.Disable();
 			_compass.TextureElement.Angle = Player.Model.Rotation.Y;

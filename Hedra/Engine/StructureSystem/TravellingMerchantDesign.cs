@@ -17,29 +17,29 @@ namespace Hedra.Engine.StructureSystem
         public override int Radius { get; set; } = 512;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.MerchantIcon);
 
-        public override void Build(Vector3 Position, CollidableStructure Structure)
+        public override void Build(CollidableStructure Structure)
         {
+            var position = Structure.Position;
             var originalModel = CacheManager.GetModel(CacheItem.MerchantCart);
             var model = originalModel.ShallowClone();
-            var underChunk = World.GetChunkAt(Position);
 
             Matrix4 transMatrix = Matrix4.CreateScale(4.5f);
-            transMatrix *= Matrix4.CreateTranslation(Position);
+            transMatrix *= Matrix4.CreateTranslation(position);
             model.Transform(transMatrix);
 
-            var merchant = new TravellingMerchant(Position);
+            var merchant = new TravellingMerchant(position);
             var shapes = CacheManager.GetShape(originalModel).DeepClone();
             for (int i = 0; i < shapes.Count; i++)
             {
                 shapes[i].Transform(transMatrix);
             }
-            merchant.Position = Position + Vector3.UnitX * -12f;
+            merchant.Position = position + Vector3.UnitX * -12f;
 
             Structure.AddStaticElement(model);
             Structure.AddCollisionShape(shapes.ToArray());
 
             World.AddStructure(merchant);
-            Executer.ExecuteOnMainThread(() => World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position));
+            Executer.ExecuteOnMainThread(() => World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, position));
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)

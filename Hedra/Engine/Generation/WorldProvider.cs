@@ -36,6 +36,7 @@ namespace Hedra.Engine.Generation
     {
         private readonly ChunkBuilder _chunkBuilder;
         private readonly MeshBuilder _meshBuilder;
+        private readonly RenderingComparer _renderingComparer;
         private readonly SharedWorkerPool _workerPool;
         private int _previousCount;
         private int _previousId;
@@ -51,6 +52,7 @@ namespace Hedra.Engine.Generation
             _items = new HashSet<WorldItem>();
             _chunks = new HashSet<Chunk>();
             _globalColliders = new HashSet<ICollidable>();
+            _renderingComparer = new RenderingComparer();
             SearcheableChunks = new Dictionary<Vector2, Chunk>();
             DrawingChunks = new Dictionary<Vector2, Chunk>();
         }
@@ -91,6 +93,8 @@ namespace Hedra.Engine.Generation
             };
             ReloadModules();
             IsGenerated = true;
+            WorldRenderer.StaticBuffer.Comparer = _renderingComparer;
+            WorldRenderer.WaterBuffer.Comparer = _renderingComparer;
         }
 
         public void ReloadModules()
@@ -107,7 +111,7 @@ namespace Hedra.Engine.Generation
             ModulesReload?.Invoke(AssetManager.AppPath);
         }
 
-        public int MenuSeed => 2124321422; //23123123
+        public int MenuSeed => 2124321422;
 
         public int RandomSeed
         {
@@ -115,7 +119,9 @@ namespace Hedra.Engine.Generation
             {
                 var newSeed = MenuSeed;
                 while (newSeed == MenuSeed)
+                {
                     newSeed = Utils.Rng.Next(1, int.MaxValue / 2);
+                }
                 return newSeed;
             }
         }
@@ -123,7 +129,7 @@ namespace Hedra.Engine.Generation
         public void CullTest(FrustumCulling FrustumObject)
         {
             if (_previousModelView == FrustumObject.ModelViewMatrix &&
-                LocalPlayer.Instance.Loader.ActiveChunks == _previousCount)
+                GameManager.Player.Loader.ActiveChunks == _previousCount)
                 return;
 
             DrawingChunks.Clear();
@@ -142,8 +148,9 @@ namespace Hedra.Engine.Generation
                     DrawingChunks.Add(offset, chunk);
             }
 
+            _renderingComparer.Position = GameManager.Player.Position;
             _previousModelView = FrustumObject.ModelViewMatrix;
-            _previousCount = LocalPlayer.Instance.Loader.ActiveChunks;
+            _previousCount = GameManager.Player.Loader.ActiveChunks;
         }
 
         public void Draw(ChunkBufferTypes Type)

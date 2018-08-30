@@ -17,13 +17,13 @@ namespace Hedra.Engine.Rendering
 	{
 		public int Offset, Length;
 		
-		public static int Compare(MemoryEntry Entry1, MemoryEntry Entry2){
+		public static int Compare(MemoryEntry Entry1, MemoryEntry Entry2)
+		{
 			if(Entry1.Offset > Entry2.Offset)
 				return 1;
-			else if(Entry1.Offset < Entry2.Offset)
+			if(Entry1.Offset < Entry2.Offset)
 				return -1;
-			else
-				return 0;
+			return 0;
 		}
 	}
 }

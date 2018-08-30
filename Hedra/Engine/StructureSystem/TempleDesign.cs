@@ -19,14 +19,14 @@ namespace Hedra.Engine.StructureSystem
         public override int Radius { get; set; } = 700;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
 
-        public override void Build(Vector3 Position, CollidableStructure Structure)
+        public override void Build(CollidableStructure Structure)
         {
-            var rng = new Random((int)(Position.X / 11 * (Position.Z / 13)));
+            var position = Structure.Position;
+            var rng = new Random((int)(position.X / 11 * (position.Z / 13)));
             var model = AssetManager.PLYLoader("Assets/Env/IncaTemple0.ply", Vector3.One * 20f);
-            var underChunk = World.GetChunkAt(Position);
 
             Matrix4 transMatrix = Matrix4.Identity;
-            transMatrix *= Matrix4.CreateTranslation(Position);
+            transMatrix *= Matrix4.CreateTranslation(position);
             model.Transform(transMatrix);
 
             model.GraduateColor(Vector3.UnitY);

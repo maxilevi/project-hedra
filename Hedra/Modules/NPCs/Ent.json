@@ -3,7 +3,7 @@
   "MaxHealth": 2000.0,
   "DisplayName": "Ent",
   "ModelType": "Ent",
-  "Class": "None",
+  "Class": "Warrior",
   "Behaviour" : "Hostile",
   "Immune": false,
   "XP": 7.0,

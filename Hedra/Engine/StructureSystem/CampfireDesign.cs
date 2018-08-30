@@ -16,10 +16,10 @@ namespace Hedra.Engine.StructureSystem
         public override int Radius { get; set; } = 80;
         public override VertexData Icon => null;
 
-        public override void Build(Vector3 Position, CollidableStructure Structure)
+        public override void Build(CollidableStructure Structure)
         {
-            var underChunk = World.GetChunkAt(Position);
-            var rng = new Random((int) (Position.X / 11 * (Position.Z / 13)));
+            var position = Structure.Position;
+            var rng = new Random((int) (position.X / 11 * (position.Z / 13)));
             var originalCampfire = CacheManager.GetModel(CacheItem.Campfire);
             var model = originalCampfire.ShallowClone();
 
@@ -27,7 +27,7 @@ namespace Hedra.Engine.StructureSystem
             Matrix4 transMatrix = Matrix4.CreateScale(3 + rng.NextFloat() * 1.5f);
             Matrix4 rotMat = Matrix4.CreateRotationY(rotation);
             transMatrix *= rotMat;
-            transMatrix *= Matrix4.CreateTranslation(Position);
+            transMatrix *= Matrix4.CreateTranslation(position);
             model.Transform(transMatrix);
             model.Color(AssetManager.ColorCode1, Utils.VariateColor(TentColor(rng), 15, rng));
 
@@ -40,9 +40,9 @@ namespace Hedra.Engine.StructureSystem
             Structure.AddStaticElement(model);
             Structure.AddCollisionShape(shapes.ToArray());
             
-            var fire = new Campfire(Position);
+            var fire = new Campfire(position);
             Executer.ExecuteOnMainThread(
-                () => World.WorldBuilding.SpawnBandit(new Vector3(Position.X, 125, Position.Z), false, false)
+                () => World.WorldBuilding.SpawnBandit(new Vector3(position.X, 125, position.Z), false, false)
             );
             World.AddStructure(fire);
 
@@ -65,7 +65,7 @@ namespace Hedra.Engine.StructureSystem
                 }
 
                 Structure.AddStaticElement(model);
-                var pad = new SleepingPad(Position + padOffset)
+                var pad = new SleepingPad(position + padOffset)
                 {
                     TargetRotation = rotation * Vector3.UnitY
                 };

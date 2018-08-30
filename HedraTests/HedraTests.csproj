@@ -69,6 +69,7 @@
     <Compile Include="CodePolicy\ShaderCodePolicy.cs" />
     <Compile Include="CodePolicy\SolutionTest.cs" />
     <Compile Include="EntitySystem\DamageComponentTest.cs" />
+    <Compile Include="Generation\RenderingComparerTest.cs" />
     <Compile Include="HedraReflectionTest.cs" />
     <Compile Include="MathExtensions\PhysicsTest.cs" />
     <Compile Include="Player\EntitySpawnerTest.cs" />

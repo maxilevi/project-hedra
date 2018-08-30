@@ -38,19 +38,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Enabled = true;
             _player = Player;
             _chunkWatchers = new List<ChunkWatcher>();
-            CoroutineManager.StartCoroutine(this.Update);
-            CoroutineManager.StartCoroutine(this.FogCoroutine);
+            CoroutineManager.StartCoroutine(this.UpdateCoroutine);
             OnChunkReady += World.MarkChunkReady;
-        }
-
-        private IEnumerator FogCoroutine()
-        {
-            while (Program.GameWindow.Exists)
-            {
-                _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks, Time.IndependantDeltaTime * .5f);
-                this.UpdateFog();
-                yield return null;
-            }
         }
 
         public void UpdateFog(bool Force = false)
@@ -60,14 +49,17 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             if (Math.Abs(_activeChunks - _targetActivechunks) > .05f || Force)
             {
-                Executer.ExecuteOnMainThread(delegate
-                {
-                    SkyManager.FogManager.UpdateFogSettings(MinFog, MaxFog);
-                });
+                SkyManager.FogManager.UpdateFogSettings(MinFog, MaxFog);
             }
         }
 
-        private IEnumerator Update()
+        public void Update()
+        {
+            _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks, Time.IndependantDeltaTime * .5f);
+            this.UpdateFog();
+        }
+
+        private IEnumerator UpdateCoroutine()
         {
             while (Program.GameWindow.Exists)
             {

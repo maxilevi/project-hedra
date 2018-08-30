@@ -20,17 +20,17 @@ namespace Hedra.Engine.StructureSystem
         public override int Radius { get; set; } = 256;
         public override VertexData Icon => null;
 
-        public override void Build(Vector3 Position, CollidableStructure Structure)
+        public override void Build(CollidableStructure Structure)
         {
-            Chunk underChunk = World.GetChunkAt(Position);
-            Vector3 scale = Vector3.One * 6;
-            var rng = new Random( (int)(Position.X / 11 * (Position.Z / 13)) );
+            var position = Structure.Position;
+            var scale = Vector3.One * 6;
+            var rng = new Random( (int)(position.X / 11 * (position.Z / 13)) );
             var originalModel = CacheManager.GetModel(CacheItem.Obelisk);
             var model = originalModel.ShallowClone();
             model.Scale(scale);
             var obelisk = new Obelisk
             {
-                Position = Position
+                Position = position
             };
 
             var collisionBox = new Box(new Vector3(0, 0, 0), new Vector3(2.4f, 8, 2.4f) * scale);

@@ -29,7 +29,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             if (distanceA < distanceB) return -1;
             return distanceA == distanceB ? 0 : 1;
-
         }
     }
 }

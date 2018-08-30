@@ -53,11 +53,10 @@ namespace Hedra.Engine.StructureSystem
 			}
 		}
 
-		public void Build(Vector3 Position, CollidableStructure Struct)
+		public void Build(CollidableStructure Struct)
 		{
-			Position = new Vector3(Position.X, Physics.HeightAtPosition(Position), Position.Z);
 			Struct.Generated = true;
-			Struct.Design.Build(Position, Struct);
+			Struct.Design.Build(Struct);
 		}
 
 		public void AddStructure(CollidableStructure Structure)

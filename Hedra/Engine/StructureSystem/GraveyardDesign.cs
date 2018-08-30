@@ -22,16 +22,15 @@ namespace Hedra.Engine.StructureSystem
         public const int GraveyardSkyTime = 24000;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GraveyardIcon);
 
-        public override void Build(Vector3 Position, CollidableStructure Structure)
+        public override void Build(CollidableStructure Structure)
         {
-            Chunk underChunk = World.GetChunkAt(Position);
-
-            var rng = new Random( (int) ( Position.X / 11 * (Position.Z / 13) ) );
+            var position = Structure.Position;
+            var rng = new Random( (int) ( position.X / 11 * (position.Z / 13) ) );
 
             const int tombstoneCount = 25;
-            var cementery = new Graveyard(Position, Radius);
+            var cementery = new Graveyard(position, Radius);
 
-            World.HighlightArea(Position, new Vector4(.2f, .2f, .2f, 1f) * .5f, Radius * 1.75f, -1);
+            World.HighlightArea(position, new Vector4(.2f, .2f, .2f, 1f) * .5f, Radius * 1.75f, -1);
 
             var rotationMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
             var originalMausoleum = CacheManager.GetModel(CacheItem.Mausoleum);
@@ -39,7 +38,7 @@ namespace Hedra.Engine.StructureSystem
 
             mausoleum.Transform(Matrix4.CreateScale(4f));
             mausoleum.Transform(rotationMatrix);
-            mausoleum.Translate(Position);
+            mausoleum.Translate(position);
             mausoleum.GraduateColor(Vector3.UnitY);
 
             var mausoleumShapes = CacheManager.GetShape(originalMausoleum).DeepClone();
@@ -47,7 +46,7 @@ namespace Hedra.Engine.StructureSystem
             {
                 mausoleumShapes[i].Transform(Matrix4.CreateScale(4f));
                 mausoleumShapes[i].Transform(rotationMatrix);
-                mausoleumShapes[i].Transform(Position);
+                mausoleumShapes[i].Transform(position);
             }
 
             World.AddStructure(cementery);
@@ -68,10 +67,10 @@ namespace Hedra.Engine.StructureSystem
                 j++;
                 if (rng.Next(0, 4) == 1 || (j == 3 && k == 2)) continue;
 
-                Vector3 gravePosition = Position + Vector3.UnitX * 28f * Chunk.BlockSize + Vector3.UnitZ * 18f * Chunk.BlockSize
+                Vector3 gravePosition = position + Vector3.UnitX * 28f * Chunk.BlockSize + Vector3.UnitZ * 18f * Chunk.BlockSize
                     + Vector3.UnitX * -11 * j * Chunk.BlockSize
                     + Vector3.UnitZ * -11 * k * Chunk.BlockSize;
-                gravePosition = new Vector3(gravePosition.X, Position.Y, gravePosition.Z);
+                gravePosition = new Vector3(gravePosition.X, position.Y, gravePosition.Z);
 
                 Vector3 graveScale = Vector3.One * (3.25f + rng.NextFloat() * .5f) * 1.5f;
                 var originalGrave = CacheManager.GetModel(CacheItem.Grave);
@@ -103,8 +102,8 @@ namespace Hedra.Engine.StructureSystem
             Structure.AddCollisionShape(mausoleumShapes.ToArray());
             Structure.AddStaticElement(mausoleum);
 
-            this.BuildLamps(Position, Structure);
-            BuildReward(Position, cementery, rng);
+            this.BuildLamps(position, Structure);
+            BuildReward(position, cementery, rng);
         }
 
         private static void BuildReward(Vector3 Position, Graveyard Cementery, Random Rng)

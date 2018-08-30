@@ -19,11 +19,11 @@ namespace Hedra.Engine.StructureSystem
         public override int Radius { get; set; } = 300;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.CampfireIcon);
 
-        public override void Build(Vector3 Position, CollidableStructure Structure)
+        public override void Build(CollidableStructure Structure)
         {
             const float roasterScale = .75f;
-            var underChunk = World.GetChunkAt(Position);
-            var rng = new Random((int)(Position.X / 11 * (Position.Z / 13)));
+            var position = Structure.Position;
+            var rng = new Random((int)(position.X / 11 * (position.Z / 13)));
             var originalRoaster = CacheManager.GetModel(CacheItem.CampfireRoaster);
             var roasterModel = originalRoaster.ShallowClone();
             roasterModel.Transform(Matrix4.CreateScale(roasterScale));
@@ -32,7 +32,7 @@ namespace Hedra.Engine.StructureSystem
             var model = new VertexData();
 
             var scaleMatrix = Structure.Parameters.Get<Matrix4>("ScaleMatrix");
-            var transMatrix = scaleMatrix * Matrix4.CreateTranslation(Position);
+            var transMatrix = scaleMatrix * Matrix4.CreateTranslation(position);
 
             roasterModel.Transform(transMatrix);
             centerModel.Transform(transMatrix);
@@ -66,7 +66,7 @@ namespace Hedra.Engine.StructureSystem
             Structure.AddCollisionShape(shapes.ToArray());
             Structure.AddStaticElement(model);
 
-            var camp = new BanditCamp(Position, this.Radius)
+            var camp = new BanditCamp(position, this.Radius)
             {
                 Enemies = enemies
             };

@@ -25,7 +25,7 @@ namespace Hedra.Engine.StructureSystem
             var models = Structure.Models;
             for (var i = 0; i < models.Length; i++)
             {
-                var chunkSpace = World.ToChunkSpace(Structure.Position);
+                var chunkSpace = World.ToChunkSpace(models[i].Position);
                 if (Object.OffsetX == (int) chunkSpace.X && Object.OffsetZ == (int) chunkSpace.Y)
                 {
                     if (!_chunksAdded.ContainsKey(models[i]) || _chunksAdded[models[i]] != Object)
@@ -42,12 +42,12 @@ namespace Hedra.Engine.StructureSystem
 
         private void OnChunkDisposed(Chunk Object)
         {
-            /*var dict = _chunksAdded.ToArray();
+            var dict = _chunksAdded.ToArray();
             foreach (var pair in dict)
             {
                 if (pair.Value == Object)
                     _chunksAdded[pair.Key] = null;
-            }*/
+            }
         }
 
         public void Dispose()

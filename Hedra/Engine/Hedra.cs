@@ -39,7 +39,6 @@ namespace Hedra
 {
     class Hedra : GameWindow, IEventProvider
     {
-	    public bool Loaded => _finishedLoading;
 		private GUITexture _studioLogo, _studioBackground;
 		private Panel _debugPanel;
 		private GUIText _positionText;
@@ -138,6 +137,7 @@ namespace Hedra
 	        _debugPanel.AddElement(_cameraText);
 	        _debugPanel.AddElement(_geomPoolMemory);
 	        _debugPanel.Disable();
+	        Log.WriteLine("Created debug elements.");
 	        
 			Renderer.BlendEquation(BlendEquationMode.FuncAdd);
 		    Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -259,7 +259,6 @@ namespace Hedra
 			base.OnRenderFrame(e);
 
 			Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
-
 
 		    if (!this._finishedLoading)
 		    {

@@ -19,15 +19,15 @@ namespace Hedra.Engine.StructureSystem
         public override int Radius { get; set; } = 256;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
 
-        public override void Build(Vector3 Position, CollidableStructure Structure)
+        public override void Build(CollidableStructure Structure)
         {
-            var chunk = World.GetChunkAt(Position);
-            var rng = new Random(World.Seed + 64432 + chunk.OffsetX + chunk.OffsetZ + (int)Position.X + (int)Position.Y);
+            var position = Structure.Position;
+            var rng = new Random(World.Seed + 64432 + (int)position.X + (int)position.Z);
             var fortModel = AssetManager.PLYLoader("Assets/Env/Fort1.ply", Vector3.One * 1.5f, Vector3.Zero, Vector3.Zero);
 
             var transMatrix = Matrix4.Identity;
             transMatrix *= Matrix4.CreateRotationY(rng.NextFloat() * 360);
-            transMatrix *= Matrix4.CreateTranslation(Position);
+            transMatrix *= Matrix4.CreateTranslation(position);
             fortModel.Transform(transMatrix);
 
             var shapes = AssetManager.LoadCollisionShapes("Assets/Env/Fort1.ply", 91, Vector3.One * 1.5f);

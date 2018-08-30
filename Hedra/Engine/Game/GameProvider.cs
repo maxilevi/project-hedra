@@ -145,6 +145,7 @@ namespace Hedra.Engine.Game
 			Player.UI.Hide = false;
 			Player.Enabled = true;				
 			_isNewRun = true;
+			Player.MessageDispatcher.ShowMessageWhile("[F4] HELP", () => !LocalPlayer.Instance.UI.ShowHelp);
 		}
 
 	    private IEnumerator LoadingScreenCoroutine()

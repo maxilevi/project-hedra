@@ -18,7 +18,7 @@ namespace Hedra.Engine.StructureSystem
         public override int Radius { get; set; } = 1024;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
 
-        public override void Build(Vector3 Position, CollidableStructure Structure)
+        public override void Build(CollidableStructure Structure)
         {
             var builder = Structure.Parameters.Get<VillageBuilder>("Builder");
             var design = Structure.Parameters.Get<PlacementDesign>("Design");
@@ -45,6 +45,11 @@ namespace Hedra.Engine.StructureSystem
         {
             float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
             return BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0 && Rng.Next(0, 25) == 1 && height > 0;
+        }
+
+        public static string CreateName(int Seed)
+        {
+            return NameGenerator.Generate(Seed);
         }
     }
 }

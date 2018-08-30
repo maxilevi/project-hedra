@@ -13,6 +13,7 @@ namespace Hedra.Engine
 	/// </summary>
 	public static class Time
 	{
+	    public static bool Paused => TimeScale <= 0.005f; 
 		public static float DeltaTime { get; private set; }
 		public static float IndependantDeltaTime { get; private set; }
 		public static float TimeScale { get; private set; } = 1;

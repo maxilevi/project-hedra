@@ -68,6 +68,7 @@ namespace Hedra.Engine.Rendering
 
         public void Update()
         {
+            if(Time.Paused) return;
             for (int i = _tipPoints.Count - 1; i > -1; i--)
             {
                 _tipPoints[i] -= Time.DeltaTime;

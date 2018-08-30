@@ -17,7 +17,7 @@ namespace Hedra.Engine.StructureSystem
         public abstract int Radius { get; set; }
         public abstract VertexData Icon { get; }
 
-        public abstract void Build(Vector3 Position, CollidableStructure Structure);
+        public abstract void Build(CollidableStructure Structure);
 
         protected abstract CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng);
 
@@ -36,7 +36,9 @@ namespace Hedra.Engine.StructureSystem
                     if (this.ShouldSetup(offset, targetPosition, items, Biome, rng))
                     {
                         var item = this.Setup(targetPosition, offset, Biome, rng);
-                        if(item != null) World.StructureGenerator.AddStructure(item);                
+                        if (item == null) continue;
+                        World.StructureGenerator.AddStructure(item);
+                        World.StructureGenerator.Build(item);
                     }
                 }
             }

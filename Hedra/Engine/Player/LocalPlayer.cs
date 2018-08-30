@@ -365,7 +365,8 @@ namespace Hedra.Engine.Player
             }
             this.View.AddonDistance = this.IsMoving || this.IsSwimming || this.IsGliding ? 3.0f : 0.0f;
 
-	        StructureAware.Update();           
+	        StructureAware.Update();
+            Loader.Update();
             Inventory.Update();
             AbilityTree.Update();
             Toolbar.Update();

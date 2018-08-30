@@ -19,21 +19,22 @@ namespace Hedra.Engine.StructureSystem
         public override int Radius { get; set; } = 700;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
 
-        public override void Build(Vector3 Position, CollidableStructure Structure)
+        public override void Build(CollidableStructure Structure)
         {
-            var rng = new Random((int)(Position.X / 11 * (Position.Z / 13)));
+            var position = Structure.Position;
+            var region = World.BiomePool.GetRegion(position);
+            var rng = new Random((int)(position.X / 11 * (position.Z / 13)));
             var originalModel = CacheManager.GetModel(CacheItem.GiantTree);
             var model = originalModel.ShallowClone();
-            var underChunk = World.GetChunkAt(Position);
 
             Matrix4 transMatrix = Matrix4.CreateScale(Vector3.One * 100f);
             transMatrix *= Matrix4.CreateRotationY(rng.NextFloat() * 360);
-            transMatrix *= Matrix4.CreateTranslation(Position + Vector3.UnitY * 7f);
+            transMatrix *= Matrix4.CreateTranslation(position + Vector3.UnitY * 7f);
             model.Transform(transMatrix);
 
-            model.Color(AssetManager.ColorCode0, underChunk.Biome.Colors.WoodColor);
-            model.Color(AssetManager.ColorCode1, underChunk.Biome.Colors.LeavesColor);
-            model.Color(AssetManager.ColorCode2, underChunk.Biome.Colors.LeavesColor  * .8f);
+            model.Color(AssetManager.ColorCode0, region.Colors.WoodColor);
+            model.Color(AssetManager.ColorCode1, region.Colors.LeavesColor);
+            model.Color(AssetManager.ColorCode2, region.Colors.LeavesColor  * .8f);
 
             model.Extradata.AddRange(model.GenerateWindValues());
             float treeRng = Utils.Rng.NextFloat();
