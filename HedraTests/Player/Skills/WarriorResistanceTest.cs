@@ -28,15 +28,24 @@ namespace HedraTests.Player.Skills
         }
         
         [Test]
-        public void TestAddonHealthIsRemovedWhenLoading()
+        public void TestAddonHealthIsAddedWhenLoading()
         {
-            
+            var startingHealth = Player.AddonHealth;
+            _skill.Level = 5;
+            _skill.Update();
+            _skill.Unload();
+            _skill.Load();
+            Assert.AreNotEqual(startingHealth, Player.AddonHealth);
         }
         
         [Test]
         public void TestAddonHealthIsRemovedWhenUnloading()
         {
-            
+            var startingHealth = Player.AddonHealth;
+            _skill.Level = 5;
+            _skill.Update();
+            _skill.Unload();
+            Assert.AreEqual(startingHealth, Player.AddonHealth);
         }
     }
 }

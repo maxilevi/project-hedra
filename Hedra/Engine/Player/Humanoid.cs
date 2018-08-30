@@ -167,7 +167,8 @@ namespace Hedra.Engine.Player
 	    }
 
         #region Dodge
-        public void Roll(){
+        public void Roll()
+        {
 			var player = this as LocalPlayer;
 			if( IsUnderwater || IsGliding || IsRolling || IsCasting || IsRiding || !IsGrounded) return;
 			
@@ -196,22 +197,6 @@ namespace Hedra.Engine.Player
 		}
 
 		#endregion
-		
-		public void Climb()
-		{
-			var frontBlock = World.GetBlockAt( this.BlockPosition + this.Orientation.Xz.ToVector3() * Chunk.BlockSize + Vector3.UnitY * 2f  );
-			if(frontBlock.Type != BlockType.Air)
-			{
-				this.Physics.UsePhysics = false;
-				this.BlockPosition += Vector3.UnitY * 8 *(float) Time.DeltaTime;
-				this.Model.Position += Vector3.UnitY * 8 *(float) Time.DeltaTime;
-				this.Stamina -= (float) Time.DeltaTime * 25f;
-			}
-		}
-		
-		public void EndClimb(){
-			this.Physics.UsePhysics = true;
-		}
 
         public void Attack(float Damage)
 	    {
