@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player
         ICamera View { get; }
         ChunkLoader Loader { get; }
         UserInterface UI { get; set; }
-        PlayerInventory Inventory { get; }
+        IPlayerInventory Inventory { get; }
         EntitySpawner Spawner { get; }
         IToolbar Toolbar { get; }
         QuestLog QuestLog { get; }

@@ -50,7 +50,7 @@ namespace Hedra.Engine.Rendering
 			Textures = new uint[FrameNames.Count];
 			for(int i = 0; i < FrameNames.Count; i++){
 				Bitmap Bmp = new Bitmap( new MemoryStream(Frames[ FrameNames[i] ]) );
-				Textures[i] = Graphics2D.LoadTexture( Bmp );
+				//Textures[i] = Graphics2D.LoadTexture( Bmp );
 			}
 		}
 		

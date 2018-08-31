@@ -3,21 +3,16 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.Skills
 {
-    public abstract class LearningSkill : BaseSkill
+    public abstract class LearningSkill : PassiveSkill
     {
         public override bool Passive => true;
-        public override abstract uint TextureId { get; }
+        protected override int MaxLevel => 1;
 
-        public override void Update()
+        protected override void OnChange()
         {
-            if (base.Level == 0) return;
-            if (base.Level > 1) Player.AbilityTree.SetPoints(this.GetType(), 1);
-
-            this.Learn();
+            Learn();
         }
 
-        public abstract void Learn();
-
-        public override void Use() { }
+        protected abstract void Learn();
     }
 }

@@ -10,7 +10,7 @@
 using System;
 using Hedra.Engine.Rendering;
 
-namespace Hedra.Engine.Player.Skills
+namespace Hedra.Engine.Player.Skills.Archer
 {
 	public class Agility : PassiveSkill
 	{

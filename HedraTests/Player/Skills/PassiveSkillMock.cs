@@ -8,6 +8,7 @@ namespace HedraTests.Player.Skills
         private int _maxLevel;
         public override string Description => string.Empty;
         protected override int MaxLevel => _maxLevel;
+        public override uint TextureId => 0;
         public Action OnChangeCallback { get; set; }
              
         protected override void OnChange()

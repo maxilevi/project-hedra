@@ -14,6 +14,7 @@ using System.Drawing.Imaging;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Hedra.Engine.Rendering
 {

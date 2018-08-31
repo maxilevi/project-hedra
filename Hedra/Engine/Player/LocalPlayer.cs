@@ -36,7 +36,7 @@ namespace Hedra.Engine.Player
 		public ICamera View { get; }
 		public ChunkLoader Loader { get; }
 		public UserInterface UI { get; set; }
-		public PlayerInventory Inventory { get; }
+		public IPlayerInventory Inventory { get; }
 		public EntitySpawner Spawner { get; }
 		public IToolbar Toolbar { get; }
 		public QuestLog QuestLog { get; }
@@ -97,7 +97,7 @@ namespace Hedra.Engine.Player
 			UpdateManager.Add(this);
 		}
 
-	    protected virtual MovementManager CreateMovementManager()
+		private MovementManager CreateMovementManager()
 	    {
 	        return new PlayerMovement(this);
 	    }

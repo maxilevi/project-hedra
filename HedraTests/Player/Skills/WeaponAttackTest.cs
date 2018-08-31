@@ -13,17 +13,8 @@ using OpenTK;
 namespace HedraTests.Player.Skills
 {
     [TestFixture]
-    public class WeaponAttackTest : SkillTest
+    public class WeaponAttackTest : SkillTest<WeaponAttack>
     {
-        private WeaponAttack _attack;
-        
-        [SetUp]
-        public override void Setup()
-        {
-            base.Setup();
-            _attack = new WeaponAttack();
-            _attack.Initialize(Vector2.Zero, Vector2.One, new Panel(), Player);
-        }
 
         [Test]
         public void TestPrimaryAttackIsContinous()
@@ -33,17 +24,17 @@ namespace HedraTests.Player.Skills
             weaponMock.Setup(W => W.Attack1(It.IsAny<IHumanoid>()))
                 .Callback( () => executedAttackTimes++);
             Player.LeftWeapon = weaponMock.Object;
-            _attack.SetType(Player.LeftWeapon, AttackType.Primary);
-            _attack.Use();
+            Skill.SetType(Player.LeftWeapon, AttackType.Primary);
+            Skill.Use();
             Assert.AreEqual(0, executedAttackTimes);
             
-            _attack.Update();
-            _attack.Update();
-            _attack.Update();
-            _attack.Update();
-            _attack.Update();
+            Skill.Update();
+            Skill.Update();
+            Skill.Update();
+            Skill.Update();
+            Skill.Update();
             
-            _attack.KeyUp();
+            Skill.KeyUp();
             Assert.AreEqual(5, executedAttackTimes);
         }
         
@@ -55,15 +46,15 @@ namespace HedraTests.Player.Skills
             weaponMock.Setup(W => W.Attack1(It.IsAny<IHumanoid>()))
                 .Callback( () => executedAttackTimes++);
             Player.LeftWeapon = weaponMock.Object;
-            _attack.SetType(Player.LeftWeapon, AttackType.Primary);
-            _attack.Use();
+            Skill.SetType(Player.LeftWeapon, AttackType.Primary);
+            Skill.Use();
             Assert.AreEqual(0, executedAttackTimes);          
-            _attack.Update();     
-            _attack.KeyUp();
+            Skill.Update();     
+            Skill.KeyUp();
             
-            _attack.Update(); 
-            _attack.Update(); 
-            _attack.Update();
+            Skill.Update(); 
+            Skill.Update(); 
+            Skill.Update();
             Assert.AreEqual(1, executedAttackTimes);
         }
 
@@ -75,18 +66,18 @@ namespace HedraTests.Player.Skills
             weaponMock.Setup(W => W.Attack2(It.IsAny<IHumanoid>(), It.IsAny<AttackOptions>()))
                 .Callback( () => wasAttackExecuted = true);
             Player.LeftWeapon = weaponMock.Object;
-            _attack.SetType(Player.LeftWeapon, AttackType.Secondary);
+            Skill.SetType(Player.LeftWeapon, AttackType.Secondary);
             
-            Assert.IsFalse(_attack.IsCharging);
-            _attack.Use();
-            Assert.IsTrue(_attack.IsCharging);
+            Assert.IsFalse(Skill.IsCharging);
+            Skill.Use();
+            Assert.IsTrue(Skill.IsCharging);
             
             Time.Set(.5f);
-            _attack.Update();
-            Assert.Greater(_attack.Charge, 0);
+            Skill.Update();
+            Assert.Greater(Skill.Charge, 0);
             
-            _attack.KeyUp();
-            Assert.AreEqual(_attack.Charge, 0);
+            Skill.KeyUp();
+            Assert.AreEqual(Skill.Charge, 0);
             
             Assert.True(wasAttackExecuted);
         }
@@ -101,10 +92,10 @@ namespace HedraTests.Player.Skills
             for (var i = 0; i < weapons.Count; i++)
             {
                 var weapon = (Weapon) Activator.CreateInstance(weapons[i], new VertexData());
-                _attack.SetType(weapon, AttackType.Primary);
-                var primaryId = _attack.TextureId;
-                _attack.SetType(weapon, AttackType.Secondary);
-                var secondaryId = _attack.TextureId;
+                Skill.SetType(weapon, AttackType.Primary);
+                var primaryId = Skill.TextureId;
+                Skill.SetType(weapon, AttackType.Secondary);
+                var secondaryId = Skill.TextureId;
                 Assert.False(Array.IndexOf(defaultIds, primaryId) != -1, 
                     $"Weapon '{weapons[i].Name}' has the default primary TextureId");
                 Assert.False(Array.IndexOf(defaultIds, secondaryId) != -1, 
@@ -122,10 +113,10 @@ namespace HedraTests.Player.Skills
         {
             var hands = new Hands();
             var list = new uint[2];
-            _attack.SetType(hands, AttackType.Primary);
-            list[0] = _attack.TextureId;
-            _attack.SetType(hands, AttackType.Secondary);
-            list[1] = _attack.TextureId;
+            Skill.SetType(hands, AttackType.Primary);
+            list[0] = Skill.TextureId;
+            Skill.SetType(hands, AttackType.Secondary);
+            list[1] = Skill.TextureId;
             return list;
         }
     }

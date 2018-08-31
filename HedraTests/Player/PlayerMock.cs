@@ -113,7 +113,7 @@ namespace HedraTests.Player
         public ICamera View { get; set; } = new SimpleCameraMock();
         public ChunkLoader Loader { get; }
         public UserInterface UI { get; set; }
-        public PlayerInventory Inventory { get; }
+        public IPlayerInventory Inventory { get; set; }
         public EntitySpawner Spawner { get; }
         public IToolbar Toolbar { get; set; }
         public QuestLog QuestLog { get; }

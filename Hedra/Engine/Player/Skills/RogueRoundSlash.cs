@@ -23,7 +23,8 @@ namespace Hedra.Engine.Player.Skills
 		private readonly Animation RoundSlashAnimation;
 	    private float _frameCounter;
 		
-		public RoundSlash() : base() {
+		public RoundSlash()
+		{
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
 			base.ManaCost = 80f;
 			base.MaxCooldown = 8.5f;
@@ -33,8 +34,7 @@ namespace Hedra.Engine.Player.Skills
 			RoundSlashAnimation.Speed = 1.75f;
 			RoundSlashAnimation.OnAnimationStart += delegate { 
 				Sound.SoundManager.PlaySound(Sound.SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
-			};
-			RoundSlashAnimation.OnAnimationEnd += delegate {
+			};RoundSlashAnimation.OnAnimationEnd += delegate {
 				Player.IsCasting = false;
 				Casting = false;
 				Player.IsAttacking = false;
@@ -43,7 +43,7 @@ namespace Hedra.Engine.Player.Skills
 		}
 
 		public override void Use(){
-			base.MaxCooldown = 9f - Math.Min(5f, base.Level * .5f);
+			base.MaxCooldown = 9f - Math.Min(5f, Level * .5f);
 			Player.IsCasting = true;
 			Casting = true;
 			Player.IsAttacking = true;

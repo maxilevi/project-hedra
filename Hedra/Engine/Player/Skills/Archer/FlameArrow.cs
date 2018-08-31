@@ -14,19 +14,16 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Rendering.UI;
 using OpenTK;
 
-namespace Hedra.Engine.Player.Skills
+namespace Hedra.Engine.Player.Skills.Archer
 {
 	/// <summary>
 	/// Description of ArcherPoisonArrow.
 	/// </summary>
-	public class ArcherFlameArrow : SpecialAttackSkill<Bow>
+	public class FlameArrow : SpecialAttackSkill<Bow>
 	{
 		private const float BaseDamage = 80f;
 	    private const float BaseCooldown = 24f;

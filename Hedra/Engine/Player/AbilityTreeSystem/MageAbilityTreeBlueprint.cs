@@ -47,14 +47,14 @@ namespace Hedra.Engine.Player
 			Items[1][1].AbilityType = typeof(FlameStyle);
 			Items[1][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/FlameStyle.png");
 			Items[1][1].Enabled = true;
-			
+			/*
 			Items[1][2].AbilityType = typeof(FlameJump);
 			Items[1][2].Image = Graphics2D.LoadFromAssets("Assets/Skills/FlameJump.png");
 			Items[1][2].Enabled = true;
 			
 			Items[1][3].AbilityType = typeof(FlameDisk);
 			Items[1][3].Image = Graphics2D.LoadFromAssets("Assets/Skills/FlameDisk.png");
-			Items[1][3].Enabled = true;
+			Items[1][3].Enabled = true;*/
 			
 			Items[2][0].AbilityType = typeof(Conflagaration);
 			Items[2][0].Image = Graphics2D.LoadFromAssets("Assets/Skills/Conflagaration.png");

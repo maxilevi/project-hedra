@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using System.IO;
 using Hedra.Engine.Player.Skills;
+using Hedra.Engine.Player.Skills.Archer;
 using OpenTK;
 namespace Hedra.Engine.Player
 {
@@ -45,15 +46,15 @@ namespace Hedra.Engine.Player
 			Items[1][2].Image = Graphics2D.LoadFromAssets("Skills/PierceArrows.png");
 			Items[1][2].Enabled = true;
 			
-			Items[2][0].AbilityType = typeof(ArcherPoisonArrow);	
+			Items[2][0].AbilityType = typeof(PoisonArrow);	
 			Items[2][0].Image = Graphics2D.LoadFromAssets("Skills/PoisonArrow.png");
 			Items[2][0].Enabled = true;
 			
-			Items[2][3].AbilityType = typeof(ArcherFlameArrow);	
+			Items[2][3].AbilityType = typeof(FlameArrow);	
 			Items[2][3].Image = Graphics2D.LoadFromAssets("Skills/FlameArrow.png");
 			Items[2][3].Enabled = true;
 			
-			Items[2][1].AbilityType = typeof(ArcherIceArrow);	
+			Items[2][1].AbilityType = typeof(IceArrow);	
 			Items[2][1].Image = Graphics2D.LoadFromAssets("Skills/IceArrow.png");
 			Items[2][1].Enabled = true;
 		}

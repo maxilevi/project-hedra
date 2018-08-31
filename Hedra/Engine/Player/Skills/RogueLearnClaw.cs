@@ -23,7 +23,8 @@ namespace Hedra.Engine.Player
 	public class LearnClaw : LearningSkill
 	{
 		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Claw.png");
-		public override void Learn()
+
+		protected override void Learn()
 		{
 		    Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Claw);
         }

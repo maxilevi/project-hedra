@@ -6,38 +6,24 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
-using System.Linq;
-using System.Collections.Generic;
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Player.Skills;
 
-namespace Hedra.Engine.Player
+using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Rendering;
+
+namespace Hedra.Engine.Player.Skills
 {
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class LearnHammer : BaseSkill
+	public class WarriorLearnHammer : LearningSkill
 	{
-
-		public LearnHammer() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
-			base.Passive = true;
-		}
+		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
 		
-		public override void Update()
+		protected override void Learn()
 		{
-			if(base.Level == 0) return;	
-			if(base.Level > 1) Player.AbilityTree.SetPoints(this.GetType(), 1);
-
 		    Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Hammer);
         }
 		
 		public override string Description => "Learn to use the hammer.";
-
-	    public override void Use(){}
 	}
 }

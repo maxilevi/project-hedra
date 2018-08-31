@@ -42,11 +42,11 @@ namespace Hedra.Engine.Player
 			Items[1][0].Image = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
 			Items[1][0].Enabled = true;
 			
-			Items[1][3].AbilityType = typeof(LearnAxe);	
+			Items[1][3].AbilityType = typeof(WarriorLearnAxe);	
 			Items[1][3].Image = Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
 			Items[1][3].Enabled = true;
 			
-			Items[1][1].AbilityType = typeof(LearnHammer);	
+			Items[1][1].AbilityType = typeof(WarriorLearnHammer);	
 			Items[1][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
 			Items[1][1].Enabled = true;
 			

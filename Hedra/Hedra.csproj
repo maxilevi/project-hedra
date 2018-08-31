@@ -258,6 +258,14 @@
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\IAbilityTree.cs" />
+    <Compile Include="Engine\Player\IPlayerInventory.cs" />
+    <Compile Include="Engine\Player\Skills\Archer\Agility.cs" />
+    <Compile Include="Engine\Player\Skills\Archer\FlameArrow.cs" />
+    <Compile Include="Engine\Player\Skills\Archer\IceArrow.cs" />
+    <Compile Include="Engine\Player\Skills\Archer\Kick.cs" />
+    <Compile Include="Engine\Player\Skills\Archer\LearnKnife.cs" />
+    <Compile Include="Engine\Player\Skills\Archer\Puncture.cs" />
+    <Compile Include="Engine\Player\Skills\Archer\PoisonArrow.cs" />
     <Compile Include="Engine\Player\Skills\WarriorIntercept.cs" />
     <Compile Include="Engine\Player\StructureAware.cs" />
     <Compile Include="Engine\Player\ICamera.cs" />
@@ -554,20 +562,11 @@
     <Compile Include="Engine\Player\QuestLog.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Sword.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\Toolbar.cs" />
-    <Compile Include="Engine\Player\Skills\ArcherAgility.cs" />
-    <Compile Include="Engine\Player\Skills\ArcherFlameArrow.cs" />
-    <Compile Include="Engine\Player\Skills\ArcherIceArrow.cs" />
-    <Compile Include="Engine\Player\Skills\ArcherLearnKnife.cs" />
-    <Compile Include="Engine\Player\Skills\ArcherPierceArrows.cs" />
-    <Compile Include="Engine\Player\Skills\ArcherPoisonArrow.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\ArcherAbilityTreeBlueprint.cs" />
     <Compile Include="Engine\Player\Skills\RogueBurstOfSpeed.cs" />
     <Compile Include="Engine\Player\Skills\RogueRoundSlash.cs" />
-    <Compile Include="Engine\Player\Skills\WarriorAttackLeap.cs" />
     <Compile Include="Engine\Player\Skills\WarriorBash.cs" />
-    <Compile Include="Engine\Player\Skills\ArcherKick.cs" />
     <Compile Include="Engine\Player\Skills\WarriorLearnAxe.cs" />
-    <Compile Include="Engine\Player\Skills\WarriorLearnDoubleSwords.cs" />
     <Compile Include="Engine\Player\Skills\WarriorLearnHammer.cs" />
     <Compile Include="Engine\Player\Skills\Meteor.cs" />
     <Compile Include="Engine\Player\Skills\WarriorResistance.cs" />
@@ -580,8 +579,6 @@
     <Compile Include="Engine\Player\Skills\Fireball.cs" />
     <Compile Include="Engine\Player\Skills\FireRelease.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\MageAbilityTreeBlueprint.cs" />
-    <Compile Include="Engine\Player\Skills\FlameDisk.cs" />
-    <Compile Include="Engine\Player\Skills\FlameJump.cs" />
     <Compile Include="Engine\Player\Skills\FlameStyle.cs" />
     <Compile Include="Engine\Player\Skills\FlameRush.cs" />
     <Compile Include="Engine\Player\Skills\RogueTripleShuriken.cs" />
@@ -4784,6 +4781,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Engine\Player\Skills\Mage" />
+    <Folder Include="Engine\Player\Skills\Rogue" />
+    <Folder Include="Engine\Player\Skills\Warrior" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Chestplates\" />
     <Folder Include="Modules\Items\Helmets\" />

@@ -6,24 +6,14 @@ using OpenTK;
 namespace HedraTests.Player.Skills
 {
     [TestFixture]
-    public class WarriorResistanceTest : SkillTest
+    public class WarriorResistanceTest : SkillTest<WarriorResistance>
     {
-        private WarriorResistance _skill;
-        
-        [SetUp]
-        public override void Setup()
-        {
-            base.Setup();
-            _skill = new WarriorResistance();
-            _skill.Initialize(Vector2.Zero, Vector2.One, new Panel(), Player);
-        }
-
         [Test]
         public void TestAddonHealthIsGiven()
         {
             var startingHealth = Player.AddonHealth;
-            _skill.Level = 5;
-            _skill.Update();
+            Skill.Level = 5;
+            Skill.Update();
             Assert.AreNotEqual(startingHealth, Player.AddonHealth);
         }
         
@@ -31,10 +21,10 @@ namespace HedraTests.Player.Skills
         public void TestAddonHealthIsAddedWhenLoading()
         {
             var startingHealth = Player.AddonHealth;
-            _skill.Level = 5;
-            _skill.Update();
-            _skill.Unload();
-            _skill.Load();
+            Skill.Level = 5;
+            Skill.Update();
+            Skill.Unload();
+            Skill.Load();
             Assert.AreNotEqual(startingHealth, Player.AddonHealth);
         }
         
@@ -42,9 +32,9 @@ namespace HedraTests.Player.Skills
         public void TestAddonHealthIsRemovedWhenUnloading()
         {
             var startingHealth = Player.AddonHealth;
-            _skill.Level = 5;
-            _skill.Update();
-            _skill.Unload();
+            Skill.Level = 5;
+            Skill.Update();
+            Skill.Unload();
             Assert.AreEqual(startingHealth, Player.AddonHealth);
         }
     }

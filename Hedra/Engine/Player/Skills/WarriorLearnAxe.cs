@@ -17,10 +17,11 @@ namespace Hedra.Engine.Player.Skills
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class LearnAxe : LearningSkill
+	public class WarriorLearnAxe : LearningSkill
 	{
 	    public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
-		public override void Learn()
+
+		protected override void Learn()
 		{
             Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Axe);
 		}
