@@ -78,7 +78,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 			return data.Split('/')[0].Replace($"{ArmatureName}_", string.Empty);
 		}
 		
-		private void ProcessTransforms(String jointName, String[] rawData, KeyFrameData[] keyFrames, bool root){
+		private void ProcessTransforms(String jointName, String[] rawData, KeyFrameData[] keyFrames, bool root)
+        {
 			float[] matrixData = new float[16];
 			for(int i=0; i<keyFrames.Length; i++){
 				for(int j=0; j<16; j++){

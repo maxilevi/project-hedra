@@ -208,17 +208,16 @@ namespace Hedra.Engine.Rendering
 		
 		public int[] BuildCounts(Dictionary<Vector2, Chunk> ToDraw, out IntPtr[] Offsets, bool Shadows = false)
 		{
+			int[] counts;
 			if (_chunkPairs == null)
 			{
 				Offsets = new IntPtr[0];
 				return new int[0];
-			}
-			
-			int[] counts;			
+			}	
 			lock(_lock)
 			{
-				counts = new int[_chunkDict.Count];
-				Offsets = new IntPtr[_chunkDict.Count];
+				counts = new int[_chunkPairs.Count];
+				Offsets = new IntPtr[_chunkPairs.Count];
 
                 var index = 0; 
 				foreach(var pair in _chunkPairs)

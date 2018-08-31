@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering
 {
 	public class ChunkMesh : ICullable, IDisposable
 	{
-		private MeshBuffer _buffer;
+		private IMeshBuffer _buffer;
 		public List<InstanceBatch> InstanceBatches = new List<InstanceBatch>();
 		public List<InstanceData> InstanceElements = new List<InstanceData>();
 		public List<ICollidable> CollisionBoxes = new List<ICollidable>();
@@ -32,7 +32,7 @@ namespace Hedra.Engine.Rendering
 		public Box CullingBox { get; set; }
 
 
-		public ChunkMesh(Vector3 Position, MeshBuffer Buffer)
+		public ChunkMesh(Vector3 Position, IMeshBuffer Buffer)
 		{
 			this.Position = Position;
 			CullingBox = new Box(Vector3.Zero, new Vector3(Chunk.Width, 768, Chunk.Width));
@@ -112,7 +112,7 @@ namespace Hedra.Engine.Rendering
 			if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 		}
 
-		private void DrawMesh(MeshBuffer MeshBuffer)
+		private void DrawMesh(IMeshBuffer MeshBuffer)
 		{
 			if (IsBuilded && IsGenerated && Enabled && MeshBuffer.Data != null)
 			{

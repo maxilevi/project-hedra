@@ -15,8 +15,13 @@ namespace Hedra.Engine.Rendering
 	/// <summary>
 	/// Description of EntityMeshBuffer.
 	/// </summary>
-	public class ObjectMeshBuffer : MeshBuffer
+	public class ObjectMeshBuffer : IMeshBuffer
 	{
+		public VBO<Vector3> Vertices { get; set; }
+		public VBO<Vector4> Colors { get; set; }
+		public VBO<uint> Indices { get; set; }
+		public VBO<Vector3> Normals { get; set; }
+		public VAO<Vector3, Vector4, Vector3> Data { get; set; }
 		public static Shader Shader { get; }
 		public bool ApplyFog { get; set; } = true;
 		public float Alpha { get; set; } = 1;
@@ -63,7 +68,7 @@ namespace Hedra.Engine.Rendering
 	        NoiseTexture = new Texture3D(noiseValues);
         }
 
-        public override void Draw()
+        public void Draw()
         {
 			if(Indices == null || Data == null) return;
 
@@ -110,7 +115,7 @@ namespace Hedra.Engine.Rendering
 			
 			Renderer.Disable(EnableCap.Blend);
 
-			UnBind();
+			Unbind();
 			
 			if(Alpha < 1)
 				Renderer.Disable(EnableCap.Blend);
@@ -230,10 +235,19 @@ namespace Hedra.Engine.Rendering
 			Shader["UseShadows"] = GameSettings.Shadows ? 1 : 0;
 		}
 		
-		public void UnBind()
+		public void Unbind()
 		{
 			Shader.Unbind();
 			Renderer.Enable(EnableCap.CullFace);
+		}
+
+		public void Dispose()
+		{
+			Vertices?.Dispose();
+			Colors?.Dispose();
+			Indices?.Dispose();
+			Normals?.Dispose();
+			Data?.Dispose();
 		}
 	}
 }

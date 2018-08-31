@@ -71,11 +71,9 @@ namespace Hedra.Engine.EntitySystem
 			World.Particles.Direction = Vector3.UnitY * .2f;
 			World.Particles.ParticleLifetime = 0.75f;
 			World.Particles.GravityEffect = 0.0f;
-			World.Particles.PositionErrorMargin = Parent.Model.Dimensions.Size * .5f;
-				
-			for(var i = 0; i < 1; i++){
-				World.Particles.Emit();
-			}
+			World.Particles.PositionErrorMargin = Parent.Model.Dimensions.Size * .5f;			
+			World.Particles.Emit();
+			
 			
 			if(!(_totalTime > _pTime && !Parent.IsDead && !Disposed && !Parent.IsUnderwater))
 				this.End();

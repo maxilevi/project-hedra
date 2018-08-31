@@ -21,13 +21,17 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 	{
 		protected override bool ShouldPlaySound => false;
 	    protected override string AttackStanceName => "Assets/Chr/WarriorPunch-Stance.dae";
-	    protected override float PrimarySpeed => 1.0f;
+	    protected override float PrimarySpeed => 1.5f;
 	    protected override string[] PrimaryAnimationsNames => new []
 	    {
-		    "Assets/Chr/WarriorPunch.dae"
+		    "Assets/Chr/WarriorLeftPunch.dae"
 	    };
-	    protected override float SecondarySpeed => 0.9f;
-	    protected override string[] SecondaryAnimationsNames => new string[0];
+	    protected override float SecondarySpeed => 1.5f;
+
+		protected override string[] SecondaryAnimationsNames => new[]
+		{
+			"Assets/Chr/WarriorRightPunch.dae"
+		};
 
         public Hands() : base(null)
 		{
@@ -41,7 +45,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
 	    protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
 	    {
-		    throw new System.NotImplementedException();
+		    if(Type != AttackEventType.Mid) return;
+		    Owner.Attack(Owner.DamageEquation * 0.75f * Options.Charge);
 	    }
 
 	    public override void Attack2(IHumanoid Human)

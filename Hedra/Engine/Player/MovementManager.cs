@@ -106,7 +106,8 @@ namespace Hedra.Engine.Player
             _order.Add(order);
         }
 
-		public void Update(){
+		public void Update()
+        {
 		    _speed = Mathf.Lerp(_speed, Human.IsAttacking ? AttackingSpeed : NormalSpeed, (float) Time.DeltaTime * 2f);
             this.DoUpdate();
 		    this.ManageMoveOrders();

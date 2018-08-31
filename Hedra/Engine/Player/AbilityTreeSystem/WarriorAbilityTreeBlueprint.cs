@@ -22,22 +22,23 @@ namespace Hedra.Engine.Player
 	public class WarriorAbilityTreeBlueprint : AbilityTreeBlueprint
 	{
 		
-		public WarriorAbilityTreeBlueprint() : base(){
+		public WarriorAbilityTreeBlueprint()
+        {
 			base.ActiveColor = new Vector4(1.000f, 0.420f, 0.204f, 1.000f);
-			
-			Items[0][0].AbilityType = typeof(WeaponThrow);	
-			Items[0][0].Image = Graphics2D.LoadFromAssets("Assets/Skills/Throw.png");
-			Items[0][0].Enabled = true;
 			
 			Items[0][1].AbilityType = typeof(Whirlwind);	
 			Items[0][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
 			Items[0][1].Enabled = true;
-			
-			//Slots[0][2].AbilityType = typeof(AttackLeap);	
-			//Slots[0][2].Image = Graphics2D.LoadFromAssets("Assets/Skills/AttackLeap.png");
-			//Slots[0][2].Enabled = true;
-			
-			Items[1][0].AbilityType = typeof(Bash);	
+
+            Items[0][2].AbilityType = typeof(WarriorIntercept);
+            Items[0][2].Image = Graphics2D.LoadFromAssets("Assets/Skills/Intercept.png");
+            Items[0][2].Enabled = true;
+
+            //Slots[0][2].AbilityType = typeof(AttackLeap);	
+            //Slots[0][2].Image = Graphics2D.LoadFromAssets("Assets/Skills/AttackLeap.png");
+            //Slots[0][2].Enabled = true;
+
+            Items[1][0].AbilityType = typeof(Bash);	
 			Items[1][0].Image = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
 			Items[1][0].Enabled = true;
 			
