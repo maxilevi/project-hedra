@@ -8,10 +8,10 @@ namespace Hedra.Engine.EntitySystem
 {
     public class EntityComponentManager
     {
-        private readonly Entity _parent;
+        private readonly IEntity _parent;
         private readonly HashSet<EntityComponent> _components;
 
-        public EntityComponentManager(Entity Parent)
+        public EntityComponentManager(IEntity Parent)
         {
             _parent = Parent;
             _components = new HashSet<EntityComponent>();

@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Skills
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class WarriorResistance : PassiveSkill
+	public class Resistance : PassiveSkill
 	{
 		private float _addonHealth;
 

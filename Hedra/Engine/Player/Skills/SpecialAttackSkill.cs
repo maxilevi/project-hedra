@@ -15,6 +15,10 @@ namespace Hedra.Engine.Player.Skills
             weapon.Attack1(Player);
         }
 
+        public override void Update()
+        {        
+        }
+
         protected abstract void BeforeUse(T Weapon);
         
         public override bool MeetsRequirements(IToolbar Bar, int CastingAbilityCount)

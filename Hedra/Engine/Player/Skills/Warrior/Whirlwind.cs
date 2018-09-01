@@ -6,18 +6,15 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.EntitySystem;
-using OpenTK;
-using System.Collections.Generic;
+
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Player.ToolbarSystem;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation;
+using OpenTK;
 
-namespace Hedra.Engine.Player
+namespace Hedra.Engine.Player.Skills.Warrior
 {
 	/// <summary>
 	/// Description of WeaponThrow.

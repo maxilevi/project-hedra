@@ -83,7 +83,7 @@ namespace Hedra.Engine
 		public static void Write(object Text)
 		{
 		    var newText = $"[{DateTime.Now:HH:mm:ss}] {(_currentType != LogType.Normal ? $"[{_currentType.ToString()}]" : string.Empty)} {Text}";
-            if(_currentType != LogType.GL || Program.IsDebug)
+            if(_currentType != LogType.GL)
 			Console.Write(newText);
             WriteToFile(newText);
         }

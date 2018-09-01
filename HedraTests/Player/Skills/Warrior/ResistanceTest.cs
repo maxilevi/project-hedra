@@ -1,12 +1,10 @@
 ﻿using Hedra.Engine.Player.Skills;
-using Hedra.Engine.Rendering.UI;
 using NUnit.Framework;
-using OpenTK;
 
-namespace HedraTests.Player.Skills
+namespace HedraTests.Player.Skills.Warrior
 {
     [TestFixture]
-    public class WarriorResistanceTest : SkillTest<WarriorResistance>
+    public class ResistanceTest : SkillTest<Resistance>
     {
         [Test]
         public void TestAddonHealthIsGiven()

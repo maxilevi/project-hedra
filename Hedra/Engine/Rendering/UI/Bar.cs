@@ -17,10 +17,10 @@ namespace Hedra.Engine.Rendering.UI
 {
     public class Bar : IRenderable, UIElement
     {
-        private static uint BarBlueprint = Graphics2D.LoadFromAssets("Assets/Bar.png");
-        private static uint RectangleBlueprint = Graphics2D.ColorTexture(Colors.FromArgb(255, 29, 29, 29));
+        private static uint _barBlueprint;
+        private static uint _rectangleBlueprint;
 
-        public static Shader Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
+        private static Shader Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
         private float _barSize;
         private bool _enabled;
         private Panel _inPanel;
@@ -28,15 +28,16 @@ namespace Hedra.Engine.Rendering.UI
 
         private Vector2 _position;
         private bool _showText = true;
-
+        private bool _builded;
+        private string _optionalText;
         private Func<float> _value;
         public Vector4 BackgroundColor = new Vector4(0.1529f, 0.1529f, 0.1529f, 1);
         public bool CurvedBorders;
-        public DrawOrder Order;
+        private DrawOrder Order;
         public bool ShowBar = true;
-        public Vector2 TargetResolution = new Vector2(1024, 578);
+        private Vector2 TargetResolution = new Vector2(1024, 578);
         public RenderableText Text;
-        public Vector4 UniformColor;
+        private Vector4 UniformColor;
 
         public bool UpdateTextRatio = true;
 
@@ -59,19 +60,6 @@ namespace Hedra.Engine.Rendering.UI
             this.Initialize(Position, Scale, Value, Max, InPanel, Text, Order);
         }
 
-        public bool ShowText
-        {
-            get { return _showText; }
-            set
-            {
-                _showText = value;
-                if (value)
-                    Text.Enable();
-                else
-                    Text.Disable();
-            }
-        }
-
         public void Dispose()
         {
             Text.Dispose();
@@ -92,7 +80,7 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.Enable(EnableCap.Blend);
 
             Renderer.ActiveTexture(TextureUnit.Texture0);
-            Renderer.BindTexture(TextureTarget.Texture2D, CurvedBorders ? BarBlueprint : RectangleBlueprint);
+            Renderer.BindTexture(TextureTarget.Texture2D, CurvedBorders ? _barBlueprint : _rectangleBlueprint);
 
             Shader["Scale"] =
                 Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) +
@@ -158,21 +146,42 @@ namespace Hedra.Engine.Rendering.UI
             _value = Value;
             _max = Max;
             _inPanel = InPanel;
+            _optionalText = OptionalText;
+            this.Build();
+        }
 
+        private void Build()
+        {
             DrawManager.UIRenderer.Add(this, Order);
-            if (OptionalText == null)
+            if (_optionalText == null)
             {
-                Text = new RenderableText(Value() + " / " + Max(), Position, Color.White,
+                Text = new RenderableText(_value() + " / " + _max(), Position, Color.White,
                     FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
             }
             else
             {
-                Text = new RenderableText(OptionalText, Position, Color.White,
+                Text = new RenderableText(_optionalText, Position, Color.White,
                     FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
                 UpdateTextRatio = false;
             }
             DrawManager.UIRenderer.Add(Text, this.Order);
-            InPanel.AddElement(Text);
+            _inPanel.AddElement(Text);
+            
+            if (_barBlueprint == 0)
+            {
+                Executer.ExecuteOnMainThread(delegate
+                {
+                    _barBlueprint = Graphics2D.LoadFromAssets("Assets/Bar.png"); 
+                    
+                });
+            }
+            if (_rectangleBlueprint == -1)
+            {
+                Executer.ExecuteOnMainThread(delegate
+                {
+                    _rectangleBlueprint = Graphics2D.ColorTexture(Colors.FromArgb(255, 29, 29, 29));
+                });
+            }
         }
     }
 }

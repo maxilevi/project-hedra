@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using System.IO;
 using Hedra.Engine.Player.Skills;
+using Hedra.Engine.Player.Skills.Warrior;
 using OpenTK;
 namespace Hedra.Engine.Player
 {
@@ -30,7 +31,7 @@ namespace Hedra.Engine.Player
 			Items[0][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
 			Items[0][1].Enabled = true;
 
-            Items[0][2].AbilityType = typeof(WarriorIntercept);
+            Items[0][2].AbilityType = typeof(Intercept);
             Items[0][2].Image = Graphics2D.LoadFromAssets("Assets/Skills/Intercept.png");
             Items[0][2].Enabled = true;
 
@@ -42,11 +43,11 @@ namespace Hedra.Engine.Player
 			Items[1][0].Image = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
 			Items[1][0].Enabled = true;
 			
-			Items[1][3].AbilityType = typeof(WarriorLearnAxe);	
+			Items[1][3].AbilityType = typeof(LearnAxe);	
 			Items[1][3].Image = Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
 			Items[1][3].Enabled = true;
 			
-			Items[1][1].AbilityType = typeof(WarriorLearnHammer);	
+			Items[1][1].AbilityType = typeof(LearnHammer);	
 			Items[1][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
 			Items[1][1].Enabled = true;
 			
@@ -54,7 +55,7 @@ namespace Hedra.Engine.Player
 			//Slots[1][3].Image = Graphics2D.LoadFromAssets("Assets/Skills/DoubleSwords.png");
 			//Slots[1][3].Enabled = true;
 			
-			Items[2][1].AbilityType = typeof(WarriorResistance);	
+			Items[2][1].AbilityType = typeof(Resistance);	
 			Items[2][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
 			Items[2][1].Enabled = true;
 		}

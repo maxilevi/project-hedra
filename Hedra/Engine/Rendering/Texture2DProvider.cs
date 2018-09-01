@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace Hedra.Engine.Rendering
@@ -8,6 +9,7 @@ namespace Hedra.Engine.Rendering
     {
         public uint LoadTexture(Bitmap Bmp, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
         {
+            var clone = Bmp.Clone() as Bitmap;
             var id = Renderer.GenTexture();
             Renderer.BindTexture(TextureTarget.Texture2D, id);
             var bmpData = Bmp.LockBits(new Rectangle(0,0,Bmp.Width, Bmp.Height), ImageLockMode.ReadOnly, 
@@ -25,7 +27,7 @@ namespace Hedra.Engine.Rendering
             Bmp.Dispose();
             var error = Renderer.GetError();
             if (error != ErrorCode.NoError)
-                Log.WriteLine("GL Error: Loading Texture: " + error, LogType.GL);
+                Log.WriteLine("GL Error: Loading Texture: " + error);
             return id;
         }
     }

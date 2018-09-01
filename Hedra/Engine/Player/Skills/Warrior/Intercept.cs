@@ -1,21 +1,19 @@
-﻿using System;
-using Hedra.Engine.Generation;
+﻿using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Rendering.Particles;
 using OpenTK;
 
-namespace Hedra.Engine.Player.Skills
+namespace Hedra.Engine.Player.Skills.Warrior
 {
-    public class WarriorIntercept : BaseSkill
+    public class Intercept : BaseSkill
     {
         private bool _isMoving;
         private readonly Timer _timer;
         private Animation _interceptStance;
 
-        public WarriorIntercept()
+        public Intercept()
         {
             _timer = new Timer(0);
             _interceptStance = AnimationLoader.LoadAnimation("Assets/Chr/WarriorIntercept.dae");
@@ -23,7 +21,6 @@ namespace Hedra.Engine.Player.Skills
 
         public override void Update()
         {
-            base.Update();
             if (!_isMoving) return;
 
             this.EmitParticles();

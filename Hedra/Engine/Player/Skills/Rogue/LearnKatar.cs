@@ -6,16 +6,11 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
-using System.Linq;
-using System.Collections.Generic;
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Player.Skills;
 
-namespace Hedra.Engine.Player
+using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Rendering;
+
+namespace Hedra.Engine.Player.Skills.Rogue
 {
 	/// <summary>
 	/// Description of Resistance.
@@ -29,12 +24,6 @@ namespace Hedra.Engine.Player
 		    Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Katar);
         }
 		
-		public override string Description {
-			get {
-				return "Learn to use the katar.";
-			}
-		}
-		
-		public override void Use(){}
+		public override string Description => "Learn to use the katar.";
 	}
 }

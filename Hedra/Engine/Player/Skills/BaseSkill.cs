@@ -132,7 +132,7 @@ namespace Hedra.Engine.Player.Skills
 		public virtual void KeyUp(){}
 		public virtual void Unload(){}
 		public virtual void Load(){}
-		public virtual void Update(){}
+		public abstract void Update();
 
 	    public Vector2 Scale { get; set; }
 

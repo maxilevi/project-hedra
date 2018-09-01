@@ -9,15 +9,13 @@
 
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
-using OpenTK;
 
-namespace Hedra.Engine.Player.Skills
+namespace Hedra.Engine.Player.Skills.Warrior
 {
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class WarriorLearnAxe : LearningSkill
+	public class LearnAxe : LearningSkill
 	{
 	    public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
 

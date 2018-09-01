@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using System.IO;
 using Hedra.Engine.Player.Skills;
+using Hedra.Engine.Player.Skills.Rogue;
 using OpenTK;
 namespace Hedra.Engine.Player
 {

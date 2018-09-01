@@ -10,12 +10,12 @@
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering;
 
-namespace Hedra.Engine.Player.Skills
+namespace Hedra.Engine.Player.Skills.Warrior
 {
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class WarriorLearnHammer : LearningSkill
+	public class LearnHammer : LearningSkill
 	{
 		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
 		

@@ -40,7 +40,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public HealthBarComponent(Entity Parent, string Name) : base(Parent)
+        public HealthBarComponent(IEntity Parent, string Name) : base(Parent)
         {
             _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGUI(new Vector2(1024, 578), _originalScale), Name,
                 () => Parent.Health, () => Parent.MaxHealth,
@@ -55,7 +55,7 @@ namespace Hedra.Engine.EntitySystem
             DrawManager.UIRenderer.Remove(_healthBar.Text);
         }
 
-        public HealthBarComponent(Entity Parent) : base(Parent)
+        public HealthBarComponent(IEntity Parent) : base(Parent)
         {
             _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGUI(new Vector2(1024, 578), _originalScale), Name,
                 () => Parent.Health, () => Parent.MaxHealth,

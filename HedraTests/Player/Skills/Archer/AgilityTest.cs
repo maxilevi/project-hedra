@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace HedraTests.Player.Skills.Archer
 {
     [TestFixture]
-    public class ArcherAgilityTest : SkillTest<Agility>
+    public class AgilityTest : SkillTest<Agility>
     {
         [Test]
         public void TestDodgeCostIsReduced()

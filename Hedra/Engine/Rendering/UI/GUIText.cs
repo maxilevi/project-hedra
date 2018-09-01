@@ -9,6 +9,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Threading;
 using OpenTK;
 using Hedra.Engine.Management;
 
@@ -38,19 +39,33 @@ namespace Hedra.Engine.Rendering.UI
         public void UpdateText()
         {
             var textBitmap = Provider.BuildText(Text, TextFont, TextColor);
-            var previousState = UIText?.Enabled ?? false;
-            DrawManager.UIRenderer.Remove(UIText);
-            UIText?.Dispose();
             var size = new Vector2(textBitmap.Width, textBitmap.Height);
-            UIText = new GUITexture(Graphics2D.LoadTexture(textBitmap),
-                new Vector2(size.X / DefaultSize.X, size.Y / DefaultSize.Y), _temporalPosition);
-            DrawManager.UIRenderer.Add(UIText);
-            
-            if (_align == AlignMode.Left)
+            void Action()
             {
-                UIText.Position -= UIText.Scale;
+                var previousState = UIText?.Enabled ?? false;
+                DrawManager.UIRenderer.Remove(UIText);
+                UIText?.Dispose();
+                UIText = new GUITexture(Graphics2D.LoadTexture(textBitmap),
+                    new Vector2(size.X / DefaultSize.X, size.Y / DefaultSize.Y), _temporalPosition);
+                DrawManager.UIRenderer.Add(UIText);
+
+                if (_align == AlignMode.Left)
+                {
+                    UIText.Position -= UIText.Scale;
+                }
+
+                UIText.Enabled = previousState;
             }
-            UIText.Enabled = previousState;
+
+            if (Thread.CurrentThread.ManagedThreadId != Hedra.MainThreadId)
+            {
+                UIText = new GUITexture(0, new Vector2(size.X / DefaultSize.X, size.Y / DefaultSize.Y), _temporalPosition);
+                Executer.ExecuteOnMainThread(Action);
+            }
+            else
+            {
+                Action();
+            }
         }
 
         public Color TextColor

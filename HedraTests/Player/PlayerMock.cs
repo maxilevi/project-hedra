@@ -206,12 +206,12 @@ namespace HedraTests.Player
 
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)
         {
-            throw new NotImplementedException();
+            Speed += BonusSpeed;
         }
 
         public void AddBonusSpeedForSeconds(float BonusSpeed, float Seconds)
         {
-            throw new NotImplementedException();
+            Speed += BonusSpeed;
         }
 
         public void AddComponentWhile(EntityComponent Component, Func<bool> Condition)

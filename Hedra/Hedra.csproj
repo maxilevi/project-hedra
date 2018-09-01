@@ -266,7 +266,30 @@
     <Compile Include="Engine\Player\Skills\Archer\LearnKnife.cs" />
     <Compile Include="Engine\Player\Skills\Archer\Puncture.cs" />
     <Compile Include="Engine\Player\Skills\Archer\PoisonArrow.cs" />
-    <Compile Include="Engine\Player\Skills\WarriorIntercept.cs" />
+    <Compile Include="Engine\Player\Skills\CappedSkill.cs" />
+    <Compile Include="Engine\Player\Skills\Mage\Conflagaration.cs" />
+    <Compile Include="Engine\Player\Skills\Mage\Fireball.cs" />
+    <Compile Include="Engine\Player\Skills\Mage\FireRelease.cs" />
+    <Compile Include="Engine\Player\Skills\Mage\FlameRush.cs" />
+    <Compile Include="Engine\Player\Skills\Mage\FlameStyle.cs" />
+    <Compile Include="Engine\Player\Skills\Mage\Meteor.cs" />
+    <Compile Include="Engine\Player\Skills\Mage\TripleFireball.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\BurstOfSpeed.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\RogueFade.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\LearnClaw.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\LearnKatar.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\RogueRoundSlash.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\RogueShuriken.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\RogueTripleShuriken.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\RogueVenom.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Engine\Player\Skills\Warrior\Bash.cs" />
+    <Compile Include="Engine\Player\Skills\Warrior\Intercept.cs" />
+    <Compile Include="Engine\Player\Skills\Warrior\LearnAxe.cs" />
+    <Compile Include="Engine\Player\Skills\Warrior\LearnHammer.cs" />
+    <Compile Include="Engine\Player\Skills\Warrior\Resistance.cs" />
+    <Compile Include="Engine\Player\Skills\Warrior\Whirlwind.cs" />
     <Compile Include="Engine\Player\StructureAware.cs" />
     <Compile Include="Engine\Player\ICamera.cs" />
     <Compile Include="Engine\Player\IStructureAware.cs" />
@@ -449,7 +472,6 @@
     <Compile Include="Engine\Player\MapSystem\MapMeshBuilder.cs" />
     <Compile Include="Engine\Player\PlayerMovement.cs" />
     <Compile Include="Engine\Player\Skills\LearningSkill.cs" />
-    <Compile Include="Engine\Player\Skills\WarriorIronSkin.cs" />
     <Compile Include="Engine\WorldBuilding\BanditCamp.cs" />
     <Compile Include="Engine\WorldBuilding\IGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\Tombstone.cs" />
@@ -563,34 +585,12 @@
     <Compile Include="Engine\ItemSystem\WeaponSystem\Sword.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\Toolbar.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\ArcherAbilityTreeBlueprint.cs" />
-    <Compile Include="Engine\Player\Skills\RogueBurstOfSpeed.cs" />
-    <Compile Include="Engine\Player\Skills\RogueRoundSlash.cs" />
-    <Compile Include="Engine\Player\Skills\WarriorBash.cs" />
-    <Compile Include="Engine\Player\Skills\WarriorLearnAxe.cs" />
-    <Compile Include="Engine\Player\Skills\WarriorLearnHammer.cs" />
-    <Compile Include="Engine\Player\Skills\Meteor.cs" />
-    <Compile Include="Engine\Player\Skills\WarriorResistance.cs" />
-    <Compile Include="Engine\Player\Skills\RogueFade.cs" />
-    <Compile Include="Engine\Player\Skills\RogueLearnClaw.cs" />
-    <Compile Include="Engine\Player\Skills\RogueLearnKatar.cs" />
-    <Compile Include="Engine\Player\Skills\RogueShuriken.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\RogueAbilityTreeBlueprint.cs" />
-    <Compile Include="Engine\Player\Skills\Conflagaration.cs" />
-    <Compile Include="Engine\Player\Skills\Fireball.cs" />
-    <Compile Include="Engine\Player\Skills\FireRelease.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\MageAbilityTreeBlueprint.cs" />
-    <Compile Include="Engine\Player\Skills\FlameStyle.cs" />
-    <Compile Include="Engine\Player\Skills\FlameRush.cs" />
-    <Compile Include="Engine\Player\Skills\RogueTripleShuriken.cs" />
-    <Compile Include="Engine\Player\Skills\RogueVenom.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Engine\Player\Skills\BaseSkill.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTree.cs" />
-    <Compile Include="Engine\Player\Skills\WarriorWhirlwind.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeBlueprint.cs" />
     <Compile Include="Engine\Player\Skills\TreeItem.cs" />
-    <Compile Include="Engine\Player\Skills\TripleFireball.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\WarriorAbilityTreeBlueprint.cs" />
     <Compile Include="Engine\Management\StateManager.cs" />
     <Compile Include="Engine\Player\Inventory\TradeInventory.cs" />
@@ -4781,9 +4781,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Engine\Player\Skills\Mage" />
-    <Folder Include="Engine\Player\Skills\Rogue" />
-    <Folder Include="Engine\Player\Skills\Warrior" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Chestplates\" />
     <Folder Include="Modules\Items\Helmets\" />

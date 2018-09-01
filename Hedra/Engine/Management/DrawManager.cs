@@ -125,7 +125,7 @@ namespace Hedra.Engine.Management
 	    	MainBuffer.Clear();
 	    	
 	    	#if DEBUG
-	    	if(GameSettings.DebugView)
+	    	//if(GameSettings.DebugView)
             {
 		    	ErrorCode code = Renderer.GetError();
 		    	if(code != ErrorCode.NoError)

@@ -5,7 +5,7 @@ using Hedra.Engine.Player.Skills.Archer;
 
 namespace HedraTests.Player.Skills.Archer
 {
-    public class ArcherLearnKnifeTest : LearningSkillTestBase<LearnKnife>
+    public class LearnKnifeTest : LearningSkillTestBase<LearnKnife>
     {
         protected override EquipmentType LearnType => EquipmentType.Knife;
         protected override int InventoryPosition => PlayerInventory.WeaponHolder;
