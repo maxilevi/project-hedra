@@ -67,7 +67,7 @@ namespace Hedra.Engine.Player
         private bool NeedsUpdating(CollidableStructure[] Structures)
         {
             if (_currentNearStructures == null || Structures.Length != _currentNearStructures.Length 
-                || Structures.Sum(S => S.Colliders.Length) != _currentNearStructures.Sum(S => S.Colliders.Length)) return true;
+                || Structures.Sum(S => S.Colliders.Length) != NearCollisions.Length) return true;
             var differences = false;
             for (var i = 0; i < Structures.Length; i++)
             {
