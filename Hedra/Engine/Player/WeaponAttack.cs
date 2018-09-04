@@ -27,23 +27,23 @@ namespace Hedra.Engine.Player
 	{
 		private const float BaseChargeTime = 2.0f;
 		private const float ExtraChargeTime = 2.5f;
-	    private static readonly uint Default = Graphics2D.LoadFromAssets("HolderSkill.png");
-        private static readonly uint Sword1 = Graphics2D.LoadFromAssets("Slash.png");
-		private static readonly uint Sword2 = Graphics2D.LoadFromAssets("Lunge.png");
-		private static readonly uint Knife1 = Graphics2D.LoadFromAssets("SlashKnife.png");
-		private static readonly uint Knife2 = Graphics2D.LoadFromAssets("LungeKnife.png");
-		private static readonly uint Bow1 = Graphics2D.LoadFromAssets("Shoot.png");
-		private static readonly uint Bow2 = Graphics2D.LoadFromAssets("TripleShot.png");
-		private static readonly uint Axe1 = Graphics2D.LoadFromAssets("SwingAxeIcon.png");
-		private static readonly uint Axe2 = Graphics2D.LoadFromAssets("SmashAxeIcon.png");
-		private static readonly uint Hammer1 = Graphics2D.LoadFromAssets("SwingHammerIcon.png");
-		private static readonly uint Hammer2 = Graphics2D.LoadFromAssets("SmashHammerIcon.png");
-		private static readonly uint DoubleBlades1 = Graphics2D.LoadFromAssets("BladesAttack1.png");
-		private static readonly uint DoubleBlades2 = Graphics2D.LoadFromAssets("BladesAttack2.png");
-		private static readonly uint Katar1 = Graphics2D.LoadFromAssets("KatarAttack1.png");
-		private static readonly uint Katar2 = Graphics2D.LoadFromAssets("KatarAttack2.png");
-		private static readonly uint Claw1 = Graphics2D.LoadFromAssets("ClawAttack1.png");
-		private static readonly uint Claw2 = Graphics2D.LoadFromAssets("ClawAttack2.png");
+	    private static readonly uint Default = Graphics2D.LoadFromAssets("Assets/Skills/HolderSkill.png");
+        private static readonly uint Sword1 = Graphics2D.LoadFromAssets("Assets/Skills/Slash.png");
+		private static readonly uint Sword2 = Graphics2D.LoadFromAssets("Assets/Skills/Lunge.png");
+		private static readonly uint Knife1 = Graphics2D.LoadFromAssets("Assets/Skills/SlashKnife.png");
+		private static readonly uint Knife2 = Graphics2D.LoadFromAssets("Assets/Skills/LungeKnife.png");
+		private static readonly uint Bow1 = Graphics2D.LoadFromAssets("Assets/Skills/Shoot.png");
+		private static readonly uint Bow2 = Graphics2D.LoadFromAssets("Assets/Skills/TripleShot.png");
+		private static readonly uint Axe1 = Graphics2D.LoadFromAssets("Assets/Skills/SwingAxeIcon.png");
+		private static readonly uint Axe2 = Graphics2D.LoadFromAssets("Assets/Skills/SmashAxeIcon.png");
+		private static readonly uint Hammer1 = Graphics2D.LoadFromAssets("Assets/Skills/SwingHammerIcon.png");
+		private static readonly uint Hammer2 = Graphics2D.LoadFromAssets("Assets/Skills/SmashHammerIcon.png");
+		private static readonly uint DoubleBlades1 = Graphics2D.LoadFromAssets("Assets/Skills/BladesAttack1.png");
+		private static readonly uint DoubleBlades2 = Graphics2D.LoadFromAssets("Assets/Skills/BladesAttack2.png");
+		private static readonly uint Katar1 = Graphics2D.LoadFromAssets("Assets/Skills/KatarAttack1.png");
+		private static readonly uint Katar2 = Graphics2D.LoadFromAssets("Assets/Skills/KatarAttack2.png");
+		private static readonly uint Claw1 = Graphics2D.LoadFromAssets("Assets/Skills/ClawAttack1.png");
+		private static readonly uint Claw2 = Graphics2D.LoadFromAssets("Assets/Skills/ClawAttack2.png");
 
 		public bool DisableWeapon { get; set; }
 		private ShiverAnimation _shiverAnimation;

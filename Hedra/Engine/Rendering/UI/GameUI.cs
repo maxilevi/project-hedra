@@ -75,7 +75,7 @@ namespace Hedra.Engine.Rendering.UI
 			_oxygenIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenIcon.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			_staminaIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaIcon.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
 			
-			Cross = new Texture("Assets/Pointer.png", new Vector2(0, 0f), Vector2.One * .1f);
+			Cross = new Texture("Assets/UI/Pointer.png", new Vector2(0, 0f), Vector2.One * .1f);
 			
 			var skillTreeMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/SkillTreeMsg.png"), Vector2.Zero, Vector2.One);
 			QuestLogMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/QuestLogMsg.png"), Vector2.Zero, Vector2.One);
