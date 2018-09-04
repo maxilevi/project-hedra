@@ -30,7 +30,7 @@ namespace Hedra.Engine.StructureSystem
             const int tombstoneCount = 25;
             var cementery = new Graveyard(position, Radius);
 
-            World.HighlightArea(position, new Vector4(.2f, .2f, .2f, 1f) * .5f, Radius * 1.75f, -1);
+            World.HighlightArea(position, new Vector4(.1f, .1f, .1f, 1f), Radius * 1.75f, -1);
 
             var rotationMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
             var originalMausoleum = CacheManager.GetModel(CacheItem.Mausoleum);

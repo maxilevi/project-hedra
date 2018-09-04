@@ -6,11 +6,11 @@ namespace Hedra.Engine.Player.Skills
 {
     public abstract class SpecialAttackSkill<T> : BaseSkill where T : Weapon
     {
-        protected override bool Grayscale => !Player.HasWeapon || !(Player.Model.LeftWeapon is T);
+        protected override bool Grayscale => !Player.HasWeapon || !(Player.LeftWeapon is T);
         
         public override void Use()
         {
-            var weapon = (T) Player.Model.LeftWeapon;
+            var weapon = (T) Player.LeftWeapon;
             this.BeforeUse(weapon);
             weapon.Attack1(Player);
         }
@@ -21,9 +21,9 @@ namespace Hedra.Engine.Player.Skills
 
         protected abstract void BeforeUse(T Weapon);
         
-        public override bool MeetsRequirements(IToolbar Bar, int CastingAbilityCount)
+        public override bool MeetsRequirements()
         {
-            return base.MeetsRequirements(Bar, CastingAbilityCount) && !Grayscale;
+            return base.MeetsRequirements() && !Grayscale;
         }
     }
 }

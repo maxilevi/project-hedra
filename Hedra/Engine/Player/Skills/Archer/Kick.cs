@@ -60,9 +60,9 @@ namespace Hedra.Engine.Player.Skills.Archer
 			};
 		}
 		
-		public override bool MeetsRequirements(IToolbar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements()
 		{
-			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.IsAttacking && !Player.IsCasting;
+			return base.MeetsRequirements() && !Player.IsAttacking && !Player.IsCasting;
 		}
 		
 		public override void Use(){

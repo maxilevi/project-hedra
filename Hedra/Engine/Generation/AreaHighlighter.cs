@@ -64,7 +64,7 @@ namespace Hedra.Engine.Generation
                 break;
             }
             int k = i;
-
+            if (k >= _highlightedAreas.Length) throw new ArgumentException($"There are no available highlights");
             if (Seconds < 0)
             {
                 CoroutineManager.StartCoroutine(CycleHighlight, new object[] { _highlightedAreas[k], World.Seed });
@@ -107,7 +107,7 @@ namespace Hedra.Engine.Generation
             var seed = (int) Params[1];
             var player = GameManager.Player;
 
-            while (World.Seed == seed && World.GetChunkAt(areaClone.Position) != null)
+            while (World.Seed == seed)// && World.GetChunkAt(areaClone.Position) != null)
             {
                 if ((player.Position.Xz - areaClone.Position.Xz).LengthFast < areaClone.Radius + 256)
                 {

@@ -47,7 +47,7 @@ namespace Hedra.Engine.Player
 		public Map Map { get; }
 		public TradeInventory Trade { get; }
 		public HangGlider Glider { get; }
-	    public override IMessageDispatcher MessageDispatcher { get; set; }
+	    public IMessageDispatcher MessageDispatcher { get; set; }
 	    public override Vector3 FacingDirection => Vector3.UnitY * -(View.TargetYaw * Mathf.Degree - 90f);
 		public ICollidable[] NearCollisions => StructureAware.NearCollisions;
 		private IStructureAware StructureAware { get; }
@@ -75,7 +75,7 @@ namespace Hedra.Engine.Player
 			this.Inventory = new PlayerInventory(this);
 			this.Toolbar = new Toolbar(this);
 			this.Glider = new HangGlider(this);
-			this.AbilityTree = new AbilityTreeSystem.AbilityTree(this);
+			this.AbilityTree = new AbilityTree(this);
 			this.QuestLog = new QuestLog(this);
 			this.Pet = new PetManager(this);
 			this.Chat = new Chat(this);
@@ -97,67 +97,10 @@ namespace Hedra.Engine.Player
 			UpdateManager.Add(this);
 		}
 
-		private MovementManager CreateMovementManager()
-	    {
-	        return new PlayerMovement(this);
-	    }
-
-        #region SetupHandlers
-        public void SetupHandlers()
-	    {
-	        float pHealth = 0, pMaxHealth = 0;
-
-	        this.BeforeAttacking += delegate (IEntity Victim, float Amount) {
-	            if (Pet.Pet != null && Victim == Pet.Pet)
-	            {
-	                pMaxHealth = Pet.Pet.MaxHealth;
-	                pHealth = Pet.Pet.Health;
-
-	                Pet.Pet.MaxHealth = Amount + 1;
-	                Pet.Pet.Health = Pet.Pet.MaxHealth;
-	            }
-	        };
-
-	        this.OnAttacking += delegate (IEntity Victim, float Amount) {
-	            if (Pet.Pet != null && Victim == Pet.Pet)
-	            {
-	                Pet.Pet.MaxHealth = pMaxHealth;
-	                Pet.Pet.Health = pHealth;
-	                var Dmg = Pet.Pet.SearchComponent<DamageComponent>();
-	                for (int i = Dmg.DamageLabels.Count - 1; i > -1; i--)
-	                {
-	                    if (Dmg.DamageLabels[i].Texture is GUIText)
-	                    {
-	                        if ((Dmg.DamageLabels[i].Texture as GUIText).Text == ((int)Amount).ToString())
-	                        {
-	                            Dmg.DamageLabels[i].Dispose();
-	                            Dmg.DamageLabels.RemoveAt(i);
-	                        }
-	                    }
-	                }
-	            }
-
-	            if ((Victim.Position - Position).LengthSquared > 128 * 128)
-	            {
-	                Victim.Health += Amount;
-	                var dmg = Victim.SearchComponent<DamageComponent>();
-	                for (int i = dmg.DamageLabels.Count - 1; i > -1; i--)
-	                {
-	                    if (!(dmg.DamageLabels[i].Texture is GUIText)) continue;
-
-	                    if (((GUIText)dmg.DamageLabels[i].Texture).Text != ((int)Amount).ToString()) continue;
-
-	                    dmg.DamageLabels[i].Dispose();
-	                    dmg.DamageLabels.RemoveAt(i);
-	                }
-	            }
-
-	            if (Networking.NetworkManager.IsConnected && !Networking.NetworkManager.IsHost)
-	                Networking.NetworkManager.RegisterAttack(Victim, Amount);
-
-	        };
+		private void SetupHandlers()
+		{
+			this.SearchComponent<DamageComponent>().Delete = false;
         }
-        #endregion
 
 	    public override bool CanInteract
 	    {

@@ -13,7 +13,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     {
         public int WeaponCount { get; private set; }
         public override bool IsMelee { get; protected set; } = true;
-        public Vector3 MainWeaponSize { get; private set; }
+        public Vector3 MainWeaponSize { get; protected set; }
         protected TrailRenderer Trail { get; set; }
         private Dictionary<ObjectMesh, ObjectMeshCollider> _colliders { get; set; }
         private CollisionShape[] _shapesArray;

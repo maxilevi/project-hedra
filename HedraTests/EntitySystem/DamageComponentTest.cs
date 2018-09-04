@@ -69,10 +69,20 @@ namespace HedraTests.EntitySystem
         }
         
         [Test]
+        public void TestIgnorePredicates()
+        {
+            var originalHealth = _entity.Health;
+            _damageComponent.Ignore(E => E == null);
+            _damageComponent.Damage(10, null, out var xp, false);
+            Assert.AreEqual(originalHealth, _entity.Health);
+            Assert.False(_damageComponent.HasBeenAttacked);
+        }
+        
+        [Test]
         public void TestDamageBillboardIsCreated()
         {          
             _damageComponent.Damage(10, null, out var xp, true);
-            Assert.AreEqual(1, _damageComponent.DamageLabels.Count);
+            Assert.AreEqual(1, _damageComponent.Labels.Length);
         }
         
         [Test]
@@ -128,7 +138,7 @@ namespace HedraTests.EntitySystem
         {
             _isStatic = true;
             _damageComponent.Damage(10, null, out var xp, true);
-            Assert.AreEqual(0, _damageComponent.DamageLabels.Count);
+            Assert.AreEqual(0, _damageComponent.Labels.Length);
         }
         
         [Test]

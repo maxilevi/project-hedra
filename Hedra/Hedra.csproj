@@ -864,6 +864,10 @@
       <Link>Assets\Chr\SheepIdle1.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Animations\WarriorHeadbutt.dae">
+      <Link>Assets\Chr\WarriorHeadbutt.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Animations\WarriorIntercept.dae">
       <Link>Assets\Chr\WarriorIntercept.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1048,6 +1052,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Includes\Lighting.shader">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Soundtrack\TheVillage.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Swoosh.ogg">

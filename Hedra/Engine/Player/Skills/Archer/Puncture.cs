@@ -9,6 +9,7 @@
 
 using System;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.Player.Skills.Archer
@@ -16,21 +17,17 @@ namespace Hedra.Engine.Player.Skills.Archer
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class Puncture : LearningSkill
+	public class Puncture : SpecialAttackSkill<Bow>
 	{
 		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
 
-		public override void Update()
+		protected override void BeforeUse(Bow Weapon)
 		{
-			
-		}
-		
-		protected override void Learn()
-		{
-			Console.WriteLine("Test");
+			void HandlerLambda(Projectile A) => PierceModifier(Weapon, A, HandlerLambda);
+			Weapon.BowModifiers += HandlerLambda;
 		}
 
-		private void PierceModifier(Projectile ArrowProj)
+		private void PierceModifier(Bow Weapon, Projectile ArrowProj, OnModifyArrowEvent Lambda)
 		{
 			ArrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
 			{
@@ -39,6 +36,7 @@ namespace Hedra.Engine.Player.Skills.Archer
 					Hit.AddComponent( new BleedingComponent(Hit, Player, 3f, 20f) );
 				}
 			};
+			Weapon.BowModifiers -= Lambda;
 		}
 		
 		public override string Description => "Arrows have a high chance to cause bleeding.";

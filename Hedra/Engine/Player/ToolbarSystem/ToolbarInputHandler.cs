@@ -47,7 +47,8 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
                 var ability = _player.Toolbar.SkillAt(keyIndex);
 
-                if (ability != null && ability.MeetsRequirements(_player.Toolbar, this.AbilitiesBeingCasted())){
+                if (ability != null && ability.MeetsRequirements() && this.AbilitiesBeingCasted() == 0)
+                {
                     SoundManager.PlaySound(SoundType.ButtonClick, _player.Position, false, 1f, 0.5f);
 
                     ability.Cooldown = ability.MaxCooldown;

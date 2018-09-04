@@ -80,7 +80,6 @@
     <Compile Include="Player\SimpleCameraMock.cs" />
     <Compile Include="Player\PlayerMock.cs" />
     <Compile Include="Player\Skills\Archer\AgilityTest.cs" />
-    <Compile Include="Player\Skills\Archer\BurstOfSpeedTest.cs" />
     <Compile Include="Player\Skills\Archer\LearnKnifeTest.cs" />
     <Compile Include="Player\Skills\Archer\PunctureTest.cs" />
     <Compile Include="Player\Skills\CappedSkillTest.cs" />
@@ -89,9 +88,12 @@
     <Compile Include="Player\Skills\LearningSkillTestBase.cs" />
     <Compile Include="Player\Skills\PassiveSkillMock.cs" />
     <Compile Include="Player\Skills\PassiveSkillTest.cs" />
+    <Compile Include="Player\Skills\Rogue\BurstOfSpeedTest.cs" />
     <Compile Include="Player\Skills\Rogue\LearnClawTest.cs" />
     <Compile Include="Player\Skills\Rogue\LearnKatarTest.cs" />
     <Compile Include="Player\Skills\SkillTest.cs" />
+    <Compile Include="Player\Skills\SpecialAttackSkillTest.cs" />
+    <Compile Include="Player\Skills\Warrior\InterceptTest.cs" />
     <Compile Include="Player\Skills\Warrior\LearnAxeTest.cs" />
     <Compile Include="Player\Skills\Warrior\LearnHammerTest.cs" />
     <Compile Include="Player\Skills\Warrior\ResistanceTest.cs" />

@@ -36,9 +36,9 @@ namespace Hedra.Engine.Player.Skills.Warrior
             _whirlwindAnimation.Loop = false;
         }
 
-		public override bool MeetsRequirements(IToolbar Bar, int CastingAbilityCount)
+		public override bool MeetsRequirements()
 		{
-			return base.MeetsRequirements(Bar, CastingAbilityCount) && !Player.Toolbar.DisableAttack && Player.HasWeapon;
+			return base.MeetsRequirements() && !Player.Toolbar.DisableAttack && Player.HasWeapon;
 		}
 		
 		public override void Use()

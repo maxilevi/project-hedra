@@ -15,6 +15,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using System.Drawing;
+using System.Linq;
 using Hedra.Engine.AISystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
@@ -28,19 +29,22 @@ namespace Hedra.Engine.EntitySystem
 
     public class DamageComponent : EntityComponent
     {
-        public float XpToGive = 8;
-        public bool Immune = false;
-        public bool Delete = true;
-        public readonly List<Billboard> DamageLabels;
-        public event OnDamageEventHandler OnDamageEvent;
+        public event OnDamageEventHandler OnDamageEvent;     
+        public float XpToGive { get; set; } = 8;
+        public bool Immune { get; set; }
+        public bool Delete { get; set; } = true;
+        private readonly List<Billboard> _damageLabels;
+        private readonly List<Predicate<IEntity>> _ignoreList;
+        private float _tintTimer;
+        private Vector4 _targetTint;
+        private float _attackedTimer;
+        private bool _hasBeenAttacked;
 
         public DamageComponent(IEntity Parent) : base(Parent)
         {
-            DamageLabels = new List<Billboard>();
+            _damageLabels = new List<Billboard>();
+            _ignoreList = new List<Predicate<IEntity>>();
         }
-
-        private float _tintTimer;
-        private Vector4 _targetTint;
 
         public override void Update()
         {
@@ -63,20 +67,20 @@ namespace Hedra.Engine.EntitySystem
                 }
             }
 
-            for (int i = DamageLabels.Count - 1; i > -1; i--)
+            for (var i = _damageLabels.Count - 1; i > -1; i--)
             {
-                if (DamageLabels[i].Disposed) DamageLabels.RemoveAt(i);
+                if (_damageLabels[i].Disposed) _damageLabels.RemoveAt(i);
             }
         }
 
         public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound)
         {
-            if (this.Parent.AttackResistance > 0)
+            if (Parent.AttackResistance > 0)
             {
-                Amount /= this.Parent.AttackResistance;
+                Amount /= Parent.AttackResistance;
             }
 
-            if (Parent.IsDead)
+            if (Parent.IsDead || _ignoreList.Any(I => I.Invoke(Damager)))
             {
                 Exp = 0;
                 return;
@@ -105,7 +109,7 @@ namespace Hedra.Engine.EntitySystem
                     Speed = 4,
                     FollowFunc = () => Parent.Position
                 };
-                DamageLabels.Add(dmgLabel);
+                _damageLabels.Add(dmgLabel);
             }
             Exp = 0;
 
@@ -119,7 +123,7 @@ namespace Hedra.Engine.EntitySystem
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
             if (Damager != null && Damager != Parent)
             {
-                Vector3 direction = -(Damager.Position - Parent.Position).Normalized();
+                var direction = -(Damager.Position - Parent.Position).Normalized();
                 var factor = 0.5f;
                 var averageSize = (Parent.Model.BaseBroadphaseBox.Size.X + Parent.Model.BaseBroadphaseBox.Size.Z) * .5f;
                 if (Parent is LocalPlayer) factor = 0.0f;
@@ -143,13 +147,11 @@ namespace Hedra.Engine.EntitySystem
                 Parent.IsDead = true;
                 var dropComponent = Parent.SearchComponent<DropComponent>();
                 dropComponent?.Drop();
-                if (Delete)
-                {
-                    Parent.Physics.HasCollision = false;
-                    CoroutineManager.StartCoroutine(this.DisposeCoroutine);
-                }
+                Parent.Physics.HasCollision = false;
+                CoroutineManager.StartCoroutine(this.DisposeCoroutine);
+                
             }
-            if (OnDamageEvent != null && Amount != 0)
+            if (OnDamageEvent != null && Math.Abs(Amount) > 0.005f)
                 OnDamageEvent.Invoke(new DamageEventArgs(Parent, Damager, Amount, Exp));
         }
 
@@ -179,15 +181,17 @@ namespace Hedra.Engine.EntitySystem
                     yield return null;
                 }
             }
-
-            animable = null;
-
-            if (!(Parent is LocalPlayer))
+            
+            if (Delete)
                 Parent.Dispose();
         }
 
-        private float _attackedTimer;
-        private bool _hasBeenAttacked;
+        public void Ignore(Predicate<IEntity> Predicate)
+        {
+            _ignoreList.Add(Predicate);
+        }
+
+        public Billboard[] Labels => _damageLabels.ToArray();
 
         /// <summary>
         /// Returns a bool representing if the Entity has been attacked in the last six seconds.
@@ -197,10 +201,10 @@ namespace Hedra.Engine.EntitySystem
 
     public class DamageEventArgs : EventArgs
     {
-        public IEntity Victim;
-        public IEntity Damager;
-        public float Amount;
-        public float Experience;
+        public IEntity Victim { get; }
+        public IEntity Damager { get; }
+        public float Amount { get; }
+        public float Experience { get; }
 
         public DamageEventArgs(IEntity Victim, IEntity Damager, float Amount, float Experience)
         {

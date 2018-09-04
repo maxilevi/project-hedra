@@ -57,7 +57,7 @@ namespace Hedra.Engine.Management
 		public static void Load(SoundSource Source)
         {
 	        SoundtrackManager.Source = Source;
-			TrackNames = new string[13];
+			TrackNames = new string[14];
             TrackNames[0] = "Sounds/Soundtrack/VillageAmbient.ogg";
             TrackNames[1] = "Sounds/Soundtrack/MainTheme.ogg";
             TrackNames[2] = "Sounds/Soundtrack/Rain.ogg";
@@ -73,6 +73,7 @@ namespace Hedra.Engine.Management
             TrackNames[10] = "Sounds/Soundtrack/CardinalCity.ogg";
             TrackNames[11] = "Sounds/Soundtrack/ThroughTheGrasslands.ogg";
             TrackNames[12] = "Sounds/Soundtrack/BreathOfDay.ogg";
+	        TrackNames[13] = "Sounds/Soundtrack/TheVillage.ogg";
             ShuffleSongs();
 
             for (var i = 0; i < TrackNames.Length; i++){

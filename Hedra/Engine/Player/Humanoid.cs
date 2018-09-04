@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player
 	public class Humanoid : Entity, IHumanoid
 	{
 		public event OnHitLandedEventHandler OnHitLanded;
-        public virtual IMessageDispatcher MessageDispatcher { get; set; }
+        public IMessageDispatcher MessageDispatcher { get; set; }
 	    public int ConsecutiveHits { get; private set; }
         public bool IsAttacking {get; set;}
 		public bool IsEating { get; set; }
@@ -44,7 +44,7 @@ namespace Hedra.Engine.Player
 		public bool WasAttacking { get; set; }
 		public bool IsSitting { get; set; }
 	    public float BaseAttackSpeed { get; private set; } = 1;
-        public virtual bool CanInteract {get; set; }
+	    public virtual bool CanInteract { get; set; } = true;
         public bool IsSleeping { get; set; }
 	    public bool IsJumping => Movement.IsJumping;
 	    public virtual Vector3 FacingDirection => Vector3.UnitY * -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
@@ -133,15 +133,14 @@ namespace Hedra.Engine.Player
 
 	    #endregion
 
-        public Humanoid() {
+        public Humanoid()
+        {
             this._consecutiveHitsTimer = new Timer(3f);
-
-            this.CanInteract = true;
             this.MessageDispatcher = new DummyMessageDispatcher();
             this.HandLamp = new HandLamp(this);
-			this.Movement = this.CreateMovementManager();
+			this.Movement = new MovementManager(this);
             this.DmgComponent = new DamageComponent(this);
-            this.RandomFactor = Humanoid.NewRandomFactor();
+            this.RandomFactor = NewRandomFactor();
             this.Physics.CanCollide = true;
             this.DodgeCost = 25f;
             this.MaxStamina = 100f;
@@ -160,11 +159,6 @@ namespace Hedra.Engine.Player
 	            ConsecutiveHits = 0;
 	        }
         }
-
-	    protected virtual MovementManager CreateMovementManager()
-	    {
-	        return new MovementManager(this);
-	    }
 
         #region Dodge
         public void Roll()

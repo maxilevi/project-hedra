@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -35,7 +36,7 @@ namespace Hedra.Engine.Generation
 
         public CollidableStructure(StructureDesign Design, Vector3 Position, Plateau Mountain)
         {
-            this.Position = Position;
+            this.Position = new Vector3(Position.X, (Mountain?.MaxHeight + Chunk.BaseHeight + 1) * Chunk.BlockSize ?? Position.Y, Position.Z);
             this.Mountain = Mountain;
             this.Design = Design;
             this.Parameters = new AttributeArray();

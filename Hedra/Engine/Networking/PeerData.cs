@@ -26,38 +26,9 @@ namespace Hedra.Engine.Networking
 		public bool Packet0x6Sent = false;
 		public float LastPing = 0;
 		
-		public static Humanoid NewHuman(IPEndPoint IP){
-			var Human = new Humanoid();
-			Human.Model = new HumanoidModel(Human);
-			Human.Removable = false;
-			Human.Model.ApplyFog = true;
-			
-			var Dmg = Human.SearchComponent<DamageComponent>();
-			if(NetworkManager.IsHost){
-				Dmg.OnDamageEvent += delegate(DamageEventArgs Args) {
-					if(Args.Damager == LocalPlayer.Instance){
-					//Reverse the gui and the dmg
-					Args.Victim.Health += Args.Amount;
-					for(int i = Dmg.DamageLabels.Count-1; i > -1; i--){
-						if(Dmg.DamageLabels[i].Texture is GUIText){
-							if( (Dmg.DamageLabels[i].Texture as GUIText).Text == ((int)Args.Amount).ToString() ){
-								Dmg.DamageLabels[i].Dispose();
-								Dmg.DamageLabels.RemoveAt(i);
-							}
-						}
-					}
-				}
-					if(Args.Damager != LocalPlayer.Instance)
-						NetworkManager.SendPacket0x15(Args.Amount, IP);
-				};
-			}else{
-				Dmg.Immune = true;
-			}
-			Log.WriteLine(Human.Physics.BaseHeight);
-			//Human.Physics.UsePhysics = false;
-			
-			World.AddEntity(Human);
-			return Human;
+		public static Humanoid NewHuman(IPEndPoint IP)
+		{
+			return null;
 		}
 	}
 }

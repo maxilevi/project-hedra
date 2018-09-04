@@ -9,10 +9,8 @@
 
 using System;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
-using OpenTK;
 
-namespace Hedra.Engine.Player.Skills
+namespace Hedra.Engine.Player.Skills.Warrior
 {
 	/// <summary>
 	/// Description of Resistance.

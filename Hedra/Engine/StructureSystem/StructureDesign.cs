@@ -77,7 +77,7 @@ namespace Hedra.Engine.StructureSystem
                 {
                     for (var i = 0; i < Items.Length; i++)
                     {
-                        if (Items[i].Design.GetType() == this.GetType() && NewPosition == Items[i].Position)
+                        if (Items[i].Design.GetType() == this.GetType() && (NewPosition.Xz - Items[i].Position.Xz).LengthFast < .05f)
                             return false;
                     }
                 }

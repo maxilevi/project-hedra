@@ -1,7 +1,7 @@
 ﻿using Hedra.Engine.Player.Skills.Rogue;
 using NUnit.Framework;
 
-namespace HedraTests.Player.Skills.Archer
+namespace HedraTests.Player.Skills.Rogue
 {
     [TestFixture]
     public class BurstOfSpeedTest : SkillTest<BurstOfSpeed>

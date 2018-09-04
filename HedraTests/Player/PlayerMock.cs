@@ -83,9 +83,9 @@ namespace HedraTests.Player
         public Vector3 BlockPosition { get; set; }
         public bool PlaySpawningAnimation { get; set; }
         public float Speed { get; set; }
-        public float MaxMana { get; }
+        public float MaxMana { get; } = 100;
         public float Health { get; set; }
-        public float Mana { get; set; }
+        public float Mana { get; set; } = 100;
         public bool InUpdateRange { get; }
         public bool IsActive { get; set; }
         public bool IsBoss { get; set; }
@@ -143,7 +143,7 @@ namespace HedraTests.Player
         public bool IsJumping { get; }
         public Vector3 FacingDirection { get; }
         public bool IsSitting { get; set; }
-        public bool HasWeapon { get; }
+        public bool HasWeapon => LeftWeapon != null;
         public HandLamp HandLamp { get; }
         public HumanoidModel Model { get; set; }
         public MovementManager Movement { get; }
