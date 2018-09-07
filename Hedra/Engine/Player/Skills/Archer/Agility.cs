@@ -14,9 +14,9 @@ namespace Hedra.Engine.Player.Skills.Archer
 {
 	public class Agility : PassiveSkill
 	{
-		private float StaminaFormula(bool clamp = false)
+		private float StaminaFormula(bool Clamp = false)
 		{
-			if(clamp)
+			if(Clamp)
 				return -1f * Math.Max(Level,1);
 			return -1f * Level;
 		}

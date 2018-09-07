@@ -6,6 +6,7 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -13,7 +14,6 @@ namespace Hedra.Engine.StructureSystem
 {
     public abstract class StructureDesign
     {
-        public bool SpawnInMenu { get; set; }
         public abstract int Radius { get; set; }
         public abstract VertexData Icon { get; }
 
@@ -23,9 +23,9 @@ namespace Hedra.Engine.StructureSystem
 
         public void CheckFor(Vector2 ChunkOffset, Region Biome)
         {
-            for (int x = Math.Min(-2, -Radius / Chunk.Width * 2); x < Math.Max(2, Radius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -Radius / Chunk.Width * 2); x < Math.Max(2, Radius / Chunk.Width * 2); x++)
             {
-                for (int z = Math.Min(-2, -Radius / Chunk.Width * 2); z < Math.Max(2, Radius / Chunk.Width * 2); z++)
+                for (var z = Math.Min(-2, -Radius / Chunk.Width * 2); z < Math.Max(2, Radius / Chunk.Width * 2); z++)
                 {
                     var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
                         ChunkOffset.Y + z * Chunk.Width);
@@ -93,5 +93,11 @@ namespace Hedra.Engine.StructureSystem
         {
             return World.Seed != World.MenuSeed;
         }
+
+        public virtual void OnEnter(IPlayer Player)
+        {         
+        }
+        
+        public virtual int[] AmbientSongs { get; }
     }
 }

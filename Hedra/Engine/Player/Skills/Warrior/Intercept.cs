@@ -25,7 +25,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
         private float Damage => BaseDamage * (base.Level * 0.15f) + BaseDamage;
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
         private float Duration => Math.Max(BaseDuration - 0.05f * base.Level, DurationCap);
-        private float Distance => Math.Max(BaseDistance + 0.1f * base.Level, DistanceCap);
+        private float Distance => Math.Min(BaseDistance + 0.1f * base.Level, DistanceCap);
         public override float ManaCost => BaseManaCost;
         protected override int MaxLevel => 15;
         

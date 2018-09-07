@@ -14,12 +14,12 @@ namespace Hedra.Engine.Player
         private bool _wasPlayingAmbient;
         private readonly IPlayer _player;
         private CollidableStructure[] _currentNearStructures;
-        private Timer _villageMessageTimer;
+        private Timer _enterTimer;
 
         public StructureAware(IPlayer Player)
         {
             _player = Player;
-            _villageMessageTimer = new Timer(12f);
+            _enterTimer = new Timer(12f);
             NearCollisions = new ICollidable[0];
         }
         
@@ -35,7 +35,7 @@ namespace Hedra.Engine.Player
                 NearCollisions = collidableStructures.SelectMany(S => S.Colliders).ToArray();               
             }
 
-            _villageMessageTimer.Tick();
+            _enterTimer.Tick();
             this.HandleSounds();
         }
 
@@ -44,15 +44,16 @@ namespace Hedra.Engine.Player
             var none = true;
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
-                if ((_currentNearStructures[i].Position.Xz - _player.Position.Xz).LengthFast <
-                    _currentNearStructures[i].Radius * .75f && _currentNearStructures[i].Design is VillageDesign)
+                var structure = _currentNearStructures[i];
+                if ((structure.Position.Xz - _player.Position.Xz).LengthFast < structure.Radius * .75f)
                 {
                     if (!_wasPlayingAmbient)
                     {
-                        SoundtrackManager.PlayTrack(SoundtrackManager.VillageIndex, true);
+                        var song = structure.Design.AmbientSongs[Utils.Rng.Next(0, structure.Design.AmbientSongs.Length)];
+                        SoundtrackManager.PlayTrack(song, true);
                         _wasPlayingAmbient = true;
-                        if (_villageMessageTimer.Ready)
-                            _player.MessageDispatcher.ShowTitleMessage($"WELCOME TO {VillageDesign.CreateName(World.Seed)}", 6f);
+                        if (_enterTimer.Ready)
+                            structure.Design.OnEnter(_player);
                     }
                     none = false;
                 }

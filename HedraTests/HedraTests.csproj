@@ -93,6 +93,7 @@
     <Compile Include="Player\Skills\Rogue\LearnKatarTest.cs" />
     <Compile Include="Player\Skills\SkillTest.cs" />
     <Compile Include="Player\Skills\SpecialAttackSkillTest.cs" />
+    <Compile Include="Player\Skills\Warrior\BashTest.cs" />
     <Compile Include="Player\Skills\Warrior\InterceptTest.cs" />
     <Compile Include="Player\Skills\Warrior\LearnAxeTest.cs" />
     <Compile Include="Player\Skills\Warrior\LearnHammerTest.cs" />

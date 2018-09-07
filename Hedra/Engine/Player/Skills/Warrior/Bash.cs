@@ -8,9 +8,13 @@
  */
 
 using System;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Warrior
@@ -18,63 +22,67 @@ namespace Hedra.Engine.Player.Skills.Warrior
 	/// <summary>
 	/// Description of Bash.
 	/// </summary>
-	public class Bash : BaseSkill
-	{	
-		private float Damage = 20f;
-		private Animation BashAnimation;
+	public sealed class Bash : CappedSkill
+	{
+		private readonly Animation _bashAnimation;
 		
-		public Bash() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
+		private const float BaseManaCost = 60;
+		private const float ManaCostCap = 20;
+		private const float ManaCostChangeRate = -2.5f;
+		
+		private const float BaseCooldown = 8; 
+		private const float CooldownCap = 4;
+		private const float CooldownChangeRate = -.25f;
+		
+		private const float BaseRange = 4;
+		private const float RangeCap = 10;
+		private const float RangeChangeRate = .25f;
+		
+		private const float BaseRadius = .9f;
+		private const float RadiusCap = .65f;
+		private const float RadiusChangeRate = -.01f;
+		
+		private const float BaseDamage = 15f;
+		private const float DamageCap = float.MaxValue;
+		private const float DamageChangeRate = 10f;
+		
+		public Bash()
+		{
 			base.ManaCost = 15f;
 			base.MaxCooldown = 3f;
-			
-			this.BashAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorBash.dae");
-			this.BashAnimation.Loop = false;
-		    this.BashAnimation.OnAnimationStart += delegate
-		    {
-		        Sound.SoundManager.PlaySound(Sound.SoundType.SlashSound, Player.Position);
-		    };
-            this.BashAnimation.OnAnimationEnd += delegate { 
-				Player.IsCasting = false;
-				Casting = false;
-				Player.WasAttacking = false;
-			};
-			
-			this.BashAnimation.OnAnimationMid += delegate { 
-				for(int i = 0; i< World.Entities.Count; i++){
-					if(World.Entities[i] == Player)
-						continue;
+			this._bashAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorHeadbutt.dae");
+			this._bashAnimation.OnAnimationMid += Sender => OnDamage();
+		}
+
+		public void OnDamage()
+		{
+			World.Entities.ToList().ForEach(delegate(IEntity Entity)
+			{
+				if(Entity == Player) return;
 					
-					Vector3 ToEntity = (World.Entities[i].Position - Player.Position).NormalizedFast();
-					float Dot = Mathf.DotProduct(ToEntity, Player.Orientation);
-					if(Dot >= .65f && (World.Entities[i].Position - Player.Position).LengthSquared < 9f*9f){
-						float Exp;
-						World.Entities[i].Damage(this.Damage * Dot * 1.25f, Player, out Exp, true);
-						Player.XP += Exp;
-					}
+				var dot = Vector3.Dot((Entity.Position - Player.Position).NormalizedFast(), Player.Orientation);
+				if(dot >= Radius && (Entity.Position - Player.Position).LengthSquared < Math.Pow(Range, 2))
+				{
+					Entity.Damage(Damage * dot * 1.25f, Player, out var exp);
+					Player.XP += exp;
 				}
-				
-			};
+			});
+			Player.Movement.Orientate();
 		}
 		
-		
-		public override void Use(){
-			base.MaxCooldown = Math.Max(4f - base.Level * .25f, 1.5f);
-			Damage = 20f * base.Level * .6f + 5f;
-			Player.IsCasting = true;
-			Casting = true;
-			Player.IsAttacking = false;
-			Player.WasAttacking = false;
-			Player.LeftWeapon.InAttackStance = false;
-			Player.Model.PlayAnimation(BashAnimation);
+		public override void Use()
+		{
+			SoundManager.PlaySound(SoundType.SlashSound, Player.Position);
+			Player.Model.Blend(_bashAnimation);
 		}
-		
-		public override void Update(){
-			if(Player.IsCasting && Casting){
-				Player.Movement.Orientate();
-			}
-		}
-		
+
+		private float Damage => Math.Min(BaseDamage + DamageChangeRate * Level, DamageCap);
+		private float Range => Math.Min(BaseRange + RangeChangeRate * Level, RangeCap);
+		private float Radius => Math.Max(BaseRadius + RadiusChangeRate * Level, RadiusCap);
+		protected override int MaxLevel => 25;
+		public override float MaxCooldown => Math.Max(BaseCooldown + CooldownChangeRate * Level, CooldownCap);
+		public override float ManaCost => Math.Max(BaseManaCost + ManaCostChangeRate * Level, ManaCostCap);
 		public override string Description => "A powerful smashing blow.";
+		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
 	}
 }

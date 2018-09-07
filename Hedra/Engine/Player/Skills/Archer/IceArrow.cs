@@ -13,7 +13,7 @@ using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
-namespace Hedra.Engine.Player.Skills
+namespace Hedra.Engine.Player.Skills.Archer
 {
 	/// <summary>
 	/// Description of ArcherPoisonArrow.

@@ -37,8 +37,8 @@ namespace Hedra.Engine.Player.Skills.Archer
 		public override string Description => "Shoot a flaming arrow.";
 	    private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;
 	    public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
-	    private float EffectDuration => Math.Max(BaseEffectDuration + 0.15f * base.Level, DurationCap);
-	    private float EffectRange => Math.Max(BaseEffectRange + 0.15f * base.Level, RangeCap);
+	    private float EffectDuration => Math.Min(BaseEffectDuration + 0.15f * base.Level, DurationCap);
+	    private float EffectRange => Math.Min(BaseEffectRange + 0.15f * base.Level, RangeCap);
 		public override float ManaCost => BaseManaCost;
 
         protected override void BeforeUse(Bow Weapon)

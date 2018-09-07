@@ -66,7 +66,7 @@ namespace Hedra.Engine
         {
             var videoCardString = Renderer.GetString(StringName.Renderer);
             var manufacturerString = Renderer.GetString(StringName.Vendor);
-            var useCompatibilityFunction = videoCardString.Contains("AMD") || manufacturerString.Contains("Intel");
+            var useCompatibilityFunction = true;//videoCardString.Contains("AMD") || manufacturerString.Contains("Intel");
             if(useCompatibilityFunction) Log.WriteLine("glMultiDrawElements issue detected. Enabling compatibility mode...");
 
             if (useCompatibilityFunction)

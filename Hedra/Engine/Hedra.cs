@@ -1,5 +1,5 @@
 ﻿#if DEBUG
-    #define SHOW_COLLISION
+    //#define SHOW_COLLISION
 #endif
 
 using Hedra.Engine.EnvironmentSystem;
@@ -199,26 +199,30 @@ namespace Hedra
 	            _studioBackground.Opacity = Mathf.Lerp(_studioBackground.Opacity, _splashOpacity, Time.IndependantDeltaTime);
                 _studioLogo.Opacity = Mathf.Lerp(_studioLogo.Opacity, _splashOpacity, Time.IndependantDeltaTime);
 
-	            if (_splashOpacity == 0 && Math.Abs(_studioLogo.Opacity - _splashOpacity) < 0.05f)
+	            if (_splashOpacity < 0.05f && Math.Abs(_studioLogo.Opacity - _splashOpacity) < 0.05f)
 	            {
 	                this._finishedLoading = true;
 	            }
 	        }
 	        // Utils.RNG is not thread safe so it might break itself
             // Here is the autofix because thread-safety is for loosers
-            float newNumber = Utils.Rng.NextFloat();
-			if(newNumber == 0 && _lastValue == 0){
-				Random Rng = Utils.Rng;
-				Utils.Rng = new Random();//Reset it
+            var newNumber = Utils.Rng.NextFloat();
+			if(newNumber < 0.0005f && _lastValue < 0.0005f)
+			{
+				Utils.Rng = new Random();
 				_lastValue = float.MinValue;
-			}else if(_lastValue != 0)
-				_lastValue = newNumber;
+			}
+			else if (_lastValue > 0.0005f)
+	        {
+		        _lastValue = newNumber;
+	        }
 
-            Utils.CalculateFrameRate();
+	        Utils.CalculateFrameRate();
             IPlayer Player = GameManager.Player;
 			Vector2 Vec2 = World.ToChunkSpace(Player.Position);
 			//Log.WriteLine( (System.GC.GetTotalMemory(false) / 1024 / 1024) + " MB");
-			if(GameSettings.DebugView){
+			if(GameSettings.DebugView)
+			{
 				
 				Chunk UChunk = World.GetChunkAt(Player.Position);
 				
@@ -249,26 +253,26 @@ namespace Hedra
 			    }
 			}
             else
+            {
 				_debugPanel.Disable();
-			
-			
+			}
 		}
 
 		protected override void OnRenderFrame(FrameEventArgs e){
-           
+          
 			base.OnRenderFrame(e);
-
+			
 			Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
-
-		    if (!this._finishedLoading)
-		    {
-                DrawManager.UIRenderer.Draw(_studioBackground);
-		        DrawManager.UIRenderer.Draw(_studioLogo);
-		    }
-		    else
-		    {
-		        DrawManager.Draw();
-            }
+			
+			if (!this._finishedLoading)
+			{
+				DrawManager.UIRenderer.Draw(_studioBackground);
+				DrawManager.UIRenderer.Draw(_studioLogo);
+			}
+			else
+			{
+				DrawManager.Draw();
+			}
 
 #if SHOW_COLLISION
 		    if (GameSettings.DebugView)
@@ -501,7 +505,8 @@ namespace Hedra
 		protected override void OnFocusedChanged(EventArgs e)
 		{
 			base.OnFocusedChanged(e);
-			if(!this.Focused){
+			if(!this.Focused && this._finishedLoading)
+			{
 				if(!GameManager.InStartMenu && !GameManager.IsLoading && !GameSettings.Paused &&
                     GameManager.Player != null && !GameManager.Player.Inventory.Show &&
                     !GameManager.Player.AbilityTree.Show && !GameManager.Player.Trade.Show)

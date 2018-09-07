@@ -5,6 +5,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem;
@@ -47,9 +48,19 @@ namespace Hedra.Engine.StructureSystem
             return BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0 && Rng.Next(0, 25) == 1 && height > 0;
         }
 
-        public static string CreateName(int Seed)
+        private string CreateName(int Seed)
         {
             return NameGenerator.Generate(Seed);
         }
+
+        public override void OnEnter(IPlayer Player)
+        {
+            Player.MessageDispatcher.ShowTitleMessage($"WELCOME TO {NameGenerator.Generate(World.Seed)}", 6f);
+        }
+        
+        public override int[] AmbientSongs => new []
+        {
+            SoundtrackManager.VillageIndex
+        };
     }
 }

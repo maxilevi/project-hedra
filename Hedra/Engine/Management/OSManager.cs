@@ -17,7 +17,9 @@ namespace Hedra.Engine.Management
 	        if (IntPtr.Size == 4) Log.WriteLine("Running "+Program.GameWindow.GameVersion+" as x86");
 	        if (IntPtr.Size == 8) Log.WriteLine("Running "+Program.GameWindow.GameVersion+" as x64");
 
-	        if (RunningPlatform == Platform.Windows) {
+	        if (RunningPlatform == Platform.Windows)
+	        {
+		        /*
 	            if (IntPtr.Size == 4 && NvidiaGPUFix32.SOP_SetProfile("Hedra", Path.GetFileName(ExecName)) == NvidiaGPUFix32.RESULT_CHANGE)
 	            {
 	                MessageBox.Show(
@@ -31,7 +33,7 @@ namespace Hedra.Engine.Management
 	                    "Your game is now configured to use your high Performance NVIDIA Graphics card. This requires a restart so please start the game again.");
 	                Program.GameWindow.Close();
 	                return;
-	            }
+	            }*/
 	        }
 
 	        RamCount = 8;

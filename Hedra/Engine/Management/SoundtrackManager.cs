@@ -28,6 +28,7 @@ namespace Hedra.Engine.Management
 	    public const int VillageIndex = 0;
 	    public const int MainThemeIndex = 1;
 	    public const int RainIndex = 2;
+		public const int Comabat0 = 3;
         public const int LoopableSongsStart = 3;
 
 	    public static int TrackIndex => _trackIndex;
@@ -57,23 +58,26 @@ namespace Hedra.Engine.Management
 		public static void Load(SoundSource Source)
         {
 	        SoundtrackManager.Source = Source;
-			TrackNames = new string[14];
-            TrackNames[0] = "Sounds/Soundtrack/VillageAmbient.ogg";
-            TrackNames[1] = "Sounds/Soundtrack/MainTheme.ogg";
-            TrackNames[2] = "Sounds/Soundtrack/Rain.ogg";
-            // LoopableSongs
-            TrackNames[3] = "Sounds/Soundtrack/ForestAmbient.ogg";
-            // Forest should always be first
-			TrackNames[4] = "Sounds/Soundtrack/Song0.ogg";
-			TrackNames[5] = "Sounds/Soundtrack/Song1.ogg";
-			TrackNames[6] = "Sounds/Soundtrack/Song2.ogg";
-			TrackNames[7] = "Sounds/Soundtrack/Song3.ogg";
-			TrackNames[8] = "Sounds/Soundtrack/Song4.ogg";
-			TrackNames[9] = "Sounds/Soundtrack/Song5.ogg";
-            TrackNames[10] = "Sounds/Soundtrack/CardinalCity.ogg";
-            TrackNames[11] = "Sounds/Soundtrack/ThroughTheGrasslands.ogg";
-            TrackNames[12] = "Sounds/Soundtrack/BreathOfDay.ogg";
-	        TrackNames[13] = "Sounds/Soundtrack/TheVillage.ogg";
+	        TrackNames = new string[]
+	        {
+		        "Sounds/Soundtrack/VillageAmbient.ogg",
+		        "Sounds/Soundtrack/MainTheme.ogg",
+		        "Sounds/Soundtrack/Rain.ogg",
+		        "Sounds/Soundtrack/GraveyardChampion.ogg",
+		        // LoopableSongs
+		        "Sounds/Soundtrack/ForestAmbient.ogg",
+		        // Forest should always be first
+		        "Sounds/Soundtrack/Song0.ogg",
+		        "Sounds/Soundtrack/Song1.ogg",
+		        "Sounds/Soundtrack/Song2.ogg",
+		        "Sounds/Soundtrack/Song3.ogg",
+		        "Sounds/Soundtrack/Song4.ogg",
+		        "Sounds/Soundtrack/Song5.ogg",
+		        "Sounds/Soundtrack/CardinalCity.ogg",
+		        "Sounds/Soundtrack/ThroughTheGrasslands.ogg",
+		        "Sounds/Soundtrack/BreathOfDay.ogg",
+		        "Sounds/Soundtrack/TheVillage.ogg"
+	        };
             ShuffleSongs();
 
             for (var i = 0; i < TrackNames.Length; i++){

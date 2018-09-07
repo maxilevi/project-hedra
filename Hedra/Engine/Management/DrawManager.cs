@@ -94,11 +94,12 @@ namespace Hedra.Engine.Management
 			}
 			Renderer.Enable(EnableCap.DepthTest);
 			World.Draw(WorldRenderType.Water);
-		    for (int i = TrailRenderer.Count - 1; i > -1; i--)
+		    for (var i = TrailRenderer.Count - 1; i > -1; i--)
 		    {
 		        TrailRenderer[i].Draw();
 		    }
-            for (int i = ParticleRenderer.Count-1; i > -1; i--){
+            for (var i = ParticleRenderer.Count-1; i > -1; i--)
+            {
 				ParticleRenderer[i].Draw();
 			}
 
@@ -112,8 +113,8 @@ namespace Hedra.Engine.Management
 	    public static void Draw()
 	    {	
 	     	VertsCount = 0;
-     		if(MainBuffer.Enabled){
-    			
+     		if(MainBuffer.Enabled)
+		     {		
     			MainBuffer.CaptureData();
     			BulkDraw();
 		    	MainBuffer.UnCaptureData();
