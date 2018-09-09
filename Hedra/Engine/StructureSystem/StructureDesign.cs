@@ -97,7 +97,7 @@ namespace Hedra.Engine.StructureSystem
         public virtual void OnEnter(IPlayer Player)
         {         
         }
-        
-        public virtual int[] AmbientSongs { get; }
+
+        public virtual int[] AmbientSongs { get; } = new int[0];
     }
 }

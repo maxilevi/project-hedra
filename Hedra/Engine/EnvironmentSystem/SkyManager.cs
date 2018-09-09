@@ -106,7 +106,8 @@ namespace Hedra.Engine.EnvironmentSystem
 				dayFactor = simplifiedTime / 12000;
 			else
 				dayFactor = 1-(simplifiedTime - 12000) / 12000;
-			if(Enabled){
+			if(Enabled)
+			{
 			    if (DayTime >= 24000)
 			    {
 			        _stackedDaytime = DayTime;
@@ -115,7 +116,8 @@ namespace Hedra.Engine.EnvironmentSystem
 			    DayTime += Time.DeltaTime * 5f * DaytimeSpeed;//20 mins
 			}
 
-			if(simplifiedTime >= 10000 && simplifiedTime < 20000 ){
+			if(simplifiedTime >= 10000 && simplifiedTime < 20000 )
+			{
 				_targetTopColor = () => _currentRegion.Sky.MiddayTop;
 				_targetBotColor = () => _currentRegion.Sky.MiddayBot;
 			
@@ -127,7 +129,8 @@ namespace Hedra.Engine.EnvironmentSystem
 
 			}
 			
-			if(simplifiedTime >= 20000 && simplifiedTime < 22000 ){
+			if(simplifiedTime >= 20000 && simplifiedTime < 22000 )
+			{
 				_targetTopColor = () => _currentRegion.Sky.AfternoonTop;
 				_targetBotColor = () => _currentRegion.Sky.AfternoonBot;
 			
@@ -138,7 +141,8 @@ namespace Hedra.Engine.EnvironmentSystem
 			    simplifiedFactor = (simplifiedTime - 20000f) / 4000f;
             }
 			
-			if(simplifiedTime >= 22000 && simplifiedTime < 24000 || simplifiedTime >= 0 && simplifiedTime < 8000 ){
+			if(simplifiedTime >= 22000 && simplifiedTime < 24000 || simplifiedTime >= 0 && simplifiedTime < 8000 )
+			{
 				_targetTopColor = () => _currentRegion.Sky.NightTop;
 				_targetBotColor = () => _currentRegion.Sky.NightBot;
 			
@@ -152,7 +156,8 @@ namespace Hedra.Engine.EnvironmentSystem
                     simplifiedFactor = simplifiedTime / 8000f;
             }
 			
-			if(simplifiedTime >= 8000 && simplifiedTime < 10000){
+			if(simplifiedTime >= 8000 && simplifiedTime < 10000)
+			{
 				_targetTopColor = () => _currentRegion.Sky.SunriseTop;
 				_targetBotColor = () => _currentRegion.Sky.SunriseBot;
 			
@@ -197,7 +202,8 @@ namespace Hedra.Engine.EnvironmentSystem
             LoadTime = false;
 		}
 		
-		public static void Draw(){
+		public static void Draw()
+		{
 			Sky.Draw();
 		}
 	}

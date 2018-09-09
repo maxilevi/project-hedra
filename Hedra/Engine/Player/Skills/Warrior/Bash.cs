@@ -34,8 +34,8 @@ namespace Hedra.Engine.Player.Skills.Warrior
 		private const float CooldownCap = 4;
 		private const float CooldownChangeRate = -.25f;
 		
-		private const float BaseRange = 4;
-		private const float RangeCap = 10;
+		private const float BaseRange = 8;
+		private const float RangeCap = 16;
 		private const float RangeChangeRate = .25f;
 		
 		private const float BaseRadius = .9f;
@@ -54,7 +54,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
 			this._bashAnimation.OnAnimationMid += Sender => OnDamage();
 		}
 
-		public void OnDamage()
+		private void OnDamage()
 		{
 			World.Entities.ToList().ForEach(delegate(IEntity Entity)
 			{
@@ -63,6 +63,11 @@ namespace Hedra.Engine.Player.Skills.Warrior
 				var dot = Vector3.Dot((Entity.Position - Player.Position).NormalizedFast(), Player.Orientation);
 				if(dot >= Radius && (Entity.Position - Player.Position).LengthSquared < Math.Pow(Range, 2))
 				{
+					if (Utils.Rng.Next(0, 5) == 1)
+					{
+						Entity.KnockForSeconds(1.5f);
+						Entity.Physics.Translate(-Entity.Orientation);
+					}
 					Entity.Damage(Damage * dot * 1.25f, Player, out var exp);
 					Player.XP += exp;
 				}

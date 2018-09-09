@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using OpenTK;
 using Hedra.Engine;
 using System.Windows.Forms;
+using System.Drawing;
+using OpenTK.Graphics.OpenGL;
 
 namespace Hedra
 {
@@ -15,7 +17,6 @@ namespace Hedra
 		public static bool IsRelease => !IsDebug;
 		public static Hedra GameWindow;
 		
-		[STAThread]
 		static void Main(string[] Args)
         {
 	        #if DEBUG
@@ -54,7 +55,7 @@ namespace Hedra
 		    GameWindow.WindowState = WindowState.Maximized;
 		    if (OSManager.RunningPlatform == Platform.Windows)
 		    {
-		        GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
+		        //GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
 		    }
 		    GameSettings.Width = GameWindow.ClientSize.Width;
 		    GameSettings.Height = GameWindow.ClientSize.Height;
@@ -74,5 +75,31 @@ namespace Hedra
 #endif
         }
     }
+	
+	class Game: GameWindow
+	{
+		protected override void OnLoad(EventArgs e)
+		{
+			GL.ClearColor(Color.Red);
+		}
+        
+		protected override void OnRenderFrame(FrameEventArgs e)
+		{
+			GL.Clear(ClearBufferMask.ColorBufferBit);
+
+			GL.Begin(BeginMode.Triangles);
+
+			GL.Color3(Color.MidnightBlue);
+			GL.Vertex2(-1.0f, 1.0f);
+			GL.Color3(Color.SpringGreen);
+			GL.Vertex2(0.0f, -1.0f);
+			GL.Color3(Color.Ivory);
+			GL.Vertex2(1.0f, 1.0f);
+
+			GL.End();
+
+			this.SwapBuffers();
+		}
+	}
 }
 

@@ -6,19 +6,16 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using System.Collections;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Player.Skills;
-using Hedra.Engine.Player.ToolbarSystem;
+using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using OpenTK;
 
-namespace Hedra.Engine.Player
+namespace Hedra.Engine.Player.Skills.Rogue
 {
 	/// <summary>
 	/// Description of WeaponThrow.
@@ -28,13 +25,15 @@ namespace Hedra.Engine.Player
 		private readonly Animation _throwAnimation;
 		private static readonly VertexData ShurikenData = AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
 
-        public Shuriken() : base() {
+        public Shuriken()
+        {
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
 			base.ManaCost = 35f;
 			base.MaxCooldown = 8.5f;
 			
 			_throwAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
 			_throwAnimation.Loop = false;
+	        _throwAnimation.Speed = .5f;
 			_throwAnimation.OnAnimationMid += delegate{
 			    Shuriken.ShootShuriken(Player, Player.View.CrossDirection.NormalizedFast(), 20f * base.Level, 8);
 			};
@@ -73,7 +72,7 @@ namespace Hedra.Engine.Player
 			Casting = true;
 			Player.IsAttacking = true;
 			Player.LeftWeapon.InAttackStance = false;
-			Player.Model.PlayAnimation(_throwAnimation);
+			Player.Model.Blend(_throwAnimation);
 			Player.Movement.Orientate();
 		}
 		

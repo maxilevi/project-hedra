@@ -16,18 +16,15 @@ namespace Hedra.Engine.Player.Skills.Warrior
         private const float BaseDamage = 80f;
         private const float BaseCooldown = 24f;
         private const float CooldownCap = 12f;
-        private const float DistanceCap = 1.5f;
-        private const float DurationCap = .75f;
-        private const float BaseDuration = 1.5f;
-        private const float BaseDistance = .5f;
+        private const float DurationCap = 1.5f;
+        private const float BaseDuration = .5f;
         private const float BaseManaCost = 60f;
         
         private float Damage => BaseDamage * (base.Level * 0.15f) + BaseDamage;
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
-        private float Duration => Math.Max(BaseDuration - 0.05f * base.Level, DurationCap);
-        private float Distance => Math.Min(BaseDistance + 0.1f * base.Level, DistanceCap);
+        private float Duration => Math.Max(BaseDuration - 0.04f * base.Level, DurationCap);
         public override float ManaCost => BaseManaCost;
-        protected override int MaxLevel => 15;
+        protected override int MaxLevel => 25;
         
         private bool _isMoving;
         private readonly Timer _timer;
@@ -110,7 +107,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
             _timer.AlertTime = Duration;
             _timer.Reset();
             Player.Movement.CaptureMovement = false;
-            Player.Movement.Move(Player.Movement.MoveFormula(Player.Orientation) * Distance, Duration, false);
+            Player.Movement.Move(Player.Movement.MoveFormula(Player.Orientation) * Duration, Duration, false);
         }
     }
 }

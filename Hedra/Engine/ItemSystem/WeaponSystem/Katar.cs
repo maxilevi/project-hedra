@@ -27,8 +27,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 		    "Assets/Chr/RogueBladeLeftAttack.dae", "Assets/Chr/RogueBladeRightAttack.dae"
 	    };
 	    protected override string[] SecondaryAnimationsNames => new [] { "Assets/Chr/RogueBladeDoubleAttack.dae" };
-	    protected override float PrimarySpeed => 1.25f;
-	    protected override float SecondarySpeed => 2.0f;
+	    protected override float PrimarySpeed => 1.0f;
+	    protected override float SecondarySpeed => 1.0f;
 	    
         private readonly ObjectMesh _secondBlade;
 		

@@ -14,6 +14,7 @@ namespace Hedra.Engine.Management
 	{
 	    public static void Load(string ExecName)
 	    {
+    
 	        if (IntPtr.Size == 4) Log.WriteLine("Running "+Program.GameWindow.GameVersion+" as x86");
 	        if (IntPtr.Size == 8) Log.WriteLine("Running "+Program.GameWindow.GameVersion+" as x64");
 
@@ -41,6 +42,10 @@ namespace Hedra.Engine.Management
              + Renderer.GetString(StringName.Renderer) + Environment.NewLine 
              + Renderer.GetString(StringName.Version);
 	        CPUArchitecture = Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER");
+		    
+		    Log.WriteLine("OS = " + Environment.OSVersion + Environment.NewLine +
+		                  "CPU = " + OSManager.CPUArchitecture + Environment.NewLine +
+		                  "Graphics Card = " + OSManager.GraphicsCard + Environment.NewLine);
         }
 
 	    public static string CPUArchitecture { get; private set; }

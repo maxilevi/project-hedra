@@ -47,7 +47,7 @@ namespace Hedra.Engine.Player
                 var structure = _currentNearStructures[i];
                 if ((structure.Position.Xz - _player.Position.Xz).LengthFast < structure.Radius * .75f)
                 {
-                    if (!_wasPlayingAmbient)
+                    if (!_wasPlayingAmbient && structure.Design.AmbientSongs.Length > 0)
                     {
                         var song = structure.Design.AmbientSongs[Utils.Rng.Next(0, structure.Design.AmbientSongs.Length)];
                         SoundtrackManager.PlayTrack(song, true);

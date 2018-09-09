@@ -13,7 +13,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using OpenTK;
 
-namespace Hedra.Engine.Player.Skills
+namespace Hedra.Engine.Player.Skills.Rogue
 {
 	/// <summary>
 	/// Description of WeaponThrow.
@@ -31,7 +31,6 @@ namespace Hedra.Engine.Player.Skills
 			
 			RoundSlashAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeRoundAttack.dae");
 			RoundSlashAnimation.Loop = false;
-			RoundSlashAnimation.Speed = 1.75f;
 			RoundSlashAnimation.OnAnimationStart += delegate { 
 				Sound.SoundManager.PlaySound(Sound.SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
 			};RoundSlashAnimation.OnAnimationEnd += delegate {

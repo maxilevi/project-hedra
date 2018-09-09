@@ -21,13 +21,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     {
         private readonly ObjectMesh SecondBlade;
         protected override string AttackStanceName => "Assets/Chr/RogueBlade-Stance.dae";
-        protected override float PrimarySpeed => 2.0f;
+        protected override float PrimarySpeed => 1.0f;
         protected override string[] PrimaryAnimationsNames => new []
         {
             "Assets/Chr/RogueBladeLeftAttack.dae",
             "Assets/Chr/RogueBladeRightAttack.dae"
         };
-        protected override float SecondarySpeed => 1.5f;
+        protected override float SecondarySpeed => 1.0f;
         protected override string[] SecondaryAnimationsNames => new []
         {
             "Assets/Chr/RogueBladeDoubleAttack.dae"

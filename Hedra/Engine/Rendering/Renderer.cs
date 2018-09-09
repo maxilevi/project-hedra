@@ -37,6 +37,13 @@ namespace Hedra.Engine.Rendering
 	        ShaderManager.RegisterStateItem(() => ShaderBound, O => ShaderBound = (int)O);
         }
 
+	    public static void Load()
+	    {
+	        BlendEquation(BlendEquationMode.FuncAdd);
+	        BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+	        Enable(EnableCap.Texture2D);
+	    }
+	    
 	    public static void Enable(EnableCap Cap)
 	    {
 	        CapHandler.Enable(Cap);

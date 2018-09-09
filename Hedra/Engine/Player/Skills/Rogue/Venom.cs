@@ -6,16 +6,12 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
-using System.Linq;
-using System.Collections.Generic;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Player.Skills;
 
-namespace Hedra.Engine.Player
+using System;
+using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Rendering;
+
+namespace Hedra.Engine.Player.Skills.Rogue
 {
 	/// <summary>
 	/// Description of Resistance.

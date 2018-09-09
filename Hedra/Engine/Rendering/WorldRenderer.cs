@@ -121,7 +121,8 @@ namespace Hedra.Engine.Rendering
 			}	
 		}
 
-		public static void Discard(){
+		public static void Discard()
+		{
 			StaticBuffer.Discard();
 			WaterBuffer.Discard();
 		}
