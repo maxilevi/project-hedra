@@ -217,6 +217,7 @@
     <Compile Include="Engine\AISystem\BasicAIComponent.cs" />
     <Compile Include="Engine\ComplexMath\RandomDistribution.cs" />
     <Compile Include="Engine\DatabaseSystem\Dao.cs" />
+    <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
     <Compile Include="Engine\AISystem\GorillaWarriorAIComponent.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Engine\Generation\RenderingComparer.cs" />
     <Compile Include="Engine\Generation\WorldProvider.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\AttackOptions.cs" />
+    <Compile Include="Engine\Loader\SplashScreen.cs" />
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
     <Compile Include="Engine\Management\IAssetProvider.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
@@ -275,13 +277,13 @@
     <Compile Include="Engine\Player\Skills\Mage\Meteor.cs" />
     <Compile Include="Engine\Player\Skills\Mage\TripleFireball.cs" />
     <Compile Include="Engine\Player\Skills\Rogue\BurstOfSpeed.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\RogueFade.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\Fade.cs" />
     <Compile Include="Engine\Player\Skills\Rogue\LearnClaw.cs" />
     <Compile Include="Engine\Player\Skills\Rogue\LearnKatar.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\RogueRoundSlash.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\RogueShuriken.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\RogueTripleShuriken.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\RogueVenom.cs">
+    <Compile Include="Engine\Player\Skills\Rogue\RoundSlash.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\Shuriken.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\TripleShuriken.cs" />
+    <Compile Include="Engine\Player\Skills\Rogue\Venom.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Engine\Player\Skills\Warrior\Bash.cs" />
