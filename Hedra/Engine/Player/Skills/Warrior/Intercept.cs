@@ -17,12 +17,12 @@ namespace Hedra.Engine.Player.Skills.Warrior
         private const float BaseCooldown = 24f;
         private const float CooldownCap = 12f;
         private const float DurationCap = 1.5f;
-        private const float BaseDuration = .5f;
+        private const float BaseDuration = .75f;
         private const float BaseManaCost = 60f;
         
         private float Damage => BaseDamage * (base.Level * 0.15f) + BaseDamage;
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
-        private float Duration => Math.Max(BaseDuration - 0.04f * base.Level, DurationCap);
+        private float Duration => Math.Max(BaseDuration - 0.03f * base.Level, DurationCap);
         public override float ManaCost => BaseManaCost;
         protected override int MaxLevel => 25;
         
