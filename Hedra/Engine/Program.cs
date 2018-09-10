@@ -80,23 +80,23 @@ namespace Hedra
 	{
 		protected override void OnLoad(EventArgs e)
 		{
-			GL.ClearColor(Color.Red);
+			Renderer.ClearColor(Color.Red);
 		}
         
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
-			GL.Clear(ClearBufferMask.ColorBufferBit);
+			Renderer.Clear(ClearBufferMask.ColorBufferBit);
 
-			GL.Begin(BeginMode.Triangles);
+			Renderer.Begin(BeginMode.Triangles);
 
-			GL.Color3(Color.MidnightBlue);
-			GL.Vertex2(-1.0f, 1.0f);
-			GL.Color3(Color.SpringGreen);
-			GL.Vertex2(0.0f, -1.0f);
-			GL.Color3(Color.Ivory);
-			GL.Vertex2(1.0f, 1.0f);
+			Renderer.Color3(Color.MidnightBlue);
+			Renderer.Vertex2(-1.0f, 1.0f);
+			Renderer.Color3(Color.SpringGreen);
+			Renderer.Vertex2(0.0f, -1.0f);
+			Renderer.Color3(Color.Ivory);
+			Renderer.Vertex2(1.0f, 1.0f);
 
-			GL.End();
+			Renderer.End();
 
 			this.SwapBuffers();
 		}
