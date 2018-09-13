@@ -43,7 +43,7 @@ namespace Hedra.Engine.ItemSystem
 	    }
 
 	    public static Item Grab(ItemPoolSettings Settings)
-	    {            
+	    {
 	        var rng = new Random(Settings.Seed);
             var templates = ItemFactory.Templater.Templates;
 	        var selectedTier = Settings.SameTier ? Settings.Tier : ItemPool.SelectTier(Settings.Tier, rng);
@@ -62,7 +62,8 @@ namespace Hedra.Engine.ItemSystem
                 && Template.EquipmentType == Settings.EquipmentType).ToArray();
 	        }
 	        templates = newTemplates;
-	        
+		    if (templates.Length == 0) return null;
+		    
 	        var item = Item.FromTemplate(templates[rng.Next(0, templates.Length)]);
 	        item.SetAttribute(CommonAttributes.Seed, Settings.Seed, true);
             return ItemPool.Randomize(item, rng);

@@ -35,6 +35,7 @@ namespace Hedra.Engine.Player.Skills
 	    public bool Active { get; set; } = true;
         public virtual bool Passive { get; set; }
         public abstract string Description { get; }
+		public abstract string DisplayName { get; }
 	    public bool Casting { get; set; }
 	    public virtual uint TextureId { get; protected set; }
 	    public uint MaskId { get; set; }
@@ -57,7 +58,7 @@ namespace Hedra.Engine.Player.Skills
 
 		protected BaseSkill()
 		{
-			
+			// Invoked via reflection
 		}
 
 		public void Initialize(Vector2 Position, Vector2 Scale, Panel InPanel, IPlayer Player)
@@ -89,12 +90,11 @@ namespace Hedra.Engine.Player.Skills
 			
 			if(!Initialized) throw new ArgumentException("This skill hasn't been initialized yet.");
 
-			Cooldown -= Time.IndependantDeltaTime;
+			Cooldown -= Time.DeltaTime;
 		    if (CooldownSecondsText == null)
 		    {
 		        CooldownSecondsText = new RenderableText(string.Empty, Position, Color.White,
 		            FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
-		        DrawManager.UIRenderer.Add(CooldownSecondsText, DrawOrder.After);
                 if(_panel.Enabled) CooldownSecondsText.Enable();
 		        _panel.AddElement(CooldownSecondsText);
             }
@@ -125,7 +125,9 @@ namespace Hedra.Engine.Player.Skills
 			
 			Renderer.Disable(EnableCap.Blend);
 			Renderer.Enable(EnableCap.DepthTest);
-			Renderer.Enable(EnableCap.CullFace);	
+			Renderer.Enable(EnableCap.CullFace);
+	        
+	        CooldownSecondsText.Draw();
 		}
 		
 		public abstract void Use();

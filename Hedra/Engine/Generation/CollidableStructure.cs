@@ -27,7 +27,6 @@ namespace Hedra.Engine.Generation
         public Vector3 Position { get; }
         public Plateau Mountain { get; }
         public float Radius { get; private set; }
-        public bool Generated = false;
         private readonly List<ICollidable> _colliders;
         private readonly List<CachedVertexData> _models;
         public StructureDesign Design { get; }

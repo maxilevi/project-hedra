@@ -31,6 +31,7 @@ namespace Hedra.Engine.Player
 		private int FireballCount = 0;
 		private ParticleSystem Particles = new ParticleSystem(Vector3.Zero);
 		private Animation FireballAnimation;
+		public override string DisplayName => "Triple Fireball";
 		
 		public TripleFireball() : base() {
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/TripleFireball.png");

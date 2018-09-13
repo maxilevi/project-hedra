@@ -92,10 +92,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
 			}
 		}
 		
-		public override string Description {
-			get {
-				return "Throw a shuriken at your foes.";
-			}
-		}
+		public override string Description => "Throw a shuriken at your foes.";
+		public override string DisplayName => "Shuriken";
 	}
 }

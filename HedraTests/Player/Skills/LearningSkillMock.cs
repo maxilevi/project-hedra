@@ -6,6 +6,7 @@ namespace HedraTests.Player.Skills
     public class LearningSkillMock : LearningSkill
     {
         public override string Description { get; }
+        public override string DisplayName { get; }
         
         public override uint TextureId { get; protected set; }
         

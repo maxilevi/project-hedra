@@ -19,4 +19,3 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.TreeSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.WorldBuilding'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.Player'):-rename")]
-[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.Player.Skills'):-rename")]

@@ -81,5 +81,6 @@ namespace Hedra.Engine.Player.Skills.Rogue
 		}
 		
 		public override string Description => "Cast a special attack which damages surrounding enemies.";
+		public override string DisplayName => "Round Slash";
 	}
 }

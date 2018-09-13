@@ -63,7 +63,7 @@ namespace Hedra.Engine.Generation
         public AreaHighlighter Highlighter { get; private set; }
         public ParticleSystem Particles { get; private set; }
         public EnviromentGenerator EnviromentGenerator { get; private set; }
-        public BiomePool BiomePool { get; private set; }
+        public IBiomePool BiomePool { get; private set; }
         public MobFactory MobFactory { get; private set; }
         public TreeGenerator TreeGenerator { get; private set; }
         public WorldBuilding.WorldBuilding WorldBuilding { get; private set; }

@@ -40,5 +40,6 @@ namespace Hedra.Engine.Player.Skills.Archer
 		}
 		
 		public override string Description => "Arrows have a high chance to cause bleeding.";
+		public override string DisplayName => "Puncture";
 	}
 }

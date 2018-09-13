@@ -35,7 +35,8 @@ namespace Hedra.Engine.BiomeSystem
 	        this._seed = Seed;
         }
 
-	    public RegionColor(int Seed, BiomeColorsDesign Design){
+	    public RegionColor(int Seed, BiomeColorsDesign Design)
+	    {
 			this._seed = Seed;
 			this.BuildColors(Design);
 		    this.IntegrityCheck();

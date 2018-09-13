@@ -29,6 +29,7 @@ namespace Hedra.Engine.Player
 		private float DurationTime = 6f;
 		private float Time;
 		private Vector3 PreviousPosition;
+		public override string DisplayName => "Flame Rush";
 		
 		public FlowingMagma() : base() {
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Conflagaration.png");

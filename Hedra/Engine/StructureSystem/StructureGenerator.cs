@@ -55,7 +55,6 @@ namespace Hedra.Engine.StructureSystem
 
 		public void Build(CollidableStructure Struct)
 		{
-			Struct.Generated = true;
 			Struct.Design.Build(Struct);
 		}
 

@@ -25,5 +25,6 @@ namespace Hedra.Engine.Player.Skills.Rogue
         }
 		
 		public override string Description => "Learn to use the katar.";
+		public override string DisplayName => "Learn Katar";
 	}
 }

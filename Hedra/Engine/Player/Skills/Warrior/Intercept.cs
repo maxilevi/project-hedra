@@ -13,6 +13,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
     {
         public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Intercept.png");
         public override string Description => "Charge and knock down you enemies.";
+        public override string DisplayName => "Intercept";
         private const float BaseDamage = 80f;
         private const float BaseCooldown = 24f;
         private const float CooldownCap = 12f;

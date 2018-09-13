@@ -103,11 +103,9 @@ namespace Hedra.Engine.Player.Skills.Mage
 			}
 		}
 		
-		public override string Description {
-			get {
-				return "Create a fire explosion that damages and throws enemies out of your range.";
-			}
-		}
+		public override string Description => "Create a fire explosion that damages and throws enemies out of your range.";
+
+		public override string DisplayName => "Conflagaration";
 		
 		public void DamageEntities(){
 			bool Hitted = false;

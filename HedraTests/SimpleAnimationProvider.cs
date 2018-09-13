@@ -1,4 +1,5 @@
-﻿using Hedra.Engine.Rendering.Animation;
+﻿using System.Collections.Generic;
+using Hedra.Engine.Rendering.Animation;
 
 namespace HedraTests
 {
@@ -10,7 +11,12 @@ namespace HedraTests
 
         public Animation LoadAnimation(string ColladaFile)
         {
-            return new Animation(0, new KeyFrame[0]);
+            return new Animation(1, new KeyFrame[2]
+                {
+                    new KeyFrame(0, new Dictionary<string, JointTransform>()),
+                    new KeyFrame(1, new Dictionary<string, JointTransform>())
+                }
+            );
         }
     }
 }

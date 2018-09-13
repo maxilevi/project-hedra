@@ -111,5 +111,6 @@ namespace Hedra.Engine.Player.Skills.Archer
 		}
 		
 		public override string Description => "A powerful knocking kick.";
+		public override string DisplayName => "Kick";
 	}
 }

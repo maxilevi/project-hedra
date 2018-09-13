@@ -27,10 +27,10 @@ namespace Hedra.Engine.StructureSystem
             var originalModel = CacheManager.GetModel(CacheItem.GiantTree);
             var model = originalModel.ShallowClone();
 
-            Matrix4 transMatrix = Matrix4.CreateScale(Vector3.One * 100f);
-            transMatrix *= Matrix4.CreateRotationY(rng.NextFloat() * 360);
+            Matrix4 scaleMatrix = Matrix4.CreateScale(Vector3.One * 100f);
+            Matrix4 transMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360);
             transMatrix *= Matrix4.CreateTranslation(position + Vector3.UnitY * 7f);
-            model.Transform(transMatrix);
+            model.Transform(scaleMatrix * transMatrix);
 
             model.Color(AssetManager.ColorCode0, region.Colors.WoodColor);
             model.Color(AssetManager.ColorCode1, region.Colors.LeavesColor);
@@ -38,7 +38,7 @@ namespace Hedra.Engine.StructureSystem
 
             model.Extradata.AddRange(model.GenerateWindValues());
             float treeRng = Utils.Rng.NextFloat();
-            for (int i = 0; i < model.Extradata.Count; i++)
+            for (var i = 0; i < model.Extradata.Count; i++)
             {
                 model.Extradata[i] = Mathf.Pack(new Vector2(model.Extradata[i] * 2.5f, treeRng), 2048);
             }
@@ -47,21 +47,20 @@ namespace Hedra.Engine.StructureSystem
             List<CollisionShape> shapes = CacheManager.GetShape(originalModel).DeepClone();
             for (int i = 0; i < shapes.Count; i++)
             {
-                shapes[i].Transform(transMatrix);
+                shapes[i].Transform(scaleMatrix * transMatrix);
             }
 
             Executer.ExecuteOnMainThread(delegate
             {
-                Entity treeBoss = BossGenerator.Generate(new [] { MobType.Beetle, MobType.Gorilla }, rng);
-
-                var prize = new Chest(Vector3.TransformPosition(Vector3.UnitZ * +10f + Vector3.UnitX * -80f, transMatrix),
-                    ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
+                var treeBoss = BossGenerator.Generate(new [] { MobType.Beetle, MobType.Gorilla }, rng);
+                var prize = new Chest(
+                    Vector3.TransformPosition(Vector3.UnitZ * 10f + Vector3.UnitX * -80f, transMatrix),
+                    ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon))
+                );
                 prize.Condition += () => treeBoss == null || treeBoss.IsDead;
                 prize.Rotation = Vector3.UnitY * 90f;
 
                 treeBoss.Position = prize.Position.Xz.ToVector3() - Vector3.UnitZ * 30f;
-                treeBoss.Model.Position = prize.Position.Xz.ToVector3();
-                //treeBoss.SearchComponent<BossAIComponent>().Protect = () => prize.Position;
 
                 World.AddStructure(prize);
             });

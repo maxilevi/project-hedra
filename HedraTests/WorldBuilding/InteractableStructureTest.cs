@@ -37,6 +37,26 @@ namespace HedraTests.WorldBuilding
             Assert.Null(player.MessageMock.LastMessage);
             Assert.AreEqual(newLevel, player.Level);
         }
+        
+        [Test]
+        public void TestSelectingStructure()
+        {
+            var player = new PlayerMock();
+            var structure = new InteractableStructureMock();
+            structure.Position = new Vector3(300, 0, 500);
+            GameManager.Player = player;
+            player.Mana = -10;
+            player.Position = new Vector3(295, 0, 500);
+            player.CameraMock.LookingDirection = (structure.Position - player.Position).NormalizedFast();
+            
+            structure.Update();
+            Assert.AreEqual(10, player.Mana);
+            
+            player.Position = new Vector3(0, 0, 0);
+            
+            structure.Update();
+            Assert.AreEqual(0, player.Mana);
+        }
 
         [Test]
         public void TestInteractionDistance()
@@ -93,9 +113,22 @@ namespace HedraTests.WorldBuilding
         public const int StructureInteractionRadius = 25;
         public override string Message => "Here is a mock string";
         public override int InteractDistance => StructureInteractionRadius;
-        public override void Interact(IPlayer Interactee)
+
+        protected override void Interact(IPlayer Interactee)
         {
             Interactee.Level += 20;
+        }
+        
+        protected override void OnSelected(IPlayer Interactee)
+        {
+            base.OnSelected(Interactee);
+            Interactee.Mana = 10;
+        }
+        
+        protected override void OnDeselected(IPlayer Interactee)
+        {
+            base.OnDeselected(Interactee);
+            Interactee.Mana = 0;
         }
     }
 }

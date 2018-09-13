@@ -16,37 +16,26 @@ namespace Hedra.Engine.Player.Skills.Rogue
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class Venom : BaseSkill
+	public class Venom : PassiveSkill
 	{
-		private int PreviousLevel = 0;
-		public Venom() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
-			base.Passive = true;
-		}
-		
-		public override void Update()
+		private PoisonousComponent _component;
+
+		protected override void OnChange()
 		{
-			if(base.Level == 0)return;
-			
-			if(Player.SearchComponent<PoisonousComponent>() == null)
-				Player.AddComponent( new PoisonousComponent(Player) );
-			
-			if(PreviousLevel != base.Level){
-				PreviousLevel = base.Level;
-				PoisonousComponent Poison = Player.SearchComponent<PoisonousComponent>();
-				Poison.Chance = (int) (100 * (Math.Min(.4f, base.Level * .05f) + .2f));
-				Poison.Damage = base.Level * 7.5f + 20f;
-				Poison.Duration = 8f - Math.Min(4f, base.Level * .5f);
+			if (Player.SearchComponent<PoisonousComponent>() == null)
+			{
+				_component = new PoisonousComponent(Player);
+				Player.AddComponent(_component);
 			}
-			
+			var poison = Player.SearchComponent<PoisonousComponent>();
+			poison.Chance = (int) (100 * (Math.Min(.4f, base.Level * .05f) + .2f));
+			poison.Damage = Level * 7.5f + 20f;
+			poison.Duration = 8f - Math.Min(4f, base.Level * .5f);		
 		}
-		
-		public override string Description {
-			get {
-				return "Your attacks have a chance to apply poison.";
-			}
-		}
-		
-		public override void Use(){}
+
+		protected override int MaxLevel => 100;
+		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
+		public override string Description => "Your attacks have a chance to apply poison.";
+		public override string DisplayName => "Venom";
 	}
 }

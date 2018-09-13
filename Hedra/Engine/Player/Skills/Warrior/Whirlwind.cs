@@ -116,5 +116,6 @@ namespace Hedra.Engine.Player.Skills.Warrior
         }
 		
 		public override string Description => "A fierce spinning attack.";
+		public override string DisplayName => "Whirlwind";
 	}
 }

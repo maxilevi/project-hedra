@@ -35,7 +35,7 @@ namespace Hedra.Engine.Generation
         public static AreaHighlighter Highlighter => Provider.Highlighter;
         public static ParticleSystem Particles => Provider.Particles;
         public static EnviromentGenerator EnviromentGenerator => Provider.EnviromentGenerator;
-        public static BiomePool BiomePool => Provider.BiomePool;
+        public static IBiomePool BiomePool => Provider.BiomePool;
         public static MobFactory MobFactory => Provider.MobFactory;
         public static TreeGenerator TreeGenerator => Provider.TreeGenerator;
         public static WorldBuilding.WorldBuilding WorldBuilding => Provider.WorldBuilding;

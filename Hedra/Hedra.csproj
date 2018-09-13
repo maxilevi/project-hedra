@@ -130,6 +130,7 @@
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeSkyDesign.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeStructureDesign.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeTreeDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\IBiomePool.cs" />
     <Compile Include="Engine\BiomeSystem\LavaBiome\LavaBiomeColors.cs" />
     <Compile Include="Engine\BiomeSystem\LavaBiome\LavaBiomeEnviromentDesign.cs" />
     <Compile Include="Engine\BiomeSystem\LavaBiome\LavaBiomeGenerationDesign.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Engine\CacheSystem\BossIconCache.cs" />
     <Compile Include="Engine\CacheSystem\BushesCache.cs" />
     <Compile Include="Engine\CacheSystem\CacheItem.cs" />
+    <Compile Include="Engine\CacheSystem\CacheManager.cs" />
     <Compile Include="Engine\CacheSystem\CacheType.cs" />
     <Compile Include="Engine\CacheSystem\CampfireCache.cs" />
     <Compile Include="Engine\CacheSystem\CampfireIconCache.cs" />
@@ -191,6 +193,7 @@
     <Compile Include="Engine\CacheSystem\CacheIgnore.cs" />
     <Compile Include="Engine\CacheSystem\GraveCache.cs" />
     <Compile Include="Engine\CacheSystem\GraveyardIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\ICacheProvider.cs" />
     <Compile Include="Engine\CacheSystem\MatCache.cs" />
     <Compile Include="Engine\CacheSystem\MausoleumCache.cs" />
     <Compile Include="Engine\CacheSystem\MerchantCartCache.cs" />
@@ -462,7 +465,7 @@
     <Compile Include="Engine\Management\AnalyticsManager.cs" />
     <Compile Include="Engine\Management\AutosaveManager.cs" />
     <Compile Include="Engine\Management\Pool.cs" />
-    <Compile Include="Engine\CacheSystem\CacheManager.cs" />
+    <Compile Include="Engine\CacheSystem\CacheProvider.cs" />
     <Compile Include="Engine\Management\CommandManager.cs" />
     <Compile Include="Engine\Management\DataManager.cs" />
     <Compile Include="Engine\Management\Occludable.cs" />

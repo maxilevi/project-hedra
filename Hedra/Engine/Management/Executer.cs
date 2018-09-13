@@ -15,37 +15,32 @@ namespace Hedra.Engine.Management
 	public static class Executer
 	{
 		private static readonly List<KeyValuePair<Action, Action>> Functions = new List<KeyValuePair<Action, Action>>();
+	    private static readonly List<KeyValuePair<Action, Action>> StandBy = new List<KeyValuePair<Action, Action>>();
+        private static object _lock = new object();
 		
 		/// <summary>
 		/// Executes the give method on the main thread after a frame has passed.
 		/// </summary>
 	     public static void ExecuteOnMainThread(Action Func)
 	     {
-	     	lock(Functions)
-            {
-	     		Functions.Add( new KeyValuePair<Action, Action>(Func, delegate {}) );
-	     	}
+            StandBy.Add( new KeyValuePair<Action, Action>(Func, delegate {}) );
 	     }
 	     
-	      public static void ExecuteOnMainThread(Action Func, Action Callback)
+	     public static void ExecuteOnMainThread(Action Func, Action Callback)
 	     {
-	     	lock(Functions)
-            {
-	      		Functions.Add( new KeyValuePair<Action, Action>(Func, Callback));
-	     	}
+            StandBy.Add( new KeyValuePair<Action, Action>(Func, Callback));
 	     }
 
 	    public static void Update()
 	    {
-	        lock (Functions)
+	        for (var i = 0; i < Functions.Count; i++)
 	        {
-	            for (var i = 0; i < Functions.Count; i++)
-	            {
-	                Functions[i].Key();
-	                Functions[i].Value();
-	            }
-	            Functions.Clear();
+	            Functions[i].Key();
+	            Functions[i].Value();
 	        }
+	        Functions.Clear();	  
+            Functions.AddRange(StandBy.ToArray());
+            StandBy.Clear();
 	    }
 	}
 }

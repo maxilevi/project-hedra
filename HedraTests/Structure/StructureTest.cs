@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace HedraTests.Structure
 {
-    [TestFixture]
+    //[TestFixture]
     public class StructureTest
     {
         //[Test]

@@ -40,5 +40,6 @@ namespace Hedra.Engine.Player.Skills.Rogue
 		}
 
 		public override string Description => "Temporarily obtain a speed burst.";
+		public override string DisplayName => "Burst Of Speed";
 	}
 }

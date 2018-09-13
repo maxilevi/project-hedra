@@ -10,7 +10,7 @@ namespace Hedra.Engine.WorldBuilding
         public override string Message => "TO PAY RESPECTS";
         public override int InteractDistance => 8;
 
-	    public override void Interact(IPlayer Interactee)
+        protected override void Interact(IPlayer Interactee)
         {
             SoundManager.PlaySound(SoundType.NotificationSound, this.Position, false, 1f, 0.6f);            
         }

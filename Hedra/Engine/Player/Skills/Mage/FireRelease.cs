@@ -28,6 +28,7 @@ namespace Hedra.Engine.Player
 		private PointLight Light;
 		private ParticleSystem Particles;
 		private Animation FireReleaseAnimation;
+		public override string DisplayName => "Fire Release";
 		
 		public FireRelease() : base() {
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");

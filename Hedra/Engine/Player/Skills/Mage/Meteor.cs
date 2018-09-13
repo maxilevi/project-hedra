@@ -29,6 +29,7 @@ namespace Hedra.Engine.Player
 		private float Damage = 27.5f;
 		private ParticleSystem HandParticles;
 		private Animation FireballAnimation;
+		public override string DisplayName => "Meteor";
 		
 		public Meteor() : base() {
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Meteor.png");

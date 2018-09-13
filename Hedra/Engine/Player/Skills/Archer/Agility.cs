@@ -29,5 +29,6 @@ namespace Hedra.Engine.Player.Skills.Archer
 		protected override int MaxLevel => 10;
 		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Agility.png");
 		public override string Description => $"Dodging costs {-StaminaFormula(true)} less stamina.";
+		public override string DisplayName => "Agility";
 	}
 }

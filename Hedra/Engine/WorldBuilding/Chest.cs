@@ -26,29 +26,38 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of Chest.
 	/// </summary>
-	public class Chest : BaseStructure, IUpdatable
+	public sealed class Chest : InteractableStructure
 	{
-		private AnimatedModel Model;
-		private Animation IdleAnimation;
-		private Animation OpenAnimation;
-	    private Chunk UnderChunk;
-	    private CollisionShape _shape;
-        public Item ItemSpecification { get; }
-		public Func<bool> Condition;
-		public event OnItemCollect OnPickup;
-	    private bool _shouldOpen;
-	    private bool _canOpen;
+	    private static readonly CollisionShape DefaultShape;
 
-        public Chest(Vector3 Position, Item ItemSpecification){
-			this.ItemSpecification = ItemSpecification;
-			this.Model = AnimationModelLoader.LoadEntity("Assets/Chr/ChestIdle.dae");
-			this.IdleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestIdle.dae");
-			this.OpenAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestOpen.dae");
-			this.Position = Position;
-			
-			this.OpenAnimation.Loop = false;
-			this.OpenAnimation.Speed = 1.5f;
-			this.OpenAnimation.OnAnimationEnd += delegate { 
+		public override string Message => "INTERACT WITH THE CHEST";
+		public override int InteractDistance => 16;
+	    public override bool DisposeAfterUse => false;
+
+		public Item ItemSpecification { get; set; }
+		public Func<bool> Condition { get; set; }
+		public event OnItemCollect OnPickup;
+		private readonly AnimatedModel _model;
+		private readonly Animation _idleAnimation;
+		private readonly Animation _openAnimation;
+	    private Chunk _underChunk;
+
+	    static Chest()
+	    {
+	        DefaultShape = AssetManager.LoadCollisionShapes("Assets/Env/Chest.ply", 1, Vector3.One)[0];
+	    }
+
+        public Chest(Vector3 Position, Item ItemSpecification)
+        {
+			this._model = AnimationModelLoader.LoadEntity("Assets/Chr/ChestIdle.dae");
+	        this.ItemSpecification = ItemSpecification;
+	        this.Position = Position;
+			this._idleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestIdle.dae");
+			this._openAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestOpen.dae");		
+			this._openAnimation.Loop = false;
+			this._openAnimation.Speed = 1.5f;
+			this._openAnimation.OnAnimationEnd += delegate
+			{ 
 				var worldItem = World.DropItem(ItemSpecification, this.Position);
 				worldItem.Position = new Vector3(worldItem.Position.X, worldItem.Position.Y + .75f * this.Scale.Y, worldItem.Position.Z);
 				worldItem.OnPickup += delegate(IPlayer Player)
@@ -57,111 +66,94 @@ namespace Hedra.Engine.WorldBuilding
 				};
 			};
 			
-			this.Model.PlayAnimation(IdleAnimation);
-			this.Model.Scale = Vector3.One * 4.5f;
-			this.Model.ApplyFog = true;
-            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs EventArgs)
-            {
-                _shouldOpen = EventArgs.Key == Key.E && _canOpen;
-            });
-			UpdateManager.Add(this);
+			this._model.PlayAnimation(_idleAnimation);
+			this._model.Scale = Vector3.One * 3.5f;
+			this._model.ApplyFog = true;
 		}
-		
-		public void Update()
+
+		public override void Update()
         {
-			if(UnderChunk == null)
-            {
-				UnderChunk = World.GetChunkAt(this.Position);
-				if(UnderChunk == null || !UnderChunk.Initialized){
-					this.Dispose();
-					return;
-				}
-			    this.CreateColliders();
-			}
-			
-			if(UnderChunk == null || UnderChunk.Disposed){
-				this.Dispose();
-				return;
-			}
-			
-			this.Position = new Vector3(this.Position.X, Physics.HeightAtPosition(this.Position), this.Position.Z);
-			this.Model.Update();
-			
-			var player = LocalPlayer.Instance;
-
-		    if ((player.Position - this.Position).LengthSquared < 16 * 16 && IsClosed && !GameSettings.Paused)
-		    {
-		        player.MessageDispatcher.ShowMessage("[E] INTERACT WITH THE CHEST", .25f, Color.White);
-		        Model.Tint = new Vector4(1.5f, 1.5f, 1.5f, 1);
-		        _canOpen = true;
-		        if (_shouldOpen) this.Open();
-		    }
-		    else
-		    {
-		        _canOpen = false;
-		    }
+	        base.Update();
+			this._model.Update();
+	        this.HandleColliders();
 		}
 
-	    private void CreateColliders()
-	    {
-            if(UnderChunk == null) return;
-	        
-	        if (_shape != null)
-	        {
-                UnderChunk.RemoveCollisionShape(_shape);
-	        }
-	        var shape = AssetManager.LoadCollisionShapes("Assets/Env/Chest.ply", 1, this.Scale)[0];
-	        //This will search for "Assets/Env/Colliders/Chest_Collider0.ply"
-            shape.Transform(-Vector3.UnitX * 1.5f);
-	        shape.Transform(Matrix4.CreateRotationY(this.Rotation.Y * Mathf.Radian) *
-	                        Matrix4.CreateRotationX(this.Rotation.X * Mathf.Radian) *
-	                        Matrix4.CreateRotationZ(this.Rotation.Z * Mathf.Radian));
+		protected override void OnSelected(IPlayer Interactee)
+		{
+			base.OnSelected(Interactee);
+			_model.Tint = new Vector4(2.5f, 2.5f, 2.5f, 1);
+		}
 
-            shape.Transform(this.Position);
-	        _shape = shape;
-	        UnderChunk.AddCollisionShape(shape);  
-	    }
-		
-		public void Open(){
-			if(IsClosed){//Check if it's closed
-				
+		protected override void OnDeselected(IPlayer Interactee)
+		{
+			base.OnDeselected(Interactee);
+			_model.Tint = new Vector4(1, 1, 1, 1);
+		}
+
+		private void HandleColliders()
+		{
+			var underChunk = World.GetChunkAt(this.Position);
+			if (underChunk != null && underChunk.BuildedWithStructures && _underChunk != underChunk)
+			{
+				_underChunk = underChunk;
+				Position = new Vector3(Position.X, Physics.HeightAtPosition(Position), Position.Z);
+
+				var shape = DefaultShape.Clone() as CollisionShape;
+			    shape.Transform(Matrix4.CreateScale(this.Scale));
+				shape.Transform(-Vector3.UnitX * 1.5f);
+				shape.Transform(Matrix4.CreateRotationY(this.Rotation.Y * Mathf.Radian) *
+				                Matrix4.CreateRotationX(this.Rotation.X * Mathf.Radian) *
+				                Matrix4.CreateRotationZ(this.Rotation.Z * Mathf.Radian));
+
+				shape.Transform(Position);
+				_underChunk.AddCollisionShape(shape);
+			}
+		}
+
+		protected override void Interact(IPlayer Interactee)
+        {
+			if(IsClosed)
+            {		
 				if(Condition != null)
 					if(!Condition()) return;
 				
-				Model.PlayAnimation(OpenAnimation);
+				_model.PlayAnimation(_openAnimation);
 			}
 		}
 		
-		public override void Dispose(){
-			UpdateManager.Remove(this);
-			this.Model.Dispose();
-		}
-		
-		public bool IsClosed => Model.AnimationPlaying == IdleAnimation;
+		public bool IsClosed => _model.AnimationPlaying == _idleAnimation;
 
-	    public new Vector3 Position{
-			get => Model.Position;
+	    public override Vector3 Position
+        {
+			get => _model.Position;
 	        set
 	        {
                 if(value == this.Position) return;
 
-	            this.Model.Position = value;
-	            this.CreateColliders();
+	            this._model.Position = value;
 	        }
 		}
 		
-		public Vector3 Scale{
-			get{ return Model.Scale;  }
-			set{ this.Model.Scale = value; }
+		public Vector3 Scale
+        {
+			get => _model.Scale;
+		    set => this._model.Scale = value;
 		}
 		
-		public Vector3 Rotation{
-			get{ return Model.Rotation;  }
+		public Vector3 Rotation
+        {
+			get => _model.Rotation;
 		    set
 		    {
-		        this.Model.Rotation = value;
-		        this.CreateColliders();
+		        this._model.Rotation = value;
 		    }
+		}
+
+		public override void Dispose()
+		{
+			base.Dispose();
+			UpdateManager.Remove(this);
+			this._model.Dispose();
 		}
 	}
 }

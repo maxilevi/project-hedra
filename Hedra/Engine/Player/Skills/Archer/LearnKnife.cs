@@ -25,6 +25,7 @@ namespace Hedra.Engine.Player.Skills.Archer
 		}
 
 		public override string Description => "Learn to use the knife.";
+		public override string DisplayName => "Learn Knife";
 
 	}
 }

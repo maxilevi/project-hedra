@@ -18,7 +18,7 @@ namespace Hedra.Engine.BiomeSystem
 	/// <summary>
 	/// Description of BiomePool.
 	/// </summary>
-	public class BiomePool
+	public class BiomePool : IBiomePool
 	{
 		public const int WorldWidth = 4096;
 		public const int WorldHeight = 4096;

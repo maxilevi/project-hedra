@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                               (realSkill.MaxCooldown != 0 ? $"Cooldown : {realSkill.MaxCooldown}" : string.Empty);
             ItemDescription.Color = Color.White;
             ItemDescription.Position = this.Position - Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .15f);
-            ItemText.Text = Utils.FitString(CurrentItem.DisplayName.ToUpperInvariant(), 15);
+            ItemText.Text = Utils.FitString(realSkill.DisplayName, 15);
 
             ItemTexture.Position = this.Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .05f);
             ItemTexture.TextureElement.TextureId = CurrentItem.HasAttribute("ImageId") 

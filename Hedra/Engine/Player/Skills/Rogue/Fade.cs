@@ -19,8 +19,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
 	/// Description of WeaponThrow.
 	/// </summary>
 	public class Fade : BaseSkill
-	{
-		
+	{		
 		public Fade() : base() 
 		{
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
@@ -57,13 +56,13 @@ namespace Hedra.Engine.Player.Skills.Rogue
 			Player.Model.BaseTint = Vector4.Zero;
 			Player.IsInvisible = false;
 		}
-		
-		public override void Update(){}
-		
-		public override string Description {
-			get {
-				return "Temporarily hide from your enemies.";
-			}
+
+		public override void Update()
+		{
+			
 		}
+		
+		public override string Description => "Temporarily hide from your enemies.";
+		public override string DisplayName => "Fade";
 	}
 }

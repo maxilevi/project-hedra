@@ -45,7 +45,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
 		protected override int MaxLevel => 10;
 		
 		public override string Description => $"Grants +{HealthFormula(true):0.0} HP.";
-		
+		public override string DisplayName => "Resistance";
 		public override uint TextureId =>  Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
 	}
 }

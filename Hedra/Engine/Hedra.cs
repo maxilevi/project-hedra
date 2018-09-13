@@ -64,25 +64,26 @@ namespace Hedra
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
 		    AssetManager.Load();
             CompatibilityManager.Load(appPath);
+	        NameGenerator.Load();
+	        CacheManager.Load();
+	        
             GameLoader.LoadArchitectureSpecificFiles(appPath);
             GameLoader.CreateCharacterFolders(appData, appPath);
 	        GameLoader.AllocateMemory();
-			NameGenerator.Load();
-			CacheManager.Load();
 			Physics.Threading.Load();
 			Log.WriteLine("Assets loading was Successful.");
 	        
 		    GameLoader.LoadSoundEngine();
-            GameSettings.VSync = true;
+	        GameSettings.VSync = true;
 			GameSettings.Load($"{appData}settings.cfg");
 			Log.WriteLine("Settings loading was Successful");
 	        
+	        Renderer.Load();
+	        Log.WriteLine("Supported GLSL version is : "+Renderer.GetString(StringName.ShadingLanguageVersion));
+	        
             GameManager.Load();
 			Log.WriteLine("Scene loading was Successful.");
-	        
-	        Renderer.Load();
-			Log.WriteLine("Supported GLSL version is : "+Renderer.GetString(StringName.ShadingLanguageVersion));
-	        
+ 
 	        var glVersion = Renderer.GetString(StringName.Version);
             var shadingOpenGlVersion = GetShadingVersion(glVersion);
 
@@ -141,7 +142,6 @@ namespace Hedra
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{    
 			base.OnRenderFrame(e);
-			
 			Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);		
 			if (!SplashScreen.FinishedLoading)
 			{

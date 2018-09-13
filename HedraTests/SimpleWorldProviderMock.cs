@@ -24,7 +24,7 @@ namespace HedraTests
         public virtual AreaHighlighter Highlighter => null;
         public virtual ParticleSystem Particles => null;
         public virtual EnviromentGenerator EnviromentGenerator => null;
-        public virtual BiomePool BiomePool => null;
+        public virtual IBiomePool BiomePool => null;
         public virtual MobFactory MobFactory => null;
         public virtual TreeGenerator TreeGenerator => null;
         public virtual Hedra.Engine.WorldBuilding.WorldBuilding WorldBuilding => null;

@@ -25,5 +25,6 @@ namespace Hedra.Engine.Player.Skills.Warrior
         }
 		
 		public override string Description => "Learn to use the hammer.";
+		public override string DisplayName => "Learn Hammer";
 	}
 }

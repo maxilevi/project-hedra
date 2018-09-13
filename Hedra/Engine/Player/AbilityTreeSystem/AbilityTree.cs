@@ -200,7 +200,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     ability.SetAttribute("Enabled", slot.Enabled);
                     if (slot.Enabled)
                     {
-                        ability.DisplayName = slot.AbilityType.Name.AddSpacesToSentence();
                         var realSkill = _player.Toolbar.Skills.First(S => slot.AbilityType == S.GetType());
                         ability.SetAttribute("Skill", realSkill);
                     }

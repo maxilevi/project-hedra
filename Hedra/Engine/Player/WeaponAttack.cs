@@ -145,6 +145,7 @@ namespace Hedra.Engine.Player
 		protected override bool UseTextureIdCache => false;
 	    protected override bool HasCooldown => false;
 		public override string Description => string.Empty;
+		public override string DisplayName => string.Empty;
 	}
 
     public enum AttackType

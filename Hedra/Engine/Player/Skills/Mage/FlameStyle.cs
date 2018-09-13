@@ -27,6 +27,7 @@ namespace Hedra.Engine.Player
 		private const float Duration = 8f;
 		private bool Emitting = false;
 		private ParticleSystem HandParticles;
+		public override string DisplayName => "Flame Style";
 		
 		public FlameStyle() : base() {
 			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/FlameStyle.png");

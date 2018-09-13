@@ -98,7 +98,8 @@ namespace Hedra.Engine.PhysicsSystem
 			 return HeightAtPosition(new Vector3(X,0,Z));
 		}
 		
-		public static float HeightAtPosition(Vector3 BlockPosition){
+		public static float HeightAtPosition(Vector3 BlockPosition)
+		{
 			
 			if(World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Noise3D){
 				return HeightAtBlock( new Vector3(BlockPosition.X, World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z), BlockPosition.Z) );

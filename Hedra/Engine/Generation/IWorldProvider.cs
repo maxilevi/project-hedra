@@ -28,7 +28,7 @@ namespace Hedra.Engine.Generation
 
         EnviromentGenerator EnviromentGenerator { get; }
 
-        BiomePool BiomePool { get; }
+        IBiomePool BiomePool { get; }
 
         MobFactory MobFactory { get; }
 

@@ -35,6 +35,7 @@ namespace Hedra.Engine.Player.Skills.Archer
 		private const float BaseManaCost = 40f;
 		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/FlameArrow.png");
 		public override string Description => "Shoot a flaming arrow.";
+		public override string DisplayName => "Flame Arrow";
 	    private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;
 	    public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
 	    private float EffectDuration => Math.Min(BaseEffectDuration + 0.15f * base.Level, DurationCap);

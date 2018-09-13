@@ -26,6 +26,7 @@ namespace Hedra.Engine.Player.Skills.Archer
 		private const float BaseManaCost = 30f;
 		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/PoisonArrow.png");
 		public override string Description => "Shoot a poisonous arrow.";
+		public override string DisplayName => "Poison Arrow";
 		private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;
 		public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
 		public override float ManaCost => BaseManaCost;

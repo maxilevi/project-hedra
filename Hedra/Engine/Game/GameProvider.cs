@@ -106,8 +106,9 @@ namespace Hedra.Engine.Game
 			Player.Inventory.SetItems(Information.Items);
 	        SetRestrictions(Information);
             GameSettings.DarkEffect = false;
-			CoroutineManager.StartCoroutine(SpawnCoroutine);	
-		}
+	        CoroutineManager.StartCoroutine(SpawnCoroutine);
+	        Log.WriteLine($"Making '{Information.Name}' current with seed {World.Seed}.");
+        }
 
 	    private void SetRestrictions(PlayerInformation Information)
 	    {

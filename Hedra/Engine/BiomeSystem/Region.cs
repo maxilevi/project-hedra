@@ -7,13 +7,13 @@ namespace Hedra.Engine.BiomeSystem
 {
     public class Region
     {
-        public RegionColor Colors;
-        public RegionTree Trees;
-        public RegionStructure Structures;
-        public RegionSky Sky;
-        public RegionMob Mob;
-        public RegionGeneration Generation;
-        public RegionEnviroment Enviroment;
+        public RegionColor Colors { get; set; }
+        public RegionTree Trees{ get; set; }
+        public RegionStructure Structures { get; set; }
+        public RegionSky Sky { get; set; }
+        public RegionMob Mob { get; set; }
+        public RegionGeneration Generation { get; set; }
+        public RegionEnviroment Enviroment { get; set; }
 
         public static Region Interpolate(params Region[] Regions)
         {

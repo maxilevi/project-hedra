@@ -45,8 +45,8 @@ namespace Hedra.Engine.Rendering
             this._tipPoints = new List<TrailPoint>();
             this.Color = Color;
 
-            _points = new VBO<Vector3>(new Vector3[0], Vector3.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
-            _colors = new VBO<Vector4>(new Vector4[0], Vector4.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
+            _points = new VBO<Vector3>(new Vector3[1], Vector3.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
+            _colors = new VBO<Vector4>(new Vector4[1], Vector4.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
             _data = new VAO<Vector3, Vector4>(_points, _colors);
                
             DrawManager.TrailRenderer.Add(this);
@@ -164,7 +164,7 @@ namespace Hedra.Engine.Rendering
 
         public void Draw()
         {
-            if(_tipPoints.Count > 4)
+            if(_tipPoints.Count <= 4) return;
             Renderer.Disable(EnableCap.CullFace);
             Renderer.Enable(EnableCap.Blend);
 
