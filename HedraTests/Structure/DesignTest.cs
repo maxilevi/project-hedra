@@ -9,7 +9,9 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using HedraTests.Player;
@@ -63,6 +65,7 @@ namespace HedraTests.Structure
                 if(!_interceptedEntities.Contains(ent)) _interceptedEntities.Add(ent);
                 return ent;
             });
+            worldMock.Setup(W => W.WorldBuilding).Returns(new StructureDesignWorldBuildingMock());
             World.Provider = worldMock.Object;
             Design = new T();
             _rng = new Random();
@@ -71,7 +74,7 @@ namespace HedraTests.Structure
         [Test]
         public void TestDesignSpawnsWithinRange()
         {
-            var structure = new CollidableStructure(Design, RandomLocation, null);
+            var structure = this.CreateStructure();
             Design.Build(structure);
             Executer.Update();
             for (var i = 0; i < WorldEntities.Length; i++)
@@ -85,7 +88,21 @@ namespace HedraTests.Structure
                     Assert.Fail($"{WorldStructures[i].Position.Xz} is far from {structure.Position.Xz} by more than {Design.Radius}");
             }
         }
+        
+        [Test]
+        public void TestDesignSpawnsEntitiesOrStructures()
+        {
+            var structure = this.CreateStructure();
+            Design.Build(structure);
+            Executer.Update();
+            Assert.Greater(WorldEntities.Length + WorldStructures.Length, 0);
+        }
 
+        protected virtual CollidableStructure CreateStructure()
+        {
+            return new CollidableStructure(Design, RandomLocation, null);
+        }
+        
         protected IEntity[] WorldEntities => _interceptedEntities.ToArray();
         protected BaseStructure[] WorldStructures => _interceptedStructures.ToArray();
         protected T Design { get; private set; }

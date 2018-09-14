@@ -120,7 +120,7 @@ namespace Hedra.Engine.StructureSystem
             }
             Cementery.Enemies = enemies.ToArray();
 
-            var prize = World.WorldBuilding.SpawnChest(Position + Vector3.UnitX * 40f, 
+            var prize = World.SpawnChest(Position + Vector3.UnitX * 40f, 
                     ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
             prize.Condition = delegate
             {

@@ -38,7 +38,7 @@ namespace Hedra.Engine.Generation
         public static IBiomePool BiomePool => Provider.BiomePool;
         public static MobFactory MobFactory => Provider.MobFactory;
         public static TreeGenerator TreeGenerator => Provider.TreeGenerator;
-        public static WorldBuilding.WorldBuilding WorldBuilding => Provider.WorldBuilding;
+        public static IWorldBuilding WorldBuilding => Provider.WorldBuilding;
         public static StructureGenerator StructureGenerator => Provider.StructureGenerator;
         public static bool IsGenerated => Provider.IsGenerated;
         public static int MeshQueueCount => Provider.MeshQueueCount;
@@ -277,6 +277,11 @@ namespace Hedra.Engine.Generation
         public static void MarkChunkReady(Chunk Object)
         {
             OnChunkReady?.Invoke(Object);
+        }
+
+        public static Chest SpawnChest(Vector3 Position, Item Specification)
+        {
+            return WorldBuilding.SpawnChest(Position, Specification);
         }
     }
 }

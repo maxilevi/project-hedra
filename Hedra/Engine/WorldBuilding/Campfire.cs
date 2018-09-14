@@ -23,15 +23,15 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of Campfire.
 	/// </summary>
-	public class Campfire : BaseStructure, IUpdatable
+	public sealed class Campfire : BaseStructure, IUpdatable
 	{
 	    private static ParticleSystem _fireParticles;
         private long _passedTime;
 		private PointLight _light;
 	    private SoundItem _sound;
-		public Vector3 Position { get; set; }
 		
-		public Campfire(Vector3 Position) : base() {
+		public Campfire(Vector3 Position)
+		{
 			if(_fireParticles == null)
 				_fireParticles = new ParticleSystem(Vector3.Zero);
 		    _fireParticles.HasMultipleOutputs = true;

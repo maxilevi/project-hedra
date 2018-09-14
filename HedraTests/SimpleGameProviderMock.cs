@@ -6,6 +6,8 @@ namespace HedraTests
 {
     public class SimpleGameProviderMock : IGameProvider
     {
+        public bool IsExiting { get; set; } = false;
+        
         public bool Exists { get; set; } = true;
         
         public KeyboardManager Keyboard => null;

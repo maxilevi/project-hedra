@@ -34,7 +34,7 @@ namespace Hedra.Engine.Generation
 
         TreeGenerator TreeGenerator { get; }
 
-        WorldBuilding.WorldBuilding WorldBuilding { get; }
+        IWorldBuilding WorldBuilding { get; }
 
         StructureGenerator StructureGenerator { get; }
 

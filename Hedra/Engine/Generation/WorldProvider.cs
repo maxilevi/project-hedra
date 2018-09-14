@@ -66,7 +66,7 @@ namespace Hedra.Engine.Generation
         public IBiomePool BiomePool { get; private set; }
         public MobFactory MobFactory { get; private set; }
         public TreeGenerator TreeGenerator { get; private set; }
-        public WorldBuilding.WorldBuilding WorldBuilding { get; private set; }
+        public IWorldBuilding WorldBuilding { get; private set; }
         public StructureGenerator StructureGenerator { get; private set; }
         public int Seed { get; private set; }
         public bool IsGenerated { get; private set; }

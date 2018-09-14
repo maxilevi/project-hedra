@@ -52,6 +52,8 @@ namespace Hedra.Engine
 		public static bool InStartMenu => Provider.InStartMenu;
 		
 		public static bool InMenu => Provider.InMenu;
+
+		public static bool IsExiting => Provider.IsExiting;
 		
 		public static bool SpawningEffect
 		{

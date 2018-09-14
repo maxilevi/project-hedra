@@ -33,14 +33,14 @@ namespace Hedra.Engine.Management
 
 	    public static void Update()
 	    {
+		    Functions.AddRange(StandBy.ToArray());
 	        for (var i = 0; i < Functions.Count; i++)
 	        {
 	            Functions[i].Key();
 	            Functions[i].Value();
 	        }
-	        Functions.Clear();	  
-            Functions.AddRange(StandBy.ToArray());
-            StandBy.Clear();
+		    Functions.Clear();
+		    StandBy.Clear();
 	    }
 	}
 }

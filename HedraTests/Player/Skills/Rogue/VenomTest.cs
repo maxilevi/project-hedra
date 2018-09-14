@@ -12,7 +12,6 @@ namespace HedraTests.Player.Skills.Rogue
         {
             Skill.Level = 1;
             Skill.Update();
-            Skill.Use();
         }
 
         [Test]

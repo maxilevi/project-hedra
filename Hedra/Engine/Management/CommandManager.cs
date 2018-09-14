@@ -329,12 +329,14 @@ namespace Hedra.Engine.Management
 			        return true;
 				}
 				if(Parts[0] == "chest"){
-                    World.WorldBuilding.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
+                    World.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
 					return true;
 				}
 			    Result = "Unknown command.";
                 Log.WriteLine("Unknown command.");
-			}catch(Exception e){
+			}
+			catch(Exception e)
+			{
 				Log.WriteLine(e.ToString());
 			    Result = "Unknown command.";
                 return false;

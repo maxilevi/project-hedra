@@ -6,6 +6,7 @@ namespace Hedra.Engine.Game
     public interface IGameProvider
     {
         bool Exists { get; }
+        bool IsExiting { get; }
         KeyboardManager Keyboard { get; }
         IPlayer Player { get; set; }
         bool IsLoading { get; }

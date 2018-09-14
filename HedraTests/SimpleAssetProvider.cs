@@ -54,7 +54,12 @@ namespace HedraTests
 
         public List<CollisionShape> LoadCollisionShapes(string Filename, int Count, Vector3 Scale)
         {
-            return new List<CollisionShape>();
+            var list = new List<CollisionShape>();
+            for (var i = 0; i < Count; i++)
+            {
+                list.Add(new CollisionShape(VertexData.Empty));
+            }
+            return list;
         }
 
         public List<CollisionShape> LoadCollisionShapes(string Filename, Vector3 Scale)

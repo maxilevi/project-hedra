@@ -23,7 +23,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of QuestGenerator.
 	/// </summary>
-	public class WorldBuilding
+	public class WorldBuilding : IWorldBuilding
 	{
 	    private readonly List<IGroundwork> _groundwork;
 	    private readonly List<Plateau> _plateaus;

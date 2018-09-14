@@ -6,6 +6,8 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Input;
@@ -282,6 +284,48 @@ namespace Hedra.Engine.Events
             OnKeyPressedEvent?.Invoke(Sender, E);
 			for(var i = 0;i<EventListeners.Count; i++){
 				EventListeners[i].OnKeyPress(Sender, E);
+			}
+		}
+
+		public static void Clear()
+		{
+			EventListeners.Clear();
+			var keyDownHandlers = HighKeyDownHandlers.Keys
+				.Concat(NormalKeyDownHandlers.Keys)
+				.Concat(LowKeyDownHandlers.Keys).ToArray();
+			
+			var keyUpHandlers = HighKeyUpHandlers.Keys
+				.Concat(NormalKeyUpHandlers.Keys)
+				.Concat(LowKeyUpHandlers.Keys).ToArray();
+			
+			for (var i = 0; i < keyDownHandlers.Length; i++)
+			{
+				UnregisterKeyDown(keyDownHandlers[i]);
+			}
+
+			for (var i = 0; i < keyUpHandlers.Length; i++)
+			{
+				UnregisterKeyUp(keyUpHandlers[i]);
+			}
+
+			foreach (var key in KeyPressedHandlers.Keys)
+			{
+				UnregisterKeyPress(key);
+			}
+			
+			foreach (var key in MouseMoveHandlers.Keys)
+			{
+				UnregisterMouseMove(key);
+			}
+			
+			foreach (var key in MouseButtonDownHandlers.Keys)
+			{
+				UnregisterMouseDown(key);
+			}
+			
+			foreach (var key in MouseButtonUpHandlers.Keys)
+			{
+				UnregisterMouseUp(key);
 			}
 		}
 	}

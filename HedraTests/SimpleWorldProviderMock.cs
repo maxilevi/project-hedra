@@ -27,7 +27,7 @@ namespace HedraTests
         public virtual IBiomePool BiomePool => null;
         public virtual MobFactory MobFactory => null;
         public virtual TreeGenerator TreeGenerator => null;
-        public virtual Hedra.Engine.WorldBuilding.WorldBuilding WorldBuilding => null;
+        public virtual IWorldBuilding WorldBuilding => null;
         public virtual StructureGenerator StructureGenerator => null;
         public virtual int Seed => 0;
         public virtual bool IsGenerated => false;

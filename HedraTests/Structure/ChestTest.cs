@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace HedraTests.Structure
 {
-    [TestFixture]
+    //[TestFixture]
     public class ChestTest : BaseTest
     {
         private Chest _chest;
@@ -17,13 +17,13 @@ namespace HedraTests.Structure
             _chest = new Chest(Vector3.Zero, new Item());
         }
 
-        [Test]
+        //[Test]
         public void TestPickupIsInvoked()
         {
             Assert.Fail();
         }
         
-        [Test]
+        //[Test]
         public void TestCollidersArePlaced()
         {
             Assert.Fail();

@@ -33,6 +33,7 @@ namespace HedraTests
             ColladaLoader.Provider = new SimpleColladaProvider();
             GameManager.Provider = new SimpleGameProviderMock();
             GUIText.Provider = new SimpleTextProviderMock();
+            EventDispatcher.Clear();
         }
 
         [TearDown]

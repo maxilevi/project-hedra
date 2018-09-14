@@ -19,6 +19,7 @@ namespace Hedra.Engine.Game
     public class GameProvider : IGameProvider
     {
         public bool Exists => Program.GameWindow.Exists;
+	    public bool IsExiting => Program.GameWindow.IsExiting;    
         public KeyboardManager Keyboard { get; private set; }
 		public IPlayer Player { get; set; }
 	    public bool IsLoading { get; private set; }

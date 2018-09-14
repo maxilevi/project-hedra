@@ -53,16 +53,14 @@ namespace Hedra.Engine.StructureSystem
             Executer.ExecuteOnMainThread(delegate
             {
                 var treeBoss = BossGenerator.Generate(new [] { MobType.Beetle, MobType.Gorilla }, rng);
-                var prize = new Chest(
+                var chest = World.SpawnChest(
                     Vector3.TransformPosition(Vector3.UnitZ * 10f + Vector3.UnitX * -80f, transMatrix),
                     ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon))
-                );
-                prize.Condition += () => treeBoss == null || treeBoss.IsDead;
-                prize.Rotation = Vector3.UnitY * 90f;
+                    );
+                chest.Condition += () => treeBoss == null || treeBoss.IsDead;
+                chest.Rotation = Vector3.UnitY * 90f;
 
-                treeBoss.Position = prize.Position.Xz.ToVector3() - Vector3.UnitZ * 30f;
-
-                World.AddStructure(prize);
+                treeBoss.Position = chest.Position.Xz.ToVector3() - Vector3.UnitZ * 30f;
             });
             Structure.AddCollisionShape(shapes.ToArray());
             Structure.AddStaticElement(model);

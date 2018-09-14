@@ -20,7 +20,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Update()
         {
-            while (Program.GameWindow.Exists)
+            while (GameManager.Exists && !GameSettings.TestingMode)
             {
                 //Thread.Sleep(SleepTime);
                 if (!IsWorking) continue;
