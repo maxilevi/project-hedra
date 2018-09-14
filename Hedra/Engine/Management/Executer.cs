@@ -23,24 +23,30 @@ namespace Hedra.Engine.Management
 		/// </summary>
 	     public static void ExecuteOnMainThread(Action Func)
 	     {
-            StandBy.Add( new KeyValuePair<Action, Action>(Func, delegate {}) );
+		     lock (_lock)
+				StandBy.Add( new KeyValuePair<Action, Action>(Func, delegate {}) );
 	     }
 	     
 	     public static void ExecuteOnMainThread(Action Func, Action Callback)
 	     {
-            StandBy.Add( new KeyValuePair<Action, Action>(Func, Callback));
+		    lock (_lock)
+				StandBy.Add( new KeyValuePair<Action, Action>(Func, Callback));
 	     }
 
 	    public static void Update()
 	    {
-		    Functions.AddRange(StandBy.ToArray());
-	        for (var i = 0; i < Functions.Count; i++)
+		    lock (_lock)
+		    {
+			    Functions.AddRange(StandBy.ToArray());
+			    StandBy.Clear();
+		    }
+
+		    for (var i = 0; i < Functions.Count; i++)
 	        {
 	            Functions[i].Key();
 	            Functions[i].Value();
 	        }
 		    Functions.Clear();
-		    StandBy.Clear();
 	    }
 	}
 }

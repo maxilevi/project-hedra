@@ -188,7 +188,8 @@ namespace Hedra.Engine.WorldBuilding
 	        return human;
         }
 	    
-	    public Chest SpawnChest(Vector3 Position, Item Item){
+	    public Chest SpawnChest(Vector3 Position, Item Item)
+	    {
 	    	var chest = new Chest(Position, Item);
 	        World.AddStructure(chest);
 	    	return chest;

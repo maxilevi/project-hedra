@@ -23,6 +23,7 @@ namespace HedraTests
         [SetUp]
         public virtual void Setup()
         {
+            GameSettings.TestingMode = true;
             EventProvider = new SimpleEventProvider();
             World.Provider = new SimpleWorldProviderMock();
             EventDispatcher.Provider = EventProvider;

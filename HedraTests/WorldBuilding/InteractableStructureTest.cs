@@ -10,52 +10,87 @@ namespace HedraTests.WorldBuilding
     [TestFixture]
     public class InteractableStructureTest : BaseTest
     {
+        private InteractableStructureMock _structure;
+        private PlayerMock _player;
+        
+        [SetUp]
+        public override void Setup()
+        {
+            base.Setup();
+            _player = new PlayerMock();
+            _structure = new InteractableStructureMock();
+            _structure.Position = new Vector3(300, 0, 500);
+            GameManager.Player = _player;
+            _player.Position = new Vector3(295, 0, 500);
+            _player.CameraMock.LookingDirection = (_structure.Position - _player.Position).NormalizedFast(); 
+        }
+        
         [Test]
         public void TestUsingInteractableStructureWorks()
         {
-            var player = new PlayerMock();
-            var structure = new InteractableStructureMock();
-            structure.Position = new Vector3(300, 0, 500);
-            GameManager.Player = player;
-            var originalLevel = player.Level;
-            player.Position = new Vector3(295, 0, 500);
-            player.CameraMock.LookingDirection = (structure.Position - player.Position).NormalizedFast();
-            
-            structure.Update();
-            Assert.AreEqual("[E] Here is a mock string", player.MessageMock.LastMessage);
-            EventProvider.SimulateKeyDown(structure.Key);
-            structure.Update();
+            var originalLevel = _player.Level;
+            _structure.Update();
+            Assert.AreEqual("[E] Here is a mock string", _player.MessageMock.LastMessage);
+            EventProvider.SimulateKeyDown(_structure.Key);
+            _structure.Update();
            
-            Assert.Greater(player.Level, originalLevel);
-            var newLevel = player.Level;
-            player.MessageMock.Reset();
+            Assert.Greater(_player.Level, originalLevel);
+            var newLevel = _player.Level;
+            _player.MessageMock.Reset();
             
-            structure.Update();
-            EventProvider.SimulateKeyDown(structure.Key);
-            structure.Update();
+            _structure.Update();
+            EventProvider.SimulateKeyDown(_structure.Key);
+            _structure.Update();
             
-            Assert.Null(player.MessageMock.LastMessage);
-            Assert.AreEqual(newLevel, player.Level);
+            Assert.Null(_player.MessageMock.LastMessage);
+            Assert.AreEqual(newLevel, _player.Level);
+        }
+        
+        [Test]
+        public void TestStructureIsNotDisposedWhenSet()
+        {
+            _structure.SetDisposeAfterUse(false);
+            _structure.Update();
+            EventProvider.SimulateKeyDown(_structure.Key);
+            _structure.Update();
+            Assert.True(_structure.Interacted);
+            Assert.False(_structure.Disposed);
+        }
+        
+        [Test]
+        public void TestStructureIsDisposedWhenSet()
+        {
+            _structure.SetDisposeAfterUse(true);
+            _structure.Update();
+            EventProvider.SimulateKeyDown(_structure.Key);
+            _structure.Update();
+            Assert.True(_structure.Interacted);
+            Assert.True(_structure.Disposed);
+        }
+        
+        [Test]
+        public void TestCanInteractIsRespected()
+        {
+            var originalLevel = _player.Level;
+            _structure.SetCanInteract(false);
+            _structure.Update();
+            EventProvider.SimulateKeyDown(_structure.Key);
+            _structure.Update();
+           
+            Assert.AreEqual(_player.Level, originalLevel);
         }
         
         [Test]
         public void TestSelectingStructure()
         {
-            var player = new PlayerMock();
-            var structure = new InteractableStructureMock();
-            structure.Position = new Vector3(300, 0, 500);
-            GameManager.Player = player;
-            player.Mana = -10;
-            player.Position = new Vector3(295, 0, 500);
-            player.CameraMock.LookingDirection = (structure.Position - player.Position).NormalizedFast();
+            _player.Mana = -10;
+            _structure.Update();
+            Assert.AreEqual(10, _player.Mana);
             
-            structure.Update();
-            Assert.AreEqual(10, player.Mana);
+            _player.Position = new Vector3(0, 0, 0);
             
-            player.Position = new Vector3(0, 0, 0);
-            
-            structure.Update();
-            Assert.AreEqual(0, player.Mana);
+            _structure.Update();
+            Assert.AreEqual(0, _player.Mana);
         }
 
         [Test]
@@ -110,9 +145,29 @@ namespace HedraTests.WorldBuilding
 
     class InteractableStructureMock : InteractableStructure
     {
+        private bool _disposeAfterUse;
+        private bool _canInteract;
         public const int StructureInteractionRadius = 25;
         public override string Message => "Here is a mock string";
         public override int InteractDistance => StructureInteractionRadius;
+        protected override bool CanInteract => _canInteract;
+        protected override bool DisposeAfterUse => _disposeAfterUse;
+
+        public InteractableStructureMock() : base()
+        {
+            _disposeAfterUse = base.DisposeAfterUse;
+            _canInteract = base.CanInteract;
+        }
+        
+        public void SetDisposeAfterUse(bool Value)
+        {
+            _disposeAfterUse = Value;
+        }
+        
+        public void SetCanInteract(bool Value)
+        {
+            _canInteract = Value;
+        }
 
         protected override void Interact(IPlayer Interactee)
         {

@@ -7,19 +7,14 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Drawing;
 using OpenTK;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Events;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using OpenTK.Input;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -32,7 +27,8 @@ namespace Hedra.Engine.WorldBuilding
 
 		public override string Message => "INTERACT WITH THE CHEST";
 		public override int InteractDistance => 16;
-	    public override bool DisposeAfterUse => false;
+	    protected override bool DisposeAfterUse => false;
+		protected override bool CanInteract => IsClosed && (Condition?.Invoke() ?? true);
 
 		public Item ItemSpecification { get; set; }
 		public Func<bool> Condition { get; set; }
@@ -112,15 +108,9 @@ namespace Hedra.Engine.WorldBuilding
 
 		protected override void Interact(IPlayer Interactee)
         {
-			if(IsClosed)
-            {		
-				if(Condition != null)
-					if(!Condition()) return;
-				
-				_model.PlayAnimation(_openAnimation);
-			}
+			_model.PlayAnimation(_openAnimation);
 		}
-		
+
 		public bool IsClosed => _model.AnimationPlaying == _idleAnimation;
 
 	    public override Vector3 Position

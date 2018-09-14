@@ -27,7 +27,8 @@ namespace Hedra.Engine.WorldBuilding
 	public abstract class InteractableStructure : BaseStructure, IUpdatable
 	{
 	    public virtual float InteractionAngle => .9f;
-	    public virtual bool DisposeAfterUse => true;
+	    protected virtual bool DisposeAfterUse => true;
+		protected virtual bool CanInteract => true;
         public virtual Key Key => Key.E;
         public abstract string Message { get; }
         public abstract int InteractDistance { get; }
@@ -59,12 +60,12 @@ namespace Hedra.Engine.WorldBuilding
 	        
             bool IsInRadius() => (this.Position - player.Position).LengthSquared < InteractDistance * InteractDistance;
 
-	        if (IsInLookingAngle() && IsInRadius() && !Interacted)
+	        if (IsInLookingAngle() && IsInRadius() && !Interacted && CanInteract)
 	        {
                 player.MessageDispatcher.ShowMessageWhile($"[{Key.ToString()}] {Message}", () => !Disposed && IsInLookingAngle() && IsInRadius());
 	            _canInteract = true;
 		        if(!_selected) this.OnSelected(player);
-	            if (_shouldInteract && !Interacted && !Disposed)
+	            if (_shouldInteract && !Interacted && !Disposed && CanInteract)
 	            {
 					this.InvokeInteraction(player);
                 }
