@@ -129,8 +129,8 @@ namespace Hedra.Engine.EntitySystem
 
 	        if (!Parent.IsGrounded)
 	        {
-	            //if (!Parent.IsUnderwater)
-	            //    Falltime += _deltaTime * 10f / (float)Utils.FrameProccesingTime;
+	            if (!Parent.IsUnderwater)
+	                Falltime += _deltaTime * 10f / (float)Utils.FrameProccesingTime;
 	        }
 	        else
 	        {

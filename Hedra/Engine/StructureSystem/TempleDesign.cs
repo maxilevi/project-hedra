@@ -54,17 +54,6 @@ namespace Hedra.Engine.StructureSystem
                 World.AddStructure(prize);
                // underChunk.AddStaticElement(model);
             });
-
-        }
-
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
-        {
-            var plateau = new Plateau(TargetPosition, Radius);
-
-            World.WorldBuilding.AddPlateau(plateau);
-
-            return new CollidableStructure(this, TargetPosition, plateau);
-
         }
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)

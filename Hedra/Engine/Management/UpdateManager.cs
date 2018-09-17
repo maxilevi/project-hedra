@@ -4,68 +4,77 @@
  * Time: 05:35 p.m.
  *
  */
-using System;
 using System.Collections.Generic;
 using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Scenes;
-using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.Management
 {
 	/// <summary>
 	/// A static class which gathers all update functions
 	/// </summary>
-	/// TODO: impletem update distance
 	public static class UpdateManager
 	{
-		private static readonly List<IUpdatable> UpdateFunctions;
+		private static readonly HashSet<IUpdatable> UpdateFunctions;
+		private static readonly List<IUpdatable> UpdateFunctionsList;
 	    private static readonly TickSystem Ticker;
+		private static bool _isShown = true;
+		private static readonly object Lock = new object();
 
 	    static UpdateManager()
 	    {
-	        UpdateFunctions = new List<IUpdatable>();
+	        UpdateFunctions = new HashSet<IUpdatable>();
+		    UpdateFunctionsList = new List<IUpdatable>();
 	        Ticker = new TickSystem();
-
         }
 
         public static void Add(IUpdatable Updatable)
 	    {
-		    if (Updatable is ITickable tickable)
-	         {
-	            Ticker.Add(tickable);
-                return;
-	         }
-	         UpdateFunctions.Add(Updatable);
-        }
-		
-		public static void Remove(IUpdatable Updatable){
-			if (Updatable is ITickable tickable)
+		    lock (Lock)
 		    {
-		        Ticker.Remove(tickable);
-                return;
+			    if (Updatable is ITickable tickable)
+			    {
+				    Ticker.Add(tickable);
+				    return;
+			    }
+			    UpdateFunctions.Add(Updatable);
+			    UpdateFunctionsList.Add(Updatable);
 		    }
-		    UpdateFunctions.Remove(Updatable);
-        }
+	    }
 		
-		public static bool Contains(IUpdatable Func){
-			return UpdateFunctions.Contains(Func);
+		public static void Remove(IUpdatable Updatable)
+		{
+			lock (Lock)
+			{
+				if (Updatable is ITickable tickable)
+				{
+					Ticker.Remove(tickable);
+					return;
+				}
+				UpdateFunctions.Remove(Updatable);
+				UpdateFunctionsList.Remove(Updatable);
+			}
 		}
-	
 	     
 		public static void Update()
 	    {
-	     	for(int i = UpdateFunctions.Count-1;i>-1;i--)
-	        {
-	     		if(UpdateFunctions[i] == null){
-	     			UpdateFunctions.RemoveAt(i);
-	     			continue;
-	     		}
-	     		
-	     		UpdateFunctions[i].Update();
-	        }
-            Ticker.Tick();
-	     	SkyManager.Update();
-	     }
+		    lock (Lock)
+		    {
+			    for (var i = UpdateFunctionsList.Count - 1; i > -1; i--)
+			    {
+				    if (UpdateFunctionsList[i] == null)
+				    {
+					    UpdateFunctions.Remove(UpdateFunctionsList[i]);
+					    UpdateFunctionsList.RemoveAt(i);
+					    continue;
+				    }
+
+				    UpdateFunctionsList[i].Update();
+			    }
+
+			    Ticker.Tick();
+			    SkyManager.Update();
+		    }
+	    }
 	  	
 		public static void CenterMouse()
 		{
@@ -74,11 +83,10 @@ namespace Hedra.Engine.Management
 
 	    public static CursorState CursorState { get; set; }
 
-	    private static bool _isShown = true;
 	    public static bool CursorShown
 	    {
-	        get{return _isShown;}
-	        set
+	        get => _isShown;
+		    set
 	        {
 	            if (value == _isShown)
 	            {

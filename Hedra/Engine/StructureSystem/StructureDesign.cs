@@ -8,6 +8,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -19,7 +20,18 @@ namespace Hedra.Engine.StructureSystem
 
         public abstract void Build(CollidableStructure Structure);
 
-        protected abstract CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng);
+        protected virtual CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
+        {
+            var plateau = new Plateau(TargetPosition, Radius);
+            World.WorldBuilding.AddPlateau(plateau);
+            return new CollidableStructure(this, TargetPosition, plateau);
+        }
+
+        private bool CanSetup(Vector3 TargetPosition)
+        {
+            var plateau = new Plateau(TargetPosition, Radius);
+            return World.WorldBuilding.CanAddPlateau(plateau);
+        }
 
         public void CheckFor(Vector2 ChunkOffset, Region Biome)
         {
@@ -35,7 +47,8 @@ namespace Hedra.Engine.StructureSystem
                     
                     if (this.ShouldSetup(offset, targetPosition, items, Biome, rng))
                     {
-                        var item = this.Setup(targetPosition, offset, Biome, rng);
+                        if (!CanSetup(targetPosition)) continue;
+                        var item = this.Setup(targetPosition, rng);
                         if (item == null) continue;
                         World.StructureGenerator.AddStructure(item);
                         World.StructureGenerator.Build(item);

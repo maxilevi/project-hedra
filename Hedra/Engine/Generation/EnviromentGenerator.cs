@@ -32,7 +32,7 @@ namespace Hedra.Engine.Generation
             if (underChunk == null) return;
 
             Random rng = underChunk.Landscape.RandomGen;
-            Matrix4 transMatrix =  Design.TransMatrix(Position, rng);
+            Matrix4 transMatrix = Design.TransMatrix(Position, rng);
 
             if(transMatrix == Matrix4.Identity) return;
 

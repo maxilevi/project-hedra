@@ -1,12 +1,6 @@
-﻿using System;
-using System.Drawing;
-using Hedra.Engine.EntitySystem;
+﻿using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Sound;
-using OpenTK;
+
 
 namespace Hedra.Engine.AISystem.Behaviours
 {

@@ -46,8 +46,6 @@ namespace Hedra.Engine.WorldBuilding
         public Chest(Vector3 Position, Item ItemSpecification)
         {
 			this._model = AnimationModelLoader.LoadEntity("Assets/Chr/ChestIdle.dae");
-	        this.ItemSpecification = ItemSpecification;
-	        this.Position = Position;
 			this._idleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestIdle.dae");
 			this._openAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestOpen.dae");		
 			this._openAnimation.Loop = false;
@@ -65,14 +63,19 @@ namespace Hedra.Engine.WorldBuilding
 			this._model.PlayAnimation(_idleAnimation);
 			this._model.Scale = Vector3.One * 3.5f;
 			this._model.ApplyFog = true;
+	        this.ItemSpecification = ItemSpecification;
+	        this.Position = Position;
 		}
 
 		public override void Update()
         {
 	        base.Update();
-			this._model.Update();
-	        this.HandleColliders();
-		}
+	        if (_model != null)
+	        {
+		        _model.Update();
+		        HandleColliders();
+	        }
+        }
 
 		protected override void OnSelected(IPlayer Interactee)
 		{
@@ -92,7 +95,7 @@ namespace Hedra.Engine.WorldBuilding
 			if (underChunk != null && underChunk.BuildedWithStructures && _underChunk != underChunk)
 			{
 				_underChunk = underChunk;
-				Position = new Vector3(Position.X, Physics.HeightAtPosition(Position), Position.Z);
+				Position = new Vector3(Position.X, Physics.HeightAtPosition(Position) + .5f, Position.Z);
 
 				var shape = DefaultShape.Clone() as CollisionShape;
 			    shape.Transform(Matrix4.CreateScale(this.Scale));
@@ -115,11 +118,11 @@ namespace Hedra.Engine.WorldBuilding
 
 	    public override Vector3 Position
         {
-			get => _model.Position;
+			get => base.Position;
 	        set
 	        {
                 if(value == this.Position) return;
-
+	            base.Position = value;
 	            this._model.Position = value;
 	        }
 		}

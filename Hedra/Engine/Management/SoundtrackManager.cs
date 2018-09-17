@@ -80,7 +80,8 @@ namespace Hedra.Engine.Management
 	        };
             ShuffleSongs();
 
-            for (var i = 0; i < TrackNames.Length; i++){
+            for (var i = 0; i < TrackNames.Length; i++)
+            {
 				if(TrackNames[i] == null)
 					throw new ArgumentException("Array cannot contain null values");
 			}
@@ -124,7 +125,7 @@ namespace Hedra.Engine.Management
 	    private static void StartCurrentSong()
 	    {
 		    if(!_loaded) return;
-            if(_previousIndex != TrackIndex)//Song is looping, no interpolation
+            if(_previousIndex != TrackIndex)// Song is looping, no interpolation
                 _sleepTime = true;
 	        _usedBuffer = null;
 	        _buildBuffers = true;
@@ -155,7 +156,7 @@ namespace Hedra.Engine.Management
 		        _targetVolume = Volume;
 		        _sleepTime = false;
 		    }
-            FinalVolume = Mathf.Lerp(FinalVolume, _targetVolume, (float)Time.IndependantDeltaTime);
+            FinalVolume = Mathf.Lerp(FinalVolume, _targetVolume, Time.IndependantDeltaTime);
 
             PLAY:
 

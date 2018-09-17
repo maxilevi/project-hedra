@@ -5,6 +5,7 @@
  *
  */
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
@@ -20,47 +21,52 @@ namespace Hedra.Engine.Management
 	/// </summary>
 	public static class DrawManager
 	{
-		private static readonly List<IRenderable> DrawFunctions = new List<IRenderable>();
-		public static List<IRenderable> ParticleRenderer = new List<IRenderable>();
-	    public static List<IRenderable> TrailRenderer = new List<IRenderable>();
-        public static MainFBO MainBuffer;
-		public static GUIRenderer UIRenderer = new GUIRenderer();
-		public static FrustumCulling FrustumObject = new FrustumCulling();
-		public static DropShadowRenderer DropShadows = new DropShadowRenderer();
-		public static Cursor MouseCursor;
-		public static int CullableObjectsCount;
-		public static int CulledObjectsCount;
-		public static int DrawCalls;
-		public static int VertsCount;
-	    private static bool _initialized;
+		private static readonly object Lock = new object();
+		private static readonly HashSet<IRenderable> DrawFunctionsSet;
+		private static readonly List<IRenderable> DrawFunctions;
+		private static bool _initialized;
+		private static Cursor _mouseCursor;
+		
+		public static List<IRenderable> ParticleRenderer { get; }
+	    public static List<IRenderable> TrailRenderer { get; }
+		public static GUIRenderer UIRenderer { get; }
+		public static FrustumCulling FrustumObject { get; }
+		public static DropShadowRenderer DropShadows { get; }
+		public static int CullableObjectsCount { get; private set; }
+		public static int CulledObjectsCount { get; private set; }
+		public static int DrawCalls { get; private set; }
+		public static int VertsCount { get; private set; }
+		public static MainFBO MainBuffer { get; private set; }
 
-        public static void Add(IRenderable a)
-	     {
-			
-			lock(DrawFunctions)
-				DrawFunctions.Add(a);
-			
-			CullableObjectsCount = 0;
-			lock (DrawFunctions)
+		static DrawManager()
+		{
+			DrawFunctionsSet = new HashSet<IRenderable>();
+			DrawFunctions = new List<IRenderable>();
+			ParticleRenderer = new List<IRenderable>();
+			TrailRenderer = new List<IRenderable>();
+			UIRenderer = new GUIRenderer();
+			FrustumObject = new FrustumCulling();
+			DropShadows = new DropShadowRenderer();
+		}
+
+		public static void Add(IRenderable Renderable)
+		{
+			lock (Lock)
 			{
-			    for(int i = 0; i < DrawFunctions.Count; i++)
-                {
-			        if(DrawFunctions[i] is ICullable)
-			            CullableObjectsCount++;
-			    }
+				DrawFunctionsSet.Add(Renderable);
+				DrawFunctions.Add(Renderable);
+				CullableObjectsCount = DrawFunctions.Sum(D => D is ICullable ? 1 : 0);
 			}
-	     }
-		
-		public static void Remove(IRenderable a)
-        {
-			lock(DrawFunctions)
-				DrawFunctions.Remove(a);
 		}
 		
-		public static bool Contains(IRenderable a)
+		public static void Remove(IRenderable Renderable)
         {
-			return DrawFunctions.Contains(a);
-		}
+	        lock (Lock)
+	        {
+		        DrawFunctionsSet.Remove(Renderable);
+		        DrawFunctions.Remove(Renderable);
+	        }
+        }
 		
 		public static void BulkDraw()
         {
@@ -68,31 +74,31 @@ namespace Hedra.Engine.Management
 			World.CullTest(FrustumObject);
 			World.Draw(WorldRenderType.Static);
 			DropShadows.Draw();
-			
-	    	IRenderable[] draws;
-	    	lock(DrawFunctions)
-	    		draws = DrawFunctions.ToArray();
-	    	
+
 	    	var drawedObjects = 0;
 	    	var drawedCullableObjects = 0;
-			for(var i = 0; i < draws.Length; i++)
-			{
-			    if (draws[i] == null) continue;
+	        lock (Lock)
+	        {
+		        for (var i = DrawFunctions.Count-1; i > -1; i--)
+		        {
+			        if (DrawFunctions[i] == null) continue;
 
-			    if (draws[i] is ICullable cullable)
-			    {
-			        if (!FrustumObject.IsInsideFrustum(cullable)) continue;
-			        draws[i].Draw();
-			        drawedObjects++;
-			        drawedCullableObjects++;
-			    }
-			    else
-			    {
-			        draws[i].Draw();
-			        drawedObjects++;
-                }
-			}
-			Renderer.Enable(EnableCap.DepthTest);
+			        if (DrawFunctions[i] is ICullable cullable)
+			        {
+				        if (!FrustumObject.IsInsideFrustum(cullable)) continue;
+				        DrawFunctions[i].Draw();
+				        drawedObjects++;
+				        drawedCullableObjects++;
+			        }
+			        else
+			        {
+				        DrawFunctions[i].Draw();
+				        drawedObjects++;
+			        }
+		        }
+	        }
+
+	        Renderer.Enable(EnableCap.DepthTest);
 			World.Draw(WorldRenderType.Water);
 		    for (var i = TrailRenderer.Count - 1; i > -1; i--)
 		    {
@@ -102,8 +108,7 @@ namespace Hedra.Engine.Management
             {
 				ParticleRenderer[i].Draw();
 			}
-
-			
+	
 			var worldCalls = 3;//Water + Static + Shadows
 			int dropShadowCalls = DropShadows.Count;//Ideally
 			CulledObjectsCount = CullableObjectsCount - drawedCullableObjects;
@@ -126,7 +131,6 @@ namespace Hedra.Engine.Management
 	    	MainBuffer.Clear();
 	    	
 	    	#if DEBUG
-	    	//if(GameSettings.DebugView)
             {
 		    	ErrorCode code = Renderer.GetError();
 		    	if(code != ErrorCode.NoError)
@@ -146,16 +150,9 @@ namespace Hedra.Engine.Management
 
 	    public static void Dispose()
 	    {
-            MouseCursor?.Dispose();
+            _mouseCursor?.Dispose();
 	        MainBuffer.Dispose();
 	        UIRenderer.Dispose();
         }
 	}
-}
-
-
-public enum DrawPriority{
-	LOW,
-	NORMAL,
-	HIGH,
 }

@@ -142,11 +142,9 @@ namespace Hedra.Engine.StructureSystem
             });
         }
 
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
-            var plateau = new Plateau(TargetPosition, Radius);
-            World.WorldBuilding.AddPlateau(plateau);
-
+            var structure = base.Setup(TargetPosition, Rng);
             var scaleMatrix = Matrix4.CreateScale(3 + Rng.NextFloat() * 1.5f);
             var tents = this.SetupTents(TargetPosition, scaleMatrix, Rng);         
 
@@ -155,7 +153,6 @@ namespace Hedra.Engine.StructureSystem
                 World.WorldBuilding.AddGroundwork(new RoundedGroundwork(tents[i].WorldPosition, 16f));
             }
 
-            var structure = new CollidableStructure(this, TargetPosition, plateau);
             structure.Parameters.Set("TentParameters", tents);
             structure.Parameters.Set("ScaleMatrix", scaleMatrix);
             return structure;

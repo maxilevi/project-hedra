@@ -42,13 +42,13 @@ namespace Hedra.Engine.StructureSystem
             Executer.ExecuteOnMainThread(() => World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, position));
         }
 
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             World.StructureGenerator.MerchantSpawned = true;
             World.StructureGenerator.MerchantPosition = TargetPosition;
-            var plateau = new Plateau(TargetPosition, 48);
-            World.WorldBuilding.AddPlateau(plateau);
-            return new CollidableStructure(this, TargetPosition, plateau);
+            var structure = base.Setup(TargetPosition, Rng);
+            structure.Mountain.Radius = 48;
+            return structure;
         }
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)

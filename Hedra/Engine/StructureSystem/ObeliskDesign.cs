@@ -62,18 +62,16 @@ namespace Hedra.Engine.StructureSystem
             World.AddStructure(obelisk);
         }
 
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
-            var plateau = new Plateau(TargetPosition, 32);
-            World.WorldBuilding.AddPlateau(plateau);
-            return new CollidableStructure(this, TargetPosition, plateau);
+            var structure = base.Setup(TargetPosition, Rng);
+            structure.Mountain.Radius = 32;
+            return structure;
         }
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
-
+            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
             return Rng.Next(0, 10) == 1 && height > 0;
         }
     }

@@ -56,6 +56,7 @@ namespace Hedra.Engine
         {
             try
             {
+                Log.WriteLine("Attemping to load sound engine...");
                 SoundManager.Load();
                 SoundtrackManager.Load();
                 Log.WriteLine("Sound engine loaded succesfully");

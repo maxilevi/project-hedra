@@ -72,20 +72,21 @@ namespace Hedra.Engine.Generation
 		    if (Vector3.Dot(normal, Vector3.UnitY) <= .2f)
                 return;
 
-            //Insert item at the start
-            for (int i = _previousTrees.Length-1; i > 0; i--)
+            for (var i = _previousTrees.Length-1; i > 0; i--)
 		    {
 		        _previousTrees[i] = _previousTrees[i - 1];
 		    }
 		    _previousTrees[0] = Position;
 			
-			for(int x = -2; x < 2; x++){
-				for(int z = -2; z < 2; z++){
-					float bDens = Physics.HeightAtPosition(
+			for(var x = -2; x < 2; x++)
+			{
+				for(var z = -2; z < 2; z++)
+				{
+					var bDens = Physics.HeightAtPosition(
                         new Vector3( (blockSpace.X+ x) * Chunk.BlockSize + underChunk.OffsetX, 0, (blockSpace.Z+ z) * Chunk.BlockSize + underChunk.OffsetZ)
                         );
 
-					float difference = Math.Abs(bDens - height);
+					var difference = Math.Abs(bDens - height);
 
 					if(difference > 10)
 						return;

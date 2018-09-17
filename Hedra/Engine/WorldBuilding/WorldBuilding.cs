@@ -38,28 +38,60 @@ namespace Hedra.Engine.WorldBuilding
 
 	    public bool CanAddPlateau(Plateau Mount)
 	    {
-	        lock (_plateauLock)
-	        {
-	            for (var i = 0; i < _plateaus.Count; i++)
-	            {
-	                if (_plateaus[i].Collides(Mount) && Math.Abs(_plateaus[i].MaxHeight - Mount.MaxHeight) > 2.0f)
-	                {
-	                    return false;
-	                }
-	            }
-	            return true;
-	        }
-        }
+			lock (_plateauLock)
+			{
+				for (var i = 0; i < _plateaus.Count; i++)
+				{
+					if (_plateaus[i].Collides(Mount) && Math.Abs(_plateaus[i].MaxHeight - Mount.MaxHeight) > 2.0f)
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+	    }
 
 	    public void AddPlateau(Plateau Mount)
 	    {
-	        lock (_plateauLock)
+	        try
 	        {
-                _plateaus.Add(Mount);
+	            lock (_plateauLock)
+	            {
+	                _plateaus.Add(Mount);
+	            }
+	        }
+	        finally
+	        {
+	            this.SortPlateaus();
 	        }
 	    }
 
-	    public void AddGroundwork(IGroundwork Work)
+	    private void SortPlateaus()
+	    {
+	        // Plateaus should be clamped to the lowest one
+	        /*lock (_plateauLock)
+	        {
+		        var doneSet = new HashSet<Plateau>();
+		        for (var i = 0; i < _plateaus.Count; i++)
+		        {
+			        var intersecting = new List<Plateau>();
+			        for (var j = 0; j < _plateaus.Count; j++)
+			        {
+                        if(_plateaus[j] == _plateaus[i]) continue;
+						if(!doneSet.Contains(_plateaus[j]) && (_plateaus[j].Position - _plateaus[i].Position).LengthFast < _plateaus[i].Radius + _plateaus[j].Radius)
+							intersecting.Add(_plateaus[j]);
+			        }
+			        var lowest = intersecting.OrderByDescending(P => P.Radius).ToArray();
+			        for (var j = 0; j < intersecting.Count; j++)
+			        {
+				       // _plateaus[j].MaxHeight = lowest[0].MaxHeight;
+				        doneSet.Add(_plateaus[j]);
+			        }
+		        }
+	        }*/
+	    }
+
+        public void AddGroundwork(IGroundwork Work)
 	    {
 	        lock (_groundworkLock)
 	        {

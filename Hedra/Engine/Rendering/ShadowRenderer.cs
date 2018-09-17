@@ -85,7 +85,7 @@ namespace Hedra.Engine.Rendering
 		
 		public static void SetQuality(int Quality)
         {
-
+			Log.WriteLine($"Setting shadow quality to {Quality}");
 		    ShadowFbo?.Dispose();
 
 		    if(Quality == 2 || Quality == 1)

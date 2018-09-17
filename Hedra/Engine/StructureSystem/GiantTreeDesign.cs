@@ -44,8 +44,8 @@ namespace Hedra.Engine.StructureSystem
             }
             model.GraduateColor(Vector3.UnitY);
 
-            List<CollisionShape> shapes = CacheManager.GetShape(originalModel).DeepClone();
-            for (int i = 0; i < shapes.Count; i++)
+            var shapes = CacheManager.GetShape(originalModel).DeepClone();
+            for (var i = 0; i < shapes.Count; i++)
             {
                 shapes[i].Transform(scaleMatrix * transMatrix);
             }
@@ -64,16 +64,6 @@ namespace Hedra.Engine.StructureSystem
             });
             Structure.AddCollisionShape(shapes.ToArray());
             Structure.AddStaticElement(model);
-        }
-
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Vector2 NewOffset, Region Biome, Random Rng)
-        {
-            var plateau = new Plateau(TargetPosition, Radius);
-
-            World.WorldBuilding.AddPlateau(plateau);
-
-            return new CollidableStructure(this, TargetPosition, plateau);
-            
         }
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
