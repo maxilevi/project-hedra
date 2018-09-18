@@ -81,10 +81,10 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             double lakeHeight = Mathf.Clamp((OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001) - .4f) * 48.0, 0, 32);
             // Height -= LakeHeight * 4;	
 
-            height += Mathf.Clamp(OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001) * 64.0, 0, float.MaxValue);
-            height += OpenSimplexNoise.Evaluate(X * 0.01, Z * 0.01) * 2.0;
+            //height += Mathf.Clamp(OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001) * 64.0, 0, float.MaxValue);
+            //height += OpenSimplexNoise.Evaluate(X * 0.01, Z * 0.01) * 2.0;
 
-            height += OpenSimplexNoise.Evaluate(X * 0.02, Z * 0.02) * 1.5;
+            //height += OpenSimplexNoise.Evaluate(X * 0.02, Z * 0.02) * 1.5;
             //Small Frequency
             height += BiomeGenerator.SmallFrequency(X, Z);
 

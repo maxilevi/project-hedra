@@ -53,7 +53,6 @@ namespace Hedra.Engine.EntitySystem
 		/// If collides with other entities
 		/// </summary>
 		public bool HasCollision = true;
-		public float BaseHeight = .0f;
 		
 		private Chunk _underChunk, _underChunkR, _underChunkL, _underChunkF, _underChunkB;
 		private readonly List<ICollidable> _collisions = new List<ICollidable>();

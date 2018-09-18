@@ -22,10 +22,9 @@ namespace Hedra.Engine.Game
 	    public bool IsExiting => Program.GameWindow.IsExiting;    
         public KeyboardManager Keyboard { get; private set; }
 		public IPlayer Player { get; set; }
-	    public bool IsLoading { get; private set; }
-		
-        private Texture _loadingScreen;
-	    private GUIText _playerText;
+	    public bool IsLoading => _loadingScreen?.IsLoading ?? false;
+
+	    private LoadingScreen _loadingScreen;
 	    private bool _isNewRun;
 	    private bool _spawningEffect;
 
@@ -43,15 +42,9 @@ namespace Hedra.Engine.Game
 			Player.UI.Menu.Enable();
 			
 			Log.WriteLine("Setted up GUI");
+			_loadingScreen = new LoadingScreen(Player);
 
 			Player.Enabled = false;
-			_loadingScreen = new Texture(Color.FromArgb(255, 30, 30, 30), Color.FromArgb(255, 60, 60, 60),
-                Vector2.Zero, Vector2.One, GradientType.Diagonal);
-		    _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, 
-			    FontCache.Get(AssetManager.NormalFamily, 15, FontStyle.Bold));
-			_loadingScreen.TextureElement.Opacity = 0;
-			_playerText.UIText.Opacity = 0;
-			CoroutineManager.StartCoroutine(LoadingScreenCoroutine);
 			LoadMenu();
 		}
 
@@ -62,6 +55,7 @@ namespace Hedra.Engine.Game
 	        SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
             CoroutineManager.StartCoroutine(MenuCoroutine);
             Player.Reset();
+	        _loadingScreen.Show();
         }
 		
 		private IEnumerator MenuCoroutine()
@@ -84,7 +78,6 @@ namespace Hedra.Engine.Game
             Player.Class = Information.Class;
 	        Player.Level = Information.Level;
 	        Player.Speed = Player.BaseSpeed;
-			Player.Physics.BaseHeight = 0;
 			Player.Name = Information.Name;
 			Player.XP = Information.Xp;
 			Player.Mana = Information.Mana;
@@ -149,50 +142,19 @@ namespace Hedra.Engine.Game
 			_isNewRun = true;
 			Player.MessageDispatcher.ShowMessageWhile("[F4] HELP", () => !LocalPlayer.Instance.UI.ShowHelp);
 		}
-
-	    private IEnumerator LoadingScreenCoroutine()
-	    {
-		    var time = 0f;
-		    var text = "LOADING";
-		    while (Exists)
-		    {
-			    yield return null;
-			    if (IsLoading)
-			    {
-				    time += Time.IndependantDeltaTime;
-				    if (time >= .5f)
-				    {
-					    text += ".";
-					    time = 0;
-					    if (text.Contains("...."))
-						    text = "LOADING";
-				    }
-				    _playerText.Text = text;
-				    _loadingScreen.TextureElement.Opacity = 1;
-				    _playerText.UIText.Opacity = 1;
-                    _playerText.Enable();
-                    _loadingScreen.Enable();
-			    }
-			    else
-			    {
-				    _loadingScreen.TextureElement.Opacity = 0;
-				    _playerText.UIText.Opacity = 0;
-			    }
-		    }
-	    }
 	    
 	    private IEnumerator SpawnCoroutine()
 	    {
+		    _loadingScreen.Show();
 		    SoundtrackManager.PlayTrack(SoundtrackManager.LoopableSongsStart);
 		    GameManager.Player.UI.HideMenu();
 		    Player.UI.GamePanel.Disable();
 		    Player.Chat.Show = false;
-		    IsLoading = true;
 		    Player.SearchComponent<DamageComponent>().Immune = true;
 
-		    var chunkOffset = World.ToChunkSpace(LocalPlayer.Instance.BlockPosition);
+		    var chunkOffset = World.ToChunkSpace(Player.BlockPosition);
 		    World.StructureGenerator.CheckStructures(chunkOffset);
-		    while (!IsLoaded(chunkOffset))
+		    while (_loadingScreen.IsLoading)
 		    {
 			    Player.Physics.TargetPosition = new Vector3(
 				    Player.Physics.TargetPosition.X,
@@ -206,34 +168,13 @@ namespace Hedra.Engine.Game
 		    Player.UI.GamePanel.Enable();
 		    Player.Chat.Show = true;
 		    Player.Chat.LoseFocus();
-		    IsLoading = false;
 		    GameManager.SpawningEffect = true;
 		    Player.Model.ApplyFog = true;
 		    Player.CanInteract = true;
 		    Player.QuestLog.Show = true;
 		    GameManager.Player.PlaySpawningAnimation = true;
 		    GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);
-	    }
-
-	    private static bool IsLoaded(Vector2 Offset)
-	    {
-		    var minRange = -1;
-		    var maxRange = 2;
-		    #if DEBUG
-		    minRange = 0;
-		    maxRange = 1;
-		    #endif
-		    for (var x = minRange; x < maxRange; x++)
-		    {
-			    for (var z = minRange; z < maxRange; z++)
-			    {
-				    var chunk = World.GetChunkByOffset((int) Offset.X + x * Chunk.Width, (int) Offset.Y + z * Chunk.Width);
-				    if (!chunk?.BuildedWithStructures ?? true)
-					    return false;
-			    } 
-		    }
-
-		    return true;
+		    
 	    }
 
 	    public bool InStartMenu => World.Seed == World.MenuSeed;

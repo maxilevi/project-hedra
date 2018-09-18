@@ -23,7 +23,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class Chunk : IDisposable
     {
-        public static int BaseHeight { get; } = 24;
+        public static int BaseHeight { get; } = 0;
         public static float BlockSize { get; } = 4.0f;
         public static int Height { get; } = 160;
         public static int Width { get; } = 128;

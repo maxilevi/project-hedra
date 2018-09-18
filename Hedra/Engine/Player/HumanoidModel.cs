@@ -128,7 +128,7 @@ namespace Hedra.Engine.Player
 			
 			Model = AnimationModelLoader.LoadEntity(Template.Path);
 
-            Model.Scale = DefaultScale * new Vector3(1, 1.15f, 1) * Template.Scale * .25f;
+            Model.Scale = DefaultScale * new Vector3(1, 1.15f, 1) * Template.Scale;
 			LeftWeaponJoint = Model.RootJoint.GetChild("Hand_L");
 			RightWeaponJoint = Model.RootJoint.GetChild("Hand_R");
 			ChestJoint = Model.RootJoint.GetChild("Chest");

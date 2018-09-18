@@ -61,7 +61,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private IEnumerator UpdateCoroutine()
         {
-            while (Program.GameWindow.Exists)
+            while (GameManager.Exists)
             {
 
                 Offset = World.ToChunkSpace(_player.BlockPosition);
@@ -76,7 +76,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             yield return null;
                             var radiusOffset = new Vector2(x, z);
                             if (radiusOffset.LengthSquared > radius * radius) continue;
-                            Vector2 chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
+                            var chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
                             if (World.GetChunkByOffset(chunkPos) != null) continue;
                             var chunk = new Chunk((int) chunkPos.X, (int) chunkPos.Y);
                             World.AddChunk(chunk);
