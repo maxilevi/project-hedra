@@ -73,7 +73,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     {
                         for (var z = -radius; z < radius; z++)
                         {
-                            yield return null;
                             var radiusOffset = new Vector2(x, z);
                             if (radiusOffset.LengthSquared > radius * radius) continue;
                             var chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
@@ -81,11 +80,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             var chunk = new Chunk((int) chunkPos.X, (int) chunkPos.Y);
                             World.AddChunk(chunk);
                             var watcher = new ChunkWatcher(chunk);
-                            watcher.OnChunkReady += (O) => OnChunkReady?.Invoke(O);
+                            watcher.OnChunkReady += O => OnChunkReady?.Invoke(O);
                             _chunkWatchers.Add(watcher);
                         }
                     }
                 }
+                yield return null;
                 var newTarget = 0;
                 for (var i = _chunkWatchers.Count - 1; i > -1; i--)
                 {

@@ -27,7 +27,7 @@ namespace Hedra.Engine.Loader
         {
             _debugPanel = new Panel();
 			
-            _debugText = new GUIText(string.Empty, new Vector2(.7f,-.7f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+            _debugText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
 	        _geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
 	        _debugPanel.AddElement(_debugText);
 	        _debugPanel.AddElement(_geomPoolMemory);
@@ -52,17 +52,17 @@ namespace Hedra.Engine.Loader
 				var underChunk = World.GetChunkByOffset(chunkSpace);
 				var text = $"X = {(int)player.BlockPosition.X} Y = {(int)(player.BlockPosition.Y)} Z={(int)player.BlockPosition.Z}";
 				text += 
-					$"\nChunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
+					$"\n\nChunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
 				text += 
-					$"\nLights={ShaderManager.UsedLights}/{ShaderManager.MaxLights}Pitch={player.View.Pitch}";
+					$"\n\nLights={ShaderManager.UsedLights}/{ShaderManager.MaxLights}Pitch={player.View.Pitch}";
 				text += 
-					$"\nMesh Queue = {World.MeshQueueCount} Cache={CacheManager.CachedColors.Count} | {CacheManager.CachedExtradata.Count} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00}";
+					$"\n\nMesh Queue = {World.MeshQueueCount} Cache={CacheManager.CachedColors.Count} | {CacheManager.CachedExtradata.Count} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00}";
 				text += 
-					$"\nGeneration Queue ={World.ChunkQueueCount} Mobs={World.Entities.Count} Yaw={player.View.TargetYaw}";
+					$"\n\nGeneration Queue ={World.ChunkQueueCount} Mobs={World.Entities.Count} Yaw={player.View.TargetYaw}";
 				text += 
-					$"\nTextures ={Graphics2D.Textures.Count} Seed={World.Seed} FPS={Utils.LastFrameRate} MS={Utils.FrameProccesingTime}";
+					$"\n\nTextures ={Graphics2D.Textures.Count} Seed={World.Seed} FPS={Utils.LastFrameRate} MS={Utils.FrameProccesingTime}";
 				text +=
-					$"\nCulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount} Pitch={player.View.TargetPitch} Physics.Calls={Physics.Threading.Count}";
+					$"\n\nCulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount} Pitch={player.View.TargetPitch} Physics.Calls={Physics.Threading.Count}";
 
 				_debugText.Text = text;
 			    _passedTime += Time.IndependantDeltaTime;

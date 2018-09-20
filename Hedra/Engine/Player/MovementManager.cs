@@ -91,8 +91,9 @@ namespace Hedra.Engine.Player
 	    public void Orientate()
 	    {
 	        Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, Human.FacingDirection.Y, Human.Model.TargetRotation.Z);
-	        var realAngle = (-Human.FacingDirection.Y+90) / Mathf.Degree;
-            Human.Orientation = new Vector3((float) Math.Cos(realAngle), 0, (float) Math.Sin(realAngle));
+	        var inRadians = Human.Model.Rotation.Y * Mathf.Radian;
+	        // There seems to be a bug in how we store the rotations so be switch the sines
+            Human.Orientation = new Vector3((float) Math.Sin(inRadians), 0, (float) Math.Cos(inRadians));
         }
 
         public void Move(Vector3 Position, float Seconds, bool Orientate = true)

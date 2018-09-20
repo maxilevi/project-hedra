@@ -58,7 +58,7 @@ namespace Hedra.Engine.WorldBuilding
         protected override void OnDamageEvent(DamageEventArgs Args)
         {
             base.OnDamageEvent(Args);
-            if (Args.Damager == null) return;
+            if (!(Args.Damager is LocalPlayer)) return;
             this.SetTarget(Args.Damager);
         }
 
