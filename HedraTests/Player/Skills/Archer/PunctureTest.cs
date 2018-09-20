@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace HedraTests.Player.Skills.Archer
 {
-    [TestFixture]
+    //[TestFixture]
     public class PunctureTest : SkillTest<Puncture>
     {
         private Bow _bow;

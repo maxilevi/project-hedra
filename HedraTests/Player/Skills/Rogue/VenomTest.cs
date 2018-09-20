@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace HedraTests.Player.Skills.Rogue
 {
-    [TestFixture]
+    /*[TestFixture]
     public class VenomTest : SkillTest<Venom>
     {
 
@@ -31,5 +31,5 @@ namespace HedraTests.Player.Skills.Rogue
         {
             
         }
-    }
+    }*/
 }
