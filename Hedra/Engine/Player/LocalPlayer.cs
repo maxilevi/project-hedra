@@ -23,6 +23,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
+using Hedra.Engine.Player.BoatSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.StructureSystem;
@@ -36,6 +37,7 @@ namespace Hedra.Engine.Player
 		public ICamera View { get; }
 		public ChunkLoader Loader { get; }
 		public UserInterface UI { get; set; }
+		public IBoat Boat { get; }
 		public IPlayerInventory Inventory { get; }
 		public EntitySpawner Spawner { get; }
 		public IToolbar Toolbar { get; }
@@ -85,6 +87,7 @@ namespace Hedra.Engine.Player
             this.Movement = new PlayerMovement(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
 	        this.StructureAware = new StructureAware(this);
+	        this.Boat = new Boat(this);
             this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
 			this.Physics.CanCollide = true;
 			this.AttackSpeed = 0.75f;
@@ -319,6 +322,7 @@ namespace Hedra.Engine.Player
 			Chat.Update();
 			Map.Update();
 			Trade.Update();
+	        Boat.Update();
             View.Update();
         }
 
@@ -511,16 +515,19 @@ namespace Hedra.Engine.Player
 		
 		public static bool CreatePlayer(string Name, HumanoidModel PreviewModel, ClassDesign ClassType)
         {
-			if(Name == string.Empty){
-				Instance.MessageDispatcher.ShowNotification("Name cannot be empty", Color.DarkRed, 3f);
+			if(Name == string.Empty)
+			{
+				Instance.MessageDispatcher.ShowNotification("Name cannot be empty", Color.Red, 3f);
 				return false;
 			}
-			if(DataManager.CharacterCount >= 3){
-			    Instance.MessageDispatcher.ShowNotification("You cannot have more than 3 characters", Color.DarkRed, 3f);
+			if(DataManager.CharacterCount >= 3)
+			{
+			    Instance.MessageDispatcher.ShowNotification("You cannot have more than 3 characters", Color.Red, 3f);
 				return false;
 			}
-			if(Name.Length > 12){
-			    Instance.MessageDispatcher.ShowNotification("Name cannot be that long", Color.DarkRed, 3f);
+			if(Name.Length > 12)
+			{
+			    Instance.MessageDispatcher.ShowNotification("Name cannot be that long", Color.Red, 3f);
 				return false;
 			}
 		    var data = new PlayerInformation

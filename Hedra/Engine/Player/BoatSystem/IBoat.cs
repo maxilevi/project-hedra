@@ -2,6 +2,7 @@
 {
     public interface IBoat
     {
-        
+        void Update();
+        bool Enabled { get; }
     }
 }

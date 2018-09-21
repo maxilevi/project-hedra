@@ -178,8 +178,8 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (Item.IsEquipment)
             {
-                GameManager.Player.MessageDispatcher.ShowNotification("YOU HAVEN'T LEARNED TO USE THAT TYPE OF EQUIPMENT",
-                    System.Drawing.Color.DarkRed, 2f, true);
+                GameManager.Player.MessageDispatcher.ShowNotification("YOU HAVEN'T LEARNED TO\nUSE THAT TYPE OF EQUIPMENT",
+                    System.Drawing.Color.Red, 2f, true);
             }
         }
 

@@ -14,6 +14,7 @@ namespace Hedra.Engine.Player
         int ConsecutiveHits { get; }
         bool IsAttacking {get; set;}
         bool IsEating { get; set; }
+        bool IsSailing { get; set; }
         bool IsCasting { get; set; }
         bool IsSwimming { get; set; }
         bool IsGliding { get; set; }

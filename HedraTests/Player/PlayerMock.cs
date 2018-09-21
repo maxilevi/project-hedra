@@ -10,6 +10,7 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
+using Hedra.Engine.Player.BoatSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.ToolbarSystem;
@@ -91,6 +92,7 @@ namespace HedraTests.Player
         public bool IsBoss { get; set; }
         public bool IsDead { get; set; }
         public bool IsFlying { get; set; }
+        public bool IsSailing { get; set; }
         public bool IsFriendly { get; }
         public bool IsGrounded { get; set; }
         public bool IsHumanoid { get; }
@@ -116,6 +118,7 @@ namespace HedraTests.Player
         public IPlayerInventory Inventory { get; set; }
         public EntitySpawner Spawner { get; }
         public IToolbar Toolbar { get; set; }
+        public IBoat Boat { get; }
         public QuestLog QuestLog { get; }
         public IAbilityTree AbilityTree { get; set; }
         public PetManager Pet { get; }

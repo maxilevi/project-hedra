@@ -28,7 +28,7 @@ namespace Hedra.Engine.Management
 	    public const int VillageIndex = 0;
 	    public const int MainThemeIndex = 1;
 	    public const int RainIndex = 2;
-		public const int Comabat0 = 3;
+		public const int GraveyardChampion = 3;
         public const int LoopableSongsStart = 3;
 
 	    public static int TrackIndex => _trackIndex;
@@ -76,7 +76,8 @@ namespace Hedra.Engine.Management
 		        "Sounds/Soundtrack/CardinalCity.ogg",
 		        "Sounds/Soundtrack/ThroughTheGrasslands.ogg",
 		        "Sounds/Soundtrack/BreathOfDay.ogg",
-		        "Sounds/Soundtrack/TheVillage.ogg"
+		        "Sounds/Soundtrack/TheVillage.ogg",
+		        "Sounds/Soundtrack/AdventurersMinuet.ogg"
 	        };
             ShuffleSongs();
 

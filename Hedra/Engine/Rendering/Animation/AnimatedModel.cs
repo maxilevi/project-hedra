@@ -131,7 +131,7 @@ namespace Hedra.Engine.Rendering.Animation
             DrawModel(projectionViewMat, viewMat);
         }
 
-        public void DrawModel(Matrix4 ProjectionViewMat, Matrix4 ViewMatrix)
+        private void DrawModel(Matrix4 ProjectionViewMat, Matrix4 ViewMatrix)
         {
             if (!Enabled || _disposed || Data == null) return;
             Renderer.Enable(EnableCap.DepthTest);
@@ -143,13 +143,13 @@ namespace Hedra.Engine.Rendering.Animation
             if (_shader == DeathShader && CompatibilityManager.SupportsGeometryShaders)
             {
                 Renderer.Enable(EnableCap.Blend);
-                _shader["viewMatrix"] = ViewMatrix;
-                _shader["disposeTime"] = DisposeTime;
+                DeathShader["viewMatrix"] = ViewMatrix;
+                DeathShader["disposeTime"] = DisposeTime;
             }
 
             _shader["jointTransforms"] = JointTransforms;
             _shader["projectionViewMatrix"] = ProjectionViewMat;
-            if (_shader != DeathShader || !CompatibilityManager.SupportsGeometryShaders)
+            if (_shader == DefaultShader || !CompatibilityManager.SupportsGeometryShaders)
             {
                 _shader["PlayerPosition"] = GameManager.Player.Position;
             }
@@ -159,7 +159,7 @@ namespace Hedra.Engine.Rendering.Animation
                 Renderer.ActiveTexture(TextureUnit.Texture0);
                 Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
                 _shader["ShadowTex"] = 0;
-                if (_shader != DeathShader || !CompatibilityManager.SupportsGeometryShaders)
+                if (_shader == DefaultShader || !CompatibilityManager.SupportsGeometryShaders)
                 {
                     _shader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
                 }

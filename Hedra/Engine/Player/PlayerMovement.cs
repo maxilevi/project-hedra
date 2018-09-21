@@ -96,7 +96,7 @@ namespace Hedra.Engine.Player
                 if (GameManager.Keyboard[Key.W])
                 {
                     _targetYaw = _player.View.TargetYaw;
-                    this.ProcessMovement(_player, this.MoveFormula(_player.View.Forward) * keysPresses);                   
+                    this.ProcessMovement(_characterRotation, this.MoveFormula(_player.View.Forward) * keysPresses);                   
                     this.Orientate();
                 }
                 _player.Model.TransformationMatrix = 
@@ -105,17 +105,17 @@ namespace Hedra.Engine.Player
                     Matrix4.CreateRotationY(_player.Model.Rotation.Y * Mathf.Radian);
                 if (GameManager.Keyboard[Key.S])
                 {
-                    this.ProcessMovement(_player, this.MoveFormula(_player.View.Backward) * keysPresses);
+                    this.ProcessMovement(_characterRotation, this.MoveFormula(_player.View.Backward) * keysPresses);
                 }
 
                 if (GameManager.Keyboard[Key.A])
                 {
-                    this.ProcessMovement(_player, this.MoveFormula(_player.View.Left) * keysPresses);
+                    this.ProcessMovement(_characterRotation, this.MoveFormula(_player.View.Left) * keysPresses);
                 }
 
                 if (GameManager.Keyboard[Key.D])
                 {
-                    this.ProcessMovement(_player, this.MoveFormula(_player.View.Right) * keysPresses);
+                    this.ProcessMovement(_characterRotation, this.MoveFormula(_player.View.Right) * keysPresses);
                 }
                 
 		        if(GameManager.Keyboard[Key.ControlLeft] && _player.Physics.InFrontOfWall)
@@ -146,18 +146,6 @@ namespace Hedra.Engine.Player
             this.ClampSwimming(_player);
             if (GameManager.Keyboard[Key.Space]) this.MoveInWater(true);
             if (GameManager.Keyboard[Key.ShiftLeft]) this.MoveInWater(false);
-        }
-
-        private void ProcessMovement(IHumanoid Player, Vector3 MoveSpace)
-        {
-            Player.Physics.DeltaTranslate(MoveSpace);
-
-            if (!Player.WasAttacking && !Player.IsAttacking)
-            {
-                Player.Model.TargetRotation = new Vector3(Player.Model.TargetRotation.X, _characterRotation, Player.Model.TargetRotation.Z);    
-                Player.Orientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
-            }
-            RollDirection = new Vector3(Player.Model.Rotation.X, _characterRotation, Player.Model.Rotation.Z);
         }
 
         private void RegisterKey(Key Key, Action Action)

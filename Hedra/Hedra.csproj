@@ -264,6 +264,11 @@
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\IAbilityTree.cs" />
+    <Compile Include="Engine\Player\BoatSystem\Boat.cs" />
+    <Compile Include="Engine\Player\BoatSystem\BoatInputHandler.cs" />
+    <Compile Include="Engine\Player\BoatSystem\BoatModelHandler.cs" />
+    <Compile Include="Engine\Player\BoatSystem\BoatStateHandler.cs" />
+    <Compile Include="Engine\Player\BoatSystem\IBoat.cs" />
     <Compile Include="Engine\Player\IPlayerInventory.cs" />
     <Compile Include="Engine\Player\Skills\Archer\Agility.cs" />
     <Compile Include="Engine\Player\Skills\Archer\FlameArrow.cs" />
@@ -4801,6 +4806,10 @@
     <Folder Include="Modules\Items\Pants\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\project-hedra-assets\Models\Blend\Misc\Boat.ply">
+      <Link>Assets\Items\Misc\Boat.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Skills\Intercept.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -4892,6 +4901,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Villages\Nordic.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\Soundtrack\AdventurersMinuet.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Sounds\Soundtrack\GraveyardChampion.ogg">

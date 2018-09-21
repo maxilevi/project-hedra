@@ -172,5 +172,10 @@ namespace Hedra.Engine.StructureSystem
             float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
             return Rng.Next(0, 75) == 1 && height > 0;
         }
+        
+        public override int[] AmbientSongs => new []
+        {
+            SoundtrackManager.GraveyardChampion
+        };
     }
 }

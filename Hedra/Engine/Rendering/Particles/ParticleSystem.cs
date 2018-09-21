@@ -50,7 +50,8 @@ namespace Hedra.Engine.Rendering.Particles
 			});
 		}
 		
-		public ParticleSystem(Vector3 Position){
+		public ParticleSystem(Vector3 Position)
+        {
 			this.Position = Position;
 			ParticleCreator.Load();
 			Executer.ExecuteOnMainThread( delegate{ this.CreateVAO();
@@ -60,7 +61,8 @@ namespace Hedra.Engine.Rendering.Particles
 			});
 		}
 		
-		public void Emit(){
+		public void Emit()
+        {
 			if( (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
 			
 			if(Particles.Count == MaxParticles || !Enabled || (GameSettings.Paused && Particle3D.UseTimeScale)) return;

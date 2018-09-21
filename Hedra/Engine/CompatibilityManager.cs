@@ -29,7 +29,7 @@ namespace Hedra.Engine
 
         private static void DetectGeometryShaderSupport()
         {
-            SupportsGeometryShaders = true;
+            SupportsGeometryShaders = false;
             try
             {
                 var shader = AnimatedModelShader.GenerateDeathShader();

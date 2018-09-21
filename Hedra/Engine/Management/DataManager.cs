@@ -26,7 +26,7 @@ namespace Hedra.Engine.Management
 		
 		public static void SavePlayer(PlayerInformation Player)
         {
-			var chrFile = AssetManager.AppData+"/Characters/"+Player.Name;
+			var chrFile = $"{AssetManager.AppData}/Characters/{Player.Name}";
 			
 			if(File.Exists(chrFile + ".db"))
             {

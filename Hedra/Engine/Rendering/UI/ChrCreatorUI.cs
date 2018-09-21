@@ -88,7 +88,7 @@ namespace Hedra.Engine.Rendering.UI
 			createChr.Click += delegate {
 				for(int i = 0; i < DataManager.PlayerFiles.Length; i++){
 					if(nameField.Text == DataManager.PlayerFiles[i].Name){
-						Player.MessageDispatcher.ShowNotification("NAME ALREADY EXISTS", Color.DarkRed, 3f, true);
+						Player.MessageDispatcher.ShowNotification("NAME ALREADY EXISTS", Color.Red, 3f, true);
 						return;
 					}
 						

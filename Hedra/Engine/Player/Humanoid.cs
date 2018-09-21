@@ -33,7 +33,8 @@ namespace Hedra.Engine.Player
 		public event OnHitLandedEventHandler OnHitLanded;
         public IMessageDispatcher MessageDispatcher { get; set; }
 	    public int ConsecutiveHits { get; private set; }
-        public bool IsAttacking {get; set;}
+		public bool IsSailing { get; set; }
+        public bool IsAttacking { get; set; }
 		public bool IsEating { get; set; }
 		public bool IsCasting { get; set; }
 		public bool IsSwimming { get; set; }

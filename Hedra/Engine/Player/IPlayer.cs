@@ -3,6 +3,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
+using Hedra.Engine.Player.BoatSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.ToolbarSystem;
@@ -22,6 +23,7 @@ namespace Hedra.Engine.Player
         IToolbar Toolbar { get; }
         QuestLog QuestLog { get; }
         IAbilityTree AbilityTree { get; }
+        IBoat Boat { get; }
         PetManager Pet { get; }
         Chat Chat { get; }
         Minimap Minimap { get; }

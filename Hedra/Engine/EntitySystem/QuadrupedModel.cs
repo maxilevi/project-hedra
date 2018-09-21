@@ -218,7 +218,7 @@ namespace Hedra.Engine.EntitySystem
 		    {
                 Model.Update();
                 
-		        _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))) .ExtractRotation() : Quaternion.Identity;
+		        _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))).ExtractRotation() : Quaternion.Identity;
 		        _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependantDeltaTime * 8f);
 		        Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
 		        _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependantDeltaTime * 14f);

@@ -142,11 +142,15 @@ namespace Hedra.Engine.EntitySystem
                 _iterableModels.ForEach(M => M.Tint = Mathf.Lerp(M.Tint, this.Tint, Time.IndependantDeltaTime * 6f));
                 _iterableModels.ForEach(M => M.Alpha = Mathf.Lerp(M.Alpha, this.Alpha, Time.DeltaTime * 8f));
             }
-            var isTranslating = (Parent.BlockPosition.Xz - _lastPosition.Xz).LengthFast > 0.001f;
-            if (isTranslating) _movingTimer.Reset();
-            if (IsMoving && _movingTimer.Tick()) IsMoving = false;
-            else if(isTranslating) IsMoving = true;
-            _lastPosition = Parent.BlockPosition;
+
+            if (Parent != null)
+            {
+                var isTranslating = (Parent.BlockPosition.Xz - _lastPosition.Xz).LengthFast > 0.001f;
+                if (isTranslating) _movingTimer.Reset();
+                if (IsMoving && _movingTimer.Tick()) IsMoving = false;
+                else if (isTranslating) IsMoving = true;
+                _lastPosition = Parent.BlockPosition;
+            }
         }
 
         public override void Attack(IEntity Victim)

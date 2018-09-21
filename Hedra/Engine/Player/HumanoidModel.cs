@@ -47,6 +47,7 @@ namespace Hedra.Engine.Player
         private Animation _tiedAnimation;
         private Animation _sleepAnimation;
 	    private Animation _jumpAnimation;
+	    private Animation _sailingAnimation;
 	    public Joint LeftShoulderJoint { get; private set; }
 	    public Joint RightShoulderJoint { get; private set; }
 	    public Joint LeftElbowJoint { get; private set; }
@@ -155,6 +156,7 @@ namespace Hedra.Engine.Player
             _tiedAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTied.dae");
             _sleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
 	        _jumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
+	        _sailingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSit.dae");
 	        
 			_rollAnimation.OnAnimationEnd += delegate
 			{ 
@@ -288,6 +290,10 @@ namespace Hedra.Engine.Player
                     currentAnimation = _idleSwimAnimation;
                 }
             }
+	        if (Human.IsSailing)
+	        {
+		        currentAnimation = _sailingAnimation;
+	        }
             if (Human.IsTied)
             {
                 currentAnimation = _tiedAnimation;
