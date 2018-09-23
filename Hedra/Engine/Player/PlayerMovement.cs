@@ -184,7 +184,7 @@ namespace Hedra.Engine.Player
                                 vehicle =_player.Glider;
                                 break;
                             default:
-                                throw new ArgumentOutOfRangeException($"Failed to find a vehicle.");
+                                throw new ArgumentOutOfRangeException($"Failed to find a vehicle from '{vehicleItem.Name}'.");
                         }
                         if (vehicle.Enabled) vehicle.Disable();
                         else vehicle.Enable();
