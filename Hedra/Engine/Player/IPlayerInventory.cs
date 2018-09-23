@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player
         bool HasAvailableSpace { get; }
         Item MainWeapon { get; }
         Item Ring { get; }
-        Item Glider { get; }
+        Item Vehicle { get; }
         Item Pet { get; }
         Item Helmet { get; }
         Item Chest { get; }

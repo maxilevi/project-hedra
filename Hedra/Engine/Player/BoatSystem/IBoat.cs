@@ -1,8 +1,7 @@
 ﻿namespace Hedra.Engine.Player.BoatSystem
 {
-    public interface IBoat
+    public interface IBoat : IVehicle
     {
-        void Update();
-        bool Enabled { get; }
+
     }
 }

@@ -18,7 +18,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         public void HandleUp(object Sender, KeyEventArgs EventArgs)
         {
             if (!_player.CanInteract || _player.IsKnocked || _player.Movement.IsJumping || _player.IsDead || _player.IsSwimming ||
-                _player.IsUnderwater || _player.IsGliding || _player.Inventory.Show || _player.AbilityTree.Show || GameSettings.Paused) return;
+                _player.IsUnderwater || _player.IsTravelling || _player.Inventory.Show || _player.AbilityTree.Show || GameSettings.Paused) return;
 
             var keyText = EventArgs.Key.ToString().ToLowerInvariant();
             if (!keyText.Contains("number")) return;
@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         public void HandleDown(object Sender, KeyEventArgs EventArgs)
         {
             if (!_player.CanInteract || _player.Movement.IsJumping || _player.IsKnocked || _player.IsDead || _player.IsSwimming || _player.IsAttacking || _player.IsRiding
-                || _player.IsUnderwater || _player.IsGliding || _player.Inventory.Show || _player.AbilityTree.Show || _player.Trade.Show || GameSettings.Paused) return;
+                || _player.IsUnderwater || _player.IsTravelling || _player.Inventory.Show || _player.AbilityTree.Show || _player.Trade.Show || GameSettings.Paused) return;
 
 
             var keyText = EventArgs.Key.ToString().ToLowerInvariant();

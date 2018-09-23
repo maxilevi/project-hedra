@@ -355,8 +355,9 @@ namespace Hedra.Engine.EntitySystem
 				        }*/
 				    }
 
-                    if (Parent is Humanoid human && human.IsGliding){
-						human.IsGliding = false;
+                    if (Parent is Humanoid human && human.IsTravelling)
+                    {
+	                    human.IsTravelling = false;
 						Parent.KnockForSeconds(3f);
 				        Executer.ExecuteOnMainThread(delegate
 				        {

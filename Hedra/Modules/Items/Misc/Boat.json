@@ -1,0 +1,18 @@
+{
+  "Name": "Boat",
+  "DisplayName": "Boat",
+  "Tier": "Rare",
+  "EquipmentType": "Vehicle",
+  "Description": "A boat.",
+  "Attributes": [
+    {
+      "Name": "Price",
+      "Value": 720,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Misc/BoatIcon.ply"
+  }
+}

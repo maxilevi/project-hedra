@@ -111,7 +111,7 @@ namespace Hedra.Engine.Game
 	        Player.Inventory.AddRestriction(PlayerInventory.PantsHolder, EquipmentType.Pants);
 	        Player.Inventory.AddRestriction(PlayerInventory.ChestplateHolder, EquipmentType.Chestplate);
 	        Player.Inventory.AddRestriction(PlayerInventory.HelmetHolder, EquipmentType.Helmet);
-            Player.Inventory.AddRestriction(PlayerInventory.GliderHolder, EquipmentType.Vehicle);
+            Player.Inventory.AddRestriction(PlayerInventory.VehicleHolder, EquipmentType.Vehicle);
 	        Player.Inventory.AddRestriction(PlayerInventory.PetHolder, EquipmentType.Pet);
 	        Player.Inventory.AddRestriction(PlayerInventory.RingHolder, EquipmentType.Ring);
         }
@@ -124,7 +124,7 @@ namespace Hedra.Engine.Game
 		    Information.WorldSeed = World.RandomSeed;
 			Information.BlockPosition = GameSettings.SpawnPoint.ToVector3();
 			Information.BlockPosition = new Vector3(Information.BlockPosition.X, 128, Information.BlockPosition.Z);
-			LocalPlayer.Instance.IsGliding = false;
+			GameManager.Player.IsTravelling = false;
 			GameManager.MakeCurrent(Information);
 			SkyManager.SetTime(12000);
 

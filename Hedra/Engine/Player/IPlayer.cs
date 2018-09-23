@@ -23,13 +23,13 @@ namespace Hedra.Engine.Player
         IToolbar Toolbar { get; }
         QuestLog QuestLog { get; }
         IAbilityTree AbilityTree { get; }
-        IBoat Boat { get; }
+        IVehicle Boat { get; }
+        IVehicle Glider { get; }
         PetManager Pet { get; }
         Chat Chat { get; }
         Minimap Minimap { get; }
         Map Map { get; }
         TradeInventory Trade { get; }
-        HangGlider Glider { get; }
         Vector3 Position { get; set; }
         ICollidable[] NearCollisions { get; }
         bool Enabled { get; set; }

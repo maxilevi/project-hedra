@@ -47,6 +47,7 @@ namespace HedraTests.Player
         public float AttackResistance { get; set; }
         public int Gold { get; set; }
         public float DamageEquation { get; }
+        public bool IsTravelling { get; set; }
         public void Attack(float Damage, Action<Entity> Callback)
         {
             throw new NotImplementedException();
@@ -118,7 +119,7 @@ namespace HedraTests.Player
         public IPlayerInventory Inventory { get; set; }
         public EntitySpawner Spawner { get; }
         public IToolbar Toolbar { get; set; }
-        public IBoat Boat { get; }
+        public IVehicle Boat { get; }
         public QuestLog QuestLog { get; }
         public IAbilityTree AbilityTree { get; set; }
         public PetManager Pet { get; }
@@ -126,7 +127,7 @@ namespace HedraTests.Player
         public Minimap Minimap { get; }
         public Map Map { get; }
         public TradeInventory Trade { get; }
-        public HangGlider Glider { get; }
+        public IVehicle Glider { get; }
         public int ConsecutiveHits { get; }
         public bool IsAttacking { get; set; }
         public bool IsEating { get; set; }
@@ -144,7 +145,7 @@ namespace HedraTests.Player
         public bool CanInteract { get; set; }
         public bool IsSleeping { get; set; }
         public bool IsJumping { get; }
-        public Vector3 FacingDirection { get; }
+        public float FacingDirection { get; }
         public bool IsSitting { get; set; }
         public bool HasWeapon => LeftWeapon != null;
         public HandLamp HandLamp { get; }

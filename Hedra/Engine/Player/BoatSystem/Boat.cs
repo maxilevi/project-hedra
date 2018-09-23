@@ -19,6 +19,22 @@
             _modelHandler.Update();
         }
 
-        public bool Enabled => _stateHandler.Enabled;
+        public bool CanEnable => _stateHandler.CanEnable;
+
+        public void Enable()
+        {
+            Enabled = true;
+        }
+
+        public void Disable()
+        {
+            Enabled = false;
+        }
+        
+        public bool Enabled
+        {
+            get => _stateHandler.Enabled;
+            private set => _stateHandler.Enabled = value;
+        }
     }
 }

@@ -7,9 +7,9 @@ namespace HedraTests
 {
     public class SimpleTexture2DProviderMock : ITexture2DProvider
     {
-        public uint LoadTexture(Bitmap Bmp, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
+        public uint LoadTexture(BitmapObject BitmapObject, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
         {
-            return (uint) Math.Abs(Bmp.GetHashCode());
+            return (uint) Math.Abs(BitmapObject.GetHashCode());
         }
     }
 }

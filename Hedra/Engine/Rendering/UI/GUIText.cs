@@ -45,7 +45,12 @@ namespace Hedra.Engine.Rendering.UI
                 var previousState = UIText?.Enabled ?? false;
                 DrawManager.UIRenderer.Remove(UIText);
                 UIText?.Dispose();
-                UIText = new GUITexture(Graphics2D.LoadTexture(textBitmap),
+                var obj = new BitmapObject
+                {
+                    Bitmap = textBitmap,
+                    Path = $"Text:{Text}"
+                };
+                UIText = new GUITexture(Graphics2D.LoadTexture(obj),
                     new Vector2(size.X / DefaultSize.X, size.Y / DefaultSize.Y), _temporalPosition);
                 DrawManager.UIRenderer.Add(UIText);
 

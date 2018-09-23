@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering
 	    public const int NoShadowsAndNoHighlightFlag = -3;
 	    public static Shader WaterShader { get; private set; }
 	    public static Shader StaticShader { get; private set; }
-        private static float WaveMovement { get; set; }
+        public static float WaveMovement { get; private set; }
         public static WorldBuffer StaticBuffer;
 	    public static WorldBuffer WaterBuffer;
 		public static bool ShowWaterBackfaces {get; set;}

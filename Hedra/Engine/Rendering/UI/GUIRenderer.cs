@@ -45,7 +45,11 @@ namespace Hedra.Engine.Rendering.UI
             _lock = new object();
             var bmp = new Bitmap(1, 1);
             bmp.SetPixel(0, 0, Color.FromArgb(0, 0, 0, 0));
-            TransparentTexture = Graphics2D.LoadTexture(bmp);
+            TransparentTexture = Graphics2D.LoadTexture(new BitmapObject
+            {
+                Bitmap = bmp,
+                Path = "UI:TransparentTexture"
+            });
             InmortalTextures = new[] {TransparentTexture};
         }
 

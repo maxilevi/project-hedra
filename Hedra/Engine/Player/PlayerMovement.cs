@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
@@ -21,7 +22,7 @@ namespace Hedra.Engine.Player
         private float _targetYaw;
         private Vector3 _angles;
         private Vector3 _targetAngles;
-        private float _glidingCooldown;
+        private float _vehicleCooldown;
 
         public PlayerMovement(LocalPlayer Player) : base(Player)
         {
@@ -43,8 +44,7 @@ namespace Hedra.Engine.Player
 
         protected override void DoUpdate()
         {
-            _glidingCooldown -= Time.IndependantDeltaTime;
-            //_player.Physics.CanBePushed = !_player.IsMoving;
+            _vehicleCooldown -= Time.IndependantDeltaTime;
             if (!CaptureMovement || _player.IsKnocked || _player.IsDead || !Human.CanInteract || GameSettings.Paused)
                 return;
 
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player
 
             if (!_player.IsGliding)
             {
-                _characterRotation = Human.FacingDirection.Y;
+                _characterRotation = Human.FacingDirection;
                 if (GameManager.Keyboard[Key.D]) _characterRotation += -90f;
                 if (GameManager.Keyboard[Key.A])_characterRotation += 90f;
                 if (GameManager.Keyboard[Key.S]) _characterRotation += 180f;
@@ -147,7 +147,7 @@ namespace Hedra.Engine.Player
             if (GameManager.Keyboard[Key.Space]) this.MoveInWater(true);
             if (GameManager.Keyboard[Key.ShiftLeft]) this.MoveInWater(false);
         }
-
+        
         private void RegisterKey(Key Key, Action Action)
         {
             _registeredKeys.Add(Key, Action);
@@ -162,16 +162,19 @@ namespace Hedra.Engine.Player
 
             this.RegisterKey(Key.G, delegate
             {
-                if (Human.CanInteract && !GameManager.InMenu && !Human.IsKnocked
-                    && !GameManager.InStartMenu && _glidingCooldown < 0)
+                if (!GameManager.InStartMenu && !GameManager.InMenu && !Human.IsKnocked
+                    && Human.CanInteract && _vehicleCooldown < 0)
                 {
-                    if (_player.Inventory.Glider == null && !GameSettings.Paused)
+                    var vehicleItem = _player.Inventory.Vehicle;
+                    if (vehicleItem == null && !GameSettings.Paused)
                     {
-                        _player.MessageDispatcher.ShowNotification("YOU NEED A GLIDER TO DO THAT", System.Drawing.Color.DarkRed, 3f, true);
-                        return;
+                        _player.MessageDispatcher.ShowNotification("YOU NEED A VEHICLE TO DO THAT", Color.Red, 3f, true);
                     }
-                    _glidingCooldown = .25f;
-                    _player.IsGliding = !_player.IsGliding;
+                    else if (vehicleItem != null)
+                    {
+                        _vehicleCooldown = .25f;
+                        vehicleItem.GetAttribute<string>("");
+                    }
                 }
             });
 

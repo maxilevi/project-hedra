@@ -72,7 +72,7 @@ namespace Hedra.Engine.StructureSystem
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return Rng.Next(0, 10) == 1 && height > 0;
+            return Rng.Next(0, 10) == 1 && height > BiomePool.SeaLevel;
         }
     }
 }

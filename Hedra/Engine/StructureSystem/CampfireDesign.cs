@@ -15,6 +15,10 @@ namespace Hedra.Engine.StructureSystem
     {
         public override int Radius { get; set; } = 80;
         public override VertexData Icon => null;
+        public override int[] AmbientSongs { get; } =
+        {
+            SoundtrackManager.OnTheLam
+        };
 
         public override void Build(CollidableStructure Structure)
         {
@@ -24,15 +28,15 @@ namespace Hedra.Engine.StructureSystem
             var model = originalCampfire.ShallowClone();
 
             var rotation = rng.NextFloat() * 360.0f;
-            Matrix4 transMatrix = Matrix4.CreateScale(3 + rng.NextFloat() * 1.5f);
-            Matrix4 rotMat = Matrix4.CreateRotationY(rotation);
+            var transMatrix = Matrix4.CreateScale(3 + rng.NextFloat() * 1.5f);
+            var rotMat = Matrix4.CreateRotationY(rotation);
             transMatrix *= rotMat;
             transMatrix *= Matrix4.CreateTranslation(position);
             model.Transform(transMatrix);
             model.Color(AssetManager.ColorCode1, Utils.VariateColor(TentColor(rng), 15, rng));
 
             var shapes = CacheManager.GetShape(originalCampfire).DeepClone();
-            for (int i = 0; i < shapes.Count; i++)
+            for (var i = 0; i < shapes.Count; i++)
             {
                 shapes[i].Transform(transMatrix);
             }
@@ -85,7 +89,7 @@ namespace Hedra.Engine.StructureSystem
         {
             float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
 
-            return Rng.Next(0, 12) == 1 && height > 0;
+            return Rng.Next(0, 12) == 1 && height > BiomePool.SeaLevel;
         }
 
 

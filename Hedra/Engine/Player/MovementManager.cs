@@ -88,21 +88,25 @@ namespace Hedra.Engine.Player
 
 	    protected virtual void DoUpdate() { }
 
-		public void ProcessMovement(float CharacterRotation, Vector3 MoveSpace)
+		public void ProcessMovement(float CharacterRotation, Vector3 MoveSpace, bool Orientate = true)
 		{
 			Human.Physics.DeltaTranslate(MoveSpace);
 
-			if (!Human.WasAttacking && !Human.IsAttacking)
-			{
-				Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, CharacterRotation, Human.Model.TargetRotation.Z);    
-				Human.Orientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
-			}
-			RollDirection = new Vector3(Human.Model.Rotation.X, CharacterRotation, Human.Model.Rotation.Z);
+		    if (Orientate)
+		    {
+		        if (!Human.WasAttacking && !Human.IsAttacking)
+		        {
+		            Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, CharacterRotation,
+		                Human.Model.TargetRotation.Z);
+		            Human.Orientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
+		        }
+		        RollDirection = new Vector3(Human.Model.Rotation.X, CharacterRotation, Human.Model.Rotation.Z);
+		    }
 		}
 		
 	    public void Orientate()
 	    {
-	        Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, Human.FacingDirection.Y, Human.Model.TargetRotation.Z);
+	        Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, Human.FacingDirection, Human.Model.TargetRotation.Z);
 	        var inRadians = Human.Model.Rotation.Y * Mathf.Radian;
 	        // There seems to be a bug in how we store the rotations so be switch the sines
             Human.Orientation = new Vector3((float) Math.Sin(inRadians), 0, (float) Math.Cos(inRadians));

@@ -8,7 +8,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player
 {
-    public class HangGlider
+    public class HangGlider : IVehicle
     {
         private readonly LocalPlayer _player;
         private readonly GliderModel _model;
@@ -63,6 +63,7 @@ namespace Hedra.Engine.Player
 
         public void Update()
         {
+            HandleLanding();
             if (!this.Enabled)
             {
                 _accumulatedVelocity = Vector3.One * 10f;
@@ -116,6 +117,22 @@ namespace Hedra.Engine.Player
             _leftTrail.Update();
         }
 
+        private void HandleLanding()
+        {        
+            if (Enabled)
+            {
+                if (_player.IsGrounded)
+                {
+                    Disable();
+                    _player.AddBonusSpeedForSeconds(-_player.Speed + _player.Speed * .5f, 2f);
+                }
+                else if(_player.IsUnderwater)
+                {
+                    Disable();
+                }
+            }
+        }
+
         public void Push(float Amount)
         {
             _upPush += Amount;
@@ -154,6 +171,8 @@ namespace Hedra.Engine.Player
             this.Enabled = true;
         }
 
+        public bool CanEnable => !_player.IsGrounded;
+        
         public bool Enabled { get; private set; }
     }
 }

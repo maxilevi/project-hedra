@@ -13,6 +13,6 @@
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/GliderIcon.ply"
+    "Path": "$DataFile$/Items/Misc/GliderIcon.ply"
   }
 }

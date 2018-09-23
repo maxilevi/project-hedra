@@ -290,10 +290,6 @@ namespace Hedra.Engine.Player
                     currentAnimation = _idleSwimAnimation;
                 }
             }
-	        if (Human.IsSailing)
-	        {
-		        currentAnimation = _sailingAnimation;
-	        }
             if (Human.IsTied)
             {
                 currentAnimation = _tiedAnimation;
@@ -324,6 +320,10 @@ namespace Hedra.Engine.Player
             {
                 currentAnimation = _glideAnimation;
             }
+	        if (Human.IsSailing)
+	        {
+		        currentAnimation = _sailingAnimation;
+	        }
 	        if (Human.IsClimbing)
 	        {
 		        currentAnimation = _climbAnimation;

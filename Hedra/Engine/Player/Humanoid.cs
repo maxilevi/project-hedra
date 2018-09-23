@@ -33,7 +33,6 @@ namespace Hedra.Engine.Player
 		public event OnHitLandedEventHandler OnHitLanded;
         public IMessageDispatcher MessageDispatcher { get; set; }
 	    public int ConsecutiveHits { get; private set; }
-		public bool IsSailing { get; set; }
         public bool IsAttacking { get; set; }
 		public bool IsEating { get; set; }
 		public bool IsCasting { get; set; }
@@ -48,7 +47,7 @@ namespace Hedra.Engine.Player
 	    public virtual bool CanInteract { get; set; } = true;
         public bool IsSleeping { get; set; }
 	    public bool IsJumping => Movement.IsJumping;
-	    public virtual Vector3 FacingDirection => Vector3.UnitY * -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
+	    public virtual float FacingDirection => -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
 		public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
 		public MovementManager Movement { get; protected set; }
 		public HandLamp HandLamp { get; }
@@ -165,7 +164,7 @@ namespace Hedra.Engine.Player
         public void Roll()
         {
 			var player = this as LocalPlayer;
-			if( IsUnderwater || IsGliding || IsRolling || IsCasting || IsRiding || !IsGrounded) return;
+			if( IsUnderwater || IsTravelling || IsRolling || IsCasting || IsRiding || !IsGrounded) return;
 			
 			if(player != null){
 			    if (Stamina < DodgeCost)
@@ -360,27 +359,27 @@ namespace Hedra.Engine.Player
 		}
 
 	
-        public float Stamina {
+        public float Stamina
+        {
 			get => _stamina;
             set => _stamina = Mathf.Clamp(value,0,MaxStamina);
         }
 		
 
-		public float Mana{
+		public float Mana
+		{
 			get => _mana;
 		    set => _mana = Mathf.Clamp(value,0,MaxMana);
 		}
 		
-		public bool IsGliding
+		public virtual bool IsSailing => throw new NotImplementedException();
+
+		public virtual bool IsGliding => throw new NotImplementedException();
+
+		public virtual bool IsTravelling
 		{
-			get => _isGliding;
-		    set{ 
-				if(value){
-					if(IsGrounded)
-						return;
-				}
-				_isGliding = value;
-			}
+			get => throw new NotImplementedException();
+			set => throw new NotImplementedException();
 		}
 
 	    public override void Dispose()

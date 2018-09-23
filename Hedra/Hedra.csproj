@@ -270,6 +270,7 @@
     <Compile Include="Engine\Player\BoatSystem\BoatStateHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\IBoat.cs" />
     <Compile Include="Engine\Player\IPlayerInventory.cs" />
+    <Compile Include="Engine\Player\IVehicle.cs" />
     <Compile Include="Engine\Player\Skills\Archer\Agility.cs" />
     <Compile Include="Engine\Player\Skills\Archer\FlameArrow.cs" />
     <Compile Include="Engine\Player\Skills\Archer\IceArrow.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="Engine\Rendering\Animation\ColladaParser\ColladaProvider.cs" />
     <Compile Include="Engine\Rendering\Animation\ColladaParser\IColladaProvider.cs" />
     <Compile Include="Engine\Rendering\Animation\IAnimationProvider.cs" />
+    <Compile Include="Engine\Rendering\BitmapObject.cs" />
     <Compile Include="Engine\Rendering\CachedVertexData.cs" />
     <Compile Include="Engine\Rendering\GLProvider.cs" />
     <Compile Include="Engine\Rendering\IGLProvider.cs" />
@@ -988,6 +990,14 @@
       <Link>Assets\Env\FearIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Glider.ply">
+      <Link>Assets\Items\Misc\Glider.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\GliderIcon.ply">
+      <Link>Assets\Items\Misc\GliderIcon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Mushroom0.ply">
       <Link>Assets\Env\Mushroom0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1118,6 +1128,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Includes\Lighting.shader">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Soundtrack\HostageSituation.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\Soundtrack\OnTheLam.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\TheVillage.ogg">
@@ -3508,14 +3524,6 @@
       <Link>Assets\Env\GiantTree0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Glider.ply">
-      <Link>Assets\Items\Glider.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\GliderIcon.ply">
-      <Link>Assets\Items\GliderIcon.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\GoatHorn.ply">
       <Link>Assets\Items\GoatHorn.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4897,6 +4905,7 @@
     <None Include="Modules\Mobs\Gorilla.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Modules\Items\Misc\Boat.json" />
     <Content Include="Modules\Items\Misc\Mushroom.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

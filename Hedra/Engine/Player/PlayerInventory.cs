@@ -33,13 +33,12 @@ namespace Hedra.Engine.Player
         public const int ChestplateHolder = 22;
         public const int HelmetHolder = 23;
         public const int PetHolder = 24;
-        public const int GliderHolder = 25;
+        public const int VehicleHolder = 25;
         public const int RingHolder = 26;
         public const int WeaponHolder = 27;
         public const int FoodHolder = 19;
         public const int GoldHolder = 18;
 
-        private readonly Vector2 _targetResolution;
         private readonly LocalPlayer _player;
         private readonly InventoryArray _items;
         private readonly InventoryArray _mainItems;
@@ -54,7 +53,6 @@ namespace Hedra.Engine.Player
 
         public PlayerInventory(LocalPlayer Player)
         {
-            _targetResolution = new Vector2(1366, 705);
             _player = Player;
             _items = new InventoryArray(InventorySpaces);
             _mainItems = new InventoryArray(MainSpaces);
@@ -231,7 +229,7 @@ namespace Hedra.Engine.Player
         public Item this[int Index] => (Index >= InventorySpaces ? _mainItems : _items)[ToCorrectItemSpace(Index)];
         public Item MainWeapon => this[WeaponHolder];
         public Item Ring => this[RingHolder];
-        public Item Glider => this[GliderHolder];
+        public Item Vehicle => this[VehicleHolder];
         public Item Pet => this[PetHolder];
         public Item Helmet => this[HelmetHolder];
         public Item Chest => this[ChestplateHolder];

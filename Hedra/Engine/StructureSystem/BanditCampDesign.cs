@@ -18,6 +18,10 @@ namespace Hedra.Engine.StructureSystem
     {
         public override int Radius { get; set; } = 300;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.CampfireIcon);
+        public override int[] AmbientSongs { get; } =
+        {
+            SoundtrackManager.HostageSituation
+        };
 
         public override void Build(CollidableStructure Structure)
         {
@@ -201,8 +205,8 @@ namespace Hedra.Engine.StructureSystem
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return Rng.Next(0, 100) == 1 && height > 0;
+            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
+            return Rng.Next(0, 100) == 1 && height > BiomePool.SeaLevel;
         }
 
         public class TentParameters

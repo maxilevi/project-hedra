@@ -39,6 +39,7 @@ out vec3 LightDir;
 out vec3 vertex_position;
 out vec3 base_normal;
 out vec4 point_diffuse;
+out vec3 base_vertex_position;
 
 layout(std140) uniform FogSettings {
 	vec4 U_BotColor;
@@ -77,15 +78,14 @@ void main(){
 	Vertex += vec4(LocalRotationPoint, 0.0);
 	Vertex = LocalRotation * Vertex;
 	Vertex -= vec4(LocalRotationPoint,0.0);
-
-	Vertex = Matrix * Vertex;
 	
 	Vertex += vec4(AnimationPosition, 0.0);
 
 	Vertex += vec4(Point,0.0);
 	Vertex = TransMatrix * Vertex;
+	Vertex = Matrix * Vertex;
 	Vertex += vec4(TransPos, 0.0);
-	Vertex -= vec4(Point, 0.0);
+	Vertex -= vec4(Point, 0.0);	
 
 	Vertex += vec4(LocalPosition,0.0);
 	
@@ -138,10 +138,10 @@ void main(){
 
 	InPos = (gl_ModelViewMatrix * Vertex).xyz;
 	vertex_position = Vertex.xyz;
+	base_vertex_position = InVertex.xyz;
 	base_normal = SurfaceNormal;
 	
-	mat3 mat = mat3(transpose(inverse(gl_ModelViewMatrix)));
-	InNorm = normalize(mat * unitNormal); 
+	InNorm = normalize(unitNormal);
 	
 	//Shadows Stuff
 	if(UseShadows){

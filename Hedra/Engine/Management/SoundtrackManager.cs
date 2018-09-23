@@ -29,6 +29,8 @@ namespace Hedra.Engine.Management
 	    public const int MainThemeIndex = 1;
 	    public const int RainIndex = 2;
 		public const int GraveyardChampion = 3;
+		public const int HostageSituation = 4;
+		public const int OnTheLam = 5;
         public const int LoopableSongsStart = 3;
 
 	    public static int TrackIndex => _trackIndex;
@@ -64,6 +66,8 @@ namespace Hedra.Engine.Management
 		        "Sounds/Soundtrack/MainTheme.ogg",
 		        "Sounds/Soundtrack/Rain.ogg",
 		        "Sounds/Soundtrack/GraveyardChampion.ogg",
+		        "Sounds/Soundtrack/HostageSituation.ogg",
+		        "Sounds/Soundtrack/OnTheLam.ogg",
 		        // LoopableSongs
 		        "Sounds/Soundtrack/ForestAmbient.ogg",
 		        // Forest should always be first

@@ -14,10 +14,11 @@ namespace Hedra.Engine.Player
         int ConsecutiveHits { get; }
         bool IsAttacking {get; set;}
         bool IsEating { get; set; }
-        bool IsSailing { get; set; }
         bool IsCasting { get; set; }
         bool IsSwimming { get; set; }
-        bool IsGliding { get; set; }
+        bool IsSailing { get; }
+        bool IsGliding { get; }
+        bool IsTravelling { get; set; }
         bool IsRolling { get; set; }
         bool IsRiding { get; set; }
         bool IsTied { get; set; }
@@ -28,7 +29,7 @@ namespace Hedra.Engine.Player
         bool CanInteract { get; set; }
         bool IsSleeping { get; set; }
         bool IsJumping { get; }
-        Vector3 FacingDirection { get; }
+        float FacingDirection { get; }
         bool IsSitting { get; set; }
         bool HasWeapon { get; }
         HandLamp HandLamp { get; }

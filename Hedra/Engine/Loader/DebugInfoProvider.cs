@@ -37,7 +37,7 @@ namespace Hedra.Engine.Loader
 #if DEBUG
 	        if (OSManager.RunningPlatform == Platform.Windows)
 	        {
-		        //GameLoader.EnableGLDebug();
+		        GameLoader.EnableGLDebug();
 	        }
 #endif	 
         }
@@ -71,7 +71,11 @@ namespace Hedra.Engine.Loader
 			        _passedTime = 0;
 			        Graphics2D.Textures.Remove(_geomPoolMemory.TextureElement.TextureId);
                     Renderer.DeleteTexture(_geomPoolMemory.TextureElement.TextureId);
-			        _geomPoolMemory.TextureElement.TextureId = Graphics2D.LoadTexture(WorldRenderer.StaticBuffer.Indices.Draw());
+			        _geomPoolMemory.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
+			        {
+				        Bitmap = WorldRenderer.StaticBuffer.Indices.Draw(),
+				        Path = "Debug:GeometryPool"
+			        });
 			    }
 			}
             else

@@ -37,7 +37,8 @@ namespace Hedra.Engine.Player
 		public ICamera View { get; }
 		public ChunkLoader Loader { get; }
 		public UserInterface UI { get; set; }
-		public IBoat Boat { get; }
+		public IVehicle Boat { get; }
+		public IVehicle Glider { get; }
 		public IPlayerInventory Inventory { get; }
 		public EntitySpawner Spawner { get; }
 		public IToolbar Toolbar { get; }
@@ -48,9 +49,8 @@ namespace Hedra.Engine.Player
 		public Minimap Minimap { get; }
 		public Map Map { get; }
 		public TradeInventory Trade { get; }
-		public HangGlider Glider { get; }
 	    public IMessageDispatcher MessageDispatcher { get; set; }
-	    public override Vector3 FacingDirection => Vector3.UnitY * -(View.TargetYaw * Mathf.Degree - 90f);
+	    public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
 		public ICollidable[] NearCollisions => StructureAware.NearCollisions;
 		private IStructureAware StructureAware { get; }
 	    private float _acummulativeHealing;
@@ -102,6 +102,11 @@ namespace Hedra.Engine.Player
 
 		private void SetupHandlers()
 		{
+			EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs Args)
+			{
+				if (Key.R == Args.Key && !GameSettings.Paused && IsDead)
+					Respawn();
+			});
 			this.SearchComponent<DamageComponent>().Delete = false;
         }
 
@@ -268,29 +273,6 @@ namespace Hedra.Engine.Player
             }
             this.Rotation = new Vector3(0, this.Rotation.Y, 0);
 
-            if (this.IsGliding)
-            {
-                if (this.IsGrounded)
-                {
-                    this.IsGliding = false;
-                    this.AddBonusSpeedForSeconds(-this.Speed + this.Speed * .5f, 2f);
-                }
-                else if(this.IsUnderwater)
-                {
-                    this.IsGliding = false;
-                }
-            }
-
-            this.Glider.Update();
-            if (!(this.IsGliding && !IsGrounded) && this.Glider.Enabled)
-            {
-               this.Glider.Disable();
-            }
-            if (this.IsGliding && !IsGrounded && !this.Glider.Enabled)
-            {
-                this.Glider.Enable();
-            }
-
             var underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
 			var underBlock1 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
 			var underBlock2 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
@@ -308,7 +290,7 @@ namespace Hedra.Engine.Player
 				GameSettings.DistortEffect = true;
 			    WorldRenderer.ShowWaterBackfaces = true;
             }
-            this.View.AddonDistance = this.IsMoving || this.IsSwimming || this.IsGliding ? 3.0f : 0.0f;
+            this.View.AddonDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
 
 	        StructureAware.Update();
             Loader.Update();
@@ -323,6 +305,7 @@ namespace Hedra.Engine.Player
 			Map.Update();
 			Trade.Update();
 	        Boat.Update();
+	        Glider.Update();
             View.Update();
         }
 
@@ -429,7 +412,23 @@ namespace Hedra.Engine.Player
 		
 		public static IPlayer Instance => GameManager.Player;
 
-        public void Unload(){
+		public override bool IsGliding => Glider.Enabled;
+		
+		public override bool IsSailing => Boat.Enabled;
+		
+		public override bool IsTravelling
+		{
+			get => IsGliding || IsSailing;
+			set
+			{
+				if (value) throw new ArgumentException("Travelling can't be enabled.");
+				if (IsGliding) Glider.Disable();
+				if (IsSailing) Boat.Disable();
+			}
+		}
+
+        public void Unload()
+        {
 			if(_inCementery){
 				_oldCementeryTime = SkyManager.DayTime;
 				SkyManager.DayTime = _cementeryTime;
@@ -442,7 +441,8 @@ namespace Hedra.Engine.Player
             }
 		}
 		
-		public void Load(){
+		public void Load()
+		{
 			if(_inCementery){
 				SkyManager.DayTime = _oldCementeryTime;
 			}
@@ -506,7 +506,7 @@ namespace Hedra.Engine.Player
 	        View.TargetYaw = 0f;
 	        View.TargetDistance = 10f;
 	        HandLamp.Enabled = false;
-            IsGliding = false;
+            IsTravelling = false;
 	        IsKnocked = false;	
 		    Spawner.Enabled = true;
 		    HandLamp.Enabled = false;

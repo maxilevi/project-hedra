@@ -10,6 +10,7 @@ in vec3 InNorm;
 in vec4 Coords;
 in vec3 LightDir;
 in vec3 vertex_position;
+in vec3 base_vertex_position;
 in vec3 base_normal;
 in vec4 point_diffuse;
 
@@ -37,8 +38,8 @@ void main()
 	{
 		discard;
 	}
-	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, vertex_position.xyz).r;
-	vec4 inputColor = vec4(linear_to_srbg(Color.xyz + tex * 0.2 * useNoiseTexture), Color.w);
+	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, base_vertex_position.xyz * 0.5).r;
+	vec4 inputColor = vec4(linear_to_srbg(Color.xyz + tex * useNoiseTexture), Color.w);
 
 	if(Outline){
 		inputColor += vec4(Color.xyz, -1.0) * .5;
@@ -85,14 +86,18 @@ void main()
 		FColor = vec4( inputColor.xyz * ShadowVisibility * (Tint.rgb + BaseTint.rgb) + pointLightColor, Alpha);
 	}
 
-	if (Outline) {
+	if (Outline)
+	{
 		vec3 unitToCamera = normalize( (inverse(gl_ModelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - vertex_position.xyz);
 		float outlineDot = max(0.0, 1.0 - dot(base_normal, unitToCamera));
 		FColor = outlineDot * ( cos(Time * 10.0)-.0) * 2.0 * OutlineColor * Alpha;
 		OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
 		OutNormal = vec4(0.0, 0.0, 0.0, 0.0);
-	} else {
+	}
+	else
+	{
+	    mat3 NormalMat = mat3(transpose(inverse(gl_ModelViewMatrix)));
 		OutPosition = vec4(InPos, gl_FragCoord.z) * Alpha;
-		OutNormal = vec4(InNorm,1.0) * Alpha;
+		OutNormal = vec4(NormalMat * InNorm.xyz, 1.0) * Alpha;
 	}
 }

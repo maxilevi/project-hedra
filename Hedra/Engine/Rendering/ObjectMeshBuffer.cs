@@ -121,7 +121,8 @@ namespace Hedra.Engine.Rendering
 				Renderer.Disable(EnableCap.Blend);
 		}
 		
-		public Vector3 TransformPoint(Vector3 Vertex){
+		public Vector3 TransformPoint(Vector3 Vertex)
+        {
 			Vertex *= Scale;
 			
 			Vertex += AnimationRotationPoint;
@@ -146,53 +147,58 @@ namespace Hedra.Engine.Rendering
             return Vertex;
 		}
 		
-		public Matrix4 RotationMatrix{
-			get{ 
+		public Matrix4 RotationMatrix
+        {
+			get
+            { 
 				if(_rotMatrixCached) return _rotationMatrix;
                 				
-				_rotationMatrix = Matrix4.CreateRotationX(Rotation.X * Mathf.Radian);
-				_rotationMatrix *= Matrix4.CreateRotationY(Rotation.Y * Mathf.Radian);
-				_rotationMatrix *= Matrix4.CreateRotationZ(Rotation.Z * Mathf.Radian);
+				_rotationMatrix = Matrix4.CreateRotationX(Rotation.X * Mathf.Radian)
+                    * Matrix4.CreateRotationY(Rotation.Y * Mathf.Radian)
+                    * Matrix4.CreateRotationZ(Rotation.Z * Mathf.Radian);
 				_rotMatrixCached = true;
 				return _rotationMatrix;
 				
 			}
 		}
 
-		public Vector3 Rotation{
-			get{ return _rotation; }
-			set{
+		public Vector3 Rotation
+        {
+			get => _rotation;
+		    set
+            {
 				_rotation = value;			
 				_rotMatrixCached = false;  
 			}
 		}
 
-		public Matrix4 TransformationMatrix{
-            get {
-				return _transformationMatrix;
-			} 
-			set{
-				_transformationMatrix = value;
-			} 
+		public Matrix4 TransformationMatrix
+        {
+            get => _transformationMatrix;
+		    set => _transformationMatrix = value;
 		}
-		public Vector3 LocalRotation{
-			get{ return _localRotation; }
-			set{
+		public Vector3 LocalRotation
+        {
+			get => _localRotation;
+		    set
+            {
 				_localRotation = value;
-				_localRotationMatrix = Matrix4.CreateRotationX(value.X * Mathf.Radian);
-				_localRotationMatrix *= Matrix4.CreateRotationY(value.Y * Mathf.Radian);
-				_localRotationMatrix *= Matrix4.CreateRotationZ(value.Z * Mathf.Radian);
+				_localRotationMatrix = Matrix4.CreateRotationX(value.X * Mathf.Radian)
+                    * Matrix4.CreateRotationY(value.Y * Mathf.Radian)
+                    * Matrix4.CreateRotationZ(value.Z * Mathf.Radian);
 			}
 		}
 		
 
-		public Vector3 AnimationRotation{
-			get{ return _animationRotation; }
-			set{
+		public Vector3 AnimationRotation
+        {
+			get => _animationRotation;
+		    set
+            {
 				_animationRotation = value;
-				_animationRotationMatrix = Matrix4.CreateRotationX(value.X * Mathf.Radian);
-				_animationRotationMatrix *= Matrix4.CreateRotationY(value.Y * Mathf.Radian);
-				_animationRotationMatrix *= Matrix4.CreateRotationZ(value.Z * Mathf.Radian);
+				_animationRotationMatrix = Matrix4.CreateRotationX(value.X * Mathf.Radian)
+                    * Matrix4.CreateRotationY(value.Y * Mathf.Radian)
+                    * Matrix4.CreateRotationZ(value.Z * Mathf.Radian);
 			}
 		}
 		

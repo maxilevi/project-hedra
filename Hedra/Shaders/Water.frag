@@ -31,7 +31,8 @@ void main()
 		if( d-floor(d) < 0.5) discard;
 	}
 	vec4 InputColor = Color;
-	for(int i = 0; i < 16; i++){
+	for(int i = 0; i < 16; i++)
+	{
 		if(AreaColors[i] != vec4(0.0, 0.0, 0.0, 0.0))
 		InputColor = mix(AreaColors[i], InputColor, clamp(length(AreaPositions[i].xyz - InPos.xyz) / AreaPositions[i].w , 0.0, 1.0) );
 	}

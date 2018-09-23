@@ -24,9 +24,9 @@ namespace Hedra.Engine.Rendering
 		public static ITexture2DProvider Provider { get; set; } = new Texture2DProvider();
 		public static readonly List<uint> Textures = new List<uint>();
 
-		public static uint LoadTexture(Bitmap Bmp, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
+		public static uint LoadTexture(BitmapObject BitmapObject, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
 		{
-			var id = Provider.LoadTexture(Bmp, Min, Mag, Wrap);
+			var id = Provider.LoadTexture(BitmapObject, Min, Mag, Wrap);
 			Textures.Add(id);
 			if(Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId)
 				Log.WriteLine($"[Error] Texture being created outside of the GL thread");
@@ -58,20 +58,25 @@ namespace Hedra.Engine.Rendering
 		public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
 		{
 			Log.WriteLine($"Loading Texture: {Path}", LogType.GL);
-			return LoadTexture(new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))), Min, Mag, Wrap);
+			return LoadTexture(new BitmapObject
+			{
+				Bitmap = new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))),
+				Path = Path
+			}, Min, Mag, Wrap);
 		}
 		
-		public static Bitmap LoadBitmapFromAssets(string Path){
+		public static Bitmap LoadBitmapFromAssets(string Path)
+		{
 			return new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3)));
 		}
 		
 		public static Vector2 LineSize(string Text, Font F)
 		{
-			Bitmap Bmp = new Bitmap(1,1);
-			using (Graphics Graphics = Graphics.FromImage(Bmp))
+			var bmp = new Bitmap(1,1);
+			using (var graphics = Graphics.FromImage(bmp))
 			{ 
-				SizeF S = Graphics.MeasureString(Text, F);
-				return new Vector2(S.Width, S.Height);
+				var s = graphics.MeasureString(Text, F);
+				return new Vector2(s.Width, s.Height);
 				
 			}  
 		}
@@ -84,7 +89,11 @@ namespace Hedra.Engine.Rendering
 		    bmp.SetPixel(0, 1, textureColor);
 		    bmp.SetPixel(1, 0, textureColor);
 		    bmp.SetPixel(1, 1, textureColor);
-            return LoadTexture(bmp, TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear, TextureWrapMode.Repeat);
+            return LoadTexture(new BitmapObject
+            {
+	            Bitmap = bmp,
+	            Path = $"UI:Color:{TextureColor}"
+            }, TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear, TextureWrapMode.Repeat);
 		}
 		
 		public static Bitmap ReColorMask(Color NewColor, Bitmap Mask){

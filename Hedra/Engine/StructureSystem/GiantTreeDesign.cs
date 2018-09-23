@@ -5,6 +5,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -50,17 +51,23 @@ namespace Hedra.Engine.StructureSystem
                 shapes[i].Transform(scaleMatrix * transMatrix);
             }
 
+            var underWater = region.Generation.GetHeight(position.X, position.Z, null, out _) < BiomePool.SeaLevel;
             Executer.ExecuteOnMainThread(delegate
             {
-                var treeBoss = BossGenerator.Generate(new [] { MobType.Beetle, MobType.Gorilla }, rng);
+                var chestPosition = Vector3.TransformPosition(Vector3.UnitZ * 10f + Vector3.UnitX * -80f, transMatrix);
+                IEntity treeBoss = null;
+                if (!underWater)
+                {
+                    BossGenerator.Generate(new [] { MobType.Beetle, MobType.Gorilla }, rng);
+                    treeBoss.Position = chestPosition.Xz.ToVector3() - Vector3.UnitZ * 30f;
+                }
+
                 var chest = World.SpawnChest(
-                    Vector3.TransformPosition(Vector3.UnitZ * 10f + Vector3.UnitX * -80f, transMatrix),
+                    chestPosition,
                     ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon))
                     );
                 chest.Condition += () => treeBoss == null || treeBoss.IsDead;
                 chest.Rotation = Vector3.UnitY * 90f;
-
-                treeBoss.Position = chest.Position.Xz.ToVector3() - Vector3.UnitZ * 30f;
             });
             Structure.AddCollisionShape(shapes.ToArray());
             Structure.AddStaticElement(model);
@@ -68,10 +75,8 @@ namespace Hedra.Engine.StructureSystem
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
-            BlockType type;
-            float height = Biome.Generation.GetHeight( TargetPosition.X, TargetPosition.Z, null, out type);
-
-            return Rng.Next(0, 100) == 1 && height > 0;
+            var height = Biome.Generation.GetHeight( TargetPosition.X, TargetPosition.Z, null, out _);
+            return Rng.Next(0, 100) == 1 && height > BiomePool.SeaLevel || Rng.Next(0, 500) == 1 && height <= BiomePool.SeaLevel;
         }
     }
 }

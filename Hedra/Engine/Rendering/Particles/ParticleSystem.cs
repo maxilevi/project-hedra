@@ -91,18 +91,23 @@ namespace Hedra.Engine.Rendering.Particles
 				}
 			}
 			
-			if(Shape == ParticleShape.Cone){
+			if(Shape == ParticleShape.Cone)
+            {
 				Particles.Add(new Particle3D(Position, ParticleCreator.UnitWithinCone(Direction, ConeAngle)* 25, Mathf.RandomVector3(Utils.Rng) * 360,
                              NewColor,
                              Scale + ParticleScale, GravityEffect, ParticleLifetime));
-			}else if(Shape == ParticleShape.Sphere){
+			}
+            else if(Shape == ParticleShape.Sphere)
+            {
 				
 				if(ParticlePosition.X * ParticlePosition.X + ParticlePosition.Y * ParticlePosition.Y + ParticlePosition.Z * ParticlePosition.Z <=
 				   (PositionErrorMargin.X * PositionErrorMargin.X + PositionErrorMargin.Y * PositionErrorMargin.Y + PositionErrorMargin.Z * PositionErrorMargin.Z) / 4.0)
 				Particles.Add(new Particle3D(this.Position + ParticlePosition, Direction * 25, Mathf.RandomVector3(Utils.Rng) * 360,
                              NewColor,
                              Scale + ParticleScale, GravityEffect, ParticleLifetime));
-			}else{
+			}
+            else
+            {
 				Particles.Add(new Particle3D(this.Position + ParticlePosition, Direction * 25, Mathf.RandomVector3(Utils.Rng) * 360,
                              NewColor,
                              Scale + ParticleScale, GravityEffect, ParticleLifetime));

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -168,9 +169,8 @@ namespace Hedra.Engine.StructureSystem
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
         {
-            BlockType type;
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out type);
-            return Rng.Next(0, 75) == 1 && height > 0;
+            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
+            return Rng.Next(0, 75) == 1 && height > BiomePool.SeaLevel;
         }
         
         public override int[] AmbientSongs => new []
