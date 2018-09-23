@@ -4,6 +4,7 @@ using System.Linq;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
@@ -13,6 +14,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Loader
 {
@@ -21,12 +23,16 @@ namespace Hedra.Engine.Loader
         private readonly Panel _debugPanel;
         private readonly GUIText _debugText;
 	    private readonly Texture _geomPoolMemory;
+	    private readonly Texture _depthTexture;
 	    private float _passedTime;
+	    private bool _depthMode;
+	    private bool _extraDebugView;
 
         public DebugInfoProvider()
         {
             _debugPanel = new Panel();
-			
+			_depthTexture = new Texture(0, Vector2.Zero, Vector2.One);
+	        _depthTexture.TextureElement.Flipped = true;
             _debugText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
 	        _geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
 	        _debugPanel.AddElement(_debugText);
@@ -39,6 +45,19 @@ namespace Hedra.Engine.Loader
 	        {
 		        GameLoader.EnableGLDebug();
 	        }
+	        
+	        EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs Args)
+	        {
+		        if (Args.Key == Key.F7 && GameSettings.DebugView)
+		        {
+			        _depthMode = !_depthMode;
+		        }
+
+		        if (Args.Key == Key.F8 && GameSettings.DebugView)
+		        {
+			        _extraDebugView = !_extraDebugView;
+		        }
+	        });
 #endif	 
         }
 
@@ -82,11 +101,21 @@ namespace Hedra.Engine.Loader
             {
 				_debugPanel.Disable();
 			}
+
+	        if (_depthMode)
+	        {
+		        _depthTexture.TextureElement.TextureId = DrawManager.MainBuffer.Ssao.FirstPass.TextureID[0];
+		        _depthTexture.Enable();
+	        }
+	        else
+	        {
+		        _depthTexture.Disable();
+	        }
         }
 
 	    public void Draw()
 	    {
-		    if (GameSettings.DebugView)
+		    if (GameSettings.DebugView && _extraDebugView)
 		    {
 		        var player = GameManager.Player;
 		        var underChunk = World.GetChunkAt(player.Position);

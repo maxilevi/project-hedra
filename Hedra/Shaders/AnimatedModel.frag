@@ -54,14 +54,18 @@ void main(void)
 	vec4 new_color = pass_color * ShadowVisibility * (BaseTint + Tint) + pass_lightDiffuse * (BaseTint + Tint);
 	new_color = vec4(linear_to_srbg(new_color.xyz), new_color.w);
 
-	if(UseFog){
+	if(UseFog)
+	{
 		vec4 NewColor = mix(sky_color(), new_color, pass_visibility);
 		out_colour = vec4(NewColor.xyz, new_color.w);
-	}else{
+	}
+	else
+	{
 		out_colour = vec4(new_color.xyz, new_color.w);
 	}		
-		
+	
+	// Ignore the gl_FragCoord.z since it causes issues with the water
 	mat3 mat = mat3(transpose(inverse(gl_ModelViewMatrix)));
-	out_position = vec4( (gl_ModelViewMatrix * vec4(pass_position, 1.0)).xyz, gl_FragCoord.z) * Alpha;
+	out_position = vec4( (gl_ModelViewMatrix * vec4(pass_position, 1.0)).xyz * Alpha, 2.0);
 	out_normal = vec4( mat * pass_normal, 1.0) * Alpha;
 }

@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player.BoatSystem
         
         public void Update()
         {
-            const float propulsionFactor = 30.0f;
+            const float propulsionFactor = 40.0f;
             if (GameManager.Keyboard[Key.W])
             {
                 _accumulatedDirection = _player.View.Forward * propulsionFactor;

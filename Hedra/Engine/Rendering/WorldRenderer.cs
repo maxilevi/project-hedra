@@ -157,7 +157,8 @@ namespace Hedra.Engine.Rendering
             Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
 		    StaticShader["noiseTexture"] = 1;
             
-            if (GameSettings.Shadows){
+            if (GameSettings.Shadows)
+            {
 				StaticShader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
 				Renderer.ActiveTexture(TextureUnit.Texture0);
 				Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
@@ -166,17 +167,19 @@ namespace Hedra.Engine.Rendering
 			}		
 		}
 		
-		private static void StaticUnBind(){
+		private static void StaticUnBind()
+		{
 			StaticShader.Unbind();
 		}
 		
-		private static void WaterBind(){
+		private static void WaterBind()
+		{
 			Renderer.Enable(EnableCap.Blend);
 		    Renderer.BlendEquation(BlendEquationMode.FuncAdd);
             Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
            	Renderer.Enable(EnableCap.Texture2D);
-           	
-           	WaterShader.Bind();
+
+            WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
            	
            	Renderer.ActiveTexture(TextureUnit.Texture0);
@@ -195,7 +198,8 @@ namespace Hedra.Engine.Rendering
             if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
 		}
 		
-		private static void WaterUnBind(){
+		private static void WaterUnBind()
+        {
 			Renderer.Disable(EnableCap.Blend);
 			Renderer.Disable(EnableCap.Texture2D);
 			Renderer.Enable(EnableCap.CullFace);

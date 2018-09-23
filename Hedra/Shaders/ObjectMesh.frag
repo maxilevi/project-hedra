@@ -41,7 +41,8 @@ void main()
 	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, base_vertex_position.xyz * 0.5).r;
 	vec4 inputColor = vec4(linear_to_srbg(Color.xyz + tex * useNoiseTexture), Color.w);
 
-	if(Outline){
+	if(Outline)
+	{
 		inputColor += vec4(Color.xyz, -1.0) * .5;
 	}
 	if(Dither){
@@ -96,8 +97,9 @@ void main()
 	}
 	else
 	{
+	    // Ignore the gl_FragCoord.z since it causes issues with the water
 	    mat3 NormalMat = mat3(transpose(inverse(gl_ModelViewMatrix)));
-		OutPosition = vec4(InPos, gl_FragCoord.z) * Alpha;
+		OutPosition = vec4((gl_ModelViewMatrix * vec4(InPos, 1.0)).xyz * Alpha, 2.0);
 		OutNormal = vec4(NormalMat * InNorm.xyz, 1.0) * Alpha;
 	}
 }

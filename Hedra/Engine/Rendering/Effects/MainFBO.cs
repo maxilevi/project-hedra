@@ -56,14 +56,16 @@ namespace Hedra.Engine.Rendering.Effects
 			
 			#region Normal
 			//Just paste the contents without any effect
-			if(!GameSettings.SSAO){
+			if(!GameSettings.SSAO)
+            {
 				FinalFbo.Bind();
                 Shader.Bind();
 				DrawQuad(Default.TextureID[0]);
                 Shader.Unbind();
 				FinalFbo.UnBind();
 				
-				if(GameSettings.BlurFilter){
+				if(GameSettings.BlurFilter)
+                {
 					Default.Bind();
                     Shader.Bind();
 					DrawQuad(FinalFbo.TextureID[0]);
@@ -89,9 +91,9 @@ namespace Hedra.Engine.Rendering.Effects
 				Ssao.FirstPassShader.Bind();
 			
 				Renderer.Enable(EnableCap.Texture2D);
-				Renderer.Enable(EnableCap.Blend);
+                Renderer.Enable(EnableCap.Blend);
 
-			    DrawManager.UIRenderer.SetupQuad();
+                DrawManager.UIRenderer.SetupQuad();
 
                 Renderer.ActiveTexture(TextureUnit.Texture0);
 				Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[1]);

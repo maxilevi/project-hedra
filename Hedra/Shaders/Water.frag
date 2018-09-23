@@ -20,6 +20,7 @@ uniform bool Dither;
 uniform float Smoothness;
 
 const float Strength = 0.01;
+
 void main()
 {
 	if(Visibility < 0.005)
@@ -40,18 +41,17 @@ void main()
 	
 	vec2 TexCoords = (ClipSpace.xy / ClipSpace.w) / 2.0 + 0.5;
 
-	float Near = 2.0;
-	float Far = 1024.0;
-	float Depth = texture(DepthMap, TexCoords).a;
-	float FloorDistance = 2.0 * Near * Far / (Far + Near - (2.0 * Depth - 1.0) * (Far - Near));
+	const float Near = 2.0;
+	const float Far = 4096.0;
+	float ObjectDepth = texture(DepthMap, TexCoords).a;
+	float FloorDistance = 2.0 * Near * Far / (Far + Near - (2.0 * ObjectDepth - 1.0) * (Far - Near));
 
-	Depth = gl_FragCoord.z;
+	float Depth = gl_FragCoord.z;
 	float WaterDistance = 2.0 * Near * Far / (Far + Near - (2.0 * Depth - 1.0) * (Far - Near));
 	float WaterDepth = FloorDistance - WaterDistance;
 	vec4 NewColor = mix(sky_color(), InputColor, Visibility);
-	
 	OutColor = NewColor;
-	OutColor.a *= clamp(WaterDepth / (4.0 * Smoothness), 0.0, 1.0);
+	OutColor.a = OutColor.a * (ObjectDepth < 1.0 ? clamp((WaterDepth / 4.0 / Smoothness) * .25, 0.0, 1.0) : 1.0);
 	
 	OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
 	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);

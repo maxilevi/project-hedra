@@ -41,17 +41,17 @@ namespace Hedra.Engine.Rendering.Effects
 		    SecondPassShader = Shader.Build("Shaders/SSAO.vert", "Shaders/SSAO-Pass2.frag");
 		    ThirdPassShader = Shader.Build("Shaders/SSAO.vert", "Shaders/SSAO-Pass3.frag");
 
-            FramebufferAttachment[] Attachments = new FramebufferAttachment[3];
-			Attachments[0] = FramebufferAttachment.ColorAttachment0;
-			Attachments[1] = FramebufferAttachment.ColorAttachment1;
-			Attachments[2] = FramebufferAttachment.ColorAttachment2;
+            var attachments = new FramebufferAttachment[3];
+			attachments[0] = FramebufferAttachment.ColorAttachment0;
+			attachments[1] = FramebufferAttachment.ColorAttachment1;
+			attachments[2] = FramebufferAttachment.ColorAttachment2;
 
-            PixelInternalFormat[] Formats = new PixelInternalFormat[3];
-		    Formats[0] = PixelInternalFormat.Rgba8;
-		    Formats[1] = PixelInternalFormat.Rgba32f;
-		    Formats[2] = PixelInternalFormat.Rgba16f;
+            var formats = new PixelInternalFormat[3];
+		    formats[0] = PixelInternalFormat.Rgba8;
+		    formats[1] = PixelInternalFormat.Rgba32f;
+		    formats[2] = PixelInternalFormat.Rgba16f;
 
-            FirstPass = new FBO(new Size(GameSettings.Width, GameSettings.Height), Attachments, Formats, false, false, 0, true);
+            FirstPass = new FBO(new Size(GameSettings.Width, GameSettings.Height), attachments, formats, false, false, 0, true);
 		    ThirdPass = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
 		    SecondPass = new FBO(GameSettings.Width, GameSettings.Height);
 
@@ -65,25 +65,27 @@ namespace Hedra.Engine.Rendering.Effects
 			AOSampler = Renderer.GetUniformLocation(ThirdPassShader.ShaderId, "SSAOInput");
 			Intensity = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "Intensity");
 			
-			Random Gen = new Random();
-			Bitmap Bmp = new Bitmap(4,4);
-			for(int x = 0; x < 4; x++){
-				for(int y = 0; y < 4; y++){
-					Vector3 Value = new Vector3( Gen.NextFloat(), Gen.NextFloat(), 0.0f);
-					Color Col = Color.FromArgb(255, (byte)(Value.X * 255),(byte) (Value.Y * 255), (byte) (Value.Z * 255) );
-					Bmp.SetPixel(x,y, Col);
+			var gen = new Random();
+			var bmp = new Bitmap(4,4);
+			for(var x = 0; x < 4; x++)
+			{
+				for(var y = 0; y < 4; y++)
+				{
+					var value = new Vector3( gen.NextFloat(), gen.NextFloat(), 0.0f);
+					var col = Color.FromArgb(255, (byte)(value.X * 255),(byte) (value.Y * 255), (byte) (value.Z * 255) );
+					bmp.SetPixel(x,y, col);
 				}
 			}
 			RandomTex = Renderer.GenTexture();
 			
 			Renderer.BindTexture(TextureTarget.Texture2D, RandomTex);
 	
-	        BitmapData bmp_data = Bmp.LockBits(new Rectangle(0,0,Bmp.Width, Bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+	        var bmpData = bmp.LockBits(new Rectangle(0,0,bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 	
-	        Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
-	            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
+	        Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpData.Width, bmpData.Height, 0,
+	            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
 	
-	        Bmp.UnlockBits(bmp_data);
+	        bmp.UnlockBits(bmpData);
 	        //Bmp.Dispose();
 
 			Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest);
@@ -91,20 +93,20 @@ namespace Hedra.Engine.Rendering.Effects
 			Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
 			Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
 			
-			Vector3[] VecSamples = new Vector3[16];
-			for(int i = 0; i < 16; i++){
-				VecSamples[i] = new Vector3( Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() );
-				VecSamples[i].Normalize();
-				VecSamples[i] *= Utils.Rng.NextFloat();
-				float Scale = i/16;
-				Scale = Mathf.Lerp(0.1f, 1.0f, Scale * Scale);
-				VecSamples[i] *= Scale;
+			var vecSamples = new Vector3[16];
+			for(var i = 0; i < 16; i++){
+				vecSamples[i] = new Vector3( Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() );
+				vecSamples[i].Normalize();
+				vecSamples[i] *= Utils.Rng.NextFloat();
+				var scale = i / 16f;
+				scale = Mathf.Lerp(0.1f, 1.0f, scale * scale);
+				vecSamples[i] *= scale;
 			}
-			List<float> fsamples = new List<float>();
-			for(int i = 0; i < VecSamples.Length; i++){
-				fsamples.Add(VecSamples[i].X);
-				fsamples.Add(VecSamples[i].Y);
-				fsamples.Add(VecSamples[i].Z);
+			var fsamples = new List<float>();
+			for(var i = 0; i < vecSamples.Length; i++){
+				fsamples.Add(vecSamples[i].X);
+				fsamples.Add(vecSamples[i].Y);
+				fsamples.Add(vecSamples[i].Z);
 			}
 			Samples = fsamples.ToArray();
 			#endregion

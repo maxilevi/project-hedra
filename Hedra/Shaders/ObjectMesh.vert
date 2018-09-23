@@ -136,7 +136,7 @@ void main(){
 	Ambient = 0.25;
 	point_diffuse = diffuse(unitToLight, unitNormal, FLightColor) * linear_color;
 
-	InPos = (gl_ModelViewMatrix * Vertex).xyz;
+	InPos = Vertex.xyz;
 	vertex_position = Vertex.xyz;
 	base_vertex_position = InVertex.xyz;
 	base_normal = SurfaceNormal;

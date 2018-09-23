@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player.BoatSystem
             if (Enabled)
             {
                 var movement = GetWaterMovement(_player.Physics.TargetPosition.X, _player.Physics.TargetPosition.Z);
-                var waterHeight = Physics.WaterHeightAtPosition(_player.Position) - 1.0f;
+                var waterHeight = Physics.WaterHeightAtPosition(_player.Position);
                 var boatY = _player.Physics.TargetPosition.Y;
 
                 if (Math.Abs(boatY - waterHeight) < 1.5f)
@@ -40,15 +40,16 @@ namespace Hedra.Engine.Player.BoatSystem
                     _player.Physics.TargetPosition
                         = new Vector3(_player.Physics.TargetPosition.X, waterHeight + movement, _player.Physics.TargetPosition.Z);
                     InWater = true;
+                    _player.Physics.ResetFall();
                 }
                 else if (boatY < waterHeight)
                 {
-                    _player.Physics.GravityDirection = Vector3.UnitY;
+                    _player.Physics.GravityDirection = Vector3.UnitY * 2.5f;
                     InWater = true;
                 }
                 else if (boatY > waterHeight)
                 {
-                    _player.Physics.GravityDirection = -Vector3.UnitY;
+                    _player.Physics.GravityDirection = -Vector3.UnitY * 2.5f;
                     InWater = false;
                 }
             }
@@ -65,7 +66,6 @@ namespace Hedra.Engine.Player.BoatSystem
             {
                 _player.Physics.GravityDirection = -Vector3.UnitY;
                 _player.Movement.CaptureMovement = true;
-                _player.Physics.ResetFall();
             }
             _wasEnabled = Enabled;
         }
