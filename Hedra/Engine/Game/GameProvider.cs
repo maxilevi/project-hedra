@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Drawing;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
@@ -31,21 +32,34 @@ namespace Hedra.Engine.Game
         public void Load()
 		{
 		    Keyboard = new KeyboardManager();
+			
+			Log.WriteLine("Loading the world...");
             World.Load();
-			Log.WriteLine("World Created Successfully!");
-			Player = new LocalPlayer();
-			Log.WriteLine("Player Created Successfully!");
-
-			Player.Model.Enabled = false;
+			
+			Log.WriteLine("Loading the player...");
+			Player = new LocalPlayer
+			{
+				Enabled = false,
+				Model =
+				{
+					Enabled = false
+				}
+			};
+			
+			Log.WriteLine("Creating the GUI...");
 			Player.UI.ShowMenu();
 			Player.UI.ChrChooser.Disable(); 
 			Player.UI.Menu.Enable();
-			
-			Log.WriteLine("Setted up GUI");
 			_loadingScreen = new LoadingScreen(Player);
-
-			Player.Enabled = false;
 			LoadMenu();
+			
+			Log.WriteLine("Loading the character classes...");
+			var classes = ClassDesign.AvailableClasses;
+			for (var i = 0; i < classes.Length; i++)
+			{
+				var classObject = ClassDesign.FromType(classes[i]); 
+				Log.WriteLine($"Loading character class '{classObject.Name}'");
+			}
 		}
 
 	    public void LoadMenu()
