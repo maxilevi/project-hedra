@@ -10,6 +10,7 @@ namespace Hedra.Engine.ItemSystem
         Berry,
         Gold,
         Glider,
-        Mushroom
+        Mushroom,
+        Boat
     }
 }

@@ -173,7 +173,21 @@ namespace Hedra.Engine.Player
                     else if (vehicleItem != null)
                     {
                         _vehicleCooldown = .25f;
-                        vehicleItem.GetAttribute<string>("");
+                        IVehicle vehicle = null;
+                        switch (vehicleItem.Name)
+                        {
+                            // FIXME: Use a more OOP style
+                            case "Boat":
+                                vehicle = _player.Boat;
+                                break;
+                            case "Glider":
+                                vehicle =_player.Glider;
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException($"Failed to find a vehicle.");
+                        }
+                        if (vehicle.Enabled) vehicle.Disable();
+                        else vehicle.Enable();
                     }
                 }
             });

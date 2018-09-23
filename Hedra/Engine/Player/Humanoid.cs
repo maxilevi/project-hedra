@@ -372,13 +372,13 @@ namespace Hedra.Engine.Player
 		    set => _mana = Mathf.Clamp(value,0,MaxMana);
 		}
 		
-		public virtual bool IsSailing => throw new NotImplementedException();
+		public virtual bool IsSailing => false;
 
-		public virtual bool IsGliding => throw new NotImplementedException();
+		public virtual bool IsGliding => false;
 
 		public virtual bool IsTravelling
 		{
-			get => throw new NotImplementedException();
+			get => false;
 			set => throw new NotImplementedException();
 		}
 

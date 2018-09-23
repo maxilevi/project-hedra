@@ -982,6 +982,10 @@
       <Link>Assets\Items\Katars\UncommonLeatherKatar.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Misc\BoatIcon.ply">
+      <Link>Assets\Items\Misc\BoatIcon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\Mushroom.ply">
       <Link>Assets\Items\Misc\Mushroom.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4905,7 +4909,9 @@
     <None Include="Modules\Mobs\Gorilla.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Modules\Items\Misc\Boat.json" />
+    <Content Include="Modules\Items\Misc\Boat.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\Mushroom.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

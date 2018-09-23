@@ -9,6 +9,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using Hedra.Engine.CacheSystem;
 using OpenTK;
@@ -138,6 +139,14 @@ namespace Hedra.Engine.Management
 					LocalPlayer.Instance.XP += float.Parse(Parts[1]);
 					return true;
 				}
+				if (Parts[0] == "list")
+				{
+					if (Parts[1] == "items")
+					{
+						Result = string.Join(Environment.NewLine, ItemFactory.Templater.Templates.Select(T => T.Name));
+					    return true;
+					}
+				}
 			    if (Parts[0] == "lvl")
 			    {
 			        LocalPlayer.Instance.Level = int.Parse(Parts[1]);
@@ -232,6 +241,10 @@ namespace Hedra.Engine.Management
 				    {
 				        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(ItemType.Glider));
 				    }
+					if (Parts[1] == "boat")
+					{
+						LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(ItemType.Boat));
+					}
                     if (Parts[1] == "gold")
 				    {
 				        var item = ItemPool.Grab(ItemType.Gold);
