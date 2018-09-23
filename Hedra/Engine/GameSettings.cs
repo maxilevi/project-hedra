@@ -20,7 +20,7 @@ namespace Hedra.Engine
     [Obfuscation(Exclude = false, Feature = "-rename")]
     public static class GameSettings
     {
-        public static bool TestingMode { get; set; } = false;
+        public static bool TestingMode { get; set; }
         public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
         public static float BloomModifier { get; set; } = 1f;
         public static bool Wireframe { get; set; }
