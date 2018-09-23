@@ -30,6 +30,7 @@ namespace HedraTests.Structure
         public override void Setup()
         {
             base.Setup();
+            DesiredHeight = BiomePool.SeaLevel+1;
             NameGenerator.Load();
             GameManager.Player = new PlayerMock();
             var cacheProvider = new Mock<ICacheProvider>();
@@ -45,6 +46,7 @@ namespace HedraTests.Structure
             _interceptedStructures = new List<BaseStructure>();
             var defaultRegion = new Region();
             defaultRegion.Colors = new RegionColor(1, new NormalBiomeColors());
+            defaultRegion.Generation = new RegionGeneration(1, new SimpleGenerationDesignMock(() => DesiredHeight));
             var biomePoolMock = new Mock<IBiomePool>();
             biomePoolMock.Setup(B => B.GetRegion(It.IsAny<Vector3>())).Returns(defaultRegion);
             var worldMock = new Mock<IWorldProvider>();
@@ -103,6 +105,7 @@ namespace HedraTests.Structure
             return new CollidableStructure(Design, RandomLocation, null);
         }
         
+        protected float DesiredHeight { get; set; }
         protected IEntity[] WorldEntities => _interceptedEntities.ToArray();
         protected BaseStructure[] WorldStructures => _interceptedStructures.ToArray();
         protected T Design { get; private set; }

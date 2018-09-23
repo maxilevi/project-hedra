@@ -58,7 +58,7 @@ namespace Hedra.Engine.StructureSystem
                 IEntity treeBoss = null;
                 if (!underWater)
                 {
-                    BossGenerator.Generate(new [] { MobType.Beetle, MobType.Gorilla }, rng);
+                    treeBoss = BossGenerator.Generate(new [] { MobType.Beetle, MobType.Gorilla }, rng);
                     treeBoss.Position = chestPosition.Xz.ToVector3() - Vector3.UnitZ * 30f;
                 }
 

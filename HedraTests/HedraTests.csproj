@@ -125,6 +125,7 @@
     <Compile Include="Structure\GiantTreeDesignTest.cs" />
     <Compile Include="Structure\GraveyardDesignTest.cs" />
     <Compile Include="Structure\ObeliskDesignTest.cs" />
+    <Compile Include="Structure\SimpleGenerationDesignMock.cs" />
     <Compile Include="Structure\StructureDesignWorldBuildingMock.cs" />
     <Compile Include="Structure\StructureTest.cs" />
     <Compile Include="Structure\TravellingMerchantDesignTest.cs" />
