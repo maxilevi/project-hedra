@@ -34,5 +34,15 @@ namespace HedraTests.MathExtensions
             Assert.AreEqual( a = (float)_random.NextDouble(), c = (float)_distribution.NextDouble(),
                 $"Result mismatch with seed '{_seed}' on NextDouble(). Expected={a}, got Distribution={c}");
         }
+        
+        [Test]
+        public void TestRandomDistributionCache()
+        {
+            var distribution = new RandomDistribution(true);
+            distribution.Seed = _seed;
+            var original = distribution.Next(0, 100);
+            distribution.Seed = _seed;
+            Assert.AreEqual(original, distribution.Next(0, 100));
+        }
     }
 }
