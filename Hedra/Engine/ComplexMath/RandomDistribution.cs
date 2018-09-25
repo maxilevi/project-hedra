@@ -1,16 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Hedra.Engine.ComplexMath
 {
-    public class RandomDistribution
+    public class RandomDistribution : IRandom
     {
-        private readonly int[] _seedArray;
+        private Dictionary<int, int[]> _seedCache;
+        private int[] _seedArray;
         private int _seed;
         private int _inext;
         private int _inextp;
 
         public RandomDistribution() : this(Environment.TickCount)
         {
+        }
+
+        public RandomDistribution(bool UseCache) : this(Environment.TickCount)
+        {
+            if(UseCache) _seedCache = new Dictionary<int, int[]>();
         }
 
         public RandomDistribution(int Seed)
@@ -24,30 +31,51 @@ namespace Hedra.Engine.ComplexMath
             get => _seed;
             set
             {
-                int num1 = 161803398 - (value == int.MinValue ? int.MaxValue : Math.Abs(value));
-                this._seedArray[55] = num1;
-                int num2 = 1;
-                for (int index1 = 1; index1 < 55; ++index1)
+                if (_seedCache != null)
                 {
-                    int index2 = 21 * index1 % 55;
-                    this._seedArray[index2] = num2;
-                    num2 = num1 - num2;
-                    if (num2 < 0)
-                        num2 += int.MaxValue;
-                    num1 = this._seedArray[index2];
-                }
-                for (int index1 = 1; index1 < 5; ++index1)
-                {
-                    for (int index2 = 1; index2 < 56; ++index2)
+                    if (_seedCache.TryGetValue(value, out var arr))
                     {
-                        this._seedArray[index2] -= this._seedArray[1 + (index2 + 30) % 55];
-                        if (this._seedArray[index2] < 0)
-                            this._seedArray[index2] += int.MaxValue;
+                        _seedArray = arr;
+                    }
+                    else
+                    {
+                        CreateSeedArray(value);
+                        _seedCache.Add(value, _seedArray);
                     }
                 }
+                else
+                {
+                    CreateSeedArray(value);
+                }
+
                 this._inext = 0;
                 this._inextp = 21;
                 _seed = value;
+            }
+        }
+
+        private void CreateSeedArray(int Value)
+        {
+            int num1 = 161803398 - (Value == int.MinValue ? int.MaxValue : Math.Abs(Value));
+            this._seedArray[55] = num1;
+            int num2 = 1;
+            for (int index1 = 1; index1 < 55; ++index1)
+            {
+                int index2 = 21 * index1 % 55;
+                this._seedArray[index2] = num2;
+                num2 = num1 - num2;
+                if (num2 < 0)
+                    num2 += int.MaxValue;
+                num1 = this._seedArray[index2];
+            }
+            for (int index1 = 1; index1 < 5; ++index1)
+            {
+                for (int index2 = 1; index2 < 56; ++index2)
+                {
+                    this._seedArray[index2] -= this._seedArray[1 + (index2 + 30) % 55];
+                    if (this._seedArray[index2] < 0)
+                        this._seedArray[index2] += int.MaxValue;
+                }
             }
         }
 
@@ -94,6 +122,11 @@ namespace Hedra.Engine.ComplexMath
             if (num <= (long) int.MaxValue)
                 return (int) (this.Sample() * (double) num) + MinValue;
             return (int) ((long) (this.GetSampleForLargeRange() * (double) num) + (long) MinValue);
+        }
+        
+        public virtual double NextDouble()
+        {
+            return this.Sample();
         }
     }
 }
