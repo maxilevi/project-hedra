@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Hedra.Engine.ComplexMath
 {
@@ -35,12 +36,12 @@ namespace Hedra.Engine.ComplexMath
                 {
                     if (_seedCache.TryGetValue(value, out var arr))
                     {
-                        _seedArray = arr;
+                        _seedArray = arr.ToArray();
                     }
                     else
                     {
                         CreateSeedArray(value);
-                        _seedCache.Add(value, _seedArray);
+                        _seedCache.Add(value, _seedArray.ToArray());
                     }
                 }
                 else

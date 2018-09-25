@@ -44,7 +44,7 @@ namespace Hedra.Engine.StructureSystem
 			if (!World.IsChunkOffset(ChunkOffset))
 				throw new ArgumentException("Provided paramater does not represent a valid offset");
 
-			var distribution = new RandomDistribution();
+			var distribution = new RandomDistribution(true);
 			var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
 			var region = underChunk != null
 				? underChunk.Biome
