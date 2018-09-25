@@ -13,6 +13,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scenes;
+using Hedra.Engine.StructureSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Game
@@ -167,7 +168,7 @@ namespace Hedra.Engine.Game
 		    Player.SearchComponent<DamageComponent>().Immune = true;
 
 		    var chunkOffset = World.ToChunkSpace(Player.BlockPosition);
-		    World.StructureGenerator.CheckStructures(chunkOffset);
+		    StructureGenerator.CheckStructures(chunkOffset);
 		    while (_loadingScreen.IsLoading)
 		    {
 			    Player.Physics.TargetPosition = new Vector3(

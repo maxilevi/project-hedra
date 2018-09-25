@@ -41,7 +41,9 @@ namespace Hedra.Engine.Rendering
 		private static List<Vertex> vertices = new List<Vertex>();
 		private static List<Ref> refs = new List<Ref>();
 		
-		public static VertexData Simplify( VertexData Data, int LOD, int target_count = 100, float agresiveness = 7){
+		public static VertexData Simplify( VertexData Data, int LOD, int target_count = 100, float agresiveness = 7)
+		{
+		    return Data;
 			if(LOD == 1) return Data;
 			
 			for(int i = 0; i < triangles.Count;i++)

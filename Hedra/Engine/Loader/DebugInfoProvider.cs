@@ -27,6 +27,8 @@ namespace Hedra.Engine.Loader
 	    private float _passedTime;
 	    private bool _depthMode;
 	    private bool _extraDebugView;
+        private bool _fpsOnTitle;
+        private string _originalTitle;
 
         public DebugInfoProvider()
         {
@@ -38,6 +40,7 @@ namespace Hedra.Engine.Loader
 	        _debugPanel.AddElement(_debugText);
 	        _debugPanel.AddElement(_geomPoolMemory);
             _debugPanel.Disable();
+            _originalTitle = Program.GameWindow.Title;
             Log.WriteLine("Created debug elements.");
 	        
 #if DEBUG
@@ -57,6 +60,11 @@ namespace Hedra.Engine.Loader
 		        {
 			        _extraDebugView = !_extraDebugView;
 		        }
+
+	            if (Args.Key == Key.F12 && GameSettings.DebugView)
+	            {
+	                _fpsOnTitle = !_fpsOnTitle;
+	            }
 	        });
 #endif	 
         }
@@ -111,6 +119,14 @@ namespace Hedra.Engine.Loader
 	        {
 		        _depthTexture.Disable();
 	        }
+            if (_fpsOnTitle)
+            {
+                Program.GameWindow.Title = $"{_originalTitle} FPS={Utils.LastFrameRate} MS={Utils.FrameProccesingTime}";
+            }
+            else if(Program.GameWindow.Title != _originalTitle)
+            {
+                Program.GameWindow.Title = _originalTitle;
+            }
         }
 
 	    public void Draw()

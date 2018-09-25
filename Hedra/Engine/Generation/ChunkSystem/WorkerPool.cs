@@ -8,10 +8,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public const int MaxWorkers = 2;
         protected readonly List<Worker> Workers;
 
-        public WorkerPool()
+        public WorkerPool(int WorkerCount)
         {
             Workers = new List<Worker>();
-            for(var i = 0; i < MaxWorkers; i++)
+            for(var i = 0; i < WorkerCount; i++)
             {
                 Workers.Add(new Worker());
             }

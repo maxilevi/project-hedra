@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -203,7 +204,7 @@ namespace Hedra.Engine.StructureSystem
             return tents.ToArray();
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng)
+        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
             return Rng.Next(0, 100) == 1 && height > BiomePool.SeaLevel;

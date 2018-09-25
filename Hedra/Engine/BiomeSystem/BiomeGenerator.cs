@@ -6,6 +6,7 @@
  */
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.ComplexMath;
 using OpenTK;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -80,8 +81,14 @@ namespace Hedra.Engine.BiomeSystem
 	        return seed2(sx ^ sy);
 	    }
 
-        public static Random GenerateRng(Vector2 Offset){
-			return new Random( seed2(seed2((int) Offset.X * 1947) ^ seed2((int) Offset.Y * 2904)) );
+		public static int GenerateSeed(Vector2 Offset)
+		{
+			return seed2(seed2((int) Offset.X * 1947) ^ seed2((int) Offset.Y * 2904));
+		}
+		
+        public static Random GenerateRng(Vector2 Offset)
+        {
+			return new Random( GenerateSeed(Offset) );
         }
 		
 		public void Dispose()

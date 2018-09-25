@@ -32,6 +32,11 @@ namespace Hedra.Engine.BiomeSystem
         {
             return _design.GetHeightSubtype(X, Y, Z, CurrentHeight, Type, HeightCache);
         }
+        
+        public bool HasHeightSubtype(float X, float Z, Dictionary<Vector2, float[]> HeightCache)
+        {
+            return _design.HasHeightSubtype(X, Z, HeightCache);
+        }
 
         public float GetHeight(float X, float Z, Dictionary<Vector2, float[]> HeightCache,
             out BlockType Blocktype)

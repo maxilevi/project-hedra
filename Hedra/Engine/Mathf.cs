@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Hedra.Engine.ComplexMath;
 using OpenTK;
 
 namespace Hedra.Engine
@@ -316,10 +317,15 @@ namespace Hedra.Engine
             return rand_normal;
         }
 		
-		public static float NextFloat(this Random r)
+		public static float NextFloat(this IRandom Random)
         {
-			return (float) r.NextDouble() ;
+			return (float) Random.NextDouble();
         }
+		
+		public static float NextFloat(this Random Random)
+		{
+			return (float) Random.NextDouble();
+		}
 
         public static int LevenshteinDistance(string Str1, string Str2)
 	    {

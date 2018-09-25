@@ -57,7 +57,7 @@ namespace Hedra.Engine.BiomeSystem
 	        var noise3D = new float[0]; //Chunk.ChunkHeight / noiseScale];
 
 	        var plateaus = World.WorldBuilding.Plateaus;
-	        var groundworks = World.WorldBuilding.Groundworks;
+	        var groundworks = World.WorldBuilding.Groundworks.ToList();
 
 	        var structs = World.StructureGenerator.Structures;
 
@@ -79,70 +79,72 @@ namespace Hedra.Engine.BiomeSystem
 			            out var pathClamped, out var river, out var path, out var riverBorders, out var blockGroundworksModifier,
 			            out var blockGroundworks);
 
+		            var hasSubType = biomeGen.HasHeightSubtype(position.X, position.Y, heightCache);
+
 	                for (var y = 0; y < Chunk.Height - 1; y++)
 	                {
-
+		                var currentBlock = Blocks[x][y][z];
 	                    float noise = 0; /*Mathf.Lerp(
                                     noise3D[ (int) Math.Floor(y / (float) noiseScale) ],
                                     noise3D[ (int) Math.Min(noise3D.Length-1, Math.Floor(y / (float) noiseScale) + 1) ],
 								    (y / (float) noiseScale) - (int) Math.Floor(y / (float)noiseScale));*/
 
-	                    type = biomeGen.GetHeightSubtype(position.X, y, position.Y, height, type, heightCache);
+	                    type = hasSubType ? biomeGen.GetHeightSubtype(position.X, y, position.Y, height, type, heightCache) : type;
 
 	                    if (noise != 0 && townClamped)
 	                        townClamped = false;
 
-	                    Blocks[x][y][z].Type = BlockType.Air;
+	                    currentBlock.Type = BlockType.Air;
 
-	                    Blocks[x][y][z].Density = (Half) (1 - (y - height) + noise);
+		                currentBlock.Density = new Half(1 - (y - height) + noise);
 
 	                    if (y < 2)
-	                        Blocks[x][y][z].Density = (Half) (0.95f + rng.NextFloat() * 0.75f);
+		                    currentBlock.Density = new Half(0.95f + rng.NextFloat() * 0.75f);
 
-	                    if (Blocks[x][y][z].Density > 0)
+	                    if (currentBlock.Density > 0)
 	                    {
 
-	                        Blocks[x][y][z].Type = type;
+		                    currentBlock.Type = type;
 
 	                        if (height - y > 3.0f)
 	                        {
-	                            Blocks[x][y][z].Type = BlockType.Stone;
+		                        currentBlock.Type = BlockType.Stone;
 	                        }
 
 	                        if (y < 2)
-	                            Blocks[x][y][z].Type = BlockType.Seafloor;
+		                        currentBlock.Type = BlockType.Seafloor;
 
 	                        if (noise != 0)
-	                            Blocks[x][y][z].Noise3D = true;
+		                        currentBlock.Noise3D = true;
 
 	                    }
 
-	                    if (Blocks[x][y][z].Type == BlockType.Grass)
+	                    if (currentBlock.Type == BlockType.Grass)
 	                        if ((World.Seed == World.MenuSeed || true) && makeDirt)
-	                            Blocks[x][y][z].Type = BlockType.Dirt;
+	                            currentBlock.Type = BlockType.Dirt;
 
 	                    if (y < height + river)
 	                    {
-	                        if (Blocks[x][y][z].Type == BlockType.Air && river > 0)
+	                        if (currentBlock.Type == BlockType.Air && river > 0)
 	                        {
-	                            Blocks[x][y][z].Type = BlockType.Water;
+	                            currentBlock.Type = BlockType.Water;
 	                            Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) (height + river));
 	                        }
 	                        else if (Mathf.Clamp(riverBorders * 100f, 0, riverDepth) > 2 &&
-	                                 Blocks[x][y][z].Type != BlockType.Air)
+	                                 currentBlock.Type != BlockType.Air)
 	                        {
-	                            Blocks[x][y][z].Type = BlockType.Seafloor;
+	                            currentBlock.Type = BlockType.Seafloor;
 	                            for (var i = 0; i < y; i++) Blocks[x][i][z].Type = BlockType.Seafloor;
 	                        }
 	                    }
 
-	                    if (y <= BiomePool.SeaLevel && Blocks[x][y][z].Type == BlockType.Air && y >= 1 &&
+	                    if (y <= BiomePool.SeaLevel && currentBlock.Type == BlockType.Air && y >= 1 &&
 	                        Blocks[x][y - 1][z].Type != BlockType.Seafloor && Blocks[x][y - 1][z].Type != BlockType.Air &&
 	                        Blocks[x][y - 1][z].Type != BlockType.Water)
 	                    {
 	                        if (y < BiomePool.SeaLevel)
 	                        {
-	                            Blocks[x][y][z].Type = BlockType.Seafloor;
+	                            currentBlock.Type = BlockType.Seafloor;
 	                            for (var i = 0; i < y; i++)
 	                            {
 	                                Blocks[x][i][z].Type = BlockType.Seafloor;
@@ -153,22 +155,24 @@ namespace Hedra.Engine.BiomeSystem
 	                    var isOcean = y > 0 && y <= BiomePool.SeaLevel &&
 	                                  (Blocks[x][y - 1][z].Type == BlockType.Seafloor ||
 	                                   Blocks[x][y - 1][z].Type == BlockType.Water) &&
-	                                  Blocks[x][y][z].Type == BlockType.Air &&
+	                                  currentBlock.Type == BlockType.Air &&
 	                                  Blocks[x][y + 1][z].Type == BlockType.Air;
 	                    if (isOcean)
 	                    {
-	                        Blocks[x][y][z].Type = BlockType.Water;
+	                        currentBlock.Type = BlockType.Water;
 	                        Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) BiomePool.SeaLevel);
 	                    }
 
 		                this.HandleGroundworks(Blocks, x, y, z, path, pathDepth, pathClamped, town, townClamped,
 			                blockGroundworks, blockGroundworksModifier);
+
+		                Blocks[x][y][z] = currentBlock;
 	                }
 	            }
 	        }
 	    }
 
-		private void HandleStructures(int x, int z, Vector2 position, IGroundwork[] groundworks, Plateau[] plateaus,
+		private void HandleStructures(int x, int z, Vector2 position, List<IGroundwork> groundworks, Plateau[] plateaus,
 			CollidableStructure[] structs, Dictionary<Vector2, float[]> heightCache, float[] noise3D, RegionGeneration biomeGen,
 			float hasPath, float hasRiver, float noiseScale, ref float height, out bool town, out bool townClamped,
 			out bool makeDirt, out bool pathClamped, out float river, out float path, out float riverBorders,
@@ -194,7 +198,7 @@ namespace Hedra.Engine.BiomeSystem
 			var smallFrequency = SmallFrequency(position.X, position.Y);
 			var nearGiantTree = FindNearestGiantTree(position, structs);
 			
-			blockGroundworks = groundworks.ToList().Where(G => G.Affects(position)).ToArray();
+			blockGroundworks = groundworks.Where(G => G.Affects(position)).ToArray();
 
 			if (townClamped && townHeight != height)
 				townClamped = false;
@@ -322,11 +326,12 @@ namespace Hedra.Engine.BiomeSystem
 
 		private static CollidableStructure FindNearestGiantTree(Vector2 position, CollidableStructure[] structs)
 		{
-			return (from item in structs
-				let radius = item.Mountain?.Radius ?? float.MaxValue
-				where (position - item.Position.Xz).LengthSquared < radius * radius &&
-				      item.Design is GiantTreeDesign
-				select item).FirstOrDefault();
+			for(var i = 0; i < structs.Length; i++)
+			{
+				float radius = structs[i].Mountain?.Radius ?? float.MaxValue;
+				if ((position - structs[i].Position.Xz).LengthSquared < radius * radius && structs[i].Design is GiantTreeDesign) return structs[i];
+			}
+			return null;
 		}
 		
 		private void HandleGroundworks(Block[][][] Blocks, int X, int Y, int Z, float path, float pathDepth,
@@ -481,7 +486,7 @@ namespace Hedra.Engine.BiomeSystem
 		
 		public void CheckForNearbyStructures()
         {
-			World.StructureGenerator.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
+			StructureGenerator.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
 		}
 	}
 }

@@ -29,6 +29,11 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
             return (float)Density;
         }
 
+        public override bool HasHeightSubtype(float X, float Z, Dictionary<Vector2, float[]> HeightCache)
+        {
+            throw new NotImplementedException();
+        }
+        
         public override BlockType GetHeightSubtype(float X, float Y, float Z, float CurrentHeight, BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
             if (HeightCache.ContainsKey(new Vector2(X, Z)))

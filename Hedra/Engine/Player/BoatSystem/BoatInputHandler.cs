@@ -23,28 +23,30 @@ namespace Hedra.Engine.Player.BoatSystem
         public void Update()
         {
             const float propulsionFactor = 40.0f;
+            var any = GameManager.Keyboard[Key.W] || GameManager.Keyboard[Key.A] || GameManager.Keyboard[Key.D];
             if (GameManager.Keyboard[Key.W])
             {
                 _accumulatedDirection = _player.View.Forward * propulsionFactor;
             }
-            if (GameManager.Keyboard[Key.S])
-            {
-                _accumulatedDirection = _player.View.Backward * propulsionFactor;
-            }
             if (GameManager.Keyboard[Key.A])
             {
-                _accumulatedDirection = _player.View.Left * propulsionFactor;
+                var dir = GameManager.Keyboard[Key.W] ? (_player.View.Left + _player.View.Forward) * .5f : _player.View.Left;
+                _accumulatedDirection = dir * propulsionFactor;
             }
             if (GameManager.Keyboard[Key.D])
             {
-                _accumulatedDirection = _player.View.Right * propulsionFactor;
+                var dir = GameManager.Keyboard[Key.W] ? (_player.View.Right + _player.View.Forward) * .5f : _player.View.Right;
+                _accumulatedDirection = dir * propulsionFactor;
             }
             if (_accumulatedDirection.LengthFast > .005f)
             {
                 _player.Movement.ProcessMovement(_characterRotation, _accumulatedDirection * Speed, _accumulatedDirection.LengthFast > 5f);
             }
+            if (any)
+            {
+                this.HandleCharacterRotation();
+            }
             this.HandleBoatRotation(propulsionFactor);
-            this.HandleCharacterRotation();
             _accumulatedDirection *= (float)Math.Pow(.35f, (float)Time.DeltaTime);
         }
 
@@ -68,12 +70,9 @@ namespace Hedra.Engine.Player.BoatSystem
             _characterRotation = _player.FacingDirection;
             if (GameManager.Keyboard[Key.D]) _characterRotation += -90f;
             if (GameManager.Keyboard[Key.A]) _characterRotation += 90f;
-            if (GameManager.Keyboard[Key.S]) _characterRotation += 180f;
             if (GameManager.Keyboard[Key.W]) _characterRotation += 0f;
             if (GameManager.Keyboard[Key.W] && GameManager.Keyboard[Key.D]) _characterRotation += 45f;
             if (GameManager.Keyboard[Key.W] && GameManager.Keyboard[Key.A]) _characterRotation += -45f;
-            if (GameManager.Keyboard[Key.S] && GameManager.Keyboard[Key.D]) _characterRotation += 135f;
-            if (GameManager.Keyboard[Key.S] && GameManager.Keyboard[Key.A]) _characterRotation += -135f;
         }
 
         public bool ShouldDrift { get; private set; }

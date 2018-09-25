@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
@@ -33,7 +34,7 @@ namespace Hedra.Engine.StructureSystem
             return World.WorldBuilding.CanAddPlateau(plateau);
         }
 
-        public void CheckFor(Vector2 ChunkOffset, Region Biome)
+        public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
         {
             for (var x = Math.Min(-2, -Radius / Chunk.Width * 2); x < Math.Max(2, Radius / Chunk.Width * 2); x++)
             {
@@ -41,14 +42,14 @@ namespace Hedra.Engine.StructureSystem
                 {
                     var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
                         ChunkOffset.Y + z * Chunk.Width);
-                    var rng = this.BuildRng(offset);
-                    var targetPosition = this.BuildTargetPosition(offset, rng);
+                    Distribution.Seed = BiomeGenerator.GenerateSeed(offset);
+                    var targetPosition = BuildTargetPosition(offset, Distribution);
                     var items = World.StructureGenerator.Structures;
                     
-                    if (this.ShouldSetup(offset, targetPosition, items, Biome, rng))
+                    if (this.ShouldSetup(offset, targetPosition, items, Biome, Distribution))
                     {
                         if (!CanSetup(targetPosition)) continue;
-                        var item = this.Setup(targetPosition, rng);
+                        var item = this.Setup(targetPosition, BuildRng(offset));
                         if (item == null) continue;
                         World.StructureGenerator.AddStructure(item);
                         World.StructureGenerator.Build(item);
@@ -57,19 +58,24 @@ namespace Hedra.Engine.StructureSystem
             }
         }
 
-        public Random BuildRng(Vector2 Offset)
+        public static Random BuildRng(Vector2 Offset)
         {
             return BiomeGenerator.GenerateRng(Offset);
         }
+        
+        public static int BuildRngSeed(Vector2 Offset)
+        {
+            return BiomeGenerator.GenerateSeed(Offset);
+        }
 
-        public Vector3 BuildTargetPosition(Vector2 ChunkOffset, Random Rng)
+        public static Vector3 BuildTargetPosition(Vector2 ChunkOffset, IRandom Rng)
         {
             return new Vector3(ChunkOffset.X + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize,
                 0,
                 ChunkOffset.Y + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize);
         }
 
-        public bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, Random Rng)
+        public bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
             bool shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng)
                             && (TargetPosition.Xz - GameSettings.SpawnPoint).LengthSquared > 256 * 256;
@@ -100,7 +106,7 @@ namespace Hedra.Engine.StructureSystem
 
         }
 
-        protected abstract bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, Random Rng);
+        protected abstract bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng);
 
         public virtual bool MeetsRequirements(Vector2 ChunkOffset)
         {

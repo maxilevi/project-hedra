@@ -37,16 +37,18 @@ namespace Hedra.Engine.Generation
         private readonly ChunkBuilder _chunkBuilder;
         private readonly MeshBuilder _meshBuilder;
         private readonly RenderingComparer _renderingComparer;
-        private readonly SharedWorkerPool _workerPool;
+        private readonly SharedWorkerPool _meshWorkerPool;
+        private readonly SharedWorkerPool _genWorkerPool;
         private int _previousCount;
         private int _previousId;
         private Matrix4 _previousModelView;
 
         public WorldProvider()
         {
-            _workerPool = new SharedWorkerPool();
-            _meshBuilder = new MeshBuilder(_workerPool);
-            _chunkBuilder = new ChunkBuilder(_workerPool);
+            _meshWorkerPool = new SharedWorkerPool(2);
+            _genWorkerPool = new SharedWorkerPool(2);
+            _meshBuilder = new MeshBuilder(_meshWorkerPool);
+            _chunkBuilder = new ChunkBuilder(_genWorkerPool);
             _structures = new HashSet<BaseStructure>();
             _entities = new HashSet<IEntity>();
             _items = new HashSet<WorldItem>();

@@ -29,19 +29,20 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             return (float)Density;
         }
 
+        public override bool HasHeightSubtype(float X, float Z, Dictionary<Vector2, float[]> HeightCache)
+        {
+            return HeightCache.ContainsKey(new Vector2(X, Z));
+        }
+        
         public override BlockType GetHeightSubtype(float X, float Y, float Z, float CurrentHeight, BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
-            if (HeightCache.ContainsKey(new Vector2(X, Z)))
-            {
-                double height = HeightCache[new Vector2(X, Z)][1];
-                double realHeight = (CurrentHeight - height - Chunk.BaseHeight) / HeightCache[new Vector2(X, Z)][2];
+            double height = HeightCache[new Vector2(X, Z)][1];
+            double realHeight = (CurrentHeight - height - Chunk.BaseHeight) / HeightCache[new Vector2(X, Z)][2];
 
-                if (Math.Abs(realHeight - 32.0) < 0.5f)
-                {
-                    if (Y > 28.0)
-                        return BlockType.Grass;
-                }
-                return Type;
+            if (Math.Abs(realHeight - 32.0) < 0.5f)
+            {
+                if (Y > 28.0)
+                    return BlockType.Grass;
             }
             return Type;
         }

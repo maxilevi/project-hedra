@@ -22,7 +22,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             while (GameManager.Exists && !GameSettings.TestingMode)
             {
-                //Thread.Sleep(SleepTime);
+                Thread.Sleep(SleepTime);
                 if (!IsWorking) continue;
                 try
                 {

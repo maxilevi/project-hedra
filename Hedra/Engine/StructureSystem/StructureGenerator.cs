@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.PhysicsSystem;
@@ -29,6 +30,8 @@ namespace Hedra.Engine.StructureSystem
 		public bool MerchantSpawned { get; set; }
 		public Voronoi SeedGenerator { get; }
 		private readonly List<StructureWatcher> _items;
+		private CollidableStructure[] _structures;
+		private bool _dirtyStructures;
 
 		public StructureGenerator()
 		{
@@ -36,11 +39,12 @@ namespace Hedra.Engine.StructureSystem
 			SeedGenerator = new Voronoi();
 		}
 
-		public void CheckStructures(Vector2 ChunkOffset)
+		public static void CheckStructures(Vector2 ChunkOffset)
 		{
 			if (!World.IsChunkOffset(ChunkOffset))
 				throw new ArgumentException("Provided paramater does not represent a valid offset");
 
+			var distribution = new RandomDistribution();
 			var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
 			var region = underChunk != null
 				? underChunk.Biome
@@ -49,7 +53,7 @@ namespace Hedra.Engine.StructureSystem
 			for (var i = 0; i < designs.Length; i++)
 			{
 				if (designs[i].MeetsRequirements(ChunkOffset))
-					designs[i].CheckFor(ChunkOffset, region);
+					designs[i].CheckFor(ChunkOffset, region, distribution);
 			}
 		}
 
@@ -63,6 +67,7 @@ namespace Hedra.Engine.StructureSystem
 			lock (_lock)
 			{
 				_items.Add(new StructureWatcher(Structure));
+				_dirtyStructures = true;
 			}
 		}
 
@@ -78,6 +83,7 @@ namespace Hedra.Engine.StructureSystem
 					_items.RemoveAt(i);
 				}
 				_items.Clear();
+				_dirtyStructures = true;
 			}
 		}
 
@@ -85,8 +91,15 @@ namespace Hedra.Engine.StructureSystem
 		{
 			get
 			{
-				lock(_lock) 
-					return _items.Select(I => I.Structure).ToArray();
+				lock (_lock)
+				{
+					if (_dirtyStructures || _structures == null)
+					{
+						_structures = _items.Select(I => I.Structure).ToArray();
+						_dirtyStructures = false;
+					}
+					return _structures;
+				}
 			}
 		}
 

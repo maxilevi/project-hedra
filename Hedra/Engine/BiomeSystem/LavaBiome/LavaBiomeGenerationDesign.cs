@@ -45,6 +45,11 @@ namespace Hedra.Engine.BiomeSystem.LavaBiome
             }
             return Type;
         }
+        
+        public override bool HasHeightSubtype(float X, float Z, Dictionary<Vector2, float[]> HeightCache)
+        {
+            throw new NotImplementedException();
+        }
 
         public override float GetHeight(float X, float Z, Dictionary<Vector2, float[]> HeightCache, out BlockType Blocktype)
         {

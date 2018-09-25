@@ -192,7 +192,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (X >= 0 && X < _boundsX && Z >= 0 && Z < _boundsZ) return _parent;
             var coords = World.ToChunkSpace(new Vector3(_offsetX + X * _blockSize, 0, _offsetZ + Z * _blockSize));
-            return World.SearcheableChunks.ContainsKey(coords) ? World.SearcheableChunks[coords] : null;
+            World.SearcheableChunks.TryGetValue(coords, out var ch);
+            return ch;
         }
 
         private Block GetNeighbourBlock(int X, int Y, int Z)

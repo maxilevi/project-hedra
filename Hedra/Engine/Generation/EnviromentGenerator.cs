@@ -10,6 +10,7 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -31,7 +32,7 @@ namespace Hedra.Engine.Generation
             Chunk underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return;
 
-            Random rng = underChunk.Landscape.RandomGen;
+	        Random rng = underChunk.Landscape.RandomGen;
             Matrix4 transMatrix = Design.TransMatrix(Position, rng);
 
             if(transMatrix == Matrix4.Identity) return;

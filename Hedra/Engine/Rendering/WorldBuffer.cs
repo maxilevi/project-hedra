@@ -224,7 +224,7 @@ namespace Hedra.Engine.Rendering
 				{		
 					var count = 0;
 					var offset = 0;				
-					if(ToDraw.ContainsKey(pair.Key) || Shadows)
+					if(Shadows || ToDraw.ContainsKey(pair.Key))
 					{	
 						count = pair.Value.DrawCount;
 						offset = pair.Value.ByteOffset;					

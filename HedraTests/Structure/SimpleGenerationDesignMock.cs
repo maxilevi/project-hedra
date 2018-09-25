@@ -15,6 +15,11 @@ namespace HedraTests.Structure
             _returnValue = ReturnValue;
         }
         
+        public override bool HasHeightSubtype(float X, float Z, Dictionary<Vector2, float[]> HeightCache)
+        {
+            throw new NotImplementedException();
+        }
+        
         public override bool HasRivers { get; set; }
         
         public override bool HasPaths { get; set; }

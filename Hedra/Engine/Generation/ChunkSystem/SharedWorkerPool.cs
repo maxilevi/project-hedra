@@ -6,9 +6,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
     {
         private readonly LoadBalancer _balancer;
 
-        public SharedWorkerPool()
+        public SharedWorkerPool(int WorkerCount = WorkerPool.MaxWorkers) : base(WorkerCount)
         {
-            _balancer = new LoadBalancer(WorkerPool.MaxWorkers);
+            _balancer = new LoadBalancer(WorkerCount);
         }
 
         public void Register(ICountable User)
