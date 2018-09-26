@@ -95,7 +95,7 @@ namespace Hedra.Engine.Player.MapSystem
                 DrawManager.FrustumObject.SetFrustum(_player.View.ModelViewMatrix);
 
                 var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
-                Renderer.LoadP(projMatrix);
+                Renderer.LoadProjection(projMatrix);
 
                 var oldShadows = GameSettings.GlobalShadows;
                 var oldFancy = GameSettings.Fancy;
@@ -158,7 +158,6 @@ namespace Hedra.Engine.Player.MapSystem
 		    this.DrawMap();
 
             Shader.Bind();
-            Renderer.Enable(EnableCap.Texture2D);
             Renderer.Enable(EnableCap.Blend);
             Renderer.Disable(EnableCap.DepthTest);
 
@@ -184,7 +183,6 @@ namespace Hedra.Engine.Player.MapSystem
 
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
-            Renderer.Disable(EnableCap.Texture2D);
             Renderer.Enable(EnableCap.CullFace);
             Shader.Unbind();
         }

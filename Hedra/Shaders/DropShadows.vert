@@ -25,7 +25,7 @@ layout(std140) uniform FogSettings {
 void main(void){
 
 	vec4 Vertex = vec4( (Rotation * (vec3(InVertex.y, 0.0, InVertex.x) * Scale) ) + Position, 1.0);
-	gl_Position = gl_ModelViewProjectionMatrix * Vertex;
+	gl_Position = _modelViewProjectionMatrix * Vertex;
 	uv = vec2((InVertex.y+1.0)/2.0 - .5, 1.0 - (InVertex.x+1.0)/2.0 - .5);
 	
 	pass_height = U_Height;

@@ -83,7 +83,7 @@ void main(void){
 	
 	vec3 unitNormal = normalize(pass_normal.xyz);
 	vec3 unitToLight = normalize(LightPosition);
-	vec3 unitToCamera = normalize((inverse(gl_ModelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - pass_position.xyz);
+	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - pass_position.xyz);
 
 	vec3 FLightColor = vec3(0.0, 0.0, 0.0);
 	for(int i = 0; i < 12; i++){

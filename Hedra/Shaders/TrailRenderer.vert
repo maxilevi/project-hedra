@@ -7,5 +7,5 @@ out vec4 Color;
 
 void main(){
 	Color = InColor;
-	gl_Position = gl_ModelViewProjectionMatrix * vec4(InVertex, 1.0);
+	gl_Position = _modelViewProjectionMatrix * vec4(InVertex, 1.0);
 }

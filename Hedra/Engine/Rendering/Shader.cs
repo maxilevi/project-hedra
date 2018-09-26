@@ -28,6 +28,7 @@ namespace Hedra.Engine.Rendering
         private readonly ShaderData _vertexShader;
 	    private readonly ShaderData _fragmentShader;
 	    private readonly ShaderData _geometryShader;
+	    private readonly string _name;
         protected int ShaderVid { get; private set; }
         protected int ShaderFid { get; private set; }
         protected int ShaderGid { get; private set; }
@@ -71,6 +72,7 @@ namespace Hedra.Engine.Rendering
             _mappings = new Dictionary<string, UniformMapping>();
 	        _arrayMappings = new Dictionary<string, UniformArray>();
 	        _knownMappings = new Dictionary<string, bool>();
+	        _name = $"<{DataV?.Name ?? string.Empty}>:<{DataF?.Name ?? string.Empty}>:<{DataG?.Name ?? string.Empty}>";
             this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
         }
 
@@ -143,8 +145,10 @@ namespace Hedra.Engine.Rendering
             this.Combine();
         }
 		
-		private void Combine(){
+		private void Combine()
+        {
 			ShaderId = Renderer.CreateProgram();
+            Log.WriteLine($"Shader'{_name}' compiled succesfully with Id '{ShaderId}'.", LogType.GL);
 
             if (ShaderVid > 0) Renderer.AttachShader(ShaderId, ShaderVid);              
             if (ShaderGid > 0) Renderer.AttachShader(ShaderId, ShaderGid);
@@ -206,8 +210,11 @@ namespace Hedra.Engine.Rendering
 	                    _mappings.Add(Key, new UniformMapping(location, value));
 	                }
                     if(this.ShaderId != Renderer.ShaderBound) throw new ArgumentException($"Uniforms need to be uploaded when the owner's shader is bound.");
-	                _mappings[Key].Value = value;
-	                Shader.LoadMapping(_mappings[Key]); 
+		            //if (_mappings[Key].Value != value)
+		            {
+			            _mappings[Key].Value = value;
+			            Shader.LoadMapping(_mappings[Key]);
+		            }
 	            }
 	        }
 	    }
@@ -251,13 +258,23 @@ namespace Hedra.Engine.Rendering
 	        }
 	    }
 
+		private void LoadBuiltinUniforms()
+		{
+			if(HasUniform(ShaderManager.ModelViewMatrixName))
+				this[ShaderManager.ModelViewMatrixName] = Renderer.ModelViewMatrix;
+			
+			if(HasUniform(ShaderManager.ModelViewProjectionName))
+				this[ShaderManager.ModelViewProjectionName] = Renderer.ModelViewProjectionMatrix;
+		}
+
 		public void Bind()
         {
 			if(Renderer.ShaderBound == ShaderId) return;
 		    if (ShaderId < 0) throw new GraphicsException($"{this.GetType().Name} is corrupt. {this.ShaderId}");
 
             Renderer.UseProgram(ShaderId);
-			Renderer.ShaderBound = ShaderId;
+            Renderer.ShaderBound = ShaderId;
+            this.LoadBuiltinUniforms();
         }
 		
 		public void Unbind()

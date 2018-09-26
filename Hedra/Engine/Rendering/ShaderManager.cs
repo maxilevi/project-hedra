@@ -18,6 +18,8 @@ namespace Hedra.Engine.Rendering
 {	
 	public static class ShaderManager
 	{
+		public const string ModelViewMatrixName = "_modelViewMatrix";
+		public const string ModelViewProjectionName = "_modelViewProjectionMatrix";
 		public const int LightDistance = 256;
 		public const int MaxLights = 12;
 	    private static readonly List<Shader> Shaders;
@@ -35,7 +37,7 @@ namespace Hedra.Engine.Rendering
             {
 				PointLights[i] = new PointLight();
 			}
-		}
+        }
 
 	    public static void ReloadShaders()
 	    {

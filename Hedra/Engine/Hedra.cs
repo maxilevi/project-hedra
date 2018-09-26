@@ -50,7 +50,7 @@ namespace Hedra
 	    public Hedra(int Width, int Height) : base(Width, Height){}
 	    
 		public Hedra(int Width, int Height, GraphicsMode Mode, string Title, DisplayDevice Device, int Minor, int Major) 
-			: base( Width, Height, Mode, Title, GameWindowFlags.Default, Device/*, Major, Minor, GraphicsContextFlags.ForwardCompatible*/){}
+			: base( Width, Height, Mode, Title, GameWindowFlags.Default, Device, Major, Minor, GraphicsContextFlags.Default){}
 
 		protected override void OnLoad(EventArgs e)
         {

@@ -92,7 +92,7 @@ void main()
 	//Lighting
 	vec3 unitNormal = Normal;
 	vec3 unitToLight = normalize(LightPosition);
-	vec3 unitToCamera = normalize((inverse(gl_ModelViewMatrix) * vec4(0.0,0.0,0.0,1.0) ).xyz - v.xyz);
+	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0,0.0,0.0,1.0) ).xyz - v.xyz);
 
 	vec3 FullLightColor = LightColor;
 	for(int i = 0; i < 12; i++){
@@ -113,7 +113,7 @@ void main()
  	Color.a = Transparency;
  	
 	v = TransformationMatrix * v;
- 	gl_Position = gl_ModelViewProjectionMatrix * v;
+ 	gl_Position = _modelViewProjectionMatrix * v;
 
 	InPos = v;
 	ClipSpace = gl_Position;

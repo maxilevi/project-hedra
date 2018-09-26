@@ -44,7 +44,7 @@ vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal, vec3 LColor){
  	mat4 TransMatrix = mat4(Col1, Col2, Col3, Col4);
  	vec4 v = vec4(v_pos, 1.0); 
  	v =  v * TransMatrix;
-	gl_Position = gl_ModelViewProjectionMatrix * v;
+	gl_Position = _modelViewProjectionMatrix * v;
 	
 	pass_height = U_Height;
 	pass_botColor = U_BotColor;
@@ -57,7 +57,7 @@ vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal, vec3 LColor){
 	//Lighting
 	vec3 unitNormal = normalize(v_Normal);
 	vec3 unitToLight = normalize(LightPosition);
-	vec3 unitToCamera = normalize((inverse(gl_ModelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - v.xyz);
+	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - v.xyz);
 
 	vec3 FLightColor = LightColor;
 	for(int i = 0; i < 8; i++){

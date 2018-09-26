@@ -90,7 +90,6 @@ namespace Hedra.Engine.Rendering.Effects
 				
 				Ssao.FirstPassShader.Bind();
 			
-				Renderer.Enable(EnableCap.Texture2D);
                 Renderer.Enable(EnableCap.Blend);
 
                 DrawManager.UIRenderer.SetupQuad();
@@ -145,7 +144,6 @@ namespace Hedra.Engine.Rendering.Effects
 				
 				Renderer.Enable(EnableCap.CullFace);
 				Renderer.Disable(EnableCap.Blend);
-				Renderer.Disable(EnableCap.Texture2D);
 			}
 			#endregion
 			
@@ -209,8 +207,8 @@ namespace Hedra.Engine.Rendering.Effects
 			Shader.Unbind();
 		}
 		
-		public static void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false, bool FXAA = false){
-			Renderer.Enable(EnableCap.Texture2D);
+		public static void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false, bool FXAA = false)
+        {
 			Renderer.Disable(EnableCap.DepthTest);
 			
 			DrawManager.UIRenderer.SetupQuad();
@@ -232,7 +230,6 @@ namespace Hedra.Engine.Rendering.Effects
             DrawManager.UIRenderer.DrawQuad();
 
             Renderer.Enable(EnableCap.DepthTest);
-			Renderer.Disable(EnableCap.Texture2D);
 		}
 		
 		public void Clear(){}

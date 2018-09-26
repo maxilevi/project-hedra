@@ -11,8 +11,7 @@ namespace Hedra.Engine.Rendering
 
         public Cubemap (IList<Bitmap> TextureArray, bool Dispose = true)
         {
-            Renderer.Enable(EnableCap.TextureCubeMap);
-            TextureId = (uint) Renderer.GenTexture();
+            TextureId = Renderer.GenTexture();
 
             Renderer.BindTexture(TextureTarget.TextureCubeMap, TextureId);
             for (var i = 0; i < TextureArray.Count; i++)

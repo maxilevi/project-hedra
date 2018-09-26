@@ -89,7 +89,7 @@ void main()
 
 	if (Outline)
 	{
-		vec3 unitToCamera = normalize( (inverse(gl_ModelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - vertex_position.xyz);
+		vec3 unitToCamera = normalize( (inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - vertex_position.xyz);
 		float outlineDot = max(0.0, 1.0 - dot(base_normal, unitToCamera));
 		FColor = outlineDot * ( cos(Time * 10.0)-.0) * 2.0 * OutlineColor * Alpha;
 		OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
@@ -98,8 +98,8 @@ void main()
 	else
 	{
 	    // Ignore the gl_FragCoord.z since it causes issues with the water
-	    mat3 NormalMat = mat3(transpose(inverse(gl_ModelViewMatrix)));
-		OutPosition = vec4((gl_ModelViewMatrix * vec4(InPos, 1.0)).xyz * Alpha, 2.0);
+	    mat3 NormalMat = mat3(transpose(inverse(_modelViewMatrix)));
+		OutPosition = vec4((_modelViewMatrix * vec4(InPos, 1.0)).xyz * Alpha, 2.0);
 		OutNormal = vec4(NormalMat * InNorm.xyz, 1.0) * Alpha;
 	}
 }

@@ -89,7 +89,7 @@ void main(){
 	DitherVisibility = clamp( (DitherRadius - DistanceToCamera) / DitherRadius, 0.0, 1.0);
 
 	Vertex = TransformationMatrix * Vertex;
-	gl_Position = gl_ModelViewProjectionMatrix * Vertex;
+	gl_Position = _modelViewProjectionMatrix * Vertex;
 
 	float use_shadows = when_neq(UseShadows, 0.0) * when_neq(InColor.a, -1.0);
 
@@ -115,7 +115,7 @@ void main(){
 		
 	//Lighting
 	vec3 unitNormal = normalize(InNorm.xyz);
-	vec3 unitToCamera = normalize((inverse(gl_ModelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - Vertex.xyz);
+	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - Vertex.xyz);
 
 	vec3 FLightColor = vec3(0.0, 0.0, 0.0);
 	float average_color = (LightColor.r + LightColor.g + LightColor.b) / 3.0; 

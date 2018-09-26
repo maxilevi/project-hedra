@@ -216,7 +216,6 @@ namespace Hedra.Engine.Rendering.UI
         private static void SetDraw()
         {
             Shader.Bind();
-            Renderer.Enable(EnableCap.Texture2D);
             Renderer.Enable(EnableCap.Blend);
             Renderer.Disable(EnableCap.DepthTest);
         }
@@ -225,7 +224,6 @@ namespace Hedra.Engine.Rendering.UI
         {
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
-            Renderer.Disable(EnableCap.Texture2D);
             Renderer.Enable(EnableCap.CullFace);
             Shader.Unbind();
         }

@@ -167,8 +167,8 @@ namespace Hedra.Engine.Management
 		    Aspect = 1.45f / GameSettings.Height * GameSettings.DeviceHeight;
 			ModelViewMatrix = View;
 			ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, Aspect, ZNear, ZFar);
-	        Renderer.LoadP(ProjectionMatrix);
-			Renderer.LoadMV(ModelViewMatrix);
+	        Renderer.LoadProjection(ProjectionMatrix);
+			Renderer.LoadModelView(ModelViewMatrix);
 			
 		}
 

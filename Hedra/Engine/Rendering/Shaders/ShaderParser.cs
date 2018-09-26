@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering.Shaders
     /// Partial shader parser for detecting certain uniforms
     /// </summary>
     public class ShaderParser
-    {
+    {        
         public string Source { get; set; }
 
         public ShaderParser(string Source)
@@ -31,7 +31,7 @@ namespace Hedra.Engine.Rendering.Shaders
                 var includeFile = matches[i].Groups[2].Value;
                 Source = Source.Replace(statement, AssetManager.ReadShader(includeFile));
             }
-            return Source;
+            return AddBuiltinUniforms(Source);
         }
 
         public string GetVersionString()
@@ -53,7 +53,7 @@ namespace Hedra.Engine.Rendering.Shaders
             for (var i = 0; i < matches.Length; i ++)
             {
                 if ((matches[i].Groups.Count - 1) % 3 != 0) throw new ArgumentException($"Expected remainder 0 got {(matches[i].Groups.Count - 1) % 3}");
-                var type = this.ParseType(matches[i].Groups[1].Value);
+                var type = ParseType(matches[i].Groups[1].Value);
                 var key = matches[i].Groups[2].Value;
                 var size = this.ParseArraySize(matches[i].Groups[3].Value);
                 mappings.Add(new UniformArray(type, ShaderId, key, size));
@@ -77,7 +77,7 @@ namespace Hedra.Engine.Rendering.Shaders
            return match.Groups[1].Value;
         }
 
-        public Type ParseType(string Type)
+        private static Type ParseType(string Type)
         {
             switch (Type)
             {
@@ -99,15 +99,24 @@ namespace Hedra.Engine.Rendering.Shaders
                     return typeof(int);
                 default:
                     // FIXME: This doesnt work when obfuscated
-                    var possibleType = this.InferType(Type);
+                    var possibleType = InferType(Type);
                     if (possibleType != null) return possibleType;
                     throw new ArgumentException($"Type '{Type}' could not be mapped to a valid type");
             }
         }
 
-        private Type InferType(string ClassName)
+        private static Type InferType(string ClassName)
         {
             return Assembly.GetExecutingAssembly().GetLoadableTypes().FirstOrDefault(T => T.Name == ClassName);
+        }
+
+        private static string AddBuiltinUniforms(string Source)
+        {
+            var lines = Source.Split(Environment.NewLine.ToCharArray()).ToList();
+            var offset = lines.FindIndex(S => S.Contains("#version"));
+            lines.Insert(offset + 1, $"uniform mat4 {ShaderManager.ModelViewMatrixName};");
+            lines.Insert(offset + 2, $"uniform mat4 {ShaderManager.ModelViewProjectionName};");
+            return string.Join(Environment.NewLine, lines);
         }
     }
 }

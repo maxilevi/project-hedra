@@ -85,13 +85,13 @@ namespace Hedra.Engine.Player.Inventory
             ShaderManager.SetLightColorInTheSameThread(Vector3.One);
 
             var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 1, 1024f);
-            Renderer.LoadP(projectionMatrix);
+            Renderer.LoadProjection(projectionMatrix);
 
             var offset = Item.IsWeapon
                 ? Vector3.UnitY * 0.4f - Vector3.UnitX * 0.4f
                 : Vector3.UnitY * 0.25f;
             var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset, offset, Vector3.UnitY);
-            Renderer.LoadMV(lookAt);
+            Renderer.LoadModelView(lookAt);
 
             Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             Renderer.Enable(EnableCap.DepthTest);

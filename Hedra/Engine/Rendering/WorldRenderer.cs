@@ -135,7 +135,8 @@ namespace Hedra.Engine.Rendering
 		
 		#region Binds
 		
-		private static void StaticBind(){
+		private static void StaticBind()
+		{
 			Renderer.Disable(EnableCap.Blend);
 			StaticShader.Bind();
 
@@ -174,10 +175,8 @@ namespace Hedra.Engine.Rendering
 		
 		private static void WaterBind()
 		{
-			Renderer.Enable(EnableCap.Blend);
 		    Renderer.BlendEquation(BlendEquationMode.FuncAdd);
             Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-           	Renderer.Enable(EnableCap.Texture2D);
 
             WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
@@ -201,7 +200,6 @@ namespace Hedra.Engine.Rendering
 		private static void WaterUnBind()
         {
 			Renderer.Disable(EnableCap.Blend);
-			Renderer.Disable(EnableCap.Texture2D);
 			Renderer.Enable(EnableCap.CullFace);
 		    WaterShader.Unbind();
         }

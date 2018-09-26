@@ -47,7 +47,7 @@ vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal){
 		Vertex.x += (cos(Time) +0.8) * .5 * 0.2 * Shade;
  	}
  	Vertex = Vertex * TransMatrix;
-	gl_Position = gl_ModelViewProjectionMatrix * Vertex;
+	gl_Position = _modelViewProjectionMatrix * Vertex;
 	
 	Height = U_Height;
 	BotColor = U_BotColor;
@@ -59,7 +59,7 @@ vec3 DiffuseModel(vec3 unitToLight, vec3 unitNormal){
 	//Lighting
 	vec3 unitNormal = normalize(InNormal);
 	vec3 unitToLight = normalize(LightPosition);
-	vec3 unitToCamera = normalize((inverse(gl_ModelViewMatrix) * vec4(0.0,0.0,0.0,1.0) ).xyz - Vertex.xyz);
+	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0,0.0,0.0,1.0) ).xyz - Vertex.xyz);
 
 	//Specular
 	vec3 ReflectedDir = reflect(-unitToLight, unitNormal);

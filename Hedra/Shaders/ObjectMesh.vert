@@ -89,7 +89,7 @@ void main(){
 
 	Vertex += vec4(LocalPosition,0.0);
 	
-	gl_Position = gl_ModelViewProjectionMatrix * Vertex;
+	gl_Position = _modelViewProjectionMatrix * Vertex;
 	
 	//Fog
 	float DistanceToCamera = length(vec3(PlayerPosition - Vertex.xyz).xz);
@@ -114,7 +114,7 @@ void main(){
 	//Lighting
 	vec3 unitNormal = normalize(SurfaceNormal);
 	vec3 unitToLight = normalize(LightPosition);
-	vec3 unitToCamera = normalize((inverse(gl_ModelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - Vertex.xyz);
+	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - Vertex.xyz);
 
 	vec3 FLightColor = vec3(0.0, 0.0, 0.0);
 	for(int i = int(0.0); i < 8.0; i++){

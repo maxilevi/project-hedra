@@ -22,6 +22,9 @@ namespace Hedra.Engine.Rendering
 	    public static IGLProvider Provider { get; set; } = new GLProvider();
 		public static int FBOBound { get; set; }
 		public static int ShaderBound { get; set; }
+	    public static Matrix4 ModelViewProjectionMatrix { get; private set; }
+	    public static Matrix4 ModelViewMatrix { get; private set; }
+	    public static Matrix4 ProjectionMatrix { get; private set; }
 	    private static readonly StateManager FboManager;
 	    private static readonly StateManager ShaderManager;
 	    private static readonly CapHandler CapHandler;
@@ -41,17 +44,23 @@ namespace Hedra.Engine.Rendering
 	    {
 	        BlendEquation(BlendEquationMode.FuncAdd);
 	        BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-	        Enable(EnableCap.Texture2D);
 	    }
 
-	    public static void LoadP(Matrix4 P)
+	    public static void LoadProjection(Matrix4 Projection)
 	    {
-	        
+	        ProjectionMatrix = Projection;
+	        RebuildMVP();
 	    }
 
-	    public static void LoadMV(Matrix4 MV)
+	    public static void LoadModelView(Matrix4 ModelView)
 	    {
-	        
+	        ModelViewMatrix = ModelView;
+	        RebuildMVP();
+	    }
+
+	    private static void RebuildMVP()
+	    {
+	        ModelViewProjectionMatrix = ModelViewMatrix * ProjectionMatrix;
 	    }
 	    
 	    public static void Enable(EnableCap Cap)

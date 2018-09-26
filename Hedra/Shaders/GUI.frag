@@ -387,7 +387,7 @@ NOTE the other tuning knobs are now in the shader function inputs!
     #define FxaaTex sampler2D
 
 /*--------------------------------------------------------------------------*/
-    // Requires "#version 130" or better
+    // Requires "version 130" or better
     #define FxaaTexTop(t, p) textureLod(t, p, 0.0)
     #define FxaaTexOff(t, p, o, r) textureLodOffset(t, p, 0.0, o)
     #if (FXAA_GATHER4_ALPHA == 1)
@@ -975,9 +975,9 @@ FxaaFloat4 FxaaPixelShader(
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------------
-//#version 100
+//version 100
 
-//precision highp float;
+precision highp float;
 
 vec4 fxaaTexturePixel(sampler2D texture, vec2 texCoord, vec2 size)
 {
