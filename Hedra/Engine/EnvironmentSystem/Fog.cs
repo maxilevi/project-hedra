@@ -9,7 +9,7 @@ using OpenTK;
 using System.Runtime.InteropServices;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Effects;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.EnvironmentSystem
 {

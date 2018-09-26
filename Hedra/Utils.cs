@@ -53,23 +53,6 @@ namespace Hedra
 		public static string GetProjectPath(string p){
 			return p;
 		}
-		
-		private static int lastTick;
-        public static int LastFrameRate;
-        private static int frameRate;
-		public static double FrameProccesingTime = 1.0 / 60.0;
-        public static void CalculateFrameRate()
-        {
-            if (Environment.TickCount - lastTick >= 1000)
-            {
-                LastFrameRate = frameRate;
-                if(LastFrameRate != 0)
-                	FrameProccesingTime = Math.Truncate(100 *(double) (1000.0 / LastFrameRate))/100;
-                frameRate = 0;
-                lastTick = Environment.TickCount;
-            }
-            frameRate++;
-        }
 
 	    public static Random Rng { get; set; } = new Random();
 

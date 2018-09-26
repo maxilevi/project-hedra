@@ -8,7 +8,7 @@ using System;
 using System.Windows.Forms.VisualStyles;
 using Hedra.Engine.Generation;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
 {

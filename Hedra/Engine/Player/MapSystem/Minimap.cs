@@ -17,7 +17,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Player.MapSystem
 {
@@ -94,9 +94,8 @@ namespace Hedra.Engine.Player.MapSystem
 
                 DrawManager.FrustumObject.SetFrustum(_player.View.ModelViewMatrix);
 
-                Renderer.MatrixMode(MatrixMode.Projection);
                 var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
-                Renderer.LoadMatrix(ref projMatrix);
+                Renderer.LoadP(projMatrix);
 
                 var oldShadows = GameSettings.GlobalShadows;
                 var oldFancy = GameSettings.Fancy;

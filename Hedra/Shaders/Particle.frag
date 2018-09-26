@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 330 core
 !include<"Includes/Sky.shader">
 
 in vec4 Color;

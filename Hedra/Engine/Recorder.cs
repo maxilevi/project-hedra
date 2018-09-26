@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.IO;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 

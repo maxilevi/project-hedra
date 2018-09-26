@@ -11,7 +11,7 @@ using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace HedraTests.Player
 {

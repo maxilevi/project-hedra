@@ -320,6 +320,7 @@
     <Compile Include="Engine\Rendering\IGLProvider.cs" />
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
     <Compile Include="Engine\Rendering\IVertexData.cs" />
+    <Compile Include="Engine\Rendering\MeshStitcher.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
     <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />
     <Compile Include="Engine\Rendering\UI\ITextProvider.cs" />

@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 330 core
 
 in vec4 InColor;
 

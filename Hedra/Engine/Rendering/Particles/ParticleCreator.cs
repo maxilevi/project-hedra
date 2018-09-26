@@ -7,7 +7,7 @@
 using System;
 using Hedra.Engine.Management;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.Particles
 {

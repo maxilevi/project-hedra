@@ -5,11 +5,8 @@
  *
  */
 using System;
-using System.Text;
-using System.Collections;
-using System.Collections.Generic;
 using Hedra.Engine.Management;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering

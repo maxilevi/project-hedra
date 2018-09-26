@@ -10,7 +10,7 @@
 using System;
 using Hedra.Engine.Management;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
 {
@@ -42,6 +42,16 @@ namespace Hedra.Engine.Rendering
 	        BlendEquation(BlendEquationMode.FuncAdd);
 	        BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 	        Enable(EnableCap.Texture2D);
+	    }
+
+	    public static void LoadP(Matrix4 P)
+	    {
+	        
+	    }
+
+	    public static void LoadMV(Matrix4 MV)
+	    {
+	        
 	    }
 	    
 	    public static void Enable(EnableCap Cap)
@@ -109,11 +119,6 @@ namespace Hedra.Engine.Rendering
         public static void AttachShader(int S0, int S1)
         {
             Provider.AttachShader(S0, S1);
-        }
-
-        public static void Begin(PrimitiveType Type)
-        {
-            Provider.Begin(Type);
         }
 
         public static void BeginQuery(QueryTarget Target, int V0)
@@ -206,16 +211,6 @@ namespace Hedra.Engine.Rendering
         {
             Provider.ClearColor(DrawingColor);
         }
-
-        public static void Color3(Vector3 Color)
-        {
-            Provider.Color3(Color);
-        }
-	    
-	    public static void Color3(Vector4 Color)
-	    {
-	        Provider.Color3(Color.Xyz);
-	    }
 
         public static void ColorMask(bool B0, bool B1, bool B2, bool B3)
         {
@@ -342,11 +337,6 @@ namespace Hedra.Engine.Rendering
             Provider.EnableVertexAttribArray(Id);
         }
 
-        public static void End()
-        {
-            Provider.End();
-        }
-
         public static void EndQuery(QueryTarget Target)
         {
             Provider.EndQuery(Target);
@@ -442,16 +432,6 @@ namespace Hedra.Engine.Rendering
             Provider.LinkProgram((uint)Program);
         }
 
-        public static void LoadMatrix(ref Matrix4 Matrix4)
-        {
-            Provider.LoadMatrix(ref Matrix4);
-        }
-
-        public static void MatrixMode(MatrixMode Mode)
-        {
-            Provider.MatrixMode(Mode);
-        }
-
         public static void PointSize(float Size)
         {
             Provider.PointSize(Size);
@@ -462,16 +442,6 @@ namespace Hedra.Engine.Rendering
             Provider.PolygonMode(Face, Mode);
         }
 
-        public static void PopMatrix()
-        {
-            Provider.PopMatrix();
-        }
-
-        public static void PushMatrix()
-        {
-            Provider.PushMatrix();
-        }
-
         public static void ReadBuffer(ReadBufferMode Mode)
         {
             Provider.ReadBuffer(Mode);
@@ -480,16 +450,6 @@ namespace Hedra.Engine.Rendering
         public static void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Pixels)
         {
             Provider.ReadPixels(V0, V1, V2, V3, Format, Type, Pixels);
-        }
-
-        public static void Rotate(float Angle, Vector3 Rotation)
-        {
-            Provider.Rotate(Angle, Rotation);
-        }
-
-        public static void Scale(Vector3 Scale)
-        {
-            Provider.Scale(Scale);
         }
 
         public static void ShaderSource(int V0, string Source)
@@ -535,11 +495,6 @@ namespace Hedra.Engine.Rendering
             Provider.TexParameter(Target, Name, Value);
         }
 
-        public static void Translate(Vector3 Location)
-        {
-            Provider.Translate(Location);
-        }
-
         public static void Uniform1(int Location, int Uniform)
         {
             Provider.Uniform1(Location, Uniform);
@@ -575,29 +530,9 @@ namespace Hedra.Engine.Rendering
             Provider.UniformMatrix2(Location, Transpose, ref Uniform);
         }
 
-        public static void UniformMatrix2x3(int Location, bool Transpose, ref Matrix2x3 Uniform)
-        {
-            Provider.UniformMatrix2x3(Location, Transpose, ref Uniform);
-        }
-
-        public static void UniformMatrix2x4(int Location, bool Transpose, ref Matrix2x4 Uniform)
-        {
-            Provider.UniformMatrix2x4(Location, Transpose, ref Uniform);
-        }
-
         public static void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform)
         {
             Provider.UniformMatrix3(Location, Transpose, ref Uniform);
-        }
-
-        public static void UniformMatrix3x2(int Location, bool Transpose, ref Matrix3x2 Uniform)
-        {
-            Provider.UniformMatrix3x2(Location, Transpose, ref Uniform);
-        }
-
-        public static void UniformMatrix3x4(int Location, bool Transpose, ref Matrix3x4 Uniform)
-        {
-            Provider.UniformMatrix3x4(Location, Transpose, ref Uniform);
         }
 
         public static void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform)
@@ -605,35 +540,10 @@ namespace Hedra.Engine.Rendering
             Provider.UniformMatrix4(Location, Transpose, ref Uniform);
         }
 
-        public static void UniformMatrix4x2(int Location, bool Transpose, ref Matrix4x2 Uniform)
-        {
-            Provider.UniformMatrix4x2(Location, Transpose, ref Uniform);
-        }
-
-        public static void UniformMatrix4x3(int Location, bool Transpose, ref Matrix4x3 Uniform)
-        {
-            Provider.UniformMatrix4x3(Location, Transpose, ref Uniform);
-        }
-
         public static void UseProgram(int Program)
         {
             Provider.UseProgram((uint)Program);
         }
-
-        public static void Vertex2(Vector2 Vertex)
-        {
-            Provider.Vertex2(Vertex);
-        }
-
-        public static void Vertex3(Vector3 Vertex)
-        {
-            Provider.Vertex3(Vertex);
-        }
-
-	    public static void Vertex3(ref float Vertex)
-	    {
-	        Provider.Vertex3(ref Vertex);
-	    }
 
         public static void VertexAttribDivisor(int V0, int V1)
         {

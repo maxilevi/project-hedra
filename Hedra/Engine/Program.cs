@@ -8,7 +8,7 @@ using Hedra.Engine;
 using System.Windows.Forms;
 using System.Drawing;
 using Hedra.Engine.Rendering;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra
 {
@@ -76,31 +76,5 @@ namespace Hedra
 #endif
         }
     }
-	
-	class Game: GameWindow
-	{
-		protected override void OnLoad(EventArgs e)
-		{
-			Renderer.ClearColor(Colors.Red);
-		}
-        
-		protected override void OnRenderFrame(FrameEventArgs e)
-		{
-			Renderer.Clear(ClearBufferMask.ColorBufferBit);
-
-			Renderer.Begin(PrimitiveType.Triangles);
-
-			Renderer.Color3(Colors.Blue);
-			Renderer.Vertex2(new Vector2(-1.0f, 1.0f));
-			Renderer.Color3(Colors.GreenYellow);
-			Renderer.Vertex2(new Vector2(0.0f, -1.0f));
-			Renderer.Color3(Colors.DeepSkyBlue);
-			Renderer.Vertex2(new Vector2(1.0f, 1.0f));
-
-			Renderer.End();
-
-			this.SwapBuffers();
-		}
-	}
 }
 

@@ -112,6 +112,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             blockData = MeshSimplifier.Simplify(blockData, Lod);
             waterData = MeshSimplifier.Simplify(waterData, Lod);
             waterData = WaterEdgePatcher.Process(waterData, Lod);
+
             blockData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             waterData.Translate(new Vector3(OffsetX, 0, OffsetZ));
 

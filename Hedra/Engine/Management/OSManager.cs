@@ -1,7 +1,7 @@
 ﻿
 using System;
 using System.IO;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Rendering;
 using System.Windows.Forms;
 

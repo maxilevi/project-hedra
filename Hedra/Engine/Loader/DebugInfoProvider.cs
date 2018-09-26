@@ -13,7 +13,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Loader
@@ -87,7 +87,7 @@ namespace Hedra.Engine.Loader
 				text += 
 					$"\n\nGeneration Queue ={World.ChunkQueueCount} Mobs={World.Entities.Count} Yaw={player.View.TargetYaw}";
 				text += 
-					$"\n\nTextures ={Graphics2D.Textures.Count} Seed={World.Seed} FPS={Utils.LastFrameRate} MS={Utils.FrameProccesingTime}";
+					$"\n\nTextures ={Graphics2D.Textures.Count} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
 				text +=
 					$"\n\nCulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount} Pitch={player.View.TargetPitch} Physics.Calls={Physics.Threading.Count}";
 
@@ -121,7 +121,7 @@ namespace Hedra.Engine.Loader
 	        }
             if (_fpsOnTitle)
             {
-                Program.GameWindow.Title = $"{_originalTitle} FPS={Utils.LastFrameRate} MS={Utils.FrameProccesingTime}";
+                Program.GameWindow.Title = $"{_originalTitle} FPS={Time.Framerate} MS={Time.Frametime}";
             }
             else if(Program.GameWindow.Title != _originalTitle)
             {
@@ -138,50 +138,45 @@ namespace Hedra.Engine.Loader
 
 		        if (underChunk != null)
 		        {
-		            for (int x = 0; x < Chunk.Width / Chunk.BlockSize; x++)
+		            for (var x = 0; x < Chunk.Width / Chunk.BlockSize; x++)
 		            {
-		                for (int z = 0; z < Chunk.Width / Chunk.BlockSize; z++)
+		                for (var z = 0; z < Chunk.Width / Chunk.BlockSize; z++)
 		                {
-		                    Vector3 BasePosition = new Vector3(x * Chunk.BlockSize + underChunk.OffsetX,
+		                    var basePosition = new Vector3(x * Chunk.BlockSize + underChunk.OffsetX,
 		                        Physics.HeightAtPosition(x * Chunk.BlockSize + underChunk.OffsetX,
 		                            z * Chunk.BlockSize + underChunk.OffsetZ), z * Chunk.BlockSize + underChunk.OffsetZ);
-		                    Vector3 Normal = Physics.NormalAtPosition(BasePosition);
+		                    var normal = Physics.NormalAtPosition(basePosition);
 
-		                    Renderer.Begin(PrimitiveType.Lines);
-		                    Renderer.Color3(Colors.Yellow);
-		                    Renderer.Vertex3(BasePosition);
-		                    Renderer.Color3(Colors.Yellow);
-		                    Renderer.Vertex3(BasePosition + Normal * 2);
-		                    Renderer.End();
+			                BasicGeometry.DrawLine(basePosition, basePosition + normal * 2, Colors.Yellow);
 		                }
 		            }
 		        }
-			    var Collisions = new List<ICollidable>();
-				var Collisions2 = new List<ICollidable>();
+			    var collisions = new List<ICollidable>();
+				var collisions2 = new List<ICollidable>();
 
 				//Chunk UnderChunk = World.GetChunkAt(Player.BlockPosition);
-				Chunk UnderChunkR = World.GetChunkAt(player.Position + new Vector3(Chunk.Width, 0, 0));
-				Chunk UnderChunkL = World.GetChunkAt(player.Position - new Vector3(Chunk.Width, 0, 0));
-				Chunk UnderChunkF = World.GetChunkAt(player.Position + new Vector3(0, 0, Chunk.Width));
-				Chunk UnderChunkB = World.GetChunkAt(player.Position - new Vector3(0, 0, Chunk.Width));
+				var underChunkR = World.GetChunkAt(player.Position + new Vector3(Chunk.Width, 0, 0));
+				var underChunkL = World.GetChunkAt(player.Position - new Vector3(Chunk.Width, 0, 0));
+				var underChunkF = World.GetChunkAt(player.Position + new Vector3(0, 0, Chunk.Width));
+				var underChunkB = World.GetChunkAt(player.Position - new Vector3(0, 0, Chunk.Width));
 
-				Collisions.AddRange(World.GlobalColliders);
+				collisions.AddRange(World.GlobalColliders);
 				if (player.NearCollisions != null)
-					Collisions.AddRange(player.NearCollisions);
+					collisions.AddRange(player.NearCollisions);
 				if (underChunk != null)
-					Collisions.AddRange(underChunk.CollisionShapes);
-				if (UnderChunkL != null)
-					Collisions2.AddRange(UnderChunkL.CollisionShapes);
-				if (UnderChunkR != null)
-					Collisions2.AddRange(UnderChunkR.CollisionShapes);
-				if (UnderChunkF != null)
-					Collisions2.AddRange(UnderChunkF.CollisionShapes);
-				if (UnderChunkB != null)
-					Collisions2.AddRange(UnderChunkB.CollisionShapes);
+					collisions.AddRange(underChunk.CollisionShapes);
+				if (underChunkL != null)
+					collisions2.AddRange(underChunkL.CollisionShapes);
+				if (underChunkR != null)
+					collisions2.AddRange(underChunkR.CollisionShapes);
+				if (underChunkF != null)
+					collisions2.AddRange(underChunkF.CollisionShapes);
+				if (underChunkB != null)
+					collisions2.AddRange(underChunkB.CollisionShapes);
 
-				for (int i = 0; i < Collisions.Count; i++)
+				for (int i = 0; i < collisions.Count; i++)
 				{
-					if (!(Collisions[i] is CollisionShape shape)) return;
+					if (!(collisions[i] is CollisionShape shape)) return;
 
 					var pshape = player.Model.BroadphaseCollider;
 
@@ -193,49 +188,28 @@ namespace Hedra.Engine.Loader
 							: Colors.Red);
 				}
 
-				for (int i = 0; i < Collisions2.Count; i++)
+				for (int i = 0; i < collisions2.Count; i++)
 				{
-					if( Collisions2[i] is CollisionShape shape){
+					if( collisions2[i] is CollisionShape shape){
 						BasicGeometry.DrawShape(shape, Colors.Yellow);
 					}
 				}
 		        if (false)
 		        {
+			        BasicGeometry.DrawLine(player.Position + Vector3.UnitZ * 2f, player.Position + Vector3.UnitZ * 4f,
+				        Colors.Blue);
 
-		            Renderer.Begin(PrimitiveType.Lines);
-		            Renderer.Color3(Colors.Blue);
-		            Renderer.Vertex3(player.Position + Vector3.UnitZ * 2f);
-		            Renderer.Color3(Colors.Blue);
-		            Renderer.Vertex3(player.Position + Vector3.UnitZ * 4f);
-		            Renderer.End();
+			        BasicGeometry.DrawLine(player.Position - Vector3.UnitZ * 2f, player.Position - Vector3.UnitZ * 4f,
+				        Colors.BlueViolet);
 
-		            Renderer.Begin(PrimitiveType.Lines);
-		            Renderer.Color3(Colors.BlueViolet);
-		            Renderer.Vertex3(player.Position - Vector3.UnitZ * 2f);
-		            Renderer.Color3(Colors.BlueViolet);
-		            Renderer.Vertex3(player.Position - Vector3.UnitZ * 4f);
-		            Renderer.End();
+			        BasicGeometry.DrawLine(player.Position + Vector3.UnitX * 2f, player.Position + Vector3.UnitX * 4f,
+				        Colors.Red);
 
-		            Renderer.Begin(PrimitiveType.Lines);
-		            Renderer.Color3(Colors.Red);
-		            Renderer.Vertex3(player.Position + Vector3.UnitX * 2f);
-		            Renderer.Color3(Colors.Red);
-		            Renderer.Vertex3(player.Position + Vector3.UnitX * 4f);
-		            Renderer.End();
+			        BasicGeometry.DrawLine(player.Position - Vector3.UnitX * 2f, player.Position - Vector3.UnitX * 4f,
+				        Colors.OrangeRed);
 
-		            Renderer.Begin(PrimitiveType.Lines);
-		            Renderer.Color3(Colors.OrangeRed);
-		            Renderer.Vertex3(player.Position - Vector3.UnitX * 2f);
-		            Renderer.Color3(Colors.OrangeRed);
-		            Renderer.Vertex3(player.Position - Vector3.UnitX * 4f);
-		            Renderer.End();
-
-		            Renderer.Begin(PrimitiveType.Lines);
-		            Renderer.Color3(Colors.Yellow);
-		            Renderer.Vertex3(player.Position + player.Orientation * 2f);
-		            Renderer.Color3(Colors.Yellow);
-		            Renderer.Vertex3(player.Position + player.Orientation * 4f);
-		            Renderer.End();
+			        BasicGeometry.DrawLine(player.Position + player.Orientation * 2f, player.Position + player.Orientation * 4f,
+				        Colors.Yellow);
 
 		            World.Entities.ToList().ForEach(delegate(IEntity E)
 		            {

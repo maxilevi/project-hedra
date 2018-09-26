@@ -13,12 +13,15 @@ namespace Hedra.Engine
 	/// </summary>
 	public static class Time
 	{
+		public static int Framerate { get; private set; }
+		public static float Frametime { get; private set; } 
 	    public static bool Paused => TimeScale <= 0.005f; 
 		public static float DeltaTime { get; private set; }
 		public static float IndependantDeltaTime { get; private set; }
 		public static float TimeScale { get; private set; } = 1;
 	    public static float AccumulatedFrameTime { get; private set; }
 	    public static float IndependentAccumulatedFrameTime { get; private set; }
+		public static float LastFrameUpdate { get; set; }
 
         public static void IncrementFrame(double Time)
 	    {
@@ -29,7 +32,6 @@ namespace Hedra.Engine
 	    {
 	        AccumulatedFrameTime += Time * TimeScale;
 	        IndependentAccumulatedFrameTime += Time;
-
 	    }
 
 	    public static void Set(double Time)
@@ -42,6 +44,12 @@ namespace Hedra.Engine
 	        TimeScale = GameSettings.Paused ? 0 : 1;
 	        IndependantDeltaTime = Time;
 	        DeltaTime = IndependantDeltaTime * TimeScale;
-        }
+		    if (Math.Abs(LastFrameUpdate - Environment.TickCount) > 1000)
+		    {
+			    Framerate = (int) (1.0 / Time);
+			    Frametime = (float) (1000.0 / (1.0 / Time));
+			    LastFrameUpdate = Environment.TickCount;
+		    }
+	    }
 	}
 }

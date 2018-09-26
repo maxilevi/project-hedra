@@ -8,7 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Shaders;
 using OpenTK;
@@ -238,40 +238,16 @@ namespace Hedra.Engine.Rendering
 	                var matrix4 = (Matrix4) Mapping.Value;
                     Renderer.UniformMatrix4(Mapping.Location, false, ref matrix4);
 	                break;
-	            case MappingType.Matrix4X3:
-	                var matrix4X3 = (Matrix4x3)Mapping.Value;
-	                Renderer.UniformMatrix4x3(Mapping.Location, false, ref matrix4X3);
-                    break;
-	            case MappingType.Matrix4X2:
-	                var matrix4X2 = (Matrix4x2)Mapping.Value;
-	                Renderer.UniformMatrix4x2(Mapping.Location, false, ref matrix4X2);
-                    break;
-	            case MappingType.Matrix3X4:
-	                var matrix3X4 = (Matrix3x4)Mapping.Value;
-	                Renderer.UniformMatrix3x4(Mapping.Location, false, ref matrix3X4);
-                    break;
-	            case MappingType.Matrix3X2:
-	                var matrix3X2 = (Matrix3x2)Mapping.Value;
-	                Renderer.UniformMatrix3x2(Mapping.Location, false, ref matrix3X2);
-                    break;
-	            case MappingType.Matrix2X4:
-	                var matrix2X4 = (Matrix2x4)Mapping.Value;
-	                Renderer.UniformMatrix2x4(Mapping.Location, false, ref matrix2X4);
-                    break;
 	            case MappingType.Matrix3:
 	                var matrix3X3 = (Matrix3)Mapping.Value;
 	                Renderer.UniformMatrix3(Mapping.Location, false, ref matrix3X3);
-                    break;
-	            case MappingType.Matrix2X3:
-	                var matrix2X3 = (Matrix2x3)Mapping.Value;
-	                Renderer.UniformMatrix2x3(Mapping.Location, false, ref matrix2X3);
                     break;
 	            case MappingType.Matrix2:
 	                var matrix2 = (Matrix2)Mapping.Value;
 	                Renderer.UniformMatrix2(Mapping.Location, false, ref matrix2);
                     break;
 	            default:
-	                throw new ArgumentOutOfRangeException();
+	                throw new ArgumentOutOfRangeException($"Unkown type {Mapping.Type}");
 	        }
 	    }
 

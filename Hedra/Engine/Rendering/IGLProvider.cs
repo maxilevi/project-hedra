@@ -1,6 +1,6 @@
 ﻿using System;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
 {
@@ -8,7 +8,6 @@ namespace Hedra.Engine.Rendering
     {
         void ActiveTexture(TextureUnit Unit);
         void AttachShader(int S0, int S1);
-        void Begin(PrimitiveType Type);
         void BeginQuery(QueryTarget Target, int V0);
         void BindBuffer(BufferTarget Target, uint V0);
         void BindBufferBase(BufferRangeTarget Target, int V0, int V1);
@@ -27,7 +26,6 @@ namespace Hedra.Engine.Rendering
         FramebufferErrorCode CheckFramebufferStatus(FramebufferTarget Target);
         void Clear(ClearBufferMask Mask);
         void ClearColor(Vector4 DrawingColor);
-        void Color3(Vector3 Color);
         void ColorMask(bool B0, bool B1, bool B2, bool B3);
         void CompileShader(uint Program);
         int CreateProgram();
@@ -55,7 +53,6 @@ namespace Hedra.Engine.Rendering
         void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int Instancecount);
         void Enable(EnableCap Cap);
         void EnableVertexAttribArray(int Id);
-        void End();
         void EndQuery(QueryTarget Target);
         void FramebufferTexture(FramebufferTarget Framebuffer, FramebufferAttachment DepthAttachment, uint Id, int V0);
         void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment, TextureTarget Textarget, uint Texture, int Level);
@@ -75,17 +72,11 @@ namespace Hedra.Engine.Rendering
         int GetUniformBlockIndex(uint V0, string Name);
         int GetUniformLocation(uint Program, string Name);
         void LinkProgram(uint Program);
-        void LoadMatrix(ref Matrix4 Matrix4);
-        void MatrixMode(MatrixMode Mode);
         void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count);
         void PointSize(float Size);
         void PolygonMode(MaterialFace Face, PolygonMode Mode);
-        void PopMatrix();
-        void PushMatrix();
         void ReadBuffer(ReadBufferMode Mode);
         void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Pixels);
-        void Rotate(float Angle, Vector3 Rotation);
-        void Scale(Vector3 Scale);
         void ShaderSource(int V0, string Source);
         void StencilFunc(StencilFunction Func, int V0, uint Id);
         void StencilMask(uint Mask);
@@ -97,7 +88,6 @@ namespace Hedra.Engine.Rendering
         void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
             int V4, PixelFormat Format, PixelType Type, T[,,] Data) where T : struct;
         void TexParameter(TextureTarget Target, TextureParameterName Name, int Value);
-        void Translate(Vector3 Location);
         void Uniform1(int Location, int Uniform);
         void Uniform1(int Location, float Uniform);
         void Uniform1(int Location, double Uniform);
@@ -105,18 +95,9 @@ namespace Hedra.Engine.Rendering
         void Uniform3(int Location, Vector3 Uniform);
         void Uniform4(int Location, Vector4 Uniform);
         void UniformMatrix2(int Location, bool Transpose, ref Matrix2 Uniform);
-        void UniformMatrix2x3(int Location, bool Transpose, ref Matrix2x3 Uniform);
-        void UniformMatrix2x4(int Location, bool Transpose, ref Matrix2x4 Uniform);
         void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform);
-        void UniformMatrix3x2(int Location, bool Transpose, ref Matrix3x2 Uniform);
-        void UniformMatrix3x4(int Location, bool Transpose, ref Matrix3x4 Uniform);
         void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform);
-        void UniformMatrix4x2(int Location, bool Transpose, ref Matrix4x2 Uniform);
-        void UniformMatrix4x3(int Location, bool Transpose, ref Matrix4x3 Uniform);
         void UseProgram(uint Program);
-        void Vertex2(Vector2 Vertex);
-        void Vertex3(Vector3 Vertex);
-        void Vertex3(ref float Vertex);
         void VertexAttribDivisor(int V0, int V1);
         void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, IntPtr Ptr);
         void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, int V2);

@@ -14,7 +14,7 @@ using Hedra.Engine.Scenes;
 using Hedra.Engine.Sound;
 using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -136,7 +136,6 @@ namespace Hedra
 	        }
 	        DebugProvider.Update();
 	        AnalyticsManager.PlayTime += (float) e.Time;
-	        Utils.CalculateFrameRate();
 		}
 
 		protected override void OnRenderFrame(FrameEventArgs e)

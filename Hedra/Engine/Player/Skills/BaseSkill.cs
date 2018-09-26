@@ -14,7 +14,7 @@ using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Player.Skills
 {

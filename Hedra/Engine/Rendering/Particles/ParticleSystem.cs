@@ -8,7 +8,7 @@ using System;
 using Hedra.Engine.Player;
 using System.Collections.Generic;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.Particles

@@ -9,7 +9,7 @@
 using System;
 using System.Collections;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using Hedra.Engine.Management;
 using Hedra.Engine.Generation;

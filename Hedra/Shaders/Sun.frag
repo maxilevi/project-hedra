@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 330 core
 
 in vec2 UV;
 uniform sampler2D Texture;

@@ -18,14 +18,8 @@ namespace Hedra.Engine.Rendering.Shaders
 
         private void DetectType()
         {
-            Type= Value is Matrix4x3 ? MappingType.Matrix4X3
-                : Value is Matrix4x2 ? MappingType.Matrix4X2
-                : Value is Matrix4 ? MappingType.Matrix4
-                : Value is Matrix3x4 ? MappingType.Matrix3X4
-                : Value is Matrix3x2 ? MappingType.Matrix3X2
+            Type= Value is Matrix4 ? MappingType.Matrix4
                 : Value is Matrix3 ? MappingType.Matrix3
-                : Value is Matrix2x4 ? MappingType.Matrix2X4
-                : Value is Matrix2x3 ? MappingType.Matrix2X3
                 : Value is Matrix2 ? MappingType.Matrix2
                 : Value is Vector4 ? MappingType.Vector4
                 : Value is Vector3 ? MappingType.Vector3

@@ -8,7 +8,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 
 namespace Hedra.Engine.Rendering.Effects
@@ -83,7 +83,7 @@ namespace Hedra.Engine.Rendering.Effects
 	        var bmpData = bmp.LockBits(new Rectangle(0,0,bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 	
 	        Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpData.Width, bmpData.Height, 0,
-	            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
+	            OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
 	
 	        bmp.UnlockBits(bmpData);
 	        //Bmp.Dispose();

@@ -11,7 +11,7 @@ using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation.ChunkSystem;

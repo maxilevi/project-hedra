@@ -28,7 +28,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Generation
 {

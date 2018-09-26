@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 330 core
 layout(location = 0)in vec2 position;
  
 varying vec2 v_texCoord;

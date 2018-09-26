@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 330 core
 
 float luma(vec3 color);
 

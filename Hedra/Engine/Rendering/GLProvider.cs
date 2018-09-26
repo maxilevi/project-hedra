@@ -1,6 +1,6 @@
 ﻿using System;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
 {
@@ -14,11 +14,6 @@ namespace Hedra.Engine.Rendering
         public void AttachShader(int S0, int S1)
         {
             GL.AttachShader(S0, S1);
-        }
-
-        public void Begin(PrimitiveType Type)
-        {
-            GL.Begin(Type);
         }
 
         public void BeginQuery(QueryTarget Target, int V0)
@@ -105,11 +100,6 @@ namespace Hedra.Engine.Rendering
         public void ClearColor(Vector4 DrawingColor)
         {
             GL.ClearColor(DrawingColor.ToColor());
-        }
-
-        public void Color3(Vector3 Color)
-        {
-            GL.Color3(Color);
         }
 
         public void ColorMask(bool B0, bool B1, bool B2, bool B3)
@@ -247,11 +237,6 @@ namespace Hedra.Engine.Rendering
             GL.EnableVertexAttribArray(Id);
         }
 
-        public void End()
-        {
-            GL.End();
-        }
-
         public void EndQuery(QueryTarget Target)
         {
             GL.EndQuery(Target);
@@ -347,16 +332,6 @@ namespace Hedra.Engine.Rendering
             GL.LinkProgram(Program);
         }
 
-        public void LoadMatrix(ref Matrix4 Matrix4)
-        {
-            GL.LoadMatrix(ref Matrix4);
-        }
-
-        public void MatrixMode(MatrixMode Mode)
-        {
-            GL.MatrixMode(Mode);
-        }
-
         public void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
         {
             GL.MultiDrawElements(Primitive, Counts, Type, Offsets, Count);
@@ -372,16 +347,6 @@ namespace Hedra.Engine.Rendering
             GL.PolygonMode(Face, Mode);
         }
 
-        public void PopMatrix()
-        {
-            GL.PopMatrix();
-        }
-
-        public void PushMatrix()
-        {
-            GL.PushMatrix();
-        }
-
         public void ReadBuffer(ReadBufferMode Mode)
         {
             GL.ReadBuffer(Mode);
@@ -390,16 +355,6 @@ namespace Hedra.Engine.Rendering
         public void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Ptr)
         {
             GL.ReadPixels(V0, V1, V2, V3, Format, Type, Ptr);
-        }
-
-        public void Rotate(float Angle, Vector3 Rotation)
-        {
-            GL.Rotate(Angle, Rotation);
-        }
-
-        public void Scale(Vector3 Scale)
-        {
-            GL.Scale(Scale);
         }
 
         public void ShaderSource(int V0, string Source)
@@ -445,11 +400,6 @@ namespace Hedra.Engine.Rendering
             GL.TexParameter(Target, Name, Value);
         }
 
-        public void Translate(Vector3 Location)
-        {
-            GL.Translate(Location);
-        }
-
         public void Uniform1(int Location, int Uniform)
         {
             GL.Uniform1(Location, Uniform);
@@ -485,29 +435,9 @@ namespace Hedra.Engine.Rendering
             GL.UniformMatrix2(Location, Transpose, ref Uniform);
         }
 
-        public void UniformMatrix2x3(int Location, bool Transpose, ref Matrix2x3 Uniform)
-        {
-            GL.UniformMatrix2x3(Location, Transpose, ref Uniform);
-        }
-
-        public void UniformMatrix2x4(int Location, bool Transpose, ref Matrix2x4 Uniform)
-        {
-            GL.UniformMatrix2x4(Location, Transpose, ref Uniform);
-        }
-
         public void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform)
         {
             GL.UniformMatrix3(Location, Transpose, ref Uniform);
-        }
-
-        public void UniformMatrix3x2(int Location, bool Transpose, ref Matrix3x2 Uniform)
-        {
-            GL.UniformMatrix3x2(Location, Transpose, ref Uniform);
-        }
-
-        public void UniformMatrix3x4(int Location, bool Transpose, ref Matrix3x4 Uniform)
-        {
-            GL.UniformMatrix3x4(Location, Transpose, ref Uniform);
         }
 
         public void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform)
@@ -515,34 +445,9 @@ namespace Hedra.Engine.Rendering
             GL.UniformMatrix4(Location, Transpose, ref Uniform);
         }
 
-        public void UniformMatrix4x2(int Location, bool Transpose, ref Matrix4x2 Uniform)
-        {
-            GL.UniformMatrix4x2(Location, Transpose, ref Uniform);
-        }
-
-        public void UniformMatrix4x3(int Location, bool Transpose, ref Matrix4x3 Uniform)
-        {
-            GL.UniformMatrix4x3(Location, Transpose, ref Uniform);
-        }
-
         public void UseProgram(uint Program)
         {
             GL.UseProgram(Program);
-        }
-
-        public void Vertex2(Vector2 Vertex)
-        {
-            GL.Vertex2(Vertex);
-        }
-
-        public void Vertex3(Vector3 Vertex)
-        {
-            GL.Vertex3(Vertex);
-        }
-
-        public void Vertex3(ref float Vertex)
-        {
-            GL.Vertex3(ref Vertex);
         }
 
         public void VertexAttribDivisor(int V0, int V1)

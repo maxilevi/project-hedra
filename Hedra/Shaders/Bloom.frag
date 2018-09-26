@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 330 core
 
 uniform sampler2D Sampler;
 uniform float Modifier;

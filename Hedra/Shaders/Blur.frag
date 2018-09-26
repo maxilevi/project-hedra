@@ -1,12 +1,11 @@
-//precision mediump float;
 #version 120
 
 uniform sampler2D s_texture;
  
 varying vec2 v_texCoord;
 varying vec2 v_blurTexCoords[14];
- 
 vec2 BlurTexCoords[14];
+
 void main()
 {
 	//BlurTexCoords = vec2[14];

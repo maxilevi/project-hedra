@@ -12,7 +12,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using Hedra.Engine.Management;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
 {

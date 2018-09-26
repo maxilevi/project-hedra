@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 330 core
 !include<"Includes/Sky.shader">
 
 layout(location = 0)out vec4 OutColor; 
