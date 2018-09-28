@@ -259,7 +259,10 @@
     <Compile Include="Engine\ItemSystem\WeaponSystem\AttackOptions.cs" />
     <Compile Include="Engine\Loader\SplashScreen.cs" />
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
+    <Compile Include="Engine\Management\WindowsConsoleManager.cs" />
+    <Compile Include="Engine\Management\DummyConsoleManager.cs" />
     <Compile Include="Engine\Management\IAssetProvider.cs" />
+    <Compile Include="Engine\Management\IConsoleManager.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
     <Compile Include="Engine\PhysicsSystem\IPhysicsThreadManager.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />

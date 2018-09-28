@@ -4,6 +4,7 @@ using System.IO;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Rendering;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Hedra.Engine.Management
 {
@@ -12,9 +13,14 @@ namespace Hedra.Engine.Management
 	/// </summary>
 	public static class OSManager
 	{
+		public static string CPUArchitecture { get; private set; }	
+		public static string GraphicsCard { get; private set; }		
+		public static int RamCount { get; private set; }	    
+		public static string Specs => CPUArchitecture+"|"+GraphicsCard+"|"+RamCount;
+		private static IConsoleManager _consoleManager;
+		
 	    public static void Load(string ExecName)
 	    {
-    
 	        if (IntPtr.Size == 4) Log.WriteLine("Running "+Program.GameWindow.GameVersion+" as x86");
 	        if (IntPtr.Size == 8) Log.WriteLine("Running "+Program.GameWindow.GameVersion+" as x64");
 
@@ -37,6 +43,10 @@ namespace Hedra.Engine.Management
 	            }*/
 	        }
 
+		    _consoleManager = RunningPlatform == Platform.Windows
+			    ? (IConsoleManager) new WindowsConsoleManager() 
+			    : (IConsoleManager) new DummyConsoleManager();
+
 	        RamCount = 8;
 	        GraphicsCard = Renderer.GetString(StringName.Vendor) + Environment.NewLine
              + Renderer.GetString(StringName.Renderer) + Environment.NewLine 
@@ -46,17 +56,21 @@ namespace Hedra.Engine.Management
 		    Log.WriteLine("OS = " + Environment.OSVersion + Environment.NewLine +
 		                  "CPU = " + OSManager.CPUArchitecture + Environment.NewLine +
 		                  "Graphics Card = " + OSManager.GraphicsCard + Environment.NewLine);
+		    
         }
 
-	    public static string CPUArchitecture { get; private set; }
-	    public static string GraphicsCard { get; private set; }
-	    public static int RamCount { get; private set; }
-	    
-	    public static string Specs => CPUArchitecture+"|"+GraphicsCard+"|"+RamCount;
+		public static bool ShowConsole
+		{
+			get => _consoleManager.Show;
+			set => _consoleManager.Show = value;
+		}
+
+		public static bool CanHideConsole => !(_consoleManager is DummyConsoleManager);
 
 	    public static Platform RunningPlatform
 	    {
-	    	get{
+	    	get
+		    {
 		        switch (Environment.OSVersion.Platform)
 		        {
 		            case PlatformID.Unix:

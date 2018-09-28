@@ -88,11 +88,14 @@ namespace Hedra.Engine
 
         [Setting] public static bool ShowMinimap = true;
 
-        [Setting] public static bool ShowTargetedMobs = true;
-
         [Setting] public static bool SSAO = true;
 
-        public static bool BakedAO => !SSAO;
+        [Setting]
+        public static bool ShowConsole
+        {
+            get => OSManager.ShowConsole;
+            set => OSManager.ShowConsole = value;
+        }
 
         [Setting]
         public static bool Fullscreen

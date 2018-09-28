@@ -332,7 +332,7 @@ namespace Hedra.Engine.Rendering.UI
 				fullscreen.Text.Text = $"Fullscreen: {(GameSettings.Fullscreen ? "ON" : "OFF")}";
 			};
 			
-			var showChat = new Button(new Vector2(0, .2f),
+			var showChat = new Button(new Vector2(0, .4f),
 			                     new Vector2(0.15f,0.075f), "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF"), 0, fontColor, _normalFont);
 			
 			showChat.Click += delegate
@@ -341,49 +341,29 @@ namespace Hedra.Engine.Rendering.UI
 				showChat.Text.Text = "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF");
 			};
 			
-			Button showMinimap = new Button(new Vector2(0, .4f),
+			Button showMinimap = new Button(new Vector2(0, .6f),
 			                     new Vector2(0.15f,0.075f), "Show Minimap: " + ( GameSettings.ShowMinimap ? "ON" : "OFF"), 0, fontColor, _normalFont);
 			
-			showMinimap.Click += new OnButtonClickEventHandler(
-				delegate{
-					if(GameSettings.ShowMinimap)
-						GameSettings.ShowMinimap = false;
-					else
-						GameSettings.ShowMinimap = true;
-					showMinimap.Text.Text = "Show Minimap: " + ( GameSettings.ShowMinimap ? "ON" : "OFF");
-				});
-			
-			/*Button Fullscreen = new Button(new Vector2(dist, -vDist),
-			                     new Vector2(0.15f,0.075f), "Fullscreen: " + ( GraphicsOptions.Fullscreen ? "ON" : "OFF"), 0, fontColor, new Font(AssetManager.NormalFamily, fontSize));
-						
-			Fullscreen.Click += delegate{
-					GraphicsOptions.Fullscreen = !GraphicsOptions.Fullscreen;
-					Fullscreen.Text.Text = "Fullscreen: " + ( GraphicsOptions.Fullscreen ? "ON" : "OFF");
-				};*/
-			/*
-			IList<DisplayResolution> AvailableResolutions = DisplayDevice.GetDisplay(DisplayIndex.Primary).AvailableResolutions;
-			List<string> Resolutions = new List<string>();
-			for(int i = 0; i < AvailableResolutions.Count; i++){
-				if(AvailableResolutions[i].Width < 1024 || AvailableResolutions[i].Height < 578) continue;
-				if(Resolutions.Contains(AvailableResolutions[i].Width + "x" + AvailableResolutions[i].Height))continue;
-				Resolutions.Add( AvailableResolutions[i].Width + "x" + AvailableResolutions[i].Height);
+			showMinimap.Click += delegate
+			{
+				GameSettings.ShowMinimap = !GameSettings.ShowMinimap;
+				showMinimap.Text.Text = "Show Minimap: " + ( GameSettings.ShowMinimap ? "ON" : "OFF");
+			};
+
+			Button showConsole = null;
+			if (OSManager.CanHideConsole)
+			{
+				showConsole = new Button(new Vector2(0, .2f),
+					new Vector2(0.15f, 0.075f), "Show Console: " + (GameSettings.ShowConsole ? "ON" : "OFF"), 0,
+					fontColor, _normalFont);
+
+				showConsole.Click += delegate
+				{
+					GameSettings.ShowConsole = !GameSettings.ShowConsole;
+					showConsole.Text.Text = "Show Console: " + (GameSettings.ShowConsole ? "ON" : "OFF");
+				};
 			}
-			
-			OptionChooser Resolution = new OptionChooser(new Vector2(Dist, -VDist*3), new Vector2(0.15f, 0.075f), "Resolution: ",  FontColor, FontCache.Get(AssetManager.NormalFamily, FontSize),
-			                                             Resolutions.ToArray(), false);
-			
-			
-			Resolution.Index = Resolutions.Count-1;
-			Resolution.CurrentValue.Text = Resolutions[Resolutions.Count-1];
-			
-			Resolution.LeftArrow.Click += delegate { 
-				GraphicsOptions.Resolution = Resolutions[Resolution.Index];
-			};
-			
-			Resolution.RightArrow.Click += delegate { 
-				GraphicsOptions.Resolution = Resolutions[Resolution.Index];
-			};
-			*/
+
 			string[] volumeOptions = new string[]{"0%","5%","10%","15%","20%","25%","30%","35%","40%","45%","50%","55%","60%","65%","70%","75%","80%","85%","90%","95%","100%"};
 			OptionChooser musicVolume = new OptionChooser(new Vector2(0, .6f), new Vector2(0.15f, 0.075f), "Music Volume: ",  fontColor, _normalFont,
 			                                             volumeOptions, false);
@@ -472,6 +452,7 @@ namespace Hedra.Engine.Rendering.UI
 			_audioButtons.Add(sfxVolume);
 			_displayButtons.Add(showChat);
 			_displayButtons.Add(showMinimap);
+			if(showConsole != null) _displayButtons.Add(showConsole);
 			
 			AddElement(_controls);
 			AddElement(blackBand);
