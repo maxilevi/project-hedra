@@ -15,12 +15,12 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.UI
 {
-    public class Bar : IRenderable, UIElement
+    public class Bar : IRenderable, UIElement, IAdjustable
     {
         private static uint _barBlueprint;
         private static uint _rectangleBlueprint;
 
-        private static Shader Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
+        private static readonly Shader Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
         private float _barSize;
         private bool _enabled;
         private Panel _inPanel;
@@ -38,6 +38,7 @@ namespace Hedra.Engine.Rendering.UI
         private Vector2 TargetResolution = new Vector2(1024, 578);
         public RenderableText Text;
         private Vector4 UniformColor;
+        public Vector2 AdjustedPosition { get; set; }
 
         public bool UpdateTextRatio = true;
 
@@ -86,7 +87,7 @@ namespace Hedra.Engine.Rendering.UI
                 Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) +
                 Mathf.DivideVector(TargetResolution * new Vector2(0.015f, 0.015f),
                     new Vector2(GameSettings.Width, GameSettings.Height));
-            Shader["Position"] = Position;
+            Shader["Position"] = AdjustedPosition;
             Shader["Color"] = BackgroundColor;
 
             DrawManager.UIRenderer.SetupQuad();
@@ -96,7 +97,7 @@ namespace Hedra.Engine.Rendering.UI
                     ? Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) *
                       new Vector2(_barSize, 1)
                     : new Vector2(0, 0);
-            Shader["Position"] = Position;
+            Shader["Position"] = AdjustedPosition;
             Shader["Color"] =  UniformColor != Vector4.Zero 
                 ? UniformColor : _barSize > 0.6f 
                 ? Colors.FullHealthGreen : _barSize < 2.5f 
@@ -115,12 +116,13 @@ namespace Hedra.Engine.Rendering.UI
 
         public Vector2 Position
         {
-            get { return _position; }
+            get => _position;
             set
             {
                 _position = value;
                 if (Text != null)
                     Text.Position = _position;
+                this.Adjust();
             }
         }
 
@@ -134,6 +136,11 @@ namespace Hedra.Engine.Rendering.UI
         {
             _enabled = false;
             Text.Disable();
+        }
+
+        public void Adjust()
+        {
+            AdjustedPosition = GUITexture.Adjust(Position);
         }
 
         private void Initialize(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Panel InPanel,

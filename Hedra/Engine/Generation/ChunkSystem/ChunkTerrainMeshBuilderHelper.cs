@@ -73,7 +73,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return new Vector4(color.Xyz / colorCount, 1.0f);
         }
 
-        public void CreateCell(ref GridCell Cell, int X, int Y, int Z, int Width, int Height, int Depth, bool ExtraData,
+        public void CreateCell(ref GridCell Cell, int X, int Y, int Z, bool ExtraData,
             bool WaterCell, int Lod, out bool Success)
         {
             Success = true;
@@ -128,7 +128,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     }
                     WATER_BREAK:
 
-                    var neighbourChunk = this.GetNeighbourChunk((int) pos.X, Y, (int) pos.Z);
+                    var neighbourChunk = this.GetNeighbourChunk((int) pos.X, (int) pos.Z);
                     var x = (int) (pos.X % _boundsX);
                     var z = (int) (pos.Z % _boundsZ);
 
@@ -188,7 +188,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        private Chunk GetNeighbourChunk(int X, int Y, int Z)
+        private Chunk GetNeighbourChunk(int X, int Z)
+        {
+            return GetNeighbourChunk(ref X, ref Z);
+        }
+        
+        //Use ref to avoid copying the structs since this function has a very high call rate.
+        private Chunk GetNeighbourChunk(ref int X, ref int Z)
         {
             if (X >= 0 && X < _boundsX && Z >= 0 && Z < _boundsZ) return _parent;
             var coords = World.ToChunkSpace(new Vector3(_offsetX + X * _blockSize, 0, _offsetZ + Z * _blockSize));
@@ -198,13 +204,18 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private Block GetNeighbourBlock(int X, int Y, int Z)
         {
-            var chunk = this.GetNeighbourChunk(X, Y, Z);
+            return GetNeighbourBlock(ref X, ref Y, ref Z);
+        }
+
+        private Block GetNeighbourBlock(ref int X, ref int Y, ref int Z)
+        {
+            var chunk = this.GetNeighbourChunk(ref X, ref Z);
             if (!chunk?.Landscape.BlocksSetted ?? true) return new Block(BlockType.Temporal);
-            return chunk[Modulo(X, _boundsX)][Y][Modulo(Z, _boundsZ)];
+            return chunk[Modulo(ref X, _boundsX)][Y][Modulo(ref Z, _boundsZ)];
         }
         
         // Source: https://codereview.stackexchange.com/a/58309
-        private static int Modulo(int Index, int Bounds)
+        private static int Modulo(ref int Index, int Bounds)
         {
             return (Index % Bounds + Bounds) % Bounds;
         }

@@ -177,6 +177,7 @@ namespace Hedra.Engine.Rendering
 		{
 		    Renderer.BlendEquation(BlendEquationMode.FuncAdd);
             Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+		    Renderer.Enable(EnableCap.Blend);
 
             WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;

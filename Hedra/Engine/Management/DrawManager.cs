@@ -28,7 +28,8 @@ namespace Hedra.Engine.Management
 		private static Cursor _mouseCursor;
 		
 		public static List<IRenderable> ParticleRenderer { get; }
-	    public static List<IRenderable> TrailRenderer { get; }
+	    public static List<IRenderable
+            > TrailRenderer { get; }
 		public static GUIRenderer UIRenderer { get; }
 		public static FrustumCulling FrustumObject { get; }
 		public static DropShadowRenderer DropShadows { get; }

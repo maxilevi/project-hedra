@@ -34,7 +34,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
 		}
 
 		protected override int MaxLevel => 100;
-		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
 		public override string Description => "Your attacks have a chance to apply poison.";
 		public override string DisplayName => "Venom";
 	}

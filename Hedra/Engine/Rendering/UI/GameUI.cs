@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using OpenTK;
 using Hedra.Engine.Management;
@@ -21,7 +22,6 @@ namespace Hedra.Engine.Rendering.UI
 	public class GameUI : Panel
 	{
         public readonly Texture Cross;
-	    public readonly Texture QuestLogMsg;
 		private readonly Texture _compass;
 		private readonly Texture _help;
 		private readonly RenderableTexture _classLogo;
@@ -29,13 +29,18 @@ namespace Hedra.Engine.Rendering.UI
 	    private readonly RenderableTexture _staminaBackground;
 	    private readonly RenderableTexture _staminaIcon;
 	    private readonly RenderableTexture _oxygenIcon;
+		private readonly RenderableTexture _healthBackground, _xpBackground, _manaBackground;
 		private readonly TexturedBar _oxygenBar;
 		private readonly TexturedBar _staminaBar;
 		private readonly GUIText _consecutiveHits;
 		private readonly SlingShotAnimation _slingShot;
-		
-		public GameUI(IPlayer Player)
+		private readonly IPlayer _player;
+		private string _currentClass;
+
+
+        public GameUI(IPlayer Player)
 		{
+			this._player = Player;
 		    _consecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.75f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
 			_slingShot = new SlingShotAnimation();
 		    _slingShot.Play(_consecutiveHits);
@@ -47,57 +52,62 @@ namespace Hedra.Engine.Rendering.UI
 				    _slingShot.Play(_consecutiveHits);
 				});
 			};
-				
-			var barBackgrounds = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/BarBackgrounds.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
-			_oxygenBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
-			_staminaBackground = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaBackground.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
-			
-			var healthBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/HealthBar.png"), new Vector2(-.675f, .7775f), new Vector2(0.12f, 0.022f),
+            _healthBackground = new RenderableTexture(new Texture("Assets/UI/HealthBackground.png", new Vector2(-.675f, .765f), Vector2.One), DrawOrder.After);
+			_manaBackground = new RenderableTexture(new Texture("Assets/UI/ManaBackground.png", new Vector2(-.7315f, .7155f), Vector2.One), DrawOrder.After);
+			_xpBackground = new RenderableTexture(new Texture("Assets/UI/XPBackground.png", new Vector2(-.675f, .805f), Vector2.One), DrawOrder.After);
+
+            var healthBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/HealthBar.png"), new Vector2(-.675f, .7775f), Graphics2D.SizeFromAssets("Assets/UI/HealthBar.png"),
 			    () => Player.Health,
 			    () => Player.MaxHealth, this);
 
-			var manaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/ManaBar.png"), new Vector2(-.7315f, .7265f), new Vector2(0.07f, 0.015f),
+			var manaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/ManaBar.png"), new Vector2(-.7315f, .7265f), Graphics2D.SizeFromAssets("Assets/UI/ManaBar.png"),
 			    () => Player.Mana,
 			    () => Player.MaxMana, this);
 
-			var xpBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/XPBar.png"), new Vector2(-.675f, .815f), new Vector2(0.12f, 0.0065f),
+			var xpBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/XPBar.png"), new Vector2(-.675f, .815f), Graphics2D.SizeFromAssets("Assets/UI/XPBar.png"),
 			    () => Player.XP,
 			    () => Player.MaxXP, this);
 
-			_oxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f),
-			    () => Player.Oxygen,
-			    () => Player.MaxOxygen, this);
-
-			_staminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), new Vector2(-.84f, .6f), new Vector2(0.049f, 0.02f),
-			    () => Player.Stamina, () => Player.MaxStamina, this);
+			_oxygenBackground = new RenderableTexture(
+				new Texture("Assets/UI/OxygenBackground.png", new Vector2(-.84f, .54f), Vector2.One), DrawOrder.After);
 			
-			_classLogo = new RenderableTexture(new Texture(0, Vector2.Zero, Vector2.One), DrawOrder.After);
-			_oxygenIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenIcon.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
-			_staminaIcon = new RenderableTexture( new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaIcon.png"), Vector2.Zero, Vector2.One), DrawOrder.After);
+			_oxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), new Vector2(-.84f, .55f), Graphics2D.SizeFromAssets("Assets/UI/OxygenBar.png"),
+			    () => Player.Oxygen,
+			    () => Player.MaxOxygen, this);	
+
+			_staminaBackground = new RenderableTexture(
+				new Texture("Assets/UI/StaminaBackground.png", new Vector2(-.85f, .44f), Vector2.One), DrawOrder.After);
+			
+			_staminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), new Vector2(-.85f, .45f), Graphics2D.SizeFromAssets("Assets/UI/StaminaBar.png"),
+			    () => Player.Stamina, () => Player.MaxStamina, this);			
+
+			
+			_classLogo = new RenderableTexture(new Texture(0, new Vector2(-.85f, .75f), Vector2.One), DrawOrder.After);
+			_oxygenIcon = new RenderableTexture(new Texture("Assets/UI/OxygenIcon.png", new Vector2(-.9f, .54f), Vector2.One), DrawOrder.After);
+			_staminaIcon = new RenderableTexture(new Texture("Assets/UI/StaminaIcon.png", new Vector2(-.9f, .44f), Vector2.One), DrawOrder.After);
 			
 			Cross = new Texture("Assets/UI/Pointer.png", new Vector2(0, 0f), Vector2.One * .1f);
-			
-			var skillTreeMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/SkillTreeMsg.png"), Vector2.Zero, Vector2.One);
-			QuestLogMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/QuestLogMsg.png"), Vector2.Zero, Vector2.One);
-			var mapMsg = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MapMsg.png"), Vector2.Zero, Vector2.One);
 			
 			_compass = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
 			_help = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Help.png"), Vector2.Zero, Vector2.One);
 			
+			var skillTreeMsg = new GUIText("SKILL TREE - X", new Vector2(-.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+			var mapMsg = new GUIText("MAP - M", new Vector2(.815f, .425f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+			
+			AddElement(skillTreeMsg);
+			AddElement(mapMsg);
             AddElement(_consecutiveHits);
 			AddElement(_compass);
-			AddElement(barBackgrounds);
+			AddElement(_healthBackground);
+			AddElement(_manaBackground);
+			AddElement(_xpBackground);
 			AddElement(xpBar);
 			AddElement(_classLogo);
-			AddElement(QuestLogMsg);
-			AddElement(skillTreeMsg);
 			AddElement(Cross);
-			AddElement(skillTreeMsg);
 			AddElement(_oxygenBar);
 			AddElement(_staminaBar);
 			AddElement(healthBar);
 			AddElement(manaBar);
-			AddElement(mapMsg);
 			AddElement(_help);
 			
 			this.OnPanelStateChange += delegate(object Sender, PanelState E)
@@ -107,47 +117,58 @@ namespace Hedra.Engine.Rendering.UI
 			};	
 		}
 
-		public void Update(IPlayer Player)
+		public void Update()
 		{
-
-			_compass.Disable();
-			_compass.TextureElement.Angle = Player.Model.Rotation.Y;
+            _compass.Disable();
+			_compass.TextureElement.Angle = _player.Model.Rotation.Y;
 			
-			if (Player.UI.ShowHelp && Enabled)
+			if (_player.UI.ShowHelp && Enabled)
 			{
-				Player.AbilityTree.Show = false;
-				Player.QuestLog.Show = false;
+				_player.AbilityTree.Show = false;
+				_player.QuestLog.Show = false;
 				_help.Enable();
 			}
 			else
 			{
 				_help.Disable();
 			}
+			
+			if(_currentClass != _player.Class.Logo)
+				this.UpdateLogo();
 
-			Oxygen = Math.Abs(Player.Oxygen - Player.MaxOxygen) > 0.05f && !GameSettings.Paused && Enabled;
+			Oxygen = Math.Abs(_player.Oxygen - _player.MaxOxygen) > 0.05f && !GameSettings.Paused && Enabled;
 
-			Stamina = Math.Abs(Player.Stamina - Player.MaxStamina) > 0.05f && !GameSettings.Paused && Enabled &&
-			          !Player.IsUnderwater;
+			Stamina = Math.Abs(_player.Stamina - _player.MaxStamina) > 0.05f && !GameSettings.Paused && Enabled &&
+			          !_player.IsUnderwater;
 
-			_classLogo.BaseTexture.TextureElement.TextureId = Player.Class.Logo;
-			_consecutiveHits.TextColor = Player.ConsecutiveHits >= 4 && Player.ConsecutiveHits < 8
-				? Color.Gold : Player.ConsecutiveHits >= 8 ? Color.Red : Color.White;
+			_consecutiveHits.TextColor = _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8
+				? Color.Gold : _player.ConsecutiveHits >= 8 ? Color.Red : Color.White;
 			_consecutiveHits.TextFont = FontCache.Get(_consecutiveHits.TextFont.FontFamily,
-				Player.ConsecutiveHits >= 4 && Player.ConsecutiveHits < 8
-					? 15f : Player.ConsecutiveHits >= 8 ? 17f : 14f,
+				_player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8
+					? 15f : _player.ConsecutiveHits >= 8 ? 17f : 14f,
 				_consecutiveHits.TextFont.Style);
-			_consecutiveHits.Text = Player.ConsecutiveHits > 0 ? $"{Player.ConsecutiveHits} HIT{(Player.ConsecutiveHits == 1 ? string.Empty : "S")}" : string.Empty;
+			_consecutiveHits.Text = _player.ConsecutiveHits > 0 ? $"{_player.ConsecutiveHits} HIT{(_player.ConsecutiveHits == 1 ? string.Empty : "S")}" : string.Empty;
             _slingShot.Update();
         }
+
+		private void UpdateLogo()
+		{
+			_currentClass = _player.Class.Logo;
+			_classLogo.BaseTexture.TextureElement.TextureId = Graphics2D.LoadFromAssets(_player.Class.Logo);
+			_classLogo.Scale = Graphics2D.SizeFromAssets(_player.Class.Logo);
+		}
 		
 		public bool Oxygen
 		{
 			set{
-				if(value){
+				if(value)
+                {
 					_oxygenBar.Enable();
 					_oxygenBackground.Enable();
 					_oxygenIcon.Enable();
-				}else{
+				}
+                else
+                {
 					_oxygenBackground.Disable();
 					_oxygenBar.Disable();
 					_oxygenIcon.Disable();
@@ -158,11 +179,14 @@ namespace Hedra.Engine.Rendering.UI
 		public bool Stamina
 		{
 			set{
-				if(value){
+				if(value)
+                {
 					_staminaBar.Enable();
 					_staminaBackground.Enable();
 					_staminaIcon.Enable();
-				}else{
+				}
+                else
+                {
 					_staminaBackground.Disable();
 					_staminaBar.Disable();
 					_staminaIcon.Disable();

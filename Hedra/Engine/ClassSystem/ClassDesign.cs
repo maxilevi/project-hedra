@@ -20,7 +20,7 @@ namespace Hedra.Engine.ClassSystem
         }
 
         public string Name => this.ToString();
-        public abstract uint Logo { get; }
+        public abstract string Logo { get; }
         public abstract HumanType Human { get; }
         public abstract float BaseSpeed { get; }
         public abstract AbilityTreeBlueprint AbilityTreeDesign { get; }

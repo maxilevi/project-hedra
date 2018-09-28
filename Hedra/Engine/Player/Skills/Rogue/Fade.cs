@@ -19,10 +19,11 @@ namespace Hedra.Engine.Player.Skills.Rogue
 	/// Description of WeaponThrow.
 	/// </summary>
 	public class Fade : BaseSkill
-	{		
+	{
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
+
 		public Fade() : base() 
 		{
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
 			base.ManaCost = 80f;
 			base.MaxCooldown = 16f;
 		}

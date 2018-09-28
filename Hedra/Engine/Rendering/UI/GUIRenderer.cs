@@ -80,24 +80,6 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.DrawArrays(PrimitiveType.Triangles, 0, _vbo.Count);
         }
 
-        public void RescaleTextures(float NewWidth, float NewHeight)
-        {
-            foreach (GUITexture texture in _textures)
-            {
-                bool anchorScaleX = false, anchorScaleY = false, anchorPositionX = false, anchorPositionY = false;
-                if (texture.Scale.X == 1) anchorScaleX = true;
-                if (texture.Scale.Y == 1) anchorScaleY = true;
-                if (texture.Position.X == 1) anchorPositionX = true;
-                if (texture.Position.Y == 1) anchorPositionY = true;
-
-                //Textures[i].Position = new Vector2(Textures[i].Position.X * GameSettings.Width / NewWidth, Textures[i].Position.Y * GameSettings.Height / NewHeight);
-                texture.Scale = new Vector2(texture.Scale.X * GameSettings.Width / NewWidth, texture.Scale.Y * GameSettings.Height / NewHeight);
-
-                //Textures[i].Position = new Vector2( (AnchorPositionX) ? 1 : Textures[i].Position.X, (AnchorPositionY) ? 1 : Textures[i].Position.Y);
-                //_textures[i].Scale = new Vector2( (anchorScaleX) ? 1 : _textures[i].Scale.X, (anchorScaleY) ? 1 : _textures[i].Scale.Y);
-            }
-        }
-
         public void Add(GUITexture Texture)
         {
             lock(_lock)
@@ -126,7 +108,7 @@ namespace Hedra.Engine.Rendering.UI
                 _renderableUISet.Add(command);
             }
         }
-
+        
         public void Remove(GUITexture Texture)
         {
             lock(_lock)
@@ -145,6 +127,23 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
+        public void Adjust()
+        {
+            lock (_lock)
+            {
+                foreach (var texture in _textures)
+                {
+                    texture.Adjust();
+                }
+                
+                foreach (var item in _renderableUISet)
+                {
+                    if(item.Renderable is IAdjustable adjustable)
+                        adjustable.Adjust();
+                }
+            }
+        }
+
         public void Draw()
         {
             DrawCount = 0;
@@ -159,7 +158,7 @@ namespace Hedra.Engine.Rendering.UI
             SetDraw();
             lock (_lock)
             {
-                foreach (GUITexture texture in _textures)
+                foreach (var texture in _textures)
                 {
                     if (texture == null || !texture.Enabled || texture.Scale == Vector2.Zero) continue;
                     DrawCount++;
@@ -196,16 +195,14 @@ namespace Hedra.Engine.Rendering.UI
                 Shader["Mask"] = 2;
             }
 
-            Vector2 scale = Texture.Scale;
             this.SetupQuad();
-
-            Shader["Scale"] = scale;
-            Shader["Position"] = Texture.Position;
+            Shader["Scale"] = Texture.Scale;
+            Shader["Position"] = Texture.AdjustedPosition;
             Shader["Flipped"] = Texture.IdPointer == null && !Texture.Flipped ? 0 : 1;
             Shader["Opacity"] = Texture.Opacity;
             Shader["Grayscale"] = Texture.Grayscale ? 1 : 0;
             Shader["Tint"] = Texture.Tint;
-            Shader["Rotation"] = Texture.Angle == 0 ? Matrix3.Identity : Texture.RotationMatrix;
+            Shader["Rotation"] = Math.Abs(Texture.Angle) < .05f ? Matrix3.Identity : Texture.RotationMatrix;
             Shader["Size"] = new Vector2(1.0f / GameSettings.Width, 1.0f / GameSettings.Height);
             Shader["FXAA"] = Texture.Fxaa ? 1.0f : 0.0f;
             Shader["UseMask"] = Texture.UseMask ? 1 : 0;

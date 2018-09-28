@@ -51,9 +51,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     {
                         next = !next;
 
+                        if (Lod != 1 && (z == 0 || x == 0)) continue;
                         if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
 
-                        Helper.CreateCell(ref cell, x, y, z, BoundsX, BoundsY, BoundsZ, true,
+                        Helper.CreateCell(ref cell, x, y, z, true,
                             Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air, Lod,
                             out bool success);
 
@@ -82,7 +83,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             if (Blocks[x][y][z].Type == BlockType.Water &&
                                 Blocks[x][y + 1][z].Type == BlockType.Air)
                             {
-                                Helper.CreateCell(ref cell, x, y, z, BoundsX, BoundsY, BoundsZ, true, false, Lod,
+                                Helper.CreateCell(ref cell, x, y, z, true, false, Lod,
                                     out success);
                             }
                             if (!success && y < BoundsY - 2) failed = true;

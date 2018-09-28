@@ -8,7 +8,7 @@ namespace Hedra.Engine.ClassSystem
     [HiddenClass]
     public class NoneDesign : ClassDesign
     {
-        public override uint Logo => 0;
+        public override string Logo => string.Empty;
         public override HumanType Human => throw new ArgumentException("Cannot retrieve HumanType from NoneClass");
         public override float BaseSpeed => 1.25f;
         public override AbilityTreeBlueprint AbilityTreeDesign => null;

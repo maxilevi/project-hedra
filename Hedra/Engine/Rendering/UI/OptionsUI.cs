@@ -314,29 +314,32 @@ namespace Hedra.Engine.Rendering.UI
 					shadows.CurrentValue.Text = "OFF";
 			};
 			
-			Button ssao = new Button(new Vector2(-dist, -vDist),
+			var ssao = new Button(new Vector2(-dist, -vDist * 2),
 			                     new Vector2(0.15f,0.075f), "Ambient Occlusion: " + ( GameSettings.SSAO ? "ON" : "OFF"), 0, fontColor, _normalFont);
 			
-			ssao.Click += new OnButtonClickEventHandler(
-				delegate{
-					if(GameSettings.SSAO)
-						GameSettings.SSAO = false;
-					else
-						GameSettings.SSAO = true;
-					ssao.Text.Text = "Ambient Occlusion: " + ( GameSettings.SSAO ? "ON" : "OFF");
-				});
+			ssao.Click += delegate
+			{
+				GameSettings.SSAO = !GameSettings.SSAO;
+				ssao.Text.Text = "Ambient Occlusion: " + ( GameSettings.SSAO ? "ON" : "OFF");
+			};
 			
-			Button showChat = new Button(new Vector2(0, .2f),
+			var fullscreen = new Button(new Vector2(-dist, -vDist),
+				new Vector2(0.15f,0.075f), $"Fullscreen: {(GameSettings.Fullscreen ? "ON" : "OFF")}", 0, fontColor, _normalFont);
+			
+			fullscreen.Click += delegate
+			{
+				GameSettings.Fullscreen = !GameSettings.Fullscreen;
+				fullscreen.Text.Text = $"Fullscreen: {(GameSettings.Fullscreen ? "ON" : "OFF")}";
+			};
+			
+			var showChat = new Button(new Vector2(0, .2f),
 			                     new Vector2(0.15f,0.075f), "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF"), 0, fontColor, _normalFont);
 			
-			showChat.Click += new OnButtonClickEventHandler(
-				delegate{
-					if(GameSettings.ShowChat)
-						GameSettings.ShowChat = false;
-					else
-						GameSettings.ShowChat = true;
-					showChat.Text.Text = "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF");
-				});
+			showChat.Click += delegate
+			{
+				GameSettings.ShowChat = !GameSettings.ShowChat;
+				showChat.Text.Text = "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF");
+			};
 			
 			Button showMinimap = new Button(new Vector2(0, .4f),
 			                     new Vector2(0.15f,0.075f), "Show Minimap: " + ( GameSettings.ShowMinimap ? "ON" : "OFF"), 0, fontColor, _normalFont);
@@ -461,7 +464,7 @@ namespace Hedra.Engine.Rendering.UI
             _graphicsButtons.Add(fxaa);
 		    _graphicsButtons.Add(frameLimiter);
 		    _graphicsButtons.Add(bloom);
-            //_graphicsButtons.Add(Fullscreen);
+            _graphicsButtons.Add(fullscreen);
             _inputButtons.Add(invertMouse);
 			_inputButtons.Add(mouseSensitivity);
 			_inputButtons.Add(autosave);

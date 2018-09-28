@@ -2,38 +2,28 @@
     //#define SHOW_COLLISION
 #endif
 
-using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Effects;
-using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Scenes;
 using Hedra.Engine.Sound;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
-using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Loader;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Engine.Rendering.UI;
 using Forms = System.Windows.Forms;
 
 namespace Hedra
@@ -157,13 +147,10 @@ namespace Hedra
         protected override void OnResize(EventArgs e)
 	    {
             base.OnResize(e);
-	        if (_forcingResize) return;
-
-	        _forcingResize = true;
-	        Width = GameSettings.Width;
-	        Height = GameSettings.Height;
-	        _forcingResize = false;
-        }
+		    GameSettings.SurfaceWidth = Width;
+		    GameSettings.SurfaceHeight = Height;
+		    DrawManager.UIRenderer.Adjust();
+	    }
 
 		protected override void OnFocusedChanged(EventArgs e)
 		{

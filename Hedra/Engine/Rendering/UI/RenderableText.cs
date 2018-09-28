@@ -17,61 +17,69 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// Wrapper around GUIText.
 	/// </summary>
-	public class RenderableText : IRenderable, IDisposable, UIElement
+	public class RenderableText : IRenderable, IAdjustable, UIElement
 	{
-		public GUIText UIText;
+		public readonly GUIText UIText;
 
 		public RenderableText(string Text, Vector2 Position, Color FontColor, Font FontType){
 			this.UIText = new GUIText(Text, Position, FontColor, FontType);
 			DrawManager.UIRenderer.Remove(this.UIText.UIText);
 		}
 
-        public void Draw(){
+        public void Draw()
+        {
 			DrawManager.UIRenderer.Draw(UIText.UIText);
 		}
+
+		public void Adjust()
+		{
+			UIText.UIText.Adjust();
+		}
 		
-		public string Text{
-			get{ return UIText.Text;}
+		public string Text
+		{
+			get => UIText.Text;
 			set{
 				UIText.Text = value;
 				DrawManager.UIRenderer.Remove(this.UIText.UIText);
 			}
 		}
 		
-		public Vector2 Scale{
-			get{ return UIText.Scale;}
-			set{
-				UIText.Scale = value;
-			}
+		public Vector2 Scale
+		{
+			get => UIText.Scale;
+			set => UIText.Scale = value;
 		}
 		
-		public Vector2 Position{
-			get{ return UIText.Position;}
-			set{
-				UIText.Position = value;
-			}
+		public Vector2 Position
+		{
+			get => UIText.Position;
+			set => UIText.Position = value;
 		}
 		
 		public Color Color{
-			get{ return UIText.TextColor; }
-			set{ UIText.TextColor = value;}
+			get => UIText.TextColor;
+			set => UIText.TextColor = value;
 		}
 
 	    public Font TextFont
 	    {
-	        get { return UIText.TextFont; }
-	        set { UIText.TextFont = value; }
+	        get => UIText.TextFont;
+		    set => UIText.TextFont = value;
 	    }
 
-        public void Enable(){
+        public void Enable()
+        {
 			UIText.Enable();
 		}
 		
-		public void Disable(){
+		public void Disable()
+		{
 			UIText.Disable();
 		}
 		
-		public void Dispose(){
+		public void Dispose()
+		{
 			UIText.Dispose();
 			DrawManager.UIRenderer.Remove(this);
 		}

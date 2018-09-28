@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
 	/// </summary>
 	public class FireRelease : BaseSkill
 	{
-		
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");
 		private float Damage = 50f;
 		private PointLight Light;
 		private ParticleSystem Particles;
@@ -31,7 +31,6 @@ namespace Hedra.Engine.Player
 		public override string DisplayName => "Fire Release";
 		
 		public FireRelease() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");
 			base.MaxCooldown = .5f;
 			base.ManaCost = 5f;
 			this.Particles = new ParticleSystem(Vector3.Zero);

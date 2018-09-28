@@ -10,6 +10,7 @@
 using System;
 using System.Drawing;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
@@ -21,7 +22,7 @@ namespace Hedra.Engine.Player.Skills
 	/// <summary>
 	/// Description of Skill.
 	/// </summary>
-	public abstract class BaseSkill : UIElement, IRenderable, IUpdatable, ISimpleTexture
+	public abstract class BaseSkill : UIElement, IRenderable, IUpdatable, ISimpleTexture, IAdjustable
 	{
 		public static Shader Shader { get; }
 		public static Vector3 GrayTint { get; }
@@ -37,17 +38,15 @@ namespace Hedra.Engine.Player.Skills
         public abstract string Description { get; }
 		public abstract string DisplayName { get; }
 	    public bool Casting { get; set; }
-	    public virtual uint TextureId { get; protected set; }
-	    public uint MaskId { get; set; }
+	    public virtual uint TextureId { get; }
+		public Vector2 AdjustedPosition { get; set; }
 		protected virtual bool Grayscale { get; set; }
 		public bool Initialized { get; private set;}
-        protected bool UseMask => MaskId != 0;
 	    protected bool Enabled { get; set; } = true;
-		protected virtual bool UseTextureIdCache { get; } = true;
 		protected RenderableText CooldownSecondsText;
 	    protected IPlayer Player => GameManager.Player;
 	    private Panel _panel;
-		private uint _textureId;
+		private Vector2 _position;
 
 	    static BaseSkill()
 	    {
@@ -67,10 +66,9 @@ namespace Hedra.Engine.Player.Skills
 			this.Position = Position;
 			this.Scale = Scale;
 			this.Tint = NormalTint;
-			this._textureId = TextureId;
 		    _panel.AddElement(this);
 			
-			DrawManager.UIRenderer.Add(this, DrawOrder.After);			
+			DrawManager.UIRenderer.Add(this, DrawOrder.After);
 			UpdateManager.Add(this);
 			this.Initialized = true;
 		}
@@ -107,15 +105,15 @@ namespace Hedra.Engine.Player.Skills
 			Shader.Bind();
             Shader["Tint"] = Player.Mana - this.ManaCost < 0 && Tint == NormalTint ? new Vector3(.9f,.6f,.6f) : Tint;
 			Shader["Scale"] = Scale * new Vector2(1,-1);
-			Shader["Position"] = Position;
-			Shader["Bools"] = new Vector2(Level == 0 || Grayscale ? 1 : 0, UseMask ? 1 : 0);
+			Shader["Position"] = AdjustedPosition;
+			Shader["Bools"] = new Vector2(Level == 0 || Grayscale ? 1 : 0, 1);
 			Shader["Cooldown"] = this.Cooldown / this.MaxCooldown;
 			
 			Renderer.ActiveTexture(TextureUnit.Texture0);
-			Renderer.BindTexture(TextureTarget.Texture2D, UseTextureIdCache ? _textureId : TextureId);
+			Renderer.BindTexture(TextureTarget.Texture2D, TextureId);
 			
 			Renderer.ActiveTexture(TextureUnit.Texture1);
-			Renderer.BindTexture(TextureTarget.Texture2D, MaskId);
+			Renderer.BindTexture(TextureTarget.Texture2D, InventoryArrayInterface.DefaultId);
 		    Shader["Mask"] = 1;
 			
 			DrawManager.UIRenderer.SetupQuad();
@@ -129,6 +127,11 @@ namespace Hedra.Engine.Player.Skills
 	        
 	        CooldownSecondsText.Draw();
 		}
+
+		public void Adjust()
+		{
+			AdjustedPosition = GUITexture.Adjust(Position);
+		}
 		
 		public abstract void Use();
 		public virtual void KeyUp(){}
@@ -138,7 +141,15 @@ namespace Hedra.Engine.Player.Skills
 
 	    public Vector2 Scale { get; set; }
 
-	    public Vector2 Position { get; set; }
+		public Vector2 Position
+		{
+			get => _position;
+			set
+			{
+				_position = value;
+				this.Adjust();
+			}
+		}
 
 	    public void Enable()
         {
@@ -150,7 +161,8 @@ namespace Hedra.Engine.Player.Skills
 		    this.Enabled = false;
 		}
 		
-		public void Dispose(){
+		public void Dispose()
+		{
 			DrawManager.Remove(this);
 			CooldownSecondsText.Dispose();
 		}	

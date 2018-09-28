@@ -322,6 +322,7 @@
     <Compile Include="Engine\Rendering\IVertexData.cs" />
     <Compile Include="Engine\Rendering\MeshStitcher.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
+    <Compile Include="Engine\Rendering\UI\IAdjustable.cs" />
     <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />
     <Compile Include="Engine\Rendering\UI\ITextProvider.cs" />
     <Compile Include="Engine\Rendering\UI\SlingShotAnimation.cs" />
@@ -4084,9 +4085,6 @@
     <None Include="Assets\UI\ArcherLogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\BarBackgrounds.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\UI\Compass.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -4106,9 +4104,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\UI\MapCursor.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\UI\MapMsg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\UI\Menu.png">
@@ -4141,9 +4136,6 @@
     <None Include="Assets\UI\QuestLog.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\QuestLogMsg.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\UI\RogueLogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -4154,9 +4146,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\UI\Skilltree.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\UI\SkillTreeMsg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\UI\StaminaBackground.png">
@@ -4867,6 +4856,9 @@
     <Content Include="Assets\UI\Dialog.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\UI\HealthBackground.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\UI\InventoryBackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -4903,6 +4895,9 @@
     <Content Include="Assets\UI\InventorySlotWeapon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\UI\ManaBackground.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\UI\SocialButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -4912,6 +4907,9 @@
     <None Include="Modules\Mobs\Gorilla.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Assets\UI\XPBackground.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\Boat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

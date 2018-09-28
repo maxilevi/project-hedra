@@ -74,7 +74,8 @@ namespace Hedra.Engine.Rendering.UI
 			this.Update();
 		}
 		
-		private void Update(){
+		private void Update()
+        {
 			if(Index == Options.Length)
 				Index = 0;
 			if(Index == -1)
@@ -99,7 +100,7 @@ namespace Hedra.Engine.Rendering.UI
 		
 		private bool _mClickable = true;
 		public bool Clickable{
-			get{ return _mClickable; }
+			get => _mClickable;
 			set{
 				this.LeftArrow.Clickable = value;
 				this.RightArrow.Clickable = value;
@@ -109,7 +110,7 @@ namespace Hedra.Engine.Rendering.UI
 		
 		private Vector2 _mScale;
 		public Vector2 Scale{
-			get{return _mScale;}
+			get => _mScale;
 			set{
 				_mScale = value;
 				Text.Scale = Scale;
@@ -121,7 +122,7 @@ namespace Hedra.Engine.Rendering.UI
 		}
 		private Vector2 _mPosition;
 		public Vector2 Position{
-			get{return _mPosition;}
+			get => _mPosition;
 			set{
 				Text.Position = Text.Position - _mPosition + value;
 				LeftArrow.Position = LeftArrow.Position - _mPosition + value;

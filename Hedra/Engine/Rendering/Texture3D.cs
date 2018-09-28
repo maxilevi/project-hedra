@@ -12,7 +12,7 @@ namespace Hedra.Engine.Rendering
             Id = Renderer.GenTexture();
 
             Renderer.BindTexture(TextureTarget.Texture3D, Id);
-            GL.TexImage3D(TextureTarget.Texture3D, 0, PixelInternalFormat.Rgb32f, Data.GetLength(0), Data.GetLength(1), Data.GetLength(2), 0,
+            Renderer.TexImage3D(TextureTarget.Texture3D, 0, PixelInternalFormat.Rgb32f, Data.GetLength(0), Data.GetLength(1), Data.GetLength(2), 0,
                 PixelFormat.Red, PixelType.Float, Data);
             Renderer.TexParameter(TextureTarget.Texture3D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             Renderer.TexParameter(TextureTarget.Texture3D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);

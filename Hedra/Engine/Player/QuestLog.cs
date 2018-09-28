@@ -45,12 +45,10 @@ namespace Hedra.Engine.Player
 
                 if (value)
                 {
-                    if (_player.UI.GamePanel.Enabled) _player.UI.GamePanel.QuestLogMsg.Disable();
                     _inPanel.Enable();
                 }
                 else
                 {
-                    if (_player.UI.GamePanel.Enabled) _player.UI.GamePanel.QuestLogMsg.Enable();
                     _inPanel.Disable();
                 }
             }

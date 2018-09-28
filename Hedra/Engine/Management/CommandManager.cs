@@ -80,6 +80,7 @@ namespace Hedra.Engine.Management
 			    if (Parts[0] == "track")
 			    {
 			        SoundtrackManager.PlayTrack(int.Parse(Parts[1]), false);
+				    return true;
 			    }
 			    if (Parts[0] == "cfg")
 			    {

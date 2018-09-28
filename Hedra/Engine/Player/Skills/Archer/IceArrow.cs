@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player.Skills.Archer
 	    private const float BaseCooldown = 18f;
 	    private const float CooldownCap = 8f;
 		private const float BaseManaCost = 40f;
-		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
 		public override string Description => "Shoot a freezing arrow.";
 		public override string DisplayName => "Ice Arrow";
 	    private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;

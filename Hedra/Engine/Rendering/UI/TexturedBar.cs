@@ -8,19 +8,18 @@
  */
 using System;
 using OpenTK;
-using System.IO;
-using System.Drawing;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.UI
 {
 	
-	public class TexturedBar : IRenderable, UIElement, IDisposable, ISimpleTexture
+	public class TexturedBar : IRenderable, UIElement, IAdjustable, ISimpleTexture
 	{
 	    private static readonly Shader Shader;
 		public Vector2 Scale {get; set;}
 	    public bool ShowBar { get; set; } = true;
+        public Vector2 AdjustedPosition { get; private set; }
         private readonly Func<float> _value;
 		private readonly Func<float> _max;
 	    public uint TextureId { get; set; }
@@ -60,7 +59,7 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.BindTexture(TextureTarget.Texture2D, TextureId);
 			
 			Shader["Scale"] = new Vector2(_barSize * Scale.X, Scale.Y);
-			Shader["Position"] = Position - (!Centered ? new Vector2(Scale.X * (1f - _barSize), 0f) : Vector2.Zero);
+			Shader["Position"] = AdjustedPosition - (!Centered ? new Vector2(Scale.X * (1f - _barSize), 0f) : Vector2.Zero);
 			Shader["Color"] = -Vector4.One;
 
 			DrawManager.UIRenderer.SetupQuad();
@@ -74,11 +73,18 @@ namespace Hedra.Engine.Rendering.UI
 		
 		public Vector2 Position
         {
-			get{ return _position;}
-			set{
+			get => _position;
+		    set
+            {
 				_position = value;
-			}
+                this.Adjust();
+            }
 		}
+
+	    public void Adjust()
+	    {
+	        AdjustedPosition = GUITexture.Adjust(Position);
+	    }
 
 	    public bool Centered { get; set; }
 

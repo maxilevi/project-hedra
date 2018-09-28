@@ -26,6 +26,7 @@ namespace Hedra.Engine.Player
 	/// </summary>
 	public class TripleFireball : BaseSkill
 	{
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/TripleFireball.png");
 		private bool LeftHand;
 		private float Damage = 6.5f;
 		private int FireballCount = 0;
@@ -34,7 +35,6 @@ namespace Hedra.Engine.Player
 		public override string DisplayName => "Triple Fireball";
 		
 		public TripleFireball() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/TripleFireball.png");
 			base.MaxCooldown = 2.5f;
 			base.ManaCost = 35f;
 			

@@ -58,9 +58,11 @@ namespace Hedra
 		    {
 		        //GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
 		    }
-		    GameSettings.Width = GameWindow.ClientSize.Width;
-		    GameSettings.Height = GameWindow.ClientSize.Height;
-		    GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;	
+
+	        GameSettings.SurfaceWidth = GameWindow.Width;
+	        GameSettings.SurfaceHeight = GameWindow.Height;
+
+	        GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;	
 #if DEBUG
             GameWindow.Run(60, 60);
 #else

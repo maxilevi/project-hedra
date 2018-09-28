@@ -225,13 +225,22 @@ namespace Hedra.Engine
 			return ToNormalizedDeviceCoordinates(Vec2.X, Vec2.Y);
 		}
 		
-		public static Vector2 ToNormalizedDeviceCoordinates(float X, float Y) {
+		public static Vector2 ToNormalizedDeviceCoordinates(float X, float Y)
+        {
 			float x = (2.0f * X) / (GameSettings.Width) - 1f;
 			float y = (2.0f * Y) / (GameSettings.Height) - 1f;
 			return new Vector2(x, y);
 		}
-		
-		public static Vector2 FromNormalizedDeviceCoordinates(float X, float Y) {
+
+	    public static Vector2 ToNormalizedDeviceCoordinates(Vector2 Position, Vector2 Surface)
+	    {
+	        float x = (2.0f * Position.X) / (Surface.X) - 1f;
+	        float y = (2.0f * Position.Y) / (Surface.Y) - 1f;
+	        return new Vector2(x, y);
+	    }
+
+        public static Vector2 FromNormalizedDeviceCoordinates(float X, float Y)
+		{
 			float x = (X+1f) * GameSettings.Width / 2.0f;
 			float y = (Y+1f) * GameSettings.Height / 2.0f;
 			return new Vector2(x,y);

@@ -48,7 +48,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _bagItems = new InventoryArray(AbilityTree.AbilityCount-1);
             _toolbarItemsInterface = new ToolbarInventoryInterface(_player, _barItems, 0, _barItems.Length, BarItems, Vector2.One)
             {
-                Position = Vector2.UnitY * -.875f,
+                Position = Vector2.UnitY * -.825f,
                 IndividualScale = Vector2.One * 1.0f
             };
             _bagItemsInterface = new AbilityBagInventoryInterface(_player, _bagItems, 0, _bagItems.Length, AbilityTree.AbilityCount / 2, Vector2.One)
@@ -70,7 +70,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
 	        {
 	            _skills[i] = (BaseSkill) Activator.CreateInstance(skillsTypes[i]);
 				_skills[i].Initialize(Vector2.Zero, InventoryArrayInterface.DefaultSize, _player.UI.GamePanel, _player);
-	            _skills[i].MaskId = InventoryArrayInterface.DefaultId;
                 _skills[i].Active = false;
 	        }
             _w1 = new WeaponAttack();
@@ -78,8 +77,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _w2 = new WeaponAttack();
 			_w2.Initialize(_toolbarItemsInterface.Textures[5].Position, _toolbarItemsInterface.Textures[5].Scale, _player.UI.GamePanel, _player);
 
-	        _w1.MaskId = InventoryArrayInterface.DefaultId;
-	        _w2.MaskId = InventoryArrayInterface.DefaultId;
             EventDispatcher.RegisterMouseDown(this, this.MouseDown);
 	        EventDispatcher.RegisterMouseUp(this, this.MouseUp);
         }

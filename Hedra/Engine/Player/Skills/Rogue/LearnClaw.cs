@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
 	/// </summary>
 	public class LearnClaw : LearningSkill
 	{
-		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Claw.png");
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Claw.png");
 
 		protected override void Learn()
 		{

@@ -20,36 +20,26 @@ using Hedra.Engine.Rendering;
 namespace Hedra.Engine.Rendering.UI
 {
 	
-	public class RenderableButton : Button, IRenderable
+	public class RenderableButton : Button, IRenderable, IAdjustable
 	{
-	    public RenderableButton(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor, Font F) :
-	        base(Position, Scale, Text, Texture, FontColor, F)
-	    {
-	        DrawManager.UIRenderer.Remove(this.Texture);
-        }
-
-	    public RenderableButton(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor) : base(
-	        Position, Scale, Text, Texture, FontColor)
-	    {
-	        DrawManager.UIRenderer.Remove(this.Texture);
-        }
-	    public RenderableButton(Vector2 Position, Vector2 Scale, string Text, uint Texture) : base(Position, Scale, Text,
-	        Texture)
-	    {
-	        DrawManager.UIRenderer.Remove(this.Texture);
-        }
 	    public RenderableButton(Vector2 Position, Vector2 Scale, uint Texture) : base(Position, Scale, Texture)
 	    {
 	        DrawManager.UIRenderer.Remove(this.Texture);
 	    }
 		
-		public void Draw(){
+		public void Draw()
+		{
 			if(this.Texture != null)			
 				DrawManager.UIRenderer.Draw(this.Texture);
 		}
 		
 		~RenderableButton(){
 			Executer.ExecuteOnMainThread( ()=> base.Dispose() );
+		}
+
+		public void Adjust()
+		{
+			this.Texture.Adjust();
 		}
 	}
 }

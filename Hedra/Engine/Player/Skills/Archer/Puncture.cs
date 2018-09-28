@@ -19,7 +19,7 @@ namespace Hedra.Engine.Player.Skills.Archer
 	/// </summary>
 	public class Puncture : SpecialAttackSkill<Bow>
 	{
-		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
 
 		protected override void BeforeUse(Bow Weapon)
 		{

@@ -22,12 +22,12 @@ namespace Hedra.Engine.Player.Skills.Rogue
 	/// </summary>
 	public class Shuriken : BaseSkill
 	{
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
 		private readonly Animation _throwAnimation;
 		private static readonly VertexData ShurikenData = AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
 
         public Shuriken()
         {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
 			base.ManaCost = 35f;
 			base.MaxCooldown = 8.5f;
 			

@@ -20,13 +20,13 @@ namespace Hedra.Engine.Player.Skills.Archer
 	/// Description of Bash.
 	/// </summary>
 	public class Kick : BaseSkill
-	{	
+	{
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Kick.png");
 		private float Damage = 35f;
 		private bool EmitParticles = false;
 		private Animation KickAnimation;
 		
 		public Kick() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Kick.png");
 			base.ManaCost = 15f;
 			base.MaxCooldown = 3f;
 			

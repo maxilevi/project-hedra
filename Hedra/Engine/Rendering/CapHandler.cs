@@ -7,6 +7,11 @@ namespace Hedra.Engine.Rendering
         protected override void DoEnable(EnableCap Index)
         {
             Renderer.Provider.Enable(Index);
+#if DEBUG
+            var error = Renderer.GetError();
+            if (error != ErrorCode.NoError)
+                Log.WriteLine($"GLError: '{error}' when enabling cap '{Index}'");
+#endif
         }
 
         protected override void DoDisable(EnableCap Index)

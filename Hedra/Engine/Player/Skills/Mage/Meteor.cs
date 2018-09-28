@@ -25,6 +25,7 @@ namespace Hedra.Engine.Player
 	/// </summary>
 	public class Meteor : BaseSkill
 	{
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Meteor.png");
 		private bool LeftHand;
 		private float Damage = 27.5f;
 		private ParticleSystem HandParticles;
@@ -32,7 +33,6 @@ namespace Hedra.Engine.Player
 		public override string DisplayName => "Meteor";
 		
 		public Meteor() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Meteor.png");
 			base.MaxCooldown = 8.5f;
 			base.ManaCost = 160f;
 			this.HandParticles = new ParticleSystem(Vector3.Zero);

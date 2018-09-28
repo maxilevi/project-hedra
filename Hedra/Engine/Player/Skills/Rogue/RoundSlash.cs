@@ -20,12 +20,12 @@ namespace Hedra.Engine.Player.Skills.Rogue
 	/// </summary>
 	public class RoundSlash : BaseSkill
 	{
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
 		private readonly Animation RoundSlashAnimation;
 	    private float _frameCounter;
 		
 		public RoundSlash()
 		{
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
 			base.ManaCost = 80f;
 			base.MaxCooldown = 8.5f;
 			

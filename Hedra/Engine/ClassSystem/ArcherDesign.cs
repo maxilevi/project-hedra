@@ -7,8 +7,7 @@ namespace Hedra.Engine.ClassSystem
 {
     public class ArcherDesign : ClassDesign
     {
-        private static readonly uint LogoId = Graphics2D.LoadFromAssets("Assets/UI/ArcherLogo.png");
-        public override uint Logo { get; } = LogoId;
+        public override string Logo => "Assets/UI/ArcherLogo.png";
         public override HumanType Human => HumanType.Archer;
         public override float BaseSpeed => 1.35f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new ArcherAbilityTreeBlueprint();

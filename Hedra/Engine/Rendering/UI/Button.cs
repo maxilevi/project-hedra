@@ -24,7 +24,7 @@ namespace Hedra.Engine.Rendering.UI
 
     public delegate void OnButtonHoverExitEventHandler(object Sender, MouseEventArgs E);
 
-    public class Button : EventListener, UIElement, IDisposable
+    public class Button : EventListener, UIElement
     {
         private bool _hasEntered;
         private Vector2 _position;
@@ -33,7 +33,6 @@ namespace Hedra.Engine.Rendering.UI
         private GUIText _privateText;
         private Vector2 _scale;
 
-        public RectangleF Bounds;
         public bool Clickable = true;
         public bool Enlarge = true;
         public bool PlaySound = true;
@@ -43,8 +42,8 @@ namespace Hedra.Engine.Rendering.UI
 
         public GUIText Text
         {
-            get { return this._privateText; }
-            set
+            get => this._privateText;
+            private set
             {
                 this._privateText?.Dispose();
                 this._privateText = value;
@@ -88,24 +87,11 @@ namespace Hedra.Engine.Rendering.UI
 
             if (!string.IsNullOrEmpty(Text))
             {
-                this.Bounds = new RectangleF(this.Text.Position.X, this.Text.Position.Y, this.Text.Scale.X,
-                    this.Text.Scale.Y);
                 this.Scale = this.Text.Scale;
             }
             else
             {
-                if (this.Texture != null)
-                {
-                    var sizeInPixels =
-                        Mathf.FromNormalizedDeviceCoordinates(this.Texture.Scale.X, this.Texture.Scale.Y);
-                    this.Bounds = new RectangleF(this.Texture.Position.X, this.Texture.Position.Y, Scale.X, Scale.Y);
-                    this.Scale = this.Texture.Scale;
-                }
-                else
-                {
-                    this.Bounds = new RectangleF(this.Position.X, this.Position.Y, this.Scale.X, this.Scale.Y);
-                    this.Scale = Scale;
-                }
+                this.Scale = Texture?.Scale ?? Scale;
             }
             this.Position = new Vector2(Position.X, Position.Y);
 
@@ -122,8 +108,10 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (this.Enabled && this.Click != null && (E.Button == MouseButton.Left || E.Button == MouseButton.Right))
             {
-                var coords = Mathf.ToNormalizedDeviceCoordinates(E.Mouse.X, E.Mouse.Y);
-
+                var coords = Mathf.ToNormalizedDeviceCoordinates(
+                    new Vector2(E.Mouse.X, E.Mouse.Y),
+                    new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
+                );
                 if (this.Position.Y + this.Scale.Y > -coords.Y && this.Position.Y - this.Scale.Y < -coords.Y
                     && this.Position.X + this.Scale.X > coords.X && this.Position.X - this.Scale.X < coords.X)
                     if (this.Clickable)
@@ -138,7 +126,10 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (this.Enabled && this.Clickable)
             {
-                var coords = Mathf.ToNormalizedDeviceCoordinates(E.Mouse.X, E.Mouse.Y);
+                var coords = Mathf.ToNormalizedDeviceCoordinates(
+                    new Vector2(E.Mouse.X, E.Mouse.Y),
+                    new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
+                    );
                 if (this.Position.Y + this.Scale.Y > -coords.Y && this.Position.Y - this.Scale.Y < -coords.Y
                     && this.Position.X + this.Scale.X > coords.X && this.Position.X - this.Scale.X < coords.X)
                 {
@@ -166,12 +157,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 this._previousFontColor = this.Text.TextColor;
                 this.Text.TextColor = new Vector4(0.937f, 0.624f, 0.047f, 1.000f).ToColor();
-                var prevPosition = this.Text.Position;
                 this.Text.UpdateText();
-                this.Text.Position = prevPosition;
-                /*PreviousScale = Text.Scale;
-                if(Enlarge)
-                    Text.Scale = PreviousScale  + PreviousScale / 16;*/
                 if (this.PlaySound)
                     SoundManager.PlayUISound(SoundType.OnOff, 1f, .2f);
             }
@@ -185,38 +171,14 @@ namespace Hedra.Engine.Rendering.UI
             if (this.Text != null)
             {
                 this.Text.TextColor = this._previousFontColor;
-                var prevPosition = this.Text.Position;
                 this.Text.UpdateText();
-                this.Text.Position = prevPosition;
-                //	Text.Scale = PreviousScale;
-            }
-            if (this.Texture != null)
-            {
-                //	Texture.Scale = PreviousScale;
-            }
-        }
-
-        ~Button()
-        {
-            Executer.ExecuteOnMainThread(() => this.Dispose());
-        }
-
-        public void Dispose()
-        {
-            if (this.Text != null)
-                this.Text.Dispose();
-            if (this.Texture != null)
-            {
-                this.Texture.Dispose();
-                DrawManager.UIRenderer.Remove(this.Texture);
             }
         }
 
         public void Disable()
         {
             this.Enabled = false;
-            if (this.Text != null)
-                this.Text.Disable();
+            Text?.Disable();
             if (this.Texture != null)
                 this.Texture.Enabled = false;
         }
@@ -224,15 +186,14 @@ namespace Hedra.Engine.Rendering.UI
         public void Enable()
         {
             this.Enabled = true;
-            if (this.Text != null)
-                this.Text.Enable();
+            Text?.Enable();
             if (this.Texture != null)
                 this.Texture.Enabled = true;
         }
 
         public Vector2 Position
         {
-            get { return this._position; }
+            get => this._position;
             set
             {
                 this._position = value;
@@ -245,7 +206,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public Vector2 Scale
         {
-            get { return this._scale; }
+            get => this._scale;
             set
             {
                 this._scale = value;
@@ -254,6 +215,21 @@ namespace Hedra.Engine.Rendering.UI
                 if (this.Texture != null)
                     this.Texture.Scale = value;
             }
+        }
+
+        public void Dispose()
+        {
+            Text?.Dispose();
+            if (this.Texture != null)
+            {
+                this.Texture.Dispose();
+                DrawManager.UIRenderer.Remove(this.Texture);
+            }
+        }
+                    
+        ~Button()
+        {
+            Executer.ExecuteOnMainThread(this.Dispose);
         }
     }
 }

@@ -21,13 +21,13 @@ namespace Hedra.Engine.Player.Skills.Mage
 	/// </summary>
 	public class Conflagaration : BaseSkill
 	{
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Conflagaration.png");
 		private float Damage = 22.5f;
 		private PointLight Light;
 		private Timer LightTimer = new Timer(.35f);
 		private Animation ConflagarationAnimation;
 		
 		public Conflagaration() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Conflagaration.png");
 			base.MaxCooldown = 8f;
 			base.ManaCost = 35f;
 			

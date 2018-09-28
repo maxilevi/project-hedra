@@ -16,7 +16,7 @@ namespace Hedra.Engine.Rendering.UI
 	/// <summary>
 	/// IRenderable wrapper
 	/// </summary>
-	public class RenderableTexture : IRenderable, UIElement
+	public class RenderableTexture : IRenderable, UIElement, IAdjustable
 	{
 		public Texture BaseTexture { get; set; }
 		
@@ -31,6 +31,11 @@ namespace Hedra.Engine.Rendering.UI
         {
 			DrawManager.UIRenderer.Draw(BaseTexture.TextureElement);
 		}
+
+		public void Adjust()
+		{
+			BaseTexture.TextureElement.Adjust();
+		}
 		
 		public void Enable()
         {
@@ -41,14 +46,9 @@ namespace Hedra.Engine.Rendering.UI
         {
 			BaseTexture.Disable();
 		}
-
-	    public DrawOrder Order
-	    {
-	        get => DrawManager.UIRenderer.GetDrawOrder(this);
-	        set => DrawManager.UIRenderer.SetDrawOrder(this, value);
-	    }
 		
-		public Vector2 Position{
+		public Vector2 Position
+		{
 			get => this.BaseTexture.Position;
 		    set => this.BaseTexture.Position = value;
 		}

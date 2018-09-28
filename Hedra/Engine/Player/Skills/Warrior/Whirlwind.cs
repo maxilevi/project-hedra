@@ -21,14 +21,14 @@ namespace Hedra.Engine.Player.Skills.Warrior
 	/// </summary>
 	public class Whirlwind : BaseSkill
 	{
-	    private readonly Animation _whirlwindAnimation;
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
+		private readonly Animation _whirlwindAnimation;
 	    private readonly TrailRenderer _trail;
 	    private float _frameCounter;
 	    private float _passedTime;
 	    private float _rotationY;
 
         public Whirlwind() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
 			base.ManaCost = 85;
 			base.MaxCooldown = 8.5f;
             _trail = new TrailRenderer( () => LocalPlayer.Instance.LeftWeapon.WeaponTip, Vector4.One);

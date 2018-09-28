@@ -271,8 +271,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 int x = (int) blockSpace.X, z = (int) blockSpace.Z, y = (int) blockSpace.Y;
 
                 var success = false;
-                _terrainBuilder.Helper.CreateCell(ref _nearestVertexCell, x, y, z,
-                    width, height, depth, true,
+                _terrainBuilder.Helper.CreateCell(ref _nearestVertexCell, x, y, z, true,
                     _blocks[x][y][z].Type == BlockType.Water && _blocks[x][y + 1][z].Type == BlockType.Air, Lod, out success);
 
                 _nearestVertexData.Vertices.Clear();

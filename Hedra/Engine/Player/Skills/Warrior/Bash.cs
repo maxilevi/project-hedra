@@ -89,6 +89,6 @@ namespace Hedra.Engine.Player.Skills.Warrior
 		public override float ManaCost => Math.Max(BaseManaCost + ManaCostChangeRate * Level, ManaCostCap);
 		public override string Description => "A powerful smashing blow.";
 		public override string DisplayName => "Bash";
-		public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
 	}
 }

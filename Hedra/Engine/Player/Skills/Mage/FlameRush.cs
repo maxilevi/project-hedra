@@ -25,6 +25,7 @@ namespace Hedra.Engine.Player
 	/// </summary>
 	public class FlowingMagma : BaseSkill
 	{
+		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Conflagaration.png");
 		private float Damage = 17.5f;
 		private float DurationTime = 6f;
 		private float Time;
@@ -32,7 +33,6 @@ namespace Hedra.Engine.Player
 		public override string DisplayName => "Flame Rush";
 		
 		public FlowingMagma() : base() {
-			base.TextureId = Graphics2D.LoadFromAssets("Assets/Skills/Conflagaration.png");
 			base.MaxCooldown = 14f;
 			base.ManaCost = 75f;
 		}

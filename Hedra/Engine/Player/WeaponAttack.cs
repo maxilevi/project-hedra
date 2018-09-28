@@ -52,13 +52,13 @@ namespace Hedra.Engine.Player
 	    private float _chargeTime;
         private bool _isCharging;
         private AttackType _type;
+		private uint _textureId = Default;
 
         public WeaponAttack()
         {
             _shiverAnimation = new ShiverAnimation();
 			base.ManaCost = 0f;
 			base.Level = 1;
-		    base.TextureId = Default;
             this.MaxCooldown = .5f;
         }
 		
@@ -68,7 +68,7 @@ namespace Hedra.Engine.Player
 		    var flags = BindingFlags.Static | BindingFlags.NonPublic;
 		    var fieldInfo1 = this.GetType().GetField($"{Weapon.GetType().Name}1", flags);
 		    var fieldInfo2 = this.GetType().GetField($"{Weapon.GetType().Name}2", flags);
-			base.TextureId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) Default);
+			_textureId = (uint) ((Type == AttackType.Primary ? fieldInfo1?.GetValue(null) : fieldInfo2?.GetValue(null)) ?? (uint) Default);
 		}
 		
 		public override bool MeetsRequirements()
@@ -142,8 +142,8 @@ namespace Hedra.Engine.Player
 			}
 		}
 
-		protected override bool UseTextureIdCache => false;
-	    protected override bool HasCooldown => false;
+		public override uint TextureId => _textureId;
+		protected override bool HasCooldown => false;
 		public override string Description => string.Empty;
 		public override string DisplayName => string.Empty;
 	}

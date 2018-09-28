@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
 	/// </summary>
 	public class LearnAxe : LearningSkill
 	{
-	    public override uint TextureId => Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
+	    public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
 
 		protected override void Learn()
 		{

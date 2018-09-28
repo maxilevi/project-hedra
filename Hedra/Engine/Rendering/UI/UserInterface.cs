@@ -138,7 +138,7 @@ namespace Hedra.Engine.Rendering.UI
 		{
 		    if (_player == null) return;
 
-			this.GamePanel.Update(_player);
+			this.GamePanel.Update();
 		}
 		
 		public void ShowMenu(){

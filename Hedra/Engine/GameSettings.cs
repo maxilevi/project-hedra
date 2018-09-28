@@ -20,6 +20,8 @@ namespace Hedra.Engine
     [Obfuscation(Exclude = false, Feature = "-rename")]
     public static class GameSettings
     {
+        public static float SurfaceWidth { get; set; }
+        public static float SurfaceHeight { get; set; }
         public static bool TestingMode { get; set; }
         public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
         public static float BloomModifier { get; set; } = 1f;
@@ -92,19 +94,15 @@ namespace Hedra.Engine
 
         public static bool BakedAO => !SSAO;
 
-        //[SettingAttribute]
+        [Setting]
         public static bool Fullscreen
         {
-            get { return _fullscreen; }
+            get => _fullscreen;
             set
             {
                 _fullscreen = value;
                 if (_fullscreen)
                 {
-                    GameSettings.Width = GameSettings.DeviceWidth;
-                    GameSettings.Height = GameSettings.DeviceHeight;
-
-                    //Program.GameWindow.Height = GameSettings.Height;
                     Program.GameWindow.WindowBorder = WindowBorder.Hidden;
                     Program.GameWindow.WindowState = WindowState.Fullscreen;
                 }
@@ -112,12 +110,7 @@ namespace Hedra.Engine
                 {
                     Program.GameWindow.WindowBorder = WindowBorder.Resizable;
                     Program.GameWindow.WindowState = WindowState.Maximized;
-
-                    GameSettings.Width = Program.GameWindow.ClientSize.Width;
-                    GameSettings.Height = Program.GameWindow.ClientSize.Height;
                 }
-                MainFBO.DefaultBuffer.Resize();
-                GameManager.Player.UI = new UserInterface(GameManager.Player);
             }
         }
 

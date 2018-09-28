@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player.MapSystem
 	/// <summary>
 	/// Description of Minimap.
 	/// </summary>
-	public class Minimap : IRenderable
+	public class Minimap : IRenderable, IAdjustable
 	{
 	    private static readonly Shader Shader = Shader.Build("Shaders/GUI.vert", "Shaders/MinimapGUI.frag");
         private readonly LocalPlayer _player;
@@ -61,6 +61,11 @@ namespace Hedra.Engine.Player.MapSystem
             _panel.Disable();
         }
 
+		public void Adjust()
+		{
+			_miniMap.TextureElement.Adjust();
+		}
+		
 	    public void Mark(Vector3 Direction)
 	    {
 	        MarkedDirection = Direction;
@@ -172,7 +177,7 @@ namespace Hedra.Engine.Player.MapSystem
             Shader["Texture"] = 0;
 
             Shader["Scale"] = _miniMap.TextureElement.Scale;
-            Shader["Position"] = _miniMap.TextureElement.Position;
+            Shader["Position"] = _miniMap.TextureElement.AdjustedPosition;
             Shader["Flipped"] = _miniMap.TextureElement.IdPointer == null && !_miniMap.TextureElement.Flipped ? 0 : 1;
             Shader["Opacity"] = _miniMap.TextureElement.Opacity;
             Shader["Grayscale"] = _miniMap.TextureElement.Grayscale ? 1 : 0;
@@ -200,6 +205,7 @@ namespace Hedra.Engine.Player.MapSystem
 	    public void Dispose()
 	    {
 	        _mapFbo.Dispose();
+		    DrawManager.UIRenderer.Remove(this);
         }
 	}
 }

@@ -61,7 +61,7 @@ namespace Hedra.Engine.Player
             _inventoryBackground = new InventoryBackground(Vector2.UnitY * .65f);
             _itemsArrayInterface = new InventoryArrayInterface(_items, 0, _items.Length, 10, Vector2.One)
             {
-                Position = Vector2.UnitY * -.65f
+                Position = Vector2.UnitY * -.5f
             };
             _leftMainItemsArrayInterface = new InventoryArrayInterface(_mainItems, 0, 4, 1, Vector2.One,
                 new [] { "Assets/UI/InventorySlotBoots.png", "Assets/UI/InventorySlotPants.png", "Assets/UI/InventorySlotChest.png", "Assets/UI/InventorySlotHelmet.png" })

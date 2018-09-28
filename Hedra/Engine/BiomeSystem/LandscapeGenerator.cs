@@ -163,10 +163,10 @@ namespace Hedra.Engine.BiomeSystem
 	                        Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) BiomePool.SeaLevel);
 	                    }
 
+		                Blocks[x][y][z] = currentBlock;
+		                
 		                this.HandleGroundworks(Blocks, x, y, z, path, pathDepth, pathClamped, town, townClamped,
 			                blockGroundworks, blockGroundworksModifier);
-
-		                Blocks[x][y][z] = currentBlock;
 	                }
 	            }
 	        }
