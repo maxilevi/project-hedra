@@ -28,6 +28,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.Player.ToolbarSystem;
+using Hedra.Engine.Rendering.Geometry;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player

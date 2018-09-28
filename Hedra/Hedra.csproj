@@ -319,11 +319,18 @@
     <Compile Include="Engine\Rendering\Animation\IAnimationProvider.cs" />
     <Compile Include="Engine\Rendering\BitmapObject.cs" />
     <Compile Include="Engine\Rendering\CachedVertexData.cs" />
+    <Compile Include="Engine\Rendering\Geometry\ChunkMeshBorderDetector.cs" />
+    <Compile Include="Engine\Rendering\Geometry\Geometry.cs" />
+    <Compile Include="Engine\Rendering\Geometry\IsoSurfaceCreator.cs" />
+    <Compile Include="Engine\Rendering\Geometry\MarchingCubes.cs" />
+    <Compile Include="Engine\Rendering\Geometry\MeshSimplifier.cs" />
+    <Compile Include="Engine\Rendering\Geometry\MeshStitcher.cs" />
+    <Compile Include="Engine\Rendering\Geometry\VertexOcclusion.cs" />
+    <Compile Include="Engine\Rendering\Geometry\WaterEdgePatcher.cs" />
     <Compile Include="Engine\Rendering\GLProvider.cs" />
     <Compile Include="Engine\Rendering\IGLProvider.cs" />
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
     <Compile Include="Engine\Rendering\IVertexData.cs" />
-    <Compile Include="Engine\Rendering\MeshStitcher.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
     <Compile Include="Engine\Rendering\UI\IAdjustable.cs" />
     <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />
@@ -333,7 +340,6 @@
     <Compile Include="Engine\Rendering\UI\TextureAnimation.cs" />
     <Compile Include="Engine\Rendering\UI\ShiverAnimation.cs" />
     <Compile Include="Engine\Rendering\UpdatableObjectMeshModel.cs" />
-    <Compile Include="Engine\Rendering\WaterEdgePatcher.cs" />
     <Compile Include="Engine\Sound\ISoundProvider.cs" />
     <Compile Include="Engine\Sound\SoundProvider.cs" />
     <Compile Include="Engine\StructureSystem\StructureWatcher.cs" />
@@ -497,7 +503,6 @@
     <Compile Include="Engine\WorldBuilding\IGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\Tombstone.cs" />
     <Compile Include="Engine\Rendering\CapHandler.cs" />
-    <Compile Include="Engine\Rendering\Geometry.cs" />
     <Compile Include="Engine\Rendering\GeometryData.cs" />
     <Compile Include="Engine\Rendering\Renderer.cs" />
     <Compile Include="Engine\Management\OSManager.cs" />
@@ -733,7 +738,6 @@
     <Compile Include="Engine\Rendering\IDisposeAnimation.cs" />
     <Compile Include="Engine\Rendering\MegaTexture.cs" />
     <Compile Include="Engine\Rendering\DirectBitmap.cs" />
-    <Compile Include="Engine\Rendering\DrawElementsIndirectCommand.cs" />
     <Compile Include="Engine\Rendering\DropShadow.cs" />
     <Compile Include="Engine\Rendering\DropShadowRenderer.cs" />
     <Compile Include="Engine\Rendering\Effects\BloomFilter.cs" />
@@ -757,11 +761,8 @@
     <Compile Include="Engine\Rendering\MarchingData.cs" />
     <Compile Include="Engine\Rendering\IModel.cs" />
     <Compile Include="Engine\Rendering\LineData.cs" />
-    <Compile Include="Engine\Rendering\MarchingCubes.cs" />
-    <Compile Include="Engine\Rendering\IsoSurfaceCreator.cs" />
     <Compile Include="Engine\Rendering\MarchingTetrahedra.cs" />
     <Compile Include="Engine\Rendering\MeshData.cs" />
-    <Compile Include="Engine\Rendering\MeshSimplifier.cs" />
     <Compile Include="Engine\Rendering\NvidiaGPUFix32.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Engine\Rendering\NvidiaGPUFix64.cs" />
@@ -803,7 +804,6 @@
     <Compile Include="Engine\Rendering\UI\UserInterface.cs" />
     <Compile Include="Engine\Rendering\VAO.cs" />
     <Compile Include="Engine\Rendering\VertexData.cs" />
-    <Compile Include="Engine\Rendering\VertexOcclusion.cs" />
     <Compile Include="Engine\Rendering\WorldBuffer.cs" />
     <Compile Include="Engine\Rendering\WorldRenderer.cs" />
     <Compile Include="Engine\GameManager.cs" />

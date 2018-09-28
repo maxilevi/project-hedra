@@ -15,7 +15,12 @@ namespace Hedra.Engine.Rendering.UI
             var textBitmap = new Bitmap((int)Math.Ceiling(Math.Max(size.Width, 1)), (int)Math.Ceiling(Math.Max(size.Height,1)));
             using (var graphics = Graphics.FromImage(textBitmap))
             {
-                graphics.ScaleTransform(1.3f, 1.3f);
+                if (OSManager.RunningPlatform == Platform.Windows)
+                {
+                    // Mono doesnt support this quite well.
+                    graphics.ScaleTransform(1.3f, 1.3f);
+                }
+
                 // Draw shadows
                 using (var gp = new GraphicsPath())
                 {

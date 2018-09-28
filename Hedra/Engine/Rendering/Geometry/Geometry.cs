@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq;
 using OpenTK;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Geometry
 {
     public static class Geometry
     {

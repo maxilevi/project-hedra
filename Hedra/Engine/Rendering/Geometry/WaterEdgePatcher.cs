@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Geometry
 {
-    public static class WaterEdgePatcher
+    public class WaterEdgePatcher
     {
-        public static VertexData Process(VertexData Water, int Lod)
+        public VertexData Process(VertexData Water, int Lod)
         {
             if (Lod != 1) return Water;
 
@@ -39,7 +38,7 @@ namespace Hedra.Engine.Rendering
         /// </summary>
         /// <param name="Water">A VertexData object representing the water mesh.</param>
         /// <returns>Returns an array of vertices that have no neighbouring vertices.</returns>
-        private static BorderVertex[] DetectBorders(VertexData Water)
+        private BorderVertex[] DetectBorders(VertexData Water)
         {
             var indexedVertices = new Dictionary<Vector2, List<Vector3>>();
             for (var i = 0; i < Water.Vertices.Count; i++)
@@ -67,7 +66,7 @@ namespace Hedra.Engine.Rendering
             return edges.ToArray();
         }
 
-        private static Vector2 CalculateDirection(Vector3 Position, int ConnectionCount, Dictionary<Vector2, List<Vector3>> IndexedList)
+        private Vector2 CalculateDirection(Vector3 Position, int ConnectionCount, Dictionary<Vector2, List<Vector3>> IndexedList)
         {
             var pos = Position.Xz;
             var accumDir = Vector2.Zero;
@@ -83,13 +82,13 @@ namespace Hedra.Engine.Rendering
             return accumDir == Vector2.Zero ? Vector2.Zero : accumDir.NormalizedFast() * Chunk.BlockSize;
         }
 
-        private static bool IsValid(List<Vector3> Connections, Dictionary<Vector2, List<Vector3>> IndexedList)
+        private bool IsValid(List<Vector3> Connections, Dictionary<Vector2, List<Vector3>> IndexedList)
         {
             return Connections.Count == 2 || Connections.Count == 3 || Connections.Count == 6 ||
                 Connections.Count == 4 && !IsInvalid4Connections(Connections.First(), IndexedList);
         }
 
-        private static bool IsInvalid4Connections(Vector3 Position, Dictionary<Vector2, List<Vector3>> IndexedList)
+        private bool IsInvalid4Connections(Vector3 Position, Dictionary<Vector2, List<Vector3>> IndexedList)
         {
             return IndexedList.ContainsKey(new Vector2(Position.X + Chunk.BlockSize, Position.Z)) &&
                    IndexedList.ContainsKey(new Vector2(Position.X - Chunk.BlockSize, Position.Z)) &&

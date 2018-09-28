@@ -2,6 +2,7 @@
 using System.Linq;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Geometry;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 

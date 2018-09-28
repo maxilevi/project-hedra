@@ -4,15 +4,14 @@
  * Time: 10:41 p.m.
  *
  */
+
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Geometry
 {
 	/// <summary>
 	/// Description of MarchingData.

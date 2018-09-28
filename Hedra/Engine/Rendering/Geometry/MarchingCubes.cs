@@ -4,13 +4,13 @@
  * Time: 10:03 p.m.
  *
  */
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using OpenTK;
-using Hedra.Engine.Generation;
 
-namespace Hedra.Engine.Rendering
+using System;
+using System.Collections.Generic;
+using Hedra.Engine.Generation;
+using OpenTK;
+
+namespace Hedra.Engine.Rendering.Geometry
 {
 	/// <summary>
 	/// Description of MarchingCubes.

@@ -6,13 +6,12 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using System.Collections.Generic;
 using OpenTK;
-using System.Linq;
-using Hedra.Engine.Generation;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Geometry
 {
 	/// <summary>
 	/// Description of MeshSimplifier.

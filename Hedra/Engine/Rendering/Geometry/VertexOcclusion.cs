@@ -6,12 +6,12 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
-using System.Collections.Generic;
-using Hedra.Engine.Generation;
 
-namespace Hedra.Engine.Rendering
+using System;
+using System.Collections.Generic;
+using OpenTK;
+
+namespace Hedra.Engine.Rendering.Geometry
 {
 	/// <summary>
 	/// Description of VertexOcclusion.

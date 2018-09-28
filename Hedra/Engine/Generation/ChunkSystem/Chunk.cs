@@ -16,6 +16,7 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Geometry;
 using OpenTK;
 using Region = Hedra.Engine.BiomeSystem.Region;
 
