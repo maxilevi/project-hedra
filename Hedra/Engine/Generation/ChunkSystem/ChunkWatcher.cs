@@ -28,11 +28,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             var result = this.ManageState();
             if(!result) return;
+            if(!GameSettings.freezelod)
             this.ManageLod();
 
-            if (WasChunkBuilt(_object) && ShouldWeRebuildChunk(_object))
+            if (WasChunkBuilt(_object))
             {
-                World.AddChunkToQueue(_object, true);
+                if (ShouldWeRebuildChunk(_object) || _object.NeedsLodPatching)
+                {
+                    World.AddChunkToQueue(_object, true);
+                }
             }
             if (_object.BuildedWithStructures && !_wasBuilded)
             {
@@ -69,9 +73,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (!_object.IsGenerated) return;
             var cameraDist = (_object.Position.Xz - GameManager.Player.View.CameraPosition.Xz).LengthSquared;
-            if (cameraDist > 288 * 288 && cameraDist < 576 * 576 && GameSettings.Lod)
+            if (cameraDist > 256 * 256 && cameraDist < 512 * 512 && GameSettings.Lod)
                 _object.Lod = 2;
-            else if (cameraDist > 576 * 576 && GameSettings.Lod)
+            else if (cameraDist > 512 * 512 && GameSettings.Lod)
                 _object.Lod = 4;
             else
                 _object.Lod = 1;

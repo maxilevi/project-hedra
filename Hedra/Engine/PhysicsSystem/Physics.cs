@@ -182,11 +182,11 @@ namespace Hedra.Engine.PhysicsSystem
 
             Chunk UnderChunk = World.GetChunkAt(BlockPosition);
 
-            if (World.GetNearestBlockAt((int)BlockPosition.X, (int)BlockPosition.Y + 1, (int)BlockPosition.Z).Noise3D)
+            /*if (World.GetNearestBlockAt((int)BlockPosition.X, (int)BlockPosition.Y + 1, (int)BlockPosition.Z).Noise3D)
             {
                 float Nearest = UnderChunk.NearestVertex(BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + Vector3.UnitY * Chunk.BlockSize).Y;
                 return Nearest;
-            }
+            }*/
 
 
             float DensityX = World.GetLowestBlock((int)BlockPosition.X + (int)Chunk.BlockSize, (int)BlockPosition.Z).Density;

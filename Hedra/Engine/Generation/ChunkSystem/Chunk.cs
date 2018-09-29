@@ -9,9 +9,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -142,7 +139,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     _terrainVertices = null;
                 }
                 if (Lod != 1 || !Input.HasNoise3D) return;
-                _terrainVertices = Input.StaticData.Vertices.ToArray();
+                //_terrainVertices = Input.StaticData.Vertices.Select( V => V - new Vector3(OffsetX, 0, OffsetZ)).ToArray();
             }
         }
 
@@ -252,9 +249,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return new Block();
         }
 
-        public Vector3 NearestVertex(Vector3 BlockPosition)
+        public Vector3[] CreateTerrainVertices(Func<int, int, int, bool> Filter)
         {
-            if (_terrainVertices == null)
+            return _terrainBuilder.CreateTerrainVertices(_blocks, Filter, Lod);
+        }
+        
+        public Vector3 NearestVertex(Vector3 Position)
+        {
+            return Vector3.Zero;
+            /*
+            //if (_terrainVertices == null)
             {
                 if (_nearestVertexCell.P == null)
                 {
@@ -268,7 +272,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 int depth = _blocks[0][0].Length;
 
                 //Check for air blocks
-                Vector3 blockSpace = World.ToBlockSpace(BlockPosition);
+                Vector3 blockSpace = World.ToBlockSpace(Position);
                 int x = (int) blockSpace.X, z = (int) blockSpace.Z, y = (int) blockSpace.Y;
 
                 var success = false;
@@ -280,18 +284,20 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 _nearestVertexData.Normals.Clear();
                 _nearestVertexData.Indices.Clear();
                 MarchingCubes.Process(0f, _nearestVertexCell, Vector4.One, (x + z) % 2 == 0, _nearestVertexData);
-
-                if (_nearestVertexData.Vertices.Count != 0)
+                var dist = float.MaxValue;
+                var point = Vector3.Zero;
+                for (var i = 0; i < _nearestVertexData.Vertices.Count; i++)
                 {
-                    Vector3 average = Vector3.Zero;
-                    for (var i = 0; i < _nearestVertexData.Vertices.Count; i++)
-                        average += _nearestVertexData.Vertices[i];
-                    average /= _nearestVertexData.Vertices.Count;
-
-                    return average - Vector3.UnitY * .25f;
+                    var newDist = (Position - _nearestVertexData.Vertices[i]).LengthSquared;
+                    if (newDist < dist)
+                    {
+                        dist = newDist;
+                        point = _nearestVertexData.Vertices[i];
+                    }
                 }
-                return Vector3.Zero;
+                return point;
             }
+            
             lock (_terrainVerticesLock)
             {
                 Vector3 nearest0 = Vector3.Zero,
@@ -302,7 +308,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                 for (var i = 0; i < _terrainVertices.Length; i++)
                 {
-                    float newDist = (_terrainVertices[i] - BlockPosition).LengthSquared;
+                    float newDist = (_terrainVertices[i] - Position).LengthSquared;
                     if (!(newDist < dist0)) continue;
                     dist0 = newDist;
 
@@ -311,8 +317,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     nearest1 = nearest0;
                     nearest0 = _terrainVertices[i];
                 }
-                return nearest0 + 1 * Vector3.UnitY;
-            }
+
+                return nearest0;// + 1 * Vector3.UnitY;
+            }*/
         }
 
         public void AddWaterDensity(Vector3 WaterPosition, Half Density)
@@ -476,20 +483,20 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Chunk n7 = World.GetChunkByOffset(OffsetX + Width, OffsetZ - Width);
                 Chunk n8 = World.GetChunkByOffset(OffsetX - Width, OffsetZ + Width);
 
-                if (n1 == null || n2 == null || n3 == null || n4 == null || n5 == null || n6 == null || n7 == null ||
-                    n8 == null
-                    || !n1.IsGenerated || !n1.Landscape.StructuresPlaced || !n2.IsGenerated ||
-                    !n2.Landscape.StructuresPlaced
-                    || !n3.IsGenerated || !n3.Landscape.StructuresPlaced || !n4.IsGenerated ||
-                    !n4.Landscape.StructuresPlaced
-                    || !n5.IsGenerated || !n5.Landscape.StructuresPlaced || !n6.IsGenerated ||
-                    !n6.Landscape.StructuresPlaced
-                    || !n7.IsGenerated || !n7.Landscape.StructuresPlaced || !n8.IsGenerated ||
-                    !n8.Landscape.StructuresPlaced)
-                    return false;
-                return true;
+                return n1 != null && n2 != null && n3 != null && n4 != null 
+                    && n5 != null && n6 != null && n7 != null && n8 != null 
+                    && n1.IsGenerated && n1.Landscape.StructuresPlaced 
+                    && n2.IsGenerated && n2.Landscape.StructuresPlaced 
+                    && n3.IsGenerated && n3.Landscape.StructuresPlaced 
+                    && n4.IsGenerated && n4.Landscape.StructuresPlaced 
+                    && n5.IsGenerated && n5.Landscape.StructuresPlaced
+                    && n6.IsGenerated && n6.Landscape.StructuresPlaced 
+                    && n7.IsGenerated && n7.Landscape.StructuresPlaced 
+                    && n8.IsGenerated && n8.Landscape.StructuresPlaced;
             }
         }
+
+        public bool NeedsLodPatching => _terrainBuilder.NeedsLodPatching;
 
         public ChunkMesh StaticBuffer => Mesh;
 
@@ -511,6 +518,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public Block[][] this[int Index] => !Landscape.StructuresPlaced || !Landscape.BlocksSetted 
             ? _dummyBlocks 
             : _blocks[Index];
+
+        public Vector3[] TerrainVertices => _terrainVertices;
 
         public void Reset()
         {
