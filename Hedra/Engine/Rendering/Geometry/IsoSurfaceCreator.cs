@@ -23,7 +23,8 @@ namespace Hedra.Engine.Rendering.Geometry
 		private static Vector3[] FaceUp = new Vector3[4], FaceDown = new Vector3[4], FaceLeft = new Vector3[4],
 			FaceRight = new Vector3[4], FaceFront = new Vector3[4], FaceBack = new Vector3[4];
 		
-		private static Vector3[] FromFace(Vector3 Input, GridCell Cell, int LOD){
+		private static Vector3[] FromFace(Vector3 Input, GridCell Cell, int LOD)
+		{
 			float BlockSize = Chunk.BlockSize;
 			if(Vector3.UnitY == Input){
 				FaceUp[3] = new Vector3(BlockSize*LOD,0,BlockSize*LOD) + Cell.P[0] * new Vector3(BlockSize,BlockSize,BlockSize);
@@ -75,73 +76,6 @@ namespace Hedra.Engine.Rendering.Geometry
 			
 			return null;
 		}
-		
-		public static void CreateSolidQuad(Vector3 Direction, GridCell Cell, bool Flipped, Vector3 Offset, Random Gen, int LOD, Vector4 TemplateColor, VertexData Data){
-			List<Vector3> Verts = new List<Vector3>();
-			List<Vector4> ColorsList = new List<Vector4>();
-			List<Vector3> NormalsList = new List<Vector3>();
-			List<uint> IndicesList = new List<uint>();
-			
-			IndicesList.Add((uint) IndicesList.Count);
-			IndicesList.Add((uint) IndicesList.Count);
-			IndicesList.Add((uint) IndicesList.Count);
-			
-			IndicesList.Add((uint) IndicesList.Count);
-			IndicesList.Add((uint) IndicesList.Count);
-			IndicesList.Add((uint) IndicesList.Count);
-			
-			Vector3[] FaceVertices = IsoSurfaceCreator.FromFace(Direction, Cell, LOD);
-			Vector3 V3 = FaceVertices[3];
-			Vector3 V1 = FaceVertices[2];
-			Vector3 V2 = FaceVertices[1];
-			Vector3 V0 = FaceVertices[0];
-			
-			if(Flipped){
-				Verts.Add(V2);
-				Verts.Add(V3);
-				Verts.Add(V1);
-				
-				Verts.Add(V0);
-				Verts.Add(V2);
-				Verts.Add(V1);
-			}else{
-				Verts.Add(V2);
-				Verts.Add(V3);
-				Verts.Add(V0);
-				
-				Verts.Add(V3);
-				Verts.Add(V1);
-				Verts.Add(V0);
-			}
-			
-			Vector3 Normal1 = Mathf.CrossProduct(Verts[Verts.Count-5] - Verts[Verts.Count-6], Verts[Verts.Count-4] - Verts[Verts.Count-6]).Normalized();
-			NormalsList.Add(Normal1);
-			NormalsList.Add(Normal1);
-			NormalsList.Add(Normal1);
-			
-			Vector3 Normal2 = Mathf.CrossProduct(Verts[Verts.Count-2] - Verts[Verts.Count-3], Verts[Verts.Count-1] - Verts[Verts.Count-3]).Normalized();
-			NormalsList.Add(Normal2);
-			NormalsList.Add(Normal2);
-			NormalsList.Add(Normal2);
-			
-			Vector4 Color1 = OffsetColor(TemplateColor, (float) (Gen.NextDouble() * 2f -1f) * 0.015f);
-			Vector4 Color2 = OffsetColor(TemplateColor, 0f);
-			ColorsList.Add(Color1);
-			ColorsList.Add(Color1);
-			ColorsList.Add(Color1);
-			ColorsList.Add(Color2);
-			ColorsList.Add(Color2);
-			ColorsList.Add(Color2);
-			
-			for(int i = 0; i < IndicesList.Count; i++){
-				IndicesList[i] += (uint) Data.Vertices.Count;
-			}
-			Data.Indices.AddRange(IndicesList.ToArray());
-			Data.Normals.AddRange(NormalsList.ToArray());
-			Data.Vertices.AddRange(Verts.ToArray());
-			Data.Colors.AddRange(ColorsList.ToArray());
-		}
-		
 		
 		public static void CreateWaterQuad(float BlockSize, GridCell Cell, bool Flipped, Vector3 Offset, int LOD, Vector4 TemplateColor, VertexData Data){
 			

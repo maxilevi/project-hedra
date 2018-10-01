@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player.BoatSystem
 
         public void Update()
         {
-            if(Enabled) _inputHandler.Update();
+            if(Enabled && _player.CanInteract) _inputHandler.Update();
             HandleTerrain();
             HandleLocation();
         }

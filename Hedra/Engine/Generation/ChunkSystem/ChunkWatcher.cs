@@ -26,17 +26,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_object?.Disposed ?? true) this.Dispose();
             if (_object == null || Disposed) return;
 
-            var result = this.ManageState();
-            if(!result) return;
             if(!GameSettings.freezelod)
             this.ManageLod();
+            var result = this.ManageState();
+            if(!result) return;
 
-            if (WasChunkBuilt(_object))
+            if (WasChunkBuilt(_object) && ShouldWeRebuildChunk(_object))
             {
-                if (ShouldWeRebuildChunk(_object) || _object.NeedsLodPatching)
-                {
-                    World.AddChunkToQueue(_object, true);
-                }
+                World.AddChunkToQueue(_object, true);
             }
             if (_object.BuildedWithStructures && !_wasBuilded)
             {
@@ -71,12 +68,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void ManageLod()
         {
-            if (!_object.IsGenerated) return;
+            if (!_object.IsGenerated || !GameSettings.Lod) return;
             var cameraDist = (_object.Position.Xz - GameManager.Player.View.CameraPosition.Xz).LengthSquared;
-            if (cameraDist > 256 * 256 && cameraDist < 512 * 512 && GameSettings.Lod)
+            if (cameraDist > 288 * 288 && cameraDist < 512 * 512)
                 _object.Lod = 2;
-            else if (cameraDist > 512 * 512 && GameSettings.Lod)
+            else if (cameraDist > 512 * 512 && cameraDist < 800 * 800)
                 _object.Lod = 4;
+            else if (cameraDist > 800 * 800)
+                _object.Lod = 8;
             else
                 _object.Lod = 1;
         }

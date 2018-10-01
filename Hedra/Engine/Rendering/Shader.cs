@@ -83,11 +83,12 @@ namespace Hedra.Engine.Rendering
 	        for (var i = 0; i < sources.Length; i++)
 	        {
 	            if (sources[i] == null) continue;
-	            var newSource = ShaderParser.ProcessSource(sources[i].SourceFinder());
+	            var preProcessedSource = sources[i].SourceFinder();
+                var newSource = ShaderParser.ProcessSource(preProcessedSource);
 	            if (newSource != sources[i].Source)
 	            {
 	                Log.WriteLine($"Shader source '{sources[i].Name}' has been updated. ");
-	                sources[i].Source = newSource;
+	                sources[i].Source = preProcessedSource;
 	                updated = true;
 	            }
 	        }

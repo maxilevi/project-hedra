@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {

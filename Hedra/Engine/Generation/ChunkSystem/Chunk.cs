@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -19,7 +20,7 @@ using Region = Hedra.Engine.BiomeSystem.Region;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    public class Chunk : IDisposable
+    public class Chunk : IDisposable, IPositionable
     {
         public static int BaseHeight { get; } = 0;
         public static float BlockSize { get; } = 4.0f;
@@ -42,6 +43,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public bool NeverBuilded { get; private set; } = true;
         public int OffsetX { get; }
         public int OffsetZ { get; }
+        public bool IsBuilding { get; set; }
         public Vector3 Position { get; private set; }
 
         private Block[][][] _blocks;
@@ -161,6 +163,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void PrepareForBuilding()
         {
+            this.IsBuilding = true;
             this._canDispose = false;
             this.BuildedCompletely = false;
         }
@@ -170,6 +173,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.BuildedLod = BuildedLod;
             this.BuildedWithStructures = true;
             this.NeedsRebuilding = false;
+            this.IsBuilding = false;
         }
 
         private void UploadMesh(ChunkMeshBuildOutput Input)
@@ -247,11 +251,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 return new Block();
             }
             return new Block();
-        }
-
-        public Vector3[] CreateTerrainVertices(Func<int, int, int, bool> Filter)
-        {
-            return _terrainBuilder.CreateTerrainVertices(_blocks, Filter, Lod);
         }
         
         public Vector3 NearestVertex(Vector3 Position)
@@ -495,8 +494,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     && n8.IsGenerated && n8.Landscape.StructuresPlaced;
             }
         }
-
-        public bool NeedsLodPatching => _terrainBuilder.NeedsLodPatching;
 
         public ChunkMesh StaticBuffer => Mesh;
 

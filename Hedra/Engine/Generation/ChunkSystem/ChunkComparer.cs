@@ -9,16 +9,17 @@
 
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.Core;
 using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
 	
-	public class ChunkComparer: IComparer<Chunk>
+	public class ChunkComparer : IComparer<IPositionable>
     {
 		public Vector3 Position { get; set; }
 
-        public int Compare(Chunk ChunkA, Chunk ChunkB)
+        public int Compare(IPositionable ChunkA, IPositionable ChunkB)
         {
             if (ChunkA == ChunkB) return 0;
             if (ChunkA == null) return -1;
@@ -28,7 +29,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             float distanceB = (ChunkB.Position - Position).LengthSquared;
 
             if (distanceA < distanceB) return -1;
-            return distanceA == distanceB ? 0 : 1;
+            return Math.Abs(distanceA - distanceB) < 0.0005 ? 0 : 1;
         }
     }
 }

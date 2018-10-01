@@ -8,12 +8,18 @@ namespace Hedra.Engine.Rendering.Geometry
     {
         private const double Epsilon = 0.0005;
 
-        public MeshBorderOutput Process(VertexData TerrainMesh, Vector3 Size)
+        public MeshBorderOutput Process(VertexData TerrainMesh,Vector3 Start, Vector3 End)
         {
-            return Process(TerrainMesh.Vertices.ToArray(), Size);
+            return Process(TerrainMesh.Vertices.ToArray(), Start, End);
         }
 
-        public MeshBorderOutput Process(Vector3[] TerrainMesh, Vector3 Size)
+
+        public MeshBorderOutput Process(VertexData TerrainMesh, Vector3 Size)
+        {
+            return Process(TerrainMesh.Vertices.ToArray(), Vector3.Zero, Size);
+        }
+
+        public MeshBorderOutput Process(Vector3[] TerrainMesh, Vector3 Start, Vector3 End)
         {
             var front = new List<Vector3>(); 
             var back = new List<Vector3>();
@@ -28,15 +34,15 @@ namespace Hedra.Engine.Rendering.Geometry
             {
                 var vertex = TerrainMesh[i];
                 
-                if(Math.Abs(vertex.X) < Epsilon && Math.Abs(vertex.Z) < Epsilon) backLeftCorner.Add(vertex);
-                else if(Math.Abs(vertex.X - Size.X) < .005 && Math.Abs(vertex.Z) < Epsilon) backRightCorner.Add(vertex);
-                else if(Math.Abs(vertex.X) < Epsilon && Math.Abs(vertex.Z - Size.Z) < Epsilon) frontLeftCorner.Add(vertex);
-                else if(Math.Abs(vertex.X - Size.X) < Epsilon && Math.Abs(vertex.Z - Size.Z) < Epsilon) frontRightCorner.Add(vertex);
+                if(Math.Abs(vertex.X - Start.X) < Epsilon && Math.Abs(vertex.Z - Start.X) < Epsilon) backLeftCorner.Add(vertex);
+                else if(Math.Abs(vertex.X - End.X) < Epsilon && Math.Abs(vertex.Z - Start.Z) < Epsilon) backRightCorner.Add(vertex);
+                else if(Math.Abs(vertex.X - Start.X) < Epsilon && Math.Abs(vertex.Z - End.Z) < Epsilon) frontLeftCorner.Add(vertex);
+                else if(Math.Abs(vertex.X - End.X) < Epsilon && Math.Abs(vertex.Z - End.Z) < Epsilon) frontRightCorner.Add(vertex);
 
-                else if(Math.Abs(vertex.X) < Epsilon) left.Add(vertex);
-                else if(Math.Abs(vertex.X - Size.X) < Epsilon) right.Add(vertex);
-                else if(Math.Abs(vertex.Z) < Epsilon) back.Add(vertex);
-                else if(Math.Abs(vertex.Z - Size.Z) < Epsilon) front.Add(vertex);
+                else if(Math.Abs(vertex.X - Start.X) < Epsilon && vertex.Z > Start.Z && vertex.Z < End.Z) left.Add(vertex);
+                else if(Math.Abs(vertex.X - End.X) < Epsilon && vertex.Z > Start.Z && vertex.Z < End.Z) right.Add(vertex);
+                else if(Math.Abs(vertex.Z - Start.Z) < Epsilon && vertex.X > Start.X && vertex.X < End.X) back.Add(vertex);
+                else if(Math.Abs(vertex.Z - End.Z) < Epsilon && vertex.X > Start.X && vertex.X < End.X) front.Add(vertex);
             }
             return new MeshBorderOutput
             {

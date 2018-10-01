@@ -77,8 +77,8 @@ void main()
     V0.y = (V0.y + InVertex.y + BakedOffset.y) * Scale.y + Offset.y;
     V1.y = (V1.y + InVertex.y + BakedOffset.y) * Scale.y + Offset.y;
     
-    V0.y = GetY(V0.x, V0.z) * 0.4 * Scale.y + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
-    V1.y = GetY(V1.x, V1.z) * 0.4 * Scale.y + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
+    V0.y = GetY(V0.x, V0.z) * 0.6 * Scale.y * InNormal.z + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
+    V1.y = GetY(V1.x, V1.z) * 0.6 * Scale.y * InNormal.z + (InVertex.y+BakedOffset.y) * Scale.y + Offset.y;
     
     vec3 Normal = normalize(Cross(v.xyz - V0, V1 - v.xyz));
  	
