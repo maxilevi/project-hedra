@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine
+﻿namespace Hedra.Engine.Core
 {
     public interface ICountable
     {

@@ -220,6 +220,8 @@
     <Compile Include="Engine\AISystem\BasicAIComponent.cs" />
     <Compile Include="Engine\ComplexMath\IRandom.cs" />
     <Compile Include="Engine\ComplexMath\RandomDistribution.cs" />
+    <Compile Include="Engine\Core\ICountable.cs" />
+    <Compile Include="Engine\Core\IPositionable.cs" />
     <Compile Include="Engine\DatabaseSystem\Dao.cs" />
     <Compile Include="Engine\Game\LoadingScreen.cs" />
     <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
@@ -327,6 +329,7 @@
     <Compile Include="Engine\Rendering\Geometry\MeshStitcher.cs" />
     <Compile Include="Engine\Rendering\Geometry\VertexOcclusion.cs" />
     <Compile Include="Engine\Rendering\Geometry\WaterEdgePatcher.cs" />
+    <Compile Include="Engine\Rendering\Geometry\WaterMeshStitcher.cs" />
     <Compile Include="Engine\Rendering\GLProvider.cs" />
     <Compile Include="Engine\Rendering\IGLProvider.cs" />
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
@@ -349,7 +352,6 @@
     <Compile Include="Engine\WorldBuilding\IWorldBuilding.cs" />
     <Compile Include="Engine\WorldBuilding\LineGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\RoundedGroundwork.cs" />
-    <Compile Include="Engine\ICountable.cs" />
     <Compile Include="Engine\IO\ConfigurationFile.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorPiece.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorFactory.cs" />
