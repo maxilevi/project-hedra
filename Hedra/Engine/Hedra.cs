@@ -147,6 +147,8 @@ namespace Hedra
         protected override void OnResize(EventArgs e)
 	    {
             base.OnResize(e);
+		    //Make min height 800;
+		    //if(this.Width < 800)
 		    GameSettings.SurfaceWidth = Width;
 		    GameSettings.SurfaceHeight = Height;
 		    DrawManager.UIRenderer.Adjust();

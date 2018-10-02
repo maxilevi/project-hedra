@@ -260,13 +260,14 @@ namespace Hedra.Engine.Rendering.UI
 				Vector2 coords = Mathf.ToNormalizedDeviceCoordinates(Events.EventDispatcher.Mouse.X, Events.EventDispatcher.Mouse.Y);
 				coords += new Vector2(1,1);
 				coords /= 2;
+	            var size = GUITexture.Adjust(new Vector2(0.05f, 0.125f));
 				for(int i = 0; i <_humans.Count; i++){
 
                     Vector4 space = Vector4.Transform(new Vector4(_humans[i].Position+Vector3.UnitY,1), DrawManager.FrustumObject.ModelViewMatrix);
 					space = Vector4.Transform(space, DrawManager.FrustumObject.ProjectionMatrix);
 					Vector2 ndc = (space.Xyz / space.W).Xy + new Vector2(1,1);
 					ndc /= 2;
-					if( _humans[i].Model.Enabled && Math.Abs(ndc.X - coords.X) < 0.05f && Math.Abs(1-ndc.Y - coords.Y) < 0.125f)
+					if( _humans[i].Model.Enabled && Math.Abs(ndc.X - coords.X) < size.X && Math.Abs(1-ndc.Y - coords.Y) < size.Y)
 						_humans[i].Model.Tint = new Vector4(2,2,2,1);
 					else
 						_humans[i].Model.Tint = new Vector4(1,1,1,1);

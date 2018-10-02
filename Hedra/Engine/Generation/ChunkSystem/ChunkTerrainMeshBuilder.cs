@@ -52,8 +52,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 _stitcher.Process(output.StaticData, borders.StaticData,
                     new Vector3(Lod*BlockSize, 0, Lod*BlockSize), new Vector3(Chunk.Width-Lod*BlockSize, 0, Chunk.Width-Lod*BlockSize),
                     new Vector3(targetLod*BlockSize,0, targetLod*BlockSize), new Vector3(Chunk.Width-targetLod*BlockSize, 0, Chunk.Width-targetLod*BlockSize));
-                //waterData = _waterStitcher.Process(waterData, new Vector3(Chunk.Width, 0, Chunk.Width));
+                _waterStitcher.Process(output.WaterData, borders.WaterData,
+                    new Vector3(Lod * BlockSize, 0, Lod * BlockSize), new Vector3(Chunk.Width - Lod * BlockSize, 0, Chunk.Width - Lod * BlockSize),
+                    new Vector3(targetLod * BlockSize, 0, targetLod * BlockSize), new Vector3(Chunk.Width - targetLod * BlockSize, 0, Chunk.Width - targetLod * BlockSize));
                 output.StaticData += borders.StaticData;
+                output.WaterData += borders.WaterData;
                 output.Failed |= borders.Failed;
                 output.HasNoise3D |= borders.HasNoise3D;
                 output.HasWater |= borders.HasWater;

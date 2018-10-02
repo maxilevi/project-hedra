@@ -234,7 +234,8 @@ namespace Hedra.Engine.Rendering.Effects
 		
 		public void Clear(){}
 		
-		public void CaptureData(){
+		public void CaptureData()
+		{
 			if(!GameSettings.SSAO)
 				Default.Bind();
 			else

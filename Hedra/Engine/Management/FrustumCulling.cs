@@ -171,10 +171,20 @@ namespace Hedra.Engine.Management
 			Renderer.LoadModelView(ModelViewMatrix);
 			
 		}
+		
+		public void SetViewport()
+		{
+			SetViewport(GameSettings.Width, GameSettings.Height);
+		}
+		
+		public void SetViewport(float Width, float Height)
+		{
+			SetViewport((int)Width, (int)Height);
+		}
 
-	    public void SetViewport()
+	    public void SetViewport(int Width, int Height)
 	    {
-	        Renderer.Viewport(0,0, GameSettings.Width, GameSettings.Height);
+	        Renderer.Viewport(0, 0, Width, Height);
         }
 
         public bool VerticesInFrustum(Vector3[] Vertices)
