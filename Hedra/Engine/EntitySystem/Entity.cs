@@ -346,9 +346,10 @@ namespace Hedra.Engine.EntitySystem
                 if (value == IsUnderwater) return;
                 if (value)
                 {
-                    Physics.GravityDirection = IsHumanoid ? Vector3.Zero : Vector3.UnitY * .0f;
+                    Physics.GravityDirection = IsHumanoid ? Vector3.Zero : Vector3.UnitY * .5f;
                     IsGrounded = false;
                     Physics.ResetFall();
+                    Physics.ResetVelocity();
                 }
                 else
                 {
