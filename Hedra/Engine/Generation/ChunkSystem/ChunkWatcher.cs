@@ -72,10 +72,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var cameraDist = (_object.Position.Xz - GameManager.Player.View.CameraPosition.Xz).LengthSquared;
             if (cameraDist > 288 * 288 && cameraDist < 512 * 512)
                 _object.Lod = 2;
-            else if (cameraDist > 512 * 512 && cameraDist < 800 * 800)
+            else if (cameraDist > 512 * 512)// && cameraDist < 800 * 800)
                 _object.Lod = 4;
-            else if (cameraDist > 800 * 800)
-                _object.Lod = 8;
+            //else if (cameraDist > 800 * 800)
+            //    _object.Lod = 8;
             else
                 _object.Lod = 1;
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -48,7 +49,7 @@ namespace Hedra.Engine.PlantSystem
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Random Rng)
+        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
         {
             Data = Data + CacheManager.GetModel(CacheItem.Berries).Clone();
 

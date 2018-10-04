@@ -31,7 +31,6 @@ namespace Hedra.Engine.Management
 		public const int GraveyardChampion = 3;
 		public const int HostageSituation = 4;
 		public const int OnTheLam = 5;
-        public const int LoopableSongsStart = 3;
 
 	    public static int TrackIndex => _trackIndex;
 	    public static bool RepeatTrack => _repeatItself;
@@ -51,8 +50,9 @@ namespace Hedra.Engine.Management
 		private static float _targetVolume;
 	    private static bool _repeatItself;
 	    private static int _previousIndex;
+	    private static int _loopableSongsStart;
 
-		public static void Load()
+        public static void Load()
 		{
 			Load(new SoundSource(SoundManager.ListenerPosition));
 		}
@@ -60,7 +60,8 @@ namespace Hedra.Engine.Management
 		public static void Load(SoundSource Source)
         {
 	        SoundtrackManager.Source = Source;
-	        TrackNames = new string[]
+            var forestTrack = "Sounds/Soundtrack/ForestAmbient.ogg";
+            TrackNames = new string[]
 	        {
 		        "Sounds/Soundtrack/VillageAmbient.ogg",
 		        "Sounds/Soundtrack/MainTheme.ogg",
@@ -69,7 +70,7 @@ namespace Hedra.Engine.Management
 		        "Sounds/Soundtrack/HostageSituation.ogg",
 		        "Sounds/Soundtrack/OnTheLam.ogg",
 		        // LoopableSongs
-		        "Sounds/Soundtrack/ForestAmbient.ogg",
+	            forestTrack,
 		        // Forest should always be first
 		        "Sounds/Soundtrack/Song0.ogg",
 		        "Sounds/Soundtrack/Song1.ogg",
@@ -83,6 +84,7 @@ namespace Hedra.Engine.Management
 		        "Sounds/Soundtrack/TheVillage.ogg",
 		        "Sounds/Soundtrack/AdventurersMinuet.ogg"
 	        };
+            _loopableSongsStart = Array.IndexOf(TrackNames, forestTrack);
             ShuffleSongs();
 
             for (var i = 0; i < TrackNames.Length; i++)
@@ -98,15 +100,20 @@ namespace Hedra.Engine.Management
 	    private static void ShuffleSongs()
 	    {
 	        int n = TrackNames.Length;
-	        while (n > LoopableSongsStart+1)
+	        while (n > _loopableSongsStart+1)
 	        {
-	            int k = Utils.Rng.Next(LoopableSongsStart+1, n--);
+	            int k = Utils.Rng.Next(_loopableSongsStart+1, n--);
 	            string temp = TrackNames[n];
 	            TrackNames[n] = TrackNames[k];
 	            TrackNames[k] = temp;
 	        }
         }
-		
+
+	    public static void PlayAmbient()
+	    {
+	        PlayTrack(_loopableSongsStart);
+	    }
+
 		public static void PlayTrack(int Index, bool RepeatItself = false)
 		{
             if(!_loaded) return;
@@ -124,7 +131,7 @@ namespace Hedra.Engine.Management
 	        _previousIndex = TrackIndex;
             if (_repeatItself) return;
             if (_trackIndex < TrackNames.Length - 1) _trackIndex++;
-	        else _trackIndex = LoopableSongsStart + 1;
+	        else _trackIndex = _loopableSongsStart + 1;
 	    }
 
 	    private static void StartCurrentSong()

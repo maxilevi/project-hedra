@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -50,10 +51,9 @@ namespace Hedra.Engine.PlantSystem
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Random Rng)
+        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
         {
-            var region = World.BiomePool.GetRegion(Position);
-            var newColor = new Vector4((region.Colors.GrassColor * 1.0f).Xyz, 1);
+            var newColor = new Vector4((Region.Colors.GrassColor * 1.0f).Xyz, 1);
 
             Data.Paint(newColor);
             Vector3 highest = Model.SupportPoint(Vector3.UnitY);

@@ -11,7 +11,7 @@ namespace Hedra.Engine.Player
 {
     public class StructureAware : IStructureAware
     {
-        private bool _wasPlayingAmbient;
+        private bool _wasPlayingCustom;
         private readonly IPlayer _player;
         private CollidableStructure[] _currentNearStructures;
         private Timer _enterTimer;
@@ -47,21 +47,21 @@ namespace Hedra.Engine.Player
                 var structure = _currentNearStructures[i];
                 if ((structure.Position.Xz - _player.Position.Xz).LengthFast < structure.Radius * .75f)
                 {
-                    if (!_wasPlayingAmbient && structure.Design.AmbientSongs.Length > 0)
+                    if (!_wasPlayingCustom && structure.Design.AmbientSongs.Length > 0)
                     {
                         var song = structure.Design.AmbientSongs[Utils.Rng.Next(0, structure.Design.AmbientSongs.Length)];
                         SoundtrackManager.PlayTrack(song, true);
-                        _wasPlayingAmbient = true;
+                        _wasPlayingCustom = true;
                         if (_enterTimer.Ready)
                             structure.Design.OnEnter(_player);
                     }
                     none = false;
                 }
             }
-            if (_wasPlayingAmbient && none)
+            if (_wasPlayingCustom && none)
             {
-                _wasPlayingAmbient = false;
-                SoundtrackManager.PlayTrack(SoundtrackManager.LoopableSongsStart);
+                _wasPlayingCustom = false;
+                SoundtrackManager.PlayAmbient();
             }
         }
         

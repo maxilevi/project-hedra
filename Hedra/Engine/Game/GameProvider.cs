@@ -158,7 +158,7 @@ namespace Hedra.Engine.Game
 	    private IEnumerator SpawnCoroutine()
 	    {
 		    _loadingScreen.Show();
-		    SoundtrackManager.PlayTrack(SoundtrackManager.LoopableSongsStart);
+		    SoundtrackManager.PlayAmbient();
 		    GameManager.Player.UI.HideMenu();
 		    Player.UI.GamePanel.Disable();
 		    Player.Chat.Show = false;

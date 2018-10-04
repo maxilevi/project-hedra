@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -43,7 +44,7 @@ namespace Hedra.Engine.PlantSystem
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Random Rng)
+        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
         {
             Data.Extradata.AddRange(Data.GenerateWindValues());
             for (int i = 0; i < Data.Extradata.Count; i++)

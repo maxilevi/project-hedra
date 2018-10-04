@@ -260,10 +260,10 @@ namespace Hedra.Engine.Rendering.UI
 				Vector2 coords = Mathf.ToNormalizedDeviceCoordinates(Events.EventDispatcher.Mouse.X, Events.EventDispatcher.Mouse.Y);
 				coords += new Vector2(1,1);
 				coords /= 2;
-	            var size = GUITexture.Adjust(new Vector2(0.05f, 0.125f));
+	            var size = GUITexture.Adjust(new Vector2(0.05f, 0.25f));
 				for(int i = 0; i <_humans.Count; i++){
 
-                    Vector4 space = Vector4.Transform(new Vector4(_humans[i].Position+Vector3.UnitY,1), DrawManager.FrustumObject.ModelViewMatrix);
+                    Vector4 space = Vector4.Transform(new Vector4(_humans[i].Position + Vector3.UnitY * 6f,1), DrawManager.FrustumObject.ModelViewMatrix);
 					space = Vector4.Transform(space, DrawManager.FrustumObject.ProjectionMatrix);
 					Vector2 ndc = (space.Xyz / space.W).Xy + new Vector2(1,1);
 					ndc /= 2;

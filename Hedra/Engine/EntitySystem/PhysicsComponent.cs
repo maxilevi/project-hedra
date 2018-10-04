@@ -33,6 +33,7 @@ namespace Hedra.Engine.EntitySystem
 		public bool HasFallDamage = true;
 		public bool UseTimescale { get; set; }
 		public bool InFrontOfWall { get; private set; }
+        public bool IsDrifting { get; private set; }
 
 	    public PhysicsComponent(Entity Parent) : base(Parent)
 	    {
@@ -189,12 +190,11 @@ namespace Hedra.Engine.EntitySystem
             var parentBox = this.Parent.Model.BroadphaseBox;
 			float modifierX = delta.X < 0 ? -1f : 1f;
 			float modifierZ = delta.Z < 0 ? -1f : 1f;
-            //if(!(Parent is LocalPlayer)) return;
+
             bool blockPx = false, blockNx = false, blockPy = false, blockNy = false, blockPz = false, blockNz = false;
       
             if (!onlyY)
             {
-
                 var nextBlock =
                     World.GetBlockAt(new Vector3(1f * modifierX, 0, 1f * modifierZ) + delta +
                                         this.Parent.BlockPosition);
@@ -202,33 +202,50 @@ namespace Hedra.Engine.EntitySystem
                 var calcPosition = new Vector3(1f * modifierX, 2.5f, 1f * modifierZ) + delta +
                                     this.Parent.BlockPosition;
                 var nextBlockY = World.GetBlockAt(calcPosition);
-                var terrainNormal = Physics.NormalAtPosition(calcPosition);
-                if (IsSolid(nextBlockY) || (Vector3.Dot(terrainNormal, Vector3.UnitY) < .35f && IsSolid(nextBlock)))
+                var tNormal = Physics.NormalAtPosition(calcPosition);
+                if (!IsDrifting)
                 {
-                    if (delta.X > 0)
-                        blockPx = true;
-
-                    if (delta.X < 0)
-                        blockNx = true;
-
-                    if (delta.Z < 0)
-                        blockNz = true;
-
-                    if (delta.Z > 0)
-                        blockPz = true;
-
-                    if (Parent is Humanoid human && human.IsClimbing)
+                    if (IsSolid(nextBlockY) || (Vector3.Dot(tNormal, Vector3.UnitY) < .35f && IsSolid(nextBlock)))
                     {
-                       delta += Vector3.UnitY * Time.DeltaTime * 60f;
-                    }           
-                    InFrontOfWall = true;
+                        if (delta.X > 0)
+                            blockPx = true;
+
+                        if (delta.X < 0)
+                            blockNx = true;
+
+                        if (delta.Z < 0)
+                            blockNz = true;
+
+                        if (delta.Z > 0)
+                            blockPz = true;
+
+                        if (Parent is Humanoid human && human.IsClimbing)
+                        {
+                            delta += Vector3.UnitY * Time.DeltaTime * 60f;
+                        }
+                        InFrontOfWall = true;
+                    }
+                    else
+                    {
+                        InFrontOfWall = false;
+                    }
                 }
-                else
-                {
-	                InFrontOfWall = false;
-                }           
             }
-            
+
+            var terrainNormal = Physics.NormalAtPosition(Parent.Position);
+            var dot = Vector3.Dot(terrainNormal, Vector3.UnitY);
+            if (IsDrifting)
+            {
+                Parent.BlockPosition += terrainNormal.Xz.ToVector3() * Time.DeltaTime * 8;
+                this.ResetFall();
+                this.ResetVelocity();
+                if (!onlyY) return;
+            }
+
+            if (dot < .35 && Parent.IsGrounded) IsDrifting = true;
+            else if(dot > .45 || !Parent.IsGrounded) IsDrifting = false;
+
+
             if (this.HasCollision && !Command.IsRecursive)
             {
                 var entities = World.Entities;

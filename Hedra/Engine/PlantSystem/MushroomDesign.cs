@@ -1,4 +1,5 @@
 ﻿using System;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -47,7 +48,7 @@ namespace Hedra.Engine.PlantSystem
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Random Rng)
+        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
         {
             Vector4 stemColor = Utils.VariateColor(Colors.MushroomStemColor(Rng), 15, Rng);
             Vector4 headColor = Utils.VariateColor(Colors.MushroomHeadColor(Rng), 15, Rng);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
@@ -18,7 +19,7 @@ namespace Hedra.Engine.PlantSystem
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Random Rng)
+        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
         {
             return Data;
         }

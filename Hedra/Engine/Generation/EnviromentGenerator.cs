@@ -40,7 +40,7 @@ namespace Hedra.Engine.Generation
             VertexData modelData = Design.Model;
             VertexData modelDataClone = modelData.ShallowClone();
 
-            Design.Paint(transMatrix.ExtractTranslation(), modelDataClone, rng);
+            Design.Paint(transMatrix.ExtractTranslation(), modelDataClone, BiomeRegion, rng);
             Design.AddShapes(underChunk, transMatrix);
 
             if (!Design.HasCustomPlacement)

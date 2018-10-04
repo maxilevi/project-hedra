@@ -339,8 +339,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (Landscape == null || !Landscape.BlocksSetted) return 0;
             for (var y = BoundsY - 1; y > -1; y--)
             {
-                var block = _blocks[X][y][Z];
-                if (block.Type != BlockType.Air && block.Type != BlockType.Water)
+                var type = _blocks[X][y][Z].Type;
+                if (type != BlockType.Air && type != BlockType.Water)
                     return y;
             }
             return 0;

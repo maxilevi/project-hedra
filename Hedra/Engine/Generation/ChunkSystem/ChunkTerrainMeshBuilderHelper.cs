@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
@@ -10,6 +11,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class ChunkTerrainMeshBuilderHelper
     {
+        private static int Bounds = (int) (Chunk.Width / Chunk.BlockSize); 
         private readonly Chunk _parent;
         private readonly float _coefficient;    
         private readonly int _offsetX;
@@ -84,9 +86,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 for (var i = 0; i < Cell.Type.Length; i++)
                 {
-                    var pos = new Vector3(Cell.P[i].X * _coefficient, Cell.P[i].Y * _coefficient,
-                        Cell.P[i].Z * _coefficient);
-                    var block = this.GetNeighbourBlock((int) pos.X, (int) pos.Y, (int) pos.Z);
+                    var posX = (int) (Cell.P[i].X * _coefficient);
+                    var posY = (int) (Cell.P[i].Y * _coefficient);
+                    var posZ = (int) (Cell.P[i].Z * _coefficient);
+                    
+                    Block block;
+                    unsafe
+                    {
+                        block = GetNeighbourBlock(&posX, &posY, &posZ);
+                    }
 
                     Cell.Type[i] = block.Type;
                     Cell.Density[i] = block.Density;
@@ -117,9 +125,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             if (waterBlock.Type == BlockType.Water) goto WATER_BREAK;
                         }
 
-                        for (int k = (int) pos.Y - 3; k < _boundsY; k++)
-                        for (int kx = -2; kx < 3; kx++)
-                        for (int kz = -2; kz < 3; kz++)
+                        for (var k = (int) pos.Y - 3; k < _boundsY; k++)
+                        for (var kx = -2; kx < 3; kx++)
+                        for (var kz = -2; kz < 3; kz++)
                         {
                             waterBlock = this.GetNeighbourBlock((int) pos.X + kx, k, (int) pos.Z + kz);
 
@@ -189,36 +197,36 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        private Chunk GetNeighbourChunk(int X, int Z)
+        private unsafe Chunk GetNeighbourChunk(int X, int Z)
         {
-            return GetNeighbourChunk(ref X, ref Z);
+            return GetNeighbourChunk(&X, &Z);
         }
         
         //Use ref to avoid copying the structs since this function has a very high call rate.
-        private Chunk GetNeighbourChunk(ref int X, ref int Z)
+        private unsafe Chunk GetNeighbourChunk(int* X, int* Z)
         {
-            if (X >= 0 && X < _boundsX && Z >= 0 && Z < _boundsZ) return _parent;
-            var coords = World.ToChunkSpace(new Vector3(_offsetX + X * _blockSize, 0, _offsetZ + Z * _blockSize));
+            if (*X >= 0 && *X < _boundsX && *Z >= 0 && *Z < _boundsZ) return _parent;
+            var coords = World.ToChunkSpace(new Vector3(_offsetX + *X * _blockSize, 0, _offsetZ + *Z * _blockSize));
             World.SearcheableChunks.TryGetValue(coords, out var ch);
             return ch;
         }
 
-        private Block GetNeighbourBlock(int X, int Y, int Z)
+        private unsafe Block GetNeighbourBlock(int X, int Y, int Z)
         {
-            return GetNeighbourBlock(ref X, ref Y, ref Z);
+            return GetNeighbourBlock(&X, &Y, &Z);
         }
 
-        private Block GetNeighbourBlock(ref int X, ref int Y, ref int Z)
+        private unsafe Block GetNeighbourBlock(int* X, int* Y, int* Z)
         {
-            var chunk = this.GetNeighbourChunk(ref X, ref Z);
+            var chunk = GetNeighbourChunk(X, Z);
             if (!chunk?.Landscape.BlocksSetted ?? true) return new Block(BlockType.Temporal);
-            return chunk[Modulo(ref X, _boundsX)][Y][Modulo(ref Z, _boundsZ)];
+            return chunk[Modulo(X)][*Y][Modulo(Z)];
         }
         
         // Source: https://codereview.stackexchange.com/a/58309
-        private static int Modulo(ref int Index, int Bounds)
+        private static unsafe int Modulo(int* Index)
         {
-            return (Index % Bounds + Bounds) % Bounds;
+            return (*Index % Bounds + Bounds) % Bounds;
         }
     }
 }
