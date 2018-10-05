@@ -43,7 +43,7 @@ namespace Hedra.Engine.BiomeSystem
 	            this.BlocksSetted = true;
             }
 
-		    var lod = Chunk.Lod <= 2 ? 1 : Chunk.Lod;
+		    var lod = Chunk.Lod;
 	        if (_firstGeneration || lod < GeneratedLod)
 	        {
 		        bool BorderFilter(int X, int Z) => X < 2 || Z < 2 || X > Chunk.BoundsX - 3 || Z > Chunk.BoundsZ - 3;
@@ -54,7 +54,6 @@ namespace Hedra.Engine.BiomeSystem
 			         */
 			        this.DefineBlocks(Blocks, Cache, 1, BorderFilter);
 			        this.DefineBlocks(Blocks, Cache, lod, (X, Z) => !BorderFilter(X, Z));
-		            this.PlaceStructures(Blocks, Cache, lod, (X,Z) => true);
                 }
                 else
 		        {
@@ -64,10 +63,13 @@ namespace Hedra.Engine.BiomeSystem
 			         */
 		            bool Filter(int X, int Z) => !BorderFilter(X, Z) && (X % GeneratedLod != 0 || Z % GeneratedLod != 0);
                     this.DefineBlocks(Blocks, Cache, lod, Filter);
-		            this.PlaceStructures(Blocks, Cache, lod, Filter);
                 }
 		        GeneratedLod = lod;
 	        }
+		    if (_firstGeneration)
+		    {
+		        this.PlaceStructures(Blocks, Cache);
+            }
 			this.StructuresPlaced = true;
 	        this._firstGeneration = false;
 	        this.FullyGenerated = lod == 1;
@@ -432,14 +434,13 @@ namespace Hedra.Engine.BiomeSystem
 	        return Type != BlockType.Air && Type != BlockType.Water && Type != BlockType.Seafloor;
 	    }
 
-	    public override void PlaceStructures(Block[][][] Blocks, RegionCache Cache, int Lod, Func<int, int, bool> Filter)
+	    public override void PlaceStructures(Block[][][] Blocks, RegionCache Cache)
 	    {
 		    var structs = World.StructureGenerator.Structures;
-	        for (var x = 0; x < this.Chunk.BoundsX; x+=Lod)
+	        for (var x = 0; x < this.Chunk.BoundsX; x++)
 	        {
-	            for (var z = 0; z < this.Chunk.BoundsZ; z+=Lod)
+	            for (var z = 0; z < this.Chunk.BoundsZ; z++)
 	            {
-	                if (!Filter(x, z)) continue;
                     int y = Chunk.GetHighestY(x, z);
                     var position = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
 	                var block = Blocks[x][y][z];

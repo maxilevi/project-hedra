@@ -55,15 +55,17 @@ namespace Hedra.Engine.BiomeSystem
 		    this.Chunk.CalculateBounds();
         }
 		
-		public static float PathFormula(float x, float z){
+		public static float PathFormula(float x, float z)
+        {
 			return (float) Math.Max(0, (0.5 - Math.Abs(OpenSimplexNoise.Evaluate(x * 0.0009f, z *  0.0009f) - 0.2)) - 0.425f) * 1f;
 		}
 		
-		public static float SmallFrequency(float x, float z){
+		public static float SmallFrequency(float x, float z)
+        {
 			return (float) (OpenSimplexNoise.Evaluate(x * 0.2, z * 0.2) * -0.15f * OpenSimplexNoise.Evaluate(x * 0.035, z * 0.035) * 2.0f);
 		}
 		
-		public virtual void PlaceStructures(Block[][][] Blocks, RegionCache Cache, int Lod, Func<int, int, bool> Filter)
+		public virtual void PlaceStructures(Block[][][] Blocks, RegionCache Cache)
         {
 			this.StructuresPlaced = true;
 		}
