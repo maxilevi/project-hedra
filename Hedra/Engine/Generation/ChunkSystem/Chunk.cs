@@ -92,13 +92,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Disposed) throw new ArgumentException($"Cannot build a disposed chunk.");
             if (!Initialized) throw new ArgumentException($"Chunk hasnt been initialized yet.");
-            if (IsGenerated) throw new ArgumentException($"Cannot generate an already existing chunk");
             _canDispose = false;
             Mesh.Position = new Vector3(OffsetX, 0, OffsetZ);
             lock (_blocksLock)
             {
                 Landscape.Generate(_blocks, _regionCache);
             }
+            _terrainBuilder.Sparsity = ChunkSparsity.From(this);
             IsGenerated = true;
         }
 
@@ -517,13 +517,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             : _blocks[Index];
 
         public Vector3[] TerrainVertices => _terrainVertices;
-
-        public void Reset()
-        {
-            Landscape.StructuresPlaced = false;
-            Mesh.Elements.Clear();
-            Mesh.InstanceElements.Clear();
-        }
 
         public void ForceDispose()
         {

@@ -23,8 +23,11 @@ namespace Hedra.Engine.BiomeSystem
         protected Chunk Chunk { get; }
 		protected int Seed { get; }
         public Random RandomGen { get; set; }
-		public bool BlocksSetted { get; set; }
-		public bool StructuresPlaced { get; set; }
+		public bool BlocksSetted { get; protected set; }
+		public bool StructuresPlaced { get; protected set; }
+		public bool FullyGenerated { get; protected set; }
+		protected int GeneratedLod { get; set; } = -1;
+		public bool HasToGenerateMoreData => Chunk.Lod < GeneratedLod && !FullyGenerated;
 
         protected BiomeGenerator(Chunk RefChunk)
         {
@@ -37,7 +40,7 @@ namespace Hedra.Engine.BiomeSystem
 
 		public abstract void Generate(Block[][][] Blocks, RegionCache Cache);
 		
-		public abstract void DefineBlocks(Block[][][] Blocks, RegionCache Cache);
+		public abstract void DefineBlocks(Block[][][] Blocks, RegionCache Cache, int Lod, Func<int, int, bool> Filter);
 		
 		public void BuildArray(Block[][][] Blocks)
         {
@@ -60,7 +63,7 @@ namespace Hedra.Engine.BiomeSystem
 			return (float) (OpenSimplexNoise.Evaluate(x * 0.2, z * 0.2) * -0.15f * OpenSimplexNoise.Evaluate(x * 0.035, z * 0.035) * 2.0f);
 		}
 		
-		public virtual void PlaceStructures(Block[][][] Blocks, RegionCache Cache)
+		public virtual void PlaceStructures(Block[][][] Blocks, RegionCache Cache, int Lod, Func<int, int, bool> Filter)
         {
 			this.StructuresPlaced = true;
 		}

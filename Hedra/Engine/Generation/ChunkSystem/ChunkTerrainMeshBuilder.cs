@@ -14,6 +14,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private readonly MeshStitcher _stitcher;
         private readonly WaterMeshStitcher _waterStitcher;
         private readonly Vector3[] _lodOffsets;
+        public ChunkSparsity Sparsity { get; set; }
         public ChunkTerrainMeshBuilderHelper Helper { get; }
 
         public ChunkTerrainMeshBuilder(Chunk Parent)
@@ -62,7 +63,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 output.HasWater |= borders.HasWater;
             }
             for (var k = 0; k < output.StaticData.Vertices.Count; k++) output.StaticData.Extradata.Add(0);
-            //output.WaterData = _waterPatcher.Process(output.WaterData, Lod);
+            output.WaterData = _waterPatcher.Process(output.WaterData, Lod);
             
             output.StaticData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             output.WaterData.Translate(new Vector3(OffsetX, 0, OffsetZ));
@@ -78,7 +79,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var hasNoise3D = false;
             var hasWater = false;
 
-            var addonColors = new List<Vector4>();
             var blockData = new VertexData();
             var waterData = new VertexData();
             var cell = new GridCell
@@ -96,6 +96,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         {
                             next = !next;
 
+                            if (Sparsity != null && (y < Sparsity.MiniumHeight || y > Sparsity.MaximumHeight)) continue;
                             if (!Filter(x, y, z)) continue;
                             if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
 

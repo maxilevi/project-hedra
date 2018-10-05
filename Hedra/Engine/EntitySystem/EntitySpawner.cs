@@ -148,7 +148,7 @@ namespace Hedra.Engine.EntitySystem
 			    return true;
 		    }
 
-		    return false;
+		    return Vector3.Dot(Physics.NormalAtPosition(Position), Vector3.UnitY) <= .35;
 	    }
 	    
 	    private Vector3 PlacementPosition()

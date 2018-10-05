@@ -22,6 +22,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private readonly object _lock;
         private bool _discard;
         private Vector3 _lastSortedPosition;
+        private int _lastCount;
 
         protected AbstractBuilder(SharedWorkerPool Pool)
         {
@@ -46,10 +47,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (_queue.Count > 0)
                 {
                     _closest.Position = GameManager.Player?.Position ?? Vector3.Zero;
-                    if ( (_lastSortedPosition - _closest.Position).LengthSquared > Chunk.Width * Chunk.Width)
+                    if ( (_lastSortedPosition - _closest.Position).LengthSquared > Chunk.Width * Chunk.Width || _lastCount != _queue.Count)
                     {
                         _queue.Sort(_closest);
                         _lastSortedPosition = _closest.Position;
+                        _lastCount = _queue.Count;
                     }
                     var chunk = _queue[0];
                     if (chunk?.Disposed ?? false) return;

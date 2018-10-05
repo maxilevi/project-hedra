@@ -32,14 +32,14 @@ namespace Hedra.Engine.Rendering.Geometry
 
         private static void ProcessBorder(Vector3[] Base, Vector3[] Border, VertexData BorderObject, VertexData BaseObject)
         {
-            for (var i = 0; i < Base.Length; i++)
+            /*for (var i = 0; i < Base.Length; i++)
             {
                 var nearesBorder = FindNearest(Border, Base[i]);
                 BaseObject.Vertices[BaseObject.Vertices.IndexOf(Base[i])] = nearesBorder;
-            }
+            }*/
             for (var i = 0; i < Border.Length; i++)
             {
-                var nearestBase = FindNearest(BaseObject.Vertices, Border[i]);
+                var nearestBase = FindNearest(Base, Border[i]);
                 BorderObject.Vertices[BorderObject.Vertices.IndexOf(Border[i])] = nearestBase;
             }
         }
