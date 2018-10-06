@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
@@ -18,102 +19,41 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of MountAIComponent.
 	/// </summary>
-	public class MountAIComponent : EntityComponent
+	public class MountAIComponent : BasicAIComponent
 	{
-		private MountAIType Type;
-		private Entity Target = null;
-		private Entity Owner = null;
-		private RideComponent RideComp = null;
-		private float WasAttackingTimer = 0f, PreviousHealth;
-		public bool DoLogic = true;
-		public float Damage {get; set;}
-		public MountAIComponent(Entity Parent, Entity Owner, MountAIType Type) : base(Parent)
+		private Entity _target;
+		private readonly Entity _owner;
+		private RideComponent _rideComp;
+		
+		public MountAIComponent(IEntity Parent, Entity Owner) : base(Parent)
 		{
-			this.Type = Type;
-			this.Owner = Owner;
-			this.Target = Owner;
-			this.PreviousHealth = Parent.Health;
-			
-			//Attack when owner is attacked
-			if(Owner.SearchComponent<DamageComponent>() != null){
-				Owner.SearchComponent<DamageComponent>().OnDamageEvent += delegate(DamageEventArgs Args) {
-					//Target = Args.Damager;
-				};
-			}
+			this._owner = Owner;
+			this._target = Owner;
 		}
 		
 		public override void Update()
 		{
-            /*
-			WasAttackingTimer -= Time.DeltaTime;
-			if(PreviousHealth != Parent.Health){
-				WasAttackingTimer = 8f;
-				PreviousHealth = Parent.Health;
+			if(!Enabled) return;
+			
+			if( _target != null && _target != _owner && (_target.Position - Parent.Position).LengthSquared > 72*72 ){
+				_target = _owner;
 			}
 			
-			if(WasAttackingTimer < 0f){
-				Parent.Health += 8f * Time.DeltaTime;
-			}*/
-		    //Parent.Health = Parent.MaxHealth;
-			
-			if(RideComp != null){
-				DoLogic = !RideComp.HasRider;
-			}else{
-				RideComp = Parent.SearchComponent<RideComponent>();
+			if( (Parent.Position - _owner.Position).LengthSquared > 128*128)
+			{
+				Parent.Position = _owner.BlockPosition + Vector3.UnitX * 12f;
 			}
 			
-			if(!DoLogic) return;
-			
-
-			if( Target != null && Target != Owner && (Target.Position - Parent.Position).LengthSquared > 72*72 ){
-				Target = Owner;
-			}
-			
-			if( (Parent.Position - Owner.Position).LengthSquared > 128*128){
-				Parent.Position = Owner.BlockPosition + Vector3.UnitX * 12f;
-			}
-			
-			float distance = (Target == Owner) ? 8 : 3;
+			float distance = (_target == _owner) ? 8 : 3;
 		    var distSqr = distance * distance;
 
-            if (Target != null && ((Target.Position - Parent.Position).LengthSquared > distSqr * Chunk.BlockSize * Chunk.BlockSize && !Parent.IsMoving
-                || (Target.Position - Parent.Position).LengthSquared > distSqr * .75f * Chunk.BlockSize * Chunk.BlockSize && Parent.IsMoving))
+            if (_target != null && ((_target.Position - Parent.Position).LengthSquared > distSqr * Chunk.BlockSize * Chunk.BlockSize && !Parent.IsMoving
+                || (_target.Position - Parent.Position).LengthSquared > distSqr * .75f * Chunk.BlockSize * Chunk.BlockSize && Parent.IsMoving))
 		    {
-		        Parent.Orientation = (Target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
+		        Parent.Orientation = (_target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
 		        Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
 		        Parent.Physics.DeltaTranslate(Parent.Speed * 8 * Parent.Orientation);
             }
-			if (Target != null && (Target.Position - Parent.Position).LengthSquared < distance * .75f * distance*.75f * Chunk.BlockSize * Chunk.BlockSize)
-            {
-                if (Target != null && Target != Owner)
-                {
-					Parent.Model.Attack(Target);
-					if(Target.IsDead) Target = null;
-				}
-			}
-
-			if( (Target == Owner || Target == null) ){
-				//bool FoundSomething = false;
-				/*for(int i = World.Entities.Count-1; i > -1; i--){
-					if( World.Entities[i] != Owner 
-					   && World.Entities[i] != Parent
-					   && !World.Entities[i].IsStatic
-					   && (World.Entities[i].Position - Parent.Position).LengthSquared < 72*72){
-						
-						Target = World.Entities[i];
-						FoundSomething = true;
-						break;
-					}
-				}*/
-				//if(!FoundSomething){
-				//	Target = Owner;
-				//}
-			}
 		}
-	}
-	
-	public enum MountAIType{
-		Wolf,
-		Horse
 	}
 }

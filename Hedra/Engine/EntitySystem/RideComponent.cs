@@ -21,20 +21,17 @@ namespace Hedra.Engine.EntitySystem
 	/// </summary>
 	public class RideComponent : EntityComponent, ITickable
     {
-		public IHumanoid Rider;
-		public bool HasRider;
-		public bool UnRidable = false;
-		public float HeightAddon = 0;
-		private BasicAIComponent AI;
+	    public bool HasRider { get; private set; }
+	    private IHumanoid _rider;
+		private BasicAIComponent _ai;
 		private HealthBarComponent _healthBar;
         private bool _shouldRide;
         private bool _shouldUnride;
         private bool _canRide;
         private bool _canUnride;
 
-        public RideComponent(Entity Parent) : base(Parent) {
-			AI = Parent.SearchComponent<BasicAIComponent>();
-			_healthBar = Parent.SearchComponent<HealthBarComponent>();
+        public RideComponent(IEntity Parent) : base(Parent)
+        {
             EventDispatcher.RegisterKeyDown(this, delegate(object Object, KeyEventArgs EventArgs)
             {
                 _shouldRide = EventArgs.Key == Key.E && _canRide;
@@ -42,7 +39,8 @@ namespace Hedra.Engine.EntitySystem
             });
 		}
 		
-		public override void Update(){
+		public override void Update()
+        {
 			var player = GameManager.Player;
 		    if (!HasRider && (player.BlockPosition - Parent.BlockPosition).LengthSquared < 12 * 12 && !player.IsRiding &&
 		        !player.IsCasting
@@ -65,10 +63,8 @@ namespace Hedra.Engine.EntitySystem
 		    {
 		        _canRide = false;
 		    }
-			if(AI == null) AI = Parent.SearchComponent<BasicAIComponent>();
-			if(_healthBar == null) _healthBar = Parent.SearchComponent<HealthBarComponent>();
 
-		    if (HasRider && Rider.IsRiding)
+		    if (HasRider && _rider.IsRiding)
 		    {
 		        _canUnride = true;
 		    }
@@ -76,18 +72,19 @@ namespace Hedra.Engine.EntitySystem
 		    {
 		        _canUnride = false;
 		    }
-			if( HasRider && Rider is LocalPlayer && _shouldUnride || HasRider && Rider.IsDead )
-				Rider.IsRiding = false;
+			if( HasRider && _rider is LocalPlayer && _shouldUnride || HasRider && _rider.IsDead )
+				_rider.IsRiding = false;
 
 
-			if(HasRider && !Rider.IsRiding){
-				Parent.Position = Rider.Position;
-			    Rider.Model.MountModel.AlignWithTerrain = true;
-			    Rider.Model.MountModel.HasRider = false;
-                Rider.Model.MountModel = null;
+			if(HasRider && !_rider.IsRiding)
+            {
+				Parent.Position = _rider.Position;
+			    _rider.Model.MountModel.AlignWithTerrain = true;
+			    _rider.Model.MountModel.HasRider = false;
+                _rider.Model.MountModel = null;
 				HasRider = false;
-				if(AI != null) AI.Enabled = true;
-				if(_healthBar != null) _healthBar.Hide = false;
+				_ai.Enabled = true;
+				_healthBar.Hide = false;
 				
 				
 				Parent.Physics.UsePhysics = true;
@@ -95,27 +92,26 @@ namespace Hedra.Engine.EntitySystem
 				Parent.SearchComponent<DamageComponent>().Immune = false;				
 			}
 		}
-		
-		public void Ride(IHumanoid Entity){
-			if(HasRider || UnRidable || Entity.IsRiding)return;
+
+	    private void Ride(IHumanoid Entity)
+		{
+			if(HasRider || Entity.IsRiding) return;
 			
-			Rider = Entity;
-			Rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Rider, -Rider.Speed + Parent.Speed * .5f), () => Rider != null && Rider.IsRiding);
+			_rider = Entity;
+			_rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(_rider, -_rider.Speed + Parent.Speed * .5f), () => _rider != null && _rider.IsRiding);
 			HasRider = true;
-			Rider.IsRiding = true;
-            Rider.Model.MountModel = (QuadrupedModel) Parent.Model;
-		    Rider.Model.MountModel.AlignWithTerrain = false;
-		    Rider.Model.MountModel.HasRider = true;
+			_rider.IsRiding = true;
+            _rider.Model.MountModel = (QuadrupedModel) Parent.Model;
+		    _rider.Model.MountModel.AlignWithTerrain = false;
+		    _rider.Model.MountModel.HasRider = true;
             Parent.Physics.UsePhysics = false;
 			Parent.Physics.HasCollision = false;
 			Parent.SearchComponent<DamageComponent>().Immune = true;
 
-		    if (AI == null) AI = Parent.SearchComponent<BasicAIComponent>();
-		    if (_healthBar == null) _healthBar = Parent.SearchComponent<HealthBarComponent>();
-
-
-            if (AI != null) AI.Enabled = false;
-			if(_healthBar != null && Rider is LocalPlayer) _healthBar.Hide = true;
+		    _ai = Parent.SearchComponent<BasicAIComponent>();
+		    _ai.Enabled = false;
+		    _healthBar = Parent.SearchComponent<HealthBarComponent>();
+			_healthBar.Hide = _rider is LocalPlayer || _healthBar.Hide;
 		}
 	}
 }

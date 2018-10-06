@@ -110,6 +110,8 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.CullFace);
             Shader.Unbind();
+
+            Text.Draw();
         }
 
         public Vector2 Scale { get; set; }
@@ -159,7 +161,6 @@ namespace Hedra.Engine.Rendering.UI
 
         private void Build()
         {
-            DrawManager.UIRenderer.Add(this, Order);
             if (_optionalText == null)
             {
                 Text = new RenderableText(_value() + " / " + _max(), Position, Color.White,
@@ -171,7 +172,7 @@ namespace Hedra.Engine.Rendering.UI
                     FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
                 UpdateTextRatio = false;
             }
-            DrawManager.UIRenderer.Add(Text, this.Order);
+            DrawManager.UIRenderer.Add(this, this.Order);
             _inPanel.AddElement(Text);
             
             if (_barBlueprint == 0)

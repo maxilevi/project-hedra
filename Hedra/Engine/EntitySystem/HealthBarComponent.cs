@@ -27,7 +27,6 @@ namespace Hedra.Engine.EntitySystem
         private bool _textUpdated;
         public Color FontColor = Color.White;
 
-
         public bool Hide { get; set; }
 
         public string Name
@@ -52,7 +51,6 @@ namespace Hedra.Engine.EntitySystem
 
             DrawManager.UIRenderer.Remove(_healthBar);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
-            DrawManager.UIRenderer.Remove(_healthBar.Text);
         }
 
         public HealthBarComponent(IEntity Parent) : base(Parent)
@@ -66,23 +64,34 @@ namespace Hedra.Engine.EntitySystem
 
             DrawManager.UIRenderer.Remove(_healthBar);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
-            DrawManager.UIRenderer.Remove(_healthBar.Text);
         }
 
         public override void Update()
         {
-            if ((Parent.BlockPosition.Xz.ToVector3() + Parent.Position.Y * Vector3.UnitY -
-                 GameManager.Player.Position).LengthSquared < 45 * 45)
-            {
-                _healthBar.Enable();
-                _targetBarSize = 1;
-                _show = true;
-            }
-            else
+            _show = (Parent.Model.Position.Xz - GameManager.Player.Position.Xz).LengthSquared < 45 * 45 
+                && !Hide
+                && !Parent.IsDead
+                && !GameSettings.Paused
+                && !GameManager.IsLoading;
+
+            _targetBarSize = _show ? 1 : 0;
+
+            _barSize = Mathf.Lerp(_barSize, _targetBarSize, (float)Time.DeltaTime * 16f);
+            _healthBar.Text.UIText.UIText.Scale = _originalTextScale * _barSize * _textEnabled;
+
+            var product = 
+                Mathf.DotProduct(GameManager.Player.View.CrossDirection, (Parent.Position - GameManager.Player.Position).NormalizedFast());
+            if (_barSize <= 0.5f || product <= 0.5f)
             {
                 _healthBar.Disable();
                 _targetBarSize = 0;
-                _show = false;
+                _textEnabled = 0; 
+            }
+            else
+            {
+                _healthBar.Enable();
+                _targetBarSize = 1;
+                _textEnabled = 1;
             }
         }
 
@@ -94,31 +103,9 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Draw()
         {
-            _barSize = Mathf.Lerp(_barSize, _targetBarSize, (float) Time.DeltaTime * 16f);
-            _healthBar.Text.UIText.UIText.Scale = _originalTextScale * _barSize * _textEnabled;
+            if(Parent.Model == null) return;
 
-            if (_barSize <= 0.5f || Parent.IsDead || GameSettings.Paused || Hide || !_show || GameManager.IsLoading)
-            {
-                _healthBar.Disable();
-                _textEnabled = 0;
-                return;
-            }
-
-            var player = GameManager.Player;
-            float product = Mathf.DotProduct(player.View.CrossDirection,
-                (Parent.Position - player.Position).NormalizedFast());
-            if (product <= 0.5f)
-            {
-                _healthBar.Disable();
-                _textEnabled = 0;
-                return;
-            }
-
-            _healthBar.Enable();
-            _textEnabled = 1;
-
-            Vector4 eyeSpace =
-                Vector4.Transform(new Vector4(Parent.Position + (Parent.Model.Height+1) * Vector3.UnitY, 1),
+            Vector4 eyeSpace = Vector4.Transform(new Vector4(Parent.Position + (Parent.Model.Height+1) * Vector3.UnitY, 1),
                     DrawManager.FrustumObject.ModelViewMatrix);
             Vector4 homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
             Vector3 ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
