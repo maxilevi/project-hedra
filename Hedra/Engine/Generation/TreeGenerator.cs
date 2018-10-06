@@ -7,10 +7,12 @@
 using System;
 using Hedra.Engine.Rendering;
 using System.Collections.Generic;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.PlantSystem;
 using Hedra.Engine.TreeSystem;
 using OpenTK;
 
@@ -23,91 +25,93 @@ namespace Hedra.Engine.Generation
 	{
 	    private readonly Vector3[] _previousTrees = new Vector3[8];
 
-		public void GenerateTree(Vector3 Position, BiomeSystem.Region BiomeRegion, TreeDesign Design)
+		public PlacementObject CanGenerateTree(Vector3 Position, Region BiomeRegion, int Lod)
 		{
-		    Chunk underChunk = World.GetChunkAt(Position);
-            if(underChunk == null) return;
+			var underChunk = World.GetChunkAt(Position);
+		    if (underChunk == null) return default(PlacementObject);
+		    var rng = new Random(BiomeGenerator.GenerateSeed(Position.Xz));
+            var addon = new Vector3(
+	            rng.NextFloat() * underChunk.BoundsX - underChunk.BoundsX * .5f,
+	            0,
+	            rng.NextFloat() * underChunk.BoundsZ - underChunk.BoundsZ * .5f
+	            );
+			var blockSpace = World.ToBlockSpace(Position);
+			
+			if (blockSpace.X + addon.X / Chunk.BlockSize > underChunk.BoundsX) addon.X = 0;
+			if (blockSpace.Z + addon.Z / Chunk.BlockSize > underChunk.BoundsZ) addon.Z = 0;
+			addon.X = (float) Math.Round(addon.X / (float)Lod) * Lod;
+			addon.Z = (float) Math.Round(addon.Z / (float)Lod) * Lod;
+			
+			var height = Physics.HeightAtPosition(Position, Lod);
+		    var normal = Physics.NormalAtPosition(Position, Lod);
+			
+			if (Vector3.Dot(normal, Vector3.UnitY) <= .2f) return default(PlacementObject);
+			
+			const float valueFactor = 1.05f;
+			float spaceBetween;
+			float noiseValue;
 
-			Random rng = new Random(World.Seed + 24121);
-			var addon = new Vector3(rng.NextFloat() * 32f - 16f, 0, rng.NextFloat() * 32f - 16f);
-		    Vector3 blockSpace = World.ToBlockSpace(Position);
-
-		    const float valueFactor = 1.05f;
-		    float spaceBetween;
-		    float noiseValue;
-
-            if (World.MenuSeed == World.Seed)
-            {
-                //This old noise doesnt support negative coordinates
-                //And I will leave it here because the menu looks good with it.
-			    spaceBetween = Position.X > 0 && Position.Z > 0 
-                    ? SimplexNoise.Noise.Generate(Position.X * .001f, (Position.Z + 100) * .001f) * 75f
-                    : int.MaxValue;
-                noiseValue = Math.Min(Math.Max(0, Math.Abs(spaceBetween / 75f) * valueFactor)+.3f, 1.0f);
-            }
-            else
+			if (World.MenuSeed == World.Seed)
 			{
-			    spaceBetween = SpaceNoise(Position.X, Position.Z);
-			    noiseValue = Math.Min(Math.Max(0, Math.Abs(spaceBetween / 40f) * valueFactor) + .3f, 1.0f);
-            }
+				//This old noise doesnt support negative coordinates
+				//And I will leave it here because the menu looks good with it.
+				spaceBetween = Position.X > 0 && Position.Z > 0 
+					? SimplexNoise.Noise.Generate(Position.X * .001f, (Position.Z + 100) * .001f) * 75f
+					: int.MaxValue;
+				noiseValue = Math.Min(Math.Max(0, Math.Abs(spaceBetween / 75f) * valueFactor)+.3f, 1.0f);
+			}
+			else
+			{
+				spaceBetween = SpaceNoise(Position.X, Position.Z);
+				noiseValue = Math.Min(Math.Max(0, Math.Abs(spaceBetween / 40f) * valueFactor) + .3f, 1.0f);
+			}
 			if(spaceBetween < 0) spaceBetween = -spaceBetween * 16f;
 
-		    if (World.MenuSeed != World.Seed)
-		        spaceBetween += BiomeRegion.Trees.PrimaryDesign.Spacing;
-		    else
-		        spaceBetween = 80f;
-
+			if (World.MenuSeed != World.Seed)
+				spaceBetween += BiomeRegion.Trees.PrimaryDesign.Spacing;
+			else
+				spaceBetween = 80f;
 
 			for(var i = 0; i < _previousTrees.Length; i++){
 				if( (Position - _previousTrees[i] ).LengthSquared < spaceBetween * spaceBetween)
-					return;	
+					return default(PlacementObject);	
 			}
-
-		    if (blockSpace.X + addon.X / Chunk.BlockSize > 15) addon.X = 0;
-		    if (blockSpace.Z + addon.Z / Chunk.BlockSize > 15) addon.Z = 0;
-
-		    float height = Physics.HeightAtPosition(Position + addon);
-		    Vector3 normal = Physics.NormalAtPosition(Position + addon + Vector3.UnitY * height);
-
-		    if (Vector3.Dot(normal, Vector3.UnitY) <= .2f)
-                return;
-
-            for (var i = _previousTrees.Length-1; i > 0; i--)
-		    {
-		        _previousTrees[i] = _previousTrees[i - 1];
-		    }
-		    _previousTrees[0] = Position;
 			
-			for(var x = -2; x < 2; x++)
+			for (var i = _previousTrees.Length-1; i > 0; i--)
 			{
-				for(var z = -2; z < 2; z++)
-				{
-					var bDens = Physics.HeightAtPosition(
-                        new Vector3( (blockSpace.X+ x) * Chunk.BlockSize + underChunk.OffsetX, 0, (blockSpace.Z+ z) * Chunk.BlockSize + underChunk.OffsetZ)
-                        );
-
-					var difference = Math.Abs(bDens - height);
-
-					if(difference > 10)
-						return;
-				}
+				_previousTrees[i] = _previousTrees[i - 1];
 			}
+					
+			_previousTrees[0] = Position;
 
-            float extraScale = new Random(World.Seed + 1111).NextFloat() * 5 + 4;
-			float scale = 10 + rng.NextFloat() * 3.5f;
+			return new PlacementObject
+			{
+				Noise = noiseValue,
+				Placed = true,
+				Position = Position.Xz.ToVector3() + addon + Vector3.UnitY * height
+			};
+		}
+		
+		public void GenerateTree(PlacementObject Placement, Region BiomeRegion, TreeDesign Design)
+		{
+		    Chunk underChunk = World.GetChunkAt(Placement.Position);
+			var rng = new Random(BiomeGenerator.GenerateSeed(Placement.Position.Xz));
+
+            var extraScale = new Random(World.Seed + 1111).NextFloat() * 5 + 4;
+			var scale = 10 + rng.NextFloat() * 3.5f;
 
 			scale *= extraScale * .5f;
 			scale += 8 + rng.NextFloat() * 4f;
-		    scale *= noiseValue;
+		    scale *= Placement.Noise;
 
-		    VertexData originalModel = Design.Model;
-            VertexData model = originalModel.Clone();
+		    var originalModel = Design.Model;
+            var model = originalModel.Clone();
 
-		    Matrix4 transMatrix = Matrix4.CreateScale(new Vector3(scale, scale, scale) * 1.5f );
+		    var transMatrix = Matrix4.CreateScale(new Vector3(scale, scale, scale) * 1.5f );
 			transMatrix *=  Matrix4.CreateRotationY( rng.NextFloat() * 360f);
-			transMatrix *= Matrix4.CreateTranslation( new Vector3(Position.X, height, Position.Z) + addon );
+			transMatrix *= Matrix4.CreateTranslation( Placement.Position );
 
-			float windRng = Utils.Rng.NextFloat(); 
+			var windRng = Utils.Rng.NextFloat(); 
 			model.Extradata.AddRange( model.GenerateWindValues(AssetManager.ColorCode1, windRng) );
 		    model.AddExtraData(AssetManager.ColorCode2, model.GenerateWindValues(AssetManager.ColorCode2, windRng));
 
@@ -131,24 +135,27 @@ namespace Hedra.Engine.Generation
 		    model = Design.Paint(model, woodColor, leafColor);
 		    model.GraduateColor(Vector3.UnitY);
 
-            List<CollisionShape> shapes = Design.GetShapes(originalModel);
-			foreach (CollisionShape originalShape in shapes)
-			{
-			    var shape = (CollisionShape) originalShape.Clone();
-			    shape.Transform(transMatrix);
-			    underChunk.AddCollisionShape( shape );
-			}
-
-		    var data = new InstanceData
+		    if (underChunk != null)
 		    {
-		        ExtraData = model.Extradata,
-		        MeshCache = originalModel,
-		        Colors = model.Colors,
-		        TransMatrix = transMatrix
-		    };
+		        List<CollisionShape> shapes = Design.GetShapes(originalModel);
+		        foreach (CollisionShape originalShape in shapes)
+		        {
+		            var shape = (CollisionShape) originalShape.Clone();
+		            shape.Transform(transMatrix);
+		            underChunk.AddCollisionShape(shape);
+		        }
 
-		    CacheManager.Check(data);
-			underChunk?.StaticBuffer?.InstanceElements?.Add(data);
+		        var data = new InstanceData
+		        {
+		            ExtraData = model.Extradata,
+		            MeshCache = originalModel,
+		            Colors = model.Colors,
+		            TransMatrix = transMatrix
+		        };
+
+		        CacheManager.Check(data);
+		        underChunk.StaticBuffer.InstanceElements.Add(data);
+		    }
 		}
 
 	    public float SpaceNoise(float X, float Z)
@@ -156,13 +163,11 @@ namespace Hedra.Engine.Generation
 	        return (float) OpenSimplexNoise.Evaluate(X * .004f, (Z + 100) * .004f) * 40f;
 	    }
     }
-	
-	public enum TreeType{
-		Pine,
-		Cypress,
-		Oak,
-		Tall,
-        Apple,
-		Dead
+
+	public struct PlacementObject
+	{
+		public Vector3 Position { get; set; }
+		public float Noise { get; set; }
+		public bool Placed { get; set; }
 	}
 }

@@ -23,7 +23,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     if (h > highest) highest = h;
                 } 
             }
-            return new Vector2(lowest-1, highest+1);
+            return new Vector2(lowest-2, highest+2);
         }
 
         private static float Highest(int X, int Z, Chunk Parent)

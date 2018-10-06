@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.WorldBuilding;
@@ -68,8 +69,13 @@ namespace Hedra.Engine.BiomeSystem
 	        }
 		    if (_firstGeneration)
 		    {
-		        this.PlaceStructures(Blocks, Cache);
+			    this.DoTreeAndStructurePlacements(Blocks, Cache, lod);
             }
+
+			if (lod == 1)
+			{
+				this.PlaceEnviroment(Blocks, Cache);
+			}
 			this.StructuresPlaced = true;
 	        this._firstGeneration = false;
 	        this.FullyGenerated = lod == 1;
@@ -434,7 +440,7 @@ namespace Hedra.Engine.BiomeSystem
 	        return Type != BlockType.Air && Type != BlockType.Water && Type != BlockType.Seafloor;
 	    }
 
-	    public override void PlaceStructures(Block[][][] Blocks, RegionCache Cache)
+	    protected override void PlaceEnviroment(Block[][][] Blocks, RegionCache Cache)
 	    {
 		    var structs = World.StructureGenerator.Structures;
 	        for (var x = 0; x < this.Chunk.BoundsX; x++)
@@ -448,31 +454,65 @@ namespace Hedra.Engine.BiomeSystem
                     if(block.Type == BlockType.Seafloor) continue;
 	                
 	                Region region = Cache.GetRegion(position);
-	                this.LoopStructures(x, z, structs, out bool noWeedZone, out bool noTreesZone, out bool inMerchant);
+	                this.LoopStructures(x, z, structs, out bool noWeedZone, out _, out _);
 	                this.DoEnviromentPlacements(position, noWeedZone, region);
-
-	                if (block.Type != BlockType.Grass) continue;
-	                if (World.Seed == World.MenuSeed)
-	                {
-	                    //Is menu, force a platform
-	                    if ((Scenes.MenuBackground.DefaultPosition.Xz - new Vector2(
-	                             Chunk.OffsetX + x * Chunk.BlockSize,
-	                             Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
-	                    if ((Scenes.MenuBackground.CreatorPosition.Xz - new Vector2(
-	                             Chunk.OffsetX + x * Chunk.BlockSize,
-	                             Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
-	                    if ((Scenes.MenuBackground.CampfirePosition.Xz - new Vector2(
-	                             Chunk.OffsetX + x * Chunk.BlockSize,
-	                             Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 48 * 48) continue;
-	                }
-
-	                if(noTreesZone) continue;
-
-	                float noise = (float) OpenSimplexNoise.Evaluate(position.X * 0.005f, position.Z * 0.005f);
-	                World.TreeGenerator.GenerateTree(position, region, region.Trees.GetDesign( (int) (noise * 10000) ));
 	            }
 	        }
 	    }
+
+		private void DoTreeAndStructurePlacements(Block[][][] Blocks, RegionCache Cache, int Lod)
+		{
+			var structs = World.StructureGenerator.Structures;
+			for (var _x = 0; _x < this.Chunk.BoundsX; _x++)
+			{
+				for (var _z = 0; _z < this.Chunk.BoundsZ; _z++)
+				{
+					var coordinates = GetNearest(_x, _z, Lod);
+					var x = (int) coordinates.X;
+					var z = (int) coordinates.Y;
+					var y = Chunk.GetHighestY(x, z);
+					var block = Blocks[x][y][z];
+
+					if (block.Type != BlockType.Grass) continue;
+	                
+					this.LoopStructures(_x, _z, structs, out _, out var noTreesZone, out _);
+
+					if (World.Seed == World.MenuSeed)
+					{
+						//Is menu, force a platform
+						if ((Scenes.MenuBackground.DefaultPosition.Xz - new Vector2(
+							     Chunk.OffsetX + x * Chunk.BlockSize,
+							     Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
+						if ((Scenes.MenuBackground.CreatorPosition.Xz - new Vector2(
+							     Chunk.OffsetX + x * Chunk.BlockSize,
+							     Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
+						if ((Scenes.MenuBackground.CampfirePosition.Xz - new Vector2(
+							     Chunk.OffsetX + x * Chunk.BlockSize,
+							     Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 48 * 48) continue;
+					}
+
+					if(noTreesZone) continue;
+
+					var realPosition = new Vector3(Chunk.OffsetX + _x * Chunk.BlockSize, y-1, Chunk.OffsetZ + _z * Chunk.BlockSize);
+					var samplingPosition = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
+					
+					var region = Cache.GetRegion(realPosition);
+					var noise = (float) OpenSimplexNoise.Evaluate(realPosition.X * 0.005f, realPosition.Z * 0.005f);
+					var placementObject = World.TreeGenerator.CanGenerateTree(samplingPosition, region, Lod);
+					if (!placementObject.Placed) continue;
+					placementObject.Position += -samplingPosition.Xz.ToVector3() + realPosition.Xz.ToVector3();
+					World.TreeGenerator.GenerateTree(placementObject, region, region.Trees.GetDesign( (int) (noise * 10000) ));
+				}
+			}
+		}
+		
+		private Vector2 GetNearest(int X, int Z, int Lod)
+		{
+			var directionX = X == 0 ? +(X % Lod) : X == Chunk.BoundsX - Lod ? -(X % Lod) : 0; 
+			var directionZ = Z == 0 ? +(Z % Lod) : Z == Chunk.BoundsZ - Lod ? -(Z % Lod) : 0;
+			return new Vector2(X % Lod == 0 ? X : X + directionX, Z % Lod == 0 ? Z : Z + directionZ);
+		}
+		
 
 	    private void DoEnviromentPlacements(Vector3 Position, bool HideEnviroment, Region Biome)
 	    {

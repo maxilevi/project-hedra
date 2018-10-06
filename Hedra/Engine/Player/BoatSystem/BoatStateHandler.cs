@@ -80,7 +80,7 @@ namespace Hedra.Engine.Player.BoatSystem
             
         }
 
-        public bool CanEnable => !_player.IsGrounded;
+        public bool CanEnable => !_player.IsGrounded && !_player.IsRiding;
         
         public bool Enabled
         {

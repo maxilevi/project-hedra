@@ -94,25 +94,27 @@ namespace Hedra.Engine.PhysicsSystem
 			return nearestWaterBlockY;
 		}
 		
-        public static float HeightAtPosition(float X, float Z){
-			 return HeightAtPosition(new Vector3(X,0,Z));
+        public static float HeightAtPosition(float X, float Z, int Lod = 1)
+        {
+			 return HeightAtPosition(new Vector3(X,0,Z), Lod);
 		}
 		
-		public static float HeightAtPosition(Vector3 BlockPosition)
+		public static float HeightAtPosition(Vector3 BlockPosition, int Lod = 1)
 		{
 			
-			if(World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Noise3D){
+			if(World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Noise3D)
+            {
 				return HeightAtBlock( new Vector3(BlockPosition.X, World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z), BlockPosition.Z) );
 			}
 			
-			var densityX = World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z ).Density;
-			var densityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
-			var densityXz = World.GetHighestBlockAt( (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
+			var densityX = World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize * Lod, (int)BlockPosition.Z ).Density;
+			var densityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize* Lod).Density;
+			var densityXz = World.GetHighestBlockAt( (int)BlockPosition.X + (int) Chunk.BlockSize * Lod, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
 			var density = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Density;
 
-			var yx = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z);
-			var yz = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z + (int) Chunk.BlockSize);
-			var yxz = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z + (int) Chunk.BlockSize);
+			var yx = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize * Lod, (int) BlockPosition.Z);
+			var yz = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z + (int) Chunk.BlockSize* Lod);
+			var yxz = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize * Lod, (int) BlockPosition.Z + (int) Chunk.BlockSize);
 			var yh = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z);
 				
 			Vector3 blockSpace = World.ToBlockSpace(BlockPosition);
@@ -173,66 +175,21 @@ namespace Hedra.Engine.PhysicsSystem
 		    return height0 * Chunk.BlockSize + (BlockPosition.X < 0 || BlockPosition.Z < 0 ? .25f : 0);
         }
 
-	    public static float LowestHeight(float X, float Z)
-	    {
-	        return LowestHeight(new Vector3(X, 0, Z));
-	    }
-        public static float LowestHeight(Vector3 BlockPosition)
+        public static Vector3 NormalAtPosition(float X, float Z, int Lod = 1)
         {
-
-            Chunk UnderChunk = World.GetChunkAt(BlockPosition);
-
-            /*if (World.GetNearestBlockAt((int)BlockPosition.X, (int)BlockPosition.Y + 1, (int)BlockPosition.Z).Noise3D)
-            {
-                float Nearest = UnderChunk.NearestVertex(BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + Vector3.UnitY * Chunk.BlockSize).Y;
-                return Nearest;
-            }*/
-
-
-            float DensityX = World.GetLowestBlock((int)BlockPosition.X + (int)Chunk.BlockSize, (int)BlockPosition.Z).Density;
-            float DensityZ = World.GetLowestBlock((int)BlockPosition.X, (int)BlockPosition.Z + (int)Chunk.BlockSize).Density;
-            float DensityXZ = World.GetLowestBlock((int)BlockPosition.X + (int)Chunk.BlockSize, (int)BlockPosition.Z + (int)Chunk.BlockSize).Density;
-            float Density = World.GetLowestBlock((int)BlockPosition.X, (int)BlockPosition.Z).Density;
-
-            float lowestY = World.GetLowestY((int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z);
-            float YX = lowestY;
-            float YZ = lowestY;
-            float YXZ = lowestY;
-            float YH = lowestY;
-
-
-            Vector3 BlockSpace = World.ToBlockSpace(BlockPosition);
-            Vector2 Coords = new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize, Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize;
-
-            Vector3 Bottom = new Vector3(BlockSpace.X, YH + Density, BlockSpace.Z);
-            Vector3 Right = new Vector3(BlockSpace.X + 1, YX + DensityX, BlockSpace.Z);
-            Vector3 Top = new Vector3(BlockSpace.X + 1, YXZ + DensityXZ, BlockSpace.Z + 1);
-            Vector3 Front = new Vector3(BlockSpace.X, YZ + DensityZ, BlockSpace.Z + 1);
-
-            float Height = 0;
-            if (Coords.X < 1 - Coords.Y)
-                Height = Mathf.BarryCentric(new Vector3(0, Bottom.Y, 0), new Vector3(1, Right.Y, 0), new Vector3(0, Front.Y, 1), Coords);
-            else
-                Height = Mathf.BarryCentric(new Vector3(1, Right.Y, 0), new Vector3(1, Top.Y, 1), new Vector3(0, Front.Y, 1), Coords);
-
-            return Height * Chunk.BlockSize;
-        }
-
-        public static Vector3 NormalAtPosition(float X, float Z){
-			return NormalAtPosition(new Vector3(X,0,Z));
+			return NormalAtPosition(new Vector3(X,0,Z), Lod);
 		}
 		
-		public static Vector3 NormalAtPosition(Vector3 BlockPosition){
-			Chunk UnderChunk = World.GetChunkAt(BlockPosition);
-			
-			float DensityX = World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z ).Density;
-			float DensityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
-			float DensityXZ = World.GetHighestBlockAt( (int)BlockPosition.X + (int) Chunk.BlockSize, (int)BlockPosition.Z + (int) Chunk.BlockSize ).Density;
+		public static Vector3 NormalAtPosition(Vector3 BlockPosition, int Lod = 1)
+		{
+			float DensityX = World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize * Lod, (int)BlockPosition.Z ).Density;
+			float DensityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize * Lod ).Density;
+			float DensityXZ = World.GetHighestBlockAt( (int)BlockPosition.X + (int) Chunk.BlockSize* Lod, (int)BlockPosition.Z + (int) Chunk.BlockSize * Lod ).Density;
 			float Density = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Density;
 			
-			float YX = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z);
-			float YZ = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z + (int) Chunk.BlockSize);
-			float YXZ = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z + (int) Chunk.BlockSize);
+			float YX = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize * Lod, (int) BlockPosition.Z);
+			float YZ = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z + (int) Chunk.BlockSize * Lod);
+			float YXZ = World.GetHighestY( (int) BlockPosition.X + (int) Chunk.BlockSize * Lod, (int) BlockPosition.Z + (int) Chunk.BlockSize* Lod);
 			float YH = World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z);
 			
 			
@@ -253,7 +210,8 @@ namespace Hedra.Engine.PhysicsSystem
 			return -Normal;
 		}
 		
-		public static bool IsColliding(Vector3 Position, Box Hitbox){
+		public static bool IsColliding(Vector3 Position, Box Hitbox)
+		{
 			Chunk UnderChunk = World.GetChunkAt(Position);
 			Chunk UnderChunkR = World.GetChunkAt(Position + new Vector3(Chunk.Width,0, 0));
 			Chunk UnderChunkL = World.GetChunkAt(Position - new Vector3(Chunk.Width,0, 0));

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Hedra.Engine.CacheSystem;
@@ -29,6 +30,8 @@ namespace Hedra.Engine.Loader
 	    private bool _extraDebugView;
         private bool _fpsOnTitle;
         private string _originalTitle;
+        private int _voxelCount;
+        private int _chunkCount = 1;
 
         public DebugInfoProvider()
         {
@@ -77,11 +80,15 @@ namespace Hedra.Engine.Loader
 			{
 				_debugPanel.Enable();
 				var underChunk = World.GetChunkByOffset(chunkSpace);
-				var text = $"X = {(int)player.BlockPosition.X} Y = {(int)(player.BlockPosition.Y)} Z={(int)player.BlockPosition.Z}";
+			    var chunkBound = Chunk.Width / Chunk.BlockSize;
+			    var defaultVoxelCount = chunkBound * Chunk.Height * chunkBound;
+                var text = $"X = {(int)player.BlockPosition.X} Y = {(int)(player.BlockPosition.Y)} Z={(int)player.BlockPosition.Z}";
 				text += 
 					$"\n\nChunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
+			    text +=
+			        $"\n\navg_vcount={_voxelCount / _chunkCount / 1000}k / {defaultVoxelCount/1000}k voxel_count={_voxelCount/1000}k";
 				text += 
-					$"\n\nLights={ShaderManager.UsedLights}/{ShaderManager.MaxLights}Pitch={player.View.Pitch}";
+					$"\n\nLights={ShaderManager.UsedLights}/{ShaderManager.MaxLights} Pitch={player.View.Pitch}";
 				text += 
 					$"\n\nMesh Queue = {World.MeshQueueCount} Cache={CacheManager.CachedColors.Count} | {CacheManager.CachedExtradata.Count} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00}";
 				text += 
@@ -103,6 +110,10 @@ namespace Hedra.Engine.Loader
 				        Bitmap = WorldRenderer.StaticBuffer.Indices.Draw(),
 				        Path = "Debug:GeometryPool"
 			        });
+                    var borderWidth = (chunkBound-1) * Chunk.Height * 8;
+                    _voxelCount = (int) World.Chunks.Select(
+                        C => (defaultVoxelCount - borderWidth) / C.Landscape.GeneratedLod + borderWidth).Sum();
+			        _chunkCount = Math.Max(World.Chunks.Count, 1);
 			    }
 			}
             else
