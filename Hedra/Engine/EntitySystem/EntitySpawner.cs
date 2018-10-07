@@ -92,7 +92,7 @@ namespace Hedra.Engine.EntitySystem
         {
 		    var region = World.BiomePool.GetRegion(NewPosition);
             var mountain = NewPosition.Y > 60 * Chunk.BlockSize;
-		    var shore = NewPosition.Y / Chunk.BlockSize > Chunk.BaseHeight && NewPosition.Y / Chunk.BlockSize < 2 + Chunk.BaseHeight;
+		    var shore = NewPosition.Y / Chunk.BlockSize > 0 && NewPosition.Y / Chunk.BlockSize < 2;
 		    var forest = !shore && World.TreeGenerator.SpaceNoise(NewPosition.X, NewPosition.Z) > 0;
             var plains = !forest && !shore && !mountain;
 

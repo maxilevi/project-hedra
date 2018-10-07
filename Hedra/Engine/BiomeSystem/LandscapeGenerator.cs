@@ -44,7 +44,7 @@ namespace Hedra.Engine.BiomeSystem
 	            this.BlocksSetted = true;
             }
 
-		    var lod = Chunk.Lod;
+			var lod = Chunk.Lod;
 	        if (_firstGeneration || lod < GeneratedLod)
 	        {
 		        bool BorderFilter(int X, int Z) => X < 2 || Z < 2 || X > Chunk.BoundsX - 3 || Z > Chunk.BoundsZ - 3;
@@ -263,7 +263,7 @@ namespace Hedra.Engine.BiomeSystem
 			this.HandlePlateaus(x, z, smallFrequency, ref height, plateaus, nearGiantTree, nearCollidableStructure,
 				ref river, ref riverBorders, ref path, ref blockGroundworksModifier, ref pathClamped, out var inPlateau);
 
-			height = Math.Max(0, height + Chunk.BaseHeight);
+			height = Math.Max(0, height);
 			
 			for (var i = 0; i < noise3D.Length; i++)
 			{

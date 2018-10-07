@@ -35,7 +35,7 @@ namespace Hedra.Engine.Generation
 
         public CollidableStructure(StructureDesign Design, Vector3 Position, Plateau Mountain)
         {
-            this.Position = new Vector3(Position.X, (Mountain?.MaxHeight + Chunk.BaseHeight + 1) * Chunk.BlockSize ?? Position.Y, Position.Z);
+            this.Position = new Vector3(Position.X, (Mountain?.MaxHeight + 1) * Chunk.BlockSize ?? Position.Y, Position.Z);
             this.Mountain = Mountain;
             this.Design = Design;
             this.Parameters = new AttributeArray();

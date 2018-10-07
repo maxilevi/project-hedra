@@ -74,17 +74,17 @@ namespace Hedra.Engine.EntitySystem
 	        set => Parent.BlockPosition = new Vector3(value.X, value.Y / Chunk.BlockSize, value.Z);
 	    }
 
-	    public override void Update(){
+	    public override void Update()
+	    {
 			if(!UsePhysics)
 				return;
-
+		    
 			_deltaTime = this.Timestep;
 
 	        if (CanCollide)
 	        {
-
 	            _underChunk = World.GetChunkAt(Parent.Position);
-	            _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.Width, 0, 0));
+                _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.Width, 0, 0));
 	            _underChunkL = World.GetChunkAt(Parent.Position - new Vector3(Chunk.Width, 0, 0));
 	            _underChunkF = World.GetChunkAt(Parent.Position + new Vector3(0, 0, Chunk.Width));
 	            _underChunkB = World.GetChunkAt(Parent.Position - new Vector3(0, 0, Chunk.Width));

@@ -94,18 +94,24 @@ namespace Hedra.Engine.PhysicsSystem
 			return nearestWaterBlockY;
 		}
 		
-        public static float HeightAtPosition(float X, float Z, int Lod = 1)
+        public static float HeightAtPosition(float X, float Z, int Lod = -1)
         {
 			 return HeightAtPosition(new Vector3(X,0,Z), Lod);
 		}
 		
-		public static float HeightAtPosition(Vector3 BlockPosition, int Lod = 1)
+		public static float HeightAtPosition(Vector3 BlockPosition, int Lod = -1)
 		{
 			
 			if(World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Noise3D)
             {
 				return HeightAtBlock( new Vector3(BlockPosition.X, World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z), BlockPosition.Z) );
 			}
+
+			if (Lod == -1)
+			{
+				var underchunk = World.GetChunkAt(BlockPosition);
+				if (underchunk != null && underchunk.Landscape.GeneratedLod != -1) Lod = underchunk.Landscape.GeneratedLod;
+			}			
 			
 			var densityX = World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize * Lod, (int)BlockPosition.Z ).Density;
 			var densityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize* Lod).Density;

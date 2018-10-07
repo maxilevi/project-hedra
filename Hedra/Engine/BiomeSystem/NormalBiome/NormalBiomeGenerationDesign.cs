@@ -37,7 +37,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         public override BlockType GetHeightSubtype(float X, float Y, float Z, float CurrentHeight, BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
             double height = HeightCache[new Vector2(X, Z)][1];
-            double realHeight = (CurrentHeight - height - Chunk.BaseHeight) / HeightCache[new Vector2(X, Z)][2];
+            double realHeight = (CurrentHeight - height) / HeightCache[new Vector2(X, Z)][2];
 
             if (Math.Abs(realHeight - 32.0) < 0.5f)
             {

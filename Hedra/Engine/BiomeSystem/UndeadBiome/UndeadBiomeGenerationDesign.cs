@@ -39,7 +39,7 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
             if (HeightCache.ContainsKey(new Vector2(X, Z)))
             {
                 double height = HeightCache[new Vector2(X, Z)][1];
-                double realHeight = (CurrentHeight - height - Chunk.BaseHeight) / HeightCache[new Vector2(X, Z)][2];
+                double realHeight = (CurrentHeight - height) / HeightCache[new Vector2(X, Z)][2];
 
                 if (Math.Abs(realHeight - 32.0) < 0.5f)
                 {
