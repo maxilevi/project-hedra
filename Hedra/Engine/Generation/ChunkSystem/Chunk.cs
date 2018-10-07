@@ -38,7 +38,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public bool IsGenerated { get; private set; }
         public BiomeGenerator Landscape { get; private set; }
         public int Lod { get; set; } = 1;
-        public ChunkMesh Mesh { get; set; }
+        public ChunkMesh Mesh { get; private set; }
         public bool NeedsRebuilding { get; private set; }
         public bool NeverBuilded { get; private set; } = true;
         public int OffsetX { get; }

@@ -30,18 +30,7 @@ namespace Hedra.Engine.Generation
 			var underChunk = World.GetChunkAt(Position);
 		    if (underChunk == null) return default(PlacementObject);
 		    var rng = new Random(BiomeGenerator.GenerateSeed(Position.Xz));
-            var addon = new Vector3(
-	            rng.NextFloat() * underChunk.BoundsX - underChunk.BoundsX * .5f,
-	            0,
-	            rng.NextFloat() * underChunk.BoundsZ - underChunk.BoundsZ * .5f
-	            );
-			var blockSpace = World.ToBlockSpace(Position);
-			
-			if (blockSpace.X + addon.X / Chunk.BlockSize > underChunk.BoundsX) addon.X = 0;
-			if (blockSpace.Z + addon.Z / Chunk.BlockSize > underChunk.BoundsZ) addon.Z = 0;
-			addon.X = (float) Math.Round(addon.X / (float)Lod) * Lod;
-			addon.Z = (float) Math.Round(addon.Z / (float)Lod) * Lod;
-			
+
 			var height = Physics.HeightAtPosition(Position, Lod);
 		    var normal = Physics.NormalAtPosition(Position, Lod);
 			
@@ -88,15 +77,15 @@ namespace Hedra.Engine.Generation
 			{
 				Noise = noiseValue,
 				Placed = true,
-				Position = Position.Xz.ToVector3() + addon + Vector3.UnitY * height
+				Position = Position.Xz.ToVector3() + Vector3.UnitY * height
 			};
 		}
 		
 		public void GenerateTree(PlacementObject Placement, Region BiomeRegion, TreeDesign Design)
 		{
-		    Chunk underChunk = World.GetChunkAt(Placement.Position);
+		    var underChunk = World.GetChunkAt(Placement.Position);
+			if(underChunk == null) return;
 			var rng = new Random(BiomeGenerator.GenerateSeed(Placement.Position.Xz));
-
             var extraScale = new Random(World.Seed + 1111).NextFloat() * 5 + 4;
 			var scale = 10 + rng.NextFloat() * 3.5f;
 
@@ -135,7 +124,7 @@ namespace Hedra.Engine.Generation
 		    model = Design.Paint(model, woodColor, leafColor);
 		    model.GraduateColor(Vector3.UnitY);
 
-		    if (underChunk != null)
+		    if (underChunk.Initialized)
 		    {
 		        List<CollisionShape> shapes = Design.GetShapes(originalModel);
 		        foreach (CollisionShape originalShape in shapes)

@@ -91,7 +91,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 {
                     _chunkWatchers[i].Update();
                     if (_chunkWatchers[i].IsHealthy) newTarget++;
-                    if (i % 3 == 0) yield return null;
                     if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
                 }
                 _targetActivechunks = newTarget;

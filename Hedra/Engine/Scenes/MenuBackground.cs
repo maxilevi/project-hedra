@@ -64,20 +64,21 @@ namespace Hedra.Engine.Scenes
 		
 		private static IEnumerator MakeFire(){
       
-			Chunk UnderChunk = null;
-			while(UnderChunk == null){
-				Chunk NewChunk = World.GetChunkAt(CampfirePosition);
-				if(NewChunk != null){
-					if(NewChunk.Landscape.StructuresPlaced)
-						UnderChunk = NewChunk; 
+			Chunk underChunk = null;
+			while(underChunk == null)
+            {
+				var newChunk = World.GetChunkAt(CampfirePosition);
+				if(newChunk != null){
+					if(newChunk.Landscape.FullyGenerated && newChunk.Landscape.StructuresPlaced)
+						underChunk = newChunk; 
 				}
 				yield return null;
 			}
 			FirePosition = CampfirePosition.Xz.ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(CampfirePosition +  Vector3.UnitX * 4));
 			
-			VertexData CenterModel = AssetManager.PLYLoader("Assets/Env/Campfire2.ply", Vector3.One * 2.4f);
-			CenterModel.Translate( FirePosition );
-			UnderChunk.AddStaticElement(CenterModel);
+			var centerModel = AssetManager.PLYLoader("Assets/Env/Campfire2.ply", Vector3.One * 2.4f);
+			centerModel.Translate( FirePosition );
+			underChunk.AddStaticElement(centerModel);
 			LocalPlayer.Instance.UI.ChrChooser.ReloadFiles();
 			CoroutineManager.StartCoroutine(MenuUpdate);
 		}

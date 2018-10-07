@@ -65,13 +65,12 @@ namespace Hedra.Engine.BiomeSystem
 		            bool Filter(int X, int Z) => !BorderFilter(X, Z) && (X % GeneratedLod != 0 || Z % GeneratedLod != 0);
                     this.DefineBlocks(Blocks, Cache, lod, Filter);
                 }
-		        GeneratedLod = lod;
 	        }
-		    if (_firstGeneration)
+		    GeneratedLod = lod;
+            if (_firstGeneration)
 		    {
 			    this.DoTreeAndStructurePlacements(Blocks, Cache, lod);
             }
-
 			if (lod == 1)
 			{
 				this.PlaceEnviroment(Blocks, Cache);
@@ -500,7 +499,7 @@ namespace Hedra.Engine.BiomeSystem
 					var noise = (float) OpenSimplexNoise.Evaluate(realPosition.X * 0.005f, realPosition.Z * 0.005f);
 					var placementObject = World.TreeGenerator.CanGenerateTree(samplingPosition, region, Lod);
 					if (!placementObject.Placed) continue;
-					placementObject.Position += -samplingPosition.Xz.ToVector3() + realPosition.Xz.ToVector3();
+					//placementObject.Position += -samplingPosition.Xz.ToVector3() + realPosition.Xz.ToVector3();
 					World.TreeGenerator.GenerateTree(placementObject, region, region.Trees.GetDesign( (int) (noise * 10000) ));
 				}
 			}
