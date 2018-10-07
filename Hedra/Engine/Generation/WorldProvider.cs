@@ -45,8 +45,8 @@ namespace Hedra.Engine.Generation
 
         public WorldProvider()
         {
-            _meshWorkerPool = new SharedWorkerPool(2);
-            _genWorkerPool = new SharedWorkerPool(2);
+            _meshWorkerPool = new SharedWorkerPool(1);
+            _genWorkerPool = new SharedWorkerPool(1);
             _meshBuilder = new MeshBuilder(_meshWorkerPool);
             _chunkBuilder = new ChunkBuilder(_genWorkerPool);
             _structures = new HashSet<BaseStructure>();
