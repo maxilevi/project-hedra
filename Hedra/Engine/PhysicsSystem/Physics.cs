@@ -107,11 +107,23 @@ namespace Hedra.Engine.PhysicsSystem
 				return HeightAtBlock( new Vector3(BlockPosition.X, World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z), BlockPosition.Z) );
 			}
 
-			if (Lod == -1)
-			{
-				var underchunk = World.GetChunkAt(BlockPosition);
-				if (underchunk != null && underchunk.Landscape.GeneratedLod != -1) Lod = underchunk.Landscape.GeneratedLod;
-			}			
+		    if (Lod == -1)
+		    {
+		        var underchunk = World.GetChunkAt(BlockPosition);
+		        if (underchunk != null && underchunk.Landscape.GeneratedLod > 1)
+		        {
+		            Lod = underchunk.Landscape.GeneratedLod;
+		            var chunkOffset = World.ToChunkSpace(BlockPosition);
+		            var bSpace = World.ToBlockSpace(BlockPosition);
+		            BlockPosition =
+		                new Vector3(Lod * (float) Math.Round(bSpace.X / Lod), 0, Lod * (float) Math.Round(bSpace.Z / Lod)) *
+		                Chunk.BlockSize + chunkOffset.ToVector3();
+		        }
+		        else
+		        {
+		            Lod = 1;
+		        }
+		    }			
 			
 			var densityX = World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize * Lod, (int)BlockPosition.Z ).Density;
 			var densityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize* Lod).Density;
