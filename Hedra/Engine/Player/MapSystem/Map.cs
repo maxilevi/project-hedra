@@ -346,9 +346,9 @@ namespace Hedra.Engine.Player.MapSystem
                     _panel.Disable();
 				    this._player.Minimap.Show = true;
                     this._targetSize = 0f;
-					this._targetHeight = 0f;
+					this._targetHeight = 0;
                     this._targetTime = SkyManager.PeekTime();
-                    TaskManager.When(() => Math.Abs(_height - _targetHeight) < 0.01f, delegate
+                    TaskManager.When(() => _height < Camera.DefaultDelegate().Y, delegate
 				    {
 
 				        this._player.View.PositionDelegate = Camera.DefaultDelegate;

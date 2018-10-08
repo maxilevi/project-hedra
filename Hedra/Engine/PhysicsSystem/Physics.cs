@@ -123,7 +123,7 @@ namespace Hedra.Engine.PhysicsSystem
 		        {
 		            Lod = 1;
 		        }
-		    }			
+		    }		
 			
 			var densityX = World.GetHighestBlockAt(  (int)BlockPosition.X + (int) Chunk.BlockSize * Lod, (int)BlockPosition.Z ).Density;
 			var densityZ = World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z + (int) Chunk.BlockSize* Lod).Density;

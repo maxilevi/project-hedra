@@ -100,11 +100,11 @@ namespace Hedra.Engine.Game
 	        Player.Physics.VelocityCap = float.MaxValue;
 		    Player.Model = new HumanoidModel(Player);
 	        Player.RandomFactor = Information.RandomFactor;
-			if(! (Player.Health > 0) )
-				Player.Model.Enabled = false;
 			Player.AbilityTree.FromInformation(Information);
 			Player.Toolbar.FromInformation(Information);
 			Player.View.CameraHeight = Camera.DefaultCameraHeight;
+            if(Player.IsDead)
+                Player.Respawn();
 			if(Information.WorldSeed != 0)
 			    World.Recreate(Information.WorldSeed);
 			SkyManager.DayTime = Information.Daytime;
