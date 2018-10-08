@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Net.Mime;
 using Hedra.Engine.Management;
-using OpenTK;
 
 namespace Hedra.Engine.Rendering.UI
 {

@@ -40,8 +40,8 @@ namespace HedraTests.EntitySystem
             entityMock.Setup(E => E.IsStatic).Returns( () => _isStatic);
             entityMock.Setup(E => E.Model).Returns(modelMock.Object);
             entityMock.Setup(E => E.Dispose()).Callback(() => _disposed = true);
-            EntityComponent lastComponent = null;
-            entityMock.Setup(E => E.AddComponent(It.IsAny<EntityComponent>())).Callback(delegate(EntityComponent Component)
+            IComponent<IEntity> lastComponent = null;
+            entityMock.Setup(E => E.AddComponent(It.IsAny<IComponent<IEntity>>())).Callback(delegate(IComponent<IEntity> Component)
             {
                 lastComponent = Component;
             });

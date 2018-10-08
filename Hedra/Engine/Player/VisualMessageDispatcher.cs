@@ -263,7 +263,7 @@ namespace Hedra.Engine.Player
             _notificationText.Text = Item.Content;
             _notificationText.Enable();
             if (Item.PlaySound)
-                Sound.SoundManager.PlaySound(Sound.SoundType.OnOff, _player.Position, false, 1f, 1.05f);
+                Sound.SoundManager.PlaySound(Sound.SoundType.OnOff, _player.Position, false, 1f, 1f);
 
             TaskManager.Asynchronous(delegate
             {

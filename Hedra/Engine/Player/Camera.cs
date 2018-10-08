@@ -13,22 +13,22 @@ namespace Hedra.Engine.Player
     {
         public static Vector3 DefaultCameraHeight = Vector3.UnitY * 9.0f;
         public static Func<Vector3> DefaultDelegate;
-        public const float DefaultMaxDistance = 12f;
+        public const float DefaultMaxDistance = 14f;
         public const float DefaultMinDistance = 2.0f;
         public const float DefaultMaxPitch = 1.5f;
         public const float DefaultMinPitch = -2f;
 
         public float TargetPitch { get; set; }
         public float TargetYaw { get; set; }
-        public float MaxDistance { get; set; } = DefaultMaxDistance;
-        public float MinDistance { get; set; } = DefaultMinDistance;
-        public float MaxPitch { get; set; } = DefaultMaxPitch;
-        public float MinPitch { get; set; } = DefaultMinPitch;
+        public float MaxDistance { get; set; }
+        public float MinDistance { get; set; }
+        public float MaxPitch { get; set; }
+        public float MinPitch { get; set; }
         public float AddonDistance { get; set; }
         public float Distance { get; set; }
-        public float WheelSpeed { get; set; } = 1;
-        public bool CaptureMovement { get; set; } = true;
-        public bool LockMouse { get; set; } = true;
+        public float WheelSpeed { get; set; }
+        public bool CaptureMovement { get; set; }
+        public bool LockMouse { get; set; }
         public Matrix4 ModelViewMatrix { get; private set; }
         public Func<Vector3> PositionDelegate { get; set; }
         public int XDelta { get; private set; }
@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player
         public float Yaw { get; set; }
         public float StackedYaw { get; private set; }
 
-        private Vector3 _cameraHeight = Vector3.UnitY * 12.0f;
+        private Vector3 _cameraHeight;
         private readonly LocalPlayer _player;
         private float _previousAlpha = -1f;
         private float _prevDistance;
@@ -49,12 +49,24 @@ namespace Hedra.Engine.Player
         public Camera(LocalPlayer RefPlayer)
         {
             _player = RefPlayer;
+            Reset();
+        }
 
-            if (Camera.DefaultDelegate == null)
+        public void Reset()
+        {
+            if (DefaultDelegate == null)
             {
-                Camera.DefaultDelegate = () => _player.Model.ModelPosition;
+                DefaultDelegate = () => _player.Model.ModelPosition;
             }
-            this.PositionDelegate = Camera.DefaultDelegate;
+            PositionDelegate = Camera.DefaultDelegate;
+            WheelSpeed = 1;
+            CaptureMovement = true;
+            LockMouse = true;
+            MaxDistance = DefaultMaxDistance;
+            MinDistance = DefaultMinDistance;
+            MaxPitch = DefaultMaxPitch;
+            MinPitch = DefaultMinPitch;
+            _cameraHeight = DefaultCameraHeight;
         }
 
         public void Update()

@@ -275,9 +275,11 @@ namespace Hedra.Engine.Player.Inventory
             _itemInfoInterface?.Hide();
         }
 
+        public bool HasCancelButton { get; set; } = true;
+
         public bool Enabled
         {
-            get { return _enabled; }
+            get => _enabled;
             set
             {
                 _enabled = value;
@@ -286,10 +288,13 @@ namespace Hedra.Engine.Player.Inventory
                     _interfaces[i].Enabled = value;
                 }
                 if(_itemInfoInterface != null) _itemInfoInterface.Enabled = value;
-                if (_enabled)
-                    _cancelButton.Enable();
-                else
-                    _cancelButton.Disable();
+                if (HasCancelButton)
+                {
+                    if (_enabled)
+                        _cancelButton.Enable();
+                    else
+                        _cancelButton.Disable();
+                }
                 this.Cancel();
             }
         }

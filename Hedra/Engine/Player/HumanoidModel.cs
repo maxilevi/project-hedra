@@ -450,19 +450,6 @@ namespace Hedra.Engine.Player
 	        _modelSound.Stop();
 	    }
 
-        public override void Draw()
-        {
-			if(!Enabled) return;
-			Model.Draw();
-			if(LeftWeapon.Meshes != null)
-			{
-				for(var i = 0; i < LeftWeapon.Meshes.Length; i++)
-				{
-					LeftWeapon.Meshes[i].Draw();
-				}
-			}
-		}
-
 	    public Vector3 TransformFromJoint(Vector3 Point, Joint Joint)
 	    {
 		    return Model.TransformFromJoint(Point, Joint);

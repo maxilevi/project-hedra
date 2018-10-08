@@ -37,6 +37,7 @@ namespace Hedra.Engine.Player
         Matrix4 ViewMatrix { get; }
         void Update();
         void BuildCameraMatrix();
+        void Reset();
         void OnMouseWheel(object Sender, MouseWheelEventArgs E);
         void OnMouseButtonUp(object Sender, MouseButtonEventArgs e);
         void OnMouseButtonDown(object Sender, MouseButtonEventArgs e);

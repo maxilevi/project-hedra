@@ -80,5 +80,10 @@ namespace HedraTests.Player
         {
             throw new NotImplementedException();
         }
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

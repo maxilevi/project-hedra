@@ -116,7 +116,7 @@ namespace Hedra.Engine.Rendering.UI
                     && this.Position.X + this.Scale.X > coords.X && this.Position.X - this.Scale.X < coords.X)
                     if (this.Clickable)
                     {
-                        SoundManager.PlayUISound(SoundType.ButtonClick, 1, 1.5f);
+                        SoundManager.PlayUISound(SoundType.ButtonClick, 1, .5f);
                         this.Click.Invoke(Sender, E);
                     }
             }

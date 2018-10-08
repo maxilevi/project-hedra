@@ -29,7 +29,8 @@ namespace Hedra.Engine.Rendering.UI
 		public bool UseNumbersOnly {get; set;}
 		public bool ShowCaret {get; set;}
 		
-		public TextField(Vector2 Position, Vector2 Scale, Panel InPanel, bool CurveBorders = true){
+		public TextField(Vector2 Position, Vector2 Scale, Panel InPanel, bool CurveBorders = true)
+		{
 			_textBar = new Bar(Position, Scale, () => 1, () => 1, Vector4.One, InPanel, DrawOrder.After, CurveBorders);
 			_textBar.ShowBar = false;
 			this.Text = string.Empty;
@@ -41,7 +42,8 @@ namespace Hedra.Engine.Rendering.UI
 			CoroutineManager.StartCoroutine(this.CaretUpdate);
 		}
 		
-		private IEnumerator CaretUpdate(){
+		private IEnumerator CaretUpdate()
+		{
 			while(Program.GameWindow.Exists){
 				
 				for(int i = 0; i < 20; i++){
@@ -60,7 +62,8 @@ namespace Hedra.Engine.Rendering.UI
 			}
 		}
 		
-		public override void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs){
+		public override void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs)
+		{
 			if(InFocus && this._enabled){
 				if(EventArgs.Key == Key.BackSpace || EventArgs.Key == Key.BackSlash || EventArgs.Key == Key.NonUSBackSlash){
 					if(Text.Length > 0){
@@ -116,7 +119,8 @@ namespace Hedra.Engine.Rendering.UI
 			}
 		}
 		
-		public void UpdateCaret(){
+		public void UpdateCaret()
+		{
 			_textBar.Text.UIText.Position = new Vector2(_textBar.Position.X, _textBar.Text.UIText.Position.Y);
 			if(ShowCaret){
 				_caretIndex = (int) Mathf.Clamp(_caretIndex,0, Text.Length-1 );
@@ -130,12 +134,18 @@ namespace Hedra.Engine.Rendering.UI
 			if(!_enabled)
 				return;
 			
-			Vector2 coords = Mathf.ToNormalizedDeviceCoordinates(E.Mouse.X, E.Mouse.Y);
+			var coords = Mathf.ToNormalizedDeviceCoordinates(
+				new Vector2(E.Mouse.X, E.Mouse.Y), 
+				new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
+				);
 				
 			if(Position.Y + Scale.Y > -coords.Y && Position.Y - Scale.Y < -coords.Y 
-				  && Position.X + Scale.X > coords.X && Position.X - Scale.X < coords.X ){
+				  && Position.X + Scale.X > coords.X && Position.X - Scale.X < coords.X )
+			{
 				InFocus = true;
-			}else{
+			}
+			else
+			{
 				InFocus = false;
 			}
 		}

@@ -120,7 +120,7 @@ namespace Hedra.Engine.Sound
 			}
 		    source.Play(_soundBuffers[(int)Sound], ListenerPosition, Pitch, Gain, true);
             TaskManager.When(() => !Lambda(), delegate
-			{
+            {
 				source.Stop();
 			});
 		}

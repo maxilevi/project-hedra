@@ -77,19 +77,8 @@ namespace Hedra.Engine.EntitySystem
 
 
 			if(HasRider && !_rider.IsRiding)
-            {
-				Parent.Position = _rider.Position;
-			    _rider.Model.MountModel.AlignWithTerrain = true;
-			    _rider.Model.MountModel.HasRider = false;
-                _rider.Model.MountModel = null;
-				HasRider = false;
-				_ai.Enabled = true;
-				_healthBar.Hide = false;
-				
-				
-				Parent.Physics.UsePhysics = true;
-				Parent.Physics.HasCollision = true;
-				Parent.SearchComponent<DamageComponent>().Immune = false;				
+			{
+			    Quit();
 			}
 		}
 
@@ -113,5 +102,27 @@ namespace Hedra.Engine.EntitySystem
 		    _healthBar = Parent.SearchComponent<HealthBarComponent>();
 			_healthBar.Hide = _rider is LocalPlayer || _healthBar.Hide;
 		}
+
+        private void Quit()
+        {
+            Parent.Position = _rider.Position;
+            _rider.Model.MountModel.AlignWithTerrain = true;
+            _rider.Model.MountModel.HasRider = false;
+            _rider.Model.MountModel = null;
+            HasRider = false;
+            _ai.Enabled = true;
+            _healthBar.Hide = false;
+
+
+            Parent.Physics.UsePhysics = true;
+            Parent.Physics.HasCollision = true;
+            Parent.SearchComponent<DamageComponent>().Immune = false;
+        }
+
+        public override void Dispose()
+        {
+            if (!HasRider) return;
+            this.Quit();
+        }
 	}
 }

@@ -56,7 +56,10 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 Position = Vector2.UnitY * -.6f,
                 IndividualScale = Vector2.One * 0.85f
             };
-            _manager = new ToolbarInterfaceManager(_player, _toolbarItemsInterface, _bagItemsInterface);
+            _manager = new ToolbarInterfaceManager(_player, _toolbarItemsInterface, _bagItemsInterface)
+            {
+                HasCancelButton = false
+            };
             _inputHandler = new ToolbarInputHandler(_player);
             this.LoadSkills();
         }

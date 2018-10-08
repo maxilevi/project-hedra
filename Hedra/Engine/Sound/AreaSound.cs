@@ -28,7 +28,7 @@ namespace Hedra.Engine.Sound
 
             if (this._sound != null && (!this._sound.Source.IsPlaying || Type != _bufferType) && Condition)
             {
-                this._sound.Source.Play(SoundManager.GetBuffer(Type), this.Position, Pitch, 1f, true);
+                this._sound.Source.Play(SoundManager.GetBuffer(Type), this.Position, Pitch, 1, true);
                 _bufferType = Type;
             }
 
@@ -36,6 +36,7 @@ namespace Hedra.Engine.Sound
             {
                 _targetGain = Math.Max(0, 1 - (this.Position - SoundManager.ListenerPosition).LengthFast / Radius);
                 _targetGain *= Condition ? 1 : 0;
+                _targetGain *= SoundManager.Volume;
 
 
                 this._sound.Source.Volume = Mathf.Lerp(this._sound.Source.Volume, this._targetGain, (float)Time.IndependantDeltaTime * 8f);

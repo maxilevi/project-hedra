@@ -385,9 +385,7 @@ namespace Hedra.Engine.EntitySystem
             World.Particles.ParticleLifetime = 1;
             World.Particles.GravityEffect = .05f;
             World.Particles.PositionErrorMargin = new Vector3(3f, 3f, 3f);
-
-            if(!GameManager.InStartMenu)
-                SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position);
+            SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position, 1f, .75f);
             for (var i = 0; i < 30; i++) World.Particles.Emit();
         }
 

@@ -511,6 +511,8 @@ namespace Hedra.Engine.Player
 	        IsKnocked = false;	
 		    Spawner.Enabled = true;
 		    HandLamp.Enabled = false;
+		    View.Reset();
+		    IsRiding = false;
 		    if (Health <= 0) Respawn();
 	    }
 		
