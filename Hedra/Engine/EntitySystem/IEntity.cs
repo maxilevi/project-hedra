@@ -99,15 +99,15 @@ namespace Hedra.Engine.EntitySystem
 
         void AddBonusSpeedForSeconds(float BonusSpeed, float Seconds);
 
-        void AddComponentWhile(EntityComponent Component, Func<bool> Condition);
+        void AddComponentWhile(IComponent<IEntity> Component, Func<bool> Condition);
 
-        void AddComponentForSeconds(EntityComponent Component, float Seconds);
+        void AddComponentForSeconds(IComponent<IEntity> Component, float Seconds);
 
-        void AddComponent(EntityComponent Component);
+        void AddComponent(IComponent<IEntity> Component);
 
-        void RemoveComponent(EntityComponent Component);
+        void RemoveComponent(IComponent<IEntity> Component);
 
-        T SearchComponent<T>() where T : EntityComponent;
+        T SearchComponent<T>() where T : IComponent<IEntity>;
 
         void UpdateEnviroment();
 

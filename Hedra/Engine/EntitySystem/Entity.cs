@@ -41,7 +41,7 @@ namespace Hedra.Engine.EntitySystem
         private readonly TickSystem _tickSystem;
         public PhysicsComponent Physics { get; }
 
-        protected List<EntityComponent> Components = new List<EntityComponent>();
+        protected List<IComponent<IEntity>> Components = new List<IComponent<IEntity>>();
         protected bool Splashed { get; set; }
 
         public event OnAttackEventHandler OnAttacking;
@@ -283,24 +283,24 @@ namespace Hedra.Engine.EntitySystem
             this.AddComponentForSeconds(new SpeedBonusComponent(this, BonusSpeed), Seconds);
         }
 
-        public void AddComponentWhile(EntityComponent Component, Func<bool> Condition)
+        public void AddComponentWhile(IComponent<IEntity> Component, Func<bool> Condition)
         {
             ComponentManager.AddComponentWhile(Component, Condition);
         }
 
-        public void AddComponentForSeconds(EntityComponent Component, float Seconds)
+        public void AddComponentForSeconds(IComponent<IEntity> Component, float Seconds)
         {
             ComponentManager.AddComponentForSeconds(Component, Seconds);
         }
 
-        public void AddComponent(EntityComponent Component)
+        public void AddComponent(IComponent<IEntity> Component)
         {
             if(Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             Components.Add(Component);
             if(Component is ITickable tickable) _tickSystem.Add(tickable);
         }
 
-        public void RemoveComponent(EntityComponent Component)
+        public void RemoveComponent(IComponent<IEntity> Component)
         {
             if (Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             Components.Remove(Component);
@@ -308,7 +308,7 @@ namespace Hedra.Engine.EntitySystem
             if (Component is ITickable tickable) _tickSystem.Remove(tickable);
         }
 
-        public T SearchComponent<T>() where T : EntityComponent
+        public T SearchComponent<T>() where T : IComponent<IEntity>
         {
             for (var i = 0; i < Components.Count; i++)
                 if (Components[i] is T variable)

@@ -48,6 +48,12 @@ namespace HedraTests.Player
         public int Gold { get; set; }
         public float DamageEquation { get; }
         public bool IsTravelling { get; set; }
+
+        public void Roll()
+        {
+            throw new NotImplementedException();
+        }
+        
         public void Attack(float Damage, Action<Entity> Callback)
         {
             throw new NotImplementedException();
@@ -218,27 +224,27 @@ namespace HedraTests.Player
             Speed += BonusSpeed;
         }
 
-        public void AddComponentWhile(EntityComponent Component, Func<bool> Condition)
+        public void AddComponentWhile(IComponent<IEntity> Component, Func<bool> Condition)
         {
             throw new NotImplementedException();
         }
 
-        public void AddComponentForSeconds(EntityComponent Component, float Seconds)
+        public void AddComponentForSeconds(IComponent<IEntity> Component, float Seconds)
         {
             throw new NotImplementedException();
         }
 
-        public void AddComponent(EntityComponent Component)
+        public void AddComponent(IComponent<IEntity> Component)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveComponent(EntityComponent Component)
+        public void RemoveComponent(IComponent<IEntity> Component)
         {
             throw new NotImplementedException();
         }
 
-        public T SearchComponent<T>() where T : EntityComponent
+        public T SearchComponent<T>() where T : IComponent<IEntity>
         {
             throw new NotImplementedException();
         }

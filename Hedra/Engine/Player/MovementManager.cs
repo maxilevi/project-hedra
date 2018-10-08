@@ -53,7 +53,7 @@ namespace Hedra.Engine.Player
             }
 	    }
 
-        protected void MoveInWater(bool Up)
+        public void MoveInWater(bool Up)
         {
 		    if(Human.IsRolling || Human.IsDead || !Human.CanInteract || !Human.IsUnderwater) return;
 	        if(Human.Position.Y + Human.Model.Height + 1 > Physics.WaterHeightAtPosition(Human.Physics.TargetPosition) && Up) return;
@@ -126,6 +126,7 @@ namespace Hedra.Engine.Player
 		public void Update()
         {
 		    _speed = Mathf.Lerp(_speed, Human.IsAttacking ? AttackingSpeed : NormalSpeed, (float) Time.DeltaTime * 2f);
+	        Human.IsSwimming = Human.IsMoving && Human.IsUnderwater;
             this.DoUpdate();
 		    this.ManageMoveOrders();
 			this.HandleJumping();

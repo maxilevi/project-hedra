@@ -62,5 +62,6 @@ namespace Hedra.Engine.Player
         float HealthRegen { get; }
         float WeaponModifier(Item Weapon);
         Weapon LeftWeapon { get; }
+        void Roll();
     }
 }

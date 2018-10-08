@@ -1,4 +1,6 @@
-﻿using Hedra.Engine.EntitySystem;
+﻿using System;
+using System.ComponentModel;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
@@ -7,14 +9,16 @@ using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    public abstract class HumanoidAIComponent : EntityComponent
+    public abstract class HumanoidAIComponent : Component<IHumanoid>
     {
         private SleepingPad _bed;
+        private bool _isDrowning;
         protected bool IsSleeping { get; private set; }
-        public abstract bool ShouldSleep { get; }
-        public virtual bool ShouldWakeup { get; }
+        protected abstract bool ShouldSleep { get; }
+        protected virtual bool ShouldWakeup { get; }
+        protected bool CanUpdate => !IsSleeping && !_isDrowning && !Parent.IsKnocked;
 
-        protected HumanoidAIComponent(IEntity Entity) : base(Entity)
+        protected HumanoidAIComponent(IHumanoid Entity) : base(Entity)
         {
             var dmgComponent = Parent.SearchComponent<DamageComponent>();
             if (dmgComponent != null)
@@ -38,7 +42,23 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        protected void ManageSleeping()
+        public override void Update()
+        {
+            this.ManageDrowning();
+            this.ManageSleeping();
+        }
+
+        private void ManageDrowning()
+        {
+            if (Parent.Oxygen <= 0) _isDrowning = true;
+            if (_isDrowning)
+            {
+                if(Parent.IsUnderwater) Parent.Movement.MoveInWater(true);
+                if (Parent.Oxygen >= Parent.MaxOxygen * .75f) _isDrowning = false;
+            }
+        }
+        
+        private void ManageSleeping()
         {
             this.ManageSleepingState();
             if (ShouldSleep && !IsSleeping && (SkyManager.DayTime > 19000 || SkyManager.DayTime < 8000))
@@ -91,26 +111,21 @@ namespace Hedra.Engine.WorldBuilding
         /// <param name="TargetPoint">Target point to move</param>
         protected void Move(Vector3 TargetPoint)
         {
-            if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > 3 * 3)
+            if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > 8 * 8)
             {
-                if (Parent is Humanoid human)
-                {
-                    human.Physics.DeltaTranslate(human.Movement.MoveFormula(Parent.Orientation) * .75f);
-                    human.IsSitting = false;
-                }
-                else
-                {
-                    Parent.Physics.DeltaTranslate(Parent.Orientation * Parent.Speed * 4);
-                }
+                Parent.Physics.DeltaTranslate(Parent.Movement.MoveFormula(Parent.Orientation));
+                Parent.IsSitting = false;
+            }
+            if (Parent.IsUnderwater)
+            {
+                if (Math.Abs(TargetPoint.Y - Parent.Position.Y) > 1)
+                    Parent.Movement.MoveInWater(TargetPoint.Y > Parent.Position.Y);
             }
         }
 
         protected void Sit()
         {
-            if (Parent is Humanoid human)
-            {
-                human.IsSitting = true;
-            }
+            Parent.IsSitting = true;
         }
     }
 }

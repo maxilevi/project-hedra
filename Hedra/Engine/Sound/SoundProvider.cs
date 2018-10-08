@@ -69,7 +69,7 @@ namespace Hedra.Engine.Sound
 	            LoadSound(SoundType.GroundQuake, "Sounds/GroundQuake.ogg");
 	            LoadSound(SoundType.SpitSound, "Sounds/Bow.ogg");
 	            LoadSound(SoundType.GorillaGrowl, "Sounds/GorillaGrowl.ogg");
-	            LoadSound(SoundType.PreparingAttack, "Sounds/Bow.ogg");
+	            LoadSound(SoundType.PreparingAttack, "Sounds/PreparingAttack.ogg");
                 _loaded = true;
                 Log.WriteLine("Finished loading sounds.");
             });
@@ -118,11 +118,10 @@ namespace Hedra.Engine.Sound
 				Log.WriteLine($"Could not play sound {Sound}");
 				return;
 			}
-		    source.Play(_soundBuffers[(int)Sound], ListenerPosition, Pitch, Gain, false);
-            TaskManager.While(Lambda, delegate
+		    source.Play(_soundBuffers[(int)Sound], ListenerPosition, Pitch, Gain, true);
+            TaskManager.When(() => !Lambda(), delegate
 			{
-				if (source.IsPlaying) return;
-				source.Play(_soundBuffers[(int) Sound], ListenerPosition, Pitch, Gain, false);
+				source.Stop();
 			});
 		}
 

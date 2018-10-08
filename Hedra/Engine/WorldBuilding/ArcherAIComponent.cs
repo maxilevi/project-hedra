@@ -27,7 +27,7 @@ namespace Hedra.Engine.WorldBuilding
         public override float AttackRadius { get; set; } = 96;
         public override float ForgetRadius { get; set; } = 192;
 
-        public ArcherAIComponent(Entity Parent, bool Friendly) : base(Parent, Friendly){}
+        public ArcherAIComponent(IHumanoid Parent, bool Friendly) : base(Parent, Friendly){}
 		
 		public override void DoUpdate()
 		{		
@@ -69,7 +69,7 @@ namespace Hedra.Engine.WorldBuilding
 				}else
 				{
 
-				    base.Roll();
+				    base.RollAndMove();
 				}
 			}
 		    base.LookTarget();

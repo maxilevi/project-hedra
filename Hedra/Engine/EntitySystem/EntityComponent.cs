@@ -14,25 +14,10 @@ namespace Hedra.Engine.EntitySystem
 	/// <summary>
 	/// Description of EntityComponent.
 	/// </summary>
-	public abstract class EntityComponent : IUpdatable
-	{	
-        public bool Renderable { get; }
-		protected bool Disposed { get; private set; }
-		protected IEntity Parent { get; set; }
-
-	    protected EntityComponent(IEntity Entity)
-        {
-			this.Parent = Entity;
-            this.Renderable = this.GetType().GetMethod("Draw")?.DeclaringType != base.GetType().BaseType;
-	    }
-		
-		public abstract void Update();
-		
-		public virtual void Draw(){}
-		
-		public virtual void Dispose()
-        {
-			this.Disposed = true;
+	public abstract class EntityComponent : Component<IEntity>, IUpdatable
+	{
+		protected EntityComponent(IEntity Entity) : base(Entity)
+		{
 		}
 	}
 }

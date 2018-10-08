@@ -25,7 +25,7 @@ namespace Hedra.Engine.WorldBuilding
         public override float AttackRadius { get; set; } = 0;
         public override float ForgetRadius { get; set; } = 64;
 
-        public WarriorAIComponent(IEntity Parent, bool Friendly) : base(Parent, Friendly)
+        public WarriorAIComponent(IHumanoid Parent, bool Friendly) : base(Parent, Friendly)
 		{
 			this._attackTimer = 0f;
 		    this.ForgetTimer = new Timer(8f);
@@ -68,7 +68,7 @@ namespace Hedra.Engine.WorldBuilding
 		        }
 		        else
 		        {
-		            base.Roll();
+		            base.RollAndMove();
 		        }
 		    }
 

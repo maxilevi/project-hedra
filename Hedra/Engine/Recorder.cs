@@ -26,15 +26,17 @@ namespace Hedra.Engine
 		public static string Output = "C:/Recordings/"+DateTime.Now.TimeOfDay.Minutes+"/";
 		
 		public static long FrameID;
-		public static void Record(){
+		public static void Record()
+		{
 			
 			if(!Active)
 				return;
 			
 			Directory.CreateDirectory(Output);
-				
-			int[] pixels = new int[GameSettings.Width * GameSettings.Height];
-			Renderer.ReadPixels(0, 0, GameSettings.Width, GameSettings.Height, PixelFormat.Rgba, PixelType.Byte, pixels);
+			int w = (int) GameSettings.SurfaceWidth;
+			int h = (int) GameSettings.SurfaceHeight;
+			int[] pixels = new int[w * h];
+			Renderer.ReadPixels(0, 0, w, h, PixelFormat.Rgba, PixelType.Byte, pixels);
 			 
 			TaskManager.Asynchronous( delegate{
 			// we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
@@ -47,8 +49,8 @@ namespace Hedra.Engine
 			    pixels[i] = (r << 16 | g << 8 | b) << 1;
 			}
 			 
-			Bitmap Bmp = new Bitmap(GameSettings.Width, GameSettings.Height);
-			var data = Bmp.LockBits(new Rectangle(0, 0, GameSettings.Width, GameSettings.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+			Bitmap Bmp = new Bitmap(w, h);
+			var data = Bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
 			Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
 			Bmp.UnlockBits(data);
 
@@ -60,9 +62,12 @@ namespace Hedra.Engine
 			});
 		}
 		
-		public static string SaveScreenshot(string Path){
-			int[] pixels = new int[GameSettings.Width * GameSettings.Height];
-			Renderer.ReadPixels(0, 0, GameSettings.Width, GameSettings.Height, PixelFormat.Rgba, PixelType.Byte, pixels);
+		public static string SaveScreenshot(string Path)
+		{
+			int w = (int) GameSettings.SurfaceWidth;
+			int h = (int) GameSettings.SurfaceHeight;
+			int[] pixels = new int[w * h];
+			Renderer.ReadPixels(0, 0, w, h, PixelFormat.Rgba, PixelType.Byte, pixels);
 			 
 			// we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
 			for (int i = 0; i < pixels.Length; i++)
@@ -74,9 +79,9 @@ namespace Hedra.Engine
 			    pixels[i] = (r << 16 | g << 8 | b) << 1;
 			}
 
-            using (Bitmap Bmp = new Bitmap(GameSettings.Width, GameSettings.Height))
+            using (Bitmap Bmp = new Bitmap(w, h))
             {
-                var data = Bmp.LockBits(new Rectangle(0, 0, GameSettings.Width, GameSettings.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                var data = Bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
                 Bmp.UnlockBits(data);
 

@@ -23,9 +23,9 @@ namespace Hedra.Engine.WorldBuilding
         public abstract float SearchRadius { get; set; }
         public abstract float AttackRadius { get; set; }
         public abstract float ForgetRadius { get; set; }
-        public override bool ShouldSleep => !Chasing;
+        protected override bool ShouldSleep => !Chasing;
 
-        protected CombatAIComponent(IEntity Entity, bool Friendly) : base(Entity)
+        protected CombatAIComponent(IHumanoid Entity, bool Friendly) : base(Entity)
         {
             this.Friendly = Friendly;
             this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24 - 12f, 0, Utils.Rng.NextFloat() * 24 - 12f) + Parent.BlockPosition;
@@ -34,7 +34,7 @@ namespace Hedra.Engine.WorldBuilding
             this.OriginalPosition = Parent.BlockPosition;
         }
 
-        public override bool ShouldWakeup
+        protected override bool ShouldWakeup
         {
             get
             {
@@ -64,11 +64,9 @@ namespace Hedra.Engine.WorldBuilding
 
         public override void Update()
         {
-            if (Parent.IsKnocked) return;
-
-            if(!this.IsSleeping)
-                this.DoUpdate();
-            this.ManageSleeping();
+            base.Update();
+            if (!base.CanUpdate) return;
+            this.DoUpdate();
         }
 
         public abstract void DoUpdate();
@@ -83,14 +81,13 @@ namespace Hedra.Engine.WorldBuilding
             this.TargetPoint = this.OriginalPosition;
         }
 
-        protected void Roll()
+        protected void RollAndMove()
         {
-            var human = Parent as Humanoid;
-            if(human != null && human.WasAttacking) return;
-            if (RollTimer.Tick() && human != null && (TargetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius && CanDodge)
-                human.Roll();
+            if(Parent != null && Parent.WasAttacking) return;
+            if (RollTimer.Tick() && Parent != null && (TargetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius && CanDodge)
+                Parent.Roll();
 
-            Parent.Physics.DeltaTranslate(human?.Movement.MoveFormula(Parent.Orientation) ?? Vector3.Zero);
+            this.Move(TargetPoint);
         }
 
         protected void LookTarget()

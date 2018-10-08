@@ -25,9 +25,9 @@ namespace Hedra.Engine.WorldBuilding
         private Vector3 _targetPoint;
         private readonly Timer _movementTimer;
 	    private bool _shouldSit;
-        public override bool ShouldSleep => true;
+	    protected override bool ShouldSleep => true;
 
-        public VillagerAIComponent(Entity Parent, bool Move) : base(Parent)
+        public VillagerAIComponent(IHumanoid Parent, bool Move) : base(Parent)
         {
             this._move = Move;
             this._movementTimer = new Timer(6.0f);//Alert every 6.0f seconds
@@ -36,8 +36,8 @@ namespace Hedra.Engine.WorldBuilding
 
         public override void Update()
         {
-            this.ManageSleeping();
-            if (IsSleeping) return;
+	        base.Update();
+            if (!base.CanUpdate) return;
 
         	if( (LocalPlayer.Instance.Position - this.Parent.Position).Xz.LengthSquared < 24*24)
 	        {
