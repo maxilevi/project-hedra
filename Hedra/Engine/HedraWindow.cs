@@ -11,9 +11,8 @@ namespace Hedra.Engine
     {
         private IGraphicsContext _glContext;
         private bool _isExiting;
-        private readonly FrameEventArgs _renderArgs;
-        private readonly FrameEventArgs _updateArgs;
         private readonly Stopwatch _watch;
+        public double TargetFramerate { get; set; }
 
         protected HedraWindow(int Width, int Height, GraphicsMode Mode, string Title, GameWindowFlags Options,
             DisplayDevice Device, int Major, int Minor, GraphicsContextFlags Flags)
@@ -22,8 +21,6 @@ namespace Hedra.Engine
             try
             {
                 _watch = new Stopwatch();
-                _renderArgs = new FrameEventArgs();
-                _updateArgs = new FrameEventArgs();
                 _glContext = new GraphicsContext(Mode, WindowInfo, Major, Minor, Flags);
                 _glContext.MakeCurrent(WindowInfo);
                 _glContext.LoadAll();
@@ -108,17 +105,26 @@ namespace Hedra.Engine
             var lastTick = _watch.Elapsed.TotalSeconds;
             var elapsed = .0;
             var frames = 0;
-            const int targetFramerate = 60;
+            var time = .0;
+            var previousTime = .0;
             while (this.Exists && !this.IsExiting)
             {
                 ProcessEvents();
                 if (this.Exists && !this.IsExiting)
                 {
                     var totalSeconds = _watch.Elapsed.TotalSeconds;
-                    var time = totalSeconds - lastTick;
+                    time = totalSeconds - lastTick;
                     lastTick = totalSeconds;
-                    this.DispatchUpdateFrame(time);
-                    this.DispatchRenderFrame(time);
+                    this.DispatchUpdateFrame(previousTime);
+                    this.DispatchRenderFrame(previousTime);
+                    var lTick = _watch.Elapsed.TotalSeconds;
+                    while (time < TargetFramerate)
+                    {
+                        var s = _watch.Elapsed.TotalSeconds;
+                        time += s - lTick;
+                        lTick = s;
+                    }
+                    previousTime = time;
                 }
             }
         }

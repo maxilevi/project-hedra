@@ -63,14 +63,13 @@ namespace Hedra.Engine
         }
 
         [Setting]
-        public static int FrameLimit {
+        public static int FrameLimit
+        {
             get => _frameLimit;
             set
             {
                 _frameLimit = value;
-                //Program.GameWindow.TargetRenderPeriod = 1.0 / FrameLimit;
-                //Program.GameWindow.TargetRenderFrequency = 60;
-                //Program.GameWindow.TargetUpdateFrequency = 60;
+                Program.GameWindow.TargetFramerate = value == 0 ? 0.0 : 1.0 / value;
             }
         }
 

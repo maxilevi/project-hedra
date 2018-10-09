@@ -88,25 +88,10 @@ namespace Hedra
 	        Log.WriteLine(glVersion);
         }
 
-	    private bool HandleFramerate(double Millis)
-	    {
-		    if (GameSettings.FrameLimit == 0) return true;
-		    _passedMillis += Millis;
-		    if (_passedMillis >= 1)
-		    {
-			    _passedMillis--;
-			    _passedFrames = 0;
-		    }
-		    _passedFrames++;
-	        return _passedFrames < GameSettings.FrameLimit;
-	    }
-	    
-
 	    protected override void OnUpdateFrame(double Delta)
         {
 			base.OnUpdateFrame(Delta);
-	        //if(!this.HandleFramerate(e.Time)) return;
-	        
+
 	        this.SplashScreen.Update();
             var frameTime = Delta;
             while (frameTime > 0f)
