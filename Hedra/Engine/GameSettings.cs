@@ -69,7 +69,7 @@ namespace Hedra.Engine
             set
             {
                 _frameLimit = value;
-                Program.GameWindow.TargetFramerate = value == 0 ? 0.0 : 1.0 / value;
+                //Program.GameWindow.TargetFramerate = value == 0 ? 0.0 : 1.0 / value;
             }
         }
 

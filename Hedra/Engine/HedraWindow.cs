@@ -106,7 +106,6 @@ namespace Hedra.Engine
             var elapsed = .0;
             var frames = 0;
             var time = .0;
-            var previousTime = .0;
             while (this.Exists && !this.IsExiting)
             {
                 ProcessEvents();
@@ -115,8 +114,8 @@ namespace Hedra.Engine
                     var totalSeconds = _watch.Elapsed.TotalSeconds;
                     time = totalSeconds - lastTick;
                     lastTick = totalSeconds;
-                    this.DispatchUpdateFrame(previousTime);
-                    this.DispatchRenderFrame(previousTime);
+                    this.DispatchUpdateFrame(time);
+                    this.DispatchRenderFrame(time);
                     var lTick = _watch.Elapsed.TotalSeconds;
                     while (time < TargetFramerate)
                     {
@@ -124,7 +123,6 @@ namespace Hedra.Engine
                         time += s - lTick;
                         lTick = s;
                     }
-                    previousTime = time;
                 }
             }
         }
