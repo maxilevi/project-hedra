@@ -276,14 +276,6 @@ namespace Hedra.Engine.Rendering
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             Renderer.FBOBound = 0;
         }
-
-        public FBO Resize()
-        {
-            bool depth = this.DepthID != 0;
-            this.Dispose();
-        	return new FBO(new Size(GameSettings.Width, GameSettings.Height), Attachments, this.Formats, this.mipmaps, this.multisample, this.samples, depth);
-        }
-        
 		
         public void Dispose()
         {

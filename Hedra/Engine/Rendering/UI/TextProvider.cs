@@ -9,6 +9,7 @@ namespace Hedra.Engine.Rendering.UI
     {
         public Bitmap BuildText(string Text, Font TextFont, Color TextColor)
         {
+            if(TextFont.Size > 128) return new Bitmap(1,1);
             var size = CalculateTextSize(Text, TextFont);
             var textBitmap = new Bitmap((int)Math.Ceiling(Math.Max(size.Width, 1)), (int)Math.Ceiling(Math.Max(size.Height,1)));
             using (var graphics = Graphics.FromImage(textBitmap))

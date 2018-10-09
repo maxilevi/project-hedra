@@ -107,6 +107,8 @@ namespace Hedra.Engine.Game
                 Player.Respawn();
 			if(Information.WorldSeed != 0)
 			    World.Recreate(Information.WorldSeed);
+            if(Player.IsDead)
+                Player.Respawn();
 			SkyManager.DayTime = Information.Daytime;
 			SkyManager.LoadTime = true;
 			Player.Inventory.SetItems(Information.Items);

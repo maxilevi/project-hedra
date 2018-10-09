@@ -227,6 +227,7 @@
     <Compile Include="Engine\EntitySystem\IComponent.cs" />
     <Compile Include="Engine\Game\LoadingScreen.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
+    <Compile Include="Engine\HedraWindow.cs" />
     <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />

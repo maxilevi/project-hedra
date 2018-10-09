@@ -225,7 +225,7 @@ namespace Hedra.Engine.Rendering.UI
             OnButtonClickEventHandler updateLimiter = delegate
             {
                 if (frameLimiter.CurrentValue.Text == "NONE")
-                    GameSettings.FrameLimit = 0.0f;
+                    GameSettings.FrameLimit = 0;
                 else
                     GameSettings.FrameLimit = int.Parse(frameLimiter.CurrentValue.Text);
             };

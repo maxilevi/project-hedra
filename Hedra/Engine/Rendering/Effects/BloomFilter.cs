@@ -32,11 +32,7 @@ namespace Hedra.Engine.Rendering.Effects
 	        HBlurShader = Shader.Build("Shaders/HBlur.vert", "Shaders/Blur.frag");
 	        VBlurShader = Shader.Build("Shaders/VBlur.vert", "Shaders/Blur.frag");
         }
-		
-		public override void Resize(){
-			HBloomFbo = HBloomFbo.Resize();
-			VBloomFbo = VBloomFbo.Resize();
-		}
+
 		
 		public override void Pass(FBO Src, FBO Dst){
 			HBloomFbo.Bind();

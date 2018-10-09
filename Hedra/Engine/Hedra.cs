@@ -28,7 +28,7 @@ using Forms = System.Windows.Forms;
 
 namespace Hedra
 {
-    class Hedra : GameWindow, IEventProvider
+    class Hedra : HedraWindow, IEventProvider
     {
 	    public DebugInfoProvider DebugProvider { get; private set; }
 	    public SplashScreen SplashScreen { get; private set; }
@@ -36,11 +36,11 @@ namespace Hedra
 	    public string GameVersion { get; private set; }
         private float _lastValue = float.MinValue;
 	    private bool _forcingResize;
+	    private int _passedFrames;
+	    private double _passedMillis;
 		
-	    public Hedra(int Width, int Height) : base(Width, Height){}
-	    
 		public Hedra(int Width, int Height, GraphicsMode Mode, string Title, DisplayDevice Device, int Minor, int Major) 
-			: base( Width, Height, Mode, Title, GameWindowFlags.Default, Device, Major, Minor, GraphicsContextFlags.Default){}
+			: base(Width, Height, Mode, Title, GameWindowFlags.Default, Device, Major, Minor, GraphicsContextFlags.Default){}
 
 		protected override void OnLoad(EventArgs e)
         {
@@ -88,12 +88,12 @@ namespace Hedra
 	        Log.WriteLine(glVersion);
         }
 
-
-	    protected override void OnUpdateFrame(FrameEventArgs e)
+	    protected override void OnUpdateFrame(double Delta)
         {
-			base.OnUpdateFrame(e);
+			base.OnUpdateFrame(Delta);
+
 	        this.SplashScreen.Update();
-            var frameTime = e.Time;
+            var frameTime = Delta;
             while (frameTime > 0f)
             {
                 var delta = Math.Min(frameTime, Physics.Timestep);
@@ -109,8 +109,8 @@ namespace Hedra
                 DistributedExecuter.Update();
                 frameTime -= delta;
             }
-            Time.Set(e.Time);
-            Time.IncrementFrame(e.Time);
+            Time.Set(Delta);
+            Time.IncrementFrame(Delta);
 	        
 	        // Utils.RNG is not thread safe so it might break itself
             // Here is the autofix because thread-safety is for loosers
@@ -125,12 +125,12 @@ namespace Hedra
 		        _lastValue = newNumber;
 	        }
 	        DebugProvider.Update();
-	        AnalyticsManager.PlayTime += (float) e.Time;
+	        AnalyticsManager.PlayTime += (float) Delta;
 		}
 
-		protected override void OnRenderFrame(FrameEventArgs e)
+		protected override void OnRenderFrame(double Delta)
 		{    
-			base.OnRenderFrame(e);
+			base.OnRenderFrame(Delta);
 			Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);		
 			if (!SplashScreen.FinishedLoading)
 			{

@@ -33,8 +33,6 @@ namespace Hedra.Engine.Rendering.Effects
 			_duDvMapUniform = Renderer.GetUniformLocation(WaterEffect.ShaderId, "DuDvMap");
 			_timeUniform = Renderer.GetUniformLocation(WaterEffect.ShaderId, "Time");
 		}
-		
-		public override void Resize(){}
 
 	    public override void Pass(FBO Src, FBO Dst){
 			Dst.Bind();

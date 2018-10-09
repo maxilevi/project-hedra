@@ -19,7 +19,6 @@ namespace Hedra.Engine.Rendering.Effects
 	public abstract class Filter : IDisposable
 	{	
 
-		public abstract void Resize();
 	    public abstract void Dispose();
         public abstract void Pass(FBO Src, FBO Dst);
 		
