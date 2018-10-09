@@ -64,11 +64,11 @@ namespace Hedra
 
 	        GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;	
 #if DEBUG
-            GameWindow.Run(60, 60);
+            GameWindow.Run();
 #else
             try
 	        {
-		        GameWindow.Run(60, 60);
+		        GameWindow.Run();
 	        }
 	        catch (Exception e)
 	        {

@@ -47,7 +47,7 @@ namespace Hedra.Engine
 		    if (Math.Abs(LastFrameUpdate - Environment.TickCount) > 1000)
 		    {
 			    Framerate = (int) (1.0 / Time);
-			    Frametime = (float) (1000.0 / (1.0 / Time));
+			    Frametime = (float) Time;
 			    LastFrameUpdate = Environment.TickCount;
 		    }
 	    }

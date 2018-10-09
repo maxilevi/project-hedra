@@ -252,20 +252,6 @@ namespace Hedra.Engine.Rendering.Effects
 		
 		public static MainFBO DefaultBuffer => DrawManager.MainBuffer;
 
-	    public void Resize()
-        {
-			Default = Default.Resize();
-			FinalFbo = FinalFbo.Resize();
-			AdditiveFbo = AdditiveFbo.Resize();
-			Ssao.FirstPass = Ssao.FirstPass.Resize();
-			Ssao.SecondPass = Ssao.SecondPass.Resize();
-	        Ssao.ThirdPass = Ssao.ThirdPass.Resize();
-			Bloom.Resize();
-			Distortion.Resize();
-			Blur.Resize();
-			UnderWater.Resize();
-		}
-
 	    public void Dispose()
 	    {
 	        Default.Dispose();

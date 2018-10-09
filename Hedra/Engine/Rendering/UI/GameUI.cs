@@ -103,9 +103,13 @@ namespace Hedra.Engine.Rendering.UI
 			AddElement(_xpBackground);
 			AddElement(xpBar);
 			AddElement(_classLogo);
+			AddElement(_staminaIcon);
+			AddElement(_oxygenIcon);
 			AddElement(Cross);
 			AddElement(_oxygenBar);
 			AddElement(_staminaBar);
+			AddElement(_staminaBackground);
+			AddElement(_oxygenBackground);
 			AddElement(healthBar);
 			AddElement(manaBar);
 			AddElement(_help);

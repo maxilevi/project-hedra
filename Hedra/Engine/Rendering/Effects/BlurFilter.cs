@@ -64,11 +64,6 @@ namespace Hedra.Engine.Rendering.Effects
 			Renderer.Enable(EnableCap.CullFace);
 		}
 
-	    public override void Resize()
-	    {
-	        
-	    }
-
 	    public override void Dispose()
 	    {
 

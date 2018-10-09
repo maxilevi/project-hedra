@@ -28,8 +28,6 @@ namespace Hedra.Engine.Rendering.Effects
 	    public UnderWaterFilter() {
             Multiplier = new Vector4(1f, 1f, 1f, 1);
 		}
-		
-		public override void Resize(){}
 
 	    public override void Pass(FBO Src, FBO Dst){
 			Dst.Bind();
