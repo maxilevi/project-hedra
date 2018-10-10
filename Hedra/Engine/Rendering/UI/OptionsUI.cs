@@ -205,9 +205,8 @@ namespace Hedra.Engine.Rendering.UI
 
 		    var fpsLimitList = new List<string>();
             fpsLimitList.AddRange(Enumerable.Range(0, 12+1).Select(I => (I*5+30).ToString()));
-#if DEBUG
             fpsLimitList.Add("NONE");
-#endif
+			
             var frameLimiterValues = fpsLimitList.ToArray();
 
 

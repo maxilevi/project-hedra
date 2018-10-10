@@ -97,7 +97,7 @@ namespace Hedra
             while (frameTime > 0f)
             {
                 var delta = Math.Min(frameTime, Physics.Timestep);
-                Time.Set(delta);
+                Time.Set(delta, false);
                 CoroutineManager.Update();
                 UpdateManager.Update();
                 Physics.Update();

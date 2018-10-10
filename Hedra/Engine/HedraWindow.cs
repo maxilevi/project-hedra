@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading;
 using Hedra.Engine.Events;
 using OpenTK;
 using OpenTK.Graphics;
@@ -105,23 +106,19 @@ namespace Hedra.Engine
             var lastTick = _watch.Elapsed.TotalSeconds;
             var elapsed = .0;
             var frames = 0;
-            var time = .0;
             while (this.Exists && !this.IsExiting)
             {
                 ProcessEvents();
                 if (this.Exists && !this.IsExiting)
                 {
                     var totalSeconds = _watch.Elapsed.TotalSeconds;
-                    time = totalSeconds - lastTick;
+                    var time = Math.Min(1.0, totalSeconds - lastTick);
                     lastTick = totalSeconds;
                     this.DispatchUpdateFrame(time);
                     this.DispatchRenderFrame(time);
-                    var lTick = _watch.Elapsed.TotalSeconds;
-                    while (time < TargetFramerate)
+                    while (_watch.Elapsed.TotalSeconds - lastTick < TargetFramerate)
                     {
-                        var s = _watch.Elapsed.TotalSeconds;
-                        time += s - lTick;
-                        lTick = s;
+                        Thread.Sleep(1);
                     }
                 }
             }

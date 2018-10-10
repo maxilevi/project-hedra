@@ -34,17 +34,17 @@ namespace Hedra.Engine
 	        IndependentAccumulatedFrameTime += Time;
 	    }
 
-	    public static void Set(double Time)
+	    public static void Set(double Time, bool UpdateCounter = true)
 	    {
-	        Set((float) Time);
+	        Set((float) Time, UpdateCounter);
 	    }
 
-	    public static void Set(float Time)
+	    public static void Set(float Time, bool UpdateCounter)
 	    {
 	        TimeScale = GameSettings.Paused ? 0 : 1;
 	        IndependantDeltaTime = Time;
 	        DeltaTime = IndependantDeltaTime * TimeScale;
-		    if (Math.Abs(LastFrameUpdate - Environment.TickCount) > 1000)
+		    if (Math.Abs(LastFrameUpdate - Environment.TickCount) > 1000 && UpdateCounter)
 		    {
 			    Framerate = (int) (1.0 / Time);
 			    Frametime = (float) Time;

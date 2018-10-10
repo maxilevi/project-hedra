@@ -38,7 +38,6 @@ namespace Hedra.Engine.EnvironmentSystem
         public void Draw()
         {
             Renderer.Disable(EnableCap.DepthTest);
-            Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.Blend);
             Shader.Bind();     
             _buffer.Bind();

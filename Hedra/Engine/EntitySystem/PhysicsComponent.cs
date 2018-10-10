@@ -160,9 +160,9 @@ namespace Hedra.Engine.EntitySystem
 	    }
 
 	    public void ExecuteTranslate(MoveCommand Command)
-        {
-			Physics.Threading.AddCommand(Command);
-        }
+	    {
+	        Physics.Threading.AddCommand(Command);
+	    }
 
 	    public void Translate(Vector3 Delta)
 	    {
@@ -176,7 +176,7 @@ namespace Hedra.Engine.EntitySystem
 
 	    public void DeltaTranslate(MoveCommand Command)
 	    {
-	        Command.Delta *= this.Timestep;
+	        Command.Delta *= Time.DeltaTime;
             this.ExecuteTranslate(Command);
 	    }
 
