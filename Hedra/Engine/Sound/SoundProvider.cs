@@ -183,7 +183,14 @@ namespace Hedra.Engine.Sound
 			using(VorbisReader reader = new VorbisReader(stream, true))
 			{
 
-				if (Length == -1) Length = 0;//(int) (reader.TotalTime.TotalSeconds * reader.SampleRate * sizeof(short)+1);
+			    if (Length == -1)
+			    {
+			        var secs = reader.TotalTime.TotalSeconds;
+                    if (secs < 1)
+			            Length = (int) Math.Ceiling(reader.TotalTime.TotalSeconds * reader.SampleRate * sizeof(short));
+                    else
+                        Length = (int) Math.Ceiling(reader.TotalTime.TotalSeconds) * reader.SampleRate * sizeof(short);
+                }
 
                 short[] data = new short[Length];
 				float[] buffer = new float[Length];
