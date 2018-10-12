@@ -36,7 +36,8 @@ namespace Hedra.Engine.Sound
                 _soundSources[i] = new SoundSource(Vector3.Zero);
             }
             Log.WriteLine("Generating a pool of sound items...");
-            for (int i = 0; i < _soundItems.Length; i++){
+            for (int i = 0; i < _soundItems.Length; i++)
+            {
 				_soundItems[i] = new SoundItem(new SoundSource(Vector3.Zero));
 			}
             Log.WriteLine("Loading sounds...");
@@ -70,6 +71,8 @@ namespace Hedra.Engine.Sound
 	            LoadSound(SoundType.SpitSound, "Sounds/Bow.ogg");
 	            LoadSound(SoundType.GorillaGrowl, "Sounds/GorillaGrowl.ogg");
 	            LoadSound(SoundType.PreparingAttack, "Sounds/PreparingAttack.ogg");
+                LoadSound(SoundType.River, "Sounds/River.ogg");
+	            LoadSound(SoundType.BoatMove, "Sounds/BoatMove.ogg");
                 _loaded = true;
                 Log.WriteLine("Finished loading sounds.");
             });
@@ -97,19 +100,19 @@ namespace Hedra.Engine.Sound
             if(!_loaded) return;
             ListenerPosition = LocalPlayer.Instance.Position;
 
-		    Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast / 256f) * Volume, 0);
+		    Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast / 128f) * Volume, 0);
             if(Gain <= 0 ) return;
 
 	        var source = GrabSource();
 			if(source == null)
 			{
-				Log.WriteLine("Could not play sound "+ Sound);
+				Log.WriteLine($"Could not play sound {Sound}");
 				return;
 			}
 			source.Play(_soundBuffers[ (int) Sound], Location, Pitch, Gain, Looping);			
 		}
 
-		public void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, float Pitch = 1, float Gain = 1)
+		public void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, Func<float> PitchLambda, Func<float> GainLambda)
 		{
 			if (!_loaded) return;
 			var source = GrabSource();
@@ -118,10 +121,10 @@ namespace Hedra.Engine.Sound
 				Log.WriteLine($"Could not play sound {Sound}");
 				return;
 			}
-		    source.Play(_soundBuffers[(int)Sound], ListenerPosition, Pitch, Gain, true);
-            TaskManager.When(() => !Lambda(), delegate
+            TaskManager.While(Lambda, delegate
             {
-				source.Stop();
+	            if(source.IsPlaying) return;
+	            source.Play(_soundBuffers[(int)Sound], ListenerPosition, PitchLambda(), GainLambda(), false);
 			});
 		}
 
@@ -171,25 +174,28 @@ namespace Hedra.Engine.Sound
 			return LoadOgg(File, out Channels, out Bits, out Rate, out BytesPerSecond, out _, Offset, Length);
 		}
 
-		private short[] LoadOgg(string File, out int Channels, out int Bits, out int Rate, out int BytesPerSecond, out int Count, int Offset, int Length){
+		private short[] LoadOgg(string File, out int Channels, out int Bits, out int Rate, out int BytesPerSecond, out int Count, int Offset, int Length)
+        {
 			
 			byte[] bytes = AssetManager.ReadBinary(File, AssetManager.DataFile2);
 			Stream stream = new MemoryStream(bytes);
 			
-			using(VorbisReader reader = new VorbisReader(stream, true)){
-			
-				if(Length == -1) Length = (int) ( Math.Ceiling(reader.TotalTime.TotalSeconds) * reader.SampleRate * 2);
-				
-				short[] data = new short[Length];
+			using(VorbisReader reader = new VorbisReader(stream, true))
+			{
+
+				if (Length == -1) Length = 0;//(int) (reader.TotalTime.TotalSeconds * reader.SampleRate * sizeof(short)+1);
+
+                short[] data = new short[Length];
 				float[] buffer = new float[Length];
 				
-				if(Offset != 0){
+				if(Offset != 0)
+				{
 					float[] offsetBuffer = new float[Offset];
 					reader.ReadSamples(offsetBuffer, 0, Offset);
 				}
 				reader.ReadSamples(buffer, 0, Length);
 				
-				for (int i = 0; i < Length; i++)
+				for (var i = 0; i < Length; i++)
 	            {
 					var temp = (int)( (short.MaxValue-1) * buffer[i]);
 	                if (temp > short.MaxValue) temp = short.MaxValue;

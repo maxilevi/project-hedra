@@ -274,11 +274,14 @@
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\IAbilityTree.cs" />
+    <Compile Include="Engine\Player\AmbientEffectHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\Boat.cs" />
+    <Compile Include="Engine\Player\BoatSystem\BoatAudioHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatInputHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatModelHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatStateHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\IBoat.cs" />
+    <Compile Include="Engine\Player\IAmbientEffectHandler.cs" />
     <Compile Include="Engine\Player\IPlayerInventory.cs" />
     <Compile Include="Engine\Player\IVehicle.cs" />
     <Compile Include="Engine\Player\Skills\Archer\Agility.cs" />
@@ -1147,7 +1150,13 @@
     <None Include="Shaders\Includes\Lighting.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Sounds\BoatMove.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Sounds\PreparingAttack.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\River.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\HostageSituation.ogg">

@@ -72,6 +72,7 @@
     <Compile Include="Generation\ChunkComparerTest.cs" />
     <Compile Include="Generation\RenderingComparerTest.cs" />
     <Compile Include="HedraReflectionTest.cs" />
+    <Compile Include="ItemSystem\ItemTest.cs" />
     <Compile Include="MathExtensions\PhysicsTest.cs" />
     <Compile Include="MathExtensions\RandomTest.cs" />
     <Compile Include="Player\AbilityTreeTest.cs" />

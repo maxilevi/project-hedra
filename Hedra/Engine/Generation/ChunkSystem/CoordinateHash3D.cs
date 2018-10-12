@@ -25,6 +25,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.Z = (byte)Coordinates.Z;
         }
 
+        public Vector3 ToVector3()
+        {
+            return new Vector3(X, Y, Z);
+        }
+        
         public bool Equals(CoordinateHash3D Other)
         {
             return X == Other.X && Y == Other.Y && Z == Other.Z;

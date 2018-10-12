@@ -229,10 +229,6 @@ namespace Hedra.Engine.EntitySystem
 
 		    if (!base.Disposed)
 		    {
-		        if (LocalPlayer.Instance.Pet.Pet == Parent)
-		        {
-		            int a = 0;
-		        }
 		        _sound.Position = this.Position;
 		        _sound.Update(this.IsWalking);
 		    }

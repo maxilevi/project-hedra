@@ -3,12 +3,13 @@ using OpenTK;
 
 namespace Hedra.Engine.Sound
 {
-    public class AreaSound
+    public class AreaSound : IDisposable
     {
         public float Radius { get; set; }
         public SoundType Type { get; set; }
         public Vector3 Position { get; set; }
-        public float Pitch { get; set; } = 1f;
+        public float Pitch { get; set; } = 1;
+        public float Volume { get; set; } = 1;
         private float _targetGain;
         private SoundItem _sound;
         private SoundType _bufferType;
@@ -37,6 +38,7 @@ namespace Hedra.Engine.Sound
                 _targetGain = Math.Max(0, 1 - (this.Position - SoundManager.ListenerPosition).LengthFast / Radius);
                 _targetGain *= Condition ? 1 : 0;
                 _targetGain *= SoundManager.Volume;
+                _targetGain *= Volume;
 
 
                 this._sound.Source.Volume = Mathf.Lerp(this._sound.Source.Volume, this._targetGain, (float)Time.IndependantDeltaTime * 8f);
@@ -58,6 +60,11 @@ namespace Hedra.Engine.Sound
             this._sound?.Source.Stop();
             if (this._sound != null) this._sound.Locked = false;
             this._sound = null;
+        }
+
+        public void Dispose()
+        {
+            this.Stop();
         }
     }
 }

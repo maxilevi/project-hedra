@@ -69,6 +69,7 @@ namespace Hedra.Engine.Player
         public override CollisionShape BroadphaseCollider => _collider.Broadphase;
         public override CollisionShape[] Colliders => _collider.Shapes;
         public override Vector3[] Vertices => _collider.Vertices;
+        public override bool IsWalking => _walkAnimation == Model.AnimationPlaying;
         public bool LockWeapon { get; set; }
 	    public override Vector4 Tint { get; set; }
 	    public override Vector4 BaseTint { get; set; }
@@ -440,7 +441,7 @@ namespace Hedra.Engine.Player
 		    {
 		        _modelSound.Type = Human.IsSleeping ? SoundType.HumanSleep : SoundType.HumanRun;
 		        _modelSound.Position = Position;
-		        _modelSound.Update(IsWalking || Human.IsSleeping);
+		        _modelSound.Update(IsWalking && Human.IsGrounded || Human.IsSleeping);
 		    }
 		    Model.Update();
         }

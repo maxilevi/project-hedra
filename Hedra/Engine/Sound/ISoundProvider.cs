@@ -11,7 +11,7 @@ namespace Hedra.Engine.Sound
         void Load();
         void Update(Vector3 Position);
         void PlaySound(SoundType Sound, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1);
-        void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, float Pitch = 1, float Gain = 1);
+        void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, Func<float> Pitch, Func<float> Gain);
         SoundBuffer GetBuffer(SoundType Type);
         SoundItem GetAvailableSource();
         short[] LoadOgg(string File, out int Channels, out int Bits, out int Rate, out int Count);

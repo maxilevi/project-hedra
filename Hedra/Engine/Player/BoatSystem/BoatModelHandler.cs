@@ -1,4 +1,5 @@
 ﻿using System;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -14,6 +15,7 @@ namespace Hedra.Engine.Player.BoatSystem
         private readonly IPlayer _player;
         private Quaternion _targetTerrainOrientation;
         private Quaternion _terrainOrientation;
+        private bool _wasInWater;
 
         public BoatModelHandler(IPlayer Player, BoatStateHandler StateHandler) : base(null)
         {
@@ -33,6 +35,15 @@ namespace Hedra.Engine.Player.BoatSystem
 
         public void Update()
         {
+            if (Model.Enabled && _player.CanInteract)
+            {
+                var waterNormal = Physics.WaterNormalAtPosition(this.Position);
+                _targetTerrainOrientation =
+                    new Matrix3(Mathf.RotationAlign(Vector3.UnitY, waterNormal)).ExtractRotation();
+                _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation,
+                    Time.IndependantDeltaTime * 1f);
+                _player.Model.TransformationMatrix *= Matrix4.CreateFromQuaternion(_terrainOrientation);
+            }
             Model.TransformationMatrix = _player.Model.TransformationMatrix;
             Model.Rotation = _player.Model.Rotation;
             Model.Position = _player.Model.ModelPosition;

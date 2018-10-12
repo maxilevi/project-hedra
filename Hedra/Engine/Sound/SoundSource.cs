@@ -6,7 +6,6 @@
  */
 
 using System;
-using System.Net;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 
@@ -44,8 +43,8 @@ namespace Hedra.Engine.Sound
 
         }
 		
-		public void Play(SoundBuffer Buffer, Vector3 Location, float Pitch, float Gain, bool Loop){
-
+		public void Play(SoundBuffer Buffer, Vector3 Location, float Pitch, float Gain, bool Loop)
+		{
             AL.Source(Id, ALSourcef.Pitch, Pitch);
 			AL.Source(Id, ALSourcef.Gain, Gain );
 			AL.Source(Id, ALSource3f.Position, ref Location);
@@ -53,7 +52,6 @@ namespace Hedra.Engine.Sound
 
             this.Stop();
             this.Play(Buffer);
-
         }
 
 	    public bool IsPlaying
@@ -67,7 +65,8 @@ namespace Hedra.Engine.Sound
 	        }
 	    }
 
-		public Vector3 Position{
+		public Vector3 Position
+		{
 			get => this._position;
 			set{
                 if(value == this._position) return;

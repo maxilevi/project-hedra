@@ -56,7 +56,7 @@ namespace Hedra.Engine.Player
         public void MoveInWater(bool Up)
         {
 		    if(Human.IsRolling || Human.IsDead || !Human.CanInteract || !Human.IsUnderwater) return;
-	        if(Human.Position.Y + Human.Model.Height + 1 > Physics.WaterHeightAtPosition(Human.Physics.TargetPosition) && Up) return;
+	        if(Human.Position.Y + Human.Model.Height + 1 > Physics.WaterHeight(Human.Physics.TargetPosition) && Up) return;
 		    Human.IsGrounded = false;
 		    Human.Physics.Velocity = Vector3.Zero;
 		    Human.Model.Rotation = new Vector3(0, Human.Model.Rotation.Y, 0);

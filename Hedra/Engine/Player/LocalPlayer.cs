@@ -53,6 +53,7 @@ namespace Hedra.Engine.Player
 	    public IMessageDispatcher MessageDispatcher { get; set; }
 	    public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
 		public ICollidable[] NearCollisions => StructureAware.NearCollisions;
+		private IAmbientEffectHandler AmbientEffects { get; }
 		private IStructureAware StructureAware { get; }
 	    private float _acummulativeHealing;
         private bool _floating;
@@ -89,6 +90,7 @@ namespace Hedra.Engine.Player
             this.MessageDispatcher = new VisualMessageDispatcher(this);
 	        this.StructureAware = new StructureAware(this);
 	        this.Boat = new Boat(this);
+	        this.AmbientEffects = new AmbientEffectHandler(this);
             this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
 			this.Physics.CanCollide = true;
 			this.AttackSpeed = 0.75f;
@@ -293,6 +295,7 @@ namespace Hedra.Engine.Player
             }
             this.View.AddonDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
 
+	        AmbientEffects.Update();
 	        StructureAware.Update();
             Loader.Update();
             Inventory.Update();

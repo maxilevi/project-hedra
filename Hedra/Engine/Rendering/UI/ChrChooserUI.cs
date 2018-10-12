@@ -13,10 +13,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
 using System.Collections.Generic;
-using System.Dynamic;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Rendering.UI
@@ -267,11 +265,17 @@ namespace Hedra.Engine.Rendering.UI
 					space = Vector4.Transform(space, DrawManager.FrustumObject.ProjectionMatrix);
 					Vector2 ndc = (space.Xyz / space.W).Xy + new Vector2(1,1);
 					ndc /= 2;
-					if( _humans[i].Model.Enabled && Math.Abs(ndc.X - coords.X) < size.X && Math.Abs(1-ndc.Y - coords.Y) < size.Y)
-						_humans[i].Model.Tint = new Vector4(2,2,2,1);
-					else
-						_humans[i].Model.Tint = new Vector4(1,1,1,1);
-                }
+				    if (_humans[i].Model.Enabled && Math.Abs(ndc.X - coords.X) < size.X && Math.Abs(1 - ndc.Y - coords.Y) < size.Y)
+				    {
+                        if( (_humans[i].Model.Tint.Xyz - new Vector3(2, 2, 2)).LengthFast > 0.05f)
+                            Sound.SoundManager.PlayUISound(Sound.SoundType.ButtonClick);
+				        _humans[i].Model.Tint = new Vector4(2, 2, 2, 1);
+				    }
+				    else
+				    {
+				        _humans[i].Model.Tint = new Vector4(1, 1, 1, 1);
+				    }
+				}
                 #endregion
 
                 #region Move selected human

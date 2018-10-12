@@ -31,7 +31,7 @@ namespace HedraTests.Sound
         {
         }
 
-        public void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, float Pitch = 1, float Gain = 1)
+        public void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, Func<float> Pitch, Func<float> Gain)
         {
         }
 

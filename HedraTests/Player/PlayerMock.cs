@@ -37,6 +37,11 @@ namespace HedraTests.Player
             });
         }
 
+        public void SplashEffect(Chunk UnderChunk)
+        {
+            throw new NotImplementedException();
+        }
+
         public PhysicsComponent Physics { get; }
         public event OnAttackEventHandler OnAttacking;
         public event OnAttackEventHandler BeforeAttacking;

@@ -38,6 +38,7 @@ namespace Hedra.Engine.EntitySystem
         private bool _spawningWithAnimation;
         private float _knockedTime;
         private bool _isUnderwater;
+        private Timer _splashTimer;
         private readonly TickSystem _tickSystem;
         public PhysicsComponent Physics { get; }
 
@@ -199,6 +200,7 @@ namespace Hedra.Engine.EntitySystem
             _tickSystem = new TickSystem();
             ComponentManager = new EntityComponentManager(this);
             Physics = new PhysicsComponent(this);
+            _splashTimer = new Timer(1f) { AutoReset = false };
         }
 
         public void ShowIcon(CacheItem? IconType)
@@ -319,12 +321,13 @@ namespace Hedra.Engine.EntitySystem
         public void UpdateEnviroment()
         {
             var underChunk = World.GetChunkAt(Position);
-            var waterHeight = PhysicsSystem.Physics.WaterHeightAtPosition(Position);
+            var waterHeight = PhysicsSystem.Physics.WaterHeight(Position);
             if (Position.Y + Model.Height < waterHeight && PhysicsSystem.Physics.WaterLevelAtPosition(Position) > Model.Height)
             {
-                if (!Splashed)
+                if (!Splashed && Math.Abs(waterHeight - Position.Y - Model.Height) > 4)
                 {
                     SplashEffect(underChunk);
+                    _splashTimer.Reset();
                     Splashed = true;
                 }
                 IsUnderwater = true;
@@ -334,7 +337,7 @@ namespace Hedra.Engine.EntitySystem
                 IsUnderwater = false;
                 Splashed = false;
             }
-
+            this._splashTimer.Tick();
             this.HandleOxygen(waterHeight);
         }
 
@@ -374,7 +377,7 @@ namespace Hedra.Engine.EntitySystem
             _drowningSoundTimer++;
         }
         
-        private void SplashEffect(Chunk UnderChunk)
+        public void SplashEffect(Chunk UnderChunk)
         {
             World.Particles.VariateUniformly = true;
             World.Particles.Color = new Vector4((UnderChunk?.Biome.Colors.WaterColor ?? Colors.DeepSkyBlue).Xyz, .5f);
@@ -385,7 +388,7 @@ namespace Hedra.Engine.EntitySystem
             World.Particles.ParticleLifetime = 1;
             World.Particles.GravityEffect = .05f;
             World.Particles.PositionErrorMargin = new Vector3(3f, 3f, 3f);
-            SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position, 1f, .75f);
+            SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position, 1f, .5f);
             for (var i = 0; i < 30; i++) World.Particles.Emit();
         }
 

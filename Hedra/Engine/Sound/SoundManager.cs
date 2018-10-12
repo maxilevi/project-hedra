@@ -8,10 +8,6 @@ using System;
 using System.IO;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
-using OpenTK.Audio;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
-using NVorbis;
 
 
 namespace Hedra.Engine.Sound
@@ -56,7 +52,7 @@ namespace Hedra.Engine.Sound
 			PlaySound(Sound, Location, false, BasePitch + Utils.Rng.NextFloat() * .2f - .1f, BaseGain + Utils.Rng.NextFloat() * .2f - .1f);
 		}
 
-		public static void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, float Pitch = 1, float Gain = 1)
+		public static void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, Func<float> Pitch, Func<float> Gain)
 		{
 			Provider.PlaySoundWhile(Sound, Lambda, Pitch, Gain);
 		}
@@ -77,7 +73,8 @@ namespace Hedra.Engine.Sound
 		}
 	}
 	
-	public enum SoundType{
+	public enum SoundType
+    {
 		ButtonClick,
 		WaterSplash,
 		OnOff,
@@ -106,6 +103,8 @@ namespace Hedra.Engine.Sound
         SpitSound,
 	    GorillaGrowl,
         PreparingAttack,
+        River,
+        BoatMove,
         MaxSounds
     }
 }

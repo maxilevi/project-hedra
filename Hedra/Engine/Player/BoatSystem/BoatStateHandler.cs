@@ -29,28 +29,31 @@ namespace Hedra.Engine.Player.BoatSystem
         {
             if (Enabled)
             {
-                var movement = GetWaterMovement(_player.Physics.TargetPosition.X, _player.Physics.TargetPosition.Z);
-                var waterHeight = Physics.WaterHeightAtPosition(_player.Position);
-                var boatY = _player.Physics.TargetPosition.Y;
-
-                if (Math.Abs(boatY - waterHeight) < 1.5f)
+                var waterHeight = Physics.WaterHeight(_player.Position)-1.5f;
+                var waterNormal = Physics.WaterNormalAtPosition(_player.Position);
+                var heightFactor = Vector3.Dot(_player.Orientation, waterNormal);
+                var boatY = _player.Physics.TargetPosition.Y + 1 * (1-heightFactor) * 0;
+                OnWaterSurface = Math.Abs(boatY - waterHeight) < 0.05f;
+                InWater = OnWaterSurface || boatY < waterHeight;
+                if (InWater)
                 {
-                    _player.Physics.GravityDirection = Vector3.Zero;
-                    _player.Physics.Velocity *= .98f;
-                    _player.Physics.TargetPosition
-                        = new Vector3(_player.Physics.TargetPosition.X, waterHeight + movement, _player.Physics.TargetPosition.Z);
-                    InWater = true;
                     _player.Physics.ResetFall();
+
+                    /* Boat is under the surface */
+                    if (!OnWaterSurface)
+                    {
+                        //_player.Physics.TargetPosition = new Vector3(_player.Physics.TargetPosition.X, waterHeight, _player.Physics.TargetPosition.Z);
+                        _player.Physics.GravityDirection = Vector3.UnitY;
+                        if(_inputHandler.Velocity.Xz.LengthFast > 30) _player.Physics.DeltaTranslate(Vector3.UnitY * 20);
+                    }
+                    else
+                    {
+                        _player.Physics.ResetVelocity();
+                    }
                 }
-                else if (boatY < waterHeight)
+                else
                 {
-                    _player.Physics.GravityDirection = Vector3.UnitY * 2.5f;
-                    InWater = true;
-                }
-                else if (boatY > waterHeight)
-                {
-                    _player.Physics.GravityDirection = -Vector3.UnitY * 2.5f;
-                    InWater = false;
+                    _player.Physics.GravityDirection = -Vector3.UnitY;
                 }
             }
         }
@@ -91,6 +94,8 @@ namespace Hedra.Engine.Player.BoatSystem
                 _enabled = value;
             }
         }
+
+        public bool OnWaterSurface { get; private set; }
 
         public bool ShouldDrift => _inputHandler.ShouldDrift;
 

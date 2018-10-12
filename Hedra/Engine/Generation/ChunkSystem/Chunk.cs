@@ -9,6 +9,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Core;
 using Hedra.Engine.Management;
@@ -173,6 +175,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.BuildedWithStructures = true;
             this.NeedsRebuilding = false;
             this.IsBuilding = false;
+            this.HasWater = Input.HasWater;
         }
 
         private void UploadMesh(ChunkMeshBuildOutput Input)
@@ -413,12 +416,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return new Block();
         }
 
-        public bool IsActiveBlock(int X, int Y, int Z)
-        {
-            var b = this.GetBlockAt(X, Y, Z);
-            return b.Type != BlockType.Air && (b.Density > 0 || b.Density == -1) ? true : false;
-        }
-
         public void AddStaticElement(params VertexData[] Data)
         {
             if (Mesh == null) throw new ArgumentException($"Failed to add static element");
@@ -497,6 +494,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public ChunkMesh StaticBuffer => Mesh;
 
         public ReadOnlyCollection<VertexData> StaticElements => Mesh.Elements.AsReadOnly();
+
+        public CoordinateHash3D[] GetWaterPositions()
+        {
+            return _waterDensity.Keys.ToArray();
+        }
 
         public ReadOnlyCollection<ICollidable> CollisionShapes
         {
