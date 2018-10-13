@@ -18,8 +18,10 @@ namespace Hedra.Engine.Player.BoatSystem
 
         public void Update()
         {
+            /*
             _areaSound.Position = _player.Position;
             _areaSound.Update(_stateHandler.Enabled && _stateHandler.Velocity.LengthFast > 15);
+            */
         }
     }
 }

@@ -13,7 +13,8 @@ namespace Hedra.Engine.Player
         private readonly IPlayer _player;
         private Vector3 _lastPosition;
         private float _nearestWater;
-        
+        private bool _wasAnyNull;
+
         public AmbientEffectHandler(IPlayer Player)
         {
             _player = Player;
@@ -22,9 +23,8 @@ namespace Hedra.Engine.Player
         
         public void Update()
         {
-            return;
             _areaSound.Update(_nearestWater < MaxRange);
-            if ((_lastPosition - _player.Position).LengthSquared < 0.25f) return;
+            if ((_lastPosition - _player.Position).LengthSquared < 0.25f && !_wasAnyNull) return;
             _areaSound.Position = _player.Position;
             _nearestWater = NearestWaterBlock();
             _areaSound.Volume = (1-Math.Min(_nearestWater, MaxRange) / MaxRange)*.1f;
@@ -34,12 +34,17 @@ namespace Hedra.Engine.Player
         private float NearestWaterBlock()
         {
             var nearest = Math.Pow(MaxRange+1, 2);
+            _wasAnyNull = false;
             for (var x = -1; x < 2; x++)
             {
                 for (var z = -1; z < 2; z++)
                 {
                     var chunk = World.GetChunkAt(_player.Position + new Vector3(x, 0, z) * Chunk.Width);
-                    if (chunk == null || !chunk.HasWater) continue;
+                    if (chunk == null || !chunk.BuildedWithStructures || !chunk.HasWater)
+                    {
+                        _wasAnyNull = chunk == null || !chunk.BuildedWithStructures;
+                        continue;
+                    }
                     var dist = NearestWaterBlockOnChunk(chunk);
                     if (dist < nearest) nearest = dist;
                 } 

@@ -230,7 +230,7 @@ namespace Hedra.Engine.EntitySystem
 		    if (!base.Disposed)
 		    {
 		        _sound.Position = this.Position;
-		        _sound.Update(this.IsWalking);
+		        _sound.Update(this.IsWalking && Parent.IsGrounded);
 		    }
 		    _attackCooldown -= Time.IndependantDeltaTime;
 		}

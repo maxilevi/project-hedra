@@ -42,9 +42,8 @@ namespace Hedra.Engine.Player.BoatSystem
                     /* Boat is under the surface */
                     if (!OnWaterSurface)
                     {
-                        //_player.Physics.TargetPosition = new Vector3(_player.Physics.TargetPosition.X, waterHeight, _player.Physics.TargetPosition.Z);
-                        _player.Physics.GravityDirection = Vector3.UnitY;
-                        if(_inputHandler.Velocity.Xz.LengthFast > 30) _player.Physics.DeltaTranslate(Vector3.UnitY * 20);
+                        //_player.Physics.TargetPosition = new Vector3(_player.Physics.TargetPosition.X, waterHeight+2, _player.Physics.TargetPosition.Z);
+                        _player.Physics.GravityDirection = Vector3.UnitY*4;
                     }
                     else
                     {
