@@ -5,6 +5,7 @@ using Hedra.Engine.WorldBuilding;
 using NUnit.Framework;
 using System.Collections.Generic;
 using Hedra.Engine;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.CacheSystem;
@@ -59,11 +60,13 @@ namespace HedraTests.Structure
             {
                 _interceptedStructures.Add(Structure);
             });
+            var guardAiComponentMock = new Mock<IGuardAIComponent>();
             worldMock.Setup(W => W.SpawnMob(It.IsAny<string>(), It.IsAny<Vector3>(), It.IsAny<int>())).Returns(delegate
             {
                 var ent = new Entity();
                 ent.AddComponent(new HealthBarComponent(ent, "test"));
                 ent.AddComponent(new DamageComponent(ent));
+                ent.AddComponent(guardAiComponentMock.Object);
                 if(!_interceptedEntities.Contains(ent)) _interceptedEntities.Add(ent);
                 return ent;
             });
