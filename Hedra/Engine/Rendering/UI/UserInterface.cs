@@ -31,6 +31,7 @@ namespace Hedra.Engine.Rendering.UI
 		public NetworkUI ConnectPanel;
 		private Texture _title;
 		private Button _newRun;
+	    private Button _loadButton;
         public static Font Regular;
 		public static Color DefaultFontColor = Color.White;
 		
@@ -61,10 +62,10 @@ namespace Hedra.Engine.Rendering.UI
 			
 			_newRun.Click += new OnButtonClickEventHandler(NewRunOnClick);
 			
-			Button chooseChr = new Button(new Vector2(.3f, bandPosition.Y),
+			_loadButton = new Button(new Vector2(.3f, bandPosition.Y),
 			                             new Vector2(0.15f,0.075f), "Load World", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
 
-			chooseChr.Click += delegate {
+            _loadButton.Click += delegate {
 				if(!GameManager.InStartMenu){
 					AutosaveManager.Save();
 					GameManager.LoadMenu();
@@ -105,7 +106,7 @@ namespace Hedra.Engine.Rendering.UI
 			Menu.AddElement(_title);
 			Menu.AddElement(quit);
 			Menu.AddElement(_newRun);
-			Menu.AddElement(chooseChr);
+			Menu.AddElement(_loadButton);
 			Menu.AddElement(options);
 			Menu.AddElement(disconnect);
 			//Menu.AddElement(Alpha);
@@ -114,7 +115,7 @@ namespace Hedra.Engine.Rendering.UI
 				if(E == PanelState.Enabled){
 					if(Networking.NetworkManager.IsConnected){
 						_newRun.Disable();
-						chooseChr.Disable();
+					    _loadButton.Disable();
 						connectToServer.Disable();
 						disconnect.Enable();
 					}else{
@@ -139,12 +140,14 @@ namespace Hedra.Engine.Rendering.UI
 		    if (_player == null) return;
 
 			this.GamePanel.Update();
-		}
+		    _loadButton.Text.Text = GameManager.InStartMenu ? "Load World" : "Start Menu";
+        }
 		
-		public void ShowMenu(){
+		public void ShowMenu()
+		{
 			if(GameManager.IsLoading || GameManager.InMenu) return;
-			
-			Menu.Enable();
+
+            Menu.Enable();
 			OptionsMenu.Disable();
 			ChrChooser.Disable();
 			if(_player?.Inventory != null) _player.Inventory.Show = false;
@@ -152,7 +155,8 @@ namespace Hedra.Engine.Rendering.UI
 			GamePanel.Disable();
 			ChrCreator.Disable();
 			ConnectPanel.Disable();
-			if(!Networking.NetworkManager.IsConnected){
+			if(!Networking.NetworkManager.IsConnected)
+			{
 				GameSettings.Paused = true;
 			}else{
 				_player.View.LockMouse = false;
@@ -163,7 +167,6 @@ namespace Hedra.Engine.Rendering.UI
 			LocalPlayer.Instance.Chat.Show = false;
 			GameSettings.DarkEffect = false;
 			System.Windows.Forms.Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height/2);
-			//CoroutineManager.StartCoroutine(MenuEnter);
 		}
 			
 		public void HideMenu()
