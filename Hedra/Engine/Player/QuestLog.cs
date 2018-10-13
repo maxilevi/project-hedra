@@ -40,7 +40,7 @@ namespace Hedra.Engine.Player
                 if (GameManager.IsLoading || !_enabled || _show == value)
                     return;
 
-                SoundManager.PlayUISound(SoundType.OnOff, 1.0f, 0.6f);
+                SoundManager.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
                 _show = value;
 
                 if (value)

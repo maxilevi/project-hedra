@@ -24,14 +24,16 @@ namespace Hedra.Engine.Rendering
         private static readonly Shader Shader;
         public Func<Vector3> Tip { get; set; }
         private readonly List<TrailPoint> _tipPoints;
-        private readonly VBO<Vector3> _points;
-        private readonly VBO<Vector4> _colors;
-        private readonly VAO<Vector3, Vector4> _data;
+        private VBO<Vector3> _points;
+        private VBO<Vector4> _colors;
+        private VAO<Vector3, Vector4> _data;
         public float Thickness { get; set; } = 1f;
         public int UpdateRate { get; set; } = 8;
         public Vector4 Color { get; set; }
         public float MaxLifetime { get; set; } = 1f;
         public Vector3 Orientation { get; set; } = Vector3.UnitY;
+        private bool _buffersCreated;
+        private bool _emit;
         private int _times;
 
         static TrailRenderer()
@@ -45,18 +47,22 @@ namespace Hedra.Engine.Rendering
             this._tipPoints = new List<TrailPoint>();
             this.Color = Color;
 
-            _points = new VBO<Vector3>(new Vector3[1], Vector3.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
-            _colors = new VBO<Vector4>(new Vector4[1], Vector4.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
-            _data = new VAO<Vector3, Vector4>(_points, _colors);
+            Executer.ExecuteOnMainThread(delegate
+            {
+                _points = new VBO<Vector3>(new Vector3[1], Vector3.SizeInBytes, VertexAttribPointerType.Float,
+                    BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
+                _colors = new VBO<Vector4>(new Vector4[1], Vector4.SizeInBytes, VertexAttribPointerType.Float,
+                    BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
+                _data = new VAO<Vector3, Vector4>(_points, _colors);
+                _buffersCreated = true;
+            });
                
             DrawManager.TrailRenderer.Add(this);
         }
 
-        private bool _emit;
-
         public bool Emit
         {
-            get { return _emit; }
+            get => _emit;
             set
             {
                 if(!_emit && value)
@@ -68,7 +74,7 @@ namespace Hedra.Engine.Rendering
 
         public void Update()
         {
-            if(Time.Paused) return;
+            if(Time.Paused || !_buffersCreated) return;
             for (int i = _tipPoints.Count - 1; i > -1; i--)
             {
                 _tipPoints[i] -= Time.DeltaTime;
@@ -164,7 +170,7 @@ namespace Hedra.Engine.Rendering
 
         public void Draw()
         {
-            if(_tipPoints.Count <= 4) return;
+            if(_tipPoints.Count <= 4 || !_buffersCreated) return;
             Renderer.Disable(EnableCap.CullFace);
             Renderer.Enable(EnableCap.Blend);
 
@@ -182,9 +188,14 @@ namespace Hedra.Engine.Rendering
 
         public void Dispose()
         {
-            this._points.Dispose();
-            this._colors.Dispose();
-            this._data.Dispose();
+            void DisposeBuffers()
+            {
+                this._points.Dispose();
+                this._colors.Dispose();
+                this._data.Dispose();
+            }
+            if(_buffersCreated) DisposeBuffers();
+            else Executer.ExecuteOnMainThread(DisposeBuffers);
             DrawManager.TrailRenderer.Remove(this);
         }
     }
@@ -192,9 +203,9 @@ namespace Hedra.Engine.Rendering
     public struct TrailPoint
     {
         public Vector3 Point;
-        public float Lifetime;
-        public float MaxLifetime;
-        public float AlphaOffset;
+        public float Lifetime { get; }
+        public float MaxLifetime { get; }
+        public float AlphaOffset { get; }
 
         public TrailPoint(Vector3 Point, float Lifetime, float MaxLifetime, float AlphaOffset)
         {

@@ -159,11 +159,11 @@ namespace Hedra.Engine.Rendering.UI
                 this.Text.TextColor = new Vector4(0.937f, 0.624f, 0.047f, 1.000f).ToColor();
                 this.Text.UpdateText();
                 if (this.PlaySound)
-                    SoundManager.PlayUISound(SoundType.OnOff, 1f, .2f);
+                    SoundManager.PlayUISound(SoundType.ButtonHover, 1f, .2f);
             }
             if (this.Texture != null)
                 if (this.PlaySound)
-                    SoundManager.PlayUISound(SoundType.OnOff, 1f, .3f);
+                    SoundManager.PlayUISound(SoundType.ButtonHover, 1f, .3f);
         }
 
         public void OnHoverExit(object Sender, EventArgs E)

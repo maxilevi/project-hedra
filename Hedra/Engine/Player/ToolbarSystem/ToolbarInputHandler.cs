@@ -41,7 +41,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 int keyIndex = int.Parse(keyText.Substring(keyText.Length - 1, 1)) - 1;
                 if (keyIndex < 0 || keyIndex > Toolbar.InteractableItems - 1)
                 {
-                    SoundManager.PlayUISound(SoundType.OnOff);
+                    SoundManager.PlayUISound(SoundType.ButtonHover);
                     return;
                 }
 
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 }
                 else
                 {
-                    SoundManager.PlayUISound(SoundType.OnOff);
+                    SoundManager.PlayUISound(SoundType.ButtonHover);
                 }
             }
         }

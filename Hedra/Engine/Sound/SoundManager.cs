@@ -77,7 +77,7 @@ namespace Hedra.Engine.Sound
     {
 		ButtonClick,
 		WaterSplash,
-		OnOff,
+		ButtonHover,
 		SwooshSound,
 		HitSound,
 		NotificationSound,

@@ -424,7 +424,6 @@ namespace Hedra.Engine.Player
 				);
 
 			Rotation = Model.Rotation;
-			//this._shadow.Position = Model.Position;
 			if(MountModel != null)
 				MountModel.TargetRotation = TargetRotation;
 
@@ -441,7 +440,7 @@ namespace Hedra.Engine.Player
 		    {
 		        _modelSound.Type = Human.IsSleeping ? SoundType.HumanSleep : SoundType.HumanRun;
 		        _modelSound.Position = Position;
-		        _modelSound.Update(IsWalking && Human.IsGrounded || Human.IsSleeping);
+		        _modelSound.Update(IsWalking && !Human.IsSwimming && !Human.IsJumping || Human.IsSleeping);
 		    }
 		    Model.Update();
         }

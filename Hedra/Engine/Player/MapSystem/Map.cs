@@ -53,7 +53,8 @@ namespace Hedra.Engine.Player.MapSystem
         private float _mapDitherRadius;
 	    private Chunk _underChunk;
 
-        public Map(LocalPlayer Player){
+        public Map(LocalPlayer Player)
+        {
 			this._player = Player;
             this._panel = new Panel();
             this._icons = new List<MapItem>();
@@ -87,7 +88,8 @@ namespace Hedra.Engine.Player.MapSystem
             });
         }
 
-		public void Update(){
+		public void Update()
+        {
 			if(World.Seed == World.MenuSeed && this.Show) this.Show = false;
 
 		    this._size = Mathf.Lerp(_size, _targetSize, Time.IndependantDeltaTime * 4f);
@@ -292,6 +294,7 @@ namespace Hedra.Engine.Player.MapSystem
 	        {
 	            var prevMesh = BaseItem.Mesh;
 	            var item = _meshBuilder.BuildItem(Coords);
+	            item.Mesh.Position = prevMesh.Position;
                 BaseItem.Mesh = item.Mesh;
 	            BaseItem.HasChunk = item.HasChunk;
 	            BaseItem.Coordinates = Coords;
@@ -359,7 +362,7 @@ namespace Hedra.Engine.Player.MapSystem
                     });
 				    _player.Loader.UpdateFog(Force: true);
                 }
-				SoundManager.PlayUISound(SoundType.OnOff, 1.0f, 0.6f);
+				SoundManager.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
 				_show = value;
 			}
 		}

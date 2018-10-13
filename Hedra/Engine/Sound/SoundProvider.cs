@@ -45,7 +45,7 @@ namespace Hedra.Engine.Sound
             {
 	            LoadSound(SoundType.ButtonClick, "Sounds/HoverButton.ogg");
 	            LoadSound(SoundType.WaterSplash, "Sounds/WaterSplash.ogg");
-	            LoadSound(SoundType.OnOff, "Sounds/OnOff.ogg");
+	            LoadSound(SoundType.ButtonHover, "Sounds/OnOff.ogg");
 	            LoadSound(SoundType.SwooshSound, "Sounds/Swoosh.ogg");
 	            LoadSound(SoundType.HitSound, "Sounds/Hit.ogg");
 	            LoadSound(SoundType.NotificationSound, "Sounds/ItemCollect.ogg");
@@ -78,7 +78,7 @@ namespace Hedra.Engine.Sound
             });
         }
 
-	    private void LoadSound(SoundType Type, string Name)
+	    private void LoadSound(SoundType Type, string Name, bool a = false)
 	    {
 	        _soundBuffers[(int)Type] = 
 		        new SoundBuffer(
@@ -182,16 +182,14 @@ namespace Hedra.Engine.Sound
 			
 			using(VorbisReader reader = new VorbisReader(stream, true))
 			{
-
 			    if (Length == -1)
 			    {
 			        var secs = reader.TotalTime.TotalSeconds;
-                    if (secs < 1)
-			            Length = (int) Math.Ceiling(reader.TotalTime.TotalSeconds * reader.SampleRate * sizeof(short));
+                    if (Math.Ceiling(secs) - secs < secs * 0.01)
+                        Length = (int) Math.Ceiling(secs) * reader.SampleRate * sizeof(short);
                     else
-                        Length = (int) Math.Ceiling(reader.TotalTime.TotalSeconds) * reader.SampleRate * sizeof(short);
+                        Length = (int)Math.Ceiling(secs * reader.SampleRate * sizeof(short));
                 }
-
                 short[] data = new short[Length];
 				float[] buffer = new float[Length];
 				

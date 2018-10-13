@@ -1152,7 +1152,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\BoatMove.ogg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\PreparingAttack.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

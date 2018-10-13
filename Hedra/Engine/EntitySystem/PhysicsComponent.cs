@@ -14,6 +14,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.Sound;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -121,7 +122,7 @@ namespace Hedra.Engine.EntitySystem
 	        }
 
 		    var modifier = 1;//40f * (1f / (float) Time.Frametime);
-            Velocity += -Physics.Gravity * GravityDirection * _deltaTime * 4;
+            Velocity += -Physics.Gravity * GravityDirection * _deltaTime * Chunk.BlockSize;
 	        Velocity = Mathf.Clamp(Velocity, -VelocityCap, VelocityCap);
 
             var command = new MoveCommand(Parent, Velocity * _deltaTime);
@@ -147,6 +148,10 @@ namespace Hedra.Engine.EntitySystem
 	                            Parent.KnockForSeconds(3f);
 	                        });
 	                    }
+	                }
+	                else if(Falltime > 1f)
+	                {
+		                SoundManager.PlaySound(SoundType.HitGround, _parent.Position);
 	                }
 	                Falltime = 0;
 	            }

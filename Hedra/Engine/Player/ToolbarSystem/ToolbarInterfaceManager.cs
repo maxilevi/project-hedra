@@ -112,11 +112,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
             var button = (Button) Sender;
             if (_toolbarInferface.Buttons.Contains(button))
             {
-                if (!this.AddTo(button, _bagInterface)) SoundManager.PlayUISound(SoundType.OnOff);
+                if (!this.AddTo(button, _bagInterface)) SoundManager.PlayUISound(SoundType.ButtonHover);
             }
             else
             {
-                if (!this.AddTo(button, _toolbarInferface)) SoundManager.PlayUISound(SoundType.OnOff);
+                if (!this.AddTo(button, _toolbarInferface)) SoundManager.PlayUISound(SoundType.ButtonHover);
             }
             this.UpdateView();
         }

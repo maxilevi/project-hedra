@@ -230,7 +230,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     this.SetBlueprint(_blueprint);
                 this.UpdateView();
                 this.SetInventoryState(_show);
-                SoundManager.PlayUISound(SoundType.OnOff, 1.0f, 0.6f);
+                SoundManager.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }
         }
     }

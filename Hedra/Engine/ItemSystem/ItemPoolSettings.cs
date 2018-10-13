@@ -9,7 +9,6 @@ namespace Hedra.Engine.ItemSystem
         public string EquipmentType { get; set; }
         public int Seed { get; set; }
 
-        public ItemPoolSettings() { }
         public ItemPoolSettings(ItemTier Tier)
         {
             this.Initialize(Tier, null);

@@ -115,7 +115,8 @@ namespace Hedra.Engine.Rendering.Particles
 		}
 		
 		
-		public void Update(){
+		public void Update()
+		{
 			if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
 			
 			for(int i = 0; i < Particles.Count; i++){
@@ -128,7 +129,8 @@ namespace Hedra.Engine.Rendering.Particles
 			UpdateVBO();
 		}
 		
-		public void Draw(){
+		public void Draw()
+        {
 			if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
 			
 			if(Particles.Count > 0){

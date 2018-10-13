@@ -96,7 +96,7 @@ namespace Hedra.Engine.Management
 				        DrawFunctions[i].Draw();
 				        drawedObjects++;
 			        }
-		        }
+                }
 	        }
 
 	        Renderer.Enable(EnableCap.DepthTest);

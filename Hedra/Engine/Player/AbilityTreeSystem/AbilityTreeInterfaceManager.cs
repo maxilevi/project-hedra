@@ -41,7 +41,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 else if(!previousUnlocked)
                     _player.MessageDispatcher.ShowNotification("YOU NEED TO UNLOCK THE PREVIOUS SKILL", Color.DarkRed, 3.0f);
                 else
-                    Sound.SoundManager.PlayUISound(Sound.SoundType.OnOff, 1.0f, 0.6f);              
+                    Sound.SoundManager.PlayUISound(Sound.SoundType.ButtonHover, 1.0f, 0.6f);              
             }
             this.UpdateView();
             _itemInfo.Show(item);

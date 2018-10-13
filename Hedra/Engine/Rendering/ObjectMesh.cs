@@ -34,7 +34,7 @@ namespace Hedra.Engine.Rendering
 			this.Position = Position;
 			this.Rotation = Vector3.Zero;
 			Mesh.Enabled = true;
-			Enabled = true;
+			Enabled = true;	
 			DrawManager.Add(this);
 		}
 
