@@ -17,6 +17,8 @@ namespace Hedra.Engine.Game
 {
     public class GameProvider : IGameProvider
     {
+	    public event EventHandler AfterSave;
+	    public event EventHandler BeforeSave;
         public bool Exists => Program.GameWindow.Exists;
 	    public bool IsExiting => Program.GameWindow.IsExiting;    
         public KeyboardManager Keyboard { get; private set; }
@@ -189,6 +191,16 @@ namespace Hedra.Engine.Game
 		    GameManager.Player.PlaySpawningAnimation = true;
 		    GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);
 		    
+	    }
+
+	    public void Unload()
+	    {
+		    BeforeSave?.Invoke(this, new EventArgs());
+	    }
+
+	    public void Reload()
+	    {
+		    AfterSave?.Invoke(this, new EventArgs());
 	    }
 
 	    public bool InStartMenu => World.Seed == World.MenuSeed;

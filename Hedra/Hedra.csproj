@@ -356,6 +356,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathEdge.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathGraph.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathVertex.cs" />
+    <Compile Include="Engine\WorldBuilding\GraveyardAmbientHandler.cs" />
     <Compile Include="Engine\WorldBuilding\IWorldBuilding.cs" />
     <Compile Include="Engine\WorldBuilding\LineGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\RoundedGroundwork.cs" />

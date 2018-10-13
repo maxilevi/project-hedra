@@ -57,16 +57,10 @@ namespace Hedra.Engine.Player
 		private IStructureAware StructureAware { get; }
 	    private float _acummulativeHealing;
         private bool _floating;
-	    private bool _inCementery;
-	    private float _cementeryTime;
-	    private float _targetCementeryTime;
 	    private Vector3 _previousPosition;
-	    private bool _shouldUpdateTime;
 	    private float _health;
 	    private bool _wasSleeping;
 	    private bool _enabled;
-	    private float _oldCementeryTime;
-	    private float _oldTime;
 	    private bool _canInteract;
 
         public LocalPlayer()
@@ -167,52 +161,7 @@ namespace Hedra.Engine.Player
 			//Dont cull the back chunk so that shadows can render
 			Vector2 chunkPos = World.ToChunkSpace(this.Position);
             Chunk underChunk = World.GetChunkAt(this.Position);
-			
-			//START CEMENTERY
-			bool wasInCementery = _inCementery;
-			_inCementery = false;
 
-            var structures = World.Structures;
-            for (var i = structures.Count- 1; i > -1; i--)
-		    {
-		        var cementery = structures[i] as Graveyard;           
-                if (cementery == null) continue;
-
-		        Vector3 cementaryPosition = cementery.Position;
-
-		        if ((cementaryPosition.Xz - this.Position.Xz).LengthSquared <
-		            cementery.Radius * cementery.Radius * .5f * .5f && !cementery.Restored)
-		        {
-		            _inCementery = true;
-		            break;
-		        }
-		    }
-		    
-		    if(_inCementery && !wasInCementery){
-				_cementeryTime = SkyManager.DayTime;
-				if(_cementeryTime < 12000) SkyManager.DayTime += 24000;
-				SkyManager.Enabled = false;
-				_targetCementeryTime = GraveyardDesign.GraveyardSkyTime;
-				_shouldUpdateTime = true;
-				SoundManager.PlayUISound(SoundType.DarkSound);
-			}
-			else if (!_inCementery && wasInCementery){
-				_targetCementeryTime = _cementeryTime;
-				if(this._cementeryTime < 12000) _targetCementeryTime += 24000;
-				_shouldUpdateTime = true;
-				SkyManager.Enabled = false;
-			}
-
-		    if(_shouldUpdateTime){
-				SkyManager.SetTime( Mathf.Lerp(SkyManager.DayTime, _targetCementeryTime, (float) Time.DeltaTime * 2f) );
-				if( Math.Abs(SkyManager.DayTime - _targetCementeryTime) < 10 )
-				{
-					_shouldUpdateTime = false;
-					SkyManager.Enabled = true;
-					if( SkyManager.DayTime > 24000) SkyManager.DayTime -= 24000;
-				}
-			}
-			//END CEMENTERY
 			
 			if( this.Model.Enabled && (_previousPosition - Model.Human.BlockPosition).LengthFast > 0.25f && Model.Human.IsGrounded && underChunk != null){
 				World.Particles.VariateUniformly = true;
@@ -430,33 +379,6 @@ namespace Hedra.Engine.Player
 				if (IsSailing) Boat.Disable();
 			}
 		}
-
-        public void Unload()
-        {
-			if(_inCementery){
-				_oldCementeryTime = SkyManager.DayTime;
-				SkyManager.DayTime = _cementeryTime;
-			}
-            _oldTime = float.MaxValue;
-            if (SkyManager.StackLength > 0)
-            {
-                _oldTime = SkyManager.PeekTime();
-                SkyManager.PopTime();
-            }
-		}
-		
-		public void Load()
-		{
-			if(_inCementery){
-				SkyManager.DayTime = _oldCementeryTime;
-			}
-
-		    if (_oldTime != float.MaxValue)
-		    {
-		        SkyManager.DayTime = _oldTime;
-		        SkyManager.PushTime();
-            }
-        }
 		
 		public void Respawn()
 		{
@@ -504,7 +426,6 @@ namespace Hedra.Engine.Player
 	        Inventory.ClearInventory();
 	        ComponentManager.Clear();
 		    Chat.Clear();
-            //UI.ShowMenu();
             Model.Alpha = 0f;
 	        View.TargetPitch = 0f;
 	        View.TargetYaw = 0f;

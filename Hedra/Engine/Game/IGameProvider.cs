@@ -1,10 +1,13 @@
-﻿using Hedra.Engine.Management;
+﻿using System;
+using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 
 namespace Hedra.Engine.Game
 {
     public interface IGameProvider
     {
+        event EventHandler AfterSave;
+        event EventHandler BeforeSave;
         bool Exists { get; }
         bool IsExiting { get; }
         KeyboardManager Keyboard { get; }
@@ -17,5 +20,7 @@ namespace Hedra.Engine.Game
         void LoadMenu();
         void Load();
         void NewRun(PlayerInformation Information);
+        void Unload();
+        void Reload();
     }
 }

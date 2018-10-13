@@ -34,8 +34,6 @@ namespace Hedra.Engine.Player
         ICollidable[] NearCollisions { get; }
         bool Enabled { get; set; }
         void Respawn();
-        void Load();
-        void Unload();
         void Reset();
     }
 }

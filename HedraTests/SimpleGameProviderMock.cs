@@ -1,13 +1,18 @@
-﻿using Hedra.Engine.Game;
+﻿using System;
+using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 
 namespace HedraTests
 {
     public class SimpleGameProviderMock : IGameProvider
-    {
-        public bool IsExiting { get; set; } = false;
+    {    
+        public event EventHandler AfterSave;
         
+        public event EventHandler BeforeSave;
+        
+        public bool IsExiting { get; set; } = false;
+
         public bool Exists { get; set; } = true;
         
         public KeyboardManager Keyboard => null;
@@ -40,6 +45,16 @@ namespace HedraTests
         public void NewRun(PlayerInformation Information)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void Unload()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Reload()
+        {
+            throw new NotImplementedException();
         }
     }
 }

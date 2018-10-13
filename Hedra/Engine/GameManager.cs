@@ -6,13 +6,7 @@
  */
 
 using System;
-using System.Collections;
-using System.Drawing;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 
@@ -21,11 +15,15 @@ namespace Hedra.Engine
 
 	public static class GameManager
 	{
+		public static event EventHandler AfterSave;
+		public static event EventHandler BeforeSave;
 		public static IGameProvider Provider { get; set; } = new GameProvider();
 
         public static void Load()
         {
             Provider.Load();
+	        Provider.BeforeSave += (S, E) => BeforeSave?.Invoke(S, E);
+	        Provider.AfterSave += (S, E) => AfterSave?.Invoke(S, E);
         }
 
 	    public static void LoadMenu()
@@ -41,6 +39,16 @@ namespace Hedra.Engine
 		public static void NewRun(IPlayer User)
 		{
 			Provider.NewRun(DataManager.DataFromPlayer(User));
+		}
+
+		public static void Unload()
+		{
+			Provider.Unload();
+		}
+
+		public static void Reload()
+		{
+			Provider.Reload();
 		}
 		
 		public static bool Exists => Provider.Exists;

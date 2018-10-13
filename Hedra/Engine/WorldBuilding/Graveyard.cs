@@ -19,20 +19,19 @@ namespace Hedra.Engine.WorldBuilding
     /// <summary>
     /// Description of Cementary.
     /// </summary>
-    public class Graveyard : BaseStructure, IUpdatable
+    public sealed class Graveyard : BaseStructure, IUpdatable
 	{
-		private readonly ParticleSystem _particles = new ParticleSystem();
-		private readonly int _passedTime = 0;
-	    private bool _restoreSoundPlayed;
+		private readonly GraveyardAmbientHandler _ambientHandler;
         public Entity[] Enemies;
 	    public bool Restored { get; private set; }
-        public float Radius { get; set; }
+        public float Radius { get; }
+		
 
-
-        public Graveyard(Vector3 Position, float Radius){
+        public Graveyard(Vector3 Position, float Radius)
+        {
 			this.Position = Position;
             this.Radius = Radius;
-			_particles.Position = this.Position;
+	        _ambientHandler = new GraveyardAmbientHandler(this);
 			UpdateManager.Add(this);
 		}
 		
@@ -54,36 +53,12 @@ namespace Hedra.Engine.WorldBuilding
 		        this.Restored = allDead;
 		    }
 
-		    if (this.Restored && !_restoreSoundPlayed)
-		    {
-		        _restoreSoundPlayed = true;
-                SoundManager.PlaySound(SoundType.DarkSound, LocalPlayer.Instance.Position);
-
-		    }
-
-            if (!Restored &&  (this.Position - GameManager.Player.Position).Xz.LengthSquared 
-			   < Radius * Radius)
-            {
-			
-				if(_passedTime % 2 == 0){
-					_particles.Color = Particle3D.AshColor;
-					_particles.VariateUniformly = false;
-					_particles.Position = GameManager.Player.Position + Vector3.UnitY * 1f;
-					_particles.Scale = Vector3.One * .85f;
-					_particles.ScaleErrorMargin = new Vector3(.05f,.05f,.05f);
-					_particles.Direction = Vector3.UnitY * 0f;
-					_particles.ParticleLifetime = 2f;
-					_particles.GravityEffect = -0.000f;
-					_particles.PositionErrorMargin = new Vector3(64f, 12f, 64f);
-					_particles.Grayscale = true;
-					
-					_particles.Emit();
-				}
-			}
+			_ambientHandler.Update();
 		}
 		
-		public override void Dispose(){
-            
+		public override void Dispose()
+		{
+            _ambientHandler.Dispose();
 			UpdateManager.Remove(this);
 		}
 	}

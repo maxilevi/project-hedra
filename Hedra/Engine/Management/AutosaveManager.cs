@@ -25,8 +25,9 @@ namespace Hedra.Engine.Management
 			}
 		}
 		
-		public static void Save(){
-			GameManager.Player.Unload();
+		public static void Save()
+		{
+			GameManager.Unload();
 			
 			for(var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
 				GameManager.Player.Toolbar.Skills[i].Unload();
@@ -36,7 +37,7 @@ namespace Hedra.Engine.Management
 			for(var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
 				GameManager.Player.Toolbar.Skills[i].Load();
 			
-			GameManager.Player.Load();
+			GameManager.Reload();
 		}
 	}
 }
