@@ -32,13 +32,14 @@ namespace Hedra.Engine.AISystem.Behaviours
                 this.Target = null;
                 Follow.Target = this.Target;
             }
-
-            var inAttackRange = Target != null && (Parent.InAttackRange(Target, 1.75f) || SpitTimer.Ready && (Parent.Position - Target.Position).LengthSquared > 24*24);
+            var canSpit = Target != null && SpitTimer.Ready &&
+                          (Parent.Position - Target.Position).LengthSquared > 24 * 24 && (Parent.Position - Target.Position).LengthSquared < 80 * 80;
+            var inAttackRange = Target != null && (Parent.InAttackRange(Target, 1.75f) || canSpit);
             if (!Parent.Model.IsAttacking && Target != null && !inAttackRange)
             {
                 Follow.Update();
             }
-            inAttackRange = Target != null && (Parent.InAttackRange(Target, 2.25f) || SpitTimer.Ready && (Parent.Position - Target.Position).LengthSquared > 24 * 24);
+            inAttackRange = Target != null && (Parent.InAttackRange(Target, 2.25f) || canSpit);
             if (Target != null && inAttackRange)
             {
                 FollowTimer.Reset();

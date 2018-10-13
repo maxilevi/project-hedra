@@ -41,18 +41,18 @@ namespace Hedra.Engine.StructureSystem
 
             Executer.ExecuteOnMainThread(delegate
             {
-                Entity treeBoss = BossGenerator.Generate(new [] {MobType.Gorilla, MobType.Troll}, rng);
-
+                //var treeBoss = BossGenerator.Generate(new [] {MobType.Gorilla, MobType.Troll}, rng);
+/*
                 var prize = new Chest(Vector3.TransformPosition(Vector3.UnitZ * +10f + Vector3.UnitX * -80f, transMatrix),
                     ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
                 prize.Condition += () => treeBoss == null || treeBoss.IsDead;
                 prize.Rotation = Vector3.UnitY * 90f;
 
                 treeBoss.Position = prize.Position.Xz.ToVector3() - Vector3.UnitZ * 30f;
-                treeBoss.Model.Position = prize.Position.Xz.ToVector3();
+                treeBoss.Model.Position = prize.Position.Xz.ToVector3();*/
                 //treeBoss.SearchComponent<BossAIComponent>().Protect = () => prize.Position;
 
-                World.AddStructure(prize);
+                //World.AddStructure(prize);
                // underChunk.AddStaticElement(model);
             });
         }

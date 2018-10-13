@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Engine.AISystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -21,7 +22,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 	/// </summary>
 	public static class BossGenerator
 	{
-		public static Entity Generate(MobType[] PossibleTypes, Random Rng)
+		public static Entity Generate(MobType[] PossibleTypes, Vector3 Position, Random Rng)
 		{
 		    var type = PossibleTypes[Rng.Next(0, PossibleTypes.Length)];
 		    if (type == MobType.Troll)
@@ -29,6 +30,8 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 		        type = MobType.Gorilla;
 		    }
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);
+			boss.Position = Position;
+			boss.SearchComponent<IGuardAIComponent>().GuardPosition = Position;
 		    boss.MaxHealth *= (float) (Math.Log(GameManager.Player.Level) + 1);
 		    boss.Health = boss.MaxHealth;
 		    var dmgComponent = boss.SearchComponent<DamageComponent>();
@@ -49,7 +52,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 			
 			boss.AddComponent(dmgComponent);
 			boss.AddComponent(healthBarComponent);
-				
+			
 			return boss;
 			
 		}

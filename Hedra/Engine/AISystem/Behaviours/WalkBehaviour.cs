@@ -18,10 +18,11 @@ namespace Hedra.Engine.AISystem.Behaviours
 
         public void Cancel()
         {
-            _arrived = true;
+            this._arrived = true;
             this._callback?.Invoke();
             this._callback = null;
             this.Target = Vector3.Zero;
+            this.HasTarget = false;
         }
 
         public void SetTarget(Vector3 Point)
@@ -34,6 +35,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             this._arrived = false;
             this._callback = Callback;
             this.Target = Point;
+            this.HasTarget = true;
         }
 
         public override void Update()
@@ -51,5 +53,7 @@ namespace Hedra.Engine.AISystem.Behaviours
                 _lastPosition = Parent.Position;
             }
         }
+        
+        public bool HasTarget { get; private set; }
     }
 }

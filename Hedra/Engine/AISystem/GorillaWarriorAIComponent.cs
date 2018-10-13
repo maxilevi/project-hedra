@@ -1,17 +1,18 @@
 ﻿using Hedra.Engine.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;
+using OpenTK;
 
 namespace Hedra.Engine.AISystem
 {
-    public class GorillaWarriorAIComponent : BasicAIComponent
+    public class GorillaWarriorAIComponent : BasicAIComponent, IGuardAIComponent
     {
         protected RetaliateBehaviour Retaliate { get; }
-        protected HostileBehaviour Hostile { get; }
+        protected GuardHostileBehaviour Hostile { get; }
 
         public GorillaWarriorAIComponent(Entity Entity) : base(Entity)
         {
             Retaliate = new RetaliateBehaviour(Parent);
-            Hostile = new HostileBehaviour(Parent);
+            Hostile = new GuardHostileBehaviour(Parent);
             this.AlterBehaviour<AttackBehaviour>(new GorillaWarriorAttackBehaviour(Entity));
         }
 
@@ -25,6 +26,12 @@ namespace Hedra.Engine.AISystem
             {
                 Hostile.Update();
             }
+        }
+        
+        public Vector3 GuardPosition
+        {
+            get => Hostile.GuardPosition;
+            set => Hostile.GuardPosition = value;
         }
     }
 }

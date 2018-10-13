@@ -21,7 +21,7 @@ namespace Hedra.Engine.ModuleSystem.AnimationEvents
                 if(entity == Parent || entity.IsStatic) continue;
                 var range = 1 - Mathf.Clamp((position - entity.Position).Xz.LengthFast / 32f, 0, 1);
                 if (range < 0.005f) continue;
-                entity.AddComponent(new SlowingComponent(entity, Parent, 3f, 100 - 30f * range));               
+                entity.AddComponent(new SlowingComponent(entity, Parent, 3f, 100 - 30f * range - 25f));               
                 entity.ShowIcon(CacheItem.FearIcon, 3f);
             }
             SoundManager.PlaySound(SoundType.GorillaGrowl, position, false, 1f, 5f);

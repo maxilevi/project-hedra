@@ -164,7 +164,7 @@ namespace Hedra.Engine.Player
         public void Roll()
         {
 			var player = this as LocalPlayer;
-			if( IsUnderwater || IsTravelling || IsRolling || IsCasting || IsRiding || !IsGrounded) return;
+		    if( IsUnderwater || IsTravelling || IsRolling || IsCasting || IsRiding || IsJumping) return;
 			
 			if(player != null){
 			    if (Stamina < DodgeCost)

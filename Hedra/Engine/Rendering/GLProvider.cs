@@ -637,6 +637,8 @@ namespace Hedra.Engine.Rendering
         private static void EnsureNoErrors()
         {
 #if DEBUG
+            if(System.Threading.Thread.CurrentThread.ManagedThreadId != Hedra.MainThreadId)
+                throw new ArgumentException($"Invalid GL calls outside of the main thread.");
             var error = GL.GetError();
             if(error != ErrorCode.NoError)
                 Log.WriteResult(false, $"Unexpected OpenGL error: {error}");

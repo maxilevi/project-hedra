@@ -249,7 +249,7 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
-        public T SearchComponent<T>() where T : IComponent<IEntity>
+        public T SearchComponent<T>()
         {
             throw new NotImplementedException();
         }

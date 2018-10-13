@@ -310,7 +310,7 @@ namespace Hedra.Engine.EntitySystem
             if (Component is ITickable tickable) _tickSystem.Remove(tickable);
         }
 
-        public T SearchComponent<T>() where T : IComponent<IEntity>
+        public T SearchComponent<T>()
         {
             for (var i = 0; i < Components.Count; i++)
                 if (Components[i] is T variable)

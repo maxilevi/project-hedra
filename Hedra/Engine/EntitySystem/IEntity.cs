@@ -109,7 +109,7 @@ namespace Hedra.Engine.EntitySystem
 
         void RemoveComponent(IComponent<IEntity> Component);
 
-        T SearchComponent<T>() where T : IComponent<IEntity>;
+        T SearchComponent<T>();
 
         void UpdateEnviroment();
 
