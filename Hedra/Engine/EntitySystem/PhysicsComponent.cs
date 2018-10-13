@@ -166,7 +166,8 @@ namespace Hedra.Engine.EntitySystem
 
 	    public void ExecuteTranslate(MoveCommand Command)
 	    {
-	        Physics.Threading.AddCommand(Command);
+	        //Physics.Threading.AddCommand(Command);
+		    ProccessCommand(Command);
 	    }
 
 	    public void Translate(Vector3 Delta)

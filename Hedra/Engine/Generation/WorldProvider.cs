@@ -588,6 +588,24 @@ namespace Hedra.Engine.Generation
             return mob;
         }
 
+        public Vector3 FindSpawningPoint(Vector3 Around)
+        {
+            var point = Around;
+
+            bool IsOcean(Vector3 Point)
+            {
+                var region = BiomePool.GetRegion(Point);
+                return region.Generation.GetHeight(Point.X, Point.Z, null, out _) < Engine.BiomeSystem.BiomePool.SeaLevel;
+            }
+            while (IsOcean(point))
+            {
+                point += 
+                    new Vector3( (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize);
+            }
+
+            return point;
+        }
+
         public Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition)
         {
             var position = DesiredPosition;

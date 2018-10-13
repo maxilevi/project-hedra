@@ -23,12 +23,12 @@ namespace Hedra.Engine.PhysicsSystem
 
 	    static Physics()
 	    {
-	        Threading = new PhysicsThreadManager();
+	        //Threading = new PhysicsThreadManager();
         }
 
         public static void Update()
 	    {
-	        Threading.Update();
+	        //Threading.Update();
 	    }
 
 	    public static Box BuildBroadphaseBox(VertexData Model)

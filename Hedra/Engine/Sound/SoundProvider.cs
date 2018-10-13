@@ -72,7 +72,9 @@ namespace Hedra.Engine.Sound
 	            LoadSound(SoundType.GorillaGrowl, "Sounds/GorillaGrowl.ogg");
 	            LoadSound(SoundType.PreparingAttack, "Sounds/PreparingAttack.ogg");
                 LoadSound(SoundType.River, "Sounds/River.ogg");
-	            LoadSound(SoundType.BoatMove, "Sounds/BoatMove.ogg");
+	            //LoadSound(SoundType.BoatMove, "Sounds/BoatMove.ogg");
+	            //LoadSound(SoundType.Swimming, "Sounds/Swimming.ogg");
+	            LoadSound(SoundType.Underwater, "Sounds/Underwater.ogg");
                 _loaded = true;
                 Log.WriteLine("Finished loading sounds.");
             });

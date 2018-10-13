@@ -105,6 +105,8 @@ namespace Hedra.Engine.Sound
         PreparingAttack,
         River,
         BoatMove,
+	    Swimming,
+	    Underwater,
         MaxSounds
     }
 }

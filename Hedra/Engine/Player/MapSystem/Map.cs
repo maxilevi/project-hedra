@@ -122,7 +122,7 @@ namespace Hedra.Engine.Player.MapSystem
                     Vector3.One * (ChunkSize / (float)Chunk.Width), 1f) + Vector3.One * 0.002f;
                 WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _targetHeight);
                 WorldRenderer.Offset = mapPosition + Vector3.UnitY * (_targetHeight + 80f);
-		        WorldRenderer.WaterSmoothness = .25f;
+		        WorldRenderer.WaterSmoothness = ChunkSize / (float)Chunk.Width;
                 this.UpdateChunks();
             }
 		}

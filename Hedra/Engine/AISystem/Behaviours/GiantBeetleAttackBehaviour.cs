@@ -73,7 +73,7 @@ namespace Hedra.Engine.AISystem.Behaviours
                 var direction = (Victim.Position - Parent.Position).NormalizedFast();
                 var spit = new ParticleProjectile(Parent, Parent.Position + Parent.Orientation * 2f + Vector3.UnitY * 2.0f)
                 {
-                    Propulsion = direction * 2f - Vector3.UnitY * (1 - (Victim.Position - Parent.Position).LengthFast / 80f),
+                    Propulsion = direction * 2f,
                     Color = Color.LawnGreen.ToVector4() * .5f,
                     UseLight = false
                 };

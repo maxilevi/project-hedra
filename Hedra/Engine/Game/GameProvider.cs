@@ -97,7 +97,7 @@ namespace Hedra.Engine.Game
 			Player.Mana = Information.Mana;
 			Player.Health = Information.Health;
 			Player.BlockPosition = Information.BlockPosition;
-			Player.Rotation = Information.Rotation;
+            Player.Rotation = Information.Rotation;
 			Player.Model.Dispose();
 	        Player.Physics.VelocityCap = float.MaxValue;
 		    Player.Model = new HumanoidModel(Player);
@@ -138,11 +138,11 @@ namespace Hedra.Engine.Game
 		    Player.Pet.Pet?.Update();//Finish removing the mount
 
 		    Information.WorldSeed = World.RandomSeed;
-			Information.BlockPosition = GameSettings.SpawnPoint.ToVector3();
-			Information.BlockPosition = new Vector3(Information.BlockPosition.X, 128, Information.BlockPosition.Z);
 			GameManager.Player.IsTravelling = false;
 			GameManager.MakeCurrent(Information);
-			SkyManager.SetTime(12000);
+		    GameManager.Player.Position = World.FindSpawningPoint(GameSettings.SpawnPoint.ToVector3());
+
+            SkyManager.SetTime(12000);
 
 		    Player.Model = new HumanoidModel(Player);
 			

@@ -96,7 +96,7 @@ namespace Hedra.Engine.Loader
 				text += 
 					$"\n\nTextures ={Graphics2D.Textures.Count} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
 				text +=
-					$"\n\nCulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount} Pitch={player.View.TargetPitch} Physics.Calls={Physics.Threading.Count}";
+					$"\n\nCulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount} Pitch={player.View.TargetPitch} Physics.Calls={0}";
 
 				_debugText.Text = text;
 			    _passedTime += Time.IndependantDeltaTime;

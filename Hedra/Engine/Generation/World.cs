@@ -283,5 +283,10 @@ namespace Hedra.Engine.Generation
         {
             return WorldBuilding.SpawnChest(Position, Specification);
         }
+
+        public static Vector3 FindSpawningPoint(Vector3 Around)
+        {
+            return Provider.FindSpawningPoint(Around);
+        }
     }
 }

@@ -60,7 +60,7 @@ namespace Hedra
             GameLoader.LoadArchitectureSpecificFiles(appPath);
             GameLoader.CreateCharacterFolders(appData, appPath);
 	        GameLoader.AllocateMemory();
-			Physics.Threading.Load();
+			//Physics.Threading.Load();
 			Log.WriteLine("Assets loading was Successful.");
 	        
 		    GameLoader.LoadSoundEngine();

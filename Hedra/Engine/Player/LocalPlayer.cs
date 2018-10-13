@@ -389,7 +389,7 @@ namespace Hedra.Engine.Player
 		    this.PlaySpawningAnimation = true;
 		    this.IsRiding = false;
             var newOffset = new Vector3( (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize);
-		    var newPosition = newOffset + this.BlockPosition;
+		    var newPosition = World.FindSpawningPoint(newOffset + this.BlockPosition);
 		    newPosition = World.FindPlaceablePosition(this, new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z), newPosition.Z));
             this.Model.Position = newPosition;
 		    this.Physics.TargetPosition = newPosition;

@@ -206,5 +206,10 @@ namespace HedraTests
         {
             return default(Vector3);
         }
+        
+        public virtual Vector3 FindSpawningPoint(Vector3 DesiredPosition)
+        {
+            return default(Vector3);
+        }
     }
 }

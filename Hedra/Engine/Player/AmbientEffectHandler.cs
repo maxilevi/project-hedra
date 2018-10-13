@@ -24,6 +24,7 @@ namespace Hedra.Engine.Player
         public void Update()
         {
             _areaSound.Update(_nearestWater < MaxRange);
+            _areaSound.Type = GameSettings.UnderWaterEffect ? SoundType.Underwater : SoundType.River;
             if ((_lastPosition - _player.Position).LengthSquared < 0.25f && !_wasAnyNull) return;
             _areaSound.Position = _player.Position;
             _nearestWater = NearestWaterBlock();
