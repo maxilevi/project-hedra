@@ -23,9 +23,14 @@ namespace Hedra.Engine.Player.Skills.Archer
 
 		protected override void OnChange()
 		{
-			Player.DodgeCost = 25 + StaminaFormula();
+			Player.DodgeCost = Humanoid.DefaultDodgeCost + StaminaFormula();
 		}
-		
+
+		protected override void Remove()
+		{
+			Player.DodgeCost = Humanoid.DefaultDodgeCost;
+		}
+
 		protected override int MaxLevel => 10;
 		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Agility.png");
 		public override string Description => $"Dodging costs {-StaminaFormula(true)} less stamina.";

@@ -34,13 +34,10 @@ namespace Hedra.Engine.StructureSystem
             {
                 shapes[i].Transform(transMatrix);
             }
-            merchant.Position = position + Vector3.UnitX * -12f;
-
             Structure.AddStaticElement(model);
             Structure.AddCollisionShape(shapes.ToArray());
 
             World.AddStructure(merchant);
-            Executer.ExecuteOnMainThread(() => World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, position));
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)

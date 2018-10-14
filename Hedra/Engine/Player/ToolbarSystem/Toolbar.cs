@@ -165,8 +165,12 @@ namespace Hedra.Engine.Player.ToolbarSystem
 		            var type = _skills[i].GetType();
 		            if (type.Name == splits[k])
 		            {
-		                var itemIndex = Array.IndexOf(_bagItemsInterface.Buttons, _bagItemsInterface.Buttons.First(B =>
-		                    _bagItemsInterface.Array[Array.IndexOf(_bagItemsInterface.Buttons, B)].GetAttribute<Type>("AbilityType") == type));
+		                var matchingButton = _bagItemsInterface.Buttons.FirstOrDefault(B =>
+		                    _bagItemsInterface.Array[Array.IndexOf(_bagItemsInterface.Buttons, B)]
+		                        .GetAttribute<Type>("AbilityType") == type);
+
+                        if(matchingButton == null) return;
+                        var itemIndex = Array.IndexOf(_bagItemsInterface.Buttons, matchingButton);
 
                         _manager.Move(_bagItemsInterface.Array[itemIndex], type, _toolbarItemsInterface, k);
 		            }

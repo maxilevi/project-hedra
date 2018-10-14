@@ -30,6 +30,7 @@ namespace Hedra.Engine.Player
 	
 	public class Humanoid : Entity, IHumanoid
 	{
+		public const float DefaultDodgeCost = 25;
 		public event OnHitLandedEventHandler OnHitLanded;
         public IMessageDispatcher MessageDispatcher { get; set; }
 	    public int ConsecutiveHits { get; private set; }
@@ -142,7 +143,7 @@ namespace Hedra.Engine.Player
             this.DmgComponent = new DamageComponent(this);
             this.RandomFactor = NewRandomFactor();
             this.Physics.CanCollide = true;
-            this.DodgeCost = 25f;
+            this.DodgeCost = DefaultDodgeCost;
             this.MaxStamina = 100f;
             this.AttackPower = 1f;
             this.Speed = this.BaseSpeed;

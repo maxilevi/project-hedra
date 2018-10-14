@@ -15,7 +15,7 @@ namespace Hedra.Engine.Player.Skills
 
         private void BeforeAttacking(IEntity Parent, float Damage)
         {
-            if(MeetsRequirements() && Player.HasWeapon && Player.LeftWeapon is T weapon)
+            if(Level > 0 && Player.HasWeapon && Player.LeftWeapon is T weapon)
                 BeforeUse(weapon);
         }
         

@@ -23,7 +23,7 @@ namespace Hedra.Engine.WorldBuilding
 	/// <summary>
 	/// Description of Campfire.
 	/// </summary>
-	public sealed class Campfire : BaseStructure, IUpdatable
+	public class Campfire : BaseStructure, IUpdatable
 	{
 	    private static ParticleSystem _fireParticles;
         private long _passedTime;

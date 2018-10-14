@@ -11,10 +11,16 @@ namespace HedraTests.Player.Skills
         protected override int MaxLevel => _maxLevel;
         public override uint TextureId => 0;
         public Action OnChangeCallback { get; set; }
+        public Action OnRemoveCallback { get; set; }
              
         protected override void OnChange()
         {
             OnChangeCallback?.Invoke();
+        }
+
+        protected override void Remove()
+        {
+            OnRemoveCallback?.Invoke();
         }
 
         public void SetMaxLevel(int Value)

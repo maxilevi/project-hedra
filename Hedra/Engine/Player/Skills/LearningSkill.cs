@@ -13,6 +13,11 @@ namespace Hedra.Engine.Player.Skills
             Learn();
         }
 
+        protected override void Remove()
+        {
+            
+        }
+
         protected abstract void Learn();
     }
 }

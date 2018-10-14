@@ -33,6 +33,11 @@ namespace Hedra.Engine.Player.Skills.Rogue
 			poison.Duration = 8f - Math.Min(4f, base.Level * .5f);		
 		}
 
+		protected override void Remove()
+		{
+			Player.RemoveComponent(_component);
+		}
+
 		protected override int MaxLevel => 100;
 		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
 		public override string Description => "Your attacks have a chance to apply poison.";

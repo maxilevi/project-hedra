@@ -31,7 +31,12 @@ namespace Hedra.Engine.Player.Skills.Warrior
 			Player.AddonHealth += _addonHealth;
 			if(Player.Health > Player.MaxHealth) Player.Health = Player.MaxHealth;
 		}
-		
+
+		protected override void Remove()
+		{
+			/* Health will be resetted when changing the character */
+		}
+
 		public override void Load()
 		{
 			Player.AddonHealth += _addonHealth;

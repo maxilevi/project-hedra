@@ -61,6 +61,7 @@ namespace Hedra.Engine.EntitySystem
 	            newItems.Add(TradeInventory.MerchantSpaces - 2, ItemPool.Grab("HorseMount"));
                 //newItems.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab("WolfMount"));
                 newItems.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab(ItemType.Glider));
+		        newItems.Add(TradeInventory.MerchantSpaces - 4, ItemPool.Grab(ItemType.Boat));
 	        }
 	        return newItems;
 	    }

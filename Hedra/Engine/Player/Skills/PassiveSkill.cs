@@ -12,15 +12,22 @@ namespace Hedra.Engine.Player.Skills
 
         public override void Update()
         {
-            if (_currentLevel != Level) _set = false;			
+            if(_currentLevel == 0 && Level == 0) return;
+            
+            if(_currentLevel != Level) _set = false;			
             if (!_set)
             {
-                _currentLevel = Level;
                 if(Level > MaxLevel)
                     Player.AbilityTree.SetPoints(GetType(), MaxLevel);
-                OnChange();
+                if(Level == 0)
+                    Remove();
+                else
+                    OnChange();
+                _currentLevel = Level;
             }
         }
+
+        protected abstract void Remove();
 
         protected abstract void OnChange();
         

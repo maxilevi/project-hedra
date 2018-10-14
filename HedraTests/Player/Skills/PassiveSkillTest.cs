@@ -39,5 +39,17 @@ namespace HedraTests.Player.Skills
             Skill.Update();
             Assert.AreEqual(3, timesCalled);
         }
+        
+        [Test]
+        public void TestRemoveWasCalled()
+        {
+            var timesCalled = 0;
+            Skill.OnRemoveCallback = () => timesCalled++;
+            Skill.Level = 1;
+            Skill.Update();
+            Skill.Level = 0;
+            Skill.Update();
+            Assert.AreEqual(1, timesCalled);
+        }
     }
 }

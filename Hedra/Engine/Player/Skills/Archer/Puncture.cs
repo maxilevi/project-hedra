@@ -40,7 +40,12 @@ namespace Hedra.Engine.Player.Skills.Archer
 			};
 			Weapon.BowModifiers -= Lambda;
 		}
-		
+
+		protected override void Remove()
+		{
+
+		}
+
 		public override string Description => "Arrows have a high chance to cause bleeding.";
 		public override string DisplayName => "Puncture";
 	}
