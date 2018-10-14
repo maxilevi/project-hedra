@@ -19,7 +19,7 @@ namespace HedraTests.EntitySystem
         private DamageComponent _damageComponent;
         private IEntity _entity;
         private bool _isStatic;
-        private PhysicsComponent _physics;
+        private IPhysicsComponent _physics;
         private float _maxHealth;
         private bool _disposed;
 
@@ -89,11 +89,11 @@ namespace HedraTests.EntitySystem
         public void TestEntityIsPushedWhenDamaged()
         {
             var wasCalled = false;
+            var physicsMock = new Mock<IPhysicsComponent>();
+            physicsMock.Setup(P => P.Translate(It.IsAny<Vector3>())).Callback( () => wasCalled = true);
+            _physics = physicsMock.Object;
             var entityMock = new Mock<IEntity>();
             entityMock.SetupAllProperties();
-            var threadingMock = new Mock<IPhysicsThreadManager>();
-            threadingMock.Setup(P => P.AddCommand(It.IsAny<MoveCommand>())).Callback( () => wasCalled = true);
-            Physics.Threading = threadingMock.Object;
             _damageComponent.Damage(10, entityMock.Object, out var xp, true);
             Assert.True(wasCalled);
         }

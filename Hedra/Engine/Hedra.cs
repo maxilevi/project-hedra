@@ -100,7 +100,6 @@ namespace Hedra
                 Time.Set(delta, false);
                 CoroutineManager.Update();
                 UpdateManager.Update();
-                Physics.Update();
                 World.Update();
                 SoundManager.Update(LocalPlayer.Instance.Position);
                 SoundtrackManager.Update();

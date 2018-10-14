@@ -42,7 +42,7 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
-        public PhysicsComponent Physics { get; }
+        public IPhysicsComponent Physics { get; }
         public event OnAttackEventHandler OnAttacking;
         public event OnAttackEventHandler BeforeAttacking;
         public EntityComponentManager ComponentManager { get; }

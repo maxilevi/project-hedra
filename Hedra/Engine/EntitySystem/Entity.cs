@@ -40,7 +40,7 @@ namespace Hedra.Engine.EntitySystem
         private bool _isUnderwater;
         private Timer _splashTimer;
         private readonly TickSystem _tickSystem;
-        public PhysicsComponent Physics { get; }
+        public IPhysicsComponent Physics { get; }
 
         protected List<IComponent<IEntity>> Components = new List<IComponent<IEntity>>();
         protected bool Splashed { get; set; }

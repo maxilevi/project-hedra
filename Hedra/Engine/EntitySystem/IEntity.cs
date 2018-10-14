@@ -9,7 +9,7 @@ namespace Hedra.Engine.EntitySystem
 {
     public interface IEntity : IUpdatable
     {
-        PhysicsComponent Physics { get; }
+        IPhysicsComponent Physics { get; }
         
         event OnAttackEventHandler OnAttacking;
         

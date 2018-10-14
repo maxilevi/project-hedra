@@ -20,18 +20,17 @@ namespace Hedra.Engine.EntitySystem
 {
     public delegate bool OnHitGroundEvent(IEntity Parent, float Falltime);
 
-    public class  PhysicsComponent : EntityComponent
-	{
+    public class  PhysicsComponent : EntityComponent, IPhysicsComponent
+    {
 		private readonly Entity _parent;
 		public event OnHitGroundEvent OnHitGround;
 		public bool UsePhysics { get; set; }
 	    public float Falltime { get; private set; }
 	    public bool CanBePushed { get; set; } = true;
-        public Vector3 GravityDirection = new Vector3(0,-1f,0);
-		public float VelocityCap = float.MaxValue;
-		public Vector3 Force = Vector3.Zero;
-		public Vector3 Velocity = Vector3.Zero;
-		public bool HasFallDamage = true;
+        public Vector3 GravityDirection { get; set; } = new Vector3(0,-1f,0);
+		public float VelocityCap { get; set; } = float.MaxValue;
+		public Vector3 Velocity { get; set; } = Vector3.Zero;
+		public bool HasFallDamage { get; set; } = true;
 		public bool UseTimescale { get; set; }
 		public bool InFrontOfWall { get; private set; }
         public bool IsDrifting { get; private set; }
@@ -46,15 +45,15 @@ namespace Hedra.Engine.EntitySystem
         /// <summary>
         /// If collides with structures
         /// </summary>
-        public bool CanCollide = false;
+        public bool CanCollide { get; set; } = false;
 		/// <summary>
 		/// If it pushes entities when moving
 		/// </summary>
-		public bool PushAround = true;
+		public bool PushAround { get; set; } = true;
 		/// <summary>
 		/// If collides with other entities
 		/// </summary>
-		public bool HasCollision = true;
+		public bool HasCollision { get; set; } = true;
 		
 		private Chunk _underChunk, _underChunkR, _underChunkL, _underChunkF, _underChunkB;
 		private readonly List<ICollidable> _collisions = new List<ICollidable>();
@@ -166,7 +165,6 @@ namespace Hedra.Engine.EntitySystem
 
 	    public void ExecuteTranslate(MoveCommand Command)
 	    {
-	        //Physics.Threading.AddCommand(Command);
 		    ProccessCommand(Command);
 	    }
 

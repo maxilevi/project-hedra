@@ -227,6 +227,7 @@
     <Compile Include="Engine\DatabaseSystem\Dao.cs" />
     <Compile Include="Engine\EntitySystem\Component.cs" />
     <Compile Include="Engine\EntitySystem\IComponent.cs" />
+    <Compile Include="Engine\EntitySystem\IPhysicsComponent.cs" />
     <Compile Include="Engine\Game\LoadingScreen.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
     <Compile Include="Engine\HedraWindow.cs" />
@@ -272,7 +273,6 @@
     <Compile Include="Engine\Management\IAssetProvider.cs" />
     <Compile Include="Engine\Management\IConsoleManager.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
-    <Compile Include="Engine\PhysicsSystem\IPhysicsThreadManager.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\IAbilityTree.cs" />
@@ -450,12 +450,7 @@
     <Compile Include="Engine\PhysicsSystem\BoneBox.cs" />
     <Compile Include="Engine\PhysicsSystem\BoneData.cs" />
     <Compile Include="Engine\PhysicsSystem\ConvexHull.cs" />
-    <Compile Include="Engine\PhysicsSystem\PhysicsListener.cs" />
     <Compile Include="Engine\PhysicsSystem\ObjectMeshCollider.cs" />
-    <Compile Include="Engine\PhysicsSystem\PhysicsScheduler.cs" />
-    <Compile Include="Engine\PhysicsSystem\PhysicsLoadBalancer.cs" />
-    <Compile Include="Engine\PhysicsSystem\PhysicsThread.cs" />
-    <Compile Include="Engine\PhysicsSystem\SchedulerWorker.cs" />
     <Compile Include="Engine\PlantSystem\BerryBushDesign.cs" />
     <Compile Include="Engine\PlantSystem\BerryBushPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\BushDesign.cs" />
@@ -568,7 +563,6 @@
     <Compile Include="Engine\PhysicsSystem\GJKCollision.cs" />
     <Compile Include="Engine\PhysicsSystem\ICollidable.cs" />
     <Compile Include="Engine\PhysicsSystem\MoveCommand.cs" />
-    <Compile Include="Engine\PhysicsSystem\PhysicsThreadManager.cs" />
     <Compile Include="Engine\PhysicsSystem\Simplex.cs" />
     <Compile Include="Engine\PhysicsSystem\SimplexVertex.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Axe.cs" />

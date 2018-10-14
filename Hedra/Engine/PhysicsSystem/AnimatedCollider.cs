@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    public class nimatedCollider : IDisposable
+    public class AnimatedCollider : IDisposable
     {
         public AnimatedModel Model { get; }
         private readonly AnimatedColliderData _colliderData;
@@ -24,13 +24,14 @@ namespace Hedra.Engine.PhysicsSystem
         {
             get
             {
+                var transforms = Model.JointTransforms;
                 if (_defaultBroadphaseShape == null)
                     _defaultBroadphaseShape = new CollisionShape(new Vector3[_colliderData.DefaultBroadphase.Length]);
                 for (var i = 0; i < _defaultBroadphaseShape.Vertices.Length; i++)
                 {
                     _defaultBroadphaseShape.Vertices[i] = Vector3.TransformPosition(
                         _colliderData.DefaultBroadphase[i].Vertex,
-                        Model.JointTransforms[(int)_colliderData.DefaultBroadphase[i].Id.X]
+                        transforms[(int)_colliderData.DefaultBroadphase[i].Id.X]
                     );
                 }
                 _defaultBroadphaseShape.RecalculateBroadphase();
