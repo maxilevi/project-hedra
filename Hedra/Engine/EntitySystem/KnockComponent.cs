@@ -19,7 +19,7 @@ namespace Hedra.Engine.EntitySystem
 
         public KnockComponent(IEntity Parent) : base(Parent)
         {
-            Parent.OnAttacking += this.Apply;
+            Parent.AfterAttacking += this.Apply;
         }
 
         public override void Update()

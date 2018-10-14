@@ -311,6 +311,7 @@
     <Compile Include="Engine\Player\Skills\Rogue\Venom.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Engine\Player\Skills\SpecialAttackPassiveSkill.cs" />
     <Compile Include="Engine\Player\Skills\Warrior\Bash.cs" />
     <Compile Include="Engine\Player\Skills\Warrior\Intercept.cs" />
     <Compile Include="Engine\Player\Skills\Warrior\LearnAxe.cs" />

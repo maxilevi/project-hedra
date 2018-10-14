@@ -50,6 +50,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private Block[][][] _blocks;
         private static Block[][] _dummyBlocks;
         private Dictionary<CoordinateHash3D, Half> _waterDensity;
+        private readonly object _waterLock = new object();
         private readonly VertexData _nearestVertexData;
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
         private readonly ChunkStructuresMeshBuilder _structuresBuilder;
@@ -325,21 +326,37 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void AddWaterDensity(Vector3 WaterPosition, Half Density)
         {
-            if(_waterDensity == null) _waterDensity = new Dictionary<CoordinateHash3D, Half>();
-            var hash = new CoordinateHash3D(WaterPosition);
-            if (!_waterDensity.ContainsKey(hash)) _waterDensity.Add(hash, Density);
+            lock (_waterLock)
+            {
+                if (_waterDensity == null) _waterDensity = new Dictionary<CoordinateHash3D, Half>();
+                var hash = new CoordinateHash3D(WaterPosition);
+                if (!_waterDensity.ContainsKey(hash)) _waterDensity.Add(hash, Density);
+            }
+        }
+
+        public CoordinateHash3D[] GetWaterPositions()
+        {
+            lock (_waterLock)
+            {
+                return _waterDensity.Keys.ToArray();
+            }
         }
 
         public Half GetWaterDensity(Vector3 WaterPosition)
         {
-            var hash = new CoordinateHash3D(WaterPosition);
-            return _waterDensity?.ContainsKey(hash) ?? false ? _waterDensity[hash] : default(Half);
+            lock (_waterLock)
+            {
+                var hash = new CoordinateHash3D(WaterPosition);
+                return _waterDensity?.ContainsKey(hash) ?? false ? _waterDensity[hash] : default(Half);
+            }
         }
+
         public int GetHighestY(int X, int Z)
         {
             if (Disposed) return 0;
             if (Landscape == null || !Landscape.BlocksSetted) return 0;
-            for (var y = BoundsY - 1; y > -1; y--)
+            var bound = (int) (_terrainBuilder.Sparsity?.MaximumHeight ?? BoundsY - 1);
+            for (var y = bound; y > -1; y--)
             {
                 var type = _blocks[X][y][Z].Type;
                 if (type != BlockType.Air && type != BlockType.Water)
@@ -348,6 +365,20 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return 0;
         }
 
+        public float GetHighest(int X, int Z)
+        {
+            if (Disposed) return 0;
+            if (Landscape == null || !Landscape.BlocksSetted) return 0;
+            var bound = (int) (_terrainBuilder.Sparsity?.MaximumHeight ?? BoundsY - 1);
+            for (var y = bound; y > -1; y--)
+            {
+                var type = _blocks[X][y][Z].Type;
+                if (type != BlockType.Air && type != BlockType.Water)
+                    return _blocks[X][y][Z].Density + y;
+            }
+            return 0;
+        }
+        
         public int GetLowestY(int X, int Z)
         {
             if (Disposed || X < 0 || Z < 0 || Landscape == null || !Landscape.BlocksSetted) return 0;
@@ -494,11 +525,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public ChunkMesh StaticBuffer => Mesh;
 
         public ReadOnlyCollection<VertexData> StaticElements => Mesh.Elements.AsReadOnly();
-
-        public CoordinateHash3D[] GetWaterPositions()
-        {
-            return _waterDensity.Keys.ToArray();
-        }
 
         public ReadOnlyCollection<ICollidable> CollisionShapes
         {

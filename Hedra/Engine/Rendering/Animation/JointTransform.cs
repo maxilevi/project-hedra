@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering.Animation
 	/// <summary>
 	/// Description of JointTransform.
 	/// </summary>
-	public class JointTransform
+	public class JointTransform : IEquatable<JointTransform>
 	{
 		public Vector3 Position { get; }
 		public Quaternion Rotation { get; }
@@ -92,6 +92,29 @@ namespace Hedra.Engine.Rendering.Animation
 			var y = Start.Y + (End.Y - Start.Y) * Progression;
 			var z = Start.Z + (End.Z - Start.Z) * Progression;
 			return new Vector3(x, y, z);
+		}
+
+		public bool Equals(JointTransform Other)
+		{
+			if (ReferenceEquals(null, Other)) return false;
+			if (ReferenceEquals(this, Other)) return true;
+			return Position.Equals(Other.Position) && Rotation.Equals(Other.Rotation);
+		}
+
+		public override bool Equals(object Obj)
+		{
+			if (ReferenceEquals(null, Obj)) return false;
+			if (ReferenceEquals(this, Obj)) return true;
+			if (Obj.GetType() != this.GetType()) return false;
+			return Equals((JointTransform) Obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return (Position.GetHashCode() * 397) ^ Rotation.GetHashCode();
+			}
 		}
 	}
 }

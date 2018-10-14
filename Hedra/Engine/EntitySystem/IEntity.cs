@@ -11,7 +11,7 @@ namespace Hedra.Engine.EntitySystem
     {
         IPhysicsComponent Physics { get; }
         
-        event OnAttackEventHandler OnAttacking;
+        event OnAttackEventHandler AfterAttacking;
         
         event OnAttackEventHandler BeforeAttacking;
         

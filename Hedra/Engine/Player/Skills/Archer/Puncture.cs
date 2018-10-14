@@ -17,8 +17,10 @@ namespace Hedra.Engine.Player.Skills.Archer
 	/// <summary>
 	/// Description of Resistance.
 	/// </summary>
-	public class Puncture : SpecialAttackSkill<Bow>
+	public class Puncture : SpecialAttackPassiveSkill<Bow>
 	{
+		protected override int MaxLevel => 25;
+		
 		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
 
 		protected override void BeforeUse(Bow Weapon)
@@ -31,9 +33,9 @@ namespace Hedra.Engine.Player.Skills.Archer
 		{
 			ArrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
 			{
-				if(Utils.Rng.Next(0, 5) == 0)
+				if(Utils.Rng.Next(0, (int) (10 - Level / 5)) == 0)
 				{
-					Hit.AddComponent( new BleedingComponent(Hit, Player, 3f, 20f) );
+					Hit.AddComponent( new BleedingComponent(Hit, Player, 2 + Level / 10.0f, 20 + 10 * Level) );
 				}
 			};
 			Weapon.BowModifiers -= Lambda;

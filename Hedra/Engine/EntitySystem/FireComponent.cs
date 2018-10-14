@@ -19,7 +19,7 @@ namespace Hedra.Engine.EntitySystem
 		public float Duration { get; set; } = 5;
 
         public FireComponent(IEntity Parent) : base(Parent) {
-			Parent.OnAttacking += this.Apply;
+			Parent.AfterAttacking += this.Apply;
 		}
 		
 		public override void Update(){}
@@ -34,7 +34,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Dispose()
         {
-            Parent.OnAttacking -= this.Apply;
+            Parent.AfterAttacking -= this.Apply;
         }
     }
 }

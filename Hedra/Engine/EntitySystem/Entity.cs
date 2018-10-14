@@ -45,7 +45,7 @@ namespace Hedra.Engine.EntitySystem
         protected List<IComponent<IEntity>> Components = new List<IComponent<IEntity>>();
         protected bool Splashed { get; set; }
 
-        public event OnAttackEventHandler OnAttacking;
+        public event OnAttackEventHandler AfterAttacking;
         public event OnAttackEventHandler BeforeAttacking;
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1.0f;
@@ -249,7 +249,7 @@ namespace Hedra.Engine.EntitySystem
         
         public void InvokeAfterAttack(IEntity Invoker, float Damage)
         {
-            OnAttacking?.Invoke(Invoker, Damage);
+            AfterAttacking?.Invoke(Invoker, Damage);
         }
 
         public bool InAttackRange(IEntity Target, float RadiusModifier = 1f)

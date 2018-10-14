@@ -13,34 +13,22 @@ namespace Hedra.Engine.Generation
 	[StructLayout(LayoutKind.Explicit, Size=4)]
 	public struct Block
 	{
-	    [FieldOffset(0)] private BlockType _type;
-		[FieldOffset(1)] private bool _noise3D;
-	    [FieldOffset(2)] private Half _density;
+		/*
+		 * We expose the variables instead of using properties,
+		 * because the compiler translates properties to method calls
+		 * which have a slight but noticeably overhead when it's called
+		 * more than a million times.
+		 */
+	    [FieldOffset(0)] public BlockType Type;
+		[FieldOffset(1)] public bool Noise3D;
+	    [FieldOffset(2)] public Half Density;
 
         public Block(BlockType Type, Half Density = default(Half))
         {
-			this._type = Type;
-			this._noise3D = false;
-            this._density = Density;
+			this.Type = Type;
+			this.Noise3D = false;
+            this.Density = Density;
         }
-
-	    public BlockType Type
-	    {
-	        get => _type;
-	        set => _type = value;
-	    }
-
-	    public bool Noise3D
-	    {
-	        get => _noise3D;
-	        set => _noise3D = value;
-	    }
-
-	    public Half Density
-	    {
-	        get => _density;
-	        set => _density = value;
-	    }
 
 	    public Vector4 GetColor(RegionColor Region)
 	    {

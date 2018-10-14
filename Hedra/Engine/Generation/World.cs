@@ -208,6 +208,11 @@ namespace Hedra.Engine.Generation
         {
             return GetHighestBlockAt((int) X, (int) Z);
         }
+        
+        public static float GetHighest(int X, int Z)
+        {
+            return Provider.GetHighest(X, Z);
+        }
 
         public static Block GetHighestBlockAt(int X, int Z)
         {

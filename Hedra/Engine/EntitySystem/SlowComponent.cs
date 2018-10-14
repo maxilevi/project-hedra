@@ -29,7 +29,7 @@ namespace Hedra.Engine.EntitySystem
 		public SlowComponent(IEntity Parent) : base(Parent)
 		{
 		    _parent = Parent;
-		    Parent.OnAttacking += this.Apply;
+		    Parent.AfterAttacking += this.Apply;
 		}
 
         public override void Update() { }
@@ -45,7 +45,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Dispose()
         {
-            Parent.OnAttacking -= this.Apply;
+            Parent.AfterAttacking -= this.Apply;
         }
     }
 }

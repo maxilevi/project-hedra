@@ -60,7 +60,7 @@ namespace Hedra.Engine.Player.Skills
 			// Invoked via reflection
 		}
 
-		public void Initialize(Vector2 Position, Vector2 Scale, Panel InPanel, IPlayer Player)
+		public virtual void Initialize(Vector2 Position, Vector2 Scale, Panel InPanel, IPlayer Player)
 		{
 			this._panel = InPanel;
 			this.Position = Position;

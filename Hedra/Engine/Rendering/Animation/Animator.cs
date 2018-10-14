@@ -50,15 +50,19 @@ namespace Hedra.Engine.Rendering.Animation
             _blendingAnimationTime = 0;
 		}
 
-		public void Update()
+		public bool Update()
 		{
-			if (_currentAnimation == null || Stop) return;
+			if (_currentAnimation == null || Stop) return false;
 
 			var animationPose = CalculateCurrentAnimationPose();
-			_pose = InterpolatePoses(_pose, animationPose, Time.IndependantDeltaTime * 16f);
-			ApplyPoseToJoints(_pose, _rootJoint, Matrix4.Identity);
-			IncreaseAnimationTime();
-
+			_pose = InterpolatePoses(_pose, animationPose, Time.IndependantDeltaTime * 16f, out var interpolated);
+			if (interpolated)
+			{
+				ApplyPoseToJoints(_pose, _rootJoint, Matrix4.Identity);
+				IncreaseAnimationTime();
+				return true;
+			}
+			return false;
 		}
 
 		private void IncreaseAnimationTime() 
@@ -205,14 +209,23 @@ namespace Hedra.Engine.Rendering.Animation
 		}
 		
 		private static Dictionary<string, JointTransform> InterpolatePoses
-			(Dictionary<string, JointTransform> Pose, IDictionary<string, JointTransform> TargetPose, float Progression)
+			(Dictionary<string, JointTransform> Pose, IDictionary<string, JointTransform> TargetPose, float Progression, out bool Interpolated)
 		{
 		    var newPose = new Dictionary<string, JointTransform>();
-            foreach (var pair in Pose) {
+			var interpolated = false;
+            foreach (var pair in Pose)
+            {
 				var previousTransform = pair.Value;
 				var nextTransform = TargetPose[pair.Key];
-                newPose.Add(pair.Key, JointTransform.Interpolate(previousTransform, nextTransform, Progression));
-			}
+	            var areEqual = previousTransform.Equals(nextTransform);
+	            newPose.Add(pair.Key,
+		            areEqual
+			            ? previousTransform
+			            : JointTransform.Interpolate(previousTransform, nextTransform, Progression));
+	            interpolated |= !areEqual;
+            }
+
+			Interpolated = interpolated;
 			return newPose;
 		}
 	

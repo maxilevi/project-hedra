@@ -194,17 +194,13 @@ namespace Hedra.Engine.Rendering.Animation
 
         public void Update()
         {
-            _animator.Update();
-        }
-
-        public Matrix4[] JointTransforms
-        {
-            get
+            if (_animator.Update())
             {
                 AddJointsToArray(RootJoint, _jointMatrices);
-                return _jointMatrices;
             }
         }
+
+        public Matrix4[] JointTransforms => _jointMatrices;
 
         private void AddJointsToArray(Joint HeadJoint, Matrix4[] JointMatrices)
         {

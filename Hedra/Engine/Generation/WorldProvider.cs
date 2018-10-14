@@ -454,7 +454,8 @@ namespace Hedra.Engine.Generation
             lock (SearcheableChunks)
             {
                 var offset = new Vector2(OffsetX, OffsetZ);
-                return SearcheableChunks.ContainsKey(offset) ? SearcheableChunks[offset] : null;
+                SearcheableChunks.TryGetValue(offset, out var chunk);
+                return chunk;
             }
         }
 
@@ -533,6 +534,15 @@ namespace Hedra.Engine.Generation
 
             var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
             return blockChunk?.GetLowestY((int) blockSpace.X, (int) blockSpace.Z) ?? 0;
+        }
+
+        public float GetHighest(int X, int Z)
+        {
+            var chunkSpace = this.ToChunkSpace(X, Z);
+            var blockSpace = this.ToBlockSpace(X, Z);
+
+            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
+            return blockChunk?.GetHighest((int) blockSpace.X, (int) blockSpace.Z) ?? 0;
         }
 
         public Block GetLowestBlock(int X, int Z)

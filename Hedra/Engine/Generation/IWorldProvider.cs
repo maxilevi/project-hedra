@@ -137,5 +137,7 @@ namespace Hedra.Engine.Generation
         Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition);
 
         Vector3 FindSpawningPoint(Vector3 Around);
+
+        float GetHighest(int X, int Z);
     }
 }

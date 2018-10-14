@@ -224,7 +224,7 @@ namespace Hedra.Engine.PhysicsSystem
 
 		private static float GetHighest(float X, float Z)
 		{
-			return World.GetHighestY((int)X, (int)Z) + World.GetHighestBlockAt(X, Z).Density;
+			return World.GetHighest((int)X, (int)Z);
 		}	
 		
 		public static bool IsColliding(Vector3 Position, Box Hitbox)

@@ -177,6 +177,11 @@ namespace HedraTests
         {
             return default(int);
         }
+        
+        public virtual float GetHighest(int X, int Z)
+        {
+            return default(float);
+        }
 
         public virtual int GetLowestY(int X, int Z)
         {

@@ -43,7 +43,7 @@ namespace HedraTests.Player
         }
 
         public IPhysicsComponent Physics { get; }
-        public event OnAttackEventHandler OnAttacking;
+        public event OnAttackEventHandler AfterAttacking;
         public event OnAttackEventHandler BeforeAttacking;
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; }
