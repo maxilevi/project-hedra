@@ -33,11 +33,24 @@ namespace HedraTests.Player.Skills
         public void TestOnChangeWasCalled()
         {
             var timesCalled = 0;
+            Skill.Level = 1;
+            Skill.SetMaxLevel(1);
             Skill.OnChangeCallback = () => timesCalled++;
             Skill.Update();
             Skill.Update();
             Skill.Update();
             Assert.AreEqual(3, timesCalled);
+        }
+        
+        [Test]
+        public void TestOnChangeIsNotCalledIfDoesntHaveSkill()
+        {
+            var timesCalled = 0;
+            Skill.OnChangeCallback = () => timesCalled++;
+            Skill.Update();
+            Skill.Update();
+            Skill.Update();
+            Assert.AreEqual(0, timesCalled);
         }
         
         [Test]

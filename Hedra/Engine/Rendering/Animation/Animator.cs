@@ -59,10 +59,9 @@ namespace Hedra.Engine.Rendering.Animation
 			if (interpolated)
 			{
 				ApplyPoseToJoints(_pose, _rootJoint, Matrix4.Identity);
-				IncreaseAnimationTime();
-				return true;
 			}
-			return false;
+			IncreaseAnimationTime();
+			return interpolated;
 		}
 
 		private void IncreaseAnimationTime() 
