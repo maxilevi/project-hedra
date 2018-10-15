@@ -57,6 +57,7 @@ namespace HedraTests.Player.Skills
         public void TestRemoveWasCalled()
         {
             var timesCalled = 0;
+            Skill.SetMaxLevel(1);
             Skill.OnRemoveCallback = () => timesCalled++;
             Skill.Level = 1;
             Skill.Update();

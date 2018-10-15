@@ -230,7 +230,6 @@
     <Compile Include="Engine\EntitySystem\IPhysicsComponent.cs" />
     <Compile Include="Engine\Game\LoadingScreen.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
-    <Compile Include="Engine\HedraWindow.cs" />
     <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
@@ -266,6 +265,10 @@
     <Compile Include="Engine\Generation\RenderingComparer.cs" />
     <Compile Include="Engine\Generation\WorldProvider.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\AttackOptions.cs" />
+    <Compile Include="Engine\Loader\Hedra.cs" />
+    <Compile Include="Engine\Loader\HedraWindow.cs" />
+    <Compile Include="Engine\Loader\IHedra.cs" />
+    <Compile Include="Engine\Loader\IHedraWindow.cs" />
     <Compile Include="Engine\Loader\SplashScreen.cs" />
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
     <Compile Include="Engine\Management\WindowsConsoleManager.cs" />
@@ -827,7 +830,6 @@
     <Compile Include="Engine\Sound\SoundEffect.cs" />
     <Compile Include="Engine\Sound\SoundItem.cs" />
     <Compile Include="Engine\Sound\SoundManager.cs" />
-    <Compile Include="Engine\Hedra.cs" />
     <Compile Include="Engine\Program.cs" />
     <Compile Include="Engine\Sound\SoundSource.cs" />
     <Compile Include="Engine\StructureSystem\CampfireDesign.cs" />

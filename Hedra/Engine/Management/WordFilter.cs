@@ -80,8 +80,10 @@ namespace Hedra.Engine.Management
 			"wank", "wanker", "wanky", "whoar", "whore", "willies", "willy", "xrated", "xxx"};
 		#endregion
 		
-		public static string Filter(string text){
-			for(int i = 0; i < WordList.Length; i++){
+		public static string Filter(string text)
+		{
+			for(int i = 0; i < WordList.Length; i++)
+			{
 				text = text.Replace(WordList[i], "*****");
 			}
 			return text;

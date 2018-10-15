@@ -28,7 +28,7 @@ using Forms = System.Windows.Forms;
 
 namespace Hedra
 {
-    class Hedra : HedraWindow, IEventProvider
+    class Hedra : HedraWindow, IHedra
     {
 	    public DebugInfoProvider DebugProvider { get; private set; }
 	    public SplashScreen SplashScreen { get; private set; }
@@ -53,7 +53,7 @@ namespace Hedra
 
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
 		    AssetManager.Load();
-            CompatibilityManager.Load(appPath);
+            CompatibilityManager.Load();
 	        NameGenerator.Load();
 	        CacheManager.Load();
 	        

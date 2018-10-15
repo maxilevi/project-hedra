@@ -162,13 +162,17 @@ namespace Hedra.Engine
 
             foreach (FieldInfo field in typeof(GameSettings).GetFields(
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            {
                 if (field.IsDefined(typeof(SettingAttribute), true))
                     builder.AppendLine(field.Name + "=" + field.GetValue(null));
+            }
 
             foreach (PropertyInfo prop in typeof(GameSettings).GetProperties(
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            {
                 if (prop.IsDefined(typeof(SettingAttribute), true))
                     builder.AppendLine(prop.Name + "=" + prop.GetValue(null, null));
+            }
 
             System.IO.File.WriteAllText(File, builder.ToString());
         }

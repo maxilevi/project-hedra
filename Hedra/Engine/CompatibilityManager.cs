@@ -20,9 +20,8 @@ namespace Hedra.Engine
         public static Action<PrimitiveType, int[], DrawElementsType, IntPtr[], int> MultiDrawElementsMethod { get; private set; }
         public static bool SupportsGeometryShaders { get; private set; } = true;
 
-        public static void Load(string AppPath)
+        public static void Load()
         {
-            //CompatibilityManager.WriteSpecificationsList(AppPath);
             CompatibilityManager.DetectGeometryShaderSupport();
             CompatibilityManager.DefineMultiDrawElementsMethod();
         }
@@ -70,17 +69,29 @@ namespace Hedra.Engine
         /// </summary>
         private static void DefineMultiDrawElementsMethod()
         {
-            var videoCardString = Renderer.GetString(StringName.Renderer);
-            var manufacturerString = Renderer.GetString(StringName.Vendor);
-            var useCompatibilityFunction = false;//videoCardString.Contains("AMD") || manufacturerString.Contains("Intel");
-            if(useCompatibilityFunction) Log.WriteLine("glMultiDrawElements issue detected. Enabling compatibility mode...");
+            var previousSeverity = Renderer.Severity;
+            var useCompatibilityFunction = false;
+            try
+            {
+                Renderer.Severity = ErrorSeverity.High;
+                Renderer.Provider
+                    .MultiDrawElements(PrimitiveType.Triangles, new int[0], DrawElementsType.UnsignedInt, new IntPtr[0], 0);
+            }
+            catch (Exception e)
+            {
+                useCompatibilityFunction = true;
+            }
+            finally
+            {
+                Renderer.Severity = previousSeverity;
+            }
 
             if (useCompatibilityFunction)
             {
                 MultiDrawElementsMethod = delegate(PrimitiveType Type, int[] Counts, DrawElementsType DrawType,
                     IntPtr[] Offsets, int Length)
                 {
-                    for (var i = 0; i < Counts.Length; i++)
+                    for (var i = 0; i < Length; i++)
                     {
                         Renderer.Provider.DrawElements(PrimitiveType.Triangles, Counts[i], DrawType, Offsets[i]);
                     }

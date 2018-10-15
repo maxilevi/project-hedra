@@ -7,16 +7,17 @@ using OpenTK;
 using Hedra.Engine;
 using System.Windows.Forms;
 using System.Drawing;
+using Hedra.Engine.Loader;
 using Hedra.Engine.Rendering;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra
 {
-	static class Program
+	public static class Program
 	{
 		public static bool IsDebug { get; private set; }
 		public static bool IsRelease => !IsDebug;
-		public static Hedra GameWindow;
+		public static IHedra GameWindow { get; set; }
 		
 		static void Main(string[] Args)
         {

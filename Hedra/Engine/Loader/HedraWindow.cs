@@ -8,7 +8,7 @@ using OpenTK.Graphics;
 
 namespace Hedra.Engine
 {
-    public class HedraWindow : NativeWindow, IEventProvider
+    public class HedraWindow : NativeWindow, IEventProvider, IHedraWindow
     {
         private IGraphicsContext _glContext;
         private bool _isExiting;

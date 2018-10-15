@@ -88,7 +88,7 @@ namespace Hedra.Engine.Events
             MouseWheelHandlers = new Dictionary<object, EventHandler<MouseWheelEventArgs>>();
 	        MouseButtonUpHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
 	        MouseButtonDownHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
-		    Provider = Program.GameWindow;
+		    Provider = (IEventProvider) Program.GameWindow;
 	    }
 
 	    public static void RegisterMouseMove(object Key, EventHandler<MouseMoveEventArgs> EventHandler)

@@ -18,6 +18,13 @@ namespace Hedra.Engine.Management
 		public static int RamCount { get; private set; }	    
 		public static string Specs => CPUArchitecture+"|"+GraphicsCard+"|"+RamCount;
 		private static IConsoleManager _consoleManager;
+
+		static OSManager()
+		{
+			_consoleManager = RunningPlatform == Platform.Windows
+				? new WindowsConsoleManager() 
+				: (IConsoleManager) new DummyConsoleManager();
+		}
 		
 	    public static void Load(string ExecName)
 	    {
@@ -42,10 +49,6 @@ namespace Hedra.Engine.Management
 	                return;
 	            }*/
 	        }
-
-		    _consoleManager = RunningPlatform == Platform.Windows
-			    ? (IConsoleManager) new WindowsConsoleManager() 
-			    : (IConsoleManager) new DummyConsoleManager();
 
 	        RamCount = 8;
 	        GraphicsCard = Renderer.GetString(StringName.Vendor) + Environment.NewLine
