@@ -43,7 +43,7 @@ namespace Hedra.Engine.Player.BoatSystem
                     if (!OnWaterSurface)
                     {
                         //_player.Physics.TargetPosition = new Vector3(_player.Physics.TargetPosition.X, waterHeight+2, _player.Physics.TargetPosition.Z);
-                        _player.Physics.GravityDirection = Vector3.UnitY*4;
+                        _player.Physics.GravityDirection = Vector3.UnitY;
                     }
                     else
                     {

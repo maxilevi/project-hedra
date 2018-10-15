@@ -450,9 +450,9 @@ namespace Hedra.Engine.Player
 				Instance.MessageDispatcher.ShowNotification("Name cannot be empty", Color.Red, 3f);
 				return false;
 			}
-			if(DataManager.CharacterCount >= 3)
+			if(DataManager.CharacterCount >= GameSettings.MaxCharacters)
 			{
-			    Instance.MessageDispatcher.ShowNotification("You cannot have more than 3 characters", Color.Red, 3f);
+			    Instance.MessageDispatcher.ShowNotification($"You cannot have more than {GameSettings.MaxCharacters} characters", Color.Red, GameSettings.MaxCharacters);
 				return false;
 			}
 			if(Name.Length > 12)

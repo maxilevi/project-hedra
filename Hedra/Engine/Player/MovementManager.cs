@@ -136,12 +136,11 @@ namespace Hedra.Engine.Player
 		private void HandleJumping()
 		{
             if (!IsJumping) return;
-            Human.Physics.DeltaTranslate(_jumpPropulsion);
-		    _jumpPropulsion *= (float) Math.Pow(.25f, Time.DeltaTime * 3f);
-		    if ((Physics.HeightAtPosition(Human.Position) + 2 > Human.Position.Y || Human.IsGrounded) && _jumpPropulsion.LengthFast < 40 || Human.IsUnderwater)
+		    if ((Physics.HeightAtPosition(Human.Position)+2 > Human.Position.Y || Human.IsGrounded) && _jumpPropulsion.LengthFast < 40 || Human.IsUnderwater)
 		        IsJumping = false;
-
-		}
+		    Human.Physics.DeltaTranslate(_jumpPropulsion);
+		    _jumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
+        }
 
 	    private void ManageMoveOrders()
 	    {

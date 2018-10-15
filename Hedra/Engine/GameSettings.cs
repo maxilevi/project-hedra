@@ -20,6 +20,7 @@ namespace Hedra.Engine
     [Obfuscation(Exclude = false, Feature = "-rename")]
     public static class GameSettings
     {
+        public const int MaxCharacters = 4;
         public static bool freezelod { get; set; }
         public static float SurfaceWidth { get; set; }
         public static float SurfaceHeight { get; set; }

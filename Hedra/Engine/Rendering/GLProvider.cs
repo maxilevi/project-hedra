@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -6,6 +7,8 @@ namespace Hedra.Engine.Rendering
 {
     public class GLProvider : IGLProvider
     {
+        public ErrorSeverity Severity { get; set; }
+        
         public void ActiveTexture(TextureUnit Unit)
         {
             GL.ActiveTexture(Unit);
@@ -634,14 +637,18 @@ namespace Hedra.Engine.Rendering
             EnsureNoErrors();
         }
 
-        private static void EnsureNoErrors()
+        private void EnsureNoErrors()
         {
 #if DEBUG
             if(System.Threading.Thread.CurrentThread.ManagedThreadId != Hedra.MainThreadId)
                 throw new ArgumentException($"Invalid GL calls outside of the main thread.");
             var error = GL.GetError();
-            if(error != ErrorCode.NoError)
-                Log.WriteResult(false, $"Unexpected OpenGL error: {error}");
+            if (error != ErrorCode.NoError)
+            {
+                var errorMsg = $"Unexpected OpenGL error: {error}";
+                if (ErrorSeverity.High == Severity) throw new RenderException(errorMsg);
+                Log.WriteResult(false, errorMsg);
+            }
 #endif
         }
     }

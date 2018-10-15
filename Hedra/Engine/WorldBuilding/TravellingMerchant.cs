@@ -13,7 +13,7 @@ namespace Hedra.Engine.WorldBuilding
 		public TravellingMerchant(Vector3 Position) : base(Position)
 		{
 		    Executer.ExecuteOnMainThread(
-                () => World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position + Vector3.UnitX * -12f)
+                () => World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position + Vector3.UnitX * 12f)
             );
         }
 	}

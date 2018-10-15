@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    public class WheatDesign : WeedDesign
+    public class ReedDesign : WeedDesign
     {
         public override VertexData Model => CacheManager.GetModel(CacheItem.Wheat);
 
@@ -24,7 +18,7 @@ namespace Hedra.Engine.PlantSystem
             Data.Color(AssetManager.ColorCode1, WheatColor(Rng));
             Data.Color(AssetManager.ColorCode0, newColor);
         }
-
+        
         private static Vector4 WheatColor(Random Rng)
         {
             switch (Rng.Next(0, 7))

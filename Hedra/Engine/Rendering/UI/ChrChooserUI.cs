@@ -200,8 +200,8 @@ namespace Hedra.Engine.Rendering.UI
 		
 		private Vector3 FireDirection(int I, float Mult)
 		{
-		    if (_humans.Count == 1) I = 1;
-			return Vector3.TransformPosition(Vector3.UnitX * Mult, Matrix4.CreateRotationY( ( I * 180 / _information.Length - 180 / _information.Length) * Mathf.Radian ));
+		    var angle = (int) ((I+1) * 180 / _information.Length) * Mathf.Radian - 90;
+            return Vector3.TransformPosition(Vector3.UnitX * Mult, Matrix4.CreateRotationY(angle));
 		}
 		
 		private IEnumerator UpdateWrapper(){

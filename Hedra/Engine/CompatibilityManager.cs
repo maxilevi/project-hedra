@@ -30,16 +30,22 @@ namespace Hedra.Engine
         private static void DetectGeometryShaderSupport()
         {
             SupportsGeometryShaders = true;
+            var previousSeverity = Renderer.Severity;
             try
             {
+                Renderer.Severity = ErrorSeverity.High;
                 var shader = AnimatedModelShader.GenerateDeathShader();
                 shader.Bind();
                 shader["viewMatrix"] = Matrix4.Identity;
                 shader.Unbind();
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
                 SupportsGeometryShaders = false;
+            }
+            finally
+            {
+                Renderer.Severity = previousSeverity;
             }
             Log.WriteLine($"Geometry shaders are {(SupportsGeometryShaders ? "ENABLED" : "DISABLED")}");
         }

@@ -575,5 +575,11 @@ namespace Hedra.Engine.Rendering
         {
             Provider.Viewport(V0, V1, V2, V3);
         }
+
+	    public static ErrorSeverity Severity
+	    {
+	        get => Provider.Severity;
+	        set => Provider.Severity = value;
+	    }
     }
 }

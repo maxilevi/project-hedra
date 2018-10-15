@@ -28,7 +28,7 @@ namespace Hedra.Engine.StructureSystem
             transMatrix *= Matrix4.CreateTranslation(position);
             model.Transform(transMatrix);
 
-            var merchant = new TravellingMerchant(position);
+            var merchant = new TravellingMerchant(position - Vector3.UnitX * 12f);
             var shapes = CacheManager.GetShape(originalModel).DeepClone();
             for (int i = 0; i < shapes.Count; i++)
             {

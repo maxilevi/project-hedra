@@ -105,7 +105,7 @@ namespace Hedra.Engine.EntitySystem
         {
             if(Parent.Model == null) return;
 
-            Vector4 eyeSpace = Vector4.Transform(new Vector4(Parent.Position + (Parent.Model.Height+1) * Vector3.UnitY, 1),
+            Vector4 eyeSpace = Vector4.Transform(new Vector4(Parent.Position + Parent.Model.Height * 1.5f * Vector3.UnitY, 1),
                     DrawManager.FrustumObject.ModelViewMatrix);
             Vector4 homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
             Vector3 ndc = homogeneusSpace.Xyz / homogeneusSpace.W;

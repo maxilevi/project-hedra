@@ -275,6 +275,9 @@
     <Compile Include="Engine\Management\ResourceHandler.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\ReedDesign.cs" />
+    <Compile Include="Engine\PlantSystem\ReedPlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\WeedDesign.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\IAbilityTree.cs" />
     <Compile Include="Engine\Player\AmbientEffectHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\Boat.cs" />
@@ -331,6 +334,7 @@
     <Compile Include="Engine\Rendering\Animation\IAnimationProvider.cs" />
     <Compile Include="Engine\Rendering\BitmapObject.cs" />
     <Compile Include="Engine\Rendering\CachedVertexData.cs" />
+    <Compile Include="Engine\Rendering\ErrorSeverity.cs" />
     <Compile Include="Engine\Rendering\Geometry\ChunkMeshBorderDetector.cs" />
     <Compile Include="Engine\Rendering\Geometry\Geometry.cs" />
     <Compile Include="Engine\Rendering\Geometry\IsoSurfaceCreator.cs" />
@@ -344,6 +348,7 @@
     <Compile Include="Engine\Rendering\IGLProvider.cs" />
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
     <Compile Include="Engine\Rendering\IVertexData.cs" />
+    <Compile Include="Engine\Rendering\RenderException.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
     <Compile Include="Engine\Rendering\UI\IAdjustable.cs" />
     <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />

@@ -7,6 +7,8 @@ namespace HedraTests
 {
     public class SimpleGLProviderMock : IGLProvider
     {
+        public ErrorSeverity Severity { get; set; }
+        
         public virtual void ActiveTexture(TextureUnit Unit)
         {
         }

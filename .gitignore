@@ -9,4 +9,5 @@ packages/
 packages
 *.user
 *.hst
+__pycache__
 

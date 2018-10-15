@@ -6,6 +6,7 @@ namespace Hedra.Engine.Rendering
 {
     public interface IGLProvider
     {
+        ErrorSeverity Severity { get; set; }
         void ActiveTexture(TextureUnit Unit);
         void AttachShader(int S0, int S1);
         void BeginQuery(QueryTarget Target, int V0);

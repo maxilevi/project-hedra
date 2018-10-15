@@ -448,10 +448,9 @@ namespace Hedra.Engine.BiomeSystem
 	            {
                     int y = Chunk.GetHighestY(x, z);
                     var position = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
-	                var block = Blocks[x][y][z];
 
-                    if(block.Type == BlockType.Seafloor) continue;
-	                
+                    if(y < BiomePool.SeaLevel - Chunk.BlockSize) continue;
+
 	                Region region = Cache.GetRegion(position);
 	                this.LoopStructures(x, z, structs, out bool noWeedZone, out _, out _);
 	                this.DoEnviromentPlacements(position, noWeedZone, region);
@@ -472,10 +471,9 @@ namespace Hedra.Engine.BiomeSystem
 					var y = Chunk.GetHighestY(x, z);
 					var block = Blocks[x][y][z];
 
-					if (block.Type != BlockType.Grass) continue;
-	                
 					this.LoopStructures(_x, _z, structs, out _, out var noTreesZone, out _);
-
+					if(block.Type != BlockType.Grass) continue;
+					
 					if (World.Seed == World.MenuSeed)
 					{
 						//Is menu, force a platform
@@ -499,7 +497,6 @@ namespace Hedra.Engine.BiomeSystem
 					var noise = (float) OpenSimplexNoise.Evaluate(realPosition.X * 0.005f, realPosition.Z * 0.005f);
 					var placementObject = World.TreeGenerator.CanGenerateTree(samplingPosition, region, Lod);
 					if (!placementObject.Placed) continue;
-					//placementObject.Position += -samplingPosition.Xz.ToVector3() + realPosition.Xz.ToVector3();
 					World.TreeGenerator.GenerateTree(placementObject, region, region.Trees.GetDesign( (int) (noise * 10000) ));
 				}
 			}
