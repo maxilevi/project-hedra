@@ -11,11 +11,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public Vector3 Rotation { get; set; }
         
         public Random Rng { get; set; }
-        public float SizeMultiplier { get; set; }
 
-        public float GetSize(VillageRoot Root)
+        public virtual float GetSize(VillageCache Cache)
         {
-            return Root.Cache.GrabSize(Design.Path).Xz.LengthFast * .5f;
+            return Cache.GrabSize(Design.Path).Xz.LengthFast * .5f;
         }
     }
 }

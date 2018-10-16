@@ -4,14 +4,14 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    public class WellBuilder : Builder<BuildingParameters>
+    public class MarketWellBuilder : Builder<MarketParameters>
     {
-        public override bool Place(BuildingParameters Parameters, VillageCache Cache)
+        public override bool Place(MarketParameters Parameters, VillageCache Cache)
         {
-            return this.PlaceGroundwork(Parameters.Position, 32, BlockType.Path);
+            return this.PlaceGroundwork(Parameters.Position, Parameters.WellSize);
         }
 
-        public override void Polish(BuildingParameters Parameters)
+        public override void Polish(MarketParameters Parameters)
         {
             World.AddStructure(new LampPost(Vector3.UnitY * 8f + Parameters.Position)
             {

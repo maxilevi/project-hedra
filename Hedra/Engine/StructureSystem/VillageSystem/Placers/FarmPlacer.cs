@@ -20,7 +20,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
                 Design = this.SelectRandom(this.Designs),
                 WindmillDesign = this.SelectRandom(this._windmillDesigns),
                 Position = Point.Position,
-                HasWindmill = Rng.Next(0, 5) == 1,
+                HasWindmill = Rng.Next(0, 3) == 1,
                 Rng = Rng
             };
         }

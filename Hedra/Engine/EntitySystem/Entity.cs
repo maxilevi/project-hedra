@@ -468,7 +468,6 @@ namespace Hedra.Engine.EntitySystem
 
             this.SpawnAnimation();
             this.Physics.Update();
-            //PhysicsSystem.Physics.Threading.AddCommand(this);
             this.UpdateEnviroment();
             this._tickSystem.Tick();
             for (var i = 0; i < this.Components.Count; i++)

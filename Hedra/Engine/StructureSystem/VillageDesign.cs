@@ -22,7 +22,7 @@ namespace Hedra.Engine.StructureSystem
 
         public override void Build(CollidableStructure Structure)
         {
-            var builder = Structure.Parameters.Get<VillageBuilder>("Builder");
+            var builder = Structure.Parameters.Get<VillageAssembler>("Builder");
             var design = Structure.Parameters.Get<PlacementDesign>("Design");
             builder.Build(design, Structure);
         }
@@ -30,12 +30,13 @@ namespace Hedra.Engine.StructureSystem
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var structure = base.Setup(TargetPosition, Rng);
-            var region = World.BiomePool.GetRegion(TargetPosition);
-            var builder = new VillageBuilder(VillageLoader.Designer[region.Structures.VillageType], Rng);
-            var design = builder.DesignVillage();
             structure.Mountain.Radius = 200;
+            var region = World.BiomePool.GetRegion(TargetPosition);
+            var builder = new VillageAssembler(VillageLoader.Designer[region.Structures.VillageType], Rng);
+            var design = builder.DesignVillage();
             design.Translate(TargetPosition);
             builder.PlaceGroundwork(design);
+
 
             World.WorldBuilding.AddPlateau(structure.Mountain);
             structure.Parameters.Set("Builder", builder);

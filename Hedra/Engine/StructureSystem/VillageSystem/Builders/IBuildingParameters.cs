@@ -10,6 +10,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         Vector3 Position { get; set; }
         Vector3 Rotation { get; set; }
         Random Rng { get; set; }
-        float GetSize(VillageRoot Root);
+        float GetSize(VillageCache Cache);
     }
 }

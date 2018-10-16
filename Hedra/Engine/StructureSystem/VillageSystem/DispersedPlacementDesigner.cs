@@ -12,25 +12,25 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    public sealed class PlacementDesigner
+    public sealed class DispersedPlacementDesigner : IDispersedPlacementDesigner
     {
         private readonly VillageRoot _root;
         private readonly Random _rng;
         private readonly VillageConfiguration _config;
         private readonly FarmPlacer _farmPlacer;
         private readonly BlacksmithPlacer _blacksmithPlacer;
-        private readonly Placer<BuildingParameters> _housePlacer;
+        private readonly NeighbourhoodPlacer _neighbourhoodPlacer;
         private readonly Placer<BuildingParameters> _stablePlacer;
         private readonly MarketPlacer _marketPlacer;
 
-        public PlacementDesigner(VillageRoot Root, VillageConfiguration Config, Random Rng)
+        public DispersedPlacementDesigner(VillageRoot Root, VillageConfiguration Config, Random Rng)
         {
             this._root = Root;
             this._rng = Rng;
             this._config = Config;
             this._farmPlacer = new FarmPlacer(Root.Template.Farm.Designs, Root.Template.Windmill.Designs, Rng);
             this._blacksmithPlacer = new BlacksmithPlacer(Root.Template.Blacksmith.Designs, Rng);
-            this._housePlacer = new Placer<BuildingParameters>(Root.Template.House.Designs, Rng);
+            this._neighbourhoodPlacer = new NeighbourhoodPlacer(Root.Template.House.Designs, Root.Template.Well.Designs, Rng);
             this._stablePlacer = new Placer<BuildingParameters>(Root.Template.Stable.Designs, Rng);
             this._marketPlacer = new MarketPlacer(Root.Template.Well.Designs, Rng);
         }
@@ -47,33 +47,54 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 design.Markets = design.Markets.Concat(this._marketPlacer.Place(sortedPoints[i], configs[i].MarketChances)).ToArray();
                 design.Stables = design.Stables.Concat(this._stablePlacer.Place(sortedPoints[i], configs[i].StableChances)).ToArray();
                 design.Blacksmith = design.Blacksmith.Concat(this._blacksmithPlacer.Place(sortedPoints[i], configs[i].BlacksmithChances)).ToArray();
-                design.Houses = design.Houses.Concat(this._housePlacer.Place(sortedPoints[i], configs[i].HouseChances)).ToArray();
+                design.Neighbourhoods = design.Neighbourhoods.Concat(this._neighbourhoodPlacer.Place(sortedPoints[i], configs[i].HouseChances)).ToArray();
                 design.Farms = design.Farms.Concat(this._farmPlacer.Place(sortedPoints[i], configs[i].FarmChances)).ToArray();                
             }
             this.RemoveIntersecting(design);
-            this.BuildPaths(design);
             return design;
         }
 
-        public void BuildPaths(PlacementDesign Design)
+        public void FinishPlacements(PlacementDesign Design)
         {
-            var candidates = Design.Blacksmith.Concat<IBuildingParameters>(Design.Houses).Concat(Design.Farms).Concat(Design.Markets).ToList();
-            var graph = this.CreateGraph(Design, candidates);
-            var edges = graph.Edges;
+            var candidates = Design.Blacksmith.Concat<IBuildingParameters>(Design.Neighbourhoods).Concat(Design.Farms).Concat(Design.Markets).ToList();
+            var graph = this.CreateGraph(Design, candidates, out var vertices);
+            this.BuildPaths(Design, graph);
+            this.MarkGraphSpots(graph, candidates, vertices);
+        }
+
+        private void MarkGraphSpots(PathGraph Graph, List<IBuildingParameters> Candidates, Dictionary<IBuildingParameters, PathVertex> Vertices)
+        {
+            for (var i = 0; i < Candidates.Count; i++)
+            {
+                var degree = Graph.Degree(Vertices[Candidates[i]]);
+                var newParam = this.ParameterFromDegree(degree, Candidates[i].Position);
+                if (degree >= 3)
+                {
+                    World.WorldBuilding.AddPlateau(new Plateau(Candidates[i].Position, degree * 32)
+                    {
+                        NoTrees = true
+                    });
+                }
+            }
+        }
+
+        private void BuildPaths(PlacementDesign Design, PathGraph Graph)
+        {
+            var edges = Graph.Edges;
             for (var i = 0; i < edges.Length; i++)
             {
                 var from = edges[i].Origin;
                 var to = edges[i].End;
-                var path = new LineGroundwork(from.Point.Xz, to.Point.Xz, BlockType.StonePath)
+                var path = new LineGroundwork(from.Point.Xz, to.Point.Xz, BlockType.Path)
                 {
                     BonusHeight = -1f,
-                    Width = 14
+                    Width = 24
                 };
                 World.WorldBuilding.AddGroundwork(path);
             }
         }
 
-        private PathGraph CreateGraph(PlacementDesign Design, List<IBuildingParameters> Candidates)
+        private PathGraph CreateGraph(PlacementDesign Design, List<IBuildingParameters> Candidates, out Dictionary<IBuildingParameters, PathVertex> Vertices)
         {
             var graph = new PathGraph(Design.Position);
             var vertices = new Dictionary<IBuildingParameters, PathVertex>();
@@ -99,11 +120,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 });
             }
             graph.AddEdge(edges.ToArray());
-            for (var i = 0; i < Candidates.Count; i++)
-            {
-                var degree = graph.Degree(vertices[Candidates[i]]);
-                var newParam = this.ParameterFromDegree(degree, Candidates[i].Position);              
-            }
+            Vertices = vertices;
             return graph;
         }
 
@@ -115,7 +132,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             };
             
             if(Degree == 1) return this._farmPlacer.FromPoint(point);
-            if(Degree == 2) return this._housePlacer.FromPoint(point);
+            if(Degree == 2) return this._neighbourhoodPlacer.FromPoint(point);
             if(Degree == 3) return this._blacksmithPlacer.FromPoint(point);
             if(Degree > 3) return this._marketPlacer.FromPoint(point);
             throw new ArgumentOutOfRangeException();
@@ -141,12 +158,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private void RemoveIntersecting(PlacementDesign Design)
         {
             var parameters = Design.Blacksmith.Concat<IBuildingParameters>(Design.Farms)
-                .Concat(Design.Houses).Concat(Design.Stables).Concat(Design.Markets).ToList();
+                .Concat(Design.Neighbourhoods).Concat(Design.Stables).Concat(Design.Markets).ToList();
             parameters.Shuffle(_rng);
             var asPoints = parameters.Select(P => new PlacementPoint
             {
                 Position = P.Position,
-                Radius = P.GetSize(_root),
+                Radius = P.GetSize(_root.Cache),
                 CanBeRemoved = Array.IndexOf(Design.Markets, P) == -1
             }).ToList();
 
@@ -163,8 +180,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             }
             Design.Blacksmith = this.RemoveIfExists<BlacksmithParameters>(Design.Blacksmith, toRemove);
             Design.Farms = this.RemoveIfExists<FarmParameters>(Design.Farms, toRemove);
-            Design.Houses = this.RemoveIfExists<BuildingParameters>(Design.Houses, toRemove);
-            Design.Markets = this.RemoveIfExists<BuildingParameters>(Design.Markets, toRemove);
+            Design.Neighbourhoods = this.RemoveIfExists<NeighbourhoodParameters>(Design.Neighbourhoods, toRemove);
+            Design.Markets = this.RemoveIfExists<MarketParameters>(Design.Markets, toRemove);
             Design.Stables = this.RemoveIfExists<BuildingParameters>(Design.Stables, toRemove);
         }
 
@@ -184,7 +201,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         private PlacementPoint[] SamplePoints(VillageRing Ring)
         {
-            const int max = 512;
+            const int max = 2048;
             var points = new PlacementPoint[max];
             for (var i = 0; i < points.Length; i++)
             {
@@ -232,7 +249,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             for (var i = 0; i < Points.Count; i++)
             {
-                if (PlacementPoint.Collide(Point, Points[i]) && Point != Points[i] && Point.CanBeRemoved)
+                if (Point.CanBeRemoved && PlacementPoint.Collide(Point, Points[i]) && Point != Points[i])
                     return true;
             }
             return false;

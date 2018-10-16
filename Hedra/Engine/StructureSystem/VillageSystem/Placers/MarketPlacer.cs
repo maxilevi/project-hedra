@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
 {
-    public class MarketPlacer : Placer<BuildingParameters>
+    public class MarketPlacer : Placer<MarketParameters>
     {
         private int _currentMarkets;
 

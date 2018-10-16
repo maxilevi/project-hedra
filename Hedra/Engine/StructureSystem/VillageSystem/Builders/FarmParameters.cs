@@ -25,9 +25,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             };
         }
 
-        public float GetSize(VillageRoot Root)
+        public float GetSize(VillageCache Cache)
         {
-            return Root.Cache.GrabSize(Design.Path).Xz.LengthFast;
+            var diameter = Cache.GrabSize(Design.Path).Xz.LengthFast * 3f;
+            return diameter * .5f;
         }
     }
 }

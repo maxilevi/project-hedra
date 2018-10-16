@@ -18,6 +18,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .75f);
         }
 
+        /* Called via reflection */
         public virtual BuildingOutput Paint(T Parameters, BuildingOutput Input)
         {
             return Input;
@@ -28,6 +29,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return Designs[Parameters.Rng.Next(0, Designs.Length)];
         }
         
+        /* Called via reflection */
         public virtual BuildingOutput Build(T Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
             var rotationMatrix = LookAtCenter ? Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian) : Matrix4.Identity;
@@ -85,6 +87,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
             return false;
         }
+        
+        protected bool IntersectsWithAnyPath(Vector2 Point, float Radius)
+        {
+            var paths = World.WorldBuilding.Groundworks.Where(G => G.IsPath).ToArray();
+            for (var i = 0; i < paths.Length; i++)
+            {
+                if (paths[i].Affects(Point)) return true;
+            }
+            return false;
+        }    
     }
     
     public class GroundworkItem {

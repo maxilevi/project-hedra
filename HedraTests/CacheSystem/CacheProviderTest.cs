@@ -3,6 +3,7 @@ using System.Linq;
 using Hedra;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using NUnit.Framework;
 using OpenTK;
@@ -17,6 +18,7 @@ namespace HedraTests.CacheSystem
         [SetUp]
         public void Setup()
         {
+            AssetManager.Provider = new SimpleAssetProvider();
             Provider = new CacheProvider();
             Provider.Load();
         }

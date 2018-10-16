@@ -13,7 +13,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 	        return this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .75f, BlockType.Path);
         }
 
-	    public override BuildingOutput Paint(BlacksmithParameters Parameters, BuildingOutput Input)
+		public override BuildingOutput Paint(BlacksmithParameters Parameters, BuildingOutput Input)
 		{
 			Input.Model.GraduateColor(Vector3.UnitY);
 			return base.Paint(Parameters, Input);

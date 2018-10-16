@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.WorldBuilding;
@@ -416,23 +417,6 @@ namespace Hedra.Engine.BiomeSystem
 						       (Chunk.BlockSize * Z + Chunk.OffsetZ) * 0.0011f) - 0.2) - Narrow +
 				       Border) * Scale;
 		}
-		
-		private Plateau GetBiggestPlateauForPosition(Vector2 Position, Plateau[] Plateaux)
-		{
-			Plateau biggestPlateau = null;
-			foreach (Plateau plateau in Plateaux)
-			{
-				var currentDist = 1 - Math.Min((plateau.Position.Xz - Position).LengthSquared / (plateau.Radius * plateau.Radius), 1);
-				if (currentDist <= 0) continue;
-
-				if (plateau.Radius > (biggestPlateau?.Radius ?? 0))
-				{
-					biggestPlateau = plateau;
-				}
-			}
-
-			return biggestPlateau;
-		}
 
 	    private bool IsBlockChangeable(BlockType Type)
 	    {
@@ -461,6 +445,7 @@ namespace Hedra.Engine.BiomeSystem
 		private void DoTreeAndStructurePlacements(Block[][][] Blocks, RegionCache Cache, int Lod)
 		{
 			var structs = World.StructureGenerator.Structures;
+			var plateaus = World.WorldBuilding.Plateaus.Where(P => P.NoTrees).ToArray();
 			for (var _x = 0; _x < this.Chunk.BoundsX; _x++)
 			{
 				for (var _z = 0; _z < this.Chunk.BoundsZ; _z++)
@@ -471,8 +456,9 @@ namespace Hedra.Engine.BiomeSystem
 					var y = Chunk.GetHighestY(x, z);
 					var block = Blocks[x][y][z];
 
-					this.LoopStructures(_x, _z, structs, out _, out var noTreesZone, out _);
 					if(block.Type != BlockType.Grass) continue;
+					this.LoopStructures(_x, _z, structs, out _, out var noTreesZone, out _);
+					this.LoopPlateaus(_x, _z, plateaus, out var noTreesPlateau);
 					
 					if (World.Seed == World.MenuSeed)
 					{
@@ -488,7 +474,7 @@ namespace Hedra.Engine.BiomeSystem
 							     Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 48 * 48) continue;
 					}
 
-					if(noTreesZone) continue;
+					if(noTreesZone || noTreesPlateau) continue;
 
 					var realPosition = new Vector3(Chunk.OffsetX + _x * Chunk.BlockSize, y-1, Chunk.OffsetZ + _z * Chunk.BlockSize);
 					var samplingPosition = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
@@ -497,9 +483,23 @@ namespace Hedra.Engine.BiomeSystem
 					var noise = (float) OpenSimplexNoise.Evaluate(realPosition.X * 0.005f, realPosition.Z * 0.005f);
 					var placementObject = World.TreeGenerator.CanGenerateTree(samplingPosition, region, Lod);
 					if (!placementObject.Placed) continue;
+					placementObject.Position += -samplingPosition.Xz.ToVector3() + realPosition.Xz.ToVector3();
 					World.TreeGenerator.GenerateTree(placementObject, region, region.Trees.GetDesign( (int) (noise * 10000) ));
 				}
 			}
+		}
+
+		private void LoopPlateaus(int X, int Z, Plateau[] Plateaus, out bool NoTrees)
+		{
+			for (var i = 0; i < Plateaus.Length; i++)
+			{
+				if (Plateaus[i].Collides(new Vector2(X * Chunk.BlockSize + OffsetX, Z * Chunk.BlockSize + OffsetZ)))
+				{
+					NoTrees = true;
+					return;
+				}
+			}
+			NoTrees = false;
 		}
 		
 		private Vector2 GetNearest(int X, int Z, int Lod)

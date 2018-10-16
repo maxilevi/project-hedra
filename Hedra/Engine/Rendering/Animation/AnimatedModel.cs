@@ -55,6 +55,8 @@ namespace Hedra.Engine.Rendering.Animation
         private Matrix4 _scaleCache;
         private Vector3 _cachePosition;
         private Matrix4 _positionCache;
+        private Matrix4 _transformationMatrix = Matrix4.Identity;
+        private bool _jointsDirty = true;
 
         public AnimatedModel(ModelData Data, Joint RootJoint, int JointCount)
         {
@@ -196,11 +198,20 @@ namespace Hedra.Engine.Rendering.Animation
         {
             if (_animator.Update())
             {
-                AddJointsToArray(RootJoint, _jointMatrices);
+                UpdateJointTransforms(true);
             }
         }
 
         public Matrix4[] JointTransforms => _jointMatrices;
+
+        private void UpdateJointTransforms(bool Force = false)
+        {
+            if (Force || _jointsDirty)
+            {
+                _jointsDirty = false;
+                AddJointsToArray(RootJoint, _jointMatrices);
+            }
+        }
 
         private void AddJointsToArray(Joint HeadJoint, Matrix4[] JointMatrices)
         {
@@ -214,6 +225,7 @@ namespace Hedra.Engine.Rendering.Animation
 
         public Matrix4 MatrixFromJoint(Joint TargetJoint)
         {
+            UpdateJointTransforms();
             return JointTransforms[TargetJoint.Index];
         }
 
@@ -256,7 +268,7 @@ namespace Hedra.Engine.Rendering.Animation
             {
                 if (ColorArray.Length != _colors.Count)
                     throw new ArgumentOutOfRangeException(
-                        "The new colors array can't have more data than the previous one.");
+                        $"The new colors array can't have more data than the previous one.");
 
 
                 _colors.Update(ColorArray, ColorArray.Length * Vector3.SizeInBytes);
@@ -265,7 +277,18 @@ namespace Hedra.Engine.Rendering.Animation
 
         private bool BuffersCreated => Data != null;
 
-        public Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
+        public Matrix4 TransformationMatrix
+        {
+            get => _transformationMatrix;
+            set
+            {
+                if (_transformationMatrix != value)
+                {
+                    _jointsDirty = true;
+                    _transformationMatrix = value;
+                }
+            }
+        }
 
         public Animation AnimationPlaying => _animator.AnimationPlaying;
         
@@ -309,6 +332,7 @@ namespace Hedra.Engine.Rendering.Animation
                                  Matrix4.CreateRotationY(Rotation.Y * Mathf.Radian) *
                                  Matrix4.CreateRotationZ(Rotation.Z * Mathf.Radian);
                 _cacheRotation = Rotation;
+                _jointsDirty = true;
                 return _rotationCache;
             }
         }
@@ -320,6 +344,7 @@ namespace Hedra.Engine.Rendering.Animation
                 if (Scale == _cacheScale) return _scaleCache;
                 _scaleCache = Matrix4.CreateScale(Scale);
                 _cacheScale = Scale;
+                _jointsDirty = true;
                 return _scaleCache;
             }
         }
@@ -331,6 +356,7 @@ namespace Hedra.Engine.Rendering.Animation
                 if (Position == _cachePosition) return _positionCache;
                 _positionCache = Matrix4.CreateTranslation(Position);
                 _cachePosition = Position;
+                _jointsDirty = true;
                 return _positionCache;
             }
         }

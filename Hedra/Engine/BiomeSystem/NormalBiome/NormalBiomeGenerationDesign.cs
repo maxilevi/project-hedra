@@ -89,7 +89,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             //Small Frequency
             height += BiomeGenerator.SmallFrequency(X, Z);
 
-            double mountHeight = Mathf.Clamp((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 2048.0, 0.0, 32.0);
+            double mountHeight = Mathf.Clamp((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 32.0, 0.0, 32.0);
 
             if (mountHeight > 0)
             {

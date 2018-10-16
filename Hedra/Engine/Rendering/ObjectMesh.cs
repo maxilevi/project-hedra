@@ -11,7 +11,7 @@ using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Rendering
 {
-	public class ObjectMesh : IRenderable, IDisposable, ICullableModel
+	public class ObjectMesh : IRenderable, IDisposable, ICullableModel, IUpdatable
 	{
 	    public Vector3 TargetRotation { get; set; }
 	    public Vector3 TargetPosition { get; set; }
@@ -36,17 +36,22 @@ namespace Hedra.Engine.Rendering
 			Mesh.Enabled = true;
 			Enabled = true;	
 			DrawManager.Add(this);
-		}
+	        UpdateManager.Add(this);
+        }
 
 		
 		public void Draw()
         {
 			if(Enabled) Mesh.Draw();
-			this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition,
-                Time.IndependantDeltaTime * 6 * AnimationSpeed);
-			this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation,
-                Time.IndependantDeltaTime * 6 * AnimationSpeed);
 		}
+        
+	    public void Update()
+	    {
+	        this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition,
+	            Time.IndependantDeltaTime * 6 * AnimationSpeed);
+	        this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation,
+	            Time.IndependantDeltaTime * 6 * AnimationSpeed);
+        }
 
 	    public bool ApplyNoiseTexture
 	    {
@@ -168,7 +173,8 @@ namespace Hedra.Engine.Rendering
 		
 		public Vector3 AnimationRotation{
 			get => _buffer.AnimationRotation;
-		    set{
+		    set
+            {
 				float valY = value.Y;
 				
 				if(valY > 40960 || valY < -40960) valY = 0;
@@ -193,7 +199,8 @@ namespace Hedra.Engine.Rendering
 		
 		public Vector3 AnimationPosition{
 			get => _buffer.AnimationPosition;
-		    set{
+		    set
+            {
 				float valY = value.Y;
 				
 				if(valY > 4096 || valY < -4096) valY = 0;
@@ -211,18 +218,21 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 		
-		public bool ApplyFog{
+		public bool ApplyFog
+        {
 			get => _buffer.ApplyFog;
 		    set => _buffer.ApplyFog = value;
 		}
 		
-		public float Alpha{
+		public float Alpha
+        {
 			get => _buffer.Alpha;
 		    set => _buffer.Alpha = value;
 		}
 		
 		
-		public Vector3 Scale{
+		public Vector3 Scale
+        {
 			get => _buffer.Scale;
 		    set => _buffer.Scale = value;
 		}

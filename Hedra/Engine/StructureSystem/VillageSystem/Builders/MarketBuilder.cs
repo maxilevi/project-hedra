@@ -10,24 +10,25 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    public class MarketBuilder : Builder<BuildingParameters>
+    public class MarketBuilder : Builder<MarketParameters>
     {
-        public override bool Place(BuildingParameters Parameters, VillageCache Cache)
+        public override bool Place(MarketParameters Parameters, VillageCache Cache)
         {
-            var work = this.CreateGroundwork(Parameters.Position, 96, BlockType.StonePath);
+            var work = this.CreateGroundwork(Parameters.Position, Parameters.Size);
             work.Groundwork = null;
+            work.Plateau.NoTrees = true;
             return this.PushGroundwork(work);
         }
 
-        public override BuildingOutput Paint(BuildingParameters Parameters, BuildingOutput Input)
+        public override BuildingOutput Paint(MarketParameters Parameters, BuildingOutput Input)
         {
             return Input;
         }
 
-        public override BuildingOutput Build(BuildingParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
+        public override BuildingOutput Build(MarketParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            float marketDist = 1.75f + Rng.NextFloat() * .75f + 1.2f;
-            int marketCount = 6 + Rng.Next(0, 4);
+            float marketDist = 4.75f + Rng.NextFloat() * .75f + 1.2f;
+            int marketCount = 16 + Rng.Next(0, 4);
 
             var market = new VertexData();
             var marketShapes = new List<CollisionShape>();
@@ -45,6 +46,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     World.WorldBuilding.SpawnVillager(originalPosition + Vector3.UnitX * 40f, false);
 
 
+                if(base.IntersectsWithAnyPath(
+                    Vector3.TransformPosition(
+                         Vector3.UnitZ * marketDist * Chunk.BlockSize, Matrix4.CreateRotationY(360 / marketCount * i * Mathf.Radian) * transMatrix
+                    ).Xz,
+                    16
+                )) continue;
+                
                 VertexData market0 = VillageCache.Market.Market0_Clone.Clone();
                 bool extraShelf = Rng.Next(0, 4) != 0;
                 if (extraShelf) market0 += VillageCache.Market.Market1_Clone.Clone();
@@ -127,7 +135,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             };
         }
 
-        public override void Polish(BuildingParameters Parameters)
+        public override void Polish(MarketParameters Parameters)
         {
 
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -10,29 +11,31 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    public class VillageBuilder
+    public class VillageAssembler
     {
         private readonly VillageRoot _root;
-        private readonly HouseBuilder _houseBuilder;
+        private readonly NeighbourhoodBuilder _neighbourhoodBuilder;
+        private readonly NeighbourhoodWellBuilder _neighbourHoodWellBuilder;
         private readonly FarmBuilder _farmBuilder;
         private readonly BlacksmithBuilder _blacksmithBuilder;
         private readonly StableBuilder _stableBuilder;
-        private readonly WellBuilder _wellBuilder;
+        private readonly MarketWellBuilder _marketWellBuilder;
         private readonly MarketBuilder _marketBuilder;
-        private readonly PlacementDesigner _designer;
+        private readonly IDispersedPlacementDesigner _designer;
         private readonly Random _rng;
 
-        public VillageBuilder(VillageRoot Root, Random Rng)
+        public VillageAssembler(VillageRoot Root, Random Rng)
         {
-            _houseBuilder = new HouseBuilder();
+            _neighbourhoodBuilder = new NeighbourhoodBuilder();
             _farmBuilder = new FarmBuilder();
             _blacksmithBuilder = new BlacksmithBuilder();
             _stableBuilder = new StableBuilder();
-            _wellBuilder = new WellBuilder();
+            _marketWellBuilder = new MarketWellBuilder();
+            _neighbourHoodWellBuilder = new NeighbourhoodWellBuilder();
             _marketBuilder = new MarketBuilder();
             _root = Root;
             _rng = Rng;
-            _designer = new PlacementDesigner(_root, new VillageConfiguration(), Rng);
+            _designer = new DispersedPlacementDesigner(_root, new VillageConfiguration(), Rng);
         }
 
         public PlacementDesign DesignVillage()
@@ -42,12 +45,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public void PlaceGroundwork(PlacementDesign Design)
         {
-            Design.Markets = LoopStructures(Design.Markets, _marketBuilder, _wellBuilder);
-            Design.Houses = LoopStructures(Design.Houses, _houseBuilder);
+            Design.Markets = LoopStructures(Design.Markets, _marketBuilder, _marketWellBuilder);
+            Design.Neighbourhoods = LoopStructures(Design.Neighbourhoods, _neighbourhoodBuilder, _neighbourHoodWellBuilder);
             Design.Blacksmith = LoopStructures(Design.Blacksmith, _blacksmithBuilder);
             Design.Farms = LoopStructures(Design.Farms, _farmBuilder);
             Design.Stables = LoopStructures(Design.Stables, _stableBuilder);
-            _designer.BuildPaths(Design);
+            _designer.FinishPlacements(Design);
         }
 
         private T[] LoopStructures<T>(T[] Parameters, params Builder<T>[] Builders) where T : IBuildingParameters
@@ -57,7 +60,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 for(var j = 0; j < Builders.Length; j++)
                 {
-                    if (!Builders[j].Place(Parameters[i], _root.Cache))
+                    if (IsUnderwater(Parameters[i].Position) || !Builders[j].Place(Parameters[i], _root.Cache))
                     {
                         list.Remove(Parameters[i]);
                         break;
@@ -67,11 +70,18 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return list.ToArray();
         }
 
+        private static bool IsUnderwater(Vector3 Position)
+        {
+            return World.BiomePool.GetRegion(Position).Generation
+                       .GetHeight(Position.X, Position.Z, null, out _) < BiomePool.SeaLevel;
+        }
+
         public void Build(PlacementDesign Design, CollidableStructure Structure)
         {
             var parameters = new IBuildingParameters[][]
             {
-                Design.Houses,
+                Design.Neighbourhoods,
+                Design.Neighbourhoods,
                 Design.Farms,
                 Design.Blacksmith,
                 Design.Stables,
@@ -79,7 +89,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Design.Markets
             };
             var radius = 0f;
-            var builders = new object[] { _houseBuilder, _farmBuilder, _blacksmithBuilder, _stableBuilder, _wellBuilder, _marketBuilder};
+            var builders = new object[] { _neighbourhoodBuilder, _neighbourHoodWellBuilder, _farmBuilder, _blacksmithBuilder, _stableBuilder, _marketWellBuilder, _marketBuilder};
             for (var i = 0; i < builders.Length; i++)
             {
                 for (var j = 0; j < parameters[i].Length; j++)
