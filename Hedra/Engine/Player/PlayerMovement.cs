@@ -305,6 +305,16 @@ namespace Hedra.Engine.Player
                 World.AddChunkToQueue(World.GetChunkByOffset(World.ToChunkSpace(_player.Position)), true);
             }
 
+            if (EventArgs.Key == Key.K)
+            {
+                World.MarkChunkReady(World.GetChunkByOffset(World.ToChunkSpace(_player.Position)));
+            }
+
+            if (EventArgs.Key == Key.P)
+            {
+                //var c = World.GetChunkByOffset(World.ToChunkSpace(_player.Position));
+            }
+
             if (EventArgs.Key == Key.L && _player.CanInteract) GameSettings.Wireframe = !GameSettings.Wireframe;
 
 

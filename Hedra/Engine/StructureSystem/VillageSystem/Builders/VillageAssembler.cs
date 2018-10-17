@@ -112,7 +112,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var position = (Vector3) Arguments[0];
             var buildingOutput = (BuildingOutput) Arguments[1];
             var structure = (CollidableStructure) Arguments[2];
-            var model = buildingOutput.Model;
+            var models = buildingOutput.Models;
             var shapes = buildingOutput.Shapes;
             
             var underChunk = World.GetChunkAt(position);
@@ -125,9 +125,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
             var height = Physics.HeightAtPosition(position);
             var transMatrix = Matrix4.CreateTranslation(Vector3.UnitY * height);
-            model.Transform(transMatrix);
+            models.ToList().ForEach(M => M.Transform(transMatrix));
             shapes.ForEach(S => S.Transform(transMatrix));
-            structure.AddStaticElement(model);
+            structure.AddStaticElement(models.ToArray());
             structure.AddCollisionShape(shapes.ToArray());
         }
     }

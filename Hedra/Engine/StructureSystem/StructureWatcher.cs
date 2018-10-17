@@ -10,12 +10,14 @@ namespace Hedra.Engine.StructureSystem
     public class StructureWatcher : IDisposable
     {
         public CollidableStructure Structure { get; }
+        private readonly object _lock = new object();
         private readonly Dictionary<CachedVertexData, Chunk> _chunksAdded;
 
         public StructureWatcher(CollidableStructure Structure)
         {
             this.Structure = Structure;
             _chunksAdded = new Dictionary<CachedVertexData, Chunk>();
+            Structure.OnModelAdded += this.OnModelAdded;
             World.OnChunkReady += this.OnChunkReady;
             World.OnChunkDisposed += this.OnChunkDisposed;
         }
@@ -28,14 +30,32 @@ namespace Hedra.Engine.StructureSystem
                 var chunkSpace = World.ToChunkSpace(models[i].Position);
                 if (Object.OffsetX == (int) chunkSpace.X && Object.OffsetZ == (int) chunkSpace.Y)
                 {
-                    if (!_chunksAdded.ContainsKey(models[i]) || _chunksAdded[models[i]] != Object)
-                    {
-                        Object.AddStaticElement(models[i].ToVertexData());
-                        if(_chunksAdded.ContainsKey(models[i]))
-                            _chunksAdded[models[i]] = Object;
-                        else
-                            _chunksAdded.Add(models[i], Object);
-                    }
+                    AddIfNecessary(models[i], Object);
+                }
+            }
+        }
+
+        private void OnModelAdded(CachedVertexData Model)
+        {
+            var chunkSpace = World.ToChunkSpace(Model.Position);
+            var chunk = World.GetChunkByOffset(chunkSpace);
+            if (chunk != null)
+            {
+                AddIfNecessary(Model, chunk);
+            }    
+        }
+
+        private void AddIfNecessary(CachedVertexData Model, Chunk Object)
+        {
+            lock (_lock)
+            {
+                if (!_chunksAdded.ContainsKey(Model) || _chunksAdded[Model] != Object)
+                {
+                    Object.AddStaticElement(Model.ToVertexData());
+                    if (_chunksAdded.ContainsKey(Model))
+                        _chunksAdded[Model] = Object;
+                    else
+                        _chunksAdded.Add(Model, Object);
                 }
             }
         }

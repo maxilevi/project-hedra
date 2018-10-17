@@ -24,7 +24,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public override BuildingOutput Paint(FarmParameters Parameters, BuildingOutput Input)
         {
             var regionColor = World.BiomePool.GetRegion(Parameters.Position).Colors;
-            Input.Model.Color(AssetManager.ColorCode2, regionColor.GrassColor);
+            Input.Color(AssetManager.ColorCode2, regionColor.GrassColor);
             return base.Paint(Parameters, Input);
         }
 
@@ -39,7 +39,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var windmill = Parameters.HasWindmill ? this.BuildWindmill(Parameters, Cache) : BuildingOutput.Empty;
             return new BuildingOutput
             {
-                Model = farm0.Model + farm1.Model + farm2.Model + farm3.Model + windmill.Model,
+                Models = farm0.Models.Concat(farm1.Models).Concat(farm2.Models).Concat(farm3.Models).Concat(windmill.Models).ToList(),
                 Shapes = farm0.Shapes.Concat(farm1.Shapes).Concat(farm2.Shapes).Concat(farm3.Shapes).Concat(windmill.Shapes).ToList()
             };
         }
@@ -58,7 +58,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             shapes.ForEach(S => S.Transform(transformationMatrix));
             return new BuildingOutput
             {
-                Model = model,
+                Models = new []{model},
                 Shapes = shapes
             };
         }

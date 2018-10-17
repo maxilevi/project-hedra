@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms.VisualStyles;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using OpenTK;
@@ -41,7 +43,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             shapes.ForEach(shape => shape.Transform(transformationMatrix));
             return new BuildingOutput
             {
-                Model = model,
+                Models = new[] { model },
                 Shapes = shapes
             };
         }

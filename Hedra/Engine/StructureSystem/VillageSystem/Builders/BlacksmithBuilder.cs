@@ -15,7 +15,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
 		public override BuildingOutput Paint(BlacksmithParameters Parameters, BuildingOutput Input)
 		{
-			Input.Model.GraduateColor(Vector3.UnitY);
+			for(var i = 0; i < Input.Models.Count; i++)
+				Input.Models[i].GraduateColor(Vector3.UnitY);
 			return base.Paint(Parameters, Input);
 		}
 

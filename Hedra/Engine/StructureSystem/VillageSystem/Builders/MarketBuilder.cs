@@ -30,7 +30,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             float marketDist = 4.75f + Rng.NextFloat() * .75f + 1.2f;
             int marketCount = 16 + Rng.Next(0, 4);
 
-            var market = new VertexData();
+            var marketModels = new List<VertexData>();
             var marketShapes = new List<CollisionShape>();
             var originalPosition = Parameters.Position;
             var transMatrix = Matrix4.CreateScale(5f) * Matrix4.CreateTranslation(originalPosition);
@@ -124,13 +124,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     market0 += shelfModel;
                     shapes.AddRange(shelfShapes);
                 }
-                market += market0;
+                market0.Transform(transMatrix);
+                marketModels.Add(market0);
                 marketShapes.AddRange(shapes.ToArray());
             }
-            market.Transform(transMatrix);
             return new BuildingOutput
             {
-                Model = market,
+                Models = marketModels,
                 Shapes = marketShapes
             };
         }

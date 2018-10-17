@@ -172,6 +172,7 @@ namespace Hedra.Engine.Game
 		    StructureGenerator.CheckStructures(chunkOffset);
 		    while (_loadingScreen.IsLoading)
 		    {
+                Player.Physics.ResetFall();
 			    Player.Physics.TargetPosition = new Vector3(
 				    Player.Physics.TargetPosition.X,
 				    Physics.HeightAtPosition(Player.Physics.TargetPosition),

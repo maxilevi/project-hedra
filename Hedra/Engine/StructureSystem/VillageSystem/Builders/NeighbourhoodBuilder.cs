@@ -34,10 +34,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return CircularNeighbourhoodHouse(Parameters, Cache, Rng);
         }
 
-        private  BuildingOutput CircularNeighbourhoodHouse(NeighbourhoodParameters Parameters, VillageCache Cache, Random Rng)
+        private BuildingOutput CircularNeighbourhoodHouse(NeighbourhoodParameters Parameters, VillageCache Cache, Random Rng)
         {
             var houseCount = Parameters.HouseCount;
-            var addedModel = new VertexData();
+            var modelsList = new List<VertexData>();
             var shapesList = new List<CollisionShape>();
             for (var i = 0; i < houseCount; i++)
             {
@@ -46,6 +46,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var rotationMatrix = Matrix4.CreateRotationY((360 / houseCount * i) * Mathf.Radian);
                 var distanceMatrix = Matrix4.CreateTranslation(-dist * Vector3.UnitZ);
                 var positionMatrix = Matrix4.CreateTranslation(Parameters.Position);
+                
                 
                 if(base.IntersectsWithAnyPath(
                     Vector3.TransformPosition(Vector3.Zero, distanceMatrix * rotationMatrix * positionMatrix).Xz,
@@ -56,17 +57,17 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 model.Transform(distanceMatrix);
                 model.Transform(rotationMatrix);
                 model.Transform(positionMatrix);
-                
+                modelsList.Add(model);
+
                 var shapes = Cache.GrabShapes(design.Path);
                 shapes.ForEach(S => S.Transform(distanceMatrix));
                 shapes.ForEach(S => S.Transform(rotationMatrix));
                 shapes.ForEach(S => S.Transform(positionMatrix));
-                addedModel += model;
                 shapesList.AddRange(shapes);
             }
             return new BuildingOutput
             {
-                Model = addedModel,
+                Models = modelsList,
                 Shapes = shapesList
             };
         }

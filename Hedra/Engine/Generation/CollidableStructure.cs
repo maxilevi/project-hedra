@@ -19,11 +19,12 @@ using Hedra.Engine.StructureSystem;
 
 namespace Hedra.Engine.Generation
 {
-    /// <summary>
-    /// Description of Town.
-    /// </summary>
+
+    public delegate void OnModelAdded(CachedVertexData Models);
+
     public class CollidableStructure : IDisposable
     {
+        public event OnModelAdded OnModelAdded;
         public Vector3 Position { get; }
         public Plateau Mountain { get; }
         public float Radius { get; private set; }
@@ -70,11 +71,15 @@ namespace Hedra.Engine.Generation
 	        }
 	    }
 
-        public void AddStaticElement(VertexData Model)
+        public void AddStaticElement(params VertexData[] Models)
         {
             lock (_lock)
             {
-                _models.Add(CachedVertexData.FromVertexData(Model));
+                for (var i = 0; i < Models.Length; i++)
+                {
+                    _models.Add(CachedVertexData.FromVertexData(Models[i]));
+                    OnModelAdded?.Invoke(_models[_models.Count-1]);
+                }
                 this.CalculateRadius();
             }
         }
