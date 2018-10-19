@@ -232,6 +232,8 @@ namespace Hedra.Engine.Generation
 
             if (NewSeed == MenuSeed)
                 MenuBackground.Setup();
+            
+            GC.Collect();
         }
 
         public void Discard()

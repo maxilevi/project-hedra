@@ -270,7 +270,8 @@ namespace Hedra.Engine.Player
                 World.Discard();
                 lock (World.Chunks)
                 {
-                    for (int i = 0; i < World.Chunks.Count; i++)
+                    var count = World.Chunks.Count;
+                    for (int i = count-1; i > -1; i--)
                     {
                         World.RemoveChunk(World.Chunks[i]);
                     }

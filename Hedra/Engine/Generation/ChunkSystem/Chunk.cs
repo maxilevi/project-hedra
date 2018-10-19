@@ -25,7 +25,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
     public class Chunk : IDisposable, IPositionable
     {
         public static float BlockSize { get; } = 4.0f;
-        public static int Height { get; } = 160;
+        public static int Height { get; } = 256;
         public static int Width { get; } = 128;
         public Region Biome { get; }
         public int BoundsX { get; private set; }
@@ -57,7 +57,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private readonly object _terrainVerticesLock;
         private readonly object _blocksLock;
         private readonly RegionCache _regionCache;
-        private bool _canDispose = true;
         private GridCell _nearestVertexCell;
         private Vector3[] _terrainVertices;
 
@@ -94,7 +93,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Disposed) throw new ArgumentException($"Cannot build a disposed chunk.");
             if (!Initialized) throw new ArgumentException($"Chunk hasnt been initialized yet.");
-            _canDispose = false;
             Mesh.Position = new Vector3(OffsetX, 0, OffsetZ);
             lock (_blocksLock)
             {
@@ -166,7 +164,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void PrepareForBuilding()
         {
             this.IsBuilding = true;
-            this._canDispose = false;
             this.BuildedCompletely = false;
         }
 
@@ -220,9 +217,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Mesh.BuildedOnce = true;
                 }
                 Input.StaticData?.Dispose();
-
-                if (Input.WaterData.Vertices.Count == 0)
-                    _canDispose = true;
             });
             if (Input.WaterData.Vertices.Count > 0)
                 DistributedExecuter.Execute(delegate
@@ -232,8 +226,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     if (BuildedCompletely)
                         BuildedCompletely = result;
                     Input.WaterData?.Dispose();
-
-                    _canDispose = true;
                 });
         }
 
@@ -545,7 +537,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public Vector3[] TerrainVertices => _terrainVertices;
 
-        public void ForceDispose()
+        private void ForceDispose()
         {
             Disposed = true;
             _waterDensity?.Clear();
@@ -562,9 +554,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _blocks = null;
         }
 
-        public IEnumerator DisposeCoroutine()
+        private IEnumerator DisposeCoroutine()
         {
-            while (!_canDispose) yield return null;
+            var time = 0f;
+            while (IsBuilding && time < 2.5f)
+            {
+                time += Time.DeltaTime;
+                yield return null;
+            }
             this.ForceDispose();
         }
 

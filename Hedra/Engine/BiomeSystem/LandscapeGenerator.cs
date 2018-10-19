@@ -14,6 +14,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using OpenTK;
+using SimplexNoise;
 
 namespace Hedra.Engine.BiomeSystem
 {
@@ -87,11 +88,11 @@ namespace Hedra.Engine.BiomeSystem
 
 	        var heightCache = new Dictionary<Vector2, float[]>();
 
-	        const int noiseScale = 4;
+	        const int noiseScale = 1;
 	        var width = (int) (Chunk.Width / Chunk.BlockSize);
 	        var depth = (int) (Chunk.Width / Chunk.BlockSize);
 
-	        var noise3D = new float[0]; //Chunk.ChunkHeight / noiseScale];
+	        var noise3D = new float[0/*Chunk.Height / noiseScale*/];
 
 	        var plateaus = World.WorldBuilding.Plateaus;
 	        var groundworks = World.WorldBuilding.Groundworks.ToList();
@@ -125,7 +126,7 @@ namespace Hedra.Engine.BiomeSystem
 			                : type;
 		                
 		                this.GenerateBlock(Blocks, type, x, y, z, height, river, makeDirt, riverBorders,
-			                ref townClamped, rng);
+			                ref townClamped, rng, noise3D, noiseScale);
 		                			
 		                this.HandleGroundworks(Blocks, x, y, z, path, PathDepth, pathClamped, town, townClamped,
 			                blockGroundworks, blockGroundworksModifier);
@@ -133,15 +134,12 @@ namespace Hedra.Engine.BiomeSystem
 	            }
 	        }
 	    }
-
+		
 		private void GenerateBlock(Block[][][] Blocks, BlockType type, int x, int y, int z, float height, float river,
-			bool makeDirt, float riverBorders, ref bool townClamped, Random rng)
+			bool makeDirt, float riverBorders, ref bool townClamped, Random rng, float[] noise3D, int noiseScale)
 		{
 			var currentBlock = Blocks[x][y][z];
-			float noise = 0; /*Mathf.Lerp(
-						noise3D[ (int) Math.Floor(y / (float) noiseScale) ],
-						noise3D[ (int) Math.Min(noise3D.Length-1, Math.Floor(y / (float) noiseScale) + 1) ],
-						(y / (float) noiseScale) - (int) Math.Floor(y / (float)noiseScale));*/
+		    var noise = 0;//noise3D[y];
 	
 			if (noise != 0 && townClamped)
 				townClamped = false;
@@ -170,12 +168,13 @@ namespace Hedra.Engine.BiomeSystem
 					currentBlock.Noise3D = true;
 	
 			}
-	
-			if (currentBlock.Type == BlockType.Grass)
-				if ((World.Seed == World.MenuSeed || true) && makeDirt)
-					currentBlock.Type = BlockType.Dirt;
-	
-			if (y < height + river)
+
+		    if (currentBlock.Type == BlockType.Grass)
+		    {
+		        if (makeDirt) currentBlock.Type = BlockType.Dirt;
+		    }
+
+		    if (y < height + river)
 			{
 				if (currentBlock.Type == BlockType.Air && river > 0)
 				{
@@ -269,9 +268,11 @@ namespace Hedra.Engine.BiomeSystem
 			for (var i = 0; i < noise3D.Length; i++)
 			{
 				if (World.MenuSeed != World.Seed)
+				{
 					noise3D[i] = biomeGen.GetDensity(OffsetX + x * Chunk.BlockSize,
 						i * noiseScale * Chunk.BlockSize,
 						OffsetZ + z * Chunk.BlockSize, heightCache);
+				}
 
 				/*
 				if (inPlateau)
@@ -288,11 +289,13 @@ namespace Hedra.Engine.BiomeSystem
 
 				if (nearGiantTree == null)
 				{
-					river = Mathf.Clamp(Mathf.Lerp(0, river, 1 - Math.Abs(noise3D[i])), 0, river);
-					riverBorders = Mathf.Clamp(Mathf.Lerp(0, riverBorders, 1 - Math.Abs(noise3D[i])), 0,
-						riverBorders);
-				}
-				path = Mathf.Lerp(path, 0, noise3D[i]);
+				    const int lerpFactor = 80;
+				    noise3D[i] = Mathf.Lerp(noise3D[i], 0f, (float)Mathf.Clamp(riverBorders * lerpFactor, 0, 1));
+
+				    /*noise3D[i] = Mathf.Clamp(
+				        Mathf.Lerp(noise3D[i], 0f, path),
+				        0, noise3D[i]);*/
+                }
 			}
 
 			float riverLerp = amplifiedRiverBorders / RiverDepth;

@@ -14,19 +14,21 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         public override float GetDensity(float X, float Y, float Z, Dictionary<Vector2, float[]> HeightCache)
         {
-            double Density = 0;
-            //if(World.MenuSeed != World.Seed){
-
-            if (HeightCache.ContainsKey(new Vector2(X, Z)))
+            var density = 0.0;
+            if(World.MenuSeed != World.Seed)
             {
-                double Mult = HeightCache[new Vector2(X, Z)][0];
-
-                //if(Mult > 0.0)
-                //	Density -=  Mathf.Clamp( 0.1 * Mult * OpenSimplexNoise.Evaluate(x * 0.0025, y * 0.0025,  z * 0.0025) * 32.0, 0, Mult);
-
+                if (HeightCache.ContainsKey(new Vector2(X, Z)))
+                {
+                    var mult = HeightCache[new Vector2(X, Z)][0];
+                    if (mult > 0.0)
+                    {
+                       /*density -= Mathf.Clamp( OpenSimplexNoise.Evaluate(X * 0.008, Y * 0.008, Z * 0.008) * 16.0,
+                            0, float.MaxValue
+                        );*/
+                    }
+                }
             }
-
-            return (float)Density;
+            return (float)density;
         }
 
         public override bool HasHeightSubtype(float X, float Z, Dictionary<Vector2, float[]> HeightCache)
@@ -36,6 +38,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         
         public override BlockType GetHeightSubtype(float X, float Y, float Z, float CurrentHeight, BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
+            /*
             double height = HeightCache[new Vector2(X, Z)][1];
             double realHeight = (CurrentHeight - height) / HeightCache[new Vector2(X, Z)][2];
 
@@ -43,77 +46,94 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             {
                 if (Y > 28.0)
                     return BlockType.Grass;
-            }
+            }*/
             return Type;
         }
 
         public override float GetHeight(float X, float Z, Dictionary<Vector2, float[]> HeightCache, out BlockType Blocktype)
         {
+            var height = 0.0;
+            Blocktype = BlockType.Air;
+            
+            AddBaseHeight(X, Z, ref height, ref Blocktype, out var baseHeight);
+            AddMountainHeight(X, Z, ref height, ref Blocktype);
+            AddMountHeight(X, Z, ref height, ref Blocktype, HeightCache);
+            AddBigMountainsHeight(X, Z,ref height, ref Blocktype, HeightCache);
+            AddStones(X, Z, ref height, ref Blocktype);
+            
+            return (float)height + BiomeGenerator.SmallFrequency(X, Z);
+        }
 
-            double height = 0;
-
-            //START BASE
-            double baseHeight = OpenSimplexNoise.Evaluate(X * 0.0004, Z * 0.0004) * 48.0;
-            double grassHeight = (OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) + .25) * 3.0;
-            Blocktype = BlockType.Grass;
-
-            height += baseHeight + grassHeight;
-            //END BASE
-
-            //START MOUNTAIN
-
-            double grassMountHeight = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.0008, Z * 0.0008) * 80.0);
-            if (grassMountHeight != 0)
+        private static void AddStones(float X, float Z, ref double Height, ref BlockType Type)
+        {
+            var stones = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.005, Z * 0.005) - .5) *
+                         48.0; // * Math.Min(moutainHeight, 1);
+            Height += stones;
+            if (stones > 0)
             {
-                Blocktype = BlockType.Grass;
+                Height += BiomeGenerator.SmallFrequency(X + 234, Z + 12123) * 2.0;
+                Type = BlockType.Stone;
             }
-            height += grassMountHeight;
-            //END MOUNTAIN
+        }
 
-            //BIG MOUNTAINS
-            double smallMountainHeight = 0;//Math.Max(0, OpenSimplexNoise.Evaluate(x * 0.01,  z *0.01) - .75f) * 128.0;
+        private static void AddBigMountainsHeight(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
+        {
+            if (World.Seed == World.MenuSeed) return;
 
-            if (smallMountainHeight != 0 && baseHeight > 0)
+            var rawMountainHeight = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.00075, Z * 0.00075) - .15);
+            var moutainHeight = rawMountainHeight * 200.0;
+            if (moutainHeight > 0)
             {
-
-                height += smallMountainHeight;
+                var stones = Math.Min(Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.0025, Z * 0.0025) - .5) * 2048.0, 16.0)
+                * Math.Min(moutainHeight, 1);
+                Height += stones;
+                if (stones > 0)
+                {
+                    Height += BiomeGenerator.SmallFrequency(X + 234, Z + 12123) * 2.0;
+                    Type = BlockType.Stone;
+                }
             }
+            Height += moutainHeight;
+        }
 
-            double lakeHeight = Mathf.Clamp((OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001) - .4f) * 48.0, 0, 32);
-            // Height -= LakeHeight * 4;	
-
-            //height += Mathf.Clamp(OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001) * 64.0, 0, float.MaxValue);
-            //height += OpenSimplexNoise.Evaluate(X * 0.01, Z * 0.01) * 2.0;
-
-            //height += OpenSimplexNoise.Evaluate(X * 0.02, Z * 0.02) * 1.5;
-            //Small Frequency
-            height += BiomeGenerator.SmallFrequency(X, Z);
-
-            double mountHeight = Mathf.Clamp((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 32.0, 0.0, 32.0);
+        private static void AddMountHeight(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
+        {
+            /*var mountHeight = Mathf.Clamp((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 2048, 0.0, 32.0);
 
             if (mountHeight > 0)
             {
-                Blocktype = BlockType.Stone;
-
-                double mod = (World.MenuSeed == World.Seed) ? 0 : .4f;//Mathf.Clamp(OpenSimplexNoise.Evaluate(x * 0.005f, z * 0.005f) * .5f - .1f, 0.0, 2.0);
-
+                Type = BlockType.Stone;
+                var mod = (World.MenuSeed == World.Seed) ? 0 : .4f;//Mathf.Clamp(OpenSimplexNoise.Evaluate(x * 0.005f, z * 0.005f) * .5f - .1f, 0.0, 2.0);
                 mountHeight *= mod;
                 var Mult = 1;//Mathf.Clamp(OpenSimplexNoise.Evaluate(x * 0.005, z * 0.005) * 4.0, 0, 1);
                 mountHeight *= Mult;
 
                 if (mountHeight > 0)
-                    HeightCache?.Add(new Vector2(X, Z), new[] { (float)mountHeight, (float)height, (float)(Mult * mod) });
-                height += mountHeight;
+                    HeightCache?.Add(new Vector2(X, Z), new[] { (float)mountHeight, (float)Height, (float)(Mult * mod) });
+                Height += mountHeight;
             }
 
             if (mountHeight <= 1.0)
-                Blocktype = BlockType.Grass;
+                Type = BlockType.Grass;*/
+        }
+        
+        private static void AddMountainHeight(float X, float Z, ref double Height, ref BlockType Type)
+        {
+            var grassMountHeight = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.0008, Z * 0.0008) * 80.0);
+            if (grassMountHeight != 0)
+            {
+                Type = BlockType.Grass;
+            }
+            Height += grassMountHeight;
+        }
 
-            if (smallMountainHeight > 0)
-                Blocktype = BlockType.Stone;
-
-            return (float)height;
-
+        private static void AddBaseHeight(float X, float Z, ref double Height, ref BlockType Type, out double BaseHeight)
+        {
+            var baseHeight = OpenSimplexNoise.Evaluate(X * 0.00005, Z * 0.00005) * 48.0 + BiomePool.SeaLevel;
+            var grassHeight = (OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) + .25) * 3.0;
+            Type = BlockType.Grass;
+            Height += baseHeight + grassHeight;
+            BaseHeight = baseHeight;
         }
     }
 }

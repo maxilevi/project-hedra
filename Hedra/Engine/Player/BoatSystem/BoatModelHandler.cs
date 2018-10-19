@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player.BoatSystem
         {
             if (Model.Enabled && _player.CanInteract)
             {
-                var waterNormal = Physics.WaterNormalAtPosition(this.Position);
+                var waterNormal = _stateHandler.OnWaterSurface || _player.IsUnderwater ? Physics.WaterNormalAtPosition(this.Position) : Vector3.UnitY;
                 _targetTerrainOrientation =
                     new Matrix3(Mathf.RotationAlign(Vector3.UnitY, waterNormal)).ExtractRotation();
                 _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation,

@@ -9,10 +9,8 @@ using Hedra.Engine.Rendering;
 using System.Collections.Generic;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.PlantSystem;
 using Hedra.Engine.TreeSystem;
 using OpenTK;
 
@@ -55,6 +53,7 @@ namespace Hedra.Engine.Generation
 				noiseValue = Math.Min(Math.Max(0, Math.Abs(spaceBetween / 40f) * valueFactor) + .3f, 1.0f);
 			}
 			if(spaceBetween < 0) spaceBetween = -spaceBetween * 16f;
+		    if (PlacementNoise(Position) < 0) return default(PlacementObject);
 
 			if (World.MenuSeed != World.Seed)
 				spaceBetween += BiomeRegion.Trees.PrimaryDesign.Spacing;
@@ -104,15 +103,6 @@ namespace Hedra.Engine.Generation
 			model.Extradata.AddRange( model.GenerateWindValues(AssetManager.ColorCode1, windRng) );
 		    model.AddExtraData(AssetManager.ColorCode2, model.GenerateWindValues(AssetManager.ColorCode2, windRng));
 
-            var shadow = new DropShadow
-			{
-			    Position = transMatrix.ExtractTranslation() + Vector3.UnitY * .1f,
-                DepthTest = true,
-			    DeleteWhen = () => underChunk.Disposed
-            };
-		    shadow.Rotation = new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(shadow.Position)));
-            shadow.Scale *= 5f;
-
 			Vector4 woodColor = rng.Next(0, 5) != 1
                 ? BiomeRegion.Colors.WoodColors[new Random(World.Seed + 5232).Next(0, BiomeRegion.Colors.WoodColors.Length)] 
                 : BiomeRegion.Colors.WoodColor;
@@ -150,6 +140,11 @@ namespace Hedra.Engine.Generation
 	    public float SpaceNoise(float X, float Z)
 	    {
 	        return (float) OpenSimplexNoise.Evaluate(X * .004f, (Z + 100) * .004f) * 40f;
+	    }
+
+	    private static float PlacementNoise(Vector3 Position)
+	    {
+	        return (float) OpenSimplexNoise.Evaluate((Position.X + 743) * .01f, (Position.Z + 14352300) * .01f);
 	    }
     }
 

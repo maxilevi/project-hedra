@@ -43,13 +43,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public ChunkMeshBuildOutput CreateTerrainMesh(Block[][][] Blocks, int Lod, RegionCache Cache)
         {
             var output = CreateTerrain(Blocks,
-                (X,Y,Z) => Lod == 1 || (X != 0 && Z != 0 && X != BoundsX-Lod && Z != BoundsZ-Lod), Lod, Cache);
+                (X,Y,Z) => Lod == 1 || (X != 0 && Z != 0 && X != BoundsX-Lod && Z != BoundsZ-Lod), Lod, Lod, Cache);
 
             if (Lod != 1)
             {
                 var targetLod = 1;
                 var borders = CreateTerrain(Blocks,
-                    (X, Y, Z) => X < targetLod || Z < targetLod || X > BoundsX-targetLod-1 || Z > BoundsZ-targetLod-1, targetLod, Cache);
+                    (X, Y, Z) => X < targetLod || Z < targetLod || X > BoundsX-targetLod-1 || Z > BoundsZ-targetLod-1, targetLod, Lod, Cache);
                 _stitcher.Process(output.StaticData, borders.StaticData,
                     new Vector3(Lod*BlockSize, 0, Lod*BlockSize), new Vector3(Chunk.Width-Lod*BlockSize, 0, Chunk.Width-Lod*BlockSize),
                     new Vector3(targetLod*BlockSize,0, targetLod*BlockSize), new Vector3(Chunk.Width-targetLod*BlockSize, 0, Chunk.Width-targetLod*BlockSize));
@@ -72,7 +72,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return output;
         }
 
-        private ChunkMeshBuildOutput CreateTerrain(Block[][][] Blocks, Func<int, int, int, bool> Filter, int Lod, RegionCache Cache)
+        private ChunkMeshBuildOutput CreateTerrain(Block[][][] Blocks, Func<int, int, int, bool> Filter, int Lod, int ColorLod, RegionCache Cache)
         {
             var failed = false;
             var next = false;
@@ -140,7 +140,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                                 var regionPosition = new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
                                 var region = Cache.GetAverageRegionColor(regionPosition);
-                                color = Helper.GetColor(cell, region, Lod);
+                                color = Helper.GetColor(cell, region, ColorLod);
                                 MarchingCubes.Process(0f, cell, color, next, blockData);
                             }
                             else
@@ -150,7 +150,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                                 RegionColor region = Cache.GetAverageRegionColor(regionPosition);
 
-                                color = Helper.GetColor(cell, region, Lod);
+                                color = Helper.GetColor(cell, region, ColorLod);
 
                                 MarchingCubes.Process(0f, cell, color, next, blockData);
                             }

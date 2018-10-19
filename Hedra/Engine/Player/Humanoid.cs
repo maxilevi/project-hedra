@@ -104,7 +104,8 @@ namespace Hedra.Engine.Player
 	        return TargetLevel * 10f + 38;
 	    }
         			
-		public float MaxMana{
+		public float MaxMana
+		{
 			get{
 				float maxMana = 103 + RandomFactor * 34f;
 				for(var i = 1; i < this.Level; i++){
@@ -128,7 +129,7 @@ namespace Hedra.Engine.Player
 	        get
 	        {
 	            var baseRegen = this.MaxHealth * .005f;
-	            return baseRegen * (this.IsSleeping ? 6.0f : 1.0f);
+	            return baseRegen * (this.IsSleeping ? 6.0f : 0.0f);
             }
 	    }
 

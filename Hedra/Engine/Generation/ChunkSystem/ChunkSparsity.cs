@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using System;
+using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -23,7 +24,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     if (h > highest) highest = h;
                 } 
             }
-            return new Vector2(lowest-2, highest+2);
+            return new Vector2(Math.Max(0, lowest-2), Math.Min(highest+2, Chunk.Height-1));
         }
 
         private static float Highest(int X, int Z, Chunk Parent)
