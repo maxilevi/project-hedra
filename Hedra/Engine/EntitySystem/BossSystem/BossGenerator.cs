@@ -9,6 +9,7 @@
 
 using System;
 using Hedra.Engine.AISystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;

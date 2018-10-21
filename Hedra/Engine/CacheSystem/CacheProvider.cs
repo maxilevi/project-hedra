@@ -47,7 +47,7 @@ namespace Hedra.Engine.CacheSystem
                         break;
                     }
                 }
-                Log.WriteLine($"Loading {type.Name} into cache as {item.ToString()}...", LogType.GL);
+                Log.WriteLine($"Loading {type.Name} into cache as {item.ToString()}...", LogType.System);
                 if(item == CacheItem.MaxEnums) throw new ArgumentException("No valid cache type found for "+type);
                 _caches.Add(item.ToString().ToLowerInvariant(), (CacheType) Activator.CreateInstance(type));
             }

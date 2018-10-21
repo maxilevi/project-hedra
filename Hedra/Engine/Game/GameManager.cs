@@ -6,11 +6,10 @@
  */
 
 using System;
-using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 
-namespace Hedra.Engine
+namespace Hedra.Engine.Game
 {
 
 	public static class GameManager

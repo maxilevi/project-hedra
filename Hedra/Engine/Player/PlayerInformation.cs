@@ -8,6 +8,7 @@
  */
 using System.Collections.Generic;
 using Hedra.Engine.ClassSystem;
+using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.ItemSystem;
 

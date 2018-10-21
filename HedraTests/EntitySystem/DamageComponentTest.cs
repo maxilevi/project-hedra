@@ -2,6 +2,7 @@
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
+using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;

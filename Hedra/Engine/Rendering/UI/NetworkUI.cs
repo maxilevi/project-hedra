@@ -13,6 +13,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Networking;
 using System.Collections.Generic;
+using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 
 namespace Hedra.Engine.Rendering.UI

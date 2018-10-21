@@ -6,6 +6,7 @@
  */
 using System.Collections.Generic;
 using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Management
 {

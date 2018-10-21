@@ -7,6 +7,7 @@
 using System;
 using OpenTK;
 using System.Runtime.InteropServices;
+using Hedra.Engine.Game;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Effects;
 using OpenTK.Graphics.OpenGL4;

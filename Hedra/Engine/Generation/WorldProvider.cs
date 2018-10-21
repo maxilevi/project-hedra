@@ -13,6 +13,7 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
@@ -74,6 +75,8 @@ namespace Hedra.Engine.Generation
         public bool IsGenerated { get; private set; }
         public int MeshQueueCount => _meshBuilder.Count;
         public int ChunkQueueCount => _chunkBuilder.Count;
+        public int AverageBuildTime => _meshBuilder.AverageWorkTime;     
+        public int AverageGenerationTime => _chunkBuilder.AverageWorkTime;
 
         public Dictionary<Vector2, Chunk> DrawingChunks { get; }
 

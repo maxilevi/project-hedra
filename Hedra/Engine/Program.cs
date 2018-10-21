@@ -7,6 +7,9 @@ using OpenTK;
 using Hedra.Engine;
 using System.Windows.Forms;
 using System.Drawing;
+using System.IO;
+using System.Reflection;
+using Hedra.Engine.Game;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Rendering;
 using OpenTK.Graphics.OpenGL4;
@@ -64,6 +67,9 @@ namespace Hedra
 	        GameSettings.SurfaceHeight = GameWindow.Height;
 
 	        GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;	
+
+	        GameSettings.LoadWindowSettings(GameSettings.SettingsPath);
+	        Log.WriteLine("Window settings loading was Successful");
 #if DEBUG
             GameWindow.Run();
 #else

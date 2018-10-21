@@ -1,5 +1,6 @@
 ﻿using System;
 using Hedra.Engine;
+using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;

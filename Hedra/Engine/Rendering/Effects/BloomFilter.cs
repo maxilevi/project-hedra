@@ -11,6 +11,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Rendering.Effects
 {

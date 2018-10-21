@@ -7,7 +7,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Hedra.Engine.Core;
+using Hedra.Engine.Game;
 using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -15,6 +17,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
     public abstract class AbstractBuilder : ICountable, IDisposable
     {
         public int Count => _queue.Count;
+        private readonly Stopwatch _watch;
         private readonly SharedWorkerPool _pool;
         private readonly HashSet<Chunk> _hashQueue;
         private readonly ChunkComparer _closest;
@@ -23,6 +26,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private bool _discard;
         private Vector3 _lastSortedPosition;
         private int _lastCount;
+        private float _accumTime;
+        private int _workItems;
 
         protected AbstractBuilder(SharedWorkerPool Pool)
         {
@@ -31,6 +36,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _queue = new List<Chunk>();
             _hashQueue = new HashSet<Chunk>();
             _closest = new ChunkComparer();
+            _watch = new Stopwatch();
             _pool.Register(this);
         }
 
@@ -59,7 +65,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     {
                         try
                         {
+                            this.StartProfile();
                             this.Work(chunk);
+                            this.EndProfile();
                         }
                         catch (Exception e)
                         {
@@ -80,6 +88,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         protected abstract void Work(Chunk Object);
 
         protected abstract int SleepTime { get; }
+
+        public int AverageWorkTime => (int) (_accumTime / (float) Math.Max(_workItems, 1));
 
         public void Add(Chunk Chunk)
         {
@@ -112,6 +122,20 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void Discard()
         {
             _discard = true;
+            _accumTime = 0;
+            _workItems = 0;
+        }
+        
+        private void StartProfile()
+        {
+            _watch.Restart();
+        }
+
+        private void EndProfile()
+        {
+            _watch.Stop();
+            _accumTime += _watch.ElapsedMilliseconds;
+            ++_workItems;
         }
 
         public void Dispose()

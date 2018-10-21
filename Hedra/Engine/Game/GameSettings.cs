@@ -6,22 +6,22 @@
  */
 
 using System;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Effects;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
 using OpenTK;
 
-namespace Hedra.Engine
+namespace Hedra.Engine.Game
 {
     [Obfuscation(Exclude = false, Feature = "-rename")]
     public static class GameSettings
     {
         public const int MaxCharacters = 4;
-        public static bool freezelod { get; set; }
         public static float SurfaceWidth { get; set; }
         public static float SurfaceHeight { get; set; }
         public static bool TestingMode { get; set; }
@@ -63,6 +63,30 @@ namespace Hedra.Engine
 #endif
         }
 
+        public static string SettingsPath => $"{GameLoader.AppData}settings.cfg";
+        
+        public static bool Shadows => ShadowQuality != 0 && GlobalShadows;
+        
+        [Setting] public static bool Bloom { get; set; } = true;
+
+        [Setting] public static bool Autosave { get; set; } = true;
+
+        [Setting] public static int ChunkLoaderRadius { get; set; } = 20;
+
+        [Setting] public static bool HideObjectives { get; set; } = false;
+
+        [Setting] public static bool InvertMouse { get; set; } = false;
+
+        [Setting] public static float MouseSensibility { get; set; } = 1f;
+
+        [Setting] public static bool ShowChat { get; set; } = true;
+
+        [Setting] public static bool ShowMinimap { get; set; } = true;
+
+        [Setting] public static bool SSAO { get; set; } = true;
+        
+        [Setting] public static bool FXAA { get; set; } = true;
+        
         [Setting]
         public static int FrameLimit
         {
@@ -74,24 +98,6 @@ namespace Hedra.Engine
             }
         }
 
-        [Setting] public static bool Bloom { get; set; } = true;
-
-        [Setting] public static bool Autosave = true;
-
-        [Setting] public static int ChunkLoaderRadius { get; set; } = 20;
-
-        [Setting] public static bool HideObjectives = false;
-
-        [Setting] public static bool InvertMouse = false;
-
-        [Setting] public static float MouseSensibility = 1f;
-
-        [Setting] public static bool ShowChat = true;
-
-        [Setting] public static bool ShowMinimap = true;
-
-        [Setting] public static bool SSAO = true;
-
         [Setting]
         public static bool ShowConsole
         {
@@ -100,6 +106,7 @@ namespace Hedra.Engine
         }
 
         [Setting]
+        [WindowSetting]
         public static bool Fullscreen
         {
             get => _fullscreen;
@@ -120,26 +127,23 @@ namespace Hedra.Engine
         }
 
         [Setting]
-        public static bool FXAA { get; set; } = true;
-
-        [Setting]
         public static float MusicVolume
         {
-            get { return SoundtrackManager.Volume; }
-            set { SoundtrackManager.Volume = value; }
+            get => SoundtrackManager.Volume;
+            set => SoundtrackManager.Volume = value;
         }
 
         [Setting]
         public static float SFXVolume
         {
-            get { return SoundManager.Volume; }
-            set { SoundManager.Volume = value; }
+            get => SoundManager.Volume;
+            set => SoundManager.Volume = value;
         }
 
         [Setting]
         public static int ShadowQuality
         {
-            get { return (int) Mathf.Clamp(_shadowQuality, 0, 3); }
+            get => (int) Mathf.Clamp(_shadowQuality, 0, 3);
             set
             {
                 _shadowQuality = value;
@@ -147,56 +151,65 @@ namespace Hedra.Engine
             }
         }
 
-        public static bool Shadows => ShadowQuality != 0 && GlobalShadows;
-
         [Setting]
+        [WindowSetting]
         public static bool VSync
         {
             get => (int) Program.GameWindow.VSync == 2;
             set => Program.GameWindow.VSync = (VSyncMode) (value ? 2 : 0);
         }
 
-        public static void Save(string File)
+        public static void Save(string Path)
         {
             var builder = new StringBuilder();
-
-            foreach (FieldInfo field in typeof(GameSettings).GetFields(
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            var properties = GatherProperties();
+            for (var i = 0; i < properties.Length; i++)
             {
-                if (field.IsDefined(typeof(SettingAttribute), true))
-                    builder.AppendLine(field.Name + "=" + field.GetValue(null));
+                builder.AppendLine($"{properties[i].Name}={properties[i].GetValue(null, null)}");
             }
-
-            foreach (PropertyInfo prop in typeof(GameSettings).GetProperties(
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
-            {
-                if (prop.IsDefined(typeof(SettingAttribute), true))
-                    builder.AppendLine(prop.Name + "=" + prop.GetValue(null, null));
-            }
-
-            System.IO.File.WriteAllText(File, builder.ToString());
+            File.WriteAllText(Path, builder.ToString());
         }
 
-        public static void Load(string File)
+        public static void LoadAll(string Path)
         {
-            if (!System.IO.File.Exists(File)) return;
+            LoadNormalSettings(Path);
+            LoadWindowSettings(Path);
+        }
 
-            string[] lines = System.IO.File.ReadAllLines(File);
+        public static void LoadNormalSettings(string Path)
+        {
+            Load(Path, P => !P.IsDefined(typeof(WindowSettingAttribute), true));
+        }
+        
+        public static void LoadWindowSettings(string Path)
+        {
+            Load(Path, P => P.IsDefined(typeof(WindowSettingAttribute), true));
+        }
+
+        private static void Load(string Path, Predicate<PropertyInfo> Predicate)
+        {
+            if (!File.Exists(Path)) return;
+
+            var lines = File.ReadAllLines(Path);
+            var properties = GatherProperties();
             for (var i = 0; i < lines.Length; i++)
             {
-                string[] parts = lines[i].Split('=');
-
-                foreach (FieldInfo field in typeof(GameSettings).GetFields(
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
-                    if (field.IsDefined(typeof(SettingAttribute), true))
-                        if (field.Name == parts[0]) field.SetValue(null, Convert.ChangeType(parts[1], field.FieldType));
-
-                foreach (PropertyInfo prop in typeof(GameSettings).GetProperties(
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
-                    if (prop.IsDefined(typeof(SettingAttribute), true))
-                        if (prop.Name == parts[0])
-                            prop.SetValue(null, Convert.ChangeType(parts[1], prop.PropertyType), null);
+                var parts = lines[i].Split('=');
+                for (var k = 0; k < properties.Length; k++)
+                {
+                    if (!Predicate(properties[k])) continue;
+                    if (properties[k].Name != parts[0]) continue;
+                    var value = Convert.ChangeType(parts[1], properties[k].PropertyType);
+                    properties[k].SetValue(null, value, null);
+                }
             }
+        }
+
+        private static PropertyInfo[] GatherProperties()
+        {
+            return
+                typeof(GameSettings).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+                    .Where(P => P.IsDefined(typeof(SettingAttribute), true)).ToArray();
         }
     }
 }

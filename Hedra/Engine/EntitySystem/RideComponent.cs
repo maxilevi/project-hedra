@@ -9,6 +9,7 @@
 using System.Drawing;
 using Hedra.Engine.AISystem;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Input;

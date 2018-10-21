@@ -16,6 +16,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Management;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Player
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.AISystem;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 

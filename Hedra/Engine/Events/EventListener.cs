@@ -11,7 +11,8 @@ namespace Hedra.Engine.Events
 {
 	public class EventListener : IEventListener
 	{
-		public EventListener(){
+		public EventListener()
+        {
 			EventDispatcher.Add(this);
 		}
 		

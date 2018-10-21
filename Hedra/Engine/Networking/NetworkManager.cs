@@ -20,6 +20,7 @@ using Hedra.Engine.Generation;
 using System.IO;
 using System.Collections;
 using System.Linq;
+using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.WorldBuilding;
 

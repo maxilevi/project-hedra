@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Reflection;
+using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;

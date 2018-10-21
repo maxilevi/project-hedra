@@ -218,36 +218,42 @@ namespace Hedra.Engine.Events
 	        KeyPressedHandlers.Remove(Key);
 	    }
 
-        public static void Add(IEventListener E){
+        public static void Add(IEventListener E)
+        {
 			EventListeners.Add(E);
 	    }
 		
-		public static void Remove(IEventListener A){
+		public static void Remove(IEventListener A)
+        {
 			EventListeners.Remove(A);
 		}
 
-	    public static void OnMouseButtonDown(object Sender, MouseButtonEventArgs E){
+	    public static void OnMouseButtonDown(object Sender, MouseButtonEventArgs E)
+        {
 		    OnMouseButtonDownEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
 				EventListeners[i].OnMouseButtonDown(Sender, E);
 			}
         }
 
-	    public static void OnMouseButtonUp(object Sender, MouseButtonEventArgs E){
+	    public static void OnMouseButtonUp(object Sender, MouseButtonEventArgs E)
+        {
 		    OnMouseButtonUpEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
 				EventListeners[i].OnMouseButtonUp(Sender, E);
 			}
         }
 
-	    public static void OnMouseWheel(object Sender, MouseWheelEventArgs E){
+	    public static void OnMouseWheel(object Sender, MouseWheelEventArgs E)
+        {
 		    OnMouseWheelEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
 				EventListeners[i].OnMouseWheel(Sender, E);
 			}
         }
 
-	    public static void OnMouseMove(object Sender, MouseMoveEventArgs E){
+	    public static void OnMouseMove(object Sender, MouseMoveEventArgs E)
+        {
 			Mouse = new Vector2(E.Mouse.X, E.Mouse.Y);
 		    OnMouseMoveEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
@@ -282,7 +288,8 @@ namespace Hedra.Engine.Events
 		public static void OnKeyPress(object Sender, KeyPressEventArgs E)
         {
             OnKeyPressedEvent?.Invoke(Sender, E);
-			for(var i = 0;i<EventListeners.Count; i++){
+			for(var i = 0;i<EventListeners.Count; i++)
+            {
 				EventListeners[i].OnKeyPress(Sender, E);
 			}
 		}

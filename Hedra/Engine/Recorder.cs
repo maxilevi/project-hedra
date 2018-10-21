@@ -10,6 +10,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.IO;
+using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;

@@ -1,5 +1,6 @@
 using System.IO;
 using Hedra.Engine;
+using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using NUnit.Framework;
 
@@ -26,7 +27,7 @@ namespace HedraTests.Core
             GameSettings.MouseSensibility = 100;
             GameSettings.Save(_dummyConfig);
             GameSettings.MouseSensibility = 0;
-            GameSettings.Load(_dummyConfig);
+            GameSettings.LoadAll(_dummyConfig);
             Assert.AreEqual(100, GameSettings.MouseSensibility);
         }
     }

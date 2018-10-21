@@ -14,6 +14,7 @@ using System.Drawing;
 using OpenTK;
 using System.Collections;
 using Hedra.Engine.ClassSystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering.Animation;
 

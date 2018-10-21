@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.ComplexMath;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.IO;
+using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Testing

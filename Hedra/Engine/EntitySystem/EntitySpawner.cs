@@ -12,6 +12,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using OpenTK;
 using System.Threading;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;

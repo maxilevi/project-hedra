@@ -14,6 +14,7 @@ using Hedra.Engine.Player;
 using OpenTK;
 using System.Collections.Generic;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
@@ -200,12 +201,29 @@ namespace Hedra.Engine.Rendering.UI
 		
 		private Vector3 FireDirection(int I, float Mult)
 		{
-		    var angle = (int) ((I+1) * 180 / _information.Length) * Mathf.Radian - 90;
-            return Vector3.TransformPosition(Vector3.UnitX * Mult, Matrix4.CreateRotationY(angle));
+            var angle = 0f;
+            switch (_information.Length)
+            {
+                case 1:
+                    angle = 0;
+                    break;
+                case 2:
+                    angle = (I * 90 - 45) * Mathf.Radian;
+                    break;
+                case 3:
+                    angle = (I * 60 - 60) * Mathf.Radian;
+                    break;
+                case 4:
+                    angle = (I * 45 - 70) * Mathf.Radian;
+                    break;
+            }
+            return Vector3.TransformPosition(Vector3.UnitX * Mult, Matrix4.CreateRotationY((float)angle));
 		}
 		
-		private IEnumerator UpdateWrapper(){
-			while (Program.GameWindow.Exists){
+		private IEnumerator UpdateWrapper()
+        {
+			while (Program.GameWindow.Exists)
+            {
 				Update();
 				yield return null;
 			}

@@ -8,6 +8,7 @@
  */
 using System;
 using System.Drawing;
+using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;

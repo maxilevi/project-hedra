@@ -49,6 +49,8 @@ namespace Hedra.Engine.Generation
         public static ReadOnlyCollection<BaseStructure> Structures => Provider.Structures;
         public static ReadOnlyCollection<ICollidable> GlobalColliders => Provider.GlobalColliders;
         public static Dictionary<Vector2, Chunk> DrawingChunks => Provider.DrawingChunks;
+        public static int AverageBuildTime => Provider.AverageBuildTime;
+        public static int AverageGenerationTime => Provider.AverageGenerationTime;
 
         public static int Seed => Provider.Seed;
         public static int MenuSeed => Provider.MenuSeed;

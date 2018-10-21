@@ -19,6 +19,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI; 
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;

@@ -12,6 +12,7 @@ using Hedra.Engine.Scenes;
 using Hedra.Engine.Player;
 using System.IO;
 using System.Linq;
+using Hedra.Engine.Game;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 using NVorbis;

@@ -59,18 +59,27 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddMountainHeight(X, Z, ref height, ref Blocktype);
             AddMountHeight(X, Z, ref height, ref Blocktype, HeightCache);
             AddBigMountainsHeight(X, Z,ref height, ref Blocktype, HeightCache);
-            AddStones(X, Z, ref height, ref Blocktype);
+            AddLakes(X, Z, ref height);
+            AddStones(X, Z, ref height, ref Blocktype, HeightCache);
             
-            return (float)height + BiomeGenerator.SmallFrequency(X, Z);
+            return (float)height + BiomeGenerator.SmallFrequency(X, Z) * 1.5f;
         }
 
-        private static void AddStones(float X, float Z, ref double Height, ref BlockType Type)
+        private static void AddLakes(float X, float Z, ref double Height)
+        {
+            var lakeNoise = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001));
+            var frequency = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.0005, Z * 0.0005));
+            Height += frequency * -lakeNoise * 48.0;
+        }
+
+        private static void AddStones(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
             var stones = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.005, Z * 0.005) - .5) *
                          48.0; // * Math.Min(moutainHeight, 1);
             Height += stones;
             if (stones > 0)
             {
+                HeightCache?.Add(new Vector2(X, Z), new[] { (float)stones });
                 Height += BiomeGenerator.SmallFrequency(X + 234, Z + 12123) * 2.0;
                 Type = BlockType.Stone;
             }
@@ -84,14 +93,16 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             var moutainHeight = rawMountainHeight * 200.0;
             if (moutainHeight > 0)
             {
+                /*
                 var stones = Math.Min(Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.0025, Z * 0.0025) - .5) * 2048.0, 16.0)
                 * Math.Min(moutainHeight, 1);
                 Height += stones;
                 if (stones > 0)
                 {
+                    HeightCache?.Add(new Vector2(X, Z), new []{ (float) stones});
                     Height += BiomeGenerator.SmallFrequency(X + 234, Z + 12123) * 2.0;
                     Type = BlockType.Stone;
-                }
+                }*/
             }
             Height += moutainHeight;
         }
@@ -129,7 +140,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         private static void AddBaseHeight(float X, float Z, ref double Height, ref BlockType Type, out double BaseHeight)
         {
-            var baseHeight = OpenSimplexNoise.Evaluate(X * 0.00005, Z * 0.00005) * 48.0 + BiomePool.SeaLevel;
+            var baseHeight = /*OpenSimplexNoise.Evaluate(X * 0.00005, Z * 0.00005) * 48.0 +*/ BiomePool.SeaLevel;
             var grassHeight = (OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) + .25) * 3.0;
             Type = BlockType.Grass;
             Height += baseHeight + grassHeight;

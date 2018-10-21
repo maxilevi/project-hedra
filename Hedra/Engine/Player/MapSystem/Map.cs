@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
@@ -156,6 +157,7 @@ namespace Hedra.Engine.Player.MapSystem
 	                _baseItems[i].Mesh.Draw();
 	            }
 	        }
+		    
             for (var i = 0; i < _icons.Count; i++)
 	        {
 	            _icons[i].Mesh.Alpha = _size;
@@ -201,7 +203,7 @@ namespace Hedra.Engine.Player.MapSystem
                                     var mapItem = new MapItem(icon + baseData.ToVertexData());
 	                                mapItem.Mesh.ApplyNoiseTexture = true;
                                     mapItem.Mesh.Rotation = new Vector3(0, Utils.Rng.Next(0, 4) * 90f, 0);
-	                                mapItem.Mesh.LocalPosition = realPos.ToVector3();
+	                                mapItem.Mesh.LocalPosition = realPos.ToVector3() + Vector3.UnitY * 12;
 	                                mapItem.Mesh.Scale = Vector3.One * 2f;
 	                                lock (_icons) _icons.Add(mapItem);
 	                            }
@@ -317,9 +319,10 @@ namespace Hedra.Engine.Player.MapSystem
 
         public override Key OpeningKey => Key.M;
 
-        public override bool Show{
-			get{ return _show; }
-			set{
+        public override bool Show
+        {
+			get => _show;
+	        set{
 				if(GameManager.IsLoading || _player.Trade.Show) return;
 
                 if (value)

@@ -6,6 +6,7 @@
  */
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Generation.ChunkSystem;

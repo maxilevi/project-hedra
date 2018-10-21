@@ -9,6 +9,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Sound;
 using OpenTK;

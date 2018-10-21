@@ -20,6 +20,7 @@ using System.Threading;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 using Hedra.Engine.Loader;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.Inventory;
@@ -48,8 +49,6 @@ namespace Hedra
 	        MainThreadId = Thread.CurrentThread.ManagedThreadId;
 	        GameVersion = "α 0.41";
 	        Title = $"{Title} {GameVersion}";
-            var appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
-		    var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
 
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
 		    AssetManager.Load();
@@ -57,17 +56,16 @@ namespace Hedra
 	        NameGenerator.Load();
 	        CacheManager.Load();
 	        
-            GameLoader.LoadArchitectureSpecificFiles(appPath);
-            GameLoader.CreateCharacterFolders(appData, appPath);
+            GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
+            GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
 	        GameLoader.AllocateMemory();
 			Log.WriteLine("Assets loading was Successful.");
 	        
 		    GameLoader.LoadSoundEngine();
-	        GameSettings.VSync = true;
-			GameSettings.Load($"{appData}settings.cfg");
-			Log.WriteLine("Settings loading was Successful");
-	        
-	        Renderer.Load();
+            GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
+            Log.WriteLine($"Setting loaded successfully.");
+
+            Renderer.Load();
 	        Log.WriteLine("Supported GLSL version is : "+Renderer.GetString(StringName.ShadingLanguageVersion));
 	        
             GameManager.Load();

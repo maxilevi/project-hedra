@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Inventory;

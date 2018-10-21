@@ -62,17 +62,24 @@ namespace Hedra.Engine.StructureSystem
 
         private void OnChunkDisposed(Chunk Object)
         {
-            var dict = _chunksAdded.ToArray();
+            KeyValuePair<CachedVertexData, Chunk>[] dict;
+            lock (_lock)
+            {
+                dict = _chunksAdded.ToArray();
+            }
             foreach (var pair in dict)
             {
                 if (pair.Value == Object)
                     _chunksAdded[pair.Key] = null;
-            }
+            }          
         }
 
         public void Dispose()
         {
-            _chunksAdded.Clear();
+            lock (_lock)
+            {
+                _chunksAdded.Clear();
+            }
             Structure.Dispose();
         }
     }

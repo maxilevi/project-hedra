@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Threading;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ModuleSystem;
 using Moq;

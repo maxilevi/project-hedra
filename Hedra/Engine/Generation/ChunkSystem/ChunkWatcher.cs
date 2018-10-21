@@ -1,4 +1,5 @@
 ﻿using System;
+using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -24,7 +25,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_object?.Disposed ?? true) this.Dispose();
             if (_object == null || Disposed) return;
 
-            if (!GameSettings.freezelod)
             this.ManageLod();
             var result = this.ManageState();
             if(!result) return;

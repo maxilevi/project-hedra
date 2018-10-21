@@ -5,6 +5,7 @@
  *
  */
 using System;
+using Hedra.Engine.Game;
 
 namespace Hedra.Engine
 {

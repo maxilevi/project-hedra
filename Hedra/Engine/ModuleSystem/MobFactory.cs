@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.AISystem;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 
 namespace Hedra.Engine.ModuleSystem

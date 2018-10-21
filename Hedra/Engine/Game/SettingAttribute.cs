@@ -6,9 +6,10 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 
-namespace Hedra.Engine
+namespace Hedra.Engine.Game
 {
 	/// <summary>
 	/// Description of SettingAttribute.

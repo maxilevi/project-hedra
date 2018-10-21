@@ -1,18 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine
+namespace Hedra.Engine.Game
 {
     public static class GameLoader
     {
 
+        public static string AppData =>
+            $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/Project Hedra/";
+        
+        public static string AppPath =>
+            $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/";
+        
         public static void AllocateMemory()
         {
             /*Log.WriteLine("Querying available vram ...");

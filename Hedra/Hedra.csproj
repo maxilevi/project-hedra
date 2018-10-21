@@ -228,7 +228,13 @@
     <Compile Include="Engine\EntitySystem\Component.cs" />
     <Compile Include="Engine\EntitySystem\IComponent.cs" />
     <Compile Include="Engine\EntitySystem\IPhysicsComponent.cs" />
+    <Compile Include="Engine\Game\GameLoader.cs" />
+    <Compile Include="Engine\Game\GameManager.cs" />
+    <Compile Include="Engine\Game\GameSettings.cs" />
+    <Compile Include="Engine\Game\GeneralSettings.cs" />
     <Compile Include="Engine\Game\LoadingScreen.cs" />
+    <Compile Include="Engine\Game\SettingAttribute.cs" />
+    <Compile Include="Engine\Game\WindowSettingAttribute.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
     <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
@@ -245,7 +251,6 @@
     <Compile Include="Engine\EnvironmentSystem\SkyOverlay.cs" />
     <Compile Include="Engine\EnvironmentSystem\WeatherManager.cs" />
     <Compile Include="Engine\Events\IEventProvider.cs" />
-    <Compile Include="Engine\GameLoader.cs" />
     <Compile Include="Engine\Game\GameProvider.cs" />
     <Compile Include="Engine\Game\IGameProvider.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\AbstractBuilder.cs" />
@@ -497,7 +502,6 @@
     <Compile Include="Engine\Events\EventListener.cs" />
     <Compile Include="Engine\Events\IEventListener.cs" />
     <Compile Include="Engine\Extensions.cs" />
-    <Compile Include="Engine\GeneralSettings.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkComparer.cs" />
     <Compile Include="Engine\Generation\HeightmapData.cs" />
     <Compile Include="Engine\Generation\EnviromentGenerator.cs" />
@@ -543,7 +547,6 @@
     <Compile Include="Engine\BiomeSystem\RegionColor.cs" />
     <Compile Include="Engine\Generation\TreeGenerator.cs" />
     <Compile Include="Engine\Generation\World.cs" />
-    <Compile Include="Engine\GameSettings.cs" />
     <Compile Include="Engine\ItemSystem\ItemPool.cs" />
     <Compile Include="Engine\Management\AssetManager.cs" />
     <Compile Include="Engine\Management\CoroutineManager.cs" />
@@ -826,9 +829,7 @@
     <Compile Include="Engine\Rendering\VertexData.cs" />
     <Compile Include="Engine\Rendering\WorldBuffer.cs" />
     <Compile Include="Engine\Rendering\WorldRenderer.cs" />
-    <Compile Include="Engine\GameManager.cs" />
     <Compile Include="Engine\Scenes\MenuBackground.cs" />
-    <Compile Include="Engine\SettingAttribute.cs" />
     <Compile Include="Engine\Sound\AreaSound.cs" />
     <Compile Include="Engine\Sound\IAudible.cs" />
     <Compile Include="Engine\Sound\SoundBuffer.cs" />

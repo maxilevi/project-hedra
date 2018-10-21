@@ -1,4 +1,5 @@
 ﻿using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 

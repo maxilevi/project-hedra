@@ -149,7 +149,7 @@ namespace Hedra.Engine.Rendering
 		private void Combine()
         {
 			ShaderId = Renderer.CreateProgram();
-            Log.WriteLine($"Shader'{_name}' compiled succesfully with Id '{ShaderId}'.", LogType.GL);
+            Log.WriteLine($"Shader'{_name}' compiled succesfully with Id '{ShaderId}'.", LogType.System);
 
             if (ShaderVid > 0) Renderer.AttachShader(ShaderId, ShaderVid);              
             if (ShaderGid > 0) Renderer.AttachShader(ShaderId, ShaderGid);

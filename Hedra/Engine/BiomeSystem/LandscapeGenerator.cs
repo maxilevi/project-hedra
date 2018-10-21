@@ -110,8 +110,7 @@ namespace Hedra.Engine.BiomeSystem
 	            {
                     if(!Filter(x,z)) continue;
 	                var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
-	                float height = Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out BlockType type);
-
+	                var height = Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out BlockType type);
 		            this.HandleStructures(x, z, position, groundworks, plateaus, structs, heightCache, noise3D, biomeGen,
 			            hasPath, hasRiver, noiseScale, ref height, out var town, out var townClamped, out var makeDirt,
 			            out var pathClamped, out var river, out var path, out var riverBorders, out var blockGroundworksModifier,
@@ -121,6 +120,7 @@ namespace Hedra.Engine.BiomeSystem
 
 	                for (var y = 0; y < Chunk.Height - 1; y++)
 	                {
+		                //if(height+ Chunk.BlockSize*Chunk.BlockSize < y) continue;
 		                type = hasSubType 
 			                ? biomeGen.GetHeightSubtype(position.X, y, position.Y, height, type, heightCache) 
 			                : type;
@@ -156,7 +156,7 @@ namespace Hedra.Engine.BiomeSystem
 	
 				currentBlock.Type = type;
 	
-				if (height - y > 3.0f)
+				if (height - y > 18.0f)
 				{
 					currentBlock.Type = BlockType.Stone;
 				}
@@ -239,7 +239,7 @@ namespace Hedra.Engine.BiomeSystem
 				town = true;
 				nearCollidableStructure = item;
 				break;
-			}     
+			}
 			var smallFrequency = SmallFrequency(position.X, position.Y);
 			var nearGiantTree = FindNearestGiantTree(position, structs);
 			
@@ -253,11 +253,11 @@ namespace Hedra.Engine.BiomeSystem
 			path = Mathf.Clamp(path * 100f, 0, PathDepth);
 
 			river = hasRiver * River(x,z, Narrow, Scale);
-			riverBorders = hasRiver * River(x,z, Narrow, Scale, Border);
+			riverBorders = hasRiver * (River(x, z, Narrow, Scale, Border));/* + SmallFrequency(x, z) * .5f * Math.Min(1, river * 100));*/
 			float amplifiedRiverBorders = Mathf.Clamp(riverBorders * RiverMult, 0, RiverDepth);
 
 			river = Mathf.Clamp(river * RiverMult, 0, RiverDepth);
-			path = Mathf.Lerp(path, 0, river / RiverDepth);
+			path = Mathf.Lerp(path, 0, Math.Min(1, river));
 
 			blockGroundworksModifier = 1.0f;
 			this.HandlePlateaus(x, z, smallFrequency, ref height, plateaus, nearGiantTree, nearCollidableStructure,
@@ -301,21 +301,15 @@ namespace Hedra.Engine.BiomeSystem
 			float riverLerp = amplifiedRiverBorders / RiverDepth;
 			var pathGroundwork = blockGroundworks.FirstOrDefault(P => P.IsPath);
 			var groundworkDensity = pathGroundwork?.Density(position) ?? 0;
-			if ((riverLerp > 0 || path > 0) && !inPlateau)
+			if ((riverLerp > 0 || path > 0))
 			{
 				if (heightCache.ContainsKey(new Vector2(x * Chunk.BlockSize + OffsetX,
 					z * Chunk.BlockSize + OffsetZ)))
 				{
 					var cache = heightCache[new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ)][0];
-					if (path > 0)
-					{
-						path = Mathf.Lerp(path, 0, Mathf.Clamp(cache / 32.0f, 0, 1.0f));
-					}
-					if (riverLerp > 0)
-					{
-						height -= Mathf.Lerp(0, cache, riverLerp);
-					}
-				}
+				    height -= Mathf.Lerp(0, cache, Math.Min(path * .5f, 1));
+                    height -= Mathf.Lerp(0, cache, riverLerp);
+                }
 			}
 			if (blockGroundworks.Length > 0)
 			{
@@ -438,7 +432,7 @@ namespace Hedra.Engine.BiomeSystem
 
                     if(y < BiomePool.SeaLevel - Chunk.BlockSize) continue;
 
-	                Region region = Cache.GetRegion(position);
+	                var region = Cache.GetRegion(position);
 	                this.LoopStructures(x, z, structs, out bool noWeedZone, out _, out _);
 	                this.DoEnviromentPlacements(position, noWeedZone, region);
 	            }

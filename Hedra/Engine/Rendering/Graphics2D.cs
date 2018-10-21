@@ -16,6 +16,7 @@ using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Rendering
 {
@@ -57,7 +58,7 @@ namespace Hedra.Engine.Rendering
 
 		public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
 		{
-			Log.WriteLine($"Loading Texture: {Path}", LogType.GL);
+			Log.WriteLine($"Loading Texture: {Path}", LogType.System);
 			return LoadTexture(new BitmapObject
 			{
 				Bitmap = new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))),

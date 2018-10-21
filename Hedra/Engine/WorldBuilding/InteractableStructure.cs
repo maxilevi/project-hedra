@@ -10,6 +10,7 @@
 using System;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;

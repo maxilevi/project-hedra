@@ -9,6 +9,7 @@ using Hedra.Engine.AISystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;

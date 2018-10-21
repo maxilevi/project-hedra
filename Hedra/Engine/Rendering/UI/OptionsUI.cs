@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -368,7 +369,8 @@ namespace Hedra.Engine.Rendering.UI
 			                                             volumeOptions, false);
 
 			for(int i = 0; i < volumeOptions.Length; i++){
-				if( (float) (Int32.Parse( volumeOptions[i].Replace("%",string.Empty) ) / 100f) == SoundtrackManager.Volume){
+				if( (float) (Int32.Parse( volumeOptions[i].Replace("%",string.Empty) ) / 100f) == SoundtrackManager.Volume)
+				{
 					musicVolume.Index = i;
 					musicVolume.CurrentValue.Text = volumeOptions[i];
 					//SoundtrackManager.Volume = Int32.Parse( VolumeOptions[Volume.Index].Replace("%",string.Empty) ) / 100f;				
@@ -377,11 +379,11 @@ namespace Hedra.Engine.Rendering.UI
 			}
 			
 			musicVolume.LeftArrow.Click += delegate { 
-				SoundtrackManager.Volume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%",string.Empty) ) / 100f;
+				GameSettings.MusicVolume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%",string.Empty) ) / 100f;
 			};
 			
 			musicVolume.RightArrow.Click += delegate { 
-				SoundtrackManager.Volume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%",string.Empty) ) / 100f;
+				GameSettings.MusicVolume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%",string.Empty) ) / 100f;
 			};
 			
 			OptionChooser sfxVolume = new OptionChooser(new Vector2(0, .4f), new Vector2(0.15f, 0.075f), "Sound FX Volume: ",  fontColor, _normalFont,

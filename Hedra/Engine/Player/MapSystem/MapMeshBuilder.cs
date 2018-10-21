@@ -13,12 +13,12 @@ namespace Hedra.Engine.Player.MapSystem
 {
     public class MapMeshBuilder
     {
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
         private readonly int _mapSize;
         private readonly int _chunkSize;
         private readonly CubeData _cubeData;
 
-        public MapMeshBuilder(LocalPlayer Player, int MapSize, int ChunkSize)
+        public MapMeshBuilder(IPlayer Player, int MapSize, int ChunkSize)
         {
             _player = Player;
             _mapSize = MapSize;
@@ -58,6 +58,7 @@ namespace Hedra.Engine.Player.MapSystem
                         item.HasChunk[x * _mapSize + z] = false;
                         var cubeData = _cubeData.Clone();
                         BlockType type;
+                        cubeData.Scale(new Vector3(1, 2, 1));
                         cubeData.TransformVerts(new Vector3(realX, 0, realZ));
                         cubeData.Color = CubeData.CreateCubeColor(blockColor);
 

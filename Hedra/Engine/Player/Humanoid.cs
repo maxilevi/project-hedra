@@ -22,6 +22,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.UI;
 using System.Linq;
+using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Player
 {

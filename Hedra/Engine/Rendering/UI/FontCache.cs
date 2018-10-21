@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -10,13 +11,21 @@ namespace Hedra.Engine.Rendering.UI
 
         public static Font Get(FontFamily Family, float Size, FontStyle Style = FontStyle.Regular)
         {
-            //if (!Family.IsStyleAvailable(Style))
-            //    return CachedFonts.Values.FirstOrDefault();
-
             var entry = new FontEntry(Family, Size, Style);
             if (!CachedFonts.ContainsKey(entry))
-                CachedFonts.Add( entry, new Font(entry.Family, entry.Size, entry.Style) );
-            
+            {
+                try
+                {
+                    CachedFonts.Add(entry, new Font(entry.Family, entry.Size, entry.Style));
+                }
+                catch (ArgumentException e)
+                {
+                    Log.WriteLine($"Font '{Family.Name}' with size '{Size}' ans style '{entry.Style}' failed to create.");
+                    if(CachedFonts.Count > 0)
+                        return CachedFonts.Values.First();
+                    throw;
+                }
+            }
             return CachedFonts[entry];
         }
     }

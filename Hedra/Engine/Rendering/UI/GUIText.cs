@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
+using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.Management;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;

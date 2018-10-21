@@ -8,7 +8,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         {
             Designs = new PlacementDesign[]
             {
-                new ReedPlacementDesign(),
+                //new ReedPlacementDesign(),
                 new WeedsPlacementDesign(),
                 new RockPlacementDesign(), 
                 new CloudPlacementDesign(), 

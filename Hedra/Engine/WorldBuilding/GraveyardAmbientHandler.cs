@@ -1,5 +1,6 @@
 using System;
 using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;

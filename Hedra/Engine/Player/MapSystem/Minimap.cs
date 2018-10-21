@@ -10,6 +10,7 @@
 using System;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;

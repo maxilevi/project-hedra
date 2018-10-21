@@ -1,5 +1,6 @@
 ﻿using System;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Input;
 
@@ -53,7 +54,7 @@ namespace Hedra.Engine.Player.BoatSystem
         private void HandleBoatRotation(float MaxPropulsion)
         {
             var movingFactor = (_accumulatedDirection.LengthFast-1) / MaxPropulsion;
-            _targetAngles.Z = Mathf.Clamp(15f * (_player.View.StackedYaw - _yaw) / (float)(Math.PI * .2f) * movingFactor, -45, 45);
+            _targetAngles.Z = Mathf.Clamp(45f * (_player.View.StackedYaw - _yaw) / (float)(Math.PI * .2f) * movingFactor, -45, 45);
             _angles = Mathf.Lerp(_angles, _targetAngles, Time.DeltaTime * 4f);
             _targetAngles = Mathf.Lerp(_targetAngles, Vector3.Zero, Time.DeltaTime * 4f);
             _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);

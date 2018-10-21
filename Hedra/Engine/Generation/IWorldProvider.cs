@@ -37,6 +37,10 @@ namespace Hedra.Engine.Generation
         IWorldBuilding WorldBuilding { get; }
 
         StructureGenerator StructureGenerator { get; }
+        
+        int AverageBuildTime { get; }
+        
+        int AverageGenerationTime { get; }
 
         int Seed { get; }
 
@@ -139,5 +143,6 @@ namespace Hedra.Engine.Generation
         Vector3 FindSpawningPoint(Vector3 Around);
 
         float GetHighest(int X, int Z);
+        
     }
 }

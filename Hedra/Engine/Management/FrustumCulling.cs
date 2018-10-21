@@ -5,6 +5,7 @@
  *
  */
 using System;
+using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;

@@ -14,6 +14,7 @@ using OpenTK;
 using OpenTK.Input;
 using System.Threading;
 using System.Collections;
+using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -29,7 +30,7 @@ namespace Hedra.Engine.Rendering.UI
 		public bool UseNumbersOnly {get; set;}
 		public bool ShowCaret {get; set;}
 		
-		public TextField(Vector2 Position, Vector2 Scale, Panel InPanel, bool CurveBorders = true)
+		public TextField(Vector2 Position, Vector2 Scale, Panel InPanel, bool CurveBorders = true) : base()
 		{
 			_textBar = new Bar(Position, Scale, () => 1, () => 1, Vector4.One, InPanel, DrawOrder.After, CurveBorders);
 			_textBar.ShowBar = false;
@@ -46,14 +47,16 @@ namespace Hedra.Engine.Rendering.UI
 		{
 			while(Program.GameWindow.Exists){
 				
-				for(int i = 0; i < 20; i++){
+				for(var i = 0; i < 20; i++)
+				{
 					if(!InFocus)_caret.Disable();
 					yield return null;
 				}
 				//if(InFocus)
 					_caret.Disable();
 				
-				for(int i = 0; i < 20; i++){
+				for(var i = 0; i < 20; i++)
+				{
 					if(!InFocus)_caret.Disable();
 					yield return null;
 				}
@@ -64,7 +67,8 @@ namespace Hedra.Engine.Rendering.UI
 		
 		public override void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs)
 		{
-			if(InFocus && this._enabled){
+			if(InFocus && this._enabled)
+			{
 				if(EventArgs.Key == Key.BackSpace || EventArgs.Key == Key.BackSlash || EventArgs.Key == Key.NonUSBackSlash){
 					if(Text.Length > 0){
 						Text = Text.Substring(0, Text.Length-1);
@@ -87,42 +91,48 @@ namespace Hedra.Engine.Rendering.UI
 				}*/
 			}
 		}
-		public override void OnKeyPress(object Sender, KeyPressEventArgs E){
+		public override void OnKeyPress(object Sender, KeyPressEventArgs E)
+        {
+	        if (!InFocus || !this._enabled) return;
+	        
+	        var textSize = (Graphics2D.LineSize(Text, _textBar.Text.UIText.TextFont).X + TextBuffer) / GameSettings.Width;
+	        if (textSize > _textBar.Scale.X)
+	        {
+		        return;
+	        }
 
-			if(InFocus && this._enabled){
-				
-				float textSize = (Graphics2D.LineSize(Text, _textBar.Text.UIText.TextFont).X + TextBuffer) / GameSettings.Width;
-				if(textSize > _textBar.Scale.X)
-					return;
-				
-				if(UseNumbersOnly && !char.IsNumber(E.KeyChar))return;
-				
-				if(ShowCaret){
-					if(_caretIndex == Math.Max(0, Text.Length-1)){
-						_caretIndex++;
-						Text += E.KeyChar;
-					}else{
-						Text += " ";//placeholder
-						char[] chars = Text.ToCharArray();
-						for(int i = _caretIndex+1; i < Text.Length; i++){
-							chars[i] = Text[i-1];
-						}
-						_caretIndex = (int) Mathf.Clamp(_caretIndex,0, Text.Length-1 );
-						chars[_caretIndex] = E.KeyChar;
-						Text = new string(chars);
-					}
-				}else{
-					Text += E.KeyChar;
-				}
-				this.UpdateCaret();
-				
-			}
-		}
-		
-		public void UpdateCaret()
+	        if(UseNumbersOnly && !char.IsNumber(E.KeyChar)) return;
+	        if (ShowCaret)
+	        {
+		        if(_caretIndex == Math.Max(0, Text.Length-1))
+		        {
+			        _caretIndex++;
+			        Text += E.KeyChar;
+		        }
+		        else
+		        {
+			        Text += " ";//placeholder
+			        var chars = Text.ToCharArray();
+			        for(var i = _caretIndex+1; i < Text.Length; i++){
+				        chars[i] = Text[i-1];
+			        }
+			        _caretIndex = (int) Mathf.Clamp(_caretIndex,0, Text.Length-1 );
+			        chars[_caretIndex] = E.KeyChar;
+			        Text = new string(chars);
+		        }
+	        }
+	        else
+	        {
+		        Text += E.KeyChar;
+	        }
+	        this.UpdateCaret();
+        }
+
+		private void UpdateCaret()
 		{
 			_textBar.Text.UIText.Position = new Vector2(_textBar.Position.X, _textBar.Text.UIText.Position.Y);
-			if(ShowCaret){
+			if(ShowCaret)
+			{
 				_caretIndex = (int) Mathf.Clamp(_caretIndex,0, Text.Length-1 );
 				string beforeCaret = Text.Substring(0, (int)Mathf.Clamp(_caretIndex+1, 0, Text.Length));
 				float sizeX = Graphics2D.LineSize(beforeCaret, _textBar.Text.UIText.TextFont).X*GameSettings.Width/GameSettings.Width * 2f;
@@ -130,7 +140,8 @@ namespace Hedra.Engine.Rendering.UI
 			}
 		}
 		
-		public override void OnMouseButtonDown(object Sender, MouseButtonEventArgs E){
+		public override void OnMouseButtonDown(object Sender, MouseButtonEventArgs E)
+		{
 			if(!_enabled)
 				return;
 			
