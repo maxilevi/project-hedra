@@ -165,12 +165,11 @@ namespace Hedra.Engine.Management
         
 		public void SetFrustum(Matrix4 View)
 		{
-		    Aspect = 1.45f / GameSettings.Height * GameSettings.DeviceHeight;
+		    Aspect = GameSettings.Width / (float)GameSettings.Height;
 			ModelViewMatrix = View;
 			ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, Aspect, ZNear, ZFar);
 	        Renderer.LoadProjection(ProjectionMatrix);
-			Renderer.LoadModelView(ModelViewMatrix);
-			
+			Renderer.LoadModelView(ModelViewMatrix);			
 		}
 		
 		public void SetViewport()

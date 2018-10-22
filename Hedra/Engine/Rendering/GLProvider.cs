@@ -474,6 +474,7 @@ namespace Hedra.Engine.Rendering
 
         public void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
         {
+            var error = GL.GetError();
             GL.MultiDrawElements(Primitive, Counts, Type, Offsets, Count);
             EnsureNoErrors();
         }
@@ -646,8 +647,8 @@ namespace Hedra.Engine.Rendering
             if (error != ErrorCode.NoError)
             {
                 var errorMsg = $"Unexpected OpenGL error: {error}";
-                if (ErrorSeverity.High == Severity) throw new RenderException(errorMsg);
                 Log.WriteResult(false, errorMsg);
+                if (ErrorSeverity.High == Severity) throw new RenderException(errorMsg);
             }
 #endif
         }

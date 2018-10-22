@@ -190,7 +190,8 @@ namespace Hedra.Engine.Rendering.UI
 			viewDistance.CurrentValue.Text = viewValues[(GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2];
 			
 			for(int i = 0; i < viewValues.Length; i++){
-				if(int.Parse(viewValues[i]) == GameSettings.ChunkLoaderRadius){
+				if(int.Parse(viewValues[i]) == GameSettings.ChunkLoaderRadius)
+{
 					viewDistance.CurrentValue.Text	= viewValues[i];
 					viewDistance.Index = i;
 				}

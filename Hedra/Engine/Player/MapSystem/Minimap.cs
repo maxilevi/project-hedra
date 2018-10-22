@@ -47,13 +47,13 @@ namespace Hedra.Engine.Player.MapSystem
             this._player = Player;
             this._panel = new Panel();
             _mapFbo = new FBO(GameSettings.Width, GameSettings.Height);
-            _miniMap = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMap.png"), new Vector2(.8f, .7f), new Vector2(0.13f, 0.23f) * new Vector2(1f, 1f));
+            _miniMap = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMap.png"), new Vector2(.8f, .7f), Graphics2D.SizeFromAssets("Assets/UI/MiniMap.png"));
             DrawManager.UIRenderer.Remove(_miniMap.TextureElement);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
-            _mapCursor = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MapCursor.png"), new Vector2(.8f, .7f), new Vector2(0.008f, 0.019f) * 1.3f), DrawOrder.After);
-            _miniMapRing = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapRing.png"), new Vector2(.8f, .7f), new Vector2(0.13f, 0.23f) * 1.0f), DrawOrder.After);
-            _miniMapNorth = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapNorth.png"), new Vector2(.8f, .7f), new Vector2(0.13f, 0.23f) * 1.0f), DrawOrder.After);
-            _miniMapMarker = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapQuest.png"), new Vector2(.8f, .7f), new Vector2(0.13f, 0.23f) * 1.0f), DrawOrder.After);
+            _mapCursor = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MapCursor.png"), new Vector2(.8f, .7f), Graphics2D.SizeFromAssets("Assets/UI/MiniMap.png") * .1f), DrawOrder.After);
+            _miniMapRing = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapRing.png"), new Vector2(.8f, .7f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapRing.png")), DrawOrder.After);
+            _miniMapNorth = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapNorth.png"), new Vector2(.8f, .7f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapNorth.png")), DrawOrder.After);
+            _miniMapMarker = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapQuest.png"), new Vector2(.8f, .7f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapQuest.png")), DrawOrder.After);
             _panel.AddElement(_mapCursor);
             _panel.AddElement(_miniMap);
             _panel.AddElement(_miniMapRing);

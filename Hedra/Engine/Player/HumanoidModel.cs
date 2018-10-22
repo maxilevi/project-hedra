@@ -130,7 +130,7 @@ namespace Hedra.Engine.Player
 			
 			Model = AnimationModelLoader.LoadEntity(Template.Path);
 
-            Model.Scale = DefaultScale * new Vector3(1, 1.15f, 1) * Template.Scale;
+            Model.Scale = Vector3.One * DefaultScale * Template.Scale;
 			LeftWeaponJoint = Model.RootJoint.GetChild("Hand_L");
 			RightWeaponJoint = Model.RootJoint.GetChild("Hand_R");
 			ChestJoint = Model.RootJoint.GetChild("Chest");
@@ -356,6 +356,11 @@ namespace Hedra.Engine.Player
 	    public void Blend(Animation Animation)
 	    {
 		    Model.BlendAnimation(Animation);
+	    }
+
+	    public void Reset()
+	    {
+		    Model.Reset();
 	    }
 
 	    private void HandleEatingEffects()

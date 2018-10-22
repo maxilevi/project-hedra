@@ -47,15 +47,15 @@ namespace Hedra.Engine.Rendering.UI
 			ConnectPanel = new NetworkUI();
 			ChrCreator = new ChrCreatorUI(Player);
 
-			Vector2 bandPosition = new Vector2(0, -.8f);
+			var bandPosition = new Vector2(0, -.8f);
 			
 			_title = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Menu.png"),
-			                       Vector2.Zero, Vector2.One);
+			                       new Vector2(-.4f, .35f), Graphics2D.SizeFromAssets("Assets/UI/Menu.png") * .75f);
 			
 			/*Alpha = new Texture(Graphics2D.LoadFromAssets("Assets/UI/alpha.png"),
 			                     new Vector2(-.25f, .4f), Graphics2D.SizeFromAssets("Assets/UI/alpha.png") * .6f);*/
 			
-			Texture blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
+			var blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
 			
 			
 			_newRun = new Button(new Vector2(.1f, bandPosition.Y),

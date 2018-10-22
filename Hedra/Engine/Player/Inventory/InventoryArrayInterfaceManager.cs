@@ -65,7 +65,10 @@ namespace Hedra.Engine.Player.Inventory
 
         private void MouseMove(object Sender, MouseMoveEventArgs EventArgs)
         {
-            var newCoords = Mathf.ToNormalizedDeviceCoordinates(EventArgs.Mouse.X, GameSettings.Height - EventArgs.Mouse.Y);
+            var newCoords = Mathf.ToNormalizedDeviceCoordinates(
+                new Vector2(EventArgs.Mouse.X, GameSettings.SurfaceHeight - EventArgs.Mouse.Y),
+                new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
+                );
             if (_selectedButton != null)
             {
                 _selectedButton.Position = newCoords;
@@ -253,6 +256,7 @@ namespace Hedra.Engine.Player.Inventory
             _selectedButton.Position = _cancelButton.Position;
             var renderer = this.RendererByButton(_selectedButton);
             var k = this.IndexByButton(_selectedButton) - this.OffsetByButton(_selectedButton);
+            renderer.UpdateView();
             _selectedButton.Texture.IdPointer = () => renderer.Draw(k);
             _selectedButton = null;
             _selectedItem = null;

@@ -7,6 +7,8 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System;
+using System.Drawing;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Player.ToolbarSystem;
@@ -19,90 +21,100 @@ namespace Hedra.Engine.Player.Skills.Warrior
 	/// <summary>
 	/// Description of WeaponThrow.
 	/// </summary>
-	public class Whirlwind : BaseSkill
+	public class Whirlwind : CappedSkill
 	{
 		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
-		private readonly Animation _whirlwindAnimation;
+		protected override bool Grayscale => !Player.HasWeapon;
+		protected override int MaxLevel => 24;
+		public override string Description => "A fierce spinning attack.";		
+		public override string DisplayName => "Whirlwind";
+		public override float ManaCost => Math.Max(120 - 4f * base.Level, 40);
+		public override float MaxCooldown => (float) Math.Max(12.0 - .25f * base.Level, 6) + WhirlwindTime;
+		private float Damage => Player.DamageEquation * .25f;
+        private float WhirlwindTime => 3 + Math.Min(.1f * base.Level, 1.5f);
+
+        private readonly Animation _whirlwindAnimation;
 	    private readonly TrailRenderer _trail;
 	    private float _frameCounter;
 	    private float _passedTime;
 	    private float _rotationY;
 
-        public Whirlwind() : base() {
-			base.ManaCost = 85;
-			base.MaxCooldown = 8.5f;
-            _trail = new TrailRenderer( () => LocalPlayer.Instance.LeftWeapon.WeaponTip, Vector4.One);
+        public Whirlwind() 
+        {
+            _trail = new TrailRenderer( () => Player.LeftWeapon.WeaponTip, Vector4.One);
 			_whirlwindAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWhirlwind.dae");
+            _whirlwindAnimation.OnAnimationEnd += delegate
+            {
+                if (!Casting) return;
+                Player.Model.PlayAnimation(_whirlwindAnimation);
+                Player.Model.Blend(_whirlwindAnimation);
+            };
             _whirlwindAnimation.Loop = false;
         }
-
-		public override bool MeetsRequirements()
-		{
-			return base.MeetsRequirements() && !Player.Toolbar.DisableAttack && Player.HasWeapon;
-		}
 		
 		public override void Use()
         {
-			base.MaxCooldown = 8.5f - base.Level * .5f;
-			Player.IsCasting = true;
+	        _passedTime = 0;
+	        _trail.Emit = true;
 			Casting = true;
-			Player.IsAttacking = true;
-			_passedTime = 0;
-			Player.Model.PlayAnimation(_whirlwindAnimation);
-			Player.Model.Blend(_whirlwindAnimation);
-		    _trail.Emit = true;
-		}
+            Player.IsAttacking = true;
+	        Player.Model.PlayAnimation(_whirlwindAnimation);
+            Player.Model.Blend(_whirlwindAnimation);
+        }
 
-	    public void Disable()
+		private void Disable()
 	    {
-	        Player.IsCasting = false;
-	        Casting = false;
-	        Player.IsAttacking = false;
+		    _trail.Emit = false;
+            Casting = false;
+		    Player.IsAttacking = false;
 	        Player.LeftWeapon.LockWeapon = false;
-            _trail.Emit = false;
+            Player.Model.Reset();
         }
 		
 		public override void Update()
 		{
-			this.Grayscale = !Player.HasWeapon;    
-			if(Player.IsCasting && Casting)
-            {
-				if(Player.IsDead || Player.IsKnocked || _passedTime > 4){
-					this.Disable();
-					return;
-				}
+			if (ShouldEnd) Disable();
+			if (!Casting) return;
 
-			    var underChunk = World.GetChunkAt(Player.Position);
-                _rotationY += Time.DeltaTime * 1000f;
-                Player.Model.TransformationMatrix =
-                    Matrix4.CreateRotationY(-Player.Model.Rotation.Y * Mathf.Radian) *
-                    Matrix4.CreateRotationY(_rotationY * Mathf.Radian) *
-                    Matrix4.CreateRotationY(Player.Model.Rotation.Y * Mathf.Radian);
-                this.ManageParticles(underChunk);
-				
-				if(_frameCounter >= .25f)
-                {
-
-                    for (var i = World.Entities.Count - 1; i > 0; i--)
-                    {
-                        if (!Player.InAttackRange(World.Entities[i])) continue;
-
-                        float dmg = Player.DamageEquation * .2f * 2f * (1 + base.Level * .1f);
-                        World.Entities[i].Damage(dmg, Player, out float exp, true);
-                        Player.XP += exp;
-                    }
-					_frameCounter = 0;
-				}
-				_passedTime += Time.DeltaTime;
-				_frameCounter += Time.DeltaTime;
+			Rotate();
+			ManageParticles();			
+			if(_frameCounter >= .25f)
+			{
+				DamageNear();
+				_frameCounter = 0;
 			}
-            _trail.Update();
+			_trail.Update();
+			_passedTime += Time.DeltaTime;
+			_frameCounter += Time.DeltaTime;
+			_rotationY += Time.DeltaTime * 1000f;
 		}
 
-	    private void ManageParticles(Chunk UnderChunk)
+		private bool ShouldEnd => Player.IsDead || Player.IsKnocked || _passedTime > WhirlwindTime;
+
+		private void Rotate()
+		{
+			Player.Model.TransformationMatrix =
+				Matrix4.CreateRotationY(-Player.Model.Rotation.Y * Mathf.Radian) *
+				Matrix4.CreateRotationY(_rotationY * Mathf.Radian) *
+				Matrix4.CreateRotationY(Player.Model.Rotation.Y * Mathf.Radian);
+		}
+		
+		private void DamageNear()
+		{
+			for (var i = World.Entities.Count - 1; i > 0; i--)
+			{
+				if (!Player.InAttackRange(World.Entities[i])) continue;
+
+				World.Entities[i].Damage(Damage, Player, out var exp);
+				Player.XP += exp;
+			}
+		}
+		
+	    private void ManageParticles()
 	    {
+		    var underChunk = World.GetChunkAt(Player.Position);
 	        World.Particles.VariateUniformly = true;
-	        World.Particles.Color = World.GetHighestBlockAt((int)this.Player.Position.X, (int)this.Player.Position.Z).GetColor(UnderChunk.Biome.Colors);
+	        World.Particles.Color = World.GetHighestBlockAt((int)this.Player.Position.X, (int)this.Player.Position.Z).GetColor(underChunk.Biome.Colors);
 	        World.Particles.Position = this.Player.Position - Vector3.UnitY;
 	        World.Particles.Scale = Vector3.One * .15f;
 	        World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
@@ -110,12 +122,14 @@ namespace Hedra.Engine.Player.Skills.Warrior
 	        World.Particles.ParticleLifetime = 1;
 	        World.Particles.GravityEffect = .1f;
 	        World.Particles.PositionErrorMargin = new Vector3(.75f, .75f, .75f);
-	        if (World.Particles.Color == Block.GetColor(BlockType.Grass, UnderChunk.Biome.Colors))
-	            World.Particles.Color = UnderChunk.Biome.Colors.GrassColor;
+	        if (World.Particles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
+	            World.Particles.Color = underChunk.Biome.Colors.GrassColor;
 	        World.Particles.Emit();
         }
 		
-		public override string Description => "A fierce spinning attack.";
-		public override string DisplayName => "Whirlwind";
+		public override bool MeetsRequirements()
+		{
+			return base.MeetsRequirements() && !Player.Toolbar.DisableAttack && Player.HasWeapon;
+		}
 	}
 }

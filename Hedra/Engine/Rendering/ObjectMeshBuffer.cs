@@ -44,6 +44,7 @@ namespace Hedra.Engine.Rendering
 
 	    private static readonly Texture3D NoiseTexture;
 	    private bool _rotMatrixCached;
+        private bool _disposed;
         private Vector3 _rotation = Vector3.Zero;
 	    private Matrix4 _rotationMatrix;
 	    private Vector3 _localRotation;
@@ -71,7 +72,8 @@ namespace Hedra.Engine.Rendering
 
         public void Draw()
         {
-			if(Indices == null || Data == null) return;
+			if (Indices == null || Data == null) return;
+            if (_disposed) throw new AccessViolationException($"Cannot draw a disposed object");
 
 		    this.Bind();
 		    Renderer.Disable(EnableCap.Blend);
@@ -250,7 +252,8 @@ namespace Hedra.Engine.Rendering
 
 		public void Dispose()
 		{
-			Vertices?.Dispose();
+            _disposed = true;
+            Vertices?.Dispose();
 			Colors?.Dispose();
 			Indices?.Dispose();
 			Normals?.Dispose();

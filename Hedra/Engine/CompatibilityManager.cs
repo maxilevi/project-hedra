@@ -6,6 +6,8 @@ using System.Text;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Engine.Rendering.Geometry;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -64,18 +66,31 @@ namespace Hedra.Engine
             File.WriteAllText($"{AppPath}/openRenderer.txt", builder.ToString());
         }
 
-        /// <summary>
-        /// If the current video card is a type of AMD Radeon HD use the workaround.
-        /// </summary>
+
         private static void DefineMultiDrawElementsMethod()
         {
             var previousSeverity = Renderer.Severity;
             var useCompatibilityFunction = false;
             try
             {
+                var testVAO = PrepareTestData(out var indices, out var buffer, out var shader);
                 Renderer.Severity = ErrorSeverity.High;
+                
+                shader.Bind();
+                testVAO.Bind();
+                indices.Bind();
+                
                 Renderer.Provider
-                    .MultiDrawElements(PrimitiveType.Triangles, new int[0], DrawElementsType.UnsignedInt, new IntPtr[0], 0);
+                    .MultiDrawElements(PrimitiveType.Triangles, new []{3}, DrawElementsType.UnsignedInt, new []{IntPtr.Zero}, 0);
+                
+                testVAO.Unbind();
+                shader.Unbind();
+                indices.Unbind();
+
+                shader.Dispose();
+                testVAO.Dispose();
+                buffer.Dispose();
+                indices.Dispose();
             }
             catch (Exception e)
             {
@@ -85,9 +100,10 @@ namespace Hedra.Engine
             {
                 Renderer.Severity = previousSeverity;
             }
-
+            Log.WriteLine($"Compatibility mode is {(useCompatibilityFunction ? "ON" : "OFF")}...");
             if (useCompatibilityFunction)
             {
+                Log.WriteLine("Using compatibility draw...");
                 MultiDrawElementsMethod = delegate(PrimitiveType Type, int[] Counts, DrawElementsType DrawType,
                     IntPtr[] Offsets, int Length)
                 {
@@ -106,6 +122,20 @@ namespace Hedra.Engine
                             Counts.Length);
                     };
             }
+        }
+
+        private static VAO<Vector3> PrepareTestData(out VBO<uint> Indices, out VBO<Vector3> Buffer, out Shader Shader)
+        {
+            var verts = new Vector3[]
+            {
+                new Vector3(0,0,1),
+                new Vector3(0,1,0), 
+                new Vector3(1,0,0)
+            };
+            Buffer = new VBO<Vector3>(verts, verts.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+            Indices = new VBO<uint>(new uint[] {0,1,2}, sizeof(uint) * verts.Length, VertexAttribPointerType.UnsignedInt);
+            Shader = Shader.Build("Shaders/Passthrough.vert", "Shaders/Passthrough.frag");
+            return new VAO<Vector3>(Buffer);
         }
     }
 }

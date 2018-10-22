@@ -47,55 +47,53 @@ namespace Hedra.Engine.Rendering
 				if (Data?.Colors == null)
 					return;
 
-				Vector4[] ColorBuffer;
+				Vector4[] colorBuffer;
 				if (ExtraData)
 				{
-					ColorBuffer = new Vector4[Data.Colors.Count];
-					for (int i = 0; i < ColorBuffer.Length; i++)
+					colorBuffer = new Vector4[Data.Colors.Count];
+					for (var i = 0; i < colorBuffer.Length; i++)
 					{
-						ColorBuffer[i] = new Vector4(Data.Colors[i].Xyz, Data.Extradata[i]);
+						colorBuffer[i] = new Vector4(Data.Colors[i].Xyz, Data.Extradata[i]);
 					}
 				}
 				else
 				{
-					ColorBuffer = Data.Colors.ToArray();
+					colorBuffer = Data.Colors.ToArray();
 				}
 
-				int ColorBufferSize = (ColorBuffer.Length * Vector4.SizeInBytes);
-				int VertexBufferSize = (Data.Vertices.Count * Vector3.SizeInBytes);
-				int IndexBufferSize = (Data.Indices.Count * sizeof(int));
-				int NormalBufferSize = (Data.Normals.Count * Vector3.SizeInBytes);
+				var colorBufferSize = (colorBuffer.Length * Vector4.SizeInBytes);
+				var vertexBufferSize = (Data.Vertices.Count * Vector3.SizeInBytes);
+				var indexBufferSize = (Data.Indices.Count * sizeof(int));
+				var normalBufferSize = (Data.Normals.Count * Vector3.SizeInBytes);
 
 				if (_buffer.Vertices == null)
-					_buffer.Vertices = new VBO<Vector3>(Data.Vertices.ToArray(), VertexBufferSize,
+					_buffer.Vertices = new VBO<Vector3>(Data.Vertices.ToArray(), vertexBufferSize,
 						VertexAttribPointerType.Float);
 				else
-					_buffer.Vertices.Update(Data.Vertices.ToArray(), VertexBufferSize);
+					_buffer.Vertices.Update(Data.Vertices.ToArray(), vertexBufferSize);
 
 				if (_buffer.Indices == null)
-					_buffer.Indices = new VBO<uint>(Data.Indices.ToArray(), IndexBufferSize,
+					_buffer.Indices = new VBO<uint>(Data.Indices.ToArray(), indexBufferSize,
 						VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
 				else
-					_buffer.Indices.Update(Data.Indices.ToArray(), IndexBufferSize);
+					_buffer.Indices.Update(Data.Indices.ToArray(), indexBufferSize);
 
 
 				if (_buffer.Colors == null)
-					_buffer.Colors = new VBO<Vector4>(ColorBuffer, ColorBufferSize, VertexAttribPointerType.Float);
+					_buffer.Colors = new VBO<Vector4>(colorBuffer, colorBufferSize, VertexAttribPointerType.Float);
 				else
-					_buffer.Colors.Update(ColorBuffer, ColorBufferSize);
+					_buffer.Colors.Update(colorBuffer, colorBufferSize);
 
 				if (_buffer.Normals == null)
-					_buffer.Normals = new VBO<Vector3>(Data.Normals.ToArray(), NormalBufferSize,
+					_buffer.Normals = new VBO<Vector3>(Data.Normals.ToArray(), normalBufferSize,
 						VertexAttribPointerType.Float);
 				else
-					_buffer.Normals.Update(Data.Normals.ToArray(), NormalBufferSize);
+					_buffer.Normals.Update(Data.Normals.ToArray(), normalBufferSize);
 
 				if (_buffer.Data == null)
 					_buffer.Data =
 						new VAO<Vector3, Vector4, Vector3>(_buffer.Vertices, _buffer.Colors, _buffer.Normals);
 
-				//Data.Dispose();
-				//Data = null;
 				IsBuilded = true;
 				Enabled = true;
 				BuildedOnce = true;

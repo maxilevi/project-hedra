@@ -79,19 +79,31 @@ namespace Hedra.Engine.Rendering
         /// </summary>
         /// <param name="Data"></param>
         /// <param name="SizeInBytes"></param>
-        public void Add(T[] Data, int SizeInBytes){
+        public void Add(T[] Data, int SizeInBytes)
+        {
         	Renderer.BindBuffer(BufferTarget, ID);
         	Renderer.BufferSubData(BufferTarget, (IntPtr) (this.SizeInBytes), (IntPtr)(SizeInBytes), Data);
 			this.Count += Data.Length;
 			this.SizeInBytes += SizeInBytes;
         }
         
-        public void Update(T[] Data, int SizeInBytes){
+        public void Update(T[] Data, int SizeInBytes)
+        {
         	Renderer.BindBuffer(BufferTarget, ID);
 			Renderer.BufferData(BufferTarget, (IntPtr)(SizeInBytes), Data, Hint);
 			this.Count = Data.Length;
 			this.SizeInBytes = SizeInBytes;
         }
+
+		public void Bind()
+		{
+			Renderer.BindBuffer(BufferTarget, ID);
+		}
+
+		public void Unbind()
+		{
+			Renderer.BindBuffer(BufferTarget, 0);
+		}
         
         /// <summary>
         /// Deletes all the data from the video card. It is automatically called at the end of the program.
