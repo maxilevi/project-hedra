@@ -8,24 +8,28 @@ namespace Hedra.Engine.ItemSystem
     public static class ItemFactory
     {
         private static readonly Dictionary<string, ItemTemplate> ItemTemplates;
+        private static readonly object _lock = new object();
         public static ItemTemplater Templater;
 
         static ItemFactory()
         {
             ItemTemplates = new Dictionary<string, ItemTemplate>();
-            Templater = new ItemTemplater(ItemTemplates);
+            Templater = new ItemTemplater(ItemTemplates, _lock);
         }
 
         public static void LoadModules(string AppPath)
         {
-            ItemTemplates.Clear();
-
-            ItemTemplate[] itemTemplates = Load<ItemTemplate>(AppPath + "/Modules/Items/");
-
-            foreach (ItemTemplate template in itemTemplates)
+            lock (_lock)
             {
-                ItemModelLoader.Load(template.Model);
-                ItemTemplates.Add(template.Name.ToLowerInvariant(), template);
+                ItemTemplates.Clear();
+
+                ItemTemplate[] itemTemplates = Load<ItemTemplate>(AppPath + "/Modules/Items/");
+
+                foreach (ItemTemplate template in itemTemplates)
+                {
+                    ItemModelLoader.Load(template.Model);
+                    ItemTemplates.Add(template.Name.ToLowerInvariant(), template);
+                }
             }
         }
 

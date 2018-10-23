@@ -11,29 +11,39 @@ namespace Hedra.Engine.ModuleSystem
     public class MobFactory
     {
         private readonly Dictionary<string, IEnemyFactory> _factories;
+        private readonly object _lock;
 
         public MobFactory()
         {
             _factories = new Dictionary<string, IEnemyFactory>();
+            _lock = new object();
         }
 
         public void AddFactory(params IEnemyFactory[] Factory)
         {
-            foreach (IEnemyFactory factory in Factory)
+            lock (_lock)
             {
-                _factories.Add(factory.Name.ToLowerInvariant(), factory);
-            }   
+                foreach (var factory in Factory)
+                {
+                    _factories.Add(factory.Name.ToLowerInvariant(), factory);
+                }
+            }
         }
 
         public void Empty()
         {
-            lock(_factories)
+            lock (_lock)
+            {
                 _factories.Clear();
+            }
         }
 
         public bool ContainsFactory(string Type)
         {
-            return _factories.ContainsKey(Type.ToLowerInvariant());
+            lock (_lock)
+            {
+                return _factories.ContainsKey(Type.ToLowerInvariant());
+            }
         }
 
         public Entity Build(MobType Type, int Seed)
@@ -46,7 +56,10 @@ namespace Hedra.Engine.ModuleSystem
             var mob = new Entity();
             var rng = new Random(Seed);
 
-            mob.Type = _factories[Type.ToLowerInvariant()].Name;
+            lock (_lock)
+            {
+                mob.Type = _factories[Type.ToLowerInvariant()].Name;
+            }
 
             var barComponent = new HealthBarComponent(mob);
             mob.AddComponent(barComponent);
@@ -60,7 +73,10 @@ namespace Hedra.Engine.ModuleSystem
 
             barComponent.FontColor = mobDifficulty == 1 ? Color.White : mobDifficulty == 3 ? Color.Red : Color.Gold;
 
-            _factories[Type.ToLowerInvariant()].Apply(mob);
+            lock (_lock)
+            {
+                _factories[Type.ToLowerInvariant()].Apply(mob);
+            }
 
             var ai = mob.SearchComponent<BasicAIComponent>();
             if (ai == null) throw new ArgumentException("No AIComponent has been set");
