@@ -134,9 +134,9 @@ namespace Hedra
 			}
 			else
 			{
-				DrawManager.Draw();
-			}
-			this.DebugProvider.Draw();
+                DrawManager.Draw();
+                DebugProvider.Draw();
+            }
             this.SwapBuffers();
 		}
 

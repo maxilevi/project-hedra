@@ -133,7 +133,7 @@ namespace Hedra.Engine.Generation
 		        };
 
 		        CacheManager.Check(data);
-		        underChunk.StaticBuffer.InstanceElements.Add(data);
+		        underChunk.StaticBuffer.AddInstance(data);
 		    }
 		}
 

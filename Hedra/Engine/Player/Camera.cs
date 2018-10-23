@@ -201,7 +201,7 @@ namespace Hedra.Engine.Player
                 if (position.Y <= y + MinDistance || Physics.IsColliding(position, box))
                     return;
             }
-            TargetDistance += Time.IndependantDeltaTime * 24f;
+            TargetDistance += Time.IndependantDeltaTime * 32f;
         }
 
         private float _targetDistance = 10f;

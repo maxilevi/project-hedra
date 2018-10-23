@@ -80,13 +80,9 @@ namespace Hedra.Engine.Generation
 
         void Discard();
 
-        void RemoveInstances(Vector3 Position, int Radius);
-
         T[] InRadius<T>(Vector3 Position, float Radius) where T : ISearchable;
 
         void AddChunkToQueue(Chunk Chunk, bool DoMesh);
-
-        Chunk GetChunkByOffset(Vector2 Vec2);
 
         void AddEntity(IEntity Entity);
 

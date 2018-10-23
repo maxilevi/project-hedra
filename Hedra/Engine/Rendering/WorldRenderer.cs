@@ -30,16 +30,18 @@ namespace Hedra.Engine.Rendering
 	    public static Shader WaterShader { get; private set; }
 	    public static Shader StaticShader { get; private set; }
         public static float WaveMovement { get; private set; }
-        public static WorldBuffer StaticBuffer;
-	    public static WorldBuffer WaterBuffer;
+        public static WorldBuffer StaticBuffer { get; private set; }
+		public static WorldBuffer InstanceBuffer { get; private set; }
+	    public static WorldBuffer WaterBuffer { get; private set; }
 		public static bool ShowWaterBackfaces {get; set;}
-	    public static Texture3D NoiseTexture;
+	    public static Texture3D NoiseTexture { get; private set; }
 
 	    public static void AllocateMemory()
 	    {
 	        WaterShader = Shader.Build("Shaders/Water.vert", "Shaders/Water.frag");
 	        StaticShader = Shader.Build("Shaders/Static.vert", "Shaders/Static.frag");
             StaticBuffer = new WorldBuffer(PoolSize.SuperBig);
+		    InstanceBuffer = new WorldBuffer(PoolSize.Tiny);
             WaterBuffer = new WorldBuffer(PoolSize.Tiny);
 
 	        var noiseValues = new float[16, 16, 16];
@@ -58,70 +60,81 @@ namespace Hedra.Engine.Rendering
 
 	    public static void PrepareRendering()
 	    {
-	        //GameManager.Player.View.BuildCameraMatrix();
 	        DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
         }
 
-		public static void Render(Dictionary<Vector2, Chunk> ToDraw, WorldRenderType Type){
+		public static void Render(Dictionary<Vector2, Chunk> ToDraw, WorldRenderType Type)
+		{
             
 			if(ToDraw.Count == 0) return;
 			
 			if(Type == WorldRenderType.Static)
-            {
-				IntPtr[] Offsets, ShadowOffsets;
-				int[] Counts = StaticBuffer.BuildCounts(ToDraw, out Offsets);
-				int[] ShadowCounts = StaticBuffer.BuildCounts(ToDraw, out ShadowOffsets, true);
-				
-				StaticBuffer.Data.Bind(false);
-				Renderer.EnableVertexAttribArray(0);
-			    Renderer.EnableVertexAttribArray(1);
-
-			    Renderer.BindBuffer(StaticBuffer.Indices.Buffer.BufferTarget, StaticBuffer.Indices.Buffer.ID);
-
-                if (GameSettings.Shadows){
-
-					ShadowRenderer.Bind();
-                    Renderer.MultiDrawElements(PrimitiveType.Triangles, ShadowCounts, DrawElementsType.UnsignedInt, ShadowOffsets, ShadowCounts.Length);
-					ShadowRenderer.UnBind();
-
-				}
-				StaticBind();
-
-				Renderer.EnableVertexAttribArray(2);
-			    Renderer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);		    
-
-				StaticBuffer.Data.Unbind();		
-				StaticUnBind();
+			{
+				TerrainDraw(ToDraw);
+				InstanceDraw(ToDraw);
 			}
 			else if(Type == WorldRenderType.Water)
 			{
-			
-				IntPtr[] Offsets;
-				int[] Counts = WaterBuffer.BuildCounts(ToDraw, out Offsets);
-
-			    WaveMovement += Time.IndependantDeltaTime * Mathf.Radian * 32;
-			    if (WaveMovement >= 5f)
-			        WaveMovement = 0;
-
-                WaterBind();
-				WaterBuffer.Data.Bind();
-				
-				Renderer.EnableVertexAttribArray(0);
-				Renderer.EnableVertexAttribArray(1);
-				Renderer.EnableVertexAttribArray(2);
-				
-				Renderer.BindBuffer(WaterBuffer.Indices.Buffer.BufferTarget, WaterBuffer.Indices.Buffer.ID);
-			    Renderer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);
-				
-				Renderer.DisableVertexAttribArray(0);
-				Renderer.DisableVertexAttribArray(1);
-				Renderer.DisableVertexAttribArray(2);	
-				
-				WaterBuffer.Data.Unbind();
-				WaterUnBind();
+				WaterDraw(ToDraw);
 			}	
 		}
 
+		private static void InstanceDraw(Dictionary<Vector2, Chunk> ToDraw)
+		{
+            StaticUnBind();
+        }
+		
+		private static void TerrainDraw(Dictionary<Vector2, Chunk> ToDraw)
+		{
+            int[] Counts = StaticBuffer.BuildCounts(ToDraw, out IntPtr[]  Offsets);
+			int[] ShadowCounts = StaticBuffer.BuildCounts(ToDraw, out IntPtr[] ShadowOffsets, true);
+				
+			StaticBuffer.Data.Bind(false);
+			Renderer.EnableVertexAttribArray(0);
+			Renderer.EnableVertexAttribArray(1);
+
+			Renderer.BindBuffer(StaticBuffer.Indices.Buffer.BufferTarget, StaticBuffer.Indices.Buffer.ID);
+
+			if (GameSettings.Shadows)
+            {
+				ShadowRenderer.Bind();
+				Renderer.MultiDrawElements(PrimitiveType.Triangles, ShadowCounts, DrawElementsType.UnsignedInt, ShadowOffsets, ShadowCounts.Length);
+				ShadowRenderer.UnBind();
+			}
+
+            StaticBind();
+            Renderer.EnableVertexAttribArray(2);
+			Renderer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);		    
+
+			StaticBuffer.Data.Unbind();
+		}
+
+		private static void WaterDraw(Dictionary<Vector2, Chunk> ToDraw)
+		{
+			var counts = WaterBuffer.BuildCounts(ToDraw, out var Offsets);
+
+			WaveMovement += Time.IndependantDeltaTime * Mathf.Radian * 32;
+			if (WaveMovement >= 5f)
+				WaveMovement = 0;
+
+			WaterBind();
+			WaterBuffer.Data.Bind();
+				
+			Renderer.EnableVertexAttribArray(0);
+			Renderer.EnableVertexAttribArray(1);
+			Renderer.EnableVertexAttribArray(2);
+				
+			Renderer.BindBuffer(WaterBuffer.Indices.Buffer.BufferTarget, WaterBuffer.Indices.Buffer.ID);
+			Renderer.MultiDrawElements(PrimitiveType.Triangles, counts, DrawElementsType.UnsignedInt, Offsets, counts.Length);
+				
+			Renderer.DisableVertexAttribArray(0);
+			Renderer.DisableVertexAttribArray(1);
+			Renderer.DisableVertexAttribArray(2);	
+				
+			WaterBuffer.Data.Unbind();
+			WaterUnBind();
+		}
+		
 		public static void Discard()
 		{
 			StaticBuffer.Discard();

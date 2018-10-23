@@ -18,8 +18,7 @@ namespace Hedra.Engine.Rendering
 	public class ChunkMesh : ICullable, IDisposable
 	{
 		private IMeshBuffer _buffer;
-		public List<InstanceBatch> InstanceBatches = new List<InstanceBatch>();
-		public List<InstanceData> InstanceElements = new List<InstanceData>();
+		private readonly List<InstanceData> _instanceElements;
 		public List<ICollidable> CollisionBoxes = new List<ICollidable>();
 		public List<VertexData> Elements = new List<VertexData>();
 		public VertexData ModelData { get; set; }
@@ -32,10 +31,10 @@ namespace Hedra.Engine.Rendering
 		public Vector3 Position { get; set; }
 		public Box CullingBox { get; set; }
 
-
 		public ChunkMesh(Vector3 Position, IMeshBuffer Buffer)
 		{
 			this.Position = Position;
+			_instanceElements = new List<InstanceData>();
 			CullingBox = new Box(Vector3.Zero, new Vector3(Chunk.Width, 768, Chunk.Width));
 			_buffer = Buffer;
 		}
@@ -121,9 +120,11 @@ namespace Hedra.Engine.Rendering
 
 		public void AddInstance(InstanceData Data)
 		{
-			InstanceElements.Add(Data);
+			_instanceElements.Add(Data);
 		}
 
+		public InstanceData[] InstanceElements => _instanceElements.ToArray();
+		
 		public void Dispose()
 		{
 			_buffer?.Dispose();

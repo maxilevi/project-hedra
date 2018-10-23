@@ -245,34 +245,6 @@ namespace Hedra.Engine.Generation
             _chunkBuilder.Discard();
         }
 
-        public void RemoveInstances(Vector3 Position, int Radius)
-        {
-            lock (Chunks)
-            {
-                for (var i = 0; i < Chunks.Count; i++)
-                    if (new Vector2(Chunks[i].OffsetX - Position.X, Chunks[i].OffsetZ - Position.Z).LengthSquared <=
-                        Radius * Radius)
-                    {
-                        //A pointer to the list
-                        var instances = Chunks[i].StaticBuffer.InstanceElements;
-                        var shapes = Chunks[i].StaticBuffer.CollisionBoxes;
-                        for (var j = instances.Count - 1; j > -1; j--)
-                            if ((instances[j].TransMatrix.ExtractTranslation().Xz - Position.Xz).LengthSquared <=
-                                Radius * Radius)
-                                instances.RemoveAt(j);
-                        lock (shapes)
-                        {
-                            for (var j = shapes.Count - 1; j > -1; j--)
-                                if (shapes[j] is CollisionShape &&
-                                    (((CollisionShape) shapes[j]).BroadphaseCenter.Xz - Position.Xz).LengthSquared <=
-                                    Radius * Radius)
-                                    shapes.RemoveAt(j);
-                        }
-                        AddChunkToQueue(Chunks[i], true);
-                    }
-            }
-        }
-
         public T[] InRadius<T>(Vector3 Position, float Radius) where T : ISearchable
         {
             var results = new List<T>();

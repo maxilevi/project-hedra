@@ -253,7 +253,7 @@ namespace Hedra.Engine.BiomeSystem
 			path = Mathf.Clamp(path * 100f, 0, PathDepth);
 
 			river = hasRiver * River(x,z, Narrow, Scale);
-			riverBorders = hasRiver * (River(x, z, Narrow, Scale, Border) + SmallFrequency(x, z) * .5f * Math.Min(1, river * 100));
+			riverBorders = hasRiver * River(x, z, Narrow, Scale, Border);
 			var amplifiedRiverBorders = Mathf.Clamp(riverBorders * RiverMult, 0, RiverDepth);
 
 			river = Mathf.Clamp(river * RiverMult, 0, RiverDepth);

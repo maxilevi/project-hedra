@@ -47,35 +47,36 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Input.StaticData += staticElements[i];
             }
 
-            for (var i = 0; i < Mesh.InstanceElements.Count; i++)
+            var instanceElements = Mesh.InstanceElements;
+            for (var i = 0; i < instanceElements.Length; i++)
             {
                 if (Lod != 1
-                    && (Mesh.InstanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Grass)
-                        || Mesh.InstanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Wheat)))
+                    && (instanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Grass)
+                        || instanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Wheat)))
                     continue;
 
-                VertexData model = Mesh.InstanceElements[i].MeshCache.Clone();
-                if (Mesh.InstanceElements[i].ColorCache != -Vector4.One &&
-                    CacheManager.CachedColors.ContainsKey(Mesh.InstanceElements[i].ColorCache))
-                    model.Colors = CacheManager.CachedColors[Mesh.InstanceElements[i].ColorCache].Clone();
+                var model = instanceElements[i].MeshCache.Clone();
+                if (instanceElements[i].ColorCache != -Vector4.One &&
+                    CacheManager.CachedColors.ContainsKey(instanceElements[i].ColorCache))
+                    model.Colors = CacheManager.CachedColors[instanceElements[i].ColorCache].Clone();
                 else
-                    model.Colors = Mesh.InstanceElements[i].Colors;
+                    model.Colors = instanceElements[i].Colors;
 
-                float variateFactor = (new Random(OffsetX + OffsetZ + World.Seed + i).NextFloat() * 2f - 1f) *
+                var variateFactor = (new Random(OffsetX + OffsetZ + World.Seed + i).NextFloat() * 2f - 1f) *
                                       (24 / 256f);
                 for (var l = 0; l < model.Colors.Count; l++)
                     model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
 
-                if (CacheManager.CachedExtradata.ContainsKey(Mesh.InstanceElements[i].ExtraDataCache))
-                    model.Extradata = CacheManager.CachedExtradata[Mesh.InstanceElements[i].ExtraDataCache]
+                if (CacheManager.CachedExtradata.ContainsKey(instanceElements[i].ExtraDataCache))
+                    model.Extradata = CacheManager.CachedExtradata[instanceElements[i].ExtraDataCache]
                         .Clone();
                 else
-                    model.Extradata = Mesh.InstanceElements[i].ExtraData;
+                    model.Extradata = instanceElements[i].ExtraData;
 
-                if (Mesh.InstanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Grass) ||
-                    Mesh.InstanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Wheat))
+                if (instanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Grass) ||
+                    instanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Wheat))
                 {
-                    Vector3 instancePosition = Mesh.InstanceElements[i].TransMatrix.ExtractTranslation();
+                    var instancePosition = instanceElements[i].TransMatrix.ExtractTranslation();
                     var grassRng = new Random((int)(instancePosition.X * instancePosition.Z));
                     instancePosition += Vector3.UnitY * (grassRng.NextFloat() * .2f - .2f);
                     if (!DrawManager.DropShadows.Exists(instancePosition))

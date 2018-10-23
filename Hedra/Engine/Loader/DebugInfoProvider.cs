@@ -24,8 +24,12 @@ namespace Hedra.Engine.Loader
     {
         private readonly Panel _debugPanel;
         private readonly GUIText _debugText;
-	    private readonly Texture _geomPoolMemory;
+	    private readonly Texture _staticPool;
+	    private readonly Texture _waterPool;
+	    private readonly Texture _instancePool;
 	    private readonly Texture _depthTexture;
+	    private readonly VBO<Vector3> _frustumPoints;
+	    private readonly VAO<Vector3> _frustumVAO;
 	    private float _passedTime;
 	    private bool _depthMode;
 	    private bool _extraDebugView;
@@ -40,11 +44,18 @@ namespace Hedra.Engine.Loader
 			_depthTexture = new Texture(0, Vector2.Zero, Vector2.One);
 	        _depthTexture.TextureElement.Flipped = true;
             _debugText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
-	        _geomPoolMemory = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
+	        _staticPool = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
+	        _waterPool = new Texture(0, new Vector2(0f, 0.90f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
+	        _instancePool = new Texture(0, new Vector2(0f, 0.85f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
+	        _debugPanel.AddElement(_staticPool);
+	        _debugPanel.AddElement(_waterPool);
+	        _debugPanel.AddElement(_instancePool);
 	        _debugPanel.AddElement(_debugText);
-	        _debugPanel.AddElement(_geomPoolMemory);
             _debugPanel.Disable();
             _originalTitle = Program.GameWindow.Title;
+	        var points = DrawManager.FrustumObject.Points;
+	        _frustumPoints = new VBO<Vector3>(points, points.Length, VertexAttribPointerType.Float);
+	        _frustumVAO = new VAO<Vector3>(_frustumPoints);
             Log.WriteLine("Created debug elements.");
 	        
 #if DEBUG
@@ -104,13 +115,27 @@ namespace Hedra.Engine.Loader
 			    if (_passedTime > 5.0f)
 			    {
 			        _passedTime = 0;
-			        Graphics2D.Textures.Remove(_geomPoolMemory.TextureElement.TextureId);
-                    Renderer.DeleteTexture(_geomPoolMemory.TextureElement.TextureId);
-			        _geomPoolMemory.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
+			        Graphics2D.Textures.Remove(_staticPool.TextureElement.TextureId);
+				    Graphics2D.Textures.Remove(_waterPool.TextureElement.TextureId);
+				    Graphics2D.Textures.Remove(_instancePool.TextureElement.TextureId);
+                    Renderer.DeleteTexture(_staticPool.TextureElement.TextureId);
+				    Renderer.DeleteTexture(_waterPool.TextureElement.TextureId);
+				    Renderer.DeleteTexture(_instancePool.TextureElement.TextureId);
+			        _staticPool.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
 			        {
 				        Bitmap = WorldRenderer.StaticBuffer.Indices.Draw(),
 				        Path = "Debug:GeometryPool"
 			        });
+				    _waterPool.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
+				    {
+					    Bitmap = WorldRenderer.WaterBuffer.Vertices.Draw(),
+					    Path = "Debug:WaterGeometryPool"
+				    });
+				    _instancePool.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
+				    {
+					    Bitmap = WorldRenderer.InstanceBuffer.Indices.Draw(),
+					    Path = "Debug:InstanceGeometryPool"
+				    });
                     var borderWidth = (chunkBound-1) * Chunk.Height * 8;
                     _voxelCount = (int) World.Chunks.Select(
                         C => (defaultVoxelCount - borderWidth) / C.Landscape.GeneratedLod + borderWidth).Sum();
@@ -141,8 +166,27 @@ namespace Hedra.Engine.Loader
             }
         }
 
+	    private void DrawFrustum()
+	    {
+		    var points = DrawManager.FrustumObject.Points;
+		    _frustumPoints.Update(points, Vector3.SizeInBytes * points.Length);
+		    
+		    _frustumVAO.Bind();
+		    Renderer.Passthrough.Bind();
+
+            GL.PointSize(10);
+		    Renderer.DrawArrays(PrimitiveType.Points, 0, _frustumPoints.Count);
+		    
+		    Renderer.Passthrough.Unbind();
+		    _frustumVAO.Unbind();
+	    }
+	    
 	    public void Draw()
 	    {
+		    if (GameSettings.DebugView && GameSettings.LockFrustum)
+		    {
+			    DrawFrustum();
+		    }
 		    if (GameSettings.DebugView && _extraDebugView)
 		    {
 		        var player = GameManager.Player;

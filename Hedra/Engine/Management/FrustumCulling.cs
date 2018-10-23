@@ -26,7 +26,7 @@ namespace Hedra.Engine.Management
 		
         private readonly float[,] Frustum = new float[6,4];
         private readonly Vector4[] Planes = new Vector4[6];
-	    private readonly Vector3[] Points = new Vector3[8];
+	    public readonly Vector3[] Points = new Vector3[8];
 	    private readonly CollisionShape FrustumShape = new CollisionShape(new Vector3[8]);
 	    private readonly Box _frustumBroadphase = new Box();
         private readonly Box _cacheBox = new Box();
@@ -154,11 +154,11 @@ namespace Hedra.Engine.Management
 
             for (var i = 0; i < Points.Length; i++)
             {
-                Points[i] = Vector3.TransformPosition(Points[i], Modl.Inverted());
+                Points[i] = Vector3.TransformPosition(Points[i], Modl);
                 FrustumShape.Vertices[i] = Points[i];
             }
             var center = Vector3.TransformPosition(Vector3.Zero, Modl.Inverted());
-            const int size = 48;
+            const int size = 16;
             _frustumBroadphase.Min = center - Vector3.One * size;
             _frustumBroadphase.Max = center + Vector3.One * size;
         }
@@ -203,7 +203,7 @@ namespace Hedra.Engine.Management
 
 	    public bool BoxInFrustum(Box Box)
 	    {
-	        return this.VerticesInFrustum(Box.Vertices) || this.FrustumCollidesWithBox(Box);
+	        return this.VerticesInFrustum(Box.Vertices) || this.FrustumInBox(Box) || FrustumCollidesWithBox(Box);
 	    }
 
 	    private bool FrustumInBox(Box Box)
@@ -232,7 +232,8 @@ namespace Hedra.Engine.Management
 	    }
 	}
 }
-public enum ClippingPlane{
+public enum ClippingPlane
+{
 	RIGHT,
 	LEFT,
 	BOTTOM,

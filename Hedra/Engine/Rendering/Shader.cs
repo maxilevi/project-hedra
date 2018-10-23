@@ -88,10 +88,17 @@ namespace Hedra.Engine.Rendering
 	            if (newSource != sources[i].Source)
 	            {
 	                Log.WriteLine($"Shader source '{sources[i].Name}' has been updated. ");
-	                sources[i].Source = preProcessedSource;
 	                updated = true;
 	            }
 	        }
+            if (updated)
+            {
+                for (var i = 0; i < sources.Length; i++)
+                {
+                    if (sources[i] == null) continue;
+                    sources[i].Source = sources[i].SourceFinder();
+                }
+            }
 	        return updated;
 	    }
 

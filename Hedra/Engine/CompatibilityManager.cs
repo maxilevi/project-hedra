@@ -73,10 +73,10 @@ namespace Hedra.Engine
             var useCompatibilityFunction = false;
             try
             {
-                var testVAO = PrepareTestData(out var indices, out var buffer, out var shader);
+                var testVAO = PrepareTestData(out var indices, out var buffer);
                 Renderer.Severity = ErrorSeverity.High;
                 
-                shader.Bind();
+                Renderer.Passthrough.Bind();
                 testVAO.Bind();
                 indices.Bind();
                 
@@ -84,10 +84,9 @@ namespace Hedra.Engine
                     .MultiDrawElements(PrimitiveType.Triangles, new []{3}, DrawElementsType.UnsignedInt, new []{IntPtr.Zero}, 0);
                 
                 testVAO.Unbind();
-                shader.Unbind();
+                Renderer.Passthrough.Unbind();
                 indices.Unbind();
 
-                shader.Dispose();
                 testVAO.Dispose();
                 buffer.Dispose();
                 indices.Dispose();
@@ -124,7 +123,7 @@ namespace Hedra.Engine
             }
         }
 
-        private static VAO<Vector3> PrepareTestData(out VBO<uint> Indices, out VBO<Vector3> Buffer, out Shader Shader)
+        private static VAO<Vector3> PrepareTestData(out VBO<uint> Indices, out VBO<Vector3> Buffer)
         {
             var verts = new Vector3[]
             {
@@ -134,7 +133,6 @@ namespace Hedra.Engine
             };
             Buffer = new VBO<Vector3>(verts, verts.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
             Indices = new VBO<uint>(new uint[] {0,1,2}, sizeof(uint) * verts.Length, VertexAttribPointerType.UnsignedInt);
-            Shader = Shader.Build("Shaders/Passthrough.vert", "Shaders/Passthrough.frag");
             return new VAO<Vector3>(Buffer);
         }
     }
