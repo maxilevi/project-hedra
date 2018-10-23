@@ -50,76 +50,81 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var instanceElements = Mesh.InstanceElements;
             for (var i = 0; i < instanceElements.Length; i++)
             {
-                if (Lod != 1
-                    && (instanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Grass)
-                        || instanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Wheat)))
-                    continue;
-
-                var model = instanceElements[i].MeshCache.Clone();
-                if (instanceElements[i].ColorCache != -Vector4.One &&
-                    CacheManager.CachedColors.ContainsKey(instanceElements[i].ColorCache))
-                    model.Colors = CacheManager.CachedColors[instanceElements[i].ColorCache].Clone();
-                else
-                    model.Colors = instanceElements[i].Colors;
-
-                var variateFactor = (new Random(OffsetX + OffsetZ + World.Seed + i).NextFloat() * 2f - 1f) *
-                                      (24 / 256f);
-                for (var l = 0; l < model.Colors.Count; l++)
-                    model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
-
-                if (CacheManager.CachedExtradata.ContainsKey(instanceElements[i].ExtraDataCache))
-                    model.Extradata = CacheManager.CachedExtradata[instanceElements[i].ExtraDataCache]
-                        .Clone();
-                else
-                    model.Extradata = instanceElements[i].ExtraData;
-
-                if (instanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Grass) ||
-                    instanceElements[i].MeshCache == CacheManager.GetModel(CacheItem.Wheat))
-                {
-                    var instancePosition = instanceElements[i].TransMatrix.ExtractTranslation();
-                    var grassRng = new Random((int)(instancePosition.X * instancePosition.Z));
-                    instancePosition += Vector3.UnitY * (grassRng.NextFloat() * .2f - .2f);
-                    if (!DrawManager.DropShadows.Exists(instancePosition))
-                    {
-                        var shadow = new DropShadow
-                        {
-                            Position = instancePosition,
-                            DepthTest = true,
-                            Rotation = new Matrix3(Mathf.RotationAlign(Vector3.UnitY,
-                                Physics.NormalAtPosition(instancePosition)))
-                        };
-                        shadow.Scale *= 1.4f;
-                        shadow.Position += Vector3.Transform(Vector3.UnitY, shadow.Rotation) *
-                                           (grassRng.NextFloat() * .4f);
-                        shadow.DeleteWhen = () => BuildedLod != 1 || Disposed;
-                    }
-                }
-
-                model.Transform(Mesh.InstanceElements[i].TransMatrix);
-                //Pack some randomness to the wind values
-                float rng = Utils.Rng.NextFloat();
-                for (var k = 0; k < model.Extradata.Count; k++)
-                {
-                    if (model.Extradata[k] != 0 && model.Extradata[k] != -10f)
-                        model.Extradata[k] = Mathf.Pack(new Vector2(model.Extradata[k], rng), 2048);
-
-                    if (model.Extradata[k] == -10f)
-                        model.Extradata[k] = -1f;
-                }
-
-                //StaticBuffer.VData += Model;
-                //Manually add these vertex data's for maximum performance
-                for (var k = 0; k < model.Indices.Count; k++)
-                    model.Indices[k] += (uint)Input.StaticData.Vertices.Count;
-                Input.StaticData.Vertices.AddRange(model.Vertices);
-                Input.StaticData.Colors.AddRange(model.Colors);
-                Input.StaticData.Normals.AddRange(model.Normals);
-                Input.StaticData.Indices.AddRange(model.Indices);
-                Input.StaticData.Extradata.AddRange(model.Extradata);
-
-                model.Dispose();
+                ProcessInstanceData(instanceElements[i], Input.StaticData, i);
             }
-            return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.Failed, Input.HasNoise3D, Input.HasWater);
+            
+            var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
+            for (var i = 0; i < lodedInstanceElements.Length; i++)
+            {
+                ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i);
+            }
+            return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed, Input.HasNoise3D, Input.HasWater);
+        }
+
+        private void ProcessInstanceData(InstanceData Element, VertexData Model, int Index)
+        {
+            var model = Element.MeshCache.Clone();
+            if (Element.ColorCache != -Vector4.One &&
+                CacheManager.CachedColors.ContainsKey(Element.ColorCache))
+                model.Colors = CacheManager.CachedColors[Element.ColorCache].Clone();
+            else
+                model.Colors = Element.Colors;
+
+            var variateFactor = (new Random(OffsetX + OffsetZ + World.Seed + Index).NextFloat() * 2f - 1f) *
+                                  (24 / 256f);
+            for (var l = 0; l < model.Colors.Count; l++)
+                model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
+
+            if (CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache))
+                model.Extradata = CacheManager.CachedExtradata[Element.ExtraDataCache]
+                    .Clone();
+            else
+                model.Extradata = Element.ExtraData;
+
+            if (Element.MeshCache == CacheManager.GetModel(CacheItem.Grass) ||
+                Element.MeshCache == CacheManager.GetModel(CacheItem.Wheat))
+            {
+                var instancePosition = Element.TransMatrix.ExtractTranslation();
+                var grassRng = new Random((int)(instancePosition.X * instancePosition.Z));
+                instancePosition += Vector3.UnitY * (grassRng.NextFloat() * .2f - .2f);
+                if (!DrawManager.DropShadows.Exists(instancePosition))
+                {
+                    var shadow = new DropShadow
+                    {
+                        Position = instancePosition,
+                        DepthTest = true,
+                        Rotation = new Matrix3(Mathf.RotationAlign(Vector3.UnitY,
+                            Physics.NormalAtPosition(instancePosition)))
+                    };
+                    shadow.Scale *= 1.4f;
+                    shadow.Position += Vector3.Transform(Vector3.UnitY, shadow.Rotation) *
+                                       (grassRng.NextFloat() * .4f);
+                    shadow.DeleteWhen = () => BuildedLod != 1 || Disposed;
+                }
+            }
+
+            model.Transform(Element.TransMatrix);
+            //Pack some randomness to the wind values
+            float rng = Utils.Rng.NextFloat();
+            for (var k = 0; k < model.Extradata.Count; k++)
+            {
+                if (model.Extradata[k] != 0 && model.Extradata[k] != -10f)
+                    model.Extradata[k] = Mathf.Pack(new Vector2(model.Extradata[k], rng), 2048);
+
+                if (model.Extradata[k] == -10f)
+                    model.Extradata[k] = -1f;
+            }
+
+            //Manually add these vertex data's for maximum performance
+            for (var k = 0; k < model.Indices.Count; k++)
+                model.Indices[k] += (uint) Model.Vertices.Count;
+
+            Model.Vertices.AddRange(model.Vertices);
+            Model.Colors.AddRange(model.Colors);
+            Model.Normals.AddRange(model.Normals);
+            Model.Indices.AddRange(model.Indices);
+            Model.Extradata.AddRange(model.Extradata);
+            model.Dispose();
         }
     }
 }

@@ -157,7 +157,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         }
                     }
                 }
-            return new ChunkMeshBuildOutput(blockData, waterData, failed, hasNoise3D, hasWater);
+            return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed, hasNoise3D, hasWater);
         }
     }
 }

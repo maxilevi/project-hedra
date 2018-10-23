@@ -75,7 +75,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _terrainVerticesLock = new object();
             _blocksLock = new object();
             _regionCache = new RegionCache(Position, Position + new Vector3(Chunk.Width, 0, Chunk.Width));
-            _dummyBlocks = new Block[Chunk.Height][];
+            _dummyBlocks = new Block[Height][];
             for(var i = 0; i < _dummyBlocks.Length; i++)
             {
                 _dummyBlocks[i] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
@@ -184,8 +184,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             for (var i = 0; i < Input.StaticData.Extradata.Count; i++)
             {
-                float edata = Input.StaticData.Extradata[i];
-
+                var edata = Input.StaticData.Extradata[i];
                 Input.StaticData.Colors[i] = new Vector4(Input.StaticData.Colors[i].Xyz, edata);
             }
             var staticMin = new Vector3(
@@ -205,10 +204,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
             );
             DistributedExecuter.Execute(delegate
             {
-                bool result = WorldRenderer.StaticBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.StaticData);
-
-                if (BuildedCompletely)
-                    BuildedCompletely = result;
+                var staticResult = WorldRenderer.StaticBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.StaticData);
+                var instanceResult = WorldRenderer.InstanceBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.InstanceData);
+                
+                BuildedCompletely &= instanceResult && staticResult;
 
                 if (Mesh != null)
                 {
@@ -221,10 +220,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (Input.WaterData.Vertices.Count > 0)
                 DistributedExecuter.Execute(delegate
                 {
-                    bool result = WorldRenderer.WaterBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.WaterData);
+                    var result = WorldRenderer.WaterBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.WaterData);
 
-                    if (BuildedCompletely)
-                        BuildedCompletely = result;
+                    BuildedCompletely &= result;
                     Input.WaterData?.Dispose();
                 });
         }
@@ -463,6 +461,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.NeedsRebuilding = true;
         }
 
+        public void AddInstance(InstanceData Data, bool AffectedByLod = false)
+        {
+            if (Mesh == null) throw new ArgumentException($"Failed to add instance data ");
+            
+            StaticBuffer.AddInstance(Data, AffectedByLod);
+        }
 
         public void AddCollisionShape(params ICollidable[] Data)
         {

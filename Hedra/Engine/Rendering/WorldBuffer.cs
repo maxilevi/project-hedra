@@ -33,7 +33,7 @@ namespace Hedra.Engine.Rendering
 		public GeometryPool<Vector3> Normals { get; }
 		public GeometryPool<Vector4> Colors { get; }
 		public VAO<Vector3, Vector4, Vector3> Data { get; }
-		public IComparer<KeyValuePair<Vector2, ChunkRenderCommand>> Comparer { get; set; } = Comparer<KeyValuePair<Vector2, ChunkRenderCommand>>.Default;
+		public IComparer<KeyValuePair<Vector2, ChunkRenderCommand>> Comparer { get; set; }
 		public int SizeInBytes { get; }
 		
 		public WorldBuffer(PoolSize Size)
@@ -147,6 +147,8 @@ namespace Hedra.Engine.Rendering
 
                         _chunkDict[Offset] = Command;
                     }
+
+                    if (Comparer == null) throw new ArgumentException("No comparer has been set.");
 
 	                _chunkPairs = _chunkDict.ToList();
 	                _chunkPairs.Sort(Comparer);

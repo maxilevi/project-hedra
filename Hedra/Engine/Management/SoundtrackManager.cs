@@ -94,7 +94,7 @@ namespace Hedra.Engine.Management
 					throw new ArgumentException("Array cannot contain null values");
 			}
 			
-			Volume = .4f;
+			Volume = .2f;
 			_loaded = true;
 		}
 

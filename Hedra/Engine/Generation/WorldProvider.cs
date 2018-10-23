@@ -100,6 +100,7 @@ namespace Hedra.Engine.Generation
             IsGenerated = true;
             WorldRenderer.StaticBuffer.Comparer = _renderingComparer;
             WorldRenderer.WaterBuffer.Comparer = _renderingComparer;
+            WorldRenderer.InstanceBuffer.Comparer = _renderingComparer;
         }
 
         public void ReloadModules()

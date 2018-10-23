@@ -19,6 +19,7 @@ namespace Hedra.Engine.Rendering
 	{
 		private IMeshBuffer _buffer;
 		private readonly List<InstanceData> _instanceElements;
+		private readonly List<InstanceData> _lodedInstanceElements;
 		public List<ICollidable> CollisionBoxes = new List<ICollidable>();
 		public List<VertexData> Elements = new List<VertexData>();
 		public VertexData ModelData { get; set; }
@@ -35,6 +36,7 @@ namespace Hedra.Engine.Rendering
 		{
 			this.Position = Position;
 			_instanceElements = new List<InstanceData>();
+			_lodedInstanceElements = new List<InstanceData>();
 			CullingBox = new Box(Vector3.Zero, new Vector3(Chunk.Width, 768, Chunk.Width));
 			_buffer = Buffer;
 		}
@@ -118,12 +120,17 @@ namespace Hedra.Engine.Rendering
 			}
 		}
 
-		public void AddInstance(InstanceData Data)
+		public void AddInstance(InstanceData Data, bool AffectedByLod = false)
 		{
-			_instanceElements.Add(Data);
+			if(!AffectedByLod)
+				_instanceElements.Add(Data);
+			else
+				_lodedInstanceElements.Add(Data);
 		}
 
 		public InstanceData[] InstanceElements => _instanceElements.ToArray();
+
+		public InstanceData[] LodAffectedInstanceElements => _lodedInstanceElements.ToArray();
 		
 		public void Dispose()
 		{
