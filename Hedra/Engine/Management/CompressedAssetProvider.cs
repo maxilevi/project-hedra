@@ -300,7 +300,7 @@ namespace Hedra.Engine.Management
 
 		public VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
 		{
-			var data = AssetManager.ReadBinary(File, AssetsResource);
+			var data = ReadPath(File);
 			if (data == null) throw new ArgumentException($"Failed to find file '{File}' in the Assets folder.");
 			return PLYLoader(data, Scale, Position, Rotation, HasColors);
 		}
