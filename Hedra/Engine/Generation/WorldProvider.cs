@@ -380,8 +380,7 @@ namespace Hedra.Engine.Generation
             }
 
             _isChunksCacheDirty = true;
-            WorldRenderer.StaticBuffer.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
-            WorldRenderer.WaterBuffer.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
+            WorldRenderer.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
 
             var baseStructuresArray = Structures.ToArray();
 

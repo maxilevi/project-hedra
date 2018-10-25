@@ -28,6 +28,13 @@ const vec2 poissonDisk[4] = vec2[](
   vec2( 0.34495938, 0.29387760 )
 );
 
+const mat4 ditherMat = mat4(
+   1.0 / 17.0,  9.0 / 17.0,  3.0 / 17.0, 11.0 / 17.0,
+   13.0 / 17.0,  5.0 / 17.0, 15.0 / 17.0,  7.0 / 17.0,
+   4.0 / 17.0, 12.0 / 17.0,  2.0 / 17.0, 10.0 / 17.0,
+   16.0 / 17.0,  8.0 / 17.0, 14.0 / 17.0,  6.0 / 17.0
+);
+
 uniform sampler2D ShadowTex;
 uniform float UseShadows;
 uniform mat4 ShadowMVP;
@@ -43,10 +50,9 @@ void main()
 	{
 		discard;
 	}
-	if (Dither) {
-		if( clamp(texture(noiseTexture, vec3(int(InPos.x), int(InPos.y), int(InPos.z)) ).r, 0.0, 1.0) > DitherVisibility * 1.25){
-			discard;
-		}
+	if (Dither)
+	{
+        if (DitherVisibility - ditherMat[int(gl_FragCoord.x) % 4][int(gl_FragCoord.y) % 4] < 0.0) discard;
 	}
     vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, InPos.xyz).r;
     vec4 output_color = Color + vec4(tex, 0.0);
@@ -67,8 +73,8 @@ void main()
 	{
 		mat3 NormalMat = mat3(transpose(inverse(_modelViewMatrix)));
 		OutColor = NewColor;
-		OutPosition = vec4( (_modelViewMatrix * vec4(InPos.xyz, 1.0)).xyz, gl_FragCoord.z);
-		OutNormal = vec4(NormalMat * InNorm.xyz, 1.0);
+		OutPosition = vec4( (_modelViewMatrix * vec4(InPos.xyz, 1.0)).xyz, gl_FragCoord.z) * (Dither ? DitherVisibility : 1.0);
+		OutNormal = vec4(NormalMat * InNorm.xyz, 1.0) * (Dither ? DitherVisibility : 1.0);
 	}
 }
 

@@ -274,6 +274,7 @@
     <Compile Include="Engine\Loader\HedraWindow.cs" />
     <Compile Include="Engine\Loader\IHedra.cs" />
     <Compile Include="Engine\Loader\IHedraWindow.cs" />
+    <Compile Include="Engine\Loader\ModificationsLoader.cs" />
     <Compile Include="Engine\Loader\SplashScreen.cs" />
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
     <Compile Include="Engine\Management\WindowsConsoleManager.cs" />
@@ -1162,33 +1163,43 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\BoatMove.ogg">
+      <Link>Sounds\BoatMove.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\PreparingAttack.ogg">
+      <Link>Sounds\PreparingAttack.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\River.ogg">
+      <Link>Sounds\Soundtrack\River.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\HostageSituation.ogg">
+      <Link>Sounds\Soundtrack\HostageSituation.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\OnTheLam.ogg">
+      <Link>Sounds\Soundtrack\OnTheLam.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Soundtrack\TheVillage.ogg">
+      <Link>Sounds\Soundtrack\TheVillage.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Swimming.ogg">
+      <Link>Sounds\Swimming.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Swoosh.ogg">
+      <Link>Sounds\Swoosh.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\Underwater.ogg">
+      <Link>Sounds\Underwater.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\WaterSplash.ogg">
+      <Link>Sounds\WaterSplash.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -4619,13 +4630,7 @@
     <None Include="Shaders\SkyOverlay.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SSAO-Pass1-MS.frag">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Shaders\SSAO-Pass1.frag">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Shaders\SSAO-Pass2-MS.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\SSAO-Pass3.frag">
@@ -4721,106 +4726,140 @@
     <None Include="Shaders\Water.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Bow.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Bow.ogg">
+      <Link>Sounds\Bow.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\DarkSound.ogg">
+    <None Include="..\project-hedra-assets\Sounds\DarkSound.ogg">
+      <Link>Sounds\DarkSound.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Eat.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Eat.ogg">
+      <Link>Sounds\Eat.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\GorillaGrowl.ogg">
+    <None Include="..\project-hedra-assets\Sounds\GorillaGrowl.ogg">
+      <Link>Sounds\GorillaGrowl.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\HitGround.ogg">
+    <None Include="..\project-hedra-assets\Sounds\HitGround.ogg">
+      <Link>Sounds\HitGround.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\HoverButton.ogg">
+    <None Include="..\project-hedra-assets\Sounds\HoverButton.ogg">
+      <Link>Sounds\HoverButton.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\ItemCollect.ogg">
+    <None Include="..\project-hedra-assets\Sounds\ItemCollect.ogg">
+      <Link>Sounds\ItemCollect.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Jump.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Jump.ogg">
+      <Link>Sounds\Jump.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Money.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Money.ogg">
+      <Link>Sounds\Money.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\OnOff.ogg">
+    <None Include="..\project-hedra-assets\Sounds\OnOff.ogg">
+      <Link>Sounds\OnOff.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Run.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Run.ogg">
+      <Link>Sounds\Run.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\BreathOfDay.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\BreathOfDay.ogg">
+      <Link>Sounds\Soundtrack\BreathOfDay.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\CardinalCity.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\CardinalCity.ogg">
+      <Link>Sounds\Soundtrack\CardinalCity.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Fireplace.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Fireplace.ogg">
+      <Link>Sounds\VillageAmbient.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\ForestAmbient.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\ForestAmbient.ogg">
+      <Link>Sounds\Soundtrack\ForestAmbient.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\GlassBreak.ogg">
+    <None Include="..\project-hedra-assets\Sounds\GlassBreak.ogg">
+      <Link>Sounds\GlassBreak.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\GlassBreakInverted.ogg">
+    <None Include="..\project-hedra-assets\Sounds\GlassBreakInverted.ogg">
+      <Link>Sounds\GlassBreakInverted.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\GroundQuake.ogg">
+    <None Include="..\project-hedra-assets\Sounds\GroundQuake.ogg">
+      <Link>Sounds\GroundQuake.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Hit.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Hit.ogg">
+      <Link>Sounds\Hit.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Horse.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Horse.ogg">
+      <Link>Sounds\Horse.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\HumanSleep.ogg">
+    <None Include="..\project-hedra-assets\Sounds\HumanSleep.ogg">
+      <Link>Sounds\HumanSleep.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\LongSwoosh.ogg">
+    <None Include="..\project-hedra-assets\Sounds\LongSwoosh.ogg">
+      <Link>Sounds\LongSwoosh.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\MainTheme.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\MainTheme.ogg">
+      <Link>Sounds\Soundtrack\MainTheme.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\Rain.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Rain.ogg">
+      <Link>Sounds\Soundtrack\Rain.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Roll.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Roll.ogg">
+      <Link>Sounds\Roll.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Slash.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Slash.ogg">
+      <Link>Sounds\Slash.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\Song0.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song0.ogg">
+      <Link>Sounds\Soundtrack\Song0.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\Song1.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song1.ogg">
+      <Link>Sounds\Soundtrack\Song1.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\Song2.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song2.ogg">
+      <Link>Sounds\Soundtrack\Song2.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\Song3.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song3.ogg">
+      <Link>Sounds\Soundtrack\Song3.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\Song4.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song4.ogg">
+      <Link>Sounds\Soundtrack\Song4.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\Song5.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song5.ogg">
+      <Link>Sounds\Soundtrack\Song5.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\ThroughTheGrasslands.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\ThroughTheGrasslands.ogg">
+      <Link>Sounds\Soundtrack\ThroughTheGrasslands.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\VillageAmbient.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\VillageAmbient.ogg">
+      <Link>Sounds\Soundtrack\VillageAmbient.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -4963,10 +5002,12 @@
     <Content Include="Shaders\Passthrough.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sounds\Soundtrack\AdventurersMinuet.ogg">
+    <Content Include="..\project-hedra-assets\Sounds\Soundtrack\AdventurersMinuet.ogg">
+      <Link>Sounds\Soundtrack\AdventurersMinuet.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sounds\Soundtrack\GraveyardChampion.ogg">
+    <Content Include="..\project-hedra-assets\Sounds\Soundtrack\GraveyardChampion.ogg">
+      <Link>Sounds\Soundtrack\GraveyardChampion.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x64\openal32.dll">

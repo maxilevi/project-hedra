@@ -49,6 +49,21 @@ namespace Hedra.Engine.Rendering
             			 
 			_chunkDict = new Dictionary<Vector2, ChunkRenderCommand>();
 		}
+
+		public void Bind(bool EnableVertexAttributes = true)
+		{
+			Data.Bind(EnableVertexAttributes);
+		}
+
+		public void BindIndices()
+		{
+			Indices.Bind();
+		}
+
+		public void Unbind()
+		{
+			Data.Unbind();
+		}
 		
 		public void Discard()
 		{
@@ -74,7 +89,7 @@ namespace Hedra.Engine.Rendering
 		    }
 	    }
 
-        public void Remove(Vector2 Offset){
+        public bool Remove(Vector2 Offset){
 			
 			lock(_lock)
 			{
@@ -88,13 +103,22 @@ namespace Hedra.Engine.Rendering
 					_chunkDict.Remove(Offset);
 				}
 			}
-		}
+            return true;
+        }
 
-        public bool Add(Vector2 Offset, VertexData Data)
+        public bool Update(Vector2 Offset, VertexData Data)
+        {
+            if (Data.IsEmpty)
+            {
+                return Remove(Offset);
+            }
+            return Add(Offset, Data);      
+        }
+
+        private bool Add(Vector2 Offset, VertexData Data)
         {
             if (this.Data != null)
             {
-
                 lock (_lock)
                 {
                     if (!_chunkDict.ContainsKey(Offset))
@@ -167,17 +191,20 @@ namespace Hedra.Engine.Rendering
 				Indices.ObjectMap.Sort( MemoryEntry.Compare  );
 				for(int i = 0; i < Indices.ObjectMap.Count; i++){
 					
-					if(i == 0 && Indices.ObjectMap[i].Offset > SizeInBytes){
+					if(i == 0 && Indices.ObjectMap[i].Offset > SizeInBytes)
+					{
 						Offset = 0;
 						break;
 					}
 					
-					if(i == Indices.ObjectMap.Count-1){
+					if(i == Indices.ObjectMap.Count-1)
+					{
 						Offset = Indices.ObjectMap[Indices.ObjectMap.Count-1].Offset + Indices.ObjectMap[Indices.ObjectMap.Count-1].Length;
 						break;
 					}
 					
-					if(Indices.ObjectMap[i] != Entry && Indices.ObjectMap[i+1].Offset - (Indices.ObjectMap[i].Offset + Indices.ObjectMap[i].Length) >= SizeInBytes){
+					if(Indices.ObjectMap[i] != Entry && Indices.ObjectMap[i+1].Offset - (Indices.ObjectMap[i].Offset + Indices.ObjectMap[i].Length) >= SizeInBytes)
+					{
 						Offset = Indices.ObjectMap[i].Offset + Indices.ObjectMap[i].Length;
 						break;
 					}
@@ -227,7 +254,7 @@ namespace Hedra.Engine.Rendering
 				{		
 					var count = 0;
 					var offset = 0;				
-					if(Shadows || ToDraw.ContainsKey(pair.Key))
+					if(ToDraw.ContainsKey(pair.Key))
 					{	
 						count = pair.Value.DrawCount;
 						offset = pair.Value.ByteOffset;					

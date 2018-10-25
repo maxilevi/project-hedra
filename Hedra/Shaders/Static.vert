@@ -40,7 +40,8 @@ uniform vec3 Scale;
 uniform vec3 Offset;
 uniform vec3 BakedOffset;
 uniform mat4 TransformationMatrix;
-uniform float DitherRadius;
+uniform float MinDitherDistance;
+uniform float MaxDitherDistance;
 uniform vec4 AreaColors[16];
 uniform vec4 AreaPositions[16];
 const float ShadowTransition = 10.0;
@@ -86,7 +87,7 @@ void main(){
 	
 	float DistanceToCamera = length(vec3(PlayerPosition - Vertex.xyz).xz);
 	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
-	DitherVisibility = clamp( (DitherRadius - DistanceToCamera) / DitherRadius, 0.0, 1.0);
+	DitherVisibility = clamp( (MaxDitherDistance - DistanceToCamera) / (MaxDitherDistance - MinDitherDistance), 0.0, 1.0);
 
 	Vertex = TransformationMatrix * Vertex;
 	gl_Position = _modelViewProjectionMatrix * Vertex;

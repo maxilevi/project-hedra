@@ -21,31 +21,37 @@ namespace Hedra.Engine.Rendering
 	/// </summary>
 	public class GeometryPool<T> : IDisposable where T : struct
 	{
-		private readonly int PoolSize;
-		public List<MemoryEntry> ObjectMap = new List<MemoryEntry>();
-		public VBO<T> Buffer;
+		private readonly int _poolSize;
+		public List<MemoryEntry> ObjectMap { get; }
+		public VBO<T> Buffer { get; }
 		
 		public int AvailableMemory => TotalMemory - UsedMemory;
 
 	    public int UsedMemory => ObjectMap.Count == 0 ? 0 : ObjectMap[ObjectMap.Count-1].Offset + ObjectMap[ObjectMap.Count-1].Length;
 
-	    public int TotalMemory => PoolSize * TypeSizeInBytes;
+	    public int TotalMemory => _poolSize * TypeSizeInBytes;
 
 	    public int Count => UsedMemory / TypeSizeInBytes;
 
 	    public int TypeSizeInBytes { get; }
 		
 		
-		public GeometryPool(int SizeInBytes, int TypeSizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget = BufferTarget.ArrayBuffer, BufferUsageHint Hint = BufferUsageHint.StaticDraw){
-			
+		public GeometryPool(int SizeInBytes, int TypeSizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget = BufferTarget.ArrayBuffer, BufferUsageHint Hint = BufferUsageHint.StaticDraw)
+		{
+			ObjectMap = new List<MemoryEntry>();
 			Buffer = new VBO<T>(new T[]{}, 0, PointerType, BufferTarget, Hint);
 
-			this.PoolSize = (int) SizeInBytes;
+			this._poolSize = (int) SizeInBytes;
 			this.TypeSizeInBytes = TypeSizeInBytes;
 			
 			Renderer.BindBuffer(Buffer.BufferTarget, Buffer.ID);
 			Renderer.BufferData(Buffer.BufferTarget, (IntPtr) TotalMemory, IntPtr.Zero, Buffer.Hint);
 			
+		}
+
+		public void Bind()
+		{
+			Buffer.Bind();
 		}
 
 	    public Bitmap Draw()
@@ -79,25 +85,30 @@ namespace Hedra.Engine.Rendering
             bmp.Dispose();
         }
 
-		public MemoryEntry Update(T[] Data, int SizeInBytes, MemoryEntry Entry){
-			
-			if(Entry.Length != SizeInBytes){
+		public MemoryEntry Update(T[] Data, int SizeInBytes, MemoryEntry Entry)
+		{			
+			if(Entry.Length != SizeInBytes)
+			{
 				int Offset = 0;
 				//Find a gap were this data can be inserted
 				ObjectMap.Sort( MemoryEntry.Compare  );
-				for(int i = 0; i < ObjectMap.Count; i++){
+				for (var i = 0; i < ObjectMap.Count; i++)
+				{
 					
-					if(i == 0 && ObjectMap[i].Offset > SizeInBytes){
+					if(i == 0 && ObjectMap[i].Offset > SizeInBytes)
+					{
 						Offset = 0;
 						break;
 					}
 					
-					if(i == ObjectMap.Count-1){
+					if(i == ObjectMap.Count-1)
+					{
 						Offset = ObjectMap[ObjectMap.Count-1].Offset + ObjectMap[ObjectMap.Count-1].Length;
 						break; 
 					}
 					
-					if(ObjectMap[i] != Entry && ObjectMap[i+1].Offset - (ObjectMap[i].Offset + ObjectMap[i].Length) >= SizeInBytes){
+					if(ObjectMap[i] != Entry && ObjectMap[i+1].Offset - (ObjectMap[i].Offset + ObjectMap[i].Length) >= SizeInBytes)
+					{
 						Offset = ObjectMap[i].Offset + ObjectMap[i].Length;
 						break;
 					}
@@ -132,7 +143,8 @@ namespace Hedra.Engine.Rendering
 	        Renderer.BufferData(Buffer.BufferTarget, (IntPtr) TotalMemory, IntPtr.Zero, Buffer.Hint);
         }
 
-		public void Dispose(){
+		public void Dispose()
+		{
 			Buffer.Dispose();
 		}
 	}

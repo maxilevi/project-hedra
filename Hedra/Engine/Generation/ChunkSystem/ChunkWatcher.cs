@@ -76,6 +76,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 _object.Lod = 8;
             else
                 _object.Lod = 1;
+            //_object.HasLodedElements
         }
 
         private static bool WasChunkBuilt(Chunk Chunk)

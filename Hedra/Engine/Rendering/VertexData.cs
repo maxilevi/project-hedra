@@ -256,7 +256,13 @@ namespace Hedra.Engine.Rendering
 			v3.Dispose();
 			return V1;
 		}
-		
+
+        public bool IsEmpty => Vertices.Count == 0
+            && Indices.Count == 0
+            && Normals.Count == 0
+            && Colors.Count == 0
+            && Extradata.Count == 0;
+
 		public int SizeInBytes => Indices.Count * sizeof(uint) 
 		                          + Vertices.Count * Vector3.SizeInBytes 
 		                          + Normals.Count * Vector3.SizeInBytes 

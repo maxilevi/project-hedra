@@ -45,6 +45,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public int OffsetX { get; }
         public int OffsetZ { get; }
         public bool IsBuilding { get; set; }
+        public bool HasLodedElements { get; set; }
         public Vector3 Position { get; private set; }
 
         private Block[][][] _blocks;
@@ -204,10 +205,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
             );
             DistributedExecuter.Execute(delegate
             {
-                var staticResult = WorldRenderer.StaticBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.StaticData);
-                var instanceResult = WorldRenderer.InstanceBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.InstanceData);
-                
-                BuildedCompletely &= instanceResult && staticResult;
+                var staticResult = WorldRenderer.UpdateStatic(new Vector2(OffsetX, OffsetZ), Input.StaticData);
+                var instanceResult = WorldRenderer.UpdateInstance(new Vector2(OffsetX, OffsetZ), Input.InstanceData);
+                var waterResult = WorldRenderer.UpdateWater(new Vector2(OffsetX, OffsetZ), Input.WaterData);
+
+                BuildedCompletely = BuildedCompletely && instanceResult && staticResult && waterResult;
 
                 if (Mesh != null)
                 {
@@ -216,15 +218,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Mesh.BuildedOnce = true;
                 }
                 Input.StaticData?.Dispose();
+                Input.InstanceData?.Dispose();
+                Input.WaterData?.Dispose();
             });
-            if (Input.WaterData.Vertices.Count > 0)
-                DistributedExecuter.Execute(delegate
-                {
-                    var result = WorldRenderer.WaterBuffer.Add(new Vector2(OffsetX, OffsetZ), Input.WaterData);
-
-                    BuildedCompletely &= result;
-                    Input.WaterData?.Dispose();
-                });
         }
 
         public Block GetBlockAt(Vector3 V)

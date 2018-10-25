@@ -41,7 +41,7 @@ namespace Hedra.Engine.Rendering
 	        WaterShader = Shader.Build("Shaders/Water.vert", "Shaders/Water.frag");
 	        StaticShader = Shader.Build("Shaders/Static.vert", "Shaders/Static.frag");
             StaticBuffer = new WorldBuffer(PoolSize.SuperBig);
-		    InstanceBuffer = new WorldBuffer(PoolSize.Tiny);
+		    InstanceBuffer = new WorldBuffer(PoolSize.Big);
             WaterBuffer = new WorldBuffer(PoolSize.Tiny);
 
 	        var noiseValues = new float[16, 16, 16];
@@ -66,7 +66,7 @@ namespace Hedra.Engine.Rendering
 		public static void Render(Dictionary<Vector2, Chunk> ToDraw, WorldRenderType Type)
 		{
             
-			if(ToDraw.Count == 0) return;
+			if(ToDraw.Cou   nt == 0) return;
 			
 			if(Type == WorldRenderType.Static)
 			{
@@ -81,6 +81,16 @@ namespace Hedra.Engine.Rendering
 
 		private static void InstanceDraw(Dictionary<Vector2, Chunk> ToDraw)
 		{
+			var counts = InstanceBuffer.BuildCounts(ToDraw, out var offsets);
+
+			InstanceBuffer.Bind();
+			InstanceBuffer.BindIndices();
+            StaticShader["Dither"] = 1;
+            StaticShader["MaxDitherDistance"] = 228f;
+			StaticShader["MinDitherDistance"] = 200f;
+			
+			Renderer.MultiDrawElements(PrimitiveType.Triangles, counts, DrawElementsType.UnsignedInt, offsets, counts.Length);
+			
             StaticUnBind();
         }
 		
@@ -89,11 +99,11 @@ namespace Hedra.Engine.Rendering
             int[] Counts = StaticBuffer.BuildCounts(ToDraw, out IntPtr[]  Offsets);
 			int[] ShadowCounts = StaticBuffer.BuildCounts(ToDraw, out IntPtr[] ShadowOffsets, true);
 				
-			StaticBuffer.Data.Bind(false);
+			StaticBuffer.Bind(false);
 			Renderer.EnableVertexAttribArray(0);
 			Renderer.EnableVertexAttribArray(1);
 
-			Renderer.BindBuffer(StaticBuffer.Indices.Buffer.BufferTarget, StaticBuffer.Indices.Buffer.ID);
+			StaticBuffer.BindIndices();
 
 			if (GameSettings.Shadows)
             {
@@ -106,7 +116,7 @@ namespace Hedra.Engine.Rendering
             Renderer.EnableVertexAttribArray(2);
 			Renderer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);		    
 
-			StaticBuffer.Data.Unbind();
+			StaticBuffer.Unbind();
 		}
 
 		private static void WaterDraw(Dictionary<Vector2, Chunk> ToDraw)
@@ -118,7 +128,7 @@ namespace Hedra.Engine.Rendering
 				WaveMovement = 0;
 
 			WaterBind();
-			WaterBuffer.Data.Bind();
+			WaterBuffer.Bind();
 				
 			Renderer.EnableVertexAttribArray(0);
 			Renderer.EnableVertexAttribArray(1);
@@ -131,11 +141,33 @@ namespace Hedra.Engine.Rendering
 			Renderer.DisableVertexAttribArray(1);
 			Renderer.DisableVertexAttribArray(2);	
 				
-			WaterBuffer.Data.Unbind();
+			WaterBuffer.Unbind();
 			WaterUnBind();
 		}
+
+		public static void Remove(Vector2 ChunkOffset)
+		{
+			StaticBuffer.Remove(ChunkOffset);
+			InstanceBuffer.Remove(ChunkOffset);
+			WaterBuffer.Remove(ChunkOffset);
+		}
 		
-		public static void Discard()
+        public static bool UpdateStatic(Vector2 Offset, VertexData Data)
+        {
+            return StaticBuffer.Update(Offset, Data);
+        }
+
+        public static bool UpdateWater(Vector2 Offset, VertexData Data)
+        {
+            return WaterBuffer.Update(Offset, Data);
+        }
+
+        public static bool UpdateInstance(Vector2 Offset, VertexData Data)
+        {
+            return InstanceBuffer.Update(Offset, Data);
+        }
+
+        public static void Discard()
 		{
 			StaticBuffer.Discard();
 			WaterBuffer.Discard();
@@ -157,13 +189,12 @@ namespace Hedra.Engine.Rendering
             StaticShader["PlayerPosition"] = GameManager.Player.Position;
 		    StaticShader["Time"] = !GameManager.InStartMenu ? Time.AccumulatedFrameTime : Time.IndependentAccumulatedFrameTime;
 		    StaticShader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
-			//StaticShader["Snow"] = SkyManager.Snowing ? 1.0f : 0.0f;		
+			//StaticShader["Snow"] = SkyManager.Snowing ? 1.0f : 0.0f;
+			StaticShader["Dither"] = 0;
 			StaticShader["UseShadows"] = (float) GameSettings.ShadowQuality * (GameSettings.Shadows ? 1f : 0f);
 		    StaticShader["BakedOffset"] = BakedOffset;
 		    StaticShader["Scale"] = Scale;
 		    StaticShader["Offset"] = Offset;
-		    StaticShader["Dither"] = Dither ? 1 : 0;
-		    StaticShader["DitherRadius"] = DitherRadius;
             StaticShader["TransformationMatrix"] = TransformationMatrix;
             StaticShader["AreaPositions"] = World.Highlighter.AreaPositions;
 			StaticShader["AreaColors"] = World.Highlighter.AreaColors;
@@ -199,7 +230,6 @@ namespace Hedra.Engine.Rendering
            	Renderer.ActiveTexture(TextureUnit.Texture0);
 		    Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Fancy ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : 0);
 
-		    WaterShader["Dither"] = Dither ? 1 : 0;
 		    WaterShader["TransformationMatrix"] = TransformationMatrix;
             WaterShader["BakedOffset"] = BakedOffset;
 		    WaterShader["Scale"] = Scale;
@@ -221,8 +251,6 @@ namespace Hedra.Engine.Rendering
 
         #endregion
 	    public static float WaterSmoothness { get; set; } = 1f;
-        public static float DitherRadius { get; set; } = 1f;
-        public static bool Dither { get; set; } = false;
         public static bool EnableCulling { get; set; } = true;
         public static Vector3 BakedOffset { get; set; }
         public static Vector3 Scale { get; set; } = Vector3.One;

@@ -24,9 +24,7 @@ namespace Hedra.Engine.Player.MapSystem
             this.RegisterStateItem(() => WorldRenderer.Offset, O => WorldRenderer.Offset = (Vector3)O);
             this.RegisterStateItem(() => WorldRenderer.BakedOffset, O => WorldRenderer.BakedOffset = (Vector3)O);
             this.RegisterStateItem(() => WorldRenderer.Scale, O => WorldRenderer.Scale = (Vector3)O);
-            this.RegisterStateItem(() => WorldRenderer.DitherRadius, O => WorldRenderer.DitherRadius = (float)O);
             this.RegisterStateItem(() => WorldRenderer.EnableCulling, O => WorldRenderer.EnableCulling = (bool)O);
-            this.RegisterStateItem(() => WorldRenderer.Dither, O => WorldRenderer.Dither = (bool)O);
             this.RegisterStateItem(() => WorldRenderer.TransformationMatrix, O => WorldRenderer.TransformationMatrix = (Matrix4)O);
             this.RegisterStateItem(() => WorldRenderer.WaterSmoothness, O => WorldRenderer.WaterSmoothness = (float)O);
             this.RegisterStateItem(() => SkyManager.UpdateDayColors, O => SkyManager.UpdateDayColors = (bool)O);

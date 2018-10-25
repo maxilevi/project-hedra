@@ -11,6 +11,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class ChunkStructuresMeshBuilder
     {
+        public bool HasLodedElements { get; set; }
         private readonly Chunk _parent;
 
         public ChunkStructuresMeshBuilder(Chunk Parent)
@@ -52,12 +53,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 ProcessInstanceData(instanceElements[i], Input.StaticData, i);
             }
-            
-            var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
-            for (var i = 0; i < lodedInstanceElements.Length; i++)
+
+            if (Lod == 1)
             {
-                ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i);
+                var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
+                for (var i = 0; i < lodedInstanceElements.Length; i++)
+                {
+                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i);
+                }
             }
+
             return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed, Input.HasNoise3D, Input.HasWater);
         }
 
