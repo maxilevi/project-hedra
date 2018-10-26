@@ -7,7 +7,7 @@ namespace Hedra.Engine.Loader
 {
     public static class ModificationsLoader
     {
-        private static string Path { get; }
+        public static string Path { get; }
 
         static ModificationsLoader()
         {
@@ -22,7 +22,7 @@ namespace Hedra.Engine.Loader
 
         public static string[] Get(string Pattern)
         {
-            var modules = Directory.GetFiles(Path, "*", SearchOption.AllDirectories).Where(M => M.Contains(Pattern)).ToArray();
+            var modules = Directory.GetFiles(Path, "*", SearchOption.AllDirectories).Where(M => M.Replace("\\", "/").Contains(Pattern)).ToArray();
             var list = new List<string>();
             for (var i = 0; i < modules.Length; i++)
             {               
