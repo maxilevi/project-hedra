@@ -22,6 +22,7 @@ namespace Hedra.Engine.Rendering
 	/// </summary>
 	public class Shader : IDisposable
 	{
+		public static Shader Passthrough { get; }
 	    private readonly Dictionary<string, bool> _knownMappings;
         private readonly Dictionary<string, UniformMapping> _mappings;
 	    private readonly Dictionary<string, UniformArray> _arrayMappings;
@@ -40,6 +41,11 @@ namespace Hedra.Engine.Rendering
         public int[] PointLightsPositionUniform { get; set; }
         public int[] PointLightsRadiusUniform { get; set; }
 
+		static Shader()
+		{
+			Passthrough = Build("Shaders/Passthrough.vert", "Shaders/Passthrough.frag");
+		}
+		
 	    public static Shader Build(string FileSourceV, string FileSourceF)
 	    {
 	        var vertexShader = new ShaderData

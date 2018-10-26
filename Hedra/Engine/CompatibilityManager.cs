@@ -76,7 +76,7 @@ namespace Hedra.Engine
                 var testVAO = PrepareTestData(out var indices, out var buffer);
                 Renderer.Severity = ErrorSeverity.High;
                 
-                Renderer.Passthrough.Bind();
+                Shader.Passthrough.Bind();
                 testVAO.Bind();
                 indices.Bind();
                 
@@ -84,7 +84,7 @@ namespace Hedra.Engine
                     .MultiDrawElements(PrimitiveType.Triangles, new []{3}, DrawElementsType.UnsignedInt, new []{IntPtr.Zero}, 0);
                 
                 testVAO.Unbind();
-                Renderer.Passthrough.Unbind();
+                Shader.Passthrough.Unbind();
                 indices.Unbind();
 
                 testVAO.Dispose();

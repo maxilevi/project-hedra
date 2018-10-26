@@ -25,7 +25,6 @@ namespace Hedra.Engine.Rendering
 	    public static Matrix4 ModelViewProjectionMatrix { get; private set; }
 	    public static Matrix4 ModelViewMatrix { get; private set; }
 	    public static Matrix4 ProjectionMatrix { get; private set; }
-	    public static Shader Passthrough { get; private set; }
 	    private static readonly StateManager FboManager;
 	    private static readonly StateManager ShaderManager;
 	    private static readonly CapHandler CapHandler;
@@ -45,7 +44,6 @@ namespace Hedra.Engine.Rendering
 	    {
 	        BlendEquation(BlendEquationMode.FuncAdd);
 	        BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-	        Passthrough = Shader.Build("Shaders/Passthrough.vert", "Shaders/Passthrough.frag");
 	    }
 
 	    public static void LoadProjection(Matrix4 Projection)

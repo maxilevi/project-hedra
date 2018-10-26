@@ -172,12 +172,12 @@ namespace Hedra.Engine.Loader
 		    _frustumPoints.Update(points, Vector3.SizeInBytes * points.Length);
 		    
 		    _frustumVAO.Bind();
-		    Renderer.Passthrough.Bind();
+		    Shader.Passthrough.Bind();
 
-            GL.PointSize(10);
+            Renderer.PointSize(10);
 		    Renderer.DrawArrays(PrimitiveType.Points, 0, _frustumPoints.Count);
 		    
-		    Renderer.Passthrough.Unbind();
+		    Shader.Passthrough.Unbind();
 		    _frustumVAO.Unbind();
 	    }
 	    
