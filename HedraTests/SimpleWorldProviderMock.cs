@@ -41,6 +41,7 @@ namespace HedraTests
         public virtual ReadOnlyCollection<BaseStructure> Structures => null;
         public virtual ReadOnlyCollection<ICollidable> GlobalColliders => null;
         public virtual Dictionary<Vector2, Chunk> DrawingChunks => null;
+        public virtual Dictionary<Vector2, Chunk> ShadowDrawingChunks => null;
         public virtual int MenuSeed => 0;
         public virtual int RandomSeed => 0;
         

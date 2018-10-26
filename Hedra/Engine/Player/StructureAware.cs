@@ -24,10 +24,8 @@ namespace Hedra.Engine.Player
         }
         
         public void Update()
-        {           
-            var collidableStructures = (from item in World.StructureGenerator.Structures
-                where (item.Position.Xz - _player.Position.Xz).LengthSquared < item.Radius * item.Radius
-                select item).ToArray();
+        {
+            var collidableStructures = StructureGenerator.GetNearStructures(_player.Position);
 
             if (this.NeedsUpdating(collidableStructures))
             {

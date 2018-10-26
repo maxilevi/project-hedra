@@ -19,6 +19,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 
@@ -48,6 +49,7 @@ namespace Hedra.Engine.Player
         private Animation _sleepAnimation;
 	    private Animation _jumpAnimation;
 	    private Animation _sailingAnimation;
+	    private Animation _helloAnimation;
 	    public Joint LeftShoulderJoint { get; private set; }
 	    public Joint RightShoulderJoint { get; private set; }
 	    public Joint LeftElbowJoint { get; private set; }
@@ -158,6 +160,8 @@ namespace Hedra.Engine.Player
             _sleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
 	        _jumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
 	        _sailingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSit.dae");
+	        _helloAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorHello.dae");
+	        _helloAnimation.Loop = false;
 	        
 			_rollAnimation.OnAnimationEnd += delegate
 			{ 
@@ -358,6 +362,17 @@ namespace Hedra.Engine.Player
 		    Model.BlendAnimation(Animation);
 	    }
 
+	    public void Greet(Action Callback)
+	    {
+		    void OnEndLambda(Animation Sender)
+		    {
+			    Callback();
+			    _helloAnimation.OnAnimationEnd -= OnEndLambda;
+		    };
+		    _helloAnimation.OnAnimationEnd += OnEndLambda;
+		    PlayAnimation(_helloAnimation);
+	    }
+	    
 	    public void Reset()
 	    {
 		    Model.Reset();

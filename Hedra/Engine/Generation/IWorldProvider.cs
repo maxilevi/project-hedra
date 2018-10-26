@@ -61,6 +61,8 @@ namespace Hedra.Engine.Generation
         ReadOnlyCollection<ICollidable> GlobalColliders { get; }
 
         Dictionary<Vector2, Chunk> DrawingChunks { get; }
+        
+        Dictionary<Vector2, Chunk> ShadowDrawingChunks { get; }
 
         void Load();
 

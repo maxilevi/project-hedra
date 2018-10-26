@@ -9,8 +9,10 @@ using OpenTK;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.StructureSystem;
 
 namespace Hedra.Engine.PhysicsSystem
 {
@@ -227,34 +229,40 @@ namespace Hedra.Engine.PhysicsSystem
 			return World.GetHighest((int)X, (int)Z);
 		}	
 		
-		public static bool IsColliding(Vector3 Position, Box Hitbox)
+		public static bool IsColliding(Vector3 Position, Box Box)
 		{
-			Chunk UnderChunk = World.GetChunkAt(Position);
-			Chunk UnderChunkR = World.GetChunkAt(Position + new Vector3(Chunk.Width,0, 0));
-			Chunk UnderChunkL = World.GetChunkAt(Position - new Vector3(Chunk.Width,0, 0));
-			Chunk UnderChunkF = World.GetChunkAt(Position + new Vector3(0,0,Chunk.Width));
-			Chunk UnderChunkB = World.GetChunkAt(Position - new Vector3(0,0,Chunk.Width));
+			var underChunk = World.GetChunkAt(Position);
+			var underChunkR = World.GetChunkAt(Position + new Vector3(Chunk.Width,0, 0));
+			var underChunkL = World.GetChunkAt(Position - new Vector3(Chunk.Width,0, 0));
+			var underChunkF = World.GetChunkAt(Position + new Vector3(0,0,Chunk.Width));
+			var underChunkB = World.GetChunkAt(Position - new Vector3(0,0,Chunk.Width));
 			
-			List<ICollidable> Collisions = new List<ICollidable>();
-			Collisions.AddRange(World.GlobalColliders);
+			var collisions = new List<ICollidable>();
+			collisions.AddRange(World.GlobalColliders);
 			
-			try{
-				if(UnderChunk != null)
-					Collisions.AddRange(UnderChunk.CollisionShapes);
-				if(UnderChunkL != null)
-					Collisions.AddRange(UnderChunkL.CollisionShapes);
-				if(UnderChunkR != null)
-					Collisions.AddRange(UnderChunkR.CollisionShapes);
-				if(UnderChunkF != null)
-					Collisions.AddRange(UnderChunkF.CollisionShapes);
-				if(UnderChunkB != null)
-					Collisions.AddRange(UnderChunkB.CollisionShapes);
-			}catch(IndexOutOfRangeException e){
+			try
+			{
+				if(underChunk != null)
+					collisions.AddRange(underChunk.CollisionShapes);
+				if(underChunkL != null)
+					collisions.AddRange(underChunkL.CollisionShapes);
+				if(underChunkR != null)
+					collisions.AddRange(underChunkR.CollisionShapes);
+				if(underChunkF != null)
+					collisions.AddRange(underChunkF.CollisionShapes);
+				if(underChunkB != null)
+					collisions.AddRange(underChunkB.CollisionShapes);
+			}
+			catch(IndexOutOfRangeException e)
+			{
 				Log.WriteLine(e.ToString());
 			}
-				
-			for(int i = 0; i < Collisions.Count; i++){
-				if(Physics.Collides(Collisions[i], Hitbox))
+
+			var structures = StructureGenerator.GetNearStructures(Position);
+			collisions.AddRange(structures.SelectMany(S => S.Colliders));
+			for (var i = 0; i < collisions.Count; i++)
+			{
+				if (Collides(collisions[i], Box))
 					return true;
 			}
 			return false;
@@ -277,16 +285,18 @@ namespace Hedra.Engine.PhysicsSystem
 		    return GJKCollision.Collides(obj1Box.ToShape(), Obj2 as CollisionShape);
 		}
 
-		public static bool AABBvsAABB(Box a, Box b) {
-			return a.Min.X  <= b.Max.X && a.Max.X >= b.Min.X &&
-                a.Min.Y  <= b.Max.Y && a.Max.Y >= b.Min.Y &&
-                a.Min.Z  <= b.Max.Z && a.Max.Z  >= b.Min.Z;
+		private static bool AABBvsAABB(Box A, Box B)
+		{
+			return A.Min.X  <= B.Max.X && A.Max.X >= B.Min.X &&
+                A.Min.Y  <= B.Max.Y && A.Max.Y >= B.Min.Y &&
+                A.Min.Z  <= B.Max.Z && A.Max.Z  >= B.Min.Z;
 		}
 		
-		public static bool AABBvsPoint(Box a, Vector3 P) {
-		  return P.X >= a.Min.X && P.X <= a.Max.X &&
-                P.Y >= a.Min.Y && P.Y <= a.Max.Y &&
-                P.Z >= a.Min.Y && P.Z <= a.Max.Z;
+		public static bool AABBvsPoint(Box A, Vector3 P)
+		{
+		  return P.X >= A.Min.X && P.X <= A.Max.X &&
+                P.Y >= A.Min.Y && P.Y <= A.Max.Y &&
+                P.Z >= A.Min.Y && P.Z <= A.Max.Z;
 		}
 	}		
 }

@@ -55,6 +55,7 @@ namespace Hedra.Engine.Player
         void Attack(float Damage);
         void ApplyEffectWhile(EffectType NewType, Func<bool> Condition);
         void ProcessHit(bool HittedSomething);
+        void Greet();
         Item MainWeapon { get; }
         float BaseSpeed { get; }
         float MaxHealth { get; }

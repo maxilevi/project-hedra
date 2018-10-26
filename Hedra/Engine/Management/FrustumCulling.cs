@@ -34,13 +34,13 @@ namespace Hedra.Engine.Management
         public Matrix4 ModelViewMatrix = Matrix4.Identity;
         private bool IsFrustumCalculated;
 		
-		public bool IsInsideFrustum(ICullable CullableObject)
+		public bool IsInsideFrustum(ICullable CullableObject, float Multiplier = 1)
 		{
 			if (!CullableObject.Enabled) return false;
             var box = CullableObject.CullingBox;
 		    if (box == null) return false;
-		    _cacheBox.Min = box.Min + CullableObject.Position;
-		    _cacheBox.Max = box.Max + CullableObject.Position;
+		    _cacheBox.Min = box.Min * Multiplier + CullableObject.Position;
+		    _cacheBox.Max = box.Max * Multiplier + CullableObject.Position;
             return this.BoxInFrustum(_cacheBox);
 		}
         

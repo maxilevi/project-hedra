@@ -54,7 +54,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 ProcessInstanceData(instanceElements[i], Input.StaticData, i);
             }
 
-            if (Lod == 1)
+            if (_parent.HasLodedElements)
             {
                 var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
                 for (var i = 0; i < lodedInstanceElements.Length; i++)
@@ -81,8 +81,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
 
             if (CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache))
-                model.Extradata = CacheManager.CachedExtradata[Element.ExtraDataCache]
-                    .Clone();
+                model.Extradata = CacheManager.CachedExtradata[Element.ExtraDataCache].Clone();
             else
                 model.Extradata = Element.ExtraData;
 
@@ -123,6 +122,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
             //Manually add these vertex data's for maximum performance
             for (var k = 0; k < model.Indices.Count; k++)
                 model.Indices[k] += (uint) Model.Vertices.Count;
+
+            if (model.Extradata.Count != model.Colors.Count)
+                throw new ArgumentOutOfRangeException("Extradata or color mismatch");
+            for (var i = 0; i < model.Extradata.Count; i++)
+            {
+                model.Colors[i] = new Vector4(model.Colors[i].Xyz, model.Extradata[i]);
+            }
 
             Model.Vertices.AddRange(model.Vertices);
             Model.Colors.AddRange(model.Colors);

@@ -36,11 +36,14 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 		    boss.MaxHealth *= (float) (Math.Log(GameManager.Player.Level) + 1);
 		    boss.Health = boss.MaxHealth;
 		    var dmgComponent = boss.SearchComponent<DamageComponent>();
+			dmgComponent.Immune = true;
             var healthBarComponent = new BossHealthBarComponent(boss, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
 			
             boss.RemoveComponent(boss.SearchComponent<HealthBarComponent>());
 		    dmgComponent.XpToGive += (int) (GameManager.Player.Level * .25f);
-            dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args) {
+            dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args)
+            {
+	            if (dmgComponent.Immune && Args.Damager is IPlayer) dmgComponent.Immune = false;
 			    if (!(Args.Victim.Health <= 0)) return;
 
 			    GameManager.Player.MessageDispatcher.ShowMessage("YOU EARNED "+(int)dmgComponent.XpToGive + " XP!", 3f, Colors.Violet.ToColor());

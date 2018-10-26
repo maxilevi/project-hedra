@@ -71,6 +71,13 @@ namespace Hedra.Engine.StructureSystem
 			}
 		}
 
+		public static CollidableStructure[] GetNearStructures(Vector3 Position)
+		{
+			return (from item in World.StructureGenerator.Structures
+				where (item.Position.Xz - Position.Xz).LengthSquared < item.Radius * item.Radius
+				select item).ToArray();
+		}
+
 		public void Discard()
 		{
 			this.MerchantPosition = Vector3.Zero;

@@ -203,6 +203,11 @@ namespace Hedra.Engine.Player
             {
                 if (!_player.IsUnderwater) this.Jump();
             });
+            
+            this.RegisterKey(Key.H, delegate
+            {
+                _player.Greet();
+            });
 
             this.RegisterKey(Key.F, delegate
             {
@@ -295,7 +300,7 @@ namespace Hedra.Engine.Player
             {
                 Recorder.Active = !Recorder.Active;
             }
-            if (EventArgs.Key == Key.H && _player.CanInteract) GameSettings.LockFrustum = !GameSettings.LockFrustum;
+            if (EventArgs.Key == Key.O && _player.CanInteract) GameSettings.LockFrustum = !GameSettings.LockFrustum;
 
             if (EventArgs.Key == Key.Number7 && _player.CanInteract)
             {

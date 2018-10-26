@@ -79,6 +79,11 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void Greet()
+        {
+            throw new NotImplementedException();
+        }
+
         public Item MainWeapon { get; }
         public float BaseSpeed { get; }
         public bool Destroy { get; set; }

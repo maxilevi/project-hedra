@@ -67,6 +67,8 @@ namespace Hedra.Engine.Game
         
         public static bool Shadows => ShadowQuality != 0 && GlobalShadows;
         
+        [Setting] public static bool SmoothLod { get; set; } = true;
+        
         [Setting] public static bool Bloom { get; set; } = true;
 
         [Setting] public static bool Autosave { get; set; } = true;

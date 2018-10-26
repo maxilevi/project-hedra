@@ -262,6 +262,16 @@ namespace Hedra.Engine.Player
 	        ComponentManager.AddComponentWhile(new HealthBonusComponent(this, BonusHealth), Condition);
 	    }
 
+		public void Greet()
+		{
+			CanInteract = false;
+			Movement.CaptureMovement = false;
+			Model.Greet(delegate
+			{
+				CanInteract = true;
+				Movement.CaptureMovement = true;
+			});
+		}
 
         public void ApplyEffectWhile(EffectType NewType, Func<bool> Condition)
 	    {
@@ -316,7 +326,8 @@ namespace Hedra.Engine.Player
             set => this.BaseAttackSpeed = value;
 	    }
 		
-        public float XP {
+        public float XP
+        {
 			get => _xp;
             set{
 				_xp = value;
@@ -343,7 +354,8 @@ namespace Hedra.Engine.Player
 			}
 		}
 		
-        public virtual Item Ring { 
+        public virtual Item Ring
+        { 
 			get => _ring;
             set{
 			    if (this.Ring == value)  return;             

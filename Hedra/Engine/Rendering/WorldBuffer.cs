@@ -236,7 +236,7 @@ namespace Hedra.Engine.Rendering
 			return Entry;                                   
 		}
 		
-		public int[] BuildCounts(Dictionary<Vector2, Chunk> ToDraw, out IntPtr[] Offsets, bool Shadows = false)
+		public int[] BuildCounts(Dictionary<Vector2, Chunk> ToDraw, out IntPtr[] Offsets)
 		{
 			int[] counts;
 			if (_chunkPairs == null)

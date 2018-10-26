@@ -14,15 +14,12 @@ namespace Hedra.Engine.Game
 	/// </summary>
 	public static class GeneralSettings
 	{
-		public static bool CollectPerformanceMetrics = false;
-		public static int MaxWeights = 3;
-	    public static int MaxJoints = 50;
-
-		static GeneralSettings()
-		{
-			#if DEBUG
-			CollectPerformanceMetrics = true;
-			#endif
-		}
+		public const float Lod1DistanceSquared = 288 * 288;
+		public const float Lod2DistanceSquared = 512 * 512;
+		public const float Lod3DistanceSquared = 1024 * 1024;
+		public const float LodElementsDistanceSquared = 320 * 320;
+		public const float MaxLodDitherDistance = 256;
+		public const float MinLodDitherDistance = 200;
+		public const int MaxWeights = 3;
 	}
 }

@@ -63,14 +63,14 @@ namespace Hedra.Engine.Rendering
 	        DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
         }
 
-		public static void Render(Dictionary<Vector2, Chunk> ToDraw, WorldRenderType Type)
+		public static void Render(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ToDrawShadow, WorldRenderType Type)
 		{
             
-			if(ToDraw.Cou   nt == 0) return;
+			if(ToDraw.Count == 0) return;
 			
 			if(Type == WorldRenderType.Static)
 			{
-				TerrainDraw(ToDraw);
+				TerrainDraw(ToDraw, ToDrawShadow);
 				InstanceDraw(ToDraw);
 			}
 			else if(Type == WorldRenderType.Water)
@@ -83,21 +83,21 @@ namespace Hedra.Engine.Rendering
 		{
 			var counts = InstanceBuffer.BuildCounts(ToDraw, out var offsets);
 
-			InstanceBuffer.Bind();
+            InstanceBuffer.Bind();
 			InstanceBuffer.BindIndices();
-            StaticShader["Dither"] = 1;
-            StaticShader["MaxDitherDistance"] = 228f;
-			StaticShader["MinDitherDistance"] = 200f;
+            StaticShader["Dither"] = GameSettings.SmoothLod ? 1 : 0;
+            StaticShader["MaxDitherDistance"] = GeneralSettings.MaxLodDitherDistance;
+			StaticShader["MinDitherDistance"] = GeneralSettings.MinLodDitherDistance;
 			
 			Renderer.MultiDrawElements(PrimitiveType.Triangles, counts, DrawElementsType.UnsignedInt, offsets, counts.Length);
 			
             StaticUnBind();
         }
 		
-		private static void TerrainDraw(Dictionary<Vector2, Chunk> ToDraw)
+		private static void TerrainDraw(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ShadowDraw)
 		{
             int[] Counts = StaticBuffer.BuildCounts(ToDraw, out IntPtr[]  Offsets);
-			int[] ShadowCounts = StaticBuffer.BuildCounts(ToDraw, out IntPtr[] ShadowOffsets, true);
+			int[] ShadowCounts = StaticBuffer.BuildCounts(ShadowDraw, out IntPtr[] ShadowOffsets);
 				
 			StaticBuffer.Bind(false);
 			Renderer.EnableVertexAttribArray(0);
@@ -188,7 +188,7 @@ namespace Hedra.Engine.Rendering
 
             StaticShader["PlayerPosition"] = GameManager.Player.Position;
 		    StaticShader["Time"] = !GameManager.InStartMenu ? Time.AccumulatedFrameTime : Time.IndependentAccumulatedFrameTime;
-		    StaticShader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
+		    //StaticShader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
 			//StaticShader["Snow"] = SkyManager.Snowing ? 1.0f : 0.0f;
 			StaticShader["Dither"] = 0;
 			StaticShader["UseShadows"] = (float) GameSettings.ShadowQuality * (GameSettings.Shadows ? 1f : 0f);

@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player.BoatSystem
         
         public void Update()
         {
-            const float propulsionFactor = 45.0f;
+            const float propulsionFactor = 35.0f;
             var any = GameManager.Keyboard[Key.W] || GameManager.Keyboard[Key.A] || GameManager.Keyboard[Key.D];
             if (GameManager.Keyboard[Key.W])
             {

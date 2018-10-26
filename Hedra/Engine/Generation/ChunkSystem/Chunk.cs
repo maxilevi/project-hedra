@@ -179,15 +179,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void UploadMesh(ChunkMeshBuildOutput Input)
         {
-            if (Mesh == null || Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
-                Input.StaticData.Extradata.Count != Input.StaticData.Vertices.Count ||
-                Input.StaticData.Extradata.Count != Input.StaticData.Colors.Count) return;
+            if (Mesh == null ||
+                Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
+                Input.InstanceData.Colors.Count != Input.InstanceData.Vertices.Count) throw new ArgumentException("Chunk index mismatch.");
 
-            for (var i = 0; i < Input.StaticData.Extradata.Count; i++)
-            {
-                var edata = Input.StaticData.Extradata[i];
-                Input.StaticData.Colors[i] = new Vector4(Input.StaticData.Colors[i].Xyz, edata);
-            }
             var staticMin = new Vector3(
                 Input.StaticData.SupportPoint(-Vector3.UnitX).X - OffsetX,
                 Input.StaticData.SupportPoint(-Vector3.UnitY).Y,
@@ -221,11 +216,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Input.InstanceData?.Dispose();
                 Input.WaterData?.Dispose();
             });
-        }
-
-        public Block GetBlockAt(Vector3 V)
-        {
-            return this.GetBlockAt((int) V.X, (int) V.Y, (int) V.Z);
         }
 
         public Block GetBlockAt(int X, int Y, int Z)
@@ -460,14 +450,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void AddInstance(InstanceData Data, bool AffectedByLod = false)
         {
             if (Mesh == null) throw new ArgumentException($"Failed to add instance data ");
-            
+       
             StaticBuffer.AddInstance(Data, AffectedByLod);
         }
 
         public void AddCollisionShape(params ICollidable[] Data)
         {
             if (Mesh == null) throw new ArgumentException($"Failed to add collision shape");
-;
+
             lock (Mesh.CollisionBoxes)
             {
                 for (var i = 0; i < Data.Length; i++)
@@ -492,14 +482,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             get
             {
-                Chunk n1 = World.GetChunkByOffset(OffsetX + Width, OffsetZ);
-                Chunk n2 = World.GetChunkByOffset(OffsetX, OffsetZ + Width);
-                Chunk n3 = World.GetChunkByOffset(OffsetX + Width, OffsetZ + Width);
-                Chunk n4 = World.GetChunkByOffset(OffsetX - Width, OffsetZ);
-                Chunk n5 = World.GetChunkByOffset(OffsetX, OffsetZ - Width);
-                Chunk n6 = World.GetChunkByOffset(OffsetX - Width, OffsetZ - Width);
-                Chunk n7 = World.GetChunkByOffset(OffsetX + Width, OffsetZ - Width);
-                Chunk n8 = World.GetChunkByOffset(OffsetX - Width, OffsetZ + Width);
+                var n1 = World.GetChunkByOffset(OffsetX + Width, OffsetZ);
+                var n2 = World.GetChunkByOffset(OffsetX, OffsetZ + Width);
+                var n3 = World.GetChunkByOffset(OffsetX + Width, OffsetZ + Width);
+                var n4 = World.GetChunkByOffset(OffsetX - Width, OffsetZ);
+                var n5 = World.GetChunkByOffset(OffsetX, OffsetZ - Width);
+                var n6 = World.GetChunkByOffset(OffsetX - Width, OffsetZ - Width);
+                var n7 = World.GetChunkByOffset(OffsetX + Width, OffsetZ - Width);
+                var n8 = World.GetChunkByOffset(OffsetX - Width, OffsetZ + Width);
 
                 return n1 != null && n2 != null && n3 != null && n4 != null 
                     && n5 != null && n6 != null && n7 != null && n8 != null 
@@ -531,8 +521,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        public Block[][] this[int Index] => !Landscape.StructuresPlaced || !Landscape.BlocksSetted 
-            ? _dummyBlocks 
+        public Block[][] this[int Index] => !Landscape.StructuresPlaced || !Landscape.BlocksSetted || Disposed 
+            ? _dummyBlocks
             : _blocks[Index];
 
         public Vector3[] TerrainVertices => _terrainVertices;

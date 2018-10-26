@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Hedra.Engine.Loader;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.ItemSystem
@@ -8,24 +10,25 @@ namespace Hedra.Engine.ItemSystem
     public static class ItemFactory
     {
         private static readonly Dictionary<string, ItemTemplate> ItemTemplates;
-        private static readonly object _lock = new object();
-        public static ItemTemplater Templater;
+        private static readonly object Lock = new object();
+        public static ItemTemplater Templater { get; }
 
         static ItemFactory()
         {
             ItemTemplates = new Dictionary<string, ItemTemplate>();
-            Templater = new ItemTemplater(ItemTemplates, _lock);
+            Templater = new ItemTemplater(ItemTemplates, Lock);
         }
 
         public static void LoadModules(string AppPath)
         {
-            lock (_lock)
+            lock (Lock)
             {
                 ItemTemplates.Clear();
+                var modules = Directory.GetFiles($"{AppPath}/Modules/Items/", "*", SearchOption.AllDirectories);
+                var mods = ModificationsLoader.Get("/Items/");
+                var itemTemplates = Load<ItemTemplate>(modules.Concat(mods).ToArray());
 
-                ItemTemplate[] itemTemplates = Load<ItemTemplate>(AppPath + "/Modules/Items/");
-
-                foreach (ItemTemplate template in itemTemplates)
+                foreach (var template in itemTemplates)
                 {
                     ItemModelLoader.Load(template.Model);
                     ItemTemplates.Add(template.Name.ToLowerInvariant(), template);
@@ -33,13 +36,12 @@ namespace Hedra.Engine.ItemSystem
             }
         }
 
-        private static T[] Load<T>(string CompletePath)
+        private static T[] Load<T>(string[] Modules)
         {
             var list = new List<T>();
-            string[] modules = Directory.GetFiles(CompletePath, "*", SearchOption.AllDirectories);
-            foreach (string module in modules)
+            foreach (var module in Modules)
             {
-                string ext = Path.GetExtension(module);
+                var ext = Path.GetExtension(module);
                 if (ext != ".json") continue;
 
                 var obj = FromJSON<T>(File.ReadAllText(module), out bool result);
@@ -47,7 +49,7 @@ namespace Hedra.Engine.ItemSystem
                 if (!result) continue;
 
                 list.Add(obj);
-            }
+            }           
             return list.ToArray();
         }
 

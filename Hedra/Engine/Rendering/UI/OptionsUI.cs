@@ -365,6 +365,16 @@ namespace Hedra.Engine.Rendering.UI
 				};
 			}
 
+			var smoothLod = new Button(new Vector2(0, .0f),
+				new Vector2(0.15f, 0.075f), "Smooth LOD: " + (GameSettings.SmoothLod ? "ON" : "OFF"), 0,
+				fontColor, _normalFont);
+
+			smoothLod.Click += delegate
+			{
+				GameSettings.SmoothLod = !GameSettings.SmoothLod;
+				smoothLod.Text.Text = "Smooth LOD: " + (GameSettings.SmoothLod ? "ON" : "OFF");
+			};
+			
 			string[] volumeOptions = new string[]{"0%","5%","10%","15%","20%","25%","30%","35%","40%","45%","50%","55%","60%","65%","70%","75%","80%","85%","90%","95%","100%"};
 			OptionChooser musicVolume = new OptionChooser(new Vector2(0, .6f), new Vector2(0.15f, 0.075f), "Music Volume: ",  fontColor, _normalFont,
 			                                             volumeOptions, false);
@@ -454,6 +464,7 @@ namespace Hedra.Engine.Rendering.UI
 			_audioButtons.Add(sfxVolume);
 			_displayButtons.Add(showChat);
 			_displayButtons.Add(showMinimap);
+			_displayButtons.Add(smoothLod);
 			if(showConsole != null) _displayButtons.Add(showConsole);
 			
 			AddElement(_controls);

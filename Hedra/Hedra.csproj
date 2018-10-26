@@ -1162,43 +1162,43 @@
     <None Include="Shaders\Includes\Lighting.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\BoatMove.ogg">
+    <None Include="..\project-hedra-assets\Sounds\BoatMove.ogg">
       <Link>Sounds\BoatMove.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\PreparingAttack.ogg">
+    <None Include="..\project-hedra-assets\Sounds\PreparingAttack.ogg">
       <Link>Sounds\PreparingAttack.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\River.ogg">
+    <None Include="..\project-hedra-assets\Sounds\River.ogg">
       <Link>Sounds\Soundtrack\River.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\HostageSituation.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\HostageSituation.ogg">
       <Link>Sounds\Soundtrack\HostageSituation.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\OnTheLam.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\OnTheLam.ogg">
       <Link>Sounds\Soundtrack\OnTheLam.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Soundtrack\TheVillage.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\TheVillage.ogg">
       <Link>Sounds\Soundtrack\TheVillage.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Swimming.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Swimming.ogg">
       <Link>Sounds\Swimming.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Swoosh.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Swoosh.ogg">
       <Link>Sounds\Swoosh.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\Underwater.ogg">
+    <None Include="..\project-hedra-assets\Sounds\Underwater.ogg">
       <Link>Sounds\Underwater.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sounds\WaterSplash.ogg">
+    <None Include="..\project-hedra-assets\Sounds\WaterSplash.ogg">
       <Link>Sounds\WaterSplash.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -4779,7 +4779,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Sounds\Fireplace.ogg">
-      <Link>Sounds\VillageAmbient.ogg</Link>
+      <Link>Sounds\Fireplace.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Sounds\Soundtrack\ForestAmbient.ogg">

@@ -51,8 +51,8 @@ namespace Hedra.Engine.StructureSystem
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return false && Rng.Next(0, 50) == 1 && height > 0;
+            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
+            return false && Rng.Next(0, 5) == 1 && height > 0;
         }
     }
 }

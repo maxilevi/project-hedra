@@ -58,6 +58,7 @@ namespace Hedra.Engine.Generation
             _renderingComparer = new RenderingComparer();
             SearcheableChunks = new Dictionary<Vector2, Chunk>();
             DrawingChunks = new Dictionary<Vector2, Chunk>();
+            ShadowDrawingChunks = new Dictionary<Vector2, Chunk>();
         }
 
         public event ModulesReloadEvent ModulesReload;
@@ -79,6 +80,7 @@ namespace Hedra.Engine.Generation
         public int AverageGenerationTime => _chunkBuilder.AverageWorkTime;
 
         public Dictionary<Vector2, Chunk> DrawingChunks { get; }
+        public Dictionary<Vector2, Chunk> ShadowDrawingChunks { get; }
 
         public void Load()
         {
@@ -139,6 +141,7 @@ namespace Hedra.Engine.Generation
                 return;
 
             DrawingChunks.Clear();
+            ShadowDrawingChunks.Clear();
             var toDrawArray = Chunks;
             for (var i = 0; i < toDrawArray.Count; i++)
             {
@@ -150,8 +153,18 @@ namespace Hedra.Engine.Generation
                     continue;
                 }
 
-                if (!WorldRenderer.EnableCulling || chunk.Initialized && FrustumObject.IsInsideFrustum(chunk.Mesh))
+                if (WorldRenderer.EnableCulling)
+                {
+                    if(!chunk.Initialized) continue;
+                    
+                    if (FrustumObject.IsInsideFrustum(chunk.Mesh))
+                        DrawingChunks.Add(offset, chunk);
+                }
+                else
+                {
                     DrawingChunks.Add(offset, chunk);
+                }
+                ShadowDrawingChunks.Add(offset, chunk);
             }
 
             _renderingComparer.Position = GameManager.Player.Position;
@@ -164,7 +177,7 @@ namespace Hedra.Engine.Generation
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             WorldRenderer.PrepareRendering();
-            WorldRenderer.Render(DrawingChunks, Type);
+            WorldRenderer.Render(DrawingChunks, ShadowDrawingChunks, Type);
 
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
         }
