@@ -1,4 +1,4 @@
-﻿/* OpenSimplex Noise in C#
+/* OpenSimplex Noise in C#
  * Ported from https://gist.github.com/KdotJPG/b1270127455a94ac5d19
  * and heavily refactored to improve performance. */
 
@@ -20,30 +20,30 @@ namespace Hedra.Engine.Generation
 
         private static double[] gradients2D = new double[]
         {
-		     5,  2,    2,  5,
-		    -5,  2,   -2,  5,
-		     5, -2,    2, -5,
-		    -5, -2,   -2, -5,
-	    };
+             5,  2,    2,  5,
+            -5,  2,   -2,  5,
+             5, -2,    2, -5,
+            -5, -2,   -2, -5,
+        };
 
         private static double[] gradients3D =
         {
-		    -11,  4,  4,     -4,  11,  4,    -4,  4,  11,
-		     11,  4,  4,      4,  11,  4,     4,  4,  11,
-		    -11, -4,  4,     -4, -11,  4,    -4, -4,  11,
-		     11, -4,  4,      4, -11,  4,     4, -4,  11,
-		    -11,  4, -4,     -4,  11, -4,    -4,  4, -11,
-		     11,  4, -4,      4,  11, -4,     4,  4, -11,
-		    -11, -4, -4,     -4, -11, -4,    -4, -4, -11,
-		     11, -4, -4,      4, -11, -4,     4, -4, -11,
-	    };
+            -11,  4,  4,     -4,  11,  4,    -4,  4,  11,
+             11,  4,  4,      4,  11,  4,     4,  4,  11,
+            -11, -4,  4,     -4, -11,  4,    -4, -4,  11,
+             11, -4,  4,      4, -11,  4,     4, -4,  11,
+            -11,  4, -4,     -4,  11, -4,    -4,  4, -11,
+             11,  4, -4,      4,  11, -4,     4,  4, -11,
+            -11, -4, -4,     -4, -11, -4,    -4, -4, -11,
+             11, -4, -4,      4, -11, -4,     4, -4, -11,
+        };
 
         private static Contribution2[] lookup2D;
         private static Contribution3[] lookup3D;
         private static Random rng;
         
         public static void Load(long seed){
-			
+            
             perm = new byte[256];
             perm2D = new byte[256];
             perm3D = new byte[256];

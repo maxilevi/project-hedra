@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem

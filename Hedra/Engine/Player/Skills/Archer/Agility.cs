@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 19/02/2017
@@ -12,28 +12,28 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.Player.Skills.Archer
 {
-	public class Agility : PassiveSkill
-	{
-		private float StaminaFormula(bool Clamp = false)
-		{
-			if(Clamp)
-				return -1f * Math.Max(Level,1);
-			return -1f * Level;
-		}
+    public class Agility : PassiveSkill
+    {
+        private float StaminaFormula(bool Clamp = false)
+        {
+            if(Clamp)
+                return -1f * Math.Max(Level,1);
+            return -1f * Level;
+        }
 
-		protected override void OnChange()
-		{
-			Player.DodgeCost = Humanoid.DefaultDodgeCost + StaminaFormula();
-		}
+        protected override void OnChange()
+        {
+            Player.DodgeCost = Humanoid.DefaultDodgeCost + StaminaFormula();
+        }
 
-		protected override void Remove()
-		{
-			Player.DodgeCost = Humanoid.DefaultDodgeCost;
-		}
+        protected override void Remove()
+        {
+            Player.DodgeCost = Humanoid.DefaultDodgeCost;
+        }
 
-		protected override int MaxLevel => 10;
-		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Agility.png");
-		public override string Description => $"Dodging costs {-StaminaFormula(true)} less stamina.";
-		public override string DisplayName => "Agility";
-	}
+        protected override int MaxLevel => 10;
+        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Agility.png");
+        public override string Description => $"Dodging costs {-StaminaFormula(true)} less stamina.";
+        public override string DisplayName => "Agility";
+    }
 }

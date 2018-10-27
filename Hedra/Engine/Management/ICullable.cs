@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Author: Zaphyk
  * Date: 03/02/2016
  * Time: 11:58 p.m.
@@ -9,10 +9,10 @@ using OpenTK;
 
 namespace Hedra.Engine.Management
 {
-	public interface ICullable
-	{
-		bool Enabled { get; set; }
-	    Vector3 Position { get; set; }
+    public interface ICullable
+    {
+        bool Enabled { get; set; }
+        Vector3 Position { get; set; }
         Box CullingBox { get; set; }
-	}
+    }
 }

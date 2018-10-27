@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;

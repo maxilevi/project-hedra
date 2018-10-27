@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.CacheSystem;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Sound;

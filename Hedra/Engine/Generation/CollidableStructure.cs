@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 27/08/2017
@@ -63,13 +63,13 @@ namespace Hedra.Engine.Generation
         }
 
         public void AddCollisionShape(params ICollidable[] IColliders)
-	    {
-	        lock (_lock)
-	        {
+        {
+            lock (_lock)
+            {
                 for(var i = 0; i < IColliders.Length; i++)
-	                _colliders.Add(IColliders[i]);
-	        }
-	    }
+                    _colliders.Add(IColliders[i]);
+            }
+        }
 
         public void AddStaticElement(params VertexData[] Models)
         {
@@ -106,5 +106,5 @@ namespace Hedra.Engine.Generation
                 }
             }
         }
-	}
+    }
 }

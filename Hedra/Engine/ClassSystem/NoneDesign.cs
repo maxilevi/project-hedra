@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;

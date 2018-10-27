@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Hedra.Engine;
 using Hedra.Engine.Rendering.Animation;
 using NUnit.Framework;

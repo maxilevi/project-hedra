@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 11/07/2016
@@ -18,46 +18,46 @@ using OpenTK;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
 {
-	/// <summary>
-	/// Description of BossGenerator.
-	/// </summary>
-	public static class BossGenerator
-	{
-		public static Entity Generate(MobType[] PossibleTypes, Vector3 Position, Random Rng)
-		{
-		    var type = PossibleTypes[Rng.Next(0, PossibleTypes.Length)];
-		    if (type == MobType.Troll)
-		    {
-		        type = MobType.Gorilla;
-		    }
+    /// <summary>
+    /// Description of BossGenerator.
+    /// </summary>
+    public static class BossGenerator
+    {
+        public static Entity Generate(MobType[] PossibleTypes, Vector3 Position, Random Rng)
+        {
+            var type = PossibleTypes[Rng.Next(0, PossibleTypes.Length)];
+            if (type == MobType.Troll)
+            {
+                type = MobType.Gorilla;
+            }
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);
-			boss.Position = Position;
-			boss.SearchComponent<IGuardAIComponent>().GuardPosition = Position;
-		    boss.MaxHealth *= (float) (Math.Log(GameManager.Player.Level) + 1);
-		    boss.Health = boss.MaxHealth;
-		    var dmgComponent = boss.SearchComponent<DamageComponent>();
-			dmgComponent.Immune = true;
+            boss.Position = Position;
+            boss.SearchComponent<IGuardAIComponent>().GuardPosition = Position;
+            boss.MaxHealth *= (float) (Math.Log(GameManager.Player.Level) + 1);
+            boss.Health = boss.MaxHealth;
+            var dmgComponent = boss.SearchComponent<DamageComponent>();
+            dmgComponent.Immune = true;
             var healthBarComponent = new BossHealthBarComponent(boss, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
-			
+            
             boss.RemoveComponent(boss.SearchComponent<HealthBarComponent>());
-		    dmgComponent.XpToGive += (int) (GameManager.Player.Level * .25f);
+            dmgComponent.XpToGive += (int) (GameManager.Player.Level * .25f);
             dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args)
             {
-			    if (!(Args.Victim.Health <= 0)) return;
+                if (!(Args.Victim.Health <= 0)) return;
 
-			    GameManager.Player.MessageDispatcher.ShowMessage("YOU EARNED "+(int)dmgComponent.XpToGive + " XP!", 3f, Colors.Violet.ToColor());
-			    healthBarComponent.Enabled = false;
-			};
-			boss.AddComponent(new SpawnComponent(boss, Position, () => dmgComponent.Immune = false));
-		    boss.Name = healthBarComponent.Name;
-		    boss.IsBoss = true;
-			boss.Physics.CanCollide = true;
-			
-			boss.AddComponent(dmgComponent);
-			boss.AddComponent(healthBarComponent);
-			
-			return boss;
-			
-		}
-	}
+                GameManager.Player.MessageDispatcher.ShowMessage("YOU EARNED "+(int)dmgComponent.XpToGive + " XP!", 3f, Colors.Violet.ToColor());
+                healthBarComponent.Enabled = false;
+            };
+            boss.AddComponent(new SpawnComponent(boss, Position, () => dmgComponent.Immune = false));
+            boss.Name = healthBarComponent.Name;
+            boss.IsBoss = true;
+            boss.Physics.CanCollide = true;
+            
+            boss.AddComponent(dmgComponent);
+            boss.AddComponent(healthBarComponent);
+            
+            return boss;
+            
+        }
+    }
 }

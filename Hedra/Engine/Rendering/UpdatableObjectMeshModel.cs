@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering
@@ -56,13 +56,13 @@ namespace Hedra.Engine.Rendering
             get => Model.LocalRotation;
             set => Model.LocalRotation = value;
         }
-		
+        
         public Vector3 LocalPosition
         {
             get => Model.LocalPosition;
             set => Model.LocalPosition = value;
         }
-		
+        
         public Vector3 BeforeLocalRotation
         {
             get => Model.BeforeLocalRotation;

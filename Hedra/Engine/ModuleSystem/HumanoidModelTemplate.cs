@@ -1,4 +1,4 @@
-﻿
+
 namespace Hedra.Engine.ModuleSystem
 {
     public class HumanoidModelTemplate

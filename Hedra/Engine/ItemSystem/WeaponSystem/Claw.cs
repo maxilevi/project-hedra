@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: Maxi Levi
  * Date: 08/05/2016
@@ -46,7 +46,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if(AttackEventType.Mid != Type) return;
             Owner.Attack(Owner.DamageEquation * .8f);
         }
-		
+        
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;

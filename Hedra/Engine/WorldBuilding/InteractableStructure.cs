@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 19/09/2016
@@ -19,94 +19,94 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.WorldBuilding
 {
-	/// <summary>
-	/// Description of ClaimableStrucuture.
-	/// </summary>
-	
-	public delegate void OnInteraction(IEntity Interactee);	
-	
-	public abstract class InteractableStructure : BaseStructure, IUpdatable
-	{
-	    public virtual float InteractionAngle => .9f;
-	    protected virtual bool DisposeAfterUse => true;
-		protected virtual bool CanInteract => true;
+    /// <summary>
+    /// Description of ClaimableStrucuture.
+    /// </summary>
+    
+    public delegate void OnInteraction(IEntity Interactee);    
+    
+    public abstract class InteractableStructure : BaseStructure, IUpdatable
+    {
+        public virtual float InteractionAngle => .9f;
+        protected virtual bool DisposeAfterUse => true;
+        protected virtual bool CanInteract => true;
         public virtual Key Key => Key.E;
         public abstract string Message { get; }
         public abstract int InteractDistance { get; }
-	    public bool Interacted { get; private set; }
+        public bool Interacted { get; private set; }
         public event OnInteraction OnInteractEvent;
-	    private bool _canInteract;
-	    private bool _shouldInteract;
-		private bool _selected;
+        private bool _canInteract;
+        private bool _shouldInteract;
+        private bool _selected;
 
         protected InteractableStructure()
-	    {
-	        EventDispatcher.RegisterKeyDown(this, delegate (object Sender, KeyEventArgs EventArgs)
-	        {
-	            if (_canInteract && Key == EventArgs.Key && !Interacted)
-	            {
-	                _shouldInteract = true;
+        {
+            EventDispatcher.RegisterKeyDown(this, delegate (object Sender, KeyEventArgs EventArgs)
+            {
+                if (_canInteract && Key == EventArgs.Key && !Interacted)
+                {
+                    _shouldInteract = true;
                     EventArgs.Cancel();
-	            }
-	        }, EventPriority.Normal);
-	        UpdateManager.Add(this);
+                }
+            }, EventPriority.Normal);
+            UpdateManager.Add(this);
         }
 
-	    public virtual void Update()
-	    {
-	        var player = GameManager.Player;
+        public virtual void Update()
+        {
+            var player = GameManager.Player;
 
-	        bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
-                player.View.LookingDirection.Xz.NormalizedFast()) > .9f;	            
-	        
+            bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
+                player.View.LookingDirection.Xz.NormalizedFast()) > .9f;                
+            
             bool IsInRadius() => (this.Position - player.Position).LengthSquared < InteractDistance * InteractDistance;
 
-	        if (IsInLookingAngle() && IsInRadius() && !Interacted && CanInteract)
-	        {
+            if (IsInLookingAngle() && IsInRadius() && !Interacted && CanInteract)
+            {
                 player.MessageDispatcher.ShowMessageWhile($"[{Key.ToString()}] {Message}", () => !Disposed && IsInLookingAngle() && IsInRadius());
-	            _canInteract = true;
-		        if(!_selected) this.OnSelected(player);
-	            if (_shouldInteract && !Interacted && !Disposed && CanInteract)
-	            {
-					this.InvokeInteraction(player);
+                _canInteract = true;
+                if(!_selected) this.OnSelected(player);
+                if (_shouldInteract && !Interacted && !Disposed && CanInteract)
+                {
+                    this.InvokeInteraction(player);
                 }
-	            else
-	            {
-	                _shouldInteract = false;
+                else
+                {
+                    _shouldInteract = false;
                 }
-	        }
-	        else
-	        {
-		        if(_selected) this.OnDeselected(player);
-	        }
+            }
+            else
+            {
+                if(_selected) this.OnDeselected(player);
+            }
         }
 
-		
-		public void InvokeInteraction(IPlayer Player)
-		{
-			Interacted = true;
-			this.Interact(Player);
-			OnInteractEvent?.Invoke(Player);
+        
+        public void InvokeInteraction(IPlayer Player)
+        {
+            Interacted = true;
+            this.Interact(Player);
+            OnInteractEvent?.Invoke(Player);
             if(DisposeAfterUse) this.Dispose();
-		}
-
-		protected virtual void OnSelected(IPlayer Interactee)
-		{
-			_selected = true;
-		}
-
-		protected virtual void OnDeselected(IPlayer Interactee)
-		{
-			_selected = false;
-		}
-
-		protected abstract void Interact(IPlayer Interactee);
-
-	    public override void Dispose()
-	    {
-            base.Dispose();
-	        UpdateManager.Remove(this);
-	        EventDispatcher.UnregisterKeyDown(this);
         }
-	}
+
+        protected virtual void OnSelected(IPlayer Interactee)
+        {
+            _selected = true;
+        }
+
+        protected virtual void OnDeselected(IPlayer Interactee)
+        {
+            _selected = false;
+        }
+
+        protected abstract void Interact(IPlayer Interactee);
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            UpdateManager.Remove(this);
+            EventDispatcher.UnregisterKeyDown(this);
+        }
+    }
 }

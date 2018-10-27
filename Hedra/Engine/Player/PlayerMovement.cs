@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -119,27 +119,27 @@ namespace Hedra.Engine.Player
                     this.ProcessMovement(_characterRotation, this.MoveFormula(_player.View.Right) * keysPresses);
                 }
                 
-		        if(GameManager.Keyboard[Key.ControlLeft] && _player.Physics.InFrontOfWall)
-		        {
-		            if(_player.Stamina > 5)
-		            {
-		                if (!_player.IsClimbing)
-		                {
-		                    _player.AddBonusSpeedWhile(-_player.Speed + _player.Speed * .15f, () => _player.IsClimbing);
-		                }
-		                _player.IsClimbing = true;
+                if(GameManager.Keyboard[Key.ControlLeft] && _player.Physics.InFrontOfWall)
+                {
+                    if(_player.Stamina > 5)
+                    {
+                        if (!_player.IsClimbing)
+                        {
+                            _player.AddBonusSpeedWhile(-_player.Speed + _player.Speed * .15f, () => _player.IsClimbing);
+                        }
+                        _player.IsClimbing = true;
                     }
-		            else
-		            {
-		            	if(_player.IsClimbing)
-			                _player.IsClimbing = false;
-		            }
-		        }
-		        else
-		        {
-		            if(_player.IsClimbing)
-		                _player.IsClimbing = false;
-		        }
+                    else
+                    {
+                        if(_player.IsClimbing)
+                            _player.IsClimbing = false;
+                    }
+                }
+                else
+                {
+                    if(_player.IsClimbing)
+                        _player.IsClimbing = false;
+                }
             }
 
 

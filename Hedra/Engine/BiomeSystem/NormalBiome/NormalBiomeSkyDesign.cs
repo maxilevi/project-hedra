@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hedra.Engine.Rendering;
 using OpenTK;
 

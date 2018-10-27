@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Hedra.Engine.PhysicsSystem;
 using NUnit.Framework;
 using OpenTK;

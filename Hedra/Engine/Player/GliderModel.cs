@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 28/07/2016
@@ -15,13 +15,13 @@ using Hedra.Engine.Rendering;
 namespace Hedra.Engine.Player
 {
 
-	public class GliderModel : UpdatableObjectMeshModel
-	{
-		public GliderModel() : base(null)
+    public class GliderModel : UpdatableObjectMeshModel
+    {
+        public GliderModel() : base(null)
         {
             Model = ObjectMesh.FromVertexData(
                 AssetManager.PLYLoader("Assets/Items/Misc/Glider.ply", Vector3.One * 2.0f)
                 );
-		}
-	}
+        }
+    }
 }

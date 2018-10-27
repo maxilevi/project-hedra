@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;

@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.ItemSystem
+namespace Hedra.Engine.ItemSystem
 {
     public enum EquipmentType
     {

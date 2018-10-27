@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 20/12/2016
@@ -10,13 +10,13 @@ using System;
 
 namespace Hedra.Engine.Management
 {
-	/// <summary>
-	/// Description of OcclusionState.
-	/// </summary>
-	public enum OcclusionState
-	{
-		HIDDEN,
-		VISIBLE,
-		WAITING
-	}
+    /// <summary>
+    /// Description of OcclusionState.
+    /// </summary>
+    public enum OcclusionState
+    {
+        HIDDEN,
+        VISIBLE,
+        WAITING
+    }
 }

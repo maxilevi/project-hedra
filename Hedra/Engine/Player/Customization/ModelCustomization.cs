@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.Player.Customization
+namespace Hedra.Engine.Player.Customization
 {
     public class ModelCustomization
     {

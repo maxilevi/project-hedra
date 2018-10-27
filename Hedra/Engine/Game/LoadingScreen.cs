@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;

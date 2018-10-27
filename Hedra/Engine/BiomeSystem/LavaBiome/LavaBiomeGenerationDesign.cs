@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -22,7 +22,7 @@ namespace Hedra.Engine.BiomeSystem.LavaBiome
                 double Mult = HeightCache[new Vector2(X, Z)][0];
 
                 //if(Mult > 0.0)
-                //	Density -=  Mathf.Clamp( 0.1 * Mult * OpenSimplexNoise.Evaluate(x * 0.0025, y * 0.0025,  z * 0.0025) * 32.0, 0, Mult);
+                //    Density -=  Mathf.Clamp( 0.1 * Mult * OpenSimplexNoise.Evaluate(x * 0.0025, y * 0.0025,  z * 0.0025) * 32.0, 0, Mult);
 
             }
 
@@ -85,7 +85,7 @@ namespace Hedra.Engine.BiomeSystem.LavaBiome
             }
 
             double LakeHeight = Mathf.Clamp((OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001) - .4f) * 48.0, 0, 32);
-            // Height -= LakeHeight * 4;	
+            // Height -= LakeHeight * 4;    
 
             Height += Mathf.Clamp(OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001) * 64.0, 0, float.MaxValue);
             Height += OpenSimplexNoise.Evaluate(X * 0.01, Z * 0.01) * 2.0;

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 02/02/2017
@@ -22,25 +22,25 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Player.MapSystem
 {
-	/// <summary>
-	/// Description of Minimap.
-	/// </summary>
-	public class Minimap : IRenderable, IAdjustable
-	{
-	    private static readonly Shader Shader = Shader.Build("Shaders/GUI.vert", "Shaders/MinimapGUI.frag");
+    /// <summary>
+    /// Description of Minimap.
+    /// </summary>
+    public class Minimap : IRenderable, IAdjustable
+    {
+        private static readonly Shader Shader = Shader.Build("Shaders/GUI.vert", "Shaders/MinimapGUI.frag");
         private readonly LocalPlayer _player;
-		private readonly Panel _panel;
-	    private readonly Texture _miniMap;
-	    private readonly RenderableTexture _mapCursor;
-	    private readonly RenderableTexture _miniMapRing;
-	    private readonly RenderableTexture _miniMapNorth;
-	    private readonly RenderableTexture _miniMapMarker;
-	    private readonly FBO _mapFbo;
+        private readonly Panel _panel;
+        private readonly Texture _miniMap;
+        private readonly RenderableTexture _mapCursor;
+        private readonly RenderableTexture _miniMapRing;
+        private readonly RenderableTexture _miniMapNorth;
+        private readonly RenderableTexture _miniMapMarker;
+        private readonly FBO _mapFbo;
         private bool _show;
-	    public bool HasMarker { get; private set; }
-	    public Vector3 MarkedDirection { get; private set; }
-	    private Vector3 _lastPosition;
-	    private int _previousActiveChunks;
+        public bool HasMarker { get; private set; }
+        public Vector3 MarkedDirection { get; private set; }
+        private Vector3 _lastPosition;
+        private int _previousActiveChunks;
 
         public Minimap(LocalPlayer Player)
         {
@@ -62,23 +62,23 @@ namespace Hedra.Engine.Player.MapSystem
             _panel.Disable();
         }
 
-		public void Adjust()
-		{
-			_miniMap.TextureElement.Adjust();
-		}
-		
-	    public void Mark(Vector3 Direction)
-	    {
-	        MarkedDirection = Direction;
-	        HasMarker = true;
+        public void Adjust()
+        {
+            _miniMap.TextureElement.Adjust();
+        }
+        
+        public void Mark(Vector3 Direction)
+        {
+            MarkedDirection = Direction;
+            HasMarker = true;
         }
 
-	    public void Unmark()
-	    {
-	        HasMarker = false;
-	    }
-		
-		public void DrawMap()
+        public void Unmark()
+        {
+            HasMarker = false;
+        }
+        
+        public void DrawMap()
         {
             if ((_lastPosition - _player.Position.Xz.ToVector3()).LengthSquared > 2 || _previousActiveChunks != _player.Loader.ActiveChunks)
             {
@@ -133,7 +133,7 @@ namespace Hedra.Engine.Player.MapSystem
             }
         }
 
-		public void Draw()
+        public void Draw()
         {
             if (!GameSettings.ShowMinimap)
             {
@@ -150,18 +150,18 @@ namespace Hedra.Engine.Player.MapSystem
             _miniMapNorth.Enable();
             _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.Rotation.Y;
 
-		    if (HasMarker)
-		    {
-		        Vector3 rot = Physics.DirectionToEuler(MarkedDirection);
-		        _miniMapMarker.BaseTexture.TextureElement.Angle = -_player.Model.Rotation.Y + rot.Y;
-		        _miniMapMarker.Enable();
-		    }
-		    else
-		    {
-		        _miniMapMarker.Disable();
-		    }
+            if (HasMarker)
+            {
+                Vector3 rot = Physics.DirectionToEuler(MarkedDirection);
+                _miniMapMarker.BaseTexture.TextureElement.Angle = -_player.Model.Rotation.Y + rot.Y;
+                _miniMapMarker.Enable();
+            }
+            else
+            {
+                _miniMapMarker.Disable();
+            }
 
-		    this.DrawMap();
+            this.DrawMap();
 
             Shader.Bind();
             Renderer.Enable(EnableCap.Blend);
@@ -192,21 +192,21 @@ namespace Hedra.Engine.Player.MapSystem
             Renderer.Enable(EnableCap.CullFace);
             Shader.Unbind();
         }
-		
-		public bool Show
+        
+        public bool Show
         {
-			get => _show;
-		    set{
-				_show = value;
-				if(_show) _panel.Enable();
-				else _panel.Disable();
-			}
-		}
-
-	    public void Dispose()
-	    {
-	        _mapFbo.Dispose();
-		    DrawManager.UIRenderer.Remove(this);
+            get => _show;
+            set{
+                _show = value;
+                if(_show) _panel.Enable();
+                else _panel.Disable();
+            }
         }
-	}
+
+        public void Dispose()
+        {
+            _mapFbo.Dispose();
+            DrawManager.UIRenderer.Remove(this);
+        }
+    }
 }

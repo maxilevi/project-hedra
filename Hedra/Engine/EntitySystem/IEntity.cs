@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.CacheSystem;
+using Hedra.Engine.CacheSystem;
 using System;
 using System.Windows.Forms.VisualStyles;
 using Hedra.Engine.Generation.ChunkSystem;

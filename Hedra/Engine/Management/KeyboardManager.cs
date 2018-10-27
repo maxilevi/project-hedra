@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Hedra.Engine.Events;
 using OpenTK.Input;

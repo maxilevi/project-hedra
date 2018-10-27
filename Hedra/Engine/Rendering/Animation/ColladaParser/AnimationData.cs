@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 23/03/2017
@@ -10,17 +10,17 @@ using System;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
-	/// <summary>
-	/// Description of AnimationData.
-	/// </summary>
-	public class AnimationData
-	{
-		public readonly float LengthSeconds;
-		public readonly KeyFrameData[] KeyFrames;
-		
-		public AnimationData(float LengthSeconds, KeyFrameData[] KeyFrames){
-			this.LengthSeconds = LengthSeconds;
-			this.KeyFrames = KeyFrames;
-		}
-	}
+    /// <summary>
+    /// Description of AnimationData.
+    /// </summary>
+    public class AnimationData
+    {
+        public readonly float LengthSeconds;
+        public readonly KeyFrameData[] KeyFrames;
+        
+        public AnimationData(float LengthSeconds, KeyFrameData[] KeyFrames){
+            this.LengthSeconds = LengthSeconds;
+            this.KeyFrames = KeyFrames;
+        }
+    }
 }

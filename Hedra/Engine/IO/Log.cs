@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 29/09/2016
@@ -13,20 +13,20 @@ using System.Reflection;
 
 namespace Hedra.Engine
 {
-	/// <summary>
-	/// Description of Log.
-	/// </summary>
-	public static class Log
-	{
-	    private static LogType _currentType;
-	    private static Dictionary<LogType, StreamWriter> _logs;
-		private static readonly string LogsPath;
-	    private static readonly object _lock;
+    /// <summary>
+    /// Description of Log.
+    /// </summary>
+    public static class Log
+    {
+        private static LogType _currentType;
+        private static Dictionary<LogType, StreamWriter> _logs;
+        private static readonly string LogsPath;
+        private static readonly object _lock;
 
-		static Log()
+        static Log()
         {
-	        var log = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt";
-	        if(File.Exists(log)) File.Delete(log);
+            var log = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt";
+            if(File.Exists(log)) File.Delete(log);
             _lock = new object();
             _logs = new Dictionary<LogType, StreamWriter>();
             /*LogsPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Logs/";
@@ -45,10 +45,10 @@ namespace Hedra.Engine
                 AutoFlush = true
             });
         }
-		
-		public static string Output
+        
+        public static string Output
         {
-			get
+            get
             {
                 lock (_lock)
                 {
@@ -70,9 +70,9 @@ namespace Hedra.Engine
                     return text;
                 }
             }
-		}
-		
-		public static void WriteToFile(object Text)
+        }
+        
+        public static void WriteToFile(object Text)
         {
             lock (_lock)
             {
@@ -80,71 +80,71 @@ namespace Hedra.Engine
             }
         }
 
-		public static void Write(object Text)
-		{
-		    var newText = $"[{DateTime.Now:HH:mm:ss}] {(_currentType != LogType.Normal ? $"[{_currentType.ToString()}]" : string.Empty)} {Text}";
+        public static void Write(object Text)
+        {
+            var newText = $"[{DateTime.Now:HH:mm:ss}] {(_currentType != LogType.Normal ? $"[{_currentType.ToString()}]" : string.Empty)} {Text}";
             if(_currentType != LogType.System)
-			Console.Write(newText);
+            Console.Write(newText);
             WriteToFile(newText);
         }
 
-	    public static void Write(object Text, ConsoleColor Color)
-	    {
-	        Console.ForegroundColor = Color;
+        public static void Write(object Text, ConsoleColor Color)
+        {
+            Console.ForegroundColor = Color;
             Write(Text);
-	        Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         public static void WriteLine(object Line){
-			Write( Line + Environment.NewLine);
-		}
+            Write( Line + Environment.NewLine);
+        }
 
-	    public static void WriteLine(string Text, LogType Type)
-	    {
-		    var oldType = _currentType;
-		    _currentType = Type;
-		    WriteLine(Text);
-		    _currentType = oldType;
-	    }
-
-	    public static void WriteLine(string Format, params object[] Args)
+        public static void WriteLine(string Text, LogType Type)
         {
-			for(var i = 0; i < Args.Length; i++)
-            {
-				Format = Format.Replace("{"+i+"}", Args[i].ToString());
-			}
-			Write( Format + Environment.NewLine);
-		}
+            var oldType = _currentType;
+            _currentType = Type;
+            WriteLine(Text);
+            _currentType = oldType;
+        }
 
-	    public static void WriteResult(bool Condition, string Text)
+        public static void WriteLine(string Format, params object[] Args)
         {
-			if(Condition)
+            for(var i = 0; i < Args.Length; i++)
             {
-				Console.ForegroundColor = ConsoleColor.DarkGreen;
-				Log.WriteLine("[SUCCESS] "+Text);
-			}
+                Format = Format.Replace("{"+i+"}", Args[i].ToString());
+            }
+            Write( Format + Environment.NewLine);
+        }
+
+        public static void WriteResult(bool Condition, string Text)
+        {
+            if(Condition)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Log.WriteLine("[SUCCESS] "+Text);
+            }
             else
             {
-				Console.ForegroundColor = ConsoleColor.DarkRed;
-				Log.WriteLine("[FAILURE] "+Text);
-			}
-			Console.ForegroundColor = ConsoleColor.Gray;
-		}
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Log.WriteLine("[FAILURE] "+Text);
+            }
+            Console.ForegroundColor = ConsoleColor.Gray;
+        }
 
-	    public static void Switch(LogType Type)
-	    {
-	        lock (_lock)
-	        {
-	            _currentType = Type;
-	        }
-	    }
-	}
+        public static void Switch(LogType Type)
+        {
+            lock (_lock)
+            {
+                _currentType = Type;
+            }
+        }
+    }
 
     public enum LogType
     {
         Normal,
         IO,
-	    System,
+        System,
         WorldBuilding,
         MaxEnums
     }

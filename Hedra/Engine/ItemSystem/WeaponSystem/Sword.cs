@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: Maxi Levi
  * Date: 08/05/2016
@@ -19,28 +19,28 @@ using OpenTK;
 
 namespace Hedra.Engine.ItemSystem.WeaponSystem
 {
-	/// <summary>
-	/// Description of TwoHandedSword.
-	/// </summary>
-	public class Sword : MeleeWeapon
+    /// <summary>
+    /// Description of TwoHandedSword.
+    /// </summary>
+    public class Sword : MeleeWeapon
     {
-	    private bool FrontSlash => PrimaryAnimationsIndex == 2;
-	    private readonly float _swordHeight;
+        private bool FrontSlash => PrimaryAnimationsIndex == 2;
+        private readonly float _swordHeight;
         private readonly TrailRenderer _renderer;
-	    
-	    protected override string AttackStanceName => "Assets/Chr/WarriorSmash-Stance.dae";
-	    protected override float PrimarySpeed => 1.25f;
-	    protected override string[] PrimaryAnimationsNames => new []
-	    {
-		    "Assets/Chr/WarriorSlash-Left.dae",
-		    "Assets/Chr/WarriorSlash-Right.dae",
-		    "Assets/Chr/WarriorSlash-Front.dae"
-	    };
-	    protected override float SecondarySpeed => 1.65f;
-	    protected override string[] SecondaryAnimationsNames => new []
-	    {
-		    "Assets/Chr/WarriorLunge.dae"
-	    };
+        
+        protected override string AttackStanceName => "Assets/Chr/WarriorSmash-Stance.dae";
+        protected override float PrimarySpeed => 1.25f;
+        protected override string[] PrimaryAnimationsNames => new []
+        {
+            "Assets/Chr/WarriorSlash-Left.dae",
+            "Assets/Chr/WarriorSlash-Right.dae",
+            "Assets/Chr/WarriorSlash-Front.dae"
+        };
+        protected override float SecondarySpeed => 1.65f;
+        protected override string[] SecondaryAnimationsNames => new []
+        {
+            "Assets/Chr/WarriorLunge.dae"
+        };
 
         public Sword(VertexData Contents) : base(Contents)
         {
@@ -53,22 +53,22 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             };
         }
 
-	    protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
-	    {
-		    if(Type != AttackEventType.Mid) return;
-		    Owner.Attack(Owner.DamageEquation * (FrontSlash ? 1.25f : 1.0f) );
-	    }
+        protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
+        {
+            if(Type != AttackEventType.Mid) return;
+            Owner.Attack(Owner.DamageEquation * (FrontSlash ? 1.25f : 1.0f) );
+        }
 
-	    protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
-	    {
+        protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
+        {
             Owner.Attack(Owner.DamageEquation * 1.10f * Options.DamageModifier, delegate(Entity Mob)
-			{
-				if (Utils.Rng.Next(0, 5) == 1 && Options.DamageModifier > .5f)
-					Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);
-			});
-	        if (Type == AttackEventType.End) _renderer.Emit = false;
+            {
+                if (Utils.Rng.Next(0, 5) == 1 && Options.DamageModifier > .5f)
+                    Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);
+            });
+            if (Type == AttackEventType.End) _renderer.Emit = false;
 
-	    }
+        }
 
         public override void Update(IHumanoid Human)
         {
@@ -77,30 +77,30 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         }
 
         public override int ParsePrimaryIndex(int AnimationIndex)
-	    {
-	        return AnimationIndex == 5 ? 2 : AnimationIndex & 1;
-	    }
-		
-		public override void Attack1(IHumanoid Human, AttackOptions Options)
         {
-			if(!base.MeetsRequirements()) return;
+            return AnimationIndex == 5 ? 2 : AnimationIndex & 1;
+        }
+        
+        public override void Attack1(IHumanoid Human, AttackOptions Options)
+        {
+            if(!base.MeetsRequirements()) return;
 
-		    if (PrimaryAnimationsIndex == 5)
-		        PrimaryAnimationsIndex = 0;
+            if (PrimaryAnimationsIndex == 5)
+                PrimaryAnimationsIndex = 0;
 
-		    PrimaryAnimationsIndex++;
+            PrimaryAnimationsIndex++;
 
             base.BasePrimaryAttack(Human, Options);
-		    Trail.Emit = false;
-		    TaskManager.After(200, () => Trail.Emit = true);
-		}
+            Trail.Emit = false;
+            TaskManager.After(200, () => Trail.Emit = true);
+        }
 
-	    public override void Attack2(IHumanoid Human, AttackOptions Options)
-	    {
-	        Options.IdleMovespeed *= Options.Charge * 2.5f + .25f;
-	        Options.RunMovespeed = Options.Charge * 1.5f;
+        public override void Attack2(IHumanoid Human, AttackOptions Options)
+        {
+            Options.IdleMovespeed *= Options.Charge * 2.5f + .25f;
+            Options.RunMovespeed = Options.Charge * 1.5f;
             base.Attack2(Human, Options);
-	        _renderer.Emit = true;
-	    }
-	}
+            _renderer.Emit = true;
+        }
+    }
 }

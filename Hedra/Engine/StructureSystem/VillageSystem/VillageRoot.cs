@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.StructureSystem.VillageSystem.Templates;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {

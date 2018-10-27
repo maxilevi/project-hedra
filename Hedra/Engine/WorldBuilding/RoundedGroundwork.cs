@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using Hedra.Engine.Generation;
 using OpenTK;

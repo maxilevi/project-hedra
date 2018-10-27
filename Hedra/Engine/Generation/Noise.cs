@@ -1,4 +1,4 @@
-﻿// SimplexNoise for C#
+// SimplexNoise for C#
 // Author: Heikki Törmälä
 
 //This is free and unencumbered software released into the public domain.
@@ -36,24 +36,24 @@ namespace SimplexNoise
     /// </summary>
     public class Noise
     {
-    	public static float Generate(float x, float y, int Octaves, float Frequency){
-    		float FNoise = Generate(x / Frequency, y / Frequency);
-    		for(int i = 0; i < Octaves; i++){
-    			Frequency *= 2;
-     			FNoise += Generate(x / Frequency, y / Frequency);
-    		}
-    		return FNoise / Octaves;
-    	}
-    	
-    	public static float Generate(float x, float y, float z, int Octaves, float Frequency){
-    		float FNoise = Generate(x / Frequency, y / Frequency, z / Frequency);
-    		for(int i = 0; i < Octaves; i++){
-    			Frequency *= 2;
-     			FNoise += Generate(x / Frequency, y / Frequency, z / Frequency);
-    		}
-    		return FNoise / Octaves;
-    	}
-    	
+        public static float Generate(float x, float y, int Octaves, float Frequency){
+            float FNoise = Generate(x / Frequency, y / Frequency);
+            for(int i = 0; i < Octaves; i++){
+                Frequency *= 2;
+                 FNoise += Generate(x / Frequency, y / Frequency);
+            }
+            return FNoise / Octaves;
+        }
+        
+        public static float Generate(float x, float y, float z, int Octaves, float Frequency){
+            float FNoise = Generate(x / Frequency, y / Frequency, z / Frequency);
+            for(int i = 0; i < Octaves; i++){
+                Frequency *= 2;
+                 FNoise += Generate(x / Frequency, y / Frequency, z / Frequency);
+            }
+            return FNoise / Octaves;
+        }
+        
         /// <summary>
         /// 1D simplex noise
         /// </summary>

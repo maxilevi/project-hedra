@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 10/09/2017
@@ -12,20 +12,20 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-	/// <summary>
-	/// Description of MoveCommand.
-	/// </summary>
-	public struct MoveCommand
-	{
-		public Vector3 Delta;
-		public IEntity Parent;
-	    public bool IsRecursive;
-		
-		public MoveCommand(IEntity Parent, Vector3 Delta){
-			this.Delta = Delta;
-			this.Parent = Parent;
-		    this.IsRecursive = false;
+    /// <summary>
+    /// Description of MoveCommand.
+    /// </summary>
+    public struct MoveCommand
+    {
+        public Vector3 Delta;
+        public IEntity Parent;
+        public bool IsRecursive;
+        
+        public MoveCommand(IEntity Parent, Vector3 Delta){
+            this.Delta = Delta;
+            this.Parent = Parent;
+            this.IsRecursive = false;
 
-		}
-	}
+        }
+    }
 }

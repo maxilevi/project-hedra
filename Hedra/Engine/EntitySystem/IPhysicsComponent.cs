@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem

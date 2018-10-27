@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Linq;
 
 namespace AssetBuilder
@@ -64,14 +64,14 @@ namespace AssetBuilder
             this.Z = Z;
         }
     }
-	    
+        
     public struct Vector4
     {
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
         public float W { get; set; }
-		    
+            
         public Vector4(float X, float Y, float Z, float W)
         {
             this.X = X;

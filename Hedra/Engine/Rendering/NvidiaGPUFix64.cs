@@ -1,4 +1,4 @@
-﻿// <copyright file="SOP.cs">
+// <copyright file="SOP.cs">
 //
 // Copyright (c) 2012, Daniel Cornel. Published on drivenbynostalgia.com.
 // All rights reserved.

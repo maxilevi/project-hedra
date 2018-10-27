@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 13/09/2016
@@ -12,18 +12,18 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.WorldBuilding
 {
-	/// <inheritdoc />
-	/// <summary>
-	/// Description of Structure.
-	/// </summary>
-	public class BaseStructure : IDisposable, IStructure, ISearchable
+    /// <inheritdoc />
+    /// <summary>
+    /// Description of Structure.
+    /// </summary>
+    public class BaseStructure : IDisposable, IStructure, ISearchable
     {
         public virtual Vector3 Position { get; set; }
-		public bool Disposed { get; protected set; }
-		
-		public virtual void Dispose()
-		{
-			Disposed = true;
-		}
-	}
+        public bool Disposed { get; protected set; }
+        
+        public virtual void Dispose()
+        {
+            Disposed = true;
+        }
+    }
 }

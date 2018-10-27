@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Linq;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;

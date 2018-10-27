@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
@@ -46,7 +46,7 @@ namespace Hedra.Engine.Player
         float AttackPower { get; set; }
         float MaxStamina {get; set;}
         float AddonHealth {get; set;}
-        float DodgeCost {get; set;}	
+        float DodgeCost {get; set;}    
         float RandomFactor { get; set; }
         float AttackResistance { get; }
         int Gold { get; set; }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
@@ -11,25 +11,25 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             document.LoadXml(ColladaFile);
             AssertCorrectName(document);
             var node = document.ChildNodes[1];
-	
+    
             var skinLoader = new SkinLoader(node["library_controllers"], MaxWeights);
             var skinningData = skinLoader.ExtractSkinData();
-	
+    
             var jointsLoader = new JointsLoader(node["library_visual_scenes"], skinningData.JointOrder);
             var jointsData = jointsLoader.ExtractBoneData();
-	
+    
             var geometryLoader = new GeometryLoader(node["library_geometries"], skinningData.VerticesSkinData);
             var modelData = geometryLoader.ExtractModelData();
-	
+    
             return new AnimatedModelData(modelData, jointsData);
         }
-	
+    
         public  AnimationData LoadColladaAnimation(string ColladaFile)
         {
             var document = new XmlDocument();
             document.LoadXml(ColladaFile);
             AssertCorrectName(document);
-            var node = document.ChildNodes[1];			
+            var node = document.ChildNodes[1];            
             XmlNode animNode = node["library_animations"];
             XmlNode jointsNode = node["library_visual_scenes"];
             var loader = new AnimationLoader(animNode, jointsNode);

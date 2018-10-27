@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using OpenTK;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;

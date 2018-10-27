@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Author: Zaphyk
  * Date: 03/02/2016
  * Time: 11:42 p.m.
@@ -13,47 +13,47 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Management
 {
-	public class FrustumCulling
-	{
-	    public static float Aspect = 1.45f;
+    public class FrustumCulling
+    {
+        public static float Aspect = 1.45f;
         public const float ZNear = 2.0f;
-	    public const float ZFar = 4096.0f;
+        public const float ZFar = 4096.0f;
 
         public const int A = 0;
         public const int B = 1;
         public const int C = 2;
         public const int D = 3;
-		
+        
         private readonly float[,] Frustum = new float[6,4];
         private readonly Vector4[] Planes = new Vector4[6];
-	    public readonly Vector3[] Points = new Vector3[8];
-	    private readonly CollisionShape FrustumShape = new CollisionShape(new Vector3[8]);
-	    private readonly Box _frustumBroadphase = new Box();
+        public readonly Vector3[] Points = new Vector3[8];
+        private readonly CollisionShape FrustumShape = new CollisionShape(new Vector3[8]);
+        private readonly Box _frustumBroadphase = new Box();
         private readonly Box _cacheBox = new Box();
         public Matrix4 ProjectionMatrix;
         public Matrix4 ModelViewMatrix = Matrix4.Identity;
         private bool IsFrustumCalculated;
-		
-		public bool IsInsideFrustum(ICullable CullableObject, float Multiplier = 1)
-		{
-			if (!CullableObject.Enabled) return false;
+        
+        public bool IsInsideFrustum(ICullable CullableObject, float Multiplier = 1)
+        {
+            if (!CullableObject.Enabled) return false;
             var box = CullableObject.CullingBox;
-		    if (box == null) return false;
-		    _cacheBox.Min = box.Min * Multiplier + CullableObject.Position;
-		    _cacheBox.Max = box.Max * Multiplier + CullableObject.Position;
+            if (box == null) return false;
+            _cacheBox.Min = box.Min * Multiplier + CullableObject.Position;
+            _cacheBox.Max = box.Max * Multiplier + CullableObject.Position;
             return this.BoxInFrustum(_cacheBox);
-		}
+        }
         
         private void NormalizePlane(float[,] Frustum , int side){
-			float magnitude = (float)Math.Sqrt( Frustum[side,A] * Frustum[side,A] + 
-										   		Frustum[side,B] * Frustum[side,B] + 
-										   		Frustum[side,C] * Frustum[side,C] );
-			Frustum[side,A] /= magnitude;
-			Frustum[side,B] /= magnitude;
-			Frustum[side,C] /= magnitude;
-			Frustum[side,D] /= magnitude; 
-		}
-		
+            float magnitude = (float)Math.Sqrt( Frustum[side,A] * Frustum[side,A] + 
+                                                   Frustum[side,B] * Frustum[side,B] + 
+                                                   Frustum[side,C] * Frustum[side,C] );
+            Frustum[side,A] /= magnitude;
+            Frustum[side,B] /= magnitude;
+            Frustum[side,C] /= magnitude;
+            Frustum[side,D] /= magnitude; 
+        }
+        
         public void CalculateFrustum(Matrix4 Proj, Matrix4 Modl){
             if(GameSettings.LockFrustum) return;
        
@@ -163,81 +163,81 @@ namespace Hedra.Engine.Management
             _frustumBroadphase.Max = center + Vector3.One * size;
         }
         
-		public void SetFrustum(Matrix4 View)
-		{
-		    Aspect = GameSettings.Width / (float)GameSettings.Height;
-			ModelViewMatrix = View;
-			ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, Aspect, ZNear, ZFar);
-	        Renderer.LoadProjection(ProjectionMatrix);
-			Renderer.LoadModelView(ModelViewMatrix);			
-		}
-		
-		public void SetViewport()
-		{
-			SetViewport(GameSettings.Width, GameSettings.Height);
-		}
-		
-		public void SetViewport(float Width, float Height)
-		{
-			SetViewport((int)Width, (int)Height);
-		}
+        public void SetFrustum(Matrix4 View)
+        {
+            Aspect = GameSettings.Width / (float)GameSettings.Height;
+            ModelViewMatrix = View;
+            ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, Aspect, ZNear, ZFar);
+            Renderer.LoadProjection(ProjectionMatrix);
+            Renderer.LoadModelView(ModelViewMatrix);            
+        }
+        
+        public void SetViewport()
+        {
+            SetViewport(GameSettings.Width, GameSettings.Height);
+        }
+        
+        public void SetViewport(float Width, float Height)
+        {
+            SetViewport((int)Width, (int)Height);
+        }
 
-	    public void SetViewport(int Width, int Height)
-	    {
-	        Renderer.Viewport(0, 0, Width, Height);
+        public void SetViewport(int Width, int Height)
+        {
+            Renderer.Viewport(0, 0, Width, Height);
         }
 
         public bool VerticesInFrustum(Vector3[] Vertices)
-	    {
-	        for (var i = 0; i < Vertices.Length; i++)
-	        {
-	            if (this.PointInFrustum(Vertices[i])) return true;
-	        }
-	        return false;
-	    }
+        {
+            for (var i = 0; i < Vertices.Length; i++)
+            {
+                if (this.PointInFrustum(Vertices[i])) return true;
+            }
+            return false;
+        }
 
         public bool ShapeInFrustum(CollisionShape Shape)
         {
             return this.VerticesInFrustum(Shape.Vertices);
         }
 
-	    public bool BoxInFrustum(Box Box)
-	    {
-	        return this.VerticesInFrustum(Box.Vertices) || this.FrustumInBox(Box) || FrustumCollidesWithBox(Box);
-	    }
+        public bool BoxInFrustum(Box Box)
+        {
+            return this.VerticesInFrustum(Box.Vertices) || this.FrustumInBox(Box) || FrustumCollidesWithBox(Box);
+        }
 
-	    private bool FrustumInBox(Box Box)
-	    {
-	        for (var i = 0; i < Points.Length; i++)
-	        {
-	            if (Physics.AABBvsPoint(Box, Points[i]))
-	                return true;
-	        }
-	        return false;
-	    }
+        private bool FrustumInBox(Box Box)
+        {
+            for (var i = 0; i < Points.Length; i++)
+            {
+                if (Physics.AABBvsPoint(Box, Points[i]))
+                    return true;
+            }
+            return false;
+        }
 
-	    public bool FrustumCollidesWithBox(Box Box)
-	    {
-	        return Physics.Collides(Box, _frustumBroadphase);
-	    }
+        public bool FrustumCollidesWithBox(Box Box)
+        {
+            return Physics.Collides(Box, _frustumBroadphase);
+        }
 
         public bool PointInFrustum(Vector3 Point)
-	    {
-	        for (var i = 0; i < 6; i++)
-	        {
-	            if (Frustum[i, A] * Point.X + Frustum[i, B] * Point.Y + Frustum[i, C] * Point.Z + Frustum[i, D] <= 0)
-	                return false;
-	        }
-	        return true;
-	    }
-	}
+        {
+            for (var i = 0; i < 6; i++)
+            {
+                if (Frustum[i, A] * Point.X + Frustum[i, B] * Point.Y + Frustum[i, C] * Point.Z + Frustum[i, D] <= 0)
+                    return false;
+            }
+            return true;
+        }
+    }
 }
 public enum ClippingPlane
 {
-	RIGHT,
-	LEFT,
-	BOTTOM,
-	TOP,
-	BACK,
-	FRONT
+    RIGHT,
+    LEFT,
+    BOTTOM,
+    TOP,
+    BACK,
+    FRONT
 }

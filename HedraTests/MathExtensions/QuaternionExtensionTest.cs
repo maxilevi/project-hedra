@@ -1,4 +1,4 @@
-﻿using Hedra.Engine;
+using Hedra.Engine;
 using Hedra.Engine.ComplexMath;
 using NUnit.Framework;
 using OpenTK;

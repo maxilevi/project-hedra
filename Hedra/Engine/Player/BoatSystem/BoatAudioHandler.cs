@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Sound;
+using Hedra.Engine.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player.BoatSystem

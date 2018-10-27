@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 19/01/2017
@@ -11,9 +11,9 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.EntitySystem
 {
-	public interface IMountable
-	{
-		bool IsMountable{ get; }
+    public interface IMountable
+    {
+        bool IsMountable{ get; }
         bool HasRider { get; set; }
-	}
+    }
 }

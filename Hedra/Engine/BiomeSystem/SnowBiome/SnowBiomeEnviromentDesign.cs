@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.PlantSystem;
+using Hedra.Engine.PlantSystem;
 
 namespace Hedra.Engine.BiomeSystem.SnowBiome
 {

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using OpenTK;
 

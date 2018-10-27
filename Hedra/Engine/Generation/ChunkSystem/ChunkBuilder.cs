@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.Generation.ChunkSystem
+namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class ChunkBuilder : AbstractBuilder
     {

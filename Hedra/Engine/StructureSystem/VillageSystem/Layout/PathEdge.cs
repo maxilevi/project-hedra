@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Layout

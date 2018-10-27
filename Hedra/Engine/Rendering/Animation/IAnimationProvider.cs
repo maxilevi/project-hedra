@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.Rendering.Animation
+namespace Hedra.Engine.Rendering.Animation
 {
     public interface IAnimationProvider
     {

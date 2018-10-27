@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 10/01/2017
@@ -20,44 +20,44 @@ using Hedra.Engine.Sound;
 
 namespace Hedra.Engine.Player
 {
-	/// <summary>
-	/// Description of Projectile.
-	/// </summary>
-	public delegate void OnProjectileHitEvent(Projectile Sender, IEntity Hit);
-	public delegate void OnProjectileLandEvent(Projectile Sender);
-	public delegate void OnProjectileMoveEvent(Projectile Sender);
-	
-	public class Projectile : IDisposable, IUpdatable
-	{
-		public event OnProjectileHitEvent HitEventHandler;
-		public event OnProjectileMoveEvent MoveEventHandler;
-		public event OnProjectileMoveEvent LandEventHandler;
+    /// <summary>
+    /// Description of Projectile.
+    /// </summary>
+    public delegate void OnProjectileHitEvent(Projectile Sender, IEntity Hit);
+    public delegate void OnProjectileLandEvent(Projectile Sender);
+    public delegate void OnProjectileMoveEvent(Projectile Sender);
+    
+    public class Projectile : IDisposable, IUpdatable
+    {
+        public event OnProjectileHitEvent HitEventHandler;
+        public event OnProjectileMoveEvent MoveEventHandler;
+        public event OnProjectileMoveEvent LandEventHandler;
 
-		public Vector3 Propulsion { get; set; }
-		public float Lifetime { get; set; } = 10f;
-		public ObjectMesh Mesh { get; }
-	    public bool Collide { get; set; } = true;
+        public Vector3 Propulsion { get; set; }
+        public float Lifetime { get; set; } = 10f;
+        public ObjectMesh Mesh { get; }
+        public bool Collide { get; set; } = true;
         public bool Disposed { get; private set; }
 
         private readonly IEntity _parent;
-	    private readonly List<ICollidable> _collisions;
-	    private readonly Box _collisionBox;
+        private readonly List<ICollidable> _collisions;
+        private readonly Box _collisionBox;
         private Vector3 _accumulatedVelocity;
         private bool _collided;
 
 
         public Projectile(IEntity Parent, Vector3 Origin, VertexData MeshData)
         {
-		    _parent = Parent;
+            _parent = Parent;
             _collisions = new List<ICollidable>();
             _collisionBox = Physics.BuildBroadphaseBox(MeshData);
             Mesh = ObjectMesh.FromVertexData(MeshData);
-			Propulsion = Propulsion;
+            Propulsion = Propulsion;
             Mesh.Position = Origin;
             UpdateManager.Add(this);
         }
-		
-		public virtual void Update()
+        
+        public virtual void Update()
         {
             if(Disposed) return;
 
@@ -70,19 +70,19 @@ namespace Hedra.Engine.Player
             Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime);
             _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f) * (float) Time.DeltaTime;
             _accumulatedVelocity *= (float) Math.Pow(.8f, (float)Time.DeltaTime);
-			Mesh.Position += _accumulatedVelocity * 2f * (float)Time.DeltaTime;
+            Mesh.Position += _accumulatedVelocity * 2f * (float)Time.DeltaTime;
             Mesh.Rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
             if (Collide)
-			{
-			    ProcessCollision();
-			}
-				
-			for(var i = 0; i < World.Entities.Count; i++)
             {
-				if (_parent == World.Entities[i] || !Physics.Collides(_collisionBox.Cache.Translate(Mesh.Position), World.Entities[i].Model.BroadphaseBox)) continue;
+                ProcessCollision();
+            }
+                
+            for(var i = 0; i < World.Entities.Count; i++)
+            {
+                if (_parent == World.Entities[i] || !Physics.Collides(_collisionBox.Cache.Translate(Mesh.Position), World.Entities[i].Model.BroadphaseBox)) continue;
 
-				HitEventHandler?.Invoke(this, World.Entities[i]);
-				_collided = true;
+                HitEventHandler?.Invoke(this, World.Entities[i]);
+                _collided = true;
                 this.Dispose();
                 break;
             }
@@ -94,8 +94,8 @@ namespace Hedra.Engine.Player
             MoveEventHandler?.Invoke(this);
         }
 
-	    private void ProcessCollision()
-	    {
+        private void ProcessCollision()
+        {
             var isColliding = false;
             _collisions.Clear();
             _collisions.AddRange(World.GlobalColliders);
@@ -149,23 +149,23 @@ namespace Hedra.Engine.Player
             }
         }
 
-		public virtual Vector3 Rotation
+        public virtual Vector3 Rotation
         {
-			get => Mesh.Rotation;
-		    set => Mesh.Rotation = value;
-		}
+            get => Mesh.Rotation;
+            set => Mesh.Rotation = value;
+        }
 
-	    public virtual Vector3 Position
-	    {
-	        get => Mesh.Position;
-	        set => Mesh.Position = value;
-	    }
+        public virtual Vector3 Position
+        {
+            get => Mesh.Position;
+            set => Mesh.Position = value;
+        }
 
         public virtual void Dispose()
-		{
-		    UpdateManager.Remove(this);
+        {
+            UpdateManager.Remove(this);
             Mesh.Dispose();
-		    Disposed = true;
+            Disposed = true;
         }
-	}
+    }
 }

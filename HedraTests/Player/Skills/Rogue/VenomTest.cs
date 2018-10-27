@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Player.Skills.Rogue;
+using Hedra.Engine.Player.Skills.Rogue;
 using NUnit.Framework;
 
 namespace HedraTests.Player.Skills.Rogue

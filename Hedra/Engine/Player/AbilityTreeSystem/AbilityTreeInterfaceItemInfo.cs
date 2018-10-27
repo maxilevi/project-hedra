@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.Skills;

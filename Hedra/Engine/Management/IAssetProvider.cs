@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;

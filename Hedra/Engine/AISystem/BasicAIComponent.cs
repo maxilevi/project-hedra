@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Reflection;
 using Hedra.Engine.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;

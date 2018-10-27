@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem

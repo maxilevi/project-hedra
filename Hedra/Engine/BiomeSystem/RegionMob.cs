@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {

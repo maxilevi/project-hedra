@@ -1,4 +1,4 @@
-﻿using OpenTK;
+using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {

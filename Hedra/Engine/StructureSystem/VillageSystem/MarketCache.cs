@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;

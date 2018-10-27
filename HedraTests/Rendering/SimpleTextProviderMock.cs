@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using Hedra.Engine.Rendering.UI;
 
 namespace HedraTests.Rendering

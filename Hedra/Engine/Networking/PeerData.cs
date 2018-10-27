@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 01/02/2017
@@ -16,19 +16,19 @@ using Hedra.Engine.Rendering.UI;
 
 namespace Hedra.Engine.Networking
 {
-	/// <summary>
-	/// Description of PeerData.
-	/// </summary>
-	public class PeerData
-	{
-		public Humanoid Human;
-		public bool Packet0x2Sent = false;
-		public bool Packet0x6Sent = false;
-		public float LastPing = 0;
-		
-		public static Humanoid NewHuman(IPEndPoint IP)
-		{
-			return null;
-		}
-	}
+    /// <summary>
+    /// Description of PeerData.
+    /// </summary>
+    public class PeerData
+    {
+        public Humanoid Human;
+        public bool Packet0x2Sent = false;
+        public bool Packet0x6Sent = false;
+        public float LastPing = 0;
+        
+        public static Humanoid NewHuman(IPEndPoint IP)
+        {
+            return null;
+        }
+    }
 }

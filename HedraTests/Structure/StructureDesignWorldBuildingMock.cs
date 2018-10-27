@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;

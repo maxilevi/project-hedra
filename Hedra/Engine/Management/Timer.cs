@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 08/12/2016
@@ -8,36 +8,36 @@
  */
 namespace Hedra.Engine.Management
 {
-	/// <summary>
-	/// Description of Timer.
-	/// </summary>
-	public class Timer
-	{
-		private float _timerCount;
-	    public bool AutoReset { get; set; } = true;
+    /// <summary>
+    /// Description of Timer.
+    /// </summary>
+    public class Timer
+    {
+        private float _timerCount;
+        public bool AutoReset { get; set; } = true;
         public float AlertTime { get; set; }
-		
-		public Timer(float AlertTime)
+        
+        public Timer(float AlertTime)
         {
-			this.AlertTime = AlertTime;
-		}
-		
-		public void Reset()
+            this.AlertTime = AlertTime;
+        }
+        
+        public void Reset()
         {
-			_timerCount = 0;
-		}
-		
-		public bool Tick()
+            _timerCount = 0;
+        }
+        
+        public bool Tick()
         {
-			_timerCount += Time.IndependantDeltaTime;
+            _timerCount += Time.IndependantDeltaTime;
 
-		    if (!Ready) return false;
-		    if (AutoReset)_timerCount = 0;
+            if (!Ready) return false;
+            if (AutoReset)_timerCount = 0;
 
-		    return true;
-		}
+            return true;
+        }
 
-	    public bool Ready => _timerCount >= AlertTime;
+        public bool Ready => _timerCount >= AlertTime;
 
-	}
+    }
 }

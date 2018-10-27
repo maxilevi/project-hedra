@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 21/11/2016
@@ -21,18 +21,18 @@ using OpenTK;
 
 namespace Hedra.Engine.Generation
 {
-	/// <summary>
-	/// Description of HerbGenerator.
-	/// </summary>
-	public class EnviromentGenerator
-	{
-		
-		public void GeneratePlant(Vector3 Position, BiomeSystem.Region BiomeRegion, PlantDesign Design)
+    /// <summary>
+    /// Description of HerbGenerator.
+    /// </summary>
+    public class EnviromentGenerator
+    {
+        
+        public void GeneratePlant(Vector3 Position, BiomeSystem.Region BiomeRegion, PlantDesign Design)
         {
             Chunk underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return;
 
-	        Random rng = underChunk.Landscape.RandomGen;
+            Random rng = underChunk.Landscape.RandomGen;
             Matrix4 transMatrix = Design.TransMatrix(Position, rng);
 
             if(transMatrix == Matrix4.Identity) return;
@@ -61,5 +61,5 @@ namespace Hedra.Engine.Generation
                 Design.CustomPlacement(modelDataClone, transMatrix);
             }
         }
-	}
+    }
 }

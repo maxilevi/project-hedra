@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Author: Zaphyk
  * Date: 31/01/2016
  * Time: 08:12 p.m.
@@ -15,126 +15,126 @@ using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Rendering
 {
-	public class ChunkMesh : ICullable, IDisposable
-	{
-		private IMeshBuffer _buffer;
-		private readonly List<InstanceData> _instanceElements;
-		private readonly List<InstanceData> _lodedInstanceElements;
-		public List<ICollidable> CollisionBoxes = new List<ICollidable>();
-		public List<VertexData> Elements = new List<VertexData>();
-		public VertexData ModelData { get; set; }
+    public class ChunkMesh : ICullable, IDisposable
+    {
+        private IMeshBuffer _buffer;
+        private readonly List<InstanceData> _instanceElements;
+        private readonly List<InstanceData> _lodedInstanceElements;
+        public List<ICollidable> CollisionBoxes = new List<ICollidable>();
+        public List<VertexData> Elements = new List<VertexData>();
+        public VertexData ModelData { get; set; }
 
-		public bool IsBuilded;
-		public bool IsGenerated;
-		public bool Enabled { get; set; }
-		public bool BuildedOnce { get; set; }
+        public bool IsBuilded;
+        public bool IsGenerated;
+        public bool Enabled { get; set; }
+        public bool BuildedOnce { get; set; }
 
-		public Vector3 Position { get; set; }
-		public Box CullingBox { get; set; }
+        public Vector3 Position { get; set; }
+        public Box CullingBox { get; set; }
 
-		public ChunkMesh(Vector3 Position, IMeshBuffer Buffer)
-		{
-			this.Position = Position;
-			_instanceElements = new List<InstanceData>();
-			_lodedInstanceElements = new List<InstanceData>();
-			CullingBox = new Box(Vector3.Zero, new Vector3(Chunk.Width, 768, Chunk.Width));
-			_buffer = Buffer;
-		}
+        public ChunkMesh(Vector3 Position, IMeshBuffer Buffer)
+        {
+            this.Position = Position;
+            _instanceElements = new List<InstanceData>();
+            _lodedInstanceElements = new List<InstanceData>();
+            CullingBox = new Box(Vector3.Zero, new Vector3(Chunk.Width, 768, Chunk.Width));
+            _buffer = Buffer;
+        }
 
-		public void BuildFrom(VertexData Data, bool ExtraData)
-		{
-			try
-			{
-				if (Data?.Colors == null)
-					return;
+        public void BuildFrom(VertexData Data, bool ExtraData)
+        {
+            try
+            {
+                if (Data?.Colors == null)
+                    return;
 
-				Vector4[] colorBuffer;
-				if (ExtraData)
-				{
-					colorBuffer = new Vector4[Data.Colors.Count];
-					for (var i = 0; i < colorBuffer.Length; i++)
-					{
-						colorBuffer[i] = new Vector4(Data.Colors[i].Xyz, Data.Extradata[i]);
-					}
-				}
-				else
-				{
-					colorBuffer = Data.Colors.ToArray();
-				}
+                Vector4[] colorBuffer;
+                if (ExtraData)
+                {
+                    colorBuffer = new Vector4[Data.Colors.Count];
+                    for (var i = 0; i < colorBuffer.Length; i++)
+                    {
+                        colorBuffer[i] = new Vector4(Data.Colors[i].Xyz, Data.Extradata[i]);
+                    }
+                }
+                else
+                {
+                    colorBuffer = Data.Colors.ToArray();
+                }
 
-				var colorBufferSize = (colorBuffer.Length * Vector4.SizeInBytes);
-				var vertexBufferSize = (Data.Vertices.Count * Vector3.SizeInBytes);
-				var indexBufferSize = (Data.Indices.Count * sizeof(int));
-				var normalBufferSize = (Data.Normals.Count * Vector3.SizeInBytes);
+                var colorBufferSize = (colorBuffer.Length * Vector4.SizeInBytes);
+                var vertexBufferSize = (Data.Vertices.Count * Vector3.SizeInBytes);
+                var indexBufferSize = (Data.Indices.Count * sizeof(int));
+                var normalBufferSize = (Data.Normals.Count * Vector3.SizeInBytes);
 
-				if (_buffer.Vertices == null)
-					_buffer.Vertices = new VBO<Vector3>(Data.Vertices.ToArray(), vertexBufferSize,
-						VertexAttribPointerType.Float);
-				else
-					_buffer.Vertices.Update(Data.Vertices.ToArray(), vertexBufferSize);
+                if (_buffer.Vertices == null)
+                    _buffer.Vertices = new VBO<Vector3>(Data.Vertices.ToArray(), vertexBufferSize,
+                        VertexAttribPointerType.Float);
+                else
+                    _buffer.Vertices.Update(Data.Vertices.ToArray(), vertexBufferSize);
 
-				if (_buffer.Indices == null)
-					_buffer.Indices = new VBO<uint>(Data.Indices.ToArray(), indexBufferSize,
-						VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
-				else
-					_buffer.Indices.Update(Data.Indices.ToArray(), indexBufferSize);
+                if (_buffer.Indices == null)
+                    _buffer.Indices = new VBO<uint>(Data.Indices.ToArray(), indexBufferSize,
+                        VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
+                else
+                    _buffer.Indices.Update(Data.Indices.ToArray(), indexBufferSize);
 
 
-				if (_buffer.Colors == null)
-					_buffer.Colors = new VBO<Vector4>(colorBuffer, colorBufferSize, VertexAttribPointerType.Float);
-				else
-					_buffer.Colors.Update(colorBuffer, colorBufferSize);
+                if (_buffer.Colors == null)
+                    _buffer.Colors = new VBO<Vector4>(colorBuffer, colorBufferSize, VertexAttribPointerType.Float);
+                else
+                    _buffer.Colors.Update(colorBuffer, colorBufferSize);
 
-				if (_buffer.Normals == null)
-					_buffer.Normals = new VBO<Vector3>(Data.Normals.ToArray(), normalBufferSize,
-						VertexAttribPointerType.Float);
-				else
-					_buffer.Normals.Update(Data.Normals.ToArray(), normalBufferSize);
+                if (_buffer.Normals == null)
+                    _buffer.Normals = new VBO<Vector3>(Data.Normals.ToArray(), normalBufferSize,
+                        VertexAttribPointerType.Float);
+                else
+                    _buffer.Normals.Update(Data.Normals.ToArray(), normalBufferSize);
 
-				if (_buffer.Data == null)
-					_buffer.Data =
-						new VAO<Vector3, Vector4, Vector3>(_buffer.Vertices, _buffer.Colors, _buffer.Normals);
+                if (_buffer.Data == null)
+                    _buffer.Data =
+                        new VAO<Vector3, Vector4, Vector3>(_buffer.Vertices, _buffer.Colors, _buffer.Normals);
 
-				IsBuilded = true;
-				Enabled = true;
-				BuildedOnce = true;
-			}
-			catch (Exception e)
-			{
-				Log.WriteLine(e.ToString());
-			}
-		}
+                IsBuilded = true;
+                Enabled = true;
+                BuildedOnce = true;
+            }
+            catch (Exception e)
+            {
+                Log.WriteLine(e.ToString());
+            }
+        }
 
-		public void Draw()
-		{
-			if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-			DrawMesh(_buffer);
-			if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-		}
+        public void Draw()
+        {
+            if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            DrawMesh(_buffer);
+            if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+        }
 
-		private void DrawMesh(IMeshBuffer MeshBuffer)
-		{
-			if (IsBuilded && IsGenerated && Enabled && MeshBuffer.Data != null)
-			{
-				MeshBuffer.Draw();
-			}
-		}
+        private void DrawMesh(IMeshBuffer MeshBuffer)
+        {
+            if (IsBuilded && IsGenerated && Enabled && MeshBuffer.Data != null)
+            {
+                MeshBuffer.Draw();
+            }
+        }
 
-		public void AddInstance(InstanceData Data, bool AffectedByLod = false)
-		{
-			if(!AffectedByLod)
-				_instanceElements.Add(Data);
-			else
-				_lodedInstanceElements.Add(Data);
-		}
+        public void AddInstance(InstanceData Data, bool AffectedByLod = false)
+        {
+            if(!AffectedByLod)
+                _instanceElements.Add(Data);
+            else
+                _lodedInstanceElements.Add(Data);
+        }
 
-		public InstanceData[] InstanceElements => _instanceElements.ToArray();
+        public InstanceData[] InstanceElements => _instanceElements.ToArray();
 
-		public InstanceData[] LodAffectedInstanceElements => _lodedInstanceElements.ToArray();
-		
-		public void Dispose()
-		{
-			_buffer?.Dispose();
-		}
-	}
+        public InstanceData[] LodAffectedInstanceElements => _lodedInstanceElements.ToArray();
+        
+        public void Dispose()
+        {
+            _buffer?.Dispose();
+        }
+    }
 }

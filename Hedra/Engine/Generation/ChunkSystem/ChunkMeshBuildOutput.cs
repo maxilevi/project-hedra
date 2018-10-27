@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {

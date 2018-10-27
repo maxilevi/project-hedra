@@ -1,4 +1,4 @@
-﻿
+
 using Hedra.Engine.Management;
 using OpenTK;
 

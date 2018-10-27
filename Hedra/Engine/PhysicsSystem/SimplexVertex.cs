@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 14/11/2016
@@ -11,13 +11,13 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-	/// <summary>
-	/// Description of SimplexVertex.
-	/// </summary>
-	public class SimplexVertex
-	{
+    /// <summary>
+    /// Description of SimplexVertex.
+    /// </summary>
+    public class SimplexVertex
+    {
         public Vector3 SupportA;
         public Vector3 SupportB;
         public Vector3 SupportPoint;
-	}
+    }
 }

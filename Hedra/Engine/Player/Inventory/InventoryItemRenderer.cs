@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
@@ -100,12 +100,12 @@ namespace Hedra.Engine.Player.Inventory
             Mesh.Draw();
 
             /*Renderer.BindFramebuffer(FramebufferTarget.DrawFramebuffer, ItemsFBO.BufferID);
-			Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, MultisampleItemsFBO.BufferID);
-			Renderer.BlitFramebuffer(0,GameSettings.Height,GameSettings.Width,0, 0,GameSettings.Height,GameSettings.Width,0
-			                   , ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
-			
-			Renderer.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
-			Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);*/
+            Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, MultisampleItemsFBO.BufferID);
+            Renderer.BlitFramebuffer(0,GameSettings.Height,GameSettings.Width,0, 0,GameSettings.Height,GameSettings.Width,0
+                               , ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
+            
+            Renderer.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
+            Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);*/
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
             Renderer.PopFBO();
             Renderer.PopShader();

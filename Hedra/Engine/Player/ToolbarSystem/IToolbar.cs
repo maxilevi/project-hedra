@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.ItemSystem.WeaponSystem;
+using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Player.Skills;
 
 namespace Hedra.Engine.Player.ToolbarSystem

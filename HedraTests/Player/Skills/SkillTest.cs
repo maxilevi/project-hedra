@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hedra.Engine;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.WeaponSystem;

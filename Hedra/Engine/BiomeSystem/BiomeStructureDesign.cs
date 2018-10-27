@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
 

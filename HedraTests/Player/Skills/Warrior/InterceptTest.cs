@@ -1,4 +1,4 @@
-﻿namespace HedraTests.Player.Skills.Warrior
+namespace HedraTests.Player.Skills.Warrior
 {
     public class InterceptTest
     {

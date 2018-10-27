@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Generation;
+using Hedra.Engine.Generation;
 using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding

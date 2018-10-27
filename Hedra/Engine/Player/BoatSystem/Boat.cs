@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.Player.BoatSystem
+namespace Hedra.Engine.Player.BoatSystem
 {
     public class Boat : IBoat
     {

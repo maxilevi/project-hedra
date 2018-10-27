@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Generation;
+using Hedra.Engine.Generation;
 using Hedra.Engine.TreeSystem;
 
 namespace Hedra.Engine.BiomeSystem.DesertBiome

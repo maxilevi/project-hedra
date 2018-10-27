@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 23/03/2017
@@ -12,18 +12,18 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering.Animation
 {
-	/// <summary>
-	/// Description of KeyFrame.
-	/// </summary>
-	public class KeyFrame
-	{
-		public float TimeStamp { get; }
-		public Dictionary<string, JointTransform> Pose { get; }
-	
-		public KeyFrame(float TimeStamp, Dictionary<string, JointTransform> JointKeyFrames)
-		{
-			this.TimeStamp = TimeStamp;
-			this.Pose = JointKeyFrames;
-		}
-	}
+    /// <summary>
+    /// Description of KeyFrame.
+    /// </summary>
+    public class KeyFrame
+    {
+        public float TimeStamp { get; }
+        public Dictionary<string, JointTransform> Pose { get; }
+    
+        public KeyFrame(float TimeStamp, Dictionary<string, JointTransform> JointKeyFrames)
+        {
+            this.TimeStamp = TimeStamp;
+            this.Pose = JointKeyFrames;
+        }
+    }
 }

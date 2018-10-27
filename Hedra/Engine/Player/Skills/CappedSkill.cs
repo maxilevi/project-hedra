@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.Player.Skills
+namespace Hedra.Engine.Player.Skills
 {
     public abstract class CappedSkill : BaseSkill
     {

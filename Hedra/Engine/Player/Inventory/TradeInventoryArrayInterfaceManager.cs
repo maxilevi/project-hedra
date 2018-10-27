@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;

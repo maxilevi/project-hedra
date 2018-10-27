@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 24/06/2016
@@ -11,42 +11,42 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.UI
 {
-	/// <summary>
-	/// Description of Cursor.
-	/// </summary>
-	public class Cursor : IRenderable
-	{	
-		public uint TextureId { get; set; }
-		public Vector2 Position {get; set;}
-		public Vector2 Scale { get; set; }
-	    private static Shader _shader;
+    /// <summary>
+    /// Description of Cursor.
+    /// </summary>
+    public class Cursor : IRenderable
+    {    
+        public uint TextureId { get; set; }
+        public Vector2 Position {get; set;}
+        public Vector2 Scale { get; set; }
+        private static Shader _shader;
 
-	    static Cursor()
-	    {
-	        _shader = Shader.Build("Shaders/Cursor.vert", "Shaders/Cursor.frag");
+        static Cursor()
+        {
+            _shader = Shader.Build("Shaders/Cursor.vert", "Shaders/Cursor.frag");
         }
 
-		public Cursor(uint TextureId)
+        public Cursor(uint TextureId)
         {
-			this.TextureId = TextureId;
-			Scale = Mathf.ScaleGUI(new Vector2(1024, 576), new Vector2(0.05f * 0.5f, 0.08f * 0.5f));
-			DrawManager.Add(this);
-		}
-		
-		public void Draw()
+            this.TextureId = TextureId;
+            Scale = Mathf.ScaleGUI(new Vector2(1024, 576), new Vector2(0.05f * 0.5f, 0.08f * 0.5f));
+            DrawManager.Add(this);
+        }
+        
+        public void Draw()
         {
-			if(this.Position.X >= .98f || this.Position.Y >= .98f || this.Position.X <= -.98f || this.Position.Y <= -.98f){
-				Program.GameWindow.CursorVisible = true;
-				return;
-			}
-			
-			if(!UpdateManager.CursorShown)
-				return;
-		}
+            if(this.Position.X >= .98f || this.Position.Y >= .98f || this.Position.X <= -.98f || this.Position.Y <= -.98f){
+                Program.GameWindow.CursorVisible = true;
+                return;
+            }
+            
+            if(!UpdateManager.CursorShown)
+                return;
+        }
 
-	    public void Dispose()
-	    {
-	        
-	    }
-	}
+        public void Dispose()
+        {
+            
+        }
+    }
 }

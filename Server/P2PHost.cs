@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;

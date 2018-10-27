@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 29/09/2016
@@ -14,10 +14,10 @@ using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-	
-	public class ChunkComparer : IComparer<IPositionable>
+    
+    public class ChunkComparer : IComparer<IPositionable>
     {
-		public Vector3 Position { get; set; }
+        public Vector3 Position { get; set; }
 
         public int Compare(IPositionable ChunkA, IPositionable ChunkB)
         {

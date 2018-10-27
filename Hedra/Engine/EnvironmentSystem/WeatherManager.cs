@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;

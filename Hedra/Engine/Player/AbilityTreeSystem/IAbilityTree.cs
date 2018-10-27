@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using OpenTK.Input;

@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using System.Collections.Generic;

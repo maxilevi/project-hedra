@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 14/12/2016
@@ -23,14 +23,14 @@ namespace Hedra.Engine.EntitySystem
         public float Damage { get; set; } = 60;
         public float Duration { get; set; } = 5;
 
-	    private float _cooldown;
-		private bool _canSlow = true;
-		
-		public SlowComponent(IEntity Parent) : base(Parent)
-		{
-		    _parent = Parent;
-		    Parent.AfterAttacking += this.Apply;
-		}
+        private float _cooldown;
+        private bool _canSlow = true;
+        
+        public SlowComponent(IEntity Parent) : base(Parent)
+        {
+            _parent = Parent;
+            Parent.AfterAttacking += this.Apply;
+        }
 
         public override void Update() { }
 

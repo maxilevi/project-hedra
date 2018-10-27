@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 08/12/2016
@@ -24,8 +24,8 @@ namespace Hedra.Engine.WorldBuilding
         private readonly bool _move;
         private Vector3 _targetPoint;
         private readonly Timer _movementTimer;
-	    private bool _shouldSit;
-	    protected override bool ShouldSleep => true;
+        private bool _shouldSit;
+        protected override bool ShouldSleep => true;
 
         public VillagerAIComponent(IHumanoid Parent, bool Move) : base(Parent)
         {
@@ -36,27 +36,27 @@ namespace Hedra.Engine.WorldBuilding
 
         public override void Update()
         {
-	        base.Update();
+            base.Update();
             if (!base.CanUpdate) return;
 
-        	if( (LocalPlayer.Instance.Position - this.Parent.Position).Xz.LengthSquared < 24*24)
-	        {
-        		Parent.Orientation = (LocalPlayer.Instance.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
-	            Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
-        		return;
-        	}       	
-        	if(_move)
-	        {
-	            if(_movementTimer.Tick())
-	            {
-		            _shouldSit = Utils.Rng.Next(0, 3) == 1;
-		            if(!_shouldSit)
-			            _targetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.Physics.TargetPosition;
-	            }
+            if( (LocalPlayer.Instance.Position - this.Parent.Position).Xz.LengthSquared < 24*24)
+            {
+                Parent.Orientation = (LocalPlayer.Instance.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
+                Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
+                return;
+            }           
+            if(_move)
+            {
+                if(_movementTimer.Tick())
+                {
+                    _shouldSit = Utils.Rng.Next(0, 3) == 1;
+                    if(!_shouldSit)
+                        _targetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.Physics.TargetPosition;
+                }
 
-		        if (_shouldSit) base.Sit();
-		        else base.Move(_targetPoint);	
-        	}
+                if (_shouldSit) base.Sit();
+                else base.Move(_targetPoint);    
+            }
         }
     }
 }

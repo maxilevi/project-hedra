@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;

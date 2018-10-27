@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.StructureSystem.VillageSystem
+namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     public enum VillageType
     {

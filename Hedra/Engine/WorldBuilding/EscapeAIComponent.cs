@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
@@ -27,7 +27,7 @@ namespace Hedra.Engine.WorldBuilding
             }
 
             Parent.Orientation = -_targetDirection;
-			Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
+            Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
         }
     }
 }

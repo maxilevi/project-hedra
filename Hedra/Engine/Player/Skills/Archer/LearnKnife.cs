@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 30/04/2017
@@ -12,20 +12,20 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.Player.Skills.Archer
 {
-	/// <summary>
-	/// Description of ArcherLearnKnife.
-	/// </summary>
-	public class LearnKnife : LearningSkill
-	{
-		public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/LearnKnife.png");
-		
-		protected override void Learn()
-		{
-			Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Knife);
-		}
+    /// <summary>
+    /// Description of ArcherLearnKnife.
+    /// </summary>
+    public class LearnKnife : LearningSkill
+    {
+        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/LearnKnife.png");
+        
+        protected override void Learn()
+        {
+            Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Knife);
+        }
 
-		public override string Description => "Learn to use the knife.";
-		public override string DisplayName => "Learn Knife";
+        public override string Description => "Learn to use the knife.";
+        public override string DisplayName => "Learn Knife";
 
-	}
+    }
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 15/06/2016
@@ -14,74 +14,74 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.UI
 {
-	/// <summary>
-	/// Wrapper around GUIText.
-	/// </summary>
-	public class RenderableText : IRenderable, IAdjustable, UIElement
-	{
-		public readonly GUIText UIText;
+    /// <summary>
+    /// Wrapper around GUIText.
+    /// </summary>
+    public class RenderableText : IRenderable, IAdjustable, UIElement
+    {
+        public readonly GUIText UIText;
 
-		public RenderableText(string Text, Vector2 Position, Color FontColor, Font FontType){
-			this.UIText = new GUIText(Text, Position, FontColor, FontType);
-			DrawManager.UIRenderer.Remove(this.UIText.UIText);
-		}
+        public RenderableText(string Text, Vector2 Position, Color FontColor, Font FontType){
+            this.UIText = new GUIText(Text, Position, FontColor, FontType);
+            DrawManager.UIRenderer.Remove(this.UIText.UIText);
+        }
 
         public void Draw()
         {
-			DrawManager.UIRenderer.Draw(UIText.UIText);
-		}
+            DrawManager.UIRenderer.Draw(UIText.UIText);
+        }
 
-		public void Adjust()
-		{
-			UIText.UIText.Adjust();
-		}
-		
-		public string Text
-		{
-			get => UIText.Text;
-			set{
-				UIText.Text = value;
-				DrawManager.UIRenderer.Remove(this.UIText.UIText);
-			}
-		}
-		
-		public Vector2 Scale
-		{
-			get => UIText.Scale;
-			set => UIText.Scale = value;
-		}
-		
-		public Vector2 Position
-		{
-			get => UIText.Position;
-			set => UIText.Position = value;
-		}
-		
-		public Color Color{
-			get => UIText.TextColor;
-			set => UIText.TextColor = value;
-		}
+        public void Adjust()
+        {
+            UIText.UIText.Adjust();
+        }
+        
+        public string Text
+        {
+            get => UIText.Text;
+            set{
+                UIText.Text = value;
+                DrawManager.UIRenderer.Remove(this.UIText.UIText);
+            }
+        }
+        
+        public Vector2 Scale
+        {
+            get => UIText.Scale;
+            set => UIText.Scale = value;
+        }
+        
+        public Vector2 Position
+        {
+            get => UIText.Position;
+            set => UIText.Position = value;
+        }
+        
+        public Color Color{
+            get => UIText.TextColor;
+            set => UIText.TextColor = value;
+        }
 
-	    public Font TextFont
-	    {
-	        get => UIText.TextFont;
-		    set => UIText.TextFont = value;
-	    }
+        public Font TextFont
+        {
+            get => UIText.TextFont;
+            set => UIText.TextFont = value;
+        }
 
         public void Enable()
         {
-			UIText.Enable();
-		}
-		
-		public void Disable()
-		{
-			UIText.Disable();
-		}
-		
-		public void Dispose()
-		{
-			UIText.Dispose();
-			DrawManager.UIRenderer.Remove(this);
-		}
-	}
+            UIText.Enable();
+        }
+        
+        public void Disable()
+        {
+            UIText.Disable();
+        }
+        
+        public void Dispose()
+        {
+            UIText.Dispose();
+            DrawManager.UIRenderer.Remove(this);
+        }
+    }
 }

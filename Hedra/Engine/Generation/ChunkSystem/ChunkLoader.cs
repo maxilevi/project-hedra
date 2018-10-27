@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Author: Zaphyk
  * Date: 07/02/2016
  * Time: 07:36 p.m.

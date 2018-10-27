@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 15/06/2016
@@ -17,28 +17,28 @@ using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.Management
 {
-	/// <summary>
-	/// Description of SaveManager.
-	/// </summary>
-	public static class DataManager
-	{
-		private const float SaveVersion = 1.12f;
-		
-		public static void SavePlayer(PlayerInformation Player)
+    /// <summary>
+    /// Description of SaveManager.
+    /// </summary>
+    public static class DataManager
+    {
+        private const float SaveVersion = 1.12f;
+        
+        public static void SavePlayer(PlayerInformation Player)
         {
-			var chrFile = $"{AssetManager.AppData}/Characters/{Player.Name}";
-			
-			if(File.Exists(chrFile + ".db"))
+            var chrFile = $"{AssetManager.AppData}/Characters/{Player.Name}";
+            
+            if(File.Exists(chrFile + ".db"))
             {
                 if (File.Exists(chrFile + ".db.bak"))
                 {
                     File.Delete(chrFile + ".db.bak");
                 }
                 File.Copy(chrFile + ".db", chrFile + ".db.bak");
-				
-				var fInfo = new FileInfo(chrFile + ".db.bak");
-				fInfo.Attributes |= FileAttributes.Hidden;
-			}
+                
+                var fInfo = new FileInfo(chrFile + ".db.bak");
+                fInfo.Attributes |= FileAttributes.Hidden;
+            }
             using (var fs = File.Create(AssetManager.AppData + "/Characters/" + Player.Name + ".db"))
             {
                 using (var bw = new BinaryWriter(fs))
@@ -88,61 +88,61 @@ namespace Hedra.Engine.Management
                     }
                 }
             }
-		}
-	
-		public static PlayerInformation DataFromPlayer(IPlayer Player)
+        }
+    
+        public static PlayerInformation DataFromPlayer(IPlayer Player)
         {
-		    var data = new PlayerInformation
-		    {
-		        Level = Player.Level,
-		        Health = Player.Health,
+            var data = new PlayerInformation
+            {
+                Level = Player.Level,
+                Health = Player.Health,
                 Mana = Player.MaxXP,
-		        Xp = Player.XP,
-		        WorldSeed = World.Seed,
-		        Name = Player.Name,
-		        Rotation = Player.Rotation,
-		        BlockPosition = Player.BlockPosition,
-		        AbilityTreeArray = Player.AbilityTree.ToArray(),
-		        ToolbarArray = Player.Toolbar.ToArray(),
-		        TargetPosition = Player.Physics.TargetPosition,
-		        Daytime = EnvironmentSystem.SkyManager.DayTime,
-		        Class = Player.Class,
-		        RandomFactor = Player.RandomFactor,
-		        Items = Player.Inventory.ToArray()
-		    };
+                Xp = Player.XP,
+                WorldSeed = World.Seed,
+                Name = Player.Name,
+                Rotation = Player.Rotation,
+                BlockPosition = Player.BlockPosition,
+                AbilityTreeArray = Player.AbilityTree.ToArray(),
+                ToolbarArray = Player.Toolbar.ToArray(),
+                TargetPosition = Player.Physics.TargetPosition,
+                Daytime = EnvironmentSystem.SkyManager.DayTime,
+                Class = Player.Class,
+                RandomFactor = Player.RandomFactor,
+                Items = Player.Inventory.ToArray()
+            };
 
-		    return data;
-		}
-		
-		public static PlayerInformation LoadPlayer(string FileName)
-		{
-		    var info = new FileInfo(FileName);
-		    FileName = info.Length == 0 ? $"{FileName}.bak" : FileName;
+            return data;
+        }
+        
+        public static PlayerInformation LoadPlayer(string FileName)
+        {
+            var info = new FileInfo(FileName);
+            FileName = info.Length == 0 ? $"{FileName}.bak" : FileName;
             var data = DataManager.LoadPlayer(File.Open(FileName, FileMode.Open));
-			if(data.IsCorrupt)
+            if(data.IsCorrupt)
             {
                 Log.WriteLine($"[IO] Detected corrupt character file '{Path.GetFileName(FileName)}'.");
-			    if (!File.Exists($"{FileName}.bak"))
-			    {
-			        Log.WriteLine($"[IO] Failed to load character '{Path.GetFileName(FileName)}'.");
+                if (!File.Exists($"{FileName}.bak"))
+                {
+                    Log.WriteLine($"[IO] Failed to load character '{Path.GetFileName(FileName)}'.");
                     return null;
-			    }
+                }
                 Log.WriteLine("[IO] Character backup found! Retrying...");
                 File.Delete(FileName);
-			    File.Copy($"{FileName}.bak", FileName);
-			    var fInfo = new FileInfo(FileName)
-			    {
-			        Attributes = FileAttributes.Normal
-			    };
+                File.Copy($"{FileName}.bak", FileName);
+                var fInfo = new FileInfo(FileName)
+                {
+                    Attributes = FileAttributes.Normal
+                };
                 return LoadPlayer($"{FileName}.bak");
-            }		
-			return data;
-		}
-		
-		public static PlayerInformation LoadPlayer(Stream Str)
+            }        
+            return data;
+        }
+        
+        public static PlayerInformation LoadPlayer(Stream Str)
         {
-			var information = new PlayerInformation();
-			Dictionary<int, Item> items;
+            var information = new PlayerInformation();
+            Dictionary<int, Item> items;
             using (var br = new BinaryReader(Str))
             {
                 float version = br.ReadSingle();
@@ -172,76 +172,76 @@ namespace Hedra.Engine.Management
                     items.Add(index, item);
                 }
             }
-			information.Items = items.ToArray();
-			Str.Close();
-			Str.Dispose();
-			return information;
-		}
+            information.Items = items.ToArray();
+            Str.Close();
+            Str.Dispose();
+            return information;
+        }
 
         [Obsolete]
-	    private static string intToClassDesignString(int OldClass)
+        private static string intToClassDesignString(int OldClass)
         {
             var map = new []{"None", "Archer", "Rogue", "Warrior"};
             return map[OldClass];
         }
 
-		public static void DeleteCharacter(PlayerInformation Information)
-		{
-			File.Delete($"{AssetManager.AppData}/Characters/{Information.Name}.db");
-			File.Delete($"{AssetManager.AppData}/Characters/{Information.Name}.db.bak");
-		}
-
-		public static PlayerInformation[] PlayerFiles
+        public static void DeleteCharacter(PlayerInformation Information)
         {
-			get
-            {
-				var filesList = new List<PlayerInformation>();
-				string[] files = Directory.GetFiles(AssetManager.AppData + "Characters/");
+            File.Delete($"{AssetManager.AppData}/Characters/{Information.Name}.db");
+            File.Delete($"{AssetManager.AppData}/Characters/{Information.Name}.db.bak");
+        }
 
-				for(var i = 0; i < files.Length; i++)
+        public static PlayerInformation[] PlayerFiles
+        {
+            get
+            {
+                var filesList = new List<PlayerInformation>();
+                string[] files = Directory.GetFiles(AssetManager.AppData + "Characters/");
+
+                for(var i = 0; i < files.Length; i++)
                 {
-					if(files[i].EndsWith(".bak")) 
-						continue;
-					try
-					{
-					    var information = LoadPlayer(files[i]);
-					    if (information == null)
-					    {
-					        File.Delete(files[i]);
-					        if (File.Exists(files[i] + ".bak"))
-					        {
-					            File.Delete(files[i] + ".bak");
-					        }
+                    if(files[i].EndsWith(".bak")) 
+                        continue;
+                    try
+                    {
+                        var information = LoadPlayer(files[i]);
+                        if (information == null)
+                        {
+                            File.Delete(files[i]);
+                            if (File.Exists(files[i] + ".bak"))
+                            {
+                                File.Delete(files[i] + ".bak");
+                            }
                             continue;
-					    }
+                        }
                         filesList.Add( information );
-					}
+                    }
                     catch (Exception e)
                     {
-						if(e is UnauthorizedAccessException)
+                        if(e is UnauthorizedAccessException)
                         {
-							Log.WriteLine("Unathoriazed access in file: " + Path.GetFileName(files[i]));
-							continue;
-						}
-						Log.WriteLine(e.ToString());
-					}
-				}
-				return filesList.ToArray();
-			}
-		}
-		
-		
-		public static int CharacterCount
+                            Log.WriteLine("Unathoriazed access in file: " + Path.GetFileName(files[i]));
+                            continue;
+                        }
+                        Log.WriteLine(e.ToString());
+                    }
+                }
+                return filesList.ToArray();
+            }
+        }
+        
+        
+        public static int CharacterCount
         {
-			get
+            get
             { 
-				string[] files = Directory.GetFiles(AssetManager.AppData+"Characters/");
-				var count = 0;
-				for(var i = 0; i < files.Length; i++){
-					if(!files[i].EndsWith(".bak")) count++;
-				}
-				return count;
-			}
-		}
-	}
+                string[] files = Directory.GetFiles(AssetManager.AppData+"Characters/");
+                var count = 0;
+                for(var i = 0; i < files.Length; i++){
+                    if(!files[i].EndsWith(".bak")) count++;
+                }
+                return count;
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.EntitySystem
+namespace Hedra.Engine.EntitySystem
 {
     public interface IEffectComponent
     {

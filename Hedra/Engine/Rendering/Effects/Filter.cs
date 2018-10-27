@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 02/08/2016
@@ -13,31 +13,31 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering.Effects
 {
-	/// <summary>
-	/// Description of IFilter.
-	/// </summary>
-	public abstract class Filter : IDisposable
-	{	
+    /// <summary>
+    /// Description of IFilter.
+    /// </summary>
+    public abstract class Filter : IDisposable
+    {    
 
-	    public abstract void Dispose();
+        public abstract void Dispose();
         public abstract void Pass(FBO Src, FBO Dst);
-		
-		public virtual void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false)
+        
+        public virtual void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false)
         {
-			Renderer.Disable(EnableCap.DepthTest);
+            Renderer.Disable(EnableCap.DepthTest);
 
-		    DrawManager.UIRenderer.SetupQuad();
+            DrawManager.UIRenderer.SetupQuad();
 
             Renderer.ActiveTexture(TextureUnit.Texture0);
-			Renderer.BindTexture(TextureTarget.Texture2D, TexID);
+            Renderer.BindTexture(TextureTarget.Texture2D, TexID);
 
             if (DrawingShader.HasUniform("Scale")) DrawingShader["Scale"] = Vector2.One;
-		    if (DrawingShader.HasUniform("Position"))  DrawingShader["Position"] = Vector2.Zero;
+            if (DrawingShader.HasUniform("Position"))  DrawingShader["Position"] = Vector2.Zero;
 
-		    DrawManager.UIRenderer.DrawQuad();
+            DrawManager.UIRenderer.DrawQuad();
 
             Renderer.Enable(EnableCap.DepthTest);
-			Renderer.Enable(EnableCap.CullFace);
-		}
-	}
+            Renderer.Enable(EnableCap.CullFace);
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿    /*
+    /*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 24/06/2016
@@ -17,21 +17,21 @@ using System.Reflection;
 
 namespace Hedra.Engine.CacheSystem
 {
-	/// <summary>
-	/// Description of CacheManager.
-	/// </summary>
-	public class CacheProvider : ICacheProvider
-	{
-		public Dictionary<float, List<float>> CachedExtradata { get; private set; }
-		public Dictionary<Vector4, List<Vector4>> CachedColors { get; private set; }
+    /// <summary>
+    /// Description of CacheManager.
+    /// </summary>
+    public class CacheProvider : ICacheProvider
+    {
+        public Dictionary<float, List<float>> CachedExtradata { get; private set; }
+        public Dictionary<Vector4, List<Vector4>> CachedColors { get; private set; }
         private readonly Dictionary<string, CacheType> _caches = new Dictionary<string, CacheType>();
-		private readonly object _colorLock = new object();
-		private readonly object _extradataLock = new object();
+        private readonly object _colorLock = new object();
+        private readonly object _extradataLock = new object();
 
         public void Load()
         {
-	        CachedColors = new Dictionary< Vector4, List<Vector4> >();
-	        CachedExtradata =  new Dictionary< float, List<float> >();
+            CachedColors = new Dictionary< Vector4, List<Vector4> >();
+            CachedExtradata =  new Dictionary< float, List<float> >();
             Type[] typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(CacheManager).Namespace).ToArray();
             foreach (Type type in typeList)
             {
@@ -60,79 +60,79 @@ namespace Hedra.Engine.CacheSystem
 
         }
 
-	    public List<CollisionShape> GetShape(VertexData Model)
-	    {
-	        foreach (var pair in _caches)
-	        {
-	            var result = GetShape(pair.Key, Model);
-	            if (result != null) return result;
+        public List<CollisionShape> GetShape(VertexData Model)
+        {
+            foreach (var pair in _caches)
+            {
+                var result = GetShape(pair.Key, Model);
+                if (result != null) return result;
 
-	        }
-	        return null;
-	    }
+            }
+            return null;
+        }
 
-	    public List<CollisionShape> GetShape(string Type, VertexData Data)
-	    {
-	        return _caches[Type].GetShapes(Data);
-	    }
+        public List<CollisionShape> GetShape(string Type, VertexData Data)
+        {
+            return _caches[Type].GetShapes(Data);
+        }
 
         public void Discard()
-	    {
-	        CachedColors.Clear();
-	        CachedExtradata.Clear();
-	    }
+        {
+            CachedColors.Clear();
+            CachedExtradata.Clear();
+        }
 
-	    public void Check(InstanceData Data)
-	    {
-	        lock (_colorLock)
-	        {
-	            Vector4 cHash = MakeHash(Data.Colors);
-	            if (CachedColors.ContainsKey(cHash))
-	            {
-	                goto COLOR_EXISTS;
-	            }
-	            CachedColors.Add(cHash, Data.Colors);
+        public void Check(InstanceData Data)
+        {
+            lock (_colorLock)
+            {
+                Vector4 cHash = MakeHash(Data.Colors);
+                if (CachedColors.ContainsKey(cHash))
+                {
+                    goto COLOR_EXISTS;
+                }
+                CachedColors.Add(cHash, Data.Colors);
 
-	            COLOR_EXISTS:
-	            Data.ColorCache = cHash;
-	            Data.Colors = new List<Vector4>();
-	        }
+                COLOR_EXISTS:
+                Data.ColorCache = cHash;
+                Data.Colors = new List<Vector4>();
+            }
 
-	        lock (_extradataLock)
-	        {
-	            float eHash = MakeHash(Data.ExtraData);
-	            if (CachedExtradata.ContainsKey(eHash))
-	            {
-	                goto EXTRADATA_EXISTS;
-	            }
-	            CachedExtradata.Add(eHash, Data.ExtraData);
+            lock (_extradataLock)
+            {
+                float eHash = MakeHash(Data.ExtraData);
+                if (CachedExtradata.ContainsKey(eHash))
+                {
+                    goto EXTRADATA_EXISTS;
+                }
+                CachedExtradata.Add(eHash, Data.ExtraData);
 
-	            EXTRADATA_EXISTS:
-	            Data.ExtraDataCache = eHash;
-	            Data.ExtraData = new List<float>();
-	        }
-	    }
+                EXTRADATA_EXISTS:
+                Data.ExtraDataCache = eHash;
+                Data.ExtraData = new List<float>();
+            }
+        }
 
-	    private Vector4 MakeHash(List<Vector4> L)
-	    {
-	        Vector4 hash = Vector4.Zero;
-	        for (int i = 0; i < L.Count; i++)
-	        {
-	            hash += L[i];
-	        }
-	        hash /= L.Count;
-	        return hash;
-	    }
+        private Vector4 MakeHash(List<Vector4> L)
+        {
+            Vector4 hash = Vector4.Zero;
+            for (int i = 0; i < L.Count; i++)
+            {
+                hash += L[i];
+            }
+            hash /= L.Count;
+            return hash;
+        }
 
-	    private float MakeHash(List<float> L)
-	    {
-	        float hash = 0;
-	        for (int i = 0; i < L.Count; i++)
-	        {
-	            hash += L[i];
-	        }
-	        hash /= L.Count;
-	        return hash - 10;
-	    }
-	}
+        private float MakeHash(List<float> L)
+        {
+            float hash = 0;
+            for (int i = 0; i < L.Count; i++)
+            {
+                hash += L[i];
+            }
+            hash /= L.Count;
+            return hash - 10;
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿using Hedra;
+using Hedra;
 using Hedra.Engine;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;

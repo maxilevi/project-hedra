@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
+namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
     public class BuildingTemplate<T> where T : DesignTemplate
     {

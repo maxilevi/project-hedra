@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 10/11/2016
@@ -10,11 +10,11 @@ using System;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-	/// <summary>
-	/// Description of ICollidable.
-	/// </summary>
-	public interface ICollidable
-	{
-	    float Height { get; }
-	}
+    /// <summary>
+    /// Description of ICollidable.
+    /// </summary>
+    public interface ICollidable
+    {
+        float Height { get; }
+    }
 }

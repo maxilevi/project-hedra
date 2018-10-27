@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 05/09/2016
@@ -22,15 +22,15 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public class PoisonousComponent : EntityComponent, IEffectComponent
     {
-		public int Chance { get; set; } = 10;
-		public float Damage { get; set; } = 30;
-		public float Duration { get; set; } = 5;
+        public int Chance { get; set; } = 10;
+        public float Damage { get; set; } = 30;
+        public float Duration { get; set; } = 5;
 
-		public PoisonousComponent(IEntity Parent) : base(Parent){
-			Parent.AfterAttacking += this.Apply;
-		}
-		
-		public override void Update(){}
+        public PoisonousComponent(IEntity Parent) : base(Parent){
+            Parent.AfterAttacking += this.Apply;
+        }
+        
+        public override void Update(){}
 
         public void Apply(IEntity Victim, float Amount)
         {

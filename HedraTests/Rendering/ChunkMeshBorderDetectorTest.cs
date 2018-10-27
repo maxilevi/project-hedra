@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using NUnit.Framework;

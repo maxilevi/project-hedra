@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 02/08/2016
@@ -12,53 +12,53 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.Effects
 {
-	/// <summary>
-	/// Description of UnderWaterFilter.
-	/// </summary>
-	public class UnderWaterFilter : Filter
-	{
-	    private static readonly Shader WaterEffect;
-		public Vector4 Multiplier { get; set; }
+    /// <summary>
+    /// Description of UnderWaterFilter.
+    /// </summary>
+    public class UnderWaterFilter : Filter
+    {
+        private static readonly Shader WaterEffect;
+        public Vector4 Multiplier { get; set; }
 
-	    static UnderWaterFilter()
-	    {
-	        WaterEffect = Shader.Build("Shaders/UnderWater.vert", "Shaders/UnderWater.frag");
+        static UnderWaterFilter()
+        {
+            WaterEffect = Shader.Build("Shaders/UnderWater.vert", "Shaders/UnderWater.frag");
         }
 
-	    public UnderWaterFilter() {
+        public UnderWaterFilter() {
             Multiplier = new Vector4(1f, 1f, 1f, 1);
-		}
+        }
 
-	    public override void Pass(FBO Src, FBO Dst){
-			Dst.Bind();
-			
-			WaterEffect.Bind();
-		    //WaterEffect["Time"] = WaterMeshBuffer.WaveMovement;
-		    WaterEffect["Multiplier"] = Multiplier;
-			this.DrawQuad(WaterEffect, Src.TextureID[0]);
-			WaterEffect.Unbind();
-			
-			Dst.UnBind();
-		}
-		
-		public override void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false)
-		{
-			Renderer.Disable(EnableCap.DepthTest);
-			
-			DrawManager.UIRenderer.SetupQuad();
-			
-			Renderer.ActiveTexture(TextureUnit.Texture0);
-			Renderer.BindTexture(TextureTarget.Texture2D, TexID);
+        public override void Pass(FBO Src, FBO Dst){
+            Dst.Bind();
+            
+            WaterEffect.Bind();
+            //WaterEffect["Time"] = WaterMeshBuffer.WaveMovement;
+            WaterEffect["Multiplier"] = Multiplier;
+            this.DrawQuad(WaterEffect, Src.TextureID[0]);
+            WaterEffect.Unbind();
+            
+            Dst.UnBind();
+        }
+        
+        public override void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false)
+        {
+            Renderer.Disable(EnableCap.DepthTest);
+            
+            DrawManager.UIRenderer.SetupQuad();
+            
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, TexID);
 
-		    DrawManager.UIRenderer.DrawQuad();
+            DrawManager.UIRenderer.DrawQuad();
 
             Renderer.Enable(EnableCap.DepthTest);
-			Renderer.Enable(EnableCap.CullFace);
-		}
+            Renderer.Enable(EnableCap.CullFace);
+        }
 
-	    public override void Dispose()
-	    {
+        public override void Dispose()
+        {
 
-	    }
+        }
     }
 }

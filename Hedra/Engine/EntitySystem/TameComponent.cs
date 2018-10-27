@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 16/02/2017
@@ -10,17 +10,17 @@ using System;
 
 namespace Hedra.Engine.EntitySystem
 {
-	/// <summary>
-	/// Description of TameComponent.
-	/// </summary>
-	public class TameComponent : EntityComponent
-	{
-		public TameComponent(Entity Parent) : base(Parent){
-		
-		}
-		
-		public override void Update(){
-		
-		}
-	}
+    /// <summary>
+    /// Description of TameComponent.
+    /// </summary>
+    public class TameComponent : EntityComponent
+    {
+        public TameComponent(Entity Parent) : base(Parent){
+        
+        }
+        
+        public override void Update(){
+        
+        }
+    }
 }

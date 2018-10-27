@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 25/12/2016
@@ -10,11 +10,11 @@ using System;
 
 namespace Hedra.Engine.Management
 {
-	/// <summary>
-	/// Description of Platform.
-	/// </summary>
-		
-	public enum Platform
+    /// <summary>
+    /// Description of Platform.
+    /// </summary>
+        
+    public enum Platform
     {
         Windows,
         Linux,

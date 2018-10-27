@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hedra.Engine.Sound;
 using OpenTK;
 using OpenTK.Audio.OpenAL;

@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem;
 using NUnit.Framework;
 
 namespace HedraTests.Player

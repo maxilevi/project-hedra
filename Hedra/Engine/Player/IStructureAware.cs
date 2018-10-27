@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Player
 {

@@ -1,4 +1,4 @@
-﻿namespace HedraTests.Rendering
+namespace HedraTests.Rendering
 {
     public class MeshStitcherTest
     {

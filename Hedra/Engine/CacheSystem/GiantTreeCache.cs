@@ -1,4 +1,4 @@
-﻿using OpenTK;
+using OpenTK;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem

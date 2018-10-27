@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Hedra.Engine.Player.Skills
 {
@@ -14,7 +14,7 @@ namespace Hedra.Engine.Player.Skills
         {
             if(_currentLevel == 0 && Level == 0) return;
             
-            if(_currentLevel != Level) _set = false;			
+            if(_currentLevel != Level) _set = false;            
             if (!_set)
             {
                 if(Level > MaxLevel)

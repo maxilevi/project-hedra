@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Player;
+using Hedra.Engine.Player;
 using OpenTK;
 
 namespace Hedra.Engine.ItemSystem.ArmorSystem

@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Generation;
+using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
 using NUnit.Framework;
 using OpenTK;

@@ -42,7 +42,7 @@ namespace Hedra.Engine.WorldBuilding
             
             _inCementery = (_parent.Position.Xz - GameManager.Player.Position.Xz).LengthSquared <
                            _parent.Radius * _parent.Radius * .5f * .5f && !_parent.Restored;
-		    
+            
             if(_inCementery && !wasInCementery)
             {
                 _cementeryTime = SkyManager.DayTime;
@@ -85,7 +85,7 @@ namespace Hedra.Engine.WorldBuilding
             if (!_parent.Restored &&  (_parent.Position - GameManager.Player.Position).Xz.LengthSquared 
                 < _parent.Radius * _parent.Radius)
             {
-			
+            
                 if(_passedTime % 2 == 0){
                     _particles.Color = Particle3D.AshColor;
                     _particles.VariateUniformly = false;
@@ -97,7 +97,7 @@ namespace Hedra.Engine.WorldBuilding
                     _particles.GravityEffect = -0.000f;
                     _particles.PositionErrorMargin = new Vector3(64f, 12f, 64f);
                     _particles.Grayscale = true;
-					
+                    
                     _particles.Emit();
                 }
             }
@@ -117,7 +117,7 @@ namespace Hedra.Engine.WorldBuilding
                 SkyManager.PopTime();
             }
         }
-		
+        
         private void AfterSave(object Invoker, EventArgs Args)
         {
             if(_inCementery)

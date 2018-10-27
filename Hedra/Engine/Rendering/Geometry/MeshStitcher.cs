@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Geometry

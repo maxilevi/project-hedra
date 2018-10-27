@@ -1,4 +1,4 @@
-﻿
+
 using Hedra.Engine.ClassSystem;
 
 namespace Hedra.Engine.ModuleSystem

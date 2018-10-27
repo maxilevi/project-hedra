@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Player.Skills;
+using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Player.Skills.Archer;
 using NUnit.Framework;
 

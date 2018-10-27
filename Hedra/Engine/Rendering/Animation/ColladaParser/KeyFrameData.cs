@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 23/03/2017
@@ -11,20 +11,20 @@ using System.Collections.Generic;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
-	/// <summary>
-	/// Description of KeyFrameData.
-	/// </summary>
-	public class KeyFrameData
-	{
-		public readonly float Time;
-		public readonly List<JointTransformData> JointTransforms = new List<JointTransformData>();
-		
-		public KeyFrameData(float Time){
-			this.Time = Time;
-		}
-		
-		public void AddJointTransform(JointTransformData Transform){
-			JointTransforms.Add(Transform);
-		}
-	}
+    /// <summary>
+    /// Description of KeyFrameData.
+    /// </summary>
+    public class KeyFrameData
+    {
+        public readonly float Time;
+        public readonly List<JointTransformData> JointTransforms = new List<JointTransformData>();
+        
+        public KeyFrameData(float Time){
+            this.Time = Time;
+        }
+        
+        public void AddJointTransform(JointTransformData Transform){
+            JointTransforms.Add(Transform);
+        }
+    }
 }

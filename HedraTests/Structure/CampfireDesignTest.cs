@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem;
 using NUnit.Framework;
 
 namespace HedraTests.Structure

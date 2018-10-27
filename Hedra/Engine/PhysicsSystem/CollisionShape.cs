@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 10/11/2016
@@ -20,64 +20,64 @@ namespace Hedra.Engine.PhysicsSystem
     /// </summary>
     public class CollisionShape : ICollidable, ICloneable
     {
-		public Vector3[] Vertices { get; }
-	    public uint[] Indices { get; }
+        public Vector3[] Vertices { get; }
+        public uint[] Indices { get; }
         public float BroadphaseRadius { get; set; }
         public Vector3 BroadphaseCenter { get; set; }
         public bool UseBroadphase { get; set; } = true;
-	    public float Height { get; private set; }
+        public float Height { get; private set; }
         private CollisionShape _cache;
 
         public CollisionShape(Vector3[] Vertices, uint[] Indices)
-	    {
-	        this.Vertices = Vertices ?? new Vector3[0];
+        {
+            this.Vertices = Vertices ?? new Vector3[0];
 #if !DEBUG
             Indices = null;
 #endif
             this.Indices = Indices ?? new uint[0];
             this.RecalculateBroadphase();
-		    this.Height = (Support(Vector3.UnitY) - Support(-Vector3.UnitY)).Y;
+            this.Height = (Support(Vector3.UnitY) - Support(-Vector3.UnitY)).Y;
         }
 
-		public CollisionShape Transform(Matrix4 TransMatrix)
+        public CollisionShape Transform(Matrix4 TransMatrix)
         {
-			for(var i = 0; i < Vertices.Length; i++)
+            for(var i = 0; i < Vertices.Length; i++)
             {
-				Vertices[i] = Vector3.TransformPosition(Vertices[i], TransMatrix);
-			}
+                Vertices[i] = Vector3.TransformPosition(Vertices[i], TransMatrix);
+            }
             this.RecalculateBroadphase();
-	        this.Height = (Support(Vector3.UnitY) - Support(-Vector3.UnitY)).Y;
+            this.Height = (Support(Vector3.UnitY) - Support(-Vector3.UnitY)).Y;
             return this;
         }
 
-		public CollisionShape Transform(Vector3 Position)
+        public CollisionShape Transform(Vector3 Position)
         {
-			for(var i = 0; i < Vertices.Length; i++)
+            for(var i = 0; i < Vertices.Length; i++)
             {
-				Vertices[i] = Vector3.TransformPosition(Vertices[i], Matrix4.CreateTranslation(Position));
-			}
+                Vertices[i] = Vector3.TransformPosition(Vertices[i], Matrix4.CreateTranslation(Position));
+            }
             this.RecalculateBroadphase();
             return this;
         }
 
-		public Vector3 Support(Vector3 Direction)
-		{
-			
-		    var highest = float.MinValue;
-		    var support = Vector3.Zero;
+        public Vector3 Support(Vector3 Direction)
+        {
+            
+            var highest = float.MinValue;
+            var support = Vector3.Zero;
 
-		    for (var i = 0; i < Vertices.Length; ++i)
+            for (var i = 0; i < Vertices.Length; ++i)
             {
-		        Vector3 v = Vertices[i];
-		        float dot = Vector3.Dot(Direction, v);
+                Vector3 v = Vertices[i];
+                float dot = Vector3.Dot(Direction, v);
 
-		        if (!(dot > highest)) continue;
-		        highest = dot;
-		        support = v;
-		    }
-		
-		    return support;
-		}
+                if (!(dot > highest)) continue;
+                highest = dot;
+                support = v;
+            }
+        
+            return support;
+        }
 
         public void RecalculateBroadphase()
         {
@@ -99,9 +99,9 @@ namespace Hedra.Engine.PhysicsSystem
         }
 
         public object Clone()
-		{
-		    return new CollisionShape(Vertices.ToArray(), this.Indices.ToArray());
-		}
+        {
+            return new CollisionShape(Vertices.ToArray(), this.Indices.ToArray());
+        }
 
         public CollisionShape(List<Vector3> Vertices, List<uint> Indices) : this(Vertices.ToArray(), Indices.ToArray())
         {
@@ -112,12 +112,12 @@ namespace Hedra.Engine.PhysicsSystem
         }
 
         public CollisionShape(Vector3[] Vertices) : this(Vertices, null)
-	    {
-	    }
+        {
+        }
 
-	    public CollisionShape(VertexData Data) : this(Data.Vertices.ToArray(), Data.Indices.ToArray())
-	    {       
-	    }
+        public CollisionShape(VertexData Data) : this(Data.Vertices.ToArray(), Data.Indices.ToArray())
+        {       
+        }
 
         public CollisionShape Cache
         {

@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Layout

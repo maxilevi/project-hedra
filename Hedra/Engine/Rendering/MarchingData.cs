@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 30/11/2016
@@ -11,14 +11,14 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
-	/// <summary>
-	/// Description of MarchingData.
-	/// </summary>
-	public class MarchingData : DataContainer
-	{
-		public Vector4 TemplateColor;
-		public MarchingData(Vector4 Color) : base(){
-			this.TemplateColor = Color;
-		}
-	}
+    /// <summary>
+    /// Description of MarchingData.
+    /// </summary>
+    public class MarchingData : DataContainer
+    {
+        public Vector4 TemplateColor;
+        public MarchingData(Vector4 Color) : base(){
+            this.TemplateColor = Color;
+        }
+    }
 }

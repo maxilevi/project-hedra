@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 01/07/2016
@@ -21,30 +21,30 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {
-	/// <summary>
-	/// Description of SkillsBar.
-	/// </summary>
-	public class Toolbar : IToolbar
-	{
+    /// <summary>
+    /// Description of SkillsBar.
+    /// </summary>
+    public class Toolbar : IToolbar
+    {
         public const int InteractableItems = 4;
-	    public const int BarItems = 7;
-	    private const char Marker = '!';
-	    private const string HeaderMarker = "<>";
+        public const int BarItems = 7;
+        private const char Marker = '!';
+        private const string HeaderMarker = "<>";
         private readonly IPlayer _player;
-	    private readonly InventoryArray _barItems;
-	    private readonly InventoryArray _bagItems;
-	    private readonly ToolbarInventoryInterface _toolbarItemsInterface;
-	    private readonly AbilityBagInventoryInterface _bagItemsInterface;
-	    private readonly ToolbarInterfaceManager _manager;
-	    private readonly ToolbarInputHandler _inputHandler;
-	    private BaseSkill[] _skills;
-	    private WeaponAttack _w1;
-	    private WeaponAttack _w2;
+        private readonly InventoryArray _barItems;
+        private readonly InventoryArray _bagItems;
+        private readonly ToolbarInventoryInterface _toolbarItemsInterface;
+        private readonly AbilityBagInventoryInterface _bagItemsInterface;
+        private readonly ToolbarInterfaceManager _manager;
+        private readonly ToolbarInputHandler _inputHandler;
+        private BaseSkill[] _skills;
+        private WeaponAttack _w1;
+        private WeaponAttack _w2;
         private bool _show;
 
         public Toolbar(IPlayer Player)
         {
-			_player = Player;
+            _player = Player;
             _barItems = new InventoryArray(BarItems);
             _bagItems = new InventoryArray(AbilityTree.AbilityCount-1);
             _toolbarItemsInterface = new ToolbarInventoryInterface(_player, _barItems, 0, _barItems.Length, BarItems, Vector2.One)
@@ -65,24 +65,24 @@ namespace Hedra.Engine.Player.ToolbarSystem
             this.LoadSkills();
         }
 
-	    private void LoadSkills()
-	    {
-	        Type[] skillsTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(Assembly => Assembly.GetLoadableTypes())
+        private void LoadSkills()
+        {
+            Type[] skillsTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(Assembly => Assembly.GetLoadableTypes())
                 .Where(Type => Type.IsSubclassOf(typeof(BaseSkill))).Where(Type => Type != typeof(WeaponAttack)).Where(Type => !Type.IsAbstract).ToArray();
-	        _skills = new BaseSkill[skillsTypes.Length];
-	        for (var i = 0; i < Skills.Length; i++)
-	        {
-	            _skills[i] = (BaseSkill) Activator.CreateInstance(skillsTypes[i]);
-				_skills[i].Initialize(Vector2.Zero, InventoryArrayInterface.DefaultSize, _player.UI.GamePanel, _player);
+            _skills = new BaseSkill[skillsTypes.Length];
+            for (var i = 0; i < Skills.Length; i++)
+            {
+                _skills[i] = (BaseSkill) Activator.CreateInstance(skillsTypes[i]);
+                _skills[i].Initialize(Vector2.Zero, InventoryArrayInterface.DefaultSize, _player.UI.GamePanel, _player);
                 _skills[i].Active = false;
-	        }
+            }
             _w1 = new WeaponAttack();
-			_w1.Initialize(_toolbarItemsInterface.Textures[4].Position, _toolbarItemsInterface.Textures[4].Scale, _player.UI.GamePanel, _player);
+            _w1.Initialize(_toolbarItemsInterface.Textures[4].Position, _toolbarItemsInterface.Textures[4].Scale, _player.UI.GamePanel, _player);
             _w2 = new WeaponAttack();
-			_w2.Initialize(_toolbarItemsInterface.Textures[5].Position, _toolbarItemsInterface.Textures[5].Scale, _player.UI.GamePanel, _player);
+            _w2.Initialize(_toolbarItemsInterface.Textures[5].Position, _toolbarItemsInterface.Textures[5].Scale, _player.UI.GamePanel, _player);
 
             EventDispatcher.RegisterMouseDown(this, this.MouseDown);
-	        EventDispatcher.RegisterMouseUp(this, this.MouseUp);
+            EventDispatcher.RegisterMouseUp(this, this.MouseUp);
         }
 
         private void MouseDown(object Sender, MouseButtonEventArgs EventArgs)
@@ -103,121 +103,121 @@ namespace Hedra.Engine.Player.ToolbarSystem
                     _w2.Use();
                     break;
             }
-	    }
-
-	    private void MouseUp(object Sender, MouseButtonEventArgs EventArgs)
-	    {
-	        switch (EventArgs.Button)
-	        {
-	            case MouseButton.Left:
-	                _w1.KeyUp();
-	                break;
-	            case MouseButton.Right:
-	                _w2.KeyUp();
-	                break;
-	        }
-	    }
-
-	    public BaseSkill SkillAt(int Index)
-	    {
-	        return _skills.FirstOrDefault(S => _barItems[Index].HasAttribute("AbilityType") 
-                && S.GetType() == _barItems[Index].GetAttribute<Type>("AbilityType"));
-	    }
-
-	    public void Update()
-	    {
-	        _toolbarItemsInterface.Update();
-	    }
-
-	    public void UpdateView()
-	    {
-	        _manager.UpdateView();
-	    }
-
-	    public void SetAttackType(Weapon CurrentWeapon)
-	    {
-	        _w1.SetType(CurrentWeapon, AttackType.Primary);
-	        _w2.SetType(CurrentWeapon, AttackType.Secondary);
         }
 
-	    public BaseSkill[] Skills => _skills;
-		
-		public byte[] ToArray()
-		{
-		    var saveData = HeaderMarker;
-		    for (var i = 0; i < InteractableItems; i++)
-		    {
-		        var skill = this.SkillAt(i);
+        private void MouseUp(object Sender, MouseButtonEventArgs EventArgs)
+        {
+            switch (EventArgs.Button)
+            {
+                case MouseButton.Left:
+                    _w1.KeyUp();
+                    break;
+                case MouseButton.Right:
+                    _w2.KeyUp();
+                    break;
+            }
+        }
+
+        public BaseSkill SkillAt(int Index)
+        {
+            return _skills.FirstOrDefault(S => _barItems[Index].HasAttribute("AbilityType") 
+                && S.GetType() == _barItems[Index].GetAttribute<Type>("AbilityType"));
+        }
+
+        public void Update()
+        {
+            _toolbarItemsInterface.Update();
+        }
+
+        public void UpdateView()
+        {
+            _manager.UpdateView();
+        }
+
+        public void SetAttackType(Weapon CurrentWeapon)
+        {
+            _w1.SetType(CurrentWeapon, AttackType.Primary);
+            _w2.SetType(CurrentWeapon, AttackType.Secondary);
+        }
+
+        public BaseSkill[] Skills => _skills;
+        
+        public byte[] ToArray()
+        {
+            var saveData = HeaderMarker;
+            for (var i = 0; i < InteractableItems; i++)
+            {
+                var skill = this.SkillAt(i);
                 saveData += skill == null ? string.Empty + Toolbar.Marker : skill.GetType().Name + Toolbar.Marker;
-		    }
-		    return Encoding.ASCII.GetBytes(saveData);
-		}
-		
-		public void FromInformation(PlayerInformation Information)
-		{
+            }
+            return Encoding.ASCII.GetBytes(saveData);
+        }
+        
+        public void FromInformation(PlayerInformation Information)
+        {
             _manager.Empty();
             var saveData = Encoding.ASCII.GetString(Information.ToolbarArray);
             if(!saveData.StartsWith(HeaderMarker)) return;
-		    var splits = saveData.Substring(HeaderMarker.Length, saveData.Length-HeaderMarker.Length).Split(Toolbar.Marker);
-		    for (var k = 0; k < splits.Length; k++)
-		    {
-		        for (var i = 0; i < _skills.Length; i++)
-		        {
-		            var type = _skills[i].GetType();
-		            if (type.Name == splits[k])
-		            {
-		                var matchingButton = _bagItemsInterface.Buttons.FirstOrDefault(B =>
-		                    _bagItemsInterface.Array[Array.IndexOf(_bagItemsInterface.Buttons, B)]
-		                        .GetAttribute<Type>("AbilityType") == type);
+            var splits = saveData.Substring(HeaderMarker.Length, saveData.Length-HeaderMarker.Length).Split(Toolbar.Marker);
+            for (var k = 0; k < splits.Length; k++)
+            {
+                for (var i = 0; i < _skills.Length; i++)
+                {
+                    var type = _skills[i].GetType();
+                    if (type.Name == splits[k])
+                    {
+                        var matchingButton = _bagItemsInterface.Buttons.FirstOrDefault(B =>
+                            _bagItemsInterface.Array[Array.IndexOf(_bagItemsInterface.Buttons, B)]
+                                .GetAttribute<Type>("AbilityType") == type);
 
                         if(matchingButton == null) return;
                         var itemIndex = Array.IndexOf(_bagItemsInterface.Buttons, matchingButton);
 
                         _manager.Move(_bagItemsInterface.Array[itemIndex], type, _toolbarItemsInterface, k);
-		            }
-		        }
-		    }
-		}
+                    }
+                }
+            }
+        }
 
-	    public bool DisableAttack
-	    {
+        public bool DisableAttack
+        {
             get => _w1.DisableWeapon && _w2.DisableWeapon;
-		    set
-	        {
-	            _w1.DisableWeapon = value;
-	            _w2.DisableWeapon = value;
-	        }
-	    }
+            set
+            {
+                _w1.DisableWeapon = value;
+                _w2.DisableWeapon = value;
+            }
+        }
 
-	    public bool BagEnabled
-	    {
-	        get => _bagItemsInterface.Enabled;
-		    set
-	        {
-	            _bagItemsInterface.Enabled = value;
-	            var filtered = _manager.GetFilteredSkills();
-	            var inToolbar = new[] {this.SkillAt(0), this.SkillAt(1), this.SkillAt(2), this.SkillAt(3)};
-	            for (var i = 0; i < _skills.Length; i++)
-	            {
+        public bool BagEnabled
+        {
+            get => _bagItemsInterface.Enabled;
+            set
+            {
+                _bagItemsInterface.Enabled = value;
+                var filtered = _manager.GetFilteredSkills();
+                var inToolbar = new[] {this.SkillAt(0), this.SkillAt(1), this.SkillAt(2), this.SkillAt(3)};
+                for (var i = 0; i < _skills.Length; i++)
+                {
                     if (!inToolbar.Contains(_skills[i])){
-	                    _skills[i].Active = false;
-	                    if (filtered.Contains(_skills[i])) _skills[i].Active = value;
-	                }
-	            }
-	        }
-	    }
+                        _skills[i].Active = false;
+                        if (filtered.Contains(_skills[i])) _skills[i].Active = value;
+                    }
+                }
+            }
+        }
 
-	    public bool Listen { get; set; } = true;
+        public bool Listen { get; set; } = true;
 
         public bool Show
-	    {
-	        get => _show;
-	        set
-	        {
-	            _show = value;
+        {
+            get => _show;
+            set
+            {
+                _show = value;
                 _manager.Enabled = _show;
                 this.UpdateView();
-	        }
-	    }
-	}
+            }
+        }
+    }
 }

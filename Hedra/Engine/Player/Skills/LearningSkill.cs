@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Rendering.UI;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills

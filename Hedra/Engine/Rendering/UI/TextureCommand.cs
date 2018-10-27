@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.Management;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.UI
 {

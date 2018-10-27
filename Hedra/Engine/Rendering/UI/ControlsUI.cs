@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 10/08/2016
@@ -15,18 +15,18 @@ using System.Collections.Generic;
 
 namespace Hedra.Engine.Rendering.UI
 {
-	/// <summary>
-	/// Description of ControlUI.
-	/// </summary>
-	public class ControlsUi
-	{
-		public Vector2 TargetResolution = new Vector2(1366,768);
-		public List<UIElement> ControlsElements = new List<UIElement>();
-		
-		public ControlsUi(Color C){
-			Color fontColor = C;
-			Texture help = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Help.png"), Vector2.Zero, Vector2.One);
-			ControlsElements.Add(help);
-		}
-	}
+    /// <summary>
+    /// Description of ControlUI.
+    /// </summary>
+    public class ControlsUi
+    {
+        public Vector2 TargetResolution = new Vector2(1366,768);
+        public List<UIElement> ControlsElements = new List<UIElement>();
+        
+        public ControlsUi(Color C){
+            Color fontColor = C;
+            Texture help = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Help.png"), Vector2.Zero, Vector2.One);
+            ControlsElements.Add(help);
+        }
+    }
 }

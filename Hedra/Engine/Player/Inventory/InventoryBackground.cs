@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;

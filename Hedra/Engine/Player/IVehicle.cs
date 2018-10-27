@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.Player
+namespace Hedra.Engine.Player
 {
     public interface IVehicle
     {

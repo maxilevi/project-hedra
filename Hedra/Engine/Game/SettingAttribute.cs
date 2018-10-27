@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 07/09/2016
@@ -11,11 +11,11 @@ using System;
 
 namespace Hedra.Engine.Game
 {
-	/// <summary>
-	/// Description of SettingAttribute.
-	/// </summary>
-	public class SettingAttribute : Attribute
-	{
-		
-	}
+    /// <summary>
+    /// Description of SettingAttribute.
+    /// </summary>
+    public class SettingAttribute : Attribute
+    {
+        
+    }
 }

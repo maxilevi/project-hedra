@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 29/11/2016
@@ -14,113 +14,113 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
 {
-	/// <summary>
-	/// Description of OpenGLStateManager.
-	/// </summary>
-	public static class Renderer
-	{
-	    public static IGLProvider Provider { get; set; } = new GLProvider();
-		public static int FBOBound { get; set; }
-		public static int ShaderBound { get; set; }
-	    public static Matrix4 ModelViewProjectionMatrix { get; private set; }
-	    public static Matrix4 ModelViewMatrix { get; private set; }
-	    public static Matrix4 ProjectionMatrix { get; private set; }
-	    private static readonly StateManager FboManager;
-	    private static readonly StateManager ShaderManager;
-	    private static readonly CapHandler CapHandler;
-	    private static readonly VertexAttributeHandler VertexAttributeHandler;
+    /// <summary>
+    /// Description of OpenGLStateManager.
+    /// </summary>
+    public static class Renderer
+    {
+        public static IGLProvider Provider { get; set; } = new GLProvider();
+        public static int FBOBound { get; set; }
+        public static int ShaderBound { get; set; }
+        public static Matrix4 ModelViewProjectionMatrix { get; private set; }
+        public static Matrix4 ModelViewMatrix { get; private set; }
+        public static Matrix4 ProjectionMatrix { get; private set; }
+        private static readonly StateManager FboManager;
+        private static readonly StateManager ShaderManager;
+        private static readonly CapHandler CapHandler;
+        private static readonly VertexAttributeHandler VertexAttributeHandler;
 
         static Renderer()
-	    {
-	        CapHandler = new CapHandler();
-	        VertexAttributeHandler = new VertexAttributeHandler();
+        {
+            CapHandler = new CapHandler();
+            VertexAttributeHandler = new VertexAttributeHandler();
             FboManager = new StateManager();
             FboManager.RegisterStateItem( () => FBOBound, O => FBOBound = (int) O);
             ShaderManager = new StateManager();
-	        ShaderManager.RegisterStateItem(() => ShaderBound, O => ShaderBound = (int)O);
+            ShaderManager.RegisterStateItem(() => ShaderBound, O => ShaderBound = (int)O);
         }
 
-	    public static void Load()
-	    {
-	        BlendEquation(BlendEquationMode.FuncAdd);
-	        BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-	    }
-
-	    public static void LoadProjection(Matrix4 Projection)
-	    {
-	        ProjectionMatrix = Projection;
-	        RebuildMVP();
-	    }
-
-	    public static void LoadModelView(Matrix4 ModelView)
-	    {
-	        ModelViewMatrix = ModelView;
-	        RebuildMVP();
-	    }
-
-	    private static void RebuildMVP()
-	    {
-	        ModelViewProjectionMatrix = ModelViewMatrix * ProjectionMatrix;
-	    }
-	    
-	    public static void Enable(EnableCap Cap)
-	    {
-	        CapHandler.Enable(Cap);
+        public static void Load()
+        {
+            BlendEquation(BlendEquationMode.FuncAdd);
+            BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
         }
 
-	    public static void Disable(EnableCap Cap)
-	    {
-	        CapHandler.Disable(Cap);
+        public static void LoadProjection(Matrix4 Projection)
+        {
+            ProjectionMatrix = Projection;
+            RebuildMVP();
         }
 
-	    public static void EnableVertexAttribArray(uint Index)
-	    {
-	        VertexAttributeHandler.Enable(Index);
+        public static void LoadModelView(Matrix4 ModelView)
+        {
+            ModelViewMatrix = ModelView;
+            RebuildMVP();
         }
 
-	    public static void DisableVertexAttribArray(uint Index)
-	    {
-	        VertexAttributeHandler.Disable(Index);
+        private static void RebuildMVP()
+        {
+            ModelViewProjectionMatrix = ModelViewMatrix * ProjectionMatrix;
+        }
+        
+        public static void Enable(EnableCap Cap)
+        {
+            CapHandler.Enable(Cap);
+        }
+
+        public static void Disable(EnableCap Cap)
+        {
+            CapHandler.Disable(Cap);
+        }
+
+        public static void EnableVertexAttribArray(uint Index)
+        {
+            VertexAttributeHandler.Enable(Index);
+        }
+
+        public static void DisableVertexAttribArray(uint Index)
+        {
+            VertexAttributeHandler.Disable(Index);
         }
 
         public static void PushFBO()
-	    {
-	        FboManager.CaptureState();
-	    }
+        {
+            FboManager.CaptureState();
+        }
 
-	    public static void PushShader()
-	    {
-	        ShaderManager.CaptureState();
-	    }
+        public static void PushShader()
+        {
+            ShaderManager.CaptureState();
+        }
 
-	    public static int PopFBO()
-	    {
-	        FboManager.ReleaseState();
-	        return FBOBound;
-	    }
+        public static int PopFBO()
+        {
+            FboManager.ReleaseState();
+            return FBOBound;
+        }
 
-	    public static int PopShader()
-	    {
-	        ShaderManager.ReleaseState();
-	        return ShaderBound;
-	    }
+        public static int PopShader()
+        {
+            ShaderManager.ReleaseState();
+            return ShaderBound;
+        }
 
-	    public static void BindShader(int Id)
-	    {
-	        Provider.UseProgram((uint)Id);
-	    }
+        public static void BindShader(int Id)
+        {
+            Provider.UseProgram((uint)Id);
+        }
 
-	    public static void BindFramebuffer(FramebufferTarget Target, int Id)
-	    {
-	        Provider.BindFramebuffer(Target, (uint)Id);
-	    }
+        public static void BindFramebuffer(FramebufferTarget Target, int Id)
+        {
+            Provider.BindFramebuffer(Target, (uint)Id);
+        }
 
         public static void MultiDrawElements(PrimitiveType Type, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
-	    {
-	        CompatibilityManager.MultiDrawElementsMethod(Type, Counts, ElementsType, Offsets, Length);
+        {
+            CompatibilityManager.MultiDrawElementsMethod(Type, Counts, ElementsType, Offsets, Length);
         }
-		
-		public static void ActiveTexture(TextureUnit Unit)
+        
+        public static void ActiveTexture(TextureUnit Unit)
         {
             Provider.ActiveTexture(Unit);
         }
@@ -154,11 +154,11 @@ namespace Hedra.Engine.Rendering
         {
             Provider.BindTexture(Target, Id);
         }
-	    
-	    public static void BindTexture(TextureTarget Target, int Id)
-	    {
-	        Provider.BindTexture(Target, (uint) Id);
-	    }
+        
+        public static void BindTexture(TextureTarget Target, int Id)
+        {
+            Provider.BindTexture(Target, (uint) Id);
+        }
 
         public static void BindVertexArray(uint Id)
         {
@@ -186,25 +186,25 @@ namespace Hedra.Engine.Rendering
             Provider.BufferData(Target, Size, Data, Hint);
         }
 
-	    public static void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : struct
-	    {
-	        Provider.BufferData(Target, Size, Data, Hint);
-	    }
+        public static void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : struct
+        {
+            Provider.BufferData(Target, Size, Data, Hint);
+        }
 
         public static void BufferSubData(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Ptr1)
         {
             Provider.BufferSubData(Target, Ptr0, Offset, Ptr1);
         }
 
-	    public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : struct
-	    {
-	        Provider.BufferSubData(Target, Ptr0, Offset, ref Data);
+        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : struct
+        {
+            Provider.BufferSubData(Target, Ptr0, Offset, ref Data);
         }
 
-	    public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : struct
-	    {
-	        Provider.BufferSubData(Target, Ptr0, Offset, Data);
-	    }
+        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : struct
+        {
+            Provider.BufferSubData(Target, Ptr0, Offset, Data);
+        }
 
         public static FramebufferErrorCode CheckFramebufferStatus(FramebufferTarget Target)
         {
@@ -286,20 +286,20 @@ namespace Hedra.Engine.Rendering
             Provider.DeleteTextures(Count, Ids);
         }
 
-	    public static void DeleteTextures(int Count, ref uint Id)
-	    {
-	        Provider.DeleteTextures(Count, ref Id);
-	    }
+        public static void DeleteTextures(int Count, ref uint Id)
+        {
+            Provider.DeleteTextures(Count, ref Id);
+        }
 
         public static void DeleteVertexArrays(int Count, params uint[] Ids)
         {
             Provider.DeleteVertexArrays(Count, Ids);
         }
 
-	    public static void DeleteVertexArrays(int Count, ref uint Id)
-	    {
-	        Provider.DeleteVertexArrays(Count, ref Id);
-	    }
+        public static void DeleteVertexArrays(int Count, ref uint Id)
+        {
+            Provider.DeleteVertexArrays(Count, ref Id);
+        }
 
         public static void DepthMask(bool Flag)
         {
@@ -509,15 +509,15 @@ namespace Hedra.Engine.Rendering
             Provider.Uniform1(Location, Uniform);
         }
 
-	    public static void Uniform1(int Location, float Uniform)
-	    {
-	        Provider.Uniform1(Location, Uniform);
-	    }
+        public static void Uniform1(int Location, float Uniform)
+        {
+            Provider.Uniform1(Location, Uniform);
+        }
 
-	    public static void Uniform1(int Location, double Uniform)
-	    {
-	        Provider.Uniform1(Location, Uniform);
-	    }
+        public static void Uniform1(int Location, double Uniform)
+        {
+            Provider.Uniform1(Location, Uniform);
+        }
 
         public static void Uniform2(int Location, Vector2 Uniform)
         {
@@ -565,21 +565,21 @@ namespace Hedra.Engine.Rendering
             Provider.VertexAttribPointer(V0, V1, Type, Flag, Bytes, Ptr);
         }
 
-	    public static void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag,
-	        int Bytes, int V2)
-	    {
-	        Provider.VertexAttribPointer(V0, V1, Type, Flag, Bytes, V2);
-	    }
+        public static void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag,
+            int Bytes, int V2)
+        {
+            Provider.VertexAttribPointer(V0, V1, Type, Flag, Bytes, V2);
+        }
 
         public static void Viewport(int V0, int V1, int V2, int V3)
         {
             Provider.Viewport(V0, V1, V2, V3);
         }
 
-	    public static ErrorSeverity Severity
-	    {
-	        get => Provider.Severity;
-	        set => Provider.Severity = value;
-	    }
+        public static ErrorSeverity Severity
+        {
+            get => Provider.Severity;
+            set => Provider.Severity = value;
+        }
     }
 }

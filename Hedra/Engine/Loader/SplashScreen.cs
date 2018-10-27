@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;

@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.ComplexMath
+namespace Hedra.Engine.ComplexMath
 {
     public interface IRandom
     {

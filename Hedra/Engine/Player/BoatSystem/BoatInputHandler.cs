@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using OpenTK;

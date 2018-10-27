@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 15/08/2017
@@ -18,25 +18,25 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory
 {
-	/// <summary>
-	/// Description of TradeSystem.
-	/// </summary>
-	public class TradeInventory : PlayerInterface
+    /// <summary>
+    /// Description of TradeSystem.
+    /// </summary>
+    public class TradeInventory : PlayerInterface
     {
-		public const int MerchantSpaces = 20;
+        public const int MerchantSpaces = 20;
         public const int TradeRadius = 12;
         public bool IsTrading { get; private set; }
-		private readonly LocalPlayer _player;
-	    private readonly InventoryArray _merchantItems;
-	    private readonly InventoryArray _playerItems;
-	    private readonly InventoryArrayInterface _playerItemsInterface;
-	    private readonly InventoryArrayInterface _merchantItemsInterface;
-	    private readonly InventoryStateManager _stateManager;
-	    private readonly TradeInventoryArrayInterfaceManager _interfaceManager;
-	    private readonly InventoryBackground _playerBackground;
-	    private readonly InventoryBackground _merchantBackground;
-	    private TradeComponent _tradeComponent;
-	    private Humanoid _trader;
+        private readonly LocalPlayer _player;
+        private readonly InventoryArray _merchantItems;
+        private readonly InventoryArray _playerItems;
+        private readonly InventoryArrayInterface _playerItemsInterface;
+        private readonly InventoryArrayInterface _merchantItemsInterface;
+        private readonly InventoryStateManager _stateManager;
+        private readonly TradeInventoryArrayInterfaceManager _interfaceManager;
+        private readonly InventoryBackground _playerBackground;
+        private readonly InventoryBackground _merchantBackground;
+        private TradeComponent _tradeComponent;
+        private Humanoid _trader;
         private bool _show;
 
         public TradeInventory(LocalPlayer Player){
@@ -66,34 +66,34 @@ namespace Hedra.Engine.Player.Inventory
             };
         }
 
-	    public void Trade(Humanoid Trader)
-	    {
-	        IsTrading = true;
-	        _trader = Trader;
-	        _tradeComponent = Trader.SearchComponent<TradeComponent>();
-	        this.SetActive(true);
-	        _playerItems.SetItems(_player.Inventory.ItemsToArray());
-	        _merchantItems.SetItems(_tradeComponent.Items.ToArray());
+        public void Trade(Humanoid Trader)
+        {
+            IsTrading = true;
+            _trader = Trader;
+            _tradeComponent = Trader.SearchComponent<TradeComponent>();
+            this.SetActive(true);
+            _playerItems.SetItems(_player.Inventory.ItemsToArray());
+            _merchantItems.SetItems(_tradeComponent.Items.ToArray());
             this._interfaceManager.SetTraders(_player, _trader);
             this.UpdateView();
         }
 
-	    public void Cancel()
-	    {
-	        this._interfaceManager.SetTraders(null, null);
-	        this.SetActive(false);
+        public void Cancel()
+        {
+            this._interfaceManager.SetTraders(null, null);
+            this.SetActive(false);
             IsTrading = false;
             _tradeComponent = null;
-	        _playerItems.Empty();
-	        _merchantItems.Empty();
-	        this.UpdateView();
-	    }
+            _playerItems.Empty();
+            _merchantItems.Empty();
+            this.UpdateView();
+        }
 
 
-	    public void UpdateView()
-	    {
-	        _interfaceManager.UpdateView();
-	    }
+        public void UpdateView()
+        {
+            _interfaceManager.UpdateView();
+        }
 
         public void UpdateInventory()
         {
@@ -110,24 +110,24 @@ namespace Hedra.Engine.Player.Inventory
             _playerItems.Empty();
         }
 
-	    public void UpdateTraders()
-	    {
-	        for (var i = 0; i < _playerItems.Length; i++)
-	        {
+        public void UpdateTraders()
+        {
+            for (var i = 0; i < _playerItems.Length; i++)
+            {
                 if(_player.Inventory[i]?.IsGold ?? false) continue;
 
-	            _player.Inventory.SetItem(i, null);
+                _player.Inventory.SetItem(i, null);
                 _player.Inventory.SetItem(i, _playerItems[i]);
-	        }
-
-	        _tradeComponent.Items.Clear();
-	        for (var i = 0; i < _merchantItems.Length; i++)
-	        {
-	            _tradeComponent.Items.Add(i, _merchantItems[i]);
             }
-	        _tradeComponent.TransactionComplete();
+
+            _tradeComponent.Items.Clear();
+            for (var i = 0; i < _merchantItems.Length; i++)
+            {
+                _tradeComponent.Items.Add(i, _merchantItems[i]);
+            }
+            _tradeComponent.TransactionComplete();
             this.UpdateInventory();
-	    }
+        }
 
         private void SetInventoryState(bool State)
         {

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 23/03/2017
@@ -12,64 +12,64 @@ using System.Collections.Generic;
 
 namespace Hedra.Engine.Rendering.Animation
 {
-	public delegate void OnAnimationHandler(Animation Sender);
-	
-	public class Animation : IDisposable
-	{
-		public event OnAnimationHandler OnAnimationEnd;
-		public event OnAnimationHandler OnAnimationMid;
-		public event OnAnimationHandler OnAnimationStart;
-		public float Speed { get; set; } = 1;
-		public float Length { get; }
-		public KeyFrame[] KeyFrames { get; }
-		public bool Loop {get; set;}
-		private bool _midAnimation;
-	    private bool _startAnimation;
-		private bool _endAnimation;
-	
-		/**
-		 * @param lengthInSeconds
-		 *            - the total length of the animation in seconds.
-		 * @param frames
-		 *            - all the keyframes for the animation, ordered by time of
-		 *            appearance in the animation.
-		 */
-		public Animation(float LengthInSeconds, KeyFrame[] Frames)
-		{
-			this.KeyFrames = Frames;
-			this.Length = LengthInSeconds;
-			this.Loop = true;
-		}
-		
-		public void DispatchEvents(float Progress)
-		{
-			if(Progress >= 1 && !_endAnimation)
-			{
-				_endAnimation = true;
-			    OnAnimationEnd?.Invoke(this);
-			}
-			if(Progress >= 0.5f && !_midAnimation)
+    public delegate void OnAnimationHandler(Animation Sender);
+    
+    public class Animation : IDisposable
+    {
+        public event OnAnimationHandler OnAnimationEnd;
+        public event OnAnimationHandler OnAnimationMid;
+        public event OnAnimationHandler OnAnimationStart;
+        public float Speed { get; set; } = 1;
+        public float Length { get; }
+        public KeyFrame[] KeyFrames { get; }
+        public bool Loop {get; set;}
+        private bool _midAnimation;
+        private bool _startAnimation;
+        private bool _endAnimation;
+    
+        /**
+         * @param lengthInSeconds
+         *            - the total length of the animation in seconds.
+         * @param frames
+         *            - all the keyframes for the animation, ordered by time of
+         *            appearance in the animation.
+         */
+        public Animation(float LengthInSeconds, KeyFrame[] Frames)
+        {
+            this.KeyFrames = Frames;
+            this.Length = LengthInSeconds;
+            this.Loop = true;
+        }
+        
+        public void DispatchEvents(float Progress)
+        {
+            if(Progress >= 1 && !_endAnimation)
             {
-				_midAnimation = true;
-			    OnAnimationMid?.Invoke(this);
-			}
-			if(Progress > 0f && !_startAnimation)
+                _endAnimation = true;
+                OnAnimationEnd?.Invoke(this);
+            }
+            if(Progress >= 0.5f && !_midAnimation)
             {
-				_startAnimation = true;
-			    OnAnimationStart?.Invoke(this);
-			}
-		}
-		
-		public void Reset()
-		{
-			_midAnimation = false;
-			_startAnimation = false;
-			_endAnimation = false;
-		}
-		
-		public void Dispose()
-		{
+                _midAnimation = true;
+                OnAnimationMid?.Invoke(this);
+            }
+            if(Progress > 0f && !_startAnimation)
+            {
+                _startAnimation = true;
+                OnAnimationStart?.Invoke(this);
+            }
+        }
+        
+        public void Reset()
+        {
+            _midAnimation = false;
+            _startAnimation = false;
+            _endAnimation = false;
+        }
+        
+        public void Dispose()
+        {
             
         }
-	}
+    }
 }

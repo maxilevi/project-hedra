@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Author: Zaphyk
  * Date: 21/02/2016
  * Time: 05:12 a.m.
@@ -11,11 +11,11 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
 {
-	/// <summary>
-	/// Description of FBO.
-	/// </summary>
-	public class FBO : IDisposable
-	{
+    /// <summary>
+    /// Description of FBO.
+    /// </summary>
+    public class FBO : IDisposable
+    {
         /// <summary>
         /// The ID for the entire framebuffer object.
         /// </summary>
@@ -92,20 +92,20 @@ namespace Hedra.Engine.Rendering
                 // if this is a depth attachment only
                 TextureID = new uint[] { (uint) Renderer.GenTexture() };
                 if(Multisample)
-                   	Renderer.BindTexture(TextureTarget.Texture2DMultisample, TextureID[0]);
+                       Renderer.BindTexture(TextureTarget.Texture2DMultisample, TextureID[0]);
                 else
-                	Renderer.BindTexture(TextureTarget.Texture2D, TextureID[0]);
-				
+                    Renderer.BindTexture(TextureTarget.Texture2D, TextureID[0]);
+                
                 if(Multisample)
-                	Renderer.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, Formats[0], Size.Width, Size.Height, true);
+                    Renderer.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, Formats[0], Size.Width, Size.Height, true);
                 else
-                	Renderer.TexImage2D(TextureTarget.Texture2D, 0, Formats[0], Size.Width, Size.Height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+                    Renderer.TexImage2D(TextureTarget.Texture2D, 0, Formats[0], Size.Width, Size.Height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
                 Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Nearest);
                 Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest);
                 Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.ClampToEdge);
                 Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToEdge);
                 //float[] BorderColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-				//Renderer.GetTexParameter(TextureTarget.Texture2D, GetTextureParameter.TextureBorderColor, BorderColor);
+                //Renderer.GetTexParameter(TextureTarget.Texture2D, GetTextureParameter.TextureBorderColor, BorderColor);
 
                 if(Multisample)
                     Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2DMultisample, TextureID[0], 0);
@@ -118,12 +118,12 @@ namespace Hedra.Engine.Rendering
             {
                 // Create n texture buffers (known by the number of attachments)
                 TextureID = new uint[Attachments.Length];
-	            for (var i = 0; i < Attachments.Length; i++)
-	            {
-		            TextureID[i] = Renderer.GenTexture();
-	            }
+                for (var i = 0; i < Attachments.Length; i++)
+                {
+                    TextureID[i] = Renderer.GenTexture();
+                }
 
-	            // Bind the n texture buffers to the framebuffer
+                // Bind the n texture buffers to the framebuffer
                 for (int i = 0; i < Attachments.Length; i++)
                 {
                     PixelType pixelType =
@@ -132,19 +132,19 @@ namespace Hedra.Engine.Rendering
                             : PixelType.UnsignedByte;
 
                     if (Multisample)
-                   		Renderer.BindTexture(TextureTarget.Texture2DMultisample, TextureID[i]);
-                	else
-                		Renderer.BindTexture(TextureTarget.Texture2D, TextureID[i]);
-                	
-                    if(Multisample)
-                		Renderer.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, Formats[i], Size.Width, Size.Height, true);
-                	else
-                		if(Attachments[i] == FramebufferAttachment.DepthAttachment)
-                			Renderer.TexImage2D(TextureTarget.Texture2D, 0, Formats[i], Size.Width, Size.Height, 0, PixelFormat.DepthComponent, PixelType.UnsignedByte, IntPtr.Zero);
-                		else
-                			Renderer.TexImage2D(TextureTarget.Texture2D, 0, Formats[i], Size.Width, Size.Height, 0, PixelFormat.Rgba, pixelType, IntPtr.Zero);
+                           Renderer.BindTexture(TextureTarget.Texture2DMultisample, TextureID[i]);
+                    else
+                        Renderer.BindTexture(TextureTarget.Texture2D, TextureID[i]);
                     
-                	if (Mipmaps)
+                    if(Multisample)
+                        Renderer.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, Formats[i], Size.Width, Size.Height, true);
+                    else
+                        if(Attachments[i] == FramebufferAttachment.DepthAttachment)
+                            Renderer.TexImage2D(TextureTarget.Texture2D, 0, Formats[i], Size.Width, Size.Height, 0, PixelFormat.DepthComponent, PixelType.UnsignedByte, IntPtr.Zero);
+                        else
+                            Renderer.TexImage2D(TextureTarget.Texture2D, 0, Formats[i], Size.Width, Size.Height, 0, PixelFormat.Rgba, pixelType, IntPtr.Zero);
+                    
+                    if (Mipmaps)
                     {
                         Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Linear);
                         Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Linear);
@@ -152,27 +152,27 @@ namespace Hedra.Engine.Rendering
                     }
                     else
                     {
-                    	Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) filterType);
+                        Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) filterType);
                         Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) filterType);
                     }
                     if(Multisample)
-                    	Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, Attachments[i], TextureTarget.Texture2DMultisample, TextureID[i], 0);
-                	else
-                    	Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[i], TextureID[i], 0);
+                        Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, Attachments[i], TextureTarget.Texture2DMultisample, TextureID[i], 0);
+                    else
+                        Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[i], TextureID[i], 0);
                 }
 
                 // Create and attach a 24-bit depth buffer to the framebuffer
                 if (Depth) {
                     DepthID = (uint) Renderer.GenTexture();
                     if(Multisample)
-                   	    Renderer.BindTexture(TextureTarget.Texture2DMultisample, DepthID);
+                           Renderer.BindTexture(TextureTarget.Texture2DMultisample, DepthID);
                     else
-                	    Renderer.BindTexture(TextureTarget.Texture2D, DepthID);
+                        Renderer.BindTexture(TextureTarget.Texture2D, DepthID);
 
                     if(Multisample)
-                	    Renderer.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, PixelInternalFormat.DepthStencil, Size.Width, Size.Height, true);
+                        Renderer.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, Samples, PixelInternalFormat.DepthStencil, Size.Width, Size.Height, true);
                     else
-               		    Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Depth24Stencil8, Size.Width, Size.Height, 0, PixelFormat.DepthStencil, PixelType.UnsignedInt248, IntPtr.Zero);
+                           Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Depth24Stencil8, Size.Width, Size.Height, 0, PixelFormat.DepthStencil, PixelType.UnsignedInt248, IntPtr.Zero);
                 
                     Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Nearest);
                     Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest);
@@ -180,14 +180,14 @@ namespace Hedra.Engine.Rendering
                     Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToEdge);
 
                     if(Multisample)
-                	    Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2DMultisample, DepthID, 0);
+                        Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2DMultisample, DepthID, 0);
                     else
-                	    Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, DepthID, 0);
+                        Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, DepthID, 0);
                 
                     if(Multisample)
-                	    Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, TextureTarget.Texture2DMultisample, DepthID, 0);
+                        Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, TextureTarget.Texture2DMultisample, DepthID, 0);
                     else
-                	    Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, DepthID, 0);
+                        Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, DepthID, 0);
                 }
             }
             Renderer.Viewport(0, 0, Size.Width, Size.Height);
@@ -209,7 +209,7 @@ namespace Hedra.Engine.Rendering
         /// </summary>
         ~FBO()
         {
-	        if(Program.GameWindow.IsExiting) return;
+            if(Program.GameWindow.IsExiting) return;
             if (DepthID != 0 || BufferID != 0 || TextureID != null)
             {
                 System.Diagnostics.Debug.Fail("FBO was not disposed of properly.");
@@ -224,19 +224,19 @@ namespace Hedra.Engine.Rendering
         /// <param name="clear">True to clear both the color and depth buffer bits of the FBO before enabling.</param>
         public void Bind(bool clear = true)
         {
-        	if(Renderer.FBOBound == BufferID) return;
+            if(Renderer.FBOBound == BufferID) return;
 
             Renderer.FBOBound = (int) BufferID;
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, BufferID);
             if (Attachments.Length == 1)
             {
-            	if(!multisample){
-                	Renderer.BindTexture(TextureTarget.Texture2D, TextureID[0]);
-               		Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[0], TextureID[0], 0);
-            	}else{
-            		Renderer.BindTexture(TextureTarget.Texture2DMultisample, TextureID[0]);
-               		Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, Attachments[0], TextureTarget.Texture2DMultisample, TextureID[0], 0);
-            	}
+                if(!multisample){
+                    Renderer.BindTexture(TextureTarget.Texture2D, TextureID[0]);
+                       Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[0], TextureID[0], 0);
+                }else{
+                    Renderer.BindTexture(TextureTarget.Texture2DMultisample, TextureID[0]);
+                       Renderer.FramebufferTexture2D(FramebufferTarget.Framebuffer, Attachments[0], TextureTarget.Texture2DMultisample, TextureID[0], 0);
+                }
             }
             else
             {
@@ -254,16 +254,16 @@ namespace Hedra.Engine.Rendering
 
                 if (Attachments.Length > 1) Renderer.DrawBuffers(Attachments.Length, buffers);
             }
-			
+            
             Renderer.Viewport(0, 0, Size.Width, Size.Height);
 
             // configurably clear the buffer and color bits
             if (true)
             {
                 if (Attachments.Length == 1 && Attachments[0] == FramebufferAttachment.DepthAttachment)
-                	Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
+                    Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
                 else
-                	Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
+                    Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
             }
         }
 
@@ -276,7 +276,7 @@ namespace Hedra.Engine.Rendering
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             Renderer.FBOBound = 0;
         }
-		
+        
         public void Dispose()
         {
             if (TextureID != null)
@@ -297,5 +297,5 @@ namespace Hedra.Engine.Rendering
                 DepthID = 0;
             }
         }
-	}
+    }
 }

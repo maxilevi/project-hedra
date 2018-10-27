@@ -1,4 +1,4 @@
-﻿namespace Hedra.Engine.Rendering.Animation.ColladaParser
+namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
     public interface IColladaProvider
     {

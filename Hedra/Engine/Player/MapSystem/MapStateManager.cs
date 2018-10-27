@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using OpenTK;

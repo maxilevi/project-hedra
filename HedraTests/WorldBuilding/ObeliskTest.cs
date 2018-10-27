@@ -1,4 +1,4 @@
-﻿using Hedra.Engine;
+using Hedra.Engine;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;

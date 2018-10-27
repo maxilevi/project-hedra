@@ -1,4 +1,4 @@
-﻿using OpenTK;
+using OpenTK;
 using System;
 
 namespace Hedra.Engine.ComplexMath

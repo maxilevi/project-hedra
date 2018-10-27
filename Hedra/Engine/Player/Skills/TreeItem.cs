@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 05/08/2016
@@ -11,12 +11,12 @@ using System;
 
 namespace Hedra.Engine.Player.Skills
 {
-	public class TreeItem
-	{
-		public Type AbilityType { get; set; }
-	    public bool Locked { get; set; }
-	    public int Level { get; set; }
-	    public uint Image { get; set; }
-	    public bool Enabled { get; set; }
-	}
+    public class TreeItem
+    {
+        public Type AbilityType { get; set; }
+        public bool Locked { get; set; }
+        public int Level { get; set; }
+        public uint Image { get; set; }
+        public bool Enabled { get; set; }
+    }
 }

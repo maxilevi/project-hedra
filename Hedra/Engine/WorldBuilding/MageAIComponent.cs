@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 30/08/2016
@@ -10,11 +10,11 @@ using System;
 
 namespace Hedra.Engine.WorldBuilding
 {
-	/// <summary>
-	/// Description of MageAIComponent.
-	/// </summary>
-	public class MageAIComponent
-	{
-		/**/
-	}
+    /// <summary>
+    /// Description of MageAIComponent.
+    /// </summary>
+    public class MageAIComponent
+    {
+        /**/
+    }
 }

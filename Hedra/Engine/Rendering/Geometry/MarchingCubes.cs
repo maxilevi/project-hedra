@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Author: Zaphyk
  * Date: 27/03/2016
  * Time: 10:03 p.m.
@@ -12,12 +12,12 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering.Geometry
 {
-	/// <summary>
-	/// Description of MarchingCubes.
-	/// </summary>
-	public static class MarchingCubes
-	{
-		#region Tables
+    /// <summary>
+    /// Description of MarchingCubes.
+    /// </summary>
+    public static class MarchingCubes
+    {
+        #region Tables
         static int[] EdgeTable = new int[256]{
             0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
             0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,
@@ -316,12 +316,12 @@ namespace Hedra.Engine.Rendering.Geometry
         public static int SizeX;
         public static int SizeY;
    
-		#region AXULIARIES        
+        #region AXULIARIES        
         public static List<BlockType> AffectingTypes(double IsoLevel, GridCell Cell)
         {
-        	List<BlockType> Types = new List<BlockType>();
-        	if (Cell.Density[1] > IsoLevel) Types.Add(Cell.Type[1]);
-        	if (Cell.Density[2] > IsoLevel) Types.Add(Cell.Type[2]);
+            List<BlockType> Types = new List<BlockType>();
+            if (Cell.Density[1] > IsoLevel) Types.Add(Cell.Type[1]);
+            if (Cell.Density[2] > IsoLevel) Types.Add(Cell.Type[2]);
             if (Cell.Density[3] > IsoLevel) Types.Add(Cell.Type[3]);
             if (Cell.Density[4] > IsoLevel) Types.Add(Cell.Type[4]);
             if (Cell.Density[5] > IsoLevel) Types.Add(Cell.Type[5]);
@@ -333,7 +333,7 @@ namespace Hedra.Engine.Rendering.Geometry
         
         public static BlockType AffectingType(double IsoLevel, GridCell Cell)
         {
-        	if (Cell.Density[1] > IsoLevel) return Cell.Type[1];
+            if (Cell.Density[1] > IsoLevel) return Cell.Type[1];
             if (Cell.Density[2] > IsoLevel) return Cell.Type[2];
             if (Cell.Density[3] > IsoLevel) return Cell.Type[3];
             if (Cell.Density[4] > IsoLevel) return Cell.Type[4];
@@ -426,8 +426,8 @@ namespace Hedra.Engine.Rendering.Geometry
             List<Triangle> TriangleList = new List<Triangle>();
             for (int i = 0; TriTable[CubeIndex, i] != -1; i += 3)
             {
-            	Triangle NewTri = new Triangle();
-            	NewTri.P = new Vector3[3];
+                Triangle NewTri = new Triangle();
+                NewTri.P = new Vector3[3];
                 NewTri.P[0] = VertList[TriTable[CubeIndex, i + 0]];
                 NewTri.P[1] = VertList[TriTable[CubeIndex, i + 1]];
                 NewTri.P[2] = VertList[TriTable[CubeIndex, i + 2]];
@@ -437,83 +437,83 @@ namespace Hedra.Engine.Rendering.Geometry
             return TriangleList.ToArray();
         }
        
-      	private static Vector3 VertexInterp(double IsoLevel, Vector3 P1, Vector3 P2, double valp1, double valp2)
+          private static Vector3 VertexInterp(double IsoLevel, Vector3 P1, Vector3 P2, double valp1, double valp2)
         {
             Vector4 p1 = new Vector4(P1, (float) valp1);
-      		Vector4 p2 = new Vector4(P2, (float) valp2);
-     		
+              Vector4 p2 = new Vector4(P2, (float) valp2);
+             
            if (p2.Length < p1.Length){
-		        Vector4 temp;
-	        	temp = p1;
-		        p1 = p2;
-	        	p2 = temp;    
-		    }
-		
-		    Vector3 p;
-		    if(Math.Abs(p1.W - p2.W) > 0.00001)
-		    	p = p1.Xyz + (p2.Xyz - p1.Xyz ) / (p2.W - p1.W)*( (float) IsoLevel - p1.W);
-		    else 
-		        p = p1.Xyz;
-		    return p;
+                Vector4 temp;
+                temp = p1;
+                p1 = p2;
+                p2 = temp;    
+            }
+        
+            Vector3 p;
+            if(Math.Abs(p1.W - p2.W) > 0.00001)
+                p = p1.Xyz + (p2.Xyz - p1.Xyz ) / (p2.W - p1.W)*( (float) IsoLevel - p1.W);
+            else 
+                p = p1.Xyz;
+            return p;
         }
  
-      	private static VertexData Build(VertexData Data, Vector4 TemplateColor, Triangle[] Triangles, bool Orientation)
+          private static VertexData Build(VertexData Data, Vector4 TemplateColor, Triangle[] Triangles, bool Orientation)
         {
-      		if(Triangles == null) return Data;
-      		if(Triangles.Length == 2){ //Make it more aestically pleasing
-      			if(Orientation && (Triangles[0].P[1].Xz - Triangles[1].P[1].Xz).LengthSquared == 0 && (Triangles[1].P[0].Xz - Triangles[0].P[2].Xz).LengthSquared == 0){
-      				Vector3 Vertex0 = Triangles[0].P[2];
-      				Vector3 Vertex1 = Triangles[0].P[1];
-      				Vector3 Vertex2 = Triangles[1].P[0];
-      				Vector3 Vertex3 = Triangles[0].P[0];
-      				
-      				Triangles[0].P[0] = Triangles[1].P[2];
-      				Triangles[0].P[1] = Vertex3;
-      				Triangles[0].P[2] = Triangles[1].P[1];
-      				
-      				Triangles[1].P[0] = Vertex3;
-      				Triangles[1].P[1] = Triangles[1].P[2];
-      				Triangles[1].P[2] = Vertex2;
-      				
-      			}
-      		}
-      		
-      		
+              if(Triangles == null) return Data;
+              if(Triangles.Length == 2){ //Make it more aestically pleasing
+                  if(Orientation && (Triangles[0].P[1].Xz - Triangles[1].P[1].Xz).LengthSquared == 0 && (Triangles[1].P[0].Xz - Triangles[0].P[2].Xz).LengthSquared == 0){
+                      Vector3 Vertex0 = Triangles[0].P[2];
+                      Vector3 Vertex1 = Triangles[0].P[1];
+                      Vector3 Vertex2 = Triangles[1].P[0];
+                      Vector3 Vertex3 = Triangles[0].P[0];
+                      
+                      Triangles[0].P[0] = Triangles[1].P[2];
+                      Triangles[0].P[1] = Vertex3;
+                      Triangles[0].P[2] = Triangles[1].P[1];
+                      
+                      Triangles[1].P[0] = Vertex3;
+                      Triangles[1].P[1] = Triangles[1].P[2];
+                      Triangles[1].P[2] = Vertex2;
+                      
+                  }
+              }
+              
+              
             for (uint i = 0; i < Triangles.Length; i++)
             {
-            	if(Triangles[i].P != null){
-	            	Data.Indices.Add( (uint) Data.Vertices.Count + 0);
-	            	Data.Indices.Add( (uint) Data.Vertices.Count + 1);
-	            	Data.Indices.Add( (uint) Data.Vertices.Count + 2);
-	            	
-	            	Data.Vertices.Add(Triangles[i].P[0]);
-	            	Data.Vertices.Add(Triangles[i].P[1]);
-	            	Data.Vertices.Add(Triangles[i].P[2]);
-	            	
-	            	Vector3 Normal = Mathf.CrossProduct(Triangles[i].P[1] - Triangles[i].P[0], Triangles[i].P[2] - Triangles[i].P[0]).Normalized();
-	            	Data.Normals.Add(Normal);
-	            	Data.Normals.Add(Normal);
-	            	Data.Normals.Add(Normal);
-	            	
-	            	Data.Colors.Add(TemplateColor);
-	            	Data.Colors.Add(TemplateColor);
-	            	Data.Colors.Add(TemplateColor);
-            	}     
+                if(Triangles[i].P != null){
+                    Data.Indices.Add( (uint) Data.Vertices.Count + 0);
+                    Data.Indices.Add( (uint) Data.Vertices.Count + 1);
+                    Data.Indices.Add( (uint) Data.Vertices.Count + 2);
+                    
+                    Data.Vertices.Add(Triangles[i].P[0]);
+                    Data.Vertices.Add(Triangles[i].P[1]);
+                    Data.Vertices.Add(Triangles[i].P[2]);
+                    
+                    Vector3 Normal = Mathf.CrossProduct(Triangles[i].P[1] - Triangles[i].P[0], Triangles[i].P[2] - Triangles[i].P[0]).Normalized();
+                    Data.Normals.Add(Normal);
+                    Data.Normals.Add(Normal);
+                    Data.Normals.Add(Normal);
+                    
+                    Data.Colors.Add(TemplateColor);
+                    Data.Colors.Add(TemplateColor);
+                    Data.Colors.Add(TemplateColor);
+                }     
             }
             return Data;
         }
-      	
-      	public static MarchingData SmoothNormals(MarchingData Data, Dictionary<GridCell, MarchingData> Cache){
-			return null;
-		}
-      	
-      	private static Random Rng = new Random();
-      	public static Vector3 Round(this Vector3 Vertex){
-      		return Vertex;//new Vector3( (Vertex.X + Vertex.X % 2 * 2f), Vertex.Y, (Vertex.Z + (float) (Vertex.Z % Math.PI * 3f) ));
-      	}
-	    
-	}
-	
+          
+          public static MarchingData SmoothNormals(MarchingData Data, Dictionary<GridCell, MarchingData> Cache){
+            return null;
+        }
+          
+          private static Random Rng = new Random();
+          public static Vector3 Round(this Vector3 Vertex){
+              return Vertex;//new Vector3( (Vertex.X + Vertex.X % 2 * 2f), Vertex.Y, (Vertex.Z + (float) (Vertex.Z % Math.PI * 3f) ));
+          }
+        
+    }
+    
     public struct GridCell
     {
         public Vector3[] P;
@@ -521,24 +521,24 @@ namespace Hedra.Engine.Rendering.Geometry
         public BlockType[] Type;
         
         public static GridCell operator +(GridCell Cell1, GridCell Cell2){
-        	for(int i = 0; i < Cell1.Density.Length; i++){
-        		Cell1.Density[i] += Cell2.Density[i];
-        	}
-        	return Cell1;
+            for(int i = 0; i < Cell1.Density.Length; i++){
+                Cell1.Density[i] += Cell2.Density[i];
+            }
+            return Cell1;
         }
         
         public static GridCell operator /(GridCell Cell1, float Divider){
-        	for(int i = 0; i < Cell1.Density.Length; i++){
-        		Cell1.Density[i] /= Divider;
-        	}
-        	return Cell1;
+            for(int i = 0; i < Cell1.Density.Length; i++){
+                Cell1.Density[i] /= Divider;
+            }
+            return Cell1;
         }
         
         public static GridCell operator *(GridCell Cell1, float Multiplier){
-        	for(int i = 0; i < Cell1.Density.Length; i++){
-        		Cell1.Density[i] *= Multiplier;
-        	}
-        	return Cell1;
+            for(int i = 0; i < Cell1.Density.Length; i++){
+                Cell1.Density[i] *= Multiplier;
+            }
+            return Cell1;
         }
     }
     public struct Triangle
@@ -546,11 +546,11 @@ namespace Hedra.Engine.Rendering.Geometry
         public Vector3[] P;
         
         public bool Contains(Vector3 Vertex){
-        	for(int i = 0; i < P.Length; i++){
-        		if(P[i] == Vertex)
-        			return true;
-        	}
-        	return false;
+            for(int i = 0; i < P.Length; i++){
+                if(P[i] == Vertex)
+                    return true;
+            }
+            return false;
         }
     }
 }

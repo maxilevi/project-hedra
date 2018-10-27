@@ -1,4 +1,4 @@
-﻿using Hedra.Engine;
+using Hedra.Engine;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;

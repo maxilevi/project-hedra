@@ -1,4 +1,4 @@
-﻿using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.AISystem.Behaviours
 {

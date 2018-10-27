@@ -1,4 +1,4 @@
-﻿ /*
+ /*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 08/12/2016
@@ -14,10 +14,10 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.WorldBuilding
 {
-	/// <summary>
-	/// Description of WarriorAI.
-	/// </summary>
-	public class WarriorAIComponent : CombatAIComponent
+    /// <summary>
+    /// Description of WarriorAI.
+    /// </summary>
+    public class WarriorAIComponent : CombatAIComponent
     {
         private float _attackTimer;
         private Timer ForgetTimer { get; set; }
@@ -26,9 +26,9 @@ namespace Hedra.Engine.WorldBuilding
         public override float ForgetRadius { get; set; } = 64;
 
         public WarriorAIComponent(IHumanoid Parent, bool Friendly) : base(Parent, Friendly)
-		{
-			this._attackTimer = 0f;
-		    this.ForgetTimer = new Timer(8f);
+        {
+            this._attackTimer = 0f;
+            this.ForgetTimer = new Timer(8f);
 
         }
 
@@ -39,40 +39,40 @@ namespace Hedra.Engine.WorldBuilding
         }
 
         public override void DoUpdate()
-		{
-		    if (this.MovementTimer.Tick() && !Chasing)
-		    {
-		        this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24 - 12f, 0, Utils.Rng.NextFloat() * 24 - 12f) +
-		                           Parent.BlockPosition;
-		    }
-		    else if (Chasing)
-		    {
+        {
+            if (this.MovementTimer.Tick() && !Chasing)
+            {
+                this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24 - 12f, 0, Utils.Rng.NextFloat() * 24 - 12f) +
+                                   Parent.BlockPosition;
+            }
+            else if (Chasing)
+            {
 
-		        if (ForgetTimer.Tick() ||
-		            ChasingTarget.IsDead || ChasingTarget.IsInvisible)
-		        {
-		            base.Reset();
-		            return;
-		        }
+                if (ForgetTimer.Tick() ||
+                    ChasingTarget.IsDead || ChasingTarget.IsInvisible)
+                {
+                    base.Reset();
+                    return;
+                }
 
-		        this.TargetPoint = ChasingTarget.Position;
-		        this._attackTimer -= Time.IndependantDeltaTime;
-		        if (Parent.InAttackRange(ChasingTarget) && !Parent.IsKnocked)
-		        {
-		            if (_attackTimer < 0)
-		            {
-		                Parent.Model.Attack(ChasingTarget);
-		                _attackTimer = 1.25f;
-		            }
+                this.TargetPoint = ChasingTarget.Position;
+                this._attackTimer -= Time.IndependantDeltaTime;
+                if (Parent.InAttackRange(ChasingTarget) && !Parent.IsKnocked)
+                {
+                    if (_attackTimer < 0)
+                    {
+                        Parent.Model.Attack(ChasingTarget);
+                        _attackTimer = 1.25f;
+                    }
                     this.ForgetTimer.Reset();
-		        }
-		        else
-		        {
-		            base.RollAndMove();
-		        }
-		    }
+                }
+                else
+                {
+                    base.RollAndMove();
+                }
+            }
 
-		    base.LookTarget();
-		}
-	}
+            base.LookTarget();
+        }
+    }
 }

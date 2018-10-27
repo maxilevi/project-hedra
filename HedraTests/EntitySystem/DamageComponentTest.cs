@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
