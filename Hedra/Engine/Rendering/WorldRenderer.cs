@@ -41,7 +41,7 @@ namespace Hedra.Engine.Rendering
 	        WaterShader = Shader.Build("Shaders/Water.vert", "Shaders/Water.frag");
 	        StaticShader = Shader.Build("Shaders/Static.vert", "Shaders/Static.frag");
             StaticBuffer = new WorldBuffer(PoolSize.SuperBig);
-		    InstanceBuffer = new WorldBuffer(PoolSize.Big);
+		    InstanceBuffer = new WorldBuffer(PoolSize.Normal);
             WaterBuffer = new WorldBuffer(PoolSize.Tiny);
 
 	        var noiseValues = new float[16, 16, 16];

@@ -12,6 +12,7 @@ using System.Drawing;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using System.IO;
+using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Player.Skills.Warrior;
 using OpenTK;
@@ -25,8 +26,6 @@ namespace Hedra.Engine.Player
 		
 		public WarriorAbilityTreeBlueprint()
         {
-			base.ActiveColor = new Vector4(1.000f, 0.420f, 0.204f, 1.000f);
-			
 			Items[0][1].AbilityType = typeof(Whirlwind);	
 			Items[0][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
 			Items[0][1].Enabled = true;
@@ -58,6 +57,18 @@ namespace Hedra.Engine.Player
 			Items[2][1].AbilityType = typeof(Resistance);	
 			Items[2][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
 			Items[2][1].Enabled = true;
+	        
+	        Items[3][1].AbilityType = typeof(Resistance);	
+	        Items[3][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+	        Items[3][1].Enabled = true;
+	        
+	        Items[3][4].AbilityType = typeof(Resistance);	
+	        Items[3][4].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+	        Items[3][4].Enabled = true;
+	        
+	        Items[3][0].AbilityType = typeof(Resistance);	
+	        Items[3][0].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+	        Items[3][0].Enabled = true;
 		}
 	}
 }

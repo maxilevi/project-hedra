@@ -40,7 +40,8 @@ namespace Hedra.Engine.WorldBuilding
             UpdateManager.Add(this);
 		}
 		
-		public void Update(){
+		public void Update()
+		{
 			this._passedTime++;
 
 		    if (this._passedTime % 2 == 0)
@@ -58,26 +59,7 @@ namespace Hedra.Engine.WorldBuilding
 		        _fireParticles.Emit();
 		    }
 
-		    try
-		    {
-		        for (int i = World.Entities.Count - 1; i > -1; i--)
-		        {
-		            if (World.Entities[i] == null) continue;
-		            if ((World.Entities[i].Position - Position).LengthSquared < 4 * 4)
-		            {
-		                if (World.Entities[i].SearchComponent<BurningComponent>() == null)
-		                {
-		                    var isImmune = World.Entities[i].SearchComponent<DamageComponent>().Immune;
-                            if (isImmune) continue;
-                            World.Entities[i].AddComponent(new BurningComponent(World.Entities[i], 5f, 40f));
-		                }
-		            }
-		        }
-		    }
-		    catch (ArgumentOutOfRangeException)
-		    {
-		        Log.WriteLine("ArgumentException while looping though entities.");
-		    }
+			HandleBurning();
 
 		    if( (this._light == null) && (this.Position - LocalPlayer.Instance.Position).LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
 
@@ -105,7 +87,6 @@ namespace Hedra.Engine.WorldBuilding
 		        this._sound.Source.Volume = gain;
 		    }
 
-
             if ( this._light != null && (this.Position - LocalPlayer.Instance.Position).LengthSquared >
                 ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
 
@@ -124,6 +105,24 @@ namespace Hedra.Engine.WorldBuilding
             }
 		}
 
+		private void HandleBurning()
+		{
+			var entities = World.Entities;
+			for (var i = entities.Count - 1; i > -1; i--)
+			{
+				if (entities[i] == null) continue;
+				if ((entities[i].Position - Position).LengthSquared < 4 * 4)
+				{
+					if (entities[i].SearchComponent<BurningComponent>() == null)
+					{
+						var isImmune = entities[i].SearchComponent<DamageComponent>().Immune;
+						if (isImmune) continue;
+						entities[i].AddComponent(new BurningComponent(World.Entities[i], 5f, 40f));
+					}
+				}
+			}
+		}
+		
 	    public override void Dispose()
 	    {
 	        base.Dispose();

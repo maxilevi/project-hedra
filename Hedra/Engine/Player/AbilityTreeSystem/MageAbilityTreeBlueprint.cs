@@ -11,6 +11,7 @@ using System.Drawing;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using System.IO;
+using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Player.Skills.Mage;
 using OpenTK;
@@ -30,9 +31,9 @@ namespace Hedra.Engine.Player
 	public class MageAbilityTreeBlueprint : AbilityTreeBlueprint
 	{
 		
-		public MageAbilityTreeBlueprint() : base(){
-			base.ActiveColor = new Vector4(1.000f, 0.420f, 0.204f, 1.000f);
-			
+		public MageAbilityTreeBlueprint()
+		{
+
 			Items[0][0].AbilityType = typeof(Fireball);	
 			Items[0][0].Image = Graphics2D.LoadFromAssets("Assets/Skills/Fireball.png");
 			Items[0][0].Enabled = true;

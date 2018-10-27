@@ -40,7 +40,6 @@ namespace Hedra.Engine.Sound
 
             AL.Source(Id, ALSourcei.Buffer, (int) Buffer.ID);
             AL.SourcePlay(Id);
-
         }
 		
 		public void Play(SoundBuffer Buffer, Vector3 Location, float Pitch, float Gain, bool Loop)

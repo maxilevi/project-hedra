@@ -271,15 +271,12 @@ namespace Hedra.Engine.EntitySystem
                                 else continue;
                             }
                             var increment = -(Parent.Position.Xz - entities[i].Position.Xz).ToVector3().NormalizedFast();
-                            for (var j = 0; j < 6; j++)
-                            {
-                                var command = new MoveCommand(entities[i],
-                                    increment * 1f)
-                                {
-                                    IsRecursive = true
-                                };
-                                entities[i].Physics.DeltaTranslate(command);
-                            }
+							var command = new MoveCommand(entities[i],
+								increment * 8f)
+							{
+								IsRecursive = true
+							};
+                            entities[i].Physics.DeltaTranslate(command);
                         }
                     }
                 }
@@ -287,9 +284,9 @@ namespace Hedra.Engine.EntitySystem
             var overFloor = false;
 			lock(_collisions)
 			{
-			    Vector3 deltaOrientation = delta.NormalizedFast();
+			    var deltaOrientation = delta.NormalizedFast();
 
-				for(int i = _collisions.Count-1; i > -1; i--)
+				for(var i = _collisions.Count-1; i > -1; i--)
                 {
 				    Box box = parentBox.Cache;
                     if (onlyY)

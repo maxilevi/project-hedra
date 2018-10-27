@@ -49,7 +49,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public Vector3 Position { get; private set; }
 
         private Block[][][] _blocks;
-        private static Block[][] _dummyBlocks;
+        private static readonly Block[][] _dummyBlocks;
         private Dictionary<CoordinateHash3D, Half> _waterDensity;
         private readonly object _waterLock = new object();
         private readonly VertexData _nearestVertexData;
@@ -61,6 +61,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private GridCell _nearestVertexCell;
         private Vector3[] _terrainVertices;
 
+        static Chunk()
+        {
+            _dummyBlocks = new Block[Height][];
+            for (var i = 0; i < _dummyBlocks.Length; i++)
+            {
+                _dummyBlocks[i] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
+            }
+        }
+        
         public Chunk(int OffsetX, int OffsetZ)
         {
             this.OffsetX = OffsetX;
@@ -68,7 +77,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.Position = new Vector3(OffsetX, 0, OffsetZ);
             if (World.GetChunkByOffset(this.OffsetX, this.OffsetZ) != null)
                 throw new ArgumentNullException($"A chunk with the coodinates ({OffsetX}, {OffsetZ}) already exists.");
-            _blocks = new Block[(int)(Width / BlockSize)][][];
+            _blocks = new Block[(int) (Width / BlockSize)][][];
             _nearestVertexData = new VertexData();
             _terrainBuilder = new ChunkTerrainMeshBuilder(this);
             _structuresBuilder = new ChunkStructuresMeshBuilder(this);
@@ -76,11 +85,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _terrainVerticesLock = new object();
             _blocksLock = new object();
             _regionCache = new RegionCache(Position, Position + new Vector3(Chunk.Width, 0, Chunk.Width));
-            _dummyBlocks = new Block[Height][];
-            for(var i = 0; i < _dummyBlocks.Length; i++)
-            {
-                _dummyBlocks[i] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
-            }
+
             Biome = World.BiomePool.GetPredominantBiome(this);
             Landscape = new LandscapeGenerator(this);
         }
@@ -99,6 +104,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 Landscape.Generate(_blocks, _regionCache);
             }
+
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
             IsGenerated = true;
         }
@@ -141,6 +147,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 {
                     _terrainVertices = null;
                 }
+
                 if (Lod != 1 || !Input.HasNoise3D) return;
                 //_terrainVertices = Input.StaticData.Vertices.Select( V => V - new Vector3(OffsetX, 0, OffsetZ)).ToArray();
             }
@@ -155,7 +162,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void SetChunkStatus(ChunkMeshBuildOutput Input)
         {
-            if(!Initialized) throw new ArgumentException($"Chunk hasnt been initialized yet.");
+            if (!Initialized) throw new ArgumentException($"Chunk hasnt been initialized yet.");
             this.BuildedCompletely = !Input.Failed;
             this.Position = new Vector3(OffsetX, 0, OffsetZ);
             this.Mesh.IsGenerated = true;
@@ -181,7 +188,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Mesh == null ||
                 Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
-                Input.InstanceData.Colors.Count != Input.InstanceData.Vertices.Count) throw new ArgumentException("Chunk index mismatch.");
+                Input.InstanceData.Colors.Count != Input.InstanceData.Vertices.Count)
+                throw new ArgumentException("Chunk index mismatch.");
 
             var staticMin = new Vector3(
                 Input.StaticData.SupportPoint(-Vector3.UnitX).X - OffsetX,
@@ -196,7 +204,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             );
             Mesh.CullingBox = new Box(
                 new Vector3(staticMin.X, staticMin.Y, staticMin.Z),
-                new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y), staticMax.Z)
+                new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y),
+                    staticMax.Z)
             );
             DistributedExecuter.Execute(delegate
             {
@@ -212,6 +221,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Mesh.Enabled = true;
                     Mesh.BuildedOnce = true;
                 }
+
                 Input.StaticData?.Dispose();
                 Input.InstanceData?.Dispose();
                 Input.WaterData?.Dispose();
@@ -229,9 +239,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                 return new Block();
             }
+
             return new Block();
         }
-        
+
         public Vector3 NearestVertex(Vector3 Position)
         {
             return Vector3.Zero;
@@ -338,6 +349,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (type != BlockType.Air && type != BlockType.Water)
                     return y;
             }
+
             return 0;
         }
 
@@ -352,9 +364,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (type != BlockType.Air && type != BlockType.Water)
                     return _blocks[X][y][Z].Density + y;
             }
+
             return 0;
         }
-        
+
         public int GetLowestY(int X, int Z)
         {
             if (Disposed || X < 0 || Z < 0 || Landscape == null || !Landscape.BlocksSetted) return 0;
@@ -364,6 +377,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (block.Type == BlockType.Air || block.Type == BlockType.Water)
                     return y - 1;
             }
+
             return 0;
         }
 
@@ -382,6 +396,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         return y;
                 }
             }
+
             return Y;
         }
 
@@ -406,6 +421,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (B.Type != BlockType.Air && B.Type != BlockType.Water)
                     return _blocks[X][y][Z];
             }
+
             return new Block();
         }
 
@@ -420,6 +436,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (block.Type == BlockType.Air && block.Type == BlockType.Water)
                     return _blocks[X][y - 1][Z];
             }
+
             return new Block();
         }
 
@@ -432,6 +449,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 for (var i = 0; i < Data.Length; i++)
                     Mesh.Elements.Add(Data[i]);
             }
+
             this.NeedsRebuilding = true;
         }
 
@@ -444,13 +462,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 for (var i = 0; i < Data.Length; i++)
                     Mesh.Elements.Remove(Data[i]);
             }
+
             this.NeedsRebuilding = true;
         }
 
         public void AddInstance(InstanceData Data, bool AffectedByLod = false)
         {
             if (Mesh == null) throw new ArgumentException($"Failed to add instance data ");
-       
+
             StaticBuffer.AddInstance(Data, AffectedByLod);
         }
 
@@ -491,16 +510,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 var n7 = World.GetChunkByOffset(OffsetX + Width, OffsetZ - Width);
                 var n8 = World.GetChunkByOffset(OffsetX - Width, OffsetZ + Width);
 
-                return n1 != null && n2 != null && n3 != null && n4 != null 
-                    && n5 != null && n6 != null && n7 != null && n8 != null 
-                    && n1.IsGenerated && n1.Landscape.StructuresPlaced 
-                    && n2.IsGenerated && n2.Landscape.StructuresPlaced 
-                    && n3.IsGenerated && n3.Landscape.StructuresPlaced 
-                    && n4.IsGenerated && n4.Landscape.StructuresPlaced 
-                    && n5.IsGenerated && n5.Landscape.StructuresPlaced
-                    && n6.IsGenerated && n6.Landscape.StructuresPlaced 
-                    && n7.IsGenerated && n7.Landscape.StructuresPlaced 
-                    && n8.IsGenerated && n8.Landscape.StructuresPlaced;
+                return n1 != null && n2 != null && n3 != null && n4 != null
+                       && n5 != null && n6 != null && n7 != null && n8 != null
+                       && n1.IsGenerated && n1.Landscape.StructuresPlaced
+                       && n2.IsGenerated && n2.Landscape.StructuresPlaced
+                       && n3.IsGenerated && n3.Landscape.StructuresPlaced
+                       && n4.IsGenerated && n4.Landscape.StructuresPlaced
+                       && n5.IsGenerated && n5.Landscape.StructuresPlaced
+                       && n6.IsGenerated && n6.Landscape.StructuresPlaced
+                       && n7.IsGenerated && n7.Landscape.StructuresPlaced
+                       && n8.IsGenerated && n8.Landscape.StructuresPlaced;
             }
         }
 
@@ -521,7 +540,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        public Block[][] this[int Index] => !Landscape.StructuresPlaced || !Landscape.BlocksSetted || Disposed 
+        public Block[][] this[int Index] => Disposed || !Landscape.StructuresPlaced || !Landscape.BlocksSetted
             ? _dummyBlocks
             : _blocks[Index];
 

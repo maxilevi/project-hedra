@@ -64,11 +64,6 @@ namespace Hedra.Engine.BiomeSystem
         {
 			return (float) (OpenSimplexNoise.Evaluate(X * 0.2, Z * 0.2) * -0.15f * OpenSimplexNoise.Evaluate(X * 0.035, Z * 0.035) * 2.0f);
 		}
-		
-		protected virtual void PlaceEnviroment(Block[][][] Blocks, RegionCache Cache, int Lod)
-        {
-			this.StructuresPlaced = true;
-		}
 
 	    static int seed2(int _s)
 	    {

@@ -30,7 +30,7 @@ namespace Hedra.Engine.EntitySystem
 
     public class DamageComponent : EntityComponent
     {
-        public event OnDamageEventHandler OnDamageEvent;     
+        public event OnDamageEventHandler OnDamageEvent;
         public float XpToGive { get; set; } = 8;
         public bool Immune { get; set; }
         public bool Delete { get; set; } = true;

@@ -12,6 +12,7 @@ using System.Drawing;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using System.IO;
+using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Player.Skills.Archer;
 using OpenTK;
@@ -23,9 +24,8 @@ namespace Hedra.Engine.Player
 	public class ArcherAbilityTreeBlueprint : AbilityTreeBlueprint
 	{
 		
-		public ArcherAbilityTreeBlueprint() : base(){
-			base.ActiveColor = new Vector4(0.5625f, 0.25f, 0.296875f, 1.000f);
-			
+		public ArcherAbilityTreeBlueprint()
+		{
 			Items[0][0].AbilityType = typeof(Kick);	
 			Items[0][0].Image = Graphics2D.LoadFromAssets("Skills/Kick.png");
 			Items[0][0].Enabled = true;

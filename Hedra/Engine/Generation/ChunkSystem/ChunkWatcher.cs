@@ -67,7 +67,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void ManageLod()
         {
             if (!GameSettings.Lod) return;
-            var cameraDist = (_object.Position.Xz - GameManager.Player.View.CameraPosition.Xz).LengthSquared;
+            var cameraDist = (_object.Position.Xz - World.ToChunkSpace(GameManager.Player.Position)).LengthSquared;
             if (cameraDist > GeneralSettings.Lod1DistanceSquared && cameraDist < GeneralSettings.Lod2DistanceSquared)
                 _object.Lod = 2;
             else if (cameraDist > GeneralSettings.Lod2DistanceSquared && cameraDist < GeneralSettings.Lod3DistanceSquared)

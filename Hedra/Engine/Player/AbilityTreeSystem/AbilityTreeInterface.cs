@@ -28,7 +28,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 12f, FontStyle.Bold));
             for (var i = 0; i < this.Buttons.Length; i++)
             {
-                this.Buttons[i].Scale *= 1.25f;
+                this.Buttons[i].Position += new Vector2(.025f, .15f);
+                this.Textures[i].Position = this.Buttons[i].Position;
+                this.Textures[i].Scale = this.Buttons[i].Scale;
                 this.Buttons[i].Texture.IdPointer = null;
                 this.ButtonsText[i].TextFont = FontCache.Get(AssetManager.BoldFamily, 10f, FontStyle.Bold);
                 this.ButtonsText[i].Position = this.Buttons[i].Position +

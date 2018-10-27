@@ -75,9 +75,9 @@ namespace Hedra.Engine.BiomeSystem
 		    {
 			    this.DoTreeAndStructurePlacements(Blocks, Cache, lod);
             }
-			if (Chunk.HasLodedElements && !_environmentPlaced)
+			if (lod == 1 && !_environmentPlaced)
 			{
-				this.PlaceEnviroment(Blocks, Cache, lod);
+				this.PlaceEnviroment(Blocks, Cache	);
 				_environmentPlaced = true;
 			}
 			this.StructuresPlaced = true;
@@ -423,25 +423,19 @@ namespace Hedra.Engine.BiomeSystem
 	        return Type != BlockType.Air && Type != BlockType.Water && Type != BlockType.Seafloor;
 	    }
 
-	    protected override void PlaceEnviroment(Block[][][] Blocks, RegionCache Cache, int Lod)
+	    protected void PlaceEnviroment(Block[][][] Blocks, RegionCache Cache)
 	    {
 		    var structs = World.StructureGenerator.Structures;
-	        for (var _x = 0; _x < this.Chunk.BoundsX; _x++)
+	        for (var x = 0; x < this.Chunk.BoundsX; x++)
 	        {
-	            for (var _z = 0; _z < this.Chunk.BoundsZ; _z++)
+	            for (var z = 0; z < this.Chunk.BoundsZ; z++)
 	            {
-		            var coordinates = GetNearest(_x, _z, Lod);
-		            var x = (int) coordinates.X;
-		            var z = (int) coordinates.Y;
-		            var y = Chunk.GetHighestY(_x, _z);
-
+		            var y = Chunk.GetHighestY(x, z);
                     if(y < BiomePool.SeaLevel - Chunk.BlockSize) continue;
-
-		            var realPosition = new Vector3(Chunk.OffsetX + _x * Chunk.BlockSize, y-1, Chunk.OffsetZ + _z * Chunk.BlockSize);
 		            var samplingPosition = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
 		            
 		            
-	                var region = Cache.GetRegion(realPosition);
+	                var region = Cache.GetRegion(samplingPosition);
 	                this.LoopStructures(x, z, structs, out var noWeedZone, out _, out _);
 	                this.DoEnviromentPlacements(samplingPosition, noWeedZone, region);
 	            }

@@ -225,6 +225,7 @@
     <Compile Include="Engine\Core\ICountable.cs" />
     <Compile Include="Engine\Core\IPositionable.cs" />
     <Compile Include="Engine\DatabaseSystem\Dao.cs" />
+    <Compile Include="Engine\EntitySystem\BossSystem\SpawnComponent.cs" />
     <Compile Include="Engine\EntitySystem\Component.cs" />
     <Compile Include="Engine\EntitySystem\IComponent.cs" />
     <Compile Include="Engine\EntitySystem\IPhysicsComponent.cs" />

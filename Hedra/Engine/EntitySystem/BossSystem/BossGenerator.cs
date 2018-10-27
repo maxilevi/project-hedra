@@ -43,13 +43,12 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 		    dmgComponent.XpToGive += (int) (GameManager.Player.Level * .25f);
             dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args)
             {
-	            if (dmgComponent.Immune && Args.Damager is IPlayer) dmgComponent.Immune = false;
 			    if (!(Args.Victim.Health <= 0)) return;
 
 			    GameManager.Player.MessageDispatcher.ShowMessage("YOU EARNED "+(int)dmgComponent.XpToGive + " XP!", 3f, Colors.Violet.ToColor());
 			    healthBarComponent.Enabled = false;
 			};
-
+			boss.AddComponent(new SpawnComponent(boss, Position, () => dmgComponent.Immune = false));
 		    boss.Name = healthBarComponent.Name;
 		    boss.IsBoss = true;
 			boss.Physics.CanCollide = true;

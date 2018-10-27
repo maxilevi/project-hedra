@@ -69,9 +69,18 @@ namespace Hedra.Engine.Rendering.UI
 	    private uint DisposeId(uint DisposeId)
 	    {
 	        if (Array.IndexOf(GUIRenderer.InmortalTextures, DisposeId) != -1 || DisposeId == 0) return DisposeId;
-	        Graphics2D.Textures.Remove(DisposeId);
-	        Renderer.DeleteTexture(DisposeId);
-	        return DisposeId;
+
+		    void DisposeProcess()
+		    {
+			    Graphics2D.Textures.Remove(DisposeId);
+			    Renderer.DeleteTexture(DisposeId);
+		    }
+		    if(System.Threading.Thread.CurrentThread.ManagedThreadId != Hedra.MainThreadId)
+			    Executer.ExecuteOnMainThread(DisposeProcess);
+		    else
+				DisposeProcess();
+
+		    return DisposeId;
 	    }
 						
 		public uint Id => IdPointer?.Invoke() ?? TextureId;
