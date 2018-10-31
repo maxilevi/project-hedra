@@ -446,7 +446,7 @@ namespace Hedra.Engine.EntitySystem
 
             var copy = Components.ToArray();
             for (var i = 0; i < Components.Count; i++)
-                Components[i].Dispose();
+                Components[i]?.Dispose();
 
             (Model as IAudible)?.StopSound();
 
