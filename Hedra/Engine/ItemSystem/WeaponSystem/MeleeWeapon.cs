@@ -58,14 +58,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 base.SetToMainHand(MainMesh);
                 MainMesh.BeforeLocalRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15F * this.Scale.Y + Vector3.UnitZ * .0f * this.Scale.Z,
                     Matrix4.CreateRotationX(-70 * Mathf.Radian) * Matrix4.CreateRotationY(25 * Mathf.Radian)  * Matrix4.CreateRotationZ(-90 * Mathf.Radian));
-                MainMesh.Rotation = new Vector3(70, -25, 90);
+                MainMesh.TargetRotation = new Vector3(70, -25, 90);
             }
             if (PrimaryAttack)
             {
                 base.SetToMainHand(MainMesh);
                 MainMesh.BeforeLocalRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15f * this.Scale.Y,
                     Matrix4.CreateRotationX(-90 * Mathf.Radian) * Matrix4.CreateRotationZ(-90 * Mathf.Radian));
-                MainMesh.Rotation = new Vector3(90, 0, 90);
+                MainMesh.TargetRotation = new Vector3(90, 0, 90);
             }
 
             if (SecondaryAttack)
@@ -73,7 +73,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 base.SetToMainHand(MainMesh);
                 MainMesh.BeforeLocalRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15f * this.Scale.Y,
                     Matrix4.CreateRotationX(-90 * Mathf.Radian) * Matrix4.CreateRotationZ(0 * Mathf.Radian));
-                MainMesh.Rotation = new Vector3(90, 0, 0);
+                MainMesh.TargetRotation = new Vector3(90, 0, 0);
 
                 if (_previousPosition != Human.BlockPosition && Human.IsGrounded)
                 {

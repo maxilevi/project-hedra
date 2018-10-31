@@ -11,8 +11,10 @@ using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.Rendering
 {
-    public class ObjectMesh : IRenderable, IDisposable, ICullableModel
+    public class ObjectMesh : IRenderable, IDisposable, ICullableModel, IUpdatable
     {
+        public Vector3 TargetRotation { get; set; }
+        public Vector3 TargetPosition { get; set; }
         public float AnimationSpeed { get; set; } = 1f;
         public bool Enabled { get; set; }
         public Box CullingBox { get; set; }
@@ -34,6 +36,7 @@ namespace Hedra.Engine.Rendering
             Mesh.Enabled = true;
             Enabled = true;    
             DrawManager.Add(this);
+            UpdateManager.Add(this);
         }
 
         
@@ -41,6 +44,15 @@ namespace Hedra.Engine.Rendering
         {
             if(Enabled) Mesh.Draw();
         }
+        
+        public void Update()
+        {
+            this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition,
+                Time.IndependantDeltaTime * 6 * AnimationSpeed);
+            this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation,
+                Time.IndependantDeltaTime * 6 * AnimationSpeed);
+        }
+
         public bool ApplyNoiseTexture
         {
             get => _buffer.UseNoiseTexture;
@@ -157,6 +169,56 @@ namespace Hedra.Engine.Rendering
         public Vector3 LocalRotationPoint{
             get => _buffer.LocalRotationPoint;
             set => _buffer.LocalRotationPoint = value;
+        }
+        
+        public Vector3 AnimationRotation
+        {
+            get => _buffer.AnimationRotation;
+            set
+            {
+                float valY = value.Y;
+                
+                if(valY > 40960 || valY < -40960) valY = 0;
+                
+                float valX = value.X;
+                
+                if(valX > 40960 || valX < -40960) valX = 0;
+                
+                float valZ = value.Z;
+                
+                if(valZ > 40960 || valZ < -40960) valZ = 0;
+
+                
+                _buffer.AnimationRotation = new Vector3(valX, valY, valZ);
+            }
+        }
+        
+        public Vector3 AnimationRotationPoint
+        {
+            get => _buffer.AnimationRotationPoint;
+            set => _buffer.AnimationRotationPoint = value;
+        }
+        
+        public Vector3 AnimationPosition
+        {
+            get => _buffer.AnimationPosition;
+            set
+            {
+                float valY = value.Y;
+                
+                if(valY > 4096 || valY < -4096) valY = 0;
+                
+                float valX = value.X;
+                
+                if(valX > 4096 || valX < -4096) valX = 0;
+                
+                float valZ = value.Z;
+                
+                if(valZ > 4096 || valZ < -4096) valZ = 0;
+
+                
+                _buffer.AnimationPosition = new Vector3(valX, valY, valZ);
+            }
         }
         
         public bool ApplyFog
