@@ -121,6 +121,7 @@ namespace Hedra.Engine.EntitySystem
 
             if (shouldMiss || Immune) return;
             _tintTimer = 0.25f;
+            Exp = XpToGive;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
             if (Damager != null && Damager != Parent)
             {
@@ -129,6 +130,18 @@ namespace Hedra.Engine.EntitySystem
                 var averageSize = (Parent.Model.BaseBroadphaseBox.Size.X + Parent.Model.BaseBroadphaseBox.Size.Z) * .5f;
                 if (Parent is LocalPlayer) factor = 0.0f;
                 Parent.Physics.Translate(direction * factor * averageSize);
+
+                if(Damager is LocalPlayer)
+                {
+                    var delta = (int)Math.Ceiling(Exp);
+                    var label0 = new Billboard(4.0f, $"+{delta} XP", Color.Violet,
+                        FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
+                        Parent.Position)
+                    {
+                        Size = .4f,
+                        Vanish = true
+                    };
+                }
             }
 
             if (Parent.Health <= 0 && !Parent.IsDead)

@@ -337,16 +337,7 @@ namespace Hedra.Engine.Player
             get => _xp;
             set
             {
-                if(Level == MaxLevel || value == _xp) return;
-                var delta = (int) Math.Ceiling(value - _xp);                
-                var label0 = new Billboard(4.0f, $"+{delta} XP", Color.Violet,
-                    FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
-                    Model.Position)
-                {
-                    Size = .4f,
-                    Vanish = true
-                };
-                
+                if(Level == MaxLevel) return;
                 if (value < MaxXP) return;
                 _xp = value - MaxXP;
                 if (++Level == MaxLevel)
