@@ -16,6 +16,7 @@ namespace Hedra.Engine.Rendering
         private Vector3 _position;
         private bool _positionInitialized;
         private bool _boundsInitialized;
+        private VertexData _cache;
 
         public Vector3 Position
         {
@@ -60,11 +61,6 @@ namespace Hedra.Engine.Rendering
 
             return support;
         }
-        
-        public VertexData ToVertexData()
-        {
-            return ToVertexData(this);
-        }
 
         public void Dispose()
         {
@@ -87,16 +83,23 @@ namespace Hedra.Engine.Rendering
             };
         }
 
-        public static VertexData ToVertexData(CachedVertexData Data)
+        public VertexData VertexData
         {
-            return new VertexData
+            get
             {
-                Vertices = Data.Vertices,
-                Colors = Data.Colors,
-                Normals = Data.Normals,
-                Indices = Data.Indices,
-                Extradata = Data.Extradata
-            }.Clone();
+                if (_cache == null)
+                {
+                    _cache = new VertexData
+                    {
+                        Vertices = Vertices,
+                        Colors = Colors,
+                        Normals = Normals,
+                        Indices = Indices,
+                        Extradata = Extradata
+                    };
+                }
+                return _cache;
+            }
         }
     }
 }

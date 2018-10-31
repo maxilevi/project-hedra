@@ -1,3 +1,4 @@
+using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
@@ -6,18 +7,24 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public class MarketWellBuilder : Builder<MarketParameters>
     {
+        public MarketWellBuilder(CollidableStructure Structure) : base(Structure)
+        {
+        }
+        
         public override bool Place(MarketParameters Parameters, VillageCache Cache)
         {
             return this.PlaceGroundwork(Parameters.Position, Parameters.WellSize);
         }
-
-        public override void Polish(MarketParameters Parameters)
+        
+        public override BuildingOutput Build(MarketParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            World.AddStructure(new LampPost(Vector3.UnitY * 8f + Parameters.Position)
+            var output = base.Build(Parameters, Cache, Rng, Center);
+            output.Structures.Add(new LampPost(Vector3.UnitY * 8f + Parameters.Position)
             {
                 Radius = 386,
                 LightColor = new Vector3(.25f, .25f, .25f)
             });
+            return output;
         }
     }
 }

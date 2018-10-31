@@ -52,6 +52,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             boss.Name = healthBarComponent.Name;
             boss.IsBoss = true;
             boss.Physics.CanCollide = true;
+            boss.Removable = false;
             
             boss.AddComponent(dmgComponent);
             boss.AddComponent(healthBarComponent);

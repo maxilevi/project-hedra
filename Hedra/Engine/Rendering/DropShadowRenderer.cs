@@ -56,7 +56,8 @@ namespace Hedra.Engine.Rendering
                 _shadows.Remove(Shadow);
 
             /*TODO: since shadows can be moved outside of the renderer's scope this might create a small memory leak for dynamic shadows because the position on the hashtable hasnt been updated.*/
-            lock (_shadowPositions) {
+            lock (_shadowPositions)
+            {
                 if (_shadowPositions.Contains(Shadow.Position))
                     _shadowPositions.Remove(Shadow.Position);
             }
@@ -73,13 +74,19 @@ namespace Hedra.Engine.Rendering
             
         }    
 
-        public void Draw(){
-            if(GameSettings.ShadowQuality <= 1) return;
-            
-            lock(_shadows){
+        public void Draw()
+        {         
+            lock(_shadows)
+            {
                 _shouldShadows.Clear();
-                for(var i = 0; i < _shadows.Count; i++)
+                for(var i = _shadows.Count-1; i > -1; --i)
                 {
+                    if (_shadows[i].DeleteWhen != null && _shadows[i].DeleteWhen())
+                    {
+                        this.Remove(_shadows[i]);
+                        continue;
+                    }
+
                     if ((!GameSettings.SSAO || _shadows[i].IsCosmeticShadow) && _shadows[i].ShouldDraw && DrawManager.FrustumObject.PointInFrustum(_shadows[i].Position))
                         _shouldShadows.Add(_shadows[i]);
                 }
@@ -96,13 +103,6 @@ namespace Hedra.Engine.Rendering
                 DrawManager.UIRenderer.SetupQuad();
                 for (int i = 0; i < _shouldShadows.Count; i++)
                 {
-
-                    if (_shouldShadows[i].DeleteWhen != null && _shouldShadows[i].DeleteWhen())
-                    {
-                        this.Remove(_shouldShadows[i]);
-                        continue;
-                    }
-
                     if (_shouldShadows[i].DepthTest)
                         Renderer.Enable(EnableCap.DepthTest);
 

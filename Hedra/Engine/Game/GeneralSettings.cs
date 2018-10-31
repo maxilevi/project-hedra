@@ -17,9 +17,8 @@ namespace Hedra.Engine.Game
         public const float Lod1DistanceSquared = 288 * 288;
         public const float Lod2DistanceSquared = 512 * 512;
         public const float Lod3DistanceSquared = 1024 * 1024;
-        public const float LodElementsDistanceSquared = 288 * 288;
         public const float MaxLodDitherDistance = 256;
-        public const float MinLodDitherDistance = 228;
+        public const float MinLodDitherDistance = 200;
         public const int MaxWeights = 3;
     }
 }

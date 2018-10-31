@@ -65,32 +65,29 @@ namespace Hedra.Engine.StructureSystem
 
             for (var i = 0; i < tents.Length; i++)
             {
-                int k = i;
-                BanditCampDesign.MakeTent(tents[i], rng, enemies, k, Structure);
+                BanditCampDesign.MakeTent(tents[i], rng, Structure);
+                enemies[i] = World.WorldBuilding.SpawnBandit(
+                    tents[i].WorldPosition + new Vector3(rng.NextFloat() * 16f - 8f, 0, rng.NextFloat() * 16f - 8f), false,
+                    false);
             }
 
             Structure.AddCollisionShape(shapes.ToArray());
             Structure.AddStaticElement(model);
-
-            var camp = new BanditCamp(position, this.Radius)
-            {
-                Enemies = enemies
-            };
-            World.AddStructure(camp);
+            ((BanditCamp) Structure.WorldObject).Enemies = enemies;
         }
 
         private bool IntersectsWithOtherCampfires(List<TentParameters> OccupiedSpots, Vector3 NewSpot)
         {
             for (var i = 0; i < OccupiedSpots.Count; i++)
             {
-                if ((OccupiedSpots[i].WorldPosition - NewSpot).LengthSquared < 12*12) return true;
+                if ((OccupiedSpots[i].WorldPosition - NewSpot).LengthSquared < 16*16) return true;
             }
             return false;
         }
 
-        private static void MakeTent(TentParameters Parameters, Random Rng, Entity[] Enemies, int K, CollidableStructure Structure)
+        private static void MakeTent(TentParameters Parameters, Random Rng, CollidableStructure Structure)
         {
-            CoroutineManager.StartCoroutine(TentCoroutine, Parameters, Rng, Enemies, K, Structure);
+            CoroutineManager.StartCoroutine(TentCoroutine, Parameters, Rng, Structure);
         }
 
         private static IEnumerator TentCoroutine(object[] Params)
@@ -98,13 +95,11 @@ namespace Hedra.Engine.StructureSystem
             var currentModelOffset = -Vector3.UnitX * 4f;
             var parameters = (TentParameters) Params[0];
             var rng = (Random)Params[1];
-            var enemies = (Entity[])Params[2];
-            var j = (int) Params[3];
-            var structure = (CollidableStructure) Params[4];
+            var structure = (CollidableStructure) Params[2];
             Chunk underChunk = null;
             while (underChunk?.Landscape == null || !underChunk.Landscape.StructuresPlaced)
             {
-                underChunk = World.GetChunkAt(parameters.Position);
+                underChunk = World.GetChunkAt(parameters.WorldPosition);
                 yield return null;
             }
 
@@ -143,21 +138,18 @@ namespace Hedra.Engine.StructureSystem
 
                 structure.AddCollisionShape(campfireShapes.ToArray());
                 structure.AddStaticElement(campfire);
-                enemies[j] = World.WorldBuilding.SpawnBandit(
-                    parameters.Position + new Vector3(rng.NextFloat() * 16f - 8f, 0, rng.NextFloat() * 16f - 8f), false,
-                    false);
             });
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
-            var structure = base.Setup(TargetPosition, Rng);
+            var structure = base.Setup(TargetPosition, Rng, new BanditCamp(TargetPosition, this.Radius));
             var scaleMatrix = Matrix4.CreateScale(3 + Rng.NextFloat() * 1.5f);
             var tents = this.SetupTents(TargetPosition, scaleMatrix, Rng);         
 
             for (var i = 0; i < tents.Length; i++)
             {
-                World.WorldBuilding.AddGroundwork(new RoundedGroundwork(tents[i].WorldPosition, 16f));
+                structure.AddGroundwork(new RoundedGroundwork(tents[i].WorldPosition, 16f));
             }
 
             structure.Parameters.Set("TentParameters", tents);
@@ -169,17 +161,18 @@ namespace Hedra.Engine.StructureSystem
         {
             var tents = new List<TentParameters>();
 
-            var extraCampfires = 3;
+            var extraCampfires = 3 + Rng.Next(0, 2);
             for (var i = 0; i < extraCampfires; i++)
             {
-                float dist = 16 + Rng.NextFloat() * 6f;
+                float dist = (22 + Rng.NextFloat() * 6f) * Chunk.BlockSize;
                 var rotationMatrix = Matrix4.CreateRotationY(360f / extraCampfires * i * Mathf.Radian);
+                var newPosition = Vector3.TransformPosition(Vector3.UnitX * dist, rotationMatrix) + TargetPosition;
                 var tent = new TentParameters
                 {
-                    Position = TargetPosition,
+                    Position = newPosition,
                     RotationMatrix = Matrix4.CreateRotationY(360f / extraCampfires * i * Mathf.Radian),
-                    TransformationMatrix = ScaleMatrix * Matrix4.CreateTranslation(Vector3.UnitX * dist),
-                    WorldPosition = Vector3.TransformPosition(Vector3.UnitX * dist, rotationMatrix) + TargetPosition
+                    TransformationMatrix = ScaleMatrix,
+                    WorldPosition = newPosition
                 };
                 tents.Add(tent);
             }
@@ -193,7 +186,7 @@ namespace Hedra.Engine.StructureSystem
                                      + Vector3.UnitZ * (Rng.NextFloat() * spawnRadius * 2f - spawnRadius);
                 var newPosition = TargetPosition + randomPosition;
 
-                if (this.IntersectsWithOtherCampfires(tents, newPosition)) continue;
+                if (this.IntersectsWithOtherCampfires(tents, newPosition) || (TargetPosition - newPosition).LengthFast < 6 * Chunk.BlockSize) continue;
 
                 tents.Add(new TentParameters
                 {

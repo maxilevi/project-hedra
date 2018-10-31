@@ -15,18 +15,27 @@ using OpenTK;
 namespace Hedra.Engine.Generation.ChunkSystem
 {
     
-    public class ChunkComparer : IComparer<IPositionable>
+    public class ChunkComparer : ClosestComparer, IComparer<IPositionable>
     {
-        public Vector3 Position { get; set; }
-
         public int Compare(IPositionable ChunkA, IPositionable ChunkB)
         {
             if (ChunkA == ChunkB) return 0;
             if (ChunkA == null) return -1;
             if (ChunkB == null) return 1;
+            return base.Compare(ChunkA.Position, ChunkB.Position);
+        }
+    }
+    
+    public class ClosestComparer : IComparer<Vector3>
+    {
+        public Vector3 Position { get; set; }
 
-            float distanceA = (ChunkA.Position - Position).LengthSquared;
-            float distanceB = (ChunkB.Position - Position).LengthSquared;
+        public int Compare(Vector3 A, Vector3 B)
+        {
+            if (A == B) return 0;
+
+            var distanceA = (A - Position).LengthSquared;
+            var distanceB = (B - Position).LengthSquared;
 
             if (distanceA < distanceB) return -1;
             return Math.Abs(distanceA - distanceB) < 0.0005 ? 0 : 1;

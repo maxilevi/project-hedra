@@ -25,7 +25,7 @@ namespace Hedra.Engine.Player
         
         public void Update()
         {
-            var collidableStructures = StructureGenerator.GetNearStructures(_player.Position);
+            var collidableStructures = StructureHandler.GetNearStructures(_player.Position);
 
             if (this.NeedsUpdating(collidableStructures))
             {

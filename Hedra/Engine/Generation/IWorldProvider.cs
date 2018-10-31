@@ -36,7 +36,7 @@ namespace Hedra.Engine.Generation
 
         IWorldBuilding WorldBuilding { get; }
 
-        StructureGenerator StructureGenerator { get; }
+        StructureHandler StructureHandler { get; }
         
         int AverageBuildTime { get; }
         
@@ -50,13 +50,11 @@ namespace Hedra.Engine.Generation
 
         int ChunkQueueCount { get; }
 
+        WorldItem[] Items { get; }
+        
         ReadOnlyCollection<Chunk> Chunks { get; }
 
-        ReadOnlyCollection<WorldItem> Items { get; }
-
         ReadOnlyCollection<IEntity> Entities { get; }
-
-        ReadOnlyCollection<BaseStructure> Structures { get; }
 
         ReadOnlyCollection<ICollidable> GlobalColliders { get; }
 
@@ -90,16 +88,6 @@ namespace Hedra.Engine.Generation
 
         void RemoveEntity(IEntity Entity);
 
-        void AddStructure(BaseStructure Struct);
-
-        void RemoveStructure(BaseStructure Struct);
-
-        void AddGlobalCollider(params ICollidable[] Collidable);
-
-        void RemoveGlobalCollider(ICollidable Collidable);
-
-        void AddItem(WorldItem Item);
-
         void RemoveItem(WorldItem Item);
 
         void AddChunk(Chunk Chunk);
@@ -130,7 +118,7 @@ namespace Hedra.Engine.Generation
 
         Block GetLowestBlock(int X, int Z);
 
-        void HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds);
+        HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds);
 
         WorldItem DropItem(Item ItemSpec, Vector3 Position);
 
@@ -141,6 +129,7 @@ namespace Hedra.Engine.Generation
         Vector3 FindSpawningPoint(Vector3 Around);
 
         float GetHighest(int X, int Z);
-        
+
+        void SetupStructure(CollidableStructure Structure);
     }
 }

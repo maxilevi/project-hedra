@@ -30,7 +30,8 @@ namespace Hedra.Engine.WorldBuilding
             UpdateManager.Add(this);
         }
         
-        public void Update(){
+        public void Update()
+        {
             var Player = GameManager.Player;
             bool InRadius = (Player.Position - this.Position).Xz.LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance;
             if(Light == null && InRadius){
@@ -52,9 +53,11 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
         
-        public override void Dispose(){
+        public override void Dispose()
+        {
             Disposed = true;
-            if(Light != null){
+            if(Light != null)
+            {
                 Light.Locked = false;
                 Light.Position = Vector3.Zero;
                 ShaderManager.UpdateLight(Light);

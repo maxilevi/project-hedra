@@ -7,6 +7,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.PlantSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
@@ -21,18 +22,20 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private readonly StableBuilder _stableBuilder;
         private readonly MarketWellBuilder _marketWellBuilder;
         private readonly MarketBuilder _marketBuilder;
-        private readonly IDispersedPlacementDesigner _designer;
+        private readonly IPlacementDesigner _designer;
         private readonly Random _rng;
+        private readonly CollidableStructure _structure;
 
-        public VillageAssembler(VillageRoot Root, Random Rng)
+        public VillageAssembler(CollidableStructure Structure, VillageRoot Root, Random Rng)
         {
-            _neighbourhoodBuilder = new NeighbourhoodBuilder();
-            _farmBuilder = new FarmBuilder();
-            _blacksmithBuilder = new BlacksmithBuilder();
-            _stableBuilder = new StableBuilder();
-            _marketWellBuilder = new MarketWellBuilder();
-            _neighbourHoodWellBuilder = new NeighbourhoodWellBuilder();
-            _marketBuilder = new MarketBuilder();
+            _structure = Structure;
+            _neighbourhoodBuilder = new NeighbourhoodBuilder(_structure);
+            _farmBuilder = new FarmBuilder(_structure);
+            _blacksmithBuilder = new BlacksmithBuilder(_structure);
+            _stableBuilder = new StableBuilder(_structure);
+            _marketWellBuilder = new MarketWellBuilder(_structure);
+            _neighbourHoodWellBuilder = new NeighbourhoodWellBuilder(_structure);
+            _marketBuilder = new MarketBuilder(_structure);
             _root = Root;
             _rng = Rng;
             _designer = new DispersedPlacementDesigner(_root, new VillageConfiguration(), Rng);
@@ -50,7 +53,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             Design.Blacksmith = LoopStructures(Design.Blacksmith, _blacksmithBuilder);
             Design.Farms = LoopStructures(Design.Farms, _farmBuilder);
             Design.Stables = LoopStructures(Design.Stables, _stableBuilder);
-            _designer.FinishPlacements(Design);
+            _designer.FinishPlacements(_structure, Design);
         }
 
         private T[] LoopStructures<T>(T[] Parameters, params Builder<T>[] Builders) where T : IBuildingParameters
@@ -129,6 +132,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             shapes.ForEach(S => S.Transform(transMatrix));
             structure.AddStaticElement(models.ToArray());
             structure.AddCollisionShape(shapes.ToArray());
+            structure.WorldObject.AddChildren(buildingOutput.Structures.ToArray());
         }
     }
 }

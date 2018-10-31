@@ -2,6 +2,7 @@ using Hedra.Engine;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
+using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
 using HedraTests.Player;
 using NUnit.Framework;
@@ -19,7 +20,7 @@ namespace HedraTests.WorldBuilding
         public override void Setup()
         {
             base.Setup();
-            _obelisk = new Obelisk();
+            _obelisk = new Obelisk(Vector3.Zero);
             _dummyPlayer = new PlayerMock();
             Assert.Null(_dummyPlayer.MessageMock.LastMessage);
         }

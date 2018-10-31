@@ -6,27 +6,35 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using Hedra.Engine.Player;
-using OpenTK;
-using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.Engine.WorldBuilding;
+using OpenTK;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Engine.StructureSystem
 {
     /// <summary>
     /// Description of Obelisk.
     /// </summary>
     
-    public class Obelisk : InteractableStructure
+    public sealed class Obelisk : InteractableStructure
     {
         public override string Message => "INTERACT WITH THE OBELISK";
         public override int InteractDistance => 32;
         public ObeliskType Type { get; set; }
+        public HighlightedAreaWrapper AreaWrapper { get; set; }
+
+        public Obelisk(Vector3 Position)
+        {
+            this.Position = Position;
+        }
 
         protected override void Interact(IPlayer Interactee)
         {
@@ -97,6 +105,12 @@ namespace Hedra.Engine.WorldBuilding
                     
                 default: throw new ArgumentOutOfRangeException($"Obelisk color wasnt found.");
             }
+        }
+
+        public override void Dispose()
+        {
+            AreaWrapper?.Dispose();
+            base.Dispose();
         }
     }
     

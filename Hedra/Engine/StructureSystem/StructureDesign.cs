@@ -22,17 +22,16 @@ namespace Hedra.Engine.StructureSystem
 
         public abstract void Build(CollidableStructure Structure);
 
-        protected virtual CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
+        protected abstract CollidableStructure Setup(Vector3 TargetPosition, Random Rng);
+        
+        protected virtual CollidableStructure Setup(Vector3 TargetPosition, Random Rng, BaseStructure Structure)
         {
-            var plateau = new Plateau(TargetPosition, Radius);
-            World.WorldBuilding.AddPlateau(plateau);
-            return new CollidableStructure(this, TargetPosition, plateau);
+            return new CollidableStructure(this, TargetPosition, new Plateau(TargetPosition, Radius), Structure);
         }
 
-        private bool CanSetup(Vector3 TargetPosition)
+        public bool CanSetup(Vector3 TargetPosition)
         {
-            var plateau = new Plateau(TargetPosition, Radius);
-            return World.WorldBuilding.CanAddPlateau(plateau);
+            return World.WorldBuilding.CanAddPlateau(new Plateau(TargetPosition, Radius));
         }
 
         public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
@@ -45,18 +44,23 @@ namespace Hedra.Engine.StructureSystem
                         ChunkOffset.Y + z * Chunk.Width);
                     Distribution.Seed = BiomeGenerator.GenerateSeed(offset);
                     var targetPosition = BuildTargetPosition(offset, Distribution);
-                    var items = World.StructureGenerator.Structures;
+                    var items = World.StructureHandler.StructureItems;
                     
                     if (this.ShouldSetup(offset, targetPosition, items, Biome, Distribution))
                     {
                         if (!CanSetup(targetPosition)) continue;
                         var item = this.Setup(targetPosition, BuildRng(offset));
-                        if (item == null) continue;
-                        World.StructureGenerator.AddStructure(item);
-                        World.StructureGenerator.Build(item);
+                        World.StructureHandler.AddStructure(item);
+                        World.StructureHandler.Build(item);
                     }
                 }
             }
+        }
+
+        public bool ShouldRemove(Vector2 Offset, CollidableStructure Structure)
+        {
+            var width = Math.Max(2, Radius / Chunk.Width * 2) * 2 * Chunk.Width;
+            return (Offset - Structure.Position.Xz).LengthFast > new Vector2(width, width).LengthFast;
         }
 
         public static Random BuildRng(Vector2 Offset)
@@ -87,7 +91,7 @@ namespace Hedra.Engine.StructureSystem
         private bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] Designs)
         {
             float wSeed = World.Seed * 0.0001f;
-            var height = (int) (World.StructureGenerator.SeedGenerator.GetValue(NewPosition.X * .0085f + wSeed,
+            var height = (int) (World.StructureHandler.SeedGenerator.GetValue(NewPosition.X * .0085f + wSeed,
                           NewPosition.Z * .0085f + wSeed) * 100f);
             var index = new Random(height).Next(0, Designs.Length);
             bool isStructureRegion = index == Array.IndexOf(Designs, this);

@@ -130,16 +130,13 @@ namespace Hedra.Engine.WorldBuilding
         public Vector3 Scale
         {
             get => _model.Scale;
-            set => this._model.Scale = value;
+            set => _model.Scale = value;
         }
         
         public Vector3 Rotation
         {
             get => _model.Rotation;
-            set
-            {
-                this._model.Rotation = value;
-            }
+            set => _model.Rotation = value;
         }
 
         public override void Dispose()

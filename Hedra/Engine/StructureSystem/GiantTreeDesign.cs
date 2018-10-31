@@ -62,8 +62,9 @@ namespace Hedra.Engine.StructureSystem
                 {
                     treeBoss = BossGenerator.Generate(
                         new [] { MobType.Beetle, MobType.Gorilla },
-                        Vector3.TransformPosition(chestOffset + Vector3.UnitZ * 10, transMatrix),
+                        Vector3.TransformPosition(chestOffset + Vector3.UnitZ * 18, transMatrix),
                         rng);
+                    ((GiantTree)Structure.WorldObject).Boss = treeBoss;
                 }
 
                 var chest = World.SpawnChest(
@@ -72,9 +73,15 @@ namespace Hedra.Engine.StructureSystem
                     );
                 chest.Condition += () => treeBoss == null || treeBoss.IsDead;
                 chest.Rotation = Vector3.UnitY * 90f;
+                Structure.WorldObject.AddChildren(chest);
             });
             Structure.AddCollisionShape(shapes.ToArray());
             Structure.AddStaticElement(model);
+        }
+
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
+        {
+            return base.Setup(TargetPosition, Rng, new GiantTree());
         }
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)

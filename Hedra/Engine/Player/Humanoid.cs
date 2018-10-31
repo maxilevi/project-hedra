@@ -31,6 +31,7 @@ namespace Hedra.Engine.Player
     
     public class Humanoid : Entity, IHumanoid
     {
+        public const int MaxLevel = 99;
         public const float DefaultDodgeCost = 25;
         public event OnHitLandedEventHandler OnHitLanded;
         public IMessageDispatcher MessageDispatcher { get; set; }
@@ -87,9 +88,11 @@ namespace Hedra.Engine.Player
 
         public float BaseSpeed => Class.BaseSpeed;
 
-        public override float MaxHealth{
-            get{
-                float maxHealth = 97 + RandomFactor * 20f;
+        public override float MaxHealth
+        {
+            get
+            {
+                var maxHealth = 97 + RandomFactor * 20f;
                 for (var i = 1; i < this.Level; i++)
                 {
                     maxHealth += Class.MaxHealthFormula(RandomFactor);
@@ -102,13 +105,14 @@ namespace Hedra.Engine.Player
 
         protected float MaxXpForLevel(int TargetLevel)
         {
-            return TargetLevel * 10f + 38;
+            return MaxLevel == Level ? 0 : TargetLevel * 10f + 38;
         }
                     
         public float MaxMana
         {
-            get{
-                float maxMana = 103 + RandomFactor * 34f;
+            get
+            {
+                var maxMana = 103 + RandomFactor * 34f;
                 for(var i = 1; i < this.Level; i++){
                     maxMana += Class.MaxManaFormula(RandomFactor);                    
                 }
@@ -317,9 +321,11 @@ namespace Hedra.Engine.Player
             return  Weapon.GetAttribute<float>(CommonAttributes.Damage) * tierModifier / 15.0f;
         }
 
-        public float AttackSpeed{
-            get{
-                float attackSpeed = BaseAttackSpeed;
+        public float AttackSpeed
+        {
+            get
+            {
+                var attackSpeed = BaseAttackSpeed;
                 if(MainWeapon != null) attackSpeed *= MainWeapon.GetAttribute<float>(CommonAttributes.AttackSpeed);
                 return attackSpeed;
             }
@@ -329,16 +335,29 @@ namespace Hedra.Engine.Player
         public float XP
         {
             get => _xp;
-            set{
-                _xp = value;
-                if (!(_xp >= MaxXP)) return;
-                _xp -= MaxXP;
-                Level++;
-                    
+            set
+            {
+                if(Level == MaxLevel || value == _xp) return;
+                var delta = (int) Math.Ceiling(value - _xp);                
+                var label0 = new Billboard(4.0f, $"+{delta} XP", Color.Violet,
+                    FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
+                    Model.Position)
+                {
+                    Size = .4f,
+                    Vanish = true
+                };
+                
+                if (value < MaxXP) return;
+                _xp = value - MaxXP;
+                if (++Level == MaxLevel)
+                {
+                    _xp = 0;
+                }
+                
                 Health = MaxHealth;
                 Mana = MaxMana;
 
-                var label = new Billboard(4.0f, "LEVEL UP!", Color.Violet,
+                var label1 = new Billboard(4.0f, "LEVEL UP!", Color.Violet,
                     FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
                     this.Model.Position)
                 {
@@ -346,11 +365,10 @@ namespace Hedra.Engine.Player
                     Vanish = true,
                     FollowFunc = () => this.Position
                 };
-
                 SoundManager.PlaySound(SoundType.NotificationSound, Position, false, 1, .65f);
-                //make a loop
-                if(_xp >= MaxXP)
-                    XP = _xp;
+                
+                /* So it keeps looping */
+                if(_xp >= MaxXP) XP = _xp;
             }
         }
         

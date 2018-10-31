@@ -12,7 +12,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    public sealed class DispersedPlacementDesigner : IDispersedPlacementDesigner
+    public sealed class DispersedPlacementDesigner : IPlacementDesigner
     {
         private readonly VillageRoot _root;
         private readonly Random _rng;
@@ -54,15 +54,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             return design;
         }
 
-        public void FinishPlacements(PlacementDesign Design)
+        public void FinishPlacements(CollidableStructure Structure, PlacementDesign Design)
         {
             var candidates = Design.Blacksmith.Concat<IBuildingParameters>(Design.Neighbourhoods).Concat(Design.Farms).Concat(Design.Markets).ToList();
             var graph = this.CreateGraph(Design, candidates, out var vertices);
-            this.BuildPaths(Design, graph);
-            this.MarkGraphSpots(graph, candidates, vertices);
+            this.BuildPaths(Structure, Design, graph);
+            this.MarkGraphSpots(Structure, graph, candidates, vertices);
         }
 
-        private void MarkGraphSpots(PathGraph Graph, List<IBuildingParameters> Candidates, Dictionary<IBuildingParameters, PathVertex> Vertices)
+        private void MarkGraphSpots(CollidableStructure Structure, PathGraph Graph, List<IBuildingParameters> Candidates, Dictionary<IBuildingParameters, PathVertex> Vertices)
         {
             for (var i = 0; i < Candidates.Count; i++)
             {
@@ -70,7 +70,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 var newParam = this.ParameterFromDegree(degree, Candidates[i].Position);
                 if (degree >= 3)
                 {
-                    World.WorldBuilding.AddPlateau(new Plateau(Candidates[i].Position, degree * 32)
+                    Structure.AddPlateau(new Plateau(Candidates[i].Position, degree * 32)
                     {
                         NoTrees = true
                     });
@@ -78,7 +78,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             }
         }
 
-        private void BuildPaths(PlacementDesign Design, PathGraph Graph)
+        private void BuildPaths(CollidableStructure Structure, PlacementDesign Design, PathGraph Graph)
         {
             var edges = Graph.Edges;
             for (var i = 0; i < edges.Length; i++)
@@ -90,7 +90,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     BonusHeight = -1f,
                     Width = 24
                 };
-                World.WorldBuilding.AddGroundwork(path);
+                Structure.AddGroundwork(path);
             }
         }
 

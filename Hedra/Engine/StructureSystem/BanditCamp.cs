@@ -23,7 +23,7 @@ namespace Hedra.Engine.WorldBuilding
         private readonly int _passedTime = 0;
         private bool _restoreSoundPlayed;
         private Humanoid _rescuee;
-        public Entity[] Enemies;
+        public Entity[] Enemies { get; set; }
         public bool Cleared { get; private set; }
         public bool Rescued { get; private set; }
         public float Radius { get; set; }
@@ -147,6 +147,13 @@ namespace Hedra.Engine.WorldBuilding
 
         public override void Dispose()
         {
+            if (Enemies != null)
+            {
+                for (var i = 0; i < Enemies.Length; i++)
+                {
+                    Enemies[i].Dispose();
+                }
+            }
             this._campfire.Dispose();
             UpdateManager.Remove(this);
         }

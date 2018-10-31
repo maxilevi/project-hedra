@@ -49,6 +49,11 @@ namespace Hedra.Engine.StructureSystem
             });
         }
 
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
+        {
+            return base.Setup(TargetPosition, Rng, null);
+        }
+
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);

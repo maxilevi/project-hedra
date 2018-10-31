@@ -133,18 +133,6 @@ namespace Hedra.Engine.EntitySystem
 
             if (Parent.Health <= 0 && !Parent.IsDead)
             {
-                Exp = (int) Math.Ceiling(XpToGive);
-                if (!Parent.IsStatic && Damager is IPlayer)
-                {
-                    var label = new Billboard(4.0f, "+" + Exp + " XP", Color.Violet,
-                        FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
-                        Parent.Model.Position)
-                    {
-                        Size = .4f,
-                        Vanish = true
-                    };
-                }
-
                 Parent.IsDead = true;
                 var dropComponent = Parent.SearchComponent<DropComponent>();
                 dropComponent?.Drop();

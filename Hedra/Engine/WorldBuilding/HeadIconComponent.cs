@@ -57,7 +57,7 @@ namespace Hedra.Engine.WorldBuilding
             {
                 if (RotateIcon)
                 {
-                    _iconMesh.TargetRotation += Vector3.UnitY * (float) Time.DeltaTime * 35f;
+                    _iconMesh.Rotation += Vector3.UnitY * (float) Time.DeltaTime * 35f;
                 }
                 Vector3 headOffset;
                 if (ParentIsHumanoid)

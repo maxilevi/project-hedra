@@ -100,15 +100,15 @@ namespace Hedra.Engine.Loader
                 text +=
                     $"\n\navg_vcount={_voxelCount / _chunkCount / 1000}k / {defaultVoxelCount/1000}k voxel_count={_voxelCount/1000}k";
                 text += 
-                    $"\n\nAvgBuildTime={World.AverageBuildTime} MS AvgGenTime={World.AverageGenerationTime} MS Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights} Pitch={player.View.Pitch}";
+                    $"\n\nAvgBuildTime={World.AverageBuildTime} MS AvgGenTime={World.AverageGenerationTime} MS Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights} Pitch={player.View.Pitch.ToString("0.00")}";
                 text += 
-                    $"\n\nMesh Queue = {World.MeshQueueCount} Cache={CacheManager.CachedColors.Count} | {CacheManager.CachedExtradata.Count} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00}";
+                    $"\n\nMQueue = {World.MeshQueueCount} GQueue ={World.ChunkQueueCount} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00} H={World.Entities.Count(M => M.IsHumanoid)} Items={World.Items.Length} M&H={World.Entities.Count}";
                 text += 
-                    $"\n\nGeneration Queue ={World.ChunkQueueCount} Mobs={World.Entities.Count} Yaw={player.View.TargetYaw}";
+                    $"\n\nWatchers={World.StructureHandler.Watchers.Length} Structs={World.StructureHandler.Structures.Length}->{World.StructureHandler.Structures.Sum(S => S.Children.Length)} Plateaus={World.WorldBuilding.Plateaus.Length} Groundworks={World.WorldBuilding.Groundworks.Length}";
                 text += 
                     $"\n\nTextures ={Graphics2D.Textures.Count} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
                 text +=
-                    $"\n\nCulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount} Pitch={player.View.TargetPitch}";
+                    $"\n\nCulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount}  Cache={CacheManager.CachedColors.Count}|{CacheManager.CachedExtradata.Count} Pitch={player.View.TargetPitch}";
 
                 _debugText.Text = text;
                 _passedTime += Time.IndependantDeltaTime;

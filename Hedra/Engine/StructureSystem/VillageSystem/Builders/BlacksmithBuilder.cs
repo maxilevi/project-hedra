@@ -8,6 +8,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public class BlacksmithBuilder : Builder<BlacksmithParameters>
     {
+        public BlacksmithBuilder(CollidableStructure Structure) : base(Structure)
+        {
+        }
+        
         public override bool Place(BlacksmithParameters Parameters, VillageCache Cache)
         {
             return this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .75f, BlockType.Path);
@@ -22,12 +26,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public override BuildingOutput Build(BlacksmithParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            World.AddStructure(new LampPost(Parameters.Position + Parameters.Design.Oven * Parameters.Design.Scale)
+            var output = base.Build(Parameters, Cache, Rng, Center);
+            output.Structures.Add(new LampPost(Parameters.Position + Parameters.Design.Oven * Parameters.Design.Scale)
             {
                 Radius = 32,
                 LightColor = new Vector3(1f, .5f, 0f)
             });
-            return base.Build(Parameters, Cache, Rng, Center);
+            return output;
         }
 
         public override void Polish(BlacksmithParameters Parameters)

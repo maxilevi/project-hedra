@@ -385,8 +385,6 @@ namespace Hedra.Engine.Player
                 
             _food.TransformationMatrix = mat4;
             _food.Position = Model.Position;
-            _food.TargetPosition = Vector3.Zero;
-            _food.AnimationPosition = Vector3.Zero;
             _food.TargetRotation = new Vector3(180, 0, 0);
             _food.RotationPoint = Vector3.Zero;
             _food.Rotation = Vector3.Zero;

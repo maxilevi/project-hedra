@@ -57,9 +57,9 @@ namespace HedraTests.Structure
             {
                 if(!_interceptedEntities.Contains(Entity)) _interceptedEntities.Add(Entity);
             });
-            worldMock.Setup(W => W.AddStructure(It.IsAny<BaseStructure>())).Callback(delegate(BaseStructure Structure)
+            worldMock.Setup(W => W.SetupStructure(It.IsAny<CollidableStructure>())).Callback(delegate(CollidableStructure Structure)
             {
-                _interceptedStructures.Add(Structure);
+                _interceptedStructures.Add(Structure.WorldObject);
             });
             var guardAiComponentMock = new Mock<IGuardAIComponent>();
             worldMock.Setup(W => W.SpawnMob(It.IsAny<string>(), It.IsAny<Vector3>(), It.IsAny<int>())).Returns(delegate
@@ -106,7 +106,7 @@ namespace HedraTests.Structure
 
         protected virtual CollidableStructure CreateStructure()
         {
-            return new CollidableStructure(Design, RandomLocation, null);
+            return new CollidableStructure(Design, RandomLocation, null, null);
         }
         
         protected float DesiredHeight { get; set; }

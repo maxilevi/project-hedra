@@ -61,9 +61,9 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         {
             _arrow = ObjectMesh.FromVertexData(ArrowVertexData);
             _quiver = ObjectMesh.FromVertexData(QuiverVertexData);
-            _quiver.TargetPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
-            _quiver.LocalRotationPoint = new Vector3(0, 0, _quiver.TargetPosition.Z);
-            _quiver.TargetRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);
+            _quiver.Rotation = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
+            _quiver.LocalRotationPoint = new Vector3(0, 0, _quiver.Rotation.Z);
+            _quiver.Rotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);
             base.ShouldPlaySound = false;            
         }
         
@@ -100,7 +100,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                     
                 this.MainMesh.TransformationMatrix = Mat4;
                 this.MainMesh.Position = Owner.Model.Position;
-                this.MainMesh.TargetRotation = new Vector3(90,25,180);
+                this.MainMesh.Rotation = new Vector3(90,25,180);
                 this.MainMesh.BeforeLocalRotation = Vector3.Zero;                
             }
             

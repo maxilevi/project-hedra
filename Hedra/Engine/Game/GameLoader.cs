@@ -14,10 +14,10 @@ namespace Hedra.Engine.Game
     {
 
         public static string AppData =>
-            $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/Project Hedra/";
+            $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/Project Hedra/".Replace("\\", "/");
         
         public static string AppPath =>
-            $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/";
+            $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/".Replace("\\", "/");
         
         public static void AllocateMemory()
         {

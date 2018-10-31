@@ -28,7 +28,7 @@ namespace HedraTests
         public virtual MobFactory MobFactory => null;
         public virtual TreeGenerator TreeGenerator => null;
         public virtual IWorldBuilding WorldBuilding => null;
-        public virtual StructureGenerator StructureGenerator => null;
+        public virtual StructureHandler StructureHandler => null;
         public int AverageBuildTime => 0;
         public int AverageGenerationTime => 0;
         public virtual int Seed => 0;
@@ -36,9 +36,9 @@ namespace HedraTests
         public virtual int MeshQueueCount => 0;
         public virtual int ChunkQueueCount => 0;
         public virtual ReadOnlyCollection<Chunk> Chunks => null;
-        public virtual ReadOnlyCollection<WorldItem> Items => null;
+        public virtual WorldItem[] Items => null;
         public virtual ReadOnlyCollection<IEntity> Entities => null;
-        public virtual ReadOnlyCollection<BaseStructure> Structures => null;
+        public virtual BaseStructure[] Structures => null;
         public virtual ReadOnlyCollection<ICollidable> GlobalColliders => null;
         public virtual Dictionary<Vector2, Chunk> DrawingChunks => null;
         public virtual Dictionary<Vector2, Chunk> ShadowDrawingChunks => null;
@@ -73,10 +73,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void RemoveInstances(Vector3 Position, int Radius)
-        {
-        }
-
         public virtual T[] InRadius<T>(Vector3 Position, float Radius) where T : ISearchable
         {
             return default(T[]);
@@ -86,36 +82,11 @@ namespace HedraTests
         {
         }
 
-        public virtual Chunk GetChunkByOffset(Vector2 Vec2)
-        {
-            return default(Chunk);
-        }
-
         public virtual void AddEntity(IEntity Entity)
         {
         }
 
         public virtual void RemoveEntity(IEntity Entity)
-        {
-        }
-
-        public virtual void AddStructure(BaseStructure Struct)
-        {
-        }
-
-        public virtual void RemoveStructure(BaseStructure Struct)
-        {
-        }
-
-        public virtual void AddGlobalCollider(params ICollidable[] Collidable)
-        {
-        }
-
-        public virtual void RemoveGlobalCollider(ICollidable Collidable)
-        {
-        }
-
-        public virtual void AddItem(WorldItem Item)
         {
         }
 
@@ -186,6 +157,11 @@ namespace HedraTests
             return default(float);
         }
 
+        public void SetupStructure(CollidableStructure Structure)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual int GetLowestY(int X, int Z)
         {
             return default(int);
@@ -196,8 +172,9 @@ namespace HedraTests
             return default(Block);
         }
 
-        public virtual void HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
+        public virtual HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
         {
+            return default(HighlightedAreaWrapper);
         }
 
         public virtual WorldItem DropItem(Item ItemSpec, Vector3 Position)

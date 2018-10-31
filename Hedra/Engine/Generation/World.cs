@@ -39,14 +39,13 @@ namespace Hedra.Engine.Generation
         public static MobFactory MobFactory => Provider.MobFactory;
         public static TreeGenerator TreeGenerator => Provider.TreeGenerator;
         public static IWorldBuilding WorldBuilding => Provider.WorldBuilding;
-        public static StructureGenerator StructureGenerator => Provider.StructureGenerator;
+        public static StructureHandler StructureHandler => Provider.StructureHandler;
         public static bool IsGenerated => Provider.IsGenerated;
         public static int MeshQueueCount => Provider.MeshQueueCount;
         public static int ChunkQueueCount => Provider.ChunkQueueCount;
+        public static WorldItem[] Items => Provider.Items;
         public static ReadOnlyCollection<Chunk> Chunks => Provider.Chunks;
-        public static ReadOnlyCollection<WorldItem> Items => Provider.Items;
         public static ReadOnlyCollection<IEntity> Entities => Provider.Entities;
-        public static ReadOnlyCollection<BaseStructure> Structures => Provider.Structures;
         public static ReadOnlyCollection<ICollidable> GlobalColliders => Provider.GlobalColliders;
         public static Dictionary<Vector2, Chunk> DrawingChunks => Provider.DrawingChunks;
         public static Dictionary<Vector2, Chunk> ShadowDrawingChunks => Provider.ShadowDrawingChunks;
@@ -119,31 +118,6 @@ namespace Hedra.Engine.Generation
         public static void RemoveEntity(IEntity Entity)
         {
             Provider.RemoveEntity(Entity);
-        }
-
-        public static void AddStructure(BaseStructure Struct)
-        {
-            Provider.AddStructure(Struct);
-        }
-
-        public static void RemoveStructure(BaseStructure Struct)
-        {
-            Provider.RemoveStructure(Struct);
-        }
-
-        public static void AddGlobalCollider(params ICollidable[] Collidable)
-        {
-            Provider.AddGlobalCollider(Collidable);
-        }
-
-        public static void RemoveGlobalCollider(ICollidable Collidable)
-        {
-            Provider.RemoveGlobalCollider(Collidable);
-        }
-
-        public static void AddItem(WorldItem Item)
-        {
-            Provider.AddItem(Item);
         }
 
         public static void RemoveItem(WorldItem Item)
@@ -247,9 +221,9 @@ namespace Hedra.Engine.Generation
             return Provider.GetLowestBlock(X, Z);
         }
 
-        public static void HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
+        public static HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
         {
-            Provider.HighlightArea(Position, Color, Radius, Seconds);
+            return Provider.HighlightArea(Position, Color, Radius, Seconds);
         }
 
         public static WorldItem DropItem(Item ItemSpec, Vector3 Position)
@@ -295,6 +269,11 @@ namespace Hedra.Engine.Generation
         public static Vector3 FindSpawningPoint(Vector3 Around)
         {
             return Provider.FindSpawningPoint(Around);
+        }
+
+        public static void AddStructure(CollidableStructure Structure)
+        {
+            Provider.SetupStructure(Structure);
         }
     }
 }

@@ -15,12 +15,9 @@ namespace HedraTests.Structure
             return false;
         }
 
-        public void AddPlateau(Plateau Mount)
+        public bool CanAddPlateau(Plateau Mount, Plateau[] Candidates)
         {
-        }
-
-        public void AddGroundwork(IGroundwork Work)
-        {
+            return false;
         }
 
         public Plateau[] Plateaus => null;
@@ -42,7 +39,7 @@ namespace HedraTests.Structure
             return SpawnHumanoid(Type, DesiredPosition, null);
         }
 
-        public Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition, HumanoidBehaviourTemplate behaviour)
+        public Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition, HumanoidBehaviourTemplate Behaviour)
         {
             var human = new Humanoid();
             human.Position = DesiredPosition;
@@ -79,14 +76,20 @@ namespace HedraTests.Structure
 
         public Chest SpawnChest(Vector3 Position, Item Item)
         {
-            var chest = new Chest(Position, Item);
-            World.AddStructure(chest);
-            return chest;
+            return new Chest(Position, Item);
         }
 
         public string GenerateName()
         {
             return string.Empty;
+        }
+
+        public void SetupStructure(CollidableStructure Structure)
+        {    
+        }
+
+        public void DisposeStructure(CollidableStructure Structure)
+        {
         }
     }
 }

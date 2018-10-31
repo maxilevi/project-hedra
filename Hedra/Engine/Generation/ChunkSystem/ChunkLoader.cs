@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
@@ -27,6 +28,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public float MinFog { get; private set; }
         public float MaxFog { get; private set; }
         private readonly List<ChunkWatcher> _chunkWatchers;
+        private readonly List<Vector3> _candidates;
+        private readonly ClosestComparer _closest;
         private readonly Thread _mainThread;
         private readonly IPlayer _player;
         private float _targetMin = 1;
@@ -39,6 +42,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Enabled = true;
             _player = Player;
             _chunkWatchers = new List<ChunkWatcher>();
+            _candidates = new List<Vector3>();
+            _closest = new ClosestComparer();
             CoroutineManager.StartCoroutine(this.UpdateCoroutine);
             OnChunkReady += World.MarkChunkReady;
         }
@@ -68,37 +73,52 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Offset = World.ToChunkSpace(_player.BlockPosition);
                 if (World.IsGenerated && Enabled)
                 {
-                    var radius = (int) (GameSettings.ChunkLoaderRadius * .5f);
                     var hadChanges = false;
-                    for (var x = -radius; x < radius; x++)
+                    var stopCounting = false;
+                    var newTarget = 0;
+                    BuildCandidates(_candidates);
+                    for (var i = 0; i < _candidates.Count; i++)
                     {
-                        for (var z = -radius; z < radius; z++)
-                        {
-                            var radiusOffset = new Vector2(x, z);
-                            if (radiusOffset.LengthSquared > radius * radius) continue;
-                            var chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
-                            if (World.GetChunkByOffset(chunkPos) != null) continue;
-                            var chunk = new Chunk((int) chunkPos.X, (int) chunkPos.Y);
-                            World.AddChunk(chunk);
-                            var watcher = new ChunkWatcher(chunk);
-                            watcher.OnChunkReady += O => OnChunkReady?.Invoke(O);
-                            _chunkWatchers.Add(watcher);
-                        }
+                        var obj = World.GetChunkByOffset(_candidates[i].Xz);
+                        if (obj == null || !obj.BuildedWithStructures || obj.Disposed) stopCounting = true;
+                        if(!stopCounting) newTarget++;
+                        if (obj != null) continue;
+                        var chunk = new Chunk((int) _candidates[i].X, (int) _candidates[i].Z);
+                        World.AddChunk(chunk);
+                        var watcher = new ChunkWatcher(chunk);
+                        watcher.OnChunkReady += O => OnChunkReady?.Invoke(O);
+                        _chunkWatchers.Add(watcher);                  
                     }
+                    _targetActivechunks = newTarget;
                 }
                 yield return null;
-                var newTarget = 0;
                 for (var i = _chunkWatchers.Count - 1; i > -1; i--)
                 {
                     _chunkWatchers[i].Update();
-                    if (_chunkWatchers[i].IsHealthy) newTarget++;
                     if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
                 }
-                _targetActivechunks = newTarget;
                 yield return null;
             }
         }
 
+        private void BuildCandidates(List<Vector3> Candidates)
+        {
+            Candidates.Clear();
+            var radius = (int) (GameSettings.ChunkLoaderRadius * .5f);
+            for (var x = -radius; x < radius; x++)
+            {
+                for (var z = -radius; z < radius; z++)
+                {
+                    var radiusOffset = new Vector2(x, z);
+                    if (radiusOffset.LengthSquared > radius * radius) continue;
+                    var chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
+                    Candidates.Add(chunkPos.ToVector3());
+                }
+            }
+            _closest.Position = _player.Position.Xz.ToVector3();
+            Candidates.Sort(_closest);
+        }
+        
         public void Reset()
         {
             for (var i = _chunkWatchers.Count - 1; i > -1; i--)

@@ -169,7 +169,7 @@ namespace Hedra.Engine.Game
             Player.SearchComponent<DamageComponent>().Immune = true;
 
             var chunkOffset = World.ToChunkSpace(Player.BlockPosition);
-            StructureGenerator.CheckStructures(chunkOffset);
+            StructureHandler.CheckStructures(chunkOffset);
             while (_loadingScreen.IsLoading)
             {
                 Player.Physics.ResetFall();

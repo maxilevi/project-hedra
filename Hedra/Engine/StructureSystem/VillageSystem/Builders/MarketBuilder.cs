@@ -12,6 +12,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public class MarketBuilder : Builder<MarketParameters>
     {
+
+        public MarketBuilder(CollidableStructure Structure) : base(Structure)
+        {
+        }
+        
         public override bool Place(MarketParameters Parameters, VillageCache Cache)
         {
             var work = this.CreateGroundwork(Parameters.Position, Parameters.Size);

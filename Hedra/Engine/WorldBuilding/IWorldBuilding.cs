@@ -1,4 +1,5 @@
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Player;
@@ -9,14 +10,13 @@ namespace Hedra.Engine.WorldBuilding
     public interface IWorldBuilding
     {
         bool CanAddPlateau(Plateau Mount);
-        void AddPlateau(Plateau Mount);
-        void AddGroundwork(IGroundwork Work);
+        bool CanAddPlateau(Plateau Mount, Plateau[] Candidates);
         Plateau[] Plateaus { get; }
         IGroundwork[] Groundworks { get; }
         Entity SpawnCarriage(Vector3 Position);
         Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition);
         Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition);
-        Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition, HumanoidBehaviourTemplate behaviour);
+        Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition, HumanoidBehaviourTemplate Behaviour);
         Humanoid SpawnBandit(Vector3 Position, bool Friendly, bool Undead);
         Humanoid SpawnBandit(Vector3 Position, bool Friendly);
         Humanoid SpawnVillager(Vector3 Position, bool Move);
@@ -24,6 +24,8 @@ namespace Hedra.Engine.WorldBuilding
         Humanoid SpawnEnt(Vector3 Position);
         Chest SpawnChest(Vector3 Position, Item Item);
         string GenerateName();
+        void SetupStructure(CollidableStructure Structure);
+        void DisposeStructure(CollidableStructure Structure);
     }
 
 }

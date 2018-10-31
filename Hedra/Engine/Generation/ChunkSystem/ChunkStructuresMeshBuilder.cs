@@ -54,7 +54,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 ProcessInstanceData(instanceElements[i], Input.StaticData, i);
             }
 
-            if (_parent.HasLodedElements)
+            if (Lod == 1)
             {
                 var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
                 for (var i = 0; i < lodedInstanceElements.Length; i++)
@@ -84,7 +84,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 model.Extradata = CacheManager.CachedExtradata[Element.ExtraDataCache].Clone();
             else
                 model.Extradata = Element.ExtraData;
-
+/*
             if (Element.MeshCache == CacheManager.GetModel(CacheItem.Grass) ||
                 Element.MeshCache == CacheManager.GetModel(CacheItem.Wheat))
             {
@@ -105,7 +105,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                                        (grassRng.NextFloat() * .4f);
                     shadow.DeleteWhen = () => BuildedLod != 1 || Disposed;
                 }
-            }
+            }*/
 
             model.Transform(Element.TransMatrix);
             //Pack some randomness to the wind values

@@ -73,8 +73,8 @@ namespace Hedra.Engine.Player.Skills.Warrior
         
         public override void Update()
         {
-            if (ShouldEnd) Disable();
             if (!Casting) return;
+            if (ShouldEnd) Disable();
 
             Rotate();
             ManageParticles();            

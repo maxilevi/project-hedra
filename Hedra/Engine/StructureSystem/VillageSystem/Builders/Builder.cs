@@ -14,6 +14,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     public abstract class Builder<T> where T : IBuildingParameters
     {
         protected virtual bool LookAtCenter => true;
+        protected CollidableStructure Structure { get; private set; }
+        
+        protected Builder(CollidableStructure Structure)
+        {
+            this.Structure = Structure;
+        }
 
         public virtual bool Place(T Parameters, VillageCache Cache)
         {
@@ -78,12 +84,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         protected bool PushGroundwork(GroundworkItem Item)
         {
-            if (World.WorldBuilding.CanAddPlateau(Item.Plateau))
+            if (World.WorldBuilding.CanAddPlateau(Item.Plateau) && Structure.CanAddPlateau(Item.Plateau))
             {
-                World.WorldBuilding.AddPlateau(Item.Plateau);
+                Structure.AddPlateau(Item.Plateau);
                 if (Item.Groundwork != null)
                 {
-                    World.WorldBuilding.AddGroundwork(Item.Groundwork);
+                    Structure.AddGroundwork(Item.Groundwork);
                 }
                 return true;
             }
@@ -101,7 +107,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         }    
     }
     
-    public class GroundworkItem {
+    public class GroundworkItem
+    {
         public Plateau Plateau { get; set; }
         public IGroundwork Groundwork { get; set; }
     }

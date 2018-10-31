@@ -33,6 +33,7 @@ namespace Hedra.Engine.Rendering
         public float MaxLifetime { get; set; } = 1f;
         public Vector3 Orientation { get; set; } = Vector3.UnitY;
         private bool _buffersCreated;
+        private bool _disposed;
         private bool _emit;
         private int _times;
 
@@ -74,14 +75,14 @@ namespace Hedra.Engine.Rendering
 
         public void Update()
         {
-            if(Time.Paused || !_buffersCreated) return;
+            if(Time.Paused || !_buffersCreated || _disposed) return;
+
             for (var i = _tipPoints.Count - 1; i > -1; i--)
             {
                 _tipPoints[i] -= Time.DeltaTime;
 
                 if (_tipPoints[i].Lifetime < 0) _tipPoints.RemoveAt(i);
             }
-
 
             var smoothPoints = new List<TrailPoint>();
             var points = new List<TrailPoint>();
@@ -188,6 +189,7 @@ namespace Hedra.Engine.Rendering
 
         public void Dispose()
         {
+            _disposed = true;
             void DisposeBuffers()
             {
                 this._points.Dispose();

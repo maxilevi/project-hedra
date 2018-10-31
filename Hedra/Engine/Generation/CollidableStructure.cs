@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
@@ -24,24 +25,36 @@ namespace Hedra.Engine.Generation
 
     public class CollidableStructure : IDisposable
     {
-        public event OnModelAdded OnModelAdded;
+        private readonly HashSet<ICollidable> _colliders;
+        private readonly HashSet<CachedVertexData> _models;
+        private readonly HashSet<IGroundwork> _groundworks;
+        private readonly HashSet<Plateau> _plateaus;
+        private readonly object _lock = new object();
+        public event OnModelAdded ModelAdded;
         public Vector3 Position { get; }
         public Plateau Mountain { get; }
+        public BaseStructure WorldObject { get; }
         public float Radius { get; private set; }
-        private readonly List<ICollidable> _colliders;
-        private readonly List<CachedVertexData> _models;
         public StructureDesign Design { get; }
         public AttributeArray Parameters { get; }
-        private readonly object _lock = new object();
+        public bool Built { get; set; }
 
-        public CollidableStructure(StructureDesign Design, Vector3 Position, Plateau Mountain)
+        public CollidableStructure(StructureDesign Design, Vector3 Position, Plateau Mountain, BaseStructure WorldObject)
         {
             this.Position = new Vector3(Position.X, (Mountain?.MaxHeight + 1) * Chunk.BlockSize ?? Position.Y, Position.Z);
             this.Mountain = Mountain;
             this.Design = Design;
+            this.WorldObject = WorldObject;
             this.Parameters = new AttributeArray();
-            this._colliders = new List<ICollidable>();
-            this._models = new List<CachedVertexData>();
+            this._colliders = new HashSet<ICollidable>();
+            this._models = new HashSet<CachedVertexData>();
+            this._groundworks = new HashSet<IGroundwork>();
+            this._plateaus = new HashSet<Plateau>();
+        }
+
+        public void Setup()
+        {
+            World.WorldBuilding.SetupStructure(this);
         }
 
         public ICollidable[] Colliders
@@ -61,6 +74,24 @@ namespace Hedra.Engine.Generation
                     return _models.ToArray();
             }
         }
+        
+        public Plateau[] Plateaus
+        {
+            get
+            {
+                lock(_lock)
+                    return _plateaus.ToArray();
+            }
+        }
+        
+        public IGroundwork[] Groundworks
+        {
+            get
+            {
+                lock(_lock)
+                    return _groundworks.ToArray();
+            }
+        }
 
         public void AddCollisionShape(params ICollidable[] IColliders)
         {
@@ -77,19 +108,48 @@ namespace Hedra.Engine.Generation
             {
                 for (var i = 0; i < Models.Length; i++)
                 {
-                    _models.Add(CachedVertexData.FromVertexData(Models[i]));
-                    OnModelAdded?.Invoke(_models[_models.Count-1]);
+                    var model = CachedVertexData.FromVertexData(Models[i]);
+                    _models.Add(model);
+                    ModelAdded?.Invoke(model);
                 }
                 this.CalculateRadius();
             }
+        }
+        
+        public void AddGroundwork(params IGroundwork[] Groundworks)
+        {
+            lock (_lock)
+            {
+                for (var i = 0; i < Groundworks.Length; i++)
+                {
+                    _groundworks.Add(Groundworks[i]);
+                }
+            }
+        }
+        
+        public void AddPlateau(params Plateau[] Plateaus)
+        {
+            lock (_lock)
+            {
+                for (var i = 0; i < Plateaus.Length; i++)
+                {
+                    _plateaus.Add(Plateaus[i]);
+                }
+            }
+        }
+
+        public bool CanAddPlateau(Plateau Mount)
+        {
+            lock(_lock)
+                return World.WorldBuilding.CanAddPlateau(Mount, _plateaus.ToArray());
         }
 
         private void CalculateRadius()
         {
             var radius = 0f;
-            for (var i = 0; i < _models.Count; i++)
+            foreach (var model in _models)
             {
-                var newRadius = (_models[i].Position - this.Position).LengthFast + _models[i].Bounds.Xz.LengthFast * .5f;
+                var newRadius = (model.Position - this.Position).LengthFast + model.Bounds.Xz.LengthFast * .5f;
                 if (newRadius > radius)
                     radius = newRadius;
             }
@@ -100,11 +160,13 @@ namespace Hedra.Engine.Generation
         {
             lock (_lock)
             {
-                for (var i = 0; i < _models.Count; i++)
+                foreach (var model in _models)
                 {
-                    _models[i].Dispose();
+                    model.Dispose();
                 }
             }
+            World.WorldBuilding.DisposeStructure(this);
+            WorldObject?.Dispose();
         }
     }
 }

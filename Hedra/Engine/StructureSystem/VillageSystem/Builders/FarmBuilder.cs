@@ -12,7 +12,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     public class FarmBuilder : Builder<FarmParameters>
     {
         protected override bool LookAtCenter => false;
-
+        
+        public FarmBuilder(CollidableStructure Structure) : base(Structure)
+        {
+        }
+        
         public override bool Place(FarmParameters Parameters, VillageCache Cache)
         {
             var groundwork = this.CreateGroundwork(Parameters.Position, Parameters.GetSize(Cache));

@@ -17,7 +17,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class VillageDesign : StructureDesign
     {
-        public override int Radius { get; set; } = 1024;
+        public override int Radius { get; set; } = 1024 + 512;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
 
         public override void Build(CollidableStructure Structure)
@@ -29,16 +29,14 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
-            var structure = base.Setup(TargetPosition, Rng);
+            var structure = base.Setup(TargetPosition, Rng, new Village());
             structure.Mountain.Radius = 200;
             var region = World.BiomePool.GetRegion(TargetPosition);
-            var builder = new VillageAssembler(VillageLoader.Designer[region.Structures.VillageType], Rng);
+            var builder = new VillageAssembler(structure, VillageLoader.Designer[region.Structures.VillageType], Rng);
             var design = builder.DesignVillage();
             design.Translate(TargetPosition);
             builder.PlaceGroundwork(design);
 
-
-            World.WorldBuilding.AddPlateau(structure.Mountain);
             structure.Parameters.Set("Builder", builder);
             structure.Parameters.Set("Design", design);
             return structure;
@@ -46,7 +44,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
-            float height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
+            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
             return BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0 && Rng.Next(0, 25) == 1 && height > BiomePool.SeaLevel;
         }
 

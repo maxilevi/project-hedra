@@ -54,14 +54,14 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         {
             var height = 0.0;
             Blocktype = BlockType.Air;
-            
+
             AddBaseHeight(X, Z, ref height, ref Blocktype, out var baseHeight);
             AddMountainHeight(X, Z, ref height, ref Blocktype);
             AddMountHeight(X, Z, ref height, ref Blocktype, HeightCache);
             AddBigMountainsHeight(X, Z,ref height, ref Blocktype, HeightCache);
             AddLakes(X, Z, ref height);
             AddStones(X, Z, ref height, ref Blocktype, HeightCache);
-            
+
             return (float)height + BiomeGenerator.SmallFrequency(X, Z) * 1.5f;
         }
 

@@ -45,7 +45,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public int OffsetX { get; }
         public int OffsetZ { get; }
         public bool IsBuilding { get; set; }
-        public bool HasLodedElements { get; set; }
         public Vector3 Position { get; private set; }
 
         private Block[][][] _blocks;

@@ -17,8 +17,11 @@ namespace Hedra.Engine.Player.MapSystem
             {
                 var design = Biome.Structures.Designs[i];
                 var rng = new RandomDistribution(StructureDesign.BuildRngSeed(chunkOffset));
-                if (design.ShouldSetup(chunkOffset, StructureDesign.BuildTargetPosition(chunkOffset, rng), EmptyItems, Biome, rng))
+                var targetPosition = StructureDesign.BuildTargetPosition(chunkOffset, rng);
+                if (design.ShouldSetup(chunkOffset, targetPosition, EmptyItems, Biome, rng) && design.CanSetup(targetPosition))
+                {
                     return design;
+                }
             }
             return null;
         }

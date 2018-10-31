@@ -37,8 +37,6 @@ namespace Hedra.Engine.EntitySystem
                 model.LocalPosition = this.LocalPosition;
                 model.BeforeLocalRotation = this.BeforeLocalRotation;
                 model.TransformationMatrix = this.TransformationMatrix;
-                model.TargetRotation = this.TargetRotation;
-                model.TargetPosition = this.TargetPosition;
                 model.Scale = this.Scale;
                 model.Alpha = this.Alpha;
                 model.ApplyFog = this.ApplyFog;

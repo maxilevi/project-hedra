@@ -14,6 +14,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public class NeighbourhoodBuilder : Builder<NeighbourhoodParameters>
     {
+        public NeighbourhoodBuilder(CollidableStructure Structure) : base(Structure)
+        {
+        }
+        
         public override bool Place(NeighbourhoodParameters Parameters, VillageCache Cache)
         {
             var options = new []{BlockType.Path, BlockType.StonePath, BlockType.DarkStonePath};

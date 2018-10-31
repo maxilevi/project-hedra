@@ -141,8 +141,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected void SetToDefault(ObjectMesh Mesh)
         {
             Mesh.Position = Vector3.Zero;
-            Mesh.TargetPosition = Vector3.Zero;
-            Mesh.AnimationPosition = Vector3.Zero;
             Mesh.RotationPoint = Vector3.Zero;
             Mesh.Rotation = Vector3.Zero;
             Mesh.LocalRotation = Vector3.Zero;
@@ -150,7 +148,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             Mesh.LocalPosition = Vector3.Zero;
             Mesh.BeforeLocalRotation = Vector3.Zero;
             Mesh.TransformationMatrix = Matrix4.Identity;
-            Mesh.TargetRotation = Vector3.Zero;
         }
 
         protected void SetToChest(ObjectMesh Mesh)
@@ -172,11 +169,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
             Mesh.TransformationMatrix = Mat4;
             Mesh.Position = Owner.Position;
-            Mesh.TargetPosition = Vector3.Zero;
-            Mesh.TargetRotation = new Vector3(180, 0, 0);
-            Mesh.AnimationPosition = Vector3.Zero;
+            Mesh.Rotation = new Vector3(180, 0, 0);
             Mesh.RotationPoint = Vector3.Zero;
-            Mesh.Rotation = Vector3.Zero;
             Mesh.LocalRotation = Vector3.Zero;
             Mesh.LocalPosition = Vector3.Zero;
             Mesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;

@@ -68,15 +68,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (!GameSettings.Lod) return;
             var cameraDist = (_object.Position.Xz - World.ToChunkSpace(GameManager.Player.Position)).LengthSquared;
-            if (cameraDist > GeneralSettings.Lod1DistanceSquared && cameraDist < GeneralSettings.Lod2DistanceSquared)
+            if (cameraDist <= GeneralSettings.Lod1DistanceSquared)
+                _object.Lod = 1;
+            else if (cameraDist <= GeneralSettings.Lod2DistanceSquared)
                 _object.Lod = 2;
-            else if (cameraDist > GeneralSettings.Lod2DistanceSquared && cameraDist < GeneralSettings.Lod3DistanceSquared)
+            else if (cameraDist <= GeneralSettings.Lod3DistanceSquared)
                 _object.Lod = 4;
             else if (cameraDist > GeneralSettings.Lod3DistanceSquared)
                 _object.Lod = 8;
             else
-                _object.Lod = 1;
-            _object.HasLodedElements = cameraDist < GeneralSettings.LodElementsDistanceSquared;
+                throw new ArgumentOutOfRangeException("Unsupported LOD.");
         }
 
         private static bool WasChunkBuilt(Chunk Chunk)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.Game;
@@ -17,7 +18,7 @@ namespace Hedra.Engine.Generation
         public AreaHighlighter()
         {
             _highlightedAreas = new HighlightedArea[16];
-            for (int i = 0; i < _highlightedAreas.Length; i++)
+            for (var i = 0; i < _highlightedAreas.Length; i++)
                 _highlightedAreas[i] = new HighlightedArea();
         }
 
@@ -44,18 +45,12 @@ namespace Hedra.Engine.Generation
                 return areaColors.ToArray();
             }
         }
-
-        public void HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
+        
+        public HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
         {
             const float fadeSpeed = 32f;
 
-            var area = new HighlightedArea
-            {
-                Color = Color,
-                Position = Position - Vector3.UnitY * fadeSpeed,
-                Radius = Radius
-            };
-
+            var area = new HighlightedArea(Position, Color, Radius);
             int i;
             for (i = 0; i < _highlightedAreas.Length; i++)
             {
@@ -64,16 +59,18 @@ namespace Hedra.Engine.Generation
                 _highlightedAreas[i] = area;
                 break;
             }
-            int k = i;
+            var k = i;
             if (k >= _highlightedAreas.Length) throw new ArgumentException($"There are no available highlights");
             if (Seconds < 0)
             {
-                CoroutineManager.StartCoroutine(CycleHighlight, new object[] { _highlightedAreas[k], World.Seed });
-                return;
+                var wrapper = new HighlightedAreaWrapper();
+                CoroutineManager.StartCoroutine(CycleHighlight, _highlightedAreas[k], World.Seed, wrapper);
+                return wrapper;
             }
-            CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position + Vector3.UnitY * fadeSpeed, Seconds });
+            CoroutineManager.StartCoroutine(FadeHighlight, _highlightedAreas[k], area.Position + Vector3.UnitY * fadeSpeed, Seconds);
 
             TaskManager.After((int)(Seconds * 1000f), () => CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position - Vector3.UnitY * fadeSpeed }));
+            return null;
         }
 
         private IEnumerator FadeHighlight(object[] Params)
@@ -82,13 +79,13 @@ namespace Hedra.Engine.Generation
             var targetPosition = (Vector3)Params[1];
             var time = Params.Length > 2 ? (float) Params[2] : float.MaxValue;
             var passedTime = 0f;
-            bool clear = targetPosition.Y < area.Position.Y; //Check if its fading in or out
+            var clear = targetPosition.Y < area.Position.Y; //Check if its fading in or out
 
             while ((area.Position - targetPosition).LengthFast > .75f && passedTime < time)
             {
 
                 area.Position = Mathf.Lerp(area.Position, targetPosition, (float)Time.DeltaTime * 4f);
-                passedTime += (float) Time.DeltaTime * 4f;
+                passedTime += Time.DeltaTime * 4f;
                 yield return null;
             }
 
@@ -104,17 +101,18 @@ namespace Hedra.Engine.Generation
         private IEnumerator CycleHighlight(object[] Params)
         {
             var area = (HighlightedArea)Params[0];
-            var areaClone = new HighlightedArea(area.Position, area.Color, area.Radius);
             var seed = (int) Params[1];
+            var wrapper = (HighlightedAreaWrapper) Params[2];
+            var areaClone = wrapper.Area = new HighlightedArea(area.Position, area.Color, area.Radius);
             var player = GameManager.Player;
 
-            while (World.Seed == seed)// && World.GetChunkAt(areaClone.Position) != null)
+            while (World.Seed == seed && !areaClone.Stop)
             {
                 if ((player.Position.Xz - areaClone.Position.Xz).LengthFast < areaClone.Radius + 256)
                 {
                     if (area == null)
                     {
-                        for (int i = 0; i < _highlightedAreas.Length; i++)
+                        for (var i = 0; i < _highlightedAreas.Length; i++)
                         {
                             if (_highlightedAreas[i].IsEmpty)
                             {

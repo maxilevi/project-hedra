@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation;
 using OpenTK;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Management;
@@ -22,10 +23,10 @@ namespace Hedra.Engine.WorldBuilding
     public sealed class Graveyard : BaseStructure, IUpdatable
     {
         private readonly GraveyardAmbientHandler _ambientHandler;
-        public Entity[] Enemies;
+        public Entity[] Enemies { get; set; }
         public bool Restored { get; private set; }
         public float Radius { get; }
-        
+        public HighlightedAreaWrapper AreaWrapper { get; set; }
 
         public Graveyard(Vector3 Position, float Radius)
         {
@@ -58,8 +59,17 @@ namespace Hedra.Engine.WorldBuilding
         
         public override void Dispose()
         {
+            if (Enemies != null)
+            {
+                for (var i = 0; i < Enemies.Length; i++)
+                {
+                    Enemies[i].Dispose();
+                }
+            }
+            AreaWrapper?.Dispose();
             _ambientHandler.Dispose();
             UpdateManager.Remove(this);
+            base.Dispose();
         }
     }
 }

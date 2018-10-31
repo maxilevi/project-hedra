@@ -38,8 +38,8 @@ namespace Hedra.Engine.Management
                 string[] Parts = Command.Split(' ');
                 if(Parts[0] == "tp"){
                     if(Parts[1] == "merchant"){
-                        if(World.StructureGenerator.MerchantPosition != Vector3.Zero)
-                            Caster.BlockPosition = World.StructureGenerator.MerchantPosition - Vector3.One.Xz.ToVector3() * 8;
+                        if(World.StructureHandler.MerchantPosition != Vector3.Zero)
+                            Caster.BlockPosition = World.StructureHandler.MerchantPosition - Vector3.One.Xz.ToVector3() * 8;
                         else 
                             return false;
                     }

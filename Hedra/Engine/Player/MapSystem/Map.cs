@@ -296,13 +296,13 @@ namespace Hedra.Engine.Player.MapSystem
             {
                 var prevMesh = BaseItem.Mesh;
                 var item = _meshBuilder.BuildItem(Coords);
-                item.Mesh.Position = prevMesh.Position;
-                BaseItem.Mesh = item.Mesh;
-                BaseItem.HasChunk = item.HasChunk;
-                BaseItem.Coordinates = Coords;
-                BaseItem.WasBuilt = item.WasBuilt;
                 Executer.ExecuteOnMainThread(delegate
                 {
+                    item.Mesh.Position = prevMesh.Position;
+                    BaseItem.Mesh = item.Mesh;
+                    BaseItem.HasChunk = item.HasChunk;
+                    BaseItem.Coordinates = Coords;
+                    BaseItem.WasBuilt = item.WasBuilt;
                     if (prevMesh?.Mesh != null) prevMesh.Dispose();
                 });
             });

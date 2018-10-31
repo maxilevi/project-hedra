@@ -30,10 +30,7 @@ namespace Hedra.Engine.StructureSystem
             var rng = new Random( (int) ( position.X / 11 * (position.Z / 13) ) );
 
             const int tombstoneCount = 25;
-            var cementery = new Graveyard(position, Radius);
-
-            World.HighlightArea(position, new Vector4(.1f, .1f, .1f, 1f), Radius * 1.75f, -1);
-
+            
             var rotationMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
             var originalMausoleum = CacheManager.GetModel(CacheItem.Mausoleum);
             var mausoleum = originalMausoleum.ShallowClone();
@@ -50,9 +47,6 @@ namespace Hedra.Engine.StructureSystem
                 mausoleumShapes[i].Transform(rotationMatrix);
                 mausoleumShapes[i].Transform(position);
             }
-
-            World.AddStructure(cementery);
-
 
             int k = 0, j = 0;
             for (var i = 0; i < tombstoneCount * 2; i++)
@@ -92,7 +86,7 @@ namespace Hedra.Engine.StructureSystem
                 Structure.AddStaticElement(grave);
                 if (rng.Next(0, 5) == 1)
                 {
-                    World.AddStructure(new Tombstone
+                    Structure.WorldObject.AddChildren(new Tombstone
                     {
                         Position = gravePosition
                     });
@@ -103,9 +97,16 @@ namespace Hedra.Engine.StructureSystem
 
             Structure.AddCollisionShape(mausoleumShapes.ToArray());
             Structure.AddStaticElement(mausoleum);
+            ((Graveyard) Structure.WorldObject).AreaWrapper =
+                World.HighlightArea(position, new Vector4(.1f, .1f, .1f, 1f), Radius * 1.75f, -1);
 
-            this.BuildLamps(position, Structure);
-            BuildReward(position, cementery, rng);
+            this.BuildLamps(position, Structure.WorldObject, Structure);
+            BuildReward(position, (Graveyard) Structure.WorldObject, rng);
+        }
+
+        protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
+        {
+            return base.Setup(TargetPosition, Rng, new Graveyard(TargetPosition, Radius));
         }
 
         private static void BuildReward(Vector3 Position, Graveyard Cementery, Random Rng)
@@ -132,9 +133,10 @@ namespace Hedra.Engine.StructureSystem
                 }
                 return Cementery.Restored;
             };
+            Cementery.AddChildren(prize);
         }
 
-        private void BuildLamps(Vector3 Position, CollidableStructure Structure)
+        private void BuildLamps(Vector3 Position, BaseStructure Cementery, CollidableStructure Structure)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -158,20 +160,19 @@ namespace Hedra.Engine.StructureSystem
                 Structure.AddCollisionShape(shapes.ToArray());
                 Structure.AddStaticElement(lampPost);
 
-                var Lamp = new LampPost(lightPosition + Vector3.UnitY * 7)
+                var lamp = new LampPost(lightPosition + Vector3.UnitY * 7)
                 {
                     Radius = 120f,
                     LightColor = new Vector3(1, .6f, .5f)
                 };
-
-                World.AddStructure(Lamp);
+                Cementery.AddChildren(lamp);
             }
         }
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return Rng.Next(0, 75) == 1 && height > BiomePool.SeaLevel;
+            return Rng.Next(0, 100) == 1 && height > BiomePool.SeaLevel;
         }
         
         public override int[] AmbientSongs => new []

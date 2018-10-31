@@ -25,6 +25,7 @@ namespace Hedra.Engine.WorldBuilding
     /// </summary>
     public class Campfire : BaseStructure, IUpdatable
     {
+        public IHumanoid Bandit { get; set; }
         private static ParticleSystem _fireParticles;
         private long _passedTime;
         private PointLight _light;
@@ -139,6 +140,7 @@ namespace Hedra.Engine.WorldBuilding
                 this._sound.Locked = false;
                 this._sound = null;
             }
+            Bandit?.Dispose();
         }
     }
 }

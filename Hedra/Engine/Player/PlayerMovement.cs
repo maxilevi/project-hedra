@@ -94,7 +94,7 @@ namespace Hedra.Engine.Player
                 _targetAngles = Mathf.Clamp(_targetAngles, -10f, 10f);
                 _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.DeltaTime * 8f);
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
-                if (GameManager.Keyboard[Key.W])
+                if (GameManager.Keyboard[Key.W] || GameSettings.ContinousMove)
                 {
                     _targetYaw = _player.View.TargetYaw;
                     this.ProcessMovement(_characterRotation, this.MoveFormula(_player.View.Forward) * keysPresses);                   
@@ -206,7 +206,8 @@ namespace Hedra.Engine.Player
             
             this.RegisterKey(Key.H, delegate
             {
-                _player.Greet();
+                if (!GameSettings.Paused && _player.CanInteract)
+                    _player.Greet();
             });
 
             this.RegisterKey(Key.F, delegate

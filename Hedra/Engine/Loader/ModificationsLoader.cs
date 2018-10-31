@@ -26,7 +26,7 @@ namespace Hedra.Engine.Loader
             var list = new List<string>();
             for (var i = 0; i < modules.Length; i++)
             {               
-                list.Add(modules[i]);
+                list.Add(modules[i].Replace("\\", "/"));
             }
             return list.ToArray();
         }

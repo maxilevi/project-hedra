@@ -75,6 +75,7 @@ namespace Hedra.Engine.Player
             this.Interpolate();
             this.ClampYaw();
 
+            var cameraPosition = CameraPosition;
             if ( !GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead)
             {
                 XDelta = Cursor.Position.X - GameSettings.Width / 2;
@@ -86,14 +87,11 @@ namespace Hedra.Engine.Player
                     this.ManageRotations();
                 }
 
-                Vector3 pos = CameraPosition;
-                float y = Physics.HeightAtPosition(pos), addonDistance = 0;
-                if (pos.Y <= y + MinDistance ||
-                    Physics.IsColliding(pos, new Box(-Vector3.One * 2f + pos, Vector3.One * 2f + pos)))
+                if (Physics.IsColliding(cameraPosition, new Box(-Vector3.One * 2f + cameraPosition, Vector3.One * 2f + cameraPosition)))
                 {
                     if (_prevDistance == 0)
                         _prevDistance = TargetDistance;
-                    TargetDistance += Time.IndependantDeltaTime * -24f;
+                    TargetDistance += Time.IndependantDeltaTime * -32f;
                 }
                 else
                 {
@@ -102,6 +100,12 @@ namespace Hedra.Engine.Player
 
                 this.ManageAlpha();
             }
+            while((cameraPosition = CameraPosition).Y - 4 < Physics.HeightAtPosition(cameraPosition) 
+                && !GameManager.IsLoading && TargetDistance > MinDistance)
+            {
+                TargetDistance += Time.IndependantDeltaTime * -128;
+            }
+
             this.BuildCameraMatrix();
             DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, ModelViewMatrix);
             DrawManager.FrustumObject.SetFrustum(ModelViewMatrix);

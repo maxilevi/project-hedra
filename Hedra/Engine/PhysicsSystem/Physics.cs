@@ -258,7 +258,7 @@ namespace Hedra.Engine.PhysicsSystem
                 Log.WriteLine(e.ToString());
             }
 
-            var structures = StructureGenerator.GetNearStructures(Position);
+            var structures = StructureHandler.GetNearStructures(Position);
             collisions.AddRange(structures.SelectMany(S => S.Colliders));
             for (var i = 0; i < collisions.Count; i++)
             {

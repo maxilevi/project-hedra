@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Game;
@@ -18,6 +19,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using OpenTK;
+using OpenTK.Graphics.ES11;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -43,7 +45,7 @@ namespace Hedra.Engine.EntitySystem
         private readonly TickSystem _tickSystem;
         public IPhysicsComponent Physics { get; }
 
-        protected List<IComponent<IEntity>> Components = new List<IComponent<IEntity>>();
+        private List<IComponent<IEntity>> Components = new List<IComponent<IEntity>>();
         protected bool Splashed { get; set; }
 
         public event OnAttackEventHandler AfterAttacking;
@@ -442,6 +444,7 @@ namespace Hedra.Engine.EntitySystem
 
             World.RemoveEntity(this);
 
+            var copy = Components.ToArray();
             for (var i = 0; i < Components.Count; i++)
                 Components[i].Dispose();
 

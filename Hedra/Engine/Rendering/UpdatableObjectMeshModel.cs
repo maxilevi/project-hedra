@@ -27,24 +27,6 @@ namespace Hedra.Engine.Rendering
             set => Model.TransformationMatrix = value;
         }
 
-        public Vector3 AnimationPosition
-        {
-            get => Model.AnimationPosition;
-            set => Model.AnimationPosition = value;
-        }
-
-        public Vector3 TargetPosition
-        {
-            get => Model.TargetPosition;
-            set => Model.TargetPosition = value;
-        }
-
-        public override Vector3 TargetRotation
-        {
-            get => Model.TargetRotation;
-            set => Model.TargetRotation = value;
-        }
-
         public Vector3 RotationPoint
         {
             get => Model.RotationPoint;

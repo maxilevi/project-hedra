@@ -17,7 +17,7 @@ namespace Hedra.Engine.StructureSystem
         {
             this.Structure = Structure;
             _chunksAdded = new Dictionary<CachedVertexData, Chunk>();
-            Structure.OnModelAdded += this.OnModelAdded;
+            Structure.ModelAdded += this.ModelAdded;
             World.OnChunkReady += this.OnChunkReady;
             World.OnChunkDisposed += this.OnChunkDisposed;
         }
@@ -35,7 +35,7 @@ namespace Hedra.Engine.StructureSystem
             }
         }
 
-        private void OnModelAdded(CachedVertexData Model)
+        private void ModelAdded(CachedVertexData Model)
         {
             var chunkSpace = World.ToChunkSpace(Model.Position);
             var chunk = World.GetChunkByOffset(chunkSpace);
@@ -49,9 +49,9 @@ namespace Hedra.Engine.StructureSystem
         {
             lock (_lock)
             {
-                if (!_chunksAdded.ContainsKey(Model) || _chunksAdded[Model] != Object)
+                if (!Object.Disposed && Object.Initialized && (!_chunksAdded.ContainsKey(Model) || _chunksAdded[Model] != Object))
                 {
-                    Object.AddStaticElement(Model.ToVertexData());
+                    Object.AddStaticElement(Model.VertexData);
                     if (_chunksAdded.ContainsKey(Model))
                         _chunksAdded[Model] = Object;
                     else
@@ -78,6 +78,11 @@ namespace Hedra.Engine.StructureSystem
         {
             lock (_lock)
             {
+                foreach(var pair in _chunksAdded)
+                {
+                    if (pair.Value != null)
+                        pair.Value.RemoveStaticElement(pair.Key.VertexData);
+                }
                 _chunksAdded.Clear();
             }
             Structure.Dispose();

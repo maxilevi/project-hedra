@@ -44,12 +44,9 @@ namespace Hedra.Engine.StructureSystem
 
             Structure.AddStaticElement(model);
             Structure.AddCollisionShape(shapes.ToArray());
-            
-            var fire = new Campfire(position);
-            Executer.ExecuteOnMainThread(
-                () => World.WorldBuilding.SpawnBandit(new Vector3(position.X, 125, position.Z), false, false)
-            );
-            World.AddStructure(fire);
+
+            ((Campfire) Structure.WorldObject).Bandit =
+                World.WorldBuilding.SpawnBandit(new Vector3(position.X, 125, position.Z), false, false);
 
             if (rng.Next(0, 5) != 1)
             {
@@ -74,14 +71,13 @@ namespace Hedra.Engine.StructureSystem
                 {
                     TargetRotation = rotation * Vector3.UnitY
                 };
-                World.AddStructure(pad);
-                UpdateManager.Add(pad);
+                Structure.WorldObject.AddChildren(pad);
             }
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
-            var structure = base.Setup(TargetPosition, Rng);
+            var structure = base.Setup(TargetPosition, Rng, new Campfire(TargetPosition));
             structure.Mountain.Radius = 48;
             return structure;
         }

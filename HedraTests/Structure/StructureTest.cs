@@ -11,7 +11,7 @@ namespace HedraTests.Structure
         //[Test]
         public void TestDesignsDontAddCollisionMeshesToChunks()
         {
-            var designs = StructureGenerator.GetTypes().Select(Activator.CreateInstance);
+            var designs = StructureHandler.GetTypes().Select(Activator.CreateInstance);
         }
     }
 }

@@ -77,7 +77,8 @@ namespace Hedra.Engine.WorldBuilding
             }
             else
             {
-                if(_selected) this.OnDeselected(player);
+                _canInteract = false;
+                if (_selected) this.OnDeselected(player);
             }
         }
 
