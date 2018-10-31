@@ -1,10 +1,16 @@
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.WorldBuilding;
 using NUnit.Framework;
+using OpenTK;
 
 namespace HedraTests.Structure
 {
     [TestFixture]
     public class CampfireDesignTest : DesignTest<CampfireDesign>
     {
+        protected override BaseStructure CreateBaseStructure(Vector3 Position)
+        {
+            return new Campfire(Position);
+        }
     }
 }

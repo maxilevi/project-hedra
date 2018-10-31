@@ -31,9 +31,8 @@ namespace Hedra.Engine.WorldBuilding
         private bool _shouldRescue;
         private bool _canRescue;
 
-        public BanditCamp(Vector3 Position, float Radius)
+        public BanditCamp(Vector3 Position, float Radius) : base(Position)
         {
-            this.Position = Position;
             this.Radius = Radius;
             this.BuildRescuee(new Random((int)(Position.X / 11 * (Position.Z / 13))));
             this._campfire = new Campfire(Position);

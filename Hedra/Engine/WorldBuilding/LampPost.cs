@@ -25,8 +25,8 @@ namespace Hedra.Engine.WorldBuilding
         public float Radius = 24;
         
         
-        public LampPost(Vector3 Position){
-            this.Position = Position;
+        public LampPost(Vector3 Position) : base(Position)
+        {
             UpdateManager.Add(this);
         }
         

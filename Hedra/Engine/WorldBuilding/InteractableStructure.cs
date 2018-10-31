@@ -39,7 +39,7 @@ namespace Hedra.Engine.WorldBuilding
         private bool _shouldInteract;
         private bool _selected;
 
-        protected InteractableStructure()
+        protected InteractableStructure(Vector3 Position) : base(Position)
         {
             EventDispatcher.RegisterKeyDown(this, delegate (object Sender, KeyEventArgs EventArgs)
             {

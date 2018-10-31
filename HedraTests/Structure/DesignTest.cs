@@ -26,7 +26,6 @@ namespace HedraTests.Structure
     {
         private Random _rng;
         private List<IEntity> _interceptedEntities;
-        private List<BaseStructure> _interceptedStructures;
         
         [SetUp]
         public override void Setup()
@@ -45,7 +44,6 @@ namespace HedraTests.Structure
                 .Returns(defaultShape);
             CacheManager.Provider = cacheProvider.Object;
             _interceptedEntities = new List<IEntity>();
-            _interceptedStructures = new List<BaseStructure>();
             var defaultRegion = new Region();
             defaultRegion.Colors = new RegionColor(1, new NormalBiomeColors());
             defaultRegion.Generation = new RegionGeneration(1, new SimpleGenerationDesignMock(() => DesiredHeight));
@@ -56,10 +54,6 @@ namespace HedraTests.Structure
             worldMock.Setup(W => W.AddEntity(It.IsAny<IEntity>())).Callback(delegate(IEntity Entity)
             {
                 if(!_interceptedEntities.Contains(Entity)) _interceptedEntities.Add(Entity);
-            });
-            worldMock.Setup(W => W.SetupStructure(It.IsAny<CollidableStructure>())).Callback(delegate(CollidableStructure Structure)
-            {
-                _interceptedStructures.Add(Structure.WorldObject);
             });
             var guardAiComponentMock = new Mock<IGuardAIComponent>();
             worldMock.Setup(W => W.SpawnMob(It.IsAny<string>(), It.IsAny<Vector3>(), It.IsAny<int>())).Returns(delegate
@@ -86,12 +80,14 @@ namespace HedraTests.Structure
             for (var i = 0; i < WorldEntities.Length; i++)
             {
                 if( (WorldEntities[i].BlockPosition.Xz - structure.Position.Xz).LengthFast > Design.Radius )
-                    Assert.Fail($"{WorldEntities[i].Position.Xz} is far from {structure.Position.Xz} by more than {Design.Radius}");
+                    Assert.Fail($"{WorldEntities[i].BlockPosition.Xz} is far from {structure.Position.Xz} by more than {Design.Radius}");
             }
-            for (var i = 0; i < WorldStructures.Length; i++)
+
+            var structures = GetStructureObjects(structure);
+            for (var i = 0; i < structures.Length; i++)
             {
-                if( (WorldStructures[i].Position.Xz - structure.Position.Xz).LengthFast > Design.Radius )
-                    Assert.Fail($"{WorldStructures[i].Position.Xz} is far from {structure.Position.Xz} by more than {Design.Radius}");
+                if( (structures[i].Position.Xz - structure.Position.Xz).LengthFast > Design.Radius )
+                    Assert.Fail($"'{structures[i]}': {structures[i].Position.Xz} is far from {structure.Position.Xz} by more than {Design.Radius}");
             }
         }
         
@@ -101,17 +97,40 @@ namespace HedraTests.Structure
             var structure = this.CreateStructure();
             Design.Build(structure);
             Executer.Update();
-            Assert.Greater(WorldEntities.Length + WorldStructures.Length, 0);
+            Assert.Greater(WorldEntities.Length + GetStructureObjects(structure).Length, 0);
         }
 
+        protected BaseStructure[] GetStructureObjects(CollidableStructure Structure)
+        {
+            var list = new List<BaseStructure>();
+            if (Structure.WorldObject != null)
+            {
+                list.Add(Structure.WorldObject);
+
+                void RecursiveSelect(BaseStructure S, List<BaseStructure> List)
+                {
+                    var children = S.Children;
+                    foreach (var child in children)
+                    {
+                        List.Add(child);
+                        RecursiveSelect(child, List);
+                    }
+                }
+                RecursiveSelect(Structure.WorldObject, list);
+            }
+            return list.ToArray();
+        }
+        
         protected virtual CollidableStructure CreateStructure()
         {
-            return new CollidableStructure(Design, RandomLocation, null, null);
+            var location = RandomLocation;
+            return new CollidableStructure(Design, location, null, CreateBaseStructure(location));
         }
+
+        protected abstract BaseStructure CreateBaseStructure(Vector3 Position);
         
         protected float DesiredHeight { get; set; }
         protected IEntity[] WorldEntities => _interceptedEntities.ToArray();
-        protected BaseStructure[] WorldStructures => _interceptedStructures.ToArray();
         protected T Design { get; private set; }
         protected Vector3 RandomLocation => 
             new Vector3(_rng.NextFloat() * 8000 - 4000, 200, _rng.NextFloat() * 8000 - 4000);

@@ -18,9 +18,8 @@ namespace Hedra.Engine.WorldBuilding
         public int BedRadius { get; set; } = 16;
         public Vector3 TargetRotation { get; set; }
 
-        public SleepingPad(Vector3 Position)
+        public SleepingPad(Vector3 Position) : base(Position)
         {
-            this.Position = Position;
             var player = LocalPlayer.Instance;
             EventDispatcher.RegisterKeyDown(this, delegate(object sender, KeyEventArgs Args)
             {

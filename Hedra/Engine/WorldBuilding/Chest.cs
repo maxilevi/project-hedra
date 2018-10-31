@@ -43,7 +43,7 @@ namespace Hedra.Engine.WorldBuilding
             DefaultShape = AssetManager.LoadCollisionShapes("Assets/Env/Chest.ply", 1, Vector3.One)[0];
         }
 
-        public Chest(Vector3 Position, Item ItemSpecification)
+        public Chest(Vector3 Position, Item ItemSpecification) : base(Position)
         {
             this._model = AnimationModelLoader.LoadEntity("Assets/Chr/ChestIdle.dae");
             this._idleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestIdle.dae");
@@ -64,7 +64,6 @@ namespace Hedra.Engine.WorldBuilding
             this._model.Scale = Vector3.One * 3.5f;
             this._model.ApplyFog = true;
             this.ItemSpecification = ItemSpecification;
-            this.Position = Position;
         }
 
         public override void Update()
@@ -72,6 +71,7 @@ namespace Hedra.Engine.WorldBuilding
             base.Update();
             if (_model != null)
             {
+                _model.Position = Position;
                 _model.Update();
                 HandleColliders();
             }
@@ -115,17 +115,6 @@ namespace Hedra.Engine.WorldBuilding
         }
 
         public bool IsClosed => _model.AnimationPlaying == _idleAnimation;
-
-        public override Vector3 Position
-        {
-            get => base.Position;
-            set
-            {
-                if(value == this.Position) return;
-                base.Position = value;
-                this._model.Position = value;
-            }
-        }
         
         public Vector3 Scale
         {

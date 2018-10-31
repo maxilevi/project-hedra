@@ -28,9 +28,8 @@ namespace Hedra.Engine.WorldBuilding
         public float Radius { get; }
         public HighlightedAreaWrapper AreaWrapper { get; set; }
 
-        public Graveyard(Vector3 Position, float Radius)
+        public Graveyard(Vector3 Position, float Radius) : base(Position)
         {
-            this.Position = Position;
             this.Radius = Radius;
             _ambientHandler = new GraveyardAmbientHandler(this);
             UpdateManager.Add(this);

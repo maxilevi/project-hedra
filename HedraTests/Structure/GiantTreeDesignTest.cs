@@ -13,6 +13,11 @@ namespace HedraTests.Structure
     [TestFixture]
     public class GiantTreeDesignTest : DesignTest<GiantTreeDesign>
     {
+        protected override BaseStructure CreateBaseStructure(Vector3 Position)
+        {
+            return new GiantTree(Position);
+        }
+
         [Test]
         public void TestGiantTreeSpawnsWithoutBossAndWithChestUnderWater()
         {
@@ -20,9 +25,11 @@ namespace HedraTests.Structure
             var structure = this.CreateStructure();
             Design.Build(structure);
             Executer.Update();
+            var structures = GetStructureObjects(structure);
             Assert.AreEqual(0, WorldEntities.Length);
-            Assert.AreEqual(1, WorldStructures.Length);
-            Assert.True(WorldStructures[0] is Chest);
+            Assert.AreEqual(2, structures.Length);
+            Assert.True(structures[0] is GiantTree);
+            Assert.True(structures[1] is Chest);
         }
     }
 }

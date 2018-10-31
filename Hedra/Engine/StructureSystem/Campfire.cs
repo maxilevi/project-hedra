@@ -31,13 +31,12 @@ namespace Hedra.Engine.WorldBuilding
         private PointLight _light;
         private SoundItem _sound;
         
-        public Campfire(Vector3 Position)
+        public Campfire(Vector3 Position) : base(Position)
         {
             if(_fireParticles == null)
                 _fireParticles = new ParticleSystem(Vector3.Zero);
             _fireParticles.HasMultipleOutputs = true;
 
-            this.Position = Position;
             UpdateManager.Add(this);
         }
         

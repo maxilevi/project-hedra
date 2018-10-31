@@ -86,10 +86,7 @@ namespace Hedra.Engine.StructureSystem
                 Structure.AddStaticElement(grave);
                 if (rng.Next(0, 5) == 1)
                 {
-                    Structure.WorldObject.AddChildren(new Tombstone
-                    {
-                        Position = gravePosition
-                    });
+                    Structure.WorldObject.AddChildren(new Tombstone(gravePosition));
                 }
             }
             for (var i = 0; i < mausoleum.Colors.Count; i++)

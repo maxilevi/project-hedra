@@ -21,11 +21,12 @@ namespace Hedra.Engine.WorldBuilding
     {
         private readonly List<BaseStructure> _children;
         public BaseStructure[] Children => _children.ToArray();
-        public virtual Vector3 Position { get; set; }
+        public Vector3 Position { get; set; }
         public bool Disposed { get; protected set; }
 
-        protected BaseStructure()
+        protected BaseStructure(Vector3 Position)
         {
+            this.Position = Position;
             _children = new List<BaseStructure>();
         }     
         

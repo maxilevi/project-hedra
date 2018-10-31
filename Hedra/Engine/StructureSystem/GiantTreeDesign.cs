@@ -81,7 +81,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
-            return base.Setup(TargetPosition, Rng, new GiantTree());
+            return base.Setup(TargetPosition, Rng, new GiantTree(TargetPosition));
         }
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)

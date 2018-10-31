@@ -154,7 +154,7 @@ namespace HedraTests.WorldBuilding
         protected override bool CanInteract => _canInteract;
         protected override bool DisposeAfterUse => _disposeAfterUse;
 
-        public InteractableStructureMock() : base()
+        public InteractableStructureMock() : base(Vector3.Zero)
         {
             _disposeAfterUse = base.DisposeAfterUse;
             _canInteract = base.CanInteract;

@@ -29,7 +29,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
-            var structure = base.Setup(TargetPosition, Rng, new Village());
+            var structure = base.Setup(TargetPosition, Rng, new Village(TargetPosition));
             structure.Mountain.Radius = 200;
             var region = World.BiomePool.GetRegion(TargetPosition);
             var builder = new VillageAssembler(structure, VillageLoader.Designer[region.Structures.VillageType], Rng);

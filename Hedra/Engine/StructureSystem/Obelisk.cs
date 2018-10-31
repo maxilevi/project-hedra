@@ -31,9 +31,8 @@ namespace Hedra.Engine.StructureSystem
         public ObeliskType Type { get; set; }
         public HighlightedAreaWrapper AreaWrapper { get; set; }
 
-        public Obelisk(Vector3 Position)
+        public Obelisk(Vector3 Position) : base(Position)
         {
-            this.Position = Position;
         }
 
         protected override void Interact(IPlayer Interactee)
