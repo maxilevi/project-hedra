@@ -14,7 +14,8 @@ namespace HedraTests.CodePolicy
     {
         private string _documentation;
         private const float MaxVersion = 3.3f;
-        private string GLClassName;
+        private string _glClassName;
+        /* These functions have multiple versions on the spec, to avoid issues we add them as exceptions. */
         private readonly string[] _exceptions =
         {
             "DebugMessageCallback",
@@ -37,7 +38,7 @@ namespace HedraTests.CodePolicy
         public void Setup()
         {
             _documentation = File.ReadAllText($"{base.SolutionDirectory}/references/OpenTK.xml");
-            GLClassName = typeof(GLProvider).Name;
+            _glClassName = typeof(GLProvider).Name;
         }
 
         [Test]
@@ -48,8 +49,8 @@ namespace HedraTests.CodePolicy
             foreach (var pair in filesAndCalls)
             {
                 var name = Path.GetFileNameWithoutExtension(pair.Key);
-                if(name != GLClassName)
-                    fails.Add($"GL calls in '{name}.cs' should be in {GLClassName}.cs");
+                if(name != _glClassName)
+                    fails.Add($"GL calls in '{name}.cs' should be in {_glClassName}.cs");
             }
             if(fails.Count > 0) Assert.Fail(string.Join(Environment.NewLine, fails.ToArray()));
         }
