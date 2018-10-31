@@ -55,7 +55,7 @@ namespace Hedra.Engine.StructureSystem
             Structure.AddCollisionShape(collisionBox);
             Structure.AddStaticElement(model);
 
-            ((Obelisk) Structure.WorldObject).AreaWrapper =
+            obelisk.AreaWrapper =
                 World.HighlightArea(position, new Vector4(.2f, .2f, .2f, .4f), 48, -1);
         }
 
