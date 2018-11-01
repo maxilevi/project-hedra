@@ -41,6 +41,7 @@ namespace HedraTests.EntitySystem
             entityMock.Setup(E => E.IsStatic).Returns( () => _isStatic);
             entityMock.Setup(E => E.Model).Returns(modelMock.Object);
             entityMock.Setup(E => E.Dispose()).Callback(() => _disposed = true);
+            entityMock.Setup(E => E.AttackResistance).Returns(1);
             IComponent<IEntity> lastComponent = null;
             entityMock.Setup(E => E.AddComponent(It.IsAny<IComponent<IEntity>>())).Callback(delegate(IComponent<IEntity> Component)
             {
