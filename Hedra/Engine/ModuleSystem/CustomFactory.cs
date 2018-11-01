@@ -49,7 +49,7 @@ namespace Hedra.Engine.ModuleSystem
                 {"GiantBeetle", typeof(GiantBeetleAIComponent)},
             };
 
-            foreach (KeyValuePair<string, Type> pair in EffectTable)
+            foreach (var pair in EffectTable)
             {
                 Type[] interfaces = pair.Value.GetInterfaces();
                 if (!interfaces.Contains( typeof(IEffectComponent) ) )
