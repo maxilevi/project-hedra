@@ -269,7 +269,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                         delegate
                         {
                             Human.Movement.Orientate();
-                            Human.Physics.DeltaTranslate(Human.Movement.MoveFormula(Human.Orientation) * Options.IdleMovespeed);
+                            Human.Physics.Move( Options.IdleMovespeed);
                         }
                     )
                 );
@@ -278,7 +278,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             {
                 TaskManager.Delay(1, 
                     () => TaskManager.While(() => Human.IsAttacking,
-                        () => Human.Physics.DeltaTranslate(Human.Movement.MoveFormula(Human.Orientation) * Options.RunMovespeed)
+                        () => Human.Physics.Move(Options.RunMovespeed)
                     )
                 );
             }

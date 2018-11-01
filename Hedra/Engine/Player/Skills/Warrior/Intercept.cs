@@ -109,7 +109,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
             _timer.AlertTime = Duration;
             _timer.Reset();
             Player.Movement.CaptureMovement = false;
-            Player.Movement.Move(Player.Movement.MoveFormula(Player.Orientation) * 1.5f, Duration, false);
+            Player.Movement.Move(Player.Physics.MoveFormula(Player.Orientation) * 1.5f, Duration, false);
         }
     }
 }

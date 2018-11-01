@@ -21,12 +21,11 @@ namespace Hedra.Engine.WorldBuilding
         public override void Update()
         {
             _targetDirection = (_target.Position - Parent.Position).Xz.ToVector3().NormalizedFast();
+            Parent.Orientation = -_targetDirection;
             if ((_target.Position - Parent.Position).Xz.ToVector3().LengthFast < GameSettings.UpdateDistance * .75f)
             {
-                Parent.Physics.DeltaTranslate(-_targetDirection * _speed * 16f);
+                Parent.Physics.Move();
             }
-
-            Parent.Orientation = -_targetDirection;
             Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
         }
     }

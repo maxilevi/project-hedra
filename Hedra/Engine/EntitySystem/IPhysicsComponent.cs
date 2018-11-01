@@ -15,13 +15,13 @@ namespace Hedra.Engine.EntitySystem
         Vector3 TargetPosition { get; set; }
         float Timestep { get; }
         bool Renderable { get; }
+        Vector3 MoveFormula(Vector3 Direction);
+        void Move(float Scalar = 1);
         void Update();
         void ResetVelocity();
-        void ExecuteTranslate(MoveCommand Command);
         void Translate(Vector3 Delta);
         void DeltaTranslate(Vector3 Delta);
         void DeltaTranslate(MoveCommand Command);
-        void ProccessCommand(MoveCommand Command);
         void ResetFall();
         void Dispose();
         void Draw();

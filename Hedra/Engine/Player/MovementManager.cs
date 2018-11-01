@@ -16,8 +16,6 @@ namespace Hedra.Engine.Player
 {
     public class MovementManager
     {
-        private const float NormalSpeed = 2.25f;
-        private const float AttackingSpeed = 0.75f;
         private readonly List<MoveOrder> _order;
         private float _speed;
         public bool CaptureMovement { get; set; } = true;
@@ -32,12 +30,6 @@ namespace Hedra.Engine.Player
         {
             this._order = new List<MoveOrder>();
             this.Human = Human;
-        }
-
-        public Vector3 MoveFormula(Vector3 Direction)
-        {
-            float movementSpeed = (Human.IsUnderwater && !Human.IsGrounded ? 1.25f : 1.0f) * Human.Speed;
-            return Direction * 5f * 1.75f * movementSpeed * _speed;
         }
 
         protected void ClampSwimming(IHumanoid Player)
@@ -70,8 +62,8 @@ namespace Hedra.Engine.Player
 
             IsFloating = true;
         }
-        
-        public void Jump()
+
+        protected void Jump()
         {
             var canJump = Human.IsGrounded || Human.Position.Y - Human.Model.Height * .5f < Physics.HeightAtPosition(Human.Position);
             if (IsJumping || Human.IsKnocked || Human.IsCasting || Human.IsRiding ||
@@ -126,7 +118,6 @@ namespace Hedra.Engine.Player
 
         public void Update()
         {
-            _speed = Mathf.Lerp(_speed, Human.IsAttacking ? AttackingSpeed : NormalSpeed, (float) Time.DeltaTime * 2f);
             Human.IsSwimming = Human.IsMoving && Human.IsUnderwater;
             this.DoUpdate();
             this.ManageMoveOrders();
@@ -159,7 +150,7 @@ namespace Hedra.Engine.Player
             return Order.Progress >= Order.Seconds;
         }
 
-        public class MoveOrder
+        private class MoveOrder
         {
             public Vector3 Position { get; set; }
             public float Seconds { get; set; }

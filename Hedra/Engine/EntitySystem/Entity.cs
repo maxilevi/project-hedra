@@ -63,6 +63,7 @@ namespace Hedra.Engine.EntitySystem
         public bool Removable { get; set; } = true;
         public Vector3 BlockPosition { get; set; }
         public bool PlaySpawningAnimation { get; set; } = true;
+        public bool IsAttacking => Model.IsAttacking;
         public float Speed { get; set; } = 2;
         public bool IsMoving => Model.IsMoving;
 

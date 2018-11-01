@@ -113,7 +113,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > 8 * 8)
             {
-                Parent.Physics.DeltaTranslate(Parent.Movement.MoveFormula(Parent.Orientation));
+                Parent.Physics.Move();
                 Parent.IsSitting = false;
             }
             if (Parent.IsUnderwater)

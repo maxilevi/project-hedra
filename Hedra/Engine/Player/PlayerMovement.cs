@@ -97,7 +97,7 @@ namespace Hedra.Engine.Player
                 if (GameManager.Keyboard[Key.W] || GameSettings.ContinousMove)
                 {
                     _targetYaw = _player.View.TargetYaw;
-                    this.ProcessMovement(_characterRotation, this.MoveFormula(_player.View.Forward) * keysPresses);                   
+                    this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Forward) * keysPresses);                   
                     this.Orientate();
                 }
                 _player.Model.TransformationMatrix = 
@@ -106,17 +106,17 @@ namespace Hedra.Engine.Player
                     Matrix4.CreateRotationY(_player.Model.Rotation.Y * Mathf.Radian);
                 if (GameManager.Keyboard[Key.S])
                 {
-                    this.ProcessMovement(_characterRotation, this.MoveFormula(_player.View.Backward) * keysPresses);
+                    this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Backward) * keysPresses);
                 }
 
                 if (GameManager.Keyboard[Key.A])
                 {
-                    this.ProcessMovement(_characterRotation, this.MoveFormula(_player.View.Left) * keysPresses);
+                    this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Left) * keysPresses);
                 }
 
                 if (GameManager.Keyboard[Key.D])
                 {
-                    this.ProcessMovement(_characterRotation, this.MoveFormula(_player.View.Right) * keysPresses);
+                    this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Right) * keysPresses);
                 }
                 
                 if(GameManager.Keyboard[Key.ControlLeft] && _player.Physics.InFrontOfWall)

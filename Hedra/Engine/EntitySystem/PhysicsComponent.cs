@@ -22,6 +22,8 @@ namespace Hedra.Engine.EntitySystem
 
     public class  PhysicsComponent : EntityComponent, IPhysicsComponent
     {
+        private const float NormalSpeed = 2.25f;
+        private const float AttackingSpeed = 0.75f;
         private readonly Entity _parent;
         public event OnHitGroundEvent OnHitGround;
         public bool UsePhysics { get; set; }
@@ -58,6 +60,7 @@ namespace Hedra.Engine.EntitySystem
         private Chunk _underChunk, _underChunkR, _underChunkL, _underChunkF, _underChunkB;
         private readonly List<ICollidable> _collisions = new List<ICollidable>();
         private float _height;
+        private float _speed;
         private bool _isOverBox, _isInsideHitbox;
         private bool _isOverTerrain;
         private float _deltaTime;
@@ -125,7 +128,7 @@ namespace Hedra.Engine.EntitySystem
             Velocity = Mathf.Clamp(Velocity, -VelocityCap, VelocityCap);
 
             var command = new MoveCommand(Parent, Velocity * _deltaTime);
-            this.ProccessCommand(command);
+            this.ProcessCommand(command);
 
             if (!Parent.IsGrounded)
             {
@@ -156,6 +159,18 @@ namespace Hedra.Engine.EntitySystem
                 }
             }
             Parent.Model.Position = Mathf.Lerp(Parent.Model.Position, this.TargetPosition, _deltaTime * 8f);
+            _speed = Mathf.Lerp(_speed, Parent.IsAttacking ? AttackingSpeed : NormalSpeed, _deltaTime * 2f);
+        }
+        
+        public Vector3 MoveFormula(Vector3 Direction)
+        {
+            float movementSpeed = (Parent.IsUnderwater && !Parent.IsGrounded ? 1.25f : 1.0f) * Parent.Speed;
+            return Direction * 5f * 1.75f * movementSpeed * _speed;
+        }
+
+        public void Move(float Scalar = 1)
+        {
+            DeltaTranslate(MoveFormula(Parent.Orientation * Scalar));
         }
 
         public void ResetVelocity()
@@ -165,7 +180,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void ExecuteTranslate(MoveCommand Command)
         {
-            ProccessCommand(Command);
+            ProcessCommand(Command);
         }
 
         public void Translate(Vector3 Delta)
@@ -186,7 +201,7 @@ namespace Hedra.Engine.EntitySystem
 
         public float Timestep => Time.IndependantDeltaTime * (UseTimescale ? Time.TimeScale : 1);
 
-        public void ProccessCommand(MoveCommand Command)
+        public void ProcessCommand(MoveCommand Command)
         {
             if(Command.Delta == Vector3.Zero) return;
             bool onlyY = Command.Delta.Xz == Vector2.Zero;

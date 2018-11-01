@@ -52,7 +52,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 Parent.Orientation = (_target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
-                Parent.Physics.DeltaTranslate(Parent.Speed * 8 * Parent.Orientation);
+                Parent.Physics.Move();
             }
         }
     }

@@ -73,6 +73,8 @@ namespace Hedra.Engine.EntitySystem
         
         bool IsMoving { get; }
         
+        bool IsAttacking { get; }
+        
         float MaxHealth { get; }
         
         MobType MobType { get; set; }
