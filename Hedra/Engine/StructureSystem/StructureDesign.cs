@@ -26,7 +26,9 @@ namespace Hedra.Engine.StructureSystem
         
         protected virtual CollidableStructure Setup(Vector3 TargetPosition, Random Rng, BaseStructure Structure)
         {
-            return new CollidableStructure(this, TargetPosition, new Plateau(TargetPosition, Radius), Structure);
+            var collidable = new CollidableStructure(this, TargetPosition, new Plateau(TargetPosition, Radius), Structure);
+            Structure.Position = collidable.Position;
+            return collidable;
         }
 
         public bool CanSetup(Vector3 TargetPosition)

@@ -42,9 +42,7 @@ namespace Hedra.Engine.WorldBuilding
         
         public void Update()
         {
-            this._passedTime++;
-
-            if (this._passedTime % 2 == 0)
+            if (this._passedTime++ % 2 == 0)
             {
                 _fireParticles.Color = Particle3D.FireColor;
                 _fireParticles.VariateUniformly = false;
@@ -83,7 +81,7 @@ namespace Hedra.Engine.WorldBuilding
                 if (!this._sound.Source.IsPlaying)
                     this._sound.Source.Play(SoundManager.GetBuffer(SoundType.Fireplace), this.Position, 1f, 1f, true);
 
-                float gain = System.Math.Max(0, 1 - (this.Position - SoundManager.ListenerPosition).LengthFast / 32f);
+                float gain = Math.Max(0, 1 - (this.Position - SoundManager.ListenerPosition).LengthFast / 32f);
                 this._sound.Source.Volume = gain;
             }
 
@@ -104,6 +102,8 @@ namespace Hedra.Engine.WorldBuilding
                 this._sound = null;
             }
         }
+
+
 
         private void HandleBurning()
         {
