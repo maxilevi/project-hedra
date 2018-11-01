@@ -44,9 +44,9 @@ namespace Hedra.Engine.Player
         float Stamina { get; set; }
         int Level { get; set; }
         float AttackPower { get; set; }
-        float MaxStamina {get; set;}
-        float AddonHealth {get; set;}
-        float DodgeCost {get; set;}    
+        float MaxStamina { get; }
+        float AddonHealth { get; set; }
+        float DodgeCost { get; set; }    
         float RandomFactor { get; set; }
         float AttackResistance { get; }
         int Gold { get; set; }

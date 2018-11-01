@@ -22,7 +22,7 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class DataManager
     {
-        private const float SaveVersion = 1.12f;
+        private const float SaveVersion = 1.15f;
         
         public static void SavePlayer(PlayerInformation Player)
         {
@@ -138,8 +138,8 @@ namespace Hedra.Engine.Management
             }        
             return data;
         }
-        
-        public static PlayerInformation LoadPlayer(Stream Str)
+
+        private static PlayerInformation LoadPlayer(Stream Str)
         {
             var information = new PlayerInformation();
             Dictionary<int, Item> items;
@@ -147,11 +147,10 @@ namespace Hedra.Engine.Management
             {
                 float version = br.ReadSingle();
                 if (version < 1.0f) return null;
+                if (version < 1.15f) return null;
                 information.Name = br.ReadString();
                 information.BlockPosition = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
                 information.Rotation = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
-                if (version < 1.1f) br.ReadSingle();
-                if (version < 1.12f) br.ReadSingle();
                 information.Health = br.ReadSingle();
                 information.Xp = br.ReadSingle();
                 information.Level = br.ReadInt32();
@@ -161,7 +160,7 @@ namespace Hedra.Engine.Management
                 information.ToolbarArray = br.ReadBytes(br.ReadInt32());
                 information.TargetPosition = br.ReadVector3();
                 information.Daytime = br.ReadSingle();
-                information.Class = ClassDesign.FromString(version < 1.11f ? intToClassDesignString(br.ReadInt32()) : br.ReadString());
+                information.Class = ClassDesign.FromString(br.ReadString());
                 information.RandomFactor = br.ReadSingle();
                 items = new Dictionary<int, Item>();
                 int itemCount = br.ReadInt32();
@@ -177,14 +176,6 @@ namespace Hedra.Engine.Management
             Str.Dispose();
             return information;
         }
-
-        [Obsolete]
-        private static string intToClassDesignString(int OldClass)
-        {
-            var map = new []{"None", "Archer", "Rogue", "Warrior"};
-            return map[OldClass];
-        }
-
         public static void DeleteCharacter(PlayerInformation Information)
         {
             File.Delete($"{AssetManager.AppData}/Characters/{Information.Name}.db");
@@ -231,17 +222,6 @@ namespace Hedra.Engine.Management
         }
         
         
-        public static int CharacterCount
-        {
-            get
-            { 
-                string[] files = Directory.GetFiles(AssetManager.AppData+"Characters/");
-                var count = 0;
-                for(var i = 0; i < files.Length; i++){
-                    if(!files[i].EndsWith(".bak")) count++;
-                }
-                return count;
-            }
-        }
+        public static int CharacterCount => PlayerFiles.Length;
     }
 }

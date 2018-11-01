@@ -46,7 +46,7 @@ namespace Hedra.Engine.Player
         public bool IsClimbing { get; set; }
         public bool WasAttacking { get; set; }
         public bool IsSitting { get; set; }
-        public float BaseAttackSpeed { get; private set; } = 1;
+        public float BaseAttackSpeed { get; private set; } = .75f;
         public virtual bool CanInteract { get; set; } = true;
         public bool IsSleeping { get; set; }
         public bool IsJumping => Movement.IsJumping;
@@ -57,11 +57,9 @@ namespace Hedra.Engine.Player
         public DamageComponent DmgComponent;
         public ClassDesign Class { get; set; } = new WarriorDesign();
         public float AttackPower { get; set; }
-        public float MaxStamina {get; set;}
-        public float AddonHealth {get; set;}
-        public float DodgeCost {get; set;}    
+        public float AddonHealth { get; set; }
+        public float DodgeCost { get; set; }    
         public float RandomFactor { get; set; }
-        public override float AttackResistance => Class.AttackResistance;
         public virtual int Gold { get; set; }
         public Weapon LeftWeapon => Model.LeftWeapon;
         private Item _mainWeapon;
@@ -101,19 +99,15 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public float MaxXP => this.MaxXpForLevel(this.Level);
-
-        protected float MaxXpForLevel(int TargetLevel)
-        {
-            return MaxLevel == Level ? 0 : TargetLevel * 10f + 38;
-        }
+        public float MaxXP => MaxLevel == Level ? 0 : Class.XPFormula(this.Level);
                     
         public float MaxMana
         {
             get
             {
-                var maxMana = 103 + RandomFactor * 34f;
-                for(var i = 1; i < this.Level; i++){
+                var maxMana = 180 + RandomFactor * 60f;
+                for(var i = 1; i < this.Level; i++)
+                {
                     maxMana += Class.MaxManaFormula(RandomFactor);                    
                 }
                 return maxMana;
@@ -129,14 +123,7 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public float HealthRegen
-        {
-            get
-            {
-                var baseRegen = this.MaxHealth * .005f;
-                return baseRegen * (this.IsSleeping ? 6.0f : 0.0f);
-            }
-        }
+        public float HealthRegen => this.IsSleeping ? 6.0f * this.MaxHealth * .005f : 0;
 
         #endregion
 
@@ -150,7 +137,6 @@ namespace Hedra.Engine.Player
             this.RandomFactor = NewRandomFactor();
             this.Physics.CanCollide = true;
             this.DodgeCost = DefaultDodgeCost;
-            this.MaxStamina = 100f;
             this.AttackPower = 1f;
             this.Speed = this.BaseSpeed;
             this.MobType = MobType.Human;
@@ -186,7 +172,6 @@ namespace Hedra.Engine.Player
             DmgComponent.Immune = true;
             WasAttacking = false;
             IsAttacking = false;
-            var wasWalking = this.IsMoving;
             this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.1f),
                 () => IsRolling);
             Movement.Move(this.Orientation * 2f, 1f, false);
@@ -252,9 +237,9 @@ namespace Hedra.Engine.Player
             }
         }
 
-        protected static float NewRandomFactor()
+        public static float NewRandomFactor()
         {
-            return Utils.Rng.NextFloat() * .5f + .75f;
+            return Utils.Rng.NextFloat() * 1f + .0f;
         }
 
         public void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition)
@@ -308,17 +293,23 @@ namespace Hedra.Engine.Player
 
         public bool HasWeapon => MainWeapon != null;
         
+        public float MaxStamina => Class.MaxStamina;
+        
+        public override float AttackResistance => (1 - 0.003f * base.Level) / Class.AttackResistance;
+        
         public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 35f, 0f, 1.25f);
 
-        public float DamageEquation => BaseDamageEquation * (.75f + Utils.Rng.NextFloat() + Utils.Rng.NextFloat() * .6f) * (.5f + ConsecutiveHitsModifier);
+        public float DamageEquation => UnRandomizedDamageEquation * ( .75f + Utils.Rng.NextFloat() * .5f);
 
-        public float BaseDamageEquation => (this.Level * 2.75f + 16f) * this.WeaponModifier(MainWeapon) * this.AttackPower;
+        public float UnRandomizedDamageEquation => BaseDamageEquation * (1f + ConsecutiveHitsModifier);
+        
+        public float BaseDamageEquation => (4 + this.Level * 0.08f * this.AttackPower) * this.WeaponModifier(MainWeapon);
 
         public float WeaponModifier(Item Weapon)
         {
-            if (Weapon == null) return 0.2f;
-            var tierModifier = 1.0f + (int)Weapon.Tier / ((int)ItemTier.Divine + 1.0f);
-            return  Weapon.GetAttribute<float>(CommonAttributes.Damage) * tierModifier / 15.0f;
+            if (Weapon == null) return 1.0f;
+            var tierModifier = 1.0f + (int)Weapon.Tier / ((int)ItemTier.Divine + 1.0f) * .0f;
+            return (Weapon.GetAttribute<float>(CommonAttributes.Damage) * tierModifier) / 40.0f + 1.0f;
         }
 
         public float AttackSpeed
@@ -350,7 +341,7 @@ namespace Hedra.Engine.Player
 
                 var label1 = new Billboard(4.0f, "LEVEL UP!", Color.Violet,
                     FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
-                    this.Model.Position)
+                    this.Position)
                 {
                     Size = .7f,
                     Vanish = true,
@@ -386,7 +377,7 @@ namespace Hedra.Engine.Player
         public float Stamina
         {
             get => _stamina;
-            set => _stamina = Mathf.Clamp(value,0,MaxStamina);
+            set => _stamina = Mathf.Clamp(value, 0, MaxStamina);
         }
         
 

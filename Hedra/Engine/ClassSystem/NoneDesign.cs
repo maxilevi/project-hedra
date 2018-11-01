@@ -15,6 +15,7 @@ namespace Hedra.Engine.ClassSystem
         public override AbilityTreeBlueprint AbilityTreeDesign => null;
         public override Item StartingItem => null;
         public override float AttackResistance => throw new ArgumentException();
+        public override float MaxStamina => throw new ArgumentException();
 
         public override float MaxHealthFormula(float RandomFactor)
         {

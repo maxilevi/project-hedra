@@ -97,14 +97,14 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 for (var j = 0; j < parameters[i].Length; j++)
                 {
-                    var build = builders[i].GetType().GetMethod("Build");
+                    var build = builders[i].GetType().GetMethod(nameof(Builder<IBuildingParameters>.Build));
                     var output = (BuildingOutput) build.Invoke(builders[i], new object[] { parameters[i][j], _root.Cache, _rng, Design.Position });
 
-                    var paint = builders[i].GetType().GetMethod("Paint");
+                    var paint = builders[i].GetType().GetMethod(nameof(Builder<IBuildingParameters>.Paint));
                     var finalOutput = (BuildingOutput) paint.Invoke(builders[i], new object[] { parameters[i][j], output });
                     CoroutineManager.StartCoroutine(PlaceCoroutine, parameters[i][j].Position, finalOutput, Structure);
 
-                    var polish = builders[i].GetType().GetMethod("Polish");
+                    var polish = builders[i].GetType().GetMethod(nameof(Builder<IBuildingParameters>.Polish));
                     polish.Invoke(builders[i], new object[] { parameters[i][j] });
                 }
             }

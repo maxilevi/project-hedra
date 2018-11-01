@@ -88,7 +88,6 @@ namespace Hedra.Engine.Player
             this.AmbientEffects = new AmbientEffectHandler(this);
             this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
             this.Physics.CanCollide = true;
-            this.AttackSpeed = 0.75f;
             this.AttackPower = 1.0f;
 
             this.SetupHandlers();
@@ -444,7 +443,7 @@ namespace Hedra.Engine.Player
             if (Health <= 0) Respawn();
         }
         
-        public static bool CreatePlayer(string Name, HumanoidModel PreviewModel, ClassDesign ClassType)
+        public static bool CreatePlayer(string Name, ClassDesign ClassType)
         {
             if(Name == string.Empty)
             {
@@ -464,7 +463,7 @@ namespace Hedra.Engine.Player
             var data = new PlayerInformation
             {
                 Name = Name,
-                RandomFactor = LocalPlayer.NewRandomFactor(),
+                RandomFactor = NewRandomFactor(),
                 WorldSeed = World.RandomSeed,
                 Class = ClassType
             };

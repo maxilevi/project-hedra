@@ -76,11 +76,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound)
         {
-            if (Parent.AttackResistance > 0)
-            {
-                Amount /= Parent.AttackResistance;
-            }
-
+            Amount *= Parent.AttackResistance;
             if (Parent.IsDead || _ignoreList.Any(I => I.Invoke(Damager)))
             {
                 Exp = 0;

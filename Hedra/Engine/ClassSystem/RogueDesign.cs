@@ -13,16 +13,17 @@ namespace Hedra.Engine.ClassSystem
         public override float BaseSpeed => 1.40f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new RogueAbilityTreeBlueprint();
         public override Item StartingItem => ItemPool.Grab(CommonItems.CommonBronzeDoubleBlades);
-        public override float AttackResistance => 1.5f;
+        public override float AttackResistance => 1.025f;
+        public override float MaxStamina => 1.25f;
 
         public override float MaxHealthFormula(float RandomFactor)
         {
-            return 38 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+            return 8.5f + RandomFactor * 1;
         }
 
         public override float MaxManaFormula(float RandomFactor)
         {
-            return 16.5f + ((RandomFactor - .75f) * 8 - 1f) * 10 - 5f;
+            return 8.5f + RandomFactor;
         }
     }
 }

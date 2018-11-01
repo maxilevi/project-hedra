@@ -4833,30 +4833,6 @@
       <Link>Sounds\Slash.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song0.ogg">
-      <Link>Sounds\Soundtrack\Song0.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song1.ogg">
-      <Link>Sounds\Soundtrack\Song1.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song2.ogg">
-      <Link>Sounds\Soundtrack\Song2.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song3.ogg">
-      <Link>Sounds\Soundtrack\Song3.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song4.ogg">
-      <Link>Sounds\Soundtrack\Song4.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Song5.ogg">
-      <Link>Sounds\Soundtrack\Song5.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Sounds\Soundtrack\ThroughTheGrasslands.ogg">
       <Link>Sounds\Soundtrack\ThroughTheGrasslands.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

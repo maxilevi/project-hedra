@@ -14,7 +14,8 @@ namespace Hedra.Engine.ClassSystem
         public override float BaseSpeed => 1.35f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new MageAbilityTreeBlueprint();
         public override Item StartingItem => ItemPool.Grab(CommonItems.CommonWoodenStaff);
-        public override float AttackResistance => 0.95f;
+        public override float AttackResistance => 0.85f;
+        public override float MaxStamina => 115;
 
         public override float MaxHealthFormula(float RandomFactor)
         {

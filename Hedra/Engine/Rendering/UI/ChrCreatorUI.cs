@@ -94,7 +94,7 @@ namespace Hedra.Engine.Rendering.UI
                     }
                         
                 }
-                if(!LocalPlayer.CreatePlayer(nameField.Text, _human.Model, _classType)) return;            
+                if(!LocalPlayer.CreatePlayer(nameField.Text, _classType)) return;            
                 base.Disable();
                 GameManager.Player.UI.ChrChooser.Enable();
                 nameField.Text = string.Empty;    
@@ -121,14 +121,17 @@ namespace Hedra.Engine.Rendering.UI
                 }
             };
             
-            OnEscapePressed += delegate {    
+            OnEscapePressed += delegate
+            {    
                 base.Disable(); GameManager.Player.UI.ChrChooser.Enable();
             };
         }
         
         private float _newRot;
-        private IEnumerator Update(){
-            while(Program.GameWindow.Exists){
+        private IEnumerator Update()
+        {
+            while(Program.GameWindow.Exists)
+            {
                 
                 _human.Model.Enabled = this.Enabled;
                 if(this.Enabled){

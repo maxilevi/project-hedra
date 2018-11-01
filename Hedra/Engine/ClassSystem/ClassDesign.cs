@@ -27,10 +27,16 @@ namespace Hedra.Engine.ClassSystem
         public abstract AbilityTreeBlueprint AbilityTreeDesign { get; }
         public abstract Item StartingItem { get; }
         public abstract float AttackResistance { get; }
+        public abstract float MaxStamina { get; }
 
         public abstract float MaxHealthFormula(float RandomFactor);
         public abstract float MaxManaFormula(float RandomFactor);
-
+       
+        public float XPFormula(int TargetLevel)
+        {
+            return TargetLevel * 10f + 38;
+        }
+        
         public override string ToString()
         {
             return ClassDesign.ToString(this);

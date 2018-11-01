@@ -1,3 +1,4 @@
+using System;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
@@ -13,16 +14,17 @@ namespace Hedra.Engine.ClassSystem
         public override float BaseSpeed => 1.35f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new ArcherAbilityTreeBlueprint();
         public override Item StartingItem => ItemPool.Grab(CommonItems.CommonWoodenBow);
-        public override float AttackResistance => 1.0f;
+        public override float AttackResistance => 0.975f;
+        public override float MaxStamina => 115;
 
         public override float MaxHealthFormula(float RandomFactor)
         {
-            return 22f + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+            return 8f + RandomFactor * 1f;
         }
 
         public override float MaxManaFormula(float RandomFactor)
         {
-            return 12.5f + ((RandomFactor - .75f) * 8 - 1f) * 10 - 5f;
+            return 9f + RandomFactor;
         }
     }
 }
