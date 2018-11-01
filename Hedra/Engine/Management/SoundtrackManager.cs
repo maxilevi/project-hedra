@@ -73,12 +73,6 @@ namespace Hedra.Engine.Management
                 // LoopableSongs
                 forestTrack,
                 // Forest should always be first
-                "Sounds/Soundtrack/Song0.ogg",
-                "Sounds/Soundtrack/Song1.ogg",
-                "Sounds/Soundtrack/Song2.ogg",
-                "Sounds/Soundtrack/Song3.ogg",
-                "Sounds/Soundtrack/Song4.ogg",
-                "Sounds/Soundtrack/Song5.ogg",
                 "Sounds/Soundtrack/CardinalCity.ogg",
                 "Sounds/Soundtrack/ThroughTheGrasslands.ogg",
                 "Sounds/Soundtrack/BreathOfDay.ogg",
@@ -100,11 +94,11 @@ namespace Hedra.Engine.Management
 
         private static void ShuffleSongs()
         {
-            int n = TrackNames.Length;
+            var n = TrackNames.Length;
             while (n > _loopableSongsStart+1)
             {
-                int k = Utils.Rng.Next(_loopableSongsStart+1, n--);
-                string temp = TrackNames[n];
+                var k = Utils.Rng.Next(_loopableSongsStart+1, n--);
+                var temp = TrackNames[n];
                 TrackNames[n] = TrackNames[k];
                 TrackNames[k] = temp;
             }
