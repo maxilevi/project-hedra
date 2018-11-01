@@ -165,7 +165,7 @@ namespace Hedra.Engine.Management
                     return true;
                 }
                 if (Parts[0] == "dmg"){
-                    LocalPlayer.Instance.AttackPower += float.Parse(Parts[1]);
+                    GameManager.Player.AttackPower += float.Parse(Parts[1]);
                     return true;
                 }
                 if (Parts[0] == "drop")
@@ -348,7 +348,8 @@ namespace Hedra.Engine.Management
                     }
                     return true;
                 }
-                if(Parts[0] == "chest"){
+                if(Parts[0] == "chest")
+                {
                     World.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
                     return true;
                 }
@@ -358,7 +359,7 @@ namespace Hedra.Engine.Management
             catch(Exception e)
             {
                 Log.WriteLine(e.ToString());
-                Result = "Unknown command.";
+                Result = $"Command failed.{Environment.NewLine}{e.Message}";
                 return false;
             }
             return false;
