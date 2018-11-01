@@ -56,7 +56,6 @@ namespace Hedra
             NameGenerator.Load();
             CacheManager.Load();
             
-            ModificationsLoader.Setup();
             GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
             GameLoader.AllocateMemory();

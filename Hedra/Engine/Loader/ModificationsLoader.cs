@@ -14,14 +14,9 @@ namespace Hedra.Engine.Loader
             Path = $"{GameLoader.AppPath}/Mods/";
         }
         
-        public static void Setup()
-        {
-            if (!Directory.Exists(Path))
-                Directory.CreateDirectory(Path);
-        }
-
         public static string[] Get(string Pattern)
         {
+            if (!Directory.Exists(Path)) return new string[0];
             var modules = Directory.GetFiles(Path, "*", SearchOption.AllDirectories).Where(M => M.Replace("\\", "/").Contains(Pattern)).ToArray();
             var list = new List<string>();
             for (var i = 0; i < modules.Length; i++)
