@@ -48,9 +48,9 @@ namespace Hedra.Engine.Rendering
         public void Update()
         {
             this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition,
-                Time.IndependantDeltaTime * 6 * AnimationSpeed);
+                Time.IndependantDeltaTime * 6);
             this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation,
-                Time.IndependantDeltaTime * 6 * AnimationSpeed);
+                Time.IndependantDeltaTime * 6);
         }
 
         public bool ApplyNoiseTexture
