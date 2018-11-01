@@ -10,7 +10,17 @@ namespace HedraTests.ItemSystem
             ItemFactory.LoadModules(GameLoader.AppPath);
         }
 
-        public void TestItemPool()
+        public void TestItemPoolGivesLessOrEqualRarity()
+        {
+            
+        }
+        
+        public void TestItemPoolRandomizing()
+        {
+            
+        }
+        
+        public void TestItemPoolSeed()
         {
             
         }
