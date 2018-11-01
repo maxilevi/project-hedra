@@ -48,12 +48,12 @@ namespace HedraTests.CacheSystem
         private InstanceData BuildRandom()
         {
             var colorList = new List<Vector4>();
-            for (var i = 0; i < Utils.Rng.Next(0, 20); i++)
+            for (var i = 0; i < Utils.Rng.Next(1, 21); i++)
             {
                 colorList.Add(new Vector4(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()));
             }
             var extradataList = new List<float>();
-            for (var i = 0; i < Utils.Rng.Next(0, 20); i++)
+            for (var i = 0; i < Utils.Rng.Next(1, 21); i++)
             {
                 extradataList.Add(Utils.Rng.NextFloat());
             }
