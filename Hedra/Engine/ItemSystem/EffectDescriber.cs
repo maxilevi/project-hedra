@@ -20,7 +20,7 @@ namespace Hedra.Engine.ItemSystem
             };
         }
 
-        public static EffectType EffectTypeFromItem(Item Item)
+        private static EffectType EffectTypeFromItem(Item Item)
         {
             return Item.HasAttribute(CommonAttributes.EffectType)
                 ? (EffectType)Enum.Parse(typeof(EffectType), Item.GetAttribute<string>(CommonAttributes.EffectType))
@@ -32,7 +32,7 @@ namespace Hedra.Engine.ItemSystem
             return EffectColorFromItem(EffectTypeFromItem(Item));
         }
 
-        public static Vector4 EffectColorFromItem(EffectType Type)
+        private static Vector4 EffectColorFromItem(EffectType Type)
         {
             switch (Type)
             {

@@ -76,6 +76,7 @@
     <Compile Include="Game\HumanoidBalanceTest.cs" />
     <Compile Include="Game\MobBalanceSheet.cs" />
     <Compile Include="Game\MobBalanceTest.cs" />
+    <Compile Include="Game\UniqueBalanceEntry.cs" />
     <Compile Include="Generation\ChunkComparerTest.cs" />
     <Compile Include="Generation\RenderingComparerTest.cs" />
     <Compile Include="HedraReflectionTest.cs" />

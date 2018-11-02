@@ -199,9 +199,9 @@ namespace Hedra.Engine.EntitySystem
             this.ExecuteTranslate(Command);
         }
 
-        public float Timestep => Time.IndependantDeltaTime * (UseTimescale ? Time.TimeScale : 1);
+        private float Timestep => Time.IndependantDeltaTime * (UseTimescale ? Time.TimeScale : 1);
 
-        public void ProcessCommand(MoveCommand Command)
+        private void ProcessCommand(MoveCommand Command)
         {
             if(Command.Delta == Vector3.Zero) return;
             bool onlyY = Command.Delta.Xz == Vector2.Zero;

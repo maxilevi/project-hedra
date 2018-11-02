@@ -64,7 +64,7 @@ namespace Hedra.Engine.EntitySystem
         public Vector3 BlockPosition { get; set; }
         public bool PlaySpawningAnimation { get; set; } = true;
         public bool IsAttacking => Model.IsAttacking;
-        public float Speed { get; set; } = 2;
+        public float Speed { get; set; } = 1.25f;
         public bool IsMoving => Model.IsMoving;
 
         public virtual float Health

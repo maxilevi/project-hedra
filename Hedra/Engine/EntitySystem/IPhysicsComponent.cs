@@ -13,8 +13,6 @@ namespace Hedra.Engine.EntitySystem
         bool InFrontOfWall { get; }
         bool IsDrifting { get; }
         Vector3 TargetPosition { get; set; }
-        float Timestep { get; }
-        bool Renderable { get; }
         Vector3 MoveFormula(Vector3 Direction);
         void Move(float Scalar = 1);
         void Update();

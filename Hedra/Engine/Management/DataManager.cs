@@ -119,7 +119,11 @@ namespace Hedra.Engine.Management
             var info = new FileInfo(FileName);
             FileName = info.Length == 0 ? $"{FileName}.bak" : FileName;
             var data = DataManager.LoadPlayer(File.Open(FileName, FileMode.Open));
-            if(data.IsCorrupt)
+            if (data == null)
+            {
+                Log.WriteLine($"Failed to load character {FileName}. It might be incompatible.");
+            }
+            else if(data.IsCorrupt)
             {
                 Log.WriteLine($"[IO] Detected corrupt character file '{Path.GetFileName(FileName)}'.");
                 if (!File.Exists($"{FileName}.bak"))

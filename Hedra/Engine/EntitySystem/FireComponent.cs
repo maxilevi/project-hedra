@@ -18,7 +18,8 @@ namespace Hedra.Engine.EntitySystem
         public float Damage { get; set; } = 30;
         public float Duration { get; set; } = 5;
 
-        public FireComponent(IEntity Parent) : base(Parent) {
+        public FireComponent(IEntity Parent) : base(Parent)
+        {
             Parent.AfterAttacking += this.Apply;
         }
         

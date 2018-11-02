@@ -203,12 +203,6 @@ namespace Hedra.Engine.Player
             {
                 if (!_player.IsUnderwater) this.Jump();
             });
-            
-            this.RegisterKey(Key.H, delegate
-            {
-                if (!GameSettings.Paused && _player.CanInteract)
-                    _player.Greet();
-            });
 
             this.RegisterKey(Key.F, delegate
             {

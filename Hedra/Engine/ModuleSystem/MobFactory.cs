@@ -46,35 +46,13 @@ namespace Hedra.Engine.ModuleSystem
             }
         }
 
-        public Entity Build(MobType Type, int Seed)
-        {
-            return this.Build(Type.ToString(), Seed);
-        }
-
         public Entity Build(string Type, int Seed)
         {
             var mob = new Entity();
-            var rng = new Random(Seed);
 
             lock (_lock)
             {
                 mob.Type = _factories[Type.ToLowerInvariant()].Name;
-            }
-
-            var barComponent = new HealthBarComponent(mob);
-            mob.AddComponent(barComponent);
-
-            int levelN = rng.Next(0, 10);
-            int mobDifficulty = 1;
-            if (levelN <= 4) mobDifficulty = 1;
-            else if (levelN > 4 && levelN <= 7) mobDifficulty = 2;
-            else if (levelN > 7 && levelN <= 9) mobDifficulty = 3;
-            var mobDifficultyModifier = Math.Min(1f, mobDifficulty * .75f);
-
-            barComponent.FontColor = mobDifficulty == 1 ? Color.White : mobDifficulty == 3 ? Color.Red : Color.Gold;
-
-            lock (_lock)
-            {
                 _factories[Type.ToLowerInvariant()].Apply(mob);
             }
 
@@ -83,12 +61,43 @@ namespace Hedra.Engine.ModuleSystem
 
             var dmg = mob.SearchComponent<DamageComponent>();
             if (dmg == null) throw new ArgumentException("No DamageComponent has been set");
+            
+            var mobDifficulty = GetMobDifficulty(new Random(Seed));
+            var mobDifficultyModifier = GetMobDifficultyModifier(mobDifficulty);
 
-            mob.MaxHealth = (GameManager.Player.Level * 1.75f + mob.MaxHealth) * mobDifficultyModifier;
-            mob.AttackDamage = 1;
+            var barComponent = new HealthBarComponent(mob);
+            mob.AddComponent(barComponent);
+            barComponent.FontColor = mobDifficulty == 1 ? Color.White : mobDifficulty == 3 ? Color.Red : Color.Gold;
+            
+            mob.MaxHealth = mob.MaxHealth * mobDifficultyModifier;
             dmg.XpToGive = dmg.XpToGive * mobDifficultyModifier; 
             mob.Health = mob.MaxHealth;
             return mob;
+        }
+
+        private int GetMobDifficulty(Random Rng)
+        {
+            var levelN = Rng.Next(0, 10);
+            var mobDifficulty = 1;
+            if (levelN <= 4) return 1;
+            if (levelN > 4 && levelN <= 7) return 2;
+            if (levelN > 7 && levelN <= 9) return 3;
+            throw new ArgumentOutOfRangeException($"Rng is not 0 < {levelN} < 10");
+        }
+
+        private float GetMobDifficultyModifier(int DifficultyLevel)
+        {
+            switch (DifficultyLevel)
+            {
+                case 1:
+                    return 1;
+                case 2:
+                    return 1.25f;
+                case 3:
+                    return 1.5f;
+                default:
+                    throw new ArgumentOutOfRangeException($"Mob difficulty level is not 1 <= {DifficultyLevel} <= 2");
+            }
         }
     }
 }

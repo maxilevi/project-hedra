@@ -1,9 +1,10 @@
 ﻿{
   "Name" : "Wolf", 
-  "MaxHealth": 400.0,
-  "AttackDamage": 19.0,
-  "Speed": 3.5,
+  "MaxHealth": 280.0,
+  "AttackDamage": 7.0,
+  "Speed": 1.25,
   "XP": 4.0,
+  "Level": 8,
   "AIType": "Hostile",
   "Ridable": true,
   "Effects": [

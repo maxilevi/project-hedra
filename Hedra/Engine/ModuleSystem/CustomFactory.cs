@@ -11,9 +11,10 @@ namespace Hedra.Engine.ModuleSystem
 {
     public class CustomFactory : IEnemyFactory
     {
-
-        public static Dictionary<string, Type> EffectTable;
-        public static Dictionary<string, Type> AITable;
+        public const float MinXpFactor = .45f;
+        public const float MaxXpFactor = .75f;
+        private static Dictionary<string, Type> EffectTable { get; }
+        private static Dictionary<string, Type> AITable { get; }
 
         public string Name { get; set; }
         public float MaxHealth { get; set; }
@@ -23,9 +24,10 @@ namespace Hedra.Engine.ModuleSystem
         public float XP { get; set; }
         public string AIType { get; set; }
         public bool Ridable { get; set; }
-        public EffectTemplate[] Effects;
-        public DropTemplate[] Drops;
-        public ModelTemplate Model;
+        public EffectTemplate[] Effects { get; set; }
+        public DropTemplate[] Drops { get; set; }
+        public ModelTemplate Model { get; set; }
+        public int Level { get; set; }
 
         static CustomFactory()
         {
@@ -51,10 +53,10 @@ namespace Hedra.Engine.ModuleSystem
 
             foreach (var pair in EffectTable)
             {
-                Type[] interfaces = pair.Value.GetInterfaces();
+                var interfaces = pair.Value.GetInterfaces();
                 if (!interfaces.Contains( typeof(IEffectComponent) ) )
                 {
-                    throw new ArgumentException("Unsupported effect type '" + pair.Value + "'");
+                    throw new ArgumentException($"Unsupported effect type '{pair.Value}'");
                 }
             }
         }
@@ -64,33 +66,30 @@ namespace Hedra.Engine.ModuleSystem
             AssetManager.LoadHitbox(Model.Path);
         }
 
-        private float EffectDamageFormula(float Damage)
-        {
-            return Damage * GameManager.Player.Level * .25f;
-        }
-
-        public void Apply(Entity Mob)
+        public void Apply(Entity Mob, bool NormalizeValues = true)
         {
             Mob.Model = new QuadrupedModel(Mob, Model);
             Mob.MaxHealth = MaxHealth;
             Mob.AttackDamage = AttackDamage;
             Mob.AttackCooldown = AttackCooldown;
             Mob.Speed = Speed;
+            Mob.Level = Level;
+            Mob.Name = Name;
             var dmg = new DamageComponent(Mob)
             {
-                XpToGive = XP
+                XpToGive = NormalizeValues ? NormalizeXp(XP) : XP
             };
             Mob.AddComponent(dmg);
 
             if (Ridable)
                 Mob.AddComponent(new RideComponent(Mob));
 
-            foreach (EffectTemplate template in Effects)
+            foreach (var template in Effects)
             {
                 var effect = (IEffectComponent) Activator.CreateInstance(EffectTable[template.Name], Mob);
                 effect.Chance = (int) template.Chance;
                 effect.Duration = template.Duration;
-                effect.Damage = this.EffectDamageFormula(template.Damage);
+                effect.Damage = template.Damage;
                 Mob.AddComponent(effect as EntityComponent);
             }
 
@@ -100,12 +99,12 @@ namespace Hedra.Engine.ModuleSystem
             {
                 ItemDrop = gold,
                 RandomDrop = false,
-                DropChance = 50f
+                DropChance = 50
             };
             Mob.AddComponent(drop);
             
 
-            foreach (DropTemplate template in Drops)
+            foreach (var template in Drops)
             {
                 var type = (ItemType) Enum.Parse(typeof(ItemType), template.Type);
 
@@ -118,6 +117,11 @@ namespace Hedra.Engine.ModuleSystem
                 Mob.AddComponent(drop);
             }
             Mob.AddComponent((EntityComponent)Activator.CreateInstance(AITable[this.AIType], Mob));
+        }
+
+        private float NormalizeXp(float Raw)
+        {
+            return Mathf.Clamp(Raw, Level * MinXpFactor, Level * MaxXpFactor);
         }
     }
 }

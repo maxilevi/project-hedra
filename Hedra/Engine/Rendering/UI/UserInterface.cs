@@ -55,7 +55,7 @@ namespace Hedra.Engine.Rendering.UI
             /*Alpha = new Texture(Graphics2D.LoadFromAssets("Assets/UI/alpha.png"),
                                  new Vector2(-.25f, .4f), Graphics2D.SizeFromAssets("Assets/UI/alpha.png") * .6f);*/
             
-            var blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
+            var blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.1f / GameSettings.Height * 578), GradientType.LeftRight);
             
             
             _newRun = new Button(new Vector2(.1f, bandPosition.Y),

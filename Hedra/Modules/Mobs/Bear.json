@@ -1,9 +1,10 @@
 ﻿{
   "Name" : "Bear", 
-  "MaxHealth": 2000.0,
+  "MaxHealth": 768.0,
   "AttackDamage": 22.0,
-  "Speed": 4.65,
-  "XP": 12.0,
+  "Speed": 1.15,
+  "XP": 16.0,
+  "Level": 28,
   "AIType": "Neutral",
   "Ridable": false,
   "Effects": [],

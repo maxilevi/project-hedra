@@ -33,14 +33,11 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);
             boss.Position = Position;
             boss.SearchComponent<IGuardAIComponent>().GuardPosition = Position;
-            boss.MaxHealth *= (float) (Math.Log(GameManager.Player.Level) + 1);
-            boss.Health = boss.MaxHealth;
             var dmgComponent = boss.SearchComponent<DamageComponent>();
             dmgComponent.Immune = true;
             var healthBarComponent = new BossHealthBarComponent(boss, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
             
             boss.RemoveComponent(boss.SearchComponent<HealthBarComponent>());
-            dmgComponent.XpToGive += (int) (GameManager.Player.Level * .25f);
             dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args)
             {
                 if (!(Args.Victim.Health <= 0)) return;

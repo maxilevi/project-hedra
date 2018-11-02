@@ -1,9 +1,10 @@
 ﻿{
   "Name" : "Ooze", 
-  "MaxHealth": 1680.0,
-  "AttackDamage": 14.0,
-  "Speed": 2.0,
+  "MaxHealth": 516.0,
+  "AttackDamage": 8.0,
+  "Speed": 1.0,
   "XP": 8.0,
+  "Level": 16,
   "AIType": "Hostile",
   "Ridable": false,
   "Effects": [],

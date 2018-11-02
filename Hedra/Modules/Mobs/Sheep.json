@@ -1,9 +1,10 @@
 ﻿{
   "Name" : "Sheep", 
   "MaxHealth": 150.0,
-  "AttackDamage": 10.0,
-  "Speed": 4.5,
-  "XP": 1.0,
+  "AttackDamage": 1.0,
+  "Speed": 1.2,
+  "XP": 1.4,
+  "Level": 2,
   "AIType": "Sheep",
   "Ridable": false,
   "Effects": [],

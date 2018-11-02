@@ -1,9 +1,10 @@
 ﻿{
   "Name" : "Bee", 
-  "MaxHealth": 300.0,
-  "AttackDamage": 16.0,
-  "Speed": 4.65,
-  "XP": 3.0,
+  "MaxHealth": 168.0,
+  "AttackDamage": 1.5,
+  "Speed": 1.35,
+  "XP": 2.0,
+  "Level": 3,
   "AIType": "Hostile",
   "Ridable": false,
   "Effects": [

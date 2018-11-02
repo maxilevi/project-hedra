@@ -1,9 +1,10 @@
 ﻿{
   "Name" : "Horse", 
-  "MaxHealth": 420.0,
-  "AttackDamage": 6.0,
-  "Speed": 5.0,
+  "MaxHealth": 210.0,
+  "AttackDamage": 4.0,
+  "Speed": 1.4,
   "XP": 3.0,
+  "Level": 5,
   "AIType": "Neutral",
   "Ridable": true,
   "Effects": [],

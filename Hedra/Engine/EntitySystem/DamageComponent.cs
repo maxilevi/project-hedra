@@ -89,14 +89,15 @@ namespace Hedra.Engine.EntitySystem
 
             if (!Parent.IsStatic && PlaySound && (GameManager.Player.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
             {
-                var baseDamage = Damager != null ? (Damager as Humanoid)?.BaseDamageEquation 
-                    ?? (Damager.SearchComponent<BasicAIComponent>() != null ? Damager.AttackDamage * .3f : Amount * .3f) : Amount / 3f;
+                var asHuman = Damager as Humanoid;
+                var baseDamage = Damager != null ? asHuman?.UnRandomizedDamageEquation 
+                    ?? (Damager.SearchComponent<BasicAIComponent>() != null ? Damager.AttackDamage : Amount) : Amount / 3f;
                 Color color = Color.White;
                 float dmgDiff = Amount / baseDamage;
                 if (dmgDiff > 1.85f) color = Color.Gold;
                 if (dmgDiff > 2.25f) color = Color.Red;
                 if (Immune || shouldMiss) color = Color.White;
-                var font = FontCache.Get(AssetManager.BoldFamily, 12 + 32 * (Amount / Parent.MaxHealth), FontStyle.Bold);
+                var font = FontCache.Get(AssetManager.BoldFamily, 12 + 12 * dmgDiff, FontStyle.Bold);
                 var dmgString = ((int) Amount).ToString();
                 var missString = Immune ? "IMMUNE" : "MISS";
                 var dmgLabel = new Billboard(1.8f, !Immune && !shouldMiss ? dmgString : missString, color,
@@ -117,7 +118,6 @@ namespace Hedra.Engine.EntitySystem
 
             if (shouldMiss || Immune) return;
             _tintTimer = 0.25f;
-            Exp = XpToGive;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
             if (Damager != null && Damager != Parent)
             {
@@ -126,7 +126,15 @@ namespace Hedra.Engine.EntitySystem
                 var averageSize = (Parent.Model.BaseBroadphaseBox.Size.X + Parent.Model.BaseBroadphaseBox.Size.Z) * .5f;
                 if (Parent is LocalPlayer) factor = 0.0f;
                 Parent.Physics.Translate(direction * factor * averageSize);
+            }
 
+            if (Parent.Health <= 0 && !Parent.IsDead)
+            {
+                Parent.IsDead = true;
+                var dropComponent = Parent.SearchComponent<DropComponent>();
+                dropComponent?.Drop();
+                Parent.Physics.HasCollision = false;
+                Exp = XpToGive;
                 if(Damager is LocalPlayer)
                 {
                     var delta = (int)Math.Ceiling(Exp);
@@ -138,14 +146,6 @@ namespace Hedra.Engine.EntitySystem
                         Vanish = true
                     };
                 }
-            }
-
-            if (Parent.Health <= 0 && !Parent.IsDead)
-            {
-                Parent.IsDead = true;
-                var dropComponent = Parent.SearchComponent<DropComponent>();
-                dropComponent?.Drop();
-                Parent.Physics.HasCollision = false;
                 CoroutineManager.StartCoroutine(this.DisposeCoroutine);
                 
             }

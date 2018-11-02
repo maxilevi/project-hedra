@@ -1,9 +1,10 @@
 ﻿{
   "Name" : "Goat", 
-  "MaxHealth": 260.0,
-  "AttackDamage": 10.0,
-  "Speed": 4.5,
-  "XP": 1.0,
+  "MaxHealth": 170.0,
+  "AttackDamage": 3.0,
+  "Speed": 1.25,
+  "XP": 2.0,
+  "Level": 4,
   "AIType": "Neutral",
   "Ridable": false,
   "Effects": [

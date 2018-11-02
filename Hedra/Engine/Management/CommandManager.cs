@@ -193,6 +193,12 @@ namespace Hedra.Engine.Management
                     LocalPlayer.Instance.PlaySpawningAnimation = true;
                     return true;
                 }
+
+                if (Parts[0] == "greet")
+                {
+                    GameManager.Player.Greet();
+                    return true;
+                }
                 if (Parts[0] == "seed")
                 {
                     Result = World.Seed.ToString();

@@ -10,6 +10,6 @@ namespace Hedra.Engine.ModuleSystem
     {
         string Name { get; set; }
 
-        void Apply(Entity Mob);
+        void Apply(Entity Mob, bool NormalizeValues = true);
     }
 }

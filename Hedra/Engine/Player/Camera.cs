@@ -100,7 +100,7 @@ namespace Hedra.Engine.Player
 
                 this.ManageAlpha();
             }
-            while((cameraPosition = CameraPosition).Y - 4 < Physics.HeightAtPosition(cameraPosition) 
+            while((cameraPosition = CameraPosition).Y - 2 < Physics.HeightAtPosition(cameraPosition) 
                 && !GameManager.IsLoading && TargetDistance > MinDistance)
             {
                 TargetDistance += Time.IndependantDeltaTime * -128;

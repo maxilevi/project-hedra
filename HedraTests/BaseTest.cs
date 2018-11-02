@@ -26,8 +26,15 @@ namespace HedraTests
         {
             GameSettings.TestingMode = true;
             EventProvider = new SimpleEventProvider();
-            World.Provider = new SimpleWorldProviderMock();
             EventDispatcher.Provider = EventProvider;
+            MockEngine();
+            EventDispatcher.Clear();
+        }
+
+        protected static void MockEngine()
+        {
+            GameSettings.TestingMode = true;
+            World.Provider = new SimpleWorldProviderMock();
             AssetManager.Provider = new SimpleAssetProvider();
             Graphics2D.Provider = new SimpleTexture2DProviderMock();
             Renderer.Provider = new SimpleGLProviderMock();
@@ -35,7 +42,6 @@ namespace HedraTests
             ColladaLoader.Provider = new SimpleColladaProvider();
             GameManager.Provider = new SimpleGameProviderMock();
             GUIText.Provider = new SimpleTextProviderMock();
-            EventDispatcher.Clear();
         }
 
         [TearDown]
