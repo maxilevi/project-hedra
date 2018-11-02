@@ -50,8 +50,8 @@ namespace Hedra.Engine.Player.Inventory
         {
             Name.Text = Human.Name;
             Level.Text = "LEVEL "+Human.Level;
-            TopLeftText.Text = $"{(int) Human.Health} HP";
-            BottomLeftText.Text = $"{(int)Human.Mana} MP";
+            TopLeftText.Text = $"{(int) Human.Health}/{(int) Human.MaxHealth} HP";
+            BottomLeftText.Text = $"{(int)Human.Mana}/{(int) Human.MaxMana} MP";
             TopRightText.Text = $"{(int)Human.XP}/{(int)Human.MaxXP} XP";
             var gold = Human.Gold == int.MaxValue ? "∞" : Human.Gold.ToString();
             BottomRightText.Text = $"{gold} G";
