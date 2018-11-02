@@ -38,12 +38,12 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         public override Vector4 MiddayTop(int Seed)
         {
-            return this.CanRain(Seed) ? CloudyTop : ClearTop;
+            return CanRain(Seed) ? CloudyTop : ClearTop;
         }
 
         public override Vector4 MiddayBot(int Seed)
         {
-            return this.CanRain(Seed) ? CloudyBot : ClearBot;
+            return CanRain(Seed) ? CloudyBot : ClearBot;
         }
 
         private Vector4 CloudyTop { get; } = Colors.FromArgb(255, 51, 60, 57);
@@ -53,7 +53,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         public override bool CanRain(int Seed)
         {
-             return new Random(Seed + 2343).Next(0, 4) == 1;
+            return false;//new Random(Seed + 2343).Next(0, 4) == 1;
         }
 
         public override float MinLight(int Seed)
