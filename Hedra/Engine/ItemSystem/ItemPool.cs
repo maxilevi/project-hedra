@@ -66,7 +66,7 @@ namespace Hedra.Engine.ItemSystem
             
             var item = Item.FromTemplate(templates[rng.Next(0, templates.Length)]);
             item.SetAttribute(CommonAttributes.Seed, Settings.Seed, true);
-            return ItemPool.Randomize(item, new Random(Settings.Seed));
+            return Randomize(item, new Random(Settings.Seed));
         }
 
         public static ItemTier SelectTier(ItemTier Tier, Random Rng)

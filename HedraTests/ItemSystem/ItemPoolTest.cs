@@ -17,7 +17,7 @@ namespace HedraTests.ItemSystem
         {
             for (var i = 0; i < (int) ItemTier.Misc; i++)
             {
-                var tier = ItemPool.Grab(new ItemPoolSettings((ItemTier) i)).Tier;
+                var tier = ItemPool.SelectTier((ItemTier)i, Utils.Rng);
                 Assert.LessOrEqual((int)tier, i, $"Expected tier '{(ItemTier) i}' but got tier {tier}");
             }
         }
