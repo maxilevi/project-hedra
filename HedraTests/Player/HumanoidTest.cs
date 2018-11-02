@@ -86,6 +86,14 @@ namespace HedraTests.Player
             _human.XP += RecursiveXp(10);
             Assert.AreEqual(10, _human.Level);
         }
+        
+        [Test]
+        public void TestHumanoidXpIsAdded()
+        {
+            _human.Level = 1;
+            _human.XP = 5;
+            Assert.AreEqual(5, _human.XP);
+        }
 
         private float RecursiveXp(int Target)
         {

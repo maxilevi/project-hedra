@@ -329,7 +329,8 @@ namespace Hedra.Engine.Player
             set
             {
                 if(Level == MaxLevel) return;
-                if (value < MaxXP) return;
+                _xp = value;
+                if (_xp < MaxXP) return;
                 _xp = value - MaxXP;
                 if (++Level == MaxLevel)
                 {
