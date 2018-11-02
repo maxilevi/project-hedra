@@ -74,8 +74,12 @@
     <Compile Include="Game\BalanceEntry.cs" />
     <Compile Include="Game\HumanoidBalanceSheet.cs" />
     <Compile Include="Game\HumanoidBalanceTest.cs" />
+    <Compile Include="Game\ItemBalanceSheet.cs" />
+    <Compile Include="Game\ItemBalanceTest.cs" />
     <Compile Include="Game\MobBalanceSheet.cs" />
     <Compile Include="Game\MobBalanceTest.cs" />
+    <Compile Include="Game\SkillBalanceSheet.cs" />
+    <Compile Include="Game\SkillBalanceTest.cs" />
     <Compile Include="Game\UniqueBalanceEntry.cs" />
     <Compile Include="Generation\ChunkComparerTest.cs" />
     <Compile Include="Generation\RenderingComparerTest.cs" />
