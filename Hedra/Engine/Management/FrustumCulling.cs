@@ -203,7 +203,7 @@ namespace Hedra.Engine.Management
 
         public bool BoxInFrustum(Box Box)
         {
-            return this.FrustumInBox(Box) || FrustumCollidesWithBox(Box) || this.VerticesInFrustum(Box.Vertices);
+            return FrustumCollidesWithBox(Box) || FrustumInBox(Box) || VerticesInFrustum(Box.Vertices);
         }
 
         private bool FrustumInBox(Box Box)
