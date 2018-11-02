@@ -48,7 +48,7 @@ namespace Hedra.Engine.Rendering.UI
             ChrCreator = new ChrCreatorUI(Player);
 
             var bandPosition = new Vector2(0, -.8f);
-            var fontSize = 18;
+            var fontSize = 16;
             
             _title = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Menu.png"),
                                    new Vector2(-.4f, .35f), Graphics2D.SizeFromAssets("Assets/UI/Menu.png") * .75f);
