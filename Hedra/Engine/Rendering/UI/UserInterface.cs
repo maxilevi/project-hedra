@@ -48,6 +48,7 @@ namespace Hedra.Engine.Rendering.UI
             ChrCreator = new ChrCreatorUI(Player);
 
             var bandPosition = new Vector2(0, -.8f);
+            var fontSize = 18;
             
             _title = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Menu.png"),
                                    new Vector2(-.4f, .35f), Graphics2D.SizeFromAssets("Assets/UI/Menu.png") * .75f);
@@ -55,16 +56,16 @@ namespace Hedra.Engine.Rendering.UI
             /*Alpha = new Texture(Graphics2D.LoadFromAssets("Assets/UI/alpha.png"),
                                  new Vector2(-.25f, .4f), Graphics2D.SizeFromAssets("Assets/UI/alpha.png") * .6f);*/
             
-            var blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.1f / GameSettings.Height * 578), GradientType.LeftRight);
+            var blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.09f / GameSettings.Height * 578), GradientType.LeftRight);
             
             
             _newRun = new Button(new Vector2(.1f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), "New World", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
+                                new Vector2(0.15f,0.075f), "New World", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
             _newRun.Click += new OnButtonClickEventHandler(NewRunOnClick);
             
             _loadButton = new Button(new Vector2(.3f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), "Load World", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
+                                         new Vector2(0.15f,0.075f), "Load World", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
 
             _loadButton.Click += delegate {
                 if(!GameManager.InStartMenu){
@@ -76,10 +77,10 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             Button connectToServer = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), "Multiplayer", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
+                                         new Vector2(0.15f,0.075f), "Multiplayer", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
             Button disconnect = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), "Disconnect", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
+                                         new Vector2(0.15f,0.075f), "Disconnect", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             disconnect.Click += delegate{ Networking.NetworkManager.Disconnect(true); };
             
             connectToServer.Click += delegate{
@@ -87,17 +88,18 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             Button options = new Button(new Vector2(.75f, bandPosition.Y),
-                                        new Vector2(0.15f,0.075f), "Options", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
+                                        new Vector2(0.15f,0.075f), "Options", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
             options.Click += delegate(object Sender, MouseButtonEventArgs E) { Menu.Disable(); OptionsMenu.Enable();};
             
             Button quit = new Button(new Vector2(.9f, bandPosition.Y),
-                                     new Vector2(0.15f,0.075f), "Exit", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, 16));
+                                     new Vector2(0.15f,0.075f), "Exit", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
             quit.Click += delegate { Program.GameWindow.Exit(); };
             
-            if( Program.GameWindow.GameVersion != "Unknown" ){
-                GUIText versionText = new GUIText(Program.GameWindow.GameVersion, Vector2.Zero, Color.Black, FontCache.Get(AssetManager.NormalFamily, 8));
+            if( Program.GameWindow.GameVersion != "Unknown" )
+            {
+                var versionText = new GUIText(Program.GameWindow.GameVersion, Vector2.Zero, Color.Black, FontCache.Get(AssetManager.NormalFamily, 8));
                 versionText.Position = new Vector2(-1,1) + new Vector2(versionText.Scale.X, -versionText.Scale.Y);
                 Menu.AddElement(versionText);
             }
