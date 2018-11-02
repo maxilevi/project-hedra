@@ -85,6 +85,7 @@
     <Compile Include="Generation\RenderingComparerTest.cs" />
     <Compile Include="HedraReflectionTest.cs" />
     <Compile Include="ItemSystem\ItemPoolTest.cs" />
+    <Compile Include="ItemSystem\ItemTest.cs" />
     <Compile Include="Loaders\ModificationsLoaderTest.cs" />
     <Compile Include="MathExtensions\PhysicsTest.cs" />
     <Compile Include="MathExtensions\RandomTest.cs" />
