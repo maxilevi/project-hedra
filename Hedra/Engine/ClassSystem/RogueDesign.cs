@@ -14,7 +14,7 @@ namespace Hedra.Engine.ClassSystem
         public override AbilityTreeBlueprint AbilityTreeDesign => new RogueAbilityTreeBlueprint();
         public override Item StartingItem => ItemPool.Grab(CommonItems.CommonBronzeDoubleBlades);
         public override float AttackResistance => 1.025f;
-        public override float MaxStamina => 1.25f;
+        public override float MaxStamina => 125f;
 
         public override float MaxHealthFormula(float RandomFactor)
         {
