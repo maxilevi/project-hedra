@@ -139,14 +139,14 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (Falltime > 0)
                 {
-                    if (Falltime > 1.75f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true) )
+                    if (Falltime > 2.0f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true) )
                     {
                         if (!Parent.SearchComponent<DamageComponent>()?.Immune ?? true)
                         {
                             var fallTime = Falltime;
                             Executer.ExecuteOnMainThread(delegate
                             {
-                                Parent.Damage(fallTime * 45f, null, out _, true);
+                                Parent.Damage(fallTime * 7.5f, null, out _, true);
                                 Parent.KnockForSeconds(3f);
                             });
                         }
