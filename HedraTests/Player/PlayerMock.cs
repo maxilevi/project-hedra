@@ -101,7 +101,7 @@ namespace HedraTests.Player
         public Vector3 BlockPosition { get; set; }
         public bool PlaySpawningAnimation { get; set; }
         public float Speed { get; set; }
-        public float MaxMana { get; } = 100;
+        public float MaxMana { get; set; } = 100;
         public float Health { get; set; }
         public float Mana { get; set; } = 100;
         public bool InUpdateRange { get; }
@@ -118,7 +118,7 @@ namespace HedraTests.Player
         public bool IsStatic { get; }
         public bool IsUnderwater { get; set; }
         public bool IsKnocked { get; }
-        public float MaxHealth { get; }
+        public float MaxHealth { get; set; }
         public float ManaRegen { get; }
         public float HealthRegen { get; }
         public float WeaponModifier(Item Weapon)

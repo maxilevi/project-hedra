@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Drawing;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -26,7 +27,7 @@ namespace Hedra.Engine.StructureSystem
     
     public sealed class Obelisk : InteractableStructure
     {
-        public override string Message => "INTERACT WITH THE OBELISK";
+        public override string Message => "INTERACT";
         public override int InteractDistance => 32;
         public ObeliskType Type { get; set; }
         public HighlightedAreaWrapper AreaWrapper { get; set; }
@@ -40,28 +41,21 @@ namespace Hedra.Engine.StructureSystem
             switch (Type)
             {
                 case ObeliskType.Xp:
-                    float xpToGive =  4 * Interactee.Level;
+                    const float xpToGive = 4;
                     Interactee.XP += xpToGive;
                     Interactee.MessageDispatcher.ShowMessage($"YOU EARNED {xpToGive} XP", 2, Colors.Violet.ToColor());
                     break;
                 case ObeliskType.Health:
-                    Interactee.Health += 16 * Interactee.Level;
+                    Interactee.Health = Interactee.MaxHealth;
                     Interactee.MessageDispatcher.ShowMessage("YOUR HEALTH FEELS REFRESHED", 2, Colors.LowHealthRed.ToColor());
                     break;
                 case ObeliskType.Mana:
-                    Interactee.Mana += 32 * Interactee.Level;
+                    Interactee.Mana = Interactee.MaxMana;
                     Interactee.MessageDispatcher.ShowMessage("YOUR MANA FEELS REFRESHED", 2, Colors.LightBlue.ToColor());
                     break;
-                case ObeliskType.Mobs:
-                    int count = Utils.Rng.Next(1, 4);
-                    for(var i = 0; i < count; i++)
-                    {
-                        var desiredPosition = this.Position + new Vector3(Utils.Rng.NextFloat() * 64f * Chunk.BlockSize - 32f * Chunk.BlockSize, 0, Utils.Rng.NextFloat() * 64f * Chunk.BlockSize - 32f * Chunk.BlockSize);
-                        desiredPosition = new Vector3(desiredPosition.X, Physics.HeightAtPosition(desiredPosition.X, desiredPosition.Z),desiredPosition.Z);
-                    
-                        World.SpawnMob(MobType.Spider, desiredPosition, Utils.Rng);
-                    }
-                    Interactee.MessageDispatcher.ShowMessage("BE CAREFUL", 2, Colors.Gray.ToColor());
+                case ObeliskType.Stamina:
+                    Interactee.Stamina = Interactee.MaxStamina;
+                    Interactee.MessageDispatcher.ShowMessage("YOUR STAMINA FEELS REFRESHED", 2, Color.Bisque);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Obelisk type does not exist.");
@@ -82,8 +76,8 @@ namespace Hedra.Engine.StructureSystem
                 case ObeliskType.Xp:
                     return Colors.Violet * .3f;
                     
-                case ObeliskType.Mobs:
-                    return Colors.FullHealthGreen * .3f;
+                case ObeliskType.Stamina:
+                    return Color.Coral.ToVector4() * .3f;
                     
                 default: throw new ArgumentOutOfRangeException($"Obelisk color wasnt found.");
             }
@@ -117,8 +111,8 @@ namespace Hedra.Engine.StructureSystem
     {
         Xp,
         Health,
+        Stamina,
         Mana,
-        Mobs,
         MaxItems
     }
 }

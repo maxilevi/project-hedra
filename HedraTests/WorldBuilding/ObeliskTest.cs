@@ -21,7 +21,12 @@ namespace HedraTests.WorldBuilding
         {
             base.Setup();
             _obelisk = new Obelisk(Vector3.Zero);
-            _dummyPlayer = new PlayerMock();
+            _dummyPlayer = new PlayerMock
+            {
+                MaxHealth = 100,
+                MaxMana = 200,
+                MaxStamina = 100
+            };
             Assert.Null(_dummyPlayer.MessageMock.LastMessage);
         }
 
@@ -57,16 +62,13 @@ namespace HedraTests.WorldBuilding
         }
         
         [Test]
-        public void TestObeliskMobs()
+        public void TestObeliskStamina()
         {
-            _obelisk.Type = ObeliskType.Mobs;
-            var provider = new WorldSpawnMock();
-            World.Provider = provider;
-            Assert.AreEqual(provider.MobsSpawned, 0);
-            
+            _obelisk.Type = ObeliskType.Stamina;     
+            var startStamina = _dummyPlayer.Stamina;
             _obelisk.InvokeInteraction(_dummyPlayer);
             Assert.NotNull(_dummyPlayer.MessageMock.LastMessage);
-            Assert.Greater(provider.MobsSpawned, 0);
+            Assert.Greater(_dummyPlayer.Stamina, startStamina);
         }
         
         [Test]
