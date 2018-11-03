@@ -25,14 +25,18 @@ namespace Hedra.Engine.Rendering
         public static Matrix4 ModelViewProjectionMatrix { get; private set; }
         public static Matrix4 ModelViewMatrix { get; private set; }
         public static Matrix4 ProjectionMatrix { get; private set; }
-        private static readonly StateManager FboManager;
-        private static readonly StateManager ShaderManager;
-        private static readonly CapHandler CapHandler;
-        private static readonly VertexAttributeHandler VertexAttributeHandler;
+        public static StateManager FboManager { get; }
+        public static StateManager ShaderManager { get; }
+        public static CapHandler CapHandler { get; }
+        public static TextureHandler TextureHandler { get; }
+        public static ShaderHandler ShaderHandler { get; }
+        public static VertexAttributeHandler VertexAttributeHandler { get; }
 
         static Renderer()
         {
             CapHandler = new CapHandler();
+            TextureHandler = new TextureHandler();
+            ShaderHandler = new ShaderHandler();
             VertexAttributeHandler = new VertexAttributeHandler();
             FboManager = new StateManager();
             FboManager.RegisterStateItem( () => FBOBound, O => FBOBound = (int) O);
@@ -107,7 +111,7 @@ namespace Hedra.Engine.Rendering
 
         public static void BindShader(int Id)
         {
-            Provider.UseProgram((uint)Id);
+            ShaderHandler.Use((uint)Id);
         }
 
         public static void BindFramebuffer(FramebufferTarget Target, int Id)
@@ -122,7 +126,7 @@ namespace Hedra.Engine.Rendering
         
         public static void ActiveTexture(TextureUnit Unit)
         {
-            Provider.ActiveTexture(Unit);
+            TextureHandler.Active(Unit);
         }
 
         public static void AttachShader(int S0, int S1)
@@ -152,12 +156,7 @@ namespace Hedra.Engine.Rendering
 
         public static void BindTexture(TextureTarget Target, uint Id)
         {
-            Provider.BindTexture(Target, Id);
-        }
-        
-        public static void BindTexture(TextureTarget Target, int Id)
-        {
-            Provider.BindTexture(Target, (uint) Id);
+            TextureHandler.Bind(Target, Id);
         }
 
         public static void BindVertexArray(uint Id)
@@ -278,24 +277,14 @@ namespace Hedra.Engine.Rendering
 
         public static void DeleteTexture(uint Texture)
         {
-            Provider.DeleteTexture(Texture);
+            TextureHandler.Delete(Texture);
         }
 
         public static void DeleteTextures(int Count, params uint[] Ids)
         {
             Provider.DeleteTextures(Count, Ids);
         }
-
-        public static void DeleteTextures(int Count, ref uint Id)
-        {
-            Provider.DeleteTextures(Count, ref Id);
-        }
-
-        public static void DeleteVertexArrays(int Count, params uint[] Ids)
-        {
-            Provider.DeleteVertexArrays(Count, Ids);
-        }
-
+        
         public static void DeleteVertexArrays(int Count, ref uint Id)
         {
             Provider.DeleteVertexArrays(Count, ref Id);

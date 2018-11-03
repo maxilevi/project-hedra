@@ -40,8 +40,6 @@ namespace Hedra.Engine.Rendering
         void DeleteShader(uint Program);
         void DeleteTexture(uint Texture);
         void DeleteTextures(int N, params uint[] Ids);
-        void DeleteVertexArrays(int N, params uint[] Ids);
-        void DeleteTextures(int N, ref uint Id);
         void DeleteVertexArrays(int N, ref uint Id);
         void DepthMask(bool Flag);
         void DetachShader(uint V0, uint V1);

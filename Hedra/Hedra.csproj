@@ -359,7 +359,9 @@
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
     <Compile Include="Engine\Rendering\IVertexData.cs" />
     <Compile Include="Engine\Rendering\RenderException.cs" />
+    <Compile Include="Engine\Rendering\ShaderHandler.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
+    <Compile Include="Engine\Rendering\TextureHandler.cs" />
     <Compile Include="Engine\Rendering\UI\IAdjustable.cs" />
     <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />
     <Compile Include="Engine\Rendering\UI\ITextProvider.cs" />

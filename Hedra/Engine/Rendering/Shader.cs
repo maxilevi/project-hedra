@@ -283,7 +283,6 @@ namespace Hedra.Engine.Rendering
 
         public void Bind()
         {
-            if(Renderer.ShaderBound == ShaderId) return;
             if (ShaderId < 0) throw new GraphicsException($"{this.GetType().Name} is corrupt. {this.ShaderId}");
 
             Renderer.UseProgram(ShaderId);

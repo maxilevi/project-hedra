@@ -108,8 +108,10 @@ namespace Hedra.Engine.Loader
                 text += 
                     $"\n\nTextures ={Graphics2D.Textures.Count} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
                 text +=
-                    $"\n\nCulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount}  Cache={CacheManager.CachedColors.Count}|{CacheManager.CachedExtradata.Count} Pitch={player.View.TargetPitch}";
+                    $"\n\n SkippedBinds={Renderer.TextureHandler.Skipped} SkippedUses={Renderer.ShaderHandler.Skipped} CulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount}  Cache={CacheManager.CachedColors.Count}|{CacheManager.CachedExtradata.Count} Pitch={player.View.TargetPitch}";
 
+                Renderer.TextureHandler.ResetStats();
+                Renderer.ShaderHandler.ResetStats();
                 _debugText.Text = text;
                 _passedTime += Time.IndependantDeltaTime;
                 if (_passedTime > 5.0f)
