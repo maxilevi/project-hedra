@@ -42,7 +42,5 @@ namespace Hedra.Engine.Rendering
         protected abstract void DoEnable(T Index);
 
         protected abstract void DoDisable(T Index);
-
-        protected virtual bool DefaultValue => false;
     }
 }
