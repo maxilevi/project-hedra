@@ -38,7 +38,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public Entity SpawnCarriage(Vector3 Position)
         {
-            Entity carriage = World.SpawnMob("QuestCarriage", Position, 1);
+            var carriage = World.SpawnMob("QuestCarriage", Position, 1);
             carriage.Health = carriage.MaxHealth;
             carriage.Physics.CanCollide = true;
             carriage.Physics.PushAround = false;
