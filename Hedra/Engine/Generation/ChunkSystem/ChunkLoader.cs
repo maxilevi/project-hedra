@@ -15,6 +15,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
+using Timer = Hedra.Engine.Management.Timer;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -44,14 +45,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _chunkWatchers = new List<ChunkWatcher>();
             _candidates = new List<Vector3>();
             _closest = new ClosestComparer();
-            CoroutineManager.StartCoroutine(this.UpdateCoroutine);
+            CoroutineManager.StartCoroutine(this.CreateChunksCoroutine);
+            CoroutineManager.StartCoroutine(this.UpdateChunkCoroutine);
             OnChunkReady += World.MarkChunkReady;
         }
 
         public void UpdateFog(bool Force = false)
         {
             MaxFog = (float)Math.Max(1, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 2) * 2.00f);
-            MinFog = (float)Math.Max(0, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 3) * 2.00f);
+            MinFog = (float)Math.Max(0, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 4) * 2.00f);
 
             if (Math.Abs(_activeChunks - _targetActivechunks) > .05f || Force)
             {
@@ -65,13 +67,26 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.UpdateFog();
         }
 
-        private IEnumerator UpdateCoroutine()
+        private IEnumerator UpdateChunkCoroutine()
         {
             while (GameManager.Exists)
             {
+                for (var i = _chunkWatchers.Count - 1; i > -1; i--)
+                {
+                    _chunkWatchers[i].Update();
+                    if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
+                }
+                yield return null;
+            }
+        }
 
+        private IEnumerator CreateChunksCoroutine()
+        {
+            var creationTimer = new Timer(0.1f);
+            while (GameManager.Exists)
+            {
                 Offset = World.ToChunkSpace(_player.BlockPosition);
-                if (World.IsGenerated && Enabled)
+                if (World.IsGenerated && Enabled && creationTimer.Tick())
                 {
                     var hadChanges = false;
                     var stopCounting = false;
@@ -81,22 +96,18 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     {
                         var obj = World.GetChunkByOffset(_candidates[i].Xz);
                         if (obj == null || !obj.BuildedWithStructures || obj.Disposed) stopCounting = true;
-                        if(!stopCounting) newTarget++;
+                        if (!stopCounting) newTarget++;
                         if (obj != null) continue;
                         var chunk = new Chunk((int) _candidates[i].X, (int) _candidates[i].Z);
                         World.AddChunk(chunk);
                         var watcher = new ChunkWatcher(chunk);
                         watcher.OnChunkReady += O => OnChunkReady?.Invoke(O);
-                        _chunkWatchers.Add(watcher);                  
+                        _chunkWatchers.Add(watcher);
                     }
+
                     _targetActivechunks = newTarget;
                 }
-                yield return null;
-                for (var i = _chunkWatchers.Count - 1; i > -1; i--)
-                {
-                    _chunkWatchers[i].Update();
-                    if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
-                }
+
                 yield return null;
             }
         }
