@@ -304,20 +304,6 @@ namespace Hedra.Engine.EntitySystem
                 for(var i = _collisions.Count-1; i > -1; i--)
                 {
                     Box box = parentBox.Cache;
-                    if (onlyY)
-                    {
-                        /*box = parentBox.Cache;
-                        box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) - Vector3.UnitY * .25f;
-                        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + Vector3.UnitY * .25f;
-                        if (_collisions[i].Height < Parent.Model.Height * .5)
-                        {
-                            if (Physics.Collides(box, _collisions[i]))
-                            {
-                                //Parent.BlockPosition += Vector3.UnitY * Parent.Model.Height * .05f;
-                                //Parent.IsGrounded = false;
-                            }
-                        }*/
-                    }
 
                     if (!onlyY)
                     {
