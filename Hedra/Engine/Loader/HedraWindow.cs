@@ -13,6 +13,7 @@ namespace Hedra.Engine
         private IGraphicsContext _glContext;
         private bool _isExiting;
         private readonly Stopwatch _watch;
+        private SpinWait _spinner;
         public double TargetFramerate { get; set; }
 
         protected HedraWindow(int Width, int Height, GraphicsMode Mode, string Title, GameWindowFlags Options,
@@ -22,6 +23,7 @@ namespace Hedra.Engine
             try
             {
                 _watch = new Stopwatch();
+                _spinner = new SpinWait();
                 _glContext = new GraphicsContext(Mode, WindowInfo, Major, Minor, Flags);
                 _glContext.MakeCurrent(WindowInfo);
                 _glContext.LoadAll();
@@ -118,7 +120,7 @@ namespace Hedra.Engine
                     this.DispatchRenderFrame(time);
                     while (_watch.Elapsed.TotalSeconds - lastTick < TargetFramerate)
                     {
-                        Thread.Sleep(1);
+                        _spinner.SpinOnce();
                     }
                 }
             }

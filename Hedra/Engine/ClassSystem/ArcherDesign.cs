@@ -16,6 +16,7 @@ namespace Hedra.Engine.ClassSystem
         public override Item StartingItem => ItemPool.Grab(CommonItems.CommonWoodenBow);
         public override float AttackResistance => 0.975f;
         public override float MaxStamina => 115;
+        public override float BaseDamage => 2.75f;
 
         public override float MaxHealthFormula(float RandomFactor)
         {

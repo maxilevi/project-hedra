@@ -28,6 +28,7 @@ namespace Hedra.Engine.ClassSystem
         public abstract Item StartingItem { get; }
         public abstract float AttackResistance { get; }
         public abstract float MaxStamina { get; }
+        public abstract float BaseDamage { get; }
 
         public abstract float MaxHealthFormula(float RandomFactor);
         public abstract float MaxManaFormula(float RandomFactor);

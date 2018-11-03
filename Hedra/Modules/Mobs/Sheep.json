@@ -1,7 +1,7 @@
 ﻿{
   "Name" : "Sheep", 
   "MaxHealth": 150.0,
-  "AttackDamage": 1.0,
+  "AttackDamage": 2.0,
   "Speed": 1.2,
   "XP": 1.4,
   "Level": 2,

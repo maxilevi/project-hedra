@@ -8,67 +8,78 @@ using NUnit.Framework;
 namespace HedraTests.Game
 {
     [TestFixture]
-    public class ItemBalanceTest
+    public class WeaponBalanceTest
     {
-        private readonly ItemBalanceSheet _sheet = new ItemBalanceSheet();
+        private readonly WeaponBalanceSheet _sheet = new WeaponBalanceSheet();
         
-        [TestCaseSource(typeof(ItemBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Bow })]
+        [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Bow })]
         public void TestBowDamage(Item Weapon)
         {
             AssertComplies(Weapon, _sheet.BowDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
         }
         
-        [TestCaseSource(typeof(ItemBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Sword })]
+        [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Sword })]
         public void TestSwordDamage(Item Weapon)
         {
             AssertComplies(Weapon, _sheet.SwordDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
         }
         
-        [TestCaseSource(typeof(ItemBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Hammer })]
+        [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Hammer })]
         public void TestHammerDamage(Item Weapon)
         {
             AssertComplies(Weapon, _sheet.HammerDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
         }
 
-        [TestCaseSource(typeof(ItemBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Axe })]
+        [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Axe })]
         public void TestAxeDamage(Item Weapon)
         {
             AssertComplies(Weapon, _sheet.AxeDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
         }
         
-        [TestCaseSource(typeof(ItemBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Knife })]
+        [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Knife })]
         public void TestKnifeDamage(Item Weapon)
         {
             AssertComplies(Weapon, _sheet.KnifeDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
         }
         
-        [TestCaseSource(typeof(ItemBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Claw })]
+        [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Claw })]
         public void TestClawDamage(Item Weapon)
         {
             AssertComplies(Weapon, _sheet.ClawDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
         }
         
-        [TestCaseSource(typeof(ItemBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Katar })]
+        [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Katar })]
         public void TestKatarDamage(Item Weapon)
         {
             AssertComplies(Weapon, _sheet.KatarDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
         }
         
-        [TestCaseSource(typeof(ItemBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.DoubleBlades })]
+        [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.DoubleBlades })]
         public void TestBladesDamage(Item Weapon)
         {
             AssertComplies(Weapon, _sheet.BladesDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
         }
+        
         /*
-        [TestCaseSource(typeof(ItemBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Staff })]
-        public void TestStaffDamage(Item Weapon)
+            [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Staff })]
+            public void TestStaffDamage(Item Weapon)
+            {
+                AssertComplies(Weapon, _sheet.StaffDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
+            }
+         */
+        
+        
+        [TestCaseSource(nameof(AllWeapons))]
+        public void TestWeaponsAttackSpeed(Item Weapon)
         {
-            AssertComplies(Weapon, _sheet.StaffDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
+            int a = 0;
+            AssertComplies(Weapon, _sheet.ItemAttackSpeed, () => Weapon.GetAttribute<float>(CommonAttributes.AttackSpeed));
         }
-        */
+        
+        
         private static void AssertComplies(Item Item, UniqueBalanceEntry Entry, Func<float> Lambda)
         {
-            var multiplier = Entry.ScaleWithLevel ? ((int) Item.Tier) * .35f + 1 : 1;
+            var multiplier = Entry.ScaleWithLevel ? ((int) Item.Tier) * .5f + 1 : 1;
             var val = Lambda();
             var max = Entry.Max * multiplier;
             var min = Entry.Min * multiplier;

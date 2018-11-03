@@ -210,27 +210,8 @@ namespace Hedra.Engine.Loader
                     }
                 }
                 var collisions = new List<ICollidable>();
-                var collisions2 = new List<ICollidable>();
-
-                //Chunk UnderChunk = World.GetChunkAt(Player.BlockPosition);
-                var underChunkR = World.GetChunkAt(player.Position + new Vector3(Chunk.Width, 0, 0));
-                var underChunkL = World.GetChunkAt(player.Position - new Vector3(Chunk.Width, 0, 0));
-                var underChunkF = World.GetChunkAt(player.Position + new Vector3(0, 0, Chunk.Width));
-                var underChunkB = World.GetChunkAt(player.Position - new Vector3(0, 0, Chunk.Width));
-
-                collisions.AddRange(World.GlobalColliders);
                 if (player.NearCollisions != null)
                     collisions.AddRange(player.NearCollisions);
-                if (underChunk != null)
-                    collisions.AddRange(underChunk.CollisionShapes);
-                if (underChunkL != null)
-                    collisions2.AddRange(underChunkL.CollisionShapes);
-                if (underChunkR != null)
-                    collisions2.AddRange(underChunkR.CollisionShapes);
-                if (underChunkF != null)
-                    collisions2.AddRange(underChunkF.CollisionShapes);
-                if (underChunkB != null)
-                    collisions2.AddRange(underChunkB.CollisionShapes);
 
                 for (int i = 0; i < collisions.Count; i++)
                 {
@@ -246,12 +227,6 @@ namespace Hedra.Engine.Loader
                             : Colors.Red);
                 }
 
-                for (int i = 0; i < collisions2.Count; i++)
-                {
-                    if( collisions2[i] is CollisionShape shape){
-                        BasicGeometry.DrawShape(shape, Colors.Yellow);
-                    }
-                }
                 if (false)
                 {
                     BasicGeometry.DrawLine(player.Position + Vector3.UnitZ * 2f, player.Position + Vector3.UnitZ * 4f,

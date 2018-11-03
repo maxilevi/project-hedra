@@ -7,11 +7,11 @@
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 7.0
+      "Value": 10.5
     },
     {
       "Name": "AttackSpeed",
-      "Value": -0.1
+      "Value": 0.9
     }
   ],
   "Model": {

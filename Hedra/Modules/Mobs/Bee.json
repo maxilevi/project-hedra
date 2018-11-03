@@ -1,7 +1,7 @@
 ﻿{
   "Name" : "Bee", 
   "MaxHealth": 168.0,
-  "AttackDamage": 1.5,
+  "AttackDamage": 2.5,
   "Speed": 1.35,
   "XP": 2.0,
   "Level": 3,
@@ -11,8 +11,8 @@
     {
       "Name": "Poison",
       "Chance": 15.0,
-      "Damage": 8.0,
-      "Duration": 5.0
+      "Damage": 16.0,
+      "Duration": 4.0
     }
   ],
   
@@ -20,7 +20,7 @@
   
   "Model": {
     "Path": "$DataFile$/Assets/Chr/BeeIdle.dae",
-    "Scale": 0.75,
+    "Scale": 1.5,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/BeeIdle.dae",

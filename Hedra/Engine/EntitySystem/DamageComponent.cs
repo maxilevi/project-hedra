@@ -90,14 +90,14 @@ namespace Hedra.Engine.EntitySystem
             if (!Parent.IsStatic && PlaySound && (GameManager.Player.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
             {
                 var asHuman = Damager as Humanoid;
-                var baseDamage = Damager != null ? asHuman?.UnRandomizedDamageEquation 
+                var baseDamage = Damager != null ? asHuman?.BaseDamageEquation 
                     ?? (Damager.SearchComponent<BasicAIComponent>() != null ? Damager.AttackDamage : Amount) : Amount / 3f;
-                Color color = Color.White;
-                float dmgDiff = Amount / baseDamage;
+                var color = Color.White;
+                var dmgDiff = Amount / baseDamage;
                 if (dmgDiff > 1.85f) color = Color.Gold;
                 if (dmgDiff > 2.25f) color = Color.Red;
                 if (Immune || shouldMiss) color = Color.White;
-                var font = FontCache.Get(AssetManager.BoldFamily, 12 + 12 * dmgDiff, FontStyle.Bold);
+                var font = FontCache.Get(AssetManager.BoldFamily, 12 + 6 * dmgDiff, FontStyle.Bold);
                 var dmgString = ((int) Amount).ToString();
                 var missString = Immune ? "IMMUNE" : "MISS";
                 var dmgLabel = new Billboard(1.8f, !Immune && !shouldMiss ? dmgString : missString, color,

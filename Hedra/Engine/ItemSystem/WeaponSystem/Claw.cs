@@ -44,13 +44,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(AttackEventType.Mid != Type) return;
-            Owner.Attack(Owner.DamageEquation * .8f);
+            Owner.Attack(Owner.DamageEquation);
         }
         
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;
-            Owner.Attack(Owner.DamageEquation * 1.10f * Options.DamageModifier, delegate (Entity Mob)
+            Owner.Attack(Owner.DamageEquation * 2.0f * Options.DamageModifier, delegate (Entity Mob)
             {
 
                 if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .75f)

@@ -32,6 +32,7 @@ namespace Hedra.Engine.Player
     public class Humanoid : Entity, IHumanoid
     {
         public const int MaxLevel = 99;
+        public const int MaxConsecutiveHits = 45;
         public const float DefaultDodgeCost = 25;
         public event OnHitLandedEventHandler OnHitLanded;
         public IMessageDispatcher MessageDispatcher { get; set; }
@@ -129,18 +130,18 @@ namespace Hedra.Engine.Player
 
         public Humanoid()
         {
-            this._consecutiveHitsTimer = new Timer(3f);
-            this.MessageDispatcher = new DummyMessageDispatcher();
-            this.HandLamp = new HandLamp(this);
-            this.Movement = new MovementManager(this);
-            this.DmgComponent = new DamageComponent(this);
-            this.RandomFactor = NewRandomFactor();
-            this.Physics.CanCollide = true;
-            this.DodgeCost = DefaultDodgeCost;
-            this.AttackPower = 1f;
-            this.Speed = this.BaseSpeed;
-            this.MobType = MobType.Human;
-            this.AddComponent(DmgComponent);
+            _consecutiveHitsTimer = new Timer(3f);
+            MessageDispatcher = new DummyMessageDispatcher();
+            HandLamp = new HandLamp(this);
+            Movement = new MovementManager(this);
+            DmgComponent = new DamageComponent(this);
+            RandomFactor = NewRandomFactor();
+            Physics.CanCollide = true;
+            DodgeCost = DefaultDodgeCost;
+            AttackPower = 1f;
+            Speed = this.BaseSpeed;
+            MobType = MobType.Human;
+            AddComponent(DmgComponent);
         }
 
         public override void Update()
@@ -229,8 +230,8 @@ namespace Hedra.Engine.Player
             else
             {
                 _consecutiveHitsTimer.Reset();
-                ConsecutiveHits++;
-                int consecutiveHitsValue = ConsecutiveHits;
+                ConsecutiveHits = Math.Min(MaxConsecutiveHits, ++ConsecutiveHits);
+                var consecutiveHitsValue = ConsecutiveHits;
                 this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier * .5f, () => ConsecutiveHits == consecutiveHitsValue);
                 Mana = Mathf.Clamp(Mana + 8, 0, MaxMana);
                 OnHitLanded?.Invoke(this, ConsecutiveHits);
@@ -303,13 +304,11 @@ namespace Hedra.Engine.Player
 
         public float UnRandomizedDamageEquation => BaseDamageEquation * (1f + ConsecutiveHitsModifier);
         
-        public float BaseDamageEquation => (4 + this.Level * 0.08f * this.AttackPower) * this.WeaponModifier(MainWeapon);
+        public float BaseDamageEquation => (Class.BaseDamage + this.Level * 0.08f * this.AttackPower) + this.WeaponModifier(MainWeapon);
 
         public float WeaponModifier(Item Weapon)
         {
-            if (Weapon == null) return 1.0f;
-            var tierModifier = 1.0f + (int)Weapon.Tier / ((int)ItemTier.Divine + 1.0f) * .0f;
-            return (Weapon.GetAttribute<float>(CommonAttributes.Damage) * tierModifier) / 40.0f + 1.0f;
+            return Weapon?.GetAttribute<float>(CommonAttributes.Damage) ?? 0.0f;
         }
 
         public float AttackSpeed

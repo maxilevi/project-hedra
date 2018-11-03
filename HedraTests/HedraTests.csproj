@@ -74,8 +74,8 @@
     <Compile Include="Game\BalanceEntry.cs" />
     <Compile Include="Game\HumanoidBalanceSheet.cs" />
     <Compile Include="Game\HumanoidBalanceTest.cs" />
-    <Compile Include="Game\ItemBalanceSheet.cs" />
-    <Compile Include="Game\ItemBalanceTest.cs" />
+    <Compile Include="Game\WeaponBalanceSheet.cs" />
+    <Compile Include="Game\WeaponBalanceTest.cs" />
     <Compile Include="Game\MobBalanceSheet.cs" />
     <Compile Include="Game\MobBalanceTest.cs" />
     <Compile Include="Game\SkillBalanceSheet.cs" />

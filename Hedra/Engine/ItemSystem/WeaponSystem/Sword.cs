@@ -61,7 +61,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
-            Owner.Attack(Owner.DamageEquation * 1.10f * Options.DamageModifier, delegate(Entity Mob)
+            Owner.Attack(Owner.DamageEquation * 1.15f * Options.DamageModifier, delegate(Entity Mob)
             {
                 if (Utils.Rng.Next(0, 5) == 1 && Options.DamageModifier > .5f)
                     Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);

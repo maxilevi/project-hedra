@@ -84,7 +84,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public override float Height => BaseBroadphaseBox.Max.Y - BaseBroadphaseBox.Min.Y;
+        public override float Height => BaseBroadphaseBox.Max.Y;
 
         public override bool Pause
         {
