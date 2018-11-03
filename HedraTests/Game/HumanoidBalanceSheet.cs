@@ -19,8 +19,8 @@ namespace HedraTests.Game
             Min1 = 3,
             Max1 = 9,
             
-            Min50 = 6,
-            Max50 = 14,
+            Min50 = 7,
+            Max50 = 15,
             
             Min99 = 12,
             Max99 = 16,
@@ -31,23 +31,23 @@ namespace HedraTests.Game
             Min1 = 4.5f,
             Max1 = 12,
             
-            Min50 = 8,
-            Max50 = 14,
+            Min50 = 10,
+            Max50 = 16,
             
-            Min99 = 11,
-            Max99 = 18,
+            Min99 = 13,
+            Max99 = 20,
         };
         
         public BalanceEntry HumanoidDamageWithBestWeapons { get; } = new BalanceEntry
         {
-            Min1 = 6,
-            Max1 = 13,
+            Min1 = 8,
+            Max1 = 15,
             
-            Min50 = 11,
-            Max50 = 18,
+            Min50 = 12,
+            Max50 = 19,
             
-            Min99 = 14,
-            Max99 = 21,
+            Min99 = 17,
+            Max99 = 24,
         };
         
         public BalanceEntry HumanoidSpeed { get; } = new BalanceEntry
