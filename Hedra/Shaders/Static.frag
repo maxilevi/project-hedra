@@ -16,6 +16,7 @@ in vec3 LightDir;
 in float Depth;
 in float CastShadows;
 in float DitherVisibility;
+in vec3 base_vertex_position;
 
 layout(location = 0)out vec4 OutColor; 
 layout(location = 1)out vec4 OutPosition;
@@ -54,7 +55,7 @@ void main()
 	{
         if (DitherVisibility - ditherMat[int(gl_FragCoord.x) % 4][int(gl_FragCoord.y) % 4] < 0.0) discard;
 	}
-    vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, InPos.xyz).r;
+    vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, base_vertex_position).r;
     vec4 output_color = Color + vec4(tex, 0.0);
     vec3 output_pointlight_color = pointlight_color * (raw_color.xyz + tex * 10.0);
 

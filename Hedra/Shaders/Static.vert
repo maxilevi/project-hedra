@@ -21,6 +21,7 @@ out vec4 Coords;
 out vec3 LightDir;
 out float CastShadows;
 out float DitherVisibility;
+out vec3 base_vertex_position;
 
 layout(std140) uniform FogSettings {
 	vec4 U_BotColor;
@@ -64,12 +65,14 @@ vec2 Unpack(float inp, int prec)
     return outp / (prec - 1.0);
 }
 
-void main(){
+void main()
+{
     vec4 linear_color = srgb_to_linear(InColor); 
 	float Config = InColor.a;
 	CastShadows = InColor.a;
 	vec3 unitToLight = normalize(LightPosition);
 	vec4 Vertex = vec4((InVertex + BakedOffset) * Scale + Offset, 1.0);
+	base_vertex_position = Vertex.xyz;
 	
 	float config_set = when_ge(InColor.a, 0.0) * Fancy; //If configuration is set
 	vec2 Unpacked = Unpack(InColor.a, int(2048.0));
