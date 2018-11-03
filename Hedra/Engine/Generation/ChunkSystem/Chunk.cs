@@ -559,7 +559,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Landscape.Dispose();
                 Landscape = null;
             }
-            _blocks = null;
+            lock (_blocksLock)
+                _blocks = null;
         }
 
         private IEnumerator DisposeCoroutine()
