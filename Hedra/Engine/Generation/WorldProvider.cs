@@ -135,9 +135,11 @@ namespace Hedra.Engine.Generation
 
         public void CullTest(FrustumCulling FrustumObject)
         {
-            if (_previousModelView == FrustumObject.ModelViewMatrix &&
-                GameManager.Player.Loader.ActiveChunks == _previousCount)
-                return;
+            if ((_previousModelView.Column0 - FrustumObject.ModelViewMatrix.Column0).Length < 0.005f
+                && (_previousModelView.Column1 - FrustumObject.ModelViewMatrix.Column1).Length < 0.005f
+                && (_previousModelView.Column2 - FrustumObject.ModelViewMatrix.Column2).Length < 0.005f
+                && (_previousModelView.Column3 - FrustumObject.ModelViewMatrix.Column3).Length < 0.005f
+                && GameManager.Player.Loader.ActiveChunks == _previousCount) return;
 
             DrawingChunks.Clear();
             ShadowDrawingChunks.Clear();
