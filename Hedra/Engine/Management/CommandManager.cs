@@ -30,173 +30,158 @@ namespace Hedra.Engine.Management
     public static class CommandManager
     {
         
-        public static bool ProcessCommand(string Command, Entity Caster, out string Result){
+        public static bool ProcessCommand(string Command, IPlayer Caster, out string Result){
             try
             {
                 Result = string.Empty;
                 Command = Command.Remove(0,1);
                 string[] Parts = Command.Split(' ');
-                if(Parts[0] == "tp"){
-                    if(Parts[1] == "merchant"){
-                        if(World.StructureHandler.MerchantPosition != Vector3.Zero)
-                            Caster.BlockPosition = World.StructureHandler.MerchantPosition - Vector3.One.Xz.ToVector3() * 8;
-                        else 
-                            return false;
-                    }
-                    float x, y, z;
-                    if(float.TryParse(Parts[1], out x)){
-                           float.TryParse(Parts[2], out y);
-                           float.TryParse(Parts[3], out z);
-                           Caster.BlockPosition = new Vector3(x,y,z);
-                    }
-                    return true;
-                }
-                if (Parts[0] == "spit")
+                switch (Parts[0])
                 {
-                    var proj = new ParticleProjectile(Caster, Caster.Position)
+                    case "tp":
                     {
-                        Propulsion = Caster.Orientation * 2f,
-                        Color = Color.LawnGreen.ToVector4() * .85f,
-                        UseLight = false
-                    };
-                    return true;
-                }
-                if (Parts[0] == "hurt")
-                {
-                    GameManager.Player.SearchComponent<DamageComponent>().Immune = false;
-                    GameManager.Player.Damage(float.Parse(Parts[1]), null, out float exp);
-                }
-                if (Parts[0] == "debug")
-                {
-                    GameSettings.DebugMode = !GameSettings.DebugMode;          
-                }
-                if (Parts[0] == "mana")
-                {
-                    GameManager.Player.Mana = GameManager.Player.MaxMana;
-                }
-                if (Parts[0] == "icon")
-                {
-                    Caster.ShowIcon((CacheItem) Enum.Parse(typeof(CacheItem), Parts[1]));
-                }
-                if (Parts[0] == "track")
-                {
-                    SoundtrackManager.PlayTrack(int.Parse(Parts[1]), false);
-                    return true;
-                }
-                if (Parts[0] == "cfg")
-                {
-                    var variable = Parts[1];
-                    var prop = typeof(GameSettings).GetProperty(variable, BindingFlags.Public | BindingFlags.Static);
-                    if (Parts.Length > 2)
-                    {
-                        prop.SetValue(null, Convert.ChangeType(Parts[2], prop.PropertyType), null);
-                    }
-                    Result = $"{variable} = {prop.GetValue(null, null).ToString()}";
-                    return true;
-                }
-                if (Parts[0] == "spawningEffect")
-                {
-                    GameManager.SpawningEffect = true;
-                    return true;
-                }
-                if (Parts[0] == "hide")
-                {
-                    LocalPlayer.Instance.Model.Enabled = !LocalPlayer.Instance.Model.Enabled;
+                        if(Parts[1] == "merchant"){
+                            if(World.StructureHandler.MerchantPosition != Vector3.Zero)
+                                Caster.BlockPosition = World.StructureHandler.MerchantPosition - Vector3.One.Xz.ToVector3() * 8;
+                            else 
+                                return false;
+                        }
 
-                }
-                if (Parts[0] == "bloom")
-                {
-                    GameSettings.Bloom = !GameSettings.Bloom;
-                }
-                if(Parts[0] == "kill")
-                {
-                    if (Parts.Length == 1) LocalPlayer.Instance.Health = 0f;
-                    return true;
-                }
-
-                if (Parts[0] == "logItems")
-                {
-                    for (var i = 0; i < LocalPlayer.Instance.Inventory.Length; i++)
-                    {
-                        if(LocalPlayer.Instance.Inventory[i] != null)
-                            Log.WriteLine($" {i} {LocalPlayer.Instance.Inventory[i]}");
-                    }
-                    return true;
-                }
-                if (Parts[0] == "rain")
-                {
-                    SkyManager.Weather.IsRaining = true;
-                    return true;
-                }
-                if (Parts[0] == "sunny")
-                {
-                    SkyManager.Weather.IsRaining = false;
-                    return true;
-                }
-                if (Parts[0] == "xp"){
-                    LocalPlayer.Instance.XP += float.Parse(Parts[1]);
-                    return true;
-                }
-                if (Parts[0] == "xp"){
-                    LocalPlayer.Instance.XP += float.Parse(Parts[1]);
-                    return true;
-                }
-                if (Parts[0] == "list")
-                {
-                    if (Parts[1] == "items")
-                    {
-                        Result = string.Join(Environment.NewLine, ItemFactory.Templater.Templates.Select(T => T.Name));
+                        if (float.TryParse(Parts[1], out var x))
+                        {
+                            float.TryParse(Parts[2], out var y);
+                            float.TryParse(Parts[3], out var z);
+                            Caster.BlockPosition = new Vector3(x,y,z);
+                        }
                         return true;
                     }
+                    case "spit":
+                    {
+                        var proj = new ParticleProjectile(Caster, Caster.Position)
+                        {
+                            Propulsion = Caster.Orientation * 2f,
+                            Color = Color.LawnGreen.ToVector4() * .85f,
+                            UseLight = false
+                        };
+                        return true;
+                    }
+                    case "hurt":
+                        Caster.SearchComponent<DamageComponent>().Immune = false;
+                        Caster.Damage(float.Parse(Parts[1]), null, out float exp);
+                        break;
+
+                    case "debug":
+                        GameSettings.DebugMode = !GameSettings.DebugMode;
+                        break;
+
+                    case "mana":
+                        Caster.Mana = Caster.MaxMana;
+                        break;
+
+                    case "icon":
+                        Caster.ShowIcon((CacheItem) Enum.Parse(typeof(CacheItem), Parts[1]));
+                        break;
+
+                    case "track":
+                        SoundtrackManager.PlayTrack(int.Parse(Parts[1]), false);
+                        return true;
+                    case "cfg":
+                    {
+                        var variable = Parts[1];
+                        var prop = typeof(GameSettings).GetProperty(variable, BindingFlags.Public | BindingFlags.Static);
+                        if (Parts.Length > 2)
+                        {
+                            prop.SetValue(null, Convert.ChangeType(Parts[2], prop.PropertyType), null);
+                        }
+                        Result = $"{variable} = {prop.GetValue(null, null).ToString()}";
+                        return true;
+                    }
+                    case "spawningEffect":
+                        GameManager.SpawningEffect = true;
+                        return true;
+                    case "hide":
+                        Caster.Model.Enabled = !Caster.Model.Enabled;
+                        break;
+  
+                    case "bloom":
+                        GameSettings.Bloom = !GameSettings.Bloom;
+                        break;
+                    case "kill":
+                    {
+                        if (Parts.Length == 1) Caster.Health = 0f;
+                        return true;
+                    }
+                    case "logItems":
+                    {
+                        for (var i = 0; i < Caster.Inventory.Length; i++)
+                        {
+                            if(Caster.Inventory[i] != null)
+                                Log.WriteLine($" {i} {Caster.Inventory[i]}");
+                        }
+                        return true;
+                    }
+                    case "rain":
+                        SkyManager.Weather.IsRaining = true;
+                        return true;
+                    case "sunny":
+                        SkyManager.Weather.IsRaining = false;
+                        return true;
+                    case "xp":
+                        Caster.XP += float.Parse(Parts[1]);
+                        return true;
+                    case "list" when Parts[1] == "items":
+                        Result = string.Join(Environment.NewLine, ItemFactory.Templater.Templates.Select(T => T.Name));
+                        return true;
                 }
+
                 if (Parts[0] == "lvl")
                 {
-                    LocalPlayer.Instance.Level = int.Parse(Parts[1]);
+                    Caster.Level = int.Parse(Parts[1]);
                     return true;
                 }
 
                 if (Parts[0] == "speed"){
-                    LocalPlayer.Instance.Speed += float.Parse(Parts[1]);
+                    Caster.Speed += float.Parse(Parts[1]);
                     return true;
                 }
                 if (Parts[0] == "attackspeed")
                 {
-                    LocalPlayer.Instance.AttackSpeed = float.Parse(Parts[1]);
+                    Caster.AttackSpeed = float.Parse(Parts[1]);
                     return true;
                 }
                 if (Parts[0] == "dmg"){
-                    GameManager.Player.AttackPower += float.Parse(Parts[1]);
+                    Caster.AttackPower += float.Parse(Parts[1]);
                     return true;
                 }
                 if (Parts[0] == "drop")
                 {
                     if (Parts[1] == "coin")
                     {
-                        World.DropItem(ItemPool.Grab(ItemType.Gold), LocalPlayer.Instance.Position + LocalPlayer.Instance.Orientation * 16f);
+                        World.DropItem(ItemPool.Grab(ItemType.Gold), Caster.Position + Caster.Orientation * 16f);
                         return true;
                     }
                 }
                 
                 if(Parts[0] == "sit")
                 {
-                    LocalPlayer.Instance.IsSitting = !LocalPlayer.Instance.IsSitting;
+                    Caster.IsSitting = !Caster.IsSitting;
                     return true;
                 }
                 
                 if(Parts[0] == "tie")
                 {
-                    LocalPlayer.Instance.IsTied = !LocalPlayer.Instance.IsTied;
+                    Caster.IsTied = !Caster.IsTied;
                     return true;
                 }
                 if (Parts[0] == "spawnAnimation")
                 {
-                    LocalPlayer.Instance.PlaySpawningAnimation = true;
+                    Caster.PlaySpawningAnimation = true;
                     return true;
                 }
 
                 if (Parts[0] == "greet")
                 {
-                    GameManager.Player.Greet();
+                    Caster.Greet();
                     return true;
                 }
                 if (Parts[0] == "seed")
@@ -204,104 +189,106 @@ namespace Hedra.Engine.Management
                     Result = World.Seed.ToString();
                     return true;
                 }
-                if(Parts[0] == "get"){
+                if(Parts[0] == "get")
+                {
                     if (Parts[1] == "attackspeed")
                     {
-                        Result = LocalPlayer.Instance.AttackSpeed.ToString(CultureInfo.InvariantCulture);
+                        Result = Caster.AttackSpeed.ToString(CultureInfo.InvariantCulture);
                         return true;
                     }
                     if (Parts[1] == "item")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(Parts[2]));
+                        Caster.Inventory.AddItem(ItemPool.Grab(Parts[2]));
                     }
                     if (Parts[1] == "sword")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int) ItemTier.Divine), EquipmentType.Sword)));
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int) ItemTier.Divine), EquipmentType.Sword)));
                     }
                     if (Parts[1] == "axe")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Axe)));
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Axe)));
                     }
                     if (Parts[1] == "katar")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Katar)));
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Katar)));
                     }
                     if (Parts[1] == "hammer")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Hammer)));
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Hammer)));
                     }
                     if (Parts[1] == "claw")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Claw)));
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Claw)));
                     }
                     if (Parts[1] == "blades")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.DoubleBlades)));
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.DoubleBlades)));
                     }
                     if (Parts[1] == "bow")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Bow)));
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Bow)));
                     }
                     if (Parts[1] == "knife")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Knife)));
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Knife)));
                     }
                     if (Parts[1] == "ring")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Ring)));
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Ring)));
                     }
                     if (Parts[1] == "glider")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(ItemType.Glider));
+                        Caster.Inventory.AddItem(ItemPool.Grab(ItemType.Glider));
                     }
                     if (Parts[1] == "boat")
                     {
-                        LocalPlayer.Instance.Inventory.AddItem(ItemPool.Grab(ItemType.Boat));
+                        Caster.Inventory.AddItem(ItemPool.Grab(ItemType.Boat));
                     }
                     if (Parts[1] == "gold")
                     {
                         var item = ItemPool.Grab(ItemType.Gold);
                         item.SetAttribute(CommonAttributes.Amount, int.Parse(Parts[2]));
-                        LocalPlayer.Instance.Inventory.AddItem(item);
+                        Caster.Inventory.AddItem(item);
                     }
                     Result = $"Giving item {Parts[1].ToUpperInvariant()} to {Caster.Name}";
                     return true;
                 }
                 if(Parts[0] == "time"){
-                    if(Parts[1] == "speed"){
-                        EnvironmentSystem.SkyManager.DaytimeSpeed = int.Parse(Parts[2]);
+                    if(Parts[1] == "speed")
+                    {
+                        SkyManager.DaytimeSpeed = int.Parse(Parts[2]);
                         return true;
                     }
-                    EnvironmentSystem.SkyManager.SetTime(int.Parse(Parts[1]));
+                    SkyManager.SetTime(int.Parse(Parts[1]));
                     return true;
                 }
                 if (Parts[0] == "poison")
                 {
-                    LocalPlayer.Instance.AddComponent(new PoisonComponent(LocalPlayer.Instance, null, 5f, 30f));
+                    Caster.AddComponent(new PoisonComponent(Caster, null, 5f, 30f));
                 }
                 if (Parts[0] == "freeze")
                 {
-                    LocalPlayer.Instance.AddComponent(new FreezingComponent(LocalPlayer.Instance, null, 5f, 30f));
+                    Caster.AddComponent(new FreezingComponent(Caster, null, 5f, 30f));
                 }
                 if (Parts[0] == "bleed")
                 {
-                    LocalPlayer.Instance.AddComponent(new BleedingComponent(LocalPlayer.Instance, null, 5f, 30f));
+                    Caster.AddComponent(new BleedingComponent(Caster, null, 5f, 30f));
                 }
                 if (Parts[0] == "slow")
                 {
-                    LocalPlayer.Instance.AddComponent(new SlowingComponent(LocalPlayer.Instance, null, 5f, 30f));
+                    Caster.AddComponent(new SlowingComponent(Caster, null, 5f, 30f));
                 }
                 if (Parts[0] == "fast")
                 {
-                    LocalPlayer.Instance.AddComponent(new SpeedComponent(LocalPlayer.Instance));
+                    Caster.AddComponent(new SpeedComponent(Caster));
                 }
                 if (Parts[0] == "burn")
                 {
-                    LocalPlayer.Instance.AddComponent(new BurningComponent(LocalPlayer.Instance, null, 5f, 30f));
+                    Caster.AddComponent(new BurningComponent(Caster, null, 5f, 30f));
                 }
                 if (Parts[0] == "knock")
                 {
-                    LocalPlayer.Instance.KnockForSeconds(float.Parse(Parts[1]));
+                    Caster.KnockForSeconds(float.Parse(Parts[1]));
                 }
                 if (Parts[0] == "audiotest")
                 {
@@ -315,12 +302,15 @@ namespace Hedra.Engine.Management
                 {
                     return true;
                 }
-                if (Parts[0] == "spawn"){
-                    if(Parts[1] == "bandit"){
+                if (Parts[0] == "spawn")
+                {
+                    if(Parts[1] == "bandit")
+                    {
                         World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, false);
                         return true;
                     }
-                    if(Parts[1] == "plantling"){
+                    if(Parts[1] == "plantling")
+                    {
                         World.WorldBuilding.SpawnHumanoid(HumanType.Mandragora, Caster.Position + Caster.Orientation * 32);
                         return true;
                     }

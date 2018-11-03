@@ -25,8 +25,8 @@ namespace Hedra.Engine.Player
     /// </summary>
     public class Chat
     {
-        public bool Focused {get; set;}
-        private readonly LocalPlayer _player;
+        public bool Focused { get; set ;}
+        private readonly IPlayer _player;
         private readonly TextField _commandLine;
         private readonly GUIText _textBox;
         private readonly Vector2 _textBoxPosition = new Vector2(-0.95f, -.65f);
@@ -36,7 +36,7 @@ namespace Hedra.Engine.Player
 
         public Chat(LocalPlayer Player){
             this._player = Player;
-            Vector2 barPosition = new Vector2(-0.95f, -0.75f);
+            var barPosition = new Vector2(-0.95f, -0.75f);
             this._commandLine = new TextField(barPosition + Vector2.UnitX * .225f, new Vector2(.225f,.02f), _inPanel, false);
             this._textBox = new GUIText(string.Empty, _textBoxPosition, Color.White, FontCache.Get(AssetManager.NormalFamily, 10));
             _inPanel.AddElement(this._textBox);
@@ -57,20 +57,22 @@ namespace Hedra.Engine.Player
             }
         }
         
-        public void PushText(){
+        public void PushText()
+        {
 
             if(_commandLine.Text.Length >= 1 && _commandLine.Text[0] == '/')
             {
-                string response;
-                if (CommandManager.ProcessCommand(_commandLine.Text, _player, out response))
+                if (CommandManager.ProcessCommand(_commandLine.Text, _player, out string response))
                     SoundManager.PlaySound(SoundType.NotificationSound, _player.Position);
                 this.AddLine(response);
                 _lastInput = _commandLine.Text;
-            }else{
-                if(_commandLine.Text != string.Empty){
-                    //It's normal text
+            }
+            else
+            {
+                if(_commandLine.Text != string.Empty)
+                {
                     _lastInput = _commandLine.Text;
-                    string outText = _player.Name+": "+WordFilter.Filter(_commandLine.Text);
+                    var outText = _player.Name+": "+WordFilter.Filter(_commandLine.Text);
                     this.AddLine(outText);
                     Networking.NetworkManager.SendChatMessage(outText);
                 }
@@ -80,41 +82,49 @@ namespace Hedra.Engine.Player
             
         }
         
-        public void AddLine(string NewLine){
-            string[] Lines = _textBox.Text.Split( Environment.NewLine.ToCharArray() );
-            int LineCount = 0;
-            for(int i = 0; i < Lines.Length; i++){
-                if(Lines[i] != string.Empty && Lines[i] != Environment.NewLine)
-                    LineCount++;
+        public void AddLine(string NewLine)
+        {
+            var lines = _textBox.Text.Split( Environment.NewLine.ToCharArray() );
+            var lineCount = 0;
+            foreach (var line in lines)
+            {
+                if(line != string.Empty && line != Environment.NewLine)
+                    lineCount++;
             }
-            if(LineCount == 7){
-                StringBuilder NewText = new StringBuilder();
-                int k = 0;
-                for(int i = 0; i < Lines.Length; i++){
-                    if(Lines[i] != string.Empty && Lines[i] != Environment.NewLine){
-                        if(k != 0)
-                            NewText.AppendLine( Lines[i].Replace(Environment.NewLine, string.Empty) );
-                        k++;
-                    }
+            if(lineCount == 7)
+            {
+                var newText = new StringBuilder();
+                var k = 0;
+                foreach (var line in lines)
+                {
+                    if (line == string.Empty || line == Environment.NewLine) continue;
+                    
+                    if(k != 0) newText.AppendLine( line.Replace(Environment.NewLine, string.Empty) );
+                    k++;
                 }
-                _textBox.Text = NewText.ToString() + NewLine;
-            }else{
+                _textBox.Text = newText + NewLine;
+            }
+            else
+            {
                 _textBox.Text = _textBox.Text + Environment.NewLine + NewLine; 
             }
-            Lines = _textBox.Text.Split( Environment.NewLine.ToCharArray() );
-            string LongestLine = string.Empty;
-            for(int i = 0; i < Lines.Length; i++){
-                if(Lines[i].Length > LongestLine.Length)
-                    LongestLine = Lines[i];
+            lines = _textBox.Text.Split( Environment.NewLine.ToCharArray() );
+            var longestLine = string.Empty;
+            foreach (var line in lines)
+            {
+                if(line.Length > longestLine.Length)
+                    longestLine = line;
             }
             _textBox.Position = _textBoxPosition + _textBox.Scale;
         }
         
-        public void Clear(){
+        public void Clear()
+        {
             _textBox.Text = string.Empty;
         }
         
-        public void Focus(){
+        public void Focus()
+        {
             _player.CanInteract = false;
             _player.View.CaptureMovement = false;
             _player.View.LockMouse = false;
@@ -126,7 +136,8 @@ namespace Hedra.Engine.Player
             _commandLine.Text = string.Empty;
         }
         
-        public void LoseFocus(){
+        public void LoseFocus()
+        {
             if (Focused)
             {
                 _player.CanInteract = true;
@@ -141,8 +152,9 @@ namespace Hedra.Engine.Player
             UpdateManager.CenterMouse();
         }
         
-        public bool Show {
-            get{ return _show; }
+        public bool Show
+        {
+            get => _show;
             set
             {
                 _show = value;
