@@ -44,7 +44,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public bool NeverBuilded { get; private set; } = true;
         public int OffsetX { get; }
         public int OffsetZ { get; }
-        public bool IsBuilding { get; set; }
+        private bool IsBuilding { get; set; }
+        private bool IsGenerating { get; set; }
         public Vector3 Position { get; private set; }
 
         private Block[][][] _blocks;
@@ -101,9 +102,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Mesh.Position = new Vector3(OffsetX, 0, OffsetZ);
             lock (_blocksLock)
             {
+                IsGenerating = true;
                 Landscape.Generate(_blocks, _regionCache);
+                IsGenerating = false;
             }
-
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
             IsGenerated = true;
         }
@@ -559,14 +561,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Landscape.Dispose();
                 Landscape = null;
             }
-            lock (_blocksLock)
-                _blocks = null;
+            _blocks = null;
         }
 
         private IEnumerator DisposeCoroutine()
         {
             var time = 0f;
-            while (IsBuilding && time < 2.5f)
+            while ( (IsBuilding || IsGenerating) && time < 2.5f)
             {
                 time += Time.DeltaTime;
                 yield return null;
