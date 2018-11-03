@@ -214,7 +214,7 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
-        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true)
+        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true, bool PushBack = true)
         {
             throw new NotImplementedException();
         }

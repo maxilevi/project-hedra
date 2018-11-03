@@ -95,7 +95,7 @@ namespace Hedra.Engine.EntitySystem
 
         void ShowIcon(CacheItem? IconType, float Seconds);
 
-        void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true);
+        void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true, bool PushBack = true);
 
         bool InAttackRange(IEntity Target, float RadiusModifier = 1f);
 

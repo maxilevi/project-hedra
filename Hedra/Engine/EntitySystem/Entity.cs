@@ -226,11 +226,14 @@ namespace Hedra.Engine.EntitySystem
                 iconComponent.ShowIconFor(IconType, Seconds);
         }
 
-        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true)
+        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true, bool PushBack = true)
         {
             for (var i = 0; i < Components.Count; i++)
-                if (Components[i] is DamageComponent)
-                    _damageManager = Components[i] as DamageComponent;
+            {
+                if (Components[i] is DamageComponent dmg)
+                    _damageManager = dmg;
+            }
+
             Exp = 0;
             if (_damageManager == null)
                 return;
@@ -239,9 +242,9 @@ namespace Hedra.Engine.EntitySystem
             _damageManager.Damage(Amount, Damager, out Exp, PlaySound);
             Damager?.InvokeAfterAttack(this, Amount);
 
-            if (Damager != null)
+            if (PushBack && Damager != null)
             {
-                Vector3 increment = (-(Damager.Position.Xz - Position.Xz)).ToVector3();
+                var increment = (-(Damager.Position.Xz - Position.Xz)).ToVector3();
                 Physics.DeltaTranslate(increment * .2f);
             }
         }

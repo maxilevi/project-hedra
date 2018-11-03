@@ -147,7 +147,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
                 Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce
             };
             arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
-                Hit.Damage(Human.DamageEquation * Options.DamageModifier, Human, out float exp, true);
+                Hit.Damage(Human.DamageEquation * Options.DamageModifier, Human, out float exp, true, false);
                 Human.XP += exp;
                 if(KnockChance != -1 && Utils.Rng.Next(0, KnockChance) == 0)
                     Hit.KnockForSeconds(3);

@@ -230,9 +230,13 @@ namespace Hedra.Engine.Player
             else
             {
                 _consecutiveHitsTimer.Reset();
+                var previousValue = ConsecutiveHits;
                 ConsecutiveHits = Math.Min(MaxConsecutiveHits, ++ConsecutiveHits);
                 var consecutiveHitsValue = ConsecutiveHits;
-                this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier * .5f, () => ConsecutiveHits == consecutiveHitsValue);
+                if (previousValue != MaxConsecutiveHits)
+                {
+                    this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier * .5f, () => ConsecutiveHits == consecutiveHitsValue);
+                }
                 Mana = Mathf.Clamp(Mana + 8, 0, MaxMana);
                 OnHitLanded?.Invoke(this, ConsecutiveHits);
             }
