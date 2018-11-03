@@ -62,7 +62,7 @@ namespace Hedra.Engine.StructureSystem
                 {
                     treeBoss = BossGenerator.Generate(
                         new [] { MobType.Beetle, MobType.Gorilla },
-                        Vector3.TransformPosition(chestOffset + Vector3.UnitZ * 18, transMatrix),
+                        Vector3.TransformPosition(chestOffset - Vector3.UnitZ * 50, transMatrix),
                         rng);
                     ((GiantTree)Structure.WorldObject).Boss = treeBoss;
                 }
