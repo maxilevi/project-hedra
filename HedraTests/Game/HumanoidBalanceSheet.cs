@@ -35,7 +35,7 @@ namespace HedraTests.Game
             Max50 = 14,
             
             Min99 = 11,
-            Max99 = 17,
+            Max99 = 18,
         };
         
         public BalanceEntry HumanoidDamageWithBestWeapons { get; } = new BalanceEntry
@@ -47,7 +47,7 @@ namespace HedraTests.Game
             Max50 = 18,
             
             Min99 = 14,
-            Max99 = 20,
+            Max99 = 21,
         };
         
         public BalanceEntry HumanoidSpeed { get; } = new BalanceEntry
@@ -77,13 +77,13 @@ namespace HedraTests.Game
         public BalanceEntry HumanoidAttackSpeed { get; } = new BalanceEntry
         {
             Min1 = 0.55f,
-            Max1 = 1.0f,
+            Max1 = 1.05f,
             
             Min50 = 0.55f,
-            Max50 = 1.0f,
+            Max50 = 1.05f,
             
             Min99 = 0.55f,
-            Max99 = 1.0f,
+            Max99 = 1.05f,
         };
         
         public BalanceEntry HumanoidStamina { get; } = new BalanceEntry

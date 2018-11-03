@@ -16,6 +16,7 @@ namespace Hedra.Engine.ItemSystem
         Boots,
         Pet,
         Vehicle,
-        Ring
+        Ring,
+        Staff
     }
 }
