@@ -9,9 +9,9 @@ using OpenTK.Input;
 using OpenTK;
 namespace Hedra.Engine.Events
 {
-    public class EventListener : IEventListener
+    public abstract class EventListener : IEventListener
     {
-        public EventListener()
+        protected EventListener()
         {
             EventDispatcher.Add(this);
         }
@@ -29,5 +29,10 @@ namespace Hedra.Engine.Events
         public virtual void OnKeyUp(object Sender, KeyboardKeyEventArgs e){}
         
         public virtual void OnKeyPress(object Sender, KeyPressEventArgs e){}
+
+        public virtual void Dispose()
+        {
+            EventDispatcher.Remove(this);
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Dispose()
         {
-            
+            DrawManager.Remove(this);
         }
     }
 }

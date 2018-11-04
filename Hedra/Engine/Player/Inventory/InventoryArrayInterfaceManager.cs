@@ -15,7 +15,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public delegate void OnItemMoveEventHandler(InventoryArray PreviousArray, InventoryArray NewArray, int Index, Item Item);
 
-    public class InventoryArrayInterfaceManager
+    public class InventoryArrayInterfaceManager : IDisposable
     {
         public OnItemMoveEventHandler OnItemMove;
         private readonly InventoryInterfaceItemInfo _itemInfoInterface;
@@ -310,6 +310,12 @@ namespace Hedra.Engine.Player.Inventory
             {
                 _interfaces[i].UpdateView();
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterMouseMove(this);
+            EventDispatcher.UnregisterMouseDown(this);
         }
     }
 }

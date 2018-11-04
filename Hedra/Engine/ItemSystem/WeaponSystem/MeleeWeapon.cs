@@ -110,8 +110,10 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             WeaponCount++;
         }
 
-        public CollisionShape[] Shapes {
-            get{
+        public CollisionShape[] Shapes
+        {
+            get
+            {
                 if(_shapesArray?.Length != WeaponCount){
                     _shapesArray = new CollisionShape[WeaponCount]; 
                 }

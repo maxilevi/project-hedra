@@ -264,6 +264,7 @@ namespace Hedra.Engine.Rendering
         public void Dispose()
         {
             DrawManager.Remove(this);
+            UpdateManager.Remove(this);
             _buffer?.Dispose();
         }
     }

@@ -106,7 +106,7 @@ namespace Hedra.Engine.Loader
                 text += 
                     $"\n\nWatchers={World.StructureHandler.Watchers.Length} Structs={World.StructureHandler.Structures.Length}->{World.StructureHandler.Structures.Sum(S => S.Children.Length)} Plateaus={World.WorldBuilding.Plateaus.Length} Groundworks={World.WorldBuilding.Groundworks.Length}";
                 text += 
-                    $"\n\nTextures ={Graphics2D.Textures.Count} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
+                    $"\n\nTextures ={Graphics2D.Textures.Count} Updates={UpdateManager.UpdateCount} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
                 text +=
                     $"\n\n SkippedBinds={Renderer.TextureHandler.Skipped} SkippedUses={Renderer.ShaderHandler.Skipped} CulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount}  Cache={CacheManager.CachedColors.Count}|{CacheManager.CachedExtradata.Count} Pitch={player.View.TargetPitch}";
 

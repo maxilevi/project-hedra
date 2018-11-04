@@ -69,6 +69,7 @@
     <Compile Include="CodePolicy\GLCodePolicy.cs" />
     <Compile Include="CodePolicy\ShaderCodePolicy.cs" />
     <Compile Include="CodePolicy\SolutionTest.cs" />
+    <Compile Include="CodePolicy\DanglingReferencesCodePolicy.cs" />
     <Compile Include="Core\GameSettingsTest.cs" />
     <Compile Include="EntitySystem\DamageComponentTest.cs" />
     <Compile Include="Game\BalanceEntry.cs" />

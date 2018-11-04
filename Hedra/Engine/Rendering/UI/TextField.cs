@@ -209,8 +209,9 @@ namespace Hedra.Engine.Rendering.UI
             _enabled = true;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             _textBar?.Dispose();
             _caret?.Dispose();
         }

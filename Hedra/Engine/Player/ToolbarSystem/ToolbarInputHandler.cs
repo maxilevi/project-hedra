@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
@@ -6,7 +7,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {
-    public class ToolbarInputHandler
+    public class ToolbarInputHandler : IDisposable
     {
         private readonly IPlayer _player;
 
@@ -16,7 +17,8 @@ namespace Hedra.Engine.Player.ToolbarSystem
             EventDispatcher.RegisterKeyUp(this, this.HandleUp);
             EventDispatcher.RegisterKeyDown(this, this.HandleDown);
         }
-        public void HandleUp(object Sender, KeyEventArgs EventArgs)
+
+        private void HandleUp(object Sender, KeyEventArgs EventArgs)
         {
             if (!_player.CanInteract || _player.IsKnocked || _player.Movement.IsJumping || _player.IsDead || _player.IsSwimming ||
                 _player.IsUnderwater || _player.IsTravelling || _player.Inventory.Show || _player.AbilityTree.Show || GameSettings.Paused) return;
@@ -30,7 +32,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _player.Toolbar.SkillAt(keyIndex)?.KeyUp();          
         }
 
-        public void HandleDown(object Sender, KeyEventArgs EventArgs)
+        private void HandleDown(object Sender, KeyEventArgs EventArgs)
         {
             if (!_player.CanInteract || _player.Movement.IsJumping || _player.IsKnocked || _player.IsDead || _player.IsSwimming || _player.IsAttacking || _player.IsRiding
                 || _player.IsUnderwater || _player.IsTravelling || _player.Inventory.Show || _player.AbilityTree.Show || _player.Trade.Show || GameSettings.Paused) return;
@@ -66,6 +68,12 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private int AbilitiesBeingCasted()
         {
             return _player.Toolbar.Skills.Count(T => T.Casting);
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyUp(this);
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

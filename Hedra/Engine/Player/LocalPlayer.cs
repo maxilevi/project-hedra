@@ -481,5 +481,11 @@ namespace Hedra.Engine.Player
             DataManager.SavePlayer(data);
             return true;
         }
+
+        public void Dispose()
+        {
+            UpdateManager.Remove(this);
+            DrawManager.Remove(this);
+        }
     }
 }

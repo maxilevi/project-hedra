@@ -131,6 +131,7 @@ namespace Hedra.Engine.WorldBuilding
         public override void Dispose()
         {
             base.Dispose();
+            UpdateManager.Remove(this);
             if (this._light != null)
             {
                 this._light.Color = Vector3.Zero;

@@ -41,6 +41,5 @@ namespace Hedra.Engine.Rendering
             if(E.Mouse.IsButtonUp(MouseButton.Left))
                 _inFocus = false;
         }
-        
     }
 }
