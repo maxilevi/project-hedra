@@ -20,7 +20,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Loader
 {
-    public class DebugInfoProvider
+    public class DebugInfoProvider : IDisposable
     {
         private readonly Panel _debugPanel;
         private readonly GUIText _debugText;
@@ -327,6 +327,11 @@ namespace Hedra.Engine.Loader
                     }*/
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

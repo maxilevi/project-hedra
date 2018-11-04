@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player.MapSystem
     /// <summary>
     /// Description of Map.
     /// </summary>
-    public class Map : PlayerInterface
+    public class Map : PlayerInterface, IDisposable
     {
         private const int MapViewSize = 8;
         private const int MapSize = 8;
@@ -368,6 +368,11 @@ namespace Hedra.Engine.Player.MapSystem
                 SoundManager.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
                 _show = value;
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterMouseDown(this);
         }
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -13,7 +13,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player
 {
-    public class PlayerMovement : MovementManager
+    public class PlayerMovement : MovementManager, IDisposable
     {
         private readonly LocalPlayer _player;
         private readonly Dictionary<Key, Action> _registeredKeys;
@@ -333,6 +333,12 @@ namespace Hedra.Engine.Player
                 _player.Health = _player.MaxHealth;
             }
 #endif
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterMouseDown(this);
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

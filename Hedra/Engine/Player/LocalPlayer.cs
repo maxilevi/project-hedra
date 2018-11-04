@@ -486,6 +486,7 @@ namespace Hedra.Engine.Player
         {
             UpdateManager.Remove(this);
             DrawManager.Remove(this);
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

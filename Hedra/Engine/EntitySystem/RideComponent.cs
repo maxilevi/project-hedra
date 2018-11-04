@@ -122,6 +122,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Dispose()
         {
+            EventDispatcher.UnregisterKeyDown(this);
             if (!HasRider) return;
             this.Quit();
         }

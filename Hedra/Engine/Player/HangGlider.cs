@@ -8,9 +8,9 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player
 {
-    public class HangGlider : IVehicle
+    public class HangGlider : IVehicle, IDisposable
     {
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
         private readonly GliderModel _model;
         private Vector3 _accumulatedVelocity;
         private Vector3 _angles;
@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
         private float _upPush;
         private int _remainingParticles;
 
-        public HangGlider(LocalPlayer Player)
+        public HangGlider(IPlayer Player)
         {
             _player = Player;
             _model = new GliderModel();
@@ -174,5 +174,10 @@ namespace Hedra.Engine.Player
         public bool CanEnable => !_player.IsGrounded;
         
         public bool Enabled { get; private set; }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
+        }
     }
 }

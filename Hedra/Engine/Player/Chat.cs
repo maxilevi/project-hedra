@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     /// Description of Chat.
     /// </summary>
-    public class Chat
+    public class Chat : IDisposable
     {
         public bool Focused { get; set ;}
         private readonly IPlayer _player;
@@ -168,6 +168,11 @@ namespace Hedra.Engine.Player
                     _textBox.Disable();
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
@@ -7,7 +8,7 @@ namespace Hedra.Engine.Rendering.UI
 {
     public delegate void OnPlayerInterfaceStateChangeEventHandler(bool Show);
 
-    public abstract class PlayerInterface
+    public abstract class PlayerInterface : IDisposable
     {
         private static readonly List<PlayerInterface> Interfaces;
         private static PlayerInterface _openedInterface;
@@ -101,6 +102,11 @@ namespace Hedra.Engine.Rendering.UI
                 Interface.Show = false;
                 _openedInterface = null;
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(typeof(EventDispatcher));
         }
     }
 }
