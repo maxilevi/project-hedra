@@ -306,7 +306,7 @@ namespace Hedra.Engine.Management
                 {
                     if(Parts[1] == "bandit")
                     {
-                        World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, false);
+                        World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, false);
                         return true;
                     }
                     if(Parts[1] == "plantling")

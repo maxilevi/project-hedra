@@ -46,7 +46,7 @@ namespace Hedra.Engine.EntitySystem
             if(damage != null)
             {
                 damage.Immune = false;
-                damage.Damage(Parent.MaxHealth, Parent, out _, false);
+                damage.Damage(Parent.MaxHealth, Parent, out _, false, false);
             }
             SoundManager.PlaySound(SoundType.NotificationSound, Parent.Position);
             Interactee.MessageDispatcher.ShowNotification(CollectMessage, Colors.DarkRed.ToColor(), 3f, false);

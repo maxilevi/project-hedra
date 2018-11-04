@@ -855,9 +855,6 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageLoader.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageType.cs" />
     <Compile Include="Engine\StructureSystem\WoodenFortDesign.cs" />
-    <Compile Include="Engine\Testing\AutomatedTest.cs" />
-    <Compile Include="Engine\Testing\AutomatedTests\BaseAutomatedTest.cs" />
-    <Compile Include="Engine\Testing\AutomatedTests\MenuTest.cs" />
     <Compile Include="Engine\Time.cs" />
     <Compile Include="Engine\Generation\Block.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\Chunk.cs" />
@@ -875,10 +872,6 @@
     <Compile Include="Engine\TreeSystem\PineDesign.cs" />
     <Compile Include="Engine\TreeSystem\TallDesign.cs" />
     <Compile Include="Engine\TreeSystem\TreeDesign.cs" />
-    <Compile Include="Engine\Testing\BaseTest.cs" />
-    <Compile Include="Engine\Testing\DataStructures\QuaternionExtensionsTester.cs" />
-    <Compile Include="Engine\Testing\TestMethod.cs" />
-    <Compile Include="Engine\Testing\Tester.cs" />
     <None Include="..\project-hedra-assets\Animations\BeetleAttack0.dae">
       <Link>Assets\Chr\BeetleAttack0.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4966,6 +4959,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Assets\UI\XPBackground.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mods\README.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\Boat.json">

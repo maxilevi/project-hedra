@@ -1,5 +1,7 @@
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 
 namespace Hedra.Engine.AISystem.Behaviours
@@ -25,6 +27,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             if (_currentBehaviour == Idle && this._ticker.Tick())
             {
                 var targetPosition = Parent.Position + new Vector3(Utils.Rng.NextFloat() * Diameter - Radius, 0, Utils.Rng.NextFloat() * Diameter - Radius);
+                if(Physics.IsWaterBlock(targetPosition)) return;
                 Walk.SetTarget(targetPosition, () => _currentBehaviour = Idle);
                 _currentBehaviour = Walk;
             }

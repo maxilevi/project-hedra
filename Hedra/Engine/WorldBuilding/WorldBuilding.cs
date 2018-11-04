@@ -53,22 +53,22 @@ namespace Hedra.Engine.WorldBuilding
 
         public Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition)
         {
-            return SpawnHumanoid(Type.ToString(), DesiredPosition, null);
+            return SpawnHumanoid(Type.ToString(), 1, DesiredPosition, null);
         }
 
         public Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition)
         {
-            return SpawnHumanoid(Type, DesiredPosition, null);
+            return SpawnHumanoid(Type, 1, DesiredPosition, null);
         }
 
-        public Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition, HumanoidBehaviourTemplate Behaviour)
+        private Humanoid SpawnHumanoid(string Type, int Level, Vector3 DesiredPosition, HumanoidBehaviourTemplate Behaviour)
         {
-            var human = HumanoidFactory.BuildHumanoid(Type, Behaviour);
+            var human = HumanoidFactory.BuildHumanoid(Type, Level, Behaviour);
             human.Physics.TargetPosition = World.FindPlaceablePosition(human, DesiredPosition);
             return human;
         }
 
-        public Humanoid SpawnBandit(Vector3 Position, bool Friendly, bool Undead)
+        public Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false)
         {
             int classN = Utils.Rng.Next(0, ClassDesign.AvailableClasses.Length);
             var classType = ClassDesign.FromType(ClassDesign.AvailableClasses[classN]);
@@ -78,7 +78,7 @@ namespace Hedra.Engine.WorldBuilding
                 Name = Undead ? "Skeleton" : "Bandit"
             };
             var isGnoll = Utils.Rng.Next(0, 4) == 1;
-            var human = this.SpawnHumanoid(isGnoll ? "Gnoll" : classType.ToString(), Position, behaviour);
+            var human = this.SpawnHumanoid(isGnoll ? "Gnoll" : classType.ToString(), Level, Position, behaviour);
             if (isGnoll) human.AddonHealth = human.MaxHealth * .5f;
             if (Undead)
             {
@@ -92,17 +92,6 @@ namespace Hedra.Engine.WorldBuilding
                 human.AddComponent(new WarriorAIComponent(human, Friendly));
 
             return human;
-        }
-
-
-        public Humanoid SpawnBandit(Vector3 Position, bool Friendly)
-        {
-            return this.SpawnBandit(Position, Friendly, false);
-        }
-
-        public Humanoid SpawnVillager(Vector3 Position, bool Move)
-        {
-            return this.SpawnVillager(Position, Move, null);
         }
         
         public Humanoid SpawnVillager(Vector3 Position, bool Move, string Name)
@@ -118,7 +107,7 @@ namespace Hedra.Engine.WorldBuilding
         public Humanoid SpawnEnt(Vector3 Position)
         {
             var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile);
-            var human = this.SpawnHumanoid("Ent", Position, behaviour);
+            var human = this.SpawnHumanoid("Ent", 36, Position, behaviour);
             human.AddComponent(new WarriorAIComponent(human, false));
             human.MainWeapon = null;
 

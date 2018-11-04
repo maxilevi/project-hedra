@@ -254,7 +254,7 @@ namespace Hedra.Engine.Rendering
                 mesh.Mesh.IsGenerated = true;
                 mesh.Mesh.IsBuilded = true;
                 mesh.Mesh.Enabled = true;
-                TaskManager.Parallel( () => mesh.CullingBox = Physics.BuildBroadphaseBox(Data) );
+                mesh.CullingBox = Physics.BuildBroadphaseBox(Data);
             });
             
             return mesh;

@@ -15,6 +15,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Player;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 
@@ -42,24 +43,28 @@ namespace Hedra.Engine.WorldBuilding
         
         public void Update()
         {
-            if (this._passedTime++ % 2 == 0)
+            var distToPlayer = (Position - GameManager.Player.Position).LengthSquared;
+            if (distToPlayer < 256 * 256)
             {
-                _fireParticles.Color = Particle3D.FireColor;
-                _fireParticles.VariateUniformly = false;
-                _fireParticles.Position = this.Position + Vector3.UnitY * 1f;
-                _fireParticles.Scale = Vector3.One * .85f;
-                _fireParticles.ScaleErrorMargin = new Vector3(.05f, .05f, .05f);
-                _fireParticles.Direction = Vector3.UnitY * 0f;
-                _fireParticles.ParticleLifetime = 1.65f;
-                _fireParticles.GravityEffect = -0.01f;
-                _fireParticles.PositionErrorMargin = new Vector3(1f, 0f, 1f);
+                if (this._passedTime++ % 2 == 0)
+                {
+                    _fireParticles.Color = Particle3D.FireColor;
+                    _fireParticles.VariateUniformly = false;
+                    _fireParticles.Position = this.Position + Vector3.UnitY * 1f;
+                    _fireParticles.Scale = Vector3.One * .85f;
+                    _fireParticles.ScaleErrorMargin = new Vector3(.05f, .05f, .05f);
+                    _fireParticles.Direction = Vector3.UnitY * 0f;
+                    _fireParticles.ParticleLifetime = 1.65f;
+                    _fireParticles.GravityEffect = -0.01f;
+                    _fireParticles.PositionErrorMargin = new Vector3(1f, 0f, 1f);
 
-                _fireParticles.Emit();
+                    _fireParticles.Emit();
+                }
+
+                HandleBurning();
             }
 
-            HandleBurning();
-
-            if( (this._light == null) && (this.Position - LocalPlayer.Instance.Position).LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
+            if( (this._light == null) && distToPlayer < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
 
                 this._light = ShaderManager.GetAvailableLight();
 
@@ -70,7 +75,7 @@ namespace Hedra.Engine.WorldBuilding
                 }
             }
 
-            if (this._sound == null && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 32f*32f*2f)
+            if (this._sound == null && distToPlayer < 32f*32f*2f)
             {
                 this._sound = SoundManager.GetAvailableSource();
             }
@@ -81,7 +86,7 @@ namespace Hedra.Engine.WorldBuilding
                 if (!this._sound.Source.IsPlaying)
                     this._sound.Source.Play(SoundManager.GetBuffer(SoundType.Fireplace), this.Position, 1f, 1f, true);
 
-                float gain = Math.Max(0, 1 - (this.Position - SoundManager.ListenerPosition).LengthFast / 32f);
+                var gain = Math.Max(0, 1 - (this.Position - SoundManager.ListenerPosition).LengthFast / 32f);
                 this._sound.Source.Volume = gain;
             }
 
@@ -95,7 +100,7 @@ namespace Hedra.Engine.WorldBuilding
                 
             }
 
-            if (this._sound != null && (this.Position - LocalPlayer.Instance.Position).LengthSquared > 32f * 32f * 2f)
+            if (this._sound != null && distToPlayer > 32f * 32f * 2f)
             {
                 this._sound.Source.Stop();
                 this._sound.Locked = false;

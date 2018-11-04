@@ -89,7 +89,7 @@ namespace Hedra.Engine.Player
                 Player.LeftWeapon.Attack2(Player, new AttackOptions
                 {
                     Charge = charge,
-                    DamageModifier = AttackOptions.Default.DamageModifier * charge
+                    DamageModifier = AttackOptions.Default.DamageModifier * charge + .25f
                 });
                 IsCharging = false;
             }

@@ -37,7 +37,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public override void Polish(BlacksmithParameters Parameters)
         {
-            World.WorldBuilding.SpawnHumanoid(HumanType.Blacksmith, Parameters.Position + Parameters.Design.Blacksmith * Parameters.Design.Scale);
+            SpawnHumanoid(HumanType.Blacksmith, Parameters.Position + Parameters.Design.Blacksmith * Parameters.Design.Scale);
         }
     }
 }

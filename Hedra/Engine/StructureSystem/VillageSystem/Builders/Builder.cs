@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms.VisualStyles;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
@@ -14,11 +15,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     public abstract class Builder<T> where T : IBuildingParameters
     {
         protected virtual bool LookAtCenter => true;
-        protected CollidableStructure Structure { get; private set; }
+        private CollidableStructure Structure { get; }
+        private Village VillageObject { get; }
         
         protected Builder(CollidableStructure Structure)
         {
             this.Structure = Structure;
+            this.VillageObject = (Village) Structure.WorldObject;
         }
 
         public virtual bool Place(T Parameters, VillageCache Cache)
@@ -61,6 +64,18 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public virtual void Polish(T Parameters)
         {
             
+        }
+
+        protected void SpawnHumanoid(HumanType Type, Vector3 Position)
+        {
+            var human = World.WorldBuilding.SpawnHumanoid(Type, Position);
+            VillageObject.AddHumanoid(human);
+        }
+
+        protected void SpawnVillager(Vector3 Position, bool Move)
+        {
+            var human = World.WorldBuilding.SpawnVillager(Position, Move);
+            VillageObject.AddHumanoid(human);
         }
 
         protected float ModelRadius(T Parameters, VillageCache Cache)

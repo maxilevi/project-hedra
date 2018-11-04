@@ -8,7 +8,6 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
-using Hedra.Engine.Testing;
 using OpenTK;
 using OpenTK.Input;
 
@@ -277,6 +276,7 @@ namespace Hedra.Engine.Player
                         World.RemoveChunk(World.Chunks[i]);
                     }
                 }
+                World.StructureHandler.Discard();
                 _player.Chat.AddLine("Chunks discarded.");
             }
             if (EventArgs.Key == Key.F12)
@@ -332,8 +332,6 @@ namespace Hedra.Engine.Player
             {
                 _player.Health = _player.MaxHealth;
             }
-            if (EventArgs.Key == Key.F11)
-                Tester.Run(AssetManager.AppPath + "/unitTests.txt");
 #endif
         }
     }

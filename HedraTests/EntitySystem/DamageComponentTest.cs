@@ -58,7 +58,7 @@ namespace HedraTests.EntitySystem
         public void TestNoExpIsGivenIfTargetInvalid()
         {
             _entity.IsDead = true;
-            _damageComponent.Damage(10, null, out var xp, false);
+            _damageComponent.Damage(10, null, out var xp, false, false);
             Assert.AreEqual(0, xp);
         }
         
@@ -66,7 +66,7 @@ namespace HedraTests.EntitySystem
         public void TestHasBeenAttacked()
         {
             Assert.False(_damageComponent.HasBeenAttacked);
-            _damageComponent.Damage(10, null, out var xp, false);
+            _damageComponent.Damage(10, null, out var xp, false, false);
             Assert.True(_damageComponent.HasBeenAttacked);
         }
         
@@ -75,7 +75,7 @@ namespace HedraTests.EntitySystem
         {
             var originalHealth = _entity.Health;
             _damageComponent.Ignore(E => E == null);
-            _damageComponent.Damage(10, null, out var xp, false);
+            _damageComponent.Damage(10, null, out var xp, false, false);
             Assert.AreEqual(originalHealth, _entity.Health);
             Assert.False(_damageComponent.HasBeenAttacked);
         }
@@ -83,7 +83,7 @@ namespace HedraTests.EntitySystem
         [Test]
         public void TestDamageBillboardIsCreated()
         {          
-            _damageComponent.Damage(10, null, out var xp, true);
+            _damageComponent.Damage(10, null, out var xp, true, false);
             Assert.AreEqual(1, _damageComponent.Labels.Length);
         }
         
@@ -96,7 +96,7 @@ namespace HedraTests.EntitySystem
             _physics = physicsMock.Object;
             var entityMock = new Mock<IEntity>();
             entityMock.SetupAllProperties();
-            _damageComponent.Damage(10, entityMock.Object, out var xp, true);
+            _damageComponent.Damage(10, entityMock.Object, out var xp, true, true);
             Assert.True(wasCalled);
         }
         
@@ -109,7 +109,7 @@ namespace HedraTests.EntitySystem
             };
             _entity.AddComponent(drop);
             _entity.Health = 5;
-            _damageComponent.Damage(10, null, out var xp, false);
+            _damageComponent.Damage(10, null, out var xp, false, false);
             Assert.True(drop.Dropped);
         }
         
@@ -122,14 +122,14 @@ namespace HedraTests.EntitySystem
                 wasDamaged = true;
                 
             };
-            _damageComponent.Damage(10, null, out var xp, false);
+            _damageComponent.Damage(10, null, out var xp, false, false);
             Assert.True(wasDamaged);
         }
         
         [Test]
         public void TestAttackTintIsAdded()
         {
-            _damageComponent.Damage(10, null, out var xp, true);
+            _damageComponent.Damage(10, null, out var xp, true, false);
             Time.Set(.5f);
             _damageComponent.Update();
             Assert.AreNotEqual(Vector4.Zero, _entity.Model.Tint);
@@ -139,7 +139,7 @@ namespace HedraTests.EntitySystem
         public void TestStaticEntitesDontShowAnyLabels()
         {
             _isStatic = true;
-            _damageComponent.Damage(10, null, out var xp, true);
+            _damageComponent.Damage(10, null, out var xp, true, false);
             Assert.AreEqual(0, _damageComponent.Labels.Length);
         }
         
@@ -157,7 +157,7 @@ namespace HedraTests.EntitySystem
                     wasCalled = true;
                 });
             SoundManager.Provider = provider.Object;
-            _damageComponent.Damage(10, null, out var xp, true);
+            _damageComponent.Damage(10, null, out var xp, true, false);
             Assert.True(wasCalled);
         }
         
@@ -165,7 +165,7 @@ namespace HedraTests.EntitySystem
         public void TestEntityIsKilled()
         {
             _entity.Health = 5;
-            _damageComponent.Damage(10, null, out var xp, false);
+            _damageComponent.Damage(10, null, out var xp, false, false);
             Assert.True(_entity.IsDead);
         }
         
@@ -173,7 +173,7 @@ namespace HedraTests.EntitySystem
         public void TestDisposeCoroutineIsLaunched()
         {
             _entity.Health = 5;
-            _damageComponent.Damage(10, null, out var xp, false);
+            _damageComponent.Damage(10, null, out var xp, false, false);
             Time.Set(4);
             CoroutineManager.Update();
             CoroutineManager.Update();
@@ -185,7 +185,7 @@ namespace HedraTests.EntitySystem
         {
             _entity.Health = 5;
             _damageComponent.XpToGive = 10;
-            _damageComponent.Damage(10, null, out var xp, false);
+            _damageComponent.Damage(10, null, out var xp, false, false);
             Assert.AreEqual(10, xp);
         }
         
@@ -205,7 +205,7 @@ namespace HedraTests.EntitySystem
         private void AssertWasDamaged(float Damage, float Delta, out float XP)
         {
             var prevHealth = _entity.Health;
-            _damageComponent.Damage(Damage, null, out XP, false);
+            _damageComponent.Damage(Damage, null, out XP, false, false);
             Assert.AreEqual(prevHealth - Delta, _entity.Health);
         }
     }

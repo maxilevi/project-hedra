@@ -144,6 +144,11 @@ namespace Hedra.Engine.PhysicsSystem
             return (WaterDensityAndHeight(Position)-1) * Chunk.BlockSize;
         }
 
+        public static bool IsWaterBlock(Vector3 Position)
+        {
+            return Math.Abs(WaterDensityAndHeight(Position)) > 0.005f;
+        }
+
         public static float WaterDensityAndHeight(Vector3 Position)
         {
             var chunk = World.GetChunkAt(Position);

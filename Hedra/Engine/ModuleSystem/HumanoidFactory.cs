@@ -26,20 +26,17 @@ namespace Hedra.Engine.ModuleSystem
         }
 
 
-        public static Humanoid BuildHumanoid(string HumanoidType, HumanoidBehaviourTemplate Behaviour)
+        public static Humanoid BuildHumanoid(string HumanoidType, int Level, HumanoidBehaviourTemplate Behaviour)
         {
             var template = HumanoidLoader.HumanoidTemplater[HumanoidType];
             var behaviour = Behaviour ?? _behaviours[template.Behaviour];
 
-            int levelN = Utils.Rng.Next(0, 10);
-            var difficultyType = 1;
-            if (levelN <= 4) difficultyType = 1;
-            else if (levelN > 4 && levelN <= 7) difficultyType = 2;
-            else if (levelN > 7 && levelN <= 9) difficultyType = 3;
+            var difficulty = GetDifficulty(Utils.Rng);
+            var difficultyModifier = GetDifficultyModifier(difficulty);
 
             var human = new Humanoid
             {
-                Level = LocalPlayer.Instance.Level + (difficultyType - 1),
+                Level = Level,
                 Class = ClassDesign.FromString(template.Class),
                 MobType = MobType.Human
             };
@@ -49,11 +46,13 @@ namespace Hedra.Engine.ModuleSystem
             human.Health = human.MaxHealth;
 
             var components = HumanoidLoader.ComponentsTemplater[HumanoidType].Components;
-            for (int i = 0; i < components.Length; i++)
+            for (var i = 0; i < components.Length; i++)
             {
-                Type type = Type.GetType(components[i].Type);
-                var paramsList = new List<object>();
-                paramsList.Add(human);
+                var type = Type.GetType(components[i].Type);
+                var paramsList = new List<object>
+                {
+                    human
+                };
                 paramsList.AddRange(components[i].Parameters);
 
                 var newComponent = (EntityComponent) Activator.CreateInstance(type, paramsList.ToArray());
@@ -87,6 +86,31 @@ namespace Hedra.Engine.ModuleSystem
             human.Removable = false;
             World.AddEntity(human);
             return human;
+        }
+        
+        private static int GetDifficulty(Random Rng)
+        {
+            var levelN = Rng.Next(0, 10);
+            var mobDifficulty = 1;
+            if (levelN <= 4) return 1;
+            if (levelN > 4 && levelN <= 7) return 2;
+            if (levelN > 7 && levelN <= 9) return 3;
+            throw new ArgumentOutOfRangeException($"Rng is not 0 < {levelN} < 10");
+        }
+
+        private static float GetDifficultyModifier(int DifficultyLevel)
+        {
+            switch (DifficultyLevel)
+            {
+                case 1:
+                    return 1;
+                case 2:
+                    return 1.25f;
+                case 3:
+                    return 1.5f;
+                default:
+                    throw new ArgumentOutOfRangeException($"Mob difficulty level is not 1 <= {DifficultyLevel} <= 2");
+            }
         }
     }
 }

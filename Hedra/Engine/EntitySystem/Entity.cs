@@ -239,14 +239,8 @@ namespace Hedra.Engine.EntitySystem
                 return;
 
             Damager?.InvokeBeforeAttack(this, Amount);
-            _damageManager.Damage(Amount, Damager, out Exp, PlaySound);
+            _damageManager.Damage(Amount, Damager, out Exp, PlaySound, PushBack);
             Damager?.InvokeAfterAttack(this, Amount);
-
-            if (PushBack && Damager != null)
-            {
-                var increment = (-(Damager.Position.Xz - Position.Xz)).ToVector3();
-                Physics.DeltaTranslate(increment * .2f);
-            }
         }
 
         public void InvokeBeforeAttack(IEntity Invoker, float Damage)

@@ -16,11 +16,8 @@ namespace Hedra.Engine.WorldBuilding
         Entity SpawnCarriage(Vector3 Position);
         Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition);
         Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition);
-        Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition, HumanoidBehaviourTemplate Behaviour);
-        Humanoid SpawnBandit(Vector3 Position, bool Friendly, bool Undead);
-        Humanoid SpawnBandit(Vector3 Position, bool Friendly);
-        Humanoid SpawnVillager(Vector3 Position, bool Move);
-        Humanoid SpawnVillager(Vector3 Position, bool Move, string Name);
+        Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false);
+        Humanoid SpawnVillager(Vector3 Position, bool Move, string Name = null);
         Humanoid SpawnEnt(Vector3 Position);
         Chest SpawnChest(Vector3 Position, Item Item);
         string GenerateName();

@@ -41,14 +41,21 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var transMatrix = Matrix4.CreateScale(5f) * Matrix4.CreateTranslation(originalPosition);
             for (var i = 0; i < marketCount; i++)
             {
-                if (i == 0)
-                    World.WorldBuilding.SpawnHumanoid(HumanType.Merchant, originalPosition - Vector3.UnitZ * 40f);
-                else if (i == 1)
-                    World.WorldBuilding.SpawnHumanoid(HumanType.Merchant, originalPosition + Vector3.UnitZ * 40f);
-                else if (i == 2)
-                    World.WorldBuilding.SpawnVillager(originalPosition - Vector3.UnitX * 40f, false);
-                else if (i == 3)
-                    World.WorldBuilding.SpawnVillager(originalPosition + Vector3.UnitX * 40f, false);
+                switch (i)
+                {
+                    case 0:
+                        SpawnHumanoid(HumanType.Merchant, originalPosition - Vector3.UnitZ * 40f);
+                        break;
+                    case 1:
+                        SpawnHumanoid(HumanType.Merchant, originalPosition + Vector3.UnitZ * 40f);
+                        break;
+                    case 2:
+                        SpawnVillager(originalPosition - Vector3.UnitX * 40f, false);
+                        break;
+                    case 3:
+                        SpawnVillager(originalPosition + Vector3.UnitX * 40f, false);
+                        break;
+                }
 
 
                 if(base.IntersectsWithAnyPath(

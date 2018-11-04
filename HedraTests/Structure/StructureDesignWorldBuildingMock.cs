@@ -49,19 +49,14 @@ namespace HedraTests.Structure
             return human;
         }
 
-        public Humanoid SpawnBandit(Vector3 Position, bool Friendly, bool Undead)
+        public Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false)
         {
             return SpawnHumanoid(null, Position);
         }
 
-        public Humanoid SpawnBandit(Vector3 Position, bool Friendly)
-        {
-            return SpawnBandit(Position, Friendly, false);
-        }
-
         public Humanoid SpawnVillager(Vector3 Position, bool Move)
         {
-            return SpawnBandit(Position, Move);
+            return SpawnBandit(Position, 0, Move);
         }
 
         public Humanoid SpawnVillager(Vector3 Position, bool Move, string Name)

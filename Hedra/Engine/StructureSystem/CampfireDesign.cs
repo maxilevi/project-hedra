@@ -14,6 +14,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class CampfireDesign : StructureDesign
     {
+        private const int Level = 6;
         public override int Radius { get; set; } = 80;
         public override VertexData Icon => null;
         public override int[] AmbientSongs { get; } =
@@ -46,7 +47,7 @@ namespace Hedra.Engine.StructureSystem
             Structure.AddCollisionShape(shapes.ToArray());
 
             ((Campfire) Structure.WorldObject).Bandit =
-                World.WorldBuilding.SpawnBandit(new Vector3(position.X, 125, position.Z), false, false);
+                World.WorldBuilding.SpawnBandit(new Vector3(position.X, 125, position.Z), Level);
 
             if (rng.Next(0, 5) != 1)
             {

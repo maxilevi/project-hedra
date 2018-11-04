@@ -18,6 +18,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class BanditCampDesign : StructureDesign
     {
+        private const int Level = 18;
         public override int Radius { get; set; } = 300;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.CampfireIcon);
         public override int[] AmbientSongs { get; } =
@@ -65,10 +66,9 @@ namespace Hedra.Engine.StructureSystem
 
             for (var i = 0; i < tents.Length; i++)
             {
-                BanditCampDesign.MakeTent(tents[i], rng, Structure);
+                MakeTent(tents[i], rng, Structure);
                 enemies[i] = World.WorldBuilding.SpawnBandit(
-                    tents[i].WorldPosition + new Vector3(rng.NextFloat() * 16f - 8f, 0, rng.NextFloat() * 16f - 8f), false,
-                    false);
+                    tents[i].WorldPosition + new Vector3(rng.NextFloat() * 16f - 8f, 0, rng.NextFloat() * 16f - 8f), Level);
             }
 
             Structure.AddCollisionShape(shapes.ToArray());

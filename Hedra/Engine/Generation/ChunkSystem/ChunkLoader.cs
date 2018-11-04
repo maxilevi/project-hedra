@@ -69,8 +69,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private IEnumerator UpdateChunkCoroutine()
         {
+            var updateTimer = new Timer(0.05f);
             while (GameManager.Exists)
             {
+                //if(!updateTimer.Tick()) continue;
                 for (var i = _chunkWatchers.Count - 1; i > -1; i--)
                 {
                     _chunkWatchers[i].Update();

@@ -74,7 +74,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound)
+        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound, bool PushBack)
         {
             Amount *= Parent.AttackResistance;
             if (Parent.IsDead || _ignoreList.Any(I => I.Invoke(Damager)))
@@ -119,7 +119,7 @@ namespace Hedra.Engine.EntitySystem
             if (shouldMiss || Immune) return;
             _tintTimer = 0.25f;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
-            if (Damager != null && Damager != Parent)
+            if (Damager != null && Damager != Parent && PushBack)
             {
                 var direction = -(Damager.Position - Parent.Position).Normalized();
                 var factor = 0.5f;

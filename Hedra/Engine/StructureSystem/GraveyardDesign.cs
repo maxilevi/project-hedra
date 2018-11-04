@@ -20,6 +20,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class GraveyardDesign : StructureDesign
     {
+        private const int Level = 9;
         public override int Radius { get; set; } = 384;
         public const int GraveyardSkyTime = 24000;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GraveyardIcon);
@@ -115,7 +116,7 @@ namespace Hedra.Engine.StructureSystem
             {
                 var skeleton = World.WorldBuilding.SpawnBandit(
                         Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) * Chunk.BlockSize,
-                        false, true);
+                        Level, false, true);
                     enemies.Add(skeleton);
             }
             Cementery.Enemies = enemies.ToArray();
