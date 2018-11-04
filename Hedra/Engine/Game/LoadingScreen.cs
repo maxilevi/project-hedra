@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -9,7 +10,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Game
 {
-    public class LoadingScreen : IUpdatable
+    public class LoadingScreen : IUpdatable, IDisposable
     {
         private Texture _loadingScreen;
         private GUIText _playerText;
@@ -91,5 +92,10 @@ namespace Hedra.Engine.Game
         }
         
         public bool IsLoading { get; private set; }
+
+        public void Dispose()
+        {
+            UpdateManager.Remove(this);
+        }
     }
 }

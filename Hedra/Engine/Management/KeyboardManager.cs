@@ -4,7 +4,7 @@ using Hedra.Engine.Events;
 using OpenTK.Input;
 namespace Hedra.Engine.Management
 {
-    public class KeyboardManager
+    public class KeyboardManager : IDisposable
     {
         private readonly Dictionary<Key, bool> _mappings;
 
@@ -22,5 +22,11 @@ namespace Hedra.Engine.Management
         }
 
         public bool this[Key Code] => _mappings[Code];
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
+            EventDispatcher.UnregisterKeyUp(this);
+        }
     }
 }

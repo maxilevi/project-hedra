@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 01/07/2016
@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
     /// <summary>
     /// Description of SkillsBar.
     /// </summary>
-    public class Toolbar : IToolbar
+    public class Toolbar : IToolbar, IDisposable
     {
         public const int InteractableItems = 4;
         public const int BarItems = 7;
@@ -218,6 +218,12 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 _manager.Enabled = _show;
                 this.UpdateView();
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterMouseDown(this);
+            EventDispatcher.UnregisterMouseUp(this);
         }
     }
 }

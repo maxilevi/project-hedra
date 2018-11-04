@@ -43,67 +43,83 @@ namespace Hedra.Engine.Rendering.UI
             _elements = new List<UIElement>();
         }
 
-        public void Move(Vector2 Vec2){
-            for(var i = 0; i < _elements.Count;i++){
+        public void Move(Vector2 Vec2)
+        {
+            for(var i = 0; i < _elements.Count;i++)
+            {
                 _elements[i].Position = _elements[i].Position + Vec2;
             }
             Position += Vec2;
         }
         
-        public void MoveTo(Vector2 Vec2){
-            for(var i = 0; i < _elements.Count;i++){
+        public void MoveTo(Vector2 Vec2)
+        {
+            for(var i = 0; i < _elements.Count;i++)
+            {
                 Vector2 relativePos = _elements[i].Position - Position;
                 _elements[i].Position = Vec2 + relativePos;
             }
             Position = Vec2;
         }
 
-        public void Disable(){
+        public void Disable()
+        {
             Enabled = false;
-            for(var i = 0; i < _elements.Count;i++){
+            for(var i = 0; i < _elements.Count;i++)
+            {
                 _elements[i].Disable();
             }
             OnPanelStateChange?.Invoke(this, PanelState.Disabled);
         }
         
-        public void Enable(){
+        public void Enable()
+        {
             Enabled = true;
-            for(int i = 0; i < _elements.Count;i++){
+            for(int i = 0; i < _elements.Count;i++)
+            {
                 _elements[i].Enable();
             }
             OnPanelStateChange?.Invoke(this, PanelState.Enabled);
         }
 
-        public void AddElement(UIElement Element){
+        public void AddElement(UIElement Element)
+        {
             if(!this.Enabled)
                 Element.Disable();
             _elements.Add(Element);
         }
         
-        public void RemoveElement(UIElement Element){
+        public void RemoveElement(UIElement Element)
+        {
             _elements.Remove(Element);
             this.InitializeButtons();
         }
         
-        private void InitializeButtons(){        
+        private void InitializeButtons()
+        {        
             var columns = new List<float>();
-            for(var i = 0; i < _elements.Count; i++){
+            for(var i = 0; i < _elements.Count; i++)
+            {
                 if( _elements[i] is Button && (_elements[i] as Button).Enabled && !columns.Contains(_elements[i].Position.X) ) columns.Add( _elements[i].Position.X );
             }
             columns.Sort();
             
             _buttons = new Button[columns.Count][];
-            for(var i = 0; i < _buttons.Length; i++){
+            for(var i = 0; i < _buttons.Length; i++)
+            {
                 
                 var rows = new List<float>();
-                for(int l = 0; l < _elements.Count; l++){
+                for(int l = 0; l < _elements.Count; l++)
+                {
                     if( _elements[l] is Button && (_elements[l] as Button).Enabled && columns[i] == _elements[l].Position.X && !rows.Contains(_elements[l].Position.Y) ) rows.Add( _elements[l].Position.Y );
                 }
                 rows.Sort( new Comparison<float>( (F1, F2) => F2.CompareTo(F1) ));
                 
                 _buttons[i] = new Button[rows.Count];
-                for(var j = 0; j < _buttons[i].Length; j++){
-                    for(var k = 0; k < _elements.Count; k++){
+                for(var j = 0; j < _buttons[i].Length; j++)
+                {
+                    for(var k = 0; k < _elements.Count; k++)
+                    {
                         if(_elements[k] is Button && (_elements[k] as Button).Enabled && columns[i] == _elements[k].Position.X && rows[j] == _elements[k].Position.Y)
                             _buttons[i][j] = _elements[k] as Button;
                     }

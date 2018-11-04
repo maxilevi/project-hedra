@@ -218,8 +218,9 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             Text?.Dispose();
             if (this.Texture != null)
             {

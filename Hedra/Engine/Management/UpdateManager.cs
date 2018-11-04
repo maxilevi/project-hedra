@@ -84,6 +84,17 @@ namespace Hedra.Engine.Management
 
         public static CursorState CursorState { get; set; }
 
+        public static int UpdateCount
+        {
+            get
+            {
+                lock (Lock)
+                {
+                    return UpdateFunctionsList.Count;
+                }
+            }
+        }
+
         public static bool CursorShown
         {
             get => _isShown;

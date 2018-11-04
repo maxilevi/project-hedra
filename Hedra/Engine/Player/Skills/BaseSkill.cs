@@ -165,6 +165,7 @@ namespace Hedra.Engine.Player.Skills
         public void Dispose()
         {
             DrawManager.Remove(this);
+            UpdateManager.Remove(this);
             CooldownSecondsText.Dispose();
         }    
     }

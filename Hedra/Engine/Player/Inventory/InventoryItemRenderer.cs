@@ -62,6 +62,7 @@ namespace Hedra.Engine.Player.Inventory
             mesh.BaseTint = EffectDescriber.EffectColorFromItem(Item);
             mesh.ApplyFog = false;
             DrawManager.Remove(mesh);
+            UpdateManager.Remove(mesh);
             return mesh;
         }
 

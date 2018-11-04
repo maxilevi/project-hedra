@@ -91,6 +91,7 @@ namespace Hedra.Engine.WorldBuilding
         public override void Dispose()
         {
             EventDispatcher.UnregisterKeyDown(this);
+            UpdateManager.Remove(this);
         }
     }
 }

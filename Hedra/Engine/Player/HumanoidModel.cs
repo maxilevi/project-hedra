@@ -578,6 +578,7 @@ namespace Hedra.Engine.Player
 
         public override void Dispose()
         {
+            _food.Dispose();
             _collider.Dispose();
             Model.Dispose();
             _lampModel?.Dispose();

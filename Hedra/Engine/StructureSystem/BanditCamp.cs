@@ -153,6 +153,7 @@ namespace Hedra.Engine.WorldBuilding
                     Enemies[i].Dispose();
                 }
             }
+            EventDispatcher.UnregisterKeyDown(this);
             _rescuee?.Dispose();
             this._campfire.Dispose();
             UpdateManager.Remove(this);

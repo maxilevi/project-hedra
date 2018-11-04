@@ -83,6 +83,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             else
             {
                 MainMesh = new ObjectMesh(Vector3.Zero);
+                MainMesh.Dispose();
             }
             CreateAnimations();
         }
