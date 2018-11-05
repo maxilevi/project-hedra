@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Loader
@@ -24,6 +26,22 @@ namespace Hedra.Engine.Loader
                 list.Add(modules[i].Replace("\\", "/"));
             }
             return list.ToArray();
+        }
+        
+        public static Type[] GetTypes(Predicate<Type> Filter)
+        {
+            var files = Get(".dll");
+            var toReturn = new List<Type>();
+            for (var i = 0; i < files.Length; i++)
+            {
+                var dll = Assembly.LoadFile(files[i]);
+                foreach (var type in dll.GetExportedTypes())
+                {
+                    if(!Filter(type)) continue;
+                    toReturn.Add(type);
+                }
+            }
+            return toReturn.ToArray();
         }
     }
 }
