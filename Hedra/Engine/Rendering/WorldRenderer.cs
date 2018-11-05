@@ -68,10 +68,11 @@ namespace Hedra.Engine.Rendering
             
             if(ToDraw.Count == 0) return;
             
-            if(Type == WorldRenderType.Static)
+            if((Type & WorldRenderType.Static) == WorldRenderType.Static)
             {
                 TerrainDraw(ToDraw, ToDrawShadow);
-                InstanceDraw(ToDraw);
+                if ((Type & WorldRenderType.Instance) == WorldRenderType.Instance) InstanceDraw(ToDraw);
+                StaticUnBind();
             }
             else if(Type == WorldRenderType.Water)
             {
@@ -90,8 +91,6 @@ namespace Hedra.Engine.Rendering
             StaticShader["MinDitherDistance"] = GeneralSettings.MinLodDitherDistance;
             
             Renderer.MultiDrawElements(PrimitiveType.Triangles, counts, DrawElementsType.UnsignedInt, offsets, counts.Length);
-            
-            StaticUnBind();
         }
         
         private static void TerrainDraw(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ShadowDraw)
@@ -258,9 +257,12 @@ namespace Hedra.Engine.Rendering
         public static Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
     }
 
-    public enum WorldRenderType
+    [Flags]
+    public enum WorldRenderType : byte
     {
-        Static,
-        Water
+        Static = 1,
+        Water = 2,
+        Instance = 4,
+        StaticAndInstance = Static | Instance
     }
 }

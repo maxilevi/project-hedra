@@ -51,7 +51,7 @@ void main()
 	float WaterDepth = FloorDistance - WaterDistance;
 	vec4 NewColor = mix(sky_color(), InputColor, Visibility);
 	OutColor = NewColor;
-	OutColor.a = OutColor.a * (ObjectDepth < 1.0 ? clamp((WaterDepth / 6.0 / Smoothness) * .25, 0.0, 1.0) : 1.0);
+	OutColor.a = OutColor.a * (ObjectDepth < 1.0 ? clamp((WaterDepth / 8.0 / Smoothness) * .25, 0.0, 1.0) : 1.0);
 	
 	OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
 	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);

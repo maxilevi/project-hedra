@@ -42,7 +42,7 @@ namespace Hedra.Engine.Player.Inventory
                 FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemText, DrawOrder.After);
 
-            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position - Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .2f),
+            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position - Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .25f),
                 Color.Bisque, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemDescription, DrawOrder.After);
 
