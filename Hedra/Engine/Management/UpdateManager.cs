@@ -20,11 +20,13 @@ namespace Hedra.Engine.Management
         private static readonly TickSystem Ticker;
         private static bool _isShown = true;
         private static readonly object Lock = new object();
+        private static readonly List<IUpdatable> ToRemove;
 
         static UpdateManager()
         {
             UpdateFunctions = new HashSet<IUpdatable>();
             UpdateFunctionsList = new List<IUpdatable>();
+            ToRemove = new List<IUpdatable>();
             Ticker = new TickSystem();
         }
 
@@ -41,8 +43,16 @@ namespace Hedra.Engine.Management
                 UpdateFunctionsList.Add(Updatable);
             }
         }
-        
+
         public static void Remove(IUpdatable Updatable)
+        {
+            lock (Lock)
+            {
+                ToRemove.Add(Updatable);
+            }
+        }
+
+        private static void DoRemove(IUpdatable Updatable)
         {
             lock (Lock)
             {
@@ -60,7 +70,8 @@ namespace Hedra.Engine.Management
         {
             lock (Lock)
             {
-                for (var i = UpdateFunctionsList.Count - 1; i > -1; i--)
+                RemovePending();
+                for (var i = 0; i < UpdateFunctionsList.Count; ++i)
                 {
                     if (UpdateFunctionsList[i] == null)
                     {
@@ -76,13 +87,20 @@ namespace Hedra.Engine.Management
                 SkyManager.Update();
             }
         }
+
+        private static void RemovePending()
+        {
+            for(var i = 0; i < ToRemove.Count; i++)
+            {
+                DoRemove(ToRemove[i]);
+            }
+            ToRemove.Clear();
+        }
           
         public static void CenterMouse()
         {
             System.Windows.Forms.Cursor.Position = new System.Drawing.Point(GameSettings.Width / 2, GameSettings.Height / 2);
         }
-
-        public static CursorState CursorState { get; set; }
 
         public static int UpdateCount
         {
@@ -110,10 +128,4 @@ namespace Hedra.Engine.Management
             }
         }
     }
-}
-
-public enum CursorState{
-    NORMAL,
-    CLICK,
-    DRAG
 }
