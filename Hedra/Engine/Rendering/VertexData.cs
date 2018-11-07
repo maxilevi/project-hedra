@@ -98,24 +98,25 @@ namespace Hedra.Engine.Rendering
         
         public float[] GenerateWindValues()
         {
-            return this.GenerateWindValues(-Vector4.One, Utils.Rng.NextFloat());
+            return this.GenerateWindValues(-Vector4.One, 1);
         }
         
-        public float[] GenerateWindValues( Vector4 Color, float Dir)
+        public float[] GenerateWindValues(Vector4 Color, float Scalar)
         {
             var values = new float[Vertices.Count];
-            Vector3 highest = this.SupportPoint(Vector3.UnitY, Color);
-            Vector3 lowest = this.SupportPoint(-Vector3.UnitY, Color);
+            var highest = this.SupportPoint(Vector3.UnitY, Color);
+            var lowest = this.SupportPoint(-Vector3.UnitY, Color);
             
             for(var i = 0; i < Vertices.Count; i++)
             {
-                if(Colors[i] != Color && Color != -Vector4.One){
+                if(Colors[i] != Color && Color != -Vector4.One)
+                {
                     values[i] = 0;
                     continue;
                 }
                 
                 float shade = Vector3.Dot(Vertices[i] - lowest, Vector3.UnitY) / Vector3.Dot(highest - lowest, Vector3.UnitY);
-                values[i] = shade + (float) Math.Pow(shade, 1.3);
+                values[i] = (shade + (float) Math.Pow(shade, 1.3)) * Scalar;
             }
             return values;
         }

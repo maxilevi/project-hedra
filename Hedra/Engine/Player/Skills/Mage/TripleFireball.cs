@@ -61,29 +61,7 @@ namespace Hedra.Engine.Player
         }
         
         public override void Update(){ }
-        
-        public IEnumerator ShootCoroutine(){
-            Vector3 Direction = Player.View.CrossDirection;
-            Matrix4 D10 = Matrix4.CreateRotationY(10 * Mathf.Radian);
-            Matrix4 DN10 = Matrix4.CreateRotationY(-10 * Mathf.Radian);
-            yield return null;
-            Matrix4 D5 = Matrix4.CreateRotationY(5 * Mathf.Radian);
-            Matrix4 DN5 = Matrix4.CreateRotationY(-5 * Mathf.Radian);
-            
-            yield return null;
-            
-            this.CreateProjectile(Direction * 4);
-            yield return null;
-            this.CreateProjectile( Vector3.TransformVector(Direction, D10) * 4);//45
-            yield return null;
-            this.CreateProjectile( Vector3.TransformVector(Direction, DN10)* 4);//45 Degrees
-            yield return null;
-            this.CreateProjectile( Vector3.TransformVector(Direction, D5) * 4);
-            yield return null;
-            this.CreateProjectile( Vector3.TransformVector(Direction, DN5)* 4);
-            yield return null;
-        }
-        
+
         public void CreateProjectile(Vector3 Direction)
         {
             /*

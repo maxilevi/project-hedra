@@ -55,6 +55,7 @@ namespace Hedra.Engine.Player
         public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
         public MovementManager Movement { get; protected set; }
         public HandLamp HandLamp { get; }
+        public FishingHandler Fisher { get; }
         public DamageComponent DmgComponent;
         public ClassDesign Class { get; set; } = new WarriorDesign();
         public float AttackPower { get; set; }
@@ -135,6 +136,7 @@ namespace Hedra.Engine.Player
             HandLamp = new HandLamp(this);
             Movement = new MovementManager(this);
             DmgComponent = new DamageComponent(this);
+            Fisher = new FishingHandler(this);
             RandomFactor = NewRandomFactor();
             Physics.CanCollide = true;
             DodgeCost = DefaultDodgeCost;
@@ -152,6 +154,7 @@ namespace Hedra.Engine.Player
             {
                 ConsecutiveHits = 0;
             }
+            Fisher.Update();
         }
 
         #region Dodge
@@ -390,6 +393,8 @@ namespace Hedra.Engine.Player
             get => _mana;
             set => _mana = Mathf.Clamp(value,0,MaxMana);
         }
+        
+        public bool IsFishing { get; set; }
         
         public virtual bool IsSailing => false;
 

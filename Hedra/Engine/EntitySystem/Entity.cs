@@ -257,6 +257,10 @@ namespace Hedra.Engine.EntitySystem
         {
             var collider0 = this.Model.BroadphaseCollider;
             var collider1 = Target.Model.BroadphaseCollider;
+            var radii = collider0.BroadphaseRadius + collider1.BroadphaseRadius;
+            return (Target.Position - this.Position).LengthSquared < radii * radii;
+            /*var collider0 = this.Model.BroadphaseCollider;
+            var collider1 = Target.Model.BroadphaseCollider;
             var radii = (collider0.BroadphaseRadius + collider1.BroadphaseRadius) * RadiusModifier;
             if ((collider0.BroadphaseCenter - collider1.BroadphaseCenter).LengthSquared > radii * radii) return false;
             var vertices0 = collider0.Vertices;
@@ -273,7 +277,7 @@ namespace Hedra.Engine.EntitySystem
                     }
                 }
             }
-            return lowestDistance < 4f * RadiusModifier;
+            return lowestDistance < 4f * RadiusModifier;*/
         }
 
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)

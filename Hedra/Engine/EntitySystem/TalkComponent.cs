@@ -140,17 +140,16 @@ namespace Hedra.Engine.EntitySystem
             EventDispatcher.UnregisterKeyDown(this);
         }
 
-        public static string[] Phrases = {
+        private static string[] Phrases =
+        {
             "Have you tried selling your items in the market? They accept every kind of object.",
             "Rumor says graveyards hold great rewards.",
             "I've heard there is a travelling merchant wandering around the world. He sells gliders & special items.",
             "You seem like an adventurer. Why don't you try doing a quest?",
             "Farming is exhausting.",
-            "Liked the game? Rate it on itch.io!",
             "Am I the only one who hears the sound of glass breaking?",
             "Are you an adventurer? I envy you. Farming gets tiring.",
             "The life of a farmer may be a dull one, but it's what keeps the village going!",
-
         };
     }
 }

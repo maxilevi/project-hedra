@@ -110,6 +110,7 @@
     <Compile Include="Engine\AISystem\Behaviours\RetaliateBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\RoamBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\StareBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\TrollAttackBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\WalkBehaviour.cs" />
     <Compile Include="Engine\AISystem\FriendlyAIComponent.cs" />
     <Compile Include="Engine\AISystem\GiantBeetleAIComponent.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Engine\AISystem\IGuardAIComponent.cs" />
     <Compile Include="Engine\AISystem\NeutralAIComponent.cs" />
     <Compile Include="Engine\AISystem\SheepAIComponent.cs" />
+    <Compile Include="Engine\AISystem\TrollAIComponent.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeColorsDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeEnviromentDesign.cs" />
@@ -204,6 +206,7 @@
     <Compile Include="Engine\CacheSystem\OakTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\ObeliskCache.cs" />
     <Compile Include="Engine\CacheSystem\PineTreesCache.cs" />
+    <Compile Include="Engine\CacheSystem\ReedCache.cs" />
     <Compile Include="Engine\CacheSystem\RockCache.cs" />
     <Compile Include="Engine\CacheSystem\KnockedIconCache.cs" />
     <Compile Include="Engine\CacheSystem\SleepingIconCache.cs" />
@@ -229,6 +232,7 @@
     <Compile Include="Engine\EntitySystem\Component.cs" />
     <Compile Include="Engine\EntitySystem\IComponent.cs" />
     <Compile Include="Engine\EntitySystem\IPhysicsComponent.cs" />
+    <Compile Include="Engine\EntitySystem\MercenaryComponent.cs" />
     <Compile Include="Engine\Game\GameLoader.cs" />
     <Compile Include="Engine\Game\GameManager.cs" />
     <Compile Include="Engine\Game\GameSettings.cs" />
@@ -283,6 +287,7 @@
     <Compile Include="Engine\Management\IAssetProvider.cs" />
     <Compile Include="Engine\Management\IConsoleManager.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
+    <Compile Include="Engine\ModuleSystem\AnimationEvents\Slash.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\ReedDesign.cs" />
@@ -296,6 +301,7 @@
     <Compile Include="Engine\Player\BoatSystem\BoatModelHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatStateHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\IBoat.cs" />
+    <Compile Include="Engine\Player\FishingHandler.cs" />
     <Compile Include="Engine\Player\IAmbientEffectHandler.cs" />
     <Compile Include="Engine\Player\IPlayerInventory.cs" />
     <Compile Include="Engine\Player\IVehicle.cs" />
@@ -904,6 +910,10 @@
       <Link>Assets\Chr\SheepIdle1.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Animations\TrollAttack1.dae">
+      <Link>Assets\Chr\TrollAttack1.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Animations\WarriorHeadbutt.dae">
       <Link>Assets\Chr\WarriorHeadbutt.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -922,6 +932,18 @@
     </None>
     <None Include="..\project-hedra-assets\Animations\WarriorSmash.dae">
       <Link>Assets\Chr\WarriorSmash.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Reed\Reed0.ply">
+      <Link>Assets\Env\Plants\Reed0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Reed\Reed1.ply">
+      <Link>Assets\Env\Plants\Reed1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Reed\Reed2.ply">
+      <Link>Assets\Env\Plants\Reed2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Bows\CommonRecurveBow.ply">

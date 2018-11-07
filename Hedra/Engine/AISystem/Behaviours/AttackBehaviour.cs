@@ -32,21 +32,26 @@ namespace Hedra.Engine.AISystem.Behaviours
                 this.Target = null;
                 Follow.Target = this.Target;
             }
-            if (!Parent.Model.IsAttacking && Target != null && !Parent.InAttackRange(Target, 1.25f))
+            if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target))
             {
                 Follow.Update();
             }
-            if (Target != null && Parent.InAttackRange(Target, 1.5f))
+            if (Target != null && InAttackRange(Target))
             {
                 FollowTimer.Reset();
                 this.Attack(1.5f);
             }
         }
 
-        public virtual void Attack(float RangeModifier)
+        protected virtual void Attack(float RangeModifier)
         {
             Physics.LookAt(this.Parent, Target);
             Parent.Model.Attack(Target, RangeModifier);
+        }
+        
+        protected bool InAttackRange(IEntity Entity)
+        {
+            return Parent.InAttackRange(Entity);
         }
 
         public bool Enabled => this.Target != null;

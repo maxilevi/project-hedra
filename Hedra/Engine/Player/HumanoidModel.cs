@@ -50,6 +50,7 @@ namespace Hedra.Engine.Player
         private Animation _jumpAnimation;
         private Animation _sailingAnimation;
         private Animation _helloAnimation;
+        private Animation _fishingAnimation;
         public Joint LeftShoulderJoint { get; private set; }
         public Joint RightShoulderJoint { get; private set; }
         public Joint LeftElbowJoint { get; private set; }
@@ -160,6 +161,7 @@ namespace Hedra.Engine.Player
             _sleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
             _jumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
             _sailingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSit.dae");
+            _fishingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSit.dae");
             _helloAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorHello.dae");
             _helloAnimation.Loop = false;
             
@@ -336,6 +338,10 @@ namespace Hedra.Engine.Player
             if (Human.IsKnocked)
             {
                 currentAnimation = _knockedAnimation;
+            }
+            if (Human.IsFishing)
+            {
+                currentAnimation = _fishingAnimation;
             }
             if (currentAnimation != null && Model.AnimationPlaying != currentAnimation 
                 && (Model.AnimationPlaying != _animationPlaying || _animationPlaying == null))

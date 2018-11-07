@@ -57,6 +57,31 @@ namespace Hedra.Engine.Player
             Items[2][1].AbilityType = typeof(Resistance);    
             Items[2][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
             Items[2][1].Enabled = true;
+            
+            Items[2][1].AbilityType = typeof(Resistance);    
+            Items[2][1].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+            Items[2][1].Enabled = true;
+            
+            Items[2][3].AbilityType = typeof(Resistance);    
+            Items[2][3].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+            Items[2][3].Enabled = true;
+            
+            Items[2][3].AbilityType = typeof(Resistance);    
+            Items[2][3].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+            Items[2][3].Enabled = true;
+            
+            Items[2][4].AbilityType = typeof(Resistance);    
+            Items[2][4].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+            Items[2][4].Enabled = true;
+            
+/*            
+            Items[3][5].AbilityType = typeof(Resistance);    
+            Items[3][5].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+            Items[3][5].Enabled = true;
+            
+            Items[4][5].AbilityType = typeof(Resistance);    
+            Items[4][5].Image = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+            Items[4][5].Enabled = true;*/
         }
     }
 }

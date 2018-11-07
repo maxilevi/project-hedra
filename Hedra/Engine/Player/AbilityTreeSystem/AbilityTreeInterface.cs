@@ -28,8 +28,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 12f, FontStyle.Bold));
             for (var i = 0; i < this.Buttons.Length; i++)
             {
-                //this.Buttons[i].Scale *= 1.5f;
-                //this.Textures[i].Position = this.Buttons[i].Position;
+                this.Textures[i].Scale *= 0.85f;
+                this.Textures[i].Position = this.Buttons[i].Position;
                 this.Buttons[i].Scale = this.Textures[i].Scale;
                 this.Buttons[i].Texture.IdPointer = null;
                 this.ButtonsText[i].TextFont = FontCache.Get(AssetManager.BoldFamily, 10f, FontStyle.Bold);
@@ -93,20 +93,20 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         private bool SetGrayscale(int Index)
         {
-            var decomposedIndexY = Index % AbilityTree.Layers;
-            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Layers - 1 - (Index - decomposedIndexY) / AbilityTree.Layers;
+            var decomposedIndexY = Index % AbilityTree.Columns;
+            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns - 1 - (Index - decomposedIndexY) / AbilityTree.Columns;
             this.Buttons[Index].Texture.Grayscale = decomposedIndexX * 5 > _player.Level || !this.PreviousUnlocked(Index);
             return this.Buttons[Index].Texture.Grayscale;
         }
 
         private bool PreviousUnlocked(int Index)
         {
-            var decomposedIndexY = Index % AbilityTree.Layers;
-            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Layers - 1 - (Index - decomposedIndexY) / AbilityTree.Layers;
+            var decomposedIndexY = Index % AbilityTree.Columns;
+            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns - 1 - (Index - decomposedIndexY) / AbilityTree.Columns;
             if (decomposedIndexX == 0) return true;
-            else if (!this.Array[Index + AbilityTree.Layers].GetAttribute<bool>("Enabled"))
-                return this.PreviousUnlocked(Index + AbilityTree.Layers);
-            return this.Array[Index + AbilityTree.Layers].GetAttribute<int>("Level") > 0;
+            else if (!this.Array[Index + AbilityTree.Columns].GetAttribute<bool>("Enabled"))
+                return this.PreviousUnlocked(Index + AbilityTree.Columns);
+            return this.Array[Index + AbilityTree.Columns].GetAttribute<int>("Level") > 0;
         }
 
         public override bool Enabled

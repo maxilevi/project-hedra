@@ -27,8 +27,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     /// </summary>
     public class AbilityTree : PlayerInterface, IAbilityTree
     {
-        public const int AbilityCount = 15;
-        public const int Layers = 3;
+        public const int Rows = 6;
+        public const int Columns = 3;
+        public const int AbilityCount = Columns * Rows;
         private const char SaveMarker = '!';
         private const char NumberMarker = '|';
         private const string HeaderMarker = "<>";
@@ -56,7 +57,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _abilities[i].SetAttribute("Level", 0);
                 
             }
-            _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Layers, new Vector2(1.5f, 1.5f))
+            _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns, new Vector2(1.0f, 1.0f))
             {
                 Position = Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * -.65f + Vector2.UnitY * -.25f),
                 IndividualScale = Vector2.One * 1.1f
@@ -104,9 +105,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _player.View.TargetDistance =
                     Mathf.Lerp(_player.View.TargetDistance, 10f, (float)Time.DeltaTime * 16f);
                 _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw, (float)Math.Acos(-_player.Orientation.X),
-                    (float)Time.DeltaTime * 16f);
+                    Time.DeltaTime * 16f);
                 _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
-                    (float)Time.DeltaTime * 16f);
+                    Time.DeltaTime * 16f);
                 _background.UpdateView(_player);
             }
         }
@@ -190,7 +191,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             {
                 for (var j = 0; j < Blueprint.Items[i].Length; j++)
                 {
-                    var index = (Blueprint.Items[i].Length-1 - j) * Layers + i;
+                    var index = (Blueprint.Items[i].Length-1 - j) * Columns + i;
                     var button = _interface.Buttons[index];
                     var slot = Blueprint.Items[i][j];
                     var ability = _abilities[index];

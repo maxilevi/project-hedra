@@ -28,12 +28,12 @@ namespace Hedra.Engine.AISystem.Behaviours
             var canGrowl = Target != null && GrowlTimer.Ready && (Parent.Position - Target.Position).LengthSquared > 16 * 16 &&
                 (Parent.Position - Target.Position).LengthSquared < 48 * 48;
 
-            var inAttackRange = Target != null && (Parent.InAttackRange(Target, 1.5f) || canGrowl);
+            var inAttackRange = Target != null && (InAttackRange(Target) || canGrowl);
             if (!Parent.Model.IsAttacking && Target != null && !inAttackRange)
             {
                 Follow.Update();
             }
-            inAttackRange = Target != null && (Parent.InAttackRange(Target, 1.75f) || canGrowl);
+            inAttackRange = Target != null && (InAttackRange(Target) || canGrowl);
             if (!Parent.Model.IsAttacking && Target != null && inAttackRange)
             {
                 FollowTimer.Reset();
@@ -42,7 +42,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             GrowlTimer.Tick();
         }
 
-        public override void Attack(float RangeModfier)
+        protected override void Attack(float RangeModfier)
         {
             var asQuadruped = (QuadrupedModel)Parent.Model;
             if (GrowlTimer.Ready)

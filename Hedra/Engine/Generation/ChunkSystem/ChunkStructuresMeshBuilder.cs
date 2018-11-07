@@ -84,28 +84,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 model.Extradata = CacheManager.CachedExtradata[Element.ExtraDataCache].Clone();
             else
                 model.Extradata = Element.ExtraData;
-/*
-            if (Element.MeshCache == CacheManager.GetModel(CacheItem.Grass) ||
-                Element.MeshCache == CacheManager.GetModel(CacheItem.Wheat))
-            {
-                var instancePosition = Element.TransMatrix.ExtractTranslation();
-                var grassRng = new Random((int)(instancePosition.X * instancePosition.Z));
-                instancePosition += Vector3.UnitY * (grassRng.NextFloat() * .2f - .2f);
-                if (!DrawManager.DropShadows.Exists(instancePosition))
-                {
-                    var shadow = new DropShadow
-                    {
-                        Position = instancePosition,
-                        DepthTest = true,
-                        Rotation = new Matrix3(Mathf.RotationAlign(Vector3.UnitY,
-                            Physics.NormalAtPosition(instancePosition)))
-                    };
-                    shadow.Scale *= 1.4f;
-                    shadow.Position += Vector3.Transform(Vector3.UnitY, shadow.Rotation) *
-                                       (grassRng.NextFloat() * .4f);
-                    shadow.DeleteWhen = () => BuildedLod != 1 || Disposed;
-                }
-            }*/
+
+            if(model.Colors.Count != model.Extradata.Count)
+                throw new ArgumentOutOfRangeException("Extradata or color mismatch");
 
             model.Transform(Element.TransMatrix);
             //Pack some randomness to the wind values

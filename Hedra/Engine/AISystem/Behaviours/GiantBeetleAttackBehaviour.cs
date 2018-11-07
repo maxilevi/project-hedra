@@ -34,12 +34,12 @@ namespace Hedra.Engine.AISystem.Behaviours
             }
             var canSpit = Target != null && SpitTimer.Ready &&
                           (Parent.Position - Target.Position).LengthSquared > 24 * 24 && (Parent.Position - Target.Position).LengthSquared < 80 * 80;
-            var inAttackRange = Target != null && (Parent.InAttackRange(Target, 1.75f) || canSpit);
+            var inAttackRange = Target != null && (InAttackRange(Target) || canSpit);
             if (!Parent.Model.IsAttacking && Target != null && !inAttackRange)
             {
                 Follow.Update();
             }
-            inAttackRange = Target != null && (Parent.InAttackRange(Target, 2.25f) || canSpit);
+            inAttackRange = Target != null && (InAttackRange(Target) || canSpit);
             if (Target != null && inAttackRange)
             {
                 FollowTimer.Reset();
@@ -48,7 +48,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             SpitTimer.Tick();
         }
 
-        public override void Attack(float RangeModifier)
+        protected override void Attack(float RangeModifier)
         {
             var asQuadruped = (QuadrupedModel) Parent.Model;
             if (SpitTimer.Ready)

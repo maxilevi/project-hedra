@@ -100,8 +100,8 @@ namespace Hedra.Engine.Generation
             transMatrix *= Matrix4.CreateTranslation( Placement.Position );
 
             var windRng = Utils.Rng.NextFloat(); 
-            model.Extradata.AddRange( model.GenerateWindValues(AssetManager.ColorCode1, windRng) );
-            model.AddExtraData(AssetManager.ColorCode2, model.GenerateWindValues(AssetManager.ColorCode2, windRng));
+            model.Extradata.AddRange( model.GenerateWindValues(AssetManager.ColorCode1, 1) );
+            model.AddExtraData(AssetManager.ColorCode2, model.GenerateWindValues(AssetManager.ColorCode2, 1));
 
             Vector4 woodColor = rng.Next(0, 5) != 1
                 ? BiomeRegion.Colors.WoodColors[new Random(World.Seed + 5232).Next(0, BiomeRegion.Colors.WoodColors.Length)] 

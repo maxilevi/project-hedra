@@ -16,13 +16,13 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     /// </summary>
     public abstract class AbilityTreeBlueprint
     {
-        public readonly TreeItem[][] Items = new TreeItem[AbilityTree.Layers][];
+        public readonly TreeItem[][] Items = new TreeItem[AbilityTree.Columns][];
 
         protected AbilityTreeBlueprint()
         {
             for(var i = 0; i < Items.Length; i++)
             {
-                Items[i] = new TreeItem[AbilityTree.AbilityCount / AbilityTree.Layers];
+                Items[i] = new TreeItem[AbilityTree.Rows];
                 for(var j = 0; j < Items[i].Length; j++)
                 {
                     Items[i][j] = new TreeItem();

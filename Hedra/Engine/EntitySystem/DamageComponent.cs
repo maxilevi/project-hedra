@@ -119,7 +119,8 @@ namespace Hedra.Engine.EntitySystem
             if (shouldMiss || Immune) return;
             _tintTimer = 0.25f;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
-            if (Damager != null && Damager != Parent && PushBack)
+            if (Damager != null && Damager != Parent && PushBack 
+                && Parent.Model.Dimensions.Size.LengthFast < Damager.Model.Dimensions.Size.LengthFast)
             {
                 var direction = -(Damager.Position - Parent.Position).Normalized();
                 var factor = 0.5f;

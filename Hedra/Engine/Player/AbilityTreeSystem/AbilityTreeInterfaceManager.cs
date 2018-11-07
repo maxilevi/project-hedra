@@ -24,8 +24,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             var button = (Button) Sender;
             var index = this.IndexFromButton(button);
-            var decomposedIndexY = index % AbilityTree.Layers;
-            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Layers-1 - (index - decomposedIndexY) / AbilityTree.Layers;
+            var decomposedIndexY = index % AbilityTree.Columns;
+            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns-1 - (index - decomposedIndexY) / AbilityTree.Columns;
             var item = this.ItemFromButton(button);
             var locked = decomposedIndexX * 5 > _player.Level;
             var previousUnlocked = this.PreviousUnlocked(index);
@@ -54,12 +54,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         private bool PreviousUnlocked(int Index)
         {
-            var decomposedIndexY = Index % AbilityTree.Layers;
-            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Layers - 1 - (Index - decomposedIndexY) / AbilityTree.Layers;
+            var decomposedIndexY = Index % AbilityTree.Columns;
+            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns - 1 - (Index - decomposedIndexY) / AbilityTree.Columns;
             if (decomposedIndexX == 0) return true;
-            else if (!_interface.Array[Index + AbilityTree.Layers].GetAttribute<bool>("Enabled"))
-                return this.PreviousUnlocked(Index + AbilityTree.Layers);
-            return _interface.Array[Index + AbilityTree.Layers].GetAttribute<int>("Level") > 0;
+            else if (!_interface.Array[Index + AbilityTree.Columns].GetAttribute<bool>("Enabled"))
+                return this.PreviousUnlocked(Index + AbilityTree.Columns);
+            return _interface.Array[Index + AbilityTree.Columns].GetAttribute<int>("Level") > 0;
         }
 
         private int IndexFromButton(Button Sender)

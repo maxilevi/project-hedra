@@ -32,6 +32,7 @@ namespace Hedra.Engine.Player
         float FacingDirection { get; }
         bool IsSitting { get; set; }
         bool HasWeapon { get; }
+        bool IsFishing { get; set; }
         HandLamp HandLamp { get; }
         HumanoidModel Model { get; set; }
         MovementManager Movement { get; }

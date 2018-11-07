@@ -53,6 +53,7 @@ namespace HedraTests.Player
         public int Gold { get; set; }
         public float DamageEquation { get; }
         public bool IsTravelling { get; set; }
+        public bool IsFishing { get; set; }
 
         public void Roll()
         {
