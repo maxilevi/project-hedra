@@ -1,0 +1,23 @@
+
+        {
+          "Name": "RareBattleStaff",
+          "DisplayName": "Battle Staff",
+          "EquipmentType": "Staff",
+          "Tier": "Rare",
+          "Description": "Battle Staff.",
+          "Attributes": [
+            {
+              "Name": "Damage",
+              "Value": 2.5
+            },
+            {
+              "Name": "AttackSpeed",
+              "Value": 1.0
+            }
+          ],
+          "Model": {
+            "Scale": 1.0,
+            "Path": "$DataFile$/Items/Staff/RareBattleStaff.ply"
+          }
+        }
+        

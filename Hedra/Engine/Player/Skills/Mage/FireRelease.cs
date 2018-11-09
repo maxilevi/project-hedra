@@ -6,17 +6,14 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using OpenTK;
-using Hedra.Engine.Rendering;
-using System.Drawing;
-using System.IO;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player.Skills;
-using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Rendering.Animation;
 
-namespace Hedra.Engine.Player
+using Hedra.Engine.Generation;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Rendering.Particles;
+using OpenTK;
+
+namespace Hedra.Engine.Player.Skills.Mage
 {
     /// <summary>
     /// Description of FireRelease.
@@ -118,10 +115,6 @@ namespace Hedra.Engine.Player
             Particles.ParticleLifetime = 2.25f;
         }
         
-        public override string Description {
-            get {
-                return "A cone of flames to burn your enemies.";
-            }
-        }    
+        public override string Description => "A cone of flames to burn your enemies.";
     }
 }

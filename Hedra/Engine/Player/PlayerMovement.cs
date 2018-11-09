@@ -39,7 +39,13 @@ namespace Hedra.Engine.Player
             if (!this.CaptureMovement || GameSettings.Paused || Human.IsKnocked || Human.IsDead
                 || !Human.CanInteract || Human.IsRiding || Human.IsEating) return;
 
-            if (EventArgs.Button == MouseButton.Middle) _player.Roll();
+            if (EventArgs.Button == MouseButton.Middle)
+            {
+                if(GameManager.Keyboard[Key.D] || GameManager.Keyboard[Key.A])
+                    _player.Roll(RollType.Sideways);
+                else
+                    _player.Roll(RollType.Normal);
+            }
         }
 
         protected override void DoUpdate()
@@ -89,8 +95,8 @@ namespace Hedra.Engine.Player
                 keysPresses = 1f / (!wPressed && !sPressed && !aPressed && !dPressed ? 1f : keysPresses);
                 if (keysPresses < 1f) keysPresses *= 1.5f;
 
-                _targetAngles.Z = 5f * (_player.View.StackedYaw - _yaw);
-                _targetAngles = Mathf.Clamp(_targetAngles, -10f, 10f);
+                _targetAngles.Z = 7.5f * (_player.View.StackedYaw - _yaw);
+                _targetAngles = Mathf.Clamp(_targetAngles, -15f, 15f);
                 _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.DeltaTime * 8f);
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
                 if (GameManager.Keyboard[Key.W] || GameSettings.ContinousMove)

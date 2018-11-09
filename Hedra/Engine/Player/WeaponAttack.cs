@@ -44,6 +44,8 @@ namespace Hedra.Engine.Player
         private static readonly uint Katar2 = Graphics2D.LoadFromAssets("Assets/Skills/KatarAttack2.png");
         private static readonly uint Claw1 = Graphics2D.LoadFromAssets("Assets/Skills/ClawAttack1.png");
         private static readonly uint Claw2 = Graphics2D.LoadFromAssets("Assets/Skills/ClawAttack2.png");
+        private static readonly uint Staff1 = Graphics2D.LoadFromAssets("Assets/Skills/StaffAttack1.png");
+        private static readonly uint Staff2 = Graphics2D.LoadFromAssets("Assets/Skills/StaffAttack2.png");
 
         public bool DisableWeapon { get; set; }
         private ShiverAnimation _shiverAnimation;
@@ -89,7 +91,7 @@ namespace Hedra.Engine.Player
                 Player.LeftWeapon.Attack2(Player, new AttackOptions
                 {
                     Charge = charge,
-                    DamageModifier = AttackOptions.Default.DamageModifier * charge + .25f
+                    DamageModifier = AttackOptions.Default.DamageModifier * charge + .15f
                 });
                 IsCharging = false;
             }

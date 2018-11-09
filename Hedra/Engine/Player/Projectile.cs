@@ -34,10 +34,14 @@ namespace Hedra.Engine.Player
         public event OnProjectileMoveEvent LandEventHandler;
 
         public Vector3 Propulsion { get; set; }
+        public Vector3 Direction { get; set; }
         public float Lifetime { get; set; } = 10f;
         public ObjectMesh Mesh { get; }
         public bool Collide { get; set; } = true;
+        public bool HandleLifecycle { get; set; } = true;
         public bool Disposed { get; private set; }
+        public bool UsePhysics { get; set; } = true;
+        public float Speed { get; set; } = 1;
 
         private readonly IEntity _parent;
         private readonly List<ICollidable> _collisions;
@@ -67,30 +71,42 @@ namespace Hedra.Engine.Player
             }
 
             Lifetime -= Time.DeltaTime;
-            Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime);
-            _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f) * (float) Time.DeltaTime;
-            _accumulatedVelocity *= (float) Math.Pow(.8f, (float)Time.DeltaTime);
-            Mesh.Position += _accumulatedVelocity * 2f * (float)Time.DeltaTime;
+            if (UsePhysics)
+            {
+                Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime);
+                _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f) * Time.DeltaTime;
+                _accumulatedVelocity *= (float)Math.Pow(.8f, Time.DeltaTime);
+                Mesh.Position += _accumulatedVelocity * 2f * Time.DeltaTime;
+            }
+            else
+            {
+                Mesh.Position += Direction * Speed * Time.DeltaTime;
+            }
             Mesh.Rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
-            if (Collide)
+            if (HandleLifecycle)
             {
-                ProcessCollision();
-            }
-                
-            for(var i = 0; i < World.Entities.Count; i++)
-            {
-                if (_parent == World.Entities[i] || !Physics.Collides(_collisionBox.Cache.Translate(Mesh.Position), World.Entities[i].Model.BroadphaseBox)) continue;
+                if (Collide)
+                {
+                    ProcessCollision();
+                }
 
-                HitEventHandler?.Invoke(this, World.Entities[i]);
-                _collided = true;
-                this.Dispose();
-                break;
+                for (var i = 0; i < World.Entities.Count; i++)
+                {
+                    if (_parent == World.Entities[i] || !Physics.Collides(_collisionBox.Cache.Translate(Mesh.Position),
+                            World.Entities[i].Model.BroadphaseBox)) continue;
+
+                    HitEventHandler?.Invoke(this, World.Entities[i]);
+                    _collided = true;
+                    this.Dispose();
+                    break;
+                }
+
+                if (Lifetime < 0)
+                {
+                    this.Dispose();
+                }
             }
 
-            if (Lifetime < 0)
-            {
-                this.Dispose();
-            }
             MoveEventHandler?.Invoke(this);
         }
 

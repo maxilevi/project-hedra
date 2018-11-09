@@ -6,7 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
+using System.Collections;
 using Hedra.Engine.Rendering;
 using OpenTK;
 using Hedra.Engine.Management;
@@ -18,8 +18,9 @@ namespace Hedra.Engine.Player
 
     public class ParticleProjectile : Projectile
     {
-        public ParticleSystem Particles { get; }
+        protected ParticleSystem Particles { get; }
         public bool UseLight { get; set; } = true;
+        public float LightRadius { get; set; } = 64;
         public Vector4 Color { get; set; } = Particle3D.FireColor;
 
         private PointLight _light;
@@ -36,13 +37,18 @@ namespace Hedra.Engine.Player
 
             this.UpdateLighting();
 
+            this.DoParticles();
+        }
+
+        protected virtual void DoParticles()
+        {
             Particles.Position = this.Position;
             Particles.Color = Color;
             Particles.ParticleLifetime = 1f;
             Particles.GravityEffect = 0f;
             Particles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
             Particles.Scale = Vector3.One * .25f;
-            Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+            Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
             Particles.Emit();
 
             Particles.Position = this.Position;
@@ -53,16 +59,19 @@ namespace Hedra.Engine.Player
             Particles.Scale = Vector3.One * 1.25f;
             Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
             Particles.VariateUniformly = true;
-            for(var i = 0; i < 35; i++) Particles.Emit();
+            for (var i = 0; i < 35; i++) Particles.Emit();
         }
 
         private void UpdateLighting()
         {
-            if (UseLight && _light == null)
+            if (UseLight && _light == null && !Disposed)
             {
                 _light = ShaderManager.GetAvailableLight();
                 if (_light != null)
-                    _light.Color = new Vector3(1, 0.2f, 0.2f);
+                {
+                    _light.Color = this.Color.Xyz;
+                    _light.Radius = LightRadius;
+                }
             }
 
             if (_light != null)
@@ -74,15 +83,27 @@ namespace Hedra.Engine.Player
         
         public override void Dispose()
         {
-            if(_light != null)
+            if (Disposed) return;
+            base.Dispose();
+            CoroutineManager.StartCoroutine(DisposeCoroutine);
+        }
+
+        private IEnumerator DisposeCoroutine()
+        {
+            if (_light != null)
             {
+                while (_light.Color.LengthFast > 0.05f)
+                {
+                    _light.Color -= _light.Color * Time.DeltaTime * 2f;
+                    ShaderManager.UpdateLight(_light);
+                    yield return null;
+                }
                 _light.Position = Vector3.Zero;
                 _light.Locked = false;
                 ShaderManager.UpdateLight(_light);
                 _light = null;
             }
             Particles.Dispose();
-            base.Dispose();
-        }    
+        }
     }
 }

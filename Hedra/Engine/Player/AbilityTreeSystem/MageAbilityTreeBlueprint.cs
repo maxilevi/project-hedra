@@ -6,17 +6,11 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using System.Drawing;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
-using System.IO;
-using Hedra.Engine.Player.AbilityTreeSystem;
-using Hedra.Engine.Player.Skills;
-using Hedra.Engine.Player.Skills.Mage;
-using OpenTK;
 
-namespace Hedra.Engine.Player
+using Hedra.Engine.Player.Skills.Mage;
+using Hedra.Engine.Rendering;
+
+namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     /*
      *    0   1   2
@@ -34,7 +28,7 @@ namespace Hedra.Engine.Player
         public MageAbilityTreeBlueprint()
         {
 
-            Items[0][0].AbilityType = typeof(Fireball);    
+            Items[0][0].AbilityType = typeof(Skills.Mage.Fireball);    
             Items[0][0].Image = Graphics2D.LoadFromAssets("Assets/Skills/Fireball.png");
             Items[0][0].Enabled = true;
             
@@ -62,7 +56,7 @@ namespace Hedra.Engine.Player
             Items[2][0].Image = Graphics2D.LoadFromAssets("Assets/Skills/Conflagaration.png");
             Items[2][0].Enabled = true;
             
-            Items[2][2].AbilityType = typeof(FireRelease);
+            Items[2][2].AbilityType = typeof(Skills.Mage.FireRelease);
             Items[2][2].Image = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");
             Items[2][2].Enabled = true;
             

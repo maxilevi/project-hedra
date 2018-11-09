@@ -158,7 +158,7 @@ namespace Hedra.Engine.Player
         }
 
         #region Dodge
-        public void Roll()
+        public void Roll(RollType Type)
         {
             var player = this as LocalPlayer;
             if( IsUnderwater || IsTravelling || IsRolling || IsCasting || IsRiding || IsJumping) return;
@@ -178,7 +178,10 @@ namespace Hedra.Engine.Player
             IsAttacking = false;
             this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.1f),
                 () => IsRolling);
-            Movement.Move(this.Orientation * 2f, 1f, false);
+            if(Type == RollType.Normal)
+                Movement.Move(this.Orientation * 2f, 1f, false);
+            else
+                Movement.Move(this.Orientation * 5f, .5f, false);
             SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);
             TaskManager.When( () => !IsRolling, () =>
             {

@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     /// </summary>
     public class AbilityTree : PlayerInterface, IAbilityTree
     {
-        public const int Rows = 6;
+        public const int Rows = 4;
         public const int Columns = 3;
         public const int AbilityCount = Columns * Rows;
         private const char SaveMarker = '!';
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _abilities[i].SetAttribute("Level", 0);
                 
             }
-            _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns, new Vector2(1.0f, 1.0f))
+            _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns, new Vector2(1.5f, 1.5f))
             {
                 Position = Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * -.65f + Vector2.UnitY * -.25f),
                 IndividualScale = Vector2.One * 1.1f

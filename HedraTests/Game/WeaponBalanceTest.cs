@@ -59,15 +59,12 @@ namespace HedraTests.Game
         {
             AssertComplies(Weapon, _sheet.BladesDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
         }
-        
-        /*
-            [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Staff })]
-            public void TestStaffDamage(Item Weapon)
-            {
-                AssertComplies(Weapon, _sheet.StaffDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
-            }
-         */
-        
+              
+        [TestCaseSource(typeof(WeaponBalanceTest), nameof(SomeWeapons), new object[] { EquipmentType.Staff })]
+        public void TestStaffDamage(Item Weapon)
+        {
+            AssertComplies(Weapon, _sheet.StaffDamage, () => Weapon.GetAttribute<float>(CommonAttributes.Damage));
+        }     
         
         [TestCaseSource(nameof(AllWeapons))]
         public void TestWeaponsAttackSpeed(Item Weapon)

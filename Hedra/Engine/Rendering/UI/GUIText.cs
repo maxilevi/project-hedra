@@ -77,7 +77,12 @@ namespace Hedra.Engine.Rendering.UI
         public Color TextColor
         {
             get => _configuration.Color;
-            set => _configuration.Color = value;
+            set
+            {
+                if (_configuration.Color == value) return;
+                _configuration.Color = value;
+                this.UpdateText();
+            }
         }
 
         public Font TextFont

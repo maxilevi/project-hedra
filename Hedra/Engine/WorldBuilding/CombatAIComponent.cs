@@ -86,7 +86,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             if(Parent != null && Parent.WasAttacking) return;
             if (RollTimer.Tick() && Parent != null && (TargetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius && CanDodge)
-                Parent.Roll();
+                Parent.Roll(RollType.Normal);
 
             this.Move(TargetPoint);
         }

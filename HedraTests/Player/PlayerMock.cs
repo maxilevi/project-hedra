@@ -55,7 +55,7 @@ namespace HedraTests.Player
         public bool IsTravelling { get; set; }
         public bool IsFishing { get; set; }
 
-        public void Roll()
+        public void Roll(RollType Type)
         {
             throw new NotImplementedException();
         }

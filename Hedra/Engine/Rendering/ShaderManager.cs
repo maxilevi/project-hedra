@@ -103,7 +103,8 @@ namespace Hedra.Engine.Rendering
 
         public static PointLight GetAvailableLight()
         {
-            for(var i = 0; i < PointLights.Length; i++){
+            for(var i = 0; i < PointLights.Length; i++)
+            {
                 if (PointLights[i].Locked) continue;
                 PointLights[i].Radius = PointLight.DefaultRadius;
                 PointLights[i].Color = Vector3.Zero;

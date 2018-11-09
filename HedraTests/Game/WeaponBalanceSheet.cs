@@ -52,7 +52,7 @@ namespace HedraTests.Game
         
         public UniqueBalanceEntry StaffDamage { get; } = new UniqueBalanceEntry
         {
-            Min = 1,
+            Min = 2.5f,
             Max = 3,
         };
         

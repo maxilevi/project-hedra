@@ -126,12 +126,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             BowModifiers?.Invoke(ArrowProj);
             return ArrowProj;
         }
-
-        public Projectile ShootArrow(IHumanoid Human, Vector3 Direction, int KnockChance = -1)
-        {
-            return this.ShootArrow(Human, Direction, AttackOptions.Default, KnockChance);
-        }
-
+        
         public Projectile ShootArrow(IHumanoid Human, Vector3 Direction, AttackOptions Options,
             int KnockChance = -1)
         {
