@@ -162,10 +162,10 @@ namespace Hedra.Engine.EntitySystem
             _speed = Mathf.Lerp(_speed, Parent.IsAttacking ? AttackingSpeed : NormalSpeed, _deltaTime * 2f);
         }
         
-        public Vector3 MoveFormula(Vector3 Direction)
+        public Vector3 MoveFormula(Vector3 Direction, bool ApplyReductions = true)
         {
-            float movementSpeed = (Parent.IsUnderwater && !Parent.IsGrounded ? 1.25f : 1.0f) * Parent.Speed;
-            return Direction * 5f * 1.75f * movementSpeed * _speed;
+            var movementSpeed = (Parent.IsUnderwater && !Parent.IsGrounded ? 1.25f : 1.0f) * Parent.Speed;
+            return Direction * 5f * 1.75f * movementSpeed * (ApplyReductions ? _speed : NormalSpeed);
         }
 
         public void Move(float Scalar = 1)

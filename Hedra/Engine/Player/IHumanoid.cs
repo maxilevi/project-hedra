@@ -42,6 +42,7 @@ namespace Hedra.Engine.Player
         float MaxMana { get; }
         float Health { get; set; }
         float Mana { get; set; }
+        float ManaRegenFactor { get; set; }
         float Stamina { get; set; }
         int Level { get; set; }
         float AttackPower { get; set; }

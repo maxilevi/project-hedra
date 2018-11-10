@@ -49,7 +49,7 @@ namespace Hedra.Engine.Player.Inventory
         public virtual void UpdateView(IHumanoid Human)
         {
             Name.Text = Human.Name;
-            Level.Text = "LEVEL "+Human.Level;
+            Level.Text = $"LEVEL {Human.Level}";
             TopLeftText.Text = $"{(int) Human.Health}/{(int) Human.MaxHealth} HP";
             BottomLeftText.Text = $"{(int)Human.Mana}/{(int) Human.MaxMana} MP";
             TopRightText.Text = $"{(int)Human.XP}/{(int)Human.MaxXP} XP";

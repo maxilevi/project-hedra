@@ -1,14 +1,14 @@
 
         {
-          "Name": "CommonWoodenStaff",
-          "DisplayName": "Wooden Staff",
+          "Name": "UncommonBattleStaff",
+          "DisplayName": "Battle Staff",
           "EquipmentType": "Staff",
-          "Tier": "Common",
-          "Description": "Wooden Staff.",
+          "Tier": "Uncommon",
+          "Description": "Battle Staff.",
           "Attributes": [
             {
               "Name": "Damage",
-              "Value": 2.0
+              "Value": 2.5
             },
             {
               "Name": "AttackSpeed",
@@ -17,7 +17,7 @@
           ],
           "Model": {
             "Scale": 1.0,
-            "Path": "$DataFile$/Items/Staff/CommonWoodenStaff.ply"
+            "Path": "$DataFile$/Items/Staff/UncommonBattleStaff.ply"
           }
         }
         

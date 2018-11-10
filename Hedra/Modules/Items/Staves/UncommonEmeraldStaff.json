@@ -1,10 +1,10 @@
 
         {
-          "Name": "DivineRuneStaff",
-          "DisplayName": "Rune Staff",
+          "Name": "UncommonEmeraldStaff",
+          "DisplayName": "Emerald Staff",
           "EquipmentType": "Staff",
-          "Tier": "Divine",
-          "Description": "Rune Staff.",
+          "Tier": "Uncommon",
+          "Description": "Emerald Staff.",
           "Attributes": [
             {
               "Name": "Damage",
@@ -17,7 +17,7 @@
           ],
           "Model": {
             "Scale": 1.0,
-            "Path": "$DataFile$/Items/Staff/DivineRuneStaff.ply"
+            "Path": "$DataFile$/Items/Staff/UncommonEmeraldStaff.ply"
           }
         }
         

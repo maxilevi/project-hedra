@@ -13,7 +13,7 @@ namespace Hedra.Engine.EntitySystem
         bool InFrontOfWall { get; }
         bool IsDrifting { get; }
         Vector3 TargetPosition { get; set; }
-        Vector3 MoveFormula(Vector3 Direction);
+        Vector3 MoveFormula(Vector3 Direction, bool ApplyReductions = true);
         void Move(float Scalar = 1);
         void Update();
         void ResetVelocity();

@@ -35,5 +35,13 @@ namespace Hedra.Engine.ItemSystem
                 }
             }
         }
+
+        public bool Contains(string Key)
+        {
+            lock (_lock)
+            {
+                return _itemTemplates.ContainsKey(Key.ToLowerInvariant());
+            }
+        }
     }
 }

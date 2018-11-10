@@ -19,7 +19,7 @@ namespace HedraTests.Game
 
         public UniqueBalanceEntry MobAttackCooldown { get; } = new UniqueBalanceEntry
         {
-            Min = 1.5f,
+            Min = 1.0f,
             Max = 3.0f,
             ScaleWithLevel = false
         };

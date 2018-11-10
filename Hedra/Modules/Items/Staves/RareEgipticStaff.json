@@ -1,10 +1,10 @@
 
         {
-          "Name": "RareBattleStaff",
-          "DisplayName": "Battle Staff",
+          "Name": "RareEgipticStaff",
+          "DisplayName": "Egiptic Staff",
           "EquipmentType": "Staff",
           "Tier": "Rare",
-          "Description": "Battle Staff.",
+          "Description": "Egiptic Staff.",
           "Attributes": [
             {
               "Name": "Damage",
@@ -17,7 +17,7 @@
           ],
           "Model": {
             "Scale": 1.0,
-            "Path": "$DataFile$/Items/Staff/RareBattleStaff.ply"
+            "Path": "$DataFile$/Items/Staff/RareEgipticStaff.ply"
           }
         }
         

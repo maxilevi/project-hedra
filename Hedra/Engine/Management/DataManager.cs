@@ -167,12 +167,19 @@ namespace Hedra.Engine.Management
                 information.Class = ClassDesign.FromString(br.ReadString());
                 information.RandomFactor = br.ReadSingle();
                 items = new Dictionary<int, Item>();
-                int itemCount = br.ReadInt32();
+                var itemCount = br.ReadInt32();
                 for (var i = 0; i < itemCount; i++)
                 {
                     var index = br.ReadInt32();
                     var item = Item.FromArray(br.ReadBytes(br.ReadInt32()));
-                    items.Add(index, item);
+                    if (item != null)
+                    {
+                        items.Add(index, item);
+                    }
+                    else
+                    {
+                        Log.WriteLine($"Found inexistant item, removing...");
+                    }
                 }
             }
             information.Items = items.ToArray();

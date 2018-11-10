@@ -34,7 +34,7 @@ namespace Hedra.Engine.Player
             this.RegisterListeners();
         }
 
-        public void OnMouseButtonDown(object Sender, MouseButtonEventArgs EventArgs)
+        private void OnMouseButtonDown(object Sender, MouseButtonEventArgs EventArgs)
         {
             if (!this.CaptureMovement || GameSettings.Paused || Human.IsKnocked || Human.IsDead
                 || !Human.CanInteract || Human.IsRiding || Human.IsEating) return;
@@ -117,11 +117,15 @@ namespace Hedra.Engine.Player
                 if (GameManager.Keyboard[Key.A])
                 {
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Left) * keysPresses);
+                    RollDirection = Human.Physics.MoveFormula(_player.View.Left, false).Xz.ToVector3().NormalizedFast();
+                    RollFacing = _characterRotation;
                 }
 
                 if (GameManager.Keyboard[Key.D])
                 {
-                    this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Right) * keysPresses);
+                    ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Right) * keysPresses);
+                    RollDirection = Human.Physics.MoveFormula(_player.View.Right, false).Xz.ToVector3().NormalizedFast();
+                    RollFacing = _characterRotation;
                 }
                 
                 if(GameManager.Keyboard[Key.ControlLeft] && _player.Physics.InFrontOfWall)

@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player
 {
-    public class FireRelease : ParticleProjectile
+    public class FireCone : ParticleProjectile
     {
         private const int ConeDistanceSquared = 320;
         private IHumanoid _owner;
@@ -16,7 +16,7 @@ namespace Hedra.Engine.Player
         private Func<bool> _while;
         private Action _do;
         
-        private FireRelease(IEntity Parent, Vector3 Origin) : base(Parent, Origin)
+        private FireCone(IEntity Parent, Vector3 Origin) : base(Parent, Origin)
         {
         }
 
@@ -33,7 +33,7 @@ namespace Hedra.Engine.Player
         protected override void DoParticles()
         {
             if(_shouldStop) return;
-            Particles.Position = Position + _owner.Orientation * 2;
+            Particles.Position = (_owner.Model.RightWeaponPosition + _owner.Model.LeftWeaponPosition) * .5f;
             Particles.Direction = _owner.Orientation;
             Particles.Color = new Vector4(1, .3f, 0, 1);
             Particles.ParticleLifetime = 2.25f;
@@ -73,7 +73,7 @@ namespace Hedra.Engine.Player
 
         public static void Create(IHumanoid Owner, float DamagePerSecond, Func<bool> While, Action Do)
         {
-            var release = new FireRelease(Owner, Owner.Position)
+            var release = new FireCone(Owner, Owner.Position)
             {
                 Color = Particle3D.FireColor,
                 Direction = Vector3.Zero,

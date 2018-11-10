@@ -51,6 +51,7 @@ namespace Hedra.Engine.Player
         public virtual bool CanInteract { get; set; } = true;
         public bool IsSleeping { get; set; }
         public bool IsJumping => Movement.IsJumping;
+        public float ManaRegenFactor { get; set; }
         public virtual float FacingDirection => -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
         public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
         public MovementManager Movement { get; protected set; }
@@ -120,7 +121,7 @@ namespace Hedra.Engine.Player
         {
             get
             {
-                var baseRegen = this.MaxMana * .01f;
+                var baseRegen = 4 + ManaRegenFactor;
                 return baseRegen * (this.IsSleeping ? 6.0f : 1.0f);
             }
         }
@@ -166,10 +167,10 @@ namespace Hedra.Engine.Player
             if(player != null){
                 if (Stamina < DodgeCost)
                 {
-                    LocalPlayer.Instance.MessageDispatcher.ShowNotification("YOU ARE TOO TIRED.", Color.DarkRed, 3f, true);
+                    GameManager.Player.MessageDispatcher.ShowNotification("YOU ARE TOO TIRED.", Color.DarkRed, 3f, true);
                     return;
                 }
-                Stamina -= DodgeCost;        
+                Stamina -= DodgeCost;
             }
             IsAttacking = false;
             IsRolling = true;
@@ -178,10 +179,17 @@ namespace Hedra.Engine.Player
             IsAttacking = false;
             this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.1f),
                 () => IsRolling);
-            if(Type == RollType.Normal)
-                Movement.Move(this.Orientation * 2f, 1f, false);
+            
+            if (Type == RollType.Normal)
+            {
+                Movement.Move(Orientation * 2f, 1f, false);
+            }
             else
-                Movement.Move(this.Orientation * 5f, .5f, false);
+            {
+                Movement.OrientateTowards(Movement.RollFacing);
+                Movement.Move(Movement.RollDirection * 4f, .5f, false);
+            }
+
             SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);
             TaskManager.When( () => !IsRolling, () =>
             {

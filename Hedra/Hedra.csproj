@@ -304,7 +304,7 @@
     <Compile Include="Engine\Player\BoatSystem\BoatStateHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\IBoat.cs" />
     <Compile Include="Engine\Player\Fireball.cs" />
-    <Compile Include="Engine\Player\FireRelease.cs" />
+    <Compile Include="Engine\Player\FireCone.cs" />
     <Compile Include="Engine\Player\Firewave.cs" />
     <Compile Include="Engine\Player\FishingHandler.cs" />
     <Compile Include="Engine\Player\IAmbientEffectHandler.cs" />
@@ -324,6 +324,7 @@
     <Compile Include="Engine\Player\Skills\Mage\FireRelease.cs" />
     <Compile Include="Engine\Player\Skills\Mage\FlameRush.cs" />
     <Compile Include="Engine\Player\Skills\Mage\FlameStyle.cs" />
+    <Compile Include="Engine\Player\Skills\Mage\Meditation.cs" />
     <Compile Include="Engine\Player\Skills\Mage\Meteor.cs" />
     <Compile Include="Engine\Player\Skills\Mage\TripleFireball.cs" />
     <Compile Include="Engine\Player\Skills\Rogue\BurstOfSpeed.cs" />
@@ -337,6 +338,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Engine\Player\Skills\SpecialAttackPassiveSkill.cs" />
+    <Compile Include="Engine\Player\Skills\SwitchSkill.cs" />
     <Compile Include="Engine\Player\Skills\Warrior\Bash.cs" />
     <Compile Include="Engine\Player\Skills\Warrior\Intercept.cs" />
     <Compile Include="Engine\Player\Skills\Warrior\LearnAxe.cs" />
@@ -908,6 +910,10 @@
       <Link>Assets\Chr\GorillaAttack1.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Animations\Mage-FireRelease.dae">
+      <Link>Assets\Chr\Mage-FireRelease.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Animations\MageStaff-PrimaryAttack.dae">
       <Link>Assets\Chr\MageStaff-PrimaryAttack.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1056,20 +1062,16 @@
       <Link>Assets\Items\Misc\Mushroom.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\CommonRuneStaff.ply">
+      <Link>Assets\Items\Staves\CommonRuneStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\CommonStoneStaff.ply">
       <Link>Assets\Items\Staves\CommonStoneStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\CommonWoodenStaff.ply">
       <Link>Assets\Items\Staves\CommonWoodenStaff.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Blend\Staves\DivineRuneStaff.ply">
-      <Link>Assets\Items\Staves\DivineRuneStaff.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Blend\Staves\LegendaryEmeraldStaff.ply">
-      <Link>Assets\Items\Staves\LegendaryEmeraldStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\LegendarySnakeStaff.ply">
@@ -1080,8 +1082,16 @@
       <Link>Assets\Items\Staves\RareAutumnStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Blend\Staves\RareBattleStaff.ply">
-      <Link>Assets\Items\Staves\RareBattleStaff.ply</Link>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\RareEgipticStaff.ply">
+      <Link>Assets\Items\Staves\RareEgipticStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\UncommonBattleStaff.ply">
+      <Link>Assets\Items\Staves\UncommonBattleStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\UncommonEmeraldStaff.ply">
+      <Link>Assets\Items\Staves\UncommonEmeraldStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\UncommonHardwoodStaff.ply">
@@ -1090,10 +1100,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\UncommonLongStaff.ply">
       <Link>Assets\Items\Staves\UncommonLongStaff.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Blend\Staves\UniqueEgipticStaff.ply">
-      <Link>Assets\Items\Staves\UniqueEgipticStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\UniqueSanctuaryStaff.ply">
@@ -1235,16 +1241,13 @@
     <None Include="Modules\Items\Katars\UncommonLeatherKatar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Items\Staves\CommonRuneStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\Staves\CommonStoneStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Staves\CommonWoodenStaff.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Modules\Items\Staves\DivineRuneStaff.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Modules\Items\Staves\LegendaryEmeraldStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Staves\LegendarySnakeStaff.json">
@@ -1253,16 +1256,19 @@
     <None Include="Modules\Items\Staves\RareAutumnStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\RareBattleStaff.json">
+    <None Include="Modules\Items\Staves\RareEgipticStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Staves\UncommonBattleStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Staves\UncommonEmeraldStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Staves\UncommonHardwoodStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Staves\UncommonLongStaff.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Modules\Items\Staves\UniqueEgipticStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Staves\UniqueSanctuaryStaff.json">
@@ -4993,6 +4999,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Skills\IronSkin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Skills\Meditation.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Skills\StaffAttack1.png">

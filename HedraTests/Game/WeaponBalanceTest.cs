@@ -69,7 +69,6 @@ namespace HedraTests.Game
         [TestCaseSource(nameof(AllWeapons))]
         public void TestWeaponsAttackSpeed(Item Weapon)
         {
-            int a = 0;
             AssertComplies(Weapon, _sheet.ItemAttackSpeed, () => Weapon.GetAttribute<float>(CommonAttributes.AttackSpeed));
         }
         

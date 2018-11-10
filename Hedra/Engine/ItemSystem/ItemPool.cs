@@ -149,12 +149,17 @@ namespace Hedra.Engine.ItemSystem
 
         public static Item Grab(ItemType Type)
         {
-            return ItemPool.Grab(Type.ToString());
+            return Grab(Type.ToString());
         }
 
         public static Item Grab(CommonItems Item)
         {
-            return ItemPool.Grab(Item.ToString());
+            return Grab(Item.ToString());
+        }
+
+        public static bool Exists(string Name)
+        {
+            return ItemFactory.Templater.Contains(Name);
         }
     }
 

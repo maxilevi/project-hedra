@@ -1,23 +1,23 @@
 
-{
-    "Name": "UniqueSanctuaryStaff",
-    "DisplayName": "Sanctuary Staff",
-    "EquipmentType": "Staff",
-    "Tier": "Unique",
-    "Description": "Sanctuary Staff.",
-    "Attributes": [
-    {
-        "Name": "Damage",
-        "Value": 2.5
-    },
-    {
-        "Name": "AttackSpeed",
-        "Value": 1.0
-    }
-    ],
-    "Model": {
-    "Scale": 1.0,
-    "Path": "$DataFile$/Items/Staff/UniqueSanctuaryStaff.ply"
-    }
-}
+        {
+          "Name": "UniqueSanctuaryStaff",
+          "DisplayName": "Sanctuary Staff",
+          "EquipmentType": "Staff",
+          "Tier": "Unique",
+          "Description": "Sanctuary Staff.",
+          "Attributes": [
+            {
+              "Name": "Damage",
+              "Value": 2.5
+            },
+            {
+              "Name": "AttackSpeed",
+              "Value": 1.0
+            }
+          ],
+          "Model": {
+            "Scale": 1.0,
+            "Path": "$DataFile$/Items/Staff/UniqueSanctuaryStaff.ply"
+          }
+        }
         

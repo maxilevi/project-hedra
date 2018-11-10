@@ -106,7 +106,7 @@ namespace HedraTests.Game
             Min50 = 460,
             Max50 = 640,
             
-            Min99 = 880,
+            Min99 = 830,
             Max99 = 1148,
         };
         

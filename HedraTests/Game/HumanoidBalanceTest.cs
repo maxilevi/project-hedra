@@ -151,7 +151,13 @@ namespace HedraTests.Game
         /* Called via reflection by NUnit */
         private static IEnumerable<ClassDesign> TestClasses()
         {
-            var classes = ClassDesign.AvailableClasses;
+            var classes = new []
+            {
+                typeof(WarriorDesign),
+                typeof(MageDesign),
+                typeof(ArcherDesign),
+                typeof(RogueDesign)
+            };
             for (var i = 0; i < classes.Length; i++)
             {
                 yield return ClassDesign.FromType(classes[i]);

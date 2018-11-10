@@ -50,6 +50,7 @@ namespace HedraTests.Player
         public float AttackCooldown { get; set; }
         public float RandomFactor { get; set; }
         public float AttackResistance { get; set; }
+        public float ManaRegenFactor { get; set; }
         public int Gold { get; set; }
         public float DamageEquation { get; }
         public bool IsTravelling { get; set; }
