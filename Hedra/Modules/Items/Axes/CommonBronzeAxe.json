@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "CommonBronzeAxe",
   "DisplayName": "Bronze Axe",
-  "EquipmentType": "Axe", 
+  "EquipmentType": "Axe",
   "Tier": "Common",
-  "Description": "Bronze axe.",
+  "Description": "An axe forged of Bronze, A mediocre cutting tool.",
   "Attributes": [
     {
       "Name": "Damage",

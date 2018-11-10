@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "UniqueMaceAxe",
   "DisplayName": "Mace Axe",
-  "EquipmentType": "Axe", 
+  "EquipmentType": "Axe",
   "Tier": "Unique",
-  "Description": "Mace axe.",
+  "Description": "Not a Mace, not an Axe, a fine balance between.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -1,9 +1,9 @@
 {
   "Name": "LegendaryGolemFistHammer",
   "DisplayName": "Golem Fist",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Legendary",
-  "Description": "Golem fist hammer.",
+  "Description": "The Golem's fist is a rather terrifying name in concept. A hammer that deserves the name, more so.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "LegendaryRoyalAxe",
   "DisplayName": "Royal Axe",
-  "EquipmentType": "Axe", 
+  "EquipmentType": "Axe",
   "Tier": "Legendary",
-  "Description": "Royal axe.",
+  "Description": "The only Axe with stakes in the Royal family.",
   "Attributes": [
     {
       "Name": "Damage",

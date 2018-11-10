@@ -1,9 +1,9 @@
 {
   "Name": "RareSunderingHammer",
   "DisplayName": "Sundering Hammer",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Rare",
-  "Description": "Sundering hammer.",
+  "Description": "Desgined for smashing bone, not sure how friendly that it.",
   "Attributes": [
     {
       "Name": "Damage",

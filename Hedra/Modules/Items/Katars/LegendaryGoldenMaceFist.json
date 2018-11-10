@@ -1,10 +1,9 @@
-
 {
   "Name": "LegendaryGoldenMaceFist",
   "DisplayName": "Golden Mace Fist",
   "EquipmentType": "Katar",
   "Tier": "Legendary",
-  "Description": "Speed is meaningless when you only need one blow.",
+  "Description": "Made of solid gold the fist is one of the heaviest weapons one can buy. It is worth it's weight in gold.",
   "Attributes": [
     {
       "Name": "Damage",

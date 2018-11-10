@@ -1,9 +1,9 @@
 {
   "Name": "RarePaladinSilverDoubleBlades",
   "DisplayName": "Paladin Silver Blades",
-  "EquipmentType": "DoubleBlades", 
+  "EquipmentType": "DoubleBlades",
   "Tier": "Rare",
-  "Description": "Paladin silver blades.",
+  "Description": "One for each hip of any self respecting Paladin.",
   "Attributes": [
     {
       "Name": "Damage",

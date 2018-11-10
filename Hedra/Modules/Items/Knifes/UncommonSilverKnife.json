@@ -1,7 +1,7 @@
 {
   "Name": "UncommonSilverKnife",
   "DisplayName": "Silver Knife",
-  "EquipmentType": "Knife", 
+  "EquipmentType": "Knife",
   "Tier": "Uncommon",
   "Description": "Silver knife.",
   "Attributes": [

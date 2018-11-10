@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "UncommonIronWarhammer",
   "DisplayName": "Iron Warhammer",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Uncommon",
-  "Description": "An uncommon iron warhammer.",
+  "Description": "No less than the best are accepted by those mongering war. Low cost and functional. ",
   "Attributes": [
     {
       "Name": "Damage",

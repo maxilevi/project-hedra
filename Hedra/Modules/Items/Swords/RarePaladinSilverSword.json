@@ -1,9 +1,9 @@
 {
   "Name": "RarePaladinSilverSword",
   "DisplayName": "Paladin Silver Sword",
-  "EquipmentType": "Sword", 
+  "EquipmentType": "Sword",
   "Tier": "Rare",
-  "Description": "Paladin silver sword.",
+  "Description": "A light very sharp sword used by the most skilled of Paladins.",
   "Attributes": [
     {
       "Name": "Damage",

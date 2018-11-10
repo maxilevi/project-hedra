@@ -1,7 +1,7 @@
 {
   "Name": "CommonIronKnife",
   "DisplayName": "Iron Knife",
-  "EquipmentType": "Knife", 
+  "EquipmentType": "Knife",
   "Tier": "Common",
   "Description": "Iron knife.",
   "Attributes": [

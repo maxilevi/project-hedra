@@ -3,7 +3,7 @@
   "DisplayName": "Silver Rapier",
   "EquipmentType": "Sword",
   "Tier": "Rare",
-  "Description": "Silver rapier.",
+  "Description": "A rapier is a flexible sword meant for stabbing and quick parries, due to the silver composition of it's sword, it fits the bill well.",
   "Attributes": [
     {
       "Name": "Damage",

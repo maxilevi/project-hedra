@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "CommonBronzeKatar",
   "DisplayName": "Bronze Katar",
-  "EquipmentType": "Katar", 
+  "EquipmentType": "Katar",
   "Tier": "Common",
-  "Description": "Bronze katar.",
+  "Description": "A katar forged of bronze, lightweight and dull.",
   "Attributes": [
     {
       "Name": "Damage",

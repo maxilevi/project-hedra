@@ -1,8 +1,8 @@
-﻿{
+{
   "Name": "Berry",
   "DisplayName": "Berry",
-  "Tier": "Misc", 
-  "Description": "Food.",
+  "Tier": "Misc",
+  "Description": "An edible morsel. Not Very nourishing",
   "Attributes": [
     {
       "Name": "Amount",

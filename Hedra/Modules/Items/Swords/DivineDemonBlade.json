@@ -3,7 +3,7 @@
   "DisplayName": "Demon Blade",
   "EquipmentType": "Sword",
   "Tier": "Divine",
-  "Description": "Demon blade.",
+  "Description": "The sword is fiery and demands sacrifice.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -3,7 +3,7 @@
   "DisplayName": "Crystal Sword",
   "EquipmentType": "Sword",
   "Tier": "Unique",
-  "Description": "Crystal sword.",
+  "Description": "Crystal is a rather ineffective material for a sword as despite it's strength it has no flexibility thus it is brittle.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "Glider",
   "DisplayName": "Glider",
   "Tier": "Rare",
-  "EquipmentType": "Vehicle", 
-  "Description": "A glider.",
+  "EquipmentType": "Vehicle",
+  "Description": "Soar through the skies.",
   "Attributes": [
     {
       "Name": "Price",

@@ -3,7 +3,7 @@
   "DisplayName": "Steel Cleaver",
   "EquipmentType": "Sword",
   "Tier": "Rare",
-  "Description": "Steel cleaver.",
+  "Description": "Steel is a Carbon Iron alloy, a perfect material for a cleaver.",
   "Attributes": [
     {
       "Name": "Damage",

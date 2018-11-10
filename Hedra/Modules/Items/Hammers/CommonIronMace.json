@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "CommonIronMace",
   "DisplayName": "Iron Mace",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Common",
-  "Description": "A common iron mace.",
+  "Description": "A large long handle mace.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "UncommonHalvingBladeAxe",
   "DisplayName": "Halving Blade",
-  "EquipmentType": "Axe", 
+  "EquipmentType": "Axe",
   "Tier": "Uncommon",
-  "Description": "Halving blade axe.",
+  "Description": "Meant for halving people's heads.",
   "Attributes": [
     {
       "Name": "Damage",

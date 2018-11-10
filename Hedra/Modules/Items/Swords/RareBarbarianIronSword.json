@@ -1,9 +1,9 @@
 {
   "Name": "RareBarbarianIronSword",
   "DisplayName": "Iron Machete",
-  "EquipmentType": "Sword", 
+  "EquipmentType": "Sword",
   "Tier": "Rare",
-  "Description": "Iron machete.",
+  "Description": "Meant for chopping foliage, yet transitions to enemies well.",
   "Attributes": [
     {
       "Name": "Damage",

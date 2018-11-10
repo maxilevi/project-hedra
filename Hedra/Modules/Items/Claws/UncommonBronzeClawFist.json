@@ -1,10 +1,9 @@
-
 {
   "Name": "UncommonBronzeClawFist",
   "DisplayName": "Bronze Claw Fist",
   "EquipmentType": "Claw",
   "Tier": "Uncommon",
-  "Description": "High precision.",
+  "Description": "A heavy spiked claw of bronze composition.",
   "Attributes": [
     {
       "Name": "Damage",

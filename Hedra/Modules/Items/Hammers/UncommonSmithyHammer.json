@@ -1,9 +1,9 @@
 {
   "Name": "UncommonSmithyHammer",
   "DisplayName": "Smithy Hammer",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Uncommon",
-  "Description": "Smithy hammer.",
+  "Description": "Mostly meant for smithing rather than other uses. Still works.",
   "Attributes": [
     {
       "Name": "Damage",

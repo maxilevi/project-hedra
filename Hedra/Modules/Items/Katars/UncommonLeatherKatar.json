@@ -1,10 +1,9 @@
-
 {
   "Name": "UncommonLeatherKatar",
   "DisplayName": "Leather Katar",
   "EquipmentType": "Katar",
   "Tier": "Uncommon",
-  "Description": "Stronger than what you would expect.",
+  "Description": "Rough Leather, somehow sharpened.",
   "Attributes": [
     {
       "Name": "Damage",

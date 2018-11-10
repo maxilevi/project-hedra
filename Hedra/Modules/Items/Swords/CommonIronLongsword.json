@@ -1,9 +1,9 @@
 {
   "Name": "CommonIronLongsword",
   "DisplayName": "Iron Longsword",
-  "EquipmentType": "Sword", 
+  "EquipmentType": "Sword",
   "Tier": "Common",
-  "Description": "Iron longsword.",
+  "Description": "An incredibly sharp, heavy long sword.",
   "Attributes": [
     {
       "Name": "Damage",

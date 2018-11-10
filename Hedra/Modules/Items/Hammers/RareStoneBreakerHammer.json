@@ -1,9 +1,9 @@
 {
   "Name": "RareStoneBreakerHammer",
   "DisplayName": "Stone Breaker",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Rare",
-  "Description": "Stone breaker hammer.",
+  "Description": "A hammer designed to break stone, perhaps this wil translate well to enemies.",
   "Attributes": [
     {
       "Name": "Damage",

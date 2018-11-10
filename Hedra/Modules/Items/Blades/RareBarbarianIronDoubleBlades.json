@@ -1,9 +1,9 @@
 {
   "Name": "RareBarbarianIronDoubleBlades",
   "DisplayName": "Barbarian Iron Blades",
-  "EquipmentType": "DoubleBlades", 
+  "EquipmentType": "DoubleBlades",
   "Tier": "Rare",
-  "Description": "Barbarian iron blades.",
+  "Description": "Iron blades sharpened to a tiny edge for optimal cuts.",
   "Attributes": [
     {
       "Name": "Damage",

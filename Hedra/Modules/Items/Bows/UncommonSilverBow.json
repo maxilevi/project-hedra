@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "UncommonSilverBow",
   "DisplayName": "Silver Bow",
-  "EquipmentType": "Bow", 
+  "EquipmentType": "Bow",
   "Tier": "Uncommon",
-  "Description": "Silver bow.",
+  "Description": "Made of silver, light and weak, but well made.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -1,10 +1,9 @@
-
 {
   "Name": "RareEllipseKatar",
   "DisplayName": "Ellipse Katar",
   "EquipmentType": "Katar",
   "Tier": "Rare",
-  "Description": "Great accuaracy, not so great range.",
+  "Description": "A short very sharp and heavy blade.",
   "Attributes": [
     {
       "Name": "Damage",

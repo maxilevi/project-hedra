@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "DivineEqualizerAxe",
   "DisplayName": "Equalizer",
-  "EquipmentType": "Axe", 
+  "EquipmentType": "Axe",
   "Tier": "Divine",
-  "Description": "Equalizer axe.",
+  "Description": "Perfectly Balanced as all things should.",
   "Attributes": [
     {
       "Name": "Damage",

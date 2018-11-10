@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "LegendaryReedemerAxe",
   "DisplayName": "Reedemer",
-  "EquipmentType": "Axe", 
+  "EquipmentType": "Axe",
   "Tier": "Legendary",
-  "Description": "Reedemer axe.",
+  "Description": "Looking for redemption? You've found the perfect tool.",
   "Attributes": [
     {
       "Name": "Damage",

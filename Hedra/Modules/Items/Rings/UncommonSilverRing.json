@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "UncommonSilverRing",
   "DisplayName": "Silver Ring",
-  "EquipmentType": "Ring", 
+  "EquipmentType": "Ring",
   "Tier": "Uncommon",
-  "Description": "Silver ring.",
+  "Description": "A beautifully engraved ring, forged of silver",
   "Attributes": [
     {
       "Name": "MovementSpeed",
@@ -17,7 +17,7 @@
     },
     {
       "Name": "AttackSpeed",
-      "Value": 0.10,
+      "Value": 0.1,
       "Display": "Percentage"
     },
     {

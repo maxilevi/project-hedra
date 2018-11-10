@@ -1,8 +1,8 @@
-﻿{
+{
   "Name": "Gold",
   "DisplayName": "Gold",
   "Tier": "Misc",
-  "Description": "Currency.",
+  "Description": "The primary currency of the universe.",
   "Attributes": [
     {
       "Name": "Amount",

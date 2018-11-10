@@ -1,10 +1,9 @@
-
 {
   "Name": "DivineShieldedBow",
   "DisplayName": "Shielded Bow",
   "EquipmentType": "Bow",
   "Tier": "Divine",
-  "Description": "Shielded bow.",
+  "Description": "Said to have been the bow of the Archery God, this bow is near perfection.",
   "Attributes": [
     {
       "Name": "Damage",

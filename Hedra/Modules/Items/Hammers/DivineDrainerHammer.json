@@ -1,9 +1,9 @@
 {
   "Name": "DivineDrainerHammer",
   "DisplayName": "Drainer",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Divine",
-  "Description": "Drainer hammer.",
+  "Description": "It drains colour from the face of those on the wrong end.",
   "Attributes": [
     {
       "Name": "Damage",
