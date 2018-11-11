@@ -260,7 +260,6 @@ namespace Hedra.Engine.BiomeSystem
             var amplifiedRiverBorders = Mathf.Clamp(riverBorders * RiverMult, 0, RiverDepth);
 
             river = Mathf.Clamp(river * RiverMult, 0, RiverDepth);
-            path = Mathf.Lerp(path, 0, Math.Min(1, river));
 
             blockGroundworksModifier = 1.0f;
             this.HandlePlateaus(x, z, smallFrequency, ref height, plateaus, nearGiantTree, nearCollidableStructure,
@@ -310,8 +309,7 @@ namespace Hedra.Engine.BiomeSystem
                     z * Chunk.BlockSize + OffsetZ)))
                 {
                     var cache = heightCache[new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ)][0];
-                    height -= Mathf.Lerp(0, cache, Math.Min(path * .5f, 1)) * (1-plateauLerp);
-                    height -= Mathf.Lerp(0, cache, riverLerp) * (1-plateauLerp);
+                    height -= Mathf.Lerp(0, cache, Math.Min(1, Math.Min(path * 0.5f, 1) + riverLerp)) * (1-plateauLerp);
                 }
             }
             if (blockGroundworks.Length > 0)
@@ -324,21 +322,21 @@ namespace Hedra.Engine.BiomeSystem
                 river = Mathf.Lerp(river, 0, groundworkDensity);
             }
             height -= river;
-            height -= path;
+            height -= Mathf.Lerp(path, 0, riverLerp);
             var dirtNoise = OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + OffsetX) * 0.0175f,
                                 (z * Chunk.BlockSize + OffsetZ) * 0.0175f) > .35f;
             makeDirt = biomeGen.HasDirt && dirtNoise;
                     
         }
 
-        private void HandlePlateaus(int x, int z, float smallFrequency, ref float height, Plateau[] plateaus, CollidableStructure nearGiantTree,
+        private void HandlePlateaus(int X, int Z, float smallFrequency, ref float height, Plateau[] plateaus, CollidableStructure nearGiantTree,
             CollidableStructure nearCollidableStructure, ref float river, ref float riverBorders, ref float path,
             ref float blockGroundworksModifier, ref bool pathClamped, out float plateauLerp)
         {
             plateauLerp = 0;
             for (var i = 0; i < plateaus.Length; i++)
             {
-                var point = new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize);
+                var point = new Vector2(OffsetX + X * Chunk.BlockSize, OffsetZ + Z * Chunk.BlockSize);
                 var radius = plateaus[i].Radius;
                 var dist = (plateaus[i].Position.Xz - point).LengthSquared;
                 var final = Math.Max(1 - Math.Min(dist / (radius * radius), 1), 0);

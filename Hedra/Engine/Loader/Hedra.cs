@@ -22,6 +22,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Loader;
+using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
@@ -55,6 +56,7 @@ namespace Hedra
             CompatibilityManager.Load();
             NameGenerator.Load();
             CacheManager.Load();
+            Translations.Load();
             
             GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);

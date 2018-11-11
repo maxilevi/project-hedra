@@ -99,9 +99,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         protected bool PushGroundwork(GroundworkItem Item)
         {
-            if (World.WorldBuilding.CanAddPlateau(Item.Plateau) && Structure.CanAddPlateau(Item.Plateau))
+            //if (World.WorldBuilding.CanAddPlateau(Item.Plateau) && Structure.CanAddPlateau(Item.Plateau))
             {
-                Structure.AddPlateau(Item.Plateau);
+                //Structure.AddPlateau(Item.Plateau);
                 if (Item.Groundwork != null)
                 {
                     Structure.AddGroundwork(Item.Groundwork);

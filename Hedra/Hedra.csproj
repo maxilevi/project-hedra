@@ -283,6 +283,9 @@
     <Compile Include="Engine\Loader\IHedraWindow.cs" />
     <Compile Include="Engine\Loader\ModificationsLoader.cs" />
     <Compile Include="Engine\Loader\SplashScreen.cs" />
+    <Compile Include="Engine\Localization\GameLanguage.cs" />
+    <Compile Include="Engine\Localization\Translation.cs" />
+    <Compile Include="Engine\Localization\Translations.cs" />
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
     <Compile Include="Engine\Management\WindowsConsoleManager.cs" />
     <Compile Include="Engine\Management\DummyConsoleManager.cs" />
@@ -1062,6 +1065,10 @@
       <Link>Assets\Items\Misc\Mushroom.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\CommonBronzeStaff.ply">
+      <Link>Assets\Items\Staves\CommonBronzeStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\CommonRuneStaff.ply">
       <Link>Assets\Items\Staves\CommonRuneStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1074,6 +1081,18 @@
       <Link>Assets\Items\Staves\CommonWoodenStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\DivineTulipflameStaff.ply">
+      <Link>Assets\Items\Staves\DivineTulipflameStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\LegendaryBloodstoneStaff.ply">
+      <Link>Assets\Items\Staves\LegendaryBloodstoneStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\LegendaryCelestialCleansingStaff.ply">
+      <Link>Assets\Items\Staves\LegendaryCelestialCleansingStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\LegendarySnakeStaff.ply">
       <Link>Assets\Items\Staves\LegendarySnakeStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1082,8 +1101,20 @@
       <Link>Assets\Items\Staves\RareAutumnStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\RareChitinclawStaff.ply">
+      <Link>Assets\Items\Staves\RareChitinclawStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\RareEgipticStaff.ply">
       <Link>Assets\Items\Staves\RareEgipticStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\RareIncenseStaff.ply">
+      <Link>Assets\Items\Staves\RareIncenseStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\RareWildSocketedStaff.ply">
+      <Link>Assets\Items\Staves\RareWildSocketedStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\UncommonBattleStaff.ply">
@@ -1102,12 +1133,24 @@
       <Link>Assets\Items\Staves\UncommonLongStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\UniqueBloodSpillingStaff.ply">
+      <Link>Assets\Items\Staves\UniqueBloodSpillingStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\UniqueSanctuaryStaff.ply">
       <Link>Assets\Items\Staves\UniqueSanctuaryStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\UniqueScryingStaff.ply">
+      <Link>Assets\Items\Staves\UniqueScryingStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\UniqueVoidStaff.ply">
       <Link>Assets\Items\Staves\UniqueVoidStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\UniqueWormStaff.ply">
+      <Link>Assets\Items\Staves\UniqueWormStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\FearIcon.ply">
@@ -1241,6 +1284,9 @@
     <None Include="Modules\Items\Katars\UncommonLeatherKatar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Items\Staves\CommonBronzeStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\Staves\CommonRuneStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1250,13 +1296,31 @@
     <None Include="Modules\Items\Staves\CommonWoodenStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Items\Staves\DivineTulipflameStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Staves\LegendaryBloodstoneStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Staves\LegendaryCelestialCleansingStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\Staves\LegendarySnakeStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Staves\RareAutumnStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Items\Staves\RareChitinclawStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\Staves\RareEgipticStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Staves\RareIncenseStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Staves\RareWildSocketedStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Staves\UncommonBattleStaff.json">
@@ -1271,10 +1335,19 @@
     <None Include="Modules\Items\Staves\UncommonLongStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Items\Staves\UniqueBloodSpillingStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\Staves\UniqueSanctuaryStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Items\Staves\UniqueScryingStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Modules\Items\Staves\UniqueVoidStaff.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Staves\UniqueWormStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Beetle.json">
@@ -1328,6 +1401,9 @@
     </None>
     <None Include="..\project-hedra-assets\Sounds\WaterSplash.ogg">
       <Link>Sounds\WaterSplash.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Translations\English.po">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -1,0 +1,23 @@
+
+{
+  "Name": "RareIncenseStaff",
+  "DisplayName": "Incense Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Rare",
+  "Description": "Incense Staff.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 2.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/RareIncenseStaff.ply"
+  }
+}
+        

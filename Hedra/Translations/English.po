@@ -1,0 +1,6 @@
+﻿new_world = New World
+load_world = Load World
+multiplayer = Multiplayer
+disconnect = Disconnect
+options = Options
+exit = Exit

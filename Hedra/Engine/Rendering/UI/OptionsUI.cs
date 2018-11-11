@@ -17,6 +17,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -342,7 +343,7 @@ namespace Hedra.Engine.Rendering.UI
                 showChat.Text.Text = "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF");
             };
             
-            Button showMinimap = new Button(new Vector2(0, .6f),
+            var showMinimap = new Button(new Vector2(0, .6f),
                                  new Vector2(0.15f,0.075f), "Show Minimap: " + ( GameSettings.ShowMinimap ? "ON" : "OFF"), 0, fontColor, _normalFont);
             
             showMinimap.Click += delegate
@@ -365,19 +366,43 @@ namespace Hedra.Engine.Rendering.UI
                 };
             }
 
+            var langs = Translations.Languages;
+            var languageOptions = new string[langs.Length];
+            for (var i = 0; i < langs.Length; i++)
+            {
+                languageOptions[i] = langs[i];
+            }
+            var language = new OptionChooser(new Vector2(0, -.2f), Vector2.Zero, "Language: ",
+                fontColor, _normalFont, languageOptions, false);
+            language.Index = Array.IndexOf(languageOptions, GameSettings.Language.ToString());
+            language.CurrentValue.Text = languageOptions[language.Index];
+            language.LeftArrow.Click += delegate
+            {
+                GameSettings.Language = languageOptions[language.Index];
+            };     
+            language.RightArrow.Click += delegate
+            { 
+                GameSettings.Language = languageOptions[language.Index];
+            };
+            
+            showChat.Click += delegate
+            {
+                GameSettings.ShowChat = !GameSettings.ShowChat;
+                showChat.Text.Text = "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF");
+            };
+
             var smoothLod = new Button(new Vector2(0, .0f),
-                new Vector2(0.15f, 0.075f), "Smooth LOD: " + (GameSettings.SmoothLod ? "ON" : "OFF"), 0,
+                new Vector2(0.15f, 0.075f), "Smooth Lod: " + (GameSettings.SmoothLod ? "ON" : "OFF"), 0,
                 fontColor, _normalFont);
 
             smoothLod.Click += delegate
             {
                 GameSettings.SmoothLod = !GameSettings.SmoothLod;
-                smoothLod.Text.Text = "Smooth LOD: " + (GameSettings.SmoothLod ? "ON" : "OFF");
+                    smoothLod.Text.Text = "Smooth Lod: " + (GameSettings.SmoothLod ? "ON" : "OFF");
             };
             
             string[] volumeOptions = new string[]{"0%","5%","10%","15%","20%","25%","30%","35%","40%","45%","50%","55%","60%","65%","70%","75%","80%","85%","90%","95%","100%"};
-            OptionChooser musicVolume = new OptionChooser(new Vector2(0, .6f), new Vector2(0.15f, 0.075f), "Music Volume: ",  fontColor, _normalFont,
-                                                         volumeOptions, false);
+            var musicVolume = new OptionChooser(new Vector2(0, .6f), new Vector2(0.15f, 0.075f), "Music Volume: ",  fontColor, _normalFont, volumeOptions, false);
 
             for(int i = 0; i < volumeOptions.Length; i++){
                 if( (float) (Int32.Parse( volumeOptions[i].Replace("%",string.Empty) ) / 100f) == SoundtrackManager.Volume)
@@ -397,7 +422,7 @@ namespace Hedra.Engine.Rendering.UI
                 GameSettings.MusicVolume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%",string.Empty) ) / 100f;
             };
             
-            OptionChooser sfxVolume = new OptionChooser(new Vector2(0, .4f), new Vector2(0.15f, 0.075f), "Sound FX Volume: ",  fontColor, _normalFont,
+            var sfxVolume = new OptionChooser(new Vector2(0, .4f), new Vector2(0.15f, 0.075f), "Sound FX Volume: ",  fontColor, _normalFont,
                                                          volumeOptions, false);
 
             for(int i = 0; i < volumeOptions.Length; i++){
@@ -465,6 +490,7 @@ namespace Hedra.Engine.Rendering.UI
             _displayButtons.Add(showChat);
             _displayButtons.Add(showMinimap);
             _displayButtons.Add(smoothLod);
+            _displayButtons.Add(language);
             if(showConsole != null) _displayButtons.Add(showConsole);
             
             AddElement(_controls);

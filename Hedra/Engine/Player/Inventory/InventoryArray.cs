@@ -63,7 +63,7 @@ namespace Hedra.Engine.Player.Inventory
             }
             for (var i = 0; i < _items.Length; i++)
             {
-                if (_items[i] != null) continue;
+                if (_items[i] != null || !this.CanSetItem(i, Item)) continue;
                 this.SetItem(i, Item);
                 return true;
             }

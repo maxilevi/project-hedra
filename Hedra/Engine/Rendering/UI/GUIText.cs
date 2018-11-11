@@ -11,6 +11,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 using OpenTK;
 using Hedra.Engine.Management;
 
@@ -29,12 +30,21 @@ namespace Hedra.Engine.Rendering.UI
         private Vector2 _temporalPosition;
         private string _text;
 
-        public GUIText(string Text, Vector2 Position, Color TextColor, Font TextFont)
+        public GUIText(Translation Translation, Vector2 Position, Color TextColor, Font TextFont)
         {
-            _text = Text;
+            Translation.LanguageChanged += delegate
+            {
+                Text = Translation.Get();
+            };
+            _text = Translation.Get();
             _temporalPosition = Position;
             _configuration = new TextConfiguration(TextColor, TextFont);
             this.UpdateText();
+        }
+
+        public GUIText(string Text, Vector2 Position, Color TextColor, Font TextFont) 
+            : this(Translation.Default(Text), Position, TextColor, TextFont)
+        {         
         }
 
         public void UpdateText()

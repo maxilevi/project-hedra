@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
@@ -142,6 +143,13 @@ namespace Hedra.Engine.Game
             get => SoundManager.Volume;
             set => SoundManager.Volume = value;
         }
+        
+        [Setting]
+        public static string Language
+        {
+            get => Translations.Language;
+            set => Translations.Language = value;
+        }
 
         [Setting]
         public static int ShadowQuality
@@ -202,7 +210,7 @@ namespace Hedra.Engine.Game
                 {
                     if (!Predicate(properties[k])) continue;
                     if (properties[k].Name != parts[0]) continue;
-                    var value = Convert.ChangeType(parts[1], properties[k].PropertyType);
+                    var value = ConvertString(parts[1], properties[k].PropertyType);
                     properties[k].SetValue(null, value, null);
                 }
             }
@@ -213,6 +221,11 @@ namespace Hedra.Engine.Game
             return
                 typeof(GameSettings).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
                     .Where(P => P.IsDefined(typeof(SettingAttribute), true)).ToArray();
+        }
+        
+        private static object ConvertString(string Value, Type Type)
+        {
+            return Type.IsEnum ? Enum.Parse(Type, Value) : Convert.ChangeType(Value, Type);
         }
     }
 }

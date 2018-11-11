@@ -1,0 +1,22 @@
+{
+  "Name": "LegendaryCelestialCleansingStaff",
+  "DisplayName": "Celestial Cleansing Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Legendary",
+  "Description": "Celestial Cleansing Staff.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 2.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/LegendaryCelestialCleansingStaff.ply"
+  }
+}
+        
