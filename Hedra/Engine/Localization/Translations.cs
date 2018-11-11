@@ -29,32 +29,51 @@ namespace Hedra.Engine.Localization
                 );
             }
         }
+
+        public static bool Has(string Key)
+        {
+            return _translations[Language].ContainsKey(Key);
+        }
                
         public static string Get(string Key)
         {
-            return Get(Key, Language);
+            return Get(Key, new object[0], Language);
         }
-
-        private static string Get(string Key, GameLanguage AppLanguage)
+        
+        public static string Get(string Key, params object[] Params)
         {
-            return Get(Key, AppLanguage.ToString());
+            return Get(Key, Params, Language);
         }
 
-        private static string Get(string Key, string AppLanguage)
+        private static string Get(string Key, object[] Params, GameLanguage AppLanguage)
+        {
+            return Get(Key, Params, AppLanguage.ToString());
+        }
+
+        private static string Get(string Key,  object[] Params, string AppLanguage)
         {
             string Fail()
             {
                 if (AppLanguage == GameLanguage.English.ToString())
-                    throw new ArgumentException("Failed to get translations in the default language (english)");
-                return Get(Key, GameLanguage.English); 
+                    throw new ArgumentException($"Failed to get key '{Key}' in the default language (english)");
+                return Get(Key, Params, GameLanguage.English); 
             }
             
             if (!_translations.ContainsKey(AppLanguage)) return Fail();
             if (!_translations[AppLanguage].ContainsKey(Key)) return Fail();
 
-            return _translations[AppLanguage][Key];
+            return AddParameters(_translations[AppLanguage][Key], Params);
         }
 
+        private static string AddParameters(string Value, object[] Params)
+        {
+            for (var i = 0; i < Params.Length; i++)
+            {
+                Value = Value.Replace("{" + i + "}", Params[i].ToString());
+            }
+            return Value;
+        }
+        
         private static Dictionary<string, string> Parse(string Contents)
         {
             var dict = new Dictionary<string, string>();

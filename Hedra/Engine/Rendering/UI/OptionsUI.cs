@@ -119,7 +119,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             _graphics = new Button(new Vector2(0f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), "Graphics", 0, Color.White, _normalFont);
+                                new Vector2(0.15f,0.075f), Translation.Create("graphics"), Color.White, _normalFont);
             _graphics.Click += delegate
             {
 
@@ -131,7 +131,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             _audio = new Button(new Vector2(-0.2f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), "Audio", 0, Color.White, _normalFont);
+                                new Vector2(0.15f,0.075f), Translation.Create("audio"), Color.White, _normalFont);
             
             _audio.Click += delegate { 
                 SetGraphicsButtonState(false);
@@ -142,7 +142,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             _input = new Button(new Vector2(-0.4f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), "Input", 0, Color.White, _normalFont);
+                                new Vector2(0.15f,0.075f), Translation.Create("input"), Color.White, _normalFont);
             
             _input.Click += delegate { 
                 SetGraphicsButtonState(false);
@@ -153,7 +153,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             _display = new Button(new Vector2(0.2f,bandPosition.Y), new Vector2(0.15f,0.05f),
-                                       "Display", 0, Color.White, _normalFont);
+                Translation.Create("display"), Color.White, _normalFont);
             
             _display.Click += delegate { 
                 SetGraphicsButtonState(false);
@@ -164,7 +164,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             _controls = new Button(new Vector2(0.4f,bandPosition.Y), new Vector2(0.15f,0.05f),
-                                       "Controls", 0, Color.White, _normalFont);
+                Translation.Create("controls"), Color.White, _normalFont);
             _controls.Click += delegate { 
                 SetGraphicsButtonState(false);
                 SetAudioButtonState(false);
@@ -184,7 +184,7 @@ namespace Hedra.Engine.Rendering.UI
 
             var viewValues = viewValuesList.ToArray();
             
-            OptionChooser viewDistance = new OptionChooser(new Vector2(dist, vDist*2f), new Vector2(0.15f, 0.075f), "View Distance: ",
+            OptionChooser viewDistance = new OptionChooser(new Vector2(dist, vDist*2f), new Vector2(0.15f, 0.075f), "View Distance : ",
                                              fontColor, _normalFont,
                                             viewValues, false);
             viewDistance.Index = (GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2;
@@ -236,7 +236,7 @@ namespace Hedra.Engine.Rendering.UI
             frameLimiter.RightArrow.Click += updateLimiter;
 
             var fxaa = new Button(new Vector2(dist, 0f),
-                     new Vector2(0.15f, 0.075f), "FXAA: " + (GameSettings.FXAA ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                     new Vector2(0.15f, 0.075f), "FXAA: " + (GameSettings.FXAA ? "ON" : "OFF"), fontColor, _normalFont);
 
             fxaa.Click += delegate {
                     GameSettings.FXAA = !GameSettings.FXAA;
@@ -244,7 +244,7 @@ namespace Hedra.Engine.Rendering.UI
                 };
             
             Button bloom = new Button(new Vector2(dist, -vDist),
-                     new Vector2(0.15f, 0.075f), "Bloom: " + (GameSettings.Bloom ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                     new Vector2(0.15f, 0.075f), "Bloom: " + (GameSettings.Bloom ? "ON" : "OFF"), fontColor, _normalFont);
 
 
             bloom.Click += delegate {
@@ -253,7 +253,7 @@ namespace Hedra.Engine.Rendering.UI
                 };
             
             Button quality = new Button(new Vector2(-dist, vDist*2),
-                                 new Vector2(0.15f,0.075f), "Quality: " + ( GameSettings.Fancy ? "FANCY" : "FAST"), 0, fontColor, _normalFont);
+                                 new Vector2(0.15f,0.075f), "Quality: " + ( GameSettings.Fancy ? "FANCY" : "FAST"), fontColor, _normalFont);
             
             quality.Click += new OnButtonClickEventHandler(
                 delegate{
@@ -266,7 +266,7 @@ namespace Hedra.Engine.Rendering.UI
 
             
             Button vSync = new Button(new Vector2(-dist, vDist),
-                                 new Vector2(0.15f,0.075f), "VSync: " + ( GameSettings.VSync ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                                 new Vector2(0.15f,0.075f), "VSync: " + ( GameSettings.VSync ? "ON" : "OFF"), fontColor, _normalFont);
             
             vSync.Click += new OnButtonClickEventHandler(
                 delegate{
@@ -278,7 +278,7 @@ namespace Hedra.Engine.Rendering.UI
                 });
             
             Button invertMouse = new Button(new Vector2(0, .6f),
-                                 new Vector2(0.15f,0.075f), "Invert Mouse: " + ( GameSettings.InvertMouse ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                                 new Vector2(0.15f,0.075f), "Invert Mouse: " + ( GameSettings.InvertMouse ? "ON" : "OFF"), fontColor, _normalFont);
             
             invertMouse.Click += new OnButtonClickEventHandler(
                 delegate{
@@ -317,7 +317,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             var ssao = new Button(new Vector2(-dist, -vDist * 2),
-                                 new Vector2(0.15f,0.075f), "Ambient Occlusion: " + ( GameSettings.SSAO ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                                 new Vector2(0.15f,0.075f), "Ambient Occlusion: " + ( GameSettings.SSAO ? "ON" : "OFF"), fontColor, _normalFont);
             
             ssao.Click += delegate
             {
@@ -326,7 +326,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             var fullscreen = new Button(new Vector2(-dist, -vDist),
-                new Vector2(0.15f,0.075f), $"Fullscreen: {(GameSettings.Fullscreen ? "ON" : "OFF")}", 0, fontColor, _normalFont);
+                new Vector2(0.15f,0.075f), $"Fullscreen: {(GameSettings.Fullscreen ? "ON" : "OFF")}", fontColor, _normalFont);
             
             fullscreen.Click += delegate
             {
@@ -335,7 +335,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             var showChat = new Button(new Vector2(0, .4f),
-                                 new Vector2(0.15f,0.075f), "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                                 new Vector2(0.15f,0.075f), "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF"), fontColor, _normalFont);
             
             showChat.Click += delegate
             {
@@ -344,7 +344,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             var showMinimap = new Button(new Vector2(0, .6f),
-                                 new Vector2(0.15f,0.075f), "Show Minimap: " + ( GameSettings.ShowMinimap ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                                 new Vector2(0.15f,0.075f), "Show Minimap: " + ( GameSettings.ShowMinimap ? "ON" : "OFF"), fontColor, _normalFont);
             
             showMinimap.Click += delegate
             {
@@ -356,7 +356,7 @@ namespace Hedra.Engine.Rendering.UI
             if (OSManager.CanHideConsole)
             {
                 showConsole = new Button(new Vector2(0, .2f),
-                    new Vector2(0.15f, 0.075f), "Show Console: " + (GameSettings.ShowConsole ? "ON" : "OFF"), 0,
+                    new Vector2(0.15f, 0.075f), "Show Console: " + (GameSettings.ShowConsole ? "ON" : "OFF"),
                     fontColor, _normalFont);
 
                 showConsole.Click += delegate
@@ -392,7 +392,7 @@ namespace Hedra.Engine.Rendering.UI
             };
 
             var smoothLod = new Button(new Vector2(0, .0f),
-                new Vector2(0.15f, 0.075f), "Smooth Lod: " + (GameSettings.SmoothLod ? "ON" : "OFF"), 0,
+                new Vector2(0.15f, 0.075f), "Smooth Lod: " + (GameSettings.SmoothLod ? "ON" : "OFF"),
                 fontColor, _normalFont);
 
             smoothLod.Click += delegate
@@ -464,7 +464,7 @@ namespace Hedra.Engine.Rendering.UI
             }
             
             Button autosave = new Button(new Vector2(0f, .2f),
-                                 new Vector2(0.15f,0.075f), "Autosave: " + ( GameSettings.Autosave ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                                 new Vector2(0.15f,0.075f), "Autosave: " + ( GameSettings.Autosave ? "ON" : "OFF"), fontColor, _normalFont);
             
             autosave.Click += (
                 delegate

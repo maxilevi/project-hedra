@@ -1,12 +1,17 @@
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Sound;
 
 namespace Hedra.Engine.Player.Skills
 {
     public abstract class SwitchSkill : CappedSkill
     {
         private readonly Animation _stance;
+        private float _lerpBlending;
         protected abstract string AnimationPath { get; }
-        protected virtual  bool Orientate => true;
+        protected abstract SoundType SoundType { get; }
+        protected virtual bool Orientate => true;
+        protected override float OverlayBlending => _lerpBlending;
+        public override bool PlaySound => false;
 
         protected SwitchSkill()
         {
@@ -23,6 +28,7 @@ namespace Hedra.Engine.Player.Skills
         public override void Use()
         {
             Casting = true;
+            SoundManager.PlaySoundWhile(SoundType, () => Casting, () => 1, () => 1);
             Player.Model.PlayAnimation(_stance);
             Player.Model.Blend(_stance);
             Activate();
@@ -40,6 +46,7 @@ namespace Hedra.Engine.Player.Skills
         
         public override void Update()
         {
+            _lerpBlending = Mathf.Lerp(_lerpBlending, Casting ? 1f : 0f, Time.DeltaTime * 2f);
             if (!Casting) return;
             if (Orientate) Player.Movement.Orientate();
         }

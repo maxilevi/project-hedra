@@ -58,12 +58,12 @@ namespace Hedra.Engine.Rendering.UI
             
             
             _newRun = new Button(new Vector2(.1f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), Translations.Get("new_world"), 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
-            
-            _newRun.Click += new OnButtonClickEventHandler(NewRunOnClick);
+                                new Vector2(0.15f,0.075f), Translation.Create("new_world"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+
+            _newRun.Click += NewRunOnClick;
             
             _loadButton = new Button(new Vector2(.3f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translations.Get("load_world"), 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                         new Vector2(0.15f,0.075f), Translation.Create("load_world"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
 
             _loadButton.Click += delegate {
                 if(!GameManager.InStartMenu){
@@ -75,10 +75,10 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             Button connectToServer = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translations.Get("multiplayer"), 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                         new Vector2(0.15f,0.075f), Translation.Create("multiplayer"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
             Button disconnect = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translations.Get("disconnect"), 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                         new Vector2(0.15f,0.075f), Translation.Create("disconnect"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             disconnect.Click += delegate{ Networking.NetworkManager.Disconnect(true); };
             
             connectToServer.Click += delegate{
@@ -86,7 +86,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             Button options = new Button(new Vector2(.75f, bandPosition.Y),
-                                        new Vector2(0.15f,0.075f), Translations.Get("options"), 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                        new Vector2(0.15f,0.075f), Translation.Create("options"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
             options.Click += delegate
             {
@@ -94,7 +94,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             Button quit = new Button(new Vector2(.9f, bandPosition.Y),
-                                     new Vector2(0.15f,0.075f), Translations.Get("exit"), 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                     new Vector2(0.15f,0.075f), Translation.Create("exit"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
             quit.Click += delegate { Program.GameWindow.Exit(); };
             

@@ -16,6 +16,7 @@ using System.Collections;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.Rendering.UI
@@ -39,11 +40,14 @@ namespace Hedra.Engine.Rendering.UI
             Vector2 bandPosition = new Vector2(0f, .8f);
             Texture blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
 
-            var currentTab = new GUIText("New Character", new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold));
+            var currentTab = new GUIText(Translation.Create("new_character"), new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold));
 
             _openFolder = new Button(new Vector2(0.8f,bandPosition.Y), new Vector2(0.15f,0.05f),
-                                       "Character Folder", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, 13));
-            _openFolder.Click += delegate { System.Diagnostics.Process.Start(AssetManager.AppData + "/Characters/"); };
+                Translation.Create("character_folder"), Color.White, FontCache.Get(AssetManager.NormalFamily, 13));
+            _openFolder.Click += delegate
+            {
+                System.Diagnostics.Process.Start($"{AssetManager.AppData}/Characters/");
+            };
             
             _human = new Humanoid();
             _human.Model = new HumanoidModel(_human)
@@ -61,7 +65,7 @@ namespace Hedra.Engine.Rendering.UI
             CoroutineManager.StartCoroutine(this.Update);
 
             string[] classes = ClassDesign.ClassNames;
-            var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, "Class", defaultColor,
+            var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, Translation.Create("class"), defaultColor,
                                                           defaultFont, classes, true);
             classChooser.Index = Array.IndexOf(classes, _human.Class.Name);            
             OnButtonClickEventHandler setWeapon = delegate {
@@ -85,11 +89,13 @@ namespace Hedra.Engine.Rendering.UI
             
             #region UI
             TextField nameField = new TextField(new Vector2(0,-.7f), new Vector2(.15f,.03f), this);
-            Button createChr = new Button(new Vector2(0f,-.8f), new Vector2(.15f,.05f), "Create", 0, defaultColor, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
+            Button createChr = new Button(new Vector2(0f,-.8f), new Vector2(.15f,.05f), Translation.Create("create"), defaultColor, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
             createChr.Click += delegate {
-                for(int i = 0; i < DataManager.PlayerFiles.Length; i++){
-                    if(nameField.Text == DataManager.PlayerFiles[i].Name){
-                        Player.MessageDispatcher.ShowNotification("NAME ALREADY EXISTS", Color.Red, 3f, true);
+                for(var i = 0; i < DataManager.PlayerFiles.Length; i++)
+                {
+                    if(nameField.Text == DataManager.PlayerFiles[i].Name)
+                    {
+                        Player.MessageDispatcher.ShowNotification(Translations.Get("name_exists"), Color.Red, 3f, true);
                         return;
                     }
                         

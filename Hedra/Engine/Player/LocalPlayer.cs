@@ -22,6 +22,7 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.BoatSystem;
@@ -447,17 +448,19 @@ namespace Hedra.Engine.Player
         {
             if(Name == string.Empty)
             {
-                Instance.MessageDispatcher.ShowNotification("Name cannot be empty", Color.Red, 3f);
+                Instance.MessageDispatcher.ShowNotification(Translations.Get("name_empty"), Color.Red, 3f);
                 return false;
             }
             if(DataManager.CharacterCount >= GameSettings.MaxCharacters)
             {
-                Instance.MessageDispatcher.ShowNotification($"You cannot have more than {GameSettings.MaxCharacters} characters", Color.Red, GameSettings.MaxCharacters);
+                Instance.MessageDispatcher.ShowNotification(Translations.Get("max_characters", GameSettings.MaxCharacters), Color.Red, GameSettings.MaxCharacters);
                 return false;
             }
-            if(Name.Length > 12)
+
+            const int maxName = 12;
+            if(Name.Length > maxName)
             {
-                Instance.MessageDispatcher.ShowNotification("Name cannot be that long", Color.Red, 3f);
+                Instance.MessageDispatcher.ShowNotification(Translations.Get("name_long", maxName), Color.Red, 3f);
                 return false;
             }
             var data = new PlayerInformation

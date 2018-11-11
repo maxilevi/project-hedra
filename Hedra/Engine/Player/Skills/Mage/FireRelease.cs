@@ -11,6 +11,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Engine.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Mage
@@ -25,6 +26,7 @@ namespace Hedra.Engine.Player.Skills.Mage
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");
         public override string DisplayName => "Fire Release";
         protected override string AnimationPath => "Assets/Chr/Mage-FireRelease.dae";
+        protected override SoundType SoundType => SoundType.ArrowHit;
 
         protected override void Activate()
         {

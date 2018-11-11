@@ -4,13 +4,25 @@ namespace Hedra.Engine.Localization
     public class Translation
     {
         public event OnLanguageChanged LanguageChanged;
-        public string Key { get; set; }
+        private string _key;
         private bool _isDefault;
         private string _defaultText;
 
+        private Translation()
+        {
+        }
+        
         public string Get()
         {
-            return _isDefault ? _defaultText : Translations.Get(Key);
+            return _isDefault ? _defaultText : Translations.Get(_key);
+        }
+
+        public static Translation Create(string Key)
+        {
+            return new Translation
+            {
+                _key = Key
+            };
         }
 
         public static Translation Default(string Text)

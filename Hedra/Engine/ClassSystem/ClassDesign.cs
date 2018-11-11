@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
@@ -47,7 +48,7 @@ namespace Hedra.Engine.ClassSystem
         {
             var fullName = $"{typeof(ClassDesign).Namespace}.{(Class.EndsWith("Design") ? Class : Class + "Design")}";
             var type = Type.GetType(fullName);
-            if (type == null) throw new ArgumentNullException("Provided Argument CLASS cannot be null.");
+            if (type == null) throw new ArgumentNullException($"Provided argument class '{Class}' cannot be null.");
             return ClassDesign.FromType(type);
         }
 
@@ -63,7 +64,9 @@ namespace Hedra.Engine.ClassSystem
 
         public static string ToString(Type ClassDesign)
         {
-            return ClassDesign.Name.Replace("Design", string.Empty);
+            var name = ClassDesign.Name.Replace("Design", string.Empty);
+            var key = name.ToLowerInvariant();
+            return Translations.Has(key) ? Translations.Get(key) : name;
         }
 
         public static ClassDesign None { get; } = new NoneDesign();

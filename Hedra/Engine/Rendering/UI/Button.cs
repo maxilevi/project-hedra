@@ -10,6 +10,7 @@ using System.Drawing;
 using System.IO;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Sound;
 using OpenTK;
@@ -51,24 +52,29 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        public Button(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor, Font F)
+        public Button(Vector2 Position, Vector2 Scale, Translation Translation, Color FontColor, Font TextFont)
         {
-            this.Initialize(Position, Scale, Text, Texture, FontColor, F);
+            this.Initialize(Position, Scale, Translation.Get(), Translation, 0, FontColor, TextFont);
+        }
+        
+        public Button(Vector2 Position, Vector2 Scale, string Text, Color FontColor, Font TextFont)
+        {
+            this.Initialize(Position, Scale, Text, null, 0, FontColor, TextFont);
         }
 
         public Button(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor)
         {
-            this.Initialize(Position, Scale, Text, Texture, FontColor, SystemFonts.DefaultFont);
+            this.Initialize(Position, Scale, Text, null, Texture, FontColor, SystemFonts.DefaultFont);
         }
 
         public Button(Vector2 Position, Vector2 Scale, string Text, uint Texture)
         {
-            this.Initialize(Position, Scale, Text, Texture, Color.Black, SystemFonts.DefaultFont);
+            this.Initialize(Position, Scale, Text, null, Texture, Color.Black, SystemFonts.DefaultFont);
         }
 
         public Button(Vector2 Position, Vector2 Scale, uint Texture)
         {
-            this.Initialize(Position, Scale, null, Texture, Color.Black, SystemFonts.DefaultFont);
+            this.Initialize(Position, Scale, null, null, Texture, Color.Black, SystemFonts.DefaultFont);
         }
 
         public event OnButtonClickEventHandler Click;
@@ -76,7 +82,7 @@ namespace Hedra.Engine.Rendering.UI
         public event OnButtonHoverEnterEventHandler HoverEnter;
         public event OnButtonHoverExitEventHandler HoverExit;
 
-        private void Initialize(Vector2 Position, Vector2 Scale, string Text, uint TextureId, Color FontColor, Font F)
+        private void Initialize(Vector2 Position, Vector2 Scale, string Text, Translation Translation, uint TextureId, Color FontColor, Font F)
         {
             if (TextureId != 0)
                 this.Texture = new GUITexture(TextureId, Scale, Position);
@@ -84,7 +90,7 @@ namespace Hedra.Engine.Rendering.UI
                 DrawManager.UIRenderer.Add(this.Texture);
 
             if (!string.IsNullOrEmpty(Text))
-                this.Text = new GUIText(Text, Position, FontColor, F);
+                this.Text = new GUIText(Translation ?? Translation.Default(Text), Position, FontColor, F);
 
             if (!string.IsNullOrEmpty(Text))
             {
