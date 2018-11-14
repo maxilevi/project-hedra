@@ -34,6 +34,7 @@ namespace Hedra.Engine.Player.MapSystem
         private const int MapSize = 8;
         private const int ChunkSize = 4;
         private const float FogDistance = 140f;
+        private readonly object _iconsLock = new object();
         private readonly LocalPlayer _player;
         private readonly MapStateManager _stateManager;
         private readonly List<MapItem> _icons;
@@ -98,7 +99,7 @@ namespace Hedra.Engine.Player.MapSystem
             this.UpdateFogAndTime();
 
             var mapPosition = _player.Model.ModelPosition.Xz.ToVector3();
-            lock (_icons)
+            lock (_iconsLock)
             {
                 for (var i = 0; i < _icons.Count; i++)
                 { 
@@ -216,7 +217,7 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void ClearIcons()
         {
-            lock (_icons)
+            lock (_iconsLock)
             {
                 for (int i = 0; i < _icons.Count; i++)
                 {
