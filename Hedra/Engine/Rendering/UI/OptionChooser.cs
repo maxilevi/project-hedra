@@ -17,28 +17,27 @@ namespace Hedra.Engine.Rendering.UI
         // \u25C0 Left
         // \u25B6 Right        
         
-        public GUIText Text;
-        public Button LeftArrow;
-        public Button RightArrow;
-        public GUIText CurrentValue;
-        public Func<int> GetValue;
-        public Action<int> SetValue;
-        public Font Font;
-        public Color Color;
-        public string[] Options;
-        public int Index;
+        public GUIText Text { get; private set; }
+        public Button LeftArrow{ get; private set; }
+        public Button RightArrow { get; private set; }
+        public GUIText CurrentValue { get; private set; }
+        public int Index { get; set; }
+        public Font Font { get; private set; }
+        public Color Color { get; private set; }
+        public Translation[] Options { get; private set; }
         
-        private void Initialize(Vector2 Position, Vector2 Scale, Translation Translation, Color C, Font F, string[] Options, bool Centered)
+        private void Initialize(Vector2 Position, Vector2 Scale, Translation Translation, Color C, Font F, Translation[] Options, bool Centered)
         {
             this.Font = F;
             this.Color = C;
             this.Options = Options;
-            var longestValue = Options.FirstOrDefault(S => S.Length == Options.Max(Str => Str.Length));
+            var max = Options.Max(T => T.Get().Length);
+            var longestValue = Options.FirstOrDefault(T => T.Get().Length == max);
 
 
-            GUIText prevCurrentValue = new GUIText(longestValue, Position, Color.Transparent, F);
-            Button prevRightArrow = new Button(Position, Scale, "\u25B6", Color.Transparent, F);
-            Button prevLeftArrow = new Button(Position, Scale, "\u25C0", Color.Transparent, F);
+            var prevCurrentValue = new GUIText(longestValue, Position, Color.Transparent, F);
+            var prevRightArrow = new Button(Position, Scale, "\u25B6", Color.Transparent, F);
+            var prevLeftArrow = new Button(Position, Scale, "\u25C0", Color.Transparent, F);
             
             if(!Centered)
             {
@@ -68,22 +67,24 @@ namespace Hedra.Engine.Rendering.UI
             prevCurrentValue.Dispose();
         }
         
-        public OptionChooser(Vector2 Position, Vector2 Scale, Translation Text, Color C, Font F, string[] Options, bool Centered = false) : base()
+        public OptionChooser(Vector2 Position, Vector2 Scale, Translation Text, Color C, Font F, Translation[] Options, bool Centered = false) : base()
         {
             Initialize(Position, Scale, Text, C, F, Options, Centered);
         }
         
         public OptionChooser(Vector2 Position, Vector2 Scale, string Text, Color C, Font F, string[] Options, bool Centered = false) : base()
         {
-            Initialize(Position, Scale, Translation.Default(Text), C, F, Options, Centered);
+            Initialize(Position, Scale, Translation.Default(Text), C, F, Options.Select(Translation.Default).ToArray(), Centered);
         }
         
-        public void OnArrowClick(object Sender, EventArgs E){
+        public void OnArrowClick(object Sender, EventArgs E)
+        {
             Index--;
             this.Update();
         }
         
-        public void OnRightArrowClick(object Sender, EventArgs E){
+        public void OnRightArrowClick(object Sender, EventArgs E)
+        {
             Index++;
             this.Update();
         }
@@ -95,7 +96,7 @@ namespace Hedra.Engine.Rendering.UI
             if(Index == -1)
                 Index = Options.Length-1;
 
-            this.CurrentValue.Text = Options[Index];
+            this.CurrentValue.SetTranslation(Options[Index]);
         }
         
         public void Enable(){

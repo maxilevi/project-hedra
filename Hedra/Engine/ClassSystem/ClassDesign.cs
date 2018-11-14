@@ -64,9 +64,7 @@ namespace Hedra.Engine.ClassSystem
 
         public static string ToString(Type ClassDesign)
         {
-            var name = ClassDesign.Name.Replace("Design", string.Empty);
-            var key = name.ToLowerInvariant();
-            return Translations.Has(key) ? Translations.Get(key) : name;
+            return ClassDesign.Name.Replace("Design", string.Empty);
         }
 
         public static ClassDesign None { get; } = new NoneDesign();

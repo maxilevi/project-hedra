@@ -314,8 +314,13 @@ namespace Hedra.Engine.BiomeSystem
             }
             if (blockGroundworks.Length > 0)
             {
-                var bonusHeight = blockGroundworks[blockGroundworks.Length - 1].BonusHeight * blockGroundworks[blockGroundworks.Length - 1].Density(position);
-                height += bonusHeight * blockGroundworksModifier;
+                var groundwork = blockGroundworks[blockGroundworks.Length - 1];
+                var bonusHeight =
+                    Math.Min(
+                        groundwork.BonusHeight,
+                        groundwork.BonusHeight * groundwork.Density(position) * groundwork.DensityMultiplier
+                    );
+                height += bonusHeight;// * blockGroundworksModifier;
             }
             if (pathGroundwork != null)
             {

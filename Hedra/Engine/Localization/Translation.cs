@@ -1,7 +1,10 @@
+using System;
+
 namespace Hedra.Engine.Localization
 {
     public delegate void OnLanguageChanged();
-    public class Translation
+    
+    public class Translation : IDisposable
     {
         public event OnLanguageChanged LanguageChanged;
         private string _key;
@@ -32,6 +35,23 @@ namespace Hedra.Engine.Localization
                 _isDefault = true,
                 _defaultText = Text
             };
+        }
+
+        public void UpdateTranslation(string NewLanguage)
+        {
+            LanguageChanged?.Invoke();
+        }
+
+        public void Dispose()
+        {
+            if (LanguageChanged != null)
+            {
+                var list = LanguageChanged.GetInvocationList();
+                for(var i = 0; i < list.Length; i++)
+                {
+                    LanguageChanged -= (OnLanguageChanged) list[i];
+                }
+            }
         }
     }
 }

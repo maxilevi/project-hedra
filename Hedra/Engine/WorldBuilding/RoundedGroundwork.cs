@@ -8,6 +8,7 @@ namespace Hedra.Engine.WorldBuilding
     public class RoundedGroundwork : IGroundwork
     {
         public BlockType Type { get; set; } = BlockType.Path;
+        public float DensityMultiplier { get; set; } = 1;
         public Vector3 Position { get; set; }
         public float Radius { get; set; }
         public float BonusHeight { get; set; }

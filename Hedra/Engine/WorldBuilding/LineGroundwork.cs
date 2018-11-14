@@ -7,6 +7,7 @@ namespace Hedra.Engine.WorldBuilding
     public class LineGroundwork : IGroundwork
     {
         public float Width { get; set; } = 14f;
+        public float DensityMultiplier { get; set; } = 1;
         public Vector2 Origin { get; set; }
         public Vector2 End { get; set; }
         public BlockType Type { get; set; }

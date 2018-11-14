@@ -16,17 +16,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             this.Rng = Rng;
         }
 
-        public virtual T[] Place(PlacementPoint[] Points, float Chances)
+        public virtual T Place(PlacementPoint Point)
         {
-            var parameters = new List<T>();
-            for (var i = 0; i < Points.Length; i++)
+            if (this.SpecialRequirements(Point))
             {
-                if (Rng.NextFloat() < Chances && this.SpecialRequirements(Points[i]))
-                {
-                    parameters.Add(this.FromPoint(Points[i]));
-                }
+                return this.FromPoint(Point);
             }
-            return parameters.ToArray();
+            throw new ArgumentOutOfRangeException("Could not place object");
         }
 
         public virtual T FromPoint(PlacementPoint Point)
@@ -39,7 +35,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             };
         }
 
-        protected virtual bool SpecialRequirements(PlacementPoint Point)
+        public virtual bool SpecialRequirements(PlacementPoint Point)
         {
             return true;
         }

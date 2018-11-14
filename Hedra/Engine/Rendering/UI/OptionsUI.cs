@@ -41,7 +41,7 @@ namespace Hedra.Engine.Rendering.UI
         private readonly Font _normalFont;
         private readonly Font _boldFont;
 
-        public OptionsUI() : base()
+        public OptionsUI()
         {
             var fontSize = 14;
             var dist = .2f;
@@ -184,7 +184,7 @@ namespace Hedra.Engine.Rendering.UI
 
             var viewValues = viewValuesList.ToArray();
             
-            OptionChooser viewDistance = new OptionChooser(new Vector2(dist, vDist*2f), new Vector2(0.15f, 0.075f), "View Distance : ",
+            var viewDistance = new OptionChooser(new Vector2(dist, vDist*2f), new Vector2(0.15f, 0.075f), "View Distance : ",
                                              fontColor, _normalFont,
                                             viewValues, false);
             viewDistance.Index = (GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2;
@@ -463,7 +463,7 @@ namespace Hedra.Engine.Rendering.UI
                 }
             }
             
-            Button autosave = new Button(new Vector2(0f, .2f),
+            var autosave = new Button(new Vector2(0f, .2f),
                                  new Vector2(0.15f,0.075f), "Autosave: " + ( GameSettings.Autosave ? "ON" : "OFF"), fontColor, _normalFont);
             
             autosave.Click += (
@@ -502,19 +502,24 @@ namespace Hedra.Engine.Rendering.UI
             AddElement(supportGame);
             
             
-            for(int i = 0; i < _graphicsButtons.Count; i++){
+            for(var i = 0; i < _graphicsButtons.Count; i++)
+            {
                 AddElement(_graphicsButtons[i]);
             }
-            for(int i = 0; i < _inputButtons.Count; i++){
+            for(var i = 0; i < _inputButtons.Count; i++)
+            {
                 AddElement(_inputButtons[i]);
             }
-            for(int i = 0; i < _audioButtons.Count; i++){
+            for(var i = 0; i < _audioButtons.Count; i++)
+            {
                 AddElement(_audioButtons[i]);
             }
-            for(int i = 0; i < _displayButtons.Count; i++){
+            for(var i = 0; i < _displayButtons.Count; i++)
+            {
                 AddElement(_displayButtons[i]);
             }
-            for(int i = 0; i < _controlsText.ControlsElements.Count; i++){
+            for(var i = 0; i < _controlsText.ControlsElements.Count; i++)
+            {
                 AddElement(_controlsText.ControlsElements[i]);
             }
             
@@ -525,9 +530,11 @@ namespace Hedra.Engine.Rendering.UI
                 GameManager.Player.UI.Menu.Enable();
             };
             
-            OnPanelStateChange += delegate(object Sender, PanelState E) {
-                if(E == PanelState.Disabled){
-                    GameSettings.Save(AssetManager.AppData+"settings.cfg");
+            OnPanelStateChange += delegate(object Sender, PanelState E)
+            {
+                if(E == PanelState.Disabled)
+                {
+                    GameSettings.Save($"{AssetManager.AppData}/settings.cfg");
                     GameSettings.DarkEffect = false;
                 }
                 if(E == PanelState.Enabled){

@@ -151,6 +151,11 @@ namespace Hedra.Engine.ItemSystem
         {
             return Grab(Type.ToString());
         }
+        
+        public static Item Grab(ItemTier Tier)
+        {
+            return Grab(new ItemPoolSettings(Tier));
+        }
 
         public static Item Grab(CommonItems Item)
         {

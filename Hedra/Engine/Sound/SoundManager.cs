@@ -75,6 +75,7 @@ namespace Hedra.Engine.Sound
     
     public enum SoundType
     {
+        None,
         ButtonClick,
         WaterSplash,
         ButtonHover,

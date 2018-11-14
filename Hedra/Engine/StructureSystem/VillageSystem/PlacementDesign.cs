@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using OpenTK;
@@ -7,11 +8,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
     public class PlacementDesign
     {
         public Vector3 Position { get; private set; }
-        public FarmParameters[] Farms { get; set; } = new FarmParameters[0];
-        public NeighbourhoodParameters[] Neighbourhoods { get; set; } = new NeighbourhoodParameters[0];
-        public BlacksmithParameters[] Blacksmith { get; set; } = new BlacksmithParameters[0];
-        public BuildingParameters[] Stables { get; set; } = new BuildingParameters[0];
-        public MarketParameters[] Markets { get; set; } = new MarketParameters[0];
+        public List<FarmParameters> Farms { get; set; } = new List<FarmParameters>();
+        public List<NeighbourhoodParameters> Neighbourhoods { get; set; } = new List<NeighbourhoodParameters>();
+        public List<BlacksmithParameters> Blacksmith { get; set; } = new List<BlacksmithParameters>();
+        public List<BuildingParameters> Stables { get; set; } = new List<BuildingParameters>();
+        public List<MarketParameters> Markets { get; set; } = new List<MarketParameters>();
 
         public IBuildingParameters[] Parameters => Farms.Concat<IBuildingParameters>(Neighbourhoods)
             .Concat(Blacksmith).Concat(Stables).Concat(Markets).ToArray();

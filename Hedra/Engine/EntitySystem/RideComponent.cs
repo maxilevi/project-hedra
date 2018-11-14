@@ -88,7 +88,7 @@ namespace Hedra.Engine.EntitySystem
             if(HasRider || Entity.IsRiding) return;
             
             _rider = Entity;
-            _rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(_rider, -_rider.Speed + Parent.Speed * .5f), () => _rider != null && _rider.IsRiding);
+            _rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(_rider, -_rider.Speed + 2.25f), () => _rider != null && _rider.IsRiding);
             HasRider = true;
             _rider.IsRiding = true;
             _rider.Model.MountModel = (QuadrupedModel) Parent.Model;

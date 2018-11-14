@@ -29,17 +29,14 @@ namespace Hedra.Engine.Rendering.UI
         private readonly TextConfiguration _configuration;
         private Vector2 _temporalPosition;
         private string _text;
+        private Translation _translation;
+        
 
         public GUIText(Translation Translation, Vector2 Position, Color TextColor, Font TextFont)
         {
-            Translation.LanguageChanged += delegate
-            {
-                Text = Translation.Get();
-            };
-            _text = Translation.Get();
             _temporalPosition = Position;
             _configuration = new TextConfiguration(TextColor, TextFont);
-            this.UpdateText();
+            SetTranslation(Translation);
         }
 
         public GUIText(string Text, Vector2 Position, Color TextColor, Font TextFont) 
@@ -84,6 +81,18 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
+        public void SetTranslation(Translation Translation)
+        {
+            _translation?.Dispose();
+            _translation = Translation;
+            Translation.LanguageChanged += delegate
+            {
+                Text = Translation.Get();
+            };
+            _text = Translation.Get();
+            UpdateText();
+        }
+        
         public Color TextColor
         {
             get => _configuration.Color;

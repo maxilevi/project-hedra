@@ -19,9 +19,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override bool Place(MarketParameters Parameters, VillageCache Cache)
         {
-            var work = this.CreateGroundwork(Parameters.Position, Parameters.Size);
-            work.Groundwork = null;
-            work.Plateau.NoTrees = true;
+            var work = this.CreateGroundwork(Parameters.Position, Parameters.Size, BlockType.StonePath);
             return this.PushGroundwork(work);
         }
 
@@ -32,8 +30,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public override BuildingOutput Build(MarketParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            float marketDist = 4.75f + Rng.NextFloat() * .75f + 1.2f;
-            int marketCount = 16 + Rng.Next(0, 4);
+            float marketDist = 4.75f + Rng.NextFloat() * .75f + 0.2f;
+            int marketCount = 8 + Rng.Next(0, 4);
 
             var marketModels = new List<VertexData>();
             var marketShapes = new List<CollisionShape>();

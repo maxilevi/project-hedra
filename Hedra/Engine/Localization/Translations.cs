@@ -10,11 +10,12 @@ namespace Hedra.Engine.Localization
     public static class Translations
     {
         private static readonly Dictionary<string, Dictionary<string, string>> _translations;
-        public static string Language { get; set; } = GameLanguage.English.ToString();
+        private static readonly List<Translation> _liveTranslation;
 
         static Translations()
         {
             _translations = new Dictionary<string, Dictionary<string, string>>();
+            _liveTranslation = new List<Translation>();
         }
         
         public static void Load()
@@ -28,6 +29,16 @@ namespace Hedra.Engine.Localization
                     Parse(File.ReadAllText(files[i]))
                 );
             }
+        }
+
+        public static void Add(Translation Key)
+        {
+            _liveTranslation.Add(Key);
+        }
+        
+        public static void Remove(Translation Key)
+        {
+            _liveTranslation.Remove(Key);
         }
 
         public static bool Has(string Key)
@@ -89,5 +100,20 @@ namespace Hedra.Engine.Localization
         }
 
         public static string[] Languages => _translations.Keys.ToArray();
+        
+        private static string _language = GameLanguage.English.ToString();
+
+        public static string Language
+        {
+            get => _language;
+            set
+            {
+                _language = value;
+                for (var i = 0; i < _liveTranslation.Count; i++)
+                {
+                    _liveTranslation[i].UpdateTranslation(_language);
+                }
+            }
+        }
     }
 }

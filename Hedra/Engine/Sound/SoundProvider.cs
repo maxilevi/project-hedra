@@ -11,7 +11,7 @@ namespace Hedra.Engine.Sound
 {
     public class SoundProvider : ISoundProvider
     {
-        private readonly SoundBuffer[] _soundBuffers;
+        private readonly SoundFamily[] _soundFamilies;
         private readonly SoundItem[] _soundItems;
         private readonly SoundSource[] _soundSources;
         private AudioContext _audioContext;
@@ -22,7 +22,7 @@ namespace Hedra.Engine.Sound
 
         public SoundProvider()
         {
-            _soundBuffers = new SoundBuffer[(int)SoundType.MaxSounds];
+            _soundFamilies = new SoundFamily[(int)SoundType.MaxSounds];
             _soundItems = new SoundItem[8];
             _soundSources = new SoundSource[32];
         }
@@ -56,7 +56,7 @@ namespace Hedra.Engine.Sound
                 LoadSound(SoundType.Jump, "Sounds/Jump.ogg");
                 LoadSound(SoundType.TransactionSound, "Sounds/Money.ogg");
                 LoadSound(SoundType.FoodEat, "Sounds/Eat.ogg");
-                _soundBuffers[(int) SoundType.FoodEaten] = _soundBuffers[(int) SoundType.NotificationSound];
+                _soundFamilies[(int) SoundType.FoodEaten] = _soundFamilies[(int) SoundType.NotificationSound];
                 LoadSound(SoundType.HorseRun, "Sounds/Horse.ogg");
                 LoadSound(SoundType.Fireplace, "Sounds/Fireplace.ogg");
                 LoadSound(SoundType.HumanRun, "Sounds/Run.ogg");
@@ -80,14 +80,19 @@ namespace Hedra.Engine.Sound
             });
         }
 
-        private void LoadSound(SoundType Type, string Name, bool a = false)
+        private void LoadSound(SoundType Type, params string[] Names)
         {
-            _soundBuffers[(int)Type] = 
-                new SoundBuffer(
-                    LoadOgg(Name, out var channels, out var bits, out var rate),
+            var family = new SoundFamily();
+            for (var i = 0; i < Names.Length; i++)
+            {
+                family.Add(new SoundBuffer(
+                    LoadOgg(Names[i], out var channels, out var bits, out var rate),
                     GetSoundFormat(channels, bits),
                     rate
-                    );
+                ));
+            }
+            _soundFamilies[(int) Type] = family;
+
         }
 
         public void Update(Vector3 Position)
@@ -99,7 +104,7 @@ namespace Hedra.Engine.Sound
         public void PlaySound(SoundType Sound, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1)
         {
 
-            if(!_loaded) return;
+            if(!_loaded || Sound == SoundType.None) return;
             ListenerPosition = LocalPlayer.Instance.Position;
 
             Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast / 128f) * Volume, 0);
@@ -111,12 +116,12 @@ namespace Hedra.Engine.Sound
                 Log.WriteLine($"Could not play sound {Sound}");
                 return;
             }
-            source.Play(_soundBuffers[ (int) Sound], Location, Pitch, Gain, Looping);            
+            source.Play(GetBuffer(Sound), Location, Pitch, Gain, Looping);            
         }
 
         public void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, Func<float> PitchLambda, Func<float> GainLambda)
         {
-            if (!_loaded) return;
+            if (!_loaded || Sound == SoundType.None) return;
             var source = GrabSource();
             if(source == null)
             {
@@ -126,7 +131,7 @@ namespace Hedra.Engine.Sound
             TaskManager.While(Lambda, delegate
             {
                 if(source.IsPlaying) return;
-                source.Play(_soundBuffers[(int)Sound], ListenerPosition, PitchLambda(), GainLambda(), false);
+                source.Play(GetBuffer(Sound), ListenerPosition, PitchLambda(), GainLambda(), false);
             });
         }
 
@@ -144,7 +149,7 @@ namespace Hedra.Engine.Sound
 
         public SoundBuffer GetBuffer(SoundType Type)
         {
-            return _soundBuffers[(int)Type];
+            return _soundFamilies[(int)Type].Get();
         }
 
         public SoundItem GetAvailableSource()

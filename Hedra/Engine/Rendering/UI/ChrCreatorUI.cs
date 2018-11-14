@@ -13,11 +13,13 @@ using Hedra.Engine.Player;
 using System.Drawing;
 using OpenTK;
 using System.Collections;
+using System.Linq;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering.Animation;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -64,12 +66,14 @@ namespace Hedra.Engine.Rendering.UI
 
             CoroutineManager.StartCoroutine(this.Update);
 
-            string[] classes = ClassDesign.ClassNames;
+            var classes = ClassDesign.ClassNames.Select(S => Translation.Create(S.ToLowerInvariant())).ToArray();
             var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, Translation.Create("class"), defaultColor,
                                                           defaultFont, classes, true);
-            classChooser.Index = Array.IndexOf(classes, _human.Class.Name);            
-            OnButtonClickEventHandler setWeapon = delegate {
-                _classType = ClassDesign.FromString(classes[classChooser.Index]);
+            classChooser.Index = Array.IndexOf(ClassDesign.ClassNames, _human.Class.Name);
+
+            void SetWeapon(object Sender, MouseButtonEventArgs E)
+            {
+                _classType = ClassDesign.FromString(ClassDesign.ClassNames[classChooser.Index]);
                 var position = _human.Model.Position;
                 var rotation = _human.Model.Rotation;
 
@@ -79,11 +83,12 @@ namespace Hedra.Engine.Rendering.UI
                 _human.Model.Position = position;
                 _human.Model.Rotation = rotation;
                 _human.Model.TargetRotation = rotation;
-            };
-            setWeapon(null, null);
+            }
+
+            SetWeapon(null, null);
             
-            classChooser.RightArrow.Click += setWeapon;
-            classChooser.LeftArrow.Click += setWeapon;
+            classChooser.RightArrow.Click += SetWeapon;
+            classChooser.LeftArrow.Click += SetWeapon;
             classChooser.CurrentValue.TextColor = defaultColor;
             classChooser.CurrentValue.UpdateText(); 
             

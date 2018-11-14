@@ -388,6 +388,7 @@
     <Compile Include="Engine\Rendering\UI\ShiverAnimation.cs" />
     <Compile Include="Engine\Rendering\UpdatableObjectMeshModel.cs" />
     <Compile Include="Engine\Sound\ISoundProvider.cs" />
+    <Compile Include="Engine\Sound\SoundFamily.cs" />
     <Compile Include="Engine\Sound\SoundProvider.cs" />
     <Compile Include="Engine\StructureSystem\BanditCamp.cs" />
     <Compile Include="Engine\StructureSystem\Campfire.cs" />
@@ -400,10 +401,13 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\NeighbourhoodParameters.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\MarketParameters.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\NeighbourhoodWellBuilder.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\GridPlacementDesigner.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\IPlacementDesigner.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathEdge.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathGraph.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathVertex.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\PlacementDesigner.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\HousePlacer.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Placers\NeighbourhoodPlacer.cs" />
     <Compile Include="Engine\WorldBuilding\IWorldBuilding.cs" />
     <Compile Include="Engine\WorldBuilding\LineGroundwork.cs" />
@@ -727,7 +731,6 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\MarketCache.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Placement.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\PlacementDesign.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\DispersedPlacementDesigner.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\PlacementPoint.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Placers\BlacksmithPlacer.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Placers\FarmPlacer.cs" />

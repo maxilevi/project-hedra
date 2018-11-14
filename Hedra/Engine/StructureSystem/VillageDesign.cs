@@ -17,7 +17,8 @@ namespace Hedra.Engine.StructureSystem
 {
     public class VillageDesign : StructureDesign
     {
-        public override int Radius { get; set; } = 1024 + 512;
+        public const float Spacing = 160;
+        public override int Radius { get; set; } = 2048;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
 
         public override void Build(CollidableStructure Structure)
@@ -30,7 +31,7 @@ namespace Hedra.Engine.StructureSystem
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var structure = base.Setup(TargetPosition, Rng, new Village(TargetPosition));
-            structure.Mountain.Radius = 1024;
+            structure.Mountain.Radius = (Rng.NextFloat() * .75f + .5f) * Radius;
             var region = World.BiomePool.GetRegion(TargetPosition);
             var builder = new VillageAssembler(structure, VillageLoader.Designer[region.Structures.VillageType], Rng);
             var design = builder.DesignVillage();

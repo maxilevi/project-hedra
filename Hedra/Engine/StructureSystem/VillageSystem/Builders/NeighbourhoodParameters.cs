@@ -7,6 +7,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public float Size { get; set; }
         public DesignTemplate[] HouseTemplates { get; set; }
         public int HouseCount { get; set; }
+        public bool IsSingle { get; set; }
 
         public override float GetSize(VillageCache Cache)
         {

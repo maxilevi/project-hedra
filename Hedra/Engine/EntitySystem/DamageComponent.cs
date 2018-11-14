@@ -132,8 +132,7 @@ namespace Hedra.Engine.EntitySystem
             if (Parent.Health <= 0 && !Parent.IsDead)
             {
                 Parent.IsDead = true;
-                var dropComponent = Parent.SearchComponent<DropComponent>();
-                dropComponent?.Drop();
+                DropLoot();
                 Parent.Physics.HasCollision = false;
                 Exp = XpToGive;
                 if(Damager is LocalPlayer)
@@ -154,6 +153,15 @@ namespace Hedra.Engine.EntitySystem
                 OnDamageEvent.Invoke(new DamageEventArgs(Parent, Damager, Amount, Exp));
         }
 
+        private void DropLoot()
+        {
+            DropComponent dropComponent;
+            while ((dropComponent = Parent.SearchComponent<DropComponent>()) != null)
+            {
+                dropComponent.Drop();   
+            }
+        }
+        
 
         public IEnumerator DisposeCoroutine()
         {

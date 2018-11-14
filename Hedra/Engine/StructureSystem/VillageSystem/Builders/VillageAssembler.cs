@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
@@ -38,7 +39,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             _marketBuilder = new MarketBuilder(_structure);
             _root = Root;
             _rng = Rng;
-            _designer = new DispersedPlacementDesigner(_root, new VillageConfiguration(), Rng);
+            _designer = new GridPlacementDesigner(_root, new VillageConfiguration
+            {
+                Size = (int) ((Structure.Mountain.Radius - VillageDesign.Spacing) / VillageDesign.Spacing)
+            }, Rng);
         }
 
         public PlacementDesign DesignVillage()
@@ -56,10 +60,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             _designer.FinishPlacements(_structure, Design);
         }
 
-        private T[] LoopStructures<T>(T[] Parameters, params Builder<T>[] Builders) where T : IBuildingParameters
+        private List<T> LoopStructures<T>(IList<T> Parameters, params Builder<T>[] Builders) where T : IBuildingParameters
         {
             var list = Parameters.ToList();
-            for (var i = 0; i < Parameters.Length; i++)
+            for (var i = 0; i < Parameters.Count; i++)
             {
                 for(var j = 0; j < Builders.Length; j++)
                 {
@@ -70,26 +74,26 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     }
                 }
             }
-            return list.ToArray();
+            return list;
         }
 
-        private static bool IsUnderwater(Vector3 Position)
+        private bool IsUnderwater(Vector3 Position)
         {
-            return World.BiomePool.GetRegion(Position).Generation
-                       .GetHeight(Position.X, Position.Z, null, out _) < BiomePool.SeaLevel;
+            return World.BiomePool.GetRegion(Position).Generation.GetHeight(Position.X, Position.Z, null, out _) < BiomePool.SeaLevel
+                && !_structure.Mountain.Collides(Position.Xz);
         }
 
         public void Build(PlacementDesign Design, CollidableStructure Structure)
         {
             var parameters = new IBuildingParameters[][]
             {
-                Design.Neighbourhoods,
-                Design.Neighbourhoods,
-                Design.Farms,
-                Design.Blacksmith,
-                Design.Stables,
-                Design.Markets,
-                Design.Markets
+                Design.Neighbourhoods.ToArray(),
+                Design.Neighbourhoods.ToArray(),
+                Design.Farms.ToArray(),
+                Design.Blacksmith.ToArray(),
+                Design.Stables.ToArray(),
+                Design.Markets.ToArray(),
+                Design.Markets.ToArray()
             };
             var radius = 0f;
             var builders = new object[] { _neighbourhoodBuilder, _neighbourHoodWellBuilder, _farmBuilder, _blacksmithBuilder, _stableBuilder, _marketWellBuilder, _marketBuilder};
