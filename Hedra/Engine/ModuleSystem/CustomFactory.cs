@@ -117,9 +117,57 @@ namespace Hedra.Engine.ModuleSystem
                 };
                 Mob.AddComponent(drop);
             }
+
+            this.AddItemDropPerLevel(Mob);
             Mob.AddComponent((EntityComponent)Activator.CreateInstance(AITable[this.AIType], Mob));
         }
 
+        private void AddItemDropPerLevel(IEntity Mob)
+        {
+            if (Mob.Level < 8)
+                Mob.AddComponent(new DropComponent(Mob)
+                {
+                    ItemDrop = ItemPool.Grab(ItemTier.Common),
+                    RandomDrop = false,
+                    DropChance = .1f,
+                });
+            else if(Mob.Level < 16)
+                Mob.AddComponent(new DropComponent(Mob)
+                {
+                    ItemDrop = ItemPool.Grab(ItemTier.Uncommon),
+                    RandomDrop = false,
+                    DropChance = .1f,
+                });
+            else if(Mob.Level < 32)
+                Mob.AddComponent(new DropComponent(Mob)
+                {
+                    ItemDrop = ItemPool.Grab(ItemTier.Rare),
+                    RandomDrop = false,
+                    DropChance = .1f,
+                });
+            else if(Mob.Level < 48)
+                Mob.AddComponent(new DropComponent(Mob)
+                {
+                    ItemDrop = ItemPool.Grab(ItemTier.Unique),
+                    RandomDrop = false,
+                    DropChance = .1f,
+                });
+            else if(Mob.Level < 64)
+                Mob.AddComponent(new DropComponent(Mob)
+                {
+                    ItemDrop = ItemPool.Grab(ItemTier.Legendary),
+                    RandomDrop = false,
+                    DropChance = .1f,
+                });
+            else
+                Mob.AddComponent(new DropComponent(Mob)
+                {
+                    ItemDrop = ItemPool.Grab(ItemTier.Divine),
+                    RandomDrop = false,
+                    DropChance = .1f,
+                });
+        }
+        
         private float NormalizeXp(float Raw)
         {
             return Mathf.Clamp(Raw, Level * MinXpFactor, Level * MaxXpFactor);
