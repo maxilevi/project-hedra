@@ -79,7 +79,7 @@ namespace Hedra.Engine.Player
             {
                 XDelta = Cursor.Position.X - GameSettings.Width / 2;
                 YDelta = Cursor.Position.Y - GameSettings.Height / 2;
-                if (LockMouse) Cursor.Position = new Vector2((float)GameSettings.Width / 2, (float)GameSettings.Height / 2);
+                if (LockMouse) Cursor.Center();
                 
                 if (CaptureMovement)
                 {

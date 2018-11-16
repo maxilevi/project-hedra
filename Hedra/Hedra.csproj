@@ -93,6 +93,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -5080,7 +5081,7 @@
     <Folder Include="Modules\Items\Chestplates\" />
     <Folder Include="Modules\Items\Helmets\" />
     <Folder Include="Modules\Items\Pants\" />
-    <Folder Include="Modules\Recipes" />
+    <Folder Include="Modules\Recipes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Boat.ply">
@@ -5201,7 +5202,7 @@
     <Content Include="Modules\Items\Misc\Boat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Misc\MagicBranch.json">
+    <Content Include="Modules\Items\Misc\EnchantedBranch.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\Mushroom.json">

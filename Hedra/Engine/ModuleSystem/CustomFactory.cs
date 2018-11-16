@@ -108,7 +108,9 @@ namespace Hedra.Engine.ModuleSystem
 
             foreach (var template in Drops)
             {
-                var type = (ItemType) Enum.Parse(typeof(ItemType), template.Type);
+                if(!ItemPool.Exists(template.Type)) 
+                    throw new ArgumentOutOfRangeException($"Item '{template.Type}' does not exist.");
+                var type = template.Type;
 
                 drop = new DropComponent(Mob)
                 {

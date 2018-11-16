@@ -155,12 +155,11 @@ namespace Hedra.Engine.EntitySystem
 
         private void DropLoot()
         {
-            DropComponent dropComponent;
-            while ((dropComponent = Parent.SearchComponent<DropComponent>()) != null)
+            var components = Parent.GetComponents<DropComponent>();
+            for (var i = 0; i < components.Length; i++)
             {
-                dropComponent.Drop();
-                Parent.RemoveComponent(dropComponent);
-                dropComponent = null;
+                components[i].Drop();
+                Parent.RemoveComponent(components[i]);
             }
         }
         

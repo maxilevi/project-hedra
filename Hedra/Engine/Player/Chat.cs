@@ -148,7 +148,7 @@ namespace Hedra.Engine.Player
             _commandLine.Disable();
             _commandLine.InFocus = false;
             Focused = false;
-            Cursor.Show = true;
+            Cursor.Show = false;
             Cursor.Center();
         }
         

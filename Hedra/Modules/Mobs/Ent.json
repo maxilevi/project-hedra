@@ -11,7 +11,7 @@
   "Effects": [],
   "Drops": [
     {
-      "Type": "MagicBranch",
+      "Type": "EnchantedBranch",
       "Chance": 15
     }
   ],

@@ -39,8 +39,8 @@ namespace Hedra
                 Log.WriteLine(devices[i].Bounds.ToString());
             }
 
-            GameSettings.DeviceWidth = device.Width;
-            GameSettings.DeviceHeight = device.Height;
+            GameSettings.DeviceWidth = DisplayDevice.Default.Width;
+            GameSettings.DeviceHeight = DisplayDevice.Default.Height;
 
 
             Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +

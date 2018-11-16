@@ -320,12 +320,26 @@ namespace Hedra.Engine.EntitySystem
         public T SearchComponent<T>()
         {
             for (var i = 0; i < Components.Count; i++)
+            {
                 if (Components[i] is T variable)
                     return variable;
+            }
+
             return default(T);
         }
+        
+        public T[] GetComponents<T>()
+        {
+            var list = new List<T>();
+            for (var i = 0; i < Components.Count; i++)
+            {
+                if (Components[i] is T variable)
+                    list.Add(variable);
+            }
+            return list.ToArray();
+        }
 
-        public void UpdateEnviroment()
+        public void UpdateEnvironment()
         {
             var underChunk = World.GetChunkAt(Position);
             var waterHeight = PhysicsSystem.Physics.WaterHeight(Position);
@@ -476,7 +490,7 @@ namespace Hedra.Engine.EntitySystem
 
             this.SpawnAnimation();
             this.Physics.Update();
-            this.UpdateEnviroment();
+            this.UpdateEnvironment();
             this._tickSystem.Tick();
             for (var i = 0; i < this.Components.Count; i++)
                 this.Components[i].Update();

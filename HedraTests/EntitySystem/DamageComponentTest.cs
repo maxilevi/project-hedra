@@ -48,6 +48,12 @@ namespace HedraTests.EntitySystem
                 lastComponent = Component;
             });
             entityMock.Setup(E => E.SearchComponent<DropComponent>()).Returns( () => (DropComponent) lastComponent);
+            entityMock.Setup(E => E.GetComponents<DropComponent>()).Returns( () => lastComponent != null 
+            ? new []
+            {
+                (DropComponent) lastComponent
+            }
+            : new DropComponent[0]);
             _entity = entityMock.Object;
             _entity.Health = 100;
             GameManager.Player = new PlayerMock();

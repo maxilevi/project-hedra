@@ -262,7 +262,12 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
-        public void UpdateEnviroment()
+        public T[] GetComponents<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateEnvironment()
         {
             throw new NotImplementedException();
         }

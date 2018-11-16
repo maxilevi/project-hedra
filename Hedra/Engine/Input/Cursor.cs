@@ -1,5 +1,6 @@
 ﻿using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Forms = System.Windows.Forms;
 using OpenTK;
 
 namespace Hedra.Engine.Input
@@ -10,11 +11,11 @@ namespace Hedra.Engine.Input
         private static Vector2 _position;
 
         static Cursor()
-        {
+        {/*
             EventDispatcher.RegisterMouseMove(
                 typeof(Cursor),
-                (sender, args) => _position = new Vector2(args.Position.X, args.Position.Y)
-            );
+                (Sender, Args) => _position = new Vector2(Args.Position.X, GameSettings.Height - Args.Position.Y)
+            );*/
         }
         
         public static void Center()
@@ -33,15 +34,22 @@ namespace Hedra.Engine.Input
                     return;
                 }
                 Program.GameWindow.CursorVisible = value;
-    
                 _show = value;
             }
         }
 
         public static Vector2 Position
         {
-            get => _position;
-            set => OpenTK.Input.Mouse.SetPosition(_position.X, _position.Y);
+            get => new Vector2(Forms.Cursor.Position.X, Forms.Cursor.Position.Y);
+            set
+            {
+                Forms.Cursor.Position = new System.Drawing.Point((int)value.X, (int)value.Y);
+            }
+        }
+
+        public static void Dispose()
+        {
+            EventDispatcher.UnregisterMouseMove(typeof(Cursor));
         }
     }
 }

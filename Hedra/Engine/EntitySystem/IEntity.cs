@@ -114,7 +114,9 @@ namespace Hedra.Engine.EntitySystem
 
         T SearchComponent<T>();
 
-        void UpdateEnviroment();
+        T[] GetComponents<T>();
+
+        void UpdateEnvironment();
 
         void KnockForSeconds(float Time);
 
