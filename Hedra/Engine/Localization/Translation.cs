@@ -10,6 +10,7 @@ namespace Hedra.Engine.Localization
         private string _key;
         private bool _isDefault;
         private string _defaultText;
+        private string _format;
 
         private Translation()
         {
@@ -17,14 +18,15 @@ namespace Hedra.Engine.Localization
         
         public string Get()
         {
-            return _isDefault ? _defaultText : Translations.Get(_key);
+            return _format.Replace("{0}", _isDefault ? _defaultText : Translations.Get(_key));
         }
 
-        public static Translation Create(string Key)
+        public static Translation Create(string Key, string Format = "{0}")
         {
             return new Translation
             {
-                _key = Key
+                _key = Key,
+                _format = Format
             };
         }
 
@@ -33,7 +35,8 @@ namespace Hedra.Engine.Localization
             return new Translation
             {
                 _isDefault = true,
-                _defaultText = Text
+                _defaultText = Text,
+                _format = "{0}"
             };
         }
 
@@ -52,6 +55,7 @@ namespace Hedra.Engine.Localization
                     LanguageChanged -= (OnLanguageChanged) list[i];
                 }
             }
+            Translations.Remove(this);
         }
     }
 }

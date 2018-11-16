@@ -34,6 +34,7 @@ namespace Hedra.Engine.ModuleSystem.AnimationEvents
             var entities = World.Entities;
             foreach (var entity in entities)
             {
+                if(!entity.IsGrounded) continue;
                 var damage = Parent.AttackDamage * (1-Mathf.Clamp((position - entity.Position).Xz.LengthFast / 48f, 0, 1)) * 3.0F;
                 if (damage > 0 && Parent != entity)
                 {

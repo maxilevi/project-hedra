@@ -5,7 +5,7 @@
   "Speed": 1.25,
   "XP": 2.0,
   "Level": 4,
-  "AIType": "Neutral",
+  "AIType": "Goat",
   "Ridable": false,
   "Effects": [
     {

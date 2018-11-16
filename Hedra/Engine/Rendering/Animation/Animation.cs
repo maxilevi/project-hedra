@@ -23,6 +23,7 @@ namespace Hedra.Engine.Rendering.Animation
         public float Length { get; }
         public KeyFrame[] KeyFrames { get; }
         public bool Loop {get; set;}
+        private List<ProgressEvent> _events;
         private bool _midAnimation;
         private bool _startAnimation;
         private bool _endAnimation;
@@ -39,6 +40,7 @@ namespace Hedra.Engine.Rendering.Animation
             this.KeyFrames = Frames;
             this.Length = LengthInSeconds;
             this.Loop = true;
+            this._events = new List<ProgressEvent>();
         }
         
         public void DispatchEvents(float Progress)
@@ -58,18 +60,44 @@ namespace Hedra.Engine.Rendering.Animation
                 _startAnimation = true;
                 OnAnimationStart?.Invoke(this);
             }
+            for (var i = 0; i < _events.Count; i++)
+            {
+                _events[i].Update(this, Progress);
+            }
         }
-        
+
+        public void RegisterOnProgressEvent(float Progress, OnAnimationHandler Callback)
+        {
+            _events.Add(new ProgressEvent(Progress, Callback));
+        }
+
         public void Reset()
         {
             _midAnimation = false;
             _startAnimation = false;
             _endAnimation = false;
+            _events.ForEach(E => E.Reset());
+        }
+        
+        private static void RemoveListeners(OnAnimationHandler Handler)
+        {
+            if (Handler != null)
+            {
+                var list = Handler.GetInvocationList();
+                for(var i = 0; i < list.Length; i++)
+                {
+                    Handler -= (OnAnimationHandler) list[i];
+                }
+            }
         }
         
         public void Dispose()
         {
-            
+            RemoveListeners(OnAnimationEnd);
+            RemoveListeners(OnAnimationMid);
+            RemoveListeners(OnAnimationStart);
+            _events.ForEach(E => E.Dispose());
+            _events.Clear();
         }
     }
 }

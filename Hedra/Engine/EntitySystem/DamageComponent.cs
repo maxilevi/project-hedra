@@ -120,11 +120,11 @@ namespace Hedra.Engine.EntitySystem
             _tintTimer = 0.25f;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
             if (Damager != null && Damager != Parent && PushBack 
-                && Parent.Model.Dimensions.Size.LengthFast < Damager.Model.Dimensions.Size.LengthFast)
+                && Parent.Size.LengthFast < Damager.Size.LengthFast)
             {
                 var direction = -(Damager.Position - Parent.Position).Normalized();
                 var factor = 0.5f;
-                var averageSize = (Parent.Model.BaseBroadphaseBox.Size.X + Parent.Model.BaseBroadphaseBox.Size.Z) * .5f;
+                var averageSize = (Parent.Size.X + Parent.Size.Z) * .5f;
                 if (Parent is LocalPlayer) factor = 0.0f;
                 Parent.Physics.Translate(direction * factor * averageSize);
             }
@@ -158,7 +158,9 @@ namespace Hedra.Engine.EntitySystem
             DropComponent dropComponent;
             while ((dropComponent = Parent.SearchComponent<DropComponent>()) != null)
             {
-                dropComponent.Drop();   
+                dropComponent.Drop();
+                Parent.RemoveComponent(dropComponent);
+                dropComponent = null;
             }
         }
         

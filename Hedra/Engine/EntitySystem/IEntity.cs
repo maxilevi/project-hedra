@@ -88,6 +88,8 @@ namespace Hedra.Engine.EntitySystem
         Vector3 Position { get; set; }
 
         Vector3 Rotation { get; set; }
+        
+        Vector3 Size { get; }
 
         string Type { get; set; }
 

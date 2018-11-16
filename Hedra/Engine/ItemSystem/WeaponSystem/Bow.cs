@@ -139,7 +139,13 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             var arrowProj = new Projectile(Human, Origin, _arrowDataVertexData)
             {
                 Lifetime = 5f,
-                Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce
+                Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce,
+                IgnoreEntities = Human is IPlayer player 
+                    ? new IEntity[]
+                    {
+                        player.Pet.Pet
+                    } 
+                    : null
             };
             arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
                 Hit.Damage(Human.DamageEquation * Options.DamageModifier, Human, out float exp, true, false);

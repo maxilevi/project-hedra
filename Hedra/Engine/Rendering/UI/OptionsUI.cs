@@ -18,6 +18,7 @@ using System.Globalization;
 using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -181,15 +182,17 @@ namespace Hedra.Engine.Rendering.UI
                 viewValuesList.Add(i.ToString());
             }
 
-
             var viewValues = viewValuesList.ToArray();
-            
-            var viewDistance = new OptionChooser(new Vector2(dist, vDist*2f), new Vector2(0.15f, 0.075f), "View Distance : ",
-                                             fontColor, _normalFont,
-                                            viewValues, false);
-            viewDistance.Index = (GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2;
-            viewDistance.CurrentValue.Text = viewValues[(GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2];
-            
+
+            var viewDistance = new OptionChooser(new Vector2(dist, vDist * 2f), new Vector2(0.15f, 0.075f),
+                Translation.Create("view_distance", "{0} : "),
+                fontColor, _normalFont,
+                viewValues.Select(Translation.Default).ToArray(), false)
+            {
+                Index = (GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2,
+                CurrentValue = {Text = viewValues[(GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2]}
+            };
+
             for(int i = 0; i < viewValues.Length; i++){
                 if(int.Parse(viewValues[i]) == GameSettings.ChunkLoaderRadius)
 {
@@ -426,39 +429,48 @@ namespace Hedra.Engine.Rendering.UI
                                                          volumeOptions, false);
 
             for(int i = 0; i < volumeOptions.Length; i++){
-                if( (float) (Int32.Parse( volumeOptions[i].Replace("%",string.Empty) ) / 100f) == Sound.SoundManager.Volume){
+                if( (float) (Int32.Parse( volumeOptions[i].Replace("%",string.Empty) ) / 100f) == Sound.SoundManager.Volume)
+                {
                     sfxVolume.Index = i;
                     sfxVolume.CurrentValue.Text = volumeOptions[i];            
                     break;
                 }
             }
             
-            sfxVolume.LeftArrow.Click += delegate { 
-                Sound.SoundManager.Volume = Int32.Parse( volumeOptions[sfxVolume.Index].Replace("%",string.Empty) ) / 100f;
+            sfxVolume.LeftArrow.Click += (Sender, Args) =>
+                Sound.SoundManager.Volume = int.Parse(volumeOptions[sfxVolume.Index].Replace("%", string.Empty)) / 100f;
+            
+            sfxVolume.RightArrow.Click += (Sender, Args) =>
+                Sound.SoundManager.Volume = int.Parse(volumeOptions[sfxVolume.Index].Replace("%", string.Empty)) / 100f;
+            
+            var sensitivityOptions = new []
+            {
+                "0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9","1.0",
+                "1.1","1.2","1.3","1.4","1.5","1.6","1.7","1.8","1.9","2.0",
+                "2.1","2.2","2.3","2.4","2.5"
+            }.Select(Translation.Default).ToArray();
+            var mouseSensitivity = new OptionChooser(
+                new Vector2(0, .4f), Vector2.Zero,
+                Translation.Create("mouse_sensitivity", "{0}: "),
+                fontColor, _normalFont, sensitivityOptions);
+            
+            mouseSensitivity.LeftArrow.Click += delegate
+            {
+                GameSettings.MouseSensibility = 
+                    float.Parse(sensitivityOptions[mouseSensitivity.Index].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"));
             };
             
-            sfxVolume.RightArrow.Click += delegate { 
-                Sound.SoundManager.Volume = Int32.Parse( volumeOptions[sfxVolume.Index].Replace("%",string.Empty) ) / 100f;
+            mouseSensitivity.RightArrow.Click += delegate 
+            { 
+                GameSettings.MouseSensibility = 
+                    float.Parse(sensitivityOptions[mouseSensitivity.Index].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"));
             };
             
-            //if(!GraphicsOptions.MaxResolution)
-            //    FullScreen.Clickable = false;
-            //Resolution.Clickable = false;
-            
-            string[] sensitivityOptions = new string[]{"0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9","1.0","1.1","1.2","1.3","1.4","1.5","1.6","1.7","1.8","1.9","2.0","2.1","2.2","2.3","2.4","2.5"};
-            OptionChooser mouseSensitivity = new OptionChooser(new Vector2(0, .4f), Vector2.Zero, "Mouse Sensitivity: ",
-                                                               fontColor, _normalFont, sensitivityOptions, false);
-            mouseSensitivity.LeftArrow.Click += delegate {
-                GameSettings.MouseSensibility = float.Parse(sensitivityOptions[mouseSensitivity.Index], NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"));
-            };
-            
-            mouseSensitivity.RightArrow.Click += delegate { 
-                GameSettings.MouseSensibility = float.Parse(sensitivityOptions[mouseSensitivity.Index], NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"));
-            };
-            
-            for(int i = 0; i < sensitivityOptions.Length; i++){
-                if(float.Parse(sensitivityOptions[i], NumberStyles.Any, CultureInfo.GetCultureInfo("en-US")) == GameSettings.MouseSensibility){
-                    mouseSensitivity.CurrentValue.Text    = sensitivityOptions[i];
+            for(int i = 0; i < sensitivityOptions.Length; i++)
+            {
+                if(float.Parse(sensitivityOptions[i].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US")) == GameSettings.MouseSensibility)
+                {
+                    mouseSensitivity.CurrentValue.Text = sensitivityOptions[i].Get();
                     mouseSensitivity.Index = i;
                 }
             }
@@ -576,7 +588,8 @@ namespace Hedra.Engine.Rendering.UI
                 _graphics.Text.TextFont = _boldFont;
                 this.UpdateFonts();
             }
-            for(int i = 0; i < _graphicsButtons.Count; i++){
+            for(int i = 0; i < _graphicsButtons.Count; i++)
+            {
                 if(Enabled)
                     _graphicsButtons[i].Enable();
                 else
@@ -584,14 +597,16 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        private void SetInputButtonState(bool Enabled){
+        private void SetInputButtonState(bool Enabled)
+        {
             if (Enabled)
             {
                 this.ResetFonts();
                 _input.Text.TextFont = _boldFont;
                 this.UpdateFonts();
             }
-            for (int i = 0; i < _inputButtons.Count; i++){
+            for (int i = 0; i < _inputButtons.Count; i++)
+            {
                 if(Enabled)
                     _inputButtons[i].Enable();
                 else
@@ -600,14 +615,16 @@ namespace Hedra.Engine.Rendering.UI
             
         }
 
-        private void SetAudioButtonState(bool Enabled){
+        private void SetAudioButtonState(bool Enabled)
+        {
             if (Enabled)
             {
                 this.ResetFonts();
                 _audio.Text.TextFont = _boldFont;
                 this.UpdateFonts();
             }
-            for (int i = 0; i < _audioButtons.Count; i++){
+            for (int i = 0; i < _audioButtons.Count; i++)
+            {
                 if(Enabled)
                     _audioButtons[i].Enable();
                 else
@@ -622,7 +639,8 @@ namespace Hedra.Engine.Rendering.UI
                 _display.Text.TextFont = _boldFont;
                 this.UpdateFonts();
             }
-            for (int i = 0; i < _displayButtons.Count; i++){
+            for (int i = 0; i < _displayButtons.Count; i++)
+            {
                 if(Enabled)
                     _displayButtons[i].Enable();
                 else
@@ -630,7 +648,8 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        private void SetControlsButtonState(bool Enabled){
+        private void SetControlsButtonState(bool Enabled)
+        {
             if (Enabled)
             {
                 this.ResetFonts();

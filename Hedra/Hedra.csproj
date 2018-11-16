@@ -99,7 +99,7 @@
   <ItemGroup>
     <Compile Include="Engine\AISystem\Behaviours\AttackBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\Behaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\ChargeAttackBehaviour.cs" />
+    <Compile Include="Engine\AISystem\Behaviours\ChargeBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\FleeBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\FollowBehaviour.cs" />
     <Compile Include="Engine\AISystem\Behaviours\GiantBeetleAttackBehaviour.cs" />
@@ -115,6 +115,7 @@
     <Compile Include="Engine\AISystem\Behaviours\WalkBehaviour.cs" />
     <Compile Include="Engine\AISystem\FriendlyAIComponent.cs" />
     <Compile Include="Engine\AISystem\GiantBeetleAIComponent.cs" />
+    <Compile Include="Engine\AISystem\GoatAIComponent.cs" />
     <Compile Include="Engine\AISystem\HostileAIComponent.cs" />
     <Compile Include="Engine\AISystem\IGuardAIComponent.cs" />
     <Compile Include="Engine\AISystem\NeutralAIComponent.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Engine\Game\SettingAttribute.cs" />
     <Compile Include="Engine\Game\WindowSettingAttribute.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
+    <Compile Include="Engine\ItemSystem\WeaponSystem\RogueWeapon.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Staff.cs" />
     <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
@@ -292,6 +294,7 @@
     <Compile Include="Engine\Management\IAssetProvider.cs" />
     <Compile Include="Engine\Management\IConsoleManager.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
+    <Compile Include="Engine\ModuleSystem\AnimationEvents\ChargeEffect.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\Slash.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
@@ -359,6 +362,7 @@
     <Compile Include="Engine\Rendering\Animation\ColladaParser\ColladaProvider.cs" />
     <Compile Include="Engine\Rendering\Animation\ColladaParser\IColladaProvider.cs" />
     <Compile Include="Engine\Rendering\Animation\IAnimationProvider.cs" />
+    <Compile Include="Engine\Rendering\Animation\ProgressEvent.cs" />
     <Compile Include="Engine\Rendering\BitmapObject.cs" />
     <Compile Include="Engine\Rendering\CachedVertexData.cs" />
     <Compile Include="Engine\Rendering\ErrorSeverity.cs" />
@@ -976,6 +980,10 @@
       <Link>Assets\Env\Plants\Reed2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Berry.ply">
+      <Link>Assets\Items\Misc\Berry.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Bows\CommonRecurveBow.ply">
       <Link>Assets\Items\Bows\CommonRecurveBow.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1062,6 +1070,10 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\BoatIcon.ply">
       <Link>Assets\Items\Misc\BoatIcon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Misc\MagicBranch.ply">
+      <Link>Assets\Items\Misc\MagicBranch.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\Mushroom.ply">
@@ -1156,6 +1168,10 @@
       <Link>Assets\Items\Staves\UniqueWormStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Coin.ply">
+      <Link>Assets\Items\Misc\Coin.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\FearIcon.ply">
       <Link>Assets\Env\FearIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1174,6 +1190,14 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Mushroom1.ply">
       <Link>Assets\Env\Mushroom1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Sounds\Goat.ogg">
+      <Link>Sounds\Goat.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Sounds\Sheep.ogg">
+      <Link>Sounds\Sheep.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Skills\BladesAttack1.png">
@@ -1831,10 +1855,6 @@
       <Link>Assets\Env\Berries.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Berry.ply">
-      <Link>Assets\Items\Berry.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\BerryBush.ply">
       <Link>Assets\Env\BerryBush.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1893,10 +1913,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Cloud1.ply">
       <Link>Assets\Env\Cloud1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Coin.ply">
-      <Link>Assets\Items\Coin.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Colliders\AppleTree0_Collider0.ply">
@@ -4695,9 +4711,6 @@
     <None Include="Modules\NPCs\Components\Warrior.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NPCs\Ent.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Modules\NPCs\Gnoll.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -4714,9 +4727,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Models\BlacksmithModel.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Modules\NPCs\Models\EntModel.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Models\GnollModel.json">
@@ -5188,7 +5198,13 @@
     <Content Include="Modules\Items\Misc\Boat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Misc\MagicBranch.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\Mushroom.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\Ent.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Villages\Nordic.json">

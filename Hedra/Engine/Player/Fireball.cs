@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
             for (var i = 0; i < 25; i++) Particles.Emit();
         }
 
-        public static void Create(IHumanoid Owner, Vector3 Position, Vector3 Direction, float Damage)
+        public static void Create(IHumanoid Owner, Vector3 Position, Vector3 Direction, float Damage, params IEntity[] IgnoreEntities)
         {
             var fireball = new Fireball(Owner, Position)
             {
@@ -32,7 +32,8 @@ namespace Hedra.Engine.Player
                 Direction = Direction,
                 UsePhysics = false,
                 UseLight = true,
-                Speed = 128
+                Speed = 128,
+                IgnoreEntities = IgnoreEntities
             };
             fireball.HitEventHandler += delegate(Projectile Projectile, IEntity Hit)
             {

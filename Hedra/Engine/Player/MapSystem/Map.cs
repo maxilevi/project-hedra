@@ -34,7 +34,6 @@ namespace Hedra.Engine.Player.MapSystem
         private const int MapSize = 8;
         private const int ChunkSize = 4;
         private const float FogDistance = 140f;
-        private readonly object _iconsLock = new object();
         private readonly LocalPlayer _player;
         private readonly MapStateManager _stateManager;
         private readonly List<MapItem> _icons;
@@ -99,14 +98,11 @@ namespace Hedra.Engine.Player.MapSystem
             this.UpdateFogAndTime();
 
             var mapPosition = _player.Model.ModelPosition.Xz.ToVector3();
-            lock (_iconsLock)
-            {
-                for (var i = 0; i < _icons.Count; i++)
-                { 
-                    _icons[i].Mesh.Rotation = new Vector3(_icons[i].Mesh.Rotation.X, _icons[i].Mesh.Rotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.Rotation.Z);
-                    _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight + 10f, mapPosition.Z);
-                }
-            }
+            for (var i = 0; i < _icons.Count; i++)
+            { 
+                _icons[i].Mesh.Rotation = new Vector3(_icons[i].Mesh.Rotation.X, _icons[i].Mesh.Rotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.Rotation.Z);
+                _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight + 10f, mapPosition.Z);
+            }          
             for (var i = 0; i < _baseItems.Count; i++)
             {
                 if (_baseItems[i].Mesh != null)
@@ -168,7 +164,6 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void UpdateIcons()
         {
-            this.ClearIcons();
             for (var x = 0; x < MapViewSize; x++)
             {
                 for (var z = 0; z < MapViewSize; z++)
@@ -217,14 +212,11 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void ClearIcons()
         {
-            lock (_iconsLock)
+            for (int i = 0; i < _icons.Count; i++)
             {
-                for (int i = 0; i < _icons.Count; i++)
-                {
-                    _icons[i].Dispose();
-                }
-                _icons.Clear();
+                _icons[i].Dispose();
             }
+            _icons.Clear();       
         }
 
         private void UpdateMap()
@@ -323,13 +315,15 @@ namespace Hedra.Engine.Player.MapSystem
         public override bool Show
         {
             get => _show;
-            set{
+            set
+            {
                 if(GameManager.IsLoading || _player.Trade.Show) return;
 
                 if (value)
                 {
                     _stateManager.CaptureState();
                     this.UpdateChunks();
+                    this.ClearIcons();
                     TaskManager.Parallel(this.UpdateIcons);
                     SkyManager.UpdateDayColors = false;
                     WorldRenderer.EnableCulling = false;                  
@@ -347,7 +341,8 @@ namespace Hedra.Engine.Player.MapSystem
                     this._player.Toolbar.Listen = false;
                     _panel.Enable();
                     SkyManager.PushTime();                   
-                }else
+                }
+                else
                 {
                     _stateManager.ReleaseState();
                     _panel.Disable();

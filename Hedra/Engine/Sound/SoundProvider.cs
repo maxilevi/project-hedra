@@ -31,12 +31,12 @@ namespace Hedra.Engine.Sound
         {
             _audioContext = new AudioContext();
             Log.WriteLine("Generating a pool of sound sources...");
-            for (int i = 0; i < _soundSources.Length; i++)
+            for (var i = 0; i < _soundSources.Length; i++)
             {
                 _soundSources[i] = new SoundSource(Vector3.Zero);
             }
             Log.WriteLine("Generating a pool of sound items...");
-            for (int i = 0; i < _soundItems.Length; i++)
+            for (var i = 0; i < _soundItems.Length; i++)
             {
                 _soundItems[i] = new SoundItem(new SoundSource(Vector3.Zero));
             }
@@ -75,6 +75,8 @@ namespace Hedra.Engine.Sound
                 //LoadSound(SoundType.BoatMove, "Sounds/BoatMove.ogg");
                 //LoadSound(SoundType.Swimming, "Sounds/Swimming.ogg");
                 LoadSound(SoundType.Underwater, "Sounds/Underwater.ogg");
+                LoadSound(SoundType.Sheep, "Sounds/Sheep.ogg");
+                LoadSound(SoundType.Goat, "Sounds/Goat.ogg");
                 _loaded = true;
                 Log.WriteLine("Finished loading sounds.");
             });

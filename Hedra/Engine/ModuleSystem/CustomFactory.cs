@@ -50,6 +50,7 @@ namespace Hedra.Engine.ModuleSystem
                 {"GorillaWarrior", typeof(GorillaWarriorAIComponent)},
                 {"GiantBeetle", typeof(GiantBeetleAIComponent)},
                 {"Troll", typeof(TrollAIComponent)},
+                {"Goat", typeof(GoatAIComponent)},
             };
 
             foreach (var pair in EffectTable)

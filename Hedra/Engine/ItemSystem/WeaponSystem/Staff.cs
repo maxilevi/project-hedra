@@ -35,7 +35,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         {
             if(Type != AttackEventType.Mid) return;
             ShootEffect();
-            Fireball.Create(Owner, Owner.Position + Vector3.UnitY * 4f, Owner is IPlayer player ? player.View.LookingDirection : Owner.Orientation, Owner.DamageEquation * Options.DamageModifier);
+            var player = Owner as IPlayer; 
+            Fireball.Create(
+                Owner,
+                Owner.Position + Vector3.UnitY * 4f,
+                player?.View.LookingDirection ?? Owner.Orientation,
+                Owner.DamageEquation * Options.DamageModifier,
+                player?.Pet.Pet
+            );
         }
         
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)

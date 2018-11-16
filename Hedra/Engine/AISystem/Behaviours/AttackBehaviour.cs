@@ -16,7 +16,7 @@ namespace Hedra.Engine.AISystem.Behaviours
             FollowTimer = new Timer(16);
         }
 
-        public void SetTarget(IEntity Target)
+        public virtual void SetTarget(IEntity Target)
         {
             if(Target.IsDead) return;
 

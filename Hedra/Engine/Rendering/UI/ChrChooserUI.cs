@@ -77,12 +77,16 @@ namespace Hedra.Engine.Rendering.UI
             
             CoroutineManager.StartCoroutine(UpdateWrapper);
             
-            OnPanelStateChange += delegate(object Sender, PanelState E) {
-                if(E == PanelState.Disabled)
-                    Scenes.MenuBackground.Campfire = false;
-                if (E == PanelState.Enabled)
-                {            
-                    ReloadFiles();
+            OnPanelStateChange += delegate(object Sender, PanelState E)
+            {
+                switch (E)
+                {
+                    case PanelState.Disabled:
+                        Scenes.MenuBackground.Campfire = false;
+                        break;
+                    case PanelState.Enabled:
+                        ReloadFiles();
+                        break;
                 }
             };
             
@@ -195,7 +199,7 @@ namespace Hedra.Engine.Rendering.UI
                 _previousHuman = _selectedHuman;
                 _selectedHuman = _humans[i];
                 _name.Text = _selectedHuman.Name;
-                _level.Text = $"{Utils.FirstCharToUpper(_selectedHuman.Class.ToString().ToLowerInvariant())} Level {_selectedHuman.Level}";
+                _level.Text = $"{Translations.Get(_selectedHuman.Class.ToString().ToLowerInvariant())} {Translations.Get("level")} {_selectedHuman.Level}";
                 break;
             }
         }

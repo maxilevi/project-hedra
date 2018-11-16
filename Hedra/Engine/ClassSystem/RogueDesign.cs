@@ -10,7 +10,7 @@ namespace Hedra.Engine.ClassSystem
     {
         public override string Logo => "Assets/UI/RogueLogo.png";
         public override HumanType Human => HumanType.Rogue;
-        public override float BaseSpeed => 1.40f;
+        public override float BaseSpeed => 1.45f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new RogueAbilityTreeBlueprint();
         public override Item StartingItem => ItemPool.Grab(CommonItems.CommonBronzeDoubleBlades);
         public override float AttackResistance => 1.025f;

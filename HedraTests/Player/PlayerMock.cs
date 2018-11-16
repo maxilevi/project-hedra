@@ -205,6 +205,7 @@ namespace HedraTests.Player
         }
 
         public Vector3 Rotation { get; set; }
+        public Vector3 Size { get; }
         public string Type { get; set; }
         public void ShowIcon(CacheItem? IconType)
         {

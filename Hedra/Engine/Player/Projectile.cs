@@ -42,6 +42,7 @@ namespace Hedra.Engine.Player
         public bool Disposed { get; private set; }
         public bool UsePhysics { get; set; } = true;
         public float Speed { get; set; } = 1;
+        public IEntity[] IgnoreEntities { get; set; }
 
         private readonly IEntity _parent;
         private readonly List<ICollidable> _collisions;
@@ -90,11 +91,13 @@ namespace Hedra.Engine.Player
                     ProcessCollision();
                 }
 
-                for (var i = 0; i < World.Entities.Count; i++)
+                var entities = World.Entities;
+                for (var i = 0; i < entities.Count; i++)
                 {
-                    if (_parent == World.Entities[i] || !Physics.Collides(_collisionBox.Cache.Translate(Mesh.Position),
-                            World.Entities[i].Model.BroadphaseBox)) continue;
-
+                    if (_parent == entities[i] 
+                        || !Physics.Collides(_collisionBox.Cache.Translate(Mesh.Position), entities[i].Model.BroadphaseBox)
+                        || IgnoreEntities != null && Array.IndexOf(IgnoreEntities, entities[i]) != -1) continue;
+                    
                     HitEventHandler?.Invoke(this, World.Entities[i]);
                     _collided = true;
                     this.Dispose();

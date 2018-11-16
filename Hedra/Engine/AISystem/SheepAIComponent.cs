@@ -1,5 +1,6 @@
 using Hedra.Engine.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Sound;
 
 namespace Hedra.Engine.AISystem
 {
@@ -12,7 +13,8 @@ namespace Hedra.Engine.AISystem
         {
             Roam = new RoamBehaviour(Parent)
             {
-                AlertTime = 18f
+                AlertTime = 18f,
+                Sound = SoundType.Sheep
             };
             Herd = new HerdBehaviour(Parent);
         }

@@ -11,6 +11,7 @@ namespace Hedra.Engine.EntitySystem
 {
     public abstract class UpdatableModel<T> : BaseUpdatableModel, IDisposable where T : class, ICullableModel
     {
+        protected const float PitchSpeed = 1.11f;
         protected HashSet<IModel> AdditionalModels { get; }
         public override Vector3 TargetRotation { get; set; }
         public override bool IsStatic => false;
@@ -71,6 +72,7 @@ namespace Hedra.Engine.EntitySystem
         public override Vector3[] Vertices => BroadphaseBox.Vertices.ToArray();
         public override CollisionShape[] Colliders => new []{ BroadphaseBox.ToShape() };
         public override CollisionShape BroadphaseCollider => BroadphaseBox.ToShape();
+        public override CollisionShape HorizontalBroadphaseCollider => BaseBroadphaseBox.ToShape();
         public override Box BroadphaseBox => BaseBroadphaseBox.Cache.Translate(Model.Position);
         public override Box Dimensions { get; protected set; }
 

@@ -209,6 +209,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         }
         
         //Use ref to avoid copying the structs since this function has a very high call rate.
+        [MethodImpl(256)]
         private unsafe Chunk GetNeighbourChunk(int* X, int* Z)
         {
             if (*X >= 0 && *X < _boundsX && *Z >= 0 && *Z < _boundsZ) return _parent;
@@ -222,6 +223,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return GetNeighbourBlock(&X, &Y, &Z);
         }
 
+        [MethodImpl(256)]
         private unsafe Block GetNeighbourBlock(int* X, int* Y, int* Z)
         {
             var chunk = GetNeighbourChunk(X, Z);
@@ -230,6 +232,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         }
         
         // Source: https://codereview.stackexchange.com/a/58309
+        [MethodImpl(256)]
         private static unsafe int Modulo(int* Index)
         {
             return (*Index % Bounds + Bounds) % Bounds;

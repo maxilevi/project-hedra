@@ -3,16 +3,18 @@
 	"MaxHealth": 680.0,
 	"AttackDamage": 13.0,
 	"AttackCooldown": 1.5,
-	"Speed": 1.45,
+	"Speed": 1.35,
 	"XP": 18.0,
 	"Level": 25,
 	"AIType": "Troll",
 	"Ridable": false,
 	"Effects": [],
-	"Drops": [],
+	"Drops": [
+      
+    ],
 	"Model": {
 		"AlignWithTerrain" :  false,
-		"Path": "$DataFile$/Assets/Chr/TrollIdle.dae",
+		"Path": "$DataFile$/Assets/Chr/EntIdle.dae",
 		"Scale": 3.0,
 		"IdleAnimations": [
 			{
@@ -23,15 +25,26 @@
 		"WalkAnimations": [
 			{
 				"Path": "$DataFile$/Assets/Chr/TrollWalk.dae",
-				"Speed": 1.5
+				"Speed": 0.75
 			}
 		],
 		"AttackAnimations": [
 			{
 				"Path": "$DataFile$/Assets/Chr/TrollAttack0.dae",
 				"Speed": 0.5,
-				"OnAnimationMid" : "Quake"
-			}
+				"OnAnimationProgress" : {
+					"Event": "Quake",
+					"Progress": 0.75
+				}
+			},
+            {
+              "Path": "$DataFile$/Assets/Chr/TrollAttack1.dae",
+              "Speed": 2.0,
+              "OnAnimationProgress" : {
+                "Event": "Slash",
+                "Progress": 0.75
+              }
+            }
 		]
 	} 
 }

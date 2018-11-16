@@ -19,33 +19,14 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
     /// <summary>
     /// Description of TwoHandedSword.
     /// </summary>
-    public class Katar : MeleeWeapon
+    public class Katar : RogueWeapon
     {
-        protected override string AttackStanceName => "Assets/Chr/RogueBlade-Stance.dae";
-        protected override string[] PrimaryAnimationsNames => new []
-        {
-            "Assets/Chr/RogueBladeLeftAttack.dae", "Assets/Chr/RogueBladeRightAttack.dae"
-        };
-        protected override string[] SecondaryAnimationsNames => new [] { "Assets/Chr/RogueBladeDoubleAttack.dae" };
-        protected override float PrimarySpeed => 1.0f;
-        protected override float SecondarySpeed => 1.0f;
-        
-        private readonly ObjectMesh _secondBlade;
-        
+
         public Katar(VertexData Contents) : base(Contents)
         {
-            var baseMesh = Contents.Clone();
-            baseMesh.Scale(Vector3.One * 1.75f);
-            this._secondBlade = ObjectMesh.FromVertexData(baseMesh);
-            this.RegisterWeapon(_secondBlade, baseMesh);
         }
         
-        protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
-        {
-            if(AttackEventType.Mid != Type) return;
-            Owner.Attack(Owner.DamageEquation);
-        }
-        
+
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;
@@ -65,59 +46,32 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         {
             base.Update(Human);
 
-            base.SetToDefault(this.MainMesh);
-            base.SetToDefault(this._secondBlade);
-
-            if (Sheathed){
-                Matrix4 Mat4 = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
-            
-                this.MainMesh.Position = Owner.Model.Position;
+            if (Sheathed)
+            {
                 this.MainMesh.BeforeLocalRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
-                this.MainMesh.TransformationMatrix = Mat4;
                 this.MainMesh.TargetRotation = new Vector3(55 + 180, 0, 0);
-                
-                this._secondBlade.Position = Owner.Model.Position;
-                this._secondBlade.BeforeLocalRotation = Vector3.UnitX * 1.0f - Vector3.UnitY * 2f;
-                this._secondBlade.TransformationMatrix = Mat4;
-                this._secondBlade.TargetRotation = new Vector3(-55 + 180,180,0);
 
+                this.SecondBlade.BeforeLocalRotation = Vector3.UnitX * 1.0f - Vector3.UnitY * 2f;
+                this.SecondBlade.TargetRotation = new Vector3(-55 + 180,180,0);
             }
             
             if(base.InAttackStance || Owner.WasAttacking)
             {
-
-                Matrix4 Mat4L = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
-                
-                this.MainMesh.TransformationMatrix = Mat4L;
-                this.MainMesh.Position = Owner.Model.Position;
                 this.MainMesh.TargetRotation = new Vector3(180, 180, 0);
                 this.MainMesh.BeforeLocalRotation = Vector3.Zero;
-                
-                Matrix4 Mat4R = Owner.Model.RightWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Position + Owner.Model.RightWeaponPosition);
-                
-                this._secondBlade.TransformationMatrix = Mat4R;
-                this._secondBlade.Position = Owner.Model.Position;
-                this._secondBlade.TargetRotation = new Vector3(180,0,0);
-                this._secondBlade.BeforeLocalRotation = Vector3.Zero;
+
+                this.SecondBlade.TargetRotation = new Vector3(180,0,0);
+                this.SecondBlade.BeforeLocalRotation = Vector3.Zero;
             }
             
-            if(PrimaryAttack || SecondaryAttack){
-
-                Matrix4 Mat4L = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
-                
-                this.MainMesh.TransformationMatrix = Mat4L;
-                this.MainMesh.Position = Owner.Model.Position;
+            if(PrimaryAttack || SecondaryAttack)
+            {
                 this.MainMesh.TargetRotation = new Vector3(180, 180, 0f);
                 this.MainMesh.BeforeLocalRotation = Vector3.Zero;
-                
-                Matrix4 Mat4R = Owner.Model.RightWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);
-                
-                this._secondBlade.TransformationMatrix = Mat4R;
-                this._secondBlade.Position = Owner.Model.Position;
-                this._secondBlade.TargetRotation = new Vector3(180,0,0);
-                this._secondBlade.BeforeLocalRotation = Vector3.Zero;
+
+                this.SecondBlade.TargetRotation = new Vector3(180,0,0);
+                this.SecondBlade.BeforeLocalRotation = Vector3.Zero;
             }
-            base.ApplyEffects(_secondBlade);
         }
     }
 }

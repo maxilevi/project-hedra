@@ -88,7 +88,7 @@ namespace HedraTests.EntitySystem
         }
         
         [Test]
-        public void TestEntityIsPushedWhenDamaged()
+        public void TestSmallerEntityIsPushedWhenDamaged()
         {
             var wasCalled = false;
             var physicsMock = new Mock<IPhysicsComponent>();
@@ -96,8 +96,22 @@ namespace HedraTests.EntitySystem
             _physics = physicsMock.Object;
             var entityMock = new Mock<IEntity>();
             entityMock.SetupAllProperties();
-            _damageComponent.Damage(10, entityMock.Object, out var xp, true, true);
+            entityMock.Setup(E => E.Size).Returns(Vector3.One);
+            _damageComponent.Damage(10, entityMock.Object, out _, true, true);
             Assert.True(wasCalled);
+        }
+        
+        [Test]
+        public void TestBiggerEntityIsNotPushedWhenDamaged()
+        {
+            var wasCalled = false;
+            var physicsMock = new Mock<IPhysicsComponent>();
+            physicsMock.Setup(P => P.Translate(It.IsAny<Vector3>())).Callback( () => wasCalled = true);
+            _physics = physicsMock.Object;
+            var entityMock = new Mock<IEntity>();
+            entityMock.SetupAllProperties();
+            _damageComponent.Damage(10, entityMock.Object, out _, true, true);
+            Assert.False(wasCalled);
         }
         
         [Test]

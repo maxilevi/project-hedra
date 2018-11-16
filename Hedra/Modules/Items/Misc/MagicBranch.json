@@ -1,0 +1,16 @@
+{
+  "Name": "MagicBranch",
+  "DisplayName": "Magic Branch",
+  "Tier": "Misc",
+  "Description": "Useful for crafting.",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Misc/MagicBranch.ply"
+  }
+}

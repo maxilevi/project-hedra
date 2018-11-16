@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
     public class RoundSlash : BaseSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
-        private readonly Animation RoundSlashAnimation;
+        private readonly Animation _roundSlashAnimation;
         private float _frameCounter;
         
         public RoundSlash()
@@ -29,11 +29,15 @@ namespace Hedra.Engine.Player.Skills.Rogue
             base.ManaCost = 80f;
             base.MaxCooldown = 8.5f;
             
-            RoundSlashAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeRoundAttack.dae");
-            RoundSlashAnimation.Loop = false;
-            RoundSlashAnimation.OnAnimationStart += delegate { 
+            _roundSlashAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeRoundAttack.dae");
+            _roundSlashAnimation.Speed = 2f;
+            _roundSlashAnimation.Loop = false;
+            _roundSlashAnimation.OnAnimationStart += delegate
+            { 
                 Sound.SoundManager.PlaySound(Sound.SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
-            };RoundSlashAnimation.OnAnimationEnd += delegate {
+            };
+            _roundSlashAnimation.OnAnimationEnd += delegate
+            {
                 Player.IsCasting = false;
                 Casting = false;
                 Player.IsAttacking = false;
@@ -41,19 +45,21 @@ namespace Hedra.Engine.Player.Skills.Rogue
             };
         }
 
-        public override void Use(){
+        public override void Use()
+        {
             base.MaxCooldown = 9f - Math.Min(5f, Level * .5f);
             Player.IsCasting = true;
             Casting = true;
             Player.IsAttacking = true;
-            Player.Model.PlayAnimation(RoundSlashAnimation);
+            Player.Model.PlayAnimation(_roundSlashAnimation);
             Player.Movement.Orientate();
             Player.LeftWeapon.InAttackStance = true;
         }
         
-        public override void Update(){
-            if(Player.IsCasting && Casting){
-                
+        public override void Update()
+        {
+            if(Player.IsCasting && Casting)
+            {               
                 World.Particles.Color = new Vector4(1,1,1,1);
                 World.Particles.ParticleLifetime = 1f;
                 World.Particles.GravityEffect = .0f;

@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly Vector2 _targetResolution = new Vector2(1366, 768);
 
         public AbilityTreeInterface(IPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing)
-            : base(Array, Offset, Length, SlotsPerLine, Spacing, null)
+            : base(Array, Offset, Length, SlotsPerLine, Spacing)
         {
             _player = Player;
             _panel = new Panel();
@@ -28,8 +28,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 12f, FontStyle.Bold));
             for (var i = 0; i < this.Buttons.Length; i++)
             {
-                //this.Textures[i].Scale *= 0.85f;
-                //this.Textures[i].Position = this.Buttons[i].Position;
                 this.Buttons[i].Scale = this.Textures[i].Scale;
                 this.Buttons[i].Texture.IdPointer = null;
                 this.ButtonsText[i].TextFont = FontCache.Get(AssetManager.BoldFamily, 10f, FontStyle.Bold);

@@ -70,6 +70,7 @@ namespace Hedra.Engine.Player
         private AnimatedCollider _collider;
 
         public override CollisionShape BroadphaseCollider => _collider.Broadphase;
+        public override CollisionShape HorizontalBroadphaseCollider => _collider.HorizontalBroadphase;
         public override CollisionShape[] Colliders => _collider.Shapes;
         public override Vector3[] Vertices => _collider.Vertices;
         public override bool IsWalking => _walkAnimation == Model.AnimationPlaying;
@@ -402,7 +403,8 @@ namespace Hedra.Engine.Player
         
         private void HandleRollEffects()
         {
-            if(_previousPosition != Human.BlockPosition && Human.IsGrounded){
+            if(_previousPosition != Human.BlockPosition && Human.IsGrounded)
+            {
                 World.Particles.VariateUniformly = true;
                 World.Particles.Color = Vector4.One;//World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z).GetColor(Region.Default);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
                 World.Particles.Position = Human.Position - Vector3.UnitY;
@@ -425,7 +427,7 @@ namespace Hedra.Engine.Player
             base.Update();
             HandleState();
             _walkAnimation.Speed = Human.Speed;
-            _modelSound.Pitch = Human.Speed / 1.11f;
+            _modelSound.Pitch = Human.Speed / PitchSpeed;
             
             var positionAddon = Vector3.Zero;
             if (MountModel != null)

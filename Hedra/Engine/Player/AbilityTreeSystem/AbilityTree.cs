@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     /// </summary>
     public class AbilityTree : PlayerInterface, IAbilityTree
     {
-        public const int Rows = 4;
+        public const int Rows = 5;
         public const int Columns = 3;
         public const int AbilityCount = Columns * Rows;
         private const char SaveMarker = '!';

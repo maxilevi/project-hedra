@@ -8,6 +8,7 @@ namespace Hedra.Engine.EntitySystem
         public abstract Vector3[] Vertices { get; }
         public abstract CollisionShape[] Colliders { get; }
         public abstract CollisionShape BroadphaseCollider { get; }
+        public abstract CollisionShape HorizontalBroadphaseCollider { get; }
         public abstract Box BroadphaseBox { get; }
         public abstract Box BaseBroadphaseBox { get; protected set; }
         public abstract Box Dimensions { get; protected set; }

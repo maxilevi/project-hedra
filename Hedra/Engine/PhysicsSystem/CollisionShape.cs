@@ -81,16 +81,21 @@ namespace Hedra.Engine.PhysicsSystem
 
         public void RecalculateBroadphase()
         {
+            RecalculateBroadphase(Vector3.One);
+        }
+
+        public void RecalculateBroadphase(Vector3 Mask)
+        {
             float dist = 0;
             var verticesSum = Vector3.Zero;
             for (var i = 0; i < Vertices.Length; i++)
             {
-                verticesSum += Vertices[i];
+                verticesSum += Vertices[i] * Mask;
             }
             this.BroadphaseCenter = verticesSum / Vertices.Length;
             for (var i = 0; i < Vertices.Length; i++)
             {
-                float length = (Vertices[i] - this.BroadphaseCenter).LengthFast;
+                float length = (Vertices[i] * Mask - this.BroadphaseCenter).LengthFast;
 
                 if (length > dist)
                     dist = length;

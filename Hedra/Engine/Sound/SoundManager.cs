@@ -108,6 +108,8 @@ namespace Hedra.Engine.Sound
         BoatMove,
         Swimming,
         Underwater,
+        Sheep,
+        Goat,
         MaxSounds
     }
 }

@@ -151,6 +151,8 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
+        public Vector3 Size => Model.Dimensions.Size;
+
         public BaseUpdatableModel Model { get; set; }
 
         public string Name
@@ -255,8 +257,8 @@ namespace Hedra.Engine.EntitySystem
 
         public bool InAttackRange(IEntity Target, float RadiusModifier = 1f)
         {
-            var collider0 = this.Model.BroadphaseCollider;
-            var collider1 = Target.Model.BroadphaseCollider;
+            var collider0 = this.Model.HorizontalBroadphaseCollider;
+            var collider1 = Target.Model.HorizontalBroadphaseCollider;
             var radii = collider0.BroadphaseRadius + collider1.BroadphaseRadius;
             return (Target.Position - this.Position).LengthSquared < radii * radii;
             /*var collider0 = this.Model.BroadphaseCollider;
