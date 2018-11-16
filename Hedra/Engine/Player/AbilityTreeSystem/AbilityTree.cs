@@ -19,6 +19,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
 using OpenTK;
 using OpenTK.Input;
+using Cursor = Hedra.Engine.Input.Cursor;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
@@ -89,7 +90,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _player.View.LockMouse = false;
                 _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
-                UpdateManager.CursorShown = true;
+                Cursor.Show = true;
             }
             else
             {

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Hedra.Engine.Management
+namespace Hedra.Engine.Native
 {
     public class WindowsConsoleManager : IConsoleManager
     {

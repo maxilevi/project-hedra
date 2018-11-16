@@ -12,6 +12,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using OpenTK.Graphics.OpenGL4;
 

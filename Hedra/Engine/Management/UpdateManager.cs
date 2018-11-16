@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Management
 {
@@ -18,7 +19,6 @@ namespace Hedra.Engine.Management
         private static readonly HashSet<IUpdatable> UpdateFunctions;
         private static readonly List<IUpdatable> UpdateFunctionsList;
         private static readonly TickSystem Ticker;
-        private static bool _isShown = true;
         private static readonly object Lock = new object();
         private static readonly List<IUpdatable> ToRemove;
 
@@ -96,11 +96,6 @@ namespace Hedra.Engine.Management
             }
             ToRemove.Clear();
         }
-          
-        public static void CenterMouse()
-        {
-            System.Windows.Forms.Cursor.Position = new System.Drawing.Point(GameSettings.Width / 2, GameSettings.Height / 2);
-        }
 
         public static int UpdateCount
         {
@@ -110,21 +105,6 @@ namespace Hedra.Engine.Management
                 {
                     return UpdateFunctionsList.Count;
                 }
-            }
-        }
-
-        public static bool CursorShown
-        {
-            get => _isShown;
-            set
-            {
-                if (value == _isShown)
-                {
-                    return;
-                }
-                Program.GameWindow.CursorVisible = value;
-    
-                _isShown = value;
             }
         }
     }

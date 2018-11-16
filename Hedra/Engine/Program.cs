@@ -5,14 +5,9 @@ using Hedra.Engine.Management;
 using System.Collections.Generic;
 using OpenTK;
 using Hedra.Engine;
-using System.Windows.Forms;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
 using Hedra.Engine.Game;
 using Hedra.Engine.Loader;
-using Hedra.Engine.Rendering;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Native;
 
 namespace Hedra
 {
@@ -44,8 +39,8 @@ namespace Hedra
                 Log.WriteLine(devices[i].Bounds.ToString());
             }
 
-            GameSettings.DeviceWidth = Screen.PrimaryScreen.Bounds.Width;
-            GameSettings.DeviceHeight = Screen.PrimaryScreen.Bounds.Height;
+            GameSettings.DeviceWidth = device.Width;
+            GameSettings.DeviceHeight = device.Height;
 
 
             Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +

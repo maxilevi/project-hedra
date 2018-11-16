@@ -1,8 +1,7 @@
 using System;
-using System.Drawing;
-using System.Windows.Forms;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
@@ -32,8 +31,8 @@ namespace Hedra.Engine.Player
         public bool LockMouse { get; set; }
         public Matrix4 ModelViewMatrix { get; private set; }
         public Func<Vector3> PositionDelegate { get; set; }
-        public int XDelta { get; private set; }
-        public int YDelta { get; private set; }
+        public float XDelta { get; private set; }
+        public float YDelta { get; private set; }
         public float Pitch { get; set; }
         public float Yaw { get; set; }
         public float StackedYaw { get; private set; }
@@ -80,11 +79,11 @@ namespace Hedra.Engine.Player
             {
                 XDelta = Cursor.Position.X - GameSettings.Width / 2;
                 YDelta = Cursor.Position.Y - GameSettings.Height / 2;
-                if (LockMouse) Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height / 2);
+                if (LockMouse) Cursor.Position = new Vector2((float)GameSettings.Width / 2, (float)GameSettings.Height / 2);
                 
                 if (CaptureMovement)
                 {
-                    this.ManageRotations();
+                    ManageRotations();
                 }
 
                 if (Physics.IsColliding(cameraPosition, new Box(-Vector3.One * 2f + cameraPosition, Vector3.One * 2f + cameraPosition)))

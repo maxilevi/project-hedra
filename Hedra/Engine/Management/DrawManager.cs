@@ -25,7 +25,7 @@ namespace Hedra.Engine.Management
         private static readonly HashSet<IRenderable> DrawFunctionsSet;
         private static readonly List<IRenderable> DrawFunctions;
         private static bool _initialized;
-        private static Cursor _mouseCursor;
+        private static CursorIcon _mouseCursorIcon;
         
         public static List<IRenderable> ParticleRenderer { get; }
         public static List<IRenderable
@@ -151,7 +151,7 @@ namespace Hedra.Engine.Management
 
         public static void Dispose()
         {
-            _mouseCursor?.Dispose();
+            _mouseCursorIcon?.Dispose();
             MainBuffer.Dispose();
             UIRenderer.Dispose();
         }

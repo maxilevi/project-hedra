@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.Input;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
@@ -177,7 +178,7 @@ namespace Hedra.Engine.Player
                 _player.View.LockMouse = false;
                 _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
-                UpdateManager.CursorShown = true;
+                Cursor.Show = true;
             }
             else
             {

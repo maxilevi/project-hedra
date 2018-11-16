@@ -6,6 +6,8 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
+using Hedra.Engine.Input;
 using OpenTK;
 using Hedra.Engine.Management;
 
@@ -14,19 +16,19 @@ namespace Hedra.Engine.Rendering.UI
     /// <summary>
     /// Description of Cursor.
     /// </summary>
-    public class Cursor : IRenderable
+    public class CursorIcon : IRenderable
     {    
         public uint TextureId { get; set; }
         public Vector2 Position {get; set;}
         public Vector2 Scale { get; set; }
         private static Shader _shader;
 
-        static Cursor()
+        static CursorIcon()
         {
             _shader = Shader.Build("Shaders/Cursor.vert", "Shaders/Cursor.frag");
         }
 
-        public Cursor(uint TextureId)
+        public CursorIcon(uint TextureId)
         {
             this.TextureId = TextureId;
             Scale = Mathf.ScaleGUI(new Vector2(1024, 576), new Vector2(0.05f * 0.5f, 0.08f * 0.5f));
@@ -40,7 +42,7 @@ namespace Hedra.Engine.Rendering.UI
                 return;
             }
             
-            if(!UpdateManager.CursorShown)
+            if(!Cursor.Show)
                 return;
         }
 

@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Reflection;
 using Hedra.Engine.Game;
+using Hedra.Engine.Input;
 using Hedra.Engine.Localization;
 using OpenTK;
 using Hedra.Engine.Management;
@@ -167,10 +168,10 @@ namespace Hedra.Engine.Rendering.UI
                 _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
             }
-            UpdateManager.CursorShown = true;
+            Cursor.Show = true;
             LocalPlayer.Instance.Chat.Show = false;
             GameSettings.DarkEffect = false;
-            System.Windows.Forms.Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height/2);
+            Cursor.Center();
         }
             
         public void HideMenu()
@@ -187,13 +188,14 @@ namespace Hedra.Engine.Rendering.UI
             ChrChooser.Disable();
             ChrCreator.Disable();
             ConnectPanel.Disable();
-            UpdateManager.CursorShown = false;
+            Cursor.Show = false;
             LocalPlayer.Instance.Chat.Show = true;
             LocalPlayer.Instance.Chat.LoseFocus();
-            System.Windows.Forms.Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height/2);
+            Cursor.Center();
         }
         
-        private IEnumerator MenuEnter(){
+        private IEnumerator MenuEnter()
+        {
             while(Menu.Position.X > 0f){
                 Menu.Move(new Vector2(-0.025f,0));
                 yield return null;

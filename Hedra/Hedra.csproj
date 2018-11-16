@@ -93,7 +93,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -229,7 +228,8 @@
     <Compile Include="Engine\ComplexMath\RandomDistribution.cs" />
     <Compile Include="Engine\Core\ICountable.cs" />
     <Compile Include="Engine\Core\IPositionable.cs" />
-    <Compile Include="Engine\DatabaseSystem\Dao.cs" />
+    <Compile Include="Engine\CraftingSystem\Recipe.cs" />
+    <Compile Include="Engine\CraftingSystem\RecipeLoader.cs" />
     <Compile Include="Engine\EntitySystem\BossSystem\SpawnComponent.cs" />
     <Compile Include="Engine\EntitySystem\Component.cs" />
     <Compile Include="Engine\EntitySystem\IComponent.cs" />
@@ -243,6 +243,8 @@
     <Compile Include="Engine\Game\SettingAttribute.cs" />
     <Compile Include="Engine\Game\WindowSettingAttribute.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
+    <Compile Include="Engine\Input\Cursor.cs" />
+    <Compile Include="Engine\Input\KeyboardManager.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\RogueWeapon.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Staff.cs" />
     <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
@@ -289,13 +291,19 @@
     <Compile Include="Engine\Localization\Translation.cs" />
     <Compile Include="Engine\Localization\Translations.cs" />
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
-    <Compile Include="Engine\Management\WindowsConsoleManager.cs" />
-    <Compile Include="Engine\Management\DummyConsoleManager.cs" />
     <Compile Include="Engine\Management\IAssetProvider.cs" />
-    <Compile Include="Engine\Management\IConsoleManager.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\ChargeEffect.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\Slash.cs" />
+    <Compile Include="Engine\Native\DummyConsoleManager.cs" />
+    <Compile Include="Engine\Native\DummyMessageManager.cs" />
+    <Compile Include="Engine\Native\IConsoleManager.cs" />
+    <Compile Include="Engine\Native\IMessageManager.cs" />
+    <Compile Include="Engine\Native\LinuxMessageManager.cs" />
+    <Compile Include="Engine\Native\OSManager.cs" />
+    <Compile Include="Engine\Native\Platform.cs" />
+    <Compile Include="Engine\Native\WindowsConsoleManager.cs" />
+    <Compile Include="Engine\Native\WindowsMessageManager.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\ReedDesign.cs" />
@@ -444,7 +452,6 @@
     <Compile Include="Engine\Management\DistributedExecuter.cs" />
     <Compile Include="Engine\Management\ISearchable.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
-    <Compile Include="Engine\Management\KeyboardManager.cs" />
     <Compile Include="Engine\Management\TickSystem.cs" />
     <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
     <Compile Include="Engine\Management\TrackItem.cs" />
@@ -564,8 +571,6 @@
     <Compile Include="Engine\Rendering\CapHandler.cs" />
     <Compile Include="Engine\Rendering\GeometryData.cs" />
     <Compile Include="Engine\Rendering\Renderer.cs" />
-    <Compile Include="Engine\Management\OSManager.cs" />
-    <Compile Include="Engine\Management\Platform.cs" />
     <Compile Include="Engine\Management\SoundtrackManager.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
@@ -835,7 +840,7 @@
     <Compile Include="Engine\Rendering\UI\ChrCreatorUI.cs" />
     <Compile Include="Engine\Rendering\UI\ColorPicker.cs" />
     <Compile Include="Engine\Rendering\UI\ControlsUI.cs" />
-    <Compile Include="Engine\Rendering\UI\Cursor.cs" />
+    <Compile Include="Engine\Rendering\UI\CursorIcon.cs" />
     <Compile Include="Engine\Rendering\UI\DisplayOnDrag.cs" />
     <Compile Include="Engine\Rendering\UI\FontCache.cs" />
     <Compile Include="Engine\Rendering\UI\GameUI.cs" />
@@ -4684,9 +4689,6 @@
     <None Include="Modules\NPCs\Components\Blacksmith.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NPCs\Components\Ent.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Modules\NPCs\Components\Gnoll.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -5078,6 +5080,7 @@
     <Folder Include="Modules\Items\Chestplates\" />
     <Folder Include="Modules\Items\Helmets\" />
     <Folder Include="Modules\Items\Pants\" />
+    <Folder Include="Modules\Recipes" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Boat.ply">

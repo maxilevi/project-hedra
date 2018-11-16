@@ -18,6 +18,7 @@ using System.Globalization;
 using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Native;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI

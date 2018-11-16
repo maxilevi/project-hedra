@@ -13,6 +13,7 @@ using System.Text;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using OpenTK;

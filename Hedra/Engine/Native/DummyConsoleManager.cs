@@ -1,4 +1,4 @@
-namespace Hedra.Engine.Management
+namespace Hedra.Engine.Native
 {
     public class DummyConsoleManager : IConsoleManager
     {

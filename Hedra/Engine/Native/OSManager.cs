@@ -1,12 +1,9 @@
-
 using System;
 using System.IO;
-using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Rendering;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
+using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Management
+namespace Hedra.Engine.Native
 {
     /// <summary>
     /// Description of OSManager.
@@ -17,13 +14,19 @@ namespace Hedra.Engine.Management
         public static string GraphicsCard { get; private set; }        
         public static int RamCount { get; private set; }        
         public static string Specs => CPUArchitecture+"|"+GraphicsCard+"|"+RamCount;
-        private static IConsoleManager _consoleManager;
+        private static readonly IConsoleManager _consoleManager;
+        private static readonly IMessageManager _messageManager;
 
         static OSManager()
         {
             _consoleManager = RunningPlatform == Platform.Windows
                 ? new WindowsConsoleManager() 
                 : (IConsoleManager) new DummyConsoleManager();
+            _messageManager = RunningPlatform == Platform.Windows
+                ? new WindowsMessageManager()
+                : RunningPlatform == Platform.Linux 
+                    ? new LinuxMessageManager()
+                    : (IMessageManager) new DummyMessageManager();
         }
         
         public static void Load(string ExecName)
@@ -60,6 +63,11 @@ namespace Hedra.Engine.Management
                           "CPU = " + OSManager.CPUArchitecture + Environment.NewLine +
                           "Graphics Card = " + OSManager.GraphicsCard + Environment.NewLine);
             
+        }
+
+        public static void Show(string Message, string Title)
+        {
+            _messageManager.Show(Message, Title);
         }
 
         public static bool ShowConsole

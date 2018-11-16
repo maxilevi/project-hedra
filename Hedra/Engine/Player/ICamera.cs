@@ -19,8 +19,6 @@ namespace Hedra.Engine.Player
         bool LockMouse { get; set; }
         Matrix4 ModelViewMatrix { get; }
         Func<Vector3> PositionDelegate { get; set; }
-        int XDelta { get; }
-        int YDelta { get; }
         float Pitch { get; set; }
         float Yaw { get; set; }
         float StackedYaw { get; }

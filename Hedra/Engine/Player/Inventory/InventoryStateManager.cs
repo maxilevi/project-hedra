@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using OpenTK;
 
@@ -19,7 +20,7 @@ namespace Hedra.Engine.Player.Inventory
             this.RegisterStateItem(() => Player.View.TargetDistance, O => Player.View.TargetDistance = (float)O);
             this.RegisterStateItem(() => Player.View.TargetYaw, O => Player.View.TargetYaw = (float)O);
             this.RegisterStateItem(() => Player.View.LockMouse, O => Player.View.LockMouse = (bool)O);
-            this.RegisterStateItem(() => UpdateManager.CursorShown, O => UpdateManager.CursorShown = (bool)O);
+            this.RegisterStateItem(() => Cursor.Show, O => Cursor.Show = (bool)O);
             this.RegisterStateItem(() => Player.Movement.CaptureMovement, O => Player.Movement.CaptureMovement = (bool)O);
             this.RegisterStateItem(() => Player.View.CaptureMovement, O => Player.View.CaptureMovement = (bool) O);
             this.RegisterStateItem(() => Player.View.PositionDelegate, O => Player.View.PositionDelegate = (Func<Vector3>)O, true);

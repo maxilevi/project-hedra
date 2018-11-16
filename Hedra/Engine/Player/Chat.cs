@@ -11,7 +11,7 @@ using System.Text;
 using System.Drawing;
 using OpenTK;
 using OpenTK.Input;
-using Hedra.Engine.Rendering;
+using Hedra.Engine.Input;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Management;
 using Hedra.Engine.Sound;
@@ -132,7 +132,7 @@ namespace Hedra.Engine.Player
             _commandLine.Enable();
             _commandLine.InFocus = true;
             Focused = true;
-            UpdateManager.CursorShown = true;
+            Cursor.Show = true;
             _commandLine.Text = string.Empty;
         }
         
@@ -148,8 +148,8 @@ namespace Hedra.Engine.Player
             _commandLine.Disable();
             _commandLine.InFocus = false;
             Focused = false;
-            UpdateManager.CursorShown = false;
-            UpdateManager.CenterMouse();
+            Cursor.Show = true;
+            Cursor.Center();
         }
         
         public bool Show

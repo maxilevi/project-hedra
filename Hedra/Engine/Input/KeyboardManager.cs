@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.Events;
 using OpenTK.Input;
-namespace Hedra.Engine.Management
+
+namespace Hedra.Engine.Input
 {
     public class KeyboardManager : IDisposable
     {

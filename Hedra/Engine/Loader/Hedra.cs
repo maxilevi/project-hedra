@@ -13,20 +13,17 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Native;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering.UI;
-using Forms = System.Windows.Forms;
 
 namespace Hedra
 {
@@ -78,8 +75,8 @@ namespace Hedra
 
             if( shadingOpenGlVersion < 3.1f)
             {
-                Forms.MessageBox.Show("Minimum OpenGL version is 3.1, yours is "+shadingOpenGlVersion, "OpenGL Version not supported",
-                                      Forms.MessageBoxButtons.OK, Forms.MessageBoxIcon.Error);
+                
+                OSManager.Show($"Minimum OpenGL version is 3.1, yours is {shadingOpenGlVersion}", "OpenGL Version not supported");
                 Exit();
             }
             DebugProvider = new DebugInfoProvider();
