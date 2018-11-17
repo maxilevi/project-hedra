@@ -78,8 +78,6 @@ namespace Hedra.Engine.Game
 
         [Setting] public static int ChunkLoaderRadius { get; set; } = 20;
 
-        [Setting] public static bool HideObjectives { get; set; } = false;
-
         [Setting] public static bool InvertMouse { get; set; } = false;
 
         [Setting] public static float MouseSensibility { get; set; } = 1f;

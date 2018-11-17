@@ -150,7 +150,7 @@ namespace Hedra.Engine.Game
             if(Player.Inventory.MainWeapon != null){
                 //Force to discard cache
                 Player.Inventory.MainWeapon.FlushCache();
-                Player.Model.SetWeapon(Player.Inventory.MainWeapon.Weapon);
+                Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);
                 
             }
             Player.UI.HideMenu();

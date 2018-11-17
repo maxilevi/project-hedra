@@ -76,10 +76,27 @@ namespace Hedra.Engine.Player
             };
             _mainItems.OnItemSet += delegate(int Index, Item New)
             {
-                if (Index+InventorySpaces == WeaponHolder)
-                    _player.Model.SetWeapon( New == null ? Weapon.Empty : New.Weapon);
-                if (Index + InventorySpaces == RingHolder)
-                    _player.Ring = New;
+                switch (Index+InventorySpaces)
+                {
+                    case WeaponHolder:
+                        _player.SetWeapon(New == null ? Weapon.Empty : New.Weapon);
+                        break;
+                    case HelmetHolder:
+                        _player.SetHelmet(New?.Helmet);
+                        break;
+                    case ChestplateHolder:
+                        _player.SetChestplate(New?.Chest);
+                        break;
+                    case PantsHolder:
+                        _player.SetPants(New?.Pants);
+                        break;
+                    case BootsHolder:
+                        _player.SetBoots(New?.Boots);
+                        break;
+                    case RingHolder:
+                        _player.Ring = New;
+                        break;
+                }
             };
             var itemInfoInterface = new InventoryInterfaceItemInfo(_itemsArrayInterface.Renderer)
             {

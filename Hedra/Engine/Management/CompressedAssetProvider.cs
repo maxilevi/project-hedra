@@ -49,8 +49,7 @@ namespace Hedra.Engine.Management
 
             var sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.DataFile3);              
             _normalFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
-            
-            AssetManager.ReloadShaderSources();
+            ReloadShaderSources();
             lock (_hitboxCacheLock)
             {
                 _hitboxCache = new Dictionary<string, VertexData>();

@@ -19,13 +19,11 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.ModuleSystem;
-using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.Player
 {
-    /// <inheritdoc/>
     /// <summary>
     /// Description of PlayerModel.
     /// </summary>
@@ -65,16 +63,14 @@ namespace Hedra.Engine.Player
         private Animation _animationPlaying;
         private AreaSound _modelSound;
         private StaticModel _food;
-        public Weapon LeftWeapon { get; private set; }
-        public QuadrupedModel MountModel;
         private AnimatedCollider _collider;
+        public QuadrupedModel MountModel { get; set; }
 
         public override CollisionShape BroadphaseCollider => _collider.Broadphase;
         public override CollisionShape HorizontalBroadphaseCollider => _collider.HorizontalBroadphase;
         public override CollisionShape[] Colliders => _collider.Shapes;
         public override Vector3[] Vertices => _collider.Vertices;
         public override bool IsWalking => _walkAnimation == Model.AnimationPlaying;
-        public bool LockWeapon { get; set; }
         public override Vector4 Tint { get; set; }
         public override Vector4 BaseTint { get; set; }
         private string _modelPath;
@@ -129,7 +125,6 @@ namespace Hedra.Engine.Player
             Human = Humanoid;
             Scale = Vector3.One * Template.Scale;
             Tint = Vector4.One;
-            LeftWeapon = Weapon.Empty;
             _modelPath = Template.Path;
             
             Model = AnimationModelLoader.LoadEntity(Template.Path);
@@ -223,31 +218,6 @@ namespace Hedra.Engine.Player
             _isDisposeAnimationPlaying = false;
             Model.SwitchShader(AnimatedModel.DefaultShader);
             DisposeTime = 0;
-        }
-
-        public override void Attack(IEntity Victim)
-        {
-            if(!Human.IsKnocked && !Human.IsAttacking && !(Human is LocalPlayer)){
-                LeftWeapon.Attack1(Human);
-            }
-        }
-        
-        public void SetWeapon(Weapon Weapon)
-        {
-            if(Weapon == LeftWeapon)
-                return;
-
-            LeftWeapon.Dispose();
-            UnregisterModel(LeftWeapon);
-
-            LeftWeapon = Weapon;
-            LeftWeapon.Enabled = Enabled;
-            LeftWeapon.Scale = Model.Scale;
-            LeftWeapon.Alpha = Model.Alpha;
-
-            RegisterModel(LeftWeapon);
-
-            (Human as LocalPlayer)?.Toolbar.SetAttackType(LeftWeapon);
         }
 
         public void SetFood(Item Food)
@@ -452,10 +422,9 @@ namespace Hedra.Engine.Player
             Rotation = Model.Rotation;
             if(MountModel != null)
                 MountModel.TargetRotation = TargetRotation;
-
-            if(!LockWeapon) LeftWeapon.Update(Human);
             
-            if(_hasLamp){
+            if(_hasLamp)
+            {
                 _lampModel.Position = LeftWeaponPosition;
                 _lampModel.Rotation = Rotation;
                 _lampModel.RotationPoint = Vector3.Zero;
@@ -476,6 +445,19 @@ namespace Hedra.Engine.Player
         public void StopSound()
         {
             _modelSound.Stop();
+        }
+
+        public void RegisterEquipment(IModel Equipment)
+        {
+            Equipment.Enabled = Enabled;
+            Equipment.Scale = Model.Scale;
+            Equipment.Alpha = Model.Alpha;
+            RegisterModel(Equipment);
+        }
+        
+        public void UnregisterEquipment(IModel Equipment)
+        {
+            UnregisterModel(Equipment);
         }
 
         public Vector3 TransformFromJoint(Vector3 Point, Joint Joint)
@@ -504,6 +486,8 @@ namespace Hedra.Engine.Player
         
         public Animation AnimationBlending => Model.AnimationBlending;
 
+        public Matrix4 HeadMatrix => Model.MatrixFromJoint(HeadJoint);
+        
         public Matrix4 ChestMatrix => Model.MatrixFromJoint(ChestJoint);
 
         public Matrix4 LeftWeaponMatrix => Model.MatrixFromJoint(LeftWeaponJoint);
@@ -590,9 +574,8 @@ namespace Hedra.Engine.Player
             _collider.Dispose();
             Model.Dispose();
             _lampModel?.Dispose();
-            LeftWeapon.Dispose();
             
-            var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             foreach (var field in GetType().GetFields(flags))
             {
                 if(field.GetType() == typeof(Animation))
@@ -602,7 +585,8 @@ namespace Hedra.Engine.Player
         }
     }
     
-    public enum HumanType{
+    public enum HumanType
+    {
         Warrior,
         Archer,
         Rogue,

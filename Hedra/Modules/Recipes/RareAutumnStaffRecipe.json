@@ -1,0 +1,10 @@
+{
+  "Name": "AutumnStaffRecipe",
+  "Tier": "Common",
+  "Ingredients": [
+    {
+      "Name": "EnchantedBranch",
+      "Amount": 3
+    }
+  ]
+}

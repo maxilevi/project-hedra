@@ -23,6 +23,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.UI;
 using System.Linq;
 using Hedra.Engine.Game;
+using Hedra.Engine.ItemSystem.ArmorSystem;
 
 namespace Hedra.Engine.Player
 {
@@ -34,7 +35,23 @@ namespace Hedra.Engine.Player
         public const int MaxLevel = 99;
         public const int MaxConsecutiveHits = 45;
         public const float DefaultDodgeCost = 25;
+        
         public event OnHitLandedEventHandler OnHitLanded;
+        
+        private FishingHandler Fisher { get; }
+        private EquipmentHandler Equipment { get; }
+        public Weapon LeftWeapon => Equipment.LeftWeapon;
+        public virtual Item MainWeapon
+        {
+            get => Equipment.MainWeapon;
+            set => Equipment.MainWeapon = value;
+        }
+        public virtual Item Ring
+        {
+            get => Equipment.Ring;
+            set => Equipment.Ring = value;
+        }
+
         public IMessageDispatcher MessageDispatcher { get; set; }
         public int ConsecutiveHits { get; private set; }
         public bool IsAttacking { get; set; }
@@ -47,26 +64,22 @@ namespace Hedra.Engine.Player
         public bool IsClimbing { get; set; }
         public bool WasAttacking { get; set; }
         public bool IsSitting { get; set; }
-        public float BaseAttackSpeed { get; private set; } = .75f;
-        public virtual bool CanInteract { get; set; } = true;
         public bool IsSleeping { get; set; }
         public bool IsJumping => Movement.IsJumping;
+        public float BaseAttackSpeed { get; private set; }
         public float ManaRegenFactor { get; set; }
-        public virtual float FacingDirection => -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
-        public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
-        public MovementManager Movement { get; protected set; }
-        public HandLamp HandLamp { get; }
-        public FishingHandler Fisher { get; }
-        public DamageComponent DmgComponent;
-        public ClassDesign Class { get; set; } = new WarriorDesign();
         public float AttackPower { get; set; }
         public float AddonHealth { get; set; }
         public float DodgeCost { get; set; }    
         public float RandomFactor { get; set; }
+        public ClassDesign Class { get; set; }
+        
+        public virtual bool CanInteract { get; set; } = true;
+        public virtual float FacingDirection => -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
+        public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
+        public MovementManager Movement { get; protected set; }
+        public HandLamp HandLamp { get; }
         public virtual int Gold { get; set; }
-        public Weapon LeftWeapon => Model.LeftWeapon;
-        private Item _mainWeapon;
-        private Item _ring;
         private float _mana;
         private float _xp;
         private float _stamina = 100f;
@@ -75,17 +88,6 @@ namespace Hedra.Engine.Player
         private readonly Timer _consecutiveHitsTimer;
 
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
-
-        public virtual Item MainWeapon
-        {
-            get => _mainWeapon;
-            set
-            {
-                if(_mainWeapon == value) return;
-                _mainWeapon = value;
-                Model.SetWeapon(_mainWeapon?.Weapon ?? Weapon.Empty);           
-            }
-        }
 
         public float BaseSpeed => Class.BaseSpeed;
 
@@ -136,28 +138,36 @@ namespace Hedra.Engine.Player
             MessageDispatcher = new DummyMessageDispatcher();
             HandLamp = new HandLamp(this);
             Movement = new MovementManager(this);
-            DmgComponent = new DamageComponent(this);
             Fisher = new FishingHandler(this);
+            Equipment = new EquipmentHandler(this);
+            Class = new WarriorDesign();
             RandomFactor = NewRandomFactor();
             Physics.CanCollide = true;
             DodgeCost = DefaultDodgeCost;
             AttackPower = 1f;
             Speed = this.BaseSpeed;
             MobType = MobType.Human;
-            AddComponent(DmgComponent);
+            BaseAttackSpeed = .75f;
+            AddComponent(new DamageComponent(this));
         }
 
         public override void Update()
         {
             base.Update();
             Movement.Update();
+            Fisher.Update();
+            Equipment.Update();
+            UpdateHits();
+        }
+
+        private void UpdateHits()
+        {
             if (!GameSettings.Paused && _consecutiveHitsTimer.Tick())
             {
                 ConsecutiveHits = 0;
             }
-            Fisher.Update();
         }
-
+        
         #region Dodge
         public void Roll(RollType Type)
         {
@@ -174,7 +184,7 @@ namespace Hedra.Engine.Player
             }
             IsAttacking = false;
             IsRolling = true;
-            DmgComponent.Immune = true;
+            SearchComponent<DamageComponent>().Immune = true;
             WasAttacking = false;
             IsAttacking = false;
             this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.1f),
@@ -193,21 +203,21 @@ namespace Hedra.Engine.Player
             SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);
             TaskManager.When( () => !IsRolling, () =>
             {
-                DmgComponent.Immune = false;
+                SearchComponent<DamageComponent>().Immune = false;
             } );
         }
 
         #endregion
 
-        public void Attack(float Damage)
+        public void AttackSurroundings(float Damage)
         {
-            this.Attack(Damage, null);
+            this.AttackSurroundings(Damage, null);
         }
 
 
-        public void Attack(float Damage, Action<Entity> Callback)
+        public void AttackSurroundings(float Damage, Action<Entity> Callback)
         {
-            var meleeWeapon = this.Model.LeftWeapon as MeleeWeapon;
+            var meleeWeapon = LeftWeapon as MeleeWeapon;
             var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 3.75f + .5f ?? 1.0f;
             var wideModifier = Math.Max( (meleeWeapon?.MainWeaponSize.Xz.LengthFast ?? 1.0f) - .75f, 1.0f);
             var nearEntities = World.InRadius<Entity>(this.Position, 16f * rangeModifier); // this.Model.BroadphaseCollider.BroadphaseRadius
@@ -227,7 +237,6 @@ namespace Hedra.Engine.Player
                     atLeastOneHit = true;
                 }
             }
-
             if(!atLeastOneHit)
             {
                 MainWeapon?.Weapon.PlaySound();
@@ -261,10 +270,36 @@ namespace Hedra.Engine.Player
             return Utils.Rng.NextFloat() * 1f + .0f;
         }
 
+        public void SetWeapon(Weapon Item)
+        {
+            Equipment.SetWeapon(Item);
+        }
+        
+        public void SetHelmet(HelmetPiece Item)
+        {
+            Equipment.SetHelmet(Item);
+        }
+        
+        public void SetChestplate(ChestPiece Item)
+        {
+            Equipment.SetChest(Item);
+        }
+        
+        public void SetPants(PantsPiece Item)
+        {
+            Equipment.SetPants(Item);
+        }
+        
+        public void SetBoots(BootsPiece Item)
+        {
+            Equipment.SetBoots(Item);
+        }
+
         public void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition)
         {
             ComponentManager.AddComponentWhile(new AttackSpeedBonusComponent(this, BonusAttackSpeed), Condition);
         }
+        
         public void AddBonusHealthWhile(float BonusHealth, Func<bool> Condition)
         {
             ComponentManager.AddComponentWhile(new HealthBonusComponent(this, BonusHealth), Condition);
@@ -371,27 +406,7 @@ namespace Hedra.Engine.Player
                 if(_xp >= MaxXP) XP = _xp;
             }
         }
-        
-        public virtual Item Ring
-        { 
-            get => _ring;
-            set{
-                if (this.Ring == value)  return;             
-                _ring = value;
 
-                if (this.Ring != null)
-                {
-                    var effectType = (EffectType) Enum.Parse(typeof(EffectType), _ring.GetAttribute<string>("EffectType"));
-                    if (effectType != EffectType.None) this.ApplyEffectWhile(effectType, () => this.Ring == value);
-
-                    this.AddBonusSpeedWhile(this.Ring.GetAttribute<float>("MovementSpeed"), () => this.Ring == value);
-                    this.AddBonusAttackSpeedWhile(this.AttackSpeed * this.Ring.GetAttribute<float>("AttackSpeed"), () => this.Ring == value);
-                    this.AddBonusHealthWhile(this.MaxHealth * this.Ring.GetAttribute<float>("Health"), () => this.Ring == value);
-                }
-            }
-        }
-
-    
         public float Stamina
         {
             get => _stamina;

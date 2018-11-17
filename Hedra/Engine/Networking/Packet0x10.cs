@@ -95,7 +95,6 @@ namespace Hedra.Engine.Networking
                             
                             if(Packet.Animation[i] == 0x1){
                                 Mob.SearchComponent<DamageComponent>().Immune = true;
-                                //Mob.Model.Attack(Mob, 0f); // Attack itself to do the animation
                                 Mob.SearchComponent<DamageComponent>().Immune = false;
                             }
                         }

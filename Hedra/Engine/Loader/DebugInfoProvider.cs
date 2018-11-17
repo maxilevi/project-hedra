@@ -259,8 +259,8 @@ namespace Hedra.Engine.Loader
                         GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
                     Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
-                    if (GameManager.Player.Model.LeftWeapon != null &&
-                        GameManager.Player.Model.LeftWeapon is MeleeWeapon melee)
+                    if (GameManager.Player.LeftWeapon != null &&
+                        GameManager.Player.LeftWeapon is MeleeWeapon melee)
                     {
                         Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
                         BasicGeometry.DrawShapes(melee.Shapes, Colors.White);

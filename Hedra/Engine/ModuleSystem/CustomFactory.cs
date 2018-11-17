@@ -132,7 +132,7 @@ namespace Hedra.Engine.ModuleSystem
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Common),
                     RandomDrop = false,
-                    DropChance = .1f,
+                    DropChance = .125f,
                 });
             else if(Mob.Level < 16)
                 Mob.AddComponent(new DropComponent(Mob)
@@ -146,28 +146,28 @@ namespace Hedra.Engine.ModuleSystem
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Rare),
                     RandomDrop = false,
-                    DropChance = .1f,
+                    DropChance = .075f,
                 });
             else if(Mob.Level < 48)
                 Mob.AddComponent(new DropComponent(Mob)
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Unique),
                     RandomDrop = false,
-                    DropChance = .1f,
+                    DropChance = .05f,
                 });
             else if(Mob.Level < 64)
                 Mob.AddComponent(new DropComponent(Mob)
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Legendary),
                     RandomDrop = false,
-                    DropChance = .1f,
+                    DropChance = .025f,
                 });
             else
                 Mob.AddComponent(new DropComponent(Mob)
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Divine),
                     RandomDrop = false,
-                    DropChance = .1f,
+                    DropChance = .005f,
                 });
         }
         

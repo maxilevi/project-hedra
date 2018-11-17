@@ -246,6 +246,8 @@
     <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
     <Compile Include="Engine\Input\Cursor.cs" />
     <Compile Include="Engine\Input\KeyboardManager.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\HelmetPiece.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\PantsPiece.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\RogueWeapon.cs" />
     <Compile Include="Engine\ItemSystem\WeaponSystem\Staff.cs" />
     <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
@@ -318,6 +320,7 @@
     <Compile Include="Engine\Player\BoatSystem\BoatModelHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatStateHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\IBoat.cs" />
+    <Compile Include="Engine\Player\EquipmentHandler.cs" />
     <Compile Include="Engine\Player\Fireball.cs" />
     <Compile Include="Engine\Player\FireCone.cs" />
     <Compile Include="Engine\Player\Firewave.cs" />
@@ -428,8 +431,8 @@
     <Compile Include="Engine\IO\ConfigurationFile.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorPiece.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorFactory.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\Boots.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\Chest.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\BootsPiece.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\ChestPiece.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\DoubleArmorPiece.cs" />
     <Compile Include="Engine\ItemSystem\AttributeArray.cs" />
     <Compile Include="Engine\ItemSystem\AttributeDisplay.cs" />
@@ -1204,6 +1207,10 @@
     </None>
     <None Include="..\project-hedra-assets\Sounds\Sheep.ogg">
       <Link>Sounds\Sheep.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Obelisk.ogg">
+      <Link>Sounds\Soundtrack\Obelisk.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Skills\BladesAttack1.png">
@@ -3790,22 +3797,6 @@
       <Link>Assets\Env\Fort1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Gem1.ply">
-      <Link>Assets\Items\Gem1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Gem2.ply">
-      <Link>Assets\Items\Gem2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Gem3.ply">
-      <Link>Assets\Items\Gem3.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Gem4.ply">
-      <Link>Assets\Items\Gem4.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\GiantTree0.ply">
       <Link>Assets\Env\GiantTree0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4020,10 +4011,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Quiver.ply">
       <Link>Assets\Items\Quiver.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Rapier.ply">
-      <Link>Assets\Items\Rapier.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\RareBarbarianIronSword.ply">
@@ -5077,11 +5064,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\Items\Boots\" />
+    <Folder Include="Assets\Items\Chestplates\" />
+    <Folder Include="Assets\Items\Gems\" />
+    <Folder Include="Assets\Items\Helmets\" />
+    <Folder Include="Assets\Items\Pants\" />
     <Folder Include="Modules\Items\Boots\" />
-    <Folder Include="Modules\Items\Chestplates\" />
+    <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Helmets\" />
     <Folder Include="Modules\Items\Pants\" />
-    <Folder Include="Modules\Recipes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Boat.ply">
@@ -5199,6 +5190,9 @@
     <Content Include="Mods\README.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Chestplates\CommonLeatherChestplate.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\Boat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -5211,6 +5205,7 @@
     <Content Include="Modules\Mobs\Ent.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Recipes\RareAutumnStaffRecipe.json" />
     <Content Include="Modules\Villages\Nordic.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

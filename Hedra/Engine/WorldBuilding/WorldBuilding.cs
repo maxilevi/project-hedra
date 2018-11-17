@@ -83,7 +83,7 @@ namespace Hedra.Engine.WorldBuilding
             if (Undead)
             {
                 human.Model = new HumanoidModel(human, HumanType.Skeleton);
-                human.Model.SetWeapon(human.MainWeapon.Weapon);
+                human.SetWeapon(human.MainWeapon.Weapon);
             }
 
             if(!human.MainWeapon.Weapon.IsMelee)

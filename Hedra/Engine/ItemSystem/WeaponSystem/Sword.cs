@@ -56,12 +56,12 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.Mid) return;
-            Owner.Attack(Owner.DamageEquation * (FrontSlash ? 1.25f : 1.0f) );
+            Owner.AttackSurroundings(Owner.DamageEquation * (FrontSlash ? 1.25f : 1.0f) );
         }
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
-            Owner.Attack(Owner.DamageEquation * 1.15f * Options.DamageModifier, delegate(Entity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * 1.15f * Options.DamageModifier, delegate(Entity Mob)
             {
                 if (Utils.Rng.Next(0, 5) == 1 && Options.DamageModifier > .5f)
                     Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);

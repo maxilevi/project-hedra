@@ -78,11 +78,13 @@ namespace Hedra.Engine.Rendering.UI
                 var rotation = _human.Model.Rotation;
 
                 _human.Model.Dispose();
-                _human.Model = new HumanoidModel(_human, _classType.Human);
-                _human.Model.SetWeapon(_classType.StartingItem.Weapon);
-                _human.Model.Position = position;
-                _human.Model.Rotation = rotation;
-                _human.Model.TargetRotation = rotation;
+                _human.Model = new HumanoidModel(_human, _classType.Human)
+                {
+                    Position = position,
+                    Rotation = rotation,
+                    TargetRotation = rotation
+                };
+                _human.SetWeapon(_classType.StartingItem.Weapon);
             }
 
             SetWeapon(null, null);

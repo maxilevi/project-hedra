@@ -1,0 +1,22 @@
+{
+  "Name": "CommonLeatherChestplate",
+  "DisplayName": "Leather Chestplate",
+  "EquipmentType": "Chestplate",
+  "Tier": "Common",
+  "Description": "Leather chestplate.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 2.5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Misc/Berry.ply"
+  }
+}
+        

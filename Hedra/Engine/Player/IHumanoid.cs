@@ -53,9 +53,11 @@ namespace Hedra.Engine.Player
         float AttackResistance { get; }
         int Gold { get; set; }
         float DamageEquation { get; }
-        void Attack(float Damage, Action<Entity> Callback);
-        void Attack(float Damage);
+        void AttackSurroundings(float Damage, Action<Entity> Callback);
+        void AttackSurroundings(float Damage);
         void ApplyEffectWhile(EffectType NewType, Func<bool> Condition);
+        void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition);
+        void AddBonusHealthWhile(float BonusHealth, Func<bool> Condition);
         void ProcessHit(bool HittedSomething);
         void Greet();
         Item MainWeapon { get; }
@@ -66,5 +68,6 @@ namespace Hedra.Engine.Player
         float WeaponModifier(Item Weapon);
         Weapon LeftWeapon { get; }
         void Roll(RollType Type);
+        void SetWeapon(Weapon Item);
     }
 }

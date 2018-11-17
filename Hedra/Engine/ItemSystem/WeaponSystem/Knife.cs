@@ -54,7 +54,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(AttackEventType.Mid != Type) return;
-            Owner.Attack(Owner.DamageEquation, delegate(Entity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation, delegate(Entity Mob)
             {
                 if (Utils.Rng.Next(0, 5) == 1)
                     Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 3f,
@@ -65,7 +65,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;
-            Owner.Attack(Owner.DamageEquation * Options.DamageModifier, delegate(Entity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * Options.DamageModifier, delegate(Entity Mob)
             {
                 if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .75f)
                     Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 4f,

@@ -4,8 +4,6 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.CacheSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ModuleSystem.AnimationEvents'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ClassSystem'):-rename")]
-[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ItemSystem.WeaponSystem'):-rename")]
-[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ItemSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ModuleSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.AISystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.AISystem.Behaviours'):-rename")]

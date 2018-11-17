@@ -60,18 +60,33 @@ namespace HedraTests.Player
         {
             throw new NotImplementedException();
         }
-        
-        public void Attack(float Damage, Action<Entity> Callback)
+
+        public void SetWeapon(Weapon Item)
         {
             throw new NotImplementedException();
         }
 
-        public void Attack(float Damage)
+        public void AttackSurroundings(float Damage, Action<Entity> Callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AttackSurroundings(float Damage)
         {
             throw new NotImplementedException();
         }
 
         public void ApplyEffectWhile(EffectType NewType, Func<bool> Condition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddBonusHealthWhile(float BonusHealth, Func<bool> Condition)
         {
             throw new NotImplementedException();
         }

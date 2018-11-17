@@ -11,13 +11,13 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
 
         static ArmorFactory()
         {
-            Armors = new Dictionary<string, Type>();
-            Type[] weaponTypes = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(ArmorFactory).Namespace).ToArray();
-            foreach (var weaponType in weaponTypes)
+            Armors = new Dictionary<string, Type>()
             {
-                if (weaponType.IsSubclassOf(typeof(ArmorPiece)))
-                    Armors.Add(weaponType.Name, weaponType);
-            }
+                {"Helmet", typeof(HelmetPiece)},
+                {"Chestplate", typeof(ChestPiece)},
+                {"Pants", typeof(PantsPiece)},
+                {"Boots", typeof(BootsPiece)},
+            };
         }
 
         public static bool Contains(Item Item)

@@ -7,14 +7,6 @@ namespace Hedra.Engine
 {
     public static class Reflection
     {
-        public static Type[] GetTypesInNamespace(Assembly Assembly, string NameSpace)
-        {
-            return
-                Assembly.GetTypes()
-                    .Where(T => string.Equals(T.Namespace, NameSpace, StringComparison.Ordinal))
-                    .ToArray();
-        }
-
         public static IEnumerable<Type> GetLoadableTypes(this Assembly Assembly, string Namespace = null)
         {
             IEnumerable<Type> types;

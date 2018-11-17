@@ -175,7 +175,7 @@ namespace Hedra.Engine.Rendering.UI
                     var item = pair.Value;
                     if (pair.Key != PlayerInventory.WeaponHolder || item == null) continue;
                     _humans[i].MainWeapon = item;
-                    _humans[i].Model.SetWeapon(_humans[i].MainWeapon.Weapon);
+                    _humans[i].SetWeapon(_humans[i].MainWeapon.Weapon);
                 }
             }
         }

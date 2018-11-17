@@ -77,7 +77,8 @@ namespace Hedra.Engine.Management
                 "Sounds/Soundtrack/ThroughTheGrasslands.ogg",
                 "Sounds/Soundtrack/BreathOfDay.ogg",
                 "Sounds/Soundtrack/TheVillage.ogg",
-                "Sounds/Soundtrack/AdventurersMinuet.ogg"
+                "Sounds/Soundtrack/AdventurersMinuet.ogg",
+                "Sounds/Soundtrack/Obelisk.ogg"
             };
             _loopableSongsStart = Array.IndexOf(TrackNames, forestTrack);
             ShuffleSongs();

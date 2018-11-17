@@ -64,6 +64,7 @@ namespace Hedra.Engine.Player
         private bool _wasSleeping;
         private bool _enabled;
         private bool _canInteract;
+        private DamageComponent _damageHandler;
 
         public LocalPlayer()
         {
@@ -105,7 +106,8 @@ namespace Hedra.Engine.Player
                 if (Key.R == Args.Key && !GameSettings.Paused && IsDead)
                     Respawn();
             });
-            this.SearchComponent<DamageComponent>().Delete = false;
+            _damageHandler = SearchComponent<DamageComponent>();
+            _damageHandler.Delete = false;
         }
 
         public override bool CanInteract
@@ -114,8 +116,7 @@ namespace Hedra.Engine.Player
             set
             {
                 _canInteract = value;
-                if(DmgComponent != null)
-                    DmgComponent.Immune = !value;
+                _damageHandler.Immune = !value;
             }
         }
 
@@ -219,7 +220,7 @@ namespace Hedra.Engine.Player
 
             if (!this.IsDead)
             {
-                if(!this.DmgComponent.HasBeenAttacked)
+                if(!_damageHandler.HasBeenAttacked)
                     this.Health += HealthRegen * Time.IndependantDeltaTime;
                 this.Mana += ManaRegen * Time.IndependantDeltaTime;
                 this.Stamina += (float)Time.DeltaTime * 4f;
@@ -287,7 +288,8 @@ namespace Hedra.Engine.Player
         }
         public override Item MainWeapon => Inventory.MainWeapon;
 
-        public void EatFood(){
+        public void EatFood()
+        {
             if(this.IsDead || this.IsEating || this.IsKnocked || this.IsEating || this.IsAttacking || this.IsClimbing) return;
             this.WasAttacking = false;
             this.IsAttacking = false;
@@ -311,7 +313,7 @@ namespace Hedra.Engine.Player
             if (_health <= 0f)
             {
                 IsDead = true;
-                CoroutineManager.StartCoroutine(this.DmgComponent.DisposeCoroutine);
+                CoroutineManager.StartCoroutine(_damageHandler.DisposeCoroutine);
                 Executer.ExecuteOnMainThread(delegate {
                     this.MessageDispatcher.ShowMessageWhile("[R] TO RESPAWN", Color.White,
                         () => this.Health <= 0 && !GameManager.InStartMenu);

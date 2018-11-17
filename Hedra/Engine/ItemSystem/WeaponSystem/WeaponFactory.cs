@@ -11,13 +11,18 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         static WeaponFactory()
         {
-            Weapons = new Dictionary<string, Type>();
-            Type[] weaponTypes = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(WeaponFactory).Namespace).ToArray();
-            foreach (var weaponType in weaponTypes)
+            Weapons = new Dictionary<string, Type>()
             {
-                if(weaponType.IsSubclassOf(typeof(Weapon)) && !weaponType.IsAbstract)
-                    Weapons.Add(weaponType.Name, weaponType);
-            }
+                {"Sword", typeof(Sword)},
+                {"Axe", typeof(Axe)},
+                {"Hammer", typeof(Hammer)},
+                {"Claw", typeof(Claw)},
+                {"Katar", typeof(Katar)},
+                {"DoubleBlades", typeof(DoubleBlades)},
+                {"Knife", typeof(Knife)},
+                {"Bow", typeof(Bow)},
+                {"Staff", typeof(Staff)}
+            };
         }
 
         public static bool Contains(Item Item)

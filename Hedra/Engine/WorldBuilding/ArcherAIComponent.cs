@@ -51,7 +51,7 @@ namespace Hedra.Engine.WorldBuilding
                 {
                     if (Parent is Humanoid human)
                     {
-                        if (human.Model.LeftWeapon is Bow bow)
+                        if (human.LeftWeapon is Bow bow)
                         {
                             bow.ArrowDownForce = 1-(TargetPoint - Parent.Position).LengthFast / (AttackRadius+16);
                             if (_secondAttackCooldown <= 0)

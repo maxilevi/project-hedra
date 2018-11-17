@@ -77,7 +77,7 @@ namespace Hedra.Engine.Player.Inventory
                 ItemDescription.Color = tierColor;
                 _itemAttributes.Position = _weaponItemAttributesPosition + this.Position;
                 ItemTexture.Position = _weaponItemTexturePosition + this.Position;
-                ItemDescription.Text = Utils.FitString(CurrentItem.Description, 18);
+                ItemDescription.Text = Utils.FitString(CurrentItem.Description, 24);
             }
             else
             {

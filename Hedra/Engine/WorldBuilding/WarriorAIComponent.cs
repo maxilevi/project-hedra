@@ -61,7 +61,7 @@ namespace Hedra.Engine.WorldBuilding
                 {
                     if (_attackTimer < 0)
                     {
-                        Parent.Model.Attack(ChasingTarget);
+                        Parent.LeftWeapon.Attack1(Parent);
                         _attackTimer = 1.25f;
                     }
                     this.ForgetTimer.Reset();

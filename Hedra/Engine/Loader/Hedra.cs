@@ -54,11 +54,12 @@ namespace Hedra
             NameGenerator.Load();
             CacheManager.Load();
             Translations.Load();
+            Log.WriteLine("Translations loaded successfully.");
             
             GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
             GameLoader.AllocateMemory();
-            Log.WriteLine("Assets loading was Successful.");
+            Log.WriteLine("Assets loading was successful.");
             
             GameLoader.LoadSoundEngine();
             GameSettings.LoadNormalSettings(GameSettings.SettingsPath);

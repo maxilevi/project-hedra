@@ -82,8 +82,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             }
             else
             {
-                MainMesh = new ObjectMesh(Vector3.Zero);
-                MainMesh.Dispose();
+                MainMesh = new ObjectMesh();
             }
             CreateAnimations();
         }
@@ -353,7 +352,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             {
                 if (!_effectApplied)
                 {
-                    Owner.ApplyEffectWhile(Describer.Type, () => Owner.Model.LeftWeapon == this);
+                    Owner.ApplyEffectWhile(Describer.Type, () => Owner.LeftWeapon == this);
                     _effectApplied = true;
                 }
             }

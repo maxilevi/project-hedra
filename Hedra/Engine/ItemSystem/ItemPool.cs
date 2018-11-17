@@ -19,6 +19,7 @@ namespace Hedra.Engine.ItemSystem
     {
         private static readonly EquipmentType[] WeaponEquipmentTypes;
         private static readonly EquipmentType[] ArmorEquipmentTypes;
+        private static readonly string[] BlacklistedEquipment;
         private static readonly EffectType[] EffectTypes;
 
         static ItemPool()
@@ -26,19 +27,26 @@ namespace Hedra.Engine.ItemSystem
            WeaponEquipmentTypes =  new[]
             {
                 EquipmentType.Axe, EquipmentType.Claw, EquipmentType.Bow,
-                EquipmentType.DoubleBlades, EquipmentType.Katar,
-                EquipmentType.Pants, EquipmentType.Knife, EquipmentType.Sword, EquipmentType.Hammer
+                EquipmentType.DoubleBlades, EquipmentType.Katar, EquipmentType.Pants,
+                EquipmentType.Knife, EquipmentType.Sword, EquipmentType.Hammer
             };
 
             ArmorEquipmentTypes = new[]
             {
-                EquipmentType.Boots, EquipmentType.Pants, EquipmentType.Chestplate, EquipmentType.Helmet
+                EquipmentType.Boots, EquipmentType.Pants, 
+                EquipmentType.Chestplate, EquipmentType.Helmet
             };
 
             EffectTypes = new[]
             {
                 EffectType.Fire, EffectType.Bleed, EffectType.Freeze,
                 EffectType.Poison, EffectType.Slow, EffectType.Speed
+            };
+
+            BlacklistedEquipment = new[]
+            {
+                EquipmentType.Staff.ToString(),
+                EquipmentType.Chestplate.ToString()
             };
         }
 
@@ -61,7 +69,7 @@ namespace Hedra.Engine.ItemSystem
                 newTemplates = templates.Where(Template => Template.Tier <= selectedTier 
                 && Template.EquipmentType == Settings.EquipmentType).ToArray();
             }
-            templates = newTemplates;
+            templates = newTemplates.Where(Template => Array.IndexOf(BlacklistedEquipment, Template.EquipmentType) == -1).ToArray();
             if (templates.Length == 0) return null;
             
             var item = Item.FromTemplate(templates[rng.Next(0, templates.Length)]);

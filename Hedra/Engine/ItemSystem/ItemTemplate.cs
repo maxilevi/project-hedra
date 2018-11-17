@@ -1,9 +1,11 @@
 
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Hedra.Engine.ItemSystem
-{
+{    
+    [Obfuscation(Exclude = false, Feature = "-rename")]
     public class ItemTemplate
     {
         public string Name { get; set; }

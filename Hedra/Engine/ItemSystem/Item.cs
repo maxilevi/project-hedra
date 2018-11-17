@@ -19,7 +19,9 @@ namespace Hedra.Engine.ItemSystem
         public ItemModelTemplate ModelTemplate { get; set; }
         private readonly AttributeArray _attributes;
         private Weapon _weaponCache;
+        private ArmorPiece _armorCache;
         private VertexData _model;
+        private bool _armorCacheDirty;
         private bool _weaponCacheDirty;
 
         public Item()
@@ -165,6 +167,14 @@ namespace Hedra.Engine.ItemSystem
                 _weaponCacheDirty = true;
             }
         }
+        
+        public HelmetPiece Helmet => GetArmor<HelmetPiece>();
+        
+        public ChestPiece Chest => GetArmor<ChestPiece>();
+        
+        public PantsPiece Pants => GetArmor<PantsPiece>();
+        
+        public BootsPiece Boots => GetArmor<BootsPiece>();
 
         public Weapon Weapon
         {
@@ -178,6 +188,17 @@ namespace Hedra.Engine.ItemSystem
 
                 return _weaponCache;
             }
+        }
+        
+        private T GetArmor<T>() where T : ArmorPiece
+        {
+            if (_armorCache != null && !_armorCacheDirty && !_armorCache.Disposed) return (T) _armorCache;
+
+            var armor = ArmorFactory.Get(this);
+            _armorCache = armor;
+            _armorCacheDirty = false;
+
+            return (T) _armorCache;
         }
     }
 }
