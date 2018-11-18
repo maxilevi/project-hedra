@@ -3,7 +3,7 @@
   "DisplayName": "Scrying Staff",
   "EquipmentType": "Staff",
   "Tier": "Unique",
-  "Description": "Scrying Staff.",
+  "Description": "A truly remarkable staff, with future telling properties.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -19,4 +19,3 @@
     "Path": "$DataFile$/Items/Staff/UniqueScryingStaff.ply"
   }
 }
-        

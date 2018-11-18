@@ -3,7 +3,7 @@
   "DisplayName": "Rune Staff",
   "EquipmentType": "Staff",
   "Tier": "Common",
-  "Description": "Rune Staff.",
+  "Description": "A simple, bare bones staff with a wooden shaft and decorated iron head. There is a small ornament hanging, very personal.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -3,7 +3,7 @@
   "DisplayName": "Wooden Staff",
   "EquipmentType": "Staff",
   "Tier": "Common",
-  "Description": "Wooden Staff.",
+  "Description": "The simplest of staves, a magically imbued quarterstaff.",
   "Attributes": [
     {
       "Name": "Damage",

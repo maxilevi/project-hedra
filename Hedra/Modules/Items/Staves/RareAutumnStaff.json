@@ -3,7 +3,7 @@
   "DisplayName": "Autumn Staff",
   "EquipmentType": "Staff",
   "Tier": "Rare",
-  "Description": "Autumn Staff.",
+  "Description": "Originally a ceremonial decoration to celebrate the autumn. It has since been imbued by a prior caster.",
   "Attributes": [
     {
       "Name": "Damage",

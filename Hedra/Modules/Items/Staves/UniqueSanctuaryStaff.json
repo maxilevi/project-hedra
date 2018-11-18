@@ -3,7 +3,7 @@
   "DisplayName": "Sanctuary Staff",
   "EquipmentType": "Staff",
   "Tier": "Unique",
-  "Description": "Sanctuary Staff.",
+  "Description": "A more defensive staff rather than say, a staff of similar power that would be used by a battle mage.",
   "Attributes": [
     {
       "Name": "Damage",

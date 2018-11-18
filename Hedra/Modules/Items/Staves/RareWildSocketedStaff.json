@@ -3,7 +3,7 @@
   "DisplayName": "Wild Socketed Staff",
   "EquipmentType": "Staff",
   "Tier": "Rare",
-  "Description": "Wild Socketed Staff.",
+  "Description": "Untamed, unadorned, the socket of a small gemstone is open.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -19,4 +19,3 @@
     "Path": "$DataFile$/Items/Staff/RareWildSocketedStaff.ply"
   }
 }
-        

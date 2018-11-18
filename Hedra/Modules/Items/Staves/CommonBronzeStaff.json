@@ -1,10 +1,9 @@
-
 {
   "Name": "CommonBronzeStaff",
   "DisplayName": "Bronze Staff",
   "EquipmentType": "Staff",
   "Tier": "Common",
-  "Description": "Bronze Staff.",
+  "Description": "Despite only being composed of bronze this staff remains an amazing work of many sources. A magically imbued metal rod.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -20,4 +19,3 @@
     "Path": "$DataFile$/Items/Staff/CommonBronzeStaff.ply"
   }
 }
-        

@@ -3,7 +3,7 @@
   "DisplayName": "Hardwood Staff",
   "EquipmentType": "Staff",
   "Tier": "Uncommon",
-  "Description": "Hardwood Staff.",
+  "Description": "As one would assume the staff is made of hardened reinforced wood.",
   "Attributes": [
     {
       "Name": "Damage",

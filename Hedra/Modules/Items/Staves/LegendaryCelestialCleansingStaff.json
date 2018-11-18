@@ -3,7 +3,7 @@
   "DisplayName": "Celestial Cleansing Staff",
   "EquipmentType": "Staff",
   "Tier": "Legendary",
-  "Description": "Celestial Cleansing Staff.",
+  "Description": "Meant for clearing the cosmos of hazardous waste.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -19,4 +19,3 @@
     "Path": "$DataFile$/Items/Staff/LegendaryCelestialCleansingStaff.ply"
   }
 }
-        

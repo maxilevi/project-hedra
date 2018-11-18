@@ -3,7 +3,7 @@
   "DisplayName": "Battle Staff",
   "EquipmentType": "Staff",
   "Tier": "Uncommon",
-  "Description": "Battle Staff.",
+  "Description": "A very basic staff meant for apprentice battle mages. Well made and effective.",
   "Attributes": [
     {
       "Name": "Damage",

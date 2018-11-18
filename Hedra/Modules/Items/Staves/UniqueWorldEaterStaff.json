@@ -3,7 +3,7 @@
   "DisplayName": "The World Eater",
   "EquipmentType": "Staff",
   "Tier": "Unique",
-  "Description": "The World Eater.",
+  "Description": "Made of luxurious wood with golden accents. The head is shaped a worm, though could be confused for a snake.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -19,4 +19,3 @@
     "Path": "$DataFile$/Items/Staff/UniqueWorldEaterStaff.ply"
   }
 }
-        

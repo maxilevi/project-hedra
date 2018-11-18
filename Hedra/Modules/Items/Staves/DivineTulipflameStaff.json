@@ -3,7 +3,7 @@
   "DisplayName": "Tulipflame Staff",
   "EquipmentType": "Staff",
   "Tier": "Divine",
-  "Description": "Tulipflame Staff.",
+  "Description": "The Flames hold themselves in the shape of tulip flowers on either end of the short staff.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -19,4 +19,3 @@
     "Path": "$DataFile$/Items/Staff/DivineTulipflameStaff.ply"
   }
 }
-        

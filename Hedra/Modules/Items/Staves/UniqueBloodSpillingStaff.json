@@ -3,7 +3,7 @@
   "DisplayName": "Blood Spilling Staff",
   "EquipmentType": "Staff",
   "Tier": "Unique",
-  "Description": "Blood Spilling Staff.",
+  "Description": "Often the chosen weapon of an evil mage, there are only 23 similar staves, you can tell by the inscription.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -19,4 +19,3 @@
     "Path": "$DataFile$/Items/Staff/UniqueBloodSpillingStaff.ply"
   }
 }
-        

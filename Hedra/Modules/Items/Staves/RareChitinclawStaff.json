@@ -3,7 +3,7 @@
   "DisplayName": "Chitinclaw Staff",
   "EquipmentType": "Staff",
   "Tier": "Rare",
-  "Description": "Chitinclaw Staff.",
+  "Description": "Made from claw of a crab or similar creature with a chitin exoskeleton.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -19,4 +19,3 @@
     "Path": "$DataFile$/Items/Staff/RareChitinclawStaff.ply"
   }
 }
-        

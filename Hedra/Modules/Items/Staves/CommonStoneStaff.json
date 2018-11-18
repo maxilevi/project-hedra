@@ -3,7 +3,7 @@
   "DisplayName": "Stone Staff",
   "EquipmentType": "Staff",
   "Tier": "Common",
-  "Description": "Stone Staff.",
+  "Description": "Easily confusable with a spear, a simple wooden shaft with a rocky point.",
   "Attributes": [
     {
       "Name": "Damage",
