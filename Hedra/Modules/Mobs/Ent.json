@@ -1,13 +1,12 @@
 {
   "Name" : "Ent",
-  "MaxHealth": 680.0,
-  "AttackDamage": 13.0,
+  "MaxHealth": 516.0,
+  "AttackDamage": 11.0,
   "AttackCooldown": 1.5,
   "Speed": 1.40,
-  "XP": 18.0,
-  "Level": 18,
+  "XP": 12.0,
+  "Level": 17,
   "AIType": "Hostile",
-  "Ridable": false,
   "Effects": [],
   "Drops": [
     {
@@ -16,9 +15,10 @@
     }
   ],
   "Model": {
+    "Handler": "Ent",
     "AlignWithTerrain" :  false,
     "Path": "$DataFile$/Assets/Chr/EntIdle.dae",
-    "Scale": 3.0,
+    "Scale": 1.75,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/EntIdle.dae",

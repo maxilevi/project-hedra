@@ -76,13 +76,13 @@ namespace HedraTests.Game
         
         public BalanceEntry HumanoidAttackSpeed { get; } = new BalanceEntry
         {
-            Min1 = 0.55f,
+            Min1 = 0.525f,
             Max1 = 1.05f,
             
-            Min50 = 0.55f,
+            Min50 = 0.525f,
             Max50 = 1.05f,
             
-            Min99 = 0.55f,
+            Min99 = 0.525f,
             Max99 = 1.05f,
         };
         

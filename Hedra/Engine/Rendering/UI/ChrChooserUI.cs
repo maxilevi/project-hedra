@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
@@ -173,10 +174,32 @@ namespace Hedra.Engine.Rendering.UI
                 foreach (var pair in _information[i].Items)
                 {
                     var item = pair.Value;
-                    if (pair.Key != PlayerInventory.WeaponHolder || item == null) continue;
-                    _humans[i].MainWeapon = item;
-                    _humans[i].SetWeapon(_humans[i].MainWeapon.Weapon);
+                    if (item == null) continue;
+                    AddItemToHuman(_humans[i], pair.Key, item);
                 }
+            }
+        }
+
+        private static void AddItemToHuman(Humanoid Human, int Index, Item Object)
+        {
+            switch (Index)
+            {
+                case PlayerInventory.WeaponHolder:
+                    Human.MainWeapon = Object;
+                    Human.SetWeapon(Human.MainWeapon.Weapon);
+                    break;
+                case PlayerInventory.HelmetHolder:
+                    Human.SetHelmet(Object.Helmet);
+                    break;
+                case PlayerInventory.ChestplateHolder:
+                    Human.SetChestplate(Object.Chestplate);
+                    break;
+                case PlayerInventory.PantsHolder:
+                    Human.SetPants(Object.Pants);
+                    break;
+                case PlayerInventory.BootsHolder:
+                    Human.SetBoots(Object.Boots);
+                    break;
             }
         }
         

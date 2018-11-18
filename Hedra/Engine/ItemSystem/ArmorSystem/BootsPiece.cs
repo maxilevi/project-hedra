@@ -5,11 +5,17 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
 {
     public class BootsPiece : DoubleArmorPiece
     {
-        public override Matrix4 LeftPlacementMatrix => Owner.Model.LeftFootMatrix;
-        public override Matrix4 RightPlacementMatrix => Owner.Model.RightFootMatrix;
+        protected override Matrix4 LeftPlacementMatrix => Owner.Model.LeftFootMatrix;
+
+        protected override Vector3 LeftPlacementPosition => Owner.Model.LeftFootPosition;
+              
+        protected override Matrix4 RightPlacementMatrix => Owner.Model.RightFootMatrix;
+
+        protected override Vector3 RightPlacementPosition => Owner.Model.LeftFootPosition;
 
         public BootsPiece(VertexData Model) : base(Model)
         {
         }
+
     }
 }

@@ -26,12 +26,14 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private int JointCount = 0;
         private static readonly Matrix4 Correction = Matrix4.CreateFromAxisAngle(Vector3.UnitX, -90f * Mathf.Radian);
     
-        public JointsLoader(XmlNode VisualSceneNode, List<string> BoneOrder) {
+        public JointsLoader(XmlNode VisualSceneNode, List<string> BoneOrder)
+        {
             this.ArmatureData = VisualSceneNode["visual_scene"].ChildWithAttribute("node", "id", ArmatureName);
             this.BoneOrder = BoneOrder;
         }
         
-        public JointsData ExtractBoneData(){
+        public JointsData ExtractBoneData()
+        {
             XmlNode headNode = ArmatureData["node"];
             JointData headJoint = LoadJointData(headNode, true);
             if(BoneOrder.Count > JointCount) throw new ArgumentOutOfRangeException($"Some vertex groups have no attached joint ({BoneOrder.Count}). Probably check that the exported model has no duplicated vertex groups.");

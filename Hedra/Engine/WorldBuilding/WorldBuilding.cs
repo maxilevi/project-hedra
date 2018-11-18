@@ -103,25 +103,6 @@ namespace Hedra.Engine.WorldBuilding
             human.AddComponent(new VillagerAIComponent(human, Move));
             return human;
         }
-
-        public Humanoid SpawnEnt(Vector3 Position)
-        {
-            var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile);
-            var human = this.SpawnHumanoid("Ent", 36, Position, behaviour);
-            human.AddComponent(new WarriorAIComponent(human, false));
-            human.MainWeapon = null;
-
-            var region = World.BiomePool.GetRegion(Position);
-            var woodColor = region.Colors.WoodColors[Utils.Rng.Next(0, region.Colors.WoodColors.Length)] * 2.0f;
-            human.Model.Paint(new []
-            {
-                woodColor,
-                region.Colors.LeavesColors[Utils.Rng.Next(0, region.Colors.LeavesColors.Length)],
-                woodColor * .65f
-            });
-
-            return human;
-        }
         
         public Chest SpawnChest(Vector3 Position, Item Item)
         {

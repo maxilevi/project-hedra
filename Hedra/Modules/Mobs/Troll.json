@@ -7,14 +7,11 @@
 	"XP": 18.0,
 	"Level": 25,
 	"AIType": "Troll",
-	"Ridable": false,
 	"Effects": [],
-	"Drops": [
-      
-    ],
+	"Drops": [],
 	"Model": {
 		"AlignWithTerrain" :  false,
-		"Path": "$DataFile$/Assets/Chr/EntIdle.dae",
+		"Path": "$DataFile$/Assets/Chr/TrollIdle.dae",
 		"Scale": 3.0,
 		"IdleAnimations": [
 			{

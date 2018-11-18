@@ -6,6 +6,8 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.ModuleSystem.ModelHandlers;
+using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.ModuleSystem
 {
@@ -123,6 +125,13 @@ namespace Hedra.Engine.ModuleSystem
 
             this.AddItemDropPerLevel(Mob);
             Mob.AddComponent((EntityComponent)Activator.CreateInstance(AITable[this.AIType], Mob));
+        }
+
+        public void Polish(Entity Mob)
+        {
+            if(Model.Handler == null) return;
+            var handler = ModelHandler.Build(Model.Handler);
+            handler.Process(Mob, Mob.Model as AnimatedUpdatableModel);
         }
 
         private void AddItemDropPerLevel(IEntity Mob)

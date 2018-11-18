@@ -11,5 +11,7 @@ namespace Hedra.Engine.ModuleSystem
         string Name { get; set; }
 
         void Apply(Entity Mob, bool NormalizeValues = true);
+
+        void Polish(Entity Mob);
     }
 }

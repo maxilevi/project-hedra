@@ -1,23 +1,21 @@
-
-        {
-          "Name": "UncommonLongStaff",
-          "DisplayName": "Long Staff",
-          "EquipmentType": "Staff",
-          "Tier": "Uncommon",
-          "Description": "Long Staff.",
-          "Attributes": [
-            {
-              "Name": "Damage",
-              "Value": 2.5
-            },
-            {
-              "Name": "AttackSpeed",
-              "Value": 1.0
-            }
-          ],
-          "Model": {
-            "Scale": 1.0,
-            "Path": "$DataFile$/Items/Staff/UncommonLongStaff.ply"
-          }
-        }
-        
+{
+  "Name": "UncommonLongStaff",
+  "DisplayName": "Long Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Uncommon",
+  "Description": "Long Staff.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 4.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.85
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/UncommonLongStaff.ply"
+  }
+}

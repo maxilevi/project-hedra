@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     /// Description of PlayerModel.
     /// </summary>
-    public sealed class HumanoidModel : UpdatableModel<AnimatedModel>, IAudible, IDisposeAnimation
+    public sealed class HumanoidModel : AnimatedUpdatableModel, IAudible, IDisposeAnimation
     {
         private const float DefaultScale = 0.75f;
         public IHumanoid Human { get; private set; }
@@ -73,7 +73,7 @@ namespace Hedra.Engine.Player
         public override bool IsWalking => _walkAnimation == Model.AnimationPlaying;
         public override Vector4 Tint { get; set; }
         public override Vector4 BaseTint { get; set; }
-        private string _modelPath;
+        protected override string ModelPath { get; set; }
         private ObjectMesh _lampModel;
         private bool _hasLamp;
         private Vector3 _previousPosition;
@@ -107,25 +107,12 @@ namespace Hedra.Engine.Player
             Load(Human, HumanoidLoader.ModelTemplater[Human.Class]);
         }
 
-        public void Paint(Vector4[] Colors)
-        {
-            if(Colors.Length > AssetManager.ColorCodes.Length)
-                throw new ArgumentOutOfRangeException($"Provided amount of colors cannot be higher than the color codes.");
-
-            var colorMap = new Dictionary<Vector3, Vector3>();
-            for (var i = 0; i < Colors.Length; i++)
-            {
-                colorMap.Add(AssetManager.ColorCodes[i].Xyz, Colors[i].Xyz);
-            }
-            AnimationModelLoader.Paint(Model, _modelPath, colorMap);
-        }
-
         private void Load(IHumanoid Humanoid, HumanoidModelTemplate Template)
         {
             Human = Humanoid;
             Scale = Vector3.One * Template.Scale;
             Tint = Vector4.One;
-            _modelPath = Template.Path;
+            ModelPath = Template.Path;
             
             Model = AnimationModelLoader.LoadEntity(Template.Path);
 

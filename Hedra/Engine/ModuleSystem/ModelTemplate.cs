@@ -2,6 +2,7 @@ namespace Hedra.Engine.ModuleSystem
 {
     public class ModelTemplate
     {
+        public string Handler { get; set; }
         public bool AlignWithTerrain { get; set; } = true;
         public string Path { get; set; }
         public float Scale { get; set; }

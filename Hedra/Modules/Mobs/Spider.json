@@ -6,7 +6,6 @@
   "XP": 2.0,
   "Level": 3,
   "AIType": "Hostile",
-  "Ridable": false,
   "Effects": [
     {
       "Name": "Poison",

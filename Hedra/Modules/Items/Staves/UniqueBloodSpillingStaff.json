@@ -1,4 +1,3 @@
-
 {
   "Name": "UniqueBloodSpillingStaff",
   "DisplayName": "Blood Spilling Staff",
@@ -8,11 +7,11 @@
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 2.5
+      "Value": 7.5
     },
     {
       "Name": "AttackSpeed",
-      "Value": 1.0
+      "Value": 0.8
     }
   ],
   "Model": {

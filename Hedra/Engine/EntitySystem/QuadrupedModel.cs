@@ -26,7 +26,7 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     /// Description of SheepModel.
     /// </summary>
-    public sealed class QuadrupedModel : UpdatableModel<AnimatedModel>, IMountable, IAudible, IDisposeAnimation
+    public sealed class QuadrupedModel : AnimatedUpdatableModel, IMountable, IAudible, IDisposeAnimation
     {    
         public override bool IsWalking => Array.IndexOf(WalkAnimations, this.Model.AnimationPlaying) != -1;
         public override bool IsIdling => Array.IndexOf(IdleAnimations, this.Model.AnimationPlaying) != -1;
@@ -46,6 +46,7 @@ namespace Hedra.Engine.EntitySystem
         public override CollisionShape HorizontalBroadphaseCollider => Collider.HorizontalBroadphase;
         public override CollisionShape[] Colliders => Collider.Shapes;
         public override Vector3[] Vertices => Collider.Vertices;
+        protected override string ModelPath { get; set; }
         private float _attackCooldown;
         private Quaternion _targetTerrainOrientation = Quaternion.Identity;
         private Quaternion _terrainOrientation = Quaternion.Identity;
@@ -61,6 +62,7 @@ namespace Hedra.Engine.EntitySystem
         {
             var rng = new Random(Parent.MobSeed);
 
+            ModelPath = Template.Path;
             Model = AnimationModelLoader.LoadEntity(Template.Path);
             WalkAnimations = new Animation[Template.WalkAnimations.Length];
             IdleAnimations = new Animation[Template.IdleAnimations.Length];

@@ -85,7 +85,7 @@ namespace Hedra.Engine.Player
                         _player.SetHelmet(New?.Helmet);
                         break;
                     case ChestplateHolder:
-                        _player.SetChestplate(New?.Chest);
+                        _player.SetChestplate(New?.Chestplate);
                         break;
                     case PantsHolder:
                         _player.SetPants(New?.Pants);

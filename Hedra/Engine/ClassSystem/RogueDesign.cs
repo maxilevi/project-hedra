@@ -3,6 +3,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
+using OpenTK;
 
 namespace Hedra.Engine.ClassSystem
 {
@@ -26,5 +27,11 @@ namespace Hedra.Engine.ClassSystem
         {
             return 8.5f + RandomFactor;
         }
+        
+        public override Matrix4 HelmetPlacement { get; } = Matrix4.Identity;
+        public override Matrix4 ChestplatePlacement { get; } = Matrix4.Identity;
+        public override Matrix4 PantsMatrixPlacement { get; } = Matrix4.Identity;
+        public override Matrix4 LeftBootPlacement { get; } = Matrix4.Identity;
+        public override Matrix4 RightBootPlacement { get; } = Matrix4.Identity;
     }
 }

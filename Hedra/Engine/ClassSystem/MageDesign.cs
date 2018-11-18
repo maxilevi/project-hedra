@@ -3,6 +3,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
+using OpenTK;
 
 namespace Hedra.Engine.ClassSystem
 {
@@ -13,7 +14,7 @@ namespace Hedra.Engine.ClassSystem
         public override HumanType Human => HumanType.Mage;
         public override float BaseSpeed => 1.35f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new MageAbilityTreeBlueprint();
-        public override Item StartingItem => ItemPool.Grab(CommonItems.CommonWoodenStaff);
+        public override Item StartingItem => ItemPool.Grab(CommonItems.CommonBronzeStaff);
         public override float AttackResistance => 0.95f;
         public override float MaxStamina => 100;
         public override float BaseDamage => 2.75f;
@@ -27,5 +28,11 @@ namespace Hedra.Engine.ClassSystem
         {
             return 11f + RandomFactor;
         }
+        
+        public override Matrix4 HelmetPlacement { get; } = Matrix4.Identity;
+        public override Matrix4 ChestplatePlacement { get; } = Matrix4.Identity;
+        public override Matrix4 PantsMatrixPlacement { get; } = Matrix4.Identity;
+        public override Matrix4 LeftBootPlacement { get; } = Matrix4.Identity;
+        public override Matrix4 RightBootPlacement { get; } = Matrix4.Identity;
     }
 }

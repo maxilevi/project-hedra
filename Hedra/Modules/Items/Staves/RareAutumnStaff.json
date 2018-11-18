@@ -1,23 +1,21 @@
-
-        {
-          "Name": "RareAutumnStaff",
-          "DisplayName": "Autumn Staff",
-          "EquipmentType": "Staff",
-          "Tier": "Rare",
-          "Description": "Autumn Staff.",
-          "Attributes": [
-            {
-              "Name": "Damage",
-              "Value": 2.5
-            },
-            {
-              "Name": "AttackSpeed",
-              "Value": 1.0
-            }
-          ],
-          "Model": {
-            "Scale": 1.0,
-            "Path": "$DataFile$/Items/Staff/RareAutumnStaff.ply"
-          }
-        }
-        
+{
+  "Name": "RareAutumnStaff",
+  "DisplayName": "Autumn Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Rare",
+  "Description": "Autumn Staff.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 5.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/RareAutumnStaff.ply"
+  }
+}

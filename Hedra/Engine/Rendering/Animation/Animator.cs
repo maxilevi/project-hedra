@@ -32,7 +32,7 @@ namespace Hedra.Engine.Rendering.Animation
             _rootJoint = RootJoint;
         }
 
-        public void Reset()
+        public void Reset() 
         {
             _currentAnimation = null;
             _blendingAnimation = null;

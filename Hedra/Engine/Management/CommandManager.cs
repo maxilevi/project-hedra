@@ -322,11 +322,6 @@ namespace Hedra.Engine.Management
                         World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Caster.Position + Caster.Orientation * 32);
                         return true;
                     }
-                    if (Parts[1] == "ent")
-                    {
-                        World.WorldBuilding.SpawnEnt(Caster.Position + Caster.Orientation * 32);
-                        return true;
-                    }
                     if (Parts[1] == "carriage")
                     {
                         World.WorldBuilding.SpawnCarriage(Caster.Position + Caster.Orientation * 32);

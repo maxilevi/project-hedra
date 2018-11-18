@@ -1,23 +1,21 @@
-
-        {
-          "Name": "UncommonEmeraldStaff",
-          "DisplayName": "Emerald Staff",
-          "EquipmentType": "Staff",
-          "Tier": "Uncommon",
-          "Description": "Emerald Staff.",
-          "Attributes": [
-            {
-              "Name": "Damage",
-              "Value": 2.5
-            },
-            {
-              "Name": "AttackSpeed",
-              "Value": 1.0
-            }
-          ],
-          "Model": {
-            "Scale": 1.0,
-            "Path": "$DataFile$/Items/Staff/UncommonEmeraldStaff.ply"
-          }
-        }
-        
+{
+  "Name": "UncommonEmeraldStaff",
+  "DisplayName": "Emerald Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Uncommon",
+  "Description": "Emerald Staff.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 3.75
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.1
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/UncommonEmeraldStaff.ply"
+  }
+}

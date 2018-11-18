@@ -64,11 +64,6 @@ namespace HedraTests.Structure
             return SpawnHumanoid(null, Position);
         }
 
-        public Humanoid SpawnEnt(Vector3 Position)
-        {
-            return SpawnHumanoid(null, Position);
-        }
-
         public Chest SpawnChest(Vector3 Position, Item Item)
         {
             return new Chest(Position, Item);

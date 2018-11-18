@@ -1,23 +1,21 @@
-
-        {
-          "Name": "LegendarySnakeStaff",
-          "DisplayName": "Snake Staff",
-          "EquipmentType": "Staff",
-          "Tier": "Legendary",
-          "Description": "Snake Staff.",
-          "Attributes": [
-            {
-              "Name": "Damage",
-              "Value": 2.5
-            },
-            {
-              "Name": "AttackSpeed",
-              "Value": 1.0
-            }
-          ],
-          "Model": {
-            "Scale": 1.0,
-            "Path": "$DataFile$/Items/Staff/LegendarySnakeStaff.ply"
-          }
-        }
-        
+{
+  "Name": "LegendarySnakeStaff",
+  "DisplayName": "Snake Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Legendary",
+  "Description": "Snake Staff.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 9.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/LegendarySnakeStaff.ply"
+  }
+}

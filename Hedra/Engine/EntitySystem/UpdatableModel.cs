@@ -5,6 +5,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem

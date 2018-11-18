@@ -75,6 +75,14 @@ namespace Hedra.Engine.ModuleSystem
             return mob;
         }
 
+        public void Polish(Entity Mob)
+        {
+            lock (_lock)
+            {
+                _factories[Mob.Type.ToLowerInvariant()].Polish(Mob);
+            }
+        }
+
         private int GetMobDifficulty(Random Rng)
         {
             var levelN = Rng.Next(0, 10);

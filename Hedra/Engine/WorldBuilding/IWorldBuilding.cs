@@ -18,7 +18,6 @@ namespace Hedra.Engine.WorldBuilding
         Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition);
         Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false);
         Humanoid SpawnVillager(Vector3 Position, bool Move, string Name = null);
-        Humanoid SpawnEnt(Vector3 Position);
         Chest SpawnChest(Vector3 Position, Item Item);
         string GenerateName();
         void SetupStructure(CollidableStructure Structure);

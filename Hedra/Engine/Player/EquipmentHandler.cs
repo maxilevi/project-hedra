@@ -68,7 +68,10 @@ namespace Hedra.Engine.Player
                 _owner.Model.UnregisterEquipment(Old);
             }
             Setter(New);
-            _owner.Model.RegisterEquipment(New);
+            if (New != null)
+            {
+                _owner.Model.RegisterEquipment(New);
+            }
         }
         
         public Item MainWeapon

@@ -298,6 +298,8 @@
     <Compile Include="Engine\Management\ResourceHandler.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\ChargeEffect.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\Slash.cs" />
+    <Compile Include="Engine\ModuleSystem\ModelHandlers\EntHandler.cs" />
+    <Compile Include="Engine\ModuleSystem\ModelHandlers\ModelHandler.cs" />
     <Compile Include="Engine\Native\DummyConsoleManager.cs" />
     <Compile Include="Engine\Native\DummyMessageManager.cs" />
     <Compile Include="Engine\Native\IConsoleManager.cs" />
@@ -370,6 +372,7 @@
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
     <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\IToolbar.cs" />
+    <Compile Include="Engine\Rendering\AnimatedUpdatableModel.cs" />
     <Compile Include="Engine\Rendering\Animation\AnimationLoader.cs" />
     <Compile Include="Engine\Rendering\Animation\ColladaParser\ColladaProvider.cs" />
     <Compile Include="Engine\Rendering\Animation\ColladaParser\IColladaProvider.cs" />
@@ -1019,6 +1022,10 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Bows\UncommonSpikedGuardBow.ply">
       <Link>Assets\Items\Bows\UncommonSpikedGuardBow.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Chestplate\CommonLeatherChestplate.ply">
+      <Link>Assets\Items\Chestplates\CommonLeatherChestplate.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Claws\CommonBronzeClaw.ply">
@@ -5065,7 +5072,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Items\Boots\" />
-    <Folder Include="Assets\Items\Chestplates\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Helmets\" />
     <Folder Include="Assets\Items\Pants\" />

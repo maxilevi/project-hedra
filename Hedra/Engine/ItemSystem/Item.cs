@@ -170,7 +170,7 @@ namespace Hedra.Engine.ItemSystem
         
         public HelmetPiece Helmet => GetArmor<HelmetPiece>();
         
-        public ChestPiece Chest => GetArmor<ChestPiece>();
+        public ChestPiece Chestplate => GetArmor<ChestPiece>();
         
         public PantsPiece Pants => GetArmor<PantsPiece>();
         

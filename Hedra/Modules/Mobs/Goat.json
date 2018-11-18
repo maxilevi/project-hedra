@@ -6,7 +6,6 @@
   "XP": 2.0,
   "Level": 4,
   "AIType": "Goat",
-  "Ridable": false,
   "Effects": [
     {
       "Name": "Knock",

@@ -6,6 +6,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
+using OpenTK;
 
 namespace Hedra.Engine.ClassSystem
 {
@@ -30,6 +31,11 @@ namespace Hedra.Engine.ClassSystem
         public abstract float AttackResistance { get; }
         public abstract float MaxStamina { get; }
         public abstract float BaseDamage { get; }
+        public abstract Matrix4 HelmetPlacement { get; }
+        public abstract Matrix4 ChestplatePlacement { get; }
+        public abstract Matrix4 PantsMatrixPlacement { get; }
+        public abstract Matrix4 LeftBootPlacement { get; }
+        public abstract Matrix4 RightBootPlacement { get; }
 
         public abstract float MaxHealthFormula(float RandomFactor);
         public abstract float MaxManaFormula(float RandomFactor);

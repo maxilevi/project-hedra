@@ -18,6 +18,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.ModelHandlers;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -538,9 +539,9 @@ namespace Hedra.Engine.Generation
             mob.Model.TargetRotation = new Vector3(0, new Random(MobSeed).NextFloat() * 360f, 0);
             mob.Physics.TargetPosition = placeablePosition;
             mob.Model.Position = placeablePosition;
-
+            MobFactory.Polish(mob);
+            
             this.AddEntity(mob);
-
             return mob;
         }
 

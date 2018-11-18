@@ -13,6 +13,7 @@ namespace Hedra.Engine.ItemSystem
         MovementSpeed,
         Health,
         EffectType,
+        Defense,
         Seed,
         Price
     }
