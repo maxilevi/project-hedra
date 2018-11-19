@@ -31,7 +31,7 @@ namespace Hedra.Engine.EntitySystem
         /// <summary>
         /// If collides with structures
         /// </summary>
-        bool CanCollide { get; set; }
+        bool CollidesWithStructures { get; set; }
         /// <summary>
         /// If it pushes entities when moving
         /// </summary>
@@ -39,6 +39,6 @@ namespace Hedra.Engine.EntitySystem
         /// <summary>
         /// If collides with other entities
         /// </summary>
-        bool HasCollision { get; set; }
+        bool CollidesWithEntities { get; set; }
     }
 }

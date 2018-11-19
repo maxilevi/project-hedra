@@ -26,17 +26,16 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             if (MeshData != null)
             {
                 _weaponHeight = MeshData.SupportPoint(Vector3.UnitY).Y - MeshData.SupportPoint(-Vector3.UnitY).Y;
+                MainWeaponSize = new Vector3(
+                    MeshData.SupportPoint(Vector3.UnitX).X - MeshData.SupportPoint(-Vector3.UnitX).X,
+                    MeshData.SupportPoint(Vector3.UnitY).Y - MeshData.SupportPoint(-Vector3.UnitY).Y,
+                    MeshData.SupportPoint(Vector3.UnitZ).Z - MeshData.SupportPoint(-Vector3.UnitZ).Z
+               );
             }
         }
 
         public override void Update(IHumanoid Human)
         {
-            if (!this.WeaponRegistered(this.MainMesh))
-            {
-                this.RegisterWeapon(this.MainMesh, this.MeshData);
-                var lastCollider = _colliders.Last().Value;
-                this.MainWeaponSize = lastCollider.Collider.Size;
-            }
             if (Trail == null)
             {
                 this.Trail = new TrailRenderer(
@@ -99,37 +98,8 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public override Vector3 WeaponTip => Vector3.Zero;//MainMesh.TransformPoint(Vector3.UnitY * _swordHeight);
 
-        private bool WeaponRegistered(ObjectMesh Mesh) 
-        {
-            return _colliders.ContainsKey(Mesh);
-        }
-
-        protected void RegisterWeapon(ObjectMesh Mesh, VertexData MeshData)
-        {
-            _colliders.Add(Mesh, new ObjectMeshCollider(Mesh, MeshData));
-            WeaponCount++;
-        }
-
-        public CollisionShape[] Shapes
-        {
-            get
-            {
-                if(_shapesArray?.Length != WeaponCount){
-                    _shapesArray = new CollisionShape[WeaponCount]; 
-                }
-                var i = 0;
-                foreach(var collider in _colliders.Values)
-                {
-                    _shapesArray[i] = collider.Shape;
-                    i++;
-                }
-                return _shapesArray;
-            }
-        }
-
         public override void Dispose()
         {
-            _colliders.Clear();
             Trail?.Dispose();
             base.Dispose();
         }

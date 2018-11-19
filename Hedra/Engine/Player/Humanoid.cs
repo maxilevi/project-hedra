@@ -142,7 +142,7 @@ namespace Hedra.Engine.Player
             Equipment = new EquipmentHandler(this);
             Class = new WarriorDesign();
             RandomFactor = NewRandomFactor();
-            Physics.CanCollide = true;
+            Physics.CollidesWithStructures = true;
             DodgeCost = DefaultDodgeCost;
             AttackPower = 1f;
             Speed = this.BaseSpeed;
@@ -435,6 +435,7 @@ namespace Hedra.Engine.Player
         public override void Dispose()
         {
             base.Dispose();
+            Equipment.Dispose();
             this.HandLamp.Dispose();
         }
     }

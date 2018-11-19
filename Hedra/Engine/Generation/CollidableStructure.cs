@@ -38,6 +38,7 @@ namespace Hedra.Engine.Generation
         public StructureDesign Design { get; }
         public AttributeArray Parameters { get; }
         public bool Built { get; set; }
+        public bool Disposed { get; private set; }
 
         public CollidableStructure(StructureDesign Design, Vector3 Position, Plateau Mountain, BaseStructure WorldObject)
         {
@@ -165,6 +166,7 @@ namespace Hedra.Engine.Generation
                     model.Dispose();
                 }
             }
+            Disposed = true;
             World.WorldBuilding.DisposeStructure(this);
             WorldObject?.Dispose();
         }

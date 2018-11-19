@@ -5,13 +5,8 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
-    public class CachedVertexData : IVertexData, IDisposable
+    public class CachedVertexData : CompressedVertexData, IDisposable
     {
-        public List<Vector3> Vertices { get; set; }
-        public List<Vector4> Colors { get; set; }
-        public List<Vector3> Normals { get; set; }
-        public List<uint> Indices { get; set; }
-        public List<float> Extradata { get; set; }
         private Vector3 _bounds;
         private Vector3 _position;
         private bool _positionInitialized;
@@ -24,11 +19,12 @@ namespace Hedra.Engine.Rendering
             {
                 if (_positionInitialized) return _position;
                 var sum = Vector3.Zero;
-                for (var i = 0; i < Vertices.Count; i++)
+                var verts = Vertices;
+                for (var i = 0; i < verts.Count; i++)
                 {
-                    sum += Vertices[i];
+                    sum += verts[i];
                 }
-                _position = sum / Vertices.Count;
+                _position = sum / verts.Count;
                 _positionInitialized = true;
                 return _position;
             }
@@ -51,12 +47,13 @@ namespace Hedra.Engine.Rendering
         {
             var highest = float.MinValue;
             var support = Vector3.Zero;
-            for (var i = Vertices.Count-1; i > -1; i--)
+            var verts = Vertices;
+            for (var i = verts.Count-1; i > -1; i--)
             {
-                var dot = Vector3.Dot(Direction, Vertices[i]);
+                var dot = Vector3.Dot(Direction, verts[i]);
                 if (dot < highest) continue;
                 highest = dot;
-                support = Vertices[i];
+                support = verts[i];
             }
 
             return support;

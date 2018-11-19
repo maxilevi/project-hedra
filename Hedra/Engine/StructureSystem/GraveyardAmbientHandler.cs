@@ -134,6 +134,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public void Dispose()
         {
+            _particles.Dispose();
             GameManager.AfterSave -= AfterSave;
             GameManager.BeforeSave -= BeforeSave;
         }

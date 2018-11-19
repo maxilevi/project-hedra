@@ -6,6 +6,7 @@
  */
 using System;
 using System.IO;
+using System.Reflection;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 
@@ -15,6 +16,7 @@ namespace Hedra.Engine.Sound
     /// <summary>
     /// Description of SoundManager.
     /// </summary>
+    [Obfuscation(Exclude = false, Feature = "-rename")]
     public static class SoundManager
     {
         public static ISoundProvider Provider { get; set; } = new SoundProvider();

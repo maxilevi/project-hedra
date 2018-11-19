@@ -28,9 +28,9 @@ namespace Hedra.Engine.PhysicsSystem
         public float Height { get; private set; }
         private CollisionShape _cache;
 
-        public CollisionShape(Vector3[] Vertices, uint[] Indices)
+        private CollisionShape(Vector3[] Vertices, uint[] Indices)
         {
-            this.Vertices = Vertices ?? new Vector3[0];
+            this.Vertices = Optimize(Vertices ?? new Vector3[0]);
 #if !DEBUG
             Indices = null;
 #endif
@@ -101,6 +101,20 @@ namespace Hedra.Engine.PhysicsSystem
                     dist = length;
             }
             this.BroadphaseRadius = dist;
+        }
+
+        private static Vector3[] Optimize(Vector3[] Original)
+        {
+            /* If it's all empty then it probably is a container. */
+            if (Original.All(V => V.Equals(Vector3.Zero))) return Original;
+
+            var set = new HashSet<Vector3>();
+            for (var i = 0; i < Original.Length; i++)
+            {
+                if (!set.Contains(Original[i]))
+                    set.Add(Original[i]);
+            }
+            return set.ToArray();
         }
 
         public object Clone()

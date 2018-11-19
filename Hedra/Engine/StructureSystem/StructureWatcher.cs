@@ -80,12 +80,14 @@ namespace Hedra.Engine.StructureSystem
             {
                 foreach(var pair in _chunksAdded)
                 {
-                    if (pair.Value != null)
-                        pair.Value.RemoveStaticElement(pair.Key.VertexData);
+                    pair.Value?.RemoveStaticElement(pair.Key.VertexData);
                 }
                 _chunksAdded.Clear();
             }
             Structure.Dispose();
+            Structure.ModelAdded -= this.ModelAdded;
+            World.OnChunkReady -= this.OnChunkReady;
+            World.OnChunkDisposed -= this.OnChunkDisposed;
         }
     }
 }

@@ -95,7 +95,7 @@ namespace Hedra.Engine.EntitySystem
             _rider.Model.MountModel.AlignWithTerrain = false;
             _rider.Model.MountModel.HasRider = true;
             Parent.Physics.UsePhysics = false;
-            Parent.Physics.HasCollision = false;
+            Parent.Physics.CollidesWithEntities = false;
             Parent.SearchComponent<DamageComponent>().Immune = true;
 
             _ai = Parent.SearchComponent<BasicAIComponent>();
@@ -116,7 +116,7 @@ namespace Hedra.Engine.EntitySystem
 
 
             Parent.Physics.UsePhysics = true;
-            Parent.Physics.HasCollision = true;
+            Parent.Physics.CollidesWithEntities = true;
             Parent.SearchComponent<DamageComponent>().Immune = false;
         }
 

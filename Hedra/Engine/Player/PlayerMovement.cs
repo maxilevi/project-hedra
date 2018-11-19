@@ -102,6 +102,11 @@ namespace Hedra.Engine.Player
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
                 if (GameManager.Keyboard[Key.W] || GameSettings.ContinousMove)
                 {
+                    if (GameSettings.ContinousMove)
+                    {
+                        Human.Physics.CollidesWithStructures = false;
+                        Human.Physics.CollidesWithEntities = false;
+                    }
                     _targetYaw = _player.View.TargetYaw;
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Forward) * keysPresses);                   
                     this.Orientate();

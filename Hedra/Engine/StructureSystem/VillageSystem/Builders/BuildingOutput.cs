@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
@@ -24,7 +25,19 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Models[i].Color(Find, Replacement);
             }
         }
-        
+
+        public CompressedBuildingOutput AsCompressed()
+        {
+            return new CompressedBuildingOutput
+            {
+                Models = Models.Select(CompressedVertexData.FromVertexData).ToList(),
+                Shapes = Shapes,
+                Structures = Structures
+            };
+        }
+
+        public bool IsEmpty => Models.Count == 0 && Shapes.Count == 0 && Structures.Count == 0;
+
         public static BuildingOutput Empty => new BuildingOutput
         {
             Models = new List<VertexData>(),

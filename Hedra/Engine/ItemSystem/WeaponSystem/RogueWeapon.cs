@@ -26,7 +26,6 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             var baseMesh = MeshData.Clone();
             baseMesh.Scale(Vector3.One * 1.75f);
             this.SecondBlade = ObjectMesh.FromVertexData(baseMesh);
-            this.RegisterWeapon(SecondBlade, baseMesh);
         }
 
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)

@@ -89,7 +89,7 @@ namespace Hedra.Engine.Player
             this.Boat = new Boat(this);
             this.AmbientEffects = new AmbientEffectHandler(this);
             this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
-            this.Physics.CanCollide = true;
+            this.Physics.CollidesWithStructures = true;
             this.AttackPower = 1.0f;
 
             this.SetupHandlers();

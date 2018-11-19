@@ -102,5 +102,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             base.Attack2(Human, Options);
             _renderer.Emit = true;
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _renderer.Dispose();
+        }
     }
 }

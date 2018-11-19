@@ -295,7 +295,6 @@
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
     <Compile Include="Engine\Management\IAssetProvider.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
-    <Compile Include="Engine\ModdingSystem\Mod.cs" />
     <Compile Include="Engine\ModdingSystem\ModificationsLoader.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\ChargeEffect.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\Slash.cs" />
@@ -381,6 +380,7 @@
     <Compile Include="Engine\Rendering\Animation\ProgressEvent.cs" />
     <Compile Include="Engine\Rendering\BitmapObject.cs" />
     <Compile Include="Engine\Rendering\CachedVertexData.cs" />
+    <Compile Include="Engine\Rendering\CompressedVertexData.cs" />
     <Compile Include="Engine\Rendering\ErrorSeverity.cs" />
     <Compile Include="Engine\Rendering\Geometry\ChunkMeshBorderDetector.cs" />
     <Compile Include="Engine\Rendering\Geometry\Geometry.cs" />
@@ -418,6 +418,7 @@
     <Compile Include="Engine\StructureSystem\Obelisk.cs" />
     <Compile Include="Engine\StructureSystem\StructureWatcher.cs" />
     <Compile Include="Engine\StructureSystem\Village.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\CompressedBuildingOutput.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\NeighbourhoodParameters.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\MarketParameters.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\NeighbourhoodWellBuilder.cs" />
@@ -830,6 +831,7 @@
     <Compile Include="Engine\Rendering\MarchingTetrahedra.cs" />
     <Compile Include="Engine\Rendering\MeshData.cs" />
     <Compile Include="Engine\Rendering\NvidiaGPUFix32.cs" />
+    <Compile Include="API\Mod.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Engine\Rendering\NvidiaGPUFix64.cs" />
     <Compile Include="Engine\Rendering\Particles\TrailRenderer.cs" />
@@ -5076,7 +5078,8 @@
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Helmets\" />
     <Folder Include="Assets\Items\Pants\" />
-    <Folder Include="Modding" />
+    <Folder Include="API\AnimationEvents" />
+    <Folder Include="API\Weapons" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Helmets\" />

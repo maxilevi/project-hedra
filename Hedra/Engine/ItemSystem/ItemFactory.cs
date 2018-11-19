@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Hedra.Engine.Loader;
+using Hedra.Engine.ModdingSystem;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.ItemSystem
@@ -30,7 +31,6 @@ namespace Hedra.Engine.ItemSystem
 
                 foreach (var template in itemTemplates)
                 {
-                    ItemModelLoader.Load(template.Model);
                     ItemTemplates.Add(template.Name.ToLowerInvariant(), template);
                 }
             }

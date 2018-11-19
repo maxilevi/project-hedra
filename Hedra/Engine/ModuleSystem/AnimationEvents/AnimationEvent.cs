@@ -3,9 +3,9 @@ using System.Reflection;
 using Hedra.Engine.EntitySystem;
 using OpenTK;
 
-[assembly: Obfuscation(Exclude = true)]
 namespace Hedra.Engine.ModuleSystem.AnimationEvents
 {
+    [Obfuscation(Exclude = false, Feature = "-rename")]
     public abstract class AnimationEvent : IDisposable
     {
         public Entity Parent { get; set; }

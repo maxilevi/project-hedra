@@ -47,7 +47,7 @@ namespace Hedra.Engine.EntitySystem
         /// <summary>
         /// If collides with structures
         /// </summary>
-        public bool CanCollide { get; set; } = false;
+        public bool CollidesWithStructures { get; set; } = false;
         /// <summary>
         /// If it pushes entities when moving
         /// </summary>
@@ -55,7 +55,7 @@ namespace Hedra.Engine.EntitySystem
         /// <summary>
         /// If collides with other entities
         /// </summary>
-        public bool HasCollision { get; set; } = true;
+        public bool CollidesWithEntities { get; set; } = true;
         
         private Chunk _underChunk, _underChunkR, _underChunkL, _underChunkF, _underChunkB;
         private readonly List<ICollidable> _collisions = new List<ICollidable>();
@@ -84,7 +84,7 @@ namespace Hedra.Engine.EntitySystem
             
             _deltaTime = this.Timestep;
 
-            if (CanCollide)
+            if (CollidesWithStructures)
             {
                 _underChunk = World.GetChunkAt(Parent.Position);
                 _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.Width, 0, 0));
@@ -265,7 +265,7 @@ namespace Hedra.Engine.EntitySystem
             else if(dot > .45 || !Parent.IsGrounded) IsDrifting = false;
 
 
-            if (this.HasCollision && !Command.IsRecursive)
+            if (this.CollidesWithEntities && !Command.IsRecursive)
             {
                 var entities = World.Entities;
                 for (int i = entities.Count - 1; i > -1; i--)
@@ -273,7 +273,7 @@ namespace Hedra.Engine.EntitySystem
                     if (entities[i] == Parent)
                         continue;
 
-                    if (entities[i].Physics.HasCollision)
+                    if (entities[i].Physics.CollidesWithEntities)
                     {
                         if (Physics.Collides(entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) 
                             && Physics.Collides(entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))

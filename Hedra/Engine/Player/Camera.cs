@@ -75,7 +75,7 @@ namespace Hedra.Engine.Player
             this.ClampYaw();
 
             var cameraPosition = CameraPosition;
-            if ( !GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead)
+            if ( !GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead && !GameSettings.ContinousMove)
             {
                 XDelta = Cursor.Position.X - GameSettings.Width / 2;
                 YDelta = Cursor.Position.Y - GameSettings.Height / 2;

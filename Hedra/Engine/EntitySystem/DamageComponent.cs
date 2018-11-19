@@ -133,7 +133,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 Parent.IsDead = true;
                 DropLoot();
-                Parent.Physics.HasCollision = false;
+                Parent.Physics.CollidesWithEntities = false;
                 Exp = XpToGive;
                 if(Damager is LocalPlayer)
                 {

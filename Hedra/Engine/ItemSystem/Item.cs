@@ -16,7 +16,7 @@ namespace Hedra.Engine.ItemSystem
         public string Description { get; set; }
         public ItemTier Tier { get; set; }
         public string EquipmentType { get; set; }
-        public ItemModelTemplate ModelTemplate { get; set; }
+        public ItemModelTemplate ModelTemplate { get; private set; }
         private readonly AttributeArray _attributes;
         private Weapon _weaponCache;
         private ArmorPiece _armorCache;
@@ -39,7 +39,6 @@ namespace Hedra.Engine.ItemSystem
                 Description = Template.Description,
                 EquipmentType = Template.EquipmentType,
                 ModelTemplate = Template.Model,
-                Model = ItemModelLoader.Load(Template.Model)
             };
             item.SetAttributes(Template.Attributes);
             return item;
@@ -160,7 +159,12 @@ namespace Hedra.Engine.ItemSystem
 
         public VertexData Model
         {
-            get => _model;
+            get
+            {
+                if (_model == null)
+                    Model = ItemModelLoader.Load(ModelTemplate);
+                return _model;
+            }
             set
             {
                 _model = value;

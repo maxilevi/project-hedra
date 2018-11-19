@@ -41,8 +41,8 @@ namespace Hedra.Engine.ModuleSystem
                 MobType = MobType.Human
             };
             human.Model = new HumanoidModel(human, template.Model);
-            human.Physics.CanCollide = true;
-            human.Physics.HasCollision = true;
+            human.Physics.CollidesWithStructures = true;
+            human.Physics.CollidesWithEntities = true;
             human.Health = human.MaxHealth;
 
             var components = HumanoidLoader.ComponentsTemplater[HumanoidType].Components;

@@ -48,7 +48,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             boss.AddComponent(new SpawnComponent(boss, Position, () => dmgComponent.Immune = false));
             boss.Name = healthBarComponent.Name;
             boss.IsBoss = true;
-            boss.Physics.CanCollide = true;
+            boss.Physics.CollidesWithStructures = true;
             boss.Removable = false;
             
             boss.AddComponent(dmgComponent);

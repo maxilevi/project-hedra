@@ -199,6 +199,7 @@ namespace Hedra.Engine.Rendering
             if(_buffersCreated) DisposeBuffers();
             else Executer.ExecuteOnMainThread(DisposeBuffers);
             DrawManager.TrailRenderer.Remove(this);
+            Tip = null;
         }
     }
 

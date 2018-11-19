@@ -1,6 +1,7 @@
 using System.IO;
 using System.Net;
 using Hedra.Engine.Loader;
+using Hedra.Engine.ModdingSystem;
 using NUnit.Framework;
 
 namespace HedraTests.Loaders

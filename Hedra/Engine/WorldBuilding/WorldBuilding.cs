@@ -40,7 +40,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             var carriage = World.SpawnMob("QuestCarriage", Position, 1);
             carriage.Health = carriage.MaxHealth;
-            carriage.Physics.CanCollide = true;
+            carriage.Physics.CollidesWithStructures = true;
             carriage.Physics.PushAround = false;
             carriage.RemoveComponent(carriage.SearchComponent<BasicAIComponent>());
             carriage.SearchComponent<DamageComponent>().Immune = true;

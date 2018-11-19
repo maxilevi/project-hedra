@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Loader;
+using Hedra.Engine.ModdingSystem;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.CraftingSystem

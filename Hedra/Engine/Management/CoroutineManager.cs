@@ -18,25 +18,25 @@ namespace Hedra.Engine.Management
 
         public static void StartCoroutine(Func<IEnumerator> Func)
         {
-            lock(Coroutines)
+            lock(Lock)
                 Coroutines.Add(Func());
         }
          
          public static void StartCoroutine(Func<object, IEnumerator> Func, object Param)
          {
-            lock(Coroutines)
+            lock(Lock)
                 Coroutines.Add(Func(Param));
          }
          
          public static void StartCoroutine(Func<object[], IEnumerator> Func, params object[] Param)
          {
-            lock(Coroutines)
+            lock(Lock)
                 Coroutines.Add(Func(Param));
          }
          
         public static void Update()
         {
-             lock(Coroutines)
+             lock(Lock)
              {
                 for(var i = Coroutines.Count-1; i > -1; i--)
                 {
@@ -44,6 +44,21 @@ namespace Hedra.Engine.Management
                     if(!passed)
                         Coroutines.RemoveAt(i);
                 }
+            }
+        }
+
+        public static void Clear()
+        {
+            lock(Lock)
+                Coroutines.Clear();
+        }
+
+        public static int Count
+        {
+            get
+            {
+                lock (Lock)
+                    return Coroutines.Count;
             }
         }
     }

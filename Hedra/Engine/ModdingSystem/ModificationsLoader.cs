@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Hedra.Engine.Game;
 
-namespace Hedra.Engine.Loader
+namespace Hedra.Engine.ModdingSystem
 {
     public static class ModificationsLoader
     {

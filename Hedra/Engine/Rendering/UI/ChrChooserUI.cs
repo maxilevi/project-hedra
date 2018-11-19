@@ -139,7 +139,7 @@ namespace Hedra.Engine.Rendering.UI
                 human.Physics.UseTimescale = false;
                 human.Removable = false;
                 human.Model.Enabled = false;
-                human.Physics.CanCollide = false;
+                human.Physics.CollidesWithStructures = false;
                 _humans.Add(human);
             }
             

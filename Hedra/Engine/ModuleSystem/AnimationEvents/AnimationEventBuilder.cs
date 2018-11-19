@@ -10,15 +10,9 @@ namespace Hedra.Engine.ModuleSystem.AnimationEvents
     {
         private static readonly Dictionary<string, Type> Events;
 
-        static AnimationEventBuilder()
+        public static void Register(string Name, Type Event)
         {
-            Events = new Dictionary<string, Type>();
-            Type[] typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(AnimationEventBuilder).Namespace).ToArray();
-            foreach (Type type in typeList)
-            {
-                if (!type.IsSubclassOf(typeof(AnimationEvent))) continue;
-                Events.Add(type.Name.ToLowerInvariant(), type);
-            }
+            Events.Add(Name, Event);
         }
 
         public static AnimationEvent Build(Entity Parent, string Key)

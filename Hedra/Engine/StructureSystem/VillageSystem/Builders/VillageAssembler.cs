@@ -106,7 +106,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
                     var paint = builders[i].GetType().GetMethod(nameof(Builder<IBuildingParameters>.Paint));
                     var finalOutput = (BuildingOutput) paint.Invoke(builders[i], new object[] { parameters[i][j], output });
-                    CoroutineManager.StartCoroutine(PlaceCoroutine, parameters[i][j].Position, finalOutput, Structure);
+                    CoroutineManager.StartCoroutine(PlaceCoroutine, parameters[i][j].Position, finalOutput.AsCompressed(), Structure);
 
                     var polish = builders[i].GetType().GetMethod(nameof(Builder<IBuildingParameters>.Polish));
                     polish.Invoke(builders[i], new object[] { parameters[i][j] });
@@ -117,22 +117,23 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private IEnumerator PlaceCoroutine(object[] Arguments)
         {
             var position = (Vector3) Arguments[0];
-            var buildingOutput = (BuildingOutput) Arguments[1];
+            var buildingOutput = (CompressedBuildingOutput) Arguments[1];
             var structure = (CollidableStructure) Arguments[2];
-            var models = buildingOutput.Models;
+            var compressedModels = buildingOutput.Models;
             var shapes = buildingOutput.Shapes;
             
             var underChunk = World.GetChunkAt(position);
             var currentSeed = World.Seed;
             while(underChunk == null || !underChunk.BuildedWithStructures)
             {
-                if(World.Seed != currentSeed) yield break;
+                if(World.Seed != currentSeed || structure.Disposed || buildingOutput.IsEmpty) yield break;
                 underChunk = World.GetChunkAt(position);
                 yield return null;
             }
             var height = Physics.HeightAtPosition(position);
             var transMatrix = Matrix4.CreateTranslation(Vector3.UnitY * height);
-            models.ToList().ForEach(M => M.Transform(transMatrix));
+            var models = compressedModels.Select(M => M.ToVertexData()).ToList();
+            models.ForEach(M => M.Transform(transMatrix));
             shapes.ForEach(S => S.Transform(transMatrix));
             structure.AddStaticElement(models.ToArray());
             structure.AddCollisionShape(shapes.ToArray());

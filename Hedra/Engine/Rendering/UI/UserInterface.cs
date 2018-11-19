@@ -135,7 +135,9 @@ namespace Hedra.Engine.Rendering.UI
             if(GameManager.InStartMenu){
                 Menu.Disable();
                 ChrChooser.Enable();
-            }else{
+            }
+            else
+            {
                 GameManager.NewRun(_player);
             }
         }
@@ -152,7 +154,11 @@ namespace Hedra.Engine.Rendering.UI
         
         public void ShowMenu()
         {
-            if(GameManager.IsLoading || GameManager.InMenu) return;
+            if (GameSettings.ContinousMove)
+            {
+                _player.View.LockMouse = false;
+            }
+            if(GameManager.IsLoading || GameManager.InMenu || GameSettings.ContinousMove) return;
 
             Menu.Enable();
             OptionsMenu.Disable();

@@ -141,5 +141,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _targetActivechunks = 0;
             _activeChunks = 0;
         }
+
+        public int WatcherCount => _chunkWatchers.Count;
     }
 }

@@ -14,6 +14,7 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Loader;
+using Hedra.Engine.ModdingSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.Skills;

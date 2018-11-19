@@ -187,5 +187,12 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             }
             this.ShootArrow(Owner, ArrowOrigin, direction, options);
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _quiver.Dispose();
+            _arrow.Dispose();
+        }
     }
 }

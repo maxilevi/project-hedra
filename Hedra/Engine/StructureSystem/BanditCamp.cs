@@ -73,8 +73,8 @@ namespace Hedra.Engine.WorldBuilding
             _rescuee = World.WorldBuilding.SpawnHumanoid(randomTypes[Rng.Next(0, randomTypes.Length)],
                 this.Position + Vector3.UnitY * 7f + Vector3.UnitZ * 3.0f);
             _rescuee.Physics.UsePhysics = false;
-            _rescuee.Physics.HasCollision = false;
-            _rescuee.Physics.CanCollide = false;
+            _rescuee.Physics.CollidesWithEntities = false;
+            _rescuee.Physics.CollidesWithStructures = false;
             _rescuee.MainWeapon = null;
 
             _rescuee.Name = Rng.Next(0, 10) == 1 ? "Deckard Cain" : NameGenerator.PickMaleName(Rng);
@@ -138,8 +138,8 @@ namespace Hedra.Engine.WorldBuilding
             });
             _rescuee.Model.TransformationMatrix = Matrix4.Identity;
             _rescuee.Physics.UsePhysics = true;
-            _rescuee.Physics.HasCollision = true;
-            _rescuee.Physics.CanCollide = true;
+            _rescuee.Physics.CollidesWithEntities = true;
+            _rescuee.Physics.CollidesWithStructures = true;
             _rescuee.BlockPosition = new Vector3(this.Position.X + 8f, Physics.HeightAtPosition(this.Position) / Chunk.BlockSize, this.Position.Z);
             _rescuee.Rotation = Vector3.Zero;
         }

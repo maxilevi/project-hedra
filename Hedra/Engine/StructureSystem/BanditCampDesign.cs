@@ -97,8 +97,10 @@ namespace Hedra.Engine.StructureSystem
             var rng = (Random)Params[1];
             var structure = (CollidableStructure) Params[2];
             Chunk underChunk = null;
+            var currentSeed = World.Seed;
             while (underChunk?.Landscape == null || !underChunk.Landscape.StructuresPlaced)
             {
+                if(World.Seed != currentSeed || structure.Disposed) yield break;
                 underChunk = World.GetChunkAt(parameters.WorldPosition);
                 yield return null;
             }
