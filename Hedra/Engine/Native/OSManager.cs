@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Windows.Forms;
 using Hedra.Engine.Rendering;
 using OpenTK.Graphics.OpenGL4;
 
@@ -36,7 +37,6 @@ namespace Hedra.Engine.Native
 
             if (RunningPlatform == Platform.Windows)
             {
-                /*
                 if (IntPtr.Size == 4 && NvidiaGPUFix32.SOP_SetProfile("Hedra", Path.GetFileName(ExecName)) == NvidiaGPUFix32.RESULT_CHANGE)
                 {
                     MessageBox.Show(
@@ -50,7 +50,7 @@ namespace Hedra.Engine.Native
                         "Your game is now configured to use your high Performance NVIDIA Graphics card. This requires a restart so please start the game again.");
                     Program.GameWindow.Close();
                     return;
-                }*/
+                }
             }
 
             RamCount = 8;

@@ -69,7 +69,7 @@ namespace Hedra.Engine.Rendering
 
             Shader.Bind();
             Shader["Time"] = Time.AccumulatedFrameTime;
-            Shader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
+            Shader["Fancy"] = GameSettings.Quality ? 1.0f : 0.0f;
             Shader["MVP"] = ShadowMvp;
             Renderer.CullFace(CullFaceMode.Front);
             Renderer.Enable(EnableCap.CullFace);

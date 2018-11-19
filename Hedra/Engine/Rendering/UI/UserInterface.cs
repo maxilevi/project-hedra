@@ -145,7 +145,9 @@ namespace Hedra.Engine.Rendering.UI
             if (_player == null) return;
 
             this.GamePanel.Update();
-            _loadButton.Text.Text = GameManager.InStartMenu ? "Load World" : "Start Menu";
+            _loadButton.Text.Text = GameManager.InStartMenu 
+                ? Translations.Get("load_world") 
+                : Translations.Get("start_menu");
         }
         
         public void ShowMenu()

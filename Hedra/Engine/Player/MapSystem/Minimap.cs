@@ -104,14 +104,14 @@ namespace Hedra.Engine.Player.MapSystem
                 Renderer.LoadProjection(projMatrix);
 
                 var oldShadows = GameSettings.GlobalShadows;
-                var oldFancy = GameSettings.Fancy;
+                var oldFancy = GameSettings.Quality;
                 GameSettings.GlobalShadows = false;
-                GameSettings.Fancy = false;
+                GameSettings.Quality = false;
                 DrawManager.FrustumObject.CalculateFrustum(projMatrix, DrawManager.FrustumObject.ModelViewMatrix);
                 World.CullTest(DrawManager.FrustumObject);
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Static);
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Water);
-                GameSettings.Fancy = oldFancy;
+                GameSettings.Quality = oldFancy;
                 GameSettings.GlobalShadows = oldShadows;
 
                 _player.View.Pitch = oldPitch;

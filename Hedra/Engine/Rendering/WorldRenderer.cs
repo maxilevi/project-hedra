@@ -40,8 +40,8 @@ namespace Hedra.Engine.Rendering
         {
             WaterShader = Shader.Build("Shaders/Water.vert", "Shaders/Water.frag");
             StaticShader = Shader.Build("Shaders/Static.vert", "Shaders/Static.frag");
-            StaticBuffer = new WorldBuffer(PoolSize.Big);
-            InstanceBuffer = new WorldBuffer(PoolSize.Big);
+            StaticBuffer = new WorldBuffer(PoolSize.Normal);
+            InstanceBuffer = new WorldBuffer(PoolSize.Normal);
             WaterBuffer = new WorldBuffer(PoolSize.Tiny);
 
             var noiseValues = new float[16, 16, 16];
@@ -227,7 +227,7 @@ namespace Hedra.Engine.Rendering
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
                
                Renderer.ActiveTexture(TextureUnit.Texture0);
-            Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Fancy ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : 0);
+            Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : 0);
 
             WaterShader["TransformationMatrix"] = TransformationMatrix;
             WaterShader["BakedOffset"] = BakedOffset;

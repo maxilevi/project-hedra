@@ -47,7 +47,6 @@ namespace Hedra.Engine.Game
         public static bool BlurFilter = false;
         public static bool DarkEffect = false;
         public static bool DistortEffect = false;
-        public static bool Fancy = true;
         public const float Fov = 85.0f;
         public static bool GlobalShadows = true;
         public static bool Hardcore = false;
@@ -69,6 +68,9 @@ namespace Hedra.Engine.Game
         public static string SettingsPath => $"{GameLoader.AppData}settings.cfg";
         
         public static bool Shadows => ShadowQuality != 0 && GlobalShadows;
+        
+        
+        [Setting] public static bool Quality { get; set; } = true;
         
         [Setting] public static bool SmoothLod { get; set; } = true;
         

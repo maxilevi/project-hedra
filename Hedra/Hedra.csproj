@@ -288,7 +288,6 @@
     <Compile Include="Engine\Loader\HedraWindow.cs" />
     <Compile Include="Engine\Loader\IHedra.cs" />
     <Compile Include="Engine\Loader\IHedraWindow.cs" />
-    <Compile Include="Engine\Loader\ModificationsLoader.cs" />
     <Compile Include="Engine\Loader\SplashScreen.cs" />
     <Compile Include="Engine\Localization\GameLanguage.cs" />
     <Compile Include="Engine\Localization\Translation.cs" />
@@ -296,6 +295,8 @@
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
     <Compile Include="Engine\Management\IAssetProvider.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
+    <Compile Include="Engine\ModdingSystem\Mod.cs" />
+    <Compile Include="Engine\ModdingSystem\ModificationsLoader.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\ChargeEffect.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\Slash.cs" />
     <Compile Include="Engine\ModuleSystem\ModelHandlers\EntHandler.cs" />
@@ -1180,8 +1181,8 @@
       <Link>Assets\Items\Staves\UniqueVoidStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Blend\Staves\UniqueWormStaff.ply">
-      <Link>Assets\Items\Staves\UniqueWormStaff.ply</Link>
+    <None Include="..\project-hedra-assets\Models\Blend\Staves\UniqueWorldEaterStaff.ply">
+      <Link>Assets\Items\Staves\UniqueWorldEaterStaff.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Coin.ply">
@@ -1394,7 +1395,7 @@
     <None Include="Modules\Items\Staves\UniqueVoidStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\UniqueWormStaff.json">
+    <None Include="Modules\Items\Staves\UniqueWorldEaterStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Beetle.json">
@@ -5075,6 +5076,7 @@
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Helmets\" />
     <Folder Include="Assets\Items\Pants\" />
+    <Folder Include="Modding" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Helmets\" />
@@ -5229,6 +5231,7 @@
       <Link>Sounds\Soundtrack\GraveyardChampion.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Translations\Español.po" />
     <Content Include="x64\openal32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
