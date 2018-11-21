@@ -11,5 +11,7 @@ namespace Hedra.Engine.CacheSystem
             this.AddModel(AssetManager.PLYLoader("Assets/Env/Bush2.ply", Vector3.One));
             this.AddModel(AssetManager.PLYLoader("Assets/Env/Bush3.ply", Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.Bushes;
     }
 }

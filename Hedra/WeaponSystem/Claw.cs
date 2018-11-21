@@ -6,13 +6,14 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
+using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Animation;
 using OpenTK;
 
-namespace Hedra.Engine.ItemSystem.WeaponSystem
+namespace Hedra.WeaponSystem
 {
     /// <summary>
     /// Description of TwoHandedSword.

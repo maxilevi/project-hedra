@@ -1,12 +1,12 @@
 using System;
 using Hedra.Engine;
 using Hedra.Engine.Game;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.WeaponSystem;
 using Moq;
 using NUnit.Framework;
 using OpenTK;

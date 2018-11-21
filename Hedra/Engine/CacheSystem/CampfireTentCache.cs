@@ -13,5 +13,7 @@ namespace Hedra.Engine.CacheSystem
             tentShapes.RemoveAt(0);
             this.AddShapes(tentShapes);
         }
+        
+        public override CacheItem Type => CacheItem.CampfireTent;
     }
 }

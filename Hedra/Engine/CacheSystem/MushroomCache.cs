@@ -10,5 +10,7 @@ namespace Hedra.Engine.CacheSystem
             this.AddModel(AssetManager.PLYLoader("Assets/Env/Mushroom0.ply", Vector3.One));
             this.AddModel(AssetManager.PLYLoader("Assets/Env/Mushroom1.ply", Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.Mushroom;
     }
 }

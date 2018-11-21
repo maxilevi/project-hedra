@@ -47,8 +47,8 @@ namespace Hedra.Engine.Rendering
         {
             return this.SupportPoint(Direction, -Vector4.One);
         }
-        
-        public Vector3 SupportPoint(Vector3 Direction, Vector4 Color)
+
+        private Vector3 SupportPoint(Vector3 Direction, Vector4 Color)
         {
             float highest = float.MinValue;
             Vector3 support = Vector3.Zero;

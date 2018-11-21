@@ -9,5 +9,7 @@ namespace Hedra.Engine.CacheSystem
         {
             this.AddModel(AssetManager.PLYLoader("Assets/UI/MerchantIcon.ply", Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.MerchantIcon;
     }
 }

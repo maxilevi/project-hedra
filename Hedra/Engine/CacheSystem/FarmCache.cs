@@ -11,5 +11,7 @@ namespace Hedra.Engine.CacheSystem
             this.AddModel(AssetManager.PLYLoader("Assets/Env/Village/Farm0.ply", Vector3.One));
             this.AddModel(AssetManager.PLYLoader("Assets/Env/Village/Farm1.ply", Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.Farm;
     }
 }

@@ -18,9 +18,14 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
     {
         public static IColladaProvider Provider { get; set; } = new ColladaProvider();
         
-        public static AnimatedModelData LoadColladaModel(string ColladaFile, int MaxWeights)
+        public static AnimatedModelData LoadColladaModel(string ColladaFile)
         {
-            return Provider.LoadColladaModel(ColladaFile, MaxWeights);
+            return Provider.LoadColladaModel(ColladaFile);
+        }
+        
+        public static ModelData LoadModel(string ColladaFile)
+        {
+            return Provider.LoadModel(ColladaFile);
         }
     
         public static AnimationData LoadColladaAnimation(string ColladaFile)

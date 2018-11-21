@@ -1,12 +1,11 @@
-﻿using Hedra.Engine.EntitySystem;
+﻿using Hedra.Engine;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Sound;
 using OpenTK;
 
-namespace Hedra.Engine.ItemSystem.WeaponSystem
+namespace Hedra.WeaponSystem
 {
     public sealed class Staff : RangedWeapon
     {

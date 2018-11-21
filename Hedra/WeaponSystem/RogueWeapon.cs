@@ -2,7 +2,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
-namespace Hedra.Engine.ItemSystem.WeaponSystem
+namespace Hedra.WeaponSystem
 {
     public abstract class RogueWeapon : MeleeWeapon
     {

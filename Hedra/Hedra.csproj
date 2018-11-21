@@ -247,10 +247,6 @@
     <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
     <Compile Include="Engine\Input\Cursor.cs" />
     <Compile Include="Engine\Input\KeyboardManager.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\HelmetPiece.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\PantsPiece.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\RogueWeapon.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\Staff.cs" />
     <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
@@ -283,7 +279,6 @@
     <Compile Include="Engine\Generation\IWorldProvider.cs" />
     <Compile Include="Engine\Generation\RenderingComparer.cs" />
     <Compile Include="Engine\Generation\WorldProvider.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\AttackOptions.cs" />
     <Compile Include="Engine\Loader\Hedra.cs" />
     <Compile Include="Engine\Loader\HedraWindow.cs" />
     <Compile Include="Engine\Loader\IHedra.cs" />
@@ -379,7 +374,9 @@
     <Compile Include="Engine\Rendering\Animation\ProgressEvent.cs" />
     <Compile Include="Engine\Rendering\BitmapObject.cs" />
     <Compile Include="Engine\Rendering\CachedVertexData.cs" />
+    <Compile Include="Engine\Rendering\CompressedValue.cs" />
     <Compile Include="Engine\Rendering\CompressedVertexData.cs" />
+    <Compile Include="Engine\Rendering\CompressedVertexDataExtensions.cs" />
     <Compile Include="Engine\Rendering\ErrorSeverity.cs" />
     <Compile Include="Engine\Rendering\Geometry\ChunkMeshBorderDetector.cs" />
     <Compile Include="Engine\Rendering\Geometry\Geometry.cs" />
@@ -435,7 +432,6 @@
     <Compile Include="Engine\IO\ConfigurationFile.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorPiece.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorFactory.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\BootsPiece.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\ChestPiece.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\DoubleArmorPiece.cs" />
     <Compile Include="Engine\ItemSystem\AttributeArray.cs" />
@@ -453,9 +449,6 @@
     <Compile Include="Engine\ItemSystem\ItemTemplater.cs" />
     <Compile Include="Engine\ItemSystem\ItemType.cs" />
     <Compile Include="Engine\ItemSystem\ItemUtils.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\MeleeWeapon.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\RangedWeapon.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\WeaponFactory.cs" />
     <Compile Include="Engine\ItemSystem\EquipmentType.cs" />
     <Compile Include="Engine\Management\DistributedExecuter.cs" />
     <Compile Include="Engine\Management\ISearchable.cs" />
@@ -532,7 +525,6 @@
     <Compile Include="Engine\PlantSystem\RockDesign.cs" />
     <Compile Include="Engine\PlantSystem\RockPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\WheatDesign.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\Hands.cs" />
     <Compile Include="Engine\EntitySystem\HealthBarComponent.cs" />
     <Compile Include="Engine\ItemSystem\WorldItem.cs" />
     <Compile Include="Engine\EntitySystem\PhysicsComponent.cs" />
@@ -627,9 +619,6 @@
     <Compile Include="Engine\PhysicsSystem\MoveCommand.cs" />
     <Compile Include="Engine\PhysicsSystem\Simplex.cs" />
     <Compile Include="Engine\PhysicsSystem\SimplexVertex.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\Axe.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\DoubleBlades.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\Bow.cs" />
     <Compile Include="Engine\Player\MapSystem\MapBuilder.cs" />
     <Compile Include="Engine\Player\MapSystem\MapItem.cs" />
     <Compile Include="Engine\Player\MapSystem\MapStateManager.cs" />
@@ -643,10 +632,8 @@
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeInterfaceItemInfo.cs" />
     <Compile Include="Engine\Player\Camera.cs" />
     <Compile Include="Engine\Player\Chat.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\Claw.cs" />
     <Compile Include="Engine\Player\DummyMessageDispatcher.cs" />
     <Compile Include="Engine\Player\GliderModel.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\Hammer.cs" />
     <Compile Include="Engine\Player\Humanoid.cs" />
     <Compile Include="Engine\EntitySystem\EntityComponentManager.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryArrayInterface.cs" />
@@ -664,8 +651,6 @@
     <Compile Include="Engine\Player\PlayerInventory.cs" />
     <Compile Include="Engine\Player\HandLamp.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryArray.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\Katar.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\Knife.cs" />
     <Compile Include="Engine\Player\LocalPlayer.cs" />
     <Compile Include="Engine\Player\MapSystem\Map.cs" />
     <Compile Include="Engine\Player\MapSystem\Minimap.cs" />
@@ -676,7 +661,6 @@
     <Compile Include="Engine\Player\ParticleProjectile.cs" />
     <Compile Include="Engine\Player\Projectile.cs" />
     <Compile Include="Engine\Player\QuestLog.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\Sword.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\Toolbar.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\ArcherAbilityTreeBlueprint.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\RogueAbilityTreeBlueprint.cs" />
@@ -689,7 +673,6 @@
     <Compile Include="Engine\Management\StateManager.cs" />
     <Compile Include="Engine\Player\Inventory\TradeInventory.cs" />
     <Compile Include="Engine\Player\VisualMessageDispatcher.cs" />
-    <Compile Include="Engine\ItemSystem\WeaponSystem\Weapon.cs" />
     <Compile Include="Engine\Player\WeaponAttack.cs" />
     <Compile Include="Engine\WorldBuilding\ArcherAIComponent.cs" />
     <Compile Include="Engine\WorldBuilding\BlacksmithComponent.cs" />
@@ -908,6 +891,22 @@
     <Compile Include="Engine\TreeSystem\PineDesign.cs" />
     <Compile Include="Engine\TreeSystem\TallDesign.cs" />
     <Compile Include="Engine\TreeSystem\TreeDesign.cs" />
+    <Compile Include="WeaponSystem\AttackOptions.cs" />
+    <Compile Include="WeaponSystem\Axe.cs" />
+    <Compile Include="WeaponSystem\Bow.cs" />
+    <Compile Include="WeaponSystem\Claw.cs" />
+    <Compile Include="WeaponSystem\DoubleBlades.cs" />
+    <Compile Include="WeaponSystem\Hammer.cs" />
+    <Compile Include="WeaponSystem\Hands.cs" />
+    <Compile Include="WeaponSystem\Katar.cs" />
+    <Compile Include="WeaponSystem\Knife.cs" />
+    <Compile Include="WeaponSystem\MeleeWeapon.cs" />
+    <Compile Include="WeaponSystem\RangedWeapon.cs" />
+    <Compile Include="WeaponSystem\RogueWeapon.cs" />
+    <Compile Include="WeaponSystem\Staff.cs" />
+    <Compile Include="WeaponSystem\Sword.cs" />
+    <Compile Include="WeaponSystem\Weapon.cs" />
+    <Compile Include="WeaponSystem\WeaponFactory.cs" />
     <None Include="..\project-hedra-assets\Animations\BeetleAttack0.dae">
       <Link>Assets\Chr\BeetleAttack0.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

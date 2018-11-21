@@ -71,7 +71,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var model = Element.MeshCache.Clone();
             if (Element.ColorCache != -Vector4.One &&
                 CacheManager.CachedColors.ContainsKey(Element.ColorCache))
-                model.Colors = CacheManager.CachedColors[Element.ColorCache].Clone();
+                model.Colors = CacheManager.CachedColors[Element.ColorCache].Decompress();
             else
                 model.Colors = Element.Colors;
 
@@ -81,7 +81,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
 
             if (CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache))
-                model.Extradata = CacheManager.CachedExtradata[Element.ExtraDataCache].Clone();
+                model.Extradata = CacheManager.CachedExtradata[Element.ExtraDataCache].Decompress();
             else
                 model.Extradata = Element.ExtraData;
 

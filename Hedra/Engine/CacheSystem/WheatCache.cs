@@ -18,5 +18,7 @@ namespace Hedra.Engine.CacheSystem
 
             this.AddModel(model);
         }
+        
+        public override CacheItem Type => CacheItem.Wheat;
     }
 }

@@ -19,5 +19,7 @@ namespace Hedra.Engine.CacheSystem
             model2.Extradata.AddRange(model2.GenerateWindValues(-Vector4.One, 1f));
             this.AddModel(model2);
         }
+        
+        public override CacheItem Type => CacheItem.Reed;
     }
 }

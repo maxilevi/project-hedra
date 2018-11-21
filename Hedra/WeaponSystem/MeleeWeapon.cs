@@ -1,13 +1,13 @@
+using System.Collections.Generic;
+using Hedra.Engine;
+using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
-using System.Collections.Generic;
-using System.Linq;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 
-namespace Hedra.Engine.ItemSystem.WeaponSystem
+namespace Hedra.WeaponSystem
 {
     public abstract class MeleeWeapon : Weapon
     {

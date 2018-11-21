@@ -9,12 +9,12 @@
 
 using System;
 using System.Reflection;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.WeaponSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player

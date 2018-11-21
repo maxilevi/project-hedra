@@ -1,6 +1,6 @@
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering.UI;
+using Hedra.WeaponSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills

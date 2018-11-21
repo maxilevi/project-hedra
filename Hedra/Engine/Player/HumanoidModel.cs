@@ -17,7 +17,6 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Sound;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;

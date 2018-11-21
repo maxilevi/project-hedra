@@ -11,5 +11,7 @@ namespace Hedra.Engine.CacheSystem
             
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Campfire0.ply", 7, Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.Campfire;
     }
 }

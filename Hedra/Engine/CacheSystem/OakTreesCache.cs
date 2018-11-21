@@ -15,5 +15,7 @@ namespace Hedra.Engine.CacheSystem
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Oak1.ply", 2, Vector3.One));
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Oak2.ply", 6, Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.OakTrees;
     }
 }

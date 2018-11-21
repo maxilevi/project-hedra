@@ -16,7 +16,6 @@ using System.Drawing;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -24,6 +23,7 @@ using Hedra.Engine.Rendering.UI;
 using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.ArmorSystem;
+using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.Player
 {

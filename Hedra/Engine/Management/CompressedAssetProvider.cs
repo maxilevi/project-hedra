@@ -269,7 +269,7 @@ namespace Hedra.Engine.Management
                 if (!_hitboxCache.ContainsKey(ModelFile))
                 {
                     string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
-                    var entityData = ColladaLoader.LoadColladaModel(fileContents, GeneralSettings.MaxWeights);
+                    var entityData = ColladaLoader.LoadColladaModel(fileContents);
                     var vertexData = new VertexData
                     {
                         Vertices = entityData.Mesh.Vertices.ToList(),

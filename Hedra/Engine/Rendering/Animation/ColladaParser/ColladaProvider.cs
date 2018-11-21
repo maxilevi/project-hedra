@@ -1,30 +1,50 @@
 using System;
 using System.Xml;
+using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
     public class ColladaProvider : IColladaProvider
     {
-        public AnimatedModelData LoadColladaModel(string ColladaFile, int MaxWeights)
+        private static XmlNode ParsePath(string ColladaFile)
         {
             var document = new XmlDocument();
             document.LoadXml(ColladaFile);
             AssertCorrectName(document);
-            var node = document.ChildNodes[1];
-    
-            var skinLoader = new SkinLoader(node["library_controllers"], MaxWeights);
-            var skinningData = skinLoader.ExtractSkinData();
+            return document.ChildNodes[1];
+        }
+        
+        public AnimatedModelData LoadColladaModel(string ColladaFile)
+        {
+            var node = ParsePath(ColladaFile);
+            var skinningData = LoadSkinning(node);
     
             var jointsLoader = new JointsLoader(node["library_visual_scenes"], skinningData.JointOrder);
             var jointsData = jointsLoader.ExtractBoneData();
-    
-            var geometryLoader = new GeometryLoader(node["library_geometries"], skinningData.VerticesSkinData);
-            var modelData = geometryLoader.ExtractModelData();
-    
-            return new AnimatedModelData(modelData, jointsData);
+
+            return new AnimatedModelData(LoadGeometry(node, skinningData), jointsData);
+        }
+
+        private static SkinningData LoadSkinning(XmlNode Node)
+        {
+            var skinLoader = new SkinLoader(Node["library_controllers"], GeneralSettings.MaxWeights);
+            return skinLoader.ExtractSkinData();
+        }
+        
+        private static ModelData LoadGeometry(XmlNode Node, SkinningData SkinningData)
+        {
+            var geometryLoader = new GeometryLoader(Node["library_geometries"], SkinningData.VerticesSkinData);
+            return geometryLoader.ExtractModelData();
+        }
+
+        public static ModelData LoadModel(string ColladaFile)
+        {
+            var node = ParsePath(ColladaFile);
+            var skinningData = LoadSkinning(node);
+            return LoadGeometry(node, skinningData);
         }
     
-        public  AnimationData LoadColladaAnimation(string ColladaFile)
+        public AnimationData LoadColladaAnimation(string ColladaFile)
         {
             var document = new XmlDocument();
             document.LoadXml(ColladaFile);

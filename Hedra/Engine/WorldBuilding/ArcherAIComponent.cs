@@ -12,7 +12,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Management;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.ItemSystem.WeaponSystem;
+using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.WorldBuilding
 {

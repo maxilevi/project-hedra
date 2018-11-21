@@ -1,4 +1,4 @@
-namespace Hedra.Engine.ItemSystem.WeaponSystem
+namespace Hedra.WeaponSystem
 {
     public class AttackOptions
     {

@@ -11,6 +11,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Hedra.Engine;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -18,7 +20,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 using OpenTK;
 
-namespace Hedra.Engine.ItemSystem.WeaponSystem
+namespace Hedra.WeaponSystem
 {
     /// <summary>
     /// Description of Weapon.

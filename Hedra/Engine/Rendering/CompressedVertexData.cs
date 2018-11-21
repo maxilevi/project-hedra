@@ -18,71 +18,33 @@ namespace Hedra.Engine.Rendering
         public List<Vector4> Colors
         {
             get => Decompress(_compressedColors);
-            set => Compress(_compressedColors, value);
+            set => Compress(value, _compressedColors);
         }
         
         private List<CompressedValue<Vector3>> _compressedNormals = new List<CompressedValue<Vector3>>();
         public List<Vector3> Normals
         {
             get => Decompress(_compressedNormals);
-            set => Compress(_compressedNormals, value);
+            set => Compress(value, _compressedNormals);
         }
 
         private List<CompressedValue<float>> _compressedExtradata = new List<CompressedValue<float>>();
         public List<float> Extradata
         {
             get => Decompress(_compressedExtradata);
-            set => Compress(_compressedExtradata, value);
-        }
-
-        private static void Compress<T>(List<CompressedValue<T>> Compressed, List<T> Uncompressed) where T : struct
-        {
-            var count = 0;
-            var type = default(T);
-            var compressing = false;
-            Compressed.Clear();
-            for (var i = 0; i < Uncompressed.Count; i++)
-            {
-                if (!compressing)
-                {
-                    type = Uncompressed[i];
-                    count = 1;
-                    compressing = true;
-                    continue;
-                }
-
-                if (type.Equals(Uncompressed[i]))
-                {
-                    count++;
-                }
-                else
-                {
-                    Compressed.Add(new CompressedValue<T>
-                    {
-                        Type = type,
-                        Count = (ushort)count
-                    });
-                    type = Uncompressed[i];
-                    count = 1;
-                }
-            }
-            Compressed.Add(new CompressedValue<T>
-            {
-                Type = type,
-                Count = (ushort)count
-            });
+            set => Compress(value, _compressedExtradata);
         }
 
         private static List<T> Decompress<T>(List<CompressedValue<T>> Values) where T : struct
         {
-            var list = new List<T>();
-            for (var i = 0; i < Values.Count; i++)
-            {
-                list.AddRange(Enumerable.Repeat(Values[i].Type, Values[i].Count));   
-            }
-            return list;
+            return Values.Decompress();
         }
-
+        
+        private static void Compress<T>(List<T> Uncompressed, List<CompressedValue<T>> Compressed) where T : struct
+        {
+            Uncompressed.Compress(Compressed);
+        }
+        
         public VertexData ToVertexData()
         {
             return new VertexData
@@ -111,11 +73,5 @@ namespace Hedra.Engine.Rendering
         {
             
         }
-    }
-
-    struct CompressedValue<T> where T : struct
-    {
-        public ushort Count { get; set; }
-        public T Type { get; set; }
     }
 }

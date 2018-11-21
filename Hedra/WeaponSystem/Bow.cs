@@ -7,10 +7,8 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
@@ -18,7 +16,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using OpenTK;
 
-namespace Hedra.Engine.ItemSystem.WeaponSystem
+namespace Hedra.WeaponSystem
 {
     public delegate void OnModifyArrowEvent(Projectile Arrow);
         

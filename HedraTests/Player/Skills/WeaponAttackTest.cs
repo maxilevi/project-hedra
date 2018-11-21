@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.WeaponSystem;
 using Moq;
 using NUnit.Framework;
 using OpenTK;
@@ -21,7 +21,7 @@ namespace HedraTests.Player.Skills
         {
             var executedAttackTimes = 0;
             var weaponMock = new Mock<Weapon>(new VertexData());
-            weaponMock.Setup(W => W.Attack1(It.IsAny<IHumanoid>()))
+            weaponMock.Setup(W => W.Attack1(It.IsAny<IHumanoid>(), It.IsAny<AttackOptions>()))
                 .Callback( () => executedAttackTimes++);
             Player.LeftWeapon = weaponMock.Object;
             Skill.SetType(Player.LeftWeapon, AttackType.Primary);
@@ -43,7 +43,7 @@ namespace HedraTests.Player.Skills
         {
             var executedAttackTimes = 0;
             var weaponMock = new Mock<Weapon>(new VertexData());
-            weaponMock.Setup(W => W.Attack1(It.IsAny<IHumanoid>()))
+            weaponMock.Setup(W => W.Attack1(It.IsAny<IHumanoid>(), It.IsAny<AttackOptions>()))
                 .Callback( () => executedAttackTimes++);
             Player.LeftWeapon = weaponMock.Object;
             Skill.SetType(Player.LeftWeapon, AttackType.Primary);

@@ -4,7 +4,6 @@ using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
@@ -15,6 +14,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.UI;
+using Hedra.WeaponSystem;
 using OpenTK;
 
 namespace HedraTests.Player

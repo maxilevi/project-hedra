@@ -17,5 +17,7 @@ namespace Hedra.Engine.CacheSystem
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/DeadTree0.ply", 2, Vector3.One));
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/DeadTree0.ply", 2, Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.DeadTrees;
     }
 }

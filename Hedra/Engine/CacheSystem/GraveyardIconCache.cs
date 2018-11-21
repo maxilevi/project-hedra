@@ -9,5 +9,7 @@ namespace Hedra.Engine.CacheSystem
         {
             this.AddModel(AssetManager.PLYLoader("Assets/Env/Grave4.ply", Vector3.One * 2f));
         }
+        
+        public override CacheItem Type => CacheItem.GraveyardIcon;
     }
 }

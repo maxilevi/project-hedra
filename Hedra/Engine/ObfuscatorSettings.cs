@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
+
 [assembly: Obfuscation(Exclude = false, StripAfterObfuscation = true, Feature = "+rename(mode=reversible,flatten=false,password='$_G+{M=U85aRq5');")]
-[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.CacheSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ClassSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ModuleSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.EntitySystem'):-rename")]
@@ -16,3 +18,4 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.AISystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.AISystem.Behaviours'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.BiomeSystem'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.WeaponSystem'):-rename")]

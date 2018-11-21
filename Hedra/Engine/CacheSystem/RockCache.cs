@@ -27,5 +27,7 @@ namespace Hedra.Engine.CacheSystem
 
             this.AddShapes(list);
         }
+        
+        public override CacheItem Type => CacheItem.Rock;
     }
 }

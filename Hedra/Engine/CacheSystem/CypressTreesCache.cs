@@ -17,5 +17,7 @@ namespace Hedra.Engine.CacheSystem
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Cypress2.ply", 2, Vector3.One));
 
         }
+        
+        public override CacheItem Type => CacheItem.CypressTrees;
     }
 }

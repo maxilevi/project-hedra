@@ -16,7 +16,7 @@
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Chestplates/CommonLeatherChestplate.ply"
+    "Path": "$DataFile$/Items/Chestplates/CommonLeatherChestplate.dae"
   }
 }
         

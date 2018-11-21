@@ -11,5 +11,7 @@ namespace Hedra.Engine.CacheSystem
             
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Roaster0.ply", 5, Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.CampfireRoaster;
     }
 }

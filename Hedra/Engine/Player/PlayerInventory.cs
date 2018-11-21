@@ -11,11 +11,11 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.Input;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.WeaponSystem;
 using OpenTK;
 using OpenTK.Input;
 

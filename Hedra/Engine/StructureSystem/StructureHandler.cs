@@ -16,7 +16,6 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Game;

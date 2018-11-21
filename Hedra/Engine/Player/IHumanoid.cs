@@ -2,7 +2,7 @@ using System;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
+using Hedra.WeaponSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player

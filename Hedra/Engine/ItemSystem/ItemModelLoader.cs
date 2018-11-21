@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
 using OpenTK;
 
 namespace Hedra.Engine.ItemSystem
@@ -19,9 +22,7 @@ namespace Hedra.Engine.ItemSystem
             var path = ModelTemplate.Path;
             if (!ModelCache.ContainsKey(path))
             {
-                var model = AssetManager.PLYLoader(path, Vector3.One);
-                model = AdjustModel(model);
-                ModelCache.Add(path, model);
+                ModelCache.Add(path, ProcessPath(path));
             }
 
             var returnModel = ModelCache[path].Clone();
@@ -29,10 +30,22 @@ namespace Hedra.Engine.ItemSystem
             return returnModel;
         }
 
+        private static VertexData ProcessPath(string Path)
+        {
+            VertexData model;
+            if (Path.EndsWith(".dae"))
+                model = AdjustModel(ColladaLoader.LoadModel(Path).ToVertexData());
+            else if (Path.EndsWith(".ply"))
+                model = AssetManager.PLYLoader(Path, Vector3.One);
+            else
+                throw new ArgumentOutOfRangeException($"Unsupported model '{Path}'.");
+            return model;
+        }
+        
         private static VertexData AdjustModel(VertexData Model)
         {
-            //var center = Model.Vertices.Aggregate( (V1,V2) => V1+V2) / Model.Vertices.Count;
-            //Model.Vertices = Model.Vertices.Select(V => V-center).ToList();
+            var center = Model.Vertices.Aggregate( (V1,V2) => V1+V2) / Model.Vertices.Count;
+            Model.Vertices = Model.Vertices.Select(V => V-center).ToList();
             return Model;
         }
     }

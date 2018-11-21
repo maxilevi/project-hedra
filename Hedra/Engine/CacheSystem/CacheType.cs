@@ -12,6 +12,8 @@ namespace Hedra.Engine.CacheSystem
         private readonly List<VertexData> _models = new List<VertexData>();
         private readonly List< List<CollisionShape> > _shapes = new List< List<CollisionShape> >();
 
+        public abstract CacheItem Type { get; }
+        
         protected void AddModel(VertexData Model)
         {
             _models.Add(Model);
