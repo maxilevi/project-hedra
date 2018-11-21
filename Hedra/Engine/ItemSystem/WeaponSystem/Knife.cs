@@ -148,11 +148,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             this._knifeSheath.TransformationMatrix = knifeMat4;
         }
         
-        public override void Attack1(IHumanoid Human)
+        public override void Attack1(IHumanoid Human, AttackOptions Options)
         {
             if(!this.MeetsRequirements()) return;
 
-            base.Attack1(Human);
+            base.Attack1(Human, Options);
             TaskManager.After(250, () => Trail.Emit = true);
         }
 

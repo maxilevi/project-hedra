@@ -17,6 +17,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.ModdingSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.ModelHandlers;
 using Hedra.Engine.PhysicsSystem;
@@ -117,6 +118,7 @@ namespace Hedra.Engine.Generation
             VillageLoader.LoadModules(AssetManager.AppPath);
             HumanoidLoader.LoadModules(AssetManager.AppPath);
             ModulesReload?.Invoke(AssetManager.AppPath);
+            ModificationsLoader.Reload();
         }
 
         public int MenuSeed => 2124321422;

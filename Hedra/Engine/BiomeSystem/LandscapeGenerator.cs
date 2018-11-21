@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
+using Hedra.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.WorldBuilding;
@@ -515,7 +516,7 @@ namespace Hedra.Engine.BiomeSystem
 
         private void DoEnviromentPlacements(Vector3 Position, bool HideEnviroment, Region Biome)
         {
-            var designs = Biome.Enviroment.Designs;
+            var designs = Biome.Environment.Designs;
             for (var i = 0; i < designs.Length; i++)
             {
                 if(designs[i].CanBeHidden && HideEnviroment) continue;

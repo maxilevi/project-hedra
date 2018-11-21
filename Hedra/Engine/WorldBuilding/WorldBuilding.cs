@@ -9,8 +9,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.AISystem;
 using OpenTK;
-using Hedra.Engine.AISystem;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;

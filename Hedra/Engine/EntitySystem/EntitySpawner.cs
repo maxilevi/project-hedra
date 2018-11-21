@@ -161,7 +161,8 @@ namespace Hedra.Engine.EntitySystem
         }
     }
 
-    public enum MobType{
+    public enum MobType
+    {
         Sheep,
         Pig,
         Boar,

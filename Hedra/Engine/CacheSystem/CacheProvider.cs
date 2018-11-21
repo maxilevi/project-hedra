@@ -32,8 +32,8 @@ namespace Hedra.Engine.CacheSystem
         {
             CachedColors = new Dictionary< Vector4, List<Vector4> >();
             CachedExtradata =  new Dictionary< float, List<float> >();
-            Type[] typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(CacheManager).Namespace).ToArray();
-            foreach (Type type in typeList)
+            var typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(CacheManager).Namespace).ToArray();
+            foreach (var type in typeList)
             {
                 if(!type.IsSubclassOf(typeof(CacheType)) || Attribute.GetCustomAttribute(type, typeof(CacheIgnore)) != null) continue;
 

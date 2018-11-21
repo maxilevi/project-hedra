@@ -1,3 +1,4 @@
+using Hedra.BiomeSystem;
 using Hedra.Engine.PlantSystem;
 
 namespace Hedra.Engine.BiomeSystem.DesertBiome

@@ -97,38 +97,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine\AISystem\Behaviours\AttackBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\Behaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\ChargeBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\FleeBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\FollowBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\GiantBeetleAttackBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\GorillaWarriorAttackBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\GuardHostileBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\HerdBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\HostileBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\IdleBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\RetaliateBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\RoamBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\StareBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\TrollAttackBehaviour.cs" />
-    <Compile Include="Engine\AISystem\Behaviours\WalkBehaviour.cs" />
-    <Compile Include="Engine\AISystem\FriendlyAIComponent.cs" />
-    <Compile Include="Engine\AISystem\GiantBeetleAIComponent.cs" />
-    <Compile Include="Engine\AISystem\GoatAIComponent.cs" />
-    <Compile Include="Engine\AISystem\HostileAIComponent.cs" />
-    <Compile Include="Engine\AISystem\IGuardAIComponent.cs" />
-    <Compile Include="Engine\AISystem\NeutralAIComponent.cs" />
-    <Compile Include="Engine\AISystem\SheepAIComponent.cs" />
-    <Compile Include="Engine\AISystem\TrollAIComponent.cs" />
-    <Compile Include="Engine\BiomeSystem\BiomeColorsDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\BiomeDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\BiomeEnviromentDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\BiomeGenerationDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\BiomeMobDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\BiomeSkyDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\BiomeStructureDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\BiomeTreeDesign.cs" />
+    <Compile Include="AISystem\AIFactory.cs" />
+    <Compile Include="AISystem\BasicAIComponent.cs" />
+    <Compile Include="AISystem\Behaviours\AttackBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\Behaviour.cs" />
+    <Compile Include="AISystem\Behaviours\ChargeBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\FleeBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\FollowBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\GiantBeetleAttackBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\GorillaWarriorAttackBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\GuardHostileBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\HerdBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\HostileBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\IdleBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\RetaliateBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\RoamBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\StareBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\TrollAttackBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\WalkBehaviour.cs" />
+    <Compile Include="AISystem\CattleAIComponent.cs" />
+    <Compile Include="AISystem\IGuardAIComponent.cs" />
+    <Compile Include="API\AIRegistry.cs" />
+    <Compile Include="API\AnimationEventRegistry.cs" />
+    <Compile Include="API\ModRegistry.cs" />
+    <Compile Include="API\WeaponRegistry.cs" />
+    <Compile Include="BiomeSystem\BiomeColorsDesign.cs" />
+    <Compile Include="BiomeSystem\BiomeDesign.cs" />
+    <Compile Include="BiomeSystem\BiomeEnviromentDesign.cs" />
+    <Compile Include="BiomeSystem\BiomeGenerationDesign.cs" />
+    <Compile Include="BiomeSystem\BiomeMobDesign.cs" />
+    <Compile Include="BiomeSystem\BiomeSkyDesign.cs" />
+    <Compile Include="BiomeSystem\BiomeStructureDesign.cs" />
+    <Compile Include="BiomeSystem\BiomeTreeDesign.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeColors.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeEnviromentDesign.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeGenerationDesign.cs" />
@@ -151,14 +151,14 @@
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeSkyDesign.cs" />
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeStructureDesign.cs" />
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeTreeDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\Region.cs" />
+    <Compile Include="BiomeSystem\Region.cs" />
     <Compile Include="Engine\BiomeSystem\RegionCache.cs" />
-    <Compile Include="Engine\BiomeSystem\RegionEnviroment.cs" />
-    <Compile Include="Engine\BiomeSystem\RegionGeneration.cs" />
-    <Compile Include="Engine\BiomeSystem\RegionMob.cs" />
-    <Compile Include="Engine\BiomeSystem\RegionSky.cs" />
-    <Compile Include="Engine\BiomeSystem\RegionStructure.cs" />
-    <Compile Include="Engine\BiomeSystem\RegionTree.cs" />
+    <Compile Include="BiomeSystem\RegionEnviroment.cs" />
+    <Compile Include="BiomeSystem\RegionGeneration.cs" />
+    <Compile Include="BiomeSystem\RegionMob.cs" />
+    <Compile Include="BiomeSystem\RegionSky.cs" />
+    <Compile Include="BiomeSystem\RegionStructure.cs" />
+    <Compile Include="BiomeSystem\RegionTree.cs" />
     <Compile Include="Engine\BiomeSystem\SnowBiome\SnowBiomeColorsDesign.cs" />
     <Compile Include="Engine\BiomeSystem\SnowBiome\SnowBiomeEnviromentDesign.cs" />
     <Compile Include="Engine\BiomeSystem\SnowBiome\SnowBiomeGenerationDesign.cs" />
@@ -224,15 +224,16 @@
     <Compile Include="Engine\ClassSystem\RogueDesign.cs" />
     <Compile Include="Engine\ClassSystem\WarriorDesign.cs" />
     <Compile Include="Engine\CompatibilityManager.cs" />
-    <Compile Include="Engine\AISystem\BasicAIComponent.cs" />
     <Compile Include="Engine\ComplexMath\IRandom.cs" />
     <Compile Include="Engine\ComplexMath\RandomDistribution.cs" />
+    <Compile Include="Engine\Core\RegistryFactory.cs" />
     <Compile Include="Engine\Core\ICountable.cs" />
     <Compile Include="Engine\Core\IPositionable.cs" />
     <Compile Include="Engine\CraftingSystem\Recipe.cs" />
     <Compile Include="Engine\CraftingSystem\RecipeLoader.cs" />
     <Compile Include="Engine\EntitySystem\BossSystem\SpawnComponent.cs" />
     <Compile Include="Engine\EntitySystem\Component.cs" />
+    <Compile Include="Engine\EntitySystem\EffectFactory.cs" />
     <Compile Include="Engine\EntitySystem\IComponent.cs" />
     <Compile Include="Engine\EntitySystem\IPhysicsComponent.cs" />
     <Compile Include="Engine\EntitySystem\MercenaryComponent.cs" />
@@ -253,7 +254,6 @@
     <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
-    <Compile Include="Engine\AISystem\GorillaWarriorAIComponent.cs" />
     <Compile Include="Engine\EntitySystem\IEntity.cs" />
     <Compile Include="Engine\EntitySystem\InteractableComponent.cs" />
     <Compile Include="Engine\EntitySystem\TradeComponent.cs" />
@@ -297,7 +297,6 @@
     <Compile Include="Engine\Management\ResourceHandler.cs" />
     <Compile Include="Engine\ModdingSystem\ModificationsLoader.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\ChargeEffect.cs" />
-    <Compile Include="Engine\ModuleSystem\AnimationEvents\Slash.cs" />
     <Compile Include="Engine\ModuleSystem\ModelHandlers\EntHandler.cs" />
     <Compile Include="Engine\ModuleSystem\ModelHandlers\ModelHandler.cs" />
     <Compile Include="Engine\Native\DummyConsoleManager.cs" />
@@ -465,7 +464,6 @@
     <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
     <Compile Include="Engine\Management\TrackItem.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEventBuilder.cs" />
-    <Compile Include="Engine\ModuleSystem\AnimationEvents\Growl.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\AttackAnimationTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\ColorTemplate.cs" />
@@ -473,7 +471,6 @@
     <Compile Include="Engine\ModuleSystem\DropTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\EffectTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEvent.cs" />
-    <Compile Include="Engine\ModuleSystem\AnimationEvents\Quake.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidBehaviourTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidComponentsItemTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidComponentsTemplate.cs" />
@@ -592,7 +589,7 @@
     <Compile Include="Engine\BiomeSystem\LandscapeGenerator.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\MeshBuilder.cs" />
     <Compile Include="Engine\Generation\Noise.cs" />
-    <Compile Include="Engine\BiomeSystem\RegionColor.cs" />
+    <Compile Include="BiomeSystem\RegionColor.cs" />
     <Compile Include="Engine\Generation\TreeGenerator.cs" />
     <Compile Include="Engine\Generation\World.cs" />
     <Compile Include="Engine\ItemSystem\ItemPool.cs" />
@@ -927,6 +924,10 @@
       <Link>Assets\Chr\BeetleWalk.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Animations\CowIdle.dae">
+      <Link>Assets\Chr\CowIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Animations\GorillaAttack0.dae">
       <Link>Assets\Chr\GorillaAttack0.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -949,6 +950,14 @@
     </None>
     <None Include="..\project-hedra-assets\Animations\MageStaff-Stance.dae">
       <Link>Assets\Chr\MageStaff-Stance.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\PigIdle.dae">
+      <Link>Assets\Chr\PigIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\PugIdle.dae">
+      <Link>Assets\Chr\PugIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Animations\SheepIdle0.dae">
@@ -5078,8 +5087,7 @@
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Helmets\" />
     <Folder Include="Assets\Items\Pants\" />
-    <Folder Include="API\AnimationEvents" />
-    <Folder Include="API\Weapons" />
+    <Folder Include="EntitySystem" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Helmets\" />
@@ -5213,7 +5221,16 @@
     <Content Include="Modules\Items\Misc\Mushroom.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Mobs\Cow.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Mobs\Ent.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\Pig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\Pug.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Recipes\RareAutumnStaffRecipe.json" />
@@ -5255,6 +5272,7 @@
         call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
     </PostBuildEvent>
     <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">
+    	cp "$(SolutionDir)/HedraContent/bin/Debug/HedraContent.dll" "$(TargetDir)/Mods/HedraContent.dll"
         mono "$(TargetDir)../../../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
         mono "$(TargetDir)../../../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
         mono "$(TargetDir)../../../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary

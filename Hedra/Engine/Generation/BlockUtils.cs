@@ -6,6 +6,7 @@
  */
 
 using System;
+using Hedra.BiomeSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -16,7 +17,7 @@ namespace Hedra.Engine.Generation
     /// </summary>
     public static class BlockUtils
     {
-        public static Vector4 GetColor(BlockType Type, BiomeSystem.RegionColor RegionColor)
+        public static Vector4 GetColor(BlockType Type, RegionColor RegionColor)
         {
             if (RegionColor == null) return Colors.Red;
             switch (Type)
@@ -28,7 +29,7 @@ namespace Hedra.Engine.Generation
                     return RegionColor.StoneColor;
 
                 case BlockType.Path:
-                    return BiomeSystem.RegionColor.PathColor;
+                    return RegionColor.PathColor;
 
                 case BlockType.Dirt:
                     return RegionColor.DirtColor;
@@ -46,9 +47,9 @@ namespace Hedra.Engine.Generation
                     return RegionColor.SeafloorColor;
 
                 case BlockType.StonePath:
-                    return BiomeSystem.RegionColor.StonePathColor;
+                    return RegionColor.StonePathColor;
                 case BlockType.DarkStonePath:
-                    return BiomeSystem.RegionColor.DarkStonePathColor;
+                    return RegionColor.DarkStonePathColor;
                    
                 default:
                     return Colors.Transparent;

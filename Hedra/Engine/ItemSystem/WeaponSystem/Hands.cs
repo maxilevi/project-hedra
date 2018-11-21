@@ -37,28 +37,23 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
 
         public Hands() : base(null)
         {
+            MainWeaponSize = new Vector3(MainWeaponSize.X, 1f, MainWeaponSize.Z);
         }
 
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.Mid) return;
-            MainWeaponSize = new Vector3(MainWeaponSize.X, 1f, MainWeaponSize.Z);
             Owner.AttackSurroundings(Owner.DamageEquation * 1.5f);
         }
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.Mid) return;
-            MainWeaponSize = new Vector3(MainWeaponSize.X, 1f, MainWeaponSize.Z);
             Owner.AttackSurroundings(Owner.DamageEquation * 3.0f * Options.Charge, delegate(Entity Mob)
             {
                 if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .4f)
                     Mob.KnockForSeconds(2.5f + Utils.Rng.NextFloat() * 2f);
             });
-        }
-
-        public override void Attack2(IHumanoid Human)
-        {
         }
     }
 }

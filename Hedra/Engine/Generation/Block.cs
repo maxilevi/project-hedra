@@ -5,6 +5,7 @@
  *
  */
 using System.Runtime.InteropServices;
+using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using OpenTK;
 

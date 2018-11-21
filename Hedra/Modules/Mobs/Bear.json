@@ -21,7 +21,7 @@
     "WalkAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/BoarWalk.dae",
-        "Speed": 1.0
+        "Speed": 1.25
       }
     ],
     "AttackAnimations": [

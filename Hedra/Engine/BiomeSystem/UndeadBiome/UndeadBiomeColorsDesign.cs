@@ -1,4 +1,5 @@
 using System;
+using Hedra.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using OpenTK;

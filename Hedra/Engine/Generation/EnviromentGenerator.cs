@@ -18,6 +18,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PlantSystem;
 using OpenTK;
+using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.Generation
 {
@@ -27,7 +28,7 @@ namespace Hedra.Engine.Generation
     public class EnviromentGenerator
     {
         
-        public void GeneratePlant(Vector3 Position, BiomeSystem.Region BiomeRegion, PlantDesign Design)
+        public void GeneratePlant(Vector3 Position, Region BiomeRegion, PlantDesign Design)
         {
             Chunk underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return;

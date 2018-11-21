@@ -75,6 +75,7 @@ namespace Hedra.Engine.Sound
         }
     }
     
+    [Obfuscation(Exclude = false, Feature = "-rename")]
     public enum SoundType
     {
         None,
@@ -112,6 +113,7 @@ namespace Hedra.Engine.Sound
         Underwater,
         Sheep,
         Goat,
+        Cow,
         MaxSounds
     }
 }

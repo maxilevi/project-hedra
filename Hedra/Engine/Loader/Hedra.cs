@@ -21,6 +21,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Localization;
+using Hedra.Engine.ModdingSystem;
 using Hedra.Engine.Native;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.Inventory;
@@ -51,6 +52,7 @@ namespace Hedra
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             AssetManager.Load();
             CompatibilityManager.Load();
+            ModificationsLoader.Reload();
             NameGenerator.Load();
             CacheManager.Load();
             Translations.Load();

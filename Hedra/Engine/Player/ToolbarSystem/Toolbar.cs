@@ -74,7 +74,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             var skillsTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(Assembly => Assembly.GetLoadableTypes())
                 .Where(Filter)
-                .Concat(ModificationsLoader.GetTypes(Filter))
+                //.Concat(ModificationsLoader.GetTypes(Filter))
                 .ToArray();
             
             _skills = new BaseSkill[skillsTypes.Length];

@@ -6,6 +6,7 @@
  */
 using System;
 using System.Collections.Generic;
+using Hedra.BiomeSystem;
 using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -32,7 +33,7 @@ namespace Hedra.Engine.EnvironmentSystem
         public static float StackedDaytimeModifier => Math.Max(0, StackedDaytime / 24000 * 2f);
 
         private static readonly Stack<float> TimeStack;
-        private static BiomeSystem.Region _currentRegion;
+        private static Region _currentRegion;
         private static Func<Vector4> _targetTopColor;
         private static Func<Vector4> _nextTargetTopColor;
         private static Func<Vector4> _targetBotColor;

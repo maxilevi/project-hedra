@@ -30,6 +30,11 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             Weapons.Add(Name, Weapon);
         }
         
+        public static void Unregister(string Name)
+        {
+            Weapons.Remove(Name);
+        }
+        
         public static bool Contains(Item Item)
         {
             return Item.EquipmentType != null && Weapons.ContainsKey(Item.EquipmentType);

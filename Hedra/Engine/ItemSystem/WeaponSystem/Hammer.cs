@@ -54,19 +54,20 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             });
         }
                 
-        public override void Attack1(IHumanoid Human){
+        public override void Attack1(IHumanoid Human, AttackOptions Options)
+        {
             if (!base.MeetsRequirements()) return;
 
-            base.Attack1(Human);
+            base.Attack1(Human, Options);
 
             TaskManager.After(250, () => Trail.Emit = true);
         }
         
-        public override void Attack2(IHumanoid Human)
+        public override void Attack2(IHumanoid Human, AttackOptions Options)
         {
             if (!base.MeetsRequirements()) return;
 
-            base.Attack2(Human);
+            base.Attack2(Human, Options);
 
             TaskManager.After(200, () => Trail.Emit = true);
 

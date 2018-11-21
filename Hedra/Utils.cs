@@ -18,6 +18,7 @@ using OpenTK;
 
 namespace Hedra
 {
+    [Obfuscation(Exclude = false, Feature = "-rename")]
     public static class Utils
     {
 

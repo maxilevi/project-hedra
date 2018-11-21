@@ -2,7 +2,6 @@
 
 [assembly: Obfuscation(Exclude = false, StripAfterObfuscation = true, Feature = "+rename(mode=reversible,flatten=false,password='$_G+{M=U85aRq5');")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.CacheSystem'):-rename")]
-[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ModuleSystem.AnimationEvents'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ClassSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ModuleSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.EntitySystem'):-rename")]
@@ -12,7 +11,8 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.StructureSystem.VillageSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.StructureSystem.VillageSystem.Builders'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.StructureSystem.VillageSystem.Templates'):-rename")]
-[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.TreeSystem'):-rename")]
-[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.WorldBuilding'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.Player'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.API'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.AISystem'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.AISystem.Behaviours'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.BiomeSystem'):-rename")]

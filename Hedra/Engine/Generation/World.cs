@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -276,6 +277,11 @@ namespace Hedra.Engine.Generation
         public static void AddStructure(CollidableStructure Structure)
         {
             Provider.SetupStructure(Structure);
+        }
+
+        public static Region GetRegion(Vector3 Position)
+        {
+            return BiomePool.GetRegion(Position);
         }
     }
 }

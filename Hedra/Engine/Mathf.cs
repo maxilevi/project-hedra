@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using OpenTK;
@@ -19,6 +20,7 @@ namespace Hedra.Engine
     /// A math library which contains different functions
     /// which are quicker but less accurate than the originals
     /// </summary>
+    [Obfuscation(Exclude = false, Feature = "-rename")]
     public static class Mathf
     {
         public const float Radian = 0.0174533f;
@@ -175,18 +177,7 @@ namespace Hedra.Engine
               
              return cross;
         }
-        
-        public static string TryParseToEnum(Type E, int N){
-            if(E != null){
-                return Enum.ToObject(E, N).ToString().Replace("_", string.Empty);
-            }
-            return N.ToString();
-        }
-        
-        public static Vector3 Floor(Vector3 Input){
-            return new Vector3((float)Math.Floor(Input.X), (float)Math.Floor(Input.Y), (float)Math.Floor(Input.Z));
-        }
-        
+
         public static Vector4 ToVector4(this Color c){
             return new Vector4(c.R / 255f, c.G / 255f, c.B / 255f, c.A / 255f);
         }
@@ -195,7 +186,8 @@ namespace Hedra.Engine
             return Color.FromArgb((byte)Mathf.Clamp((int)(v.W * 255),0,255), (byte) Mathf.Clamp((int)(v.X * 255),0,255), (byte)Mathf.Clamp((int) (v.Y * 255),0,255), (byte)Mathf.Clamp((int) (v.Z * 255),0,255));
         }
         
-        public static Matrix4 CreateTransformationMatrix(Vector3 Scale, Vector3 Position){
+        public static Matrix4 CreateTransformationMatrix(Vector3 Scale, Vector3 Position)
+        {
             Matrix4 TransMatrix = Matrix4.CreateTranslation(Position);
             TransMatrix *= Matrix4.CreateScale(Scale);
             return TransMatrix;
@@ -210,16 +202,6 @@ namespace Hedra.Engine
         
         public static Matrix4 CreateTransformationMatrix(Vector2 Scale, Vector2 Position){
             return CreateTransformationMatrix(new Vector3(Scale.X, Scale.Y, 0), new Vector3(Position.X, Position.Y, 0));
-        }
-
-        public static Vector4d Mult(Matrix4 m, Vector4d v)
-        {
-            Vector4d result = new Vector4d();
-            result.X = m.M11 * v.X + m.M12 * v.Y + m.M13 * v.Z + m.M14 * v.W;
-            result.Y = m.M21 * v.X + m.M22 * v.Y + m.M23 * v.Z + m.M24 * v.W;
-            result.Z = m.M31 * v.X + m.M32 * v.Y + m.M33 * v.Z + m.M34 * v.W;
-            result.W = m.M41 * v.X + m.M42 * v.Y + m.M43 * v.Z + m.M44 * v.W;
-            return result;
         }
         
         public static Vector2 ToNormalizedDeviceCoordinates(Vector2 Vec2) {
@@ -246,29 +228,10 @@ namespace Hedra.Engine
             float y = (Y+1f) * GameSettings.Height / 2.0f;
             return new Vector2(x,y);
         }
-        
-        public static Vector2 RandomVector2(Random Gen){
-            return new Vector2((float) Gen.NextDouble(), (float) Gen.NextDouble());
-        }
-        
-        public static Vector3 RandomVector3(Random Gen){
+
+        public static Vector3 RandomVector3(Random Gen)
+        {
             return new Vector3( (float) Gen.NextDouble(), (float) Gen.NextDouble(), (float) Gen.NextDouble());
-        }
-        
-        public static Vector3 RandomVector3ExceptY(Random Gen){
-            return new Vector3( (float) Gen.NextDouble(), 0f, (float) Gen.NextDouble());
-        }
-        
-        public static Quaternion RandomHorizontalQuaternion(Random Gen){
-            return new Quaternion( (float) Gen.NextDouble() * Vector3.UnitY * 2f -Vector3.UnitY, (float) Gen.NextDouble() * 2f -1f);
-        }
-        
-        public static Quaternion RandomQuaternion(Random Gen){
-            return new Quaternion( (float) Gen.NextDouble() * 2f -1f, (float) Gen.NextDouble() * 2f -1f, (float) Gen.NextDouble() * 2f -1f, (float) Gen.NextDouble() * 2f -1f);
-        }
-        
-        public static Vector4 DivideVector(Vector4 V1, Vector4 V2){
-            return new Vector4(V1.X / V2.X, V1.Y / V2.Y, V1.Z / V2.Z, V1.W / V2.W);
         }
         
         public static Vector3 DivideVector(Vector3 V1, Vector3 V2){
@@ -306,25 +269,14 @@ namespace Hedra.Engine
             return new Vector2(Clamp(v.X,min,max), Clamp(v.Y,min,max));
         }
         
-        public static Color ColorFromInt32(uint Data){
+        public static Color ColorFromInt32(uint Data)
+        {
             return Color.FromArgb( (byte) (Data >> 24), (byte) (Data >> 16), (byte) (Data >> 8), (byte) (Data >> 0) );
         }
         
-        public static uint Int32FromColor(Color Color){
-            return (uint)( (Color.A << 24) | (Color.R << 16) | (Color.G << 8) | (Color.B << 0) );
-        }
-        
-        public static double NextGaussian(this Random r, double mu = 0, double sigma = 1)
+        public static uint Int32FromColor(Color Color)
         {
-            var u1 = r.NextDouble();
-            var u2 = r.NextDouble();
-
-            var rand_std_normal = Math.Sqrt(-2.0 * Math.Log(u1)) *
-                                Math.Sin(2.0 * Math.PI * u2);
-
-            var rand_normal = mu + sigma * rand_std_normal;
-
-            return rand_normal;
+            return (uint)( (Color.A << 24) | (Color.R << 16) | (Color.G << 8) | (Color.B << 0) );
         }
         
         public static float NextFloat(this IRandom Random)
@@ -360,32 +312,23 @@ namespace Hedra.Engine
             return distances[lengthA, lengthB];
         }
 
-        /*
-        public static int Compress(this Vector3 To){
-            float Factor = 21.325f;
-            return Color.FromArgb(255, (byte)(To.X * Factor+128), (byte)(To.Y * Factor+128), (byte)(To.Z * Factor+128)).ToArgb();
-        }
-        
-        public static Vector3 Decompress(this int From){
-            float Factor = 21.325f;
-            Color C = Color.FromArgb(From);
-            return new Vector3( (C.R - 128) * Factor, (C.G - 128) * Factor, (C.B - 128) * Factor );
-        }*/
-
-        public static Color Lerp(this Color Origin, Color Target, float T){
-            return Color.FromArgb( (byte) Mathf.Lerp(Origin.A, Target.A, T),
-                                   (byte) Mathf.Lerp(Origin.R, Target.R, T),
-                                   (byte) Mathf.Lerp(Origin.G, Target.G, T),
-                                   (byte) Mathf.Lerp(Origin.B, Target.B, T));
+        public static Color Lerp(this Color Origin, Color Target, float T)
+        {
+            return Color.FromArgb( (byte) Lerp(Origin.A, Target.A, T),
+                                   (byte) Lerp(Origin.R, Target.R, T),
+                                   (byte) Lerp(Origin.G, Target.G, T),
+                                   (byte) Lerp(Origin.B, Target.B, T));
         }
 
-        public static Vector3 NormalizedFast(this Vector3 Point){
+        public static Vector3 NormalizedFast(this Vector3 Point)
+        {
             Vector3 Direction = Point;
             Direction.NormalizeFast();
             return Direction;
         }
         
-        public static Vector2 NormalizedFast(this Vector2 Point){
+        public static Vector2 NormalizedFast(this Vector2 Point)
+        {
             Vector2 Direction = Point;
             Direction.NormalizeFast();
             return Direction;

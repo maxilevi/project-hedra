@@ -192,7 +192,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             return Index;
         }
         
-        public virtual void Attack1(IHumanoid Human)
+        public void Attack1(IHumanoid Human)
         {
             Attack1(Human, new AttackOptions());
         }
@@ -217,7 +217,7 @@ namespace Hedra.Engine.ItemSystem.WeaponSystem
             Human.Model.Blend(animation);
         }
 
-        public virtual void Attack2(IHumanoid Human)
+        public void Attack2(IHumanoid Human)
         {
             Attack2(Human, new AttackOptions());
         }

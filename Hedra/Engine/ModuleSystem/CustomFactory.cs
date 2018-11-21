@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Engine.AISystem;
+using Hedra.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
@@ -16,7 +16,6 @@ namespace Hedra.Engine.ModuleSystem
         public const float MinXpFactor = .45f;
         public const float MaxXpFactor = .75f;
         private static Dictionary<string, Type> EffectTable { get; }
-        private static Dictionary<string, Type> AITable { get; }
 
         public string Name { get; set; }
         public float MaxHealth { get; set; }
@@ -41,18 +40,6 @@ namespace Hedra.Engine.ModuleSystem
                 {"Bleed", typeof(BleedComponent)},
                 {"Slow", typeof(SlowComponent)},
                 {"Knock", typeof(KnockComponent)}
-            };
-
-            AITable = new Dictionary<string, Type>
-            {
-                {"Friendly", typeof(FriendlyAIComponent)},
-                {"Neutral", typeof(NeutralAIComponent)},
-                {"Hostile", typeof(HostileAIComponent)},
-                {"Sheep", typeof(SheepAIComponent)},
-                {"GorillaWarrior", typeof(GorillaWarriorAIComponent)},
-                {"GiantBeetle", typeof(GiantBeetleAIComponent)},
-                {"Troll", typeof(TrollAIComponent)},
-                {"Goat", typeof(GoatAIComponent)},
             };
 
             foreach (var pair in EffectTable)
@@ -124,7 +111,7 @@ namespace Hedra.Engine.ModuleSystem
             }
 
             this.AddItemDropPerLevel(Mob);
-            Mob.AddComponent((EntityComponent)Activator.CreateInstance(AITable[this.AIType], Mob));
+            Mob.AddComponent(AIFactory.Instance.Build(Mob, AIType));
         }
 
         public void Polish(Entity Mob)

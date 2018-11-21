@@ -14,7 +14,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using OpenTK;
-using Region = Hedra.Engine.BiomeSystem.Region;
+using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.StructureSystem
 {

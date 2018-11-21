@@ -1,4 +1,5 @@
-﻿using Hedra.Engine.PlantSystem;
+﻿using Hedra.BiomeSystem;
+using Hedra.Engine.PlantSystem;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {

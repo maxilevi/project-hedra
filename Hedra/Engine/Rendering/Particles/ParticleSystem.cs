@@ -7,6 +7,7 @@
 using System;
 using Hedra.Engine.Player;
 using System.Collections.Generic;
+using System.Reflection;
 using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -14,6 +15,7 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.Particles
 {
+    [Obfuscation(Exclude = false, Feature = "-rename")]
     public class ParticleSystem : IRenderable, IUpdatable, IDisposable
     {
         public const int MaxParticleCount = 15000;
@@ -234,7 +236,8 @@ namespace Hedra.Engine.Rendering.Particles
             return TransMatrix;
         }
         
-        public void Dispose(){
+        public void Dispose()
+        {
             //ThreadManager.ExecuteOnMainThread(() => Renderer.DeleteBuffers(1, ref BufferID));
             
             DrawManager.ParticleRenderer.Remove(this);
@@ -242,7 +245,9 @@ namespace Hedra.Engine.Rendering.Particles
         }
     }
     
-    public enum ParticleShape{
+    [Obfuscation(Exclude = false, Feature = "-rename")]
+    public enum ParticleShape
+    {
         Square,
         Sphere,
         Cone

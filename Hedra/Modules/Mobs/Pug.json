@@ -1,0 +1,33 @@
+{
+  "Name" : "Pug",
+  "MaxHealth": 150.0,
+  "AttackDamage": 2.0,
+  "Speed": 1.25,
+  "XP": 1.25,
+  "Level": 6,
+  "AIType": "Pug",
+  "Effects": [],
+  "Drops": [],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/PugIdle.dae",
+    "Scale": 1.5,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BoarWalk.dae",
+        "Speed": 1.5
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BoarAttack.dae",
+        "Speed": 1.15
+      }
+    ]
+  }
+}

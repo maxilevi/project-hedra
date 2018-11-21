@@ -3,7 +3,7 @@
   "DisplayName": "Barbarian Iron Knife",
   "EquipmentType": "Knife",
   "Tier": "Rare",
-  "Description": "Barbarian iron knife.",
+  "Description": "An iron knife with a thicker blade increasing it's weight and ability to be sharpened.",
   "Attributes": [
     {
       "Name": "Damage",
