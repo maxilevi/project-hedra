@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Geometry

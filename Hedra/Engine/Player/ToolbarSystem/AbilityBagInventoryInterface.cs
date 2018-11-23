@@ -2,6 +2,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Player.ToolbarSystem

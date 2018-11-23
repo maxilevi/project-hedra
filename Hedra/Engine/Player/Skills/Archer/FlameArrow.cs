@@ -15,6 +15,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
 using OpenTK;
 

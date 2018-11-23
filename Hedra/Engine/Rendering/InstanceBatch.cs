@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
+using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 

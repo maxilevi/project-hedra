@@ -6,6 +6,7 @@
  */
 using System;
 using Hedra.Engine.Management;
+using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 

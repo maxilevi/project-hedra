@@ -11,6 +11,7 @@ using System.Collections;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+ using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {

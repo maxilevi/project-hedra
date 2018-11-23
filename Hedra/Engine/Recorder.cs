@@ -39,7 +39,7 @@ namespace Hedra.Engine
             int[] pixels = new int[w * h];
             Renderer.ReadPixels(0, 0, w, h, PixelFormat.Rgba, PixelType.Byte, pixels);
              
-            TaskManager.Asynchronous( delegate{
+            TaskScheduler.Asynchronous( delegate{
             // we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
             for (int i = 0; i < pixels.Length; i++)
             {

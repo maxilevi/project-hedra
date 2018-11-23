@@ -14,7 +14,7 @@ using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Particles
 {
     /// <summary>
     ///     Description of TrailRenderer.

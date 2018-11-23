@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Collections;
 using System.Diagnostics;
+using Hedra.Engine.IO;
 
 namespace Hedra.Engine.Management
 {
     /// <summary>
     /// Helper class to simplify running delayed, concurrent, parallel and asynchronous actions.
     /// </summary>
-    public static class TaskManager
+    public static class TaskScheduler
     {
 
         /// <summary>

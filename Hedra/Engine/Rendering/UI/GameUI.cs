@@ -49,7 +49,7 @@ namespace Hedra.Engine.Rendering.UI
             Player.OnHitLanded += delegate
             {
                 if (_slingShot.Active) return;
-                TaskManager.When(() => _consecutiveHits.Scale.Y > 0, delegate
+                TaskScheduler.When(() => _consecutiveHits.Scale.Y > 0, delegate
                 {
                     _slingShot.Play(_consecutiveHits);
                 });

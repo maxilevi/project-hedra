@@ -12,6 +12,8 @@ using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.EntitySystem;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Player
 {

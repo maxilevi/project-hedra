@@ -2,6 +2,7 @@ using System.Linq;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.AISystem.Behaviours

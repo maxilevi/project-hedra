@@ -19,9 +19,9 @@ namespace Hedra.WeaponSystem
                 {"Claw", typeof(Claw)},
                 {"Katar", typeof(Katar)},
                 {"DoubleBlades", typeof(DoubleBlades)},
-                {"Knife", typeof(Knife)},
                 {"Bow", typeof(Bow)},
-                {"Staff", typeof(Staff)}
+                {"Staff", typeof(Staff)},
+                {"Knife", typeof(Knife)}
             };
         }
 

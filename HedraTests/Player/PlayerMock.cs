@@ -14,6 +14,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
 using OpenTK;
 
@@ -66,7 +67,7 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
-        public void AttackSurroundings(float Damage, Action<Entity> Callback)
+        public void AttackSurroundings(float Damage, Action<IEntity> Callback)
         {
             throw new NotImplementedException();
         }

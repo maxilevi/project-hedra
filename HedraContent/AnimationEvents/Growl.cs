@@ -4,13 +4,14 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace HedraContent.AnimationEvents
 {
     public class Growl : AnimationEvent
     {
-        public Growl(Entity Parent) : base(Parent) { }
+        public Growl(IEntity Parent) : base(Parent) { }
 
         public override void Build()
         {

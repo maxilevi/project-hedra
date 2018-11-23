@@ -7,6 +7,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
 using HedraTests.Player;
 using Moq;
 using NUnit.Framework;

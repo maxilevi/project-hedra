@@ -16,7 +16,6 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using OpenTK;
-using SimplexNoise;
 
 namespace Hedra.Engine.BiomeSystem
 {

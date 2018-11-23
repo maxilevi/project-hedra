@@ -55,7 +55,7 @@ namespace Hedra.Engine.Player.Inventory
             if (_selectedButton != null)
             {
                 _willReset = true;
-                TaskManager.After(10, delegate
+                TaskScheduler.After(10, delegate
                 {
                     if(_willReset)
                         this.DropItem(_selectedItem);
@@ -141,7 +141,7 @@ namespace Hedra.Engine.Player.Inventory
             _cancelButton.Position = SelectedButton.Position;
             _cancelButton.Scale = SelectedButton.Scale;
             _cancelButton.Clickable = false;
-            TaskManager.After(10, () => _cancelButton.Clickable = true);
+            TaskScheduler.After(10, () => _cancelButton.Clickable = true);
         }
 
         private void PlaceItemInFirstEmptyPosition(Item Item)

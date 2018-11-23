@@ -8,6 +8,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player

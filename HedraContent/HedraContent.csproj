@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>../Hedra/bin/Debug/Mods/</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +26,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>../Hedra/bin/Release/Mods/</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -69,26 +69,7 @@
     <ProjectReference Include="..\Hedra\Hedra.csproj">
       <Project>{301a6b68-cf39-4e86-a50a-479b96a5a298}</Project>
       <Name>Hedra</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <PostBuildEvent>
-      copy /Y "$(TargetDir)/HedraContent.dll" "$(SolutionDir)/Hedra/bin/Debug/Mods/HedraContent.dll"
-      copy /Y "$(TargetDir)/HedraContent.pdb" "$(SolutionDir)/Hedra/bin/Debug/Mods/HedraContent.pdb"
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <PostBuildEvent>
-      <Command>
-      copy /Y "$(TargetDir)/HedraContent.dll" "$(SolutionDir)/Hedra/bin/Release/Mods/HedraContent.dll"
-      </Command>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetDir)/HedraContent.dll" "$(SolutionDir)/Hedra/bin/Debug/Mods/HedraContent.dll"
-copy /Y "$(TargetDir)/HedraContent.pdb" "$(SolutionDir)/Hedra/bin/Debug/Mods/HedraContent.pdb"
-</PostBuildEvent>
-  </PropertyGroup>
 </Project>

@@ -1,6 +1,7 @@
 using System.Linq;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
+using Hedra.Rendering;
 using NUnit.Framework;
 using OpenTK;
 

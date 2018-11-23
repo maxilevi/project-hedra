@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {

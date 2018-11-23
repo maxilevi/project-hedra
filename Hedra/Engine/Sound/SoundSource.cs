@@ -80,7 +80,7 @@ namespace Hedra.Engine.Sound
             get => this._volume;
             set
             {
-                if (System.Threading.Thread.CurrentThread.ManagedThreadId != Hedra.MainThreadId)
+                if (System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
                     throw new Exception("Duude");
 
                 if (value == this._volume) return;

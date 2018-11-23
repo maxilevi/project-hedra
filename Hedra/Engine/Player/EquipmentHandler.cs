@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.Player

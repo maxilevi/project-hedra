@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Geometry

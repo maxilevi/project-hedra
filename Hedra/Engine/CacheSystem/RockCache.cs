@@ -4,6 +4,7 @@ using Hedra.Engine.Rendering;
 using OpenTK;
 using System.Linq;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.CacheSystem
 {

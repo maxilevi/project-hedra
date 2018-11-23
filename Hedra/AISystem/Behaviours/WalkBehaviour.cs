@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.AISystem.Behaviours

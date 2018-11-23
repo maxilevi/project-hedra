@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
@@ -11,12 +8,11 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Sound;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 using OpenTK.Input;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Engine.StructureSystem
 {
     public class BanditCamp : BaseStructure, IUpdatable
     {
@@ -119,7 +115,7 @@ namespace Hedra.Engine.WorldBuilding
 
             _rescuee.IsTied = false;
             Rescued = true;
-            TaskManager.Delay(1, delegate
+            TaskScheduler.Delay(1, delegate
             {
                 var talkComponent = new TalkComponent(_rescuee,
                     "I am grateful to you for saving me. Take this item as a show of gratitude");
@@ -127,7 +123,7 @@ namespace Hedra.Engine.WorldBuilding
                 {
                     var settings = new ItemPoolSettings(ItemTier.Rare, EquipmentType.Axe);
                     _rescuee.Movement.Orientate();
-                    TaskManager.After(1000, () =>
+                    TaskScheduler.After(1000, () =>
                         World.DropItem(ItemPool.Grab(settings), _rescuee.Position + Vector3.UnitX * 5f)
                     );
                     //TaskManager.After( (int) ((talkComponent.Duration+1) * 1000), () =>

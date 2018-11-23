@@ -1,4 +1,5 @@
 using Hedra.Engine.Management;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {

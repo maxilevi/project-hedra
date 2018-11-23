@@ -4,12 +4,8 @@
  * Time: 01:00 a.m.
  *
  */
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Drawing.Drawing2D;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Effects
 {
     public static class Filters
     {

@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -106,7 +107,7 @@ namespace Hedra.Engine.StructureSystem
                 yield return null;
             }
 
-            TaskManager.Parallel(delegate
+            TaskScheduler.Parallel(delegate
             {
                 parameters.Position = new Vector3(
                     parameters.Position.X,

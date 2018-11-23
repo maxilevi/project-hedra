@@ -1,7 +1,8 @@
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 
-namespace Hedra.Engine.EntitySystem
+namespace Hedra.EntitySystem
 {
     public interface IPhysicsComponent
     {

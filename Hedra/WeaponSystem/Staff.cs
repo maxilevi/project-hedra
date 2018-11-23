@@ -3,6 +3,8 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
@@ -11,7 +13,6 @@ namespace Hedra.WeaponSystem
     {
         protected override string AttackStanceName => "Assets/Chr/MageStaff-Stance.dae";
         protected override float PrimarySpeed => 0.9f;
-        protected override bool ShouldPlaySound => false;
         protected override string[] PrimaryAnimationsNames => new []
         {
             "Assets/Chr/MageStaff-PrimaryAttack.dae"
@@ -29,74 +30,50 @@ namespace Hedra.WeaponSystem
         public Staff(VertexData Contents) : base(Contents)
         {  
         }
-        
-        protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
+
+        protected override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
         {
-            if(Type != AttackEventType.Mid) return;
-            ShootEffect();
-            var player = Owner as IPlayer; 
             Fireball.Create(
                 Owner,
                 Owner.Position + Vector3.UnitY * 4f,
-                player?.View.LookingDirection ?? Owner.Orientation,
+                Direction,
                 Owner.DamageEquation * Options.DamageModifier,
-                player?.Pet.Pet
+                ToIgnore
             );
         }
-        
+
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;
             Firewave.Create(Owner, Owner.DamageEquation * 8 * Options.Charge, Options.Charge);
         }
         
-        public override void Update(IHumanoid Human)
+        protected override void OnSheathed()
         {
-            base.Update(Human);
-            base.SetToDefault(MainMesh);
-
-            if(Sheathed)
-            {
-                this.MainMesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
-                this.MainMesh.Position = Owner.Model.Position;
-                this.MainMesh.LocalRotation = this.SheathedRotation;
-                this.MainMesh.BeforeLocalRotation = this.SheathedPosition * this.Scale;
-            }
-
-            if (base.InAttackStance || Owner.IsAttacking || Owner.WasAttacking)
-            {
-                var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
-                    
-                this.MainMesh.TransformationMatrix = mat4;
-                this.MainMesh.Position = Owner.Model.Position;
-                this.MainMesh.TargetRotation = new Vector3(90,25,180);
-                this.MainMesh.BeforeLocalRotation = Vector3.Zero;     
-            } 
-
-            if(SecondaryAttack)
-            {
-                var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
-
-                this.MainMesh.TransformationMatrix = mat4;
-                this.MainMesh.Position = Owner.Model.Position;
-                this.MainMesh.TargetRotation = new Vector3(90, 0, 180);
-                this.MainMesh.BeforeLocalRotation = Vector3.Zero;
-            }
+            this.MainMesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
+            this.MainMesh.Position = Owner.Model.Position;
+            this.MainMesh.LocalRotation = this.SheathedRotation;
+            this.MainMesh.BeforeLocalRotation = this.SheathedPosition * this.Scale;
         }
-        
-        private void ShootEffect()
+
+        protected override void OnAttackStance()
         {
-            return;
-            World.Particles.Color = Particle3D.FireColor;
-            World.Particles.VariateUniformly = false;
-            World.Particles.Position = Owner.Position;
-            World.Particles.Scale = Vector3.One;
-            World.Particles.ScaleErrorMargin = new Vector3(.25f, .25f, .25f);
-            World.Particles.Direction = Vector3.UnitY;
-            World.Particles.ParticleLifetime = 0.5f;
-            World.Particles.GravityEffect = 0f;
-            World.Particles.PositionErrorMargin = Owner.Model.Dimensions.Size.Xz.ToVector3();
-            for(var i = 0; i < 10; i++) World.Particles.Emit();
+            var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
+                    
+            this.MainMesh.TransformationMatrix = mat4;
+            this.MainMesh.Position = Owner.Model.Position;
+            this.MainMesh.TargetRotation = new Vector3(90,25,180);
+            this.MainMesh.BeforeLocalRotation = Vector3.Zero;     
+        } 
+
+        protected override void OnSecondaryAttack()
+        {
+            var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() 
+                       * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);   
+            MainMesh.TransformationMatrix = mat4;
+            MainMesh.Position = Owner.Model.Position;
+            MainMesh.TargetRotation = new Vector3(90, 0, 180);
+            MainMesh.BeforeLocalRotation = Vector3.Zero;
         }
     }
 }

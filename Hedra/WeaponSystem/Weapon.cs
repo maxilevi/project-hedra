@@ -18,6 +18,8 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
@@ -33,7 +35,8 @@ namespace Hedra.WeaponSystem
         public Animation AttackStanceAnimation { get; set; }
         protected virtual Vector3 SheathedPosition => new Vector3(-.6f, 0.5f, -0.8f);
         protected virtual Vector3 SheathedRotation => new Vector3(-5, 90, -135);
-        public abstract bool IsMelee { get; protected set; }
+        protected virtual bool ContinousAttack => false;
+        public abstract bool IsMelee { get; }
         public bool LockWeapon { get; set; } = false;
         private bool WeaponCoroutineExists;
         public bool Disposed { get; private set; }
@@ -265,8 +268,8 @@ namespace Hedra.WeaponSystem
 
             if (Human.Model.IsIdling && IsMelee)
             {
-                TaskManager.Delay(1,
-                    () => TaskManager.While(
+                TaskScheduler.Delay(1,
+                    () => TaskScheduler.While(
                         () => Human.IsAttacking/*Human.Model.IsWalking && !Human.IsMoving*/,
                         delegate
                         {
@@ -278,8 +281,8 @@ namespace Hedra.WeaponSystem
             }
             else
             {
-                TaskManager.Delay(1, 
-                    () => TaskManager.While(() => Human.IsAttacking,
+                TaskScheduler.Delay(1, 
+                    () => TaskScheduler.While(() => Human.IsAttacking,
                         () => Human.Physics.Move(Options.RunMovespeed)
                     )
                 );
@@ -330,23 +333,23 @@ namespace Hedra.WeaponSystem
             }
 
             Owner.IsAttacking = attacking;
-
+            SetToDefault(MainMesh);
+            
             if (Sheathed)
-                SetToChest(MainMesh);
+                OnSheathed();           
 
-            if (InAttackStance || Owner.WasAttacking)
-                SetToMainHand(MainMesh);
-
+            if (InAttackStance || Owner.WasAttacking || (ContinousAttack && Owner.IsAttacking))
+                OnAttackStance();
+            
             if (PrimaryAttack)
-                SetToMainHand(MainMesh);
+                OnPrimaryAttack();
 
             if (SecondaryAttack)
-                SetToMainHand(MainMesh);
-
+                OnSecondaryAttack();
+            
             if (PrimaryAttack || SecondaryAttack)
-            {
-                if (Orientate) Owner.Movement.Orientate();
-            }
+                OnAttack();
+            
 
             ApplyEffects(MainMesh);
 
@@ -358,6 +361,27 @@ namespace Hedra.WeaponSystem
                     _effectApplied = true;
                 }
             }
+        }
+
+        protected virtual void OnSheathed()
+        {
+        }
+
+        protected virtual void OnAttackStance()
+        {
+        }
+        
+        protected virtual void OnPrimaryAttack()
+        {
+        }
+        
+        protected virtual void OnSecondaryAttack()
+        {
+        }
+        
+        protected virtual void OnAttack()
+        {
+            if (Orientate) Owner.Movement.Orientate();
         }
 
         protected void ApplyEffects(ObjectMesh Mesh)

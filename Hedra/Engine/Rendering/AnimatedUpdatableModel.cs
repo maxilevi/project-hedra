@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering
@@ -13,6 +15,16 @@ namespace Hedra.Engine.Rendering
         
         protected AnimatedUpdatableModel(IEntity Parent) : base(Parent)
         {
+        }
+
+        public void AddModel(ModelData Data)
+        {
+            Model.AddModel(Data);
+        }
+
+        public void RemoveModel(ModelData Data)
+        {
+            Model.RemoveModel(Data);
         }
         
         public void Paint(Vector4[] Colors)

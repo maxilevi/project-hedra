@@ -6,18 +6,12 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
-using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Rendering;
-using System.Drawing;
-using System.IO;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player.Skills;
-using Hedra.Engine.Rendering.Particles;
 
-namespace Hedra.Engine.Player
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Particles;
+using OpenTK;
+
+namespace Hedra.Engine.Player.Skills.Mage
 {
     /// <summary>
     /// Description of FlameStyle.

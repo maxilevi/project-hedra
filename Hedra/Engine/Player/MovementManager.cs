@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.Player
 {

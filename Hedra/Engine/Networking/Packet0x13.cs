@@ -11,6 +11,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using System.Net;
 using Hedra.Engine.Generation;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.Networking
 {

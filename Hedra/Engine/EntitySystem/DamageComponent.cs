@@ -20,6 +20,7 @@ using Hedra.AISystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {

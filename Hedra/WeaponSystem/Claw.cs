@@ -11,6 +11,8 @@ using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
@@ -34,7 +36,7 @@ namespace Hedra.WeaponSystem
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;
-            Owner.AttackSurroundings(Owner.DamageEquation * 2.0f * Options.DamageModifier, delegate (Entity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * 2.0f * Options.DamageModifier, delegate (IEntity Mob)
             {
 
                 if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .75f)
@@ -46,36 +48,34 @@ namespace Hedra.WeaponSystem
             });
         }
 
-        public override void Update(IHumanoid Human)
+        protected override void OnSheathed()
         {
-            base.Update(Human);
-            if (Sheathed)
-            {
-                this.MainMesh.BeforeLocalRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
-                this.MainMesh.TargetRotation = new Vector3(55 + 180, 0, 0);
+            base.OnSheathed();
+            MainMesh.BeforeLocalRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
+            MainMesh.TargetRotation = new Vector3(55 + 180, 0, 0);
 
-                this.SecondBlade.BeforeLocalRotation = Vector3.UnitX * 1.0f - Vector3.UnitY * 2f;
-                this.SecondBlade.TargetRotation = new Vector3(-55 + 180, 180, 0);
+            SecondBlade.BeforeLocalRotation = Vector3.UnitX * 1.0f - Vector3.UnitY * 2f;
+            SecondBlade.TargetRotation = new Vector3(-55 + 180, 180, 0);        
+        }
 
-            }
+        protected override void OnAttackStance()
+        {
+            base.OnAttackStance();
+            MainMesh.TargetRotation = new Vector3(180, 180, 0);
+            MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.35f;
 
-            if (base.InAttackStance || Owner.Model.Human.WasAttacking)
-            {
-                this.MainMesh.TargetRotation = new Vector3(180, 180, 0);
-                this.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.35f;
+            SecondBlade.TargetRotation = new Vector3(180, 0, 0);
+            SecondBlade.BeforeLocalRotation = Vector3.UnitY * -0.35f;
+        }
 
-                this.SecondBlade.TargetRotation = new Vector3(180, 0, 0);
-                this.SecondBlade.BeforeLocalRotation = Vector3.UnitY * -0.35f;
-            }
+        protected override void OnAttack()
+        {
+            base.OnAttack();
+            MainMesh.TargetRotation = new Vector3(180, 180, 0f);
+            MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
 
-            if (PrimaryAttack || SecondaryAttack)
-            {
-                this.MainMesh.TargetRotation = new Vector3(180, 180, 0f);
-                this.MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
-
-                this.SecondBlade.TargetRotation = new Vector3(180, 0, 0);
-                this.SecondBlade.BeforeLocalRotation = Vector3.UnitY * -0.7f;
-            }
+            SecondBlade.TargetRotation = new Vector3(180, 0, 0);
+            SecondBlade.BeforeLocalRotation = Vector3.UnitY * -0.7f;
         }
     }
 }

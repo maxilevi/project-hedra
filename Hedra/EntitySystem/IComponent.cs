@@ -1,4 +1,4 @@
-namespace Hedra.Engine.EntitySystem
+namespace Hedra.EntitySystem
 {
     public interface IComponent<out T> where T : IEntity
     {

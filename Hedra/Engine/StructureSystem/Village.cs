@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem

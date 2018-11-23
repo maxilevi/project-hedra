@@ -8,11 +8,13 @@
  */
 using System;
 using System.Drawing;
+using Hedra.Components;
 using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Management;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.WorldBuilding
 {

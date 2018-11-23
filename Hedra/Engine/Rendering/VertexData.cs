@@ -6,11 +6,13 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.Rendering;
 using OpenTK;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Rendering
 {
     /// <inheritdoc />
     /// <summary>

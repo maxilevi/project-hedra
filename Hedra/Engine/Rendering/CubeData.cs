@@ -4,12 +4,12 @@
  * Time: 09:41 p.m.
  *
  */
+
 using System;
-using System.Linq;
-using System.Drawing;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using OpenTK;
-using Hedra.Engine;
 
 namespace Hedra.Engine.Rendering
 {
@@ -128,14 +128,14 @@ namespace Hedra.Engine.Rendering
             };
         }
     }
-}
 
-public enum Face{
-    RIGHT,
-    UP,
-    LEFT,
-    BACK,
-    DOWN,
-    FRONT,
-    ALL
+    public enum Face{
+        RIGHT,
+        UP,
+        LEFT,
+        BACK,
+        DOWN,
+        FRONT,
+        ALL
+    }
 }

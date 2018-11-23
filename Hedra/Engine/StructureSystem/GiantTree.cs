@@ -1,5 +1,6 @@
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem

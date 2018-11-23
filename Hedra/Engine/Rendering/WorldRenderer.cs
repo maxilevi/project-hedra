@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
 {
@@ -40,7 +41,7 @@ namespace Hedra.Engine.Rendering
         {
             WaterShader = Shader.Build("Shaders/Water.vert", "Shaders/Water.frag");
             StaticShader = Shader.Build("Shaders/Static.vert", "Shaders/Static.frag");
-            StaticBuffer = new WorldBuffer(PoolSize.Normal);
+            StaticBuffer = new WorldBuffer(PoolSize.Big);
             InstanceBuffer = new WorldBuffer(PoolSize.Normal);
             WaterBuffer = new WorldBuffer(PoolSize.Tiny);
 

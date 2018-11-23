@@ -2,6 +2,7 @@ using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
+using Hedra.EntitySystem;
 
 namespace Hedra.AISystem.Behaviours
 {

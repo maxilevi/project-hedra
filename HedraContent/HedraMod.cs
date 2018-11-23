@@ -1,5 +1,4 @@
 using Hedra.API;
-using Hedra.AISystem;
 using HedraContent.AI;
 using HedraContent.AnimationEvents;
 
@@ -7,7 +6,7 @@ namespace HedraContent
 {
     public class HedraMod : Mod
     {
-        public override string Name => "Project 2Hedra";
+        public override string Name => "Project Hedra";
         
         public override void RegisterContent()
         {

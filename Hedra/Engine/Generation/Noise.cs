@@ -27,7 +27,7 @@
 //For more information, please refer to <http://unlicense.org/>
 
 
-namespace SimplexNoise
+namespace Hedra.Engine.Generation
 {
     /// <summary>
     /// Implementation of the Perlin simplex noise, an improved Perlin noise algorithm.

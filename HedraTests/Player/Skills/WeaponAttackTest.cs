@@ -5,6 +5,8 @@ using Hedra.Engine;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using Moq;
 using NUnit.Framework;

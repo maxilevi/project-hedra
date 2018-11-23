@@ -9,9 +9,11 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Management
@@ -450,6 +452,14 @@ namespace Hedra.Engine.Management
         {
             var fileHeader = Encoding.ASCII.GetString(Data, 1, HeaderSize);
             return fileHeader == Header;
+        }
+        
+        public ModelData DAELoader(string File)
+        {
+            var data = ReadPath(File);
+            if (data == null) throw new ArgumentException($"Failed to find file '{File}' in the Assets folder.");
+            var fileContents = Encoding.ASCII.GetString(data);
+            return ColladaLoader.LoadModel(fileContents);
         }
         
         public void Dispose()

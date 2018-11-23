@@ -1,6 +1,7 @@
 using System;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using Moq;
 using NUnit.Framework;

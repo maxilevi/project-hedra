@@ -1,9 +1,10 @@
+using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Components
 {
     /// <inheritdoc />
     public class EscapeAIComponent : EntityComponent

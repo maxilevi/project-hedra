@@ -1,6 +1,7 @@
 using System.Drawing;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Inventory

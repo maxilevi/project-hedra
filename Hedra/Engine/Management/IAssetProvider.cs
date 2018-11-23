@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Management
@@ -30,6 +32,7 @@ namespace Hedra.Engine.Management
         Box LoadDimensions(string ModelFile);
         VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true);
         VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true);
+        ModelData DAELoader(string File);
         void Dispose();
     }
 }

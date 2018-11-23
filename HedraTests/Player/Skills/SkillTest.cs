@@ -6,6 +6,7 @@ using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using Moq;
 using NUnit.Framework;

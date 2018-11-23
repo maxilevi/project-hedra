@@ -8,6 +8,8 @@
  */
 
 
+using Hedra.EntitySystem;
+
 namespace Hedra.Engine.EntitySystem
 {
     /// <inheritdoc cref="IEffectComponent" />

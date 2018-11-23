@@ -16,6 +16,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {

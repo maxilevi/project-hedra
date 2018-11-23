@@ -6,6 +6,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Input;
+using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -217,11 +218,11 @@ namespace Hedra.Engine.Game
                 if (!value || SpawningEffect || GameSettings.Paused) return;
                 _spawningEffect = true;
                 GameSettings.BloomModifier = 8.0f;
-                TaskManager.While( () => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
+                TaskScheduler.While( () => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
                 {
                     GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependantDeltaTime);
                 });
-                TaskManager.When( () => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
+                TaskScheduler.When( () => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
                 {
                     GameSettings.BloomModifier = 1.0f;
                     _spawningEffect = false;

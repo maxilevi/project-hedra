@@ -1,15 +1,12 @@
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
 using OpenTK;
 
 namespace Hedra.Engine.ItemSystem.ArmorSystem
 {
     public class HelmetPiece : ArmorPiece
     {
-        protected override Matrix4 PlacementMatrix => Owner.Model.HeadMatrix;
-
-        protected override Vector3 PlacementPosition => Owner.Model.HeadPosition;
-
-        public HelmetPiece(VertexData Model) : base(Model)
+        public HelmetPiece(ModelData Model) : base(Model)
         {
         }
     }

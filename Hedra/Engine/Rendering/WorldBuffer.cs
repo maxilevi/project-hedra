@@ -17,6 +17,7 @@ using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Player;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
 {

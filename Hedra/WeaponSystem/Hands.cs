@@ -9,6 +9,7 @@
 
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
@@ -47,7 +48,7 @@ namespace Hedra.WeaponSystem
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.Mid) return;
-            Owner.AttackSurroundings(Owner.DamageEquation * 3.0f * Options.Charge, delegate(Entity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * 3.0f * Options.Charge, delegate(IEntity Mob)
             {
                 if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .4f)
                     Mob.KnockForSeconds(2.5f + Utils.Rng.NextFloat() * 2f);

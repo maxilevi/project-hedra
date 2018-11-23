@@ -11,6 +11,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {

@@ -8,6 +8,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.ModelHandlers;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.ModuleSystem
 {

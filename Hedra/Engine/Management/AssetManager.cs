@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Rendering;
 using OpenTK;
 
 
@@ -117,6 +119,11 @@ namespace Hedra.Engine.Management
             bool HasColors = true)
         {
             return Provider.PLYLoader(Data, Scale, Position, Rotation, HasColors);
+        }
+        
+        public static ModelData DAELoader(string File)
+        {
+            return Provider.DAELoader(File);
         }
 
         public static void Dispose()

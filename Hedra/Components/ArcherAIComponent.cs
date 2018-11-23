@@ -6,15 +6,14 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
-using Hedra.Engine.Player;
-using Hedra.Engine.Management;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Generation;
-using Hedra.WeaponSystem;
 
-namespace Hedra.Engine.WorldBuilding
+using Hedra.Engine;
+using Hedra.Engine.Player;
+using Hedra.EntitySystem;
+using Hedra.WeaponSystem;
+using OpenTK;
+
+namespace Hedra.Components
 {
     /// <summary>
     /// Description of ArcherAI.

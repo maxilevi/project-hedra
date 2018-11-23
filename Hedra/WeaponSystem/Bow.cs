@@ -14,13 +14,15 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
 {
     public delegate void OnModifyArrowEvent(Projectile Arrow);
         
-    public sealed class Bow : RangedWeapon
+    public class Bow : RangedWeapon
     {            
         protected override string AttackStanceName => "Assets/Chr/ArcherShootStance.dae";
         protected override float PrimarySpeed => 0.9f;
@@ -34,26 +36,27 @@ namespace Hedra.WeaponSystem
             "Assets/Chr/ArcherTripleShoot.dae"
         };
         
-        private static readonly VertexData ArrowVertexData;
-        private static readonly VertexData _arrowDataVertexData;
-        private static readonly VertexData QuiverVertexData;
         protected override Vector3 SheathedPosition => new Vector3(1.5f,-0.0f,0.0f);
         protected override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
-        private readonly ObjectMesh _quiver;
-        private readonly ObjectMesh _arrow;
-        public OnModifyArrowEvent BowModifiers;
-        public float ArrowDownForce { get; set; }
         
-
+        private static readonly VertexData ArrowVertexData;
+        private static readonly VertexData ArrowDataVertexData;
+        private static readonly VertexData QuiverVertexData;
+        
         static Bow()
         {
             ArrowVertexData = AssetManager.PLYLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f,
                 Vector3.UnitX * .35f, Vector3.Zero);
             QuiverVertexData = AssetManager.PLYLoader("Assets/Items/Quiver.ply",
                 Vector3.One * new Vector3(2.2f, 2.8f, 2.2f) * 1.5f);
-            _arrowDataVertexData = AssetManager.PLYLoader("Assets/Items/Arrow.ply", Vector3.One * 5f, Vector3.Zero,
+            ArrowDataVertexData = AssetManager.PLYLoader("Assets/Items/Arrow.ply", Vector3.One * 5f, Vector3.Zero,
                 new Vector3(-90, 0, 90) * Mathf.Radian);
         }
+        
+        public OnModifyArrowEvent BowModifiers;
+        public float ArrowDownForce { get; set; }
+        private readonly ObjectMesh _quiver;
+        private readonly ObjectMesh _arrow;
 
         public Bow(VertexData Contents) : base(Contents)
         {
@@ -61,129 +64,96 @@ namespace Hedra.WeaponSystem
             _quiver = ObjectMesh.FromVertexData(QuiverVertexData);
             _quiver.TargetPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
             _quiver.LocalRotationPoint = new Vector3(0, 0, _quiver.TargetPosition.Z);
-            _quiver.TargetRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);
-            base.ShouldPlaySound = false;            
-        }
-        
-        protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
-        {
-            if(Type != AttackEventType.Mid) return;
-            var player = Owner as IPlayer;
-            var direction = player?.View.CrossDirection ?? Owner.Orientation;
-            this.ShootArrow(Owner, direction, Options);
+            _quiver.TargetRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);          
         }
         
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.Mid) return;
-            CoroutineManager.StartCoroutine(TripleArrowCoroutine, Options);
+            var player = Owner as IPlayer;
+            var direction = player?.View.CrossDirection ?? Owner.Orientation;
+            Shoot(direction, Options, player?.Pet?.Pet);
+            TaskScheduler.After(
+                150,
+                () => Shoot(direction, Options, player?.Pet?.Pet)
+            );
+            TaskScheduler.After(
+                300,
+                () => Shoot(direction, Options, player?.Pet?.Pet)
+            );
         }
-        
+
+        protected override void OnSheathed()
+        {
+            MainMesh.TransformationMatrix = 
+                Owner.Model.ChestMatrix.ClearTranslation() 
+                * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
+            MainMesh.Position = Owner.Model.Position;
+            MainMesh.LocalRotation = this.SheathedRotation;
+            MainMesh.BeforeLocalRotation = this.SheathedPosition * this.Scale;
+        }
+
+        protected override void OnAttackStance()
+        {
+            var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() 
+                           * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);                  
+            this.MainMesh.TransformationMatrix = mat4;
+            this.MainMesh.Position = Owner.Model.Position;
+            this.MainMesh.TargetRotation = new Vector3(90,25,180);
+            this.MainMesh.BeforeLocalRotation = Vector3.Zero;   
+        }
+
         public override void Update(IHumanoid Human)
         {
             base.Update(Human);
+            SetQuiverPosition();
+            SetArrowPosition();
+        }
 
-            base.SetToDefault(MainMesh);
-
-            if(Sheathed){
-                this.MainMesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
-                this.MainMesh.Position = Owner.Model.Position;
-                this.MainMesh.LocalRotation = this.SheathedRotation;
-                this.MainMesh.BeforeLocalRotation = this.SheathedPosition * this.Scale;
-            }
-
-            if (base.InAttackStance || Owner.IsAttacking || Owner.WasAttacking)
-            {
-                Matrix4 Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
-                    
-                this.MainMesh.TransformationMatrix = Mat4;
-                this.MainMesh.Position = Owner.Model.Position;
-                this.MainMesh.TargetRotation = new Vector3(90,25,180);
-                this.MainMesh.BeforeLocalRotation = Vector3.Zero;                
-            }
-            
-            base.SetToDefault(this._quiver);
-
-            this._quiver.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
-            this._quiver.Position = Owner.Model.Position;
-            this._quiver.BeforeLocalRotation = (-Vector3.UnitY * 1.5f - Vector3.UnitZ * 1.8f) * this.Scale;
-
-            base.SetToDefault(this._arrow);
-
-            Matrix4 ArrowMat4 = Owner.Model.RightWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);
-            
-            this._arrow.TransformationMatrix = ArrowMat4;
-            this._arrow.Position = Owner.Model.Position;
-            this._arrow.BeforeLocalRotation = Vector3.UnitZ * 0.5f;
-            this._arrow.Enabled = (base.InAttackStance || Owner.IsAttacking) && this._quiver.Enabled;    
-            
+        private void SetQuiverPosition()
+        {
+            SetToDefault(_quiver);
+            _quiver.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+            _quiver.Position = Owner.Model.Position;
+            _quiver.BeforeLocalRotation = (-Vector3.UnitY * 1.5f - Vector3.UnitZ * 1.8f) * this.Scale;
         }
         
-        public Projectile AddModifiers(Projectile ArrowProj)
+        private void SetArrowPosition()
+        {
+            base.SetToDefault(_arrow);
+            var arrowMat4 = Owner.Model.RightWeaponMatrix.ClearTranslation() 
+                            * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);
+            
+            _arrow.TransformationMatrix = arrowMat4;
+            _arrow.Position = Owner.Model.Position;
+            _arrow.BeforeLocalRotation = Vector3.UnitZ * 0.5f;
+            _arrow.Enabled = (base.InAttackStance || Owner.IsAttacking) && _quiver.Enabled; 
+        }
+
+        private Projectile AddModifiers(Projectile ArrowProj)
         {
             BowModifiers?.Invoke(ArrowProj);
             return ArrowProj;
         }
-        
-        public Projectile ShootArrow(IHumanoid Human, Vector3 Direction, AttackOptions Options,
-            int KnockChance = -1)
-        {
-            return this.ShootArrow(Human, this.ArrowOrigin, Direction, Options, KnockChance);
-        }
-        
-        public Projectile ShootArrow(IHumanoid Human, Vector3 Origin, Vector3 Direction, AttackOptions Options, int KnockChance = -1)
+
+        protected override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
         {
 
-            var arrowProj = new Projectile(Human, Origin, _arrowDataVertexData)
+            var arrowProj = new Projectile(Owner, Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2, ArrowDataVertexData)
             {
                 Lifetime = 5f,
                 Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce,
-                IgnoreEntities = Human is IPlayer player 
-                    ? new IEntity[]
-                    {
-                        player.Pet.Pet
-                    } 
-                    : null
+                IgnoreEntities = ToIgnore
             };
-            arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
-                Hit.Damage(Human.DamageEquation * Options.DamageModifier, Human, out float exp, true, false);
-                Human.XP += exp;
-                if(KnockChance != -1 && Utils.Rng.Next(0, KnockChance) == 0)
-                    Hit.KnockForSeconds(3);
+            arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
+            {
+                Hit.Damage(Owner.DamageEquation * Options.DamageModifier, Owner, out var exp, true, false);
+                Owner.XP += exp;
             };
-            arrowProj.LandEventHandler += S => Human.ProcessHit(false);
-            arrowProj.HitEventHandler += (S,V) => Human.ProcessHit(true);
+            arrowProj.LandEventHandler += S => Owner.ProcessHit(false);
+            arrowProj.HitEventHandler += (S,V) => Owner.ProcessHit(true);
             arrowProj = this.AddModifiers(arrowProj);
-            SoundManager.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
-            return arrowProj;
-        }
-
-        private Vector3 ArrowOrigin => Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 +
-                                       (Owner is IPlayer
-                                           ? Owner.IsRiding ? Vector3.UnitY * 1f : Vector3.Zero
-                                           : Vector3.Zero);
-
-        private IEnumerator TripleArrowCoroutine(object[] Params)
-        {
-            var options = (AttackOptions) Params[0];
-            var player = Owner as IPlayer;
-            var direction = player?.View.CrossDirection ?? Owner.Orientation;
-            var origin = ArrowOrigin;
-            this.ShootArrow(Owner, ArrowOrigin, direction, options);
-            var time = 0f;
-            while (time < .20f)
-            {
-                time += Time.DeltaTime;
-                yield return null;
-            }
-            this.ShootArrow(Owner, ArrowOrigin, direction, options);
-            time = 0f;
-            while (time < .20f)
-            {
-                time += Time.DeltaTime;
-                yield return null;
-            }
-            this.ShootArrow(Owner, ArrowOrigin, direction, options);
+            SoundManager.PlaySound(SoundType.BowSound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
         }
 
         public override void Dispose()

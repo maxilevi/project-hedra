@@ -2,10 +2,10 @@ using System;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Player;
 using Hedra.WeaponSystem;
-using OpenTK;
 
-namespace Hedra.Engine.Player
+namespace Hedra.EntitySystem
 {
     public interface IHumanoid : IEntity
     {
@@ -53,7 +53,7 @@ namespace Hedra.Engine.Player
         float AttackResistance { get; }
         int Gold { get; set; }
         float DamageEquation { get; }
-        void AttackSurroundings(float Damage, Action<Entity> Callback);
+        void AttackSurroundings(float Damage, Action<IEntity> Callback);
         void AttackSurroundings(float Damage);
         void ApplyEffectWhile(EffectType NewType, Func<bool> Condition);
         void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition);

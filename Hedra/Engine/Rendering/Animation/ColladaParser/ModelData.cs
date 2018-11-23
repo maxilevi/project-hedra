@@ -10,6 +10,7 @@ using OpenTK;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
@@ -48,25 +49,29 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         
         public static ModelData Combine(ModelData Model, params ModelData[] Models)
         {
-            var offset = Model.Vertices.Length;
-            var indexOffset = Model.Indices.Length;
-            var newIndices = new uint[indexOffset + Models.Sum(M => M.Indices.Length)];
+            var offset = 0;
+            var indexOffset = 0;
+            var newIndices = new uint[Model.Indices.Length + Models.Sum(M => M.Indices.Length)];
             for (var i = 0; i < Models.Length; i++)
             {
                 for (var k = 0; k < Models[i].Indices.Length; ++k)
                 {
-                    newIndices[indexOffset] = (uint)(Models[i].Indices[k] + offset);
+                    newIndices[indexOffset + k] = (uint)(Models[i].Indices[k] + offset);
                 }
                 indexOffset += Models[i].Indices.Length;
                 offset += Models[i].Vertices.Length;
             }
+            for (var i = 0; i < Model.Indices.Length; i++)
+            {
+                newIndices[i + indexOffset] = (uint)(Model.Indices[i] + offset);
+            }
             return new ModelData(
-                Model.Vertices.Concat(Models.SelectMany(M => M.Vertices)).ToArray(),
-                Model.Colors.Concat(Models.SelectMany(M => M.Colors)).ToArray(),
-                Model.Normals.Concat(Models.SelectMany(M => M.Normals)).ToArray(),
+                Models.SelectMany(M => M.Vertices).Concat(Model.Vertices).ToArray(),
+                Models.SelectMany(M => M.Colors).Concat(Model.Colors).ToArray(),
+                Models.SelectMany(M => M.Normals).Concat(Model.Normals).ToArray(),
                 newIndices,
-                Model.JointIds.Concat(Models.SelectMany(M => M.JointIds)).ToArray(),
-                Model.VertexWeights.Concat(Models.SelectMany(M => M.VertexWeights)).ToArray()
+                Models.SelectMany(M => M.JointIds).Concat(Model.JointIds).ToArray(),
+                Models.SelectMany(M => M.VertexWeights).Concat(Model.VertexWeights).ToArray()
             );
         }
     }

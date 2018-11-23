@@ -12,6 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 using ObeliskType = Hedra.Engine.StructureSystem.ObeliskType;
 

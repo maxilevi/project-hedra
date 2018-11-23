@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Generation;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Geometry

@@ -1,6 +1,7 @@
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.EntitySystem;
 
 namespace Hedra.AISystem.Behaviours
 {

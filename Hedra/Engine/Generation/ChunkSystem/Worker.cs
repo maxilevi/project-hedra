@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {

@@ -17,6 +17,7 @@ using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Input;
 using Cursor = Hedra.Engine.Input.Cursor;

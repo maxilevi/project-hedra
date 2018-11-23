@@ -6,6 +6,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Events;
 using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
+using Hedra.EntitySystem;
 using OpenTK;
 using OpenTK.Input;
 

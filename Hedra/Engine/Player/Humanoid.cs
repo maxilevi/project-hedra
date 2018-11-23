@@ -23,6 +23,7 @@ using Hedra.Engine.Rendering.UI;
 using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.ArmorSystem;
+using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.Player
@@ -201,7 +202,7 @@ namespace Hedra.Engine.Player
             }
 
             SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);
-            TaskManager.When( () => !IsRolling, () =>
+            TaskScheduler.When( () => !IsRolling, () =>
             {
                 SearchComponent<DamageComponent>().Immune = false;
             } );
@@ -215,12 +216,12 @@ namespace Hedra.Engine.Player
         }
 
 
-        public void AttackSurroundings(float Damage, Action<Entity> Callback)
+        public void AttackSurroundings(float Damage, Action<IEntity> Callback)
         {
             var meleeWeapon = LeftWeapon as MeleeWeapon;
             var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 3.75f + .5f ?? 1.0f;
             var wideModifier = Math.Max( (meleeWeapon?.MainWeaponSize.Xz.LengthFast ?? 1.0f) - .75f, 1.0f);
-            var nearEntities = World.InRadius<Entity>(this.Position, 16f * rangeModifier); // this.Model.BroadphaseCollider.BroadphaseRadius
+            var nearEntities = World.InRadius<IEntity>(this.Position, 16f * rangeModifier); // this.Model.BroadphaseCollider.BroadphaseRadius
             var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
             var atLeastOneHit = false;
 

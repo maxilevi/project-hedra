@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 using OpenTK;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Components
 {
     public abstract class CombatAIComponent : HumanoidAIComponent
     {

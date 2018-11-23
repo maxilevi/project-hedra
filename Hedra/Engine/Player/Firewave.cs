@@ -6,6 +6,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player

@@ -7,7 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
+using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
@@ -15,7 +15,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Components
 {
     public class HeadIconComponent : EntityComponent
     {
@@ -48,7 +48,7 @@ namespace Hedra.Engine.WorldBuilding
         public void ShowIconFor(CacheItem? IconType, float Seconds)
         {
             this.ShowIcon(IconType);
-            TaskManager.After((int) (Seconds * 1000), () => this.ShowIcon(null));
+            TaskScheduler.After((int) (Seconds * 1000), () => this.ShowIcon(null));
         }
 
         public override void Update()

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using NVorbis;
@@ -41,7 +42,7 @@ namespace Hedra.Engine.Sound
                 _soundItems[i] = new SoundItem(new SoundSource(Vector3.Zero));
             }
             Log.WriteLine("Loading sounds...");
-            TaskManager.Parallel(delegate
+            TaskScheduler.Parallel(delegate
             {
                 LoadSound(SoundType.ButtonClick, "Sounds/HoverButton.ogg");
                 LoadSound(SoundType.WaterSplash, "Sounds/WaterSplash.ogg");
@@ -130,7 +131,7 @@ namespace Hedra.Engine.Sound
                 Log.WriteLine($"Could not play sound {Sound}");
                 return;
             }
-            TaskManager.While(Lambda, delegate
+            TaskScheduler.While(Lambda, delegate
             {
                 if(source.IsPlaying) return;
                 source.Play(GetBuffer(Sound), ListenerPosition, PitchLambda(), GainLambda(), false);

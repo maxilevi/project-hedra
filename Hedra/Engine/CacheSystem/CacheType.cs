@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.CacheSystem
 {

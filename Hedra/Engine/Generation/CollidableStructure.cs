@@ -17,6 +17,7 @@ using Hedra.Engine.Rendering.UI;
 using OpenTK;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Generation
 {

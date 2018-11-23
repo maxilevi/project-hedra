@@ -19,6 +19,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
 using OpenTK.Input;
 
 namespace Hedra.Engine.EntitySystem

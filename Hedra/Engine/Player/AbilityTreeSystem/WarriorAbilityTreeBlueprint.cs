@@ -7,16 +7,10 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using System.Drawing;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
-using System.IO;
-using Hedra.Engine.Player.AbilityTreeSystem;
-using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Player.Skills.Warrior;
-using OpenTK;
-namespace Hedra.Engine.Player
+using Hedra.Engine.Rendering;
+
+namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     /// <summary>
     /// Description of WaterTreeBlueprint.

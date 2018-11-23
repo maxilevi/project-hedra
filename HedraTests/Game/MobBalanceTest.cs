@@ -5,6 +5,7 @@ using Hedra;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ModuleSystem;
+using Hedra.EntitySystem;
 using HedraTests.Player;
 using NUnit.Framework;
 

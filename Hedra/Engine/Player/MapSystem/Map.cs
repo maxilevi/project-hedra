@@ -285,7 +285,7 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void GenerateMesh(MapBaseItem BaseItem, Vector2 Coords)
         {
-            TaskManager.Parallel(delegate
+            TaskScheduler.Parallel(delegate
             {
                 var prevMesh = BaseItem.Mesh;
                 var item = _meshBuilder.BuildItem(Coords);
@@ -324,7 +324,7 @@ namespace Hedra.Engine.Player.MapSystem
                     _stateManager.CaptureState();
                     this.UpdateChunks();
                     this.ClearIcons();
-                    TaskManager.Parallel(this.UpdateIcons);
+                    TaskScheduler.Parallel(this.UpdateIcons);
                     SkyManager.UpdateDayColors = false;
                     WorldRenderer.EnableCulling = false;                  
                     this._targetSize = 1.0f;
@@ -350,7 +350,7 @@ namespace Hedra.Engine.Player.MapSystem
                     this._targetSize = 0f;
                     this._targetHeight = 0;
                     this._targetTime = SkyManager.PeekTime();
-                    TaskManager.When(() => _height < Camera.DefaultDelegate().Y, delegate
+                    TaskScheduler.When(() => _height < Camera.DefaultDelegate().Y, delegate
                     {
 
                         this._player.View.PositionDelegate = Camera.DefaultDelegate;

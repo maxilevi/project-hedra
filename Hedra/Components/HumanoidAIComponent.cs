@@ -1,13 +1,15 @@
 using System;
-using System.ComponentModel;
+using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using OpenTK;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Components
 {
     public abstract class HumanoidAIComponent : Component<IHumanoid>
     {

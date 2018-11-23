@@ -8,6 +8,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ModuleSystem;
+using Hedra.EntitySystem;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;

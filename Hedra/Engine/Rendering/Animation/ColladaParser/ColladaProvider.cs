@@ -6,17 +6,17 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
     public class ColladaProvider : IColladaProvider
     {
-        private static XmlNode ParsePath(string ColladaFile)
+        private static XmlNode ParsePath(string ColladaFile, bool AssertHasArmature)
         {
             var document = new XmlDocument();
             document.LoadXml(ColladaFile);
-            AssertCorrectName(document);
+            if(AssertHasArmature) AssertCorrectName(document);
             return document.ChildNodes[1];
         }
         
         public AnimatedModelData LoadColladaModel(string ColladaFile)
         {
-            var node = ParsePath(ColladaFile);
+            var node = ParsePath(ColladaFile, true);
             var skinningData = LoadSkinning(node);
     
             var jointsLoader = new JointsLoader(node["library_visual_scenes"], skinningData.JointOrder);
@@ -37,9 +37,9 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             return geometryLoader.ExtractModelData();
         }
 
-        public static ModelData LoadModel(string ColladaFile)
+        public ModelData LoadModel(string ColladaFile)
         {
-            var node = ParsePath(ColladaFile);
+            var node = ParsePath(ColladaFile, false);
             var skinningData = LoadSkinning(node);
             return LoadGeometry(node, skinningData);
         }

@@ -19,3 +19,6 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.AISystem.Behaviours'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.BiomeSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.WeaponSystem'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.EntitySystem'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Components'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Rendering'):-rename")]

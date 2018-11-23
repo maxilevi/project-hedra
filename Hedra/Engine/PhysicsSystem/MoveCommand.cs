@@ -8,6 +8,7 @@
  */
 using System;
 using Hedra.Engine.EntitySystem;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem

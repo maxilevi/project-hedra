@@ -14,6 +14,8 @@ using System.Linq;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.PhysicsSystem;
 using System.Reflection;
+using Hedra.Engine.IO;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -33,7 +35,7 @@ namespace Hedra.Engine.CacheSystem
             CachedExtradata = new Dictionary<float, List<CompressedValue<float>>>();
             CachedColors =  new Dictionary<Vector4, List<CompressedValue<Vector4>>>();
             var foundTypes = new HashSet<CacheItem>();
-            var typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(CacheManager).Namespace).ToArray();
+            var typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(this.GetType().Namespace).ToArray();
             foreach (var type in typeList)
             {
                 if(!type.IsSubclassOf(typeof(CacheType)) || Attribute.GetCustomAttribute(type, typeof(CacheIgnore)) != null) continue;

@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using OpenTK;
 using OpenTK.Input;

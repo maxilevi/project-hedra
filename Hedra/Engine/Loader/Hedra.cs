@@ -2,31 +2,30 @@
     //#define SHOW_COLLISION
 #endif
 
-using Hedra.Engine.Generation;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
-using Hedra.Engine.WorldBuilding;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Sound;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Hedra.Engine;
+using Hedra.API;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Game;
-using Hedra.Engine.Loader;
+using Hedra.Engine.Generation;
+using Hedra.Engine.IO;
 using Hedra.Engine.Localization;
-using Hedra.Engine.ModdingSystem;
+using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Sound;
+using Hedra.Engine.WorldBuilding;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra
+namespace Hedra.Engine.Loader
 {
     class Hedra : HedraWindow, IHedra
     {

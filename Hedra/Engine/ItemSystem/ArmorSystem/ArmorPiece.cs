@@ -1,55 +1,63 @@
 using System;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.ItemSystem.ArmorSystem
 {
-    public abstract class ArmorPiece : IModel, IDisposable
+    public abstract class ArmorPiece : IDisposable, IModel
     {
         public bool Disposed { get; set; }
         protected IHumanoid Owner { get; private set; }
-        protected abstract Matrix4 PlacementMatrix { get; }
-        protected abstract Vector3 PlacementPosition { get; }
-        protected ObjectMesh Mesh { get; }
+        private readonly ModelData _model;
 
-        protected ArmorPiece(VertexData Model)
+        protected ArmorPiece(ModelData Model)
         {
-            Mesh = ObjectMesh.FromVertexData(Model);
+            _model = Model;
         }
         
         public void Update(IHumanoid Humanoid)
         {
-            Owner = Humanoid;
-            Mesh.TransformationMatrix = /*Owner.Class.
-                                        * */PlacementMatrix.ClearTranslation() 
-                                        * Matrix4.CreateTranslation(-Owner.Model.Position + PlacementPosition);
-            Mesh.Position = Owner.Model.Position;
+            UpdateOwner(Humanoid);
+        }
+
+        private void UpdateOwner(IHumanoid Humanoid)
+        {
+            if (Humanoid != Owner)
+            {
+                if(Owner != null) 
+                    UnregisterOwner(Owner);
+                Owner = Humanoid;
+                RegisterOwner(Humanoid);
+            }
+        }
+
+        private void RegisterOwner(IHumanoid Humanoid)
+        {
+            Humanoid.Model.AddModel(_model);
         }
         
+        private void UnregisterOwner(IHumanoid Humanoid)
+        {
+            Humanoid.Model.RemoveModel(_model);
+        }
+
         public Vector4 Tint { get; set; }
-        
         public Vector4 BaseTint { get; set; }
-        
         public Vector3 Scale { get; set; }
-        
         public Vector3 Position { get; set; }
-        
         public Vector3 Rotation { get; set; }
-        
         public bool Enabled { get; set; }
-        
         public bool ApplyFog { get; set; }
-        
         public bool Pause { get; set; }
-        
         public float Alpha { get; set; }
-        
         public float AnimationSpeed { get; set; }
 
         public void Dispose()
         {
-            Mesh.Dispose();
+            if(Owner != null) UnregisterOwner(Owner);
             Disposed = true;
         }
     }

@@ -67,7 +67,7 @@ namespace Hedra.Engine.Rendering.Animation
         public AnimatedModel(ModelData Model, Joint RootJoint, int JointCount)
         {
             _baseModelData = Model;
-
+            _addedModels = new List<ModelData>();
             Executer.ExecuteOnMainThread(delegate
             {
                 _vertices = new VBO<Vector3>(Model.Vertices, Model.Vertices.Length * Vector3.SizeInBytes,
@@ -116,6 +116,7 @@ namespace Hedra.Engine.Rendering.Animation
             var model = ModelData.Combine(_baseModelData, _addedModels.ToArray());
             Executer.ExecuteOnMainThread(delegate
             {
+                if (_disposed) return;
                 _vertices.Update(model.Vertices, model.Vertices.Length * Vector3.SizeInBytes);
                 _colors.Update(model.Colors, model.Colors.Length * Vector4.SizeInBytes);
                 _normals.Update(model.Normals, model.Normals.Length * Vector3.SizeInBytes);

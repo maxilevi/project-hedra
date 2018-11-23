@@ -6,6 +6,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scenes;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
@@ -111,7 +112,7 @@ namespace Hedra.Engine.EntitySystem
             Vector4 homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
             Vector3 ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
             _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f);
-            _healthBar.Scale = _originalScale * _barSize;
+            _healthBar.Scale = _originalScale * _barSize * Math.Min(1, Parent.Model.Height / 7f);
 
             if (!_textUpdated)
             {

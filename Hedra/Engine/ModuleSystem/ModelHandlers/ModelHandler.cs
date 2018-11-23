@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.ModuleSystem.ModelHandlers
 {

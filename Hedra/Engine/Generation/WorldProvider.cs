@@ -9,15 +9,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Hedra.API;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.ModdingSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.ModelHandlers;
 using Hedra.Engine.PhysicsSystem;
@@ -30,6 +31,7 @@ using Hedra.Engine.Sound;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -515,7 +517,7 @@ namespace Hedra.Engine.Generation
 
             model.OnPickup += delegate(IPlayer Player)
             {
-                TaskManager.While(() => !model.Disposed, delegate
+                TaskScheduler.While(() => !model.Disposed, delegate
                 {
                     model.Outline = false;
                     model.Position = Mathf.Lerp(model.Position, Player.Position, Time.DeltaTime * 5f);

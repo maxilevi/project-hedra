@@ -70,7 +70,7 @@ namespace Hedra.Engine.Rendering.UI
                 UIText.Enabled = previousState;
             }
 
-            if (Thread.CurrentThread.ManagedThreadId != Hedra.MainThreadId)
+            if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
             {
                 UIText = new GUITexture(0, new Vector2(size.X / DefaultSize.X, size.Y / DefaultSize.Y), _temporalPosition);
                 Executer.ExecuteOnMainThread(Action);

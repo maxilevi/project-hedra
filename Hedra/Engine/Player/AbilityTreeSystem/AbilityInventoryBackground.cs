@@ -1,5 +1,6 @@
 using System.Drawing;
 using Hedra.Engine.Player.Inventory;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem

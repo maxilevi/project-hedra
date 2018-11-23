@@ -12,6 +12,9 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Particles;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
@@ -58,7 +61,7 @@ namespace Hedra.WeaponSystem
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
-            Owner.AttackSurroundings(Owner.DamageEquation * 1.15f * Options.DamageModifier, delegate(Entity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * 1.15f * Options.DamageModifier, delegate(IEntity Mob)
             {
                 if (Utils.Rng.Next(0, 5) == 1 && Options.DamageModifier > .5f)
                     Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);
@@ -89,7 +92,7 @@ namespace Hedra.WeaponSystem
 
             base.BasePrimaryAttack(Human, Options);
             Trail.Emit = false;
-            TaskManager.After(200, () => Trail.Emit = true);
+            TaskScheduler.After(200, () => Trail.Emit = true);
         }
 
         public override void Attack2(IHumanoid Human, AttackOptions Options)

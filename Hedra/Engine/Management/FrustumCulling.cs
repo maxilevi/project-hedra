@@ -4,11 +4,12 @@
  * Time: 11:42 p.m.
  *
  */
+
 using System;
 using Hedra.Engine.Game;
-using OpenTK;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Management
@@ -46,8 +47,8 @@ namespace Hedra.Engine.Management
         
         private void NormalizePlane(float[,] Frustum , int side){
             float magnitude = (float)Math.Sqrt( Frustum[side,A] * Frustum[side,A] + 
-                                                   Frustum[side,B] * Frustum[side,B] + 
-                                                   Frustum[side,C] * Frustum[side,C] );
+                                                Frustum[side,B] * Frustum[side,B] + 
+                                                Frustum[side,C] * Frustum[side,C] );
             Frustum[side,A] /= magnitude;
             Frustum[side,B] /= magnitude;
             Frustum[side,C] /= magnitude;
@@ -72,18 +73,18 @@ namespace Hedra.Engine.Management
             Clip[8] = (Modl.M31 * Proj.M11) + (Modl.M32 * Proj.M21) + (Modl.M33 * Proj.M31) + (Modl.M34 * Proj.M41);
             Clip[9] = (Modl.M31 * Proj.M12) + (Modl.M32 * Proj.M22) + (Modl.M33 * Proj.M32) + (Modl.M34 * Proj.M42);
             Clip[10] = (Modl.M31 * Proj.M13) + (Modl.M32 * Proj.M23) + (Modl.M33 * Proj.M33) +
-                        (Modl.M34 * Proj.M43);
+                       (Modl.M34 * Proj.M43);
             Clip[11] = (Modl.M31 * Proj.M14) + (Modl.M32 * Proj.M24) + (Modl.M33 * Proj.M34) +
-                        (Modl.M34 * Proj.M44);
+                       (Modl.M34 * Proj.M44);
 
             Clip[12] = (Modl.M41 * Proj.M11) + (Modl.M42 * Proj.M21) + (Modl.M43 * Proj.M31) +
-                        (Modl.M44 * Proj.M41);
+                       (Modl.M44 * Proj.M41);
             Clip[13] = (Modl.M41 * Proj.M12) + (Modl.M42 * Proj.M22) + (Modl.M43 * Proj.M32) +
-                        (Modl.M44 * Proj.M42);
+                       (Modl.M44 * Proj.M42);
             Clip[14] = (Modl.M41 * Proj.M13) + (Modl.M42 * Proj.M23) + (Modl.M43 * Proj.M33) +
-                        (Modl.M44 * Proj.M43);
+                       (Modl.M44 * Proj.M43);
             Clip[15] = (Modl.M41 * Proj.M14) + (Modl.M42 * Proj.M24) + (Modl.M43 * Proj.M34) +
-                        (Modl.M44 * Proj.M44);
+                       (Modl.M44 * Proj.M44);
 
 
             //Lado derecho del Frustum
@@ -231,13 +232,14 @@ namespace Hedra.Engine.Management
             return true;
         }
     }
-}
-public enum ClippingPlane
-{
-    RIGHT,
-    LEFT,
-    BOTTOM,
-    TOP,
-    BACK,
-    FRONT
+
+    public enum ClippingPlane
+    {
+        RIGHT,
+        LEFT,
+        BOTTOM,
+        TOP,
+        BACK,
+        FRONT
+    }
 }

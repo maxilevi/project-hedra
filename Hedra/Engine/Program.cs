@@ -1,15 +1,13 @@
-
 using System;
-using OpenTK.Graphics;
-using Hedra.Engine.Management;
 using System.Collections.Generic;
-using OpenTK;
-using Hedra.Engine;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Native;
+using OpenTK;
+using OpenTK.Graphics;
 
-namespace Hedra
+namespace Hedra.Engine
 {
     public static class Program
     {
@@ -50,7 +48,7 @@ namespace Hedra
             GameSettings.Height = GameSettings.DeviceHeight;
             GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;
 
-            GameWindow = new Hedra(GameSettings.Width, GameSettings.Height,
+            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height,
                 GraphicsMode.Default, "Project Hedra", device, 3, 3);
             GameWindow.WindowState = WindowState.Maximized;
             if (OSManager.RunningPlatform == Platform.Windows)

@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.ItemSystem
@@ -34,7 +37,7 @@ namespace Hedra.Engine.ItemSystem
         {
             VertexData model;
             if (Path.EndsWith(".dae"))
-                model = AdjustModel(ColladaLoader.LoadModel(Path).ToVertexData());
+                model = AdjustModel(AssetManager.DAELoader(Path).ToVertexData());
             else if (Path.EndsWith(".ply"))
                 model = AssetManager.PLYLoader(Path, Vector3.One);
             else

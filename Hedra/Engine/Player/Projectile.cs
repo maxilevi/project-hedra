@@ -17,6 +17,8 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Player
 {

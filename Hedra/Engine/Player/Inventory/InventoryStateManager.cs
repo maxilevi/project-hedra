@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (!_state) throw new InvalidOperationException("Cannot release an empty state.");
             if (_isExiting) return;
-            TaskManager.Concurrent(this.LerpState);
+            TaskScheduler.Concurrent(this.LerpState);
         }
 
         public override void CaptureState()

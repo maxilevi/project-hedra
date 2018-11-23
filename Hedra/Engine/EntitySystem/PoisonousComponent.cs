@@ -12,6 +12,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Management;
 using System.Collections;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem

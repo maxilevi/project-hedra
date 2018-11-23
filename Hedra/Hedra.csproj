@@ -119,6 +119,9 @@
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="API\AIRegistry.cs" />
     <Compile Include="API\AnimationEventRegistry.cs" />
+    <Compile Include="API\IMod.cs" />
+    <Compile Include="API\Mod.cs" />
+    <Compile Include="API\ModificationsLoader.cs" />
     <Compile Include="API\ModRegistry.cs" />
     <Compile Include="API\WeaponRegistry.cs" />
     <Compile Include="BiomeSystem\BiomeColorsDesign.cs" />
@@ -129,6 +132,15 @@
     <Compile Include="BiomeSystem\BiomeSkyDesign.cs" />
     <Compile Include="BiomeSystem\BiomeStructureDesign.cs" />
     <Compile Include="BiomeSystem\BiomeTreeDesign.cs" />
+    <Compile Include="Components\ArcherAIComponent.cs" />
+    <Compile Include="Components\BlacksmithComponent.cs" />
+    <Compile Include="Components\CarriageAIComponent.cs" />
+    <Compile Include="Components\CombatAIComponent.cs" />
+    <Compile Include="Components\EscapeAIComponent.cs" />
+    <Compile Include="Components\FollowAIComponent.cs" />
+    <Compile Include="Components\HeadIconComponent.cs" />
+    <Compile Include="Components\HumanoidAIComponent.cs" />
+    <Compile Include="Components\MageAIComponent.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeColors.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeEnviromentDesign.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeGenerationDesign.cs" />
@@ -234,8 +246,6 @@
     <Compile Include="Engine\EntitySystem\BossSystem\SpawnComponent.cs" />
     <Compile Include="Engine\EntitySystem\Component.cs" />
     <Compile Include="Engine\EntitySystem\EffectFactory.cs" />
-    <Compile Include="Engine\EntitySystem\IComponent.cs" />
-    <Compile Include="Engine\EntitySystem\IPhysicsComponent.cs" />
     <Compile Include="Engine\EntitySystem\MercenaryComponent.cs" />
     <Compile Include="Engine\Game\GameLoader.cs" />
     <Compile Include="Engine\Game\GameManager.cs" />
@@ -247,10 +257,12 @@
     <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
     <Compile Include="Engine\Input\Cursor.cs" />
     <Compile Include="Engine\Input\KeyboardManager.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\BootsPiece.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\HelmetPiece.cs" />
+    <Compile Include="Engine\ItemSystem\ArmorSystem\PantsPiece.cs" />
     <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
     <Compile Include="Engine\EntitySystem\AttackSpeedBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
-    <Compile Include="Engine\EntitySystem\IEntity.cs" />
     <Compile Include="Engine\EntitySystem\InteractableComponent.cs" />
     <Compile Include="Engine\EntitySystem\TradeComponent.cs" />
     <Compile Include="Engine\EntitySystem\UpdatableModel.cs" />
@@ -290,7 +302,6 @@
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
     <Compile Include="Engine\Management\IAssetProvider.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
-    <Compile Include="Engine\ModdingSystem\ModificationsLoader.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\ChargeEffect.cs" />
     <Compile Include="Engine\ModuleSystem\ModelHandlers\EntHandler.cs" />
     <Compile Include="Engine\ModuleSystem\ModelHandlers\ModelHandler.cs" />
@@ -362,7 +373,6 @@
     <Compile Include="Engine\Player\StructureAware.cs" />
     <Compile Include="Engine\Player\ICamera.cs" />
     <Compile Include="Engine\Player\IStructureAware.cs" />
-    <Compile Include="Engine\Player\IHumanoid.cs" />
     <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
     <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\IToolbar.cs" />
@@ -403,6 +413,7 @@
     <Compile Include="Engine\Rendering\UI\TextureAnimation.cs" />
     <Compile Include="Engine\Rendering\UI\ShiverAnimation.cs" />
     <Compile Include="Engine\Rendering\UpdatableObjectMeshModel.cs" />
+    <Compile Include="Engine\Rendering\VertexData.cs" />
     <Compile Include="Engine\Sound\ISoundProvider.cs" />
     <Compile Include="Engine\Sound\SoundFamily.cs" />
     <Compile Include="Engine\Sound\SoundProvider.cs" />
@@ -488,7 +499,6 @@
     <Compile Include="Engine\EntitySystem\FireComponent.cs" />
     <Compile Include="Engine\EntitySystem\FreezeComponent.cs" />
     <Compile Include="Engine\EntitySystem\FreezingComponent.cs" />
-    <Compile Include="Engine\EntitySystem\IEffectComponent.cs" />
     <Compile Include="Engine\EntitySystem\IMountable.cs" />
     <Compile Include="Engine\EntitySystem\KnockComponent.cs" />
     <Compile Include="Engine\EntitySystem\MerchantComponent.cs" />
@@ -595,7 +605,7 @@
     <Compile Include="Engine\Management\OcclusionCulling.cs" />
     <Compile Include="Engine\Rendering\PointLight.cs" />
     <Compile Include="Engine\Rendering\ShaderManager.cs" />
-    <Compile Include="Engine\Management\TaskManager.cs" />
+    <Compile Include="Engine\Management\TaskScheduler.cs" />
     <Compile Include="Engine\Management\Executer.cs" />
     <Compile Include="Engine\Management\UpdateManager.cs" />
     <Compile Include="Engine\Management\ZipManager.cs" />
@@ -674,25 +684,16 @@
     <Compile Include="Engine\Player\Inventory\TradeInventory.cs" />
     <Compile Include="Engine\Player\VisualMessageDispatcher.cs" />
     <Compile Include="Engine\Player\WeaponAttack.cs" />
-    <Compile Include="Engine\WorldBuilding\ArcherAIComponent.cs" />
-    <Compile Include="Engine\WorldBuilding\BlacksmithComponent.cs" />
     <Compile Include="Engine\EntitySystem\BossSystem\BossHealthBarComponent.cs" />
     <Compile Include="Engine\EntitySystem\BossSystem\BossGenerator.cs" />
-    <Compile Include="Engine\WorldBuilding\CombatAIComponent.cs" />
-    <Compile Include="Engine\WorldBuilding\HumanoidAIComponent.cs" />
     <Compile Include="Engine\WorldBuilding\IStructure.cs" />
     <Compile Include="Engine\WorldBuilding\SleepingPad.cs" />
-    <Compile Include="Engine\WorldBuilding\CarriageAIComponent.cs" />
     <Compile Include="Engine\WorldBuilding\Chest.cs" />
     <Compile Include="Engine\WorldBuilding\InteractableStructure.cs" />
     <Compile Include="Engine\WorldBuilding\LampPost.cs" />
-    <Compile Include="Engine\WorldBuilding\MageAIComponent.cs" />
     <Compile Include="Engine\WorldBuilding\NameGenerator.cs" />
-    <Compile Include="Engine\WorldBuilding\FollowAIComponent.cs" />
-    <Compile Include="Engine\WorldBuilding\EscapeAIComponent.cs" />
     <Compile Include="Engine\WorldBuilding\Plateau.cs" />
     <Compile Include="Engine\WorldBuilding\WorldBuilding.cs" />
-    <Compile Include="Engine\WorldBuilding\HeadIconComponent.cs" />
     <Compile Include="Engine\WorldBuilding\BaseStructure.cs" />
     <Compile Include="Engine\Reflection.cs" />
     <Compile Include="Engine\Rendering\Colors.cs" />
@@ -811,7 +812,11 @@
     <Compile Include="Engine\Rendering\MarchingTetrahedra.cs" />
     <Compile Include="Engine\Rendering\MeshData.cs" />
     <Compile Include="Engine\Rendering\NvidiaGPUFix32.cs" />
-    <Compile Include="API\Mod.cs" />
+    <Compile Include="EntitySystem\IComponent.cs" />
+    <Compile Include="EntitySystem\IEffectComponent.cs" />
+    <Compile Include="EntitySystem\IEntity.cs" />
+    <Compile Include="EntitySystem\IHumanoid.cs" />
+    <Compile Include="EntitySystem\IPhysicsComponent.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Engine\Rendering\NvidiaGPUFix64.cs" />
     <Compile Include="Engine\Rendering\Particles\TrailRenderer.cs" />
@@ -851,7 +856,6 @@
     <Compile Include="Engine\Rendering\UI\UIElement.cs" />
     <Compile Include="Engine\Rendering\UI\UserInterface.cs" />
     <Compile Include="Engine\Rendering\VAO.cs" />
-    <Compile Include="Engine\Rendering\VertexData.cs" />
     <Compile Include="Engine\Rendering\WorldBuffer.cs" />
     <Compile Include="Engine\Rendering\WorldRenderer.cs" />
     <Compile Include="Engine\Scenes\MenuBackground.cs" />
@@ -898,6 +902,7 @@
     <Compile Include="WeaponSystem\DoubleBlades.cs" />
     <Compile Include="WeaponSystem\Hammer.cs" />
     <Compile Include="WeaponSystem\Hands.cs" />
+    <Compile Include="WeaponSystem\HeavyMeleeWeapon.cs" />
     <Compile Include="WeaponSystem\Katar.cs" />
     <Compile Include="WeaponSystem\Knife.cs" />
     <Compile Include="WeaponSystem\MeleeWeapon.cs" />
@@ -1035,8 +1040,8 @@
       <Link>Assets\Items\Bows\UncommonSpikedGuardBow.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Blend\Chestplate\CommonLeatherChestplate.ply">
-      <Link>Assets\Items\Chestplates\CommonLeatherChestplate.ply</Link>
+    <None Include="..\project-hedra-assets\Models\Blend\Chestplate\CommonLeatherChestplate.dae">
+      <Link>Assets\Items\Chestplates\CommonLeatherChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Claws\CommonBronzeClaw.ply">
@@ -5086,7 +5091,6 @@
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Helmets\" />
     <Folder Include="Assets\Items\Pants\" />
-    <Folder Include="EntitySystem" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Helmets\" />

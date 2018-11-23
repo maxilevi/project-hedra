@@ -20,6 +20,8 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Player
 {
@@ -216,7 +218,7 @@ namespace Hedra.Engine.Player
         public void Eat(float FoodHealth)
         {
             Human.IsEating = true;
-            TaskManager.While( 
+            TaskScheduler.While( 
                 () => Human.IsEating && !Human.IsDead,
                 () => Human.Health += FoodHealth * Time.IndependantDeltaTime * .3f);
             Model.BlendAnimation(_eatAnimation);

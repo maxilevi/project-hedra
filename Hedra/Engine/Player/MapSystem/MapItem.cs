@@ -1,6 +1,7 @@
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using System;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Player.MapSystem

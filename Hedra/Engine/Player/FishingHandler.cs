@@ -1,3 +1,5 @@
+using Hedra.EntitySystem;
+
 namespace Hedra.Engine.Player
 {
     public class FishingHandler

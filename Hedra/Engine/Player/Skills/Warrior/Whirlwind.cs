@@ -14,6 +14,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Rendering.Particles;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Warrior

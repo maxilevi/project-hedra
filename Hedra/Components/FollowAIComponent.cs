@@ -6,13 +6,13 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
+
+using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
-using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Components
 {
     /// <inheritdoc />
     /// <summary>

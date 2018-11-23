@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using Hedra.Engine.Generation;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
@@ -119,7 +120,7 @@ namespace Hedra.Engine.Player
 
             if (_player.UI.GamePanel.Enabled)
             {
-                TaskManager.Asynchronous(delegate
+                TaskScheduler.Asynchronous(delegate
                 {
                     _mainText.UIText.Opacity = 0.0001f;
                     float factor = MessageSpeed;
@@ -170,7 +171,7 @@ namespace Hedra.Engine.Player
             
             if (_player.UI.GamePanel.Enabled)
             {
-                TaskManager.Asynchronous(delegate
+                TaskScheduler.Asynchronous(delegate
                 {
                     _playerText.UIText.Opacity = 1;
                     Thread.Sleep( (int) (Item.Time * 1000) );
@@ -219,7 +220,7 @@ namespace Hedra.Engine.Player
 
             if (_player.UI.GamePanel.Enabled)
             {
-                TaskManager.Asynchronous(delegate
+                TaskScheduler.Asynchronous(delegate
                 {
                     _playerText.UIText.Opacity = 1;
                     while (Item.Condition())
@@ -265,7 +266,7 @@ namespace Hedra.Engine.Player
             if (Item.PlaySound)
                 Sound.SoundManager.PlaySound(Sound.SoundType.ButtonHover, _player.Position, false, 1f, 1f);
 
-            TaskManager.Asynchronous(delegate
+            TaskScheduler.Asynchronous(delegate
             {
                 _notificationText.UIText.Opacity = 0.0001f;
                 var factor = MessageSpeed * 2f;

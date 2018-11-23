@@ -4,6 +4,8 @@ using System.Drawing.Text;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace HedraTests
@@ -85,6 +87,11 @@ namespace HedraTests
         public VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
         {
             return new VertexData();
+        }
+
+        public ModelData DAELoader(string File)
+        {
+            return default(ModelData);
         }
 
         public void Dispose()
