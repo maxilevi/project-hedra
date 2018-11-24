@@ -18,14 +18,12 @@ namespace Hedra.WeaponSystem
         public override bool IsMelee => true;
         public Vector3 MainWeaponSize { get; protected set; }
         protected TrailRenderer Trail { get; set; }
-        private Dictionary<ObjectMesh, ObjectMeshCollider> _colliders { get; set; }
         private CollisionShape[] _shapesArray;
         private readonly float _weaponHeight;
         private Vector3 _previousPosition;
 
         protected MeleeWeapon(VertexData MeshData) : base(MeshData)
         {
-            _colliders = new Dictionary<ObjectMesh, ObjectMeshCollider>();
             if (MeshData != null)
             {
                 _weaponHeight = MeshData.SupportPoint(Vector3.UnitY).Y - MeshData.SupportPoint(-Vector3.UnitY).Y;

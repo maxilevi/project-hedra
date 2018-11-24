@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
@@ -14,7 +16,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override bool Place(BlacksmithParameters Parameters, VillageCache Cache)
         {
-            return this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .5f, BlockType.StonePath);
+            return PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .5f, BlockType.StonePath);
         }
 
         public override BuildingOutput Paint(BlacksmithParameters Parameters, BuildingOutput Input)
@@ -27,11 +29,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public override BuildingOutput Build(BlacksmithParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
             var output = base.Build(Parameters, Cache, Rng, Center);
-            output.Structures.Add(new LampPost(Parameters.Position + Parameters.Design.Oven * Parameters.Design.Scale)
-            {
-                Radius = 32,
-                LightColor = new Vector3(1f, .5f, 0f)
-            });
+            var transformation = BuildTransformation(Parameters).ClearTranslation();
+            AddDoors(Parameters, Parameters.Design.Doors, transformation, output);
             return output;
         }
 

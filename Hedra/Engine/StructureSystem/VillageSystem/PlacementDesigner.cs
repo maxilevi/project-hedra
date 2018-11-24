@@ -19,7 +19,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         protected VillageConfiguration Config { get; private set; }
         protected FarmPlacer FarmPlacer { get; private set; }
         protected BlacksmithPlacer BlacksmithPlacer { get; private set; }
-        protected NeighbourhoodPlacer NeighbourhoodPlacer { get; private set; }
+        protected HousePlacer HousePlacer { get; private set; }
         protected Placer<BuildingParameters> StablePlacer { get; private set; }
         protected MarketPlacer MarketPlacer { get; private set; }
 
@@ -30,7 +30,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             this.Config = Config;
             this.FarmPlacer = new FarmPlacer(Root.Template.Farm.Designs, Root.Template.Windmill.Designs, Rng);
             this.BlacksmithPlacer = new BlacksmithPlacer(Root.Template.Blacksmith.Designs, Rng);
-            this.NeighbourhoodPlacer = new NeighbourhoodPlacer(Root.Template.House.Designs, Root.Template.Well.Designs, Rng);
+            this.HousePlacer = new HousePlacer(Root.Template.House.Designs, Root.Template.Well.Designs, Rng);
             this.StablePlacer = new Placer<BuildingParameters>(Root.Template.Stable.Designs, Rng);
             this.MarketPlacer = new MarketPlacer(Root.Template.Well.Designs, Rng);
         }

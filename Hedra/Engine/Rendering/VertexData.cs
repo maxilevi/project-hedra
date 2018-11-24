@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -130,6 +131,12 @@ namespace Hedra.Rendering
             {
                 Extradata.Add(Value);
             }
+        }
+
+        public void Center()
+        {
+            var center = Vertices.Aggregate( (V1,V2) => V1+V2) / Vertices.Count;
+            Vertices = Vertices.Select(V => V-center).ToList();
         }
 
         public void AddExtraData(Vector4 Color, float[] Values){

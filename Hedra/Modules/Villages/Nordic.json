@@ -19,17 +19,22 @@
   "Blacksmith" : {
     "Designs" : [
       {
-        "Path" : "Assets/Env/Village/Blacksmith1.ply",
-        "Scale" : 6.0,
-        "Oven" : {
-	        "X": -16.0,
-			"Y": 0.0,
-			"Z": 10.0
-        },
+        "Path" : "Assets/Env/Village/Blacksmith0.ply",
+        "Scale" : 3.0,
+        "Doors" : [
+          {
+           "Path":  "Assets/Env/Village/Blacksmith0_Door0.ply",
+            "Position" : {
+              "X": 8.7,
+              "Y": 6.0,
+              "Z": -7.08
+            }
+          }
+        ],
         "Blacksmith" : {
-			"X": 10.0,
-			"Y": 0.0,
-			"Z": 24.0
+          "X": 32.0,
+          "Y": 0.0,
+          "Z": 24.0
         }
       }
     ]
@@ -58,11 +63,25 @@
     "Designs" : [
       {
         "Path" : "Assets/Env/Village/House0.ply",
-        "Scale" : 10.0
-      },
-      {
-        "Path" : "Assets/Env/Village/House1.ply",
-        "Scale" : 12.0
+        "Scale" : 4.0,
+        "Doors" : [
+          {
+            "Path":  "Assets/Env/Village/House0_Door0.ply",
+            "Position" : {
+              "X": 4.56401,
+              "Y": 2.87233,
+              "Z": -6.06534
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House0_Door1.ply",
+            "Position" : {
+              "X": -1.1613,
+              "Y": 2.20772,
+              "Z": 3.7195
+            }
+          }
+        ]
       }
     ]
   }

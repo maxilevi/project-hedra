@@ -2,6 +2,7 @@
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">
 
+in vec4 raw_color;
 in vec4 Color;
 in vec4 IColor;
 in float Visibility;
@@ -12,7 +13,7 @@ in vec3 LightDir;
 in vec3 vertex_position;
 in vec3 base_vertex_position;
 in vec3 base_normal;
-in vec4 point_diffuse;
+in vec3 point_diffuse;
 
 layout(location = 0) out vec4 FColor;
 layout(location = 1)out vec4 OutPosition;
@@ -39,12 +40,6 @@ void main()
 		discard;
 	}
 	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, base_vertex_position.xyz * 0.5).r;
-	vec4 inputColor = vec4(linear_to_srbg(Color.xyz + tex * useNoiseTexture), Color.w);
-
-	if(Outline)
-	{
-		inputColor += vec4(Color.xyz, -1.0) * .5;
-	}
 	if(Dither){
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
 		if( d-floor(d) < 0.5) discard;
@@ -52,8 +47,7 @@ void main()
 
 	float ShadowVisibility = 1.0;
 	if(UseFog && UseShadows){
-		float bias = 0.005;//max(0.05 * (1.0 - dot(InNorm.xyz, LightDir)), 0.005);
-		//bias = clamp(bias, 0.0, 1.0);
+		float bias = max(0.001 * (1.0 - dot(InNorm.xyz, LightDir)), 0.0) + 0.001;
 	
 		vec4 ShadowCoords = Coords * vec4(.5,.5,.5,1.0) + vec4(.5,.5,.5, 0.0);
 			
@@ -71,21 +65,33 @@ void main()
 		    }    
 		}
 		shadow /= 9.0;
-		ShadowVisibility = 1.0 - ( (shadow * .45) * Coords.w);
+		ShadowVisibility = 1.0 - ( (shadow * .65) * Coords.w);
 		
 		if(ShadowCoords.z > 1.0)
 			ShadowVisibility = 1.0;
 	}
+	
+	vec3 output_pointlight_color = point_diffuse.xyz * (raw_color.xyz + tex * 10.0) * (Tint.rgb + BaseTint.rgb);
+    vec4 inputColor = vec4(linear_to_srbg((Color.xyz + tex * useNoiseTexture) * ShadowVisibility * (Tint.rgb + BaseTint.rgb)), Color.w);
 
-	vec3 pointLightColor = linear_to_srbg(point_diffuse.xyz) * (Tint.rgb + BaseTint.rgb);
+    if(Outline)
+    {
+        inputColor += vec4(Color.xyz, -1.0) * .5;
+    }
 
-	if(UseFog){
-		vec4 NewColor = mix(sky_color(), inputColor * ShadowVisibility * vec4(Tint.rgb + BaseTint.rgb, 1.0) + vec4(pointLightColor, 0.0), Visibility);
+    inputColor += vec4(linear_to_srbg(output_pointlight_color), 0.0);
+
+	if(UseFog)
+	{
+		vec4 NewColor = mix(sky_color(), inputColor, Visibility);
 		
 		FColor = vec4(NewColor.xyz, Alpha);
-	}else{
-		FColor = vec4( inputColor.xyz * ShadowVisibility * (Tint.rgb + BaseTint.rgb) + pointLightColor, Alpha);
 	}
+	else
+	{
+		FColor = vec4( inputColor.xyz, Alpha);
+	}
+	//FColor = vec4(InNorm.xyz, inputColor.a);
 
 	if (Outline)
 	{
@@ -99,7 +105,7 @@ void main()
 	{
 	    // Ignore the gl_FragCoord.z since it causes issues with the water
 	    mat3 NormalMat = mat3(transpose(inverse(_modelViewMatrix)));
-		OutPosition = vec4((_modelViewMatrix * vec4(InPos, 1.0)).xyz * Alpha, 2.0);
+		OutPosition = vec4((_modelViewMatrix * vec4(InPos, 1.0)).xyz * Alpha, gl_FragCoord.z);
 		OutNormal = vec4(NormalMat * InNorm.xyz, 1.0) * Alpha;
 	}
 }

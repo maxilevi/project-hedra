@@ -315,8 +315,8 @@ namespace Hedra.Engine.EntitySystem
         {
             if (Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             Components.Remove(Component);
-            Component.Dispose();
             if (Component is ITickable tickable) _tickSystem.Remove(tickable);
+            Component.Dispose();
         }
 
         public T SearchComponent<T>()
@@ -464,9 +464,10 @@ namespace Hedra.Engine.EntitySystem
 
             World.RemoveEntity(this);
 
-            var copy = Components.ToArray();
-            for (var i = 0; i < Components.Count; i++)
+            for (var i = Components.Count-1; i > -1; --i)
+            {
                 Components[i]?.Dispose();
+            }
 
             (Model as IAudible)?.StopSound();
 
@@ -479,9 +480,11 @@ namespace Hedra.Engine.EntitySystem
             if (IsDead) return;
 
             Physics.Draw();
-            for (var i = 0; i < Components.Count; i++)
+            for (var i = Components.Count - 1; i > -1; --i)
+            {
                 if (!Components[i].Renderable)
                     Components[i].Draw();
+            }
         }
 
         public virtual void Update()
@@ -494,8 +497,11 @@ namespace Hedra.Engine.EntitySystem
             this.Physics.Update();
             this.UpdateEnvironment();
             this._tickSystem.Tick();
-            for (var i = 0; i < this.Components.Count; i++)
-                this.Components[i].Update();
+            for (var i = Components.Count-1; i > -1; --i)
+            {
+                Components[i].Update();
+            }
+
             if (IsKnocked)
             {
                 _knockedTime -= Time.DeltaTime;

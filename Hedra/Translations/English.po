@@ -58,4 +58,6 @@ low = LOW
 medium = MEDIUM
 high = HIGH
 start_menu = Start Menu
+open_door = TO OPEN THE DOOR
+close_door = TO CLOSE THE DOOR
 

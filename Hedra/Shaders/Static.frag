@@ -92,7 +92,8 @@ float CalculateShadows()
 	{
 		for(float y = -1.0; y <= 1.0; ++y)
 		{
-			for (int i=int(0.0);i<4.0;i++){
+			for (int i=int(0.0);i<4.0;i++)
+			{
 				vec4 fetch = texture(ShadowTex, ShadowCoords.xy + vec2(x, y) * texelSize + poissonDisk[i] / 1500.0);
 				float pcfDepth = fetch.r; 
 				if ( pcfDepth  <  ShadowCoords.z - bias)

@@ -29,6 +29,7 @@ namespace Hedra.Engine.WorldBuilding
     public abstract class InteractableStructure : BaseStructure, IUpdatable
     {
         public virtual float InteractionAngle => .9f;
+        protected virtual bool SingleUse => true;
         protected virtual bool DisposeAfterUse => true;
         protected virtual bool CanInteract => true;
         public virtual Key Key => Key.E;
@@ -44,7 +45,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             EventDispatcher.RegisterKeyDown(this, delegate (object Sender, KeyEventArgs EventArgs)
             {
-                if (_canInteract && Key == EventArgs.Key && !Interacted)
+                if (_canInteract && Key == EventArgs.Key && (!Interacted || !SingleUse))
                 {
                     _shouldInteract = true;
                     EventArgs.Cancel();
@@ -58,18 +59,18 @@ namespace Hedra.Engine.WorldBuilding
             var player = GameManager.Player;
 
             bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
-                player.View.LookingDirection.Xz.NormalizedFast()) > .9f;                
+                player.View.LookingDirection.Xz.NormalizedFast()) > .75f;                
             
             bool IsInRadius() => (this.Position - player.Position).LengthSquared < InteractDistance * InteractDistance;
-
-            if (IsInLookingAngle() && IsInRadius() && !Interacted && CanInteract)
+            if (IsInLookingAngle() && IsInRadius() && (!Interacted || !SingleUse) && CanInteract)
             {
                 player.MessageDispatcher.ShowMessageWhile($"[{Key.ToString()}] {Message}", () => !Disposed && IsInLookingAngle() && IsInRadius());
                 _canInteract = true;
-                if(!_selected) this.OnSelected(player);
-                if (_shouldInteract && !Interacted && !Disposed && CanInteract)
+                if(!_selected) OnSelected(player);
+                if (_shouldInteract && (!Interacted || !SingleUse) && !Disposed && CanInteract)
                 {
-                    this.InvokeInteraction(player);
+                    InvokeInteraction(player);
+                    if (!SingleUse) _shouldInteract = false;
                 }
                 else
                 {
@@ -89,7 +90,7 @@ namespace Hedra.Engine.WorldBuilding
             Interacted = true;
             this.Interact(Player);
             OnInteractEvent?.Invoke(Player);
-            if(DisposeAfterUse) this.Dispose();
+            if(DisposeAfterUse && SingleUse) this.Dispose();
         }
 
         protected virtual void OnSelected(IPlayer Interactee)

@@ -16,7 +16,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     public class VillageAssembler
     {
         private readonly VillageRoot _root;
-        private readonly NeighbourhoodBuilder _neighbourhoodBuilder;
+        private readonly HouseBuilder _houseBuilder;
         private readonly NeighbourhoodWellBuilder _neighbourHoodWellBuilder;
         private readonly FarmBuilder _farmBuilder;
         private readonly BlacksmithBuilder _blacksmithBuilder;
@@ -30,7 +30,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public VillageAssembler(CollidableStructure Structure, VillageRoot Root, Random Rng)
         {
             _structure = Structure;
-            _neighbourhoodBuilder = new NeighbourhoodBuilder(_structure);
+            _houseBuilder = new HouseBuilder(_structure);
             _farmBuilder = new FarmBuilder(_structure);
             _blacksmithBuilder = new BlacksmithBuilder(_structure);
             _stableBuilder = new StableBuilder(_structure);
@@ -53,7 +53,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public void PlaceGroundwork(PlacementDesign Design)
         {
             Design.Markets = LoopStructures(Design.Markets, _marketBuilder, _marketWellBuilder);
-            Design.Neighbourhoods = LoopStructures(Design.Neighbourhoods, _neighbourhoodBuilder, _neighbourHoodWellBuilder);
+            Design.Neighbourhoods = LoopStructures(Design.Neighbourhoods, _houseBuilder, _neighbourHoodWellBuilder);
             Design.Blacksmith = LoopStructures(Design.Blacksmith, _blacksmithBuilder);
             Design.Farms = LoopStructures(Design.Farms, _farmBuilder);
             Design.Stables = LoopStructures(Design.Stables, _stableBuilder);
@@ -96,7 +96,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Design.Markets.ToArray()
             };
             var radius = 0f;
-            var builders = new object[] { _neighbourhoodBuilder, _neighbourHoodWellBuilder, _farmBuilder, _blacksmithBuilder, _stableBuilder, _marketWellBuilder, _marketBuilder};
+            var builders = new object[] { _houseBuilder, _neighbourHoodWellBuilder, _farmBuilder, _blacksmithBuilder, _stableBuilder, _marketWellBuilder, _marketBuilder};
             for (var i = 0; i < builders.Length; i++)
             {
                 for (var j = 0; j < parameters[i].Length; j++)
@@ -133,6 +133,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var height = Physics.HeightAtPosition(position);
             var transMatrix = Matrix4.CreateTranslation(Vector3.UnitY * height);
             var models = compressedModels.Select(M => M.ToVertexData()).ToList();
+            buildingOutput.Structures.ForEach(S => S.Position += Vector3.UnitY * height);
             models.ForEach(M => M.Transform(transMatrix));
             shapes.ForEach(S => S.Transform(transMatrix));
             structure.AddStaticElement(models.ToArray());

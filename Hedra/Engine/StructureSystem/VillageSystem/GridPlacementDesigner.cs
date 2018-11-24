@@ -11,13 +11,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     public class GridPlacementDesigner : PlacementDesigner
     {
-        private HousePlacer HousePlacer { get; }
         private int VillageSize { get; }
         private readonly List<PlacementPoint> _pointsWithBuildings;
         
         public GridPlacementDesigner(VillageRoot Root, VillageConfiguration Config, Random Rng) : base(Root, Config, Rng)
         {
-            HousePlacer = new HousePlacer(Root.Template.House.Designs, Root.Template.Well.Designs, Rng);
             VillageSize = Config.Size;
             _pointsWithBuildings = new List<PlacementPoint>();
         }

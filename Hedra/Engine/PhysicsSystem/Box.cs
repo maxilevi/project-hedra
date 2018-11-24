@@ -7,8 +7,6 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Collections.Generic;
-using Hedra.Engine.Management;
 using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
@@ -18,10 +16,9 @@ namespace Hedra.Engine.PhysicsSystem
     /// </summary>
     public class Box : ICollidable
     {
-        public Vector3 Min { get; set; }
-        public Vector3 Max { get; set; }
+        private Vector3 _min;
+        private Vector3 _max;
         private Box _cache;
-        private Pool<Box> _poolCache;
         private Vector3 _shapeCenter;
         private CollisionShape _shape;
         private CollisionShape _boxShape;
@@ -119,38 +116,6 @@ namespace Hedra.Engine.PhysicsSystem
             }
         }
 
-        public Vector3[] GetHighResolutionVertices(int Resolution)
-        {
-            var defaultDelta = new Vector3(Max.X - Min.X, Max.Y - Min.Y, Max.Z - Min.Z);
-            if (_highResVerticesCache == null) _highResVerticesCache = new Vector3[Resolution * 8];
-
-            for (var i = 0; i < Resolution; i++)
-            {
-                var delta = defaultDelta * ((i+1) / (float) Resolution);
-                _highResVerticesCache[i * 8 + 0] = new Vector3(Min.X, Min.Y, Min.Z);
-                _highResVerticesCache[i * 8 + 1] = new Vector3(Min.X + delta.X, Min.Y, Min.Z);
-                _highResVerticesCache[i * 8 + 2] = new Vector3(Min.X, Min.Y, Min.Z + delta.Z);
-                _highResVerticesCache[i * 8 + 3] = new Vector3(Min.X + delta.X, Min.Y, Min.Z + delta.Z);
-                _highResVerticesCache[i * 8 + 4] = new Vector3(Min.X, Min.Y + defaultDelta.Y, Min.Z);
-                _highResVerticesCache[i * 8 + 5] = new Vector3(Min.X + delta.X, Min.Y + defaultDelta.Y, Min.Z);
-                _highResVerticesCache[i * 8 + 6] = new Vector3(Min.X, Min.Y + defaultDelta.Y, Min.Z + delta.Z);
-                _highResVerticesCache[i * 8 + 7] = new Vector3(Min.X + delta.X, Min.Y + defaultDelta.Y, Min.Z + delta.Z);
-            }
-            return _highResVerticesCache;        
-        }
-        /*
-                public Box Cache
-                {
-                    get
-                    {
-                        if(_poolCache == null) _poolCache = new Pool<Box>();
-                        var cache = _poolCache.Grab();
-                        cache.Min = this.Min;
-                        cache.Max = this.Max;                
-                        return cache;
-                    }
-                }*/
-
         public Box Cache
         {
             get
@@ -166,15 +131,14 @@ namespace Hedra.Engine.PhysicsSystem
         }
 
         public Vector3 Size => Max - Min;
-        
-        public float Height => Size.Y;
 
         public Vector3 Average => (Min + Max) / 2;
 
         public CollisionShape ToShape()
         {
 
-            if (_shapeCenter == this.Average && _shape != null)
+            var avg = this.Average;
+            if (_shapeCenter == avg && _shape != null)
                 return _shape;
 
             if(_boxShape == null)
@@ -198,14 +162,41 @@ namespace Hedra.Engine.PhysicsSystem
             _boxShape.BroadphaseRadius = (this.Min - this.Max).LengthFast;
 
             _shape = _boxShape;
-            _shapeCenter = this.Average;
+            _shapeCenter = avg;
 
             return _shape;
         }
+        
+        
+        public float BroadphaseRadius { get; private set; }
+        
+        public Vector3 BroadphaseCenter => _shapeCenter;
+        
+        public bool UseBroadphase => true;
 
-        public Box Clone()
+        private void Recalculate()
         {
-            return new Box(this.Min, this.Max);
+            BroadphaseRadius = Math.Max(Size.X, Size.Z) * .5f;
+        }
+
+        public Vector3 Min
+        {
+            get => _min;
+            set
+            {
+                _min = value;
+                Recalculate();
+            }
+        }
+
+        public Vector3 Max
+        {
+            get => _max;
+            set
+            {
+                _max = value;
+                Recalculate();
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
@@ -11,7 +12,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     public abstract class Builder<T> where T : IBuildingParameters
     {
         protected virtual bool LookAtCenter => true;
-        private CollidableStructure Structure { get; }
+        protected CollidableStructure Structure { get; }
         private Village VillageObject { get; }
         
         protected Builder(CollidableStructure Structure)
@@ -39,8 +40,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         /* Called via reflection */
         public virtual BuildingOutput Build(T Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            var rotationMatrix = LookAtCenter ? Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian) : Matrix4.Identity;
-            var transformationMatrix = rotationMatrix * Matrix4.CreateTranslation(Parameters.Position);
+            var transformationMatrix = BuildTransformation(Parameters);
             var model = Cache.GrabModel(Parameters.Design.Path);
             model.Transform(transformationMatrix);
 
@@ -51,6 +51,33 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Models = new[] { model },
                 Shapes = shapes
             };
+        }
+
+        protected void AddDoors(T Parameters, DoorTemplate[] Doors, Matrix4 Transformation, BuildingOutput Output)
+        {
+            for (var i = 0; i < Doors.Length; ++i)
+            {
+                var doorTemplate = Doors[i];
+                var vertexData = AssetManager.PLYLoader(doorTemplate.Path, Vector3.One * Parameters.Design.Scale);
+                var rotationPoint = Vector3.TransformPosition(Door.GetRotationPointFromMesh(vertexData), Transformation);
+                vertexData.Center();
+                vertexData.Transform(Transformation);
+                var offset = Vector3.TransformPosition(doorTemplate.Position * Parameters.Design.Scale, Transformation);
+                Output.Structures.Add(
+                    new Door(
+                        vertexData,
+                        rotationPoint,
+                        Parameters.Position + offset,
+                        Structure
+                    )
+                );
+            }
+        }
+        
+        protected Matrix4 BuildTransformation(T Parameters)
+        {
+            var rotationMatrix = LookAtCenter ? Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian) : Matrix4.Identity;
+            return rotationMatrix * Matrix4.CreateTranslation(Parameters.Position);
         }
 
         /// <summary>

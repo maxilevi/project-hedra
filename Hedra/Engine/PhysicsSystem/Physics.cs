@@ -282,7 +282,7 @@ namespace Hedra.Engine.PhysicsSystem
             var obj2Box = Obj2 as Box;
 
             if (obj1Box != null && obj2Box != null)
-                return Physics.AABBvsAABB(obj1Box, obj2Box);
+                return AABBvsAABB(obj1Box, obj2Box);
             
             if(obj1Box == null && obj2Box == null)
                 return GJKCollision.Collides(Obj1 as CollisionShape, Obj2 as CollisionShape);

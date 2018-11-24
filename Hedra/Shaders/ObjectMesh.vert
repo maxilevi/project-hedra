@@ -27,6 +27,7 @@ uniform bool Outline;
 const float ShadowTransition = 20.0;
 
 
+out vec4 raw_color;
 out vec4 Color;
 out float Visibility;
 out float pass_height;
@@ -38,7 +39,7 @@ out vec4 Coords;
 out vec3 LightDir;
 out vec3 vertex_position;
 out vec3 base_normal;
-out vec4 point_diffuse;
+out vec3 point_diffuse;
 out vec3 base_vertex_position;
 
 layout(std140) uniform FogSettings {
@@ -53,6 +54,7 @@ struct PointLight
 {
     vec3 Position;
     vec3 Color;
+    float Radius;
 };
 
 uniform PointLight Lights[8];
@@ -96,20 +98,11 @@ void main(){
 	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
 	
 	vec3 SurfaceNormal = InNormal;
-	
-	SurfaceNormal += AnimationRotationPoint;
-	SurfaceNormal = TransformNormal(SurfaceNormal, AnimationRotation);
-	SurfaceNormal -= AnimationRotationPoint;
-	
-	SurfaceNormal += Point;
-	SurfaceNormal = TransformNormal(SurfaceNormal, TransMatrix);
-	SurfaceNormal -= Point;
-	
-	SurfaceNormal += LocalRotationPoint;
+	SurfaceNormal = TransformNormal(SurfaceNormal, AnimationRotation);	
 	SurfaceNormal = TransformNormal(SurfaceNormal, LocalRotation);
-	SurfaceNormal -= LocalRotationPoint;
-	
-	SurfaceNormal = TransformNormal(SurfaceNormal, Matrix);
+    SurfaceNormal = TransformNormal(SurfaceNormal, TransMatrix);
+    SurfaceNormal = TransformNormal(SurfaceNormal, Matrix);
+
 	
 	//Lighting
 	vec3 unitNormal = normalize(SurfaceNormal);
@@ -117,34 +110,37 @@ void main(){
 	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - Vertex.xyz);
 
 	vec3 FLightColor = vec3(0.0, 0.0, 0.0);
-	for(int i = int(0.0); i < 8.0; i++){
-		float dist = length(Lights[i].Position - Vertex.xyz);
-		vec3 toLightPoint = normalize(Lights[i].Position);
-		float att = 1.0 / (1.0 + 0.35 * dist * dist);
-		att *= 20.0;
-		att = min(att, 1.0);
-		
-		FLightColor += Lights[i].Color * att; 
+	float average_color = (LightColor.r + LightColor.g + LightColor.b) / 3.0; 
+	for(int i = int(0.0); i < 8.0; i++)
+	{
+		float dist = length(Lights[i].Position.xyz - Vertex.xyz);
+        float att = 1.0 / (1.0 + dist * dist);
+        att *= Lights[i].Radius * .5;
+        att = min(att, 1.0);
+        
+        FLightColor += Lights[i].Color * att * .5 * (1.0 - average_color); 
 	}
 	FLightColor =  clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 	vec3 FullLight = clamp(FLightColor + LightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 
+	Ambient = 0.25;
 	Color = rim(linear_color.rgb, LightColor, unitToCamera, unitNormal) 
 	+ diffuse(unitToLight, unitNormal, LightColor) * linear_color
 	+ specular(unitToLight, unitNormal, unitToCamera, LightColor);
 
-	Ambient = 0.25;
-	point_diffuse = diffuse(unitToLight, unitNormal, FLightColor) * linear_color;
+	point_diffuse = diffuse(unitToLight, unitNormal, FLightColor).rgb;
 
 	InPos = Vertex.xyz;
 	vertex_position = Vertex.xyz;
 	base_vertex_position = InVertex.xyz;
-	base_normal = SurfaceNormal;
+	base_normal = unitNormal;
 	
-	InNorm = normalize(unitNormal);
+	InNorm = SurfaceNormal;
+	raw_color = linear_color;
 	
 	//Shadows Stuff
-	if(UseShadows){
+	if(UseShadows)
+	{
 		float ShadowDist = DistanceToCamera - (ShadowDistance - ShadowTransition);
 		ShadowDist /= ShadowTransition;
 		ShadowDist = clamp(1.0 - ShadowDist, 0.0, 1.0);
@@ -155,10 +151,5 @@ void main(){
 
  vec3 TransformNormal(vec3 norm, mat4 invMat)
 {
-	invMat = inverse(invMat);
-    vec3 n;
-    n.x = dot(norm, invMat[0].xyz);
-    n.y = dot(norm, invMat[1].xyz);
-    n.z = dot(norm, invMat[2].xyz);
-    return n;
+    return mat3(transpose(inverse(invMat))) * norm;
 }

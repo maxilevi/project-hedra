@@ -4,17 +4,26 @@ using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
 {
-    public class HousePlacer : NeighbourhoodPlacer
+    public class HousePlacer : Placer<HouseParameters>
     {
-        public HousePlacer(DesignTemplate[] Designs, DesignTemplate[] WellDesigns, Random Rng) : base(Designs, WellDesigns, Rng)
+        protected DesignTemplate[] WellDesigns { get; set; }
+        private readonly HouseDesignTemplate[] _houseDesigns;
+        
+        public HousePlacer(HouseDesignTemplate[] Designs, DesignTemplate[] WellDesigns, Random Rng) : base(Designs, Rng)
         {
+            this.WellDesigns = WellDesigns;
+            _houseDesigns = Designs;
         }
         
-        public override NeighbourhoodParameters FromPoint(PlacementPoint Point)
+        public override HouseParameters FromPoint(PlacementPoint Point)
         {
-            var parameter = base.FromPoint(Point);
-            parameter.IsSingle = true;
-            return parameter;
+            return new HouseParameters
+            {
+                Design = this.SelectRandom(_houseDesigns),
+                WellTemplate = WellDesigns[Rng.Next(0, WellDesigns.Length)],
+                Position = Point.Position,
+                Rng = Rng
+            };
         }
     }
 }

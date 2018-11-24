@@ -69,6 +69,7 @@
     <ProjectReference Include="..\Hedra\Hedra.csproj">
       <Project>{301a6b68-cf39-4e86-a50a-479b96a5a298}</Project>
       <Name>Hedra</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

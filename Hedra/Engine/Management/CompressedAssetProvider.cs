@@ -236,8 +236,9 @@ namespace Hedra.Engine.Management
         {
             var shapes = new List<CollisionShape>();
             var name = Path.GetFileNameWithoutExtension(Filename);
-            for(var i = 0; i < Count; i++){
-                var data = AssetManager.PLYLoader("Assets/Env/Colliders/"+name+"_Collider"+i+".ply", Scale, Vector3.Zero, Vector3.Zero, false);
+            for(var i = 0; i < Count; i++)
+            {
+                var data = AssetManager.PLYLoader($"Assets/Env/Colliders/{name}_Collider{i}.ply", Scale, Vector3.Zero, Vector3.Zero, false);
                 var newShape = new CollisionShape(data.Vertices, data.Indices);
                 shapes.Add(newShape);
                 data.Dispose();
