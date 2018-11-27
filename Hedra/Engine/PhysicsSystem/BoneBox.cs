@@ -29,11 +29,8 @@ namespace Hedra.Engine.PhysicsSystem
         public CollisionShape ToShape()
         {
             return new CollisionShape(new List<Vector3>(Corners),
-                    new List<uint>(Indices)
-                )
-            {
-                UseBroadphase = true
-            };
+                new List<uint>(Indices)
+            );
         }
 
         public BoneBox Clone()

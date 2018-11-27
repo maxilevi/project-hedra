@@ -140,7 +140,7 @@ namespace Hedra.Engine.Management
             _receivedBytes = -1;
             _reader?.Dispose();
 
-            byte[] bytes = AssetManager.ReadBinary(TrackNames[_trackIndex], AssetManager.DataFile2);
+            byte[] bytes = AssetManager.ReadBinary(TrackNames[_trackIndex], AssetManager.SoundResource);
             Stream stream = new MemoryStream(bytes);
             _reader = new VorbisReader(stream, true);
         }

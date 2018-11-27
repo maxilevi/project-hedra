@@ -23,6 +23,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private readonly ObjectMeshCollider _collider;
         private readonly Vector3 _rotationPoint;
         private readonly CollisionShape _shape;
+        private Vector3 _lastRotation;
+        private Vector3 _lastPosition;
         
         public Door(VertexData Mesh, Vector3 RotationPoint, Vector3 Position, CollidableStructure Structure) : base(Position)
         {
@@ -37,20 +39,27 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         public override void Update()
         {
             base.Update();
-            _mesh.LocalRotation = Mathf.Lerp(_mesh.LocalRotation, _targetRotation, Time.DeltaTime * 4f);
-            _mesh.LocalRotationPoint = _rotationPoint;
-            _mesh.Position = Position;
+            if (_mesh != null)
+            {
+                _mesh.LocalRotation = Mathf.Lerp(_mesh.LocalRotation, _targetRotation, Time.DeltaTime * 4f);
+                _mesh.LocalRotationPoint = _rotationPoint;
+                _mesh.Position = Position;
+            }
             if(_collider != null) UpdateBox();
         }
 
         private void UpdateBox()
         {
+            if ((_mesh.LocalRotation - _lastRotation).LengthSquared < 0.005f * 0.005f
+                && (_lastPosition - _mesh.Position).LengthSquared < 0.005f * 0.005f) return;
             var collider = _collider.Collider;
             for (var i = 0; i < _shape.Vertices.Length; i++)
             {
                 _shape.Vertices[i] = collider.Corners[i];
             }
             _shape.RecalculateBroadphase();
+            _lastRotation = _mesh.LocalRotation;
+            _lastPosition = _mesh.Position;
         }
 
         protected override void Interact(IPlayer Interactee)
@@ -64,8 +73,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             var xSize = Vector3.UnitX * (Mesh.SupportPoint(Vector3.UnitX).X - Mesh.SupportPoint(-Vector3.UnitX).X);
             var zSize = Vector3.UnitZ * (Mesh.SupportPoint(Vector3.UnitZ).Z - Mesh.SupportPoint(-Vector3.UnitZ).Z);
-            return (xSize.LengthFast > zSize.LengthFast ? xSize : zSize) * .5f 
-                + (xSize.LengthFast > zSize.LengthFast ? zSize : xSize) * .0f;
+            return (xSize.LengthFast > zSize.LengthFast ? xSize : zSize) * .5f;
         }
     }
 }

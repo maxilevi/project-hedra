@@ -18,6 +18,10 @@ namespace Hedra.Engine.PhysicsSystem
     {
         float BroadphaseRadius { get; }
         Vector3 BroadphaseCenter { get; }
-        bool UseBroadphase { get; }
+        Vector3[] Vertices { get; }
+        CollisionShape AsShape();
+        Box AsBox();
+        CollisionGroup AsGroup();
+
     }
 }

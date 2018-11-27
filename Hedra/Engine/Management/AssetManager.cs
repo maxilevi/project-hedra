@@ -21,9 +21,9 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class AssetManager
     {
-        public static string DataFile1 => Provider.ShaderResource;
-        public static string DataFile2 => Provider.SoundResource;
-        public static string DataFile3 => Provider.AssetsResource;
+        public static string ShaderResource => Provider.ShaderResource;
+        public static string SoundResource => Provider.SoundResource;
+        public static string AssetsResource => Provider.AssetsResource;
         
         public static Vector4 ColorCode0 { get; }
         public static Vector4 ColorCode1 { get; }

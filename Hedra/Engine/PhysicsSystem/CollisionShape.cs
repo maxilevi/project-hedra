@@ -25,7 +25,6 @@ namespace Hedra.Engine.PhysicsSystem
         public uint[] Indices { get; }
         public float BroadphaseRadius { get; set; }
         public Vector3 BroadphaseCenter { get; set; }
-        public bool UseBroadphase { get; set; } = true;
         public float Height { get; private set; }
         private CollisionShape _cache;
 
@@ -118,6 +117,21 @@ namespace Hedra.Engine.PhysicsSystem
             return set.ToArray();
         }
 
+        public CollisionShape AsShape()
+        {
+            return this;
+        }
+        
+        public Box AsBox()
+        {
+            return null;
+        }
+        
+        public CollisionGroup AsGroup()
+        {
+            return null;
+        }
+        
         public object Clone()
         {
             return new CollisionShape(Vertices.ToArray(), this.Indices.ToArray());

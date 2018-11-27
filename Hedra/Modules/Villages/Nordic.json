@@ -25,9 +25,9 @@
           {
            "Path":  "Assets/Env/Village/Blacksmith0_Door0.ply",
             "Position" : {
-              "X": 8.7,
-              "Y": 6.0,
-              "Z": -7.08
+              "X": 9.23307,
+              "Y": 5.91168,
+              "Z": -7.05042
             }
           }
         ],
@@ -79,6 +79,74 @@
               "X": -1.1613,
               "Y": 2.20772,
               "Z": 3.7195
+            }
+          }
+        ]
+      },
+      {
+        "Path" : "Assets/Env/Village/House1.ply",
+        "Scale" : 5.0,
+        "Doors" : [
+          {
+            "Path":  "Assets/Env/Village/House1_Door0.ply",
+            "Position" : {
+              "X": 4.25405,
+              "Y": 2.12194,
+              "Z": -7.93568
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House1_Door1.ply",
+            "Position" : {
+              "X": 4.28769,
+              "Y": 1.67716,
+              "Z": 0.52434
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House1_Door2.ply",
+            "Position" : {
+              "X": 4.14934,
+              "Y": 6.33101,
+              "Z": 0.39632
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House1_Door3.ply",
+            "Position" : {
+              "X": 4.14934,
+              "Y": 6.33101,
+              "Z": -4.18791
+            }
+          }
+        ]
+      },
+      {
+        "Path" : "Assets/Env/Village/House2.ply",
+        "Scale" : 4.0,
+        "Doors" : [
+          {
+            "Path":  "Assets/Env/Village/House2_Door0.ply",
+            "Position" : {
+              "X": 2.22709,
+              "Y": 2.28284,
+              "Z": -9.61886
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House2_Door1.ply",
+            "Position" : {
+              "X": -4.88185,
+              "Y": 1.82325,
+              "Z": 2.94575
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House2_Door2.ply",
+            "Position" : {
+              "X": 4.24883,
+              "Y": 1.84454,
+              "Z": 6.68699
             }
           }
         ]

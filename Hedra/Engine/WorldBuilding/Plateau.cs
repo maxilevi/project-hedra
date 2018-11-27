@@ -21,6 +21,7 @@ namespace Hedra.Engine.WorldBuilding
         public float Radius { get; set; }
         public float MaxHeight { get; set; }
         public bool NoTrees { get; set; }
+        public bool NoPlants { get; set; }
 
         public Plateau(Vector3 Position, float Radius)
         {

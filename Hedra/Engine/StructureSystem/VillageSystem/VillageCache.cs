@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -51,13 +53,32 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 for (var j = 0; j < designs[i].Length; j++)
                 {
                     cache._colliderCache.Add(designs[i][j].Path, AssetManager.LoadCollisionShapes(designs[i][j].Path, Vector3.One * designs[i][j].Scale));
-                    cache._modelCache.Add(designs[i][j].Path, AssetManager.PLYLoader(designs[i][j].Path, Vector3.One * designs[i][j].Scale));
+                    cache._modelCache.Add(designs[i][j].Path, LoadCollisionShapesAsVertexData(designs[i][j].Path, Vector3.One * designs[i][j].Scale));
                     cache._sizeCache.Add(designs[i][j].Path, CalculateBounds(cache._modelCache[designs[i][j].Path]));
                 }
             }
             return cache;
         }
 
+        private static VertexData LoadCollisionShapesAsVertexData(string Filename, Vector3 Scale)
+        {
+            var model = new VertexData();
+            string name = Path.GetFileNameWithoutExtension(Filename);
+            var iterator = 0;
+            while(true)
+            {
+                var path = $"Assets/Env/Colliders/{name}_Collider{iterator}.ply";
+                var data = AssetManager.ReadBinary(path, AssetManager.AssetsResource);
+                if(data == null) return model;
+                var vertexInformation = AssetManager.PLYLoader(path, Scale);
+                vertexInformation.Colors = Enumerable.Repeat(Vector4.One, vertexInformation.Vertices.Count).ToList();
+                model += vertexInformation;
+                iterator++;
+            }
+
+            return model;
+        }
+        
         private static Vector3 CalculateBounds(VertexData Model)
         {
             return new Vector3(

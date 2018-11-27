@@ -11,6 +11,8 @@ namespace Hedra.Engine.WorldBuilding
         public Vector2 Origin { get; set; }
         public Vector2 End { get; set; }
         public BlockType Type { get; set; }
+        public bool NoTrees { get; set; }
+        public bool NoPlants { get; set; }
         public float BonusHeight { get; set; } = -1.0f;
         public bool IsPath => true;
 

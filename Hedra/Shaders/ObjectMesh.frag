@@ -39,7 +39,7 @@ void main()
 	{
 		discard;
 	}
-	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, base_vertex_position.xyz * 0.5).r;
+	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, base_vertex_position.xyz).r;
 	if(Dither){
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
 		if( d-floor(d) < 0.5) discard;
@@ -65,10 +65,7 @@ void main()
 		    }    
 		}
 		shadow /= 9.0;
-		ShadowVisibility = 1.0 - ( (shadow * .65) * Coords.w);
-		
-		if(ShadowCoords.z > 1.0)
-			ShadowVisibility = 1.0;
+		ShadowVisibility = 1.0 - shadow * .65;
 	}
 	
 	vec3 output_pointlight_color = point_diffuse.xyz * (raw_color.xyz + tex * 10.0) * (Tint.rgb + BaseTint.rgb);

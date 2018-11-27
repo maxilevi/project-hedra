@@ -19,10 +19,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override bool Place(FarmParameters Parameters, VillageCache Cache)
         {
-            var groundwork = this.CreateGroundwork(Parameters.Position, Parameters.GetSize(Cache));
-            groundwork.Plateau.Radius *= 1.25f;
-            groundwork.Groundwork = null;
-            return this.PushGroundwork(groundwork);
+            return true;
         }
 
         public override BuildingOutput Paint(FarmParameters Parameters, BuildingOutput Input)

@@ -54,7 +54,7 @@ namespace Hedra.Engine.Rendering
         
         public static Vector2 SizeFromAssets(string Path)
         {
-            return TextureSize( new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))));
+            return TextureSize( new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))));
         }
 
         public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
@@ -62,14 +62,14 @@ namespace Hedra.Engine.Rendering
             Log.WriteLine($"Loading Texture: {Path}", LogType.System);
             return LoadTexture(new BitmapObject
             {
-                Bitmap = new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))),
+                Bitmap = new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))),
                 Path = Path
             }, Min, Mag, Wrap);
         }
         
         public static Bitmap LoadBitmapFromAssets(string Path)
         {
-            return new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3)));
+            return new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource)));
         }
         
         public static Vector2 LineSize(string Text, Font F)

@@ -46,10 +46,10 @@ namespace Hedra.Engine.Management
 
         public void Load()
         {
-            var sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.DataFile3);
+            var sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.AssetsResource);
             _boldFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
 
-            var sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.DataFile3);              
+            var sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.AssetsResource);              
             _normalFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
             ReloadShaderSources();
             lock (_hitboxCacheLock)

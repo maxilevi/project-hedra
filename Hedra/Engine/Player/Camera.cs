@@ -1,9 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Input;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.StructureSystem;
 using OpenTK;
 using OpenTK.Input;
 
@@ -45,10 +51,13 @@ namespace Hedra.Engine.Player
         private Vector3 _lastDelegateValue;
         private Vector3 _interpolatedZoomOut;
         private Vector3 _targetZoomOut;
+        private Vector2 _lastCollisionPosition;
+        private List<ICollidable> _collisions;
 
         public Camera(LocalPlayer RefPlayer)
         {
             _player = RefPlayer;
+            _collisions = new List<ICollidable>();
             Reset();
         }
 
@@ -77,8 +86,8 @@ namespace Hedra.Engine.Player
             var cameraPosition = CameraPosition;
             if ( !GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead && !GameSettings.ContinousMove)
             {
-                XDelta = Cursor.Position.X - GameSettings.Width / 2;
-                YDelta = Cursor.Position.Y - GameSettings.Height / 2;
+                XDelta = Cursor.Position.X - GameSettings.Width / 2f;
+                YDelta = Cursor.Position.Y - GameSettings.Height / 2f;
                 if (LockMouse) Cursor.Center();
                 
                 if (CaptureMovement)
@@ -86,7 +95,7 @@ namespace Hedra.Engine.Player
                     ManageRotations();
                 }
 
-                if (Physics.IsColliding(cameraPosition, new Box(-Vector3.One * 2f + cameraPosition, Vector3.One * 2f + cameraPosition)))
+                if (IsColliding(cameraPosition, new Box(-Vector3.One * 2f + cameraPosition, Vector3.One * 2f + cameraPosition)))
                 {
                     if (_prevDistance == 0)
                         _prevDistance = TargetDistance;
@@ -201,7 +210,7 @@ namespace Hedra.Engine.Player
                 var position = this.CalculatePosition(i) + Vector3.UnitY;
                 float y = Physics.HeightAtPosition(position);
                 var box = new Box(-Vector3.One * 2f + this.CalculatePosition(i-1), Vector3.One * 2f + position);
-                if (position.Y <= y + MinDistance || Physics.IsColliding(position, box))
+                if (position.Y <= y + MinDistance || IsColliding(position, box))
                     return;
             }
             TargetDistance += Time.IndependantDeltaTime * 32f;
@@ -273,5 +282,52 @@ namespace Hedra.Engine.Player
         public Matrix4 ViewMatrix => Matrix4.LookAt(-LookAtPoint * TargetDistance + CameraHeight,
             LookAtPoint * TargetDistance + CameraHeight,
             Vector3.UnitY);
+
+        private bool IsColliding(Vector3 Position, ICollidable Box)
+        {
+            UpdateCollisions(Position);
+            for (var i = 0; i < _collisions.Count; i++)
+            {
+                 if (Physics.Collides(_collisions[i], Box))
+                    return true;
+            }
+            return false;
+        }
+        
+        private void UpdateCollisions(Vector3 Position)
+        {
+            var chunkSpace = World.ToChunkSpace(Position);
+            if (chunkSpace == _lastCollisionPosition) return;
+            _lastCollisionPosition = chunkSpace;
+            var underChunk = World.GetChunkAt(Position);
+            var underChunkR = World.GetChunkAt(Position + new Vector3(Chunk.Width,0, 0));
+            var underChunkL = World.GetChunkAt(Position - new Vector3(Chunk.Width,0, 0));
+            var underChunkF = World.GetChunkAt(Position + new Vector3(0,0,Chunk.Width));
+            var underChunkB = World.GetChunkAt(Position - new Vector3(0,0,Chunk.Width));
+
+            _collisions.Clear();
+            _collisions.AddRange(World.GlobalColliders);
+            
+            try
+            {
+                if(underChunk != null)
+                    _collisions.AddRange(underChunk.CollisionShapes);
+                if(underChunkL != null)
+                    _collisions.AddRange(underChunkL.CollisionShapes);
+                if(underChunkR != null)
+                    _collisions.AddRange(underChunkR.CollisionShapes);
+                if(underChunkF != null)
+                    _collisions.AddRange(underChunkF.CollisionShapes);
+                if(underChunkB != null)
+                    _collisions.AddRange(underChunkB.CollisionShapes);
+            }
+            catch(IndexOutOfRangeException e)
+            {
+                Log.WriteLine(e.ToString());
+            }
+
+            var structures = StructureHandler.GetNearStructures(Position);
+            _collisions.AddRange(structures.SelectMany(S => S.Colliders));
+        }
     }
 }

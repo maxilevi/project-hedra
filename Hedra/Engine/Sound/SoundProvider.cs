@@ -187,7 +187,7 @@ namespace Hedra.Engine.Sound
         private short[] LoadOgg(string File, out int Channels, out int Bits, out int Rate, out int BytesPerSecond, out int Count, int Offset, int Length)
         {
             
-            byte[] bytes = AssetManager.ReadBinary(File, AssetManager.DataFile2);
+            byte[] bytes = AssetManager.ReadBinary(File, AssetManager.SoundResource);
             Stream stream = new MemoryStream(bytes);
             
             using(VorbisReader reader = new VorbisReader(stream, true))
@@ -238,7 +238,7 @@ namespace Hedra.Engine.Sound
         private byte[] LoadWave(string File, out int Channels, out int Bits, out int Rate, out int BytesPerSecond, int Offset, int Length)
         {
             
-            byte[] bytes = AssetManager.ReadBinary(File, AssetManager.DataFile2);
+            byte[] bytes = AssetManager.ReadBinary(File, AssetManager.SoundResource);
             Stream stream = new MemoryStream(bytes);
             
             if (stream == null)

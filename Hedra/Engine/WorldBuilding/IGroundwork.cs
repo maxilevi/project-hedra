@@ -6,6 +6,8 @@ namespace Hedra.Engine.WorldBuilding
     public interface IGroundwork
     {
         BlockType Type { get; set; }
+        bool NoTrees { get; set; }
+        bool NoPlants { get; set; }
         float BonusHeight { get; set; }
         float DensityMultiplier { get; set; }
         bool IsPath { get; }

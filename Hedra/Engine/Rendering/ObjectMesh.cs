@@ -5,6 +5,7 @@
  *
  */
 using System;
+using System.Diagnostics;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -122,22 +123,19 @@ namespace Hedra.Engine.Rendering
             set => _buffer.Pause = value;
         }
 
-        public Vector3 Rotation{
+        public Vector3 Rotation
+        {
             get => _buffer.Rotation;
-            set{
-                float valY = value.Y;
+            set
+            {
+                if (_buffer.Rotation == value) return;
+                if (float.IsInfinity(value.Y) || float.IsNaN(value.Y)) Debugger.Break();
                 
-                if(float.IsInfinity(valY) || float.IsNaN(valY)) valY = 0;
-                
-                float valX = value.X;
-                
-                if(float.IsInfinity(valX) || float.IsNaN(valX)) valX = 0;
-                
-                float valZ = value.Z;
-                
-                if(float.IsInfinity(valZ) || float.IsNaN(valZ)) valZ = 0;
+                if(float.IsInfinity(value.X) || float.IsNaN(value.X)) Debugger.Break();
+
+                if(float.IsInfinity(value.Z) || float.IsNaN(value.Z)) Debugger.Break();
         
-                _buffer.Rotation = new Vector3(valX, valY, valZ);
+                _buffer.Rotation = value;
             }
         }
         
@@ -147,27 +145,24 @@ namespace Hedra.Engine.Rendering
             set => _buffer.BeforeLocalRotation = value;
         }
         
-        public Vector3 LocalRotation{
+        public Vector3 LocalRotation
+        {
             get => _buffer.LocalRotation;
-            set{
-                float valY = value.Y;
+            set
+            {
+                if(_buffer.LocalRotation == value) return;
+                if(float.IsInfinity(value.Y) || float.IsNaN(value.Y)) Debugger.Break();
                 
-                if(float.IsInfinity(valY) || float.IsNaN(valY)) valY = 0;
-                
-                float valX = value.X;
-                
-                if(float.IsInfinity(valX) || float.IsNaN(valX)) valX = 0;
-                
-                float valZ = value.Z;
-                
-                if(float.IsInfinity(valZ) || float.IsNaN(valZ)) valZ = 0;
+                if(float.IsInfinity(value.X) || float.IsNaN(value.X)) Debugger.Break();
 
+                if(float.IsInfinity(value.Z) || float.IsNaN(value.Z)) Debugger.Break();
                 
-                _buffer.LocalRotation = new Vector3(valX, valY, valZ);
+                _buffer.LocalRotation = value;
             }
         }
         
-        public Vector3 LocalRotationPoint{
+        public Vector3 LocalRotationPoint
+        {
             get => _buffer.LocalRotationPoint;
             set => _buffer.LocalRotationPoint = value;
         }

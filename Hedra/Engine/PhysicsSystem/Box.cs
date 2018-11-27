@@ -116,6 +116,21 @@ namespace Hedra.Engine.PhysicsSystem
             }
         }
 
+        public CollisionShape AsShape()
+        {
+            return ToShape();
+        }
+
+        public Box AsBox()
+        {
+            return this;
+        }
+
+        public CollisionGroup AsGroup()
+        {
+            return null;
+        }
+
         public Box Cache
         {
             get
@@ -170,13 +185,12 @@ namespace Hedra.Engine.PhysicsSystem
         
         public float BroadphaseRadius { get; private set; }
         
-        public Vector3 BroadphaseCenter => _shapeCenter;
-        
-        public bool UseBroadphase => true;
+        public Vector3 BroadphaseCenter { get; private set; }
 
         private void Recalculate()
         {
             BroadphaseRadius = Math.Max(Size.X, Size.Z) * .5f;
+            BroadphaseCenter = Average;
         }
 
         public Vector3 Min
@@ -184,6 +198,7 @@ namespace Hedra.Engine.PhysicsSystem
             get => _min;
             set
             {
+                if(_min == value) return;
                 _min = value;
                 Recalculate();
             }
@@ -194,6 +209,7 @@ namespace Hedra.Engine.PhysicsSystem
             get => _max;
             set
             {
+                if(_max == value) return;
                 _max = value;
                 Recalculate();
             }

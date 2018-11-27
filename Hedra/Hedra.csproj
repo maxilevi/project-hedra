@@ -313,6 +313,7 @@
     <Compile Include="Engine\Native\Platform.cs" />
     <Compile Include="Engine\Native\WindowsConsoleManager.cs" />
     <Compile Include="Engine\Native\WindowsMessageManager.cs" />
+    <Compile Include="Engine\PhysicsSystem\CollisionGroup.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\ReedDesign.cs" />
@@ -1501,64 +1502,12 @@
       <Link>Assets\Env\Colliders\Blacksmith0_Collider67.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider68.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider68.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider69.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider69.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider7.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider7.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider70.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider70.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider71.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider71.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider72.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider72.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider73.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider73.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider74.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider74.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider75.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider75.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider76.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider76.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider77.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider77.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider78.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider78.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider79.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider79.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider8.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider8.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider80.ply">
-      <Link>Assets\Env\Colliders\Blacksmith0_Collider80.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider9.ply">
@@ -1585,168 +1534,16 @@
       <Link>Assets\Env\Colliders\House0_Collider10.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider100.ply">
-      <Link>Assets\Env\Colliders\House0_Collider100.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider101.ply">
-      <Link>Assets\Env\Colliders\House0_Collider101.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider102.ply">
-      <Link>Assets\Env\Colliders\House0_Collider102.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider103.ply">
-      <Link>Assets\Env\Colliders\House0_Collider103.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider104.ply">
-      <Link>Assets\Env\Colliders\House0_Collider104.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider105.ply">
-      <Link>Assets\Env\Colliders\House0_Collider105.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider106.ply">
-      <Link>Assets\Env\Colliders\House0_Collider106.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider107.ply">
-      <Link>Assets\Env\Colliders\House0_Collider107.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider108.ply">
-      <Link>Assets\Env\Colliders\House0_Collider108.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider109.ply">
-      <Link>Assets\Env\Colliders\House0_Collider109.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0_Collider11.ply">
       <Link>Assets\Env\Colliders\House0_Collider11.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider110.ply">
-      <Link>Assets\Env\Colliders\House0_Collider110.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider111.ply">
-      <Link>Assets\Env\Colliders\House0_Collider111.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider112.ply">
-      <Link>Assets\Env\Colliders\House0_Collider112.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider113.ply">
-      <Link>Assets\Env\Colliders\House0_Collider113.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider114.ply">
-      <Link>Assets\Env\Colliders\House0_Collider114.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider115.ply">
-      <Link>Assets\Env\Colliders\House0_Collider115.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider116.ply">
-      <Link>Assets\Env\Colliders\House0_Collider116.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider117.ply">
-      <Link>Assets\Env\Colliders\House0_Collider117.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider118.ply">
-      <Link>Assets\Env\Colliders\House0_Collider118.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider119.ply">
-      <Link>Assets\Env\Colliders\House0_Collider119.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0_Collider12.ply">
       <Link>Assets\Env\Colliders\House0_Collider12.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider120.ply">
-      <Link>Assets\Env\Colliders\House0_Collider120.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider121.ply">
-      <Link>Assets\Env\Colliders\House0_Collider121.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider122.ply">
-      <Link>Assets\Env\Colliders\House0_Collider122.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider123.ply">
-      <Link>Assets\Env\Colliders\House0_Collider123.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider124.ply">
-      <Link>Assets\Env\Colliders\House0_Collider124.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider125.ply">
-      <Link>Assets\Env\Colliders\House0_Collider125.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider126.ply">
-      <Link>Assets\Env\Colliders\House0_Collider126.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider127.ply">
-      <Link>Assets\Env\Colliders\House0_Collider127.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider128.ply">
-      <Link>Assets\Env\Colliders\House0_Collider128.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider129.ply">
-      <Link>Assets\Env\Colliders\House0_Collider129.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0_Collider13.ply">
       <Link>Assets\Env\Colliders\House0_Collider13.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider130.ply">
-      <Link>Assets\Env\Colliders\House0_Collider130.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider131.ply">
-      <Link>Assets\Env\Colliders\House0_Collider131.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider132.ply">
-      <Link>Assets\Env\Colliders\House0_Collider132.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider133.ply">
-      <Link>Assets\Env\Colliders\House0_Collider133.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider134.ply">
-      <Link>Assets\Env\Colliders\House0_Collider134.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider135.ply">
-      <Link>Assets\Env\Colliders\House0_Collider135.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider136.ply">
-      <Link>Assets\Env\Colliders\House0_Collider136.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider137.ply">
-      <Link>Assets\Env\Colliders\House0_Collider137.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0_Collider14.ply">
@@ -2077,52 +1874,8 @@
       <Link>Assets\Env\Colliders\House0_Collider88.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider89.ply">
-      <Link>Assets\Env\Colliders\House0_Collider89.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0_Collider9.ply">
       <Link>Assets\Env\Colliders\House0_Collider9.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider90.ply">
-      <Link>Assets\Env\Colliders\House0_Collider90.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider91.ply">
-      <Link>Assets\Env\Colliders\House0_Collider91.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider92.ply">
-      <Link>Assets\Env\Colliders\House0_Collider92.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider93.ply">
-      <Link>Assets\Env\Colliders\House0_Collider93.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider94.ply">
-      <Link>Assets\Env\Colliders\House0_Collider94.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider95.ply">
-      <Link>Assets\Env\Colliders\House0_Collider95.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider96.ply">
-      <Link>Assets\Env\Colliders\House0_Collider96.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider97.ply">
-      <Link>Assets\Env\Colliders\House0_Collider97.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider98.ply">
-      <Link>Assets\Env\Colliders\House0_Collider98.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House0\House0_Collider99.ply">
-      <Link>Assets\Env\Colliders\House0_Collider99.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0_Door0.ply">
@@ -2133,8 +1886,1032 @@
       <Link>Assets\Env\Village\House0_Door1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1.ply">
+      <Link>Assets\Env\Village\House1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider0.ply">
+      <Link>Assets\Env\Colliders\House1_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider1.ply">
+      <Link>Assets\Env\Colliders\House1_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider10.ply">
+      <Link>Assets\Env\Colliders\House1_Collider10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider100.ply">
+      <Link>Assets\Env\Colliders\House1_Collider100.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider101.ply">
+      <Link>Assets\Env\Colliders\House1_Collider101.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider102.ply">
+      <Link>Assets\Env\Colliders\House1_Collider102.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider103.ply">
+      <Link>Assets\Env\Colliders\House1_Collider103.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider104.ply">
+      <Link>Assets\Env\Colliders\House1_Collider104.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider105.ply">
+      <Link>Assets\Env\Colliders\House1_Collider105.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider106.ply">
+      <Link>Assets\Env\Colliders\House1_Collider106.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider107.ply">
+      <Link>Assets\Env\Colliders\House1_Collider107.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider108.ply">
+      <Link>Assets\Env\Colliders\House1_Collider108.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider109.ply">
+      <Link>Assets\Env\Colliders\House1_Collider109.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider11.ply">
+      <Link>Assets\Env\Colliders\House1_Collider11.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider110.ply">
+      <Link>Assets\Env\Colliders\House1_Collider110.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider111.ply">
+      <Link>Assets\Env\Colliders\House1_Collider111.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider112.ply">
+      <Link>Assets\Env\Colliders\House1_Collider112.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider113.ply">
+      <Link>Assets\Env\Colliders\House1_Collider113.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider114.ply">
+      <Link>Assets\Env\Colliders\House1_Collider114.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider115.ply">
+      <Link>Assets\Env\Colliders\House1_Collider115.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider116.ply">
+      <Link>Assets\Env\Colliders\House1_Collider116.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider117.ply">
+      <Link>Assets\Env\Colliders\House1_Collider117.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider118.ply">
+      <Link>Assets\Env\Colliders\House1_Collider118.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider119.ply">
+      <Link>Assets\Env\Colliders\House1_Collider119.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider12.ply">
+      <Link>Assets\Env\Colliders\House1_Collider12.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider120.ply">
+      <Link>Assets\Env\Colliders\House1_Collider120.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider121.ply">
+      <Link>Assets\Env\Colliders\House1_Collider121.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider122.ply">
+      <Link>Assets\Env\Colliders\House1_Collider122.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider123.ply">
+      <Link>Assets\Env\Colliders\House1_Collider123.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider124.ply">
+      <Link>Assets\Env\Colliders\House1_Collider124.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider125.ply">
+      <Link>Assets\Env\Colliders\House1_Collider125.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider126.ply">
+      <Link>Assets\Env\Colliders\House1_Collider126.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider127.ply">
+      <Link>Assets\Env\Colliders\House1_Collider127.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider128.ply">
+      <Link>Assets\Env\Colliders\House1_Collider128.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider129.ply">
+      <Link>Assets\Env\Colliders\House1_Collider129.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider13.ply">
+      <Link>Assets\Env\Colliders\House1_Collider13.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider130.ply">
+      <Link>Assets\Env\Colliders\House1_Collider130.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider131.ply">
+      <Link>Assets\Env\Colliders\House1_Collider131.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider132.ply">
+      <Link>Assets\Env\Colliders\House1_Collider132.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider133.ply">
+      <Link>Assets\Env\Colliders\House1_Collider133.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider134.ply">
+      <Link>Assets\Env\Colliders\House1_Collider134.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider135.ply">
+      <Link>Assets\Env\Colliders\House1_Collider135.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider136.ply">
+      <Link>Assets\Env\Colliders\House1_Collider136.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider137.ply">
+      <Link>Assets\Env\Colliders\House1_Collider137.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider138.ply">
+      <Link>Assets\Env\Colliders\House1_Collider138.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider139.ply">
+      <Link>Assets\Env\Colliders\House1_Collider139.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider14.ply">
+      <Link>Assets\Env\Colliders\House1_Collider14.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider140.ply">
+      <Link>Assets\Env\Colliders\House1_Collider140.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider15.ply">
+      <Link>Assets\Env\Colliders\House1_Collider15.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider16.ply">
+      <Link>Assets\Env\Colliders\House1_Collider16.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider17.ply">
+      <Link>Assets\Env\Colliders\House1_Collider17.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider18.ply">
+      <Link>Assets\Env\Colliders\House1_Collider18.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider19.ply">
+      <Link>Assets\Env\Colliders\House1_Collider19.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider2.ply">
+      <Link>Assets\Env\Colliders\House1_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider20.ply">
+      <Link>Assets\Env\Colliders\House1_Collider20.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider21.ply">
+      <Link>Assets\Env\Colliders\House1_Collider21.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider22.ply">
+      <Link>Assets\Env\Colliders\House1_Collider22.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider23.ply">
+      <Link>Assets\Env\Colliders\House1_Collider23.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider24.ply">
+      <Link>Assets\Env\Colliders\House1_Collider24.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider25.ply">
+      <Link>Assets\Env\Colliders\House1_Collider25.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider26.ply">
+      <Link>Assets\Env\Colliders\House1_Collider26.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider27.ply">
+      <Link>Assets\Env\Colliders\House1_Collider27.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider28.ply">
+      <Link>Assets\Env\Colliders\House1_Collider28.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider29.ply">
+      <Link>Assets\Env\Colliders\House1_Collider29.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider3.ply">
+      <Link>Assets\Env\Colliders\House1_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider30.ply">
+      <Link>Assets\Env\Colliders\House1_Collider30.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider31.ply">
+      <Link>Assets\Env\Colliders\House1_Collider31.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider32.ply">
+      <Link>Assets\Env\Colliders\House1_Collider32.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider33.ply">
+      <Link>Assets\Env\Colliders\House1_Collider33.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider34.ply">
+      <Link>Assets\Env\Colliders\House1_Collider34.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider35.ply">
+      <Link>Assets\Env\Colliders\House1_Collider35.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider36.ply">
+      <Link>Assets\Env\Colliders\House1_Collider36.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider37.ply">
+      <Link>Assets\Env\Colliders\House1_Collider37.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider38.ply">
+      <Link>Assets\Env\Colliders\House1_Collider38.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider39.ply">
+      <Link>Assets\Env\Colliders\House1_Collider39.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider4.ply">
+      <Link>Assets\Env\Colliders\House1_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider40.ply">
+      <Link>Assets\Env\Colliders\House1_Collider40.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider41.ply">
+      <Link>Assets\Env\Colliders\House1_Collider41.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider42.ply">
+      <Link>Assets\Env\Colliders\House1_Collider42.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider43.ply">
+      <Link>Assets\Env\Colliders\House1_Collider43.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider44.ply">
+      <Link>Assets\Env\Colliders\House1_Collider44.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider45.ply">
+      <Link>Assets\Env\Colliders\House1_Collider45.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider46.ply">
+      <Link>Assets\Env\Colliders\House1_Collider46.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider47.ply">
+      <Link>Assets\Env\Colliders\House1_Collider47.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider48.ply">
+      <Link>Assets\Env\Colliders\House1_Collider48.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider49.ply">
+      <Link>Assets\Env\Colliders\House1_Collider49.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider5.ply">
+      <Link>Assets\Env\Colliders\House1_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider50.ply">
+      <Link>Assets\Env\Colliders\House1_Collider50.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider51.ply">
+      <Link>Assets\Env\Colliders\House1_Collider51.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider52.ply">
+      <Link>Assets\Env\Colliders\House1_Collider52.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider53.ply">
+      <Link>Assets\Env\Colliders\House1_Collider53.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider54.ply">
+      <Link>Assets\Env\Colliders\House1_Collider54.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider55.ply">
+      <Link>Assets\Env\Colliders\House1_Collider55.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider56.ply">
+      <Link>Assets\Env\Colliders\House1_Collider56.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider57.ply">
+      <Link>Assets\Env\Colliders\House1_Collider57.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider58.ply">
+      <Link>Assets\Env\Colliders\House1_Collider58.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider59.ply">
+      <Link>Assets\Env\Colliders\House1_Collider59.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider6.ply">
+      <Link>Assets\Env\Colliders\House1_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider60.ply">
+      <Link>Assets\Env\Colliders\House1_Collider60.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider61.ply">
+      <Link>Assets\Env\Colliders\House1_Collider61.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider62.ply">
+      <Link>Assets\Env\Colliders\House1_Collider62.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider63.ply">
+      <Link>Assets\Env\Colliders\House1_Collider63.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider64.ply">
+      <Link>Assets\Env\Colliders\House1_Collider64.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider65.ply">
+      <Link>Assets\Env\Colliders\House1_Collider65.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider66.ply">
+      <Link>Assets\Env\Colliders\House1_Collider66.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider67.ply">
+      <Link>Assets\Env\Colliders\House1_Collider67.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider68.ply">
+      <Link>Assets\Env\Colliders\House1_Collider68.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider69.ply">
+      <Link>Assets\Env\Colliders\House1_Collider69.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider7.ply">
+      <Link>Assets\Env\Colliders\House1_Collider7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider70.ply">
+      <Link>Assets\Env\Colliders\House1_Collider70.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider71.ply">
+      <Link>Assets\Env\Colliders\House1_Collider71.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider72.ply">
+      <Link>Assets\Env\Colliders\House1_Collider72.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider73.ply">
+      <Link>Assets\Env\Colliders\House1_Collider73.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider74.ply">
+      <Link>Assets\Env\Colliders\House1_Collider74.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider75.ply">
+      <Link>Assets\Env\Colliders\House1_Collider75.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider76.ply">
+      <Link>Assets\Env\Colliders\House1_Collider76.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider77.ply">
+      <Link>Assets\Env\Colliders\House1_Collider77.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider78.ply">
+      <Link>Assets\Env\Colliders\House1_Collider78.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider79.ply">
+      <Link>Assets\Env\Colliders\House1_Collider79.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider8.ply">
+      <Link>Assets\Env\Colliders\House1_Collider8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider80.ply">
+      <Link>Assets\Env\Colliders\House1_Collider80.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider81.ply">
+      <Link>Assets\Env\Colliders\House1_Collider81.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider82.ply">
+      <Link>Assets\Env\Colliders\House1_Collider82.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider83.ply">
+      <Link>Assets\Env\Colliders\House1_Collider83.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider84.ply">
+      <Link>Assets\Env\Colliders\House1_Collider84.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider85.ply">
+      <Link>Assets\Env\Colliders\House1_Collider85.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider86.ply">
+      <Link>Assets\Env\Colliders\House1_Collider86.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider87.ply">
+      <Link>Assets\Env\Colliders\House1_Collider87.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider88.ply">
+      <Link>Assets\Env\Colliders\House1_Collider88.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider89.ply">
+      <Link>Assets\Env\Colliders\House1_Collider89.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider9.ply">
+      <Link>Assets\Env\Colliders\House1_Collider9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider90.ply">
+      <Link>Assets\Env\Colliders\House1_Collider90.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider91.ply">
+      <Link>Assets\Env\Colliders\House1_Collider91.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider92.ply">
+      <Link>Assets\Env\Colliders\House1_Collider92.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider93.ply">
+      <Link>Assets\Env\Colliders\House1_Collider93.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider94.ply">
+      <Link>Assets\Env\Colliders\House1_Collider94.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider95.ply">
+      <Link>Assets\Env\Colliders\House1_Collider95.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider96.ply">
+      <Link>Assets\Env\Colliders\House1_Collider96.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider97.ply">
+      <Link>Assets\Env\Colliders\House1_Collider97.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider98.ply">
+      <Link>Assets\Env\Colliders\House1_Collider98.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Collider99.ply">
+      <Link>Assets\Env\Colliders\House1_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Door0.ply">
+      <Link>Assets\Env\Village\House1_Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Door1.ply">
+      <Link>Assets\Env\Village\House1_Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Door2.ply">
+      <Link>Assets\Env\Village\House1_Door2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1_Door3.ply">
+      <Link>Assets\Env\Village\House1_Door3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Villages\House2\House2.ply">
       <Link>Assets\Env\Village\House2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider0.ply">
+      <Link>Assets\Env\Colliders\House2_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider1.ply">
+      <Link>Assets\Env\Colliders\House2_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider10.ply">
+      <Link>Assets\Env\Colliders\House2_Collider10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider100.ply">
+      <Link>Assets\Env\Colliders\House2_Collider100.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider101.ply">
+      <Link>Assets\Env\Colliders\House2_Collider101.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider102.ply">
+      <Link>Assets\Env\Colliders\House2_Collider102.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider103.ply">
+      <Link>Assets\Env\Colliders\House2_Collider103.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider104.ply">
+      <Link>Assets\Env\Colliders\House2_Collider104.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider105.ply">
+      <Link>Assets\Env\Colliders\House2_Collider105.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider106.ply">
+      <Link>Assets\Env\Colliders\House2_Collider106.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider11.ply">
+      <Link>Assets\Env\Colliders\House2_Collider11.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider12.ply">
+      <Link>Assets\Env\Colliders\House2_Collider12.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider13.ply">
+      <Link>Assets\Env\Colliders\House2_Collider13.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider14.ply">
+      <Link>Assets\Env\Colliders\House2_Collider14.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider15.ply">
+      <Link>Assets\Env\Colliders\House2_Collider15.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider16.ply">
+      <Link>Assets\Env\Colliders\House2_Collider16.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider17.ply">
+      <Link>Assets\Env\Colliders\House2_Collider17.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider18.ply">
+      <Link>Assets\Env\Colliders\House2_Collider18.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider19.ply">
+      <Link>Assets\Env\Colliders\House2_Collider19.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider2.ply">
+      <Link>Assets\Env\Colliders\House2_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider20.ply">
+      <Link>Assets\Env\Colliders\House2_Collider20.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider21.ply">
+      <Link>Assets\Env\Colliders\House2_Collider21.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider22.ply">
+      <Link>Assets\Env\Colliders\House2_Collider22.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider23.ply">
+      <Link>Assets\Env\Colliders\House2_Collider23.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider24.ply">
+      <Link>Assets\Env\Colliders\House2_Collider24.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider25.ply">
+      <Link>Assets\Env\Colliders\House2_Collider25.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider26.ply">
+      <Link>Assets\Env\Colliders\House2_Collider26.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider27.ply">
+      <Link>Assets\Env\Colliders\House2_Collider27.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider28.ply">
+      <Link>Assets\Env\Colliders\House2_Collider28.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider29.ply">
+      <Link>Assets\Env\Colliders\House2_Collider29.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider3.ply">
+      <Link>Assets\Env\Colliders\House2_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider30.ply">
+      <Link>Assets\Env\Colliders\House2_Collider30.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider31.ply">
+      <Link>Assets\Env\Colliders\House2_Collider31.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider32.ply">
+      <Link>Assets\Env\Colliders\House2_Collider32.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider33.ply">
+      <Link>Assets\Env\Colliders\House2_Collider33.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider34.ply">
+      <Link>Assets\Env\Colliders\House2_Collider34.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider35.ply">
+      <Link>Assets\Env\Colliders\House2_Collider35.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider36.ply">
+      <Link>Assets\Env\Colliders\House2_Collider36.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider37.ply">
+      <Link>Assets\Env\Colliders\House2_Collider37.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider38.ply">
+      <Link>Assets\Env\Colliders\House2_Collider38.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider39.ply">
+      <Link>Assets\Env\Colliders\House2_Collider39.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider4.ply">
+      <Link>Assets\Env\Colliders\House2_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider40.ply">
+      <Link>Assets\Env\Colliders\House2_Collider40.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider41.ply">
+      <Link>Assets\Env\Colliders\House2_Collider41.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider42.ply">
+      <Link>Assets\Env\Colliders\House2_Collider42.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider43.ply">
+      <Link>Assets\Env\Colliders\House2_Collider43.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider44.ply">
+      <Link>Assets\Env\Colliders\House2_Collider44.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider45.ply">
+      <Link>Assets\Env\Colliders\House2_Collider45.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider46.ply">
+      <Link>Assets\Env\Colliders\House2_Collider46.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider47.ply">
+      <Link>Assets\Env\Colliders\House2_Collider47.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider48.ply">
+      <Link>Assets\Env\Colliders\House2_Collider48.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider49.ply">
+      <Link>Assets\Env\Colliders\House2_Collider49.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider5.ply">
+      <Link>Assets\Env\Colliders\House2_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider50.ply">
+      <Link>Assets\Env\Colliders\House2_Collider50.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider51.ply">
+      <Link>Assets\Env\Colliders\House2_Collider51.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider52.ply">
+      <Link>Assets\Env\Colliders\House2_Collider52.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider53.ply">
+      <Link>Assets\Env\Colliders\House2_Collider53.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider54.ply">
+      <Link>Assets\Env\Colliders\House2_Collider54.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider55.ply">
+      <Link>Assets\Env\Colliders\House2_Collider55.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider56.ply">
+      <Link>Assets\Env\Colliders\House2_Collider56.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider57.ply">
+      <Link>Assets\Env\Colliders\House2_Collider57.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider58.ply">
+      <Link>Assets\Env\Colliders\House2_Collider58.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider59.ply">
+      <Link>Assets\Env\Colliders\House2_Collider59.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider6.ply">
+      <Link>Assets\Env\Colliders\House2_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider60.ply">
+      <Link>Assets\Env\Colliders\House2_Collider60.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider61.ply">
+      <Link>Assets\Env\Colliders\House2_Collider61.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider62.ply">
+      <Link>Assets\Env\Colliders\House2_Collider62.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider63.ply">
+      <Link>Assets\Env\Colliders\House2_Collider63.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider64.ply">
+      <Link>Assets\Env\Colliders\House2_Collider64.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider65.ply">
+      <Link>Assets\Env\Colliders\House2_Collider65.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider66.ply">
+      <Link>Assets\Env\Colliders\House2_Collider66.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider67.ply">
+      <Link>Assets\Env\Colliders\House2_Collider67.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider68.ply">
+      <Link>Assets\Env\Colliders\House2_Collider68.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider69.ply">
+      <Link>Assets\Env\Colliders\House2_Collider69.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider7.ply">
+      <Link>Assets\Env\Colliders\House2_Collider7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider70.ply">
+      <Link>Assets\Env\Colliders\House2_Collider70.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider71.ply">
+      <Link>Assets\Env\Colliders\House2_Collider71.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider72.ply">
+      <Link>Assets\Env\Colliders\House2_Collider72.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider73.ply">
+      <Link>Assets\Env\Colliders\House2_Collider73.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider74.ply">
+      <Link>Assets\Env\Colliders\House2_Collider74.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider75.ply">
+      <Link>Assets\Env\Colliders\House2_Collider75.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider76.ply">
+      <Link>Assets\Env\Colliders\House2_Collider76.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider77.ply">
+      <Link>Assets\Env\Colliders\House2_Collider77.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider78.ply">
+      <Link>Assets\Env\Colliders\House2_Collider78.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider79.ply">
+      <Link>Assets\Env\Colliders\House2_Collider79.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider8.ply">
+      <Link>Assets\Env\Colliders\House2_Collider8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider80.ply">
+      <Link>Assets\Env\Colliders\House2_Collider80.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider81.ply">
+      <Link>Assets\Env\Colliders\House2_Collider81.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider82.ply">
+      <Link>Assets\Env\Colliders\House2_Collider82.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider83.ply">
+      <Link>Assets\Env\Colliders\House2_Collider83.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider84.ply">
+      <Link>Assets\Env\Colliders\House2_Collider84.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider85.ply">
+      <Link>Assets\Env\Colliders\House2_Collider85.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider86.ply">
+      <Link>Assets\Env\Colliders\House2_Collider86.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider87.ply">
+      <Link>Assets\Env\Colliders\House2_Collider87.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider88.ply">
+      <Link>Assets\Env\Colliders\House2_Collider88.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider89.ply">
+      <Link>Assets\Env\Colliders\House2_Collider89.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider9.ply">
+      <Link>Assets\Env\Colliders\House2_Collider9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider90.ply">
+      <Link>Assets\Env\Colliders\House2_Collider90.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider91.ply">
+      <Link>Assets\Env\Colliders\House2_Collider91.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider92.ply">
+      <Link>Assets\Env\Colliders\House2_Collider92.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider93.ply">
+      <Link>Assets\Env\Colliders\House2_Collider93.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider94.ply">
+      <Link>Assets\Env\Colliders\House2_Collider94.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider95.ply">
+      <Link>Assets\Env\Colliders\House2_Collider95.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider96.ply">
+      <Link>Assets\Env\Colliders\House2_Collider96.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider97.ply">
+      <Link>Assets\Env\Colliders\House2_Collider97.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider98.ply">
+      <Link>Assets\Env\Colliders\House2_Collider98.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider99.ply">
+      <Link>Assets\Env\Colliders\House2_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Door0.ply">
+      <Link>Assets\Env\Village\House2_Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Door1.ply">
+      <Link>Assets\Env\Village\House2_Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2_Door2.ply">
+      <Link>Assets\Env\Village\House2_Door2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Skills\BladesAttack1.png">
@@ -3729,18 +4506,6 @@
       <Link>Assets\Env\Colliders\Grave5_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\House1_Collider0.ply">
-      <Link>Assets\Env\Colliders\House1_Collider0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\House1_Collider1.ply">
-      <Link>Assets\Env\Colliders\House1_Collider1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\House1_Collider2.ply">
-      <Link>Assets\Env\Colliders\House1_Collider2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Colliders\Lamp0_Collider0.ply">
       <Link>Assets\Env\Colliders\Lamp0_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4551,10 +5316,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Heart.ply">
       <Link>Assets\Env\Heart.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\House1.ply">
-      <Link>Assets\Env\Village\House1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\IncaTemple0.ply">

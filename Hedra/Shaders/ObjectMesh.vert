@@ -123,11 +123,11 @@ void main(){
 	FLightColor =  clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 	vec3 FullLight = clamp(FLightColor + LightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 
-	Ambient = 0.25;
+
 	Color = rim(linear_color.rgb, LightColor, unitToCamera, unitNormal) 
 	+ diffuse(unitToLight, unitNormal, LightColor) * linear_color
 	+ specular(unitToLight, unitNormal, unitToCamera, LightColor);
-
+	Ambient = 0.25;
 	point_diffuse = diffuse(unitToLight, unitNormal, FLightColor).rgb;
 
 	InPos = Vertex.xyz;

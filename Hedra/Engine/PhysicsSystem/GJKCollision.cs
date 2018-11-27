@@ -37,82 +37,85 @@ namespace Hedra.Engine.PhysicsSystem
             Vertex.SupportPoint = Vertex.SupportA - Vertex.SupportB;
             
         }
+
+        public static bool IsInsideBroadphase(ICollidable Shape1, ICollidable Shape2)
+        {            
+            var radii = Shape1.BroadphaseRadius + Shape2.BroadphaseRadius;
+            return (Shape1.BroadphaseCenter - Shape2.BroadphaseCenter).LengthSquared < radii * radii;
+        }
          
         public static bool Collides(CollisionShape Shape1, CollisionShape Shape2)
         {
-
-            if (Shape1.UseBroadphase || Shape2.UseBroadphase)
-            {
-                float radii = Shape1.BroadphaseRadius + Shape2.BroadphaseRadius;
-                if ( (Shape1.BroadphaseCenter - Shape2.BroadphaseCenter).LengthSquared > radii * radii)
-                    return false;
-            }
-
-            Simplex Simplex = Simplex.Cache;
-            Simplex.Lock();
+            var simplex = Simplex.Cache;
+            simplex.Lock();
             
             Direction = Vector3.One;
             //A it's our first supporting point.
-            SupportPoint(Direction, Shape1, Shape2, Simplex.A);
-            Simplex.Type = SimplexType.Point;
+            SupportPoint(Direction, Shape1, Shape2, simplex.A);
+            simplex.Type = SimplexType.Point;
          
             Direction = -Direction;
          
-            for ( int i = 0; i < 20; ++i ) {
-                SimplexVertex NewSimplexVertex = new SimplexVertex();
-                SupportPoint(Direction, Shape1, Shape2, NewSimplexVertex);
+            for (var i = 0; i < 20; ++i)
+            {
+                var newSimplexVertex = new SimplexVertex();
+                SupportPoint(Direction, Shape1, Shape2, newSimplexVertex);
                
-                if (NewSimplexVertex.SupportPoint.Dot(Direction) <= 0) { Simplex.Unlock(); return false; }
+                if (newSimplexVertex.SupportPoint.Dot(Direction) <= 0) { simplex.Unlock(); return false; }
          
                 //Add new point to create a new simplex.
-                if (Simplex.Type == SimplexType.Point) {
-                    Simplex.B = Simplex.A;
-                    Simplex.A = NewSimplexVertex;
-                    Simplex.Type = SimplexType.Edge;
+                if (simplex.Type == SimplexType.Point) {
+                    simplex.B = simplex.A;
+                    simplex.A = newSimplexVertex;
+                    simplex.Type = SimplexType.Edge;
                 }
                 
-                else if (Simplex.Type == SimplexType.Edge) {
-                    Simplex.C = Simplex.B;
-                    Simplex.B = Simplex.A;
-                    Simplex.A = NewSimplexVertex;
-                    Simplex.Type = SimplexType.Face;
+                else if (simplex.Type == SimplexType.Edge) {
+                    simplex.C = simplex.B;
+                    simplex.B = simplex.A;
+                    simplex.A = newSimplexVertex;
+                    simplex.Type = SimplexType.Face;
                 }
                 
-                else if (Simplex.Type == SimplexType.Face) {
-                    Simplex.D = Simplex.C;
-                    Simplex.C = Simplex.B;
-                    Simplex.B = Simplex.A;
-                    Simplex.A = NewSimplexVertex;
-                    Simplex.Type = SimplexType.Tetrahedron;
+                else if (simplex.Type == SimplexType.Face) {
+                    simplex.D = simplex.C;
+                    simplex.C = simplex.B;
+                    simplex.B = simplex.A;
+                    simplex.A = newSimplexVertex;
+                    simplex.Type = SimplexType.Tetrahedron;
                 }
          
                 //Check if the simplex contains the origin.
                 //Update simplex and direction.
-                if ( UpdateSimplex(Simplex) ) {
-                    Simplex.Unlock();
+                if (UpdateSimplex(simplex))
+                {
+                    simplex.Unlock();
                     return true;
                 }
             }
-            Simplex.Unlock();
+            simplex.Unlock();
             return false;
         }
          
-        private static bool UpdateSimplex(Simplex Simplex) {
+        private static bool UpdateSimplex(Simplex Simplex)
+        {
             return SimplexUpdateFuncs[(int)Simplex.Type](Simplex);
         }
          
-        private static bool SimplexEdgeUpdate(Simplex Simplex) {
-            Vector3 AO = -Simplex.A.SupportPoint;
-            Vector3 AB = Simplex.B.SupportPoint - Simplex.A.SupportPoint;
+        private static bool SimplexEdgeUpdate(Simplex Simplex)
+        {
+            var AO = -Simplex.A.SupportPoint;
+            var AB = Simplex.B.SupportPoint - Simplex.A.SupportPoint;
             Direction = AB.Cross(AO).Cross(AB);
             return false;
         }
          
-        private static bool SimplexFaceUpdate(Simplex Simplex) {
-            Vector3 AO = -Simplex.A.SupportPoint;
-            Vector3 AB = Simplex.B.SupportPoint - Simplex.A.SupportPoint;
-            Vector3 AC = Simplex.C.SupportPoint - Simplex.A.SupportPoint;
-            Vector3 FaceNormal = AB.Cross(AC);
+        private static bool SimplexFaceUpdate(Simplex Simplex)
+        {
+            var AO = -Simplex.A.SupportPoint;
+            var AB = Simplex.B.SupportPoint - Simplex.A.SupportPoint;
+            var AC = Simplex.C.SupportPoint - Simplex.A.SupportPoint;
+            var FaceNormal = AB.Cross(AC);
          
             if ( AB.Cross(FaceNormal).Dot(AO) > 0 ) {
                 Simplex.Type = SimplexType.Edge;
@@ -171,7 +174,8 @@ namespace Hedra.Engine.PhysicsSystem
             return true;
         }
          
-        private static bool UpdateSimplexTetrahedronFace(Vector3 AO, Simplex Simplex) {
+        private static bool UpdateSimplexTetrahedronFace(Vector3 AO, Simplex Simplex)
+        {
             Vector3 AB = Simplex.B.SupportPoint - Simplex.A.SupportPoint;
             Vector3 AC = Simplex.C.SupportPoint - Simplex.A.SupportPoint;
             Vector3 FaceNormal = AB.Cross(AC);

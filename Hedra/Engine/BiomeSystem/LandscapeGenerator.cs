@@ -77,7 +77,7 @@ namespace Hedra.Engine.BiomeSystem
             }
             if (lod == 1 && !_environmentPlaced)
             {
-                this.PlaceEnviroment(Blocks, Cache);
+                this.PlaceEnvironment(Blocks, Cache);
                 _environmentPlaced = true;
             }
             this.StructuresPlaced = true;
@@ -397,8 +397,11 @@ namespace Hedra.Engine.BiomeSystem
 
                     if (BlockGroundworks.Length > 0)
                     {
-                        var groundwork = BlockGroundworks[BlockGroundworks.Length - 1];
-                        Blocks[X][Y][Z].Type = groundwork.Type;
+                        var groundwork = BlockGroundworks.LastOrDefault(G => G.Type != BlockType.None);
+                        if (groundwork != null)
+                        {
+                            Blocks[X][Y][Z].Type = groundwork.Type;
+                        }
                     }
 
                     if (town && townClamped)
@@ -426,13 +429,16 @@ namespace Hedra.Engine.BiomeSystem
             return Type != BlockType.Air && Type != BlockType.Water && Type != BlockType.Seafloor;
         }
 
-        protected void PlaceEnviroment(Block[][][] Blocks, RegionCache Cache)
+        protected void PlaceEnvironment(Block[][][] Blocks, RegionCache Cache)
         {
             var structs = World.StructureHandler.StructureItems;
+            var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoPlants).ToArray();
             for (var x = 0; x < this.Chunk.BoundsX; x++)
             {
                 for (var z = 0; z < this.Chunk.BoundsZ; z++)
                 {
+                    this.LoopGroundworks(x, z, groundworks, out var noPlantsGroundwork);
+                    if(noPlantsGroundwork) continue;
                     var y = Chunk.GetHighestY(x, z);
                     if(y < BiomePool.SeaLevel - Chunk.BlockSize) continue;
                     var samplingPosition = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
@@ -449,6 +455,7 @@ namespace Hedra.Engine.BiomeSystem
         {
             var structs = World.StructureHandler.StructureItems;
             var plateaus = World.WorldBuilding.Plateaus.Where(P => P.NoTrees).ToArray();
+            var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoTrees).ToArray();
             for (var _x = 0; _x < this.Chunk.BoundsX; _x++)
             {
                 for (var _z = 0; _z < this.Chunk.BoundsZ; _z++)
@@ -462,6 +469,7 @@ namespace Hedra.Engine.BiomeSystem
                     if(block.Type != BlockType.Grass) continue;
                     this.LoopStructures(_x, _z, structs, out _, out var noTreesZone, out _);
                     this.LoopPlateaus(_x, _z, plateaus, out var noTreesPlateau);
+                    this.LoopGroundworks(_x, _z, groundworks, out var noTreesGroundwork);
                     
                     if (World.Seed == World.MenuSeed)
                     {
@@ -477,7 +485,7 @@ namespace Hedra.Engine.BiomeSystem
                                  Chunk.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 48 * 48) continue;
                     }
 
-                    if(noTreesZone || noTreesPlateau) continue;
+                    if(noTreesZone || noTreesPlateau || noTreesGroundwork) continue;
 
                     var realPosition = new Vector3(Chunk.OffsetX + _x * Chunk.BlockSize, y-1, Chunk.OffsetZ + _z * Chunk.BlockSize);
                     var samplingPosition = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
@@ -492,17 +500,30 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private void LoopPlateaus(int X, int Z, Plateau[] Plateaus, out bool NoTrees)
+        private void LoopPlateaus(int X, int Z, Plateau[] Plateaus, out bool Result)
         {
+            Result = false;
             for (var i = 0; i < Plateaus.Length; i++)
             {
                 if (Plateaus[i].Collides(new Vector2(X * Chunk.BlockSize + OffsetX, Z * Chunk.BlockSize + OffsetZ)))
                 {
-                    NoTrees = true;
+                    Result = true;
                     return;
                 }
             }
-            NoTrees = false;
+        }
+        
+        private void LoopGroundworks(int X, int Z, IGroundwork[] Groundworks, out bool Result)
+        {
+            Result = false;
+            for (var i = 0; i < Groundworks.Length; i++)
+            {
+                if (Groundworks[i].Affects(new Vector2(X * Chunk.BlockSize + OffsetX, Z * Chunk.BlockSize + OffsetZ)))
+                {
+                    Result = true;
+                    return;
+                }
+            }
         }
         
         private Vector2 GetNearest(int X, int Z, int Lod)

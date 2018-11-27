@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Hedra.Components;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem.BossSystem;
@@ -21,7 +20,6 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using OpenTK;
-using OpenTK.Graphics.ES11;
 
 namespace Hedra.Engine.EntitySystem
 {

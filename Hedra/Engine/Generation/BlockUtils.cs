@@ -73,6 +73,7 @@ namespace Hedra.Engine.Generation
         Seafloor,
         StonePath,
         DarkStonePath,
+        None,
         MaxNums
     }
 }

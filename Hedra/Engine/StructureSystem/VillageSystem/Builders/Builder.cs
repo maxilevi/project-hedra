@@ -106,13 +106,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return Cache.GrabSize(Parameters.Design.Path).Xz.LengthFast;
         }
 
-        protected GroundworkItem CreateGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
+        protected IGroundwork CreateGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
         {
-            return new GroundworkItem
-            {
-                Plateau = new Plateau(Position, Radius * 1.25f),
-                Groundwork = new RoundedGroundwork(Position, Radius, Type)
-            };
+            return new RoundedGroundwork(Position, Radius, Type);
         }
         
         protected bool PlaceGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
@@ -120,18 +116,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return this.PushGroundwork(this.CreateGroundwork(Position, Radius, Type));
         }
         
-        protected bool PushGroundwork(GroundworkItem Item)
+        protected bool PushGroundwork(IGroundwork Item)
         {
-            //if (World.WorldBuilding.CanAddPlateau(Item.Plateau) && Structure.CanAddPlateau(Item.Plateau))
+            if (Item != null)
             {
-                //Structure.AddPlateau(Item.Plateau);
-                if (Item.Groundwork != null)
-                {
-                    Structure.AddGroundwork(Item.Groundwork);
-                }
-                return true;
+                Structure.AddGroundwork(Item);
             }
-            return false;
+            return true;
         }
         
         protected bool IntersectsWithAnyPath(Vector2 Point, float Radius)
@@ -143,11 +134,5 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
             return false;
         }    
-    }
-    
-    public class GroundworkItem
-    {
-        public Plateau Plateau { get; set; }
-        public IGroundwork Groundwork { get; set; }
     }
 }

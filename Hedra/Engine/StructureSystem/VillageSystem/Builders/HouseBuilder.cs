@@ -23,12 +23,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override bool Place(HouseParameters Parameters, VillageCache Cache)
         {
-            var options = new []{BlockType.Path, BlockType.StonePath, BlockType.StonePath};
-            var selected = options[Parameters.Rng.Next(0, options.Length)];
-            var work = CreateGroundwork(Parameters.Position, Parameters.GetSize(Cache), selected);          
-            work.Groundwork.BonusHeight = 0.25f;
-            work.Groundwork.DensityMultiplier = 3;
-            work.Plateau.NoTrees = true;
+            var work = CreateGroundwork(Parameters.Position, Parameters.GetSize(Cache), BlockType.None);
+            work.NoTrees = true;
+            work.NoPlants = true;
             return this.PushGroundwork(work);
         }
 

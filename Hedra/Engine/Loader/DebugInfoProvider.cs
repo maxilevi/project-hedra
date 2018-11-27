@@ -173,7 +173,7 @@ namespace Hedra.Engine.Loader
 
         private void DrawFrustum()
         {
-            var points = DrawManager.FrustumObject.Points;
+            var points = GameManager.Player.Model.BroadphaseBox.Vertices;
             _frustumPoints.Update(points, Vector3.SizeInBytes * points.Length);
             
             _frustumVAO.Bind();
@@ -188,7 +188,7 @@ namespace Hedra.Engine.Loader
         
         public void Draw()
         {
-            if (GameSettings.DebugView && GameSettings.LockFrustum)
+            if (GameSettings.DebugView)
             {
                 DrawFrustum();
             }

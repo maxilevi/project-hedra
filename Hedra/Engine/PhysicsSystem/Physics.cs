@@ -237,60 +237,36 @@ namespace Hedra.Engine.PhysicsSystem
             return World.GetHighest((int)X, (int)Z);
         }    
         
-        public static bool IsColliding(Vector3 Position, Box Box)
-        {
-            var underChunk = World.GetChunkAt(Position);
-            var underChunkR = World.GetChunkAt(Position + new Vector3(Chunk.Width,0, 0));
-            var underChunkL = World.GetChunkAt(Position - new Vector3(Chunk.Width,0, 0));
-            var underChunkF = World.GetChunkAt(Position + new Vector3(0,0,Chunk.Width));
-            var underChunkB = World.GetChunkAt(Position - new Vector3(0,0,Chunk.Width));
-            
-            var collisions = new List<ICollidable>();
-            collisions.AddRange(World.GlobalColliders);
-            
-            try
-            {
-                if(underChunk != null)
-                    collisions.AddRange(underChunk.CollisionShapes);
-                if(underChunkL != null)
-                    collisions.AddRange(underChunkL.CollisionShapes);
-                if(underChunkR != null)
-                    collisions.AddRange(underChunkR.CollisionShapes);
-                if(underChunkF != null)
-                    collisions.AddRange(underChunkF.CollisionShapes);
-                if(underChunkB != null)
-                    collisions.AddRange(underChunkB.CollisionShapes);
-            }
-            catch(IndexOutOfRangeException e)
-            {
-                Log.WriteLine(e.ToString());
-            }
-
-            var structures = StructureHandler.GetNearStructures(Position);
-            collisions.AddRange(structures.SelectMany(S => S.Colliders));
-            for (var i = 0; i < collisions.Count; i++)
-            {
-                if (Collides(collisions[i], Box))
-                    return true;
-            }
-            return false;
-        }
-        
         public static bool Collides(ICollidable Obj1, ICollidable Obj2)
         {
-            var obj1Box = Obj1 as Box;
-            var obj2Box = Obj2 as Box;
+            if (!GJKCollision.IsInsideBroadphase(Obj1, Obj2)) return false;
+            var obj1Box = Obj1.AsBox();
+            var obj2Box = Obj2.AsBox();
 
             if (obj1Box != null && obj2Box != null)
                 return AABBvsAABB(obj1Box, obj2Box);
             
-            if(obj1Box == null && obj2Box == null)
-                return GJKCollision.Collides(Obj1 as CollisionShape, Obj2 as CollisionShape);
-            
-            if(obj1Box == null)
-                return GJKCollision.Collides(Obj1 as CollisionShape, obj2Box.ToShape() );
+            var obj1Group = Obj1.AsGroup();
+            var obj2Group = Obj2.AsGroup();
 
-            return GJKCollision.Collides(obj1Box.ToShape(), Obj2 as CollisionShape);
+            if (obj1Group != null || obj2Group != null)
+            {
+                if(obj1Group != null && obj2Group != null)
+                    throw new NotSupportedException("Collision between 2 collision groups is unsupported.");
+                return GroupVsShape(obj1Group ?? obj2Group, obj1Group == null ? Obj1.AsShape() : Obj2.AsShape());
+            }
+
+            return GJKCollision.Collides(Obj1.AsShape(), Obj2.AsShape());
+        }
+
+        private static bool GroupVsShape(CollisionGroup Group, CollisionShape Shape)
+        {
+            for (var i = 0; i < Group.Colliders.Length; i++)
+            {
+                if (!GJKCollision.IsInsideBroadphase(Group.Colliders[i], Shape)) continue;
+                if (GJKCollision.Collides(Group.Colliders[i].AsShape(), Shape)) return true;
+            }
+            return false;
         }
 
         private static bool AABBvsAABB(Box A, Box B)
