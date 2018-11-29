@@ -244,6 +244,7 @@ namespace Hedra.Engine.Rendering.Animation
 
         public void Update()
         {
+            if(!Enabled) return;
             if (_animator.Update())
             {
                 UpdateJointTransforms(true);

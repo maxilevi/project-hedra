@@ -5,7 +5,6 @@
  *
  */
 using System;
-using System.Diagnostics;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -129,12 +128,6 @@ namespace Hedra.Engine.Rendering
             set
             {
                 if (_buffer.Rotation == value) return;
-                if (float.IsInfinity(value.Y) || float.IsNaN(value.Y)) Debugger.Break();
-                
-                if(float.IsInfinity(value.X) || float.IsNaN(value.X)) Debugger.Break();
-
-                if(float.IsInfinity(value.Z) || float.IsNaN(value.Z)) Debugger.Break();
-        
                 _buffer.Rotation = value;
             }
         }
@@ -151,12 +144,6 @@ namespace Hedra.Engine.Rendering
             set
             {
                 if(_buffer.LocalRotation == value) return;
-                if(float.IsInfinity(value.Y) || float.IsNaN(value.Y)) Debugger.Break();
-                
-                if(float.IsInfinity(value.X) || float.IsNaN(value.X)) Debugger.Break();
-
-                if(float.IsInfinity(value.Z) || float.IsNaN(value.Z)) Debugger.Break();
-                
                 _buffer.LocalRotation = value;
             }
         }
@@ -172,20 +159,8 @@ namespace Hedra.Engine.Rendering
             get => _buffer.AnimationRotation;
             set
             {
-                float valY = value.Y;
-                
-                if(valY > 40960 || valY < -40960) valY = 0;
-                
-                float valX = value.X;
-                
-                if(valX > 40960 || valX < -40960) valX = 0;
-                
-                float valZ = value.Z;
-                
-                if(valZ > 40960 || valZ < -40960) valZ = 0;
-
-                
-                _buffer.AnimationRotation = new Vector3(valX, valY, valZ);
+                if(_buffer.AnimationRotation == value) return;   
+                _buffer.AnimationRotation = value;
             }
         }
         
@@ -200,20 +175,8 @@ namespace Hedra.Engine.Rendering
             get => _buffer.AnimationPosition;
             set
             {
-                float valY = value.Y;
-                
-                if(valY > 4096 || valY < -4096) valY = 0;
-                
-                float valX = value.X;
-                
-                if(valX > 4096 || valX < -4096) valX = 0;
-                
-                float valZ = value.Z;
-                
-                if(valZ > 4096 || valZ < -4096) valZ = 0;
-
-                
-                _buffer.AnimationPosition = new Vector3(valX, valY, valZ);
+                if(_buffer.AnimationPosition == value) return;               
+                _buffer.AnimationPosition = value;
             }
         }
         

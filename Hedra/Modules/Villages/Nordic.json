@@ -4,7 +4,7 @@
     "Designs":[
       {
         "Path" : "Assets/Env/Village/Well0.ply",
-        "Scale" : 6.0
+        "Scale" : 3.0
       }
     ]
   },
@@ -12,7 +12,7 @@
     "Designs" : [
       {
         "Path" : "Assets/Env/Village/Stable0.ply",
-        "Scale" : 8.0
+        "Scale" : 4.0
       }
     ]
   },
@@ -20,7 +20,7 @@
     "Designs" : [
       {
         "Path" : "Assets/Env/Village/Blacksmith0.ply",
-        "Scale" : 3.0,
+        "Scale" : 2.5,
         "Doors" : [
           {
            "Path":  "Assets/Env/Village/Blacksmith0_Door0.ply",
@@ -55,7 +55,7 @@
     "Designs" : [
       {
         "Path" : "Assets/Env/Village/Windmill0.ply",
-        "Scale" : 10.0
+        "Scale" : 5.0
       }
     ]
   },
@@ -63,7 +63,7 @@
     "Designs" : [
       {
         "Path" : "Assets/Env/Village/House0.ply",
-        "Scale" : 4.0,
+        "Scale" : 3.5,
         "Doors" : [
           {
             "Path":  "Assets/Env/Village/House0_Door0.ply",
@@ -85,7 +85,7 @@
       },
       {
         "Path" : "Assets/Env/Village/House1.ply",
-        "Scale" : 5.0,
+        "Scale" : 5,
         "Doors" : [
           {
             "Path":  "Assets/Env/Village/House1_Door0.ply",

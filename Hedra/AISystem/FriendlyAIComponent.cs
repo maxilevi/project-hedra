@@ -1,8 +1,7 @@
-using Hedra.AISystem;
 using Hedra.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;
 
-namespace HedraContent.AI
+namespace Hedra.AISystem
 {
     public class FriendlyAIComponent : BasicAIComponent
     {

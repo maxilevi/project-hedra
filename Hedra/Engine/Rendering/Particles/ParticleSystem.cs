@@ -15,7 +15,6 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.Particles
 {
-    [Obfuscation(Exclude = false, Feature = "-rename")]
     public class ParticleSystem : IRenderable, IUpdatable, IDisposable
     {
         public const int MaxParticleCount = 15000;

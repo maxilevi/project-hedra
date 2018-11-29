@@ -38,6 +38,7 @@ namespace Hedra.WeaponSystem
         
         protected override Vector3 SheathedPosition => new Vector3(1.5f,-0.0f,0.0f);
         protected override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
+        protected virtual float ArrowDamageModifier => 1.0f;
         
         private static readonly VertexData ArrowVertexData;
         private static readonly VertexData ArrowDataVertexData;
@@ -147,7 +148,7 @@ namespace Hedra.WeaponSystem
             };
             arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {
-                Hit.Damage(Owner.DamageEquation * Options.DamageModifier, Owner, out var exp, true, false);
+                Hit.Damage(Owner.DamageEquation * ArrowDamageModifier * Options.DamageModifier, Owner, out var exp, true, false);
                 Owner.XP += exp;
             };
             arrowProj.LandEventHandler += S => Owner.ProcessHit(false);

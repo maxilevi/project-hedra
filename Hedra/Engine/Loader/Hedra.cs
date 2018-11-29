@@ -51,6 +51,7 @@ namespace Hedra.Engine.Loader
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             AssetManager.Load();
             CompatibilityManager.Load();
+            HedraContent.Load();
             ModificationsLoader.Reload();
             NameGenerator.Load();
             CacheManager.Load();

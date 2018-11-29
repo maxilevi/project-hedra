@@ -6,8 +6,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public class MarketParameters : BuildingParameters
     {
-        public float Size { get; } = 160;
-        public float WellSize { get; } = 64;
+        public float Size { get; } = 108;
+        public float WellSize { get; } = 15;
 
         public override float GetSize(VillageCache Cache)
         {

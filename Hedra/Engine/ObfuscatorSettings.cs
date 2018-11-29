@@ -8,7 +8,6 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ModuleSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.EntitySystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.EntitySystem.BossSystem'):-rename")]
-[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.IO'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.StructureSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.StructureSystem.VillageSystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.StructureSystem.VillageSystem.Builders'):-rename")]

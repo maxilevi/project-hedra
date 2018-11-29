@@ -2,9 +2,9 @@ using Hedra.AISystem;
 using Hedra.AnimationEvents;
 using Hedra.API;
 
-namespace HedraContent
+namespace Hedra
 {
-    public class HedraMod : Mod
+    public class HedraContent : Mod
     {
         public override string Name => "Project Hedra";
         
@@ -25,6 +25,11 @@ namespace HedraContent
             AddAnimationEvent("Growl", typeof(Growl));
             AddAnimationEvent("Quake", typeof(Quake));
             AddAnimationEvent("Slash", typeof(Slash));
+        }
+
+        public static void Load()
+        {
+            (new HedraContent()).RegisterContent();
         }
     }
 }

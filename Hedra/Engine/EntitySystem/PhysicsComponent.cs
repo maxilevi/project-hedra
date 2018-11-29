@@ -22,10 +22,11 @@ namespace Hedra.Engine.EntitySystem
 {
     public delegate bool OnHitGroundEvent(IEntity Parent, float Falltime);
 
-    public class  PhysicsComponent : EntityComponent, IPhysicsComponent
+    public class PhysicsComponent : EntityComponent, IPhysicsComponent
     {
         private const float NormalSpeed = 2.25f;
         private const float MaxSlopeHeight = 1.0f;
+        private const float MaxSlide = 3.0f;
         private const float AttackingSpeed = 0.75f;
         private readonly Entity _parent;
         private readonly object _lock = new object();
@@ -33,7 +34,7 @@ namespace Hedra.Engine.EntitySystem
         public bool UsePhysics { get; set; }
         public float Falltime { get; private set; }
         public bool CanBePushed { get; set; } = true;
-        public Vector3 GravityDirection { get; set; } = new Vector3(0,-1f,0);
+        public Vector3 GravityDirection { get; set; } = new Vector3(0, -1f, 0);
         public float VelocityCap { get; set; } = float.MaxValue;
         public Vector3 Velocity { get; set; } = Vector3.Zero;
         public bool HasFallDamage { get; set; } = true;
@@ -44,10 +45,10 @@ namespace Hedra.Engine.EntitySystem
         public PhysicsComponent(Entity Parent) : base(Parent)
         {
             _parent = Parent;
+            _physicsBox = new Box();
             UsePhysics = true;
             UseTimescale = true;
         }
-
         /// <summary>
         /// If collides with structures
         /// </summary>
@@ -60,25 +61,26 @@ namespace Hedra.Engine.EntitySystem
         /// If collides with other entities
         /// </summary>
         public bool CollidesWithEntities { get; set; } = true;
-        
+
         private Chunk _underChunk, _underChunkR, _underChunkL, _underChunkF, _underChunkB;
         private readonly List<ICollidable> _collisions = new List<ICollidable>();
         private float _height;
         private float _speed;
         private bool _isOverTerrain;
         private float _deltaTime;
+        private Box _physicsBox;
 
         public Vector3 TargetPosition
         {
-            get => Parent.BlockPosition * new Vector3(1,Chunk.BlockSize,1);
+            get => Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1);
             set => Parent.BlockPosition = new Vector3(value.X, value.Y / Chunk.BlockSize, value.Z);
         }
 
         public override void Update()
         {
-            if(!UsePhysics)
+            if (!UsePhysics)
                 return;
-            
+
             _deltaTime = this.Timestep;
 
             if (CollidesWithStructures)
@@ -110,7 +112,7 @@ namespace Hedra.Engine.EntitySystem
                         if (_underChunkF != null && _underChunkF.Initialized)
                             _collisions.AddRange(_underChunkF.CollisionShapes);
                         if (_underChunkB != null && _underChunkB.Initialized)
-                            _collisions.AddRange(_underChunkB.CollisionShapes);          
+                            _collisions.AddRange(_underChunkB.CollisionShapes);
 
                     }
                     catch (Exception e)
@@ -136,7 +138,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (Falltime > 0)
                 {
-                    if (Falltime > 2.0f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true) )
+                    if (Falltime > 2.0f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true))
                     {
                         if (!Parent.SearchComponent<DamageComponent>()?.Immune ?? true)
                         {
@@ -148,7 +150,7 @@ namespace Hedra.Engine.EntitySystem
                             });
                         }
                     }
-                    else if(Falltime > 1f)
+                    else if (Falltime > 1f)
                     {
                         SoundManager.PlaySound(SoundType.HitGround, _parent.Position);
                     }
@@ -158,7 +160,7 @@ namespace Hedra.Engine.EntitySystem
             Parent.Model.Position = TargetPosition;//Mathf.Lerp(Parent.Model.Position, this.TargetPosition, _deltaTime * 8f);
             _speed = Mathf.Lerp(_speed, Parent.IsAttacking ? AttackingSpeed : NormalSpeed, _deltaTime * 2f);
         }
-        
+
         public Vector3 MoveFormula(Vector3 Direction, bool ApplyReductions = true)
         {
             var movementSpeed = (Parent.IsUnderwater && !Parent.IsGrounded ? 1.25f : 1.0f) * Parent.Speed;
@@ -203,7 +205,8 @@ namespace Hedra.Engine.EntitySystem
             if (Command.Delta == Vector3.Zero) return;
 
             var canMove = HandleVoxelCollision(Command);
-            if (!canMove && Parent is LocalPlayer) {
+            if (!canMove && Parent is LocalPlayer)
+            {
                 int a = 0;
             }
             HandleDrifting(Command);
@@ -226,7 +229,6 @@ namespace Hedra.Engine.EntitySystem
             if (canMove)
             {
                 var moveDelta = Command.Delta * new Vector3(1, 1f / Chunk.BlockSize, 1);
-                if(!Command.OnlyY && Parent is LocalPlayer) Log.WriteLine($"Moved {moveDelta}");
                 Parent.BlockPosition += moveDelta;
             }
         }
@@ -234,51 +236,91 @@ namespace Hedra.Engine.EntitySystem
         private bool HandleStructureCollision(MoveCommand Command)
         {
             if (!(Parent is LocalPlayer)) return true;
-            if (!Command.OnlyY)
+            _physicsBox.Min = Vector3.Zero + TargetPosition + 2 * Vector3.UnitY;
+            _physicsBox.Max = Parent.Model.BaseBroadphaseBox.Size + TargetPosition;
+            _physicsBox.Min += Command.Delta;
+            _physicsBox.Max += Command.Delta;
+            var shape = _physicsBox.AsShape();
+            lock (_lock)
             {
-                int a = 0;
-            }
-            var box = new Box(Vector3.Zero + TargetPosition + 2 * Vector3.UnitY, Parent.Model.BaseBroadphaseBox.Size + TargetPosition);
-            //var box = Parent.Model.BroadphaseBox.Cache;
-            box.Min += Command.Delta;
-            box.Max += Command.Delta;
-            /*var offset =  new Vector3(
-                Math.Abs(Command.Delta.X) > 0.001f ? 1 : 0,
-                0,
-                Math.Abs(Command.Delta.Z) > 0.001f ? 1 : 0
-                ) * 2;
-            box.Min += offset;
-            box.Max += offset;*/
-            var shape = box.AsShape();
-            lock(_lock)
-            {
-                for(var i = _collisions.Count-1; i > -1; i--)
+                for (var i = _collisions.Count - 1; i > -1; i--)
                 {
-                    if (Physics.Collides(_collisions[i], shape))
+                    if (!Physics.Collides(_collisions[i], shape)) continue;
+                    if (!Command.OnlyY)
                     {
-                        if (!Command.OnlyY)
-                        {
-                            var slopeHeight = MaxSlopeHeight;
-                            shape.Transform(Vector3.UnitY * slopeHeight);
-                            if (Physics.Collides(_collisions[i], shape))
-                            {
-                                return false;
-                            }
-                            else
-                            {
-                                /* If the object collided with Y but not Y+1 then it probably is a slope */
-                                Parent.BlockPosition += slopeHeight * Vector3.UnitY * (1f / Chunk.BlockSize);
-                            }
-                            shape.Transform(-Vector3.UnitY * slopeHeight);
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        var collided = true;
+                        collided &= HandleSlopes(Command, _collisions[i], shape);
+                        if(collided) HandleSliding(Command, _collisions[i], shape);
+                        collided &= HandleSlidingCorners(Command, _collisions[i], shape);
+                        if (collided) return false;
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
             }
             return true;
+        }
+
+        private bool HandleSlidingCorners(MoveCommand Command, ICollidable Shape, CollisionShape Box)
+        {
+            if (!CollidesWithOffset(Shape, Box, Command.Delta.NormalizedFast() * MaxSlide))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool HandleSlopes(MoveCommand Command, ICollidable Shape, CollisionShape Box)
+        {
+            var slopeHeight = .25f;
+            if (!CollidesWithOffset(Shape, Box, Vector3.UnitY * 1f))
+            {
+                /* If the object collided with Y but not Y+1 then it probably is a slope */
+                var accum = .05f;
+                while (CollidesWithOffset(Shape, Box, Vector3.UnitY * accum) && accum < 1f)
+                {
+                    accum += 0.05f;
+                }
+                Parent.BlockPosition += accum * Vector3.UnitY;
+                return false;
+            }
+            return true;
+        }
+
+        private void HandleSliding(MoveCommand Command, ICollidable Shape, CollisionShape Box)
+        {
+            var offset = Vector3.Zero;
+            if (!CollidesWithOffset(Shape, Box, offset = (Command.Delta.Xz.PerpendicularLeft.ToVector3() * .5f + Command.Delta * .5f)))
+            {
+                Parent.BlockPosition += offset;
+            }
+            else if (!CollidesWithOffset(Shape, Box, offset = Command.Delta.Xz.PerpendicularLeft.ToVector3()))
+            {
+                Parent.BlockPosition += offset;
+            }
+            else if (!CollidesWithOffset(Shape, Box, offset = (Command.Delta.Xz.PerpendicularRight.ToVector3() * .5f + Command.Delta * .5f)))
+            {
+                Parent.BlockPosition += offset;
+            }
+            else if (!CollidesWithOffset(Shape, Box, offset = Command.Delta.Xz.PerpendicularRight.ToVector3()))
+            {
+                Parent.BlockPosition += offset;
+            }
+        }
+
+        private bool CollidesWithOffset(ICollidable Shape, CollisionShape Box, Vector3 Offset)
+        {
+            try
+            {
+                Box.Transform(Offset);
+                return Physics.Collides(Shape, Box);
+            }
+            finally
+            {
+                Box.Transform(-Offset);
+            }
         }
 
         private bool HandleVoxelCollision(MoveCommand Command)
@@ -302,7 +344,7 @@ namespace Hedra.Engine.EntitySystem
             }
             return true;
         }
-        
+
         private void HandleDrifting(MoveCommand Command)
         {
             var terrainNormal = Physics.NormalAtPosition(Parent.Position);
@@ -316,9 +358,9 @@ namespace Hedra.Engine.EntitySystem
             }
 
             if (dot < .35 && Parent.IsGrounded) IsDrifting = true;
-            else if(dot > .45 || !Parent.IsGrounded) IsDrifting = false;
+            else if (dot > .45 || !Parent.IsGrounded) IsDrifting = false;
         }
-        
+
         private void HandleTerrainCollision(MoveCommand Command, bool IsOverAShape)
         {
             var heightAtPosition = Physics.HeightAtPosition((int)Parent.BlockPosition.X, (int)Parent.BlockPosition.Z);
@@ -345,14 +387,14 @@ namespace Hedra.Engine.EntitySystem
                     _isOverTerrain = false;
                 }
             }
-            else if(IsOverAShape)
+            else if (IsOverAShape)
             {
                 Parent.IsGrounded = true;
                 Velocity = Vector3.Zero;
                 _isOverTerrain = false;
-            }         
+            }
         }
-        
+
         private void OnColliderHit()
         {
             if (!(Parent is IHumanoid human) || !human.IsTravelling) return;
@@ -363,7 +405,7 @@ namespace Hedra.Engine.EntitySystem
                 Parent.Damage(Parent.MaxHealth * .15f, Parent, out _);
             });
         }
-        
+
         private void HandleEntityCollision(MoveCommand Command)
         {
             if (!this.CollidesWithEntities || Command.IsRecursive) return;
@@ -375,19 +417,19 @@ namespace Hedra.Engine.EntitySystem
                     continue;
 
                 /* Is a entity is farther than 2 chunks away, just skip it.*/
-                if( (World.ToChunkSpace(entities[i].Position) - chunkSpace).LengthSquared > Chunk.Width*2 * Chunk.Width*2)
+                if ((World.ToChunkSpace(entities[i].Position) - chunkSpace).LengthSquared > Chunk.Width * 2 * Chunk.Width * 2)
                     continue;
-                
+
                 if (!entities[i].Physics.CollidesWithEntities) continue;
                 if (!Physics.Collides(entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) ||
                     !Physics.Collides(entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))
                     continue;
-                    
+
                 if (!PushAround || !entities[i].Physics.CanBePushed) return;
                 if (entities[i].Model.BroadphaseBox.Size.LengthSquared >
                     this.Parent.Model.BroadphaseBox.Size.LengthSquared * 4f)
                 {
-                    if(Vector3.Dot(Command.Delta.NormalizedFast(), (entities[i].Position - this.Parent.Position).NormalizedFast()) > .75f) return;
+                    if (Vector3.Dot(Command.Delta.NormalizedFast(), (entities[i].Position - this.Parent.Position).NormalizedFast()) > .75f) return;
                     else continue;
                 }
                 var increment = -(Parent.Position.Xz - entities[i].Position.Xz).ToVector3().NormalizedFast();
@@ -398,16 +440,16 @@ namespace Hedra.Engine.EntitySystem
                 entities[i].Physics.DeltaTranslate(command);
             }
         }
-        
+
         public void ResetFall()
         {
             Falltime = 0.01f;
         }
-        
+
         public override void Dispose()
         {
             lock (_lock)
-                this._collisions.Clear();    
+                this._collisions.Clear();
             this._underChunk = null;
             this._underChunkR = null;
             this._underChunkL = null;

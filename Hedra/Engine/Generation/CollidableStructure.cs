@@ -26,7 +26,7 @@ namespace Hedra.Engine.Generation
 
     public class CollidableStructure : IDisposable
     {
-        private readonly HashSet<CollisionGroup> _colliders;
+        private readonly HashSet<ICollidable> _colliders;
         private readonly HashSet<CachedVertexData> _models;
         private readonly HashSet<IGroundwork> _groundworks;
         private readonly HashSet<Plateau> _plateaus;
@@ -48,7 +48,7 @@ namespace Hedra.Engine.Generation
             this.Design = Design;
             this.WorldObject = WorldObject;
             this.Parameters = new AttributeArray();
-            this._colliders = new HashSet<CollisionGroup>();
+            this._colliders = new HashSet<ICollidable>();
             this._models = new HashSet<CachedVertexData>();
             this._groundworks = new HashSet<IGroundwork>();
             this._plateaus = new HashSet<Plateau>();
@@ -59,7 +59,7 @@ namespace Hedra.Engine.Generation
             World.WorldBuilding.SetupStructure(this);
         }
 
-        public CollisionGroup[] Colliders
+        public ICollidable[] Colliders
         {
             get
             {
@@ -97,9 +97,10 @@ namespace Hedra.Engine.Generation
 
         public void AddCollisionShape(params ICollidable[] IColliders)
         {
+            if (IColliders.Length == 0) return;
             lock (_lock)
             {
-                _colliders.Add(new CollisionGroup(IColliders));
+                _colliders.Add(IColliders.Length != 1 ? new CollisionGroup(IColliders) : IColliders.First());
             }
         }
 

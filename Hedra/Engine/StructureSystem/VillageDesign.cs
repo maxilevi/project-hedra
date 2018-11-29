@@ -19,7 +19,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class VillageDesign : StructureDesign
     {
-        public const float Spacing = 140;
+        public const float Spacing = 128;
         public override int Radius { get; set; } = 2048;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
 

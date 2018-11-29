@@ -1,8 +1,7 @@
-using Hedra.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Sound;
 
-namespace HedraContent.AI
+namespace Hedra.AISystem
 {
     public class PugAIComponent : CattleAIComponent
     {

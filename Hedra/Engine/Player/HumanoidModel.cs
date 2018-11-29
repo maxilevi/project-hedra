@@ -395,7 +395,7 @@ namespace Hedra.Engine.Player
                 positionAddon += MountModel.Height * Vector3.UnitY * .5f;
             }
 
-            Model.Position = Mathf.Lerp(Model.Position, Position + positionAddon, Time.IndependantDeltaTime * 32f);
+            Model.Position = Mathf.Lerp(Model.Position, Position + positionAddon, Time.IndependantDeltaTime * 24f);
             if (MountModel != null)
             {
                 MountModel.Position = Mathf.Lerp(MountModel.Position, Position, Time.IndependantDeltaTime * 32f);

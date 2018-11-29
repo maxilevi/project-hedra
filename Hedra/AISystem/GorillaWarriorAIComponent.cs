@@ -1,9 +1,8 @@
-using Hedra.AISystem;
 using Hedra.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;
 using OpenTK;
 
-namespace HedraContent.AI
+namespace Hedra.AISystem
 {
     public class GorillaWarriorAIComponent : BasicAIComponent, IGuardAIComponent
     {

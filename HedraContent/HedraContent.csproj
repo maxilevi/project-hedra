@@ -45,24 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AI\CowAIComponent.cs" />
-    <Compile Include="AI\FriendlyAIComponent.cs" />
-    <Compile Include="AI\GiantBeetleAIComponent.cs" />
-    <Compile Include="AI\GoatAIComponent.cs" />
-    <Compile Include="AI\GorillaWarriorAIComponent.cs" />
-    <Compile Include="AI\HostileAIComponent.cs" />
-    <Compile Include="AI\NeutralAIComponent.cs" />
-    <Compile Include="AI\PigAIComponent.cs" />
-    <Compile Include="AI\PugAIComponent.cs" />
-    <Compile Include="AI\SheepAIComponent.cs" />
-    <Compile Include="AI\TrollAIComponent.cs" />
-    <Compile Include="AnimationEvents\Growl.cs" />
-    <Compile Include="AnimationEvents\Quake.cs" />
-    <Compile Include="AnimationEvents\Slash.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="HedraMod.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AI" />
+    <Folder Include="AnimationEvents" />
     <Folder Include="Weapons\" />
   </ItemGroup>
   <ItemGroup>

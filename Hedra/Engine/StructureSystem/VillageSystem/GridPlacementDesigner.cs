@@ -37,7 +37,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 for (var z = 0; z < VillageSize; ++z)
                 {
                     var position = new Vector3(x * VillageDesign.Spacing, 0, z * VillageDesign.Spacing) - offset;
-                    var size = marketPoint.Size * 1.5f;
+                    var size = marketPoint.Size * 1.0f;
                     if ((position - marketPoint.Position).LengthSquared > size * size)
                     {
                         points.Add(new PlacementPoint
@@ -60,7 +60,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private bool SelectPlacer(PlacementPoint Point, PlacementDesign Design)
         {
             var rng = Rng.NextFloat();
-            var rotationY = Physics.DirectionToEuler((Vector3.Zero - Point.Position).NormalizedFast()).Y;
+            var rotationY = Physics.DirectionToEuler(-(Vector3.Zero - Point.Position).NormalizedFast()).Y;
             var rotation = Vector3.UnitY * (float) (Math.Round(rotationY / 90f) * 90f);
             
             if (rng < .15 && FarmPlacer.SpecialRequirements(Point))

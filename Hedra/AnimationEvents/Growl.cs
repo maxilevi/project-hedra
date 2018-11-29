@@ -7,7 +7,7 @@ using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using OpenTK;
 
-namespace HedraContent.AnimationEvents
+namespace Hedra.AnimationEvents
 {
     public class Growl : AnimationEvent
     {

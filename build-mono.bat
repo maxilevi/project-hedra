@@ -1,1 +1,0 @@
-xbuild Hedra/Hedra.csproj /p:Platform=x86 /p:Configuration=Debug /p:DebugType=portable

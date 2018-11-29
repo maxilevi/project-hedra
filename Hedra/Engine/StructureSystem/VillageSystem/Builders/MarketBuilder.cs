@@ -31,13 +31,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public override BuildingOutput Build(MarketParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            float marketDist = 4.75f + Rng.NextFloat() * .75f + 0.2f;
+            float marketDist = 3.5f + Rng.NextFloat() * .75f + 0.2f;
             int marketCount = 8 + Rng.Next(0, 4);
 
             var marketModels = new List<VertexData>();
             var marketShapes = new List<CollisionShape>();
             var originalPosition = Parameters.Position;
-            var transMatrix = Matrix4.CreateScale(5f) * Matrix4.CreateTranslation(originalPosition);
+            var transMatrix = Matrix4.CreateScale(4f) * Matrix4.CreateTranslation(originalPosition);
             for (var i = 0; i < marketCount; i++)
             {
                 switch (i)
