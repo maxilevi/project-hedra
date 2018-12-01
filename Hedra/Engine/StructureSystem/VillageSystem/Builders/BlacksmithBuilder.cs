@@ -19,13 +19,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .5f, BlockType.StonePath);
         }
 
-        public override BuildingOutput Paint(BlacksmithParameters Parameters, BuildingOutput Input)
-        {
-            for(var i = 0; i < Input.Models.Count; i++)
-                Input.Models[i].GraduateColor(Vector3.UnitY);
-            return base.Paint(Parameters, Input);
-        }
-
         public override BuildingOutput Build(BlacksmithParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
             var output = base.Build(Parameters, Cache, Rng, Center);

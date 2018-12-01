@@ -14,7 +14,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
     {
         public static MarketCache Market { get; }
         private readonly Dictionary<string, List<CollisionShape>> _colliderCache;
-        private readonly Dictionary<string, VertexData> _modelCache;
+        private readonly Dictionary<string, CompressedVertexData> _modelCache;
         private readonly Dictionary<string, Vector3> _sizeCache;
 
         static VillageCache()
@@ -25,7 +25,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private VillageCache()
         {
             _colliderCache = new Dictionary<string, List<CollisionShape>>();
-            _modelCache = new Dictionary<string, VertexData>();
+            _modelCache = new Dictionary<string, CompressedVertexData>();
             _sizeCache = new Dictionary<string, Vector3>();
         }
 
@@ -36,7 +36,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         
         public VertexData GrabModel(string Path)
         {
-            return _modelCache[Path].ShallowClone();
+            return _modelCache[Path].ToVertexData().ShallowClone();
         }
         
         public Vector3 GrabSize(string Path)
@@ -53,8 +53,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 for (var j = 0; j < designs[i].Length; j++)
                 {
                     cache._colliderCache.Add(designs[i][j].Path, AssetManager.LoadCollisionShapes(designs[i][j].Path, Vector3.One * designs[i][j].Scale));
-                    cache._modelCache.Add(designs[i][j].Path, LoadCollisionShapesAsVertexData(designs[i][j].Path, Vector3.One * designs[i][j].Scale));
-                    cache._sizeCache.Add(designs[i][j].Path, CalculateBounds(cache._modelCache[designs[i][j].Path]));
+                    cache._modelCache.Add(designs[i][j].Path, AssetManager.PLYLoader(designs[i][j].Path, Vector3.One * designs[i][j].Scale).AsCompressed());
+                    cache._sizeCache.Add(designs[i][j].Path, CalculateBounds(cache._modelCache[designs[i][j].Path].ToVertexData()));
                 }
             }
             return cache;
@@ -75,8 +75,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 model += vertexInformation;
                 iterator++;
             }
-
-            return model;
         }
         
         private static Vector3 CalculateBounds(VertexData Model)

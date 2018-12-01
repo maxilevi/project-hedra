@@ -211,6 +211,11 @@ namespace Hedra.Rendering
                 Colors[i] = Color;
             }
         }
+
+        public CompressedVertexData AsCompressed()
+        {
+            return CompressedVertexData.FromVertexData(this);
+        }
         
         public VertexData Clone()
         {

@@ -71,6 +71,7 @@
     <Compile Include="CodePolicy\SolutionTest.cs" />
     <Compile Include="CodePolicy\DanglingReferencesCodePolicy.cs" />
     <Compile Include="Core\GameSettingsTest.cs" />
+    <Compile Include="Core\HalfBlockTest.cs" />
     <Compile Include="EntitySystem\DamageComponentTest.cs" />
     <Compile Include="Game\ArmorBalanceSheet.cs" />
     <Compile Include="Game\ArmorBalanceTest.cs" />

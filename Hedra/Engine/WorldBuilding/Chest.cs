@@ -68,10 +68,14 @@ namespace Hedra.Engine.WorldBuilding
 
         public override void Update()
         {
+            if (_model != null) _model.Position = Position;
             base.Update();
+        }
+
+        protected override void DoUpdate()
+        {
             if (_model != null)
             {
-                _model.Position = Position;
                 _model.Update();
                 HandleColliders();
             }

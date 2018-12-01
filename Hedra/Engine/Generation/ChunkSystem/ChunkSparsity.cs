@@ -5,8 +5,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class ChunkSparsity
     {
-        public float MiniumHeight { get; set; }
-        public float MaximumHeight { get; set; }
+        public int MinimumHeight { get; set; }
+        public int MaximumHeight { get; set; }
 
         private ChunkSparsity() { }
 
@@ -56,9 +56,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
             //Log.WriteLine($"Chunk '{Parent.Position}' has a sparsity of {percentage}% ");
             return new ChunkSparsity
             {
-                MiniumHeight = sparsity.X,
-                MaximumHeight = sparsity.Y
+                MinimumHeight = (int)sparsity.X,
+                MaximumHeight = (int)sparsity.Y
             };
         }
+
+        public static ChunkSparsity Default { get; } = new ChunkSparsity();
     }
 }

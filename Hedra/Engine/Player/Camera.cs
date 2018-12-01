@@ -99,7 +99,8 @@ namespace Hedra.Engine.Player
                 {
                     if (_prevDistance == 0)
                         _prevDistance = TargetDistance;
-                    TargetDistance += Time.IndependantDeltaTime * -32f;
+
+                    TargetDistance += Time.IndependantDeltaTime * -1600f;
                 }
                 else
                 {
@@ -213,7 +214,7 @@ namespace Hedra.Engine.Player
                 if (position.Y <= y + MinDistance || IsColliding(position, box))
                     return;
             }
-            TargetDistance += Time.IndependantDeltaTime * 32f;
+            TargetDistance += Time.IndependantDeltaTime * 1600f;
         }
 
         private float _targetDistance = 10f;

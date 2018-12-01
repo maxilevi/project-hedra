@@ -98,7 +98,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         {
                             next = !next;
 
-                            if (y < Sparsity.MiniumHeight || y > Sparsity.MaximumHeight) continue;
+                            if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight) continue;
                             if (!Filter(x, y, z)) continue;
                             if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
 

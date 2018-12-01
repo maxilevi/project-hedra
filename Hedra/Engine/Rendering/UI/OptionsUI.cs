@@ -239,7 +239,7 @@ namespace Hedra.Engine.Rendering.UI
             void UpdateLimiter(object Sender, MouseButtonEventArgs E)
             {
                 GameSettings.FrameLimit = 
-                    frameLimiter.Index == fpsLimitList.Count ? 0 : int.Parse(frameLimiter.CurrentValue.Text);
+                    frameLimiter.Index == fpsLimitList.Count-1 ? 0 : int.Parse(frameLimiter.CurrentValue.Text);
             }
 
             frameLimiter.LeftArrow.Click += UpdateLimiter;

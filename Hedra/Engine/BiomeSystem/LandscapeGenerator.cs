@@ -167,8 +167,8 @@ namespace Hedra.Engine.BiomeSystem
                 if (y < 2)
                     currentBlock.Type = BlockType.Seafloor;
     
-                if (noise != 0)
-                    currentBlock.Noise3D = true;
+                //if (noise != 0)
+                //    Block.Noise3D = true;
     
             }
 

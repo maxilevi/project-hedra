@@ -56,13 +56,18 @@ namespace Hedra.Engine.WorldBuilding
 
         public virtual void Update()
         {
+            if (IsInRadius())
+                DoUpdate();
+        }
+
+        protected virtual void DoUpdate()
+        {
             var player = GameManager.Player;
 
             bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
                 player.View.LookingDirection.Xz.NormalizedFast()) > .75f;                
             
-            bool IsInRadius() => (this.Position - player.Position).LengthSquared < InteractDistance * InteractDistance;
-            if (IsInLookingAngle() && IsInRadius() && (!Interacted || !SingleUse) && CanInteract)
+            if (IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract)
             {
                 player.MessageDispatcher.ShowMessageWhile($"[{Key.ToString()}] {Message}", () => !Disposed && IsInLookingAngle() && IsInRadius());
                 _canInteract = true;
@@ -84,7 +89,11 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        
+        private bool IsInRadius()
+        {
+            return (Position - GameManager.Player.Position).LengthSquared < InteractDistance * InteractDistance;
+        }
+
         public void InvokeInteraction(IPlayer Player)
         {
             Interacted = true;

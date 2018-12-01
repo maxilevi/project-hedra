@@ -38,25 +38,57 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         }
         public override void Update()
         {
+            if(_mesh != null) _mesh.Position = Position;       
             base.Update();
+        }
+
+        protected override void DoUpdate()
+        {
             if (_mesh != null)
             {
                 _mesh.LocalRotation = Mathf.Lerp(_mesh.LocalRotation, _targetRotation, Time.DeltaTime * 4f);
                 _mesh.LocalRotationPoint = _rotationPoint;
-                _mesh.Position = Position;
             }
-            if(_collider != null) UpdateBox();
+            if (_collider != null)
+            {
+                if (!_opened) UpdateBox();
+                else IgnoreBox();
+            }
         }
 
+        private void IgnoreBox()
+        {
+            if (ShouldUpdate()) return;
+
+            for (var i = 0; i < _shape.Vertices.Length; i++)
+            {
+                _shape.Vertices[i] = Vector3.Zero;
+            }
+
+            UpdateShape();
+        }
+        
         private void UpdateBox()
         {
-            if ((_mesh.LocalRotation - _lastRotation).LengthSquared < 0.005f * 0.005f
-                && (_lastPosition - _mesh.Position).LengthSquared < 0.005f * 0.005f) return;
+            if (ShouldUpdate()) return;
+            
             var collider = _collider.Collider;
             for (var i = 0; i < _shape.Vertices.Length; i++)
             {
                 _shape.Vertices[i] = collider.Corners[i];
             }
+
+            UpdateShape();
+        }
+
+        private bool ShouldUpdate()
+        {
+            return (_mesh.LocalRotation - _lastRotation).LengthSquared < 0.005f * 0.005f
+                   && (_lastPosition - _mesh.Position).LengthSquared < 0.005f * 0.005f;
+        }
+
+        private void UpdateShape()
+        {
             _shape.RecalculateBroadphase();
             _lastRotation = _mesh.LocalRotation;
             _lastPosition = _mesh.Position;
@@ -69,11 +101,18 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             _targetRotation = _opened ? Vector3.UnitY * -90 : Vector3.Zero;
         }
 
-        public static Vector3 GetRotationPointFromMesh(VertexData Mesh)
+        public static Vector3 GetRotationPointFromMesh(VertexData Mesh, bool Inverted)
         {
             var xSize = Vector3.UnitX * (Mesh.SupportPoint(Vector3.UnitX).X - Mesh.SupportPoint(-Vector3.UnitX).X);
             var zSize = Vector3.UnitZ * (Mesh.SupportPoint(Vector3.UnitZ).Z - Mesh.SupportPoint(-Vector3.UnitZ).Z);
-            return (xSize.LengthFast > zSize.LengthFast ? xSize : zSize) * .5f;
+            return (xSize.LengthFast > zSize.LengthFast ? xSize : zSize) * (Inverted ? -.5f : .5f);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _mesh.Dispose();
+            _collider.Dispose();
         }
     }
 }

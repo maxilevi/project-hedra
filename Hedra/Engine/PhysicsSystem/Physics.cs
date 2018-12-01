@@ -71,7 +71,7 @@ namespace Hedra.Engine.PhysicsSystem
         public static float HeightAtPosition(Vector3 BlockPosition, int Lod = -1)
         {
             
-            if(World.GetHighestBlockAt( (int)BlockPosition.X, (int)BlockPosition.Z).Noise3D)
+            if(Block.Noise3D)
             {
                 return HeightAtBlock( new Vector3(BlockPosition.X, World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z), BlockPosition.Z) );
             }
@@ -129,7 +129,7 @@ namespace Hedra.Engine.PhysicsSystem
         {
             int nearestWaterBlockY = 0;
             var blockSpace = World.ToBlockSpace(Position);
-            for (var y = UnderChunk.BoundsY - 1; y > -1; y--)
+            for (var y = UnderChunk.MaximumHeight; y > UnderChunk.MinimumHeight; y--)
             {
                 var block = UnderChunk.GetBlockAt((int)blockSpace.X, y, (int)blockSpace.Z);
                 if (block.Type == BlockType.Water)

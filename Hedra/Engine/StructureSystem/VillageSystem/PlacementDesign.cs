@@ -9,12 +9,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
     {
         public Vector3 Position { get; private set; }
         public List<FarmParameters> Farms { get; set; } = new List<FarmParameters>();
-        public List<HouseParameters> Neighbourhoods { get; set; } = new List<HouseParameters>();
+        public List<HouseParameters> Houses { get; set; } = new List<HouseParameters>();
         public List<BlacksmithParameters> Blacksmith { get; set; } = new List<BlacksmithParameters>();
         public List<BuildingParameters> Stables { get; set; } = new List<BuildingParameters>();
         public List<MarketParameters> Markets { get; set; } = new List<MarketParameters>();
 
-        public IBuildingParameters[] Parameters => Farms.Concat<IBuildingParameters>(Neighbourhoods)
+        public IBuildingParameters[] Parameters => Farms.Concat<IBuildingParameters>(Houses)
             .Concat(Blacksmith).Concat(Stables).Concat(Markets).ToArray();
 
         public void Translate(Vector3 Translation)

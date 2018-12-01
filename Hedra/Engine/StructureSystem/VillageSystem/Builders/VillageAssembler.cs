@@ -39,11 +39,14 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             _marketBuilder = new MarketBuilder(_structure);
             _root = Root;
             _rng = Rng;
+            Size = 14;//7 + Rng.Next(0, 4);
             _designer = new GridPlacementDesigner(_root, new VillageConfiguration
             {
-                Size = (int) ((Structure.Mountain.Radius - VillageDesign.Spacing) / VillageDesign.Spacing)
+                Size = Size
             }, Rng);
         }
+
+        public int Size { get; }
 
         public PlacementDesign DesignVillage()
         {
@@ -53,7 +56,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public void PlaceGroundwork(PlacementDesign Design)
         {
             Design.Markets = LoopStructures(Design.Markets, _marketBuilder, _marketWellBuilder);
-            Design.Neighbourhoods = LoopStructures(Design.Neighbourhoods, _houseBuilder, _neighbourHoodWellBuilder);
+            Design.Houses = LoopStructures(Design.Houses, _houseBuilder, _neighbourHoodWellBuilder);
             Design.Blacksmith = LoopStructures(Design.Blacksmith, _blacksmithBuilder);
             Design.Farms = LoopStructures(Design.Farms, _farmBuilder);
             Design.Stables = LoopStructures(Design.Stables, _stableBuilder);
@@ -87,8 +90,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             var parameters = new IBuildingParameters[][]
             {
-                Design.Neighbourhoods.ToArray(),
-                Design.Neighbourhoods.ToArray(),
+                Design.Houses.ToArray(),
                 Design.Farms.ToArray(),
                 Design.Blacksmith.ToArray(),
                 Design.Stables.ToArray(),
@@ -96,7 +98,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Design.Markets.ToArray()
             };
             var radius = 0f;
-            var builders = new object[] { _houseBuilder, _neighbourHoodWellBuilder, _farmBuilder, _blacksmithBuilder, _stableBuilder, _marketWellBuilder, _marketBuilder};
+            var builders = new object[] { _houseBuilder, _farmBuilder, _blacksmithBuilder, _stableBuilder, _marketWellBuilder, _marketBuilder};
             for (var i = 0; i < builders.Length; i++)
             {
                 for (var j = 0; j < parameters[i].Length; j++)
@@ -126,7 +128,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var currentSeed = World.Seed;
             while(underChunk == null || !underChunk.BuildedWithStructures)
             {
-                if(World.Seed != currentSeed || structure.Disposed || buildingOutput.IsEmpty) yield break;
+                if (World.Seed != currentSeed || structure.Disposed || buildingOutput.IsEmpty)
+                {
+                    buildingOutput.Dispose();
+                    yield break;
+                }
                 underChunk = World.GetChunkAt(position);
                 yield return null;
             }

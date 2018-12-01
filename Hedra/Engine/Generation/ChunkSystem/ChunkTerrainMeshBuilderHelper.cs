@@ -151,7 +151,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     }
                     for (int k = Math.Min(Y + 8, Chunk.Height - 1); k > -1; k--)
                     {
-                        var block = neighbourChunk?.GetBlockAt(x, k, z) ?? new Block();
+                        var block = neighbourChunk[x][k]?[z] ?? new Block();
                         if (block.Type == BlockType.Seafloor)
                         {
                             Cell.Density[i] = 0;

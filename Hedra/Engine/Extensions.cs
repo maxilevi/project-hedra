@@ -130,23 +130,26 @@ namespace Hedra.Engine
             return new Quaternion(x, y, z, w);
         }
         
-        public static Quaternion SlerpExt(Quaternion a, Quaternion b, float blend) {
+        public static Quaternion SlerpExt(Quaternion a, Quaternion b, float blend)
+        {
             Quaternion result = new Quaternion(0, 0, 0, 1);
             float dot = a.W * b.W + a.X * b.X + a.Y * b.Y + a.Z * b.Z;
             float blendI = 1f - blend;
-            if (dot < 0) {
+            if (dot < 0)
+            {
                 result.W = blendI * a.W + blend * -b.W;
                 result.X = blendI * a.X + blend * -b.X;
                 result.Y = blendI * a.Y + blend * -b.Y;
                 result.Z = blendI * a.Z + blend * -b.Z;
-            } else {
+            }
+            else
+            {
                 result.W = blendI * a.W + blend * b.W;
                 result.X = blendI * a.X + blend * b.X;
                 result.Y = blendI * a.Y + blend * b.Y;
                 result.Z = blendI * a.Z + blend * b.Z;
             }
-            result.Normalize();
-            return result;
+            return result.Normalized();
         }
         ///<sumary>
         /// Do NOT touch this function. It's not a real ToMatrix, it's an adhoc version.

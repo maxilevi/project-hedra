@@ -116,5 +116,7 @@ namespace Hedra.Engine.Rendering.Animation
                 return (Position.GetHashCode() * 397) ^ Rotation.GetHashCode();
             }
         }
+        
+        public static JointTransform Default { get; } = new JointTransform(Vector3.Zero, Quaternion.Identity);
     }
 }

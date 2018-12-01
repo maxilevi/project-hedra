@@ -54,6 +54,18 @@ namespace Hedra.Engine.BiomeSystem
             }
             this.Chunk.CalculateBounds();
         }
+
+        public void Cull(Block[][][] Blocks, ChunkSparsity Sparsity)
+        {
+            for (var x = 0; x < Blocks.Length; x++)
+            {
+                for (var y = 0; y < Blocks.Length; y++)
+                {
+                    if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight)
+                        Blocks[x][y] = null;
+                }
+            }
+        }
         
         public static float PathFormula(float X, float Z)
         {

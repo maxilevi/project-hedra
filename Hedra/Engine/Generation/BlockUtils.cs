@@ -58,22 +58,22 @@ namespace Hedra.Engine.Generation
         }
     }
 
+    /* BlockTypes should not exceed 16 */
     public enum BlockType : byte
     {
-        Air,
-        Grass,
-        Stone,
-        Dirt,
-        Water,
-        Wood,
-        Leaves,
-        Rock,
-        Path,
-        Temporal,
-        Seafloor,
-        StonePath,
-        DarkStonePath,
-        None,
+        Air = 0,
+        Grass = 1,
+        Stone = 2,
+        Dirt = 3,
+        Water = 4,
+        Wood = 5,
+        Leaves = 6,
+        Path = 7,
+        Temporal = 8,
+        Seafloor = 9,
+        StonePath = 10,
+        DarkStonePath = 11,
+        None = 12,
         MaxNums
     }
 }

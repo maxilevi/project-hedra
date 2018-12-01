@@ -107,7 +107,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Landscape.Generate(_blocks, _regionCache);
                 IsGenerating = false;
             }
+            CalculateBounds();
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
+            /* Landscape.Cull(_blocks, _terrainBuilder.Sparsity); */
             IsGenerated = true;
         }
 
@@ -115,7 +117,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Disposed || !IsGenerated || !Landscape.BlocksSetted || !Landscape.StructuresPlaced) return;
             var buildingLod = this.Lod;
-            this.CalculateBounds();
             this.PrepareForBuilding();
             var output = this.CreateTerrainMesh(buildingLod);
 
@@ -344,8 +345,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Disposed) return 0;
             if (Landscape == null || !Landscape.BlocksSetted) return 0;
-            var bound = (int) (_terrainBuilder.Sparsity?.MaximumHeight ?? BoundsY - 1);
-            for (var y = bound; y > -1; y--)
+            for (var y = MaximumHeight; y > MinimumHeight; y--)
             {
                 var type = _blocks[X][y][Z].Type;
                 if (type != BlockType.Air && type != BlockType.Water)
@@ -359,8 +359,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Disposed) return 0;
             if (Landscape == null || !Landscape.BlocksSetted) return 0;
-            var bound = (int) (_terrainBuilder.Sparsity?.MaximumHeight ?? BoundsY - 1);
-            for (var y = bound; y > -1; y--)
+            for (var y = MaximumHeight; y > MinimumHeight; y--)
             {
                 var type = _blocks[X][y][Z].Type;
                 if (type != BlockType.Air && type != BlockType.Water)
@@ -373,7 +372,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public int GetLowestY(int X, int Z)
         {
             if (Disposed || X < 0 || Z < 0 || Landscape == null || !Landscape.BlocksSetted) return 0;
-            for (var y = 0; y < BoundsY; y++)
+            for (var y = MinimumHeight; y < MaximumHeight; y++)
             {
                 var block = _blocks[X][y][Z];
                 if (block.Type == BlockType.Air || block.Type == BlockType.Water)
@@ -390,7 +389,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             if (Landscape != null && Landscape.BlocksSetted)
             {
-                for (int y = Y; y < BoundsY - 1; y++)
+                for (int y = Y; y < MaximumHeight; y++)
                 {
                     var block = _blocks[X][y][Z];
                     if (block.Type != BlockType.Air && block.Type != BlockType.Water &&
@@ -417,7 +416,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Disposed || X > BoundsX - 1 || Z > BoundsZ - 1 || X < 0 || Z < 0) return new Block();
             if (Landscape == null || !Landscape.BlocksSetted) return new Block();
-            for (int y = BoundsY - 1; y > -1; y--)
+            for (int y = MaximumHeight; y > MinimumHeight; y--)
             {
                 var B = _blocks[X][y][Z];
                 if (B.Type != BlockType.Air && B.Type != BlockType.Water)
@@ -432,7 +431,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (Disposed || X > BoundsX - 1 || Z > BoundsZ - 1 || X < 0 || Z < 0) return new Block();
             if (Landscape == null || !Landscape.BlocksSetted) return new Block();
 
-            for (var y = 0; y < Height; y++)
+            for (var y = MinimumHeight; y < MaximumHeight; y++)
             {
                 var block = _blocks[X][y][Z];
                 if (block.Type == BlockType.Air && block.Type == BlockType.Water)
@@ -541,6 +540,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 }
             }
         }
+
+        public int MaximumHeight => _terrainBuilder.Sparsity?.MaximumHeight ?? BoundsY - 1;
+        public int MinimumHeight => _terrainBuilder.Sparsity?.MinimumHeight ?? 0;
 
         public Block[][] this[int Index] => Disposed || !Landscape.StructuresPlaced || !Landscape.BlocksSetted
             ? _dummyBlocks

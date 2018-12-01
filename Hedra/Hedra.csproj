@@ -2853,6 +2853,34 @@
       <Link>Assets\Env\Village\House2_Door2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Villages\Well\Well0.ply">
+      <Link>Assets\Env\Village\Well0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Well\Well0_Collider0.ply">
+      <Link>Assets\Env\Colliders\Well0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Well\Well0_Collider1.ply">
+      <Link>Assets\Env\Colliders\Well0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Well\Well0_Collider2.ply">
+      <Link>Assets\Env\Colliders\Well0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Well\Well0_Collider3.ply">
+      <Link>Assets\Env\Colliders\Well0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Well\Well0_Collider4.ply">
+      <Link>Assets\Env\Colliders\Well0_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Well\Well0_Collider5.ply">
+      <Link>Assets\Env\Colliders\Well0_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Assets\Skills\BladesAttack1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -5053,30 +5081,6 @@
       <Link>Assets\Env\Colliders\Temple0_Collider9.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Well0_Collider0.ply">
-      <Link>Assets\Env\Colliders\Well0_Collider0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Well0_Collider1.ply">
-      <Link>Assets\Env\Colliders\Well0_Collider1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Well0_Collider2.ply">
-      <Link>Assets\Env\Colliders\Well0_Collider2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Well0_Collider3.ply">
-      <Link>Assets\Env\Colliders\Well0_Collider3.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Well0_Collider4.ply">
-      <Link>Assets\Env\Colliders\Well0_Collider4.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Well0_Collider5.ply">
-      <Link>Assets\Env\Colliders\Well0_Collider5.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Colliders\Windmill0_Collider0.ply">
       <Link>Assets\Env\Colliders\Windmill0_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -5591,10 +5595,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\UniqueWoodsmanAxe.ply">
       <Link>Assets\Items\Axes\UniqueWoodsmanAxe.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Well0.ply">
-      <Link>Assets\Env\Village\Well0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Wheat.ply">

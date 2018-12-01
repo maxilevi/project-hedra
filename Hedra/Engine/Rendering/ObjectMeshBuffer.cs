@@ -230,7 +230,7 @@ namespace Hedra.Engine.Rendering
 
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
-            Shader["noiseTexture"] = 1;           
+            Shader["noiseTexture"] = 1;      
             Shader["useNoiseTexture"] = UseNoiseTexture ? 1f : 0f;
             
             if (GameSettings.Shadows){

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
@@ -29,6 +30,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         /* Called via reflection */
         public virtual BuildingOutput Paint(T Parameters, BuildingOutput Input)
         {
+            for (var i = 0; i < Input.Models.Count; i++)
+            {
+            //    Input.Models[i].GraduateColor(Vector3.UnitY);
+            }
             return Input;
         }
         
@@ -59,7 +64,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 var doorTemplate = Doors[i];
                 var vertexData = AssetManager.PLYLoader(doorTemplate.Path, Vector3.One * Parameters.Design.Scale);
-                var rotationPoint = Vector3.TransformPosition(Door.GetRotationPointFromMesh(vertexData), Transformation);
+                var rotationPoint = Vector3.TransformPosition(Door.GetRotationPointFromMesh(vertexData, doorTemplate.Inverted), Transformation);
                 vertexData.Center();
                 vertexData.Transform(Transformation);
                 var offset = Vector3.TransformPosition(doorTemplate.Position * Parameters.Design.Scale, Transformation);

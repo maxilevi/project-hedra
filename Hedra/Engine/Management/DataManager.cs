@@ -47,7 +47,7 @@ namespace Hedra.Engine.Management
                     bw.Write(SaveVersion);
                     bw.Write(Player.Name);
                     bw.Write(Player.BlockPosition.X);
-                    bw.Write(Player.BlockPosition.Y + 4);
+                    bw.Write(Player.BlockPosition.Y);
                     bw.Write(Player.BlockPosition.Z);
 
                     bw.Write(Player.Rotation.X);

@@ -29,11 +29,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return this.PushGroundwork(work);
         }
 
-        public override BuildingOutput Paint(HouseParameters Parameters, BuildingOutput Input)
-        {
-            return Input;
-        }
-
         public override BuildingOutput Build(HouseParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
             var output = BuildSingleHouse(Parameters, Cache, Rng);

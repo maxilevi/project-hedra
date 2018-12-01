@@ -210,8 +210,9 @@ namespace Hedra.Engine.Rendering
             {
                 if (_arrayMappings.ContainsKey(Key))
                 {
-                    var array = ((IEnumerable) value).Cast<object>().ToArray();
-                    _arrayMappings[Key].Load(array);
+                    var asArray = (Array) value;
+                    if(_arrayMappings[Key].Values.Any(O => Array.IndexOf(asArray, O) == -1))
+                        _arrayMappings[Key].Load(asArray.Cast<object>().ToArray());
                 }
                 else
                 {
@@ -225,9 +226,10 @@ namespace Hedra.Engine.Rendering
                         _mappings.Add(Key, new UniformMapping(location, value));
                     }
                     if(this.ShaderId != Renderer.ShaderBound) throw new ArgumentException($"Uniforms need to be uploaded when the owner's shader is bound.");
-                    //if (_mappings[Key].Value != value)
+                    if (_mappings[Key].Value != value || !_mappings[Key].Loaded)
                     {
                         _mappings[Key].Value = value;
+                        _mappings[Key].Loaded = true;
                         Shader.LoadMapping(_mappings[Key]);
                     }
                 }

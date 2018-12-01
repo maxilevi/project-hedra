@@ -64,9 +64,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     16
                 )) continue;
                 
-                VertexData market0 = VillageCache.Market.Market0_Clone.Clone();
+                VertexData market0 = VillageCache.Market.Market0_Clone.ToVertexData().Clone();
                 bool extraShelf = Rng.Next(0, 4) != 0;
-                if (extraShelf) market0 += VillageCache.Market.Market1_Clone.Clone();
+                if (extraShelf) market0 += VillageCache.Market.Market1_Clone.ToVertexData().Clone();
                 market0.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
                 market0.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
                 market0.Transform(Matrix4.CreateRotationY(360 / marketCount * i * Mathf.Radian));
@@ -89,7 +89,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 else if (basketCount == 3 || basketCount == 4 || basketCount == 5) basketCount = 4;
 
                 List<CollisionShape> shelfShapes = VillageCache.Market.ShelfShapes_Clones[basketCount].DeepClone();
-                VertexData shelfModel = VillageCache.Market.ShelfModels_Clones[basketCount].Clone();
+                VertexData shelfModel = VillageCache.Market.ShelfModels_Clones[basketCount].ToVertexData().Clone();
 
                 shelfModel.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
                 shelfModel.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
@@ -117,7 +117,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     if (basketCount != -1)
                     {
                         shelfShapes = VillageCache.Market.ShelfShapes_Clones[basketCount].DeepClone();
-                        shelfModel = VillageCache.Market.ShelfModels_Clones[basketCount].Clone();
+                        shelfModel = VillageCache.Market.ShelfModels_Clones[basketCount].ToVertexData().Clone();
 
                         shelfModel.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
                         shelfModel.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
