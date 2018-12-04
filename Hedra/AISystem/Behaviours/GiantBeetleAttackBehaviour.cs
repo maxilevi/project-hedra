@@ -7,6 +7,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.AISystem.Behaviours
@@ -83,7 +84,7 @@ namespace Hedra.AISystem.Behaviours
                     Hit.Damage(Parent.AttackDamage, this.Parent, out float exp);
                     Parent.AddBonusSpeedForSeconds(1.5f, 3);
                 };
-                SoundManager.PlaySoundWithVariation(SoundType.SpitSound, Parent.Position);
+                SoundPlayer.PlaySoundWithVariation(SoundType.SpitSound, Parent.Position);
             }
             Model.Attack(null, spitAnimation, AttackHandler, RangeModifier);
         }
@@ -97,7 +98,7 @@ namespace Hedra.AISystem.Behaviours
                 biteAnimation.OnAnimationMid -= AttackHandler;
                 if (!Parent.InAttackRange(Victim, RangeModifier))
                 {
-                    SoundManager.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
+                    SoundPlayer.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
                     return;
                 }
                 Victim.Damage(Parent.AttackDamage, this.Parent, out float exp);

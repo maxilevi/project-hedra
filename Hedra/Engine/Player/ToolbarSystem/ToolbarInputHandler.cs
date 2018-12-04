@@ -3,6 +3,7 @@ using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.ToolbarSystem
@@ -44,7 +45,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 int keyIndex = int.Parse(keyText.Substring(keyText.Length - 1, 1)) - 1;
                 if (keyIndex < 0 || keyIndex > Toolbar.InteractableItems - 1)
                 {
-                    SoundManager.PlayUISound(SoundType.ButtonHover);
+                    SoundPlayer.PlayUISound(SoundType.ButtonHover);
                     return;
                 }
 
@@ -52,7 +53,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
                 if (ability != null && ability.MeetsRequirements() && this.AbilitiesBeingCasted() == 0)
                 {
-                    SoundManager.PlaySound(SoundType.ButtonClick, _player.Position, false, 1f, 0.5f);
+                    SoundPlayer.PlaySound(SoundType.ButtonClick, _player.Position, false, 1f, 0.5f);
 
                     ability.Cooldown = ability.MaxCooldown;
                     _player.Mana -= ability.ManaCost;
@@ -60,7 +61,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 }
                 else
                 {
-                    SoundManager.PlayUISound(SoundType.ButtonHover);
+                    SoundPlayer.PlayUISound(SoundType.ButtonHover);
                 }
             }
         }

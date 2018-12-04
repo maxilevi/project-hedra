@@ -81,9 +81,9 @@ namespace Hedra.Engine.PlantSystem
                     {
                         CollidesWithEntities = false,
                         UsePhysics = false,
-                        CollidesWithStructures = false
+                        CollidesWithStructures = false,
+                        TargetPosition = position
                     },
-                    BlockPosition = position
                 };
                 berryBush.Model = new StaticModel(berryBush, Data)
                 {

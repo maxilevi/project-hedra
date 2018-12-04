@@ -85,12 +85,12 @@ namespace HedraTests.WorldBuilding
         public void TestSelectingStructure()
         {
             _player.Mana = -10;
-            _structure.Update();
+            _structure.DoUpdate();
             Assert.AreEqual(10, _player.Mana);
             
             _player.Position = new Vector3(0, 0, 0);
             
-            _structure.Update();
+            _structure.DoUpdate();
             Assert.AreEqual(0, _player.Mana);
         }
 
@@ -136,9 +136,9 @@ namespace HedraTests.WorldBuilding
             player.Position = PlayerPosition;
             player.CameraMock.LookingDirection = PlayerLookAt;
             
-            structure.Update();
+            structure.DoUpdate();
             EventProvider.SimulateKeyDown(structure.Key);
-            structure.Update();
+            structure.DoUpdate();
 
             return structure.Interacted;
         }
@@ -168,6 +168,11 @@ namespace HedraTests.WorldBuilding
         public void SetCanInteract(bool Value)
         {
             _canInteract = Value;
+        }
+
+        public void DoUpdate()
+        {
+            base.DoUpdate();
         }
 
         protected override void Interact(IPlayer Interactee)

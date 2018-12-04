@@ -69,7 +69,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     }
                     if (y0.Type == BlockType.StonePath)
                     {
-                        var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .15f;
+                        var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f;
                         blockColor += new Vector4(shade, shade, shade, 0); 
                     }
                     color += new Vector4(blockColor.X, blockColor.Y, blockColor.Z, blockColor.W);

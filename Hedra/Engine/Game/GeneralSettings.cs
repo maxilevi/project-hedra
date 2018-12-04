@@ -14,6 +14,8 @@ namespace Hedra.Engine.Game
     /// </summary>
     public static class GeneralSettings
     {
+        public const float DrawDistanceSquared = 512 * 512;
+        public const float UpdateDistanceSquared = 420 * 420;
         public const float Lod1DistanceSquared = 288 * 288;
         public const float Lod2DistanceSquared = 512 * 512;
         public const float Lod3DistanceSquared = 1024 * 1024;

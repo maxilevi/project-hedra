@@ -20,6 +20,7 @@ using OpenTK;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -33,7 +34,8 @@ namespace Hedra.Engine.EntitySystem
         public override bool IsIdling => Array.IndexOf(IdleAnimations, this.Model.AnimationPlaying) != -1;
         public bool AlignWithTerrain { get; set; }
         public bool IsMountable { get; set; }
-        public bool HasRider { get; set; }
+        public IHumanoid Rider { get; set; }
+        public bool HasRider => Rider != null;
         public Animation[] AttackAnimations { get; }
         private Animation[] IdleAnimations { get; }
         private Animation[] WalkAnimations { get; }
@@ -55,6 +57,7 @@ namespace Hedra.Engine.EntitySystem
         private Quaternion _quaternionTargetRotation;
         private Vector3 _eulerTargetRotation;
         private Vector3 _rotation;
+        private Vector3 _position;
         private readonly bool _hasAnimationEvent;
         private readonly AreaSound _sound;
 
@@ -166,7 +169,7 @@ namespace Hedra.Engine.EntitySystem
                     this.SetAttackHandler(selectedAnimation, AttackHandler, false);
                     if (!Parent.InAttackRange(Victim, RangeModifier))
                     {
-                        SoundManager.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
+                        SoundPlayer.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
                         return;
                     }
 
@@ -227,9 +230,12 @@ namespace Hedra.Engine.EntitySystem
         public override void Update()
         {
             this.UpdateWalkAnimationsSpeed();
-            if (!HasRider && !IsAttacking)
+            if (!IsAttacking)
             {
-                if (Parent.IsMoving) this.Run();
+                var isMoving = !HasRider 
+                    ? Parent.IsMoving 
+                    : Rider.IsMoving;
+                if (isMoving) this.Run();
                 else this.Idle();
             }
             base.Update();
@@ -237,15 +243,15 @@ namespace Hedra.Engine.EntitySystem
             if (Model != null)
             {
                 Model.Update();
-                
+                if (HasRider) TargetRotation = Rider.Model.TargetRotation;
+                if (HasRider) Position = Rider.Position;
                 _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))).ExtractRotation() : Quaternion.Identity;
                 _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependantDeltaTime * 8f);
                 Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
                 _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependantDeltaTime * 14f);
                 Model.Rotation = _quaternionModelRotation.ToEuler();
                 Model.Position = this.Position;
-                this.Rotation = Model.Rotation; 
-                
+                this.Rotation = Model.Rotation;                
             }
 
             if (!base.Disposed)
@@ -290,7 +296,7 @@ namespace Hedra.Engine.EntitySystem
             DisposeTime = 0;
         }
 
-        public void Run()
+        private void Run()
         {
         
             if(this.IsAttacking) return;
@@ -299,7 +305,7 @@ namespace Hedra.Engine.EntitySystem
                 Model.PlayAnimation(WalkAnimations[Utils.Rng.Next(0, WalkAnimations.Length)]);
         }
 
-        public void Idle()
+        private void Idle()
         {
             if(this.IsAttacking) return;
             
@@ -312,13 +318,24 @@ namespace Hedra.Engine.EntitySystem
             this.Model.Draw();
         }
 
-        public override Vector3 Position { get; set; }
+        public override Vector3 Position
+        {
+            get => _position;
+            set
+            {
+                /* If it has a rider, ignore other values */
+                if (HasRider) value = Rider.Position;
+                _position = value;
+            }
+        }
 
         public override Vector3 TargetRotation
         {
             get => _eulerTargetRotation;
             set
             {
+                /* If it has a rider, ignore other values */
+                if (HasRider) value = Rider.Model.TargetRotation;
                 _eulerTargetRotation = value;
                 _quaternionTargetRotation = QuaternionMath.FromEuler(_eulerTargetRotation * Mathf.Radian);
             }
@@ -326,7 +343,8 @@ namespace Hedra.Engine.EntitySystem
         public override Vector3 Rotation
         {
             get => _rotation;
-            set{
+            set
+            {
                 this._rotation = value;
                 
                 if( float.IsNaN(this._rotation.X) || float.IsNaN(this._rotation.Y) || float.IsNaN(this._rotation.Z))

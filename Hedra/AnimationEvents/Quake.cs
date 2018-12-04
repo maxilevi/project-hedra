@@ -4,6 +4,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.AnimationEvents
@@ -43,7 +44,7 @@ namespace Hedra.AnimationEvents
                     entity.Damage(damage, Parent, out float xp);
                 }           
             }
-            SoundManager.PlaySound(SoundType.GroundQuake, position, false, 1f, 5f);
+            SoundPlayer.PlaySound(SoundType.GroundQuake, position, false, 1f, 5f);
         }
     }
 }

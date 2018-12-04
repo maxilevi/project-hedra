@@ -4,6 +4,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
 
@@ -48,7 +49,7 @@ namespace Hedra.Engine.Player
                 if (!this.Enabled || !this._player.CanInteract || EventArgs.Key != Key.Space || _player.Stamina < _player.MaxStamina * .25f) return;
                 this.Push(220f);
                 this._player.Stamina -= _player.MaxStamina * .25f;
-                SoundManager.PlaySoundWithVariation(SoundType.Jump, _player.Position);
+                SoundPlayer.PlaySoundWithVariation(SoundType.Jump, _player.Position);
                 _remainingParticles = 20;
             });
         }

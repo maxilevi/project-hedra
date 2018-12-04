@@ -12,6 +12,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Archer
@@ -56,7 +57,7 @@ namespace Hedra.Engine.Player.Skills.Archer
                     }
                 }
                 this.EmitParticles = true;
-                Sound.SoundManager.PlaySound(Sound.SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
+                SoundPlayer.PlaySound(SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
             };
         }
         

@@ -49,7 +49,7 @@ namespace Hedra.Engine.Generation
             {
                 var data = new InstanceData
                 {
-                    MeshCache = modelData,
+                    OriginalMesh = modelData,
                     Colors = modelDataClone.Colors.Clone(),
                     ExtraData = modelDataClone.Extradata.Clone(),
                     TransMatrix = transMatrix

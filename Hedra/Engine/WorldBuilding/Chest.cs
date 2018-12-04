@@ -74,6 +74,7 @@ namespace Hedra.Engine.WorldBuilding
 
         protected override void DoUpdate()
         {
+            base.DoUpdate();
             if (_model != null)
             {
                 _model.Update();

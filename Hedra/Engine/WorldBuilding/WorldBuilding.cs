@@ -16,8 +16,10 @@ using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -66,6 +68,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             var human = HumanoidFactory.BuildHumanoid(Type, Level, Behaviour);
             human.Physics.TargetPosition = World.FindPlaceablePosition(human, DesiredPosition);
+            ApplySeasonHats(human, Type);
             return human;
         }
 
@@ -117,6 +120,20 @@ namespace Hedra.Engine.WorldBuilding
             return types[rng.Next(0,types.Length)]+" of "+NameGenerator.Generate(World.Seed);
         }
 
+        private void ApplySeasonHats(Humanoid Human, string Type)
+        {
+            if (Type.ToLowerInvariant() != HumanType.Warrior.ToString().ToLowerInvariant() &&
+                Type.ToLowerInvariant() != HumanType.Merchant.ToString().ToLowerInvariant() &&
+                Type.ToLowerInvariant() != HumanType.TravellingMerchant.ToString().ToLowerInvariant() &&
+                Type.ToLowerInvariant() != HumanType.Archer.ToString().ToLowerInvariant() &&
+                Type.ToLowerInvariant() != HumanType.Blacksmith.ToString().ToLowerInvariant() &&
+                Type.ToLowerInvariant() != HumanType.Rogue.ToString().ToLowerInvariant() &&
+                Type.ToLowerInvariant() != HumanType.Mage.ToString().ToLowerInvariant() &&
+                Type.ToLowerInvariant() != HumanType.Villager.ToString().ToLowerInvariant()) return;
+            
+            if(Season.IsChristmas) 
+                Human.SetHelmet(ItemPool.Grab(CommonItems.ChristmasHat).Helmet);
+        }
 
         public bool CanAddPlateau(Plateau Mount, Plateau[] Candidates)
         {

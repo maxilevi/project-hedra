@@ -13,8 +13,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     public class GridPlacementDesigner : PlacementDesigner
     {
+        private const float PathWidth = 16;
         private int VillageSize { get; }
         private readonly List<PlacementPoint> _pointsWithBuildings;
+        private MarketParameters _marketPoint;
         
         public GridPlacementDesigner(VillageRoot Root, VillageConfiguration Config, Random Rng) : base(Root, Config, Rng)
         {
@@ -31,7 +33,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     MarketPlacer.Place(new PlacementPoint())
                 }
             };
-            var marketPoint = design.Markets[0];
+            _marketPoint = design.Markets[0];
             var points = new List<PlacementPoint>();
             for (var x = 1; x < VillageSize; ++x)
             {
@@ -40,14 +42,14 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     if( (new Vector2(x,z) - new Vector2(VillageSize, VillageSize) * .5f).LengthSquared > VillageSize * .5f * .5f * VillageSize)
                         continue;
                     var spacing = CalculateSpacing(x, z);
-                    var offset = new Vector3(VillageSize * spacing * .5f, 0, VillageSize * spacing * .5f);
-                    var position = new Vector3(x * spacing, 0, z * spacing) - offset;
-                    var size = marketPoint.Size * 1.0f;
-                    if ((position - marketPoint.Position).LengthSquared > size * size)
+                    var size = _marketPoint.Size * 1.5f;
+                    var offset = CalculateOffset();
+                    var position = new Vector2(AccumulativeSpacing(x), AccumulativeSpacing(z)) - offset;
+                    if ((position - _marketPoint.Position.Xz).LengthSquared > size * size)
                     {
                         points.Add(new PlacementPoint
                         {
-                            Position = position,
+                            Position = position.ToVector3(),
                             GridPosition = new Vector2(x, z),
                             Radius = 0
                         });
@@ -65,14 +67,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         private float CalculateSpacing(float X, float Z)
         {
-            if ((int)X == VillageSize/2 - 1 && (int)Z == VillageSize/2-1) return VillageDesign.Spacing * 5;
-            return (float) Math.Max(
-                Math.Pow(
-                   VillageDesign.Spacing * 
-                        (1.0f + (new Vector2(X, Z) - new Vector2(VillageSize, VillageSize) * .5f).LengthFast / (VillageSize)),
-                .975f),
-                VillageDesign.Spacing
-            );
+            var distanceFromCenter = (new Vector2(X, Z) - new Vector2(VillageSize, VillageSize) * .5f).LengthFast /
+                                     VillageSize;
+            return VillageDesign.Spacing * (1.0f + (float)Math.Pow(distanceFromCenter, 4.0f) * 4f);
         }
 
         private bool SelectPlacer(PlacementPoint Point, PlacementDesign Design)
@@ -81,41 +78,75 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             var rotationY = Physics.DirectionToEuler(-(Vector3.Zero - Point.Position).NormalizedFast()).Y;
             var rotation = Vector3.UnitY * (float) (Math.Round(rotationY / 90f) * 90f);
             var distFromCenter = 
-                (Point.GridPosition - new Vector2(VillageSize, VillageSize) * .5f).LengthFast / (VillageSize);
-            
-            if (rng < .1f && FarmPlacer.SpecialRequirements(Point))
+                (Point.Position).LengthFast / (AccumulativeSpacing(VillageSize) * .5f);
+
+            if (distFromCenter < .2f)
             {
-                Design.Farms.Add(FarmPlacer.Place(Point));
+                if (rng < .5f && BlacksmithPlacer.SpecialRequirements(Point))
+                    AddBlacksmith(Point, Design, rotation);
+                else if (rng < .95f && HousePlacer.SpecialRequirements(Point))
+                    AddHouse(Point, Design, rotation);
+                else
+                    return false;
             }
-            else if (rng < .2f && BlacksmithPlacer.SpecialRequirements(Point))
+            else if (distFromCenter < .55f)
             {
-                var parameter = BlacksmithPlacer.Place(Point);
-                parameter.Rotation = rotation;
-                Design.Blacksmith.Add(parameter);
+                if (rng < .15f && BlacksmithPlacer.SpecialRequirements(Point))
+                    AddBlacksmith(Point, Design, rotation);
+                else if (rng < .90f && HousePlacer.SpecialRequirements(Point))
+                    AddHouse(Point, Design, rotation);
+                //else if (rng < .95f && FarmPlacer.SpecialRequirements(Point))
+                //    AddFarm(Point, Design, rotation);
+                else
+                    return false;
             }
-            else if (rng < .85f && HousePlacer.SpecialRequirements(Point))
+            else if (distFromCenter < 1f && distFromCenter > .75f)
             {
-                var parameter = HousePlacer.Place(Point);
-                parameter.Rotation = rotation;
-                Design.Houses.Add(parameter);
-            }
-            else
-            {
-                return false;
+                //if (rng < .05f && BlacksmithPlacer.SpecialRequirements(Point))
+                //    AddBlacksmith(Point, Design, rotation);
+                if (rng < .4f && FarmPlacer.SpecialRequirements(Point))
+                    AddFarm(Point, Design, rotation);
+                //else if (rng < .5f && HousePlacer.SpecialRequirements(Point))
+                //    AddHouse(Point, Design, rotation);
+                else
+                    return false;
             }
 
             return true;
         }
-        
+
+        private void AddBlacksmith(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation)
+        {
+            var parameter = BlacksmithPlacer.Place(Point);
+            parameter.Rotation = Rotation;
+            Design.Blacksmith.Add(parameter);
+        }
+
+        private void AddFarm(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation)
+        {
+            Design.Farms.Add(FarmPlacer.Place(Point));
+        }
+
+        private void AddHouse(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation)
+        {
+            var parameter = HousePlacer.Place(Point);
+            parameter.Rotation = Rotation;
+            Design.Houses.Add(parameter);
+        }
+
+        private Vector2 CalculateOffset()
+        {
+            return AccumulativeSpacing(VillageSize) * Vector2.One * .5f;
+        }
 
         public override void FinishPlacements(CollidableStructure Structure, PlacementDesign Design)
         {
-            void AddGroundwork(Vector2 From, Vector2 To)
+            void AddGroundwork(Vector2 From, Vector2 To, float DistanceFromCenter)
             {
-                var path = new LineGroundwork(From, To, BlockType.StonePath)
+                var path = new LineGroundwork(From, To, SelectPathType(DistanceFromCenter))
                 {
-                    BonusHeight = -.25f,
-                    Width = 20
+                    BonusHeight = -.25f * Math.Max(1.0f - DistanceFromCenter, 0.0f),
+                    Width = PathWidth
                 };
                 Structure.AddGroundwork(path);
             }
@@ -124,50 +155,54 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             {
                 for (var z = 1; z < VillageSize; ++z)
                 {
-                    var squaredDistFromCenter =
-                        (new Vector2(x, z) - new Vector2(VillageSize-2, VillageSize-2) * .5f).LengthSquared;
-                    //if(squaredDistFromCenter > VillageSize * .5f * VillageSize * .5f)
-                    //    continue;
-                    //if(squaredDistFromCenter <= 1)
-                    //    continue;
+                    var spacingX = CalculateSpacing(x,0);
+                    var spacingZ = CalculateSpacing(0,z);
+                    var offset = CalculateOffset();
+                    var startPosition = new Vector2(AccumulativeSpacing(x) + spacingX *.5f, AccumulativeSpacing(z) + spacingZ * .5f) - offset;
+                    var distFromCenter = 
+                        startPosition.LengthFast / (AccumulativeSpacing(VillageSize) * .5f);
                     
-                    var spacing = CalculateSpacing(x, z);
-                    var offset = new Vector2(VillageSize * spacing * .5f, VillageSize * spacing * .5f);
-                    var startPosition = new Vector2(x * spacing + spacing * .5f, z * spacing + spacing * .5f) - offset;
                     AddGroundwork(
                         startPosition + Design.Position.Xz,
-                        startPosition + new Vector2(0, spacing) + Design.Position.Xz
+                        startPosition + new Vector2(0, spacingZ) + Design.Position.Xz,
+                        distFromCenter
                     );
 
                     AddGroundwork(
-                        startPosition + new Vector2(spacing, 0) + Design.Position.Xz,
-                        startPosition + Design.Position.Xz
+                        startPosition + new Vector2(spacingX, 0) + Design.Position.Xz,
+                        startPosition + Design.Position.Xz,
+                        distFromCenter
                     );
                 }
             }
-
-            /*for (var i = 0; i < _pointsWithBuildings.Count; ++i)
+            Structure.AddGroundwork(new RoundedGroundwork(Design.Position, _marketPoint.Size, BlockType.StonePath)
             {
-                var point = _pointsWithBuildings[i];
-                var spacing = CalculateSpacing(point.GridPosition.X, point.GridPosition.Y) + 24;
-                AddGroundwork(
-                    new Vector2(point.Position.X + spacing * .5f, point.Position.Z) + Design.Position.Xz,
-                    new Vector2(point.Position.X + spacing * .5f, point.Position.Z + spacing) + Design.Position.Xz
-                );
-                AddGroundwork(
-                    new Vector2(point.Position.X, point.Position.Z + spacing * .5f) + Design.Position.Xz,
-                    new Vector2(point.Position.X + spacing, point.Position.Z + spacing * .5f) + Design.Position.Xz
-                );
-                /* Negative */
-                /*AddGroundwork(
-                    new Vector2(point.Position.X - spacing * .5f, point.Position.Z) + Design.Position.Xz,
-                    new Vector2(point.Position.X - spacing * .5f, point.Position.Z - spacing) + Design.Position.Xz
-                );
-                AddGroundwork(
-                    new Vector2(point.Position.X, point.Position.Z - spacing * .5f) + Design.Position.Xz,
-                    new Vector2(point.Position.X - spacing, point.Position.Z - spacing * .5f) + Design.Position.Xz
-                );
-            }*/
+                BonusHeight = .25f,
+            });
+            
+            Structure.AddGroundwork(new RoundedGroundwork(Design.Position, _marketPoint.WellSize, BlockType.Path)
+            {
+                BonusHeight = .0f,
+            });
         }
+
+        private BlockType SelectPathType(float DistanceFromCenter)
+        {
+            if (DistanceFromCenter < .6f)
+                return BlockType.StonePath;
+            if (DistanceFromCenter < 1f)
+                return BlockType.None;
+            return BlockType.None;
+        }
+
+        private float AccumulativeSpacing(int I)
+        {
+            var accum = 0f;
+            for(; I > 0; I--)
+            {
+                accum += CalculateSpacing(I, 0);
+            }
+            return accum;
+        } 
     }
 }

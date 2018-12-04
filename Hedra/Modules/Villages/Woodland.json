@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Nordic",
+  "Name" : "Woodland",
   "Well" : {
     "Designs":[
       {
@@ -20,6 +20,7 @@
     "Designs" : [
       {
         "Path" : "Assets/Env/Village/Blacksmith0.ply",
+        "LodPath": "Assets/Env/Village/Blacksmith0-Lod.ply",
         "Scale" : 2.5,
         "Doors" : [
           {
@@ -44,10 +45,6 @@
       {
         "Path": "Assets/Env/Village/Farm0.ply",
         "Scale": 8.0
-      },
-      {
-        "Path": "Assets/Env/Village/Farm1.ply",
-        "Scale": 8.0
       }
     ]
   },
@@ -63,7 +60,17 @@
     "Designs" : [
       {
         "Path" : "Assets/Env/Village/House0.ply",
-        "Scale" : 3.5,
+        "LodPath": "Assets/Env/Village/House0-Lod.ply",
+        "Scale" : 3.0,
+        "Beds" : [
+          {
+            "Position" : {
+              "X" : -3.20435,
+              "Y" : 1.09831,
+              "Z" : -1.16152
+            }
+          }
+        ],
         "Doors" : [
           {
             "Path":  "Assets/Env/Village/House0_Door0.ply",
@@ -85,7 +92,17 @@
       },
       {
         "Path" : "Assets/Env/Village/House1.ply",
-        "Scale" : 5,
+        "LodPath": "Assets/Env/Village/House1-Lod.ply",
+        "Scale" : 3.5,
+        "Beds" : [
+          {
+            "Position" : {
+              "X" : -1.43419,
+              "Y" : 5.51153,
+              "Z" : -6.28642
+            }
+          }
+        ],
         "Doors" : [
           {
             "Path":  "Assets/Env/Village/House1_Door0.ply",
@@ -123,7 +140,24 @@
       },
       {
         "Path" : "Assets/Env/Village/House2.ply",
-        "Scale" : 4.0,
+        "LodPath": "Assets/Env/Village/House2-Lod.ply",
+        "Scale" : 3.5,
+        "Beds" : [
+          {
+            "Position" : {
+              "X" : -9.9806,
+              "Y" : 1.15,
+              "Z" : 3.32437
+            }
+          },
+          {
+            "Position" : {
+              "X" : 9.10594,
+              "Y" : 1.15,
+              "Z" : 3.32436
+            }
+          }
+        ],
         "Doors" : [
           {
             "Path":  "Assets/Env/Village/House2_Door0.ply",

@@ -59,7 +59,6 @@ namespace Hedra.Engine.Player
         private IAmbientEffectHandler AmbientEffects { get; }
         private IStructureAware StructureAware { get; }
         private float _acummulativeHealing;
-        private bool _floating;
         private Vector3 _previousPosition;
         private float _health;
         private bool _wasSleeping;
@@ -182,16 +181,6 @@ namespace Hedra.Engine.Player
                 if( (int) Time.AccumulatedFrameTime % 2 == 0) World.Particles.Emit();
                 
                 _previousPosition = Model.Human.BlockPosition;
-            }
-            
-            if(this.IsRiding){
-                if(this.Position.Y < -1f)
-                    _floating = true;
-                if(_floating)
-                    this.Physics.TargetPosition += Vector3.UnitY * 15 * Time.DeltaTime;
-                if(this.Position.Y > 1f)
-                    _floating = false;
-                if(Model.MountModel == null || Model.MountModel != null && Model.MountModel.Disposed) IsRiding = false;
             }
 
             try

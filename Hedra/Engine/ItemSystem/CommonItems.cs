@@ -11,5 +11,6 @@ namespace Hedra.Engine.ItemSystem
         CommonWoodenBow,
         CommonBronzeDoubleBlades,
         CommonBronzeStaff,
+        ChristmasHat
     }
 }

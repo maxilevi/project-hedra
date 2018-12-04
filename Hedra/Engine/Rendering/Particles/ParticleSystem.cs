@@ -65,7 +65,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         public void Emit()
         {
-            if( (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
+            if( (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
             
             if(Particles.Count == MaxParticles || !Enabled || (GameSettings.Paused && Particle3D.UseTimeScale)) return;
             
@@ -119,7 +119,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         public void Update()
         {
-            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
+            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
             
             for(int i = 0; i < Particles.Count; i++){
                 if(this.RandomRotation)
@@ -133,7 +133,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         public void Draw()
         {
-            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
+            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
             
             if(Particles.Count > 0){
                 Renderer.Enable(EnableCap.Blend);

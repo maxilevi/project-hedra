@@ -38,6 +38,12 @@ namespace Hedra.Engine.Management
         public bool IsInsideFrustum(ICullable CullableObject, float Multiplier = 1)
         {
             if (!CullableObject.Enabled) return false;
+            if (CullableObject.PrematureCulling)
+            {
+                if ((CullableObject.Position - GameManager.Player.Position).LengthSquared 
+                    > GeneralSettings.DrawDistanceSquared) 
+                    return false;
+            }
             var box = CullableObject.CullingBox;
             if (box == null) return false;
             _cacheBox.Min = box.Min * Multiplier + CullableObject.Position;
@@ -45,7 +51,8 @@ namespace Hedra.Engine.Management
             return this.BoxInFrustum(_cacheBox);
         }
         
-        private void NormalizePlane(float[,] Frustum , int side){
+        private void NormalizePlane(float[,] Frustum , int side)
+        {
             float magnitude = (float)Math.Sqrt( Frustum[side,A] * Frustum[side,A] + 
                                                 Frustum[side,B] * Frustum[side,B] + 
                                                 Frustum[side,C] * Frustum[side,C] );

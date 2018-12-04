@@ -4,20 +4,20 @@
  * Time: 01:19 a.m.
  *
  */
+
 using System;
-using System.IO;
 using System.Reflection;
+using Hedra.Engine;
+using Hedra.Engine.Sound;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 
-
-namespace Hedra.Engine.Sound
+namespace Hedra.Sound
 {
     /// <summary>
-    /// Description of SoundManager.
+    /// Use for playing sound effects.
     /// </summary>
-    [Obfuscation(Exclude = false, Feature = "-rename")]
-    public static class SoundManager
+    public static class SoundPlayer
     {
         public static ISoundProvider Provider { get; set; } = new SoundProvider();
 
@@ -31,7 +31,7 @@ namespace Hedra.Engine.Sound
         
         public static void Load()
         {
-            Provider.Load();
+            Provider.Setup();
         }
 
         public static void Update(Vector3 Position)
@@ -41,7 +41,12 @@ namespace Hedra.Engine.Sound
 
         public static void PlaySound(SoundType Sound, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1)
         {
-            Provider.PlaySound(Sound, Location, Looping, Pitch, Gain);
+            PlaySound(Sound.ToString(), Location, Looping, Pitch, Gain);
+        }
+        
+        public static void PlaySound(string SoundName, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1)
+        {
+            Provider.PlaySound(SoundName, Location, Looping, Pitch, Gain);
         }
         
         public static void PlayUISound(SoundType Sound, float Pitch = 1, float Gain = 1)
@@ -56,12 +61,12 @@ namespace Hedra.Engine.Sound
 
         public static void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, Func<float> Pitch, Func<float> Gain)
         {
-            Provider.PlaySoundWhile(Sound, Lambda, Pitch, Gain);
+            Provider.PlaySoundWhile(Sound.ToString(), Lambda, Pitch, Gain);
         }
 
         public static SoundBuffer GetBuffer(SoundType Type)
         {
-            return Provider.GetBuffer(Type);
+            return Provider.GetBuffer(Type.ToString());
         }
 
         public static SoundItem GetAvailableSource()
@@ -73,9 +78,23 @@ namespace Hedra.Engine.Sound
         {
             return Provider.GetSoundFormat(Channels, Bits);
         }
+
+        public static void LoadSound(SoundType Name, params string[] Names)
+        {
+            Provider.LoadSound(Name.ToString(), Names);
+        }
+        
+        public static void LoadSound(string Name, params string[] Names)
+        {
+            Provider.LoadSound(Name, Names);
+        }
+
+        public static void MarkAsReady()
+        {
+            Provider.MarkAsReady();
+        }
     }
     
-    [Obfuscation(Exclude = false, Feature = "-rename")]
     public enum SoundType
     {
         None,
@@ -114,6 +133,7 @@ namespace Hedra.Engine.Sound
         Sheep,
         Goat,
         Cow,
+        Door,
         MaxSounds
     }
 }

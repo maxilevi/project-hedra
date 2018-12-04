@@ -34,7 +34,7 @@ namespace HedraTests
         {
         }
 
-        public byte[] ReadPath(string Path)
+        public byte[] ReadPath(string Path, bool Text = true)
         {
             return SampleImage;
         }

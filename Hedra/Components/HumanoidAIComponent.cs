@@ -113,8 +113,9 @@ namespace Hedra.Components
         /// <param name="TargetPoint">Target point to move</param>
         protected void Move(Vector3 TargetPoint)
         {
-            if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > 8 * 8)
+            if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > 3 * 3)
             {
+                Parent.Orientation = (TargetPoint.Xz - Parent.Position.Xz).ToVector3().NormalizedFast();
                 Parent.Physics.Move();
                 Parent.IsSitting = false;
             }

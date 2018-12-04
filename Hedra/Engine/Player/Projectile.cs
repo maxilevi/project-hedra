@@ -19,6 +19,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Player
 {
@@ -152,7 +153,7 @@ namespace Hedra.Engine.Player
 
             if (isColliding)
             {
-                SoundManager.PlaySound(SoundType.HitGround, Mesh.Position);
+                SoundPlayer.PlaySound(SoundType.HitGround, Mesh.Position);
                 World.Particles.Color = new Vector4(1, 1, 1, 1);
                 World.Particles.ParticleLifetime = 0.75f;
                 World.Particles.GravityEffect = .0f;

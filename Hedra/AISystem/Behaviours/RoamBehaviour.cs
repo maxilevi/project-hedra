@@ -3,6 +3,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.AISystem.Behaviours
@@ -40,7 +41,7 @@ namespace Hedra.AISystem.Behaviours
 
                 if (this._soundTicker.Tick())
                 {
-                    SoundManager.PlaySoundWithVariation(Sound, Parent.Position);
+                    SoundPlayer.PlaySoundWithVariation(Sound, Parent.Position);
                 }
             }
         }

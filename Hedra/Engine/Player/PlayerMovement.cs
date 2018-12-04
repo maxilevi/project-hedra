@@ -9,6 +9,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
 
@@ -224,7 +225,7 @@ namespace Hedra.Engine.Player
                 if (!GameSettings.Paused && _player.CanInteract)
                 {
                     _player.HandLamp.Enabled = !_player.HandLamp.Enabled;
-                    SoundManager.PlaySound(SoundType.NotificationSound, _player.Position, false, 1f, .5f);
+                    SoundPlayer.PlaySound(SoundType.NotificationSound, _player.Position, false, 1f, .5f);
                 }
             });
 
@@ -251,7 +252,7 @@ namespace Hedra.Engine.Player
             }
 
             if (EventArgs.Key == Key.Escape && !_player.UI.GamePanel.Enabled && !_player.UI.Hide)
-                SoundManager.PlayUISound(SoundType.ButtonClick);
+                SoundPlayer.PlayUISound(SoundType.ButtonClick);
 
             if (EventArgs.Key == Key.Escape && _player.Chat.Focused)
             {

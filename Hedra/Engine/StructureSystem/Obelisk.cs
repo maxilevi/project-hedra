@@ -17,6 +17,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -61,7 +62,7 @@ namespace Hedra.Engine.StructureSystem
                     throw new ArgumentOutOfRangeException($"Obelisk type does not exist.");
             }
             
-            SoundManager.PlaySound(SoundType.NotificationSound, this.Position, false, 1f, 0.6f);
+            SoundPlayer.PlaySound(SoundType.NotificationSound, this.Position, false, 1f, 0.6f);
         }
         
         public static Vector4 GetObeliskColor(ObeliskType Type)

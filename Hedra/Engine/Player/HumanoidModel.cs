@@ -22,6 +22,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Player
 {
@@ -65,7 +66,7 @@ namespace Hedra.Engine.Player
         private AreaSound _modelSound;
         private StaticModel _food;
         private AnimatedCollider _collider;
-        public QuadrupedModel MountModel { get; set; }
+        public Vector3 RidingOffset { get; set; }
 
         public override CollisionShape BroadphaseCollider => _collider.Broadphase;
         public override CollisionShape HorizontalBroadphaseCollider => _collider.HorizontalBroadphase;
@@ -157,7 +158,7 @@ namespace Hedra.Engine.Player
 
             _eatAnimation.OnAnimationStart += delegate
             {
-                SoundManager.PlaySound(SoundType.FoodEat, Position);
+                SoundPlayer.PlaySound(SoundType.FoodEat, Position);
             };
 
             _eatAnimation.OnAnimationEnd += delegate{ 
@@ -238,7 +239,6 @@ namespace Hedra.Engine.Player
                 if (Human.IsRiding)
                 {
                     currentAnimation = _rideAnimation;
-                    MountModel?.Run();
                 }
                 if (Human.IsUnderwater)
                 {
@@ -251,7 +251,6 @@ namespace Hedra.Engine.Player
                 if (Human.IsRiding)
                 {
                     currentAnimation = _idleRideAnimation;
-                    MountModel?.Idle();
                 }
                 if (Human.IsUnderwater)
                 {
@@ -388,18 +387,7 @@ namespace Hedra.Engine.Player
             HandleState();
             _walkAnimation.Speed = Human.Speed;
             _modelSound.Pitch = Human.Speed / PitchSpeed;
-            
-            var positionAddon = Vector3.Zero;
-            if (MountModel != null)
-            {
-                positionAddon += MountModel.Height * Vector3.UnitY * .5f;
-            }
-
-            Model.Position = Mathf.Lerp(Model.Position, Position + positionAddon, Time.IndependantDeltaTime * 24f);
-            if (MountModel != null)
-            {
-                MountModel.Position = Mathf.Lerp(MountModel.Position, Position, Time.IndependantDeltaTime * 32f);
-            }
+            Model.Position = Mathf.Lerp(Model.Position, Position + RidingOffset, Time.IndependantDeltaTime * 24f);
             _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
             _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
             _rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
@@ -408,11 +396,7 @@ namespace Hedra.Engine.Player
                 QuaternionMath.ToEuler(_rotationQuaternionY).Y,
                 QuaternionMath.ToEuler(_rotationQuaternionZ).Z
                 );
-
             Rotation = Model.Rotation;
-            if(MountModel != null)
-                MountModel.TargetRotation = TargetRotation;
-            
             if(_hasLamp)
             {
                 _lampModel.Position = LeftWeaponPosition;

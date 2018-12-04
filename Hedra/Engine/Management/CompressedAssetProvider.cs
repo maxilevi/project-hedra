@@ -120,7 +120,7 @@ namespace Hedra.Engine.Management
             _filesDecompressed = true;
         }
 
-        public byte[] ReadPath(string Path)
+        public byte[] ReadPath(string Path, bool Text = true)
         {
             bool external = !Path.Contains("$DataFile$");
             if (!external || Path.StartsWith("Assets/"))
@@ -129,9 +129,13 @@ namespace Hedra.Engine.Management
                 if (Path.StartsWith("/"))
                     Path = Path.Substring(1, Path.Length-1);
 
-                return ReadBinary(Path, AssetsResource);
+                return ReadBinary(Path, Text ? AssetsResource : SoundResource);
             }
-            return Encoding.ASCII.GetBytes( File.ReadAllText(Path.Replace("$GameFolder$", AppPath)) );
+
+            var finalPath = Path.Replace("$GameFolder$", AppPath);
+            return Text
+                ? Encoding.ASCII.GetBytes(File.ReadAllText(finalPath))
+                : File.ReadAllBytes(finalPath);
         }
 
         public byte[] ReadBinary(string Name, string DataFile)

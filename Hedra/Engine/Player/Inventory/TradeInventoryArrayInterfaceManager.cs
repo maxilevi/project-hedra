@@ -4,6 +4,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory
@@ -57,7 +58,7 @@ namespace Hedra.Engine.Player.Inventory
                 _manager.ProcessTrade(_seller, _buyer, _sellerInterface, _buyerInterface, item, price);
             }
             this.UpdateView();
-            SoundManager.PlayUISound(SoundType.ButtonClick);
+            SoundPlayer.PlayUISound(SoundType.ButtonClick);
         }
     }
 }

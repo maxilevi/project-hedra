@@ -12,7 +12,7 @@ namespace Hedra.Engine.Player.MapSystem
 
         public MapItem(VertexData Data)
         {
-            _mesh = ObjectMesh.FromVertexData(Data);    
+            _mesh = ObjectMesh.FromVertexData(Data, false);
             DrawManager.Remove(_mesh);
         }
 

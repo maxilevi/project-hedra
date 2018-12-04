@@ -13,6 +13,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     public abstract class Builder<T> where T : IBuildingParameters
     {
         protected virtual bool LookAtCenter => true;
+        protected virtual bool GraduateColor => true;
         protected CollidableStructure Structure { get; }
         private Village VillageObject { get; }
         
@@ -30,10 +31,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         /* Called via reflection */
         public virtual BuildingOutput Paint(T Parameters, BuildingOutput Input)
         {
-            for (var i = 0; i < Input.Models.Count; i++)
-            {
-            //    Input.Models[i].GraduateColor(Vector3.UnitY);
-            }
             return Input;
         }
         
@@ -46,16 +43,27 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public virtual BuildingOutput Build(T Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
             var transformationMatrix = BuildTransformation(Parameters);
-            var model = Cache.GrabModel(Parameters.Design.Path);
-            model.Transform(transformationMatrix);
-
             var shapes = Cache.GrabShapes(Parameters.Design.Path);
             shapes.ForEach(shape => shape.Transform(transformationMatrix));
             return new BuildingOutput
             {
-                Models = new[] { model },
-                Shapes = shapes
+                Models = new[] { Cache.GrabModel(Parameters.Design.Path) },
+                LodModels = Parameters.Design.LodPath != null ? new[] { Cache.GrabModel(Parameters.Design.LodPath) } : null,
+                TransformationMatrices = new[] { transformationMatrix },
+                Shapes = shapes,
+                GraduateColors = GraduateColor
             };
+        }
+        
+        protected void AddBeds(T Parameters, BedTemplate[] Beds, Matrix4 Transformation, BuildingOutput Output)
+        {
+            for (var i = 0; i < Beds.Length; ++i)
+            {
+                var template = Beds[i];
+                Output.Structures.Add(
+                    new SleepingPad(Vector3.TransformPosition(template.Position * Parameters.Design.Scale, Transformation) + Parameters.Position)
+                );
+            }
         }
 
         protected void AddDoors(T Parameters, DoorTemplate[] Doors, Matrix4 Transformation, BuildingOutput Output)

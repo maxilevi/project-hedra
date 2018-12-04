@@ -7,6 +7,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         
     public class ChunkWatcher : IDisposable
     {
+        public static event OnChunkEvent OnChunkLodChanged;
         private Chunk _object;
         private bool _wasBuilded;
         public event OnChunkEvent OnChunkReady;
@@ -68,16 +69,19 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (!GameSettings.Lod) return;
             var cameraDist = (_object.Position.Xz - World.ToChunkSpace(GameManager.Player.Position)).LengthSquared;
+            var newLod = -1;
             if (cameraDist <= GeneralSettings.Lod1DistanceSquared)
-                _object.Lod = 1;
+                newLod = 1;
             else if (cameraDist <= GeneralSettings.Lod2DistanceSquared)
-                _object.Lod = 2;
+                newLod = 2;
             else if (cameraDist <= GeneralSettings.Lod3DistanceSquared)
-                _object.Lod = 4;
+                newLod = 4;
             else if (cameraDist > GeneralSettings.Lod3DistanceSquared)
-                _object.Lod = 8;
+                newLod = 8;
             else
                 throw new ArgumentOutOfRangeException("Unsupported LOD.");
+            if(_object.Lod != newLod) OnChunkLodChanged?.Invoke(_object);
+            _object.Lod = newLod;
         }
 
         private static bool WasChunkBuilt(Chunk Chunk)

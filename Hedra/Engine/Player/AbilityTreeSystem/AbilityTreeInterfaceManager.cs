@@ -2,6 +2,7 @@ using System.Drawing;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Sound;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
@@ -41,7 +42,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 else if(!previousUnlocked)
                     _player.MessageDispatcher.ShowNotification("YOU NEED TO UNLOCK THE PREVIOUS SKILL", Color.DarkRed, 3.0f);
                 else
-                    Sound.SoundManager.PlayUISound(Sound.SoundType.ButtonHover, 1.0f, 0.6f);              
+                    SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);              
             }
             this.UpdateView();
             _itemInfo.Show(item);

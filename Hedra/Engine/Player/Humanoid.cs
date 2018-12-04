@@ -24,6 +24,7 @@ using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.Player
@@ -201,7 +202,7 @@ namespace Hedra.Engine.Player
                 Movement.Move(Movement.RollDirection * 4f, .5f, false);
             }
 
-            SoundManager.PlaySoundWithVariation(SoundType.Dodge, this.Position);
+            SoundPlayer.PlaySoundWithVariation(SoundType.Dodge, this.Position);
             TaskScheduler.When( () => !IsRolling, () =>
             {
                 SearchComponent<DamageComponent>().Immune = false;
@@ -401,7 +402,7 @@ namespace Hedra.Engine.Player
                     Vanish = true,
                     FollowFunc = () => this.Position
                 };
-                SoundManager.PlaySound(SoundType.NotificationSound, Position, false, 1, .65f);
+                SoundPlayer.PlaySound(SoundType.NotificationSound, Position, false, 1, .65f);
                 
                 /* So it keeps looping */
                 if(_xp >= MaxXP) XP = _xp;

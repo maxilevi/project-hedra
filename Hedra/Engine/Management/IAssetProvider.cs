@@ -22,7 +22,7 @@ namespace Hedra.Engine.Management
         void Load();
         void ReloadShaderSources();
         void GrabShaders();
-        byte[] ReadPath(string Path);
+        byte[] ReadPath(string Path, bool Text);
         byte[] ReadBinary(string Name, string DataFile);
         string ReadShader(string Name);
         Icon LoadIcon(string path);

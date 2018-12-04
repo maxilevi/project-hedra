@@ -18,6 +18,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
 using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
 using Cursor = Hedra.Engine.Input.Cursor;
@@ -233,7 +234,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     this.SetBlueprint(_blueprint);
                 this.UpdateView();
                 this.SetInventoryState(_show);
-                SoundManager.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
+                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }
         }
     }

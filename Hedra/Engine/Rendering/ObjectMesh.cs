@@ -5,6 +5,7 @@
  *
  */
 using System;
+using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -18,6 +19,7 @@ namespace Hedra.Engine.Rendering
         public Vector3 TargetPosition { get; set; }
         public float AnimationSpeed { get; set; } = 1f;
         public bool Enabled { get; set; }
+        public bool PrematureCulling { get; set; } = true;
         public Box CullingBox { get; set; }
         public ChunkMesh Mesh { get; }
         private readonly ObjectMeshBuffer _buffer;
@@ -27,7 +29,7 @@ namespace Hedra.Engine.Rendering
            _buffer = new ObjectMeshBuffer();
         }
 
-        public ObjectMesh(Vector3 Position)
+        private ObjectMesh(Vector3 Position)
         {
             this.Enabled = true;
             this._buffer = new ObjectMeshBuffer();
@@ -40,12 +42,12 @@ namespace Hedra.Engine.Rendering
             UpdateManager.Add(this);
         }
 
-        
         public void Draw()
         {
-            if(Enabled) Mesh.Draw();
+            if (Enabled)
+                Mesh.Draw();
         }
-        
+
         public void Update()
         {
             this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition,
@@ -199,14 +201,12 @@ namespace Hedra.Engine.Rendering
             set => _buffer.Scale = value;
         }
 
-        public static ObjectMesh FromVertexData(VertexData Data)
+        public static ObjectMesh FromVertexData(VertexData Data, bool CullPrematurely = true)
         {
-            return FromVertexData(Data, Vector3.Zero);
-        }
-        
-        public static ObjectMesh FromVertexData(VertexData Data, Vector3 Position)
-        {
-            var mesh = new ObjectMesh(Position);
+            var mesh = new ObjectMesh(Vector3.Zero)
+            {
+                PrematureCulling = CullPrematurely
+            };
             Executer.ExecuteOnMainThread( delegate
             {                                                  
                 mesh.Mesh.BuildFrom(Data, false);

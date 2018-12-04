@@ -8,6 +8,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player
@@ -264,7 +265,7 @@ namespace Hedra.Engine.Player
             _notificationText.Text = Item.Content;
             _notificationText.Enable();
             if (Item.PlaySound)
-                Sound.SoundManager.PlaySound(Sound.SoundType.ButtonHover, _player.Position, false, 1f, 1f);
+                SoundPlayer.PlaySound(SoundType.ButtonHover, _player.Position, false, 1f, 1f);
 
             TaskScheduler.Asynchronous(delegate
             {

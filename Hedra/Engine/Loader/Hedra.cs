@@ -21,6 +21,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
@@ -51,6 +52,8 @@ namespace Hedra.Engine.Loader
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             AssetManager.Load();
             CompatibilityManager.Load();
+            GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
+            GameLoader.LoadSoundEngine();
             HedraContent.Load();
             ModificationsLoader.Reload();
             NameGenerator.Load();
@@ -58,12 +61,10 @@ namespace Hedra.Engine.Loader
             Translations.Load();
             Log.WriteLine("Translations loaded successfully.");
             
-            GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
             GameLoader.AllocateMemory();
             Log.WriteLine("Assets loading was successful.");
             
-            GameLoader.LoadSoundEngine();
             GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
             Log.WriteLine($"Setting loaded successfully.");
 
@@ -100,7 +101,7 @@ namespace Hedra.Engine.Loader
                 CoroutineManager.Update();
                 UpdateManager.Update();
                 World.Update();
-                SoundManager.Update(LocalPlayer.Instance.Position);
+                SoundPlayer.Update(LocalPlayer.Instance.Position);
                 SoundtrackManager.Update();
                 AutosaveManager.Update();
                 Executer.Update();

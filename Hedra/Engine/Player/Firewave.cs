@@ -7,6 +7,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player
@@ -40,7 +41,7 @@ namespace Hedra.Engine.Player
         {
             CreateParticles();
             DamageEntities();
-            SoundManager.PlaySound(SoundType.HitGround, Position);
+            SoundPlayer.PlaySound(SoundType.HitGround, Position);
             _shouldStop = true;
         }
         

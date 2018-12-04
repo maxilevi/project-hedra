@@ -1,9 +1,9 @@
 {
   "Name" : "Pug",
-  "MaxHealth": 150.0,
-  "AttackDamage": 2.0,
+  "MaxHealth": 200.0,
+  "AttackDamage": 4.0,
   "Speed": 1.25,
-  "XP": 1.25,
+  "XP": 2.75,
   "Level": 6,
   "AIType": "Pug",
   "Effects": [],

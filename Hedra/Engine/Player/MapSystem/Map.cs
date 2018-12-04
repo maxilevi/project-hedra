@@ -20,6 +20,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
 
@@ -63,8 +64,8 @@ namespace Hedra.Engine.Player.MapSystem
             this._builder = new MapBuilder();
             this._baseItems = new List<MapBaseItem>();
             this._meshBuilder = new MapMeshBuilder(_player, MapSize, ChunkSize);
-            this._cursor = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapCursor.ply", Vector3.One * 20f));
-            this._marker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f));
+            this._cursor = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapCursor.ply", Vector3.One * 20f), false);
+            this._marker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f), false);
             _marker.ApplyFog = false;
 
             var hint = new GUIText("CLICK TO MARK A WAYPOINT",
@@ -85,7 +86,7 @@ namespace Hedra.Engine.Player.MapSystem
                     _player.Model.TargetRotation = Physics.DirectionToEuler(_player.Minimap.MarkedDirection);
                 }
                 else if(Args.Button == MouseButton.Right) _player.Minimap.Unmark();
-                SoundManager.PlayUISound(SoundType.NotificationSound);
+                SoundPlayer.PlayUISound(SoundType.NotificationSound);
             });
         }
 
@@ -361,7 +362,7 @@ namespace Hedra.Engine.Player.MapSystem
                     });
                     _player.Loader.UpdateFog(Force: true);
                 }
-                SoundManager.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
+                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
                 _show = value;
             }
         }

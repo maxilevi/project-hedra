@@ -472,6 +472,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (Mesh == null) throw new ArgumentException($"Failed to add instance data ");
 
             StaticBuffer.AddInstance(Data, AffectedByLod);
+            this.NeedsRebuilding = true;
+        }
+        
+        public void RemoveInstance(InstanceData Data)
+        {
+            if (Mesh == null) throw new ArgumentException($"Failed to add instance data ");
+
+            StaticBuffer.RemoveInstance(Data);
+            this.NeedsRebuilding = true;
         }
 
         public void AddCollisionShape(params ICollidable[] Data)

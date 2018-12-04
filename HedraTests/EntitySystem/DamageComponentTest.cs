@@ -8,6 +8,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 using HedraTests.Player;
 using Moq;
 using NUnit.Framework;
@@ -171,13 +172,13 @@ namespace HedraTests.EntitySystem
             var provider = new Mock<ISoundProvider>();
             provider.Setup(P => P.PlaySound(It.IsIn( new []
             {
-                SoundType.HitSound,
-                SoundType.SlashSound
+                SoundType.HitSound.ToString(),
+                SoundType.SlashSound.ToString()
             }), It.IsAny<Vector3>(), It.IsAny<bool>(), It.IsAny<float>(), It.IsAny<float>())).Callback(delegate
                 {
                     wasCalled = true;
                 });
-            SoundManager.Provider = provider.Object;
+            SoundPlayer.Provider = provider.Object;
             _damageComponent.Damage(10, null, out var xp, true, false);
             Assert.True(wasCalled);
         }

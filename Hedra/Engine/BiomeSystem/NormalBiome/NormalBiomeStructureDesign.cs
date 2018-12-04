@@ -19,6 +19,6 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             this.AddDesign(new BanditCampDesign());
         }
 
-        public override VillageType VillageType => VillageType.Nordic;
+        public override VillageType VillageType => VillageType.Woodland;
     }
 }

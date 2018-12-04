@@ -2,6 +2,7 @@ using System.Drawing;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -99,7 +100,7 @@ namespace Hedra.Engine.Player.Inventory
                     if (!BuyerInterface.Array.AddItem(oneItem))
                     {
                         World.DropItem(oneItem, Buyer.Position);
-                        SoundManager.PlaySound(SoundType.NotificationSound, Buyer.Position);
+                        SoundPlayer.PlaySound(SoundType.NotificationSound, Buyer.Position);
                     }
                 }
                 else
@@ -109,10 +110,10 @@ namespace Hedra.Engine.Player.Inventory
                     if (!BuyerInterface.Array.AddItem(Item))
                     {
                         World.DropItem(Item, Buyer.Position);
-                        SoundManager.PlaySound(SoundType.NotificationSound, Buyer.Position);
+                        SoundPlayer.PlaySound(SoundType.NotificationSound, Buyer.Position);
                     }
                 }
-                SoundManager.PlaySound(SoundType.TransactionSound, Buyer.Position);
+                SoundPlayer.PlaySound(SoundType.TransactionSound, Buyer.Position);
             }
             else
             {

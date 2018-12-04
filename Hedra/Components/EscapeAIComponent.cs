@@ -23,7 +23,7 @@ namespace Hedra.Components
         {
             _targetDirection = (_target.Position - Parent.Position).Xz.ToVector3().NormalizedFast();
             Parent.Orientation = -_targetDirection;
-            if ((_target.Position - Parent.Position).Xz.ToVector3().LengthFast < GameSettings.UpdateDistance * .75f)
+            if ((_target.Position - Parent.Position).Xz.ToVector3().LengthSquared < GeneralSettings.UpdateDistanceSquared * .75f)
             {
                 Parent.Physics.Move();
             }

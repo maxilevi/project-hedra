@@ -19,6 +19,7 @@ using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Native;
+using Hedra.Sound;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI
@@ -286,7 +287,7 @@ namespace Hedra.Engine.Rendering.UI
             var shadowsValues =  new []
             {
                 "low","medium","high"
-            }.Select(Translation.Default).ToArray();//Repeat medium so the option chooser has the correct size
+            }.Select(S => Translation.Create(S)).ToArray();
             OptionChooser shadows = new OptionChooser(new Vector2(dist, vDist), new Vector2(0.15f, 0.075f), Translation.Create("shadow_quality", "{0}: "),
                                              fontColor, _normalFont,
                                             shadowsValues, false);
@@ -419,7 +420,7 @@ namespace Hedra.Engine.Rendering.UI
                                                          volumeOptions, false);
 
             for(int i = 0; i < volumeOptions.Length; i++){
-                if( Math.Abs((float) (Int32.Parse( volumeOptions[i].Get().Replace("%",string.Empty) ) / 100f) - Sound.SoundManager.Volume) < 0.005f)
+                if( Math.Abs((float) (Int32.Parse( volumeOptions[i].Get().Replace("%",string.Empty) ) / 100f) - SoundPlayer.Volume) < 0.005f)
                 {
                     sfxVolume.Index = i;
                     sfxVolume.CurrentValue.Text = volumeOptions[i].Get();            
@@ -428,10 +429,10 @@ namespace Hedra.Engine.Rendering.UI
             }
             
             sfxVolume.LeftArrow.Click += (Sender, Args) =>
-                Sound.SoundManager.Volume = int.Parse(volumeOptions[sfxVolume.Index].Get().Replace("%", string.Empty)) / 100f;
+                SoundPlayer.Volume = int.Parse(volumeOptions[sfxVolume.Index].Get().Replace("%", string.Empty)) / 100f;
             
             sfxVolume.RightArrow.Click += (Sender, Args) =>
-                Sound.SoundManager.Volume = int.Parse(volumeOptions[sfxVolume.Index].Get().Replace("%", string.Empty)) / 100f;
+                SoundPlayer.Volume = int.Parse(volumeOptions[sfxVolume.Index].Get().Replace("%", string.Empty)) / 100f;
             
             var sensitivityOptions = new []
             {

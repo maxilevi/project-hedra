@@ -64,9 +64,9 @@ namespace Hedra.Engine.Management
             Provider.GrabShaders();
         }
 
-        public static byte[] ReadPath(string Path)
+        public static byte[] ReadPath(string Path, bool Text = true)
         {
-            return Provider.ReadPath(Path);
+            return Provider.ReadPath(Path, Text);
         }
 
         public static byte[] ReadBinary(string Name, string DataFile)

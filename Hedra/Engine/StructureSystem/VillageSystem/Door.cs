@@ -5,8 +5,10 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Sound;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
@@ -15,7 +17,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
     {
         protected override bool SingleUse => false;
         public override string Message => Translations.Get(!_opened ? "open_door" : "close_door");
-        public override int InteractDistance => 16;
+        public override int InteractDistance => 8;
         private bool _isMoving;
         private bool _opened;
         private Vector3 _targetRotation;
@@ -44,6 +46,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         protected override void DoUpdate()
         {
+            base.DoUpdate();
             if (_mesh != null)
             {
                 _mesh.LocalRotation = Mathf.Lerp(_mesh.LocalRotation, _targetRotation, Time.DeltaTime * 4f);
@@ -99,6 +102,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             if (_isMoving) return;
             _opened = !_opened;
             _targetRotation = _opened ? Vector3.UnitY * -90 : Vector3.Zero;
+            SoundPlayer.PlaySound(SoundType.Door, Position);
         }
 
         public static Vector3 GetRotationPointFromMesh(VertexData Mesh, bool Inverted)

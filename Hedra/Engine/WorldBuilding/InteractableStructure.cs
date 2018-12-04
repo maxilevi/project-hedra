@@ -56,7 +56,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public virtual void Update()
         {
-            if (IsInRadius())
+            if ((Position - GameManager.Player.Position).LengthSquared < 128 * 128)
                 DoUpdate();
         }
 
@@ -67,7 +67,7 @@ namespace Hedra.Engine.WorldBuilding
             bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
                 player.View.LookingDirection.Xz.NormalizedFast()) > .75f;                
             
-            if (IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract)
+            if (IsInRadius() && IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract)
             {
                 player.MessageDispatcher.ShowMessageWhile($"[{Key.ToString()}] {Message}", () => !Disposed && IsInLookingAngle() && IsInRadius());
                 _canInteract = true;

@@ -154,6 +154,7 @@ namespace Hedra.Engine.EntitySystem
                 if (IsMoving && _movingTimer.Tick()) IsMoving = false;
                 else if (isTranslating) IsMoving = true;
                 _lastPosition = Parent.BlockPosition;
+                Position = Parent.Physics.TargetPosition;
             }
         }
 

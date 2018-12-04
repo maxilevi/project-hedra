@@ -101,21 +101,23 @@ namespace Hedra.Engine.CacheSystem
                 Data.ColorCache = cHash;
                 Data.Colors = new List<Vector4>();
             }
-
-            lock (_extradataLock)
+            if (Data.HasExtraData)
             {
-                float eHash = MakeHash(Data.ExtraData);
-                if (CachedExtradata.ContainsKey(eHash))
+                lock (_extradataLock)
                 {
-                    goto EXTRADATA_EXISTS;
-                }
-                var cache = new List<CompressedValue<float>>();
-                Data.ExtraData.Compress(cache);
-                CachedExtradata.Add(eHash, cache);
+                    float eHash = MakeHash(Data.ExtraData);
+                    if (CachedExtradata.ContainsKey(eHash))
+                    {
+                        goto EXTRADATA_EXISTS;
+                    }
+                    var cache = new List<CompressedValue<float>>();
+                    Data.ExtraData.Compress(cache);
+                    CachedExtradata.Add(eHash, cache);
 
-                EXTRADATA_EXISTS:
-                Data.ExtraDataCache = eHash;
-                Data.ExtraData = new List<float>();
+                    EXTRADATA_EXISTS:
+                    Data.ExtraDataCache = eHash;
+                    Data.ExtraData = new List<float>();
+                }
             }
         }
 

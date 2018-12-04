@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.Core;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
-    public class CachedVertexData : CompressedVertexData, IDisposable
+    public class CachedVertexData : CompressedVertexData, IDisposable, IPositionable
     {
         private Vector3 _bounds;
         private Vector3 _position;

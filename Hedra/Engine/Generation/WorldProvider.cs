@@ -32,6 +32,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -525,7 +526,7 @@ namespace Hedra.Engine.Generation
                         if (Player.Inventory.AddItem(model.ItemSpecification))
                         {
                             model.Enabled = false;
-                            SoundManager.PlaySound(SoundType.NotificationSound, model.Position, false, 1f,
+                            SoundPlayer.PlaySound(SoundType.NotificationSound, model.Position, false, 1f,
                                 1.2f);
                             model.Dispose();
                         }

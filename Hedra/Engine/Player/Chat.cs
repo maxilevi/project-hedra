@@ -17,6 +17,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Player
 {
@@ -63,7 +64,7 @@ namespace Hedra.Engine.Player
             if(_commandLine.Text.Length >= 1 && _commandLine.Text[0] == '/')
             {
                 if (CommandManager.ProcessCommand(_commandLine.Text, _player, out string response))
-                    SoundManager.PlaySound(SoundType.NotificationSound, _player.Position);
+                    SoundPlayer.PlaySound(SoundType.NotificationSound, _player.Position);
                 this.AddLine(response);
                 _lastInput = _commandLine.Text;
             }

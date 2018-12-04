@@ -18,6 +18,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -78,16 +79,16 @@ namespace Hedra.Engine.StructureSystem
 
             if (this._sound == null && distToPlayer < 32f*32f*2f)
             {
-                this._sound = SoundManager.GetAvailableSource();
+                this._sound = SoundPlayer.GetAvailableSource();
             }
 
             if (this._sound != null)
             {
 
                 if (!this._sound.Source.IsPlaying)
-                    this._sound.Source.Play(SoundManager.GetBuffer(SoundType.Fireplace), this.Position, 1f, 1f, true);
+                    this._sound.Source.Play(SoundPlayer.GetBuffer(SoundType.Fireplace), this.Position, 1f, 1f, true);
 
-                var gain = Math.Max(0, 1 - (this.Position - SoundManager.ListenerPosition).LengthFast / 32f);
+                var gain = Math.Max(0, 1 - (this.Position - SoundPlayer.ListenerPosition).LengthFast / 32f);
                 this._sound.Source.Volume = gain;
             }
 

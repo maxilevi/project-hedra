@@ -31,7 +31,7 @@ namespace Hedra.Components
             if(ToFollow == null || !DoLogic) return;
 
             if ((ToFollow.Position - Parent.Position).LengthSquared >
-                GameSettings.UpdateDistance * GameSettings.UpdateDistance * .5f * .5f)
+                GeneralSettings.UpdateDistanceSquared * .5f)
                 Parent.Position = ToFollow.Position;
 
             if( (ToFollow.Position - Parent.Position).LengthSquared > 8*8 )

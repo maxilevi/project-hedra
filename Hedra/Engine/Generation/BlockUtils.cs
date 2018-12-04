@@ -48,8 +48,6 @@ namespace Hedra.Engine.Generation
 
                 case BlockType.StonePath:
                     return RegionColor.StonePathColor;
-                case BlockType.DarkStonePath:
-                    return RegionColor.DarkStonePathColor;
                    
                 default:
                     return Colors.Transparent;
@@ -72,7 +70,6 @@ namespace Hedra.Engine.Generation
         Temporal = 8,
         Seafloor = 9,
         StonePath = 10,
-        DarkStonePath = 11,
         None = 12,
         MaxNums
     }

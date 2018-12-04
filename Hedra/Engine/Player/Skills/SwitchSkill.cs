@@ -1,5 +1,6 @@
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Player.Skills
 {
@@ -28,7 +29,7 @@ namespace Hedra.Engine.Player.Skills
         public override void Use()
         {
             Casting = true;
-            SoundManager.PlaySoundWhile(SoundType, () => Casting, () => 1, () => 1);
+            SoundPlayer.PlaySoundWhile(SoundType, () => Casting, () => 1, () => 1);
             Player.Model.PlayAnimation(_stance);
             Player.Model.Blend(_stance);
             Activate();

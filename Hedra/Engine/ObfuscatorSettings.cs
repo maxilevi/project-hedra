@@ -21,3 +21,4 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.EntitySystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Components'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Rendering'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Sound'):-rename")]

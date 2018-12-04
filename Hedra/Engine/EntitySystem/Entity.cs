@@ -19,6 +19,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
@@ -82,7 +83,7 @@ namespace Hedra.Engine.EntitySystem
         }
 
         public bool InUpdateRange => (BlockPosition.Xz - LocalPlayer.Instance.Model.Position.Xz).LengthSquared <
-                                     GameSettings.UpdateDistance * GameSettings.UpdateDistance;
+                                     GeneralSettings.UpdateDistanceSquared;
 
         public bool IsActive { get; set; }
         public bool IsBoss { get; set; }
@@ -409,7 +410,7 @@ namespace Hedra.Engine.EntitySystem
             World.Particles.ParticleLifetime = 1;
             World.Particles.GravityEffect = .05f;
             World.Particles.PositionErrorMargin = new Vector3(3f, 3f, 3f);
-            SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position, 1f, .5f);
+            SoundPlayer.PlaySoundWithVariation(SoundType.WaterSplash, Position, 1f, .5f);
             for (var i = 0; i < 30; i++) World.Particles.Emit();
         }
 
@@ -426,7 +427,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 PlaySpawningAnimation = false;
                 if(Model.Enabled)
-                    SoundManager.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
+                    SoundPlayer.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
 
                 if (Model is IDisposeAnimation animable)
                 {

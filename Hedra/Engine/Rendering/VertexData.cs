@@ -26,7 +26,7 @@ namespace Hedra.Rendering
         public List<Vector3> Normals { get; set; }
         public List<uint> Indices { get; set; }
         public List<float> Extradata { get; set; }
-        public VertexData Original { get; private set; }
+        public VertexData Original { get; set; }
         public bool UseCache { get; set; }
         public static VertexData Empty { get; }
         private readonly Dictionary<Vector3, int> _points;
@@ -97,6 +97,11 @@ namespace Hedra.Rendering
                 _points.Add(Direction + Color.Xyz, index);
 
             return support;    
+        }
+        
+        public float[] GenerateWindValues(float Scalar)
+        {
+            return this.GenerateWindValues(-Vector4.One, Scalar);
         }
         
         public float[] GenerateWindValues()
@@ -226,7 +231,7 @@ namespace Hedra.Rendering
                 Colors = new List<Vector4>(this.Colors),
                 Normals = new List<Vector3>(this.Normals),
                 Extradata = new List<float>(Extradata),
-                Original = this
+                Original = Original ?? this
             };
         }
 
@@ -239,7 +244,7 @@ namespace Hedra.Rendering
                 Colors = new List<Vector4>(this.Colors),
                 Normals = new List<Vector3>(this.Normals),
                 Extradata = new List<float>(this.Extradata),
-                Original = this
+                Original = Original ?? this
             };
         }
 

@@ -148,7 +148,8 @@ namespace Hedra.Engine.Game
 
             Player.Model = new HumanoidModel(Player);
             
-            if(Player.Inventory.MainWeapon != null){
+            if(Player.Inventory.MainWeapon != null)
+            {
                 //Force to discard cache
                 Player.Inventory.MainWeapon.FlushCache();
                 Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);
@@ -175,14 +176,10 @@ namespace Hedra.Engine.Game
             while (_loadingScreen.IsLoading)
             {
                 Player.Physics.ResetFall();
-                Player.Physics.TargetPosition = new Vector3(
-                    Player.Physics.TargetPosition.X,
-                    Physics.HeightAtPosition(Player.Physics.TargetPosition),
-                    Player.Physics.TargetPosition.Z
-                );
+                Player.Physics.UsePhysics = false;
                 yield return null;
             }
-
+            Player.Physics.UsePhysics = true;
             Player.SearchComponent<DamageComponent>().Immune = false;
             Player.UI.GamePanel.Enable();
             Player.Chat.Show = true;

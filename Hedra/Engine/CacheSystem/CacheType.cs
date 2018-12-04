@@ -11,7 +11,7 @@ namespace Hedra.Engine.CacheSystem
     public abstract class CacheType
     {
         private readonly List<VertexData> _models = new List<VertexData>();
-        private readonly List< List<CollisionShape> > _shapes = new List< List<CollisionShape> >();
+        private readonly List<List<CollisionShape> > _shapes = new List< List<CollisionShape> >();
 
         public abstract CacheItem Type { get; }
         

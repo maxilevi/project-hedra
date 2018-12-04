@@ -4,6 +4,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.AnimationEvents
@@ -15,7 +16,7 @@ namespace Hedra.AnimationEvents
         public override void Build()
         {
             var position = Parent.Position + Parent.Orientation * 2;
-            SoundManager.PlaySound(SoundType.SlashSound, position, false, 1f, 5f);
+            SoundPlayer.PlaySound(SoundType.SlashSound, position, false, 1f, 5f);
         }
 
         public override void Update()

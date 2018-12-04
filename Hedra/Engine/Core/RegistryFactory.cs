@@ -6,7 +6,7 @@ namespace Hedra.Engine.Core
     public abstract class RegistryFactory<T> where T : class, new()
     {
         private static T _instance;
-        private Dictionary<string, Type> _table;
+        private readonly Dictionary<string, Type> _table;
 
         protected RegistryFactory()
         {

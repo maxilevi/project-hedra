@@ -121,6 +121,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var position = (Vector3) Arguments[0];
             var buildingOutput = (CompressedBuildingOutput) Arguments[1];
             var structure = (CollidableStructure) Arguments[2];
+            var instances = buildingOutput.Instances;
             var compressedModels = buildingOutput.Models;
             var shapes = buildingOutput.Shapes;
             
@@ -138,10 +139,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
             var height = Physics.HeightAtPosition(position);
             var transMatrix = Matrix4.CreateTranslation(Vector3.UnitY * height);
-            var models = compressedModels.Select(M => M.ToVertexData()).ToList();
+            var models = compressedModels.Select(C => C.ToVertexData()).ToList();
             buildingOutput.Structures.ForEach(S => S.Position += Vector3.UnitY * height);
-            models.ForEach(M => M.Transform(transMatrix));
+            instances.ForEach(I => I.Apply(transMatrix));
             shapes.ForEach(S => S.Transform(transMatrix));
+            models.ForEach(M => M.Transform(transMatrix));
+            structure.AddInstance(instances.ToArray());
             structure.AddStaticElement(models.ToArray());
             structure.AddCollisionShape(shapes.ToArray());
             structure.WorldObject.AddChildren(buildingOutput.Structures.ToArray());

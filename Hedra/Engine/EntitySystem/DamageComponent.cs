@@ -21,6 +21,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -114,7 +115,7 @@ namespace Hedra.Engine.EntitySystem
 
             if (PlaySound)
             {
-                SoundManager.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SlashSound, Parent.Position, 1f, 80f);
+                SoundPlayer.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SlashSound, Parent.Position, 1f, 80f);
             }
 
             if (shouldMiss || Immune) return;
@@ -171,7 +172,7 @@ namespace Hedra.Engine.EntitySystem
 
             if (Parent.Model is IDisposeAnimation animable)
             {
-                SoundManager.PlaySound(SoundType.GlassBreak, Parent.Position);
+                SoundPlayer.PlaySound(SoundType.GlassBreak, Parent.Position);
                 animable.DisposeAnimation();
 
                 while (currentTime < 4)

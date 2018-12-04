@@ -84,6 +84,9 @@ namespace Hedra.Engine.Player.Inventory
             Renderer.PushFBO();
             Framebuffer.Bind();
 
+            var meshPrematureCulling = Mesh.PrematureCulling;
+            Mesh.PrematureCulling = false;
+
             var currentDayColor = ShaderManager.LightColor;
             ShaderManager.SetLightColorInTheSameThread(Vector3.One);
 
@@ -114,7 +117,8 @@ namespace Hedra.Engine.Player.Inventory
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);
             Renderer.BindShader(Renderer.ShaderBound);
             Renderer.Disable(EnableCap.DepthTest);
-            Renderer.Enable(EnableCap.Blend);        
+            Renderer.Enable(EnableCap.Blend);
+            Mesh.PrematureCulling = meshPrematureCulling;
             return Framebuffer.TextureID[0];
         }
 

@@ -23,7 +23,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override bool Place(HouseParameters Parameters, VillageCache Cache)
         {
-            var work = CreateGroundwork(Parameters.Position, Parameters.GetSize(Cache), BlockType.None);
+            var work = CreateGroundwork(Parameters.Position, Parameters.GetSize(Cache), BlockType.Grass);
             work.NoTrees = true;
             work.NoPlants = true;
             return this.PushGroundwork(work);
@@ -31,26 +31,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public override BuildingOutput Build(HouseParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            var output = BuildSingleHouse(Parameters, Cache, Rng);
+            var output = base.Build(Parameters, Cache, Rng, Center);
             var transformation = BuildTransformation(Parameters).ClearTranslation();
             AddDoors(Parameters, Parameters.Design.Doors, transformation, output);
+            AddBeds(Parameters, Parameters.Design.Beds, transformation, output);
             return output;
-        }
-
-        private BuildingOutput BuildSingleHouse(HouseParameters Parameters, VillageCache Cache, Random Rng)
-        {
-            var rotationMatrix = LookAtCenter ? Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian) : Matrix4.Identity;
-            var transformationMatrix = rotationMatrix * Matrix4.CreateTranslation(Parameters.Position);
-            var model = Cache.GrabModel(Parameters.Design.Path);
-            model.Transform(transformationMatrix);
-
-            var shapes = Cache.GrabShapes(Parameters.Design.Path);
-            shapes.ForEach(S => S.Transform(transformationMatrix));
-            return new BuildingOutput
-            {
-                Models = new[] { model },
-                Shapes = shapes
-            };
         }
     }
 }

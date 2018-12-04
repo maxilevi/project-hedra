@@ -16,6 +16,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
@@ -154,7 +155,7 @@ namespace Hedra.WeaponSystem
             arrowProj.LandEventHandler += S => Owner.ProcessHit(false);
             arrowProj.HitEventHandler += (S,V) => Owner.ProcessHit(true);
             arrowProj = this.AddModifiers(arrowProj);
-            SoundManager.PlaySound(SoundType.BowSound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
+            SoundPlayer.PlaySound(SoundType.BowSound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
         }
 
         public override void Dispose()

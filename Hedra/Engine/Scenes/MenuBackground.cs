@@ -21,6 +21,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Scenes
 {
@@ -103,18 +104,18 @@ namespace Hedra.Engine.Scenes
 
                 if (_sound == null)
                 {
-                    _sound = SoundManager.GetAvailableSource();
+                    _sound = SoundPlayer.GetAvailableSource();
                     yield return null;
                     yield return null;
                     yield return null;
                     yield return null;
-                    float gain = Math.Max(0, 1 - (FirePosition - SoundManager.ListenerPosition).LengthFast / 32f);
-                    _sound?.Source.Play(SoundManager.GetBuffer(SoundType.Fireplace), FirePosition, 1f, gain, true);
+                    float gain = Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast / 32f);
+                    _sound?.Source.Play(SoundPlayer.GetBuffer(SoundType.Fireplace), FirePosition, 1f, gain, true);
                 }
 
                 if (_sound != null)
                 {
-                    float gain = System.Math.Max(0, 1 - (FirePosition - SoundManager.ListenerPosition).LengthFast / 32f);
+                    float gain = System.Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast / 32f);
                     _sound.Source.Volume = gain;
 
                 }

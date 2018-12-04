@@ -5,6 +5,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.AnimationEvents
@@ -27,7 +28,7 @@ namespace Hedra.AnimationEvents
                 entity.AddComponent(new SlowingComponent(entity, Parent, 3f, 100 - 30f * range - 25f));               
                 entity.ShowIcon(CacheItem.FearIcon, 3f);
             }
-            SoundManager.PlaySound(SoundType.GorillaGrowl, position, false, 1f, 5f);
+            SoundPlayer.PlaySound(SoundType.GorillaGrowl, position, false, 1f, 5f);
         }
     }
 }

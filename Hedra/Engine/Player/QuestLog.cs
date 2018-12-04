@@ -14,6 +14,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player
@@ -41,7 +42,7 @@ namespace Hedra.Engine.Player
                 if (GameManager.IsLoading || !_enabled || _show == value)
                     return;
 
-                SoundManager.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
+                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
                 _show = value;
 
                 if (value)

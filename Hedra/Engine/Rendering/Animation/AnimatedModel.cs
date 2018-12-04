@@ -33,6 +33,7 @@ namespace Hedra.Engine.Rendering.Animation
         public int JointCount { get; }
         public Vector3 Position { get; set; }
         public bool Enabled { get; set; }
+        public bool PrematureCulling { get; set; } = true;
         public bool ApplyFog { get; set; }
         public float Alpha { get; set; }
         public float DisposeTime { get; set; }

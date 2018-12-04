@@ -3,6 +3,7 @@ using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -48,7 +49,7 @@ namespace Hedra.Engine.StructureSystem
                 SkyManager.Enabled = false;
                 _targetCementeryTime = GraveyardDesign.GraveyardSkyTime;
                 _shouldUpdateTime = true;
-                SoundManager.PlayUISound(SoundType.DarkSound);
+                SoundPlayer.PlayUISound(SoundType.DarkSound);
             }
             else if (!_inCementery && wasInCementery)
             {
@@ -76,7 +77,7 @@ namespace Hedra.Engine.StructureSystem
             if (_parent.Restored && !_restoreSoundPlayed)
             {
                 _restoreSoundPlayed = true;
-                SoundManager.PlaySound(SoundType.DarkSound, GameManager.Player.Position);
+                SoundPlayer.PlaySound(SoundType.DarkSound, GameManager.Player.Position);
 
             }
 

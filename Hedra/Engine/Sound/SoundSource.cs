@@ -6,6 +6,7 @@
  */
 
 using System;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 
@@ -35,7 +36,7 @@ namespace Hedra.Engine.Sound
 
         private void Play(SoundBuffer Buffer)
         {
-            var position = SoundManager.ListenerPosition;
+            var position = SoundPlayer.ListenerPosition;
             AL.Listener(ALListener3f.Position, ref position);
 
             AL.Source(Id, ALSourcei.Buffer, (int) Buffer.ID);

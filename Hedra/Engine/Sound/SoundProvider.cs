@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Sound;
 using NVorbis;
 using OpenTK;
 using OpenTK.Audio;
@@ -12,7 +14,7 @@ namespace Hedra.Engine.Sound
 {
     public class SoundProvider : ISoundProvider
     {
-        private readonly SoundFamily[] _soundFamilies;
+        private readonly Dictionary<string, SoundFamily> _soundFamilies;
         private readonly SoundItem[] _soundItems;
         private readonly SoundSource[] _soundSources;
         private AudioContext _audioContext;
@@ -23,12 +25,12 @@ namespace Hedra.Engine.Sound
 
         public SoundProvider()
         {
-            _soundFamilies = new SoundFamily[(int)SoundType.MaxSounds];
+            _soundFamilies = new Dictionary<string, SoundFamily>();
             _soundItems = new SoundItem[8];
             _soundSources = new SoundSource[32];
         }
 
-        public void Load()
+        public void Setup()
         {
             _audioContext = new AudioContext();
             Log.WriteLine("Generating a pool of sound sources...");
@@ -41,60 +43,28 @@ namespace Hedra.Engine.Sound
             {
                 _soundItems[i] = new SoundItem(new SoundSource(Vector3.Zero));
             }
-            Log.WriteLine("Loading sounds...");
-            TaskScheduler.Parallel(delegate
-            {
-                LoadSound(SoundType.ButtonClick, "Sounds/HoverButton.ogg");
-                LoadSound(SoundType.WaterSplash, "Sounds/WaterSplash.ogg");
-                LoadSound(SoundType.ButtonHover, "Sounds/OnOff.ogg");
-                LoadSound(SoundType.SwooshSound, "Sounds/Swoosh.ogg");
-                LoadSound(SoundType.HitSound, "Sounds/Hit.ogg");
-                LoadSound(SoundType.NotificationSound, "Sounds/ItemCollect.ogg");
-                LoadSound(SoundType.ArrowHit, "Sounds/Hit.ogg");
-                LoadSound(SoundType.BowSound, "Sounds/Bow.ogg");
-                LoadSound(SoundType.DarkSound, "Sounds/DarkSound.ogg");
-                LoadSound(SoundType.SlashSound, "Sounds/Slash.ogg");
-                LoadSound(SoundType.Jump, "Sounds/Jump.ogg");
-                LoadSound(SoundType.TransactionSound, "Sounds/Money.ogg");
-                LoadSound(SoundType.FoodEat, "Sounds/Eat.ogg");
-                _soundFamilies[(int) SoundType.FoodEaten] = _soundFamilies[(int) SoundType.NotificationSound];
-                LoadSound(SoundType.HorseRun, "Sounds/Horse.ogg");
-                LoadSound(SoundType.Fireplace, "Sounds/Fireplace.ogg");
-                LoadSound(SoundType.HumanRun, "Sounds/Run.ogg");
-                LoadSound(SoundType.HitGround, "Sounds/HitGround.ogg");
-                LoadSound(SoundType.Dodge, "Sounds/Roll.ogg");
-                LoadSound(SoundType.LongSwoosh, "Sounds/LongSwoosh.ogg");
-                LoadSound(SoundType.GlassBreak, "Sounds/GlassBreak.ogg");
-                LoadSound(SoundType.GlassBreakInverted, "Sounds/GlassBreakInverted.ogg");
-                LoadSound(SoundType.HumanSleep, "Sounds/HumanSleep.ogg");
-                LoadSound(SoundType.TalkSound, "Sounds/ItemCollect.ogg");
-                LoadSound(SoundType.GroundQuake, "Sounds/GroundQuake.ogg");
-                LoadSound(SoundType.SpitSound, "Sounds/Bow.ogg");
-                LoadSound(SoundType.GorillaGrowl, "Sounds/GorillaGrowl.ogg");
-                LoadSound(SoundType.PreparingAttack, "Sounds/PreparingAttack.ogg");
-                LoadSound(SoundType.River, "Sounds/River.ogg");
-                //LoadSound(SoundType.BoatMove, "Sounds/BoatMove.ogg");
-                //LoadSound(SoundType.Swimming, "Sounds/Swimming.ogg");
-                LoadSound(SoundType.Underwater, "Sounds/Underwater.ogg");
-                LoadSound(SoundType.Sheep, "Sounds/Sheep.ogg");
-                LoadSound(SoundType.Goat, "Sounds/Goat.ogg");
-                _loaded = true;
-                Log.WriteLine("Finished loading sounds.");
-            });
         }
 
-        private void LoadSound(SoundType Type, params string[] Names)
+        public void MarkAsReady()
+        {            
+            _loaded = true;
+        }
+
+        public void LoadSound(string Name, params string[] Names)
         {
             var family = new SoundFamily();
             for (var i = 0; i < Names.Length; i++)
             {
+                if(!Names[i].EndsWith(".ogg"))
+                    throw new ArgumentException("Only '.ogg' files are supported.");
+                
                 family.Add(new SoundBuffer(
                     LoadOgg(Names[i], out var channels, out var bits, out var rate),
                     GetSoundFormat(channels, bits),
                     rate
                 ));
             }
-            _soundFamilies[(int) Type] = family;
+            _soundFamilies[Name] = family;
 
         }
 
@@ -104,10 +74,10 @@ namespace Hedra.Engine.Sound
             ListenerPosition = Position;
         }
 
-        public void PlaySound(SoundType Sound, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1)
+        public void PlaySound(string Sound, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1)
         {
 
-            if(!_loaded || Sound == SoundType.None) return;
+            if(!_loaded || Sound == SoundType.None.ToString()) return;
             ListenerPosition = LocalPlayer.Instance.Position;
 
             Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast / 128f) * Volume, 0);
@@ -122,9 +92,9 @@ namespace Hedra.Engine.Sound
             source.Play(GetBuffer(Sound), Location, Pitch, Gain, Looping);            
         }
 
-        public void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, Func<float> PitchLambda, Func<float> GainLambda)
+        public void PlaySoundWhile(string Sound, Func<bool> Lambda, Func<float> PitchLambda, Func<float> GainLambda)
         {
-            if (!_loaded || Sound == SoundType.None) return;
+            if (!_loaded || Sound == SoundType.None.ToString()) return;
             var source = GrabSource();
             if(source == null)
             {
@@ -150,9 +120,9 @@ namespace Hedra.Engine.Sound
             return source;
         }
 
-        public SoundBuffer GetBuffer(SoundType Type)
+        public SoundBuffer GetBuffer(string Type)
         {
-            return _soundFamilies[(int)Type].Get();
+            return _soundFamilies[Type.ToString()].Get();
         }
 
         public SoundItem GetAvailableSource()
@@ -187,7 +157,7 @@ namespace Hedra.Engine.Sound
         private short[] LoadOgg(string File, out int Channels, out int Bits, out int Rate, out int BytesPerSecond, out int Count, int Offset, int Length)
         {
             
-            byte[] bytes = AssetManager.ReadBinary(File, AssetManager.SoundResource);
+            byte[] bytes = AssetManager.ReadPath(File, false);
             Stream stream = new MemoryStream(bytes);
             
             using(VorbisReader reader = new VorbisReader(stream, true))

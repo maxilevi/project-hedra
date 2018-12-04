@@ -12,6 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Mage
@@ -121,7 +122,7 @@ namespace Hedra.Engine.Player.Skills.Mage
                 }
             }
             if(Hitted)
-                Sound.SoundManager.PlaySound(Sound.SoundType.HitSound, Player.Position, false, 1f,.6f);
+                SoundPlayer.PlaySound(SoundType.HitSound, Player.Position, false, 1f,.6f);
         }
         
         

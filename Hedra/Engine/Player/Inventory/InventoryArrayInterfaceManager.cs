@@ -8,6 +8,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
 
@@ -90,7 +91,7 @@ namespace Hedra.Engine.Player.Inventory
                 array[itemIndex] = null;
                 this.SetCancelButton(button);
                 this.UpdateView();
-                SoundManager.PlayUISound(SoundType.ButtonClick);
+                SoundPlayer.PlayUISound(SoundType.ButtonClick);
             }
             else if (_selectedButton != null)
             {
@@ -106,7 +107,7 @@ namespace Hedra.Engine.Player.Inventory
                 this.ResetSelected();
                 this.UpdateView();
                 OnItemMove?.Invoke(newArray, array, itemIndex, item);
-                SoundManager.PlayUISound(SoundType.ButtonClick);
+                SoundPlayer.PlayUISound(SoundType.ButtonClick);
             }
         }
 
@@ -124,7 +125,7 @@ namespace Hedra.Engine.Player.Inventory
                 this.PlaceInRestrictionsOrFirstEmpty(itemIndex, array, item);
             
             this.UpdateView();
-            SoundManager.PlayUISound(SoundType.ButtonClick);
+            SoundPlayer.PlayUISound(SoundType.ButtonClick);
         }
 
         private void SetSelectedItem(Button SelectedButton, Item SelectedItem)

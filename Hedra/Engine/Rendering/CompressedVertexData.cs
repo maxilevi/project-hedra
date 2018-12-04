@@ -11,7 +11,7 @@ namespace Hedra.Engine.Rendering
     public class CompressedVertexData  : IVertexData, IDisposable
     {
         /* It's not worth compression vertices and indices since they will be mostly different. */
-        
+        private VertexData _original;
         public List<Vector3> Vertices { get; set; }
         public List<uint> Indices { get; set; }
 
@@ -54,7 +54,8 @@ namespace Hedra.Engine.Rendering
                 Colors = Colors,
                 Normals = Normals,
                 Extradata = Extradata,
-                Indices = Indices
+                Indices = Indices,
+                Original = _original
             };
         }
         
@@ -66,7 +67,8 @@ namespace Hedra.Engine.Rendering
                 Colors = Data.Colors,
                 Normals = Data.Normals,
                 Extradata = Data.Extradata,
-                Indices = Data.Indices
+                Indices = Data.Indices,
+                _original = Data
             };
         }
         

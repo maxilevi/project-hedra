@@ -20,6 +20,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
@@ -255,7 +256,7 @@ namespace Hedra.WeaponSystem
 
         public void PlaySound()
         {
-            SoundManager.PlaySoundWithVariation(SoundType, Owner.Position);
+            SoundPlayer.PlaySoundWithVariation(SoundType, Owner.Position);
         }
 
         protected void BaseAttack(IHumanoid Human, AttackOptions Options)
@@ -264,7 +265,7 @@ namespace Hedra.WeaponSystem
             
             _currentAttackOption = Options;
             if (ShouldPlaySound && !IsMelee)
-                SoundManager.PlaySoundWithVariation(SoundType, Human.Position);
+                SoundPlayer.PlaySoundWithVariation(SoundType, Human.Position);
 
             if (Human.Model.IsIdling && IsMelee)
             {

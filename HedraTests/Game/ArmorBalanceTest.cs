@@ -11,7 +11,7 @@ namespace HedraTests.Game
     public class ArmorBalanceTest : BaseEquipmentTest<ArmorBalanceTest>, IBalanceTestCompliant
     {
         private readonly ArmorBalanceSheet _sheet = new ArmorBalanceSheet();
-
+/*
         [TestCaseSource(typeof(ArmorBalanceTest), nameof(Some), new object[] {EquipmentType.Helmet})]
         public void TestHelmetDefense(Item Armor)
         {
@@ -35,7 +35,7 @@ namespace HedraTests.Game
         {
             AssertComplies(Armor, _sheet.BootsDefense, () => Armor.GetAttribute<float>(CommonAttributes.Defense));
         }
-
+*/
         public override bool Complies(Item Equipment)
         {
             return Equipment.IsArmor;

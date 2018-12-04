@@ -53,7 +53,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var instanceElements = Mesh.InstanceElements;
             for (var i = 0; i < instanceElements.Length; i++)
             {
-                ProcessInstanceData(instanceElements[i], Input.StaticData, i);
+                ProcessInstanceData(instanceElements[i], Input.StaticData, i, Lod);
             }
 
             if (Lod == 1)
@@ -61,64 +61,89 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
                 for (var i = 0; i < lodedInstanceElements.Length; i++)
                 {
-                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i);
+                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i, Lod);
                 }
             }
 
             return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed, Input.HasNoise3D, Input.HasWater);
         }
 
-        private void ProcessInstanceData(InstanceData Element, VertexData Model, int Index)
+        private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod)
         {
-            var model = Element.MeshCache.Clone();
-            if (Element.ColorCache != -Vector4.One &&
-                CacheManager.CachedColors.ContainsKey(Element.ColorCache))
-                model.Colors = CacheManager.CachedColors[Element.ColorCache].Decompress();
-            else
-                model.Colors = Element.Colors;
+            var element = Instance.Get(Lod);
+            var model = element.OriginalMesh.Clone();
+            model.Transform(element.TransMatrix);
+            
+            SetColor(model, element, Index);
+            SetExtraData(model, element);
+            AssertValidModel(model);
+            PackAndAddModel(model, Model);
+        }
 
-            var variateFactor = (new Random(OffsetX + OffsetZ + World.Seed + Index).NextFloat() * 2f - 1f) *
-                                  (24 / 256f);
-            for (var l = 0; l < model.Colors.Count; l++)
-                model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
+        private static void PackAndAddModel(VertexData InstanceModel, VertexData Model)
+        {
+            for (var i = 0; i < InstanceModel.Extradata.Count; i++)
+            {
+                InstanceModel.Colors[i] = new Vector4(InstanceModel.Colors[i].Xyz, InstanceModel.Extradata[i]);
+            }
 
-            if (CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache))
-                model.Extradata = CacheManager.CachedExtradata[Element.ExtraDataCache].Decompress();
-            else
-                model.Extradata = Element.ExtraData;
+            /* Manually add these vertex data's for maximum performance */
+            for (var k = 0; k < InstanceModel.Indices.Count; k++)
+                InstanceModel.Indices[k] += (uint) Model.Vertices.Count;
+            
+            Model.Vertices.AddRange(InstanceModel.Vertices);
+            Model.Colors.AddRange(InstanceModel.Colors);
+            Model.Normals.AddRange(InstanceModel.Normals);
+            Model.Indices.AddRange(InstanceModel.Indices);
+            Model.Extradata.AddRange(InstanceModel.Extradata);
+            InstanceModel.Dispose();
+        }
+        
+        private static void AssertValidModel(VertexData Model)
+        {
+            if(Model.Colors.Count != Model.Extradata.Count)
+                throw new ArgumentOutOfRangeException($"Extradata '{Model.Extradata.Count}' or color '{Model.Colors.Count}' mismatch");
+        }
+        
+        private void SetColor(VertexData Model, InstanceData Element, int Index)
+        {
+            Model.Colors = Element.ColorCache != -Vector4.One && CacheManager.CachedColors.ContainsKey(Element.ColorCache)
+                ? CacheManager.CachedColors[Element.ColorCache].Decompress()
+                : Element.Colors;
 
-            if(model.Colors.Count != model.Extradata.Count)
-                throw new ArgumentOutOfRangeException("Extradata or color mismatch");
+            if (Element.VariateColor)
+            {
+                var variateFactor = (new Random(OffsetX + OffsetZ + World.Seed + Index).NextFloat() * 2f - 1f) *
+                                    (24 / 256f);
+                for (var l = 0; l < Model.Colors.Count; l++)
+                    Model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
 
-            model.Transform(Element.TransMatrix);
+            }
+            if (Element.GraduateColor)
+            {
+                Model.GraduateColor(Vector3.UnitY);
+            }
+        }
+
+        private static void SetExtraData(VertexData Model, InstanceData Element)
+        {
+            Model.Extradata = CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache) 
+                ? CacheManager.CachedExtradata[Element.ExtraDataCache].Decompress() 
+                : Element.ExtraData;
+
+            if (!Element.HasExtraData)
+                Model.Extradata = Enumerable.Repeat(0f, Model.Vertices.Count).ToList();
+            
             //Pack some randomness to the wind values
             float rng = Utils.Rng.NextFloat();
-            for (var k = 0; k < model.Extradata.Count; k++)
+            for (var k = 0; k < Model.Extradata.Count; k++)
             {
-                if (model.Extradata[k] != 0 && model.Extradata[k] != -10f)
-                    model.Extradata[k] = Mathf.Pack(new Vector2(model.Extradata[k], rng), 2048);
+                if (Model.Extradata[k] != 0 && Model.Extradata[k] != -10f)
+                    Model.Extradata[k] = Mathf.Pack(new Vector2(Model.Extradata[k], rng), 2048);
 
-                if (model.Extradata[k] == -10f)
-                    model.Extradata[k] = -1f;
+                if (Model.Extradata[k] == -10f)
+                    Model.Extradata[k] = -1f;
             }
-
-            //Manually add these vertex data's for maximum performance
-            for (var k = 0; k < model.Indices.Count; k++)
-                model.Indices[k] += (uint) Model.Vertices.Count;
-
-            if (model.Extradata.Count != model.Colors.Count)
-                throw new ArgumentOutOfRangeException("Extradata or color mismatch");
-            for (var i = 0; i < model.Extradata.Count; i++)
-            {
-                model.Colors[i] = new Vector4(model.Colors[i].Xyz, model.Extradata[i]);
-            }
-
-            Model.Vertices.AddRange(model.Vertices);
-            Model.Colors.AddRange(model.Colors);
-            Model.Normals.AddRange(model.Normals);
-            Model.Indices.AddRange(model.Indices);
-            Model.Extradata.AddRange(model.Extradata);
-            model.Dispose();
         }
     }
 }

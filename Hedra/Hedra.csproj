@@ -154,6 +154,9 @@
     <Compile Include="Components\HeadIconComponent.cs" />
     <Compile Include="Components\HumanoidAIComponent.cs" />
     <Compile Include="Components\MageAIComponent.cs" />
+    <Compile Include="Engine\Game\Season.cs" />
+    <Compile Include="Engine\Rendering\LodedVertexData.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
     <Compile Include="HedraContent.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeColors.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeEnviromentDesign.cs" />
@@ -216,7 +219,6 @@
     <Compile Include="Engine\CacheSystem\CloudCache.cs" />
     <Compile Include="Engine\CacheSystem\CypressTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\DeadTreesCache.cs" />
-    <Compile Include="Engine\CacheSystem\FarmCache.cs" />
     <Compile Include="Engine\CacheSystem\FearIconCache.cs" />
     <Compile Include="Engine\CacheSystem\FernCache.cs" />
     <Compile Include="Engine\CacheSystem\FlowerCache.cs" />
@@ -801,7 +803,6 @@
     <Compile Include="Engine\Rendering\ChunkRenderCommand.cs" />
     <Compile Include="Engine\Rendering\Effects\FXShader.cs" />
     <Compile Include="Engine\Rendering\IDisposeAnimation.cs" />
-    <Compile Include="Engine\Rendering\MegaTexture.cs" />
     <Compile Include="Engine\Rendering\DirectBitmap.cs" />
     <Compile Include="Engine\Rendering\DropShadow.cs" />
     <Compile Include="Engine\Rendering\DropShadowRenderer.cs" />
@@ -834,6 +835,7 @@
     <Compile Include="EntitySystem\IEntity.cs" />
     <Compile Include="EntitySystem\IHumanoid.cs" />
     <Compile Include="EntitySystem\IPhysicsComponent.cs" />
+    <Compile Include="Sound\SoundPlayer.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Engine\Rendering\NvidiaGPUFix64.cs" />
     <Compile Include="Engine\Rendering\Particles\TrailRenderer.cs" />
@@ -881,7 +883,6 @@
     <Compile Include="Engine\Sound\SoundBuffer.cs" />
     <Compile Include="Engine\Sound\SoundEffect.cs" />
     <Compile Include="Engine\Sound\SoundItem.cs" />
-    <Compile Include="Engine\Sound\SoundManager.cs" />
     <Compile Include="Engine\Program.cs" />
     <Compile Include="Engine\Sound\SoundSource.cs" />
     <Compile Include="Engine\StructureSystem\CampfireDesign.cs" />
@@ -1085,6 +1086,10 @@
       <Link>Assets\Items\Claws\UncommonBronzeClawFist.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Helmet\ChristmasHat.dae">
+      <Link>Assets\Items\Helmets\ChristmasHat.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Katars\CommonBronzeKatar.ply">
       <Link>Assets\Items\Katars\CommonBronzeKatar.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1251,6 +1256,10 @@
     </None>
     <None Include="..\project-hedra-assets\Sounds\Soundtrack\Obelisk.ogg">
       <Link>Sounds\Soundtrack\Obelisk.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0-Lod.ply">
+      <Link>Assets\Env\Village\Blacksmith0-Lod.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0.ply">
@@ -1531,6 +1540,10 @@
     </None>
     <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Door0.ply">
       <Link>Assets\Env\Village\Blacksmith0_Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House0\House0-Lod.ply">
+      <Link>Assets\Env\Village\House0-Lod.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0.ply">
@@ -1899,6 +1912,10 @@
     </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0_Door1.ply">
       <Link>Assets\Env\Village\House0_Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\House1\House1-Lod.ply">
+      <Link>Assets\Env\Village\House1-Lod.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\House1\House1.ply">
@@ -2421,6 +2438,10 @@
       <Link>Assets\Env\Village\House1_Door3.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Villages\House2\House2-Lod.ply">
+      <Link>Assets\Env\Village\House2-Lod.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Villages\House2\House2.ply">
       <Link>Assets\Env\Village\House2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -2447,10 +2468,6 @@
     </None>
     <None Include="..\project-hedra-assets\Villages\House2\House2_Collider102.ply">
       <Link>Assets\Env\Colliders\House2_Collider102.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\House2\House2_Collider103.ply">
-      <Link>Assets\Env\Colliders\House2_Collider103.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\House2\House2_Collider11.ply">
@@ -6474,7 +6491,6 @@
   <ItemGroup>
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
-    <Folder Include="Assets\Items\Helmets\" />
     <Folder Include="Assets\Items\Pants\" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
@@ -6600,6 +6616,9 @@
     <Content Include="Modules\Items\Chestplates\CommonLeatherChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Helmets\ChristmasHat.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\Boat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -6622,7 +6641,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Recipes\RareAutumnStaffRecipe.json" />
-    <Content Include="Modules\Villages\Nordic.json">
+    <Content Include="Modules\Villages\Woodland.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Passthrough.frag">

@@ -56,13 +56,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                         break;
                 }
 
-
+/*
                 if(base.IntersectsWithAnyPath(
                     Vector3.TransformPosition(
                          Vector3.UnitZ * marketDist * Chunk.BlockSize, Matrix4.CreateRotationY(360 / marketCount * i * Mathf.Radian) * transMatrix
                     ).Xz,
                     16
-                )) continue;
+                )) continue;*/
                 
                 VertexData market0 = VillageCache.Market.Market0_Clone.ToVertexData().Clone();
                 bool extraShelf = Rng.Next(0, 4) != 0;
@@ -142,7 +142,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return new BuildingOutput
             {
                 Models = marketModels,
-                Shapes = marketShapes
+                Shapes = marketShapes,
+                BuildAsInstance = false
             };
         }
 

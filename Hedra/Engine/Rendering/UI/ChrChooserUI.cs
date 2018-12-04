@@ -20,6 +20,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -315,7 +316,7 @@ namespace Hedra.Engine.Rendering.UI
                     if (_humans[i].Model.Enabled && Math.Abs(ndc.X - coords.X) < size.X && Math.Abs(1 - ndc.Y - coords.Y) < size.Y)
                     {
                         if( (_humans[i].Model.Tint.Xyz - new Vector3(2, 2, 2)).LengthFast > 0.05f)
-                            SoundManager.PlayUISound(SoundType.ButtonClick);
+                            SoundPlayer.PlayUISound(SoundType.ButtonClick);
                         _humans[i].Model.Tint = new Vector4(2, 2, 2, 1);
                     }
                     else

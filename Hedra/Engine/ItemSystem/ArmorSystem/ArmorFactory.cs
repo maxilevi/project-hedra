@@ -14,6 +14,7 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
             Armors = new Dictionary<string, Type>()
             {
                 {"Chestplate", typeof(ChestPiece)},
+                {"Helmet", typeof(HelmetPiece)},
             };
         }
 

@@ -128,7 +128,7 @@ namespace Hedra.Engine.Generation
                 var data = new InstanceData
                 {
                     ExtraData = model.Extradata,
-                    MeshCache = originalModel,
+                    OriginalMesh = originalModel,
                     Colors = model.Colors,
                     TransMatrix = transMatrix
                 };

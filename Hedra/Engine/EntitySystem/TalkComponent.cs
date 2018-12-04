@@ -20,6 +20,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Sound;
 using OpenTK.Input;
 
 namespace Hedra.Engine.EntitySystem
@@ -85,7 +86,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void Talk(bool Silent)
         {
-            if(!Silent) SoundManager.PlayUISound(SoundType.TalkSound, 1f, .75f);
+            if(!Silent) SoundPlayer.PlayUISound(SoundType.TalkSound, 1f, .75f);
             string phrase = _phrase ?? Phrases[Utils.Rng.Next(0, Phrases.Length)];
             phrase = Utils.FitString(phrase, 30);
             

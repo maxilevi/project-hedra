@@ -23,15 +23,18 @@ namespace Hedra.Engine.Generation
 {
 
     public delegate void OnModelAdded(CachedVertexData Models);
+    public delegate void OnInstanceAdded(InstanceData Instance);
 
     public class CollidableStructure : IDisposable
     {
         private readonly HashSet<ICollidable> _colliders;
         private readonly HashSet<CachedVertexData> _models;
+        private readonly HashSet<InstanceData> _instances;
         private readonly HashSet<IGroundwork> _groundworks;
         private readonly HashSet<Plateau> _plateaus;
         private readonly object _lock = new object();
         public event OnModelAdded ModelAdded;
+        public event OnInstanceAdded InstanceAdded;
         public Vector3 Position { get; }
         public Plateau Mountain { get; }
         public BaseStructure WorldObject { get; }
@@ -52,6 +55,7 @@ namespace Hedra.Engine.Generation
             this._models = new HashSet<CachedVertexData>();
             this._groundworks = new HashSet<IGroundwork>();
             this._plateaus = new HashSet<Plateau>();
+            this._instances = new HashSet<InstanceData>();
         }
 
         public void Setup()
@@ -74,6 +78,15 @@ namespace Hedra.Engine.Generation
             {
                 lock(_lock)
                     return _models.ToArray();
+            }
+        }
+        
+        public InstanceData[] Instances
+        {
+            get
+            {
+                lock(_lock)
+                    return _instances.ToArray();
             }
         }
         
@@ -118,6 +131,19 @@ namespace Hedra.Engine.Generation
             }
         }
         
+        public void AddInstance(params InstanceData[] Instances)
+        {
+            lock (_lock)
+            {
+                for (var i = 0; i < Instances.Length; i++)
+                {
+                    _instances.Add(Instances[i]);
+                    InstanceAdded?.Invoke(Instances[i]);
+                }
+                this.CalculateRadius();
+            }
+        }
+        
         public void AddGroundwork(params IGroundwork[] Groundworks)
         {
             lock (_lock)
@@ -152,6 +178,12 @@ namespace Hedra.Engine.Generation
             foreach (var model in _models)
             {
                 var newRadius = (model.Position - this.Position).LengthFast + model.Bounds.Xz.LengthFast * .5f;
+                if (newRadius > radius)
+                    radius = newRadius;
+            }
+            foreach (var instance in _instances)
+            {
+                var newRadius = (instance.Position - this.Position).LengthFast + instance.Bounds.Xz.LengthFast * .5f;
                 if (newRadius > radius)
                     radius = newRadius;
             }

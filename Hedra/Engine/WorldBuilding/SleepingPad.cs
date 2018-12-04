@@ -7,6 +7,7 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
 using Hedra.EntitySystem;
+using Hedra.Engine.Localization;
 using OpenTK;
 using OpenTK.Input;
 
@@ -43,7 +44,7 @@ namespace Hedra.Engine.WorldBuilding
         public void Update()
         {
             var player = LocalPlayer.Instance;
-            player.MessageDispatcher.ShowMessageWhile("[E] TO SLEEP",
+            player.MessageDispatcher.ShowMessageWhile($"[E] {Translations.Get("to_sleep")}",
                 () => (player.Position - this.Position).LengthSquared < BedRadius * BedRadius && player.CanInteract && !IsOccupied && SkyManager.IsNight);
 
             if(IsOccupied && !SkyManager.IsNight)

@@ -11,6 +11,7 @@ using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Rogue
@@ -34,7 +35,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
             _roundSlashAnimation.Loop = false;
             _roundSlashAnimation.OnAnimationStart += delegate
             { 
-                Sound.SoundManager.PlaySound(Sound.SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
+                SoundPlayer.PlaySound(SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
             };
             _roundSlashAnimation.OnAnimationEnd += delegate
             {

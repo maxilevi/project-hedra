@@ -14,6 +14,7 @@ using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using Hedra.WeaponSystem;
 using OpenTK;
 
@@ -106,7 +107,7 @@ namespace Hedra.Engine.Player
             if (_type == AttackType.Secondary)
             {
                 IsCharging = true;
-                SoundManager.PlaySoundWhile(SoundType.PreparingAttack, () => IsCharging, () => 1, () => Charge);
+                SoundPlayer.PlaySoundWhile(SoundType.PreparingAttack, () => IsCharging, () => 1, () => Charge);
             }
         }
         

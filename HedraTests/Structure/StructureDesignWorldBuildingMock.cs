@@ -54,11 +54,6 @@ namespace HedraTests.Structure
             return SpawnHumanoid(null, Position);
         }
 
-        public Humanoid SpawnVillager(Vector3 Position, bool Move)
-        {
-            return SpawnBandit(Position, 0, Move);
-        }
-
         public Humanoid SpawnVillager(Vector3 Position, bool Move, string Name)
         {
             return SpawnHumanoid(null, Position);

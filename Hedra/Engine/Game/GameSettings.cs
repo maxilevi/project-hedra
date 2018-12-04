@@ -16,6 +16,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Game
@@ -53,7 +54,6 @@ namespace Hedra.Engine.Game
         public static bool Lod = true;
         public static bool MaxResolution = false;
         public static bool UnderWaterEffect = false;
-        public static float UpdateDistance = 420;
         private static bool _fullscreen;
         private static int _shadowQuality = 2;
         private static int _frameLimit;
@@ -141,8 +141,8 @@ namespace Hedra.Engine.Game
         [Setting]
         public static float SFXVolume
         {
-            get => SoundManager.Volume;
-            set => SoundManager.Volume = value;
+            get => SoundPlayer.Volume;
+            set => SoundPlayer.Volume = value;
         }
         
         [Setting]

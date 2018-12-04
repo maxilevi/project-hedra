@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Rogue
@@ -35,7 +36,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
         
         private IEnumerator FadeTime(){
             float PassedTime = 8f + Math.Min(base.Level * .75f, 10f), PTime = 0;
-            Sound.SoundManager.PlayUISound(Sound.SoundType.DarkSound, 1f, .25f);
+            SoundPlayer.PlayUISound(SoundType.DarkSound, 1f, .25f);
             while(PTime < PassedTime){
                 
                 Player.Model.Alpha = .4f;

@@ -9,7 +9,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public const float MarketSize = 108;
         
         public float Size { get; } = MarketSize;
-        public float WellSize { get; } = 15;
+        public float WellSize { get; } = 18;
 
         public override float GetSize(VillageCache Cache)
         {

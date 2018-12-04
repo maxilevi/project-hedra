@@ -16,7 +16,6 @@ namespace Hedra.Engine.CacheSystem
         Grass,
         Wheat,
         Cloud,
-        Farm,
         BerryBush,
         AttentionIcon,
         Berries,
