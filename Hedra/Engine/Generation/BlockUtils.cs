@@ -36,21 +36,20 @@ namespace Hedra.Engine.Generation
 
                 case BlockType.Water:
                     return RegionColor.WaterColor;
-
-                case BlockType.Wood:
-                    return RegionColor.WoodColor;
-
-                case BlockType.Leaves:
-                    return RegionColor.LeavesColor;
-
+                
                 case BlockType.Seafloor:
                     return RegionColor.SeafloorColor;
 
                 case BlockType.StonePath:
                     return RegionColor.StonePathColor;
-                   
-                default:
+                
+                case BlockType.FarmDirt:
+                    return RegionColor.DirtColor;
+
+                case BlockType.Air:
                     return Colors.Transparent;
+
+                default:
                     throw new ArgumentOutOfRangeException($"Unkown block type {Type}");
             }
         }
@@ -64,12 +63,11 @@ namespace Hedra.Engine.Generation
         Stone = 2,
         Dirt = 3,
         Water = 4,
-        Wood = 5,
-        Leaves = 6,
         Path = 7,
         Temporal = 8,
         Seafloor = 9,
         StonePath = 10,
+        FarmDirt = 11,
         None = 12,
         MaxNums
     }

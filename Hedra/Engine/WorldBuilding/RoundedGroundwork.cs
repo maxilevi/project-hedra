@@ -5,16 +5,10 @@ using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    public class RoundedGroundwork : IGroundwork
+    public class RoundedGroundwork : BaseGroundwork
     {
-        public BlockType Type { get; set; } = BlockType.Path;
-        public bool NoTrees { get; set; }
-        public bool NoPlants { get; set; }
-        public float DensityMultiplier { get; set; } = 1;
-        public Vector3 Position { get; set; }
-        public float Radius { get; set; }
-        public float BonusHeight { get; set; }
-        public bool IsPath => false;
+        private Vector3 Position { get; set; }
+        private float Radius { get; set; }
 
         public RoundedGroundwork(Vector3 Position, float Radius)
         {
@@ -27,12 +21,12 @@ namespace Hedra.Engine.WorldBuilding
             this.Type = Type;
         }
 
-        public bool Affects(Vector2 Sample)
+        public override bool Affects(Vector2 Sample)
         {
             return (Sample - this.Position.Xz).LengthSquared < this.Radius * this.Radius;
         }
         
-        public float Density(Vector2 Sample)
+        public override float Density(Vector2 Sample)
         {
             return 1 - Math.Min((Sample - this.Position.Xz).LengthSquared / (this.Radius * this.Radius), 1);
         }

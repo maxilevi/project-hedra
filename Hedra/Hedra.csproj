@@ -157,6 +157,9 @@
     <Compile Include="Engine\Game\Season.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\FarmDesignTemplate.cs" />
+    <Compile Include="Engine\WorldBuilding\BaseGroundwork.cs" />
+    <Compile Include="Engine\WorldBuilding\SquaredGroundwork.cs" />
     <Compile Include="HedraContent.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeColors.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeEnviromentDesign.cs" />
@@ -1244,6 +1247,10 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Mushroom1.ply">
       <Link>Assets\Env\Mushroom1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Sounds\Door.ogg">
+      <Link>Sounds\Door.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Sounds\Goat.ogg">
@@ -6494,7 +6501,6 @@
     <Folder Include="Assets\Items\Pants\" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
-    <Folder Include="Modules\Items\Helmets\" />
     <Folder Include="Modules\Items\Pants\" />
   </ItemGroup>
   <ItemGroup>

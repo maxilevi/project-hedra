@@ -8,6 +8,24 @@
       }
     ]
   },
+  "Farm" : {
+    "Designs" : [
+      {
+        "Path": "Assets/Env/Village/Farm0.ply",
+        "Scale": 8.0,
+        "Plants" : [
+          {
+            "Type": null,
+            "Position": {
+              "X": 0.0,
+              "Y": 0.0,
+              "Z": 0.0
+            }
+          }
+        ]
+      }
+    ]
+  },
   "Stable" : {
     "Designs" : [
       {
@@ -37,14 +55,6 @@
           "Y": 0.0,
           "Z": 24.0
         }
-      }
-    ]
-  },
-  "Farm" : {
-    "Designs" : [
-      {
-        "Path": "Assets/Env/Village/Farm0.ply",
-        "Scale": 8.0
       }
     ]
   },

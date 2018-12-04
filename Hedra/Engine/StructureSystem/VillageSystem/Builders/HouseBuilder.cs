@@ -26,7 +26,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var work = CreateGroundwork(Parameters.Position, Parameters.GetSize(Cache), BlockType.Grass);
             work.NoTrees = true;
             work.NoPlants = true;
-            return this.PushGroundwork(work);
+            return true;//this.PushGroundwork(work);
         }
 
         public override BuildingOutput Build(HouseParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)

@@ -6,13 +6,19 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public class FarmParameters : IBuildingParameters
     {
-        public DesignTemplate Design { get; set; }
+        public FarmDesignTemplate Design { get; set; }
         public DesignTemplate WindmillDesign { get; set; }
         public Vector3 Position { get; set; }
         public Vector3 Rotation { get; set; }
         public Random Rng { get; set; }
         public bool HasWindmill { get; set; }
 
+        DesignTemplate IBuildingParameters.Design
+        {
+            get => Design;
+            set => Design = value as FarmDesignTemplate;
+        }
+        
         public FarmParameters AlterPosition(Vector3 Offset)
         {
             return new FarmParameters

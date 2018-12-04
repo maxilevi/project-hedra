@@ -26,17 +26,28 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 output.Models[i].Extradata = output.Models[i].GenerateWindValues(2f).ToList();
             }
+
+            AddPlants(Parameters, Cache, Rng);
             return output;
         }
         
         public override bool Place(FarmParameters Parameters, VillageCache Cache)
         {
-            var width = Parameters.GetSize(Cache) * .5f;
-            var path = new RoundedGroundwork(Parameters.Position, width, BlockType.Dirt)
+            var width = Parameters.GetSize(Cache);
+            var path = new SquaredGroundwork(Parameters.Position, width, BlockType.FarmDirt)
             {
-                BonusHeight = .25f
+                BonusHeight = .35f
             };
             return this.PushGroundwork(path);
+        }
+
+        private static void AddPlants(FarmParameters Parameters, VillageCache Cache, Random Rng)
+        {
+            for (var i = 0; i < Parameters.Design.Plants.Length; i++)
+            {
+                var plant = Parameters.Design.Plants[i];
+                
+            }
         }
     }
 }

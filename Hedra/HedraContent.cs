@@ -69,7 +69,7 @@ namespace Hedra
                 SoundPlayer.LoadSound(SoundType.Underwater, "$DataFile$/Sounds/Underwater.ogg");
                 SoundPlayer.LoadSound(SoundType.Sheep, "$DataFile$/Sounds/Sheep.ogg");
                 SoundPlayer.LoadSound(SoundType.Goat, "$DataFile$/Sounds/Goat.ogg");
-                //SoundPlayer.LoadSound(SoundType.Door, "Sounds/Door.ogg");
+                SoundPlayer.LoadSound(SoundType.Door, "Sounds/Door.ogg");
                 SoundPlayer.MarkAsReady();
                 Log.WriteLine("Finished loading sounds.");
             });

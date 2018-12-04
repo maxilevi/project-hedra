@@ -4,17 +4,13 @@ using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    public class LineGroundwork : IGroundwork
+    public class LineGroundwork : BaseGroundwork
     {
         public float Width { get; set; } = 14f;
-        public float DensityMultiplier { get; set; } = 1;
-        public Vector2 Origin { get; set; }
-        public Vector2 End { get; set; }
-        public BlockType Type { get; set; }
-        public bool NoTrees { get; set; }
-        public bool NoPlants { get; set; }
-        public float BonusHeight { get; set; } = -1.0f;
-        public bool IsPath => true;
+        private Vector2 Origin { get; set; }
+        private Vector2 End { get; set; }
+        public override float BonusHeight { get; set; } = -1.0f;
+        public override bool IsPath => true;
 
         public LineGroundwork(Vector2 Origin, Vector2 End, BlockType Type = BlockType.Path)
         {
@@ -23,7 +19,7 @@ namespace Hedra.Engine.WorldBuilding
             this.Type = Type;
         }
 
-        public bool Affects(Vector2 Sample)
+        public override bool Affects(Vector2 Sample)
         {
             var length = (End - Origin).LengthFast;
             var dir = (End - Origin) * (1f / length);
@@ -31,7 +27,7 @@ namespace Hedra.Engine.WorldBuilding
             return point < length && (point * dir + Origin - Sample).LengthFast < Width;
         }
         
-        public float Density(Vector2 Sample)
+        public override float Density(Vector2 Sample)
         {
             var dir = (End - Origin).NormalizedFast();
             var point = (Sample - Origin).LengthFast;

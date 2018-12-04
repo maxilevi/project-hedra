@@ -39,7 +39,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             _marketBuilder = new MarketBuilder(_structure);
             _root = Root;
             _rng = Rng;
-            Size = 14;//7 + Rng.Next(0, 4);
+            Size = 24;//7 + Rng.Next(0, 4);
             _designer = new GridPlacementDesigner(_root, new VillageConfiguration
             {
                 Size = Size

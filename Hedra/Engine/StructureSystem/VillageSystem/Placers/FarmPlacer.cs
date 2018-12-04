@@ -7,9 +7,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
     public class FarmPlacer : Placer<FarmParameters>
     {
         private readonly DesignTemplate[] _windmillDesigns;
+        private readonly FarmDesignTemplate[] _farmDesigns;
         
-        public FarmPlacer(DesignTemplate[] Farms, DesignTemplate[] Windmills, Random Rng) : base(Farms, Rng)
+        public FarmPlacer(FarmDesignTemplate[] Farms, DesignTemplate[] Windmills, Random Rng) : base(Farms, Rng)
         {
+            _farmDesigns = Farms;
             _windmillDesigns = Windmills;
         }
 
@@ -17,8 +19,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
         {
             return new FarmParameters
             {
-                Design = this.SelectRandom(this.Designs),
-                WindmillDesign = this.SelectRandom(this._windmillDesigns),
+                Design = SelectRandom(_farmDesigns),
+                WindmillDesign = SelectRandom(this._windmillDesigns),
                 Position = Point.Position,
                 HasWindmill = Rng.Next(0, 3) == 1,
                 Rng = Rng

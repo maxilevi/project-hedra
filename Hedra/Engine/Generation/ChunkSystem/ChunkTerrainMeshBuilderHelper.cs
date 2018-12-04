@@ -66,11 +66,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         float delta = clampNoise / levelSize - (float) Math.Floor(clampNoise / levelSize);
 
                         blockColor = Mathf.Lerp(A, B, delta);
-                    }
-                    if (y0.Type == BlockType.StonePath)
+                    } else if (y0.Type == BlockType.StonePath)
                     {
                         var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f;
                         blockColor += new Vector4(shade, shade, shade, 0); 
+                    } else if (y0.Type == BlockType.FarmDirt)
+                    {
+                        //var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f;
+                        //blockColor -= new Vector4(shade, shade, shade, 0);
+                        if(x % 2 == 0)
+                            blockColor -= new Vector4(.05f, .05f, .05f, 0);
                     }
                     color += new Vector4(blockColor.X, blockColor.Y, blockColor.Z, blockColor.W);
                     colorCount++;
