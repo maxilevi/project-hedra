@@ -195,17 +195,24 @@ namespace Hedra.Rendering
 
         public VertexData Optimize()
         {
-            var decoupledColors = Indices.Select(I => Vertices[(int)I]).ToList();
-            var decoupledVertices = Indices.Select(I => Colors[(int)I]).ToList();
-            var decoupledNormals = Indices.Select(I => Normals[(int)I]).ToList();
-            var decoupledExtradata = Extradata.Count != 0 ? Indices.Select(I => Extradata[(int)I]).ToList() : null;
+            var decoupledVertices = Indices.Select(I => Vertices[(int)I]).ToList();
             var newIndices = new List<uint>();
             var newVertices = decoupledVertices.Distinct().ToList();
             for (var i = 0; i < decoupledVertices.Count; i++)
             {
                 newIndices.Add((uint) newVertices.IndexOf(decoupledVertices[i]));
             }
-
+            var newNormals = new List<Vector3>();
+            var newColors = new List<Vector4>();
+            var newExtradata = new List<float>();
+            for (var i = 0; i < newVertices.Count; i++)
+            {
+                var index = Vertices.IndexOf(newVertices[i]);
+                newColors.Add(Colors[index]);
+                newNormals.Add(Normals[index]);
+                if(Extradata != null && newExtradata.Count > 0)
+                    newExtradata.Add(Extradata[index]);
+            }
             Indices = newIndices;
             Vertices = newVertices;
             Colors = newColors;

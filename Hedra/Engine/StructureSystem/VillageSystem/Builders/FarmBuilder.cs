@@ -138,7 +138,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                                       * Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian)
                                       * Matrix4.CreateTranslation(position);
                     
-                    Output.Instances.Add(BuildPlant(design.Model, design, World.BiomePool.GetRegion(position), transMatrix, rng));
+                    Output.Instances.Add(BuildPlant(design.Model, design, World.BiomePool.GetRegion(position), transMatrix, Rng));
                 }
             }
         }
