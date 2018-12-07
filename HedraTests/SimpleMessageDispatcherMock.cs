@@ -30,6 +30,8 @@ namespace HedraTests
             LastMessage = Message;
         }
 
+        public bool HasTitleMessages => false;
+
         public void ShowNotification(string Message, Color FontColor, float Seconds)
         {
             LastMessage = Message;

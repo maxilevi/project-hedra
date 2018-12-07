@@ -10,12 +10,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
         public FarmTemplate Farm { get; set; }
         public WindmillTemplate Windmill { get; set; }
 
-        public DesignTemplate[][] Designs => new DesignTemplate[][]
+        public DesignTemplate[][] CacheableDesigns => new []
         {
             House.Designs,
             Well.Designs,
             Stable.Designs,
             Farm.Designs,
+            Farm.PropDesigns,
             Windmill.Designs,
             Blacksmith.Designs
         };

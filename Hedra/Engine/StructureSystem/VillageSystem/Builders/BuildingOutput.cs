@@ -12,6 +12,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public class BuildingOutput
     {
+        public IList<InstanceData> Instances { get; set; }
         public IList<VertexData> LodModels { get; set; }
         public IList<VertexData> Models { get; set; }
         public IList<Matrix4> TransformationMatrices;
@@ -23,6 +24,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public BuildingOutput()
         {
             Structures = new List<BaseStructure>();
+            Instances = new List<InstanceData>();
         }
         
         public void Color(Vector4 Find, Vector4 Replacement)
@@ -56,7 +58,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 if(LodModels != null) mainInstance.AddLOD(BuildInstance(LodModels[i], TransformationMatrices[i]), 2);
                 list.Add(mainInstance);
             }
-
+            list.AddRange(Instances);
             return list;
         }
 
@@ -75,6 +77,17 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             };
             CacheManager.Check(model);
             return model;
+        }
+
+        public BuildingOutput Concat(BuildingOutput New)
+        {
+            Models = Models.Concat(New.Models).ToArray();
+            Shapes.AddRange(New.Shapes);
+            TransformationMatrices = TransformationMatrices.Concat(New.TransformationMatrices).ToArray();
+            Structures.AddRange(New.Structures);
+            LodModels = LodModels?.Concat(New.LodModels ?? new VertexData[0]).ToArray();
+            Instances = Instances.Concat(New.Instances).ToList();
+            return this;
         }
         
         public bool IsEmpty => Models.Count == 0 && Shapes.Count == 0 && Structures.Count == 0;

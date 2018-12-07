@@ -184,7 +184,7 @@ namespace Hedra.Engine.StructureSystem
             var randomCampfires = 4;
             for (var i = 0; i < randomCampfires; i++)
             {
-                var rotationMatrix = Matrix4.CreateRotationY(360f * Rng.NextFloat());
+                var rotationMatrix = Matrix4.CreateRotationY(360f * Rng.NextFloat()* Mathf.Radian);
                 var spawnRadius = Radius * .5f;
                 var randomPosition = Vector3.UnitX * (Rng.NextFloat() * spawnRadius * 2f - spawnRadius)
                                      + Vector3.UnitZ * (Rng.NextFloat() * spawnRadius * 2f - spawnRadius);

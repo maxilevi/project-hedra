@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
@@ -63,7 +64,7 @@ namespace Hedra.Engine.Player
                     prevSeed = World.Seed;
                 }
 
-                if (_messageQueue.Count == 0)
+                if (_messageQueue.Count == 0 || GameManager.IsLoading)
                 {
                     yield return null;
                     continue;
@@ -94,6 +95,8 @@ namespace Hedra.Engine.Player
             }
         }
 
+        public bool HasTitleMessages => _messageQueue.Any(M => M.Type == MessageType.Title);
+        
         public void ShowTitleMessage(string Message, float Seconds)
         {
             this.ShowTitleMessage(Message, Seconds, Color.FromArgb(255, 39, 39, 39));

@@ -23,17 +23,17 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override bool Place(HouseParameters Parameters, VillageCache Cache)
         {
-            var work = CreateGroundwork(Parameters.Position, Parameters.GetSize(Cache), BlockType.Grass);
-            work.NoTrees = true;
-            work.NoPlants = true;
-            return true;//this.PushGroundwork(work);
+            var work = CreateGroundwork(Parameters.Position, Parameters.GetSize(Cache), Parameters.Type);
+            work.Groundwork.NoTrees = true;
+            work.Groundwork.NoPlants = true;
+            return this.PushGroundwork(work);
         }
 
-        public override BuildingOutput Build(HouseParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
+        public override BuildingOutput Build(HouseParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            var output = base.Build(Parameters, Cache, Rng, Center);
+            var output = base.Build(Parameters, Design, Cache, Rng, Center);
             var transformation = BuildTransformation(Parameters).ClearTranslation();
-            AddDoors(Parameters, Parameters.Design.Doors, transformation, output);
+            AddDoors(Parameters, Cache, Parameters.Design.Doors, transformation, output);
             AddBeds(Parameters, Parameters.Design.Beds, transformation, output);
             return output;
         }

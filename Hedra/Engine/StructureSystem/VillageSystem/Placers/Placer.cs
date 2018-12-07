@@ -40,8 +40,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             return true;
         }
         
-        protected T SelectRandom<T>(T[] Templates)
+        protected T SelectRandom<T>(T[] Templates) where T : class
         {
+            if (Templates.Length == 0) return null;
             return Templates[Rng.Next(0, Templates.Length)];
         }
     }

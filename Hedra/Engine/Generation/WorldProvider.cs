@@ -70,7 +70,7 @@ namespace Hedra.Engine.Generation
         public Dictionary<Vector2, Chunk> SearcheableChunks { get; }
         public AreaHighlighter Highlighter { get; private set; }
         public ParticleSystem Particles { get; private set; }
-        public EnviromentGenerator EnviromentGenerator { get; private set; }
+        public EnvironmentGenerator EnvironmentGenerator { get; private set; }
         public IBiomePool BiomePool { get; private set; }
         public MobFactory MobFactory { get; private set; }
         public TreeGenerator TreeGenerator { get; private set; }
@@ -95,7 +95,7 @@ namespace Hedra.Engine.Generation
             TreeGenerator = new TreeGenerator();
             WorldBuilding = new WorldBuilding.WorldBuilding();
             StructureHandler = new StructureHandler();
-            EnviromentGenerator = new EnviromentGenerator();
+            EnvironmentGenerator = new EnvironmentGenerator();
             MobFactory = new MobFactory();
             Highlighter = new AreaHighlighter();
             Particles = new ParticleSystem

@@ -22,6 +22,7 @@ namespace Hedra.Engine.WorldBuilding
         public float MaxHeight { get; set; }
         public bool NoTrees { get; set; }
         public bool NoPlants { get; set; }
+        public float Hardness { get; set; } = 3.0f;
 
         public Plateau(Vector3 Position, float Radius)
         {
@@ -40,16 +41,18 @@ namespace Hedra.Engine.WorldBuilding
             return (this.Position.Xz - Point).LengthFast < this.Radius;
         }
 
-        public float Apply(Vector2 Point, float Height, float SmallFrequency = 0)
+        public float Apply(Vector2 Point, float Height, out float Final, float SmallFrequency = 0)
         {
-            var dist = (this.Position.Xz - Point).LengthSquared;
-            var final = Math.Max(1 - Math.Min(dist / (this.Radius * this.Radius), 1), 0);
-            var addonHeight = this.MaxHeight * Math.Max(final, 0f);
+            var dist = (this.Position.Xz - Point).LengthFast;
+            Final = Math.Min(1.0f, Math.Max(1 - Math.Min(dist / Radius, 1), 0) * Hardness);
+            var addonHeight = this.MaxHeight * Math.Max(Final, 0f);
 
             Height += addonHeight;
-            return Mathf.Lerp(Height - addonHeight,
+            return Mathf.Lerp(
+                Height - addonHeight,
                 Math.Min(this.MaxHeight + SmallFrequency, Height),
-                Math.Min(1.0f, final * 1.5f));
+                Final
+            );
         }
     }
 }

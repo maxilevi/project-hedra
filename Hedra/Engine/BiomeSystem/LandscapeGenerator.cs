@@ -115,7 +115,7 @@ namespace Hedra.Engine.BiomeSystem
                     var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
                     var height = Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out BlockType type);
                     this.HandleStructures(x, z, position, groundworks, plateaus, structs, heightCache, noise3D, biomeGen,
-                        hasPath, hasRiver, noiseScale, ref height, out var town, out var townClamped, out var makeDirt,
+                        hasPath, hasRiver, noiseScale, ref height, out var town, out var makeDirt,
                         out var pathClamped, out var river, out var path, out var riverBorders, out var blockGroundworksModifier,
                         out var blockGroundworks);
 
@@ -129,25 +129,23 @@ namespace Hedra.Engine.BiomeSystem
                             : type;
                         
                         this.GenerateBlock(Blocks, type, x, y, z, height, river, makeDirt, riverBorders,
-                            ref townClamped, rng, noise3D, noiseScale);
+                            rng, noise3D, noiseScale);
                                     
-                        this.HandleGroundworks(Blocks, x, y, z, path, PathDepth, pathClamped, town, townClamped,
-                            blockGroundworks, blockGroundworksModifier);
+                        this.HandleGroundworks(Blocks, x, y, z, path, PathDepth, pathClamped, town,
+                            blockGroundworks, ref height);
                     }
                 }
             }
         }
         
-        private void GenerateBlock(Block[][][] Blocks, BlockType type, int x, int y, int z, float height, float river,
-            bool makeDirt, float riverBorders, ref bool townClamped, Random rng, float[] noise3D, int noiseScale)
+        private void GenerateBlock(Block[][][] Blocks, BlockType Type, int x, int y, int z, float height, float river,
+            bool makeDirt, float riverBorders, Random rng, float[] noise3D, int noiseScale)
         {
             var currentBlock = Blocks[x][y][z];
             var noise = 0;//noise3D[y];
-    
-            if (noise != 0 && townClamped)
-                townClamped = false;
-    
-            currentBlock.Type = BlockType.Air;
+
+            var blockType = BlockType.Air;
+            //type = BlockType.Air;
     
             currentBlock.Density = new Half(1 - (y - height) + noise);
     
@@ -157,48 +155,44 @@ namespace Hedra.Engine.BiomeSystem
             if (currentBlock.Density > 0)
             {
     
-                currentBlock.Type = type;
+                blockType = Type;
     
                 if (height - y > 18.0f)
                 {
-                    currentBlock.Type = BlockType.Stone;
+                    blockType = BlockType.Stone;
                 }
     
                 if (y < 2)
-                    currentBlock.Type = BlockType.Seafloor;
-    
-                //if (noise != 0)
-                //    Block.Noise3D = true;
-    
+                    blockType = BlockType.Seafloor;
             }
 
-            if (currentBlock.Type == BlockType.Grass)
+            if (blockType == BlockType.Grass)
             {
-                if (makeDirt) currentBlock.Type = BlockType.Dirt;
+                if (makeDirt) blockType = BlockType.Dirt;
             }
 
             if (y < height + river)
             {
-                if (currentBlock.Type == BlockType.Air && river > 0)
+                if (blockType == BlockType.Air && river > 0)
                 {
-                    currentBlock.Type = BlockType.Water;
+                    blockType = BlockType.Water;
                     Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) (height + river));
                 }
                 else if (Mathf.Clamp(riverBorders * 100f, 0, RiverDepth) > 2 &&
-                         currentBlock.Type != BlockType.Air)
+                         blockType != BlockType.Air)
                 {
-                    currentBlock.Type = BlockType.Seafloor;
+                    blockType = BlockType.Seafloor;
                     for (var i = 0; i < y; i++) Blocks[x][i][z].Type = BlockType.Seafloor;
                 }
             }
     
-            if (y <= BiomePool.SeaLevel && currentBlock.Type == BlockType.Air && y >= 1 &&
+            if (y <= BiomePool.SeaLevel && blockType == BlockType.Air && y >= 1 &&
                 Blocks[x][y - 1][z].Type != BlockType.Seafloor && Blocks[x][y - 1][z].Type != BlockType.Air &&
                 Blocks[x][y - 1][z].Type != BlockType.Water)
             {
                 if (y < BiomePool.SeaLevel)
                 {
-                    currentBlock.Type = BlockType.Seafloor;
+                    blockType = BlockType.Seafloor;
                     for (var i = 0; i < y; i++)
                     {
                         Blocks[x][i][z].Type = BlockType.Seafloor;
@@ -209,25 +203,25 @@ namespace Hedra.Engine.BiomeSystem
             var isOcean = y > 0 && y <= BiomePool.SeaLevel &&
                           (Blocks[x][y - 1][z].Type == BlockType.Seafloor ||
                            Blocks[x][y - 1][z].Type == BlockType.Water) &&
-                          currentBlock.Type == BlockType.Air &&
+                          blockType == BlockType.Air &&
                           Blocks[x][y + 1][z].Type == BlockType.Air;
             if (isOcean)
             {
-                currentBlock.Type = BlockType.Water;
+                blockType = BlockType.Water;
                 Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) BiomePool.SeaLevel);
             }
-    
+
+            currentBlock.Type = blockType;
             Blocks[x][y][z] = currentBlock;
         }
 
         private void HandleStructures(int x, int z, Vector2 position, List<IGroundwork> groundworks, Plateau[] plateaus,
             CollidableStructure[] structs, Dictionary<Vector2, float[]> heightCache, float[] noise3D, RegionGeneration biomeGen,
-            float hasPath, float hasRiver, float noiseScale, ref float height, out bool town, out bool townClamped,
+            float hasPath, float hasRiver, float noiseScale, ref float height, out bool town,
             out bool makeDirt, out bool pathClamped, out float river, out float path, out float riverBorders,
             out float blockGroundworksModifier, out IGroundwork[] blockGroundworks)
         {
             town = false;
-            townClamped = false;
             CollidableStructure nearCollidableStructure = null;
             float townHeight = 0;
 
@@ -247,9 +241,6 @@ namespace Hedra.Engine.BiomeSystem
             var nearGiantTree = FindNearestGiantTree(position, structs);
             
             blockGroundworks = groundworks.Where(G => G.Affects(position)).ToArray();
-
-            if (townClamped && townHeight != height)
-                townClamped = false;
 
             pathClamped = false;
             path = hasPath * PathFormula(Chunk.BlockSize * x + Chunk.OffsetX, Chunk.BlockSize * z + Chunk.OffsetZ);
@@ -342,15 +333,7 @@ namespace Hedra.Engine.BiomeSystem
             for (var i = 0; i < plateaus.Length; i++)
             {
                 var point = new Vector2(OffsetX + X * Chunk.BlockSize, OffsetZ + Z * Chunk.BlockSize);
-                var radius = plateaus[i].Radius;
-                var dist = (plateaus[i].Position.Xz - point).LengthSquared;
-                var final = Math.Max(1 - Math.Min(dist / (radius * radius), 1), 0);
-                var addonHeight = plateaus[i].MaxHeight * Math.Max(final, 0f);
-
-                height += addonHeight;
-                height = Mathf.Lerp(height - addonHeight,
-                    Math.Min(plateaus[i].MaxHeight + smallFrequency, height),
-                    Math.Min(1.0f, final * 1.5f));
+                height = plateaus[i].Apply(point, height, out var final, smallFrequency);
                 
                 if (nearGiantTree == null)
                 {
@@ -366,7 +349,7 @@ namespace Hedra.Engine.BiomeSystem
                     0, blockGroundworksModifier);
                 path = Mathf.Clamp(Mathf.Lerp(0, path, 1 - Math.Min(1, final * 3f)), 0, path);
                 
-                if (final > 0.005f)
+                if (final > 0)
                 {
                     plateauLerp = final;
                 }
@@ -384,7 +367,7 @@ namespace Hedra.Engine.BiomeSystem
         }
         
         private void HandleGroundworks(Block[][][] Blocks, int X, int Y, int Z, float path, float pathDepth,
-            bool pathClamped, bool town, bool townClamped, IGroundwork[] BlockGroundworks, float GroundworksModifier)
+            bool pathClamped, bool town, IGroundwork[] BlockGroundworks, ref float Height)
         {
             if (BlockGroundworks.Length > 0 || path == pathDepth || town)
             {
@@ -404,7 +387,11 @@ namespace Hedra.Engine.BiomeSystem
                         }
                     }
 
-                    if (town && townClamped)
+                    if (Blocks[X][Y][Z].Type == BlockType.FarmDirt)
+                    {
+                        if ((X + OffsetX) % 2 == 0) Blocks[X][Y][Z].Density += new Half(.25f);
+                    }
+                    if (town)
                     {
                         if (Blocks[X][Y][Z].Type == BlockType.Stone)
                         {
@@ -543,7 +530,7 @@ namespace Hedra.Engine.BiomeSystem
                 if (designs[i].ShouldPlace(Position, this.Chunk))
                 {
                     var design = designs[i].GetDesign(Position, this.Chunk);
-                    World.EnviromentGenerator.GeneratePlant(Position, Biome, design);
+                    World.EnvironmentGenerator.GeneratePlant(Position, Biome, design);
                 }
             }
         }

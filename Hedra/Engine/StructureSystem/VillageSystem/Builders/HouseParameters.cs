@@ -1,4 +1,5 @@
 using System;
+using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using OpenTK;
 
@@ -11,6 +12,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public Vector3 Rotation { get; set; }
         public Random Rng { get; set; }
         public DesignTemplate WellTemplate { get; set; }
+        public BlockType Type { get; set; } = BlockType.Grass;
 
         DesignTemplate IBuildingParameters.Design
         {

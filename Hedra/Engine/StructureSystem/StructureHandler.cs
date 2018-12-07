@@ -27,6 +27,7 @@ namespace Hedra.Engine.StructureSystem
     /// </summary>
     public class StructureHandler
     {
+        private static RandomDistribution _distribution;
         private readonly object _lock = new object();
         public Vector3 MerchantPosition { get; set; }
         public bool MerchantSpawned { get; set; }
@@ -37,6 +38,11 @@ namespace Hedra.Engine.StructureSystem
         private bool _dirtyStructuresItems;
         private bool _dirtyStructures;
 
+        static StructureHandler()
+        {
+            _distribution = new RandomDistribution(true);
+        }
+        
         public StructureHandler()
         {
             _itemWatchers = new List<StructureWatcher>();
@@ -72,7 +78,6 @@ namespace Hedra.Engine.StructureSystem
             if (!World.IsChunkOffset(ChunkOffset))
                 throw new ArgumentException("Provided parameter does not represent a valid offset");
 
-            var distribution = new RandomDistribution(true);
             var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
             var region = underChunk != null
                 ? underChunk.Biome
@@ -81,7 +86,7 @@ namespace Hedra.Engine.StructureSystem
             for (var i = 0; i < designs.Length; i++)
             {
                 if (designs[i].MeetsRequirements(ChunkOffset))
-                    designs[i].CheckFor(ChunkOffset, region, distribution);
+                    designs[i].CheckFor(ChunkOffset, region, _distribution);
             }
         }
 

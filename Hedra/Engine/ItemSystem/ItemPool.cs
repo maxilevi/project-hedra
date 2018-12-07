@@ -70,7 +70,7 @@ namespace Hedra.Engine.ItemSystem
                 && Template.EquipmentType == Settings.EquipmentType).ToArray();
             }
             templates = newTemplates.Where(Template => Array.IndexOf(BlacklistedEquipment, Template.EquipmentType) == -1).ToArray();
-            if (templates.Length == 0) return null;
+            if (templates.Length == 0) throw new ArgumentOutOfRangeException($"No valid item template found.");
             
             var item = Item.FromTemplate(templates[rng.Next(0, templates.Length)]);
             item.SetAttribute(CommonAttributes.Seed, Settings.Seed, true);

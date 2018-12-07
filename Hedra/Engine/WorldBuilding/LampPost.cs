@@ -55,7 +55,7 @@ namespace Hedra.Engine.WorldBuilding
         
         public override void Dispose()
         {
-            Disposed = true;
+            base.Dispose();
             if(Light != null)
             {
                 Light.Locked = false;

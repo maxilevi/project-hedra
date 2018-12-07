@@ -182,6 +182,7 @@ namespace Hedra.Engine.EntitySystem
         Gorilla,
         Beetle,
         Troll,
+        Cow,
         TotalCount,
         None,
         Unknown

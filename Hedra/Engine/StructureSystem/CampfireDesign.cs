@@ -33,7 +33,7 @@ namespace Hedra.Engine.StructureSystem
 
             var rotation = rng.NextFloat() * 360.0f;
             var transMatrix = Matrix4.CreateScale(3 + rng.NextFloat() * 1.5f);
-            var rotMat = Matrix4.CreateRotationY(rotation);
+            var rotMat = Matrix4.CreateRotationY(rotation * Mathf.Radian);
             transMatrix *= rotMat;
             transMatrix *= Matrix4.CreateTranslation(position);
             model.Transform(transMatrix);

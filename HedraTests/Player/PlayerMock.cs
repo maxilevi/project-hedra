@@ -4,6 +4,7 @@ using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
@@ -63,6 +64,26 @@ namespace HedraTests.Player
         }
 
         public void SetWeapon(Weapon Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetHelmet(HelmetPiece Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetChestplate(ChestPiece Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPants(PantsPiece Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetBoots(BootsPiece Item)
         {
             throw new NotImplementedException();
         }

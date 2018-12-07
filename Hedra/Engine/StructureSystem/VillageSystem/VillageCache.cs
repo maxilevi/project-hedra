@@ -43,11 +43,25 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             return _sizeCache[Path];
         }
+
+        public VertexData GetOrCreate(string Path, Vector3 Scale)
+        {
+            if (_modelCache.ContainsKey(Path)) return GrabModel(Path);
+            _modelCache.Add(Path, AssetManager.PLYLoader(Path, Vector3.One * Scale).AsCompressed());
+            return GetOrCreate(Path, Scale);
+        }
+        
+        public List<CollisionShape> GetOrCreateShapes(string Path, Vector3 Scale)
+        {
+            if (_colliderCache.ContainsKey(Path)) return GrabShapes(Path);
+            _colliderCache.Add(Path, AssetManager.LoadCollisionShapes(Path, Vector3.One * Scale));
+            return GetOrCreateShapes(Path, Scale);
+        }
         
         public static VillageCache FromTemplate(VillageTemplate Template)
         {
             var cache = new VillageCache();
-            var designs = Template.Designs;
+            var designs = Template.CacheableDesigns;
             for (var i = 0; i < designs.Length; i++)
             {
                 for (var j = 0; j < designs[i].Length; j++)

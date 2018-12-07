@@ -36,19 +36,18 @@ namespace Hedra.Engine.PlantSystem
                 }
             }
 
-            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat());
+            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
             Matrix4 transMatrix = Matrix4.CreateScale(1.75f + Rng.NextFloat() * .75f);
             transMatrix *= rotationMat4;
             transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
+        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
             Data.Extradata.AddRange(Data.GenerateWindValues());
 
-            var underchunk = World.GetChunkAt(Position);
-            Data.Paint(underchunk.Biome.Colors.GrassColor * .8f);
+            Data.Paint(Region.Colors.GrassColor * .8f);
             Data.GraduateColor(Vector3.UnitY);
 
             return Data;

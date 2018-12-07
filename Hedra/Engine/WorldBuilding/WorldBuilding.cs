@@ -29,7 +29,7 @@ namespace Hedra.Engine.WorldBuilding
     public class WorldBuilding : IWorldBuilding
     {
         private readonly List<IGroundwork> _groundwork;
-        private readonly List<Plateau> _plateaus;
+        private List<Plateau> _plateaus;
         private readonly object _plateauLock = new object();
         private readonly object _groundworkLock = new object();
 
@@ -116,8 +116,11 @@ namespace Hedra.Engine.WorldBuilding
         public string GenerateName()
         {
             var rng = new Random(World.Seed);
-            var types = new string[]{"Islands","Lands","Mountains"};
-            return types[rng.Next(0,types.Length)]+" of "+NameGenerator.Generate(World.Seed);
+            var types = new []
+            {
+                "Lands","Mountains", "Territory"
+            };
+            return $"{types[rng.Next(0,types.Length)]} of {NameGenerator.Generate(World.Seed)}";
         }
 
         private void ApplySeasonHats(Humanoid Human, string Type)
@@ -177,38 +180,24 @@ namespace Hedra.Engine.WorldBuilding
             {
                 lock (_plateauLock)
                 {
+                    ApplyMultiple(Mount);
                     _plateaus.Add(Mount);
                 }
             }
             finally
             {
-                this.SortPlateaus();
+                //lock (_plateauLock)
+                //    _plateaus = _plateaus.OrderByDescending(P => P.MaxHeight).ToList();
             }
         }
 
-        private void SortPlateaus()
+        private void ApplyMultiple(Plateau Mount)
         {
-            // Plateaus should be clamped to the lowest one
-            /*lock (_plateauLock)
+            var plateaus = _plateaus.OrderByDescending(P => P.MaxHeight).ToList();
+            for (var i = 0; i < plateaus.Count; i++)
             {
-                var doneSet = new HashSet<Plateau>();
-                for (var i = 0; i < _plateaus.Count; i++)
-                {
-                    var intersecting = new List<Plateau>();
-                    for (var j = 0; j < _plateaus.Count; j++)
-                    {
-                        if(_plateaus[j] == _plateaus[i]) continue;
-                        if(!doneSet.Contains(_plateaus[j]) && (_plateaus[j].Position - _plateaus[i].Position).LengthFast < _plateaus[i].Radius + _plateaus[j].Radius)
-                            intersecting.Add(_plateaus[j]);
-                    }
-                    var lowest = intersecting.OrderByDescending(P => P.Radius).ToArray();
-                    for (var j = 0; j < intersecting.Count; j++)
-                    {
-                       // _plateaus[j].MaxHeight = lowest[0].MaxHeight;
-                        doneSet.Add(_plateaus[j]);
-                    }
-                }
-            }*/
+                Mount.MaxHeight = plateaus[i].Apply(Mount.Position.Xz, Mount.MaxHeight, out _);
+            }
         }
 
         private void AddGroundwork(IGroundwork Work)
@@ -244,7 +233,7 @@ namespace Hedra.Engine.WorldBuilding
             if (Structure.Mountain != null)
                 PlateauDo(Structure.Mountain);
             
-            var plateaus = Structure.Plateaus;
+            var plateaus = Structure.Plateaus.OrderByDescending(P => P.MaxHeight).ToArray();
             for (var i = 0; i < plateaus.Length; i++)
                 PlateauDo(plateaus[i]);
             

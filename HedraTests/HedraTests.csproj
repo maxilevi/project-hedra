@@ -161,6 +161,7 @@
     <Compile Include="WorldBuilding\InteractableStructureTest.cs" />
     <Compile Include="WorldBuilding\ObeliskTest.cs" />
     <Compile Include="Generation\WorldTest.cs" />
+    <Compile Include="WorldBuilding\PlateauTest.cs" />
     <Compile Include="WorldSpawnMock.cs" />
   </ItemGroup>
   <ItemGroup>

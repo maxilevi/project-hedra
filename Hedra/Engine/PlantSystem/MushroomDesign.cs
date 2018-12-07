@@ -43,14 +43,14 @@ namespace Hedra.Engine.PlantSystem
                 }
             }
 
-            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat());
+            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat()* Mathf.Radian);
             Matrix4 transMatrix = Matrix4.CreateScale(1.75f + Rng.NextFloat() * .75f);
             transMatrix *= rotationMat4;
             transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
+        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
             Vector4 stemColor = Utils.VariateColor(Colors.MushroomStemColor(Rng), 15, Rng);
             Vector4 headColor = Utils.VariateColor(Colors.MushroomHeadColor(Rng), 15, Rng);

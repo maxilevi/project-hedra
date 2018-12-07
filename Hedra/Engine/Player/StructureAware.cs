@@ -19,7 +19,11 @@ namespace Hedra.Engine.Player
         public StructureAware(IPlayer Player)
         {
             _player = Player;
-            _enterTimer = new Timer(12f);
+            _enterTimer = new Timer(12f)
+            {
+                AutoReset = false
+            };
+            _enterTimer.MakeReady();
             NearCollisions = new ICollidable[0];
         }
         
@@ -51,7 +55,7 @@ namespace Hedra.Engine.Player
                         SoundtrackManager.PlayTrack(song, true);
                         _wasPlayingCustom = true;
                         if (_enterTimer.Ready)
-                            structure.Design.OnEnter(_player);
+                           structure.Design.OnEnter(_player);
                     }
                     none = false;
                 }

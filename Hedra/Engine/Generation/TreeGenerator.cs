@@ -97,7 +97,7 @@ namespace Hedra.Engine.Generation
             var model = originalModel.Clone();
 
             var transMatrix = Matrix4.CreateScale(new Vector3(scale, scale, scale) * 1.5f );
-            transMatrix *=  Matrix4.CreateRotationY( rng.NextFloat() * 360f);
+            transMatrix *=  Matrix4.CreateRotationY( rng.NextFloat() * 360f * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation( Placement.Position );
 
             var windRng = Utils.Rng.NextFloat(); 

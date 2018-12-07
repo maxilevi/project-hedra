@@ -17,7 +17,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
     {
         protected override bool SingleUse => false;
         public override string Message => Translations.Get(!_opened ? "open_door" : "close_door");
-        public override int InteractDistance => 8;
+        public override int InteractDistance => 12;
         private bool _isMoving;
         private bool _opened;
         private Vector3 _targetRotation;

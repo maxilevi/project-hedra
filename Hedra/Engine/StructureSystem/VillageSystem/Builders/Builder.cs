@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
@@ -40,18 +43,18 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         }
         
         /* Called via reflection */
-        public virtual BuildingOutput Build(T Parameters, VillageCache Cache, Random Rng, Vector3 Center)
+        public virtual BuildingOutput Build(T Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
         {
             var transformationMatrix = BuildTransformation(Parameters);
-            var shapes = Cache.GrabShapes(Parameters.Design.Path);
+            var shapes = Cache.GrabShapes(Design.Path);
             shapes.ForEach(shape => shape.Transform(transformationMatrix));
             return new BuildingOutput
             {
-                Models = new[] { Cache.GrabModel(Parameters.Design.Path) },
-                LodModels = Parameters.Design.LodPath != null ? new[] { Cache.GrabModel(Parameters.Design.LodPath) } : null,
+                Models = new[] { Cache.GrabModel(Design.Path) },
+                LodModels = Design.LodPath != null ? new[] { Cache.GrabModel(Design.LodPath) } : null,
                 TransformationMatrices = new[] { transformationMatrix },
                 Shapes = shapes,
-                GraduateColors = GraduateColor
+                GraduateColors = GraduateColor,
             };
         }
         
@@ -66,12 +69,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
         }
 
-        protected void AddDoors(T Parameters, DoorTemplate[] Doors, Matrix4 Transformation, BuildingOutput Output)
+        protected void AddDoors(T Parameters, VillageCache Cache, DoorTemplate[] Doors, Matrix4 Transformation, BuildingOutput Output)
         {
             for (var i = 0; i < Doors.Length; ++i)
             {
                 var doorTemplate = Doors[i];
-                var vertexData = AssetManager.PLYLoader(doorTemplate.Path, Vector3.One * Parameters.Design.Scale);
+                var vertexData = Cache.GetOrCreate(doorTemplate.Path, Vector3.One * Parameters.Design.Scale);
                 var rotationPoint = Vector3.TransformPosition(Door.GetRotationPointFromMesh(vertexData, doorTemplate.Inverted), Transformation);
                 vertexData.Center();
                 vertexData.Transform(Transformation);
@@ -97,21 +100,23 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         /// Called as a last step to setup the remaining objects e.g. merchants, lights, etc
         /// </summary>
         /// <param name="Parameters">The placement parameters</param>
-        public virtual void Polish(T Parameters)
+        public virtual void Polish(T Parameters, Random Rng)
         {
             
         }
 
-        protected void SpawnHumanoid(HumanType Type, Vector3 Position)
+        protected IHumanoid SpawnHumanoid(HumanType Type, Vector3 Position)
         {
             var human = World.WorldBuilding.SpawnHumanoid(Type, Position);
             VillageObject.AddHumanoid(human);
+            return human;
         }
 
-        protected void SpawnVillager(Vector3 Position, bool Move)
+        protected IHumanoid SpawnVillager(Vector3 Position, bool Move)
         {
             var human = World.WorldBuilding.SpawnVillager(Position, Move);
             VillageObject.AddHumanoid(human);
+            return human;
         }
 
         protected float ModelRadius(T Parameters, VillageCache Cache)
@@ -119,9 +124,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return Cache.GrabSize(Parameters.Design.Path).Xz.LengthFast;
         }
 
-        protected IGroundwork CreateGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
+        protected GroundworkItem CreateGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
         {
-            return new RoundedGroundwork(Position, Radius, Type);
+            return new GroundworkItem
+            {
+                Plateau = new Plateau(Position, Radius * 1.5f),
+                Groundwork = new RoundedGroundwork(Position, Radius, Type)
+            };
         }
         
         protected bool PlaceGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
@@ -129,23 +138,24 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return this.PushGroundwork(this.CreateGroundwork(Position, Radius, Type));
         }
         
-        protected bool PushGroundwork(IGroundwork Item)
+        protected bool PushGroundwork(GroundworkItem Item)
         {
-            if (Item != null)
+            //if (World.WorldBuilding.CanAddPlateau(Item.Plateau) && Structure.CanAddPlateau(Item.Plateau))
             {
-                Structure.AddGroundwork(Item);
+                Structure.AddPlateau(Item.Plateau);
+                if (Item.Groundwork != null)
+                {
+                    Structure.AddGroundwork(Item.Groundwork);
+                }
+                return true;
             }
-            return true;
+            //return false;
         }
         
-        protected bool IntersectsWithAnyPath(Vector2 Point, float Radius)
+        public class GroundworkItem
         {
-            var paths = World.WorldBuilding.Groundworks.Where(G => G.IsPath).ToArray();
-            for (var i = 0; i < paths.Length; i++)
-            {
-                if (paths[i].Affects(Point)) return true;
-            }
-            return false;
-        }    
+            public Plateau Plateau { get; set; }
+            public IGroundwork Groundwork { get; set; }
+        }
     }
 }

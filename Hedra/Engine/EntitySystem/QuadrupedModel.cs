@@ -10,12 +10,12 @@
 using System;
 using System.Linq;
 using Hedra.Engine.ComplexMath;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Player;
 using OpenTK;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
@@ -245,7 +245,19 @@ namespace Hedra.Engine.EntitySystem
                 Model.Update();
                 if (HasRider) TargetRotation = Rider.Model.TargetRotation;
                 if (HasRider) Position = Rider.Position;
-                _targetTerrainOrientation = AlignWithTerrain ? new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(this.Position))).ExtractRotation() : Quaternion.Identity;
+                _targetTerrainOrientation = AlignWithTerrain
+                    ? new Matrix3(
+                        Mathf.RotationAlign(
+                            Vector3.UnitY,
+                            (
+                                Physics.NormalAtPosition(this.Position) + 
+                                Physics.NormalAtPosition(this.Position + new Vector3(Chunk.BlockSize, 0, 0)) +
+                                Physics.NormalAtPosition(this.Position + new Vector3(0, 0, Chunk.BlockSize)) +
+                                Physics.NormalAtPosition(this.Position + new Vector3(Chunk.BlockSize, 0, Chunk.BlockSize))
+                            ) * .25f
+                        )
+                    ).ExtractRotation() 
+                    : Quaternion.Identity;
                 _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependantDeltaTime * 8f);
                 Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
                 _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependantDeltaTime * 14f);

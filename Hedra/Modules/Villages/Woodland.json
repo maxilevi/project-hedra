@@ -9,20 +9,21 @@
     ]
   },
   "Farm" : {
-    "Designs" : [
+    "Designs" : [],
+    "PropDesigns" :
+    [
       {
-        "Path": "Assets/Env/Village/Farm0.ply",
         "Scale": 8.0,
-        "Plants" : [
-          {
-            "Type": null,
-            "Position": {
-              "X": 0.0,
-              "Y": 0.0,
-              "Z": 0.0
-            }
-          }
-        ]
+        "Path": "Assets/Env/Village/Farm0_Prop0.ply",
+        "Chance": 10,
+        "HasLivestock": true
+      },
+      {
+        "Scale": 8.0,
+        "Path": "Assets/Env/Village/Farm0_Prop1.ply",
+        "Chance": 90,
+        "HasWindmill": true,
+        "WindmillChance": 25
       }
     ]
   },
@@ -39,7 +40,7 @@
       {
         "Path" : "Assets/Env/Village/Blacksmith0.ply",
         "LodPath": "Assets/Env/Village/Blacksmith0-Lod.ply",
-        "Scale" : 2.5,
+        "Scale" : 2.0,
         "Doors" : [
           {
            "Path":  "Assets/Env/Village/Blacksmith0_Door0.ply",
@@ -62,7 +63,13 @@
     "Designs" : [
       {
         "Path" : "Assets/Env/Village/Windmill0.ply",
-        "Scale" : 5.0
+        "BladesPath": "Assets/Env/Village/Windmill0_Blades.ply",
+        "BladesPosition" : {
+          "X" :  0.0,
+          "Y" :  4.54216,
+          "Z" : -0.50052
+        },
+        "Scale" : 8.0
       }
     ]
   },

@@ -21,7 +21,10 @@ namespace Hedra.Engine.WorldBuilding
 
         public override bool Affects(Vector2 Sample)
         {
-            var length = (End - Origin).LengthFast;
+            var lengthSquared = (End - Origin).LengthSquared;
+            if ((Sample - Origin).LengthSquared > lengthSquared && (Sample - End).LengthSquared > lengthSquared)
+                return false;
+            var length = Mathf.FastSqrt(lengthSquared);
             var dir = (End - Origin) * (1f / length);
             var point = (Sample - Origin).LengthFast;           
             return point < length && (point * dir + Origin - Sample).LengthFast < Width;

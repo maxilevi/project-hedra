@@ -1,0 +1,12 @@
+{
+  "Name": "FarmerHat",
+  "DisplayName": "Farmer Hat",
+  "EquipmentType": "Helmet",
+  "Tier": "Common",
+  "Description": "I hate wheat.",
+  "Attributes": [],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/FarmerHat.dae"
+  }
+}

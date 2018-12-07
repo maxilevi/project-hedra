@@ -16,12 +16,12 @@ namespace Hedra.Engine.PlantSystem
         {
             var cloudPosition = new Vector3(Position.X, 800f + Rng.NextFloat() * 32f - 16f, Position.Z);
             Matrix4 transMatrix = Matrix4.CreateScale(Rng.NextFloat() * 6.0f + 40f);
-            transMatrix *= Matrix4.CreateRotationY(360f * Rng.NextFloat());
+            transMatrix *= Matrix4.CreateRotationY(360f * Rng.NextFloat() * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation(cloudPosition);
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
+        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
             return Data;
         }

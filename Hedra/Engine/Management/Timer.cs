@@ -37,6 +37,11 @@ namespace Hedra.Engine.Management
             return true;
         }
 
+        public void MakeReady()
+        {
+            _timerCount = AlertTime;
+        }
+
         public bool Ready => _timerCount >= AlertTime;
 
     }

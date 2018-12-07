@@ -158,8 +158,11 @@
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\FarmDesignTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\WindmillDesignTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\WindmillBlades.cs" />
     <Compile Include="Engine\WorldBuilding\BaseGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredGroundwork.cs" />
+    <Compile Include="Engine\WorldBuilding\SquaredPlateau.cs" />
     <Compile Include="HedraContent.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeColors.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeEnviromentDesign.cs" />
@@ -576,7 +579,7 @@
     <Compile Include="Engine\Extensions.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkComparer.cs" />
     <Compile Include="Engine\Generation\HeightmapData.cs" />
-    <Compile Include="Engine\Generation\EnviromentGenerator.cs" />
+    <Compile Include="Engine\Generation\EnvironmentGenerator.cs" />
     <Compile Include="Engine\Generation\Perlin.cs" />
     <Compile Include="Engine\Generation\Simplex.cs" />
     <Compile Include="Engine\Generation\CollidableStructure.cs" />
@@ -1093,6 +1096,10 @@
       <Link>Assets\Items\Helmets\ChristmasHat.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Helmet\FarmerHat.dae">
+      <Link>Assets\Items\Helmets\FarmerHat.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Katars\CommonBronzeKatar.ply">
       <Link>Assets\Items\Katars\CommonBronzeKatar.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1547,6 +1554,30 @@
     </None>
     <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Door0.ply">
       <Link>Assets\Env\Village\Blacksmith0_Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Farm0_Prop0.ply">
+      <Link>Assets\Env\Village\Farm0_Prop0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Farm0_Prop1.ply">
+      <Link>Assets\Env\Village\Farm0_Prop1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Plants\Pumpkin0.ply">
+      <Link>Assets\Env\Plants\Pumpkin0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Plants\Pumpkin1.ply">
+      <Link>Assets\Env\Plants\Pumpkin1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Windmill0.ply">
+      <Link>Assets\Env\Village\Windmill0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Windmill0_Blades.ply">
+      <Link>Assets\Env\Village\Windmill0_Blades.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0-Lod.ply">
@@ -3756,50 +3787,6 @@
       <Link>Assets\Env\Colliders\DesertRock0_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider0.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider1.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider10.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider10.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider2.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider3.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider3.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider4.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider4.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider5.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider5.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider6.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider6.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider7.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider7.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider8.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider8.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Fence0_Collider9.ply">
-      <Link>Assets\Env\Colliders\Fence0_Collider9.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Colliders\Fort1_Collider0.ply">
       <Link>Assets\Env\Colliders\Fort1_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -5105,30 +5092,6 @@
       <Link>Assets\Env\Colliders\Temple0_Collider9.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Windmill0_Collider0.ply">
-      <Link>Assets\Env\Colliders\Windmill0_Collider0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Windmill0_Collider1.ply">
-      <Link>Assets\Env\Colliders\Windmill0_Collider1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Windmill0_Collider2.ply">
-      <Link>Assets\Env\Colliders\Windmill0_Collider2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Windmill0_Collider3.ply">
-      <Link>Assets\Env\Colliders\Windmill0_Collider3.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Windmill0_Collider4.ply">
-      <Link>Assets\Env\Colliders\Windmill0_Collider4.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Windmill0_Collider5.ply">
-      <Link>Assets\Env\Colliders\Windmill0_Collider5.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\CommonBronzeAxe.ply">
       <Link>Assets\Items\Axes\CommonBronzeAxe.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -5215,18 +5178,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\ExclamationMark.ply">
       <Link>Assets\Env\ExclamationMark.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Farm0.ply">
-      <Link>Assets\Env\Village\Farm0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Farm1.ply">
-      <Link>Assets\Env\Village\Farm1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Fence0.ply">
-      <Link>Assets\Env\Village\Fence0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Fern.ply">
@@ -5623,14 +5574,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Wheat.ply">
       <Link>Assets\Env\Wheat.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Windmill0.ply">
-      <Link>Assets\Env\Village\Windmill0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Windmill0_Blades.ply">
-      <Link>Assets\Env\Village\Windmill0_Blades.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.config" />
@@ -6623,6 +6566,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Helmets\ChristmasHat.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Helmets\FarmerHat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\Boat.json">

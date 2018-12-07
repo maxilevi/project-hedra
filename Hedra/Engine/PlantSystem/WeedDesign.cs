@@ -1,4 +1,5 @@
 using System;
+using System.Drawing.Drawing2D;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
@@ -41,16 +42,16 @@ namespace Hedra.Engine.PlantSystem
                 if (difference > 6)
                     return Matrix4.Identity;
             }
-            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat());
+            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
             Matrix4 transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f);
             transMatrix *= rotationMat4;
             transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
         }
         
-        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
+        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
-            ApplyPaint(Position, Data, Region, Rng);
+            ApplyPaint(Data, Region, Rng);
             
             var highest = Model.SupportPoint(Vector3.UnitY);
             var lowest = Model.SupportPoint(-Vector3.UnitY);
@@ -64,6 +65,6 @@ namespace Hedra.Engine.PlantSystem
             return Data;
         }
 
-        protected abstract void ApplyPaint(Vector3 Position, VertexData Data, Region Region, Random Rng);
+        protected abstract void ApplyPaint(VertexData Data, Region Region, Random Rng);
     }
 }

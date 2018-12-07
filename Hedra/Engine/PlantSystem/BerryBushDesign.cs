@@ -44,19 +44,18 @@ namespace Hedra.Engine.PlantSystem
                 }
             }
 
-            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat());
+            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
             Matrix4 transMatrix = Matrix4.CreateScale(1.75f + Rng.NextFloat() * .75f);
             transMatrix *= rotationMat4;
             transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
+        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
             Data = Data + CacheManager.GetModel(CacheItem.Berries).Clone();
 
-            var underChunk = World.GetChunkAt(Position);
-            Vector4 newColor = Utils.VariateColor(underChunk.Biome.Colors.GrassColor, 15, Rng);
+            Vector4 newColor = Utils.VariateColor(Region.Colors.GrassColor, 15, Rng);
             Vector4 berriesColor = Utils.VariateColor(Colors.BerryColor(Rng), 15, Rng);
 
             ///maybe this is causing problems

@@ -27,7 +27,7 @@ namespace Hedra.Engine.Generation
 
         ParticleSystem Particles { get; }
 
-        EnviromentGenerator EnviromentGenerator { get; }
+        EnvironmentGenerator EnvironmentGenerator { get; }
 
         IBiomePool BiomePool { get; }
 

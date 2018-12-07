@@ -189,8 +189,8 @@ namespace Hedra.Engine.Game
             Player.CanInteract = true;
             Player.QuestLog.Show = true;
             GameManager.Player.PlaySpawningAnimation = true;
-            GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);
-            
+            if (!GameManager.Player.MessageDispatcher.HasTitleMessages)
+                GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);           
         }
 
         public void Unload()

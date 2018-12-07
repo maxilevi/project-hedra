@@ -33,7 +33,7 @@ namespace Hedra.Engine.StructureSystem
             var model = originalModel.ShallowClone();
 
             Matrix4 scaleMatrix = Matrix4.CreateScale(Vector3.One * 100f);
-            Matrix4 transMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360);
+            Matrix4 transMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation(position + Vector3.UnitY * 7f);
             model.Transform(scaleMatrix * transMatrix);
 

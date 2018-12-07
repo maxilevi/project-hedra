@@ -26,25 +26,24 @@ namespace Hedra.Engine.Generation
     /// <summary>
     /// Description of HerbGenerator.
     /// </summary>
-    public class EnviromentGenerator
+    public class EnvironmentGenerator
     {
         
         public void GeneratePlant(Vector3 Position, Region BiomeRegion, PlantDesign Design)
         {
-            Chunk underChunk = World.GetChunkAt(Position);
+            var underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return;
 
-            Random rng = underChunk.Landscape.RandomGen;
-            Matrix4 transMatrix = Design.TransMatrix(Position, rng);
+            var rng = underChunk.Landscape.RandomGen;
+            var transMatrix = Design.TransMatrix(Position, rng);
 
-            if(transMatrix == Matrix4.Identity) return;
+            if (transMatrix == Matrix4.Identity) return;
 
-            VertexData modelData = Design.Model;
-            VertexData modelDataClone = modelData.ShallowClone();
+            var modelData = Design.Model;
+            var modelDataClone = modelData.ShallowClone();
 
-            Design.Paint(transMatrix.ExtractTranslation(), modelDataClone, BiomeRegion, rng);
-            Design.AddShapes(underChunk, transMatrix);
-
+            Design.Paint(modelDataClone, BiomeRegion, rng);
+            Design.AddShapes(underChunk, transMatrix);         
             if (!Design.HasCustomPlacement)
             {
                 var data = new InstanceData

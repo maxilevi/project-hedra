@@ -38,7 +38,7 @@ namespace Hedra.Engine.Generation
         public static Dictionary<Vector2, Chunk> SearcheableChunks => Provider.SearcheableChunks;
         public static AreaHighlighter Highlighter => Provider.Highlighter;
         public static ParticleSystem Particles => Provider.Particles;
-        public static EnviromentGenerator EnviromentGenerator => Provider.EnviromentGenerator;
+        public static EnvironmentGenerator EnvironmentGenerator => Provider.EnvironmentGenerator;
         public static IBiomePool BiomePool => Provider.BiomePool;
         public static MobFactory MobFactory => Provider.MobFactory;
         public static TreeGenerator TreeGenerator => Provider.TreeGenerator;

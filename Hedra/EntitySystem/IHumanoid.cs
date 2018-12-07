@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Player;
 using Hedra.WeaponSystem;
 
@@ -69,5 +70,9 @@ namespace Hedra.EntitySystem
         Weapon LeftWeapon { get; }
         void Roll(RollType Type);
         void SetWeapon(Weapon Item);
+        void SetHelmet(HelmetPiece Item);
+        void SetChestplate(ChestPiece Item);
+        void SetPants(PantsPiece Item);
+        void SetBoots(BootsPiece Item);
     }
 }

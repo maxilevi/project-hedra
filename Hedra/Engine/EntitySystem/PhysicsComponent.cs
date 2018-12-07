@@ -70,6 +70,7 @@ namespace Hedra.Engine.EntitySystem
         private bool _isOverTerrain;
         private float _deltaTime;
         private Box _physicsBox;
+        private Vector3 _lastPosition;
 
         public Vector3 TargetPosition
         {
@@ -79,86 +80,86 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Update()
         {
-            if (UsePhysics)
+            _deltaTime = this.Timestep;
+            _speed = Mathf.Lerp(_speed, Parent.IsAttacking ? AttackingSpeed : NormalSpeed, _deltaTime * 2f);
+            if (!UsePhysics) return;
+            if (Parent.IsGrounded && Parent.BlockPosition == _lastPosition 
+                                  && TargetPosition.Y >= Physics.HeightAtPosition(Parent.BlockPosition)) return;
+            _lastPosition = Parent.BlockPosition;
+            if (CollidesWithStructures)
             {
-                _deltaTime = this.Timestep;
+                _underChunk = World.GetChunkAt(Parent.Position);
+                _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.Width, 0, 0));
+                _underChunkL = World.GetChunkAt(Parent.Position - new Vector3(Chunk.Width, 0, 0));
+                _underChunkF = World.GetChunkAt(Parent.Position + new Vector3(0, 0, Chunk.Width));
+                _underChunkB = World.GetChunkAt(Parent.Position - new Vector3(0, 0, Chunk.Width));
 
-                if (CollidesWithStructures)
+                lock (_lock)
                 {
-                    _underChunk = World.GetChunkAt(Parent.Position);
-                    _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.Width, 0, 0));
-                    _underChunkL = World.GetChunkAt(Parent.Position - new Vector3(Chunk.Width, 0, 0));
-                    _underChunkF = World.GetChunkAt(Parent.Position + new Vector3(0, 0, Chunk.Width));
-                    _underChunkB = World.GetChunkAt(Parent.Position - new Vector3(0, 0, Chunk.Width));
-
-                    lock (_lock)
+                    _collisions.Clear();
+                    _collisions.AddRange(World.GlobalColliders);
+                    try
                     {
-                        _collisions.Clear();
-                        _collisions.AddRange(World.GlobalColliders);
-                        try
-                        {
-                            if (_underChunk != null && _underChunk.Initialized)
-                                _collisions.AddRange(_underChunk.CollisionShapes);
+                        if (_underChunk != null && _underChunk.Initialized)
+                            _collisions.AddRange(_underChunk.CollisionShapes);
 
-                            var player = LocalPlayer.Instance;
+                        var player = LocalPlayer.Instance;
 
-                            if (player?.NearCollisions != null)
-                                _collisions.AddRange(player.NearCollisions);
+                        if (player?.NearCollisions != null)
+                            _collisions.AddRange(player.NearCollisions);
 
-                            if (_underChunkL != null && _underChunkL.Initialized)
-                                _collisions.AddRange(_underChunkL.CollisionShapes);
-                            if (_underChunkR != null && _underChunkR.Initialized)
-                                _collisions.AddRange(_underChunkR.CollisionShapes);
-                            if (_underChunkF != null && _underChunkF.Initialized)
-                                _collisions.AddRange(_underChunkF.CollisionShapes);
-                            if (_underChunkB != null && _underChunkB.Initialized)
-                                _collisions.AddRange(_underChunkB.CollisionShapes);
-
-                        }
-                        catch (Exception e)
-                        {
-                            Log.WriteLine("Catched a sync error." + Environment.NewLine + e);
-                        }
+                        if (_underChunkL != null && _underChunkL.Initialized)
+                            _collisions.AddRange(_underChunkL.CollisionShapes);
+                        if (_underChunkR != null && _underChunkR.Initialized)
+                            _collisions.AddRange(_underChunkR.CollisionShapes);
+                        if (_underChunkF != null && _underChunkF.Initialized)
+                            _collisions.AddRange(_underChunkF.CollisionShapes);
+                        if (_underChunkB != null && _underChunkB.Initialized)
+                            _collisions.AddRange(_underChunkB.CollisionShapes);
                     }
-                }
-
-                var modifier = 1;//40f * (1f / (float) Time.Frametime);
-                Velocity += -Physics.Gravity * GravityDirection * _deltaTime * Chunk.BlockSize;
-                Velocity = Mathf.Clamp(Velocity, -VelocityCap, VelocityCap);
-
-                var command = new MoveCommand(Velocity * _deltaTime, true);
-                this.ProcessCommand(command);
-
-                if (!Parent.IsGrounded)
-                {
-                    if (!Parent.IsUnderwater)
-                        Falltime += _deltaTime;
-                }
-                else
-                {
-                    if (Falltime > 0)
+                    catch (Exception e)
                     {
-                        if (Falltime > 2.0f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true))
-                        {
-                            if (!Parent.SearchComponent<DamageComponent>()?.Immune ?? true)
-                            {
-                                var fallTime = Falltime;
-                                Executer.ExecuteOnMainThread(delegate
-                                {
-                                    Parent.Damage(fallTime * 7.5f, null, out _, true);
-                                    Parent.KnockForSeconds(3f);
-                                });
-                            }
-                        }
-                        else if (Falltime > 1f)
-                        {
-                            SoundPlayer.PlaySound(SoundType.HitGround, _parent.Position);
-                        }
-                        Falltime = 0;
+                        Log.WriteLine("Catched a sync error." + Environment.NewLine + e);
                     }
                 }
             }
-            _speed = Mathf.Lerp(_speed, Parent.IsAttacking ? AttackingSpeed : NormalSpeed, _deltaTime * 2f);
+
+            var modifier = 1; //40f * (1f / (float) Time.Frametime);
+            Velocity += -Physics.Gravity * GravityDirection * _deltaTime * Chunk.BlockSize;
+            Velocity = Mathf.Clamp(Velocity, -VelocityCap, VelocityCap);
+
+            var command = new MoveCommand(Velocity * _deltaTime, true);
+            this.ProcessCommand(command);
+
+            if (!Parent.IsGrounded)
+            {
+                if (!Parent.IsUnderwater)
+                    Falltime += _deltaTime;
+            }
+            else
+            {
+                if (Falltime > 0)
+                {
+                    if (Falltime > 2.0f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true))
+                    {
+                        if (!Parent.SearchComponent<DamageComponent>()?.Immune ?? true)
+                        {
+                            var fallTime = Falltime;
+                            Executer.ExecuteOnMainThread(delegate
+                            {
+                                Parent.Damage(fallTime * 7.5f, null, out _, true);
+                                Parent.KnockForSeconds(3f);
+                            });
+                        }
+                    }
+                    else if (Falltime > 1f)
+                    {
+                        SoundPlayer.PlaySound(SoundType.HitGround, _parent.Position);
+                    }
+
+                    Falltime = 0;
+                }
+            }
         }
 
         public Vector3 MoveFormula(Vector3 Direction, bool ApplyReductions = true)
@@ -354,7 +355,7 @@ namespace Hedra.Engine.EntitySystem
 
         private void HandleDrifting(MoveCommand Command)
         {
-            var terrainNormal = Physics.NormalAtPosition(Parent.Position);
+            /*var terrainNormal = Physics.NormalAtPosition(Parent.Position);
             var dot = Vector3.Dot(terrainNormal, Vector3.UnitY);
             if (IsDrifting)
             {
@@ -365,7 +366,7 @@ namespace Hedra.Engine.EntitySystem
             }
 
             if (dot < .35 && Parent.IsGrounded) IsDrifting = true;
-            else if (dot > .45 || !Parent.IsGrounded) IsDrifting = false;
+            else if (dot > .45 || !Parent.IsGrounded) IsDrifting = false;*/
         }
 
         private void HandleTerrainCollision(MoveCommand Command)

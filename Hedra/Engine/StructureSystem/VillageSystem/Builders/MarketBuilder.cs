@@ -6,6 +6,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -29,7 +30,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return Input;
         }
 
-        public override BuildingOutput Build(MarketParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
+        public override BuildingOutput Build(MarketParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
         {
             float marketDist = 3.5f + Rng.NextFloat() * .75f + 0.2f;
             int marketCount = 8 + Rng.Next(0, 4);
@@ -145,11 +146,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Shapes = marketShapes,
                 BuildAsInstance = false
             };
-        }
-
-        public override void Polish(MarketParameters Parameters)
-        {
-
         }
 
         private static Vector4 MarketColor(Random Rng)

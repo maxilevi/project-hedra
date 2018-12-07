@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
@@ -19,15 +20,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .5f, BlockType.StonePath);
         }
 
-        public override BuildingOutput Build(BlacksmithParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
+        public override BuildingOutput Build(BlacksmithParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            var output = base.Build(Parameters, Cache, Rng, Center);
+            var output = base.Build(Parameters, Design, Cache, Rng, Center);
             var transformation = BuildTransformation(Parameters).ClearTranslation();
-            AddDoors(Parameters, Parameters.Design.Doors, transformation, output);
+            AddDoors(Parameters, Cache, Parameters.Design.Doors, transformation, output);
             return output;
         }
 
-        public override void Polish(BlacksmithParameters Parameters)
+        public override void Polish(BlacksmithParameters Parameters, Random Rng)
         {
             SpawnHumanoid(HumanType.Blacksmith, Parameters.Position + Parameters.Design.Blacksmith * Parameters.Design.Scale);
         }

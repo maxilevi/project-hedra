@@ -1,5 +1,6 @@
 using System;
 using Hedra.Engine.Generation;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
@@ -16,9 +17,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return this.PlaceGroundwork(Parameters.Position, Parameters.WellSize);
         }
         
-        public override BuildingOutput Build(MarketParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
+        public override BuildingOutput Build(MarketParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            var output = base.Build(Parameters, Cache, Rng, Center);
+            var output = base.Build(Parameters, Design, Cache, Rng, Center);
             output.Structures.Add(new LampPost(Vector3.UnitY * 8f + Parameters.Position)
             {
                 Radius = 386,

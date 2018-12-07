@@ -52,14 +52,16 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
         
-        public static string Generate(int Seed){
+        public static string Generate(int Seed)
+        {
             var rng = new Random(Seed);
             int length = rng.Next(3, 6);
             int entry = rng.Next(0, Table.Keys.Count);
 
             var iterator = 0;
             var startingChar = 'k';
-            foreach(char Char in Table.Keys){
+            foreach(char Char in Table.Keys)
+            {
                 if(iterator == entry)
                     startingChar = Char;
                 iterator++;
@@ -86,7 +88,8 @@ namespace Hedra.Engine.WorldBuilding
             return builder.ToString().First().ToString().ToUpper() + builder.ToString().Substring(1);
         }
         
-        public static string PickMaleName(Random Rng){
+        public static string PickMaleName(Random Rng)
+        {
             return MaleNames[Rng.Next(0, MaleNames.Length)];
         }
     }

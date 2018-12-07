@@ -12,7 +12,7 @@ namespace Hedra.Engine.ClassSystem
     {
         public override string Logo => "Assets/UI/ArcherLogo.png";
         public override HumanType Human => HumanType.Archer;
-        public override float BaseSpeed => 1.35f;
+        public override float BaseSpeed => 1.4f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new ArcherAbilityTreeBlueprint();
         public override Item StartingItem => ItemPool.Grab(CommonItems.CommonWoodenBow);
         public override float AttackResistance => 0.975f;

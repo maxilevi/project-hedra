@@ -11,7 +11,7 @@ namespace Hedra.Engine.ClassSystem
     {
         public override string Logo => "Assets/UI/WarriorLogo.png";
         public override HumanType Human => HumanType.Warrior;
-        public override float BaseSpeed => 1.25f;
+        public override float BaseSpeed => 1.325f;
         public override AbilityTreeBlueprint AbilityTreeDesign => new WarriorAbilityTreeBlueprint();
         public override Item StartingItem => ItemPool.Grab(CommonItems.CommonBronzeSword);
         public override float AttackResistance => 1.075f;

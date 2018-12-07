@@ -45,5 +45,7 @@ namespace Hedra.Engine.Player
         {
 
         }
+
+        public bool HasTitleMessages => false;
     }
 }

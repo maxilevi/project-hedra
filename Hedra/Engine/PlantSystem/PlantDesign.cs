@@ -18,7 +18,7 @@ namespace Hedra.Engine.PlantSystem
 
         public abstract Matrix4 TransMatrix(Vector3 Position, Random Rng);
 
-        public abstract VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng);
+        public abstract VertexData Paint(VertexData Data, Region Region, Random Rng);
 
         public virtual void AddShapes(Chunk UnderChunk, Matrix4 TransMatrix){}
 

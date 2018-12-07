@@ -29,7 +29,7 @@ namespace Hedra.Engine.StructureSystem
             var fortModel = AssetManager.PLYLoader("Assets/Env/Fort1.ply", Vector3.One * 1.5f, Vector3.Zero, Vector3.Zero);
 
             var transMatrix = Matrix4.Identity;
-            transMatrix *= Matrix4.CreateRotationY(rng.NextFloat() * 360);
+            transMatrix *= Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation(position);
             fortModel.Transform(transMatrix);
 

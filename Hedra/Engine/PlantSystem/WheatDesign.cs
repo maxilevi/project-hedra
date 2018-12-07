@@ -19,7 +19,7 @@ namespace Hedra.Engine.PlantSystem
     {
         public override VertexData Model => CacheManager.GetModel(CacheItem.Wheat);
 
-        protected override void ApplyPaint(Vector3 Position, VertexData Data, Region Region, Random Rng)
+        protected override void ApplyPaint(VertexData Data, Region Region, Random Rng)
         {
             var newColor = new Vector4((Region.Colors.GrassColor * 1.25f).Xyz, 1);
 
