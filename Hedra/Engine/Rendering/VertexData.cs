@@ -192,13 +192,26 @@ namespace Hedra.Rendering
                 Normals[i] = Vector3.TransformNormalInverse(Normals[i], normalMat);
             }
         }
-        
-        public void Transform(Matrix3 Mat)
+
+        public VertexData Optimize()
         {
-            for (var i = 0; i < Vertices.Count; i++)
+            var decoupledColors = Indices.Select(I => Vertices[(int)I]).ToList();
+            var decoupledVertices = Indices.Select(I => Colors[(int)I]).ToList();
+            var decoupledNormals = Indices.Select(I => Normals[(int)I]).ToList();
+            var decoupledExtradata = Extradata.Count != 0 ? Indices.Select(I => Extradata[(int)I]).ToList() : null;
+            var newIndices = new List<uint>();
+            var newVertices = decoupledVertices.Distinct().ToList();
+            for (var i = 0; i < decoupledVertices.Count; i++)
             {
-                Vertices[i] = Vector3.TransformPosition(Vertices[i], new Matrix4(Mat));
+                newIndices.Add((uint) newVertices.IndexOf(decoupledVertices[i]));
             }
+
+            Indices = newIndices;
+            Vertices = newVertices;
+            Colors = newColors;
+            Extradata = newExtradata;
+            Normals = newNormals;
+            return this;
         }
         
         public void Scale(Vector3 Scalar)

@@ -154,7 +154,13 @@
     <Compile Include="Components\HeadIconComponent.cs" />
     <Compile Include="Components\HumanoidAIComponent.cs" />
     <Compile Include="Components\MageAIComponent.cs" />
+    <Compile Include="Engine\CacheSystem\CornCache.cs" />
+    <Compile Include="Engine\CacheSystem\PumpkinCache.cs" />
+    <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
     <Compile Include="Engine\Game\Season.cs" />
+    <Compile Include="Engine\PlantSystem\CornDesign.cs" />
+    <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
+    <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\FarmDesignTemplate.cs" />
@@ -238,7 +244,6 @@
     <Compile Include="Engine\CacheSystem\MausoleumCache.cs" />
     <Compile Include="Engine\CacheSystem\MerchantCartCache.cs" />
     <Compile Include="Engine\CacheSystem\MerchantIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\MushroomCache.cs" />
     <Compile Include="Engine\CacheSystem\OakTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\ObeliskCache.cs" />
     <Compile Include="Engine\CacheSystem\PineTreesCache.cs" />
@@ -337,8 +342,6 @@
     <Compile Include="Engine\Native\WindowsConsoleManager.cs" />
     <Compile Include="Engine\Native\WindowsMessageManager.cs" />
     <Compile Include="Engine\PhysicsSystem\CollisionGroup.cs" />
-    <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
-    <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\ReedDesign.cs" />
     <Compile Include="Engine\PlantSystem\ReedPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\WeedDesign.cs" />
@@ -1246,14 +1249,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\GliderIcon.ply">
       <Link>Assets\Items\Misc\GliderIcon.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Mushroom0.ply">
-      <Link>Assets\Env\Mushroom0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Mushroom1.ply">
-      <Link>Assets\Env\Mushroom1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Sounds\Door.ogg">

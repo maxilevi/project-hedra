@@ -21,12 +21,12 @@ namespace Hedra.Engine.CacheSystem
 
         public static VertexData GetModel(CacheItem Item)
         {
-            return GetModel(Item.ToString());
+            return Provider.GetModel(Item.ToString().ToLowerInvariant());
         }
-
-        public static VertexData GetModel(string Type)
+        
+        public static VertexData GetLodModel(CacheItem Item)
         {
-            return Provider.GetModel(Type.ToLowerInvariant());
+            return Provider.GetLodModel(Item.ToString().ToLowerInvariant());
         }
 
         public static List<CollisionShape> GetShape(VertexData Model)

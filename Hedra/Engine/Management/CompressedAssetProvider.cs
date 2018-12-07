@@ -317,9 +317,9 @@ namespace Hedra.Engine.Management
             var size = Encoding.ASCII.GetByteCount(header);
             if (HasHeader(Data, header, size))
             {
-                return PLYUnserialize(Data, size, Scale, Position, Rotation, HasColors);
+                return PLYUnserialize(Data, size, Scale, Position, Rotation, HasColors).Optimize();
             }
-            return PLYParser(Data, Scale, Position, Rotation, HasColors);
+            return PLYParser(Data, Scale, Position, Rotation, HasColors).Optimize();
         }
 
         public VertexData PLYUnserialize(byte[] Data, int HeaderSize, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)

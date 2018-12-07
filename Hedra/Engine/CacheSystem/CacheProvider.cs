@@ -60,6 +60,12 @@ namespace Hedra.Engine.CacheSystem
             return _caches[Type].GrabModel();
 
         }
+        
+        public VertexData GetLODModel(string Type)
+        {
+            return _caches[Type].GrabModel();
+
+        }
 
         public List<CollisionShape> GetShape(VertexData Model)
         {

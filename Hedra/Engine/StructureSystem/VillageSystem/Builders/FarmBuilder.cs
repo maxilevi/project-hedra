@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -132,27 +133,32 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 {
                     var offset = new Vector3((Rng.NextFloat() * 2f - 1f) * _width * .5f, 0,
                         (Rng.NextFloat() * 2f - 1f) * _width * .5f);
-                    var model = design.Model;
-                    var modelClone = model.Clone();
                     var position = Parameters.Position + offset;
-                    var region = World.BiomePool.GetRegion(position);
-                    design.Paint(modelClone, region, Rng);
                     var transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
                                       * Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian)
                                       * Matrix4.CreateTranslation(position);
-                    Output.Instances.Add(new InstanceData
-                    {
-                        OriginalMesh = model,
-                        Colors = modelClone.Colors.Clone(),
-                        ExtraData = modelClone.Extradata.Clone(),
-                        HasExtraData = true,
-                        VariateColor = true,
-                        GraduateColor = true,
-                        TransMatrix = transMatrix
-                    });
-                    CacheManager.Check(Output.Instances[Output.Instances.Count - 1]);
+                    
+                    Output.Instances.Add(BuildPlant(design.Model, design, World.BiomePool.GetRegion(position), transMatrix, rng));
                 }
             }
+        }
+
+        private InstanceData BuildPlant(VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng)
+        {
+            var modelClone = Model.Clone();
+            Design.Paint(modelClone, Biome, Rng);
+            var data = new InstanceData
+            {
+                OriginalMesh = Model,
+                Colors = modelClone.Colors.Clone(),
+                ExtraData = modelClone.Extradata.Clone(),
+                HasExtraData = true,
+                VariateColor = true,
+                GraduateColor = true,
+                TransMatrix = Transformation
+            };
+            CacheManager.Check(data);
+            return data;
         }
         
         private void SpawnFarmer(FarmParameters Parameters, Random Rng)

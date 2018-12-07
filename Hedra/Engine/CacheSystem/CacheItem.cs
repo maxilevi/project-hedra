@@ -38,6 +38,9 @@ namespace Hedra.Engine.CacheSystem
         CampfireLogs,
         Mushroom,
         Reed,
+        Sunflower,
+        Pumpkin,
+        Corn,
         MaxEnums
     }
 }

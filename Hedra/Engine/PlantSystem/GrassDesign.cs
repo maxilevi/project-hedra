@@ -16,7 +16,7 @@ namespace Hedra.Engine.PlantSystem
 {
     public class GrassDesign : WeedDesign
     {
-        public override VertexData Model => CacheManager.GetModel(CacheItem.Grass);
+        protected override CacheItem Type => CacheItem.Grass;
 
         protected override void ApplyPaint(VertexData Data, Region Region, Random Rng)
         {

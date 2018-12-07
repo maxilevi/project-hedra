@@ -19,7 +19,8 @@ namespace Hedra.Engine.PlantSystem
 {
     public class BerryBushDesign : PlantDesign
     {
-        public override VertexData Model => CacheManager.GetModel(CacheItem.BerryBush);
+        protected override CacheItem Type => CacheItem.BerryBush;
+        
         public override bool HasCustomPlacement => true;
 
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)

@@ -10,7 +10,7 @@ namespace Hedra.Engine.PlantSystem
 {
     public class CloudDesign : PlantDesign
     {
-        public override VertexData Model => CacheManager.GetModel(CacheItem.Cloud);
+        protected override CacheItem Type => CacheItem.Cloud;
 
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
         {

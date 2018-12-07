@@ -16,7 +16,8 @@ namespace Hedra.Engine.PlantSystem
 {
     public class RockDesign :  PlantDesign
     {
-        public override VertexData Model => CacheManager.GetModel(CacheItem.Rock);
+        protected override CacheItem Type => CacheItem.Rock;
+        
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);
