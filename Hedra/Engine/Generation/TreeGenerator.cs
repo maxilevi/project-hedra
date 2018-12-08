@@ -100,9 +100,8 @@ namespace Hedra.Engine.Generation
             transMatrix *=  Matrix4.CreateRotationY( rng.NextFloat() * 360f * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation( Placement.Position );
 
-            var windRng = Utils.Rng.NextFloat(); 
-            model.Extradata.AddRange( model.GenerateWindValues(AssetManager.ColorCode1, 1) );
-            model.AddExtraData(AssetManager.ColorCode2, model.GenerateWindValues(AssetManager.ColorCode2, 1));
+            model.AddWindValues(AssetManager.ColorCode1);
+            model.AddWindValues(AssetManager.ColorCode2);
 
             Vector4 woodColor = rng.Next(0, 5) != 1
                 ? BiomeRegion.Colors.WoodColors[new Random(World.Seed + 5232).Next(0, BiomeRegion.Colors.WoodColors.Length)] 
@@ -124,17 +123,7 @@ namespace Hedra.Engine.Generation
                     shape.Transform(transMatrix);
                     underChunk.AddCollisionShape(shape);
                 }
-
-                var data = new InstanceData
-                {
-                    ExtraData = model.Extradata,
-                    OriginalMesh = originalModel,
-                    Colors = model.Colors,
-                    TransMatrix = transMatrix
-                };
-
-                CacheManager.Check(data);
-                underChunk.StaticBuffer.AddInstance(data);
+                underChunk.StaticBuffer.AddInstance(model.ToInstanceData(transMatrix));
             }
         }
 

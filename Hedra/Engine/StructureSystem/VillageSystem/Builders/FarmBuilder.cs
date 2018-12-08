@@ -123,7 +123,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             
             if (rng < .6f)
                 design = new GrassDesign();
-            else if (rng < 1f)
+            else if (rng < .8f)
                 design = new FernDesign();
             
             if(design == null) return;
@@ -156,7 +156,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 VariateColor = true,
                 GraduateColor = true,
                 TransMatrix = Transformation,
-                PlaceCondition = B => B == BlockType.FarmDirt// || B == BlockType.Dirt || B == BlockType.Grass
+                PlaceCondition = B => B == BlockType.FarmDirt
             };
             CacheManager.Check(data);
             return data;

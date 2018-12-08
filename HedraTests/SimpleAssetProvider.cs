@@ -79,6 +79,11 @@ namespace HedraTests
             return new Box();
         }
 
+        public VertexData LoadPLYWithLODs(string Filename, Vector3 Scale)
+        {
+            return new VertexData();
+        }
+
         public VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
         {
             return new VertexData();

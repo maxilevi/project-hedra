@@ -30,8 +30,8 @@ namespace Hedra.Engine.Management
         List<CollisionShape> LoadCollisionShapes(string Filename, Vector3 Scale);
         Box LoadHitbox(string ModelFile);
         Box LoadDimensions(string ModelFile);
+        VertexData LoadPLYWithLODs(string Filename, Vector3 Scale);
         VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true);
-        VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true);
         ModelData DAELoader(string File);
         void Dispose();
     }

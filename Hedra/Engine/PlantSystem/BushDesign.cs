@@ -46,7 +46,7 @@ namespace Hedra.Engine.PlantSystem
 
         public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
-            Data.Extradata.AddRange(Data.GenerateWindValues());
+            Data.AddWindValues();
 
             Data.Paint(Region.Colors.GrassColor * .8f);
             Data.GraduateColor(Vector3.UnitY);

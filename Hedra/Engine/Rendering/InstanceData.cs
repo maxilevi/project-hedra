@@ -18,13 +18,11 @@ namespace Hedra.Engine.Rendering
     /// <summary>
     /// Description of InstanceData.
     /// </summary>
-    public class InstanceData : IPositionable
+    public class InstanceData : LodableObject<InstanceData>, IPositionable
     {
         private bool _boundsInitialized;
         private Vector3 _bounds;
-        private Dictionary<int, InstanceData> _lodVersions;
-        private VertexData _originalMesh;
-        
+
         public List<Vector4> Colors { get; set; }
         public List<float> ExtraData { get; set; }
         public Matrix4 TransMatrix { get; set; }
@@ -34,53 +32,13 @@ namespace Hedra.Engine.Rendering
         public bool VariateColor { get; set; } = true;
         public bool GraduateColor { get; set; }
         public Func<BlockType, bool> PlaceCondition { get; set; }
+        public VertexData OriginalMesh { get; set; }
 
-        public VertexData OriginalMesh
-        {
-            get => _originalMesh;
-            set
-            {
-                _originalMesh = value;
-                //UpdateLODs();
-            }
-        }
-        
-        /* ReSharper disable once InconsistentNaming */
-        public void AddLOD(InstanceData Model, int Level)
-        {
-            if(Level != 2 && Level != 4 && Level != 8)
-                throw new ArgumentOutOfRangeException($"LOD needs to be either 2, 4 or 8, '{Level}' given.");
-
-            if (_lodVersions == null) _lodVersions = new Dictionary<int, InstanceData>
-            {
-                {2, null},
-                {4, null},
-                {8, null}
-            };
-
-            _lodVersions[Level] = Model;
-        }
-
-        public InstanceData Get(int Lod)
-        {
-            if (Lod == 1 || _lodVersions == null) return this;
-            var selectedLod = _lodVersions[Lod];
-            while (selectedLod == null)
-            {
-                selectedLod = Lod > 1
-                    ? _lodVersions[Lod = Lod / 2]
-                    : this;
-            }
-            return selectedLod;
-        }
 
         public void Apply(Matrix4 Transformation)
         {
             TransMatrix *= Transformation;
-            if(_lodVersions == null) return;
-            if(_lodVersions[2] != null) _lodVersions[2].TransMatrix *= Transformation;
-            if(_lodVersions[4] != null) _lodVersions[4].TransMatrix *= Transformation;
-            if(_lodVersions[8] != null) _lodVersions[8].TransMatrix *= Transformation;
+            ApplyRecursively(I => I.Apply(Transformation));
         }
         
         public Vector3 Bounds

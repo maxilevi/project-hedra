@@ -162,6 +162,7 @@
     <Compile Include="Engine\PlantSystem\CornDesign.cs" />
     <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
     <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
+    <Compile Include="Engine\Rendering\LodableObject.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\FarmDesignTemplate.cs" />
@@ -1030,68 +1031,272 @@
       <Link>Assets\Env\Trees\AppleTree0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree0_Lod2.ply">
+      <Link>Assets\Env\Trees\AppleTree0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree0_Lod4.ply">
+      <Link>Assets\Env\Trees\AppleTree0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree0_Lod8.ply">
+      <Link>Assets\Env\Trees\AppleTree0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree1.ply">
       <Link>Assets\Env\Trees\AppleTree1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree1_Lod2.ply">
+      <Link>Assets\Env\Trees\AppleTree1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree1_Lod4.ply">
+      <Link>Assets\Env\Trees\AppleTree1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree1_Lod8.ply">
+      <Link>Assets\Env\Trees\AppleTree1_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree2.ply">
       <Link>Assets\Env\Trees\AppleTree2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree2_Lod2.ply">
+      <Link>Assets\Env\Trees\AppleTree2_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree2_Lod4.ply">
+      <Link>Assets\Env\Trees\AppleTree2_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree2_Lod8.ply">
+      <Link>Assets\Env\Trees\AppleTree2_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\Cypress\Cypress0.ply">
       <Link>Assets\Env\Trees\Cypress0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress0_Lod2.ply">
+      <Link>Assets\Env\Trees\Cypress0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress0_Lod4.ply">
+      <Link>Assets\Env\Trees\Cypress0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress0_Lod8.ply">
+      <Link>Assets\Env\Trees\Cypress0_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Environment\Cypress\Cypress1.ply">
       <Link>Assets\Env\Trees\Cypress1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress1_Lod2.ply">
+      <Link>Assets\Env\Trees\Cypress1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress1_Lod4.ply">
+      <Link>Assets\Env\Trees\Cypress1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress1_Lod8.ply">
+      <Link>Assets\Env\Trees\Cypress1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\Cypress\Cypress2.ply">
       <Link>Assets\Env\Trees\Cypress2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress2_Lod2.ply">
+      <Link>Assets\Env\Trees\Cypress2_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress2_Lod4.ply">
+      <Link>Assets\Env\Trees\Cypress2_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress2_Lod8.ply">
+      <Link>Assets\Env\Trees\Cypress2_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree0.ply">
       <Link>Assets\Env\Trees\DeadTree0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree0_Lod2.ply">
+      <Link>Assets\Env\Trees\DeadTree0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree0_Lod4.ply">
+      <Link>Assets\Env\Trees\DeadTree0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree0_Lod8.ply">
+      <Link>Assets\Env\Trees\DeadTree0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree1.ply">
       <Link>Assets\Env\Trees\DeadTree1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree1_Lod2.ply">
+      <Link>Assets\Env\Trees\DeadTree1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree1_Lod4.ply">
+      <Link>Assets\Env\Trees\DeadTree1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree1_Lod8.ply">
+      <Link>Assets\Env\Trees\DeadTree1_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree2.ply">
       <Link>Assets\Env\Trees\DeadTree2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree2_Lod2.ply">
+      <Link>Assets\Env\Trees\DeadTree2_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree2_Lod4.ply">
+      <Link>Assets\Env\Trees\DeadTree2_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree2_Lod8.ply">
+      <Link>Assets\Env\Trees\DeadTree2_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree3.ply">
       <Link>Assets\Env\Trees\DeadTree3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree3_Lod2.ply">
+      <Link>Assets\Env\Trees\DeadTree3_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree3_Lod4.ply">
+      <Link>Assets\Env\Trees\DeadTree3_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree3_Lod8.ply">
+      <Link>Assets\Env\Trees\DeadTree3_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Environment\Oaks\Oak0.ply">
       <Link>Assets\Env\Trees\Oak0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak0_Lod2.ply">
+      <Link>Assets\Env\Trees\Oak0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak0_Lod4.ply">
+      <Link>Assets\Env\Trees\Oak0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak0_Lod8.ply">
+      <Link>Assets\Env\Trees\Oak0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\Oaks\Oak1.ply">
       <Link>Assets\Env\Trees\Oak1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak1_Lod2.ply">
+      <Link>Assets\Env\Trees\Oak1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak1_Lod4.ply">
+      <Link>Assets\Env\Trees\Oak1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak1_Lod8.ply">
+      <Link>Assets\Env\Trees\Oak1_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Environment\Oaks\Oak2.ply">
       <Link>Assets\Env\Trees\Oak2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak2_Lod2.ply">
+      <Link>Assets\Env\Trees\Oak2_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak2_Lod4.ply">
+      <Link>Assets\Env\Trees\Oak2_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak2_Lod8.ply">
+      <Link>Assets\Env\Trees\Oak2_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\Pines\Pine0.ply">
       <Link>Assets\Env\Trees\Pine0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine0_Lod2.ply">
+      <Link>Assets\Env\Trees\Pine0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine0_Lod4.ply">
+      <Link>Assets\Env\Trees\Pine0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine0_Lod8.ply">
+      <Link>Assets\Env\Trees\Pine0_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Environment\Pines\Pine1.ply">
       <Link>Assets\Env\Trees\Pine1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine1_Lod2.ply">
+      <Link>Assets\Env\Trees\Pine1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine1_Lod4.ply">
+      <Link>Assets\Env\Trees\Pine1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine1_Lod8.ply">
+      <Link>Assets\Env\Trees\Pine1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\Pines\Pine2.ply">
       <Link>Assets\Env\Trees\Pine2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine2_Lod2.ply">
+      <Link>Assets\Env\Trees\Pine2_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine2_Lod4.ply">
+      <Link>Assets\Env\Trees\Pine2_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine2_Lod8.ply">
+      <Link>Assets\Env\Trees\Pine2_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\Pines\Pine3.ply">
       <Link>Assets\Env\Trees\Pine3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine3_Lod2.ply">
+      <Link>Assets\Env\Trees\Pine3_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine3_Lod4.ply">
+      <Link>Assets\Env\Trees\Pine3_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine3_Lod8.ply">
+      <Link>Assets\Env\Trees\Pine3_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Environment\Reed\Reed0.ply">
@@ -1110,12 +1315,48 @@
       <Link>Assets\Env\Trees\TallTree0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree0_Lod2.ply">
+      <Link>Assets\Env\Trees\TallTree0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree0_Lod4.ply">
+      <Link>Assets\Env\Trees\TallTree0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree0_Lod8.ply">
+      <Link>Assets\Env\Trees\TallTree0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree1.ply">
       <Link>Assets\Env\Trees\TallTree1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree1_Lod2.ply">
+      <Link>Assets\Env\Trees\TallTree1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree1_Lod4.ply">
+      <Link>Assets\Env\Trees\TallTree1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree1_Lod8.ply">
+      <Link>Assets\Env\Trees\TallTree1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree2.ply">
       <Link>Assets\Env\Trees\TallTree2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree2_Lod2.ply">
+      <Link>Assets\Env\Trees\TallTree2_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree2_Lod4.ply">
+      <Link>Assets\Env\Trees\TallTree2_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree2_Lod8.ply">
+      <Link>Assets\Env\Trees\TallTree2_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Berry.ply">

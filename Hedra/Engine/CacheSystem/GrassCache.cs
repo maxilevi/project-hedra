@@ -12,11 +12,7 @@ namespace Hedra.Engine.CacheSystem
              *  fix that before adding new models
              */
             var model = AssetManager.PLYLoader("Assets/Env/Grass.ply", Vector3.One);
-            model.Extradata.AddRange(model.GenerateWindValues());
-            for (int i = 0; i < model.Extradata.Count; i++)
-            {
-                model.Extradata[i] *= .45f;
-            }
+            model.AddWindValues(.45f);
 
             this.AddModel(model);
         }

@@ -49,10 +49,7 @@ namespace Hedra.Engine.PlantSystem
 
         public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
-            Data.Extradata.AddRange(Data.GenerateWindValues());
-            for (int i = 0; i < Data.Extradata.Count; i++)
-                Data.Extradata[i] = 0.001f;
-
+            Data.AddWindValues(0f);
             Data.Paint(this.RockColor(Rng));
             Data.GraduateColor(Vector3.UnitY);
 

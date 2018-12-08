@@ -230,8 +230,10 @@ namespace Hedra.Engine.Management
             return Name.Replace("/", slashRegex).Replace(".", "\\.");
         }
         
-        public Icon LoadIcon(string path){
-            using(var ms = new MemoryStream(AssetManager.ReadBinary(path, AssetsResource))){
+        public Icon LoadIcon(string Path)
+        {
+            using(var ms = new MemoryStream(AssetManager.ReadBinary(Path, AssetsResource)))
+            {
                 return new Icon(ms);
             }
         }
@@ -299,9 +301,27 @@ namespace Hedra.Engine.Management
         {
             return Physics.BuildDimensionsBox(this.LoadModelVertexData(ModelFile));
         }
+        
+        public VertexData LoadPLYWithLODs(string Filename, Vector3 Scale)
+        {
+            var model = PLYLoader(Filename, Scale);
+            var name = Path.GetFileNameWithoutExtension(Filename);
+            var dir = Path.GetDirectoryName(Filename);
+            for(var i = 1; i < 4; ++i)
+            {
+                var iterator = (int)Math.Pow(2, i);
+                var path = $"{dir}/{name}_Lod{iterator}.ply";
+                var data = ReadBinary(path, AssetsResource);
+                if (data == null) return model;
+                var vertexInformation = PLYLoader(path, Scale);
+                model.AddLOD(vertexInformation, iterator);
+            }
+            return model;
+        }
 
-        public VertexData PLYLoader(string file, Vector3 Scale){
-            return AssetManager.PLYLoader(file, Scale, Vector3.Zero, Vector3.Zero);
+        private VertexData PLYLoader(string File, Vector3 Scale)
+        {
+            return PLYLoader(File, Scale, Vector3.Zero, Vector3.Zero);
         }
 
         public VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
@@ -311,7 +331,7 @@ namespace Hedra.Engine.Management
             return PLYLoader(data, Scale, Position, Rotation, HasColors);
         }
 
-        public VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
+        private VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
         {
             const string header = "PROCESSEDPLY";
             var size = Encoding.ASCII.GetByteCount(header);
@@ -322,7 +342,7 @@ namespace Hedra.Engine.Management
             return PLYParser(Data, Scale, Position, Rotation, HasColors);
         }
 
-        public VertexData PLYUnserialize(byte[] Data, int HeaderSize, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
+        private VertexData PLYUnserialize(byte[] Data, int HeaderSize, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
         {
             using (var ms = new MemoryStream(Data))
             {
@@ -363,8 +383,8 @@ namespace Hedra.Engine.Management
                 return HandlePLYTransforms(vertices, normals, colors, indices, Scale, Position, Rotation);
             }
         }
-        
-        public VertexData PLYParser(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
+
+        private VertexData PLYParser(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
         {
             string fileContents = Encoding.ASCII.GetString(Data);
 

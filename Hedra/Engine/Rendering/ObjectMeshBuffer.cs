@@ -82,34 +82,19 @@ namespace Hedra.Engine.Rendering
             
             Data.Bind();
 
-            Shader["Outline"] = 0;
-            if (Outline)
-            {
-                /*GraphicsLayer.Enable(EnableCap.StencilTest);
-                Renderer.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
-                Renderer.StencilFunc(StencilFunction.Always, 1, 0xFF);
-                Renderer.StencilMask(0xFF);*/
-            }
-
             Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
             Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
             if (Outline)
             {
                 Renderer.Enable(EnableCap.Blend);
-                /*Renderer.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
-                Renderer.StencilMask(0x00);*/
                 Renderer.Disable(EnableCap.DepthTest);
-                //GraphicsLayer.Disable(EnableCap.CullFace);
                 Shader["Outline"] = this.Outline ? 1 : 0;
                 Shader["OutlineColor"] = this.OutlineColor;
                 Shader["Time"] = Time.IndependantDeltaTime;
                 Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
                 Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-                //Renderer.StencilMask(0xFF);
                 Renderer.Enable(EnableCap.DepthTest);
-                //GraphicsLayer.Enable(EnableCap.CullFace);
-                //GraphicsLayer.Disable(EnableCap.StencilTest);
             }
 
             Renderer.Disable(EnableCap.Blend);
@@ -203,8 +188,8 @@ namespace Hedra.Engine.Rendering
                     * Matrix4.CreateRotationZ(value.Z * Mathf.Radian);
             }
         }
-        
-        public void Bind()
+
+        private void Bind()
         {
             Shader.Bind();
 
@@ -233,7 +218,8 @@ namespace Hedra.Engine.Rendering
             Shader["noiseTexture"] = 1;      
             Shader["useNoiseTexture"] = UseNoiseTexture ? 1f : 0f;
             
-            if (GameSettings.Shadows){
+            if (GameSettings.Shadows)
+            {
                 Shader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
                 Renderer.ActiveTexture(TextureUnit.Texture0);
                 Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
@@ -242,8 +228,8 @@ namespace Hedra.Engine.Rendering
             }
             Shader["UseShadows"] = GameSettings.Shadows ? 1 : 0;
         }
-        
-        public void Unbind()
+
+        private static void Unbind()
         {
             Shader.Unbind();
             Renderer.Enable(EnableCap.CullFace);

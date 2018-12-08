@@ -9,11 +9,6 @@ namespace HedraTests.CodePolicy
     [TestFixture]
     public class DanglingReferencesCodePolicy : BaseCodePolicy
     {
-        private readonly string[] _exceptions =
-        {
-
-        };
-
         [Test]
         public void TestNoUpdateManager()
         {

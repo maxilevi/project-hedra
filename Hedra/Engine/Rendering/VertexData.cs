@@ -9,7 +9,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -19,7 +22,7 @@ namespace Hedra.Rendering
     /// <summary>
     /// Description of VertexData.
     /// </summary>
-    public sealed class VertexData : IDisposable, IVertexData
+    public sealed class VertexData : LodableObject<VertexData>, IDisposable, IVertexData
     {
         public List<Vector3> Vertices { get; set; }
         public List<Vector4> Colors { get; set; }
@@ -30,7 +33,7 @@ namespace Hedra.Rendering
         public bool UseCache { get; set; }
         public static VertexData Empty { get; }
         private readonly Dictionary<Vector3, int> _points;
-
+        
         static VertexData()
         {
             Empty = new VertexData();
@@ -53,8 +56,8 @@ namespace Hedra.Rendering
 
         private Vector3 SupportPoint(Vector3 Direction, Vector4 Color)
         {
-            float highest = float.MinValue;
-            Vector3 support = Vector3.Zero;
+            var highest = float.MinValue;
+            var support = Vector3.Zero;
             if(UseCache)
             {
                 if(IsClone)
@@ -71,21 +74,20 @@ namespace Hedra.Rendering
                 }
             }
             var index = -1;
+            var all = Color == -Vector4.One;
             lock(Vertices)
             {
-                for (int i = Vertices.Count-1; i > -1; i--)
+                for (var i = Vertices.Count-1; i > -1; i--)
                 {
-                    if(Colors[i] != Color && Color != -Vector4.One) continue;
+                    if(Colors[i] != Color && !all) continue;
                         
-                    Vector3 v = Vertices[i];
-                    float dot = Vector3.Dot(Direction, v);
-            
-                    if (dot > highest)
-                    {
-                        highest = dot;
-                        support = v;
-                        index = i;
-                    }
+                    var v = Vertices[i];
+                    var dot = Vector3.Dot(Direction, v);
+
+                    if (!(dot > highest)) continue;
+                    highest = dot;
+                    support = v;
+                    index = i;
                 }
             }
 
@@ -99,36 +101,36 @@ namespace Hedra.Rendering
             return support;    
         }
         
-        public float[] GenerateWindValues(float Scalar)
+        public void AddWindValues()
         {
-            return this.GenerateWindValues(-Vector4.One, Scalar);
+            AddWindValues(-Vector4.One);
         }
         
-        public float[] GenerateWindValues()
+        public void AddWindValues(float Scalar)
         {
-            return this.GenerateWindValues(-Vector4.One, 1);
+            AddWindValues(-Vector4.One, Scalar);
         }
         
-        public float[] GenerateWindValues(Vector4 Color, float Scalar)
+        public void AddWindValues(Vector4 Color, float Scalar = 1f)
         {
             var values = new float[Vertices.Count];
             var highest = this.SupportPoint(Vector3.UnitY, Color);
             var lowest = this.SupportPoint(-Vector3.UnitY, Color);
-            
-            for(var i = 0; i < Vertices.Count; i++)
+            var all = Color == -Vector4.One;
+            if(Extradata.Count == 0) Extradata = Enumerable.Repeat(0f, Vertices.Count).ToList();
+            for(var i = 0; i < Extradata.Count; i++)
             {
-                if(Colors[i] != Color && Color != -Vector4.One)
+                if(Colors[i] != Color && !all)
                 {
                     values[i] = 0;
                     continue;
-                }
-                
-                float shade = Vector3.Dot(Vertices[i] - lowest, Vector3.UnitY) / Vector3.Dot(highest - lowest, Vector3.UnitY);
-                values[i] = (shade + (float) Math.Pow(shade, 1.3)) * Scalar;
+                }             
+                var shade = Vector3.Dot(Vertices[i] - lowest, Vector3.UnitY) / Vector3.Dot(highest - lowest, Vector3.UnitY);
+                Extradata[i] = (shade + (float) Math.Pow(shade, 1.3)) * Scalar;
             }
-            return values;
+            ApplyRecursively(V => V.AddWindValues(Color, Scalar));
         }
-
+        
         public void FillExtraData(float Value)
         {
             Extradata.Clear();
@@ -136,22 +138,19 @@ namespace Hedra.Rendering
             {
                 Extradata.Add(Value);
             }
+            ApplyRecursively(V => V.FillExtraData(Value));
+        }
+        
+        public void Translate(Vector3 Position)
+        {
+            Transform(Matrix4.CreateTranslation(Position));
         }
 
         public void Center()
         {
             var center = Vertices.Aggregate( (V1,V2) => V1+V2) / Vertices.Count;
             Vertices = Vertices.Select(V => V-center).ToList();
-        }
-
-        public void AddExtraData(Vector4 Color, float[] Values){
-            var k = 0;
-            for(var i = 0; i < Vertices.Count; i++)
-            {
-                if (Colors[i] != Color) continue;
-                Extradata[i] = Values[i];
-                k++;
-            }
+            ApplyRecursively(V => V.Center());
         }
 
         public void GraduateColor(Vector3 Direction)
@@ -159,25 +158,18 @@ namespace Hedra.Rendering
             this.GraduateColor(Direction, .3f);
         }
 
-        public void GraduateColor(Vector3 Direction, float Amount)
+        private void GraduateColor(Vector3 Direction, float Amount)
         {
-            Vector3 highest = this.SupportPoint(Direction);
-            Vector3 lowest =  this.SupportPoint(-Direction);
+            var highest = this.SupportPoint(Direction);
+            var lowest =  this.SupportPoint(-Direction);
 
-            float dot = Vector3.Dot(highest - lowest, Direction);
+            var dot = Vector3.Dot(highest - lowest, Direction);
             for (var i = 0; i < Vertices.Count; i++)
             {
-                float shade = Vector3.Dot(Vertices[i] - lowest, Direction) / dot;
+                var shade = Vector3.Dot(Vertices[i] - lowest, Direction) / dot;
                 Colors[i] += new Vector4(Amount, Amount, Amount, 0) * shade;
             }
-        }
-        
-        public void Translate(Vector3 Position)
-        {
-            for (var i = 0; i < Vertices.Count; i++)
-            {
-                Vertices[i] += Position;
-            }
+            ApplyRecursively(V => V.GraduateColor(Direction, Amount));
         }
         
         public void Transform(Matrix4 Mat)
@@ -186,11 +178,12 @@ namespace Hedra.Rendering
             {
                 Vertices[i] = Vector3.TransformPosition(Vertices[i], Mat);
             }
-            Matrix4 normalMat = Mat.ClearScale().ClearTranslation().Inverted();
+            var normalMat = Mat.ClearScale().ClearTranslation().Inverted();
             for (var i = 0; i < Normals.Count; i++)
             {
                 Normals[i] = Vector3.TransformNormalInverse(Normals[i], normalMat);
             }
+            ApplyRecursively(V => V.Transform(Mat));
         }
 
         public VertexData Optimize()
@@ -225,10 +218,7 @@ namespace Hedra.Rendering
         
         public void Scale(Vector3 Scalar)
         {
-            for (var i = 0; i < Vertices.Count; i++)
-            {
-                Vertices[i] *= Scalar;
-            }
+            Transform(Matrix4.CreateScale(Scalar));
         }
         
         public void Paint(Vector4 Color)
@@ -237,16 +227,40 @@ namespace Hedra.Rendering
             {
                 Colors[i] = Color;
             }
+            ApplyRecursively(V => V.Paint(Color));
         }
 
         public CompressedVertexData AsCompressed()
         {
             return CompressedVertexData.FromVertexData(this);
         }
+
+        public InstanceData ToInstanceData(Matrix4 Transformation)
+        {
+            if (!IsClone)
+                throw new ArgumentOutOfRangeException("VertexData needs to be a clone.");
+            var data = new InstanceData
+            {
+                ExtraData = Extradata,
+                OriginalMesh = Original,
+                Colors = Colors,
+                TransMatrix = Transformation
+            };
+            if (HasLod)
+            {
+                for (var i = 1; i < 4; ++i)
+                {
+                    var iterator = (int) Math.Pow(2, i);
+                    data.AddLOD(Get(iterator, false)?.ToInstanceData(Transformation), iterator);
+                }
+            }
+            CacheManager.Check(data);
+            return data;
+        }
         
         public VertexData Clone()
         {
-            return new VertexData
+            var data = new VertexData
             {
                 Indices = new List<uint>(this.Indices),
                 Vertices = new List<Vector3>(this.Vertices),
@@ -255,19 +269,20 @@ namespace Hedra.Rendering
                 Extradata = new List<float>(Extradata),
                 Original = Original ?? this
             };
+            if (data.Original.HasLod)
+            {
+                for (var i = 1; i < 4; ++i)
+                {
+                    var iterator = (int)Math.Pow(2, i);
+                    data.AddLOD(Get(iterator, false)?.Clone(), iterator);
+                }
+            }
+            return data;
         }
 
         public VertexData ShallowClone()
         {
-            return new VertexData
-            {
-                Indices = new List<uint>(this.Indices),
-                Vertices = new List<Vector3>(this.Vertices),
-                Colors = new List<Vector4>(this.Colors),
-                Normals = new List<Vector3>(this.Normals),
-                Extradata = new List<float>(this.Extradata),
-                Original = Original ?? this
-            };
+            return Clone();
         }
 
         public void Color(Vector4 OriginalColor, Vector4 ReplacementColor)
@@ -279,6 +294,7 @@ namespace Hedra.Rendering
                     Colors[i] = ReplacementColor;
                 }
             }
+            ApplyRecursively(V => V.Color(OriginalColor, ReplacementColor));
         }
         
         public static VertexData operator +(VertexData V1, VertexData V2)
@@ -311,8 +327,8 @@ namespace Hedra.Rendering
                                   + Colors.Count * Vector4.SizeInBytes 
                                   + Extradata.Count * sizeof(float);
         public bool IsClone => Original != null;
-
-        public void Clear()
+        
+        public void Dispose()
         {
             Extradata.Clear();
             Indices.Clear();
@@ -320,11 +336,6 @@ namespace Hedra.Rendering
             Vertices.Clear();
             Indices.Clear();
             Extradata.Clear();
-        }
-
-        public void Dispose()
-        {
-            this.Clear();
         }
     }
 }

@@ -70,6 +70,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod)
         {
+            if (Instance.HasLod)
+            {
+                int a = 0;
+            }
             var element = Instance.Get(Lod);
             var model = element.OriginalMesh.Clone();
             model.Transform(element.TransMatrix);

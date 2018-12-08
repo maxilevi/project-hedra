@@ -109,16 +109,15 @@ namespace Hedra.Engine.Management
             return Provider.PLYLoader(File, Scale, Vector3.Zero, Vector3.Zero);
         }
 
+        public static VertexData LoadPLYWithLODs(string Filename, Vector3 Scale)
+        {
+            return Provider.LoadPLYWithLODs(Filename, Scale);
+        }
+        
         public static VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation,
             bool HasColors = true)
         {
             return Provider.PLYLoader(File, Scale, Position, Rotation, HasColors);
-        }
-
-        public static VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation,
-            bool HasColors = true)
-        {
-            return Provider.PLYLoader(Data, Scale, Position, Rotation, HasColors);
         }
         
         public static ModelData DAELoader(string File)

@@ -7,10 +7,10 @@ namespace Hedra.Engine.CacheSystem
     {
         public DeadTreesCache()
         {
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/Trees/DeadTree0.ply", Vector3.One));
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/Trees/DeadTree1.ply", Vector3.One));
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/Trees/DeadTree2.ply", Vector3.One));
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/Trees/DeadTree3.ply", Vector3.One));
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/DeadTree0.ply", Vector3.One));
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/DeadTree1.ply", Vector3.One));
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/DeadTree2.ply", Vector3.One));
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/DeadTree3.ply", Vector3.One));
 
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/DeadTree0.ply", 2, Vector3.One));
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/DeadTree0.ply", 2, Vector3.One));

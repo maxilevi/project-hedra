@@ -41,7 +41,7 @@ namespace Hedra.Engine.StructureSystem
             model.Color(AssetManager.ColorCode1, region.Colors.LeavesColor);
             model.Color(AssetManager.ColorCode2, region.Colors.LeavesColor  * .8f);
 
-            model.Extradata.AddRange(model.GenerateWindValues());
+            model.AddWindValues();
             float treeRng = Utils.Rng.NextFloat();
             for (var i = 0; i < model.Extradata.Count; i++)
             {
