@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Core;
+using Hedra.Engine.Generation;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -22,8 +23,8 @@ namespace Hedra.Engine.Rendering
         private bool _boundsInitialized;
         private Vector3 _bounds;
         private Dictionary<int, InstanceData> _lodVersions;
+        private VertexData _originalMesh;
         
-        public VertexData OriginalMesh { get; set; }
         public List<Vector4> Colors { get; set; }
         public List<float> ExtraData { get; set; }
         public Matrix4 TransMatrix { get; set; }
@@ -32,8 +33,19 @@ namespace Hedra.Engine.Rendering
         public bool HasExtraData { get; set; } = true;
         public bool VariateColor { get; set; } = true;
         public bool GraduateColor { get; set; }
-        public bool HasLod { get; set; }
+        public Func<BlockType, bool> PlaceCondition { get; set; }
 
+        public VertexData OriginalMesh
+        {
+            get => _originalMesh;
+            set
+            {
+                _originalMesh = value;
+                //UpdateLODs();
+            }
+        }
+        
+        /* ReSharper disable once InconsistentNaming */
         public void AddLOD(InstanceData Model, int Level)
         {
             if(Level != 2 && Level != 4 && Level != 8)

@@ -128,7 +128,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             return new GroundworkItem
             {
-                Plateau = new Plateau(Position, Radius * 1.5f),
+                Plateau = new RoundedPlateau(Position, Radius * 1.5f),
                 Groundwork = new RoundedGroundwork(Position, Radius, Type)
             };
         }
@@ -154,7 +154,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public class GroundworkItem
         {
-            public Plateau Plateau { get; set; }
+            public BasePlateau Plateau { get; set; }
             public IGroundwork Groundwork { get; set; }
         }
     }

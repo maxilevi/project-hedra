@@ -31,12 +31,12 @@ namespace Hedra.Engine.Generation
         private readonly HashSet<CachedVertexData> _models;
         private readonly HashSet<InstanceData> _instances;
         private readonly HashSet<IGroundwork> _groundworks;
-        private readonly HashSet<Plateau> _plateaus;
+        private readonly HashSet<BasePlateau> _plateaus;
         private readonly object _lock = new object();
         public event OnModelAdded ModelAdded;
         public event OnInstanceAdded InstanceAdded;
         public Vector3 Position { get; }
-        public Plateau Mountain { get; }
+        public RoundedPlateau Mountain { get; }
         public BaseStructure WorldObject { get; }
         public float Radius { get; private set; }
         public StructureDesign Design { get; }
@@ -44,7 +44,7 @@ namespace Hedra.Engine.Generation
         public bool Built { get; set; }
         public bool Disposed { get; private set; }
 
-        public CollidableStructure(StructureDesign Design, Vector3 Position, Plateau Mountain, BaseStructure WorldObject)
+        public CollidableStructure(StructureDesign Design, Vector3 Position, RoundedPlateau Mountain, BaseStructure WorldObject)
         {
             this.Position = new Vector3(Position.X, (Mountain?.MaxHeight + 1) * Chunk.BlockSize ?? Position.Y, Position.Z);
             this.Mountain = Mountain;
@@ -54,7 +54,7 @@ namespace Hedra.Engine.Generation
             this._colliders = new HashSet<ICollidable>();
             this._models = new HashSet<CachedVertexData>();
             this._groundworks = new HashSet<IGroundwork>();
-            this._plateaus = new HashSet<Plateau>();
+            this._plateaus = new HashSet<BasePlateau>();
             this._instances = new HashSet<InstanceData>();
         }
 
@@ -90,7 +90,7 @@ namespace Hedra.Engine.Generation
             }
         }
         
-        public Plateau[] Plateaus
+        public BasePlateau[] RoundedPlateaux
         {
             get
             {
@@ -155,21 +155,15 @@ namespace Hedra.Engine.Generation
             }
         }
         
-        public void AddPlateau(params Plateau[] Plateaus)
+        public void AddPlateau(params BasePlateau[] RoundedPlateaux)
         {
             lock (_lock)
             {
-                for (var i = 0; i < Plateaus.Length; i++)
+                for (var i = 0; i < RoundedPlateaux.Length; i++)
                 {
-                    _plateaus.Add(Plateaus[i]);
+                    _plateaus.Add(RoundedPlateaux[i]);
                 }
             }
-        }
-
-        public bool CanAddPlateau(Plateau Mount)
-        {
-            lock(_lock)
-                return World.WorldBuilding.CanAddPlateau(Mount, _plateaus.ToArray());
         }
 
         private void CalculateRadius()

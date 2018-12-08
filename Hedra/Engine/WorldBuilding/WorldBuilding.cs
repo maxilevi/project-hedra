@@ -29,14 +29,14 @@ namespace Hedra.Engine.WorldBuilding
     public class WorldBuilding : IWorldBuilding
     {
         private readonly List<IGroundwork> _groundwork;
-        private List<Plateau> _plateaus;
+        private readonly List<BasePlateau> _plateaus;
         private readonly object _plateauLock = new object();
         private readonly object _groundworkLock = new object();
 
         public WorldBuilding()
         {
             _groundwork = new List<IGroundwork>();
-            _plateaus = new List<Plateau>();
+            _plateaus = new List<BasePlateau>();
         }
 
         public Entity SpawnCarriage(Vector3 Position)
@@ -138,7 +138,7 @@ namespace Hedra.Engine.WorldBuilding
                 Human.SetHelmet(ItemPool.Grab(CommonItems.ChristmasHat).Helmet);
         }
 
-        public bool CanAddPlateau(Plateau Mount, Plateau[] Candidates)
+        public bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates)
         {
 
             for (var i = 0; i < Candidates.Length; i++)
@@ -152,13 +152,13 @@ namespace Hedra.Engine.WorldBuilding
             return true;
         }
 
-        public bool CanAddPlateau(Plateau Mount)
+        public bool CanAddPlateau(RoundedPlateau Mount)
         {
             lock (_plateauLock)
-                return CanAddPlateau(Mount, _plateaus.ToArray());
+                return CanAddPlateau(Mount, _plateaus.Select(P => P as RoundedPlateau).Where(P => P != null).ToArray());
         }
 
-        private void RemovePlateau(Plateau Mount)
+        private void RemovePlateau(BasePlateau Mount)
         {
             lock (_plateauLock)
             {
@@ -174,7 +174,7 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        private void AddPlateau(Plateau Mount)
+        private void AddPlateau(BasePlateau Mount)
         {
             try
             {
@@ -191,7 +191,7 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        private void ApplyMultiple(Plateau Mount)
+        private void ApplyMultiple(BasePlateau Mount)
         {
             var plateaus = _plateaus.OrderByDescending(P => P.MaxHeight).ToList();
             for (var i = 0; i < plateaus.Count; i++)
@@ -208,7 +208,7 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
         
-        public Plateau[] Plateaus
+        public BasePlateau[] Plateaux
         {
             get
             {
@@ -228,12 +228,12 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        private void LoopStructure(CollidableStructure Structure, Action<Plateau> PlateauDo, Action<IGroundwork> GroundworkDo)
+        private void LoopStructure(CollidableStructure Structure, Action<BasePlateau> PlateauDo, Action<IGroundwork> GroundworkDo)
         {
             if (Structure.Mountain != null)
                 PlateauDo(Structure.Mountain);
             
-            var plateaus = Structure.Plateaus.OrderByDescending(P => P.MaxHeight).ToArray();
+            var plateaus = Structure.RoundedPlateaux.OrderByDescending(P => P.MaxHeight).ToArray();
             for (var i = 0; i < plateaus.Length; i++)
                 PlateauDo(plateaus[i]);
             

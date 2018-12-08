@@ -10,17 +10,17 @@ namespace HedraTests.Structure
 {
     public class StructureDesignWorldBuildingMock : IWorldBuilding
     {
-        public bool CanAddPlateau(Plateau Mount)
+        public bool CanAddPlateau(RoundedPlateau Mount)
         {
             return false;
         }
 
-        public bool CanAddPlateau(Plateau Mount, Plateau[] Candidates)
+        public bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates)
         {
             return false;
         }
 
-        public Plateau[] Plateaus => null;
+        public BasePlateau[] Plateaux => null;
         
         public IGroundwork[] Groundworks => null;
         

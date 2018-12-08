@@ -67,6 +67,20 @@ namespace Hedra.Engine.PhysicsSystem
         {
              return HeightAtPosition(new Vector3(X,0,Z), Lod);
         }
+
+        public static Vector3 ClampToNearestLod(Vector3 Position)
+        {
+            return ClampToNearestLod(Position, World.GetChunkAt(Position));
+        }
+
+        private static Vector3 ClampToNearestLod(Vector3 Position, Chunk UnderChunk)
+        {
+            var lod = UnderChunk.Landscape.GeneratedLod;
+            var chunkOffset = World.ToChunkSpace(Position);
+            var bSpace = World.ToBlockSpace(Position);
+            return new Vector3(lod * (float) Math.Round(bSpace.X / lod), 0, lod * (float) Math.Round(bSpace.Z / lod)) *
+                Chunk.BlockSize + chunkOffset.ToVector3();
+        }
         
         public static float HeightAtPosition(Vector3 BlockPosition, int Lod = -1)
         {
@@ -82,11 +96,7 @@ namespace Hedra.Engine.PhysicsSystem
                 if (underChunk != null && underChunk.Landscape.GeneratedLod > 1)
                 {
                     Lod = underChunk.Landscape.GeneratedLod;
-                    var chunkOffset = World.ToChunkSpace(BlockPosition);
-                    var bSpace = World.ToBlockSpace(BlockPosition);
-                    BlockPosition =
-                        new Vector3(Lod * (float) Math.Round(bSpace.X / Lod), 0, Lod * (float) Math.Round(bSpace.Z / Lod)) *
-                        Chunk.BlockSize + chunkOffset.ToVector3();
+                    BlockPosition = ClampToNearestLod(BlockPosition, underChunk);
                 }
                 else
                 {

@@ -17,16 +17,28 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     public class HouseBuilder : Builder<HouseParameters>
     {
         protected override bool LookAtCenter => true;
+        protected override bool GraduateColor => false;
+        
         public HouseBuilder(CollidableStructure Structure) : base(Structure)
         {
         }
         
         public override bool Place(HouseParameters Parameters, VillageCache Cache)
         {
-            var work = CreateGroundwork(Parameters.Position, Parameters.GetSize(Cache), Parameters.Type);
-            work.Groundwork.NoTrees = true;
-            work.Groundwork.NoPlants = true;
-            return this.PushGroundwork(work);
+            var width = Parameters.GetSize(Cache) * 2f;
+            var ground = new SquaredGroundwork(Parameters.Position, width * .5f, Parameters.Type)
+            {
+                NoPlants = true,
+                NoTrees = true
+            };
+            return PushGroundwork(new GroundworkItem
+            {
+                Groundwork = ground,
+                Plateau = GroundworkType.Squared == Parameters.GroundworkType
+                    ? (BasePlateau) new SquaredPlateau(Parameters.Position, width) { Hardness = 3.0f }
+                    : new RoundedPlateau(Parameters.Position, width * .5f * 1.5f) { Hardness = 6.0f }                 
+            });
+        
         }
 
         public override BuildingOutput Build(HouseParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)

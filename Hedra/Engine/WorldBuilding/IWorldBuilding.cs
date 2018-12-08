@@ -9,9 +9,9 @@ namespace Hedra.Engine.WorldBuilding
 {
     public interface IWorldBuilding
     {
-        bool CanAddPlateau(Plateau Mount);
-        bool CanAddPlateau(Plateau Mount, Plateau[] Candidates);
-        Plateau[] Plateaus { get; }
+        bool CanAddPlateau(RoundedPlateau Mount);
+        bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates);
+        BasePlateau[] Plateaux { get; }
         IGroundwork[] Groundworks { get; }
         Entity SpawnCarriage(Vector3 Position);
         Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition);

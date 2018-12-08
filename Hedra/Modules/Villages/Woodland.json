@@ -23,7 +23,7 @@
         "Path": "Assets/Env/Village/Farm0_Prop1.ply",
         "Chance": 90,
         "HasWindmill": true,
-        "WindmillChance": 25
+        "WindmillChance": 15
       }
     ]
   },

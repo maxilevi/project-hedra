@@ -25,9 +25,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class Chunk : IDisposable, IPositionable
     {
-        public static float BlockSize { get; } = 4.0f;
-        public static int Height { get; } = 256;
-        public static int Width { get; } = 128;
+        public const float BlockSize = 4.0f;
+        public const int Height = 256;
+        public const int Width = 128;
         public Region Biome { get; }
         public int BoundsX { get; private set; }
         public int BoundsY { get; private set; }
@@ -420,7 +420,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 var B = _blocks[X][y][Z];
                 if (B.Type != BlockType.Air && B.Type != BlockType.Water)
-                    return _blocks[X][y][Z];
+                    return B;
             }
 
             return new Block();

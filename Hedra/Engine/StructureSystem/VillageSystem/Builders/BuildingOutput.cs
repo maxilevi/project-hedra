@@ -35,7 +35,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
         }
         
-        public CompressedBuildingOutput AsCompressed()
+        public CompressedBuildingOutput Compress()
         {
             return new CompressedBuildingOutput
             {

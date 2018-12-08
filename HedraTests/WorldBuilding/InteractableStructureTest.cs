@@ -148,6 +148,7 @@ namespace HedraTests.WorldBuilding
     {
         private bool _disposeAfterUse;
         private bool _canInteract;
+        protected override float InteractionAngle => .9f;
         public const int StructureInteractionRadius = 25;
         public override string Message => "Here is a mock string";
         public override int InteractDistance => StructureInteractionRadius;

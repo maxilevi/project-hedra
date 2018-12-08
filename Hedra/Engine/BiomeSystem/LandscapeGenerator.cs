@@ -97,7 +97,7 @@ namespace Hedra.Engine.BiomeSystem
 
             var noise3D = new float[0/*Chunk.Height / noiseScale*/];
 
-            var plateaus = World.WorldBuilding.Plateaus;
+            var plateaus = World.WorldBuilding.Plateaux;
             var groundworks = World.WorldBuilding.Groundworks.ToList();
 
             var structs = World.StructureHandler.StructureItems;
@@ -215,7 +215,7 @@ namespace Hedra.Engine.BiomeSystem
             Blocks[x][y][z] = currentBlock;
         }
 
-        private void HandleStructures(int x, int z, Vector2 position, List<IGroundwork> groundworks, Plateau[] plateaus,
+        private void HandleStructures(int x, int z, Vector2 position, List<IGroundwork> groundworks, BasePlateau[] RoundedPlateaux,
             CollidableStructure[] structs, Dictionary<Vector2, float[]> heightCache, float[] noise3D, RegionGeneration biomeGen,
             float hasPath, float hasRiver, float noiseScale, ref float height, out bool town,
             out bool makeDirt, out bool pathClamped, out float river, out float path, out float riverBorders,
@@ -253,7 +253,7 @@ namespace Hedra.Engine.BiomeSystem
             river = Mathf.Clamp(river * RiverMult, 0, RiverDepth);
 
             blockGroundworksModifier = 1.0f;
-            this.HandlePlateaus(x, z, smallFrequency, ref height, plateaus, nearGiantTree, nearCollidableStructure,
+            this.HandlePlateaus(x, z, smallFrequency, ref height, RoundedPlateaux, nearGiantTree, nearCollidableStructure,
                 ref river, ref riverBorders, ref path, ref blockGroundworksModifier, ref pathClamped, out var plateauLerp);
 
             height = Math.Max(0, height);
@@ -325,15 +325,15 @@ namespace Hedra.Engine.BiomeSystem
                     
         }
 
-        private void HandlePlateaus(int X, int Z, float smallFrequency, ref float height, Plateau[] plateaus, CollidableStructure nearGiantTree,
+        private void HandlePlateaus(int X, int Z, float smallFrequency, ref float height, BasePlateau[] RoundedPlateaux, CollidableStructure nearGiantTree,
             CollidableStructure nearCollidableStructure, ref float river, ref float riverBorders, ref float path,
             ref float blockGroundworksModifier, ref bool pathClamped, out float plateauLerp)
         {
             plateauLerp = 0;
-            for (var i = 0; i < plateaus.Length; i++)
+            for (var i = 0; i < RoundedPlateaux.Length; i++)
             {
                 var point = new Vector2(OffsetX + X * Chunk.BlockSize, OffsetZ + Z * Chunk.BlockSize);
-                height = plateaus[i].Apply(point, height, out var final, smallFrequency);
+                height = RoundedPlateaux[i].Apply(point, height, out var final, smallFrequency);
                 
                 if (nearGiantTree == null)
                 {
@@ -342,7 +342,7 @@ namespace Hedra.Engine.BiomeSystem
                         riverBorders);
                 }
 
-                if (path > 0 && nearCollidableStructure != null && plateaus[i] == nearCollidableStructure.Mountain)
+                if (path > 0 && nearCollidableStructure != null && RoundedPlateaux[i] == nearCollidableStructure.Mountain)
                     pathClamped = true;
 
                 blockGroundworksModifier = Mathf.Clamp(Mathf.Lerp(0, blockGroundworksModifier, 1 - Math.Min(1, final * 3f)),
@@ -441,7 +441,7 @@ namespace Hedra.Engine.BiomeSystem
         private void DoTreeAndStructurePlacements(Block[][][] Blocks, RegionCache Cache, int Lod)
         {
             var structs = World.StructureHandler.StructureItems;
-            var plateaus = World.WorldBuilding.Plateaus.Where(P => P.NoTrees).ToArray();
+            var plateaus = World.WorldBuilding.Plateaux.Where(P => P.NoTrees).ToArray();
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoTrees).ToArray();
             for (var _x = 0; _x < this.Chunk.BoundsX; _x++)
             {
@@ -487,12 +487,12 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private void LoopPlateaus(int X, int Z, Plateau[] Plateaus, out bool Result)
+        private void LoopPlateaus(int X, int Z, BasePlateau[] RoundedPlateaux, out bool Result)
         {
             Result = false;
-            for (var i = 0; i < Plateaus.Length; i++)
+            for (var i = 0; i < RoundedPlateaux.Length; i++)
             {
-                if (Plateaus[i].Collides(new Vector2(X * Chunk.BlockSize + OffsetX, Z * Chunk.BlockSize + OffsetZ)))
+                if (RoundedPlateaux[i].Collides(new Vector2(X * Chunk.BlockSize + OffsetX, Z * Chunk.BlockSize + OffsetZ)))
                 {
                     Result = true;
                     return;

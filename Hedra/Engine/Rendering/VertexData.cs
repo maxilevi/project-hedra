@@ -195,6 +195,8 @@ namespace Hedra.Rendering
 
         public VertexData Optimize()
         {
+            if (Colors.Count == 0) return this;
+
             var decoupledVertices = Indices.Select(I => Vertices[(int)I]).ToList();
             var newIndices = new List<uint>();
             var newVertices = decoupledVertices.Distinct().ToList();

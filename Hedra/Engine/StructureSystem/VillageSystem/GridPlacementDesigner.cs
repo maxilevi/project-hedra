@@ -139,6 +139,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             var parameter = HousePlacer.Place(Point);
             parameter.Rotation = Rotation;
             parameter.Type = Distance > NoPathZone ? BlockType.StonePath : parameter.Type;
+            parameter.GroundworkType = Distance > SparseZone ? GroundworkType.Rounded : GroundworkType.Squared;
             Design.Houses.Add(parameter);    
         }
 

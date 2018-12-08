@@ -158,6 +158,7 @@
     <Compile Include="Engine\CacheSystem\PumpkinCache.cs" />
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
     <Compile Include="Engine\Game\Season.cs" />
+    <Compile Include="Engine\Management\WaitForChunk.cs" />
     <Compile Include="Engine\PlantSystem\CornDesign.cs" />
     <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
     <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
@@ -167,6 +168,8 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\WindmillDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\WindmillBlades.cs" />
     <Compile Include="Engine\WorldBuilding\BaseGroundwork.cs" />
+    <Compile Include="Engine\WorldBuilding\BasePlateau.cs" />
+    <Compile Include="Engine\WorldBuilding\GroundworkType.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredPlateau.cs" />
     <Compile Include="HedraContent.cs" />
@@ -720,7 +723,7 @@
     <Compile Include="Engine\WorldBuilding\InteractableStructure.cs" />
     <Compile Include="Engine\WorldBuilding\LampPost.cs" />
     <Compile Include="Engine\WorldBuilding\NameGenerator.cs" />
-    <Compile Include="Engine\WorldBuilding\Plateau.cs" />
+    <Compile Include="Engine\WorldBuilding\RoundedPlateau.cs" />
     <Compile Include="Engine\WorldBuilding\WorldBuilding.cs" />
     <Compile Include="Engine\WorldBuilding\BaseStructure.cs" />
     <Compile Include="Engine\Reflection.cs" />
@@ -1023,6 +1026,74 @@
       <Link>Assets\Chr\WarriorSmash.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree0.ply">
+      <Link>Assets\Env\Trees\AppleTree0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree1.ply">
+      <Link>Assets\Env\Trees\AppleTree1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\AppleTrees\AppleTree2.ply">
+      <Link>Assets\Env\Trees\AppleTree2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress0.ply">
+      <Link>Assets\Env\Trees\Cypress0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress1.ply">
+      <Link>Assets\Env\Trees\Cypress1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Cypress\Cypress2.ply">
+      <Link>Assets\Env\Trees\Cypress2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree0.ply">
+      <Link>Assets\Env\Trees\DeadTree0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree1.ply">
+      <Link>Assets\Env\Trees\DeadTree1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree2.ply">
+      <Link>Assets\Env\Trees\DeadTree2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree3.ply">
+      <Link>Assets\Env\Trees\DeadTree3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak0.ply">
+      <Link>Assets\Env\Trees\Oak0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak1.ply">
+      <Link>Assets\Env\Trees\Oak1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Oaks\Oak2.ply">
+      <Link>Assets\Env\Trees\Oak2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine0.ply">
+      <Link>Assets\Env\Trees\Pine0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine1.ply">
+      <Link>Assets\Env\Trees\Pine1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine2.ply">
+      <Link>Assets\Env\Trees\Pine2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Pines\Pine3.ply">
+      <Link>Assets\Env\Trees\Pine3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\Reed\Reed0.ply">
       <Link>Assets\Env\Plants\Reed0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1033,6 +1104,18 @@
     </None>
     <None Include="..\project-hedra-assets\Environment\Reed\Reed2.ply">
       <Link>Assets\Env\Plants\Reed2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree0.ply">
+      <Link>Assets\Env\Trees\TallTree0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree1.ply">
+      <Link>Assets\Env\Trees\TallTree1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree2.ply">
+      <Link>Assets\Env\Trees\TallTree2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Berry.ply">
@@ -1573,6 +1656,22 @@
     </None>
     <None Include="..\project-hedra-assets\Villages\Farm\Windmill0_Blades.ply">
       <Link>Assets\Env\Village\Windmill0_Blades.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Windmill0_Collider0.ply">
+      <Link>Assets\Env\Colliders\Windmill0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Windmill0_Collider1.ply">
+      <Link>Assets\Env\Colliders\Windmill0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Windmill0_Collider2.ply">
+      <Link>Assets\Env\Colliders\Windmill0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Windmill0_Collider3.ply">
+      <Link>Assets\Env\Colliders\Windmill0_Collider3.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0-Lod.ply">
@@ -3566,18 +3665,6 @@
       <Link>Assets\Chr\WolfIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\AppleTree0.ply">
-      <Link>Assets\Env\AppleTree0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\AppleTree1.ply">
-      <Link>Assets\Env\AppleTree1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\AppleTree2.ply">
-      <Link>Assets\Env\AppleTree2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Arrow.ply">
       <Link>Assets\Items\Arrow.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -3776,10 +3863,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Colliders\DeadTree0_Collider9.ply">
       <Link>Assets\Env\Colliders\DeadTree0_Collider9.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\DesertRock0_Collider0.ply">
-      <Link>Assets\Env\Colliders\DesertRock0_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Colliders\Fort1_Collider0.ply">
@@ -4675,46 +4758,6 @@
       <Link>Assets\Env\Colliders\Oak2_Collider5.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Palmtree0_Collider0.ply">
-      <Link>Assets\Env\Colliders\Palmtree0_Collider0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Palmtree0_Collider1.ply">
-      <Link>Assets\Env\Colliders\Palmtree0_Collider1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Palmtree0_Collider2.ply">
-      <Link>Assets\Env\Colliders\Palmtree0_Collider2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Palmtree0_Collider3.ply">
-      <Link>Assets\Env\Colliders\Palmtree0_Collider3.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Palmtree0_Collider4.ply">
-      <Link>Assets\Env\Colliders\Palmtree0_Collider4.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Palmtree0_Collider5.ply">
-      <Link>Assets\Env\Colliders\Palmtree0_Collider5.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Palmtree0_Collider6.ply">
-      <Link>Assets\Env\Colliders\Palmtree0_Collider6.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Palmtree0_Collider7.ply">
-      <Link>Assets\Env\Colliders\Palmtree0_Collider7.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Palmtree0_Collider8.ply">
-      <Link>Assets\Env\Colliders\Palmtree0_Collider8.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Palmtree0_Collider9.ply">
-      <Link>Assets\Env\Colliders\Palmtree0_Collider9.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Colliders\Pine0_Collider0.ply">
       <Link>Assets\Env\Colliders\Pine0_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4751,46 +4794,6 @@
       <Link>Assets\Env\Colliders\Pine3_Collider1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Pyramid1_Collider0.ply">
-      <Link>Assets\Env\Colliders\Pyramid1_Collider0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Pyramid1_Collider1.ply">
-      <Link>Assets\Env\Colliders\Pyramid1_Collider1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Pyramid1_Collider2.ply">
-      <Link>Assets\Env\Colliders\Pyramid1_Collider2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Pyramid1_Collider3.ply">
-      <Link>Assets\Env\Colliders\Pyramid1_Collider3.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Pyramid1_Collider4.ply">
-      <Link>Assets\Env\Colliders\Pyramid1_Collider4.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Pyramid1_Collider5.ply">
-      <Link>Assets\Env\Colliders\Pyramid1_Collider5.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Pyramid1_Collider6.ply">
-      <Link>Assets\Env\Colliders\Pyramid1_Collider6.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Pyramid1_Collider7.ply">
-      <Link>Assets\Env\Colliders\Pyramid1_Collider7.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Pyramid1_Collider8.ply">
-      <Link>Assets\Env\Colliders\Pyramid1_Collider8.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Pyramid1_Collider9.ply">
-      <Link>Assets\Env\Colliders\Pyramid1_Collider9.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Colliders\Roaster0_Collider0.ply">
       <Link>Assets\Env\Colliders\Roaster0_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4813,54 +4816,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Colliders\Rock0_Collider0.ply">
       <Link>Assets\Env\Colliders\Rock0_Collider0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider0.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider1.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider10.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider10.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider11.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider11.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider2.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider3.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider3.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider4.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider4.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider5.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider5.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider6.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider6.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider7.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider7.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider8.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider8.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Ruins1_Collider9.ply">
-      <Link>Assets\Env\Colliders\Ruins1_Collider9.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Colliders\Stable0_Collider0.ply">
@@ -4983,110 +4938,6 @@
       <Link>Assets\Env\Colliders\TallTree2_Collider1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider0.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider1.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider10.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider10.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider11.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider11.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider12.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider12.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider13.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider13.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider14.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider14.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider15.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider15.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider16.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider16.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider17.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider17.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider18.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider18.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider19.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider19.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider2.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider20.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider20.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider21.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider21.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider22.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider22.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider23.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider23.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider24.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider24.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider25.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider25.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider3.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider3.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider4.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider4.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider5.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider5.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider6.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider6.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider7.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider7.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider8.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider8.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Colliders\Temple0_Collider9.ply">
-      <Link>Assets\Env\Colliders\Temple0_Collider9.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\CommonBronzeAxe.ply">
       <Link>Assets\Items\Axes\CommonBronzeAxe.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -5125,38 +4976,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\CreationPlatform.ply">
       <Link>Assets\Intro\CreationPlatform.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Cypress0.ply">
-      <Link>Assets\Env\Cypress0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Cypress1.ply">
-      <Link>Assets\Env\Cypress1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Cypress2.ply">
-      <Link>Assets\Env\Cypress2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\DeadTree0.ply">
-      <Link>Assets\Env\DeadTree0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\DeadTree1.ply">
-      <Link>Assets\Env\DeadTree1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\DeadTree2.ply">
-      <Link>Assets\Env\DeadTree2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\DeadTree3.ply">
-      <Link>Assets\Env\DeadTree3.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\DesertRock0.ply">
-      <Link>Assets\Env\DesertRock0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\DivineDemonBlade.ply">
@@ -5339,48 +5158,12 @@
       <Link>Assets\Items\Mount.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Oak0.ply">
-      <Link>Assets\Env\Oak0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Oak1.ply">
-      <Link>Assets\Env\Oak1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Oak2.ply">
-      <Link>Assets\Env\Oak2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Obelisk.ply">
       <Link>Assets\Env\Obelisk.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Palace.ply">
-      <Link>Assets\Env\Palace.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Palmtree0.ply">
-      <Link>Assets\Env\Palmtree0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Particle.ply">
       <Link>Assets\Env\Particle.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Pine0.ply">
-      <Link>Assets\Env\Pine0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Pine1.ply">
-      <Link>Assets\Env\Pine1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Pine2.ply">
-      <Link>Assets\Env\Pine2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Pine3.ply">
-      <Link>Assets\Env\Pine3.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Pyramid1.ply">
@@ -5443,18 +5226,6 @@
       <Link>Assets\Env\Rock1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\RuinAltar.ply">
-      <Link>Assets\Env\RuinAltar.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Ruins1.ply">
-      <Link>Assets\Env\Ruins1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\RuinStone.ply">
-      <Link>Assets\Env\RuinStone.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Shuriken.ply">
       <Link>Assets\Items\Shuriken.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -5469,22 +5240,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Stable0.ply">
       <Link>Assets\Env\Village\Stable0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\TallTree0.ply">
-      <Link>Assets\Env\TallTree0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\TallTree1.ply">
-      <Link>Assets\Env\TallTree1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\TallTree2.ply">
-      <Link>Assets\Env\TallTree2.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Temple0.ply">
-      <Link>Assets\Env\Temple0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\TurtleShell.ply">

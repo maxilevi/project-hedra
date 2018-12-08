@@ -9,10 +9,10 @@ layout(location = 1)in vec4 InColor;
 layout(location = 2)in vec3 InNormal;
 
 out vec4 raw_color;
+out vec4 Color;
 out vec4 InPos;
 out vec4 InNorm;
 out vec3 pointlight_color;
-out vec4 Color;
 out float Visibility;
 out float pass_height;
 out vec4 pass_botColor;

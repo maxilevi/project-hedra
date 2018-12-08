@@ -36,7 +36,6 @@ namespace Hedra.Engine.CacheSystem
         CampfireTent,
         CampfireRoaster,
         CampfireLogs,
-        Mushroom,
         Reed,
         Sunflower,
         Pumpkin,

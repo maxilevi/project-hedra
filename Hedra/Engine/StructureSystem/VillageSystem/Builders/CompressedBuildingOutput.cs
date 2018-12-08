@@ -3,6 +3,10 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using System;
+using System.Collections;
+using Hedra.Engine.Generation;
+using Hedra.Engine.Management;
+using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -17,6 +21,35 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             for (var i = 0; i < Structures.Count; i++)
                 Structures[i].Dispose();
+        }
+      
+        public IEnumerator Place(Vector3 Position)
+        {
+            var height = Physics.HeightAtPosition(Position);
+            Structures.ForEach(S => S.Position += Vector3.UnitY * height);
+            var transMatrix = Matrix4.CreateTranslation(Vector3.UnitY * height);
+            Shapes.ForEach(S => S.Transform(transMatrix));
+            Models.ForEach(M => M.Transform(transMatrix));
+            for (var i = Instances.Count - 1; i > -1; --i)
+            {
+                var position = Instances[i].Position;
+                var waiter = new WaitForChunk(position);
+                while (waiter.MoveNext()) yield return null;            
+                if (waiter.Disposed) yield break;
+
+                var clampedPosition = Physics.ClampToNearestLod(position);
+                var block = World.GetHighestBlockAt(clampedPosition.X, clampedPosition.Z);
+                if (Instances[i].PlaceCondition == null || Instances[i].PlaceCondition(block.Type))
+                {
+                    var instanceHeight = Physics.HeightAtPosition(position);
+                    Instances[i].Apply(Matrix4.CreateTranslation(Vector3.UnitY * instanceHeight));
+                }
+                else
+                {
+                    Instances.RemoveAt(i);
+                    var block2 = World.GetHighestBlockAt(position.X, position.Z);
+                }
+            }
         }
 
         public bool IsEmpty => Models.Count == 0 && Instances.Count == 0 && Shapes.Count == 0 && Structures.Count == 0; 

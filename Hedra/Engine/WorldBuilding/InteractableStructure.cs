@@ -28,7 +28,7 @@ namespace Hedra.Engine.WorldBuilding
     
     public abstract class InteractableStructure : BaseStructure, IUpdatable
     {
-        public virtual float InteractionAngle => .9f;
+        protected virtual float InteractionAngle => .75f;
         protected virtual bool SingleUse => true;
         protected virtual bool DisposeAfterUse => true;
         protected virtual bool CanInteract => true;
@@ -65,7 +65,7 @@ namespace Hedra.Engine.WorldBuilding
             var player = GameManager.Player;
 
             bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
-                player.View.LookingDirection.Xz.NormalizedFast()) > .75f;                
+                player.View.LookingDirection.Xz.NormalizedFast()) > InteractionAngle;                
             
             if (IsInRadius() && IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract)
             {

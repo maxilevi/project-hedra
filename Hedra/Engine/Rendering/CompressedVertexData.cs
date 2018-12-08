@@ -45,6 +45,23 @@ namespace Hedra.Engine.Rendering
         {
             Uncompressed.Compress(Compressed);
         }
+
+        public void Transform(Matrix4 Transformation)
+        {
+            for (var i = 0; i < Vertices.Count; i++)
+            {
+                Vertices[i] = Vector3.TransformPosition(Vertices[i], Transformation);
+            }
+            var normalMat = Transformation.ClearScale().ClearTranslation().Inverted();
+            for (var i = 0; i < _compressedNormals.Count; i++)
+            {
+                _compressedNormals[i] = new CompressedValue<Vector3>()
+                {
+                    Type = Vector3.TransformNormalInverse(_compressedNormals[i].Type, normalMat),
+                    Count = _compressedNormals[i].Count
+                };
+            }
+        }
         
         public VertexData ToVertexData()
         {

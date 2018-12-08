@@ -40,6 +40,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 GraduateColors = GraduateColor
             };
             Parameters.Rotation = Vector3.UnitY * Rng.Next(0, 4) * 90;
+            SpawnPlants(Parameters, Rng, output);
             if (Parameters.PropDesign != null)
             {
                 var prop = base.Build(Parameters, Parameters.PropDesign, Cache, Rng, Center);
@@ -49,7 +50,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     var windmill = BuildWindmill(Parameters, Parameters.PropDesign, Cache, Rng, Center);
                     prop = prop.Concat(windmill);
                 }
-                SpawnPlants(Parameters, Rng, output);
                 return output.Concat(prop);
             }
             return output;
@@ -127,19 +127,19 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 design = new FernDesign();
             
             if(design == null) return;
-            for (var x = 0; x < count; x++)
+            var added = new List<Vector3>();
+            for (var x = 0; x < count * count; x++)
             {
-                for (var z = 0; z < count; z++)
-                {
-                    var offset = new Vector3((Rng.NextFloat() * 2f - 1f) * _width * .5f, 0,
-                        (Rng.NextFloat() * 2f - 1f) * _width * .5f);
-                    var position = Parameters.Position + offset;
-                    var transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
-                                      * Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian)
-                                      * Matrix4.CreateTranslation(position);
-                    
-                    Output.Instances.Add(BuildPlant(design.Model, design, World.BiomePool.GetRegion(position), transMatrix, Rng));
-                }
+                var offset = new Vector3((Rng.NextFloat() * 2f - 1f) * _width * .5f, 0,
+                    (Rng.NextFloat() * 2f - 1f) * _width * .5f);
+                var position = Parameters.Position + offset;
+                const float minDist = Chunk.BlockSize * 2.5f;
+                if (added.Any(P => (P - position).LengthSquared < minDist * minDist)) continue;
+                var transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
+                                  * Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian)
+                                  * Matrix4.CreateTranslation(position);
+                added.Add(position);
+                Output.Instances.Add(BuildPlant(design.Model, design, World.BiomePool.GetRegion(position), transMatrix, Rng));
             }
         }
 
@@ -155,7 +155,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 HasExtraData = true,
                 VariateColor = true,
                 GraduateColor = true,
-                TransMatrix = Transformation
+                TransMatrix = Transformation,
+                PlaceCondition = B => B == BlockType.FarmDirt// || B == BlockType.Dirt || B == BlockType.Grass
             };
             CacheManager.Check(data);
             return data;
@@ -179,10 +180,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return this.PushGroundwork(new GroundworkItem
             {
                 Groundwork = path,
-                Plateau = new Plateau(Parameters.Position, _width * 1.0f)
-                {
-                    Hardness = 2.5f
-                }
+                Plateau = new SquaredPlateau(Parameters.Position, _width)
             });
         }
     }
