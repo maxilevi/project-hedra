@@ -1,7 +1,9 @@
+using Hedra;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
@@ -75,6 +77,16 @@ namespace HedraTests.Structure
 
         public void DisposeStructure(CollidableStructure Structure)
         {
+        }
+
+        public float ApplyMultiple(Vector3 Position, float MaxHeight)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public float ApplyMultiple(Vector3 Position, float MaxHeight, BasePlateau[] Against)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

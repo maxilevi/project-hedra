@@ -10,6 +10,7 @@ using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.UI;
 

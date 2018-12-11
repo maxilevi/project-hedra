@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -75,7 +76,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
             Casting = true;
             Player.IsAttacking = true;
             Player.LeftWeapon.InAttackStance = false;
-            Player.Model.Blend(_throwAnimation);
+            Player.Model.BlendAnimation(_throwAnimation);
             Player.Movement.Orientate();
         }
         

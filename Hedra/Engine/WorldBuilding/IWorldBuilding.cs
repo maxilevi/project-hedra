@@ -10,10 +10,8 @@ namespace Hedra.Engine.WorldBuilding
     public interface IWorldBuilding
     {
         bool CanAddPlateau(RoundedPlateau Mount);
-        bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates);
         BasePlateau[] Plateaux { get; }
         IGroundwork[] Groundworks { get; }
-        Entity SpawnCarriage(Vector3 Position);
         Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition);
         Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition);
         Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false);
@@ -22,6 +20,7 @@ namespace Hedra.Engine.WorldBuilding
         string GenerateName();
         void SetupStructure(CollidableStructure Structure);
         void DisposeStructure(CollidableStructure Structure);
+        float ApplyMultiple(Vector3 Position, float MaxHeight);
+        float ApplyMultiple(Vector3 Position, float MaxHeight, params BasePlateau[] Against);
     }
-
 }

@@ -1,4 +1,5 @@
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -13,7 +14,7 @@ namespace Hedra.AISystem.Behaviours
         public FleeBehaviour Flee { get; set; }
         public AttackBehaviour Attack { get; set; }
 
-        public HerdBehaviour(Entity Parent) : base(Parent)
+        public HerdBehaviour(IEntity Parent) : base(Parent)
         {
             this.Flee = new FleeBehaviour(Parent);
             this.Attack = new AttackBehaviour(Parent);
@@ -23,8 +24,8 @@ namespace Hedra.AISystem.Behaviours
                 damageComponent.OnDamageEvent += delegate (DamageEventArgs Args)
                 {
                     if (Args.Damager == null) return;
-                    var nearEntities = World.InRadius<Entity>(Parent.Position, CallRadius).Where(E => E.Type == Parent.Type).ToList();                      
-                    nearEntities.ForEach(delegate(Entity E)
+                    var nearEntities = World.InRadius<IEntity>(Parent.Position, CallRadius).Where(E => E.Type == Parent.Type).ToList();                      
+                    nearEntities.ForEach(delegate(IEntity E)
                     {
                         var baseAIComponent = E.SearchComponent<BasicAIComponent>();
                         var herd = baseAIComponent.SearchBehaviour<HerdBehaviour>();

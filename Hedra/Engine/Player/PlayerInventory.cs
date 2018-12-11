@@ -9,8 +9,10 @@
 
 using System;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.Input;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
@@ -256,7 +258,7 @@ namespace Hedra.Engine.Player
         public Item Boots => this[BootsHolder];
         public int Length => _items.Length + _mainItems.Length;
 
-        public override Key OpeningKey => Key.I;
+        public override Key OpeningKey => Controls.InventoryOpen;
         public override bool Show
         {
             get => _show;

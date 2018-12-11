@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
@@ -58,7 +59,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
             for (var i = 0; i < points.Count; i++)
             {
-                var successful = this.SelectPlacer(points[i], design);
+                var successful = SelectPlacer(points[i], design);
             }
             return design;
         }
@@ -75,11 +76,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 var z = Point.GridPosition.Y;
                 var spacingX = 0f;
                 var offset = CalculateOffset();
-                if (x % 2 == 0) spacingX += VillageDesign.Spacing * .5f;
+                if ((int)x % 2 == 0) spacingX += VillageDesign.Spacing * .5f;
                 var mod = (1.0f + Math.Max(0, distFromCenter - SparseZone) * 2f) * VillageDesign.Spacing * (Point.Position.NormalizedFast());
                 Point.Position = (new Vector2(VillageDesign.Spacing * x, VillageDesign.Spacing * z + spacingX) - offset + mod.Xz).ToVector3();
             }
-
+            
             if (distFromCenter < .2f)
             {
                 if (rng < .5f && BlacksmithPlacer.SpecialRequirements(Point))
@@ -140,7 +141,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             parameter.Rotation = Rotation;
             parameter.Type = Distance > NoPathZone ? BlockType.StonePath : parameter.Type;
             parameter.GroundworkType = Distance > SparseZone ? GroundworkType.Rounded : GroundworkType.Squared;
-            Design.Houses.Add(parameter);    
+            Design.Houses.Add(parameter); 
         }
 
         private float CalculateDistanceFromCenter(Vector3 Position)

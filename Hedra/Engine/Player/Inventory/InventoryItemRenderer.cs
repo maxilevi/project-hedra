@@ -1,5 +1,6 @@
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
@@ -93,9 +94,9 @@ namespace Hedra.Engine.Player.Inventory
             var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 1, 1024f);
             Renderer.LoadProjection(projectionMatrix);
 
-            var offset = Item.IsWeapon
+            var offset = Vector3.Zero;/*Item.IsWeapon
                 ? Vector3.UnitY * 0.4f - Vector3.UnitX * 0.4f
-                : Vector3.UnitY * 0.25f;
+                : Vector3.UnitY * 0.25f*/;
             var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset, offset, Vector3.UnitY);
             Renderer.LoadModelView(lookAt);
 

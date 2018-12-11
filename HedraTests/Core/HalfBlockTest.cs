@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Hedra;
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Generation;
 using NUnit.Framework;

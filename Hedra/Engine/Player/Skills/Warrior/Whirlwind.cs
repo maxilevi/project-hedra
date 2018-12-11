@@ -9,8 +9,10 @@
 
 using System;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
@@ -27,8 +29,8 @@ namespace Hedra.Engine.Player.Skills.Warrior
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
         protected override bool Grayscale => !Player.HasWeapon;
         protected override int MaxLevel => 24;
-        public override string Description => "A fierce spinning attack.";        
-        public override string DisplayName => "Whirlwind";
+        public override string Description => Translations.Get("whirlwind_desc");        
+        public override string DisplayName => Translations.Get("whirlwind");
         public override float ManaCost => Math.Max(120 - 4f * base.Level, 40);
         public override float MaxCooldown => (float) Math.Max(12.0 - .25f * base.Level, 6) + WhirlwindTime;
         private float Damage => Player.DamageEquation * .25f;
@@ -47,8 +49,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
             _whirlwindAnimation.OnAnimationEnd += delegate
             {
                 if (!Casting) return;
-                Player.Model.PlayAnimation(_whirlwindAnimation);
-                Player.Model.Blend(_whirlwindAnimation);
+                Player.Model.Play(_whirlwindAnimation);
             };
             _whirlwindAnimation.Loop = false;
         }
@@ -59,8 +60,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
             _trail.Emit = true;
             Casting = true;
             Player.IsAttacking = true;
-            Player.Model.PlayAnimation(_whirlwindAnimation);
-            Player.Model.Blend(_whirlwindAnimation);
+            Player.Model.Play(_whirlwindAnimation);
         }
 
         private void Disable()

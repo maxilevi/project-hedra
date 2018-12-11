@@ -90,7 +90,7 @@ namespace Hedra.Engine.Generation
             }
         }
         
-        public BasePlateau[] RoundedPlateaux
+        public BasePlateau[] Plateaux
         {
             get
             {

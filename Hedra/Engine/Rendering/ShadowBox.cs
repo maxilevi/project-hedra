@@ -1,6 +1,7 @@
 //ShadowBox class ported from ThinMatrix code
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;

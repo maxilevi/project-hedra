@@ -10,6 +10,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using Hedra.Core;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
@@ -62,12 +63,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             }
             _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns, new Vector2(1.5f, 1.5f))
             {
-                Position = Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * -.65f + Vector2.UnitY * -.25f),
+                Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.65f + Vector2.UnitY * -.25f),
                 IndividualScale = Vector2.One * 1.1f
             };
             var itemInfo = new AbilityTreeInterfaceItemInfo(_interface.Renderer)
             {
-                Position = Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * .6f + Vector2.UnitY * .1f)
+                Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .6f + Vector2.UnitY * .1f)
             };
             _manager = new AbilityTreeInterfaceManager(_player, itemInfo, _interface);
             _stateManager = new InventoryStateManager(_player);

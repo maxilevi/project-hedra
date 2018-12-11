@@ -12,6 +12,7 @@ using System.Xml;
 using OpenTK;
 using System.Linq;
 using System.Collections.Generic;
+using Hedra.Core;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {

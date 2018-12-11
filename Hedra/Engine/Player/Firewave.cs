@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Rendering.Particles;
 using Hedra.Sound;
 using OpenTK;
 

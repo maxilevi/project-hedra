@@ -1,10 +1,13 @@
 using System;
+using Hedra.Components;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
@@ -108,7 +111,10 @@ namespace Hedra.Engine.StructureSystem
                 return;
             }
 
-            GameManager.Player.MessageDispatcher.ShowMessage("PRESS [E] TO UNTIE", .25f);
+            GameManager.Player.MessageDispatcher.ShowMessage(
+                Translations.Get("press_to_untie", Controls.Interact.ToString().ToUpperInvariant()),
+                .25f
+            );
             _canRescue = true;
 
             if (!_shouldRescue) return;
@@ -117,8 +123,7 @@ namespace Hedra.Engine.StructureSystem
             Rescued = true;
             TaskScheduler.Delay(1, delegate
             {
-                var talkComponent = new TalkComponent(_rescuee,
-                    "I am grateful to you for saving me. Take this item as a show of gratitude");
+                var talkComponent = new TalkComponent(_rescuee, Translations.Get("old_man_dialog_1"));
                 talkComponent.OnTalk += delegate
                 {
                     var settings = new ItemPoolSettings(ItemTier.Rare, EquipmentType.Axe);

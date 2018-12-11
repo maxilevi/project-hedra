@@ -7,6 +7,8 @@ namespace Hedra.API
         private readonly WeaponRegistry _weaponRegistry;
         private readonly AnimationEventRegistry _animationEventRegistry;
         private readonly AIRegistry _aiRegistry;
+        private readonly ClassRestrictionRegistry _classRegistry;
+        private readonly ModelHandlerRegistry _modelHandlerRegistry;
         
         public abstract string Name { get; }
         
@@ -15,9 +17,16 @@ namespace Hedra.API
             _weaponRegistry = new WeaponRegistry();
             _animationEventRegistry = new AnimationEventRegistry();
             _aiRegistry = new AIRegistry();
+            _classRegistry = new ClassRestrictionRegistry();
+            _modelHandlerRegistry = new ModelHandlerRegistry();
         }
         
         public abstract void RegisterContent();
+
+        protected void AddClassRestriction(Class Class, string EquipmentType)
+        {
+            _classRegistry.Add(Class, EquipmentType);
+        }
         
         protected void AddAIType(string Name, Type ClassType)
         {
@@ -33,12 +42,18 @@ namespace Hedra.API
         {
             _animationEventRegistry.Add(Name, ClassType);
         }
+        
+        protected void AddModelHandler(string Name, Type ClassType)
+        {
+            _modelHandlerRegistry.Add(Name, ClassType);
+        }
 
         public void UnregisterContent()
         {
             _weaponRegistry.Unregister();
             _animationEventRegistry.Unregister();
             _aiRegistry.Unregister();
+            _classRegistry.Unregister();
         }
     }
 }

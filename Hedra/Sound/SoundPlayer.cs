@@ -7,6 +7,7 @@
 
 using System;
 using System.Reflection;
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Sound;
 using OpenTK;
@@ -104,7 +105,6 @@ namespace Hedra.Sound
         SwooshSound,
         HitSound,
         NotificationSound,
-        FoodEaten,
         ArrowHit,
         BowSound,
         DarkSound,
@@ -115,6 +115,7 @@ namespace Hedra.Sound
         Fireplace,
         HorseRun,
         HumanRun,
+        HumanRunWood,
         HitGround,
         Dodge,
         LongSwoosh,

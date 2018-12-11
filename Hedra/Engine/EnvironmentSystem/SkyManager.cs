@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -95,7 +96,7 @@ namespace Hedra.Engine.EnvironmentSystem
 
         public static void Update()
         {
-            var underChunk = Gen.World.GetChunkAt(LocalPlayer.Instance.BlockPosition);
+            var underChunk = World.GetChunkAt(LocalPlayer.Instance.BlockPosition);
             if(underChunk == null) return;
             Weather.Update(underChunk);
             _currentRegion = underChunk.Biome;

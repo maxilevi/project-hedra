@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
@@ -24,6 +25,9 @@ namespace Hedra.WeaponSystem
     /// </summary>
     public class Sword : MeleeWeapon
     {
+        public override uint PrimaryAttackIcon => WeaponIcons.SwordPrimaryAttack;     
+        public override uint SecondaryAttackIcon => WeaponIcons.SwordSecondaryAttack;
+        
         private bool FrontSlash => PrimaryAnimationsIndex == 2;
         private readonly float _swordHeight;
         private readonly TrailRenderer _renderer;
@@ -37,6 +41,7 @@ namespace Hedra.WeaponSystem
             "Assets/Chr/WarriorSlash-Front.dae"
         };
         protected override float SecondarySpeed => 1.65f;
+
         protected override string[] SecondaryAnimationsNames => new []
         {
             "Assets/Chr/WarriorLunge.dae"

@@ -16,12 +16,11 @@ namespace Hedra.WeaponSystem
             "Assets/Chr/RogueBladeLeftAttack.dae",
             "Assets/Chr/RogueBladeRightAttack.dae"
         };
-        protected override float SecondarySpeed => 2.0f;
+        protected override float SecondarySpeed => 2.5f;
         protected override string[] SecondaryAnimationsNames => new []
         {
             "Assets/Chr/RogueBladeDoubleAttack.dae"
-        };
-        
+        };    
         
         protected RogueWeapon(VertexData MeshData) : base(MeshData)
         {

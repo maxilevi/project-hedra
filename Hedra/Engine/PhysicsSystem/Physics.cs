@@ -10,6 +10,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
@@ -55,7 +56,7 @@ namespace Hedra.Engine.PhysicsSystem
         
         public static Vector3 DirectionToEuler(Vector3 Direction)
         {
-            Matrix4 mv = Mathf.RotationAlign(Direction.Z < 0 ? -Vector3.UnitZ : Vector3.UnitZ, Direction);
+            var mv = Mathf.RotationAlign(Direction.Z < 0 ? -Vector3.UnitZ : Vector3.UnitZ, Direction);
             var modifier = new Vector3(0, Direction.Z < 0 ? 180 : 0, 0);
             var multiplier = new Vector3(Direction.Z < 0 ? -1f : 1, 1, 1);
             mv.ExtractRotation().ToAxisAngle(out Vector3 axis, out float angle);
@@ -291,6 +292,11 @@ namespace Hedra.Engine.PhysicsSystem
           return P.X >= A.Min.X && P.X <= A.Max.X &&
                 P.Y >= A.Min.Y && P.Y <= A.Max.Y &&
                 P.Z >= A.Min.Y && P.Z <= A.Max.Z;
+        }
+
+        public static bool Raycast(Vector3 Direction, float Length)
+        {
+            return false;
         }
     }        
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Drawing.Drawing2D;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;

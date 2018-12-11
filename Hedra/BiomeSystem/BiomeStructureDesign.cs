@@ -8,6 +8,11 @@ namespace Hedra.BiomeSystem
     {
         private List<StructureDesign> _designs { get; } = new List<StructureDesign>();
 
+        protected BiomeStructureDesign()
+        {
+            AddDesign(new SpawnCampfireDesign());
+        }
+        
         protected void AddDesign(StructureDesign Design)
         {
             this._designs.Add(Design);

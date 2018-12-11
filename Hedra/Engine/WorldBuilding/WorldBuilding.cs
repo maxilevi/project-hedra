@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.AISystem;
+using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using OpenTK;
 using Hedra.Engine.ClassSystem;
@@ -18,7 +19,9 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.EntitySystem;
 
 namespace Hedra.Engine.WorldBuilding
@@ -37,21 +40,6 @@ namespace Hedra.Engine.WorldBuilding
         {
             _groundwork = new List<IGroundwork>();
             _plateaus = new List<BasePlateau>();
-        }
-
-        public Entity SpawnCarriage(Vector3 Position)
-        {
-            var carriage = World.SpawnMob("QuestCarriage", Position, 1);
-            carriage.Health = carriage.MaxHealth;
-            carriage.Physics.CollidesWithStructures = true;
-            carriage.Physics.PushAround = false;
-            carriage.RemoveComponent(carriage.SearchComponent<BasicAIComponent>());
-            carriage.SearchComponent<DamageComponent>().Immune = true;
-            carriage.AddComponent(new CarriageAIComponent(carriage));
-            carriage.RemoveComponent(carriage.SearchComponent<HealthBarComponent>());
-            carriage.Removable = false;
-            World.AddEntity(carriage);
-            return carriage;
         }
 
         public Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition)
@@ -82,13 +70,13 @@ namespace Hedra.Engine.WorldBuilding
                 Name = Undead ? "Skeleton" : "Bandit"
             };
             var isGnoll = Utils.Rng.Next(0, 4) == 1;
-            var human = this.SpawnHumanoid(isGnoll ? "Gnoll" : classType.ToString(), Level, Position, behaviour);
+            var className = isGnoll
+                ? HumanType.Gnoll.ToString()
+                : Undead
+                    ? HumanType.Skeleton.ToString()
+                    : classType.ToString();
+            var human = this.SpawnHumanoid(className, Level, Position, behaviour);
             if (isGnoll) human.AddonHealth = human.MaxHealth * .5f;
-            if (Undead)
-            {
-                human.Model = new HumanoidModel(human, HumanType.Skeleton);
-                human.SetWeapon(human.MainWeapon.Weapon);
-            }
 
             if(!human.MainWeapon.Weapon.IsMelee)
                 human.AddComponent( new ArcherAIComponent(human, Friendly) );
@@ -125,20 +113,20 @@ namespace Hedra.Engine.WorldBuilding
 
         private void ApplySeasonHats(Humanoid Human, string Type)
         {
-            if (Type.ToLowerInvariant() != HumanType.Warrior.ToString().ToLowerInvariant() &&
-                Type.ToLowerInvariant() != HumanType.Merchant.ToString().ToLowerInvariant() &&
-                Type.ToLowerInvariant() != HumanType.TravellingMerchant.ToString().ToLowerInvariant() &&
-                Type.ToLowerInvariant() != HumanType.Archer.ToString().ToLowerInvariant() &&
-                Type.ToLowerInvariant() != HumanType.Blacksmith.ToString().ToLowerInvariant() &&
-                Type.ToLowerInvariant() != HumanType.Rogue.ToString().ToLowerInvariant() &&
-                Type.ToLowerInvariant() != HumanType.Mage.ToString().ToLowerInvariant() &&
-                Type.ToLowerInvariant() != HumanType.Villager.ToString().ToLowerInvariant()) return;
+            if (!string.Equals(Type, HumanType.Warrior.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Merchant.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.TravellingMerchant.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Archer.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Blacksmith.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Rogue.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Mage.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Villager.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
             
             if(Season.IsChristmas) 
                 Human.SetHelmet(ItemPool.Grab(CommonItems.ChristmasHat).Helmet);
         }
 
-        public bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates)
+        private bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates)
         {
 
             for (var i = 0; i < Candidates.Length; i++)
@@ -176,28 +164,27 @@ namespace Hedra.Engine.WorldBuilding
 
         private void AddPlateau(BasePlateau Mount)
         {
-            try
+            lock (_plateauLock)
             {
-                lock (_plateauLock)
-                {
-                    ApplyMultiple(Mount);
-                    _plateaus.Add(Mount);
-                }
-            }
-            finally
-            {
-                //lock (_plateauLock)
-                //    _plateaus = _plateaus.OrderByDescending(P => P.MaxHeight).ToList();
-            }
+                Mount.MaxHeight = ApplyMultiple(Mount.Position, Mount.MaxHeight);
+                _plateaus.Add(Mount);
+            }         
         }
 
-        private void ApplyMultiple(BasePlateau Mount)
+        public float ApplyMultiple(Vector3 Position, float MaxHeight, params BasePlateau[] Against)
         {
-            var plateaus = _plateaus.OrderByDescending(P => P.MaxHeight).ToList();
+            var plateaus = Against.OrderByDescending(P => P.MaxHeight).ToList();
             for (var i = 0; i < plateaus.Count; i++)
             {
-                Mount.MaxHeight = plateaus[i].Apply(Mount.Position.Xz, Mount.MaxHeight, out _);
+                MaxHeight = plateaus[i].Apply(Position.Xz, MaxHeight, out _);
             }
+            return MaxHeight;
+        }
+        
+        public float ApplyMultiple(Vector3 Position, float MaxHeight)
+        {
+            lock (_plateauLock)
+                return ApplyMultiple(Position, MaxHeight, _plateaus.ToArray());
         }
 
         private void AddGroundwork(IGroundwork Work)
@@ -228,12 +215,12 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        private void LoopStructure(CollidableStructure Structure, Action<BasePlateau> PlateauDo, Action<IGroundwork> GroundworkDo)
+        private static void LoopStructure(CollidableStructure Structure, Action<BasePlateau> PlateauDo, Action<IGroundwork> GroundworkDo)
         {
             if (Structure.Mountain != null)
                 PlateauDo(Structure.Mountain);
             
-            var plateaus = Structure.RoundedPlateaux.OrderByDescending(P => P.MaxHeight).ToArray();
+            var plateaus = Structure.Plateaux.OrderByDescending(P => P.MaxHeight).ToArray();
             for (var i = 0; i < plateaus.Length; i++)
                 PlateauDo(plateaus[i]);
             

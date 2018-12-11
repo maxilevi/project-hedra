@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.ClassSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 
 namespace Hedra.Engine.ModuleSystem

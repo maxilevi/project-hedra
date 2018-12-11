@@ -14,6 +14,7 @@ using OpenTK;
 using OpenTK.Input;
 using System.Threading;
 using System.Collections;
+using Hedra.Core;
 using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Rendering.UI

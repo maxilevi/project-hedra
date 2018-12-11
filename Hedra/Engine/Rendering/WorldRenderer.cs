@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;

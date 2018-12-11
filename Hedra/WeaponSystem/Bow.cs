@@ -8,6 +8,7 @@
  */
 
 using System.Collections;
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
@@ -24,7 +25,10 @@ namespace Hedra.WeaponSystem
     public delegate void OnModifyArrowEvent(Projectile Arrow);
         
     public class Bow : RangedWeapon
-    {            
+    {           
+        public override uint PrimaryAttackIcon => WeaponIcons.BowPrimaryAttack;     
+        public override uint SecondaryAttackIcon => WeaponIcons.BowSecondaryAttack;
+        
         protected override string AttackStanceName => "Assets/Chr/ArcherShootStance.dae";
         protected override float PrimarySpeed => 0.9f;
         protected override string[] PrimaryAnimationsNames => new []

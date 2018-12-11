@@ -11,6 +11,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.WorldBuilding;

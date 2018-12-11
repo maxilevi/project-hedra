@@ -1,5 +1,6 @@
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using OpenTK;
 

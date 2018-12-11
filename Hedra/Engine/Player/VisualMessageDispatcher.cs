@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.IO;

@@ -7,7 +7,9 @@
 
 using System;
 using System.Collections.Generic;
+using Hedra.AISystem.Humanoid;
 using Hedra.Components;
+using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Game;
@@ -260,27 +262,8 @@ namespace Hedra.Engine.EntitySystem
         {
             var collider0 = this.Model.HorizontalBroadphaseCollider;
             var collider1 = Target.Model.HorizontalBroadphaseCollider;
-            var radii = collider0.BroadphaseRadius + collider1.BroadphaseRadius;
-            return (Target.Position - this.Position).LengthSquared < radii * radii;
-            /*var collider0 = this.Model.BroadphaseCollider;
-            var collider1 = Target.Model.BroadphaseCollider;
             var radii = (collider0.BroadphaseRadius + collider1.BroadphaseRadius) * RadiusModifier;
-            if ((collider0.BroadphaseCenter - collider1.BroadphaseCenter).LengthSquared > radii * radii) return false;
-            var vertices0 = collider0.Vertices;
-            var vertices1 = collider1.Vertices;
-            float lowestDistance = float.MaxValue;
-            for (var i = 0; i < vertices0.Length; i++)
-            {
-                for (var k = 0; k < vertices1.Length; k++)
-                {
-                    var dist = (new Vector3(vertices0[i].X, this.Model.Position.Y, vertices0[i].Z) - new Vector3(vertices1[k].X, Target.Model.Position.Y, vertices1[k].Z)).LengthFast;
-                    if (dist < lowestDistance)
-                    {
-                        lowestDistance = dist;
-                    }
-                }
-            }
-            return lowestDistance < 4f * RadiusModifier;*/
+            return (Target.Position - this.Position).LengthSquared < radii * radii;
         }
 
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)

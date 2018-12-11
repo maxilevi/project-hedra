@@ -1,9 +1,9 @@
 {
-  "Name": "RareEgipticStaff",
-  "DisplayName": "Egiptic Staff",
+  "Name": "RareEpitaphStaff",
+  "DisplayName": "Epitaph Staff",
   "EquipmentType": "Staff",
   "Tier": "Rare",
-  "Description": "Egiptic Staff.",
+  "Description": "A deeply inscribed staff for transferring souls to the afterlife.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
@@ -22,6 +23,8 @@ namespace Hedra.WeaponSystem
     /// </summary>
     public class Hammer : HeavyMeleeWeapon
     {
+        public override uint PrimaryAttackIcon => WeaponIcons.HammerPrimaryAttack;     
+        public override uint SecondaryAttackIcon => WeaponIcons.HammerSecondaryAttack;
         protected override float SecondarySpeed => 1.5f;
         
         public Hammer(VertexData Contents) : base(Contents)

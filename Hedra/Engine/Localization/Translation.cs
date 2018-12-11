@@ -49,7 +49,7 @@ namespace Hedra.Engine.Localization
             };
         }
 
-        public void UpdateTranslation(string NewLanguage)
+        public void UpdateTranslation()
         {
             LanguageChanged?.Invoke();
         }

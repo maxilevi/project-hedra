@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Rendering.Geometry;
 using OpenTK;

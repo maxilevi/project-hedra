@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.API;
+using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;

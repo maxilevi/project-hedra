@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
@@ -29,7 +30,6 @@ namespace Hedra.Engine.Game
         public static float SurfaceWidth { get; set; }
         public static float SurfaceHeight { get; set; }
         public static bool TestingMode { get; set; }
-        public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
         public static float BloomModifier { get; set; } = 1f;
         public static bool Wireframe { get; set; }
         public static bool LockFrustum { get; set; }

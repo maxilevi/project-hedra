@@ -5,6 +5,7 @@
  *
  */
 using System;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Rendering;
 using OpenTK;
@@ -44,9 +45,9 @@ namespace Hedra.Engine.Rendering.Particles
      
             Vector4 direction = new Vector4(x, y, z, 1);
             if (coneDirection.X != 0 || coneDirection.Y != 0 || (coneDirection.Z != 1 && coneDirection.Z != -1)) {
-                Vector3 rotateAxis = Mathf.CrossProduct(coneDirection, new Vector3(0, 0, 1));
+                Vector3 rotateAxis = Vector3.Cross(coneDirection, new Vector3(0, 0, 1));
                 rotateAxis.Normalize();
-                float rotateAngle = (float) Math.Acos(Mathf.DotProduct(coneDirection, new Vector3(0, 0, 1)));
+                float rotateAngle = (float) Math.Acos(Vector3.Dot(coneDirection, new Vector3(0, 0, 1)));
                 Matrix4 rotationMatrix = Matrix4.CreateFromAxisAngle(rotateAxis, -rotateAngle);
                 direction = Vector4.Transform(direction, rotationMatrix);
             } else if (coneDirection.Z == -1) {

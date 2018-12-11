@@ -3,7 +3,9 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using System;
+using Hedra.Core;
 using Hedra.EntitySystem;
+using Hedra.Rendering.Particles;
 using OpenTK;
 
 namespace Hedra.Engine.Player
@@ -56,7 +58,7 @@ namespace Hedra.Engine.Player
                 
                 var distanceVector = (entities[i].Position - _owner.Position);
                 var toEntity = distanceVector.NormalizedFast();
-                var dot = Mathf.DotProduct(toEntity, _owner.Orientation);
+                var dot = Vector3.Dot(toEntity, _owner.Orientation);
                 
                 if(dot >= .75f && distanceVector.LengthSquared < ConeDistanceSquared)
                 {

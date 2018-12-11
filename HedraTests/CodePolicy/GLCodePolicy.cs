@@ -79,7 +79,7 @@ namespace HedraTests.CodePolicy
         private Dictionary<string, string[]> GetAllGLCalls()
         {
             var calls = new Dictionary<string, string[]>();
-            var files = Directory.GetFiles($"{SolutionDirectory}/Hedra/Engine/", "*.cs", SearchOption.AllDirectories);
+            var files = Directory.GetFiles($"{SolutionDirectory}/Hedra/", "*.cs", SearchOption.AllDirectories);
             for (var i = 0; i < files.Length; i++)
             {
                 var matches = Regex.Matches(File.ReadAllText(files[i]), @"GL\..*?\(");

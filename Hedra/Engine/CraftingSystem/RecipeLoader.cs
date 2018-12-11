@@ -5,6 +5,7 @@ using System.Linq;
 using Hedra.API;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Engine.Loader;
 using Newtonsoft.Json;
 

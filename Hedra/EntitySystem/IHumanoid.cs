@@ -13,7 +13,7 @@ namespace Hedra.EntitySystem
         event OnHitLandedEventHandler OnHitLanded;
         IMessageDispatcher MessageDispatcher { get; set; }
         int ConsecutiveHits { get; }
-        bool IsAttacking {get; set;}
+        bool IsAttacking { get; set; }
         bool IsEating { get; set; }
         bool IsCasting { get; set; }
         bool IsSwimming { get; set; }

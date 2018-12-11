@@ -9,6 +9,7 @@
 
 using System;
 using System.Linq;
+using Hedra.Core;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -98,7 +99,7 @@ namespace Hedra.Engine.ItemSystem
 
         public static Item Randomize(Item Item, Random Rng)
         {
-            var equipmentType = (EquipmentType) Enum.Parse(typeof(EquipmentType), Item.EquipmentType);
+            var isBuiltin = Enum.TryParse<EquipmentType>(Item.EquipmentType, true, out var equipmentType);
             if (WeaponEquipmentTypes.Contains(equipmentType))
             {
                 var originalTier = Item.Tier;
@@ -113,11 +114,11 @@ namespace Hedra.Engine.ItemSystem
                     Item.SetAttribute(CommonAttributes.EffectType, EffectTypes[Rng.Next(0, EffectTypes.Length)].ToString());
                 }
             }
-            if (ArmorEquipmentTypes.Contains(equipmentType))
+            if (isBuiltin && ArmorEquipmentTypes.Contains(equipmentType))
             {
 
             }
-            if (EquipmentType.Ring == equipmentType)
+            if (isBuiltin && EquipmentType.Ring == equipmentType)
             {
                 Item.SetAttribute(CommonAttributes.MovementSpeed, Item.GetAttribute<float>(CommonAttributes.MovementSpeed) * (1.0f + (Rng.NextFloat() * .3f - .15f)));
                 Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed) * (1.0f + (Rng.NextFloat() * .3f - .15f)));

@@ -8,7 +8,8 @@
  */
  using OpenTK;
 using System.Collections;
-using Hedra.Engine.Management;
+ using Hedra.Core;
+ using Hedra.Engine.Management;
  using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem

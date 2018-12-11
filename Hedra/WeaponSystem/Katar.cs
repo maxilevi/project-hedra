@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
@@ -22,6 +23,8 @@ namespace Hedra.WeaponSystem
     /// </summary>
     public class Katar : RogueWeapon
     {
+        public override uint PrimaryAttackIcon => WeaponIcons.KatarPrimaryAttack;     
+        public override uint SecondaryAttackIcon => WeaponIcons.KatarSecondaryAttack;
 
         public Katar(VertexData Contents) : base(Contents)
         {

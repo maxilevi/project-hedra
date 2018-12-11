@@ -41,7 +41,6 @@ namespace Hedra.Engine.Player
             this.Level = 1;
             this.Daytime = 12000;
             this.Health = 100;
-            this.BlockPosition = GameSettings.SpawnPoint.ToVector3();
             this._items = new Dictionary<int, Item>();
             this.AbilityTreeArray = new byte[0];
             this.ToolbarArray = new byte[4];

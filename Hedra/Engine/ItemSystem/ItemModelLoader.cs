@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;

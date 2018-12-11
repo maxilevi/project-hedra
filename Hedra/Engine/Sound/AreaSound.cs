@@ -1,4 +1,5 @@
 using System;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Sound;
 using OpenTK;

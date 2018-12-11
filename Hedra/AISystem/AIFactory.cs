@@ -4,7 +4,7 @@ using Hedra.Engine.EntitySystem;
 
 namespace Hedra.AISystem
 {
-    public class AIFactory : RegistryFactory<AIFactory>
+    public class AIFactory : RegistryFactory<AIFactory, string, Type>
     {
         public BasicAIComponent Build(Entity Parent, string Key)
         {

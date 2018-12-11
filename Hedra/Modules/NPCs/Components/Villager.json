@@ -1,9 +1,0 @@
-﻿{
-  "Name": "Villager",
-  "Components":  [
-    {
-      "Type": "Hedra.Engine.EntitySystem.TalkComponent",
-      "Parameters": []
-    }
-  ] 
-}

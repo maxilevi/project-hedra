@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;

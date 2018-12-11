@@ -96,7 +96,7 @@ namespace Hedra.Engine.BiomeSystem
                 this._biomeDistribution.Seed = (int) voronoiHeight + 421;
                 int biomeIndex = _biomeDistribution.Next(0, BiomeDesigns.Length);
 
-                if ((Position.Xz - GameSettings.SpawnPoint).LengthFast < 5000) biomeIndex = 0;
+                if ((Position - World.SpawnPoint).Xz.LengthFast < 5000) biomeIndex = 0;
 
                 int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
 

@@ -47,7 +47,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 else
                 {
                     Instances.RemoveAt(i);
-                    var block2 = World.GetHighestBlockAt(position.X, position.Z);
                 }
             }
         }

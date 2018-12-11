@@ -8,10 +8,12 @@
  */
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
@@ -32,7 +34,7 @@ namespace Hedra.Engine.WorldBuilding
         protected virtual bool SingleUse => true;
         protected virtual bool DisposeAfterUse => true;
         protected virtual bool CanInteract => true;
-        public virtual Key Key => Key.E;
+        public virtual Key Key => Controls.Interact;
         public abstract string Message { get; }
         public abstract int InteractDistance { get; }
         public bool Interacted { get; private set; }

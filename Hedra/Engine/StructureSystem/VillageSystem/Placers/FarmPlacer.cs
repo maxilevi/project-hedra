@@ -1,4 +1,5 @@
 using System;
+using Hedra.Core;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 

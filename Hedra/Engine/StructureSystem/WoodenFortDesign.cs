@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;

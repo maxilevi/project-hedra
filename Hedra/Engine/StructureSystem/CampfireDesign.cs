@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
@@ -95,7 +96,7 @@ namespace Hedra.Engine.StructureSystem
 
         public static Vector4 TentColor(Random Rng)
         {
-            int n = Rng.Next(0, 5);
+            var n = Rng.Next(0, 5);
             switch (n)
             {
                 case 0: return Colors.FromHtml("#92A86D");

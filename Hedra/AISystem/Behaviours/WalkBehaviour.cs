@@ -1,4 +1,5 @@
 using System;
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;

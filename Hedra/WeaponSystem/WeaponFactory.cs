@@ -7,23 +7,7 @@ namespace Hedra.WeaponSystem
 {
     public static class WeaponFactory
     {
-        private static readonly Dictionary<string, Type> Weapons;
-
-        static WeaponFactory()
-        {
-            Weapons = new Dictionary<string, Type>()
-            {
-                {"Sword", typeof(Sword)},
-                {"Axe", typeof(Axe)},
-                {"Hammer", typeof(Hammer)},
-                {"Claw", typeof(Claw)},
-                {"Katar", typeof(Katar)},
-                {"DoubleBlades", typeof(DoubleBlades)},
-                {"Bow", typeof(Bow)},
-                {"Staff", typeof(Staff)},
-                {"Knife", typeof(Knife)}
-            };
-        }
+        private static readonly Dictionary<string, Type> Weapons = new Dictionary<string, Type>();
 
         public static void Register(string Name, Type Weapon)
         {

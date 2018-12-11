@@ -65,7 +65,7 @@ namespace HedraTests.CodePolicy
         
         private void AssertBothInSameFile(string PatternA, string PatternB, string Name)
         {
-            var files = Directory.GetFiles($"{SolutionDirectory}/Hedra/Engine/", "*.cs", SearchOption.AllDirectories);
+            var files = Directory.GetFiles($"{SolutionDirectory}/Hedra/", "*.cs", SearchOption.AllDirectories);
             var failures = new List<string>();
             for (var i = 0; i < files.Length; i++)
             {

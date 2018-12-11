@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
@@ -23,7 +24,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _panel = new Panel();
             _skillPointsBackgrounTextures = new RenderableTexture[this.Buttons.Length];
             _backgroundTexture = new RenderableTexture(new Texture("Assets/UI/AbilityTreeBackground.png",
-                Mathf.ScaleGUI(_targetResolution, new Vector2(.04f, .15f)), new Vector2(.6f, .55f) * 1f), DrawOrder.Before);
+                Mathf.ScaleGui(_targetResolution, new Vector2(.04f, .15f)), new Vector2(.6f, .55f) * 1f), DrawOrder.Before);
             _availablePointsText = new GUIText(string.Empty, new Vector2(_backgroundTexture.Position.X, -.35f),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 12f, FontStyle.Bold));
             for (var i = 0; i < this.Buttons.Length; i++)
@@ -32,7 +33,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 this.Buttons[i].Texture.IdPointer = null;
                 this.ButtonsText[i].TextFont = FontCache.Get(AssetManager.BoldFamily, 10f, FontStyle.Bold);
                 this.ButtonsText[i].Position = this.Buttons[i].Position +
-                                               Mathf.ScaleGUI(_targetResolution, new Vector2(0, -InventoryArrayInterface.DefaultSize.Y) * .65f);
+                                               Mathf.ScaleGui(_targetResolution, new Vector2(0, -InventoryArrayInterface.DefaultSize.Y) * .65f);
                 _skillPointsBackgrounTextures[i] = 
                     new RenderableTexture(new Texture("Assets/UI/InventoryBackground.png",
                     this.ButtonsText[i].Position, new Vector2(.05f, .075f)), DrawOrder.Before);

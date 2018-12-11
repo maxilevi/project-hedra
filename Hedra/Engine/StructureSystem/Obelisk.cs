@@ -9,9 +9,11 @@
 
 using System;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -28,7 +30,7 @@ namespace Hedra.Engine.StructureSystem
     
     public sealed class Obelisk : InteractableStructure
     {
-        public override string Message => "INTERACT";
+        public override string Message => Translations.Get("interact_obelisk");
         public override int InteractDistance => 32;
         public ObeliskType Type { get; set; }
         public HighlightedAreaWrapper AreaWrapper { get; set; }
@@ -44,19 +46,19 @@ namespace Hedra.Engine.StructureSystem
                 case ObeliskType.Xp:
                     const float xpToGive = 4;
                     Interactee.XP += xpToGive;
-                    Interactee.MessageDispatcher.ShowMessage($"YOU EARNED {xpToGive} XP", 2, Colors.Violet.ToColor());
+                    Interactee.MessageDispatcher.ShowMessage(Translations.Get("obelisk_xp", xpToGive), 2, Colors.Violet.ToColor());
                     break;
                 case ObeliskType.Health:
                     Interactee.Health = Interactee.MaxHealth;
-                    Interactee.MessageDispatcher.ShowMessage("YOUR HEALTH FEELS REFRESHED", 2, Colors.LowHealthRed.ToColor());
+                    Interactee.MessageDispatcher.ShowMessage(Translations.Get("obelisk_health"), 2, Colors.LowHealthRed.ToColor());
                     break;
                 case ObeliskType.Mana:
                     Interactee.Mana = Interactee.MaxMana;
-                    Interactee.MessageDispatcher.ShowMessage("YOUR MANA FEELS REFRESHED", 2, Colors.LightBlue.ToColor());
+                    Interactee.MessageDispatcher.ShowMessage(Translations.Get("obelisk_mana"), 2, Colors.LightBlue.ToColor());
                     break;
                 case ObeliskType.Stamina:
                     Interactee.Stamina = Interactee.MaxStamina;
-                    Interactee.MessageDispatcher.ShowMessage("YOUR STAMINA FEELS REFRESHED", 2, Color.Bisque);
+                    Interactee.MessageDispatcher.ShowMessage(Translations.Get("obelisk_stamina"), 2, Color.Bisque);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Obelisk type does not exist.");

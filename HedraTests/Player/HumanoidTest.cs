@@ -1,4 +1,5 @@
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using NUnit.Framework;
 
@@ -16,8 +17,6 @@ namespace HedraTests.Player
             _human = new Humanoid();
             _human.Model = new HumanoidModel(_human, new HumanoidModelTemplate
             {
-                Colors = new ColorTemplate[0],
-                Name = string.Empty,
                 Path = string.Empty,
                 Scale = 0
             });

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;

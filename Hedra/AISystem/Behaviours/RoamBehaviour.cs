@@ -1,8 +1,10 @@
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
 using Hedra.Sound;
 using OpenTK;
 
@@ -16,7 +18,7 @@ namespace Hedra.AISystem.Behaviours
         private readonly Timer _moveTicker;
         private readonly Timer _soundTicker;
 
-        public RoamBehaviour(Entity Parent) : base(Parent)
+        public RoamBehaviour(IEntity Parent) : base(Parent)
         {
             this.Idle = new IdleBehaviour(Parent);
             this.Walk = new WalkBehaviour(Parent);
@@ -32,8 +34,8 @@ namespace Hedra.AISystem.Behaviours
             {
                 if (this._moveTicker.Tick())
                 {
-                    var targetPosition = Parent.Position + new Vector3(Utils.Rng.NextFloat() * Diameter - Radius, 0,
-                                             Utils.Rng.NextFloat() * Diameter - Radius);
+                    var targetPosition = World.FindPlaceablePosition(Parent, SearchPoint + new Vector3(Utils.Rng.NextFloat() * Diameter - Radius, 0,
+                                             Utils.Rng.NextFloat() * Diameter - Radius));
                     if (Physics.IsWaterBlock(targetPosition)) return;
                     Walk.SetTarget(targetPosition, () => _currentBehaviour = Idle);
                     _currentBehaviour = Walk;
@@ -46,6 +48,8 @@ namespace Hedra.AISystem.Behaviours
             }
         }
 
+        protected virtual Vector3 SearchPoint => Parent.Position;
+        
         private float Diameter => Radius * 2f;
 
         public float Radius { get; set; } = 80f;

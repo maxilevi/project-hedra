@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
@@ -124,6 +125,11 @@ namespace Hedra.Engine.Game
 
         private void SetRestrictions(PlayerInformation Information)
         {
+            var modRestrictions = RestrictionsFactory.Instance.Build(Information.Class.GetType());
+            for (var i = 0; i < modRestrictions.Length; i++)
+            {
+                Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, modRestrictions[i]);
+            }
             Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, Information.Class.StartingItem.EquipmentType);
             Player.Inventory.AddRestriction(PlayerInventory.BootsHolder, EquipmentType.Boots);
             Player.Inventory.AddRestriction(PlayerInventory.PantsHolder, EquipmentType.Pants);
@@ -136,30 +142,21 @@ namespace Hedra.Engine.Game
 
         public void NewRun(PlayerInformation Information)
         {
-            Player.IsRiding = false;
-            Player.Pet.Pet?.Update();//Finish removing the mount
-
             Information.WorldSeed = World.RandomSeed;
-            GameManager.Player.IsTravelling = false;
             GameManager.MakeCurrent(Information);
-            GameManager.Player.Position = World.FindSpawningPoint(GameSettings.SpawnPoint.ToVector3());
-
+            GameManager.Player.Position = World.SpawnPoint;
             SkyManager.SetTime(12000);
 
-            Player.Model = new HumanoidModel(Player);
-            
+            Player.Model = new HumanoidModel(Player);         
             if(Player.Inventory.MainWeapon != null)
             {
-                //Force to discard cache
                 Player.Inventory.MainWeapon.FlushCache();
-                Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);
-                
+                Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);               
             }
             Player.UI.HideMenu();
             Player.UI.Hide = false;
             Player.Enabled = true;                
             _isNewRun = true;
-            Player.MessageDispatcher.ShowMessageWhile("[F4] HELP", () => !LocalPlayer.Instance.UI.ShowHelp);
         }
         
         private IEnumerator SpawnCoroutine()

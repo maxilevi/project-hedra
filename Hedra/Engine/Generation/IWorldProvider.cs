@@ -44,6 +44,8 @@ namespace Hedra.Engine.Generation
         int AverageGenerationTime { get; }
 
         int Seed { get; }
+        
+        Vector3 SpawnPoint { get; }
 
         bool IsGenerated { get; }
 
@@ -125,7 +127,7 @@ namespace Hedra.Engine.Generation
 
         Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed);
 
-        Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition);
+        Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition);
 
         Vector3 FindSpawningPoint(Vector3 Around);
 

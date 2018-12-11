@@ -5,6 +5,7 @@
  *
  */
 using System;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.Management;

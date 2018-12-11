@@ -11,6 +11,9 @@ namespace Hedra.WeaponSystem
 {
     public sealed class Staff : RangedWeapon
     {
+        public override uint PrimaryAttackIcon => WeaponIcons.StaffPrimaryAttack;     
+        public override uint SecondaryAttackIcon => WeaponIcons.StaffSecondaryAttack;
+        
         protected override string AttackStanceName => "Assets/Chr/MageStaff-Stance.dae";
         protected override float PrimarySpeed => 0.9f;
         protected override string[] PrimaryAnimationsNames => new []
@@ -45,7 +48,7 @@ namespace Hedra.WeaponSystem
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;
-            Firewave.Create(Owner, Owner.DamageEquation * 8 * Options.Charge, Options.Charge);
+            Firewave.Create(Owner, Owner.DamageEquation * 3 * Options.Charge, Options.Charge);
         }
         
         protected override void OnSheathed()

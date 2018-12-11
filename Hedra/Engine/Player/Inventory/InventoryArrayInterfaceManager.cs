@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
@@ -141,8 +143,8 @@ namespace Hedra.Engine.Player.Inventory
         {
             _cancelButton.Position = SelectedButton.Position;
             _cancelButton.Scale = SelectedButton.Scale;
-            _cancelButton.Clickable = false;
-            TaskScheduler.After(10, () => _cancelButton.Clickable = true);
+            _cancelButton.CanClick = false;
+            TaskScheduler.After(10, () => _cancelButton.CanClick = true);
         }
 
         private void PlaceItemInFirstEmptyPosition(Item Item)
@@ -183,7 +185,7 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (Item.IsEquipment)
             {
-                GameManager.Player.MessageDispatcher.ShowNotification("YOU HAVEN'T LEARNED TO\nUSE THAT TYPE OF EQUIPMENT",
+                GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("cannot_use_equipment"),
                     System.Drawing.Color.Red, 2f, true);
             }
         }

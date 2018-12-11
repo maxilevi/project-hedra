@@ -61,4 +61,25 @@ start_menu = Start Menu
 open_door = TO OPEN THE DOOR
 close_door = TO CLOSE THE DOOR
 to_sleep = TO SLEEP
+welcome_to_village = WELCOME TO {0}
+interact_tombstone = TO PAY RESPECTS
+interact_obelisk = INTERACT
+interact_chest = INTERACT WITH THE CHEST
+obelisk_xp = YOU EARNED {0} XP
+obelisk_health = YOUR HEALTH FEELS REFRESHED
+obelisk_mana = YOUR MANA FEELS REFRESHED
+obelisk_stamina = YOUR STAMINA FEELS REFRESHED
+press_to_untie = PRESS [{0}] TO UNTIE
+cannot_use_equipment = YOU HAVEN'T LEARNED TO\nUSE THAT TYPE OF EQUIPMENT
+farmer_thought_1 = Are you an adventurer? I envy you. Farming gets tiring.
+farmer_thought_2 = The life of a farmer may be a dull one, but it's what keeps the village going!
+farmer_thought_3 = Farming is exhausting.
+villager_thought_1 = Have you tried selling your items in the market? They accept every kind of object.
+villager_thought_2 = I've heard there is a travelling merchant wandering around the world. He sells gliders & special items.
+villager_thought_3 = You seem like an adventurer. Why don't you try doing a quest?
+villager_thought_4 = Am I the only one who hears the sound of glass breaking?
+old_man_dialog_1 = I am thankful to you for saving me. Take this item as a show of gratitude
+whirlwind = Whirlwind
+whirlwind_desc = A fierce spinning attack.
+
 

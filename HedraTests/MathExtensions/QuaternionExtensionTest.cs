@@ -1,3 +1,4 @@
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.ComplexMath;
 using NUnit.Framework;

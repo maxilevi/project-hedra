@@ -9,12 +9,14 @@
 
 using System;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using OpenTK;
 using Hedra.Engine.Rendering.Animation;
@@ -105,7 +107,7 @@ namespace Hedra.Engine.EntitySystem
                     _hasAnimationEvent = true;
                     AttackAnimations[i].OnAnimationStart += delegate
                     {
-                        AnimationEventBuilder.Build(Parent, Template.AttackAnimations[k].OnAnimationStart).Build();
+                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationStart).Build();
                     };
                 }
                 if (Template.AttackAnimations[i].OnAnimationMid != null)
@@ -113,7 +115,7 @@ namespace Hedra.Engine.EntitySystem
                     _hasAnimationEvent = true;
                     AttackAnimations[i].OnAnimationMid += delegate
                     {
-                        AnimationEventBuilder.Build(Parent, Template.AttackAnimations[k].OnAnimationMid).Build();
+                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationMid).Build();
                     };
                 }
                 if (Template.AttackAnimations[i].OnAnimationEnd != null)
@@ -121,7 +123,7 @@ namespace Hedra.Engine.EntitySystem
                     _hasAnimationEvent = true;
                     AttackAnimations[i].OnAnimationEnd += delegate
                     {
-                        AnimationEventBuilder.Build(Parent, Template.AttackAnimations[k].OnAnimationEnd).Build();
+                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationEnd).Build();
                     };
                 }
                 if (Template.AttackAnimations[i].OnAnimationProgress != null)
@@ -129,7 +131,7 @@ namespace Hedra.Engine.EntitySystem
                     _hasAnimationEvent = true;
                     AttackAnimations[i].RegisterOnProgressEvent(Template.AttackAnimations[k].OnAnimationProgress.Progress, delegate(Animation Sender)
                     {
-                        AnimationEventBuilder.Build(Parent, Template.AttackAnimations[k].OnAnimationProgress.Event).Build();
+                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationProgress.Event).Build();
                     });
                 }
                 AttackAnimations[i].OnAnimationEnd += delegate {
@@ -195,12 +197,12 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Attack(IEntity Victim)
         {
-            this.Attack(Victim, AttackAnimations[Utils.Rng.Next(0, AttackAnimations.Length)], null);
+            this.Attack(Victim, SelectAttackAnimation(), null);
         }
 
         public override void Attack(IEntity Victim, float RangeModifier)
         {
-            this.Attack(Victim, AttackAnimations[Utils.Rng.Next(0, AttackAnimations.Length)], null, RangeModifier);
+            this.Attack(Victim, SelectAttackAnimation(), null, RangeModifier);
         }
 
         private void SetAttackHandler(Animation AttackAnimation, OnAnimationHandler Handler, bool Add)
@@ -244,7 +246,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 Model.Update();
                 if (HasRider) TargetRotation = Rider.Model.TargetRotation;
-                if (HasRider) Position = Rider.Position;
+                if (HasRider) _position = Rider.Model.ModelPosition - Rider.Model.RidingOffset;
                 _targetTerrainOrientation = AlignWithTerrain
                     ? new Matrix3(
                         Mathf.RotationAlign(
@@ -308,13 +310,28 @@ namespace Hedra.Engine.EntitySystem
             DisposeTime = 0;
         }
 
+        private Animation SelectWalkingAnimation()
+        {
+            return WalkAnimations[Utils.Rng.Next(0, WalkAnimations.Length)];
+        }
+        
+        private Animation SelectIdleAnimation()
+        {
+            return IdleAnimations[Utils.Rng.Next(0, WalkAnimations.Length)];
+        }
+
+        private Animation SelectAttackAnimation()
+        {
+            return AttackAnimations[Utils.Rng.Next(0, AttackAnimations.Length)];
+        }
+        
         private void Run()
         {
         
             if(this.IsAttacking) return;
             
             if(Model != null && !this.IsWalking)
-                Model.PlayAnimation(WalkAnimations[Utils.Rng.Next(0, WalkAnimations.Length)]);
+                Model.PlayAnimation(SelectWalkingAnimation());
         }
 
         private void Idle()
@@ -322,7 +339,7 @@ namespace Hedra.Engine.EntitySystem
             if(this.IsAttacking) return;
             
             if(Model != null && !this.IsIdling)
-                Model.PlayAnimation(IdleAnimations[Utils.Rng.Next(0, IdleAnimations.Length)]);
+                Model.PlayAnimation(SelectIdleAnimation());
         }
         
         public override void Draw()
@@ -336,8 +353,8 @@ namespace Hedra.Engine.EntitySystem
             set
             {
                 /* If it has a rider, ignore other values */
-                if (HasRider) value = Rider.Position;
-                _position = value;
+                if (!HasRider)
+                    _position = value;
             }
         }
 

@@ -27,9 +27,10 @@ namespace Hedra.Engine.StructureSystem
     /// </summary>
     public class StructureHandler
     {
-        private static RandomDistribution _distribution;
+        private static readonly RandomDistribution Distribution;
         private readonly object _lock = new object();
         public Vector3 MerchantPosition { get; set; }
+        public bool SpawnCampfireSpawned { get; set; }
         public bool MerchantSpawned { get; set; }
         public Voronoi SeedGenerator { get; }
         private readonly List<StructureWatcher> _itemWatchers;
@@ -40,7 +41,7 @@ namespace Hedra.Engine.StructureSystem
 
         static StructureHandler()
         {
-            _distribution = new RandomDistribution(true);
+            Distribution = new RandomDistribution(true);
         }
         
         public StructureHandler()
@@ -69,7 +70,7 @@ namespace Hedra.Engine.StructureSystem
 
         private bool ShouldRemove(Vector2 Offset, CollidableStructure Structure)
         {
-            /*Offset is not used because this causes issues when chunks are deleted at chunk edges*/
+            /* Offset is not used because this causes issues when chunks are deleted at chunk edges */
             return Structure.Design.ShouldRemove(GameManager.Player.Loader.Offset, Structure) && Structure.Built;
         }
 
@@ -86,7 +87,7 @@ namespace Hedra.Engine.StructureSystem
             for (var i = 0; i < designs.Length; i++)
             {
                 if (designs[i].MeetsRequirements(ChunkOffset))
-                    designs[i].CheckFor(ChunkOffset, region, _distribution);
+                    designs[i].CheckFor(ChunkOffset, region, Distribution);
             }
         }
 
@@ -117,6 +118,7 @@ namespace Hedra.Engine.StructureSystem
         {
             this.MerchantPosition = Vector3.Zero;
             this.MerchantSpawned = false;
+            this.SpawnCampfireSpawned = false;
             lock (_lock)
             {
                 for (var i = _itemWatchers.Count - 1; i > -1; i--)

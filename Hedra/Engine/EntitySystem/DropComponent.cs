@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Core;
 using OpenTK;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
@@ -47,7 +48,7 @@ namespace Hedra.Engine.EntitySystem
             var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
             if (item != null)
             {
-                Generation.World.DropItem(item,
+                World.DropItem(item,
                     Parent.Position + Vector3.UnitY * 2f +
                     new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f));
             }

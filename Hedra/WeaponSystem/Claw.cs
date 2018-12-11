@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
@@ -22,6 +23,9 @@ namespace Hedra.WeaponSystem
     /// </summary>
     public class Claw : RogueWeapon
     {
+        
+        public override uint PrimaryAttackIcon => WeaponIcons.ClawPrimaryAttack;     
+        public override uint SecondaryAttackIcon => WeaponIcons.ClawSecondaryAttack;
         
         public Claw(VertexData Contents) : base(Contents)
         {

@@ -84,10 +84,10 @@ namespace Hedra.Engine.StructureSystem
                 ChunkOffset.Y + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize);
         }
 
-        public bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
+        public virtual bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
-            bool shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng)
-                            && (TargetPosition.Xz - GameSettings.SpawnPoint).LengthSquared > 256 * 256;
+            var shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng)
+                            && (TargetPosition - World.SpawnPoint).Xz.LengthSquared > 256 * 256;
 
             return shouldBe && this.ShouldBuild(TargetPosition, Items, Biome.Structures.Designs);
         }

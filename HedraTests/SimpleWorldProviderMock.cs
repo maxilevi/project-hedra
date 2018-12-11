@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Hedra;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -33,6 +34,7 @@ namespace HedraTests
         public int AverageBuildTime => 0;
         public int AverageGenerationTime => 0;
         public virtual int Seed => 0;
+        public Vector3 SpawnPoint { get; }
         public virtual bool IsGenerated => false;
         public virtual int MeshQueueCount => 0;
         public virtual int ChunkQueueCount => 0;
@@ -188,7 +190,7 @@ namespace HedraTests
             return default(Entity);
         }
 
-        public virtual Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition)
+        public virtual Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)
         {
             return default(Vector3);
         }

@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using OpenTK;
 using Hedra.Engine.Rendering;
@@ -18,6 +19,7 @@ using Hedra.Engine.Sound;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -101,12 +103,12 @@ namespace Hedra.Engine.Player
 
         public HumanoidModel(IHumanoid Human, HumanType Type) : base(Human)
         {
-            Load(Human, HumanoidLoader.ModelTemplater[Type]);
+            Load(Human, HumanoidLoader.HumanoidTemplater[Type].Model);
         }
 
         public HumanoidModel(IHumanoid Human) : base(Human)
         {
-            Load(Human, HumanoidLoader.ModelTemplater[Human.Class]);
+            Load(Human, HumanoidLoader.HumanoidTemplater[Human.Class].Model);
         }
 
         private void Load(IHumanoid Humanoid, HumanoidModelTemplate Template)
@@ -316,6 +318,12 @@ namespace Hedra.Engine.Player
                 }
             }
         }
+
+        public void Play(Animation Animation)
+        {
+            PlayAnimation(Animation);
+            BlendAnimation(Animation);
+        }
         
         public void PlayAnimation(Animation Animation)
         {
@@ -323,7 +331,7 @@ namespace Hedra.Engine.Player
             Model.PlayAnimation(_animationPlaying);
         }
 
-        public void Blend(Animation Animation)
+        public void BlendAnimation(Animation Animation)
         {
             Model.BlendAnimation(Animation);
         }
@@ -409,9 +417,11 @@ namespace Hedra.Engine.Player
             {
                 _modelSound.Type = Human.IsSleeping 
                     ? SoundType.HumanSleep 
-                    : SoundType.HumanRun;
+                    : Human.Physics.IsOverAShape
+                        ? SoundType.HumanRunWood 
+                        : SoundType.HumanRun;
                 _modelSound.Position = Position;
-                _modelSound.Update(IsWalking && !Human.IsJumping && !Human.IsSwimming || Human.IsSleeping);
+                _modelSound.Update(IsWalking && !Human.IsJumping && !Human.IsSwimming && Human.IsGrounded || Human.IsSleeping);
             }
             Model.Update();
         }
@@ -570,6 +580,7 @@ namespace Hedra.Engine.Player
         Mandragora,
         TravellingMerchant,
         Villager,
+        Gnoll,
         Mage
     }
 }

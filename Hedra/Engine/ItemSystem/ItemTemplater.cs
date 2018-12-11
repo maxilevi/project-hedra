@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.ItemSystem.Templates;
 
 namespace Hedra.Engine.ItemSystem
 {

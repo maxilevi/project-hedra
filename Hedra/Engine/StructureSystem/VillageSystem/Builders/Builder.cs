@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using Hedra.Core;
+using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
@@ -118,6 +121,14 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             VillageObject.AddHumanoid(human);
             return human;
         }
+        
+        protected IEntity SpawnMob(MobType Mob, Vector3 Position)
+        {
+            var mob = World.SpawnMob(Mob, Position, Utils.Rng);
+            VillageObject.AddMob(mob);
+            return mob;
+        }
+        
 
         protected float ModelRadius(T Parameters, VillageCache Cache)
         {
@@ -140,16 +151,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         protected bool PushGroundwork(GroundworkItem Item)
         {
-            //if (World.WorldBuilding.CanAddPlateau(Item.Plateau) && Structure.CanAddPlateau(Item.Plateau))
+            Structure.AddPlateau(Item.Plateau);
+            if (Item.Groundwork != null)
             {
-                Structure.AddPlateau(Item.Plateau);
-                if (Item.Groundwork != null)
-                {
-                    Structure.AddGroundwork(Item.Groundwork);
-                }
-                return true;
+                Structure.AddGroundwork(Item.Groundwork);
             }
-            //return false;
+            return true;
         }
         
         public class GroundworkItem

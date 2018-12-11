@@ -20,8 +20,9 @@ namespace Hedra.AISystem
 
         public void AlterBehaviour<T>(T NewBehaviour) where T : Behaviour
         {
-            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-            foreach (FieldInfo field in this.GetType().GetFields(flags))
+            var type = this.GetType();
+            var fields = GetFields(type);
+            foreach (FieldInfo field in fields)
             {
                 if (field.FieldType.IsSubclassOf(typeof(T)) || typeof(T) == field.FieldType)
                 {

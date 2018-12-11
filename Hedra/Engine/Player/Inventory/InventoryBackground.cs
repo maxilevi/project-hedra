@@ -1,4 +1,5 @@
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
@@ -23,17 +24,17 @@ namespace Hedra.Engine.Player.Inventory
         {
             _targetResolution = new Vector2(1366, 705);
             _texture = new Texture("Assets/UI/InventoryBackground.png", Vector2.Zero, Vector2.One * .55f);
-            Name = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .075f),
+            Name = new GUIText(string.Empty, Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .075f),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
-            Level = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * -.05f),
+            Level = new GUIText(string.Empty, Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.05f),
                 Color.White, FontCache.Get(AssetManager.NormalFamily, 16));
-            TopLeftText = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * -.2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f),
+            TopLeftText = new GUIText(string.Empty, Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f),
                 Color.Red, FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold));
-            BottomLeftText = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * -.2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f),
+            BottomLeftText = new GUIText(string.Empty, Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f),
                 Color.DodgerBlue, FontCache.Get(AssetManager.NormalFamily, 10));
-            TopRightText = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * .2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f),
+            TopRightText = new GUIText(string.Empty, Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .2f + Vector2.UnitY * .075f + Vector2.UnitY * -.05f),
                 Color.DarkViolet, FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold));
-            BottomRightText = new GUIText(string.Empty, Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitX * .2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f),
+            BottomRightText = new GUIText(string.Empty, Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f),
                 Color.Gold, FontCache.Get(AssetManager.NormalFamily, 10));
 
             _panel = new Panel();

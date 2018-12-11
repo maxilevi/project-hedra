@@ -8,6 +8,7 @@
  */
 using System;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.Management;
@@ -86,7 +87,7 @@ namespace Hedra.Engine.Rendering
             }
             
             var player = GameManager.Player;
-            float product = Mathf.DotProduct(player.View.LookingDirection, (Position+_addedPosition - player.Position).NormalizedFast());
+            float product = Vector3.Dot(player.View.LookingDirection, (Position+_addedPosition - player.Position).NormalizedFast());
             if(product <= -0.5f) return;
             
             Vector4 eyeSpace = Vector4.Transform(new Vector4(Position+_addedPosition,1), DrawManager.FrustumObject.ModelViewMatrix);

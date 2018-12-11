@@ -16,6 +16,7 @@ using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 

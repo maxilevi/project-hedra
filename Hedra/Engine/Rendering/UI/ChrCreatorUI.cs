@@ -129,7 +129,7 @@ namespace Hedra.Engine.Rendering.UI
                 }
                 if(E == PanelState.Enabled){
                     Scenes.MenuBackground.Creator = true;
-                    _openFolder.Clickable = false;
+                    _openFolder.CanClick = false;
                     _clickTimer.Reset();
                 }
             };
@@ -149,7 +149,7 @@ namespace Hedra.Engine.Rendering.UI
                 _human.Model.Enabled = this.Enabled;
                 if(this.Enabled){
                     if(_clickTimer.Tick())
-                        _openFolder.Clickable = true;
+                        _openFolder.CanClick = true;
                     _human.Update();
                     _newRot += Time.IndependantDeltaTime * 30f;
                     _human.Model.Rotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;

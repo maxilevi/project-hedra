@@ -7,11 +7,14 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Rendering;
+using Hedra.Rendering.Particles;
 using Hedra.Sound;
 using OpenTK;
 
@@ -47,7 +50,8 @@ namespace Hedra.Engine.Player.Skills.Mage
             };*/
         }
         
-        public override void Use(){
+        public override void Use()
+        {
             Player.IsCasting = true;
             Casting = true;
             base.MaxCooldown = 8 - 1f * base.Level;

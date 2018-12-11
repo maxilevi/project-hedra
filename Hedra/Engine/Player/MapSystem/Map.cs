@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;

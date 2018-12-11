@@ -1,3 +1,4 @@
+using Hedra.Core;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
@@ -22,7 +23,7 @@ namespace Hedra.Engine.Player.Skills
             {
                 if (!Casting) return;
                 Player.Model.PlayAnimation(_stance);
-                Player.Model.Blend(_stance);
+                Player.Model.BlendAnimation(_stance);
             };
         }
 
@@ -31,7 +32,7 @@ namespace Hedra.Engine.Player.Skills
             Casting = true;
             SoundPlayer.PlaySoundWhile(SoundType, () => Casting, () => 1, () => 1);
             Player.Model.PlayAnimation(_stance);
-            Player.Model.Blend(_stance);
+            Player.Model.BlendAnimation(_stance);
             Activate();
         }
 

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;

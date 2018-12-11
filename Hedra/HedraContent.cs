@@ -4,7 +4,9 @@ using Hedra.API;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Sound;
+using Hedra.ModelHandlers;
 using Hedra.Sound;
+using Hedra.WeaponSystem;
 
 namespace Hedra
 {
@@ -16,6 +18,19 @@ namespace Hedra
         {
             RegisterSounds();
 
+            AddWeaponType("Sword", typeof(Sword));
+            AddWeaponType("Axe", typeof(Axe));
+            AddWeaponType("Hammer", typeof(Hammer));
+            AddWeaponType("Claw", typeof(Claw));
+            AddWeaponType("Katar", typeof(Katar));
+            AddWeaponType("DoubleBlades", typeof(DoubleBlades));
+            AddWeaponType("Bow", typeof(Bow));
+            AddWeaponType("Staff", typeof(Staff));
+            AddWeaponType("Knife", typeof(Knife));
+            AddWeaponType("FarmingRake", typeof(FarmingRake));
+
+            AddClassRestriction(Class.Warrior, "FarmingRake");
+            
             AddAIType("GiantBeetle", typeof(GiantBeetleAIComponent));
             AddAIType("GorillaWarrior", typeof(GorillaWarriorAIComponent));
             AddAIType("Friendly", typeof(FriendlyAIComponent));
@@ -31,6 +46,8 @@ namespace Hedra
             AddAnimationEvent("Growl", typeof(Growl));
             AddAnimationEvent("Quake", typeof(Quake));
             AddAnimationEvent("Slash", typeof(Slash));
+            
+            AddModelHandler("Ent", typeof(EntHandler));
         }
 
         private void RegisterSounds()
@@ -54,6 +71,7 @@ namespace Hedra
                 SoundPlayer.LoadSound(SoundType.HorseRun, "$DataFile$/Sounds/Horse.ogg");
                 SoundPlayer.LoadSound(SoundType.Fireplace, "$DataFile$/Sounds/Fireplace.ogg");
                 SoundPlayer.LoadSound(SoundType.HumanRun, "$DataFile$/Sounds/Run.ogg");
+                SoundPlayer.LoadSound(SoundType.HumanRunWood, "$DataFile$/Sounds/RunWood.ogg");
                 SoundPlayer.LoadSound(SoundType.HitGround, "$DataFile$/Sounds/HitGround.ogg");
                 SoundPlayer.LoadSound(SoundType.Dodge, "$DataFile$/Sounds/Roll.ogg");
                 SoundPlayer.LoadSound(SoundType.LongSwoosh, "$DataFile$/Sounds/LongSwoosh.ogg");

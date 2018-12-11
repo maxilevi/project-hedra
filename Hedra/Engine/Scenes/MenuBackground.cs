@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using OpenTK;
 using Hedra.Engine.Rendering;
@@ -21,6 +22,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
+using Hedra.Rendering;
 using Hedra.Sound;
 
 namespace Hedra.Engine.Scenes

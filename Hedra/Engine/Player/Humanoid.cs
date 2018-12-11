@@ -21,6 +21,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.UI;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.EntitySystem;
@@ -220,9 +221,9 @@ namespace Hedra.Engine.Player
         public void AttackSurroundings(float Damage, Action<IEntity> Callback)
         {
             var meleeWeapon = LeftWeapon as MeleeWeapon;
-            var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 3.75f + .5f ?? 1.0f;
+            var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 3.75f + .75f ?? 1.0f;
             var wideModifier = Math.Max( (meleeWeapon?.MainWeaponSize.Xz.LengthFast ?? 1.0f) - .75f, 1.0f);
-            var nearEntities = World.InRadius<IEntity>(this.Position, 16f * rangeModifier); // this.Model.BroadphaseCollider.BroadphaseRadius
+            var nearEntities = World.InRadius<IEntity>(this.Position, 16f * rangeModifier);
             var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
             var atLeastOneHit = false;
 
@@ -230,7 +231,7 @@ namespace Hedra.Engine.Player
             {
                 var norm = (target.Position - this.Position).Xz.NormalizedFast().ToVector3();
                 var dot = Vector3.Dot(norm, this.Orientation);
-                if(dot > 0.80f / wideModifier && this.InAttackRange(target, rangeModifier))
+                if(dot > 0.70f / wideModifier && this.InAttackRange(target, rangeModifier))
                 {
                     var damageToDeal = Damage * dot;
                     target.Damage(damageToDeal, this, out float exp);

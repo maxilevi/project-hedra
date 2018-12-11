@@ -20,8 +20,8 @@ namespace Hedra.Engine.Management
 {
     public class CompressedAssetProvider : IAssetProvider
     {
-        private readonly PrivateFontCollection _boldFonts;
-        private readonly PrivateFontCollection _normalFonts;
+        private PrivateFontCollection _boldFonts;
+        private PrivateFontCollection _normalFonts;
         private List<ResourceHandler> _registeredHandlers;
         private bool _filesDecompressed;
         private Dictionary<string, VertexData> _hitboxCache;
@@ -38,14 +38,11 @@ namespace Hedra.Engine.Management
         public string SoundResource => "data2.db";
         public string AssetsResource => "data3.db";
         
-        public CompressedAssetProvider()
+        public void Load()
         {
             _boldFonts = new PrivateFontCollection();
             _normalFonts = new PrivateFontCollection();
-        }
-
-        public void Load()
-        {
+            
             var sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.AssetsResource);
             _boldFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
 

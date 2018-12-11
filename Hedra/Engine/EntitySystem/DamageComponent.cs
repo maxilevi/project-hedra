@@ -17,6 +17,7 @@ using Hedra.Engine.Rendering.UI;
 using System.Drawing;
 using System.Linq;
 using Hedra.AISystem;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;

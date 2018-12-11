@@ -9,6 +9,7 @@ using OpenTK;
 using Hedra.Engine.Management;
 using System.Collections;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
@@ -21,6 +22,8 @@ namespace Hedra.Engine.Player
         private float _speed;
         public bool CaptureMovement { get; set; } = true;
         public Vector3 RollDirection { get; set; }
+        public virtual bool IsMovingForward { get; protected set; }
+        public virtual bool IsMovingBackwards { get; protected set; }
         public float RollFacing { get; set; }
         public bool IsJumping { get; private set; }
         protected readonly IHumanoid Human;
@@ -82,7 +85,6 @@ namespace Hedra.Engine.Player
         public void ProcessMovement(float CharacterRotation, Vector3 MoveSpace, bool Orientate = true)
         {
             Human.Physics.DeltaTranslate(MoveSpace);
-
             if (Orientate)
             {
                 if (!Human.WasAttacking && !Human.IsAttacking)
@@ -99,7 +101,10 @@ namespace Hedra.Engine.Player
             Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, Facing, Human.Model.TargetRotation.Z);
             var inRadians = Human.Model.Rotation.Y * Mathf.Radian;
             // There seems to be a bug in how we store the rotations so be switch the sines
-            Human.Orientation = new Vector3((float) Math.Sin(inRadians), 0, (float) Math.Cos(inRadians));
+            //if(Human is LocalPlayer player)
+            //    Human.Orientation = player.View.LookingDirection;
+            //else
+                Human.Orientation = new Vector3((float)Math.Sin(inRadians), 0, (float)Math.Cos(inRadians));
         }
         
         public void Orientate()

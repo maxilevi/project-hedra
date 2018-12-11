@@ -6,6 +6,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
@@ -58,7 +59,7 @@ namespace Hedra.Engine.StructureSystem
 
         public override void OnEnter(IPlayer Player)
         {
-            Player.MessageDispatcher.ShowTitleMessage($"WELCOME TO {NameGenerator.Generate(World.Seed + 23123)}", 6f);
+            Player.MessageDispatcher.ShowTitleMessage(Translations.Get("welcome_to_village", NameGenerator.Generate(World.Seed + 23123)), 6f);
         }
         
         public override int[] AmbientSongs => new []

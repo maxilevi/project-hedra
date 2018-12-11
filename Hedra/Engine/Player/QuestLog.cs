@@ -8,6 +8,7 @@
  */
 
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -62,16 +63,16 @@ namespace Hedra.Engine.Player
             _inPanel = new Panel();
 
             var background = new Texture(Graphics2D.LoadFromAssets("Assets/UI/QuestLog.png"), Vector2.Zero,
-                Mathf.ScaleGUI(_targetResolution, Vector2.One));
+                Mathf.ScaleGui(_targetResolution, Vector2.One));
 
-            _chainIcon = new Texture(0, Mathf.ScaleGUI(_targetResolution, new Vector2(0.7f, .325f)),
-                Mathf.ScaleGUI(_targetResolution, new Vector2(0.07f, 0.13f) * 2.9f))
+            _chainIcon = new Texture(0, Mathf.ScaleGui(_targetResolution, new Vector2(0.7f, .325f)),
+                Mathf.ScaleGui(_targetResolution, new Vector2(0.07f, 0.13f) * 2.9f))
             {
                 TextureElement = {Flipped = true}
             };
 
             _questDescription = new GUIText("QUEST DESCRIPTION",
-                Mathf.ScaleGUI(_targetResolution, new Vector2(0.7f, -0.3f)),
+                Mathf.ScaleGui(_targetResolution, new Vector2(0.7f, -0.3f)),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
 
             _inPanel.AddElement(background);

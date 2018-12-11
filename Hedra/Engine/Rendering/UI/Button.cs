@@ -8,6 +8,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
@@ -35,11 +36,11 @@ namespace Hedra.Engine.Rendering.UI
         private Vector2 _previousScale;
         private GUIText _privateText;
         private Vector2 _scale;
+        private Translation _liveTranslation;
 
-        public bool Clickable = true;
-        public bool Enlarge = true;
-        public bool PlaySound = true;
-        public GUITexture Texture;
+        public bool CanClick { get; set; } = true;
+        public bool PlaySound { get; set; } = true;
+        public GUITexture Texture { get; set; }
 
         public bool Enabled { get; set; }
 
@@ -90,8 +91,11 @@ namespace Hedra.Engine.Rendering.UI
             if (this.Texture != null)
                 DrawManager.UIRenderer.Add(this.Texture);
 
-            if (!string.IsNullOrEmpty(Text))
-                this.Text = new GUIText(Translation ?? Translation.Default(Text), Position, FontColor, F);
+            if (!string.IsNullOrEmpty(Text) || Translation != null)
+            {
+                _liveTranslation = Translation ?? Translation.Default(Text);
+                this.Text = new GUIText(_liveTranslation, Position, FontColor, F);
+            }
 
             if (!string.IsNullOrEmpty(Text))
             {
@@ -122,17 +126,20 @@ namespace Hedra.Engine.Rendering.UI
                 );
                 if (this.Position.Y + this.Scale.Y > -coords.Y && this.Position.Y - this.Scale.Y < -coords.Y
                     && this.Position.X + this.Scale.X > coords.X && this.Position.X - this.Scale.X < coords.X)
-                    if (this.Clickable)
+                {
+                    if (this.CanClick)
                     {
                         SoundPlayer.PlayUISound(SoundType.ButtonClick, 1, .5f);
                         this.Click.Invoke(Sender, E);
+                        UpdateTranslation();
                     }
+                }
             }
         }
 
         public override void OnMouseMove(object Sender, MouseMoveEventArgs E)
         {
-            if (this.Enabled && this.Clickable)
+            if (this.Enabled && this.CanClick)
             {
                 var coords = Mathf.ToNormalizedDeviceCoordinates(
                     new Vector2(E.Mouse.X, E.Mouse.Y),
@@ -145,6 +152,7 @@ namespace Hedra.Engine.Rendering.UI
                     if (!this._hasEntered)
                     {
                         HoverEnter?.Invoke(Sender, E);
+                        UpdateTranslation();
                         this._hasEntered = true;
                     }
                 }
@@ -153,6 +161,7 @@ namespace Hedra.Engine.Rendering.UI
                     if (this._hasEntered)
                     {
                         HoverExit?.Invoke(Sender, E);
+                        UpdateTranslation();
                         this._hasEntered = false;
                     }
                 }
@@ -181,6 +190,11 @@ namespace Hedra.Engine.Rendering.UI
                 this.Text.TextColor = this._previousFontColor;
                 this.Text.UpdateText();
             }
+        }
+
+        private void UpdateTranslation()
+        {
+            _liveTranslation?.UpdateTranslation();
         }
 
         public void Disable()

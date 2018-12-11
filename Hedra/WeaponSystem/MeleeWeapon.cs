@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -39,7 +40,7 @@ namespace Hedra.WeaponSystem
         {
             this.SetToChest(MainMesh);
             MainMesh.BeforeLocalRotation =
-                (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 2.5f - Vector3.UnitY * (_weaponHeight * .5f - 1.25f)) * this.Scale;
+                (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 1.5f - Vector3.UnitY * 1.5f) * this.Scale;
         }
 
         protected override void OnAttackStance()

@@ -8,10 +8,12 @@ using System;
 using Hedra.Engine.Player;
 using System.Collections.Generic;
 using System.Reflection;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
+using Hedra.Rendering.Particles;
 
 namespace Hedra.Engine.Rendering.Particles
 {
@@ -242,13 +244,5 @@ namespace Hedra.Engine.Rendering.Particles
             DrawManager.ParticleRenderer.Remove(this);
             UpdateManager.Remove(this);
         }
-    }
-    
-    [Obfuscation(Exclude = false, Feature = "-rename")]
-    public enum ParticleShape
-    {
-        Square,
-        Sphere,
-        Cone
     }
 }

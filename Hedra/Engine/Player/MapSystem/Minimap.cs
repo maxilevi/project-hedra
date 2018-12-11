@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;

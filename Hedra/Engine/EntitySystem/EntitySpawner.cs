@@ -12,10 +12,12 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using OpenTK;
 using System.Threading;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.Engine.EntitySystem
@@ -182,6 +184,7 @@ namespace Hedra.Engine.EntitySystem
         Gorilla,
         Beetle,
         Troll,
+        Pug,
         Cow,
         TotalCount,
         None,

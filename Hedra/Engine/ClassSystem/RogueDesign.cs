@@ -1,3 +1,4 @@
+using Hedra.API;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
@@ -33,5 +34,6 @@ namespace Hedra.Engine.ClassSystem
         public override Matrix4 PantsMatrixPlacement { get; } = Matrix4.Identity;
         public override Matrix4 LeftBootPlacement { get; } = Matrix4.Identity;
         public override Matrix4 RightBootPlacement { get; } = Matrix4.Identity;
+        public override Class Type => Class.Rogue;
     }
 }

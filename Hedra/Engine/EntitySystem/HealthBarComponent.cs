@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
@@ -43,7 +44,7 @@ namespace Hedra.Engine.EntitySystem
 
         public HealthBarComponent(IEntity Parent, string Name) : base(Parent)
         {
-            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGUI(new Vector2(1024, 578), _originalScale), Name,
+            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGui(new Vector2(1024, 578), _originalScale), Name,
                 () => Parent.Health, () => Parent.MaxHealth,
                 HealthBarPanel);
 
@@ -57,7 +58,7 @@ namespace Hedra.Engine.EntitySystem
 
         public HealthBarComponent(IEntity Parent) : base(Parent)
         {
-            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGUI(new Vector2(1024, 578), _originalScale), Name,
+            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGui(new Vector2(1024, 578), _originalScale), Name,
                 () => Parent.Health, () => Parent.MaxHealth,
                 HealthBarPanel);
 
@@ -82,7 +83,7 @@ namespace Hedra.Engine.EntitySystem
             _healthBar.Text.UIText.UIText.Scale = _originalTextScale * _barSize * _textEnabled;
 
             var product = 
-                Mathf.DotProduct(GameManager.Player.View.CrossDirection, (Parent.Position - GameManager.Player.Position).NormalizedFast());
+                Vector3.Dot(GameManager.Player.View.CrossDirection, (Parent.Position - GameManager.Player.Position).NormalizedFast());
             if (_barSize <= 0.5f || product <= 0.5f)
             {
                 _healthBar.Disable();

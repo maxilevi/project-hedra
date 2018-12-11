@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
@@ -19,6 +20,8 @@ namespace Hedra.WeaponSystem
     /// </summary>
     public class Hands : MeleeWeapon
     {
+        public override uint PrimaryAttackIcon => WeaponIcons.DefaultAttack;     
+        public override uint SecondaryAttackIcon => WeaponIcons.DefaultAttack;
         protected override bool ShouldPlaySound => false;
         protected override string AttackStanceName => "Assets/Chr/WarriorPunch-Stance.dae";
         protected override float PrimarySpeed => 1.35f;

@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering;
@@ -49,7 +50,7 @@ namespace Hedra.Engine.Player.Skills.Archer
                         continue;
                     
                     Vector3 ToEntity = (World.Entities[i].Position - Player.Position).NormalizedFast();
-                    float Dot = Mathf.DotProduct(ToEntity, Player.Orientation);
+                    float Dot = Vector3.Dot(ToEntity, Player.Orientation);
                     if(Dot >= .25f && (World.Entities[i].Position - Player.Position).LengthSquared < 16f*16f){
                         float Exp;
                         World.Entities[i].Damage(this.Damage * Dot * 1.25f, Player, out Exp, true);

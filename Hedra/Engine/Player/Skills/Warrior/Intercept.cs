@@ -47,7 +47,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
             if (!_isMoving) return;
             if (Player.Model.AnimationBlending == null)
             {
-                Player.Model.Blend(_interceptStance);
+                Player.Model.BlendAnimation(_interceptStance);
             }
 
             if (_dmgTimer.Tick())
@@ -105,7 +105,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
         {
             if(_isMoving) return;
             Player.Movement.Orientate();
-            Player.Model.Blend(_interceptStance);
+            Player.Model.BlendAnimation(_interceptStance);
             _isMoving = true;
             _timer.AlertTime = Duration;
             _timer.Reset();

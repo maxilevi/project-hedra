@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using OpenTK;
 using Hedra.Engine.Sound;
@@ -88,7 +89,6 @@ namespace Hedra.Engine.Player
             this.StructureAware = new StructureAware(this);
             this.Boat = new Boat(this);
             this.AmbientEffects = new AmbientEffectHandler(this);
-            this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
             this.Physics.CollidesWithStructures = true;
             this.AttackPower = 1.0f;
 
@@ -416,6 +416,9 @@ namespace Hedra.Engine.Player
 
         public void Reset()
         {
+            IsRiding = false;
+            /* Finish removing the mount */
+            Pet.Pet?.Update();
             Inventory.ClearInventory();
             ComponentManager.Clear();
             Chat.Clear();
@@ -465,11 +468,11 @@ namespace Hedra.Engine.Player
 
             var gold = ItemPool.Grab(ItemType.Gold);
             gold.SetAttribute(CommonAttributes.Amount, 5);
-            data.AddItem(PlayerInventory.GoldHolder, gold );
+            data.AddItem(PlayerInventory.GoldHolder, gold);
 
             var food = ItemPool.Grab(ItemType.Berry);
             food.SetAttribute(CommonAttributes.Amount, 5);
-            data.AddItem( PlayerInventory.FoodHolder, food);
+            data.AddItem(PlayerInventory.FoodHolder, food);
 
             data.AddItem(PlayerInventory.WeaponHolder, ClassType.StartingItem);
 

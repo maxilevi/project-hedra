@@ -56,7 +56,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public void PlaceGroundwork(PlacementDesign Design)
         {
             Design.Markets = LoopStructures(Design.Markets, _marketBuilder, _marketWellBuilder);
-            Design.Houses = LoopStructures(Design.Houses, _houseBuilder, _neighbourHoodWellBuilder);
+            Design.Houses = LoopStructures(Design.Houses, _houseBuilder);
             Design.Blacksmith = LoopStructures(Design.Blacksmith, _blacksmithBuilder);
             Design.Farms = LoopStructures(Design.Farms, _farmBuilder);
             Design.Stables = LoopStructures(Design.Stables, _stableBuilder);
@@ -70,9 +70,21 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 for(var j = 0; j < Builders.Length; j++)
                 {
-                    if (IsUnderwater(Parameters[i].Position) || !Builders[j].Place(Parameters[i], _root.Cache))
+                    if (!Builders[j].Place(Parameters[i], _root.Cache))
                     {
                         list.Remove(Parameters[i]);
+                        break;
+                    }
+                }
+            }
+            for (var i = 0; i < Parameters.Count; i++)
+            {
+                for (var j = 0; j < Builders.Length; j++)
+                {
+                    //if (IsUnderwater(Parameters[i].Position))
+                    {
+
+//                        list.Remove(Parameters[i]);
                         break;
                     }
                 }
@@ -82,36 +94,36 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         private bool IsUnderwater(Vector3 Position)
         {
-            return World.BiomePool.GetRegion(Position).Generation.GetHeight(Position.X, Position.Z, null, out _) < BiomePool.SeaLevel
-                && !_structure.Mountain.Collides(Position.Xz);
+            return World.WorldBuilding.ApplyMultiple(
+                   Position,
+                   World.BiomePool.GetRegion(Position).Generation.GetHeight(Position.X, Position.Z, null, out _),
+                   _structure.Plateaux.Concat(new[] {_structure.Mountain}).ToArray()
+            ) < BiomePool.SeaLevel;
         }
 
         public void Build(PlacementDesign Design, CollidableStructure Structure)
         {
-            var parameters = new IBuildingParameters[][]
+            LoopAndBuild(Design, Structure, Design.Markets, _marketBuilder, _marketWellBuilder);
+            LoopAndBuild(Design, Structure, Design.Houses, _houseBuilder);
+            LoopAndBuild(Design, Structure, Design.Blacksmith, _blacksmithBuilder);
+            LoopAndBuild(Design, Structure, Design.Farms, _farmBuilder);
+            LoopAndBuild(Design, Structure, Design.Stables, _stableBuilder);
+        }
+
+        private void LoopAndBuild<T>(PlacementDesign Design, CollidableStructure Structure, IList<T> Parameters, params Builder<T>[] Builders) where T : IBuildingParameters
+        {
+            for (var i = 0; i < Parameters.Count; i++)
             {
-                Design.Houses.ToArray(),
-                Design.Farms.ToArray(),
-                Design.Blacksmith.ToArray(),
-                Design.Stables.ToArray(),
-                Design.Markets.ToArray(),
-                Design.Markets.ToArray()
-            };
-            var radius = 0f;
-            var builders = new object[] { _houseBuilder, _farmBuilder, _blacksmithBuilder, _stableBuilder, _marketWellBuilder, _marketBuilder};
-            for (var i = 0; i < builders.Length; i++)
-            {
-                for (var j = 0; j < parameters[i].Length; j++)
+                for (var j = 0; j < Builders.Length; j++)
                 {
-                    var build = builders[i].GetType().GetMethod(nameof(Builder<IBuildingParameters>.Build));
-                    var output = (BuildingOutput) build.Invoke(builders[i], new object[] { parameters[i][j], parameters[i][j].Design, _root.Cache, _rng, Design.Position });
+                    var output = Builders[j].Build(Parameters[i], Parameters[i].Design, _root.Cache, _rng, Design.Position);
+                    var finalOutput = Builders[j].Paint(Parameters[i], output);
 
-                    var paint = builders[i].GetType().GetMethod(nameof(Builder<IBuildingParameters>.Paint));
-                    var finalOutput = (BuildingOutput) paint.Invoke(builders[i], new object[] { parameters[i][j], output });
-                    CoroutineManager.StartCoroutine(PlaceCoroutine, parameters[i][j].Position, finalOutput.Compress(), Structure);
-
-                    var polish = builders[i].GetType().GetMethod(nameof(Builder<IBuildingParameters>.Polish));
-                    polish.Invoke(builders[i], new object[] { parameters[i][j], _rng });
+                    var k = j;
+                    var o = i;
+                    void PolishCallback() => Builders[k].Polish(Parameters[o], _rng);
+                    CoroutineManager.StartCoroutine(PlaceCoroutine, Parameters[i].Position, finalOutput.Compress(),
+                        Structure, (Action) PolishCallback);
                 }
             }
         }
@@ -121,6 +133,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var position = (Vector3) Arguments[0];
             var buildingOutput = (CompressedBuildingOutput) Arguments[1];
             var structure = (CollidableStructure) Arguments[2];
+            var callback = (Action)Arguments[3];
 
             var waiter = new WaitForChunk(position)
             {
@@ -136,6 +149,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             structure.AddStaticElement(buildingOutput.Models.Select(C => C.ToVertexData()).ToArray());
             structure.AddCollisionShape(buildingOutput.Shapes.ToArray());
             structure.WorldObject.AddChildren(buildingOutput.Structures.ToArray());
+            callback();
         }
     }
 }

@@ -111,7 +111,7 @@ namespace Hedra.Engine.Localization
                 _language = value;
                 for (var i = 0; i < _liveTranslation.Count; i++)
                 {
-                    _liveTranslation[i].UpdateTranslation(_language);
+                    _liveTranslation[i].UpdateTranslation();
                 }
             }
         }

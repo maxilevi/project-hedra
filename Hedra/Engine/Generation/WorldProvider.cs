@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Hedra.API;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
@@ -20,7 +21,6 @@ using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
-using Hedra.Engine.ModuleSystem.ModelHandlers;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -45,6 +45,7 @@ namespace Hedra.Engine.Generation
         private readonly RenderingComparer _renderingComparer;
         private readonly SharedWorkerPool _meshWorkerPool;
         private readonly SharedWorkerPool _genWorkerPool;
+        private Vector3 _spawningPoint;
         private int _previousCount;
         private int _previousId;
         private Matrix4 _previousModelView;
@@ -82,7 +83,7 @@ namespace Hedra.Engine.Generation
         public int ChunkQueueCount => _chunkBuilder.Count;
         public int AverageBuildTime => _meshBuilder.AverageWorkTime;     
         public int AverageGenerationTime => _chunkBuilder.AverageWorkTime;
-
+        public Vector3 SpawnPoint => _spawningPoint;
         public Dictionary<Vector2, Chunk> DrawingChunks { get; }
         public Dictionary<Vector2, Chunk> ShadowDrawingChunks { get; }
 
@@ -207,6 +208,7 @@ namespace Hedra.Engine.Generation
             OpenSimplexNoise.Load(NewSeed == MenuSeed ? 23123123 : NewSeed); //Not really the menu seed.
             _meshBuilder.Discard();
             _chunkBuilder.Discard();
+            _spawningPoint = FindSpawningPoint(GeneralSettings.SpawnPoint);
             SkyManager.SetTime(12000);
 
             var items = Items;
@@ -541,7 +543,7 @@ namespace Hedra.Engine.Generation
             var placeablePosition = this.FindPlaceablePosition(mob, DesiredPosition);
             mob.MobId = ++_previousId;
             mob.MobSeed = MobSeed;
-            mob.Model.TargetRotation = new Vector3(0, new Random(MobSeed).NextFloat() * 360f, 0);
+            mob.Model.TargetRotation = new Vector3(0, (new Random(MobSeed)).NextFloat() * 360f * Mathf.Radian, 0);
             mob.Physics.TargetPosition = placeablePosition;
             mob.Model.Position = placeablePosition;
             MobFactory.Polish(mob);
@@ -568,7 +570,7 @@ namespace Hedra.Engine.Generation
             return point;
         }
 
-        public Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition)
+        public Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)
         {
             var position = DesiredPosition;
             var underChunk = this.GetChunkAt(position);

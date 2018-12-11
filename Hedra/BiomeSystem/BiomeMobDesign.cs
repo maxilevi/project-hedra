@@ -1,4 +1,5 @@
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 
 namespace Hedra.BiomeSystem
 {

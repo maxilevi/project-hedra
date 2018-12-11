@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.ItemSystem.ArmorSystem;
+using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
@@ -11,7 +12,6 @@ namespace Hedra.Engine.ItemSystem
     public class Item
     {
         private static string GoldItemName = "Gold";
-        private static string[] FoodItemNames = {"Berry"};
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
@@ -151,8 +151,8 @@ namespace Hedra.Engine.ItemSystem
             return Encoding.ASCII.GetBytes(ItemTemplate.ToJson(ItemTemplate.FromItem(this)));
         }
 
-        public bool IsGold => Name == Item.GoldItemName;
-        public bool IsFood => FoodItemNames.Contains(Name);
+        public bool IsGold => Name == GoldItemName;
+        public bool IsFood => HasAttribute("IsFood") && GetAttribute<bool>("IsFood");
         public bool IsWeapon => WeaponFactory.Contains(this);
         public bool IsArmor => ArmorFactory.Contains(this);
         public bool IsRing => EquipmentType == ItemSystem.EquipmentType.Ring.ToString();

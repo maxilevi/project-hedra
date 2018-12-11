@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.AISystem;
+using Hedra.AISystem.Humanoid;
 using Hedra.BiomeSystem;
+using Hedra.Components;
+using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -87,31 +91,32 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override void Polish(FarmParameters Parameters, Random Rng)
         {
-            if (Rng.Next(0, 4) == 1) SpawnFarmer(Parameters, Rng);
-            /*var rng = Rng.NextFloat();
-            if (Parameters.PropDesign.HasLivestock)
-                SpawnLivestock(Parameters, Rng);
-            else if (rng < .85f)
-                SpawnPlants(Parameters, Rng);*/
-
-        }
-
-        private void SpawnLivestock(FarmParameters Parameters, Random Rng)
-        {
-            var count = Rng.Next(3, 8);
-            var mobType = MobType.None;
-            var rng = Rng.NextFloat();
-            
-            if(rng < .5f) return;
-            if (rng < .8f)
-                mobType = MobType.Cow;
-            else if (rng < 1f)
-                mobType = MobType.Sheep;
-            
-            for (var i = 0; i < count; i++)
+            var dir = Vector3.TransformPosition(Vector3.UnitZ, Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
+            if (Rng.Next(0, 4) == 1)
             {
-                var offset = new Vector3(Rng.NextFloat() * _width * .5f, 0, Rng.NextFloat() * _width * .5f);
-                World.SpawnMob(mobType, Parameters.Position + offset, Rng);
+                var position = Parameters.Position + dir * _width * .5f;
+                SpawnFarmer(position, Parameters.Position.Xz);
+            }
+            else if (Rng.Next(0, 5) == 1)
+            {
+                var type = Rng.Next(0, 4) != 1 ? MobType.Cow : MobType.Sheep;
+                var count = Rng.Next(1, 4);
+                for (var i = 0; i < count; ++i)
+                {
+                    var position = Parameters.Position + dir * new Vector3(Rng.NextFloat() * _width - _width * .5f, 0,
+                                       Rng.NextFloat() * _width - _width * .5f);
+                    var animal = SpawnMob(type, position);
+                    animal.RemoveComponent(animal.SearchComponent<BasicAIComponent>());
+                    switch (type)
+                    {
+                        case MobType.Cow:
+                            animal.AddComponent(new CowFarmAIComponent(animal, Parameters.Position, _width));
+                            break;
+                        case MobType.Sheep:
+                            animal.AddComponent(new SheepFarmAIComponent(animal, Parameters.Position, _width));
+                            break;
+                    }
+                }
             }
         }
 
@@ -162,12 +167,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return data;
         }
         
-        private void SpawnFarmer(FarmParameters Parameters, Random Rng)
+        private void SpawnFarmer(Vector3 Position, Vector2 FarmPosition)
         {
-            var dir = Vector3.TransformPosition(Vector3.UnitZ, Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
-            var farmer = SpawnHumanoid(HumanType.Villager, Parameters.Position + dir * _width * .5f);
-            var farmerHat = ItemPool.Grab(CommonItems.FarmerHat);
-            farmer.SetHelmet(farmerHat.Helmet);
+            var farmer = SpawnHumanoid(HumanType.Villager, Position);
+            farmer.SetHelmet(ItemPool.Grab(CommonItems.FarmerHat).Helmet);
+            farmer.SetWeapon(ItemPool.Grab(CommonItems.FarmingRake).Weapon);
+            farmer.AddComponent(new FarmerAIComponent(farmer, FarmPosition, Vector2.One * _width));
+            farmer.AddComponent(new FarmerThoughtsComponent(farmer));
         }
         
         public override bool Place(FarmParameters Parameters, VillageCache Cache)

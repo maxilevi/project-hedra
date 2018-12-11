@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Hedra.Core;
 using Hedra.Engine.IO;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;

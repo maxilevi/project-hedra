@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
@@ -30,7 +31,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public override void Polish(BlacksmithParameters Parameters, Random Rng)
         {
-            SpawnHumanoid(HumanType.Blacksmith, Parameters.Position + Parameters.Design.Blacksmith * Parameters.Design.Scale);
+            var transformation = BuildTransformation(Parameters).ClearTranslation();
+            var human = SpawnHumanoid(
+                HumanType.Blacksmith,
+                Vector3.Zero
+            );
+            var newPosition = Parameters.Position +
+                              Vector3.TransformPosition(Parameters.Design.Blacksmith * Parameters.Design.Scale,
+                                  transformation);
+            human.Physics.TargetPosition = newPosition + Vector3.UnitY * Physics.HeightAtPosition(newPosition);
+            human.Physics.UsePhysics = false;
         }
     }
 }

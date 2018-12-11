@@ -1,4 +1,5 @@
 using Hedra.Engine.EntitySystem;
+using Hedra.EntitySystem;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -6,7 +7,7 @@ namespace Hedra.AISystem.Behaviours
     {
         protected StareBehaviour Stare { get; }
 
-        public IdleBehaviour(Entity Parent) : base(Parent)
+        public IdleBehaviour(IEntity Parent) : base(Parent)
         {
             Stare = new StareBehaviour(Parent);
         }

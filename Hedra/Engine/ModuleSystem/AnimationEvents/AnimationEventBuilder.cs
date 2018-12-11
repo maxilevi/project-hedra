@@ -2,32 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Hedra.AnimationEvents;
+using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;
 
 namespace Hedra.Engine.ModuleSystem.AnimationEvents
 {
-    public static class AnimationEventBuilder
+    public class AnimationEventBuilder : TypeFactory<AnimationEventBuilder>
     {
-        private static readonly Dictionary<string, Type> Events;
-
-        static AnimationEventBuilder()
+        public AnimationEvent Build(Entity Parent, string Key)
         {
-            Events = new Dictionary<string, Type>();
-        }
-
-        public static void Register(string Name, Type Event)
-        {
-            Events.Add(Name, Event);
-        }
-        
-        public static void Unregister(string Name)
-        {
-            Events.Remove(Name);
-        }
-
-        public static AnimationEvent Build(Entity Parent, string Key)
-        {
-            return (AnimationEvent) Activator.CreateInstance(Events[Key], Parent);
+            return (AnimationEvent) Activator.CreateInstance(this[Key], Parent);
         }
     }
 }

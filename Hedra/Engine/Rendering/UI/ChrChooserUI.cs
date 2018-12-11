@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
@@ -275,7 +276,7 @@ namespace Hedra.Engine.Rendering.UI
 
                     int k = i;
                     if(_humans[k].MainWeapon != null && _humans[k].MainWeapon.Weapon.InAttackStance)
-                        _humans[k].Model.Blend(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);                             
+                        _humans[k].Model.BlendAnimation(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);                             
                         
                     _humans[i].Model.Enabled = (_humans[i].Model.ModelPosition.Xz - _humans[i].BlockPosition.Xz).LengthFast < 8;
                     _humans[i].Update();                    

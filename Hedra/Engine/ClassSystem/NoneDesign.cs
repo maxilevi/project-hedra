@@ -1,4 +1,5 @@
 using System;
+using Hedra.API;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
@@ -10,23 +11,23 @@ namespace Hedra.Engine.ClassSystem
     [HiddenClass]
     public class NoneDesign : ClassDesign
     {
-        public override string Logo => string.Empty;
-        public override HumanType Human => throw new ArgumentException("Cannot retrieve HumanType from NoneClass");
-        public override float BaseSpeed => 1.25f;
-        public override AbilityTreeBlueprint AbilityTreeDesign => null;
-        public override Item StartingItem => null;
+        public override string Logo => throw new ArgumentException();
+        public override HumanType Human => throw new ArgumentException();
+        public override float BaseSpeed => throw new ArgumentException();
+        public override AbilityTreeBlueprint AbilityTreeDesign => throw new ArgumentException();
+        public override Item StartingItem => throw new ArgumentException();
         public override float AttackResistance => throw new ArgumentException();
         public override float MaxStamina => throw new ArgumentException();
-        public override float BaseDamage => 4f;
+        public override float BaseDamage => throw new ArgumentException();
 
         public override float MaxHealthFormula(float RandomFactor)
         {
-            return 30 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+            throw new ArgumentException();
         }
 
         public override float MaxManaFormula(float RandomFactor)
         {
-            return 30 + ((RandomFactor - .75f) * 8 - 1f) * 5 - 2.5f;
+            throw new ArgumentException();
         }
         
         public override Matrix4 HelmetPlacement => throw new ArgumentException();
@@ -34,5 +35,6 @@ namespace Hedra.Engine.ClassSystem
         public override Matrix4 PantsMatrixPlacement => throw new ArgumentException();
         public override Matrix4 LeftBootPlacement => throw new ArgumentException();
         public override Matrix4 RightBootPlacement => throw new ArgumentException();
+        public override Class Type => Class.None;
     }
 }

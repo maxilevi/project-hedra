@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
@@ -22,10 +23,12 @@ namespace Hedra.WeaponSystem
     /// </summary>
     public class Axe : HeavyMeleeWeapon
     {        
+        public override uint PrimaryAttackIcon => WeaponIcons.AxePrimaryAttack;     
+        public override uint SecondaryAttackIcon => WeaponIcons.AxeSecondaryAttack;
+        
         public Axe(VertexData Contents) : base(Contents)
         {
         }
-
         
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {

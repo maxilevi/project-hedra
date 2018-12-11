@@ -1,9 +1,11 @@
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
+using Hedra.Rendering.Particles;
 using Hedra.Sound;
 using OpenTK;
 

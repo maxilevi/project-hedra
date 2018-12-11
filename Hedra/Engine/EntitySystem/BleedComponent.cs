@@ -8,6 +8,7 @@
  */
 
 
+using Hedra.Core;
 using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem

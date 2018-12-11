@@ -76,6 +76,8 @@ namespace Hedra.WeaponSystem
         protected abstract string[] SecondaryAnimationsNames { get; }
         protected abstract float PrimarySpeed { get; }
         protected abstract float SecondarySpeed { get; }
+        public abstract uint PrimaryAttackIcon { get; }
+        public abstract uint SecondaryAttackIcon { get; }
 
         protected Weapon(VertexData MeshData)
         {
@@ -220,7 +222,7 @@ namespace Hedra.WeaponSystem
             BaseAttack(Human, Options);
             var animation = _primaryAnimations[ParsePrimaryIndex(PrimaryAnimationsIndex)];
             animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed;
-            Human.Model.Blend(animation);
+            Human.Model.BlendAnimation(animation);
         }
 
         public void Attack2(IHumanoid Human)
@@ -245,7 +247,7 @@ namespace Hedra.WeaponSystem
             BaseAttack(Human, Options);
             var animation = _secondaryAnimations[ParseSecondaryIndex(SecondaryAnimationsIndex)];
             animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed;
-            Human.Model.Blend(animation);
+            Human.Model.BlendAnimation(animation);
         }
 
         protected bool MeetsRequirements()
@@ -267,7 +269,7 @@ namespace Hedra.WeaponSystem
             if (ShouldPlaySound && !IsMelee)
                 SoundPlayer.PlaySoundWithVariation(SoundType, Human.Position);
 
-            if (Human.Model.IsIdling && IsMelee)
+            if (IsMelee && Owner.Movement.IsMovingBackwards)
             {
                 TaskScheduler.Delay(1,
                     () => TaskScheduler.While(
@@ -275,7 +277,7 @@ namespace Hedra.WeaponSystem
                         delegate
                         {
                             Human.Movement.Orientate();
-                            Human.Physics.Move( Options.IdleMovespeed);
+                            Human.Physics.Move(Options.IdleMovespeed);
                         }
                     )
                 );
@@ -289,6 +291,7 @@ namespace Hedra.WeaponSystem
                 );
             }
             if (Orientate) Human.Movement.Orientate();
+            StartWasAttackingCoroutine();
         }
 
         public virtual void Update(IHumanoid Human)
@@ -350,7 +353,11 @@ namespace Hedra.WeaponSystem
             
             if (PrimaryAttack || SecondaryAttack)
                 OnAttack();
-            
+
+            if (Owner.IsAttacking)
+            {
+                Owner.Movement.Orientate();
+            }
 
             ApplyEffects(MainMesh);
 
@@ -640,11 +647,11 @@ namespace Hedra.WeaponSystem
         private IEnumerator WasAttackingCoroutine()
         {
             _onAttackStance = true;
-            CoroutineManager.StartCoroutine(DisableWasAttacking);
             if (WeaponCoroutineExists)
                 yield break;
             else
                 WeaponCoroutineExists = true;
+            CoroutineManager.StartCoroutine(DisableWasAttacking);
             _passedTimeInAttackStance = 0;
             while (_passedTimeInAttackStance < 5f && _onAttackStance)
             {

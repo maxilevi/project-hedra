@@ -9,6 +9,7 @@
 
 using System;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;

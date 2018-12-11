@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.ModuleSystem
 {
@@ -45,7 +48,7 @@ namespace Hedra.Engine.ModuleSystem
             human.Physics.CollidesWithEntities = true;
             human.Health = human.MaxHealth;
 
-            var components = HumanoidLoader.ComponentsTemplater[HumanoidType].Components;
+            var components = HumanoidLoader.HumanoidTemplater[HumanoidType].Components;
             for (var i = 0; i < components.Length; i++)
             {
                 var type = Type.GetType(components[i].Type);
@@ -55,7 +58,7 @@ namespace Hedra.Engine.ModuleSystem
                 };
                 paramsList.AddRange(components[i].Parameters);
 
-                var newComponent = (EntityComponent) Activator.CreateInstance(type, paramsList.ToArray());
+                var newComponent = (IComponent<IEntity>) Activator.CreateInstance(type, paramsList.ToArray());
 
                 human.AddComponent(newComponent);
             }

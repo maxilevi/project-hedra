@@ -1,3 +1,4 @@
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
@@ -9,7 +10,7 @@ namespace Hedra.Engine.WorldBuilding
     public class Tombstone : InteractableStructure
     {
         public override Key Key => Key.F;
-        public override string Message => "TO PAY RESPECTS";
+        public override string Message => Translations.Get("pay_respects");
         public override int InteractDistance => 8;
 
         protected override void Interact(IPlayer Interactee)

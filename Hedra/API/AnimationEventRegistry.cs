@@ -1,18 +1,19 @@
 using System;
+using Hedra.AnimationEvents;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 
 namespace Hedra.API
 {
-    public class AnimationEventRegistry : ModRegistry
+    public class AnimationEventRegistry : TypeRegistry
     {
         protected override void DoAdd(string Name, Type ClassType)
         {
-            AnimationEventBuilder.Register(Name, ClassType);
+            AnimationEventBuilder.Instance.Register(Name, ClassType);
         }
 
-        protected override void DoRemove(string Name)
+        protected override void DoRemove(string Name, Type ClassType)
         {
-            AnimationEventBuilder.Unregister(Name);
+            AnimationEventBuilder.Instance.Unregister(Name);
         }
 
         protected override Type RegistryType { get; } = typeof(AnimationEvent);

@@ -1,13 +1,17 @@
 ﻿{
   "Name": "Gnoll",
   "DisplayName": "Gnoll",
-  "ModelType": "Gnoll",
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/GnollIdle.dae",
+    "Scale": 1.4  
+  },
   "Class": "Warrior",
   "Behaviour" : "Hostile",  
   "Immune": false,
   "XP": 4.0,
   "AttackPower": 1.0, 
-  "AttackSpeed": 1.0,  
+  "AttackSpeed": 1.0,
+  "Components":  [],
   "Weapons": [
     {
       "Tier": "Uncommon", 

@@ -8,6 +8,7 @@
  */
 
 using Hedra;
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -26,6 +27,9 @@ namespace Hedra.WeaponSystem
     /// </summary>
     public class Knife : MeleeWeapon
     {
+        public override uint PrimaryAttackIcon => WeaponIcons.KnifePrimaryAttack;     
+        public override uint SecondaryAttackIcon => WeaponIcons.KnifeSecondaryAttack;
+        
         private static readonly VertexData SheathData;
         private readonly ObjectMesh _knifeSheath;
         private Vector3 _previousPosition;

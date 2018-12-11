@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.UI;
@@ -23,10 +24,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                               (realSkill.ManaCost != 0 ? $"Mana cost : {realSkill.ManaCost}{Environment.NewLine}" : string.Empty) +
                               (realSkill.MaxCooldown != 0 ? $"Cooldown : {realSkill.MaxCooldown}" : string.Empty);
             ItemDescription.Color = Color.White;
-            ItemDescription.Position = this.Position - Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .15f);
+            ItemDescription.Position = this.Position - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .15f);
             ItemText.Text = Utils.FitString(realSkill.DisplayName, 15);
 
-            ItemTexture.Position = this.Position + Mathf.ScaleGUI(_targetResolution, Vector2.UnitY * .05f);
+            ItemTexture.Position = this.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .05f);
             ItemTexture.TextureElement.TextureId = CurrentItem.HasAttribute("ImageId") 
                 ? CurrentItem.GetAttribute<uint>("ImageId") 
                 : GUIRenderer.TransparentTexture;

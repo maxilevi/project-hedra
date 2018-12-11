@@ -7,8 +7,10 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using OpenTK;
@@ -20,6 +22,9 @@ namespace Hedra.WeaponSystem
     /// </summary>
     public class DoubleBlades : RogueWeapon
     {     
+        public override uint PrimaryAttackIcon => WeaponIcons.DoubleBladesPrimaryAttack;     
+        public override uint SecondaryAttackIcon => WeaponIcons.DoubleBladesSecondaryAttack;
+        
         public DoubleBlades(VertexData Contents) : base(Contents)
         {
         }
@@ -27,7 +32,7 @@ namespace Hedra.WeaponSystem
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;
-            Owner.AttackSurroundings(Owner.DamageEquation * 1.5f * Options.DamageModifier, delegate (IEntity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * 2.0f * Options.DamageModifier, delegate (IEntity Mob)
             {
 
                 if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .75f)

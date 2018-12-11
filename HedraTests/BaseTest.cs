@@ -2,6 +2,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Hedra;
 using Hedra.Engine;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;

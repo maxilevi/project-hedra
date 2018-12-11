@@ -7,12 +7,14 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using Hedra.Core;
 using OpenTK;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 
@@ -25,7 +27,7 @@ namespace Hedra.Engine.WorldBuilding
     {
         private static readonly CollisionShape DefaultShape;
 
-        public override string Message => "INTERACT WITH THE CHEST";
+        public override string Message => Translations.Get("interact_chest");
         public override int InteractDistance => 16;
         protected override bool DisposeAfterUse => false;
         protected override bool CanInteract => IsClosed && (Condition?.Invoke() ?? true);

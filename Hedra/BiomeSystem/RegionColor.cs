@@ -7,6 +7,7 @@
 
 using System;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;

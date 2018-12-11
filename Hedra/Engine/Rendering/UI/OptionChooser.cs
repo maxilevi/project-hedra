@@ -117,8 +117,8 @@ namespace Hedra.Engine.Rendering.UI
         public bool Clickable{
             get => _mClickable;
             set{
-                this.LeftArrow.Clickable = value;
-                this.RightArrow.Clickable = value;
+                this.LeftArrow.CanClick = value;
+                this.RightArrow.CanClick = value;
                 this._mClickable = value;
             }
         }

@@ -7,6 +7,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
@@ -32,8 +33,6 @@ namespace HedraTests.Player
             Movement = new SimpleMovementMock(this);
             Model = new HumanoidModel(this, new HumanoidModelTemplate
             {
-                Colors = new ColorTemplate[0],
-                Name = string.Empty,
                 Path = string.Empty,
                 Scale = 0
             });

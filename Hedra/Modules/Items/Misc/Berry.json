@@ -2,7 +2,7 @@
   "Name": "Berry",
   "DisplayName": "Berry",
   "Tier": "Misc",
-  "Description": "An edible morsel. Not Very nourishing",
+  "Description": "An edible morsel. Not very nourishing",
   "Attributes": [
     {
       "Name": "Amount",
@@ -15,6 +15,11 @@
     {
       "Name": "Price",
       "Value": 4,
+      "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
       "Hidden": true
     }
   ],

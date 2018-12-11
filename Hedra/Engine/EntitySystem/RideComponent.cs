@@ -8,6 +8,7 @@
  */
 using System.Drawing;
 using Hedra.AISystem;
+using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;

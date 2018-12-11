@@ -66,6 +66,7 @@
     <Compile Include="BaseTest.cs" />
     <Compile Include="CacheSystem\CacheProviderTest.cs" />
     <Compile Include="CodePolicy\BaseCodePolicy.cs" />
+    <Compile Include="CodePolicy\ControlsCodePolicy.cs" />
     <Compile Include="CodePolicy\GLCodePolicy.cs" />
     <Compile Include="CodePolicy\ShaderCodePolicy.cs" />
     <Compile Include="CodePolicy\SolutionTest.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Loaders\ModificationsLoaderTest.cs" />
     <Compile Include="MathExtensions\PhysicsTest.cs" />
     <Compile Include="MathExtensions\RandomTest.cs" />
+    <Compile Include="ModuleSystem\AssetProviderTest.cs" />
     <Compile Include="Player\AbilityTreeTest.cs" />
     <Compile Include="Player\AttributeArrayTest.cs" />
     <Compile Include="Player\CappedSkillMock.cs" />

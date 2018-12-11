@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using OpenTK;
 using Hedra.Engine.Player;
@@ -321,12 +322,6 @@ namespace Hedra.Engine.Management
                     }
                     if(Parts[1] == "merchant"){
                         World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Caster.Position + Caster.Orientation * 32);
-                        return true;
-                    }
-                    if (Parts[1] == "carriage")
-                    {
-                        World.WorldBuilding.SpawnCarriage(Caster.Position + Caster.Orientation * 32);
-
                         return true;
                     }
 
