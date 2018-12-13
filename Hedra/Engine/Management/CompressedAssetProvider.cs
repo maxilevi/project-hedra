@@ -392,6 +392,7 @@ namespace Hedra.Engine.Management
             const int vertexCountIndex = 0;
             const int faceCountIndex = 1;
             const int startDataIndex = 2;
+            var hasAlpha = fileContents.IndexOf("property uchar alpha", StringComparison.Ordinal) != -1;
             var vertexCount = int.Parse(numbers[vertexCountIndex]);
             var faceCount = int.Parse(numbers[faceCountIndex]);
 
@@ -426,7 +427,7 @@ namespace Hedra.Engine.Management
                             float.Parse(numbers[accumulatedOffset + 6]) / 255f,
                             float.Parse(numbers[accumulatedOffset + 7]) / 255f, 
                             float.Parse(numbers[accumulatedOffset + 8]) / 255f,
-                            1.0f
+                            hasAlpha ? float.Parse(numbers[accumulatedOffset + 9]) / 255f : 1.0f
                             )
                     );
                 }
