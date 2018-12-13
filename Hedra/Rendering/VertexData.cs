@@ -146,8 +146,17 @@ namespace Hedra.Rendering
 
         public void Center()
         {
-            var center = Vertices.Aggregate( (V1,V2) => V1+V2) / Vertices.Count;
-            Vertices = Vertices.Select(V => V-center).ToList();
+            var min = new Vector3(
+                SupportPoint(-Vector3.UnitX).X,
+                SupportPoint(-Vector3.UnitY).Y,
+                SupportPoint(-Vector3.UnitZ).Z
+            );
+            var renderCenter = new Vector3(
+                SupportPoint(Vector3.UnitX).X - min.X,
+                SupportPoint(Vector3.UnitY).Y - min.Y,
+                SupportPoint(Vector3.UnitZ).Z - min.Z
+            ) * .5f;
+            Vertices = Vertices.Select(V => V - (min + renderCenter)).ToList();
             ApplyRecursively(V => V.Center());
         }
 

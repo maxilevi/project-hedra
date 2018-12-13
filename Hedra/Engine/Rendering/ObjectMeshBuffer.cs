@@ -97,6 +97,7 @@ namespace Hedra.Engine.Rendering
                 Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
                 Renderer.Enable(EnableCap.DepthTest);
             }
+            Shader["Outline"] = 0;
 
             Renderer.Disable(EnableCap.Blend);
             Data.Unbind();

@@ -5,6 +5,7 @@ using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
@@ -13,6 +14,7 @@ namespace Hedra.Components
 {
     public abstract class TradeComponent : EntityComponent
     {
+        private const int TradeRadius = 12;
         public new Humanoid Parent;
         public Dictionary<int, Item> Items { get; private set; }
         private Dictionary<int, Item> _originalItems;
@@ -39,7 +41,7 @@ namespace Hedra.Components
             }
             var player = LocalPlayer.Instance;
 
-            if ((LocalPlayer.Instance.Position - this.Parent.Position).Xz.LengthSquared < 24 * 24)
+            if ((LocalPlayer.Instance.Position - this.Parent.Position).Xz.LengthSquared < TradeRadius * TradeRadius)
             {
                 Parent.Orientation = (LocalPlayer.Instance.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
@@ -53,7 +55,7 @@ namespace Hedra.Components
 
             if (!canTrade || !inRadius) return;
 
-            player.MessageDispatcher.ShowMessageWhile("[E] TO TRADE", Color.White, InRadiusFunc);
+            player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_trade", Controls.Interact), Color.White, InRadiusFunc);
         }
     }
 }

@@ -135,7 +135,6 @@ namespace Hedra.Engine.Networking
                     
                     //0x2 is KeepAlive
                     //if(Buffer[0] != 0x2 && Buffer[0] != 0x0)
-                    //    Log.WriteLine("Packet of ID "+Buffer[0] + " Received");
                     byte PacketID = Buffer[0];
                     byte[] Data = new byte[ (int) Math.Max(Buffer.Length-1,0) ];
                     Array.Copy(Buffer,1,Data,0, (int) Math.Max(Buffer.Length-1,0));

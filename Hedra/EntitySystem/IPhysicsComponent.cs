@@ -7,6 +7,7 @@ namespace Hedra.EntitySystem
     public interface IPhysicsComponent
     {
         event OnHitGroundEvent OnHitGround;
+        event OnMoveEvent OnMove;
         bool UsePhysics { get; set; }
         float Falltime { get; }
         bool CanBePushed { get; set; }

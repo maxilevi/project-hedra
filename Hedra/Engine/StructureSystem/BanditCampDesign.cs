@@ -154,7 +154,7 @@ namespace Hedra.Engine.StructureSystem
 
             for (var i = 0; i < tents.Length; i++)
             {
-                structure.AddGroundwork(new RoundedGroundwork(tents[i].WorldPosition, 16f));
+                structure.AddGroundwork(new RoundedGroundwork(tents[i].WorldPosition, 16f, BlockType.Dirt));
             }
 
             structure.Parameters.Set("TentParameters", tents);

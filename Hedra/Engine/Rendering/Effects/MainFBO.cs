@@ -157,7 +157,7 @@ namespace Hedra.Engine.Rendering.Effects
             #region UnderWater
             if(GameSettings.UnderWaterEffect)
             {
-                var underChunk = World.GetChunkAt(LocalPlayer.Instance.View.CameraPosition);
+                var underChunk = World.GetChunkAt(LocalPlayer.Instance.View.CameraEyePosition);
                 UnderWater.Multiplier = underChunk?.Biome?.Colors.WaterColor * .7f + Vector4.One * .3f ?? Colors.DeepSkyBlue;
                 UnderWater.Pass(Default, FinalFbo);
             }

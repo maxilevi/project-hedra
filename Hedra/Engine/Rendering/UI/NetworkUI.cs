@@ -54,7 +54,7 @@ namespace Hedra.Engine.Rendering.UI
             join.Click += delegate {
                 
                 if(!NetworkManager.Join(_ipField.Text)){
-                    LocalPlayer.Instance.MessageDispatcher.ShowNotification("Connection Refused",Color.FromArgb(255,229,10,10), 2.5f);
+                    LocalPlayer.Instance.MessageDispatcher.ShowNotification("refused",Color.FromArgb(255,229,10,10), 2.5f);
                     return;
                 }
                 //Game.MakeCurrent(Game.CurrentInformation);

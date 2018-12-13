@@ -247,8 +247,8 @@ namespace Hedra.Engine.BiomeSystem
             path = hasPath * PathFormula(Chunk.BlockSize * x + Chunk.OffsetX, Chunk.BlockSize * z + Chunk.OffsetZ);
             path = Mathf.Clamp(path * 100f, 0, PathDepth);
 
-            river = hasRiver * River(x,z, Narrow, Scale);
-            riverBorders = hasRiver * River(x, z, Narrow, Scale, Border);
+            river = hasRiver * River(position);
+            riverBorders = hasRiver * River(position, Border);
             var amplifiedRiverBorders = Mathf.Clamp(riverBorders * RiverMult, 0, RiverDepth);
 
             river = Mathf.Clamp(river * RiverMult, 0, RiverDepth);
@@ -403,12 +403,12 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
         
-        private float River(int X, int Z, float Narrow, float Scale, float Border = 0)
+        public static float River(Vector2 Position, float Border = 0)
         {
             return (float) Math.Max(0,
                        0.5 - Math.Abs(
-                           OpenSimplexNoise.Evaluate((X * Chunk.BlockSize + Chunk.OffsetX) * 0.0011f,
-                               (Chunk.BlockSize * Z + Chunk.OffsetZ) * 0.0011f) - 0.2) - Narrow +
+                           OpenSimplexNoise.Evaluate(Position.X * 0.0011f,
+                               Position.Y * 0.0011f) - 0.2) - Narrow +
                        Border) * Scale;
         }
 

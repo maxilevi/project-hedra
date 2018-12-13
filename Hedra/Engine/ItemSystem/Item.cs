@@ -137,7 +137,7 @@ namespace Hedra.Engine.ItemSystem
             savedTemplate.DisplayName = defaultTemplate.DisplayName;
             savedTemplate.Tier = defaultTemplate.Tier;
             var item = FromTemplate(savedTemplate);
-            if (savedTemplate.EquipmentType == null) return item;
+            if (savedTemplate.EquipmentType == null) return UpdateAttributes(item);
             
             var newItem = ItemPool.Grab(savedTemplate.Name);
             if (!item.HasAttribute(CommonAttributes.Seed)) item.SetAttribute(CommonAttributes.Seed, Utils.Rng.Next(int.MinValue, int.MaxValue), true);
@@ -146,13 +146,27 @@ namespace Hedra.Engine.ItemSystem
             return ItemPool.Randomize(newItem, new Random(newItem.GetAttribute<int>(CommonAttributes.Seed)));           
         }
 
+        private static Item UpdateAttributes(Item Item)
+        {
+            if (Item.HasAttribute(CommonAttributes.Amount))
+            {
+                if(!Item.IsFood && !Item.IsGold) 
+                    throw new ArgumentOutOfRangeException($"Type of item {Item.Name} was not expected");
+                var amount = Item.GetAttribute<int>(CommonAttributes.Amount);
+                var newItem = ItemPool.Grab(Item.Name);
+                newItem.SetAttribute(CommonAttributes.Amount, amount);
+                return newItem;
+            }
+            return Item;
+        }
+
         public byte[] ToArray()
         {
             return Encoding.ASCII.GetBytes(ItemTemplate.ToJson(ItemTemplate.FromItem(this)));
         }
 
         public bool IsGold => Name == GoldItemName;
-        public bool IsFood => HasAttribute("IsFood") && GetAttribute<bool>("IsFood");
+        public bool IsFood => HasAttribute("IsFood") && GetAttribute<bool>("IsFood") || Name == "Berry";
         public bool IsWeapon => WeaponFactory.Contains(this);
         public bool IsArmor => ArmorFactory.Contains(this);
         public bool IsRing => EquipmentType == ItemSystem.EquipmentType.Ring.ToString();

@@ -1,6 +1,7 @@
 using System.Drawing;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
 
@@ -117,7 +118,7 @@ namespace Hedra.Engine.Player.Inventory
             }
             else
             {
-                Buyer.MessageDispatcher.ShowNotification("NOT ENOUGH MONEY", Color.Red, 3f);
+                Buyer.MessageDispatcher.ShowNotification(Translations.Get("not_enough_money"), Color.Red, 3f);
             }
             OnTransactionComplete?.Invoke(Item, Price);
         }

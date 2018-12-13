@@ -9,12 +9,6 @@ namespace Hedra.Components
         {
         }
 
-        public override Translation[] Thoughts { get; } = new[]
-        {
-            Translation.Create("villager_thought_1"),
-            Translation.Create("villager_thought_2"),
-            Translation.Create("villager_thought_3"),
-            Translation.Create("villager_thought_4")
-        };
+        protected override string ThoughtKeyword => "villager_thought";
     }
 }

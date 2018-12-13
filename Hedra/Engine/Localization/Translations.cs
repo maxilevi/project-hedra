@@ -10,12 +10,12 @@ namespace Hedra.Engine.Localization
     public static class Translations
     {
         private static readonly Dictionary<string, Dictionary<string, string>> _translations;
-        private static readonly List<Translation> _liveTranslation;
+        private static readonly List<Translation> LiveTranslation;
 
         static Translations()
         {
             _translations = new Dictionary<string, Dictionary<string, string>>();
-            _liveTranslation = new List<Translation>();
+            LiveTranslation = new List<Translation>();
         }
         
         public static void Load()
@@ -33,19 +33,14 @@ namespace Hedra.Engine.Localization
 
         public static void Add(Translation Key)
         {
-            _liveTranslation.Add(Key);
+            LiveTranslation.Add(Key);
         }
         
         public static void Remove(Translation Key)
         {
-            _liveTranslation.Remove(Key);
+            LiveTranslation.Remove(Key);
         }
-
-        public static bool Has(string Key)
-        {
-            return _translations[Language].ContainsKey(Key);
-        }
-               
+ 
         public static string Get(string Key)
         {
             return Get(Key, new object[0], Language);
@@ -74,6 +69,23 @@ namespace Hedra.Engine.Localization
             if (!_translations[AppLanguage].ContainsKey(Key)) return Fail();
 
             return AddParameters(_translations[AppLanguage][Key], Params);
+        }
+        
+        public static bool Has(string Key)
+        {
+            return Has(Key, Language);
+        }
+        
+        private static bool Has(string Key, GameLanguage AppLanguage)
+        {
+            return Has(Key, AppLanguage.ToString());
+        }
+        
+        private static bool Has(string Key, string AppLanguage)
+        {
+            if (_translations.ContainsKey(AppLanguage) && _translations[AppLanguage].ContainsKey(Key)) return true;
+            if (AppLanguage == GameLanguage.English.ToString()) return false;
+            return Has(Key, GameLanguage.English);
         }
 
         private static string AddParameters(string Value, object[] Params)
@@ -109,9 +121,9 @@ namespace Hedra.Engine.Localization
             set
             {
                 _language = value;
-                for (var i = 0; i < _liveTranslation.Count; i++)
+                for (var i = 0; i < LiveTranslation.Count; i++)
                 {
-                    _liveTranslation[i].UpdateTranslation();
+                    LiveTranslation[i].UpdateTranslation();
                 }
             }
         }

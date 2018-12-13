@@ -37,5 +37,7 @@ namespace Hedra.Engine.WorldBuilding
                 Final
             );
         }
+
+        public abstract BasePlateau Clone();
     }
 }

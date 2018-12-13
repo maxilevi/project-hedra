@@ -177,12 +177,12 @@ namespace Hedra.Engine.Player
 
         private void RegisterListeners()
         {
-            this.RegisterKey(Key.Q, delegate
+            this.RegisterKey(Controls.Eat, delegate
             {
                 if (_player.CanInteract) _player.EatFood();
             });
 
-            this.RegisterKey(Key.G, delegate
+            this.RegisterKey(Controls.SpecialItem, delegate
             {
                 if (!GameManager.InStartMenu && !GameManager.InMenu && !Human.IsKnocked
                     && Human.CanInteract && _vehicleCooldown < 0)
@@ -190,7 +190,7 @@ namespace Hedra.Engine.Player
                     var vehicleItem = _player.Inventory.Vehicle;
                     if (vehicleItem == null && !GameSettings.Paused)
                     {
-                        _player.MessageDispatcher.ShowNotification("YOU NEED A VEHICLE TO DO THAT", Color.Red, 3f, true);
+                        _player.MessageDispatcher.ShowNotification(Translations.Get("need_vehicle"), Color.Red, 3f, true);
                     }
                     else if (vehicleItem != null)
                     {
@@ -214,24 +214,9 @@ namespace Hedra.Engine.Player
                 }
             });
 
-            this.RegisterKey(Key.R, delegate
-            {
-                if (!GameSettings.Paused && _player.IsDead)
-                    _player.Respawn();
-            });
-
-            this.RegisterKey(Key.Space, delegate
+            this.RegisterKey(Controls.Jump, delegate
             {
                 if (!_player.IsUnderwater) this.Jump();
-            });
-
-            this.RegisterKey(Key.F, delegate
-            {
-                if (!GameSettings.Paused && _player.CanInteract)
-                {
-                    _player.HandLamp.Enabled = !_player.HandLamp.Enabled;
-                    SoundPlayer.PlaySound(SoundType.NotificationSound, _player.Position, false, 1f, .5f);
-                }
             });
 
             this.RegisterKey(Key.F3, delegate
@@ -272,7 +257,7 @@ namespace Hedra.Engine.Player
             if (EventArgs.Key == Key.F2)
             {
                 if (!Directory.Exists(AssetManager.AppData + "/Screenshots/")) Directory.CreateDirectory(AssetManager.AppData + "/Screenshots/");
-                _player.MessageDispatcher.ShowNotification("Saved screenshot as " + Recorder.SaveScreenshot(AssetManager.AppData + "/Screenshots/"), System.Drawing.Color.White, 3f, false);
+                _player.MessageDispatcher.ShowNotification($"{Translations.Get("saved_screenshot")} {Recorder.SaveScreenshot($"{AssetManager.AppData}/Screenshots/")}", System.Drawing.Color.White, 3f, false);
             }
             if (EventArgs.Key == Key.F4) _player.UI.ShowHelp = !_player.UI.ShowHelp;
 

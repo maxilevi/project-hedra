@@ -38,14 +38,14 @@ namespace Hedra.Engine.Rendering
 
         public static Vector2 ToRelativeSize(this Vector2 Size)
         {
-            return new Vector2(Size.X / GameSettings.Width, Size.Y / GameSettings.Height);
+            return new Vector2(Size.X / (float)GameSettings.Width, Size.Y / (float)GameSettings.Height);
         }
 
         #region NonGL
 
         public static Vector2 TextureSize(Bitmap bmp)
         {
-            return new Vector2(bmp.Width / (float)GameSettings.Width, (float)bmp.Height / (float)GameSettings.Height);
+            return new Vector2(bmp.Width, bmp.Height).ToRelativeSize();
         }
 
         public static Bitmap Clone(Bitmap Original)

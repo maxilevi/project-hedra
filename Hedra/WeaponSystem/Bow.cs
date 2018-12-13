@@ -145,7 +145,7 @@ namespace Hedra.WeaponSystem
         protected override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
         {
 
-            var arrowProj = new Projectile(Owner, Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2, ArrowDataVertexData)
+            var arrowProj = new Projectile(Owner, Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 - Vector3.UnitY, ArrowDataVertexData)
             {
                 Lifetime = 5f,
                 Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce,

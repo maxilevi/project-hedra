@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using Hedra.Core;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.Skills;
@@ -219,7 +220,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public int AvailablePoints => _manager.AvailablePoints;
         public InventoryArray TreeItems => _abilities;
 
-        public override Key OpeningKey => Key.X;
+        public override Key OpeningKey => Controls.Skilltree;
         public override bool Show
         {
             get => _show;

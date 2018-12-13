@@ -16,6 +16,7 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -69,7 +70,7 @@ namespace Hedra.Engine.Player.MapSystem
             this._marker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f), false);
             _marker.ApplyFog = false;
 
-            var hint = new GUIText("CLICK TO MARK A WAYPOINT",
+            var hint = new GUIText(Translation.Create("mark_waypoint"), 
                 Vector2.UnitY * .8f, Color.White,
                 FontCache.Get(AssetManager.BoldFamily, 16f, FontStyle.Bold));
             var underline = new GUIText("＿＿＿＿＿＿＿＿",
@@ -312,7 +313,7 @@ namespace Hedra.Engine.Player.MapSystem
             return null;
         }
 
-        public override Key OpeningKey => Key.M;
+        public override Key OpeningKey => Controls.Map;
 
         public override bool Show
         {

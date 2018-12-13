@@ -95,10 +95,10 @@ namespace Hedra.Engine.StructureSystem
         private bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] Designs)
         {
             float wSeed = World.Seed * 0.0001f;
-            var height = (int) (World.StructureHandler.SeedGenerator.GetValue(NewPosition.X * .0085f + wSeed,
-                          NewPosition.Z * .0085f + wSeed) * 100f);
-            var index = new Random(height).Next(0, Designs.Length);
-            bool isStructureRegion = index == Array.IndexOf(Designs, this);
+            var voronoi = (int) (World.StructureHandler.SeedGenerator.GetValue(NewPosition.X * .0075f + wSeed,
+                          NewPosition.Z * .0075f + wSeed) * 100f);
+            var index = new Random(voronoi).Next(0, Designs.Length);
+            var isStructureRegion = index == Array.IndexOf(Designs, this);
             if (isStructureRegion)
             {
                 lock (Items)

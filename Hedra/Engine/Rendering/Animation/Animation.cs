@@ -19,11 +19,12 @@ namespace Hedra.Engine.Rendering.Animation
         public event OnAnimationHandler OnAnimationEnd;
         public event OnAnimationHandler OnAnimationMid;
         public event OnAnimationHandler OnAnimationStart;
+        public event OnAnimationHandler OnAnimationUpdate;
         public float Speed { get; set; } = 1;
         public float Length { get; }
         public KeyFrame[] KeyFrames { get; }
         public bool Loop {get; set;}
-        private List<ProgressEvent> _events;
+        private readonly List<ProgressEvent> _events;
         private bool _midAnimation;
         private bool _startAnimation;
         private bool _endAnimation;
@@ -64,6 +65,7 @@ namespace Hedra.Engine.Rendering.Animation
             {
                 _events[i].Update(this, Progress);
             }
+            OnAnimationUpdate?.Invoke(this);
         }
 
         public void RegisterOnProgressEvent(float Progress, OnAnimationHandler Callback)

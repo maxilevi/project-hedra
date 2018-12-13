@@ -1,5 +1,6 @@
 using System.Drawing;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Sound;
@@ -38,9 +39,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             else
             {
                 if (locked)
-                    _player.MessageDispatcher.ShowNotification("YOU NEED LEVEL " + decomposedIndexX * 5 + " TO UNLOCK THIS SKILL", Color.DarkRed, 3.0f);
+                    _player.MessageDispatcher.ShowNotification(Translations.Get("need_level_to_unlock", decomposedIndexX * 5), Color.DarkRed, 3.0f);
                 else if(!previousUnlocked)
-                    _player.MessageDispatcher.ShowNotification("YOU NEED TO UNLOCK THE PREVIOUS SKILL", Color.DarkRed, 3.0f);
+                    _player.MessageDispatcher.ShowNotification(Translations.Get("unlock_previous_skill"), Color.DarkRed, 3.0f);
                 else
                     SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);              
             }

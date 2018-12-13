@@ -14,6 +14,7 @@ using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -30,6 +31,7 @@ namespace Hedra.Components
 
     public class TalkComponent : Component<IHumanoid>, ITickable
     {
+        private const int TalkRadius = 12;
         private static uint _talkBackground;
         private static Vector2 _talkBackgroundSize;
         private Animation _talkingAnimation;
@@ -37,8 +39,9 @@ namespace Hedra.Components
         private bool _shouldTalk;                                                                                        
         public bool Talked;
         private bool _isTalking;
-        private Billboard _board;
+        private TextBillboard _board;
         private readonly string _phrase;
+        private string _thought;
 
         static TalkComponent()
         {
@@ -61,7 +64,7 @@ namespace Hedra.Components
             };
             EventDispatcher.RegisterKeyDown(this, (Sender, EventArgs) =>
             {
-                if (EventArgs.Key == Key.E && (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 24f * 24f)
+                if (EventArgs.Key == Controls.Interact && (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius && !Talked && !_isTalking)
                     _shouldTalk = true;
             });
         }
@@ -72,17 +75,17 @@ namespace Hedra.Components
 
         public override void Update()
         {
-            if (GameManager.Player.CanInteract && !GameManager.Player.IsDead && !GameSettings.Paused && !Talked && !PlayerInterface.Showing)
+            if (GameManager.Player.CanInteract && !GameManager.Player.IsDead && !GameSettings.Paused && !_isTalking && !Talked && !PlayerInterface.Showing)
             {
-                GameManager.Player.MessageDispatcher.ShowMessageWhile("[E] TO TALK", Color.White,
-                    () => (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 24f * 24f && !Talked);
+                GameManager.Player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_talk", Controls.Interact), Color.White,
+                    () => (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius && !_isTalking && !Talked);
 
                 if (_shouldTalk)
                 {
                     this.Talk();
                 }         
             }
-            if (Talked && (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 24f * 24f)
+            if (Talked && (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius)
             {
                 Physics.LookAt(this.Parent, GameManager.Player);
             }
@@ -90,9 +93,10 @@ namespace Hedra.Components
 
         private string SelectThought()
         {
+            if (_thought != null) return _thought;
             var thoughtComponent = Parent.SearchComponent<ThoughtsComponent>();
             if (thoughtComponent != null)
-                return thoughtComponent.Thoughts[Utils.Rng.Next(0, thoughtComponent.Thoughts.Length)].Get();
+                return _thought = thoughtComponent.Thoughts[Utils.Rng.Next(0, thoughtComponent.Thoughts.Length)].Get();
             return _phrase ?? Phrases[Utils.Rng.Next(0, Phrases.Length)];
         }
 
@@ -110,21 +114,23 @@ namespace Hedra.Components
             }
 
             var lifetime = 8;
-            var backBoard = new Billboard(lifetime, _talkBackground, FollowFunc(), _talkBackgroundSize)
+            var backBoard = new TextureBillboard(lifetime, _talkBackground, FollowFunc, _talkBackgroundSize)
             {
-                FollowFunc = FollowFunc,
-                DisposeTextureId = false
+                ShouldDisposeId = false
             };
 
-            _board = new Billboard(lifetime, string.Empty, Color.White, FontCache.Get(AssetManager.NormalFamily, 10), FollowFunc())
-            {
-                FollowFunc = FollowFunc
-            };
+            _board = new TextBillboard(lifetime, string.Empty, Color.White,
+                FontCache.Get(AssetManager.NormalFamily, 10), FollowFunc);
             CoroutineManager.StartCoroutine(TalkCoroutine, _board, phrase, lifetime);
-            OnTalk?.Invoke(this.Parent);
+            OnTalk?.Invoke(Parent);
 
             textSize.Dispose();
+            _shouldTalk = false;
             Talked = true;
+            TaskScheduler.When(
+                () => backBoard.Disposed,
+                () => Talked = false
+            );
         }
 
         private void PlayTalkingAnimation()
@@ -134,14 +140,12 @@ namespace Hedra.Components
 
         private IEnumerator TalkCoroutine(object[] Args)
         {
-            var billboard = (Billboard) Args[0];
+            var billboard = (TextBillboard) Args[0];
             var text = (string) Args[1];
-            var textElement = billboard.Texture as GUIText;
             var iterator = 0;
             var passedTime = 0f;
             _isTalking = true;
             PlayTalkingAnimation();
-            if (textElement == null) yield break;
 
             while (iterator < text.Length+1)
             {
@@ -163,7 +167,7 @@ namespace Hedra.Components
             EventDispatcher.UnregisterKeyDown(this);
         }
 
-        private static string[] Phrases =
+        private static readonly string[] Phrases =
         {
             "..."
         };

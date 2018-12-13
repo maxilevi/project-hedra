@@ -14,6 +14,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
@@ -52,7 +53,7 @@ namespace Hedra.Engine.ItemSystem
 
             EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyEventArgs EventArgs)
             {
-                if (_canPickup && Key.E == EventArgs.Key) _shouldPickup = true;
+                if (_canPickup && Controls.Interact == EventArgs.Key) _shouldPickup = true;
             });
             var shadow = new DropShadow
             {
@@ -81,8 +82,9 @@ namespace Hedra.Engine.ItemSystem
             
             float DotFunc() => Vector2.Dot((this.Position - GameManager.Player.Position).Xz.NormalizedFast(), LocalPlayer.Instance.View.LookingDirection.Xz.NormalizedFast());
 
-            if(DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f*14f){
-                LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile("[E] TO PICK UP", 
+            if(DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 12f * 12f)
+            {
+                LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile(Translations.Get("to_pickup", Controls.Interact), 
                     () => !Disposed && DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f * 14f);
                 _canPickup = true;
 
@@ -95,7 +97,7 @@ namespace Hedra.Engine.ItemSystem
                     if (_shouldPickup)
                     {
                         _shouldPickup = false;
-                        GameManager.Player.MessageDispatcher.ShowNotification("YOUR INVENTORY IS FULL", Color.Red, 3f, true);
+                        GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("full_inventory"), Color.Red, 3f, true);
                     }
                 }
             }else

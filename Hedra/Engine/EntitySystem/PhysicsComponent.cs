@@ -23,6 +23,7 @@ using Hedra.Sound;
 namespace Hedra.Engine.EntitySystem
 {
     public delegate bool OnHitGroundEvent(IEntity Parent, float Falltime);
+    public delegate void OnMoveEvent();
 
     public class PhysicsComponent : EntityComponent, IPhysicsComponent
     {
@@ -31,6 +32,7 @@ namespace Hedra.Engine.EntitySystem
         private const float MaxSlide = 3.0f;
         private const float AttackingSpeed = 0.75f;
         private readonly Entity _parent;
+        public event OnMoveEvent OnMove;
         public event OnHitGroundEvent OnHitGround;
         public bool UsePhysics { get; set; }
         public float Falltime { get; private set; }
@@ -217,6 +219,8 @@ namespace Hedra.Engine.EntitySystem
             {
                 var moveDelta = Command.Delta * new Vector3(1, 1f / Chunk.BlockSize, 1);
                 Parent.BlockPosition += moveDelta;
+                if(moveDelta.LengthFast > 0.005f)
+                    OnMove?.Invoke();
             }
             else
             {

@@ -77,27 +77,28 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     }
                 }
             }
+
+            var plateaus = _structure.Plateaux.Concat(new[] {_structure.Mountain}).ToArray();
+            plateaus = plateaus.Select(P => P.Clone()).Cast<BasePlateau>().OrderByDescending(P => P.MaxHeight).ToArray();
+            for (var i = 0; i < plateaus.Length; ++i)
+            {
+                plateaus[i].MaxHeight = 
+                        World.WorldBuilding.ApplyMultiple(plateaus[i].Position, plateaus[i].MaxHeight, plateaus.Take(i).ToArray());
+            }
             for (var i = 0; i < Parameters.Count; i++)
             {
-                for (var j = 0; j < Builders.Length; j++)
-                {
-                    //if (IsUnderwater(Parameters[i].Position))
-                    {
-
-//                        list.Remove(Parameters[i]);
-                        break;
-                    }
-                }
+                if(IsUnderwater(Parameters[i].Position, plateaus))
+                    list.Remove(Parameters[i]);
             }
             return list;
         }
 
-        private bool IsUnderwater(Vector3 Position)
+        private bool IsUnderwater(Vector3 Position, BasePlateau[] Plateaus)
         {
             return World.WorldBuilding.ApplyMultiple(
                    Position,
                    World.BiomePool.GetRegion(Position).Generation.GetHeight(Position.X, Position.Z, null, out _),
-                   _structure.Plateaux.Concat(new[] {_structure.Mountain}).ToArray()
+                   Plateaus
             ) < BiomePool.SeaLevel;
         }
 

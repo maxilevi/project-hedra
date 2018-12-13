@@ -83,7 +83,7 @@ namespace Hedra.Engine.Rendering.UI
             disconnect.Click += delegate{ Networking.NetworkManager.Disconnect(true); };
             
             connectToServer.Click += delegate{
-                Player.MessageDispatcher.ShowNotification("Multiplayer is down.", Color.DarkRed, 3f, true);
+                Player.MessageDispatcher.ShowNotification("", Color.DarkRed, 3f, true);
             };
             
             Button options = new Button(new Vector2(.75f, bandPosition.Y),

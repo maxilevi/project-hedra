@@ -44,22 +44,33 @@ namespace Hedra.Engine.Rendering.UI
         {         
         }
 
+        private static BitmapObject BuildBitmap(string Text, Color Color, Font Font, out Vector2 Measurements)
+        {
+            var textBitmap = Provider.BuildText(Text, Font, Color);
+            Measurements = new Vector2(textBitmap.Width, textBitmap.Height);
+            var obj = new BitmapObject
+            {
+                Bitmap = textBitmap,
+                Path = $"Text:{Text}"
+            };
+            return obj;
+        }
+
+        public static uint BuildText(string Text, Color Color, Font Font, out Vector2 Measurements)
+        {
+            return Graphics2D.LoadTexture(BuildBitmap(Text, Color, Font, out Measurements));
+        }
+        
         public void UpdateText()
         {
-            var textBitmap = Provider.BuildText(Text, TextFont, TextColor);
-            var size = new Vector2(textBitmap.Width, textBitmap.Height);
+            var obj = BuildBitmap(Text, TextColor, TextFont, out var measurements);
             void Action()
             {
                 var previousState = UIText?.Enabled ?? false;
                 DrawManager.UIRenderer.Remove(UIText);
                 UIText?.Dispose();
-                var obj = new BitmapObject
-                {
-                    Bitmap = textBitmap,
-                    Path = $"Text:{Text}"
-                };
                 UIText = new GUITexture(Graphics2D.LoadTexture(obj),
-                    new Vector2(size.X / DefaultSize.X, size.Y / DefaultSize.Y), _temporalPosition);
+                    new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y), _temporalPosition);
                 DrawManager.UIRenderer.Add(UIText);
 
                 if (_align == AlignMode.Left)
@@ -72,7 +83,7 @@ namespace Hedra.Engine.Rendering.UI
 
             if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
             {
-                UIText = new GUITexture(0, new Vector2(size.X / DefaultSize.X, size.Y / DefaultSize.Y), _temporalPosition);
+                UIText = new GUITexture(0, new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y), _temporalPosition);
                 Executer.ExecuteOnMainThread(Action);
             }
             else

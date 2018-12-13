@@ -433,7 +433,6 @@ namespace Hedra.Engine.Rendering.Geometry
                 NewTri.P[0] = VertList[TriTable[CubeIndex, i + 0]];
                 NewTri.P[1] = VertList[TriTable[CubeIndex, i + 1]];
                 NewTri.P[2] = VertList[TriTable[CubeIndex, i + 2]];
-                //Log.WriteLine(NewTri.P[0] + " | " + NewTri.P[1] + " | "+ NewTri.P[2]);
                 TriangleList.Add(NewTri);
             }
             return TriangleList.ToArray();

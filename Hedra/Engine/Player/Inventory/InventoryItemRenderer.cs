@@ -1,5 +1,7 @@
 
 using System;
+using System.Drawing;
+using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
@@ -58,7 +60,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public ObjectMesh BuildModel(Item Item, out float ModelHeight)
         {
-            var model = this.CenterModel(Item.Model.Clone());
+            var model = CenterModel(Item.Model.Clone());
             ModelHeight = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
             var mesh = ObjectMesh.FromVertexData(model);
             mesh.BaseTint = EffectDescriber.EffectColorFromItem(Item);
@@ -91,13 +93,11 @@ namespace Hedra.Engine.Player.Inventory
             var currentDayColor = ShaderManager.LightColor;
             ShaderManager.SetLightColorInTheSameThread(Vector3.One);
 
-            var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 1, 1024f);
+            var aspect = GameSettings.Width / (float)GameSettings.Height;
+            var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, aspect, 1, 1024f);
             Renderer.LoadProjection(projectionMatrix);
 
-            var offset = Vector3.Zero;/*Item.IsWeapon
-                ? Vector3.UnitY * 0.4f - Vector3.UnitX * 0.4f
-                : Vector3.UnitY * 0.25f*/;
-            var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset, offset, Vector3.UnitY);
+            var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset, Vector3.Zero, Vector3.UnitY);
             Renderer.LoadModelView(lookAt);
 
             Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -105,13 +105,15 @@ namespace Hedra.Engine.Player.Inventory
             Renderer.Disable(EnableCap.Blend);
             Mesh.Draw();
 
-            /*Renderer.BindFramebuffer(FramebufferTarget.DrawFramebuffer, ItemsFBO.BufferID);
+            /*
+            Renderer.BindFramebuffer(FramebufferTarget.DrawFramebuffer, ItemsFBO.BufferID);
             Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, MultisampleItemsFBO.BufferID);
             Renderer.BlitFramebuffer(0,GameSettings.Height,GameSettings.Width,0, 0,GameSettings.Height,GameSettings.Width,0
                                , ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
             
             Renderer.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
-            Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);*/
+            Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);
+            */
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
             Renderer.PopFBO();
             Renderer.PopShader();
@@ -123,20 +125,10 @@ namespace Hedra.Engine.Player.Inventory
             return Framebuffer.TextureID[0];
         }
 
-        private VertexData CenterModel(VertexData Data)
+        private static VertexData CenterModel(VertexData Model)
         {
-            var center = Vector3.Zero;
-            for (var i = 0; i < Data.Vertices.Count; i++)
-            {
-                center += Data.Vertices[i];
-            }
-            center = center / Data.Vertices.Count;
-
-            for (var i = 0; i < Data.Vertices.Count; i++)
-            {
-                Data.Vertices[i] -= center;
-            }
-            return Data;
+            Model.Center();
+            return Model;
         }
     }
 }

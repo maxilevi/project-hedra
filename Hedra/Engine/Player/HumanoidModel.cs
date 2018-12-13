@@ -94,6 +94,7 @@ namespace Hedra.Engine.Player
         private Vector3 _defaultRightWeaponPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         private Vector3 _defaultChestPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         private bool _isDisposeAnimationPlaying;
+        private Timer _foodTimer;
 
 
         public HumanoidModel(IHumanoid Human, HumanoidModelTemplate Template) : base(Human)
@@ -162,16 +163,22 @@ namespace Hedra.Engine.Player
             {
                 SoundPlayer.PlaySound(SoundType.FoodEat, Position);
             };
-
-            _eatAnimation.OnAnimationEnd += delegate{ 
-                _food.Enabled = false;            
+            
+            _eatAnimation.OnAnimationUpdate += delegate { _foodTimer.Tick(); };
+            _eatAnimation.OnAnimationEnd += delegate
+            {
+                _food.Enabled = false;
                 Humanoid.IsEating = false;
             };
-
+            
             _collider = new AnimatedCollider(Template.Path, Model);
             BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * Model.Scale;
             Dimensions = AssetManager.LoadDimensions(Template.Path) * Model.Scale;
             _modelSound = new AreaSound(SoundType.HumanRun, Vector3.Zero, 48f);
+            _foodTimer = new Timer(1)
+            {
+                AutoReset = false
+            };
             _food = new StaticModel(VertexData.Empty)
             {
                 Scale = Vector3.One * 1.5f
@@ -213,12 +220,15 @@ namespace Hedra.Engine.Player
             DisposeTime = 0;
         }
 
-        public void SetFood(Item Food)
+        public void EatFood(Item Food)
         {
+            _foodTimer.AlertTime = Food.GetAttribute<float>("EatTime");
+            _foodTimer.Reset();
             _food.SetModel(Food.Model);
+            Eat(Food.GetAttribute<float>("Saturation"));
         }
         
-        public void Eat(float FoodHealth)
+        private void Eat(float FoodHealth)
         {
             Human.IsEating = true;
             TaskScheduler.While( 
@@ -237,7 +247,7 @@ namespace Hedra.Engine.Player
             if (Human.IsMoving)
             {
                 currentAnimation = _walkAnimation;
-                Human.IsSitting = false;
+                if(Human.IsSitting) Human.IsSitting = false;
                 if (Human.IsRiding)
                 {
                     currentAnimation = _rideAnimation;
@@ -359,10 +369,10 @@ namespace Hedra.Engine.Player
                 
             _food.TransformationMatrix = mat4;
             _food.Position = Model.Position;
-            _food.TargetRotation = new Vector3(180, 0, 0);
+            _food.TargetRotation = Vector3.Zero;
             _food.RotationPoint = Vector3.Zero;
             _food.Rotation = Vector3.Zero;
-            _food.LocalRotation = Vector3.Zero;
+            _food.LocalRotation = new Vector3(90, 0, 0);
             _food.LocalPosition = Vector3.Zero;
             _food.BeforeLocalRotation = Vector3.Zero;
             _food.Enabled = true;

@@ -37,7 +37,7 @@ namespace Hedra.Engine.StructureSystem
             this._campfire = new Campfire(Position);
             EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs EventArgs)
             {
-                _shouldRescue = EventArgs.Key == Key.E && _canRescue;
+                _shouldRescue = EventArgs.Key == Controls.Interact && _canRescue;
             });
             UpdateManager.Add(this);
         }
@@ -123,7 +123,7 @@ namespace Hedra.Engine.StructureSystem
             Rescued = true;
             TaskScheduler.Delay(1, delegate
             {
-                var talkComponent = new TalkComponent(_rescuee, Translations.Get("old_man_dialog_1"));
+                var talkComponent = new TalkComponent(_rescuee, Translations.Get("saved_old_man"));
                 talkComponent.OnTalk += delegate
                 {
                     var settings = new ItemPoolSettings(ItemTier.Rare, EquipmentType.Axe);

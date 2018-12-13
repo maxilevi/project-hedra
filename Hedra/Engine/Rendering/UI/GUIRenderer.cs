@@ -38,8 +38,12 @@ namespace Hedra.Engine.Rendering.UI
             _vbo = new VBO<Vector2>(
                 new[]
                 {
-                    new Vector2(1, 1), new Vector2(-1, 1), new Vector2(-1, -1),
-                    new Vector2(1, -1), new Vector2(1, 1), new Vector2(-1, -1)
+                    new Vector2(1, 1),
+                    new Vector2(-1, 1),
+                    new Vector2(-1, -1),
+                    new Vector2(1, -1),
+                    new Vector2(1, 1),
+                    new Vector2(-1, -1)
                 }, 6 * Vector2.SizeInBytes, VertexAttribPointerType.Float);
 
             _vao = new VAO<Vector2>(_vbo);
@@ -211,28 +215,34 @@ namespace Hedra.Engine.Rendering.UI
             this.DrawQuad();
         }
 
-        private static void SetDraw()
+        public static void SetDraw(Shader CustomProgram = null)
         {
-            Shader.Bind();
+            (CustomProgram ?? Shader).Bind();
             Renderer.Enable(EnableCap.Blend);
             Renderer.Disable(EnableCap.DepthTest);
         }
 
-        private static void UnsetDrawing()
+        public static void UnsetDrawing(Shader CustomProgram = null)
         {
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.CullFace);
-            Shader.Unbind();
+            (CustomProgram ?? Shader).Unbind();
         }
 
-        public void Draw(GUITexture Texture)
+        public static void SetTexture(uint Position, uint Id)
+        {
+            Renderer.ActiveTexture((TextureUnit)((uint)TextureUnit.Texture0 + Position));
+            Renderer.BindTexture(TextureTarget.Texture2D, Id);
+        }
+        
+        public void Draw(GUITexture Texture, Shader CustomProgram = null)
         {
             if (!Texture.Enabled) return;
             
-            SetDraw();
+            SetDraw(CustomProgram);
             this.BaseDraw(Texture);
-            UnsetDrawing();
+            UnsetDrawing(CustomProgram);
         }
 
         public void Dispose()

@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Events;
+using Hedra.Engine.Localization;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI
@@ -140,7 +141,8 @@ namespace Hedra.Engine.Rendering.UI
         {
             if(!Enabled) return;
             
-            if(EventArgs.Key == Key.Escape){
+            if(EventArgs.Key == Key.Escape)
+            {
                 OnEscapePressed?.Invoke(this, EventArgs);
                 return;
             }
@@ -149,7 +151,8 @@ namespace Hedra.Engine.Rendering.UI
             
             if(_buttons == null || _buttons.Length == 0 || _buttons[0].Length == 0) return;
             
-            if(EventArgs.Key == Key.Enter && _firstHover){
+            if(EventArgs.Key == Key.Enter && _firstHover)
+            {
                 if(_buttons[_x][_y].Enabled)
                     _buttons[_x][_y].OnHoverExit(Sender, EventArgs);
                 _buttons[_x][_y].ForceClick();

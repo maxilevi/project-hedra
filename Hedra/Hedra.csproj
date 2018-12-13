@@ -168,6 +168,7 @@
     <Compile Include="Components\HeadIconComponent.cs" />
     <Compile Include="Components\MercenaryComponent.cs" />
     <Compile Include="Components\MerchantComponent.cs" />
+    <Compile Include="Components\SpawnVillagerThoughtsComponent.cs" />
     <Compile Include="Components\TalkComponent.cs" />
     <Compile Include="Components\ThoughtsComponent.cs" />
     <Compile Include="Components\TradeComponent.cs" />
@@ -203,6 +204,8 @@
     <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
+    <Compile Include="Engine\Rendering\TextBillboard.cs" />
+    <Compile Include="Engine\Rendering\TextureBillboard.cs" />
     <Compile Include="Engine\StructureSystem\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\SpawnCampfireDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\IBuilder.cs" />
@@ -819,7 +822,7 @@
     <Compile Include="Engine\Rendering\Animation\Joint.cs" />
     <Compile Include="Engine\Rendering\Animation\JointTransform.cs" />
     <Compile Include="Engine\Rendering\Animation\KeyFrame.cs" />
-    <Compile Include="Engine\Rendering\Billboard.cs" />
+    <Compile Include="Engine\Rendering\BaseBillboard.cs" />
     <Compile Include="Engine\Rendering\ChunkGeometry.cs" />
     <Compile Include="Engine\Rendering\IMeshBuffer.cs" />
     <Compile Include="Engine\Rendering\ChunkRenderCommand.cs" />
@@ -870,7 +873,6 @@
     <Compile Include="Engine\Rendering\Particles\Particle3D.cs" />
     <Compile Include="Engine\Rendering\Particles\ParticleSystem.cs" />
     <Compile Include="Engine\Rendering\Particles\ParticleCreator.cs" />
-    <Compile Include="Engine\Rendering\ShadowBox.cs" />
     <Compile Include="Engine\Rendering\ShadowRenderer.cs" />
     <Compile Include="Engine\Rendering\SurfaceNets.cs" />
     <Compile Include="Engine\Rendering\SymetricMatrix.cs" />
@@ -6555,9 +6557,17 @@
     <Content Include="Modules\Mobs\Pug.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\NPCs\Skeleton.json" />
+    <Content Include="Modules\NPCs\Skeleton.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Recipes\RareAutumnStaffRecipe.json" />
     <Content Include="Modules\Villages\Woodland.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Billboard.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Billboard.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Passthrough.frag">

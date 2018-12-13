@@ -31,5 +31,15 @@ namespace Hedra.Engine.WorldBuilding
             );
             return Math.Max(0f, 1.0f - (nearest - Point).LengthFast * .04f * Hardness);
         }
+        
+        public override BasePlateau Clone()
+        {
+            return new RoundedPlateau(Position, Width)
+            {
+                Hardness = Hardness,
+                NoPlants = NoPlants,
+                NoTrees = NoTrees
+            };
+        }
     }
 }

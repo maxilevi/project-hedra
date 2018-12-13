@@ -45,7 +45,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return Designs[Parameters.Rng.Next(0, Designs.Length)];
         }
         
-        /* Called via reflection */
         public virtual BuildingOutput Build(T Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
         {
             var transformationMatrix = BuildTransformation(Parameters);

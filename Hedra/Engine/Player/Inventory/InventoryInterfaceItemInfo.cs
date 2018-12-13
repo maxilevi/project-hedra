@@ -35,19 +35,19 @@ namespace Hedra.Engine.Player.Inventory
         {
             this._renderer = Renderer;
             this._panel = new Panel();
-            this.BackgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Vector2.One * .35f);
-            this.ItemTexture = new Texture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitY * -.05f),
+            this.BackgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Vector2.One * .45f);
+            this.ItemTexture = new Texture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
                 BackgroundTexture.Scale * .75f);
 
-            this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .225f), Color.White,
+            this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .325f), Color.White,
                 FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemText, DrawOrder.After);
 
-            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .25f),
+            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.25f),
                 Color.Bisque, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemDescription, DrawOrder.After);
 
-            this._itemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position - Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .025f + Vector2.UnitY * .05f),
+            this._itemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 9, FontStyle.Bold));
             DrawManager.UIRenderer.Add(_itemAttributes, DrawOrder.After);
 
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player.Inventory
             _panel.AddElement(ItemTexture);
             _panel.AddElement(BackgroundTexture);
 
-            _nonWeaponItemAttributesPosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.175f);
+            _nonWeaponItemAttributesPosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.225f);
             _nonWeaponItemTexturePosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .0f);
             _weaponItemAttributesPosition = _itemAttributes.Position;
             _weaponItemTexturePosition = ItemTexture.Position;
@@ -73,17 +73,17 @@ namespace Hedra.Engine.Player.Inventory
                 var tierColor = ItemUtils.TierToColor(CurrentItem.Tier);
                 ItemText.Color = tierColor;
 
-                ItemText.Text = Utils.FitString($"{CurrentItem.Tier} {CurrentItem.DisplayName}", 15);
+                ItemText.Text = Utils.FitString($"{CurrentItem.Tier} {CurrentItem.DisplayName}", 20);
                 _itemAttributes.Color = tierColor;
                 ItemDescription.Color = tierColor;
                 _itemAttributes.Position = _weaponItemAttributesPosition + this.Position;
                 ItemTexture.Position = _weaponItemTexturePosition + this.Position;
-                ItemDescription.Text = Utils.FitString(CurrentItem.Description, 24);
+                ItemDescription.Text = Utils.FitString(CurrentItem.Description, 32);
             }
             else
             {
                 ItemText.Color = Color.White;
-                ItemText.Text = Utils.FitString(CurrentItem.DisplayName, 15);
+                ItemText.Text = Utils.FitString(CurrentItem.DisplayName, 20);
                 _itemAttributes.Color = Color.Bisque;
                 ItemDescription.Color = Color.White;
                 _itemAttributes.Position = _nonWeaponItemAttributesPosition + this.Position;

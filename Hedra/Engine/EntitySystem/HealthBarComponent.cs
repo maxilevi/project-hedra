@@ -84,7 +84,7 @@ namespace Hedra.Engine.EntitySystem
 
             var product = 
                 Vector3.Dot(GameManager.Player.View.CrossDirection, (Parent.Position - GameManager.Player.Position).NormalizedFast());
-            if (_barSize <= 0.5f || product <= 0.5f)
+            if (_barSize <= 0.5f || product <= 0.0f)
             {
                 _healthBar.Disable();
                 _targetBarSize = 0;
@@ -108,11 +108,11 @@ namespace Hedra.Engine.EntitySystem
         {
             if(Parent.Model == null) return;
 
-            Vector4 eyeSpace = Vector4.Transform(new Vector4(Parent.Position + Parent.Model.Height * 1.5f * Vector3.UnitY, 1),
+            var eyeSpace = Vector4.Transform(new Vector4(Parent.Position + Parent.Model.Height * 1.75f * Vector3.UnitY, 1),
                     DrawManager.FrustumObject.ModelViewMatrix);
-            Vector4 homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
-            Vector3 ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
-            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f);
+            var homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
+            var ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
+            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f) + _originalScale * _barSize * Vector2.UnitY;
             _healthBar.Scale = _originalScale * _barSize * Math.Min(1, Parent.Model.Height / 7f);
 
             if (!_textUpdated)

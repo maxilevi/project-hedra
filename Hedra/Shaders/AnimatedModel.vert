@@ -50,7 +50,8 @@ struct PointLight
 
 uniform PointLight Lights[12];
 
-void main(void){
+void main(void)
+{
 	vec3 linear_color = srgb_to_linear(in_color);
 	pass_height = U_Height;
 	pass_botColor = U_BotColor;
@@ -59,10 +60,11 @@ void main(void){
 	vec4 totalLocalPos = vec4(0.0, 0.0, 0.0, 0.0);
 	vec4 totalNormal = vec4(0.0, 0.0, 0.0, 0.0);
 	mat4 identity = mat4(
-	1.0, 0.0, 0.0, 0.0,
-	0.0, 1.0, 0.0, 0.0,
-	0.0, 0.0, 1.0, 0.0,
-	0.0, 0.0, 0.0, 1.0);
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+	);
 	
 	float sum = 0.0;
 	for(int i=0;i<MAX_WEIGHTS;i++){

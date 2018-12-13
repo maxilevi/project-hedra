@@ -10,14 +10,10 @@ namespace Hedra.Engine.WorldBuilding
         private Vector3 Position { get; set; }
         private float Radius { get; set; }
 
-        public RoundedGroundwork(Vector3 Position, float Radius)
+        public RoundedGroundwork(Vector3 Position, float Radius, BlockType Type)
         {
             this.Position = Position;
             this.Radius = Radius;
-        }
-
-        public RoundedGroundwork(Vector3 Position, float Radius, BlockType Type) : this(Position, Radius)
-        {
             this.Type = Type;
         }
 

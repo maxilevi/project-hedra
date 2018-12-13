@@ -24,6 +24,7 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.ArmorSystem;
+using Hedra.Engine.Localization;
 using Hedra.EntitySystem;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
@@ -180,7 +181,7 @@ namespace Hedra.Engine.Player
             if(player != null){
                 if (Stamina < DodgeCost)
                 {
-                    GameManager.Player.MessageDispatcher.ShowNotification("YOU ARE TOO TIRED.", Color.DarkRed, 3f, true);
+                    GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("too_tired"), Color.DarkRed, 3f, true);
                     return;
                 }
                 Stamina -= DodgeCost;
@@ -395,13 +396,12 @@ namespace Hedra.Engine.Player
                 Health = MaxHealth;
                 Mana = MaxMana;
 
-                var label1 = new Billboard(4.0f, "LEVEL UP!", Color.Violet,
+                var label1 = new TextBillboard(4.0f, Translations.Get("level_up"), Color.Violet,
                     FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
-                    this.Position)
+                    () => this.Position)
                 {
-                    Size = .7f,
+                    Scalar = .7f,
                     Vanish = true,
-                    FollowFunc = () => this.Position
                 };
                 SoundPlayer.PlaySound(SoundType.NotificationSound, Position, false, 1, .65f);
                 

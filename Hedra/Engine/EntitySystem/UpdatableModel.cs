@@ -23,7 +23,6 @@ namespace Hedra.Engine.EntitySystem
         private T _model;
         private List<IModel> _iterableModels;
         private Box _baseBroadphaseBox = new Box(Vector3.Zero, Vector3.One);
-        private Vector3 _lastPosition;
         private Timer _movingTimer;
 
         protected UpdatableModel(IEntity Parent)
@@ -32,6 +31,8 @@ namespace Hedra.Engine.EntitySystem
             this._movingTimer = new Timer(.05f);
             this.AdditionalModels = new HashSet<IModel>();
             this.Parent = Parent;
+            if(Parent != null)
+                this.Parent.Physics.OnMove += OnMove;
         }
 
         protected void RegisterModel(IModel Model)
@@ -150,11 +151,7 @@ namespace Hedra.Engine.EntitySystem
 
             if (Parent != null)
             {
-                var isTranslating = (Parent.BlockPosition.Xz - _lastPosition.Xz).LengthFast > 0.001f;
-                if (isTranslating) _movingTimer.Reset();
                 if (IsMoving && _movingTimer.Tick()) IsMoving = false;
-                else if (isTranslating) IsMoving = true;
-                _lastPosition = Parent.BlockPosition;
                 Position = Parent.Physics.TargetPosition;
             }
         }
@@ -174,8 +171,16 @@ namespace Hedra.Engine.EntitySystem
             
         }
 
+        private void OnMove()
+        {
+            _movingTimer.Reset();
+            IsMoving = true;  
+        }
+
         public override void Dispose()
         {
+            if(Parent != null)
+                this.Parent.Physics.OnMove -= OnMove;
             this.Model?.Dispose();
             this.Disposed = true;
         }

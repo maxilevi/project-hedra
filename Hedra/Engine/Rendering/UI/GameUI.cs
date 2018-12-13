@@ -92,9 +92,19 @@ namespace Hedra.Engine.Rendering.UI
             
             _compass = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
             _help = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Help.png"), Vector2.Zero, Vector2.One);
+
+            var skillTreeTranslation = Translation.Create("skill_tree_label");
+            skillTreeTranslation.Concat(() => $" - {Controls.Skilltree}");
+            var skillTreeMsg = new GUIText(skillTreeTranslation, new Vector2(-.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+            var mapTranslation = Translation.Create("map_label");
+            skillTreeTranslation.Concat(() => $" - {Controls.Map}");
+            var mapMsg = new GUIText(mapTranslation, new Vector2(.815f, .425f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
             
-            var skillTreeMsg = new GUIText(Translation.Create("skill_tree_label", "{0} - X"), new Vector2(-.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
-            var mapMsg = new GUIText(Translation.Create("map_label", "{0} - M"), new Vector2(.815f, .425f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+            Controls.OnControlsChanged += () =>
+            {
+                mapTranslation.UpdateTranslation();
+                skillTreeTranslation.UpdateTranslation();
+            };
             
             AddElement(skillTreeMsg);
             AddElement(mapMsg);

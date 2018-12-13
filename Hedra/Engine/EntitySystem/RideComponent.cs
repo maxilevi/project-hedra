@@ -11,6 +11,7 @@ using Hedra.AISystem;
 using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Input;
@@ -37,8 +38,8 @@ namespace Hedra.Engine.EntitySystem
         {
             EventDispatcher.RegisterKeyDown(this, delegate(object Object, KeyEventArgs EventArgs)
             {
-                _shouldRide = EventArgs.Key == Key.E && _canRide;
-                _shouldUnride = EventArgs.Key == Key.ShiftLeft && _canUnride;
+                _shouldRide = EventArgs.Key == Controls.Interact && _canRide;
+                _shouldUnride = EventArgs.Key == Controls.Descend && _canUnride;
             });
         }
         
@@ -52,7 +53,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (Parent.Model is IMountable model && model.IsMountable && !Parent.IsUnderwater && !Parent.IsKnocked)
                 {
-                    player.MessageDispatcher.ShowMessage("[E] TO MOUNT", .5f, Color.White);
+                    player.MessageDispatcher.ShowMessage(Translations.Get("to_mount", Controls.Interact), .5f, Color.White);
                     Parent.Model.Tint = new Vector4(2.0f, 2.0f, 2.0f, 1f);
                     _canRide = true;
                     if (_shouldRide) this.Ride(player);

@@ -243,7 +243,12 @@ namespace Hedra.Engine.Player
 
         public Item Food
         {
-            get { return this.Search(I => I.IsFood); }
+            get
+            {
+                return (this[FoodHolder] != null && this[FoodHolder].IsFood) 
+                    ? this[FoodHolder] 
+                    : this.Search(I => I.IsFood);
+            }
         }
 
         public bool HasAvailableSpace => _items.HasAvailableSpace;

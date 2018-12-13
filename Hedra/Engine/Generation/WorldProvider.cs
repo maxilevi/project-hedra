@@ -555,16 +555,17 @@ namespace Hedra.Engine.Generation
         public Vector3 FindSpawningPoint(Vector3 Around)
         {
             var point = Around;
-
-            bool IsOcean(Vector3 Point)
+            var rng = new Random(World.Seed + 43234);
+            bool IsWater(Vector3 Point)
             {
                 var region = BiomePool.GetRegion(Point);
-                return region.Generation.GetHeight(Point.X, Point.Z, null, out _) < Engine.BiomeSystem.BiomePool.SeaLevel;
+                return region.Generation.GetHeight(Point.X, Point.Z, null, out _) < Engine.BiomeSystem.BiomePool.SeaLevel
+                    || LandscapeGenerator.River(point.Xz) > 0;
             }
-            while (IsOcean(point))
+            while (IsWater(point))
             {
                 point += 
-                    new Vector3( (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize);
+                    new Vector3( (192f * rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * rng.NextFloat() - 96f) * Chunk.BlockSize);
             }
 
             return point;

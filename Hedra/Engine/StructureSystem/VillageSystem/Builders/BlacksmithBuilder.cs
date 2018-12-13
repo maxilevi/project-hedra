@@ -40,7 +40,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                               Vector3.TransformPosition(Parameters.Design.Blacksmith * Parameters.Design.Scale,
                                   transformation);
             human.Physics.TargetPosition = newPosition + Vector3.UnitY * Physics.HeightAtPosition(newPosition);
-            human.Physics.UsePhysics = false;
+            //human.Physics.UsePhysics = false;
         }
     }
 }

@@ -9,6 +9,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
@@ -129,7 +130,7 @@ namespace Hedra.Engine.StructureSystem
             {
                 if (!Cementery.Restored)
                 {
-                    LocalPlayer.Instance.MessageDispatcher.ShowNotification("THERE ARE STILL ENEMIES AROUND.", Color.DarkRed, 2f);
+                    LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("enemies_around"), Color.DarkRed, 2f);
                 }
                 return Cementery.Restored;
             };

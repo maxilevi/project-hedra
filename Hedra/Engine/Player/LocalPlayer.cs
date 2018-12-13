@@ -33,6 +33,7 @@ using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.Geometry;
+using Hedra.Sound;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player
@@ -103,9 +104,16 @@ namespace Hedra.Engine.Player
         {
             EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs Args)
             {
-                if (Key.R == Args.Key && !GameSettings.Paused && IsDead)
+                if (Controls.Respawn == Args.Key && !GameSettings.Paused && IsDead)
                     Respawn();
+                
+                if (Controls.Handlamp == Args.Key && !GameSettings.Paused && CanInteract)
+                {
+                    HandLamp.Enabled = !HandLamp.Enabled;
+                    SoundPlayer.PlaySound(SoundType.NotificationSound, Position);
+                }
             });
+
             _damageHandler = SearchComponent<DamageComponent>();
             _damageHandler.Delete = false;
         }
@@ -217,24 +225,24 @@ namespace Hedra.Engine.Player
             }
             this.Rotation = new Vector3(0, this.Rotation.Y, 0);
 
-            var underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock1 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock2 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock3 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (3 + IsoSurfaceCreator.WaterQuadOffset));
-            int lowestY = World.GetLowestY( (int) View.CameraPosition.X, (int) View.CameraPosition.Z);
+            var underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
+            var underBlock1 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
+            var underBlock2 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
+            var underBlock3 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (3 + IsoSurfaceCreator.WaterQuadOffset));
+            int lowestY = World.GetLowestY( (int) View.CameraEyePosition.X, (int) View.CameraEyePosition.Z);
             
             //Log.WriteLine(UnderBlock0.Type);
-            if(underBlock0.Type != BlockType.Water && ( View.CameraPosition.Y / Chunk.BlockSize >= lowestY + 2 &&  underBlock1.Type != BlockType.Water && underBlock2.Type != BlockType.Water && underBlock3.Type != BlockType.Water)){
+            if(underBlock0.Type != BlockType.Water && ( View.CameraEyePosition.Y / Chunk.BlockSize >= lowestY + 2 &&  underBlock1.Type != BlockType.Water && underBlock2.Type != BlockType.Water && underBlock3.Type != BlockType.Water)){
                 GameSettings.DistortEffect = false;
                 GameSettings.UnderWaterEffect = false;
                 WorldRenderer.ShowWaterBackfaces = false;
             }
-            if( underBlock0.Type == BlockType.Water || (View.CameraPosition.Y / Chunk.BlockSize <= lowestY + 2 && (underBlock1.Type == BlockType.Water || underBlock2.Type == BlockType.Water || underBlock3.Type == BlockType.Water))){
+            if( underBlock0.Type == BlockType.Water || (View.CameraEyePosition.Y / Chunk.BlockSize <= lowestY + 2 && (underBlock1.Type == BlockType.Water || underBlock2.Type == BlockType.Water || underBlock3.Type == BlockType.Water))){
                 GameSettings.UnderWaterEffect = true;
                 GameSettings.DistortEffect = true;
                 WorldRenderer.ShowWaterBackfaces = true;
             }
-            this.View.AddonDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
+            this.View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
 
             AmbientEffects.Update();
             StructureAware.Update();
@@ -284,11 +292,10 @@ namespace Hedra.Engine.Player
             this.WasAttacking = false;
             this.IsAttacking = false;
             
-            if(Inventory.Food != null){
-                var foodHealth = Inventory.Food.GetAttribute<float>("Saturation");
+            if(Inventory.Food != null)
+            {
                 var foodAmount = Inventory.Food.GetAttribute<int>(CommonAttributes.Amount);
-                Model.SetFood(Inventory.Food);
-                Model.Eat(foodHealth);
+                Model.EatFood(Inventory.Food);
 
                 if(foodAmount > 1)
                     Inventory.Food.SetAttribute(CommonAttributes.Amount, foodAmount-1);
@@ -305,7 +312,7 @@ namespace Hedra.Engine.Player
                 IsDead = true;
                 CoroutineManager.StartCoroutine(_damageHandler.DisposeCoroutine);
                 Executer.ExecuteOnMainThread(delegate {
-                    this.MessageDispatcher.ShowMessageWhile("[R] TO RESPAWN", Color.White,
+                    this.MessageDispatcher.ShowMessageWhile(Translations.Get("to_respawn", Controls.Respawn), Color.White,
                         () => this.Health <= 0 && !GameManager.InStartMenu);
                 });
             }
@@ -332,12 +339,12 @@ namespace Hedra.Engine.Player
                 {
                     if (Model.Enabled)
                     {
-                        var newLabel = new Billboard(2.0f, $"+ {(int) _acummulativeHealing} HP", Color.GreenYellow,
+                        var newLabel = new TextBillboard(2.0f, $"+ {(int) _acummulativeHealing} HP", Color.GreenYellow,
                             FontCache.Get(AssetManager.BoldFamily,
                                 18 + 12 * ((_acummulativeHealing - MaxHealth * .05f) / this.MaxHealth),
                                 FontStyle.Bold), this.Model.HeadPosition);
                         newLabel.Vanish = true;
-                        newLabel.Speed = 4;
+                        newLabel.VanishSpeed = 4;
                     }
                     _acummulativeHealing = 0;
                 }
@@ -394,22 +401,20 @@ namespace Hedra.Engine.Player
             Gold = (int)(Gold - goldDiff);
             if (xpDiff > 0)
             {
-                var xp = new Billboard(6f, $"- {xpDiff} XP", Color.Purple,
-                    FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), this.Model.HeadPosition + Vector3.UnitY * 1f)
+                var xp = new TextBillboard(6f, $"- {xpDiff} XP", Color.Purple,
+                    FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), () => this.Model.HeadPosition + Vector3.UnitY * 1f)
                 {
                     Vanish = true,
-                    Speed = 2,
-                    FollowFunc = () => this.Model.HeadPosition + Vector3.UnitY * 1f
+                    VanishSpeed = 2
                 };
             }
             if (goldDiff > 0)
             {
-                var gold = new Billboard(6f, $"- {goldDiff} G", Color.Gold,
-                    FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), this.Model.HeadPosition + Vector3.UnitY * 3f)
+                var gold = new TextBillboard(6f, $"- {goldDiff} G", Color.Gold,
+                    FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), () => this.Model.HeadPosition + Vector3.UnitY * 2f)
                 {
                     Vanish = true,
-                    Speed = 2,
-                    FollowFunc = () => this.Model.HeadPosition + Vector3.UnitY * 2f
+                    VanishSpeed = 2
                 };
             }
         }

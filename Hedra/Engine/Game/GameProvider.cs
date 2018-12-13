@@ -144,18 +144,17 @@ namespace Hedra.Engine.Game
         {
             Information.WorldSeed = World.RandomSeed;
             GameManager.MakeCurrent(Information);
-            GameManager.Player.Position = World.SpawnPoint;
             SkyManager.SetTime(12000);
-
             Player.Model = new HumanoidModel(Player);         
             if(Player.Inventory.MainWeapon != null)
             {
                 Player.Inventory.MainWeapon.FlushCache();
                 Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);               
             }
+            SpawnCampfireDesign.AlignPlayer(Player);
             Player.UI.HideMenu();
             Player.UI.Hide = false;
-            Player.Enabled = true;                
+            Player.Enabled = true;
             _isNewRun = true;
         }
         
