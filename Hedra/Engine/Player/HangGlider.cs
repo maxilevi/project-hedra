@@ -2,6 +2,7 @@ using System;
 using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
@@ -47,7 +48,7 @@ namespace Hedra.Engine.Player
             };
             EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs EventArgs)
             {
-                if (!this.Enabled || !this._player.CanInteract || EventArgs.Key != Key.Space || _player.Stamina < _player.MaxStamina * .25f) return;
+                if (!this.Enabled || !this._player.CanInteract || EventArgs.Key != Controls.Jump || _player.Stamina < _player.MaxStamina * .25f) return;
                 this.Push(220f);
                 this._player.Stamina -= _player.MaxStamina * .25f;
                 SoundPlayer.PlaySoundWithVariation(SoundType.Jump, _player.Position);

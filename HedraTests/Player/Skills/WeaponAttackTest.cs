@@ -17,7 +17,6 @@ namespace HedraTests.Player.Skills
     [TestFixture]
     public class WeaponAttackTest : SkillTest<WeaponAttack>
     {
-
         [Test]
         public void TestPrimaryAttackIsContinous()
         {
@@ -91,6 +90,7 @@ namespace HedraTests.Player.Skills
             var defaultIds = this.GetDefaultIconIds();
             var existingIds = new List<uint>();
             weapons.Remove(typeof(Hands));
+            weapons.Remove(typeof(FarmingRake));
             for (var i = 0; i < weapons.Count; i++)
             {
                 var weapon = (Weapon) Activator.CreateInstance(weapons[i], new VertexData());

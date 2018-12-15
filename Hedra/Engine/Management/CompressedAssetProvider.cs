@@ -129,7 +129,7 @@ namespace Hedra.Engine.Management
                 return ReadBinary(Path, Text ? AssetsResource : SoundResource);
             }
 
-            var finalPath = Path.Replace("$GameFolder$", AppPath);
+            var finalPath = Path.Replace("$GameFolder$", GameLoader.AppPath);
             return Text
                 ? Encoding.ASCII.GetBytes(File.ReadAllText(finalPath))
                 : File.ReadAllBytes(finalPath);
@@ -137,7 +137,7 @@ namespace Hedra.Engine.Management
 
         public byte[] ReadBinary(string Name, string DataFile)
         {
-            this.DecompileAssets();
+            DecompileAssets();
             ResourceHandler selectedHandler = null;
             lock (_handlerLock)
             {

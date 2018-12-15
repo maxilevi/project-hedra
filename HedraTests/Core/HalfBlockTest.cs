@@ -24,7 +24,7 @@ namespace HedraTests.Core
         [TestCaseSource(nameof(RandomBlocks))]
         public void TestDensity(TestTuple Tuple)
         {
-            Assert.AreEqual(Tuple.ExpectedDensity, Tuple.Block.Density, 0.01);
+            Assert.AreEqual(Tuple.ExpectedDensity, Tuple.Block.Density, 0.02);
         }
         
         [TestCaseSource(nameof(RandomBlocks))]

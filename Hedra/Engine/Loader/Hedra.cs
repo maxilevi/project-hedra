@@ -55,7 +55,7 @@ namespace Hedra.Engine.Loader
             CompatibilityManager.Load();
             GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
             GameLoader.LoadSoundEngine();
-            HedraContent.Load();
+            HedraContent.Register();
             ModificationsLoader.Reload();
             NameGenerator.Load();
             CacheManager.Load();

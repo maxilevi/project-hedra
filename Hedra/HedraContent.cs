@@ -12,9 +12,10 @@ namespace Hedra
 {
     public class HedraContent : Mod
     {
+        private static HedraContent _instance;
         public override string Name => "Project Hedra";
         
-        public override void RegisterContent()
+        protected override void RegisterContent()
         {
             RegisterSounds();
 
@@ -93,9 +94,9 @@ namespace Hedra
             });
         }
 
-        public static void Load()
+        public static void Register()
         {
-            (new HedraContent()).RegisterContent();
+            (_instance ?? (_instance = new HedraContent())).Load();
         }
     }
 }

@@ -13,12 +13,14 @@ namespace Hedra.Engine.ClassSystem
     {
         public override string Logo => throw new ArgumentException();
         public override HumanType Human => throw new ArgumentException();
-        public override float BaseSpeed => throw new ArgumentException();
+        /* Do not delete. Used in tests */
+        public override float BaseSpeed => 1.25f;
         public override AbilityTreeBlueprint AbilityTreeDesign => throw new ArgumentException();
         public override Item StartingItem => throw new ArgumentException();
         public override float AttackResistance => throw new ArgumentException();
         public override float MaxStamina => throw new ArgumentException();
-        public override float BaseDamage => throw new ArgumentException();
+        /* Do not delete. Used in tests */
+        public override float BaseDamage => 4f;
 
         public override float MaxHealthFormula(float RandomFactor)
         {

@@ -9,7 +9,7 @@ namespace Hedra.Engine.WorldBuilding
 {
     public class Tombstone : InteractableStructure
     {
-        public override Key Key => Key.F;
+        public override Key Key => Controls.Respect;
         public override string Message => Translations.Get("pay_respects");
         public override int InteractDistance => 8;
 

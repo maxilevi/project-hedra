@@ -22,5 +22,6 @@ namespace Hedra.Engine.Localization
         public static Key Map => Key.M;
         public static Key Eat => Key.Q;
         public static Key SpecialItem => Key.G;
+        public static Key Respect => Key.F;
     }
 }

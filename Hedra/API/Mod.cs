@@ -21,7 +21,13 @@ namespace Hedra.API
             _modelHandlerRegistry = new ModelHandlerRegistry();
         }
         
-        public abstract void RegisterContent();
+        protected abstract void RegisterContent();
+
+        public void Load()
+        {
+            UnregisterContent();
+            RegisterContent();
+        }
 
         protected void AddClassRestriction(Class Class, string EquipmentType)
         {
@@ -54,6 +60,7 @@ namespace Hedra.API
             _animationEventRegistry.Unregister();
             _aiRegistry.Unregister();
             _classRegistry.Unregister();
+            _modelHandlerRegistry.Unregister();
         }
     }
 }

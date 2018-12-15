@@ -178,6 +178,7 @@
     <Compile Include="Engine\CacheSystem\PumpkinCache.cs" />
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
     <Compile Include="Engine\ClassSystem\RestrictionsFactory.cs" />
+    <Compile Include="Engine\Core\Singleton.cs" />
     <Compile Include="Engine\Core\TypeFactory.cs" />
     <Compile Include="Engine\Game\Season.cs" />
     <Compile Include="Engine\ItemSystem\Templates\AttributeTemplate.cs" />

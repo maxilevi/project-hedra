@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using Hedra.Engine.Loader;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
+using Hedra.Engine.Rendering.UI;
 using NUnit.Framework;
 
 namespace HedraTests.CodePolicy
@@ -12,16 +15,33 @@ namespace HedraTests.CodePolicy
     public class ControlsCodePolicy : BaseCodePolicy
     {
         private string _controlsClassName;
-        /* These functions have multiple versions on the spec, to avoid issues we add them as exceptions. */
-        private readonly string[] _exceptions =
+        private string _regex;
+        private readonly string[] _exceptions = new[]
         {
-            "DebugMessageCallback",
+            nameof(Chat),
+            nameof(DebugInfoProvider),
+            nameof(Panel),
+            nameof(TextField),
+            nameof(PlayerMovement)
+        };
+        private readonly string[] _regexExceptions =
+        {
+            @"ToString\(\)",
+            @"VertexData",
+            @"ToLowerInvariant\(\)",
+            @"Setter",
+            @"ReleaseFirst",
+            @"Getter",
+            /* Excluded key types*/
+            @"Escape",
+            @"Enter"
         };
 
         [SetUp]
         public void Setup()
         {
-            _controlsClassName = typeof(Controls).ToString();
+            _controlsClassName = typeof(Controls).Name;
+            _regex = $@"Key\.(?!{string.Join("|", _regexExceptions)})";
         }
 
         [Test]
@@ -32,8 +52,9 @@ namespace HedraTests.CodePolicy
             foreach (var pair in filesAndCalls)
             {
                 var name = Path.GetFileNameWithoutExtension(pair.Key);
+                if(Array.IndexOf(_exceptions, name) != -1) continue;
                 if(name != _controlsClassName)
-                    fails.Add($"GL calls in '{name}.cs' should be in {_controlsClassName}.cs");
+                    fails.Add($"OpenTK.Input.Key usages in '{name}.cs' should be in {_controlsClassName}.cs");
             }
             if(fails.Count > 0) Assert.Fail(string.Join(Environment.NewLine, fails.ToArray()));
         }
@@ -42,10 +63,10 @@ namespace HedraTests.CodePolicy
         private Dictionary<string, string[]> GetAllKeyUsages()
         {
             var calls = new Dictionary<string, string[]>();
-            var files = Directory.GetFiles($"{SolutionDirectory}/Hedra/Engine/", "*.cs", SearchOption.AllDirectories);
+            var files = Directory.GetFiles($"{SolutionDirectory}/Hedra/", "*.cs", SearchOption.AllDirectories);
             for (var i = 0; i < files.Length; i++)
             {
-                var matches = Regex.Matches(File.ReadAllText(files[i]), @"Key\.");
+                var matches = Regex.Matches(File.ReadAllText(files[i]), _regex);
                 if (matches.Count > 0)
                 {
                     var matchList = new List<string>();

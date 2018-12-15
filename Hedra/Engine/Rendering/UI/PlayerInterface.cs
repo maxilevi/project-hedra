@@ -40,10 +40,10 @@ namespace Hedra.Engine.Rendering.UI
             switch (Args.Key)
             {
                 case Key.Escape:
-                    PlayerInterface.OnEscapeDown(Args);
+                    OnEscapeDown(Args);
                     break;
                 default:
-                    PlayerInterface.ManageOpened(Args);
+                    ManageOpened(Args);
                     break;
             }
         }

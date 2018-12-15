@@ -31,8 +31,8 @@ namespace Hedra.Engine.EntitySystem
             this._movingTimer = new Timer(.05f);
             this.AdditionalModels = new HashSet<IModel>();
             this.Parent = Parent;
-            if(Parent != null)
-                this.Parent.Physics.OnMove += OnMove;
+            if(Parent?.Physics != null)
+                Parent.Physics.OnMove += OnMove;
         }
 
         protected void RegisterModel(IModel Model)

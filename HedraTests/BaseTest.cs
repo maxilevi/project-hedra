@@ -7,6 +7,7 @@ using Hedra.Engine;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
@@ -20,6 +21,7 @@ namespace HedraTests
 {
     public abstract class BaseTest
     {
+        private static bool _translationsLoaded;
         protected SimpleEventProvider EventProvider { get; private set; }
         
         [SetUp]
@@ -34,7 +36,6 @@ namespace HedraTests
 
         protected static void MockEngine()
         {
-            GameSettings.TestingMode = true;
             World.Provider = new SimpleWorldProviderMock();
             AssetManager.Provider = new SimpleAssetProvider();
             Graphics2D.Provider = new SimpleTexture2DProviderMock();
@@ -43,6 +44,8 @@ namespace HedraTests
             ColladaLoader.Provider = new SimpleColladaProvider();
             GameManager.Provider = new SimpleGameProviderMock();
             GUIText.Provider = new SimpleTextProviderMock();
+            if(!_translationsLoaded) Translations.Load();
+            _translationsLoaded = true;
         }
 
         [TearDown]

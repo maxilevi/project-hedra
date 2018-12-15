@@ -46,7 +46,8 @@ namespace Hedra.Engine.Rendering.UI
         
         private IEnumerator CaretUpdate()
         {
-            while(Program.GameWindow.Exists){
+            while(Program.GameWindow.Exists)
+            {
                 
                 for(var i = 0; i < 20; i++)
                 {

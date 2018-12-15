@@ -74,7 +74,7 @@ namespace HedraTests.Game
             GameManager.Player = new PlayerMock();
             if (!_loaded)
             {
-                HedraContent.Load();
+                HedraContent.Register();
                 _loaded = true;
             }
             var factories = MobLoader.LoadModules(GameLoader.AppPath);

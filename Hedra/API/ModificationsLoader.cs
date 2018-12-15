@@ -41,7 +41,7 @@ namespace Hedra.API
                 {
                     if (!type.IsSubclassOf(typeof(Mod)) || type.IsAbstract) continue;
                     var mod = (Mod) Activator.CreateInstance(type, new object[0]);
-                    mod.RegisterContent();
+                    mod.Load();
                     Log.WriteLine($"Loaded mod '{mod.Name}'");
                     LoadedMods.Add(mod);
                 }
