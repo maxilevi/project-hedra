@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using Hedra.Core;
 using OpenTK;
 
@@ -21,7 +22,7 @@ namespace Hedra.Engine.WorldBuilding
                    Point.Y < unCenteredPosition.Y + Width && Point.Y > unCenteredPosition.Y;
         }
 
-        protected override float Density(Vector2 Point)
+        public override float Density(Vector2 Point)
         {
             if (Collides(Point)) return 1;
             var halfWidth = Width * .5f;
@@ -31,6 +32,11 @@ namespace Hedra.Engine.WorldBuilding
             );
             return Math.Max(0f, 1.0f - (nearest - Point).LengthFast * .04f * Hardness);
         }
+        
+        public Vector2 LeftCorner => Position.Xz - new Vector2(Width * .5f, 0);
+        public Vector2 RightCorner => Position.Xz + new Vector2(Width * .5f, 0);
+        public Vector2 BackCorner => Position.Xz - new Vector2(0, Width * .5f);
+        public Vector2 FrontCorner => Position.Xz + new Vector2(0, Width * .5f);
         
         public override BasePlateau Clone()
         {

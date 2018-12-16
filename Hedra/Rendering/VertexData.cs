@@ -144,6 +144,12 @@ namespace Hedra.Rendering
             Transform(Matrix4.CreateTranslation(Position));
         }
 
+        public void AverageCenter()
+        {
+            var avg = Vertices.Aggregate((V1, V2) => V1 + V2) / Vertices.Count;
+            Vertices = Vertices.Select(V => V - avg).ToList();
+        }
+
         public void Center()
         {
             var min = new Vector3(

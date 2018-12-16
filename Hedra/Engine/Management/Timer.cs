@@ -6,6 +6,9 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
+using System;
+
 namespace Hedra.Engine.Management
 {
     /// <summary>
@@ -20,6 +23,7 @@ namespace Hedra.Engine.Management
         public Timer(float AlertTime)
         {
             this.AlertTime = AlertTime;
+            if((int)Math.Ceiling(AlertTime) == 0) throw new ArgumentOutOfRangeException($"AlertTime cannot be zero.");
         }
         
         public void Reset()

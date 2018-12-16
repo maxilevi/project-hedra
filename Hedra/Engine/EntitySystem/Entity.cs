@@ -98,7 +98,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (this.SearchComponent<WarriorAIComponent>() != null)
                     return this.SearchComponent<WarriorAIComponent>().Friendly;
-                return this.SearchComponent<VillagerAIComponent>() != null;
+                return this.SearchComponent<BaseVillagerAIComponent>() != null;
             }
         }
 

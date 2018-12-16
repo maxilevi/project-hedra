@@ -72,7 +72,7 @@ namespace HedraTests.Game
             AssertComplies(Weapon, _sheet.ItemAttackSpeed, () => Weapon.GetAttribute<float>(CommonAttributes.AttackSpeed));
         }
         
-        public override bool Complies(Item Equipment)
+        public bool Complies(Item Equipment)
         {
             return Equipment.IsWeapon;
         }

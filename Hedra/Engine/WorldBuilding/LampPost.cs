@@ -21,9 +21,9 @@ namespace Hedra.Engine.WorldBuilding
     /// </summary>
     public class LampPost : BaseStructure, IUpdatable
     {
-        public PointLight Light;
-        public Vector3 LightColor = new Vector3(1,1,1f);
-        public float Radius = 24;
+        private PointLight _light;
+        public Vector3 LightColor { get; set; } = Vector3.One;
+        public float Radius { get; set; } = 24;
         
         
         public LampPost(Vector3 Position) : base(Position)
@@ -33,35 +33,36 @@ namespace Hedra.Engine.WorldBuilding
         
         public void Update()
         {
-            var Player = GameManager.Player;
-            bool InRadius = (Player.Position - this.Position).Xz.LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance;
-            if(Light == null && InRadius){
-                Light = ShaderManager.GetAvailableLight();
-                if(Light != null){
-                    Light.Position = this.Position;
-                    Light.Color = LightColor;
-                    Light.Radius = Radius;
-                    ShaderManager.UpdateLight(Light);
+            var inRadius = (GameManager.Player.Position - this.Position).Xz.LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance;
+            if(_light == null && inRadius)
+            {
+                _light = ShaderManager.GetAvailableLight();
+                if(_light != null)
+                {
+                    _light.Position = this.Position;
+                    _light.Color = LightColor;
+                    _light.Radius = Radius;
+                    ShaderManager.UpdateLight(_light);
                 }
                 
-            }else if(Light != null && !InRadius){
-                //Light exists, make it dissapear
-                
-                Light.Locked = false;
-                Light.Position = Vector3.Zero;
-                ShaderManager.UpdateLight(Light);
-                Light = null;
+            }
+            else if(_light != null && !inRadius)
+            {
+                _light.Locked = false;
+                _light.Position = Vector3.Zero;
+                ShaderManager.UpdateLight(_light);
+                _light = null;
             }
         }
         
         public override void Dispose()
         {
             base.Dispose();
-            if(Light != null)
+            if(_light != null)
             {
-                Light.Locked = false;
-                Light.Position = Vector3.Zero;
-                ShaderManager.UpdateLight(Light);
+                _light.Locked = false;
+                _light.Position = Vector3.Zero;
+                ShaderManager.UpdateLight(_light);
             }
             UpdateManager.Remove(this);
         }

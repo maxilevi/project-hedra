@@ -1,5 +1,19 @@
 ﻿{
   "Name" : "Woodland",
+  "Decorations": {
+    "Lamp": [
+      {
+        "Path": "Assets/Env/Lamp0.ply",
+        "Scale": 5.0
+      }
+    ],
+    "Bench": [
+      {
+        "Path": "",
+        "Scale": ""
+      }
+    ]
+  },
   "Well" : {
     "Designs":[
       {
@@ -49,6 +63,28 @@
               "Y": 5.91168,
               "Z": -7.05042
             }
+          }
+        ],
+        "Blacksmith" : {
+          "X": -11.20,
+          "Y": 0.5,
+          "Z": -12.0
+        }
+      },
+      {
+        "Path" : "Assets/Env/Village/Carpenter0.ply",
+        "LodPath": "Assets/Env/Village/Carpenter0-Lod.ply",
+        "Scale" : 2.0,
+        "Doors" : [
+          {
+            "Path":  "Assets/Env/Village/Carpenter0_Door0.ply",
+            "Position" : {
+              "X": -9.12806,
+              "Y": 5.93834,
+              "Z": -7.02207
+            },
+            "InvertedPivot": true,
+            "InvertedRotation": false
           }
         ],
         "Blacksmith" : {
@@ -199,7 +235,7 @@
               "Y": 1.84454,
               "Z": 6.68699
             },
-            "Inverted": true
+            "InvertedPivot": true
           }
         ]
       }

@@ -51,10 +51,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                         SpawnHumanoid(HumanType.Merchant, originalPosition + Vector3.UnitZ * 40f);
                         break;
                     case 2:
-                        SpawnVillager(originalPosition - Vector3.UnitX * 40f, false);
+                        SpawnVillager(originalPosition - Vector3.UnitX * 40f);
                         break;
                     case 3:
-                        SpawnVillager(originalPosition + Vector3.UnitX * 40f, false);
+                        SpawnVillager(originalPosition + Vector3.UnitX * 40f);
                         break;
                 }
 

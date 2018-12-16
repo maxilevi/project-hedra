@@ -20,7 +20,7 @@ namespace Hedra.Engine.StructureSystem
         {
             var rng = BuildRng(Structure);
             BuildBaseCampfire(Structure, Vector3.Zero, rng, out var transformationMatrix);
-            ((Campfire) Structure.WorldObject).Bandit = CreateVillager(Structure);
+            ((Campfire) Structure.WorldObject).Bandit = CreateVillager(Structure, rng);
             SpawnMat(
                 Vector3.UnitX * -16f,
                 Vector3.Zero,
@@ -29,9 +29,10 @@ namespace Hedra.Engine.StructureSystem
             );
         }
 
-        private static IHumanoid CreateVillager(CollidableStructure Structure)
+        private static IHumanoid CreateVillager(CollidableStructure Structure, Random Rng)
         {
-            var villager = World.WorldBuilding.SpawnVillager(Structure.Position + -SpawnOffset, false);
+            var villager = World.WorldBuilding.SpawnHumanoid(HumanType.Villager, Structure.Position + -SpawnOffset);
+            villager.Name = NameGenerator.PickMaleName(Rng);
             villager.Physics.UsePhysics = false;
             villager.IsSitting = true;
             villager.RemoveComponent(villager.SearchComponent<TalkComponent>());

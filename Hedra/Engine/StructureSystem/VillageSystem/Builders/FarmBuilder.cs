@@ -183,10 +183,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 BonusHeight = .35f
             };
+            var plateau = new SquaredPlateau(Parameters.Position, _width);
             return this.PushGroundwork(new GroundworkItem
             {
                 Groundwork = path,
-                Plateau = new SquaredPlateau(Parameters.Position, _width)
+                Plateau = IsPlateauNeeded(plateau) ? plateau : null
             });
         }
     }

@@ -8,6 +8,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
     public class PlacementDesign
     {
         public Vector3 Position { get; private set; }
+        public VillageGraph Graph { get; set; } = new VillageGraph();
         public List<FarmParameters> Farms { get; set; } = new List<FarmParameters>();
         public List<HouseParameters> Houses { get; set; } = new List<HouseParameters>();
         public List<BlacksmithParameters> Blacksmith { get; set; } = new List<BlacksmithParameters>();

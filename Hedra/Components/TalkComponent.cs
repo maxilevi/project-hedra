@@ -75,10 +75,12 @@ namespace Hedra.Components
 
         public override void Update()
         {
-            if (GameManager.Player.CanInteract && !GameManager.Player.IsDead && !GameSettings.Paused && !_isTalking && !Talked && !PlayerInterface.Showing)
+            bool CanTalk() => 
+                (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius 
+                && !_isTalking && !Talked && !PlayerInterface.Showing && !Parent.Model.IsMoving;
+            if (CanTalk())
             {
-                GameManager.Player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_talk", Controls.Interact), Color.White,
-                    () => (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius && !_isTalking && !Talked);
+                GameManager.Player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_talk", Controls.Interact), Color.White, CanTalk);
 
                 if (_shouldTalk)
                 {

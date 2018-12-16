@@ -8,7 +8,7 @@ using OpenTK;
 
 namespace Hedra.AISystem.Humanoid
 {
-    public class FarmerAIComponent : VillagerAIComponent
+    public class FarmerAIComponent : BaseVillagerAIComponent
     {
         private readonly Vector2 _farmPosition;
         private readonly Vector2 _farmSize;

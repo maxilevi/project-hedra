@@ -35,10 +35,15 @@ namespace Hedra.Engine.WorldBuilding
             return (this.Position.Xz - Point).LengthFast < this.Radius;
         }
 
-        protected override float Density(Vector2 Point)
+        public override float Density(Vector2 Point)
         {
             var dist = (this.Position.Xz - Point).LengthFast;
             return Math.Min(1.0f, Math.Max(1 - Math.Min(dist / Radius, 1), 0) * Hardness);
+        }
+
+        public SquaredPlateau ToSquared()
+        {
+            return new SquaredPlateau(Position, Radius);
         }
 
         public override BasePlateau Clone()

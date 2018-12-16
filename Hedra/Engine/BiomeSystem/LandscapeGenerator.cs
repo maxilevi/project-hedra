@@ -326,15 +326,15 @@ namespace Hedra.Engine.BiomeSystem
                     
         }
 
-        private void HandlePlateaus(int X, int Z, float smallFrequency, ref float height, BasePlateau[] RoundedPlateaux, CollidableStructure nearGiantTree,
+        private void HandlePlateaus(int X, int Z, float smallFrequency, ref float height, BasePlateau[] Plateaux, CollidableStructure nearGiantTree,
             CollidableStructure nearCollidableStructure, ref float river, ref float riverBorders, ref float path,
             ref float blockGroundworksModifier, ref bool pathClamped, out float plateauLerp)
         {
             plateauLerp = 0;
-            for (var i = 0; i < RoundedPlateaux.Length; i++)
+            for (var i = 0; i < Plateaux.Length; i++)
             {
                 var point = new Vector2(OffsetX + X * Chunk.BlockSize, OffsetZ + Z * Chunk.BlockSize);
-                height = RoundedPlateaux[i].Apply(point, height, out var final, smallFrequency);
+                height = Plateaux[i].Apply(point, height, out var final, smallFrequency);
                 
                 if (nearGiantTree == null)
                 {
@@ -343,7 +343,7 @@ namespace Hedra.Engine.BiomeSystem
                         riverBorders);
                 }
 
-                if (path > 0 && nearCollidableStructure != null && RoundedPlateaux[i] == nearCollidableStructure.Mountain)
+                if (path > 0 && nearCollidableStructure != null && Plateaux[i] == nearCollidableStructure.Mountain)
                     pathClamped = true;
 
                 blockGroundworksModifier = Mathf.Clamp(Mathf.Lerp(0, blockGroundworksModifier, 1 - Math.Min(1, final * 3f)),

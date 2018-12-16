@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
@@ -177,17 +178,28 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     var startPosition = new Vector2(VillageDesign.Spacing * x + spacing *.5f, VillageDesign.Spacing * z + spacing * .5f + addX) - offset;
                     var distFromCenter = 
                         startPosition.LengthFast / (VillageDesign.Spacing * VillageSize * .5f);
+                    
                     if(distFromCenter > NoPathZone) continue;
+
+                    var start = startPosition + Design.Position.Xz;
+                    var halfStartX = start + new Vector2(spacing, 0) * .5f;
+                    var endX = start + new Vector2(spacing, 0);
+                    var halfStartZ = start + new Vector2(0, spacing) * .5f;
+                    var endZ = start + new Vector2(0, spacing);
+                    Design.Graph.AddEdge(start, halfStartX);
+                    Design.Graph.AddEdge(halfStartX, endX);
+                    Design.Graph.AddEdge(start, halfStartZ);
+                    Design.Graph.AddEdge(halfStartZ, endZ);
                     
                     AddGroundwork(
-                        startPosition + Design.Position.Xz,
-                        startPosition + new Vector2(0, spacing) + Design.Position.Xz,
+                        start,
+                        start + new Vector2(0, spacing),
                         distFromCenter
                     );
 
                     AddGroundwork(
-                        startPosition + new Vector2(spacing, 0) + Design.Position.Xz,
-                        startPosition + Design.Position.Xz,
+                        start + new Vector2(spacing, 0),
+                        start,
                         distFromCenter
                     );
                 }
@@ -201,6 +213,24 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             {
                 BonusHeight = .0f,
             });
+            PlaceDecorations(Structure, Design);
+        }
+
+        private void PlaceDecorations(CollidableStructure Structure, PlacementDesign Design)
+        {
+            var vertices = Design.Graph.Vertices;
+            for (var i = 0; i < vertices.Length; ++i)
+            {
+                if (Design.Graph.Degree(i) >= 4)
+                {
+                    DecorationsPlacer.PlaceLamp(vertices[i].ToVector3(), Structure, Root);
+                }
+                else
+                {
+                    if (Rng.Next(0, 5) == 1)
+                        DecorationsPlacer.PlaceBench(vertices[i].ToVector3(), Structure, Root);
+                }
+            }
         }
 
         private BlockType SelectPathType(float DistanceFromCenter)

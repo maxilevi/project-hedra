@@ -14,6 +14,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.EntitySystem;
 using OpenTK;
 
@@ -22,19 +23,19 @@ namespace Hedra.AISystem.Humanoid
     /// <summary>
     /// Description of WarriorAI.
     /// </summary>
-    public class VillagerAIComponent : HumanoidAIComponent
+    public abstract class BaseVillagerAIComponent : HumanoidAIComponent
     {
         private readonly bool _move;
-        private readonly Timer _movementTimer;
         private Vector3 _targetPoint;
-        protected bool IsSitting;
+        protected Timer MovementTimer { get; }
+        protected bool IsSitting { get; set; }
         protected override bool ShouldSleep => true;
 
-        public VillagerAIComponent(IHumanoid Parent, bool Move) : base(Parent)
+        protected BaseVillagerAIComponent(IHumanoid Parent, bool Move) : base(Parent)
         {
             _move = Move;
-            _movementTimer = new Timer(WaitTime);
             IsSitting = true;
+            MovementTimer = new Timer(WaitTime);
         }
 
         public override void Update()
@@ -42,15 +43,14 @@ namespace Hedra.AISystem.Humanoid
             base.Update();
             if (!base.CanUpdate) return;
 
-            if((GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 16*16 && !IsMoving)
+            if((GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 16 * 16 && !IsMoving)
             {
                 Parent.Orientation = (GameManager.Player.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
-                return;
-            }           
-            if(_move)
+            }
+            else if(_move)
             {
-                if(_movementTimer.Tick())
+                if(MovementTimer.Tick())
                 {
                     IsSitting = Utils.Rng.Next(0, 4) == 1 && !IsMoving;
                     if(!IsSitting)

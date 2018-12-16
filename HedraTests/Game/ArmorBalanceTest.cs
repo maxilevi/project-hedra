@@ -36,7 +36,7 @@ namespace HedraTests.Game
             AssertComplies(Armor, _sheet.BootsDefense, () => Armor.GetAttribute<float>(CommonAttributes.Defense));
         }
 */
-        public override bool Complies(Item Equipment)
+        public bool Complies(Item Equipment)
         {
             return Equipment.IsArmor;
         }

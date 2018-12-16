@@ -35,7 +35,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
 
         public Intercept()
         {
-            _timer = new Timer(0);
+            _timer = new Timer(1);
             _dmgTimer = new Timer(.05f);
             _interceptStance = AnimationLoader.LoadAnimation("Assets/Chr/WarriorIntercept.dae");
         }

@@ -29,19 +29,25 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public override bool Place(HouseParameters Parameters, VillageCache Cache)
         {
             _width = Parameters.GetSize(Cache) * 2f;
-            var ground = new RoundedGroundwork(Parameters.Position, _width * .5f, Parameters.Type)
+            var ground = new RoundedGroundwork(Parameters.Position, _width * .5f * .75f, Parameters.Type)
             {
                 NoPlants = true,
                 NoTrees = true
             };
+            var plateau = CreatePlateau(Parameters);
             return PushGroundwork(new GroundworkItem
             {
                 Groundwork = ground,
-                Plateau = GroundworkType.Squared == Parameters.GroundworkType
-                    ? (BasePlateau) new SquaredPlateau(Parameters.Position, _width) { Hardness = 3.0f }
-                    : new RoundedPlateau(Parameters.Position, _width * .5f * 1.5f) { Hardness = 6.0f }                 
+                Plateau = IsPlateauNeeded(plateau) ? plateau : null
             });
         
+        }
+
+        private BasePlateau CreatePlateau(HouseParameters Parameters)
+        {
+            return GroundworkType.Squared == Parameters.GroundworkType
+                ? (BasePlateau) new SquaredPlateau(Parameters.Position, _width) { Hardness = 3.0f }
+                : new RoundedPlateau(Parameters.Position, _width * .5f * 1.5f) { Hardness = 3.0f };
         }
 
         public override void Polish(HouseParameters Parameters, Random Rng)
@@ -49,9 +55,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var position = Parameters.Position + Vector3.TransformPosition(Vector3.UnitX * _width,
                                Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
             
-            if (Rng.Next(0, 8) == 1)
+            if (Rng.Next(0, 4) == 1)
             {
-                var villager = SpawnVillager(position, false);
+                var villager = SpawnVillager(position);
                 villager.AddComponent(new VillagerThoughtsComponent(villager));
             }
             else if (Rng.Next(0, 6) == 1)

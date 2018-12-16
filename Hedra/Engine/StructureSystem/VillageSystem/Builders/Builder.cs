@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Windows.Forms.VisualStyles;
+using Hedra.AISystem.Humanoid;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -32,6 +35,21 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public virtual bool Place(T Parameters, VillageCache Cache)
         {
             return this.PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .75f);
+        }
+
+        protected bool IsPlateauNeeded(BasePlateau Plateau)
+        {
+            var mount = Structure.Mountain;
+            switch (Plateau)
+            {
+                case SquaredPlateau squared:
+                    return mount.Density(squared.LeftCorner) < 1 || mount.Density(squared.RightCorner) < 1 ||
+                           mount.Density(squared.FrontCorner) < 1 || mount.Density(squared.BackCorner) < 1;
+                case RoundedPlateau rounded:
+                    return IsPlateauNeeded(rounded.ToSquared());  
+                default:
+                    throw new ArgumentOutOfRangeException($"Unknown plateau type {Plateau.GetType()}");
+            }
         }
 
         /* Called via reflection */
@@ -77,8 +95,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 var doorTemplate = Doors[i];
                 var vertexData = Cache.GetOrCreate(doorTemplate.Path, Vector3.One * Parameters.Design.Scale);
-                var rotationPoint = Vector3.TransformPosition(Door.GetRotationPointFromMesh(vertexData, doorTemplate.Inverted), Transformation);
-                vertexData.Center();
+                var rotationPoint = Vector3.TransformPosition(Door.GetRotationPointFromMesh(vertexData, doorTemplate.InvertedPivot), Transformation);
+                vertexData.AverageCenter();
                 vertexData.Transform(Transformation);
                 var offset = Vector3.TransformPosition(doorTemplate.Position * Parameters.Design.Scale, Transformation);
                 Output.Structures.Add(
@@ -86,6 +104,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                         vertexData,
                         rotationPoint,
                         Parameters.Position + offset,
+                        doorTemplate.InvertedRotation,
                         Structure
                     )
                 );
@@ -114,9 +133,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return human;
         }
 
-        protected IHumanoid SpawnVillager(Vector3 Position, bool Move)
+        protected IHumanoid SpawnVillager(Vector3 Position)
         {
-            var human = World.WorldBuilding.SpawnVillager(Position, Move);
+            var human = this.SpawnHumanoid(HumanType.Villager, Position);
+            human.AddComponent(new RoamingVillagerAIComponent(human, VillageObject.Graph));
             VillageObject.AddHumanoid(human);
             return human;
         }
@@ -136,10 +156,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         protected GroundworkItem CreateGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
         {
+            var plateau = new RoundedPlateau(Position, Radius * 1.5f);
             return new GroundworkItem
             {
-                Plateau = new RoundedPlateau(Position, Radius * 1.5f),
-                Groundwork = new RoundedGroundwork(Position, Radius, Type)
+                Groundwork =  new RoundedGroundwork(Position, Radius, Type),
+                Plateau = IsPlateauNeeded(plateau) ? plateau : null
             };
         }
         
@@ -150,7 +171,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         protected bool PushGroundwork(GroundworkItem Item)
         {
-            Structure.AddPlateau(Item.Plateau);
+            if(Item.Plateau != null)
+                Structure.AddPlateau(Item.Plateau);
             if (Item.Groundwork != null)
             {
                 Structure.AddGroundwork(Item.Groundwork);

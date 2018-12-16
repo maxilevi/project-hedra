@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Hedra.Engine.Player;
+using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using OpenTK;
@@ -8,6 +9,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class Village : BaseStructure
     {
+        public VillageGraph Graph { get; set; }
         private readonly List<IHumanoid> _humans;
         private readonly List<IEntity> _mobs;
         

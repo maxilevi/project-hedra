@@ -14,8 +14,6 @@ namespace HedraTests.Game
     
     public abstract class BaseEquipmentTest<T> where T : class, IBalanceTestCompliant, new()
     {
-        public abstract bool Complies(Item Equipment);
-        
         protected static void AssertComplies(Item Item, UniqueBalanceEntry Entry, Func<float> Lambda)
         {
             var multiplier = Entry.ScaleWithLevel ? ((int) Item.Tier) * .5f + 1 : 1;

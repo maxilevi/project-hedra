@@ -112,7 +112,7 @@ namespace Hedra.AISystem.Humanoid
         /// Move to target position. Needs to be called every frame.
         /// </summary>
         /// <param name="TargetPoint">Target point to move</param>
-        protected void Move(Vector3 TargetPoint)
+        protected virtual void Move(Vector3 TargetPoint)
         {
             if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > 3 * 3)
             {
@@ -124,6 +124,8 @@ namespace Hedra.AISystem.Humanoid
             }
             else
             {
+                if(IsMoving)
+                    OnTargetPointReached();
                 IsMoving = false;
             }
             if (Parent.IsUnderwater)
@@ -131,6 +133,11 @@ namespace Hedra.AISystem.Humanoid
                 if (Math.Abs(TargetPoint.Y - Parent.Position.Y) > 1)
                     Parent.Movement.MoveInWater(TargetPoint.Y > Parent.Position.Y);
             }
+        }
+
+        protected virtual void OnTargetPointReached()
+        {
+            
         }
 
         protected void Sit()

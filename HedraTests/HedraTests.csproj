@@ -80,6 +80,7 @@
     <Compile Include="Game\BaseEquipmentTest.cs" />
     <Compile Include="Game\HumanoidBalanceSheet.cs" />
     <Compile Include="Game\HumanoidBalanceTest.cs" />
+    <Compile Include="Game\ItemPriceTest.cs" />
     <Compile Include="Game\WeaponBalanceSheet.cs" />
     <Compile Include="Game\WeaponBalanceTest.cs" />
     <Compile Include="Game\MobBalanceSheet.cs" />

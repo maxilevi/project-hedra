@@ -28,8 +28,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private readonly CollisionShape _shape;
         private Vector3 _lastRotation;
         private Vector3 _lastPosition;
+        private readonly float _invertedRotation;
         
-        public Door(VertexData Mesh, Vector3 RotationPoint, Vector3 Position, CollidableStructure Structure) : base(Position)
+        public Door(VertexData Mesh, Vector3 RotationPoint, Vector3 Position, bool InvertedRotation, CollidableStructure Structure) : base(Position)
         {
             _mesh = ObjectMesh.FromVertexData(Mesh);
             _mesh.ApplyNoiseTexture = true;
@@ -37,6 +38,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             _rotationPoint = RotationPoint;
             _collider = new ObjectMeshCollider(_mesh, Mesh);
             _shape = _collider.Shape;
+            _invertedRotation = InvertedRotation ? -1 : 1;
             Structure.AddCollisionShape(_shape);
         }
         public override void Update()
@@ -102,7 +104,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             if (_isMoving) return;
             _opened = !_opened;
-            _targetRotation = _opened ? Vector3.UnitY * -90 : Vector3.Zero;
+            _targetRotation = _opened ? Vector3.UnitY * 90 * _invertedRotation : Vector3.Zero;
             SoundPlayer.PlaySound(SoundType.Door, Position);
         }
 

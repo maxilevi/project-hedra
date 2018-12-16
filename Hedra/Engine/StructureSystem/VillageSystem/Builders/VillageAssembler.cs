@@ -113,6 +113,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         private void LoopAndBuild<T>(PlacementDesign Design, CollidableStructure Structure, IList<T> Parameters, params Builder<T>[] Builders) where T : IBuildingParameters
         {
+            ((Village) Structure.WorldObject).Graph = Design.Graph;
             for (var i = 0; i < Parameters.Count; i++)
             {
                 for (var j = 0; j < Builders.Length; j++)

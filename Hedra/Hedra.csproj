@@ -132,7 +132,9 @@
     <Compile Include="AISystem\Humanoid\FollowAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\HumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\MageAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\VillagerAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\BaseVillagerAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\RoamingVillagerAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\VillagerAISettings.cs" />
     <Compile Include="AISystem\Humanoid\WarriorAIComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="AISystem\NeutralAIComponent.cs" />
@@ -209,10 +211,13 @@
     <Compile Include="Engine\Rendering\TextureBillboard.cs" />
     <Compile Include="Engine\StructureSystem\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\SpawnCampfireDesign.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\DecorationsPlacer.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\IBuilder.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\DecorationsTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\FarmDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\WindmillDesignTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\VillageGraph.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\WindmillBlades.cs" />
     <Compile Include="Engine\WorldBuilding\BaseGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\BasePlateau.cs" />
@@ -1491,12 +1496,20 @@
       <Link>Assets\Items\Misc\BoatIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Misc\Corn.ply">
+      <Link>Assets\Items\Misc\Corn.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\MagicBranch.ply">
       <Link>Assets\Items\Misc\MagicBranch.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\Mushroom.ply">
       <Link>Assets\Items\Misc\Mushroom.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Misc\Pumpkin.ply">
+      <Link>Assets\Items\Misc\Pumpkin.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\Rake.ply">
@@ -1909,6 +1922,294 @@
     </None>
     <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Door0.ply">
       <Link>Assets\Env\Village\Blacksmith0_Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0-Lod.ply">
+      <Link>Assets\Env\Village\Carpenter0-Lod.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0.ply">
+      <Link>Assets\Env\Village\Carpenter0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider0.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider1.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider10.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider11.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider11.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider12.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider12.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider13.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider13.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider14.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider14.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider15.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider15.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider16.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider16.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider17.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider17.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider18.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider18.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider19.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider19.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider2.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider20.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider20.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider21.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider21.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider22.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider22.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider23.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider23.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider24.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider24.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider25.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider25.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider26.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider26.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider27.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider27.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider28.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider28.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider29.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider29.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider3.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider30.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider30.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider31.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider31.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider32.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider32.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider33.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider33.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider34.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider34.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider35.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider35.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider36.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider36.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider37.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider37.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider38.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider38.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider39.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider39.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider4.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider40.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider40.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider41.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider41.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider42.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider42.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider43.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider43.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider44.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider44.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider45.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider45.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider46.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider46.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider47.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider47.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider48.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider48.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider49.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider49.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider5.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider50.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider50.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider51.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider51.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider52.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider52.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider53.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider53.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider54.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider54.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider55.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider55.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider56.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider56.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider57.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider57.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider58.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider58.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider59.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider59.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider6.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider60.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider60.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider61.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider61.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider62.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider62.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider63.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider63.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider64.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider64.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider65.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider65.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider66.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider66.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider67.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider67.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider68.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider68.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider7.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider8.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Collider9.ply">
+      <Link>Assets\Env\Colliders\Carpenter0_Collider9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Carpenter\Carpenter0_Door0.ply">
+      <Link>Assets\Env\Village\Carpenter0_Door0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\Farm\Farm0_Prop0.ply">

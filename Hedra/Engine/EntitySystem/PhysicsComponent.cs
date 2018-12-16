@@ -11,6 +11,7 @@ using OpenTK;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
 using Hedra.Core;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
@@ -81,7 +82,7 @@ namespace Hedra.Engine.EntitySystem
             if (!UsePhysics) return;
             if (Parent.IsGrounded && Parent.BlockPosition == _lastPosition 
                                   && TargetPosition.Y >= Physics.HeightAtPosition(Parent.BlockPosition)) return;
-            _lastPosition = Parent.BlockPosition;
+            if(!GameSettings.Paused) _lastPosition = Parent.BlockPosition;
             if (CollidesWithStructures)
             {
                 _underChunk = World.GetChunkAt(Parent.Position);

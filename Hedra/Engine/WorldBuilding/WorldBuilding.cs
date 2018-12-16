@@ -12,6 +12,7 @@ using System.Linq;
 using Hedra.AISystem;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
+using Hedra.Core;
 using OpenTK;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Player;
@@ -56,6 +57,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             var human = HumanoidFactory.BuildHumanoid(Type, Level, Behaviour);
             human.Physics.TargetPosition = World.FindPlaceablePosition(human, DesiredPosition);
+            human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
             ApplySeasonHats(human, Type);
             return human;
         }
@@ -83,16 +85,6 @@ namespace Hedra.Engine.WorldBuilding
             else
                 human.AddComponent(new WarriorAIComponent(human, Friendly));
 
-            return human;
-        }
-        
-        public Humanoid SpawnVillager(Vector3 Position, bool Move, string Name)
-        {
-            var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile);
-            behaviour.Name = Name;
-            var human = this.SpawnHumanoid(HumanType.Villager, Position);
-
-            human.AddComponent(new VillagerAIComponent(human, Move));
             return human;
         }
         
@@ -198,10 +190,10 @@ namespace Hedra.Engine.WorldBuilding
         public BasePlateau[] Plateaux
         {
             get
-            {
+            {    
                 lock (_plateauLock)
                 {
-                    return _plateaus.Select(P => P).ToArray();
+                    return _plateaus.ToArray();
                 }
             }
         }
