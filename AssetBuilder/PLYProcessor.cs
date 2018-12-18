@@ -42,7 +42,7 @@ namespace AssetBuilder
             var normals = new List<Vector3>();
             var indices = new List<uint>(faceCount * 3);
 
-            var numberOffset = hasColor ? 9 : 6;
+            var numberOffset = hasColor ? 10 : 6;
             int accumulatedOffset = startDataIndex;
             for(; vertexData.Count < vertexCount; accumulatedOffset += numberOffset)
             {
