@@ -105,7 +105,7 @@ namespace Hedra.Engine.Management
         /// </summary>
         /// <param name="Frames">Frames to wait for.</param>
         /// <param name="Do">Action to execute</param>
-        public static void Delay(int Frames, Action Do)
+        public static void DelayFrames(int Frames, Action Do)
         {
             CoroutineManager.StartCoroutine(AfterFrames, Frames, Do);
         }

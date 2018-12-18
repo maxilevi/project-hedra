@@ -46,7 +46,7 @@ namespace Hedra.Engine.Rendering
             InstanceBuffer = new WorldBuffer(PoolSize.Normal);
             WaterBuffer = new WorldBuffer(PoolSize.Tiny);
 
-            var noiseValues = new float[32, 32, 32];
+            var noiseValues = new float[16, 16, 16];
             for (var x = 0; x < noiseValues.GetLength(0); x++)
             {
                 for (var y = 0; y < noiseValues.GetLength(1); y++)

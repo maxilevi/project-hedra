@@ -121,7 +121,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         /// Called as a last step to setup the remaining objects e.g. merchants, lights, etc
         /// </summary>
         /// <param name="Parameters">The placement parameters</param>
-        public virtual void Polish(T Parameters, Random Rng)
+        public virtual void Polish(T Parameters, VillageRoot Root, Random Rng)
         {
             
         }

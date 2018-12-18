@@ -36,6 +36,7 @@ namespace Hedra.Engine.Rendering
         protected int ShaderGid { get; private set; }
         public int ShaderId { get; private set; }
         public int ClipPlaneLocation { get; set; }
+        public int LightCountLocation { get; set; }
         public int LightColorLocation { get; set; }
         public int LightPositionLocation { get; set; }
         public int[] PointLightsColorUniform { get; set; }

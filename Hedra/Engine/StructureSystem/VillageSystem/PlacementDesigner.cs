@@ -22,7 +22,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         protected HousePlacer HousePlacer { get; }
         protected Placer<BuildingParameters> StablePlacer { get; }
         protected MarketPlacer MarketPlacer { get; }
-        protected DecorationsPlacer DecorationsPlacer { get; }
 
         protected PlacementDesigner(VillageRoot Root, VillageConfiguration Config, Random Rng)
         {
@@ -34,7 +33,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             this.HousePlacer = new HousePlacer(Root.Template.House.Designs, Root.Template.Well.Designs, Rng);
             this.StablePlacer = new Placer<BuildingParameters>(Root.Template.Stable.Designs, Rng);
             this.MarketPlacer = new MarketPlacer(Root.Template.Well.Designs, Rng);
-            this.DecorationsPlacer = new DecorationsPlacer();
         }
 
         public abstract PlacementDesign CreateDesign();

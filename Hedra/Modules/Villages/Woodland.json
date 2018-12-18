@@ -1,16 +1,35 @@
 ﻿{
   "Name" : "Woodland",
   "Decorations": {
-    "Lamp": [
+    "Lamps": [
       {
         "Path": "Assets/Env/Lamp0.ply",
-        "Scale": 5.0
+        "Scale": 4.0,
+        "LightOffset": {
+          "X": 0.0,
+          "Y": 5.0,
+          "Z": 0.0
+        }
       }
     ],
-    "Bench": [
+    "Benches": [
       {
-        "Path": "",
-        "Scale": ""
+        "Path": "Assets/Env/Bench0.ply",
+        "Scale": 3.0,
+        "SitOffset": {
+          "X": 0.0,
+          "Y": 1.0,
+          "Z": 0.0
+        }
+      },
+      {
+        "Path": "Assets/Env/Bench1.ply",
+        "Scale": 3.0,
+        "SitOffset": {
+          "X": 0.0,
+          "Y": 1.0,
+          "Z": 0.0
+        }
       }
     ]
   },
@@ -69,6 +88,11 @@
           "X": -11.20,
           "Y": 0.5,
           "Z": -12.0
+        },
+        "LampPosition" : {
+          "X": -16.0,
+          "Y": 0.0,
+          "Z": -16.0
         }
       },
       {
@@ -91,6 +115,11 @@
           "X": -11.20,
           "Y": 0.5,
           "Z": -12.0
+        },
+        "LampPosition" : {
+          "X": -16.0,
+          "Y": 0.0,
+          "Z": -16.0
         }
       }
     ]

@@ -247,7 +247,7 @@ namespace Hedra.Engine.Player
             if (Human.IsMoving)
             {
                 currentAnimation = _walkAnimation;
-                if(Human.IsSitting) Human.IsSitting = false;
+                //if(Human.IsSitting) Human.IsSitting = false;
                 if (Human.IsRiding)
                 {
                     currentAnimation = _rideAnimation;
@@ -422,7 +422,6 @@ namespace Hedra.Engine.Player
                 _lampModel.RotationPoint = Vector3.Zero;
             }
             Human.HandLamp.Update();
-
             if (!Disposed)
             {
                 _modelSound.Type = Human.IsSleeping 

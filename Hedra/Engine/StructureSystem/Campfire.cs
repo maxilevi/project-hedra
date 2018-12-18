@@ -71,7 +71,8 @@ namespace Hedra.Engine.StructureSystem
 
                 this._light = ShaderManager.GetAvailableLight();
 
-                if(this._light != null){
+                if(this._light != null)
+                {
                     this._light.Color = new Vector3(1f, 0.4f, 0.4f);
                     this._light.Position = Position;
                     ShaderManager.UpdateLight(this._light);

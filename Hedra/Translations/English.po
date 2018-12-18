@@ -71,6 +71,7 @@ obelisk_health = YOUR HEALTH FEELS REFRESHED
 obelisk_mana = YOUR MANA FEELS REFRESHED
 obelisk_stamina = YOUR STAMINA FEELS REFRESHED
 press_to_untie = PRESS [{0}] TO UNTIE
+to_sit = TO SIT
 to_talk = [{0}] TO TALK
 to_trade = [{0}] TO TRADE
 to_pickup = [{0}] TO PICK UP

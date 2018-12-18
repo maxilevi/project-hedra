@@ -12,13 +12,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public class BlacksmithBuilder : Builder<BlacksmithParameters>
     {
+        private float _width;
         public BlacksmithBuilder(CollidableStructure Structure) : base(Structure)
         {
         }
         
         public override bool Place(BlacksmithParameters Parameters, VillageCache Cache)
         {
-            return PlaceGroundwork(Parameters.Position, this.ModelRadius(Parameters, Cache) * .5f, BlockType.StonePath);
+            
+            return PlaceGroundwork(Parameters.Position, (_width = this.ModelRadius(Parameters, Cache)) * .5f, BlockType.StonePath);
         }
 
         public override BuildingOutput Build(BlacksmithParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
@@ -29,18 +31,18 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return output;
         }
 
-        public override void Polish(BlacksmithParameters Parameters, Random Rng)
+        public override void Polish(BlacksmithParameters Parameters, VillageRoot Root, Random Rng)
         {
             var transformation = BuildTransformation(Parameters).ClearTranslation();
             var human = SpawnHumanoid(
                 HumanType.Blacksmith,
                 Vector3.Zero
             );
-            var newPosition = Parameters.Position +
-                              Vector3.TransformPosition(Parameters.Design.Blacksmith * Parameters.Design.Scale,
-                                  transformation);
-            human.Physics.TargetPosition = newPosition + Vector3.UnitY * Physics.HeightAtPosition(newPosition);
-            //human.Physics.UsePhysics = false;
+            var blacksmithOffset = Vector3.TransformPosition(Parameters.Design.Blacksmith * Parameters.Design.Scale, transformation);
+            var lampOffset = Vector3.TransformPosition(Parameters.Design.LampPosition * Parameters.Design.Scale, transformation);
+            var newPosition = Parameters.Position + blacksmithOffset;
+            human.Physics.TargetPosition = newPosition + Vector3.UnitY * Physics.HeightAtPosition(newPosition);    
+            DecorationsPlacer.PlaceLamp(Parameters.Position + lampOffset, Structure, Root, _width, Rng);
         }
     }
 }

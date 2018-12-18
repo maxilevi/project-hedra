@@ -96,25 +96,25 @@ namespace Hedra.Engine.WorldBuilding
             return (Position - GameManager.Player.Position).LengthSquared < InteractDistance * InteractDistance;
         }
 
-        public void InvokeInteraction(IPlayer Player)
+        public void InvokeInteraction(IHumanoid Humanoid)
         {
             Interacted = true;
-            this.Interact(Player);
-            OnInteractEvent?.Invoke(Player);
+            this.Interact(Humanoid);
+            OnInteractEvent?.Invoke(Humanoid);
             if(DisposeAfterUse && SingleUse) this.Dispose();
         }
 
-        protected virtual void OnSelected(IPlayer Interactee)
+        protected virtual void OnSelected(IHumanoid Humanoid)
         {
             _selected = true;
         }
 
-        protected virtual void OnDeselected(IPlayer Interactee)
+        protected virtual void OnDeselected(IHumanoid Humanoid)
         {
             _selected = false;
         }
 
-        protected abstract void Interact(IPlayer Interactee);
+        protected abstract void Interact(IHumanoid Humanoid);
 
         public override void Dispose()
         {

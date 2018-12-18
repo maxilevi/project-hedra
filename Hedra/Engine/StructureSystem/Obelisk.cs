@@ -19,6 +19,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using Hedra.Sound;
 using OpenTK;
 
@@ -39,26 +40,26 @@ namespace Hedra.Engine.StructureSystem
         {
         }
 
-        protected override void Interact(IPlayer Interactee)
+        protected override void Interact(IHumanoid Humanoid)
         {
             switch (Type)
             {
                 case ObeliskType.Xp:
                     const float xpToGive = 4;
-                    Interactee.XP += xpToGive;
-                    Interactee.MessageDispatcher.ShowMessage(Translations.Get("obelisk_xp", xpToGive), 2, Colors.Violet.ToColor());
+                    Humanoid.XP += xpToGive;
+                    Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_xp", xpToGive), 2, Colors.Violet.ToColor());
                     break;
                 case ObeliskType.Health:
-                    Interactee.Health = Interactee.MaxHealth;
-                    Interactee.MessageDispatcher.ShowMessage(Translations.Get("obelisk_health"), 2, Colors.LowHealthRed.ToColor());
+                    Humanoid.Health = Humanoid.MaxHealth;
+                    Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_health"), 2, Colors.LowHealthRed.ToColor());
                     break;
                 case ObeliskType.Mana:
-                    Interactee.Mana = Interactee.MaxMana;
-                    Interactee.MessageDispatcher.ShowMessage(Translations.Get("obelisk_mana"), 2, Colors.LightBlue.ToColor());
+                    Humanoid.Mana = Humanoid.MaxMana;
+                    Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_mana"), 2, Colors.LightBlue.ToColor());
                     break;
                 case ObeliskType.Stamina:
-                    Interactee.Stamina = Interactee.MaxStamina;
-                    Interactee.MessageDispatcher.ShowMessage(Translations.Get("obelisk_stamina"), 2, Color.Bisque);
+                    Humanoid.Stamina = Humanoid.MaxStamina;
+                    Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_stamina"), 2, Color.Bisque);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Obelisk type does not exist.");

@@ -59,7 +59,7 @@ namespace Hedra.Engine.Management
 
         private static void ScheduleGC(PoolItem<T> Item)
         {
-            TaskScheduler.Delay(GCDelay, () => Item.Locked = false);
+            TaskScheduler.DelayFrames(GCDelay, () => Item.Locked = false);
         }
     }
 

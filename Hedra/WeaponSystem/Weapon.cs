@@ -271,7 +271,7 @@ namespace Hedra.WeaponSystem
 
             if (IsMelee && Owner.Movement.IsMovingBackwards)
             {
-                TaskScheduler.Delay(1,
+                TaskScheduler.DelayFrames(1,
                     () => TaskScheduler.While(
                         () => Human.IsAttacking/*Human.Model.IsWalking && !Human.IsMoving*/,
                         delegate
@@ -284,7 +284,7 @@ namespace Hedra.WeaponSystem
             }
             else
             {
-                TaskScheduler.Delay(1, 
+                TaskScheduler.DelayFrames(1, 
                     () => TaskScheduler.While(() => Human.IsAttacking,
                         () => Human.Physics.Move(Options.RunMovespeed)
                     )

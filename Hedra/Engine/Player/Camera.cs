@@ -189,7 +189,7 @@ namespace Hedra.Engine.Player
         {
             get
             {
-                if (_player.IsSitting || _player.IsSleeping) return _cameraHeight - Vector3.UnitY * 2.0f;
+                //if (_player.IsSitting || _player.IsSleeping) return _cameraHeight - Vector3.UnitY * 2.0f;
                 return _cameraHeight;
             }
             set => _cameraHeight = value;

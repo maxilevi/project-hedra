@@ -162,7 +162,9 @@ namespace Hedra.Engine.StructureSystem
             {
                 if (_dirtyStructures || _structureCache == null)
                 {
-                    _structureCache = _itemWatchers.Select(I => I.Structure.WorldObject).ToArray();
+                    _structureCache = _itemWatchers.SelectMany(
+                        I => I.Structure.WorldObject.Children.Concat(new [] { I.Structure.WorldObject })
+                        ).ToArray();
                     _dirtyStructures = false;
                 }
                 return _structureCache;

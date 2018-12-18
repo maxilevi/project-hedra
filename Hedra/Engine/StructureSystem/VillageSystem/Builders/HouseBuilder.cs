@@ -50,12 +50,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 : new RoundedPlateau(Parameters.Position, _width * .5f * 1.5f) { Hardness = 3.0f };
         }
 
-        public override void Polish(HouseParameters Parameters, Random Rng)
+        public override void Polish(HouseParameters Parameters, VillageRoot Root, Random Rng)
         {
             var position = Parameters.Position + Vector3.TransformPosition(Vector3.UnitX * _width,
                                Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
             
-            if (Rng.Next(0, 4) == 1)
+            if (Rng.Next(0, 3) == 1)
             {
                 var villager = SpawnVillager(position);
                 villager.AddComponent(new VillagerThoughtsComponent(villager));
@@ -64,6 +64,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 var pug = SpawnMob(MobType.Pug, position);
             }
+
+            var width = VillageDesign.Spacing * .5f;
+            var offset = Vector3.TransformPosition(- width * .5f * Vector3.UnitZ - width * .5f * Vector3.UnitX,
+                Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
+            DecorationsPlacer.PlaceLamp(Parameters.Position + offset, Structure, Root, _width, Rng);
         }
 
         public override BuildingOutput Build(HouseParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)

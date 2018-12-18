@@ -99,17 +99,17 @@ namespace Hedra.Rendering
             return support;    
         }
         
-        public void AddWindValues()
+        public VertexData AddWindValues()
         {
-            AddWindValues(-Vector4.One);
+            return AddWindValues(-Vector4.One);
         }
         
-        public void AddWindValues(float Scalar)
+        public VertexData AddWindValues(float Scalar)
         {
-            AddWindValues(-Vector4.One, Scalar);
+            return AddWindValues(-Vector4.One, Scalar);
         }
         
-        public void AddWindValues(Vector4 Color, float Scalar = 1f)
+        public VertexData AddWindValues(Vector4 Color, float Scalar = 1f)
         {
             var values = new float[Vertices.Count];
             var highest = this.SupportPoint(Vector3.UnitY, Color);
@@ -127,9 +127,10 @@ namespace Hedra.Rendering
                 Extradata[i] = (shade + (float) Math.Pow(shade, 1.3)) * Scalar;
             }
             ApplyRecursively(V => V.AddWindValues(Color, Scalar));
+            return this;
         }
         
-        public void FillExtraData(float Value)
+        public VertexData FillExtraData(float Value)
         {
             Extradata.Clear();
             for (var i = 0; i < Vertices.Count; i++)
@@ -137,20 +138,23 @@ namespace Hedra.Rendering
                 Extradata.Add(Value);
             }
             ApplyRecursively(V => V.FillExtraData(Value));
+            return this;
         }
         
-        public void Translate(Vector3 Position)
+        public VertexData Translate(Vector3 Position)
         {
             Transform(Matrix4.CreateTranslation(Position));
+            return this;
         }
 
-        public void AverageCenter()
+        public VertexData AverageCenter()
         {
             var avg = Vertices.Aggregate((V1, V2) => V1 + V2) / Vertices.Count;
             Vertices = Vertices.Select(V => V - avg).ToList();
+            return this;
         }
 
-        public void Center()
+        public VertexData Center()
         {
             var min = new Vector3(
                 SupportPoint(-Vector3.UnitX).X,
@@ -164,14 +168,15 @@ namespace Hedra.Rendering
             ) * .5f;
             Vertices = Vertices.Select(V => V - (min + renderCenter)).ToList();
             ApplyRecursively(V => V.Center());
+            return this;
         }
 
-        public void GraduateColor(Vector3 Direction)
+        public VertexData GraduateColor(Vector3 Direction)
         {
-            this.GraduateColor(Direction, .3f);
+            return GraduateColor(Direction, .3f);
         }
 
-        private void GraduateColor(Vector3 Direction, float Amount)
+        private VertexData GraduateColor(Vector3 Direction, float Amount)
         {
             var highest = this.SupportPoint(Direction);
             var lowest =  this.SupportPoint(-Direction);
@@ -183,9 +188,10 @@ namespace Hedra.Rendering
                 Colors[i] += new Vector4(Amount, Amount, Amount, 0) * shade;
             }
             ApplyRecursively(V => V.GraduateColor(Direction, Amount));
+            return this;
         }
         
-        public void Transform(Matrix4 Mat)
+        public VertexData Transform(Matrix4 Mat)
         {
             for (var i = 0; i < Vertices.Count; i++)
             {
@@ -197,6 +203,7 @@ namespace Hedra.Rendering
                 Normals[i] = Vector3.TransformNormalInverse(Normals[i], normalMat);
             }
             ApplyRecursively(V => V.Transform(Mat));
+            return this;
         }
 
         public VertexData Optimize()
@@ -229,18 +236,19 @@ namespace Hedra.Rendering
             return this;
         }
         
-        public void Scale(Vector3 Scalar)
+        public VertexData Scale(Vector3 Scalar)
         {
-            Transform(Matrix4.CreateScale(Scalar));
+            return Transform(Matrix4.CreateScale(Scalar));
         }
         
-        public void Paint(Vector4 Color)
+        public VertexData Paint(Vector4 Color)
         {
             for(var i = 0; i < Colors.Count; i++)
             {
                 Colors[i] = Color;
             }
             ApplyRecursively(V => V.Paint(Color));
+            return this;
         }
 
         public CompressedVertexData AsCompressed()

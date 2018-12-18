@@ -82,7 +82,9 @@ namespace Hedra.Engine.EnvironmentSystem
             LoadTime = true;
         }
         
-        public static bool IsNight => DayTime > 16000 || DayTime < 10000;
+        public static bool IsSleepTime => DayTime > 18000 || DayTime < 8000;
+        
+        public static bool IsNight => DayTime > 20000 || DayTime < 6000;
 
         public static bool Snowing { get; set; }
 

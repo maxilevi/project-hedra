@@ -41,6 +41,11 @@ namespace Hedra.Engine
             }
         }
 
+        public static T Random<T>(this IList<T> List, Random Rng)
+        {
+            return List[Rng.Next(0, List.Count)];
+        }
+
         public static Vector3 SupportPoint(this Vector3[] Vertices, Vector3 Direction)
         {
             float highest = float.MinValue;

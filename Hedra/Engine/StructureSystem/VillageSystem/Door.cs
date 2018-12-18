@@ -8,6 +8,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;
@@ -100,7 +101,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             _lastPosition = _mesh.Position;
         }
 
-        protected override void Interact(IPlayer Interactee)
+        protected override void Interact(IHumanoid Humanoid)
         {
             if (_isMoving) return;
             _opened = !_opened;

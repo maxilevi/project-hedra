@@ -30,7 +30,7 @@ namespace Hedra.Engine.WorldBuilding
                 if (Args.Key == Controls.Interact && !IsOccupied)
                 {
                     if (player.IsAttacking || player.IsCasting || player.IsDead || !player.CanInteract ||
-                        player.IsEating || (player.Position - this.Position).LengthSquared > BedRadius * BedRadius || !SkyManager.IsNight) return;
+                        player.IsEating || (player.Position - this.Position).LengthSquared > BedRadius * BedRadius || !SkyManager.IsSleepTime) return;
 
                     this.SetSleeper(player);
                 }
@@ -47,9 +47,9 @@ namespace Hedra.Engine.WorldBuilding
         {
             var player = LocalPlayer.Instance;
             player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_sleep", Controls.Interact),
-                () => (player.Position - this.Position).LengthSquared < BedRadius * BedRadius && player.CanInteract && !IsOccupied && SkyManager.IsNight);
+                () => (player.Position - this.Position).LengthSquared < BedRadius * BedRadius && player.CanInteract && !IsOccupied && SkyManager.IsSleepTime);
 
-            if(IsOccupied && (!SkyManager.IsNight || Sleeper.IsDead))
+            if(IsOccupied && (!SkyManager.IsSleepTime || Sleeper.IsDead))
                 this.SetSleeper(null);
         }
 

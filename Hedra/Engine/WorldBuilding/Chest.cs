@@ -17,6 +17,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -84,15 +85,15 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        protected override void OnSelected(IPlayer Interactee)
+        protected override void OnSelected(IHumanoid Humanoid)
         {
-            base.OnSelected(Interactee);
+            base.OnSelected(Humanoid);
             _model.Tint = new Vector4(2.5f, 2.5f, 2.5f, 1);
         }
 
-        protected override void OnDeselected(IPlayer Interactee)
+        protected override void OnDeselected(IHumanoid Humanoid)
         {
-            base.OnDeselected(Interactee);
+            base.OnDeselected(Humanoid);
             _model.Tint = new Vector4(1, 1, 1, 1);
         }
 
@@ -116,7 +117,7 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        protected override void Interact(IPlayer Interactee)
+        protected override void Interact(IHumanoid Humanoid)
         {
             _model.PlayAnimation(_openAnimation);
         }

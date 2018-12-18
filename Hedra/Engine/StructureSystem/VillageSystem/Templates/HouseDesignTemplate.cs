@@ -1,8 +1,7 @@
 namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
-    public class HouseDesignTemplate : DesignTemplate
+    public class HouseDesignTemplate : BuildingDesignTemplate
     {
-        public DoorTemplate[] Doors { get; set; }
         public BedTemplate[] Beds { get; set; }
     }
 }

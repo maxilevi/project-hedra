@@ -214,6 +214,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\DecorationsPlacer.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\IBuilder.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BuildingDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\DecorationsTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\FarmDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\WindmillDesignTemplate.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\WindmillBlades.cs" />
     <Compile Include="Engine\WorldBuilding\BaseGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\BasePlateau.cs" />
+    <Compile Include="Engine\WorldBuilding\Bench.cs" />
     <Compile Include="Engine\WorldBuilding\GroundworkType.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredPlateau.cs" />
@@ -742,7 +744,7 @@
     <Compile Include="Engine\WorldBuilding\SleepingPad.cs" />
     <Compile Include="Engine\WorldBuilding\Chest.cs" />
     <Compile Include="Engine\WorldBuilding\InteractableStructure.cs" />
-    <Compile Include="Engine\WorldBuilding\LampPost.cs" />
+    <Compile Include="Engine\WorldBuilding\WorldLight.cs" />
     <Compile Include="Engine\WorldBuilding\NameGenerator.cs" />
     <Compile Include="Engine\WorldBuilding\RoundedPlateau.cs" />
     <Compile Include="Engine\WorldBuilding\WorldBuilding.cs" />
@@ -3580,6 +3582,26 @@
       <Link>Assets\Env\Village\House2_Door2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Villages\OutdoorObjects\Bench0.ply">
+      <Link>Assets\Env\Village\Bench0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\OutdoorObjects\Bench0_Collider0.ply">
+      <Link>Assets\Env\Colliders\Bench0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\OutdoorObjects\Bench1.ply">
+      <Link>Assets\Env\Village\Bench1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\OutdoorObjects\Bench1_Collider0.ply">
+      <Link>Assets\Env\Colliders\Bench1_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\OutdoorObjects\Lamp0.ply">
+      <Link>Assets\Env\Village\Lamp0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Villages\Well\Well0.ply">
       <Link>Assets\Env\Village\Well0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -5624,10 +5646,6 @@
       <Link>Assets\Items\Handlamp.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Heart.ply">
-      <Link>Assets\Env\Heart.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\IncaTemple0.ply">
       <Link>Assets\Env\IncaTemple0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -5642,10 +5660,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\KnockedStars.ply">
       <Link>Assets\Env\KnockedStars.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Lamp0.ply">
-      <Link>Assets\Env\Lamp0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Lantern.ply">
@@ -5670,10 +5684,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\LegendarySteelChopper.ply">
       <Link>Assets\Items\Swords\LegendarySteelChopper.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\LogHouse0.ply">
-      <Link>Assets\Env\LogHouse0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\MapBase.ply">

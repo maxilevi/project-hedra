@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using Hedra.AISystem.Humanoid;
 using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using OpenTK;
@@ -23,6 +24,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
+using Hedra.Engine.StructureSystem;
 
 namespace Hedra.Engine.Management
 {
@@ -139,6 +141,17 @@ namespace Hedra.Engine.Management
                 if (Parts[0] == "lvl")
                 {
                     Caster.Level = int.Parse(Parts[1]);
+                    return true;
+                }
+
+                if (Parts[0] == "villager")
+                {
+                    var vill = World.InRadius<Village>(Caster.Position, VillageDesign.MaxVillageRadius).FirstOrDefault();
+                    Result = "Couldn't find any near village";
+                    if (vill == null) return false;
+                    var human = World.WorldBuilding.SpawnHumanoid(HumanType.Villager, Caster.Position + Caster.Orientation * 16f);
+                    human.AddComponent(new RoamingVillagerAIComponent(human, vill.Graph));
+                    Result = "Success";
                     return true;
                 }
 

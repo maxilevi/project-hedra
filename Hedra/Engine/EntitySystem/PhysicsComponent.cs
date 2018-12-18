@@ -280,7 +280,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 /* If the object collided with Y but not Y+1 then it probably is a slope */
                 var accum = .05f;
-                while (CollidesWithOffset(Shape, Box, Vector3.UnitY * accum) && accum < 1f)
+                while (CollidesWithOffset(Shape, Box, Vector3.UnitY * accum) && accum < 1f && !CollidesWithOffset(Shape, Box, Vector3.UnitY * (2f + accum)))
                 {
                     accum += 0.05f;
                 }
@@ -398,6 +398,7 @@ namespace Hedra.Engine.EntitySystem
                 if ((World.ToChunkSpace(entities[i].Position) - chunkSpace).LengthSquared > Chunk.Width * Chunk.Width)
                     continue;
 
+                if (!entities[i].Physics.UsePhysics) continue;
                 if (!entities[i].Physics.CollidesWithEntities) continue;
                 var radii = Parent.Model.Dimensions.Size.LengthFast + entities[i].Model.Dimensions.Size.LengthFast;
                 if (!((entities[i].Position - Parent.Position).LengthSquared < radii * radii)) continue;

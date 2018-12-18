@@ -39,14 +39,16 @@ void main()
 	{
 		discard;
 	}
-	vec3 tex = Color.xyz * vec3(1.0, 1.0, 1.0) * texture(noiseTexture, base_vertex_position.xyz).r;
-	if(Dither){
+	
+	if(Dither)
+	{
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
 		if( d-floor(d) < 0.5) discard;
 	}
 
 	float ShadowVisibility = 1.0;
-	if(UseFog && UseShadows){
+	if(UseFog && UseShadows)
+	{
 		float bias = max(0.001 * (1.0 - dot(InNorm.xyz, LightDir)), 0.0) + 0.001;
 	
 		vec4 ShadowCoords = Coords * vec4(.5,.5,.5,1.0) + vec4(.5,.5,.5, 0.0);
@@ -67,16 +69,13 @@ void main()
 		shadow /= 9.0;
 		ShadowVisibility = 1.0 - shadow * .65;
 	}
-	
-	vec3 output_pointlight_color = point_diffuse.xyz * (raw_color.xyz + tex * 10.0) * (Tint.rgb + BaseTint.rgb);
-    vec4 inputColor = vec4(linear_to_srbg((Color.xyz + tex * useNoiseTexture) * ShadowVisibility * (Tint.rgb + BaseTint.rgb)), Color.w);
+    float tex = texture(noiseTexture, base_vertex_position).r * useNoiseTexture;
+    vec4 inputColor = vec4(linear_to_srbg((Color.xyz * ShadowVisibility + point_diffuse.xyz * raw_color.xyz) * (Tint.rgb + BaseTint.rgb) * (tex + 1.0)), Color.w);
 
     if(Outline)
     {
         inputColor += vec4(Color.xyz, -1.0) * .5;
     }
-
-    inputColor += vec4(linear_to_srbg(output_pointlight_color), 0.0);
 
 	if(UseFog)
 	{

@@ -89,8 +89,8 @@ namespace Hedra.Engine.Scenes
         
         private static PointLight _light;
         private static SoundItem _sound;
-        private static IEnumerator MenuUpdate(){
-
+        private static IEnumerator MenuUpdate()
+        {
             while (World.Seed == World.MenuSeed)
             {
                 if (_light == null)
@@ -98,7 +98,7 @@ namespace Hedra.Engine.Scenes
                     _light = ShaderManager.GetAvailableLight();
                     if (_light != null)
                     {
-                        _light.Color = new Vector3(1f, 0.35f, 0.35f);
+                        _light.Color = new Vector3(1f, 0.4f, 0.4f);
                         _light.Position = FirePosition;
                     }
                 }

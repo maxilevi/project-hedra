@@ -402,7 +402,7 @@ namespace Hedra.Engine.Management
             var indices = new List<uint>(faceCount * 3);
             var offset = 0;
 
-            var numberOffset = HasColors ? 9 : 6;
+            var numberOffset = HasColors ? 10 : 6;
             int accumulatedOffset = startDataIndex;
             for(; vertices.Count < vertexCount; accumulatedOffset += numberOffset)
             {

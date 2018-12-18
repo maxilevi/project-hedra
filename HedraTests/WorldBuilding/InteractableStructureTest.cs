@@ -3,6 +3,7 @@ using Hedra.Engine;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using HedraTests.Player;
 using NUnit.Framework;
 using OpenTK;
@@ -177,21 +178,21 @@ namespace HedraTests.WorldBuilding
             base.DoUpdate();
         }
 
-        protected override void Interact(IPlayer Interactee)
+        protected override void Interact(IHumanoid Humanoid)
         {
-            Interactee.Level += 20;
+            Humanoid.Level += 20;
         }
         
-        protected override void OnSelected(IPlayer Interactee)
+        protected override void OnSelected(IHumanoid Humanoid)
         {
-            base.OnSelected(Interactee);
-            Interactee.Mana = 10;
+            base.OnSelected(Humanoid);
+            Humanoid.Mana = 10;
         }
         
-        protected override void OnDeselected(IPlayer Interactee)
+        protected override void OnDeselected(IHumanoid Humanoid)
         {
-            base.OnDeselected(Interactee);
-            Interactee.Mana = 0;
+            base.OnDeselected(Humanoid);
+            Humanoid.Mana = 0;
         }
     }
 }

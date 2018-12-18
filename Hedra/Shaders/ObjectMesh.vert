@@ -1,6 +1,6 @@
 #version 330 core
-!include<"Includes/Lighting.shader">
 !include<"Includes/GammaCorrection.shader">
+!include<"Includes/Lighting.shader">
 
 layout(location = 0) in vec3 InVertex;
 layout(location = 1) in vec4 InColor;
@@ -26,7 +26,6 @@ uniform mat4 Matrix;
 uniform bool Outline;
 const float ShadowTransition = 20.0;
 
-
 out vec4 raw_color;
 out vec4 Color;
 out float Visibility;
@@ -50,21 +49,13 @@ layout(std140) uniform FogSettings {
 	float U_Height;
 };
 
-struct PointLight
-{
-    vec3 Position;
-    vec3 Color;
-    float Radius;
-};
-
-uniform PointLight Lights[8];
-
 vec3 TransformNormal(vec3 norm, mat4 invMat);
 
 uniform vec3 PlayerPosition;
 uniform bool UseFog = true;
 
-void main(){
+void main()
+{
 	vec4 linear_color = srgb_to_linear(InColor);
 	pass_height = U_Height;
 	pass_botColor = U_BotColor;
@@ -109,20 +100,8 @@ void main(){
 	vec3 unitToLight = normalize(LightPosition);
 	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - Vertex.xyz);
 
-	vec3 FLightColor = vec3(0.0, 0.0, 0.0);
-	float average_color = (LightColor.r + LightColor.g + LightColor.b) / 3.0; 
-	for(int i = int(0.0); i < 8.0; i++)
-	{
-		float dist = length(Lights[i].Position.xyz - Vertex.xyz);
-        float att = 1.0 / (1.0 + dist * dist);
-        att *= Lights[i].Radius * .5;
-        att = min(att, 1.0);
-        
-        FLightColor += Lights[i].Color * att * .5 * (1.0 - average_color); 
-	}
-	FLightColor =  clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
+	vec3 FLightColor = calculate_lights(LightColor, Vertex.xyz);
 	vec3 FullLight = clamp(FLightColor + LightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
-
 
 	Color = rim(linear_color.rgb, LightColor, unitToCamera, unitNormal) 
 	+ diffuse(unitToLight, unitNormal, LightColor) * linear_color

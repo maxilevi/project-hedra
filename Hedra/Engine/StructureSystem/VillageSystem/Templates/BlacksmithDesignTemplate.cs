@@ -2,9 +2,8 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
-    public class BlacksmithDesignTemplate : DesignTemplate
+    public class BlacksmithDesignTemplate : BuildingDesignTemplate
     {
-        public DoorTemplate[] Doors { get; set; }
         public Vector3 Blacksmith { get; set; }
     }
 }

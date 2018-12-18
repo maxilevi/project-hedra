@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering;
+using Hedra.Engine;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
@@ -12,7 +13,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     public class GridPlacementDesigner : PlacementDesigner
     {
-        private const float PathWidth = 16;
         private const float NoPathZone = .55f;
         private const float SparseZone = .60f;
         private int VillageSize { get; }
@@ -162,7 +162,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 var path = new LineGroundwork(From, To, SelectPathType(DistanceFromCenter))
                 {
                     BonusHeight = -.4f,
-                    Width = PathWidth
+                    Width = VillageDesign.PathWidth
                 };
                 Structure.AddGroundwork(path);
             }
@@ -180,7 +180,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                         startPosition.LengthFast / (VillageDesign.Spacing * VillageSize * .5f);
                     
                     if(distFromCenter > NoPathZone) continue;
-
+                    
                     var start = startPosition + Design.Position.Xz;
                     var halfStartX = start + new Vector2(spacing, 0) * .5f;
                     var endX = start + new Vector2(spacing, 0);
@@ -190,7 +190,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     Design.Graph.AddEdge(halfStartX, endX);
                     Design.Graph.AddEdge(start, halfStartZ);
                     Design.Graph.AddEdge(halfStartZ, endZ);
-                    
+
                     AddGroundwork(
                         start,
                         start + new Vector2(0, spacing),
@@ -221,14 +221,26 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             var vertices = Design.Graph.Vertices;
             for (var i = 0; i < vertices.Length; ++i)
             {
-                if (Design.Graph.Degree(i) >= 4)
+                /* Unless we can guarantee the terrain is flat don't place anything */
+                if(Structure.Mountain.Density(vertices[i]) < 1) continue;            
+                if((vertices[i] - Design.Position.Xz).LengthSquared < Math.Pow(_marketPoint.Size, 2)) continue;
+                
+                if (Rng.Next(0, 5) == 1)
                 {
-                    DecorationsPlacer.PlaceLamp(vertices[i].ToVector3(), Structure, Root);
-                }
-                else
-                {
-                    if (Rng.Next(0, 5) == 1)
-                        DecorationsPlacer.PlaceBench(vertices[i].ToVector3(), Structure, Root);
+                    var inIntersection = Design.Graph.Degree(i) == 3;
+                    var edges = Design.Graph.GetEdgesWithVertex(vertices[i]);
+                    var possibleDirections = new List<Vector2>(new[]
+                    {
+                        Vector2.UnitX,
+                        -Vector2.UnitX,
+                        Vector2.UnitY,
+                        -Vector2.UnitY
+                    });
+                    var k = i;
+                    Vector2 EdgeDirection(GraphEdge E) => (vertices[E.GetOtherVertex(k)] - vertices[k]).Normalized();
+                    edges.ToList().ForEach(E => possibleDirections.Remove(EdgeDirection(E)));
+                    var orientation = possibleDirections.Select(V => V.ToVector3()).ToList().Random(Rng);
+                    DecorationsPlacer.PlaceBench(vertices[i].ToVector3(), inIntersection, orientation, Structure, Root, Rng);
                 }
             }
         }

@@ -123,7 +123,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
                     var k = j;
                     var o = i;
-                    void PolishCallback() => Builders[k].Polish(Parameters[o], _rng);
+                    void PolishCallback() => Builders[k].Polish(Parameters[o], _root, _rng);
                     CoroutineManager.StartCoroutine(PlaceCoroutine, Parameters[i].Position, finalOutput.Compress(),
                         Structure, (Action) PolishCallback);
                 }

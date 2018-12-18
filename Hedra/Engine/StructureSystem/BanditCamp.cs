@@ -121,7 +121,7 @@ namespace Hedra.Engine.StructureSystem
 
             _rescuee.IsTied = false;
             Rescued = true;
-            TaskScheduler.Delay(1, delegate
+            TaskScheduler.DelayFrames(1, delegate
             {
                 var talkComponent = new TalkComponent(_rescuee, Translations.Get("saved_old_man"));
                 talkComponent.OnTalk += delegate

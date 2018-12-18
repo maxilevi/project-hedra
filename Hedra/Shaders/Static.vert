@@ -47,14 +47,6 @@ uniform vec4 AreaColors[16];
 uniform vec4 AreaPositions[16];
 const float ShadowTransition = 10.0;
 
-struct PointLight
-{
-    vec3 Position;
-    vec3 Color;
-    float Radius;
-};
-uniform PointLight Lights[12];
-
 vec2 Unpack(float inp, int prec)
 {
     vec2 outp = vec2(0.0, 0.0);
@@ -121,20 +113,10 @@ void main()
 	vec3 unitNormal = normalize(InNorm.xyz);
 	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - Vertex.xyz);
 
-	vec3 FLightColor = vec3(0.0, 0.0, 0.0);
-	float average_color = (LightColor.r + LightColor.g + LightColor.b) / 3.0; 
-	for(int i = 0; i < 12; i++){
-		float dist = length(Lights[i].Position.xyz - Vertex.xyz);
-		float att = 1.0 / (1.0 + dist * dist);
-		att *= Lights[i].Radius * .5;
-		att = min(att, 1.0);
-		
-		FLightColor += Lights[i].Color * att * .5 * (1.0 - average_color); 
-	}
-	FLightColor = clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
+	vec3 FLightColor = calculate_lights(LightColor, Vertex.xyz);
 	vec4 InputColor = vec4(linear_color.xyz, 1.0);
 
-	Ambient += when_lt(Config + 1.0, 0.1) * 0.25;
+	Ambient += 0.0;//when_lt(Config + 1.0, 0.1) * 0.25;
 	vec4 Specular = specular(unitToLight, unitNormal, unitToCamera, LightColor);
 	vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
 	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);

@@ -9,6 +9,7 @@ using OpenTK;
 using Hedra.Engine.Management;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.PhysicsSystem;
@@ -94,6 +95,8 @@ namespace Hedra.Engine.Player
                     Human.Orientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
                 }
             }
+
+            Human.IsSitting = false;
         }
         
         public void OrientateTowards(float Facing)

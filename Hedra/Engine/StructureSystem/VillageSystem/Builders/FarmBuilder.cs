@@ -89,7 +89,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             );        
         }
         
-        public override void Polish(FarmParameters Parameters, Random Rng)
+        public override void Polish(FarmParameters Parameters, VillageRoot Root, Random Rng)
         {
             var dir = Vector3.TransformPosition(Vector3.UnitZ, Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
             if (Rng.Next(0, 4) == 1)
