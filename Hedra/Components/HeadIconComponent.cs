@@ -57,7 +57,7 @@ namespace Hedra.Components
             {
                 if (RotateIcon)
                 {
-                    _iconMesh.Rotation += Vector3.UnitY * (float) Time.DeltaTime * 35f;
+                    _iconMesh.LocalRotation += Vector3.UnitY * (float) Time.DeltaTime * 35f;
                 }
                 Vector3 headOffset;
                 if (ParentIsHumanoid)

@@ -49,31 +49,31 @@ namespace Hedra.WeaponSystem
         protected override void OnSheathed()
         {
             base.OnSheathed();
-            MainMesh.BeforeLocalRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
-            MainMesh.TargetRotation = new Vector3(55 + 180, 0, 0);
+            MainMesh.BeforeRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
+            MainMesh.LocalRotation = new Vector3(55 + 180, 0, 0);
 
-            SecondBlade.BeforeLocalRotation = Vector3.UnitX * 1.0f - Vector3.UnitY * 2f;
-            SecondBlade.TargetRotation = new Vector3(-55 + 180,180,0);
+            SecondBlade.BeforeRotation = Vector3.UnitX * 1.0f - Vector3.UnitY * 2f;
+            SecondBlade.LocalRotation = new Vector3(-55 + 180,180,0);
         }
             
         protected override void OnAttackStance()
         {
             base.OnAttackStance();
-            MainMesh.TargetRotation = new Vector3(180, 180, 0);
-            MainMesh.BeforeLocalRotation = Vector3.Zero;
+            MainMesh.LocalRotation = new Vector3(180, 180, 0);
+            MainMesh.BeforeRotation = Vector3.Zero;
 
-            SecondBlade.TargetRotation = new Vector3(180,0,0);
-            SecondBlade.BeforeLocalRotation = Vector3.Zero;
+            SecondBlade.LocalRotation = new Vector3(180,0,0);
+            SecondBlade.BeforeRotation = Vector3.Zero;
         }
             
         protected override void OnAttack()
         {
             base.OnAttack();
-            MainMesh.TargetRotation = new Vector3(180, 180, 0f);
-            MainMesh.BeforeLocalRotation = Vector3.Zero;
+            MainMesh.LocalRotation = new Vector3(180, 180, 0f);
+            MainMesh.BeforeRotation = Vector3.Zero;
         
-            SecondBlade.TargetRotation = new Vector3(180,0,0);
-            SecondBlade.BeforeLocalRotation = Vector3.Zero;
+            SecondBlade.LocalRotation = new Vector3(180,0,0);
+            SecondBlade.BeforeRotation = Vector3.Zero;
         }
     }
 }

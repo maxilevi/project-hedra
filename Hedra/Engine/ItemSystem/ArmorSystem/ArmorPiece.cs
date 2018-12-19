@@ -48,7 +48,7 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
         public Vector4 BaseTint { get; set; }
         public Vector3 Scale { get; set; }
         public Vector3 Position { get; set; }
-        public Vector3 Rotation { get; set; }
+        public Vector3 LocalRotation { get; set; }
         public bool Enabled { get; set; }
         public bool ApplyFog { get; set; }
         public bool Pause { get; set; }

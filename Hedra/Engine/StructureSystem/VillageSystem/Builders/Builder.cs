@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Security.Cryptography;
 using System.Windows.Forms.VisualStyles;
 using Hedra.AISystem.Humanoid;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
@@ -40,16 +42,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         protected bool IsPlateauNeeded(BasePlateau Plateau)
         {
             var mount = Structure.Mountain;
-            switch (Plateau)
-            {
-                case SquaredPlateau squared:
-                    return mount.Density(squared.LeftCorner) < 1 || mount.Density(squared.RightCorner) < 1 ||
-                           mount.Density(squared.FrontCorner) < 1 || mount.Density(squared.BackCorner) < 1;
-                case RoundedPlateau rounded:
-                    return IsPlateauNeeded(rounded.ToSquared());  
-                default:
-                    throw new ArgumentOutOfRangeException($"Unknown plateau type {Plateau.GetType()}");
-            }
+            var squared = Plateau.ToSquared();
+            return mount.Density(squared.LeftCorner) < 1 || mount.Density(squared.RightCorner) < 1 ||
+                   mount.Density(squared.FrontCorner) < 1 || mount.Density(squared.BackCorner) < 1;
         }
 
         /* Called via reflection */
@@ -135,7 +130,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         protected IHumanoid SpawnVillager(Vector3 Position)
         {
-            var human = this.SpawnHumanoid(HumanType.Villager, Position);
+            var types = new []
+            {
+                HumanType.Warrior,
+                HumanType.Rogue,
+                HumanType.Mage,
+                HumanType.Archer
+            };
+            var human = this.SpawnHumanoid(types[Utils.Rng.Next(0, types.Length)], Position);
+            human.SetWeapon(null);
+            human.AddComponent(new TalkComponent(human));
             human.AddComponent(new RoamingVillagerAIComponent(human, VillageObject.Graph));
             VillageObject.AddHumanoid(human);
             return human;

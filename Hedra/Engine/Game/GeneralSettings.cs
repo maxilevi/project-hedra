@@ -25,5 +25,8 @@ namespace Hedra.Engine.Game
         public const float MaxLodDitherDistance = 256;
         public const float MinLodDitherDistance = 200;
         public const int MaxWeights = 3;
+        public const int MaxLoadingRadius = 32;
+        public const int MinLoadingRadius = 8;
+        public const int MaxChunks = MaxLoadingRadius * MaxLoadingRadius;
     }
 }

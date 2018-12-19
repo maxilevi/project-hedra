@@ -53,7 +53,7 @@ namespace Hedra.Engine.Rendering
 
         public static void Bind()
         {
-            ShadowDistance = 1400f / (float) GameSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
+            ShadowDistance = 1400f / GeneralSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
             _prevFbo = Renderer.FBOBound;
             if (ShadowFbo == null) ShadowRenderer.SetQuality(GameSettings.ShadowQuality);
             ShadowFbo.Bind();

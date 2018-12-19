@@ -58,6 +58,7 @@ namespace Hedra.Engine.WorldBuilding
             var human = HumanoidFactory.BuildHumanoid(Type, Level, Behaviour);
             human.Physics.TargetPosition = World.FindPlaceablePosition(human, DesiredPosition);
             human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
+            human.ResetEquipment();
             ApplySeasonHats(human, Type);
             return human;
         }
@@ -111,8 +112,7 @@ namespace Hedra.Engine.WorldBuilding
                 !string.Equals(Type, HumanType.Archer.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
                 !string.Equals(Type, HumanType.Blacksmith.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
                 !string.Equals(Type, HumanType.Rogue.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Mage.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Villager.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
+                !string.Equals(Type, HumanType.Mage.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
             
             if(Season.IsChristmas) 
                 Human.SetHelmet(ItemPool.Grab(CommonItems.ChristmasHat).Helmet);
@@ -185,6 +185,37 @@ namespace Hedra.Engine.WorldBuilding
             {
                 _groundwork.Add(Work);
             }
+        }
+
+        public BasePlateau[] GetPlateausFor(Vector2 Position)
+        {
+            return Plateaux;
+            lock (_plateauLock)
+            {
+                var chunkSpace = World.ToChunkSpace(Position);
+                var list = new List<BasePlateau>();
+                for (var i = 0; i < _plateaus.Count; ++i)
+                {
+                    var squared = _plateaus[i].ToSquared();
+                    if (
+                        squared.Collides(chunkSpace)
+                        || World.ToChunkSpace(squared.BackCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.FrontCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.RightCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.LeftCorner) == chunkSpace
+                    )
+                    {
+                        list.Add(_plateaus[i]);
+                    }
+                }
+                return list.ToArray();
+            }
+        }
+
+        public IGroundwork[] GetGroundworksFor(Vector2 Position)
+        {
+            // TODO
+            return Groundworks;
         }
         
         public BasePlateau[] Plateaux

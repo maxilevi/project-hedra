@@ -6,6 +6,7 @@
  */
 using System;
 using Hedra.Core;
+using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.Management;
@@ -16,8 +17,6 @@ namespace Hedra.Engine.Rendering
 {
     public class ObjectMesh : IRenderable, IDisposable, ICullableModel, IUpdatable
     {
-        public Vector3 TargetRotation { get; set; }
-        public Vector3 TargetPosition { get; set; }
         public float AnimationSpeed { get; set; } = 1f;
         public bool Enabled { get; set; }
         public bool PrematureCulling { get; set; } = true;
@@ -36,7 +35,7 @@ namespace Hedra.Engine.Rendering
             this._buffer = new ObjectMeshBuffer();
             this.Mesh = new ChunkMesh(Position, _buffer);
             this.Position = Position;
-            this.Rotation = Vector3.Zero;
+            this.LocalRotation = Vector3.Zero;
             Mesh.Enabled = true;
             Enabled = true;    
             DrawManager.Add(this);
@@ -51,10 +50,7 @@ namespace Hedra.Engine.Rendering
 
         public void Update()
         {
-            this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition,
-                Time.IndependantDeltaTime * 6);
-            this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation,
-                Time.IndependantDeltaTime * 6);
+            _buffer.LocalRotation = LocalRotation;//Mathf.Lerp(_buffer.LocalRotation, LocalRotation, Time.IndependantDeltaTime * 8f);
         }
 
         public bool ApplyNoiseTexture
@@ -68,17 +64,20 @@ namespace Hedra.Engine.Rendering
             return _buffer.TransformPoint(Point);
         }
 
-        public Matrix4 TransformationMatrix{
+        public Matrix4 TransformationMatrix
+        {
             get => _buffer.TransformationMatrix;
             set => _buffer.TransformationMatrix = value;
         }
         
-        public Vector4 Tint{
+        public Vector4 Tint
+        {
             get => _buffer.Tint;
             set => _buffer.Tint = value;
         }
         
-        public Vector4 BaseTint{
+        public Vector4 BaseTint
+        {
             get => _buffer.BaseTint;
             set => _buffer.BaseTint = value;
         }
@@ -113,10 +112,10 @@ namespace Hedra.Engine.Rendering
             set => _buffer.LocalPosition = value;
         }
         
-        public Vector3 RotationPoint
+        public Vector3 LocalRotationPoint
         {
-            get => _buffer.Point;
-            set => _buffer.Point = value;
+            get => _buffer.RotationPoint;
+            set => _buffer.RotationPoint = value;
         }
 
         public bool Pause
@@ -125,62 +124,28 @@ namespace Hedra.Engine.Rendering
             set => _buffer.Pause = value;
         }
 
+        public Vector3 LocalRotation { get; set; }
+
+        public Vector3 BeforeRotation
+        {
+            get => _buffer.BeforeRotation;
+            set => _buffer.BeforeRotation = value;
+        }
+        
         public Vector3 Rotation
         {
             get => _buffer.Rotation;
             set
             {
-                if (_buffer.Rotation == value) return;
+                if(_buffer.Rotation == value) return;
                 _buffer.Rotation = value;
             }
         }
         
-        public Vector3 BeforeLocalRotation
-        {
-            get => _buffer.BeforeLocalRotation;
-            set => _buffer.BeforeLocalRotation = value;
-        }
-        
-        public Vector3 LocalRotation
-        {
-            get => _buffer.LocalRotation;
-            set
-            {
-                if(_buffer.LocalRotation == value) return;
-                _buffer.LocalRotation = value;
-            }
-        }
-        
-        public Vector3 LocalRotationPoint
+        public Vector3 RotationPoint
         {
             get => _buffer.LocalRotationPoint;
             set => _buffer.LocalRotationPoint = value;
-        }
-        
-        public Vector3 AnimationRotation
-        {
-            get => _buffer.AnimationRotation;
-            set
-            {
-                if(_buffer.AnimationRotation == value) return;   
-                _buffer.AnimationRotation = value;
-            }
-        }
-        
-        public Vector3 AnimationRotationPoint
-        {
-            get => _buffer.AnimationRotationPoint;
-            set => _buffer.AnimationRotationPoint = value;
-        }
-        
-        public Vector3 AnimationPosition
-        {
-            get => _buffer.AnimationPosition;
-            set
-            {
-                if(_buffer.AnimationPosition == value) return;               
-                _buffer.AnimationPosition = value;
-            }
         }
         
         public bool ApplyFog

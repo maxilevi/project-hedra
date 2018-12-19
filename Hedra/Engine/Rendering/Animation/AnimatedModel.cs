@@ -345,7 +345,7 @@ namespace Hedra.Engine.Rendering.Animation
             set => _animator.Stop = value;
         }
 
-        public Vector3 Rotation
+        public Vector3 LocalRotation
         {
             get => _rotation;
             set
@@ -366,11 +366,11 @@ namespace Hedra.Engine.Rendering.Animation
         {
             get
             {
-                if (Rotation == _cacheRotation) return _rotationCache;
-                _rotationCache = Matrix4.CreateRotationX(Rotation.X * Mathf.Radian) *
-                                 Matrix4.CreateRotationY(Rotation.Y * Mathf.Radian) *
-                                 Matrix4.CreateRotationZ(Rotation.Z * Mathf.Radian);
-                _cacheRotation = Rotation;
+                if (LocalRotation == _cacheRotation) return _rotationCache;
+                _rotationCache = Matrix4.CreateRotationX(LocalRotation.X * Mathf.Radian) *
+                                 Matrix4.CreateRotationY(LocalRotation.Y * Mathf.Radian) *
+                                 Matrix4.CreateRotationZ(LocalRotation.Z * Mathf.Radian);
+                _cacheRotation = LocalRotation;
                 _jointsDirty = true;
                 return _rotationCache;
             }

@@ -30,14 +30,14 @@ namespace Hedra.Engine.Rendering
 
         public Vector3 RotationPoint
         {
-            get => Model.RotationPoint;
-            set => Model.RotationPoint = value;
+            get => Model.LocalRotationPoint;
+            set => Model.LocalRotationPoint = value;
         }
 
         public Vector3 LocalRotation
         {
-            get => Model.LocalRotation;
-            set => Model.LocalRotation = value;
+            get => Model.Rotation;
+            set => Model.Rotation = value;
         }
         
         public Vector3 LocalPosition
@@ -48,8 +48,8 @@ namespace Hedra.Engine.Rendering
         
         public Vector3 BeforeLocalRotation
         {
-            get => Model.BeforeLocalRotation;
-            set => Model.BeforeLocalRotation = value;
+            get => Model.BeforeRotation;
+            set => Model.BeforeRotation = value;
         }
 
         public Vector3 Position

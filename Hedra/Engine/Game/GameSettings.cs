@@ -42,8 +42,6 @@ namespace Hedra.Engine.Game
         public static float ScreenRatio { get; set; }
         public static float DefaultScreenHeight { get; set; }
         public static bool Paused { get; set; }
-        public static int MaxLoadingRadius { get; set; } = 32;
-        public static int MinLoadingRadius { get; } = 8;
         public static float AmbientOcclusionIntensity = 1;
         public static bool BlurFilter = false;
         public static bool DarkEffect = false;

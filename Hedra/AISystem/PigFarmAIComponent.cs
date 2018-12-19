@@ -5,11 +5,11 @@ using OpenTK;
 
 namespace Hedra.AISystem
 {
-    public class CowFarmAIComponent : FarmAnimalAIComponent
+    public class PigFarmAIComponent : FarmAnimalAIComponent
     {
-        public CowFarmAIComponent(IEntity Parent, Vector3 FarmPosition, float Width) : base(Parent, FarmPosition, Width)
+        public PigFarmAIComponent(IEntity Parent, Vector3 FarmPosition, float Width) : base(Parent, FarmPosition, Width)
         {
-            AlertTime = 9 + Utils.Rng.NextFloat() * 14f;
+            AlertTime = 10 + Utils.Rng.NextFloat() * 14f;
         }
 
         protected override float AlertTime { get; }

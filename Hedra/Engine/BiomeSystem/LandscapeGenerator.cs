@@ -98,8 +98,8 @@ namespace Hedra.Engine.BiomeSystem
 
             var noise3D = new float[0/*Chunk.Height / noiseScale*/];
 
-            var plateaus = World.WorldBuilding.Plateaux;
-            var groundworks = World.WorldBuilding.Groundworks.ToList();
+            var plateaus = World.WorldBuilding.GetPlateausFor(new Vector2(OffsetX, OffsetZ));
+            var groundworks = World.WorldBuilding.GetGroundworksFor(new Vector2(OffsetX, OffsetZ)).ToList();
 
             var structs = World.StructureHandler.StructureItems;
 

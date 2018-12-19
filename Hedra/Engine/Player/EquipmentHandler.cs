@@ -31,7 +31,16 @@ namespace Hedra.Engine.Player
             Helmet?.Update(_owner);
             Pants?.Update(_owner);
             Boots?.Update(_owner);
-        }            
+        }
+
+        public void Reset()
+        {
+            SetHelmet(null);
+            SetChest(null);
+            SetPants(null);
+            SetBoots(null);
+            SetWeapon(null);
+        }
 
         public void SetHelmet(HelmetPiece New)
         {

@@ -15,6 +15,7 @@ namespace Hedra.AISystem.Humanoid
 {
     public abstract class HumanoidAIComponent : Component<IHumanoid>
     {
+        protected const float DefaultErrorMargin = 3;
         private SleepingPad _bed;
         private bool _isDrowning;
         protected bool IsMoving { get; private set; }
@@ -128,9 +129,9 @@ namespace Hedra.AISystem.Humanoid
         /// Move to target position. Needs to be called every frame.
         /// </summary>
         /// <param name="TargetPoint">Target point to move</param>
-        protected virtual void Move(Vector3 TargetPoint)
+        protected virtual void Move(Vector3 TargetPoint, float ErrorMargin = DefaultErrorMargin)
         {
-            if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > 3 * 3)
+            if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > ErrorMargin * ErrorMargin)
             {
                 Parent.Orientation = (TargetPoint.Xz - Parent.Position.Xz).ToVector3().NormalizedFast();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);

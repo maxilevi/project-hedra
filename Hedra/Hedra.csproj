@@ -139,6 +139,7 @@
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="AISystem\NeutralAIComponent.cs" />
     <Compile Include="AISystem\PigAIComponent.cs" />
+    <Compile Include="AISystem\PigFarmAIComponent.cs" />
     <Compile Include="AISystem\PugAIComponent.cs" />
     <Compile Include="AISystem\SheepAIComponent.cs" />
     <Compile Include="AISystem\SheepFarmAIComponent.cs" />
@@ -6397,9 +6398,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\TravellingMerchant.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Modules\NPCs\Villager.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\NPCs\Warrior.json">

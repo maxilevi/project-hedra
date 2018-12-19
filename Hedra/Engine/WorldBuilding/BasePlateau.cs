@@ -37,6 +37,8 @@ namespace Hedra.Engine.WorldBuilding
             );
         }
 
+        public abstract SquaredPlateau ToSquared();
+        
         public abstract BasePlateau Clone();
     }
 }

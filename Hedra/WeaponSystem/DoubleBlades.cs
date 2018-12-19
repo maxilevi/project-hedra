@@ -48,31 +48,31 @@ namespace Hedra.WeaponSystem
         protected override void OnSheathed()
         {
             base.OnSheathed();
-            MainMesh.BeforeLocalRotation = new Vector3(.4f, 0.75f, -1.2f);
-            MainMesh.TargetRotation = new Vector3(0, 90, 135);
+            MainMesh.BeforeRotation = new Vector3(.4f, 0.75f, -1.2f);
+            MainMesh.LocalRotation = new Vector3(0, 90, 135);
                 
-            SecondBlade.BeforeLocalRotation = new Vector3(-1.0f, 0.75f, -1.2f);
-            SecondBlade.TargetRotation = new Vector3(0, 270, 225);
+            SecondBlade.BeforeRotation = new Vector3(-1.0f, 0.75f, -1.2f);
+            SecondBlade.LocalRotation = new Vector3(0, 270, 225);
         }
 
         protected override void OnAttackStance()
         {
             base.OnAttackStance();
-            MainMesh.TargetRotation = new Vector3(180, 0, -45);
-            MainMesh.BeforeLocalRotation = Vector3.UnitY * -0.35f;
+            MainMesh.LocalRotation = new Vector3(180, 0, -45);
+            MainMesh.BeforeRotation = Vector3.UnitY * -0.35f;
 
-            SecondBlade.TargetRotation = new Vector3(180, 90, 45);
-            SecondBlade.BeforeLocalRotation = Vector3.UnitY * -0.35f;
+            SecondBlade.LocalRotation = new Vector3(180, 90, 45);
+            SecondBlade.BeforeRotation = Vector3.UnitY * -0.35f;
         }
 
         protected override void OnAttack()
         {
             base.OnAttack();
-            MainMesh.TargetRotation = PrimaryAttack ? new Vector3(180, 0, 0) : new Vector3(180, 0, 0f);
-            MainMesh.BeforeLocalRotation = PrimaryAttack ? -Vector3.UnitY * .35f : Vector3.UnitY * -0.7f;
+            MainMesh.LocalRotation = PrimaryAttack ? new Vector3(180, 0, 0) : new Vector3(180, 0, 0f);
+            MainMesh.BeforeRotation = PrimaryAttack ? -Vector3.UnitY * .35f : Vector3.UnitY * -0.7f;
         
-            SecondBlade.TargetRotation = PrimaryAttack ? new Vector3(180, 180, 0) : new Vector3(180, 180, 0f);
-            SecondBlade.BeforeLocalRotation = PrimaryAttack ? -Vector3.UnitY * .35f : Vector3.UnitY * -0.7f;
+            SecondBlade.LocalRotation = PrimaryAttack ? new Vector3(180, 180, 0) : new Vector3(180, 180, 0f);
+            SecondBlade.BeforeRotation = PrimaryAttack ? -Vector3.UnitY * .35f : Vector3.UnitY * -0.7f;
         }
     }
 }

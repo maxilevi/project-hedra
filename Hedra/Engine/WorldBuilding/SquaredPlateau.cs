@@ -37,7 +37,12 @@ namespace Hedra.Engine.WorldBuilding
         public Vector2 RightCorner => Position.Xz + new Vector2(Width * .5f, 0);
         public Vector2 BackCorner => Position.Xz - new Vector2(0, Width * .5f);
         public Vector2 FrontCorner => Position.Xz + new Vector2(0, Width * .5f);
-        
+
+        public override SquaredPlateau ToSquared()
+        {
+            return this;
+        }
+
         public override BasePlateau Clone()
         {
             return new RoundedPlateau(Position, Width)

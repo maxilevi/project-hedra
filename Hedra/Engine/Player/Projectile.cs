@@ -87,7 +87,7 @@ namespace Hedra.Engine.Player
             {
                 Mesh.Position += Direction * Speed * Time.DeltaTime;
             }
-            Mesh.Rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
+            Mesh.LocalRotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
             if (HandleLifecycle)
             {
                 if (Collide)
@@ -174,8 +174,8 @@ namespace Hedra.Engine.Player
 
         public virtual Vector3 Rotation
         {
-            get => Mesh.Rotation;
-            set => Mesh.Rotation = value;
+            get => Mesh.LocalRotation;
+            set => Mesh.LocalRotation = value;
         }
 
         public virtual Vector3 Position

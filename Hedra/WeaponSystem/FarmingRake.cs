@@ -27,8 +27,8 @@ namespace Hedra.WeaponSystem
         protected override void OnPrimaryAttack()
         {
             base.OnPrimaryAttack();
-            MainMesh.BeforeLocalRotation = Vector3.Zero;
-            MainMesh.TargetRotation = new Vector3(0, 90, 180);
+            MainMesh.BeforeRotation = Vector3.Zero;
+            MainMesh.LocalRotation = new Vector3(0, 90, 180);
         }
         
         protected override void OnAttackStance()
@@ -37,8 +37,8 @@ namespace Hedra.WeaponSystem
                        * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);                  
             this.MainMesh.TransformationMatrix = mat4;
             this.MainMesh.Position = Owner.Model.Position;
-            this.MainMesh.TargetRotation = new Vector3(90,25,180);
-            this.MainMesh.BeforeLocalRotation = Vector3.Zero;   
+            this.MainMesh.LocalRotation = new Vector3(90,25,180);
+            this.MainMesh.BeforeRotation = Vector3.Zero;   
         }
 
         public override void Attack1(IHumanoid Human, AttackOptions Options)

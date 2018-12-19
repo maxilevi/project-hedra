@@ -185,9 +185,9 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             
-            GameSettings.ChunkLoaderRadius = Math.Max(GameSettings.ChunkLoaderRadius, GameSettings.MinLoadingRadius);
+            GameSettings.ChunkLoaderRadius = Math.Max(GameSettings.ChunkLoaderRadius, GeneralSettings.MinLoadingRadius);
             var viewValuesList = new List<string>();
-            for (int i = GameSettings.MinLoadingRadius; i < GameSettings.MaxLoadingRadius + 1; i++)
+            for (int i = GeneralSettings.MinLoadingRadius; i < GeneralSettings.MaxLoadingRadius + 1; i++)
             {
                 viewValuesList.Add(i.ToString());
             }
@@ -199,8 +199,8 @@ namespace Hedra.Engine.Rendering.UI
                 fontColor, _normalFont,
                 viewValues.Select(Translation.Default).ToArray(), false)
             {
-                Index = (GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2,
-                CurrentValue = {Text = viewValues[(GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2]}
+                Index = (GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2,
+                CurrentValue = {Text = viewValues[(GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2]}
             };
 
             for(int i = 0; i < viewValues.Length; i++){
@@ -212,11 +212,11 @@ namespace Hedra.Engine.Rendering.UI
             }
             
             viewDistance.LeftArrow.Click += delegate { 
-                GameSettings.ChunkLoaderRadius = viewDistance.Index + GameSettings.MinLoadingRadius;
+                GameSettings.ChunkLoaderRadius = viewDistance.Index + GeneralSettings.MinLoadingRadius;
             };
             
             viewDistance.RightArrow.Click += delegate { 
-                GameSettings.ChunkLoaderRadius = viewDistance.Index + GameSettings.MinLoadingRadius;
+                GameSettings.ChunkLoaderRadius = viewDistance.Index + GeneralSettings.MinLoadingRadius;
             };
 
             var fpsLimitList = new List<Translation>();

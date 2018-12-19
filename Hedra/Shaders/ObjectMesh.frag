@@ -21,13 +21,10 @@ layout(location = 2)out vec4 OutNormal;
 
 uniform vec4 Tint;
 uniform vec4 BaseTint;
-uniform bool UseFog;
 uniform vec2 res;
 uniform float Alpha;
 uniform sampler2D ShadowTex;
-uniform bool UseShadows;
-uniform bool Dither;
-uniform float useNoiseTexture;
+uniform bvec4 DitherFogTextureShadows;
 uniform sampler3D noiseTexture;
 uniform bool Outline;
 uniform vec4 OutlineColor;
@@ -35,19 +32,19 @@ uniform float Time;
 
 void main()
 {
-	if(UseFog && Visibility < 0.005)
+	if(DitherFogTextureShadows.y && Visibility < 0.005)
 	{
 		discard;
 	}
 	
-	if(Dither)
+	if(DitherFogTextureShadows.x)
 	{
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
 		if( d-floor(d) < 0.5) discard;
 	}
 
 	float ShadowVisibility = 1.0;
-	if(UseFog && UseShadows)
+	if(DitherFogTextureShadows.y && DitherFogTextureShadows.w)
 	{
 		float bias = max(0.001 * (1.0 - dot(InNorm.xyz, LightDir)), 0.0) + 0.001;
 	
@@ -69,7 +66,7 @@ void main()
 		shadow /= 9.0;
 		ShadowVisibility = 1.0 - shadow * .65;
 	}
-    float tex = texture(noiseTexture, base_vertex_position).r * useNoiseTexture;
+    float tex = texture(noiseTexture, base_vertex_position).r * int(DitherFogTextureShadows.z);
     vec4 inputColor = vec4(linear_to_srbg((Color.xyz * ShadowVisibility + point_diffuse.xyz * raw_color.xyz) * (Tint.rgb + BaseTint.rgb) * (tex + 1.0)), Color.w);
 
     if(Outline)
@@ -77,7 +74,7 @@ void main()
         inputColor += vec4(Color.xyz, -1.0) * .5;
     }
 
-	if(UseFog)
+	if(DitherFogTextureShadows.y)
 	{
 		vec4 NewColor = mix(sky_color(), inputColor, Visibility);
 		

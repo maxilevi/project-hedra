@@ -164,6 +164,11 @@ namespace Hedra.Engine.Player
             UpdateHits();
         }
 
+        public void ResetEquipment()
+        {
+            Equipment.Reset();
+        }
+
         private void UpdateHits()
         {
             if (!GameSettings.Paused && _consecutiveHitsTimer.Tick())

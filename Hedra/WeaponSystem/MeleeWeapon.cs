@@ -39,32 +39,32 @@ namespace Hedra.WeaponSystem
         protected override void OnSheathed()
         {
             this.SetToChest(MainMesh);
-            MainMesh.BeforeLocalRotation =
+            MainMesh.BeforeRotation =
                 (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 1.5f - Vector3.UnitY * 1.5f) * this.Scale;
         }
 
         protected override void OnAttackStance()
         {
             base.SetToMainHand(MainMesh);
-            MainMesh.BeforeLocalRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15F * this.Scale.Y + Vector3.UnitZ * .0f * this.Scale.Z,
+            MainMesh.BeforeRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15F * this.Scale.Y + Vector3.UnitZ * .0f * this.Scale.Z,
                 Matrix4.CreateRotationX(-70 * Mathf.Radian) * Matrix4.CreateRotationY(25 * Mathf.Radian)  * Matrix4.CreateRotationZ(-90 * Mathf.Radian));
-            MainMesh.TargetRotation = new Vector3(70, -25, 90);
+            MainMesh.LocalRotation = new Vector3(70, -25, 90);
         }
 
         protected override void OnPrimaryAttack()
         {
             base.SetToMainHand(MainMesh);
-            MainMesh.BeforeLocalRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15f * this.Scale.Y,
+            MainMesh.BeforeRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15f * this.Scale.Y,
                 Matrix4.CreateRotationX(-90 * Mathf.Radian) * Matrix4.CreateRotationZ(-90 * Mathf.Radian));
-            MainMesh.TargetRotation = new Vector3(90, 0, 90);
+            MainMesh.LocalRotation = new Vector3(90, 0, 90);
         }
 
         protected override void OnSecondaryAttack()
         {
             base.SetToMainHand(MainMesh);
-            MainMesh.BeforeLocalRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15f * this.Scale.Y,
+            MainMesh.BeforeRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15f * this.Scale.Y,
                 Matrix4.CreateRotationX(-90 * Mathf.Radian) * Matrix4.CreateRotationZ(0 * Mathf.Radian));
-            MainMesh.TargetRotation = new Vector3(90, 0, 0);
+            MainMesh.LocalRotation = new Vector3(90, 0, 0);
 
             if (_previousPosition != Owner.BlockPosition && Owner.IsGrounded)
             {

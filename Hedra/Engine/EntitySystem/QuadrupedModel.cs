@@ -263,9 +263,9 @@ namespace Hedra.Engine.EntitySystem
                 _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependantDeltaTime * 8f);
                 Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
                 _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependantDeltaTime * 14f);
-                Model.Rotation = _quaternionModelRotation.ToEuler();
+                Model.LocalRotation = _quaternionModelRotation.ToEuler();
                 Model.Position = this.Position;
-                this.Rotation = Model.Rotation;                
+                this.Rotation = Model.LocalRotation;                
             }
 
             if (!base.Disposed)

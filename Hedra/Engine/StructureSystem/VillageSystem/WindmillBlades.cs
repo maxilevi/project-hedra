@@ -34,7 +34,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             _angle += Time.DeltaTime * 80f;
             _targetRotation = Quaternion.FromEulerAngles(_rotationAxis * _angle * Mathf.Radian);
             _currentRotation = Quaternion.Slerp(_currentRotation, _targetRotation, Time.DeltaTime * 2f);
-            _mesh.Rotation = _currentRotation.ToEuler();
+            _mesh.LocalRotation = _currentRotation.ToEuler();
             _mesh.Position = Position;
             if(_angle > 360) _angle -= 360;
         }

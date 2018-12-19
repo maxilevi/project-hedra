@@ -37,6 +37,8 @@ namespace Hedra.Engine.Rendering
         public static WorldBuffer WaterBuffer { get; private set; }
         public static bool ShowWaterBackfaces {get; set;}
         public static Texture3D NoiseTexture { get; private set; }
+        private static IntPtr[] _shadowOffsets;
+        private static int[] _shadowCounts;
 
         public static void AllocateMemory()
         {
@@ -58,6 +60,8 @@ namespace Hedra.Engine.Rendering
                 }
             }
             NoiseTexture = new Texture3D(noiseValues);
+            _shadowOffsets = new IntPtr[StaticBuffer.Offsets.Length];
+            _shadowCounts = new int[StaticBuffer.Counts.Length];
         }
 
         public static void PrepareRendering()
@@ -84,7 +88,7 @@ namespace Hedra.Engine.Rendering
 
         private static void InstanceDraw(Dictionary<Vector2, Chunk> ToDraw)
         {
-            var counts = InstanceBuffer.BuildCounts(ToDraw, out var offsets);
+            var count = InstanceBuffer.BuildCounts(ToDraw);
 
             InstanceBuffer.Bind();
             InstanceBuffer.BindIndices();
@@ -92,13 +96,12 @@ namespace Hedra.Engine.Rendering
             StaticShader["MaxDitherDistance"] = GeneralSettings.MaxLodDitherDistance;
             StaticShader["MinDitherDistance"] = GeneralSettings.MinLodDitherDistance;
             
-            Renderer.MultiDrawElements(PrimitiveType.Triangles, counts, DrawElementsType.UnsignedInt, offsets, counts.Length);
+            Renderer.MultiDrawElements(PrimitiveType.Triangles, InstanceBuffer.Counts, DrawElementsType.UnsignedInt, InstanceBuffer.Offsets, count);
         }
         
         private static void TerrainDraw(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ShadowDraw)
         {
-            int[] Counts = StaticBuffer.BuildCounts(ToDraw, out IntPtr[]  Offsets);
-            int[] ShadowCounts = StaticBuffer.BuildCounts(ShadowDraw, out IntPtr[] ShadowOffsets);
+            var shadowCount = StaticBuffer.BuildCounts(ShadowDraw, ref _shadowOffsets, ref _shadowCounts);
                 
             StaticBuffer.Bind(false);
             Renderer.EnableVertexAttribArray(0);
@@ -109,20 +112,21 @@ namespace Hedra.Engine.Rendering
             if (GameSettings.Shadows)
             {
                 ShadowRenderer.Bind();
-                Renderer.MultiDrawElements(PrimitiveType.Triangles, ShadowCounts, DrawElementsType.UnsignedInt, ShadowOffsets, ShadowCounts.Length);
+                Renderer.MultiDrawElements(PrimitiveType.Triangles, _shadowCounts, DrawElementsType.UnsignedInt, _shadowOffsets, shadowCount);
                 ShadowRenderer.UnBind();
             }
+            var count = StaticBuffer.BuildCounts(ToDraw);
 
             StaticBind();
             Renderer.EnableVertexAttribArray(2);
-            Renderer.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Counts.Length);            
+            Renderer.MultiDrawElements(PrimitiveType.Triangles, StaticBuffer.Counts, DrawElementsType.UnsignedInt, StaticBuffer.Offsets, count);            
 
             StaticBuffer.Unbind();
         }
 
         private static void WaterDraw(Dictionary<Vector2, Chunk> ToDraw)
         {
-            var counts = WaterBuffer.BuildCounts(ToDraw, out var Offsets);
+            var count = WaterBuffer.BuildCounts(ToDraw);
 
             WaveMovement += Time.IndependantDeltaTime * Mathf.Radian * 32;
             if (WaveMovement >= 5f)
@@ -136,7 +140,7 @@ namespace Hedra.Engine.Rendering
             Renderer.EnableVertexAttribArray(2);
                 
             Renderer.BindBuffer(WaterBuffer.Indices.Buffer.BufferTarget, WaterBuffer.Indices.Buffer.ID);
-            Renderer.MultiDrawElements(PrimitiveType.Triangles, counts, DrawElementsType.UnsignedInt, Offsets, counts.Length);
+            Renderer.MultiDrawElements(PrimitiveType.Triangles, WaterBuffer.Counts, DrawElementsType.UnsignedInt, WaterBuffer.Offsets, count);
                 
             Renderer.DisableVertexAttribArray(0);
             Renderer.DisableVertexAttribArray(1);

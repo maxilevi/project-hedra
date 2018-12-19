@@ -55,8 +55,8 @@ namespace Hedra.WeaponSystem
         {
             this.MainMesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
             this.MainMesh.Position = Owner.Model.Position;
-            this.MainMesh.LocalRotation = this.SheathedRotation;
-            this.MainMesh.BeforeLocalRotation = this.SheathedPosition * this.Scale;
+            this.MainMesh.Rotation = this.SheathedRotation;
+            this.MainMesh.BeforeRotation = this.SheathedPosition * this.Scale;
         }
 
         protected override void OnAttackStance()
@@ -65,8 +65,8 @@ namespace Hedra.WeaponSystem
                     
             this.MainMesh.TransformationMatrix = mat4;
             this.MainMesh.Position = Owner.Model.Position;
-            this.MainMesh.TargetRotation = new Vector3(90,25,180);
-            this.MainMesh.BeforeLocalRotation = Vector3.Zero;     
+            this.MainMesh.LocalRotation = new Vector3(90,25,180);
+            this.MainMesh.BeforeRotation = Vector3.Zero;     
         } 
 
         protected override void OnSecondaryAttack()
@@ -75,8 +75,8 @@ namespace Hedra.WeaponSystem
                        * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);   
             MainMesh.TransformationMatrix = mat4;
             MainMesh.Position = Owner.Model.Position;
-            MainMesh.TargetRotation = new Vector3(90, 0, 180);
-            MainMesh.BeforeLocalRotation = Vector3.Zero;
+            MainMesh.LocalRotation = new Vector3(90, 0, 180);
+            MainMesh.BeforeRotation = Vector3.Zero;
         }
     }
 }

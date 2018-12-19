@@ -2,7 +2,7 @@
   "Name" : "Pug",
   "MaxHealth": 200.0,
   "AttackDamage": 4.0,
-  "Speed": 1.25,
+  "Speed": 1.0,
   "XP": 2.75,
   "Level": 6,
   "AIType": "Pug",

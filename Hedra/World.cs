@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Hedra.BiomeSystem;
+using Hedra.Engine;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -168,6 +169,10 @@ namespace Hedra
         public static Vector2 ToChunkSpace(Vector3 Vec3)
         {
             return Provider.ToChunkSpace(Vec3);
+        }
+        public static Vector2 ToChunkSpace(Vector2 Vec2)
+        {
+            return Provider.ToChunkSpace(Vec2.ToVector3());
         }
 
         public static Chunk GetChunkAt(Vector3 Coordinates)

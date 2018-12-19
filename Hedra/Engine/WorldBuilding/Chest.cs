@@ -132,8 +132,8 @@ namespace Hedra.Engine.WorldBuilding
         
         public Vector3 Rotation
         {
-            get => _model.Rotation;
-            set => _model.Rotation = value;
+            get => _model.LocalRotation;
+            set => _model.LocalRotation = value;
         }
 
         public override void Dispose()

@@ -41,7 +41,7 @@ namespace Hedra.Engine.WorldBuilding
             return Math.Min(1.0f, Math.Max(1 - Math.Min(dist / Radius, 1), 0) * Hardness);
         }
 
-        public SquaredPlateau ToSquared()
+        public override SquaredPlateau ToSquared()
         {
             return new SquaredPlateau(Position, Radius);
         }

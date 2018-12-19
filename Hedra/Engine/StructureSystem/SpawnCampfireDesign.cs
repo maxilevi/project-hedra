@@ -31,11 +31,17 @@ namespace Hedra.Engine.StructureSystem
 
         private static IHumanoid CreateVillager(CollidableStructure Structure, Random Rng)
         {
-            var villager = World.WorldBuilding.SpawnHumanoid(HumanType.Villager, Structure.Position + -SpawnOffset);
+            var types = new []
+            {
+                HumanType.Warrior,
+                HumanType.Rogue,
+                HumanType.Mage,
+                HumanType.Archer
+            };
+            var villager = World.WorldBuilding.SpawnHumanoid(types[Rng.Next(0, types.Length)], Structure.Position + -SpawnOffset);
             villager.Name = NameGenerator.PickMaleName(Rng);
             villager.Physics.UsePhysics = false;
             villager.IsSitting = true;
-            villager.RemoveComponent(villager.SearchComponent<TalkComponent>());
             villager.AddComponent(new SpawnVillagerThoughtsComponent(villager));
             villager.AddComponent(new TalkComponent(villager));
             return villager;

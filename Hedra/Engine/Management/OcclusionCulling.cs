@@ -15,7 +15,8 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class OcclusionCulling
     {
-        public static void StartQueries(Occludable[] Occludables){
+        public static void StartQueries(Occludable[] Occludables)
+        {
             Renderer.ColorMask(false, false, false, false);
             Renderer.DepthMask(false);
             for(int i = 0; i < Occludables.Length; i++){

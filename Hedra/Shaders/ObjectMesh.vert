@@ -6,24 +6,19 @@ layout(location = 0) in vec3 InVertex;
 layout(location = 1) in vec4 InColor;
 layout(location = 2) in vec3 InNormal;
 
-uniform vec3 Point;
 uniform vec3 LocalRotationPoint;
-uniform mat4 TransMatrix;
-uniform mat4 LocalRotation;
-uniform vec3 LocalPosition;
-uniform vec3 BeforeLocalRotation;
-uniform vec3 AnimationPosition;
-uniform mat4 AnimationRotation;
-uniform vec3 AnimationRotationPoint;
-uniform vec3 TransPos;
+uniform mat3 RotationMatrix;
+uniform mat3 LocalRotationMatrix;
+uniform mat4 TransformationMatrix;
+uniform mat4 ShadowMVP;
+uniform vec3 RotationPoint;
+uniform vec3 BeforeRotation;
+uniform vec3 Position;
 uniform float Time;
 uniform vec3 Scale;
-uniform vec3 BakedPosition;
-uniform mat4 ShadowMVP;
 uniform float ShadowDistance;
-uniform bool UseShadows;
-uniform mat4 Matrix;
 uniform bool Outline;
+uniform bvec4 DitherFogTextureShadows;
 const float ShadowTransition = 20.0;
 
 out vec4 raw_color;
@@ -61,26 +56,19 @@ void main()
 	pass_botColor = U_BotColor;
 	pass_topColor = U_TopColor;
 
-	vec4 Vertex = vec4((InVertex + BakedPosition) * Scale - BakedPosition, 1.0);
+	vec4 Vertex = vec4(InVertex * Scale, 1.0);
 
-	Vertex += vec4(AnimationRotationPoint, 0.0);
-	Vertex = AnimationRotation * Vertex;
-	Vertex -= vec4(AnimationRotationPoint, 0.0);
+	Vertex += vec4(LocalRotationPoint,0.0);
+	Vertex = vec4(LocalRotationMatrix * Vertex.xyz, Vertex.w);
+    Vertex -= vec4(LocalRotationPoint, 0.0);
 	
-	Vertex += vec4(BeforeLocalRotation,0.0);
-	Vertex += vec4(LocalRotationPoint, 0.0);
-	Vertex = LocalRotation * Vertex;
-	Vertex -= vec4(LocalRotationPoint,0.0);
-	
-	Vertex += vec4(AnimationPosition, 0.0);
+	Vertex += vec4(BeforeRotation,0.0);
+	Vertex += vec4(RotationPoint, 0.0);
+	Vertex = vec4(RotationMatrix * Vertex.xyz, Vertex.w);
+	Vertex -= vec4(RotationPoint,0.0);
 
-	Vertex += vec4(Point,0.0);
-	Vertex = TransMatrix * Vertex;
-	Vertex = Matrix * Vertex;
-	Vertex += vec4(TransPos, 0.0);
-	Vertex -= vec4(Point, 0.0);	
-
-	Vertex += vec4(LocalPosition,0.0);
+	Vertex = TransformationMatrix * Vertex;
+	Vertex += vec4(Position, 0.0);
 	
 	gl_Position = _modelViewProjectionMatrix * Vertex;
 	
@@ -89,11 +77,9 @@ void main()
 	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
 	
 	vec3 SurfaceNormal = InNormal;
-	SurfaceNormal = TransformNormal(SurfaceNormal, AnimationRotation);	
-	SurfaceNormal = TransformNormal(SurfaceNormal, LocalRotation);
-    SurfaceNormal = TransformNormal(SurfaceNormal, TransMatrix);
-    SurfaceNormal = TransformNormal(SurfaceNormal, Matrix);
-
+	SurfaceNormal = TransformNormal(SurfaceNormal, mat4(LocalRotationMatrix));
+	SurfaceNormal = TransformNormal(SurfaceNormal, mat4(RotationMatrix));
+    SurfaceNormal = TransformNormal(SurfaceNormal, TransformationMatrix);
 	
 	//Lighting
 	vec3 unitNormal = normalize(SurfaceNormal);
@@ -117,8 +103,7 @@ void main()
 	InNorm = SurfaceNormal;
 	raw_color = linear_color;
 	
-	//Shadows Stuff
-	if(UseShadows)
+	if(DitherFogTextureShadows.w)
 	{
 		float ShadowDist = DistanceToCamera - (ShadowDistance - ShadowTransition);
 		ShadowDist /= ShadowTransition;

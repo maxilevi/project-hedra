@@ -68,9 +68,9 @@ namespace Hedra.WeaponSystem
         {
             _arrow = ObjectMesh.FromVertexData(ArrowVertexData);
             _quiver = ObjectMesh.FromVertexData(QuiverVertexData);
-            _quiver.TargetPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
-            _quiver.LocalRotationPoint = new Vector3(0, 0, _quiver.TargetPosition.Z);
-            _quiver.TargetRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);          
+            _quiver.LocalPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
+            _quiver.RotationPoint = new Vector3(0, 0, _quiver.LocalPosition.Z);
+            _quiver.LocalRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);          
         }
         
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
@@ -95,8 +95,8 @@ namespace Hedra.WeaponSystem
                 Owner.Model.ChestMatrix.ClearTranslation() 
                 * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
             MainMesh.Position = Owner.Model.Position;
-            MainMesh.LocalRotation = this.SheathedRotation;
-            MainMesh.BeforeLocalRotation = this.SheathedPosition * this.Scale;
+            MainMesh.Rotation = this.SheathedRotation;
+            MainMesh.BeforeRotation = this.SheathedPosition * this.Scale;
         }
 
         protected override void OnAttackStance()
@@ -105,8 +105,8 @@ namespace Hedra.WeaponSystem
                            * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);                  
             this.MainMesh.TransformationMatrix = mat4;
             this.MainMesh.Position = Owner.Model.Position;
-            this.MainMesh.TargetRotation = new Vector3(90,25,180);
-            this.MainMesh.BeforeLocalRotation = Vector3.Zero;   
+            this.MainMesh.LocalRotation = new Vector3(90,25,180);
+            this.MainMesh.BeforeRotation = Vector3.Zero;   
         }
 
         public override void Update(IHumanoid Human)
@@ -121,7 +121,7 @@ namespace Hedra.WeaponSystem
             SetToDefault(_quiver);
             _quiver.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
             _quiver.Position = Owner.Model.Position;
-            _quiver.BeforeLocalRotation = (-Vector3.UnitY * 1.5f - Vector3.UnitZ * 1.8f) * this.Scale;
+            _quiver.BeforeRotation = (-Vector3.UnitY * 1.5f - Vector3.UnitZ * 1.8f) * this.Scale;
         }
         
         private void SetArrowPosition()
@@ -132,7 +132,7 @@ namespace Hedra.WeaponSystem
             
             _arrow.TransformationMatrix = arrowMat4;
             _arrow.Position = Owner.Model.Position;
-            _arrow.BeforeLocalRotation = Vector3.UnitZ * 0.5f;
+            _arrow.BeforeRotation = Vector3.UnitZ * 0.5f;
             _arrow.Enabled = (base.InAttackStance || Owner.IsAttacking) && _quiver.Enabled; 
         }
 

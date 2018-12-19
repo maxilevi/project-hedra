@@ -103,7 +103,7 @@ namespace Hedra.Engine.Player.MapSystem
             var mapPosition = _player.Model.ModelPosition.Xz.ToVector3();
             for (var i = 0; i < _icons.Count; i++)
             { 
-                _icons[i].Mesh.Rotation = new Vector3(_icons[i].Mesh.Rotation.X, _icons[i].Mesh.Rotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.Rotation.Z);
+                _icons[i].Mesh.LocalRotation = new Vector3(_icons[i].Mesh.LocalRotation.X, _icons[i].Mesh.LocalRotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.LocalRotation.Z);
                 _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight + 10f, mapPosition.Z);
             }          
             for (var i = 0; i < _baseItems.Count; i++)
@@ -118,7 +118,7 @@ namespace Hedra.Engine.Player.MapSystem
                 _marker.Enabled = _player.Minimap.HasMarker;
                 _marker.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f) + _player.Minimap.MarkedDirection * FogDistance;
                 _cursor.Position = mapPosition + Vector3.UnitY * (_targetHeight + 45f);
-                _cursor.Rotation = _player.Model.Rotation;
+                _cursor.LocalRotation = _player.Model.Rotation;
                 WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
                     Vector3.One * (ChunkSize / (float)Chunk.Width), 1f) + Vector3.One * 0.002f;
                 WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _targetHeight);
@@ -201,7 +201,7 @@ namespace Hedra.Engine.Player.MapSystem
                                     baseData.Color = CubeData.CreateCubeColor(Color.DarkSlateGray.ToVector4());
                                     var mapItem = new MapItem(icon + baseData.ToVertexData());
                                     mapItem.Mesh.ApplyNoiseTexture = true;
-                                    mapItem.Mesh.Rotation = new Vector3(0, Utils.Rng.Next(0, 4) * 90f, 0);
+                                    mapItem.Mesh.LocalRotation = new Vector3(0, Utils.Rng.Next(0, 4) * 90f, 0);
                                     mapItem.Mesh.LocalPosition = realPos.ToVector3() + Vector3.UnitY * 12;
                                     mapItem.Mesh.Scale = Vector3.One * 2f;
                                     lock (_icons) _icons.Add(mapItem);

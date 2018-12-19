@@ -6,6 +6,7 @@
  */
 using System;
 using Hedra.Core;
+using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using OpenTK;
@@ -35,23 +36,18 @@ namespace Hedra.Engine.Rendering
         public Vector4 BaseTint { get; set; } = new Vector4(0,0,0,0);
         public Vector3 Position { get; set; } = Vector3.Zero;
         public Vector3 Scale { get; set; } = Vector3.One;
-        public Vector3 Point { get; set; }
+        public Vector3 RotationPoint { get; set; }
         public Vector3 LocalRotationPoint { get; set; }
         public Vector3 LocalPosition { get; set; }
-        public Vector3 BeforeLocalRotation { get; set; }
-        public Vector3 AnimationPosition { get; set; }
-        public Vector3 AnimationRotationPoint { get; set; }
+        public Vector3 BeforeRotation { get; set; }
 
         private static readonly Texture3D NoiseTexture;
         private bool _rotMatrixCached;
         private bool _disposed;
-        private Vector3 _rotation = Vector3.Zero;
-        private Matrix4 _rotationMatrix;
         private Vector3 _localRotation;
-        private Vector3 _animationRotation;
-        private Matrix4 _localRotationMatrix = Matrix4.Identity;
-        private Matrix4 _transformationMatrix = Matrix4.Identity;
-        private Matrix4 _animationRotationMatrix = Matrix4.Identity;
+        private Matrix3 _localRotationMatrix;
+        private Vector3 _rotation;
+        private Matrix3 _rotationMatrix = Matrix3.Identity;
 
         static ObjectMeshBuffer()
         {
@@ -113,81 +109,59 @@ namespace Hedra.Engine.Rendering
         public Vector3 TransformPoint(Vector3 Vertex)
         {
             Vertex *= Scale;
-            
-            Vertex += AnimationRotationPoint;
-            Vertex =  Vector3.TransformPosition(Vertex, _animationRotationMatrix);
-            Vertex -= AnimationRotationPoint;
-            
-            Vertex += BeforeLocalRotation;
-            Vertex += LocalRotationPoint;
-            Vertex = Vector3.TransformPosition(Vertex, _localRotationMatrix);
+
+            Vertex -= LocalRotationPoint;
+            Vertex = Vector3.Transform(Vertex, LocalRotationMatrix);
             Vertex -= LocalRotationPoint;
 
-            Vertex = Vector3.TransformPosition(Vertex, TransformationMatrix);
+            Vertex += BeforeRotation;
+            Vertex += RotationPoint;
+            Vertex = Vector3.Transform(Vertex, _rotationMatrix);
+            Vertex -= RotationPoint;
 
-            Vertex += AnimationPosition;
-        
-            Vertex += Point;
-            Vertex = Vector3.TransformPosition(Vertex, RotationMatrix);
-            Vertex -= Point;
+            Vertex = Vector3.TransformPosition(Vertex, TransformationMatrix);
             
-            Vertex += Position;
+            Vertex += Position + LocalPosition;
 
             return Vertex;
         }
-        
-        public Matrix4 RotationMatrix
+
+        private Matrix3 LocalRotationMatrix
         {
             get
             { 
-                if(_rotMatrixCached) return _rotationMatrix;
-                                
-                _rotationMatrix = Matrix4.CreateRotationX(Rotation.X * Mathf.Radian)
-                    * Matrix4.CreateRotationY(Rotation.Y * Mathf.Radian)
-                    * Matrix4.CreateRotationZ(Rotation.Z * Mathf.Radian);
+                if(_rotMatrixCached) return _localRotationMatrix;
+                _localRotationMatrix = Matrix3.CreateRotationY(_localRotation.Y * Mathf.Radian)
+                    * Matrix3.CreateRotationX(_localRotation.X * Mathf.Radian)
+                    * Matrix3.CreateRotationZ(_localRotation.Z * Mathf.Radian);
                 _rotMatrixCached = true;
-                return _rotationMatrix;
+                return _localRotationMatrix;
                 
             }
         }
+
+        public Vector3 LocalRotation
+        {
+            get => _localRotation;
+            set
+            {
+                if(_localRotation == value) return;
+                _localRotation = value;            
+                _rotMatrixCached = false;  
+            }
+        }
+
+        public Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
 
         public Vector3 Rotation
         {
             get => _rotation;
             set
             {
-                _rotation = value;            
-                _rotMatrixCached = false;  
-            }
-        }
-
-        public Matrix4 TransformationMatrix
-        {
-            get => _transformationMatrix;
-            set => _transformationMatrix = value;
-        }
-        public Vector3 LocalRotation
-        {
-            get => _localRotation;
-            set
-            {
-                _localRotation = value;
-                _localRotationMatrix = Matrix4.CreateRotationX(value.X * Mathf.Radian)
-                    * Matrix4.CreateRotationY(value.Y * Mathf.Radian)
-                    * Matrix4.CreateRotationZ(value.Z * Mathf.Radian);
-            }
-        }
-        
-
-        public Vector3 AnimationRotation
-        {
-            get => _animationRotation;
-            set
-            {
-                _animationRotation = value;
-                _animationRotationMatrix = Matrix4.CreateRotationX(value.X * Mathf.Radian)
-                    * Matrix4.CreateRotationY(value.Y * Mathf.Radian)
-                    * Matrix4.CreateRotationZ(value.Z * Mathf.Radian);
+                _rotation = value;
+                _rotationMatrix = Matrix3.CreateRotationX(value.X * Mathf.Radian)
+                    * Matrix3.CreateRotationY(value.Y * Mathf.Radian)
+                    * Matrix3.CreateRotationZ(value.Z * Mathf.Radian);
             }
         }
 
@@ -197,28 +171,20 @@ namespace Hedra.Engine.Rendering
 
             Shader["Alpha"] = Alpha;
             Shader["Scale"] = Scale;
-            Shader["Dither"] = Dither ? 1 : 0;
-            Shader["UseFog"] = ApplyFog ? 1 : 0;
-            Shader["TransPos"] = Position;
-            Shader["TransMatrix"] = RotationMatrix;
-            Shader["Matrix"] = _transformationMatrix;
-            Shader["Point"] = Point;
-            Shader["LocalRotation"] = _localRotationMatrix;
+            Shader["Position"] = Position + LocalPosition;
+            Shader["LocalRotationMatrix"] = LocalRotationMatrix;
+            Shader["TransformationMatrix"] = TransformationMatrix;
+            Shader["RotationPoint"] = RotationPoint;
+            Shader["RotationMatrix"] = _rotationMatrix;
             Shader["LocalRotationPoint"] = LocalRotationPoint;
-            Shader["LocalPosition"] = LocalPosition;
-            Shader["BeforeLocalRotation"] = BeforeLocalRotation;
-            Shader["AnimationPosition"] = AnimationPosition;
-            Shader["AnimationRotation"] = _animationRotationMatrix;
-            Shader["AnimationRotationPoint"] = AnimationRotationPoint;
+            Shader["BeforeRotation"] = BeforeRotation;
             Shader["Tint"] = Tint;
             Shader["BaseTint"] = BaseTint;
-            Shader["BakedPosition"] = Vector3.Zero;
             Shader["PlayerPosition"] = GameManager.Player.Position;
 
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
             Shader["noiseTexture"] = 1;      
-            Shader["useNoiseTexture"] = UseNoiseTexture ? 1f : 0f;
             
             if (GameSettings.Shadows)
             {
@@ -228,7 +194,7 @@ namespace Hedra.Engine.Rendering
                 Shader["ShadowTex"] = 0;
                 Shader["ShadowDistance"] = ShadowRenderer.ShadowDistance;
             }
-            Shader["UseShadows"] = GameSettings.Shadows ? 1 : 0;
+            Shader["DitherFogTextureShadows"] = new Vector4(Dither ? 1 : 0, ApplyFog ? 1 : 0, UseNoiseTexture ? 1 : 0, GameSettings.Shadows ? 1 : 0);
         }
 
         private static void Unbind()

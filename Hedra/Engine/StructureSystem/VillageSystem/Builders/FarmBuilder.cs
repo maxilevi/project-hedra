@@ -99,7 +99,14 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
             else if (Rng.Next(0, 5) == 1)
             {
-                var type = Rng.Next(0, 4) != 1 ? MobType.Cow : MobType.Sheep;
+                var type = MobType.None;
+                var rng = Rng.NextFloat();
+                if (rng < .2f)
+                    type = MobType.Sheep;
+                else if (rng < .5f)
+                    type = MobType.Pig;
+                else if (rng < 1)
+                    type = MobType.Cow;
                 var count = Rng.Next(1, 4);
                 for (var i = 0; i < count; ++i)
                 {
@@ -114,6 +121,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                             break;
                         case MobType.Sheep:
                             animal.AddComponent(new SheepFarmAIComponent(animal, Parameters.Position, _width));
+                            break;
+                        case MobType.Pig:
+                            animal.AddComponent(new PigFarmAIComponent(animal, Parameters.Position, _width));
                             break;
                     }
                 }
@@ -169,7 +179,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         private void SpawnFarmer(Vector3 Position, Vector2 FarmPosition)
         {
-            var farmer = SpawnHumanoid(HumanType.Villager, Position);
+            var farmer = SpawnVillager(Position);
             farmer.SetHelmet(ItemPool.Grab(CommonItems.FarmerHat).Helmet);
             farmer.SetWeapon(ItemPool.Grab(CommonItems.FarmingRake).Weapon);
             farmer.AddComponent(new FarmerAIComponent(farmer, FarmPosition, Vector2.One * _width));

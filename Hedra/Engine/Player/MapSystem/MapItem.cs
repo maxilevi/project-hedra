@@ -43,8 +43,8 @@ namespace Hedra.Engine.Player.MapSystem
 
         public Vector3 Rotation
         {
-            get => _mesh.Rotation;
-            set => _mesh.Rotation = value;
+            get => _mesh.LocalRotation;
+            set => _mesh.LocalRotation = value;
         }
 
         public void Dispose()

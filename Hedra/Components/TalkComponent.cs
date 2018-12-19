@@ -84,7 +84,7 @@ namespace Hedra.Components
 
                 if (_shouldTalk)
                 {
-                    this.Talk();
+                    this.TalkToPlayer();
                 }         
             }
             if (Talked && (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius)
@@ -102,9 +102,21 @@ namespace Hedra.Components
             return _phrase ?? Phrases[Utils.Rng.Next(0, Phrases.Length)];
         }
 
-        public void Talk(bool Silent = false)
+        public void Simulate(float Seconds)
         {
-            if(!Silent) SoundPlayer.PlayUISound(SoundType.TalkSound, 1f, .75f);
+            _isTalking = true;
+            Talked = true;
+            PlayTalkingAnimation();
+            TaskScheduler.After((int)(Seconds * 1000), delegate
+            {
+                _isTalking = false;
+                Talked = false;
+            });
+        }
+
+        private void TalkToPlayer()
+        {
+            SoundPlayer.PlayUISound(SoundType.TalkSound, 1f, .75f);
             var phrase = SelectThought();
             phrase = Utils.FitString(phrase, 30);
             

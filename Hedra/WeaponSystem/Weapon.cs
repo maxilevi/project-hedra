@@ -149,16 +149,13 @@ namespace Hedra.WeaponSystem
         protected void SetToDefault(ObjectMesh Mesh)
         {
             Mesh.Position = Vector3.Zero;
-            Mesh.TargetPosition = Vector3.Zero;
-            Mesh.AnimationPosition = Vector3.Zero;
-            Mesh.RotationPoint = Vector3.Zero;
-            Mesh.Rotation = Vector3.Zero;
-            Mesh.LocalRotation = Vector3.Zero;
             Mesh.LocalRotationPoint = Vector3.Zero;
+            Mesh.LocalRotation = Vector3.Zero;
+            Mesh.Rotation = Vector3.Zero;
+            Mesh.RotationPoint = Vector3.Zero;
             Mesh.LocalPosition = Vector3.Zero;
-            Mesh.BeforeLocalRotation = Vector3.Zero;
+            Mesh.BeforeRotation = Vector3.Zero;
             Mesh.TransformationMatrix = Matrix4.Identity;
-            Mesh.TargetRotation = Vector3.Zero;
         }
 
         protected void SetToChest(ObjectMesh Mesh)
@@ -168,8 +165,8 @@ namespace Hedra.WeaponSystem
                                         Matrix4.CreateTranslation(
                                             -Owner.Position + Owner.Model.ChestPosition + Vector3.UnitY * 1f);
             Mesh.Position = Owner.Position;
-            Mesh.LocalRotation = SheathedRotation;
-            Mesh.BeforeLocalRotation =
+            Mesh.Rotation = SheathedRotation;
+            Mesh.BeforeRotation =
                 (SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 2.5f - Vector3.UnitY * 0.5f) * Scale;
         }
 
@@ -180,14 +177,11 @@ namespace Hedra.WeaponSystem
 
             Mesh.TransformationMatrix = Mat4;
             Mesh.Position = Owner.Position;
-            Mesh.TargetPosition = Vector3.Zero;
-            Mesh.TargetRotation = new Vector3(180, 0, 0);
-            Mesh.AnimationPosition = Vector3.Zero;
-            Mesh.RotationPoint = Vector3.Zero;
-            Mesh.Rotation = Vector3.Zero;
+            Mesh.LocalRotationPoint = Vector3.Zero;
             Mesh.LocalRotation = Vector3.Zero;
+            Mesh.Rotation = Vector3.Zero;
             Mesh.LocalPosition = Vector3.Zero;
-            Mesh.BeforeLocalRotation = Vector3.UnitY * -0.7f;
+            Mesh.BeforeRotation = Vector3.UnitY * -0.7f;
         }
 
         public virtual int ParsePrimaryIndex(int Index)
@@ -258,7 +252,8 @@ namespace Hedra.WeaponSystem
 
         public void PlaySound()
         {
-            SoundPlayer.PlaySoundWithVariation(SoundType, Owner.Position);
+            if (Owner != null)
+                SoundPlayer.PlaySoundWithVariation(SoundType, Owner.Position);
         }
 
         protected void BaseAttack(IHumanoid Human, AttackOptions Options)
@@ -564,10 +559,10 @@ namespace Hedra.WeaponSystem
             set => MainMesh.Position = value;
         }
 
-        public Vector3 Rotation
+        public Vector3 LocalRotation
         {
-            get => MainMesh.Rotation;
-            set => MainMesh.Rotation = value;
+            get => MainMesh.LocalRotation;
+            set => MainMesh.LocalRotation = value;
         }
 
         public bool Sheathed => !LockWeapon && !PrimaryAttack && !SecondaryAttack &&

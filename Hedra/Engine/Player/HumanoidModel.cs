@@ -409,17 +409,17 @@ namespace Hedra.Engine.Player
             _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
             _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
             _rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
-            Model.Rotation = new Vector3(
+            Model.LocalRotation = new Vector3(
                 QuaternionMath.ToEuler(_rotationQuaternionX).X,
                 QuaternionMath.ToEuler(_rotationQuaternionY).Y,
                 QuaternionMath.ToEuler(_rotationQuaternionZ).Z
                 );
-            Rotation = Model.Rotation;
+            Rotation = Model.LocalRotation;
             if(_hasLamp)
             {
                 _lampModel.Position = LeftWeaponPosition;
-                _lampModel.Rotation = Rotation;
-                _lampModel.RotationPoint = Vector3.Zero;
+                _lampModel.LocalRotation = Rotation;
+                _lampModel.LocalRotationPoint = Vector3.Zero;
             }
             Human.HandLamp.Update();
             if (!Disposed)
@@ -588,7 +588,6 @@ namespace Hedra.Engine.Player
         Blacksmith,
         Mandragora,
         TravellingMerchant,
-        Villager,
         Gnoll,
         Mage
     }

@@ -60,6 +60,7 @@ namespace Hedra.EntitySystem
         void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition);
         void AddBonusHealthWhile(float BonusHealth, Func<bool> Condition);
         void ProcessHit(bool HittedSomething);
+        void ResetEquipment();
         void Greet();
         Item MainWeapon { get; }
         float BaseSpeed { get; }

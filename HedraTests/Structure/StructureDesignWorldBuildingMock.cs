@@ -17,6 +17,16 @@ namespace HedraTests.Structure
             return false;
         }
 
+        public BasePlateau[] GetPlateausFor(Vector2 Position)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IGroundwork[] GetGroundworksFor(Vector2 Position)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates)
         {
             return false;
