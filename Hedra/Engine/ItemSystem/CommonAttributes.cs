@@ -15,6 +15,8 @@ namespace Hedra.Engine.ItemSystem
         EffectType,
         Defense,
         Seed,
+        Ingredients,
+        CraftingStation,
         Price
     }
 }
