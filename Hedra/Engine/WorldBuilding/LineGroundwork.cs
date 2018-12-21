@@ -38,5 +38,10 @@ namespace Hedra.Engine.WorldBuilding
             var den = 1 - Math.Min((point * dir + Origin - Sample).LengthFast / Width, 1);
             return Math.Min(den * 2.5f, 1f);
         }
+        
+        public override BoundingBox ToBoundingBox()
+        {
+            return new BoundingBox((Origin + End) * .5f, (End - Origin).LengthFast);
+        }
     }
 }

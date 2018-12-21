@@ -11,6 +11,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.PlantSystem;
@@ -92,7 +93,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public override void Polish(FarmParameters Parameters, VillageRoot Root, Random Rng)
         {
             var dir = Vector3.TransformPosition(Vector3.UnitZ, Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
-            if (Rng.Next(0, 4) == 1)
+            if (Rng.Next(0, 3) == 1)
             {
                 var position = Parameters.Position + dir * _width * .5f;
                 SpawnFarmer(position, Parameters.Position.Xz);
@@ -180,6 +181,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private void SpawnFarmer(Vector3 Position, Vector2 FarmPosition)
         {
             var farmer = SpawnVillager(Position);
+            farmer.SearchComponent<HealthBarComponent>().Name = Translations.Get("farmer");
+            farmer.RemoveComponent(farmer.SearchComponent<RoamingVillagerAIComponent>());
             farmer.SetHelmet(ItemPool.Grab(CommonItems.FarmerHat).Helmet);
             farmer.SetWeapon(ItemPool.Grab(CommonItems.FarmingRake).Weapon);
             farmer.AddComponent(new FarmerAIComponent(farmer, FarmPosition, Vector2.One * _width));
@@ -193,7 +196,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 BonusHeight = .35f
             };
-            var plateau = new SquaredPlateau(Parameters.Position, _width);
+            var plateau = new SquaredPlateau(Parameters.Position.Xz, _width);
             return this.PushGroundwork(new GroundworkItem
             {
                 Groundwork = path,

@@ -550,13 +550,13 @@ namespace Hedra.Engine.BiomeSystem
                 if (structPosition.Design is GiantTreeDesign)
                 {
                     float radius = structPosition.Mountain.Radius;
-                    if ((structPosition.Mountain.Position.Xz - possiblePosition.Xz).LengthSquared <
+                    if ((structPosition.Mountain.Position - possiblePosition.Xz).LengthSquared <
                         radius * .3f * radius * .3f)
                     {
                         NoGrassZone = true;
                     }
 
-                    if (!NoTreesZone && (structPosition.Mountain.Position.Xz - possiblePosition.Xz).LengthSquared <
+                    if (!NoTreesZone && (structPosition.Mountain.Position - possiblePosition.Xz).LengthSquared <
                         radius * 0.5f * radius * 0.5f)
                         NoTreesZone = true;
 
@@ -565,7 +565,7 @@ namespace Hedra.Engine.BiomeSystem
                 if (structPosition.Design is TravellingMerchantDesign)
                 {
                     var radius = structPosition.Mountain.Radius;
-                    if ((structPosition.Mountain.Position.Xz - possiblePosition.Xz).LengthSquared <
+                    if ((structPosition.Mountain.Position - possiblePosition.Xz).LengthSquared <
                         radius * .5f * radius * .5f)
                         InMerchant = true;
                 }

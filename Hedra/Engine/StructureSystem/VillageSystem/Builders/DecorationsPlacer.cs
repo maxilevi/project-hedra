@@ -25,7 +25,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var lampPost = Root.Cache.GrabModel(template.Path);
                 lampPost.Translate(Position);
                 var shapes = Root.Cache.GrabShapes(template.Path).Select(S => S.Transform(Position)).ToList();
-                Structure.AddCollisionShape(shapes.Cast<ICollidable>().ToArray());
+                Structure.AddCollisionShape(shapes.ToArray());
                 Structure.AddStaticElement(lampPost);
                 Structure.WorldObject.AddChildren(new WorldLight(Position + template.LightOffset * template.Scale)
                 {
@@ -48,7 +48,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var transMatrix = rotationMatrix * Matrix4.CreateTranslation(Position + offset);
                 var bench = Root.Cache.GrabModel(template.Path).Transform(transMatrix);
                 var shapes = Root.Cache.GrabShapes(template.Path).Select(S => S.Transform(transMatrix)).ToList();
-                Structure.AddCollisionShape(shapes.Cast<ICollidable>().ToArray());
+                Structure.AddCollisionShape(shapes.ToArray());
                 Structure.AddStaticElement(bench);
                 Structure.WorldObject.AddChildren(
                     new Bench(

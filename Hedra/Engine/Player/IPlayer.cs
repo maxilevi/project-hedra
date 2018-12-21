@@ -29,7 +29,7 @@ namespace Hedra.Engine.Player
         Minimap Minimap { get; }
         TradeInventory Trade { get; }
         Vector3 Position { get; set; }
-        ICollidable[] NearCollisions { get; }
+        CollisionGroup[] NearCollisions { get; }
         bool Enabled { get; set; }
         void Respawn();
         void Reset();

@@ -13,5 +13,6 @@ namespace Hedra.Engine.WorldBuilding
         bool IsPath { get; }
         bool Affects(Vector2 Sample);
         float Density(Vector2 Sample);
+        BoundingBox ToBoundingBox();
     }
 }

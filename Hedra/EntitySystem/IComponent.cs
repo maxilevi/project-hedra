@@ -2,7 +2,7 @@ namespace Hedra.EntitySystem
 {
     public interface IComponent<out T> where T : IEntity
     {
-        bool Renderable { get; }
+        bool Drawable { get; }
 
         void Update();
 

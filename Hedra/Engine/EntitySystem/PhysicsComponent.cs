@@ -10,6 +10,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -28,10 +29,9 @@ namespace Hedra.Engine.EntitySystem
 
     public class PhysicsComponent : EntityComponent, IPhysicsComponent
     {
-        private const float NormalSpeed = 2.25f;
+        private const float NormalSpeedModifier = 2.25f;
         private const float MaxSlopeHeight = 1.0f;
         private const float MaxSlide = 3.0f;
-        private const float AttackingSpeed = 0.75f;
         private readonly Entity _parent;
         public event OnMoveEvent OnMove;
         public event OnHitGroundEvent OnHitGround;
@@ -53,7 +53,7 @@ namespace Hedra.Engine.EntitySystem
         private Chunk _underChunkF;
         private Chunk _underChunkB;
         private float _height;
-        private float _speed;
+        private float _speedMultiplier;
         private bool _isOverTerrain;
         private float _deltaTime;
         private Vector3 _lastPosition;
@@ -78,12 +78,12 @@ namespace Hedra.Engine.EntitySystem
         public override void Update()
         {
             _deltaTime = this.Timestep;
-            _speed = Mathf.Lerp(_speed, Parent.IsAttacking ? AttackingSpeed : NormalSpeed, _deltaTime * 2f);
+            _speedMultiplier = Mathf.Lerp(_speedMultiplier, NormalSpeedModifier * (Parent.IsAttacking ? Parent.AttackingSpeedModifier : 1), _deltaTime * 2f);
             if (!UsePhysics) return;
             if (Parent.IsGrounded && Parent.BlockPosition == _lastPosition 
                                   && TargetPosition.Y >= Physics.HeightAtPosition(Parent.BlockPosition)) return;
             if(!GameSettings.Paused) _lastPosition = Parent.BlockPosition;
-            if (CollidesWithStructures)
+            if (CollidesWithStructures && !GameSettings.Paused)
             {
                 _underChunk = World.GetChunkAt(Parent.Position);
                 _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.Width, 0, 0));
@@ -93,29 +93,20 @@ namespace Hedra.Engine.EntitySystem
 
                 _collisions.Clear();
                 _collisions.AddRange(World.GlobalColliders);
-                try
-                {
-                    if (_underChunk != null && _underChunk.Initialized)
-                        _collisions.AddRange(_underChunk.CollisionShapes);
+                if (_underChunk != null && _underChunk.Initialized)
+                    _collisions.AddRange(_underChunk.CollisionShapes);
+                if (_underChunkL != null && _underChunkL.Initialized)
+                    _collisions.AddRange(_underChunkL.CollisionShapes);
+                if (_underChunkR != null && _underChunkR.Initialized)
+                    _collisions.AddRange(_underChunkR.CollisionShapes);
+                if (_underChunkF != null && _underChunkF.Initialized)
+                    _collisions.AddRange(_underChunkF.CollisionShapes);
+                if (_underChunkB != null && _underChunkB.Initialized)
+                    _collisions.AddRange(_underChunkB.CollisionShapes);
 
-                    var player = LocalPlayer.Instance;
-
-                    if (player?.NearCollisions != null)
-                        _collisions.AddRange(player.NearCollisions);
-
-                    if (_underChunkL != null && _underChunkL.Initialized)
-                        _collisions.AddRange(_underChunkL.CollisionShapes);
-                    if (_underChunkR != null && _underChunkR.Initialized)
-                        _collisions.AddRange(_underChunkR.CollisionShapes);
-                    if (_underChunkF != null && _underChunkF.Initialized)
-                        _collisions.AddRange(_underChunkF.CollisionShapes);
-                    if (_underChunkB != null && _underChunkB.Initialized)
-                        _collisions.AddRange(_underChunkB.CollisionShapes);
-                }
-                catch (Exception e)
-                {
-                    Log.WriteLine("Catched a sync error." + Environment.NewLine + e);
-                }
+                var nearCollisions = GameManager.Player.NearCollisions;
+                var currentOffset = World.ToChunkSpace(Parent.Position);
+                _collisions.AddRange(nearCollisions.Where(G => G.Contains(currentOffset)).Cast<ICollidable>().ToArray());
             }
 
             var modifier = 1;
@@ -159,7 +150,7 @@ namespace Hedra.Engine.EntitySystem
         public Vector3 MoveFormula(Vector3 Direction, bool ApplyReductions = true)
         {
             var movementSpeed = (Parent.IsUnderwater && !Parent.IsGrounded ? 1.25f : 1.0f) * Parent.Speed;
-            return Direction * 5f * 1.75f * movementSpeed * (ApplyReductions ? _speed : NormalSpeed);
+            return Direction * 5f * 1.75f * movementSpeed * (ApplyReductions ? _speedMultiplier : NormalSpeedModifier);
         }
 
         public void Move(float Scalar = 1)

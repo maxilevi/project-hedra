@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Hedra.AISystem.Humanoid;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using OpenTK;
@@ -150,6 +151,7 @@ namespace Hedra.Engine.Management
                     Result = "Couldn't find any near village";
                     if (vill == null) return false;
                     var human = World.WorldBuilding.SpawnHumanoid(HumanType.Warrior, Caster.Position + Caster.Orientation * 16f);
+                    human.AddComponent(new TalkComponent(human));
                     human.AddComponent(new RoamingVillagerAIComponent(human, vill.Graph));
                     Result = "Success";
                     return true;

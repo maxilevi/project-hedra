@@ -31,8 +31,9 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public delegate void OnAttackEventHandler(IEntity Victim, float Amount);
 
-    public class Entity : IRenderable, IDisposable, ISearchable, IEntity
+    public class Entity : IEntity
     {
+        public virtual float AttackingSpeedModifier => 0.75f;
         private DamageComponent _damageManager;
         private int _drowningSoundTimer;
         private float _health = 100f;
@@ -49,7 +50,7 @@ namespace Hedra.Engine.EntitySystem
         public IPhysicsComponent Physics { get; }
 
         private List<IComponent<IEntity>> Components = new List<IComponent<IEntity>>();
-        protected bool Splashed { get; set; }
+        private bool Splashed { get; set; }
 
         public event OnAttackEventHandler AfterAttacking;
         public event OnAttackEventHandler BeforeAttacking;
@@ -57,7 +58,6 @@ namespace Hedra.Engine.EntitySystem
         public float AttackDamage { get; set; } = 1.0f;
         public float AttackCooldown { get; set; }
         public virtual float AttackResistance { get; set; } = 1.0f;
-        public bool Destroy { get; set; } = false;
         public int Level { get; set; } = 1;
         public float MaxOxygen { get; set; } = 30;
         public int MobId { get; set; }
@@ -258,14 +258,6 @@ namespace Hedra.Engine.EntitySystem
             AfterAttacking?.Invoke(Invoker, Damage);
         }
 
-        public bool InAttackRange(IEntity Target, float RadiusModifier = 1f)
-        {
-            var collider0 = this.Model.HorizontalBroadphaseCollider;
-            var collider1 = Target.Model.HorizontalBroadphaseCollider;
-            var radii = (collider0.BroadphaseRadius + collider1.BroadphaseRadius) * RadiusModifier;
-            return (Target.Position - this.Position).LengthSquared < radii * radii;
-        }
-
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)
         {
             this.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed), Condition);
@@ -464,7 +456,7 @@ namespace Hedra.Engine.EntitySystem
             Physics.Draw();
             for (var i = Components.Count - 1; i > -1; --i)
             {
-                if (!Components[i].Renderable)
+                if (!Components[i].Drawable)
                     Components[i].Draw();
             }
         }

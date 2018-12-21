@@ -89,12 +89,12 @@ namespace HedraTests.Structure
         {
         }
 
-        public float ApplyMultiple(Vector3 Position, float MaxHeight)
+        public float ApplyMultiple(Vector2 Position, float MaxHeight)
         {
             throw new System.NotImplementedException();
         }
 
-        public float ApplyMultiple(Vector3 Position, float MaxHeight, BasePlateau[] Against)
+        public float ApplyMultiple(Vector2 Position, float MaxHeight, params BasePlateau[] Against)
         {
             throw new System.NotImplementedException();
         }

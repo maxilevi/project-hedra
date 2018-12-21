@@ -145,12 +145,6 @@ namespace Hedra.Engine.EntitySystem
             var soundType = Parent.MobType == MobType.Horse ? SoundType.HorseRun : SoundType.HumanRun;
             this._sound = new AreaSound(soundType, this.Position, 48f);
         }
-        
-        public void Resize(Vector3 Scalar)
-        {
-            this.Model.Scale *= Scalar;
-            this.BaseBroadphaseBox *= Scalar;
-        }
 
         public bool CanAttack()
         {

@@ -20,7 +20,7 @@ namespace Hedra.Engine.WorldBuilding
         public float Radius { get; set; }     
         public float Hardness { get; set; } = 3.0f;
 
-        public RoundedPlateau(Vector3 Position, float Radius) : base(Position)
+        public RoundedPlateau(Vector2 Position, float Radius) : base(Position)
         {
             this.Radius = Radius;
         }
@@ -32,18 +32,18 @@ namespace Hedra.Engine.WorldBuilding
         
         public override bool Collides(Vector2 Point)
         {
-            return (this.Position.Xz - Point).LengthFast < this.Radius;
+            return (this.Position - Point).LengthFast < this.Radius;
         }
 
         public override float Density(Vector2 Point)
         {
-            var dist = (this.Position.Xz - Point).LengthFast;
+            var dist = (Position - Point).LengthFast;
             return Math.Min(1.0f, Math.Max(1 - Math.Min(dist / Radius, 1), 0) * Hardness);
         }
 
-        public override SquaredPlateau ToSquared()
+        public override BoundingBox ToBoundingBox()
         {
-            return new SquaredPlateau(Position, Radius);
+            return new BoundingBox(Position, Radius * 2f);
         }
 
         public override BasePlateau Clone()

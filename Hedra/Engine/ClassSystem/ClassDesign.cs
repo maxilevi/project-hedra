@@ -37,6 +37,7 @@ namespace Hedra.Engine.ClassSystem
         public abstract float AttackResistance { get; }
         public abstract float MaxStamina { get; }
         public abstract float BaseDamage { get; }
+        public abstract float AttackingSpeedModifier { get; }
         public abstract Matrix4 HelmetPlacement { get; }
         public abstract Matrix4 ChestplatePlacement { get; }
         public abstract Matrix4 PantsMatrixPlacement { get; }

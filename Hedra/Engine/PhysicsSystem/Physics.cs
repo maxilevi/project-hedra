@@ -47,12 +47,6 @@ namespace Hedra.Engine.PhysicsSystem
                 new Vector3(Model.SupportPoint(Vector3.UnitX).X, Model.SupportPoint(Vector3.UnitY).Y, Model.SupportPoint(Vector3.UnitZ).Z)
             );
         }
-
-
-        public static void LookAt(IEntity Parent, IEntity Target){
-            Parent.Orientation = (Target.Model.Position-Parent.Model.Position).Xz.NormalizedFast().ToVector3();
-            Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
-        }
         
         public static Vector3 DirectionToEuler(Vector3 Direction)
         {

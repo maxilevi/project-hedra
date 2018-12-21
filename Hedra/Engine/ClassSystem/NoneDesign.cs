@@ -21,6 +21,7 @@ namespace Hedra.Engine.ClassSystem
         public override float MaxStamina => throw new ArgumentException();
         /* Do not delete. Used in tests */
         public override float BaseDamage => 4f;
+        public override float AttackingSpeedModifier => 1;
 
         public override float MaxHealthFormula(float RandomFactor)
         {

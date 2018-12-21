@@ -48,7 +48,7 @@ namespace Hedra.Components
         public void ShowIconFor(CacheItem? IconType, float Seconds)
         {
             this.ShowIcon(IconType);
-            TaskScheduler.After((int) (Seconds * 1000), () => this.ShowIcon(null));
+            TaskScheduler.After(Seconds, () => this.ShowIcon(null));
         }
 
         public override void Update()

@@ -46,8 +46,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private BasePlateau CreatePlateau(HouseParameters Parameters)
         {
             return GroundworkType.Squared == Parameters.GroundworkType
-                ? (BasePlateau) new SquaredPlateau(Parameters.Position, _width) { Hardness = 3.0f }
-                : new RoundedPlateau(Parameters.Position, _width * .5f * 1.5f) { Hardness = 3.0f };
+                ? (BasePlateau) new SquaredPlateau(Parameters.Position.Xz, _width) { Hardness = 3.0f }
+                : new RoundedPlateau(Parameters.Position.Xz, _width * .5f * 1.5f) { Hardness = 3.0f };
         }
 
         public override void Polish(HouseParameters Parameters, VillageRoot Root, Random Rng)
@@ -58,6 +58,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             if (Rng.Next(0, 3) == 1)
             {
                 var villager = SpawnVillager(position);
+                villager.SearchComponent<DamageComponent>().Immune = true;
                 villager.AddComponent(new VillagerThoughtsComponent(villager));
             }
             else if (Rng.Next(0, 6) == 1)

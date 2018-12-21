@@ -128,7 +128,7 @@ namespace Hedra.Engine.StructureSystem
                 {
                     var settings = new ItemPoolSettings(ItemTier.Rare, EquipmentType.Axe);
                     _rescuee.Movement.Orientate();
-                    TaskScheduler.After(1000, () =>
+                    TaskScheduler.After(.25f, () =>
                         World.DropItem(ItemPool.Grab(settings), _rescuee.Position + Vector3.UnitX * 5f)
                     );
                     //TaskManager.After( (int) ((talkComponent.Duration+1) * 1000), () =>

@@ -117,6 +117,11 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void ResetEquipment()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Greet()
         {
             throw new NotImplementedException();
@@ -126,6 +131,7 @@ namespace HedraTests.Player
         public float BaseSpeed { get; }
         public bool Destroy { get; set; }
         public float Stamina { get; set; }
+        public float AttackingSpeedModifier { get; }
         public int Level { get; set; } = 1;
         public float AttackPower { get; set; }
         public float MaxStamina { get; set; }
@@ -218,7 +224,7 @@ namespace HedraTests.Player
         public string Name { get; set; }
         public float Oxygen { get; set; }
         public Vector3 Position { get; set; }
-        public ICollidable[] NearCollisions { get; }
+        public CollisionGroup[] NearCollisions { get; }
         public bool Enabled { get; set; }
         public void Respawn()
         {

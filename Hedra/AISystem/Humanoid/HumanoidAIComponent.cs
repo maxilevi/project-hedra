@@ -13,7 +13,7 @@ using OpenTK;
 
 namespace Hedra.AISystem.Humanoid
 {
-    public abstract class HumanoidAIComponent : Component<IHumanoid>
+    public abstract class HumanoidAIComponent : Component<IHumanoid>, IBehaviourComponent
     {
         protected const float DefaultErrorMargin = 3;
         private SleepingPad _bed;

@@ -10,7 +10,7 @@ namespace Hedra.Engine.WorldBuilding
     public class Bench : InteractableStructure
     {
         protected override bool SingleUse => false;
-        protected override bool CanInteract => !HasHost;
+        protected override bool CanInteract => !IsOccupied;
         private readonly Vector3 _sitOffset;
         private readonly Vector3 _sitRotation;
         private IHumanoid _currentHost;
@@ -24,14 +24,14 @@ namespace Hedra.Engine.WorldBuilding
         public override void Update()
         {
             base.Update();
-            if(HasHost && !_currentHost.IsSitting)
+            if(IsOccupied && !_currentHost.IsSitting)
                 SetHost(null);
         }
 
         private void SetHost(IHumanoid Host)
         {
             _currentHost = Host;
-            if (HasHost)
+            if (IsOccupied)
             {
                 Host.Physics.TargetPosition = Position + _sitOffset;
                 Host.Rotation = _sitRotation;
@@ -40,17 +40,19 @@ namespace Hedra.Engine.WorldBuilding
 
         protected override void Interact(IHumanoid Humanoid)
         {
-            if(HasHost) return;
+            if(IsOccupied) return;
             Humanoid.IsSitting = !Humanoid.IsSitting;
             SetHost(Humanoid.IsSitting ? Humanoid : null);
             Humanoid.CanInteract = false;
-            TaskScheduler.After(500, delegate
+            Humanoid.Physics.UsePhysics = false;
+            TaskScheduler.When(() => !Humanoid.IsSitting, () => Humanoid.Physics.UsePhysics = true);
+            TaskScheduler.After(.5f, delegate
             {
                 Humanoid.CanInteract = true;
             });
         }
 
-        private bool HasHost => _currentHost != null;
+        public bool IsOccupied => _currentHost != null;
         
         public override string Message => Translations.Get("to_sit");
 

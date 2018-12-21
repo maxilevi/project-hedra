@@ -10,14 +10,14 @@ namespace Hedra.Engine.WorldBuilding
         private float Width { get; }
         public float Hardness { get; set; } = 1.0f;
         
-        public SquaredPlateau(Vector3 Position, float Width) : base(Position)
+        public SquaredPlateau(Vector2 Position, float Width) : base(Position)
         {
             this.Width = Width;
         }
 
         public override bool Collides(Vector2 Point)
         {
-            var unCenteredPosition = Position.Xz - Width * Vector2.One * .5f;
+            var unCenteredPosition = Position - Width * Vector2.One * .5f;
             return Point.X < unCenteredPosition.X + Width && Point.X > unCenteredPosition.X &&
                    Point.Y < unCenteredPosition.Y + Width && Point.Y > unCenteredPosition.Y;
         }
@@ -28,19 +28,19 @@ namespace Hedra.Engine.WorldBuilding
             var halfWidth = Width * .5f;
             var nearest = new Vector2(
                 Mathf.Clamp(Point.X, Position.X - halfWidth, Position.X + halfWidth),
-                Mathf.Clamp(Point.Y, Position.Z - halfWidth, Position.Z + halfWidth)
+                Mathf.Clamp(Point.Y, Position.Y - halfWidth, Position.Y + halfWidth)
             );
             return Math.Max(0f, 1.0f - (nearest - Point).LengthFast * .04f * Hardness);
         }
         
-        public Vector2 LeftCorner => Position.Xz - new Vector2(Width * .5f, 0);
-        public Vector2 RightCorner => Position.Xz + new Vector2(Width * .5f, 0);
-        public Vector2 BackCorner => Position.Xz - new Vector2(0, Width * .5f);
-        public Vector2 FrontCorner => Position.Xz + new Vector2(0, Width * .5f);
+        public Vector2 LeftCorner => Position - new Vector2(Width * .5f, 0);
+        public Vector2 RightCorner => Position + new Vector2(Width * .5f, 0);
+        public Vector2 BackCorner => Position - new Vector2(0, Width * .5f);
+        public Vector2 FrontCorner => Position + new Vector2(0, Width * .5f);
 
-        public override SquaredPlateau ToSquared()
+        public override BoundingBox ToBoundingBox()
         {
-            return this;
+            return new BoundingBox(Position, Width);
         }
 
         public override BasePlateau Clone()

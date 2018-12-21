@@ -93,6 +93,8 @@ namespace Hedra.Engine.Player
 
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
 
+        public override float AttackingSpeedModifier => Class.AttackingSpeedModifier;
+        
         public float BaseSpeed => Class.BaseSpeed;
 
         public override float MaxHealth

@@ -166,7 +166,7 @@ namespace Hedra.WeaponSystem
             if(!this.MeetsRequirements()) return;
 
             base.Attack1(Human, Options);
-            TaskScheduler.After(250, () => Trail.Emit = true);
+            TaskScheduler.After(.25f, () => Trail.Emit = true);
         }
 
         public override void Dispose()

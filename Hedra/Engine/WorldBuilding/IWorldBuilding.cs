@@ -21,7 +21,7 @@ namespace Hedra.Engine.WorldBuilding
         string GenerateName();
         void SetupStructure(CollidableStructure Structure);
         void DisposeStructure(CollidableStructure Structure);
-        float ApplyMultiple(Vector3 Position, float MaxHeight);
-        float ApplyMultiple(Vector3 Position, float MaxHeight, params BasePlateau[] Against);
+        float ApplyMultiple(Vector2 Position, float MaxHeight);
+        float ApplyMultiple(Vector2 Position, float MaxHeight, params BasePlateau[] Against);
     }
 }

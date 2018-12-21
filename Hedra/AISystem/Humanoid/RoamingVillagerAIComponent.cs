@@ -1,10 +1,13 @@
 using System;
 using System.Linq;
+using System.Security.Cryptography;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
@@ -18,7 +21,9 @@ namespace Hedra.AISystem.Humanoid
     {
         private const int BenchSearchRadius = 24;
         private const int TalkSearchRadius = 8;
+        private float MaxSpeed { get; }
         private VillageGraph Graph { get; }
+        private Timer LookTimer { get; }
         private Vector2 _targetVertex;
         private Vector2 _partialTargetVertex;
         private GraphEdge _currentEdge;
@@ -27,62 +32,149 @@ namespace Hedra.AISystem.Humanoid
         private Action _reachedCallback;
         private float _errorMargin = DefaultErrorMargin;
         private readonly Timer _interactionTimer;
+        private Vector2 _lastPosition;
+        private bool _isInteracting;
+        private readonly Timer _sitTimer;
+        private readonly Timer _talkTimer;
+        private float _targetSpeed;
         
         public RoamingVillagerAIComponent(IHumanoid Parent, VillageGraph Graph) : base(Parent, false)
         {
             this.Graph = Graph;
             _reachedTarget = true;
             MovementTimer.MakeReady();
+            MaxSpeed = Utils.Rng.NextFloat() * .25f + .8f;
             _timeoutTimer = new Timer(48 + Utils.Rng.NextFloat() * 40);
             _interactionTimer = new Timer(8 + Utils.Rng.NextFloat() * 14f);
-            Parent.Speed = .85f;
+            _sitTimer = new Timer(Utils.Rng.NextFloat() * 8f + 8)
+            {
+                AutoReset = false
+            };
+            _talkTimer = new Timer(Utils.Rng.NextFloat() * 8f + 8)
+            {
+                AutoReset = false
+            };
+            LookTimer = new Timer(Utils.Rng.NextFloat() * 8f + 6);
         }
 
         public override void Update()
         {
-            base.Update();
-            if (_reachedTarget)
+            if (!base.CanUpdate) return;
+
+            if (Parent.IsNear(GameManager.Player, 16) && !_isInteracting || Parent.SearchComponent<TalkComponent>().Talking)
             {
-                if (MovementTimer.Tick())
-                {
-                    if (Utils.Rng.Next(0, 5) == 1)
-                        GoToMarket();
-                    else
-                        FindAnotherSpot();
-                }
-                else if (_interactionTimer.Tick())
-                {
-                    ManageInteractions();
-                }
+                Parent.RotateTowards(GameManager.Player);
+                _targetSpeed = 0;
             }
             else
             {
-                if (_timeoutTimer.Tick())
-                    _reachedTarget = true;
-                else
-                    base.Move(_partialTargetVertex.ToVector3(), _errorMargin);
+                if (_reachedTarget && !_isInteracting)
+                {
+                    if (MovementTimer.Tick())
+                        FindLocation();
+                    else if (LookTimer.Tick())
+                        LookAtRandom();
+                }
+                else if (!_reachedTarget)
+                {
+                    if (_timeoutTimer.Tick())
+                        _reachedTarget = true;
+                    else
+                        base.Move(_partialTargetVertex.ToVector3(), _errorMargin);
+                }
 
-                ManageInteractions();
+                if (!_isInteracting)
+                    ManageInteractions();
+                _talkTimer.Tick();
+                _sitTimer.Tick();
+                _targetSpeed = MaxSpeed;
             }
+            Parent.Speed = Mathf.Lerp(Parent.Speed, _targetSpeed, Time.DeltaTime);
+        }
+
+        private void LookAtRandom()
+        {
+            Physics.DirectionToEuler(
+                (new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * 2 - Vector3.One).Xz.NormalizedFast().ToVector3()
+            );
+        }
+        
+        private void FindLocation()
+        {
+            if (Utils.Rng.Next(0, 5) == 1)
+                GoToMarket();
+            else
+                FindRandomSpot();
         }
 
         private void ManageInteractions()
         {
-            if (CanSit && ShouldSit)
-                Sit();
-            if (CanTalk && ShouldTalk)
-                Talk();
+            if ((Parent.BlockPosition.Xz - _lastPosition).LengthSquared < 1) return;
+            _lastPosition = Parent.BlockPosition.Xz;
+            if (ShouldSit && CanSit(out var bench))
+                Sit(bench);
+            if (ShouldTalk && CanTalk(out var human))
+                Talk(human);
         }
 
-        private void Talk()
+
+        private bool CanSit(out Bench Bench)
         {
-            var nearestVillager = World.InRadius<IHumanoid>(Parent.Position, TalkSearchRadius)
-                .First(V => V.SearchComponent<RoamingVillagerAIComponent>() != null);
-            MoveTo(nearestVillager.Position.Xz, delegate
+            return null != (Bench = World.InRadius<Bench>(Parent.Position, BenchSearchRadius).FirstOrDefault(
+                            B => !B.IsOccupied
+                       )) && _sitTimer.Ready;
+        }
+
+        private bool CanTalk(out IHumanoid Human)
+        {
+            return null != (Human = World.InRadius<IHumanoid>(Parent.Position, TalkSearchRadius)
+                       .FirstOrDefault(
+                           V => V.SearchComponent<RoamingVillagerAIComponent>() != null 
+                                && V != Parent
+                                && (!V.SearchComponent<TalkComponent>()?.Talking ?? false)
+                           )
+                       ) && _talkTimer.Ready;
+        }
+        
+        private void Talk(IHumanoid NearestVillager)
+        {
+            MoveTo(NearestVillager.Position.Xz, delegate
             {
-                nearestVillager.SearchComponent<TalkComponent>().Simulate(Utils.Rng.NextFloat() * 12 + 6);
+                var time = Utils.Rng.NextFloat() * 8 + 8;
+                TalkWith(NearestVillager, time);
+                NearestVillager.SearchComponent<RoamingVillagerAIComponent>().TalkWith(Parent, time);
             }, 8);
+            _isInteracting = true;
+        }
+        
+        /* Called from RoamingVillagerAIComponent::Talk */
+        private void TalkWith(IHumanoid Humanoid, float Time)
+        {
+            Parent.RotateTowards(Humanoid);
+            Parent.SearchComponent<TalkComponent>().Simulate(Humanoid, Time, delegate
+            {
+                _talkTimer.Reset();
+                _isInteracting = false;
+                FindLocation();
+            });
             _reachedTarget = true;
+            _isInteracting = true;
+        }
+        
+        private void Sit(InteractableStructure NearestBench)
+        {
+            MoveTo(NearestBench.Position.Xz, delegate
+            {
+                NearestBench.InvokeInteraction(Parent);
+                TaskScheduler.After(Utils.Rng.NextFloat() * 8 + 12, delegate
+                {
+                    _sitTimer.Reset();
+                    _isInteracting = false;
+                    Parent.IsSitting = false;
+                    FindLocation();
+                });
+            }, 8);
+            _isInteracting = true;
         }
         
         private void GoToMarket()
@@ -94,17 +186,7 @@ namespace Hedra.AISystem.Humanoid
             }, MarketParameters.MarketSize * .25f);
         }
         
-        private void Sit()
-        {
-            var nearestBench = World.InRadius<Bench>(Parent.Position, BenchSearchRadius).First();
-            MoveTo(nearestBench.Position.Xz, delegate
-            {
-                nearestBench.InvokeInteraction(Parent);
-            });
-            _reachedTarget = true;
-        }
-        
-        private void FindAnotherSpot()
+        private void FindRandomSpot()
         {
             _targetVertex = NewPoint.Xz;
             SelectNextEdge();
@@ -135,7 +217,7 @@ namespace Hedra.AISystem.Humanoid
             if (allEdges.Count(E => E != currentEdge) > 0)
             {
                 var randomUnit = new Vector2(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat() * 2 - 1);
-                MoveTo(lowestVertex + randomUnit * 12f, delegate
+                MoveTo(lowestVertex + randomUnit * 24f, delegate
                 {
                     if(_targetVertex == _partialTargetVertex) 
                         _reachedTarget = true;
@@ -169,14 +251,9 @@ namespace Hedra.AISystem.Humanoid
 
         private bool ShouldSit => Utils.Rng.Next(0, 2) == 1;
 
-        private bool CanSit => World.InRadius<Bench>(Parent.Position, BenchSearchRadius).Length > 0;
-
         private bool ShouldTalk => true;//Utils.Rng.Next(0, 2) == 1;
-
-        private bool CanTalk => World.InRadius<IHumanoid>(Parent.Position, TalkSearchRadius)
-                                    .Any(V => V.SearchComponent<RoamingVillagerAIComponent>() != null);
         
-        protected override float WaitTime => 30 + Utils.Rng.NextFloat() * 120;
+        protected override float WaitTime => 4;//6 + Utils.Rng.NextFloat() * 10;
 
         protected override Vector3 NewPoint => Graph.GetNearestVertex(RandomPointInsideVillage).ToVector3();
     }

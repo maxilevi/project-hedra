@@ -4,7 +4,7 @@ namespace Hedra.Engine.Player
 {
     public interface IStructureAware
     {
-        ICollidable[] NearCollisions { get; }
+        CollisionGroup[] NearCollisions { get; }
         void Update();
     }
 }

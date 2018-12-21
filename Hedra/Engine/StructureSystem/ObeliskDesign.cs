@@ -54,7 +54,7 @@ namespace Hedra.Engine.StructureSystem
             model.Extradata.Clear();
             model.FillExtraData(WorldRenderer.NoHighlightFlag);
 
-            Structure.AddCollisionShape(collisionBox);
+            Structure.AddCollisionShape(collisionBox.ToShape());
             Structure.AddStaticElement(model);
 
             obelisk.AreaWrapper =

@@ -33,6 +33,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public override void Polish(BlacksmithParameters Parameters, VillageRoot Root, Random Rng)
         {
+            if(Rng.Next(0, 3) != 1) return;
             var transformation = BuildTransformation(Parameters).ClearTranslation();
             var human = SpawnHumanoid(
                 HumanType.Blacksmith,

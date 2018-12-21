@@ -16,7 +16,7 @@ namespace Hedra.AISystem.Behaviours
             var nearHumanoids = World.InRadius<IHumanoid>(Parent.Position, 16f);
             if (nearHumanoids.Length > 0)
             {
-                Physics.LookAt(Parent, nearHumanoids[0]);
+                Parent.RotateTowards(nearHumanoids[0]);
             }
         }
     }

@@ -27,5 +27,10 @@ namespace Hedra.Engine.WorldBuilding
         {
             return Math.Abs(Sample.X - Position.X) / Width + Math.Abs(Sample.Y - Position.Z) / Width;
         }
+        
+        public override BoundingBox ToBoundingBox()
+        {
+            return new BoundingBox(Position.Xz, Width);
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace Hedra.Engine.PhysicsSystem
 #endif
             this.Indices = Indices ?? new uint[0];
             this.RecalculateBroadphase();
-            this.Height = (Support(Vector3.UnitY) - Support(-Vector3.UnitY)).Y;
+            this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
         }
 
         public CollisionShape Transform(Matrix4 TransMatrix)
@@ -46,7 +46,7 @@ namespace Hedra.Engine.PhysicsSystem
                 Vertices[i] = Vector3.TransformPosition(Vertices[i], TransMatrix);
             }
             this.RecalculateBroadphase();
-            this.Height = (Support(Vector3.UnitY) - Support(-Vector3.UnitY)).Y;
+            this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
             return this;
         }
 
@@ -60,9 +60,8 @@ namespace Hedra.Engine.PhysicsSystem
             return this;
         }
 
-        public Vector3 Support(Vector3 Direction)
-        {
-            
+        public Vector3 SupportPoint(Vector3 Direction)
+        {           
             var highest = float.MinValue;
             var support = Vector3.Zero;
 

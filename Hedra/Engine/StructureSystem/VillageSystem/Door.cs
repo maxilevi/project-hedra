@@ -27,6 +27,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private readonly ObjectMeshCollider _collider;
         private readonly Vector3 _rotationPoint;
         private readonly CollisionShape _shape;
+        private readonly CollisionGroup _group;
         private Vector3 _lastRotation;
         private Vector3 _lastPosition;
         private readonly float _invertedRotation;
@@ -40,7 +41,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             _collider = new ObjectMeshCollider(_mesh, Mesh);
             _shape = _collider.Shape;
             _invertedRotation = InvertedRotation ? -1 : 1;
-            Structure.AddCollisionShape(_shape);
+            Structure.AddCollisionGroup(_group = new CollisionGroup(_shape));
         }
         public override void Update()
         {
@@ -53,7 +54,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             base.DoUpdate();
             if (_mesh != null)
             {
-                _mesh.Rotation = Mathf.Lerp(_mesh.Rotation, _targetRotation, Time.DeltaTime * 4f);
+                _mesh.LocalRotation = Mathf.Lerp(_mesh.LocalRotation, _targetRotation, Time.DeltaTime * 4f);
                 _mesh.RotationPoint = _rotationPoint;
             }
             if (_collider != null)
@@ -96,7 +97,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         private void UpdateShape()
         {
-            _shape.RecalculateBroadphase();
+            _group.Recalculate();
             _lastRotation = _mesh.Rotation;
             _lastPosition = _mesh.Position;
         }

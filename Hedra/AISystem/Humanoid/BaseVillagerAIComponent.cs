@@ -43,7 +43,7 @@ namespace Hedra.AISystem.Humanoid
             base.Update();
             if (!base.CanUpdate) return;
 
-            if((GameManager.Player.Position - Parent.Position).Xz.LengthSquared < 16 * 16 && !IsMoving)
+            if(Parent.IsNear(GameManager.Player, 16) && !IsMoving)
             {
                 Parent.Orientation = (GameManager.Player.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );

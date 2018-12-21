@@ -96,7 +96,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private bool IsUnderwater(Vector3 Position, BasePlateau[] Plateaus)
         {
             return World.WorldBuilding.ApplyMultiple(
-                   Position,
+                   Position.Xz,
                    World.BiomePool.GetRegion(Position).Generation.GetHeight(Position.X, Position.Z, null, out _),
                    Plateaus
             ) < BiomePool.SeaLevel;

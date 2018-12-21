@@ -100,21 +100,21 @@ namespace Hedra.Engine.Rendering.UI
             {
                 DonateBtcButton.CanClick = false;
                 Process.Start("https://twitter.com/Zaphyk");
-                TaskScheduler.After(250, delegate { DonateBtcButton.CanClick = true; });
+                TaskScheduler.After(.25f, delegate { DonateBtcButton.CanClick = true; });
             };
 
             redditClick.Click += delegate
             {
                 DonateBtcButton.CanClick = false;
                 Process.Start("https://www.reddit.com/r/projecthedra");
-                TaskScheduler.After(250, delegate { DonateBtcButton.CanClick = true; });
+                TaskScheduler.After(.25f, delegate { DonateBtcButton.CanClick = true; });
             };
 
             discordClick.Click += delegate
             {
                 DonateBtcButton.CanClick = false;
                 Process.Start("https://discord.gg/AEC4Uab");
-                TaskScheduler.After(250, delegate { DonateBtcButton.CanClick = true; });
+                TaskScheduler.After(.25f, delegate { DonateBtcButton.CanClick = true; });
             };
 
             

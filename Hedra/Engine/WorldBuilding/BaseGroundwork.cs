@@ -15,5 +15,7 @@ namespace Hedra.Engine.WorldBuilding
         public abstract bool Affects(Vector2 Sample);
 
         public abstract float Density(Vector2 Sample);
+
+        public abstract BoundingBox ToBoundingBox();
     }
 }

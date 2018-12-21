@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player
         public TradeInventory Trade { get; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
-        public ICollidable[] NearCollisions => StructureAware.NearCollisions;
+        public CollisionGroup[] NearCollisions => StructureAware.NearCollisions;
         private IAmbientEffectHandler AmbientEffects { get; }
         private IStructureAware StructureAware { get; }
         private float _acummulativeHealing;

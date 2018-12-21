@@ -32,8 +32,8 @@ namespace Hedra.Engine.PhysicsSystem
         }
        
         private static void SupportPoint(Vector3 Direction, CollisionShape Shape1, CollisionShape Shape2, SimplexVertex Vertex){
-            Vertex.SupportA = Shape1.Support(Direction);
-            Vertex.SupportB = Shape2.Support(-Direction);
+            Vertex.SupportA = Shape1.SupportPoint(Direction);
+            Vertex.SupportB = Shape2.SupportPoint(-Direction);
             Vertex.SupportPoint = Vertex.SupportA - Vertex.SupportB;
             
         }

@@ -67,7 +67,7 @@ namespace Hedra.Engine.Management
         /// </summary>
         /// <param name="Time">Time to wait. In milliseconds.</param>
         /// <param name="Action">Action to execute.</param>
-        public static void After(int Time, Action Action)
+        public static void After(float Time, Action Action)
         {
             CoroutineManager.StartCoroutine(AfterSeconds, Time, Action);
         }
@@ -140,11 +140,13 @@ namespace Hedra.Engine.Management
             action();
         }
 
-        private static IEnumerator AfterSeconds(params object[] Args){
+        private static IEnumerator AfterSeconds(params object[] Args)
+        {
             float passedTime = 0;
-            float milliseconds = Convert.ToSingle(Args[0]);
+            float targetTime = Convert.ToSingle(Args[0]);
             var action = (Action)Args[1];
-            while (passedTime * 1000 < milliseconds){
+            while (passedTime < targetTime)
+            {
                 passedTime += Time.IndependantDeltaTime;
                 yield return null;
             }

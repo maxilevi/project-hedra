@@ -38,7 +38,7 @@ namespace Hedra.WeaponSystem
 
             base.Attack1(Human, Options);
 
-            TaskScheduler.After(250, () => Trail.Emit = true);
+            TaskScheduler.After(.25f, () => Trail.Emit = true);
         }
 
         public override void Attack2(IHumanoid Human, AttackOptions Options)
@@ -47,7 +47,7 @@ namespace Hedra.WeaponSystem
 
             base.Attack2(Human, Options);
 
-            TaskScheduler.After(200, () => Trail.Emit = true);
+            TaskScheduler.After(.2f, () => Trail.Emit = true);
         }
     }
 }

@@ -5,6 +5,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
 using OpenTK;
@@ -13,7 +14,7 @@ namespace Hedra.AnimationEvents
 {
     public class Slash : AnimationEvent
     {
-        public Slash(Entity Parent) : base(Parent) {}
+        public Slash(IEntity Parent) : base(Parent) {}
 
         public override void Build()
         {

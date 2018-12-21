@@ -80,11 +80,11 @@ namespace Hedra.WeaponSystem
             var direction = player?.View.CrossDirection ?? Owner.Orientation;
             Shoot(direction, Options, player?.Pet?.Pet);
             TaskScheduler.After(
-                150,
+                .15f,
                 () => Shoot(direction, Options, player?.Pet?.Pet)
             );
             TaskScheduler.After(
-                300,
+                .3f,
                 () => Shoot(direction, Options, player?.Pet?.Pet)
             );
         }

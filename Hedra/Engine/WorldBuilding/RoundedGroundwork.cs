@@ -26,5 +26,10 @@ namespace Hedra.Engine.WorldBuilding
         {
             return 1 - Math.Min((Sample - this.Position.Xz).LengthSquared / (this.Radius * this.Radius), 1);
         }
+
+        public override BoundingBox ToBoundingBox()
+        {
+            return new BoundingBox(Position.Xz, Radius * 2);
+        }
     }
 }

@@ -19,6 +19,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
@@ -163,17 +164,17 @@ namespace Hedra.Engine.WorldBuilding
             }         
         }
 
-        public float ApplyMultiple(Vector3 Position, float MaxHeight, params BasePlateau[] Against)
+        public float ApplyMultiple(Vector2 Position, float MaxHeight, params BasePlateau[] Against)
         {
             var plateaus = Against.OrderByDescending(P => P.MaxHeight).ToList();
             for (var i = 0; i < plateaus.Count; i++)
             {
-                MaxHeight = plateaus[i].Apply(Position.Xz, MaxHeight, out _);
+                MaxHeight = plateaus[i].Apply(Position, MaxHeight, out _);
             }
             return MaxHeight;
         }
         
-        public float ApplyMultiple(Vector3 Position, float MaxHeight)
+        public float ApplyMultiple(Vector2 Position, float MaxHeight)
         {
             lock (_plateauLock)
                 return ApplyMultiple(Position, MaxHeight, _plateaus.ToArray());
@@ -189,16 +190,18 @@ namespace Hedra.Engine.WorldBuilding
 
         public BasePlateau[] GetPlateausFor(Vector2 Position)
         {
-            return Plateaux;
             lock (_plateauLock)
             {
                 var chunkSpace = World.ToChunkSpace(Position);
                 var list = new List<BasePlateau>();
                 for (var i = 0; i < _plateaus.Count; ++i)
                 {
-                    var squared = _plateaus[i].ToSquared();
+                    var squared = _plateaus[i].ToBoundingBox();
                     if (
                         squared.Collides(chunkSpace)
+                        || squared.Collides(chunkSpace + new Vector2(Chunk.Width, 0)) 
+                        || squared.Collides(chunkSpace + new Vector2(0, Chunk.Width))
+                        || squared.Collides(chunkSpace + new Vector2(Chunk.Width, Chunk.Width))
                         || World.ToChunkSpace(squared.BackCorner) == chunkSpace
                         || World.ToChunkSpace(squared.FrontCorner) == chunkSpace
                         || World.ToChunkSpace(squared.RightCorner) == chunkSpace
@@ -214,8 +217,29 @@ namespace Hedra.Engine.WorldBuilding
 
         public IGroundwork[] GetGroundworksFor(Vector2 Position)
         {
-            // TODO
-            return Groundworks;
+            lock (_groundworkLock)
+            {
+                var chunkSpace = World.ToChunkSpace(Position);
+                var list = new List<IGroundwork>();
+                for (var i = 0; i < _groundwork.Count; ++i)
+                {
+                    var squared = _groundwork[i].ToBoundingBox();
+                    if (
+                        squared.Collides(chunkSpace)
+                        || squared.Collides(chunkSpace + new Vector2(Chunk.Width, 0)) 
+                        || squared.Collides(chunkSpace + new Vector2(0, Chunk.Width))
+                        || squared.Collides(chunkSpace + new Vector2(Chunk.Width, Chunk.Width))
+                        || World.ToChunkSpace(squared.BackCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.FrontCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.RightCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.LeftCorner) == chunkSpace
+                    )
+                    {
+                        list.Add(_groundwork[i]);
+                    }
+                }
+                return list.ToArray();
+            }
         }
         
         public BasePlateau[] Plateaux

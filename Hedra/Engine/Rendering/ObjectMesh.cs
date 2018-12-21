@@ -112,7 +112,7 @@ namespace Hedra.Engine.Rendering
             set => _buffer.LocalPosition = value;
         }
         
-        public Vector3 LocalRotationPoint
+        public Vector3 RotationPoint
         {
             get => _buffer.RotationPoint;
             set => _buffer.RotationPoint = value;
@@ -142,7 +142,7 @@ namespace Hedra.Engine.Rendering
             }
         }
         
-        public Vector3 RotationPoint
+        public Vector3 LocalRotationPoint
         {
             get => _buffer.LocalRotationPoint;
             set => _buffer.LocalRotationPoint = value;

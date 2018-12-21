@@ -34,14 +34,14 @@ namespace Hedra.Components
         private const int TalkRadius = 12;
         private static uint _talkBackground;
         private static Vector2 _talkBackgroundSize;
-        private Animation _talkingAnimation;
+        private readonly Animation _talkingAnimation;
         public event OnTalkEventHandler OnTalk;
         private bool _shouldTalk;                                                                                        
-        public bool Talked;
-        private bool _isTalking;
+        public bool Talking { get; private set; }
         private TextBillboard _board;
         private readonly string _phrase;
         private string _thought;
+        private IHumanoid _talker;
 
         static TalkComponent()
         {
@@ -52,32 +52,28 @@ namespace Hedra.Components
             });
         }
         
-        public TalkComponent(IHumanoid Parent, string Text) : base(Parent)
+        public TalkComponent(IHumanoid Parent, string Text = null) : base(Parent)
         {
             _phrase = Utils.FitString(Text, 25);
             _talkingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTalk.dae");
             _talkingAnimation.Loop = false;
             _talkingAnimation.OnAnimationEnd += Sender =>
             {
-                if (!_isTalking) return;
+                if (!Talking) return;
                 PlayTalkingAnimation();
             };
             EventDispatcher.RegisterKeyDown(this, (Sender, EventArgs) =>
             {
-                if (EventArgs.Key == Controls.Interact && (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius && !Talked && !_isTalking)
+                if (EventArgs.Key == Controls.Interact && Parent.IsNear(GameManager.Player, TalkRadius) && !Talking)
                     _shouldTalk = true;
             });
-        }
-
-        public TalkComponent(IHumanoid Parent) : this(Parent, null)
-        {           
         }
 
         public override void Update()
         {
             bool CanTalk() => 
                 (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius 
-                && !_isTalking && !Talked && !PlayerInterface.Showing && !Parent.Model.IsMoving;
+                && !Talking && !PlayerInterface.Showing && !Parent.Model.IsMoving;
             if (CanTalk())
             {
                 GameManager.Player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_talk", Controls.Interact), Color.White, CanTalk);
@@ -87,9 +83,9 @@ namespace Hedra.Components
                     this.TalkToPlayer();
                 }         
             }
-            if (Talked && (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius)
+            if (Talking && Parent.IsNear(_talker, TalkRadius))
             {
-                Physics.LookAt(this.Parent, GameManager.Player);
+                Parent.RotateTowards(_talker);
             }
         }
 
@@ -102,15 +98,20 @@ namespace Hedra.Components
             return _phrase ?? Phrases[Utils.Rng.Next(0, Phrases.Length)];
         }
 
-        public void Simulate(float Seconds)
+        public void Simulate(IHumanoid To, float Seconds, Action Callback)
         {
-            _isTalking = true;
-            Talked = true;
+            Talking = true;
+            _talker = To;
             PlayTalkingAnimation();
-            TaskScheduler.After((int)(Seconds * 1000), delegate
+            TaskScheduler.After(Seconds, delegate
             {
-                _isTalking = false;
-                Talked = false;
+                Talking = false;
+                _talker = null;
+                TaskScheduler.When(
+                    () => Parent.Model.AnimationBlending != _talkingAnimation
+                    && Parent.Model.AnimationPlaying != _talkingAnimation,
+                    Callback
+                );
             });
         }
 
@@ -140,16 +141,21 @@ namespace Hedra.Components
 
             textSize.Dispose();
             _shouldTalk = false;
-            Talked = true;
+            Talking = true;
+            _talker = GameManager.Player;
             TaskScheduler.When(
                 () => backBoard.Disposed,
-                () => Talked = false
+                delegate
+                {
+                    _talker = null;
+                    Talking = false;
+                }
             );
         }
 
         private void PlayTalkingAnimation()
         {
-            Parent.Model.Play(_talkingAnimation);
+            Parent.Model.BlendAnimation(_talkingAnimation);
         }
 
         private IEnumerator TalkCoroutine(object[] Args)
@@ -158,7 +164,6 @@ namespace Hedra.Components
             var text = (string) Args[1];
             var iterator = 0;
             var passedTime = 0f;
-            _isTalking = true;
             PlayTalkingAnimation();
 
             while (iterator < text.Length+1)
@@ -172,7 +177,6 @@ namespace Hedra.Components
                 passedTime += Time.DeltaTime;
                 yield return null;
             }
-            _isTalking = false;
         }
 
         public override void Dispose()

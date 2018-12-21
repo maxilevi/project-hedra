@@ -42,7 +42,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         protected bool IsPlateauNeeded(BasePlateau Plateau)
         {
             var mount = Structure.Mountain;
-            var squared = Plateau.ToSquared();
+            var squared = Plateau.ToBoundingBox();
             return mount.Density(squared.LeftCorner) < 1 || mount.Density(squared.RightCorner) < 1 ||
                    mount.Density(squared.FrontCorner) < 1 || mount.Density(squared.BackCorner) < 1;
         }
@@ -160,7 +160,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         protected GroundworkItem CreateGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
         {
-            var plateau = new RoundedPlateau(Position, Radius * 1.5f);
+            var plateau = new RoundedPlateau(Position.Xz, Radius * 1.5f);
             return new GroundworkItem
             {
                 Groundwork =  new RoundedGroundwork(Position, Radius, Type),

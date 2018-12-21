@@ -40,13 +40,13 @@ namespace Hedra.AISystem.Behaviours
             if (Target != null && InAttackRange(Target))
             {
                 FollowTimer.Reset();
-                this.Attack(1.5f);
+                this.Attack(2.0f);
             }
         }
 
         protected virtual void Attack(float RangeModifier)
         {
-            Physics.LookAt(this.Parent, Target);
+            Parent.RotateTowards(Target);
             Parent.Model.Attack(Target, RangeModifier);
         }
         

@@ -97,7 +97,7 @@ namespace Hedra.WeaponSystem
 
             base.BasePrimaryAttack(Human, Options);
             Trail.Emit = false;
-            TaskScheduler.After(200, () => Trail.Emit = true);
+            TaskScheduler.After(.2f, () => Trail.Emit = true);
         }
 
         public override void Attack2(IHumanoid Human, AttackOptions Options)

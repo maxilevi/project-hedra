@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.EntitySystem
 {
-    public interface IEntity : IUpdatable, ISearchable
+    public interface IEntity : IUpdatable, ISearchable, IDisposable, IRenderable
     {
         IPhysicsComponent Physics { get; }
         
@@ -22,8 +22,8 @@ namespace Hedra.EntitySystem
         float AttackCooldown { get; set; }
         
         float AttackResistance { get; set; }
-        
-        bool Destroy { get; set; }
+
+        float AttackingSpeedModifier { get; }
         
         int Level { get; set; }
         
@@ -47,13 +47,9 @@ namespace Hedra.EntitySystem
 
         bool InUpdateRange { get; }
 
-        bool IsActive { get; set; }
-        
         bool IsBoss { get; set; }
         
         bool IsDead { get; set; }
-        
-        bool IsFlying { get; set; }
         
         bool IsFriendly { get; }
         
@@ -99,8 +95,6 @@ namespace Hedra.EntitySystem
 
         void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true, bool PushBack = true);
 
-        bool InAttackRange(IEntity Target, float RadiusModifier = 1f);
-
         void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition);
 
         void AddBonusSpeedForSeconds(float BonusSpeed, float Seconds);
@@ -116,9 +110,7 @@ namespace Hedra.EntitySystem
         T SearchComponent<T>();
 
         T[] GetComponents<T>();
-
-        void UpdateEnvironment();
-
+        
         void KnockForSeconds(float Time);
 
         void SpawnAnimation();
@@ -132,7 +124,5 @@ namespace Hedra.EntitySystem
         void InvokeBeforeAttack(IEntity Invoker, float Damage);
 
         void InvokeAfterAttack(IEntity Invoker, float Damage);
-
-        void SplashEffect(Chunk UnderChunk);
     }
 }

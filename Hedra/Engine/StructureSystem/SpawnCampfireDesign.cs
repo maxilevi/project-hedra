@@ -3,6 +3,7 @@ using Hedra.BiomeSystem;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.ComplexMath;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
@@ -42,6 +43,7 @@ namespace Hedra.Engine.StructureSystem
             villager.Name = NameGenerator.PickMaleName(Rng);
             villager.Physics.UsePhysics = false;
             villager.IsSitting = true;
+            villager.SearchComponent<DamageComponent>().Immune = true;
             villager.AddComponent(new SpawnVillagerThoughtsComponent(villager));
             villager.AddComponent(new TalkComponent(villager));
             return villager;

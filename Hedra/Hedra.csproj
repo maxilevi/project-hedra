@@ -136,6 +136,7 @@
     <Compile Include="AISystem\Humanoid\RoamingVillagerAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\VillagerAISettings.cs" />
     <Compile Include="AISystem\Humanoid\WarriorAIComponent.cs" />
+    <Compile Include="AISystem\IBehaviourComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="AISystem\NeutralAIComponent.cs" />
     <Compile Include="AISystem\PigAIComponent.cs" />
@@ -224,9 +225,11 @@
     <Compile Include="Engine\WorldBuilding\BaseGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\BasePlateau.cs" />
     <Compile Include="Engine\WorldBuilding\Bench.cs" />
+    <Compile Include="Engine\WorldBuilding\BoundingBox.cs" />
     <Compile Include="Engine\WorldBuilding\GroundworkType.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredPlateau.cs" />
+    <Compile Include="EntitySystem\EntityExtensions.cs" />
     <Compile Include="HedraContent.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeColors.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeEnviromentDesign.cs" />
@@ -6939,6 +6942,8 @@
     <OutputPath>bin\Debug\</OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <WarningLevel>1</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ProjectExtensions />
   <Target Name="AfterCompile">

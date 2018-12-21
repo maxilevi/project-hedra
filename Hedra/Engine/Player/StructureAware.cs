@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player
                 AutoReset = false
             };
             _enterTimer.MakeReady();
-            NearCollisions = new ICollidable[0];
+            NearCollisions = new CollisionGroup[0];
         }
         
         public void Update()
@@ -83,6 +83,6 @@ namespace Hedra.Engine.Player
             return differences;
         }
 
-        public ICollidable[] NearCollisions { get; private set; }
+        public CollisionGroup[] NearCollisions { get; private set; }
     }
 }

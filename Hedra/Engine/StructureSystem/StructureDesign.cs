@@ -28,14 +28,14 @@ namespace Hedra.Engine.StructureSystem
         
         protected virtual CollidableStructure Setup(Vector3 TargetPosition, Random Rng, BaseStructure Structure)
         {
-            var collidable = new CollidableStructure(this, TargetPosition, new RoundedPlateau(TargetPosition, Radius), Structure);
+            var collidable = new CollidableStructure(this, TargetPosition, new RoundedPlateau(TargetPosition.Xz, Radius), Structure);
             Structure.Position = collidable.Position;
             return collidable;
         }
 
         public bool CanSetup(Vector3 TargetPosition)
         {
-            return World.WorldBuilding.CanAddPlateau(new RoundedPlateau(TargetPosition, Radius));
+            return World.WorldBuilding.CanAddPlateau(new RoundedPlateau(TargetPosition.Xz, Radius));
         }
 
         public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
