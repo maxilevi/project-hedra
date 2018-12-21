@@ -81,7 +81,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             };
         }
 
-        public void UpdateView()
+        private void UpdateView()
         {
             _manager.UpdateView();
         }

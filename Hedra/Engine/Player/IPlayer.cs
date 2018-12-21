@@ -4,8 +4,10 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.BoatSystem;
+using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
+using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
@@ -22,7 +24,7 @@ namespace Hedra.Engine.Player
         IPlayerInventory Inventory { get; }
         EntitySpawner Spawner { get; }
         IToolbar Toolbar { get; }
-        QuestLog QuestLog { get; }
+        QuestInterface QuestInterface { get; }
         IAbilityTree AbilityTree { get; }
         PetManager Pet { get; }
         Chat Chat { get; }
@@ -30,6 +32,7 @@ namespace Hedra.Engine.Player
         TradeInventory Trade { get; }
         Vector3 Position { get; set; }
         CollisionGroup[] NearCollisions { get; }
+        CraftingInventory Crafting { get; }
         bool Enabled { get; set; }
         void Respawn();
         void Reset();

@@ -28,8 +28,10 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.BoatSystem;
+using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
+using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.Geometry;
@@ -48,13 +50,14 @@ namespace Hedra.Engine.Player
         public IPlayerInventory Inventory { get; }
         public EntitySpawner Spawner { get; }
         public IToolbar Toolbar { get; }
-        public QuestLog QuestLog { get; }
+        public QuestInterface QuestInterface { get; }
         public IAbilityTree AbilityTree { get; }
         public PetManager Pet { get; }
         public Chat Chat { get; }
         public Minimap Minimap { get; }
         public Map Map { get; }
         public TradeInventory Trade { get; }
+        public CraftingInventory Crafting { get; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
         public CollisionGroup[] NearCollisions => StructureAware.NearCollisions;
@@ -79,11 +82,12 @@ namespace Hedra.Engine.Player
             this.Toolbar = new Toolbar(this);
             this.Glider = new HangGlider(this);
             this.AbilityTree = new AbilityTree(this);
-            this.QuestLog = new QuestLog(this);
+            this.QuestInterface = new QuestInterface(this);
             this.Pet = new PetManager(this);
             this.Chat = new Chat(this);
             this.Minimap = new Minimap(this);
             this.Map = new Map(this);
+            this.Crafting = new CraftingInventory(this);
             this.Trade = new TradeInventory(this);
             this.Movement = new PlayerMovement(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
@@ -252,7 +256,7 @@ namespace Hedra.Engine.Player
             Toolbar.Update();
             UI.Update();
             ManageSounds();
-            QuestLog.Update();
+            QuestInterface.Update();
             Pet.Update();
             Chat.Update();
             Map.Update();

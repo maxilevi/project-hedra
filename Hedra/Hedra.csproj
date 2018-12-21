@@ -184,6 +184,8 @@
     <Compile Include="Engine\ClassSystem\RestrictionsFactory.cs" />
     <Compile Include="Engine\Core\Singleton.cs" />
     <Compile Include="Engine\Core\TypeFactory.cs" />
+    <Compile Include="Engine\CraftingSystem\RecipePool.cs" />
+    <Compile Include="Engine\CraftingSystem\Templates\IngredientsTemplate.cs" />
     <Compile Include="Engine\Game\Season.cs" />
     <Compile Include="Engine\ItemSystem\Templates\AttributeTemplate.cs" />
     <Compile Include="Engine\ItemSystem\Templates\ItemModelTemplate.cs" />
@@ -207,6 +209,12 @@
     <Compile Include="Engine\PlantSystem\CornDesign.cs" />
     <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
     <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
+    <Compile Include="Engine\Player\CraftingSystem\CraftingBackground.cs" />
+    <Compile Include="Engine\Player\CraftingSystem\CraftingInventory.cs" />
+    <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterfaceManager.cs" />
+    <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryItemInfo.cs" />
+    <Compile Include="Engine\Player\Inventory\BaseBackground.cs" />
+    <Compile Include="Engine\Player\QuestSystem\QuestInterface.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
     <Compile Include="Engine\Rendering\TextBillboard.cs" />
@@ -329,8 +337,6 @@
     <Compile Include="Engine\Core\RegistryFactory.cs" />
     <Compile Include="Engine\Core\ICountable.cs" />
     <Compile Include="Engine\Core\IPositionable.cs" />
-    <Compile Include="Engine\CraftingSystem\Recipe.cs" />
-    <Compile Include="Engine\CraftingSystem\RecipeLoader.cs" />
     <Compile Include="Engine\EntitySystem\BossSystem\SpawnComponent.cs" />
     <Compile Include="Engine\EntitySystem\Component.cs" />
     <Compile Include="Engine\EntitySystem\EffectFactory.cs" />
@@ -728,7 +734,6 @@
     <Compile Include="Engine\Player\HumanoidModel.cs" />
     <Compile Include="Engine\Player\ParticleProjectile.cs" />
     <Compile Include="Engine\Player\Projectile.cs" />
-    <Compile Include="Engine\Player\QuestLog.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\Toolbar.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\ArcherAbilityTreeBlueprint.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\RogueAbilityTreeBlueprint.cs" />
@@ -6858,6 +6863,7 @@
     <Content Include="Modules\Items\Misc\Rake.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Recipes\RareAutumnStaffRecipe.json" />
     <Content Include="Modules\Mobs\Cow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -6873,7 +6879,6 @@
     <Content Include="Modules\NPCs\Skeleton.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Recipes\RareAutumnStaffRecipe.json" />
     <Content Include="Modules\Villages\Woodland.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -23,5 +23,7 @@ namespace Hedra.Engine.Localization
         public static Key Eat => Key.Q;
         public static Key SpecialItem => Key.G;
         public static Key Respect => Key.F;
+        public static Key Crafting => Key.C;
+        public static Key QuestLog => Key.T;
     }
 }

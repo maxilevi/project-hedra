@@ -11,6 +11,7 @@
 /* Template namespaces */
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ModuleSystem.Templates'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ItemSystem.Templates'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.CraftingSystem.Templates'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.StructureSystem.VillageSystem.Templates'):-rename")]
 
 /* API namespaces */

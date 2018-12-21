@@ -7,23 +7,19 @@ using OpenTK;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    public class InventoryBackground
+    public class InventoryBackground : BaseBackground
     {
-        protected readonly GUIText Name;
-        protected readonly GUIText Level;
-        protected readonly GUIText TopLeftText;
-        protected readonly GUIText BottomLeftText;
-        protected readonly GUIText TopRightText;
-        protected readonly GUIText BottomRightText;
-        private readonly Vector2 _targetResolution;
-        private readonly Texture _texture;
-        private readonly Panel _panel;
-        private bool _enabled;
-
-        public InventoryBackground(Vector2 Position)
+        protected GUIText Name { get; private set; }
+        protected GUIText Level { get; private set; }
+        protected GUIText TopLeftText { get; private set; }
+        protected GUIText BottomLeftText { get; private set; }
+        protected GUIText TopRightText { get; private set; }
+        protected GUIText BottomRightText { get; private set; }
+        private Vector2 _targetResolution;
+        
+        public InventoryBackground(Vector2 Position) : base(Position, Vector2.One * .55f)
         {
             _targetResolution = new Vector2(1366, 705);
-            _texture = new Texture("Assets/UI/InventoryBackground.png", Vector2.Zero, Vector2.One * .55f);
             Name = new GUIText(string.Empty, Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .075f),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
             Level = new GUIText(string.Empty, Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.05f),
@@ -37,15 +33,12 @@ namespace Hedra.Engine.Player.Inventory
             BottomRightText = new GUIText(string.Empty, Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .2f + Vector2.UnitY * -.025f + Vector2.UnitY * -.05f),
                 Color.Gold, FontCache.Get(AssetManager.NormalFamily, 10));
 
-            _panel = new Panel();
-            _panel.AddElement(_texture);
-            _panel.AddElement(Name);
-            _panel.AddElement(Level);
-            _panel.AddElement(TopLeftText);
-            _panel.AddElement(BottomLeftText);
-            _panel.AddElement(TopRightText);
-            _panel.AddElement(BottomRightText);
-            this.Position = Position;
+            Panel.AddElement(Name);
+            Panel.AddElement(Level);
+            Panel.AddElement(TopLeftText);
+            Panel.AddElement(BottomLeftText);
+            Panel.AddElement(TopRightText);
+            Panel.AddElement(BottomRightText);
         }
 
         public virtual void UpdateView(IHumanoid Human)
@@ -57,25 +50,6 @@ namespace Hedra.Engine.Player.Inventory
             TopRightText.Text = $"{(int)Human.XP}/{(int)Human.MaxXP} XP";
             var gold = Human.Gold == int.MaxValue ? "∞" : Human.Gold.ToString();
             BottomRightText.Text = $"{gold} G";
-        }
-
-        public bool Enabled
-        {
-            get { return _enabled; }
-            set
-            {
-                _enabled = value;
-                if (_enabled)
-                    _panel.Enable();
-                else
-                    _panel.Disable();
-            }
-        }
-
-        public Vector2 Position
-        {
-            get { return _texture.Position; }
-            set { _texture.Position = value; }
         }
     }
 }

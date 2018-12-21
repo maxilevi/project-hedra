@@ -96,16 +96,23 @@ namespace Hedra.Engine.Rendering.UI
             var skillTreeTranslation = Translation.Create("skill_tree_label");
             skillTreeTranslation.Concat(() => $" - {Controls.Skilltree}");
             var skillTreeMsg = new GUIText(skillTreeTranslation, new Vector2(-.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+            
+            var questLogTranslation = Translation.Create("quest_log_label");
+            questLogTranslation.Concat(() => $" - {Controls.QuestLog}");
+            var questLogMsg = new GUIText(questLogTranslation, new Vector2(.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+            
             var mapTranslation = Translation.Create("map_label");
             skillTreeTranslation.Concat(() => $" - {Controls.Map}");
             var mapMsg = new GUIText(mapTranslation, new Vector2(.815f, .425f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
-            
+                
             Controls.OnControlsChanged += () =>
             {
+                questLogTranslation.UpdateTranslation();
                 mapTranslation.UpdateTranslation();
                 skillTreeTranslation.UpdateTranslation();
             };
             
+            AddElement(questLogMsg);
             AddElement(skillTreeMsg);
             AddElement(mapMsg);
             AddElement(_consecutiveHits);
@@ -141,7 +148,7 @@ namespace Hedra.Engine.Rendering.UI
             if (_player.UI.ShowHelp && Enabled)
             {
                 _player.AbilityTree.Show = false;
-                _player.QuestLog.Show = false;
+                _player.QuestInterface.Show = false;
                 _help.Enable();
             }
             else

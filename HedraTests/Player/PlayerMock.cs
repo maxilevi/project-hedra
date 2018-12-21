@@ -12,8 +12,10 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.BoatSystem;
+using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
+using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
@@ -180,7 +182,7 @@ namespace HedraTests.Player
         public EntitySpawner Spawner { get; }
         public IToolbar Toolbar { get; set; }
         public IVehicle Boat { get; }
-        public QuestLog QuestLog { get; }
+        public QuestInterface QuestInterface { get; }
         public IAbilityTree AbilityTree { get; set; }
         public PetManager Pet { get; }
         public Chat Chat { get; }
@@ -225,6 +227,7 @@ namespace HedraTests.Player
         public float Oxygen { get; set; }
         public Vector3 Position { get; set; }
         public CollisionGroup[] NearCollisions { get; }
+        public CraftingInventory Crafting { get; }
         public bool Enabled { get; set; }
         public void Respawn()
         {
