@@ -17,6 +17,7 @@ namespace Hedra.Engine.ClassSystem
     {
         public static Type[] AvailableClasses { get; }
         public static string[] ClassNames { get; }
+        public static string[] AvailableClassNames { get; }
         private static readonly Dictionary<string, Type> ClassMap;
 
         static ClassDesign()
@@ -26,6 +27,7 @@ namespace Hedra.Engine.ClassSystem
             ClassMap = classes.ToDictionary( T => FromType(T).ToString(), T => T);
             AvailableClasses = classes.Where(T => !Attribute.IsDefined(T, typeof(HiddenClassAttribute))).ToArray();
             ClassNames = ClassMap.Keys.ToArray();
+            AvailableClassNames = AvailableClasses.Select(T => FromType(T).ToString()).ToArray();
         }
 
         public string Name => this.ToString();

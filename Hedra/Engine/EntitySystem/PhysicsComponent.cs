@@ -217,7 +217,7 @@ namespace Hedra.Engine.EntitySystem
             }
             else
             {
-                if (Command.OnlyY) MakeGrounded();
+                if (Command.OnlyY && Command.Delta.Y < 0) MakeGrounded();
             }
 
             return canMove;
@@ -251,11 +251,14 @@ namespace Hedra.Engine.EntitySystem
                 }
                 else
                 {
-                    if(Command.Delta.Y < 0)
+                    if (Command.Delta.Y < 0)
+                    {
                         Parent.IsGrounded = true;
+                    }
                     else
                     {
-                        int a = 0;
+                        Parent.BlockPosition -= .05f * Vector3.UnitY;
+                        Parent.IsGrounded = false;
                     }
                     return false;
                 }

@@ -32,7 +32,7 @@ namespace Hedra.Engine.Loader
             };
             
 #if !DEBUG
-            TaskScheduler.After(6000, () => _splashOpacity = 0);
+            TaskScheduler.After(6, () => _splashOpacity = 0);
 #endif
 #if DEBUG
             this._finishedLoading = true;
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Loader
         public void Draw()
         {
             DrawManager.UIRenderer.Draw(_studioBackground);
-            DrawManager.UIRenderer.Draw(_studioLogo);
+            //DrawManager.UIRenderer.Draw(_studioLogo);
         }
 
         public bool FinishedLoading => _finishedLoading;

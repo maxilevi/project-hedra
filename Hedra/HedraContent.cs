@@ -64,7 +64,7 @@ namespace Hedra
                 SoundPlayer.LoadSound(SoundType.ButtonHover, "$DataFile$/Sounds/OnOff.ogg");
                 SoundPlayer.LoadSound(SoundType.SwooshSound, "$DataFile$/Sounds/Swoosh.ogg");
                 SoundPlayer.LoadSound(SoundType.HitSound, "$DataFile$/Sounds/Hit.ogg");
-                SoundPlayer.LoadSound(SoundType.NotificationSound, "Sounds/ItemCollect.ogg");
+                SoundPlayer.LoadSound(SoundType.NotificationSound, "$DataFile$/Sounds/ItemCollect.ogg");
                 SoundPlayer.LoadSound(SoundType.ArrowHit, "$DataFile$/Sounds/Hit.ogg");
                 SoundPlayer.LoadSound(SoundType.BowSound, "$DataFile$/Sounds/Bow.ogg");
                 SoundPlayer.LoadSound(SoundType.DarkSound, "$DataFile$/Sounds/DarkSound.ogg");
@@ -91,7 +91,7 @@ namespace Hedra
                 SoundPlayer.LoadSound(SoundType.Underwater, "$DataFile$/Sounds/Underwater.ogg");
                 SoundPlayer.LoadSound(SoundType.Sheep, "$DataFile$/Sounds/Sheep.ogg");
                 SoundPlayer.LoadSound(SoundType.Goat, "$DataFile$/Sounds/Goat.ogg");
-                SoundPlayer.LoadSound(SoundType.Door, "Sounds/Door.ogg");
+                SoundPlayer.LoadSound(SoundType.Door, "$DataFile$/Sounds/Door.ogg");
                 SoundPlayer.MarkAsReady();
                 Log.WriteLine("Finished loading sounds.");
             });

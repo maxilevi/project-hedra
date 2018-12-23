@@ -66,14 +66,14 @@ namespace Hedra.Engine.Rendering.UI
 
             CoroutineManager.StartCoroutine(this.Update);
 
-            var classes = ClassDesign.ClassNames.Select(S => Translation.Create(S.ToLowerInvariant())).ToArray();
+            var classes = ClassDesign.AvailableClassNames.Select(S => Translation.Create(S.ToLowerInvariant())).ToArray();
             var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, Translation.Create("class"), defaultColor,
                                                           defaultFont, classes, true);
-            classChooser.Index = Array.IndexOf(ClassDesign.ClassNames, _human.Class.Name);
+            classChooser.Index = Array.IndexOf(ClassDesign.AvailableClassNames, _human.Class.Name);
 
             void SetWeapon(object Sender, MouseButtonEventArgs E)
             {
-                _classType = ClassDesign.FromString(ClassDesign.ClassNames[classChooser.Index]);
+                _classType = ClassDesign.FromString(ClassDesign.AvailableClassNames[classChooser.Index]);
                 var position = _human.Model.Position;
                 var rotation = _human.Model.LocalRotation;
 
@@ -84,6 +84,7 @@ namespace Hedra.Engine.Rendering.UI
                     LocalRotation = rotation,
                     TargetRotation = rotation
                 };
+                _human.Physics.TargetPosition = position;
                 _human.SetWeapon(_classType.StartingItem.Weapon);
             }
 

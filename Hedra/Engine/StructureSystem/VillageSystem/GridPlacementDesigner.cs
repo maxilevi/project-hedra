@@ -98,7 +98,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 else if (rng < .90f && HousePlacer.SpecialRequirements(Point))
                     AddHouse(Point, Design, rotation, distFromCenter);
                 else if (rng < .95f && FarmPlacer.SpecialRequirements(Point))
-                    AddFarm(Point, Design, rotation);
+                    AddFarm(Point, Design, rotation, distFromCenter);
                 else
                     return false;
             }
@@ -107,7 +107,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 if (rng < .30f && HousePlacer.SpecialRequirements(Point))
                     AddHouse(Point, Design, rotation, distFromCenter);
                 else if (rng < .50f && FarmPlacer.SpecialRequirements(Point))
-                    AddFarm(Point, Design, rotation);
+                    AddFarm(Point, Design, rotation, distFromCenter);
                 else
                     return false;
             }
@@ -116,7 +116,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 if (rng < .05f && HousePlacer.SpecialRequirements(Point))
                     AddHouse(Point, Design, rotation, distFromCenter);
                 else if (rng < 0.45f && FarmPlacer.SpecialRequirements(Point))
-                    AddFarm(Point, Design, rotation);
+                    AddFarm(Point, Design, rotation, distFromCenter);
                 else
                     return false;
             }
@@ -131,9 +131,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             Design.Blacksmith.Add(parameter);
         }
 
-        private void AddFarm(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation)
+        private void AddFarm(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation, float Distance)
         {
-            Design.Farms.Add(FarmPlacer.Place(Point));
+            var parameter = FarmPlacer.Place(Point);
+            parameter.InsidePaths = Distance <= NoPathZone;
+            Design.Farms.Add(parameter);
         }
 
         private void AddHouse(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation, float Distance)

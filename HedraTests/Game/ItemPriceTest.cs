@@ -14,7 +14,7 @@ namespace HedraTests.Game
     {
         private readonly TradeManagerMock _trader = new TradeManagerMock();
         [TestCaseSource(nameof(All))]
-        public void TestItemPriceIsWithinRage(Item Item)
+        public void TestItemPriceIsWithinRange(Item Item)
         {
             AssertComplies(Item);
         }

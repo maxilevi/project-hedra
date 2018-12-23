@@ -167,6 +167,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var position = Parameters.Position + offset;
                 var minDist = Chunk.BlockSize * minDistModifier;
                 if (added.Any(P => (P - position).LengthSquared < minDist * minDist)) continue;
+                if (Parameters.InsidePaths /*&& (position - ).le*/) continue;
                 var transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
                                   * Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian * rotModifier)
                                   * Matrix4.CreateTranslation(position);
@@ -204,7 +205,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 GraduateColor = true,
                 SkipOnLod = Rng.Next(0, 3) == 1,
                 TransMatrix = Transformation,
-                PlaceCondition = B => B == BlockType.FarmDirt
+                //PlaceCondition = B => B == BlockType.FarmDirt
             };
             CacheManager.Check(data);
             return data;

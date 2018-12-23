@@ -120,7 +120,7 @@ namespace Hedra.Engine.Management
         public byte[] ReadPath(string Path, bool Text = true)
         {
             bool external = !Path.Contains("$DataFile$");
-            if (!external || Path.StartsWith("Assets/"))
+            if (!external || Path.StartsWith("Assets/") || Path.StartsWith("Asset\\"))
             {
                 Path = Path.Replace("$DataFile$", string.Empty);
                 if (Path.StartsWith("/"))

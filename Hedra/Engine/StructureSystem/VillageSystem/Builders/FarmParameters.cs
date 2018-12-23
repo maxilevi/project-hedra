@@ -13,6 +13,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public Vector3 Rotation { get; set; }
         public Random Rng { get; set; }
         public bool HasWindmill { get; set; }
+        public bool InsidePaths { get; set; }
         public DesignTemplate[] PropDesigns { get; set; }
 
         DesignTemplate IBuildingParameters.Design
