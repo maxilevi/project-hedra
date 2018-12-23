@@ -59,11 +59,6 @@ namespace Hedra.Engine.Scenes
             }
             
             PlatformPosition = CreatorPosition.Xz.ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(PlatformPosition +  Vector3.UnitX * 4));
-            
-            //VertexData CenterModel = AssetManager.PlyLoader("Assets/Intro/CreationPlatform.ply", Vector3.One);
-            //CenterModel.Transform( PlatformPosition );
-            //UnderChunk.AddStaticElement(CenterModel);
-            //World.AddChunkToQueue(UnderChunk, true);
         }
         
         private static IEnumerator MakeFire(){

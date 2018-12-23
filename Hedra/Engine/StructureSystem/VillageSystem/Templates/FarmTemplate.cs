@@ -5,7 +5,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
         public PropTemplate[] PropDesigns { get; set; }
     }
             
-    public class PropTemplate : DesignTemplate
+    public class PropTemplate : DesignTemplate, IProbabilityTemplate
     {
         public int Chance { get; set; }
         public bool HasLivestock { get; set; }

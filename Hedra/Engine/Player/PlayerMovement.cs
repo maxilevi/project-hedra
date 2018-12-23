@@ -62,7 +62,7 @@ namespace Hedra.Engine.Player
 
             if ((GameManager.Keyboard[Controls.Forward] || GameManager.Keyboard[Controls.Leftward] || GameManager.Keyboard[Controls.Backward] || GameManager.Keyboard[Controls.Rightward]) && !_player.IsCasting)
             {
-                Human.Model.Rotation = new Vector3(0, Human.Model.Rotation.Y, Human.Model.Rotation.Z);
+                Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, Human.Model.LocalRotation.Z);
 
             }
 
@@ -118,9 +118,9 @@ namespace Hedra.Engine.Player
                     this.Orientate();
                 }
                 _player.Model.TransformationMatrix = 
-                    Matrix4.CreateRotationY(-_player.Model.Rotation.Y * Mathf.Radian) *
+                    Matrix4.CreateRotationY(-_player.Model.LocalRotation.Y * Mathf.Radian) *
                     Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f)) *
-                    Matrix4.CreateRotationY(_player.Model.Rotation.Y * Mathf.Radian);
+                    Matrix4.CreateRotationY(_player.Model.LocalRotation.Y * Mathf.Radian);
                 if (GameManager.Keyboard[Controls.Backward])
                 {
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Backward) * keysPresses);
@@ -249,11 +249,6 @@ namespace Hedra.Engine.Player
                 _player.Chat.LoseFocus();
             }
 
-            //Kinda specific?
-            if (EventArgs.Key == Key.Escape && _player.UI.OptionsMenu.DonateBtcButton.Enabled)
-            {
-                _player.UI.OptionsMenu.DonateBtcButton.ForceClick();
-            }
             if (EventArgs.Key == Key.F2)
             {
                 if (!Directory.Exists(AssetManager.AppData + "/Screenshots/")) Directory.CreateDirectory(AssetManager.AppData + "/Screenshots/");

@@ -5,6 +5,7 @@ using System.Linq;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.ComplexMath;
+using Hedra.Engine.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -46,7 +47,7 @@ namespace Hedra.Engine.StructureSystem
                 {
                     var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
                         ChunkOffset.Y + z * Chunk.Width);
-                    Distribution.Seed = BiomeGenerator.GenerateSeed(offset);
+                    Distribution.Seed = Unique.GenerateSeed(offset);
                     var targetPosition = BuildTargetPosition(offset, Distribution);
                     var items = World.StructureHandler.StructureItems;
                     
@@ -74,7 +75,7 @@ namespace Hedra.Engine.StructureSystem
         
         public static int BuildRngSeed(Vector2 Offset)
         {
-            return BiomeGenerator.GenerateSeed(Offset);
+            return Unique.GenerateSeed(Offset);
         }
 
         public static Vector3 BuildTargetPosition(Vector2 ChunkOffset, IRandom Rng)

@@ -64,7 +64,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             var windmill = base.Build(Parameters, Parameters.WindmillDesign, Cache, Rng, Center);
             var transformation = BuildTransformation(Parameters).ClearTranslation();
-            AddBlades(Parameters, Cache, transformation, windmill);
+            if(Parameters.WindmillDesign.BladesPath != null) AddBlades(Parameters, Cache, transformation, windmill);
             return windmill;
         }
 
@@ -135,13 +135,29 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             var count = Rng.Next(11, 24);
             PlantDesign design = null;
+            ItemType type = ItemType.MaxEnums;
             var rng = Rng.NextFloat();
-            
-            if (rng < .6f)
-                design = new GrassDesign();
-            else if (rng < .8f)
-                design = new FernDesign();
-            
+            var rotModifier = 1;
+            var minDistModifier = 2.5f;
+
+            if (rng < .3f)
+            {
+                design = new PumpkinDesign();
+                type = ItemType.Pumpkin;
+            }
+            else if (rng < .6f)
+            {
+                design = new CornDesign();
+                minDistModifier = 1.5f;
+                type = ItemType.Corn;
+            }
+            else if (rng < .75f)
+            {
+                design = new SunflowerDesign();
+                minDistModifier = 1.5f;
+                rotModifier = 0;
+            }
+
             if(design == null) return;
             var added = new List<Vector3>();
             for (var x = 0; x < count * count; x++)
@@ -149,17 +165,32 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var offset = new Vector3((Rng.NextFloat() * 2f - 1f) * _width * .5f, 0,
                     (Rng.NextFloat() * 2f - 1f) * _width * .5f);
                 var position = Parameters.Position + offset;
-                const float minDist = Chunk.BlockSize * 2.5f;
+                var minDist = Chunk.BlockSize * minDistModifier;
                 if (added.Any(P => (P - position).LengthSquared < minDist * minDist)) continue;
                 var transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
-                                  * Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian)
+                                  * Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian * rotModifier)
                                   * Matrix4.CreateTranslation(position);
                 added.Add(position);
-                Output.Instances.Add(BuildPlant(design.Model, design, World.BiomePool.GetRegion(position), transMatrix, Rng));
+                var model = design.Model;
+                var region = World.BiomePool.GetRegion(position);
+                Output.Instances.Add(BuildPlant(model, design, region, transMatrix, Rng));
+                //if(type != ItemType.MaxEnums && Rng.Next(0, 8) == 1)
+                //    Output.Structures.Add(BuildPlantCollectible(type, model, design, region, transMatrix, Rng));
             }
         }
 
-        private InstanceData BuildPlant(VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng)
+        private static BaseStructure BuildPlantCollectible(ItemType Type, VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng)
+        {
+            var partModel = CacheManager.GetPart(Design.Type, Model);
+            var data = BuildPlant(partModel, Design, Biome, Transformation, Rng);
+            return new CollectiblePlant(
+                data.Position,
+                data,
+                ItemPool.Grab(Type)
+            );
+        }
+
+        private static InstanceData BuildPlant(VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng)
         {
             var modelClone = Model.Clone();
             Design.Paint(modelClone, Biome, Rng);
@@ -171,6 +202,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 HasExtraData = true,
                 VariateColor = true,
                 GraduateColor = true,
+                SkipOnLod = Rng.Next(0, 3) == 1,
                 TransMatrix = Transformation,
                 PlaceCondition = B => B == BlockType.FarmDirt
             };
@@ -183,8 +215,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var farmer = SpawnVillager(Position);
             farmer.SearchComponent<HealthBarComponent>().Name = Translations.Get("farmer");
             farmer.RemoveComponent(farmer.SearchComponent<RoamingVillagerAIComponent>());
-            farmer.SetHelmet(ItemPool.Grab(CommonItems.FarmerHat).Helmet);
-            farmer.SetWeapon(ItemPool.Grab(CommonItems.FarmingRake).Weapon);
+            farmer.SetHelmet(ItemPool.Grab(ItemType.FarmerHat).Helmet);
+            farmer.SetWeapon(ItemPool.Grab(ItemType.FarmingRake).Weapon);
             farmer.AddComponent(new FarmerAIComponent(farmer, FarmPosition, Vector2.One * _width));
             farmer.AddComponent(new FarmerThoughtsComponent(farmer));
         }

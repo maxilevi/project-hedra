@@ -55,7 +55,7 @@ namespace Hedra.Engine.Player
             get => Equipment.Ring;
             set => Equipment.Ring = value;
         }
-
+        public IPlayerInventory Inventory { get; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public int ConsecutiveHits { get; private set; }
         public bool IsAttacking { get; set; }
@@ -141,6 +141,7 @@ namespace Hedra.Engine.Player
         public Humanoid()
         {
             _consecutiveHitsTimer = new Timer(3f);
+            Inventory = new DummyInventory();
             MessageDispatcher = new DummyMessageDispatcher();
             HandLamp = new HandLamp(this);
             Movement = new MovementManager(this);

@@ -7,5 +7,10 @@ namespace Hedra.Engine.Player.CraftingSystem
         public CraftingInventoryItemInfo(InventoryItemRenderer Renderer) : base(Renderer)
         {
         }
+
+        protected override void UpdateView()
+        {
+            base.UpdateView();
+        }
     }
 }

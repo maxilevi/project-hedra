@@ -124,6 +124,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         protected IHumanoid SpawnHumanoid(HumanType Type, Vector3 Position)
         {
             var human = World.WorldBuilding.SpawnHumanoid(Type, Position);
+            human.SetWeapon(null);
             VillageObject.AddHumanoid(human);
             return human;
         }
@@ -138,7 +139,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 HumanType.Archer
             };
             var human = this.SpawnHumanoid(types[Utils.Rng.Next(0, types.Length)], Position);
-            human.SetWeapon(null);
             human.AddComponent(new TalkComponent(human));
             human.AddComponent(new RoamingVillagerAIComponent(human, VillageObject.Graph));
             VillageObject.AddHumanoid(human);

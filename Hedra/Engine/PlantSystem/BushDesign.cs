@@ -14,7 +14,7 @@ namespace Hedra.Engine.PlantSystem
 {
     public class BushDesign : PlantDesign
     {
-        protected override CacheItem Type => CacheItem.Bushes;
+        public override CacheItem Type => CacheItem.Bushes;
         
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
         {

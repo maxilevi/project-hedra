@@ -8,6 +8,6 @@ namespace Hedra.Engine.Management
 {
     public interface ISearchable
     {
-        Vector3 Position { get; set; }
+        Vector3 Position { get; }
     }
 }

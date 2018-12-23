@@ -16,7 +16,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryItemRenderer
     {
-        public const float ZOffsetFactor = 1.25f;
+        public const float ZOffsetFactor = 1.25f * 5f;
         public static readonly FBO Framebuffer;
         private readonly InventoryArray _array;
         private readonly int _length;
@@ -78,8 +78,8 @@ namespace Hedra.Engine.Player.Inventory
         {
             ZOffset = Math.Max(ZOffset, 3.0f);
             if (Mesh == null || Item == null) return GUIRenderer.TransparentTexture;
-
-            Mesh.LocalRotation = new Vector3(0, _itemRotation, TiltIfWeapon && Item.IsWeapon ? 45 : 0);
+            var willTilt = TiltIfWeapon && Item.IsWeapon;
+            Mesh.LocalRotation = new Vector3(0, _itemRotation, willTilt ? 45 : 0);
             _itemRotation += 25 * (float)Time.DeltaTime / Math.Max(1,_itemCount);
 
             Renderer.PushShader();
@@ -92,11 +92,11 @@ namespace Hedra.Engine.Player.Inventory
             var currentDayColor = ShaderManager.LightColor;
             ShaderManager.SetLightColorInTheSameThread(Vector3.One);
 
-            var aspect = GameSettings.Width / (float)GameSettings.Height;
-            var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, aspect, 1, 1024f);
+            var aspect = 1.33f;
+            var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(10 * Mathf.Radian, aspect, 1, 1024f);
             Renderer.LoadProjection(projectionMatrix);
 
-            var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset, Vector3.Zero, Vector3.UnitY);
+            var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset * (willTilt ? .75f : 1f), Vector3.Zero, Vector3.UnitY);
             Renderer.LoadModelView(lookAt);
 
             Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

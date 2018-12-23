@@ -8,45 +8,19 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public class StructureWatcher : IDisposable
+    public class StructureWatcher
     {
         public CollidableStructure Structure { get; }
-        private readonly object _lock = new object();
-        private readonly Dictionary<CachedVertexData, Chunk> _modelsAdded;
-        private readonly Dictionary<InstanceData, Chunk> _instancesAdded;
+        private readonly CachedVertexDataChunkWatcher _vertexDataWatcher;
+        private readonly InstanceDataChunkWatcher _instanceDataWatcher;
 
         public StructureWatcher(CollidableStructure Structure)
         {
             this.Structure = Structure;
-            _modelsAdded = new Dictionary<CachedVertexData, Chunk>();
-            _instancesAdded = new Dictionary<InstanceData, Chunk>();
+            _vertexDataWatcher = new CachedVertexDataChunkWatcher(() => Structure.Models);
+            _instanceDataWatcher = new InstanceDataChunkWatcher(() => Structure.Instances);
             Structure.ModelAdded += this.ModelAdded;
             Structure.InstanceAdded += this.InstanceAdded;
-            World.OnChunkReady += this.OnChunkReady;
-            World.OnChunkDisposed += this.OnChunkDisposed;
-        }
-
-        private void OnChunkReady(Chunk Object)
-        {
-            var models = Structure.Models;
-            var instances = Structure.Instances;
-
-            bool IsInRange(Vector3 Position)
-            {
-                var chunkSpace = World.ToChunkSpace(Position);
-                return (Object.OffsetX == (int) chunkSpace.X && Object.OffsetZ == (int) chunkSpace.Y);
-            }
-            
-            for (var i = 0; i < models.Length; i++)
-            {
-                if(IsInRange(models[i].Position))
-                    AddModelIfNecessary(models[i], Object);          
-            }
-            for (var i = 0; i < instances.Length; i++)
-            {
-                if(IsInRange(instances[i].Position))
-                    AddInstanceIfNecessary(instances[i], Object);    
-            }
         }
         
         private void InstanceAdded(InstanceData Instance)
@@ -55,7 +29,7 @@ namespace Hedra.Engine.StructureSystem
             var chunk = World.GetChunkByOffset(chunkSpace);
             if (chunk != null)
             {
-                AddInstanceIfNecessary(Instance, chunk);
+                _instanceDataWatcher.OnChunkReady(chunk);
             }    
         }
 
@@ -65,75 +39,17 @@ namespace Hedra.Engine.StructureSystem
             var chunk = World.GetChunkByOffset(chunkSpace);
             if (chunk != null)
             {
-                AddModelIfNecessary(Model, chunk);
+                _vertexDataWatcher.OnChunkReady(chunk);
             }    
-        }
-
-        private void AddModelIfNecessary(CachedVertexData Model, Chunk Object)
-        {
-            AddIfNecessary(_modelsAdded, Model, Object, V => Object.AddStaticElement(V.VertexData));
-        }
-        
-        private void AddInstanceIfNecessary(InstanceData Instance, Chunk Object)
-        {
-            AddIfNecessary(_instancesAdded, Instance, Object, I => Object.AddInstance(I));
-        }
-
-        private void AddIfNecessary<T>(Dictionary<T, Chunk> Map, T Value, Chunk Object, Action<T> Do)
-        {
-            lock (_lock)
-            {
-                if (!Object.Disposed && Object.Initialized && (!Map.ContainsKey(Value) || Map[Value] != Object))
-                {
-                    Do(Value);
-                    if (Map.ContainsKey(Value))
-                        Map[Value] = Object;
-                    else
-                        Map.Add(Value, Object);
-                }
-            }
-        }
-
-        private void OnChunkDisposed(Chunk Object)
-        {
-            KeyValuePair<CachedVertexData, Chunk>[] modelDict;
-            KeyValuePair<InstanceData, Chunk>[] instanceDict;
-            lock (_lock)
-            {
-                modelDict = _modelsAdded.ToArray();
-                instanceDict = _instancesAdded.ToArray();
-            }
-            foreach (var pair in modelDict)
-            {
-                if (pair.Value == Object)
-                    _modelsAdded[pair.Key] = null;
-            }
-            foreach (var pair in instanceDict)
-            {
-                if (pair.Value == Object)
-                    _instancesAdded[pair.Key] = null;
-            }   
         }
 
         public void Dispose()
         {
-            lock (_lock)
-            {
-                foreach(var pair in _modelsAdded)
-                {
-                    pair.Value?.RemoveStaticElement(pair.Key.VertexData);
-                }
-                _modelsAdded.Clear();
-                foreach(var pair in _instancesAdded)
-                {
-                    pair.Value?.RemoveInstance(pair.Key);
-                }
-                _instancesAdded.Clear();
-            }
             Structure.Dispose();
             Structure.ModelAdded -= this.ModelAdded;
-            World.OnChunkReady -= this.OnChunkReady;
-            World.OnChunkDisposed -= this.OnChunkDisposed;
+            Structure.InstanceAdded -= this.InstanceAdded;
+            _instanceDataWatcher.Dispose();
+            _vertexDataWatcher.Dispose();
         }
     }
 }

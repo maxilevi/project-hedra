@@ -24,9 +24,9 @@ namespace Hedra.Engine.CacheSystem
             return Provider.GetModel(Item.ToString().ToLowerInvariant());
         }
         
-        public static VertexData GetLodModel(CacheItem Item)
+        public static VertexData GetPart(CacheItem Item, VertexData Model)
         {
-            return null;//Provider.GetLodModel(Item.ToString().ToLowerInvariant());
+            return Provider.GetPart(Item.ToString().ToLowerInvariant(), Model);
         }
 
         public static List<CollisionShape> GetShape(VertexData Model)

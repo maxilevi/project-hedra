@@ -17,7 +17,7 @@ namespace Hedra.Engine.PlantSystem
 {
     public class RockDesign :  PlantDesign
     {
-        protected override CacheItem Type => CacheItem.Rock;
+        public override CacheItem Type => CacheItem.Rock;
         
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
         {

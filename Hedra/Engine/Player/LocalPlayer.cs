@@ -252,6 +252,7 @@ namespace Hedra.Engine.Player
             StructureAware.Update();
             Loader.Update();
             Inventory.Update();
+            Crafting.Update();
             AbilityTree.Update();
             Toolbar.Update();
             UI.Update();

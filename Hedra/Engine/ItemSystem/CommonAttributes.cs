@@ -17,6 +17,10 @@ namespace Hedra.Engine.ItemSystem
         Seed,
         Ingredients,
         CraftingStation,
+        IsFood,
+        IsConsumable,
+        Handler,
+        Output,
         Price
     }
 }

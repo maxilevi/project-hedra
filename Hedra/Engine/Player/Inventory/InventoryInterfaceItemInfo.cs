@@ -5,6 +5,7 @@ using System.Text;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
@@ -19,12 +20,15 @@ namespace Hedra.Engine.Player.Inventory
         protected readonly Texture ItemTexture;
         protected readonly RenderableText ItemText;
         protected readonly RenderableText ItemDescription;
+        protected readonly Texture HintTexture;
+        protected readonly GUIText HintText;
         private readonly Vector2 _targetResolution = new Vector2(1366, 705);
         private readonly Panel _panel;
         private readonly InventoryItemRenderer _renderer;
         private readonly RenderableText _itemAttributes;
         private readonly Vector2 _weaponItemAttributesPosition;
         private readonly Vector2 _weaponItemTexturePosition;
+        private readonly Vector2 _weaponItemTextureScale;
         private readonly Vector2 _nonWeaponItemAttributesPosition;
         private readonly Vector2 _nonWeaponItemTexturePosition;
         private ObjectMesh _currentItemMesh;
@@ -50,7 +54,12 @@ namespace Hedra.Engine.Player.Inventory
             this._itemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 9, FontStyle.Bold));
             DrawManager.UIRenderer.Add(_itemAttributes, DrawOrder.After);
+            
+            this.HintTexture = new Texture("Assets/UI/InventoryBackground.png", Vector2.UnitY * -.35f, Vector2.One * .15f);
+            this.HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 7, FontStyle.Bold));
 
+            _panel.AddElement(HintTexture);
+            _panel.AddElement(HintText);
             _panel.AddElement(ItemText);
             _panel.AddElement(_itemAttributes);
             _panel.AddElement(ItemDescription);
@@ -61,14 +70,34 @@ namespace Hedra.Engine.Player.Inventory
             _nonWeaponItemTexturePosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .0f);
             _weaponItemAttributesPosition = _itemAttributes.Position;
             _weaponItemTexturePosition = ItemTexture.Position;
+            _weaponItemTextureScale = ItemTexture.Scale;
         }
 
         protected virtual void UpdateView()
         {
-            _currentItemMesh?.Dispose();
-            _currentItemMesh = _renderer.BuildModel(CurrentItem, out _currentItemMeshHeight);
-            var isEquipment = CurrentItem.IsEquipment;
-            if (isEquipment)
+            UpdateItemMesh();
+            AddAttributes();
+            AddLayout();
+            AddTexture();
+            AddHint();
+        }
+
+        protected virtual void AddHint()
+        {
+            if (CurrentItem.IsConsumable)
+            {
+                HintText.Text = Translations.Get("right_click_use");
+            }
+            else
+            {
+                HintText.Disable();
+                HintTexture.Disable();
+            }
+        }
+
+        protected virtual void AddLayout()
+        {
+            if (CurrentItem.IsEquipment)
             {
                 var tierColor = ItemUtils.TierToColor(CurrentItem.Tier);
                 ItemText.Color = tierColor;
@@ -78,6 +107,7 @@ namespace Hedra.Engine.Player.Inventory
                 ItemDescription.Color = tierColor;
                 _itemAttributes.Position = _weaponItemAttributesPosition + this.Position;
                 ItemTexture.Position = _weaponItemTexturePosition + this.Position;
+                ItemTexture.Scale = _weaponItemTextureScale;
                 ItemDescription.Text = Utils.FitString(CurrentItem.Description, 32);
             }
             else
@@ -87,18 +117,29 @@ namespace Hedra.Engine.Player.Inventory
                 _itemAttributes.Color = Color.Bisque;
                 ItemDescription.Color = Color.White;
                 _itemAttributes.Position = _nonWeaponItemAttributesPosition + this.Position;
-                ItemTexture.Position = _nonWeaponItemTexturePosition + this.Position;
+                ItemTexture.Position = _nonWeaponItemTexturePosition
+                                       + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * _itemAttributes.UIText.Scale.Y)
+                                       + this.Position;               
+                ItemTexture.Scale = _weaponItemTextureScale * (1-(_itemAttributes.UIText.Scale.Y / _weaponItemTextureScale.Y));
                 ItemDescription.Text = string.Empty;
             }
+        }
 
+        protected virtual void UpdateItemMesh()
+        {
+            _currentItemMesh?.Dispose();
+            _currentItemMesh = _renderer.BuildModel(CurrentItem, out _currentItemMeshHeight);
+        }
+
+        protected virtual void AddAttributes()
+        {
             var attributes = CurrentItem.GetAttributes();
             var strBuilder = new StringBuilder();
             for (var i = 0; i < attributes.Length; i++)
             {
                 if (!attributes[i].Hidden || GameSettings.DebugView)
                 {
-                    var line = $"{attributes[i].Name.AddSpacesToSentence()}   ➝   {Format(attributes[i].Display, attributes[i].Value)}";
-                    strBuilder.AppendLine(line);
+                    strBuilder.AppendLine(AttributeFormatter.Format(attributes[i]));
                 }
             }
             if (GameSettings.DebugView && CurrentItem.HasAttribute(CommonAttributes.Damage))
@@ -106,36 +147,20 @@ namespace Hedra.Engine.Player.Inventory
                 strBuilder.AppendLine($"Modifier   ➝   {GameManager.Player.WeaponModifier(CurrentItem)}");
             }
             _itemAttributes.Text = strBuilder.ToString();
+        }
+
+        protected virtual void AddTexture()
+        {
             ItemTexture.TextureElement.IdPointer = () => _renderer.Draw(_currentItemMesh, CurrentItem,
                 false, _currentItemMeshHeight * InventoryItemRenderer.ZOffsetFactor);
         }
-
-        protected static object Format(string Display, object Value)
-        {
-            if (Value is double || Value is float)
-            {
-                var asNumber = (float) Convert.ChangeType(Value, typeof(float));
-                if (Display == null) return asNumber.ToString("0.00", CultureInfo.InvariantCulture);
-                switch ((AttributeDisplay) Enum.Parse(typeof(AttributeDisplay), Display))
-                {
-                    case AttributeDisplay.Percentage:
-                        return $"{(asNumber > 0 ? "+" : asNumber == 0 ? string.Empty : "-")}{ (int) (asNumber * 100f)}%";
-                    case AttributeDisplay.Flat:
-                        return asNumber.ToString("0.00", CultureInfo.InvariantCulture);
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-            if (!(Value is int) && !(Value is long)) return Value.ToString();
-            return (int)Convert.ChangeType(Value, typeof(int)) == int.MaxValue ? "∞" : Value.ToString();
-        }
-
+        
         public virtual void Show(Item Item)
         {
             if(Item == null) return;
             CurrentItem = Item;
-            this.UpdateView();
             this.Enabled = true;
+            this.UpdateView();
         }
 
         public virtual void Hide()
@@ -157,6 +182,8 @@ namespace Hedra.Engine.Player.Inventory
             get => BackgroundTexture.Position;
             set
             {
+                HintTexture.Position = HintTexture.Position - Position + value;
+                HintText.Position = HintText.Position - Position + value;
                 ItemTexture.Position = ItemTexture.Position - Position + value;
                 ItemText.Position = ItemText.Position - Position + value;
                 ItemDescription.Position = ItemDescription.Position - Position + value;

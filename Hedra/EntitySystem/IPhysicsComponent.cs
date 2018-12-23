@@ -20,9 +20,9 @@ namespace Hedra.EntitySystem
         void Move(float Scalar = 1);
         void Update();
         void ResetVelocity();
-        void Translate(Vector3 Delta);
-        void DeltaTranslate(Vector3 Delta);
-        void DeltaTranslate(MoveCommand Command);
+        bool Translate(Vector3 Delta);
+        bool DeltaTranslate(Vector3 Delta, bool OnlyY = false);
+        bool DeltaTranslate(MoveCommand Command);
         void ResetFall();
         void Dispose();
         void Draw();

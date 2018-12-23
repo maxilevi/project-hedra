@@ -1,9 +1,7 @@
 using System;
-using System.Linq;
 using System.Text;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.ItemSystem.Templates;
-using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 
@@ -166,11 +164,12 @@ namespace Hedra.Engine.ItemSystem
         }
 
         public bool IsGold => Name == GoldItemName;
-        public bool IsFood => HasAttribute("IsFood") && GetAttribute<bool>("IsFood") || Name == "Berry";
+        public bool IsFood => HasAttribute(CommonAttributes.IsFood) && GetAttribute<bool>(CommonAttributes.IsFood) || Name == "Berry";
         public bool IsWeapon => WeaponFactory.Contains(this);
         public bool IsArmor => ArmorFactory.Contains(this);
         public bool IsRing => EquipmentType == ItemSystem.EquipmentType.Ring.ToString();
         public bool IsEquipment => IsWeapon || IsRing || IsArmor;
+        public bool IsConsumable => HasAttribute(CommonAttributes.IsConsumable) && GetAttribute<bool>(CommonAttributes.IsConsumable);
 
         public VertexData Model
         {

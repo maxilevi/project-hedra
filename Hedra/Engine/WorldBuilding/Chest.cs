@@ -8,6 +8,7 @@
  */
 using System;
 using Hedra.Core;
+using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
@@ -32,6 +33,7 @@ namespace Hedra.Engine.WorldBuilding
         public override int InteractDistance => 16;
         protected override bool DisposeAfterUse => false;
         protected override bool CanInteract => IsClosed && (Condition?.Invoke() ?? true);
+        private string ChestModelPath => Season.IsChristmas ? "Assets/Chr/ChristmasChestIdle.dae" : "Assets/Chr/ChestIdle.dae"; 
 
         public Item ItemSpecification { get; set; }
         public Func<bool> Condition { get; set; }
@@ -48,7 +50,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public Chest(Vector3 Position, Item ItemSpecification) : base(Position)
         {
-            this._model = AnimationModelLoader.LoadEntity("Assets/Chr/ChestIdle.dae");
+            this._model = AnimationModelLoader.LoadEntity(ChestModelPath);
             this._idleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestIdle.dae");
             this._openAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestOpen.dae");        
             this._openAnimation.Loop = false;

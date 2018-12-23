@@ -4,6 +4,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
+using HedraTests.ItemSystem;
 using NUnit.Framework;
 
 namespace HedraTests.Game
@@ -11,7 +12,7 @@ namespace HedraTests.Game
     [TestFixture]
     public class ItemPriceTest
     {
-        private readonly TradeManager _trader = new TradeManager(null, null);
+        private readonly TradeManagerMock _trader = new TradeManagerMock();
         [TestCaseSource(nameof(All))]
         public void TestItemPriceIsWithinRage(Item Item)
         {

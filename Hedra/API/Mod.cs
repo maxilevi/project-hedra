@@ -9,6 +9,7 @@ namespace Hedra.API
         private readonly AIRegistry _aiRegistry;
         private readonly ClassRestrictionRegistry _classRegistry;
         private readonly ModelHandlerRegistry _modelHandlerRegistry;
+        private readonly ItemHandlerRegistry _itemHandlerRegistry;
         
         public abstract string Name { get; }
         
@@ -19,6 +20,7 @@ namespace Hedra.API
             _aiRegistry = new AIRegistry();
             _classRegistry = new ClassRestrictionRegistry();
             _modelHandlerRegistry = new ModelHandlerRegistry();
+            _itemHandlerRegistry = new ItemHandlerRegistry();
         }
         
         protected abstract void RegisterContent();
@@ -53,6 +55,11 @@ namespace Hedra.API
         {
             _modelHandlerRegistry.Add(Name, ClassType);
         }
+        
+        protected void AddItemHandler(string Name, Type ClassType)
+        {
+            _itemHandlerRegistry.Add(Name, ClassType);
+        }
 
         public void UnregisterContent()
         {
@@ -61,6 +68,7 @@ namespace Hedra.API
             _aiRegistry.Unregister();
             _classRegistry.Unregister();
             _modelHandlerRegistry.Unregister();
+            _itemHandlerRegistry.Unregister();
         }
     }
 }

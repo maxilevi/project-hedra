@@ -213,6 +213,10 @@ namespace Hedra.Engine.Management
                         Result = Caster.AttackSpeed.ToString(CultureInfo.InvariantCulture);
                         return true;
                     }
+                    if (Parts[1] == "recipe")
+                    {
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Recipe)));
+                    }
                     if (Parts[1] == "item")
                     {
                         Caster.Inventory.AddItem(ItemPool.Grab(Parts[2]));

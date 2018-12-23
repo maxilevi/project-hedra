@@ -28,13 +28,13 @@ namespace Hedra.Engine.Rendering
             set => Model.TransformationMatrix = value;
         }
 
-        public Vector3 RotationPoint
+        public Vector3 LocalRotationPoint
         {
             get => Model.LocalRotationPoint;
             set => Model.LocalRotationPoint = value;
         }
 
-        public Vector3 LocalRotation
+        public Vector3 Rotation
         {
             get => Model.Rotation;
             set => Model.Rotation = value;
@@ -46,7 +46,7 @@ namespace Hedra.Engine.Rendering
             set => Model.LocalPosition = value;
         }
         
-        public Vector3 BeforeLocalRotation
+        public Vector3 BeforeRotation
         {
             get => Model.BeforeRotation;
             set => Model.BeforeRotation = value;
@@ -56,6 +56,12 @@ namespace Hedra.Engine.Rendering
         {
             get => Model.Position;
             set => Model.Position = value;
+        }
+        
+        public bool ApplyNoiseTexture
+        {
+            get => Model.ApplyNoiseTexture;
+            set => Model.ApplyNoiseTexture = value;
         }
 
         public Vector3 TransformPoint(Vector3 Point)

@@ -54,7 +54,7 @@ namespace Hedra.Engine.Rendering.UI
             _human = new Humanoid();
             _human.Model = new HumanoidModel(_human)
             {
-                Rotation = Vector3.UnitY * -90,
+                LocalRotation = Vector3.UnitY * -90,
                 TargetRotation = Vector3.UnitY * -90,
                 ApplyFog = true,
                 Enabled = true
@@ -75,13 +75,13 @@ namespace Hedra.Engine.Rendering.UI
             {
                 _classType = ClassDesign.FromString(ClassDesign.ClassNames[classChooser.Index]);
                 var position = _human.Model.Position;
-                var rotation = _human.Model.Rotation;
+                var rotation = _human.Model.LocalRotation;
 
                 _human.Model.Dispose();
                 _human.Model = new HumanoidModel(_human, _classType.Human)
                 {
                     Position = position,
-                    Rotation = rotation,
+                    LocalRotation = rotation,
                     TargetRotation = rotation
                 };
                 _human.SetWeapon(_classType.StartingItem.Weapon);
@@ -152,7 +152,7 @@ namespace Hedra.Engine.Rendering.UI
                         _openFolder.CanClick = true;
                     _human.Update();
                     _newRot += Time.IndependantDeltaTime * 30f;
-                    _human.Model.Rotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
+                    _human.Model.LocalRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
                     _human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
                 }
                 yield return null;

@@ -259,7 +259,7 @@ namespace Hedra.Engine.EntitySystem
                 _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependantDeltaTime * 14f);
                 Model.LocalRotation = _quaternionModelRotation.ToEuler();
                 Model.Position = this.Position;
-                this.Rotation = Model.LocalRotation;                
+                this.LocalRotation = Model.LocalRotation;                
             }
 
             if (!base.Disposed)
@@ -363,7 +363,7 @@ namespace Hedra.Engine.EntitySystem
                 _quaternionTargetRotation = QuaternionMath.FromEuler(_eulerTargetRotation * Mathf.Radian);
             }
         }
-        public override Vector3 Rotation
+        public override Vector3 LocalRotation
         {
             get => _rotation;
             set

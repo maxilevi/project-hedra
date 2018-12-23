@@ -121,11 +121,20 @@ namespace Hedra.Engine.Player.Inventory
             var array = this.ArrayByButton(button);
             var item = array[itemIndex];
             array[itemIndex] = null;
-            if (array.HasRestrictions(itemIndex) && item != null)
+            if (item != null && item.IsConsumable)
+            {
+                var success = Consume(item);
+                if (!success) array[itemIndex] = item;
+            }
+            else if (array.HasRestrictions(itemIndex) && item != null)
+            {
                 this.PlaceItemInFirstEmptyPosition(item);
+            }
             else
+            {
                 this.PlaceInRestrictionsOrFirstEmpty(itemIndex, array, item);
-            
+            }
+
             this.UpdateView();
             SoundPlayer.PlayUISound(SoundType.ButtonClick);
         }
@@ -179,6 +188,14 @@ namespace Hedra.Engine.Player.Inventory
             }
             this.ShowCannotYieldEquipment(Item);
             this.PlaceItemInFirstEmptyPosition(Item);
+        }
+        
+        
+        private static bool Consume(Item Item)
+        {
+            return ItemHandlerFactory.Instance.Build(
+                Item.GetAttribute<string>(CommonAttributes.Handler)
+            ).Consume(GameManager.Player, Item);
         }
 
         private void ShowCannotYieldEquipment(Item Item)
@@ -268,7 +285,7 @@ namespace Hedra.Engine.Player.Inventory
             _selectedMesh = null;
         }
 
-        private void HoverEnter(object Sender, MouseEventArgs EventArgs)
+        protected virtual void HoverEnter(object Sender, MouseEventArgs EventArgs)
         {
             var button = (Button)Sender;
             var itemIndex = this.IndexByButton(button);
@@ -278,7 +295,7 @@ namespace Hedra.Engine.Player.Inventory
             _itemInfoInterface?.Show(item);
         }
 
-        private void HoverExit(object Sender, MouseEventArgs EventArgs)
+        protected virtual void HoverExit(object Sender, MouseEventArgs EventArgs)
         {
             _itemInfoInterface?.Hide();
         }

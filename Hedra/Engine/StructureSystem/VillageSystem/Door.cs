@@ -55,7 +55,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             if (_mesh != null)
             {
                 _mesh.LocalRotation = Mathf.Lerp(_mesh.LocalRotation, _targetRotation, Time.DeltaTime * 4f);
-                _mesh.RotationPoint = _rotationPoint;
+                _mesh.LocalRotationPoint = _rotationPoint;
             }
             if (_collider != null)
             {
@@ -91,14 +91,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         private bool ShouldUpdate()
         {
-            return (_mesh.Rotation - _lastRotation).LengthSquared < 0.005f * 0.005f
+            return (_mesh.LocalRotation - _lastRotation).LengthSquared < 0.005f * 0.005f
                    && (_lastPosition - _mesh.Position).LengthSquared < 0.005f * 0.005f;
         }
 
         private void UpdateShape()
         {
+            _shape.RecalculateBroadphase();
             _group.Recalculate();
-            _lastRotation = _mesh.Rotation;
+            _lastRotation = _mesh.LocalRotation;
             _lastPosition = _mesh.Position;
         }
 

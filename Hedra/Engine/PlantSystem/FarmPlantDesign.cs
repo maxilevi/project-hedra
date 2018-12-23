@@ -1,4 +1,6 @@
 ﻿using System;
+using Hedra.BiomeSystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.PlantSystem

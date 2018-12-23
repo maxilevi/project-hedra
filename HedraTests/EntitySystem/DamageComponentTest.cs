@@ -30,7 +30,6 @@ namespace HedraTests.EntitySystem
         public override void Setup()
         {
             base.Setup();
-            _physics = new PhysicsComponent(null);
             _maxHealth = 100;
             var modelMock = new Mock<BaseUpdatableModel>();
             modelMock.SetupProperty(M => M.Tint);
@@ -58,6 +57,7 @@ namespace HedraTests.EntitySystem
             : new DropComponent[0]);
             _entity = entityMock.Object;
             _entity.Health = 100;
+            _physics = new PhysicsComponent(_entity);
             GameManager.Player = new PlayerMock();
             _damageComponent = new DamageComponent(_entity);
         }

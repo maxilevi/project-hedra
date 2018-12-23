@@ -12,6 +12,8 @@ namespace Hedra.Engine.CacheSystem
         
         VertexData GetModel(string Type);
 
+        VertexData GetPart(string Type, VertexData Model);
+
         List<CollisionShape> GetShape(VertexData Model);
 
         List<CollisionShape> GetShape(string Type, VertexData Data);

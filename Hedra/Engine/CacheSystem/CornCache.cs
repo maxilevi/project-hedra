@@ -1,4 +1,7 @@
-﻿namespace Hedra.Engine.CacheSystem
+﻿using Hedra.Engine.Management;
+using OpenTK;
+
+namespace Hedra.Engine.CacheSystem
 {
     public class CornCache : CacheType
     {
@@ -6,7 +9,13 @@
 
         public CornCache()
         {
-            
+            var scale = Vector3.One * .65f;
+            const float wind = .75f;
+            AddModel(AssetManager.PLYLoader("Assets/Env/Plants/Corn0.ply", scale).AddWindValues(wind)); 
+            AddModelPart(AssetManager.PLYLoader("Assets/Env/Plants/Corn0_Fruit0.ply", scale).AddWindValues(wind));
+
+            AddModel(AssetManager.PLYLoader("Assets/Env/Plants/Corn1.ply", scale).AddWindValues(wind));
+            AddModelPart(AssetManager.PLYLoader("Assets/Env/Plants/Corn1_Fruit0.ply", scale).AddWindValues(wind));
         }
     }
 }

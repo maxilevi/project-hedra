@@ -128,7 +128,7 @@ namespace Hedra.Engine.EntitySystem
             set => _iterableModels.ForEach(M => M.Position = value);
         }
 
-        public override Vector3 Rotation
+        public override Vector3 LocalRotation
         {
             get => Model.LocalRotation;
             set => _iterableModels.ForEach(M => M.LocalRotation = value);

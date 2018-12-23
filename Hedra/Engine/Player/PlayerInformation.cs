@@ -44,6 +44,7 @@ namespace Hedra.Engine.Player
             this.Daytime = 12000;
             this.Health = 100;
             this._items = new Dictionary<int, Item>();
+            this._learnedRecipes = new List<string>();
             this.AbilityTreeArray = new byte[0];
             this.ToolbarArray = new byte[4];
         }

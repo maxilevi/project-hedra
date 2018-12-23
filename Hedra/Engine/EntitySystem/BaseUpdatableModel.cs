@@ -28,7 +28,7 @@ namespace Hedra.Engine.EntitySystem
         public abstract Vector4 BaseTint { get; set; }
         public abstract Vector4 Tint { get; set; }
         public abstract Vector3 Position { get; set; }
-        public abstract Vector3 Rotation { get; set; }
+        public abstract Vector3 LocalRotation { get; set; }
         public abstract Vector3 Scale { get; set; }
         public abstract Vector3 TargetRotation { get; set; }
         public abstract void Update();

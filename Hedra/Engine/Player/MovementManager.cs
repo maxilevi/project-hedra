@@ -29,6 +29,7 @@ namespace Hedra.Engine.Player
         public bool IsJumping { get; private set; }
         protected readonly IHumanoid Human;
         private Vector3 _jumpPropulsion;
+        private float _lastHeight;
 
         public MovementManager(IHumanoid Human)
         {
@@ -55,7 +56,7 @@ namespace Hedra.Engine.Player
             if(Human.Position.Y + Human.Model.Height + 1 > Physics.WaterHeight(Human.Physics.TargetPosition) && Up) return;
             Human.IsGrounded = false;
             Human.Physics.Velocity = Vector3.Zero;
-            Human.Model.Rotation = new Vector3(0, Human.Model.Rotation.Y, 0);
+            Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, 0);
             if(Up) Human.Physics.TargetPosition += Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
             else Human.Physics.TargetPosition -= Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
 
@@ -102,7 +103,7 @@ namespace Hedra.Engine.Player
         public void OrientateTowards(float Facing)
         {
             Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, Facing, Human.Model.TargetRotation.Z);
-            var inRadians = Human.Model.Rotation.Y * Mathf.Radian;
+            var inRadians = Human.Model.LocalRotation.Y * Mathf.Radian;
             // There seems to be a bug in how we store the rotations so be switch the sines
             //if(Human is LocalPlayer player)
             //    Human.Orientation = player.View.LookingDirection;
@@ -142,7 +143,7 @@ namespace Hedra.Engine.Player
             {
                 IsJumping = false;
             }
-            Human.Physics.DeltaTranslate(_jumpPropulsion);
+            if(!Human.Physics.DeltaTranslate(_jumpPropulsion, true)) IsJumping = false;
             _jumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
         }
 

@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.ComplexMath;
+using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -50,11 +53,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                 Input.StaticData += staticElements[i];
             }
-
+            var distribution = new RandomDistribution(); 
             var instanceElements = Mesh.InstanceElements;
             for (var i = 0; i < instanceElements.Length; i++)
             {
-                ProcessInstanceData(instanceElements[i], Input.StaticData, i, Lod);
+                if(instanceElements[i].SkipOnLod && Lod != 1) continue; 
+                ProcessInstanceData(instanceElements[i], Input.StaticData, i, Lod, distribution);
             }
 
             if (Lod == 1)
@@ -62,25 +66,21 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
                 for (var i = 0; i < lodedInstanceElements.Length; i++)
                 {
-                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i, Lod);
+                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i, Lod, distribution);
                 }
             }
 
             return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed, Input.HasNoise3D, Input.HasWater);
         }
 
-        private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod)
+        private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod, RandomDistribution Distribution)
         {
-            if (Instance.HasLod)
-            {
-                int a = 0;
-            }
             var element = Instance.Get(Lod);
             var model = element.OriginalMesh.Clone();
             model.Transform(element.TransMatrix);
             
             SetColor(model, element, Index);
-            SetExtraData(model, element);
+            SetExtraData(model, element, Distribution);
             AssertValidModel(model);
             PackAndAddModel(model, Model);
         }
@@ -130,7 +130,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        private static void SetExtraData(VertexData Model, InstanceData Element)
+        private static void SetExtraData(VertexData Model, InstanceData Element, RandomDistribution Distribution)
         {
             Model.Extradata = CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache) 
                 ? CacheManager.CachedExtradata[Element.ExtraDataCache].Decompress() 
@@ -139,8 +139,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (!Element.HasExtraData)
                 Model.Extradata = Enumerable.Repeat(0f, Model.Vertices.Count).ToList();
             
-            //Pack some randomness to the wind values
-            float rng = Utils.Rng.NextFloat();
+            /* Pack some randomness to the wind values */
+            Distribution.Seed = Unique.GenerateSeed(Element.Position.Xz);
+            var rng = Distribution.NextFloat();
             for (var k = 0; k < Model.Extradata.Count; k++)
             {
                 if (Model.Extradata[k] != 0 && Model.Extradata[k] != -10f)

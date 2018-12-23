@@ -20,7 +20,7 @@ namespace Hedra.Engine.PlantSystem
 {
     public class BerryBushDesign : PlantDesign
     {
-        protected override CacheItem Type => CacheItem.BerryBush;
+        public override CacheItem Type => CacheItem.BerryBush;
         
         public override bool HasCustomPlacement => true;
 
@@ -71,7 +71,6 @@ namespace Hedra.Engine.PlantSystem
         public override void CustomPlacement(VertexData Data, Matrix4 TransMatrix)
         {
             var position = TransMatrix.ExtractTranslation();
-            var underChunk = World.GetChunkAt(position);
             TransMatrix = TransMatrix.ClearTranslation();
             Data.Transform(TransMatrix);
 
@@ -88,7 +87,8 @@ namespace Hedra.Engine.PlantSystem
                 };
                 berryBush.Model = new StaticModel(berryBush, Data)
                 {
-                    Position = position
+                    Position = position,
+                    ApplyNoiseTexture = true
                 };
 
                 var damage = new DamageComponent(berryBush)

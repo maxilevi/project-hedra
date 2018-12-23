@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.Core;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Management;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -18,7 +19,7 @@ namespace Hedra.Engine.Rendering
     /// <summary>
     /// Description of InstanceData.
     /// </summary>
-    public class InstanceData : LodableObject<InstanceData>, IPositionable
+    public class InstanceData : LodableObject<InstanceData>, IPositionable, ISearchable
     {
         private bool _boundsInitialized;
         private Vector3 _bounds;
@@ -31,6 +32,7 @@ namespace Hedra.Engine.Rendering
         public bool HasExtraData { get; set; } = true;
         public bool VariateColor { get; set; } = true;
         public bool GraduateColor { get; set; }
+        public bool SkipOnLod { get; set; }
         public Func<BlockType, bool> PlaceCondition { get; set; }
         public VertexData OriginalMesh { get; set; }
 

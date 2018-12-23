@@ -62,10 +62,10 @@ namespace Hedra.Engine.Player.BoatSystem
             _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
 
             _player.Model.TransformationMatrix =
-                Matrix4.CreateRotationY(-_player.Model.Rotation.Y * Mathf.Radian)
+                Matrix4.CreateRotationY(-_player.Model.LocalRotation.Y * Mathf.Radian)
                 * Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian)
                 * Matrix4.CreateRotationX(_angles.X * Mathf.Radian)
-                * Matrix4.CreateRotationY(_player.Model.Rotation.Y * Mathf.Radian);
+                * Matrix4.CreateRotationY(_player.Model.LocalRotation.Y * Mathf.Radian);
         }
 
         private void HandleCharacterRotation()

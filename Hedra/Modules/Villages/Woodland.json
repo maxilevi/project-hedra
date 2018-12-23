@@ -134,7 +134,13 @@
           "Y" :  4.54216,
           "Z" : -0.50052
         },
-        "Scale" : 8.0
+        "Scale" : 8.0,
+        "Chance": 80
+      },
+      {
+        "Path" : "Assets/Env/Village/Windmill1.ply",
+        "Scale" : 4.0,
+        "Chance": 20
       }
     ]
   },

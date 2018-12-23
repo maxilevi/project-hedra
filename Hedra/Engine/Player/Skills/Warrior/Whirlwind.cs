@@ -96,9 +96,9 @@ namespace Hedra.Engine.Player.Skills.Warrior
         private void Rotate()
         {
             Player.Model.TransformationMatrix =
-                Matrix4.CreateRotationY(-Player.Model.Rotation.Y * Mathf.Radian) *
+                Matrix4.CreateRotationY(-Player.Model.LocalRotation.Y * Mathf.Radian) *
                 Matrix4.CreateRotationY(_rotationY * Mathf.Radian) *
-                Matrix4.CreateRotationY(Player.Model.Rotation.Y * Mathf.Radian);
+                Matrix4.CreateRotationY(Player.Model.LocalRotation.Y * Mathf.Radian);
         }
         
         private void DamageNear()

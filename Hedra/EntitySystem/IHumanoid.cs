@@ -12,6 +12,7 @@ namespace Hedra.EntitySystem
     {
         event OnHitLandedEventHandler OnHitLanded;
         IMessageDispatcher MessageDispatcher { get; set; }
+        IPlayerInventory Inventory { get; }
         int ConsecutiveHits { get; }
         bool IsAttacking { get; set; }
         bool IsEating { get; set; }

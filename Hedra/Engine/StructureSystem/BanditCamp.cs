@@ -71,6 +71,7 @@ namespace Hedra.Engine.StructureSystem
             };
             _rescuee = World.WorldBuilding.SpawnHumanoid(randomTypes[Rng.Next(0, randomTypes.Length)],
                 this.Position + Vector3.UnitY * 7f + Vector3.UnitZ * 3.0f);
+            _rescuee.ResetEquipment();
             _rescuee.Physics.UsePhysics = false;
             _rescuee.Physics.CollidesWithEntities = false;
             _rescuee.Physics.CollidesWithStructures = false;

@@ -152,6 +152,7 @@
     <Compile Include="API\AIRegistry.cs" />
     <Compile Include="API\AnimationEventRegistry.cs" />
     <Compile Include="API\Class.cs" />
+    <Compile Include="API\ItemHandlerRegistry.cs" />
     <Compile Include="API\Mod.cs" />
     <Compile Include="API\ModelHandlerRegistry.cs" />
     <Compile Include="API\ModificationsLoader.cs" />
@@ -182,11 +183,14 @@
     <Compile Include="Engine\CacheSystem\PumpkinCache.cs" />
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
     <Compile Include="Engine\ClassSystem\RestrictionsFactory.cs" />
+    <Compile Include="Engine\Core\ISearchable.cs" />
     <Compile Include="Engine\Core\Singleton.cs" />
     <Compile Include="Engine\Core\TypeFactory.cs" />
+    <Compile Include="Engine\Core\Unique.cs" />
     <Compile Include="Engine\CraftingSystem\RecipePool.cs" />
     <Compile Include="Engine\CraftingSystem\Templates\IngredientsTemplate.cs" />
     <Compile Include="Engine\Game\Season.cs" />
+    <Compile Include="Engine\ItemSystem\ItemHandlerFactory.cs" />
     <Compile Include="Engine\ItemSystem\Templates\AttributeTemplate.cs" />
     <Compile Include="Engine\ItemSystem\Templates\ItemModelTemplate.cs" />
     <Compile Include="Engine\ItemSystem\Templates\ItemTemplate.cs" />
@@ -209,20 +213,29 @@
     <Compile Include="Engine\PlantSystem\CornDesign.cs" />
     <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
     <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
+    <Compile Include="Engine\PlantSystem\SunflowerDesign.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingBackground.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventory.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryItemInfo.cs" />
+    <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterface.cs" />
+    <Compile Include="Engine\Player\DummyInventory.cs" />
+    <Compile Include="Engine\Player\Inventory\AttributeFormatter.cs" />
     <Compile Include="Engine\Player\Inventory\BaseBackground.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestInterface.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
     <Compile Include="Engine\Rendering\TextBillboard.cs" />
     <Compile Include="Engine\Rendering\TextureBillboard.cs" />
+    <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
+    <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
+    <Compile Include="Engine\StructureSystem\InstanceDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\SpawnCampfireDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\DecorationsPlacer.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\IBuilder.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\CollectiblePlant.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\IProbabilityTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BuildingDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\DecorationsTemplate.cs" />
@@ -549,7 +562,6 @@
     <Compile Include="Engine\ItemSystem\ItemUtils.cs" />
     <Compile Include="Engine\ItemSystem\EquipmentType.cs" />
     <Compile Include="Engine\Management\DistributedExecuter.cs" />
-    <Compile Include="Engine\Management\ISearchable.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
     <Compile Include="Engine\Management\TickSystem.cs" />
     <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
@@ -877,6 +889,8 @@
     <Compile Include="EntitySystem\IEntity.cs" />
     <Compile Include="EntitySystem\IHumanoid.cs" />
     <Compile Include="EntitySystem\IPhysicsComponent.cs" />
+    <Compile Include="ItemHandlers\ItemHandler.cs" />
+    <Compile Include="ItemHandlers\RecipeHandler.cs" />
     <Compile Include="ModelHandlers\EntHandler.cs" />
     <Compile Include="ModelHandlers\ModelHandler.cs" />
     <Compile Include="Rendering\Particles\ParticleShape.cs" />
@@ -993,6 +1007,10 @@
     </None>
     <None Include="..\project-hedra-assets\Animations\BeetleWalk.dae">
       <Link>Assets\Chr\BeetleWalk.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Animations\ChristmasChestIdle.dae">
+      <Link>Assets\Chr\ChristmasChestIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Animations\CowIdle.dae">
@@ -1229,6 +1247,182 @@
     </None>
     <None Include="..\project-hedra-assets\Environment\DeadTrees\DeadTree3_Lod8.ply">
       <Link>Assets\Env\Trees\DeadTree3_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn0.ply">
+      <Link>Assets\Env\Plants\Corn0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn0_Fruit0.ply">
+      <Link>Assets\Env\Plants\Corn0_Fruit0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn0_Fruit0_Lod2.ply">
+      <Link>Assets\Env\Plants\Corn0_Fruit0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn0_Fruit0_Lod4.ply">
+      <Link>Assets\Env\Plants\Corn0_Fruit0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn0_Fruit0_Lod8.ply">
+      <Link>Assets\Env\Plants\Corn0_Fruit0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn0_Lod2.ply">
+      <Link>Assets\Env\Plants\Corn0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn0_Lod4.ply">
+      <Link>Assets\Env\Plants\Corn0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn0_Lod8.ply">
+      <Link>Assets\Env\Plants\Corn0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn1.ply">
+      <Link>Assets\Env\Plants\Corn1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn1_Fruit0.ply">
+      <Link>Assets\Env\Plants\Corn1_Fruit0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn1_Fruit0_Lod2.ply">
+      <Link>Assets\Env\Plants\Corn1_Fruit0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn1_Fruit0_Lod4.ply">
+      <Link>Assets\Env\Plants\Corn1_Fruit0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn1_Fruit0_Lod8.ply">
+      <Link>Assets\Env\Plants\Corn1_Fruit0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn1_Lod2.ply">
+      <Link>Assets\Env\Plants\Corn1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn1_Lod4.ply">
+      <Link>Assets\Env\Plants\Corn1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Corn1_Lod8.ply">
+      <Link>Assets\Env\Plants\Corn1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0.ply">
+      <Link>Assets\Env\Plants\Pumpkin0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Fruit0.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Fruit0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Fruit0_Lod2.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Fruit0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Fruit0_Lod4.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Fruit0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Fruit0_Lod8.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Fruit0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Fruit1.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Fruit1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Fruit1_Lod2.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Fruit1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Fruit1_Lod4.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Fruit1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Fruit1_Lod8.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Fruit1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Lod2.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Lod4.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin0_Lod8.ply">
+      <Link>Assets\Env\Plants\Pumpkin0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin1.ply">
+      <Link>Assets\Env\Plants\Pumpkin1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin1_Fruit0.ply">
+      <Link>Assets\Env\Plants\Pumpkin1_Fruit0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin1_Fruit0_Lod2.ply">
+      <Link>Assets\Env\Plants\Pumpkin1_Fruit0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin1_Fruit0_Lod4.ply">
+      <Link>Assets\Env\Plants\Pumpkin1_Fruit0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin1_Fruit0_Lod8.ply">
+      <Link>Assets\Env\Plants\Pumpkin1_Fruit0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin1_Lod2.ply">
+      <Link>Assets\Env\Plants\Pumpkin1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin1_Lod4.ply">
+      <Link>Assets\Env\Plants\Pumpkin1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Pumpkin1_Lod8.ply">
+      <Link>Assets\Env\Plants\Pumpkin1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Sunflower0.ply">
+      <Link>Assets\Env\Plants\Sunflower0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Sunflower0_Lod2.ply">
+      <Link>Assets\Env\Plants\Sunflower0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Sunflower0_Lod4.ply">
+      <Link>Assets\Env\Plants\Sunflower0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Sunflower0_Lod8.ply">
+      <Link>Assets\Env\Plants\Sunflower0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Sunflower1.ply">
+      <Link>Assets\Env\Plants\Sunflower1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Sunflower1_Lod2.ply">
+      <Link>Assets\Env\Plants\Sunflower1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Sunflower1_Lod4.ply">
+      <Link>Assets\Env\Plants\Sunflower1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\FarmPlants\Sunflower1_Lod8.ply">
+      <Link>Assets\Env\Plants\Sunflower1_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Environment\Oaks\Oak0.ply">
@@ -1525,6 +1719,10 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\Rake.ply">
       <Link>Assets\Items\Misc\Rake.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Misc\Recipe.ply">
+      <Link>Assets\Items\Misc\Recipe.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\CommonBronzeStaff.ply">
@@ -2231,14 +2429,6 @@
       <Link>Assets\Env\Village\Farm0_Prop1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\Farm\Plants\Pumpkin0.ply">
-      <Link>Assets\Env\Plants\Pumpkin0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Farm\Plants\Pumpkin1.ply">
-      <Link>Assets\Env\Plants\Pumpkin1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\Farm\Windmill0.ply">
       <Link>Assets\Env\Village\Windmill0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -2261,6 +2451,14 @@
     </None>
     <None Include="..\project-hedra-assets\Villages\Farm\Windmill0_Collider3.ply">
       <Link>Assets\Env\Colliders\Windmill0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Windmill1.ply">
+      <Link>Assets\Env\Village\Windmill1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Villages\Farm\Windmill1_Collider0.ply">
+      <Link>Assets\Env\Colliders\Windmill1_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\House0\House0-Lod.ply">
@@ -5583,10 +5781,6 @@
       <Link>Assets\Items\Rings\CommonWoodenRing.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\CreationPlatform.ply">
-      <Link>Assets\Intro\CreationPlatform.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\DivineDemonBlade.ply">
       <Link>Assets\Items\Swords\DivineDemonBlade.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -5693,10 +5887,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\LegendarySteelChopper.ply">
       <Link>Assets\Items\Swords\LegendarySteelChopper.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\MapBase.ply">
-      <Link>Assets\Intro\MapBase.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\MapCursor.ply">
@@ -6825,6 +7015,9 @@
     <Content Include="Assets\UI\ManaBackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\UI\SelectedInventorySlot.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\UI\SocialButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -6852,18 +7045,26 @@
     <Content Include="Modules\Items\Misc\Boat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Misc\Corn.json" />
+    <Content Include="Modules\Items\Misc\Corn.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\EnchantedBranch.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\Mushroom.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Misc\Pumpkin.json" />
+    <Content Include="Modules\Items\Misc\Pumpkin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Misc\PumpkinPie.json" />
+    <Content Include="Modules\Items\Misc\PumpkinSoup.json" />
     <Content Include="Modules\Items\Misc\Rake.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Recipes\RareAutumnStaffRecipe.json" />
+    <Content Include="Modules\Items\Recipes\UncommonAutumnStaffRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Mobs\Cow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

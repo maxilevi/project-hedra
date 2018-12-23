@@ -11,7 +11,7 @@ namespace Hedra.Engine.Player.QuestSystem
 {
     public class QuestInterface : PlayerInterface
     {
-        public override Key OpeningKey => Controls.Crafting;
+        public override Key OpeningKey => Controls.QuestLog;
         private readonly IPlayer _player;
         
         public QuestInterface(IPlayer Player)
@@ -25,5 +25,7 @@ namespace Hedra.Engine.Player.QuestSystem
         }
         
         public override bool Show { get; set; }
+
+        protected override bool Disabled => true;
     }
 }

@@ -40,6 +40,7 @@ namespace Hedra.Engine.StructureSystem
                 HumanType.Archer
             };
             var villager = World.WorldBuilding.SpawnHumanoid(types[Rng.Next(0, types.Length)], Structure.Position + -SpawnOffset);
+            villager.ResetEquipment();
             villager.Name = NameGenerator.PickMaleName(Rng);
             villager.Physics.UsePhysics = false;
             villager.IsSitting = true;

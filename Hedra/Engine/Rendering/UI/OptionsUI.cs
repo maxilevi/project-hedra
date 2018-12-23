@@ -31,7 +31,6 @@ namespace Hedra.Engine.Rendering.UI
     {
         private static readonly Translation OnTranslation;
         private static readonly Translation OffTranslation;
-        public Button DonateBtcButton = null;
         private List<UIElement> _graphicsButtons = new List<UIElement>();
         private List<UIElement> _audioButtons = new List<UIElement>();
         private List<UIElement> _inputButtons = new List<UIElement>();
@@ -76,59 +75,21 @@ namespace Hedra.Engine.Rendering.UI
             var redditClick = new Button(new Vector2(-.6f, -.05f), squareScale, 0);
             var twitterClick = new Button(new Vector2(.6f, -.05f), squareScale, 0);
 
-            DonateBtcButton = new Button(Vector2.Zero, Vector2.One, 0);
-
-            /*copyAddress.Click += delegate {
-                DonateBtcButton.Clickable = false;
-                Clipboard.SetText("18GbXbnGzLDwi5KmZ1VD4JQpibw6Lpyfvp");
-                Player.MessageDispatcher.ShowNotification("Succesfully copied to clipboard", Color.White, 3f, true);
-                TaskManager.RunAfterSeconds(250, delegate{ DonateBtcButton.Clickable = true; } );
-            };*/
-
-
-            DonateBtcButton.Click += delegate {
-                donateBtc.Disable();
-                DonateBtcButton.Disable();
-                twitterClick.Disable();
-                discordClick.Disable();
-                redditClick.Disable();
-                //copyAddress.Disable();
-                Enable();
-            };
-
             twitterClick.Click += delegate
             {
-                DonateBtcButton.CanClick = false;
                 Process.Start("https://twitter.com/Zaphyk");
-                TaskScheduler.After(.25f, delegate { DonateBtcButton.CanClick = true; });
             };
 
             redditClick.Click += delegate
             {
-                DonateBtcButton.CanClick = false;
                 Process.Start("https://www.reddit.com/r/projecthedra");
-                TaskScheduler.After(.25f, delegate { DonateBtcButton.CanClick = true; });
             };
 
             discordClick.Click += delegate
             {
-                DonateBtcButton.CanClick = false;
                 Process.Start("https://discord.gg/AEC4Uab");
-                TaskScheduler.After(.25f, delegate { DonateBtcButton.CanClick = true; });
             };
 
-            
-            Button supportGame = new Button(new Vector2(0f, -bandPosition.Y),  Graphics2D.SizeFromAssets("Assets/UI/SocialButton.png") * .5f, Graphics2D.LoadFromAssets("Assets/UI/SocialButton.png"));
-            supportGame.Click += delegate { 
-                Disable();
-                donateBtc.Enable();
-                DonateBtcButton.Enable();
-                twitterClick.Enable();
-                discordClick.Enable();
-                redditClick.Enable();
-                //copyAddress.Enable();
-            };
-            
             _graphics = new Button(new Vector2(0f, bandPosition.Y),
                                 new Vector2(0.15f,0.075f), Translation.Create("graphics"), Color.White, _normalFont);
             _graphics.Click += delegate
@@ -500,7 +461,6 @@ namespace Hedra.Engine.Rendering.UI
             AddElement(_input);
             AddElement(_graphics);
             AddElement(_display);
-            AddElement(supportGame);
             
             
             for(var i = 0; i < _graphicsButtons.Count; i++)

@@ -110,7 +110,7 @@ namespace Hedra.Engine.Rendering
         {
             Vertex *= Scale;
 
-            Vertex -= LocalRotationPoint;
+            Vertex += LocalRotationPoint;
             Vertex = Vector3.Transform(Vertex, LocalRotationMatrix);
             Vertex -= LocalRotationPoint;
 

@@ -11,6 +11,7 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.TreeSystem;
@@ -29,7 +30,7 @@ namespace Hedra.Engine.Generation
         {
             var underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return default(PlacementObject);
-            var rng = new Random(BiomeGenerator.GenerateSeed(Position.Xz));
+            var rng = new Random(Unique.GenerateSeed(Position.Xz));
 
             var height = Physics.HeightAtPosition(Position, Lod);
             var normal = Physics.NormalAtPosition(Position, Lod);
@@ -86,7 +87,7 @@ namespace Hedra.Engine.Generation
         {
             var underChunk = World.GetChunkAt(Placement.Position);
             if(underChunk == null) return;
-            var rng = new Random(BiomeGenerator.GenerateSeed(Placement.Position.Xz));
+            var rng = new Random(Unique.GenerateSeed(Placement.Position.Xz));
             var extraScale = new Random(World.Seed + 1111).NextFloat() * 5 + 4;
             var scale = 10 + rng.NextFloat() * 3.5f;
 

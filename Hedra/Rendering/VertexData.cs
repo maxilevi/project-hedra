@@ -109,16 +109,16 @@ namespace Hedra.Rendering
             return AddWindValues(-Vector4.One, Scalar);
         }
         
-        public VertexData AddWindValues(Vector4 Color, float Scalar = 1f)
+        public VertexData AddWindValues(Vector4 ColorFilter, float Scalar = 1f)
         {
             var values = new float[Vertices.Count];
-            var highest = this.SupportPoint(Vector3.UnitY, Color);
-            var lowest = this.SupportPoint(-Vector3.UnitY, Color);
-            var all = Color == -Vector4.One;
+            var highest = this.SupportPoint(Vector3.UnitY, ColorFilter);
+            var lowest = this.SupportPoint(-Vector3.UnitY, ColorFilter);
+            var all = ColorFilter == -Vector4.One;
             if(Extradata.Count == 0) Extradata = Enumerable.Repeat(0f, Vertices.Count).ToList();
             for(var i = 0; i < Extradata.Count; i++)
             {
-                if(Colors[i] != Color && !all)
+                if(Colors[i] != ColorFilter && !all)
                 {
                     values[i] = 0;
                     continue;
@@ -126,7 +126,7 @@ namespace Hedra.Rendering
                 var shade = Vector3.Dot(Vertices[i] - lowest, Vector3.UnitY) / Vector3.Dot(highest - lowest, Vector3.UnitY);
                 Extradata[i] = (shade + (float) Math.Pow(shade, 1.3)) * Scalar;
             }
-            ApplyRecursively(V => V.AddWindValues(Color, Scalar));
+            ApplyRecursively(V => V.AddWindValues(ColorFilter, Scalar));
             return this;
         }
         

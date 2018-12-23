@@ -16,6 +16,7 @@ namespace Hedra.Engine.Rendering.UI
         public static bool Showing => _openedInterface != null;
         public abstract Key OpeningKey { get; }
         public abstract bool Show { get; set; }
+        protected virtual bool Disabled { get; }
 
         protected PlayerInterface()
         {
@@ -53,7 +54,7 @@ namespace Hedra.Engine.Rendering.UI
             for (var i = 0; i < Interfaces.Count; i++)
             {
                 if (Interfaces[i].OpeningKey != Args.Key || GameSettings.Paused || GameManager.Player.IsDead ||
-                    !GameManager.Player.CanInteract || GameManager.IsLoading) continue;
+                    !GameManager.Player.CanInteract || GameManager.IsLoading || Interfaces[i].Disabled) continue;
                 if (_openedInterface == null)
                 {
                     Interfaces[i].Show = true;

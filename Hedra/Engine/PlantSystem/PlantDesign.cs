@@ -14,11 +14,9 @@ namespace Hedra.Engine.PlantSystem
 {
     public abstract class PlantDesign
     {
-        protected abstract CacheItem Type { get; }
+        public abstract CacheItem Type { get; }
 
         public VertexData Model => CacheManager.GetModel(Type);
-
-        //public VertexData LodModel => CacheManager.GetLodModel(Type);
 
         public abstract Matrix4 TransMatrix(Vector3 Position, Random Rng);
 

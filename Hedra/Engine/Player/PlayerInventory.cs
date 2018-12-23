@@ -210,7 +210,7 @@ namespace Hedra.Engine.Player
         {
             if (_show)
             {
-                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float) Time.DeltaTime * 16f);
+                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, Time.DeltaTime * 16f);
                 _player.View.TargetDistance =
                     Mathf.Lerp(_player.View.TargetDistance, 10f, (float) Time.DeltaTime * 16f);
                 _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw, (float) Math.Acos(-_player.Orientation.X),

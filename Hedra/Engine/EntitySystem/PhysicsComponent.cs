@@ -32,7 +32,6 @@ namespace Hedra.Engine.EntitySystem
         private const float NormalSpeedModifier = 2.25f;
         private const float MaxSlopeHeight = 1.0f;
         private const float MaxSlide = 3.0f;
-        private readonly Entity _parent;
         public event OnMoveEvent OnMove;
         public event OnHitGroundEvent OnHitGround;
         public bool UsePhysics { get; set; }
@@ -60,9 +59,8 @@ namespace Hedra.Engine.EntitySystem
         private readonly Box _physicsBox;
         private readonly List<ICollidable> _collisions;
         
-        public PhysicsComponent(Entity Parent) : base(Parent)
+        public PhysicsComponent(IEntity Parent) : base(Parent)
         {
-            _parent = Parent;
             _physicsBox = new Box();
             UsePhysics = true;
             UseTimescale = true;
@@ -139,7 +137,7 @@ namespace Hedra.Engine.EntitySystem
                     }
                     else if (Falltime > 1f)
                     {
-                        SoundPlayer.PlaySound(SoundType.HitGround, _parent.Position);
+                        SoundPlayer.PlaySound(SoundType.HitGround, Parent.Position);
                     }
 
                     Falltime = 0;
@@ -163,32 +161,35 @@ namespace Hedra.Engine.EntitySystem
             Velocity = Vector3.Zero;
         }
 
-        public void ExecuteTranslate(MoveCommand Command)
+        public bool ExecuteTranslate(MoveCommand Command)
         {
-            ProcessCommand(Command);
+            return ProcessCommand(Command);
         }
 
-        public void Translate(Vector3 Delta)
+        public bool Translate(Vector3 Delta)
         {
-            this.ExecuteTranslate(new MoveCommand(Delta));
+            return this.ExecuteTranslate(new MoveCommand(Delta));
         }
 
-        public void DeltaTranslate(Vector3 Delta)
+        public bool DeltaTranslate(Vector3 Delta, bool OnlyY = false)
         {
-            this.ExecuteTranslate(new MoveCommand(Delta * Time.DeltaTime));
+            return this.ExecuteTranslate(new MoveCommand(Delta * Time.DeltaTime)
+            {
+                OnlyY = OnlyY
+            });
         }
 
-        public void DeltaTranslate(MoveCommand Command)
+        public bool DeltaTranslate(MoveCommand Command)
         {
             Command.Delta *= Time.DeltaTime;
-            this.ExecuteTranslate(Command);
+            return this.ExecuteTranslate(Command);
         }
 
         private float Timestep => Time.IndependantDeltaTime * (UseTimescale ? Time.TimeScale : 1);
 
-        private void ProcessCommand(MoveCommand Command)
+        private bool ProcessCommand(MoveCommand Command)
         {
-            if (Command.Delta == Vector3.Zero) return;
+            if (Command.Delta == Vector3.Zero) return true;
             if (Command.OnlyY && Math.Abs(Command.Delta.Y) > .25f) Parent.IsGrounded = false;
             var canMove = HandleVoxelCollision(Command);
             HandleEntityCollision(Command);
@@ -218,6 +219,8 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (Command.OnlyY) MakeGrounded();
             }
+
+            return canMove;
         }
 
         private void MakeGrounded()
@@ -248,7 +251,12 @@ namespace Hedra.Engine.EntitySystem
                 }
                 else
                 {
-                    Parent.IsGrounded = true;
+                    if(Command.Delta.Y < 0)
+                        Parent.IsGrounded = true;
+                    else
+                    {
+                        int a = 0;
+                    }
                     return false;
                 }
             }         

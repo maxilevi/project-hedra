@@ -33,11 +33,11 @@ namespace Hedra.Engine.EntitySystem
             if (Model != null)
             {
                 model.Position = this.Position;
-                model.LocalRotation = this.Rotation;
-                model.LocalRotationPoint = this.RotationPoint;
-                model.Rotation = this.LocalRotation;
+                model.LocalRotation = this.LocalRotation;
+                model.LocalRotationPoint = this.LocalRotationPoint;
+                model.Rotation = this.Rotation;
                 model.LocalPosition = this.LocalPosition;
-                model.BeforeRotation = this.BeforeLocalRotation;
+                model.BeforeRotation = this.BeforeRotation;
                 model.TransformationMatrix = this.TransformationMatrix;
                 model.Scale = this.Scale;
                 model.Alpha = this.Alpha;

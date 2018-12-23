@@ -10,9 +10,6 @@ namespace Hedra.Engine.ItemSystem
         CommonBronzeSword,
         CommonWoodenBow,
         CommonBronzeDoubleBlades,
-        CommonBronzeStaff,
-        ChristmasHat,
-        FarmerHat,
-        FarmingRake
+        CommonBronzeStaff
     }
 }

@@ -59,7 +59,6 @@ namespace Hedra.Engine.WorldBuilding
             var human = HumanoidFactory.BuildHumanoid(Type, Level, Behaviour);
             human.Physics.TargetPosition = World.FindPlaceablePosition(human, DesiredPosition);
             human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
-            human.ResetEquipment();
             ApplySeasonHats(human, Type);
             return human;
         }
@@ -116,7 +115,7 @@ namespace Hedra.Engine.WorldBuilding
                 !string.Equals(Type, HumanType.Mage.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
             
             if(Season.IsChristmas) 
-                Human.SetHelmet(ItemPool.Grab(CommonItems.ChristmasHat).Helmet);
+                Human.SetHelmet(ItemPool.Grab(ItemType.ChristmasHat).Helmet);
         }
 
         private bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates)

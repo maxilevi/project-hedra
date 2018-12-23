@@ -23,7 +23,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             return new FarmParameters
             {
                 Design = SelectRandom(_farmDesigns),
-                WindmillDesign = SelectRandom(this._windmillDesigns),
+                WindmillDesign = SelectProp(_windmillDesigns),
                 PropDesign = SelectProp(_farm.PropDesigns),
                 Position = Point.Position,
                 HasWindmill = Rng.Next(0, 3) == 1,
@@ -32,7 +32,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             };
         }
         
-        private PropTemplate SelectProp(PropTemplate[] Templates)
+        private T SelectProp<T>(T[] Templates) where T : class, IProbabilityTemplate
         {
             var rng = Rng.NextFloat();
             var accum = 0f;

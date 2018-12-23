@@ -370,11 +370,11 @@ namespace Hedra.Engine.Player
             _food.TransformationMatrix = mat4;
             _food.Position = Model.Position;
             _food.TargetRotation = Vector3.Zero;
-            _food.RotationPoint = Vector3.Zero;
-            _food.Rotation = Vector3.Zero;
-            _food.LocalRotation = new Vector3(90, 0, 0);
+            _food.LocalRotationPoint = Vector3.Zero;
+            _food.LocalRotation = Vector3.Zero;
+            _food.Rotation = new Vector3(90, 0, 0);
             _food.LocalPosition = Vector3.Zero;
-            _food.BeforeLocalRotation = Vector3.Zero;
+            _food.BeforeRotation = Vector3.Zero;
             _food.Enabled = true;
         }
         
@@ -414,11 +414,11 @@ namespace Hedra.Engine.Player
                 QuaternionMath.ToEuler(_rotationQuaternionY).Y,
                 QuaternionMath.ToEuler(_rotationQuaternionZ).Z
                 );
-            Rotation = Model.LocalRotation;
+            LocalRotation = Model.LocalRotation;
             if(_hasLamp)
             {
                 _lampModel.Position = LeftWeaponPosition;
-                _lampModel.LocalRotation = Rotation;
+                _lampModel.LocalRotation = LocalRotation;
                 _lampModel.LocalRotationPoint = Vector3.Zero;
             }
             Human.HandLamp.Update();
@@ -559,7 +559,7 @@ namespace Hedra.Engine.Player
             set => Model.TransformationMatrix = value;
         }
         
-        public override Vector3 Rotation { get; set; }
+        public override Vector3 LocalRotation { get; set; }
 
         public override void Dispose()
         {

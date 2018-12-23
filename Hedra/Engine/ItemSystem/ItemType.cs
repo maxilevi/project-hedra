@@ -10,7 +10,13 @@ namespace Hedra.Engine.ItemSystem
         Berry,
         Gold,
         Glider,
-        Mushroom,
-        Boat
+        Pumpkin,
+        Recipe,
+        Corn,
+        ChristmasHat,
+        FarmerHat,
+        FarmingRake,
+        Boat,
+        MaxEnums
     }
 }

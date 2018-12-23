@@ -4,6 +4,7 @@ using Hedra.API;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Sound;
+using Hedra.ItemHandlers;
 using Hedra.ModelHandlers;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
@@ -49,6 +50,8 @@ namespace Hedra
             AddAnimationEvent("Slash", typeof(Slash));
             
             AddModelHandler("Ent", typeof(EntHandler));
+            
+            AddItemHandler("Recipe", typeof(RecipeHandler));
         }
 
         private void RegisterSounds()
