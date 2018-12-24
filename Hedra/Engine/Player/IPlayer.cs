@@ -1,3 +1,4 @@
+using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
@@ -33,8 +34,10 @@ namespace Hedra.Engine.Player
         Vector3 Position { get; set; }
         CollisionGroup[] NearCollisions { get; }
         CraftingInventory Crafting { get; }
+        bool InterfaceOpened { get; }
         bool Enabled { get; set; }
         void Respawn();
         void Reset();
+        void HideInterfaces();
     }
 }

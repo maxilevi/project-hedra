@@ -32,16 +32,7 @@ namespace Hedra.Engine.StructureSystem
 
         private static IHumanoid CreateVillager(CollidableStructure Structure, Random Rng)
         {
-            var types = new []
-            {
-                HumanType.Warrior,
-                HumanType.Rogue,
-                HumanType.Mage,
-                HumanType.Archer
-            };
-            var villager = World.WorldBuilding.SpawnHumanoid(types[Rng.Next(0, types.Length)], Structure.Position + -SpawnOffset);
-            villager.ResetEquipment();
-            villager.Name = NameGenerator.PickMaleName(Rng);
+            var villager = World.WorldBuilding.SpawnVillager(Structure.Position + -SpawnOffset, Rng);
             villager.Physics.UsePhysics = false;
             villager.IsSitting = true;
             villager.SearchComponent<DamageComponent>().Immune = true;

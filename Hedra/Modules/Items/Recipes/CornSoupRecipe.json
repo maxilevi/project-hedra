@@ -1,0 +1,46 @@
+{
+  "Name": "CornSoupRecipe",
+  "DisplayName": "Corn soup recipe",
+  "EquipmentType": "Recipe",
+  "Tier": "Common",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "CraftingStation",
+      "Value": "Fire"
+    },
+    {
+      "Name": "Ingredients",
+      "Value": [
+        {
+          "Name": "Corn",
+          "Amount": 1
+        },
+        {
+          "Name": "WoodenBowl",
+          "Amount": 1
+        }
+      ],
+      "Display": "Bullets"
+    },
+    {
+      "Name": "Output",
+      "Value": "CornSoup",
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Recipe",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Misc/Recipe.ply"
+  }
+}

@@ -64,6 +64,7 @@ namespace Hedra.EntitySystem
         void ResetEquipment();
         void Greet();
         Item MainWeapon { get; }
+        Item Ring { get; set; }
         float BaseSpeed { get; }
         float MaxHealth { get; }
         float ManaRegen { get; }

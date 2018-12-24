@@ -9,12 +9,12 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryBackground : BaseBackground
     {
-        protected GUIText Name { get; private set; }
-        protected GUIText Level { get; private set; }
-        protected GUIText TopLeftText { get; private set; }
-        protected GUIText BottomLeftText { get; private set; }
-        protected GUIText TopRightText { get; private set; }
-        protected GUIText BottomRightText { get; private set; }
+        protected GUIText Name { get; }
+        protected GUIText Level { get; }
+        protected GUIText TopLeftText { get;  }
+        protected GUIText BottomLeftText { get; }
+        protected GUIText TopRightText { get; }
+        protected GUIText BottomRightText { get; }
         private Vector2 _targetResolution;
         
         public InventoryBackground(Vector2 Position) : base(Position, Vector2.One * .55f)

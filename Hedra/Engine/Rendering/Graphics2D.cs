@@ -97,7 +97,7 @@ namespace Hedra.Engine.Rendering
             {
                 Bitmap = bmp,
                 Path = $"UI:Color:{TextureColor}"
-            }, TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear, TextureWrapMode.Repeat);
+            }, TextureMinFilter.Linear, TextureMagFilter.Linear, TextureWrapMode.Repeat);
         }
         
         public static Bitmap ReColorMask(Color NewColor, Bitmap Mask){

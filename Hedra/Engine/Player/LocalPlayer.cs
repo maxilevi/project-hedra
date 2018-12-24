@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
+using Hedra.Engine.CraftingSystem;
 using OpenTK;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Rendering;
@@ -48,6 +49,7 @@ namespace Hedra.Engine.Player
         public IVehicle Boat { get; }
         public IVehicle Glider { get; }
         public IPlayerInventory Inventory { get; }
+        private PlayerInventoryInterface InventoryInterface { get; }
         public EntitySpawner Spawner { get; }
         public IToolbar Toolbar { get; }
         public QuestInterface QuestInterface { get; }
@@ -58,6 +60,7 @@ namespace Hedra.Engine.Player
         public Map Map { get; }
         public TradeInventory Trade { get; }
         public CraftingInventory Crafting { get; }
+        private CraftingInterface CraftingInterface { get; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
         public CollisionGroup[] NearCollisions => StructureAware.NearCollisions;
@@ -79,6 +82,9 @@ namespace Hedra.Engine.Player
             this.Spawner = new EntitySpawner(this);
             this.Model = new HumanoidModel(this);
             this.Inventory = new PlayerInventory(this);
+            this.InventoryInterface = new PlayerInventoryInterface(this);
+            this.Crafting = new CraftingInventory(this.Inventory);
+            this.CraftingInterface = new CraftingInterface(this);
             this.Toolbar = new Toolbar(this);
             this.Glider = new HangGlider(this);
             this.AbilityTree = new AbilityTree(this);
@@ -87,7 +93,6 @@ namespace Hedra.Engine.Player
             this.Chat = new Chat(this);
             this.Minimap = new Minimap(this);
             this.Map = new Map(this);
-            this.Crafting = new CraftingInventory(this);
             this.Trade = new TradeInventory(this);
             this.Movement = new PlayerMovement(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
@@ -251,8 +256,8 @@ namespace Hedra.Engine.Player
             AmbientEffects.Update();
             StructureAware.Update();
             Loader.Update();
-            Inventory.Update();
-            Crafting.Update();
+            InventoryInterface.Update();
+            CraftingInterface.Update();
             AbilityTree.Update();
             Toolbar.Update();
             UI.Update();
@@ -299,13 +304,8 @@ namespace Hedra.Engine.Player
             
             if(Inventory.Food != null)
             {
-                var foodAmount = Inventory.Food.GetAttribute<int>(CommonAttributes.Amount);
                 Model.EatFood(Inventory.Food);
-
-                if(foodAmount > 1)
-                    Inventory.Food.SetAttribute(CommonAttributes.Amount, foodAmount-1);
-                else
-                    this.Inventory.SetItem(this.Inventory.IndexOf(Inventory.Food), null);
+                Inventory.RemoveItem(Inventory.Food);
             }
             this.Inventory.UpdateInventory();
         }
@@ -373,6 +373,16 @@ namespace Hedra.Engine.Player
         public override bool IsGliding => Glider.Enabled;
         
         public override bool IsSailing => Boat.Enabled;
+
+        public bool InterfaceOpened => InventoryInterface.Show || Trade.Show || CraftingInterface.Show || AbilityTree.Show;
+
+        public void HideInterfaces()
+        {
+            InventoryInterface.Show = false;
+            Trade.Show = false;
+            CraftingInterface.Show = false;
+            AbilityTree.Show = false;
+        }
         
         public override bool IsTravelling
         {
@@ -461,7 +471,6 @@ namespace Hedra.Engine.Player
                 Instance.MessageDispatcher.ShowNotification(Translations.Get("max_characters", GameSettings.MaxCharacters), Color.Red, GameSettings.MaxCharacters);
                 return false;
             }
-
             const int maxName = 12;
             if(Name.Length > maxName)
             {
@@ -485,6 +494,7 @@ namespace Hedra.Engine.Player
             data.AddItem(PlayerInventory.FoodHolder, food);
 
             data.AddItem(PlayerInventory.WeaponHolder, ClassType.StartingItem);
+            data.AddRecipe(ItemPool.Grab(ItemType.HealthPotionRecipe).Name);
 
             DataManager.SavePlayer(data);
             return true;

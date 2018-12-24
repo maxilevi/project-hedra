@@ -159,19 +159,15 @@ namespace Hedra.Engine.PhysicsSystem
             if(_boxShape == null)
                 _boxShape = new CollisionShape(new Vector3[8]);
 
-            Vector3 halfSize = (this.Max - this.Min) * .5f;
+            _boxShape.Vertices[0] = Min;
+            _boxShape.Vertices[1] = new Vector3(Max.X, Min.Y, Min.Z);
+            _boxShape.Vertices[2] = new Vector3(Min.X, Min.Y, Max.Z);
+            _boxShape.Vertices[3] = new Vector3(Max.X, Min.Y, Max.Z);
 
-            _boxShape.Vertices[0] = this.Min - halfSize;
-
-            _boxShape.Vertices[1] = this.Min * new Vector3(0,1,1) + new Vector3(this.Max.X,0,0) - halfSize;
-            _boxShape.Vertices[2] = this.Min * new Vector3(1,0,1) + new Vector3(0,this.Max.Y,0) - halfSize;
-            _boxShape.Vertices[3] = this.Min * new Vector3(1,1,0) + new Vector3(0,0,this.Max.Z) - halfSize;
-
-            _boxShape.Vertices[4] = this.Min * new Vector3(0,1,0) + new Vector3(this.Max.X,0,this.Max.Z) - halfSize;
-            _boxShape.Vertices[5] = this.Min * new Vector3(0,0,1) + new Vector3(this.Max.X,this.Max.Y,0) - halfSize;
-            _boxShape.Vertices[6] = this.Min * new Vector3(1,0,0) + new Vector3(0,this.Max.Y,this.Max.Z) - halfSize;
-
-            _boxShape.Vertices[7] = this.Max - halfSize;
+            _boxShape.Vertices[4] = new Vector3(Min.X, Max.Y, Min.Z);
+            _boxShape.Vertices[5] = new Vector3(Max.X, Max.Y, Min.Z);
+            _boxShape.Vertices[6] = new Vector3(Min.X, Max.Y, Max.Z);
+            _boxShape.Vertices[7] = Max;
 
             _boxShape.BroadphaseCenter = (this.Min + this.Max) * .5f;
             _boxShape.BroadphaseRadius = (this.Min - this.Max).LengthFast;

@@ -1,0 +1,40 @@
+{
+  "Name": "RawMeat",
+  "DisplayName": "Raw meat",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Saturation",
+      "Value": 40
+    },
+    {
+      "Name": "Price",
+      "Value": 12,
+      "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "EatTime",
+      "Value": 6.0,
+      "Hidden": true
+    },
+    {
+      "Name": "EatEffect",
+      "Value": "Poison",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Foods/RawMeat.ply"
+  }
+}

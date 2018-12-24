@@ -8,48 +8,43 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.CraftingSystem
 {
-    public class CraftingInventory : PlayerInterface
+    public class CraftingInterface : PlayerInterface
     {
-        private const int RecipeSpaces = 20; 
+        private const int Rows = 4;
+        private const int Columns = 4; 
         public override Key OpeningKey => Controls.Crafting;
         private readonly IPlayer _player;       
         private readonly InventoryArray _recipeItems;
         private readonly CraftingInventoryArrayInterface _recipesItemInterface;
         private readonly InventoryStateManager _stateManager;
         private readonly CraftingInventoryArrayInterfaceManager _interfaceManager;
-        private readonly InventoryBackground _background;
-        private readonly CraftingBackground _craftingDescription;
-        private readonly List<string> _recipes;
-        private Item[] _allRecipeItems;
+        private readonly CraftingBackground _background;
+        private readonly CraftingInventoryItemInfo _itemInfo;
         private bool _show;
         
         
-        public CraftingInventory(IPlayer Player)
+        public CraftingInterface(IPlayer Player)
         {
             _player = Player;
-            _recipes = new List<string>();
-            _recipeItems = new InventoryArray(RecipeSpaces);
+            _recipeItems = new InventoryArray(Rows * Columns);
             _stateManager = new InventoryStateManager(_player);
-            _background = new InventoryBackground(Vector2.UnitY * .65f);
+            _background = new CraftingBackground(Vector2.UnitY * .65f);
             var interfacePosition = Vector2.UnitX * -.4f + Vector2.UnitY * .05f;
-            _recipesItemInterface = new CraftingInventoryArrayInterface(_recipeItems, _recipeItems.Length)
+            _recipesItemInterface = new CraftingInventoryArrayInterface(_player, _recipeItems, Columns, Rows)
             {
                 Position = interfacePosition
             };
-            var itemInfoInterface = new CraftingInventoryItemInfo(_recipesItemInterface.Renderer)
+            _itemInfo = new CraftingInventoryItemInfo(_player, _recipesItemInterface.Renderer)
             {
                 Position = Vector2.UnitY * _recipesItemInterface.Position.Y + interfacePosition.X * -Vector2.UnitX
             };
-            _craftingDescription = new CraftingBackground(
-                new Vector2(0, -itemInfoInterface.Scale.Y * 2),
-                new Vector2(interfacePosition.X * -2, itemInfoInterface.Scale.Y * 2)
-            );
-            _interfaceManager = new CraftingInventoryArrayInterfaceManager(itemInfoInterface, _recipesItemInterface);
+            _interfaceManager = new CraftingInventoryArrayInterfaceManager(Columns, Rows, _itemInfo, _recipesItemInterface);
             _stateManager.OnStateChange += Invoke;
         }
 
@@ -57,7 +52,6 @@ namespace Hedra.Engine.Player.CraftingSystem
         {
             _interfaceManager.UpdateView();
             _recipesItemInterface.UpdateView();
-            _craftingDescription.UpdateView();
             _background.UpdateView(_player);
         }
 
@@ -88,56 +82,24 @@ namespace Hedra.Engine.Player.CraftingSystem
                     Time.DeltaTime * 16f);
                 _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
                     Time.DeltaTime * 16f);
+                _itemInfo.Update();
             }
         }
-        
-        private void SetActive(bool Value)
-        {
-            if (_show == Value || _stateManager.GetState() != _show) return;
-            _show = Value;
-            _recipesItemInterface.Enabled = _show;
-            _interfaceManager.Enabled = _show;
-            _craftingDescription.Enabled = _show;
-            _background.Enabled = _show;
-            SetInventoryState(_show);
-            UpdateView();
-        }
 
-        public string[] GetRecipes()
-        {
-            return _recipes.ToArray();
-        }
-
-        public bool LearnRecipe(string RecipeName)
-        {
-            if (!_recipes.Contains(RecipeName))
-            {
-                _recipes.Add(RecipeName);
-                return true;
-            }
-            return false;
-        }
-
-        public bool HasRecipe(string RecipeName)
-        {
-            return _recipes.Contains(RecipeName);
-        }
-        
-        public void SetRecipes(string[] LearnedRecipes)
-        {
-            _recipeItems.Empty();
-            _recipes.Clear();
-            _recipes.AddRange(LearnedRecipes);
-            _allRecipeItems = RecipePool.GetOutputs(GetRecipes());
-            _allRecipeItems.ToList().ForEach(I => _recipeItems.AddItem(I));
-        }
-        
         public override bool Show
         {
             get => _show;
-            set => SetActive(value);
+            set
+            {
+                if (_show == value || _stateManager.GetState() != _show) return;
+                _show = value;
+                _recipesItemInterface.Enabled = _show;
+                _interfaceManager.Enabled = _show;
+                _background.Enabled = _show;
+                SetInventoryState(_show);
+                UpdateView();
+                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
+            }
         }
-
-        protected override bool Disabled => true;
     }
 }

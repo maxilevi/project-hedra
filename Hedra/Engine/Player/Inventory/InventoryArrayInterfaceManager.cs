@@ -332,7 +332,7 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             EventDispatcher.UnregisterMouseMove(this);
             EventDispatcher.UnregisterMouseDown(this);

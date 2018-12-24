@@ -1053,6 +1053,6 @@ void main(void)
 	}
 	if(UseMask)
 	{
-		OutColor.a = texture(Mask, TexCoords).a * Opacity;
+		OutColor.a = texture(Mask, TexCoords).a * OutColor.a;
 	}
 }	

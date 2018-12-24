@@ -158,8 +158,7 @@ namespace Hedra.Engine.Loader
             if(!this.Focused && SplashScreen.FinishedLoading)
             {
                 if(!GameManager.InStartMenu && !GameManager.IsLoading && !GameSettings.Paused &&
-                    GameManager.Player != null && !GameManager.Player.Inventory.Show &&
-                    !GameManager.Player.AbilityTree.Show && !GameManager.Player.Trade.Show)
+                    GameManager.Player != null && !GameManager.Player.InterfaceOpened)
                 {
                     GameManager.Player.UI.ShowMenu();
                 }

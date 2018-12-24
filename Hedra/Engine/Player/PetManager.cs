@@ -89,8 +89,8 @@ namespace Hedra.Engine.Player
                 Pet.Level = 1;
                 Pet.RemoveComponent(Pet.SearchComponent<HealthBarComponent>());
                 Pet.AddComponent(new HealthBarComponent(Pet, "Mount"));
-                Pet.AddComponent(new MountAIComponent(Pet, _player));
                 Pet.RemoveComponent(Pet.SearchComponent<BasicAIComponent>());
+                Pet.AddComponent(new MountAIComponent(Pet, _player));
                 Pet.Removable = false;
                 ((QuadrupedModel) Pet.Model).IsMountable = true;
             }

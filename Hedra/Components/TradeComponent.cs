@@ -48,7 +48,7 @@ namespace Hedra.Components
             }
 
             var canTrade = player.CanInteract && !player.IsDead && !GameSettings.Paused &&
-                           !player.Inventory.Show && !player.AbilityTree.Show;
+                           !player.InterfaceOpened;
             bool InRadiusFunc() => (player.Position - Parent.Position).LengthSquared < TradeInventory.TradeRadius * TradeInventory.TradeRadius && !player.Trade.IsTrading;
 
             var inRadius = InRadiusFunc();

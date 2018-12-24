@@ -1,0 +1,21 @@
+{
+  "Name": "GlassFlask",
+  "DisplayName": "Glass flask",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 7.5,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Misc/GlassFlask.ply"
+  }
+}

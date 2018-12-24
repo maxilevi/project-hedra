@@ -57,13 +57,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             
             if (Rng.Next(0, 3) == 1)
             {
-                var villager = SpawnVillager(position);
-                villager.SearchComponent<DamageComponent>().Immune = true;
-                villager.AddComponent(new VillagerThoughtsComponent(villager));
+                SpawnVillager(position, Rng);
             }
             else if (Rng.Next(0, 6) == 1)
             {
-                var pug = SpawnMob(MobType.Pug, position);
+                SpawnMob(MobType.Pug, position);
             }
 
             var width = VillageDesign.Spacing * .5f;

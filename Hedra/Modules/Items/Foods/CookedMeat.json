@@ -1,8 +1,8 @@
 {
-  "Name": "Corn",
-  "DisplayName": "Corn",
+  "Name": "CookedMeat",
+  "DisplayName": "Cooked meat",
   "Tier": "Misc",
-  "Description": "A corn.",
+  "Description": "...",
   "Attributes": [
     {
       "Name": "Amount",
@@ -10,11 +10,11 @@
     },
     {
       "Name": "Saturation",
-      "Value": 60
+      "Value": 240
     },
     {
       "Name": "Price",
-      "Value": 8,
+      "Value": 32,
       "Hidden": true
     },
     {
@@ -24,12 +24,12 @@
     },
     {
       "Name": "EatTime",
-      "Value": 4.0,
+      "Value": 6.0,
       "Hidden": true
     }
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Misc/Corn.ply"
+    "Path": "$DataFile$/Items/Foods/CookedMeat.ply"
   }
 }

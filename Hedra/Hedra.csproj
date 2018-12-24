@@ -187,7 +187,7 @@
     <Compile Include="Engine\Core\Singleton.cs" />
     <Compile Include="Engine\Core\TypeFactory.cs" />
     <Compile Include="Engine\Core\Unique.cs" />
-    <Compile Include="Engine\CraftingSystem\RecipePool.cs" />
+    <Compile Include="Engine\CraftingSystem\CraftingInventory.cs" />
     <Compile Include="Engine\CraftingSystem\Templates\IngredientsTemplate.cs" />
     <Compile Include="Engine\Game\Season.cs" />
     <Compile Include="Engine\ItemSystem\ItemHandlerFactory.cs" />
@@ -215,13 +215,14 @@
     <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
     <Compile Include="Engine\PlantSystem\SunflowerDesign.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingBackground.cs" />
-    <Compile Include="Engine\Player\CraftingSystem\CraftingInventory.cs" />
+    <Compile Include="Engine\Player\CraftingSystem\CraftingInterface.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryItemInfo.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\DummyInventory.cs" />
     <Compile Include="Engine\Player\Inventory\AttributeFormatter.cs" />
     <Compile Include="Engine\Player\Inventory\BaseBackground.cs" />
+    <Compile Include="Engine\Player\Inventory\PlayerInventoryInterface.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestInterface.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
@@ -1597,10 +1598,6 @@
       <Link>Assets\Env\Trees\TallTree2_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Berry.ply">
-      <Link>Assets\Items\Misc\Berry.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Bows\CommonRecurveBow.ply">
       <Link>Assets\Items\Bows\CommonRecurveBow.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1657,6 +1654,42 @@
       <Link>Assets\Items\Claws\UncommonBronzeClawFist.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Foods\Berry.ply">
+      <Link>Assets\Items\Foods\Berry.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Foods\CookedMeat.ply">
+      <Link>Assets\Items\Foods\CookedMeat.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Foods\Corn.ply">
+      <Link>Assets\Items\Foods\Corn.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Foods\CornSoup.ply">
+      <Link>Assets\Items\Foods\CornSoup.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Foods\HealthPotion.ply">
+      <Link>Assets\Items\Foods\HealthPotion.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Foods\Mushroom.ply">
+      <Link>Assets\Items\Foods\Mushroom.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Foods\Pumpkin.ply">
+      <Link>Assets\Items\Foods\Pumpkin.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Foods\PumpkinPie.ply">
+      <Link>Assets\Items\Foods\PumpkinPie.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Foods\RawMeat.ply">
+      <Link>Assets\Items\Foods\RawMeat.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Models\Blend\Helmet\ChristmasHat.dae">
       <Link>Assets\Items\Helmets\ChristmasHat.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1701,20 +1734,12 @@
       <Link>Assets\Items\Misc\BoatIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Blend\Misc\Corn.ply">
-      <Link>Assets\Items\Misc\Corn.ply</Link>
+    <None Include="..\project-hedra-assets\Models\Blend\Misc\GlassFlask.ply">
+      <Link>Assets\Items\Misc\GlassFlask.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\MagicBranch.ply">
       <Link>Assets\Items\Misc\MagicBranch.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Blend\Misc\Mushroom.ply">
-      <Link>Assets\Items\Misc\Mushroom.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Blend\Misc\Pumpkin.ply">
-      <Link>Assets\Items\Misc\Pumpkin.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\Rake.ply">
@@ -1723,6 +1748,10 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\Recipe.ply">
       <Link>Assets\Items\Misc\Recipe.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Misc\WoodenBowl.ply">
+      <Link>Assets\Items\Misc\WoodenBowl.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Staves\CommonBronzeStaff.ply">
@@ -3925,6 +3954,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Claws\UncommonBronzeClawFist.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Modules\Items\Foods\Berry.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Items\Katars\DivineCrystalFist.json">
@@ -6433,9 +6465,6 @@
     <None Include="Modules\Items\Knifes\UncommonSilverKnife.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Misc\Berry.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Modules\Items\Axes\CommonBronzeAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -7036,6 +7065,30 @@
     <Content Include="Modules\Items\Chestplates\CommonLeatherChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Foods\CookedMeat.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\Corn.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\CornSoup.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\HealthPotion.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\Mushroom.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\Pumpkin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\PumpkinPie.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\RawMeat.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Helmets\ChristmasHat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -7045,21 +7098,28 @@
     <Content Include="Modules\Items\Misc\Boat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Misc\Corn.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Modules\Items\Misc\EnchantedBranch.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Misc\Mushroom.json">
+    <Content Include="Modules\Items\Misc\GlassFlask.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Misc\Pumpkin.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Modules\Items\Misc\PumpkinPie.json" />
-    <Content Include="Modules\Items\Misc\PumpkinSoup.json" />
     <Content Include="Modules\Items\Misc\Rake.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Misc\WoodenBowl.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\CookedMeatRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\CornSoupRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\HealthPotionRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\PumpkinPieRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\UncommonAutumnStaffRecipe.json">

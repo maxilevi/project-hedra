@@ -107,5 +107,10 @@ spawn_dialog_0 = This is my last stop, you will have to continue your journey al
 right_click_use = RIGHT-CLICK TO USE
 recipe_already_learned = YOU ALREADY LEARNED THAT RECIPE
 available_points = AVAILABLE POINTS
+craft = CRAFT
+recipes = RECIPES
+insufficient_ingredients = INSUFFICIENT INGREDIENTS
+ingredients = Ingredients
+is_on_cooldown = YOU CAN'T CRAFT YET
 
 

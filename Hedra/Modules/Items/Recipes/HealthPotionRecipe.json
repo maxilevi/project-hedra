@@ -1,0 +1,50 @@
+{
+  "Name": "HealthPotionRecipe",
+  "DisplayName": "Health potion recipe",
+  "EquipmentType": "Recipe",
+  "Tier": "Common",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "CraftingStation",
+      "Value": "Water"
+    },
+    {
+      "Name": "Ingredients",
+      "Value": [
+        {
+          "Name": "GlassFlask",
+          "Amount": 1
+        },
+        {
+          "Name": "Berry",
+          "Amount": 2
+        },
+        {
+          "Name": "Mushroom",
+          "Amount": 1
+        }
+      ],
+      "Display": "Bullets"
+    },
+    {
+      "Name": "Output",
+      "Value": "HealthPotion",
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Recipe",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Misc/Recipe.ply"
+  }
+}

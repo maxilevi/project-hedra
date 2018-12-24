@@ -96,7 +96,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             if (Rng.Next(0, 3) == 1)
             {
                 var position = Parameters.Position + dir * _width * .5f;
-                SpawnFarmer(position, Parameters.Position.Xz);
+                SpawnFarmer(position, Parameters.Position.Xz, Rng);
             }
             else if (Rng.Next(0, 5) == 1)
             {
@@ -175,8 +175,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var model = design.Model;
                 var region = World.BiomePool.GetRegion(position);
                 Output.Instances.Add(BuildPlant(model, design, region, transMatrix, Rng));
-                //if(type != ItemType.MaxEnums && Rng.Next(0, 8) == 1)
-                //    Output.Structures.Add(BuildPlantCollectible(type, model, design, region, transMatrix, Rng));
+                if(type != ItemType.MaxEnums && Rng.Next(0, 8) == 1)
+                    Output.Structures.Add(BuildPlantCollectible(type, model, design, region, transMatrix, Rng));
             }
         }
 
@@ -205,15 +205,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 GraduateColor = true,
                 SkipOnLod = Rng.Next(0, 3) == 1,
                 TransMatrix = Transformation,
-                //PlaceCondition = B => B == BlockType.FarmDirt
             };
             CacheManager.Check(data);
             return data;
         }
         
-        private void SpawnFarmer(Vector3 Position, Vector2 FarmPosition)
+        private void SpawnFarmer(Vector3 Position, Vector2 FarmPosition, Random Rng)
         {
-            var farmer = SpawnVillager(Position);
+            var farmer = SpawnVillager(Position, Rng);
+            farmer.RemoveComponent(farmer.SearchComponent<VillagerThoughtsComponent>());
             farmer.SearchComponent<HealthBarComponent>().Name = Translations.Get("farmer");
             farmer.RemoveComponent(farmer.SearchComponent<RoamingVillagerAIComponent>());
             farmer.SetHelmet(ItemPool.Grab(ItemType.FarmerHat).Helmet);

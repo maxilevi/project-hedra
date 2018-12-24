@@ -1,6 +1,7 @@
 using System;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ClassSystem;
+using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
@@ -130,6 +131,7 @@ namespace HedraTests.Player
         }
 
         public Item MainWeapon { get; }
+        public Item Ring { get; set; }
         public float BaseSpeed { get; }
         public bool Destroy { get; set; }
         public float Stamina { get; set; }
@@ -228,6 +230,7 @@ namespace HedraTests.Player
         public Vector3 Position { get; set; }
         public CollisionGroup[] NearCollisions { get; }
         public CraftingInventory Crafting { get; }
+        public bool InterfaceOpened { get; }
         public bool Enabled { get; set; }
         public void Respawn()
         {
@@ -245,6 +248,11 @@ namespace HedraTests.Player
         }
 
         public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HideInterfaces()
         {
             throw new NotImplementedException();
         }

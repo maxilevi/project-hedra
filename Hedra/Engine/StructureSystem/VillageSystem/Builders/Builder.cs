@@ -129,20 +129,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return human;
         }
 
-        protected IHumanoid SpawnVillager(Vector3 Position)
+        protected IHumanoid SpawnVillager(Vector3 Position, Random Rng)
         {
-            var types = new []
-            {
-                HumanType.Warrior,
-                HumanType.Rogue,
-                HumanType.Mage,
-                HumanType.Archer
-            };
-            var human = this.SpawnHumanoid(types[Utils.Rng.Next(0, types.Length)], Position);
-            human.AddComponent(new TalkComponent(human));
-            human.AddComponent(new RoamingVillagerAIComponent(human, VillageObject.Graph));
-            VillageObject.AddHumanoid(human);
-            return human;
+            var vill = World.WorldBuilding.SpawnVillager(Position, Rng);
+            vill.SearchComponent<DamageComponent>().Immune = true;
+            vill.AddComponent(new TalkComponent(vill));
+            vill.AddComponent(new RoamingVillagerAIComponent(vill, VillageObject.Graph));
+            vill.AddComponent(new VillagerThoughtsComponent(vill));
+            VillageObject.AddHumanoid(vill);
+            return vill;
         }
         
         protected IEntity SpawnMob(MobType Mob, Vector3 Position)

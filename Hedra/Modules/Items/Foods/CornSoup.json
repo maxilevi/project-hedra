@@ -1,8 +1,8 @@
 {
-  "Name": "Pumpkin",
-  "DisplayName": "Pumpkin",
+  "Name": "CornSoup",
+  "DisplayName": "Corn soup",
   "Tier": "Misc",
-  "Description": "A pumpkin.",
+  "Description": "...",
   "Attributes": [
     {
       "Name": "Amount",
@@ -10,11 +10,11 @@
     },
     {
       "Name": "Saturation",
-      "Value": 120
+      "Value": 160
     },
     {
       "Name": "Price",
-      "Value": 16,
+      "Value": 12,
       "Hidden": true
     },
     {
@@ -24,12 +24,12 @@
     },
     {
       "Name": "EatTime",
-      "Value": 6.0,
+      "Value": 12.0,
       "Hidden": true
     }
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Misc/Pumpkin.ply"
+    "Path": "$DataFile$/Items/Foods/CornSoup.ply"
   }
 }

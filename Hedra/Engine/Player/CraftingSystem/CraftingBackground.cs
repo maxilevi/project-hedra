@@ -1,15 +1,16 @@
 using Hedra.Engine.Player.Inventory;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.CraftingSystem
 {
-    public class CraftingBackground : BaseBackground
+    public class CraftingBackground : InventoryBackground
     {
-        public CraftingBackground(Vector2 Position, Vector2 Scale) : base(Position, Scale)
+        public CraftingBackground(Vector2 Position) : base(Position)
         {
         }
 
-        public void UpdateView()
+        public override void UpdateView(IHumanoid Human)
         {
             
         }

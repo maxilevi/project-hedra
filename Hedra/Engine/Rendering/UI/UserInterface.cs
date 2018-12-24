@@ -163,8 +163,7 @@ namespace Hedra.Engine.Rendering.UI
             Menu.Enable();
             OptionsMenu.Disable();
             ChrChooser.Disable();
-            if(_player?.Inventory != null) _player.Inventory.Show = false;
-            _player.AbilityTree.Show = false;
+            _player.HideInterfaces();
             GamePanel.Disable();
             ChrCreator.Disable();
             ConnectPanel.Disable();

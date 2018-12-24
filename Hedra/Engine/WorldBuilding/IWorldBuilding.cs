@@ -1,3 +1,4 @@
+using System;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
@@ -14,6 +15,7 @@ namespace Hedra.Engine.WorldBuilding
         IGroundwork[] GetGroundworksFor(Vector2 Position);
         BasePlateau[] Plateaux { get; }
         IGroundwork[] Groundworks { get; }
+        Humanoid SpawnVillager(Vector3 DesiredPosition, Random Rng);
         Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition);
         Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition);
         Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false);

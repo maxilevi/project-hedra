@@ -1,3 +1,4 @@
+using System;
 using Hedra;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -27,18 +28,13 @@ namespace HedraTests.Structure
             throw new System.NotImplementedException();
         }
 
-        public bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates)
-        {
-            return false;
-        }
-
         public BasePlateau[] Plateaux => null;
         
         public IGroundwork[] Groundworks => null;
-        
-        public Entity SpawnCarriage(Vector3 Position)
+
+        public Humanoid SpawnVillager(Vector3 DesiredPosition, Random Rng)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
         public Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition)
@@ -91,12 +87,12 @@ namespace HedraTests.Structure
 
         public float ApplyMultiple(Vector2 Position, float MaxHeight)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public float ApplyMultiple(Vector2 Position, float MaxHeight, params BasePlateau[] Against)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

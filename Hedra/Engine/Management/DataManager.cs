@@ -120,7 +120,7 @@ namespace Hedra.Engine.Management
                 Class = Player.Class,
                 RandomFactor = Player.RandomFactor,
                 Items = Player.Inventory.ToArray(),
-                Recipes = Player.Crafting.GetRecipes()
+                Recipes = Player.Crafting.RecipeNames
             };
 
             return data;

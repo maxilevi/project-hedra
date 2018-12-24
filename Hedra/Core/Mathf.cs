@@ -271,14 +271,9 @@ namespace Hedra.Core
             public int tmp;
         }
 
-        /// <summary>
-        /// X = 2 ^ round( log(n, 2) )
-        /// </summary>
-        /// <param name="N"></param>
-        /// <returns></returns>
-        public static int ToNearestPo2(int N)
+        public static int Modulo(int Index, int Bounds)
         {
-            return (int) Math.Pow(2, (Math.Ceiling(Math.Log(N, 2))));
+            return (Index % Bounds + Bounds) % Bounds;
         }
     }
 }

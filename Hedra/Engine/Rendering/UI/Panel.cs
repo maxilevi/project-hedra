@@ -26,8 +26,9 @@ namespace Hedra.Engine.Rendering.UI
     {
         private const float MoveSpeed = 2f;
         public bool Animate = false;
-        public bool Enabled{get; private set;}
-        public Vector2 Position{get; private set;}
+        public bool DisableKeys { get; set; }
+        public bool Enabled { get; private set; }
+        public Vector2 Position { get; private set; }
         public event OnPanelStateChangeEventHandler OnPanelStateChange;
         public event OnEscapePressedEventHandler OnEscapePressed;
         private bool _firstHover;
@@ -139,7 +140,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public override void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs)
         {
-            if(!Enabled) return;
+            if(!Enabled || DisableKeys) return;
             
             if(EventArgs.Key == Key.Escape)
             {

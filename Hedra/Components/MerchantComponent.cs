@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
@@ -31,35 +32,32 @@ namespace Hedra.Components
 
         public override Dictionary<int, Item> BuildInventory()
         {
-            var rng = new Random(World.Seed + 82823 + Utils.Rng.Next(-9999999, 9999999));
-            var items = new[]
-            {
-                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Axe)),
-                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Sword)),
-                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Hammer)),
-                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Claw)),
-                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Katar)),
-                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.DoubleBlades)),
-                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Bow)),
-                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Knife))
-            };
+            var rng = new Random(World.Seed + Unique.GenerateSeed(Parent.BlockPosition.Xz));
             var berry = ItemPool.Grab(ItemType.Berry);
             berry.SetAttribute(CommonAttributes.Amount, int.MaxValue);
+            var flask = ItemPool.Grab(ItemType.GlassFlask);
+            flask.SetAttribute(CommonAttributes.Amount, int.MaxValue);
+            var bowl = ItemPool.Grab(ItemType.WoodenBowl);
+            bowl.SetAttribute(CommonAttributes.Amount, int.MaxValue);
+            var recipes = new[]
+            {
+                ItemPool.Grab(ItemType.PumpkinPieRecipe),
+                ItemPool.Grab(ItemType.CookedMeatRecipe),
+                ItemPool.Grab(ItemType.HealthPotionRecipe),
+                ItemPool.Grab(ItemType.CornSoupRecipe),
+            };
             var newItems = new Dictionary<int, Item>
             {
-                {TradeInventory.MerchantSpaces - 1, berry}
+                {TradeInventory.MerchantSpaces - 1, berry},
+                {TradeInventory.MerchantSpaces - 2, rng.NextBool() ? flask : null},
+                {TradeInventory.MerchantSpaces - 3, rng.NextBool() ? bowl : null},
+                {TradeInventory.MerchantSpaces - 4, null /*recipes[rng.Next(0, recipes.Length)]*/},
             };
-            for (var i = 0; i < 4; i++)
-            {
-                newItems.Add(i, items[rng.Next(0, items.Length)]);
-            }
-
             if (_isTravellingMerchant)
             {
-                newItems.Add(TradeInventory.MerchantSpaces - 2, ItemPool.Grab("HorseMount"));
-                //newItems.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab("WolfMount"));
-                newItems.Add(TradeInventory.MerchantSpaces - 3, ItemPool.Grab(ItemType.Glider));
-                newItems.Add(TradeInventory.MerchantSpaces - 4, ItemPool.Grab(ItemType.Boat));
+                newItems.Add(0, ItemPool.Grab("HorseMount"));
+                newItems.Add(1, ItemPool.Grab(ItemType.Glider));
+                newItems.Add(2, ItemPool.Grab(ItemType.Boat));
             }
             return newItems;
         }

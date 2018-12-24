@@ -25,7 +25,5 @@ namespace Hedra.Engine.Player.QuestSystem
         }
         
         public override bool Show { get; set; }
-
-        protected override bool Disabled => true;
     }
 }

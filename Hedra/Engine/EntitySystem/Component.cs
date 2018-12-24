@@ -20,8 +20,8 @@ namespace Hedra.Engine.EntitySystem
 
         private void EnsureSingleBehaviour()
         {
-            //if(Parent.SearchComponent<IBehaviourComponent>() != null && this is IBehaviourComponent)
-            //    throw new ArgumentException("Entity cannot have more than 2 behaviour components.");
+            if(Parent.SearchComponent<IBehaviourComponent>() != null && this is IBehaviourComponent)
+                throw new ArgumentException("Entity cannot have more than 2 behaviour components.");
         }
         
         public abstract void Update();

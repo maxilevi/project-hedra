@@ -9,22 +9,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.AISystem;
 using Hedra.AISystem.Humanoid;
-using Hedra.Components;
 using Hedra.Core;
 using OpenTK;
 using Hedra.Engine.ClassSystem;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
-using Hedra.EntitySystem;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -61,6 +57,24 @@ namespace Hedra.Engine.WorldBuilding
             human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
             ApplySeasonHats(human, Type);
             return human;
+        }
+
+        public Humanoid SpawnVillager(Vector3 DesiredPosition, Random Rng)
+        {
+            var types = new []
+            {
+                HumanType.Warrior,
+                HumanType.Rogue,
+                HumanType.Mage,
+                HumanType.Archer
+            };
+            var villager = World.WorldBuilding.SpawnHumanoid(types[Rng.Next(0, types.Length)], DesiredPosition);
+            villager.SetWeapon(null);
+            villager.SearchComponent<HealthBarComponent>().FontColor = HumanoidBehaviourTemplate.Friendly.ToColor();
+            villager.Name = NameGenerator.PickMaleName(Rng);
+            villager.SearchComponent<DamageComponent>().Immune = true;
+            villager.SearchComponent<HealthBarComponent>().Name = villager.Name;
+            return villager;
         }
 
         public Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false)

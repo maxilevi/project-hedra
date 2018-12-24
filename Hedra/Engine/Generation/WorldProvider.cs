@@ -575,6 +575,7 @@ namespace Hedra.Engine.Generation
         {
             var position = DesiredPosition;
             var underChunk = this.GetChunkAt(position);
+            var structuresForPosition = StructureHandler.GetNearStructures(position);
             var collidesOnSurface = true;
             var box = Mob.Model.BaseBroadphaseBox.Cache.Translate(position.Xz.ToVector3()
                                                                   + Vector3.UnitY *
@@ -583,7 +584,8 @@ namespace Hedra.Engine.Generation
             {
                 try
                 {
-                    collidesOnSurface = underChunk.CollisionShapes.Any(Shape => Physics.Collides(Shape, box));
+                    collidesOnSurface = underChunk.CollisionShapes.Any(Shape => Physics.Collides(Shape, box))
+                        || structuresForPosition.SelectMany(S => S.Colliders).Any(Shape => Physics.Collides(Shape, box));
                 }
                 catch (InvalidOperationException e)
                 {
@@ -595,6 +597,7 @@ namespace Hedra.Engine.Generation
                     position = position + new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0,
                                    Utils.Rng.NextFloat() * 32f - 16f);
                     underChunk = this.GetChunkAt(position);
+                    structuresForPosition = StructureHandler.GetNearStructures(position);
                     box = Mob.Model.BaseBroadphaseBox.Cache.Translate(position.Xz.ToVector3()
                                                                       + Vector3.UnitY *
                                                                       Physics.HeightAtPosition(position.X, position.Z));

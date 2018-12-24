@@ -148,8 +148,6 @@ namespace Hedra.Engine.ItemSystem
         {
             if (Item.HasAttribute(CommonAttributes.Amount))
             {
-                if(!Item.IsFood && !Item.IsGold) 
-                    throw new ArgumentOutOfRangeException($"Type of item {Item.Name} was not expected");
                 var amount = Item.GetAttribute<int>(CommonAttributes.Amount);
                 var newItem = ItemPool.Grab(Item.Name);
                 newItem.SetAttribute(CommonAttributes.Amount, amount);

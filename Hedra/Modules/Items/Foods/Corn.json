@@ -1,0 +1,35 @@
+{
+  "Name": "Corn",
+  "DisplayName": "Corn",
+  "Tier": "Misc",
+  "Description": "A corn.",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Saturation",
+      "Value": 60
+    },
+    {
+      "Name": "Price",
+      "Value": 8,
+      "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "EatTime",
+      "Value": 4.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Foods/Corn.ply"
+  }
+}

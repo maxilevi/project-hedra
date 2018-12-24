@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using OpenTK.Input;
 
@@ -13,7 +14,14 @@ namespace Hedra.Engine.Player
         {
             return false;
         }
-        
+
+        public void RemoveItem(Item Old, int Amount = 1)
+        {
+            throw new NotImplementedException();
+        }
+
+        public event OnInventoryUpdated InventoryUpdated;
+
         public void UpdateInventory()
         {
             throw new NotImplementedException();
@@ -54,11 +62,6 @@ namespace Hedra.Engine.Player
             throw new NotImplementedException();
         }
 
-        public void Update()
-        {
-            throw new NotImplementedException();
-        }
-
         public void AddRestriction(int Index, EquipmentType Type)
         {
             throw new NotImplementedException();
@@ -80,9 +83,9 @@ namespace Hedra.Engine.Player
         public Item Pet => throw new NotImplementedException();
         
         public int Length => throw new NotImplementedException();
-        
-        public bool Show { get; set; }
-        
+
         public Item this[int Index] => throw new NotImplementedException();
+        public InventoryArray MainItemsArray { get; }
+        public InventoryArray ItemsArray { get; }
     }
 }

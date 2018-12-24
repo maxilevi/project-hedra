@@ -42,7 +42,7 @@ namespace Hedra.Engine.Rendering.UI
         public bool PlaySound { get; set; } = true;
         public GUITexture Texture { get; set; }
 
-        public bool Enabled { get; set; }
+        public bool Enabled { get; private set; }
 
         public GUIText Text
         {

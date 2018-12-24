@@ -20,12 +20,12 @@ namespace Hedra.Engine.Player.Inventory
         protected readonly Texture ItemTexture;
         protected readonly RenderableText ItemText;
         protected readonly RenderableText ItemDescription;
+        protected readonly RenderableText ItemAttributes;
         protected readonly Texture HintTexture;
         protected readonly GUIText HintText;
         private readonly Vector2 _targetResolution = new Vector2(1366, 705);
         private readonly Panel _panel;
         private readonly InventoryItemRenderer _renderer;
-        private readonly RenderableText _itemAttributes;
         private readonly Vector2 _weaponItemAttributesPosition;
         private readonly Vector2 _weaponItemTexturePosition;
         private readonly Vector2 _weaponItemTextureScale;
@@ -51,9 +51,9 @@ namespace Hedra.Engine.Player.Inventory
                 Color.Bisque, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemDescription, DrawOrder.After);
 
-            this._itemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
-                Color.White, FontCache.Get(AssetManager.BoldFamily, 9, FontStyle.Bold));
-            DrawManager.UIRenderer.Add(_itemAttributes, DrawOrder.After);
+            this.ItemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
+                Color.White, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
+            DrawManager.UIRenderer.Add(ItemAttributes, DrawOrder.After);
             
             this.HintTexture = new Texture("Assets/UI/InventoryBackground.png", Vector2.UnitY * -.35f, Vector2.One * .15f);
             this.HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 7, FontStyle.Bold));
@@ -61,14 +61,14 @@ namespace Hedra.Engine.Player.Inventory
             _panel.AddElement(HintTexture);
             _panel.AddElement(HintText);
             _panel.AddElement(ItemText);
-            _panel.AddElement(_itemAttributes);
+            _panel.AddElement(ItemAttributes);
             _panel.AddElement(ItemDescription);
             _panel.AddElement(ItemTexture);
             _panel.AddElement(BackgroundTexture);
 
             _nonWeaponItemAttributesPosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.225f);
             _nonWeaponItemTexturePosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .0f);
-            _weaponItemAttributesPosition = _itemAttributes.Position;
+            _weaponItemAttributesPosition = ItemAttributes.Position;
             _weaponItemTexturePosition = ItemTexture.Position;
             _weaponItemTextureScale = ItemTexture.Scale;
         }
@@ -99,30 +99,40 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (CurrentItem.IsEquipment)
             {
-                var tierColor = ItemUtils.TierToColor(CurrentItem.Tier);
-                ItemText.Color = tierColor;
-
-                ItemText.Text = Utils.FitString($"{CurrentItem.Tier} {CurrentItem.DisplayName}", 20);
-                _itemAttributes.Color = tierColor;
-                ItemDescription.Color = tierColor;
-                _itemAttributes.Position = _weaponItemAttributesPosition + this.Position;
-                ItemTexture.Position = _weaponItemTexturePosition + this.Position;
-                ItemTexture.Scale = _weaponItemTextureScale;
-                ItemDescription.Text = Utils.FitString(CurrentItem.Description, 32);
+                AddEquipmentLayout();
             }
             else
             {
-                ItemText.Color = Color.White;
-                ItemText.Text = Utils.FitString(CurrentItem.DisplayName, 20);
-                _itemAttributes.Color = Color.Bisque;
-                ItemDescription.Color = Color.White;
-                _itemAttributes.Position = _nonWeaponItemAttributesPosition + this.Position;
-                ItemTexture.Position = _nonWeaponItemTexturePosition
-                                       + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * _itemAttributes.UIText.Scale.Y)
-                                       + this.Position;               
-                ItemTexture.Scale = _weaponItemTextureScale * (1-(_itemAttributes.UIText.Scale.Y / _weaponItemTextureScale.Y));
-                ItemDescription.Text = string.Empty;
+                AddNormalLayout();
             }
+        }
+
+        protected void AddNormalLayout()
+        {
+            ItemText.Color = Color.White;
+            ItemAttributes.Color = Color.White;
+            ItemDescription.Color = Color.White;
+            ItemText.Text = Utils.FitString(CurrentItem.DisplayName, 20);
+            ItemAttributes.Position = _nonWeaponItemAttributesPosition + this.Position;
+            ItemTexture.Position = _nonWeaponItemTexturePosition
+                                   + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * ItemAttributes.UIText.Scale.Y)
+                                   + this.Position;               
+            ItemTexture.Scale = _weaponItemTextureScale * (1-(ItemAttributes.UIText.Scale.Y / _weaponItemTextureScale.Y));
+            ItemDescription.Text = string.Empty;
+        }
+
+        protected void AddEquipmentLayout()
+        {
+            var tierColor = ItemUtils.TierToColor(CurrentItem.Tier);
+            ItemText.Color = tierColor;
+
+            ItemText.Text = Utils.FitString($"{CurrentItem.Tier} {CurrentItem.DisplayName}", 20);
+            ItemAttributes.Color = tierColor;
+            ItemDescription.Color = tierColor;
+            ItemAttributes.Position = _weaponItemAttributesPosition + this.Position;
+            ItemTexture.Position = _weaponItemTexturePosition + this.Position;
+            ItemTexture.Scale = _weaponItemTextureScale;
+            ItemDescription.Text = Utils.FitString(CurrentItem.Description, 32);
         }
 
         protected virtual void UpdateItemMesh()
@@ -146,7 +156,7 @@ namespace Hedra.Engine.Player.Inventory
             {
                 strBuilder.AppendLine($"Modifier   ➝   {GameManager.Player.WeaponModifier(CurrentItem)}");
             }
-            _itemAttributes.Text = strBuilder.ToString();
+            ItemAttributes.Text = strBuilder.ToString();
         }
 
         protected virtual void AddTexture()
@@ -187,7 +197,7 @@ namespace Hedra.Engine.Player.Inventory
                 ItemTexture.Position = ItemTexture.Position - Position + value;
                 ItemText.Position = ItemText.Position - Position + value;
                 ItemDescription.Position = ItemDescription.Position - Position + value;
-                _itemAttributes.Position = _itemAttributes.Position - Position + value;
+                ItemAttributes.Position = ItemAttributes.Position - Position + value;
                 BackgroundTexture.Position = value;
             }
         }
@@ -202,6 +212,8 @@ namespace Hedra.Engine.Player.Inventory
                     _panel.Enable();
                 else
                     _panel.Disable();
+                HintText.Disable();
+                HintTexture.Disable();
             }
         }
     }

@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
@@ -21,11 +21,15 @@ namespace Hedra.Engine.StructureSystem
 
         public void AddHumanoid(IHumanoid Human)
         {
+            if(_humans.Contains(Human))
+                throw new ArgumentException($"This humanoid has already been added to the list.");
             _humans.Add(Human);
         }
         
         public void AddMob(IEntity Mob)
         {
+            if(_mobs.Contains(Mob))
+                throw new ArgumentException($"This entity has already been added to the list.");
             _mobs.Add(Mob);
         }
 

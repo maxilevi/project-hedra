@@ -11,8 +11,8 @@ namespace Hedra.Engine.CacheSystem
         {
             var scale = Vector3.One * .75f;
             const float wind = .75f;
-            AddModel(AssetManager.PLYLoader("Assets/Env/Plants/Sunflower0.ply", scale).AddWindValues(wind)); 
-            AddModel(AssetManager.PLYLoader("Assets/Env/Plants/Sunflower1.ply", scale).AddWindValues(wind));
+            AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/Sunflower0.ply", scale).AddWindValues(wind)); 
+            AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/Sunflower1.ply", scale).AddWindValues(wind));
         }
     }
 }

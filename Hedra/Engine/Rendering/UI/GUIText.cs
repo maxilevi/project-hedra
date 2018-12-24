@@ -46,8 +46,10 @@ namespace Hedra.Engine.Rendering.UI
 
         private static BitmapObject BuildBitmap(string Text, Color Color, Font Font, out Vector2 Measurements)
         {
-            var textBitmap = Provider.BuildText(Text, Font, Color);
-            Measurements = new Vector2(textBitmap.Width, textBitmap.Height);
+            var crispModifier = 1.5f;
+            var textBitmap = Provider.BuildText(Text, FontCache.Get(Font.FontFamily, Font.Size * crispModifier, Font.Style), Color);
+            Measurements = 
+                new Vector2((float) (textBitmap.Width * (1.0 / crispModifier)), (float) (textBitmap.Height * (1.0 / crispModifier)));
             var obj = new BitmapObject
             {
                 Bitmap = textBitmap,

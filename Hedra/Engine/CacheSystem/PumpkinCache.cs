@@ -11,11 +11,11 @@ namespace Hedra.Engine.CacheSystem
         {
             var scale = Vector3.One * .5f;
             const float wind = .5f;
-            AddModel(AssetManager.PLYLoader("Assets/Env/Plants/Pumpkin0.ply", scale).AddWindValues(wind)); 
-            AddModelPart(AssetManager.PLYLoader("Assets/Env/Plants/Pumpkin0_Fruit0.ply", scale).AddWindValues(wind));
+            AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/Pumpkin0.ply", scale).AddWindValues(wind)); 
+            AddModelPart(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/Pumpkin0_Fruit0.ply", scale).AddWindValues(wind));
 
-            AddModel(AssetManager.PLYLoader("Assets/Env/Plants/Pumpkin1.ply", scale).AddWindValues(wind));
-            AddModelPart(AssetManager.PLYLoader("Assets/Env/Plants/Pumpkin1_Fruit0.ply", scale).AddWindValues(wind));
+            AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/Pumpkin1.ply", scale).AddWindValues(wind));
+            AddModelPart(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/Pumpkin1_Fruit0.ply", scale).AddWindValues(wind));
         }
     }
 }

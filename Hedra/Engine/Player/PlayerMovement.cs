@@ -236,7 +236,7 @@ namespace Hedra.Engine.Player
                 pushedText = true;
             }
 
-            if (EventArgs.Key == Key.Enter && !GameSettings.Paused && !_player.IsDead && Human.CanInteract && !pushedText)
+            if (EventArgs.Key == Key.Enter && !GameSettings.Paused && !_player.InterfaceOpened && !_player.IsDead && Human.CanInteract && !pushedText)
             {
                 _player.Chat.Focus();
             }

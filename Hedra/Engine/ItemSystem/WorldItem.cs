@@ -107,7 +107,7 @@ namespace Hedra.Engine.ItemSystem
             this.Model.Tint = _canPickup ? Vector4.One * 1.5f : Vector4.One;
             this.Model.Outline = true;
 
-            if (!ItemSpecification.IsEquipment && (this.Position - GameManager.Player.Position).Xz.LengthSquared < 12 * 12 
+            if ((this.Position - GameManager.Player.Position).Xz.LengthSquared < 12 * 12 && ItemSpecification.HasAttribute(CommonAttributes.Amount)
                 && GameManager.Player.Inventory.Search(I => I.Name == ItemSpecification.Name) != null)
             {
                 if (!PickedUp && !Disposed)

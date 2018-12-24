@@ -30,12 +30,13 @@ namespace Hedra.Engine.Rendering
         public static Vector4 BlueViolet { get; } = Color.BlueViolet.ToVector4();
         public static Vector4 OrangeRed { get; } = Color.OrangeRed.ToVector4();
         public static Vector4 GreenYellow { get; } = Color.GreenYellow.ToVector4();
+        public static Vector4 CooldownBlue { get; } = new Vector4(.2f, .2f, .85f, 1);
 
         public static Vector4 FromHtml(string Hex)
         {
-            int argb = int.Parse(Hex.Replace("#", string.Empty), NumberStyles.HexNumber);
+            var argb = int.Parse(Hex.Replace("#", string.Empty), NumberStyles.HexNumber);
 
-            return Colors.FromArgb((byte)((argb & -16777216) >> 0x18),
+            return FromArgb((byte)((argb & -16777216) >> 0x18),
             (byte)((argb & 0xff0000) >> 0x10),
             (byte)((argb & 0xff00) >> 8),
             (byte)(argb & 0xff));

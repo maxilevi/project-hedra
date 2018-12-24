@@ -54,7 +54,7 @@ namespace Hedra.Engine.Player
             _items.Add(Index, ItemSpecification);
         }
         
-        public void AddLearnedRecipe(string RecipeName)
+        public void AddRecipe(string RecipeName)
         {
             _learnedRecipes.Add(RecipeName);
         }

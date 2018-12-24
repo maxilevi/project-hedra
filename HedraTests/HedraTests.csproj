@@ -99,6 +99,7 @@
     <Compile Include="MathExtensions\PhysicsTest.cs" />
     <Compile Include="MathExtensions\RandomTest.cs" />
     <Compile Include="ModuleSystem\AssetProviderTest.cs" />
+    <Compile Include="PhysicsSystem\BoxTest.cs" />
     <Compile Include="PhysicsSystem\CollisionGroupTest.cs" />
     <Compile Include="Player\AbilityTreeTest.cs" />
     <Compile Include="Player\AttributeArrayTest.cs" />

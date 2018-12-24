@@ -79,8 +79,8 @@ namespace Hedra.Engine.Player.Inventory
             ZOffset = Math.Max(ZOffset, 3.0f);
             if (Mesh == null || Item == null) return GUIRenderer.TransparentTexture;
             var willTilt = TiltIfWeapon && Item.IsWeapon;
-            Mesh.LocalRotation = new Vector3(0, _itemRotation, willTilt ? 45 : 0);
-            _itemRotation += 25 * (float)Time.DeltaTime / Math.Max(1,_itemCount);
+            Mesh.Rotation = new Vector3(0, _itemRotation, willTilt ? 45 : 0);
+            _itemRotation += 25 * Time.DeltaTime / Math.Max(1,_itemCount);
 
             Renderer.PushShader();
             Renderer.PushFBO();

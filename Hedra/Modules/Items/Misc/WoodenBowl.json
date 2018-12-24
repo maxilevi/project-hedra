@@ -1,0 +1,21 @@
+{
+  "Name": "WoodenBowl",
+  "DisplayName": "Wooden bowl",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 4,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Misc/WoodenBowl.ply"
+  }
+}

@@ -97,9 +97,9 @@ namespace Hedra.Engine.Rendering.UI
             skillTreeTranslation.Concat(() => $" - {Controls.Skilltree}");
             var skillTreeMsg = new GUIText(skillTreeTranslation, new Vector2(-.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
             
-            //var questLogTranslation = Translation.Create("quest_log_label");
-            //questLogTranslation.Concat(() => $" - {Controls.QuestLog}");
-            //var questLogMsg = new GUIText(questLogTranslation, new Vector2(.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+            var questLogTranslation = Translation.Create("quest_log_label");
+            questLogTranslation.Concat(() => $" - {Controls.QuestLog}");
+            var questLogMsg = new GUIText(questLogTranslation, new Vector2(.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
             
             var mapTranslation = Translation.Create("map_label");
             skillTreeTranslation.Concat(() => $" - {Controls.Map}");
@@ -107,12 +107,12 @@ namespace Hedra.Engine.Rendering.UI
                 
             Controls.OnControlsChanged += () =>
             {
-            //    questLogTranslation.UpdateTranslation();
+                questLogTranslation.UpdateTranslation();
                 mapTranslation.UpdateTranslation();
                 skillTreeTranslation.UpdateTranslation();
             };
             
-            //AddElement(questLogMsg);
+            AddElement(questLogMsg);
             AddElement(skillTreeMsg);
             AddElement(mapMsg);
             AddElement(_consecutiveHits);
