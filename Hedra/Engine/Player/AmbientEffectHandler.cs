@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
 using OpenTK;
@@ -48,21 +49,21 @@ namespace Hedra.Engine.Player
                         _wasAnyNull = chunk == null || !chunk.BuildedWithStructures;
                         continue;
                     }
-                    var dist = NearestWaterBlockOnChunk(chunk);
+                    var dist = NearestWaterBlockOnChunk(chunk, _player.Position);
                     if (dist < nearest) nearest = dist;
                 } 
             }
             return (float) Math.Sqrt(nearest);
         }
-
-        private float NearestWaterBlockOnChunk(Chunk UnderChunk)
+        
+        private static float NearestWaterBlockOnChunk(Chunk UnderChunk, Vector3 Position)
         {
             var nearest = float.MaxValue;
             var positions = UnderChunk.GetWaterPositions();
             for (var i = 0; i < positions.Length; i++)
             {
                 var realPosition = positions[i].ToVector3() * Chunk.BlockSize + UnderChunk.Position;
-                var dist = (realPosition - _player.Position).LengthSquared;
+                var dist = (realPosition - Position).LengthSquared;
                 if (dist < nearest) nearest = dist;
             }
             return nearest;

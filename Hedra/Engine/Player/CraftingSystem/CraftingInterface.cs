@@ -24,7 +24,6 @@ namespace Hedra.Engine.Player.CraftingSystem
         private readonly CraftingInventoryArrayInterface _recipesItemInterface;
         private readonly InventoryStateManager _stateManager;
         private readonly CraftingInventoryArrayInterfaceManager _interfaceManager;
-        private readonly CraftingBackground _background;
         private readonly CraftingInventoryItemInfo _itemInfo;
         private bool _show;
         
@@ -34,7 +33,6 @@ namespace Hedra.Engine.Player.CraftingSystem
             _player = Player;
             _recipeItems = new InventoryArray(Rows * Columns);
             _stateManager = new InventoryStateManager(_player);
-            _background = new CraftingBackground(Vector2.UnitY * .65f);
             var interfacePosition = Vector2.UnitX * -.4f + Vector2.UnitY * .05f;
             _recipesItemInterface = new CraftingInventoryArrayInterface(_player, _recipeItems, Columns, Rows)
             {
@@ -48,11 +46,15 @@ namespace Hedra.Engine.Player.CraftingSystem
             _stateManager.OnStateChange += Invoke;
         }
 
+        public void Reset()
+        {
+            _recipesItemInterface.Reset();
+        }
+        
         private void UpdateView()
         {
             _interfaceManager.UpdateView();
             _recipesItemInterface.UpdateView();
-            _background.UpdateView(_player);
         }
 
         private void SetInventoryState(bool State)
@@ -95,7 +97,6 @@ namespace Hedra.Engine.Player.CraftingSystem
                 _show = value;
                 _recipesItemInterface.Enabled = _show;
                 _interfaceManager.Enabled = _show;
-                _background.Enabled = _show;
                 SetInventoryState(_show);
                 UpdateView();
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);

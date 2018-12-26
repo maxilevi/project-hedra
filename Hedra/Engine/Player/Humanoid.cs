@@ -21,6 +21,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.UI;
 using System.Linq;
+using Hedra.Components.Effects;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.ArmorSystem;
@@ -331,25 +332,28 @@ namespace Hedra.Engine.Player
         public void ApplyEffectWhile(EffectType NewType, Func<bool> Condition)
         {
             EntityComponent effect;
+            var defaultChance = 20;
+            var defaultDamage = 50;
+            var defaultDuration = 3;
             switch (NewType)
             {
                 case EffectType.Fire:
-                    effect = new FireComponent(this);
+                    effect = new FireComponent(this, defaultChance, defaultDamage, defaultDuration);
                     break;
                 case EffectType.Poison:
-                    effect = new PoisonousComponent(this);
+                    effect = new PoisonousComponent(this, defaultChance, defaultDamage, defaultDuration);
                     break;
                 case EffectType.Bleed:
-                    effect = new BleedComponent(this);
+                    effect = new BleedComponent(this, defaultChance, defaultDamage, defaultDuration);
                     break;
                 case EffectType.Freeze:
-                    effect = new FreezeComponent(this);
+                    effect = new FreezeComponent(this, defaultChance, defaultDamage, defaultDuration);
                     break;
                 case EffectType.Speed:
-                    effect = new SpeedComponent(this);
+                    effect = new SpeedComponent(this, defaultDuration);
                     break;
                 case EffectType.Slow:
-                    effect = new SlowComponent(this);
+                    effect = new SlowComponent(this, defaultChance, defaultDamage, defaultDuration);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(NewType), NewType, null);

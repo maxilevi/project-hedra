@@ -98,24 +98,37 @@ namespace Hedra.Rendering
 
             return support;    
         }
-        
-        public VertexData AddWindValues()
-        {
-            return AddWindValues(-Vector4.One);
-        }
-        
-        public VertexData AddWindValues(float Scalar)
+
+        public VertexData AddWindValues(float Scalar = 1)
         {
             return AddWindValues(-Vector4.One, Scalar);
         }
         
-        public VertexData AddWindValues(Vector4 ColorFilter, float Scalar = 1f)
+        public VertexData AddWindValues(Vector4 ColorFilter, float Scalar = 1)
+        {
+            return AddWindValues(
+                ColorFilter,
+                SupportPoint(-Vector3.UnitY, ColorFilter),
+                SupportPoint(Vector3.UnitY, ColorFilter),
+                Scalar
+            );
+        }
+        
+        public VertexData AddWindValues(Vector3 Lowest, Vector3 Highest, float Scalar)
+        {
+            return AddWindValues(
+                -Vector4.One,
+                Lowest,
+                Highest,
+                Scalar
+            );
+        }
+        
+        private VertexData AddWindValues(Vector4 ColorFilter, Vector3 Lowest, Vector3 Highest, float Scalar)
         {
             var values = new float[Vertices.Count];
-            var highest = this.SupportPoint(Vector3.UnitY, ColorFilter);
-            var lowest = this.SupportPoint(-Vector3.UnitY, ColorFilter);
             var all = ColorFilter == -Vector4.One;
-            if(Extradata.Count == 0) Extradata = Enumerable.Repeat(0f, Vertices.Count).ToList();
+            if(Extradata.Count == 0) Extradata = Enumerable.Repeat(0.01f, Vertices.Count).ToList();
             for(var i = 0; i < Extradata.Count; i++)
             {
                 if(Colors[i] != ColorFilter && !all)
@@ -123,7 +136,7 @@ namespace Hedra.Rendering
                     values[i] = 0;
                     continue;
                 }             
-                var shade = Vector3.Dot(Vertices[i] - lowest, Vector3.UnitY) / Vector3.Dot(highest - lowest, Vector3.UnitY);
+                var shade = Vector3.Dot(Vertices[i] - Lowest, Vector3.UnitY) / Vector3.Dot(Highest - Lowest, Vector3.UnitY);
                 Extradata[i] = (shade + (float) Math.Pow(shade, 1.3)) * Scalar;
             }
             ApplyRecursively(V => V.AddWindValues(ColorFilter, Scalar));

@@ -16,7 +16,6 @@ namespace Hedra.Engine.ModuleSystem.Templates
     {
         public const float MinXpFactor = .45f;
         public const float MaxXpFactor = .75f;
-        private static Dictionary<string, Type> EffectTable { get; }
 
         public string Name { get; set; }
         public float MaxHealth { get; set; }
@@ -30,28 +29,6 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public DropTemplate[] Drops { get; set; }
         public ModelTemplate Model { get; set; }
         public int Level { get; set; }
-
-        static CustomFactory()
-        {
-            EffectTable = new Dictionary<string, Type>
-            {
-                {"Fire", typeof(FireComponent)},
-                {"Poison", typeof(PoisonousComponent)},
-                {"Freeze", typeof(FreezeComponent)},
-                {"Bleed", typeof(BleedComponent)},
-                {"Slow", typeof(SlowComponent)},
-                {"Knock", typeof(KnockComponent)}
-            };
-
-            foreach (var pair in EffectTable)
-            {
-                var interfaces = pair.Value.GetInterfaces();
-                if (!interfaces.Contains( typeof(IEffectComponent) ) )
-                {
-                    throw new ArgumentException($"Unsupported effect type '{pair.Value}'");
-                }
-            }
-        }
 
         public void Load()
         {
@@ -78,11 +55,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
 
             foreach (var template in Effects)
             {
-                var effect = (IEffectComponent) Activator.CreateInstance(EffectTable[template.Name], Mob);
-                effect.Chance = (int) template.Chance;
-                effect.Duration = template.Duration;
-                effect.Damage = template.Damage;
-                Mob.AddComponent(effect as EntityComponent);
+                Mob.AddComponent(EffectFactory.Instance.Build(template, Mob));
             }
 
             var gold = ItemPool.Grab(ItemType.Gold);

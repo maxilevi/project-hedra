@@ -28,13 +28,13 @@ namespace Hedra.Engine.ItemSystem
            WeaponEquipmentTypes =  new[]
             {
                 EquipmentType.Axe, EquipmentType.Claw, EquipmentType.Bow,
-                EquipmentType.DoubleBlades, EquipmentType.Katar, EquipmentType.Pants,
+                EquipmentType.DoubleBlades, EquipmentType.Katar, EquipmentType.Staff,
                 EquipmentType.Knife, EquipmentType.Sword, EquipmentType.Hammer
             };
 
             ArmorEquipmentTypes = new[]
             {
-                EquipmentType.Boots, EquipmentType.Pants, 
+                EquipmentType.Boots, EquipmentType.Pants,
                 EquipmentType.Chestplate, EquipmentType.Helmet
             };
 
@@ -74,8 +74,7 @@ namespace Hedra.Engine.ItemSystem
             if (templates.Length == 0) throw new ArgumentOutOfRangeException($"No valid item template found.");
             
             var item = Item.FromTemplate(templates[rng.Next(0, templates.Length)]);
-            item.SetAttribute(CommonAttributes.Seed, Settings.Seed, true);
-            return Randomize(item, new Random(Settings.Seed));
+            return Grab(item.Name, Settings.Seed);
         }
 
         public static ItemTier SelectTier(ItemTier Tier, Random Rng)
@@ -152,8 +151,14 @@ namespace Hedra.Engine.ItemSystem
 
         public static Item Grab(string Name)
         {
-            var template = ItemFactory.Templater[Name];
-            return Item.FromTemplate(template);
+            return Item.FromTemplate(ItemFactory.Templater[Name]);
+        }
+        
+        public static Item Grab(string Name, int Seed)
+        {
+            var item = Item.FromTemplate(ItemFactory.Templater[Name]);
+            item.SetAttribute(CommonAttributes.Seed, Seed, true);
+            return ItemPool.Randomize(item, new Random(Seed));
         }
 
         public static Item Grab(ItemType Type)

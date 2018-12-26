@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Drawing;
+using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
@@ -118,10 +119,27 @@ namespace Hedra.Engine.Game
             SkyManager.LoadTime = true;
             Player.Inventory.SetItems(Information.Items);
             Player.Crafting.SetRecipes(Information.Recipes);
+            AddDefaultRecipes(Information);
             SetRestrictions(Information);
             GameSettings.DarkEffect = false;
             CoroutineManager.StartCoroutine(SpawnCoroutine);
             Log.WriteLine($"Making '{Information.Name}' current with seed {World.Seed}.");
+        }
+
+        private void AddDefaultRecipes(PlayerInformation Information)
+        {
+            var defaultRecipes = new[]
+            {
+                ItemType.HealthPotionRecipe,
+                ItemType.PumpkinPieRecipe,
+                ItemType.CookedMeatRecipe,
+                ItemType.CornSoupRecipe
+            }.Select(T => T.ToString()).ToArray();
+            for (var i = 0; i < defaultRecipes.Length; i++)
+            {
+                if (!Player.Crafting.HasRecipe(defaultRecipes[i]))
+                    Player.Crafting.LearnRecipe(defaultRecipes[i]);
+            }
         }
 
         private void SetRestrictions(PlayerInformation Information)
@@ -176,6 +194,7 @@ namespace Hedra.Engine.Game
                 Player.Physics.UsePhysics = false;
                 yield return null;
             }
+            Player.Physics.TargetPosition += Vector3.UnitY * 2;
             Player.Physics.UsePhysics = true;
             Player.SearchComponent<DamageComponent>().Immune = false;
             Player.UI.GamePanel.Enable();

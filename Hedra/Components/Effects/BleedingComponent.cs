@@ -6,17 +6,16 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
-using Hedra.Engine.Rendering.UI;
+
 using System.Collections;
-using Hedra.Engine.Generation;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using OpenTK;
 
-namespace Hedra.Engine.EntitySystem
+namespace Hedra.Components.Effects
 {
     /// <summary>
     /// Description of BurningComponent.

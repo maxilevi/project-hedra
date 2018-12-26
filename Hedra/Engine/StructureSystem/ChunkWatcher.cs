@@ -75,7 +75,7 @@ namespace Hedra.Engine.StructureSystem
             {
                 foreach(var pair in _added)
                 {
-                    if(pair.Value != null)
+                    if(pair.Value != null && !pair.Value.Disposed)
                         Delete(pair.Value, pair.Key);
                 }
                 _added.Clear();

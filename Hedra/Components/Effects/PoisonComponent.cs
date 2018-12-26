@@ -6,17 +6,16 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
-using Hedra.Engine.Rendering.UI;
+
 using System.Collections;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
+using OpenTK;
 
-namespace Hedra.Engine.EntitySystem
+namespace Hedra.Components.Effects
 {
     /// <summary>
     /// Description of BurningComponent.
@@ -37,7 +36,8 @@ namespace Hedra.Engine.EntitySystem
         
         public override void Update(){}
 
-        private IEnumerator UpdatePoison(){
+        private IEnumerator UpdatePoison()
+        {
             Parent.Model.BaseTint = Colors.PoisonGreen *new Vector4(1,3,1,1);
             while(TotalTime > PTime && !Parent.IsDead && !Disposed){
                 

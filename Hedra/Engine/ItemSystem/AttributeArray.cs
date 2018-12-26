@@ -35,7 +35,8 @@ namespace Hedra.Engine.ItemSystem
 
         public T Get<T>(string Attribute)
         {
-            if(!_attributes.ContainsKey(Attribute)) throw new KeyNotFoundException($"Provided attribute '{Attribute}' does not exist.");
+            if (!_attributes.ContainsKey(Attribute)) throw new KeyNotFoundException($"Provided attribute '{Attribute}' does not exist.");
+            if (typeof(T).IsEnum) return (T) Enum.Parse(typeof(T), (string) _attributes[Attribute].Value, true);
             return typeof(T).IsAssignableFrom(typeof(IConvertible)) || typeof(T).IsValueType
                 ? (T) Convert.ChangeType(_attributes[Attribute].Value, typeof(T)) 
                 : (T) _attributes[Attribute].Value;

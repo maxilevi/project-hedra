@@ -477,7 +477,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         
         public void RemoveInstance(InstanceData Data)
         {
-            if (Mesh == null) throw new ArgumentException($"Failed to add instance data ");
+            if (Mesh == null) throw new ArgumentException($"Failed to remove instance data ");
 
             StaticBuffer.RemoveInstance(Data);
             this.NeedsRebuilding = true;

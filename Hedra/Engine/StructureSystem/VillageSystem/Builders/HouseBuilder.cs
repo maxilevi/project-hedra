@@ -55,7 +55,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var position = Parameters.Position + Vector3.TransformPosition(Vector3.UnitX * _width,
                                Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
             
-            if (Rng.Next(0, 3) == 1)
+            if (Rng.Next(0, 4) == 1)
             {
                 SpawnVillager(position, Rng);
             }

@@ -25,6 +25,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem.FoodSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
@@ -304,10 +305,15 @@ namespace Hedra.Engine.Player
             
             if(Inventory.Food != null)
             {
-                Model.EatFood(Inventory.Food);
+                Model.EatFood(Inventory.Food, OnEatingEnd);
                 Inventory.RemoveItem(Inventory.Food);
             }
             this.Inventory.UpdateInventory();
+        }
+
+        private void OnEatingEnd()
+        {
+            FoodHandler.ApplyEffects(Inventory.Food, this);
         }
 
         private void ManageDeath()
@@ -441,6 +447,7 @@ namespace Hedra.Engine.Player
             Pet.Pet?.Update();
             Inventory.ClearInventory();
             ComponentManager.Clear();
+            CraftingInterface.Reset();
             Chat.Clear();
             Model.Alpha = 0f;
             View.TargetPitch = 0f;

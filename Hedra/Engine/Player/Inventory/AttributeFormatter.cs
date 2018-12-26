@@ -7,6 +7,7 @@ using Hedra.Engine.CraftingSystem.Templates;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.Templates;
+using Hedra.Engine.ModuleSystem.Templates;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -14,13 +15,14 @@ namespace Hedra.Engine.Player.Inventory
 {
     public static class AttributeFormatter
     {
-        private static readonly List<Type> Codecs;
+        private static readonly Dictionary<string, Type> Codecs;
 
         static AttributeFormatter()
         {
-            Codecs = new List<Type>
+            Codecs = new Dictionary<string, Type>
             {
-                typeof(IngredientsTemplate)
+                {CommonAttributes.Ingredients.ToString(), typeof(IngredientsTemplate)},
+                {CommonAttributes.EatEffects.ToString(), typeof(EffectTemplate)}
             };
         }
 
@@ -28,40 +30,30 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (AttributeDisplay.Bullets.ToString() == Template.Display)
             {
-                return $"{Template.Name.AddSpacesToSentence()}:{Get(Template.Display, Template.Value, 4)}";
+                return $"{Template.Name.AddSpacesToSentence()}:{Get(Template.Display, Template.Value, Template.Name, 4)}";
             }
-            return $"{Template.Name.AddSpacesToSentence()}   ➝   {Get(Template.Display, Template.Value, 0)}";
+            return $"{Template.Name.AddSpacesToSentence()}   ➝   {Get(Template.Display, Template.Value, Template.Name, 0)}";
         }
 
-        private static string GetString(object Value, int Padding)
+        private static string GetString(object Value, string Name, int Padding)
         {
             if (Value is JArray asJArray)
             {
                 var stringBuilder = new StringBuilder();
                 foreach (var obj in asJArray)
                 {
-                    stringBuilder.Append($"{Environment.NewLine}{BuildPadding(Padding)}{GetString(obj, Padding)}");
+                    stringBuilder.Append($"{Environment.NewLine}{BuildPadding(Padding)}{GetString(obj, Name, Padding)}");
                 }
                 return stringBuilder.ToString();
             } 
-            else if (Value is JObject asJObject)
+            if (Value is JObject asJObject)
             {
-                for (var i = 0; i < Codecs.Count; ++i)
-                {
-                    try
-                    {
-                        return JsonConvert.DeserializeObject(asJObject.ToString(), Codecs[i]).ToString();
-                    }
-                    catch (JsonSerializationException e)
-                    {
-                        Log.WriteLine(e);
-                    }
-                }
+                return JsonConvert.DeserializeObject(asJObject.ToString(), Codecs[Name]).ToString();          
             }
             return Value.ToString();         
         }
         
-        private static string Get(string Display, object Value, int Padding)
+        private static string Get(string Display, object Value, string Name, int Padding)
         {
             if (Value is double || Value is float)
             {
@@ -77,7 +69,7 @@ namespace Hedra.Engine.Player.Inventory
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            if (!(Value is int) && !(Value is long)) return GetString(Value, Padding);
+            if (!(Value is int) && !(Value is long)) return GetString(Value, Name, Padding);
             return (int)Convert.ChangeType(Value, typeof(int)) == int.MaxValue ? "∞" : Value.ToString();
         }
 

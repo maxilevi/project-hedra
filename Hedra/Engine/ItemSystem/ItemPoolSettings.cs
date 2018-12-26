@@ -1,4 +1,5 @@
 using System;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -32,7 +33,7 @@ namespace Hedra.Engine.ItemSystem
         {
             this.Tier = Tier;
             this.EquipmentType = WeaponType;
-            this.Seed = Utils.Rng.Next(int.MinValue, int.MaxValue);
+            this.Seed = Unique.RandomSeed;
         }
     }
 

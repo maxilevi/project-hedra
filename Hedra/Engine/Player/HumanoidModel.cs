@@ -220,20 +220,24 @@ namespace Hedra.Engine.Player
             DisposeTime = 0;
         }
 
-        public void EatFood(Item Food)
+        public void EatFood(Item Food, Action OnEatingEnd)
         {
-            _foodTimer.AlertTime = Food.GetAttribute<float>("EatTime");
+            _foodTimer.AlertTime = Food.GetAttribute<float>(CommonAttributes.EatTime);
             _foodTimer.Reset();
             _food.SetModel(Food.Model);
-            Eat(Food.GetAttribute<float>("Saturation"));
+            Eat(Food.GetAttribute<float>(CommonAttributes.Saturation), OnEatingEnd);
         }
         
-        private void Eat(float FoodHealth)
+        private void Eat(float FoodHealth, Action OnEatingEnd)
         {
             Human.IsEating = true;
             TaskScheduler.While( 
                 () => Human.IsEating && !Human.IsDead,
                 () => Human.Health += FoodHealth * Time.IndependantDeltaTime * .3f);
+            TaskScheduler.When(
+                () => !Human.IsEating,
+                OnEatingEnd
+            );
             Model.BlendAnimation(_eatAnimation);
             Human.WasAttacking = false;
             Human.IsAttacking = false;

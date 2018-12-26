@@ -21,6 +21,9 @@ namespace Hedra.Engine.ItemSystem
         IsConsumable,
         Handler,
         Output,
+        Saturation,
+        EatTime,
+        EatEffects,
         Price
     }
 }

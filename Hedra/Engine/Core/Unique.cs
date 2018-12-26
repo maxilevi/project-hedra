@@ -24,5 +24,7 @@ namespace Hedra.Engine.Core
             int sy = seed2(y * 2904);
             return seed2(sx ^ sy);
         }
+
+        public static int RandomSeed => Utils.Rng.Next(int.MinValue, int.MaxValue);
     }
 }

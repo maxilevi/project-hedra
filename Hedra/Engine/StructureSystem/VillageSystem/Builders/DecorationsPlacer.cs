@@ -33,7 +33,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     LightColor = HandLamp.LightColor
                 });
             }
-            CoroutineManager.StartCoroutine(DoPlace, TargetPosition, (Action<Vector3>) Place);
+            PlaceWhenWorldReady(TargetPosition, Place);
         }
         
         public static void PlaceBench(Vector3 TargetPosition, bool IsInIntersection, 
@@ -58,6 +58,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     )
                 );
             }
+            PlaceWhenWorldReady(TargetPosition, Place);
+        }
+
+        public static void PlaceWhenWorldReady(Vector3 TargetPosition, Action<Vector3> Place)
+        {
             CoroutineManager.StartCoroutine(DoPlace, TargetPosition, (Action<Vector3>) Place);
         }
 

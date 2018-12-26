@@ -7,7 +7,12 @@
   "Level": 6,
   "AIType": "Cow",
   "Effects": [],
-  "Drops": [],
+  "Drops": [
+    {
+      "Type": "RawMeat",
+      "Chance": 33
+    }
+  ],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/CowIdle.dae",
     "Scale": 4.0,

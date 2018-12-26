@@ -72,7 +72,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Colors = Model.Colors.Clone(),
                 ExtraData = Model.Extradata.Clone(),
                 TransMatrix = TransformationMatrix,
-                HasExtraData = Model.Extradata.Count != 0,
                 GraduateColor = GraduateColors
             };
             CacheManager.Check(model);

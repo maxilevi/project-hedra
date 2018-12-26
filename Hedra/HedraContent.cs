@@ -1,6 +1,7 @@
 using Hedra.AISystem;
 using Hedra.AnimationEvents;
 using Hedra.API;
+using Hedra.Components.Effects;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Sound;
@@ -52,6 +53,14 @@ namespace Hedra
             AddModelHandler("Ent", typeof(EntHandler));
             
             AddItemHandler("Recipe", typeof(RecipeHandler));
+
+            AddEffectType("Fire", typeof(FireComponent));
+            AddEffectType("Poison", typeof(PoisonousComponent));
+            AddEffectType("Toxic", typeof(ToxicComponent));
+            AddEffectType("Freeze", typeof(FreezeComponent));
+            AddEffectType("Bleed", typeof(BleedComponent));
+            AddEffectType("Slow", typeof(SlowComponent));
+            AddEffectType("Knock", typeof(KnockComponent));
         }
 
         private void RegisterSounds()

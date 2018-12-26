@@ -13,6 +13,7 @@ using System.Linq;
 using System.Reflection;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
+using Hedra.Components.Effects;
 using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using OpenTK;

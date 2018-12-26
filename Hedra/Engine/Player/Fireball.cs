@@ -1,3 +1,4 @@
+using Hedra.Components.Effects;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;

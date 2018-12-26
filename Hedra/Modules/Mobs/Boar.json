@@ -7,7 +7,12 @@
   "Level": 6,
   "AIType": "Hostile",
   "Effects": [],
-  "Drops": [],
+  "Drops": [
+    {
+      "Type": "RawMeat",
+      "Chance": 15
+    }
+  ],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",
     "Scale": 3.8,

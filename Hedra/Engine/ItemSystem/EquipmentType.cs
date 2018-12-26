@@ -2,6 +2,7 @@ namespace Hedra.Engine.ItemSystem
 {
     public enum EquipmentType
     {
+        None,
         Sword,
         Axe,
         Hammer,
@@ -18,6 +19,6 @@ namespace Hedra.Engine.ItemSystem
         Vehicle,
         Ring,
         Staff,
-        Recipe
+        Recipe,        
     }
 }

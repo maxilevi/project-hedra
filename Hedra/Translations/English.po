@@ -112,5 +112,12 @@ recipes = RECIPES
 insufficient_ingredients = INSUFFICIENT INGREDIENTS
 ingredients = Ingredients
 is_on_cooldown = YOU CAN'T CRAFT YET
+crafting_menu = CRAFTING
+requires_campfire = Requires campfire
+requires_well = Requires well
+requires_anvil = Requires anvil
+use_anvil = USE ANVIL
+use_campfire = USE CAMPFIRE
+use_well = USE WELL
 
 

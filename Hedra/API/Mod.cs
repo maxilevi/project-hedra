@@ -10,6 +10,7 @@ namespace Hedra.API
         private readonly ClassRestrictionRegistry _classRegistry;
         private readonly ModelHandlerRegistry _modelHandlerRegistry;
         private readonly ItemHandlerRegistry _itemHandlerRegistry;
+        private readonly EffectRegistry _effectRegistry;
         
         public abstract string Name { get; }
         
@@ -21,6 +22,7 @@ namespace Hedra.API
             _classRegistry = new ClassRestrictionRegistry();
             _modelHandlerRegistry = new ModelHandlerRegistry();
             _itemHandlerRegistry = new ItemHandlerRegistry();
+            _effectRegistry = new EffectRegistry();
         }
         
         protected abstract void RegisterContent();
@@ -61,6 +63,11 @@ namespace Hedra.API
             _itemHandlerRegistry.Add(Name, ClassType);
         }
 
+        protected void AddEffectType(string Name, Type ClassType)
+        {
+            _effectRegistry.Add(Name, ClassType);
+        }
+
         public void UnregisterContent()
         {
             _weaponRegistry.Unregister();
@@ -69,6 +76,7 @@ namespace Hedra.API
             _classRegistry.Unregister();
             _modelHandlerRegistry.Unregister();
             _itemHandlerRegistry.Unregister();
+            _effectRegistry.Unregister();
         }
     }
 }

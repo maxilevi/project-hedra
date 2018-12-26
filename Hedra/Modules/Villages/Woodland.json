@@ -93,6 +93,12 @@
           "X": -16.0,
           "Y": 0.0,
           "Z": -16.0
+        },
+        "HasAnvil": true,
+        "AnvilPosition": {
+          "X": -10.5,
+          "Y": 0.45,
+          "Z": -1.4
         }
       },
       {
@@ -139,7 +145,7 @@
       },
       {
         "Path" : "Assets/Env/Village/Windmill1.ply",
-        "Scale" : 4.0,
+        "Scale" : 3.0,
         "Chance": 20
       }
     ]

@@ -10,6 +10,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using Hedra.Components.Effects;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;

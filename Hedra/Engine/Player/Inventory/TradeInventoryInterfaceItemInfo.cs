@@ -27,6 +27,8 @@ namespace Hedra.Engine.Player.Inventory
                 priceString = _manager.ItemPrice(clone).ToString();
             }
             HintText.Text = $"{priceString} G";
+            HintText.Enable();
+            HintTexture.Enable();
         }
 
         public override void Show(Item Item)

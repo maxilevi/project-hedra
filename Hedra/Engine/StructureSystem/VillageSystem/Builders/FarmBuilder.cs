@@ -139,17 +139,20 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var rng = Rng.NextFloat();
             var rotModifier = 1;
             var minDistModifier = 2.5f;
+            var colorMultiplier = 1f;
 
             if (rng < .3f)
             {
                 design = new PumpkinDesign();
                 type = ItemType.Pumpkin;
+                colorMultiplier = 1.5f;
             }
             else if (rng < .6f)
             {
                 design = new CornDesign();
                 minDistModifier = 1.5f;
                 type = ItemType.Corn;
+                colorMultiplier = 2.5f;
             }
             else if (rng < .75f)
             {
@@ -167,7 +170,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var position = Parameters.Position + offset;
                 var minDist = Chunk.BlockSize * minDistModifier;
                 if (added.Any(P => (P - position).LengthSquared < minDist * minDist)) continue;
-                if (Parameters.InsidePaths /*&& (position - ).le*/) continue;
+                if (Parameters.InsidePaths && offset.LengthFast > _width - VillageDesign.PathWidth * 4) continue;
                 var transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
                                   * Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian * rotModifier)
                                   * Matrix4.CreateTranslation(position);
@@ -176,31 +179,34 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var region = World.BiomePool.GetRegion(position);
                 Output.Instances.Add(BuildPlant(model, design, region, transMatrix, Rng));
                 if(type != ItemType.MaxEnums && Rng.Next(0, 8) == 1)
-                    Output.Structures.Add(BuildPlantCollectible(type, model, design, region, transMatrix, Rng));
+                    BuildPlantCollectible(type, model, design, region, transMatrix, Rng, colorMultiplier);
             }
         }
 
-        private static BaseStructure BuildPlantCollectible(ItemType Type, VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng)
+        private void BuildPlantCollectible(ItemType Type, VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng, float ColorMultiplier)
         {
             var partModel = CacheManager.GetPart(Design.Type, Model);
-            var data = BuildPlant(partModel, Design, Biome, Transformation, Rng);
-            return new CollectiblePlant(
-                data.Position,
-                data,
-                ItemPool.Grab(Type)
-            );
+            var data = BuildPlant(partModel, Design, Biome, Transformation, Rng, 1.5f);
+            DecorationsPlacer.PlaceWhenWorldReady(data.Position, P =>
+            {
+                data.TransMatrix *= Matrix4.CreateTranslation(Vector3.UnitY * P.Y);
+                Structure.WorldObject.AddChildren(new CollectiblePlant(
+                    data.Position,
+                    data,
+                    ItemPool.Grab(Type)
+                ));
+            });
         }
 
-        private static InstanceData BuildPlant(VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng)
+        private static InstanceData BuildPlant(VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng, float ColorMultiplier = 1)
         {
             var modelClone = Model.Clone();
             Design.Paint(modelClone, Biome, Rng);
             var data = new InstanceData
             {
                 OriginalMesh = Model,
-                Colors = modelClone.Colors.Clone(),
+                Colors = modelClone.Colors.Select(C => C * ColorMultiplier).ToList(),
                 ExtraData = modelClone.Extradata.Clone(),
-                HasExtraData = true,
                 VariateColor = true,
                 GraduateColor = true,
                 SkipOnLod = Rng.Next(0, 3) == 1,

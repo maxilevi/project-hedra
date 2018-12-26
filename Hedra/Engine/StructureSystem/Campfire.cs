@@ -8,9 +8,11 @@
  */
 
 using System;
+using Hedra.Components.Effects;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -27,8 +29,9 @@ namespace Hedra.Engine.StructureSystem
     /// <summary>
     /// Description of Campfire.
     /// </summary>
-    public class Campfire : BaseStructure, IUpdatable
+    public class Campfire : CraftingStation
     {
+        protected override string CraftingMessage => Translations.Get("use_campfire");
         public IHumanoid Bandit { get; set; }
         private static ParticleSystem _fireParticles;
         private long _passedTime;
@@ -40,12 +43,11 @@ namespace Hedra.Engine.StructureSystem
             if(_fireParticles == null)
                 _fireParticles = new ParticleSystem(Vector3.Zero);
             _fireParticles.HasMultipleOutputs = true;
-
-            UpdateManager.Add(this);
         }
-        
-        public void Update()
+
+        public override void Update()
         {
+            base.Update();
             var distToPlayer = (Position - GameManager.Player.Position).LengthSquared;
             if (distToPlayer < 256 * 256)
             {
@@ -135,7 +137,6 @@ namespace Hedra.Engine.StructureSystem
         public override void Dispose()
         {
             base.Dispose();
-            UpdateManager.Remove(this);
             if (this._light != null)
             {
                 this._light.Color = Vector3.Zero;

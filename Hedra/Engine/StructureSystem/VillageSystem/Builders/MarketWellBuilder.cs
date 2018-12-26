@@ -16,18 +16,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override bool Place(MarketParameters Parameters, VillageCache Cache)
         {
-            return this.PlaceGroundwork(Parameters.Position, Parameters.WellSize);
+            return PlaceGroundwork(Parameters.Position, Parameters.WellSize);
         }
 
         public override void Polish(MarketParameters Parameters, VillageRoot Root, Random Rng)
         {
             base.Polish(Parameters, Root, Rng);
             var offset = (Physics.HeightAtPosition(Parameters.Position) + 4) * Vector3.UnitY;
-            Structure.WorldObject.AddChildren(new WorldLight(Parameters.Position + offset)
-            {
-                Radius = MarketParameters.MarketSize,
-                LightColor = HandLamp.LightColor
-            });
+            DecorationsPlacer.PlaceWhenWorldReady(Parameters.Position + offset,
+                P => Structure.WorldObject.AddChildren(new Well(P, MarketParameters.MarketSize))
+            );
         }
     }
 }

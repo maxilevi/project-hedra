@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
@@ -72,6 +73,7 @@ namespace Hedra.Engine.Player.CraftingSystem
                 for (var i = 0; i < _recipeSelectedTextures.Length; i++)
                 {
                     _recipeSelectedTextures[i].Disable();
+                    Buttons[i].Texture.Grayscale = false;
                 }
                 _recipeSelectedTextures[SelectedRecipeIndex].Enable();
             }
@@ -82,9 +84,23 @@ namespace Hedra.Engine.Player.CraftingSystem
             {
                 Array.AddItem(outputs[i]);
             }
+            /*for(var i = 0; i < Array.Length; i++)
+            {
+                if (Array[i] == null) continue;
+                var recipe = _player.Crafting.Recipes[System.Array.IndexOf(_player.Crafting.RecipeOutputs, Array[i])];
+                if (CraftingInventory.IsInStation(recipe, _player.Position)) continue;
+                Buttons[i].Texture.Grayscale = true;
+                Buttons[i].Texture.Tint = new Vector4(Vector3.One * .5f, 1);
+            }*/
             _totalPages = Recipes.Length / _recipesPerPage + 1;
             _currentPageText.Text = $"{_currentPage + 1}/{_totalPages}";
             Renderer.UpdateView();           
+        }
+
+        public void Reset()
+        {
+            _currentPage = 0;
+            SelectedRecipeIndex = 0;
         }
 
         private void PreviousPage()

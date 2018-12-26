@@ -33,17 +33,33 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public override void Polish(BlacksmithParameters Parameters, VillageRoot Root, Random Rng)
         {
-            if(Rng.Next(0, 3) != 1) return;
             var transformation = BuildTransformation(Parameters).ClearTranslation();
-            var human = SpawnHumanoid(
-                HumanType.Blacksmith,
-                Vector3.Zero
-            );
-            var blacksmithOffset = Vector3.TransformPosition(Parameters.Design.Blacksmith * Parameters.Design.Scale, transformation);
+            if (Rng.Next(0, 3) == 1)
+            {
+                var blacksmithOffset = Vector3.TransformPosition(Parameters.Design.Blacksmith * Parameters.Design.Scale, transformation);
+                var newPosition = Parameters.Position + blacksmithOffset;
+                DecorationsPlacer.PlaceWhenWorldReady(newPosition,
+                    P =>
+                    {
+                        var human = SpawnHumanoid(
+                            HumanType.Blacksmith,
+                            P
+                        );
+                        human.Physics.TargetPosition = P;
+                    }
+                );
+            }
             var lampOffset = Vector3.TransformPosition(Parameters.Design.LampPosition * Parameters.Design.Scale, transformation);
-            var newPosition = Parameters.Position + blacksmithOffset;
-            human.Physics.TargetPosition = newPosition + Vector3.UnitY * Physics.HeightAtPosition(newPosition);    
             DecorationsPlacer.PlaceLamp(Parameters.Position + lampOffset, Structure, Root, _width, Rng);
+            if (Parameters.Design.HasAnvil)
+            {
+                var anvilPosition = Parameters.Position + Vector3.TransformPosition(
+                                        Parameters.Design.AnvilPosition * Parameters.Design.Scale,
+                                        transformation);
+                DecorationsPlacer.PlaceWhenWorldReady(anvilPosition,
+                    P => Structure.WorldObject.AddChildren(new Anvil(P))
+                );
+            }
         }
     }
 }

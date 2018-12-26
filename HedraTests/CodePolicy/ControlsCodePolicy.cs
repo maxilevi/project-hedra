@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
+using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Rendering.UI;
 using NUnit.Framework;
 
@@ -22,7 +23,8 @@ namespace HedraTests.CodePolicy
             nameof(DebugInfoProvider),
             nameof(Panel),
             nameof(TextField),
-            nameof(PlayerMovement)
+            nameof(PlayerMovement),
+            nameof(CraftingInventoryArrayInterfaceManager)
         };
         private readonly string[] _regexExceptions =
         {

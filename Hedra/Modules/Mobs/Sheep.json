@@ -7,7 +7,12 @@
   "Level": 2,
   "AIType": "Sheep",
   "Effects": [],
-  "Drops": [],
+  "Drops": [
+    {
+      "Type": "RawMeat",
+      "Chance": 5
+    }
+  ],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/SheepIdle0.dae",
     "Scale": 1.25,

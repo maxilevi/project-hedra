@@ -1,16 +1,11 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Hedra.Engine.Generation;
+using Hedra.Engine;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using OpenTK;
 
-namespace Hedra.Engine.EntitySystem
+namespace Hedra.Components.Effects
 {
     public class SlowingComponent : EntityComponent
     {

@@ -13,7 +13,8 @@ namespace Hedra.Engine.WorldBuilding
     public class TravellingMerchant : Campfire
     {
         private readonly IHumanoid _merchant;
-        
+        protected override bool CanUseForCrafting => false;
+
         public TravellingMerchant(Vector3 Position) : base(Position)
         {
             _merchant = World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position + Vector3.UnitX * 12f);

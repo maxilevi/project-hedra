@@ -28,9 +28,16 @@
       "Hidden": true
     },
     {
-      "Name": "EatEffect",
-      "Value": "Poison",
-      "Hidden": true
+      "Name": "EatEffects",
+      "Value": [
+        {
+          "Name": "Toxic",
+          "Chance": 40.0,
+          "Damage": 8.0,
+          "Duration": 5.0
+        }
+      ],
+      "Display": "Bullets"
     }
   ],
   "Model": {

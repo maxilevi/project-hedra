@@ -129,7 +129,7 @@ namespace Hedra.Engine.PhysicsSystem
         {
             return WaterHeight(Position) - HeightAtPosition(Position);
         }
-        
+
         public static int WaterBlock(Chunk UnderChunk, Vector3 Position)
         {
             int nearestWaterBlockY = 0;

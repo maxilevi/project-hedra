@@ -70,7 +70,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private IEnumerator UpdateChunkCoroutine()
         {
-            var updateTimer = new Timer(0.05f);
+            var updateTimer = new Timer(0.15f);
             while (GameManager.Exists)
             {
                 if(!updateTimer.Tick()) continue;

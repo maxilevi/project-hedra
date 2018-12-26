@@ -1,3 +1,5 @@
+using Hedra.Engine.CraftingSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.EntitySystem;
 using OpenTK;
@@ -12,7 +14,8 @@ namespace Hedra.Engine.Player.CraftingSystem
 
         public override void UpdateView(IHumanoid Human)
         {
-            
+            var currentStation = CraftingInventory.GetCurrentStation(Human.Position);
+            Name.Text = Translations.Get("crafting_menu");;
         }
     }
 }

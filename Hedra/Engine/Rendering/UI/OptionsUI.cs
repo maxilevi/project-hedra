@@ -63,33 +63,7 @@ namespace Hedra.Engine.Rendering.UI
             
             var bandPosition = new Vector2(0f, .8f);
             var blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
-
-            var donateBtc = new Texture(Graphics2D.LoadFromAssets("Assets/UI/SocialMedia.png"), Vector2.Zero, Vector2.One);
-            donateBtc.Disable();
             
-            Button copyAddress = new Button(new Vector2(0.275f, 0.475f), Graphics2D.SizeFromAssets("Assets/UI/CopyIcon.png") * .05f, Graphics2D.LoadFromAssets("Assets/UI/CopyIcon.png"));
-            copyAddress.Disable();
-
-            Vector2 squareScale = new Vector2(0.3f, 0.55f) * .8f;
-            Button discordClick = new Button(new Vector2(0f, -.05f), squareScale, 0);
-            var redditClick = new Button(new Vector2(-.6f, -.05f), squareScale, 0);
-            var twitterClick = new Button(new Vector2(.6f, -.05f), squareScale, 0);
-
-            twitterClick.Click += delegate
-            {
-                Process.Start("https://twitter.com/Zaphyk");
-            };
-
-            redditClick.Click += delegate
-            {
-                Process.Start("https://www.reddit.com/r/projecthedra");
-            };
-
-            discordClick.Click += delegate
-            {
-                Process.Start("https://discord.gg/AEC4Uab");
-            };
-
             _graphics = new Button(new Vector2(0f, bandPosition.Y),
                                 new Vector2(0.15f,0.075f), Translation.Create("graphics"), Color.White, _normalFont);
             _graphics.Click += delegate

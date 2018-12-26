@@ -1,6 +1,7 @@
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 
-namespace Hedra.Engine.EntitySystem
+namespace Hedra.Components.Effects
 {
     public class AttackSpeedBonusComponent : EntityComponent
     {

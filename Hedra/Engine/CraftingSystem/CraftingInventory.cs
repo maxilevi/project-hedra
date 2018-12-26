@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.Core;
 using Hedra.Engine.CraftingSystem.Templates;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.VillageSystem;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenTK;
@@ -12,6 +16,7 @@ namespace Hedra.Engine.CraftingSystem
 {
     public class CraftingInventory
     {
+        private const int CraftingStationRadius = 16;
         private readonly IPlayerInventory _inventory;
         private readonly List<string> _recipeNames;
         private Item[] _recipeOutputs;
@@ -23,8 +28,9 @@ namespace Hedra.Engine.CraftingSystem
             _inventory = Inventory;
         }
 
-        public bool CanCraft(Item Recipe)
+        public bool CanCraft(Item Recipe, Vector3 Position)
         {
+            if (!IsInStation(Recipe, Position)) return false;
             var ingredients = GetIngredients(Recipe);
             return ingredients.All(I => 
                 _inventory.Search(
@@ -33,16 +39,40 @@ namespace Hedra.Engine.CraftingSystem
             );
         }
 
+        public static bool IsInStation(Item Recipe, Vector3 Position)
+        {
+            var station = Recipe.GetAttribute<CraftingStation>(CommonAttributes.CraftingStation);
+            return (GetCurrentStation(Position) & station) != 0;
+        }
+
+        public static CraftingStation GetCurrentStation(Vector3 Position)
+        {
+            var structs = World.InRadius<WorldBuilding.CraftingStation>(Position, CraftingStationRadius);
+            var currentStation = CraftingStation.None;
+            var nearWater = structs.Any(
+                S => S is Well
+            );
+            var nearFire = structs.Any(
+                S => S is Campfire
+            );
+            var nearAnvil = structs.Any(
+                S => S is Anvil
+            );
+            if (nearWater) currentStation |= CraftingStation.Well;
+            if (nearFire) currentStation |= CraftingStation.Campfire;
+            if (nearAnvil) currentStation |= CraftingStation.Anvil;
+            return currentStation;
+        }
+
         public void Craft(Item Recipe, Vector3 Position)
         {
-            /* TODO: Check stations */
-            if(!CanCraft(Recipe))
+            if(!CanCraft(Recipe, Position))
                 throw new ArgumentOutOfRangeException($"Failed to craft {Recipe.Name}");
             var ingredients = GetIngredients(Recipe);
             ingredients.ToList().ForEach(
                 I => _inventory.RemoveItem(_inventory.Search(T => T.Name == I.Name), I.Amount)
             );
-            var output = ItemPool.Grab(Recipe.GetAttribute<string>(CommonAttributes.Output));
+            var output = ItemPool.Grab(Recipe.GetAttribute<string>(CommonAttributes.Output), Unique.RandomSeed);
             if (!_inventory.AddItem(output))
             {
                 World.DropItem(output, Position);
@@ -89,7 +119,7 @@ namespace Hedra.Engine.CraftingSystem
         
         private void UpdateRecipes()
         {
-            _recipes = _recipeNames.Select(ItemPool.Grab).ToArray(); 
+            _recipes = _recipeNames.Select(R => ItemPool.Grab(R)).ToArray(); 
             _recipeOutputs = _recipes.Select(I => ItemPool.Grab(I.GetAttribute<string>(CommonAttributes.Output))).ToArray();
         }
         

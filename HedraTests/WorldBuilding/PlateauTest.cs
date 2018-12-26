@@ -64,9 +64,7 @@ namespace HedraTests.WorldBuilding
             var radius = Utils.Rng.NextFloat() * 1024 + 20;
             var rounded = new RoundedPlateau(Vector2.Zero, radius);
             var box = rounded.ToBoundingBox();
-            var pos = Vector2.UnitX * (radius - 5);
-            var b = box.Density(pos);
-            Assert.Greater(b, rounded.Density(pos));
+            Assert.Greater(box.Width * 2, rounded.Radius);
         }
     }
 }

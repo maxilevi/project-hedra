@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player.Inventory
         protected readonly RenderableText ItemAttributes;
         protected readonly Texture HintTexture;
         protected readonly GUIText HintText;
-        private readonly Vector2 _targetResolution = new Vector2(1366, 705);
+        protected readonly Vector2 TargetResolution = new Vector2(1366, 705);
         private readonly Panel _panel;
         private readonly InventoryItemRenderer _renderer;
         private readonly Vector2 _weaponItemAttributesPosition;
@@ -40,18 +40,18 @@ namespace Hedra.Engine.Player.Inventory
             this._renderer = Renderer;
             this._panel = new Panel();
             this.BackgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Vector2.One * .45f);
-            this.ItemTexture = new Texture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
+            this.ItemTexture = new Texture(0, BackgroundTexture.Position + Mathf.ScaleGui(TargetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
                 BackgroundTexture.Scale * .75f);
 
-            this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .325f), Color.White,
+            this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(TargetResolution, Vector2.UnitY * .325f), Color.White,
                 FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemText, DrawOrder.After);
 
-            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.25f),
+            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(TargetResolution, Vector2.UnitY * -.25f),
                 Color.Bisque, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemDescription, DrawOrder.After);
 
-            this.ItemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
+            this.ItemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(TargetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemAttributes, DrawOrder.After);
             
@@ -66,8 +66,8 @@ namespace Hedra.Engine.Player.Inventory
             _panel.AddElement(ItemTexture);
             _panel.AddElement(BackgroundTexture);
 
-            _nonWeaponItemAttributesPosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.225f);
-            _nonWeaponItemTexturePosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .0f);
+            _nonWeaponItemAttributesPosition = Mathf.ScaleGui(TargetResolution, Vector2.UnitY * -.225f);
+            _nonWeaponItemTexturePosition = Mathf.ScaleGui(TargetResolution, Vector2.UnitY * .0f);
             _weaponItemAttributesPosition = ItemAttributes.Position;
             _weaponItemTexturePosition = ItemTexture.Position;
             _weaponItemTextureScale = ItemTexture.Scale;
@@ -114,12 +114,24 @@ namespace Hedra.Engine.Player.Inventory
             ItemDescription.Color = Color.White;
             ItemText.Text = Utils.FitString(CurrentItem.DisplayName, 20);
             ItemAttributes.Position = _nonWeaponItemAttributesPosition + this.Position;
-            ItemTexture.Position = _nonWeaponItemTexturePosition
-                                   + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * ItemAttributes.UIText.Scale.Y)
-                                   + this.Position;               
-            ItemTexture.Scale = _weaponItemTextureScale * (1-(ItemAttributes.UIText.Scale.Y / _weaponItemTextureScale.Y));
+            ItemTexture.Position = _nonWeaponItemTexturePosition + this.Position;               
+            ItemTexture.Scale = _weaponItemTextureScale;
             ItemDescription.Text = string.Empty;
+            AccomodatePosition(ItemTexture);
+            AccomodateScale(ItemTexture);
         }
+
+        protected void AccomodatePosition(UIElement Element)
+        {
+            Element.Position += Mathf.ScaleGui(TargetResolution, Vector2.UnitY * DescriptionHeight);
+        }
+        
+        protected void AccomodateScale(UIElement Element)
+        {
+            Element.Scale *= (1-(DescriptionHeight / _weaponItemTextureScale.Y));
+        }
+        
+        protected virtual float DescriptionHeight => ItemAttributes.UIText.Scale.Y;
 
         protected void AddEquipmentLayout()
         {

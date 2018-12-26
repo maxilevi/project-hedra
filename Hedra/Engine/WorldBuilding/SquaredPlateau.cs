@@ -5,7 +5,7 @@ using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    public class SquaredPlateau : BasePlateau
+    public class SquaredPlateau : BasePlateau, IBoundingBox
     {
         private float Width { get; }
         public float Hardness { get; set; } = 1.0f;

@@ -30,7 +30,7 @@ namespace Hedra.Engine.EntitySystem
     public class PhysicsComponent : EntityComponent, IPhysicsComponent
     {
         private const float NormalSpeedModifier = 2.25f;
-        private const float MaxSlopeHeight = 1.0f;
+        private const float MinSlopeHeight = 1.0f;
         private const float MaxSlide = 3.0f;
         public event OnMoveEvent OnMove;
         public event OnHitGroundEvent OnHitGround;
@@ -104,7 +104,11 @@ namespace Hedra.Engine.EntitySystem
 
                 var nearCollisions = GameManager.Player.NearCollisions;
                 var currentOffset = World.ToChunkSpace(Parent.Position);
-                _collisions.AddRange(nearCollisions.Where(G => G.Contains(currentOffset)).Cast<ICollidable>().ToArray());
+                for (var i = 0; i < nearCollisions.Length; i++)
+                {
+                    if(nearCollisions[i].Contains(currentOffset))
+                        _collisions.Add(nearCollisions[i]);
+                }
             }
 
             var modifier = 1;
@@ -233,7 +237,7 @@ namespace Hedra.Engine.EntitySystem
 
         private bool HandleStructureCollision(MoveCommand Command)
         {
-            _physicsBox.Min = Vector3.Zero + TargetPosition + 2 * Vector3.UnitY;
+            _physicsBox.Min = Vector3.Zero + TargetPosition + 0 * Vector3.UnitY;
             _physicsBox.Max = Parent.Model.BaseBroadphaseBox.Size + TargetPosition;
             _physicsBox.Min += Command.Delta;
             _physicsBox.Max += Command.Delta;
@@ -277,8 +281,7 @@ namespace Hedra.Engine.EntitySystem
 
         private bool HandleSlopes(MoveCommand Command, ICollidable Shape, CollisionShape Box)
         {
-            var slopeHeight = .25f;
-            if (!CollidesWithOffset(Shape, Box, Vector3.UnitY * 1f))
+            if (!CollidesWithOffset(Shape, Box, Vector3.UnitY * MinSlopeHeight))
             {
                 /* If the object collided with Y but not Y+1 then it probably is a slope */
                 var accum = .05f;

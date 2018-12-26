@@ -1,10 +1,9 @@
-using System;
-using Hedra.Engine.Generation;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using OpenTK;
 
-namespace Hedra.Engine.EntitySystem
+namespace Hedra.Components.Effects
 {
     public class SpeedBonusComponent : EntityComponent
     {

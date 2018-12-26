@@ -16,6 +16,7 @@ namespace Hedra.Engine.Player.CraftingSystem
 {
     public class CraftingInventoryItemInfo : InventoryInterfaceItemInfo
     {
+        private const int MaxIngredients = 4;
         private readonly Button _craftButton;
         private Item _currentRecipe;
         private readonly IPlayer _player;
@@ -24,17 +25,29 @@ namespace Hedra.Engine.Player.CraftingSystem
         private readonly Timer _cooldownTimer;
         private readonly Vector4 _normalTint;
         private readonly Vector4 _cooldownTint;
+        private readonly GUIText[] _ingredientsText;
+        private readonly Panel _panel;
+        private float _descriptionHeight;
 
         public CraftingInventoryItemInfo(IPlayer Player, InventoryItemRenderer Renderer) : base(Renderer)
         {
             _player = Player;
             _normalTint = new Vector4(Color.Orange.ToVector4().Xyz * 5f, 1);
-            _cooldownTint = new Vector4(Color.Orange.ToVector4().Xyz * 2.5f, 1);
-            _cooldownTimer = new Timer(1.75f)
+            _cooldownTint = new Vector4(Color.Orange.ToVector4().Xyz * 2f, 1);
+            _cooldownTimer = new Timer(1.25f)
             {
                 AutoReset = false,
             };
             _cooldownTimer.MakeReady();
+            _panel = new Panel();
+            _ingredientsText = new GUIText[MaxIngredients+1];
+            for (var i = 0; i < _ingredientsText.Length; i++)
+            {
+                _ingredientsText[i] = new GUIText(
+                    string.Empty, ItemAttributes.Position, ItemAttributes.Color, ItemAttributes.TextFont
+                );
+                _panel.AddElement(_ingredientsText[i]);
+            }
             HintTexture.TextureElement.Grayscale = true;
             HintTexture.Position = Vector2.UnitY * -.45f;
             HintTexture.Scale *= 1.5f;
@@ -43,6 +56,7 @@ namespace Hedra.Engine.Player.CraftingSystem
             HintText.TextFont = FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold);
             _craftButton = new Button(HintTexture.Position, HintTexture.Scale, GUIRenderer.TransparentTexture);
             _craftButton.Click += (O, E) => Craft(); 
+            _panel.AddElement(_craftButton);
             _player.Inventory.InventoryUpdated += () =>
             {
                 if(_currentRecipe != null)
@@ -69,7 +83,7 @@ namespace Hedra.Engine.Player.CraftingSystem
 
         public void Update()
         {
-            var ready = _cooldownTimer.Tick();
+            var ready = _cooldownTimer.Tick() && _canCraft;
             HintText.TextColor = ready ? Color.White : Color.Gray;
             HintTexture.TextureElement.Tint = Mathf.Lerp(HintTexture.TextureElement.Tint, ready ? _normalTint : _cooldownTint, Time.DeltaTime * 8f);
         }
@@ -82,24 +96,70 @@ namespace Hedra.Engine.Player.CraftingSystem
 
         protected override void AddLayout()
         {
-            AddNormalLayout();
             if (_currentRecipe != null && _lastRecipeChecked != _currentRecipe.Name)
             {
                 UpdateCanCraft();
             }
-            ItemAttributes.Color = _canCraft ? Color.LawnGreen : Color.Red;
         }
 
         protected override void AddAttributes()
         {
+            _descriptionHeight = 0;
+            AddNormalLayout();
             var ingredients = CraftingInventory.GetIngredients(_currentRecipe);
-            ItemAttributes.Text = $@"{Translations.Get("ingredients")}:{Environment.NewLine}{ 
-                ingredients.Select(
-                    I => $@"{new string(' ', 4)}• {
-                        _player.Inventory.Search(T => T.Name == I.Name)?.GetAttribute<int>(CommonAttributes.Amount) ?? 0
-                    }/{I.Amount} {ItemPool.Grab(I.Name).DisplayName}"
-                ).Aggregate((S1,S2) => $"{S1}{Environment.NewLine}{S2}")
-            }";
+            ItemAttributes.Text = $@"{Translations.Get("ingredients")}:";
+            ItemAttributes.Position -= Vector2.UnitX * ItemAttributes.Scale.X;
+            if (ingredients.Length > MaxIngredients) 
+                throw new ArgumentOutOfRangeException($"Cannot display a recipe with more than {MaxIngredients} ingredients, has {ingredients.Length}");
+
+            DisableIngredientsText();
+            var offset = -ItemAttributes.Scale.Y * 2f;
+            for (var i = 0; i < ingredients.Length; i++)
+            {
+                var k = i;
+                var asItem = _player.Inventory.Search(T => T.Name == ingredients[k].Name);
+                var currentAmount = asItem?.GetAttribute<int>(CommonAttributes.Amount) ?? 0;
+                var ingredientName = asItem?.DisplayName ?? ItemPool.Grab(ingredients[i].Name).DisplayName;
+                _ingredientsText[i].Position = ItemAttributes.Position + Vector2.UnitY * offset;
+                _ingredientsText[i].Text =
+                    $@"{new string(' ', 4)}• {currentAmount}/{ingredients[i].Amount} {ingredientName}";
+                _ingredientsText[i].Position += Vector2.UnitX * _ingredientsText[i].Scale.X - Vector2.UnitX * ItemAttributes.Scale.X;
+                _ingredientsText[i].TextColor = currentAmount >= ingredients[i].Amount ? Color.LawnGreen : Color.Red;
+                _ingredientsText[i].Enable();
+                offset -= _ingredientsText[i].Scale.Y * 2;
+            }
+            AddStationRequirement(Vector2.UnitY * offset);
+            _descriptionHeight = _ingredientsText.Where(I => I.UIText.Enabled).Sum(I => I.Scale.Y) + base.DescriptionHeight;
+            AccomodateScale(ItemTexture);
+            AccomodatePosition(ItemTexture);
+            AccomodatePosition(ItemAttributes);
+            for (var i = 0; i < _ingredientsText.Length; i++)
+            {
+                AccomodatePosition(_ingredientsText[i]);
+            }
+        }
+
+        private void AddStationRequirement(Vector2 Offset)
+        {
+            StationRequirementText.Position = ItemAttributes.Position + Offset;
+            StationRequirementText.Enable();
+            StationRequirementText.Text = 
+                $"• {Translations.Get($"requires_{_currentRecipe.GetAttribute<string>(CommonAttributes.CraftingStation).ToLowerInvariant()}")}";
+            StationRequirementText.TextColor = 
+                CraftingInventory.IsInStation(_currentRecipe, _player.Position) ? Color.LawnGreen : Color.Red;
+            StationRequirementText.Position += Vector2.UnitX * StationRequirementText.Scale.X - Vector2.UnitX * ItemAttributes.Scale.X;
+        }
+
+        private GUIText StationRequirementText => _ingredientsText[MaxIngredients - 1]; 
+        
+        protected override float DescriptionHeight => _descriptionHeight;
+
+        private void DisableIngredientsText()
+        {
+            for (var i = 0; i < _ingredientsText.Length; i++)
+            {
+                _ingredientsText[i].Disable();
+            }
         }
 
         protected override void AddHint()
@@ -111,7 +171,7 @@ namespace Hedra.Engine.Player.CraftingSystem
 
         private void UpdateCanCraft()
         {
-            _canCraft = _player.Crafting.CanCraft(_currentRecipe);
+            _canCraft = _player.Crafting.CanCraft(_currentRecipe, _player.Position);
             _lastRecipeChecked = _currentRecipe.Name;
         }
 
@@ -120,8 +180,8 @@ namespace Hedra.Engine.Player.CraftingSystem
             get => base.Enabled;
             set
             {
-                if(value) _craftButton.Enable();
-                else _craftButton.Disable();
+                if(value) _panel.Enable();
+                else _panel.Disable();
                 base.Enabled = value;
             }
         }
@@ -131,7 +191,11 @@ namespace Hedra.Engine.Player.CraftingSystem
             get => base.Position;
             set
             {
-                _craftButton.Position = _craftButton.Position - Position + value;
+                var elements = _panel.Elements.ToArray();
+                for (var i = 0; i < elements.Length; i++)
+                {
+                    elements[i].Position = elements[i].Position - base.Position + value;
+                }
                 base.Position = value;
             }
         }

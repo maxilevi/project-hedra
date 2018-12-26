@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Components.Effects;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Rendering;
 
@@ -24,13 +25,13 @@ namespace Hedra.Engine.Player.Skills.Rogue
         {
             if (Player.SearchComponent<PoisonousComponent>() == null)
             {
-                _component = new PoisonousComponent(Player);
+                _component = new PoisonousComponent(Player, 1, 1, 1);
                 Player.AddComponent(_component);
             }
             var poison = Player.SearchComponent<PoisonousComponent>();
             poison.Chance = (int) (100 * (Math.Min(.4f, base.Level * .05f) + .2f));
             poison.Damage = Level * 7.5f + 20f;
-            poison.Duration = 8f - Math.Min(4f, base.Level * .5f);        
+            poison.Duration = 8f - Math.Min(4f, Level * .5f);        
         }
 
         protected override void Remove()
