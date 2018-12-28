@@ -39,7 +39,7 @@ namespace Hedra.Engine.Player.CraftingSystem
             var button = (Button) Sender;
             var item = ItemByButton(button);
             if(item == null) return;
-            _craftingInterface.SelectedRecipeIndex = IndexByButton(button);
+            _craftingInterface.SelectedIndex = IndexByButton(button);
             UpdateView();
             SoundPlayer.PlayUISound(SoundType.ButtonClick);
         }
@@ -71,18 +71,18 @@ namespace Hedra.Engine.Player.CraftingSystem
         private void OnKeyDown(object Sender, KeyEventArgs EventArgs)
         {
             if (!Enabled) return;
-            var newIndex = _craftingInterface.SelectedRecipeIndex;
-            var rowIndex = newIndex / _columns;
+            var newIndex = _craftingInterface.SelectedIndex;
+            var rowIndex = newIndex / _rows;
             switch (EventArgs.Key)
             {
                 case Key.Up:
                     if(!_upPressed)
-                        newIndex = MoveSelector(newIndex, _rows, newIndex % _columns, (_rows - rowIndex - 1) * _columns + newIndex);
+                        newIndex = MoveSelector(newIndex, _rows, newIndex % _rows, (_columns - rowIndex - 1) * _rows + newIndex);
                     _upPressed = true;
                     break;
                 case Key.Down:
                     if(!_downPressed)
-                        newIndex = MoveSelector(newIndex, - _rows, newIndex % _columns, (_rows - rowIndex - 1) * _columns + newIndex);
+                        newIndex = MoveSelector(newIndex, - _rows, newIndex % _rows, (_columns - rowIndex - 1) * _rows + newIndex);
                     _downPressed = true;
                     break;
                 case Key.Right:
@@ -103,7 +103,7 @@ namespace Hedra.Engine.Player.CraftingSystem
                 default:
                     return;
             }
-            _craftingInterface.SelectedRecipeIndex = newIndex;
+            _craftingInterface.SelectedIndex = newIndex;
             UpdateView();
         }
 

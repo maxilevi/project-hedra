@@ -60,7 +60,6 @@ namespace Hedra.Engine.PlantSystem
         {
             Data.Color(AssetManager.ColorCode0, Region.Colors.GrassColor);
             Data.Color(AssetManager.ColorCode1, Colors.BerryColor(Rng));
-            Data.Colors = Data.Colors.Select(C => C * 1.5f).ToList();
             
             return Data;
         }

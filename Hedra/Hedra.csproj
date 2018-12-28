@@ -245,10 +245,13 @@
     <Compile Include="Engine\Player\Inventory\AttributeFormatter.cs" />
     <Compile Include="Engine\Player\Inventory\BaseBackground.cs" />
     <Compile Include="Engine\Player\Inventory\PlayerInventoryInterface.cs" />
-    <Compile Include="Engine\Player\QuestSystem\QuestView.cs" />
-    <Compile Include="Engine\Player\QuestSystem\BulletView.cs" />
-    <Compile Include="Engine\Player\QuestSystem\DefaultView.cs" />
+    <Compile Include="Engine\Player\QuestSystem\QuestingInventoryArrayInterface.cs" />
+    <Compile Include="Engine\Player\QuestSystem\QuestingInventoryInterfaceManager.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestInterface.cs" />
+    <Compile Include="Engine\Player\QuestSystem\QuestInventoryItemInfo.cs" />
+    <Compile Include="Engine\Player\QuestSystem\Views\BulletView.cs" />
+    <Compile Include="Engine\Player\QuestSystem\Views\DefaultView.cs" />
+    <Compile Include="Engine\Player\QuestSystem\Views\QuestView.cs" />
     <Compile Include="Engine\QuestSystem\BaseQuest.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CollectDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CraftDesign.cs" />

@@ -19,7 +19,6 @@ namespace Hedra.Engine.PlantSystem
 
         public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
-            Data.Colors = Data.Colors.Select(C => C * 1.5f).ToList();
             return Data;
         }
 

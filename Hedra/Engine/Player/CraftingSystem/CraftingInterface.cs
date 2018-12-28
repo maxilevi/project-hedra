@@ -17,10 +17,9 @@ namespace Hedra.Engine.Player.CraftingSystem
     public class CraftingInterface : PlayerInterface
     {
         private const int Rows = 4;
-        private const int Columns = 4; 
+        private const int Columns = 4;
         public override Key OpeningKey => Controls.Crafting;
         private readonly IPlayer _player;       
-        private readonly InventoryArray _recipeItems;
         private readonly CraftingInventoryArrayInterface _recipesItemInterface;
         private readonly InventoryStateManager _stateManager;
         private readonly CraftingInventoryArrayInterfaceManager _interfaceManager;
@@ -31,10 +30,9 @@ namespace Hedra.Engine.Player.CraftingSystem
         public CraftingInterface(IPlayer Player)
         {
             _player = Player;
-            _recipeItems = new InventoryArray(Rows * Columns);
             _stateManager = new InventoryStateManager(_player);
             var interfacePosition = Vector2.UnitX * -.4f + Vector2.UnitY * .05f;
-            _recipesItemInterface = new CraftingInventoryArrayInterface(_player, _recipeItems, Columns, Rows)
+            _recipesItemInterface = new CraftingInventoryArrayInterface(_player, new InventoryArray(Rows * Columns), Columns, Rows)
             {
                 Position = interfacePosition
             };
@@ -59,6 +57,8 @@ namespace Hedra.Engine.Player.CraftingSystem
 
         private void SetInventoryState(bool State)
         {
+            _recipesItemInterface.Enabled = State;
+            _interfaceManager.Enabled = State;
             if (State)
             {
                 _stateManager.CaptureState();
@@ -90,8 +90,6 @@ namespace Hedra.Engine.Player.CraftingSystem
             {
                 if (_show == value || _stateManager.GetState() != _show) return;
                 _show = value;
-                _recipesItemInterface.Enabled = _show;
-                _interfaceManager.Enabled = _show;
                 SetInventoryState(_show);
                 UpdateView();
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);

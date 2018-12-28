@@ -262,6 +262,7 @@ namespace Hedra.Engine.Player
             Loader.Update();
             InventoryInterface.Update();
             CraftingInterface.Update();
+            QuestInterface.Update();
             AbilityTree.Update();
             Toolbar.Update();
             UI.Update();
@@ -383,7 +384,10 @@ namespace Hedra.Engine.Player
         
         public override bool IsSailing => Boat.Enabled;
 
-        public bool InterfaceOpened => InventoryInterface.Show || Trade.Show || CraftingInterface.Show || AbilityTree.Show;
+        public bool InterfaceOpened => InventoryInterface.Show || Trade.Show 
+                                                               || CraftingInterface.Show 
+                                                               || AbilityTree.Show 
+                                                               || QuestInterface.Show;
 
         public void HideInterfaces()
         {

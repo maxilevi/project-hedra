@@ -21,7 +21,7 @@ namespace Hedra.Engine.PlantSystem
         public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)
         {
             return World.GetHighestBlockAt(Position.X, Position.Z).Type == BlockType.Dirt &&
-                   UnderChunk.Landscape.RandomGen.Next(0, 300) == 1 && World.MenuSeed != World.Seed;
+                   UnderChunk.Landscape.RandomGen.Next(0, 1000) == 1 && World.MenuSeed != World.Seed;
         }
     }
 }

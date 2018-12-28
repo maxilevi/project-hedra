@@ -24,14 +24,14 @@ namespace Hedra.Engine.Player.CraftingSystem
         private readonly Button _nextPage;
         private readonly Panel _panel;
         private readonly IPlayer _player;
-        private readonly int _recipesPerPage;
+        private readonly int _perPage;
         private int _currentPage;
         private int _totalPages;
 
-        public CraftingInventoryArrayInterface(IPlayer Player, InventoryArray Array, int Columns, int Rows) : base(Array, 0, Columns * Rows, Rows, Vector2.One)
+        public CraftingInventoryArrayInterface(IPlayer Player, InventoryArray Array, int Rows, int Columns) : base(Array, 0, Rows * Columns, Columns, Vector2.One)
         {
             _player = Player;
-            _recipesPerPage = Columns * Rows;
+            _perPage = Rows * Columns;
             _panel = new Panel
             {
                 DisableKeys = true
@@ -47,9 +47,14 @@ namespace Hedra.Engine.Player.CraftingSystem
                 _recipeSelectedTextures[i].BaseTexture.TextureElement.MaskId = DefaultId;
                 _panel.AddElement(_recipeSelectedTextures[i]);
             }
-            _title = new Texture("Assets/UI/InventoryBackground.png", Vector2.UnitY * .35f, new Vector2(DefaultSize.X * Columns, DefaultSize.Y * 2) * .65f);
-            _titleText = new GUIText(Translation.Create("recipes"), _title.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
-            _pageSelector = new Texture("Assets/UI/InventoryBackground.png", Vector2.UnitY * -.45f, new Vector2(DefaultSize.X * Columns, DefaultSize.Y * 2) * .65f);
+
+            var barScale = new Vector2(DefaultSize.X * Rows, DefaultSize.Y * 2) * .65f;
+            var realScale = Graphics2D.SizeFromAssets("Assets/UI/InventoryBackground.png") * barScale;
+            var barPosition = Vector2.UnitY * .0975f * Rows;
+            var offset = Rows % 2 == 0 ? Vector2.UnitY * realScale.Y : Vector2.Zero;
+            _title = new Texture("Assets/UI/InventoryBackground.png", barPosition - offset, barScale);
+            _titleText = new GUIText(TitleTranslation, _title.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
+            _pageSelector = new Texture("Assets/UI/InventoryBackground.png", -barPosition - offset, barScale);
             
             _currentPageText = new GUIText("00/00", _pageSelector.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
             var footerFont = FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold);
@@ -65,42 +70,40 @@ namespace Hedra.Engine.Player.CraftingSystem
             _panel.AddElement(_title);
             _panel.AddElement(_titleText);
         }
+
+        protected virtual Translation TitleTranslation => Translation.Create("recipes");
         
         public override void UpdateView()
         {
-            if (Enabled)
-            {
-                for (var i = 0; i < _recipeSelectedTextures.Length; i++)
-                {
-                    _recipeSelectedTextures[i].Disable();
-                    Buttons[i].Texture.Grayscale = false;
-                }
-                _recipeSelectedTextures[SelectedRecipeIndex].Enable();
-            }
-            
+            ResetSelector();        
             Array.Empty();
-            var outputs = _player.Crafting.RecipeOutputs;
-            for (var i = _currentPage * _recipesPerPage; i < outputs.Length; i++)
+            var outputs = ArrayObjects;
+            for (var i = _currentPage * _perPage; i < outputs.Length; i++)
             {
                 Array.AddItem(outputs[i]);
             }
-            /*for(var i = 0; i < Array.Length; i++)
-            {
-                if (Array[i] == null) continue;
-                var recipe = _player.Crafting.Recipes[System.Array.IndexOf(_player.Crafting.RecipeOutputs, Array[i])];
-                if (CraftingInventory.IsInStation(recipe, _player.Position)) continue;
-                Buttons[i].Texture.Grayscale = true;
-                Buttons[i].Texture.Tint = new Vector4(Vector3.One * .5f, 1);
-            }*/
-            _totalPages = Recipes.Length / _recipesPerPage + 1;
+            _totalPages = Recipes.Length / _perPage + 1;
             _currentPageText.Text = $"{_currentPage + 1}/{_totalPages}";
-            Renderer.UpdateView();           
+            Renderer.UpdateView(); 
         }
+
+        private void ResetSelector()
+        {
+            if (!Enabled) return;
+            for (var i = 0; i < _recipeSelectedTextures.Length; i++)
+            {
+                _recipeSelectedTextures[i].Disable();
+                Buttons[i].Texture.Grayscale = false;
+            }
+            _recipeSelectedTextures[SelectedIndex].Enable();
+        }
+
+        protected virtual Item[] ArrayObjects => _player.Crafting.RecipeOutputs;
 
         public void Reset()
         {
             _currentPage = 0;
-            SelectedRecipeIndex = 0;
+            SelectedIndex = 0;
         }
 
         private void PreviousPage()
@@ -113,12 +116,12 @@ namespace Hedra.Engine.Player.CraftingSystem
             _currentPage = Mathf.Modulo(_currentPage + 1, _totalPages);
         }
 
-        public int SelectedRecipeIndex { get; set; }
+        public int SelectedIndex { get; set; }
 
         private Item[] Recipes => _player.Crafting.Recipes;
 
-        public Item CurrentOutput => Array[SelectedRecipeIndex + _recipesPerPage * _currentPage];
-        public Item CurrentRecipe => Recipes[SelectedRecipeIndex + _recipesPerPage * _currentPage];
+        public Item CurrentOutput => Array[SelectedIndex + _perPage * _currentPage];
+        public Item CurrentRecipe => Recipes[SelectedIndex + _perPage * _currentPage];
         
         public override bool Enabled
         {
