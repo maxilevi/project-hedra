@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering.UI
         public static uint[] InmortalTextures { get; private set; }
         private readonly HashSet<TextureCommand> _renderableUISet;
         private readonly List<TextureCommand> _renderableUIList;
-        private readonly HashSet<GUITexture> _textures;
+        private readonly List<GUITexture> _textures;
         private static bool _inited;
         private static VAO<Vector2> _vao;
         private static VBO<Vector2> _vbo;
@@ -34,7 +34,7 @@ namespace Hedra.Engine.Rendering.UI
             Shader = Shader.Build("Shaders/GUI.vert", "Shaders/GUI.frag");
             _renderableUISet = new HashSet<TextureCommand>();
             _renderableUIList = new List<TextureCommand>();
-            _textures = new HashSet<GUITexture>();
+            _textures = new List<GUITexture>();
             _vbo = new VBO<Vector2>(
                 new[]
                 {
@@ -130,6 +130,12 @@ namespace Hedra.Engine.Rendering.UI
                         adjustable.Adjust();
                 }
             }
+        }
+
+        public void SendBack(GUITexture Texture)
+        {
+            _textures.Remove(Texture);
+            _textures.Insert(0, Texture);
         }
 
         public void Draw()

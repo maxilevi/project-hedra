@@ -57,6 +57,11 @@ namespace Hedra.Engine.Rendering.UI
             };
             DrawManager.UIRenderer.Add(this.TextureElement);
         }
+
+        public void SendBack()
+        {
+            DrawManager.UIRenderer.SendBack(TextureElement);
+        }
         
         public Vector2 Scale
         {

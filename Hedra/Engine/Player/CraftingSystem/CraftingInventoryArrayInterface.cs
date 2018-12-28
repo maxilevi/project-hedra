@@ -15,14 +15,14 @@ namespace Hedra.Engine.Player.CraftingSystem
 {
     public class CraftingInventoryArrayInterface : InventoryArrayInterface
     {
-        private readonly RenderableTexture[] _recipeSelectedTextures;
+        private readonly Texture[] _recipeSelectedTextures;
         private readonly Texture _title;
         private readonly GUIText _titleText;
         private readonly Texture _pageSelector;
         private readonly GUIText _currentPageText;
         private readonly Button _previousPage;
         private readonly Button _nextPage;
-        private readonly Panel _panel;
+        protected Panel Panel { get; }
         private readonly IPlayer _player;
         private readonly int _perPage;
         private int _currentPage;
@@ -32,20 +32,21 @@ namespace Hedra.Engine.Player.CraftingSystem
         {
             _player = Player;
             _perPage = Rows * Columns;
-            _panel = new Panel
+            Panel = new Panel
             {
                 DisableKeys = true
             };
-            _recipeSelectedTextures = new RenderableTexture[Buttons.Length];
-            for (var i = 0; i < this.Buttons.Length; i++)
+            _recipeSelectedTextures = new Texture[Buttons.Length];
+            for (var i = 0; i < Buttons.Length; i++)
             {
-                _recipeSelectedTextures[i] = 
-                    new RenderableTexture(
-                        new Texture(Graphics2D.LoadFromAssets("Assets/UI/SelectedInventorySlot.png"), this.Textures[i].Position, this.Textures[i].Scale),
-                        DrawOrder.After
+                _recipeSelectedTextures[i] =
+                    new Texture(
+                        Graphics2D.LoadFromAssets("Assets/UI/SelectedInventorySlot.png"),
+                        Textures[i].Position,
+                        Textures[i].Scale
                     );
-                _recipeSelectedTextures[i].BaseTexture.TextureElement.MaskId = DefaultId;
-                _panel.AddElement(_recipeSelectedTextures[i]);
+                _recipeSelectedTextures[i].TextureElement.MaskId = DefaultId;
+                Panel.AddElement(_recipeSelectedTextures[i]);
             }
 
             var barScale = new Vector2(DefaultSize.X * Rows, DefaultSize.Y * 2) * .65f;
@@ -63,12 +64,12 @@ namespace Hedra.Engine.Player.CraftingSystem
             _nextPage = new Button(_currentPageText.Position + Vector2.UnitX * _currentPageText.Scale.X * 2, Vector2.One, "\u25B6", Color.White, footerFont);
             _previousPage.Click += (O, E) => NextPage();
             
-            _panel.AddElement(_currentPageText);
-            _panel.AddElement(_previousPage);
-            _panel.AddElement(_nextPage);
-            _panel.AddElement(_pageSelector);
-            _panel.AddElement(_title);
-            _panel.AddElement(_titleText);
+            Panel.AddElement(_currentPageText);
+            Panel.AddElement(_previousPage);
+            Panel.AddElement(_nextPage);
+            Panel.AddElement(_pageSelector);
+            Panel.AddElement(_title);
+            Panel.AddElement(_titleText);
         }
 
         protected virtual Translation TitleTranslation => Translation.Create("recipes");
@@ -129,8 +130,8 @@ namespace Hedra.Engine.Player.CraftingSystem
             set
             {
                 base.Enabled = value;
-                if (this.Enabled) _panel.Enable();
-                else _panel.Disable();            
+                if (Enabled) Panel.Enable();
+                else Panel.Disable();            
             }
         }
 
@@ -139,7 +140,7 @@ namespace Hedra.Engine.Player.CraftingSystem
             get => base.Scale;
             set
             {
-                var elements = _panel.Elements.ToArray();
+                var elements = Panel.Elements.ToArray();
                 for (var i = 0; i < elements.Length; i++)
                 {
                     elements[i].Scale = 
@@ -157,7 +158,7 @@ namespace Hedra.Engine.Player.CraftingSystem
             get => base.IndividualScale;
             set
             {
-                var elements = _panel.Elements.ToArray();
+                var elements = Panel.Elements.ToArray();
                 for (var i = 0; i < elements.Length; i++)
                 {
                     elements[i].Scale = new Vector2(elements[i].Scale.X / base.IndividualScale.X,
@@ -172,7 +173,7 @@ namespace Hedra.Engine.Player.CraftingSystem
             get => base.Position;
             set
             {
-                var elements = _panel.Elements.ToArray();
+                var elements = Panel.Elements.ToArray();
                 for (var i = 0; i < elements.Length; i++)
                 {
                     elements[i].Position = elements[i].Position - base.Position + value;

@@ -1929,275 +1929,275 @@
       <Link>Assets\Env\Village\Blacksmith0-Lod.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0.ply">
       <Link>Assets\Env\Village\Blacksmith0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider0.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider0.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider1.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider1.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider10.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider10.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider10.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider11.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider11.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider11.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider12.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider12.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider12.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider13.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider13.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider13.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider14.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider14.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider14.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider15.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider15.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider15.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider16.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider16.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider16.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider17.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider17.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider17.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider18.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider18.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider18.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider19.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider19.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider19.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider2.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider2.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider20.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider20.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider20.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider21.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider21.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider21.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider22.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider22.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider22.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider23.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider23.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider23.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider24.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider24.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider24.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider25.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider25.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider25.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider26.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider26.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider26.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider27.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider27.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider27.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider28.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider28.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider28.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider29.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider29.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider29.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider3.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider3.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider3.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider30.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider30.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider30.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider31.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider31.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider31.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider32.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider32.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider32.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider33.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider33.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider33.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider34.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider34.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider34.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider35.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider35.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider35.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider36.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider36.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider36.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider37.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider37.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider37.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider38.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider38.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider38.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider39.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider39.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider39.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider4.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider4.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider4.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider40.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider40.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider40.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider41.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider41.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider41.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider42.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider42.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider42.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider43.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider43.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider43.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider44.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider44.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider44.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider45.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider45.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider45.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider46.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider46.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider46.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider47.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider47.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider47.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider48.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider48.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider48.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider49.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider49.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider49.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider5.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider5.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider5.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider50.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider50.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider50.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider51.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider51.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider51.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider52.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider52.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider52.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider53.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider53.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider53.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider54.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider54.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider54.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider55.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider55.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider55.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider56.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider56.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider56.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider57.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider57.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider57.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider58.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider58.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider58.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider59.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider59.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider59.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider6.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider6.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider6.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider60.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider60.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider60.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider61.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider61.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider61.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider62.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider62.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider62.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider63.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider63.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider63.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider64.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider64.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider64.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider65.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider65.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider65.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider66.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider66.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider66.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider67.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider67.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider67.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider7.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider7.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider7.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\blacksmith\Blacksmith0_Collider8.ply">
+    <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0_Collider8.ply">
       <Link>Assets\Env\Colliders\Blacksmith0_Collider8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

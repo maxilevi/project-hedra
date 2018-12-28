@@ -31,10 +31,11 @@ namespace Hedra.Engine.Player.CraftingSystem
         {
             _player = Player;
             _stateManager = new InventoryStateManager(_player);
-            var interfacePosition = Vector2.UnitX * -.4f + Vector2.UnitY * .05f;
+            var interfacePosition = Vector2.UnitX * -.5f + Vector2.UnitY * .05f;
             _recipesItemInterface = new CraftingInventoryArrayInterface(_player, new InventoryArray(Rows * Columns), Columns, Rows)
             {
-                Position = interfacePosition
+                Position = interfacePosition,
+                Scale = Vector2.One * 1.05f
             };
             _itemInfo = new CraftingInventoryItemInfo(_player, _recipesItemInterface.Renderer)
             {
