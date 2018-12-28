@@ -234,6 +234,7 @@ namespace Hedra.AISystem.Humanoid
 
         protected override void OnMovementStuck()
         {
+            base.OnMovementStuck();
             _reachedTarget = true;
             MovementTimer.MakeReady();
         }

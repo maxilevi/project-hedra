@@ -26,7 +26,7 @@ namespace Hedra.Engine.StructureSystem
         public const int MaxVillageRadius = MaxVillageSize * PlateauVillageRatio;
         public const int PathWidth = 16;
         public const float Spacing = 114;
-        public override int Radius { get; set; } = MaxVillageRadius;
+        public override int Radius { get; } = MaxVillageRadius;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
 
         public override void Build(CollidableStructure Structure)

@@ -36,6 +36,7 @@ using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.Player.ToolbarSystem;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Sound;
 using OpenTK.Input;
@@ -51,17 +52,18 @@ namespace Hedra.Engine.Player
         public IVehicle Glider { get; }
         public IPlayerInventory Inventory { get; }
         private PlayerInventoryInterface InventoryInterface { get; }
+        public QuestInventory Questing { get; }
+        private QuestInterface QuestInterface { get; }
+        public CraftingInventory Crafting { get; }
+        private CraftingInterface CraftingInterface { get; }
         public EntitySpawner Spawner { get; }
         public IToolbar Toolbar { get; }
-        public QuestInterface QuestInterface { get; }
         public IAbilityTree AbilityTree { get; }
         public PetManager Pet { get; }
         public Chat Chat { get; }
         public Minimap Minimap { get; }
         public Map Map { get; }
         public TradeInventory Trade { get; }
-        public CraftingInventory Crafting { get; }
-        private CraftingInterface CraftingInterface { get; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
         public CollisionGroup[] NearCollisions => StructureAware.NearCollisions;
@@ -89,6 +91,7 @@ namespace Hedra.Engine.Player
             this.Toolbar = new Toolbar(this);
             this.Glider = new HangGlider(this);
             this.AbilityTree = new AbilityTree(this);
+            this.Questing = new QuestInventory();
             this.QuestInterface = new QuestInterface(this);
             this.Pet = new PetManager(this);
             this.Chat = new Chat(this);

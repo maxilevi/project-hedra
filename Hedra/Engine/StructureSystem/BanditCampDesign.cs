@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
@@ -14,6 +15,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -22,7 +24,7 @@ namespace Hedra.Engine.StructureSystem
     public class BanditCampDesign : StructureDesign
     {
         private const int Level = 18;
-        public override int Radius { get; set; } = 300;
+        public override int Radius { get; } = 300;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.CampfireIcon);
         public override int[] AmbientSongs { get; } =
         {
@@ -42,10 +44,9 @@ namespace Hedra.Engine.StructureSystem
             var model = new VertexData();
 
             var scaleMatrix = Structure.Parameters.Get<Matrix4>("ScaleMatrix");
-            var transMatrix = scaleMatrix * Matrix4.CreateTranslation(position);
-
-            roasterModel.Transform(transMatrix);
-            centerModel.Transform(transMatrix);
+            
+            roasterModel.Transform(scaleMatrix);
+            centerModel.Transform(scaleMatrix);
 
             model += roasterModel;
             model += centerModel;
@@ -61,7 +62,7 @@ namespace Hedra.Engine.StructureSystem
             for (var i = 0; i < shapes.Count; i++)
             {
                 if (i != 0) shapes[i].Transform(Matrix4.CreateScale(roasterScale));
-                shapes[i].Transform(transMatrix);
+                shapes[i].Transform(scaleMatrix);
             }
 
             var tents = Structure.Parameters.Get<TentParameters[]>("TentParameters");
@@ -71,11 +72,15 @@ namespace Hedra.Engine.StructureSystem
             {
                 MakeTent(tents[i], rng, Structure);
                 enemies[i] = World.WorldBuilding.SpawnBandit(
-                    tents[i].WorldPosition + new Vector3(rng.NextFloat() * 16f - 8f, 0, rng.NextFloat() * 16f - 8f), Level);
+                    tents[i].WorldPosition + Vector3.TransformPosition(Vector3.UnitZ * 24, tents[i].RotationMatrix), Level);
             }
 
-            Structure.AddCollisionShape(shapes.ToArray());
-            Structure.AddStaticElement(model);
+            DecorationsPlacer.PlaceWhenWorldReady(position, P =>
+            {
+                var transform = Matrix4.CreateTranslation(P);
+                Structure.AddCollisionShape(shapes.Select(S => S.Transform(transform)).ToArray());
+                Structure.AddStaticElement(model.Transform(transform)); 
+            });
             ((BanditCamp) Structure.WorldObject).Enemies = enemies;
         }
 
@@ -152,6 +157,7 @@ namespace Hedra.Engine.StructureSystem
             var scaleMatrix = Matrix4.CreateScale(3 + Rng.NextFloat() * 1.5f);
             var tents = this.SetupTents(TargetPosition, scaleMatrix, Rng);         
 
+            structure.AddGroundwork(new RoundedGroundwork(TargetPosition, 16f, BlockType.Dirt));
             for (var i = 0; i < tents.Length; i++)
             {
                 structure.AddGroundwork(new RoundedGroundwork(tents[i].WorldPosition, 16f, BlockType.Dirt));
@@ -207,7 +213,7 @@ namespace Hedra.Engine.StructureSystem
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return Rng.Next(0, 100) == 1 && height > BiomePool.SeaLevel;
+            return Rng.Next(0, 125) == 1 && height > BiomePool.SeaLevel;
         }
 
         public class TentParameters

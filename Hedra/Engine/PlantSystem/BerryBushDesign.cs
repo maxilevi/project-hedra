@@ -13,6 +13,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -24,6 +25,8 @@ namespace Hedra.Engine.PlantSystem
         
         public override bool HasCustomPlacement => true;
 
+        protected virtual float Scale(Random Rng) => 1.75f + Rng.NextFloat() * .75f;
+        
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);
@@ -46,8 +49,8 @@ namespace Hedra.Engine.PlantSystem
                 }
             }
 
-            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
-            Matrix4 transMatrix = Matrix4.CreateScale(1.75f + Rng.NextFloat() * .75f);
+            var rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
+            var transMatrix = Matrix4.CreateScale(Scale(Rng));
             transMatrix *= rotationMat4;
             transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
@@ -55,53 +58,30 @@ namespace Hedra.Engine.PlantSystem
 
         public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
-            Data = Data + CacheManager.GetModel(CacheItem.Berries).Clone();
-
-            Vector4 newColor = Utils.VariateColor(Region.Colors.GrassColor, 15, Rng);
-            Vector4 berriesColor = Utils.VariateColor(Colors.BerryColor(Rng), 15, Rng);
-
-            ///maybe this is causing problems
-            Data.Color(AssetManager.ColorCode0, newColor);
-            Data.Color(AssetManager.ColorCode1, berriesColor);
-            Data.GraduateColor(Vector3.UnitY);
-
+            Data.Color(AssetManager.ColorCode0, Region.Colors.GrassColor);
+            Data.Color(AssetManager.ColorCode1, Colors.BerryColor(Rng));
+            Data.Colors = Data.Colors.Select(C => C * 1.5f).ToList();
+            
             return Data;
         }
 
         public override void CustomPlacement(VertexData Data, Matrix4 TransMatrix)
         {
-            var position = TransMatrix.ExtractTranslation();
-            TransMatrix = TransMatrix.ClearTranslation();
-            Data.Transform(TransMatrix);
-
-            Executer.ExecuteOnMainThread(delegate {
-                var berryBush = new Entity
-                {
-                    Physics =
-                    {
-                        CollidesWithEntities = false,
-                        UsePhysics = false,
-                        CollidesWithStructures = false,
-                        TargetPosition = position
-                    },
-                };
-                berryBush.Model = new StaticModel(berryBush, Data)
-                {
-                    Position = position,
-                    ApplyNoiseTexture = true
-                };
-
-                var damage = new DamageComponent(berryBush)
-                {
-                    Immune = true
-                };
-                berryBush.AddComponent(damage);
-                berryBush.AddComponent(
-                    new CollectibleComponent(berryBush, ItemPool.Grab(ItemType.Berry), "You got a berry from the bush")
-                );
-
-                World.AddEntity(berryBush);
-            });
+            var position = Vector3.TransformPosition(Vector3.Zero, TransMatrix);
+            World.WorldBuilding.SetupStructure(
+                new CollidableStructure(
+                    null,
+                    position,
+                    null,
+                    new CollectiblePlant(
+                        position,
+                        Data.ToInstanceData(TransMatrix),
+                        ItemCollect
+                    )
+                )
+            );
         }
+
+        protected virtual Item ItemCollect => ItemPool.Grab(ItemType.Berry);
     }
 }

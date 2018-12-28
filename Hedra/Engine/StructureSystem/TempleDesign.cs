@@ -19,7 +19,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class TempleDesign : StructureDesign
     {
-        public override int Radius { get; set; } = 700;
+        public override int Radius { get; } = 700;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
 
         public override void Build(CollidableStructure Structure)

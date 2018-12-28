@@ -112,7 +112,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         
         private void SetColor(VertexData Model, InstanceData Element, int Index)
         {
-            Model.Colors = Element.ColorCache != -Vector4.One && CacheManager.CachedColors.ContainsKey(Element.ColorCache)
+            Model.Colors = Element.ColorCache != null && CacheManager.CachedColors.ContainsKey(Element.ColorCache)
                 ? CacheManager.CachedColors[Element.ColorCache].Decompress()
                 : Element.Colors;
 
@@ -128,11 +128,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 Model.GraduateColor(Vector3.UnitY);
             }
+
+            if (Model.Colors.Count != Model.Vertices.Count)
+                throw new ArgumentOutOfRangeException($"Color '{Model.Colors.Count}' and vertices '{Model.Vertices.Count}' mismatch. This is probably a cache collision");
         }
 
         private static void SetExtraData(VertexData Model, InstanceData Element, RandomDistribution Distribution)
         {
-            Model.Extradata = CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache) 
+            Model.Extradata = Element.ExtraDataCache != null &&  CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache) 
                 ? CacheManager.CachedExtradata[Element.ExtraDataCache].Decompress() 
                 : Element.ExtraData;
 

@@ -203,7 +203,6 @@ namespace Hedra.Engine.Game
             GameManager.SpawningEffect = true;
             Player.Model.ApplyFog = true;
             Player.CanInteract = true;
-            Player.QuestInterface.Show = true;
             GameManager.Player.PlaySpawningAnimation = true;
             if (!GameManager.Player.MessageDispatcher.HasTitleMessages)
                 GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);           

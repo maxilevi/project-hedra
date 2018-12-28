@@ -13,7 +13,7 @@ namespace Hedra.API
 
         protected override void DoRemove(string Key, Type Value)
         {
-            EffectFactory.Instance.Register(Key, Value);
+            EffectFactory.Instance.Unregister(Key);
         }
 
         protected override Type RegistryType => typeof(ApplyEffectComponent);

@@ -168,7 +168,8 @@ namespace Hedra.Engine.ItemSystem
         public bool IsRing => EquipmentType == ItemSystem.EquipmentType.Ring.ToString();
         public bool IsEquipment => IsWeapon || IsRing || IsArmor;
         public bool IsConsumable => HasAttribute(CommonAttributes.IsConsumable) && GetAttribute<bool>(CommonAttributes.IsConsumable);
-
+        public bool IsRecipe => HasAttribute(CommonAttributes.Handler) && GetAttribute<string>(CommonAttributes.Handler) == "Recipe";
+        
         public VertexData Model
         {
             get

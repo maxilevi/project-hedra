@@ -119,5 +119,6 @@ requires_anvil = Requires anvil
 use_anvil = USE ANVIL
 use_campfire = USE CAMPFIRE
 use_well = USE WELL
+collect_these_object_dialog_0 = Collect these
 
 

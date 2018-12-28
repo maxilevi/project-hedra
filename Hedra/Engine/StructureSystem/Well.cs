@@ -1,6 +1,7 @@
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -8,6 +9,7 @@ namespace Hedra.Engine.StructureSystem
     public class Well : CraftingStation
     {
         private readonly WorldLight _light;
+        public IHumanoid NPC { get; set; }
         
         public Well(Vector3 Position, float Radius) : base(Position)
         {
@@ -24,6 +26,7 @@ namespace Hedra.Engine.StructureSystem
         {
             base.Dispose();
             _light.Dispose();
+            NPC?.Dispose();
         }
     }
 }

@@ -10,6 +10,8 @@ namespace Hedra.EntitySystem
     public interface IEntity : IUpdatable, ISearchable, IDisposable, IRenderable
     {
         IPhysicsComponent Physics { get; }
+
+        event OnComponentAdded ComponentAdded;
         
         event OnAttackEventHandler AfterAttacking;
         
@@ -70,6 +72,8 @@ namespace Hedra.EntitySystem
         bool IsMoving { get; }
         
         bool IsAttacking { get; }
+        
+        bool IsStuck { get; set; }
         
         float MaxHealth { get; }
         

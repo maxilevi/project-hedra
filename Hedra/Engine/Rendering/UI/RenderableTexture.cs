@@ -29,6 +29,7 @@ namespace Hedra.Engine.Rendering.UI
         
         public void Draw()
         {
+            if (!BaseTexture.Enabled || BaseTexture.TextureElement.Id == GUIRenderer.TransparentTexture) return;
             DrawManager.UIRenderer.Draw(BaseTexture.TextureElement);
         }
 

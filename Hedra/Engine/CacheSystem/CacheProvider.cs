@@ -10,12 +10,14 @@
 using System;
 using OpenTK;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.PhysicsSystem;
 using System.Reflection;
 using Hedra.Engine.IO;
 using Hedra.Rendering;
+using System.Security.Cryptography;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -24,16 +26,18 @@ namespace Hedra.Engine.CacheSystem
     /// </summary>
     public class CacheProvider : ICacheProvider
     {
-        public Dictionary<float, List<CompressedValue<float>>> CachedExtradata { get; private set; }
-        public Dictionary<Vector4, List<CompressedValue<Vector4>>> CachedColors { get; private set; }
+        public Dictionary<object, List<CompressedValue<float>>> CachedExtradata { get; private set; }
+        public Dictionary<object, List<CompressedValue<Vector4>>> CachedColors { get; private set; }
         private readonly Dictionary<string, CacheType> _caches = new Dictionary<string, CacheType>();
         private readonly object _colorLock = new object();
         private readonly object _extradataLock = new object();
+        private SHA256Managed _hasher;
 
         public void Load()
         {
-            CachedExtradata = new Dictionary<float, List<CompressedValue<float>>>();
-            CachedColors =  new Dictionary<Vector4, List<CompressedValue<Vector4>>>();
+            CachedExtradata = new Dictionary<object, List<CompressedValue<float>>>();
+            CachedColors =  new Dictionary<object, List<CompressedValue<Vector4>>>();
+            _hasher = new SHA256Managed();
             var foundTypes = new HashSet<CacheItem>();
             var typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(this.GetType().Namespace).ToArray();
             foreach (var type in typeList)
@@ -92,7 +96,7 @@ namespace Hedra.Engine.CacheSystem
         {
             lock (_colorLock)
             {
-                Vector4 cHash = MakeHash(Data.Colors);
+                var cHash = MakeHash(Data.Colors);
                 if (CachedColors.ContainsKey(cHash))
                 {
                     goto COLOR_EXISTS;
@@ -110,7 +114,7 @@ namespace Hedra.Engine.CacheSystem
             {
                 lock (_extradataLock)
                 {
-                    float eHash = MakeHash(Data.ExtraData);
+                    var eHash = MakeHash(Data.ExtraData);
                     if (CachedExtradata.ContainsKey(eHash))
                     {
                         goto EXTRADATA_EXISTS;
@@ -126,26 +130,31 @@ namespace Hedra.Engine.CacheSystem
             }
         }
 
-        private static Vector4 MakeHash(List<Vector4> L)
+        private object MakeHash(List<Vector4> List)
         {
             Vector4 hash = Vector4.Zero;
-            for (var i = 0; i < L.Count; i++)
+            for (int i = 0; i < List.Count; i++)
             {
-                hash += L[i];
+                hash += List[i];
             }
-            hash /= (L.Count+1);
+            hash /= List.Count;
             return hash;
         }
 
-        private static float MakeHash(List<float> L)
+        private object MakeHash(List<float> List)
         {
             float hash = 0;
-            for (int i = 0; i < L.Count; i++)
+            for (int i = 0; i < List.Count; i++)
             {
-                hash += L[i];
+                hash += List[i];
             }
-            hash /= L.Count;
+            hash /= List.Count;
             return hash - 10;
+        }
+
+        private object MakeHash(string Key)
+        {
+            return _hasher.ComputeHash(System.Text.Encoding.UTF8.GetBytes(Key));
         }
     }
 }

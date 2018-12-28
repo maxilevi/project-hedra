@@ -18,7 +18,6 @@ namespace Hedra.Engine.CacheSystem
         Cloud,
         BerryBush,
         AttentionIcon,
-        Berries,
         Mat,
         KnockedIcon,
         SleepingIcon,
@@ -40,6 +39,8 @@ namespace Hedra.Engine.CacheSystem
         Sunflower,
         Pumpkin,
         Corn,
+        Well,
+        Mushroom,
         MaxEnums
     }
 }

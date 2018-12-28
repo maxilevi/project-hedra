@@ -134,7 +134,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private void AddFarm(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation, float Distance)
         {
             var parameter = FarmPlacer.Place(Point);
-            parameter.InsidePaths = Distance <= NoPathZone;
+            parameter.InsidePaths = Distance <= (NoPathZone+.05f);
             Design.Farms.Add(parameter);
         }
 

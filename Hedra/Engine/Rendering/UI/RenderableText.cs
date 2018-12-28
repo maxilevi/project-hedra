@@ -28,6 +28,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Draw()
         {
+            if (!UIText.UIText.Enabled) return;
             DrawManager.UIRenderer.Draw(UIText.UIText);
         }
 

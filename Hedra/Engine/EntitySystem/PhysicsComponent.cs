@@ -30,7 +30,7 @@ namespace Hedra.Engine.EntitySystem
     public class PhysicsComponent : EntityComponent, IPhysicsComponent
     {
         private const float NormalSpeedModifier = 2.25f;
-        private const float MinSlopeHeight = 1.0f;
+        private const float MaxSlopeHeight = 0.25f;
         private const float MaxSlide = 3.0f;
         public event OnMoveEvent OnMove;
         public event OnHitGroundEvent OnHitGround;
@@ -281,7 +281,7 @@ namespace Hedra.Engine.EntitySystem
 
         private bool HandleSlopes(MoveCommand Command, ICollidable Shape, CollisionShape Box)
         {
-            if (!CollidesWithOffset(Shape, Box, Vector3.UnitY * MinSlopeHeight))
+            if (!CollidesWithOffset(Shape, Box, Vector3.UnitY * MaxSlopeHeight))
             {
                 /* If the object collided with Y but not Y+1 then it probably is a slope */
                 var accum = .05f;

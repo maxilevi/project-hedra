@@ -4,9 +4,18 @@
   "EquipmentType": "Helmet",
   "Tier": "Common",
   "Description": "Merry Christmas!",
-  "Attributes": [],
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 0
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
   "Model": {
-    "Scale": 0.5,
+    "Scale": 0.25,
     "Path": "$DataFile$/Items/Helmets/ChristmasHat.dae"
   }
 }

@@ -18,6 +18,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.ToolbarSystem;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
@@ -47,6 +48,7 @@ namespace HedraTests.Player
         }
 
         public IPhysicsComponent Physics { get; }
+        public event OnComponentAdded ComponentAdded;
         public event OnAttackEventHandler AfterAttacking;
         public event OnAttackEventHandler BeforeAttacking;
         public EntityComponentManager ComponentManager { get; }
@@ -194,6 +196,7 @@ namespace HedraTests.Player
         public IVehicle Glider { get; }
         public int ConsecutiveHits { get; }
         public bool IsAttacking { get; set; }
+        public bool IsStuck { get; set; }
         public bool IsEating { get; set; }
         public bool IsCasting { get; set; }
         public bool IsSwimming { get; set; }
@@ -230,6 +233,7 @@ namespace HedraTests.Player
         public Vector3 Position { get; set; }
         public CollisionGroup[] NearCollisions { get; }
         public CraftingInventory Crafting { get; }
+        public QuestInventory Questing { get; }
         public bool InterfaceOpened { get; }
         public bool Enabled { get; set; }
         public void Respawn()

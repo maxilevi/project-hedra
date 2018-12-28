@@ -65,7 +65,7 @@ namespace Hedra.Engine.ModuleSystem
             var mobDifficulty = GetMobDifficulty(new Random(Seed));
             var mobDifficultyModifier = GetMobDifficultyModifier(mobDifficulty);
 
-            var barComponent = new HealthBarComponent(mob);
+            var barComponent = new HealthBarComponent(mob, mob.Type.AddSpacesToSentence(true));
             mob.AddComponent(barComponent);
             barComponent.FontColor = mobDifficulty == 1 ? Color.White : mobDifficulty == 3 ? Color.Red : Color.Gold;
             

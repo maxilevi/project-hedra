@@ -39,6 +39,7 @@ namespace Hedra.Engine.StructureSystem
             {
                 _shouldRescue = EventArgs.Key == Controls.Interact && _canRescue;
             });
+            AddChildren(_campfire);
             UpdateManager.Add(this);
         }
 
@@ -59,7 +60,7 @@ namespace Hedra.Engine.StructureSystem
 
                 this.Cleared = allDead;
             }
-
+            _campfire.Position = Position.Xz.ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
             this.ManageOldMan();
         }
 
@@ -84,7 +85,6 @@ namespace Hedra.Engine.StructureSystem
             _rescuee.AddComponent(new HealthBarComponent(_rescuee, _rescuee.Name));
             _rescuee.SearchComponent<DamageComponent>().Immune = true;
             _rescuee.IsTied = true;
-            World.AddEntity(_rescuee);
         }
 
         private Matrix4 BuildRescueeMatrix()
@@ -100,8 +100,7 @@ namespace Hedra.Engine.StructureSystem
             if (Rescued) return;
 
             _rescuee.Model.TransformationMatrix = this.BuildRescueeMatrix();
-            _rescuee.BlockPosition = this.Position.Xz.ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
-            _rescuee.Model.Position = _rescuee.BlockPosition;
+            _rescuee.Physics.TargetPosition = this.Position.Xz.ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
 
             if (!_rescuee.InUpdateRange)
                 _rescuee.Update();

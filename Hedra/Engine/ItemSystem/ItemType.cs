@@ -22,6 +22,7 @@ namespace Hedra.Engine.ItemSystem
         FarmerHat,
         FarmingRake,
         Boat,
+        Mushroom,
         MaxEnums
     }
 }

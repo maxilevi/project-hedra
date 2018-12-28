@@ -20,7 +20,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public abstract class StructureDesign
     {
-        public abstract int Radius { get; set; }
+        public abstract int Radius { get; }
         public abstract VertexData Icon { get; }
 
         public abstract void Build(CollidableStructure Structure);
@@ -38,7 +38,12 @@ namespace Hedra.Engine.StructureSystem
         {
             return World.WorldBuilding.CanAddPlateau(new RoundedPlateau(TargetPosition.Xz, Radius));
         }
-
+   
+        protected static Random BuildRng(CollidableStructure Structure)
+        {
+            return new Random((int) (Structure.Position.X / 11 * (Structure.Position.Z / 13)));
+        }
+        
         public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
         {
             for (var x = Math.Min(-2, -Radius / Chunk.Width * 2); x < Math.Max(2, Radius / Chunk.Width * 2); x++)

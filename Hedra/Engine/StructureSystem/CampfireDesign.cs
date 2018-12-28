@@ -18,7 +18,8 @@ namespace Hedra.Engine.StructureSystem
     public class CampfireDesign : StructureDesign
     {
         private const int Level = 6;
-        public override int Radius { get; set; } = 80;
+        public const int MaxRadius = 80;
+        public override int Radius { get; } = 80;
         public override VertexData Icon => null;
         public override int[] AmbientSongs { get; } =
         {
@@ -43,11 +44,6 @@ namespace Hedra.Engine.StructureSystem
                     Structure
                     );
             }
-        }
-
-        protected static Random BuildRng(CollidableStructure Structure)
-        {
-            return new Random((int) (Structure.Position.X / 11 * (Structure.Position.Z / 13)));
         }
         
         protected static void BuildBaseCampfire(CollidableStructure Structure, Vector3 Rotation, Random Rng, out Matrix4 TransformationMatrix)

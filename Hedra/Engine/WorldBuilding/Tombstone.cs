@@ -11,7 +11,7 @@ namespace Hedra.Engine.WorldBuilding
     public class Tombstone : InteractableStructure
     {
         public override Key Key => Controls.Respect;
-        public override string Message => Translations.Get("pay_respects");
+        public override string Message => Translations.Get("interact_tombstone");
         public override int InteractDistance => 8;
 
         protected override void Interact(IHumanoid Humanoid)

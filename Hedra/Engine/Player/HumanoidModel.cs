@@ -369,10 +369,10 @@ namespace Hedra.Engine.Player
         private void HandleEatingEffects()
         {
             var mat4 = LeftWeaponMatrix.ClearTranslation() * 
-            Matrix4.CreateTranslation(-Model.Position + (LeftWeaponPosition + RightWeaponPosition) / 2f );
+            Matrix4.CreateTranslation(-Position + (LeftWeaponPosition + RightWeaponPosition) / 2f );
                 
             _food.TransformationMatrix = mat4;
-            _food.Position = Model.Position;
+            _food.Position = Position;
             _food.TargetRotation = Vector3.Zero;
             _food.LocalRotationPoint = Vector3.Zero;
             _food.LocalRotation = Vector3.Zero;
@@ -406,7 +406,6 @@ namespace Hedra.Engine.Player
         public override void Update()
         {
             base.Update();
-            HandleState();
             _walkAnimation.Speed = Human.Speed;
             _modelSound.Pitch = Human.Speed / PitchSpeed;
             Model.Position = Mathf.Lerp(Model.Position, Position + RidingOffset, Time.IndependantDeltaTime * 24f);
@@ -425,6 +424,7 @@ namespace Hedra.Engine.Player
                 _lampModel.LocalRotation = LocalRotation;
                 _lampModel.LocalRotationPoint = Vector3.Zero;
             }
+            HandleState();
             Human.HandLamp.Update();
             if (!Disposed)
             {

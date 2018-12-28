@@ -58,23 +58,6 @@ namespace Hedra.Engine.Rendering.UI
             InmortalTextures = new[] {TransparentTexture};
         }
 
-        public DrawOrder GetDrawOrder(IRenderable Renderable)
-        {
-            lock (_lock)
-            {
-                return _renderableUIList.First(T => T.Renderable == Renderable).Order;
-            }
-        }
-
-        public void SetDrawOrder(IRenderable Renderable, DrawOrder Order)
-        {
-            lock (_lock)
-            {
-                var command = _renderableUIList.First(T => T.Renderable == Renderable);
-                command.Order = Order;
-            }
-        }
-
         public void SetupQuad()
         {
             _vao.Bind();

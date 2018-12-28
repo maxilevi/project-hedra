@@ -10,6 +10,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.ToolbarSystem;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
 using OpenTK;
@@ -25,7 +26,6 @@ namespace Hedra.Engine.Player
         IPlayerInventory Inventory { get; }
         EntitySpawner Spawner { get; }
         IToolbar Toolbar { get; }
-        QuestInterface QuestInterface { get; }
         IAbilityTree AbilityTree { get; }
         PetManager Pet { get; }
         Chat Chat { get; }
@@ -34,6 +34,7 @@ namespace Hedra.Engine.Player
         Vector3 Position { get; set; }
         CollisionGroup[] NearCollisions { get; }
         CraftingInventory Crafting { get; }
+        QuestInventory Questing { get; }
         bool InterfaceOpened { get; }
         bool Enabled { get; set; }
         void Respawn();

@@ -66,32 +66,23 @@ namespace Hedra.Engine.Rendering.UI
         public void UpdateText()
         {
             var obj = BuildBitmap(Text, TextColor, TextFont, out var measurements);
-            void Action()
+            var previousState = UIText?.Enabled ?? false;
+            DrawManager.UIRenderer.Remove(UIText);
+            UIText?.Dispose();
+            UIText = new GUITexture(GUIRenderer.TransparentTexture,
+                new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y), _temporalPosition);
+            DrawManager.UIRenderer.Add(UIText);
+
+            if (_align == AlignMode.Left)
             {
-                var previousState = UIText?.Enabled ?? false;
-                DrawManager.UIRenderer.Remove(UIText);
-                UIText?.Dispose();
-                UIText = new GUITexture(Graphics2D.LoadTexture(obj),
-                    new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y), _temporalPosition);
-                DrawManager.UIRenderer.Add(UIText);
-
-                if (_align == AlignMode.Left)
-                {
-                    UIText.Position -= UIText.Scale;
-                }
-
-                UIText.Enabled = previousState;
+                UIText.Position -= UIText.Scale;
             }
 
+            UIText.Enabled = previousState;
             if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
-            {
-                UIText = new GUITexture(0, new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y), _temporalPosition);
-                Executer.ExecuteOnMainThread(Action);
-            }
+                Executer.ExecuteOnMainThread(() => UIText.TextureId = Graphics2D.LoadTexture(obj));
             else
-            {
-                Action();
-            }
+                UIText.TextureId = Graphics2D.LoadTexture(obj);        
         }
 
         public void SetTranslation(Translation Translation)
@@ -102,8 +93,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 Text = Translation.Get();
             };
-            _text = Translation.Get();
-            UpdateText();
+            Text = Translation.Get();
         }
         
         public Color TextColor
@@ -128,7 +118,7 @@ namespace Hedra.Engine.Rendering.UI
             get => _text;
             set
             {
-                if (value == _text || _configuration == null || _text == null) return;
+                if (value == _text || _configuration == null || value == null) return;
                 _text = value;
                 this.UpdateText();
             }
@@ -136,7 +126,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public Vector2 Scale
         {
-            get => UIText?.Scale ?? Vector2.Zero;
+            get => UIText.Scale;
             set
             {
                 if (UIText != null)

@@ -86,9 +86,10 @@ namespace Hedra.Engine.EntitySystem
                 return;
             }
 
-            bool shouldMiss = Parent is LocalPlayer && Utils.Rng.Next(1, 18) == 1;
+            var shouldMiss = Parent is LocalPlayer && Utils.Rng.Next(1, 18) == 1;
             _attackedTimer = 6;
             _hasBeenAttacked = true;
+            var isImmune = Immune | Parent.IsStuck;
 
             if (!Parent.IsStatic && PlaySound && (GameManager.Player.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
             {
@@ -99,11 +100,11 @@ namespace Hedra.Engine.EntitySystem
                 var dmgDiff = Amount / baseDamage;
                 if (dmgDiff > 1.85f) color = Color.Gold;
                 if (dmgDiff > 2.25f) color = Color.Red;
-                if (Immune || shouldMiss) color = Color.White;
+                if (isImmune || shouldMiss) color = Color.White;
                 var font = FontCache.Get(AssetManager.BoldFamily, 12 + 6 * dmgDiff, FontStyle.Bold);
                 var dmgString = ((int) Amount).ToString();
-                var missString = Immune ? "IMMUNE" : "MISS";
-                var dmgLabel = new TextBillboard(1.8f, !Immune && !shouldMiss ? dmgString : missString, color,
+                var missString = isImmune ? "IMMUNE" : "MISS";
+                var dmgLabel = new TextBillboard(1.8f, !isImmune && !shouldMiss ? dmgString : missString, color,
                     font, () => Parent.Position)
                 {
                     Vanish = true,
@@ -118,7 +119,7 @@ namespace Hedra.Engine.EntitySystem
                 SoundPlayer.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SlashSound, Parent.Position, 1f, 80f);
             }
 
-            if (shouldMiss || Immune) return;
+            if (shouldMiss || isImmune) return;
             _tintTimer = 0.25f;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
             if (Damager != null && Damager != Parent && PushBack 

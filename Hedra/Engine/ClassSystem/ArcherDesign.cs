@@ -19,7 +19,7 @@ namespace Hedra.Engine.ClassSystem
         public override float AttackResistance => 0.975f;
         public override float MaxStamina => 115;
         public override float BaseDamage => 2.75f;
-        public override float AttackingSpeedModifier => .15f;
+        public override float AttackingSpeedModifier => .2f;
 
         public override float MaxHealthFormula(float RandomFactor)
         {

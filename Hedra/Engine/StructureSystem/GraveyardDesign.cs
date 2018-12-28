@@ -24,7 +24,7 @@ namespace Hedra.Engine.StructureSystem
     public class GraveyardDesign : StructureDesign
     {
         private const int Level = 9;
-        public override int Radius { get; set; } = 384;
+        public override int Radius { get; } = 384;
         public const int GraveyardSkyTime = 24000;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GraveyardIcon);
 
@@ -173,7 +173,7 @@ namespace Hedra.Engine.StructureSystem
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return Rng.Next(0, 100) == 1 && height > BiomePool.SeaLevel;
+            return Rng.Next(0, 125) == 1 && height > BiomePool.SeaLevel;
         }
         
         public override int[] AmbientSongs => new []

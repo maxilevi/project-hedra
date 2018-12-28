@@ -32,6 +32,8 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public delegate void OnAttackEventHandler(IEntity Victim, float Amount);
 
+    public delegate void OnComponentAdded(IComponent<IEntity> Component);
+    
     public class Entity : IEntity
     {
         public virtual float AttackingSpeedModifier => 0.75f;
@@ -53,6 +55,7 @@ namespace Hedra.Engine.EntitySystem
         private List<IComponent<IEntity>> Components = new List<IComponent<IEntity>>();
         private bool Splashed { get; set; }
 
+        public event OnComponentAdded ComponentAdded;
         public event OnAttackEventHandler AfterAttacking;
         public event OnAttackEventHandler BeforeAttacking;
         public EntityComponentManager ComponentManager { get; }
@@ -66,6 +69,7 @@ namespace Hedra.Engine.EntitySystem
         public Vector3 Orientation { get; set; } = Vector3.UnitZ;       
         public bool Removable { get; set; } = true;
         public Vector3 BlockPosition { get; set; }
+        public bool IsStuck { get; set; }
         public bool PlaySpawningAnimation { get; set; } = true;
         public bool IsAttacking => Model.IsAttacking;
         public float Speed { get; set; } = 1.25f;
@@ -282,6 +286,7 @@ namespace Hedra.Engine.EntitySystem
         public void AddComponent(IComponent<IEntity> Component)
         {
             if(Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
+            ComponentAdded?.Invoke(Component);
             Components.Add(Component);
             if(Component is ITickable tickable) _tickSystem.Add(tickable);
         }

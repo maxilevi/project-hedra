@@ -53,8 +53,10 @@ namespace Hedra.AISystem.Behaviours
                 {
                     this.Cancel();
                 }
+
                 _lastPosition = Parent.Position;
             }
+            Parent.IsStuck = !Parent.IsMoving && !_arrived && HasTarget;
         }
         
         public bool HasTarget { get; private set; }

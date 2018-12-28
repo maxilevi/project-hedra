@@ -5,6 +5,7 @@ using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
@@ -23,6 +24,7 @@ namespace Hedra.AISystem.Humanoid
         protected abstract bool ShouldSleep { get; }
         protected virtual bool ShouldWakeup { get; }
         protected virtual bool UseLantern => true;
+        private readonly Timer _lanternTimer;
 
         protected bool CanUpdate => !IsSleeping && !_isDrowning && !Parent.IsKnocked;
 
@@ -33,6 +35,7 @@ namespace Hedra.AISystem.Humanoid
             {
                 dmgComponent.OnDamageEvent += OnDamageEvent;
             }
+            _lanternTimer = new Timer(Utils.Rng.NextFloat() + .005f);
         }
 
         protected void Orientate(Vector3 TargetPoint)
@@ -59,7 +62,7 @@ namespace Hedra.AISystem.Humanoid
 
         private void ManageLantern()
         {
-            if(!UseLantern) return;
+            if(!UseLantern || !_lanternTimer.Tick()) return;
             var lights = ShaderManager.Lights;
             var insideAnyLight = lights.Any(L => L != Parent.HandLamp.LightObject && L.Collides(Parent.Position));
             var newValue = false;
@@ -150,7 +153,8 @@ namespace Hedra.AISystem.Humanoid
                 if (Math.Abs(TargetPoint.Y - Parent.Position.Y) > 1)
                     Parent.Movement.MoveInWater(TargetPoint.Y > Parent.Position.Y);
             }
-            if(!Parent.IsMoving && IsMoving)
+            Parent.IsStuck = !Parent.IsMoving && IsMoving;
+            if(Parent.IsStuck)
             {
                 OnMovementStuck();
             }
@@ -158,7 +162,6 @@ namespace Hedra.AISystem.Humanoid
 
         protected virtual void OnMovementStuck()
         {
-
         }
 
         protected virtual void OnTargetPointReached()

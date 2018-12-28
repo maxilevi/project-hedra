@@ -21,7 +21,7 @@ namespace Hedra.Engine.EntitySystem
         private static readonly Panel HealthBarPanel = new Panel();
         private readonly Bar _healthBar;
         private readonly Vector2 _originalScale = new Vector2(0.075f, 0.025f) * .8f;
-        private readonly Vector2 _originalTextScale;
+        private Vector2 _originalTextScale;
         private float _barSize;
         private string _name;
         private bool _show;
@@ -34,36 +34,26 @@ namespace Hedra.Engine.EntitySystem
 
         public string Name
         {
-            get => _name ?? Parent.Type.AddSpacesToSentence(true);
+            get => _name;
             set
             {
                 _name = value;
-                if (_healthBar?.Text != null) (_healthBar?.Text).Text = _name;
+                if (_healthBar?.Text != null)
+                {
+                    (_healthBar?.Text).Text = _name;
+                    _originalTextScale = (_healthBar?.Text).Scale;
+                }
             }
         }
 
         public HealthBarComponent(IEntity Parent, string Name) : base(Parent)
         {
-            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGui(new Vector2(1024, 578), _originalScale), Name,
-                () => Parent.Health, () => Parent.MaxHealth,
-                HealthBarPanel);
-
-            _name = Name;
-            _originalTextScale = _healthBar.Text.UIText.UIText.Scale;
-            _healthBar.UpdateTextRatio = false;
-
-            DrawManager.UIRenderer.Remove(_healthBar);
-            DrawManager.UIRenderer.Add(this, DrawOrder.After);
-        }
-
-        public HealthBarComponent(IEntity Parent) : base(Parent)
-        {
-            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGui(new Vector2(1024, 578), _originalScale), Name,
+            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGui(new Vector2(1024, 578), _originalScale), string.Empty,
                 () => Parent.Health, () => Parent.MaxHealth,
                 HealthBarPanel);
 
             _healthBar.UpdateTextRatio = false;
-            _originalTextScale = _healthBar.Text.UIText.UIText.Scale;
+            this.Name = Name;
 
             DrawManager.UIRenderer.Remove(_healthBar);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);

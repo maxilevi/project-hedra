@@ -20,7 +20,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class ObeliskDesign : StructureDesign
     {
-        public override int Radius { get; set; } = 256;
+        public override int Radius { get; } = 256;
         public override VertexData Icon => null;
 
         public override void Build(CollidableStructure Structure)

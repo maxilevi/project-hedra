@@ -1,4 +1,6 @@
+using System;
 using System.Drawing;
+using System.Linq;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
@@ -24,59 +26,73 @@ namespace Hedra.Engine.Player.Inventory
         public int ItemPrice(Item Item)
         {
             if (Item == null) return 0;
-            float price = 1;
-            var hasPriceAttribute = Item.HasAttribute(CommonAttributes.Price);
-            if (!hasPriceAttribute)
+            var price = 1f;
+            if (!Item.HasAttribute(CommonAttributes.Price))
             {
-                var attributes = Item.GetAttributes();
-                for (var i = 0; i < attributes.Length; i++)
+                if (Item.IsEquipment)
                 {
-                    if (attributes[i].Name == CommonAttributes.Amount.ToString())
+                    price += 10;
+                    if (Item.IsWeapon)
                     {
-                        price += 1;
-                        continue;
-                    }
-                    if (attributes[i].Display == AttributeDisplay.Percentage.ToString())
-                    {
-                        price += (float) attributes[i].Value * 100f;
-                        continue;
-                    }
-                    if (attributes[i].Display == AttributeDisplay.Flat.ToString())
-                    {
-                        price += (float) attributes[i].Value;
-                        continue;
-                    }
-                    var typeList = new[] {typeof(float), typeof(double), typeof(long)};
-                    object selectedType = null;
-                    for (var j = 0; j < typeList.Length; j++)
-                    {
-                        if (typeList[j].IsInstanceOfType(attributes[i].Value))
-                        {
-                            selectedType = typeList[j];
-                            break;
-                        }
+                        price += GetNormalizedAttributeValue(Item, CommonAttributes.Damage);
+                        price += GetNormalizedAttributeValue(Item, CommonAttributes.AttackSpeed);
                     }
 
-                    if (selectedType != null)
+                    if (Item.IsArmor)
                     {
-                        var value = Item.GetAttribute<float>(attributes[i].Name);
-                        price += Item.EquipmentType != null ? value : value * .025f;
+                        price += GetNormalizedAttributeValue(Item, CommonAttributes.Defense);
+                        price += GetNormalizedAttributeValue(Item, CommonAttributes.MovementSpeed);
+                    }
+
+                    if (Item.IsRing)
+                    {
+                        price += GetNormalizedAttributeValue(Item, CommonAttributes.AttackSpeed);
+                        price += GetNormalizedAttributeValue(Item, CommonAttributes.Health);
+                        price += GetNormalizedAttributeValue(Item, CommonAttributes.MovementSpeed);
                     }
                 }
-                price *= Item.EquipmentType != null ? 1.5f : 1.0f;
-                price *= (int) Item.Tier + 1;
+
+                if (Item.IsConsumable)
+                    price += 40;
+                
+                if (Item.IsFood)
+                {
+                    price += Item.GetAttribute<int>(CommonAttributes.Saturation) / 15f;
+                    price -= Item.GetAttribute<float>(CommonAttributes.EatTime) / 5f;
+                }
+
+                if (Item.IsRecipe)
+                    return ItemPrice(ItemPool.Grab(Item.GetAttribute<string>(CommonAttributes.Output))) / 2;
+                
+                price *= (int) (Item.Tier+1);
             }
             else
             {
                 price = Item.GetAttribute<int>(CommonAttributes.Price);
             }
-            price *= 1 + ((float) Item.Tier / (float) (ItemTier.Misc - 1)) * .5f;
+            
+            price *= Item.HasAttribute(CommonAttributes.Amount) ? Item.GetAttribute<int>(CommonAttributes.Amount) : 1;
             return (int) (price * GetPriceMultiplier(Item));
         }
 
         protected virtual float GetPriceMultiplier(Item Item)
         {
             return _buyerInterface.Array.Contains(Item) ? 0.5f : 1.25f;
+        }
+        
+        private static float GetNormalizedAttributeValue(Item Item, CommonAttributes Attribute)
+        {
+            var attr = Item.GetAttributes().First(T => T.Name == Attribute.ToString());
+            return attr.Display == AttributeDisplay.Percentage.ToString() 
+                ? ConvertObj<float>(attr.Value) * 100f 
+                : ConvertObj<float>(attr.Value);
+        }
+
+        private static T ConvertObj<T>(object Value)
+        {
+            return typeof(T).IsAssignableFrom(typeof(IConvertible)) || typeof(T).IsValueType
+                ? (T) Convert.ChangeType(Value, typeof(T)) 
+                : (T) Value;
         }
         
         public void ProcessTrade(Humanoid Buyer, Humanoid Seller,

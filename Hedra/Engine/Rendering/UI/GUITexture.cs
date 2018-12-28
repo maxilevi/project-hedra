@@ -36,6 +36,7 @@ namespace Hedra.Engine.Rendering.UI
         public Func<uint> IdPointer { get; set; }
         private Vector2 _position;
         private bool _disposed;
+        private StackTrace _stack;
 
         public GUITexture(uint Id, Vector2 Scale, Vector2 Pos)
         {
@@ -44,6 +45,7 @@ namespace Hedra.Engine.Rendering.UI
             this.Scale = Scale;
             this.Opacity = 1;
             this.Tint = Vector4.One;
+            _stack = new StackTrace();
         }
 
         public void Adjust()

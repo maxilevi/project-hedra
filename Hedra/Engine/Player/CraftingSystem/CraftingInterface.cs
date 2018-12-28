@@ -77,13 +77,8 @@ namespace Hedra.Engine.Player.CraftingSystem
         {
             if (_show)
             {
-                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float) Time.DeltaTime * 16f);
-                _player.View.TargetDistance =
-                    Mathf.Lerp(_player.View.TargetDistance, 10f, Time.DeltaTime * 16f);
-                _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw, (float) Math.Acos(-_player.Orientation.X),
-                    Time.DeltaTime * 16f);
                 _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
-                    Time.DeltaTime * 16f);
+                    Time.DeltaTime * 8f);
                 _itemInfo.Update();
             }
         }

@@ -1,6 +1,7 @@
 using System.Timers;
 using Hedra.Core;
 using Hedra.Engine;
+using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
@@ -34,14 +35,22 @@ namespace Hedra.AISystem.Humanoid
                 Parent.WasAttacking = false;
             }
         }
-        
-        protected override Vector3 NewPoint =>
-            new Vector3(
-                Utils.Rng.NextFloat() * _farmSize.X - _farmSize.X * .5f,
-                0,
-                Utils.Rng.NextFloat() * _farmSize.Y - _farmSize.Y * .5f
-            ) 
-            + _farmPosition.ToVector3();
+
+        protected override Vector3 NewPoint
+        {
+            get
+            {
+                var newPoint = new Vector3(
+                    Utils.Rng.NextFloat() * _farmSize.X - _farmSize.X * .5f,
+                    0,
+                    Utils.Rng.NextFloat() * _farmSize.Y - _farmSize.Y * .5f
+                ) + _farmPosition.ToVector3();
+                return World.GetHighestBlockAt(newPoint.X, newPoint.Z).Type != BlockType.FarmDirt 
+                    ? NewPoint 
+                    : newPoint;
+            }
+        }
+            
         
         protected override float WaitTime => 16.0f;
     }

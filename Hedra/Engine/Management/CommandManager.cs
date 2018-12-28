@@ -24,6 +24,7 @@ using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using Hedra.Engine.StructureSystem;
@@ -154,6 +155,17 @@ namespace Hedra.Engine.Management
                     var human = World.WorldBuilding.SpawnHumanoid(HumanType.Warrior, Caster.Position + Caster.Orientation * 16f);
                     human.AddComponent(new TalkComponent(human));
                     human.AddComponent(new RoamingVillagerAIComponent(human, vill.Graph));
+                    Result = "Success";
+                    return true;
+                }
+                
+                if (Parts[0] == "quest")
+                {
+                    var human = World.WorldBuilding.SpawnVillager(Caster.Position + Caster.Orientation * 16f, Utils.Rng);
+                    var tier = Parts.Length == 2 ? (QuestTier) Enum.Parse(typeof(QuestTier), Parts[1], true) : QuestTier.Any;
+                    human.AddComponent(
+                        new QuestGiverComponent(human, QuestPool.Grab(tier))
+                    );
                     Result = "Success";
                     return true;
                 }

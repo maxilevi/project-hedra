@@ -196,8 +196,10 @@
     <Compile Include="Components\VillagerThoughtsComponent.cs" />
     <Compile Include="Core\Mathf.cs" />
     <Compile Include="Engine\CacheSystem\CornCache.cs" />
+    <Compile Include="Engine\CacheSystem\MushroomCache.cs" />
     <Compile Include="Engine\CacheSystem\PumpkinCache.cs" />
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
+    <Compile Include="Engine\CacheSystem\WellCache.cs" />
     <Compile Include="Engine\ClassSystem\RestrictionsFactory.cs" />
     <Compile Include="Engine\Core\ISearchable.cs" />
     <Compile Include="Engine\Core\Singleton.cs" />
@@ -230,6 +232,8 @@
     <Compile Include="Engine\ModuleSystem\Templates\SpawnTemplate.cs" />
     <Compile Include="Engine\PlantSystem\CornDesign.cs" />
     <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
+    <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
+    <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
     <Compile Include="Engine\PlantSystem\SunflowerDesign.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingBackground.cs" />
@@ -241,7 +245,23 @@
     <Compile Include="Engine\Player\Inventory\AttributeFormatter.cs" />
     <Compile Include="Engine\Player\Inventory\BaseBackground.cs" />
     <Compile Include="Engine\Player\Inventory\PlayerInventoryInterface.cs" />
+    <Compile Include="Engine\Player\QuestSystem\QuestView.cs" />
+    <Compile Include="Engine\Player\QuestSystem\BulletView.cs" />
+    <Compile Include="Engine\Player\QuestSystem\DefaultView.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestInterface.cs" />
+    <Compile Include="Engine\QuestSystem\BaseQuest.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\CollectDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\CraftDesign.cs" />
+    <Compile Include="Engine\QuestSystem\IQuest.cs" />
+    <Compile Include="Engine\QuestSystem\QuestContext.cs" />
+    <Compile Include="Engine\QuestSystem\QuestItem.cs" />
+    <Compile Include="Engine\QuestSystem\QuestObject.cs" />
+    <Compile Include="Engine\QuestSystem\QuestDesign.cs" />
+    <Compile Include="Engine\QuestSystem\QuestGiverComponent.cs" />
+    <Compile Include="Engine\QuestSystem\QuestInventory.cs" />
+    <Compile Include="Engine\QuestSystem\QuestParameters.cs" />
+    <Compile Include="Engine\QuestSystem\QuestPool.cs" />
+    <Compile Include="Engine\QuestSystem\QuestTier.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
     <Compile Include="Engine\Rendering\TextBillboard.cs" />
@@ -264,6 +284,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageGraph.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\WindmillBlades.cs" />
     <Compile Include="Engine\StructureSystem\Well.cs" />
+    <Compile Include="Engine\StructureSystem\WellDesign.cs" />
     <Compile Include="Engine\WorldBuilding\BaseGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\BasePlateau.cs" />
     <Compile Include="Engine\WorldBuilding\Bench.cs" />
@@ -322,7 +343,6 @@
     <Compile Include="Engine\BiomeSystem\Voronoi.cs" />
     <Compile Include="Engine\CacheSystem\AppleTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\AttentionIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\BerriesCache.cs" />
     <Compile Include="Engine\CacheSystem\BerryBushCache.cs" />
     <Compile Include="Engine\CacheSystem\BossIconCache.cs" />
     <Compile Include="Engine\CacheSystem\BushesCache.cs" />
@@ -1432,6 +1452,22 @@
     </None>
     <None Include="..\project-hedra-assets\Environment\FarmPlants\Sunflower1_Lod8.ply">
       <Link>Assets\Env\Plants\Sunflower1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Misc\Mushroom0.ply">
+      <Link>Assets\Env\Plants\Mushroom0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Misc\Mushroom0_Lod2.ply">
+      <Link>Assets\Env\Plants\Mushroom0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Misc\Mushroom0_Lod4.ply">
+      <Link>Assets\Env\Plants\Mushroom0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Misc\Mushroom0_Lod8.ply">
+      <Link>Assets\Env\Plants\Mushroom0_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Environment\Oaks\Oak0.ply">

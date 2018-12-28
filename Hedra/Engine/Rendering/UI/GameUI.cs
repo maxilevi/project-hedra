@@ -148,7 +148,6 @@ namespace Hedra.Engine.Rendering.UI
             if (_player.UI.ShowHelp && Enabled)
             {
                 _player.AbilityTree.Show = false;
-                _player.QuestInterface.Show = false;
                 _help.Enable();
             }
             else
