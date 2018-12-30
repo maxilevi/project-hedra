@@ -144,7 +144,7 @@ namespace Hedra.Engine.Player.Inventory
             _selectedButton = SelectedButton;
             _selectedItem = SelectedItem;
             var renderer = this.RendererByButton(_selectedButton);
-            _selectedMesh = renderer.BuildModel(_selectedItem, out _selectedMeshHeight);
+            _selectedMesh = InventoryItemRenderer.BuildModel(_selectedItem, out _selectedMeshHeight);
             _selectedButton.Texture.IdPointer = () => renderer.Draw(_selectedMesh, SelectedItem, true, _selectedMeshHeight * InventoryItemRenderer.ZOffsetFactor);
         }
 

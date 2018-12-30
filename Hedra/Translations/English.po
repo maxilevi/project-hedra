@@ -119,7 +119,18 @@ requires_anvil = Requires anvil
 use_anvil = USE ANVIL
 use_campfire = USE CAMPFIRE
 use_well = USE WELL
-collect_these_object_dialog_0 = Collect these
+collect_these_object_dialog_0 = I need some help collecting items
 quests = JOURNAL
-
+accept_quest = Accept
+decline_quest = Decline
+quest_giver_thought_0 = You seem like an adventurer, are you willing to help me with something?
+quest_giver_thought_1 = I have a task you can help me with
+quest_giver_thought_2 = Are you looking for a quest?
+quest_easy = $GREENEASY
+quest_normal = $BLUENORMAL
+quest_hard = $REDHARD
+quest_difficulty = Difficulty
+quest_collect_name = Obtain these items:
+quest = QUEST
+quest_items = Requirements
 

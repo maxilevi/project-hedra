@@ -172,7 +172,7 @@ namespace Hedra.Engine.Loader
             if(!GameManager.InStartMenu) AutosaveManager.Save();
             Graphics2D.Dispose();
             DrawManager.Dispose();
-            InventoryItemRenderer.Framebuffer.Dispose();
+            InventoryItemRenderer.Dispose();
             base.OnUnload(e);
         }
 

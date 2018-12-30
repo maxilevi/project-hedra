@@ -32,7 +32,7 @@ namespace Hedra.Engine.StructureSystem
                 );
                 npc.Physics.UsePhysics = false;
                 npc.IsSitting = true;
-                npc.AddComponent(new QuestGiverComponent(npc, QuestPool.Grab()));
+                npc.AddComponent(new QuestGiverComponent(npc, QuestPool.Grab().Build(npc.Position, Utils.Rng)));
                 ((Well) Structure.WorldObject).NPC = npc;
             }
             

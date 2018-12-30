@@ -23,7 +23,6 @@ namespace Hedra.Engine.Rendering.UI
     {
         public Vector2 AdjustedPosition { get; private set; }
         public bool Flipped { get; set; }
-        public bool Fxaa { get; set; }
         public uint TextureId { get; set; }
         public float Opacity { get; set; }
         public uint BackGroundId { get; set; }

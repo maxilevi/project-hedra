@@ -184,11 +184,6 @@ namespace Hedra.Engine.Rendering.UI
         public void HideMenu()
         {
             GameSettings.Paused = false;
-            if(Networking.NetworkManager.IsConnected){
-                _player.View.LockMouse = true;
-                _player.Movement.CaptureMovement = true;
-                _player.View.CaptureMovement = true;
-            }
             Menu.Disable();
             OptionsMenu.Disable();
             GamePanel.Enable();
@@ -199,15 +194,6 @@ namespace Hedra.Engine.Rendering.UI
             LocalPlayer.Instance.Chat.Show = true;
             LocalPlayer.Instance.Chat.LoseFocus();
             Cursor.Center();
-        }
-        
-        private IEnumerator MenuEnter()
-        {
-            while(Menu.Position.X > 0f){
-                Menu.Move(new Vector2(-0.025f,0));
-                yield return null;
-            }
-            Menu.MoveTo(Vector2.Zero);
         }
         
         private List<bool> _wasEnabled = new List<bool>();

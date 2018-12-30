@@ -38,6 +38,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.Geometry;
+using Hedra.EntitySystem;
 using Hedra.Sound;
 using OpenTK.Input;
 
@@ -266,7 +267,6 @@ namespace Hedra.Engine.Player
             AbilityTree.Update();
             Toolbar.Update();
             UI.Update();
-            ManageSounds();
             QuestInterface.Update();
             Pet.Update();
             Chat.Update();
@@ -338,12 +338,9 @@ namespace Hedra.Engine.Player
                 Model?.Recompose();
             }
         }
-        
-        public void ManageSounds(){
-
-        }    
-        
-        public override float Health{
+ 
+        public override float Health
+        {
             get => _health;
             set
             {
@@ -389,12 +386,18 @@ namespace Hedra.Engine.Player
                                                                || AbilityTree.Show 
                                                                || QuestInterface.Show;
 
+        public void ShowQuestDialog(IHumanoid Humanoid, QuestObject Object, Action Callback)
+        {
+            QuestInterface.ShowDialog(Humanoid, Object, Callback);
+        }
+        
         public void HideInterfaces()
         {
             InventoryInterface.Show = false;
             Trade.Show = false;
             CraftingInterface.Show = false;
             AbilityTree.Show = false;
+            QuestInterface.Show = false;
         }
         
         public override bool IsTravelling

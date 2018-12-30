@@ -99,30 +99,7 @@ namespace Hedra.Engine.Rendering
                 Path = $"UI:Color:{TextureColor}"
             }, TextureMinFilter.Linear, TextureMagFilter.Linear, TextureWrapMode.Repeat);
         }
-        
-        public static Bitmap ReColorMask(Color NewColor, Bitmap Mask){
-            BitmapData Data = Mask.LockBits(new Rectangle(0,0,Mask.Width,Mask.Height), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-              unsafe
-              {
-                  byte* DataPtr = (byte*)Data.Scan0;
-                  int Stride = Data.Stride;
-                  
-                  for (int y = 0; y < Mask.Height; y++)
-                  {
-                      for (int x = 0; x < Mask.Width; x++)
-                      {
-                            DataPtr[(x * 4) + y * Stride] = NewColor.B; // Red
-                          DataPtr[(x * 4) + y * Stride + 1] = NewColor.G; // Blue
-                          DataPtr[(x * 4) + y * Stride + 2] = NewColor.R; // Green
-                         // DataPtr[(x * 4) + y * Stride + 3] = DataPtr[(x * 4) + y * Stride+3]; // Red
-        
-                      }
-                  }
-              }
-            Mask.UnlockBits(Data);
-            return Mask;
-        }
-        
+
         public static Bitmap CreateGradient(Color Color1, Color Color2, GradientType Type, Bitmap Bmp){
             BitmapData Data = Bmp.LockBits(new Rectangle(0,0,Bmp.Width,Bmp.Height), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
               unsafe

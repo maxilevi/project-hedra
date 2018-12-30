@@ -7,6 +7,7 @@ using Hedra.Engine.Loader;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.CraftingSystem;
+using Hedra.Engine.Player.PagedInterface;
 using Hedra.Engine.Rendering.UI;
 using NUnit.Framework;
 
@@ -24,7 +25,7 @@ namespace HedraTests.CodePolicy
             nameof(Panel),
             nameof(TextField),
             nameof(PlayerMovement),
-            nameof(CraftingInventoryArrayInterfaceManager)
+            nameof(PagedInventoryArrayInterfaceManager)
         };
         private readonly string[] _regexExceptions =
         {

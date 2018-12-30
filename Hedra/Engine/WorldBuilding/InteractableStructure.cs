@@ -47,7 +47,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             EventDispatcher.RegisterKeyDown(this, delegate (object Sender, KeyEventArgs EventArgs)
             {
-                if (_canInteract && Key == EventArgs.Key && (!Interacted || !SingleUse))
+                if (_canInteract && Key == EventArgs.Key && (!Interacted || !SingleUse) && GameManager.Player.CanInteract)
                 {
                     _shouldInteract = true;
                     EventArgs.Cancel();
@@ -69,12 +69,12 @@ namespace Hedra.Engine.WorldBuilding
             bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
                 player.View.LookingDirection.Xz.NormalizedFast()) > InteractionAngle;                
             
-            if (IsInRadius() && IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract)
+            if (IsInRadius() && IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract && player.CanInteract)
             {
-                player.MessageDispatcher.ShowMessageWhile($"[{Key.ToString()}] {Message}", () => !Disposed && IsInLookingAngle() && IsInRadius());
+                player.MessageDispatcher.ShowMessageWhile($"[{Key.ToString()}] {Message}", () => !Disposed && IsInLookingAngle() && IsInRadius() && player.CanInteract);
                 _canInteract = true;
                 if(!_selected) OnSelected(player);
-                if (_shouldInteract && (!Interacted || !SingleUse) && !Disposed && CanInteract)
+                if (_shouldInteract && (!Interacted || !SingleUse) && !Disposed && CanInteract && player.CanInteract)
                 {
                     InvokeInteraction(player);
                     if (!SingleUse) _shouldInteract = false;

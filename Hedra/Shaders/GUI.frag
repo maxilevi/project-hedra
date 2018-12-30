@@ -614,7 +614,7 @@ FxaaFloat4 FxaaPixelShader(
         #endif
         FxaaFloat lumaS = FxaaLuma(FxaaTexOff(tex, posM, FxaaInt2( 0, 1), fxaaQualityRcpFrame.xy));
         FxaaFloat lumaE = FxaaLuma(FxaaTexOff(tex, posM, FxaaInt2( 1, 0), fxaaQualityRcpFrame.xy));
-        FxaaFloat lumaN = FxaaLuma(FxaaTexOff(tex, posM, FxaaInt2( 0, -1), fxaaQualityRcpFrame.xy));
+        FxaaFloat lumaN = FxaaLuma(FxaaTexOff(tex, posM, FxaaInt2( 0,-1), fxaaQualityRcpFrame.xy));
         FxaaFloat lumaW = FxaaLuma(FxaaTexOff(tex, posM, FxaaInt2(-1, 0), fxaaQualityRcpFrame.xy));
     #endif
 /*--------------------------------------------------------------------------*/
@@ -644,7 +644,7 @@ FxaaFloat4 FxaaPixelShader(
         FxaaFloat lumaNE = FxaaLuma(FxaaTexOff(tex, posM, FxaaInt2( 1,-1), fxaaQualityRcpFrame.xy));
         FxaaFloat lumaSW = FxaaLuma(FxaaTexOff(tex, posM, FxaaInt2(-1, 1), fxaaQualityRcpFrame.xy));
     #else
-        FxaaFloat lumaNE = FxaaLuma(FxaaTexOff(tex, posM, FxaaInt2( 1,-1), fxaaQualityRcpFrame.xy));
+        FxaaFloat lumaNE = FxaaLuma(FxaaTexOff(tex, posM, FxaaInt2(1, -1), fxaaQualityRcpFrame.xy));
         FxaaFloat lumaSW = FxaaLuma(FxaaTexOff(tex, posM, FxaaInt2(-1, 1), fxaaQualityRcpFrame.xy));
     #endif
 /*--------------------------------------------------------------------------*/
@@ -975,7 +975,6 @@ FxaaFloat4 FxaaPixelShader(
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //----------------------------------------------------------------------------------
-//version 100
 
 precision highp float;
 
@@ -999,6 +998,7 @@ vec4 fxaaTexturePixel(sampler2D texture, vec2 texCoord, vec2 size)
         FxaaFloat4(0.0, 0.0, 0.0, 0.0)		// FxaaFloat fxaaConsole360ConstDir,
     );
 }
+
 
 in vec2 UV;
 

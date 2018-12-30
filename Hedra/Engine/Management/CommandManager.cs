@@ -164,7 +164,7 @@ namespace Hedra.Engine.Management
                     var human = World.WorldBuilding.SpawnVillager(Caster.Position + Caster.Orientation * 16f, Utils.Rng);
                     var tier = Parts.Length == 2 ? (QuestTier) Enum.Parse(typeof(QuestTier), Parts[1], true) : QuestTier.Any;
                     human.AddComponent(
-                        new QuestGiverComponent(human, QuestPool.Grab(tier))
+                        new QuestGiverComponent(human, QuestPool.Grab(tier).Build(human.Position, Utils.Rng))
                     );
                     Result = "Success";
                     return true;

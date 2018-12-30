@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
+using Hedra.Rendering;
+using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Designs
 {
@@ -11,9 +15,23 @@ namespace Hedra.Engine.QuestSystem.Designs
     {
         public override QuestTier Tier => QuestTier.Easy;
         
-        public override QuestView View { get; } = new BulletView();
+        public override string Name => "CollectQuest";
+        
+        public override string GetDisplayName(QuestObject Quest)
+        {
+            return Translations.Get("quest_collect_name");
+        }
 
-        public override Translation OpeningLine { get; } = Translation.Create("collect_these_object_dialog_0");
+        public override string GetDescription(QuestObject Quest)
+        {
+            var itemList = string.Join(
+                Environment.NewLine,
+                Quest.Parameters.Get<ItemCollect[]>("Items").Select(I => I.ToString())
+            );
+            return $"{Translations.Get("quest_items")}:{Environment.NewLine}{itemList}";
+        }
+
+        public override QuestView View { get; } = new BulletView();
 
         public override QuestDesign[] Descendants => new QuestDesign[]
         {
@@ -38,17 +56,19 @@ namespace Hedra.Engine.QuestSystem.Designs
         private static ItemCollect[] GetRandomItems(QuestContext Context, Random Rng)
         {
             var templates = TemplatesFromContext(Context, Rng);
-            var items = new ItemCollect[Rng.Next(1, 4)];
-            for (var i = 0; i < items.Length; ++i)
+            var count = Rng.Next(1, Math.Min(4, templates.Length));
+            var items = new List<ItemCollect>();
+            for (var i = 0; i < count; ++i)
             {
                 var template = templates[Rng.Next(0, templates.Length)];
-                items[i] = new ItemCollect
+                if(items.Contains(template)) continue;
+                items.Add(new ItemCollect
                 {
                     Name = template.Name,
                     Amount = template.Amount
-                };
+                });
             }
-            return items;
+            return items.ToArray();
         }
 
         private static ItemCollect[] TemplatesFromContext(QuestContext Context, Random Rng)
@@ -65,7 +85,7 @@ namespace Hedra.Engine.QuestSystem.Designs
                         },
                         new ItemCollect
                         {
-                            Name = QuestItem.Mushrooms.ToString(),
+                            Name = QuestItem.Mushroom.ToString(),
                             Amount = Rng.Next(1, 2)
                         }
                     };
@@ -93,8 +113,13 @@ namespace Hedra.Engine.QuestSystem.Designs
                         },
                         new ItemCollect
                         {
-                            Name = QuestItem.Mushrooms.ToString(),
+                            Name = QuestItem.Mushroom.ToString(),
                             Amount = Rng.Next(1, 4)
+                        },
+                        new ItemCollect
+                        {
+                            Name = QuestItem.Berry.ToString(),
+                            Amount = Rng.Next(3, 8)
                         }
                     };
                 default:
@@ -109,6 +134,21 @@ namespace Hedra.Engine.QuestSystem.Designs
             );
         }
 
+        public override VertexData Icon => VertexData.Empty;
+
+        public override VertexData BuildPreview(QuestObject Object)
+        {
+            var items = Object.Parameters.Get<ItemCollect[]>("Items").Select(T => ItemPool.Grab(T.Name)).ToArray();
+            var model = new VertexData();
+            for (var i = 0; i < items.Length; i++)
+            {
+                var transform = Matrix4.CreateTranslation(Vector3.UnitZ);
+                transform *= Matrix4.CreateRotationY(i * (360 / items.Length) * Mathf.Radian);
+                model += items[i].Model.Clone().Transform(transform);
+            }
+            return model;
+        }
+
         private struct ItemCollect
         {
             public int Amount { get; set; }
@@ -116,7 +156,7 @@ namespace Hedra.Engine.QuestSystem.Designs
 
             public override string ToString()
             {
-                return $"• {Amount} {ItemPool.Grab(Name).DisplayName}";
+                return $"    • {Amount} {ItemPool.Grab(Name).DisplayName}";
             }
         }
     }

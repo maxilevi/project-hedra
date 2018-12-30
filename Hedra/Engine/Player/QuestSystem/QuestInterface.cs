@@ -1,10 +1,13 @@
 using System;
 using Hedra.Core;
+using Hedra.Engine.Game;
 using Hedra.Engine.Input;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
 using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
@@ -14,7 +17,8 @@ namespace Hedra.Engine.Player.QuestSystem
 {
     public class QuestInterface : PlayerInterface
     {
-        private const int Entries = 5;
+        private const int Columns = 7;
+        private const int Rows = 1;
         public override Key OpeningKey => Controls.QuestLog;
         private readonly IPlayer _player;
         private bool _show;
@@ -22,24 +26,24 @@ namespace Hedra.Engine.Player.QuestSystem
         private readonly InventoryStateManager _stateManager;
         private readonly QuestingInventoryInterfaceManager _interfaceManager;
         private readonly QuestInventoryItemInfo _itemInfo;
+        private readonly QuestDialog _dialog;
         
         public QuestInterface(IPlayer Player)
         {
             _player = Player;
             _stateManager = new InventoryStateManager(_player);
-            var interfacePosition = Vector2.UnitX * -.65f;
-            _questItemInterface = new QuestingInventoryArrayInterface(_player, new InventoryArray(Entries), Entries, 1)
+            var interfacePosition = Vector2.UnitX * -.5f;
+            _questItemInterface = new QuestingInventoryArrayInterface(_player, new InventoryArray(Columns * Rows), Rows, Columns)
             {
-                Position = interfacePosition,
-                Scale = Vector2.One * 1.05f
+                Position = Vector2.UnitY * -.1f
             };
             _itemInfo = new QuestInventoryItemInfo(_player, _questItemInterface.Renderer)
             {
                 Position = Vector2.UnitY * _questItemInterface.Position.Y + interfacePosition.X * -Vector2.UnitX
             };
-            _interfaceManager = new QuestingInventoryInterfaceManager(Entries, 1, _itemInfo, _questItemInterface);
+            _interfaceManager = new QuestingInventoryInterfaceManager(Rows, Columns, _itemInfo, _questItemInterface);
             _stateManager.OnStateChange += Invoke;
-            
+            _dialog = new QuestDialog(_player, _questItemInterface.Renderer);
         }
 
         public void UpdateView()
@@ -52,12 +56,14 @@ namespace Hedra.Engine.Player.QuestSystem
         {
             _questItemInterface.Enabled = State;
             _interfaceManager.Enabled = State;
+            _dialog.Enabled = false;
             if (State)
             {
                 _stateManager.CaptureState();
                 _player.View.LockMouse = false;
                 _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
+                _player.View.PositionDelegate = Camera.DefaultDelegate;
                 Cursor.Show = true;
             }
             else
@@ -72,7 +78,23 @@ namespace Hedra.Engine.Player.QuestSystem
             {
                 _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
                     Time.DeltaTime * 8f);
+                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float) Time.DeltaTime * 16f);
+                _player.View.TargetDistance =
+                    Mathf.Lerp(_player.View.TargetDistance, 10f, (float) Time.DeltaTime * 16f);
+                _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw,
+                    0,
+                    Time.DeltaTime * 16f);
             }
+        }
+
+        public void ShowDialog(IHumanoid Humanoid, QuestObject Object, Action Callback)
+        {
+            MarkAsShown();
+            _player.View.PositionDelegate = () => (_player.Position + Humanoid.Position) / 2;
+            _questItemInterface.Enabled = false;
+            _interfaceManager.Enabled = false;
+            _dialog.Show(Object, Callback);
+            
         }
         
         public override bool Show

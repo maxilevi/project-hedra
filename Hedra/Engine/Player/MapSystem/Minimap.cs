@@ -78,8 +78,8 @@ namespace Hedra.Engine.Player.MapSystem
         {
             HasMarker = false;
         }
-        
-        public void DrawMap()
+
+        private void DrawMap()
         {
             if ((_lastPosition - _player.Position.Xz.ToVector3()).LengthSquared > 2 || _previousActiveChunks != _player.Loader.ActiveChunks)
             {
@@ -193,6 +193,8 @@ namespace Hedra.Engine.Player.MapSystem
             Renderer.Enable(EnableCap.CullFace);
             Shader.Unbind();
         }
+
+        public uint TextureId => _mapFbo.TextureID[0];
         
         public bool Show
         {

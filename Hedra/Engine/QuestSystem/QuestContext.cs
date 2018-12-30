@@ -9,6 +9,12 @@ namespace Hedra.Engine.QuestSystem
         {
             ContextType = SelectContextType(Position);
         }
+        
+        public QuestContext(QuestContextType Type)
+        {
+            ContextType = Type;
+        }
+        
 
         private static QuestContextType SelectContextType(Vector3 Position)
         {

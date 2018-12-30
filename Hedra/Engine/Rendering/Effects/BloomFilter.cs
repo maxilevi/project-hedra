@@ -21,21 +21,20 @@ namespace Hedra.Engine.Rendering.Effects
     public class BloomFilter : Filter
     {
         private static readonly Shader Bloom;
-        private static readonly Shader HBlurShader;
-        private static readonly Shader VBlurShader;
-        public FBO HBloomFbo = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
-        public FBO VBloomFbo = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
-        public int TopColorUniform, BotColorUniform, HeightUniform;
+        public static readonly Shader HBlurShader;
+        public static readonly Shader VBlurShader;
+        public static readonly FBO HBloomFbo = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
+        public static readonly FBO VBloomFbo = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
 
         static BloomFilter()
         {
             Bloom = Shader.Build("Shaders/Bloom.vert", "Shaders/Bloom.frag");
-            HBlurShader = Shader.Build("Shaders/HBlur.vert", "Shaders/Blur.frag");
-            VBlurShader = Shader.Build("Shaders/VBlur.vert", "Shaders/Blur.frag");
+            HBlurShader = Shader.Build("Shaders/Blur.vert", "Shaders/HBlur.frag");
+            VBlurShader = Shader.Build("Shaders/Blur.vert", "Shaders/VBlur.frag");
         }
-
         
-        public override void Pass(FBO Src, FBO Dst){
+        public override void Pass(FBO Src, FBO Dst)
+        {
             HBloomFbo.Bind();
             Bloom.Bind();
             Bloom["Modifier"] = GameSettings.BloomModifier;
@@ -47,7 +46,7 @@ namespace Hedra.Engine.Rendering.Effects
             
             VBloomFbo.Bind();
             HBlurShader.Bind();
-
+            HBlurShader["TexelSize"] = new Vector2(1.0f / VBloomFbo.Size.Width, 1.0f / VBloomFbo.Size.Height); 
             Renderer.Clear(ClearBufferMask.ColorBufferBit);
             this.DrawQuad(HBlurShader, HBloomFbo.TextureID[0]);
             
@@ -56,7 +55,7 @@ namespace Hedra.Engine.Rendering.Effects
             
             HBloomFbo.Bind();
             VBlurShader.Bind();
-
+            VBlurShader["TexelSize"] = new Vector2(1.0f / VBloomFbo.Size.Width, 1.0f / VBloomFbo.Size.Height); 
             Renderer.Clear(ClearBufferMask.ColorBufferBit);
             this.DrawQuad(VBlurShader, VBloomFbo.TextureID[0]);
             

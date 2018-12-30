@@ -1021,7 +1021,8 @@ float luma(vec3 color){
 	return 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
 }
 
-void main(void){
+void main(void)
+{
 	vec2 TexCoords;
 	if(Flipped == int(1.0))
 		TexCoords = vec2( clamp(UV.x, 0.001, 0.999), clamp(1.0-UV.y, 0.001, 0.999) );

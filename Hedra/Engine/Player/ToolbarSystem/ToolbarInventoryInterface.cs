@@ -50,9 +50,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
         {
             for (var i = 0; i < _textBackgrounds.Length; i++)
             {
-                this.ButtonsText[i].Text = i < Toolbar.InteractableItems 
-                    ? (i + 1).ToString() : i == Toolbar.InteractableItems 
-                    ? "M1" : i == Toolbar.InteractableItems+1 ? "M2" : string.Empty;
                 if (Enabled)
                 {
                     _textBackgrounds[i].Enable();
@@ -62,6 +59,12 @@ namespace Hedra.Engine.Player.ToolbarSystem
                     this.ButtonsText[i].Text = string.Empty;
                     _textBackgrounds[i].Disable();
                 }
+                else
+                {
+                    this.ButtonsText[i].Text = i < Toolbar.InteractableItems
+                        ? (i + 1).ToString() : i == Toolbar.InteractableItems
+                        ? "M1" : i == Toolbar.InteractableItems + 1 ? "M2" : string.Empty;
+                }
             }
         }
 
@@ -70,7 +73,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _foodItem = _player.Inventory.Food;
             if (_foodItem != _builtFoodItem && _foodItem != null)
             {
-                _foodMesh = Renderer.BuildModel(_foodItem, out _foodHeight);
+                _foodMesh = InventoryItemRenderer.BuildModel(_foodItem, out _foodHeight);
                 _builtFoodItem = _foodItem;
             }
             this.ButtonsText[this.ButtonsText.Length - 1].Text =

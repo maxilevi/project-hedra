@@ -177,7 +177,8 @@ namespace Hedra.Engine.Rendering.Effects
             #endregion
             
             #region Blur
-            if(GameSettings.BlurFilter){
+            if(GameSettings.BlurFilter)
+            {
                 Blur.Pass(Default, FinalFbo);
             }
             #endregion 
@@ -211,6 +212,7 @@ namespace Hedra.Engine.Rendering.Effects
         public static void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false, bool FXAA = false)
         {
             Renderer.Disable(EnableCap.DepthTest);
+            //Renderer.Enable(EnableCap.Blend);
             
             DrawManager.UIRenderer.SetupQuad();
 

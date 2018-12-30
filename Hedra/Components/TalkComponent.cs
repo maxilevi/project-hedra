@@ -35,12 +35,12 @@ namespace Hedra.Components
         private static uint _talkBackground;
         private static Vector2 _talkBackgroundSize;
         private readonly Animation _talkingAnimation;
-        public event OnTalkEventHandler OnTalk;
+        public event OnTalkEventHandler OnTalkingEnded;
         private bool _shouldTalk;                                                                                        
         public bool Talking { get; private set; }
         private TextBillboard _board;
-        private readonly string _phrase;
-        private string _thought;
+        private readonly Translation _phrase;
+        private Translation _thought;
         private IHumanoid _talker;
 
         static TalkComponent()
@@ -51,10 +51,14 @@ namespace Hedra.Components
                 _talkBackground = Graphics2D.LoadFromAssets("Assets/Skills/Dialog.png");
             });
         }
+
+        public TalkComponent(IHumanoid Parent, string Text = null) : this(Parent, Translation.Default(Utils.FitString(Text, 25)))
+        {           
+        }
         
-        public TalkComponent(IHumanoid Parent, string Text = null) : base(Parent)
+        public TalkComponent(IHumanoid Parent, Translation LiveTranslation) : base(Parent)
         {
-            _phrase = Utils.FitString(Text, 25);
+            _phrase = LiveTranslation;
             _talkingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTalk.dae");
             _talkingAnimation.Loop = false;
             _talkingAnimation.OnAnimationEnd += Sender =>
@@ -64,7 +68,8 @@ namespace Hedra.Components
             };
             EventDispatcher.RegisterKeyDown(this, (Sender, EventArgs) =>
             {
-                if (EventArgs.Key == Controls.Interact && Parent.IsNear(GameManager.Player, TalkRadius) && !Talking)
+                if (EventArgs.Key == Controls.Interact && Parent.IsNear(GameManager.Player, TalkRadius) && !Talking 
+                    && GameManager.Player.CanInteract)
                     _shouldTalk = true;
             });
         }
@@ -73,7 +78,7 @@ namespace Hedra.Components
         {
             bool CanTalk() => 
                 (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius 
-                && !Talking && !PlayerInterface.Showing && !Parent.Model.IsMoving;
+                && !Talking && !PlayerInterface.Showing && !Parent.Model.IsMoving && GameManager.Player.CanInteract;
             if (CanTalk())
             {
                 GameManager.Player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_talk", Controls.Interact), Color.White, CanTalk);
@@ -89,12 +94,12 @@ namespace Hedra.Components
             }
         }
 
-        private string SelectThought()
+        private Translation SelectThought()
         {
             if (_thought != null) return _thought;
             var thoughtComponent = Parent.SearchComponent<ThoughtsComponent>();
             if (thoughtComponent != null)
-                return _thought = thoughtComponent.Thoughts[Utils.Rng.Next(0, thoughtComponent.Thoughts.Length)].Get();
+                return _thought = thoughtComponent.Thoughts[Utils.Rng.Next(0, thoughtComponent.Thoughts.Length)];
             return _phrase ?? Phrases[Utils.Rng.Next(0, Phrases.Length)];
         }
 
@@ -110,15 +115,20 @@ namespace Hedra.Components
                 TaskScheduler.When(
                     () => Parent.Model.AnimationBlending != _talkingAnimation
                     && Parent.Model.AnimationPlaying != _talkingAnimation,
-                    Callback
+                    () =>
+                    {
+                        OnTalkingEnded?.Invoke(_talker);
+                        Callback();
+                    }
                 );
             });
         }
 
         private void TalkToPlayer()
         {
+            _talker = GameManager.Player;
             SoundPlayer.PlayUISound(SoundType.TalkSound, 1f, .75f);
-            var phrase = SelectThought();
+            var phrase = SelectThought().Get();
             phrase = Utils.FitString(phrase, 30);
             
             var textSize = new GUIText(phrase, Vector2.Zero, Color.White, FontCache.Get(AssetManager.NormalFamily, 10));
@@ -137,12 +147,10 @@ namespace Hedra.Components
             _board = new TextBillboard(lifetime, string.Empty, Color.White,
                 FontCache.Get(AssetManager.NormalFamily, 10), FollowFunc);
             CoroutineManager.StartCoroutine(TalkCoroutine, _board, phrase, lifetime);
-            OnTalk?.Invoke(Parent);
 
             textSize.Dispose();
             _shouldTalk = false;
             Talking = true;
-            _talker = GameManager.Player;
             TaskScheduler.When(
                 () => backBoard.Disposed,
                 delegate
@@ -177,6 +185,7 @@ namespace Hedra.Components
                 passedTime += Time.DeltaTime;
                 yield return null;
             }
+            OnTalkingEnded?.Invoke(_talker);
         }
 
         public override void Dispose()
@@ -185,9 +194,9 @@ namespace Hedra.Components
             EventDispatcher.UnregisterKeyDown(this);
         }
 
-        private static readonly string[] Phrases =
+        private static readonly Translation[] Phrases =
         {
-            "..."
+            Translation.Default("...")
         };
     }
 }

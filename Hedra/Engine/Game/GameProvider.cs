@@ -119,6 +119,7 @@ namespace Hedra.Engine.Game
             SkyManager.LoadTime = true;
             Player.Inventory.SetItems(Information.Items);
             Player.Crafting.SetRecipes(Information.Recipes);
+            Player.Questing.SetQuests(Information.Quests);
             AddDefaultRecipes(Information);
             SetRestrictions(Information);
             GameSettings.DarkEffect = false;

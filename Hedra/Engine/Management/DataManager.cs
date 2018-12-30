@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
 
 namespace Hedra.Engine.Management
@@ -24,7 +25,7 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class DataManager
     {
-        private const float SaveVersion = 1.2f;
+        private const float SaveVersion = 1.25f;
         
         public static void SavePlayer(PlayerInformation Player)
         {
@@ -97,6 +98,17 @@ namespace Hedra.Engine.Management
                             bw.Write(recipes[i]);
                         } 
                     }
+                    var quests = Player.Quests;
+                    if (quests != null)
+                    {
+                        bw.Write(quests.Length);
+                        for(var i = 0; i < quests.Length; ++i)
+                        {
+                            var questBytes = quests[i].ToArray();
+                            bw.Write(questBytes.Length);
+                            bw.Write(questBytes);
+                        } 
+                    }
                 }
             }
         }
@@ -120,7 +132,8 @@ namespace Hedra.Engine.Management
                 Class = Player.Class,
                 RandomFactor = Player.RandomFactor,
                 Items = Player.Inventory.ToArray(),
-                Recipes = Player.Crafting.RecipeNames
+                Recipes = Player.Crafting.RecipeNames,
+                Quests = Player.Questing.ActiveQuests
             };
 
             return data;
@@ -204,10 +217,24 @@ namespace Hedra.Engine.Management
                         if(ItemPool.Exists(name))
                             recipes.Add(name);
                         else
-                            Log.WriteLine($"Found non-existent recipe ${name}, removing...");
+                            Log.WriteLine($"Found non-existent recipe '{name},' removing...");
                     }
                     information.Recipes = recipes.ToArray();
-                }             
+                }
+                if (version >= 1.25f)
+                {
+                    var quests = new List<QuestObject>();
+                    var length = br.ReadInt32();
+                    for(var i = 0; i < length; ++i)
+                    {
+                        var quest = QuestObject.FromArray(br.ReadBytes(br.ReadInt32()));
+                        if(QuestPool.Exists(quest.Name))
+                            quests.Add(quest);
+                        else
+                            Log.WriteLine($"Found non-existent quest design '{quest.Name}', removing...");
+                    }
+                    information.Quests = quests.ToArray();
+                }
             }
             Str.Close();
             Str.Dispose();

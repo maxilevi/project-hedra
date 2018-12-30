@@ -1,11 +1,8 @@
-using System.Reflection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Hedra.Engine.ModuleSystem;
 
 namespace Hedra.Engine.ItemSystem.Templates
 {    
-    [Obfuscation(Exclude = false, Feature = "-rename")]
-    public class ItemTemplate
+    public class ItemTemplate : SerializableTemplate<ItemTemplate>
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }
@@ -27,16 +24,6 @@ namespace Hedra.Engine.ItemSystem.Templates
                 Attributes = Item.GetAttributes(),
                 Model = Item.ModelTemplate
             };
-        }
-
-        public static string ToJson(ItemTemplate Template)
-        {
-            return JObject.FromObject(Template).ToString(Formatting.None);
-        }
-
-        public static ItemTemplate FromJSON(string Data)
-        {
-            return JsonConvert.DeserializeObject<ItemTemplate>(Data);
         }
     }
 }

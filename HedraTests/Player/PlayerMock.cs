@@ -261,6 +261,11 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void ShowQuestDialog(IHumanoid Humanoid, QuestObject Object, Action Callback)
+        {
+            throw new NotImplementedException();
+        }
+
         public Vector3 Rotation { get; set; }
         public Vector3 Size { get; }
         public string Type { get; set; }

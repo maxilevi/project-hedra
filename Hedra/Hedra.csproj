@@ -217,6 +217,7 @@
     <Compile Include="Engine\Localization\Controls.cs" />
     <Compile Include="Engine\Management\WaitForChunk.cs" />
     <Compile Include="Engine\ModuleSystem\ModelHandlers\ModelHandlerFactory.cs" />
+    <Compile Include="Engine\ModuleSystem\SerializableTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\AnimationTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\AttackAnimationTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\CustomFactory.cs" />
@@ -238,13 +239,17 @@
     <Compile Include="Engine\PlantSystem\SunflowerDesign.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingBackground.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInterface.cs" />
+    <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryItemInfo.cs" />
-    <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\DummyInventory.cs" />
     <Compile Include="Engine\Player\Inventory\AttributeFormatter.cs" />
     <Compile Include="Engine\Player\Inventory\BaseBackground.cs" />
     <Compile Include="Engine\Player\Inventory\PlayerInventoryInterface.cs" />
+    <Compile Include="Engine\Player\PagedInterface\PagedInventoryArrayInterface.cs" />
+    <Compile Include="Engine\Player\PagedInterface\PagedInventoryArrayInterfaceManager.cs" />
+    <Compile Include="Engine\Player\PagedInterface\PagedInventoryItemInfo.cs" />
+    <Compile Include="Engine\Player\QuestSystem\QuestDialog.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestingInventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestingInventoryInterfaceManager.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestInterface.cs" />
@@ -252,11 +257,11 @@
     <Compile Include="Engine\Player\QuestSystem\Views\BulletView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\DefaultView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\QuestView.cs" />
-    <Compile Include="Engine\QuestSystem\BaseQuest.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CollectDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CraftDesign.cs" />
     <Compile Include="Engine\QuestSystem\IQuest.cs" />
     <Compile Include="Engine\QuestSystem\QuestContext.cs" />
+    <Compile Include="Engine\QuestSystem\QuestGiverThoughtsComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestItem.cs" />
     <Compile Include="Engine\QuestSystem\QuestObject.cs" />
     <Compile Include="Engine\QuestSystem\QuestDesign.cs" />
@@ -264,7 +269,9 @@
     <Compile Include="Engine\QuestSystem\QuestInventory.cs" />
     <Compile Include="Engine\QuestSystem\QuestParameters.cs" />
     <Compile Include="Engine\QuestSystem\QuestPool.cs" />
+    <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestTier.cs" />
+    <Compile Include="Engine\Rendering\DisplayColor.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
     <Compile Include="Engine\Rendering\TextBillboard.cs" />
@@ -6344,9 +6351,6 @@
     <None Include="Assets\UI\Compass.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\CopyIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\UI\DonateBTC.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -6389,19 +6393,10 @@
     <None Include="Assets\UI\OxygenIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\QuestLog.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\UI\RogueLogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\SkillInfo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\UI\Skillsbar.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\UI\Skilltree.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\UI\StaminaBackground.png">
@@ -6411,9 +6406,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\UI\StaminaIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\UI\SupportGame.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\UI\WarriorLogo.png">
@@ -6714,7 +6706,7 @@
     <None Include="Shaders\Bloom.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Blur.frag">
+    <None Include="Shaders\HBlur.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Cursor.frag">
@@ -6765,7 +6757,7 @@
     <None Include="Shaders\SSAO.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\HBlur.vert">
+    <None Include="Shaders\Blur.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\GUI.frag">
@@ -6841,9 +6833,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\UnderWater.vert">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Shaders\VBlur.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Water.frag">
@@ -7091,13 +7080,13 @@
     <Content Include="Assets\UI\ManaBackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\UI\QuestDescription.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\QuestMap.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\UI\SelectedInventorySlot.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\UI\SocialButton.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\UI\SocialMedia.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Modules\Mobs\Gorilla.json">
@@ -7196,6 +7185,9 @@
     <Content Include="Shaders\Billboard.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Shaders\Includes\Blur.shader">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\Passthrough.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -7208,6 +7200,9 @@
     </Content>
     <Content Include="..\project-hedra-assets\Sounds\Soundtrack\GraveyardChampion.ogg">
       <Link>Sounds\Soundtrack\GraveyardChampion.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\VBlur.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Translations\Español.po" />

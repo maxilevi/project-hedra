@@ -2,13 +2,24 @@ using System;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.QuestSystem.Designs
 {
     public class CraftDesign : QuestDesign
     {
         public override QuestTier Tier => QuestTier.Easy;
-        public override Translation OpeningLine { get; }
+        public override string Name => "CraftingQuest";
+
+        public override string GetDisplayName(QuestObject Quest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetDescription(QuestObject Quest)
+        {
+            throw new NotImplementedException();
+        }
 
         public override QuestView View { get; }
         protected override QuestParameters BuildParameters(QuestContext Context, QuestParameters Parameters, Random Rng)
@@ -27,5 +38,12 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
             throw new NotImplementedException();
         }
+
+        public override VertexData BuildPreview(QuestObject Object)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override VertexData Icon { get; }
     }
 }

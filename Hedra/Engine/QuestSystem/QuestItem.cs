@@ -7,7 +7,7 @@ namespace Hedra.Engine.QuestSystem
         CornSoup,
         RawMeat,
         CookedMeat,
-        Mushrooms,
+        Mushroom,
         PumpkinPie,
         HealthPotion,
         Berry,

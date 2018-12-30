@@ -108,7 +108,6 @@ namespace Hedra.Engine.EntitySystem
             if (!_textUpdated)
             {
                 _healthBar.Text.UIText.TextColor = FontColor;
-                _healthBar.Text.UIText.UpdateText();
                 _textUpdated = true;
             }
             _healthBar.CurvedBorders = true;

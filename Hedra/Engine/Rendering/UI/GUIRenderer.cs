@@ -198,7 +198,6 @@ namespace Hedra.Engine.Rendering.UI
             Shader["Tint"] = Texture.Tint;
             Shader["Rotation"] = Math.Abs(Texture.Angle) < .05f ? Matrix3.Identity : Texture.RotationMatrix;
             Shader["Size"] = new Vector2(1.0f / GameSettings.Width, 1.0f / GameSettings.Height);
-            Shader["FXAA"] = Texture.Fxaa ? 1.0f : 0.0f;
             Shader["UseMask"] = Texture.UseMask ? 1 : 0;
 
             this.DrawQuad();

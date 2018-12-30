@@ -1,15 +1,32 @@
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.QuestSystem.Designs;
+using OpenTK;
 
 namespace Hedra.Engine.QuestSystem
 {
     public static class QuestPool
     {
-        private static readonly List<QuestDesign> _designs;
-        
-        public static QuestObject Grab(QuestTier Tier = QuestTier.Any)
+        private static readonly List<QuestDesign> QuestDesigns = new List<QuestDesign>
         {
-            return _designs.First(D => D.Tier == Tier || Tier == QuestTier.Any).Build();
+            new CollectDesign()
+        };
+        
+        public static QuestDesign Grab(QuestTier Tier = QuestTier.Any)
+        {
+            return QuestDesigns.First(D => D.Tier == Tier || Tier == QuestTier.Any);
         }
+
+        public static QuestDesign Grab(string Name)
+        {
+            return QuestDesigns.First(D => D.Name == Name);
+        }
+
+        public static bool Exists(string Name)
+        {
+            return QuestDesigns.Any(D => D.Name == Name);
+        }
+        
+        public static QuestDesign[] Designs => QuestDesigns.ToArray();
     }
 }

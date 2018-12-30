@@ -31,7 +31,6 @@ namespace Hedra.Engine.Rendering.UI
         private string _text;
         private Translation _translation;
         
-
         public GUIText(Translation Translation, Vector2 Position, Color TextColor, Font TextFont)
         {
             _temporalPosition = Position;
@@ -46,7 +45,7 @@ namespace Hedra.Engine.Rendering.UI
 
         private static BitmapObject BuildBitmap(string Text, Color Color, Font Font, out Vector2 Measurements)
         {
-            var crispModifier = 1.5f;
+            const float crispModifier = 1.5f;
             var textBitmap = Provider.BuildText(Text, FontCache.Get(Font.FontFamily, Font.Size * crispModifier, Font.Style), Color);
             Measurements = 
                 new Vector2((float) (textBitmap.Width * (1.0 / crispModifier)), (float) (textBitmap.Height * (1.0 / crispModifier)));

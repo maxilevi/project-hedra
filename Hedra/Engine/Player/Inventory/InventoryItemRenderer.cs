@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Inventory
     public class InventoryItemRenderer
     {
         public const float ZOffsetFactor = 1.25f * 5f;
-        public static readonly FBO Framebuffer;
+        private static readonly FBO Framebuffer;
         private readonly InventoryArray _array;
         private readonly int _length;
         private readonly int _offset;
@@ -51,14 +51,14 @@ namespace Hedra.Engine.Player.Inventory
                 }
                 if (_array[i+ _offset] != null)
                 {
-                    _models[i] = this.BuildModel(_array[i + _offset], out _modelsHeights[i]);
+                    _models[i] = BuildModel(_array[i + _offset], out _modelsHeights[i]);
                     itemCount++;
                 }
             }
             _itemCount = itemCount;
         }
 
-        public ObjectMesh BuildModel(Item Item, out float ModelHeight)
+        public static ObjectMesh BuildModel(Item Item, out float ModelHeight)
         {
             var model = CenterModel(Item.Model.Clone());
             ModelHeight = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
@@ -128,6 +128,11 @@ namespace Hedra.Engine.Player.Inventory
         {
             Model.Center();
             return Model;
+        }
+
+        public static void Dispose()
+        {
+            Framebuffer.Dispose();
         }
     }
 }

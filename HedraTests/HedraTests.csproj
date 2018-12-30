@@ -130,12 +130,14 @@
     <Compile Include="Player\Skills\Warrior\LearnHammerTest.cs" />
     <Compile Include="Player\Skills\Warrior\ResistanceTest.cs" />
     <Compile Include="Player\Skills\WeaponAttackTest.cs" />
+    <Compile Include="QuestSystem\QuestDesignTest.cs" />
     <Compile Include="Rendering\AnimatorTest.cs" />
     <Compile Include="Rendering\BillboardTest.cs" />
     <Compile Include="Rendering\ChunkMeshBorderDetectorTest.cs" />
     <Compile Include="Rendering\CompatibilityManagerTest.cs" />
     <Compile Include="Rendering\MeshStitcherTest.cs" />
     <Compile Include="Rendering\SimpleTextProviderMock.cs" />
+    <Compile Include="Rendering\TextProviderTest.cs" />
     <Compile Include="SimpleAnimationProvider.cs" />
     <Compile Include="SimpleAssetProvider.cs" />
     <Compile Include="SimpleColladaProvider.cs" />

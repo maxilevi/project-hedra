@@ -1,14 +1,12 @@
+using System;
 using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
-using Hedra.Engine.Player.BoatSystem;
-using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
-using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
@@ -40,5 +38,6 @@ namespace Hedra.Engine.Player
         void Respawn();
         void Reset();
         void HideInterfaces();
+        void ShowQuestDialog(IHumanoid Humanoid, QuestObject Object, Action Callback);
     }
 }

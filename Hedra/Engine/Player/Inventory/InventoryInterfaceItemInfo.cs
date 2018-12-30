@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Hedra.Core;
 using Hedra.Engine.Game;
@@ -23,12 +24,12 @@ namespace Hedra.Engine.Player.Inventory
         protected readonly RenderableText ItemAttributes;
         protected readonly Texture HintTexture;
         protected readonly GUIText HintText;
-        protected readonly Vector2 TargetResolution = new Vector2(1366, 705);
-        private readonly Panel _panel;
+        private readonly Vector2 _targetResolution = new Vector2(1366, 705);
+        protected readonly Panel Panel;
         private readonly InventoryItemRenderer _renderer;
         private readonly Vector2 _weaponItemAttributesPosition;
         private readonly Vector2 _weaponItemTexturePosition;
-        private readonly Vector2 _weaponItemTextureScale;
+        protected readonly Vector2 WeaponItemTextureScale;
         private readonly Vector2 _nonWeaponItemAttributesPosition;
         private readonly Vector2 _nonWeaponItemTexturePosition;
         private ObjectMesh _currentItemMesh;
@@ -38,39 +39,39 @@ namespace Hedra.Engine.Player.Inventory
         public InventoryInterfaceItemInfo(InventoryItemRenderer Renderer)
         {
             this._renderer = Renderer;
-            this._panel = new Panel();
+            this.Panel = new Panel();
             this.BackgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Vector2.One * .45f);
-            this.ItemTexture = new Texture(0, BackgroundTexture.Position + Mathf.ScaleGui(TargetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
+            this.ItemTexture = new Texture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
                 BackgroundTexture.Scale * .75f);
 
-            this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(TargetResolution, Vector2.UnitY * .325f), Color.White,
+            this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .325f), Color.White,
                 FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemText, DrawOrder.After);
 
-            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(TargetResolution, Vector2.UnitY * -.25f),
+            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.25f),
                 Color.Bisque, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemDescription, DrawOrder.After);
 
-            this.ItemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(TargetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
+            this.ItemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemAttributes, DrawOrder.After);
             
             this.HintTexture = new Texture("Assets/UI/InventoryBackground.png", Vector2.UnitY * -.35f, Vector2.One * .15f);
             this.HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 7, FontStyle.Bold));
 
-            _panel.AddElement(HintTexture);
-            _panel.AddElement(HintText);
-            _panel.AddElement(ItemText);
-            _panel.AddElement(ItemAttributes);
-            _panel.AddElement(ItemDescription);
-            _panel.AddElement(ItemTexture);
-            _panel.AddElement(BackgroundTexture);
+            Panel.AddElement(HintTexture);
+            Panel.AddElement(HintText);
+            Panel.AddElement(ItemText);
+            Panel.AddElement(ItemAttributes);
+            Panel.AddElement(ItemDescription);
+            Panel.AddElement(ItemTexture);
+            Panel.AddElement(BackgroundTexture);
 
-            _nonWeaponItemAttributesPosition = Mathf.ScaleGui(TargetResolution, Vector2.UnitY * -.225f);
-            _nonWeaponItemTexturePosition = Mathf.ScaleGui(TargetResolution, Vector2.UnitY * .0f);
+            _nonWeaponItemAttributesPosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.225f);
+            _nonWeaponItemTexturePosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .0f);
             _weaponItemAttributesPosition = ItemAttributes.Position;
             _weaponItemTexturePosition = ItemTexture.Position;
-            _weaponItemTextureScale = ItemTexture.Scale;
+            WeaponItemTextureScale = ItemTexture.Scale;
         }
 
         protected virtual void UpdateView()
@@ -115,7 +116,7 @@ namespace Hedra.Engine.Player.Inventory
             ItemText.Text = Utils.FitString(CurrentItem.DisplayName, 20);
             ItemAttributes.Position = _nonWeaponItemAttributesPosition + this.Position;
             ItemTexture.Position = _nonWeaponItemTexturePosition + this.Position;               
-            ItemTexture.Scale = _weaponItemTextureScale;
+            ItemTexture.Scale = WeaponItemTextureScale;
             ItemDescription.Text = string.Empty;
             AccomodatePosition(ItemTexture);
             AccomodateScale(ItemTexture);
@@ -123,12 +124,12 @@ namespace Hedra.Engine.Player.Inventory
 
         protected void AccomodatePosition(UIElement Element)
         {
-            Element.Position += Mathf.ScaleGui(TargetResolution, Vector2.UnitY * DescriptionHeight);
+            Element.Position += Mathf.ScaleGui(_targetResolution, Vector2.UnitY * DescriptionHeight);
         }
         
         protected void AccomodateScale(UIElement Element)
         {
-            Element.Scale *= (1-(DescriptionHeight / _weaponItemTextureScale.Y));
+            Element.Scale *= (1-(DescriptionHeight / WeaponItemTextureScale.Y));
         }
         
         protected virtual float DescriptionHeight => ItemAttributes.UIText.Scale.Y;
@@ -143,14 +144,14 @@ namespace Hedra.Engine.Player.Inventory
             ItemDescription.Color = tierColor;
             ItemAttributes.Position = _weaponItemAttributesPosition + this.Position;
             ItemTexture.Position = _weaponItemTexturePosition + this.Position;
-            ItemTexture.Scale = _weaponItemTextureScale;
+            ItemTexture.Scale = WeaponItemTextureScale;
             ItemDescription.Text = Utils.FitString(CurrentItem.Description, 32);
         }
 
         protected virtual void UpdateItemMesh()
         {
             _currentItemMesh?.Dispose();
-            _currentItemMesh = _renderer.BuildModel(CurrentItem, out _currentItemMeshHeight);
+            _currentItemMesh = InventoryItemRenderer.BuildModel(CurrentItem, out _currentItemMeshHeight);
         }
 
         protected virtual void AddAttributes()
@@ -191,7 +192,7 @@ namespace Hedra.Engine.Player.Inventory
             _currentItemMesh?.Dispose();
             _currentItemMesh = null;
             CurrentItem = null;
-            _panel.Disable();
+            Panel.Disable();
             this.Enabled = false;
         }
 
@@ -204,13 +205,11 @@ namespace Hedra.Engine.Player.Inventory
             get => BackgroundTexture.Position;
             set
             {
-                HintTexture.Position = HintTexture.Position - Position + value;
-                HintText.Position = HintText.Position - Position + value;
-                ItemTexture.Position = ItemTexture.Position - Position + value;
-                ItemText.Position = ItemText.Position - Position + value;
-                ItemDescription.Position = ItemDescription.Position - Position + value;
-                ItemAttributes.Position = ItemAttributes.Position - Position + value;
-                BackgroundTexture.Position = value;
+                var elements = Panel.Elements.ToArray();
+                for (var i = 0; i < elements.Length; ++i)
+                {
+                    elements[i].Position = elements[i].Position - Position + value;
+                }
             }
         }
 
@@ -221,9 +220,9 @@ namespace Hedra.Engine.Player.Inventory
             {
                 _enabled = value;
                 if (_enabled && CurrentItem != null)
-                    _panel.Enable();
+                    Panel.Enable();
                 else
-                    _panel.Disable();
+                    Panel.Disable();
                 HintText.Disable();
                 HintTexture.Disable();
             }

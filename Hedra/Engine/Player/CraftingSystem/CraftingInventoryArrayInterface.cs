@@ -1,185 +1,26 @@
-using System;
-using System.Drawing;
-using System.Linq;
-using Hedra.Core;
-using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Player.PagedInterface;
 using OpenTK;
 
 namespace Hedra.Engine.Player.CraftingSystem
 {
-    public class CraftingInventoryArrayInterface : InventoryArrayInterface
+    public class CraftingInventoryArrayInterface : PagedInventoryArrayInterface
     {
-        private readonly Texture[] _recipeSelectedTextures;
-        private readonly Texture _title;
-        private readonly GUIText _titleText;
-        private readonly Texture _pageSelector;
-        private readonly GUIText _currentPageText;
-        private readonly Button _previousPage;
-        private readonly Button _nextPage;
-        protected Panel Panel { get; }
-        private readonly IPlayer _player;
-        private readonly int _perPage;
-        private int _currentPage;
-        private int _totalPages;
-
-        public CraftingInventoryArrayInterface(IPlayer Player, InventoryArray Array, int Rows, int Columns) : base(Array, 0, Rows * Columns, Columns, Vector2.One)
+        public CraftingInventoryArrayInterface(IPlayer Player, InventoryArray Array, int Rows, int Columns) 
+            : base(Player, Array, Rows, Columns, Vector2.One)
         {
-            _player = Player;
-            _perPage = Rows * Columns;
-            Panel = new Panel
-            {
-                DisableKeys = true
-            };
-            _recipeSelectedTextures = new Texture[Buttons.Length];
-            for (var i = 0; i < Buttons.Length; i++)
-            {
-                _recipeSelectedTextures[i] =
-                    new Texture(
-                        Graphics2D.LoadFromAssets("Assets/UI/SelectedInventorySlot.png"),
-                        Textures[i].Position,
-                        Textures[i].Scale
-                    );
-                _recipeSelectedTextures[i].TextureElement.MaskId = DefaultId;
-                Panel.AddElement(_recipeSelectedTextures[i]);
-            }
-
-            var barScale = new Vector2(DefaultSize.X * Rows, DefaultSize.Y * 2) * .65f;
-            var realScale = Graphics2D.SizeFromAssets("Assets/UI/InventoryBackground.png") * barScale;
-            var barPosition = Vector2.UnitY * .0975f * Rows;
-            var offset = Rows % 2 == 0 ? Vector2.UnitY * realScale.Y : Vector2.Zero;
-            _title = new Texture("Assets/UI/InventoryBackground.png", barPosition - offset, barScale);
-            _titleText = new GUIText(TitleTranslation, _title.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
-            _pageSelector = new Texture("Assets/UI/InventoryBackground.png", -barPosition - offset, barScale);
-            
-            _currentPageText = new GUIText("00/00", _pageSelector.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
-            var footerFont = FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold);
-            _previousPage = new Button(_currentPageText.Position - Vector2.UnitX * _currentPageText.Scale.X * 2, Vector2.One, "\u25C0", Color.White, footerFont);
-            _previousPage.Click += (O, E) => PreviousPage();
-            _nextPage = new Button(_currentPageText.Position + Vector2.UnitX * _currentPageText.Scale.X * 2, Vector2.One, "\u25B6", Color.White, footerFont);
-            _previousPage.Click += (O, E) => NextPage();
-            
-            Panel.AddElement(_currentPageText);
-            Panel.AddElement(_previousPage);
-            Panel.AddElement(_nextPage);
-            Panel.AddElement(_pageSelector);
-            Panel.AddElement(_title);
-            Panel.AddElement(_titleText);
-        }
-
-        protected virtual Translation TitleTranslation => Translation.Create("recipes");
-        
-        public override void UpdateView()
-        {
-            ResetSelector();        
-            Array.Empty();
-            var outputs = ArrayObjects;
-            for (var i = _currentPage * _perPage; i < outputs.Length; i++)
-            {
-                Array.AddItem(outputs[i]);
-            }
-            _totalPages = Recipes.Length / _perPage + 1;
-            _currentPageText.Text = $"{_currentPage + 1}/{_totalPages}";
-            Renderer.UpdateView(); 
-        }
-
-        private void ResetSelector()
-        {
-            if (!Enabled) return;
-            for (var i = 0; i < _recipeSelectedTextures.Length; i++)
-            {
-                _recipeSelectedTextures[i].Disable();
-                Buttons[i].Texture.Grayscale = false;
-            }
-            _recipeSelectedTextures[SelectedIndex].Enable();
-        }
-
-        protected virtual Item[] ArrayObjects => _player.Crafting.RecipeOutputs;
-
-        public void Reset()
-        {
-            _currentPage = 0;
-            SelectedIndex = 0;
-        }
-
-        private void PreviousPage()
-        {
-            _currentPage = Mathf.Modulo(_currentPage - 1, _totalPages);
         }
         
-        private void NextPage()
-        {
-            _currentPage = Mathf.Modulo(_currentPage + 1, _totalPages);
-        }
+        protected override Translation TitleTranslation => Translation.Create("recipes");
+       
+        private Item[] Recipes => Player.Crafting.Recipes;
 
-        public int SelectedIndex { get; set; }
-
-        private Item[] Recipes => _player.Crafting.Recipes;
-
-        public Item CurrentOutput => Array[SelectedIndex + _perPage * _currentPage];
-        public Item CurrentRecipe => Recipes[SelectedIndex + _perPage * _currentPage];
+        public Item CurrentOutput => Array[SelectedIndex + PerPage * CurrentPage];
         
-        public override bool Enabled
-        {
-            get => base.Enabled;
-            set
-            {
-                base.Enabled = value;
-                if (Enabled) Panel.Enable();
-                else Panel.Disable();            
-            }
-        }
-
-        public override Vector2 Scale
-        {
-            get => base.Scale;
-            set
-            {
-                var elements = Panel.Elements.ToArray();
-                for (var i = 0; i < elements.Length; i++)
-                {
-                    elements[i].Scale = 
-                        new Vector2(elements[i].Scale.X / base.IndividualScale.X, elements[i].Scale.Y / base.IndividualScale.Y) * value;
-                    var relativePosition = elements[i].Position - Position;
-                    elements[i].Position = 
-                        new Vector2(relativePosition.X / base.Scale.X, relativePosition.Y / base.Scale.Y) * value + Position;
-                }
-                base.Scale = value;
-            }
-        }
-
-        public override Vector2 IndividualScale
-        {
-            get => base.IndividualScale;
-            set
-            {
-                var elements = Panel.Elements.ToArray();
-                for (var i = 0; i < elements.Length; i++)
-                {
-                    elements[i].Scale = new Vector2(elements[i].Scale.X / base.IndividualScale.X,
-                                            elements[i].Scale.Y / base.IndividualScale.Y) * value;
-                }
-                base.IndividualScale = value;
-            }
-        }
-
-        public override Vector2 Position
-        {
-            get => base.Position;
-            set
-            {
-                var elements = Panel.Elements.ToArray();
-                for (var i = 0; i < elements.Length; i++)
-                {
-                    elements[i].Position = elements[i].Position - base.Position + value;
-                }
-                base.Position = value;
-            }
-        }      
+        public Item CurrentRecipe => Recipes[SelectedIndex + PerPage * CurrentPage];
+        
+        protected override Item[] ArrayObjects => Player.Crafting.RecipeOutputs;
     }
 }

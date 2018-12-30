@@ -56,14 +56,19 @@ namespace Hedra.Engine.Rendering.UI
                     !GameManager.Player.CanInteract || GameManager.IsLoading) continue;
                 if (_openedInterface == null)
                 {
-                    Interfaces[i].Show = true;
-                    if(Interfaces[i].Show) _openedInterface = Interfaces[i];
+                    Interfaces[i].MarkAsShown();
                 }
                 else if(_openedInterface == Interfaces[i] && Interfaces[i].Show)
                 {
                     Close(Interfaces[i]);
                 }
             }
+        }
+
+        protected void MarkAsShown()
+        {
+            Show = true;
+            if(Show) _openedInterface = this;
         }
 
         private static void OnEscapeDown(KeyEventArgs Args)
@@ -102,6 +107,12 @@ namespace Hedra.Engine.Rendering.UI
                 Interface.Show = false;
                 _openedInterface = null;
             }
+        }
+
+        public static void CloseCurrent()
+        {
+            _openedInterface.Show = false;
+            _openedInterface = null;
         }
 
         public void Dispose()
