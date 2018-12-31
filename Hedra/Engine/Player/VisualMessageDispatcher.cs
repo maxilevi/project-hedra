@@ -9,6 +9,8 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player.Skills.Rogue;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Sound;
 using OpenTK;
@@ -17,6 +19,7 @@ namespace Hedra.Engine.Player
 {
     public class VisualMessageDispatcher : IMessageDispatcher
     {
+        private const float FadeSpeed = 2f;
         private readonly LocalPlayer _player;
         private static readonly Color DefaultColor = Color.White;
         private const float MessageSpeed = .1f;
@@ -27,6 +30,7 @@ namespace Hedra.Engine.Player
         private Func<bool> _currentCondition;
         private bool _isRunning;
         private readonly GUIText _notificationText;
+        private readonly Plaque _plaqueText;
         private readonly List<MessageItem> _messageQueue;
 
         public VisualMessageDispatcher(LocalPlayer Player)
@@ -35,10 +39,19 @@ namespace Hedra.Engine.Player
             _messageQueue = new List<MessageItem>();
 
             _mainText = new GUIText(string.Empty, new Vector2(0, .7f), Color.FromArgb(255, 39, 39, 39), FontCache.Get(AssetManager.BoldFamily, 32, FontStyle.Bold));
-            _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.Get(AssetManager.BoldFamily, 16, FontStyle.Bold));
+            _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
 
-            _notificationText = new GUIText(string.Empty, new Vector2(0.7f, -0.8f), Color.FromArgb(255, 39, 39, 39), FontCache.Get(AssetManager.NormalFamily, 14));
-            _notificationText.UIText.Opacity = 0f;
+            _notificationText = new GUIText(string.Empty, new Vector2(0.7f, -0.8f), Color.FromArgb(255, 39, 39, 39),
+                FontCache.Get(AssetManager.NormalFamily, 14))
+            {
+                UIText =
+                {
+                    Opacity = 0f
+                }
+            };
+
+            _plaqueText = new Plaque(Vector2.UnitY * -.55f + Vector2.UnitX * .75f);
+            _plaqueText.Disable();
 
             Player.UI.GamePanel.AddElement(_mainText);
             Player.UI.GamePanel.AddElement(_playerText);
@@ -74,27 +87,58 @@ namespace Hedra.Engine.Player
                 var msg = _messageQueue[0];
                 processing = true;
 
-                Action callback = delegate
+                void Callback()
                 {
                     processing = false;
                     _messageQueue.RemoveAt(0);
-                };
+                }
 
-                if (msg.Type == MessageType.Title)
-                    this.ProcessTitleMessage(msg, callback);
-
-                else if (msg.Type == MessageType.Notification)
-                    this.ProcessNotificationMessage(msg, callback);
-
-                else if (msg.Type == MessageType.Normal)
-                    this.ProcessNormalMessage(msg, callback);
-
-                else if (msg.Type == MessageType.While)
-                    this.ProcessWhileMessage(msg, callback);
-
+                switch (msg.Type)
+                {
+                    case MessageType.Title:
+                        ProcessTitleMessage(msg, Callback);
+                        break;
+                    case MessageType.Notification:
+                        ProcessNotificationMessage(msg, Callback);
+                        break;
+                    case MessageType.Normal:
+                        ProcessNormalMessage(msg, Callback);
+                        break;
+                    case MessageType.While:
+                        ProcessWhileMessage(msg, Callback);
+                        break;
+                    case MessageType.Plaque:
+                        ProcessPlaqueMessage(msg, Callback);
+                        break;
+                }
 
                 yield return null;
             }
+        }
+
+        public void ShowPlaque(string Message, float Seconds, bool PlaySound = true)
+        {
+            if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
+            var item = new MessageItem
+            {
+                Type = MessageType.Plaque,
+                Content = Message.ToUpperInvariant(),
+                Time = Seconds,
+                PlaySound = PlaySound,
+                UIObject = _plaqueText
+            };
+            _messageQueue.Add(item);
+        }
+ 
+        private void ProcessPlaqueMessage(MessageItem Item, Action Callback)
+        {
+            _plaqueText.Text = Item.Content;
+            _plaqueText.Opacity = 0;
+            _plaqueText.Enable();
+            if (Item.PlaySound)
+                SoundPlayer.PlaySound(SoundType.NotificationSound, _player.Position);
+            
+            FadeAndShow(Item, Callback);
         }
 
         public bool HasTitleMessages => _messageQueue.Any(M => M.Type == MessageType.Title);
@@ -112,7 +156,8 @@ namespace Hedra.Engine.Player
                 Type = MessageType.Title,
                 Content = Message.ToUpperInvariant(),
                 Time = Seconds,
-                Color = TextColor
+                Color = TextColor,
+                UIObject = _mainText
             };
 
             _messageQueue.Add( item );
@@ -124,31 +169,7 @@ namespace Hedra.Engine.Player
             _mainText.Text = Item.Content;
             _mainText.UIText.Opacity = 0;
 
-            if (_player.UI.GamePanel.Enabled)
-            {
-                TaskScheduler.Asynchronous(delegate
-                {
-                    _mainText.UIText.Opacity = 0.0001f;
-                    float factor = MessageSpeed;
-                    while (_mainText.UIText.Opacity > 0)
-                    {
-                        if (_mainText.UIText.Opacity >= 1f)
-                        {
-                            Thread.Sleep((int) (Item.Time * 1000));
-                            factor = -factor;
-                        }
-                        _mainText.UIText.Opacity += factor;
-                        _mainText.UIText.Opacity = Mathf.Clamp(_mainText.UIText.Opacity, 0, 1);
-                        Thread.Sleep((int) ((factor < 0 ? -factor : factor) * 1000));
-                    }
-                    _mainText.UIText.Opacity = 0;
-                    Callback();
-                });
-            }
-            else
-            {
-                Callback();
-            }
+            FadeAndShow(Item, Callback);
         }
 
         public void ShowMessage(string Message, float Seconds)
@@ -258,9 +279,9 @@ namespace Hedra.Engine.Player
                 Content = Message.ToUpperInvariant(),
                 Time = Seconds,
                 Color = FontColor,
-                PlaySound = PlaySound
+                PlaySound = PlaySound,
+                UIObject = _notificationText
             };
-
             _messageQueue.Add(item);
         }
 
@@ -271,31 +292,55 @@ namespace Hedra.Engine.Player
             _notificationText.Enable();
             if (Item.PlaySound)
                 SoundPlayer.PlaySound(SoundType.ButtonHover, _player.Position, false, 1f, 1f);
-
-            TaskScheduler.Asynchronous(delegate
+            FadeAndShow(Item, Callback);
+        }
+        
+        private void FadeAndShow(MessageItem Item, Action Callback)
+        {
+            if (_player.UI.GamePanel.Enabled)
             {
-                _notificationText.UIText.Opacity = 0.0001f;
-                var factor = MessageSpeed * 2f;
-                while (_notificationText.UIText.Opacity > 0)
-                {
-                    if (_notificationText.UIText.Opacity >= 1f)
-                    {
-                        Thread.Sleep((int)(Item.Time * 1000));
-                        factor = -factor;
-                    }
-                    _notificationText.UIText.Opacity += factor;
-                    _notificationText.UIText.Opacity = Mathf.Clamp(_notificationText.UIText.Opacity, 0, 1);
-                    Thread.Sleep((int)((factor < 0 ? -factor : factor) * 400));
-                }
-                _notificationText.UIText.Opacity = 0;
+                CoroutineManager.StartCoroutine(
+                    FadeOverTimeCoroutine,
+                    Item.UIObject,
+                    Item.Time,
+                    Callback
+                );
+            }
+            else
+            {
                 Callback();
-            });         
+            }
+        }
+        
+        private static IEnumerator FadeOverTimeCoroutine(object[] Params)
+        {
+            var time = 0f;
+            var element = (ITransparent) Params[0];
+            var seconds = (float) Params[1];
+            var callback = (Action) Params[2];
+            while (element.Opacity < 1)
+            {
+                element.Opacity += Time.DeltaTime * FadeSpeed;
+                yield return null;
+            }
+            while (time < seconds)
+            {
+                time += Time.DeltaTime;
+                yield return null;
+            }
+            while (element.Opacity > 0)
+            {
+                element.Opacity -= Time.DeltaTime * FadeSpeed;
+                yield return null;
+            }
+            callback();
         }
     }
 
     public class MessageItem
     {
         public MessageType Type;
+        public ITransparent UIObject;
         public string Content;
         public Color Color;
         public float Time;
@@ -307,6 +352,7 @@ namespace Hedra.Engine.Player
         Title,
         Notification,
         Normal,
-        While
+        While,
+        Plaque
     }
 }

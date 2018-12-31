@@ -94,7 +94,7 @@ namespace Hedra.Engine.Localization
             {
                 Value = Value.Replace("{" + i + "}", Params[i].ToString());
             }
-            return Value;
+            return Value.Replace(@"\n", Environment.NewLine);
         }
         
         private static Dictionary<string, string> Parse(string Contents)

@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.QuestSystem.Designs
@@ -11,7 +12,7 @@ namespace Hedra.Engine.QuestSystem.Designs
         public override QuestTier Tier => QuestTier.Easy;
         public override string Name => "CraftingQuest";
 
-        public override string GetDisplayName(QuestObject Quest)
+        public override string GetShortDescription(QuestObject Quest)
         {
             throw new NotImplementedException();
         }
@@ -28,13 +29,19 @@ namespace Hedra.Engine.QuestSystem.Designs
         }
 
         public override QuestDesign[] Predecessors { get; }
+        public override QuestDesign[] Auxiliaries { get; }
         public override QuestDesign[] Descendants { get; }
         public override string ToString(QuestObject Object)
         {
             throw new NotImplementedException();
         }
 
-        public override bool IsQuestCompleted(QuestObject Object, IPlayer Player)
+        public override bool IsQuestCompleted(QuestObject Object)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void Consume(QuestObject Object)
         {
             throw new NotImplementedException();
         }
@@ -43,7 +50,5 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
             throw new NotImplementedException();
         }
-
-        public override VertexData Icon { get; }
     }
 }

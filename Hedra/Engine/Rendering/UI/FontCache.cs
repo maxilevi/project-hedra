@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Hedra.Engine.IO;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -29,6 +30,8 @@ namespace Hedra.Engine.Rendering.UI
             }
             return CachedFonts[entry];
         }
+
+        public static Font Default => FontCache.Get(AssetManager.NormalFamily, 10);
     }
 
     public class FontEntry

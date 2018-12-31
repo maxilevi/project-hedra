@@ -151,7 +151,7 @@ namespace Hedra.Engine.Player.Inventory
         protected virtual void UpdateItemMesh()
         {
             _currentItemMesh?.Dispose();
-            _currentItemMesh = InventoryItemRenderer.BuildModel(CurrentItem, out _currentItemMeshHeight);
+            _currentItemMesh = InventoryItemRenderer.BuildModel(CurrentItem.Model, out _currentItemMeshHeight);
         }
 
         protected virtual void AddAttributes()

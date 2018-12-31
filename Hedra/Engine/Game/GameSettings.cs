@@ -43,14 +43,13 @@ namespace Hedra.Engine.Game
         public static float DefaultScreenHeight { get; set; }
         public static bool Paused { get; set; }
         public static float AmbientOcclusionIntensity = 1;
-        public static bool BlurFilter = false;
+        public static bool BlurFilter { get; set; } = false;
         public static bool DarkEffect = false;
         public static bool DistortEffect = false;
         public const float Fov = 85.0f;
         public static bool GlobalShadows = true;
         public static bool Hardcore = false;
         public static bool Lod = true;
-        public static bool MaxResolution = false;
         public static bool UnderWaterEffect = false;
         private static bool _fullscreen;
         private static int _shadowQuality = 2;

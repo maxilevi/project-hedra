@@ -46,6 +46,10 @@ namespace Hedra.Engine.Player
 
         }
 
+        public void ShowPlaque(string Message, float Seconds, bool PlaySound = true)
+        {
+        }
+
         public bool HasTitleMessages => false;
     }
 }

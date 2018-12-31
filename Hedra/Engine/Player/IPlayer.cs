@@ -38,6 +38,5 @@ namespace Hedra.Engine.Player
         void Respawn();
         void Reset();
         void HideInterfaces();
-        void ShowQuestDialog(IHumanoid Humanoid, QuestObject Object, Action Callback);
     }
 }

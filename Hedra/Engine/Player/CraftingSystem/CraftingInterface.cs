@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player.CraftingSystem
         {
             _player = Player;
             _stateManager = new InventoryStateManager(_player);
-            var interfacePosition = Vector2.UnitX * -.5f + Vector2.UnitY * -.0f;
+            var interfacePosition = Vector2.UnitX * -.4f + Vector2.UnitY * -.0f;
             _recipesItemInterface = new CraftingInventoryArrayInterface(_player, new InventoryArray(Columns * Rows), Rows, Columns)
             {
                 Position = interfacePosition,

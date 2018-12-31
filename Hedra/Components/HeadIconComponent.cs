@@ -13,6 +13,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Components
@@ -24,7 +25,7 @@ namespace Hedra.Components
         private bool ParentIsHumanoid => _humanoidParent != null;
         public bool RotateIcon { get; set; } = true;
 
-        public HeadIconComponent(Entity Parent) : base(Parent)
+        public HeadIconComponent(IEntity Parent) : base(Parent)
         {
             _humanoidParent = Parent as Humanoid;
         }

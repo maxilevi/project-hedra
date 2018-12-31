@@ -6,6 +6,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -17,18 +18,26 @@ namespace Hedra.Engine.QuestSystem.Designs
         
         public override string Name => "CollectQuest";
         
-        public override string GetDisplayName(QuestObject Quest)
+        public override string GetShortDescription(QuestObject Quest)
         {
-            return Translations.Get("quest_collect_name");
+            return Translations.Get(
+                "quest_collect_name",
+                Quest.Giver?.Name ?? "null",
+                Quest.Parameters.Get<ItemCollect[]>("Items")
+                    .Select(I => I.ToString())
+                    .Aggregate((S1,S2) => $"{S1}{S2}")
+            );
         }
 
         public override string GetDescription(QuestObject Quest)
         {
-            var itemList = string.Join(
-                Environment.NewLine,
-                Quest.Parameters.Get<ItemCollect[]>("Items").Select(I => I.ToString())
+            return Translations.Get(
+                "quest_collect_description",
+                Quest.Giver?.Name ?? "null",
+                Quest.Parameters.Get<ItemCollect[]>("Items")
+                    .Select(I => I.ToString(I.IsCompleted(Quest.Owner)))
+                    .Aggregate((S1,S2) => $"{S1}{Environment.NewLine}{S2}")
             );
-            return $"{Translations.Get("quest_items")}:{Environment.NewLine}{itemList}";
         }
 
         public override QuestView View { get; } = new BulletView();
@@ -39,6 +48,8 @@ namespace Hedra.Engine.QuestSystem.Designs
         };
         
         public override QuestDesign[] Predecessors => null;
+        
+        public override QuestDesign[] Auxiliaries => null;
 
         protected override QuestParameters BuildParameters(QuestContext Context, QuestParameters Parameters, Random Rng)
         {
@@ -46,17 +57,24 @@ namespace Hedra.Engine.QuestSystem.Designs
             return Parameters;
         }
         
-        public override bool IsQuestCompleted(QuestObject Object, IPlayer Player)
+        public override bool IsQuestCompleted(QuestObject Object)
         {
             return Object.Parameters.Get<ItemCollect[]>("Items").All(
-                I => Player.Inventory.Search(T => T.Name == I.Name && T.GetAttribute<int>(CommonAttributes.Amount) >= I.Amount
-            ) != null);
+                I => I.IsCompleted(Object.Owner)
+            );
+        }
+
+        protected override void Consume(QuestObject Object)
+        {
+            Object.Parameters.Get<ItemCollect[]>("Items").ToList().ForEach(
+                I => I.Consume(Object.Owner)
+            );
         }
 
         private static ItemCollect[] GetRandomItems(QuestContext Context, Random Rng)
         {
             var templates = TemplatesFromContext(Context, Rng);
-            var count = Rng.Next(1, Math.Min(4, templates.Length));
+            var count = 1;//Rng.Next(1, Math.Min(4, templates.Length));
             var items = new List<ItemCollect>();
             for (var i = 0; i < count; ++i)
             {
@@ -134,8 +152,6 @@ namespace Hedra.Engine.QuestSystem.Designs
             );
         }
 
-        public override VertexData Icon => VertexData.Empty;
-
         public override VertexData BuildPreview(QuestObject Object)
         {
             var items = Object.Parameters.Get<ItemCollect[]>("Items").Select(T => ItemPool.Grab(T.Name)).ToArray();
@@ -154,9 +170,28 @@ namespace Hedra.Engine.QuestSystem.Designs
             public int Amount { get; set; }
             public string Name { get; set; }
 
+            public void Consume(IPlayer Player)
+            {
+                var name = Name;
+                Player.Inventory.RemoveItem(Player.Inventory.Search(I => I.Name == name), Amount);
+            }
+
+            public bool IsCompleted(IPlayer Player)
+            {
+                var amount = Amount;
+                var name = Name;
+                return Player.Inventory.Search(T =>
+                    T.Name == name && T.GetAttribute<int>(CommonAttributes.Amount) >= amount) != null;
+            }
+            
+            public string ToString(bool Completed)
+            {
+                return $"{new string(' ', 8)}${(Completed ? TextFormatting.Green : TextFormatting.Red)}{TextFormatting.Bold}{{• {ToString()}}}";
+            }
+            
             public override string ToString()
             {
-                return $"    • {Amount} {ItemPool.Grab(Name).DisplayName}";
+                return $"{Amount} {ItemPool.Grab(Name).DisplayName}";
             }
         }
     }

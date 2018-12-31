@@ -31,11 +31,12 @@ namespace Hedra.Engine.QuestSystem
         private void AddQuest(IEntity Interactee)
         {
             if(!(Interactee is IPlayer player) || (Parent.Position - player.Position).LengthSquared > 16 * 16) return;
-            player.ShowQuestDialog(Parent, _quest, () =>
+            player.Questing.Start(_quest);
+            /*player.ShowQuestDialog(Parent, _quest, () =>
             {
                 _talk.Dispose();
                 Dispose();
-            });
+            });*/
         }
 
         public override void Dispose()

@@ -92,7 +92,7 @@ namespace Hedra.Engine.Player
             this.Toolbar = new Toolbar(this);
             this.Glider = new HangGlider(this);
             this.AbilityTree = new AbilityTree(this);
-            this.Questing = new QuestInventory();
+            this.Questing = new QuestInventory(this);
             this.QuestInterface = new QuestInterface(this);
             this.Pet = new PetManager(this);
             this.Chat = new Chat(this);
@@ -263,11 +263,9 @@ namespace Hedra.Engine.Player
             Loader.Update();
             InventoryInterface.Update();
             CraftingInterface.Update();
-            QuestInterface.Update();
             AbilityTree.Update();
             Toolbar.Update();
             UI.Update();
-            QuestInterface.Update();
             Pet.Update();
             Chat.Update();
             Map.Update();
@@ -385,12 +383,6 @@ namespace Hedra.Engine.Player
                                                                || CraftingInterface.Show 
                                                                || AbilityTree.Show 
                                                                || QuestInterface.Show;
-
-        public void ShowQuestDialog(IHumanoid Humanoid, QuestObject Object, Action Callback)
-        {
-            QuestInterface.ShowDialog(Humanoid, Object, Callback);
-        }
-        
         public void HideInterfaces()
         {
             InventoryInterface.Show = false;
@@ -399,7 +391,7 @@ namespace Hedra.Engine.Player
             AbilityTree.Show = false;
             QuestInterface.Show = false;
         }
-        
+
         public override bool IsTravelling
         {
             get => IsGliding || IsSailing;
@@ -458,6 +450,7 @@ namespace Hedra.Engine.Player
             Inventory.ClearInventory();
             ComponentManager.Clear();
             CraftingInterface.Reset();
+            QuestInterface.Reset();
             Chat.Clear();
             Model.Alpha = 0f;
             View.TargetPitch = 0f;

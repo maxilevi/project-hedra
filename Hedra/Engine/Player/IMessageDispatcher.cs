@@ -13,6 +13,7 @@ namespace Hedra.Engine.Player
         void ShowMessageWhile(string Message, Color TextColor, Func<bool> Condition);
         void ShowNotification(string Message, Color FontColor, float Seconds);
         void ShowNotification(string Message, Color FontColor, float Seconds, bool PlaySound);
+        void ShowPlaque(string Message, float Seconds, bool PlaySound = true);
         bool HasTitleMessages { get; }
     }
 }

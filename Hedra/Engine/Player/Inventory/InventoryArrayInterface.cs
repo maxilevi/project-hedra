@@ -39,12 +39,14 @@ namespace Hedra.Engine.Player.Inventory
             this._inventoryButtons = new RenderableButton[_length];
             this._inventoryButtonsText = new RenderableText[_length];
             this._elementsPanel = new Panel();
-            var size = InventoryArrayInterface.DefaultSize;
+            var size = DefaultSize;
             var offset = new Vector2(size.X, size.Y);
+            var slotsPerLine = Math.Max(SlotsPerLine, 1);
             var wholeSize = new Vector2(
-                size.X * (_length - 1 - (_length - 1) / SlotsPerLine * SlotsPerLine),
-                size.Y * ((_length - 1) / (float)SlotsPerLine)
+                size.X * (_length - 1 - (_length - 1) / slotsPerLine * slotsPerLine),
+                size.Y * ((_length - 1) / (float)slotsPerLine)
             );
+            var e = Math.Max(SlotsPerLine * SlotsPerLine, 1);
             for (var i = 0; i < _length; i++)
             {
                 var k = i;

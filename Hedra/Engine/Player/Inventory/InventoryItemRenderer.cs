@@ -51,19 +51,19 @@ namespace Hedra.Engine.Player.Inventory
                 }
                 if (_array[i+ _offset] != null)
                 {
-                    _models[i] = BuildModel(_array[i + _offset], out _modelsHeights[i]);
+                    _models[i] = BuildModel(_array[i + _offset].Model, out _modelsHeights[i]);
                     itemCount++;
                 }
             }
             _itemCount = itemCount;
         }
 
-        public static ObjectMesh BuildModel(Item Item, out float ModelHeight)
+        public static ObjectMesh BuildModel(VertexData Model, out float ModelHeight)
         {
-            var model = CenterModel(Item.Model.Clone());
+            var model = CenterModel(Model.Clone());
             ModelHeight = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
             var mesh = ObjectMesh.FromVertexData(model);
-            mesh.BaseTint = EffectDescriber.EffectColorFromItem(Item);
+            //mesh.BaseTint = EffectDescriber.EffectColorFromItem(Item);
             mesh.ApplyFog = false;
             DrawManager.Remove(mesh);
             return mesh;
@@ -76,9 +76,15 @@ namespace Hedra.Engine.Player.Inventory
 
         public uint Draw(ObjectMesh Mesh, Item Item, bool TiltIfWeapon = true, float ZOffset = 3.0f)
         {
+            if(Item == null) return GUIRenderer.TransparentTexture;
+            return Draw(Mesh, Item.IsWeapon, TiltIfWeapon, ZOffset);
+        }
+
+        public uint Draw(ObjectMesh Mesh, bool IsWeapon, bool TiltIfWeapon = true, float ZOffset = 3.0f)
+        {
             ZOffset = Math.Max(ZOffset, 3.0f);
-            if (Mesh == null || Item == null) return GUIRenderer.TransparentTexture;
-            var willTilt = TiltIfWeapon && Item.IsWeapon;
+            if (Mesh == null) return GUIRenderer.TransparentTexture;
+            var willTilt = TiltIfWeapon && IsWeapon;
             Mesh.Rotation = new Vector3(0, _itemRotation, willTilt ? 45 : 0);
             _itemRotation += 25 * Time.DeltaTime / Math.Max(1,_itemCount);
 

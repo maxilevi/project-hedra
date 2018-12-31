@@ -249,14 +249,13 @@
     <Compile Include="Engine\Player\PagedInterface\PagedInventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\PagedInterface\PagedInventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\PagedInterface\PagedInventoryItemInfo.cs" />
-    <Compile Include="Engine\Player\QuestSystem\QuestDialog.cs" />
-    <Compile Include="Engine\Player\QuestSystem\QuestingInventoryArrayInterface.cs" />
-    <Compile Include="Engine\Player\QuestSystem\QuestingInventoryInterfaceManager.cs" />
+    <Compile Include="Engine\Player\QuestSystem\QuestingJournal.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestInterface.cs" />
-    <Compile Include="Engine\Player\QuestSystem\QuestInventoryItemInfo.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\BulletView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\DefaultView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\QuestView.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\ReadNoteDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\TalkDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CollectDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CraftDesign.cs" />
     <Compile Include="Engine\QuestSystem\IQuest.cs" />
@@ -271,11 +270,13 @@
     <Compile Include="Engine\QuestSystem\QuestPool.cs" />
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestTier.cs" />
-    <Compile Include="Engine\Rendering\DisplayColor.cs" />
+    <Compile Include="Engine\Rendering\TextFormatting.cs" />
+    <Compile Include="Engine\Rendering\ITransparent.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
     <Compile Include="Engine\Rendering\TextBillboard.cs" />
     <Compile Include="Engine\Rendering\TextureBillboard.cs" />
+    <Compile Include="Engine\Rendering\UI\Plaque.cs" />
     <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\InstanceDataChunkWatcher.cs" />
@@ -7029,6 +7030,9 @@
     <Content Include="Assets\splash-logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\UI\AbandonButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\UI\AbilityTreeBackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -7078,6 +7082,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\UI\ManaBackground.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\Plaque.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\UI\QuestDescription.png">

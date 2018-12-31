@@ -6,6 +6,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.QuestSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
 using Hedra.Sound;
@@ -17,46 +18,52 @@ namespace Hedra.Engine.Player.QuestSystem
 {
     public class QuestInterface : PlayerInterface
     {
-        private const int Columns = 7;
+        private const int Columns = 5;
         private const int Rows = 1;
         public override Key OpeningKey => Controls.QuestLog;
         private readonly IPlayer _player;
         private bool _show;
-        private readonly QuestingInventoryArrayInterface _questItemInterface;
+        private readonly QuestingJournal _questItemInterface;
         private readonly InventoryStateManager _stateManager;
-        private readonly QuestingInventoryInterfaceManager _interfaceManager;
-        private readonly QuestInventoryItemInfo _itemInfo;
-        private readonly QuestDialog _dialog;
-        
+
         public QuestInterface(IPlayer Player)
         {
             _player = Player;
             _stateManager = new InventoryStateManager(_player);
-            var interfacePosition = Vector2.UnitX * -.5f;
-            _questItemInterface = new QuestingInventoryArrayInterface(_player, new InventoryArray(Columns * Rows), Rows, Columns)
+            _questItemInterface = new QuestingJournal(_player)
             {
-                Position = Vector2.UnitY * -.1f
+                Position = Vector2.UnitX * -.5f
             };
-            _itemInfo = new QuestInventoryItemInfo(_player, _questItemInterface.Renderer)
-            {
-                Position = Vector2.UnitY * _questItemInterface.Position.Y + interfacePosition.X * -Vector2.UnitX
-            };
-            _interfaceManager = new QuestingInventoryInterfaceManager(Rows, Columns, _itemInfo, _questItemInterface);
             _stateManager.OnStateChange += Invoke;
-            _dialog = new QuestDialog(_player, _questItemInterface.Renderer);
+            _player.Questing.QuestAccepted += O =>
+            {
+                _player.MessageDispatcher.ShowPlaque(
+                    $"{Translations.Get("new_quest")}{Environment.NewLine}{O.ShortDescription}.", 1f
+                );
+            };
+            _player.Questing.QuestCompleted += O =>
+            {
+                _player.MessageDispatcher.ShowPlaque(
+                    $"{Translations.Get("quest_completed")}{Environment.NewLine}{O.ShortDescription}.", 1f
+                );
+            };
+            _player.Questing.QuestAbandoned += O =>
+            {
+                _player.MessageDispatcher.ShowPlaque(
+                    $"{Translations.Get("quest_abandoned")}{Environment.NewLine}{O.ShortDescription}.", 1f, false
+                );
+            };
         }
 
-        public void UpdateView()
+        private void UpdateView()
         {
-            _interfaceManager.UpdateView();
             _questItemInterface.UpdateView();
         }
 
         private void SetInventoryState(bool State)
         {
             _questItemInterface.Enabled = State;
-            _interfaceManager.Enabled = State;
-            _dialog.Enabled = false;
+    
             if (State)
             {
                 _stateManager.CaptureState();
@@ -71,30 +78,10 @@ namespace Hedra.Engine.Player.QuestSystem
                 _stateManager.ReleaseState();
             }
         }
-        
-        public void Update()
-        {
-            if (_show)
-            {
-                _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
-                    Time.DeltaTime * 8f);
-                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float) Time.DeltaTime * 16f);
-                _player.View.TargetDistance =
-                    Mathf.Lerp(_player.View.TargetDistance, 10f, (float) Time.DeltaTime * 16f);
-                _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw,
-                    0,
-                    Time.DeltaTime * 16f);
-            }
-        }
 
-        public void ShowDialog(IHumanoid Humanoid, QuestObject Object, Action Callback)
+        public void Reset()
         {
-            MarkAsShown();
-            _player.View.PositionDelegate = () => (_player.Position + Humanoid.Position) / 2;
-            _questItemInterface.Enabled = false;
-            _interfaceManager.Enabled = false;
-            _dialog.Show(Object, Callback);
-            
+            _questItemInterface.Reset();
         }
         
         public override bool Show

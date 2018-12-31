@@ -164,7 +164,7 @@ namespace Hedra.Engine.Management
                     var human = World.WorldBuilding.SpawnVillager(Caster.Position + Caster.Orientation * 16f, Utils.Rng);
                     var tier = Parts.Length == 2 ? (QuestTier) Enum.Parse(typeof(QuestTier), Parts[1], true) : QuestTier.Any;
                     human.AddComponent(
-                        new QuestGiverComponent(human, QuestPool.Grab(tier).Build(human.Position, Utils.Rng))
+                        new QuestGiverComponent(human, QuestPool.Grab(tier).Build(human.Position, Utils.Rng, human))
                     );
                     Result = "Success";
                     return true;
@@ -299,6 +299,11 @@ namespace Hedra.Engine.Management
                     }
                     SkyManager.SetTime(int.Parse(Parts[1]));
                     return true;
+                }
+
+                if (Parts[0] == "plaque")
+                {
+                    Caster.MessageDispatcher.ShowPlaque(Parts[1], 3);
                 }
                 if (Parts[0] == "poison")
                 {

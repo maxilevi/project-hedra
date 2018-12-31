@@ -20,7 +20,7 @@ namespace Hedra.Engine.Rendering.UI
     /// <summary>
     /// Description of GUIText.
     /// </summary>
-    public class GUIText : UIElement, ISimpleTexture
+    public class GUIText : UIElement, ISimpleTexture, ITransparent
     {
         public static ITextProvider Provider { get; set; } = new TextProvider();
         public GUITexture UIText { get; private set; }
@@ -141,6 +141,12 @@ namespace Hedra.Engine.Rendering.UI
                 UIText.Position = value;
                 _temporalPosition = value;
             }
+        }
+
+        public float Opacity
+        {
+            get => UIText.Opacity;
+            set => UIText.Opacity = value;
         }
 
         public void Enable()

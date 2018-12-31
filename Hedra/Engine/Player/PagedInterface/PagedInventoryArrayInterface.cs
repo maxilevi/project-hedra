@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using System.Linq;
 using Hedra.Core;
@@ -19,18 +20,18 @@ namespace Hedra.Engine.Player.PagedInterface
         protected int PerPage { get; }
         protected int CurrentPage { get; private set; }
         protected int TotalPages { get; private set; }
-        private readonly Texture _title;
-        private readonly GUIText _titleText;
-        private readonly Texture _pageSelector;
-        private readonly GUIText _currentPageText;
-        private readonly Button _previousPage;
-        private readonly Button _nextPage;
+        protected Texture Title { get; }
+        protected GUIText TitleText { get; }
+        protected Texture PageSelector { get; }
+        protected GUIText CurrentPageText { get; }
+        protected Button PreviousPageText { get; }
+        protected Button NextPageText { get; }
 
         protected PagedInventoryArrayInterface(IPlayer Player, InventoryArray Array, int Rows, int Columns, Vector2 Spacing) 
             : base(Array, 0, Rows * Columns, Columns, Spacing)
         {
             this.Player = Player;
-            PerPage = Rows * Columns;
+            PerPage = Math.Max(Rows * Columns, 1);
             Panel = new Panel
             {
                 DisableKeys = true
@@ -52,23 +53,23 @@ namespace Hedra.Engine.Player.PagedInterface
             var realScale = Graphics2D.SizeFromAssets("Assets/UI/InventoryBackground.png") * barScale;
             var barPosition = Vector2.UnitY * .0975f * Rows;
             var offset = Rows % 2 == 0 ? Vector2.UnitY * realScale.Y : Vector2.Zero;
-            _title = new Texture("Assets/UI/InventoryBackground.png", barPosition - offset, barScale);
-            _titleText = new GUIText(TitleTranslation, _title.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
-            _pageSelector = new Texture("Assets/UI/InventoryBackground.png", -barPosition - offset, barScale);
+            Title = new Texture("Assets/UI/InventoryBackground.png", barPosition - offset, barScale);
+            TitleText = new GUIText(TitleTranslation, Title.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
+            PageSelector = new Texture("Assets/UI/InventoryBackground.png", -barPosition - offset, barScale);
             
-            _currentPageText = new GUIText("00/00", _pageSelector.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
+            CurrentPageText = new GUIText("00/00", PageSelector.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
             var footerFont = FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold);
-            _previousPage = new Button(_currentPageText.Position - Vector2.UnitX * _currentPageText.Scale.X * 2, Vector2.One, "\u25C0", Color.White, footerFont);
-            _previousPage.Click += (O, E) => PreviousPage();
-            _nextPage = new Button(_currentPageText.Position + Vector2.UnitX * _currentPageText.Scale.X * 2, Vector2.One, "\u25B6", Color.White, footerFont);
-            _previousPage.Click += (O, E) => NextPage();
+            PreviousPageText = new Button(CurrentPageText.Position - Vector2.UnitX * CurrentPageText.Scale.X * 1.25f, Vector2.One, "\u25C0", Color.White, footerFont);
+            PreviousPageText.Click += (O, E) => PreviousPage();
+            NextPageText = new Button(CurrentPageText.Position + Vector2.UnitX * CurrentPageText.Scale.X * 1.25f, Vector2.One, "\u25B6", Color.White, footerFont);
+            NextPageText.Click += (O, E) => NextPage();
             
-            Panel.AddElement(_currentPageText);
-            Panel.AddElement(_previousPage);
-            Panel.AddElement(_nextPage);
-            Panel.AddElement(_pageSelector);
-            Panel.AddElement(_title);
-            Panel.AddElement(_titleText);
+            Panel.AddElement(CurrentPageText);
+            Panel.AddElement(PreviousPageText);
+            Panel.AddElement(NextPageText);
+            Panel.AddElement(PageSelector);
+            Panel.AddElement(Title);
+            Panel.AddElement(TitleText);
         }
 
         protected abstract Translation TitleTranslation { get; }
@@ -83,9 +84,15 @@ namespace Hedra.Engine.Player.PagedInterface
                 Array.AddItem(outputs[i]);
                 SetSlot(Array.IndexOf(outputs[i]));
             }
-            TotalPages = outputs.Length / PerPage + 1;
-            _currentPageText.Text = $"{CurrentPage + 1}/{TotalPages}";
-            Renderer.UpdateView(); 
+            UpdatePages(outputs.Length);
+            Renderer.UpdateView();
+        }
+
+        protected void UpdatePages(int Length)
+        {
+            TotalPages = Length / PerPage;
+            CurrentPage = Mathf.Modulo(CurrentPage, TotalPages);
+            CurrentPageText.Text = $"{CurrentPage + 1}/{Math.Max(1, TotalPages)}";
         }
 
         private void ResetSelector()
@@ -108,7 +115,7 @@ namespace Hedra.Engine.Player.PagedInterface
         {
         }
 
-        protected abstract Item[] ArrayObjects { get; }
+        protected virtual Item[] ArrayObjects => null;
 
         public void Reset()
         {
@@ -119,11 +126,13 @@ namespace Hedra.Engine.Player.PagedInterface
         private void PreviousPage()
         {
             CurrentPage = Mathf.Modulo(CurrentPage - 1, TotalPages);
+            UpdateView();
         }
         
         private void NextPage()
         {
             CurrentPage = Mathf.Modulo(CurrentPage + 1, TotalPages);
+            UpdateView();
         }
 
         public int SelectedIndex { get; set; }
