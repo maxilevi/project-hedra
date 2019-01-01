@@ -263,6 +263,7 @@ namespace Hedra.Engine.Player
             Loader.Update();
             InventoryInterface.Update();
             CraftingInterface.Update();
+            QuestInterface.Update();
             AbilityTree.Update();
             Toolbar.Update();
             UI.Update();

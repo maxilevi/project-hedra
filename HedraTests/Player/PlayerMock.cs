@@ -145,7 +145,7 @@ namespace HedraTests.Player
         public float DodgeCost { get; set; }
         public float MaxOxygen { get; set; }
         public int MobId { get; set; }
-        public int MobSeed { get; set; }
+        public int Seed { get; set; }
         public Vector3 Orientation { get; set; }
         public bool Removable { get; set; }
         public Vector3 BlockPosition { get; set; }

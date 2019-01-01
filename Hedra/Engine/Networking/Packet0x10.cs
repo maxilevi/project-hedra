@@ -56,7 +56,7 @@ namespace Hedra.Engine.Networking
                             Animation.Add( 0x0 );
                         }
                         Position.Add( World.Entities[i].BlockPosition);
-                        Seeds.Add( (ushort) World.Entities[i].MobSeed);
+                        Seeds.Add( (ushort) World.Entities[i].Seed);
                         
                     }
                     if( (World.Entities.Count-1 - Base - i) >= Packet0x10.EntityRate)

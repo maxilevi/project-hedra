@@ -9,8 +9,10 @@ using OpenTK;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public abstract class QuestDesign 
+    public abstract class QuestDesign
     {
+        protected virtual bool IsAuxiliary => false;
+        
         public abstract QuestTier Tier { get; }
 
         public abstract string Name { get; }
@@ -22,14 +24,10 @@ namespace Hedra.Engine.QuestSystem
         public abstract QuestView View { get; }
 
         protected abstract QuestParameters BuildParameters(QuestContext Context, QuestParameters Parameters, Random Rng);
-        
-        public abstract QuestDesign[] Predecessors { get; }
-        
+
         public abstract QuestDesign[] Auxiliaries { get; }
         
         public abstract QuestDesign[] Descendants { get; }
-
-        public abstract string ToString(QuestObject Object);
 
         public abstract bool IsQuestCompleted(QuestObject Object);
         
@@ -40,6 +38,33 @@ namespace Hedra.Engine.QuestSystem
         public void Trigger(QuestObject Object)
         {
             Consume(Object);
+            if (!IsAuxiliary)
+            {
+                var rng = new Random(Object.Parameters.Get<int>("Seed"));
+                var nextDesign = Descendants?[rng.Next(0, Descendants.Length)];
+                var auxiliaryDesign = Auxiliaries[rng.Next(0, Auxiliaries.Length)];
+                var questObject = auxiliaryDesign.Build(
+                    Object.Parameters.Get<QuestContext>("Context"),
+                    Object.Parameters.Get<int>("Seed"),
+                    Object.Giver
+                );
+                if(nextDesign != null)
+                    questObject.Parameters.Set("Next", nextDesign);
+                Object.Owner.Questing.Start(questObject);
+            }
+            else
+            {
+                var nextDesign = Object.Parameters.Get<QuestDesign>("Next");
+                if (nextDesign != null)
+                {
+                    var questObject = nextDesign.Build(
+                        Object.Parameters.Get<QuestContext>("Context"),
+                        Object.Parameters.Get<int>("Seed"),
+                        Object.Giver
+                    );
+                    Object.Owner.Questing.Start(questObject);
+                }
+            }
         }
         
         public QuestObject Build(Vector3 Position, Random Rng, IHumanoid Giver)

@@ -5,6 +5,7 @@ namespace Hedra.Engine.QuestSystem
         Easy,
         Normal,
         Hard,
+        Auxiliary,
         MaxEnums,
         Any
     }

@@ -66,7 +66,7 @@ namespace Hedra.Engine.EntitySystem
 
         public QuadrupedModel(Entity Parent, ModelTemplate Template) : base(Parent)
         {
-            var rng = new Random(Parent.MobSeed);
+            var rng = new Random(Parent.Seed);
 
             ModelPath = Template.Path;
             Model = AnimationModelLoader.LoadEntity(Template.Path);

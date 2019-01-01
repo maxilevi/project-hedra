@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player.QuestSystem
         private readonly Texture _renderTexture;
         private readonly Vector2 _descriptionPosition;
         private readonly Button _abandonButton;
-        private readonly GUIText _abandonText;
+        private readonly Texture _descriptionBackground;
         private ObjectMesh _currentItemMesh;
         private float _currentItemMeshHeight;
         
@@ -35,37 +35,38 @@ namespace Hedra.Engine.Player.QuestSystem
             _journalBackground.SendBack();
             _descriptionText = new GUIText(
                 string.Empty,
-                _descriptionPosition = -Vector2.UnitY * _journalBackground.Scale.Y * .65f,
+                _descriptionPosition = -Vector2.UnitY * _journalBackground.Scale.Y * .8f,
                 Color.White,
                 FontCache.Get(AssetManager.NormalFamily, 11)
             );
+            _descriptionBackground = new Texture(
+                "Assets/UI/QuestTextureBackground.png",
+                Vector2.Zero,
+                Vector2.One
+            );
             _renderTexture = new Texture(
                 0,
-                _journalBackground.Position + Vector2.UnitY * _journalBackground.Scale.Y * .25f,
-                _journalBackground.Scale * .4f
+                _journalBackground.Position,
+                _journalBackground.Scale * .35f
             );
             _renderTexture.TextureElement.IdPointer = () => Renderer.Draw(_currentItemMesh, false,
                 false, _currentItemMeshHeight * InventoryItemRenderer.ZOffsetFactor);
             var abandonSize = Graphics2D.SizeFromAssets("Assets/UI/AbandonButton.png") * .4f;
             _abandonButton = new Button(
-                _journalBackground.Position - Vector2.UnitY * (_journalBackground.Scale.Y + abandonSize.Y),
+                _journalBackground.Position - Vector2.UnitY * (_journalBackground.Scale.Y - abandonSize.Y * .5f),
                 abandonSize,
-                Graphics2D.LoadFromAssets("Assets/UI/AbandonButton.png")
-            );
-            _abandonButton.Click += (O, E) =>
-            {
-                Player.Questing.Abadon(CurrentQuest);
-                UpdateView();
-                SoundPlayer.PlayUISound(SoundType.NotificationSound);
-            };
-            _abandonText = new GUIText(
                 Translation.Create("abandon_quest"),
-                _abandonButton.Position,
                 Color.White,
                 FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold)
             );
+            _abandonButton.Click += (O, E) =>
+            {
+                Player.Questing.Abandon(CurrentQuest);
+                UpdateView();
+                SoundPlayer.PlayUISound(SoundType.NotificationSound);
+            };
+            Panel.AddElement(_descriptionBackground);
             Panel.AddElement(_abandonButton);
-            Panel.AddElement(_abandonText);
             Panel.AddElement(_renderTexture);
             Panel.AddElement(_descriptionText);
             Panel.AddElement(_journalBackground);
@@ -84,11 +85,26 @@ namespace Hedra.Engine.Player.QuestSystem
 
         public override void UpdateView()
         {
-            UpdatePages(Quests.Length);
-            UpdateItemMesh();
-            Title.Disable();
-            _descriptionText.Text = CurrentQuest.Description;
-            _descriptionText.Position = Position + _descriptionPosition;
+            if (Quests.Length != 0)
+            {
+                UpdatePages(Quests.Length);
+                UpdateItemMesh();
+                Title.Disable();
+                _descriptionText.Text = CurrentQuest.Description;
+                _descriptionText.Position = Position + _descriptionPosition;
+                _descriptionText.Position += Vector2.UnitY * _descriptionText.Scale.Y * 2;
+                _renderTexture.Position = _journalBackground.Position;
+                _renderTexture.Position += Vector2.UnitY * _descriptionText.Scale.Y * 2;
+                _descriptionBackground.Position = _renderTexture.Position;
+                _descriptionBackground.Scale = _renderTexture.Scale * 1.15f;
+            }
+            else
+            {
+                UpdatePages(1);
+                _renderTexture.Disable();
+                _descriptionText.Disable();
+                _abandonButton.Disable();
+            }
         }
 
         private void UpdateItemMesh()

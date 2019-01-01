@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.QuestSystem.Designs;
+using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using OpenTK;
 
 namespace Hedra.Engine.QuestSystem
@@ -9,12 +10,13 @@ namespace Hedra.Engine.QuestSystem
     {
         private static readonly List<QuestDesign> QuestDesigns = new List<QuestDesign>
         {
-            new CollectDesign()
+            new CollectDesign(),
+            new SpeakDesign()
         };
         
         public static QuestDesign Grab(QuestTier Tier = QuestTier.Any)
         {
-            return QuestDesigns.First(D => D.Tier == Tier || Tier == QuestTier.Any);
+            return QuestDesigns.First(D => (D.Tier == Tier || Tier == QuestTier.Any) && Tier != QuestTier.Auxiliary);
         }
 
         public static QuestDesign Grab(string Name)

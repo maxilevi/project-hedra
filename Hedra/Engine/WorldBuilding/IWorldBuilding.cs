@@ -16,6 +16,7 @@ namespace Hedra.Engine.WorldBuilding
         BasePlateau[] Plateaux { get; }
         IGroundwork[] Groundworks { get; }
         Humanoid SpawnVillager(Vector3 DesiredPosition, Random Rng);
+        Humanoid SpawnVillager(Vector3 DesiredPosition, int Seed);
         Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition);
         Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition);
         Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false);

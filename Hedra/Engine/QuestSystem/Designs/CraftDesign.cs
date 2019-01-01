@@ -28,13 +28,8 @@ namespace Hedra.Engine.QuestSystem.Designs
             throw new NotImplementedException();
         }
 
-        public override QuestDesign[] Predecessors { get; }
         public override QuestDesign[] Auxiliaries { get; }
         public override QuestDesign[] Descendants { get; }
-        public override string ToString(QuestObject Object)
-        {
-            throw new NotImplementedException();
-        }
 
         public override bool IsQuestCompleted(QuestObject Object)
         {

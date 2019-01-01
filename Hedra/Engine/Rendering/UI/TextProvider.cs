@@ -219,12 +219,24 @@ namespace Hedra.Engine.Rendering.UI
         {
             var max = SizeF.Empty;
             var sizes = new SizeF[Params.Texts.Length];
+            var fullString = string.Join(string.Empty, Params.Texts);
             using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
             {
                 for (var i = 0; i < Params.Texts.Length; ++i)
                 {
                     if (Params.Texts[i] == Environment.NewLine) continue;
-                    sizes[i] = graphics.MeasureString(Params.Texts[i], Params.TextFonts[i]);
+                    var format = StringFormat.GenericTypographic;
+                    format.SetMeasurableCharacterRanges(new[]
+                    {
+                        new CharacterRange(Params.Offsets[i], Params.Texts[i].Length)
+                    });
+                    var rectangle = graphics.MeasureCharacterRanges(
+                        fullString,
+                        Params.TextFonts[i],
+                        new RectangleF(0, 0, 0, 0),
+                        format
+                    ).First().GetBounds(graphics);
+                    sizes[i] = new SizeF(rectangle.Width, rectangle.Height);
                 }
             }
             var bounds = SizeF.Empty;

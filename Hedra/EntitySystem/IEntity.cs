@@ -33,7 +33,7 @@ namespace Hedra.EntitySystem
         
         int MobId { get; set; }
         
-        int MobSeed { get; set; }
+        int Seed { get; set; }
         
         Vector3 Orientation { get; set; }
         

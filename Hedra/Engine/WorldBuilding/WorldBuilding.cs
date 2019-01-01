@@ -61,6 +61,12 @@ namespace Hedra.Engine.WorldBuilding
 
         public Humanoid SpawnVillager(Vector3 DesiredPosition, Random Rng)
         {
+            return SpawnVillager(DesiredPosition, Rng.Next(int.MinValue, int.MaxValue));
+        }
+        
+        public Humanoid SpawnVillager(Vector3 DesiredPosition, int Seed)
+        {
+            var rng = new Random(Seed);
             var types = new []
             {
                 HumanType.Warrior,
@@ -68,10 +74,10 @@ namespace Hedra.Engine.WorldBuilding
                 HumanType.Mage,
                 HumanType.Archer
             };
-            var villager = World.WorldBuilding.SpawnHumanoid(types[Rng.Next(0, types.Length)], DesiredPosition);
+            var villager = World.WorldBuilding.SpawnHumanoid(types[rng.Next(0, types.Length)], DesiredPosition);
             villager.SetWeapon(null);
             villager.SearchComponent<HealthBarComponent>().FontColor = HumanoidBehaviourTemplate.Friendly.ToColor();
-            villager.Name = NameGenerator.PickMaleName(Rng);
+            villager.Name = NameGenerator.PickMaleName(rng);
             villager.SearchComponent<DamageComponent>().Immune = true;
             villager.SearchComponent<HealthBarComponent>().Name = villager.Name;
             return villager;

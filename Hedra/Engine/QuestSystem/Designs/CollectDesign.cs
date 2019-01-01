@@ -6,6 +6,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
+using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 using OpenTK;
@@ -21,8 +22,8 @@ namespace Hedra.Engine.QuestSystem.Designs
         public override string GetShortDescription(QuestObject Quest)
         {
             return Translations.Get(
-                "quest_collect_name",
-                Quest.Giver?.Name ?? "null",
+                "quest_collect_short",
+                Quest.Giver?.Name ?? "NULL",
                 Quest.Parameters.Get<ItemCollect[]>("Items")
                     .Select(I => I.ToString())
                     .Aggregate((S1,S2) => $"{S1}{S2}")
@@ -33,9 +34,9 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
             return Translations.Get(
                 "quest_collect_description",
-                Quest.Giver?.Name ?? "null",
+                Quest.Giver?.Name ?? "NULL",
                 Quest.Parameters.Get<ItemCollect[]>("Items")
-                    .Select(I => I.ToString(I.IsCompleted(Quest.Owner)))
+                    .Select(I => I.ToString(Quest.Owner))
                     .Aggregate((S1,S2) => $"{S1}{Environment.NewLine}{S2}")
             );
         }
@@ -46,10 +47,11 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
             new CraftDesign()
         };
-        
-        public override QuestDesign[] Predecessors => null;
-        
-        public override QuestDesign[] Auxiliaries => null;
+
+        public override QuestDesign[] Auxiliaries => new QuestDesign[]
+        {
+            new SpeakDesign()
+        };
 
         protected override QuestParameters BuildParameters(QuestContext Context, QuestParameters Parameters, Random Rng)
         {
@@ -60,7 +62,7 @@ namespace Hedra.Engine.QuestSystem.Designs
         public override bool IsQuestCompleted(QuestObject Object)
         {
             return Object.Parameters.Get<ItemCollect[]>("Items").All(
-                I => I.IsCompleted(Object.Owner)
+                I => I.IsCompleted(Object.Owner, out _)
             );
         }
 
@@ -144,13 +146,6 @@ namespace Hedra.Engine.QuestSystem.Designs
                     throw new ArgumentOutOfRangeException($"Unknown QuestContextType '{Context.ContextType}'");
             }
         }
-        
-        public override string ToString(QuestObject Object)
-        {
-            return Object.Parameters.Get<ItemCollect[]>("Items").Select(
-                I => I.ToString()).Aggregate((S1,S2) => $"{S1}{Environment.NewLine}{S2}"
-            );
-        }
 
         public override VertexData BuildPreview(QuestObject Object)
         {
@@ -176,17 +171,20 @@ namespace Hedra.Engine.QuestSystem.Designs
                 Player.Inventory.RemoveItem(Player.Inventory.Search(I => I.Name == name), Amount);
             }
 
-            public bool IsCompleted(IPlayer Player)
+            public bool IsCompleted(IPlayer Player, out int CurrentAmount)
             {
+                CurrentAmount = 0;
                 var amount = Amount;
                 var name = Name;
-                return Player.Inventory.Search(T =>
-                    T.Name == name && T.GetAttribute<int>(CommonAttributes.Amount) >= amount) != null;
+                var item = Player.Inventory.Search(T => T.Name == name);
+                return item != null && (CurrentAmount = item.GetAttribute<int>(CommonAttributes.Amount)) >= amount;
             }
             
-            public string ToString(bool Completed)
+            public string ToString(IPlayer Player)
             {
-                return $"{new string(' ', 8)}${(Completed ? TextFormatting.Green : TextFormatting.Red)}{TextFormatting.Bold}{{• {ToString()}}}";
+                var completed = IsCompleted(Player, out var currentAmount);
+                var text = $"• {currentAmount}/{Amount} {ItemPool.Grab(Name).DisplayName}";               
+                return $"{new string(' ', 8)}${(completed ? TextFormatting.Green : TextFormatting.Red)}{TextFormatting.Bold}{{{text}}}";
             }
             
             public override string ToString()

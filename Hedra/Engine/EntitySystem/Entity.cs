@@ -65,7 +65,7 @@ namespace Hedra.Engine.EntitySystem
         public int Level { get; set; } = 1;
         public float MaxOxygen { get; set; } = 30;
         public int MobId { get; set; }
-        public int MobSeed { get; set; }
+        public int Seed { get; set; }
         public Vector3 Orientation { get; set; } = Vector3.UnitZ;       
         public bool Removable { get; set; } = true;
         public Vector3 BlockPosition { get; set; }

@@ -37,6 +37,11 @@ namespace HedraTests.Structure
             throw new NotImplementedException();
         }
 
+        public Humanoid SpawnVillager(Vector3 DesiredPosition, int Seed)
+        {
+            throw new NotImplementedException();
+        }
+
         public Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition)
         {
             return SpawnHumanoid(Type.ToString(), DesiredPosition);

@@ -108,6 +108,7 @@ namespace Hedra.Engine.Player.Inventory
             Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
+
             Mesh.Draw();
 
             /*

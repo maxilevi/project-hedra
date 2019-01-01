@@ -542,7 +542,7 @@ namespace Hedra.Engine.Generation
             var mob = MobFactory.Build(Type, MobSeed);
             var placeablePosition = this.FindPlaceablePosition(mob, DesiredPosition);
             mob.MobId = ++_previousId;
-            mob.MobSeed = MobSeed;
+            mob.Seed = MobSeed;
             mob.Model.TargetRotation = new Vector3(0, (new Random(MobSeed)).NextFloat() * 360f * Mathf.Radian, 0);
             mob.Physics.TargetPosition = placeablePosition;
             mob.Model.Position = placeablePosition;

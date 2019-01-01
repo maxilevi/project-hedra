@@ -38,17 +38,18 @@ namespace Hedra.Engine.QuestSystem
 
         private void CheckForCompleteness()
         {
-            for (var i = 0; i < _activeQuests.Count; ++i)
+            for (var i = _activeQuests.Count-1; i > -1; --i)
             {
                 if (_activeQuests[i].IsQuestCompleted())
                 {
                     _activeQuests[i].Trigger();
                     QuestCompleted?.Invoke(_activeQuests[i]);
+                    _activeQuests.RemoveAt(i);
                 }
             }
         }
 
-        public void Abadon(QuestObject Object)
+        public void Abandon(QuestObject Object)
         {
             _activeQuests.Remove(Object);
             QuestAbandoned?.Invoke(Object);
