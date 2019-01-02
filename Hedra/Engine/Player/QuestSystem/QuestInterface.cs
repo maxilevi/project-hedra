@@ -38,19 +38,19 @@ namespace Hedra.Engine.Player.QuestSystem
             _player.Questing.QuestAccepted += O =>
             {
                 _player.MessageDispatcher.ShowPlaque(
-                    $"{Translations.Get("new_quest")}{Environment.NewLine}{O.ShortDescription}.", 1f
+                    $"{Translations.Get("new_quest")}{Environment.NewLine}{O.ShortDescription}", 1f
                 );
             };
             _player.Questing.QuestCompleted += O =>
             {
                 _player.MessageDispatcher.ShowPlaque(
-                    $"{Translations.Get("quest_completed")}{Environment.NewLine}{O.ShortDescription}.", 1f
+                    $"{Translations.Get("quest_completed")}{Environment.NewLine}{O.ShortDescription}", 1f
                 );
             };
             _player.Questing.QuestAbandoned += O =>
             {
                 _player.MessageDispatcher.ShowPlaque(
-                    $"{Translations.Get("quest_abandoned")}{Environment.NewLine}{O.ShortDescription}.", 1f, false
+                    $"{Translations.Get("quest_abandoned")}{Environment.NewLine}{O.ShortDescription}", 1f, false
                 );
             };
         }

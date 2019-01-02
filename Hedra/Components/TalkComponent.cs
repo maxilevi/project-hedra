@@ -31,13 +31,15 @@ namespace Hedra.Components
 
     public class TalkComponent : Component<IHumanoid>, ITickable
     {
+        public event OnTalkEventHandler OnTalkingEnded;
+        public bool Talking { get; private set; }
+        public bool CanTalk { get; set; } = true;
+        
         private const int TalkRadius = 12;
         private static uint _talkBackground;
         private static Vector2 _talkBackgroundSize;
         private readonly Animation _talkingAnimation;
-        public event OnTalkEventHandler OnTalkingEnded;
-        private bool _shouldTalk;                                                                                        
-        public bool Talking { get; private set; }
+        private bool _shouldTalk;  
         private TextBillboard _board;
         private readonly Translation _phrase;
         private Translation _thought;
@@ -68,20 +70,22 @@ namespace Hedra.Components
             };
             EventDispatcher.RegisterKeyDown(this, (Sender, EventArgs) =>
             {
-                if (EventArgs.Key == Controls.Interact && Parent.IsNear(GameManager.Player, TalkRadius) && !Talking 
-                    && GameManager.Player.CanInteract)
+                if (EventArgs.Key == Controls.Interact && IsAvailableToTalk())
                     _shouldTalk = true;
             });
         }
 
+        private bool IsAvailableToTalk()
+        {
+            return Parent.IsNear(GameManager.Player, TalkRadius) && !Talking && GameManager.Player.CanInteract
+                && !PlayerInterface.Showing && !Parent.Model.IsMoving && CanTalk;
+        }
+
         public override void Update()
         {
-            bool CanTalk() => 
-                (GameManager.Player.Position - Parent.Position).Xz.LengthSquared < TalkRadius * TalkRadius 
-                && !Talking && !PlayerInterface.Showing && !Parent.Model.IsMoving && GameManager.Player.CanInteract;
-            if (CanTalk())
+            if (IsAvailableToTalk())
             {
-                GameManager.Player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_talk", Controls.Interact), Color.White, CanTalk);
+                GameManager.Player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_talk", Controls.Interact), Color.White, IsAvailableToTalk);
 
                 if (_shouldTalk)
                 {
@@ -129,7 +133,6 @@ namespace Hedra.Components
             _talker = GameManager.Player;
             SoundPlayer.PlayUISound(SoundType.TalkSound, 1f, .75f);
             var phrase = SelectThought().Get();
-            phrase = Utils.FitString(phrase, 30);
             
             var textSize = new GUIText(phrase, Vector2.Zero, Color.White, FontCache.Get(AssetManager.NormalFamily, 10));
 
@@ -170,15 +173,17 @@ namespace Hedra.Components
         {
             var billboard = (TextBillboard) Args[0];
             var text = (string) Args[1];
+            var realText = TextProvider.StripFormat(text);
+            if (realText.Length == text.Length) text = realText = Utils.FitString(realText, 26);
             var iterator = 0;
             var passedTime = 0f;
             PlayTalkingAnimation();
 
-            while (iterator < text.Length+1)
+            while (iterator < realText.Length + 1)
             {
                 if (passedTime > .05f)
                 {
-                    billboard.UpdateText(text.Substring(0, iterator));
+                    billboard.UpdateText(TextProvider.Substr(text, iterator));
                     iterator++;
                     passedTime = 0;
                 }

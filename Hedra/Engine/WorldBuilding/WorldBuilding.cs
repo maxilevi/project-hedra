@@ -75,6 +75,7 @@ namespace Hedra.Engine.WorldBuilding
                 HumanType.Archer
             };
             var villager = World.WorldBuilding.SpawnHumanoid(types[rng.Next(0, types.Length)], DesiredPosition);
+            villager.Seed = Seed;
             villager.SetWeapon(null);
             villager.SearchComponent<HealthBarComponent>().FontColor = HumanoidBehaviourTemplate.Friendly.ToColor();
             villager.Name = NameGenerator.PickMaleName(rng);

@@ -178,7 +178,7 @@ namespace Hedra.Engine.Rendering.Animation
             DrawModel(projectionViewMat, viewMat);
         }
 
-        private void DrawModel(Matrix4 ProjectionViewMat, Matrix4 ViewMatrix)
+        public void DrawModel(Matrix4 ProjectionViewMat, Matrix4 ViewMatrix)
         {
             if (!Enabled || _disposed || Data == null) return;
             Renderer.Enable(EnableCap.DepthTest);

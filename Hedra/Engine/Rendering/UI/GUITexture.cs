@@ -32,6 +32,7 @@ namespace Hedra.Engine.Rendering.UI
         public bool Grayscale { get; set; }
         public float Angle { get; set; }
         public uint MaskId { get; set; }
+        public bool FXAA { get; set; }
         public Func<uint> IdPointer { get; set; }
         private Vector2 _position;
         private bool _disposed;

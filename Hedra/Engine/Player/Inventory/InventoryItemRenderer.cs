@@ -17,14 +17,13 @@ namespace Hedra.Engine.Player.Inventory
     public class InventoryItemRenderer
     {
         public const float ZOffsetFactor = 1.25f * 5f;
-        private static readonly FBO Framebuffer;
+        public static readonly FBO Framebuffer;
         private readonly InventoryArray _array;
         private readonly int _length;
         private readonly int _offset;
         private readonly ObjectMesh[] _models;
         private readonly float[] _modelsHeights;
-        private float _itemRotation;
-        private float _itemCount;
+        private static float _itemRotation;
 
         static InventoryItemRenderer()
         {
@@ -55,7 +54,6 @@ namespace Hedra.Engine.Player.Inventory
                     itemCount++;
                 }
             }
-            _itemCount = itemCount;
         }
 
         public static ObjectMesh BuildModel(VertexData Model, out float ModelHeight)
@@ -71,7 +69,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public uint Draw(int Id)
         {
-            return Draw(_models[Id], _array[Id + _offset], true, _modelsHeights[Id] * InventoryItemRenderer.ZOffsetFactor);
+            return Draw(_models[Id], _array[Id + _offset], true, _modelsHeights[Id] * ZOffsetFactor);
         }
 
         public uint Draw(ObjectMesh Mesh, Item Item, bool TiltIfWeapon = true, float ZOffset = 3.0f)
@@ -80,13 +78,12 @@ namespace Hedra.Engine.Player.Inventory
             return Draw(Mesh, Item.IsWeapon, TiltIfWeapon, ZOffset);
         }
 
-        public uint Draw(ObjectMesh Mesh, bool IsWeapon, bool TiltIfWeapon = true, float ZOffset = 3.0f)
+        public static uint Draw(ObjectMesh Mesh, bool IsWeapon, bool TiltIfWeapon = true, float ZOffset = 3.0f)
         {
             ZOffset = Math.Max(ZOffset, 3.0f);
             if (Mesh == null) return GUIRenderer.TransparentTexture;
             var willTilt = TiltIfWeapon && IsWeapon;
             Mesh.Rotation = new Vector3(0, _itemRotation, willTilt ? 45 : 0);
-            _itemRotation += 25 * Time.DeltaTime / Math.Max(1,_itemCount);
 
             Renderer.PushShader();
             Renderer.PushFBO();
@@ -131,6 +128,11 @@ namespace Hedra.Engine.Player.Inventory
             return Framebuffer.TextureID[0];
         }
 
+        public static void Update()
+        {
+            _itemRotation += 25 * Time.DeltaTime;
+        }
+        
         private static VertexData CenterModel(VertexData Model)
         {
             Model.Center();

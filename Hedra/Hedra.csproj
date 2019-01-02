@@ -189,6 +189,7 @@
     <Compile Include="Components\HeadIconComponent.cs" />
     <Compile Include="Components\MercenaryComponent.cs" />
     <Compile Include="Components\MerchantComponent.cs" />
+    <Compile Include="Components\SingularComponent.cs" />
     <Compile Include="Components\SpawnVillagerThoughtsComponent.cs" />
     <Compile Include="Components\TalkComponent.cs" />
     <Compile Include="Components\ThoughtsComponent.cs" />
@@ -249,10 +250,11 @@
     <Compile Include="Engine\Player\PagedInterface\PagedInventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\PagedInterface\PagedInventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\PagedInterface\PagedInventoryItemInfo.cs" />
+    <Compile Include="Engine\Player\QuestSystem\EntityRenderer.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestingJournal.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestInterface.cs" />
-    <Compile Include="Engine\Player\QuestSystem\Views\BulletView.cs" />
-    <Compile Include="Engine\Player\QuestSystem\Views\DefaultView.cs" />
+    <Compile Include="Engine\Player\QuestSystem\Views\ModelView.cs" />
+    <Compile Include="Engine\Player\QuestSystem\Views\EntityView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\QuestView.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\AuxiliaryDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\ReadNoteDesign.cs" />
@@ -260,17 +262,21 @@
     <Compile Include="Engine\QuestSystem\Designs\CollectDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CraftDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\QuestDesign.cs" />
+    <Compile Include="Engine\QuestSystem\GiverTemplate.cs" />
     <Compile Include="Engine\QuestSystem\IQuest.cs" />
+    <Compile Include="Engine\QuestSystem\QuestComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestContext.cs" />
-    <Compile Include="Engine\QuestSystem\QuestGiverThoughtsComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestItem.cs" />
     <Compile Include="Engine\QuestSystem\QuestObject.cs" />
     <Compile Include="Engine\QuestSystem\QuestGiverComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestInventory.cs" />
     <Compile Include="Engine\QuestSystem\QuestParameters.cs" />
+    <Compile Include="Engine\QuestSystem\QuestPersistence.cs" />
     <Compile Include="Engine\QuestSystem\QuestPool.cs" />
+    <Compile Include="Engine\QuestSystem\Quests.cs" />
     <Compile Include="Engine\QuestSystem\QuestSpeakComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
+    <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestTier.cs" />
     <Compile Include="Engine\Rendering\TextFormatting.cs" />
     <Compile Include="Engine\Rendering\ITransparent.cs" />
@@ -6709,7 +6715,7 @@
     <None Include="Shaders\Bloom.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\HBlur.frag">
+    <None Include="Shaders\Blur.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Cursor.frag">
@@ -6760,7 +6766,7 @@
     <None Include="Shaders\SSAO.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Blur.vert">
+    <None Include="Shaders\HBlur.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\GUI.frag">
@@ -6836,6 +6842,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\UnderWater.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\VBlur.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Water.frag">
@@ -7212,9 +7221,6 @@
     </Content>
     <Content Include="..\project-hedra-assets\Sounds\Soundtrack\GraveyardChampion.ogg">
       <Link>Sounds\Soundtrack\GraveyardChampion.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shaders\VBlur.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Translations\Español.po" />

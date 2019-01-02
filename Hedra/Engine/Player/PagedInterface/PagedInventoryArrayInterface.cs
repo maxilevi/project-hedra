@@ -90,7 +90,7 @@ namespace Hedra.Engine.Player.PagedInterface
 
         protected void UpdatePages(int Length)
         {
-            TotalPages = Length / PerPage + 1;
+            TotalPages = Math.Max(Length / PerPage, 1);
             CurrentPage = Mathf.Modulo(CurrentPage, TotalPages);
             CurrentPageText.Text = $"{CurrentPage + 1}/{Math.Max(1, TotalPages)}";
         }

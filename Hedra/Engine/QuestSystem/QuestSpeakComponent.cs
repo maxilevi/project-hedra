@@ -1,19 +1,32 @@
 using Hedra.Components;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Localization;
+using Hedra.Engine.QuestSystem.Designs;
 using Hedra.EntitySystem;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public class QuestSpeakComponent : Component<IHumanoid>
+    public class QuestSpeakComponent : QuestComponent
     {
-        public bool Spoke { get; private set; }
+        public event OnTalkEventHandler Spoke;
         private readonly TalkComponent _talk;
+        private readonly QuestThoughtsComponent _thoughts;
         
-        public QuestSpeakComponent(IHumanoid Parent) : base(Parent)
+        public QuestSpeakComponent(IHumanoid Parent, QuestObject Object, QuestDesign Design) : base(Parent)
         {
-            _talk = new TalkComponent(Parent);
-            _talk.OnTalkingEnded += T => Spoke = true;
-            Parent.AddComponent(_talk);
+            Parent.AddComponent(
+                _thoughts = new QuestThoughtsComponent(
+                    Parent,
+                    Design.ThoughtsKeyword,
+                    Design.GetThoughtsParameters(Object)
+                )
+            );
+            Parent.AddComponent(_talk = new TalkComponent(Parent));
+            _talk.OnTalkingEnded += T =>
+            {
+                Spoke?.Invoke(T);
+                Parent.RemoveComponent(this);
+            };
         }
 
         public override void Update()
@@ -22,7 +35,9 @@ namespace Hedra.Engine.QuestSystem
 
         public override void Dispose()
         {
-            _talk.Dispose();
+            Parent.RemoveComponent(_talk);
+            Parent.RemoveComponent(_thoughts);
+            base.Dispose();
         }
     }
 }

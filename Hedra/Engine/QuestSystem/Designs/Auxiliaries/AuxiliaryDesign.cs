@@ -4,15 +4,20 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 {
     public abstract class AuxiliaryDesign : QuestDesign
     {
-        protected override bool IsAuxiliary => false;
-        
         public override QuestTier Tier => QuestTier.Auxiliary;
-        
-        public override QuestView View => new DefaultView();
-        
-        public override QuestDesign[] Auxiliaries => null;
 
-        public override QuestDesign[] Descendants => null;
+        public override string Name => null;
+        
+        public override string ThoughtsKeyword => null;
+
+        public override object[] GetThoughtsParameters(QuestObject Quest)
+        {
+            return null;
+        }
+
+        protected override QuestDesign[] Auxiliaries => null;
+
+        protected override QuestDesign[] Descendants => null;
 
     }
 }

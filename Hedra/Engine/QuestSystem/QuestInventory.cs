@@ -29,13 +29,19 @@ namespace Hedra.Engine.QuestSystem
             CheckForCompleteness();
         }
 
-        public void SetQuests(QuestObject[] Quests)
+        public void SetQuests(QuestTemplate[] Quests)
         {
             _activeQuests.Clear();
-            _activeQuests.AddRange(Quests.ToList());
+            _activeQuests.AddRange(Quests.Select(QuestObject.FromTemplate).ToList());
+            _activeQuests.RemoveAll(Q => Q == null);
             _activeQuests.ForEach(Q => Q.Start(_player));
         }
 
+        public void Trigger()
+        {
+            CheckForCompleteness();
+        }
+        
         private void CheckForCompleteness()
         {
             for (var i = _activeQuests.Count-1; i > -1; --i)
@@ -49,8 +55,14 @@ namespace Hedra.Engine.QuestSystem
             }
         }
 
+        public QuestTemplate[] GetTemplates()
+        {
+            return _activeQuests.Select(Q => Q.ToTemplate()).ToArray();
+        }
+        
         public void Abandon(QuestObject Object)
         {
+            Object.Abandon();
             _activeQuests.Remove(Object);
             QuestAbandoned?.Invoke(Object);
         }

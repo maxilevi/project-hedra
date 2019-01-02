@@ -13,6 +13,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.StructureSystem;
 using OpenTK;
@@ -172,6 +173,8 @@ namespace Hedra.Engine.Game
                 Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);               
             }
             SpawnCampfireDesign.AlignPlayer(Player);
+            Player.Questing.Empty();
+            //Player.Questing.Start(QuestPool.Grab(Quests.SpawnQuest));
             Player.UI.HideMenu();
             Player.UI.Hide = false;
             Player.Enabled = true;

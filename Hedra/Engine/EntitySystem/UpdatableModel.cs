@@ -5,6 +5,7 @@ using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -164,11 +165,6 @@ namespace Hedra.Engine.EntitySystem
         public override void Attack(IEntity Victim, float RangeModifier)
         {
 
-        }
-
-        public override void Draw()
-        {
-            
         }
 
         private void OnMove()

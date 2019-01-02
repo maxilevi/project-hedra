@@ -11,32 +11,39 @@ namespace Hedra.Engine.Localization
         private bool _isDefault;
         private string _defaultText;
         private string _format;
-        private Func<string> _provider;
+        private object[] _parameters;
+        private Func<object[], string> _provider;
 
         private Translation()
         {
-            _provider = () => _format.Replace("{0}", _isDefault ? _defaultText : Translations.Get(_key));
+            _provider = P => _format.Replace("{0}", _isDefault ? _defaultText : Translations.Get(_key, P));
             Translations.Add(this);
         }
         
         public string Get()
         {
-            return _provider();
+            return _provider(_parameters);
         }
 
         public void Concat(Func<string> Provider)
         {
             var oldProvider = _provider;
-            _provider = () => oldProvider() + Provider();
+            _provider = P => oldProvider(P) + Provider();
         }
         
-        public static Translation Create(string Key, string Format = "{0}")
+        public static Translation Create(string Key, string Format = "{0}", params object[] Parameters)
         {
             return new Translation
             {
                 _key = Key,
                 _format = Format,
+                _parameters = Parameters
             };
+        }
+        
+        public static Translation Create(string Key, params object[] Parameters)
+        {
+            return Create(Key, "{0}", Parameters);
         }
 
         public static Translation Default(string Text)

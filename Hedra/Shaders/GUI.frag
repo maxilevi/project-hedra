@@ -2,7 +2,7 @@
 
 float luma(vec3 color);
 
-#define FXAA_QUALITY_PRESET 29
+#define FXAA_QUALITY_PRESET 12
 
 #define FXAA_PC 1
 #define FXAA_GLSL_120 0

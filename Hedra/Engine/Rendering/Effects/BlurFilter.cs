@@ -16,27 +16,35 @@ namespace Hedra.Engine.Rendering.Effects
     /// </summary>
     public class BlurFilter : Filter
     {
+        
+        private static readonly Shader HBlurShader;
+        private static readonly Shader VBlurShader;
 
-        public override void Pass(FBO Src, FBO Dst)
+        static BlurFilter()
         {
-            
-            BloomFilter.HBloomFbo.Bind();
-            BloomFilter.HBlurShader.Bind();
-            Renderer.Clear(ClearBufferMask.ColorBufferBit);
-            this.DrawQuad(BloomFilter.HBlurShader, Src.TextureID[0], 0);
-            BloomFilter.HBlurShader.Unbind();
-            BloomFilter.HBloomFbo.UnBind();
+            HBlurShader = Shader.Build("Shaders/HBlur.vert", "Shaders/Blur.frag");
+            VBlurShader = Shader.Build("Shaders/VBlur.vert", "Shaders/Blur.frag");
+        }
 
-            BloomFilter.VBloomFbo.Bind();         
-            BloomFilter.VBlurShader.Bind();
-            Renderer.Clear(ClearBufferMask.ColorBufferBit);
-            this.DrawQuad(BloomFilter.VBlurShader, BloomFilter.HBloomFbo.TextureID[0], 0);
-            BloomFilter.VBlurShader.Unbind();
-            BloomFilter.VBloomFbo.UnBind();
+        public override void Pass(FBO Src, FBO Dst){
+            
+            Dst.Bind();
+            HBlurShader.Bind();
+            this.DrawQuad(HBlurShader, Src.TextureID[0], 0);
+            HBlurShader.Unbind();
+            Dst.UnBind();
+
+            Src.Bind();
+            
+            VBlurShader.Bind();
+            this.DrawQuad(VBlurShader, Dst.TextureID[0], 0);
+            VBlurShader.Unbind();
+            
+            Src.UnBind();
             
             Dst.Bind();
             MainFBO.Shader.Bind();
-            MainFBO.DrawQuad(BloomFilter.VBloomFbo.TextureID[0]);
+            MainFBO.DrawQuad(Src.TextureID[0]);
             MainFBO.Shader.Unbind();
             Dst.UnBind();
         }

@@ -12,6 +12,26 @@ namespace HedraTests.Rendering
     [TestFixture]
     public class TextProviderTest
     {
+
+        [Test]
+        public void TestTextSubString()
+        {
+            var str = "thank $(BOLD)(VIOLET){u}, next";
+            var realStr = TextProvider.StripFormat(str);
+            Assert.AreEqual(
+                TextProvider.Substr(str, 6),
+                "thank "
+            );
+            Assert.AreEqual(
+                TextProvider.Substr(str, 7),
+                "thank $(BOLD)(VIOLET){u}"
+            );
+            Assert.AreEqual(
+                TextProvider.Substr(str, realStr.Length),
+                str
+            );
+        }
+        
         [Test]
         public void TestMultipleProperties()
         {

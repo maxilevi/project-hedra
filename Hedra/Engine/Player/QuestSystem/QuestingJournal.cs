@@ -23,9 +23,7 @@ namespace Hedra.Engine.Player.QuestSystem
         private readonly Texture _renderTexture;
         private readonly Vector2 _descriptionPosition;
         private readonly Button _abandonButton;
-        private readonly Texture _descriptionBackground;
-        private ObjectMesh _currentItemMesh;
-        private float _currentItemMeshHeight;
+        private readonly Texture _renderBackground;
         
         public QuestingJournal(IPlayer Player) 
             : base(Player, null, 0, 0, Vector2.One)
@@ -39,7 +37,7 @@ namespace Hedra.Engine.Player.QuestSystem
                 Color.White,
                 FontCache.Get(AssetManager.NormalFamily, 11)
             );
-            _descriptionBackground = new Texture(
+            _renderBackground = new Texture(
                 "Assets/UI/QuestTextureBackground.png",
                 Vector2.Zero,
                 Vector2.One
@@ -47,16 +45,20 @@ namespace Hedra.Engine.Player.QuestSystem
             _renderTexture = new Texture(
                 0,
                 _journalBackground.Position,
-                _journalBackground.Scale * .35f
-            );
-            _renderTexture.TextureElement.IdPointer = () => Renderer.Draw(_currentItemMesh, false,
-                false, _currentItemMeshHeight * InventoryItemRenderer.ZOffsetFactor);
+                _journalBackground.Scale * .4f
+            )
+            {
+                TextureElement =
+                {
+                    IdPointer = () => CurrentQuest?.View.GetTextureId() ?? GUIRenderer.TransparentTexture
+                }
+            };
             var abandonSize = Graphics2D.SizeFromAssets("Assets/UI/AbandonButton.png") * .4f;
             _abandonButton = new Button(
                 _journalBackground.Position - Vector2.UnitY * (_journalBackground.Scale.Y - abandonSize.Y * .5f),
                 abandonSize,
                 Translation.Create("abandon_quest"),
-                Color.White,
+                Color.Red,
                 FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold)
             );
             _abandonButton.Click += (O, E) =>
@@ -65,7 +67,7 @@ namespace Hedra.Engine.Player.QuestSystem
                 UpdateView();
                 SoundPlayer.PlayUISound(SoundType.NotificationSound);
             };
-            Panel.AddElement(_descriptionBackground);
+            Panel.AddElement(_renderBackground);
             Panel.AddElement(_abandonButton);
             Panel.AddElement(_renderTexture);
             Panel.AddElement(_descriptionText);
@@ -88,32 +90,25 @@ namespace Hedra.Engine.Player.QuestSystem
             if (Quests.Length != 0)
             {
                 UpdatePages(Quests.Length);
-                UpdateItemMesh();
                 Title.Disable();
                 _descriptionText.Text = CurrentQuest.Description;
                 _descriptionText.Position = Position + _descriptionPosition;
                 _descriptionText.Position += Vector2.UnitY * _descriptionText.Scale.Y * 2;
                 _renderTexture.Position = _journalBackground.Position;
                 _renderTexture.Position += Vector2.UnitY * _descriptionText.Scale.Y * 2;
-                _descriptionBackground.Position = _renderTexture.Position;
-                _descriptionBackground.Scale = _renderTexture.Scale * 1.15f;
+                _renderBackground.Position = _renderTexture.Position;
+                _renderBackground.Scale = _renderTexture.Scale * 1.15f;
             }
             else
             {
                 UpdatePages(1);
+                _descriptionText.Text = Translations.Get("empty_journal");
                 _renderTexture.Disable();
-                _descriptionText.Disable();
                 _abandonButton.Disable();
+                _renderBackground.Disable();
             }
         }
 
-        private void UpdateItemMesh()
-        {
-            _currentItemMesh?.Dispose();
-            _currentItemMesh = 
-                InventoryItemRenderer.BuildModel(CurrentQuest.BuildPreview(), out _currentItemMeshHeight);
-        }
-        
         private QuestObject CurrentQuest => Quests[CurrentPage];
 
         protected override Translation TitleTranslation => Translation.Create("quests");

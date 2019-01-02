@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
+using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 
@@ -12,6 +13,15 @@ namespace Hedra.Engine.QuestSystem.Designs
         public override QuestTier Tier => QuestTier.Easy;
         public override string Name => "CraftingQuest";
 
+        public override string ThoughtsKeyword => "quest_craft_dialog";
+
+        public override object[] GetThoughtsParameters(QuestObject Quest)
+        {
+            return new object[]
+            {
+            };
+        }
+        
         public override string GetShortDescription(QuestObject Quest)
         {
             throw new NotImplementedException();
@@ -22,14 +32,18 @@ namespace Hedra.Engine.QuestSystem.Designs
             throw new NotImplementedException();
         }
 
-        public override QuestView View { get; }
+        public override QuestView BuildView(QuestObject Quest)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override QuestParameters BuildParameters(QuestContext Context, QuestParameters Parameters, Random Rng)
         {
             throw new NotImplementedException();
         }
 
-        public override QuestDesign[] Auxiliaries { get; }
-        public override QuestDesign[] Descendants { get; }
+        protected override QuestDesign[] Auxiliaries { get; }
+        protected override QuestDesign[] Descendants { get; }
 
         public override bool IsQuestCompleted(QuestObject Object)
         {
@@ -37,11 +51,6 @@ namespace Hedra.Engine.QuestSystem.Designs
         }
 
         protected override void Consume(QuestObject Object)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override VertexData BuildPreview(QuestObject Object)
         {
             throw new NotImplementedException();
         }

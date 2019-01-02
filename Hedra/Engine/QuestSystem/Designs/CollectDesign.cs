@@ -6,6 +6,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
+using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
@@ -18,12 +19,25 @@ namespace Hedra.Engine.QuestSystem.Designs
         public override QuestTier Tier => QuestTier.Easy;
         
         public override string Name => "CollectQuest";
+
+        public override string ThoughtsKeyword => "quest_collect_dialog";
+
+        public override object[] GetThoughtsParameters(QuestObject Quest)
+        {
+            return new object[]
+            {
+                Quest.Parameters.Get<ItemCollect[]>("Items")
+                .Select(I => I.ToString())
+                .Aggregate((S1,S2) => $"{S1}, {S2}")
+                .ToUpperInvariant()
+            };
+        }
         
         public override string GetShortDescription(QuestObject Quest)
         {
             return Translations.Get(
                 "quest_collect_short",
-                Quest.Giver?.Name ?? "NULL",
+                Quest.Giver.Name,
                 Quest.Parameters.Get<ItemCollect[]>("Items")
                     .Select(I => I.ToString())
                     .Aggregate((S1,S2) => $"{S1}{S2}")
@@ -34,21 +48,19 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
             return Translations.Get(
                 "quest_collect_description",
-                Quest.Giver?.Name ?? "NULL",
+                Quest.Giver.Name,
                 Quest.Parameters.Get<ItemCollect[]>("Items")
                     .Select(I => I.ToString(Quest.Owner))
                     .Aggregate((S1,S2) => $"{S1}{Environment.NewLine}{S2}")
             );
         }
 
-        public override QuestView View { get; } = new BulletView();
-
-        public override QuestDesign[] Descendants => new QuestDesign[]
+        protected override QuestDesign[] Descendants => new QuestDesign[]
         {
             new CraftDesign()
         };
 
-        public override QuestDesign[] Auxiliaries => new QuestDesign[]
+        protected override QuestDesign[] Auxiliaries => new QuestDesign[]
         {
             new SpeakDesign()
         };
@@ -147,7 +159,7 @@ namespace Hedra.Engine.QuestSystem.Designs
             }
         }
 
-        public override VertexData BuildPreview(QuestObject Object)
+        public override QuestView BuildView(QuestObject Object)
         {
             var items = Object.Parameters.Get<ItemCollect[]>("Items").Select(T => ItemPool.Grab(T.Name)).ToArray();
             var model = new VertexData();
@@ -157,7 +169,7 @@ namespace Hedra.Engine.QuestSystem.Designs
                 transform *= Matrix4.CreateRotationY(i * (360 / items.Length) * Mathf.Radian);
                 model += items[i].Model.Clone().Transform(transform);
             }
-            return model;
+            return new ModelView(Object, model);
         }
 
         private struct ItemCollect
@@ -184,7 +196,7 @@ namespace Hedra.Engine.QuestSystem.Designs
             {
                 var completed = IsCompleted(Player, out var currentAmount);
                 var text = $"• {currentAmount}/{Amount} {ItemPool.Grab(Name).DisplayName}";               
-                return $"{new string(' ', 8)}${(completed ? TextFormatting.Green : TextFormatting.Red)}{TextFormatting.Bold}{{{text}}}";
+                return $"{new string(' ', 8)}${(completed ? TextFormatting.Green : TextFormatting.Red)}{{{text}}}";
             }
             
             public override string ToString()

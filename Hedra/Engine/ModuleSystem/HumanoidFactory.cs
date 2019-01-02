@@ -78,12 +78,10 @@ namespace Hedra.Engine.ModuleSystem
                 human.AddComponent(drop);
             }
 
-            var barComponent =
-                new HealthBarComponent(human, behaviour.Name ?? template.DisplayName ?? template.Name)
-                {
-                    FontColor = behaviour.Color.ToColor()
-                };
-            human.AddComponent(barComponent);
+            human.AddComponent(new HealthBarComponent(human, behaviour.Name ?? template.DisplayName ?? template.Name)
+            {
+                FontColor = behaviour.Color.ToColor()
+            });
             human.SearchComponent<DamageComponent>().Immune = template.Immune;
             human.SearchComponent<DamageComponent>().XpToGive = 6f;
             human.Removable = false;

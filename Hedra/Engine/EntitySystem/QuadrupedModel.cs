@@ -335,11 +335,6 @@ namespace Hedra.Engine.EntitySystem
             if(Model != null && !this.IsIdling)
                 Model.PlayAnimation(SelectIdleAnimation());
         }
-        
-        public override void Draw()
-        {
-            this.Model.Draw();
-        }
 
         public override Vector3 Position
         {

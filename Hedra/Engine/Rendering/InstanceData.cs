@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -23,6 +24,7 @@ namespace Hedra.Engine.Rendering
     {
         private bool _boundsInitialized;
         private Vector3 _bounds;
+        private StackTrace _trace;
 
         public List<Vector4> Colors { get; set; }
         public List<float> ExtraData { get; set; }
@@ -36,6 +38,11 @@ namespace Hedra.Engine.Rendering
         public Func<BlockType, bool> PlaceCondition { get; set; }
         public VertexData OriginalMesh { get; set; }
 
+
+        public InstanceData()
+        {
+            _trace = new StackTrace();
+        }
 
         public void Apply(Matrix4 Transformation)
         {

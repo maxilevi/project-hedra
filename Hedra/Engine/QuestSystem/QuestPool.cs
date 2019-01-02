@@ -10,18 +10,22 @@ namespace Hedra.Engine.QuestSystem
     {
         private static readonly List<QuestDesign> QuestDesigns = new List<QuestDesign>
         {
-            new CollectDesign(),
-            new SpeakDesign()
+            new CollectDesign()
         };
         
         public static QuestDesign Grab(QuestTier Tier = QuestTier.Any)
         {
-            return QuestDesigns.First(D => (D.Tier == Tier || Tier == QuestTier.Any) && Tier != QuestTier.Auxiliary);
+            return QuestDesigns.First(D => D.Tier == Tier || Tier == QuestTier.Any);
         }
 
         public static QuestDesign Grab(string Name)
         {
             return QuestDesigns.First(D => D.Name == Name);
+        }
+        
+        public static QuestDesign Grab(Quests Name)
+        {
+            return Grab(Name.ToString());
         }
 
         public static bool Exists(string Name)

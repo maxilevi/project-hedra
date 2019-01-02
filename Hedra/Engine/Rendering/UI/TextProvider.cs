@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Net.Mime;
+using System.Text;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
@@ -44,20 +45,43 @@ namespace Hedra.Engine.Rendering.UI
         
         public Bitmap BuildText(string Text, Font TextFont, Color TextColor)
         {
-            if(Text.Contains(Environment.NewLine))
-            {
-                int a = 0;
-            }
             return DoBuildText(BuildParams(Text, TextFont, TextColor));
         }
 
-        public static TextParams BuildParams(string Text, Font TextFont, Color TextColor)
+        private static string[] GetSplits(string Text)
         {
-            var splits = Regex.Split(Text, @"(\$.+?{.*?})")
+            return Regex.Split(Text, @"(\$.+?{.*?})")
                 .SelectMany(S => Regex.Split(S, @"(\r\n|\n)"))
                 .Where(S => !string.IsNullOrEmpty(S))
                 .ToArray();
-            
+        }
+        
+        public static string Substr(string Text, int End)
+        {
+            var splits = GetSplits(Text);
+            var texts = splits.Select(StringMatch).ToArray();
+            var accumulated = 0;
+            var index = 0;
+            var builder = new StringBuilder();
+            for (var i = 0; i < texts.Length; ++i)
+            {
+                index = i;
+                if(accumulated + texts[i].Length >= End) break;
+                accumulated += texts[i].Length;
+                builder.Append(splits[i]);
+            }
+            builder.Append(splits[index].Replace(texts[index], texts[index].Substring(0, End - accumulated)));
+            return builder.ToString();
+        }
+
+        public static string StripFormat(string Text)
+        {
+            return string.Join(string.Empty, GetSplits(Text).Select(StringMatch));
+        }
+        
+        public static TextParams BuildParams(string Text, Font TextFont, Color TextColor)
+        {
+            var splits = GetSplits(Text);          
             var texts = splits.Select(StringMatch).ToArray();
             var fullText = string.Join(string.Empty, texts);
             return new TextParams(
@@ -68,7 +92,7 @@ namespace Hedra.Engine.Rendering.UI
             );
         }
 
-        private static bool Match(string Text, Color Default, Font DefaultFont, out Color Color, out string CleanVersion, out Font Font)
+        private static void Match(string Text, Color Default, Font DefaultFont, out Color Color, out string CleanVersion, out Font Font)
         {
             CleanVersion = Text;
             Font = DefaultFont;
@@ -96,9 +120,7 @@ namespace Hedra.Engine.Rendering.UI
                     U => FontCache.Get(lambdaFont.FontFamily, lambdaFont.Size * U, lambdaFont.Style)
                 );
                 CleanVersion = Regex.Replace(Text, @"\$|\(\)|{|}", string.Empty);
-                return true;
             }
-            return false;
         }
 
         private static T Replace<T, U>(ref string Text, T Default, Dictionary<string, U> Map, Func<U, T> Do)

@@ -443,10 +443,10 @@ namespace Hedra.Engine.EntitySystem
             if (Model.Disposed) return;
 
             World.RemoveEntity(this);
-
-            for (var i = Components.Count-1; i > -1; --i)
+            var components = Components.ToArray(); 
+            for (var i = components.Length-1; i > -1; --i)
             {
-                Components[i]?.Dispose();
+                components[i]?.Dispose();
             }
 
             (Model as IAudible)?.StopSound();

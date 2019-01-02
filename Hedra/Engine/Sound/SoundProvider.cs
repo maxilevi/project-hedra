@@ -157,10 +157,10 @@ namespace Hedra.Engine.Sound
         private short[] LoadOgg(string File, out int Channels, out int Bits, out int Rate, out int BytesPerSecond, out int Count, int Offset, int Length)
         {
             
-            byte[] bytes = AssetManager.ReadPath(File, false);
+            var bytes = AssetManager.ReadPath(File, false);
             Stream stream = new MemoryStream(bytes);
             
-            using(VorbisReader reader = new VorbisReader(stream, true))
+            using(var reader = new VorbisReader(stream, true))
             {
                 if (Length == -1)
                 {

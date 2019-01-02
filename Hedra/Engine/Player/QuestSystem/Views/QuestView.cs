@@ -1,7 +1,16 @@
-namespace Hedra.Engine.Player.QuestSystem
+using Hedra.Engine.QuestSystem;
+
+namespace Hedra.Engine.Player.QuestSystem.Views
 {
-    public class QuestView
+    public abstract class QuestView
     {
+        protected QuestObject Quest { get; }
+
+        protected QuestView(QuestObject Quest)
+        {
+            this.Quest = Quest;
+        }
         
+        public abstract uint GetTextureId();
     }
 }

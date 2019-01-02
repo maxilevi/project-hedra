@@ -2,6 +2,7 @@ using System;
 using Hedra.Components;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.QuestSystem;
+using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 
@@ -9,13 +10,11 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 {
     public class SpeakDesign : AuxiliaryDesign
     {
-        public override string Name => "TalkQuest";
-        
         public override string GetShortDescription(QuestObject Quest)
         {
             return Translations.Get(
                 "quest_speak_short",
-                Quest.Giver?.Name ?? "NULL"
+                Quest.Giver.Name
             );
         }
 
@@ -23,30 +22,47 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
         {
             return Translations.Get(
                 "quest_speak_description",
-                Quest.Giver?.Name ?? "NULL"
+                Quest.Giver.Name
             );
         }
-        
-        protected override QuestParameters BuildParameters(QuestContext Context, QuestParameters Parameters, Random Rng)
+
+        protected override QuestObject Setup(QuestObject Object)
         {
-            return Parameters;
+            var component = new QuestSpeakComponent(
+                Object.Giver,
+                Object,
+                Object.Parameters.Get<QuestDesign>("Next")
+            );
+            component.Spoke += T =>
+            {
+                Object.Parameters.Set("IsCompleted", true);
+                Object.Owner.Questing.Trigger();
+            };
+            Object.Giver.AddComponent(component);
+            Object.Parameters.Set("IsCompleted", false);
+            return Object;
         }
 
         public override bool IsQuestCompleted(QuestObject Object)
         {
-            return Object.Parameters.Get<IHumanoid>("Humanoid").SearchComponent<QuestSpeakComponent>().Spoke;
+            return Object.Parameters.Get<bool>("IsCompleted");
         }
 
+        public override void Abandon(QuestObject Object)
+        {
+            Consume(Object);
+        }
+        
         protected override void Consume(QuestObject Object)
         {
-            Object.Parameters.Get<IHumanoid>("Humanoid").RemoveComponent(
-                Object.Parameters.Get<IHumanoid>("Humanoid").SearchComponent<QuestSpeakComponent>()
+            Object.Giver.RemoveComponent(
+                Object.Giver.SearchComponent<QuestSpeakComponent>()
             );
         }
 
-        public override VertexData BuildPreview(QuestObject Object)
+        public override QuestView BuildView(QuestObject Object)
         {
-            return VertexData.Empty;
+            return new EntityView(Object, Object.Giver.Model);
         }
     }
 }

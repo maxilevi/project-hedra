@@ -12,6 +12,7 @@ using System.IO;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
@@ -133,7 +134,7 @@ namespace Hedra.Engine.Management
                 RandomFactor = Player.RandomFactor,
                 Items = Player.Inventory.ToArray(),
                 Recipes = Player.Crafting.RecipeNames,
-                Quests = Player.Questing.ActiveQuests
+                Quests = Player.Questing.GetTemplates()
             };
 
             return data;
@@ -223,11 +224,11 @@ namespace Hedra.Engine.Management
                 }
                 if (version >= 1.25f)
                 {
-                    var quests = new List<QuestObject>();
+                    var quests = new List<QuestTemplate>();
                     var length = br.ReadInt32();
                     for(var i = 0; i < length; ++i)
                     {
-                        var quest = QuestObject.FromArray(br.ReadBytes(br.ReadInt32()));
+                        var quest = QuestTemplate.FromArray(br.ReadBytes(br.ReadInt32()));
                         if(QuestPool.Exists(quest.Name))
                             quests.Add(quest);
                         else

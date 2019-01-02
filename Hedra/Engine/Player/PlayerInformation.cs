@@ -38,7 +38,7 @@ namespace Hedra.Engine.Player
         public float RandomFactor { get; set; }
         private Dictionary<int, Item> _items;
         private List<string> _learnedRecipes;
-        private List<QuestObject> _quests;
+        private List<QuestTemplate> _quests;
 
         public PlayerInformation()
         {
@@ -47,7 +47,7 @@ namespace Hedra.Engine.Player
             this.Health = 100;
             this._items = new Dictionary<int, Item>();
             this._learnedRecipes = new List<string>();
-            this._quests = new List<QuestObject>();
+            this._quests = new List<QuestTemplate>();
             this.AbilityTreeArray = new byte[0];
             this.ToolbarArray = new byte[4];
         }
@@ -74,7 +74,7 @@ namespace Hedra.Engine.Player
             set => _learnedRecipes = value.ToList();
         }
 
-        public QuestObject[] Quests
+        public QuestTemplate[] Quests
         {
             get => _quests.ToArray();
             set => _quests = value.ToList();

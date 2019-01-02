@@ -19,7 +19,7 @@
     }
   ],
   "Model": {
-    "Scale": 1.0,
+    "Scale": 0.5,
     "Path": "$DataFile$/Items/Foods/Mushroom.ply"
   }
 }

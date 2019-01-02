@@ -1,3 +1,5 @@
+using System;
+using Hedra.Engine.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -12,7 +14,15 @@ namespace Hedra.Engine.ModuleSystem
 
         public static T FromJSON(string Data)
         {
-            return JsonConvert.DeserializeObject<T>(Data);
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(Data);
+            } catch(Exception e)
+            {
+                Log.WriteLine(e);
+                Log.WriteLine($"Failed to parse {Data}");
+                return default(T);
+            }
         }
     }
 }

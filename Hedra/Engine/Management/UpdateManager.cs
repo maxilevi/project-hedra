@@ -7,6 +7,8 @@
 using System.Collections.Generic;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.Player.Inventory;
+using Hedra.Engine.Player.QuestSystem;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Management
@@ -85,6 +87,8 @@ namespace Hedra.Engine.Management
 
                 Ticker.Tick();
                 SkyManager.Update();
+                InventoryItemRenderer.Update();
+                EntityRenderer.Update();
             }
         }
 

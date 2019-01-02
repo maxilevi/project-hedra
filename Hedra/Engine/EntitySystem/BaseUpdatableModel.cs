@@ -34,7 +34,6 @@ namespace Hedra.Engine.EntitySystem
         public abstract void Update();
         public abstract void Attack(IEntity Victim);
         public abstract void Attack(IEntity Victim, float RangeModifier);
-        public abstract void Draw();
         public abstract void Dispose();
     }
 }
