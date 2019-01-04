@@ -8,12 +8,9 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 
         public override string Name => null;
         
-        public override string ThoughtsKeyword => null;
+        public override string GetThoughtsKeyword(QuestObject Quest) => null;
 
-        public override object[] GetThoughtsParameters(QuestObject Quest)
-        {
-            return null;
-        }
+        public override object[] GetThoughtsParameters(QuestObject Quest) => null;
 
         protected override QuestDesign[] Auxiliaries => null;
 

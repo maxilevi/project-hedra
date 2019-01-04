@@ -244,6 +244,11 @@ namespace Hedra.Engine.Rendering.Animation
             _animator.Reset();
         }
 
+        public void ResetBlending()
+        {
+            _animator.ResetBlending();
+        }
+
         public void Update()
         {
             if(!Enabled) return;

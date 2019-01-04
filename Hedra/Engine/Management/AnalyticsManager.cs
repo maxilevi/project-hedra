@@ -49,7 +49,7 @@ namespace Hedra.Engine.Management
             if(Online)
                 AnalyticsManager.RegisterPlayer();
             
-            CoroutineManager.StartCoroutine(Run);
+            RoutineManager.StartRoutine(Run);
             
         }
 

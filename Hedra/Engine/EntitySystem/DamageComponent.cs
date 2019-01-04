@@ -149,7 +149,7 @@ namespace Hedra.Engine.EntitySystem
                         Vanish = true
                     };
                 }
-                CoroutineManager.StartCoroutine(this.DisposeCoroutine);
+                RoutineManager.StartRoutine(this.DisposeCoroutine);
                 
             }
             if (OnDamageEvent != null && Math.Abs(Amount) > 0.005f)

@@ -99,7 +99,7 @@ namespace Hedra.Engine.Loader
             {
                 var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta, false);
-                CoroutineManager.Update();
+                RoutineManager.Update();
                 UpdateManager.Update();
                 World.Update();
                 SoundPlayer.Update(LocalPlayer.Instance.Position);

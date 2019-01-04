@@ -43,8 +43,8 @@ namespace Hedra.Engine.Scenes
         public static float Increment = 0;
         
         public static void Setup(){
-            CoroutineManager.StartCoroutine(MakeFire);
-            CoroutineManager.StartCoroutine(MakePlatform);
+            RoutineManager.StartRoutine(MakeFire);
+            RoutineManager.StartRoutine(MakePlatform);
         }
         
         private static IEnumerator MakePlatform(){
@@ -79,7 +79,7 @@ namespace Hedra.Engine.Scenes
             centerModel.Translate( FirePosition );
             underChunk.AddStaticElement(centerModel);
             LocalPlayer.Instance.UI.ChrChooser.ReloadFiles();
-            CoroutineManager.StartCoroutine(MenuUpdate);
+            RoutineManager.StartRoutine(MenuUpdate);
         }
         
         private static PointLight _light;

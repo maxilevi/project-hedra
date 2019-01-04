@@ -4,7 +4,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public class CachedVertexDataChunkWatcher : ChunkWatcher<CachedVertexData>
+    public sealed class CachedVertexDataChunkWatcher : ChunkWatcher<CachedVertexData>
     {
         private readonly Func<CachedVertexData[]> _lambda;
         

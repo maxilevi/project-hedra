@@ -10,12 +10,34 @@
     },
     {
       "Name": "Saturation",
-      "Value": 60
+      "Value": 50
     },
     {
       "Name": "Price",
       "Value": 18,
       "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "EatTime",
+      "Value": 4.0,
+      "Hidden": true
+    },
+    {
+      "Name": "EatEffects",
+      "Value": [
+        {
+          "Name": "Toxic",
+          "Chance": 25.0,
+          "Damage": 90.0,
+          "Duration": 6.0
+        }
+      ],
+      "Display": "Bullets"
     }
   ],
   "Model": {

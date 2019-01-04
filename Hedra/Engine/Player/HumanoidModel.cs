@@ -94,6 +94,7 @@ namespace Hedra.Engine.Player
         private Vector3 _defaultRightWeaponPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         private Vector3 _defaultChestPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         private bool _isDisposeAnimationPlaying;
+        private bool _isEatingWhileSitting;
         private Timer _foodTimer;
 
 
@@ -163,13 +164,7 @@ namespace Hedra.Engine.Player
             {
                 SoundPlayer.PlaySound(SoundType.FoodEat, Position);
             };
-            
-            _eatAnimation.OnAnimationUpdate += delegate { _foodTimer.Tick(); };
-            _eatAnimation.OnAnimationEnd += delegate
-            {
-                _food.Enabled = false;
-                Humanoid.IsEating = false;
-            };
+            _eatAnimation.OnAnimationUpdate += delegate { if (_foodTimer.Tick()) StopEating(); };
             
             _collider = new AnimatedCollider(Template.Path, Model);
             BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * Model.Scale;
@@ -224,8 +219,17 @@ namespace Hedra.Engine.Player
         {
             _foodTimer.AlertTime = Food.GetAttribute<float>(CommonAttributes.EatTime);
             _foodTimer.Reset();
+            _isEatingWhileSitting = Food.HasAttribute(CommonAttributes.EatSitting) &&
+                                    Food.GetAttribute<bool>(CommonAttributes.EatSitting);
             _food.SetModel(Food.Model);
             Eat(Food.GetAttribute<float>(CommonAttributes.Saturation), OnEatingEnd);
+        }
+
+        private void StopEating()
+        {
+            _food.Enabled = false;
+            Human.IsEating = false;
+            Model.ResetBlending();
         }
         
         private void Eat(float FoodHealth, Action OnEatingEnd)
@@ -251,7 +255,6 @@ namespace Hedra.Engine.Player
             if (Human.IsMoving)
             {
                 currentAnimation = _walkAnimation;
-                //if(Human.IsSitting) Human.IsSitting = false;
                 if (Human.IsRiding)
                 {
                     currentAnimation = _rideAnimation;
@@ -425,6 +428,7 @@ namespace Hedra.Engine.Player
                 _lampModel.LocalRotationPoint = Vector3.Zero;
             }
             HandleState();
+            if (_isEatingWhileSitting && !Human.IsSitting) StopEating();
             Human.HandLamp.Update();
             if (!Disposed)
             {

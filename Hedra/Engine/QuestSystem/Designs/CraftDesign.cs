@@ -1,58 +1,135 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Hedra.Engine.CraftingSystem;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.QuestSystem.Views;
+using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.QuestSystem.Designs
 {
-    public class CraftDesign : QuestDesign
+    public class CraftDesign : BaseItemQuestDesign
     {
-        public override QuestTier Tier => QuestTier.Easy;
         public override string Name => "CraftingQuest";
 
-        public override string ThoughtsKeyword => "quest_craft_dialog";
+        public override string GetThoughtsKeyword(QuestObject Quest)
+        {
+            return HasCraftingStation(Quest)
+                ? "quest_craft_dialog" 
+                : "quest_craft_anywhere_dialog";
+        }
 
         public override object[] GetThoughtsParameters(QuestObject Quest)
         {
-            return new object[]
-            {
-            };
+            return Quest.Parameters.Get<CraftingStation>("Station") == CraftingStation.None 
+                ? new object[] { CraftingItemName(Quest).ToString() }
+                : new object[]
+                {
+                    CraftingItemName(Quest),
+                    CraftingStationName(Quest)
+                };
         }
-        
+
         public override string GetShortDescription(QuestObject Quest)
         {
-            throw new NotImplementedException();
+            return Translations.Get(
+                "quest_craft_short",
+                new object[]
+                {
+                    CraftingItemName(Quest).ToString(),
+                }
+            );
         }
 
         public override string GetDescription(QuestObject Quest)
         {
-            throw new NotImplementedException();
+            var arguments = new List<object>(new object[]
+            {
+                Quest.Giver.Name,
+                CraftingItemName(Quest).ToString()
+            });
+            var hasStation = HasCraftingStation(Quest);
+            if(hasStation) arguments.Add(CraftingStationName(Quest));
+            return Translations.Get(
+                hasStation
+                    ? "quest_craft_description"
+                    : "quest_craft_anywhere_description",
+                arguments.ToArray()
+            );                    
         }
 
-        public override QuestView BuildView(QuestObject Quest)
+        protected override QuestDesign[] Auxiliaries => new QuestDesign[]
         {
-            throw new NotImplementedException();
-        }
+            new SpeakDesign(),
+            new TravelDesign()
+        };
 
-        protected override QuestParameters BuildParameters(QuestContext Context, QuestParameters Parameters, Random Rng)
+        protected override QuestDesign[] Descendants => new QuestDesign[]
         {
-            throw new NotImplementedException();
-        }
+            new TravelDesign(),
+        };
 
-        protected override QuestDesign[] Auxiliaries { get; }
-        protected override QuestDesign[] Descendants { get; }
-
-        public override bool IsQuestCompleted(QuestObject Object)
+        public override void OnAccept(QuestObject Quest)
         {
-            throw new NotImplementedException();
+            var recipe = Quest.Parameters.Get<Item>("Recipe");
+            if (!Quest.Owner.Crafting.HasRecipe(recipe.Name))
+            {
+                AddDialogLine(Quest, Translation.Create("quest_craft_take_recipe"));
+                Quest.Owner.AddOrDropItem(recipe);
+            }
+            var startingItems = Quest.Parameters.Get<ItemCollect[]>("StartingItems");
+            if (startingItems == null) return;
+            for (var i = 0; i < startingItems.Length; ++i)
+            {
+                var startItem = ItemPool.Grab(startingItems[i].Name);
+                startItem.SetAttribute(CommonAttributes.Amount, startingItems[i].Amount);
+                AddDialogLine(
+                    Quest,
+                    Translation.Create("quest_craft_take_item", startingItems[i].ToString().ToUpperInvariant())
+                );
+                Quest.Owner.AddOrDropItem(startItem);
+            }
         }
 
-        protected override void Consume(QuestObject Object)
+        protected override ItemCollect[] GetItems(QuestObject Previous, QuestParameters Parameters, Random Rng)
         {
-            throw new NotImplementedException();
+            if(Previous == null)
+                throw new ArgumentException("Craft designs are not suitable to be first tier quests.");
+            var item = Previous.Parameters.Get<ItemCollect[]>("Items").First();
+            var recipe = ItemPool.Grab(item.Recipe);
+            Parameters.Set("Recipe", recipe);
+            Parameters.Set("Station", recipe.GetAttribute<CraftingStation>(CommonAttributes.CraftingStation));
+            Parameters.Set("StartingItems", item.StartingItems);
+            var output = ItemPool.Grab(recipe.GetAttribute<string>(CommonAttributes.Output));
+            return new []
+            {
+                new ItemCollect
+                {
+                    Name = output.Name,
+                    Amount = Rng.Next(1, 4)
+                }
+            };
         }
+
+        protected override int RandomItemCount(Random Rng, ItemCollect[] Templates) => throw new NotImplementedException();
+
+        protected override ItemCollect[] SpawnTemplates(Random Rng) => throw new NotImplementedException();
+        
+        protected override ItemCollect[] VillageTemplates(Random Rng) => throw new NotImplementedException();
+
+        protected override ItemCollect[] WildernessTemplates(Random Rng) => throw new NotImplementedException();
+
+        private bool HasCraftingStation(QuestObject Quest) => Quest.Parameters.Get<CraftingStation>("Station") != CraftingStation.None ;
+        
+        private static string CraftingStationName(QuestObject Quest) => Translations.Get(Station(Quest).ToString().ToLowerInvariant());
+        
+        private static CraftingStation Station(QuestObject Object) => Object.Parameters.Get<CraftingStation>("Station");
+        
+        private static string CraftingItemName(QuestObject Object) => Object.Parameters.Get<ItemCollect[]>("Items").First().ToString().ToUpperInvariant();
     }
 }

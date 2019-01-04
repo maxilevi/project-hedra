@@ -34,7 +34,7 @@ namespace Hedra.Engine.Player.CraftingSystem
             _player = Player;
             _normalTint = new Vector4(Color.Orange.ToVector4().Xyz * 5f, 1);
             _cooldownTint = new Vector4(Color.Orange.ToVector4().Xyz * 2f, 1);
-            _cooldownTimer = new Timer(1.25f)
+            _cooldownTimer = new Timer(.5f)
             {
                 AutoReset = false,
             };
@@ -141,11 +141,12 @@ namespace Hedra.Engine.Player.CraftingSystem
 
         private void AddStationRequirement(Vector2 Offset)
         {
+            if(_currentRecipe.GetAttribute<CraftingStation>(CommonAttributes.CraftingStation) == CraftingStation.None) return;
             StationRequirementText.Position = ItemAttributes.Position + Offset;
             StationRequirementText.Enable();
-            StationRequirementText.Text = 
+            StationRequirementText.Text =
                 $"• {Translations.Get($"requires_{_currentRecipe.GetAttribute<string>(CommonAttributes.CraftingStation).ToLowerInvariant()}")}";
-            StationRequirementText.TextColor = 
+            StationRequirementText.TextColor =
                 CraftingInventory.IsInStation(_currentRecipe, _player.Position) ? Color.LawnGreen : Color.Red;
             StationRequirementText.Position += Vector2.UnitX * StationRequirementText.Scale.X - Vector2.UnitX * ItemAttributes.Scale.X;
         }

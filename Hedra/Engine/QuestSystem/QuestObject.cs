@@ -17,12 +17,14 @@ namespace Hedra.Engine.QuestSystem
         private readonly QuestDesign _design;
         public QuestView View { get; }
         public QuestDesign BaseDesign { get; }
+        public bool IsEndQuest => _design.IsEndQuest(this);
         public string ShortDescription => _design.GetShortDescription(this);
         public string Description => _design.GetDescription(this);
         public int Steps { get; }
         public IHumanoid Giver { get; }
         public IPlayer Owner { get; private set; }
         public QuestParameters Parameters { get; }
+        public bool FirstTime { get; private set; }
 
         public QuestObject(QuestDesign Design, QuestParameters Parameters, IHumanoid Giver, QuestDesign BaseDesign, int Steps)
         {
@@ -37,6 +39,7 @@ namespace Hedra.Engine.QuestSystem
         public void Start(IPlayer Player)
         {
             Owner = Player;
+            if(!FirstTime) _design.OnAccept(this);
         }
 
         public bool IsQuestCompleted()
@@ -61,7 +64,7 @@ namespace Hedra.Engine.QuestSystem
 
         public QuestThoughtsComponent BuildThoughts(IHumanoid Humanoid)
         {
-            return new QuestThoughtsComponent(Humanoid, _design.ThoughtsKeyword, _design.GetThoughtsParameters(this));
+            return new QuestThoughtsComponent(Humanoid, _design.GetThoughtsKeyword(this), _design.GetThoughtsParameters(this));
         }
 
         public QuestTemplate ToTemplate()
@@ -87,6 +90,7 @@ namespace Hedra.Engine.QuestSystem
                 );
                 for (var i = 0; i < Template.Steps; ++i)
                     quest = quest.Next();
+                quest.FirstTime = false;
                 return quest;
             }
             catch (Exception e)

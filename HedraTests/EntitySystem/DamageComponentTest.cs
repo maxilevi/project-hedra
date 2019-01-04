@@ -197,8 +197,8 @@ namespace HedraTests.EntitySystem
             _entity.Health = 5;
             _damageComponent.Damage(10, null, out var xp, false, false);
             Time.Set(4);
-            CoroutineManager.Update();
-            CoroutineManager.Update();
+            RoutineManager.Update();
+            RoutineManager.Update();
             Assert.True(_disposed);
         }
         

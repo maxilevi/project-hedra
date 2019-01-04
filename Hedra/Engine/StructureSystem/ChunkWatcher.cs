@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.UI;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -11,6 +12,7 @@ namespace Hedra.Engine.StructureSystem
     {
         private readonly object _lock = new object();
         private readonly Dictionary<T1, Chunk> _added;
+        private bool _addedAfterCreation;
         
         protected ChunkWatcher()
         {
@@ -24,6 +26,17 @@ namespace Hedra.Engine.StructureSystem
         protected abstract void Delete(Chunk Object, T1 Value);
 
         protected abstract T1[] Get();
+
+        private void AddAfterCreationIfNecessary(T1[] Values)
+        {
+            if(_addedAfterCreation) return;
+            _addedAfterCreation = true;
+            for (var i = 0; i < Values.Length; ++i)
+            {
+                var chunk = World.GetChunkAt(Values[i].Position);
+                if(chunk != null) AddIfNecessary(Values[i], chunk);
+            }
+        }
 
         private void AddIfNecessary(T1 Value, Chunk Object)
         {
@@ -39,22 +52,25 @@ namespace Hedra.Engine.StructureSystem
                 }
             }
         }
+        
+        private static bool IsInRange(Chunk Object, Vector3 Position)
+        {
+            var chunkSpace = World.ToChunkSpace(Position);
+            return Object.OffsetX == (int) chunkSpace.X && Object.OffsetZ == (int) chunkSpace.Y;
+        }
 
         public void OnChunkReady(Chunk Object)
         {
-            bool IsInRange(Vector3 Position)
-            {
-                var chunkSpace = World.ToChunkSpace(Position);
-                return Object.OffsetX == (int) chunkSpace.X && Object.OffsetZ == (int) chunkSpace.Y;
-            }
             var objects = Get();
+            if(!_addedAfterCreation) AddAfterCreationIfNecessary(objects);
+            
             for (var i = 0; i < objects.Length; i++)
             {
-                if(IsInRange(objects[i].Position))
+                if(IsInRange(Object, objects[i].Position))
                     AddIfNecessary(objects[i], Object);          
             }
         }
-                
+      
         private void OnChunkDisposed(Chunk Object)
         {
             KeyValuePair<T1, Chunk>[] dict;

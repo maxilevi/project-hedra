@@ -95,7 +95,7 @@ namespace Hedra.Engine.StructureSystem
 
         private static void MakeTent(TentParameters Parameters, Random Rng, CollidableStructure Structure)
         {
-            CoroutineManager.StartCoroutine(TentCoroutine, Parameters, Rng, Structure);
+            RoutineManager.StartRoutine(TentCoroutine, Parameters, Rng, Structure);
         }
 
         private static IEnumerator TentCoroutine(object[] Params)

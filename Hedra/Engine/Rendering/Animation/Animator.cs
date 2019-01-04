@@ -53,6 +53,12 @@ namespace Hedra.Engine.Rendering.Animation
             _currentAnimation = null;
             _blendingAnimation = null;
         }
+
+        public void ResetBlending()
+        {
+            _blendingAnimation?.Reset();
+            _blendingAnimation = null;
+        }
         
         public void PlayAnimation(Animation Animation)
         {

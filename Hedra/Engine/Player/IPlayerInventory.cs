@@ -32,4 +32,15 @@ namespace Hedra.Engine.Player
         InventoryArray MainItemsArray { get; }
         InventoryArray ItemsArray { get; }
     }
+
+    public static class InventoryExtensions
+    {
+        public static void AddOrDropItem(this IPlayer Owner, Item Item)
+        {
+            if (!Owner.Inventory.AddItem(Item))
+            {
+                World.DropItem(Item, Owner.Position);
+            }
+        }
+    }
 }

@@ -259,8 +259,11 @@
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\AuxiliaryDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\ReadNoteDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\SpeakDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\TravelDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\BaseItemQuestDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CollectDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CraftDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\ItemCollect.cs" />
     <Compile Include="Engine\QuestSystem\Designs\QuestDesign.cs" />
     <Compile Include="Engine\QuestSystem\GiverTemplate.cs" />
     <Compile Include="Engine\QuestSystem\IQuest.cs" />
@@ -721,7 +724,7 @@
     <Compile Include="Engine\Generation\TreeGenerator.cs" />
     <Compile Include="Engine\ItemSystem\ItemPool.cs" />
     <Compile Include="Engine\Management\AssetManager.cs" />
-    <Compile Include="Engine\Management\CoroutineManager.cs" />
+    <Compile Include="Engine\Management\RoutineManager.cs" />
     <Compile Include="Engine\Management\DrawManager.cs" />
     <Compile Include="Engine\Management\FrustumCulling.cs" />
     <Compile Include="Engine\Management\ICullable.cs" />
@@ -1739,6 +1742,10 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Foods\Mushroom.ply">
       <Link>Assets\Items\Foods\Mushroom.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Foods\MushroomStew.ply">
+      <Link>Assets\Items\Foods\MushroomStew.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Foods\Pumpkin.ply">
@@ -7137,6 +7144,9 @@
     <Content Include="Modules\Items\Foods\Mushroom.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Foods\MushroomStew.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Foods\Pumpkin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -7174,6 +7184,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\HealthPotionRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\MushroomStewRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\PumpkinPieRecipe.json">

@@ -45,17 +45,19 @@ namespace Hedra.Engine.StructureSystem
             _fireParticles.HasMultipleOutputs = true;
         }
 
+        protected virtual Vector3 FirePosition => Position;
+        
         public override void Update()
         {
             base.Update();
-            var distToPlayer = (Position - GameManager.Player.Position).LengthSquared;
+            var distToPlayer = (FirePosition - GameManager.Player.Position).LengthSquared;
             if (distToPlayer < 256 * 256)
             {
                 if (this._passedTime++ % 2 == 0)
                 {
                     _fireParticles.Color = Particle3D.FireColor;
                     _fireParticles.VariateUniformly = false;
-                    _fireParticles.Position = this.Position + Vector3.UnitY * 1f;
+                    _fireParticles.Position = FirePosition + Vector3.UnitY * 1f;
                     _fireParticles.Scale = Vector3.One * .85f;
                     _fireParticles.ScaleErrorMargin = new Vector3(.05f, .05f, .05f);
                     _fireParticles.Direction = Vector3.UnitY * 0f;
@@ -76,7 +78,7 @@ namespace Hedra.Engine.StructureSystem
                 if(this._light != null)
                 {
                     this._light.Color = new Vector3(1f, 0.4f, 0.4f);
-                    this._light.Position = Position;
+                    this._light.Position = FirePosition;
                     ShaderManager.UpdateLight(this._light);
                 }
             }
@@ -90,13 +92,13 @@ namespace Hedra.Engine.StructureSystem
             {
 
                 if (!this._sound.Source.IsPlaying)
-                    this._sound.Source.Play(SoundPlayer.GetBuffer(SoundType.Fireplace), this.Position, 1f, 1f, true);
+                    this._sound.Source.Play(SoundPlayer.GetBuffer(SoundType.Fireplace), FirePosition, 1f, 1f, true);
 
-                var gain = Math.Max(0, 1 - (this.Position - SoundPlayer.ListenerPosition).LengthFast / 32f);
+                var gain = Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast / 32f);
                 this._sound.Source.Volume = gain;
             }
 
-            if ( this._light != null && (this.Position - LocalPlayer.Instance.Position).LengthSquared >
+            if ( this._light != null && (FirePosition - LocalPlayer.Instance.Position).LengthSquared >
                 ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
 
                 this._light.Position = Vector3.Zero;
@@ -114,15 +116,13 @@ namespace Hedra.Engine.StructureSystem
             }
         }
 
-
-
         private void HandleBurning()
         {
             var entities = World.Entities;
             for (var i = entities.Count - 1; i > -1; i--)
             {
                 if (entities[i] == null) continue;
-                if ((entities[i].Position - Position).LengthSquared < 4 * 4)
+                if ((entities[i].Position - FirePosition).LengthSquared < 4 * 4)
                 {
                     if (entities[i].SearchComponent<BurningComponent>() == null)
                     {

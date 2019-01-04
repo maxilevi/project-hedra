@@ -10,7 +10,7 @@
     },
     {
       "Name": "Saturation",
-      "Value": 160
+      "Value": 65
     },
     {
       "Name": "Price",
@@ -24,7 +24,12 @@
     },
     {
       "Name": "EatTime",
-      "Value": 12.0,
+      "Value": 8.0,
+      "Hidden": true
+    },
+    {
+      "Name": "EatSitting",
+      "Value": true,
       "Hidden": true
     }
   ],

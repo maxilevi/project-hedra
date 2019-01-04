@@ -70,12 +70,12 @@ namespace Hedra.Engine.Player.Skills.Archer
             };
             Arrow.LandEventHandler += delegate 
             { 
-                CoroutineManager.StartCoroutine(CreateFlames, Arrow);
+                RoutineManager.StartRoutine(CreateFlames, Arrow);
             };
             Arrow.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {                
                 Hit.AddComponent( new BurningComponent(Hit, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
-                CoroutineManager.StartCoroutine( this.CreateFlames, Arrow);
+                RoutineManager.StartRoutine( this.CreateFlames, Arrow);
             };
             Weapon.BowModifiers -= Event;
         }

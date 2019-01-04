@@ -33,7 +33,7 @@
         {
           "Name": "Toxic",
           "Chance": 40.0,
-          "Damage": 8.0,
+          "Damage": 80.0,
           "Duration": 5.0
         }
       ],

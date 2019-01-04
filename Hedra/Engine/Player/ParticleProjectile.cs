@@ -87,7 +87,7 @@ namespace Hedra.Engine.Player
         {
             if (Disposed) return;
             base.Dispose();
-            CoroutineManager.StartCoroutine(DisposeCoroutine);
+            RoutineManager.StartRoutine(DisposeCoroutine);
         }
 
         private IEnumerator DisposeCoroutine()

@@ -1,3 +1,4 @@
+using System.Linq;
 using Hedra.Engine.ModuleSystem;
 
 namespace Hedra.Engine.ItemSystem.Templates
@@ -12,6 +13,9 @@ namespace Hedra.Engine.ItemSystem.Templates
         public AttributeTemplate[] Attributes { get; set; }
         public ItemModelTemplate Model { get; set; }
 
+        public bool IsRecipe =>
+            Attributes.Any(T => T.Name == CommonAttributes.Handler.ToString() && T.Value == "Recipe");
+        
         public static ItemTemplate FromItem(Item Item)
         {
             return new ItemTemplate

@@ -36,7 +36,7 @@ namespace Hedra.Engine.EntitySystem
         {
             var name = _parent.Name.Clone();
             bool RealCondition() => Condition() && _parent.Name == name;
-            CoroutineManager.StartCoroutine(this.WhileCoroutine, Component, (Func<bool>) RealCondition);
+            RoutineManager.StartRoutine(this.WhileCoroutine, Component, (Func<bool>) RealCondition);
         }
 
         private bool ContainsComponent(IComponent<IEntity> Component)
@@ -55,7 +55,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void AddComponentForSeconds(IComponent<IEntity> Component, float Seconds)
         {
-            CoroutineManager.StartCoroutine(this.ForCoroutine, Component, Seconds);
+            RoutineManager.StartRoutine(this.ForCoroutine, Component, Seconds);
         }
 
         private IEnumerator ForCoroutine(object[] Params)

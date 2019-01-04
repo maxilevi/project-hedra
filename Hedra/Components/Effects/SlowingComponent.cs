@@ -18,7 +18,7 @@ namespace Hedra.Components.Effects
             this._totalTime = TotalTime;
             this._slowPercentage = SlowPercentage;
             this._damager = Damager;
-            CoroutineManager.StartCoroutine(this.UpdateEffect);
+            RoutineManager.StartRoutine(this.UpdateEffect);
         }
 
         public override void Update() { }

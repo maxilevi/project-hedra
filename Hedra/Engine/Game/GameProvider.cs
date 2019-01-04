@@ -72,7 +72,7 @@ namespace Hedra.Engine.Game
             World.Recreate(World.MenuSeed);
             SkyManager.SetTime(12000);
             SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
-            CoroutineManager.StartCoroutine(MenuCoroutine);
+            RoutineManager.StartRoutine(MenuCoroutine);
             Player.Reset();
             _loadingScreen.Show();
         }
@@ -124,7 +124,7 @@ namespace Hedra.Engine.Game
             AddDefaultRecipes(Information);
             SetRestrictions(Information);
             GameSettings.DarkEffect = false;
-            CoroutineManager.StartCoroutine(SpawnCoroutine);
+            RoutineManager.StartRoutine(SpawnCoroutine);
             Log.WriteLine($"Making '{Information.Name}' current with seed {World.Seed}.");
         }
 

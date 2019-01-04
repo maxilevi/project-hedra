@@ -328,7 +328,7 @@ namespace Hedra.WeaponSystem
             if (!attacking && Owner.Model.Human.IsAttacking)
             {
                 Owner.Model.Human.WasAttacking = true;
-                CoroutineManager.StartCoroutine(WasAttackingCoroutine);
+                RoutineManager.StartRoutine(WasAttackingCoroutine);
             }
 
             Owner.IsAttacking = attacking;
@@ -451,7 +451,7 @@ namespace Hedra.WeaponSystem
                 if (_onAttackStance == value) return;
                 if (value)
                 {
-                    CoroutineManager.StartCoroutine(WasAttackingCoroutine);
+                    RoutineManager.StartRoutine(WasAttackingCoroutine);
                 }
                 else
                 {
@@ -622,7 +622,7 @@ namespace Hedra.WeaponSystem
             if (Owner != null)
             {
                 Owner.WasAttacking = true;
-                CoroutineManager.StartCoroutine(WasAttackingCoroutine);
+                RoutineManager.StartRoutine(WasAttackingCoroutine);
             }
         }
 
@@ -646,7 +646,7 @@ namespace Hedra.WeaponSystem
                 yield break;
             else
                 WeaponCoroutineExists = true;
-            CoroutineManager.StartCoroutine(DisableWasAttacking);
+            RoutineManager.StartRoutine(DisableWasAttacking);
             _passedTimeInAttackStance = 0;
             while (_passedTimeInAttackStance < 5f && _onAttackStance)
             {

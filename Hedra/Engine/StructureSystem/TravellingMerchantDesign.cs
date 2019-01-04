@@ -43,7 +43,7 @@ namespace Hedra.Engine.StructureSystem
         {
             World.StructureHandler.MerchantSpawned = true;
             World.StructureHandler.MerchantPosition = TargetPosition;
-            var structure = base.Setup(TargetPosition, Rng, new TravellingMerchant(TargetPosition - Vector3.UnitX * 12f));
+            var structure = base.Setup(TargetPosition, Rng, new TravellingMerchant(TargetPosition));
             structure.Mountain.Radius = 48;
             return structure;
         }
@@ -53,7 +53,7 @@ namespace Hedra.Engine.StructureSystem
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
 
             return Math.Abs(ChunkOffset.X - World.SpawnPoint.X) < 10000 && Math.Abs(ChunkOffset.Y - World.SpawnPoint.Y) < 10000 &&
-                   Rng.Next(0, 40) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > BiomePool.SeaLevel && !World.StructureHandler.MerchantSpawned;
+                   Rng.Next(0, 20) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > BiomePool.SeaLevel && !World.StructureHandler.MerchantSpawned;
         }
     }
 }

@@ -9,7 +9,10 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
@@ -34,14 +37,16 @@ namespace Hedra.Components
         public event OnTalkEventHandler OnTalkingEnded;
         public bool Talking { get; private set; }
         public bool CanTalk { get; set; } = true;
-        
+
+        private const float CharacterThreshold = .05f;
         private const int TalkRadius = 12;
         private static uint _talkBackground;
         private static Vector2 _talkBackgroundSize;
+        private readonly List<Translation> _lines;
         private readonly Animation _talkingAnimation;
-        private bool _shouldTalk;  
+        private bool _shouldTalk;
+        private bool _dialogCreated;
         private TextBillboard _board;
-        private readonly Translation _phrase;
         private Translation _thought;
         private IHumanoid _talker;
 
@@ -54,13 +59,10 @@ namespace Hedra.Components
             });
         }
 
-        public TalkComponent(IHumanoid Parent, string Text = null) : this(Parent, Translation.Default(Utils.FitString(Text, 25)))
-        {           
-        }
-        
-        public TalkComponent(IHumanoid Parent, Translation LiveTranslation) : base(Parent)
+        public TalkComponent(IHumanoid Parent, Translation LiveTranslation = null) : base(Parent)
         {
-            _phrase = LiveTranslation;
+            _lines = new List<Translation>();
+            if(LiveTranslation != null) _lines.Add(LiveTranslation);
             _talkingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTalk.dae");
             _talkingAnimation.Loop = false;
             _talkingAnimation.OnAnimationEnd += Sender =>
@@ -81,6 +83,11 @@ namespace Hedra.Components
                 && !PlayerInterface.Showing && !Parent.Model.IsMoving && CanTalk;
         }
 
+        public void AddDialogLine(Translation Dialog)
+        {
+            _lines.Add(Dialog);
+        }
+        
         public override void Update()
         {
             if (IsAvailableToTalk())
@@ -98,13 +105,13 @@ namespace Hedra.Components
             }
         }
 
-        private Translation SelectThought()
+        private Translation SelectMainThought()
         {
             if (_thought != null) return _thought;
             var thoughtComponent = Parent.SearchComponent<ThoughtsComponent>();
             if (thoughtComponent != null)
                 return _thought = thoughtComponent.Thoughts[Utils.Rng.Next(0, thoughtComponent.Thoughts.Length)];
-            return _phrase ?? Phrases[Utils.Rng.Next(0, Phrases.Length)];
+            return Phrases[Utils.Rng.Next(0, Phrases.Length)];
         }
 
         public void Simulate(IHumanoid To, float Seconds, Action Callback)
@@ -128,20 +135,25 @@ namespace Hedra.Components
             });
         }
 
+        private void SetupDialog()
+        {
+            if (_dialogCreated) return;
+            _dialogCreated = true;
+            _lines.Insert(0, SelectMainThought());
+        }
+
         private void TalkToPlayer()
         {
+            SetupDialog();
             _talker = GameManager.Player;
             SoundPlayer.PlayUISound(SoundType.TalkSound, 1f, .75f);
-            var phrase = SelectThought().Get();
-            
-            var textSize = new GUIText(phrase, Vector2.Zero, Color.White, FontCache.Get(AssetManager.NormalFamily, 10));
 
             Vector3 FollowFunc()
             {
                 return Parent.Position + Vector3.UnitY * 14f;
             }
 
-            var lifetime = 8;
+            var lifetime = _lines.Sum(S => TextProvider.StripFormat(S.Get()).Length * CharacterThreshold * 3f);
             var backBoard = new TextureBillboard(lifetime, _talkBackground, FollowFunc, _talkBackgroundSize)
             {
                 ShouldDisposeId = false
@@ -149,9 +161,9 @@ namespace Hedra.Components
 
             _board = new TextBillboard(lifetime, string.Empty, Color.White,
                 FontCache.Get(AssetManager.NormalFamily, 10), FollowFunc);
-            CoroutineManager.StartCoroutine(TalkCoroutine, _board, phrase, lifetime);
+            
+            RoutineManager.StartRoutine(TalkRoutine, _board);
 
-            textSize.Dispose();
             _shouldTalk = false;
             Talking = true;
             TaskScheduler.When(
@@ -169,28 +181,38 @@ namespace Hedra.Components
             Parent.Model.BlendAnimation(_talkingAnimation);
         }
 
-        private IEnumerator TalkCoroutine(object[] Args)
+        private IEnumerator TalkRoutine(params object[] Args)
         {
             var billboard = (TextBillboard) Args[0];
-            var text = (string) Args[1];
-            var realText = TextProvider.StripFormat(text);
-            if (realText.Length == text.Length) text = realText = Utils.FitString(realText, 26);
+            PlayTalkingAnimation();
+            for (var i = 0; i < _lines.Count; ++i)
+            {
+                var routine = SingleLineRoutine(billboard, TextProvider.Wrap(_lines[i].Get(), 28));
+                while (routine.MoveNext()) yield return null;
+                var waitRoutine = RoutineManager.WaitForSeconds(2f);
+                while (waitRoutine.MoveNext()) yield return null;
+                billboard.UpdateText(string.Empty);
+            }
+            OnTalkingEnded?.Invoke(_talker);
+        }
+        
+        private static IEnumerator SingleLineRoutine(TextBillboard Billboard, string Text)
+        {
+            var strippedText = TextProvider.StripFormat(Text);
             var iterator = 0;
             var passedTime = 0f;
-            PlayTalkingAnimation();
 
-            while (iterator < realText.Length + 1)
+            while (iterator < strippedText.Length + 1)
             {
-                if (passedTime > .05f)
+                if (passedTime > CharacterThreshold)
                 {
-                    billboard.UpdateText(TextProvider.Substr(text, iterator));
+                    Billboard.UpdateText(TextProvider.Substr(Text, iterator));
                     iterator++;
                     passedTime = 0;
                 }
                 passedTime += Time.DeltaTime;
                 yield return null;
             }
-            OnTalkingEnded?.Invoke(_talker);
         }
 
         public override void Dispose()

@@ -16,6 +16,7 @@ namespace Hedra.Engine.ItemSystem
         PumpkinPieRecipe,
         CookedMeatRecipe,
         HealthPotionRecipe,
+        MushroomStewRecipe,
         CornSoupRecipe,
         Corn,
         ChristmasHat,

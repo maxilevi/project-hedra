@@ -147,6 +147,12 @@ namespace Hedra.Engine.Management
                     return true;
                 }
 
+                if (Parts[0] == "clear")
+                {
+                    Caster.Chat.Clear();
+                    return true;
+                }
+
                 if (Parts[0] == "villager")
                 {
                     var vill = World.InRadius<Village>(Caster.Position, VillageDesign.MaxVillageRadius).FirstOrDefault();

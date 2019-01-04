@@ -19,11 +19,13 @@ namespace Hedra.Engine.CacheSystem
         
         protected void AddModel(VertexData Model)
         {
+            Model.Name = Type.ToString();
             _models.Add(Model);
         }
         
         protected void AddModelPart(VertexData Part)
         {
+            Part.Name = Type.ToString();
             _modelParts.Add(Part);
         }
 

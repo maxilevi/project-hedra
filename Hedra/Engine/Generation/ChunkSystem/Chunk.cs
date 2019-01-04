@@ -589,7 +589,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Dispose()
         {
-            CoroutineManager.StartCoroutine(this.DisposeCoroutine);
+            RoutineManager.StartRoutine(this.DisposeCoroutine);
         }
     }
 }

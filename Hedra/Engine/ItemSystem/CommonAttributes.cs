@@ -24,6 +24,7 @@ namespace Hedra.Engine.ItemSystem
         Saturation,
         EatTime,
         EatEffects,
+        EatSitting,
         Price
     }
 }

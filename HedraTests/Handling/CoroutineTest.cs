@@ -10,12 +10,12 @@ namespace HedraTests.Handling
         [Test]
         public void TestCoroutineIsRemoved()
         {
-            CoroutineManager.Clear();
-            CoroutineManager.StartCoroutine(TestCoroutine);
-            Assert.AreEqual(1, CoroutineManager.Count);
-            CoroutineManager.Update();
-            CoroutineManager.Update();
-            Assert.AreEqual(0, CoroutineManager.Count);
+            RoutineManager.Clear();
+            RoutineManager.StartRoutine(TestCoroutine);
+            Assert.AreEqual(1, RoutineManager.Count);
+            RoutineManager.Update();
+            RoutineManager.Update();
+            Assert.AreEqual(0, RoutineManager.Count);
         }
 
         private IEnumerator TestCoroutine()

@@ -56,7 +56,7 @@ namespace Hedra.Engine.Player
             Player.UI.GamePanel.AddElement(_mainText);
             Player.UI.GamePanel.AddElement(_playerText);
 
-            CoroutineManager.StartCoroutine(this.ProcessMessages);
+            RoutineManager.StartRoutine(this.ProcessMessages);
         }
 
         private IEnumerator ProcessMessages()
@@ -299,7 +299,7 @@ namespace Hedra.Engine.Player
         {
             if (_player.UI.GamePanel.Enabled)
             {
-                CoroutineManager.StartCoroutine(
+                RoutineManager.StartRoutine(
                     FadeOverTimeCoroutine,
                     Item.UIObject,
                     Item.Time,

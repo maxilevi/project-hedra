@@ -42,7 +42,7 @@ namespace Hedra.Engine.CraftingSystem
         public static bool IsInStation(Item Recipe, Vector3 Position)
         {
             var station = Recipe.GetAttribute<CraftingStation>(CommonAttributes.CraftingStation);
-            return (GetCurrentStation(Position) & station) != 0;
+            return (GetCurrentStation(Position) & station) == station;
         }
 
         public static CraftingStation GetCurrentStation(Vector3 Position)

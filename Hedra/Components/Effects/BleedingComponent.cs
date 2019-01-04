@@ -30,13 +30,13 @@ namespace Hedra.Components.Effects
             this._totalTime = TotalTime;
             this._totalDamage = TotalDamage;
             this._damager = Damager;
-            CoroutineManager.StartCoroutine(UpdateBleed);
+            RoutineManager.StartRoutine(UpdateBleed);
         }
         
         public BleedingComponent(IEntity Parent, float TotalTime, float TotalDamage) : base(Parent){
             this._totalTime = TotalTime;
             this._totalDamage = TotalDamage;
-            CoroutineManager.StartCoroutine(UpdateBleed);
+            RoutineManager.StartRoutine(UpdateBleed);
         }
         
         public override void Update(){}

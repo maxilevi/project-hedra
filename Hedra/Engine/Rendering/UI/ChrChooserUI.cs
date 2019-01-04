@@ -78,7 +78,7 @@ namespace Hedra.Engine.Rendering.UI
             this.AddElement(currentTab);
             this.Disable();
             
-            CoroutineManager.StartCoroutine(UpdateWrapper);
+            RoutineManager.StartRoutine(UpdateWrapper);
             
             OnPanelStateChange += delegate(object Sender, PanelState E)
             {

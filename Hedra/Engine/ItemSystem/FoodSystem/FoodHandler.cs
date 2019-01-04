@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.CraftingSystem.Templates;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ModuleSystem.Templates;
@@ -16,7 +17,8 @@ namespace Hedra.Engine.ItemSystem.FoodSystem
             var effects = ParseEffects(Food);
             for (var i = 0; i < effects.Length; ++i)
             {
-                Humanoid.AddComponent(EffectFactory.Instance.Build(effects[i], Humanoid));
+                if (Utils.Rng.NextFloat() < effects[i].Chance / 100)
+                    Humanoid.AddComponent(EffectFactory.Instance.Build(effects[i], Humanoid));
             }
         }
 

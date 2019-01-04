@@ -69,7 +69,7 @@ namespace Hedra.Engine.Management
         /// <param name="Action">Action to execute.</param>
         public static void After(float Time, Action Action)
         {
-            CoroutineManager.StartCoroutine(AfterSeconds, Time, Action);
+            RoutineManager.StartRoutine(AfterSeconds, Time, Action);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Hedra.Engine.Management
         /// <param name="Action">Action to execute.</param>
         public static void When(Func<bool> Condition, Action Action)
         {
-            CoroutineManager.StartCoroutine(AfterAction, Condition, Action);
+            RoutineManager.StartRoutine(AfterAction, Condition, Action);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Hedra.Engine.Management
         /// <param name="Action">Action to execute.</param>
         public static void While(Func<bool> Condition, Action Do)
         {
-            CoroutineManager.StartCoroutine(WhileCondition, Condition, Do);
+            RoutineManager.StartRoutine(WhileCondition, Condition, Do);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Hedra.Engine.Management
         /// <param name="Action">Action to execute.</param>
         public static void Concurrent(Func<IEnumerator> Action)
         {
-            CoroutineManager.StartCoroutine(Action);
+            RoutineManager.StartRoutine(Action);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Hedra.Engine.Management
         /// <param name="Do">Action to execute</param>
         public static void DelayFrames(int Frames, Action Do)
         {
-            CoroutineManager.StartCoroutine(AfterFrames, Frames, Do);
+            RoutineManager.StartRoutine(AfterFrames, Frames, Do);
         }
 
         /// <summary>

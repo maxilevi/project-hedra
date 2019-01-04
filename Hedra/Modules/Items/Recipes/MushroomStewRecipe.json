@@ -1,27 +1,23 @@
 {
-  "Name": "HealthPotionRecipe",
-  "DisplayName": "Health potion recipe",
+  "Name": "MushroomStewRecipe",
+  "DisplayName": "Mushroom stew recipe",
   "EquipmentType": "Recipe",
   "Tier": "Common",
   "Description": "...",
   "Attributes": [
     {
       "Name": "CraftingStation",
-      "Value": "None"
+      "Value": "Campfire"
     },
     {
       "Name": "Ingredients",
       "Value": [
         {
-          "Name": "GlassFlask",
-          "Amount": 1
-        },
-        {
-          "Name": "Berry",
-          "Amount": 2
-        },
-        {
           "Name": "Mushroom",
+          "Amount": 3
+        },
+        {
+          "Name": "WoodenBowl",
           "Amount": 1
         }
       ],
@@ -29,7 +25,7 @@
     },
     {
       "Name": "Output",
-      "Value": "HealthPotion",
+      "Value": "MushroomStew",
       "Hidden": true
     },
     {

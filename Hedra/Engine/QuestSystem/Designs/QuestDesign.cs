@@ -1,4 +1,7 @@
 using System;
+using Hedra.Components;
+using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.EntitySystem;
@@ -12,8 +15,8 @@ namespace Hedra.Engine.QuestSystem.Designs
         private bool IsAuxiliary => Tier == QuestTier.Auxiliary;
         
         public abstract QuestTier Tier { get; }
-        
-        public abstract string ThoughtsKeyword { get; }
+
+        public abstract string GetThoughtsKeyword(QuestObject Quest);
 
         public abstract string Name { get; }
 
@@ -30,9 +33,18 @@ namespace Hedra.Engine.QuestSystem.Designs
             return Object;
         }
 
-        protected virtual QuestParameters BuildParameters(QuestContext Context, QuestParameters Parameters, Random Rng)
+        protected virtual QuestParameters BuildParameters(QuestObject Previous, QuestContext Context, QuestParameters Parameters, Random Rng)
         {
             return Parameters;
+        }
+
+        protected void AddDialogLine(QuestObject Quest, Translation Text)
+        {
+            Quest.Giver.SearchComponent<TalkComponent>().AddDialogLine(Text);
+        }
+        
+        public virtual void OnAccept(QuestObject Quest)
+        {
         }
 
         protected abstract QuestDesign[] Auxiliaries { get; }
@@ -50,22 +62,35 @@ namespace Hedra.Engine.QuestSystem.Designs
         public void Trigger(QuestObject Object)
         {
             Consume(Object);
+            if (Object.Giver.SearchComponent<QuestComponent>() != null)
+                Object.Giver.RemoveComponent(Object.Giver.SearchComponent<QuestComponent>());
             Object.Owner.Questing.Start(GetNext(Object));
         }
 
-        public QuestObject GetNext(QuestObject Object)
+        public QuestObject GetNext(QuestObject Quest)
         {
             if (!IsAuxiliary)
             {
-                var rng = new Random(Object.Parameters.Get<int>("Seed"));
+                var rng = new Random(Quest.Parameters.Get<int>("Seed"));
                 var nextDesign = Descendants?[rng.Next(0, Descendants.Length)];
                 var auxiliaryDesign = Auxiliaries[rng.Next(0, Auxiliaries.Length)];
-                var questObject = auxiliaryDesign.Build(Object, nextDesign);
-                if(nextDesign != null)
+                var nextObject = nextDesign?.Build(Quest, null, null);
+                var questObject = auxiliaryDesign.Build(Quest, nextDesign, nextObject);
+                if (nextDesign != null)
+                {
                     questObject.Parameters.Set("Next", nextDesign);
+                    questObject.Parameters.Set("NextObject", nextObject);
+                }
+
                 return questObject;
             }
-            return Object.Parameters.Get<QuestDesign>("Next")?.Build(Object);
+            return Quest.Parameters.Get<QuestObject>("NextObject");
+        }
+
+        public bool IsEndQuest(QuestObject Quest)
+        {
+            var rng = new Random(Quest.Parameters.Get<int>("Seed"));
+            return Descendants?[rng.Next(0, Descendants.Length)] == null;
         }
         
         public QuestObject Build(Vector3 Position, Random Rng, IHumanoid Giver)
@@ -73,7 +98,7 @@ namespace Hedra.Engine.QuestSystem.Designs
             return Build(new QuestContext(Position), Rng.Next(int.MinValue, int.MaxValue), Giver);
         }
 
-        private QuestObject Build(QuestObject Object, QuestDesign NextDesign = null)
+        private QuestObject Build(QuestObject Object, QuestDesign NextDesign, QuestObject NextObject)
         {
             return Build(
                 Object.Parameters.Get<QuestContext>("Context"),
@@ -81,7 +106,9 @@ namespace Hedra.Engine.QuestSystem.Designs
                 Object.Giver,
                 Object.BaseDesign,
                 Object.Steps + 1,
-                NextDesign
+                Object,
+                NextDesign,
+                NextObject
             );
         }
 
@@ -91,16 +118,19 @@ namespace Hedra.Engine.QuestSystem.Designs
             IHumanoid Giver,
             QuestDesign BaseDesign = null,
             int Steps = 0,
-            QuestDesign NextDesign = null
+            QuestObject Previous = null,
+            QuestDesign NextDesign = null,
+            QuestObject NextObject = null
         )
         {
             var parameters = new QuestParameters();
             parameters.Set("Seed", Seed);
             parameters.Set("Context", Context);
-            if(NextDesign != null) parameters.Set("Next", NextDesign);
+            parameters.Set("Next", NextDesign);
+            parameters.Set("NextObject", NextObject);
             return Setup(new QuestObject(
                 this,
-                BuildParameters(Context, parameters, new Random(parameters.Get<int>("Seed"))),
+                BuildParameters(Previous, Context, parameters, new Random(parameters.Get<int>("Seed"))),
                 Giver,
                 BaseDesign ?? this,
                 Steps

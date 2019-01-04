@@ -12,13 +12,15 @@ namespace Hedra.Engine.WorldBuilding
     /// </summary>
     public class TravellingMerchant : Campfire
     {
+        public static readonly Vector3 CampfireOffset = Vector3.UnitX * 12f;
         private readonly IHumanoid _merchant;
-        protected override bool CanUseForCrafting => false;
 
         public TravellingMerchant(Vector3 Position) : base(Position)
         {
-            _merchant = World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position + Vector3.UnitX * 12f);
+            _merchant = World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position);
         }
+        
+        protected override Vector3 FirePosition => Position - CampfireOffset;
 
         public override void Dispose()
         {

@@ -41,7 +41,7 @@ namespace Hedra.Engine.Rendering.UI
             _caret = new RenderableText("|", Position + Vector2.UnitY * .00275f, _textBar.Text.UIText.TextColor, _textBar.Text.UIText.TextFont);
             DrawManager.UIRenderer.Add(_caret, DrawOrder.After);
             InPanel.AddElement(_caret);
-            CoroutineManager.StartCoroutine(this.CaretUpdate);
+            RoutineManager.StartRoutine(this.CaretUpdate);
         }
         
         private IEnumerator CaretUpdate()

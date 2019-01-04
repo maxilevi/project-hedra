@@ -123,7 +123,7 @@ namespace Hedra.Engine.StructureSystem
             Rescued = true;
             TaskScheduler.DelayFrames(1, delegate
             {
-                var talkComponent = new TalkComponent(_rescuee, Translations.Get("saved_old_man"));
+                var talkComponent = new TalkComponent(_rescuee, Translation.Create("saved_old_man"));
                 talkComponent.OnTalkingEnded += delegate
                 {
                     var settings = new ItemPoolSettings(ItemTier.Rare, EquipmentType.Axe);

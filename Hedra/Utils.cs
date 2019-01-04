@@ -21,23 +21,24 @@ namespace Hedra
     public static class Utils
     {
 
-        public static string FitString(string input, int characterLimit)
+        public static string FitString(string Input, int CharacterLimit, bool Once = false)
         {
-            if (input == null) return input;
-            string[] parts = input.Split(Environment.NewLine.ToCharArray());
+            if (Input == null) return Input;
+            string[] parts = Input.Split(Environment.NewLine.ToCharArray());
             parts = parts.Where(Str => Str != string.Empty).ToArray();
-
+            var atLeast = false;
             var builder = new StringBuilder();
             for (var i = 0; i < parts.Length; i++)
             {
 
                 string originalString = parts[i] + Environment.NewLine;
 
-                while (originalString.Length > characterLimit)
+                while (originalString.Length > CharacterLimit && (Once && !atLeast || !Once))
                 {
-                    int nearest = Utils.FindNearestSeparator(originalString, characterLimit - 1);
+                    int nearest = Utils.FindNearestSeparator(originalString, CharacterLimit - 1);
                     builder.AppendLine(originalString.Substring(0, nearest));
                     originalString = originalString.Substring(nearest, originalString.Length - nearest);
+                    atLeast = true;
                 }
 
                 builder.Append(originalString);
@@ -191,25 +192,13 @@ namespace Hedra
             }
             return newText.ToString();
         }
+
         
-        public static bool HasNumber(string Input){
-            char[] Array = Input.ToCharArray();
-            for(int i = 0; i < Array.Length; i++){
-                if(char.IsNumber(Array[i]))
-                    return true;
-            }
-            return false;
-        }
-        
-        
-        public static  bool NextBool(this Random r){
+        public static  bool NextBool(this Random r)
+        {
             return r.Next(0,2) == 1;
         }
-        
-        public static Type[] GetTypesInNamespace(Assembly assembly, string nameSpace)
-        {
-            return assembly.GetTypes().Where(t => String.Equals(t.Namespace, nameSpace, StringComparison.Ordinal)).ToArray();
-        }
+
         
         public static IntPtr IntPtrFromByteArray(byte[] Buffer){
             IntPtr unmanagedPointer = Marshal.AllocHGlobal(Buffer.Length);
@@ -217,7 +206,8 @@ namespace Hedra
             return unmanagedPointer;
         }
         
-        public static int FindNearestSeparator(string str, int BaseIndex){
+        public static int FindNearestSeparator(string str, int BaseIndex)
+        {
             char[] chars = str.ToCharArray();
             
             int fwrIndex = BaseIndex;

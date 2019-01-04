@@ -65,12 +65,12 @@ namespace Hedra.Engine.Generation
             if (Seconds < 0)
             {
                 var wrapper = new HighlightedAreaWrapper();
-                CoroutineManager.StartCoroutine(CycleHighlight, _highlightedAreas[k], World.Seed, wrapper);
+                RoutineManager.StartRoutine(CycleHighlight, _highlightedAreas[k], World.Seed, wrapper);
                 return wrapper;
             }
-            CoroutineManager.StartCoroutine(FadeHighlight, _highlightedAreas[k], area.Position + Vector3.UnitY * fadeSpeed, Seconds);
+            RoutineManager.StartRoutine(FadeHighlight, _highlightedAreas[k], area.Position + Vector3.UnitY * fadeSpeed, Seconds);
 
-            TaskScheduler.After(Seconds, () => CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position - Vector3.UnitY * fadeSpeed }));
+            TaskScheduler.After(Seconds, () => RoutineManager.StartRoutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position - Vector3.UnitY * fadeSpeed }));
             return null;
         }
 

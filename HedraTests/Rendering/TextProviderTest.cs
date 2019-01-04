@@ -14,6 +14,26 @@ namespace HedraTests.Rendering
     {
 
         [Test]
+        public void TestWrapping()
+        {
+            var str = "thank $(BOLD)(VIOLET){u}, next you";
+            Assert.AreEqual(
+                $"thank {Environment.NewLine}$(BOLD)(VIOLET){{u}}, {Environment.NewLine}next you",
+                TextProvider.Wrap(str, 5)
+            );
+            str = "I am in need of $(ORANGE)(BOLD){3 MUSHROOM}. Can you help me?";
+            Assert.AreEqual(
+                $"I am in need of $(ORANGE)(BOLD){{3 MUSHROOM}}.{Environment.NewLine} Can you help me?",
+                TextProvider.Wrap(str, 26)
+            );
+            str = "Using the items you collected for me I need you to craft me a $(ORANGE)(BOLD){HEALTH POTION}";
+            Assert.AreEqual(
+                $"Using the items you collected {Environment.NewLine}for me I need you to craft {Environment.NewLine}me a $(ORANGE)(BOLD){{HEALTH POTION}}",
+                TextProvider.Wrap(str, 26)
+            );
+        }
+
+        [Test]
         public void TestTextSubString()
         {
             var str = "thank $(BOLD)(VIOLET){u}, next";

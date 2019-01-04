@@ -9,7 +9,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
     {
         public static event OnChunkEvent OnChunkLodChanged;
         private Chunk _object;
-        private bool _wasBuilded;
+        private bool _wasBuilt;
         public event OnChunkEvent OnChunkReady;
         public bool Disposed { get; private set; }
         public bool IsHealthy { get; private set; }
@@ -34,9 +34,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 World.AddChunkToQueue(_object, true);
             }
-            if (_object.BuildedWithStructures && !_wasBuilded)
+            if (!_wasBuilt && _object.BuildedWithStructures)
             {
-                _wasBuilded = true;
+                _wasBuilt = true;
                 OnChunkReady?.Invoke(_object);
             }
         }

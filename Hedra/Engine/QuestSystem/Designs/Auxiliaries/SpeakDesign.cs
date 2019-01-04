@@ -30,7 +30,7 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
         {
             var component = new QuestSpeakComponent(
                 Object.Giver,
-                Object,
+                Object.Parameters.Get<QuestObject>("NextObject"),
                 Object.Parameters.Get<QuestDesign>("Next")
             );
             component.Spoke += T =>

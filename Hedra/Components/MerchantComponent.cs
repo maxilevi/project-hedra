@@ -49,8 +49,8 @@ namespace Hedra.Components
             var newItems = new Dictionary<int, Item>
             {
                 {TradeInventory.MerchantSpaces - 1, berry},
-                {TradeInventory.MerchantSpaces - 2, rng.NextBool() ? flask : null},
-                {TradeInventory.MerchantSpaces - 3, rng.NextBool() ? bowl : null},
+                {TradeInventory.MerchantSpaces - 2, flask},
+                {TradeInventory.MerchantSpaces - 3, bowl},
                 {TradeInventory.MerchantSpaces - 4, null /*recipes[rng.Next(0, recipes.Length)]*/},
             };
             if (_isTravellingMerchant)

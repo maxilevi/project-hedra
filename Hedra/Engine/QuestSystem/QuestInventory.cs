@@ -48,9 +48,10 @@ namespace Hedra.Engine.QuestSystem
             {
                 if (_activeQuests[i].IsQuestCompleted())
                 {
-                    _activeQuests[i].Trigger();
-                    QuestCompleted?.Invoke(_activeQuests[i]);
+                    var quest = _activeQuests[i];
                     _activeQuests.RemoveAt(i);
+                    quest.Trigger();
+                    QuestCompleted?.Invoke(quest);
                 }
             }
         }

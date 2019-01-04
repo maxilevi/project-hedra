@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.CraftingSystem;
@@ -65,7 +66,6 @@ namespace Hedra.Engine.Player
         public Minimap Minimap { get; }
         public Map Map { get; }
         public TradeInventory Trade { get; }
-        public IMessageDispatcher MessageDispatcher { get; set; }
         public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
         public CollisionGroup[] NearCollisions => StructureAware.NearCollisions;
         private IAmbientEffectHandler AmbientEffects { get; }
@@ -308,10 +308,25 @@ namespace Hedra.Engine.Player
             
             if(Inventory.Food != null)
             {
-                Model.EatFood(Inventory.Food, OnEatingEnd);
-                Inventory.RemoveItem(Inventory.Food);
+                if (CanEat(Inventory.Food, out var shouldSit))
+                {
+                    if (shouldSit) IsSitting = true;
+                    Model.EatFood(Inventory.Food, OnEatingEnd);
+                    Inventory.RemoveItem(Inventory.Food);
+                }
+                else
+                {
+                    MessageDispatcher.ShowNotification(Translations.Get("cant_eat_while_moving"), Color.Red, 2f);
+                }
             }
             this.Inventory.UpdateInventory();
+        }
+
+        private bool CanEat(Item Food, out bool ShouldSit)
+        {
+            ShouldSit = Food.HasAttribute(CommonAttributes.EatSitting) 
+                             && Food.GetAttribute<bool>(CommonAttributes.EatSitting);
+            return (ShouldSit && !IsMoving || !ShouldSit);
         }
 
         private void OnEatingEnd()
@@ -324,7 +339,7 @@ namespace Hedra.Engine.Player
             if (_health <= 0f)
             {
                 IsDead = true;
-                CoroutineManager.StartCoroutine(_damageHandler.DisposeCoroutine);
+                RoutineManager.StartRoutine(_damageHandler.DisposeCoroutine);
                 Executer.ExecuteOnMainThread(delegate {
                     this.MessageDispatcher.ShowMessageWhile(Translations.Get("to_respawn", Controls.Respawn), Color.White,
                         () => this.Health <= 0 && !GameManager.InStartMenu);

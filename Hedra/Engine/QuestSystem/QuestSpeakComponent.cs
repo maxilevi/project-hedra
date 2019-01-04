@@ -17,7 +17,7 @@ namespace Hedra.Engine.QuestSystem
             Parent.AddComponent(
                 _thoughts = new QuestThoughtsComponent(
                     Parent,
-                    Design.ThoughtsKeyword,
+                    Design.GetThoughtsKeyword(Object),
                     Design.GetThoughtsParameters(Object)
                 )
             );

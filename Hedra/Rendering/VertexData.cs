@@ -22,6 +22,7 @@ namespace Hedra.Rendering
     /// </summary>
     public sealed class VertexData : LodableObject<VertexData>, IDisposable, IVertexData
     {
+        public string Name { get; set; }
         public List<Vector3> Vertices { get; set; }
         public List<Vector4> Colors { get; set; }
         public List<Vector3> Normals { get; set; }

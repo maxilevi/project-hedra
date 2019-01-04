@@ -46,8 +46,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _chunkWatchers = new List<ChunkWatcher>();
             _candidates = new List<Vector3>();
             _closest = new ClosestComparer();
-            CoroutineManager.StartCoroutine(this.CreateChunksCoroutine);
-            CoroutineManager.StartCoroutine(this.UpdateChunkCoroutine);
+            RoutineManager.StartRoutine(this.CreateChunksCoroutine);
+            RoutineManager.StartRoutine(this.UpdateChunkCoroutine);
             OnChunkReady += World.MarkChunkReady;
         }
 

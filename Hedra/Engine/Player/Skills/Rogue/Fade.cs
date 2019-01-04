@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
         
         public override void Use(){
             base.MaxCooldown = 20f;
-            CoroutineManager.StartCoroutine(FadeTime);
+            RoutineManager.StartRoutine(FadeTime);
         }
         
         private IEnumerator FadeTime(){

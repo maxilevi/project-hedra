@@ -70,8 +70,9 @@ namespace Hedra.Engine.Player.Inventory
             {
                 price = Item.GetAttribute<int>(CommonAttributes.Price);
             }
-            
-            price *= Item.HasAttribute(CommonAttributes.Amount) ? Item.GetAttribute<int>(CommonAttributes.Amount) : 1;
+            var amount = Item.HasAttribute(CommonAttributes.Amount) ? Item.GetAttribute<int>(CommonAttributes.Amount) : 1;
+            //if(amount != int.MaxValue)
+            //    price *= amount;
             return (int) (price * GetPriceMultiplier(Item));
         }
 

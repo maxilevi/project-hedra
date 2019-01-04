@@ -14,13 +14,11 @@ using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Designs
 {
-    public class CollectDesign : QuestDesign
+    public class CollectDesign : BaseItemQuestDesign
     {
-        public override QuestTier Tier => QuestTier.Easy;
-        
         public override string Name => "CollectQuest";
 
-        public override string ThoughtsKeyword => "quest_collect_dialog";
+        public override string GetThoughtsKeyword(QuestObject Quest) => "quest_collect_dialog";
 
         public override object[] GetThoughtsParameters(QuestObject Quest)
         {
@@ -65,144 +63,65 @@ namespace Hedra.Engine.QuestSystem.Designs
             new SpeakDesign()
         };
 
-        protected override QuestParameters BuildParameters(QuestContext Context, QuestParameters Parameters, Random Rng)
+        protected override int RandomItemCount(Random Rng, ItemCollect[] Templates)
         {
-            Parameters.Set("Items", GetRandomItems(Context, Rng));
-            return Parameters;
+            return 1;
+        }
+
+        protected override ItemCollect[] SpawnTemplates(Random Rng)
+        {
+            return WildernessTemplates(Rng);
         }
         
-        public override bool IsQuestCompleted(QuestObject Object)
+        protected override ItemCollect[] VillageTemplates(Random Rng)
         {
-            return Object.Parameters.Get<ItemCollect[]>("Items").All(
-                I => I.IsCompleted(Object.Owner, out _)
-            );
-        }
-
-        protected override void Consume(QuestObject Object)
-        {
-            Object.Parameters.Get<ItemCollect[]>("Items").ToList().ForEach(
-                I => I.Consume(Object.Owner)
-            );
-        }
-
-        private static ItemCollect[] GetRandomItems(QuestContext Context, Random Rng)
-        {
-            var templates = TemplatesFromContext(Context, Rng);
-            var count = 1;//Rng.Next(1, Math.Min(4, templates.Length));
-            var items = new List<ItemCollect>();
-            for (var i = 0; i < count; ++i)
+            return new[]
             {
-                var template = templates[Rng.Next(0, templates.Length)];
-                if(items.Contains(template)) continue;
-                items.Add(new ItemCollect
+                new ItemCollect
                 {
-                    Name = template.Name,
-                    Amount = template.Amount
-                });
-            }
-            return items.ToArray();
+                    Name = QuestItem.Corn.ToString(),
+                    Amount = Rng.Next(3, 10),
+                    Recipe = ItemType.CornSoupRecipe.ToString()
+                },
+                new ItemCollect
+                {
+                    Name = QuestItem.Pumpkin.ToString(),
+                    Amount = Rng.Next(4, 10),
+                    Recipe = ItemType.PumpkinPieRecipe.ToString()
+                },
+            };
         }
-
-        private static ItemCollect[] TemplatesFromContext(QuestContext Context, Random Rng)
+        
+        protected override ItemCollect[] WildernessTemplates(Random Rng)
         {
-            switch (Context.ContextType)
+            return new[]
             {
-                case QuestContextType.Spawn:
-                    return new[]
-                    {
-                        new ItemCollect
-                        {
-                            Name = QuestItem.Berry.ToString(),
-                            Amount = Rng.Next(3, 10)
-                        },
-                        new ItemCollect
-                        {
-                            Name = QuestItem.Mushroom.ToString(),
-                            Amount = Rng.Next(1, 2)
-                        }
-                    };
-                case QuestContextType.Village:
-                    return new[]
-                    {
-                        new ItemCollect
-                        {
-                            Name = QuestItem.Corn.ToString(),
-                            Amount = Rng.Next(3, 10)
-                        },
-                        new ItemCollect
-                        {
-                            Name = QuestItem.Pumpkin.ToString(),
-                            Amount = Rng.Next(4, 10)
-                        },
-                    };
-                case QuestContextType.Wilderness:
-                    return new[]
-                    {
-                        new ItemCollect
-                        {
-                            Name = QuestItem.RawMeat.ToString(),
-                            Amount = Rng.Next(2, 6)
-                        },
-                        new ItemCollect
-                        {
-                            Name = QuestItem.Mushroom.ToString(),
-                            Amount = Rng.Next(1, 4)
-                        },
-                        new ItemCollect
-                        {
-                            Name = QuestItem.Berry.ToString(),
-                            Amount = Rng.Next(3, 8)
-                        }
-                    };
-                default:
-                    throw new ArgumentOutOfRangeException($"Unknown QuestContextType '{Context.ContextType}'");
-            }
-        }
-
-        public override QuestView BuildView(QuestObject Object)
-        {
-            var items = Object.Parameters.Get<ItemCollect[]>("Items").Select(T => ItemPool.Grab(T.Name)).ToArray();
-            var model = new VertexData();
-            for (var i = 0; i < items.Length; i++)
-            {
-                var transform = Matrix4.CreateTranslation(Vector3.UnitZ);
-                transform *= Matrix4.CreateRotationY(i * (360 / items.Length) * Mathf.Radian);
-                model += items[i].Model.Clone().Transform(transform);
-            }
-            return new ModelView(Object, model);
-        }
-
-        private struct ItemCollect
-        {
-            public int Amount { get; set; }
-            public string Name { get; set; }
-
-            public void Consume(IPlayer Player)
-            {
-                var name = Name;
-                Player.Inventory.RemoveItem(Player.Inventory.Search(I => I.Name == name), Amount);
-            }
-
-            public bool IsCompleted(IPlayer Player, out int CurrentAmount)
-            {
-                CurrentAmount = 0;
-                var amount = Amount;
-                var name = Name;
-                var item = Player.Inventory.Search(T => T.Name == name);
-                return item != null && (CurrentAmount = item.GetAttribute<int>(CommonAttributes.Amount)) >= amount;
-            }
-            
-            public string ToString(IPlayer Player)
-            {
-                var completed = IsCompleted(Player, out var currentAmount);
-                var text = $"• {currentAmount}/{Amount} {ItemPool.Grab(Name).DisplayName}";               
-                return $"{new string(' ', 8)}${(completed ? TextFormatting.Green : TextFormatting.Red)}{{{text}}}";
-            }
-            
-            public override string ToString()
-            {
-                return $"{Amount} {ItemPool.Grab(Name).DisplayName}";
-            }
+                new ItemCollect
+                {
+                    Name = QuestItem.RawMeat.ToString(),
+                    Amount = Rng.Next(2, 6),
+                    Recipe = ItemType.CookedMeatRecipe.ToString()
+                },
+                new ItemCollect
+                {
+                    Name = QuestItem.Mushroom.ToString(),
+                    Amount = Rng.Next(1, 4),
+                    Recipe = ItemType.HealthPotionRecipe.ToString()
+                },
+                new ItemCollect
+                {
+                    Name = QuestItem.Mushroom.ToString(),
+                    Amount = Rng.Next(3, 6),
+                    Recipe = ItemType.MushroomStewRecipe.ToString(),
+                    //StartingItems = 
+                },
+                new ItemCollect
+                {
+                    Name = QuestItem.Berry.ToString(),
+                    Amount = Rng.Next(3, 8),
+                    Recipe = ItemType.HealthPotionRecipe.ToString()
+                }
+            };
         }
     }
 }

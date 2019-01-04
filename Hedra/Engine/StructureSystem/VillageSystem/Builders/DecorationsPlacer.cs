@@ -63,7 +63,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public static void PlaceWhenWorldReady(Vector3 TargetPosition, Action<Vector3> Place)
         {
-            CoroutineManager.StartCoroutine(DoPlace, TargetPosition, (Action<Vector3>) Place);
+            RoutineManager.StartRoutine(DoPlace, TargetPosition, (Action<Vector3>) Place);
         }
 
         private static T SelectTemplate<T>(IList<T> Templates, Random Rng) where T : DesignTemplate

@@ -55,6 +55,26 @@ namespace Hedra.Engine.Rendering.UI
                 .Where(S => !string.IsNullOrEmpty(S))
                 .ToArray();
         }
+
+        public static string Wrap(string Text, int Characters)
+        {
+            var splits = GetSplits(Text);
+            var texts = splits.Select(StringMatch).ToArray();
+            var accumulated = 0;
+            for (var i = 0; i < splits.Length; ++i)
+            {
+                accumulated += texts[i].Length; 
+                if(texts[i].Length != splits[i].Length) continue;
+                if (accumulated > Characters)
+                {
+                    var measure = Math.Max(1, Characters - accumulated + texts[i].Length);
+                    splits[i] = Utils.FitString(splits[i], measure, measure < Characters);
+                    splits[i] = splits[i].Substring(0, splits[i].Length - Environment.NewLine.Length);
+                    accumulated -= Characters;
+                } 
+            }
+            return string.Join(string.Empty, splits);
+        }
         
         public static string Substr(string Text, int End)
         {

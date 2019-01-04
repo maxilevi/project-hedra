@@ -10,6 +10,7 @@
 using System;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Engine.ItemSystem.Templates;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -149,6 +150,11 @@ namespace Hedra.Engine.ItemSystem
             return Item;
         }
 
+        public static Item[] Matching(Predicate<ItemTemplate> Searcher)
+        {
+            return ItemFactory.Templater.Templates.Where(I => Searcher(I)).Select(I => ItemPool.Grab(I.Name)).ToArray();
+        }
+        
         public static Item Grab(string Name)
         {
             return Item.FromTemplate(ItemFactory.Templater[Name]);

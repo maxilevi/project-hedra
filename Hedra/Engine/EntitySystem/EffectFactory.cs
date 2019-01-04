@@ -13,8 +13,8 @@ namespace Hedra.Engine.EntitySystem
                 this[Template.Name],
                 Mob,
                 (int) Template.Chance,
-                Template.Duration,
-                Template.Damage
+                Template.Damage,
+                Template.Duration
             );
         }
     }

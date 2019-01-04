@@ -97,7 +97,7 @@ namespace Hedra.Engine.Loader
                 var underChunk = World.GetChunkByOffset(chunkSpace);
                 var chunkBound = Chunk.Width / Chunk.BlockSize;
                 var defaultVoxelCount = chunkBound * Chunk.Height * chunkBound;
-                var text = $"X = {(int)player.BlockPosition.X} Y = {(int)(player.BlockPosition.Y)} Z={(int)player.BlockPosition.Z} Routines={CoroutineManager.Count} Watchers={player.Loader.WatcherCount}";
+                var text = $"X = {(int)player.BlockPosition.X} Y = {(int)(player.BlockPosition.Y)} Z={(int)player.BlockPosition.Z} Routines={RoutineManager.Count} Watchers={player.Loader.WatcherCount}";
                 text += 
                     $"\n\nChunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=

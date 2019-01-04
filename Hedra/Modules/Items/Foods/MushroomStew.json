@@ -1,6 +1,6 @@
 {
-  "Name": "PumpkinPie",
-  "DisplayName": "Pumpkin pie",
+  "Name": "MushroomStew",
+  "DisplayName": "Mushroom stew",
   "Tier": "Misc",
   "Description": "...",
   "Attributes": [
@@ -10,11 +10,11 @@
     },
     {
       "Name": "Saturation",
-      "Value": 90
+      "Value": 70
     },
     {
       "Name": "Price",
-      "Value": 18,
+      "Value": 14,
       "Hidden": true
     },
     {
@@ -34,7 +34,7 @@
     }
   ],
   "Model": {
-    "Scale": 2.0,
-    "Path": "$DataFile$/Items/Foods/PumpkinPie.ply"
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Foods/MushroomStew.ply"
   }
 }

@@ -31,7 +31,7 @@ namespace Hedra.Components.Effects
             this.TotalTime = TotalTime;
             this.TotalDamage = TotalDamage;
             this.Damager = Damager;
-            CoroutineManager.StartCoroutine(UpdatePoison);
+            RoutineManager.StartRoutine(UpdatePoison);
         }
         
         public override void Update(){}

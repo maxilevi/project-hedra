@@ -1,10 +1,10 @@
+using System;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering;
-using Newtonsoft.Json.Serialization;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public class InstanceDataChunkWatcher : ChunkWatcher<InstanceData>
+    public sealed class InstanceDataChunkWatcher : ChunkWatcher<InstanceData>
     {
         private readonly Func<InstanceData[]> _lambda;
         
