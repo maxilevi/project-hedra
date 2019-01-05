@@ -126,14 +126,12 @@ namespace Hedra.Engine.StructureSystem
                 var talkComponent = new TalkComponent(_rescuee, Translation.Create("saved_old_man"));
                 talkComponent.OnTalkingEnded += delegate
                 {
-                    var settings = new ItemPoolSettings(ItemTier.Rare, EquipmentType.Axe);
+                    var settings = new ItemPoolSettings(ItemTier.Rare);
                     _rescuee.Movement.Orientate();
-                    TaskScheduler.After(.25f, () =>
+                    TaskScheduler.After(.05f, () =>
                         World.DropItem(ItemPool.Grab(settings), _rescuee.Position + Vector3.UnitX * 5f)
                     );
-                    //TaskManager.After( (int) ((talkComponent.Duration+1) * 1000), () =>
-                    //    Talkee.AddComponent(new EscapeAIComponent(_rescuee, GameManager.Player))
-                    //);
+                    _rescuee.RemoveComponent(talkComponent);
                 };
                 _rescuee.AddComponent(talkComponent);
             });

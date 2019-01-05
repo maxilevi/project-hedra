@@ -53,7 +53,7 @@ namespace Hedra.Engine.Player.Skills.Archer
                     float Dot = Vector3.Dot(ToEntity, Player.Orientation);
                     if(Dot >= .25f && (World.Entities[i].Position - Player.Position).LengthSquared < 16f*16f){
                         float Exp;
-                        World.Entities[i].Damage(this.Damage * Dot * 1.25f, Player, out Exp, true);
+                        World.Entities[i].Damage(this.Damage * Dot * .5f, Player, out Exp, true);
                         Player.XP += Exp;
                     }
                 }

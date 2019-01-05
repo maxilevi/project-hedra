@@ -10,7 +10,7 @@
     }
   ],
   "Model": {
-    "Scale": 1.0,
+    "Scale": 0.25,
     "Path": "$DataFile$/Items/Misc/MagicBranch.ply"
   }
 }

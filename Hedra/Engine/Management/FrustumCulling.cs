@@ -167,7 +167,7 @@ namespace Hedra.Engine.Management
                 FrustumShape.Vertices[i] = Points[i];
             }
             var center = Vector3.TransformPosition(Vector3.Zero, Modl.Inverted());
-            const int size = 80;
+            const int size = 96;
             _frustumBroadphase.Min = center - Vector3.One * size;
             _frustumBroadphase.Max = center + Vector3.One * size;
         }

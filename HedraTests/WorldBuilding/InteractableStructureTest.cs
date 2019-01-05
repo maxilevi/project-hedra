@@ -25,7 +25,8 @@ namespace HedraTests.WorldBuilding
             _structure.Position = new Vector3(300, 0, 500);
             GameManager.Player = _player;
             _player.Position = new Vector3(295, 0, 500);
-            _player.CameraMock.LookingDirection = (_structure.Position - _player.Position).NormalizedFast(); 
+            _player.CameraMock.LookingDirection = (_structure.Position - _player.Position).NormalizedFast();
+            _player.CanInteract = true;
         }
         
         [Test]

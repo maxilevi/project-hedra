@@ -1,3 +1,4 @@
+using System;
 using Hedra.Engine.Player.QuestSystem;
 
 namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
@@ -16,5 +17,6 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 
         protected override QuestDesign[] Descendants => null;
 
+        protected override QuestReward BuildReward(Random Rng) => null;
     }
 }

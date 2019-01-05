@@ -9,6 +9,8 @@
 
 using Hedra.Core;
 using Hedra.Engine;
+using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
 using OpenTK;
@@ -20,13 +22,20 @@ namespace Hedra.AISystem.Humanoid
     /// </summary>
     public class ArcherAIComponent : CombatAIComponent
     {
+        private const int DefaultAttackRadius = 96;
         private float _secondAttackCooldown;
         private float _firstAttackCooldown;
+        private Bow _leftWeapon;
         public override float SearchRadius { get; set; } = 128;
-        public override float AttackRadius { get; set; } = 96;
+        public override float AttackRadius { get; set; } = DefaultAttackRadius;
         public override float ForgetRadius { get; set; } = 192;
 
-        public ArcherAIComponent(IHumanoid Parent, bool Friendly) : base(Parent, Friendly){}
+        public ArcherAIComponent(IHumanoid Parent, bool Friendly) : base(Parent, Friendly)
+        {
+            _leftWeapon = (Bow) Parent.LeftWeapon;
+            _leftWeapon.Miss += OnMiss;
+            _leftWeapon.Hit += OnHit;
+        }
         
         public override void DoUpdate()
         {        
@@ -45,33 +54,37 @@ namespace Hedra.AISystem.Humanoid
                     return;
                 }
                 
-                this.TargetPoint = ChasingTarget.Position;
+                TargetPoint = ChasingTarget.Position;
                 if( (TargetPoint - Parent.Position).LengthSquared < AttackRadius * AttackRadius && !Parent.IsKnocked)
                 {
-                    if (Parent is Engine.Player.Humanoid human)
+                    if (_secondAttackCooldown <= 0)
                     {
-                        if (human.LeftWeapon is Bow bow)
-                        {
-                            bow.ArrowDownForce = 1-(TargetPoint - Parent.Position).LengthFast / (AttackRadius+16);
-                            if (_secondAttackCooldown <= 0)
-                            {
-                                _secondAttackCooldown = 4.5f;
-                                bow.Attack2(human);
-                            }
-                            else if (_firstAttackCooldown <= 0)
-                            {
-                                _firstAttackCooldown = 1.5f;
-                                bow.Attack1(human);
-                            }
-                        }
+                        _secondAttackCooldown = 4.5f;
+                        _leftWeapon.Attack2(Parent);
                     }
-                }else
+                    else if (_firstAttackCooldown <= 0)
+                    {
+                        _firstAttackCooldown = 1.5f;
+                        _leftWeapon.Attack1(Parent);
+                    }                   
+                }
+                else
                 {
 
                     base.RollAndMove();
                 }
             }
             base.LookTarget();
+        }
+
+        private void OnMiss(Projectile Arrow)
+        {
+            AttackRadius -= Chunk.BlockSize;
+        }
+        
+        private void OnHit(Projectile Arrow)
+        {
+            AttackRadius = DefaultAttackRadius;
         }
     }
 }

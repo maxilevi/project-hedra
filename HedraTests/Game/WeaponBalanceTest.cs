@@ -72,6 +72,12 @@ namespace HedraTests.Game
             AssertComplies(Weapon, _sheet.ItemAttackSpeed, () => Weapon.GetAttribute<float>(CommonAttributes.AttackSpeed));
         }
         
+        [TestCaseSource(typeof(WeaponBalanceTest), nameof(Some), new object[] { EquipmentType.Bow })]
+        public void TestBowAttackSpeed(Item Weapon)
+        {
+            AssertComplies(Weapon, _sheet.BowAttackSpeed, () => Weapon.GetAttribute<float>(CommonAttributes.AttackSpeed));
+        }
+        
         public bool Complies(Item Equipment)
         {
             return Equipment.IsWeapon;

@@ -146,25 +146,15 @@ namespace Hedra.Engine.Player
         {
             base.Draw();
             Map.Draw();
-            try
+            var entities = World.Entities.ToArray();
+            for (var i = entities.Length - 1; i > -1; i--)
             {
-                var entities = World.Entities.ToArray();
-                for (int i = entities.Length - 1; i > -1; i--)
+                if (!(entities[i] is LocalPlayer) &&
+                    (entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256 * 256 ||
+                    Pet.Pet == entities[i])
                 {
-                    if (!(entities[i] is LocalPlayer) &&
-                        (entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256 * 256 ||
-                        Pet.Pet == entities[i])
-                    {
-                        entities[i].Draw();
-                    }
+                    entities[i].Draw();
                 }
-            }
-            catch (Exception e)
-            {
-                if (e is ArgumentOutOfRangeException || e is NullReferenceException)
-                    Log.WriteLine("Syncronization exception while reading entities.");
-                else
-                    throw;
             }
         }
 
@@ -205,29 +195,22 @@ namespace Hedra.Engine.Player
                 _previousPosition = Model.Human.BlockPosition;
             }
 
-            try
+            var entities = World.Entities.ToArray();
+            for (int i = entities.Length - 1; i > -1; i--)
             {
-                var entities = World.Entities.ToArray();
-                for (int i = entities.Length - 1; i > -1; i--)
+                var player = GameManager.Player;
+                if (entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused &&
+                    !GameManager.IsLoading
+
+                    || Pet.Pet == entities[i] || entities[i].IsBoss)
                 {
-                    var player = GameManager.Player;
-                    if (entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused &&
-                        !GameManager.IsLoading
 
-                        || Pet.Pet == entities[i] || entities[i].IsBoss)
-                    {
-
-                        entities[i].Update();
-                    }
-                    else if (entities[i] != player && entities[i].InUpdateRange && GameSettings.Paused)
-                    {
-                        (entities[i].Model as IAudible)?.StopSound();
-                    }
+                    entities[i].Update();
                 }
-            }
-            catch (ArgumentException e)
-            {
-                Log.WriteLine("Syncronization exception while reading entities.");
+                else if (entities[i] != player && entities[i].InUpdateRange && GameSettings.Paused)
+                {
+                    (entities[i].Model as IAudible)?.StopSound();
+                }
             }
 
             if (!this.IsDead)
@@ -308,11 +291,12 @@ namespace Hedra.Engine.Player
             
             if(Inventory.Food != null)
             {
-                if (CanEat(Inventory.Food, out var shouldSit))
+                var food = Inventory.Food;
+                if (CanEat(food, out var shouldSit))
                 {
                     if (shouldSit) IsSitting = true;
-                    Model.EatFood(Inventory.Food, OnEatingEnd);
-                    Inventory.RemoveItem(Inventory.Food);
+                    Model.EatFood(food, OnEatingEnd);
+                    Inventory.RemoveItem(food);
                 }
                 else
                 {
@@ -329,9 +313,9 @@ namespace Hedra.Engine.Player
             return (ShouldSit && !IsMoving || !ShouldSit);
         }
 
-        private void OnEatingEnd()
+        private void OnEatingEnd(Item Food)
         {
-            FoodHandler.ApplyEffects(Inventory.Food, this);
+            FoodHandler.ApplyEffects(Food, this);
         }
 
         private void ManageDeath()

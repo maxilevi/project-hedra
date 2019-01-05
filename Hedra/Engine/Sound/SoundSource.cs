@@ -20,6 +20,7 @@ namespace Hedra.Engine.Sound
         public readonly uint Id;        
         private Vector3 _position;
         private float _volume;
+        private bool _initialized;
         
         public SoundSource(Vector3 Position)
         {
@@ -78,16 +79,12 @@ namespace Hedra.Engine.Sound
 
         public float Volume
         {
-            get => this._volume;
+            get => _volume;
             set
             {
-                if (System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
-                    throw new Exception("Duude");
-
-                if (value == this._volume) return;
-                AL.Source(Id, ALSourcef.Gain, value);
-
-                this._volume = value;
+                if (Math.Abs(value - _volume) < 0.005f && _initialized) return;
+                AL.Source(Id, ALSourcef.Gain, _volume = value);
+                _initialized = true;
             }
         }
     }

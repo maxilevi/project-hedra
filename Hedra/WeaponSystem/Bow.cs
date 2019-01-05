@@ -22,7 +22,7 @@ using OpenTK;
 
 namespace Hedra.WeaponSystem
 {
-    public delegate void OnModifyArrowEvent(Projectile Arrow);
+    public delegate void OnArrowEvent(Projectile Arrow);
         
     public class Bow : RangedWeapon
     {           
@@ -30,12 +30,12 @@ namespace Hedra.WeaponSystem
         public override uint SecondaryAttackIcon => WeaponIcons.BowSecondaryAttack;
         
         protected override string AttackStanceName => "Assets/Chr/ArcherShootStance.dae";
-        protected override float PrimarySpeed => 1f;
+        protected override float PrimarySpeed => .7f;
         protected override string[] PrimaryAnimationsNames => new []
         {
             "Assets/Chr/ArcherShoot.dae"
         };
-        protected override float SecondarySpeed => 0.9f;
+        protected override float SecondarySpeed => 1f;
         protected override string[] SecondaryAnimationsNames => new []
         {
             "Assets/Chr/ArcherTripleShoot.dae"
@@ -59,7 +59,9 @@ namespace Hedra.WeaponSystem
                 new Vector3(-90, 0, 90) * Mathf.Radian);
         }
         
-        public OnModifyArrowEvent BowModifiers;
+        public OnArrowEvent BowModifiers;
+        public OnArrowEvent Hit;
+        public OnArrowEvent Miss;
         public float ArrowDownForce { get; set; }
         private readonly ObjectMesh _quiver;
         private readonly ObjectMesh _arrow;
@@ -156,8 +158,16 @@ namespace Hedra.WeaponSystem
                 Hit.Damage(Owner.DamageEquation * ArrowDamageModifier * Options.DamageModifier, Owner, out var exp, true, false);
                 Owner.XP += exp;
             };
-            arrowProj.LandEventHandler += S => Owner.ProcessHit(false);
-            arrowProj.HitEventHandler += (S,V) => Owner.ProcessHit(true);
+            arrowProj.LandEventHandler += S =>
+            {
+                Miss?.Invoke(arrowProj);
+                Owner.ProcessHit(false);
+            };
+            arrowProj.HitEventHandler += (S,V) =>
+            {
+                Hit?.Invoke(arrowProj);
+                Owner.ProcessHit(true);
+            };
             arrowProj = this.AddModifiers(arrowProj);
             SoundPlayer.PlaySound(SoundType.BowSound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
         }

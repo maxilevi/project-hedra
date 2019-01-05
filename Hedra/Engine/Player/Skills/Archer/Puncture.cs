@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player.Skills.Archer
             Weapon.BowModifiers += HandlerLambda;
         }
 
-        private void PierceModifier(Bow Weapon, Projectile ArrowProj, OnModifyArrowEvent Lambda)
+        private void PierceModifier(Bow Weapon, Projectile ArrowProj, OnArrowEvent Lambda)
         {
             ArrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {

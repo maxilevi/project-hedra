@@ -49,8 +49,11 @@ namespace Hedra.Engine.Player
         public IEntity[] IgnoreEntities { get; set; }
 
         private readonly IEntity _parent;
-        private readonly List<ICollidable> _collisions;
+        private readonly List<ICollidable> _chunkCollisions;
+        private readonly List<ICollidable> _structureCollisions;
         private readonly Box _collisionBox;
+        private Vector2 _lastChunkCollisionPosition;
+        private Vector2 _lastStructureCollisionPosition;
         private Vector3 _accumulatedVelocity;
         private bool _collided;
 
@@ -58,7 +61,8 @@ namespace Hedra.Engine.Player
         public Projectile(IEntity Parent, Vector3 Origin, VertexData MeshData)
         {
             _parent = Parent;
-            _collisions = new List<ICollidable>();
+            _chunkCollisions = new List<ICollidable>();
+            _structureCollisions = new List<ICollidable>();
             _collisionBox = Physics.BuildBroadphaseBox(MeshData);
             Mesh = ObjectMesh.FromVertexData(MeshData);
             Propulsion = Propulsion;
@@ -95,17 +99,26 @@ namespace Hedra.Engine.Player
                     ProcessCollision();
                 }
 
-                var entities = World.Entities;
-                for (var i = 0; i < entities.Count; i++)
+                try
                 {
-                    if (_parent == entities[i] 
-                        || !Physics.Collides(_collisionBox.Cache.Translate(Mesh.Position), entities[i].Model.BroadphaseBox)
-                        || IgnoreEntities != null && Array.IndexOf(IgnoreEntities, entities[i]) != -1) continue;
-                    
-                    HitEventHandler?.Invoke(this, World.Entities[i]);
-                    _collided = true;
-                    this.Dispose();
-                    break;
+                    _collisionBox.Translate(Mesh.Position);
+                    var entities = World.Entities;
+                    for (var i = 0; i < entities.Count; i++)
+                    {
+                        if (_parent == entities[i]
+                            || !Physics.Collides(_collisionBox,
+                                entities[i].Model.BroadphaseBox)
+                            || IgnoreEntities != null && Array.IndexOf(IgnoreEntities, entities[i]) != -1) continue;
+
+                        HitEventHandler?.Invoke(this, World.Entities[i]);
+                        _collided = true;
+                        this.Dispose();
+                        break;
+                    }
+                }
+                finally
+                {
+                    _collisionBox.Translate(-Mesh.Position);
                 }
 
                 if (Lifetime < 0)
@@ -119,39 +132,35 @@ namespace Hedra.Engine.Player
 
         private void ProcessCollision()
         {
+            Collision.Update(
+                Position,
+                _chunkCollisions,
+                _structureCollisions,
+                ref _lastChunkCollisionPosition,
+                ref _lastStructureCollisionPosition
+            );
             var isColliding = false;
-            _collisions.Clear();
-            _collisions.AddRange(World.GlobalColliders);
-
-            var underChunk = World.GetChunkAt(Mesh.Position);
-            var underChunkR = World.GetChunkAt(Mesh.Position + new Vector3(Chunk.Width, 0, 0));
-            var underChunkL = World.GetChunkAt(Mesh.Position - new Vector3(Chunk.Width, 0, 0));
-            var underChunkF = World.GetChunkAt(Mesh.Position + new Vector3(0, 0, Chunk.Width));
-            var underChunkB = World.GetChunkAt(Mesh.Position - new Vector3(0, 0, Chunk.Width));
-
-            if (underChunk != null)
-                _collisions.AddRange(underChunk.CollisionShapes.ToArray());
-            if (underChunkL != null)
-                _collisions.AddRange(underChunkL.CollisionShapes.ToArray());
-            if (underChunkR != null)
-                _collisions.AddRange(underChunkR.CollisionShapes.ToArray());
-            if (underChunkF != null)
-                _collisions.AddRange(underChunkF.CollisionShapes.ToArray());
-            if (underChunkB != null)
-                _collisions.AddRange(underChunkB.CollisionShapes.ToArray());
-
-            for (var i = 0; i < _collisions.Count; i++)
+            try
             {
-
-                if (Physics.Collides(_collisions[i], _collisionBox.Cache.Translate(Mesh.Position)))
+                _collisionBox.Translate(Mesh.Position);
+                for (var i = 0; i < _structureCollisions.Count && !isColliding; i++)
                 {
-                    isColliding = true;
-                    break;
+                    if (Physics.Collides(_structureCollisions[i], _collisionBox))
+                        isColliding = true;
+                }
+                for (var i = 0; i < _chunkCollisions.Count && !isColliding; i++)
+                {
+                    if (Physics.Collides(_chunkCollisions[i], _collisionBox))
+                        isColliding = true;
                 }
             }
-            if (Mesh.Position.Y <= Physics.HeightAtPosition(Mesh.Position))
-                isColliding = true;
+            finally
+            {
+                _collisionBox.Translate(-Mesh.Position);
+            }
 
+            if (Mesh.Position.Y <= Physics.HeightAtPosition(Mesh.Position))
+                isColliding = true;          
             if (isColliding)
             {
                 SoundPlayer.PlaySound(SoundType.HitGround, Mesh.Position);
@@ -172,13 +181,13 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public virtual Vector3 Rotation
+        public Vector3 Rotation
         {
             get => Mesh.LocalRotation;
             set => Mesh.LocalRotation = value;
         }
 
-        public virtual Vector3 Position
+        public Vector3 Position
         {
             get => Mesh.Position;
             set => Mesh.Position = value;

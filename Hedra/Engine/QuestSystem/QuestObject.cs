@@ -17,9 +17,11 @@ namespace Hedra.Engine.QuestSystem
         private readonly QuestDesign _design;
         public QuestView View { get; }
         public QuestDesign BaseDesign { get; }
+        public QuestReward Reward => _design.GetReward(this);
         public bool IsEndQuest => _design.IsEndQuest(this);
         public string ShortDescription => _design.GetShortDescription(this);
         public string Description => _design.GetDescription(this);
+        public int Seed => Parameters.Get<int>("Seed");
         public int Steps { get; }
         public IHumanoid Giver { get; }
         public IPlayer Owner { get; private set; }
@@ -39,7 +41,6 @@ namespace Hedra.Engine.QuestSystem
         public void Start(IPlayer Player)
         {
             Owner = Player;
-            if(!FirstTime) _design.OnAccept(this);
         }
 
         public bool IsQuestCompleted()

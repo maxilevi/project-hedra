@@ -219,8 +219,10 @@ namespace Hedra
             }
             
             int bkwIndex = BaseIndex;
-            for(int i = BaseIndex; i > -1; i--){
-                if( chars[i] == ' ' || 0 == i){ 
+            for(int i = BaseIndex; i > -1; i--)
+            {
+                if( chars[i] == ' ' || 0 == i)
+                { 
                     bkwIndex = i;
                     break;
                 }

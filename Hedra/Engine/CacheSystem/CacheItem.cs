@@ -41,6 +41,7 @@ namespace Hedra.Engine.CacheSystem
         Corn,
         Well,
         Mushroom,
+        Timber,
         MaxEnums
     }
 }

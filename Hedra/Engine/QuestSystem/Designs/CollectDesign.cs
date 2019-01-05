@@ -25,12 +25,12 @@ namespace Hedra.Engine.QuestSystem.Designs
             return new object[]
             {
                 Quest.Parameters.Get<ItemCollect[]>("Items")
-                .Select(I => I.ToString())
-                .Aggregate((S1,S2) => $"{S1}, {S2}")
-                .ToUpperInvariant()
+                    .Select(I => I.ToString())
+                    .Aggregate((S1, S2) => $"{S1}, {S2}")
+                    .ToUpperInvariant()
             };
         }
-        
+
         public override string GetShortDescription(QuestObject Quest)
         {
             return Translations.Get(
@@ -38,7 +38,7 @@ namespace Hedra.Engine.QuestSystem.Designs
                 Quest.Giver.Name,
                 Quest.Parameters.Get<ItemCollect[]>("Items")
                     .Select(I => I.ToString())
-                    .Aggregate((S1,S2) => $"{S1}{S2}")
+                    .Aggregate((S1, S2) => $"{S1}{S2}")
             );
         }
 
@@ -49,7 +49,7 @@ namespace Hedra.Engine.QuestSystem.Designs
                 Quest.Giver.Name,
                 Quest.Parameters.Get<ItemCollect[]>("Items")
                     .Select(I => I.ToString(Quest.Owner))
-                    .Aggregate((S1,S2) => $"{S1}{Environment.NewLine}{S2}")
+                    .Aggregate((S1, S2) => $"{S1}{Environment.NewLine}{S2}")
             );
         }
 
@@ -72,7 +72,7 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
             return WildernessTemplates(Rng);
         }
-        
+
         protected override ItemCollect[] VillageTemplates(Random Rng)
         {
             return new[]
@@ -91,7 +91,7 @@ namespace Hedra.Engine.QuestSystem.Designs
                 },
             };
         }
-        
+
         protected override ItemCollect[] WildernessTemplates(Random Rng)
         {
             return new[]
@@ -122,6 +122,11 @@ namespace Hedra.Engine.QuestSystem.Designs
                     Recipe = ItemType.HealthPotionRecipe.ToString()
                 }
             };
+        }
+
+        protected override Item RandomReward(Random Rng)
+        {
+            return ItemPool.Grab(ItemTier.Misc);
         }
     }
 }

@@ -282,8 +282,11 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        private static void LoopStructure(CollidableStructure Structure, Action<BasePlateau> PlateauDo, Action<IGroundwork> GroundworkDo)
+        private static void LoopStructure(CollidableStructure Structure, Action<BasePlateau> PlateauDo, Action<IGroundwork> GroundworkDo, bool IsRemoving)
         {
+            //if(World.StructureHandler.Has(Structure) && !IsRemoving)
+            //    throw new ArgumentOutOfRangeException("A structure first needs to be added via the structure handler.");
+
             if (Structure.Mountain != null)
                 PlateauDo(Structure.Mountain);
             
@@ -298,12 +301,12 @@ namespace Hedra.Engine.WorldBuilding
         
         public void SetupStructure(CollidableStructure Structure)
         {
-            LoopStructure(Structure, AddPlateau, AddGroundwork);
+            LoopStructure(Structure, AddPlateau, AddGroundwork, false);
         }
 
         public void DisposeStructure(CollidableStructure Structure)
         {
-            LoopStructure(Structure, RemovePlateau, RemoveGroundwork);
+            LoopStructure(Structure, RemovePlateau, RemoveGroundwork, true);
         }
     }
 }

@@ -91,7 +91,7 @@ namespace Hedra.Engine.Player.QuestSystem
             {
                 UpdatePages(Quests.Length);
                 Title.Disable();
-                _descriptionText.Text = TextProvider.Wrap(CurrentQuest.Description, 40);
+                _descriptionText.Text = TextProvider.Wrap(CurrentQuest.Description, 38);
                 _descriptionText.Position = Position + _descriptionPosition;
                 _descriptionText.Position += Vector2.UnitY * _descriptionText.Scale.Y * 2;
                 _renderTexture.Position = _journalBackground.Position;

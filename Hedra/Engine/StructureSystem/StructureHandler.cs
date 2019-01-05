@@ -71,7 +71,7 @@ namespace Hedra.Engine.StructureSystem
         private bool ShouldRemove(Vector2 Offset, CollidableStructure Structure)
         {
             /* Offset is not used because this causes issues when chunks are deleted at chunk edges */
-            return Structure.Design.ShouldRemove(GameManager.Player.Loader.Offset, Structure) && Structure.Built;
+            return Structure.Design.ShouldRemove(GameManager.Player.Loader.Offset, Offset, Structure) && Structure.Built;
         }
 
         public static void CheckStructures(Vector2 ChunkOffset)
@@ -101,10 +101,16 @@ namespace Hedra.Engine.StructureSystem
         {
             lock (_lock)
             {
-                Structure.Setup();
                 _itemWatchers.Add(new StructureWatcher(Structure));
+                Structure.Setup();
                 Dirty();
             }
+        }
+
+        public bool Has(CollidableStructure Structure)
+        {
+            lock (_lock)
+                return StructureItems.Any(S => S == Structure);
         }
 
         public static CollidableStructure[] GetNearStructures(Vector3 Position)

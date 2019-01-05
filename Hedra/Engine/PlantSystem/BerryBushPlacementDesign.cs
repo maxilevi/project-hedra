@@ -8,24 +8,12 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    public class BerryBushPlacementDesign : PlacementDesign
+    public class BerryBushPlacementDesign : CollectibleDesign
     {
-        private readonly PlantDesign _berryBushDesign;
+        protected override PlantDesign Design { get; } = new BerryBushDesign();
+        
+        protected override BlockType Type => BlockType.Grass;
 
-        public BerryBushPlacementDesign()
-        {
-            _berryBushDesign = new BerryBushDesign();
-        }
-
-        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk)
-        {
-            return _berryBushDesign;
-        }
-
-        public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)
-        {
-            return World.GetHighestBlockAt(Position.X, Position.Z).Type == BlockType.Grass &&
-                   UnderChunk.Landscape.RandomGen.Next(0, 3000) == 1 && World.MenuSeed != World.Seed;
-        }
+        protected override bool ShouldPlace(Random Rng) => Rng.Next(0, 3000) == 1;
     }
 }

@@ -113,7 +113,8 @@ namespace Hedra.Engine.Player
         
         public void Orientate()
         {
-            OrientateTowards(Human.FacingDirection);
+            if(Human is LocalPlayer)
+                OrientateTowards(Human.FacingDirection);
         }
 
         public void Move(Vector3 Position, float Seconds, bool Orientate = true)

@@ -395,11 +395,20 @@ namespace Hedra.Engine.EntitySystem
             for (var i = 0; i < 30; i++) World.Particles.Emit();
         }
 
-        public void KnockForSeconds(float Time)
+        public void KnockForSeconds(float Seconds)
         {
             IsKnocked = true;
-            Physics.Translate(Vector3.UnitY * 7.5f);
-            _knockedTime = Time;
+            var accum = 0f;
+            TaskScheduler.While(
+                () => accum < 7.5f,
+                () =>
+                {
+                    var curr = 40f * Time.DeltaTime;
+                    accum += curr;
+                    Physics.Translate(Vector3.UnitY * curr);
+                }
+            );
+            _knockedTime = Seconds;
         }
 
         public void SpawnAnimation()
@@ -485,6 +494,7 @@ namespace Hedra.Engine.EntitySystem
             if (IsKnocked)
             {
                 _knockedTime -= Time.DeltaTime;
+                //Model.LocalRotation = new Vector3(0, 0, 90);
                 if (Model is HumanoidModel model)
                 {
                     model.Human.IsRiding = false;

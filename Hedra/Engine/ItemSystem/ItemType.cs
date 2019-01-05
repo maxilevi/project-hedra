@@ -7,6 +7,7 @@ namespace Hedra.Engine.ItemSystem
 {
     public enum ItemType
     {
+        None,
         Berry,
         Gold,
         Glider,
@@ -24,6 +25,7 @@ namespace Hedra.Engine.ItemSystem
         FarmingRake,
         Boat,
         Mushroom,
+        Timber,
         MaxEnums
     }
 }

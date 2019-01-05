@@ -91,6 +91,7 @@ namespace Hedra.Engine.Player
         public override void Update()
         {
             if(DisableWeapon) return;
+            if (Player.IsDead) _continousAttack = false;
             if(_continousAttack)
             {
                 Player.LeftWeapon.Attack1(Player);

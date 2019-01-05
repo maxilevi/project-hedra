@@ -71,6 +71,18 @@ namespace Hedra.Engine.QuestSystem.Designs
                     throw new ArgumentOutOfRangeException($"Unknown QuestContextType '{Context.ContextType}'");
             }
         }
+        protected override QuestReward BuildReward(Random Rng)
+        {
+            var rng = Rng.NextFloat();
+            return new QuestReward
+            {
+                Experience = rng < 0.3f ? Rng.Next(3, 9) : 0,
+                Gold = rng > 0.3f && rng < 0.7f ? Rng.Next(11, 25) : 0,
+                Item = rng > 0.8f && rng < 0.95f ? RandomReward(Rng) : null,
+            };
+        }
+
+        protected abstract Item RandomReward(Random Rng);
 
         protected virtual ItemCollect[] GetItems(QuestObject Previous, QuestParameters Parameters, Random Rng)
         {

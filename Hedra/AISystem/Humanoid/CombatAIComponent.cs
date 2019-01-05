@@ -29,8 +29,8 @@ namespace Hedra.AISystem.Humanoid
         {
             this.Friendly = Friendly;
             this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24 - 12f, 0, Utils.Rng.NextFloat() * 24 - 12f) + Parent.BlockPosition;
-            this.MovementTimer = new Timer(6.0f);
-            this.RollTimer = new Timer(4.0f);
+            this.MovementTimer = new Timer(Utils.Rng.NextFloat() * 4 + 6.0f);
+            this.RollTimer = new Timer(Utils.Rng.NextFloat() * 3 + 4.0f);
             this.OriginalPosition = Parent.BlockPosition;
         }
 

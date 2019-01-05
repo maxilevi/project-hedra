@@ -64,12 +64,12 @@ namespace Hedra.Engine.PlantSystem
             return Data;
         }
 
-        public override void CustomPlacement(VertexData Data, Matrix4 TransMatrix)
+        public override void CustomPlacement(VertexData Data, Matrix4 TransMatrix, Chunk UnderChunk)
         {
             var position = Vector3.TransformPosition(Vector3.Zero, TransMatrix);
-            World.WorldBuilding.SetupStructure(
+            World.StructureHandler.AddStructure(
                 new CollidableStructure(
-                    null,
+                    new CollectiblePlantDesign(),
                     position,
                     null,
                     new CollectiblePlant(
@@ -78,6 +78,9 @@ namespace Hedra.Engine.PlantSystem
                         ItemCollect
                     )
                 )
+                {
+                    Built = true
+                }
             );
         }
 

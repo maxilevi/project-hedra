@@ -62,5 +62,12 @@ namespace HedraTests.Game
             Max = 1.5f,
             ScaleWithLevel = false
         };
+        
+        public UniqueBalanceEntry BowAttackSpeed { get; } = new UniqueBalanceEntry
+        {
+            Min = 0.85f,
+            Max = 1.15f,
+            ScaleWithLevel = false
+        };
     }
 }

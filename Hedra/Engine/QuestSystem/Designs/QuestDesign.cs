@@ -4,6 +4,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.QuestSystem.Views;
+using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using OpenTK;
@@ -13,6 +14,15 @@ namespace Hedra.Engine.QuestSystem.Designs
     public abstract class QuestDesign
     {
         private bool IsAuxiliary => Tier == QuestTier.Auxiliary;
+
+        protected virtual bool HasNext => true;
+
+        protected abstract QuestReward BuildReward(Random Rng);
+
+        public QuestReward GetReward(QuestObject Quest)
+        {
+            return BuildReward(new Random(Quest.Seed + 42));
+        }
         
         public abstract QuestTier Tier { get; }
 
@@ -28,9 +38,9 @@ namespace Hedra.Engine.QuestSystem.Designs
 
         public abstract QuestView BuildView(QuestObject Quest);
         
-        protected virtual QuestObject Setup(QuestObject Object)
+        protected virtual QuestObject Setup(QuestObject Quest)
         {
-            return Object;
+            return Quest;
         }
 
         protected virtual QuestParameters BuildParameters(QuestObject Previous, QuestContext Context, QuestParameters Parameters, Random Rng)
@@ -42,20 +52,16 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
             Quest.Giver.SearchComponent<TalkComponent>().AddDialogLine(Text);
         }
-        
-        public virtual void OnAccept(QuestObject Quest)
-        {
-        }
 
         protected abstract QuestDesign[] Auxiliaries { get; }
 
         protected abstract QuestDesign[] Descendants { get; }
 
-        public abstract bool IsQuestCompleted(QuestObject Object);
+        public abstract bool IsQuestCompleted(QuestObject Quest);
         
-        protected abstract void Consume(QuestObject Object);
+        protected abstract void Consume(QuestObject Quest);
        
-        public virtual void Abandon(QuestObject Object)
+        public virtual void Abandon(QuestObject Quest)
         {
         }
         
@@ -64,7 +70,8 @@ namespace Hedra.Engine.QuestSystem.Designs
             Consume(Object);
             if (Object.Giver.SearchComponent<QuestComponent>() != null)
                 Object.Giver.RemoveComponent(Object.Giver.SearchComponent<QuestComponent>());
-            Object.Owner.Questing.Start(GetNext(Object));
+            if(HasNext)
+                Object.Owner.Questing.Start(GetNext(Object));
         }
 
         public QuestObject GetNext(QuestObject Quest)
@@ -73,14 +80,13 @@ namespace Hedra.Engine.QuestSystem.Designs
             {
                 var rng = new Random(Quest.Parameters.Get<int>("Seed"));
                 var nextDesign = Descendants?[rng.Next(0, Descendants.Length)];
-                var auxiliaryDesign = Auxiliaries[rng.Next(0, Auxiliaries.Length)];
+                var auxiliaryDesign = nextDesign != null 
+                    ? Auxiliaries[rng.Next(0, Auxiliaries.Length)]
+                    : new EndDesign();
                 var nextObject = nextDesign?.Build(Quest, null, null);
                 var questObject = auxiliaryDesign.Build(Quest, nextDesign, nextObject);
-                if (nextDesign != null)
-                {
-                    questObject.Parameters.Set("Next", nextDesign);
-                    questObject.Parameters.Set("NextObject", nextObject);
-                }
+                questObject.Parameters.Set("Next", nextDesign);
+                questObject.Parameters.Set("NextObject", nextObject);
 
                 return questObject;
             }

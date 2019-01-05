@@ -111,7 +111,7 @@ namespace Hedra.Components
             var thoughtComponent = Parent.SearchComponent<ThoughtsComponent>();
             if (thoughtComponent != null)
                 return _thought = thoughtComponent.Thoughts[Utils.Rng.Next(0, thoughtComponent.Thoughts.Length)];
-            return Phrases[Utils.Rng.Next(0, Phrases.Length)];
+            return null;
         }
 
         public void Simulate(IHumanoid To, float Seconds, Action Callback)
@@ -139,7 +139,11 @@ namespace Hedra.Components
         {
             if (_dialogCreated) return;
             _dialogCreated = true;
-            _lines.Insert(0, SelectMainThought());
+            var dialog = SelectMainThought();
+            if(dialog != null)
+                _lines.Insert(0, dialog);
+            if (_lines.Count == 0)
+                _lines.Add(Phrases[Utils.Rng.Next(0, Phrases.Length)]);
         }
 
         private void TalkToPlayer()
@@ -191,7 +195,6 @@ namespace Hedra.Components
                 while (routine.MoveNext()) yield return null;
                 var waitRoutine = RoutineManager.WaitForSeconds(2f);
                 while (waitRoutine.MoveNext()) yield return null;
-                billboard.UpdateText(string.Empty);
             }
             OnTalkingEnded?.Invoke(_talker);
         }

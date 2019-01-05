@@ -11,14 +11,19 @@ namespace Hedra.Engine.QuestSystem
         public event OnTalkEventHandler Spoke;
         private readonly TalkComponent _talk;
         private readonly QuestThoughtsComponent _thoughts;
-        
-        public QuestSpeakComponent(IHumanoid Parent, QuestObject Object, QuestDesign Design) : base(Parent)
+
+        public QuestSpeakComponent(IHumanoid Parent, QuestObject Object, QuestDesign Design) 
+            : this(Parent, Design.GetThoughtsKeyword(Object), Design.GetThoughtsParameters(Object))
+        {
+        }
+
+        public QuestSpeakComponent(IHumanoid Parent, string Keyword, params object[] Params) : base(Parent)
         {
             Parent.AddComponent(
                 _thoughts = new QuestThoughtsComponent(
                     Parent,
-                    Design.GetThoughtsKeyword(Object),
-                    Design.GetThoughtsParameters(Object)
+                    Keyword,
+                    Params
                 )
             );
             Parent.AddComponent(_talk = new TalkComponent(Parent));

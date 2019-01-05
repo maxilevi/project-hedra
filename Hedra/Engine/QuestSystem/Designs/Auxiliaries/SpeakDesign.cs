@@ -26,21 +26,26 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
             );
         }
 
-        protected override QuestObject Setup(QuestObject Object)
+        protected virtual QuestSpeakComponent BuildSpeakComponent(QuestObject Quest)
         {
-            var component = new QuestSpeakComponent(
-                Object.Giver,
-                Object.Parameters.Get<QuestObject>("NextObject"),
-                Object.Parameters.Get<QuestDesign>("Next")
+            return new QuestSpeakComponent(
+                Quest.Giver,
+                Quest.Parameters.Get<QuestObject>("NextObject"),
+                Quest.Parameters.Get<QuestDesign>("Next")
             );
+        }
+
+        protected override QuestObject Setup(QuestObject Quest)
+        {
+            var component = BuildSpeakComponent(Quest);
             component.Spoke += T =>
             {
-                Object.Parameters.Set("IsCompleted", true);
-                Object.Owner.Questing.Trigger();
+                Quest.Parameters.Set("IsCompleted", true);
+                Quest.Owner.Questing.Trigger();
             };
-            Object.Giver.AddComponent(component);
-            Object.Parameters.Set("IsCompleted", false);
-            return Object;
+            Quest.Giver.AddComponent(component);
+            Quest.Parameters.Set("IsCompleted", false);
+            return Quest;
         }
 
         public override bool IsQuestCompleted(QuestObject Object)
@@ -48,15 +53,15 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
             return Object.Parameters.Get<bool>("IsCompleted");
         }
 
-        public override void Abandon(QuestObject Object)
+        public override void Abandon(QuestObject Quest)
         {
-            Consume(Object);
+            Consume(Quest);
         }
         
-        protected override void Consume(QuestObject Object)
+        protected override void Consume(QuestObject Quest)
         {
-            Object.Giver.RemoveComponent(
-                Object.Giver.SearchComponent<QuestSpeakComponent>()
+            Quest.Giver.RemoveComponent(
+                Quest.Giver.SearchComponent<QuestSpeakComponent>()
             );
         }
 

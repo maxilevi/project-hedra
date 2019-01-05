@@ -3,6 +3,7 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 using OpenTK;
@@ -13,10 +14,12 @@ namespace Hedra.Engine.PlantSystem
     {
         public override CacheItem Type => CacheItem.Cloud;
 
+        public override bool AffectedByLod => false;
+
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
         {
             var cloudPosition = new Vector3(Position.X, 800f + Rng.NextFloat() * 32f - 16f, Position.Z);
-            Matrix4 transMatrix = Matrix4.CreateScale(Rng.NextFloat() * 6.0f + 40f);
+            var transMatrix = Matrix4.CreateScale(Rng.NextFloat() * 6.0f + 40f);
             transMatrix *= Matrix4.CreateRotationY(360f * Rng.NextFloat() * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation(cloudPosition);
             return transMatrix;

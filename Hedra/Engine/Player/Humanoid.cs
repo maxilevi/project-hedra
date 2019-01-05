@@ -80,7 +80,7 @@ namespace Hedra.Engine.Player
         public ClassDesign Class { get; set; }
         
         public virtual bool CanInteract { get; set; } = true;
-        public virtual float FacingDirection => -( (float) Math.Acos(this.Orientation.X) * Mathf.Degree - 90f);
+        public virtual float FacingDirection => throw new NotImplementedException();
         public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
         public MovementManager Movement { get; protected set; }
         public HandLamp HandLamp { get; }
@@ -367,7 +367,7 @@ namespace Hedra.Engine.Player
         
         public override float AttackResistance => (1 - 0.003f * base.Level) / Class.AttackResistance;
         
-        public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 35f, 0f, 1.25f);
+        public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 90f, 0f, .5f);
 
         public float DamageEquation => UnRandomizedDamageEquation * ( .75f + Utils.Rng.NextFloat() * .5f);
 

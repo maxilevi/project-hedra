@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering
             bmp.Dispose();
             var error = Renderer.GetError();
             if (error != ErrorCode.NoError)
-                Log.WriteLine($"GL Error: Loading Texture: '{BitmapObject.Path}'" + error);
+                Log.WriteLine($"GL Error: Loading Texture: '{BitmapObject.Path}' " + error);
             return id;
         }
     }

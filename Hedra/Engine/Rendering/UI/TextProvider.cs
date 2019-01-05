@@ -58,20 +58,43 @@ namespace Hedra.Engine.Rendering.UI
 
         public static string Wrap(string Text, int Characters)
         {
-            var splits = GetSplits(Text);
-            var texts = splits.Select(StringMatch).ToArray();
+            var splits = GetSplits(Text).ToList();
+            var texts = splits.Select(StringMatch).ToList();
             var accumulated = 0;
-            for (var i = 0; i < splits.Length; ++i)
+            for (var i = 0; i < splits.Count; ++i)
             {
-                accumulated += texts[i].Length; 
-                if(texts[i].Length != splits[i].Length) continue;
+                accumulated += texts[i].Length;
                 if (accumulated > Characters)
                 {
                     var measure = Math.Max(1, Characters - accumulated + texts[i].Length);
-                    splits[i] = Utils.FitString(splits[i], measure, measure < Characters);
-                    splits[i] = splits[i].Substring(0, splits[i].Length - Environment.NewLine.Length);
-                    accumulated -= Characters;
-                } 
+                    var previousLen = splits[i].Length;
+                    var currentLen = 0;
+                    if (splits[i] == texts[i])
+                    {
+                        splits[i] = Utils.FitString(splits[i], measure, measure < Characters);
+                        splits[i] = splits[i].Substring(0, splits[i].Length - Environment.NewLine.Length);
+                        currentLen = splits[i].Length;
+                    }
+                    else
+                    {
+                       /* String has format */
+                        var newStr = Utils.FitString(texts[i], measure, measure < Characters);
+                        newStr = newStr.Substring(0, newStr.Length - Environment.NewLine.Length);
+                        previousLen = texts[i].Length;
+                        currentLen = newStr.Length;
+                        var subParts = newStr.Split(Environment.NewLine.ToCharArray())
+                            .Where(S => !string.IsNullOrEmpty(S))
+                            .ToArray();
+                        var newSplit = string.Empty;
+                        for (var k = 0; k < subParts.Length; k++)
+                        {
+                            newSplit += $"{splits[i].Replace(texts[i], subParts[k])}{Environment.NewLine}";
+                        }
+                        newSplit = newSplit.Substring(0, newSplit.Length - Environment.NewLine.Length);
+                        splits[i] = newSplit;
+                    }
+                    accumulated -= Characters * ((currentLen - previousLen) / Environment.NewLine.Length);
+                }
             }
             return string.Join(string.Empty, splits);
         }
@@ -212,7 +235,7 @@ namespace Hedra.Engine.Rendering.UI
                                 Point.Empty, StringFormat.GenericTypographic
                             );
                             var shadowOffset = new Matrix();
-                            shadowOffset.Translate(2 + offset.X, 2 + offset.Y);
+                            shadowOffset.Translate(1.5f + offset.X, 1.5f + offset.Y);
                             gp.Transform(shadowOffset);
 
                             graphics.FillPath(shadowBrush, gp);
@@ -234,7 +257,7 @@ namespace Hedra.Engine.Rendering.UI
                             offsetMat.Translate(offset.X, offset.Y);
                             gp.Transform(offsetMat);
                             graphics.FillPath(brush, gp);
-                            var format = StringFormat.GenericTypographic;
+                            var format = (StringFormat) StringFormat.GenericTypographic.Clone();
                             format.SetMeasurableCharacterRanges(new[]
                             {
                                 new CharacterRange(Params.Offsets[i], Params.Texts[i].Length)

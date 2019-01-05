@@ -24,7 +24,11 @@ namespace Hedra.Engine.PlantSystem
 
         public virtual void AddShapes(Chunk UnderChunk, Matrix4 TransMatrix){}
 
-        public virtual bool HasCustomPlacement { get; } = false;
-        public virtual void CustomPlacement(VertexData Data, Matrix4 TransMatrix) {}
+        public virtual bool HasCustomPlacement => false;
+        
+        public virtual bool AffectedByLod => true;
+        
+        public virtual void CustomPlacement(VertexData Data, Matrix4 TransMatrix, Chunk UnderChunk)
+            => throw new NotImplementedException();
     }
 }

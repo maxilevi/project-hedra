@@ -51,7 +51,7 @@ namespace Hedra.Engine.Player.Skills.Archer
             Weapon.BowModifiers += HandlerLambda;
         }
 
-        private void ModifierHandler(Bow Weapon, Projectile Arrow, OnModifyArrowEvent Event)
+        private void ModifierHandler(Bow Weapon, Projectile Arrow, OnArrowEvent Event)
         {
             Arrow.MoveEventHandler += Sender =>
             {

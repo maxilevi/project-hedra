@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
@@ -41,7 +42,7 @@ namespace Hedra.Engine.QuestSystem.Designs
                 "quest_craft_short",
                 new object[]
                 {
-                    CraftingItemName(Quest).ToString(),
+                    CraftingItemName(Quest),
                 }
             );
         }
@@ -51,7 +52,7 @@ namespace Hedra.Engine.QuestSystem.Designs
             var arguments = new List<object>(new object[]
             {
                 Quest.Giver.Name,
-                CraftingItemName(Quest).ToString()
+                CraftingItemName(Quest)
             });
             var hasStation = HasCraftingStation(Quest);
             if(hasStation) arguments.Add(CraftingStationName(Quest));
@@ -69,21 +70,19 @@ namespace Hedra.Engine.QuestSystem.Designs
             new TravelDesign()
         };
 
-        protected override QuestDesign[] Descendants => new QuestDesign[]
-        {
-            new TravelDesign(),
-        };
+        protected override QuestDesign[] Descendants => null;
 
-        public override void OnAccept(QuestObject Quest)
+        protected override QuestObject Setup(QuestObject Quest)
         {
+            if (!Quest.FirstTime) return base.Setup(Quest);
             var recipe = Quest.Parameters.Get<Item>("Recipe");
             if (!Quest.Owner.Crafting.HasRecipe(recipe.Name))
             {
-                AddDialogLine(Quest, Translation.Create("quest_craft_take_recipe"));
                 Quest.Owner.AddOrDropItem(recipe);
             }
+
             var startingItems = Quest.Parameters.Get<ItemCollect[]>("StartingItems");
-            if (startingItems == null) return;
+            if (startingItems == null) return base.Setup(Quest);
             for (var i = 0; i < startingItems.Length; ++i)
             {
                 var startItem = ItemPool.Grab(startingItems[i].Name);
@@ -94,6 +93,7 @@ namespace Hedra.Engine.QuestSystem.Designs
                 );
                 Quest.Owner.AddOrDropItem(startItem);
             }
+            return base.Setup(Quest);
         }
 
         protected override ItemCollect[] GetItems(QuestObject Previous, QuestParameters Parameters, Random Rng)
@@ -115,6 +115,21 @@ namespace Hedra.Engine.QuestSystem.Designs
                 }
             };
         }
+// Charge and fire
+        // Right click kick ability
+
+        protected override Item RandomReward(Random Rng)
+        {
+            Item[] items;
+            if (Rng.Next(0, 7) == 1)
+                items = ItemPool.Matching(T => T.IsRecipe && (int) T.Tier == (int) ItemTier.Uncommon);
+            else if (Rng.Next(0, 4) == 1)
+                items = ItemPool.Matching(T => T.IsRecipe && (int) T.Tier == (int) ItemTier.Common);
+            else
+                items = ItemPool.Matching(T => T.Tier == ItemTier.Misc);
+
+            return items[Rng.Next(0, items.Length)];
+        }
 
         protected override int RandomItemCount(Random Rng, ItemCollect[] Templates) => throw new NotImplementedException();
 
@@ -126,7 +141,7 @@ namespace Hedra.Engine.QuestSystem.Designs
 
         private bool HasCraftingStation(QuestObject Quest) => Quest.Parameters.Get<CraftingStation>("Station") != CraftingStation.None ;
         
-        private static string CraftingStationName(QuestObject Quest) => Translations.Get(Station(Quest).ToString().ToLowerInvariant());
+        private static string CraftingStationName(QuestObject Quest) => Translations.Get(Station(Quest).ToString().ToLowerInvariant()).ToUpperInvariant();
         
         private static CraftingStation Station(QuestObject Object) => Object.Parameters.Get<CraftingStation>("Station");
         

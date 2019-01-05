@@ -53,12 +53,12 @@ namespace Hedra.Engine.Generation
                     TransMatrix = transMatrix
                 };
                 CacheManager.Check(data);
-                underChunk.AddInstance(data, true);
+                underChunk.AddInstance(data, Design.AffectedByLod);
                 modelDataClone.Dispose();
             }
             else
             {
-                Design.CustomPlacement(modelDataClone, transMatrix);
+                Design.CustomPlacement(modelDataClone, transMatrix, underChunk);
             }
         }
     }

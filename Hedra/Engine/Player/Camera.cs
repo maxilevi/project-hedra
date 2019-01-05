@@ -211,7 +211,13 @@ namespace Hedra.Engine.Player
 
         private bool IsColliding(Vector3 Position)
         {
-            UpdateCollisions(Position);
+            Collision.Update(
+                Position,
+                _chunkCollisions,
+                _structureCollisions,
+                ref _lastChunkCollisionPosition,
+                ref _lastStructureCollisionPosition
+            );
             try
             {
                 _cameraBox.Translate(Position);
@@ -230,38 +236,6 @@ namespace Hedra.Engine.Player
             finally
             {
                 _cameraBox.Translate(-Position);
-            }
-        }
-        
-        private void UpdateCollisions(Vector3 Position)
-        {
-            var chunkSpace = World.ToChunkSpace(Position.Xz);
-            if (chunkSpace != _lastChunkCollisionPosition)
-            {
-                _lastChunkCollisionPosition = chunkSpace;
-                _chunkCollisions.Clear();
-                var underChunk = World.GetChunkAt(Position);
-                var underChunkR = World.GetChunkAt(Position + new Vector3(Chunk.Width, 0, 0));
-                var underChunkL = World.GetChunkAt(Position - new Vector3(Chunk.Width, 0, 0));
-                var underChunkF = World.GetChunkAt(Position + new Vector3(0, 0, Chunk.Width));
-                var underChunkB = World.GetChunkAt(Position - new Vector3(0, 0, Chunk.Width));
-                if(underChunk != null) _chunkCollisions.AddRange(underChunk.CollisionShapes);
-                if(underChunkL != null) _chunkCollisions.AddRange(underChunkL.CollisionShapes);
-                if(underChunkR != null) _chunkCollisions.AddRange(underChunkR.CollisionShapes);
-                if(underChunkF != null) _chunkCollisions.AddRange(underChunkF.CollisionShapes);
-                if(underChunkB != null) _chunkCollisions.AddRange(underChunkB.CollisionShapes);
-            }
-            if ((Position.Xz - _lastStructureCollisionPosition).LengthSquared > 1)
-            {
-                _lastStructureCollisionPosition = Position.Xz;
-                _structureCollisions.Clear();
-                _structureCollisions.AddRange(World.GlobalColliders);
-                var nearCollisions = _player.NearCollisions;
-                for (var i = 0; i < nearCollisions.Length; i++)
-                {
-                    if (nearCollisions[i].Contains(chunkSpace))
-                        _structureCollisions.Add(nearCollisions[i]);
-                }
             }
         }
     }

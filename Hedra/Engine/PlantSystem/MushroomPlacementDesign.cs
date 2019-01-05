@@ -1,27 +1,14 @@
+using System;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
-using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    public class MushroomPlacementDesign : PlacementDesign
+    public class MushroomPlacementDesign : CollectibleDesign
     {
-        private readonly PlantDesign _mushroomDesign;
+        protected override PlantDesign Design { get; } = new MushroomDesign();
+        
+        protected override BlockType Type => BlockType.Dirt;
 
-        public MushroomPlacementDesign()
-        {
-            _mushroomDesign = new MushroomDesign();
-        }
-
-        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk)
-        {
-            return _mushroomDesign;
-        }
-
-        public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)
-        {
-            return World.GetHighestBlockAt(Position.X, Position.Z).Type == BlockType.Dirt &&
-                   UnderChunk.Landscape.RandomGen.Next(0, 1000) == 1 && World.MenuSeed != World.Seed;
-        }
+        protected override bool ShouldPlace(Random Rng) => Rng.Next(0, 1000) == 1;
     }
 }

@@ -22,6 +22,7 @@ namespace Hedra.Engine.ItemSystem
         private static readonly EquipmentType[] WeaponEquipmentTypes;
         private static readonly EquipmentType[] ArmorEquipmentTypes;
         private static readonly string[] BlacklistedEquipment;
+        private static readonly string[] BlacklistedItems;
         private static readonly EffectType[] EffectTypes;
 
         static ItemPool()
@@ -45,6 +46,11 @@ namespace Hedra.Engine.ItemSystem
                 EffectType.Poison, EffectType.Slow, EffectType.Speed
             };
 
+            BlacklistedItems = new[]
+            {
+                ItemType.Gold.ToString()
+            };
+            
             BlacklistedEquipment = new[]
             {
                 EquipmentType.Staff.ToString(),
@@ -71,7 +77,10 @@ namespace Hedra.Engine.ItemSystem
                 newTemplates = templates.Where(Template => Template.Tier <= selectedTier 
                 && Template.EquipmentType == Settings.EquipmentType).ToArray();
             }
-            templates = newTemplates.Where(Template => Array.IndexOf(BlacklistedEquipment, Template.EquipmentType) == -1).ToArray();
+            templates = newTemplates
+                .Where(Template => Array.IndexOf(BlacklistedEquipment, Template.EquipmentType) == -1)
+                .Where(Template => Array.IndexOf(BlacklistedItems, Template.Name) == -1)
+                .ToArray();
             if (templates.Length == 0) throw new ArgumentOutOfRangeException($"No valid item template found.");
             
             var item = Item.FromTemplate(templates[rng.Next(0, templates.Length)]);
@@ -145,7 +154,6 @@ namespace Hedra.Engine.ItemSystem
                     break;
                 }
             }
-            if (newTier < Item.Tier) throw new Exception("Fix this");
             Item.Tier = newTier;
             return Item;
         }

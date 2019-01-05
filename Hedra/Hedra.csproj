@@ -200,6 +200,7 @@
     <Compile Include="Engine\CacheSystem\MushroomCache.cs" />
     <Compile Include="Engine\CacheSystem\PumpkinCache.cs" />
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
+    <Compile Include="Engine\CacheSystem\TimberCache.cs" />
     <Compile Include="Engine\CacheSystem\WellCache.cs" />
     <Compile Include="Engine\ClassSystem\RestrictionsFactory.cs" />
     <Compile Include="Engine\Core\ISearchable.cs" />
@@ -232,12 +233,17 @@
     <Compile Include="Engine\ModuleSystem\Templates\ModelTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\SpawnerSettings.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\SpawnTemplate.cs" />
+    <Compile Include="Engine\PhysicsSystem\Collision.cs" />
+    <Compile Include="Engine\PlantSystem\CollectibleDesign.cs" />
+    <Compile Include="Engine\PlantSystem\CollectiblePlantDesign.cs" />
     <Compile Include="Engine\PlantSystem\CornDesign.cs" />
     <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
     <Compile Include="Engine\PlantSystem\SunflowerDesign.cs" />
+    <Compile Include="Engine\PlantSystem\TimberDesign.cs" />
+    <Compile Include="Engine\PlantSystem\TimberPlacementDesign.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingBackground.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInterface.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterface.cs" />
@@ -257,6 +263,8 @@
     <Compile Include="Engine\Player\QuestSystem\Views\EntityView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\QuestView.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\AuxiliaryDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\DummyDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\EndDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\ReadNoteDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\SpeakDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\TravelDesign.cs" />
@@ -276,6 +284,7 @@
     <Compile Include="Engine\QuestSystem\QuestParameters.cs" />
     <Compile Include="Engine\QuestSystem\QuestPersistence.cs" />
     <Compile Include="Engine\QuestSystem\QuestPool.cs" />
+    <Compile Include="Engine\QuestSystem\QuestReward.cs" />
     <Compile Include="Engine\QuestSystem\Quests.cs" />
     <Compile Include="Engine\QuestSystem\QuestSpeakComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
@@ -1492,6 +1501,22 @@
       <Link>Assets\Env\Plants\Mushroom0_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Environment\Misc\Timber0.ply">
+      <Link>Assets\Env\Plants\Timber0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Misc\Timber0_Lod2.ply">
+      <Link>Assets\Env\Plants\Timber0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Misc\Timber0_Lod4.ply">
+      <Link>Assets\Env\Plants\Timber0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Environment\Misc\Timber0_Lod8.ply">
+      <Link>Assets\Env\Plants\Timber0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Environment\Oaks\Oak0.ply">
       <Link>Assets\Env\Trees\Oak0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1818,6 +1843,10 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\Recipe.ply">
       <Link>Assets\Items\Misc\Recipe.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Misc\Timber.ply">
+      <Link>Assets\Items\Misc\Timber.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Misc\WoodenBowl.ply">
@@ -7174,6 +7203,9 @@
     <Content Include="Modules\Items\Misc\Rake.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Misc\Timber.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\WoodenBowl.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -7193,6 +7225,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\UncommonAutumnStaffRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\WoodenBowlRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\Cow.json">
