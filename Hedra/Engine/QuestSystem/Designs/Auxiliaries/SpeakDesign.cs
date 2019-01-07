@@ -10,6 +10,8 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 {
     public class SpeakDesign : AuxiliaryDesign
     {
+        
+        
         public override string GetShortDescription(QuestObject Quest)
         {
             return Translations.Get(
@@ -42,6 +44,12 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
             {
                 Quest.Parameters.Set("IsCompleted", true);
                 Quest.Owner.Questing.Trigger();
+            };
+            component.BeforeSpeaking += T =>
+            {
+                var nextQuest = Quest.Parameters.Get<QuestObject>("NextObject");
+                var nextDesign = Quest.Parameters.Get<QuestDesign>("Next");
+                nextDesign?.SetupDialog(nextQuest, Quest.Owner);
             };
             Quest.Giver.AddComponent(component);
             Quest.Parameters.Set("IsCompleted", false);

@@ -1,6 +1,9 @@
+using System;
+using System.Drawing;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 {
@@ -23,9 +26,15 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
             );
         }
 
+        protected override QuestParameters BuildParameters(QuestObject Previous, QuestContext Context, QuestParameters Parameters, Random Rng)
+        {
+            Parameters.Set("Reward", Previous.Reward);
+            return base.BuildParameters(Previous, Context, Parameters, Rng);
+        }
+
         private static DialogObject BuildDialog(QuestObject Quest)
         {
-            var reward = Quest.Reward;
+            var reward = Quest.Parameters.Get<QuestReward>("Reward");
             if (reward.HasExperience)
                 return new DialogObject
                 {
@@ -72,9 +81,12 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
         
         private static void GiveReward(QuestObject Quest)
         {
-            var reward = Quest.Reward;
+            var reward = Quest.Parameters.Get<QuestReward>("Reward");
             if (reward.HasExperience)
+            {
                 Quest.Owner.XP += reward.Experience;
+                Quest.Owner.ShowText($"+{reward.Experience} XP", Color.Violet, 20);
+            }
             if (reward.HasGold)
                 Quest.Owner.Gold += reward.Gold;
             if (reward.HasItem)

@@ -140,14 +140,7 @@ namespace Hedra.Engine.EntitySystem
                 Exp = XpToGive;
                 if(Damager is LocalPlayer)
                 {
-                    var delta = (int)Math.Ceiling(Exp);
-                    var label0 = new TextBillboard(4.0f, $"+{delta} XP", Color.Violet,
-                        FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
-                        Parent.Position)
-                    {
-                        Scalar = .4f,
-                        Vanish = true
-                    };
+                    Parent.ShowText($"+{(int)Math.Ceiling(Exp)} XP", Color.Violet, 20);
                 }
                 RoutineManager.StartRoutine(this.DisposeCoroutine);
                 

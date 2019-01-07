@@ -35,6 +35,7 @@ namespace Hedra.Components
     public class TalkComponent : Component<IHumanoid>, ITickable
     {
         public event OnTalkEventHandler OnTalkingEnded;
+        public event OnTalkEventHandler OnTalkingStarted;
         public bool Talking { get; private set; }
         public bool CanTalk { get; set; } = true;
 
@@ -148,8 +149,9 @@ namespace Hedra.Components
 
         private void TalkToPlayer()
         {
-            SetupDialog();
             _talker = GameManager.Player;
+            OnTalkingStarted?.Invoke(_talker);
+            SetupDialog();
             SoundPlayer.PlayUISound(SoundType.TalkSound, 1f, .75f);
 
             Vector3 FollowFunc()

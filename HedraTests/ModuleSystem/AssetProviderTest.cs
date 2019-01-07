@@ -21,13 +21,14 @@ namespace HedraTests.ModuleSystem
         [Test]
         public void TestGameFolderPrefix()
         {
-            var path = $"{GameLoader.AppPath}/test_file.txt";
+            var path = $"{GameLoader.AppPath}/Modules/Blablasmod/test_file.txt";
             var expected = new byte[]
             {
                 0, 1, 2, 3, 4, 5
             };
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllBytes(path, expected);
-            Assert.AreEqual(_assetProvider.ReadPath("$GameFolder$/test_file.txt"), expected);
+            Assert.AreEqual(_assetProvider.ReadPath("$GameFolder$/Modules/Blablasmod/test_file.txt"), expected);
         }
         
         [Test]

@@ -46,6 +46,9 @@ uniform float MaxDitherDistance;
 uniform vec4 AreaColors[16];
 uniform vec4 AreaPositions[16];
 const float ShadowTransition = 10.0;
+const float NoShadowsFlag = -1.0;
+const float NoHighlightFlag = -2.0;
+const float FlagEpsilon = 0.1;
 
 vec2 Unpack(float inp, int prec)
 {
@@ -87,7 +90,7 @@ void main()
 	Vertex = TransformationMatrix * Vertex;
 	gl_Position = _modelViewProjectionMatrix * Vertex;
 
-	float use_shadows = when_neq(UseShadows, 0.0) * when_neq(InColor.a, -1.0);
+	float use_shadows = when_neq(UseShadows, 0.0) * when_neq(InColor.a, NoShadowsFlag);
 
 	float ShadowDist = DistanceToCamera - (ShadowDistance - ShadowTransition);
 	ShadowDist /= ShadowTransition;
@@ -97,8 +100,7 @@ void main()
 	
 	InPos = Vertex;
 	InNorm = vec4(InNormal, 1.0);
-	
-    if(!(Config+2.0 < 0.1))
+    if(Config - NoHighlightFlag > FlagEpsilon)
     {
         for(int i = 0; i < 16; i++)
         {
@@ -116,7 +118,7 @@ void main()
 	vec3 FLightColor = calculate_lights(LightColor, Vertex.xyz);
 	vec4 InputColor = vec4(linear_color.xyz, 1.0);
 
-	Ambient += 0.0;//when_lt(Config + 1.0, 0.1) * 0.25;
+	Ambient += Config - NoShadowsFlag < FlagEpsilon ? 0.25 : 0.0;
 	vec4 Specular = specular(unitToLight, unitNormal, unitToCamera, LightColor);
 	vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
 	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);

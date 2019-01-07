@@ -58,7 +58,7 @@ namespace Hedra.Engine.StructureSystem
                 for (var i = _itemWatchers.Count-1; i > -1; --i)
                 {
                     var item = _itemWatchers[i];
-                    if (ShouldRemove(Chunk.Position.Xz, item.Structure))
+                    if (ShouldRemove(item.Structure))
                     {
                         item.Dispose();
                         _itemWatchers.RemoveAt(i);
@@ -68,10 +68,10 @@ namespace Hedra.Engine.StructureSystem
             }
         }
 
-        private bool ShouldRemove(Vector2 Offset, CollidableStructure Structure)
+        private static bool ShouldRemove(CollidableStructure Structure)
         {
             /* Offset is not used because this causes issues when chunks are deleted at chunk edges */
-            return Structure.Design.ShouldRemove(GameManager.Player.Loader.Offset, Offset, Structure) && Structure.Built;
+            return Structure.Design.ShouldRemove(Structure) && Structure.Built;
         }
 
         public static void CheckStructures(Vector2 ChunkOffset)

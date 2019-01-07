@@ -28,7 +28,7 @@ namespace Hedra.Engine.QuestSystem.Designs
         public override object[] GetThoughtsParameters(QuestObject Quest)
         {
             return Quest.Parameters.Get<CraftingStation>("Station") == CraftingStation.None 
-                ? new object[] { CraftingItemName(Quest).ToString() }
+                ? new object[] { CraftingItemName(Quest) }
                 : new object[]
                 {
                     CraftingItemName(Quest),
@@ -52,7 +52,9 @@ namespace Hedra.Engine.QuestSystem.Designs
             var arguments = new List<object>(new object[]
             {
                 Quest.Giver.Name,
-                CraftingItemName(Quest)
+                Quest.Parameters.Get<ItemCollect[]>("Items")
+                    .Select(I => I.ToString(Quest.Owner))
+                    .Aggregate((S1, S2) => $"{S1}{Environment.NewLine}{S2}")
             });
             var hasStation = HasCraftingStation(Quest);
             if(hasStation) arguments.Add(CraftingStationName(Quest));
@@ -72,17 +74,21 @@ namespace Hedra.Engine.QuestSystem.Designs
 
         protected override QuestDesign[] Descendants => null;
 
-        protected override QuestObject Setup(QuestObject Quest)
+        public override void SetupDialog(QuestObject Quest, IPlayer Owner)
         {
-            if (!Quest.FirstTime) return base.Setup(Quest);
+            if (!Quest.FirstTime) return;
             var recipe = Quest.Parameters.Get<Item>("Recipe");
-            if (!Quest.Owner.Crafting.HasRecipe(recipe.Name))
+            if (!Owner.Crafting.HasRecipe(recipe.Name))
             {
-                Quest.Owner.AddOrDropItem(recipe);
+                AddDialogLine(
+                    Quest,
+                    Translation.Create("quest_craft_take_recipe")
+                );
+                Owner.AddOrDropItem(recipe);
             }
 
             var startingItems = Quest.Parameters.Get<ItemCollect[]>("StartingItems");
-            if (startingItems == null) return base.Setup(Quest);
+            if (startingItems == null) return;
             for (var i = 0; i < startingItems.Length; ++i)
             {
                 var startItem = ItemPool.Grab(startingItems[i].Name);
@@ -93,7 +99,6 @@ namespace Hedra.Engine.QuestSystem.Designs
                 );
                 Quest.Owner.AddOrDropItem(startItem);
             }
-            return base.Setup(Quest);
         }
 
         protected override ItemCollect[] GetItems(QuestObject Previous, QuestParameters Parameters, Random Rng)

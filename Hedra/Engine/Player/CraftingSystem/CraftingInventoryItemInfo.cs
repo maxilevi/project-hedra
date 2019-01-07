@@ -69,7 +69,7 @@ namespace Hedra.Engine.Player.CraftingSystem
         {
             if (_canCraft && _cooldownTimer.Ready)
             {
-                _player.Crafting.Craft(_currentRecipe, _player.Position);
+                _player.Crafting.CraftItem(_currentRecipe, _player.Position);
                 UpdateView();
                 _cooldownTimer.Reset();
                 SoundPlayer.PlayUISound(SoundType.NotificationSound);

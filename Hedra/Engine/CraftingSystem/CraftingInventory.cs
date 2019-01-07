@@ -14,8 +14,11 @@ using OpenTK;
 
 namespace Hedra.Engine.CraftingSystem
 {
+    public delegate void OnCraft(IngredientsTemplate[] Ingredients, Item Recipe, Item Output);
+    
     public class CraftingInventory
     {
+        public event OnCraft Craft;
         private const int CraftingStationRadius = 16;
         private readonly IPlayerInventory _inventory;
         private readonly List<string> _recipeNames;
@@ -64,7 +67,7 @@ namespace Hedra.Engine.CraftingSystem
             return currentStation;
         }
 
-        public void Craft(Item Recipe, Vector3 Position)
+        public void CraftItem(Item Recipe, Vector3 Position)
         {
             if(!CanCraft(Recipe, Position))
                 throw new ArgumentOutOfRangeException($"Failed to craft {Recipe.Name}");
@@ -77,6 +80,7 @@ namespace Hedra.Engine.CraftingSystem
             {
                 World.DropItem(output, Position);
             }
+            Craft?.Invoke(ingredients, Recipe, output);
         }
         
         public bool LearnRecipe(string RecipeName)

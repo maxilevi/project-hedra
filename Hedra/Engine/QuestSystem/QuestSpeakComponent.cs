@@ -9,6 +9,7 @@ namespace Hedra.Engine.QuestSystem
     public class QuestSpeakComponent : QuestComponent
     {
         public event OnTalkEventHandler Spoke;
+        public event OnTalkEventHandler BeforeSpeaking;
         private readonly TalkComponent _talk;
         private readonly QuestThoughtsComponent _thoughts;
 
@@ -31,6 +32,10 @@ namespace Hedra.Engine.QuestSystem
             {
                 Spoke?.Invoke(T);
                 Parent.RemoveComponent(this);
+            };
+            _talk.OnTalkingStarted += T =>
+            {
+                BeforeSpeaking?.Invoke(T);
             };
         }
 

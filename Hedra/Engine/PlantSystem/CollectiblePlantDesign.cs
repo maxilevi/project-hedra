@@ -25,9 +25,9 @@ namespace Hedra.Engine.PlantSystem
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
             => throw new NotImplementedException();
         
-        public override bool ShouldRemove(Vector2 PlayerOffset, Vector2 Offset, CollidableStructure Structure)
+        public override bool ShouldRemove(CollidableStructure Structure)
         {
-            return Offset == World.ToChunkSpace(Structure.Position);
+            return World.GetChunkByOffset(World.ToChunkSpace(Structure.Position)) == null;
         }
     }
 }

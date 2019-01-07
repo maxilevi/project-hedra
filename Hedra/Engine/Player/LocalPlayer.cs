@@ -268,6 +268,7 @@ namespace Hedra.Engine.Player
             set
             {
                 if (value < 0) return;
+                this.ShowText(Model.HeadPosition, $"+ {value - Gold} {Translations.Get("quest_gold")}", Color.Gold, 18);
                 var currentGold = Inventory.Search(I => I.IsGold);
                 if (currentGold == null)
                 {
@@ -347,15 +348,7 @@ namespace Hedra.Engine.Player
                 _acummulativeHealing += diff < 0 ? 0 : diff;
                 if (_acummulativeHealing > MaxHealth * .05f)
                 {
-                    if (Model.Enabled)
-                    {
-                        var newLabel = new TextBillboard(2.0f, $"+ {(int) _acummulativeHealing} HP", Color.GreenYellow,
-                            FontCache.Get(AssetManager.BoldFamily,
-                                18 + 12 * ((_acummulativeHealing - MaxHealth * .05f) / this.MaxHealth),
-                                FontStyle.Bold), this.Model.HeadPosition);
-                        newLabel.Vanish = true;
-                        newLabel.VanishSpeed = 4;
-                    }
+                    this.ShowText(Model.HeadPosition, $"+ {(int)_acummulativeHealing} HP", Color.GreenYellow, 18 + 12 * ((_acummulativeHealing - MaxHealth * .05f) / this.MaxHealth), 2.0f);
                     _acummulativeHealing = 0;
                 }
                 if (_health <= 0 && value > 0) this.PlaySpawningAnimation = true;

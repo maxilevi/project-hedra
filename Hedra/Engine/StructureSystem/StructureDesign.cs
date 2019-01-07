@@ -67,10 +67,20 @@ namespace Hedra.Engine.StructureSystem
             }
         }
 
-        public virtual bool ShouldRemove(Vector2 PlayerOffset, Vector2 Offset, CollidableStructure Structure)
+        public virtual bool ShouldRemove(CollidableStructure Structure)
         {
-            var width = Math.Max(2, Radius / Chunk.Width * 2) * 2 * Chunk.Width;
-            return (PlayerOffset - Structure.Position.Xz).LengthFast > new Vector2(width, width).LengthFast;
+            var chunkOffset = World.ToChunkSpace(Structure.Position);
+            for (var x = Math.Min(-2, -Radius / Chunk.Width * 2); x < Math.Max(2, Radius / Chunk.Width * 2); x++)
+            {
+                for (var z = Math.Min(-2, -Radius / Chunk.Width * 2); z < Math.Max(2, Radius / Chunk.Width * 2); z++)
+                {
+                    var offset = new Vector2(chunkOffset.X + x * Chunk.Width, chunkOffset.Y + z * Chunk.Width);
+                    if (World.GetChunkByOffset(offset) != null)
+                        return false;
+                }
+            }
+
+            return true;
         }
 
         public static Random BuildRng(Vector2 Offset)

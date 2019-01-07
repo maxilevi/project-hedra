@@ -396,15 +396,16 @@ namespace Hedra.Engine.Player
             get => _xp;
             set
             {
-                if(Level == MaxLevel) return;
+                if (Level == MaxLevel) return;
                 _xp = value;
                 if (_xp < MaxXP) return;
+
                 _xp = value - MaxXP;
                 if (++Level == MaxLevel)
                 {
                     _xp = 0;
                 }
-                
+
                 Health = MaxHealth;
                 Mana = MaxMana;
 
@@ -416,9 +417,9 @@ namespace Hedra.Engine.Player
                     Vanish = true,
                 };
                 SoundPlayer.PlaySound(SoundType.NotificationSound, Position, false, 1, .65f);
-                
+
                 /* So it keeps looping */
-                if(_xp >= MaxXP) XP = _xp;
+                if (_xp >= MaxXP) XP = _xp;
             }
         }
 

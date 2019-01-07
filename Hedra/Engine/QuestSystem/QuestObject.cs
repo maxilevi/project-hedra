@@ -22,11 +22,11 @@ namespace Hedra.Engine.QuestSystem
         public string ShortDescription => _design.GetShortDescription(this);
         public string Description => _design.GetDescription(this);
         public int Seed => Parameters.Get<int>("Seed");
-        public int Steps { get; }
+        public int Steps { get; private set; }
         public IHumanoid Giver { get; }
         public IPlayer Owner { get; private set; }
         public QuestParameters Parameters { get; }
-        public bool FirstTime { get; private set; }
+        public bool FirstTime { get; private set; } = true;
 
         public QuestObject(QuestDesign Design, QuestParameters Parameters, IHumanoid Giver, QuestDesign BaseDesign, int Steps)
         {
@@ -41,6 +41,11 @@ namespace Hedra.Engine.QuestSystem
         public void Start(IPlayer Player)
         {
             Owner = Player;
+        }
+
+        public void SetSteps(int NewSteps)
+        {
+            Steps = NewSteps;
         }
 
         public bool IsQuestCompleted()
@@ -90,7 +95,11 @@ namespace Hedra.Engine.QuestSystem
                     QuestPersistence.BuildQuestVillager(Template.Giver)
                 );
                 for (var i = 0; i < Template.Steps; ++i)
+                {
+                    quest._design.Cleanup(quest);
                     quest = quest.Next();
+                }
+
                 quest.FirstTime = false;
                 return quest;
             }

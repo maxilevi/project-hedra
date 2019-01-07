@@ -14,6 +14,7 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.PlantSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using OpenTK;
@@ -75,10 +76,11 @@ namespace Hedra.Engine.BiomeSystem
             if (_firstGeneration)
             {
                 this.DoTreeAndStructurePlacements(Blocks, Cache, lod);
+                this.PlaceEnvironment(Cache, D => D.CanBePlacedInPartialGeneration);
             }
             if (lod == 1 && !_environmentPlaced)
             {
-                this.PlaceEnvironment(Blocks, Cache);
+                this.PlaceEnvironment(Cache, D => !D.CanBePlacedInPartialGeneration);
                 _environmentPlaced = true;
             }
             this.StructuresPlaced = true;
@@ -412,7 +414,7 @@ namespace Hedra.Engine.BiomeSystem
             return Type != BlockType.Air && Type != BlockType.Water && Type != BlockType.Seafloor;
         }
 
-        protected void PlaceEnvironment(Block[][][] Blocks, RegionCache Cache)
+        protected void PlaceEnvironment(RegionCache Cache, Predicate<PlacementDesign> Filter)
         {
             var structs = World.StructureHandler.StructureItems;
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoPlants).ToArray();
@@ -429,7 +431,7 @@ namespace Hedra.Engine.BiomeSystem
                     
                     var region = Cache.GetRegion(samplingPosition);
                     this.LoopStructures(x, z, structs, out var noWeedZone, out _, out _);
-                    this.DoEnviromentPlacements(samplingPosition, noWeedZone, region);
+                    this.DoEnvironmentPlacements(samplingPosition, noWeedZone, region, Filter);
                 }
             }
         }
@@ -517,12 +519,14 @@ namespace Hedra.Engine.BiomeSystem
         }
         
 
-        private void DoEnviromentPlacements(Vector3 Position, bool HideEnviroment, Region Biome)
+        private void DoEnvironmentPlacements(Vector3 Position, bool HideEnvironment,
+            Region Biome, Predicate<PlacementDesign> Filter)
         {
             var designs = Biome.Environment.Designs;
             for (var i = 0; i < designs.Length; i++)
             {
-                if(designs[i].CanBeHidden && HideEnviroment) continue;
+                if(!Filter(designs[i])) continue;
+                if(designs[i].CanBeHidden && HideEnvironment) continue;
                 if (designs[i].ShouldPlace(Position, this.Chunk))
                 {
                     var design = designs[i].GetDesign(Position, this.Chunk);

@@ -28,7 +28,7 @@ namespace Hedra.Engine.QuestSystem
             return new GiverTemplate
             {
                 Seed = Humanoid.Seed,
-                Position = Humanoid.Position
+                Position = Humanoid.Physics.TargetPosition
             };
         }
     }

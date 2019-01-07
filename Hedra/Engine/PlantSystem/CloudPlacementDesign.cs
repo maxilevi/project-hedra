@@ -12,6 +12,8 @@ namespace Hedra.Engine.PlantSystem
     {
         private readonly PlantDesign _cloudDesign;
 
+        public override bool CanBePlacedInPartialGeneration => true;
+
         public CloudPlacementDesign()
         {
             _cloudDesign = new CloudDesign();

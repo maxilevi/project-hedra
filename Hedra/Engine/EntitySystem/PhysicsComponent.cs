@@ -237,11 +237,11 @@ namespace Hedra.Engine.EntitySystem
 
         private bool HandleStructureCollision(MoveCommand Command)
         {
-            _physicsBox.Min = Vector3.Zero + TargetPosition + 0 * Vector3.UnitY;
-            _physicsBox.Max = Parent.Model.BaseBroadphaseBox.Size + TargetPosition;
+            _physicsBox.Min = -Parent.Model.BaseBroadphaseBox.Size.Xz.ToVector3() * .5f + TargetPosition;
+            _physicsBox.Max = Parent.Model.BaseBroadphaseBox.Size.Xz.ToVector3() * .5f + TargetPosition + Parent.Model.BaseBroadphaseBox.Size.Y * .5f * Vector3.UnitY;
             _physicsBox.Min += Command.Delta;
             _physicsBox.Max += Command.Delta;
-            var shape = _physicsBox.AsShape();
+            var shape = Parent.Model.BroadphaseBox.Cache.Translate(Command.Delta).AsShape();
             for (var i = _collisions.Count - 1; i > -1; i--)
             {
                 if (!Physics.Collides(_collisions[i], shape)) continue;
@@ -261,7 +261,8 @@ namespace Hedra.Engine.EntitySystem
                     }
                     else
                     {
-                        Parent.BlockPosition -= .05f * Vector3.UnitY;
+                        if (!CollidesWithOffset(_collisions[i], shape, Vector3.UnitY * -.5f))
+                            Parent.BlockPosition -= .05f * Vector3.UnitY;
                         Parent.IsGrounded = false;
                     }
                     return false;

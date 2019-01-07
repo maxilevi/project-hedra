@@ -82,7 +82,6 @@ namespace Hedra.Engine.Sound
             get => _volume;
             set
             {
-                if (Math.Abs(value - _volume) < 0.005f && _initialized) return;
                 AL.Source(Id, ALSourcef.Gain, _volume = value);
                 _initialized = true;
             }

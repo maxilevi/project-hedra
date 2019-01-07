@@ -1,7 +1,12 @@
+using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Game;
+using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.UI;
+using OpenTK;
 
 namespace Hedra.EntitySystem
 {
@@ -25,6 +30,25 @@ namespace Hedra.EntitySystem
             var collider1 = Target.Model.HorizontalBroadphaseCollider;
             var radii = (collider0.BroadphaseRadius + collider1.BroadphaseRadius) * RadiusModifier;
             return (Target.Position - Parent.Position).LengthSquared < radii * radii;
+        }
+
+        public static void ShowText(this IEntity Parent, string Text, Color FontColor, float FontSize,
+            float Lifetime = 4.0f)
+        {
+            ShowText(Parent, Parent.Position, Text, FontColor, FontSize, Lifetime);
+        }
+        
+        public static void ShowText(this IEntity Parent, Vector3 Position, string Text, Color FontColor, float FontSize, float Lifetime = 4.0f)
+        {
+            if (Parent.Model.Enabled)
+            {
+                var newLabel = new TextBillboard(Lifetime, Text, FontColor,
+                    FontCache.Get(AssetManager.BoldFamily, FontSize, FontStyle.Bold), Position)
+                {
+                    Vanish = true,
+                    VanishSpeed = 4
+                };
+            }
         }
     }
 }

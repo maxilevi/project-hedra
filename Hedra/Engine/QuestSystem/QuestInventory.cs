@@ -50,8 +50,8 @@ namespace Hedra.Engine.QuestSystem
                 {
                     var quest = _activeQuests[i];
                     _activeQuests.RemoveAt(i);
-                    quest.Trigger();
                     QuestCompleted?.Invoke(quest);
+                    quest.Trigger();
                 }
             }
         }
