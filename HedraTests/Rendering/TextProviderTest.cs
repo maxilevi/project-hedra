@@ -34,7 +34,7 @@ namespace HedraTests.Rendering
             
             str = "Using the items you collected I need you to craft me $(ORANGE)(BOLD){3 HEALTH POTION}";
             Assert.AreEqual(
-                $"Using the items you collected {Environment.NewLine}I need you to craft me $(ORANGE)(BOLD){{3}}{Environment.NewLine}$(ORANGE)(BOLD){{ HEALTH POTION}}",
+                $"Using the items you collected {Environment.NewLine}I need you to craft me $(ORANGE)(BOLD){{3}}{Environment.NewLine}$(ORANGE)(BOLD){{}}$(ORANGE)(BOLD){{ HEALTH POTION}}",
                 TextProvider.Wrap(str, 26)
             );
         }

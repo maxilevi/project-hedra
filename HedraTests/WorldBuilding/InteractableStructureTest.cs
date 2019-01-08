@@ -122,14 +122,14 @@ namespace HedraTests.WorldBuilding
             {
                 var orientation = Vector3.TransformNormal(originalOrientation, Matrix4.CreateRotationY(i * Mathf.Radian));
                 var inRange = Vector2.Dot((structPosition - playerPosition).Xz.NormalizedFast(),
-                                  orientation.Xz.NormalizedFast()) > .9f;
-                Assert.AreEqual(inRange, CreateInteraction(structPosition, playerPosition, orientation));
+                                  orientation.Xz.NormalizedFast());
+                Assert.AreEqual(inRange > .9f, CreateInteraction(structPosition, playerPosition, orientation));
             }
         }
 
         private bool CreateInteraction(Vector3 StructPosition, Vector3 PlayerPosition, Vector3 PlayerLookAt)
         {
-            var player = new PlayerMock();
+            var player = new PlayerMock {CanInteract = true};
             GameManager.Player = player;
             var structure = new InteractableStructureMock
             {
