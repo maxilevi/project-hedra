@@ -9,13 +9,10 @@ pool:
 container: mono_container
 
 steps:
-- script: apt-get install -y nuget
-  displayName: 'Run a one-line script'
-
 - script: |
-    apt-get install -y nuget
+    sudo apt-get install -y nuget
     nuget restore HedraTests/HedraTests.csproj -PackagesDirectory packages
-    chmod 777 prepare_testing.sh
+    sudo chmod 777 prepare_testing.sh
     ./prepare_testing.sh
     rm Hedra/Hedra.csproj
     mv Hedra/Hedra.csproj.test Hedra/Hedra.csproj
