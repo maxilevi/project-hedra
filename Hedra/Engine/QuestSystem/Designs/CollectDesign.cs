@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
@@ -53,80 +54,44 @@ namespace Hedra.Engine.QuestSystem.Designs
             );
         }
 
-        protected override QuestDesign[] Descendants => new QuestDesign[]
+        protected override QuestDesign[] GetDescendants(QuestObject Quest) => new QuestDesign[]
         {
-            new CraftDesign()
+            Quest.Parameters.Get<ItemCollect[]>("Items").All(I => I.Recipe != null) 
+                ? new CraftDesign() 
+                : null
         };
 
-        protected override QuestDesign[] Auxiliaries => new QuestDesign[]
+        protected override QuestDesign[] GetAuxiliaries(QuestObject Quest) => new QuestDesign[]
         {
             new SpeakDesign()
         };
-
-        protected override int RandomItemCount(Random Rng, ItemCollect[] Templates)
+        
+        private static string RecipeFromItem(string ItemName, Item[] Recipes, Random Rng)
         {
-            return 1;
+            var possibleRecipes = Recipes.Where(R => CraftingInventory.GetIngredients(R).Any(I => I.Name == ItemName)).ToArray();
+            return possibleRecipes.Length > 0 ? possibleRecipes[Rng.Next(0, possibleRecipes.Length)].Name : null;
         }
 
-        protected override ItemCollect[] SpawnTemplates(Random Rng)
+        private static int AmountFromItem(Item MiscItem, Random Rng)
         {
-            return WildernessTemplates(Rng);
+            if (!MiscItem.HasAttribute(CommonAttributes.Price))
+                throw new ArgumentOutOfRangeException($" Item '{MiscItem.DisplayName}' does not have a price attribute.");
+            return Rng.Next((int)Math.Round(18f / MiscItem.GetAttribute<int>(CommonAttributes.Price)), (int)Math.Round(42f / MiscItem.GetAttribute<int>(CommonAttributes.Price)));
         }
-
-        protected override ItemCollect[] VillageTemplates(Random Rng)
+        
+        protected override ItemCollect[] Templates(Random Rng)
         {
-            return new[]
+            var possibleItems = ItemPool.Matching(T => T.Tier == ItemTier.Misc && T.Name != ItemType.Gold.ToString());
+            var recipes = ItemPool.Matching(T => T.EquipmentType == EquipmentType.Recipe.ToString());
+            possibleItems = possibleItems.Where(
+                I => recipes.All(R => R.GetAttribute<string>(CommonAttributes.Output) != I.Name)
+            ).ToArray();
+            return possibleItems.Select(I => new ItemCollect
             {
-                new ItemCollect
-                {
-                    Name = QuestItem.Corn.ToString(),
-                    Amount = Rng.Next(3, 10),
-                    Recipe = ItemType.CornSoupRecipe.ToString()
-                },
-                new ItemCollect
-                {
-                    Name = QuestItem.Pumpkin.ToString(),
-                    Amount = Rng.Next(4, 10),
-                    Recipe = ItemType.PumpkinPieRecipe.ToString()
-                },
-            };
-        }
-
-        protected override ItemCollect[] WildernessTemplates(Random Rng)
-        {
-            return new[]
-            {
-                new ItemCollect
-                {
-                    Name = QuestItem.RawMeat.ToString(),
-                    Amount = Rng.Next(2, 6),
-                    Recipe = ItemType.CookedMeatRecipe.ToString()
-                },
-                new ItemCollect
-                {
-                    Name = QuestItem.Mushroom.ToString(),
-                    Amount = Rng.Next(1, 4),
-                    Recipe = ItemType.HealthPotionRecipe.ToString()
-                },
-                new ItemCollect
-                {
-                    Name = QuestItem.Mushroom.ToString(),
-                    Amount = Rng.Next(3, 6),
-                    Recipe = ItemType.MushroomStewRecipe.ToString(),
-                    //StartingItems = 
-                },
-                new ItemCollect
-                {
-                    Name = QuestItem.Berry.ToString(),
-                    Amount = Rng.Next(3, 8),
-                    Recipe = ItemType.HealthPotionRecipe.ToString()
-                }
-            };
-        }
-
-        protected override Item RandomReward(Random Rng)
-        {
-            return ItemPool.Grab(ItemTier.Misc);
+                Name = I.Name,
+                Amount = AmountFromItem(I, Rng),
+                Recipe = RecipeFromItem(I.Name, recipes, Rng)
+            }).ToArray();
         }
     }
 }

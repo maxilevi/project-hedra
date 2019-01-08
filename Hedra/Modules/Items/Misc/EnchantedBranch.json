@@ -7,10 +7,15 @@
     {
       "Name": "Amount",
       "Value": 1
-    }
+    },
+    {
+      "Name": "Price",
+      "Value": 24,
+      "Hidden": true
+    },
   ],
   "Model": {
-    "Scale": 0.25,
+    "Scale": 0.75,
     "Path": "$DataFile$/Items/Misc/MagicBranch.ply"
   }
 }

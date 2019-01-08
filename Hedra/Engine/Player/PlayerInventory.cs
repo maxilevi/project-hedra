@@ -117,7 +117,7 @@ namespace Hedra.Engine.Player
 
         public void RemoveItem(Item Old, int Amount = 1)
         {
-            if (Old.GetAttribute<int>(CommonAttributes.Amount) > Amount)
+            if (Old.HasAttribute(CommonAttributes.Amount) && Old.GetAttribute<int>(CommonAttributes.Amount) > Amount)
                 Old.SetAttribute(CommonAttributes.Amount, Old.GetAttribute<int>(CommonAttributes.Amount) - Amount);
             else
                 _items.RemoveItem(Old);

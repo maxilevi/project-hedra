@@ -22,16 +22,16 @@ namespace Hedra.Engine.QuestSystem.Designs
         /// </summary>
         /// <param name="Rng">A Random object with the same seed.</param>
         /// <returns>A QuestReward</returns>
-        protected abstract QuestReward BuildReward(Random Rng);
+        protected abstract QuestReward BuildReward(QuestObject Quest, Random Rng);
 
         /// <summary>
         /// Proxy method for returning a QuestReward from this design.
         /// </summary>
         /// <param name="Quest">The quest object</param>
-        /// <returns>A QuestRewars</returns>
+        /// <returns>A QuestReward</returns>
         public QuestReward GetReward(QuestObject Quest)
         {
-            return BuildReward(new Random(Quest.Seed + 42));
+            return BuildReward(Quest, new Random(Quest.Seed + 42));
         }
         
         /// <summary>
@@ -116,12 +116,12 @@ namespace Hedra.Engine.QuestSystem.Designs
         /// <summary>
         /// List of "bridge" quest designs
         /// </summary>
-        protected abstract QuestDesign[] Auxiliaries { get; }
+        protected abstract QuestDesign[] GetAuxiliaries(QuestObject Quest);
 
         /// <summary>
         /// The possible quest design descendants for this quest.
         /// </summary>
-        protected abstract QuestDesign[] Descendants { get; }
+        protected abstract QuestDesign[] GetDescendants(QuestObject Quest);
 
         /// <summary>
         /// Usually called from the QuestInventory
@@ -180,16 +180,18 @@ namespace Hedra.Engine.QuestSystem.Designs
         /// <summary>
         /// Creates the next quest object of the chain. It could either be an auxiliary or non-auxliary.
         /// </summary>
-        /// <param name="Quest">The quest object.</param>
+        /// <param name="Quest">The current quest object.</param>
         /// <returns>A new quest object.</returns>
         public QuestObject GetNext(QuestObject Quest)
         {
             if (!IsAuxiliary)
             {
+                var descendants = GetDescendants(Quest);
+                var auxiliaries = GetAuxiliaries(Quest);
                 var rng = new Random(Quest.Parameters.Get<int>("Seed"));
-                var nextDesign = Descendants?[rng.Next(0, Descendants.Length)];
-                var auxiliaryDesign = nextDesign != null 
-                    ? Auxiliaries[rng.Next(0, Auxiliaries.Length)]
+                var nextDesign = GetDescendants(Quest)?[rng.Next(0, descendants.Length)];
+                var auxiliaryDesign = nextDesign != null
+                    ? auxiliaries[rng.Next(0, auxiliaries.Length)]
                     : new EndDesign();
                 var nextObject = nextDesign?.Build(Quest, null, null);
                 var questObject = auxiliaryDesign.Build(Quest, nextDesign, nextObject);
@@ -210,7 +212,8 @@ namespace Hedra.Engine.QuestSystem.Designs
         public bool IsEndQuest(QuestObject Quest)
         {
             var rng = new Random(Quest.Parameters.Get<int>("Seed"));
-            return Descendants?[rng.Next(0, Descendants.Length)] == null;
+            var descendants = GetDescendants(Quest);
+            return descendants?[rng.Next(0, descendants.Length)] == null;
         }
         
         /// <summary>
@@ -247,6 +250,18 @@ namespace Hedra.Engine.QuestSystem.Designs
             );
         }
 
+        /// <summary>
+        /// Builds a new quest object. Used to load quests and internally.
+        /// </summary>
+        /// <param name="Context">The quest context</param>
+        /// <param name="Seed">The quest seed.</param>
+        /// <param name="Giver">The quest giver.</param>
+        /// <param name="BaseDesign">The starting quest design.</param>
+        /// <param name="Steps">The steps the quest chain has.</param>
+        /// <param name="Previous">The previous quest object.</param>
+        /// <param name="NextDesign">The next quest design.</param>
+        /// <param name="NextObject">The next quest object.</param>
+        /// <returns>A new quest object</returns>
         public QuestObject Build(
             QuestContext Context,
             int Seed,

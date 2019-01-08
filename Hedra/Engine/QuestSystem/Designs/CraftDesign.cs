@@ -66,13 +66,13 @@ namespace Hedra.Engine.QuestSystem.Designs
             );                    
         }
 
-        protected override QuestDesign[] Auxiliaries => new QuestDesign[]
+        protected override QuestDesign[] GetAuxiliaries(QuestObject Quest) => new QuestDesign[]
         {
             new SpeakDesign(),
             new TravelDesign()
         };
 
-        protected override QuestDesign[] Descendants => null;
+        protected override QuestDesign[] GetDescendants(QuestObject Quest) => null;
 
         public override void SetupDialog(QuestObject Quest, IPlayer Owner)
         {
@@ -116,33 +116,14 @@ namespace Hedra.Engine.QuestSystem.Designs
                 new ItemCollect
                 {
                     Name = output.Name,
-                    Amount = Rng.Next(1, 4)
+                    Amount = Math.Max(1, (int)(item.Amount / CraftingInventory.GetIngredients(recipe).First(I => I.Name == item.Name).Amount))
                 }
             };
         }
 // Charge and fire
         // Right click kick ability
 
-        protected override Item RandomReward(Random Rng)
-        {
-            Item[] items;
-            if (Rng.Next(0, 7) == 1)
-                items = ItemPool.Matching(T => T.IsRecipe && (int) T.Tier == (int) ItemTier.Uncommon);
-            else if (Rng.Next(0, 4) == 1)
-                items = ItemPool.Matching(T => T.IsRecipe && (int) T.Tier == (int) ItemTier.Common);
-            else
-                items = ItemPool.Matching(T => T.Tier == ItemTier.Misc);
-
-            return items[Rng.Next(0, items.Length)];
-        }
-
-        protected override int RandomItemCount(Random Rng, ItemCollect[] Templates) => throw new NotImplementedException();
-
-        protected override ItemCollect[] SpawnTemplates(Random Rng) => throw new NotImplementedException();
-        
-        protected override ItemCollect[] VillageTemplates(Random Rng) => throw new NotImplementedException();
-
-        protected override ItemCollect[] WildernessTemplates(Random Rng) => throw new NotImplementedException();
+        protected override ItemCollect[] Templates(Random Rng) => throw new NotImplementedException();
 
         private bool HasCraftingStation(QuestObject Quest) => Quest.Parameters.Get<CraftingStation>("Station") != CraftingStation.None ;
         
