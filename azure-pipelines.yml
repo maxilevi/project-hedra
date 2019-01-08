@@ -26,6 +26,7 @@ steps:
   displayName: 'Run tests.'
 
 - task: PublishTestResults@2
+  condition: true
   inputs:
     testRunner: NUnit
     testResultsFiles: '**/*.xml' 
