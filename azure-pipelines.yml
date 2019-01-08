@@ -27,8 +27,7 @@ steps:
 
 - task: PublishTestResults@2
   inputs:
-    testResultsFormat: NUnit
-    testResultsFiles: '**/results*.xml' 
+    testRunner: NUnit
+    testResultsFiles: '**/*.xml' 
     searchFolder: '$(System.DefaultWorkingDirectory)'
-    buildPlatform: 'Mono x64'
     publishRunAttachments: true
