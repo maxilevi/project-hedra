@@ -21,9 +21,10 @@ steps:
     xbuild HedraTests/HedraTests.csproj
   displayName: 'Build project.'
 
-- script: |
-    mono "packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe" "HedraTests/bin/Debug/HedraTests.dll" -result="./results.xml"
-  displayName: 'Run tests.'
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: '**/HedraTests*.dll/**'
 
 - task: PublishTestResults@2
   condition: true
