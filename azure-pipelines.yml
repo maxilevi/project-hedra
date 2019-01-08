@@ -19,9 +19,16 @@ steps:
 
 - script: |
     xbuild HedraTests/HedraTests.csproj
-    mkdir "./test-results"
   displayName: 'Build project.'
 
 - script: |
-    mono "packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe" "HedraTests/bin/Debug/HedraTests.dll" -result="./test-results/results.xml"
+    mono "packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe" "HedraTests/bin/Debug/HedraTests.dll" -result="./results.xml"
   displayName: 'Run tests.'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: NUnit
+    testResultsFiles: '**/results*.xml' 
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    buildPlatform: 'Mono x64'
+    publishRunAttachments: true
