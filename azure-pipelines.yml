@@ -14,8 +14,7 @@ steps:
     nuget restore HedraTests/HedraTests.csproj -PackagesDirectory packages
     sudo chmod 777 prepare_testing.sh
     cat ./prepare_testing.sh
-    ls
-    ./prepare_testing.sh
+    sudo ./prepare_testing.sh
     ls
     rm Hedra/Hedra.csproj
     mv Hedra/Hedra.csproj.test Hedra/Hedra.csproj
