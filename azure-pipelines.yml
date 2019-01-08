@@ -1,18 +1,31 @@
 resources:
   containers:
-  - container: my_container
-    image: ubuntu:16.04
+  - container: mono_container
+    image: mono
 
 pool:
   vmImage: 'ubuntu-16.04'
 
-container: my_container
+container: mono_container
 
 steps:
-- script: echo Hello, world!
+- script: apt-get install -y nuget
   displayName: 'Run a one-line script'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    apt-get install -y nuget
+    nuget restore HedraTests/HedraTests.csproj -PackagesDirectory packages
+    chmod 777 prepare_testing.sh
+    ./prepare_testing.sh
+    rm Hedra/Hedra.csproj
+    mv Hedra/Hedra.csproj.test Hedra/Hedra.csproj
+  displayName: 'Prepare testing environment.'
+
+- script: |
+    xbuild HedraTests/HedraTests.csproj
+    mkdir "./test-results"
+  displayName: 'Build project.'
+
+- script: |
+    mono "packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe" "HedraTests/bin/Debug/HedraTests.dll" -result="./test-results/results.xml"
+  displayName: 'Run tests.'
