@@ -17,9 +17,11 @@ variables:
 steps:
 - task: NuGetToolInstaller@0
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+- script: |
+    nuget restore HedraTests/HedraTests.csproj -PackagesDirectory packages
+    rm Hedra/Hedra.csproj
+    mv Hedra/Hedra.csproj.test Hedra/Hedra.csproj
+  displayName: 'Prepare testing environment.'
 
 - task: VSBuild@1
   inputs:
