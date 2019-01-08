@@ -7287,15 +7287,14 @@
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
-        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
-        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
+        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
+        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
+        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
     </PostBuildEvent>
     <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">
-    	cp "$(SolutionDir)/HedraContent/bin/Debug/HedraContent.dll" "$(TargetDir)/Mods/HedraContent.dll"
-        mono "$(TargetDir)../../../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
-        mono "$(TargetDir)../../../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
-        mono "$(TargetDir)../../../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
+        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
+        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
+        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
@@ -7303,9 +7302,9 @@
     <ConsolePause>False</ConsolePause>
     <OutputPath>bin\Release\</OutputPath>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
-        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
-        call "$(SolutionDir)/utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
+        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
+        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
+        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
         call "$(ProjectDir)/../hedra-obfuscator/Confuser.CLI.exe" "$(ProjectDir)/Hedra.crproj"
     </PostBuildEvent>
   </PropertyGroup>
