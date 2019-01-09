@@ -23,6 +23,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
@@ -45,6 +46,7 @@ namespace Hedra.Engine.Generation
         private readonly RenderingComparer _renderingComparer;
         private readonly SharedWorkerPool _meshWorkerPool;
         private readonly SharedWorkerPool _genWorkerPool;
+        private Vector3 _spawningVillagePoint;
         private Vector3 _spawningPoint;
         private int _previousCount;
         private int _previousId;
@@ -84,6 +86,7 @@ namespace Hedra.Engine.Generation
         public int AverageBuildTime => _meshBuilder.AverageWorkTime;     
         public int AverageGenerationTime => _chunkBuilder.AverageWorkTime;
         public Vector3 SpawnPoint => _spawningPoint;
+        public Vector3 SpawnVillagePoint => _spawningVillagePoint;
         public Dictionary<Vector2, Chunk> DrawingChunks { get; }
         public Dictionary<Vector2, Chunk> ShadowDrawingChunks { get; }
 
@@ -203,13 +206,20 @@ namespace Hedra.Engine.Generation
                 return;
 
             _previousId = 0;
-            this.Seed = NewSeed;
+            Seed = NewSeed;
             BiomePool = new BiomePool();
             WorldBuilding = new WorldBuilding.WorldBuilding();
             OpenSimplexNoise.Load(NewSeed == MenuSeed ? 23123123 : NewSeed); //Not really the menu seed.
             _meshBuilder.Discard();
             _chunkBuilder.Discard();
             _spawningPoint = FindSpawningPoint(GeneralSettings.SpawnPoint);
+            var rng = new Random(Seed);
+            _spawningVillagePoint = FindSpawningPoint(
+                _spawningPoint
+                + new Vector3(rng.NextBool() ? -1 : 1, 0, rng.NextBool() ? -1 : 1) 
+                * new Vector3(1.5f + rng.NextFloat() * 2, 0, 1.5f + rng.NextFloat() * 2)
+                * VillageDesign.MaxVillageRadius
+            );
             SkyManager.SetTime(12000);
 
             var items = Items;
@@ -253,6 +263,7 @@ namespace Hedra.Engine.Generation
             StructureHandler.Discard();
             WorldRenderer.ForceDiscard();
             CacheManager.Discard();
+            QuestPersistence.Discard();
 
             this.AddEntity(GameManager.Player);
 

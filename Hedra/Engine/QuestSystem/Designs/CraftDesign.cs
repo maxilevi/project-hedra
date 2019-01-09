@@ -68,8 +68,7 @@ namespace Hedra.Engine.QuestSystem.Designs
 
         protected override QuestDesign[] GetAuxiliaries(QuestObject Quest) => new QuestDesign[]
         {
-            new SpeakDesign(),
-            new TravelDesign()
+            new SpeakDesign()
         };
 
         protected override QuestDesign[] GetDescendants(QuestObject Quest) => null;

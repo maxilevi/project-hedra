@@ -11,6 +11,7 @@ namespace Hedra.BiomeSystem
         protected BiomeStructureDesign()
         {
             AddDesign(new SpawnCampfireDesign());
+            AddDesign(new SpawnVillageDesign());
         }
         
         protected void AddDesign(StructureDesign Design)

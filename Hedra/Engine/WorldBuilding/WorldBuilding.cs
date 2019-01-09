@@ -24,9 +24,7 @@ using Hedra.Engine.ModuleSystem.Templates;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    /// <summary>
-    /// Description of QuestGenerator.
-    /// </summary>
+
     public class WorldBuilding : IWorldBuilding
     {
         private readonly List<IGroundwork> _groundwork;

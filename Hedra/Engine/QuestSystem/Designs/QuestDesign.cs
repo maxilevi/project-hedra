@@ -129,12 +129,15 @@ namespace Hedra.Engine.QuestSystem.Designs
         /// <param name="Quest">The quest object</param>
         /// <returns>A bool representing if the quest was completed.</returns>
         public abstract bool IsQuestCompleted(QuestObject Quest);
-        
+
         /// <summary>
         /// Eats up the requirements needed by the quest. e.g. A CollectDesign might consume 3 BERRY.
         /// </summary>
         /// <param name="Quest">The quest object</param>
-        protected abstract void Consume(QuestObject Quest);
+        protected virtual void Consume(QuestObject Quest)
+        {
+            
+        }
 
         /// <summary>
         /// Called by an auxiliary (e.g. SpeakDesign) to setup any dialog needed for the next design.
@@ -191,7 +194,7 @@ namespace Hedra.Engine.QuestSystem.Designs
                 var rng = new Random(Quest.Parameters.Get<int>("Seed"));
                 var nextDesign = GetDescendants(Quest)?[rng.Next(0, descendants.Length)];
                 var auxiliaryDesign = nextDesign != null
-                    ? auxiliaries[rng.Next(0, auxiliaries.Length)]
+                    ? auxiliaries?[rng.Next(0, auxiliaries.Length)] ?? new EndDesign()
                     : new EndDesign();
                 var nextObject = nextDesign?.Build(Quest, null, null);
                 var questObject = auxiliaryDesign.Build(Quest, nextDesign, nextObject);

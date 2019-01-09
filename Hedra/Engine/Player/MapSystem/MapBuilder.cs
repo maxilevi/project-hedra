@@ -11,7 +11,7 @@ namespace Hedra.Engine.Player.MapSystem
     {
         private static readonly CollidableStructure[] EmptyItems = new CollidableStructure[0];
 
-        public StructureDesign Sample(Vector3 Position, Region Biome)
+        public static StructureDesign Sample(Vector3 Position, Region Biome)
         {
             var chunkOffset = World.ToChunkSpace(Position);
             for (var i = 0; i < Biome.Structures.Designs.Length; i++)

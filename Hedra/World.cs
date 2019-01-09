@@ -57,6 +57,7 @@ namespace Hedra
         public static int AverageGenerationTime => Provider.AverageGenerationTime;
 
         public static Vector3 SpawnPoint => Provider.SpawnPoint;
+        public static Vector3 SpawnVillagePoint => Provider.SpawnVillagePoint;
         public static int Seed => Provider.Seed;
         public static int MenuSeed => Provider.MenuSeed;
         public static int RandomSeed => Provider.RandomSeed;

@@ -267,12 +267,13 @@
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\EndDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\ReadNoteDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\SpeakDesign.cs" />
-    <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\TravelDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\BaseItemQuestDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CollectDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CraftDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\ItemCollect.cs" />
     <Compile Include="Engine\QuestSystem\Designs\QuestDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\FindStructureDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\SpawnQuestDesign.cs" />
     <Compile Include="Engine\QuestSystem\GiverTemplate.cs" />
     <Compile Include="Engine\QuestSystem\IQuest.cs" />
     <Compile Include="Engine\QuestSystem\QuestComponent.cs" />
@@ -302,6 +303,8 @@
     <Compile Include="Engine\StructureSystem\InstanceDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\SpawnCampfireDesign.cs" />
+    <Compile Include="Engine\StructureSystem\SpawnVillage.cs" />
+    <Compile Include="Engine\StructureSystem\SpawnVillageDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Anvil.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\DecorationsPlacer.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\IBuilder.cs" />

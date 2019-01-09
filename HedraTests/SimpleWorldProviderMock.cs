@@ -35,6 +35,7 @@ namespace HedraTests
         public int AverageGenerationTime => 0;
         public virtual int Seed => 0;
         public Vector3 SpawnPoint { get; }
+        public Vector3 SpawnVillagePoint { get; }
         public virtual bool IsGenerated => false;
         public virtual int MeshQueueCount => 0;
         public virtual int ChunkQueueCount => 0;

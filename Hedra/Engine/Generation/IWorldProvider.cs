@@ -46,6 +46,8 @@ namespace Hedra.Engine.Generation
         int Seed { get; }
         
         Vector3 SpawnPoint { get; }
+        
+        Vector3 SpawnVillagePoint { get; }
 
         bool IsGenerated { get; }
 

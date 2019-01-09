@@ -186,7 +186,7 @@ namespace Hedra.Engine.Player.MapSystem
                             if (!MapBaseItem.UsableChunk(chunk))
                             {
                                 var biome = World.BiomePool.GetRegion(pos.ToVector3());
-                                var sample = _builder.Sample(pos.ToVector3(), biome);
+                                var sample = MapBuilder.Sample(pos.ToVector3(), biome);
                                 if (sample?.Icon != null)
                                 {
                                     var realPos = new Vector2(coords.X, coords.Y) * ChunkSize * MapSize
