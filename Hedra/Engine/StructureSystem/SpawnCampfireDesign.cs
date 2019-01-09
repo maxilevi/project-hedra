@@ -38,11 +38,11 @@ namespace Hedra.Engine.StructureSystem
             var position = Structure.Position + -SpawnOffset;
             if (QuestPersistence.SpawnVillager(position, Rng, out var villager))
             {
-                villager.Physics.UsePhysics = false;
-                villager.IsSitting = true;
                 var quest = QuestPool.Grab(Quests.SpawnQuest).Build(position, new Random(World.Seed), villager);
-                villager.AddComponent(new QuestGiverComponent(villager, quest));
+                QuestPersistence.SetupQuest(quest, villager);
             }
+            villager.Physics.UsePhysics = false;
+            villager.IsSitting = true;
             return villager;
         }
         

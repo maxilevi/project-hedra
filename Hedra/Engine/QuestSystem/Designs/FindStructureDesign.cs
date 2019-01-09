@@ -18,7 +18,7 @@ namespace Hedra.Engine.QuestSystem.Designs
             => Translations.Get("quest_find_structure_short", StructureTypeName);
 
         public override string GetDescription(QuestObject Quest)
-            => Translations.Get("quest_find_structure_description", StructureTypeName);
+            => Translations.Get("quest_find_structure_description", Quest.Giver.Name, StructureTypeName);
         
         public override string GetThoughtsKeyword(QuestObject Quest)
             => "quest_find_structure_dialog";
@@ -44,7 +44,7 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
             return new ModelView(
                 Quest,
-                CacheManager.GetModel(IconCache).Clone()
+                CacheManager.GetModel(IconCache).Clone().Scale(IconScale * Vector3.One)
             );
         }
 
@@ -54,6 +54,8 @@ namespace Hedra.Engine.QuestSystem.Designs
                    .LengthSquared < Math.Pow(Quest.Parameters.Get<float>("StructureRadius"), 2);
         }
 
+        protected virtual float IconScale => 1;
+        
         protected abstract CacheItem IconCache { get; }
         
         protected abstract string StructureTypeName { get; }

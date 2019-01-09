@@ -288,6 +288,8 @@
     <Compile Include="Engine\QuestSystem\QuestReward.cs" />
     <Compile Include="Engine\QuestSystem\Quests.cs" />
     <Compile Include="Engine\QuestSystem\QuestSpeakComponent.cs" />
+    <Compile Include="Engine\QuestSystem\QuestStructure.cs" />
+    <Compile Include="Engine\QuestSystem\QuestStructureDesign.cs" />
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestTier.cs" />

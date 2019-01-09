@@ -91,6 +91,7 @@ namespace Hedra.Engine.Rendering.UI
                         previousLen = texts[i].Length;
                         currentLen = newStr.Length;
                         var subParts = newStr.Split(Environment.NewLine.ToCharArray())
+                            .Where(S => !string.IsNullOrEmpty(S))
                             .ToArray();
                         var newSplit = string.Empty;
                         for (var k = 0; k < subParts.Length; k++)

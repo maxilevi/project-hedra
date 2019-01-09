@@ -141,6 +141,7 @@ namespace Hedra.Engine.QuestSystem.Designs
 
         /// <summary>
         /// Called by an auxiliary (e.g. SpeakDesign) to setup any dialog needed for the next design.
+        /// Or by a QuestGiverComponent to setup extra dialog lines.
         /// </summary>
         /// <param name="Quest">The quest object</param>
         /// <param name="Owner">The quest owner</param>

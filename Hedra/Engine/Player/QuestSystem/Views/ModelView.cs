@@ -14,6 +14,7 @@ namespace Hedra.Engine.Player.QuestSystem.Views
         {
             _currentItemMesh = 
                 InventoryItemRenderer.BuildModel(PreviewMesh, out _currentItemMeshHeight);
+            _currentItemMesh.ApplyNoiseTexture = true;
         }
 
         public override uint GetTextureId()

@@ -10,9 +10,7 @@ using OpenTK;
 namespace Hedra.Engine.QuestSystem.Designs
 {
     public class SpawnQuestDesign : FindStructureDesign
-    {
-        private const int MaxSearchRadius = VillageDesign.MaxVillageRadius * 2;
-        
+    {   
         public override string Name => Quests.SpawnQuest.ToString();
         
         protected override QuestDesign[] GetAuxiliaries(QuestObject Quest) => null;
@@ -35,11 +33,13 @@ namespace Hedra.Engine.QuestSystem.Designs
         public override void SetupDialog(QuestObject Quest, IPlayer Owner)
         {
             Quest.Giver.SearchComponent<TalkComponent>().AddDialogLine(
-                Translation.Create("quest_spawn_find_structure", StructureTypeName)
+                Translation.Create("quest_spawn_find_structure", new object[] {StructureTypeName})
             );
         }
 
         protected override CacheItem IconCache => CacheItem.VillageIcon;
+
+        protected override float IconScale => .05f;
 
         protected override QuestReward BuildReward(QuestObject Quest, Random Rng)
         {
