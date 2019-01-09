@@ -7300,7 +7300,7 @@
         mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
     </PostBuildEvent>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release">
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <ErrorReport>prompt</ErrorReport>
     <ConsolePause>False</ConsolePause>
     <OutputPath>bin\Release\</OutputPath>
