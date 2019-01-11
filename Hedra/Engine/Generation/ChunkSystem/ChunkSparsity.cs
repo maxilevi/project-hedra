@@ -14,12 +14,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             var lowest = (float)Parent.BoundsY;
             var highest = 0f;
-            for (var x = 0; x < Parent.BoundsX; x++)
+            for (var x = -1; x < Parent.BoundsX + 1; x++)
             {
-                for (var z = 0; z < Parent.BoundsZ; z++)
+                for (var z = -1; z < Parent.BoundsZ + 1; z++)
                 {
-                    var l = Lowest(x, z, Parent);
-                    var h = Highest(x, z, Parent);
+                    var chunkSpace = World.ToChunkSpace(Parent.Position + new Vector3(x, 0, z) * Chunk.BlockSize);
+                    var chunk = World.GetChunkByOffset(chunkSpace);
+                    if(chunk == null) throw new ArgumentOutOfRangeException($"Sparsity needs to be built when all the neighbours exist.");
+                    var coords = (chunkSpace - Parent.Position.Xz) / Chunk.BlockSize;
+                    var l = Lowest(x, z, chunk);
+                    var h = Highest(x, z, chunk);
                     if (l < lowest) lowest = l;
                     if (h > highest) highest = h;
                 } 

@@ -108,6 +108,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 IsGenerating = false;
             }
             CalculateBounds();
+            /* We should build the sparsity data when all the neighbours exist */
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
             /* Landscape.Cull(_blocks, _terrainBuilder.Sparsity); */
             IsGenerated = true;
