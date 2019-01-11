@@ -10,11 +10,6 @@ container: mono_container
 
 steps:
 - script: |
-    sudo apt-get install -y nuget
-    nuget restore HedraTests/HedraTests.csproj -PackagesDirectory packages
-  displayName: 'Prepare testing environment.'
-
-- script: |
     mkdir release
     xbuild /p:Configuration=Release Hedra/Hedra.csproj
   displayName: 'Build project.'
