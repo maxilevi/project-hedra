@@ -108,15 +108,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 IsGenerating = false;
             }
             CalculateBounds();
-            /* We should build the sparsity data when all the neighbours exist */
-            _terrainBuilder.Sparsity = ChunkSparsity.From(this);
-            /* Landscape.Cull(_blocks, _terrainBuilder.Sparsity); */
             IsGenerated = true;
         }
 
         public void BuildMesh()
         {
             if (Disposed || !IsGenerated || !Landscape.BlocksSetted || !Landscape.StructuresPlaced) return;
+            if (_terrainBuilder.Sparsity == null) BuildSparsity();
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
             var output = this.CreateTerrainMesh(buildingLod);
@@ -130,6 +128,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.FinishUpload(output, buildingLod);
         }
 
+        private void BuildSparsity()
+        {
+            /* We should build the sparsity data when all the neighbours exist */
+            _terrainBuilder.Sparsity = ChunkSparsity.From(this);
+            /* Landscape.Cull(_blocks, _terrainBuilder.Sparsity); */
+        }
+        
         private ChunkMeshBuildOutput CreateTerrainMesh(int LevelOfDetail)
         {
             lock (_blocks)
