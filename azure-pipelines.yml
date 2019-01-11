@@ -15,8 +15,26 @@ steps:
   displayName: 'Prepare testing environment.'
 
 - script: |
-    xbuild Hedra/Hedra.csproj
+    mkdir release
+    xbuild /p:Configuration=Release Hedra/Hedra.csproj
   displayName: 'Build project.'
 
+- task: CopyFiles@2
+  displayName: 'Copy Files to Release Dir'
+  inputs:
+    SourceFolder: Hedra/bin/Release/
+
+    Contents: |
+     *.db
+     Hedra.exe
+     *.dll
+     86/**
+     x64/**
+     Translations/**
+     Modules/**
+
+    TargetFolder: ./release
+
 - script: |
+    cd release
     mono Hedra.exe --dummy-mode
