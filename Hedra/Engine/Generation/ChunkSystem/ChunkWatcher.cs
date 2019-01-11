@@ -26,11 +26,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_object?.Disposed ?? true) this.Dispose();
             if (_object == null || Disposed) return;
 
-            this.ManageLod();
-            var result = this.ManageState();
+            ManageLod();
+            var result = ManageState();
             if(!result) return;
 
-            if (WasChunkBuilt(_object) && ShouldWeRebuildChunk(_object))
+            if (WasChunkGenerated(_object) && ShouldWeRebuildChunk(_object))
             {
                 World.AddChunkToQueue(_object, true);
             }
@@ -45,7 +45,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if(_object.Disposed)
             {
-                this.Kill();
+                Kill();
                 return false;
             }
 
@@ -53,7 +53,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var radius = GameSettings.ChunkLoaderRadius * .5f * Chunk.Width;
             if ((_object.Position.Xz - offset).LengthSquared > radius * radius)
             {
-                this.Kill();
+                Kill();
                 return false;
             }
             if (!_object.Initialized) _object.Initialize();
@@ -84,7 +84,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _object.Lod = newLod;
         }
 
-        private static bool WasChunkBuilt(Chunk Chunk)
+        private static bool WasChunkGenerated(Chunk Chunk)
         {
             return Chunk != null && Chunk.Initialized && Chunk.IsGenerated && Chunk.Landscape.StructuresPlaced;
         }

@@ -80,7 +80,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var next = false;
             var hasNoise3D = false;
             var hasWater = false;
-
             var blockData = new VertexData();
             var waterData = new VertexData();
             var cell = new GridCell

@@ -1,4 +1,5 @@
 using System;
+using Hedra.Core;
 using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -14,12 +15,18 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             var lowest = (float)Parent.BoundsY;
             var highest = 0f;
-            for (var x = 0; x < Parent.BoundsX; x++)
+            for (var x = -1; x < Parent.BoundsX + 1; x++)
             {
-                for (var z = 0; z < Parent.BoundsZ; z++)
+                for (var z = -1; z < Parent.BoundsZ + 1; z++)
                 {
-                    var l = Lowest(x, z, Parent);
-                    var h = Highest(x, z, Parent);
+                    var position = Parent.Position + new Vector3(x, 0, z) * Chunk.BlockSize;
+                    var chunkSpace = World.ToChunkSpace(position);
+                    var chunk = World.GetChunkByOffset(chunkSpace);
+                    if(chunk == null) throw new ArgumentOutOfRangeException($"Sparsity needs to be built when all the neighbours exist.");
+                    var coordX = Mathf.Modulo(x, Parent.BoundsX);
+                    var coordZ = Mathf.Modulo(z, Parent.BoundsZ);
+                    var l = Lowest(coordX, coordZ, chunk);
+                    var h = Highest(coordX, coordZ, chunk);
                     if (l < lowest) lowest = l;
                     if (h > highest) highest = h;
                 } 

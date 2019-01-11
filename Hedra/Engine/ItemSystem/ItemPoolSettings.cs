@@ -37,7 +37,8 @@ namespace Hedra.Engine.ItemSystem
         }
     }
 
-    public enum ItemTier : int {
+    public enum ItemTier
+    {
         Common,
         Uncommon,
         Rare,
