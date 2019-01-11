@@ -12,7 +12,7 @@ namespace Hedra.Engine.Player.Inventory
         protected BaseBackground(Vector2 Position, Vector2 Scale)
         {
             this.Scale = Scale;
-            Texture = new Texture("Assets/UI/InventoryBackground.png", Position, Scale);                       
+            Texture = new Texture(InventoryBackground.DefaultId, Position, InventoryBackground.DefaultSize * Scale);                       
             Panel = new Panel();
             Panel.AddElement(Texture);
         }

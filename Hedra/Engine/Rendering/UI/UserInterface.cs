@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Reflection;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Input;
 using Hedra.Engine.Localization;
@@ -50,10 +51,9 @@ namespace Hedra.Engine.Rendering.UI
             ChrCreator = new ChrCreatorUI(Player);
 
             var bandPosition = new Vector2(0, -.8f);
-            var fontSize = 16;
-            
-            _title = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Menu.png"),
-                                   new Vector2(-.4f, .35f), Graphics2D.SizeFromAssets("Assets/UI/Menu.png") * .75f);
+            const int fontSize = 16;
+            _title = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MenuLogo.png"),
+                                   new Vector2(-.405f, .35f), Graphics2D.SizeFromAssets("Assets/UI/MenuLogo.png").As1920x1080() * .75f);
 
             var blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.09f / GameSettings.Height * 578), GradientType.LeftRight);
             

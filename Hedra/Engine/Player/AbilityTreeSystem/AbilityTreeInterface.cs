@@ -4,6 +4,7 @@ using Hedra.Core;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
 
@@ -11,6 +12,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     public class AbilityTreeInterface : InventoryArrayInterface
     {
+        private static uint DefaultId { get; }  = Graphics2D.LoadFromAssets("Assets/UI/AbilityTreeBackground.png");
+        private static Vector2 DefaultSize { get; } = Graphics2D.SizeFromAssets("Assets/UI/AbilityTreeBackground.png").As1920x1080() * UISizeMultiplier;
+
         private readonly IPlayer _player;
         private readonly Panel _panel;
         private readonly GUIText _availablePointsText;
@@ -24,20 +28,22 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _player = Player;
             _panel = new Panel();
             _skillPointsBackgroundTextures = new RenderableTexture[this.Buttons.Length];
-            _backgroundTexture = new RenderableTexture(new Texture("Assets/UI/AbilityTreeBackground.png",
-                Mathf.ScaleGui(_targetResolution, new Vector2(.04f, .15f)), new Vector2(.6f, .55f) * 1f), DrawOrder.Before);
-            _availablePointsText = new GUIText(string.Empty, new Vector2(_backgroundTexture.Position.X, -.35f),
+            _backgroundTexture = new RenderableTexture(
+                new Texture(DefaultId, Mathf.ScaleGui(_targetResolution, new Vector2(.04f, .15f)), DefaultSize * .3f),
+                DrawOrder.Before
+            );
+            _availablePointsText = new GUIText(string.Empty, _backgroundTexture.Position - _backgroundTexture.Scale.Y * Vector2.UnitY,
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 12f, FontStyle.Bold));
+            _availablePointsText.Position += _availablePointsText.Scale.Y * Vector2.UnitY;
             for (var i = 0; i < this.Buttons.Length; i++)
             {
                 this.Buttons[i].Scale = this.Textures[i].Scale;
                 this.Buttons[i].Texture.IdPointer = null;
                 this.ButtonsText[i].TextFont = FontCache.Get(AssetManager.BoldFamily, 10f, FontStyle.Bold);
-                this.ButtonsText[i].Position = this.Buttons[i].Position +
-                                               Mathf.ScaleGui(_targetResolution, new Vector2(0, -InventoryArrayInterface.DefaultSize.Y) * .65f);
+                this.ButtonsText[i].Position = this.Buttons[i].Position + new Vector2(0, -InventoryArrayInterface.DefaultSize.Y) * .65f;
                 _skillPointsBackgroundTextures[i] = 
-                    new RenderableTexture(new Texture("Assets/UI/InventoryBackground.png",
-                    this.ButtonsText[i].Position, new Vector2(.05f, .075f)), DrawOrder.Before);
+                    new RenderableTexture(new Texture(InventoryBackground.DefaultId,
+                    this.ButtonsText[i].Position, InventoryBackground.DefaultSize * new Vector2(.05f, .075f)), DrawOrder.Before);
 
                 _panel.AddElement(_skillPointsBackgroundTextures[i]);
             }

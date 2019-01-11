@@ -13,8 +13,9 @@ namespace Hedra.Engine.Player.Inventory
     public class InventoryArrayInterface
     {
         public const string DefaultIcon = "Assets/UI/InventorySlot.png";
+        public const float UISizeMultiplier = 1.15f;
         public static uint DefaultId { get; } = Graphics2D.LoadFromAssets(DefaultIcon);
-        public static Vector2 DefaultSize { get; } = Graphics2D.SizeFromAssets(DefaultIcon);
+        public static Vector2 DefaultSize { get; } = Graphics2D.SizeFromAssets(DefaultIcon).As1920x1080() * UISizeMultiplier;
         private readonly InventoryArray _array;
         private readonly InventoryItemRenderer _renderer;
         private readonly Texture[] _inventoryTextures;
@@ -55,7 +56,7 @@ namespace Hedra.Engine.Player.Inventory
                 var position = Vector2.Zero + new Vector2((i - j * SlotsPerLine) * offset.X, j * offset.Y) * Spacing -
                                wholeSize * .5f;
                 var customId = CustomIcons != null ? Graphics2D.LoadFromAssets(CustomIcons[i]) : GUIRenderer.TransparentTexture;
-                var customScale = CustomIcons != null ? Graphics2D.SizeFromAssets(CustomIcons[i]) : InventoryArrayInterface.DefaultSize;
+                var customScale = /*CustomIcons != null ? Graphics2D.SizeFromAssets(CustomIcons[i]) : */InventoryArrayInterface.DefaultSize;
 
                 _inventoryTextures[i] = new Texture(CustomIcons != null ? customId : DefaultId, position, customScale * scale);
                 _inventoryButtonsText[i] = new RenderableText(string.Empty, position + new Vector2(size.X, -size.Y) * .25f, Color.White, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));

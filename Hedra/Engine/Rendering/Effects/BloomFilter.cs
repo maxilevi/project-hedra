@@ -64,10 +64,10 @@ namespace Hedra.Engine.Rendering.Effects
             HBloomFbo.UnBind();
             
             Dst.Bind();
-            MainFBO.Shader.Bind();
+            MainFBO.DefaultShader.Bind();
             Renderer.Clear(ClearBufferMask.ColorBufferBit);
-            this.DrawQuad(MainFBO.Shader, HBloomFbo.TextureID[0], 0);
-            MainFBO.Shader.Unbind();
+            this.DrawQuad(MainFBO.DefaultShader, HBloomFbo.TextureID[0], 0);
+            MainFBO.DefaultShader.Unbind();
             Dst.UnBind();
         }
 

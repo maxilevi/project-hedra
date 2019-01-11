@@ -49,7 +49,7 @@ namespace Hedra.Engine.Player.CraftingSystem
                 _panel.AddElement(_ingredientsText[i]);
             }
             HintTexture.TextureElement.Grayscale = true;
-            HintTexture.Position = Vector2.UnitY * -.45f;
+            HintTexture.Position = BackgroundTexture.Position - DefaultSize.Y * Vector2.UnitY * .75f;
             HintTexture.Scale *= 1.5f;
             HintText.TextColor = Color.White;
             HintText.Position = HintTexture.Position;

@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player.Inventory
 
         static InventoryItemRenderer()
         {
-            Framebuffer = new FBO(GameSettings.Width, GameSettings.Height);
+            Framebuffer = new FBO(256, 256);
         }
 
         public InventoryItemRenderer(InventoryArray Array, int Offset, int Length)
@@ -121,6 +121,7 @@ namespace Hedra.Engine.Player.Inventory
             Renderer.PopFBO();
             Renderer.PopShader();
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);
+            Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
             Renderer.BindShader(Renderer.ShaderBound);
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.Blend);

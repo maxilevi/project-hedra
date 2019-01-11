@@ -122,8 +122,8 @@ namespace Hedra.Engine.Game
                 }
                 else
                 {
-                    Program.GameWindow.WindowBorder = WindowBorder.Resizable;
-                    Program.GameWindow.WindowState = WindowState.Maximized;
+                   Program.GameWindow.WindowBorder = WindowBorder.Resizable;
+                   Program.GameWindow.WindowState = WindowState.Maximized;
                 }
             }
         }

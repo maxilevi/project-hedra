@@ -22,10 +22,10 @@ namespace Hedra.Engine.Rendering.Effects
     /// </summary>
     public class MainFBO
     {
-        public static Shader Shader { get; }
+        public static Shader DefaultShader { get; }
+        public static Shader FXAAShader { get; }
         public bool Enabled {get; set;}
         public FBO Default;
-        public FBO ThirdPass;
         public FBO FinalFbo;
         public FBO AdditiveFbo;
         public UnderWaterFilter UnderWater;
@@ -36,7 +36,8 @@ namespace Hedra.Engine.Rendering.Effects
 
         static MainFBO()
         {
-            Shader = Shader.Build("Shaders/GUI.vert", "Shaders/GUI.frag");
+            DefaultShader = Shader.Build("Shaders/GUI.vert", "Shaders/GUI.frag");
+            FXAAShader = Shader.Build("Shaders/GUI.vert", "Shaders/FXAA.frag");
         }
 
         public MainFBO()
@@ -60,17 +61,17 @@ namespace Hedra.Engine.Rendering.Effects
             if(!GameSettings.SSAO)
             {
                 FinalFbo.Bind();
-                Shader.Bind();
+                DefaultShader.Bind();
                 DrawQuad(Default.TextureID[0]);
-                Shader.Unbind();
+                DefaultShader.Unbind();
                 FinalFbo.UnBind();
                 
                 if(GameSettings.BlurFilter)
                 {
                     Default.Bind();
-                    Shader.Bind();
+                    DefaultShader.Bind();
                     DrawQuad(FinalFbo.TextureID[0]);
-                    Shader.Unbind();
+                    DefaultShader.Unbind();
                     Default.UnBind();
                     
                     //Clear it
@@ -184,17 +185,18 @@ namespace Hedra.Engine.Rendering.Effects
             #endregion 
             
             #region UnderWater & SSAO Flip
-            if( (GameSettings.UnderWaterEffect || GameSettings.DarkEffect || GameSettings.BlurFilter) && GameSettings.SSAO){
+            if( (GameSettings.UnderWaterEffect || GameSettings.DarkEffect || GameSettings.BlurFilter) && GameSettings.SSAO)
+            {
                 Default.Bind();
-                Shader.Bind();
+                DefaultShader.Bind();
                 DrawQuad(FinalFbo.TextureID[0], 0, true);
-                Shader.Unbind();
+                DefaultShader.Unbind();
                 Default.UnBind();
                    
                 FinalFbo.Bind();
-                Shader.Bind();
+                DefaultShader.Bind();
                 DrawQuad(Default.TextureID[0], 0, false);
-                Shader.Unbind();
+                DefaultShader.Unbind();
                 FinalFbo.UnBind();
                 
                 //Clear it
@@ -204,35 +206,63 @@ namespace Hedra.Engine.Rendering.Effects
             }
             #endregion
 
-            Shader.Bind();
-            DrawQuad(FinalFbo.TextureID[0], GameSettings.Bloom ? AdditiveFbo.TextureID[0] : 0, false, GameSettings.FXAA);
-            Shader.Unbind();
+            if (GameSettings.FXAA)
+                DrawFXAAQuad(FinalFbo.TextureID[0], GameSettings.Bloom ? AdditiveFbo.TextureID[0] : 0);
+            else
+                DrawQuad(FinalFbo.TextureID[0], GameSettings.Bloom ? AdditiveFbo.TextureID[0] : 0);
+
         }
-        
-        public static void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false, bool FXAA = false)
+
+        private static void DrawFXAAQuad(uint Texture, uint AdditiveTexture)
         {
             Renderer.Disable(EnableCap.DepthTest);
-            //Renderer.Enable(EnableCap.Blend);
+            Renderer.Disable(EnableCap.Blend);
             
             DrawManager.UIRenderer.SetupQuad();
+            FXAAShader.Bind();
+            
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, Texture);
+            FXAAShader["Texture"] = 0;
 
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, AdditiveTexture);
+            FXAAShader["Additive"] = 1;
+
+            FXAAShader["Scale"] = Vector2.One;
+            FXAAShader["Position"] = Vector2.Zero;
+            FXAAShader["Resolution"] = new Vector2(1.0f / GameSettings.Width, 1.0f / GameSettings.Height);
+            
+            DrawManager.UIRenderer.DrawQuad();
+            
+            Renderer.Enable(EnableCap.DepthTest);
+            FXAAShader.Unbind();
+        }
+        
+        public static void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false)
+        {
+            Renderer.Disable(EnableCap.DepthTest);
+            Renderer.Disable(EnableCap.Blend);
+            
+            DrawManager.UIRenderer.SetupQuad();
+            DefaultShader.Bind();
+            
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, TexID);
-            Shader["Texture"] = 0;
+            DefaultShader["Texture"] = 0;
 
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, Additive);
-            Shader["Background"] = 1;
+            DefaultShader["Background"] = 1;
 
-            Shader["Scale"] = Vector2.One;
-            Shader["Position"] = Vector2.Zero;
-            Shader["Flipped"] = Flipped ? 1 : 0;
-            Shader["Size"] = new Vector2(1.0f / GameSettings.Width, 1.0f / GameSettings.Height);
-            Shader["FXAA"] = FXAA ? 1.0f : 0.0f;
+            DefaultShader["Scale"] = Vector2.One;
+            DefaultShader["Position"] = Vector2.Zero;
+            DefaultShader["Flipped"] = Flipped ? 1 : 0;
 
             DrawManager.UIRenderer.DrawQuad();
 
             Renderer.Enable(EnableCap.DepthTest);
+            DefaultShader.Unbind();
         }
         
         public void Clear(){}

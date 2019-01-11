@@ -45,6 +45,7 @@ namespace Hedra.Engine.Player.MapSystem
         private readonly List<MapBaseItem> _baseItems;
         private readonly ObjectMesh _cursor;
         private readonly ObjectMesh _marker;
+        private readonly ObjectMesh _questMarker;
         private readonly Panel _panel;
         private bool _show;
         private float _size;
@@ -68,6 +69,7 @@ namespace Hedra.Engine.Player.MapSystem
             this._meshBuilder = new MapMeshBuilder(_player, MapSize, ChunkSize);
             this._cursor = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapCursor.ply", Vector3.One * 20f), false);
             this._marker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f), false);
+            this._questMarker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f), false);
             _marker.ApplyFog = false;
 
             var hint = new GUIText(Translation.Create("mark_waypoint"), 
@@ -117,6 +119,8 @@ namespace Hedra.Engine.Player.MapSystem
             {
                 _marker.Enabled = _player.Minimap.HasMarker;
                 _marker.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f) + _player.Minimap.MarkedDirection * FogDistance;
+                //_questMarker.Enabled = _player.Minimap.HasMarker;
+                //_questMarker.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f) + _player.Minimap.MarkedDirection * FogDistance;
                 _cursor.Position = mapPosition + Vector3.UnitY * (_targetHeight + 45f);
                 _cursor.LocalRotation = _player.Model.LocalRotation;
                 WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
@@ -130,7 +134,7 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void UpdateFogAndTime()
         {
-            if (float.MaxValue != _targetTime)
+            if (Math.Abs(float.MaxValue - _targetTime) > 0.005f)
             {
                 SkyManager.SetTime(Mathf.Lerp(SkyManager.DayTime, _targetTime, (float)Time.DeltaTime * 2f));
                 if (Math.Abs(SkyManager.DayTime - _targetTime) < 10)

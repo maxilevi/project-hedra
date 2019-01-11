@@ -29,7 +29,7 @@ namespace Hedra.Engine.Player.QuestSystem
             : base(Player, null, 0, 0, Vector2.One)
         {
             _journalBackground = 
-                new Texture("Assets/UI/InventoryItemInfo.png", Position, Vector2.One * .55f);
+                new Texture(InventoryInterfaceItemInfo.DefaultId, Position, InventoryInterfaceItemInfo.DefaultSize * .55f);
             _journalBackground.SendBack();
             _descriptionText = new GUIText(
                 string.Empty,
@@ -38,9 +38,9 @@ namespace Hedra.Engine.Player.QuestSystem
                 FontCache.Get(AssetManager.NormalFamily, 11)
             );
             _renderBackground = new Texture(
-                "Assets/UI/QuestTextureBackground.png",
+                Graphics2D.LoadFromAssets("Assets/UI/QuestTextureBackground.png"),
                 Vector2.Zero,
-                Vector2.One
+                Graphics2D.SizeFromAssets("Assets/UI/QuestTextureBackground.png").As1920x1080()
             );
             _renderTexture = new Texture(
                 0,
@@ -55,7 +55,7 @@ namespace Hedra.Engine.Player.QuestSystem
             };
             var abandonSize = Graphics2D.SizeFromAssets("Assets/UI/AbandonButton.png") * .4f;
             _abandonButton = new Button(
-                _journalBackground.Position - Vector2.UnitY * (_journalBackground.Scale.Y - abandonSize.Y * .5f),
+                _journalBackground.Position - Vector2.UnitY * (_journalBackground.Scale.Y - abandonSize.Y),
                 abandonSize,
                 Translation.Create("abandon_quest"),
                 Color.Red,
@@ -74,7 +74,7 @@ namespace Hedra.Engine.Player.QuestSystem
             Panel.AddElement(_journalBackground);
 
             var leftJournalTopCorner = -Vector2.UnitX * _journalBackground.Scale.X 
-                                       + Vector2.UnitY * (_journalBackground.Scale.Y + TitleText.Scale.Y * .75f);
+                                       + Vector2.UnitY * (_journalBackground.Scale.Y + TitleText.Scale.Y * .5f);
             TitleText.Position += Vector2.UnitX * TitleText.Scale.X * 1.25f;
             TitleText.Position += leftJournalTopCorner;
             var rightJournalCorner = leftJournalTopCorner * new Vector2(-1, 1) 

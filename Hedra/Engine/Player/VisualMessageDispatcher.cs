@@ -38,7 +38,7 @@ namespace Hedra.Engine.Player
             this._player = Player;
             _messageQueue = new List<MessageItem>();
 
-            _mainText = new GUIText(string.Empty, new Vector2(0, .7f), Color.FromArgb(255, 39, 39, 39), FontCache.Get(AssetManager.BoldFamily, 32, FontStyle.Bold));
+            _mainText = new GUIText(string.Empty, new Vector2(0, .7f), Color.White, FontCache.Get(AssetManager.BoldFamily, 32, FontStyle.Bold));
             _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
 
             _notificationText = new GUIText(string.Empty, new Vector2(0.7f, -0.8f), Color.FromArgb(255, 39, 39, 39),

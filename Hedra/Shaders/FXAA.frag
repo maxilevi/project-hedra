@@ -2,7 +2,7 @@
 
 float luma(vec3 color);
 
-#define FXAA_QUALITY_PRESET 29
+#define FXAA_QUALITY_PRESET 12
 
 #define FXAA_PC 1
 #define FXAA_GLSL_120 0
@@ -1001,34 +1001,20 @@ vec4 fxaaTexturePixel(sampler2D texture, vec2 texCoord, vec2 size)
 
 
 in vec2 UV;
-
 uniform sampler2D Texture;
-
-uniform vec4 Color;
-
-uniform int Flipped;
-
-uniform float Opacity;
-
-uniform vec4 Tint;
-
-uniform vec2 Size;
+uniform sampler2D Additive;
+uniform vec2 Resolution;
 
 layout(location = 0) out vec4 OutColor;
 
 
-float luma(vec3 color){
+float luma(vec3 color)
+{
 	return 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
 }
 
 void main(void)
 {
-	vec2 TexCoords;
-	if(Flipped == int(1.0))
-		TexCoords = vec2( clamp(UV.x, 0.001, 0.999), clamp(1.0-UV.y, 0.001, 0.999) );
-	else
-		TexCoords = vec2( clamp(UV.x, 0.001, 0.999), clamp(UV.y, 0.001, 0.999) );
-
-	OutColor = fxaaTexturePixel(Texture, TexCoords, Size);
+	OutColor = fxaaTexturePixel(Texture, UV, Resolution) + texture(Additive, UV);
 	
 }	

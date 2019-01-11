@@ -56,7 +56,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 }
                 if (Array[i].HasAttribute("AbilityType") && this.Array[i].GetAttribute<Type>("AbilityType") == null)
                 {
-                    //ButtonsText[i].Text = string.Empty;
+                    ButtonsText[i].Text = string.Empty;
                     _textBackgrounds[i].Disable();
                 }
                 else

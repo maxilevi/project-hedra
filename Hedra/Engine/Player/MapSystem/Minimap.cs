@@ -8,12 +8,14 @@
  */
 
 using System;
+using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -47,14 +49,34 @@ namespace Hedra.Engine.Player.MapSystem
         {
             this._player = Player;
             this._panel = new Panel();
-            _mapFbo = new FBO(GameSettings.Width, GameSettings.Height);
-            _miniMap = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMap.png"), new Vector2(.8f, .7f), Graphics2D.SizeFromAssets("Assets/UI/MiniMap.png"));
+            const float mapScale = .75f;
+            _mapFbo = new FBO(256, 256);
+            _miniMap = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMap.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMap.png").As1920x1080() * mapScale);
             DrawManager.UIRenderer.Remove(_miniMap.TextureElement);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
-            _mapCursor = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MapCursor.png"), new Vector2(.8f, .7f), Graphics2D.SizeFromAssets("Assets/UI/MiniMap.png") * .1f), DrawOrder.After);
-            _miniMapRing = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapRing.png"), new Vector2(.8f, .7f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapRing.png")), DrawOrder.After);
-            _miniMapNorth = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapNorth.png"), new Vector2(.8f, .7f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapNorth.png")), DrawOrder.After);
-            _miniMapMarker = new RenderableTexture(new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapQuest.png"), new Vector2(.8f, .7f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapQuest.png")), DrawOrder.After);
+            _mapCursor = new RenderableTexture(
+                new Texture(Graphics2D.LoadFromAssets("Assets/UI/MapCursor.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMap.png").As1920x1080() * .1f * mapScale),
+                DrawOrder.After
+            );
+            _miniMapRing = new RenderableTexture(
+                new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapRing.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapRing.png").As1920x1080() * mapScale),
+                DrawOrder.After
+            );
+            _miniMapNorth = new RenderableTexture(
+                new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapNorth.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapNorth.png").As1920x1080() * mapScale),
+                DrawOrder.After
+            );
+            _miniMapMarker = new RenderableTexture(
+                new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapQuest.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapQuest.png").As1920x1080() * mapScale),
+                DrawOrder.After
+            );
+            
+            var mapTranslation = Translation.Create("map_label");
+            mapTranslation.Concat(() => $" - {Controls.Map}");
+            var mapMsg = new GUIText(mapTranslation, _miniMapRing.Position - _miniMapRing.Scale.Y * Vector2.UnitY * 1.5f, Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+            Controls.OnControlsChanged += () => mapTranslation.UpdateTranslation();
+            
+            _panel.AddElement(mapMsg);
             _panel.AddElement(_mapCursor);
             _panel.AddElement(_miniMap);
             _panel.AddElement(_miniMapRing);
@@ -128,6 +150,7 @@ namespace Hedra.Engine.Player.MapSystem
                 Renderer.PopFBO();
                 Renderer.PopShader();
                 Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);
+                Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
                 Renderer.BindShader(Renderer.ShaderBound);
                 _lastPosition = _player.Position.Xz.ToVector3();
                 _previousActiveChunks = _player.Loader.ActiveChunks;
@@ -194,8 +217,6 @@ namespace Hedra.Engine.Player.MapSystem
             Shader.Unbind();
         }
 
-        public uint TextureId => _mapFbo.TextureID[0];
-        
         public bool Show
         {
             get => _show;

@@ -36,6 +36,10 @@ namespace Hedra
                 while (originalString.Length > CharacterLimit && (Once && !atLeast || !Once))
                 {
                     int nearest = Utils.FindNearestSeparator(originalString, CharacterLimit - 1);
+                    if (Once && originalString.IndexOf(" ") == -1 && parts.Length == 1) {
+                        if (Math.Abs(nearest) < (originalString.Length - nearest)) nearest = nearest - 1;
+                        //else nearest = originalString.Length - 1;
+                    }
                     builder.AppendLine(originalString.Substring(0, nearest));
                     originalString = originalString.Substring(nearest, originalString.Length - nearest);
                     atLeast = true;
