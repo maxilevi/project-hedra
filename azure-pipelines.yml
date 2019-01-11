@@ -12,23 +12,11 @@ steps:
 - script: |
     sudo apt-get install -y nuget
     nuget restore HedraTests/HedraTests.csproj -PackagesDirectory packages
-    (mcs prepare_testing.cs && mono prepare_testing.exe && rm prepare_testing.exe)
-    rm Hedra/Hedra.csproj
-    mv Hedra/Hedra.csproj.test Hedra/Hedra.csproj
   displayName: 'Prepare testing environment.'
 
 - script: |
-    xbuild HedraTests/HedraTests.csproj
+    xbuild Hedra/Hedra.csproj
   displayName: 'Build project.'
 
 - script: |
-    mono "packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe" "HedraTests/bin/Debug/HedraTests.dll" -result="./results.xml"
-  displayName: 'Run tests.'
-
-- task: PublishTestResults@2
-  condition: true
-  inputs:
-    testRunner: NUnit
-    testResultsFiles: '**/*.xml' 
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    publishRunAttachments: true
+    mono Hedra.exe --dummy-mode
