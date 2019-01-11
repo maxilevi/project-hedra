@@ -39,7 +39,7 @@ namespace HedraTests
             World.Provider = new SimpleWorldProviderMock();
             AssetManager.Provider = new SimpleAssetProvider();
             Graphics2D.Provider = new SimpleTexture2DProviderMock();
-            Renderer.Provider = new SimpleGLProviderMock();
+            Renderer.Provider = new DummyGLProvider();
             AnimationLoader.Provider = new SimpleAnimationProvider();
             ColladaLoader.Provider = new SimpleColladaProvider();
             GameManager.Provider = new SimpleGameProviderMock();

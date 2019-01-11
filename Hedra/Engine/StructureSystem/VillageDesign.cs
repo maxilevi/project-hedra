@@ -38,7 +38,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
-            var structure = base.Setup(TargetPosition, Rng, new Village(TargetPosition));
+            var structure = base.Setup(TargetPosition, Rng, BuildVillageObject(TargetPosition));
             var region = World.BiomePool.GetRegion(TargetPosition);
             var builder = new VillageAssembler(structure, VillageLoader.Designer[region.Structures.VillageType], Rng);
             structure.Mountain.Radius = builder.Size * PlateauVillageRatio;
@@ -50,6 +50,11 @@ namespace Hedra.Engine.StructureSystem
             structure.Parameters.Set("Builder", builder);
             structure.Parameters.Set("Design", design);
             return structure;
+        }
+
+        protected virtual Village BuildVillageObject(Vector3 TargetPosition)
+        {
+            return new Village(TargetPosition);
         }
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)

@@ -38,7 +38,7 @@ namespace Hedra.Engine.Player
             this._player = Player;
             _messageQueue = new List<MessageItem>();
 
-            _mainText = new GUIText(string.Empty, new Vector2(0, .7f), Color.FromArgb(255, 39, 39, 39), FontCache.Get(AssetManager.BoldFamily, 32, FontStyle.Bold));
+            _mainText = new GUIText(string.Empty, new Vector2(0, .7f), Color.White, FontCache.Get(AssetManager.BoldFamily, 32, FontStyle.Bold));
             _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
 
             _notificationText = new GUIText(string.Empty, new Vector2(0.7f, -0.8f), Color.FromArgb(255, 39, 39, 39),
@@ -312,27 +312,29 @@ namespace Hedra.Engine.Player
             }
         }
         
-        private static IEnumerator FadeOverTimeCoroutine(object[] Params)
+        private IEnumerator FadeOverTimeCoroutine(object[] Params)
         {
             var time = 0f;
             var element = (ITransparent) Params[0];
             var seconds = (float) Params[1];
             var callback = (Action) Params[2];
-            while (element.Opacity < 1)
+            while (element.Opacity < 1 && _player.UI.GamePanel.Enabled)
             {
                 element.Opacity += Time.DeltaTime * FadeSpeed;
                 yield return null;
             }
-            while (time < seconds)
+            while (time < seconds && _player.UI.GamePanel.Enabled)
             {
                 time += Time.DeltaTime;
                 yield return null;
             }
-            while (element.Opacity > 0)
+            while (element.Opacity > 0 && _player.UI.GamePanel.Enabled)
             {
                 element.Opacity -= Time.DeltaTime * FadeSpeed;
                 yield return null;
             }
+
+            element.Opacity = 0;
             callback();
         }
     }

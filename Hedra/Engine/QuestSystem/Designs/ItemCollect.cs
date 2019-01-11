@@ -23,7 +23,9 @@ namespace Hedra.Engine.QuestSystem.Designs
             var amount = Amount;
             var name = Name;
             var item = Player.Inventory.Search(T => T.Name == name);
-            return item != null && (CurrentAmount = item.GetAttribute<int>(CommonAttributes.Amount)) >= amount;
+            return item != null && (CurrentAmount = item.HasAttribute(CommonAttributes.Amount) 
+                ? item.GetAttribute<int>(CommonAttributes.Amount)
+                : 1) >= amount;
         }
             
         public string ToString(IPlayer Player)

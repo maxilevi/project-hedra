@@ -324,7 +324,7 @@ namespace Hedra.Rendering
         {
             for(var i = 0; i < Colors.Count; i++)
             {
-                if(Colors[i] == OriginalColor)
+                if( (Colors[i] - OriginalColor).Length < .01f)
                 {
                     Colors[i] = ReplacementColor;
                 }

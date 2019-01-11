@@ -13,7 +13,8 @@ in float Gradient;
 const float width = 0.05;
 const float edge = 0.025;
 
-void main(){
+void main()
+{
 	if( Color.a < 0.0 )
 		OutColor = texture(BluePrint, UV);
 	else

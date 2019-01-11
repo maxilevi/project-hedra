@@ -1,9 +1,12 @@
 using System;
 using System.Drawing;
+using System.Media;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.Sound;
+using SoundPlayer = Hedra.Sound.SoundPlayer;
 
 namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 {
@@ -86,11 +89,19 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
             {
                 Quest.Owner.XP += reward.Experience;
                 Quest.Owner.ShowText($"+{reward.Experience} XP", Color.Violet, 20);
+                SoundPlayer.PlayUISound(SoundType.NotificationSound);
             }
             if (reward.HasGold)
+            {
                 Quest.Owner.Gold += reward.Gold;
+                SoundPlayer.PlayUISound(SoundType.TransactionSound);
+            }
+
             if (reward.HasItem)
+            {
                 Quest.Owner.AddOrDropItem(reward.Item);
+                //SoundPlayer.PlayUISound(SoundType.Equip);
+            }
         }
         
         protected override void Consume(QuestObject Quest)

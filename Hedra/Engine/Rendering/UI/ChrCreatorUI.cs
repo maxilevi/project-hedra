@@ -61,7 +61,6 @@ namespace Hedra.Engine.Rendering.UI
             };
             _human.Physics.UseTimescale = false;
             _human.Removable = false;
-            _human.BlockPosition = Scenes.MenuBackground.PlatformPosition;
             _human.PlaySpawningAnimation = false;
 
             RoutineManager.StartRoutine(this.Update);
@@ -74,8 +73,8 @@ namespace Hedra.Engine.Rendering.UI
             void SetWeapon(object Sender, MouseButtonEventArgs E)
             {
                 _classType = ClassDesign.FromString(ClassDesign.AvailableClassNames[classChooser.Index]);
-                var position = _human.Model.Position;
                 var rotation = _human.Model.LocalRotation;
+                var position = _human.Physics.TargetPosition = Scenes.MenuBackground.PlatformPosition;
 
                 _human.Model.Dispose();
                 _human.Model = new HumanoidModel(_human, _classType.Human)
@@ -84,7 +83,6 @@ namespace Hedra.Engine.Rendering.UI
                     LocalRotation = rotation,
                     TargetRotation = rotation
                 };
-                _human.Physics.TargetPosition = position;
                 _human.SetWeapon(_classType.StartingItem.Weapon);
             }
 

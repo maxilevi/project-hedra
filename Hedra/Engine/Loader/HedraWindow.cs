@@ -14,6 +14,7 @@ namespace Hedra.Engine.Loader
         private bool _isExiting;
         private readonly Stopwatch _watch;
         private SpinWait _spinner;
+        private bool _dryRun;
         public double TargetFramerate { get; set; }
 
         protected HedraWindow(int Width, int Height, GraphicsMode Mode, string Title, GameWindowFlags Options,
@@ -123,7 +124,14 @@ namespace Hedra.Engine.Loader
                         _spinner.SpinOnce();
                     }
                 }
+                if(_dryRun) break;
             }
+        }
+
+        public void RunOnce()
+        {
+            _dryRun = true;
+            Run();
         }
                
         protected virtual void OnRenderFrame(double Delta)

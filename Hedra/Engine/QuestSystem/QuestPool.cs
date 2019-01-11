@@ -10,7 +10,8 @@ namespace Hedra.Engine.QuestSystem
     {
         private static readonly List<QuestDesign> QuestDesigns = new List<QuestDesign>
         {
-            new CollectDesign()
+            new CollectDesign(),
+            new SpawnQuestDesign()
         };
         
         public static QuestDesign Grab(QuestTier Tier = QuestTier.Any)

@@ -10,8 +10,6 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 {
     public class SpeakDesign : AuxiliaryDesign
     {
-        
-        
         public override string GetShortDescription(QuestObject Quest)
         {
             return Translations.Get(

@@ -15,7 +15,7 @@ public static class TestingMode
         foreach(var match in matches)
         {
             var asStr = match.ToString();
-            if(!Regex.IsMatch(asStr, "Include=\"Modules"))
+            if(!Regex.IsMatch(asStr, "Include=\"Modules") && !Regex.IsMatch(asStr, "Include=\"Translations"))
                 currentProj = currentProj.Replace(asStr, string.Empty);
         }
         currentProj = Regex.Replace(currentProj,

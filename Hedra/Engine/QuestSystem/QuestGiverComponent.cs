@@ -23,6 +23,10 @@ namespace Hedra.Engine.QuestSystem
             Parent.ShowIcon(CacheItem.AttentionIcon);
             Parent.AddComponent(_thoughts = _quest.BuildThoughts(Parent));
             Parent.AddComponent(_talk = new TalkComponent(Parent));
+            _talk.OnTalkingStarted += T =>
+            {
+                Quest.SetupDialog();
+            };
             _talk.OnTalkingEnded += AddQuest;
         }
 

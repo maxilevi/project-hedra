@@ -63,6 +63,11 @@ namespace Hedra.Engine.QuestSystem
             _design.Abandon(this);
         }
 
+        public void SetupDialog()
+        {
+            _design.SetupDialog(this, Owner);
+        }
+        
         private QuestObject Next()
         {
             return _design.GetNext(this);

@@ -40,6 +40,11 @@ namespace Hedra.Engine.Rendering
         {
             return new Vector2(Size.X / (float)GameSettings.Width, Size.Y / (float)GameSettings.Height);
         }
+        
+        public static Vector2 ToPixelSize(this Vector2 Size)
+        {
+            return new Vector2(Size.X * GameSettings.Width, Size.Y * GameSettings.Height);
+        }
 
         #region NonGL
 
@@ -52,10 +57,26 @@ namespace Hedra.Engine.Rendering
         {
             return Original.Clone(new RectangleF(0, 0, Original.Width, Original.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
         }
+
+        public static Vector2 As1920x1080(this Vector2 Size)
+        {
+            return new Vector2(Size.X / 1920 * GameSettings.Width, Size.Y / 1080 * GameSettings.Height);
+        }
+        
+        public static float As1920x1080(this int Size)
+        {
+            return (Size / 1920f) * GameSettings.Width;
+        }
         
         public static Vector2 SizeFromAssets(string Path)
         {
             return TextureSize( new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))));
+        }
+        
+        public static Vector2 SizeFromAssets(string Path, Vector2 OriginalResolution)
+        {
+            var size = SizeFromAssets(Path).ToPixelSize();
+            return new Vector2(size.X / OriginalResolution.X, size.Y / OriginalResolution.Y);
         }
 
         public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)

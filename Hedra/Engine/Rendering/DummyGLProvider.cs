@@ -1,11 +1,10 @@
 using System;
-using Hedra.Engine.Rendering;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace HedraTests
+namespace Hedra.Engine.Rendering
 {
-    public class SimpleGLProviderMock : IGLProvider
+    public class DummyGLProvider : IGLProvider
     {
         public ErrorSeverity Severity { get; set; }
         
@@ -14,10 +13,6 @@ namespace HedraTests
         }
 
         public virtual void AttachShader(int S0, int S1)
-        {
-        }
-
-        public virtual void Begin(PrimitiveType Type)
         {
         }
 
@@ -80,7 +75,7 @@ namespace HedraTests
 
         public virtual FramebufferErrorCode CheckFramebufferStatus(FramebufferTarget Target)
         {
-            return default(FramebufferErrorCode);
+            return FramebufferErrorCode.FramebufferComplete;
         }
 
         public virtual void Clear(ClearBufferMask Mask)
@@ -88,10 +83,6 @@ namespace HedraTests
         }
 
         public virtual void ClearColor(Vector4 DrawingColor)
-        {
-        }
-
-        public virtual void Color3(Vector3 Color)
         {
         }
 
@@ -105,17 +96,12 @@ namespace HedraTests
 
         public virtual int CreateProgram()
         {
-            return 0;
+            return 1;
         }
 
         public virtual int CreateShader(ShaderType Type)
         {
-            return 0;
-        }
-
-        public virtual void CreateTextures(TextureTarget Target, int N, out uint Id)
-        {
-            Id = 0;
+            return 1;
         }
 
         public virtual void CullFace(CullFaceMode Mode)
@@ -153,15 +139,7 @@ namespace HedraTests
         public virtual void DeleteTextures(int N, params uint[] Ids)
         {
         }
-
-        public virtual void DeleteVertexArrays(int N, params uint[] Ids)
-        {
-        }
-
-        public virtual void DeleteTextures(int N, ref uint Id)
-        {
-        }
-
+        
         public virtual void DeleteVertexArrays(int N, ref uint Id)
         {
         }
@@ -211,10 +189,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void End()
-        {
-        }
-
         public virtual void EndQuery(QueryTarget Target)
         {
         }
@@ -230,27 +204,27 @@ namespace HedraTests
 
         public virtual void GenBuffers(int N, out uint V1)
         {
-            V1 = 0;
+            V1 = 1;
         }
 
         public virtual int GenFramebuffer()
         {
-            return 0;
+            return 1;
         }
 
         public virtual int GenQuery()
         {
-            return 0;
+            return 1;
         }
 
         public virtual uint GenTexture()
         {
-            return 0;
+            return 1;
         }
 
         public virtual void GenVertexArrays(int N, out uint V1)
         {
-            V1 = 0;
+            V1 = 1;
         }
 
         public virtual void GenerateMipmap(GenerateMipmapTarget Target)
@@ -259,7 +233,7 @@ namespace HedraTests
 
         public virtual void GetActiveUniformBlock(uint V0, uint V1, ActiveUniformBlockParameter Parameter, out int V3)
         {
-            V3 = 0;
+            V3 = 1;
         }
 
         public virtual ErrorCode GetError()
@@ -269,17 +243,17 @@ namespace HedraTests
 
         public virtual int GetInteger(GetPName PName)
         {
-            return 0;
+            return 1;
         }
 
         public virtual void GetQueryObject(uint Program, GetQueryObjectParam Parameter, out int Value)
         {
-            Value = 0;
+            Value = 1;
         }
 
         public virtual void GetShader(uint Program, ShaderParameter Parameter, out int Value)
         {
-            Value = 0;
+            Value = 1;
         }
 
         public virtual string GetShaderInfoLog(int Id)
@@ -289,33 +263,21 @@ namespace HedraTests
 
         public virtual string GetString(StringName Name)
         {
+            if (StringName.Version == Name) return "DUMMY v3.3";
             return default(string);
-        }
-
-        public virtual void GetTexParameter(TextureTarget Target, GetTextureParameter Parameter, out int V0)
-        {
-            V0 = 0;
         }
 
         public virtual int GetUniformBlockIndex(uint V0, string Name)
         {
-            return 0;
+            return 1;
         }
 
         public virtual int GetUniformLocation(uint Program, string Name)
         {
-            return 0;
+            return 1;
         }
 
         public virtual void LinkProgram(uint Program)
-        {
-        }
-
-        public virtual void LoadMatrix(ref Matrix4 Matrix4)
-        {
-        }
-
-        public virtual void MatrixMode(MatrixMode Mode)
         {
         }
 
@@ -331,14 +293,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void PopMatrix()
-        {
-        }
-
-        public virtual void PushMatrix()
-        {
-        }
-
         public virtual void ReadBuffer(ReadBufferMode Mode)
         {
         }
@@ -347,13 +301,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void Rotate(float Angle, Vector3 Rotation)
-        {
-        }
-
-        public virtual void Scale(Vector3 Scale)
-        {
-        }
 
         public virtual void ShaderSource(int V0, string Source)
         {
@@ -390,15 +337,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void TexStorage3D(TextureTarget3d Target, int Levels, SizedInternalFormat Internalformat, int Width, int Height,
-            int Depth)
-        {
-        }
-
-        public virtual void Translate(Vector3 Location)
-        {
-        }
-
         public virtual void Uniform1(int Location, int Uniform)
         {
         }
@@ -427,23 +365,7 @@ namespace HedraTests
         {
         }
 
-        public virtual void UniformMatrix2x3(int Location, bool Transpose, ref Matrix2x3 Uniform)
-        {
-        }
-
-        public virtual void UniformMatrix2x4(int Location, bool Transpose, ref Matrix2x4 Uniform)
-        {
-        }
-
         public virtual void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform)
-        {
-        }
-
-        public virtual void UniformMatrix3x2(int Location, bool Transpose, ref Matrix3x2 Uniform)
-        {
-        }
-
-        public virtual void UniformMatrix3x4(int Location, bool Transpose, ref Matrix3x4 Uniform)
         {
         }
 
@@ -451,27 +373,7 @@ namespace HedraTests
         {
         }
 
-        public virtual void UniformMatrix4x2(int Location, bool Transpose, ref Matrix4x2 Uniform)
-        {
-        }
-
-        public virtual void UniformMatrix4x3(int Location, bool Transpose, ref Matrix4x3 Uniform)
-        {
-        }
-
         public virtual void UseProgram(uint Program)
-        {
-        }
-
-        public virtual void Vertex2(Vector2 Vertex)
-        {
-        }
-
-        public virtual void Vertex3(Vector3 Vertex)
-        {
-        }
-
-        public virtual void Vertex3(ref float Vertex)
         {
         }
 

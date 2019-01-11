@@ -25,7 +25,6 @@ namespace Hedra.Engine.Rendering.UI
         private readonly Func<float> _max;
         public uint TextureId { get; set; }
         private bool _enabled;
-        public Vector4 Color;
         private float _barSize;
         private Vector2 _position;
 
@@ -59,7 +58,7 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, TextureId);
             
-            Shader["Scale"] = new Vector2(_barSize * Scale.X, Scale.Y);
+            Shader["Scale"] = new Vector2(Scale.X * _barSize, Scale.Y);
             Shader["Position"] = AdjustedPosition - (!Centered ? new Vector2(Scale.X * (1f - _barSize), 0f) : Vector2.Zero);
             Shader["Color"] = -Vector4.One;
 

@@ -4,6 +4,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Native;
+using Hedra.Engine.Rendering;
 using OpenTK;
 using OpenTK.Graphics;
 
@@ -13,33 +14,20 @@ namespace Hedra.Engine
     {
         public static bool IsDebug { get; private set; }
         public static bool IsRelease => !IsDebug;
+        public static bool IsDummy { get; private set; }
         public static IHedra GameWindow { get; set; }
-        
-        static void Main(string[] Args)
+
+        private static void Main(string[] Args)
         {
+            if (Args.Length > 0 && Args[0] == "--dummy-mode") EnableDummyMode();
             #if DEBUG
             IsDebug = true;
             #endif
-            
-            var devices = new List<DisplayDevice>();
-            for (var index = 0; index < 6; ++index)
-            {
-                var display = DisplayDevice.GetDisplay((DisplayIndex)(0 + index));
-                if (display != null)
-                    devices.Add(display);
-            }
+
             var device = DisplayDevice.Default;
-            Log.WriteLine("Available Devices: " + Environment.NewLine);
-            for (var i = 0; i < devices.Count; i++)
-            {
-                if (devices[i].Width > device.Width && devices[i].Height > device.Height)
-                    device = devices[i];
-                Log.WriteLine(devices[i].Bounds.ToString());
-            }
-
-            GameSettings.DeviceWidth = DisplayDevice.Default.Width;
-            GameSettings.DeviceHeight = DisplayDevice.Default.Height;
-
+            Log.WriteLine(device.Bounds.ToString());
+            GameSettings.DeviceWidth = device.Width;
+            GameSettings.DeviceHeight = device.Height;
 
             Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +
                             GameSettings.DeviceHeight);
@@ -48,9 +36,10 @@ namespace Hedra.Engine
             GameSettings.Height = GameSettings.DeviceHeight;
             GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;
 
-            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height,
-                GraphicsMode.Default, "Project Hedra", device, 3, 3);
-            GameWindow.WindowState = WindowState.Maximized;
+            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, GraphicsMode.Default, "Project Hedra", device, 3, 3)
+            {
+                WindowState = WindowState.Maximized
+            };
             if (OSManager.RunningPlatform == Platform.Windows)
             {
                 //GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
@@ -63,19 +52,36 @@ namespace Hedra.Engine
 
             GameSettings.LoadWindowSettings(GameSettings.SettingsPath);
             Log.WriteLine("Window settings loading was Successful");
+            if (!IsDummy)
+            {
 #if DEBUG
-            GameWindow.Run();
-#else
-            try
-            {
                 GameWindow.Run();
-            }
-            catch (Exception e)
-            {
-                Log.WriteLine(e);
-                throw;
-            }
+#else
+                try
+                {
+                    GameWindow.Run();
+                }
+                catch (Exception e)
+                {
+                    Log.WriteLine(e);
+                    throw;
+                }
 #endif
+            }
+            else
+            {
+                GameWindow.RunOnce();
+                Log.WriteLine("Project Hedra loaded successfully. Exiting...");
+                Environment.Exit(0);
+            }
+            Environment.Exit(0);
+        }
+
+        private static void EnableDummyMode()
+        {
+            IsDummy = true;
+            Renderer.Provider = new DummyGLProvider();
+            Log.WriteLine("Dummy Mode: ENABLED");
         }
     }
 }

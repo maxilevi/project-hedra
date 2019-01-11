@@ -50,12 +50,12 @@ namespace Hedra.Engine.Player.PagedInterface
             }
 
             var barScale = new Vector2(DefaultSize.X * Rows, DefaultSize.Y * 2) * .65f;
-            var realScale = Graphics2D.SizeFromAssets("Assets/UI/InventoryBackground.png") * barScale;
-            var barPosition = Vector2.UnitY * .0975f * Rows;
+            var realScale = InventoryBackground.DefaultSize * barScale;
+            var barPosition = Vector2.UnitY * Rows * DefaultSize * .65f;
             var offset = Rows % 2 == 0 ? Vector2.UnitY * realScale.Y : Vector2.Zero;
-            Title = new Texture("Assets/UI/InventoryBackground.png", barPosition - offset, barScale);
+            Title = new Texture(InventoryBackground.DefaultId, barPosition - offset, realScale);
             TitleText = new GUIText(TitleTranslation, Title.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
-            PageSelector = new Texture("Assets/UI/InventoryBackground.png", -barPosition - offset, barScale);
+            PageSelector = new Texture(InventoryBackground.DefaultId, -barPosition - offset, realScale);
             
             CurrentPageText = new GUIText("00/00", PageSelector.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
             var footerFont = FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold);

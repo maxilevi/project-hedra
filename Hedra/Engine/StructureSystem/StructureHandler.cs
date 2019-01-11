@@ -31,6 +31,7 @@ namespace Hedra.Engine.StructureSystem
         private readonly object _lock = new object();
         public Vector3 MerchantPosition { get; set; }
         public bool SpawnCampfireSpawned { get; set; }
+        public bool SpawnVillageSpawned { get; set; }
         public bool MerchantSpawned { get; set; }
         public Voronoi SeedGenerator { get; }
         private readonly List<StructureWatcher> _itemWatchers;

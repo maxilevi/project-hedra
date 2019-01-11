@@ -31,7 +31,10 @@ namespace Hedra.Engine.Rendering.UI
         private readonly RenderableTexture _staminaBackground;
         private readonly RenderableTexture _staminaIcon;
         private readonly RenderableTexture _oxygenIcon;
-        private readonly RenderableTexture _healthBackground, _xpBackground, _manaBackground;
+        private readonly Texture _healthBackground, _xpBackground, _manaBackground;
+        private readonly TexturedBar _healthBar;
+        private readonly TexturedBar _manaBar;
+        private readonly TexturedBar _xpBar;
         private readonly TexturedBar _oxygenBar;
         private readonly TexturedBar _staminaBar;
         private readonly GUIText _consecutiveHits;
@@ -39,10 +42,9 @@ namespace Hedra.Engine.Rendering.UI
         private readonly IPlayer _player;
         private string _currentClass;
 
-
         public GameUI(IPlayer Player)
         {
-            this._player = Player;
+            _player = Player;
             _consecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.75f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
             _slingShot = new SlingShotAnimation();
             _slingShot.Play(_consecutiveHits);
@@ -54,39 +56,58 @@ namespace Hedra.Engine.Rendering.UI
                     _slingShot.Play(_consecutiveHits);
                 });
             };
-            _healthBackground = new RenderableTexture(new Texture("Assets/UI/HealthBackground.png", new Vector2(-.675f, .765f), Vector2.One), DrawOrder.After);
-            _manaBackground = new RenderableTexture(new Texture("Assets/UI/ManaBackground.png", new Vector2(-.7315f, .7155f), Vector2.One), DrawOrder.After);
-            _xpBackground = new RenderableTexture(new Texture("Assets/UI/XPBackground.png", new Vector2(-.675f, .805f), Vector2.One), DrawOrder.After);
+            const float scale = .75f;
+            _healthBackground = new Texture(
+                Graphics2D.LoadFromAssets("Assets/UI/HealthBarBackground.png"), new Vector2(0, .765f), Graphics2D.SizeFromAssets("Assets/UI/HealthBarBackground.png").As1920x1080() * scale
+            );
+            _manaBackground = new Texture(
+                Graphics2D.LoadFromAssets("Assets/UI/ManaBarBackground.png"), new Vector2(0, .7155f), Graphics2D.SizeFromAssets("Assets/UI/ManaBarBackground.png").As1920x1080()  * scale
+            );
+            _xpBackground = new Texture(
+                Graphics2D.LoadFromAssets("Assets/UI/XpBarBackground.png"), new Vector2(0, .805f), Graphics2D.SizeFromAssets("Assets/UI/XpBarBackground.png").As1920x1080()  * scale
+            );
 
-            var healthBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/HealthBar.png"), new Vector2(-.675f, .7775f), Graphics2D.SizeFromAssets("Assets/UI/HealthBar.png"),
+            _healthBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/HealthBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/HealthBar.png").As1920x1080()  * scale,
                 () => Player.Health,
                 () => Player.MaxHealth, this);
 
-            var manaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/ManaBar.png"), new Vector2(-.7315f, .7265f), Graphics2D.SizeFromAssets("Assets/UI/ManaBar.png"),
+            _manaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/ManaBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/ManaBar.png").As1920x1080()  * scale,
                 () => Player.Mana,
                 () => Player.MaxMana, this);
 
-            var xpBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/XPBar.png"), new Vector2(-.675f, .815f), Graphics2D.SizeFromAssets("Assets/UI/XPBar.png"),
+            _xpBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/XpBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/XpBar.png").As1920x1080() * scale,
                 () => Player.XP,
                 () => Player.MaxXP, this);
 
-            _oxygenBackground = new RenderableTexture(
-                new Texture("Assets/UI/OxygenBackground.png", new Vector2(-.84f, .54f), Vector2.One), DrawOrder.After);
+            var oxygenAndStaminaBackgroundId = Graphics2D.LoadFromAssets("Assets/UI/StaminaAndOxygenBarBackground.png");
+            var oxygenAndStaminaBackgroundSize = Graphics2D.SizeFromAssets("Assets/UI/StaminaAndOxygenBarBackground.png").As1920x1080() * scale;
             
-            _oxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), new Vector2(-.84f, .55f), Graphics2D.SizeFromAssets("Assets/UI/OxygenBar.png"),
+            _oxygenBackground = new RenderableTexture(
+                new Texture(oxygenAndStaminaBackgroundId, Vector2.Zero, oxygenAndStaminaBackgroundSize),
+                DrawOrder.After
+            );
+            
+            _oxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/StaminaBar.png").As1920x1080() * scale,
                 () => Player.Oxygen,
-                () => Player.MaxOxygen, this);    
+                () => Player.MaxOxygen, this);
 
             _staminaBackground = new RenderableTexture(
-                new Texture("Assets/UI/StaminaBackground.png", new Vector2(-.85f, .44f), Vector2.One), DrawOrder.After);
+                new Texture(oxygenAndStaminaBackgroundId, Vector2.Zero, oxygenAndStaminaBackgroundSize),
+                DrawOrder.After
+            );
             
-            _staminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), new Vector2(-.85f, .45f), Graphics2D.SizeFromAssets("Assets/UI/StaminaBar.png"),
-                () => Player.Stamina, () => Player.MaxStamina, this);            
-
-            
+            _staminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/StaminaBar.png").As1920x1080() * scale,
+                () => Player.Stamina, () => Player.MaxStamina, this);
+      
             _classLogo = new RenderableTexture(new Texture(0, new Vector2(-.85f, .75f), Vector2.One), DrawOrder.After);
-            _oxygenIcon = new RenderableTexture(new Texture("Assets/UI/OxygenIcon.png", new Vector2(-.9f, .54f), Vector2.One), DrawOrder.After);
-            _staminaIcon = new RenderableTexture(new Texture("Assets/UI/StaminaIcon.png", new Vector2(-.9f, .44f), Vector2.One), DrawOrder.After);
+            _oxygenIcon = new RenderableTexture(
+                new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenIcon.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/OxygenIcon.png").As1920x1080() * scale),
+                DrawOrder.After
+            );
+            _staminaIcon = new RenderableTexture(
+                new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaIcon.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/StaminaIcon.png").As1920x1080() * scale),
+                DrawOrder.After
+            );
             
             Cross = new Texture("Assets/UI/Pointer.png", new Vector2(0, 0f), Vector2.One * .1f);
             
@@ -101,26 +122,20 @@ namespace Hedra.Engine.Rendering.UI
             questLogTranslation.Concat(() => $" - {Controls.QuestLog}");
             var questLogMsg = new GUIText(questLogTranslation, new Vector2(.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
             
-            var mapTranslation = Translation.Create("map_label");
-            skillTreeTranslation.Concat(() => $" - {Controls.Map}");
-            var mapMsg = new GUIText(mapTranslation, new Vector2(.815f, .425f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
-                
             Controls.OnControlsChanged += () =>
             {
                 questLogTranslation.UpdateTranslation();
-                mapTranslation.UpdateTranslation();
                 skillTreeTranslation.UpdateTranslation();
             };
             
             AddElement(questLogMsg);
             AddElement(skillTreeMsg);
-            AddElement(mapMsg);
             AddElement(_consecutiveHits);
             AddElement(_compass);
             AddElement(_healthBackground);
             AddElement(_manaBackground);
             AddElement(_xpBackground);
-            AddElement(xpBar);
+            AddElement(_xpBar);
             AddElement(_classLogo);
             AddElement(_staminaIcon);
             AddElement(_oxygenIcon);
@@ -129,11 +144,11 @@ namespace Hedra.Engine.Rendering.UI
             AddElement(_staminaBar);
             AddElement(_staminaBackground);
             AddElement(_oxygenBackground);
-            AddElement(healthBar);
-            AddElement(manaBar);
+            AddElement(_healthBar);
+            AddElement(_manaBar);
             AddElement(_help);
             
-            this.OnPanelStateChange += delegate(object Sender, PanelState E)
+            OnPanelStateChange += delegate(object Sender, PanelState E)
             { 
                 LocalPlayer.Instance.Minimap.Show = E == PanelState.Enabled;
                 LocalPlayer.Instance.Toolbar.Show = E == PanelState.Enabled;
@@ -144,6 +159,20 @@ namespace Hedra.Engine.Rendering.UI
         {
             _compass.Disable();
             _compass.TextureElement.Angle = _player.Model.LocalRotation.Y;
+
+            _healthBackground.Position = new Vector2(_classLogo.Position.X + _healthBackground.Scale.X * 1.5f, _healthBackground.Position.Y);
+            _manaBackground.Position = new Vector2(_classLogo.Position.X + _manaBackground.Scale.X * 1.5f, _manaBackground.Position.Y);
+            _xpBackground.Position = new Vector2(_classLogo.Position.X + _xpBackground.Scale.X * 1.5f, _xpBackground.Position.Y);
+            _staminaBackground.Position = _classLogo.Position - Vector2.UnitY * _classLogo.Scale * 1.5f;
+            _oxygenBackground.Position = _classLogo.Position - Vector2.UnitY * _classLogo.Scale * 2.25f;
+            
+            _healthBar.Position = new Vector2(_classLogo.Position.X + _healthBar.Scale.X * 1.5f, _healthBackground.Position.Y);
+            _manaBar.Position = new Vector2(_classLogo.Position.X + _manaBar.Scale.X * 1.5f, _manaBackground.Position.Y);
+            _xpBar.Position = new Vector2(_classLogo.Position.X + _xpBar.Scale.X * 1.5f, _xpBackground.Position.Y);
+            _staminaBar.Position = _staminaBackground.Position + Vector2.UnitX * (_staminaBackground.Scale.X -_staminaBar.Scale.X) * .5f;
+            _oxygenBar.Position = _oxygenBackground.Position + Vector2.UnitX * (_oxygenBackground.Scale.X - _oxygenBar.Scale.X) * .5f;
+            _staminaIcon.Position = _staminaBackground.Position;
+            _oxygenIcon.Position = _oxygenBackground.Position;
             
             if (_player.UI.ShowHelp && Enabled)
             {
@@ -160,8 +189,7 @@ namespace Hedra.Engine.Rendering.UI
 
             Oxygen = Math.Abs(_player.Oxygen - _player.MaxOxygen) > 0.05f && !GameSettings.Paused && Enabled;
 
-            Stamina = Math.Abs(_player.Stamina - _player.MaxStamina) > 0.05f && !GameSettings.Paused && Enabled &&
-                      !_player.IsUnderwater;
+            Stamina = Math.Abs(_player.Stamina - _player.MaxStamina) > 0.05f && !GameSettings.Paused && Enabled;
 
             _consecutiveHits.TextColor = _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8
                 ? Color.Gold : _player.ConsecutiveHits >= 8 ? Color.Red : Color.White;
@@ -178,7 +206,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             _currentClass = _player.Class.Logo;
             _classLogo.BaseTexture.TextureElement.TextureId = Graphics2D.LoadFromAssets(_player.Class.Logo);
-            _classLogo.Scale = Graphics2D.SizeFromAssets(_player.Class.Logo);
+            _classLogo.Scale = Graphics2D.SizeFromAssets(_player.Class.Logo).As1920x1080();
         }
 
         private bool Oxygen

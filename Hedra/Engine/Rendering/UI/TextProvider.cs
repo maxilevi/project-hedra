@@ -18,6 +18,7 @@ namespace Hedra.Engine.Rendering.UI
         private static readonly Dictionary<string, Color> ColorMap;
         private static readonly Dictionary<string, Font> FontMap;
         private static readonly Dictionary<string, float> SizeMap;
+        private static readonly Dictionary<string, Func<string, string>> TransformationMap;
 
         static TextProvider()
         {
@@ -30,6 +31,7 @@ namespace Hedra.Engine.Rendering.UI
                 {TextFormatting.Green, Color.LawnGreen},
                 {TextFormatting.Orange, Color.OrangeRed},
                 {TextFormatting.Gold, Color.Gold},
+                {TextFormatting.Gray, Color.LightGray}
             };
             FontMap = new Dictionary<string, Font>
             {
@@ -40,6 +42,10 @@ namespace Hedra.Engine.Rendering.UI
             {
                 {TextFormatting.Smaller, .8f},
                 {TextFormatting.Bigger, 1.25f},
+            };
+            TransformationMap = new Dictionary<string, Func<string, string>>
+            {
+                {TextFormatting.Caps, S => S.ToUpperInvariant()},
             };
         }
         
@@ -85,6 +91,7 @@ namespace Hedra.Engine.Rendering.UI
                         previousLen = texts[i].Length;
                         currentLen = newStr.Length;
                         var subParts = newStr.Split(Environment.NewLine.ToCharArray())
+                            .Where(S => !string.IsNullOrEmpty(S))
                             .ToArray();
                         var newSplit = string.Empty;
                         for (var k = 0; k < subParts.Length; k++)
@@ -162,6 +169,12 @@ namespace Hedra.Engine.Rendering.UI
                     Font,
                     SizeMap,
                     U => FontCache.Get(lambdaFont.FontFamily, lambdaFont.Size * U, lambdaFont.Style)
+                );
+                Text = Replace(
+                    ref Text,
+                    Text,
+                    TransformationMap,
+                    U => U(Text)
                 );
                 CleanVersion = Regex.Replace(Text, @"\$|\(\)|{|}", string.Empty);
             }

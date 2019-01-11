@@ -16,6 +16,8 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryInterfaceItemInfo
     {
+        public static uint DefaultId { get; } = Graphics2D.LoadFromAssets("Assets/UI/InventoryItemInfo.png");
+        public static Vector2 DefaultSize { get; } = Graphics2D.SizeFromAssets("Assets/UI/InventoryItemInfo.png").As1920x1080() * InventoryArrayInterface.UISizeMultiplier;
         protected Item CurrentItem;
         protected readonly Texture BackgroundTexture;
         protected readonly Texture ItemTexture;
@@ -40,11 +42,12 @@ namespace Hedra.Engine.Player.Inventory
         {
             this._renderer = Renderer;
             this.Panel = new Panel();
-            this.BackgroundTexture = new Texture("Assets/UI/InventoryItemInfo.png", Vector2.Zero, Vector2.One * .45f);
+            var resFactor = 1366f / GameSettings.Width;
+            this.BackgroundTexture = new Texture(DefaultId, Vector2.Zero, DefaultSize * .525f * resFactor);
             this.ItemTexture = new Texture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
                 BackgroundTexture.Scale * .75f);
 
-            this.ItemText = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .325f), Color.White,
+            this.ItemText = new RenderableText(string.Empty, Vector2.Zero, Color.White,
                 FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemText, DrawOrder.After);
 
@@ -56,8 +59,8 @@ namespace Hedra.Engine.Player.Inventory
                 Color.White, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
             DrawManager.UIRenderer.Add(ItemAttributes, DrawOrder.After);
             
-            this.HintTexture = new Texture("Assets/UI/InventoryBackground.png", Vector2.UnitY * -.35f, Vector2.One * .15f);
-            this.HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 7, FontStyle.Bold));
+            this.HintTexture = new Texture(InventoryBackground.DefaultId, Vector2.UnitY * -.35f, InventoryBackground.DefaultSize * .15f);
+            this.HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 7.As1920x1080(), FontStyle.Bold));
 
             Panel.AddElement(HintTexture);
             Panel.AddElement(HintText);
@@ -81,8 +84,14 @@ namespace Hedra.Engine.Player.Inventory
             AddLayout();
             AddTexture();
             AddHint();
+            SetTitlePosition();
         }
 
+        protected void SetTitlePosition()
+        {
+            ItemText.Position = BackgroundTexture.Position + BackgroundTexture.Scale.Y * Vector2.UnitY - ItemText.Scale.Y * Vector2.UnitY;
+        }
+        
         protected virtual void AddHint()
         {
             if (CurrentItem.IsConsumable)

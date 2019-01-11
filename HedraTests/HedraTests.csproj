@@ -81,6 +81,7 @@
     <Compile Include="Game\HumanoidBalanceSheet.cs" />
     <Compile Include="Game\HumanoidBalanceTest.cs" />
     <Compile Include="Game\ItemPriceTest.cs" />
+    <Compile Include="Game\MiscItemsTest.cs" />
     <Compile Include="Game\WeaponBalanceSheet.cs" />
     <Compile Include="Game\WeaponBalanceTest.cs" />
     <Compile Include="Game\MobBalanceSheet.cs" />
@@ -143,7 +144,6 @@
     <Compile Include="SimpleColladaProvider.cs" />
     <Compile Include="SimpleEventProvider.cs" />
     <Compile Include="SimpleGameProviderMock.cs" />
-    <Compile Include="SimpleGLProviderMock.cs" />
     <Compile Include="SimpleHedraWindowMock.cs" />
     <Compile Include="SimpleMovementMock.cs" />
     <Compile Include="SimpleTexture2DProviderMock.cs" />
@@ -162,6 +162,7 @@
     <Compile Include="Structure\GraveyardDesignTest.cs" />
     <Compile Include="Structure\ObeliskDesignTest.cs" />
     <Compile Include="Structure\SimpleGenerationDesignMock.cs" />
+    <Compile Include="Structure\SpawnStructuresTest.cs" />
     <Compile Include="Structure\StructureDesignWorldBuildingMock.cs" />
     <Compile Include="Structure\StructureTest.cs" />
     <Compile Include="Structure\TravellingMerchantDesignTest.cs" />
@@ -185,6 +186,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.12.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.12.0\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

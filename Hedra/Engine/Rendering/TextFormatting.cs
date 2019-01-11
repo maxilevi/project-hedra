@@ -3,6 +3,7 @@ namespace Hedra.Engine.Rendering
     public static class TextFormatting
     {
         public const string Red = "(RED)";
+        public const string Gray = "(GRAY)";
         public const string Violet = "(VIOLET)";
         public const string Blue = "(BLUE)";
         public const string White = "(WHITE)";
@@ -13,5 +14,6 @@ namespace Hedra.Engine.Rendering
         public const string Normal = "(NORMAL)";
         public const string Smaller = "(SMALLER)";
         public const string Bigger = "(BIGGER)";
+        public const string Caps = "(CAPS)";
     }
 }

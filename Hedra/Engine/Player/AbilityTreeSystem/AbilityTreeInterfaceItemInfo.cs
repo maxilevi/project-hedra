@@ -31,6 +31,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             ItemTexture.TextureElement.TextureId = CurrentItem.HasAttribute("ImageId") 
                 ? CurrentItem.GetAttribute<uint>("ImageId") 
                 : GUIRenderer.TransparentTexture;
+            SetTitlePosition();
         }
     }
 }

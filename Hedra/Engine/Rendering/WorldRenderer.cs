@@ -72,7 +72,6 @@ namespace Hedra.Engine.Rendering
         {
             
             if(ToDraw.Count == 0) return;
-            
             if((Type & WorldRenderType.Static) == WorldRenderType.Static)
             {
                 TerrainDraw(ToDraw, ToDrawShadow);

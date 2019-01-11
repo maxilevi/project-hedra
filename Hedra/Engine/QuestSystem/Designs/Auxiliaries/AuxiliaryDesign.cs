@@ -13,10 +13,10 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 
         public override object[] GetThoughtsParameters(QuestObject Quest) => null;
 
-        protected override QuestDesign[] Auxiliaries => null;
+        protected override QuestDesign[] GetAuxiliaries(QuestObject Quest) => null;
 
-        protected override QuestDesign[] Descendants => null;
+        protected override QuestDesign[] GetDescendants(QuestObject Quest) => null;
 
-        protected override QuestReward BuildReward(Random Rng) => null;
+        protected override QuestReward BuildReward(QuestObject Quest, Random Rng) => null;
     }
 }

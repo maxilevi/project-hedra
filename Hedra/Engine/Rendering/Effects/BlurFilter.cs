@@ -43,9 +43,7 @@ namespace Hedra.Engine.Rendering.Effects
             Src.UnBind();
             
             Dst.Bind();
-            MainFBO.Shader.Bind();
             MainFBO.DrawQuad(Src.TextureID[0]);
-            MainFBO.Shader.Unbind();
             Dst.UnBind();
         }
         

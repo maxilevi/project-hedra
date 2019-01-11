@@ -5,8 +5,11 @@ using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
+using Hedra.Engine.QuestSystem;
+using Hedra.Engine.QuestSystem.Designs;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using OpenTK;
@@ -32,12 +35,14 @@ namespace Hedra.Engine.StructureSystem
 
         private static IHumanoid CreateVillager(CollidableStructure Structure, Random Rng)
         {
-            var villager = World.WorldBuilding.SpawnVillager(Structure.Position + -SpawnOffset, Rng);
+            var position = Structure.Position + -SpawnOffset;
+            if (QuestPersistence.SpawnVillager(position, Rng, out var villager))
+            {
+                var quest = QuestPool.Grab(Quests.SpawnQuest).Build(position, new Random(World.Seed), villager);
+                QuestPersistence.SetupQuest(quest, villager);
+            }
             villager.Physics.UsePhysics = false;
             villager.IsSitting = true;
-            villager.SearchComponent<DamageComponent>().Immune = true;
-            villager.AddComponent(new SpawnVillagerThoughtsComponent(villager));
-            villager.AddComponent(new TalkComponent(villager));
             return villager;
         }
         

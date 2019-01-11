@@ -37,13 +37,14 @@ namespace Hedra.Engine.Management
     public static class CommandManager
     {
         
-        public static bool ProcessCommand(string Command, IPlayer Caster, out string Result){
+        public static bool ProcessCommand(string Command, IPlayer Caster, out string Result)
+        {
             try
             {
                 Result = string.Empty;
                 Command = Command.Remove(0,1);
                 string[] Parts = Command.Split(' ');
-                switch (Parts[0])
+                switch (Parts[0].ToLowerInvariant())
                 {
                     case "tp":
                     {
@@ -54,6 +55,16 @@ namespace Hedra.Engine.Management
                                 return false;
                         }
 
+                        if (Parts[1] == "spawn")
+                        {
+                            Caster.BlockPosition = World.SpawnPoint;
+                            
+                        }
+
+                        if (Parts[1] == "spawnvillage")
+                        {
+                            Caster.BlockPosition = World.SpawnVillagePoint;
+                        }
                         if (float.TryParse(Parts[1], out var x))
                         {
                             float.TryParse(Parts[2], out var y);

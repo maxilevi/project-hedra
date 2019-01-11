@@ -124,13 +124,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
 
             }
+
+            if (Model.Colors.Count != Model.Vertices.Count)
+            {
+                throw new ArgumentOutOfRangeException($"Color '{Model.Colors.Count}' and vertices '{Model.Vertices.Count}' mismatch. This is probably a cache collision");
+            }
+
             if (Element.GraduateColor)
             {
                 Model.GraduateColor(Vector3.UnitY);
             }
-
-            if (Model.Colors.Count != Model.Vertices.Count)
-                throw new ArgumentOutOfRangeException($"Color '{Model.Colors.Count}' and vertices '{Model.Vertices.Count}' mismatch. This is probably a cache collision");
         }
 
         private static void SetExtraData(VertexData Model, InstanceData Element, RandomDistribution Distribution)

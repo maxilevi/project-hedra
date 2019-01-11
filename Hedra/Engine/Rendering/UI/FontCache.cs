@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 

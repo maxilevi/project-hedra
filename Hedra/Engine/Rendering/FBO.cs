@@ -210,7 +210,7 @@ namespace Hedra.Engine.Rendering
         /// </summary>
         ~FBO()
         {
-            if(Program.GameWindow.IsExiting) return;
+            if(Program.GameWindow.IsExiting || Program.IsDummy) return;
             if (DepthID != 0 || BufferID != 0 || TextureID != null)
             {
                 System.Diagnostics.Debug.Fail("FBO was not disposed of properly.");
