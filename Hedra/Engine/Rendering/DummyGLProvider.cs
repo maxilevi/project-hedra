@@ -17,10 +17,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void Begin(PrimitiveType Type)
-        {
-        }
-
         public virtual void BeginQuery(QueryTarget Target, int V0)
         {
         }
@@ -211,10 +207,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void End()
-        {
-        }
-
         public virtual void EndQuery(QueryTarget Target)
         {
         }
@@ -311,14 +303,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void LoadMatrix(ref Matrix4 Matrix4)
-        {
-        }
-
-        public virtual void MatrixMode(MatrixMode Mode)
-        {
-        }
-
         public virtual void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
         {
         }
@@ -331,14 +315,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void PopMatrix()
-        {
-        }
-
-        public virtual void PushMatrix()
-        {
-        }
-
         public virtual void ReadBuffer(ReadBufferMode Mode)
         {
         }
@@ -347,13 +323,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void Rotate(float Angle, Vector3 Rotation)
-        {
-        }
-
-        public virtual void Scale(Vector3 Scale)
-        {
-        }
 
         public virtual void ShaderSource(int V0, string Source)
         {
@@ -390,15 +359,6 @@ namespace HedraTests
         {
         }
 
-        public virtual void TexStorage3D(TextureTarget3d Target, int Levels, SizedInternalFormat Internalformat, int Width, int Height,
-            int Depth)
-        {
-        }
-
-        public virtual void Translate(Vector3 Location)
-        {
-        }
-
         public virtual void Uniform1(int Location, int Uniform)
         {
         }
@@ -427,23 +387,7 @@ namespace HedraTests
         {
         }
 
-        public virtual void UniformMatrix2x3(int Location, bool Transpose, ref Matrix2x3 Uniform)
-        {
-        }
-
-        public virtual void UniformMatrix2x4(int Location, bool Transpose, ref Matrix2x4 Uniform)
-        {
-        }
-
         public virtual void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform)
-        {
-        }
-
-        public virtual void UniformMatrix3x2(int Location, bool Transpose, ref Matrix3x2 Uniform)
-        {
-        }
-
-        public virtual void UniformMatrix3x4(int Location, bool Transpose, ref Matrix3x4 Uniform)
         {
         }
 
@@ -451,27 +395,7 @@ namespace HedraTests
         {
         }
 
-        public virtual void UniformMatrix4x2(int Location, bool Transpose, ref Matrix4x2 Uniform)
-        {
-        }
-
-        public virtual void UniformMatrix4x3(int Location, bool Transpose, ref Matrix4x3 Uniform)
-        {
-        }
-
         public virtual void UseProgram(uint Program)
-        {
-        }
-
-        public virtual void Vertex2(Vector2 Vertex)
-        {
-        }
-
-        public virtual void Vertex3(Vector3 Vertex)
-        {
-        }
-
-        public virtual void Vertex3(ref float Vertex)
         {
         }
 

@@ -41,6 +41,10 @@ namespace HedraTests
         {
         }
 
+        public void RunOnce()
+        {
+        }
+
         public void Dispose()
         {
         }

@@ -15,7 +15,7 @@ namespace HedraTests.Rendering
         public void Setup()
         {
             AssetManager.Provider = new SimpleAssetProvider();
-            Renderer.Provider = new SimpleGLProviderMock();
+            Renderer.Provider = new DummyGLProvider();
         }
         
         [Test]

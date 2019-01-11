@@ -144,7 +144,6 @@
     <Compile Include="SimpleColladaProvider.cs" />
     <Compile Include="SimpleEventProvider.cs" />
     <Compile Include="SimpleGameProviderMock.cs" />
-    <Compile Include="SimpleGLProviderMock.cs" />
     <Compile Include="SimpleHedraWindowMock.cs" />
     <Compile Include="SimpleMovementMock.cs" />
     <Compile Include="SimpleTexture2DProviderMock.cs" />

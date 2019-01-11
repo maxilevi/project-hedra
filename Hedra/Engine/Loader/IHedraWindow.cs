@@ -33,6 +33,7 @@ namespace Hedra.Engine.Loader
         bool CursorVisible { get; set; }
         void Exit();
         void Run();
+        void RunOnce();
         void Dispose();
         void Close();
         Point PointToClient(Point point);
