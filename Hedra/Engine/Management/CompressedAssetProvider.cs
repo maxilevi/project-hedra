@@ -120,7 +120,7 @@ namespace Hedra.Engine.Management
         public byte[] ReadPath(string Path, bool Text = true)
         {
             bool external = !Path.Contains("$DataFile$");
-            if (!external || Path.StartsWith("Assets/") || Path.StartsWith("Asset\\"))
+            if (!external || Path.StartsWith("Assets/") || Path.StartsWith("Assets\\"))
             {
                 Path = Path.Replace("$DataFile$", string.Empty);
                 if (Path.StartsWith("/"))
@@ -128,7 +128,9 @@ namespace Hedra.Engine.Management
 
                 return ReadBinary(Path, Text ? AssetsResource : SoundResource);
             }
-
+#if DEBUG
+            throw new ArgumentOutOfRangeException($"Yuo shouldn't read from external paths when on debug mode.");
+#endif
             var finalPath = Path.Replace("$GameFolder$", GameLoader.AppPath);
             return Text
                 ? Encoding.ASCII.GetBytes(File.ReadAllText(finalPath))

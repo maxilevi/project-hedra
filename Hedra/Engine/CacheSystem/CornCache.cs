@@ -14,7 +14,7 @@ namespace Hedra.Engine.CacheSystem
             var model0 = AssetManager.LoadPLYWithLODs("$DataFile$/Assets/Env/Plants/Corn0.ply", scale);
             AddModel(model0.AddWindValues(wind)); 
             AddModelPart(
-                AssetManager.LoadPLYWithLODs("Assets/Env/Plants/Corn0_Fruit0.ply", scale)
+                AssetManager.LoadPLYWithLODs("$DataFile$/Assets/Env/Plants/Corn0_Fruit0.ply", scale)
                     .AddWindValues(wind)
             );
 
