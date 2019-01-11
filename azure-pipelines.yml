@@ -33,3 +33,4 @@ steps:
 - script: |
     cd release
     mono Hedra.exe --dummy-mode
+  enabled: false
