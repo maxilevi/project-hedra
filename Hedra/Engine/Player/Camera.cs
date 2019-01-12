@@ -10,6 +10,7 @@ using Hedra.Engine.Input;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.StructureSystem;
 using Hedra.EntitySystem;
 using OpenTK;
@@ -114,8 +115,7 @@ namespace Hedra.Engine.Player
             }
 
             BuildCameraMatrix();
-            DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, ModelViewMatrix);
-            DrawManager.FrustumObject.SetFrustum(ModelViewMatrix);
+            Culling.SetFrustum(ModelViewMatrix);
         }
 
         private void ManageRotations()
@@ -200,9 +200,9 @@ namespace Hedra.Engine.Player
             get
             {
                 var lookingDir = new Vector4(0f, 0f, -1.0f, 1.0f);
-                lookingDir = Vector4.Transform(lookingDir, DrawManager.FrustumObject.ProjectionMatrix.Inverted());
+                lookingDir = Vector4.Transform(lookingDir, Culling.ProjectionMatrix.Inverted());
                 lookingDir = new Vector4(lookingDir.X, lookingDir.Y, -1f, 0f);
-                lookingDir = Vector4.Transform(lookingDir, DrawManager.FrustumObject.ModelViewMatrix.Inverted());
+                lookingDir = Vector4.Transform(lookingDir, Culling.ModelViewMatrix.Inverted());
                 return lookingDir.Xyz.NormalizedFast();
             }
         }

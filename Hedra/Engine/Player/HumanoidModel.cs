@@ -422,12 +422,6 @@ namespace Hedra.Engine.Player
                 QuaternionMath.ToEuler(_rotationQuaternionZ).Z
                 );
             LocalRotation = Model.LocalRotation;
-            if(_hasLamp)
-            {
-                _lampModel.Position = LeftWeaponPosition;
-                _lampModel.LocalRotation = LocalRotation;
-                _lampModel.LocalRotationPoint = Vector3.Zero;
-            }
             HandleState();
             if ( (_isEatingWhileSitting || _foodTimer.Tick()) && !Human.IsSitting && Human.IsEating) StopEating();
             Human.HandLamp.Update();
@@ -442,6 +436,12 @@ namespace Hedra.Engine.Player
                 _modelSound.Update(IsWalking && !Human.IsJumping && !Human.IsSwimming && Human.IsGrounded || Human.IsSleeping);
             }
             Model.Update();
+            if (_hasLamp)
+            {
+                _lampModel.Position = LeftWeaponPosition;
+                _lampModel.LocalRotation = LocalRotation;
+                _lampModel.LocalRotationPoint = Vector3.Zero;
+            }
         }
 
         public void StopSound()

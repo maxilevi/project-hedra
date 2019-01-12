@@ -15,6 +15,7 @@ using OpenTK;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering.Frustum;
 
 namespace Hedra.Engine.Rendering
 {
@@ -87,7 +88,7 @@ namespace Hedra.Engine.Rendering
                         continue;
                     }
 
-                    if ((!GameSettings.SSAO || _shadows[i].IsCosmeticShadow) && _shadows[i].ShouldDraw && DrawManager.FrustumObject.PointInFrustum(_shadows[i].Position))
+                    if ((!GameSettings.SSAO || _shadows[i].IsCosmeticShadow) && _shadows[i].ShouldDraw && Culling.IsInside(_shadows[i].Position))
                         _shouldShadows.Add(_shadows[i]);
                 }
                 _shouldShadows = _shouldShadows.OrderBy(S => S.Position.Y).ToList();

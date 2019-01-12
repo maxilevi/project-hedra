@@ -7,6 +7,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.QuestSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -47,6 +48,7 @@ namespace Hedra.Engine.StructureSystem
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var structure = base.Setup(TargetPosition, Rng, new Well(TargetPosition, 48));
+            structure.AddGroundwork(new RoundedGroundwork(TargetPosition, 24, BlockType.StonePath));
             structure.Mountain.Radius = 48;
             return structure;
         }

@@ -17,6 +17,7 @@ using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
@@ -65,7 +66,7 @@ namespace Hedra.Engine.Rendering
 
         public static void PrepareRendering()
         {
-            DrawManager.FrustumObject.SetFrustum(GameManager.Player.View.ModelViewMatrix);
+            Culling.SetFrustum(GameManager.Player.View.ModelViewMatrix);
         }
 
         public static void Render(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ToDrawShadow, WorldRenderType Type)

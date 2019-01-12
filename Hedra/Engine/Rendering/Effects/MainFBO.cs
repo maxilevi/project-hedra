@@ -14,6 +14,7 @@ using System.Drawing;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering.Frustum;
 
 namespace Hedra.Engine.Rendering.Effects
 {
@@ -110,7 +111,7 @@ namespace Hedra.Engine.Rendering.Effects
                 Renderer.Uniform1(Ssao.RandomSampler, 2);
                 Renderer.Uniform1(Ssao.Intensity, GameSettings.AmbientOcclusionIntensity);
                 
-                Renderer.UniformMatrix4(Ssao.ProjectionUniform, false, ref DrawManager.FrustumObject.ProjectionMatrix);
+                Renderer.UniformMatrix4(Ssao.ProjectionUniform, false, ref Culling.ProjectionMatrix);
 
                 DrawManager.UIRenderer.DrawQuad();
 

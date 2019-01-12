@@ -25,6 +25,6 @@ namespace Hedra.Engine.Rendering
     {
         Vector3 Position { get; set; }
         bool Enabled { get; set; }
-        bool PrematureCulling { set; }
+        Box CullingBox { get; set; }
     }
 }

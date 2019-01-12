@@ -26,6 +26,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.Sound;
@@ -50,7 +51,6 @@ namespace Hedra.Engine.Generation
         private Vector3 _spawningPoint;
         private int _previousCount;
         private int _previousId;
-        private Matrix4 _previousModelView;
 
         public WorldProvider()
         {
@@ -143,15 +143,8 @@ namespace Hedra.Engine.Generation
             }
         }
 
-        public void CullTest(FrustumCulling FrustumObject)
+        public void CullTest()
         {
-            /*
-            if ((_previousModelView.Column0 - FrustumObject.ModelViewMatrix.Column0).Length < 0.005f
-                && (_previousModelView.Column1 - FrustumObject.ModelViewMatrix.Column1).Length < 0.005f
-                && (_previousModelView.Column2 - FrustumObject.ModelViewMatrix.Column2).Length < 0.005f
-                && (_previousModelView.Column3 - FrustumObject.ModelViewMatrix.Column3).Length < 0.005f
-                && GameManager.Player.Loader.ActiveChunks == _previousCount) return;
-            */
             DrawingChunks.Clear();
             ShadowDrawingChunks.Clear();
             var toDrawArray = Chunks;
@@ -169,7 +162,7 @@ namespace Hedra.Engine.Generation
                 {
                     if(!chunk.Initialized) continue;
                     
-                    if (FrustumObject.IsInsideFrustum(chunk.Mesh))
+                    if (Culling.IsInside(chunk.Mesh))
                         DrawingChunks.Add(offset, chunk);
                 }
                 else
@@ -180,7 +173,6 @@ namespace Hedra.Engine.Generation
             }
 
             _renderingComparer.Position = GameManager.Player.Position;
-            _previousModelView = FrustumObject.ModelViewMatrix;
             _previousCount = GameManager.Player.Loader.ActiveChunks;
         }
 
@@ -555,7 +547,7 @@ namespace Hedra.Engine.Generation
             var placeablePosition = this.FindPlaceablePosition(mob, DesiredPosition);
             mob.MobId = ++_previousId;
             mob.Seed = MobSeed;
-            mob.Model.TargetRotation = new Vector3(0, (new Random(MobSeed)).NextFloat() * 360f * Mathf.Radian, 0);
+            mob.Model.TargetRotation = new Vector3(0, (new Random(MobSeed)).NextFloat() * 360f, 0);
             mob.Physics.TargetPosition = placeablePosition;
             mob.Model.Position = placeablePosition;
             MobFactory.Polish(mob);

@@ -20,6 +20,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
 
@@ -310,8 +311,8 @@ namespace Hedra.Engine.Rendering.UI
                 var size = GUITexture.Adjust(new Vector2(0.05f, 0.25f));
                 for(int i = 0; i <_humans.Count; i++){
 
-                    Vector4 space = Vector4.Transform(new Vector4(_humans[i].Position + Vector3.UnitY * 6f,1), DrawManager.FrustumObject.ModelViewMatrix);
-                    space = Vector4.Transform(space, DrawManager.FrustumObject.ProjectionMatrix);
+                    Vector4 space = Vector4.Transform(new Vector4(_humans[i].Position + Vector3.UnitY * 6f,1), Culling.ModelViewMatrix);
+                    space = Vector4.Transform(space, Culling.ProjectionMatrix);
                     Vector2 ndc = (space.Xyz / space.W).Xy + new Vector2(1,1);
                     ndc /= 2;
                     if (_humans[i].Model.Enabled && Math.Abs(ndc.X - coords.X) < size.X && Math.Abs(1 - ndc.Y - coords.Y) < size.Y)

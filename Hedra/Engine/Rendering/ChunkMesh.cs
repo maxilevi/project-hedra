@@ -31,17 +31,22 @@ namespace Hedra.Engine.Rendering
         public bool Enabled { get; set; }
         public bool PrematureCulling => false;
         public bool BuildedOnce { get; set; }
-
-        public Vector3 Position { get; set; }
-        public Box CullingBox { get; set; }
+        public Vector3 Max { get; private set; }
+        public Vector3 Min { get; private set; }
+        public Vector3 Position { get; }
 
         public ChunkMesh(Vector3 Position, IMeshBuffer Buffer)
         {
             this.Position = Position;
             _instanceElements = new List<InstanceData>();
             _lodedInstanceElements = new List<InstanceData>();
-            CullingBox = new Box(Vector3.Zero, new Vector3(Chunk.Width, 768, Chunk.Width));
             _buffer = Buffer;
+        }
+
+        public void SetBounds(Vector3 Min, Vector3 Max)
+        {
+            this.Max = Max;
+            this.Min = Min;
         }
 
         public void BuildFrom(VertexData Data, bool ExtraData)

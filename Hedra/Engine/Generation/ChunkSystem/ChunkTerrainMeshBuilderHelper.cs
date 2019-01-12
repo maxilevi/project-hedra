@@ -97,12 +97,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     var posY = (int) (Cell.P[i].Y * _coefficient);
                     var posZ = (int) (Cell.P[i].Z * _coefficient);
                     
-                    Block block;
-                    unsafe
-                    {
-                        block = GetNeighbourBlock(&posX, &posY, &posZ);
-                    }
-
+                    Block block = GetNeighbourBlock(posX, posY, posZ);
                     Cell.Type[i] = block.Type;
                     Cell.Density[i] = block.Density;
                 }
@@ -203,40 +198,28 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Cell.P[7] = new Vector3(Cell.P[0].X, _blockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
             }
         }
-
-        private unsafe Chunk GetNeighbourChunk(int X, int Z)
-        {
-            return GetNeighbourChunk(&X, &Z);
-        }
         
         //Use ref to avoid copying the structs since this function has a very high call rate.
         [MethodImpl(256)]
-        private unsafe Chunk GetNeighbourChunk(int* X, int* Z)
+        private Chunk GetNeighbourChunk(int X, int Z)
         {
-            if (*X >= 0 && *X < _boundsX && *Z >= 0 && *Z < _boundsZ) return _parent;
-            var coords = World.ToChunkSpace(new Vector3(_offsetX + *X * _blockSize, 0, _offsetZ + *Z * _blockSize));
-            World.SearcheableChunks.TryGetValue(coords, out var ch);
+            World.SearcheableChunksReference.TryGetValue(new Vector2(((int) (_offsetX + X * _blockSize) >> 7) << 7, ((int) (_offsetZ + Z * _blockSize) >> 7) << 7), out var ch);
             return ch;
         }
 
-        private unsafe Block GetNeighbourBlock(int X, int Y, int Z)
-        {
-            return GetNeighbourBlock(&X, &Y, &Z);
-        }
-
         [MethodImpl(256)]
-        private unsafe Block GetNeighbourBlock(int* X, int* Y, int* Z)
+        private Block GetNeighbourBlock(int X, int Y, int Z)
         {
             var chunk = GetNeighbourChunk(X, Z);
             if (!chunk?.Landscape.BlocksSetted ?? true) return new Block(BlockType.Temporal);
-            return chunk[Modulo(X)][*Y][Modulo(Z)];
+            return chunk[Modulo(X)][Y][Modulo(Z)];
         }
         
         // Source: https://codereview.stackexchange.com/a/58309
         [MethodImpl(256)]
-        private static unsafe int Modulo(int* Index)
+        private static int Modulo(int Index)
         {
-            return (*Index % Bounds + Bounds) % Bounds;
+            return (Index % Bounds + Bounds) % Bounds;
         }
     }
 }

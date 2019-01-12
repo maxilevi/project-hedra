@@ -20,6 +20,7 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
@@ -35,6 +36,7 @@ namespace Hedra
         public static event ModulesReloadEvent ModulesReload;
         public static event OnChunkEvent OnChunkReady;
         public static event OnChunkEvent OnChunkDisposed;
+        public static Dictionary<Vector2, Chunk> SearcheableChunksReference;
         public static Dictionary<Vector2, Chunk> SearcheableChunks => Provider.SearcheableChunks;
         public static AreaHighlighter Highlighter => Provider.Highlighter;
         public static ParticleSystem Particles => Provider.Particles;
@@ -69,6 +71,7 @@ namespace Hedra
             Provider = new WorldProvider();
             Provider.Load();
             Provider.ModulesReload += Path => ModulesReload?.Invoke(Path);
+            SearcheableChunksReference = Provider.SearcheableChunks;
         }
 
         public static void ReloadModules()
@@ -76,9 +79,9 @@ namespace Hedra
             Provider.ReloadModules();
         }
 
-        public static void CullTest(FrustumCulling FrustumObject)
+        public static void CullTest()
         {
-            Provider.CullTest(FrustumObject);
+            Provider.CullTest();
         }
 
         public static void Draw(WorldRenderType Type)

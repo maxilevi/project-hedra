@@ -18,6 +18,7 @@ using Hedra.Engine.Rendering.Animation.ColladaParser;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering.Frustum;
 
 namespace Hedra.Engine.Rendering.Animation
 {
@@ -42,6 +43,8 @@ namespace Hedra.Engine.Rendering.Animation
         public Vector4 BaseTint { get; set; }
         public Vector3 Scale { get; set; }
         public Box CullingBox { get; set; }
+        public Vector3 Max => CullingBox.Max;
+        public Vector3 Min => CullingBox.Min;
         public Vector3[] JointIdsArray => _baseModelData.JointIds;
         public Vector3[] VerticesArray => _baseModelData.Vertices;
         private readonly List<ModelData> _addedModels;
@@ -174,7 +177,7 @@ namespace Hedra.Engine.Rendering.Animation
         public void Draw()
         {
             var viewMat = LocalPlayer.Instance.View.ModelViewMatrix;
-            var projectionViewMat = viewMat * DrawManager.FrustumObject.ProjectionMatrix;
+            var projectionViewMat = viewMat * Culling.ProjectionMatrix;
             DrawModel(projectionViewMat, viewMat);
         }
 

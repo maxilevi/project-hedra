@@ -19,6 +19,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -121,7 +122,7 @@ namespace Hedra.Engine.Player.MapSystem
                 _player.View.Pitch = -10f;
                 _player.View.BuildCameraMatrix();
 
-                DrawManager.FrustumObject.SetFrustum(_player.View.ModelViewMatrix);
+                Culling.SetFrustum(_player.View.ModelViewMatrix);
 
                 var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
                 Renderer.LoadProjection(projMatrix);
@@ -130,8 +131,8 @@ namespace Hedra.Engine.Player.MapSystem
                 var oldFancy = GameSettings.Quality;
                 GameSettings.GlobalShadows = false;
                 GameSettings.Quality = false;
-                DrawManager.FrustumObject.CalculateFrustum(projMatrix, DrawManager.FrustumObject.ModelViewMatrix);
-                World.CullTest(DrawManager.FrustumObject);
+                Culling.CalculateFrustum(projMatrix, Culling.ModelViewMatrix);
+                World.CullTest();
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Static);
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Water);
                 GameSettings.Quality = oldFancy;
@@ -142,7 +143,7 @@ namespace Hedra.Engine.Player.MapSystem
                 _player.View.Distance = oldDistance;
 
                 _player.View.BuildCameraMatrix();
-                DrawManager.FrustumObject.SetFrustum(_player.View.ModelViewMatrix);
+                Culling.SetFrustum(_player.View.ModelViewMatrix);
 
                 Renderer.Disable(EnableCap.DepthTest);
                 Renderer.Enable(EnableCap.Blend);

@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Linq;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Geometry;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -44,7 +45,7 @@ namespace Hedra.Engine.EnvironmentSystem
             _map.Bind();
             
             Shader["map"] = 0;
-            Shader["mvp"] = DrawManager.FrustumObject.ModelViewMatrix.ClearTranslation() * DrawManager.FrustumObject.ProjectionMatrix;
+            Shader["mvp"] = Culling.ModelViewMatrix.ClearTranslation() * Culling.ProjectionMatrix;
             Shader["trans_matrix"] = Matrix4.CreateScale(4) * TransformationMatrix;
             Shader["color_multiplier"] = ColorMultiplier;
 

@@ -12,6 +12,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Effects;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
 using OpenTK.Graphics.OpenGL4;
 
@@ -31,7 +32,6 @@ namespace Hedra.Engine.Management
         public static List<IRenderable> ParticleRenderer { get; }
         public static List<IRenderable> TrailRenderer { get; }
         public static GUIRenderer UIRenderer { get; }
-        public static FrustumCulling FrustumObject { get; }
         public static DropShadowRenderer DropShadows { get; }
         public static int CullableObjectsCount { get; private set; }
         public static int CulledObjectsCount { get; private set; }
@@ -46,7 +46,6 @@ namespace Hedra.Engine.Management
             ParticleRenderer = new List<IRenderable>();
             TrailRenderer = new List<IRenderable>();
             UIRenderer = new GUIRenderer();
-            FrustumObject = new FrustumCulling();
             DropShadows = new DropShadowRenderer();
         }
 
@@ -72,7 +71,7 @@ namespace Hedra.Engine.Management
         public static void BulkDraw()
         {
             SkyManager.Draw();
-            World.CullTest(FrustumObject);
+            World.CullTest();
             World.Draw(WorldRenderType.StaticAndInstance);
             DropShadows.Draw();
 
@@ -86,7 +85,7 @@ namespace Hedra.Engine.Management
 
                     if (DrawFunctions[i] is ICullable cullable)
                     {
-                        if (!FrustumObject.IsInsideFrustum(cullable)) continue;
+                        if (!Culling.IsInside(cullable)) continue;
                         DrawFunctions[i].Draw();
                         drawedObjects++;
                         drawedCullableObjects++;

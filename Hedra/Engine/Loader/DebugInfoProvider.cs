@@ -14,6 +14,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
@@ -56,7 +57,7 @@ namespace Hedra.Engine.Loader
             _debugPanel.AddElement(_debugText);
             _debugPanel.Disable();
             _originalTitle = Program.GameWindow.Title;
-            var points = DrawManager.FrustumObject.Points;
+            var points = Culling.Frustum.Corners;
             _frustumPoints = new VBO<Vector3>(points, points.Length, VertexAttribPointerType.Float);
             _frustumVAO = new VAO<Vector3>(_frustumPoints);
             Log.WriteLine("Created debug elements.");
@@ -174,7 +175,7 @@ namespace Hedra.Engine.Loader
 
         private void DrawFrustum()
         {
-            var points = GameManager.Player.Model.BroadphaseBox.Vertices;
+            var points = Culling.Frustum.Corners;
             _frustumPoints.Update(points, Vector3.SizeInBytes * points.Length);
             
             _frustumVAO.Bind();

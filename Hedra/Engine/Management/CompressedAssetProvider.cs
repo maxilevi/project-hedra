@@ -129,7 +129,8 @@ namespace Hedra.Engine.Management
                 return ReadBinary(Path, Text ? AssetsResource : SoundResource);
             }
 #if DEBUG
-            throw new ArgumentOutOfRangeException($"Yuo shouldn't read from external paths when on debug mode.");
+            if(!GameSettings.TestingMode)
+                throw new ArgumentOutOfRangeException($"You shouldn't read from external paths when on debug mode.");
 #endif
             var finalPath = Path.Replace("$GameFolder$", GameLoader.AppPath);
             return Text

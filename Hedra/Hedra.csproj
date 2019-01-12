@@ -294,6 +294,10 @@
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestTier.cs" />
     <Compile Include="Engine\Rendering\DummyGLProvider.cs" />
+    <Compile Include="Engine\Rendering\Frustum\BoundingFrustum.cs" />
+    <Compile Include="Engine\Rendering\Frustum\Culling.cs" />
+    <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
+    <Compile Include="Engine\Rendering\Frustum\PlaneIntersectionType.cs" />
     <Compile Include="Engine\Rendering\TextFormatting.cs" />
     <Compile Include="Engine\Rendering\ITransparent.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
@@ -741,7 +745,6 @@
     <Compile Include="Engine\Management\AssetManager.cs" />
     <Compile Include="Engine\Management\RoutineManager.cs" />
     <Compile Include="Engine\Management\DrawManager.cs" />
-    <Compile Include="Engine\Management\FrustumCulling.cs" />
     <Compile Include="Engine\Management\ICullable.cs" />
     <Compile Include="Engine\Management\IRenderable.cs" />
     <Compile Include="Engine\Management\IUpdatable.cs" />

@@ -15,9 +15,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             var lowest = (float)Parent.BoundsY;
             var highest = 0f;
-            for (var x = -1; x < Parent.BoundsX + 1; x++)
+            for (var x = 0; x < Parent.BoundsX + 1; x++)
             {
-                for (var z = -1; z < Parent.BoundsZ + 1; z++)
+                for (var z = 0; z < Parent.BoundsZ + 1; z++)
                 {
                     var position = Parent.Position + new Vector3(x, 0, z) * Chunk.BlockSize;
                     var chunkSpace = World.ToChunkSpace(position);

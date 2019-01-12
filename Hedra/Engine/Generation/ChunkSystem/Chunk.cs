@@ -100,7 +100,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Disposed) throw new ArgumentException($"Cannot build a disposed chunk.");
             if (!Initialized) throw new ArgumentException($"Chunk hasnt been initialized yet.");
-            Mesh.Position = new Vector3(OffsetX, 0, OffsetZ);
             lock (_blocksLock)
             {
                 IsGenerating = true;
@@ -211,10 +210,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Input.StaticData.SupportPoint(Vector3.UnitY).Y,
                 Input.StaticData.SupportPoint(Vector3.UnitZ).Z - OffsetZ
             );
-            Mesh.CullingBox = new Box(
+            Mesh.SetBounds(
                 new Vector3(staticMin.X, staticMin.Y, staticMin.Z),
-                new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y),
-                    staticMax.Z)
+                new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y), staticMax.Z)
             );
             DistributedExecuter.Execute(delegate
             {

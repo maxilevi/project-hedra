@@ -16,6 +16,7 @@ using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering.Frustum;
 
 namespace Hedra.Engine.Rendering
 {
@@ -79,7 +80,7 @@ namespace Hedra.Engine.Rendering
         
         public static void UnBind()
         {
-            DrawManager.FrustumObject.SetViewport();
+            Culling.SetViewport();
             Shader.Unbind();
             Renderer.CullFace(CullFaceMode.Back);
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, _prevFbo);

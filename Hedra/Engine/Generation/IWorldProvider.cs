@@ -9,6 +9,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
@@ -75,7 +76,7 @@ namespace Hedra.Engine.Generation
 
         int RandomSeed { get; }
 
-        void CullTest(FrustumCulling FrustumObject);
+        void CullTest();
 
         void Draw(WorldRenderType Type);
 

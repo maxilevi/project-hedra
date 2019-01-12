@@ -11,6 +11,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
@@ -57,8 +58,9 @@ namespace HedraTests
         {
         }
 
-        public virtual void CullTest(FrustumCulling FrustumObject)
+        public void CullTest()
         {
+            throw new NotImplementedException();
         }
 
         public virtual void Draw(WorldRenderType Type)

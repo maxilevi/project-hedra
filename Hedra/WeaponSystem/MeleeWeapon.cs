@@ -46,7 +46,7 @@ namespace Hedra.WeaponSystem
         protected override void OnAttackStance()
         {
             base.SetToMainHand(MainMesh);
-            MainMesh.BeforeRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15F * this.Scale.Y + Vector3.UnitZ * .0f * this.Scale.Z,
+            MainMesh.BeforeRotation = Vector3.TransformPosition(Vector3.UnitY * _weaponHeight * -.15f * this.Scale.Y + Vector3.UnitZ * .0f * this.Scale.Z,
                 Matrix4.CreateRotationX(-70 * Mathf.Radian) * Matrix4.CreateRotationY(25 * Mathf.Radian)  * Matrix4.CreateRotationZ(-90 * Mathf.Radian));
             MainMesh.LocalRotation = new Vector3(70, -25, 90);
         }

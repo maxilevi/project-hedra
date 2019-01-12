@@ -287,10 +287,5 @@ namespace Hedra.Engine.PhysicsSystem
                 P.Y >= A.Min.Y && P.Y <= A.Max.Y &&
                 P.Z >= A.Min.Y && P.Z <= A.Max.Z;
         }
-
-        public static bool Raycast(Vector3 Direction, float Length)
-        {
-            return false;
-        }
     }        
 }
