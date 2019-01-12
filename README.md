@@ -6,6 +6,6 @@
 Name | Status
 --- | ---
 Windows | [![Build status](https://dev.azure.com/maxilevi/maxilevi/_apis/build/status/Project%20Hedra%20CI%20-%20Windows)](https://dev.azure.com/maxilevi/maxilevi/_build/latest?definitionId=3)
-Linux | [![Build Status](https://dev.azure.com/maxilevi/maxilevi/_apis/build/status/Project%20Hedra%20CI%20-%20Linux)](https://dev.azure.com/maxilevi/maxilevi/_build/latest?definitionId=5)
+Linux | [![Build status](https://dev.azure.com/maxilevi/maxilevi/_apis/build/status/Project%20Hedra%20CI%20-%20Linux)](https://dev.azure.com/maxilevi/maxilevi/_build/latest?definitionId=5)
 
 ### Screenshots
