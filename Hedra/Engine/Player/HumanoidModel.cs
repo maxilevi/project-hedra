@@ -422,7 +422,8 @@ namespace Hedra.Engine.Player
                 );
             LocalRotation = Model.LocalRotation;
             HandleState();
-            if ( (_isEatingWhileSitting || _foodTimer.Tick()) && !Human.IsSitting && Human.IsEating) StopEating();
+            if ( _isEatingWhileSitting && !Human.IsSitting && Human.IsEating) StopEating();
+            if (_foodTimer.Tick() && Human.IsEating) StopEating();
             Human.HandLamp.Update();
             if (!Disposed)
             {
