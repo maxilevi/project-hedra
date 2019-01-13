@@ -71,14 +71,15 @@ namespace Hedra.Engine.StructureSystem
                 HandleBurning();
             }
 
-            if( (this._light == null) && distToPlayer < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
+            if ( _light == null && distToPlayer < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
 
                 this._light = ShaderManager.GetAvailableLight();
 
                 if(this._light != null)
                 {
-                    this._light.Color = new Vector3(1f, 0.4f, 0.4f);
-                    this._light.Position = FirePosition;
+                    _light.Color = new Vector3(.8f, .3f, .2f);
+                    _light.Radius = 24;
+                    _light.Position = FirePosition;
                     ShaderManager.UpdateLight(this._light);
                 }
             }
