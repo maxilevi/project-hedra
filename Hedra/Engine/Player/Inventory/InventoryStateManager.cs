@@ -25,6 +25,7 @@ namespace Hedra.Engine.Player.Inventory
             this.RegisterStateItem(() => Player.Movement.CaptureMovement, O => Player.Movement.CaptureMovement = (bool)O);
             this.RegisterStateItem(() => Player.View.CaptureMovement, O => Player.View.CaptureMovement = (bool) O);
             this.RegisterStateItem(() => Player.View.PositionDelegate, O => Player.View.PositionDelegate = (Func<Vector3>)O, true);
+            this.RegisterStateItem(() => Player.IsSitting, O => Player.IsSitting = (bool)O, true);
         }
 
         public override void ReleaseState()
