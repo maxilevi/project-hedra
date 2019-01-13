@@ -212,8 +212,7 @@ namespace Hedra.Engine.Rendering
                 if (_arrayMappings.ContainsKey(Key))
                 {
                     var asArray = (Array) value;
-                    if(_arrayMappings[Key].Values.Any(O => Array.IndexOf(asArray, O) == -1))
-                        _arrayMappings[Key].Load(asArray.Cast<object>().ToArray());
+                    _arrayMappings[Key].Load(asArray.Cast<object>().ToArray());
                 }
                 else
                 {
@@ -222,7 +221,7 @@ namespace Hedra.Engine.Rendering
                     {
                         var location = Renderer.GetUniformLocation(ShaderId, Key);
 #if DEBUG
-                        if(location == -1) throw new ArgumentException($"Uniform {Key} does not exist in shader");
+                        if (location == -1) throw new ArgumentException($"Uniform {Key} does not exist in shader");
 #endif
                         _mappings.Add(Key, new UniformMapping(location, value));
                     }
@@ -278,7 +277,7 @@ namespace Hedra.Engine.Rendering
 
         private void LoadBuiltinUniforms()
         {
-            if(HasUniform(ShaderManager.ModelViewMatrixName))
+            if (HasUniform(ShaderManager.ModelViewMatrixName))
                 this[ShaderManager.ModelViewMatrixName] = Renderer.ModelViewMatrix;
             
             if(HasUniform(ShaderManager.ModelViewProjectionName))

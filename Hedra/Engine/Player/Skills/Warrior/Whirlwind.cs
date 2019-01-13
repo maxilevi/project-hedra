@@ -61,6 +61,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
             _trail.Emit = true;
             Casting = true;
             Player.IsAttacking = true;
+            _rotationY = 0;
             Player.Model.Play(_whirlwindAnimation);
         }
 
@@ -95,10 +96,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
 
         private void Rotate()
         {
-            Player.Model.TransformationMatrix =
-                Matrix4.CreateRotationY(-Player.Model.LocalRotation.Y * Mathf.Radian) *
-                Matrix4.CreateRotationY(_rotationY * Mathf.Radian) *
-                Matrix4.CreateRotationY(Player.Model.LocalRotation.Y * Mathf.Radian);
+            Player.Model.TargetRotation = Vector3.UnitY * _rotationY;
         }
         
         private void DamageNear()

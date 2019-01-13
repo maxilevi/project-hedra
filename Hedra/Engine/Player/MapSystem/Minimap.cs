@@ -124,14 +124,13 @@ namespace Hedra.Engine.Player.MapSystem
 
                 Culling.SetFrustum(_player.View.ModelViewMatrix);
 
-                var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
-                Renderer.LoadProjection(projMatrix);
+                var projMatrix = Matrix4.CreatePerspectiveFieldOfView(60 * Mathf.Radian, 1, 1, 2048); //Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
+                Culling.CalculateFrustum(projMatrix, Culling.ModelViewMatrix);
 
                 var oldShadows = GameSettings.GlobalShadows;
                 var oldFancy = GameSettings.Quality;
                 GameSettings.GlobalShadows = false;
                 GameSettings.Quality = false;
-                Culling.CalculateFrustum(projMatrix, Culling.ModelViewMatrix);
                 World.CullTest();
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Static);
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Water);

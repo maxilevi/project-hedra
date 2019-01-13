@@ -34,12 +34,12 @@ namespace HedraTests.Structure
 
         public Humanoid SpawnVillager(Vector3 DesiredPosition, Random Rng)
         {
-            throw new NotImplementedException();
+            return SpawnHumanoid(HumanType.Warrior.ToString(), DesiredPosition, null);
         }
 
         public Humanoid SpawnVillager(Vector3 DesiredPosition, int Seed)
         {
-            throw new NotImplementedException();
+            return SpawnVillager(DesiredPosition, new Random(Seed));
         }
 
         public Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition)
@@ -92,12 +92,12 @@ namespace HedraTests.Structure
 
         public float ApplyMultiple(Vector2 Position, float MaxHeight)
         {
-            throw new NotImplementedException();
+            return MaxHeight;
         }
 
         public float ApplyMultiple(Vector2 Position, float MaxHeight, params BasePlateau[] Against)
         {
-            throw new NotImplementedException();
+            return MaxHeight;
         }
     }
 }

@@ -1,8 +1,10 @@
-
 #version 330 core
+
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Conditionals.shader">
 !include<"Includes/Sky.shader">
+
+precision mediump float;
 
 in vec4 raw_color;
 in vec4 Color;

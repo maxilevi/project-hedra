@@ -21,8 +21,8 @@ namespace Hedra.Engine.Rendering
         public bool Enabled { get; set; }
         public bool PrematureCulling { get; set; } = true;
         public Box CullingBox { get; set; }
-        public Vector3 Max => CullingBox.Max;
-        public Vector3 Min => CullingBox.Min;
+        public Vector3 Max => CullingBox?.Max ?? Vector3.Zero;
+        public Vector3 Min => CullingBox?.Min ?? Vector3.Zero;
         public ChunkMesh Mesh { get; }
         private readonly ObjectMeshBuffer _buffer;
 

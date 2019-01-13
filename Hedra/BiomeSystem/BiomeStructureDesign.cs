@@ -19,7 +19,7 @@ namespace Hedra.BiomeSystem
             this._designs.Add(Design);
         }
 
-        public StructureDesign[] Designs => _designs.ToArray();
+        public virtual StructureDesign[] Designs => _designs.ToArray();
         public abstract VillageType VillageType { get; }
     }
 }

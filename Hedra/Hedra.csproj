@@ -211,6 +211,7 @@
     <Compile Include="Engine\CraftingSystem\CraftingStation.cs" />
     <Compile Include="Engine\CraftingSystem\Templates\IngredientsTemplate.cs" />
     <Compile Include="Engine\Game\Season.cs" />
+    <Compile Include="Engine\Generation\FastComparer.cs" />
     <Compile Include="Engine\ItemSystem\FoodSystem\FoodHandler.cs" />
     <Compile Include="Engine\ItemSystem\ItemHandlerFactory.cs" />
     <Compile Include="Engine\ItemSystem\Templates\AttributeTemplate.cs" />

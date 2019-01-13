@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenTK;
 using Hedra.Engine.Management;
 
@@ -28,7 +29,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             this.Position = Position;
             _children = new List<BaseStructure>();
-        }     
+        }
         
         public void AddChildren(params BaseStructure[] Children)
         {

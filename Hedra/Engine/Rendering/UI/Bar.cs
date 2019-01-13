@@ -38,7 +38,7 @@ namespace Hedra.Engine.Rendering.UI
         private DrawOrder Order;
         public bool ShowBar = true;
         private Vector2 TargetResolution = new Vector2(1024, 578);
-        public GUIText Text;
+        public RenderableText Text;
         private Vector4 UniformColor;
         public Vector2 AdjustedPosition { get; set; }
 
@@ -165,12 +165,12 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (_optionalText == null)
             {
-                Text = new GUIText(_value() + " / " + _max(), Position, Color.White,
+                Text = new RenderableText(_value() + " / " + _max(), Position, Color.White,
                     FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
             }
             else
             {
-                Text = new GUIText(_optionalText, Position, Color.White,
+                Text = new RenderableText(_optionalText, Position, Color.White,
                     FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
                 UpdateTextRatio = false;
             }

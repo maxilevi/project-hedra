@@ -142,9 +142,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 DisposeCondition = () => structure.Disposed || buildingOutput.IsEmpty,
                 OnDispose = () => buildingOutput.Dispose()
             };
-            while (waiter.MoveNext()) yield return null;            
-            if (waiter.Disposed) yield break;
-
+            while (waiter.MoveNext())
+            {
+                if (waiter.Disposed) yield break;
+                yield return null;
+            }
             var placer = buildingOutput.Place(position);
             while (placer.MoveNext()) yield return null;
             structure.AddInstance(buildingOutput.Instances.ToArray());

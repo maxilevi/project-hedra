@@ -174,12 +174,13 @@ namespace Hedra.Engine.BiomeSystem
                 if (makeDirt) blockType = BlockType.Dirt;
             }
 
-            if (y < height + river)
+            var riverHeight = height + river + 1.5f;
+            if (y < riverHeight)
             {
                 if (blockType == BlockType.Air && river > 0)
                 {
                     blockType = BlockType.Water;
-                    Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) (height + river));
+                    Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) (riverHeight));
                 }
                 else if (Mathf.Clamp(riverBorders * 100f, 0, RiverDepth) > 2 &&
                          blockType != BlockType.Air)

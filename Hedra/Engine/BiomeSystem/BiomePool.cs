@@ -199,32 +199,5 @@ namespace Hedra.Engine.BiomeSystem
         {
             return this.GetRegion(new Vector3(ChunkOffset.X, 0, ChunkOffset.Y));
         }
-
-        public static float EncodeWater(float Height, float Density)
-        {
-            float riverPack = (float)Math.Round(Height, 3) * 0.1f;
-            float densityPack = (float)Math.Round(Density, 3) * 0.1f;
-
-            var scaleFactor = 65530.0;
-            var cp = 256.0 * 256.0;
-
-            var x1 = (int)(densityPack * scaleFactor);
-            var y1 = (int)(riverPack * scaleFactor);
-            return (float)(y1 * cp) + x1;
-        }
-
-        public static float DecodeWater(double Den)
-        {
-            var scaleFactor = 65530.0;
-            double cp = 256.0 * 256.0;
-
-            double dy = Math.Floor(Den / cp);
-            double dx = Den - dy * cp;
-            float xk = -1.0f + (float)(dx / scaleFactor);
-            //We uncompress the floats
-            if (dx == 0)
-                return (float)dx;
-            return xk * 10.0f;
-        }
     }
 }

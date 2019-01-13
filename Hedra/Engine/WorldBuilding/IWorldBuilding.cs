@@ -10,7 +10,6 @@ namespace Hedra.Engine.WorldBuilding
 {
     public interface IWorldBuilding
     {
-        bool CanAddPlateau(RoundedPlateau Mount);
         BasePlateau[] GetPlateausFor(Vector2 Position);
         IGroundwork[] GetGroundworksFor(Vector2 Position);
         BasePlateau[] Plateaux { get; }

@@ -80,7 +80,7 @@ namespace Hedra.Engine.StructureSystem
                 var transform = Matrix4.CreateTranslation(P);
                 Structure.AddCollisionShape(shapes.Select(S => S.Transform(transform)).ToArray());
                 Structure.AddStaticElement(model.Transform(transform)); 
-            });
+            }, () => Structure.Disposed);
             ((BanditCamp) Structure.WorldObject).Enemies = enemies;
         }
 

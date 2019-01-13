@@ -5,6 +5,7 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scenes;
 using Hedra.EntitySystem;
@@ -99,8 +100,8 @@ namespace Hedra.Engine.EntitySystem
             if(Parent.Model == null) return;
 
             var eyeSpace = Vector4.Transform(new Vector4(Parent.Position + Parent.Model.Height * 1.5f * Vector3.UnitY, 1),
-                    DrawManager.FrustumObject.ModelViewMatrix);
-            var homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
+                    Culling.ModelViewMatrix);
+            var homogeneusSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
             var ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
             _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f) + _originalScale * _barSize * Vector2.UnitY;
             _healthBar.Scale = _originalScale * _barSize * Math.Min(1, Parent.Model.Height / 7f);

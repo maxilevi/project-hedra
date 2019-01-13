@@ -33,7 +33,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     LightColor = HandLamp.LightColor
                 });
             }
-            PlaceWhenWorldReady(TargetPosition, Place);
+            PlaceWhenWorldReady(TargetPosition, Place, () => Structure.Disposed);
         }
         
         public static void PlaceBench(Vector3 TargetPosition, bool IsInIntersection, 
@@ -58,12 +58,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     )
                 );
             }
-            PlaceWhenWorldReady(TargetPosition, Place);
+            PlaceWhenWorldReady(TargetPosition, Place, () => Structure.Disposed);
         }
 
-        public static void PlaceWhenWorldReady(Vector3 TargetPosition, Action<Vector3> Place)
+        public static void PlaceWhenWorldReady(Vector3 TargetPosition, Action<Vector3> Place, Func<bool> ShouldDispose)
         {
-            RoutineManager.StartRoutine(DoPlace, TargetPosition, (Action<Vector3>) Place);
+            RoutineManager.StartRoutine(DoPlace, TargetPosition, Place, ShouldDispose);
         }
 
         private static T SelectTemplate<T>(IList<T> Templates, Random Rng) where T : DesignTemplate
@@ -75,10 +75,17 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             var position = (Vector3) Params[0];
             var lambda = (Action<Vector3>) Params[1];
-            var waiter = new WaitForChunk(position);
-            
-            while (waiter.MoveNext()) yield return null;            
-            if (waiter.Disposed) yield break;
+            var shouldDispose = (Func<bool>) Params[2];
+            var waiter = new WaitForChunk(position)
+            {
+                DisposeCondition = shouldDispose
+            };
+
+            while (waiter.MoveNext())
+            {
+                if (waiter.Disposed) yield break;
+                yield return null;
+            }
 
             lambda(new Vector3(position.X, Physics.HeightAtPosition(position), position.Z));
         }       

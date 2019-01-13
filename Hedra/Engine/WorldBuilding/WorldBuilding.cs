@@ -137,26 +137,6 @@ namespace Hedra.Engine.WorldBuilding
                 Human.SetHelmet(ItemPool.Grab(ItemType.ChristmasHat).Helmet);
         }
 
-        private bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates)
-        {
-
-            for (var i = 0; i < Candidates.Length; i++)
-            {
-                if (Candidates[i].Collides(Mount) && Math.Abs(Candidates[i].MaxHeight - Mount.MaxHeight) > 2.0f)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public bool CanAddPlateau(RoundedPlateau Mount)
-        {
-            lock (_plateauLock)
-                return CanAddPlateau(Mount, _plateaus.Select(P => P as RoundedPlateau).Where(P => P != null).ToArray());
-        }
-
         private void RemovePlateau(BasePlateau Mount)
         {
             lock (_plateauLock)

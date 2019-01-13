@@ -65,7 +65,7 @@ namespace Hedra.Engine.Management
         /// <summary>
         /// Executes a provided action after a specified delay.
         /// </summary>
-        /// <param name="Time">Time to wait. In milliseconds.</param>
+        /// <param name="Time">Time to wait. In seconds.</param>
         /// <param name="Action">Action to execute.</param>
         public static void After(float Time, Action Action)
         {

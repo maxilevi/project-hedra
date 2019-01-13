@@ -4,6 +4,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Hedra;
 using Hedra.AISystem;
 using Hedra.BiomeSystem;
@@ -12,12 +13,15 @@ using Hedra.Engine;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
@@ -31,6 +35,8 @@ namespace HedraTests.Structure
     {
         private Random _rng;
         private List<IEntity> _interceptedEntities;
+        private StructureDesign[] _designs;
+        private BiomeStructureDesign _biomeStructureDesign;
         
         [SetUp]
         public override void Setup()
@@ -52,9 +58,15 @@ namespace HedraTests.Structure
             var defaultRegion = new Region();
             defaultRegion.Colors = new RegionColor(1, new NormalBiomeColors());
             defaultRegion.Generation = new RegionGeneration(1, new SimpleGenerationDesignMock(() => DesiredHeight));
+            var structureDesignMock = new Mock<BiomeStructureDesign>();
+            structureDesignMock.Setup(S => S.Designs).Returns(() => _designs);
+            _biomeStructureDesign = structureDesignMock.Object;
+            defaultRegion.Structures = new RegionStructure(1, _biomeStructureDesign);
             var biomePoolMock = new Mock<IBiomePool>();
             biomePoolMock.Setup(B => B.GetRegion(It.IsAny<Vector3>())).Returns(defaultRegion);
             var worldMock = new Mock<IWorldProvider>();
+            var normalProvider = new WorldProvider();
+            worldMock.Setup(W => W.ToChunkSpace(It.IsAny<Vector3>())).Returns<Vector3>(V => normalProvider.ToChunkSpace(V));
             worldMock.Setup(W => W.BiomePool).Returns(biomePoolMock.Object);
             worldMock.Setup(W => W.AddEntity(It.IsAny<IEntity>())).Callback(delegate(IEntity Entity)
             {
@@ -71,9 +83,11 @@ namespace HedraTests.Structure
                 return ent;
             });
             worldMock.Setup(W => W.WorldBuilding).Returns(new StructureDesignWorldBuildingMock());
+            worldMock.Setup(W => W.StructureHandler).Returns(new StructureHandler());
             World.Provider = worldMock.Object;
             Design = new T();
             _rng = new Random();
+            _designs = new NormalBiomeStructureDesign().Designs;
         }
         
         [Test]
@@ -105,6 +119,60 @@ namespace HedraTests.Structure
             Assert.Greater(WorldEntities.Length + GetStructureObjects(structure).Length, 0);
         }
 
+        [Test]
+        public void TestDesignPlacementMatchesWithMapPlacement()
+        {
+            var design = new T();
+            SetDesigns(design);
+            var currentOffset = World.ToChunkSpace(new Vector3(Utils.Rng.Next(int.MinValue, int.MaxValue), 0, Utils.Rng.Next(int.MinValue, int.MaxValue)));
+            var distribution = new RandomDistribution();
+            for (var x = Math.Min(-2, -design.Radius / Chunk.Width * 2); x < Math.Max(2, design.Radius / Chunk.Width * 2); x++)
+            {
+                for (var z = Math.Min(-2, -design.Radius / Chunk.Width * 2); z < Math.Max(2, design.Radius / Chunk.Width * 2); z++)
+                {
+                    var offset = new Vector2(currentOffset.X + x * Chunk.Width, currentOffset.Y + z * Chunk.Width);
+                    distribution.Seed = StructureDesign.BuildRngSeed(offset);
+                    var targetPosition = StructureDesign.BuildTargetPosition(offset, distribution);
+                    var biome = World.BiomePool.GetRegion(targetPosition);
+                    Assert.AreEqual(
+                        MapBuilder.Sample(offset.ToVector3(), biome) != null,
+                        design.ShouldSetup(offset, targetPosition, World.StructureHandler.StructureItems,biome, distribution)
+                    );
+                }
+            }
+        }
+
+        private void SetDesigns(params StructureDesign[] Designs)
+        {
+            _designs = Designs;
+            // Get the mocked region.
+            World.BiomePool.GetRegion(Vector3.Zero).Structures = new RegionStructure(1, _biomeStructureDesign);
+        }
+        /*
+        [Test]
+        public void TestDesignPlacement()
+        {
+            var design = new T();
+            _designs = new StructureDesign[] {new T()};
+            var currentOffset = World.ToChunkSpace(new Vector3(Utils.Rng.Next(int.MinValue, int.MaxValue), 0, Utils.Rng.Next(int.MinValue, int.MaxValue)));
+            var distribution = new RandomDistribution();
+            for (var x = Math.Min(-2, -design.Radius / Chunk.Width * 2); x < Math.Max(2, design.Radius / Chunk.Width * 2); x++)
+            {
+                for (var z = Math.Min(-2, -design.Radius / Chunk.Width * 2); z < Math.Max(2, design.Radius / Chunk.Width * 2); z++)
+                {
+                    var offset = new Vector2(currentOffset.X + x * Chunk.Width, currentOffset.Y + z * Chunk.Width);
+                    distribution.Seed = StructureDesign.BuildRngSeed(offset);
+                    var targetPosition = StructureDesign.BuildTargetPosition(offset, distribution);
+                    var biome = World.BiomePool.GetRegion(targetPosition);
+                    Assert.AreEqual(
+                        MapBuilder.Sample(offset.ToVector3(), biome),
+                        design.ShouldSetup(offset, targetPosition, World.StructureHandler.StructureItems,
+                            biome, distribution)
+                    );
+                }
+            }
+        }*/
+
         protected BaseStructure[] GetStructureObjects(CollidableStructure Structure)
         {
             var list = new List<BaseStructure>();
@@ -129,7 +197,7 @@ namespace HedraTests.Structure
         protected virtual CollidableStructure CreateStructure()
         {
             var location = RandomLocation;
-            return new CollidableStructure(Design, location, null, CreateBaseStructure(location));
+            return new CollidableStructure(Design, location, new RoundedPlateau(location.Xz, _rng.Next(32, 1024)), CreateBaseStructure(location));
         }
 
         protected abstract BaseStructure CreateBaseStructure(Vector3 Position);

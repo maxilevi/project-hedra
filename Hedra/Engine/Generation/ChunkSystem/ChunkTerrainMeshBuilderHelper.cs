@@ -13,8 +13,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static int Bounds = (int) (Chunk.Width / Chunk.BlockSize); 
         private readonly Chunk _parent;
         private readonly float _coefficient;    
-        private readonly int _offsetX;
-        private readonly int _offsetZ;
+        private int _offsetX;
+        private int _offsetZ;
         private readonly int _boundsX;
         private readonly int _boundsY;
         private readonly int _boundsZ;
@@ -80,11 +80,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     colorCount++;
                 }
             }
+            /*float wSeed = World.Seed * 0.0001f;
+            var voronoi = (int) (World.StructureHandler.SeedGenerator.GetValue((Cell.P[0].X + _offsetX) * .0075f + wSeed, (Cell.P[0].Z + _offsetZ) * .0075f + wSeed) * 100f);
+            var rng = new Random(new Random(voronoi).Next(0, 12));
+            return new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);*/
             return new Vector4(color.Xyz / colorCount, 1.0f);
         }
 
-        public void CreateCell(ref GridCell Cell, int X, int Y, int Z, bool ExtraData,
-            bool WaterCell, int Lod, out bool Success)
+        public void CreateCell(ref GridCell Cell, ref int X, ref int Y, ref int Z, ref bool WaterCell, ref int Lod, out bool Success)
         {
             Success = true;
             this.BuildCell(ref Cell, X, Y, Z, WaterCell, Lod);
@@ -97,7 +100,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     var posY = (int) (Cell.P[i].Y * _coefficient);
                     var posZ = (int) (Cell.P[i].Z * _coefficient);
                     
-                    Block block = GetNeighbourBlock(posX, posY, posZ);
+                    var block = GetNeighbourBlock(posX, posY, posZ);
                     Cell.Type[i] = block.Type;
                     Cell.Density[i] = block.Density;
                 }
@@ -115,31 +118,31 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 {
                     var pos = new Vector3(cz.P[i].X * _coefficient, cz.P[i].Y * _coefficient,
                         cz.P[i].Z * _coefficient); // LOD is 1
-                    Block waterBlock = this.GetNeighbourBlock((int) pos.X, (int) pos.Y, (int) pos.Z);
+                    Block waterBlock = GetBlock(ref pos.X, ref pos.Y, ref pos.Z);
 
                     if (waterBlock.Type != BlockType.Water)
                     {
-                        for (int k = (int) pos.Y - 3; k < _boundsY; k++)
+                        for (var k = pos.Y - 3; k < _boundsY; k++)
                         {
-                            waterBlock = this.GetNeighbourBlock((int) pos.X, k, (int) pos.Z);
-
-
+                            waterBlock = GetBlock(ref pos.X, ref k, ref pos.Z);
                             if (waterBlock.Type == BlockType.Water) goto WATER_BREAK;
                         }
 
-                        for (var k = (int) pos.Y - 3; k < _boundsY; k++)
+                        for (var k = pos.Y - 3; k < _boundsY; k++)
                         for (var kx = -2; kx < 3; kx++)
                         for (var kz = -2; kz < 3; kz++)
                         {
-                            waterBlock = this.GetNeighbourBlock((int) pos.X + kx, k, (int) pos.Z + kz);
+                            var waterX = pos.X + kx;
+                            var waterZ = pos.Z + kz;
+                            waterBlock = GetBlock(ref waterX, ref k, ref waterZ);
 
 
                             if (waterBlock.Type == BlockType.Water) goto WATER_BREAK;
                         }
                     }
                     WATER_BREAK:
-
-                    var neighbourChunk = this.GetNeighbourChunk((int) pos.X, (int) pos.Z);
+ 
+                    var neighbourChunk = GetNeighbourChunk(ref pos.X, ref pos.Z, ref _offsetX, ref _offsetZ);
                     var x = (int) (pos.X % _boundsX);
                     var z = (int) (pos.Z % _boundsZ);
 
@@ -198,26 +201,49 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Cell.P[7] = new Vector3(Cell.P[0].X, _blockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
             }
         }
+
+        private Block GetBlock(ref float X, ref float Y, ref float Z)
+        {
+            var intX = (int) X;
+            var intY = (int) Y;
+            var intZ = (int) Z;
+            if (X > 0 && X < _boundsX && Z > 0 && Z < _boundsZ) return _parent[intX][intY][intZ];
+            return GetNeighbourBlock(ref intX, ref intY, ref intZ, ref _offsetX, ref _offsetZ);
+        }
         
         //Use ref to avoid copying the structs since this function has a very high call rate.
         [MethodImpl(256)]
-        private Chunk GetNeighbourChunk(int X, int Z)
+        private static Chunk GetNeighbourChunk(ref float X, ref float Z, ref int _offsetX, ref int _offsetZ)
         {
-            World.SearcheableChunksReference.TryGetValue(new Vector2(((int) (_offsetX + X * _blockSize) >> 7) << 7, ((int) (_offsetZ + Z * _blockSize) >> 7) << 7), out var ch);
+            World.SearcheableChunksReference.TryGetValue(new Vector2(((int) (_offsetX + X * Chunk.BlockSize) >> 7) << 7, ((int) (_offsetZ + Z * Chunk.BlockSize) >> 7) << 7), out var ch);
+            return ch;
+        }
+        
+        //Use ref to avoid copying the structs since this function has a very high call rate.
+        [MethodImpl(256)]
+        private static Chunk GetNeighbourChunk(ref int X, ref int Z, ref int _offsetX, ref int _offsetZ)
+        {
+            World.SearcheableChunksReference.TryGetValue(new Vector2(((int) (_offsetX + X * Chunk.BlockSize) >> 7) << 7, ((int) (_offsetZ + Z * Chunk.BlockSize) >> 7) << 7), out var ch);
             return ch;
         }
 
         [MethodImpl(256)]
         private Block GetNeighbourBlock(int X, int Y, int Z)
         {
-            var chunk = GetNeighbourChunk(X, Z);
+            return GetNeighbourBlock(ref X, ref Y, ref Z, ref _offsetX, ref _offsetZ);
+        }
+
+        [MethodImpl(256)]
+        private static Block GetNeighbourBlock(ref int X, ref int Y, ref int Z, ref int _offsetX, ref int _offsetZ)
+        {
+            var chunk = GetNeighbourChunk(ref X, ref Z, ref _offsetX, ref _offsetZ);
             if (!chunk?.Landscape.BlocksSetted ?? true) return new Block(BlockType.Temporal);
-            return chunk[Modulo(X)][Y][Modulo(Z)];
+            return chunk[Modulo(ref X)][Y][Modulo(ref Z)];
         }
         
         // Source: https://codereview.stackexchange.com/a/58309
         [MethodImpl(256)]
-        private static int Modulo(int Index)
+        private static int Modulo(ref int Index)
         {
             return (Index % Bounds + Bounds) % Bounds;
         }

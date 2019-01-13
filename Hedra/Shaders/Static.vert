@@ -4,6 +4,8 @@
 !include<"Includes/Conditionals.shader">
 !include<"Includes/Lighting.shader">
 
+precision mediump float;
+
 layout(location = 0)in vec3 InVertex;
 layout(location = 1)in vec4 InColor;
 layout(location = 2)in vec3 InNormal;

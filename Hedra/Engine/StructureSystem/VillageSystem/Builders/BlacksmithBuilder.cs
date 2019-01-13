@@ -46,8 +46,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                             P
                         );
                         human.Physics.TargetPosition = P;
-                    }
-                );
+                    },
+                () => Structure.Disposed);
             }
             var lampOffset = Vector3.TransformPosition(Parameters.Design.LampPosition * Parameters.Design.Scale, transformation);
             DecorationsPlacer.PlaceLamp(Parameters.Position + lampOffset, Structure, Root, _width, Rng);
@@ -57,7 +57,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                                         Parameters.Design.AnvilPosition * Parameters.Design.Scale,
                                         transformation);
                 DecorationsPlacer.PlaceWhenWorldReady(anvilPosition,
-                    P => Structure.WorldObject.AddChildren(new Anvil(P))
+                    P => Structure.WorldObject.AddChildren(new Anvil(P)),
+                    () => Structure.Disposed
                 );
             }
         }

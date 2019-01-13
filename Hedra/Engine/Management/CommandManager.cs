@@ -73,6 +73,11 @@ namespace Hedra.Engine.Management
                         }
                         return true;
                     }
+                    case "hideworld":
+                    {
+                        GameSettings.HideWorld = !GameSettings.HideWorld;
+                        return true;
+                    }
                     case "spit":
                     {
                         var proj = new ParticleProjectile(Caster, Caster.Position)
@@ -163,7 +168,11 @@ namespace Hedra.Engine.Management
                     Caster.Chat.Clear();
                     return true;
                 }
-
+                if(Parts[0] == "highlight")
+                {
+                    World.HighlightArea(Caster.Position, new Vector4(1, 0, 0, 1), 32, 4f);
+                    return true;
+                }
                 if (Parts[0] == "villager")
                 {
                     var vill = World.InRadius<Village>(Caster.Position, VillageDesign.MaxVillageRadius).FirstOrDefault();

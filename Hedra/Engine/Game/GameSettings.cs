@@ -26,6 +26,7 @@ namespace Hedra.Engine.Game
     public static class GameSettings
     {
         public const int MaxCharacters = 4; 
+        public static bool HideWorld { get; set; }
         public static bool ContinousMove { get; set; }
         public static float SurfaceWidth { get; set; }
         public static float SurfaceHeight { get; set; }

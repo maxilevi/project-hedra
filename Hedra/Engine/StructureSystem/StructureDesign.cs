@@ -11,6 +11,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
@@ -33,11 +34,6 @@ namespace Hedra.Engine.StructureSystem
             Structure.Position = collidable.Position;
             return collidable;
         }
-
-        public bool CanSetup(Vector3 TargetPosition)
-        {
-            return World.WorldBuilding.CanAddPlateau(new RoundedPlateau(TargetPosition.Xz, Radius));
-        }
    
         protected static Random BuildRng(CollidableStructure Structure)
         {
@@ -52,13 +48,12 @@ namespace Hedra.Engine.StructureSystem
                 {
                     var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
                         ChunkOffset.Y + z * Chunk.Width);
-                    Distribution.Seed = Unique.GenerateSeed(offset);
+                    Distribution.Seed = BuildRngSeed(offset);
                     var targetPosition = BuildTargetPosition(offset, Distribution);
                     var items = World.StructureHandler.StructureItems;
                     
                     if (this.ShouldSetup(offset, targetPosition, items, Biome, Distribution))
                     {
-                        if (!CanSetup(targetPosition)) continue;
                         var item = this.Setup(targetPosition, BuildRng(offset));
                         World.StructureHandler.AddStructure(item);
                         World.StructureHandler.Build(item);
@@ -111,8 +106,7 @@ namespace Hedra.Engine.StructureSystem
         private bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] Designs)
         {
             float wSeed = World.Seed * 0.0001f;
-            var voronoi = (int) (World.StructureHandler.SeedGenerator.GetValue(NewPosition.X * .0075f + wSeed,
-                          NewPosition.Z * .0075f + wSeed) * 100f);
+            var voronoi = (int) (World.StructureHandler.SeedGenerator.GetValue(NewPosition.X * .0075f + wSeed, NewPosition.Z * .0075f + wSeed) * 100f);
             var index = new Random(voronoi).Next(0, Designs.Length);
             var isStructureRegion = index == Array.IndexOf(Designs, this);
             if (isStructureRegion)

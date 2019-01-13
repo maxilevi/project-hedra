@@ -14,12 +14,13 @@ namespace Hedra.Engine.Player.MapSystem
         public static StructureDesign Sample(Vector3 Position, Region Biome)
         {
             var chunkOffset = World.ToChunkSpace(Position);
+            var rng = new RandomDistribution();
             for (var i = 0; i < Biome.Structures.Designs.Length; i++)
             {
                 var design = Biome.Structures.Designs[i];
-                var rng = new RandomDistribution(StructureDesign.BuildRngSeed(chunkOffset));
+                rng.Seed = StructureDesign.BuildRngSeed(chunkOffset);
                 var targetPosition = StructureDesign.BuildTargetPosition(chunkOffset, rng);
-                if (design.ShouldSetup(chunkOffset, targetPosition, EmptyItems, Biome, rng) && design.CanSetup(targetPosition))
+                if (design.ShouldSetup(chunkOffset, targetPosition, EmptyItems, Biome, rng))
                 {
                     return design;
                 }

@@ -27,7 +27,7 @@ namespace Hedra.Engine.Management
                 {
                     OnDispose?.Invoke();
                     Disposed = true;
-                    return false;
+                    return true;
                 }
                 return true;
             }

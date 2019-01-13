@@ -301,7 +301,6 @@ namespace Hedra.Engine.Player
             if (Human.IsEating)
             {
                 blendingAnimation = _eatAnimation;
-                HandleEatingEffects();
             }
             if (Human.IsGliding)
             {
@@ -442,6 +441,7 @@ namespace Hedra.Engine.Player
                 _lampModel.LocalRotation = LocalRotation;
                 _lampModel.LocalRotationPoint = Vector3.Zero;
             }
+            if (Human.IsEating) HandleEatingEffects();
         }
 
         public void StopSound()

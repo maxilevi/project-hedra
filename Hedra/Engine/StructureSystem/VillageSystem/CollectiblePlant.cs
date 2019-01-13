@@ -14,6 +14,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private readonly Item _drop;
         private readonly InstanceData _model;
         private readonly InstanceDataChunkWatcher _watcher;
+        private Village _parent;
         
         public CollectiblePlant(Vector3 Position, InstanceData Model, Item Drop) : base(Position)
         {
@@ -40,7 +41,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         public override void Dispose()
         {
-            base.Update();
+            base.Dispose();
             _watcher.Dispose();
         }
     }

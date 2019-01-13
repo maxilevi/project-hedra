@@ -54,8 +54,8 @@ namespace Hedra.Engine.Generation
 
         public WorldProvider()
         {
-            _meshWorkerPool = new SharedWorkerPool(1);
-            _genWorkerPool = new SharedWorkerPool(1);
+            _meshWorkerPool = new SharedWorkerPool(2);
+            _genWorkerPool = new SharedWorkerPool(2);
             _meshBuilder = new MeshBuilder(_meshWorkerPool);
             _chunkBuilder = new ChunkBuilder(_genWorkerPool);
             _entities = new HashSet<IEntity>();
@@ -63,7 +63,7 @@ namespace Hedra.Engine.Generation
             _chunks = new HashSet<Chunk>();
             _globalColliders = new HashSet<ICollidable>();
             _renderingComparer = new RenderingComparer();
-            SearcheableChunks = new Dictionary<Vector2, Chunk>();
+            SearcheableChunks = new Dictionary<Vector2, Chunk>(new FastComparer());
             DrawingChunks = new Dictionary<Vector2, Chunk>();
             ShadowDrawingChunks = new Dictionary<Vector2, Chunk>();
         }

@@ -34,8 +34,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 var position = Instances[i].Position;
                 var waiter = new WaitForChunk(position);
-                while (waiter.MoveNext()) yield return null;            
-                if (waiter.Disposed) yield break;
+                while (waiter.MoveNext())
+                {
+                    if (waiter.Disposed) yield break;
+                    yield return null;
+                }
 
                 var clampedPosition = Physics.ClampToNearestLod(position);
                 var block = World.GetHighestBlockAt(clampedPosition.X, clampedPosition.Z);

@@ -81,17 +81,26 @@ namespace HedraTests
 
         public VertexData LoadPLYWithLODs(string Filename, Vector3 Scale)
         {
-            return new VertexData();
+            return new VertexData()
+            {
+                Vertices = new List<Vector3>(new[] {new Vector3()}),
+                Colors = new List<Vector4>(new[] {new Vector4()}),
+                Normals = new List<Vector3>(new[] {new Vector3()}),
+                Indices = new List<uint>(new[] {(uint) 0}),
+                Extradata = new List<float>(new[] {1f}),
+            };
         }
 
         public VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
         {
-            return new VertexData();
-        }
-
-        public VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
-        {
-            return new VertexData();
+            return new VertexData()
+            {
+                Vertices = new List<Vector3>(new[] {new Vector3()}),
+                Colors = new List<Vector4>(new[] {new Vector4()}),
+                Normals = new List<Vector3>(new[] {new Vector3()}),
+                Indices = new List<uint>(new[] {(uint) 0}),
+                Extradata = new List<float>(new[] {1f}),
+            };
         }
 
         public ModelData DAELoader(string File)

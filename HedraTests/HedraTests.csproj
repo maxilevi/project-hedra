@@ -167,6 +167,7 @@
     <Compile Include="Structure\StructureTest.cs" />
     <Compile Include="Structure\TravellingMerchantDesignTest.cs" />
     <Compile Include="Structure\VillageDesignTest.cs" />
+    <Compile Include="Structure\WellDesignTest.cs" />
     <Compile Include="WorldBuilding\InteractableStructureTest.cs" />
     <Compile Include="WorldBuilding\ObeliskTest.cs" />
     <Compile Include="Generation\WorldTest.cs" />

@@ -31,7 +31,7 @@ namespace Hedra.Engine.Rendering
         {
             var id = Provider.LoadTexture(BitmapObject, Min, Mag, Wrap);
             Textures.Add(id);
-            if(Loader.Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId)
+            if(Loader.Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId && !GameSettings.TestingMode)
                 Log.WriteLine($"[Error] Texture being created outside of the GL thread");
             return id;
         }

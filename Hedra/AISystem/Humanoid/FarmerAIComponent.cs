@@ -40,14 +40,18 @@ namespace Hedra.AISystem.Humanoid
         {
             get
             {
-                var newPoint = new Vector3(
-                    Utils.Rng.NextFloat() * _farmSize.X - _farmSize.X * .5f,
-                    0,
-                    Utils.Rng.NextFloat() * _farmSize.Y - _farmSize.Y * .5f
-                ) + _farmPosition.ToVector3();
-                return World.GetHighestBlockAt(newPoint.X, newPoint.Z).Type != BlockType.FarmDirt 
-                    ? NewPoint 
-                    : newPoint;
+                /* Try 10 times */
+                for(var i = 0; i < 10; ++i)
+                {
+                    var newPoint = new Vector3(
+                        Utils.Rng.NextFloat() * _farmSize.X - _farmSize.X * .5f,
+                        0,
+                        Utils.Rng.NextFloat() * _farmSize.Y - _farmSize.Y * .5f
+                    ) + _farmPosition.ToVector3();
+                    if (World.GetHighestBlockAt(newPoint.X, newPoint.Z).Type == BlockType.FarmDirt)
+                        return newPoint;
+                }
+                return Parent.Position;
             }
         }
             

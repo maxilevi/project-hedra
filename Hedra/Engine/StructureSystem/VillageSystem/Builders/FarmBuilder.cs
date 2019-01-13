@@ -195,7 +195,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     data,
                     ItemPool.Grab(Type)
                 ));
-            });
+            }, () => Structure.Disposed);
         }
 
         private static InstanceData BuildPlant(VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng, float ColorMultiplier = 1)

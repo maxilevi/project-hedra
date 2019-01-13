@@ -22,7 +22,7 @@ namespace Hedra.Engine.StructureSystem
 
         public override bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
-            return ChunkOffset == World.ToChunkSpace(World.SpawnVillagePoint) && !World.StructureHandler.SpawnVillageSpawned;
+            return ChunkOffset == World.ToChunkSpace(World.SpawnVillagePoint) && !World.StructureHandler.SpawnVillageSpawned && false;
         }      
     }
 }

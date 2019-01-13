@@ -72,7 +72,7 @@ namespace Hedra.Engine.Rendering
         public static void Render(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ToDrawShadow, WorldRenderType Type)
         {
             
-            if(ToDraw.Count == 0) return;
+            if(ToDraw.Count == 0 || GameSettings.HideWorld) return;
             if((Type & WorldRenderType.Static) == WorldRenderType.Static)
             {
                 TerrainDraw(ToDraw, ToDrawShadow);

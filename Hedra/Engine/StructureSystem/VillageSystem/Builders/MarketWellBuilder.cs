@@ -24,8 +24,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             base.Polish(Parameters, Root, Rng);
             var offset = (Physics.HeightAtPosition(Parameters.Position) + 4) * Vector3.UnitY;
             DecorationsPlacer.PlaceWhenWorldReady(Parameters.Position + offset,
-                P => Structure.WorldObject.AddChildren(new Well(P, MarketParameters.MarketSize))
-            );
+                P => Structure.WorldObject.AddChildren(new Well(P, MarketParameters.MarketSize)),
+            () => Structure.Disposed);
         }
     }
 }

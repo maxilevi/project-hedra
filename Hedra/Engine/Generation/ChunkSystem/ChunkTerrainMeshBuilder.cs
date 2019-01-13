@@ -101,10 +101,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             if (!Filter(x, y, z)) continue;
                             if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
 
-                            Helper.CreateCell(ref cell, x, y, z, true,
-                                Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air,
-                                Lod,
-                                out var success);
+                            var isWaterCell = Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air;
+                            Helper.CreateCell(ref cell, ref x, ref y, ref z, ref isWaterCell, ref Lod, out var success);
 
                             if (!(Blocks[x][y][z].Type == BlockType.Water &&
                                   Blocks[x][y + 1][z].Type == BlockType.Air) &&
@@ -131,8 +129,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
                                 if (Blocks[x][y][z].Type == BlockType.Water &&
                                     Blocks[x][y + 1][z].Type == BlockType.Air)
                                 {
-                                    Helper.CreateCell(ref cell, x, y, z, true, false, Lod,
-                                        out success);
+                                    var waterCell = false;
+                                    Helper.CreateCell(ref cell, ref x, ref y, ref z, ref waterCell, ref Lod, out success);
                                 }
 
                                 if (!success && y < BoundsY - 2) failed = true;

@@ -48,8 +48,7 @@ namespace Hedra.Engine.Rendering.Frustum
         {
             SetFrustum(View);
             ProjectionMatrix = Proj;
-            Renderer.LoadProjection(Proj);
-            if (!GameSettings.LockFrustum) Frustum.Matrix = View * Proj;
+            UpdateFrustum();
         }
         
         public static void SetFrustum(Matrix4 View)
@@ -57,9 +56,14 @@ namespace Hedra.Engine.Rendering.Frustum
             var aspect = GameSettings.Width / (float)GameSettings.Height;
             ModelViewMatrix = View;
             ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, aspect, ZNear, ZFar);
-            Renderer.LoadProjection(ProjectionMatrix);
+            UpdateFrustum();
+        }
+
+        private static void UpdateFrustum()
+        {
             Renderer.LoadModelView(ModelViewMatrix);
-            if(!GameSettings.LockFrustum) Frustum.Matrix = ModelViewMatrix * ProjectionMatrix;
+            Renderer.LoadProjection(ProjectionMatrix);
+            if (!GameSettings.LockFrustum) Frustum.Matrix = ModelViewMatrix * ProjectionMatrix;
         }
     }
 }

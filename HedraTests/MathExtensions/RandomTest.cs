@@ -1,4 +1,5 @@
 using System;
+using Hedra;
 using Hedra.Engine.ComplexMath;
 using NUnit.Framework;
 
@@ -43,6 +44,16 @@ namespace HedraTests.MathExtensions
             var original = distribution.Next(0, 100);
             distribution.Seed = _seed;
             Assert.AreEqual(original, distribution.Next(0, 100));
+        }
+        
+        [Test]
+        public void TestRandomDistributionSeed()
+        {
+            var seed = Utils.Rng.Next();
+            var distribution = new RandomDistribution(seed);
+            var original = new Random(seed);
+            Assert.AreEqual(original.Next(0, 100000), distribution.Next(0, 100000));
+            Assert.AreEqual(original.Next(-123123, 345234), distribution.Next(-123123, 345234));
         }
     }
 }

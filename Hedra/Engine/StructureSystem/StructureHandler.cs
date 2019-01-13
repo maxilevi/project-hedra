@@ -27,7 +27,6 @@ namespace Hedra.Engine.StructureSystem
     /// </summary>
     public class StructureHandler
     {
-        private static readonly RandomDistribution Distribution;
         private readonly object _lock = new object();
         public Vector3 MerchantPosition { get; set; }
         public bool SpawnCampfireSpawned { get; set; }
@@ -39,11 +38,6 @@ namespace Hedra.Engine.StructureSystem
         private BaseStructure[] _structureCache;
         private bool _dirtyStructuresItems;
         private bool _dirtyStructures;
-
-        static StructureHandler()
-        {
-            Distribution = new RandomDistribution(true);
-        }
         
         public StructureHandler()
         {
@@ -85,10 +79,12 @@ namespace Hedra.Engine.StructureSystem
                 ? underChunk.Biome
                 : World.BiomePool.GetRegion(ChunkOffset.ToVector3());
             var designs = region.Structures.Designs;
+            /* Beware! This is created locally and we don't maintain a static instance because of multi-threading issues. */
+            var distribution = new RandomDistribution(true);
             for (var i = 0; i < designs.Length; i++)
             {
                 if (designs[i].MeetsRequirements(ChunkOffset))
-                    designs[i].CheckFor(ChunkOffset, region, Distribution);
+                    designs[i].CheckFor(ChunkOffset, region, distribution);
             }
         }
 
